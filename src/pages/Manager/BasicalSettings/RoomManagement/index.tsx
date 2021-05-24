@@ -73,32 +73,42 @@ const RoomManagement = () => {
       title: '场地名称',
       dataIndex: 'CDMC',
       align: 'center',
+      width: '15%',
+      ellipsis: true,
     },
     {
       title: '场地类型',
       dataIndex: 'CDLX',
       align: 'center',
+      width: '12%',
+      ellipsis: true,
     },
     {
       title: '所属校区',
       dataIndex: 'SSXQ',
       align: 'center',
+      width: '15%',
+      ellipsis: true,
     },
     {
       title: '容纳人数',
       dataIndex: 'RNRS',
       align: 'center',
+      width: 100,
     },
     {
       title: '场地地址',
       dataIndex: 'CDDZ',
       align: 'center',
+      width: '15%',
+      ellipsis: true,
     },
     {
       title: '备注',
       dataIndex: 'BZ',
       align: 'center',
-      width: 220,
+      width: '15%',
+      ellipsis: true,
     },
     {
       title: '操作',
@@ -150,13 +160,13 @@ const RoomManagement = () => {
         footer={
           modalType === 'add'
             ? [
-                <Button key="back" onClick={() => setModalVisible(false)}>
-                  取消
+              <Button key="back" onClick={() => setModalVisible(false)}>
+                取消
                 </Button>,
-                <Button key="submit" type="primary" onClick={handleSubmit}>
-                  确定
+              <Button key="submit" type="primary" onClick={handleSubmit}>
+                确定
                 </Button>,
-              ]
+            ]
             : null
         }
         centered

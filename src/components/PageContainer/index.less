@@ -11,11 +11,29 @@
 
       .ant-breadcrumb {
         display: flex;
-        flex: 1;
+        flex: auto;
         align-items: center;
         text-align: justify;
-        & + .ant-page-header-heading {
+        min-width: 200px;
+        >span{
+          display: flex;
+        }
+
+        &+.ant-page-header-heading {
           width: 200px;
+        }
+      }
+    }
+
+    .ant-pro-grid-content {
+
+      .ant-pro-table {
+        .ant-table-wrapper {
+          width: 100%;
+          overflow: auto;
+          .ant-table {
+            min-width: 700px;
+          }
         }
       }
     }
