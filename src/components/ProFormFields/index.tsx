@@ -1,6 +1,5 @@
 import type { FC } from 'react';
 import React, { useEffect } from 'react';
-import type { SubmitterProps } from '@ant-design/pro-form/lib/components/Submitter';
 import ProForm, {
   ProFormText,
   ProFormSelect,
@@ -15,30 +14,11 @@ import ProForm, {
   ProFormTimePicker,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import type { FormInstance } from 'antd';
+import type { FormItemsProps, ProFormFieldsPropsType } from './indexType';
 import { Col, Form, Row } from 'antd';
 
-type formItemsProps = {
-  /** 表单项的类型 */
-  type: string;
-  /** 表单项的key */
-  key: string;
-  /** 表单的数组项 */
-  groupItems: any[];
-  /** 表单的栅格布局（请参考antd的栅格API） */
-  span: string;
-  /** 表单的栅格布局（请参考antd的栅格API） */
-  flex: string;
-  /** 表单的栅格布局（请参考antd的栅格API） */
-  gutter: [number, number];
-  /** 与 select 相同，根据 options 生成子节点 */
-  options: any[];
-  /** 每个表单项的属性，详情请参考ProForm的API */
-  currentProps: Record<string, any>;
-};
-
-const renderFormItems = (formItems: formItemsProps[]) => {
-  return formItems.map((formItem: formItemsProps) => {
+const renderFormItems = (formItems: FormItemsProps[]) => {
+  return formItems.map((formItem: FormItemsProps) => {
     const { type, key, groupItems, span, flex, ...currentProps } = formItem;
     switch (type) {
       case 'input':
@@ -112,38 +92,6 @@ const renderFormItems = (formItems: formItemsProps[]) => {
         return '';
     }
   });
-};
-
-type ProFormFieldsPropsType = {
-  /** 默认值 */
-  initialValues?: Record<string, any>;
-
-  /** 布局样式 */
-  formItemLayout?: {
-    labelCol: {
-      span?: number | string;
-      flex?: number | 'none' | 'auto' | string;
-    };
-    wrapperCol: {
-      span?: number | string;
-      flex?: number | 'none' | 'auto' | string;
-    };
-  };
-
-  /** 支持水平的 | 垂直的 | 内联的 */
-  layout?: 'horizontal' | 'vertical' | 'inline';
-
-  /** 提交表单且数据验证成功后回调事件 */
-  onFinish: (value: any) => any;
-
-  formItems: any;
-  /** 提交按钮相关配置(请参考ProForm的API) */
-  submitter?: false | SubmitterProps<{ form?: FormInstance<any> | undefined }>;
-
-  /** 外部按钮获取form表单对象的方法 */
-  setForm?: (value: any) => void;
-  /** 表单的初始值 */
-  values?: Record<string, any>;
 };
 
 const ProFormFields: FC<ProFormFieldsPropsType> = ({
