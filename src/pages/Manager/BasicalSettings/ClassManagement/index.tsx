@@ -2,7 +2,7 @@
 import PageContainer from "@/components/PageContainer";
 import type { ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
-import { Divider, Modal } from "antd";
+import { Divider} from "antd";
 import styles from './index.less';
 import type { RoomItem } from "./data";
 import { Button } from "antd";
@@ -12,7 +12,6 @@ import { listData } from "./mock";
 import { paginationConfig } from '@/constant';
 import { Popconfirm } from "antd";
 import { useState } from "react";
-import React from "react";
 import { Drawer } from "antd";
 
 
@@ -85,6 +84,20 @@ const ClassManagement=()=>{
             dataIndex: 'ZJLS',
             align: 'center',
             ellipsis: true,
+            // render:(dom,index)=>{
+            //     console.log(index.ZJLS)
+            //     return(
+            //         <>
+            //        {
+            //            index.ZJLS?.map((item)=>{
+            //                return (
+            //                ` ${item};`
+            //                )
+            //            })
+            //        }
+            //         </>
+            //     )
+            // }
         },
         {
             title: '学生人数',
@@ -149,7 +162,7 @@ const ClassManagement=()=>{
                             key="add"
                             onClick={() => handleOperation('add')}
                         >
-                            新增
+                            新增课程
                          </Button>,
                     ]}
                 />

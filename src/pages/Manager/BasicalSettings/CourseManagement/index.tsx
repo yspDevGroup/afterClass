@@ -109,7 +109,7 @@ const CourseManagement = () => {
                             key="add"
                             onClick={() => showDrawer()}
                         >
-                            新增
+                             新增课程
             </Button>,
                     ]}
                 />
