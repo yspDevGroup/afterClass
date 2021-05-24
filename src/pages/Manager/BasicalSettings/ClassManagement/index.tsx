@@ -12,7 +12,8 @@ import { listData } from "./mock";
 import { paginationConfig } from '@/constant';
 import { Popconfirm } from "antd";
 import { useState } from "react";
-
+import React from "react";
+import { Drawer } from "antd";
 
 
 const ClassManagement=()=>{
@@ -120,7 +121,7 @@ const ClassManagement=()=>{
                     <Divider type="vertical" />
                     <Popconfirm title="确定删除吗？" okText="是" cancelText="否">
                         <a >删除</a>
-                    </Popconfirm>,
+                    </Popconfirm>
                 </>
             ),
             align: 'center',
@@ -152,12 +153,13 @@ const ClassManagement=()=>{
                          </Button>,
                     ]}
                 />
-                <Modal
+                  <Drawer
                     title={getModelTitle()}
                     destroyOnClose
-                    width={modalType === 'classReset' ? '50vw' : '40vw'}
+                    placement="right"
+                    width={modalType === 'classReset' ? '30vw' : '30vw'}
                     visible={modalVisible}
-                    onCancel={() => setModalVisible(false)}
+                    onClose={() => setModalVisible(false)}
                     footer={
                         modalType === 'add'
                             ? [
@@ -170,15 +172,14 @@ const ClassManagement=()=>{
                             ]
                             : null
                     }
-                    centered
                     maskClosable={false}
                     bodyStyle={{
                         maxHeight: '65vh',
                         overflowY: 'auto',
                     }}
                 >
-
-                </Modal>
+                 
+                </Drawer>
             </PageContainer>
         </>
 
