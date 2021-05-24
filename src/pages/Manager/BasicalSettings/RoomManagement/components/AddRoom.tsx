@@ -29,20 +29,23 @@ const AddRoom = (props: PropsType) => {
       label: '场地名称',
       name: 'CDMC',
       key: 'CDMC',
+      rules: [{ required: true, message: '请填写场地名称' }],
     },
     {
-      type: 'input',
+      type: 'select',
       readonly,
       label: '场地类型',
       name: 'CDLX',
       key: 'CDLX',
+      rules: [{ required: true, message: '请填写场地名称' }],
     },
     {
-      type: 'input',
+      type: 'select',
       readonly,
       label: '所属校区',
       name: 'SSXQ',
       key: 'SSXQ',
+      rules: [{ required: true, message: '请填写场地名称' }],
     },
     {
       type: 'input',
@@ -50,6 +53,7 @@ const AddRoom = (props: PropsType) => {
       label: '容纳人数',
       name: 'RNRS',
       key: 'RNRS',
+      rules: [{ required: true, message: '请填写场地名称' }],
     },
     {
       type: 'input',
@@ -57,6 +61,7 @@ const AddRoom = (props: PropsType) => {
       label: '场地地址',
       name: 'CDDZ',
       key: 'CDDZ',
+      rules: [{ required: true, message: '请填写场地名称' }],
     },
     {
       type: 'textArea',

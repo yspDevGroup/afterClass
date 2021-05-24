@@ -2,18 +2,19 @@ import ProFormFields from '@/components/ProFormFields';
 import { Button, Drawer } from 'antd';
 import type { FC } from 'react';
 import { useState } from 'react';
-import React from 'react';
 
 type AddCourseProps = {
   visible: boolean;
   onClose: () => void;
+  readonly?: boolean;
+  formValues?: {};
 };
 const formLayout = {
-  labelCol: { span: 5 },
-  wrapperCol: { span: 16 },
+  labelCol: {},
+  wrapperCol: {},
 };
 
-const AddCourse: FC<AddCourseProps> = ({ visible, onClose }) => {
+const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues }) => {
   const [form, setForm] = useState<any>();
 
   const onFinish = (values: any) => {
@@ -24,7 +25,36 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose }) => {
     form.submit();
   };
 
-  const formItems = () => [];
+  const formItems: any[] = [
+    {
+      type: 'input',
+      readonly,
+      label: '课程名称：',
+      name: 'KCMC',
+      key: 'KCMC',
+    },
+    {
+      type: 'select',
+      readonly,
+      label: '类型：',
+      name: 'LX',
+      key: 'LX',
+    },
+    {
+      type: 'input',
+      readonly,
+      label: '时长：',
+      name: 'SC',
+      key: 'SC',
+    },
+    {
+      type: 'textArea',
+      readonly,
+      label: '简介：',
+      name: 'JJ',
+      key: 'JJ',
+    },
+  ];
   return (
     <div>
       <Drawer
@@ -54,6 +84,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose }) => {
           setForm={setForm}
           formItems={formItems}
           formItemLayout={formLayout}
+          values={formValues}
         />
       </Drawer>
     </div>

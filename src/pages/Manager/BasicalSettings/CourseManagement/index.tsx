@@ -1,197 +1,103 @@
-import PageContainer from "@/components/PageContainer";
-import type { ProColumns } from "@ant-design/pro-table";
-import ProTable from "@ant-design/pro-table";
-import { Divider, Modal } from "antd";
+import PageContainer from '@/components/PageContainer';
+import type { ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import { Divider } from 'antd';
 import styles from './index.less';
-import type { RoomItem } from "./data";
-import { Button } from "antd";
-import { theme } from "@/theme-default";
-import type { FormInstance } from 'antd';
-import { listData } from "./mock";
-import { paginationConfig } from '@/constant';
-import { Popconfirm } from "antd";
-import { useState } from "react";
-
+import React, { useState } from 'react';
+import type { RoomItem } from './data';
+import { Button } from 'antd';
+import { theme } from '@/theme-default';
+import AddCourse from './components/AddCourse';
 
 const CourseManagement = () => {
+  const [visible, setVisible] = useState(false);
 
-    const [modalType, setModalType] = useState<string>('add');
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [current, setCurrent] = useState<RoomItem | null>(null);
-    const [form, setForm] = useState<FormInstance<any>>();
+  const showDrawer = () => {
+    setVisible(true);
+  };
 
-    const getModelTitle = () => {
-        if (modalType === 'preview') {
-            return '作息时间表预览';
-        }
-        if (modalType === 'classReset') {
-            return '节次维护';
-        }
-        if (current) {
-            return '编辑信息';
-        }
-        return '新增';
-    };
-    const handleOperation = (type: string) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        type === 'add' ? setCurrent(null) : '';
-        setModalType(type);
-        setModalVisible(true);
-    };
-
-    const handleEdit = (data: RoomItem) => {
-        setModalType('add');
-        setCurrent(data);
-        getModelTitle();
-        setModalVisible(true);
-    };
-    const handleSubmit = async () => {
-        try {
-            const values = await form?.validateFields();
-            console.log('Success:', values);
-        } catch (errorInfo) {
-            console.log('Failed:', errorInfo);
-        }
-    };
-
-
-
-    const columns: ProColumns<RoomItem>[] = [
-        {
-            title: '序号',
-            dataIndex: 'index',
-            valueType: 'index',
-            width: 48,
-        },
-        {
-            title: '课程名称',
-            dataIndex: 'KCMC',
-            align: 'center',
-        },
-        {
-            title: '类型',
-            dataIndex: 'LX',
-            align: 'center',
-        },
-        {
-            title: '时长',
-            dataIndex: 'SC',
-            align: 'center',
-            render: (dom) => {
-                return (
-                    <>
-                        {dom}分钟
-                    </>
-                )
-            }
-        },
-        {
-            title: `费用${<span>(元)</span>}`,
-            dataIndex: 'FY',
-            align: 'center',
-        },
-        {
-            title: '课程封面',
-            dataIndex: 'KCFM',
-            align: 'center',
-            valueType: 'image',
-            render: (dom) => {
-
-                return (
-                    // <a >
-                    //   课程封面.png
-                    // </a>
-                    <span>{dom}</span>
-                )
-            }
-
-        },
-        {
-            title: '简介',
-            dataIndex: 'JJ',
-            align: 'center',
-
-            ellipsis: true,
-        },
-        {
-            title: '状态',
-            dataIndex: 'ZT',
-            align: 'center',
-            width: 220,
-        },
-        {
-            title: '操作',
-            valueType: 'option',
-            width: 100,
-            render: (_, record) => (
-                <>
-                    <a onClick={() => handleEdit(record)} >编辑</a>
-                    <Divider type="vertical" />
-                    <Popconfirm title="确定删除吗？" okText="是" cancelText="否">
-                        <a >删除</a>
-                    </Popconfirm>
-                </>
-            ),
-            align: 'center',
-        },
-    ];
-
-    return (
+  const onClose = () => {
+    setVisible(false);
+  };
+  const columns: ProColumns<RoomItem>[] = [
+    {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 48,
+    },
+    {
+      title: '课程名称',
+      dataIndex: 'CDMC',
+      align: 'center',
+    },
+    {
+      title: '类型',
+      dataIndex: 'CDLX',
+      align: 'center',
+    },
+    {
+      title: '时长',
+      dataIndex: 'SSXQ',
+      align: 'center',
+    },
+    {
+      title: '费用',
+      dataIndex: 'RNRS',
+      align: 'center',
+    },
+    {
+      title: '课程封面',
+      dataIndex: 'CDDZ',
+      align: 'center',
+    },
+    {
+      title: '简介',
+      dataIndex: 'BZ',
+      align: 'center',
+      width: 220,
+    },
+    {
+      title: '状态',
+      dataIndex: 'BZ',
+      align: 'center',
+      width: 220,
+    },
+    {
+      title: '操作',
+      valueType: 'option',
+      width: 100,
+      render: () => (
         <>
-            <PageContainer cls={styles.roomWrapper} >
-                <ProTable<RoomItem>
-                    columns={columns}
-                    search={false}
-                    options={{
-                        setting: false,
-                        fullScreen: false,
-                        density: false,
-                        reload: false,
-                    }}
-                    pagination={paginationConfig}
-                    dataSource={listData}
-                    toolBarRender={() => [
-                        <Button
-                            style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
-                            type="primary"
-                            key="add"
-                            onClick={() => handleOperation('add')}
-                        >
-                            新增
-                         </Button>,
-                    ]}
-                />
-                <Modal
-                    title={getModelTitle()}
-                    destroyOnClose
-                    width={modalType === 'classReset' ? '50vw' : '40vw'}
-                    visible={modalVisible}
-                    onCancel={() => setModalVisible(false)}
-                    footer={
-                        modalType === 'add'
-                            ? [
-                                <Button key="back" onClick={() => setModalVisible(false)}>
-                                    取消
-                        </Button>,
-                                <Button key="submit" type="primary" onClick={handleSubmit}>
-                                    确定
-                        </Button>,
-                            ]
-                            : null
-                    }
-                    centered
-                    maskClosable={false}
-                    bodyStyle={{
-                        maxHeight: '65vh',
-                        overflowY: 'auto',
-                    }}
-                >
-
-                </Modal>
-            </PageContainer>
+          <a>编辑</a>
+          <Divider type="vertical" />
+          <a>删除</a>
         </>
+      ),
+      align: 'center',
+    },
+  ];
 
-    )
-}
+  return (
+    <>
+      <PageContainer cls={styles.roomWrapper}>
+        <ProTable<RoomItem>
+          columns={columns}
+          toolBarRender={() => [
+            <Button
+              style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
+              type="primary"
+              key="add"
+              onClick={() => showDrawer()}
+            >
+              新增
+            </Button>,
+          ]}
+        />
+        <AddCourse visible={visible} onClose={onClose} />
+      </PageContainer>
+    </>
+  );
+};
 
-export default CourseManagement
+export default CourseManagement;
