@@ -61,74 +61,13 @@ body,
       }
     }
 
-    // 整体modal样式
-    .ant-modal-content {
-      border-radius: 8px !important;
-
-      .ant-modal-close {
-        .ant-modal-close-x {
-          .anticon {
-            color: #fff;
-          }
-        }
-      }
-
-      .ant-modal-header {
-        color: #fff;
-        font-weight: bold;
-        font-size: 14px;
-        font-style: normal;
-        line-height: 22px;
-        text-align: center;
-        background: #2f54eb;
-        border-radius: 8px 8px 0 0;
-
-        .ant-modal-title {
-          color: #fff;
-        }
-      }
-
-      .ant-modal-body {
-        color: #666;
-        font-weight: normal;
-        font-size: 14px;
-        font-family: PingFang SC;
-        font-style: normal;
-        line-height: 20px;
-      }
-
-      .ant-modal-footer {
-        padding: 10px 24px;
-        border-radius: 0 0 8px 8px;
-
-        .ant-btn {
-          width: 80px;
-          height: 28px;
-          font-weight: normal;
-          font-size: 14px;
-          font-family: PingFang SC;
-          font-style: normal;
-          line-height: 18px;
-          text-align: center;
-          border-radius: 2px;
-        }
-
-        .ant-btn-primary {
-          margin-left: 16px !important;
-          color: #fff;
-          background: #2f54eb;
-          border: 0;
-        }
-      }
-    }
-
     // 调整protable下翻页的样式
     .ant-pro-table {
       .ant-table-wrapper .ant-table-pagination-right {
         justify-content: center;
 
         >li {
-          color: @text-color-secondary;
+          color: @normal-color;
           width: 26px;
           height: 26px;
           line-height: 24px;
@@ -149,6 +88,58 @@ body,
       .ant-pro-global-footer-links {
         display: none;
       }
+    }
+  }
+
+
+  // 整体modal样式
+  .ant-modal-root {
+    .ant-modal-centered {
+      .ant-modal-content {
+        border-radius: 8px !important;
+        overflow: hidden;
+      }
+    }
+
+    .ant-modal-content {
+      .ant-modal-header {
+        .ant-modal-title {
+          font-weight: bold;
+          font-size: @font-size-base;
+          font-style: normal;
+          line-height: 22px;
+        }
+      }
+
+      .ant-modal-body {
+        color: @text-color-secondary;
+        font-size: @font-size-base;
+        line-height: 20px;
+      }
+
+      .ant-modal-footer {
+        padding: @padding-sm @padding-lg;
+
+        .ant-btn {
+          width: 80px;
+          height: 32px;
+          color: @normal-color;
+          font-weight: normal;
+          font-size: @font-size-base;
+          line-height: 22px;
+          text-align: center;
+          border-radius: 2px;
+        }
+      }
+    }
+  }
+
+  // 调整主色调按钮的颜色
+  .ant-btn-primary {
+    background-color: @primary-color;
+    border-color: @primary-color;
+    span{
+      color:#fff;
     }
   }
 }
