@@ -9,6 +9,7 @@ import { listData } from './mock';
 import styles from './index.less';
 import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
+import { paginationConfig } from '@/constant';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -114,7 +115,7 @@ const RoomManagement = () => {
     },
   ];
   return (
-    <PageContainer cls={styles.roomWrapper}>
+    <PageContainer cls={styles.roomWrapper} >
       <ProTable<RoomItem>
         columns={columns}
         actionRef={actionRef}
@@ -126,6 +127,7 @@ const RoomManagement = () => {
           density: false,
           reload: false,
         }}
+        pagination={paginationConfig}
         rowKey="id"
         dateFormatter="string"
         toolBarRender={() => [
