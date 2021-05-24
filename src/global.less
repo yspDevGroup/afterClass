@@ -36,14 +36,16 @@ body,
           color: #fff;
         }
 
-        & + div {
+        &+div {
           margin-top: @padding-lg;
         }
       }
 
       .ant-menu {
+
         .ant-menu-item,
         .ant-menu-submenu {
+
           .ant-pro-menu-item-title,
           .anticon,
           .ant-menu-submenu-arrow {
@@ -120,6 +122,28 @@ body,
       }
     }
 
+    // 调整protable下翻页的样式
+    .ant-pro-table {
+      .ant-table-wrapper .ant-table-pagination-right {
+        justify-content: center;
+
+        >li {
+          color: @text-color-secondary;
+          width: 26px;
+          height: 26px;
+          line-height: 24px;
+          border: 1px solid @border-color-base;
+          border-radius: 2px;
+          margin: @padding-sm;
+
+          &.ant-pagination-item-active {
+            border-color: @primary-color;
+            color: @primary-color;
+          }
+        }
+      }
+    }
+
     // 取消footer的链接信息
     .ant-pro-global-footer {
       .ant-pro-global-footer-links {
@@ -134,13 +158,14 @@ body,
     width: 100%;
     overflow-x: auto;
 
-    &-thead > tr,
-    &-tbody > tr {
-      > th,
-      > td {
+    &-thead>tr,
+    &-tbody>tr {
+
+      >th,
+      >td {
         white-space: pre;
 
-        > span {
+        >span {
           display: block;
         }
       }
@@ -149,8 +174,9 @@ body,
 }
 
 // 兼容IE11
-@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
-  body .ant-design-pro > .ant-layout {
+@media screen and(-ms-high-contrast: active),
+(-ms-high-contrast: none) {
+  body .ant-design-pro>.ant-layout {
     min-height: 100vh;
   }
 }

@@ -15,7 +15,7 @@ export default {
   'success-color': 'rgba(82, 196, 26, 1)', // 成功色
   'warning-color': 'rgba(255, 178, 24, 1)', // 警告色
   'error-color': 'rgba(234, 17, 28, 1)', // 错误色
-  'border-color-base': 'rgba(222,222,222,1)', // 边框色
+  'border-color-base': 'rgba(228, 228, 228, 1)', // 边框色
   'link-color': 'rgba(72, 132, 255, 1)', // link 链接颜色
   'text-color': 'rgba(51, 51, 51, 1)', // 主文本色
   'text-color-secondary': 'rgba(102, 102, 102, 1)', // 二级文本色

@@ -29,7 +29,7 @@
     path: '/homepage',
     name: 'homePage',
     icon: 'smile',
-    component: './homepage',
+    component: './Parent/Homepage',
   },
   {
     path: '/basicalSettings',
@@ -40,7 +40,7 @@
         path: '/basicalSettings/roomManagement',
         name: 'roomManagement',
         icon: 'smile',
-        component: './BasicalSettings/RoomManagement',
+        component: './Manager/BasicalSettings/RoomManagement',
       },
       {
         path: '/basicalSettings/',
@@ -51,7 +51,7 @@
   {
     path: '/',
     layout: false,
-    redirect: '/homepage',
+    redirect: './homepage',
   },
   {
     component: './404',
