@@ -9,3 +9,12 @@ export type RoomItem = {
     JJ?: string;
     ZT?: string;
 };
+//学生信息
+export type StudentType = {
+    id?: string;
+    XM?: string;
+    XH?: string;
+    SSNJ?: string;
+    SSBJ?: string;
+  }
+  

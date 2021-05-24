@@ -14,6 +14,7 @@ import { Popconfirm } from "antd";
 import { useState } from "react";
 
 
+
 const ClassManagement=()=>{
     const [modalType, setModalType] = useState<string>('add');
     const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -119,7 +120,7 @@ const ClassManagement=()=>{
                     <Divider type="vertical" />
                     <Popconfirm title="确定删除吗？" okText="是" cancelText="否">
                         <a >删除</a>
-                    </Popconfirm>
+                    </Popconfirm>,
                 </>
             ),
             align: 'center',
