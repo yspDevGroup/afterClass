@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import PageContainer from "@/components/PageContainer";
 import type { ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
@@ -13,8 +14,7 @@ import { Popconfirm } from "antd";
 import { useState } from "react";
 
 
-const CourseManagement = () => {
-
+const ClassManagement=()=>{
     const [modalType, setModalType] = useState<string>('add');
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [current, setCurrent] = useState<RoomItem | null>(null);
@@ -64,44 +64,35 @@ const CourseManagement = () => {
             width: 48,
         },
         {
-            title: '课程名称',
-            dataIndex: 'KCMC',
+            title: '班级名称',
+            dataIndex: 'BJMC',
             align: 'center',
         },
         {
-            title: '类型',
-            dataIndex: 'LX',
+            title: '上课地点',
+            dataIndex: 'SKDD',
             align: 'center',
         },
         {
-            title: '时长',
-            dataIndex: 'SC',
+            title: '授课老师',
+            dataIndex: 'SKLS',
+            align: 'center',
+        },
+        {
+            title: `助教老师`,
+            dataIndex: 'ZJLS',
+            align: 'center',
+            ellipsis: true,
+        },
+        {
+            title: '学生人数',
+            dataIndex: 'XSRS',
             align: 'center',
             render: (dom) => {
                 return (
-                    <>
-                        {dom}分钟
-                    </>
-                )
-            }
-        },
-        {
-            title: `费用${<span>(元)</span>}`,
-            dataIndex: 'FY',
-            align: 'center',
-        },
-        {
-            title: '课程封面',
-            dataIndex: 'KCFM',
-            align: 'center',
-            valueType: 'image',
-            render: (dom) => {
-
-                return (
-                    // <a >
-                    //   课程封面.png
-                    // </a>
-                    <span>{dom}</span>
+                     <a >
+                         {dom}
+                     </a>
                 )
             }
 
@@ -110,7 +101,6 @@ const CourseManagement = () => {
             title: '简介',
             dataIndex: 'JJ',
             align: 'center',
-
             ellipsis: true,
         },
         {
@@ -193,5 +183,4 @@ const CourseManagement = () => {
 
     )
 }
-
-export default CourseManagement
+export default ClassManagement
