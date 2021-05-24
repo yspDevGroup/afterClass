@@ -10,14 +10,14 @@ const formLayout = {
 };
 
 type PropsType = {
-  current?: RoomItem | null;
+  current?: RoomItem;
   onCancel?: () => void;
   setForm: React.Dispatch<React.SetStateAction<FormInstance<any> | undefined>>;
   readonly?: boolean;
 };
 
 const AddRoom = (props: PropsType) => {
-  const { setForm, readonly } = props;
+  const { current, setForm, readonly } = props;
 
   const onFinish = (values: any) => {
     console.log('onFinish', values);
@@ -77,6 +77,7 @@ const AddRoom = (props: PropsType) => {
         layout="horizontal"
         onFinish={onFinish}
         setForm={setForm}
+        values={current}
         formItems={formItems}
         formItemLayout={formLayout}
       />

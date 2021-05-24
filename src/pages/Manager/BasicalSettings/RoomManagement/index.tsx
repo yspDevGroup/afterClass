@@ -10,6 +10,7 @@ import styles from './index.less';
 import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
 import { paginationConfig } from '@/constant';
+import { PlusOutlined } from '@ant-design/icons';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -21,7 +22,7 @@ const RoomManagement = () => {
   // 模态框的新增或编辑form定义
   const [form, setForm] = useState<FormInstance<any>>();
   // 当前信息，用于回填表单
-  const [current, setCurrent] = useState<RoomItem | null>(null);
+  const [current, setCurrent] = useState<RoomItem>();
   /**
    * 实时设置模态框标题
    *
@@ -47,7 +48,7 @@ const RoomManagement = () => {
   };
   const handleOperation = (type: string) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    type === 'add' ? setCurrent(null) : '';
+    type === 'add' ? setCurrent(undefined) : '';
     setModalType(type);
     setModalVisible(true);
   };
@@ -147,7 +148,7 @@ const RoomManagement = () => {
             key="add"
             onClick={() => handleOperation('add')}
           >
-            新增
+            <PlusOutlined />新增场地
           </Button>,
         ]}
       />
@@ -157,18 +158,14 @@ const RoomManagement = () => {
         width={modalType === 'classReset' ? '50vw' : '40vw'}
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
-        footer={
-          modalType === 'add'
-            ? [
-              <Button key="back" onClick={() => setModalVisible(false)}>
-                取消
-                </Button>,
-              <Button key="submit" type="primary" onClick={handleSubmit}>
-                确定
-                </Button>,
-            ]
-            : null
-        }
+        footer={[
+          <Button key="back" onClick={() => setModalVisible(false)}>
+            取消
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleSubmit}>
+            确定
+          </Button>
+        ]}
         centered
         maskClosable={false}
         bodyStyle={{
