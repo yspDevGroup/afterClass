@@ -43,6 +43,12 @@
         component: './Manager/BasicalSettings/RoomManagement',
       },
       {
+        path: '/basicalSettings/courseManagement',
+        name: 'courseManagement',
+        icon: 'smile',
+        component: './Manager/BasicalSettings/CourseManagement',
+      },
+      {
         path: '/basicalSettings/',
         redirect: '/basicalSettings/roomManagement',
       },
