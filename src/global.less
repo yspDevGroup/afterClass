@@ -1,0 +1,156 @@
+@import '~antd/es/style/themes/default.less';
+
+html,
+body,
+#root {
+  height: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  .colorWeak {
+    filter: invert(80%);
+  }
+
+  canvas {
+    display: block;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+  }
+
+  .ant-layout {
+    min-height: 100vh;
+
+    // 调整左侧菜单
+    .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+      background-color: @primary-color;
+
+      .ant-pro-sider-logo {
+        height: 80px;
+        background-color: rgba(69, 201, 119, 1);
+
+        h1 {
+          color: #fff;
+        }
+
+        & + div {
+          margin-top: @padding-lg;
+        }
+      }
+
+      .ant-menu {
+        .ant-menu-item,
+        .ant-menu-submenu {
+          .ant-pro-menu-item-title,
+          .anticon,
+          .ant-menu-submenu-arrow {
+            color: #fff;
+          }
+
+          &.ant-menu-item-selected,
+          &:active,
+          .ant-menu-submenu-title:active {
+            background: rgba(255, 255, 255, 0.2);
+          }
+        }
+      }
+    }
+
+    // 整体modal样式
+    .ant-modal-content {
+      border-radius: 8px !important;
+
+      .ant-modal-close {
+        .ant-modal-close-x {
+          .anticon {
+            color: #fff;
+          }
+        }
+      }
+
+      .ant-modal-header {
+        color: #fff;
+        font-weight: bold;
+        font-size: 14px;
+        font-style: normal;
+        line-height: 22px;
+        text-align: center;
+        background: #2f54eb;
+        border-radius: 8px 8px 0 0;
+
+        .ant-modal-title {
+          color: #fff;
+        }
+      }
+
+      .ant-modal-body {
+        color: #666;
+        font-weight: normal;
+        font-size: 14px;
+        font-family: PingFang SC;
+        font-style: normal;
+        line-height: 20px;
+      }
+
+      .ant-modal-footer {
+        padding: 10px 24px;
+        border-radius: 0 0 8px 8px;
+
+        .ant-btn {
+          width: 80px;
+          height: 28px;
+          font-weight: normal;
+          font-size: 14px;
+          font-family: PingFang SC;
+          font-style: normal;
+          line-height: 18px;
+          text-align: center;
+          border-radius: 2px;
+        }
+
+        .ant-btn-primary {
+          margin-left: 16px !important;
+          color: #fff;
+          background: #2f54eb;
+          border: 0;
+        }
+      }
+    }
+
+    // 取消footer的链接信息
+    .ant-pro-global-footer {
+      .ant-pro-global-footer-links {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: @screen-xs) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+// 兼容IE11
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
+    min-height: 100vh;
+  }
+}
