@@ -1,4 +1,4 @@
-import type { CourseItem } from './data';
+import type { CourseItem, DataSourceType } from './data';
 import ceshi from './ceshi.png';
 
 export const listData: CourseItem[] = [
@@ -123,3 +123,16 @@ export const listData: CourseItem[] = [
         ZT: '待开课',
     },
 ]
+
+export const defaultData: DataSourceType[] = [
+    {
+        id: 624748507,
+        decs: '这是艺术类',
+        state: '艺术类',
+    },
+    {
+        id: 624691221,
+        decs: '这是文艺类',
+        state: '文艺类',
+    },
+  ];

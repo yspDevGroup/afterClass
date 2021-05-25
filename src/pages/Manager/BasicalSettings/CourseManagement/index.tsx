@@ -10,16 +10,20 @@ import { theme } from '@/theme-default';
 import AddCourse from './components/AddCourse';
 import { listData } from './mock';
 import { paginationConfig } from '@/constant';
+import Modal from 'antd/lib/modal/Modal';
+import React from 'react';
+import CourseType from './components/CourseType';
 
 const CourseManagement = () => {
     const [visible, setVisible] = useState(false);
     const [current, setCurrent] = useState<CourseItem>();
+    const [openes, setopenes] = useState(false)
 
     const showDrawer = () => {
         setVisible(true);
         setCurrent(undefined)
     };
-    
+
     const handleEdit = (data: CourseItem) => {
         setVisible(true);
         setCurrent(data);
@@ -28,6 +32,12 @@ const CourseManagement = () => {
     const onClose = () => {
         setVisible(false);
     };
+    const maintain = () => {
+        setopenes(true)
+    }
+    const showmodal = () => {
+        setopenes(false)
+    }
     const columns: ProColumns<CourseItem>[] = [
         {
             title: '序号',
@@ -39,36 +49,33 @@ const CourseManagement = () => {
             title: '课程名称',
             dataIndex: 'KCMC',
             align: 'center',
-            width:'12%',
+            width: 80,
         },
         {
             title: '类型',
             dataIndex: 'LX',
             align: 'center',
-            width:'10%',
+            width: 100,
         },
         {
             title: '时长',
             dataIndex: 'SC',
             align: 'center',
-            width:'10%',
+            width: 50,
         },
         {
             title: '费用(元)',
             dataIndex: 'FY',
             align: 'center',
-            width:'10%'
         },
         {
             title: '课程封面',
             dataIndex: 'KCFM',
             align: 'center',
-            ellipsis: true,
-            width:100,
-   
-            render:(dom,index)=>{
-                return(
-                    <a href={index.KCFM} target="view_window" > 
+            width: 100,
+            render: (dom, index) => {
+                return (
+                    <a href={index.KCFM} target="view_window" >
                         课程封面.png
                     </a>
                 )
@@ -85,14 +92,14 @@ const CourseManagement = () => {
             title: '状态',
             dataIndex: 'ZT',
             align: 'center',
-            width: 100,
+            width: 70,
 
         },
         {
             title: '操作',
             valueType: 'option',
             width: 100,
-            render: (_,record) => (
+            render: (_, record) => (
                 <>
                     <a onClick={() => handleEdit(record)}>编辑</a>
                     <Divider type="vertical" />
@@ -119,16 +126,42 @@ const CourseManagement = () => {
                     pagination={paginationConfig}
                     toolBarRender={() => [
                         <Button
+                            key='wh'
+                            onClick={() => maintain()}
+                        >
+                            课程类型维护
+                        </Button>,
+                        <Button
                             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
                             type="primary"
                             key="add"
                             onClick={() => showDrawer()}
                         >
-                             新增课程
-            </Button>,
+                            新增课程
+                        </Button>,
+
                     ]}
                 />
-                <AddCourse visible={visible} onClose={onClose} formValues={current}/>
+                <AddCourse visible={visible} onClose={onClose} formValues={current} />
+                <Modal visible={openes}
+                    onCancel={showmodal}
+                    title='课程类型维护'
+                    centered bodyStyle={{
+                        maxHeight: '65vh',
+                        overflowY: 'auto',
+                    }}
+                    width='40vw'
+                    footer={[
+                        <Button key="back" onClick={() => setopenes(false)}>
+                          取消
+                        </Button>,
+                        <Button key="submit" type="primary">
+                          确定
+                        </Button>
+                      ]}
+                    >
+                    <CourseType />
+                </Modal>
             </PageContainer>
         </>
     );
