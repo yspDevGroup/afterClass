@@ -2,25 +2,23 @@
 import PageContainer from "@/components/PageContainer";
 import type { ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
-import { Divider} from "antd";
+import { Divider } from "antd";
 import styles from './index.less';
 import type { RoomItem } from "./data";
 import { Button } from "antd";
 import { theme } from "@/theme-default";
-import type { FormInstance } from 'antd';
 import { listData } from "./mock";
 import { paginationConfig } from '@/constant';
 import { Popconfirm } from "antd";
-import { useState } from "react";
-import { Drawer } from "antd";
-import StudentInformation from './components/StudentInformation'
+import React, { useState } from "react";
+import AddClass from "./components/AddClass";
+import StudentInformation from "./components/StudentInformation";
 
 
-const ClassManagement=()=>{
+const ClassManagement = () => {
     const [modalType, setModalType] = useState<string>('add');
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [current, setCurrent] = useState<RoomItem | null>(null);
-    const [form, setForm] = useState<FormInstance<any>>();
 
     const getModelTitle = () => {
         if (modalType === 'preview') {
@@ -47,16 +45,13 @@ const ClassManagement=()=>{
         getModelTitle();
         setModalVisible(true);
     };
-    const handleSubmit = async () => {
-        try {
-            const values = await form?.validateFields();
-            console.log('Success:', values);
-        } catch (errorInfo) {
-            console.log('Failed:', errorInfo);
-        }
+
+    const onClose = () => {
+        setModalVisible(false);
     };
-
-
+    const sc = (record: any) => {
+        console.log(record.id)
+    }
 
     const columns: ProColumns<RoomItem>[] = [
         {
@@ -74,6 +69,7 @@ const ClassManagement=()=>{
             title: '上课地点',
             dataIndex: 'SKDD',
             align: 'center',
+            ellipsis: true,
         },
         {
             title: '授课老师',
@@ -85,20 +81,6 @@ const ClassManagement=()=>{
             dataIndex: 'ZJLS',
             align: 'center',
             ellipsis: true,
-            // render:(dom,index)=>{
-            //     console.log(index.ZJLS)
-            //     return(
-            //         <>
-            //        {
-            //            index.ZJLS?.map((item)=>{
-            //                return (
-            //                ` ${item};`
-            //                )
-            //            })
-            //        }
-            //         </>
-            //     )
-            // }
         },
         {
             title: '学生人数',
@@ -106,9 +88,9 @@ const ClassManagement=()=>{
             align: 'center',
             render: (dom) => {
                 return (
-                     <a >
-                         <StudentInformation dom={dom}/>
-                     </a>
+                    <a >
+                       <StudentInformation dom={dom} />
+                    </a>
                 )
             }
 
@@ -133,9 +115,10 @@ const ClassManagement=()=>{
                 <>
                     <a onClick={() => handleEdit(record)} >编辑</a>
                     <Divider type="vertical" />
-                    <Popconfirm title="确定删除吗？" okText="是" cancelText="否">
-                        <a >删除</a>
-                    </Popconfirm>
+                    <a onClick={() => sc(record)}>
+                        <Popconfirm title="确定删除吗？" okText="是" cancelText="否">删除
+                        </Popconfirm>
+                    </a>
                 </>
             ),
             align: 'center',
@@ -167,33 +150,7 @@ const ClassManagement=()=>{
                          </Button>,
                     ]}
                 />
-                  <Drawer
-                    title={getModelTitle()}
-                    destroyOnClose
-                    placement="right"
-                    width={modalType === 'classReset' ? '30vw' : '30vw'}
-                    visible={modalVisible}
-                    onClose={() => setModalVisible(false)}
-                    footer={
-                        modalType === 'add'
-                            ? [
-                                <Button key="back" onClick={() => setModalVisible(false)}>
-                                    取消
-                        </Button>,
-                                <Button key="submit" type="primary" onClick={handleSubmit}>
-                                    确定
-                        </Button>,
-                            ]
-                            : null
-                    }
-                    maskClosable={false}
-                    bodyStyle={{
-                        maxHeight: '65vh',
-                        overflowY: 'auto',
-                    }}
-                >
-                 
-                </Drawer>
+                <AddClass visible={modalVisible} onClose={onClose} formValues={current} />
             </PageContainer>
         </>
 
