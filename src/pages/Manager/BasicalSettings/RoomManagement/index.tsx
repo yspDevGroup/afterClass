@@ -12,6 +12,7 @@ import PageContainer from '@/components/PageContainer';
 import { paginationConfig } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
 import SearchComponent from '@/components/Search';
+import SiteMaintenance from './components/SiteMaintenance';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -30,6 +31,9 @@ const RoomManagement = () => {
    * @return {*}
    */
   const getModelTitle = () => {
+    if(modalType==='wh'){
+      return '场地维护';
+    }
     if (current) {
       return '编辑场地信息';
     }
@@ -41,6 +45,11 @@ const RoomManagement = () => {
     getModelTitle();
     setModalVisible(true);
   };
+  const cdwh =()=>{
+    setModalType('wh');
+    setModalVisible(true);
+    getModelTitle();
+  }
   const handleOperation = (type: string) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     type === 'add' ? setCurrent(undefined) : '';
@@ -145,6 +154,12 @@ const RoomManagement = () => {
             field="学年学期 :"
           />,
           <Button
+          key="wh"
+          onClick={() => cdwh()}
+          >
+            场地类型维护
+          </Button>,
+          <Button
             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
             type="primary"
             key="add"
@@ -175,7 +190,7 @@ const RoomManagement = () => {
           overflowY: 'auto',
         }}
       >
-        <AddRoom current={current} setForm={setForm} />
+        {modalType==='wh'? <SiteMaintenance/>:<AddRoom current={current} setForm={setForm} />}
       </Modal>
     </PageContainer>
   );

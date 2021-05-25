@@ -31,3 +31,12 @@ export type TableListParams = {
   filter?: Record<string, any[]>;
   sorter?: Record<string, any>;
 } & Record<string, any>;
+
+export type DataSourceType = {
+  id: React.Key;
+  title?: string;
+  decs?: string;
+  state?: string;
+  created_at?: string;
+  children?: DataSourceType[];
+};

@@ -1,4 +1,12 @@
-import type { RoomItem } from './data';
+/*
+ * @,@Author: ,: your name
+ * @,@Date: ,: 2021-05-24 15:20:59
+ * @,@LastEditTime: ,: 2021-05-25 14:52:31
+ * @,@LastEditors: ,: your name
+ * @,@Description: ,: In User Settings Edit
+ * @,@FilePath: ,: \afterClass\src\pages\Manager\BasicalSettings\RoomManagement\mock.ts
+ */
+import type { DataSourceType, RoomItem } from './data';
 
 export const listData: RoomItem[] = [
   {
@@ -63,5 +71,18 @@ export const listData: RoomItem[] = [
     RNRS: '120',
     CDDZ: '雁塔校区一号教学楼4楼',
     BZ: '',
+  },
+];
+
+export const defaultData: DataSourceType[] = [
+  {
+      id: 624748504,
+      decs: '这是电脑教室',
+      state: '电教室',
+  },
+  {
+      id: 624691229,
+      decs: '这是阶梯教室',
+      state: '阶梯教室',
   },
 ];
