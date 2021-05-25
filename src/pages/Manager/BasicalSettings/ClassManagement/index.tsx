@@ -64,33 +64,39 @@ const ClassManagement = () => {
             title: '班级名称',
             dataIndex: 'BJMC',
             align: 'center',
+            width:100,
         },
         {
             title: '上课地点',
             dataIndex: 'SKDD',
             align: 'center',
+           
             ellipsis: true,
+            width:100,
         },
         {
             title: '授课老师',
             dataIndex: 'SKLS',
             align: 'center',
+            width:80,
         },
         {
             title: `助教老师`,
             dataIndex: 'ZJLS',
             align: 'center',
             ellipsis: true,
+            width:100,
         },
         {
             title: '学生人数',
             dataIndex: 'XSRS',
             align: 'center',
+            width:80,
             render: (dom) => {
                 return (
-                    <a >
-                       <StudentInformation dom={dom} />
-                    </a>
+                     <a >
+                         <StudentInformation dom={dom}/>
+                     </a>
                 )
             }
 
@@ -100,12 +106,13 @@ const ClassManagement = () => {
             dataIndex: 'JJ',
             align: 'center',
             ellipsis: true,
+            width:100,
         },
         {
             title: '状态',
             dataIndex: 'ZT',
             align: 'center',
-            width: 220,
+            width: 70,
         },
         {
             title: '操作',

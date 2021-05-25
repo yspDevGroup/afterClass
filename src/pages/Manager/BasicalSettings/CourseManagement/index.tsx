@@ -38,31 +38,30 @@ const CourseManagement = () => {
             title: '课程名称',
             dataIndex: 'KCMC',
             align: 'center',
-            width:'14%',
+            width:80,
         },
         {
             title: '类型',
             dataIndex: 'LX',
             align: 'center',
-            width:'10%'
+            width:100,
         },
         {
             title: '时长',
             dataIndex: 'SC',
             align: 'center',
-            width:'7%'
+            width:50,
         },
         {
             title: '费用(元)',
             dataIndex: 'FY',
             align: 'center',
-            width:'7%'
         },
         {
             title: '课程封面',
             dataIndex: 'KCFM',
             align: 'center',
-            width:'13%',
+            width:100,
             render:(dom,index)=>{
                 return(
                     <a href={index.KCFM} target="view_window" > 
@@ -77,13 +76,12 @@ const CourseManagement = () => {
             dataIndex: 'JJ',
             align: 'center',
             ellipsis: true,
-            width:'18%'
         },
         {
             title: '状态',
             dataIndex: 'ZT',
             align: 'center',
-            width: '10%',
+            width: 70,
 
         },
         {
