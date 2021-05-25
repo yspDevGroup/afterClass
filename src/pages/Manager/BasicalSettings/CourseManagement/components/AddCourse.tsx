@@ -1,4 +1,5 @@
 import ProFormFields from '@/components/ProFormFields';
+import { CourseType } from '@/constant';
 import { Button, Drawer } from 'antd';
 import type { FC } from 'react';
 import { useState } from 'react';
@@ -39,6 +40,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues 
       label: '类型：',
       name: 'LX',
       key: 'LX',
+      valueEnum: CourseType,
     },
     {
       type: 'input',

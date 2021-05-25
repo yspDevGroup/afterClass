@@ -3,6 +3,7 @@ import React from 'react';
 import type { FormInstance } from 'antd';
 import type { RoomItem } from '../data';
 import ProFormFields from '@/components/ProFormFields';
+import { RoomType, SchoolArea } from '@/constant';
 
 const formLayout = {
   labelCol: { span: 5 },
@@ -38,6 +39,7 @@ const AddRoom = (props: PropsType) => {
       name: 'CDLX',
       key: 'CDLX',
       rules: [{ required: true, message: '请填写场地名称' }],
+      valueEnum: RoomType,
     },
     {
       type: 'select',
@@ -46,6 +48,7 @@ const AddRoom = (props: PropsType) => {
       name: 'SSXQ',
       key: 'SSXQ',
       rules: [{ required: true, message: '请填写场地名称' }],
+      valueEnum: SchoolArea,
     },
     {
       type: 'input',

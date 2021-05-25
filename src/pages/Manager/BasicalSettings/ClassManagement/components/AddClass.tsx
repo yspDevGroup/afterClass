@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import ProFormFields from '@/components/ProFormFields';
+import { AssistantTeacher, ClassLocation, Teacher } from '@/constant';
 import { Button, Drawer } from 'antd';
 import type { FC } from 'react';
 import { useState } from 'react';
@@ -40,6 +41,7 @@ const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues })
       label: '上课地点：',
       name: 'SKDD',
       key: 'SKDD',
+      valueEnum: ClassLocation,
     },
     {
       type: 'select',
@@ -47,6 +49,7 @@ const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues })
       label: '授课老师：',
       name: 'SKLS',
       key: 'SKLS',
+      valueEnum: Teacher,
     },
     {
       type: 'select',
@@ -57,6 +60,7 @@ const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues })
       fieldProps: {
         mode: 'multiple',
       },
+      valueEnum: AssistantTeacher,
     },
     {
       type: 'textArea',
