@@ -31,8 +31,8 @@ const RoomManagement = () => {
    * @return {*}
    */
   const getModelTitle = () => {
-    if(modalType==='wh'){
-      return '场地维护';
+    if (modalType === 'wh') {
+      return '场地类型维护';
     }
     if (current) {
       return '编辑场地信息';
@@ -45,15 +45,11 @@ const RoomManagement = () => {
     getModelTitle();
     setModalVisible(true);
   };
-  const cdwh =()=>{
-    setModalType('wh');
-    setModalVisible(true);
-    getModelTitle();
-  }
   const handleOperation = (type: string) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     type === 'add' ? setCurrent(undefined) : '';
     setModalType(type);
+    getModelTitle();
     setModalVisible(true);
   };
   const handleDelete = (ids: (string | number)[]) => {
@@ -154,8 +150,8 @@ const RoomManagement = () => {
             field="学年学期 :"
           />,
           <Button
-          key="wh"
-          onClick={() => cdwh()}
+            key="wh"
+            onClick={() => handleOperation('wh')}
           >
             场地类型维护
           </Button>,
@@ -172,7 +168,7 @@ const RoomManagement = () => {
       <Modal
         title={getModelTitle()}
         destroyOnClose
-        width={modalType === 'classReset' ? '50vw' : '40vw'}
+        width='50vw'
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={[
@@ -190,7 +186,7 @@ const RoomManagement = () => {
           overflowY: 'auto',
         }}
       >
-        {modalType==='wh'? <SiteMaintenance/>:<AddRoom current={current} setForm={setForm} />}
+        {modalType === 'wh' ? <SiteMaintenance /> : <AddRoom current={current} setForm={setForm} />}
       </Modal>
     </PageContainer>
   );
