@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import type { FormInstance } from 'antd';
+import type { FormInstance} from 'antd';
+import { message, Popconfirm } from 'antd';
 import { Button, Divider, Modal } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -51,9 +52,6 @@ const RoomManagement = () => {
     setModalType(type);
     getModelTitle();
     setModalVisible(true);
-  };
-  const handleDelete = (ids: (string | number)[]) => {
-    console.log(ids);
   };
   const handleSubmit = async () => {
     try {
@@ -119,7 +117,25 @@ const RoomManagement = () => {
         <>
           <a onClick={() => handleEdit(record)}>编辑</a>
           <Divider type="vertical" />
-          <a onClick={() => handleDelete([record.id!])}>删除</a>
+          <Popconfirm
+            title="删除之后，数据不可恢复，确定要删除吗?"
+            onConfirm={async () => {
+              try {
+                if (record.id) {
+                  console.log('delete', [record.id])
+                }
+              } catch (err) {
+                message.error('删除失败，请联系管理员或稍后重试。');
+              }
+            }}
+            okText="确定"
+            cancelText="取消"
+            placement="topLeft"
+          >
+            <a>
+              删除
+            </a>
+          </Popconfirm>
         </>
       ),
       align: 'center',

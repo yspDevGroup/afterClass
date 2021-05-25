@@ -12,7 +12,7 @@ export const listData: RoomItem[] = [
   {
     id: '7835u-uedejn2-792hs7481',
     CDMC: '教室301',
-    CDLX: '电教室',
+    CDLX: '多媒体教室',
     SSXQ: '雁塔校区',
     RNRS: '40',
     CDDZ: '雁塔校区一号教学楼3楼',
@@ -21,7 +21,7 @@ export const listData: RoomItem[] = [
   {
     id: '7835u-uedejn2-792hs7482',
     CDMC: '教室302',
-    CDLX: '电教室',
+    CDLX: '多媒体教室',
     SSXQ: '雁塔校区',
     RNRS: '40',
     CDDZ: '雁塔校区一号教学楼3楼',
@@ -30,7 +30,7 @@ export const listData: RoomItem[] = [
   {
     id: '7835u-uedejn2-792hs7483',
     CDMC: '教室303',
-    CDLX: '电教室',
+    CDLX: '多媒体教室',
     SSXQ: '雁塔校区',
     RNRS: '40',
     CDDZ: '雁塔校区一号教学楼3楼',
@@ -39,7 +39,7 @@ export const listData: RoomItem[] = [
   {
     id: '7835u-uedejn2-792hs7484',
     CDMC: '教室304',
-    CDLX: '电教室',
+    CDLX: '多媒体教室',
     SSXQ: '雁塔校区',
     RNRS: '40',
     CDDZ: '雁塔校区一号教学楼3楼',
@@ -78,7 +78,7 @@ export const defaultData: DataSourceType[] = [
   {
       id: 624748504,
       decs: '这是电脑教室',
-      state: '电教室',
+      state: '多媒体教室',
   },
   {
       id: 624691229,
