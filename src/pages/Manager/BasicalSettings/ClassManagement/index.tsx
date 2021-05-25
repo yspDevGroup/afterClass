@@ -13,6 +13,7 @@ import { paginationConfig } from '@/constant';
 import { Popconfirm } from "antd";
 import { useState } from "react";
 import { Drawer } from "antd";
+import StudentInformation from './components/StudentInformation'
 
 
 const ClassManagement=()=>{
@@ -106,7 +107,7 @@ const ClassManagement=()=>{
             render: (dom) => {
                 return (
                      <a >
-                         {dom}
+                         <StudentInformation dom={dom}/>
                      </a>
                 )
             }
