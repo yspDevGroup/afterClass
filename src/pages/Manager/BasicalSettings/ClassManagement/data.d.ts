@@ -22,6 +22,16 @@ export type ClassItem = {
     ZT?: string;
 };
 
+/**
+ * 
+ *  学生信息字段
+    id  UUID;
+    XM:姓名
+    SKDD 学号
+    SSNJ 所属年级;
+    SSBJ 所属班级;
+ */
+
 export type StudentType = {
     id?: string;
     XM?: string;
