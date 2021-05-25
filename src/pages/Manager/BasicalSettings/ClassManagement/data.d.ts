@@ -1,5 +1,5 @@
 
-export type RoomItem = {
+export type ClassItem = {
     id?: string;
     BJMC?: string;
     SKDD?: string;

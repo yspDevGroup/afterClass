@@ -32,7 +32,7 @@ const CourseManagement = () => {
             title: '序号',
             dataIndex: 'index',
             valueType: 'index',
-            width: '5%',
+            width: 48,
         },
         {
             title: '课程名称',
@@ -89,8 +89,8 @@ const CourseManagement = () => {
         {
             title: '操作',
             valueType: 'option',
-            width: '13%',
-            render: (_, record) => (
+            width: 100,
+            render: () => (
                 <>
                     <a onClick={() => handleEdit(record)}>编辑</a>
                     <Divider type="vertical" />

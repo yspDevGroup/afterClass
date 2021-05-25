@@ -17,6 +17,8 @@ export default {
   'error-color': 'rgba(234, 17, 28, 1)', // 错误色
   'border-color-base': 'rgba(228, 228, 228, 1)', // 边框色
   'btn-default-border': 'rgba(160, 160, 160, 1)', // btn边框色
+  'item-hover-bg':'rgba(81, 208, 129, 0.7)',
+  'link-hover-color':'rgba(81, 208, 129, 0.7)',
   'link-color': 'rgba(72, 132, 255, 1)', // link 链接颜色
   'text-color': 'rgba(51, 51, 51, 1)', // 主文本色
   'text-color-secondary': 'rgba(102, 102, 102, 1)', // 二级文本色

@@ -30,16 +30,10 @@ const RoomManagement = () => {
    * @return {*}
    */
   const getModelTitle = () => {
-    if (modalType === 'preview') {
-      return '作息时间表预览';
-    }
-    if (modalType === 'classReset') {
-      return '节次维护';
-    }
     if (current) {
-      return '编辑信息';
+      return '编辑场地信息';
     }
-    return '新增';
+    return '新增场地信息';
   };
   const handleEdit = (data: RoomItem) => {
     setModalType('add');
