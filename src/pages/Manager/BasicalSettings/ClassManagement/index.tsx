@@ -39,9 +39,6 @@ const ClassManagement = () => {
     const onClose = () => {
         setModalVisible(false);
     };
-    const sc = (record: any) => {
-        console.log(record.id)
-    }
 
     const columns: ProColumns<ClassItem>[] = [
         {
