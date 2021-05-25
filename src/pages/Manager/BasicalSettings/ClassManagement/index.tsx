@@ -16,31 +16,21 @@ import StudentInformation from "./components/StudentInformation";
 
 
 const ClassManagement = () => {
-    const [modalType, setModalType] = useState<string>('add');
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [current, setCurrent] = useState<ClassItem>();
 
     const getModelTitle = () => {
-        if (modalType === 'preview') {
-            return '作息时间表预览';
-        }
-        if (modalType === 'classReset') {
-            return '节次维护';
-        }
         if (current) {
             return '编辑信息';
         }
         return '新增';
     };
-    const handleOperation = (type: string) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        type === 'add' ? setCurrent(undefined) : '';
-        setModalType(type);
+    const showDrawer = () => {
+        setCurrent(undefined);
         setModalVisible(true);
     };
 
     const handleEdit = (data: ClassItem) => {
-        setModalType('add');
         setCurrent(data);
         getModelTitle();
         setModalVisible(true);
@@ -151,7 +141,7 @@ const ClassManagement = () => {
                             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
                             type="primary"
                             key="add"
-                            onClick={() => handleOperation('add')}
+                            onClick={() => showDrawer()}
                         >
                             新增课程
                          </Button>,

@@ -76,6 +76,7 @@ const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues })
         title="新增班级"
         width={480}
         onClose={onClose}
+        destroyOnClose={true}
         visible={visible}
         bodyStyle={{ paddingBottom: 80 }}
         footer={

@@ -17,6 +17,7 @@ const CourseManagement = () => {
 
     const showDrawer = () => {
         setVisible(true);
+        setCurrent(undefined)
     };
     
     const handleEdit = (data: CourseItem) => {

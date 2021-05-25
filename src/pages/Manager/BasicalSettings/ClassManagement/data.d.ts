@@ -1,3 +1,14 @@
+/**
+ * 
+    id  UUID;
+    BJMC:班级名称；
+    SKDD 上课地点；
+    SKLS 授课老师；
+    ZJLS 助教老师；
+    XSRS 学生人数；
+    JJ 简介 ;
+    ZT 状态 ;
+ */
 
 export type ClassItem = {
     id?: string;
@@ -16,5 +27,4 @@ export type StudentType = {
     XH?: string;
     SSNJ?: string;
     SSBJ?: string;
-  }
-  
+}

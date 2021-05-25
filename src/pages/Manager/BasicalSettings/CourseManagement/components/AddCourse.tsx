@@ -64,6 +64,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues 
         width={480}
         onClose={onClose}
         visible={visible}
+        destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
         footer={
           <div
