@@ -3,12 +3,13 @@ import React from 'react';
 import type { FC } from 'react';
 import { ModalForm } from '@ant-design/pro-form';
 import '../index.less';
-import ProTable, { ProColumns } from '@ant-design/pro-table';
-import type { StudentType } from '../data'
-import {studentList} from '../mock'
+import type { ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import type { StudentType } from '../data';
+import {studentList} from '../mock';
 
 type listProps ={
-    dom :any;
+    dom: any;
 }
 
 const StudentInformation: FC<listProps> = (props) => {

@@ -4,7 +4,7 @@ import ProTable from '@ant-design/pro-table';
 import { Divider } from 'antd';
 import styles from './index.less';
 import { useState } from 'react';
-import type { RoomItem } from './data';
+import type { CourseItem } from './data';
 import { Button } from 'antd';
 import { theme } from '@/theme-default';
 import AddCourse from './components/AddCourse';
@@ -13,13 +13,13 @@ import { paginationConfig } from '@/constant';
 
 const CourseManagement = () => {
     const [visible, setVisible] = useState(false);
-    const [current, setCurrent] = useState<RoomItem | null>(null);
+    const [current, setCurrent] = useState<CourseItem | null>(null);
 
     const showDrawer = () => {
         setVisible(true);
     };
     
-    const handleEdit = (data: RoomItem) => {
+    const handleEdit = (data: CourseItem) => {
         setVisible(true);
         setCurrent(data);
     };
@@ -27,7 +27,7 @@ const CourseManagement = () => {
     const onClose = () => {
         setVisible(false);
     };
-    const columns: ProColumns<RoomItem>[] = [
+    const columns: ProColumns<CourseItem>[] = [
         {
             title: '序号',
             dataIndex: 'index',
@@ -104,7 +104,7 @@ const CourseManagement = () => {
     return (
         <>
             <PageContainer cls={styles.roomWrapper}>
-                <ProTable<RoomItem>
+                <ProTable<CourseItem>
                     columns={columns}
                     dataSource={listData}
                     options={{

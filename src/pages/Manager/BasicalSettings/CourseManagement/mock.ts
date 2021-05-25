@@ -1,7 +1,7 @@
-import type { RoomItem } from './data';
-import ceshi from './ceshi.png'
+import type { CourseItem } from './data';
+import ceshi from './ceshi.png';
 
-export const listData: RoomItem[] = [
+export const listData: CourseItem[] = [
     {
         id: '7835u-uedejn2-792hs7481',
         KCMC: '美术',

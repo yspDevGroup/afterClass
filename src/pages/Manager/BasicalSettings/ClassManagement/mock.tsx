@@ -1,6 +1,6 @@
-import type { RoomItem,StudentType } from './data';
+import type { ClassItem,StudentType } from './data';
 
-export const listData: RoomItem[] = [
+export const listData: ClassItem[] = [
     {
         id: '7835u-uedejn2-792hs7481',
         BJMC: '美术',
