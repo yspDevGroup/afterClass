@@ -45,6 +45,11 @@ const RoomManagement = () => {
     getModelTitle();
     setModalVisible(true);
   };
+  const cdwh =()=>{
+    setModalType('wh');
+    setModalVisible(true);
+    getModelTitle();
+  }
   const handleOperation = (type: string) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     type === 'add' ? setCurrent(undefined) : '';
@@ -150,8 +155,8 @@ const RoomManagement = () => {
             field="学年学期 :"
           />,
           <Button
-            key="wh"
-            onClick={() => handleOperation('wh')}
+          key="wh"
+          onClick={() => cdwh()}
           >
             场地类型维护
           </Button>,

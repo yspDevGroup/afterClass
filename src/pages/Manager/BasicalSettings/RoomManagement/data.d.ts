@@ -32,11 +32,17 @@ export type TableListParams = {
   sorter?: Record<string, any>;
 } & Record<string, any>;
 
+
+/**
+ * 
+ 场地类型维护 字段
+ decs 描述
+ state 名称
+ */
+
 export type DataSourceType = {
   id: React.Key;
-  title?: string;
   decs?: string;
   state?: string;
-  created_at?: string;
-  children?: DataSourceType[];
+ 
 };

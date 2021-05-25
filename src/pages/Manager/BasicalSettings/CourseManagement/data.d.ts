@@ -1,5 +1,7 @@
 /**
  * 
+ * 
+ 课程管理维护字段
   id  UUID;
   KCMC 课程名称；
   LX 类型；
@@ -20,3 +22,17 @@ export type CourseItem = {
     JJ?: string;
     ZT?: string;
 };
+
+/**
+ * 
+课程类型维护 字段
+ decs 描述
+ state 名称
+ */
+
+export type DataSourceType = {
+    id: React.Key;
+    decs?: string;
+    state?: string;
+   
+  };
