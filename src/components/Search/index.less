@@ -12,8 +12,8 @@
   .HeaderFieldYear {
     margin-right: 8px;
   }
-  .HeaderFieldSemester {
-    margin-right: 40px;
+  .HeaderFieldSemesterTwo {
+    margin-left: 40px;
   }
 
   :global {
@@ -24,9 +24,14 @@
     }
     .ant-input-group {
       border: 1px solid #999999;
+      border-radius: 2px;
     }
-    .ant-input-affix-wrapper {
-      padding: 8px;
+    .ant-input-group .ant-input {
+      margin: 5px 8px;
+      padding: 0;
+    }
+    .ant-btn {
+      padding: 4px 8px;
     }
     .ant-input-search
       > .ant-input-group
@@ -34,6 +39,15 @@
       .ant-input-search-button:not(.ant-btn-primary) {
       color: #999999;
       border: 0;
+    }
+    .ant-input-search
+      > .ant-input-group
+      > .ant-input-group-addon:last-child
+      .ant-input-search-button:not(.ant-btn-primary):hover {
+      color: #333333;
+    }
+    .ant-input-group-wrapper {
+      margin-left: 40px;
     }
   }
   button[ant-click-animating-without-extra-node]:after {

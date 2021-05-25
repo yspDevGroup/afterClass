@@ -14,7 +14,7 @@ import Modal from 'antd/lib/modal/Modal';
 import React from 'react';
 import { message, Popconfirm } from 'antd';
 import CourseType from './components/CourseType';
-
+import SearchComponent from "@/components/Search"
 
 const CourseManagement = () => {
     const [visible, setVisible] = useState(false);
@@ -148,6 +148,14 @@ const CourseManagement = () => {
                     search={false}
                     pagination={paginationConfig}
                     toolBarRender={() => [
+                        <SearchComponent
+                            placeholder="课程名称"
+                            fieldOne="学年学期 :"
+                            one="2020-2021"
+                            two="第一学期"
+                            HeaderFieldTitleNum={true}
+                            onlySearch={false}
+                        />,
                         <Button
                             key='wh'
                             onClick={() => maintain()}

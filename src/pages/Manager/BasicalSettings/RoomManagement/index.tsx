@@ -164,15 +164,12 @@ const RoomManagement = () => {
         dateFormatter="string"
         toolBarRender={() => [
           <SearchComponent
-            placeholder="场地维护"
-            onlySearch={false}
-            year="2020-2021"
-            semester="第一学期"
-            field="学年学期 :"
+            placeholder="场地名称"
+            onlySearch={true}
           />,
           <Button
-          key="wh"
-          onClick={() => cdwh()}
+            key="wh"
+            onClick={() => cdwh()}
           >
             场地类型维护
           </Button>,
