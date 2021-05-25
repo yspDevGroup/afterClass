@@ -11,6 +11,7 @@ import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
 import { paginationConfig } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
+import SearchComponent from '@/components/Search';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -142,6 +143,13 @@ const RoomManagement = () => {
         rowKey="id"
         dateFormatter="string"
         toolBarRender={() => [
+          <SearchComponent
+            placeholder="场地维护"
+            onlySearch={false}
+            year="2020-2021"
+            semester="第一学期"
+            field="学年学期 :"
+          />,
           <Button
             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
             type="primary"
