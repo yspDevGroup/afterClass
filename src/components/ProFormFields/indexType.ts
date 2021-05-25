@@ -21,6 +21,7 @@ export type FormItemsProps = {
     | 'dateTimeRange' // 日期时间区间
     | 'time' // 时间
     | 'timeRange' // 时间区间
+    | 'uploadImage' // 上传
     | 'group'
     | 'empty';
   /** 表单项的key */

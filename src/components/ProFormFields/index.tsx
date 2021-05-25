@@ -16,6 +16,7 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import type { FormItemsProps, ProFormFieldsPropsType } from './indexType';
 import { Col, Form, Row } from 'antd';
+import UploadImage from './components/UploadImage';
 
 const renderFormItems = (formItems: FormItemsProps[]) => {
   return formItems.map((formItem: FormItemsProps) => {
@@ -55,6 +56,12 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
         return <ProFormTimePicker {...currentProps} key={key} />;
       case 'timeRange': // 时间区间
         return <ProFormTimePicker.RangePicker {...currentProps} key={key} />;
+      case 'uploadImage':
+        return (
+          <ProForm.Item {...currentProps} key={key}>
+            <UploadImage />
+          </ProForm.Item>
+        );
       case 'group': {
         const colW = 24 / (groupItems ? groupItems.length : 1);
         return (
