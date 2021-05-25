@@ -18,7 +18,7 @@ import StudentInformation from "./components/StudentInformation";
 const ClassManagement = () => {
     const [modalType, setModalType] = useState<string>('add');
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [current, setCurrent] = useState<ClassItem | null>(null);
+    const [current, setCurrent] = useState<ClassItem>();
 
     const getModelTitle = () => {
         if (modalType === 'preview') {
@@ -34,7 +34,7 @@ const ClassManagement = () => {
     };
     const handleOperation = (type: string) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        type === 'add' ? setCurrent(null) : '';
+        type === 'add' ? setCurrent(undefined) : '';
         setModalType(type);
         setModalVisible(true);
     };

@@ -13,7 +13,7 @@ import { paginationConfig } from '@/constant';
 
 const CourseManagement = () => {
     const [visible, setVisible] = useState(false);
-    const [current, setCurrent] = useState<CourseItem | null>(null);
+    const [current, setCurrent] = useState<CourseItem>();
 
     const showDrawer = () => {
         setVisible(true);
@@ -90,7 +90,7 @@ const CourseManagement = () => {
             title: '操作',
             valueType: 'option',
             width: 100,
-            render: () => (
+            render: (_,record) => (
                 <>
                     <a onClick={() => handleEdit(record)}>编辑</a>
                     <Divider type="vertical" />

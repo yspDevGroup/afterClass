@@ -1,6 +1,6 @@
 
 
-export type RoomItem = {
+export type CourseItem = {
     id?: string;
     KCMC?: string;
     LX?: string;
