@@ -1,50 +1,44 @@
 @import '~antd/es/style/themes/default.less';
 .SearchBox {
-  text-align: left;
-  div{
+  // 字段样式
+  div {
     display: inline;
   }
   .HeaderFieldTitle {
-    color: #333333;
     margin-right: 4px;
     padding-right: 8px;
-    // width: 170px;
-    // height: 22px;
-    // line-height: 22px;
+    color: #333333;
   }
-  .HeaderFieldYear{
+  .HeaderFieldYear {
     margin-right: 8px;
-    // color: #999999;
   }
-  .HeaderFieldSemester{
+  .HeaderFieldSemester {
     margin-right: 40px;
   }
 
   :global {
+    .ant-btn:hover,
+    .ant-btn:focus {
+      color: #999999;
+      border: 1px solid #999999;
+    }
+    .ant-input-group {
+      border: 1px solid #999999;
+    }
     .ant-input-affix-wrapper {
-      padding: 5px 8px;
-      border-right: 0;
+      padding: 8px;
     }
     .ant-input-search
       > .ant-input-group
       > .ant-input-group-addon:last-child
-      .ant-input-search-button {
-      height: 34px;
-      border-left: 0;
+      .ant-input-search-button:not(.ant-btn-primary) {
+      color: #999999;
+      border: 0;
     }
-
-    .ant-btn:hover,
-    .ant-btn:focus {
-      color: @primary-color;
-      background: #fff;
-      border-color: @primary-color;
-      border-left: 0;
-    }
-    .ant-input-search .ant-input:hover,
-    .ant-input-search .ant-input:focus {
-      color: @primary-color;
-      border-color: @primary-color;
-      border-right: 0;
-    }
+  }
+  button[ant-click-animating-without-extra-node]:after {
+    border: 0 none;
+    opacity: 0;
+    animation: none 0 ease 0 1 normal;
   }
 }

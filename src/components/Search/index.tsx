@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-05-24 16:33:45
- * @LastEditTime: 2021-05-25 09:14:00
+ * @LastEditTime: 2021-05-25 11:27:05
  * @LastEditors: txx
  */
 
@@ -14,8 +14,6 @@ import styles from "./index.less"
 type ISearchComponent = {
   /** 输入框默认值 */
   placeholder?: string,
-  /** 可以点击清除图标删除内容 */
-  allowClear?: boolean,
   /** 点击搜索图标、清除图标，或按下回车键时的回调 */
   onSearch?: (value: any, event: any) => void
   /** 左侧筛选的字段 */
@@ -63,7 +61,7 @@ const SearchComponent: FC<ISearchComponent> = (
     field,
     year,
     semester,
-    onlySearch 
+    onlySearch
   }) => {
   return (
     <div>
@@ -71,9 +69,9 @@ const SearchComponent: FC<ISearchComponent> = (
         (<div className={styles.SearchBox}>
           <Search
             placeholder={placeholder}
-            allowClear
             onSearch={onSearch}
-            style={{ width: 200 }}
+            style={{ width: 200, height: 32 }}
+            bordered={false}
           />
         </div>)
         :
@@ -96,9 +94,9 @@ const SearchComponent: FC<ISearchComponent> = (
 
           <Search
             placeholder={placeholder}
-            allowClear
             onSearch={onSearch}
-            style={{ width: 200 }}
+            style={{ width: 200, height: 32 }}
+            bordered={false}
           />
         </div>)
       }
