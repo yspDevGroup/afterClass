@@ -147,6 +147,7 @@ const CourseManagement = () => {
         <ProTable<CourseItem>
           actionRef={actionRef}
           columns={columns}
+          rowKey="id"
           request={(param, sorter, filter) => {
             const obj = {
               param,

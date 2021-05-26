@@ -4,8 +4,8 @@ import styles from './UploadImage.less';
 import type { FormItemsProps } from '../indexType';
 
 const UploadImage = (props: FormItemsProps) => {
-  const { uploadUrl } = props;
-  const [imageUrl, setImageUrl] = useState(props.imageUrl);
+  const { upurl } = props;
+  const [imageUrl, setImageUrl] = useState(props.imageurl);
   const getBase64 = (img: any, callback: any) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
@@ -45,7 +45,7 @@ const UploadImage = (props: FormItemsProps) => {
         <Upload
           showUploadList={false}
           name="avatar"
-          action={uploadUrl}
+          action={upurl}
           beforeUpload={beforeUpload}
           onChange={handleChange}
         >
