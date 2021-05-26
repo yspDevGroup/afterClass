@@ -148,6 +148,10 @@ const RoomManagement = () => {
         actionRef={actionRef}
         search={false}
         dataSource={listData}
+        headerTitle={<SearchComponent
+          placeholder="场地名称"
+          onlySearch={true}
+        />}
         options={{
           setting: false,
           fullScreen: false,
@@ -158,10 +162,6 @@ const RoomManagement = () => {
         rowKey="id"
         dateFormatter="string"
         toolBarRender={() => [
-          <SearchComponent
-            placeholder="场地名称"
-            onlySearch={true}
-          />,
           <Button
             key="wh"
             onClick={() => handleOperation('wh')}
