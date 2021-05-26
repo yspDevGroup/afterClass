@@ -64,20 +64,20 @@ const ClassManagement = () => {
         },
         {
             title: '授课老师',
-            dataIndex: 'SKLS',
+            dataIndex: 'ZJS',
             align: 'center',
             width:80,
         },
         {
             title: `助教老师`,
-            dataIndex: 'ZJLS',
+            dataIndex: 'FJS',
             align: 'center',
             ellipsis: true,
             width:100,
         },
         {
             title: '学生人数',
-            dataIndex: 'XSRS',
+            dataIndex: 'BJRS',
             align: 'center',
             width:80,
             render: (dom) => {
@@ -91,14 +91,14 @@ const ClassManagement = () => {
         },
         {
             title: '简介',
-            dataIndex: 'JJ',
+            dataIndex: 'BJMS',
             align: 'center',
             ellipsis: true,
             width:100,
         },
         {
             title: '状态',
-            dataIndex: 'ZT',
+            dataIndex: 'BJZT',
             align: 'center',
             width: 70,
         },

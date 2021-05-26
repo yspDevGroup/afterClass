@@ -1,3 +1,4 @@
+
 /**
  * 场地维护字段
  *  id  UUID;
@@ -10,10 +11,10 @@
  */
 export type RoomItem = {
   id?: string;
-  CDMC?: string;
-  CDLX?: string;
-  SSXQ?: string;
-  RNRS?: string;
+  FJMC?: string;
+  FJLX?: string;
+  XQMC?: string;
+  FJRS?: number;
   CDDZ?: string;
   BZ?: string;
 };

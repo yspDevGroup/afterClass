@@ -4,23 +4,23 @@
  课程管理维护字段
   id  UUID;
   KCMC 课程名称；
-  LX 类型；
-  SC 时长；
-  FY 费用；
-  KCFM 课程封面；
-  JJ 简介；
-  ZT 状态；
+  KCLX 类型；
+  KCSC 时长；
+  KCFY 费用；
+  KCTP 课程封面；
+  KCMS 简介；
+  KCZT 状态；
  */
 
 export type CourseItem = {
     id?: string;
     KCMC?: string;
-    LX?: string;
-    SC?: number;
-    FY?: number;
-    KCFM?: string;
-    JJ?: string;
-    ZT?: string;
+    KCLX?: string;
+    KCSC?: number;
+    KCFY?: number;
+    KCTP?: string;
+    KCMS?: string;
+    KCZT?: string;
 };
 
 /**

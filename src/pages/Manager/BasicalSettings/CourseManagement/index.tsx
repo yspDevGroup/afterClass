@@ -55,32 +55,32 @@ const CourseManagement = () => {
         },
         {
             title: '类型',
-            dataIndex: 'LX',
+            dataIndex: 'KCLX',
             align: 'center',
             width:'10%',
         },
         {
             title: '时长',
-            dataIndex: 'SC',
+            dataIndex: 'KCSC',
             align: 'center',
             width:'10%',
         },
         {
             title: '费用(元)',
-            dataIndex: 'FY',
+            dataIndex: 'KCFY',
             align: 'center',
             width:'10%'
         },
         {
             title: '课程封面',
-            dataIndex: 'KCFM',
+            dataIndex: 'KCTP',
             align: 'center',
             ellipsis: true,
             width:100,
    
             render:(dom,index)=>{
                 return(
-                    <a href={index.KCFM} target="view_window" > 
+                    <a href={index.KCTP} target="view_window" > 
                         课程封面.png
                     </a>
                 )
@@ -89,13 +89,13 @@ const CourseManagement = () => {
         },
         {
             title: '简介',
-            dataIndex: 'JJ',
+            dataIndex: 'KCMS',
             align: 'center',
             ellipsis: true,
         },
         {
             title: '状态',
-            dataIndex: 'ZT',
+            dataIndex: 'CKZT',
             align: 'center',
             width: 100,
 
