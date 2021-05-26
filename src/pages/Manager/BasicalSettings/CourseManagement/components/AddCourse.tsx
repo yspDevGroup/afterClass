@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
+import { useState } from 'react';
+import type { FC } from 'react';
+import { Button, Drawer, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
 import { CourseType } from '@/constant';
 import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import type { ActionType } from '@ant-design/pro-table';
-import { Button, Drawer, message } from 'antd';
-import type { FC } from 'react';
-import { useState } from 'react';
 
 type AddCourseProps = {
   visible: boolean;

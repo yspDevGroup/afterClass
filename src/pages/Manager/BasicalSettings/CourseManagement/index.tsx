@@ -1,20 +1,19 @@
+import React from 'react';
+import { useRef, useState } from 'react';
+import { message, Popconfirm, Divider, Button, Modal } from 'antd';
+
 import PageContainer from '@/components/PageContainer';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Divider } from 'antd';
-import styles from './index.less';
-import { useRef, useState } from 'react';
-import type { CourseItem } from './data';
-import { Button } from 'antd';
 import { theme } from '@/theme-default';
-import AddCourse from './components/AddCourse';
 import { paginationConfig } from '@/constant';
-import Modal from 'antd/lib/modal/Modal';
-import React from 'react';
-import { message, Popconfirm } from 'antd';
-import CourseType from './components/CourseType';
 import SearchComponent from '@/components/Search';
 import { deleteKHKCSJ, getAllKHKCSJ } from '@/services/after-class/khkcsj';
+
+import AddCourse from './components/AddCourse';
+import CourseType from './components/CourseType';
+import type { CourseItem } from './data';
+import styles from './index.less';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
