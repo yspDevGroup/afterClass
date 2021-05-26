@@ -6,7 +6,7 @@ export const listData: ClassItem[] = [
         BJMC: '美术',
         FJSJ: '一号教学楼301',
         ZJS: '陈英振',
-        FJS: '王子聪林艺佐罗惠新海',
+        FJS: '王子聪,林艺,佐罗,惠新海',
         BJRS: 40,
         BJMS: '通过趣味的简单线描，色彩绘画...',
         BJZT: '待开课',

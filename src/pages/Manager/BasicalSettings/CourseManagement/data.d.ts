@@ -26,13 +26,12 @@ export type CourseItem = {
 /**
  * 
 课程类型维护 字段
- decs 描述
- state 名称
+ KCMS 描述
+ KCLX 类型
  */
 
 export type DataSourceType = {
     id: React.Key;
-    decs?: string;
-    state?: string;
-   
-  };
+    KCLX?: string;
+    KCMS?: string;
+};

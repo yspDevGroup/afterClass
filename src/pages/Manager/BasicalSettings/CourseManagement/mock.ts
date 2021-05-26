@@ -127,12 +127,12 @@ export const listData: CourseItem[] = [
 export const defaultData: DataSourceType[] = [
     {
         id: 624748507,
-        decs: '这是艺术类',
-        state: '艺术类',
+        KCMS: '这是艺术类',
+        KCLX: '艺术类',
     },
     {
         id: 624691221,
-        decs: '这是文艺类',
-        state: '文艺类',
+        KCMS: '这是文艺类',
+        KCLX: '文艺类',
     },
   ];

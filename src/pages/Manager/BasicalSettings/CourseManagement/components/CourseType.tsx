@@ -1,6 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
+import { message } from "antd";
 import { Button, Popconfirm } from "antd";
 import React, { useRef, useState } from "react";
 import type { DataSourceType } from "../data";
@@ -10,9 +11,6 @@ const CourseType = () => {
     const actionRef = useRef<ActionType>();
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
     const [dataSource, setDataSource] = useState<DataSourceType[]>([]);
-    // const txt =(record: any)=>{
-    //     setDataSource(dataSource.filter((item) => item.id !== record.id));
-    // }
     const columns: ProColumns<DataSourceType>[] = [
         {
             title: '序号',
@@ -24,13 +22,13 @@ const CourseType = () => {
         {
             title: '类型',
             key: 'state',
-            dataIndex: 'state',
+            dataIndex: 'KCLX',
             align: 'center',
             ellipsis: true,
         },
         {
             title: '描述',
-            dataIndex: 'decs',
+            dataIndex: 'KCMS',
             align: 'center',
             ellipsis: true,
             fieldProps: (from, { rowKey, rowIndex }) => {
@@ -62,25 +60,31 @@ const CourseType = () => {
                     编辑
             </a>,
                 <Popconfirm
-                    title='确定删除？'
-                // onConfirm={txt(record)}
+                    title="删除之后，数据不可恢复，确定要删除吗?"
+                    onConfirm={async () => {
+                        try {
+                            if (record.id) {
+                                console.log('delete', [record.id])
+                            }
+                        } catch (err) {
+                            message.error('删除失败，请联系管理员或稍后重试。');
+                        }
+                    }}
+                    okText="确定"
+                    cancelText="取消"
+                    placement="topLeft"
                 >
-                    <a
-                        key="delete"
-                    // onClick={() => {
-                    //     setDataSource(dataSource.filter((item) => item.id !== record.id));
-                    // }}
-                    >
+                    <a>
                         删除
-            </a>
-                </Popconfirm>,
+               </a>
+                </Popconfirm>
             ],
         },
     ];
 
     return (
         <>
-             <Button
+            <Button
                 type="primary"
                 onClick={() => {
                     actionRef.current?.addEditRecord?.({
@@ -89,7 +93,7 @@ const CourseType = () => {
                     });
                 }}
                 icon={<PlusOutlined />}
-                style={{marginLeft:"25px"}}
+                style={{ marginLeft: "25px" }}
             >
                 新建一行
             </Button>

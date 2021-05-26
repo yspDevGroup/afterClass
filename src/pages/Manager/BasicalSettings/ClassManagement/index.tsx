@@ -2,7 +2,7 @@
 import PageContainer from "@/components/PageContainer";
 import type { ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
-import { Divider, message } from "antd";
+import { Divider, message, Tag } from "antd";
 import styles from './index.less';
 import type { ClassItem } from "./data";
 import { Button } from "antd";
@@ -56,9 +56,8 @@ const ClassManagement = () => {
         },
         {
             title: '上课地点',
-            dataIndex: 'SKDD',
-            align: 'center',
-           
+            dataIndex: 'FJSJ',
+            align: 'center', 
             ellipsis: true,
             width:100,
         },
@@ -66,7 +65,7 @@ const ClassManagement = () => {
             title: '授课老师',
             dataIndex: 'ZJS',
             align: 'center',
-            width:80,
+            width:80,    
         },
         {
             title: `助教老师`,
@@ -74,6 +73,21 @@ const ClassManagement = () => {
             align: 'center',
             ellipsis: true,
             width:100,
+            render:(_,index)=>{
+                return(
+                    <>
+                    {
+                        index.FJS?.split(',').map((item)=>{
+                            return(
+                                <>
+                                <Tag>{item}</Tag>
+                                </>
+                            )
+                        })
+                    }
+                    </>
+                )
+            }
         },
         {
             title: '学生人数',
@@ -160,7 +174,6 @@ const ClassManagement = () => {
                         onlySearch={false}
                     />}
                     toolBarRender={() => [
-
                         <Button
                             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
                             type="primary"
