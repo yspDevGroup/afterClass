@@ -149,17 +149,18 @@ const ClassManagement = () => {
                     }}
                     pagination={paginationConfig}
                     dataSource={listData}
+                    headerTitle={<SearchComponent
+                        placeholder="班级名称"
+                        fieldOne="学年学期 :"
+                        fieldTwo="年级 :"
+                        one="2020-2021"
+                        two="第一学期"
+                        three="六年级"
+                        HeaderFieldTitleNum={false}
+                        onlySearch={false}
+                    />}
                     toolBarRender={() => [
-                        <SearchComponent
-                            placeholder="班级名称"
-                            fieldOne="学年学期 :"
-                            fieldTwo="年级 :"
-                            one="2020-2021"
-                            two="第一学期"
-                            three="六年级"
-                            HeaderFieldTitleNum={false}
-                            onlySearch={false}
-                        />,
+
                         <Button
                             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
                             type="primary"
