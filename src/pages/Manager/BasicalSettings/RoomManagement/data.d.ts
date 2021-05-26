@@ -47,7 +47,7 @@ type SchoolAreaType = {
  *  JXL  教学楼;
  *  XXJBSJ 学校基本数据
  *  SSXQ  所属校区;
- *  BZ  备注;
+ *  BZXX  备注;
  */
 export type RoomItem = {
   id?: string;
@@ -61,7 +61,7 @@ export type RoomItem = {
   JXL?: string;
   XXJBSJ?: SchoolType;
   XQSJ?: SchoolAreaType;
-  BZ?: string;
+  BZXX?: string;
 };
 
 /**

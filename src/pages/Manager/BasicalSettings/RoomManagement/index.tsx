@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { FormInstance} from 'antd';
 import { Tooltip } from 'antd';
 import { message, Popconfirm } from 'antd';
@@ -15,6 +15,8 @@ import { paginationConfig } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
 import SearchComponent from '@/components/Search';
 import SiteMaintenance from './components/SiteMaintenance';
+import { getAllFJSJ } from '@/services/after-class/fjsj';
+import { getInitialState } from '@/app';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -41,6 +43,20 @@ const RoomManagement = () => {
     }
     return '新增场地信息';
   };
+  useEffect(() => {
+    // 后期通过用户信息获取当前学校ID
+    async function fetchData() {
+      const response = await getInitialState();
+      console.log(response);
+      // 根据学校ID获取所有场地信息
+      const list = await getAllFJSJ({
+        xxId: 'd18f9105-9dfb-4373-9c76-bc68f670fff5'
+      });
+      console.log(list);
+      
+    }
+    fetchData();
+  }, []);
   const handleEdit = (data: RoomItem) => {
     setModalType('add');
     setCurrent(data);
@@ -111,7 +127,7 @@ const RoomManagement = () => {
     },
     {
       title: '地址',
-      dataIndex: 'BZ',
+      dataIndex: 'BZXX',
       align: 'center',
       width: '18%',
       ellipsis: true,

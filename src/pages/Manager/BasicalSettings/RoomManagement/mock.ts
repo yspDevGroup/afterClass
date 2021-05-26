@@ -18,7 +18,7 @@ export const listData: RoomItem[] = [
       XQMC: '雁塔校区雁塔校区雁塔校区雁塔校区'
     },
     FJRS: 40,
-    BZ: '雁塔校区一号教学楼3楼',
+    BZXX: '雁塔校区一号教学楼3楼',
   },
 ];
 

@@ -68,7 +68,7 @@
     "react-dom": "^17.0.0",
     "react-helmet-async": "^1.0.4",
     "react-resizable": "^1.11.1",
-    "umi": "^3.4.0",
+    "umi": "^3.4.6",
     "umi-request": "^1.0.8",
     "ysp-business-complib": "^1.0.2"
   },

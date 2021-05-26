@@ -5,7 +5,7 @@ import { history, useModel } from 'umi';
 import { stringify } from 'querystring';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { outLogin } from '@/services/edu-platform/auth';
+import { outLogin } from '@/services/after-class/auth';
 import defaultAvatar from '@/assets/avatar.png';
 
 export type GlobalHeaderRightProps = {

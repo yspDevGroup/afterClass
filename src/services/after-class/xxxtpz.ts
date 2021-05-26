@@ -11,7 +11,7 @@ export async function getXXXTPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -32,7 +32,7 @@ export async function getXXXTPZ(
     message?: string;
   }>(`/xxxtpz/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -46,10 +46,10 @@ export async function deleteXXXTPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxxtpz/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -63,12 +63,12 @@ export async function getAllXXXTPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { xxid: param0 } = params;
+  const { xxid: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.XXXTPZ[]; message?: string }>(
     `/xxxtpz/all/${param0}`,
     {
       method: 'GET',
-      params: { ...params },
+      params: { ...queryParams },
       ...(options || {}),
     },
   );
@@ -114,13 +114,13 @@ export async function updateXXXTPZ(
   body: API.UpdateXXXTPZ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxxtpz/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

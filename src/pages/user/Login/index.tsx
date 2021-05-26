@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import { postAccount } from '@/services/edu-platform/auth';
+import { postAccount } from '@/services/after-class/auth';
 import leftBg from '@/assets/leftBg.png';
 import peopleBg from '@/assets/peopleBg.png';
 import rightBg from '@/assets/rightBg.png';

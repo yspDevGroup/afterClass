@@ -5,7 +5,7 @@ import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
 import Footer from '@/components/Footer';
 import type { ResponseError } from 'umi-request';
-import { currentUser as queryCurrentUser } from './services/edu-platform/user';
+import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { envjudge } from './utils/utils';
 

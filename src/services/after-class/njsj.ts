@@ -11,14 +11,14 @@ export async function getNJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; NJ?: number; NJMC?: string; XXJBSJId?: string };
     message?: string;
   }>(`/njsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -32,20 +32,32 @@ export async function deleteNJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/njsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** 查询所有年级数据 GET /njsj/ */
-export async function getAllNJSJ(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: API.NJSJ[]; message?: string }>('/njsj/', {
-    method: 'GET',
-    ...(options || {}),
-  });
+/** 查询所有年级数据 GET /njsj/all/${param0} */
+export async function getAllNJSJ(
+  params: {
+    // path
+    /** 学校ID */
+    xxid: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { xxid: param0, ...queryParams } = params;
+  return request<{ status?: 'ok' | 'error'; data?: API.NJSJ[]; message?: string }>(
+    `/njsj/all/${param0}`,
+    {
+      method: 'GET',
+      params: { ...queryParams },
+      ...(options || {}),
+    },
+  );
 }
 
 /** 创建年级数据 PUT /njsj/create */
@@ -74,13 +86,13 @@ export async function updateNJSJ(
   body: API.UpdateNJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/njsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
