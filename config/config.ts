@@ -60,15 +60,10 @@ export default defineConfig({
     {
       requestLibPath: "import { request } from 'umi'",
       schemaPath: 'http://api.xianyunshipei.com/documentation/json',
-      // schemaPath: 'http://192.168.0.17:3000/documentation/json',
+      // schemaPath: 'http://192.168.0.113:3000/documentation/json',
       // schemaPath: 'http://zpldongxie.gicp.net:3000/documentation/json',
       // schemaPath: join(__dirname, 'oneapi.json'),
       mock: false,
-    },
-    {
-      requestLibPath: "import { request } from 'umi'",
-      schemaPath: 'https://gw.alipayobjects.com/os/antfincdn/CA1dOm%2631B/openapi.json',
-      projectName: 'swagger',
     },
   ],
 });

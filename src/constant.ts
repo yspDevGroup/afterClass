@@ -151,19 +151,19 @@ export const AssistantTeacher: Record<string, string> = {
 // 类型
 export const CourseType: Record<string, string>[] = [
   {
-    text: '艺术类',
+    label: '艺术类',
     value: '艺术类',
   },
   {
-    text: '文史类',
+    label: '文史类',
     value: '文史类',
   },
   {
-    text: '理数类',
+    label: '理数类',
     value: '理数类',
   },
   {
-    text: '体育类',
+    label: '体育类',
     value: '体育类',
   },
 ];

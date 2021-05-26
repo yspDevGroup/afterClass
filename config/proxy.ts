@@ -8,8 +8,9 @@
 export default {
   dev: {
     '/api/': {
-      target: 'http://192.168.0.17:3000',
-      // target: 'http://zpldongxie.gicp.net:3000',
+      // target: 'http://192.168.0.17:3000',
+      // target: 'http://192.168.0.113:3000',
+      target: 'http://zpldongxie.gicp.net:3000',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
@@ -17,7 +18,6 @@ export default {
   ssh: {
     '/api/': {
       target: 'http://api.xianyunshipei.com',
-      // target: 'http://192.168.0.113:3000',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
