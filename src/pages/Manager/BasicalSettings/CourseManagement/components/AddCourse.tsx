@@ -50,6 +50,13 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues 
       key: 'SC',
     },
     {
+      type: 'uploadImage',
+      readonly,
+      label: '封面：',
+      name: 'FM',
+      key: 'FM',
+    },
+    {
       type: 'textArea',
       readonly,
       label: '简介：',

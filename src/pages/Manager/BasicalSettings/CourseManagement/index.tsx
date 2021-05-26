@@ -12,7 +12,9 @@ import { listData } from './mock';
 import { paginationConfig } from '@/constant';
 import Modal from 'antd/lib/modal/Modal';
 import React from 'react';
+import { message, Popconfirm } from 'antd';
 import CourseType from './components/CourseType';
+import SearchComponent from "@/components/Search"
 
 const CourseManagement = () => {
     const [visible, setVisible] = useState(false);
@@ -49,33 +51,36 @@ const CourseManagement = () => {
             title: '课程名称',
             dataIndex: 'KCMC',
             align: 'center',
-            width: 80,
+            width:'12%',
         },
         {
             title: '类型',
             dataIndex: 'LX',
             align: 'center',
-            width: 100,
+            width:'10%',
         },
         {
             title: '时长',
             dataIndex: 'SC',
             align: 'center',
-            width: 50,
+            width:'10%',
         },
         {
             title: '费用(元)',
             dataIndex: 'FY',
             align: 'center',
+            width:'10%'
         },
         {
             title: '课程封面',
             dataIndex: 'KCFM',
             align: 'center',
-            width: 100,
-            render: (dom, index) => {
-                return (
-                    <a href={index.KCFM} target="view_window" >
+            ellipsis: true,
+            width:100,
+   
+            render:(dom,index)=>{
+                return(
+                    <a href={index.KCFM} target="view_window" > 
                         课程封面.png
                     </a>
                 )
@@ -92,7 +97,7 @@ const CourseManagement = () => {
             title: '状态',
             dataIndex: 'ZT',
             align: 'center',
-            width: 70,
+            width: 100,
 
         },
         {
@@ -103,7 +108,25 @@ const CourseManagement = () => {
                 <>
                     <a onClick={() => handleEdit(record)}>编辑</a>
                     <Divider type="vertical" />
-                    <a>删除</a>
+                    <Popconfirm
+                        title="删除之后，数据不可恢复，确定要删除吗?"
+                        onConfirm={async () => {
+                            try {
+                                if (record.id) {
+                                    console.log('delete', [record.id])
+                                }
+                            } catch (err) {
+                                message.error('删除失败，请联系管理员或稍后重试。');
+                            }
+                        }}
+                        okText="确定"
+                        cancelText="取消"
+                        placement="topLeft"
+                    >
+                        <a>
+                            删除
+                        </a>
+                    </Popconfirm>
                 </>
             ),
             align: 'center',
@@ -125,6 +148,14 @@ const CourseManagement = () => {
                     search={false}
                     pagination={paginationConfig}
                     toolBarRender={() => [
+                        <SearchComponent
+                            placeholder="课程名称"
+                            fieldOne="学年学期 :"
+                            one="2020-2021"
+                            two="第一学期"
+                            HeaderFieldTitleNum={true}
+                            onlySearch={false}
+                        />,
                         <Button
                             key='wh'
                             onClick={() => maintain()}
@@ -143,7 +174,8 @@ const CourseManagement = () => {
                     ]}
                 />
                 <AddCourse visible={visible} onClose={onClose} formValues={current} />
-                <Modal visible={openes}
+                <Modal 
+                    visible={openes}
                     onCancel={showmodal}
                     title='课程类型维护'
                     centered bodyStyle={{
@@ -153,13 +185,13 @@ const CourseManagement = () => {
                     width='40vw'
                     footer={[
                         <Button key="back" onClick={() => setopenes(false)}>
-                          取消
+                            取消
                         </Button>,
                         <Button key="submit" type="primary">
-                          确定
+                            确定
                         </Button>
-                      ]}
-                    >
+                    ]}
+                >
                     <CourseType />
                 </Modal>
             </PageContainer>

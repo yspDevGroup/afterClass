@@ -2,7 +2,7 @@
 import PageContainer from "@/components/PageContainer";
 import type { ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
-import { Divider } from "antd";
+import { Divider, message } from "antd";
 import styles from './index.less';
 import type { ClassItem } from "./data";
 import { Button } from "antd";
@@ -13,6 +13,7 @@ import { Popconfirm } from "antd";
 import React, { useState } from "react";
 import AddClass from "./components/AddClass";
 import StudentInformation from "./components/StudentInformation";
+import SearchComponent from "@/components/Search"
 
 
 const ClassManagement = () => {
@@ -39,9 +40,6 @@ const ClassManagement = () => {
     const onClose = () => {
         setModalVisible(false);
     };
-    const sc = (record: any) => {
-        console.log(record.id)
-    }
 
     const columns: ProColumns<ClassItem>[] = [
         {
@@ -112,10 +110,25 @@ const ClassManagement = () => {
                 <>
                     <a onClick={() => handleEdit(record)} >编辑</a>
                     <Divider type="vertical" />
-                    <a onClick={() => sc(record)}>
-                        <Popconfirm title="确定删除吗？" okText="是" cancelText="否">删除
-                        </Popconfirm>
-                    </a>
+                    <Popconfirm
+                        title="删除之后，数据不可恢复，确定要删除吗?"
+                        onConfirm={async () => {
+                            try {
+                                if (record.id) {
+                                    console.log('delete', [record.id])
+                                }
+                            } catch (err) {
+                                message.error('删除失败，请联系管理员或稍后重试。');
+                            }
+                        }}
+                        okText="确定"
+                        cancelText="取消"
+                        placement="topLeft"
+                    >
+                        <a>
+                            删除
+            </a>
+                    </Popconfirm>
                 </>
             ),
             align: 'center',
@@ -137,6 +150,16 @@ const ClassManagement = () => {
                     pagination={paginationConfig}
                     dataSource={listData}
                     toolBarRender={() => [
+                        <SearchComponent
+                            placeholder="班级名称"
+                            fieldOne="学年学期 :"
+                            fieldTwo="年级 :"
+                            one="2020-2021"
+                            two="第一学期"
+                            three="六年级"
+                            HeaderFieldTitleNum={false}
+                            onlySearch={false}
+                        />,
                         <Button
                             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
                             type="primary"
