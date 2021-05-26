@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import type { FormInstance} from 'antd';
+import { Tooltip } from 'antd';
 import { message, Popconfirm } from 'antd';
 import { Button, Divider, Modal } from 'antd';
 import ProTable from '@ant-design/pro-table';
@@ -69,44 +70,50 @@ const RoomManagement = () => {
       width: 48,
     },
     {
-      title: '场地名称',
-      dataIndex: 'CDMC',
+      title: '名称',
+      dataIndex: 'FJMC',
       align: 'center',
       width: '15%',
       ellipsis: true,
     },
     {
-      title: '场地类型',
-      dataIndex: 'CDLX',
+      title: '编号',
+      dataIndex: 'FJBH',
+      align: 'center',
+      width: '10%',
+      ellipsis: true,
+    },
+    {
+      title: '类型',
+      dataIndex: 'FJLX',
       align: 'center',
       width: '12%',
       ellipsis: true,
     },
     {
       title: '所属校区',
-      dataIndex: 'SSXQ',
+      dataIndex: 'XQSJ',
       align: 'center',
       width: '15%',
       ellipsis: true,
+      render: (_, record) => {
+        return <div className='ui-table-col-elp'>
+          <Tooltip title={record.XQSJ?.XQMC} arrowPointAtCenter>
+            {record.XQSJ?.XQMC}
+          </Tooltip></div>
+      }
     },
     {
       title: '容纳人数',
-      dataIndex: 'RNRS',
+      dataIndex: 'FJRS',
       align: 'center',
       width: 100,
     },
     {
-      title: '场地地址',
-      dataIndex: 'CDDZ',
-      align: 'center',
-      width: '15%',
-      ellipsis: true,
-    },
-    {
-      title: '备注',
+      title: '地址',
       dataIndex: 'BZ',
       align: 'center',
-      width: '15%',
+      width: '18%',
       ellipsis: true,
     },
     {

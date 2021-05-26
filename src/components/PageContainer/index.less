@@ -15,7 +15,8 @@
         align-items: center;
         text-align: justify;
         min-width: 200px;
-        >span{
+
+        >span {
           display: flex;
         }
 
@@ -31,8 +32,17 @@
         .ant-table-wrapper {
           width: 100%;
           overflow: auto;
+
           .ant-table {
             min-width: 700px;
+
+            .ui-table-col-elp {
+              display: inline-block;
+              width: 100%;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
           }
         }
       }
