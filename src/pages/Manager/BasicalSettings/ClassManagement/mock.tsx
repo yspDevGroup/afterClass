@@ -4,7 +4,9 @@ export const listData: ClassItem[] = [
     {
         id: '7835u-uedejn2-792hs7481',
         BJMC: '美术',
-        FJSJ: '一号教学楼301',
+        FJSJ: {
+          FJMC : '一号教学楼301'
+        },
         ZJS: '陈英振',
         FJS: '王子聪,林艺,佐罗,惠新海',
         BJRS: 40,

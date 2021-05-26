@@ -21,7 +21,6 @@ const CourseType = () => {
         },
         {
             title: '类型',
-            key: 'state',
             dataIndex: 'KCLX',
             align: 'center',
             ellipsis: true,
@@ -74,9 +73,9 @@ const CourseType = () => {
                     cancelText="取消"
                     placement="topLeft"
                 >
-                    <a>
+                    <a  key="delete">
                         删除
-               </a>
+                    </a>
                 </Popconfirm>
             ],
         },

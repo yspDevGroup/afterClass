@@ -60,6 +60,11 @@ const ClassManagement = () => {
             align: 'center', 
             ellipsis: true,
             width:100,
+            render: (_, record) => {
+                return <div >    
+                    {record.FJSJ?.FJMC}
+                 </div>
+              }
         },
         {
             title: '授课老师',

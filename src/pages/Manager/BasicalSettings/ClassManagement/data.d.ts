@@ -14,13 +14,37 @@
 export type ClassItem = {
     id?: string;
     BJMC?: string;
-    FJSJ?: string;
+    FJSJ?: FJSJtype;
     ZJS?: string;
     FJS?: string;
     BJRS?: number;
     BJMS?: string;
     BJZT?: string;
 };
+/**
+ * 
+    "FJBH": 房间编号 ,
+    "FJMC": 房间名称,
+    "FJLC": 房间楼层, 
+    "FJJZMJ": 房间建筑面积,
+    "FJSYMJ": 房间使用面积,
+    "FJRS":房间容纳人数 ,
+    "FJLX": 房间类型
+ * 
+ */
+
+
+type FJSJtype = {
+    id?: string,
+    FJBH?: string,
+    FJMC?: string,
+    FJLC?: string, 
+    FJJZMJ?: number,
+    FJSYMJ?: number,
+    FJRS?: number,
+    FJLX?: string,
+}
+
 
 /**
  * 

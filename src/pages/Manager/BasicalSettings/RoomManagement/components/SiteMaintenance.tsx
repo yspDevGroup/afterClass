@@ -10,9 +10,7 @@ const SiteMaintenance = () => {
     const actionRef = useRef<ActionType>();
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
     const [dataSource, setDataSource] = useState<DataSourceType[]>([]);
-    // const txt =(record: any)=>{
-    //     setDataSource(dataSource.filter((item) => item.id !== record.id));
-    // }
+
     const columns: ProColumns<DataSourceType>[] = [
         {
             title: '序号',
@@ -60,16 +58,12 @@ const SiteMaintenance = () => {
                     }}
                 >
                     编辑
-            </a>,
+                </a>,
                 <Popconfirm
                     title='确定删除？'
-                // onConfirm={txt(record)}
                 >
                     <a
                         key="delete"
-                    // onClick={() => {
-                    //     setDataSource(dataSource.filter((item) => item.id !== record.id));
-                    // }}
                     >
                         删除
             </a>
