@@ -122,7 +122,7 @@ export const listData: CourseItem[] = [
         JJ: '通过趣味的简单线描，色彩绘画...',
         ZT: '待开课',
     },
-]
+];
 
 export const defaultData: DataSourceType[] = [
     {
