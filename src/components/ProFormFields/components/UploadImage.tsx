@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Button, message, Upload } from 'antd';
 import styles from './UploadImage.less';
+import type { FormItemsProps } from '../indexType';
 
-const UploadImage = () => {
-  const [imageUrl, setImageUrl] = useState();
+const UploadImage = (props: FormItemsProps) => {
+  const { uploadUrl } = props;
+  const [imageUrl, setImageUrl] = useState(props.imageUrl);
   const getBase64 = (img: any, callback: any) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
@@ -27,10 +29,13 @@ const UploadImage = () => {
       });
     }
   };
+  const onResetClick = () => {
+    setImageUrl(undefined);
+  };
   return (
     <div className={styles.uploadStyles}>
       {imageUrl ? (
-        <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+        <img src={imageUrl} alt="avatar" style={{ width: 110, height: 130, marginRight: 16 }} />
       ) : (
         <div className={styles.defImgStyles}>
           <div className={styles.icon} />
@@ -40,13 +45,15 @@ const UploadImage = () => {
         <Upload
           showUploadList={false}
           name="avatar"
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          action={uploadUrl}
           beforeUpload={beforeUpload}
           onChange={handleChange}
         >
           <Button type="primary">上传</Button>
         </Upload>
-        <Button style={{ marginTop: 8 }}>重置</Button>
+        <Button style={{ marginTop: 8 }} onClick={onResetClick}>
+          重置
+        </Button>
       </div>
     </div>
   );

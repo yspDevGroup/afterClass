@@ -47,16 +47,16 @@ const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues })
       type: 'select',
       readonly,
       label: '授课老师：',
-      name: 'SKLS',
-      key: 'SKLS',
+      name: 'ZJS',
+      key: 'ZJS',
       valueEnum: Teacher,
     },
     {
       type: 'select',
       readonly,
       label: '助教老师：(可多选)',
-      name: 'ZJLS',
-      key: 'ZJLS',
+      name: 'FJS',
+      key: 'FJS',
       fieldProps: {
         mode: 'multiple',
       },
@@ -66,8 +66,8 @@ const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues })
       type: 'textArea',
       readonly,
       label: '简介：',
-      name: 'JJ',
-      key: 'JJ',
+      name: 'BJMS',
+      key: 'BJMS',
     },
   ];
   return (

@@ -8,7 +8,7 @@ type AddCourseProps = {
   visible: boolean;
   onClose: () => void;
   readonly?: boolean;
-  formValues?: {};
+  formValues?: Record<string, any>;
 };
 const formLayout = {
   labelCol: {},
@@ -38,30 +38,32 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues 
       type: 'select',
       readonly,
       label: '类型：',
-      name: 'LX',
-      key: 'LX',
+      name: 'KCLX',
+      key: 'KCLX',
       valueEnum: CourseType,
     },
     {
       type: 'input',
       readonly,
       label: '时长：',
-      name: 'SC',
-      key: 'SC',
+      name: 'KCSC',
+      key: 'KCSC',
     },
     {
       type: 'uploadImage',
       readonly,
       label: '封面：',
-      name: 'FM',
-      key: 'FM',
+      name: 'KCTP',
+      key: 'KCTP',
+      upUrl: '',
+      imageUrl: formValues?.KCFM,
     },
     {
       type: 'textArea',
       readonly,
       label: '简介：',
-      name: 'JJ',
-      key: 'JJ',
+      name: 'KCMS',
+      key: 'KCMS',
     },
   ];
   return (

@@ -59,7 +59,7 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
       case 'uploadImage':
         return (
           <ProForm.Item {...currentProps} key={key}>
-            <UploadImage />
+            <UploadImage {...currentProps} key={key} />
           </ProForm.Item>
         );
       case 'group': {

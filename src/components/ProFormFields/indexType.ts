@@ -38,6 +38,10 @@ export type FormItemsProps = {
   options: any[];
   /** 每个表单项的属性，详情请参考ProForm的API */
   currentProps?: Record<string, any>;
+  /** 返回的图片地址 */
+  imageUrl?: string;
+  /** 图片上传地址 */
+  uploadUrl?: string;
 };
 
 export type ProFormFieldsPropsType = {
