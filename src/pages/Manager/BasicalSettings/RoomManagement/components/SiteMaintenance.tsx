@@ -21,14 +21,13 @@ const SiteMaintenance = () => {
         },
         {
             title: '名称',
-            key: 'state',
-            dataIndex: 'state',
+            dataIndex: 'FJMC',
             align: 'center',
             ellipsis: true,
         },
         {
             title: '描述',
-            dataIndex: 'decs',
+            dataIndex: 'BZXX',
             align: 'center',
             ellipsis: true,
             fieldProps: (from, { rowKey, rowIndex }) => {

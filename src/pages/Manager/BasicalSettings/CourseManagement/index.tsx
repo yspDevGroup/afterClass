@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRef, useState } from 'react';
 import { message, Popconfirm, Divider, Button, Modal } from 'antd';
-
 import PageContainer from '@/components/PageContainer';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -9,7 +8,6 @@ import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
 import SearchComponent from '@/components/Search';
 import { deleteKHKCSJ, getAllKHKCSJ } from '@/services/after-class/khkcsj';
-
 import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
 import type { CourseItem } from './data';

@@ -1,12 +1,12 @@
 /*
  * @,@Author: ,: your name
  * @,@Date: ,: 2021-05-24 15:20:59
- * @,@LastEditTime: ,: 2021-05-25 14:52:31
- * @,@LastEditors: ,: your name
+ * @,@LastEditTime: ,: 2021-05-26 17:48:39
+ * @,@LastEditors: ,: Please set LastEditors
  * @,@Description: ,: In User Settings Edit
  * @,@FilePath: ,: \afterClass\src\pages\Manager\BasicalSettings\RoomManagement\mock.ts
  */
-import type { DataSourceType, RoomItem } from './data';
+import type { RoomItem } from './data';
 
 export const listData: RoomItem[] = [
   {
@@ -22,15 +22,15 @@ export const listData: RoomItem[] = [
   },
 ];
 
-export const defaultData: DataSourceType[] = [
+export const defaultData: RoomItem[] = [
   {
-    id: 624748504,
-    decs: '这是电脑教室',
-    state: '多媒体教室',
+    id: '624748504',
+    BZXX: '这是电脑教室',
+    FJMC: '多媒体教室',
   },
   {
-    id: 624691229,
-    decs: '这是阶梯教室',
-    state: '阶梯教室',
+    id: '624691229',
+    BZXX: '这是阶梯教室',
+   FJMC: '阶梯教室',
   },
 ];
