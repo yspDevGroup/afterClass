@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, message, Upload } from 'antd';
+import { Button, message, Upload, Image } from 'antd';
 import styles from './UploadImage.less';
 import type { FormItemsProps } from '../indexType';
 
@@ -35,7 +35,9 @@ const UploadImage = (props: FormItemsProps) => {
   return (
     <div className={styles.uploadStyles}>
       {imageUrl ? (
-        <img src={imageUrl} alt="avatar" style={{ width: 110, height: 130, marginRight: 16 }} />
+        <div style={{ marginRight: 16 }}>
+          <Image width={110} height={130} src={imageUrl} />
+        </div>
       ) : (
         <div className={styles.defImgStyles}>
           <div className={styles.icon} />
