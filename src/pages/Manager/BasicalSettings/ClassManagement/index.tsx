@@ -2,7 +2,7 @@
 import PageContainer from "@/components/PageContainer";
 import type { ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
-import { Divider, message, Tag } from "antd";
+import { Divider, message, Tag, Tooltip } from "antd";
 import styles from './index.less';
 import type { ClassItem } from "./data";
 import { Button } from "antd";
@@ -78,11 +78,12 @@ const ClassManagement = () => {
             align: 'center',
             ellipsis: true,
             width:100,
-            render:(_,index)=>{
+            render:(_,record)=>{
                 return(
-                    <>
+                    <div className='ui-table-col-elp'>
+                    <Tooltip title={record.FJS} arrowPointAtCenter>
                     {
-                        index.FJS?.split(',').map((item)=>{
+                        record.FJS?.split(',').map((item)=>{
                             return(
                                 <>
                                 <Tag>{item}</Tag>
@@ -90,7 +91,8 @@ const ClassManagement = () => {
                             )
                         })
                     }
-                    </>
+                    </Tooltip>
+                    </div>
                 )
             }
         },
