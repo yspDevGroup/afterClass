@@ -2,213 +2,113 @@
  * @description: 
  * @author: txx
  * @Date: 2021-05-24 16:33:45
- * @LastEditTime: 2021-05-26 16:17:16
+ * @LastEditTime: 2021-05-25 17:39:03
  * @LastEditors: txx
  */
 
-// import { Input, Dropdown, Button, } from 'antd';
-// import type { FC } from 'react';
-// import { DownOutlined } from '@ant-design/icons';
-// import styles from "./index.less"
+import type { FC } from 'react';
+import { useState } from 'react';
+import { Input, Select, } from 'antd';
+import styles from "./index.less";
+import { dataSource } from './mock';
 
+type ISearchComponent = {
+  /** 输入框默认值 */
+  placeholder?: string,
+  /** 点击搜索图标、清除图标，或按下回车键时的回调 */
+  onSearch?: (value: any, event: any) => void
+  /** 左侧筛选的字段 */
+  fieldOne?: string;
+  /** 左侧筛选的字段 */
+  fieldTwo?: string;
+  /** 表头第一个字段选择 */
+  one?: string;
+  /** 表头第二个字段选择 */
+  two?: string;
+  /** 表头第三个字段选择 */
+  three?: string;
+  /** 判断表头是否只有search */
+  onlySearch?: boolean;
+  /** 判断表头有几个字段选择  默认是1个 */
+  HeaderFieldTitleNum?: boolean;
+  /** 第一个下拉数据 */
+  downOneData?: {
+    oneData?: string;
+  }[];
+  /** 第二个下拉数据 */
+  downTwoData?: {
+    twoData?: string;
+  }[];
+  /** 第三个下拉数据 */
+  downThreeData?: {
+    threeData?: string;
+  }[];
 
-// type ISearchComponent = {
-//   /** 输入框默认值 */
-//   placeholder?: string,
-//   /** 点击搜索图标、清除图标，或按下回车键时的回调 */
-//   onSearch?: (value: any, event: any) => void
-//   /** 左侧筛选的字段 */
-//   fieldOne?: string;
-//   /** 左侧筛选的字段 */
-//   fieldTwo?: string;
-//   /** 表头第一个字段选择 */
-//   one?: string;
-//   /** 表头第二个字段选择 */
-//   two?: string;
-//   /** 表头第三个字段选择 */
-//   three?: string;
-//   /** 判断表头是否只有search */
-//   onlySearch?: boolean;
-//   /** 判断表头有几个字段选择  默认是1个 */
-//   HeaderFieldTitleNum?: boolean;
-//   /** 第一个1下拉框的数据 */
-//   overlay1?: any;
-//   /** 第二个1下拉框的数据 */
-//   overlay2?: any;
-//   /** 第三个1下拉框的数据 */
-//   overlay3?: any;
-// }
+}
 
+const { Search } = Input;
+const { Option } = Select;
+const onSearch = (value: any) => console.log(value);
 
-// const downOneData = [
-//   { oneData: "2020 - 2021", key: "1" },
-//   { oneData: "2019 - 2020", key: "2" },
-//   { oneData: "2018 - 2019", key: "3" },
-//   { oneData: "2018 - 2019", key: "4" },
+const SearchComponent: FC<ISearchComponent> = () => {
+  const { itemRecourse, chainData } = dataSource;
+  const [terms, setTerms] = useState<any>(chainData.subData[chainData.data[0].key]);
+  const [curTerm, setCurTerm] = useState<string>(chainData.subData[chainData.data[0].key][0].key);
+  
 
-// ]
-// const downTwoData = [
-//   { twoData: "第一学期", key: "1" },
-//   { twoData: "第二学期", key: "2" },
-//   { twoData: "第三学期", key: "3" },
-//   { twoData: "第四学期", key: "4" },
-// ]
-// const downThreeData = [
-//   { threeData: "第一学期", key: "1" },
-//   { threeData: "第二学期", key: "2" },
-//   { threeData: "第三学期", key: "3" },
-//   { threeData: "第四学期", key: "4" },
-// ]
-// const onClick = (value: any) => {
-//   console.log(`value`, value)
-// };
-// const DownOneData = () => {
-//   return (
-//       <Menu onClick={onClick}>
-//           <List
-//               dataSource={downOneData}
-//               renderItem={item => (
-//                   <Menu.Item key={item.key}>
-//                       <div style={{ textAlign: "center", margin: "8px 0px", cursor: 'pointer' }}>{item.oneData}</div>
-//                   </Menu.Item>
-//               )}
-//           />
-
-//       </Menu>
-//   )
-// };
-// const DownTwoData = () => {
-//   return (
-//       <Menu onClick={onClick}>
-//           <List
-//               dataSource={downTwoData}
-//               renderItem={item => (
-//                   <Menu.Item key={item.key}>
-//                       <div style={{ textAlign: "center", margin: "8px 0px", cursor: 'pointer' }}>{item.twoData}</div>
-//                   </Menu.Item>
-//               )}
-//           />
-
-//       </Menu>
-//   )
-// };
-// const DownThreeData = () => {
-//   return (
-//       <Menu onClick={onClick}>
-//           <List
-//               dataSource={downThreeData}
-//               renderItem={item => (
-//                   <Menu.Item key={item.key}>
-//                       <div style={{ textAlign: "center", margin: "8px 0px", cursor: 'pointer' }}>{item.threeData}</div>
-//                   </Menu.Item>
-//               )}
-//           />
-
-//       </Menu>
-//   )
-// };
-
-
-// const { Search } = Input;
-// const onSearch = (value: any) => console.log(value);
-
-// const SearchComponent: FC<ISearchComponent> = (
-//   { placeholder,
-//     fieldOne,
-//     fieldTwo,
-//     one,
-//     two,
-//     three,
-//     onlySearch,
-//     HeaderFieldTitleNum,
-//     overlay1,
-//     overlay2,
-//     overlay3,
-//   }
-// ) => {
-//   return (
-//     <div>
-//       { onlySearch === true ?
-//         (<div className={styles.SearchBox}>
-//           <Search
-//             placeholder={placeholder}
-//             onSearch={onSearch}
-//             style={{ width: 200 }}
-//             bordered={false}
-//           />
-//         </div>)
-//         :
-//         (<div className={styles.SearchBox}>
-//           {HeaderFieldTitleNum === true ?
-//             (<div>
-//               <div className={styles.HeaderFieldTitle}>{fieldOne}</div>
-//               <div className={styles.HeaderFieldYear}>
-//                 <Dropdown overlay={overlay1}>
-//                   <Button>
-//                     {one} <DownOutlined />
-//                   </Button>
-//                 </Dropdown>
-//               </div>
-//               <div className={styles.HeaderFieldSemester}>
-//                 <Dropdown overlay={overlay2}>
-//                   <Button>
-//                     {two} <DownOutlined />
-//                   </Button>
-//                 </Dropdown>
-//               </div>
-
-//               <Search
-//                 placeholder={placeholder}
-//                 onSearch={onSearch}
-//                 style={{ width: 200 }}
-//                 bordered={false}
-//               />
-//             </div>
-//             )
-//             :
-//             (<div>
-//               <div>
-//                 <div className={styles.HeaderFieldTitle}>{fieldOne}</div>
-//                 <div className={styles.HeaderFieldYear}>
-//                   <Dropdown overlay={overlay1}>
-//                     <Button>
-//                       {one} <DownOutlined />
-//                     </Button>
-//                   </Dropdown>
-//                 </div>
-//                 <div className={styles.HeaderFieldSemester}>
-//                   <Dropdown overlay={overlay2}>
-//                     <Button>
-//                       {two} <DownOutlined />
-//                     </Button>
-//                   </Dropdown>
-//                 </div>
-//               </div>
-//               <div className={styles.HeaderFieldSemesterTwo}>
-//                 <div className={styles.HeaderFieldTitle}>{fieldTwo}</div>
-//                 <div className={styles.HeaderFieldYear}>
-//                   <Dropdown overlay={overlay3}>
-//                     <Button>
-//                       {three} <DownOutlined />
-//                     </Button>
-//                   </Dropdown>
-//                 </div>
-//               </div>
-
-//               <Search
-//                 placeholder={placeholder}
-//                 onSearch={onSearch}
-//                 style={{ width: 200 }}
-//                 bordered={false}
-//               />
-//             </div>
-//             )
-//           }
-
-//         </div>)
-//       }
-
-//     </div >
-//   )
-// }
-// export default SearchComponent
+  const handleChainChange = (value: any) => {
+    const curData = chainData.subData;
+    setTerms(curData[value]);
+    setCurTerm(curData[value][0].key);
+  };
+  const onTermChange = (value: any)=>{
+    setCurTerm(value);
+  };
+  return (
+    <div className={styles.SearchBox}>
+      {itemRecourse.map((item) => {
+        const { label, type, placeHolder = '请输入', isLabel = true, data } = item;
+        switch (type) {
+          case 'input':
+            return <>
+              {isLabel ? <span>{label}</span> : ''}
+              <Search
+                placeholder={placeHolder}
+                onSearch={onSearch}
+                style={{ width: 200 }}
+                bordered={false}
+              /></>;
+            break;
+          case 'select':
+            return <>
+              <div className={styles.HeaderFieldTitle}>{label}</div>
+              <div className={styles.HeaderFieldYear}>
+                <Select defaultValue={data![0].title} style={{ width: 120 }}>
+                  {data?.map((op: any) => <Option value={op.key}>{op.title}</Option>)}
+                </Select>
+              </div>
+            </>
+          case 'chainSelect':
+            return <>
+              <div className={styles.HeaderFieldTitle}>{label}</div>
+              <div className={styles.HeaderFieldYear}>
+                <Select style={{ width: 120 }} onChange={handleChainChange} defaultValue={chainData.data[0].key} >
+                  {chainData.data?.map(year => (
+                    <Option value={year.key}>{year.title}</Option>
+                  ))}
+                </Select>
+                <Select style={{ width: 120 }} onChange={onTermChange} value={curTerm} >
+                  {terms?.map((term: any) => (
+                    <Option value={term.key}>{term.title}</Option>
+                  ))}
+                </Select>
+              </div>
+            </>
+          default:
+            return <></>
+        }
+      })}
+    </div >
+  )
+}
+export default SearchComponent

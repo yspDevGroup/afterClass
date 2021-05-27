@@ -13,10 +13,10 @@ import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
 import { paginationConfig } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
+import SearchComponent from '@/components/Search';
 import SiteMaintenance from './components/SiteMaintenance';
 import { getAllFJSJ } from '@/services/after-class/fjsj';
 import { getInitialState } from '@/app';
-// import SelectComponent from '@/components/SelectComponent';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -171,12 +171,10 @@ const RoomManagement = () => {
         actionRef={actionRef}
         search={false}
         dataSource={listData}
-        // headerTitle={
-        //   <SelectComponent
-        //     onlySearch={true}
-        //     placeholder="场地名称"
-        //   />
-        // }
+        headerTitle={<SearchComponent
+          placeholder="场地名称"
+          onlySearch={true}
+        />}
         options={{
           setting: false,
           fullScreen: false,

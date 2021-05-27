@@ -13,12 +13,8 @@ import { Popconfirm } from "antd";
 import React, { useState } from "react";
 import AddClass from "./components/AddClass";
 import StudentInformation from "./components/StudentInformation";
-// import SelectComponent from "@/components/SelectComponent"
+import SearchComponent from "@/components/Search"
 
-// const downOneData = [
-//     { key: "1", Field: "学年学期：", oneData1: "2020 - 2021", oneData2: "2019 - 2020" },
-//     { key: "1", Field: "年级：", oneData1: "六年级", oneData2: "五年级" },
-// ]
 
 const ClassManagement = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -174,14 +170,16 @@ const ClassManagement = () => {
                     }}
                     pagination={paginationConfig}
                     dataSource={listData}
-                    // headerTitle={
-                    //     <SelectComponent
-                    //         onlySearch={false}
-                    //         fieldData={downOneData}
-                    //         placeholder="班级名称"
-                    //         filedSelectTwo={false}
-                    //     />
-                    // }
+                    headerTitle={<SearchComponent
+                        placeholder="班级名称"
+                        fieldOne="学年学期 :"
+                        fieldTwo="年级 :"
+                        one="2020-2021"
+                        two="第一学期"
+                        three="六年级"
+                        HeaderFieldTitleNum={false}
+                        onlySearch={false}
+                    />}
                     toolBarRender={() => [
                         <Button
                             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
