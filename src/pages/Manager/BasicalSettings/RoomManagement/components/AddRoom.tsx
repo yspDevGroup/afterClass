@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
-import type { RoomItem } from '../data';
+import type { RoomItem, SchoolAreaType } from '../data';
 import ProFormFields from '@/components/ProFormFields';
-import { RoomType, SchoolArea } from '@/constant';
+import { RoomType } from '@/constant';
+import { getAllXQSJ } from '@/services/after-class/xqsj';
 
 const formLayout = {
   labelCol: { span: 5 },
@@ -19,26 +20,61 @@ type PropsType = {
 
 const AddRoom = (props: PropsType) => {
   const { current, setForm, readonly } = props;
+  const [schoolArea,setSchoolArea] = useState<Record<string, string>[]>([]);
 
-  const onFinish = (values: any) => {
-    console.log('onFinish', values);
-  };
+  useEffect(() => {
+    // 根据学校ID获取所有校区信息
+    async function fetchData() {
+      try {
+        const result = await getAllXQSJ({
+          xxid: 'd18f9105-9dfb-4373-9c76-bc68f670fff5'
+        });
+        if (result.status === 'ok') {
+          if(result.data && result.data.length > 0) {
+            const data: any = [].map.call(result.data, (item: SchoolAreaType) => {
+              return {
+                value: item.id,
+                text: item.XQMC
+              }
+            });
+            setSchoolArea(data);
+          }
+        }
+      } catch (error) {
+        console.log('数据获取失败');
+        
+      }
+
+
+    }
+    fetchData();
+  }, [])
+  console.log(schoolArea);
+  
   const formItems: any[] = [
     {
       type: 'input',
       readonly,
-      label: '场地名称',
+      label: '名称',
       name: 'FJMC',
       key: 'FJMC',
-      rules: [{ required: true, message: '请填写场地名称' }],
+      rules: [{ required: true, message: '请填写名称' }],
+    },
+    {
+      type: 'input',
+      readonly,
+      label: '编号',
+      name: 'FJBH',
+      key: 'FJBH',
+      rules: [{ required: true, message: '请填写编号' }],
     },
     {
       type: 'select',
       readonly,
-      label: '场地类型',
+      label: '类型',
       name: 'FJLX',
       key: 'FJLX',
-      rules: [{ required: true, message: '请填写场地名称' }],
+      rules: [{ required: true, message: '请填写名称' }],
       valueEnum: RoomType,
     },
     {
@@ -47,8 +83,8 @@ const AddRoom = (props: PropsType) => {
       label: '所属校区',
       name: 'SSXQ',
       key: 'SSXQ',
-      rules: [{ required: true, message: '请填写场地名称' }],
-      valueEnum: SchoolArea,
+      rules: [{ required: true, message: '请选择所属校区' }],
+      valueEnum: schoolArea,
     },
     {
       type: 'input',
@@ -56,29 +92,21 @@ const AddRoom = (props: PropsType) => {
       label: '容纳人数',
       name: 'FJRS',
       key: 'FJRS',
-      rules: [{ required: true, message: '请填写场地名称' }],
+      rules: [{ required: true, message: '请填写场地容纳人数' }],
     },
     {
       type: 'input',
       readonly,
       label: '场地地址',
-      name: 'CDDZ',
-      key: 'CDDZ',
-      rules: [{ required: true, message: '请填写场地名称' }],
-    },
-    {
-      type: 'textArea',
-      readonly,
-      label: '备 注',
-      name: 'BZ',
-      key: 'BZ',
+      name: 'BZXX',
+      key: 'BZXX',
+      rules: [{ required: true, message: '请填写场地地址' }],
     },
   ];
   return (
     <>
       <ProFormFields
         layout="horizontal"
-        onFinish={onFinish}
         setForm={setForm}
         values={current}
         formItems={formItems}

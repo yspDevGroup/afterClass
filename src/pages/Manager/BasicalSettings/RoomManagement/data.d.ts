@@ -25,7 +25,7 @@ type SchoolType = {
  * XQLXDH: 校区联系电话;
  * XQCZDH: 校区传真电话;
  */
-type SchoolAreaType = {
+export type SchoolAreaType = {
   id?: string;
   XQH?: string;
   XQMC?: string;

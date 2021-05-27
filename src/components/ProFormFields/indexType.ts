@@ -64,7 +64,7 @@ export type ProFormFieldsPropsType = {
   layout?: 'horizontal' | 'vertical' | 'inline';
 
   /** 提交表单且数据验证成功后回调事件 */
-  onFinish: (value: any) => any;
+  onFinish?: (value: any) => any;
 
   formItems: any;
   /** 提交按钮相关配置(请参考ProForm的API) */
