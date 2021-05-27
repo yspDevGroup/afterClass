@@ -6,7 +6,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
-import SearchComponent from '@/components/Search';
+import SelectComponent from '@/components/SelectComponent';
 import { deleteKHKCSJ, getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
@@ -137,7 +137,11 @@ const CourseManagement = () => {
       align: 'center',
     },
   ];
-
+  const provinceData = ['Zhejiang', 'Jiangsu'];
+  const cityData = {
+    Zhejiang: ['Hangzhou', 'Ningbo', 'Wenzhou'],
+    Jiangsu: ['Nanjing', 'Suzhou', 'Zhenjiang'],
+  };
   return (
     <>
       <PageContainer cls={styles.roomWrapper}>
@@ -167,14 +171,15 @@ const CourseManagement = () => {
           search={false}
           pagination={paginationConfig}
           headerTitle={
-            <SearchComponent
-              placeholder="课程名称"
-              fieldOne="学年学期 :"
-              one="2020-2021"
-              two="第一学期"
-              HeaderFieldTitleNum={true}
+            <SelectComponent
               onlySearch={false}
+              // fieldData={downOneData}
+              placeholder="班级名称"
+              filedSelectTwo={false}
+              cityData={cityData}
+              provinceData={provinceData}
             />
+
           }
           toolBarRender={() => [
             <Button key="wh" onClick={() => maintain()}>
