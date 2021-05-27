@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 import ProFormFields from '@/components/ProFormFields';
 import { AssistantTeacher, ClassLocation, Teacher } from '@/constant';
-import { Button, Drawer } from 'antd';
+import { createKHPKSJ, updateKHPKSJ } from '@/services/after-class/khpksj';
+import type { ActionType } from '@ant-design/pro-table';
+import { Button, Drawer, message } from 'antd';
 import type { FC } from 'react';
 import { useState } from 'react';
 
@@ -10,17 +12,43 @@ type AddClassProps = {
   onClose: () => void;
   readonly?: boolean;
   formValues?: Record<string, any>;
+  actionRef?: React.MutableRefObject<ActionType | undefined>;
 };
 const formLayout = {
   labelCol: {},
   wrapperCol: {},
 };
 
-const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues }) => {
+const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues, actionRef }) => {
   const [form, setForm] = useState<any>();
 
   const onFinish = (values: any) => {
-    console.log('onFinish131', values);
+    new Promise((resolve, reject) => {
+      let res = null;
+      if (formValues?.id) {
+        const params = {
+          id: formValues?.id,
+        };
+        const options = values;
+        res = updateKHPKSJ(params, options);
+      } else {
+        res = createKHPKSJ(values);
+      }
+      resolve(res);
+      reject(res);
+    })
+      .then((data: any) => {
+        if (data.status === 'ok') {
+          message.success('保存成功');
+          onClose();
+          actionRef?.current?.reload();
+        } else {
+          message.error('保存失败');
+        }
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
   };
 
   const handleSubmit = () => {

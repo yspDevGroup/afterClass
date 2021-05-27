@@ -12,11 +12,15 @@ import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
 import type { CourseItem } from './data';
 import styles from './index.less';
+import { useEffect } from 'react';
+import { getInitialState } from '@/app';
+import { getXXJBSJ } from '@/services/after-class/xxjbsj';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
   const [openes, setopenes] = useState(false);
+  const [xxjbData, setXxjbData] = useState<string | undefined>('')
   const actionRef = useRef<ActionType>();
 
   const showDrawer = () => {
@@ -38,6 +42,23 @@ const CourseManagement = () => {
   const showmodal = () => {
     setopenes(false);
   };
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getInitialState();
+      console.log('response', response);
+      if (response.currentUser?.XXDM) {
+        const params = {
+          XXDM: response.currentUser.XXDM
+        }
+        const XXJB = await getXXJBSJ(params);
+        if (XXJB.status === 'ok') {
+          setXxjbData(XXJB.data.id);
+        }
+        console.log('XXJB', XXJB);
+      }
+    }
+    fetchData();
+  }, []);
   const columns: ProColumns<CourseItem>[] = [
     {
       title: '序号',
@@ -153,7 +174,7 @@ const CourseManagement = () => {
               njId: 'dd149420-7d4b-4191-8ddc-6b686a2bd63f',
               xn: '2021学年',
               xq: '第一学期',
-              xxId: 'd18f9105-9dfb-4373-9c76-bc68f670fff5',
+              xxId: xxjbData,
               name: '',
             };
             return getAllKHKCSJ(obj);

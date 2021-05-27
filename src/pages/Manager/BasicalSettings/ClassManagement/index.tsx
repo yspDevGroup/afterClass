@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import PageContainer from "@/components/PageContainer";
-import type { ProColumns } from "@ant-design/pro-table";
+import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
 import { Divider, message, Tag, Tooltip } from "antd";
 import styles from './index.less';
@@ -10,15 +10,21 @@ import { theme } from "@/theme-default";
 import { listData } from "./mock";
 import { paginationConfig } from '@/constant';
 import { Popconfirm } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddClass from "./components/AddClass";
 import StudentInformation from "./components/StudentInformation";
 import SearchComponent from "@/components/Search"
+import { getInitialState } from "@/app";
+import { getXXJBSJ } from "@/services/after-class/xxjbsj";
+import { deleteKHPKSJ, getAllKHPKSJ } from "@/services/after-class/khpksj";
 
 
 const ClassManagement = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [current, setCurrent] = useState<ClassItem>();
+    const [xxjbData, setXxjbData] = useState<string | undefined>('')
+    const actionRef = useRef<ActionType>();
+
 
     const getModelTitle = () => {
         if (current) {
@@ -40,6 +46,23 @@ const ClassManagement = () => {
     const onClose = () => {
         setModalVisible(false);
     };
+    useEffect(() => {
+        async function fetchData() {
+          const response = await getInitialState();
+          console.log('response', response);
+          if (response.currentUser?.XXDM) {
+            const params = {
+              XXDM: response.currentUser.XXDM
+            }
+            const XXJB = await getXXJBSJ(params);
+            if (XXJB.status === 'ok') {
+              setXxjbData(XXJB.data.id);
+            }
+            console.log('XXJB', XXJB);
+          }
+        }
+        fetchData();
+      }, []);
 
     const columns: ProColumns<ClassItem>[] = [
         {
@@ -132,24 +155,33 @@ const ClassManagement = () => {
                     <a onClick={() => handleEdit(record)} >编辑</a>
                     <Divider type="vertical" />
                     <Popconfirm
-                        title="删除之后，数据不可恢复，确定要删除吗?"
-                        onConfirm={async () => {
-                            try {
-                                if (record.id) {
-                                    console.log('delete', [record.id])
-                                }
-                            } catch (err) {
-                                message.error('删除失败，请联系管理员或稍后重试。');
-                            }
-                        }}
-                        okText="确定"
-                        cancelText="取消"
-                        placement="topLeft"
-                    >
-                        <a>
-                            删除
-            </a>
-                    </Popconfirm>
+            title="删除之后，数据不可恢复，确定要删除吗?"
+            onConfirm={async () => {
+              try {
+                if (record.id) {
+                  const params = { id: record.id };
+                  const res = deleteKHPKSJ(params);
+                  new Promise((resolve) => {
+                    resolve(res);
+                  }).then((data: any) => {
+                    if (data.status === 'ok') {
+                      message.success('删除成功');
+                      actionRef.current?.reload();
+                    } else {
+                      message.error('删除失败');
+                    }
+                  });
+                }
+              } catch (err) {
+                message.error('删除失败，请联系管理员或稍后重试。');
+              }
+            }}
+            okText="确定"
+            cancelText="取消"
+            placement="topLeft"
+          >
+            <a>删除</a>
+          </Popconfirm>
                 </>
             ),
             align: 'center',
@@ -168,6 +200,19 @@ const ClassManagement = () => {
                         density: false,
                         reload: false,
                     }}
+                    request={(param, sorter, filter) => {
+                        const obj = {
+                          param,
+                          sorter,
+                          filter,
+                          njId: 'dd149420-7d4b-4191-8ddc-6b686a2bd63f',
+                          xn: '2021学年',
+                          xq: '第一学期',
+                          xxId: xxjbData,
+                          name: '',
+                        };
+                        return getAllKHPKSJ(obj);
+                      }}
                     pagination={paginationConfig}
                     dataSource={listData}
                     headerTitle={<SearchComponent
@@ -191,7 +236,7 @@ const ClassManagement = () => {
                          </Button>,
                     ]}
                 />
-                <AddClass visible={modalVisible} onClose={onClose} formValues={current} />
+                <AddClass visible={modalVisible} onClose={onClose} formValues={current} actionRef={actionRef}/>
             </PageContainer>
         </>
 
