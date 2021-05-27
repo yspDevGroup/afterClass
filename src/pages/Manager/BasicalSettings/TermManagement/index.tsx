@@ -76,8 +76,10 @@ const TermManagement = () => {
     const handleSubmit = async () => {
       try {
         const values = await form?.validateFields();
-        values.KSRQ = values.KSRQ ? moment(values.KSRQ).format('YYYY-MM-DD') : '';
-        values.JSRQ = values.JSRQ ? moment(values.JSRQ).format('YYYY-MM-DD') : '';
+        console.log('values123132',values);
+        values.JSRQ = values.KSRQ[1] ? moment(values.KSRQ[1]).format('YYYY-MM-DD') : '';
+        values.KSRQ = values.KSRQ[0] ? moment(values.KSRQ[0]).format('YYYY-MM-DD') : '';
+        
         values.XXJBSJId="d6879944-be88-11eb-9edd-00ff016ba5b8";
         new Promise((resolve, reject) => {
           let res = null;

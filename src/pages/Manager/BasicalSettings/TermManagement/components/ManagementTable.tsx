@@ -43,20 +43,13 @@ const OrganizationTable = (props: PropsType) => {
       valueEnum: RoomType,
     },
     {
-      type: 'date',
+      type: 'dateRange',
       readonly,
-      label: '开始日期',
+      label: '日期',
       name: 'KSRQ',
       key: 'KSRQ',
       rules: [{ required: true, message: '请填写学年' }],
-    },
-    {
-      type: 'date',
-      readonly,
-      label: '结束日期',
-      name: 'JSRQ',
-      key: 'JSRQ',
-      rules: [{ required: true, message: '请填写学年' }],
+      width: '100%'
     },
   ];
 
