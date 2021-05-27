@@ -48,12 +48,17 @@
         icon: 'smile',
         component: './Manager/BasicalSettings/CourseManagement',
       },
-  
       {
         path: '/basicalSettings/classManagement',
         name: 'classManagement',
         icon: 'smile',
         component: './Manager/BasicalSettings/ClassManagement',
+      },
+      {
+        path: '/basicalSettings/termManagement',
+        name: 'termManagement',
+        icon: 'smile',
+        component: './Manager/BasicalSettings/TermManagement',
       },
       {
         path: '/basicalSettings/',

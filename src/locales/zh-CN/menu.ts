@@ -5,4 +5,5 @@ export default {
   'menu.basicalSettings.roomManagement': '场地维护',
   'menu.basicalSettings.courseManagement': '课程管理',
   'menu.basicalSettings.classManagement': '排课管理',
+  'menu.basicalSettings.termManagement': '学期学年管理',
 };
