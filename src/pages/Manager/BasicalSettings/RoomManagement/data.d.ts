@@ -35,6 +35,15 @@ export type SchoolAreaType = {
   XQCZDH?: string;
 };
 /**
+ * 场地类型字段
+ *  id  UUID;
+ *  FJLX  场地类型;
+ */
+export type FJLX = {
+  id?: string;
+  FJLX?: string;
+};
+/**
  * 场地维护字段
  *  id  UUID;
  *  FJBH  房间编号;
@@ -57,7 +66,7 @@ export type RoomItem = {
   FJJZMJ?: number;
   FJSYMJ?: number;
   FJRS?: number;
-  FJLX?: string;
+  FJLX?: FJLX;
   JXL?: string;
   XXJBSJ?: SchoolType;
   XQSJ?: SchoolAreaType;

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
-import type { RoomItem, SchoolAreaType } from '../data';
+import { message } from 'antd';
+import type { FJLX, RoomItem, SchoolAreaType } from '../data';
 import ProFormFields from '@/components/ProFormFields';
-import { RoomType } from '@/constant';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
+import { getAllFJLX } from '@/services/after-class/fjlx';
 
 const formLayout = {
   labelCol: { span: 5 },
@@ -20,17 +21,18 @@ type PropsType = {
 
 const AddRoom = (props: PropsType) => {
   const { current, setForm, readonly } = props;
-  const [schoolArea,setSchoolArea] = useState<Record<string, string>[]>([]);
+  const [schoolArea, setSchoolArea] = useState<Record<string, string>[]>([]);
+  const [roomType, setRoomType] = useState<Record<string, string>[]>([]);
 
   useEffect(() => {
-    // 根据学校ID获取所有校区信息
     async function fetchData() {
       try {
+        // 根据学校ID获取所有校区信息
         const result = await getAllXQSJ({
-          xxid: 'd18f9105-9dfb-4373-9c76-bc68f670fff5'
+          xxid: 'd6879944-be88-11eb-9edd-00ff016ba5b8'
         });
         if (result.status === 'ok') {
-          if(result.data && result.data.length > 0) {
+          if (result.data && result.data.length > 0) {
             const data: any = [].map.call(result.data, (item: SchoolAreaType) => {
               return {
                 value: item.id,
@@ -39,19 +41,44 @@ const AddRoom = (props: PropsType) => {
             });
             setSchoolArea(data);
           }
+        } else {
+          message.info(result.message)
+        }
+        // 根据学校ID获取所有场地类型
+        const response = await getAllFJLX({
+          xxId: 'd6879944-be88-11eb-9edd-00ff016ba5b8',
+          name:''
+        });
+        if (response.status === 'ok') {
+          if (response.data && response.data.length > 0) {
+            const data: any = [].map.call(response.data, (item: FJLX) => {
+              return {
+                value: item.id,
+                text: item.FJLX
+              }
+            });
+            setRoomType(data);
+          }
+        } else {
+          message.info(result.message)
         }
       } catch (error) {
         console.log('数据获取失败');
-        
+
       }
-
-
     }
     fetchData();
   }, [])
-  console.log(schoolArea);
-  
+  console.log(schoolArea,roomType);
+
   const formItems: any[] = [
+    {
+      type: 'input',
+      readonly,
+      hidden: true,
+      name: 'id',
+      key: 'id',
+    },
     {
       type: 'input',
       readonly,
@@ -75,7 +102,7 @@ const AddRoom = (props: PropsType) => {
       name: 'FJLX',
       key: 'FJLX',
       rules: [{ required: true, message: '请填写名称' }],
-      valueEnum: RoomType,
+      valueEnum: roomType,
     },
     {
       type: 'select',
@@ -83,7 +110,6 @@ const AddRoom = (props: PropsType) => {
       label: '所属校区',
       name: 'SSXQ',
       key: 'SSXQ',
-      rules: [{ required: true, message: '请选择所属校区' }],
       valueEnum: schoolArea,
     },
     {

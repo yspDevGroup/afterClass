@@ -67,7 +67,7 @@ export async function getAllKHBJSJ(
   body: {
     /** 课后课程ID */
     khkcsjid?: string;
-    /** 课程名称 */
+    /** 班级名称 */
     name?: string;
   },
   options?: { [key: string]: any },

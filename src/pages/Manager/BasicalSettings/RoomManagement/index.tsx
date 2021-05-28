@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import type { FormInstance} from 'antd';
+import type { FormInstance } from 'antd';
 import { Tooltip } from 'antd';
 import { message, Popconfirm } from 'antd';
 import { Button, Divider, Modal } from 'antd';
@@ -7,7 +7,6 @@ import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import AddRoom from './components/AddRoom';
 import type { RoomItem } from './data';
-import { listData } from './mock';
 import styles from './index.less';
 import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
@@ -15,15 +14,17 @@ import { paginationConfig } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
 import SearchComponent from '@/components/Search';
 import SiteMaintenance from './components/SiteMaintenance';
-import { getAllFJSJ } from '@/services/after-class/fjsj';
+import { createFJSJ, getAllFJSJ, updateFJSJ } from '@/services/after-class/fjsj';
 import { getInitialState } from '@/app';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
   const actionRef = useRef<ActionType>();
+  // 列表数据来源
+  const [dataSource, setDataSource] = useState<RoomItem[]>();
   // 设置模态框显示状态
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  // 模态框加载内容类型，info为编辑查看界面，audit为审核界面
+  // 模态框加载内容类型，add为编辑新增界面，uphold为场地类型维护界面
   const [modalType, setModalType] = useState<string>('add');
   // 模态框的新增或编辑form定义
   const [form, setForm] = useState<FormInstance<any>>();
@@ -35,7 +36,7 @@ const RoomManagement = () => {
    * @return {*}
    */
   const getModelTitle = () => {
-    if (modalType === 'wh') {
+    if (modalType === 'uphold') {
       return '场地类型维护';
     }
     if (current) {
@@ -49,23 +50,24 @@ const RoomManagement = () => {
       const response = await getInitialState();
       console.log(response);
       // 根据学校ID获取所有场地信息
-      const list = await getAllFJSJ({
-        xxId: 'd18f9105-9dfb-4373-9c76-bc68f670fff5'
+      const result = await getAllFJSJ({
+        xxId: 'd6879944-be88-11eb-9edd-00ff016ba5b8',
+        name: ''
       });
-      console.log(list);
-      
+      if (result.status === 'ok') {
+        console.log(result.data);
+        setDataSource(result.data)
+      };
+
     }
     fetchData();
   }, []);
-  const handleEdit = (data: RoomItem) => {
-    setModalType('add');
-    setCurrent(data);
-    getModelTitle();
-    setModalVisible(true);
-  };
-  const handleOperation = (type: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    type === 'add' ? setCurrent(undefined) : '';
+  const handleOperation = (type: string, data?: RoomItem) => {
+    if (data) {
+      setCurrent(data)
+    } else {
+      setCurrent(undefined);
+    }
     setModalType(type);
     getModelTitle();
     setModalVisible(true);
@@ -73,7 +75,16 @@ const RoomManagement = () => {
   const handleSubmit = async () => {
     try {
       const values = await form?.validateFields();
-      console.log('Success:', values);
+      // 新增场地信息
+      const result = await createFJSJ(values);
+      if (result.status === 'ok') {
+        message.success('场地新增成功');
+        setModalVisible(false);
+      } else {
+        message.error(result.message)
+      }
+      // 更新场地信息
+      // const result1 = await updateFJSJ({ id: '' }, values);
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
@@ -105,6 +116,12 @@ const RoomManagement = () => {
       align: 'center',
       width: '12%',
       ellipsis: true,
+      render: (_, record) => {
+        return <div className='ui-table-col-elp'>
+          <Tooltip title={record.FJLX?.FJLX} arrowPointAtCenter>
+            {record.FJLX?.FJLX}
+          </Tooltip></div>
+      }
     },
     {
       title: '所属校区',
@@ -138,7 +155,7 @@ const RoomManagement = () => {
       width: 100,
       render: (_, record) => (
         <>
-          <a onClick={() => handleEdit(record)}>编辑</a>
+          <a onClick={() => handleOperation('add', record)}>编辑</a>
           <Divider type="vertical" />
           <Popconfirm
             title="删除之后，数据不可恢复，确定要删除吗?"
@@ -170,7 +187,7 @@ const RoomManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
-        dataSource={listData}
+        dataSource={dataSource}
         headerTitle={
           <SearchComponent
             isChainSelect={true}
@@ -189,8 +206,8 @@ const RoomManagement = () => {
         dateFormatter="string"
         toolBarRender={() => [
           <Button
-            key="wh"
-            onClick={() => handleOperation('wh')}
+            key="uphold"
+            onClick={() => handleOperation('uphold')}
           >
             场地类型维护
           </Button>,
@@ -225,7 +242,7 @@ const RoomManagement = () => {
           overflowY: 'auto',
         }}
       >
-        {modalType === 'wh' ? <SiteMaintenance /> : <AddRoom current={current} setForm={setForm} />}
+        {modalType === 'uphold' ? <SiteMaintenance /> : <AddRoom current={current} setForm={setForm} />}
       </Modal>
     </PageContainer>
   );

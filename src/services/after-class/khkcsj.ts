@@ -17,7 +17,6 @@ export async function getKHKCSJ(
     data: {
       id?: string;
       KCMC?: string;
-      KCLX?: string;
       KCTP?: string;
       KCSC?: number;
       KCZT?: string;
@@ -27,6 +26,7 @@ export async function getKHKCSJ(
       NJSJId?: string;
       NJSJ?: { id?: string; NJ?: number; NJMC?: string };
       XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+      KHKCLX?: { id?: string; KCLX?: string };
     };
     message?: string;
   }>(`/khkcsj/${param0}`, {
@@ -86,7 +86,6 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
     data: {
       id?: string;
       KCMC?: string;
-      KCLX?: string;
       KCTP?: string;
       KCSC?: number;
       KCZT?: string;
@@ -96,6 +95,7 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
       NJSJId?: string;
       NJSJ?: { id?: string; NJ?: number; NJMC?: string };
       XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+      KHKCLX?: { id?: string; KCLX?: string };
     };
     message?: string;
   }>('/khkcsj/create', {

@@ -22,7 +22,6 @@ export async function getFJSJ(
       FJJZMJ?: number;
       FJSYMJ?: number;
       FJRS?: number;
-      FJLX?: string;
       JXL?: string;
       BZXX?: string;
       XXJBSJ?: {
@@ -43,6 +42,7 @@ export async function getFJSJ(
         XQLXDH?: string;
         XQCZDH?: string;
       };
+      FJLX?: { id?: string; FJLX?: string };
     };
     message?: string;
   }>(`/fjsj/${param0}`, {
@@ -74,7 +74,7 @@ export async function getAllFJSJ(
   body: {
     /** 学校ID */
     xxId?: string;
-    /** 课程名称 */
+    /** 场地名称 */
     name?: string;
   },
   options?: { [key: string]: any },
@@ -101,7 +101,6 @@ export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]
       FJJZMJ?: number;
       FJSYMJ?: number;
       FJRS?: number;
-      FJLX?: string;
       JXL?: string;
       BZXX?: string;
       XXJBSJ?: {
@@ -122,6 +121,7 @@ export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]
         XQLXDH?: string;
         XQCZDH?: string;
       };
+      FJLX?: { id?: string; FJLX?: string };
     };
     message?: string;
   }>('/fjsj/create', {
