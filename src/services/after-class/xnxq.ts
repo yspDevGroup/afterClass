@@ -14,14 +14,7 @@ export async function getXNXQ(
   const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: {
-      id?: string;
-      XN?: string;
-      XQ?: string;
-      KSRQ?: string;
-      JSRQ?: string;
-      XXJBSJId?: string;
-    };
+    data: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
     message?: string;
   }>(`/xnxq/${param0}`, {
     method: 'GET',
@@ -47,44 +40,40 @@ export async function deleteXNXQ(
   });
 }
 
-/** 查询所有学年学期数据 GET /xnxq/all/${param0} */
+/** 查询所有学年学期数据 GET /xnxq/all */
 export async function getAllXNXQ(
   params: {
     // path
-    /** 学校ID */
-    xxid: string;
   },
   options?: { [key: string]: any },
 ) {
-  const { xxid: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; data?: API.XNXQ[]; message?: string }>(
-    `/xnxq/all/${param0}`,
-    {
-      method: 'GET',
-      params: { ...queryParams },
-      ...(options || {}),
-    },
-  );
+  const { ...queryParams } = params;
+  return request<{ status?: 'ok' | 'error'; data?: API.XNXQ[]; message?: string }>('/xnxq/all', {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
 }
 
 /** 创建学年学期数据 PUT /xnxq/create */
-export async function createXNXQ(body: API.CreateXNXQ, options?: { [key: string]: any }) {
+export async function createXNXQ(
+  params: {
+    // path
+  },
+  body: API.CreateXNXQ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: {
-      id?: string;
-      XN?: string;
-      XQ?: string;
-      KSRQ?: string;
-      JSRQ?: string;
-      XXJBSJId?: string;
-    };
+    data: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
     message?: string;
   }>('/xnxq/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

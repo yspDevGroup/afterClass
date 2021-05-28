@@ -28,7 +28,6 @@ export async function getKCSJ(
       SKFSM?: string;
       JCBM?: string;
       CKSM?: string;
-      XXJBSJId?: string;
     };
     message?: string;
   }>(`/kcsj/${param0}`, {
@@ -76,7 +75,14 @@ export async function getKCSJByXX(
 }
 
 /** 创建课程数据 PUT /kcsj/create */
-export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]: any }) {
+export async function createKCSJ(
+  params: {
+    // path
+  },
+  body: API.CreateKCSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -93,7 +99,6 @@ export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]
       SKFSM?: string;
       JCBM?: string;
       CKSM?: string;
-      XXJBSJId?: string;
     };
     message?: string;
   }>('/kcsj/create', {
@@ -101,6 +106,7 @@ export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

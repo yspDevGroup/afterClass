@@ -2,11 +2,11 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取校历数据 GET /xl/${param0} */
-export async function getXL(
+/** 获取课程类型 GET /khkclx/${param0} */
+export async function getKHKCLX(
   params: {
     // path
-    /** 校历ID */
+    /** 类型ID */
     id: string;
   },
   options?: { [key: string]: any },
@@ -14,61 +14,69 @@ export async function getXL(
   const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
+    data: { id?: string; KCLX?: string };
     message?: string;
-  }>(`/xl/${param0}`, {
+  }>(`/khkclx/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** 删除校历数据 DELETE /xl/${param0} */
-export async function deleteXL(
+/** 删除课程类型 DELETE /khkclx/${param0} */
+export async function deleteKHKCLX(
   params: {
     // path
-    /** 校历ID */
+    /** 类型ID */
     id: string;
   },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xl/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkclx/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** 查询所有校历数据 GET /xl/ */
-export async function getAllXL(
+/** 查询所有课程类型 POST /khkclx/ */
+export async function getAllKHKCLX(
   params: {
     // path
+  },
+  body: {
+    /** 课程类型 */
+    name?: string;
   },
   options?: { [key: string]: any },
 ) {
   const { ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; data?: API.XL[]; message?: string }>('/xl/', {
-    method: 'GET',
+  return request<{ status?: 'ok' | 'error'; data?: API.KHKCLX[]; message?: string }>('/khkclx/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     params: { ...queryParams },
+    data: body,
     ...(options || {}),
   });
 }
 
-/** 创建校历数据 PUT /xl/create */
-export async function createXL(
+/** 创建课程类型 PUT /khkclx/create */
+export async function createKHKCLX(
   params: {
     // path
   },
-  body: API.CreateXL,
+  body: API.CreateKHKCLX,
   options?: { [key: string]: any },
 ) {
   const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
+    data: { id?: string; KCLX?: string };
     message?: string;
-  }>('/xl/create', {
+  }>('/khkclx/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -79,18 +87,18 @@ export async function createXL(
   });
 }
 
-/** 更新校历数据 PUT /xl/update/${param0} */
-export async function updateXL(
+/** 更新课程类型 PUT /khkclx/update/${param0} */
+export async function updateKHKCLX(
   params: {
     // path
-    /** 校历ID */
+    /** 类型ID */
     id: string;
   },
-  body: API.UpdateXL,
+  body: API.UpdateKHKCLX,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xl/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkclx/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

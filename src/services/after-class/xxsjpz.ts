@@ -2,11 +2,11 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取校区数据 GET /xqsj/${param0} */
-export async function getXQSJ(
+/** 获取学校系统配置数据 GET /xxsjpz/${param0} */
+export async function getXXXTPZ(
   params: {
     // path
-    /** 校区ID */
+    /** 学校系统配置ID */
     id: string;
   },
   options?: { [key: string]: any },
@@ -16,12 +16,9 @@ export async function getXQSJ(
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      XQH?: string;
-      XQMC?: string;
-      XQDZ?: string;
-      XQYZBM?: string;
-      XQLXDH?: string;
-      XQCZDH?: string;
+      KSSJ?: string;
+      JSSJ?: string;
+      KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
       XXJBSJ?: {
         id?: string;
         XXDM?: string;
@@ -31,35 +28,34 @@ export async function getXQSJ(
         XXYZBM?: string;
         XZQHM?: string;
       };
-      JZGJBSJ?: { id?: string; GH?: string; XM?: string; YWXM?: string; XMPY?: string };
     };
     message?: string;
-  }>(`/xqsj/${param0}`, {
+  }>(`/xxsjpz/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** 删除校区数据 DELETE /xqsj/${param0} */
-export async function deleteXQSJ(
+/** 删除学校系统配置数据 DELETE /xxsjpz/${param0} */
+export async function deleteXXXTPZ(
   params: {
     // path
-    /** 校区ID */
+    /** 学校系统配置ID */
     id: string;
   },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xqsj/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxsjpz/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** 查询所有校区数据 GET /xqsj/all/${param0} */
-export async function getAllXQSJ(
+/** 查询所有学校系统配置数据 GET /xxsjpz/all/${param0} */
+export async function getAllXXXTPZ(
   params: {
     // path
     xxid: string;
@@ -67,8 +63,8 @@ export async function getAllXQSJ(
   options?: { [key: string]: any },
 ) {
   const { xxid: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; data?: API.XQSJ[]; message?: string }>(
-    `/xqsj/all/${param0}`,
+  return request<{ status?: 'ok' | 'error'; data?: API.XXSJPZ[]; message?: string }>(
+    `/xxsjpz/all/${param0}`,
     {
       method: 'GET',
       params: { ...queryParams },
@@ -77,12 +73,12 @@ export async function getAllXQSJ(
   );
 }
 
-/** 创建校区数据 PUT /xqsj/create */
-export async function createXQSJ(
+/** 创建学校系统配置数据 PUT /xxsjpz/create */
+export async function createXXXTPZ(
   params: {
     // path
   },
-  body: API.CreateXQSJ,
+  body: API.CreateXXXTPZ,
   options?: { [key: string]: any },
 ) {
   const { ...queryParams } = params;
@@ -90,12 +86,9 @@ export async function createXQSJ(
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      XQH?: string;
-      XQMC?: string;
-      XQDZ?: string;
-      XQYZBM?: string;
-      XQLXDH?: string;
-      XQCZDH?: string;
+      KSSJ?: string;
+      JSSJ?: string;
+      KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
       XXJBSJ?: {
         id?: string;
         XXDM?: string;
@@ -105,10 +98,9 @@ export async function createXQSJ(
         XXYZBM?: string;
         XZQHM?: string;
       };
-      JZGJBSJ?: { id?: string; GH?: string; XM?: string; YWXM?: string; XMPY?: string };
     };
     message?: string;
-  }>('/xqsj/create', {
+  }>('/xxsjpz/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -119,18 +111,18 @@ export async function createXQSJ(
   });
 }
 
-/** 更新校区数据 PUT /xqsj/update/${param0} */
-export async function updateXQSJ(
+/** 更新学校系统配置数据 PUT /xxsjpz/update/${param0} */
+export async function updateXXXTPZ(
   params: {
     // path
-    /** 校区ID */
+    /** 学校系统配置ID */
     id: string;
   },
-  body: API.UpdateXQSJ,
+  body: API.UpdateXXXTPZ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xqsj/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxsjpz/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

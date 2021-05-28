@@ -14,7 +14,7 @@ export async function getNJSJ(
   const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; NJ?: number; NJMC?: string; XXJBSJId?: string };
+    data: { id?: string; NJ?: number; NJMC?: string };
     message?: string;
   }>(`/njsj/${param0}`, {
     method: 'GET',
@@ -44,7 +44,6 @@ export async function deleteNJSJ(
 export async function getAllNJSJ(
   params: {
     // path
-    /** 学校ID */
     xxid: string;
   },
   options?: { [key: string]: any },
@@ -61,16 +60,24 @@ export async function getAllNJSJ(
 }
 
 /** 创建年级数据 PUT /njsj/create */
-export async function createNJSJ(body: API.CreateNJSJ, options?: { [key: string]: any }) {
+export async function createNJSJ(
+  params: {
+    // path
+  },
+  body: API.CreateNJSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; NJ?: number; NJMC?: string; XXJBSJId?: string };
+    data: { id?: string; NJ?: number; NJMC?: string };
     message?: string;
   }>('/njsj/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -17,16 +17,13 @@ export async function getKHKCSJ(
     data: {
       id?: string;
       KCMC?: string;
-      KCLX?: string;
       KCTP?: string;
       KCSC?: number;
       KCZT?: string;
       KCMS?: string;
-      KCFY?: number;
       XNXQId?: string;
-      NJSJId?: string;
-      NJSJ?: { id?: string; NJ?: number; NJMC?: string };
       XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+      KHKCLX?: { id?: string; KCLX?: string };
     };
     message?: string;
   }>(`/khkcsj/${param0}`, {
@@ -55,6 +52,9 @@ export async function deleteKHKCSJ(
 
 /** 查询所有课后课程数据 POST /khkcsj/ */
 export async function getAllKHKCSJ(
+  params: {
+    // path
+  },
   body: {
     /** 年级ID */
     njId?: string;
@@ -62,40 +62,44 @@ export async function getAllKHKCSJ(
     xn?: string;
     /** 学期 */
     xq?: string;
-    /** 学校ID */
-    xxId?: string;
     /** 课程名称 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHKCSJ[]; message?: string }>('/khkcsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课后课程数据 PUT /khkcsj/create */
-export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: string]: any }) {
+export async function createKHKCSJ(
+  params: {
+    // path
+  },
+  body: API.CreateKHKCSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
       id?: string;
       KCMC?: string;
-      KCLX?: string;
       KCTP?: string;
       KCSC?: number;
       KCZT?: string;
       KCMS?: string;
-      KCFY?: number;
       XNXQId?: string;
-      NJSJId?: string;
-      NJSJ?: { id?: string; NJ?: number; NJMC?: string };
       XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+      KHKCLX?: { id?: string; KCLX?: string };
     };
     message?: string;
   }>('/khkcsj/create', {
@@ -103,6 +107,7 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -2,11 +2,11 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取校历数据 GET /xl/${param0} */
-export async function getXL(
+/** 获取房间类型 GET /fjlx/${param0} */
+export async function getFJLX(
   params: {
     // path
-    /** 校历ID */
+    /** 类型ID */
     id: string;
   },
   options?: { [key: string]: any },
@@ -14,61 +14,69 @@ export async function getXL(
   const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
+    data: { id?: string; FJLX?: string };
     message?: string;
-  }>(`/xl/${param0}`, {
+  }>(`/fjlx/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** 删除校历数据 DELETE /xl/${param0} */
-export async function deleteXL(
+/** 删除房间类型 DELETE /fjlx/${param0} */
+export async function deleteFJLX(
   params: {
     // path
-    /** 校历ID */
+    /** 类型ID */
     id: string;
   },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xl/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjlx/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** 查询所有校历数据 GET /xl/ */
-export async function getAllXL(
+/** 查询所有房间类型 POST /fjlx/ */
+export async function getAllFJLX(
   params: {
     // path
+  },
+  body: {
+    /** 房间类型 */
+    name?: string;
   },
   options?: { [key: string]: any },
 ) {
   const { ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; data?: API.XL[]; message?: string }>('/xl/', {
-    method: 'GET',
+  return request<{ status?: 'ok' | 'error'; data?: API.FJLX[]; message?: string }>('/fjlx/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     params: { ...queryParams },
+    data: body,
     ...(options || {}),
   });
 }
 
-/** 创建校历数据 PUT /xl/create */
-export async function createXL(
+/** 创建房间类型 PUT /fjlx/create */
+export async function createFJLX(
   params: {
     // path
   },
-  body: API.CreateXL,
+  body: API.CreateFJLX,
   options?: { [key: string]: any },
 ) {
   const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
+    data: { id?: string; FJLX?: string };
     message?: string;
-  }>('/xl/create', {
+  }>('/fjlx/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -79,18 +87,18 @@ export async function createXL(
   });
 }
 
-/** 更新校历数据 PUT /xl/update/${param0} */
-export async function updateXL(
+/** 更新房间类型 PUT /fjlx/update/${param0} */
+export async function updateFJLX(
   params: {
     // path
-    /** 校历ID */
+    /** 类型ID */
     id: string;
   },
-  body: API.UpdateXL,
+  body: API.UpdateFJLX,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xl/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjlx/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

@@ -22,7 +22,6 @@ export async function getFJSJ(
       FJJZMJ?: number;
       FJSYMJ?: number;
       FJRS?: number;
-      FJLX?: string;
       JXL?: string;
       BZXX?: string;
       XXJBSJ?: {
@@ -43,6 +42,7 @@ export async function getFJSJ(
         XQLXDH?: string;
         XQCZDH?: string;
       };
+      FJLX?: { id?: string; FJLX?: string };
     };
     message?: string;
   }>(`/fjsj/${param0}`, {
@@ -71,26 +71,36 @@ export async function deleteFJSJ(
 
 /** 查询所有房间数据 POST /fjsj/ */
 export async function getAllFJSJ(
+  params: {
+    // path
+  },
   body: {
-    /** 学校ID */
-    xxId?: string;
-    /** 课程名称 */
+    /** 场地名称 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.FJSJ[]; message?: string }>('/fjsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建房间数据 PUT /fjsj/create */
-export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]: any }) {
+export async function createFJSJ(
+  params: {
+    // path
+  },
+  body: API.CreateFJSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -101,7 +111,6 @@ export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]
       FJJZMJ?: number;
       FJSYMJ?: number;
       FJRS?: number;
-      FJLX?: string;
       JXL?: string;
       BZXX?: string;
       XXJBSJ?: {
@@ -122,6 +131,7 @@ export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]
         XQLXDH?: string;
         XQCZDH?: string;
       };
+      FJLX?: { id?: string; FJLX?: string };
     };
     message?: string;
   }>('/fjsj/create', {
@@ -129,6 +139,7 @@ export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

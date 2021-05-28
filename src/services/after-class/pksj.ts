@@ -22,7 +22,6 @@ export async function getPKSJ(
       SKRQ?: string;
       KSKJS?: number;
       JSKJS?: number;
-      XXJBSJId?: string;
     };
     message?: string;
   }>(`/pksj/${param0}`, {
@@ -50,15 +49,29 @@ export async function deletePKSJ(
 }
 
 /** 查询所有排课数据 GET /pksj/ */
-export async function getAllPKSJ(options?: { [key: string]: any }) {
+export async function getAllPKSJ(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.PKSJ[]; message?: string }>('/pksj/', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建排课数据 PUT /pksj/create */
-export async function createPKSJ(body: API.CreatePKSJ, options?: { [key: string]: any }) {
+export async function createPKSJ(
+  params: {
+    // path
+  },
+  body: API.CreatePKSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -69,7 +82,6 @@ export async function createPKSJ(body: API.CreatePKSJ, options?: { [key: string]
       SKRQ?: string;
       KSKJS?: number;
       JSKJS?: number;
-      XXJBSJId?: string;
     };
     message?: string;
   }>('/pksj/create', {
@@ -77,6 +89,7 @@ export async function createPKSJ(body: API.CreatePKSJ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -31,7 +31,6 @@ export async function getJCSJ(
       ZS?: number;
       YS?: number;
       NRJJ?: string;
-      XXJBSJId?: string;
     };
     message?: string;
   }>(`/jcsj/${param0}`, {
@@ -79,7 +78,14 @@ export async function getJCSJByXX(
 }
 
 /** 创建教材数据 PUT /jcsj/create */
-export async function createJCSJ(body: API.CreateJCSJ, options?: { [key: string]: any }) {
+export async function createJCSJ(
+  params: {
+    // path
+  },
+  body: API.CreateJCSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -99,7 +105,6 @@ export async function createJCSJ(body: API.CreateJCSJ, options?: { [key: string]
       ZS?: number;
       YS?: number;
       NRJJ?: string;
-      XXJBSJId?: string;
     };
     message?: string;
   }>('/jcsj/create', {
@@ -107,6 +112,7 @@ export async function createJCSJ(body: API.CreateJCSJ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
