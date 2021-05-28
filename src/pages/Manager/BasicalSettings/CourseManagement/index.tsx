@@ -189,12 +189,9 @@ const CourseManagement = () => {
           pagination={paginationConfig}
           headerTitle={
             <SearchComponent
-              placeholder="课程名称"
-              fieldOne="学年学期 :"
-              one="2020-2021"
-              two="第一学期"
-              HeaderFieldTitleNum={true}
-              onlySearch={false}
+              isChainSelect={true}
+              isSelect={true}
+              isSearch={true}
             />
           }
           toolBarRender={() => [

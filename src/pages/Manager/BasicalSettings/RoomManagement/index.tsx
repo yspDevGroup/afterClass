@@ -171,10 +171,13 @@ const RoomManagement = () => {
         actionRef={actionRef}
         search={false}
         dataSource={listData}
-        headerTitle={<SearchComponent
-          placeholder="场地名称"
-          onlySearch={true}
-        />}
+        headerTitle={
+          <SearchComponent
+            isChainSelect={true}
+            isSelect={true}
+            isSearch={true}
+          />
+        }
         options={{
           setting: false,
           fullScreen: false,

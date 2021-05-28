@@ -198,10 +198,13 @@ const TermManagement = () => {
         actionRef={actionRef}
         search={false}
         dataSource={listData}
-        headerTitle={<SearchComponent
-          placeholder="学年学期"
-          onlySearch={true}
-        />}
+        headerTitle={
+          <SearchComponent
+            isChainSelect={true}
+            isSelect={true}
+            isSearch={true}
+          />
+        }
         options={{
           setting: false,
           fullScreen: false,
