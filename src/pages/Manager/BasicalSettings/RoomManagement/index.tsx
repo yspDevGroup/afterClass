@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Tooltip } from 'antd';
 import { message, Popconfirm } from 'antd';
@@ -7,7 +6,7 @@ import { Button, Divider, Modal } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import AddRoom from './components/AddRoom';
-import type { RoomItem } from './data';
+import type { RoomItem, TableListParams } from './data';
 import styles from './index.less';
 import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
@@ -15,14 +14,11 @@ import { paginationConfig } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
 import SearchComponent from '@/components/Search';
 import SiteMaintenance from './components/SiteMaintenance';
-import { createFJSJ, getAllFJSJ, updateFJSJ } from '@/services/after-class/fjsj';
-import { getInitialState } from '@/app';
+import { createFJSJ, deleteFJSJ, getAllFJSJ, updateFJSJ } from '@/services/after-class/fjsj';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
   const actionRef = useRef<ActionType>();
-  // 列表数据来源
-  const [dataSource, setDataSource] = useState<RoomItem[]>();
   // 设置模态框显示状态
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   // 模态框加载内容类型，add为编辑新增界面，uphold为场地类型维护界面
@@ -45,23 +41,6 @@ const RoomManagement = () => {
     }
     return '新增场地信息';
   };
-  useEffect(() => {
-    // 后期通过用户信息获取当前学校ID
-    async function fetchData() {
-      const response = await getInitialState();
-      console.log(response);
-      // 根据学校ID获取所有场地信息
-      const list = await getAllFJSJ({},{
-       name: ''
-      });
-      if (result.status === 'ok') {
-        console.log(result.data);
-        setDataSource(result.data)
-      };
-
-    }
-    fetchData();
-  }, []);
   const handleOperation = (type: string, data?: RoomItem) => {
     if (data) {
       setCurrent(data)
@@ -75,16 +54,16 @@ const RoomManagement = () => {
   const handleSubmit = async () => {
     try {
       const values = await form?.validateFields();
-      // 新增场地信息
-      const result = await createFJSJ(values);
+      const { id, ...rest } = values;
+      // 更新或新增场地信息
+      const result = id ? await updateFJSJ({ id }, { ...rest }) : await createFJSJ({ ...rest });
       if (result.status === 'ok') {
-        message.success('场地新增成功');
+        message.success(id ? '场地信息更新成功' : '场地信息新增成功');
         setModalVisible(false);
+        actionRef.current?.reload();
       } else {
-        message.error(result.message)
+        message.error(`${result.message},请联系管理员或稍后再试`);
       }
-      // 更新场地信息
-      // const result1 = await updateFJSJ({ id: '' }, values);
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
@@ -162,7 +141,13 @@ const RoomManagement = () => {
             onConfirm={async () => {
               try {
                 if (record.id) {
-                  console.log('delete', [record.id])
+                  const result = await deleteFJSJ({id: record.id});
+                  if (result.status === 'ok') {
+                    message.success('场地信息删除成功');
+                    actionRef.current?.reload();
+                  } else {
+                    message.error(`${result.message},请联系管理员或稍后再试`);
+                  }
                 }
               } catch (err) {
                 message.error('删除失败，请联系管理员或稍后重试。');
@@ -187,7 +172,16 @@ const RoomManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
-        dataSource={dataSource}
+        // dataSource={dataSource}
+        request={(params, sorter, filter) => {
+          // 表单搜索项会从 params 传入，传递给后端接口。
+          const opts: TableListParams = {
+            ...params,
+            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+            filter,
+          };
+          return getAllFJSJ({ name: '' }, opts);
+        }}
         headerTitle={
           <SearchComponent
             isChainSelect={true}

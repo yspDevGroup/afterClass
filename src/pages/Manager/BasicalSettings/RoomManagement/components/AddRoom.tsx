@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
-import type { FJLX, RoomItem, SchoolAreaType } from '../data';
+import type { RoomType, RoomItem, SchoolAreaType } from '../data';
 import ProFormFields from '@/components/ProFormFields';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllFJLX } from '@/services/after-class/fjlx';
@@ -35,8 +35,8 @@ const AddRoom = (props: PropsType) => {
           if (result.data && result.data.length > 0) {
             const data: any = [].map.call(result.data, (item: SchoolAreaType) => {
               return {
+                label: item.XQMC,
                 value: item.id,
-                text: item.XQMC,
               };
             });
             setSchoolArea(data);
@@ -46,15 +46,14 @@ const AddRoom = (props: PropsType) => {
         }
         // 根据学校ID获取所有场地类型
         const response = await getAllFJLX({
-          xxId: 'd6879944-be88-11eb-9edd-00ff016ba5b8',
           name: '',
         });
         if (response.status === 'ok') {
           if (response.data && response.data.length > 0) {
-            const data: any = [].map.call(response.data, (item: FJLX) => {
+            const data: any = [].map.call(response.data, (item: RoomType) => {
               return {
+                label: item.FJLX,
                 value: item.id,
-                text: item.FJLX,
               };
             });
             setRoomType(data);
@@ -68,7 +67,6 @@ const AddRoom = (props: PropsType) => {
     }
     fetchData();
   }, []);
-  console.log(schoolArea, roomType);
 
   const formItems: any[] = [
     {
@@ -98,21 +96,21 @@ const AddRoom = (props: PropsType) => {
       type: 'select',
       readonly,
       label: '类型',
-      name: 'FJLX',
-      key: 'FJLX',
+      name: 'FJLXId',
+      key: 'FJLXId',
       rules: [{ required: true, message: '请填写类型' }],
-      valueEnum: roomType,
+      options: roomType
     },
     {
       type: 'select',
       readonly,
       label: '所属校区',
-      name: 'SSXQ',
-      key: 'SSXQ',
-      valueEnum: schoolArea,
+      name: 'XQSJId',
+      key: 'XQSJId',
+      options: schoolArea
     },
     {
-      type: 'input',
+      type: 'inputNumber',
       readonly,
       label: '容纳人数',
       name: 'FJRS',
@@ -133,7 +131,17 @@ const AddRoom = (props: PropsType) => {
       <ProFormFields
         layout="horizontal"
         setForm={setForm}
-        values={current}
+        values={(() => {
+          if (current) {
+            const { FJLX, XQSJ, ...info } = current;
+            return {
+              FJLXId: FJLX?.id,
+              XQSJId: XQSJ?.id,
+              ...info,
+            };
+          }
+          return undefined;
+        })()}
         formItems={formItems}
         formItemLayout={formLayout}
       />

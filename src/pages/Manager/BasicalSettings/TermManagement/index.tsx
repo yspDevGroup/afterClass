@@ -99,7 +99,7 @@ const TermManagement = () => {
           const options = values;
           res = updateXNXQ(params, options);
         } else {
-          res = createXNXQ({}, values);
+          res = createXNXQ(values);
         }
         resolve(res);
         reject(res);

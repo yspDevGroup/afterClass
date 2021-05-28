@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { PlusOutlined } from "@ant-design/icons";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";

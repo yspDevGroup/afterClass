@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import ProFormFields from '@/components/ProFormFields';
 import { AssistantTeacher, ClassLocation, Teacher } from '@/constant';
 import { createKHPKSJ, updateKHPKSJ } from '@/services/after-class/khpksj';
@@ -32,7 +31,7 @@ const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues, a
         const options = values;
         res = updateKHPKSJ(params, options);
       } else {
-        res = createKHPKSJ({},values);
+        res = createKHPKSJ(values);
       }
       resolve(res);
       reject(res);

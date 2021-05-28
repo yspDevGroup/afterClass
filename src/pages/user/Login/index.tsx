@@ -41,7 +41,7 @@ const Login: React.FC = () => {
 
     try {
       // 登录
-      const msg = await postAccount({},{ ...values, type: type as 'account' | 'mobile' });
+      const msg = await postAccount({ ...values, type: type as 'account' | 'mobile' });
       if (msg.status === 'ok') {
         message.success('登录成功！');
         localStorage.setItem('token', msg.data.token || '');

@@ -211,7 +211,7 @@ const ClassManagement = () => {
                           xxId: xxjbData,
                           name: '',
                         };
-                        return getAllKHPKSJ({},obj);
+                        return getAllKHPKSJ(obj);
                       }}
                     pagination={paginationConfig}
                     dataSource={listData}

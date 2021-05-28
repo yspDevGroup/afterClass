@@ -39,7 +39,7 @@ export type SchoolAreaType = {
  *  id  UUID;
  *  FJLX  场地类型;
  */
-export type FJLX = {
+export type RoomType = {
   id?: string;
   FJLX?: string;
 };
@@ -66,7 +66,7 @@ export type RoomItem = {
   FJJZMJ?: number;
   FJSYMJ?: number;
   FJRS?: number;
-  FJLX?: FJLX;
+  FJLX?: RoomType;
   JXL?: string;
   XXJBSJ?: SchoolType;
   XQSJ?: SchoolAreaType;

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 import { useState } from 'react';
 import type { FC } from 'react';
@@ -33,7 +32,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
         const options = values;
         res = updateKHKCSJ(params, options);
       } else {
-        res = createKHKCSJ({},values);
+        res = createKHKCSJ(values);
       }
       resolve(res);
       reject(res);
@@ -84,6 +83,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           readonly,
           noStyle: true,
           width: 212,
+	  
           valueEnum: {
             '2019~2020': '2019~2020',
             '2020~2021': '2020~2021',
