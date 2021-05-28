@@ -17,32 +17,14 @@ const CourseType = () => {
             dataIndex: 'index',
             valueType: 'index',
             ellipsis: true,
-            width: 48,
+            align: 'center',
+            width: 100,
         },
         {
             title: '类型',
             dataIndex: 'KCLX',
             align: 'center',
             ellipsis: true,
-        },
-        {
-            title: '描述',
-            dataIndex: 'KCMS',
-            align: 'center',
-            ellipsis: true,
-            fieldProps: (from, { rowKey, rowIndex }) => {
-                if (from.getFieldValue([rowKey || '', 'title']) === '不好玩') {
-                    return {
-                        disabled: true,
-                    };
-                }
-                if (rowIndex > 9) {
-                    return {
-                        disabled: true,
-                    };
-                }
-                return {};
-            },
         },
         {
             title: '操作',
