@@ -4,7 +4,7 @@ import { EditableProTable } from "@ant-design/pro-table";
 import { Button, Popconfirm  } from "antd";
 import React, { useRef, useState } from "react";
 import type { DataSourceType } from "../data";
-import { defaultData } from "../mock";
+
 
 const SiteMaintenance = () => {
     const actionRef = useRef<ActionType>();
@@ -91,11 +91,6 @@ const SiteMaintenance = () => {
                 rowKey="id"
                 actionRef={actionRef}
                 columns={columns}
-                request={async () => ({
-                    data: defaultData,
-                    total: 3,
-                    success: true,
-                })}
                 value={dataSource}
                 recordCreatorProps={false}
                 onChange={setDataSource}

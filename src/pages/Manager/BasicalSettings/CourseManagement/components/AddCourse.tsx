@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 import { useState } from 'react';
 import type { FC } from 'react';
@@ -32,7 +33,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
         const options = values;
         res = updateKHKCSJ(params, options);
       } else {
-        res = createKHKCSJ(values);
+        res = createKHKCSJ({},values);
       }
       resolve(res);
       reject(res);

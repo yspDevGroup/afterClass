@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import { useRef, useState } from 'react';
 import { message, Popconfirm, Divider, Button, Modal } from 'antd';
@@ -177,7 +178,7 @@ const CourseManagement = () => {
               xxId: xxjbData,
               name: '',
             };
-            return getAllKHKCSJ(obj);
+            return getAllKHKCSJ({},obj);
           }}
           options={{
             setting: false,

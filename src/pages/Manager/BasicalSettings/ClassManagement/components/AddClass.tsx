@@ -32,7 +32,7 @@ const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues, a
         const options = values;
         res = updateKHPKSJ(params, options);
       } else {
-        res = createKHPKSJ(values);
+        res = createKHPKSJ({},values);
       }
       resolve(res);
       reject(res);

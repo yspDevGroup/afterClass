@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Tooltip } from 'antd';
@@ -50,9 +51,8 @@ const RoomManagement = () => {
       const response = await getInitialState();
       console.log(response);
       // 根据学校ID获取所有场地信息
-      const result = await getAllFJSJ({
-        xxId: 'd6879944-be88-11eb-9edd-00ff016ba5b8',
-        name: ''
+      const list = await getAllFJSJ({},{
+       name: ''
       });
       if (result.status === 'ok') {
         console.log(result.data);
