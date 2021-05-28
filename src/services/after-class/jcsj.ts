@@ -78,14 +78,7 @@ export async function getJCSJByXX(
 }
 
 /** 创建教材数据 PUT /jcsj/create */
-export async function createJCSJ(
-  params: {
-    // path
-  },
-  body: API.CreateJCSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createJCSJ(body: API.CreateJCSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -112,7 +105,6 @@ export async function createJCSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

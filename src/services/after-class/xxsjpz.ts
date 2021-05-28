@@ -54,34 +54,19 @@ export async function deleteXXXTPZ(
   });
 }
 
-/** 查询所有学校系统配置数据 GET /xxsjpz/all/${param0} */
-export async function getAllXXXTPZ(
-  params: {
-    // path
-    xxid: string;
-  },
-  options?: { [key: string]: any },
-) {
-  const { xxid: param0, ...queryParams } = params;
+/** 查询所有学校系统配置数据 GET /xxsjpz/all */
+export async function getAllXXXTPZ(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.XXSJPZ[]; message?: string }>(
-    `/xxsjpz/all/${param0}`,
+    '/xxsjpz/all',
     {
       method: 'GET',
-      params: { ...queryParams },
       ...(options || {}),
     },
   );
 }
 
 /** 创建学校系统配置数据 PUT /xxsjpz/create */
-export async function createXXXTPZ(
-  params: {
-    // path
-  },
-  body: API.CreateXXXTPZ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createXXXTPZ(body: API.CreateXXXTPZ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -105,7 +90,6 @@ export async function createXXXTPZ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

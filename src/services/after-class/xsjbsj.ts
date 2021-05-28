@@ -79,29 +79,15 @@ export async function deleteXSJBSJ(
 }
 
 /** 查询所有学生数据 GET /xsjbsj/ */
-export async function getAllXSJBSJ(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllXSJBSJ(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.XSJBSJ[]; message?: string }>('/xsjbsj/', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建学生数据 PUT /xsjbsj/create */
-export async function createXSJBSJ(
-  params: {
-    // path
-  },
-  body: API.CreateXSJBSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createXSJBSJ(body: API.CreateXSJBSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -149,7 +135,6 @@ export async function createXSJBSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

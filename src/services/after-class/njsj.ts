@@ -40,34 +40,16 @@ export async function deleteNJSJ(
   });
 }
 
-/** 查询所有年级数据 GET /njsj/all/${param0} */
-export async function getAllNJSJ(
-  params: {
-    // path
-    xxid: string;
-  },
-  options?: { [key: string]: any },
-) {
-  const { xxid: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; data?: API.NJSJ[]; message?: string }>(
-    `/njsj/all/${param0}`,
-    {
-      method: 'GET',
-      params: { ...queryParams },
-      ...(options || {}),
-    },
-  );
+/** 查询所有年级数据 GET /njsj/all */
+export async function getAllNJSJ(options?: { [key: string]: any }) {
+  return request<{ status?: 'ok' | 'error'; data?: API.NJSJ[]; message?: string }>('/njsj/all', {
+    method: 'GET',
+    ...(options || {}),
+  });
 }
 
 /** 创建年级数据 PUT /njsj/create */
-export async function createNJSJ(
-  params: {
-    // path
-  },
-  body: API.CreateNJSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createNJSJ(body: API.CreateNJSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; NJ?: number; NJMC?: string };
@@ -77,7 +59,6 @@ export async function createNJSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

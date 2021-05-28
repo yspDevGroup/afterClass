@@ -41,29 +41,15 @@ export async function deleteJCXX(
 }
 
 /** 查询所有节次信息数据 GET /jcxx/ */
-export async function getAllJCXX(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllJCXX(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.JCXX[]; message?: string }>('/jcxx/', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建节次信息数据 PUT /jcxx/create */
-export async function createJCXX(
-  params: {
-    // path
-  },
-  body: API.CreateJCXX,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createJCXX(body: API.CreateJCXX, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; MC?: string; YWMC?: string; SC?: number; SM?: string };
@@ -73,7 +59,6 @@ export async function createJCXX(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

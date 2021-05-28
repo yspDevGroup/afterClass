@@ -41,29 +41,15 @@ export async function deleteZXSJ(
 }
 
 /** 查询所有作息时间数据 GET /zxsj/ */
-export async function getAllZXSJ(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllZXSJ(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.ZXSJ[]; message?: string }>('/zxsj/', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建作息时间数据 PUT /zxsj/create */
-export async function createZXSJ(
-  params: {
-    // path
-  },
-  body: API.CreateZXSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createZXSJ(body: API.CreateZXSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; SD?: string; SX?: string; KSSJ?: string; JSSJ?: string; SYXQ?: string };
@@ -73,7 +59,6 @@ export async function createZXSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

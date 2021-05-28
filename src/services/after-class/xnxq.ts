@@ -41,29 +41,15 @@ export async function deleteXNXQ(
 }
 
 /** 查询所有学年学期数据 GET /xnxq/all */
-export async function getAllXNXQ(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllXNXQ(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.XNXQ[]; message?: string }>('/xnxq/all', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建学年学期数据 PUT /xnxq/create */
-export async function createXNXQ(
-  params: {
-    // path
-  },
-  body: API.CreateXNXQ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createXNXQ(body: API.CreateXNXQ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
@@ -73,7 +59,6 @@ export async function createXNXQ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

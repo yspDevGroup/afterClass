@@ -83,29 +83,15 @@ export async function deleteJZGJBSJ(
 }
 
 /** 查询所有教职工基本数据 GET /jzgjbsj/ */
-export async function getAllJZGJBSJ(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllJZGJBSJ(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.JZGJBSJ[]; message?: string }>('/jzgjbsj/', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建教职工基本数据 PUT /jzgjbsj/create */
-export async function createJZG(
-  params: {
-    // path
-  },
-  body: API.CreateJZGJBSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createJZG(body: API.CreateJZGJBSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -157,7 +143,6 @@ export async function createJZG(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

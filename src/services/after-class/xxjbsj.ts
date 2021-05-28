@@ -60,29 +60,15 @@ export async function getXXJBSJ(
 }
 
 /** 查询所有学校基本数据 GET /xxjbsj/ */
-export async function getAllXXJBSJ(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllXXJBSJ(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.XXJBSJ[]; message?: string }>('/xxjbsj/', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建学校基本数据 PUT /xxjbsj/create */
-export async function createXXJBSJ(
-  params: {
-    // path
-  },
-  body: API.CreateXXJBSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createXXJBSJ(body: API.CreateXXJBSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -128,7 +114,6 @@ export async function createXXJBSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

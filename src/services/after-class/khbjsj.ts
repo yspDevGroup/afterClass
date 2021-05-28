@@ -65,9 +65,6 @@ export async function deleteKHBJSJ(
 
 /** 查询所有课后班级数据 POST /khbjsj/ */
 export async function getAllKHBJSJ(
-  params: {
-    // path
-  },
   body: {
     /** 课后课程ID */
     khkcsjid?: string;
@@ -76,27 +73,18 @@ export async function getAllKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHBJSJ[]; message?: string }>('/khbjsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课后班级数据 PUT /khbjsj/create */
-export async function createKHBJSJ(
-  params: {
-    // path
-  },
-  body: API.CreateKHBJSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -129,7 +117,6 @@ export async function createKHBJSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
