@@ -18,8 +18,78 @@ import { getInitialState } from "@/app";
 import { getXXJBSJ } from "@/services/after-class/xxjbsj";
 import { deleteKHPKSJ, getAllKHPKSJ } from "@/services/after-class/khpksj";
 
+import { dataSource } from './headerMock';
+import { getAllXNXQ } from '@/services/after-class/xnxq';
 
-const ClassManagement = () => {
+const convertData = (data: API.XNXQ[]) => {
+    const chainData: {
+        data: { title: string, key: string }[],
+        subData: Record<string, { title: string; key: string }[]>
+    } = {
+        data: [],
+        subData: {}
+    }
+    data.forEach((item) => {
+        const { XN, XQ } = item;
+        if (!chainData.data.find((d) => d.key === XN)) {
+            chainData.data.push({ title: XN, key: XN })
+        }
+        if (chainData.subData[XN]) {
+            chainData.subData[XN].push({ title: XQ, key: XQ })
+        } else {
+            chainData.subData[XN] = [{ title: XQ, key: XQ }]
+        }
+    });
+    return chainData;
+}
+type ChainDataType = {
+    data: { title: string, key: string }[],
+    subData: Record<string, { title: string; key: string }[]>
+}
+
+const ClassManagement = (
+) => {
+    const { itemRecourse } = dataSource;
+
+    const [chainData, setchainData] = useState<ChainDataType>()
+    const [currentXN, setCurrentXN] = useState<string>()
+
+    const [terms, setTerms] = useState<{ title: string; key: string }[]>();
+    const [curTerm, setCurTerm] = useState<string>();
+
+    useEffect(() => {
+        (async () => {
+            const res = await getAllXNXQ({})
+            if (res.status === 'ok') {
+                const { data = [] } = res;
+                const newData = convertData(data);
+                setchainData(newData)
+                setCurrentXN(newData.data[0].key)
+                const ter = newData.subData[newData.data[0].key]
+                setTerms(ter)
+                setCurTerm(ter[0].key)
+            } else {
+                message.warn('')
+            }
+        })()
+    }, [])
+
+    const handleChainChange = (value: string) => {
+        setCurrentXN(value);
+        const ter = chainData?.subData[value] || []
+        setTerms(ter)
+        if (ter.length) {
+            setCurTerm(ter[0].key)
+            if (onXNXQChange) onXNXQChange(value, ter[0].key)
+        }
+    };
+    const onTermChange = (value: any) => {
+        setCurTerm(value);
+        if (onXNXQChange) onXNXQChange(currentXN!, value)
+    };
+
+
+
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [current, setCurrent] = useState<ClassItem>();
     const [xxjbData, setXxjbData] = useState<string | undefined>('')
@@ -217,9 +287,13 @@ const ClassManagement = () => {
                     dataSource={listData}
                     headerTitle={
                         <SearchComponent
-                            isChainSelect={true}
-                            isSelect={true}
-                            isSearch={true}
+                            handleChainChange={handleChainChange}
+                            onTermChange={onTermChange}
+                            onXNXQChange={onXNXQChange}
+                            itemRecourse={itemRecourse}
+                            terms={terms}
+                            curTerm={curTerm}
+
                         />
                     }
                     toolBarRender={() => [
@@ -240,3 +314,8 @@ const ClassManagement = () => {
     )
 }
 export default ClassManagement
+
+function onXNXQChange(value: string, key: string) {
+    throw new Error("Function not implemented.");
+    console.log(`value+key`, value + key)
+}

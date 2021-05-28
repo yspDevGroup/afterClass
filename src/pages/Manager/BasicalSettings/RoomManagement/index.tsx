@@ -183,11 +183,7 @@ const RoomManagement = () => {
           return getAllFJSJ({ name: '' }, opts);
         }}
         headerTitle={
-          <SearchComponent
-            isChainSelect={true}
-            isSelect={true}
-            isSearch={true}
-          />
+          <SearchComponent />
         }
         options={{
           setting: false,

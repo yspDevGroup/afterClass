@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-05-24 16:33:45
- * @LastEditTime: 2021-05-27 18:37:59
+ * @LastEditTime: 2021-05-28 15:02:49
  * @LastEditors: txx
  */
 
@@ -37,14 +37,18 @@ const convertData = (data: API.XNXQ[]) => {
 }
 
 type ISearchComponent = {
-  /** 需要搜索时为true */
-  isSearch?: boolean;
-  /** 需要选中下拉时为true */
-  isSelect?: boolean;
-  /** 需要联动下拉时为true */
-  isChainSelect?: boolean;
   /** 学年学期数据改变的方法 */
   onXNXQChange?: (xn: string, xq: string) => void;
+  /** 联动第一个下拉框的事件 */
+  handleChainChange?: any;
+  /** 联动第二个下拉框的事件 */
+  onTermChange?: any;
+  /** 数据的循环 */
+  itemRecourse?: any[];
+  /** 第二个联动的默认值 */
+  curTerm?: any;
+  /** 第二个联动要循环的值 */
+  terms?: any;
 }
 
 type ChainDataType = {
@@ -56,7 +60,7 @@ const { Search } = Input;
 const { Option } = Select;
 const onSearch = (value: any) => console.log(value);
 
-const SearchComponent: FC<ISearchComponent> = ({ isSearch, isSelect, isChainSelect, onXNXQChange }) => {
+const SearchComponent: FC<ISearchComponent> = ({ onXNXQChange }) => {
   const { itemRecourse } = dataSource;
 
   const [chainData, setchainData] = useState<ChainDataType>()
@@ -101,64 +105,50 @@ const SearchComponent: FC<ISearchComponent> = ({ isSearch, isSelect, isChainSele
         const { label, type, placeHolder = '请输入', isLabel = true, data } = item;
         switch (type) {
           case 'chainSelect':
-            return <div style={{ display: "inline-block" }}>
-              {isChainSelect === true ?
-                (<div>
-                  <div className={styles.HeaderLable}>{label}</div>
-                  <div className={styles.HeaderSelect}>
-                    <span className={styles.HeaderSelectOne}>
-                      <Select onChange={handleChainChange} value={currentXN} style={{ width: 120 }} >
-                        {chainData?.data?.map((year: any) => (
-                          <Option value={year.key}>{year.title}</Option>
-                        ))}
-                      </Select>
-                    </span>
-                    <span className={styles.HeaderSelectTwo}>
-                      <Select onChange={onTermChange} value={curTerm} style={{ width: 120 }}>
-                        {terms?.map((term: any) => (
-                          <Option value={term.key}>{term.title}</Option>
-                        ))}
-                      </Select>
-                    </span>
-                  </div>
-                </div>)
-                :
-                (<></>)}
-
+            return <div style={{ display: "inline-block" }}  >
+              <div>
+                <div className={styles.HeaderLable}>{label}</div>
+                <div className={styles.HeaderSelect}>
+                  <span className={styles.HeaderSelectOne}>
+                    <Select onChange={handleChainChange} value={currentXN} style={{ width: 120 }} >
+                      {chainData?.data?.map((year: any) => (
+                        <Option value={year.key} key={year.key}>{year.title}</Option>
+                      ))}
+                    </Select>
+                  </span>
+                  <span className={styles.HeaderSelectTwo}>
+                    <Select onChange={onTermChange} value={curTerm} style={{ width: 120 }}>
+                      {terms?.map((term: any) => (
+                        <Option value={term.key} key={term.key}>{term.title}</Option>
+                      ))}
+                    </Select>
+                  </span>
+                </div>
+              </div>
             </div>
           case 'select':
-            return <div style={{ display: "inline-block" }}>
-
-              {isSelect === true ?
-                (<div>
-                  <div className={styles.HeaderLable}>{label}</div>
-                  <div className={styles.HeaderSelect}>
-                    <span className={styles.HeaderSelectTwo}>
-                      <Select defaultValue={data![0].title} style={{ width: 120 }}>
-                        {data?.map((op: any) => <Option value={op.key}>{op.title}</Option>)}
-                      </Select>
-                    </span>
-                  </div>
-                </div>)
-                :
-                (<></>)}
-
+            return <div style={{ display: "inline-block" }} >
+              <div>
+                <div className={styles.HeaderLable}>{label}</div>
+                <div className={styles.HeaderSelect}>
+                  <span className={styles.HeaderSelectTwo}>
+                    <Select defaultValue={data![0].title} style={{ width: 120 }}>
+                      {data?.map((op: any) => <Option value={op.key} key={op.key}>{op.title}</Option>)}
+                    </Select>
+                  </span>
+                </div>
+              </div>
             </div>
           case 'input':
-            return <div style={{ display: "inline-block" }}>
-              {isSearch === true ?
-                (<div className={styles.HeaderSearch} >
-                  {isLabel ? <span>{label}</span> : ''}
-                  <Search
-                    placeholder={placeHolder}
-                    onSearch={onSearch}
-                    style={{ width: 200 }}
-                  />
-                </div>)
-                :
-                (<></>)
-              }
-
+            return <div style={{ display: "inline-block" }} >
+              <div className={styles.HeaderSearch} >
+                {isLabel ? <span>{label}</span> : ''}
+                <Search
+                  placeholder={placeHolder}
+                  onSearch={onSearch}
+                  style={{ width: 200 }}
+                />
+              </div>
             </div>;
             break;
           default:

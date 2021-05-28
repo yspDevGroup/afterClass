@@ -199,11 +199,7 @@ const TermManagement = () => {
         search={false}
         dataSource={listData}
         headerTitle={
-          <SearchComponent
-            isChainSelect={true}
-            isSelect={true}
-            isSearch={true}
-          />
+          <SearchComponent />
         }
         options={{
           setting: false,

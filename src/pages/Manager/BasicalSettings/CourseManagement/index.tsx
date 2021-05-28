@@ -188,11 +188,7 @@ const CourseManagement = () => {
           search={false}
           pagination={paginationConfig}
           headerTitle={
-            <SearchComponent
-              isChainSelect={true}
-              isSelect={true}
-              isSearch={true}
-            />
+            <SearchComponent />
           }
           toolBarRender={() => [
             <Button key="wh" onClick={() => maintain()}>
