@@ -71,26 +71,41 @@ export async function deleteFJSJ(
 
 /** 查询所有房间数据 POST /fjsj/ */
 export async function getAllFJSJ(
+  params: {
+    // path
+  },
   body: {
+<<<<<<< HEAD
     /** 学校ID */
     xxId?: string;
+=======
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     /** 场地名称 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.FJSJ[]; message?: string }>('/fjsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建房间数据 PUT /fjsj/create */
-export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]: any }) {
+export async function createFJSJ(
+  params: {
+    // path
+  },
+  body: API.CreateFJSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -129,6 +144,7 @@ export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

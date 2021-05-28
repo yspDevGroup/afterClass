@@ -14,7 +14,11 @@ export async function getKHKCLX(
   const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
+<<<<<<< HEAD
     data: { id?: string; KCLX?: string; XXJBSJId?: string };
+=======
+    data: { id?: string; KCLX?: string };
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     message?: string;
   }>(`/khkclx/${param0}`, {
     method: 'GET',
@@ -42,35 +46,68 @@ export async function deleteKHKCLX(
 
 /** 查询所有课程类型 POST /khkclx/ */
 export async function getAllKHKCLX(
+<<<<<<< HEAD
   body: {
     /** 学校ID */
     xxId?: string;
+=======
+  params: {
+    // path
+  },
+  body: {
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     /** 课程类型 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
+<<<<<<< HEAD
+=======
+  const { ...queryParams } = params;
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
   return request<{ status?: 'ok' | 'error'; data?: API.KHKCLX[]; message?: string }>('/khkclx/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+<<<<<<< HEAD
+=======
+    params: { ...queryParams },
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课程类型 PUT /khkclx/create */
+<<<<<<< HEAD
 export async function createKHKCLX(body: API.CreateKHKCLX, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; KCLX?: string; XXJBSJId?: string };
+=======
+export async function createKHKCLX(
+  params: {
+    // path
+  },
+  body: API.CreateKHKCLX,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
+  return request<{
+    status?: 'ok' | 'error';
+    data: { id?: string; KCLX?: string };
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     message?: string;
   }>('/khkclx/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+<<<<<<< HEAD
+=======
+    params: { ...queryParams },
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     data: body,
     ...(options || {}),
   });

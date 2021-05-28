@@ -18,7 +18,7 @@ import { Divider } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { TermItem } from './data';
 import { listData } from './mock';
-import { createXNXQ, deleteXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
+import { createXNXQ, deleteXNXQ, getAllXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
 import moment from 'moment';
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
 
@@ -34,7 +34,7 @@ const TermManagement = () => {
   const [form, setForm] = useState<FormInstance<any>>();
   // 当前信息，用于回填表单
   const [current, setCurrent] = useState<TermItem>();
-  const [xxjbData, setXxjbData] = useState<string | undefined>('')
+  const [xxjbData, setXxjbData] = useState<string>('');
   /**
    * 实时设置模态框标题
    *
@@ -59,7 +59,7 @@ const TermManagement = () => {
         }
         const XXJB = await getXXJBSJ(params);
         if (XXJB.status === 'ok') {
-          setXxjbData(XXJB.data.id);
+          setXxjbData(XXJB.data.id!);
         }
         console.log('XXJB', XXJB);
       }
@@ -210,6 +210,12 @@ const TermManagement = () => {
           fullScreen: false,
           density: false,
           reload: false,
+        }}
+        request={() => {
+          const params = {
+            xxid:xxjbData
+          }
+          return getAllXNXQ(params);
         }}
         pagination={paginationConfig}
         rowKey="id"

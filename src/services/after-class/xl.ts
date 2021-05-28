@@ -14,7 +14,7 @@ export async function getXL(
   const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string; XXJBSJId?: string };
+    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
     message?: string;
   }>(`/xl/${param0}`, {
     method: 'GET',
@@ -41,24 +41,39 @@ export async function deleteXL(
 }
 
 /** 查询所有校历数据 GET /xl/ */
-export async function getAllXL(options?: { [key: string]: any }) {
+export async function getAllXL(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.XL[]; message?: string }>('/xl/', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建校历数据 PUT /xl/create */
-export async function createXL(body: API.CreateXL, options?: { [key: string]: any }) {
+export async function createXL(
+  params: {
+    // path
+  },
+  body: API.CreateXL,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string; XXJBSJId?: string };
+    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
     message?: string;
   }>('/xl/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -14,15 +14,7 @@ export async function getZXFA(
   const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: {
-      id?: string;
-      FAMC?: string;
-      KSRQ?: string;
-      JSRQ?: string;
-      QSSJ?: string;
-      SM?: string;
-      XXJBSJId?: string;
-    };
+    data: { id?: string; FAMC?: string; KSRQ?: string; JSRQ?: string; QSSJ?: string; SM?: string };
     message?: string;
   }>(`/zxfa/${param0}`, {
     method: 'GET',
@@ -49,32 +41,39 @@ export async function deleteZXFA(
 }
 
 /** 查询所有作息方案数据 GET /zxfa/ */
-export async function getAllZXFA(options?: { [key: string]: any }) {
+export async function getAllZXFA(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.ZXFA[]; message?: string }>('/zxfa/', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建作息方案数据 PUT /zxfa/create */
-export async function createZXFA(body: API.CreateZXFA, options?: { [key: string]: any }) {
+export async function createZXFA(
+  params: {
+    // path
+  },
+  body: API.CreateZXFA,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: {
-      id?: string;
-      FAMC?: string;
-      KSRQ?: string;
-      JSRQ?: string;
-      QSSJ?: string;
-      SM?: string;
-      XXJBSJId?: string;
-    };
+    data: { id?: string; FAMC?: string; KSRQ?: string; JSRQ?: string; QSSJ?: string; SM?: string };
     message?: string;
   }>('/zxfa/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

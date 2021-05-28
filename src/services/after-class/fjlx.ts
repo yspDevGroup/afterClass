@@ -14,7 +14,11 @@ export async function getFJLX(
   const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
+<<<<<<< HEAD
     data: { id?: string; FJLX?: string; XXJBSJId?: string };
+=======
+    data: { id?: string; FJLX?: string };
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     message?: string;
   }>(`/fjlx/${param0}`, {
     method: 'GET',
@@ -42,35 +46,68 @@ export async function deleteFJLX(
 
 /** 查询所有房间类型 POST /fjlx/ */
 export async function getAllFJLX(
+<<<<<<< HEAD
   body: {
     /** 学校ID */
     xxId?: string;
+=======
+  params: {
+    // path
+  },
+  body: {
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     /** 房间类型 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
+<<<<<<< HEAD
+=======
+  const { ...queryParams } = params;
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
   return request<{ status?: 'ok' | 'error'; data?: API.FJLX[]; message?: string }>('/fjlx/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+<<<<<<< HEAD
+=======
+    params: { ...queryParams },
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建房间类型 PUT /fjlx/create */
+<<<<<<< HEAD
 export async function createFJLX(body: API.CreateFJLX, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; FJLX?: string; XXJBSJId?: string };
+=======
+export async function createFJLX(
+  params: {
+    // path
+  },
+  body: API.CreateFJLX,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
+  return request<{
+    status?: 'ok' | 'error';
+    data: { id?: string; FJLX?: string };
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     message?: string;
   }>('/fjlx/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+<<<<<<< HEAD
+=======
+    params: { ...queryParams },
+>>>>>>> 8eb5765991756acc9b1e24725c77a6400120aecb
     data: body,
     ...(options || {}),
   });

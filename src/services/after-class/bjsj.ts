@@ -28,7 +28,6 @@ export async function getBJSJ(
       BYRQ?: string;
       SFSSMZSYJXB?: string;
       SYJXMSM?: string;
-      XXJBSJId?: string;
       NJSJId?: string;
     };
     message?: string;
@@ -57,15 +56,29 @@ export async function deleteBJSJ(
 }
 
 /** 查询所有班级数据 GET /bjsj/ */
-export async function getAllBJSJ(options?: { [key: string]: any }) {
+export async function getAllBJSJ(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.BJSJ[]; message?: string }>('/bjsj/', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建班级数据 PUT /bjsj/create */
-export async function createBJSJ(body: API.CreateBJSJ, options?: { [key: string]: any }) {
+export async function createBJSJ(
+  params: {
+    // path
+  },
+  body: API.CreateBJSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -82,7 +95,6 @@ export async function createBJSJ(body: API.CreateBJSJ, options?: { [key: string]
       BYRQ?: string;
       SFSSMZSYJXB?: string;
       SYJXMSM?: string;
-      XXJBSJId?: string;
       NJSJId?: string;
     };
     message?: string;
@@ -91,6 +103,7 @@ export async function createBJSJ(body: API.CreateBJSJ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

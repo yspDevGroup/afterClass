@@ -8,7 +8,6 @@ import leftBg from '@/assets/leftBg.png';
 import peopleBg from '@/assets/peopleBg.png';
 import rightBg from '@/assets/rightBg.png';
 import logo from '@/assets/logo.png';
-
 import styles from './index.less';
 import { GithubOutlined, WechatOutlined } from '@ant-design/icons';
 /** 此方法会跳转到 redirect 参数所在的位置 */
