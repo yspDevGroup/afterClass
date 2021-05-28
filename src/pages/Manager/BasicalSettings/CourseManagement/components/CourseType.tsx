@@ -1,11 +1,12 @@
+import { createKHKCLX, deleteKHKCLX, getAllKHKCLX, updateKHKCLX } from "@/services/after-class/khkclx";
 import { PlusOutlined } from "@ant-design/icons";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import { message } from "antd";
 import { Button, Popconfirm } from "antd";
 import React, { useRef, useState } from "react";
-import type { DataSourceType } from "../data";
-import { defaultData } from "../mock";
+import type { DataSourceType, TableListParams } from "../data";
+
 
 const CourseType = () => {
     const actionRef = useRef<ActionType>();
@@ -35,7 +36,7 @@ const CourseType = () => {
                 <a
                     key="editable"
                     onClick={() => {
-                        action?.startEditable?.(record.id);
+                        action?.startEditable?.(record.id!);
                     }}
                 >
                     编辑
@@ -45,7 +46,13 @@ const CourseType = () => {
                     onConfirm={async () => {
                         try {
                             if (record.id) {
-                                console.log('delete', [record.id])
+                                const result = await deleteKHKCLX({ id: `${record.id}` });
+                                if (result.status === 'ok') {
+                                    message.success('信息删除成功');
+                                    actionRef.current?.reload();
+                                } else {
+                                    message.error(`${result.message},请联系管理员或稍后再试`);
+                                }
                             }
                         } catch (err) {
                             message.error('删除失败，请联系管理员或稍后重试。');
@@ -55,9 +62,9 @@ const CourseType = () => {
                     cancelText="取消"
                     placement="topLeft"
                 >
-                    <a  key="delete">
+                    <a>
                         删除
-                    </a>
+               </a>
                 </Popconfirm>
             ],
         },
@@ -83,11 +90,15 @@ const CourseType = () => {
                 rowKey="id"
                 actionRef={actionRef}
                 columns={columns}
-                request={async () => ({
-                    data: defaultData,
-                    total: 3,
-                    success: true,
-                })}
+                request={(params, sorter, filter) => {
+                    // 表单搜索项会从 params 传入，传递给后端接口。
+                    const opts: TableListParams = {
+                        ...params,
+                        sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+                        filter,
+                    };
+                    return getAllKHKCLX({ name: '' }, opts);
+                }}
                 value={dataSource}
                 recordCreatorProps={false}
                 onChange={setDataSource}
@@ -95,6 +106,26 @@ const CourseType = () => {
                     type: 'multiple',
                     editableKeys,
                     onChange: setEditableRowKeys,
+                    onSave: async (key, row) => {
+                        try {
+                            // 更新或新增场地信息
+                            const result = row.title ? await createKHKCLX({
+                                KCLX: row.KCLX!
+                            }) : await updateKHKCLX({
+                                id: row.id!
+                            }, {
+                                KCLX: row.KCLX!
+                            });
+                            if (result.status === 'ok') {
+                                message.success(row.title ?'信息新增成功':'信息更新成功');
+                                actionRef.current?.reload();
+                            } else {
+                                message.error(`${result.message},请联系管理员或稍后再试`);
+                            }
+                        } catch (errorInfo) {
+                            console.log('Failed:', errorInfo);
+                        }
+                    },
                 }}
             />
         </>

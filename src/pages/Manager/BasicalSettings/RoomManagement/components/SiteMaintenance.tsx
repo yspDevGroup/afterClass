@@ -1,8 +1,10 @@
+import { createFJLX, deleteFJLX, getAllFJLX, updateFJLX } from "@/services/after-class/fjlx";
 import { PlusOutlined } from "@ant-design/icons";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
-import { Button, Popconfirm  } from "antd";
+import { Button, message, Popconfirm  } from "antd";
 import React, { useRef, useState } from "react";
+import type { TableListParams } from "../../CourseManagement/data";
 import type { DataSourceType } from "../data";
 
 
@@ -21,28 +23,9 @@ const SiteMaintenance = () => {
         },
         {
             title: '名称',
-            dataIndex: 'FJMC',
+            dataIndex: 'FJLX',
             align: 'center',
             ellipsis: true,
-        },
-        {
-            title: '描述',
-            dataIndex: 'BZXX',
-            align: 'center',
-            ellipsis: true,
-            fieldProps: (from, { rowKey, rowIndex }) => {
-                if (from.getFieldValue([rowKey || '', 'title']) === '不好玩') {
-                    return {
-                        disabled: true,
-                    };
-                }
-                if (rowIndex > 9) {
-                    return {
-                        disabled: true,
-                    };
-                }
-                return {};
-            },
         },
         {
             title: '操作',
@@ -53,20 +36,36 @@ const SiteMaintenance = () => {
                 <a
                     key="editable"
                     onClick={() => {
-                        action?.startEditable?.(record.id);
+                        action?.startEditable?.(record.id!);
                     }}
                 >
                     编辑
                 </a>,
                 <Popconfirm
-                    title='确定删除？'
-                >
-                    <a
-                        key="delete"
-                    >
-                        删除
-            </a>
-                </Popconfirm>,
+                title="删除之后，数据不可恢复，确定要删除吗?"
+                onConfirm={async () => {
+                    try {
+                        if (record.id) {
+                            const result = await deleteFJLX({ id: `${record.id}` });
+                            if (result.status === 'ok') {
+                                message.success('信息删除成功');
+                                actionRef.current?.reload();
+                            } else {
+                                message.error(`${result.message},请联系管理员或稍后再试`);
+                            }
+                        }
+                    } catch (err) {
+                        message.error('删除失败，请联系管理员或稍后重试。');
+                    }
+                }}
+                okText="确定"
+                cancelText="取消"
+                placement="topLeft"
+            >
+                <a>
+                    删除
+           </a>
+            </Popconfirm>
             ],
         },
     ];
@@ -92,12 +91,42 @@ const SiteMaintenance = () => {
                 actionRef={actionRef}
                 columns={columns}
                 value={dataSource}
+                request={(params, sorter, filter) => {
+                    // 表单搜索项会从 params 传入，传递给后端接口。
+                    const opts: TableListParams = {
+                        ...params,
+                        sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+                        filter,
+                    };
+                    return getAllFJLX({ name: '' }, opts);
+                }}
                 recordCreatorProps={false}
                 onChange={setDataSource}
                 editable={{
                     type: 'multiple',
                     editableKeys,
                     onChange: setEditableRowKeys,
+                    onSave: async (key, row) => {
+                        console.log(row)
+                        try {
+                            // 更新或新增场地信息
+                            const result = row.title ? await createFJLX({
+                                FJLX: row.FJLX!
+                            }) : await updateFJLX({
+                                id: row.id!
+                            }, {
+                                FJLX: row.FJLX!
+                            });
+                            if (result.status === 'ok') {
+                                message.success(row.title ?'信息新增成功':'信息更新成功');
+                                actionRef.current?.reload();
+                            } else {
+                                message.error(`${result.message},请联系管理员或稍后再试`);
+                            }
+                        } catch (errorInfo) {
+                            console.log('Failed:', errorInfo);
+                        }
+                    },
                 }}
             />
         </>

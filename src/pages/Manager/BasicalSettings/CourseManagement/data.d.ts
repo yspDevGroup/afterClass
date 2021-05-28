@@ -24,6 +24,22 @@ export type CourseItem = {
 };
 
 /**
+ * 查询参数
+ *
+ * @export
+ * @interface TableListParams
+ */
+export type TableListParams = {
+    pageSize?: number;
+    current?: number;
+    search?: string;
+    filter?: Record<string, any[]>;
+    sorter?: Record<string, any>;
+  } & Record<string, any>;
+  
+
+
+/**
  * 
 课程类型维护 字段
  KCMS 描述
@@ -31,7 +47,8 @@ export type CourseItem = {
  */
 
 export type DataSourceType = {
-    id: React.Key;
+    id?: string;
     KCLX?: string;
     KCMS?: string;
+    title?: string;
 };

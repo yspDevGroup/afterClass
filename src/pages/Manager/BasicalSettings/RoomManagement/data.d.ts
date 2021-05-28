@@ -96,8 +96,7 @@ export type TableListParams = {
  */
 
 export type DataSourceType = {
-  id: React.Key;
-  decs?: string;
-  state?: string;
-
+  id?: string;
+  FJLX?: string;
+  title?: string;
 };
