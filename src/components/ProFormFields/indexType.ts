@@ -22,12 +22,15 @@ export type FormItemsProps = {
     | 'time' // 时间
     | 'timeRange' // 时间区间
     | 'uploadImage' // 上传
+    | 'cascader' // 级联（适用于一项有多个控件）
     | 'group'
     | 'empty';
   /** 表单项的key */
   key: string;
   /** 表单的数组项 */
   groupItems?: any[];
+  /** 级联的数组项 */
+  cascaderItem?: any[];
   /** 表单的栅格布局（请参考antd的栅格API） */
   span?: string;
   /** 表单的栅格布局（请参考antd的栅格API） */

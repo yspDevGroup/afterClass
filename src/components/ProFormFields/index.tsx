@@ -15,12 +15,13 @@ import ProForm, {
   ProFormTextArea,
 } from '@ant-design/pro-form';
 import type { FormItemsProps, ProFormFieldsPropsType } from './indexType';
-import { Col, Form, Row } from 'antd';
+import { Col, Form, Row, Space } from 'antd';
 import UploadImage from './components/UploadImage';
 
 const renderFormItems = (formItems: FormItemsProps[]) => {
   return formItems.map((formItem: FormItemsProps) => {
-    const { type, key, groupItems, span, flex, ...currentProps } = formItem;
+    const { type, key, groupItems, span, flex, cascaderItem, ...currentProps } = formItem;
+
     switch (type) {
       case 'input':
         return <ProFormText {...currentProps} key={key} />;
@@ -60,6 +61,16 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
         return (
           <ProForm.Item {...currentProps} key={key}>
             <UploadImage {...currentProps} key={key} />
+          </ProForm.Item>
+        );
+      case 'cascader':
+        return (
+          <ProForm.Item {...currentProps} key={key}>
+            <Space>
+              {cascaderItem?.map((item: any) => {
+                return renderFormItems([item]);
+              })}
+            </Space>
           </ProForm.Item>
         );
       case 'group': {

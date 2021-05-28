@@ -72,6 +72,49 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       options: CourseType,
     },
     {
+      type: 'cascader',
+      label: '学年学期：',
+      key: 'cascader',
+      cascaderItem: [
+        {
+          type: 'select',
+          name: 'XNXQ',
+          key: 'XNXQ',
+          readonly,
+          noStyle: true,
+          width: 212,
+          valueEnum: {
+            '2019~2020': '2019~2020',
+            '2020~2021': '2020~2021',
+            '2021~2022': '2021~2022',
+          },
+          fieldProps: {
+            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+              console.log('vluess111', event);
+            },
+          },
+        },
+        {
+          type: 'select',
+          name: 'XNXQ1',
+          key: 'XNXQ2',
+          readonly,
+          noStyle: true,
+          width: 212,
+          request: async () => [
+            { label: '第一学期', value: '1' },
+            { label: '第二学期', value: '2' },
+            { label: '第三学期', value: '3' },
+          ],
+          fieldProps: {
+            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+              console.log('vluess2222', event);
+            },
+          },
+        },
+      ],
+    },
+    {
       type: 'input',
       readonly,
       label: '时长：',
