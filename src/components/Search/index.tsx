@@ -6,51 +6,16 @@
  * @LastEditors: txx
  */
 
-import { useState, useEffect } from 'react';
-import { Input, message, Select, } from 'antd';
 import type { FC } from 'react';
-
-import { dataSource } from './mock';
+import { useState, useEffect } from 'react';
+import { Input, Select, } from 'antd';
 import styles from "./index.less";
-import { getAllXNXQ } from '@/services/after-class/xnxq';
-
-const convertData = (data: API.XNXQ[]) => {
-  const chainData: {
-    data: { title: string, key: string }[],
-    subData: Record<string, { title: string; key: string }[]>
-  } = {
-    data: [],
-    subData: {}
-  }
-  data.forEach((item) => {
-    const { XN, XQ } = item;
-    if (!chainData.data.find((d) => d.key === XN)) {
-      chainData.data.push({ title: XN, key: XN })
-    }
-    if (chainData.subData[XN]) {
-      chainData.subData[XN].push({ title: XQ, key: XQ })
-    } else {
-      chainData.subData[XN] = [{ title: XQ, key: XQ }]
-    }
-  });
-  return chainData;
-}
+import type { SearchDataType } from './data';
 
 type ISearchComponent = {
-  /** 学年学期数据改变的方法 */
-  onXNXQChange?: (xn: string, xq: string) => void;
-  /** 联动第一个下拉框的事件 */
-  handleChainChange?: any;
-  /** 联动第二个下拉框的事件 */
-  onTermChange?: any;
-  /** 数据的循环 */
-  itemRecourse?: any[];
-  /** 第二个联动的默认值 */
-  curTerm?: any;
-  /** 第二个联动要循环的值 */
-  terms?: any;
+  dataSource?: SearchDataType;
+  onChange?: any;
 }
-
 type ChainDataType = {
   data: { title: string, key: string }[],
   subData: Record<string, { title: string; key: string }[]>
@@ -60,48 +25,48 @@ const { Search } = Input;
 const { Option } = Select;
 const onSearch = (value: any) => console.log(value);
 
-const SearchComponent: FC<ISearchComponent> = ({ onXNXQChange }) => {
-  const { itemRecourse } = dataSource;
-
-  const [chainData, setchainData] = useState<ChainDataType>()
-  const [currentXN, setCurrentXN] = useState<string>()
-
+const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
+  const [chainData, setchainData] = useState<ChainDataType>();
+  const [currentXN, setCurrentXN] = useState<string>();
   const [terms, setTerms] = useState<{ title: string; key: string }[]>();
   const [curTerm, setCurTerm] = useState<string>();
+  const [curGride, setCurGride] = useState<string>();
 
   useEffect(() => {
-    (async () => {
-      const res = await getAllXNXQ({})
-      if (res.status === 'ok') {
-        const { data = [] } = res;
-        const newData = convertData(data);
-        setchainData(newData)
-        setCurrentXN(newData.data[0].key)
-        const ter = newData.subData[newData.data[0].key]
-        setTerms(ter)
-        setCurTerm(ter[0].key)
-      } else {
-        message.warn('')
+    if (dataSource) {
+      const chainSel = dataSource.find((item) => item.type === 'chainSelect');
+      const grideSel = dataSource.find((item: any) => item.label === '年级：');
+      const curXn = chainSel?.defaultValue?.first;
+      setchainData(chainSel?.data);
+      if(curXn){
+        setTerms(chainSel?.data?.subData[curXn])
       }
-    })()
-  }, [])
+      setCurrentXN(chainSel?.defaultValue?.first);
+      setCurTerm(chainSel?.defaultValue?.second);
+      setCurGride(grideSel?.defaultValue?.first);
+    }
+  }, [dataSource])
 
   const handleChainChange = (value: string) => {
     setCurrentXN(value);
     const ter = chainData?.subData[value] || []
-    setTerms(ter)
+    setTerms(ter);
     if (ter.length) {
       setCurTerm(ter[0].key)
-      if (onXNXQChange) onXNXQChange(value, ter[0].key)
     }
+    onChange('year', value);
   };
   const onTermChange = (value: any) => {
     setCurTerm(value);
-    if (onXNXQChange) onXNXQChange(currentXN!, value)
+    onChange('term', value);
   };
+  const onGrideChange = (value: any) => {
+    setCurGride(value);
+    onChange('gride', value);
+  }
   return (
     <div className={styles.Header}>
-      {itemRecourse.map((item) => {
+      {dataSource?.map((item: any) => {
         const { label, type, placeHolder = '请输入', isLabel = true, data } = item;
         switch (type) {
           case 'chainSelect':
@@ -126,19 +91,20 @@ const SearchComponent: FC<ISearchComponent> = ({ onXNXQChange }) => {
                 </div>
               </div>
             </div>
-          case 'select':
+          case 'select': {
             return <div style={{ display: "inline-block" }} >
               <div>
                 <div className={styles.HeaderLable}>{label}</div>
                 <div className={styles.HeaderSelect}>
                   <span className={styles.HeaderSelectTwo}>
-                    <Select defaultValue={data![0].title} style={{ width: 120 }}>
-                      {data?.map((op: any) => <Option value={op.key} key={op.key}>{op.title}</Option>)}
+                    <Select onChange={onGrideChange} value={curGride} style={{ width: '120px' }}>
+                      {data?.map((op: any) => <Option value={op.id} key={op.id}>{op.NJMC}</Option>)}
                     </Select>
                   </span>
                 </div>
               </div>
             </div>
+          }
           case 'input':
             return <div style={{ display: "inline-block" }} >
               <div className={styles.HeaderSearch} >

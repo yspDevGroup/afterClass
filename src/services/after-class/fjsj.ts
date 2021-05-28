@@ -72,6 +72,10 @@ export async function deleteFJSJ(
 /** 查询所有房间数据 POST /fjsj/ */
 export async function getAllFJSJ(
   body: {
+    /** 跳过记录数 */
+    skip?: number;
+    /** 获取记录数 */
+    limit?: number;
     /** 场地名称 */
     name?: string;
   },

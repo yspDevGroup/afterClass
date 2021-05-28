@@ -37,6 +37,7 @@ export async function getKHBJSJ(
         KCMS?: string;
         KCFY?: number;
       };
+      NJSJs?: any[];
     };
     message?: string;
   }>(`/khbjsj/${param0}`, {
@@ -67,7 +68,13 @@ export async function deleteKHBJSJ(
 export async function getAllKHBJSJ(
   body: {
     /** 课后课程ID */
-    khkcsjid?: string;
+    kcId?: string;
+    /** 年级ID */
+    njId?: string;
+    /** 跳过记录数 */
+    skip?: string;
+    /** 获取记录数 */
+    limit?: string;
     /** 班级名称 */
     name?: string;
   },
@@ -110,6 +117,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         KCMS?: string;
         KCFY?: number;
       };
+      NJSJs?: any[];
     };
     message?: string;
   }>('/khbjsj/create', {
