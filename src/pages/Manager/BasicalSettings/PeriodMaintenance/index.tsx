@@ -13,13 +13,14 @@ import Modal from "antd/lib/modal/Modal";
 import { list } from "./mock";
 import { paginationConfig } from "@/constant";
 import TimePeriodForm from "./components/TimePeriodForm";
+import moment from "moment";
 
 
 const PeriodMaintenance = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [current, setCurrent] = useState<Maintenance>();
     const [form, setForm] = useState<FormInstance<any>>();
-
+    console.log(form)
     const getModelTitle = () => {
         if (current) {
             return '编辑信息';
@@ -42,7 +43,15 @@ const PeriodMaintenance = () => {
         setModalVisible(true);
     };
     const handleSubmit = async () => {
-        setModalVisible(false);
+        try {
+          const values = await form?.validateFields();
+          console.log(values)
+          values.JSSJ = values.JSSJ ? moment(values.JSSJ).format('hh:mm') : '';
+          values.KSSJ = values.KSSJ? moment(values.KSSJ).format('hh:mm') : '';
+          console.log(values)
+        } catch (errorInfo) {
+            console.log('Failed:', errorInfo);
+        }    
     };
 
     const columns: ProColumns<Maintenance>[] = [
@@ -99,7 +108,7 @@ const PeriodMaintenance = () => {
             <PageContainer cls={styles.roomWrapper} >
                 <ProTable<Maintenance>
                     columns={columns}
-                    headerTitle="表格标题"
+                    headerTitle="时段维护"
                     search={false}
                     options={{
                         setting: false,
@@ -125,7 +134,7 @@ const PeriodMaintenance = () => {
                 <Modal
                     title={getModelTitle()}
                     destroyOnClose
-                    width='50vw'
+                    width='30vw'
                     visible={modalVisible}
                     onCancel={() => setModalVisible(false)}
                     footer={[

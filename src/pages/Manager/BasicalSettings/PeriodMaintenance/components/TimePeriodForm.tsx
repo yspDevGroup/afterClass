@@ -23,7 +23,6 @@ const TimePeriodForm = (props: PropsType) => {
       hidden: true,
       name: 'id',
       key: 'id',
-
     },
     {
       type: 'input',
@@ -33,15 +32,25 @@ const TimePeriodForm = (props: PropsType) => {
       rules: [{ required: true, message: '请填写名称' }],
     },
     {
-      type: 'dateRange',
-      label: '日期',
+      type: 'time',
+      label: '开始时间',
       name: 'KSSJ',
       key: 'KSSJ',
       width: '100%',
-      rules: [{ required: true, messsage: '请填写日期' }]
+      format:'HH:mm',
+      rules: [{ type: 'any' , required: true, messsage: '请填写日期' }]
     },
     {
-      type: 'input',
+      type: 'time',
+      label: '结束时间',
+      name: 'JSSJ',
+      key: 'JSSJ',
+      width: '100%',
+      format:'HH:mm',
+      rules: [{ type: 'any' , required: true, messsage: '请填写日期' }]
+    },
+    {
+      type: 'textArea',
       label: '备注',
       name: 'BZ',
       key: 'BZ',
