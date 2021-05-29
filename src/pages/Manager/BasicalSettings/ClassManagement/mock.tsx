@@ -1,97 +1,143 @@
-import type { ClassItem,StudentType } from './data';
+import type { ClassItem, StudentType } from './data';
 
 export const listData: ClassItem[] = [
-    {
-        id: '7835u-uedejn2-792hs7481',
-        BJMC: '美术',
-        FJSJ: {
-          FJMC : '一号教学楼301'
-        },
-        ZJS: '陈英振',
-        FJS: '王子聪,林艺,佐罗,惠新海',
-        BJRS: 40,
-        BJMS: '通过趣味的简单线描，色彩绘画...',
-        BJZT: '待开课',
+  {
+    id: '7835u-uedejn2-792hs7481',
+    BJMC: '美术',
+    FJSJ: {
+      FJMC: '一号教学楼301',
     },
-    
-]
+    ZJS: '陈英振',
+    FJS: '王子聪,林艺,佐罗,惠新海',
+    BJRS: 40,
+    BJMS: '通过趣味的简单线描，色彩绘画...',
+    BJZT: '待开课',
+  },
+];
 
-export const studentList: StudentType[]=[
-    {
-      id:'1',
-      XM:'李杰',
-      XH:'202102112',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'2',
-      XM:'赵利明',
-      XH:'202102112',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'3',
-      XM:'宋梓涵',
-      XH:'202105414',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'4',
-      XM:'赵晓明',
-      XH:'202105414',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'5',
-      XM:'张三分',
-      XH:'202105414',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'6',
-      XM:'张三分',
-      XH:'202105414',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'7',
-      XM:'张三分',
-      XH:'202105414',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'4',
-      XM:'赵晓明',
-      XH:'202105414',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'5',
-      XM:'张三分',
-      XH:'202105414',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'6',
-      XM:'张三分',
-      XH:'202105414',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-    {
-      id:'7',
-      XM:'张三分',
-      XH:'202105414',
-      SSNJ:'小学三年级',
-      SSBJ:'B组1班'
-    },
-  ]
+export const studentList: StudentType[] = [
+  {
+    id: '1',
+    XM: '李杰',
+    XH: '202102112',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '2',
+    XM: '赵利明',
+    XH: '202102112',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '3',
+    XM: '宋梓涵',
+    XH: '202105414',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '4',
+    XM: '赵晓明',
+    XH: '202105414',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '5',
+    XM: '张三分',
+    XH: '202105414',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '6',
+    XM: '张三分',
+    XH: '202105414',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '7',
+    XM: '张三分',
+    XH: '202105414',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '4',
+    XM: '赵晓明',
+    XH: '202105414',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '5',
+    XM: '张三分',
+    XH: '202105414',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '6',
+    XM: '张三分',
+    XH: '202105414',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+  {
+    id: '7',
+    XM: '张三分',
+    XH: '202105414',
+    SSNJ: '小学三年级',
+    SSBJ: 'B组1班',
+  },
+];
+
+export const newClassData: any[] = [
+  {
+    room: 'A301 画室',
+    course: { lesson: '第一节', time: '9：00 — 9：45' },
+    monday: { cla: '一年级二班', teacher: '李四', key: '1' },
+    tuesday: { cla: '三年级一班', teacher: '张三', key: '2' },
+    wednesday: '',
+    thursday: { cla: '五年级一班', teacher: '张三', key: '3' },
+    friday: { cla: '六年级一班', teacher: '张三', key: '3' },
+    saturday: { cla: '加班', teacher: '刘进', key: '1' },
+    sunday: '',
+  },
+  {
+    room: 'A301 画室',
+    course: { lesson: '第二节', time: '10：00 — 10：45' },
+    monday: { cla: '一年级一班', teacher: '张三', key: '0' },
+    tuesday: { cla: '三年级二班', teacher: '李四', key: '5' },
+    wednesday: '',
+    thursday: { cla: '五年级二班', teacher: '李四', key: '4' },
+    friday: '',
+    saturday: { cla: '加班', teacher: '佳佳姐', key: '1' },
+    sunday: '',
+  },
+  {
+    room: 'A301 画室',
+    course: { lesson: '第三节', time: '11：00 — 11：45' },
+    monday: { cla: '二年级一班', teacher: '王五', key: '2' },
+    tuesday: { cla: '四年级一班', teacher: '王五', key: '6' },
+    wednesday: { cla: '一年级一班', teacher: '张三', key: '0' },
+    thursday: '',
+    friday: { cla: '六年级二班', teacher: '李四', key: '4' },
+    saturday: { cla: '加班', teacher: '媛媛姐', key: '1' },
+    sunday: '',
+  },
+  {
+    room: 'A301 画室',
+    course: { lesson: '第四节', time: '14：30 — 15：15' },
+    monday: { cla: '二年级二班', teacher: '赵六', key: '3' },
+    tuesday: { cla: '四年级二班', teacher: '赵六', key: '7' },
+    wednesday: { cla: '一年级二班', teacher: '李四', key: '2' },
+    thursday: '',
+    friday: '',
+    saturday: { cla: '加班', teacher: '艳妮姐', key: '1' },
+    sunday: '',
+  },
+];

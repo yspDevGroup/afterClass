@@ -52,7 +52,7 @@
         path: '/basicalSettings/classManagement',
         name: 'classManagement',
         icon: 'smile',
-        component: './Manager/BasicalSettings/ClassManagement',
+        component: './Manager/BasicalSettings/ClassManagement/indexNew',
       },
       {
         path: '/basicalSettings/termManagement',
@@ -60,7 +60,6 @@
         icon: 'smile',
         component: './Manager/BasicalSettings/TermManagement',
       },
-     
       {
         path: '/basicalSettings/periodMaintenance',
         name: 'periodMaintenance',
