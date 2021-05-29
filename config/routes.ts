@@ -60,6 +60,13 @@
         icon: 'smile',
         component: './Manager/BasicalSettings/TermManagement',
       },
+     
+      {
+        path: '/basicalSettings/periodMaintenance',
+        name: 'periodMaintenance',
+        icon: 'smile',
+        component: './Manager/BasicalSettings/PeriodMaintenance',
+      },
       {
         path: '/basicalSettings/',
         redirect: '/basicalSettings/roomManagement',
