@@ -167,3 +167,18 @@ export const CourseType: Record<string, string>[] = [
     value: '体育类',
   },
 ];
+// 课程状态
+export const CourseStatus: Record<string, string>[] = [
+  {
+    label: '待开课',
+    value: '待开课',
+  },
+  {
+    label: '开课中',
+    value: '开课中',
+  },
+  {
+    label: '已结束',
+    value: '已结束',
+  },
+];

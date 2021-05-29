@@ -1,11 +1,15 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable no-param-reassign */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { Button, Drawer, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
-import { CourseType } from '@/constant';
+import { CourseStatus } from '@/constant';
 import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import type { ActionType } from '@ant-design/pro-table';
+import styles from './AddCourse.less';
+import { getAllXNXQ } from '@/services/after-class/xnxq';
+import { getAllKHKCLX } from '@/services/after-class/khkclx';
 
 type AddCourseProps = {
   visible: boolean;
@@ -21,6 +25,52 @@ const formLayout = {
 
 const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef }) => {
   const [form, setForm] = useState<any>();
+  const [XNData, setXNData] = useState<any>([]);
+  const [XQData, setXQData] = useState<any>([]);
+  const [XQ, setXQ] = useState<any>();
+  const [kcTypeData, setKcTypeData] = useState<any>([]);
+  useEffect(() => {
+    Promise.resolve(getAllXNXQ()).then((data: any) => {
+      if (data.status === 'ok') {
+        const xnxqAllData = data.data;
+        const xnData: any[] = [];
+        xnxqAllData.map((item: any) => xnData.push(item.XN));
+
+        // 数组去重
+        const unique = (ary: any) => {
+          const s = new Set(ary);
+          return Array.from(s);
+        };
+
+        const xnDataKey = unique(xnData);
+
+        const xq = {};
+        const xn: { label: any; value: any }[] = [];
+        xnDataKey.map((item: any) => {
+          const xqData: { label: any; value: any }[] = [];
+          xnxqAllData.map((xnxqItem: any) => {
+            if (item === xnxqItem.XN) {
+              xqData.push({ label: xnxqItem.XQ, value: xnxqItem.XQ });
+            }
+          });
+          xq[`${item}`] = xqData;
+          xn.push({ label: item, value: item });
+        });
+        setXNData(xn);
+        setXQData(xq);
+      }
+    });
+    Promise.resolve(getAllKHKCLX({ name: '' })).then((data: any) => {
+      if (data.status === 'ok') {
+        const kcType: any = [];
+        data.data.map((item: any) => {
+          kcType.push({ label: item.KCLX, value: item.id });
+        });
+        setKcTypeData(kcType);
+      }
+    });
+  }, []);
+
   const onFinish = (values: any) => {
     values.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
     new Promise((resolve, reject) => {
@@ -67,9 +117,9 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       type: 'select',
       readonly,
       label: '类型：',
-      name: 'KCLX',
-      key: 'KCLX',
-      options: CourseType,
+      name: 'KHKCLXId',
+      key: 'KHKCLXId',
+      options: kcTypeData,
     },
     {
       type: 'cascader',
@@ -78,40 +128,26 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       cascaderItem: [
         {
           type: 'select',
-          name: 'XNXQ',
-          key: 'XNXQ',
+          width: '100%',
+          name: 'XN',
+          key: 'XN',
           readonly,
           noStyle: true,
-          width: 212,
-	  
-          valueEnum: {
-            '2019~2020': '2019~2020',
-            '2020~2021': '2020~2021',
-            '2021~2022': '2021~2022',
-          },
+          options: XNData,
           fieldProps: {
             onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-              console.log('vluess111', event);
+              setXQ(XQData[`${event}`]);
             },
           },
         },
         {
           type: 'select',
-          name: 'XNXQ1',
-          key: 'XNXQ2',
+          name: 'XQ',
+          width: '100%',
+          key: 'XQ',
           readonly,
           noStyle: true,
-          width: 212,
-          request: async () => [
-            { label: '第一学期', value: '1' },
-            { label: '第二学期', value: '2' },
-            { label: '第三学期', value: '3' },
-          ],
-          fieldProps: {
-            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-              console.log('vluess2222', event);
-            },
-          },
+          options: XQ,
         },
       ],
     },
@@ -131,6 +167,14 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       imageurl: formValues?.KCTP,
     },
     {
+      type: 'select',
+      label: '状态：',
+      name: 'KCZT',
+      key: 'KCZT',
+      readonly,
+      options: CourseStatus,
+    },
+    {
       type: 'textArea',
       readonly,
       label: '简介：',
@@ -145,6 +189,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
         width={480}
         onClose={onClose}
         visible={visible}
+        className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
         footer={

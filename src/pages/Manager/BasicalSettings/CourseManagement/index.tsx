@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import { useRef, useState } from 'react';
 import { message, Popconfirm, Divider, Button, Modal } from 'antd';
@@ -12,15 +13,11 @@ import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
 import type { CourseItem } from './data';
 import styles from './index.less';
-import { useEffect } from 'react';
-import { getInitialState } from '@/app';
-import { getXXJBSJ } from '@/services/after-class/xxjbsj';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
   const [openes, setopenes] = useState(false);
-  const [xxjbData, setXxjbData] = useState<string | undefined>('')
   const actionRef = useRef<ActionType>();
 
   const showDrawer = () => {
@@ -42,61 +39,45 @@ const CourseManagement = () => {
   const showmodal = () => {
     setopenes(false);
   };
-  useEffect(() => {
-    async function fetchData() {
-      const response = await getInitialState();
-      console.log('response', response);
-      if (response.currentUser?.XXDM) {
-        const params = {
-          XXDM: response.currentUser.XXDM
-        }
-        const XXJB = await getXXJBSJ(params);
-        if (XXJB.status === 'ok') {
-          setXxjbData(XXJB.data.id);
-        }
-        console.log('XXJB', XXJB);
-      }
-    }
-    fetchData();
-  }, []);
   const columns: ProColumns<CourseItem>[] = [
     {
       title: '序号',
       dataIndex: 'index',
+      key: 'index',
       valueType: 'index',
       width: 48,
     },
     {
       title: '课程名称',
       dataIndex: 'KCMC',
+      key: 'KCMC',
       align: 'center',
       width: '12%',
     },
     {
       title: '类型',
-      dataIndex: 'KCLX',
+      dataIndex: 'KHKCLX',
+      key: 'KHKCLX',
       align: 'center',
       width: '10%',
+      render: (dom: any) => {
+        return <>{dom?.KCLX}</>;
+      },
     },
     {
       title: '时长',
       dataIndex: 'KCSC',
-      align: 'center',
-      width: '10%',
-    },
-    {
-      title: '费用(元)',
-      dataIndex: 'KCFY',
+      key: 'KCSC',
       align: 'center',
       width: '10%',
     },
     {
       title: '课程封面',
       dataIndex: 'KCTP',
+      key: 'KCTP',
       align: 'center',
       ellipsis: true,
       width: 100,
-
       render: (dom, index) => {
         return (
           <a href={index.KCTP} target="view_window">
@@ -108,18 +89,21 @@ const CourseManagement = () => {
     {
       title: '简介',
       dataIndex: 'KCMS',
+      key: 'KCMS',
       align: 'center',
       ellipsis: true,
     },
     {
       title: '状态',
-      dataIndex: 'CKZT',
+      dataIndex: 'KCZT',
+      key: 'KCZT',
       align: 'center',
       width: 100,
     },
     {
       title: '操作',
       valueType: 'option',
+      key: 'option',
       width: 100,
       render: (_, record) => (
         <>
@@ -166,18 +150,17 @@ const CourseManagement = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          request={(param, sorter, filter) => {
+          request={async (param, sorter, filter) => {
             const obj = {
               param,
               sorter,
               filter,
-              njId: 'dd149420-7d4b-4191-8ddc-6b686a2bd63f',
-              xn: '2021学年',
+              xn: '2020-2021',
               xq: '第一学期',
-              xxId: xxjbData,
               name: '',
             };
-            return getAllKHKCSJ(obj);
+            const res = await getAllKHKCSJ(obj);
+            return res;
           }}
           options={{
             setting: false,
@@ -187,9 +170,7 @@ const CourseManagement = () => {
           }}
           search={false}
           pagination={paginationConfig}
-          headerTitle={
-            <SearchComponent />
-          }
+          headerTitle={<SearchComponent />}
           toolBarRender={() => [
             <Button key="wh" onClick={() => maintain()}>
               课程类型维护

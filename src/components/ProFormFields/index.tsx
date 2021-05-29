@@ -66,7 +66,7 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
       case 'cascader':
         return (
           <ProForm.Item {...currentProps} key={key}>
-            <Space>
+            <Space style={{ width: '100%' }}>
               {cascaderItem?.map((item: any) => {
                 return renderFormItems([item]);
               })}
