@@ -21,6 +21,10 @@ import { listData } from './mock';
 import { createXNXQ, deleteXNXQ, getAllXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
 import moment from 'moment';
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
+import type { SearchDataType } from "@/components/Search/data";
+import { searchData } from "./serarchConfig";
+import { convertData } from "@/components/Search/util";
+import { getAllNJSJ } from "@/services/after-class/njsj";
 
 
 const TermManagement = () => {
@@ -35,6 +39,7 @@ const TermManagement = () => {
   // 当前信息，用于回填表单
   const [current, setCurrent] = useState<TermItem>();
   const [xxjbData, setXxjbData] = useState<string>('');
+  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   /**
    * 实时设置模态框标题
    *
@@ -63,9 +68,45 @@ const TermManagement = () => {
         }
         console.log('XXJB', XXJB);
       }
+      // 学年学期数据的获取
+      const res = await getAllXNXQ({});
+      if (res.status === 'ok') {
+        const { data = [] } = res;
+        const defaultData = [...searchData];
+        const newData = convertData(data);
+        const term = newData.subData[newData.data[0].key];
+        const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+        if (chainSel && chainSel.defaultValue) {
+          chainSel.defaultValue.first = newData.data[0].key;
+          chainSel.defaultValue.second = term[0].key;
+          chainSel.data = newData;
+        }
+        setDataSource(defaultData);
+      } else {
+        console.log(res.message);
+      }
+      // 年级数据的获取
+      const result = await getAllNJSJ();
+      if (result.status === 'ok') {
+        const { data = [] } = result;
+        const defaultData = [...searchData];
+        const grideSel = defaultData.find((item: any) => item.type === 'select');
+        if (grideSel && grideSel.data) {
+          grideSel.defaultValue!.first = data[0].NJMC;
+          grideSel.data = data;
+        }
+        setDataSource(defaultData);
+      } else {
+        console.log(result.message);
+      }
     }
     fetchData();
   }, []);
+ // 头部input事件
+  const handlerSearch = (type: string, value: string) => {
+    console.log(type, value);
+
+  };
   const handleEdit = (data: TermItem) => {
     setModalType('add');
     setCurrent(data);
@@ -199,7 +240,9 @@ const TermManagement = () => {
         search={false}
         dataSource={listData}
         headerTitle={
-          <SearchComponent />
+          <SearchComponent
+            dataSource={dataSource}
+            onChange={(type: string, value: string) => handlerSearch(type, value)} />
         }
         options={{
           setting: false,

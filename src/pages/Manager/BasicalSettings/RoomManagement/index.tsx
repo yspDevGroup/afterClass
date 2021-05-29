@@ -15,6 +15,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import SearchComponent from '@/components/Search';
 import SiteMaintenance from './components/SiteMaintenance';
 import { createFJSJ, deleteFJSJ, getAllFJSJ, updateFJSJ } from '@/services/after-class/fjsj';
+import { searchData } from "./serarchConfig";
+import type { SearchDataType } from "@/components/Search/data";
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -27,6 +29,15 @@ const RoomManagement = () => {
   const [form, setForm] = useState<FormInstance<any>>();
   // 当前信息，用于回填表单
   const [current, setCurrent] = useState<RoomItem>();
+
+  const [dataSource] = useState<SearchDataType>(searchData);
+
+  
+ // 头部input事件
+  const handlerSearch = (type: string, value: string) => {
+    console.log(type, value);
+
+  };
   /**
    * 实时设置模态框标题
    *
@@ -183,7 +194,9 @@ const RoomManagement = () => {
           return getAllFJSJ({ name: '' }, opts);
         }}
         headerTitle={
-          <SearchComponent />
+          <SearchComponent
+            dataSource={dataSource}
+            onChange={(type: string, value: string) => handlerSearch(type, value)} />
         }
         options={{
           setting: false,

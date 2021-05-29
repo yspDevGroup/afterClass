@@ -13,7 +13,10 @@ import StudentInformation from "./components/StudentInformation";
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { deleteKHPKSJ, getAllKHPKSJ } from "@/services/after-class/khpksj";
 import SearchComponent from "@/components/Search";
-import { convertData } from "@/components/Search/util";
+import {
+    convertData,
+    //  convertSelectData 
+} from "@/components/Search/util";
 import { searchData } from "./serarchConfig";
 import { getAllNJSJ } from "@/services/after-class/njsj";
 import type { SearchDataType } from "@/components/Search/data";
@@ -26,6 +29,7 @@ const ClassManagement = (
     const actionRef = useRef<ActionType>();
     useEffect(() => {
         (async () => {
+            // 学年学期数据的获取
             const res = await getAllXNXQ({});
             if (res.status === 'ok') {
                 const { data = [] } = res;
@@ -42,11 +46,12 @@ const ClassManagement = (
             } else {
                 console.log(res.message);
             }
+            // 年级数据的获取
             const result = await getAllNJSJ();
             if (result.status === 'ok') {
                 const { data = [] } = result;
                 const defaultData = [...searchData];
-                const grideSel = defaultData.find((item: any) => item.label === '年级：');
+                const grideSel = defaultData.find((item: any) => item.type === 'select');
                 if (grideSel && grideSel.data) {
                     grideSel.defaultValue!.first = data[0].NJMC;
                     grideSel.data = data;
@@ -55,12 +60,25 @@ const ClassManagement = (
             } else {
                 console.log(result.message);
             }
+            // 年级数据的获取
+            // const result = await getAllNJSJ();
+            // if (result.status === 'ok') {
+            //     const { data = [] } = result;
+            //     const defaultData = [...searchData];
+            //     const selsetNewData = convertSelectData(data)
+            //     const grideSels = defaultData.find((item: any) => item.type === 'select');
+            //     grideSels!.data = selsetNewData
+            //     setDataSource(defaultData);
+            // } else {
+            //     console.log(result.message);
+            // }
+
         })()
     }, [])
+    // 头部input事件
+    const handlerSearch = (type: string, value: string) => {
+        console.log(type, value);
 
-    const handlerSearch = (type: string,value: string)=>{
-        console.log(type,value);
-        
     };
     const getModelTitle = () => {
         if (current) {
@@ -214,7 +232,9 @@ const ClassManagement = (
                     columns={columns}
                     search={false}
                     headerTitle={
-                        <SearchComponent dataSource={dataSource} onChange={(type: string, value: string) => handlerSearch(type, value)} />
+                        <SearchComponent
+                            dataSource={dataSource}
+                            onChange={(type: string, value: string) => handlerSearch(type, value)} />
                     }
                     options={{
                         setting: false,

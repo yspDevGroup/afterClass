@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { message, Popconfirm, Divider, Button, Modal } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -13,12 +13,45 @@ import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
 import type { CourseItem } from './data';
 import styles from './index.less';
+import type { SearchDataType } from "@/components/Search/data";
+import { searchData } from "./serarchConfig";
+import { getAllXNXQ } from '@/services/after-class/xnxq';
+import { convertData } from "@/components/Search/util";
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
   const [openes, setopenes] = useState(false);
   const actionRef = useRef<ActionType>();
+  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
+
+  useEffect(() => {
+    (async () => {
+      // 学年学期数据的获取
+      const res = await getAllXNXQ({});
+      if (res.status === 'ok') {
+        const { data = [] } = res;
+        const defaultData = [...searchData];
+        const newData = convertData(data);
+        const term = newData.subData[newData.data[0].key];
+        const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+        if (chainSel && chainSel.defaultValue) {
+          chainSel.defaultValue.first = newData.data[0].key;
+          chainSel.defaultValue.second = term[0].key;
+          chainSel.data = newData;
+        }
+        setDataSource(defaultData);
+      } else {
+        console.log(res.message);
+      }
+    })()
+
+  }, [])
+  // 头部input事件
+  const handlerSearch = (type: string, value: string) => {
+    console.log(type, value);
+
+  };
 
   const showDrawer = () => {
     setVisible(true);
@@ -170,7 +203,11 @@ const CourseManagement = () => {
           }}
           search={false}
           pagination={paginationConfig}
-          headerTitle={<SearchComponent />}
+          headerTitle={
+            <SearchComponent
+              dataSource={dataSource}
+              onChange={(type: string, value: string) => handlerSearch(type, value)} />
+          }
           toolBarRender={() => [
             <Button key="wh" onClick={() => maintain()}>
               课程类型维护
