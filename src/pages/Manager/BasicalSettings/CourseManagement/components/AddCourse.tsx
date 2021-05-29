@@ -25,6 +25,7 @@ const formLayout = {
 
 const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef }) => {
   const [form, setForm] = useState<any>();
+  const [XN, setXN] = useState<any>();
   const [XNData, setXNData] = useState<any>([]);
   const [XQData, setXQData] = useState<any>([]);
   const [XQ, setXQ] = useState<any>();
@@ -132,10 +133,12 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           name: 'XN',
           key: 'XN',
           readonly,
+          placeholder: '请选择学年',
           noStyle: true,
           options: XNData,
           fieldProps: {
             onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+              setXN(event);
               setXQ(XQData[`${event}`]);
             },
           },
@@ -145,6 +148,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           name: 'XQ',
           width: '100%',
           key: 'XQ',
+          placeholder: '请选择学期',
           readonly,
           noStyle: true,
           options: XQ,
@@ -213,7 +217,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           setForm={setForm}
           formItems={formItems}
           formItemLayout={formLayout}
-          values={formValues}
+          values={XN ? { XQ: XQData[XN][0].label } : formValues}
         />
       </Drawer>
     </div>

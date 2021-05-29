@@ -8,6 +8,24 @@ body,
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  ::-webkit-scrollbar {
+    // 滚动条整体样式
+    width: 8px; // 高宽分别对应横竖滚动条的尺寸
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    // 滚动条里面小方块
+    border-radius: 8px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  ::-webkit-scrollbar-track {
+    background: #ededed;
+    border-radius: 8px;
+    // 滚动条里面轨道
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+
   .colorWeak {
     filter: invert(80%);
   }
@@ -36,16 +54,14 @@ body,
           color: #fff;
         }
 
-        &+div {
+        & + div {
           margin-top: @padding-lg;
         }
       }
 
       .ant-menu {
-
         .ant-menu-item,
         .ant-menu-submenu {
-
           .ant-pro-menu-item-title,
           .anticon,
           .ant-menu-submenu-arrow {
@@ -66,18 +82,18 @@ body,
       .ant-table-wrapper .ant-table-pagination-right {
         justify-content: center;
 
-        >li {
-          color: @normal-color;
+        > li {
           width: 26px;
           height: 26px;
+          margin: @padding-sm;
+          color: @normal-color;
           line-height: 24px;
           border: 1px solid @border-color-base;
           border-radius: 2px;
-          margin: @padding-sm;
 
           &.ant-pagination-item-active {
-            border-color: @primary-color;
             color: @primary-color;
+            border-color: @primary-color;
           }
         }
       }
@@ -91,13 +107,12 @@ body,
     }
   }
 
-
   // 整体modal样式
   .ant-modal-root {
     .ant-modal-centered {
       .ant-modal-content {
-        border-radius: 8px !important;
         overflow: hidden;
+        border-radius: 8px !important;
       }
     }
 
@@ -137,8 +152,8 @@ body,
   .ant-btn-primary {
     background-color: @primary-color;
     border-color: @primary-color;
-    span{
-      color:#fff;
+    span {
+      color: #fff;
     }
   }
 }
@@ -148,14 +163,13 @@ body,
     width: 100%;
     overflow-x: auto;
 
-    &-thead>tr,
-    &-tbody>tr {
-
-      >th,
-      >td {
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
         white-space: pre;
 
-        >span {
+        > span {
           display: block;
         }
       }
@@ -164,9 +178,8 @@ body,
 }
 
 // 兼容IE11
-@media screen and(-ms-high-contrast: active),
-(-ms-high-contrast: none) {
-  body .ant-design-pro>.ant-layout {
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
     min-height: 100vh;
   }
 }
