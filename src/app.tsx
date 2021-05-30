@@ -12,6 +12,7 @@ import { envjudge } from './utils/utils';
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 const authCallbackPath = '/auth_callback';
+let currentToken: string;
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -32,6 +33,7 @@ export async function getInitialState(): Promise<{
       if (currentUserRes.status === 'ok') {
         // sessionStorage.setItem('csrf', currentUser?.csrfToken || '');
         const { token = '', info } = currentUserRes.data || {};
+        currentToken = token;
         localStorage.setItem('token', token || '');
         return info as API.CurrentUser;
       }
@@ -156,7 +158,7 @@ export const request: RequestConfig = {
     async function middlewareA(ctx, next) {
       ctx.req.options.headers = {
         ...ctx.req.options.headers,
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${currentToken || localStorage.getItem('token')}`,
       };
       await next();
     },
