@@ -10,7 +10,21 @@ import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { envjudge } from './utils/utils';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
-const loginPath = '/user/login';
+let loginPath: string;
+switch (envjudge()) {
+  case 'com-wx-mobile': // 手机端企业微信
+  case 'wx-mobile': // 手机端微信
+  case 'com-wx-pc': // PC端企业微信
+  case 'wx-pc': // PC端微信
+    loginPath = `${ENV_backUrl}/auth/inWechat`;
+    break;
+  case 'mobile': // 手机
+  case 'pc': // PC
+  default:
+    loginPath = '/user/login'; // `${ENV_backUrl}/auth/wechat`;
+    break;
+}
+// const loginPath = 'http://api.xianyunshipei.com/auth/wechat'; // '/user/login';
 const authCallbackPath = '/auth_callback';
 let currentToken: string;
 
@@ -33,12 +47,19 @@ export async function getInitialState(): Promise<{
       if (currentUserRes.status === 'ok') {
         // sessionStorage.setItem('csrf', currentUser?.csrfToken || '');
         const { token = '', info } = currentUserRes.data || {};
+        if (!info) {
+          history.push('/user/login');
+          currentToken = '';
+          localStorage.removeItem('token');
+          return undefined;
+        }
         currentToken = token;
         localStorage.setItem('token', token || '');
         return info as API.CurrentUser;
       }
     } catch (error) {
-      history.push(loginPath);
+      // history.push(loginPath);
+      window.location.href = loginPath;
     }
     return undefined;
   };
@@ -73,9 +94,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         !initialState?.currentUser &&
         ![loginPath, authCallbackPath].includes(location.pathname)
       ) {
-        if (envjudge() === 'com-wx-mobile') {
+        if (loginPath.startsWith('http')) {
           // 企业微信手机端打开
-          window.location.href = `${ENV_backUrl}/auth/inWechat`;
+          window.location.href = loginPath;
         } else {
           history.push(loginPath);
         }
