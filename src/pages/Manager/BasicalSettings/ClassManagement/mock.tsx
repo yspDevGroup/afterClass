@@ -1,19 +1,102 @@
-import type { ClassItem, StudentType } from './data';
+import type { ClassItem,StudentType,BJType } from './data';
 
 export const listData: ClassItem[] = [
-  {
-    id: '7835u-uedejn2-792hs7481',
-    BJMC: '美术',
-    FJSJ: {
-      FJMC: '一号教学楼301',
+    {
+        id: '7835u-uedejn2-792hs7481',
+        BJMC: '美术',
+        FJSJ: {
+          FJMC : '一号教学楼301'
+        },
+        ZJS: '陈英振',
+        FJS: '王子聪,林艺,佐罗,惠新海',
+        BJRS: 40,
+        BJMS: '通过趣味的简单线描，色彩绘画...',
+        BJZT: '待开课',
     },
-    ZJS: '陈英振',
-    FJS: '王子聪,林艺,佐罗,惠新海',
-    BJRS: 40,
-    BJMS: '通过趣味的简单线描，色彩绘画...',
-    BJZT: '待开课',
+    
+]
+export const BJList :BJType[]=[
+  {
+    id:'1',
+    BJ:'美术A班',
+    LS:'赵华亮'
   },
-];
+  {
+    id:'2',
+    BJ:'美术B班',
+    LS:'张三丰'
+  },
+  {
+    id:'3',
+    BJ:'美术C班',
+    LS:'李浩'
+  },
+  {
+    id:'4',
+    BJ:'美术D班',
+    LS:'赵华亮'
+  },
+  {
+    id:'5',
+    BJ:'美术F班',
+    LS:'王达'
+  },
+  {
+    id:'6',
+    BJ:'美术G班',
+    LS:'赵马仔'
+  },
+  {
+    id:'7',
+    BJ:'美术H班',
+    LS:'王五'
+  },
+  {
+    id:'8',
+    BJ:'美术I班',
+    LS:'里斯'
+  },
+  {
+    id:'9',
+    BJ:'美术O班',
+    LS:'占山'
+  },
+  {
+    id:'10',
+    BJ:'美术Q班',
+    LS:'里斯'
+  },
+  {
+    id:'11',
+    BJ:'美术p班',
+    LS:'占山'
+  },
+  {
+    id:'12',
+    BJ:'美术m班',
+    LS:'里斯'
+  },
+  {
+    id:'13',
+    BJ:'美术w班',
+    LS:'占山'
+  },
+  {
+    id:'14',
+    BJ:'美术x班',
+    LS:'里斯'
+  },
+  {
+    id:'15',
+    BJ:'美术y班',
+    LS:'占山'
+  },
+  {
+    id:'16',
+    BJ:'美术z班',
+    LS:'里斯'
+  },
+]
 
 export const studentList: StudentType[] = [
   {

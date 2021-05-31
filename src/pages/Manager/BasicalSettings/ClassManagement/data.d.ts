@@ -63,3 +63,12 @@ export type StudentType = {
     SSNJ?: string;
     SSBJ?: string;
 }
+
+
+export type BJType = {
+    id?: string;
+    BJ?: string;
+    LS?: string;
+}
+
+

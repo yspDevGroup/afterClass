@@ -15,6 +15,7 @@ import { convertData } from '@/components/Search/util';
 import { searchData } from './serarchConfig';
 import { getAllNJSJ } from '@/services/after-class/njsj';
 import type { SearchDataType } from '@/components/Search/data';
+import AddArranging from "./components/AddArranging";
 import { newClassData } from './mock';
 
 const ClassManagement = () => {
@@ -22,6 +23,7 @@ const ClassManagement = () => {
   const [current, setCurrent] = useState<ClassItem>();
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const actionRef = useRef<ActionType>();
+  const [state, setState] = useState(true);
   useEffect(() => {
     (async () => {
       const res = await getAllXNXQ({});
@@ -66,8 +68,9 @@ const ClassManagement = () => {
   //     return '新增';
   // };
   const showDrawer = () => {
-    setCurrent(undefined);
-    setModalVisible(true);
+    setState(false)
+    // setCurrent(undefined);
+    // setModalVisible(true);
   };
 
   // const handleEdit = (data: ClassItem) => {
@@ -233,47 +236,49 @@ const ClassManagement = () => {
   return (
     <>
       <PageContainer>
-        <ProTable<ClassItem>
-          columns={columns}
-          dataSource={newClassData}
-          search={false}
-          bordered
-          headerTitle={
-            <SearchComponent
-              dataSource={dataSource}
-              onChange={(type: string, value: string) => handlerSearch(type, value)}
-            />
-          }
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          // request={(param, sorter, filter) => {
-          //     const obj = {
-          //         param,
-          //         sorter,
-          //         filter,
-          //         njId: 'dd149420-7d4b-4191-8ddc-6b686a2bd63f',
-          //         xn: '2021学年',
-          //         xq: '第一学期',
-          //         name: '',
-          //     };
-          //     return getAllKHPKSJ(obj);
-          // }}
-          pagination={paginationConfig}
-          toolBarRender={() => [
-            <Button
-              style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
-              type="primary"
-              key="add"
-              onClick={() => showDrawer()}
-            >
-              新增课程
-            </Button>,
-          ]}
-        />
+        {state === true ? 
+           <ProTable<ClassItem>
+           columns={columns}
+           dataSource={newClassData}
+           search={false}
+           bordered
+           headerTitle={
+             <SearchComponent
+               dataSource={dataSource}
+               onChange={(type: string, value: string) => handlerSearch(type, value)}
+             />
+           }
+           options={{
+             setting: false,
+             fullScreen: false,
+             density: false,
+             reload: false,
+           }}
+           // request={(param, sorter, filter) => {
+           //     const obj = {
+           //         param,
+           //         sorter,
+           //         filter,
+           //         njId: 'dd149420-7d4b-4191-8ddc-6b686a2bd63f',
+           //         xn: '2021学年',
+           //         xq: '第一学期',
+           //         name: '',
+           //     };
+           //     return getAllKHPKSJ(obj);
+           // }}
+           pagination={paginationConfig}
+           toolBarRender={() => [
+             <Button
+               style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
+               type="primary"
+               key="add"
+               onClick={() => showDrawer()}
+             >
+               新增课程
+             </Button>,
+           ]}
+         />:<AddArranging setState={setState} />}
+       
         <AddClass
           visible={modalVisible}
           onClose={onClose}
