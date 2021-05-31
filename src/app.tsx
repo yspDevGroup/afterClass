@@ -48,6 +48,8 @@ export async function getInitialState(): Promise<{
         // sessionStorage.setItem('csrf', currentUser?.csrfToken || '');
         const { token = '', info } = currentUserRes.data || {};
         if (!info) {
+          // 如果后台未查询到用户信息，则跳转到登录页
+          // 此时不能无条件跳转向认证页，否则可能产生无限循环
           history.push('/user/login');
           currentToken = '';
           localStorage.removeItem('token');
