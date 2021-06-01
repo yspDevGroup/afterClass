@@ -126,7 +126,7 @@ const AddArranging: FC<PropsType> = (props) => {
                                             </ProCard>)
                                         })
                                     }
-                                    <ProCard layout="center" bordered onClick={unFold}>
+                                    <ProCard layout="center" bordered onClick={unFold} className='unFold'>
                                         展开 <DownOutlined style={{ color: '#4884FF' }}  />
                                     </ProCard>
                                 </ProCard> :
@@ -141,7 +141,7 @@ const AddArranging: FC<PropsType> = (props) => {
                                             </ProCard>)
                                         })
                                     }
-                                    <ProCard layout="center" bordered onClick={unFold}>
+                                    <ProCard layout="center" bordered onClick={unFold} className='unFold'>
                                         收起 <UpOutlined style={{ color: '#4884FF' }} />
                                     </ProCard>
                                 </ProCard>}
