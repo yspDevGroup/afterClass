@@ -46,7 +46,6 @@
   "dependencies": {
     "@ant-design/icons": "^4.5.0",
     "@ant-design/pro-card": "^1.11.7",
-    "@ant-design/pro-descriptions": "^1.6.8",
     "@ant-design/pro-form": "^1.18.3",
     "@ant-design/pro-layout": "^6.15.3",
     "@ant-design/pro-table": "^2.30.8",
@@ -54,19 +53,15 @@
     "@umijs/plugin-openapi": "^1.2.0",
     "@umijs/route-utils": "^1.0.36",
     "antd": "^4.14.0",
-    "braft-editor": "^2.3.9",
     "classnames": "^2.2.6",
-    "interweave": "^12.7.1",
     "lodash": "^4.17.11",
     "moment": "^2.25.3",
     "omit.js": "^2.0.2",
     "react": "^17.0.0",
     "react-dev-inspector": "^1.1.1",
     "react-dom": "^17.0.0",
-    "react-resizable": "^1.11.1",
     "umi": "^3.4.6",
-    "umi-request": "^1.0.8",
-    "ysp-business-complib": "^1.0.2"
+    "umi-request": "^1.0.8"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^2.0.2",

@@ -16,7 +16,7 @@ switch (envjudge()) {
   case 'wx-mobile': // 手机端微信
   case 'com-wx-pc': // PC端企业微信
   case 'wx-pc': // PC端微信
-    loginPath = `${ENV_backUrl}/auth/inWechat`;
+    loginPath = `${ENV_backUrl}/wechat/platAuth`;
     break;
   case 'mobile': // 手机
   case 'pc': // PC
