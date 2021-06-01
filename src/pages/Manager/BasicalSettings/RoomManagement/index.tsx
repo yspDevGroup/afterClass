@@ -29,14 +29,16 @@ const RoomManagement = () => {
   const [form, setForm] = useState<FormInstance<any>>();
   // 当前信息，用于回填表单
   const [current, setCurrent] = useState<RoomItem>();
+  // 设置表单的查询更新
+  const [name, setName] = useState<string>('');
 
   const [dataSource] = useState<SearchDataType>(searchData);
 
   
  // 头部input事件
   const handlerSearch = (type: string, value: string) => {
-    console.log(type, value);
-
+    setName(value);
+    actionRef.current?.reload();
   };
   /**
    * 实时设置模态框标题
@@ -52,6 +54,11 @@ const RoomManagement = () => {
     }
     return '新增场地信息';
   };
+   /**
+   * 根据不同按钮显示不同模态框与title
+   *
+   * @return {*}
+   */
   const handleOperation = (type: string, data?: RoomItem) => {
     if (data) {
       setCurrent(data)
@@ -62,6 +69,11 @@ const RoomManagement = () => {
     getModelTitle();
     setModalVisible(true);
   };
+  /**
+   * 更新或新增场地信息
+   *
+   * @return {*}
+   */ 
   const handleSubmit = async () => {
     try {
       const values = await form?.validateFields();
@@ -183,7 +195,6 @@ const RoomManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
-        // dataSource={dataSource}
         request={(params, sorter, filter) => {
           // 表单搜索项会从 params 传入，传递给后端接口。
           const opts: TableListParams = {
@@ -191,7 +202,7 @@ const RoomManagement = () => {
             sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
             filter,
           };
-          return getAllFJSJ({ name: '', page: 1 ,pageCount: 20}, opts);
+          return getAllFJSJ({ name, page: 1 ,pageCount: 20}, opts);
         }}
         headerTitle={
           <SearchComponent

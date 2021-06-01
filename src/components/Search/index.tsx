@@ -121,7 +121,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
                 <Search
                   placeholder={placeHolder}
                   onSearch={onSearch}
-                  onPressEnter={(val) => { onChange("customSearch", val.target.value) }}
+                  onPressEnter={(val) => { onChange("customSearch", (val.target as HTMLInputElement).value) }}
                   style={{ width: 200 }}
                 />
               </div>

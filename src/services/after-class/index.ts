@@ -6,53 +6,53 @@ import * as other from './other';
 import * as auth from './auth';
 import * as user from './user';
 import * as bjsj from './bjsj';
-import * as fjsj from './fjsj';
 import * as fjlx from './fjlx';
 import * as jcsj from './jcsj';
+import * as fjsj from './fjsj';
 import * as jcxx from './jcxx';
 import * as jxjhsj from './jxjhsj';
 import * as jzgjbsj from './jzgjbsj';
 import * as kcsj from './kcsj';
 import * as khbjsj from './khbjsj';
 import * as khkclx from './khkclx';
-import * as njsj from './njsj';
-import * as khpksj from './khpksj';
 import * as khkcsj from './khkcsj';
+import * as khpksj from './khpksj';
 import * as pksj from './pksj';
+import * as njsj from './njsj';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
-import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
+import * as xnxq from './xnxq';
 import * as xsjbsj from './xsjbsj';
 import * as xxjbsj from './xxjbsj';
+import * as zxsj from './zxsj';
 import * as xxsjpz from './xxsjpz';
 import * as zxfa from './zxfa';
-import * as zxsj from './zxsj';
 export default {
   other,
   auth,
   user,
   bjsj,
-  fjsj,
   fjlx,
   jcsj,
+  fjsj,
   jcxx,
   jxjhsj,
   jzgjbsj,
   kcsj,
   khbjsj,
   khkclx,
-  njsj,
-  khpksj,
   khkcsj,
+  khpksj,
   pksj,
+  njsj,
   xl,
   xnjgsj,
-  xnxq,
   xqsj,
+  xnxq,
   xsjbsj,
   xxjbsj,
+  zxsj,
   xxsjpz,
   zxfa,
-  zxsj,
 };
