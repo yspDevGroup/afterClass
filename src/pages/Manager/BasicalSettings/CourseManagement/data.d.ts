@@ -1,26 +1,27 @@
+
 /**
  * 
  * 
  课程管理维护字段
   id  UUID;
-  KCMC 课程名称；
-  KCLX 类型；
-  KCSC 时长；
-  KCFY 费用；
-  KCTP 课程封面；
-  KCMS 简介；
-  KCZT 状态；
+  BJMC 班级名称；
+  BJZT 班级状态；
+  FY 费用；
+  ZJS 主教师；
+  FJS 副教师；
+  NJMC 年级名称；
+  BJMS 班级描述；
  */
 
 export type CourseItem = {
     id?: string;
-    KCMC?: string;
-    KCLX?: string;
-    KCSC?: number;
-    KCFY?: number;
-    KCTP?: string;
-    KCMS?: string;
-    KCZT?: string;
+    BJMC?: string;
+    BJZT?: string;
+    FY?: number;
+    ZJS?: string;
+    FJS?: string;
+    NJMC?: string;
+    BJMS?: string;
 };
 
 /**

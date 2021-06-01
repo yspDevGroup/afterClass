@@ -17,6 +17,8 @@ type PropsType = {
 
 const TimePeriodForm = (props: PropsType) => {
   const { current, setForm } = props;
+  
+
   const formItems: any[] = [
     {
       type: 'input',
@@ -37,9 +39,6 @@ const TimePeriodForm = (props: PropsType) => {
       name: 'KSSJ',
       key: 'KSSJ',
       width: '100%',
-      fieldProps: {
-        format: 'HH:mm',
-      },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }]
     },
     {
@@ -48,9 +47,6 @@ const TimePeriodForm = (props: PropsType) => {
       name: 'JSSJ',
       key: 'JSSJ',
       width: '100%',
-      fieldProps: {
-        format: 'HH:mm',
-      },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }]
     },
     {

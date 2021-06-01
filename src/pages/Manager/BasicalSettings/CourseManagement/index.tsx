@@ -1,14 +1,13 @@
 /* eslint-disable no-console */
 import React from 'react';
 import { useRef, useState, useEffect } from 'react';
-import { message, Popconfirm, Divider, Button, Modal } from 'antd';
+import { message, Popconfirm, Divider, Button, Modal, Tag } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
 import SearchComponent from '@/components/Search';
-import { deleteKHKCSJ, getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
 import type { CourseItem } from './data';
@@ -17,6 +16,10 @@ import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./serarchConfig";
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from "@/components/Search/util";
+import { deleteKHBJSJ, getAllKHBJSJ } from '@/services/after-class/khbjsj';
+import { list } from './mock';
+import { Tooltip } from 'antd';
+import ActionBar from './components/ActionBar';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -59,6 +62,7 @@ const CourseManagement = () => {
   };
 
   const handleEdit = (data: CourseItem) => {
+    console.log(data)
     setVisible(true);
     setCurrent(data);
   };
@@ -81,55 +85,62 @@ const CourseManagement = () => {
       width: 48,
     },
     {
-      title: '课程名称',
-      dataIndex: 'KCMC',
-      key: 'KCMC',
+      title: '班级名称',
+      dataIndex: 'BJMC',
+      key: 'BJMC',
       align: 'center',
       width: '12%',
     },
     {
-      title: '类型',
-      dataIndex: 'KHKCLX',
-      key: 'KHKCLX',
-      align: 'center',
-      width: '10%',
-      render: (dom: any) => {
-        return <>{dom?.KCLX}</>;
-      },
-    },
-    {
-      title: '时长',
-      dataIndex: 'KCSC',
-      key: 'KCSC',
+      title: '费用(元)',
+      dataIndex: 'FY',
+      key: 'FY',
       align: 'center',
       width: '10%',
     },
     {
-      title: '课程封面',
-      dataIndex: 'KCTP',
-      key: 'KCTP',
+      title: '主班',
+      dataIndex: 'ZJS',
+      key: 'ZJS',
+      align: 'center',
+      width: '10%',
+    },
+    {
+      title: '副班',
+      dataIndex: 'FJS',
+      key: 'FJS',
       align: 'center',
       ellipsis: true,
       width: 100,
-      render: (dom, index) => {
-        return (
-          <a href={index.KCTP} target="view_window">
-            课程封面.png
-          </a>
-        );
-      },
     },
     {
-      title: '简介',
-      dataIndex: 'KCMS',
-      key: 'KCMS',
+      title: '适用年级',
+      dataIndex: 'NJMC',
+      key: 'NJMC',
       align: 'center',
       ellipsis: true,
+      render: (_, record) => {
+        return (
+            <div className='ui-table-col-elp'>
+                <Tooltip title={record.NJMC} arrowPointAtCenter>
+                    {
+                        record.NJMC?.split(',').map((item) => {
+                            return (
+                                <>
+                                    <Tag>{item}</Tag>
+                                </>
+                            )
+                        })
+                    }
+                </Tooltip>
+            </div>
+        )
+    }
     },
     {
       title: '状态',
-      dataIndex: 'KCZT',
-      key: 'KCZT',
+      dataIndex: 'BJZT',
+      key: 'BJZT',
       align: 'center',
       width: 100,
     },
@@ -138,8 +149,14 @@ const CourseManagement = () => {
       valueType: 'option',
       key: 'option',
       width: 100,
-      render: (_, record) => (
+      align: 'center',
+      render: (_, record) => { 
+        return(
         <>
+          <ActionBar
+          record={record}
+          handleEdit={handleEdit}
+           />
           <a onClick={() => handleEdit(record)}>编辑</a>
           <Divider type="vertical" />
           <Popconfirm
@@ -148,7 +165,7 @@ const CourseManagement = () => {
               try {
                 if (record.id) {
                   const params = { id: record.id };
-                  const res = deleteKHKCSJ(params);
+                  const res = deleteKHBJSJ(params);
                   new Promise((resolve) => {
                     resolve(res);
                   }).then((data: any) => {
@@ -171,8 +188,8 @@ const CourseManagement = () => {
             <a>删除</a>
           </Popconfirm>
         </>
-      ),
-      align: 'center',
+      )},
+      
     },
   ];
 
@@ -183,6 +200,7 @@ const CourseManagement = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
+          dataSource={list}
           request={async (param, sorter, filter) => {
             const obj = {
               param,
@@ -192,7 +210,7 @@ const CourseManagement = () => {
               xq: '第一学期',
               name: '',
             };
-            const res = await getAllKHKCSJ(obj);
+            const res = await getAllKHBJSJ(obj);
             return res;
           }}
           options={{

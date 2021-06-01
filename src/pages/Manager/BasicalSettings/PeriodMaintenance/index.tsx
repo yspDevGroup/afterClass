@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+/* eslint-disable no-param-reassign */
+import React, { useRef, useState } from "react";
 import PageContainer from "@/components/PageContainer";
 import { theme } from "@/theme-default";
 import { PlusOutlined } from "@ant-design/icons"
-import type { ProColumns } from "@ant-design/pro-table";
+import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
-import type { FormInstance } from "antd";
+import type { FormInstance} from "antd";
+import { Popconfirm } from "antd";
 import { Divider } from "antd";
 import { Button } from "antd";
 import type { Maintenance } from "./data";
 import styles from './index.less'
 import Modal from "antd/lib/modal/Modal";
-import { list } from "./mock";
 import { paginationConfig } from "@/constant";
 import TimePeriodForm from "./components/TimePeriodForm";
+import { createXXXTPZ, deleteXXXTPZ, getAllXXXTPZ, updateXXXTPZ } from "@/services/after-class/xxsjpz";
+import { message } from "antd";
 import moment from "moment";
 
 
@@ -20,7 +23,8 @@ const PeriodMaintenance = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [current, setCurrent] = useState<Maintenance>();
     const [form, setForm] = useState<FormInstance<any>>();
-    console.log(form)
+    const actionRef = useRef<ActionType>();
+  
     const getModelTitle = () => {
         if (current) {
             return '编辑信息';
@@ -28,6 +32,8 @@ const PeriodMaintenance = () => {
         return '新增';
     };
     const handleEdit = (data: Maintenance) => {
+        data['KSSJ'] = moment(data?.KSSJ, 'HH:mm')
+        data['JSSJ'] = moment(data?.JSSJ, 'HH:mm')
         setCurrent(data);
         getModelTitle();
         setModalVisible(true);
@@ -45,14 +51,22 @@ const PeriodMaintenance = () => {
     const handleSubmit = async () => {
         try {
           const values = await form?.validateFields();
-          console.log(values)
-          values.JSSJ = values.JSSJ ? moment(values.JSSJ).format('hh:mm') : '';
-          values.KSSJ = values.KSSJ? moment(values.KSSJ).format('hh:mm') : '';
-          console.log(values)
+          const { id, ...rest } = values;
+          rest['KSSJ'] = moment(rest.KSSJ).format('HH:mm:ss')
+          rest['JSSJ'] = moment(rest.JSSJ).format('HH:mm:ss')
+          // 更新或新增场地信息
+          const result = id ? await updateXXXTPZ({ id }, { ...rest }) : await createXXXTPZ({ ...rest });
+          if (result.status === 'ok') {
+            message.success(id ? '信息更新成功' : '信息新增成功');
+            setModalVisible(false);
+            actionRef.current?.reload();
+          } else {
+            message.error(`${result.message},请联系管理员或稍后再试`);
+          }
         } catch (errorInfo) {
-            console.log('Failed:', errorInfo);
-        }    
-    };
+          console.log('Failed:', errorInfo);
+        }
+      };
 
     const columns: ProColumns<Maintenance>[] = [
         {
@@ -84,7 +98,7 @@ const PeriodMaintenance = () => {
         },
         {
             title: '备注',
-            dataIndex: 'BZ',
+            dataIndex: 'BZXX',
             align: 'center',
             width: '10%',
             ellipsis: true,
@@ -98,7 +112,34 @@ const PeriodMaintenance = () => {
                 <>
                     <a onClick={() => handleEdit(record)}>编辑</a>
                     <Divider type="vertical" />
-                    <a>删除</a>
+                    <Popconfirm
+                        title="删除之后，数据不可恢复，确定要删除吗?"
+                        onConfirm={async () => {
+                            try {
+                                if (record.id) {
+                                    const params = { id: record.id };
+                                    const res = deleteXXXTPZ(params);
+                                    new Promise((resolve) => {
+                                        resolve(res);
+                                    }).then((data: any) => {
+                                        if (data.status === 'ok') {
+                                            message.success('删除成功');
+                                            actionRef.current?.reload();
+                                        } else {
+                                            message.error('删除失败');
+                                        }
+                                    });
+                                }
+                            } catch (err) {
+                                message.error('删除失败，请联系管理员或稍后重试。');
+                            }
+                        }}
+                        okText="确定"
+                        cancelText="取消"
+                        placement="topLeft"
+                    >
+                        <a>删除</a>
+                    </Popconfirm>
                 </>
             ),
         },
@@ -116,16 +157,27 @@ const PeriodMaintenance = () => {
                         density: false,
                         reload: false,
                     }}
+                    request={async (param, sorter, filter) => {
+                        const obj = {
+                            param,
+                            sorter,
+                            filter,
+                            xn: '2020-2021',
+                            xq: '第一学期',
+                            name: '',
+                        };
+                        const res = await getAllXXXTPZ(obj);
+                        return res;
+                    }}
                     rowKey="id"
                     pagination={paginationConfig}
-                    dataSource={list}
                     dateFormatter="string"
                     toolBarRender={() => [
                         <Button
                             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
                             type="primary"
                             key="add"
-                          onClick={() => handleOperation('add')}
+                            onClick={() => handleOperation('add')}
                         >
                             <PlusOutlined />新增时段
                         </Button>,
@@ -152,7 +204,7 @@ const PeriodMaintenance = () => {
                         overflowY: 'auto',
                     }}
                 >
-                   <TimePeriodForm current={current} setForm={setForm}/>
+                    <TimePeriodForm current={current} setForm={setForm} />
                 </Modal>
             </PageContainer>
         </>

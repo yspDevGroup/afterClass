@@ -1,15 +1,10 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable no-param-reassign */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { FC } from 'react';
 import { Button, Drawer, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
-import { CourseStatus } from '@/constant';
-import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
-import { getAllXNXQ } from '@/services/after-class/xnxq';
-import { getAllKHKCLX } from '@/services/after-class/khkclx';
+import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -25,55 +20,8 @@ const formLayout = {
 
 const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef }) => {
   const [form, setForm] = useState<any>();
-  const [XN, setXN] = useState<any>();
-  const [XNData, setXNData] = useState<any>([]);
-  const [XQData, setXQData] = useState<any>([]);
-  const [XQ, setXQ] = useState<any>();
-  const [kcTypeData, setKcTypeData] = useState<any>([]);
-  useEffect(() => {
-    Promise.resolve(getAllXNXQ()).then((data: any) => {
-      if (data.status === 'ok') {
-        const xnxqAllData = data.data;
-        const xnData: any[] = [];
-        xnxqAllData.map((item: any) => xnData.push(item.XN));
-
-        // 数组去重
-        const unique = (ary: any) => {
-          const s = new Set(ary);
-          return Array.from(s);
-        };
-
-        const xnDataKey = unique(xnData);
-
-        const xq = {};
-        const xn: { label: any; value: any }[] = [];
-        xnDataKey.map((item: any) => {
-          const xqData: { label: any; value: any }[] = [];
-          xnxqAllData.map((xnxqItem: any) => {
-            if (item === xnxqItem.XN) {
-              xqData.push({ label: xnxqItem.XQ, value: xnxqItem.XQ });
-            }
-          });
-          xq[`${item}`] = xqData;
-          xn.push({ label: item, value: item });
-        });
-        setXNData(xn);
-        setXQData(xq);
-      }
-    });
-    Promise.resolve(getAllKHKCLX({ name: '' })).then((data: any) => {
-      if (data.status === 'ok') {
-        const kcType: any = [];
-        data.data.map((item: any) => {
-          kcType.push({ label: item.KCLX, value: item.id });
-        });
-        setKcTypeData(kcType);
-      }
-    });
-  }, []);
-
+ 
   const onFinish = (values: any) => {
-    values.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
     new Promise((resolve, reject) => {
       let res = null;
       if (formValues?.id) {
@@ -81,9 +29,9 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           id: formValues?.id,
         };
         const options = values;
-        res = updateKHKCSJ(params, options);
+        res =  updateKHBJSJ(params, options);
       } else {
-        res = createKHKCSJ(values);
+        res = createKHBJSJ(values);
       }
       resolve(res);
       reject(res);
@@ -115,52 +63,57 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       key: 'KCMC',
     },
     {
-      type: 'select',
+      type: 'group',
       readonly,
-      label: '类型：',
-      name: 'KHKCLXId',
-      key: 'KHKCLXId',
-      options: kcTypeData,
+      groupItems:[
+        {
+          type: 'input',
+          label: '状态：',
+          name: 'BJZT',
+          key: 'BJZT',
+          fieldProps :{
+            disabled:true,
+            defaultValue:'未排课'
+          }
+      
+        },
+        {
+          type: 'input',
+          label: '费用：',
+          name: 'FY',
+          key: 'FY',
+          readonly,
+          
+        },
+      ]
     },
     {
-      type: 'cascader',
-      label: '学年学期：',
-      key: 'cascader',
-      cascaderItem: [
+      type: 'group',
+      readonly,
+      groupItems:[
         {
           type: 'select',
-          width: '100%',
-          name: 'XN',
-          key: 'XN',
-          readonly,
-          placeholder: '请选择学年',
-          noStyle: true,
-          options: XNData,
-          fieldProps: {
-            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-              setXN(event);
-              setXQ(XQData[`${event}`]);
-            },
-          },
+          label: '主班：',
+          name: 'ZJS',
+          key: 'ZJS',
+          readonly,   
         },
         {
           type: 'select',
-          name: 'XQ',
-          width: '100%',
-          key: 'XQ',
-          placeholder: '请选择学期',
+          label: '副班：(多选)',
+          name: 'FJS',
+          key: 'FJS',
           readonly,
-          noStyle: true,
-          options: XQ,
+          fieldProps :{
+            mode:"multiple"
+          }
         },
-      ],
+      ]
     },
     {
-      type: 'input',
-      readonly,
-      label: '时长：',
-      name: 'KCSC',
-      key: 'KCSC',
+      type:'textArea',
+      label: '适用年级',
+
     },
     {
       type: 'uploadImage',
@@ -169,14 +122,6 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       key: 'KCTP',
       upurl: '',
       imageurl: formValues?.KCTP,
-    },
-    {
-      type: 'select',
-      label: '状态：',
-      name: 'KCZT',
-      key: 'KCZT',
-      readonly,
-      options: CourseStatus,
     },
     {
       type: 'textArea',
@@ -217,7 +162,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           setForm={setForm}
           formItems={formItems}
           formItemLayout={formLayout}
-          values={XN ? { XQ: XQData[XN][0].label } : formValues}
+          values={formValues}
         />
       </Drawer>
     </div>
