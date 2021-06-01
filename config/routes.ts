@@ -43,22 +43,10 @@
         component: './Manager/BasicalSettings/RoomManagement',
       },
       {
-        path: '/basicalSettings/classManagements',
-        name: 'classManagements',
+        path: '/basicalSettings/periodMaintenance',
+        name: 'periodMaintenance',
         icon: 'smile',
-        component: './Manager/BasicalSettings/NewClassManagement',
-      },
-      {
-        path: '/basicalSettings/courseManagement',
-        name: 'courseManagement',
-        icon: 'smile',
-        component: './Manager/BasicalSettings/CourseManagement',
-      },
-      {
-        path: '/basicalSettings/classManagement',
-        name: 'classManagement',
-        icon: 'smile',
-        component: './Manager/BasicalSettings/ClassManagement/indexNew',
+        component: './Manager/BasicalSettings/PeriodMaintenance',
       },
       {
         path: '/basicalSettings/termManagement',
@@ -67,16 +55,28 @@
         component: './Manager/BasicalSettings/TermManagement',
       },
       {
-        path: '/basicalSettings/periodMaintenance',
-        name: 'periodMaintenance',
-        icon: 'smile',
-        component: './Manager/BasicalSettings/PeriodMaintenance',
-      },
-      {
         path: '/basicalSettings/',
         redirect: '/basicalSettings/roomManagement',
       },
     ],
+  },
+  {
+    path: '/courseManagements',
+    name: 'courseManagements',
+    icon: 'smile',
+    component: './Manager/CourseManagements',
+  },
+  {
+    path: '/classManagement',
+    name: 'classManagement',
+    icon: 'smile',
+    component: './Manager/ClassManagement',
+  },
+  {
+    path: '/courseScheduling',
+    name: 'courseScheduling',
+    icon: 'smile',
+    component: './Manager/CourseScheduling',
   },
   {
     path: '/listComponent',

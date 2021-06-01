@@ -14,7 +14,7 @@ import styles from './index.less'
 import Modal from "antd/lib/modal/Modal";
 import { paginationConfig } from "@/constant";
 import TimePeriodForm from "./components/TimePeriodForm";
-import { createXXXTPZ, deleteXXXTPZ, getAllXXXTPZ, updateXXXTPZ } from "@/services/after-class/xxsjpz";
+import { createXXSJPZ, deleteXXSJPZ, getAllXXSJPZ, updateXXSJPZ } from "@/services/after-class/xxsjpz";
 import { message } from "antd";
 import moment from "moment";
 
@@ -32,8 +32,8 @@ const PeriodMaintenance = () => {
         return '新增';
     };
     const handleEdit = (data: Maintenance) => {
-        data['KSSJ'] = moment(data?.KSSJ, 'HH:mm')
-        data['JSSJ'] = moment(data?.JSSJ, 'HH:mm')
+        data.KSSJ = moment(data?.KSSJ, 'HH:mm')
+        data.JSSJ = moment(data?.JSSJ, 'HH:mm')
         setCurrent(data);
         getModelTitle();
         setModalVisible(true);
@@ -52,10 +52,10 @@ const PeriodMaintenance = () => {
         try {
           const values = await form?.validateFields();
           const { id, ...rest } = values;
-          rest['KSSJ'] = moment(rest.KSSJ).format('HH:mm:ss')
-          rest['JSSJ'] = moment(rest.JSSJ).format('HH:mm:ss')
+          rest.KSSJ = moment(rest.KSSJ).format('HH:mm:ss')
+          rest.JSSJ = moment(rest.JSSJ).format('HH:mm:ss')
           // 更新或新增场地信息
-          const result = id ? await updateXXXTPZ({ id }, { ...rest }) : await createXXXTPZ({ ...rest });
+          const result = id ? await updateXXSJPZ({ id }, { ...rest }) : await createXXSJPZ({ ...rest });
           if (result.status === 'ok') {
             message.success(id ? '信息更新成功' : '信息新增成功');
             setModalVisible(false);
@@ -118,7 +118,7 @@ const PeriodMaintenance = () => {
                             try {
                                 if (record.id) {
                                     const params = { id: record.id };
-                                    const res = deleteXXXTPZ(params);
+                                    const res = deleteXXSJPZ(params);
                                     new Promise((resolve) => {
                                         resolve(res);
                                     }).then((data: any) => {
@@ -166,7 +166,7 @@ const PeriodMaintenance = () => {
                             xq: '第一学期',
                             name: '',
                         };
-                        const res = await getAllXXXTPZ(obj);
+                        const res = await getAllXXSJPZ(obj);
                         return res;
                     }}
                     rowKey="id"
