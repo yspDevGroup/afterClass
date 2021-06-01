@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import React, { useState } from 'react';
 import type { FC } from 'react';
 import styles from './index.less';
@@ -8,7 +9,7 @@ type IndexPropsType = {
   columns: any[];
   /** 表格的数据 */
   dataSource: any[];
-  /** 选中的值 */
+  /** 选中的值  在type='edit'时可以传 */
   chosenData?: { cla: string; teacher: string };
   /** 选中项发生变化时的回调 */
   onExcelTableClick?: (value: any) => void;
@@ -26,19 +27,18 @@ const Index: FC<IndexPropsType> = ({
   type = 'see',
   switchPages,
 }) => {
-  const [row, setRowKey] = useState<number>(0);
-  const [col, setColKey] = useState<number>(0);
-  const [isShow, setIsShow] = useState<boolean>(false);
-  let [stateTableData] = useState<any>();
+  let [stateTableData, setStateTableData] = useState<any>();
 
-  const onTdClick = (rowKey: number, colKey: number, isShows: boolean) => {
+  const onTdClick = (rowKey: number, colKey: number) => {
     stateTableData = stateTableData || [...dataSource];
     const colItem = columns[colKey] || {};
-    const rowData = stateTableData[rowKey] || {};
-    if (type === 'see') {
+
+    const newData = [...stateTableData];
+    const rowData = newData[rowKey] || {};
+    if (type === 'see' && !chosenData) {
       switchPages();
     } else if (type === 'edit') {
-      if (isShows && chosenData) {
+      if (chosenData && rowData[colItem.dataIndex] === '') {
         rowData[colItem.dataIndex] = {
           cla: chosenData?.cla,
           teacher: chosenData?.teacher,
@@ -48,10 +48,8 @@ const Index: FC<IndexPropsType> = ({
       } else {
         rowData[colItem.dataIndex] = '';
       }
+      setStateTableData(newData);
     }
-    setRowKey(rowKey);
-    setColKey(colKey);
-    setIsShow(isShows);
     if (typeof onExcelTableClick === 'function') {
       onExcelTableClick(stateTableData);
     }
@@ -77,41 +75,6 @@ const Index: FC<IndexPropsType> = ({
             return (
               <tr key={Math.random()}>
                 {columns.map((item, itemKey) => {
-                  // 获取到点击的单元格
-                  if (row === dataKey && col === itemKey && isShow && chosenData) {
-                    return (
-                      <td
-                        key={`${item.key}-${data.key}`}
-                        style={{ width: item.width }}
-                        onClick={
-                          //
-                          () => {
-                            if (item.dataIndex !== 'room' && item.dataIndex !== 'course') {
-                              onTdClick(dataKey, itemKey, false);
-                            }
-                          }
-                        }
-                      >
-                        <div className="classCard">
-                          <div
-                            className={`cardTop`}
-                            style={{ backgroundColor: 'rgba(139,87,42,1)' }}
-                          />
-                          <div
-                            className={`cardcontent`}
-                            style={{
-                              backgroundColor: 'rgba(139,87,42,0.1)',
-                              color: 'rgba(139,87,42,1)',
-                            }}
-                          >
-                            <div className="cla">{chosenData?.cla}</div>
-                            <div className="teacher">{chosenData?.teacher}</div>
-                          </div>
-                        </div>
-                      </td>
-                    );
-                  }
-
                   // 前两列没有事件
                   if (item.dataIndex === 'room' || item.dataIndex === 'course') {
                     return (
@@ -135,9 +98,9 @@ const Index: FC<IndexPropsType> = ({
                     <td key={`${item.key}-${data.key}`} style={{ width: item.width }}>
                       <Button
                         type="text"
-                        disabled={type === 'see' ? false : data[item.dataIndex].dis}
+                        disabled={type === 'see' ? false : !!data[item.dataIndex]?.dis}
                         onClick={() => {
-                          onTdClick(dataKey, itemKey, true);
+                          onTdClick(dataKey, itemKey);
                         }}
                         style={{
                           height: 70,
@@ -147,17 +110,21 @@ const Index: FC<IndexPropsType> = ({
                           width: '100%',
                         }}
                       >
-                        <div className="classCard">
-                          <div className={`cardTop cardTop${data[item.dataIndex].key}`} />
-                          <div
-                            className={`cardcontent cardTop${data[item.dataIndex].key} cardcontent${
-                              data[item.dataIndex].key
-                            }`}
-                          >
-                            <div className="cla">{data[item.dataIndex].cla}</div>
-                            <div className="teacher">{data[item.dataIndex].teacher}</div>
+                        {data[item.dataIndex] ? (
+                          <div className="classCard">
+                            <div className={`cardTop cardTop${data[item.dataIndex].key}`} />
+                            <div
+                              className={`cardcontent cardTop${
+                                data[item.dataIndex].key
+                              } cardcontent${data[item.dataIndex].key}`}
+                            >
+                              <div className="cla">{data[item.dataIndex].cla}</div>
+                              <div className="teacher">{data[item.dataIndex].teacher}</div>
+                            </div>
                           </div>
-                        </div>
+                        ) : (
+                          ' '
+                        )}
                       </Button>
                     </td>
                   );
