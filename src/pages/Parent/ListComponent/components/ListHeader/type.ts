@@ -10,4 +10,5 @@ export type IListHeader = {
   HeaderRightHref?: any;
   HeaderRight?: string;
   listData?: any[];
+  HeaderTab?: boolean;
 }

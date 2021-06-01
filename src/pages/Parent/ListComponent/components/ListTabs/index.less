@@ -1,5 +1,8 @@
 .ListTabsBox {
   :global {
+    .ant-tabs-tab + .ant-tabs-tab{
+      margin-left: 28px;
+    }
     .ant-tabs-top > .ant-tabs-nav::before,
     .ant-tabs-bottom > .ant-tabs-nav::before,
     .ant-tabs-top > div > .ant-tabs-nav::before,
@@ -8,6 +11,15 @@
     }
     .ant-tabs-ink-bar{
       display: none;
+    }
+    .ant-tabs-tab {
+      padding: 0;
+    }
+    .ant-tabs-top > .ant-tabs-nav,
+    .ant-tabs-bottom > .ant-tabs-nav,
+    .ant-tabs-top > div > .ant-tabs-nav,
+    .ant-tabs-bottom > div > .ant-tabs-nav {
+      margin-bottom: 0;
     }
   }
 }

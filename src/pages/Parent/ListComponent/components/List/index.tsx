@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-05-31 16:29:08
- * @LastEditTime: 2021-05-31 18:04:59
+ * @LastEditTime: 2021-06-01 12:13:21
  * @LastEditors: txx
  */
 import { List } from 'antd';
@@ -32,29 +32,27 @@ const ListCom: FC<IListCom> = ({ data, isImg, layout }) => {
                 {item.title}
               </a>}
               description={<div>
-                <div>{item.two}</div>
-                <div>{item.three}</div>
+                <div className={styles.OpenTime}>{item.two}</div>
+                <div className={styles.TotalHour}>{item.three}</div>
               </div>}
             />
           )
           }
         />)
         :
-        (
-          <div>
-            <List
-              bordered={false}
-              dataSource={data}
-              renderItem={item => (
-                <List.Item>
-                  {item}
-                </List.Item>
-              )}
-            />
-          </div>
-        )
+        (<div>
+          <List
+            bordered={false}
+            dataSource={data}
+            renderItem={item => (
+              <div className={styles.ListComDiv}>
+                <span>●</span>
+                {item.title}
+              </div>
+            )}
+          />
+        </div>)
       }
-
     </div >
   )
 }
