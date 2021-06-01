@@ -73,6 +73,11 @@
     ],
   },
   {
+    path: '/listComponent',
+    layout:false,
+    component: './Parent/ListComponent',
+  },
+  {
     path: '/',
     layout: false,
     redirect: './homepage',
