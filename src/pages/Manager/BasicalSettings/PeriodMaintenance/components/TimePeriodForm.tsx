@@ -37,8 +37,10 @@ const TimePeriodForm = (props: PropsType) => {
       name: 'KSSJ',
       key: 'KSSJ',
       width: '100%',
-      format:'HH:mm',
-      rules: [{ type: 'any' , required: true, messsage: '请填写日期' }]
+      fieldProps: {
+        format: 'HH:mm',
+      },
+      rules: [{ type: 'any', required: true, messsage: '请填写日期' }]
     },
     {
       type: 'time',
@@ -46,8 +48,10 @@ const TimePeriodForm = (props: PropsType) => {
       name: 'JSSJ',
       key: 'JSSJ',
       width: '100%',
-      format:'HH:mm',
-      rules: [{ type: 'any' , required: true, messsage: '请填写日期' }]
+      fieldProps: {
+        format: 'HH:mm',
+      },
+      rules: [{ type: 'any', required: true, messsage: '请填写日期' }]
     },
     {
       type: 'textArea',
