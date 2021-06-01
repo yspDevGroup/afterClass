@@ -28,12 +28,22 @@ export async function getKHPKSJ(
         KSS?: number;
         KKRQ?: string;
         JKRQ?: string;
+        KHKCSJ?: {
+          id?: string;
+          KCMC?: string;
+          KCTP?: string;
+          KCSC?: number;
+          KCZT?: string;
+          KCMS?: string;
+        };
       };
       XXSJPZ?: {
         id?: string;
         KSSJ?: string;
         JSSJ?: string;
         KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+        SDMC?: string;
+        BZXX?: string;
       };
       FJSJ?: {
         id?: string;
@@ -44,15 +54,6 @@ export async function getKHPKSJ(
         FJSYMJ?: number;
         FJRS?: number;
         FJLX?: string;
-      };
-      XXJBSJ?: {
-        id?: string;
-        XXDM?: string;
-        XXMC?: string;
-        XXYWMC?: string;
-        XXDZ?: string;
-        XXYZBM?: string;
-        XZQHM?: string;
       };
     };
     message?: string;
@@ -122,12 +123,22 @@ export async function createKHPKSJ(body: API.CreateKHPKSJ, options?: { [key: str
         KSS?: number;
         KKRQ?: string;
         JKRQ?: string;
+        KHKCSJ?: {
+          id?: string;
+          KCMC?: string;
+          KCTP?: string;
+          KCSC?: number;
+          KCZT?: string;
+          KCMS?: string;
+        };
       };
       XXSJPZ?: {
         id?: string;
         KSSJ?: string;
         JSSJ?: string;
         KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+        SDMC?: string;
+        BZXX?: string;
       };
       FJSJ?: {
         id?: string;
@@ -138,15 +149,6 @@ export async function createKHPKSJ(body: API.CreateKHPKSJ, options?: { [key: str
         FJSYMJ?: number;
         FJRS?: number;
         FJLX?: string;
-      };
-      XXJBSJ?: {
-        id?: string;
-        XXDM?: string;
-        XXMC?: string;
-        XXYWMC?: string;
-        XXDZ?: string;
-        XXYZBM?: string;
-        XZQHM?: string;
       };
     };
     message?: string;

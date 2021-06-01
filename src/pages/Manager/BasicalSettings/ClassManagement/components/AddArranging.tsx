@@ -1,11 +1,12 @@
-import React, { FC, useEffect, useState } from 'react';
+import type { FC} from 'react';
+import React, { useEffect, useState } from 'react';
 import ProForm, {
 ProFormSelect,
 } from '@ant-design/pro-form';
 import '../index.less'
 import { BJList } from '../mock'
 import ProCard from '@ant-design/pro-card';
-import { BJType } from '../data';
+import type { BJType } from '../data';
 import {DownOutlined, UpOutlined} from '@ant-design/icons';
 import { Button } from 'antd';
 
@@ -25,7 +26,7 @@ const AddArranging: FC<PropsType> = (props) => {
             setPackUp(false)
         }
     }
-    const BjClick = (value: BJType, key:any) => {
+    const BjClick = (value: BJType, key: any) => {
         console.log(value.BJ)
         setBj(value.BJ)
         setIndex(key);
@@ -39,7 +40,7 @@ const AddArranging: FC<PropsType> = (props) => {
         setState(true)
         return true;
     }
-    const onReset = (props:any)=>{
+    const onReset = (props: any)=>{
         props.form?.resetFields()
         setState(true)
     }

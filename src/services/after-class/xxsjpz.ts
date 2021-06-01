@@ -2,11 +2,11 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取学校系统配置数据 GET /xxsjpz/${param0} */
-export async function getXXXTPZ(
+/** 获取学校时间配置数据 GET /xxsjpz/${param0} */
+export async function getXXSJPZ(
   params: {
     // path
-    /** 学校系统配置ID */
+    /** 学校时间配置ID */
     id: string;
   },
   options?: { [key: string]: any },
@@ -19,6 +19,8 @@ export async function getXXXTPZ(
       KSSJ?: string;
       JSSJ?: string;
       KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+      SDMC?: string;
+      BZXX?: string;
       XXJBSJ?: {
         id?: string;
         XXDM?: string;
@@ -37,11 +39,11 @@ export async function getXXXTPZ(
   });
 }
 
-/** 删除学校系统配置数据 DELETE /xxsjpz/${param0} */
-export async function deleteXXXTPZ(
+/** 删除学校时间配置数据 DELETE /xxsjpz/${param0} */
+export async function deleteXXSJPZ(
   params: {
     // path
-    /** 学校系统配置ID */
+    /** 学校时间配置ID */
     id: string;
   },
   options?: { [key: string]: any },
@@ -54,8 +56,8 @@ export async function deleteXXXTPZ(
   });
 }
 
-/** 查询所有学校系统配置数据 GET /xxsjpz/all */
-export async function getAllXXXTPZ(options?: { [key: string]: any }) {
+/** 查询所有学校时间配置数据 GET /xxsjpz/all */
+export async function getAllXXSJPZ(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.XXSJPZ[]; message?: string }>(
     '/xxsjpz/all',
     {
@@ -65,8 +67,8 @@ export async function getAllXXXTPZ(options?: { [key: string]: any }) {
   );
 }
 
-/** 创建学校系统配置数据 PUT /xxsjpz/create */
-export async function createXXXTPZ(body: API.CreateXXXTPZ, options?: { [key: string]: any }) {
+/** 创建学校时间配置数据 PUT /xxsjpz/create */
+export async function createXXSJPZ(body: API.CreateXXSJPZ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -74,6 +76,8 @@ export async function createXXXTPZ(body: API.CreateXXXTPZ, options?: { [key: str
       KSSJ?: string;
       JSSJ?: string;
       KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+      SDMC?: string;
+      BZXX?: string;
       XXJBSJ?: {
         id?: string;
         XXDM?: string;
@@ -95,14 +99,14 @@ export async function createXXXTPZ(body: API.CreateXXXTPZ, options?: { [key: str
   });
 }
 
-/** 更新学校系统配置数据 PUT /xxsjpz/update/${param0} */
-export async function updateXXXTPZ(
+/** 更新学校时间配置数据 PUT /xxsjpz/update/${param0} */
+export async function updateXXSJPZ(
   params: {
     // path
-    /** 学校系统配置ID */
+    /** 学校时间配置ID */
     id: string;
   },
-  body: API.UpdateXXXTPZ,
+  body: API.UpdateXXSJPZ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;

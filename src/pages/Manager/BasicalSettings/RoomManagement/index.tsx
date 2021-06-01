@@ -191,7 +191,7 @@ const RoomManagement = () => {
             sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
             filter,
           };
-          return getAllFJSJ({ name: '' }, opts);
+          return getAllFJSJ({ name: '', page: 1 ,pageCount: 20}, opts);
         }}
         headerTitle={
           <SearchComponent

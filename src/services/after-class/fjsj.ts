@@ -72,10 +72,12 @@ export async function deleteFJSJ(
 /** 查询所有房间数据 POST /fjsj/ */
 export async function getAllFJSJ(
   body: {
-    /** 跳过记录数 */
-    skip?: number;
-    /** 获取记录数 */
-    limit?: number;
+    /** 场地类型ID */
+    lxId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageCount?: number;
     /** 场地名称 */
     name?: string;
   },
@@ -153,6 +155,64 @@ export async function updateFJSJ(
       'Content-Type': 'application/json',
     },
     params: { ...queryParams },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 查询房间占用情况 POST /fjsj/plan */
+export async function getFJPlan(
+  body: {
+    /** 场地类型ID */
+    lxId?: string;
+    /** 场地ID */
+    fjId?: string;
+    /** 学年学期ID */
+    xnxqId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: {
+      id?: string;
+      FJBH?: string;
+      FJMC?: string;
+      FJLC?: string;
+      JXL?: string;
+      BZXX?: string;
+      KHPKSJs?: {
+        id?: string;
+        WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+        XXSJPZ?: {
+          id?: string;
+          KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+          KSSJ?: string;
+          JSSJ?: string;
+          SDMC?: string;
+          BZXX?: string;
+        };
+        KHBJSJ?: {
+          id?: string;
+          BJMC?: string;
+          BJMS?: string;
+          BJZT?: string;
+          ZJS?: string;
+          FJS?: string;
+          BJRS?: number;
+          KSS?: number;
+          FY?: number;
+          KKRQ?: string;
+          JKRQ?: string;
+        };
+      }[];
+    }[];
+    message?: string;
+  }>('/fjsj/plan', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     data: body,
     ...(options || {}),
   });

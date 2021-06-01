@@ -24,6 +24,20 @@ export async function getKHKCSJ(
       XNXQId?: string;
       XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
       KHKCLX?: { id?: string; KCLX?: string };
+      KHBJSJs?: {
+        id?: string;
+        BJMC?: string;
+        BJMS?: string;
+        BJZT?: string;
+        ZJS?: string;
+        FJS?: string;
+        BJRS?: number;
+        KSS?: number;
+        FY?: number;
+        KKRQ?: string;
+        JKRQ?: string;
+        KBYS?: string;
+      }[];
     };
     message?: string;
   }>(`/khkcsj/${param0}`, {
@@ -57,6 +71,10 @@ export async function getAllKHKCSJ(
     xn?: string;
     /** 学期 */
     xq?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageCount?: number;
     /** 课程名称 */
     name?: string;
   },
@@ -86,6 +104,20 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
       XNXQId?: string;
       XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
       KHKCLX?: { id?: string; KCLX?: string };
+      KHBJSJs?: {
+        id?: string;
+        BJMC?: string;
+        BJMS?: string;
+        BJZT?: string;
+        ZJS?: string;
+        FJS?: string;
+        BJRS?: number;
+        KSS?: number;
+        FY?: number;
+        KKRQ?: string;
+        JKRQ?: string;
+        KBYS?: string;
+      }[];
     };
     message?: string;
   }>('/khkcsj/create', {

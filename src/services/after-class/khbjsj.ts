@@ -26,6 +26,7 @@ export async function getKHBJSJ(
       FY?: number;
       KKRQ?: string;
       JKRQ?: string;
+      KBYS?: string;
       KHKCSJId?: string;
       KHKCSJ?: {
         id?: string;
@@ -35,9 +36,9 @@ export async function getKHBJSJ(
         KCSC?: number;
         KCZT?: string;
         KCMS?: string;
-        KCFY?: number;
       };
-      NJSJs?: any[];
+      NJSJs?: { id?: string; NJ?: number; NJMC?: string }[];
+      KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
     };
     message?: string;
   }>(`/khbjsj/${param0}`, {
@@ -71,10 +72,12 @@ export async function getAllKHBJSJ(
     kcId?: string;
     /** 年级ID */
     njId?: string;
-    /** 跳过记录数 */
-    skip?: string;
-    /** 获取记录数 */
-    limit?: string;
+    /** 学年学期ID */
+    xnxqId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageCount?: number;
     /** 班级名称 */
     name?: string;
   },
@@ -106,6 +109,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       FY?: number;
       KKRQ?: string;
       JKRQ?: string;
+      KBYS?: string;
       KHKCSJId?: string;
       KHKCSJ?: {
         id?: string;
@@ -115,9 +119,9 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         KCSC?: number;
         KCZT?: string;
         KCMS?: string;
-        KCFY?: number;
       };
-      NJSJs?: any[];
+      NJSJs?: { id?: string; NJ?: number; NJMC?: string }[];
+      KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
     };
     message?: string;
   }>('/khbjsj/create', {
