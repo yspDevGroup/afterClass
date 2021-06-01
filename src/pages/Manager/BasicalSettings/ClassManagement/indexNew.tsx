@@ -1,89 +1,39 @@
 /* eslint-disable no-console */
-import React, { useEffect, useRef, useState } from 'react';
-import PageContainer from '@/components/PageContainer';
-import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
+import React, { useRef, useState } from 'react';
 import { Button } from 'antd';
-import './indexNew.less';
-import type { ClassItem } from './data';
-import { theme } from '@/theme-default';
-import { paginationConfig } from '@/constant';
-import AddClass from './components/AddClass';
-import { getAllXNXQ } from '@/services/after-class/xnxq';
-import SearchComponent from '@/components/Search';
-import { convertData } from '@/components/Search/util';
-import { searchData } from './serarchConfig';
-import { getAllNJSJ } from '@/services/after-class/njsj';
+import type { ActionType } from '@ant-design/pro-table';
 import type { SearchDataType } from '@/components/Search/data';
-import AddArranging from "./components/AddArranging";
+import PageContainer from '@/components/PageContainer';
+import SearchComponent from '@/components/Search';
+import ExcelTable from '@/components/ExcelTable';
+import { theme } from '@/theme-default';
+import AddArranging from './components/AddArranging';
+import AddClass from './components/AddClass';
+import type { ClassItem } from './data';
+import { searchData } from './serarchConfig';
 import { newClassData } from './mock';
+import './indexNew.less';
 
 const ClassManagement = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [current, setCurrent] = useState<ClassItem>();
-  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
+  const [current] = useState<ClassItem>();
+  const [dataSource] = useState<SearchDataType>(searchData);
   const actionRef = useRef<ActionType>();
   const [state, setState] = useState(true);
-  useEffect(() => {
-    (async () => {
-      const res = await getAllXNXQ({});
-      if (res.status === 'ok') {
-        const { data = [] } = res;
-        const defaultData = [...searchData];
-        const newData = convertData(data);
-        const term = newData.subData[newData.data[0].key];
-        const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-        if (chainSel && chainSel.defaultValue) {
-          chainSel.defaultValue.first = newData.data[0].key;
-          chainSel.defaultValue.second = term[0].key;
-          chainSel.data = newData;
-        }
-        setDataSource(defaultData);
-      } else {
-        console.log(res.message);
-      }
-      const result = await getAllNJSJ();
-      if (result.status === 'ok') {
-        const { data = [] } = result;
-        const defaultData = [...searchData];
-        const grideSel = defaultData.find((item: any) => item.label === '年级：');
-        if (grideSel && grideSel.data) {
-          grideSel.defaultValue!.first = data[0].NJMC;
-          grideSel.data = data;
-        }
-        setDataSource(defaultData);
-      } else {
-        console.log(result.message);
-      }
-    })();
-  }, []);
-
   const handlerSearch = (type: string, value: string) => {
     console.log(type, value);
   };
-  // const getModelTitle = () => {
-  //     if (current) {
-  //         return '编辑信息';
-  //     }
-  //     return '新增';
-  // };
   const showDrawer = () => {
-    setState(false)
+    setState(false);
     // setCurrent(undefined);
     // setModalVisible(true);
   };
-
-  // const handleEdit = (data: ClassItem) => {
-  //     setCurrent(data);
-  //     getModelTitle();
-  //     setModalVisible(true);
-  // };
 
   const onClose = () => {
     setModalVisible(false);
   };
 
-  const columns: ProColumns<ClassItem>[] = [
+  const columns = [
     {
       title: '',
       dataIndex: 'room',
@@ -236,49 +186,31 @@ const ClassManagement = () => {
   return (
     <>
       <PageContainer>
-        {state === true ? 
-           <ProTable<ClassItem>
-           columns={columns}
-           dataSource={newClassData}
-           search={false}
-           bordered
-           headerTitle={
-             <SearchComponent
-               dataSource={dataSource}
-               onChange={(type: string, value: string) => handlerSearch(type, value)}
-             />
-           }
-           options={{
-             setting: false,
-             fullScreen: false,
-             density: false,
-             reload: false,
-           }}
-           // request={(param, sorter, filter) => {
-           //     const obj = {
-           //         param,
-           //         sorter,
-           //         filter,
-           //         njId: 'dd149420-7d4b-4191-8ddc-6b686a2bd63f',
-           //         xn: '2021学年',
-           //         xq: '第一学期',
-           //         name: '',
-           //     };
-           //     return getAllKHPKSJ(obj);
-           // }}
-           pagination={paginationConfig}
-           toolBarRender={() => [
-             <Button
-               style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
-               type="primary"
-               key="add"
-               onClick={() => showDrawer()}
-             >
-               新增课程
-             </Button>,
-           ]}
-         />:<AddArranging setState={setState} />}
-       
+        {state === true ? (
+          <div>
+            <div style={{ display: 'flex' }}>
+              <div>
+                <SearchComponent
+                  dataSource={dataSource}
+                  onChange={(type: string, value: string) => handlerSearch(type, value)}
+                />
+              </div>
+              <div style={{ position: 'absolute', right: 24 }}>
+                <Button
+                  style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
+                  type="primary"
+                  key="add"
+                  onClick={() => showDrawer()}
+                >
+                  新增课程
+                </Button>
+              </div>
+            </div>
+            <ExcelTable columns={columns} dataSource={newClassData} />
+          </div>
+        ) : (
+          <AddArranging setState={setState} />
+        )}
         <AddClass
           visible={modalVisible}
           onClose={onClose}

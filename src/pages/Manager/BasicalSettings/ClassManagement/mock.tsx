@@ -1,102 +1,101 @@
-import type { ClassItem,StudentType,BJType } from './data';
+import type { ClassItem, StudentType, BJType } from './data';
 
 export const listData: ClassItem[] = [
-    {
-        id: '7835u-uedejn2-792hs7481',
-        BJMC: '美术',
-        FJSJ: {
-          FJMC : '一号教学楼301'
-        },
-        ZJS: '陈英振',
-        FJS: '王子聪,林艺,佐罗,惠新海',
-        BJRS: 40,
-        BJMS: '通过趣味的简单线描，色彩绘画...',
-        BJZT: '待开课',
+  {
+    id: '7835u-uedejn2-792hs7481',
+    BJMC: '美术',
+    FJSJ: {
+      FJMC: '一号教学楼301',
     },
-    
-]
-export const BJList :BJType[]=[
+    ZJS: '陈英振',
+    FJS: '王子聪,林艺,佐罗,惠新海',
+    BJRS: 40,
+    BJMS: '通过趣味的简单线描，色彩绘画...',
+    BJZT: '待开课',
+  },
+];
+export const BJList: BJType[] = [
   {
-    id:'1',
-    BJ:'美术A班',
-    LS:'赵华亮'
+    id: '1',
+    BJ: '美术A班',
+    LS: '赵华亮',
   },
   {
-    id:'2',
-    BJ:'美术B班',
-    LS:'张三丰'
+    id: '2',
+    BJ: '美术B班',
+    LS: '张三丰',
   },
   {
-    id:'3',
-    BJ:'美术C班',
-    LS:'李浩'
+    id: '3',
+    BJ: '美术C班',
+    LS: '李浩',
   },
   {
-    id:'4',
-    BJ:'美术D班',
-    LS:'赵华亮'
+    id: '4',
+    BJ: '美术D班',
+    LS: '赵华亮',
   },
   {
-    id:'5',
-    BJ:'美术F班',
-    LS:'王达'
+    id: '5',
+    BJ: '美术F班',
+    LS: '王达',
   },
   {
-    id:'6',
-    BJ:'美术G班',
-    LS:'赵马仔'
+    id: '6',
+    BJ: '美术G班',
+    LS: '赵马仔',
   },
   {
-    id:'7',
-    BJ:'美术H班',
-    LS:'王五'
+    id: '7',
+    BJ: '美术H班',
+    LS: '王五',
   },
   {
-    id:'8',
-    BJ:'美术I班',
-    LS:'里斯'
+    id: '8',
+    BJ: '美术I班',
+    LS: '里斯',
   },
   {
-    id:'9',
-    BJ:'美术O班',
-    LS:'占山'
+    id: '9',
+    BJ: '美术O班',
+    LS: '占山',
   },
   {
-    id:'10',
-    BJ:'美术Q班',
-    LS:'里斯'
+    id: '10',
+    BJ: '美术Q班',
+    LS: '里斯',
   },
   {
-    id:'11',
-    BJ:'美术p班',
-    LS:'占山'
+    id: '11',
+    BJ: '美术p班',
+    LS: '占山',
   },
   {
-    id:'12',
-    BJ:'美术m班',
-    LS:'里斯'
+    id: '12',
+    BJ: '美术m班',
+    LS: '里斯',
   },
   {
-    id:'13',
-    BJ:'美术w班',
-    LS:'占山'
+    id: '13',
+    BJ: '美术w班',
+    LS: '占山',
   },
   {
-    id:'14',
-    BJ:'美术x班',
-    LS:'里斯'
+    id: '14',
+    BJ: '美术x班',
+    LS: '里斯',
   },
   {
-    id:'15',
-    BJ:'美术y班',
-    LS:'占山'
+    id: '15',
+    BJ: '美术y班',
+    LS: '占山',
   },
   {
-    id:'16',
-    BJ:'美术z班',
-    LS:'里斯'
+    id: '16',
+    BJ: '美术z班',
+    LS: '里斯',
   },
-]
+];
 
 export const studentList: StudentType[] = [
   {
@@ -180,8 +179,8 @@ export const studentList: StudentType[] = [
 
 export const newClassData: any[] = [
   {
-    room: 'A301 画室',
-    course: { lesson: '第一节', time: '9：00 — 9：45' },
+    room: { cla: 'A301 画室', teacher: '' },
+    course: { cla: '第一节', teacher: '9：00 — 9：45' },
     monday: { cla: '一年级二班', teacher: '李四', key: '1' },
     tuesday: { cla: '三年级一班', teacher: '张三', key: '2' },
     wednesday: '',
@@ -189,10 +188,11 @@ export const newClassData: any[] = [
     friday: { cla: '六年级一班', teacher: '张三', key: '3' },
     saturday: { cla: '加班', teacher: '刘进', key: '1' },
     sunday: '',
+    dataKey: 1,
   },
   {
-    room: 'A301 画室',
-    course: { lesson: '第二节', time: '10：00 — 10：45' },
+    room: { cla: 'A301 画室', teacher: '' },
+    course: { cla: '第二节', teacher: '10：00 — 10：45' },
     monday: { cla: '一年级一班', teacher: '张三', key: '0' },
     tuesday: { cla: '三年级二班', teacher: '李四', key: '5' },
     wednesday: '',
@@ -200,10 +200,11 @@ export const newClassData: any[] = [
     friday: '',
     saturday: { cla: '加班', teacher: '佳佳姐', key: '1' },
     sunday: '',
+    dataKey: 2,
   },
   {
-    room: 'A301 画室',
-    course: { lesson: '第三节', time: '11：00 — 11：45' },
+    room: { cla: 'A301 画室', teacher: '' },
+    course: { cla: '第三节', teacher: '11：00 — 11：45' },
     monday: { cla: '二年级一班', teacher: '王五', key: '2' },
     tuesday: { cla: '四年级一班', teacher: '王五', key: '6' },
     wednesday: { cla: '一年级一班', teacher: '张三', key: '0' },
@@ -211,10 +212,11 @@ export const newClassData: any[] = [
     friday: { cla: '六年级二班', teacher: '李四', key: '4' },
     saturday: { cla: '加班', teacher: '媛媛姐', key: '1' },
     sunday: '',
+    dataKey: 3,
   },
   {
-    room: 'A301 画室',
-    course: { lesson: '第四节', time: '14：30 — 15：15' },
+    room: { cla: 'A301 画室', teacher: '' },
+    course: { cla: '第四节', teacher: '14：30 — 15：15' },
     monday: { cla: '二年级二班', teacher: '赵六', key: '3' },
     tuesday: { cla: '四年级二班', teacher: '赵六', key: '7' },
     wednesday: { cla: '一年级二班', teacher: '李四', key: '2' },
@@ -222,5 +224,6 @@ export const newClassData: any[] = [
     friday: '',
     saturday: { cla: '加班', teacher: '艳妮姐', key: '1' },
     sunday: '',
+    dataKey: 4,
   },
 ];
