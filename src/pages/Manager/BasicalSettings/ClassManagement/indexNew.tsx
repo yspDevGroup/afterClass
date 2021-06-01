@@ -33,6 +33,13 @@ const ClassManagement = () => {
     setModalVisible(false);
   };
 
+  const chosenData = {
+    cla: '幼儿班',
+    teacher: '刘进',
+  };
+  const onExcelTableClick = (value: any) => {
+    console.log('onExcelTableClickvalue', value);
+  };
   const columns = [
     {
       title: '',
@@ -46,14 +53,6 @@ const ClassManagement = () => {
       dataIndex: 'course',
       key: 'course',
       width: 136,
-      render: (text: any) => {
-        return (
-          <div>
-            <div>{text.lesson}</div>
-            <div>{text.time}</div>
-          </div>
-        );
-      },
     },
     {
       title: '周一',
@@ -61,17 +60,6 @@ const ClassManagement = () => {
       key: 'monday',
       align: 'center',
       width: 136,
-      render: (text: any) => {
-        return (
-          <div className="classCard">
-            <div className={`cardTop cardTop${text.key}`} />
-            <div className={`cardcontent cardTop${text.key} cardcontent${text.key}`}>
-              <div className="cla">{text.cla}</div>
-              <div className="teacher">{text.teacher}</div>
-            </div>
-          </div>
-        );
-      },
     },
     {
       title: '周二',
@@ -79,17 +67,6 @@ const ClassManagement = () => {
       key: 'tuesday',
       align: 'center',
       width: 136,
-      render: (text: any) => {
-        return (
-          <div className="classCard">
-            <div className={`cardTop cardTop${text.key}`} />
-            <div className={`cardcontent cardTop${text.key} cardcontent${text.key}`}>
-              <div className="cla">{text.cla}</div>
-              <div className="teacher">{text.teacher}</div>
-            </div>
-          </div>
-        );
-      },
     },
     {
       title: '周三',
@@ -97,17 +74,6 @@ const ClassManagement = () => {
       key: 'wednesday',
       align: 'center',
       width: 136,
-      render: (text: any) => {
-        return (
-          <div className="classCard">
-            <div className={`cardTop cardTop${text.key}`} />
-            <div className={`cardcontent cardTop${text.key} cardcontent${text.key}`}>
-              <div className="cla">{text.cla}</div>
-              <div className="teacher">{text.teacher}</div>
-            </div>
-          </div>
-        );
-      },
     },
     {
       title: '周四',
@@ -115,17 +81,6 @@ const ClassManagement = () => {
       key: 'thursday',
       align: 'center',
       width: 136,
-      render: (text: any) => {
-        return (
-          <div className="classCard">
-            <div className={`cardTop cardTop${text.key}`} />
-            <div className={`cardcontent cardTop${text.key} cardcontent${text.key}`}>
-              <div className="cla">{text.cla}</div>
-              <div className="teacher">{text.teacher}</div>
-            </div>
-          </div>
-        );
-      },
     },
     {
       title: '周五',
@@ -133,17 +88,6 @@ const ClassManagement = () => {
       key: 'friday',
       align: 'center',
       width: 136,
-      render: (text: any) => {
-        return (
-          <div className="classCard">
-            <div className={`cardTop cardTop${text.key}`} />
-            <div className={`cardcontent cardTop${text.key} cardcontent${text.key}`}>
-              <div className="cla">{text.cla}</div>
-              <div className="teacher">{text.teacher}</div>
-            </div>
-          </div>
-        );
-      },
     },
     {
       title: '周六',
@@ -151,17 +95,6 @@ const ClassManagement = () => {
       key: 'saturday',
       align: 'center',
       width: 136,
-      render: (text: any) => {
-        return (
-          <div className="classCard">
-            <div className={`cardTop cardTop${text.key}`} />
-            <div className={`cardcontent cardTop${text.key} cardcontent${text.key}`}>
-              <div className="cla">{text.cla}</div>
-              <div className="teacher">{text.teacher}</div>
-            </div>
-          </div>
-        );
-      },
     },
     {
       title: '周日',
@@ -169,17 +102,6 @@ const ClassManagement = () => {
       key: 'sunday',
       align: 'center',
       width: 136,
-      render: (text: any) => {
-        return (
-          <div className="classCard">
-            <div className={`cardTop cardTop${text.key}`} />
-            <div className={`cardcontent cardTop${text.key} cardcontent${text.key}`}>
-              <div className="cla">{text.cla}</div>
-              <div className="teacher">{text.teacher}</div>
-            </div>
-          </div>
-        );
-      },
     },
   ];
 
@@ -206,7 +128,13 @@ const ClassManagement = () => {
                 </Button>
               </div>
             </div>
-            <ExcelTable columns={columns} dataSource={newClassData} />
+            <ExcelTable
+              columns={columns}
+              dataSource={newClassData}
+              chosenData={chosenData}
+              onExcelTableClick={onExcelTableClick}
+              switchPages={showDrawer}
+            />
           </div>
         ) : (
           <AddArranging setState={setState} />
