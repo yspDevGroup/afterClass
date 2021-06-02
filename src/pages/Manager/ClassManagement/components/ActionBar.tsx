@@ -9,10 +9,11 @@ import type { CourseItem } from "../data";
 type propstype = {
   handleEdit: (data: CourseItem) => void;
   record: CourseItem;
+  maintain: (type: string) => void
 }
 
 const ActionBar = (props: propstype) => {
-  const { handleEdit, record } = props
+  const { handleEdit, record, maintain } = props
 
   switch (record.BJZT) {
     case '未排课':
@@ -59,7 +60,7 @@ const ActionBar = (props: propstype) => {
     case '已排课':
       return (
         <>
-          <a>
+          <a onClick={()=>{maintain('startclass')}}>
             开班
           </a>
           <Divider type="vertical" />
@@ -99,7 +100,7 @@ const ActionBar = (props: propstype) => {
       return (
         <>
           <a>
-           下架
+            下架
           </a>
           <Divider type="vertical" />
           <a onClick={() => handleEdit(record)}>查看</a>
@@ -109,7 +110,7 @@ const ActionBar = (props: propstype) => {
     case '已下架':
       return (
         <>
-           <a>
+          <a>
             <Link to='/courseScheduling'>
               排课
             </Link>
@@ -150,7 +151,7 @@ const ActionBar = (props: propstype) => {
     default:
       return (
         <>
-   <a onClick={() => handleEdit(record)}>查看</a>
+          <a onClick={() => handleEdit(record)}>查看</a>
         </>
       );
   }

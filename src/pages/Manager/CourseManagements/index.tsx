@@ -3,48 +3,89 @@ import { paginationConfig } from "@/constant";
 import { theme } from "@/theme-default";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
-import type { FormInstance} from "antd";
 import { Button, Modal, Popconfirm } from "antd";
 import { Divider } from "antd";
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useState } from "react";
 import type { classType } from "./data";
 import NewCourses from "./components/NewCourses";
 import styles from './index.less'
-import { list } from "./mock";
-import { Link } from "umi";
 import Sitclass from "./components/Sitclass";
+import {  deleteKHKCSJ, getAllKHKCSJ} from "@/services/after-class/khkcsj";
+import type { SearchDataType } from "@/components/Search/data";
+import { searchData } from "./serarchConfig";
+import { convertData } from "@/components/Search/util";
+import { getAllXNXQ } from "@/services/after-class/xnxq";
+import SearchComponent from "@/components/Search";
+import { message } from "antd";
+
 
 
 const NewClassManagement = () => {
     const actionRef = useRef<ActionType>();
     const [current, setCurrent] = useState<classType>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [open,setopen]=useState<boolean>(false)
     const [modalType, setModalType] = useState<string>('add');
-    const [form, setForm] = useState<FormInstance<any>>();
-    console.log(form)
+    const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
+    const [xn, setxn] = useState<string>('2020-2021');
+    const [xq, setxq] = useState<string>('第一学期')
+
+    useEffect(() => {
+        async function fetchData() {
+            const res = await getAllXNXQ({});
+            if (res.status === 'ok') {
+                const { data = [] } = res;
+                const defaultData = [...searchData];
+                const newData = convertData(data);
+                const term = newData.subData[newData.data[0].key];
+                const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+                if (chainSel && chainSel.defaultValue) {
+                    chainSel.defaultValue.first = newData.data[0].key;
+                    chainSel.defaultValue.second = term[0].key;
+                    chainSel.data = newData;
+                }
+                setDataSource(defaultData);
+            } else {
+                console.log(res.message);
+            }
+        }
+        fetchData();
+    }, []);
+    // 头部input事件
+    const handlerSearch = (type: string, value: string) => {
+        if (type === 'year') {
+            setxn(value)
+            return actionRef.current?.reload();
+        }
+        setxq(value)
+        return actionRef.current?.reload();
+    };
     const getModelTitle = () => {
         if (modalType === 'uphold') {
             return '课程类型维护';
-          }
+        }
         if (current) {
-          return '编辑信息';
+            return '编辑信息';
         }
         return '新增信息';
-      };
+    };
     const handleOperation = (type: string, data?: classType) => {
         if (data) {
-          setCurrent(data)
+            setCurrent(data)
         } else {
-          setCurrent(undefined);
+            setCurrent(undefined);
         }
         setModalType(type);
         getModelTitle();
-        setModalVisible(true);
+        setopen(true);
     };
-    const handleSubmit = () => {
-        console.log(666)
+    const onClose = () => {
+        setopen(false);
       };
+    const handleSubmit = async () => {
+       
+    };
     const maintain = () => {
         setModalType('uphold')
         setModalVisible(true);
@@ -65,39 +106,57 @@ const NewClassManagement = () => {
             width: '12%',
         },
         {
-            title: '类型',
-            dataIndex: 'KCLX',
-            key: 'KCLX',
+            title: '课程类型',
             align: 'center',
             width: '10%',
+            key: 'KCLX',
+            render: (_, record) => {
+                return (
+                    <>
+                        {record.KHKCLX?.KCLX}
+                    </>
+                )
+            }
         },
         {
             title: '班级数',
-            dataIndex: 'BJS',
-            key: 'BJS',
             align: 'center',
             width: '10%',
-            render:(dom)=>{
+            render: (_, record) => {
+                return (
+                    <>
+                        {record.KHBJSJs?.length}
+                    </>
+                )
+            }
+        },
+        {
+            title:'课程封面',
+            align:'center',
+            width:'10%',
+            render:(_,record)=>{
                 return(
-                    <Link to='/classManagement'>
-                    <a>{dom}</a>
-                    </Link>
+                    <>
+                    <a href={record.KCTP}>课程封面.png</a>
+                    </>
                 )
             }
         },
         {
             title: '简介',
-            dataIndex: 'BJMS',
-            key: 'BJMS',
+            dataIndex: 'KCMS',
+            key: 'KCMS',
             align: 'center',
+            width:'20%',
             ellipsis: true,
         },
+
         {
-            title: '简介',
-            dataIndex: 'BJMS',
-            key: 'BJMS',
+            title: '状态',
             align: 'center',
             ellipsis: true,
+            dataIndex: 'KCZT',
+            key: 'KCZT',
         },
         {
             title: '操作',
@@ -110,11 +169,29 @@ const NewClassManagement = () => {
                     <Divider type="vertical" />
                     <Popconfirm
                         title="删除之后，数据不可恢复，确定要删除吗?"
+                        onConfirm={async () => {
+                            try {
+                                if (record.id) {
+                                    const result = await deleteKHKCSJ({ id: record.id })
+                                    if (result.status === 'ok') {
+                                        message.success('信息删除成功');
+                                        actionRef.current?.reload();
+                                    } else {
+                                        message.error(`${result.message},请联系管理员或者稍后重试`)
+                                    }
+                                }
+
+                            } catch (err) {
+                                message.error('删除失败，请联系管理员或稍后重试')
+                            }
+                        }
+
+                        }
                         okText="确定"
                         cancelText="取消"
                         placement="topLeft"
                     >
-                    <a>删除</a>
+                        <a>删除</a>
                     </Popconfirm>
                 </>
             ),
@@ -128,6 +205,15 @@ const NewClassManagement = () => {
                     actionRef={actionRef}
                     columns={columns}
                     rowKey="id"
+                    headerTitle={
+                        <SearchComponent
+                            dataSource={dataSource}
+                            onChange={(type: string, value: string) => handlerSearch(type, value)} />
+                    }
+                    request={(params, sorter, filter) => {
+                        console.log(params, sorter, filter)
+                        return getAllKHKCSJ({ name: '', xn, xq, pageCount: 20, page: 1 })
+                    }}
                     options={{
                         setting: false,
                         fullScreen: false,
@@ -135,7 +221,6 @@ const NewClassManagement = () => {
                         reload: false,
                     }}
                     search={false}
-                    dataSource={list}
                     pagination={paginationConfig}
                     toolBarRender={() => [
                         <Button key="wh" onClick={() => maintain()}>
@@ -151,28 +236,29 @@ const NewClassManagement = () => {
                         </Button>,
                     ]}
                 />
+                <NewCourses actionRef={actionRef} visible={open} onClose={onClose} current={current} />
                 <Modal
-                     title={getModelTitle()}
-                     destroyOnClose
-                     width='30vw'
-                     visible={modalVisible}
-                     onCancel={() => setModalVisible(false)}
-                     footer={[
-                       <Button key="back" onClick={() => setModalVisible(false)}>
-                         取消
+                    title={getModelTitle()}
+                    destroyOnClose
+                    width='30vw'
+                    visible={modalVisible}
+                    onCancel={() => setModalVisible(false)}
+                    footer={[
+                        <Button key="back" onClick={() => setModalVisible(false)}>
+                            取消
                        </Button>,
-                       <Button key="submit" type="primary" onClick={handleSubmit}>
-                         确定
+                        <Button key="submit" type="primary" onClick={handleSubmit}>
+                            确定
                        </Button>
-                     ]}
-                     centered
-                     maskClosable={false}
-                     bodyStyle={{
-                       maxHeight: '65vh',
-                       overflowY: 'auto',
-                     }}
+                    ]}
+                    centered
+                    maskClosable={false}
+                    bodyStyle={{
+                        maxHeight: '65vh',
+                        overflowY: 'auto',
+                    }}
                 >
-                {modalType === 'uphold' ?<Sitclass/>:<NewCourses current={current} setForm={setForm} />}   
+                    <Sitclass />
                 </Modal>
             </PageContainer>
         </>

@@ -20,6 +20,7 @@ import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { list } from './mock';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
+import ClassStart from './components/ClassStart';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -27,7 +28,8 @@ const CourseManagement = () => {
   const [openes, setopenes] = useState(false);
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
-  const [readonly,stereadonly]=useState<boolean>(false) 
+  const [readonly,stereadonly]=useState<boolean>(false);
+  const [moduletype,setmoduletype ]=useState<string>('crourse')
 
   useEffect(() => {
     (async () => {
@@ -55,6 +57,12 @@ const CourseManagement = () => {
     console.log(type, value);
 
   };
+  const getTitle=()=>{
+    if(moduletype==='crourse'){
+      return '课程类型维护'
+    }
+    return '开班信息'
+  }
 
   const showDrawer = () => {
     setVisible(true);
@@ -74,8 +82,9 @@ const CourseManagement = () => {
   const onClose = () => {
     setVisible(false);
   };
-  const maintain = () => {
+  const maintain = (type: string) => {
     setopenes(true);
+    setmoduletype(type)
   };
   const showmodal = () => {
     setopenes(false);
@@ -160,6 +169,7 @@ const CourseManagement = () => {
           <ActionBar
           record={record}
           handleEdit={handleEdit}
+          maintain={maintain}
            />
         </>
       )},
@@ -201,7 +211,7 @@ const CourseManagement = () => {
               onChange={(type: string, value: string) => handlerSearch(type, value)} />
           }
           toolBarRender={() => [
-            <Button key="wh" onClick={() => maintain()}>
+            <Button key="wh" onClick={() => maintain('crourse')}>
               课程类型维护
             </Button>,
             <Button
@@ -218,13 +228,13 @@ const CourseManagement = () => {
         <Modal
           visible={openes}
           onCancel={showmodal}
-          title="课程类型维护"
+          title={getTitle()}
           centered
           bodyStyle={{
             maxHeight: '65vh',
             overflowY: 'auto',
           }}
-          width="40vw"
+          width={moduletype==='crourse'?'40vw':'30vw'}
           footer={[
             <Button key="back" onClick={() => setopenes(false)}>
               取消
@@ -233,8 +243,8 @@ const CourseManagement = () => {
               确定
             </Button>,
           ]}
-        >
-          <CourseType />
+        > 
+          {moduletype==='crourse'? <CourseType />:<ClassStart/>}
         </Modal>
       </PageContainer>
     </>

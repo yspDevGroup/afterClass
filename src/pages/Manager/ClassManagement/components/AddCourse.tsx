@@ -113,6 +113,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
     {
       type:'textArea',
       label: '适用年级',
+      
       readonly,
     },
     {
