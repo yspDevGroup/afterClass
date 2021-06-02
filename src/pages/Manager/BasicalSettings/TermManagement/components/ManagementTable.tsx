@@ -1,5 +1,4 @@
 import ProFormFields from "@/components/ProFormFields";
-import { RoomType } from "@/constant";
 import type { FormInstance } from "@ant-design/pro-form";
 import type { ActionType } from "@ant-design/pro-table";
 import React from "react";
@@ -40,7 +39,6 @@ const OrganizationTable = (props: PropsType) => {
       name: 'XQ',
       key: 'XQ',
       rules: [{ required: true, message: '请填写学年' }],
-      valueEnum: RoomType,
     },
     {
       type: 'dateRange',

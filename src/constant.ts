@@ -12,77 +12,20 @@ export const paginationConfig: TablePaginationConfig = {
   showTotal: undefined,
 };
 
-// 场地类型
-export const RoomType: Record<string, string>[] = [
-  {
-    text: '普通教室',
-    value: '普通教室',
-  },
-  {
-    text: '语音室',
-    value: '语音室',
-  },
-  {
-    text: '计算机教室',
-    value: '计算机教室',
-  },
-  {
-    text: '多功能教室',
-    value: '多功能教室',
-  },
-  {
-    text: '多媒体教室',
-    value: '多媒体教室',
-  },
-  {
-    text: '音乐教室',
-    value: '音乐教室',
-  },
-  {
-    text: '美术教室',
-    value: '美术教室',
-  },
-  {
-    text: '综合实践室',
-    value: '综合实践室',
-  },
-  {
-    text: '科技活动室',
-    value: '科技活动室',
-  },
-  {
-    text: '琴房',
-    value: '琴房',
-  },
-  {
-    text: '舞蹈教室',
-    value: '舞蹈教室',
-  },
-  {
-    text: '合班教室',
-    value: '合班教室',
-  },
-];
 
-// 所属校区
-export const SchoolArea: Record<string, string>[] = [
-  {
-    text: '雁塔校区',
-    value: '雁塔校区',
-  },
-  {
-    text: '长安校区',
-    value: '长安校区',
-  },
-  {
-    text: '未央校区',
-    value: '未央校区',
-  },
-  {
-    text: '浐灞校区',
-    value: '浐灞校区',
-  },
-];
+/**
+ * 查询参数
+ *
+ * @export
+ * @interface TableListParams
+ */
+ export type TableListParams = {
+  pageSize?: number;
+  current?: number;
+  search?: string;
+  filter?: Record<string, any[]>;
+  sorter?: Record<string, any>;
+} & Record<string, any>;
 
 // 上课地点
 export const ClassLocation: Record<string, string>[] = [

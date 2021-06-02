@@ -5,18 +5,18 @@ import { message, Popconfirm } from 'antd';
 import { Button, Divider, Modal } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import AddRoom from './components/AddRoom';
+import type { SearchDataType } from "@/components/Search/data";
 import type { RoomItem, TableListParams } from './data';
-import styles from './index.less';
 import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
 import { paginationConfig } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
 import SearchComponent from '@/components/Search';
-import SiteMaintenance from './components/SiteMaintenance';
 import { createFJSJ, deleteFJSJ, getAllFJSJ, updateFJSJ } from '@/services/after-class/fjsj';
+import styles from './index.less';
 import { searchData } from "./serarchConfig";
-import type { SearchDataType } from "@/components/Search/data";
+import AsyncAddRoom from './components/AsyncAddRoom';
+import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -241,7 +241,7 @@ const RoomManagement = () => {
         width='50vw'
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
-        footer={[
+        footer={modalType === 'uphold'? null :[
           <Button key="back" onClick={() => setModalVisible(false)}>
             取消
           </Button>,
@@ -256,7 +256,7 @@ const RoomManagement = () => {
           overflowY: 'auto',
         }}
       >
-        {modalType === 'uphold' ? <SiteMaintenance /> : <AddRoom current={current} setForm={setForm} />}
+        {modalType === 'uphold' ? <AsyncSiteMaintenance /> : <AsyncAddRoom current={current} setForm={setForm} />}
       </Modal>
     </PageContainer>
   );

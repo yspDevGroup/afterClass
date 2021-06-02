@@ -4,7 +4,7 @@ import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import { Button, message, Popconfirm  } from "antd";
 import React, { useRef, useState } from "react";
-import type { TableListParams } from "../../CourseManagement/data";
+import type { TableListParams } from "../../RoomManagement/data";
 import type { DataSourceType } from "../data";
 
 
@@ -107,7 +107,6 @@ const SiteMaintenance = () => {
                     editableKeys,
                     onChange: setEditableRowKeys,
                     onSave: async (key, row) => {
-                        console.log(row)
                         try {
                             // 更新或新增场地信息
                             const result = row.title ? await createFJLX({

@@ -11,15 +11,14 @@ import type { FormInstance } from 'antd';
 import { Modal } from 'antd';
 import { message, Popconfirm } from 'antd';
 import { Button } from 'antd';
+import type { TableListParams } from '@/constant';
 import { paginationConfig } from '@/constant';
 import { useEffect } from 'react';
-import { getInitialState } from '@/app';
 import { Divider } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { TermItem } from './data';
 import { createXNXQ, deleteXNXQ, getAllXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
 import moment from 'moment';
-import { getXXJBSJ } from '@/services/after-class/xxjbsj';
 import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./serarchConfig";
 import { convertData } from "@/components/Search/util";
@@ -37,7 +36,6 @@ const TermManagement = () => {
   const [form, setForm] = useState<FormInstance<any>>();
   // 当前信息，用于回填表单
   const [current, setCurrent] = useState<TermItem>();
-  const [xxjbData, setXxjbData] = useState<string>('');
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   /**
    * 实时设置模态框标题
@@ -55,18 +53,6 @@ const TermManagement = () => {
   };
   useEffect(() => {
     async function fetchData() {
-      const response = await getInitialState();
-      console.log('response', response);
-      if (response.currentUser?.XXDM) {
-        const params = {
-          XXDM: response.currentUser.XXDM
-        }
-        const XXJB = await getXXJBSJ(params);
-        if (XXJB.status === 'ok') {
-          setXxjbData(XXJB.data.id!);
-        }
-        console.log('XXJB', XXJB);
-      }
       // 学年学期数据的获取
       const res = await getAllXNXQ({});
       if (res.status === 'ok') {
@@ -127,8 +113,6 @@ const TermManagement = () => {
       const values = await form?.validateFields();
       values.JSRQ = values.KSRQ[1] ? moment(values.KSRQ[1]).format('YYYY-MM-DD') : '';
       values.KSRQ = values.KSRQ[0] ? moment(values.KSRQ[0]).format('YYYY-MM-DD') : '';
-      values.XXJBSJId = xxjbData
-      console.log(values)
 
       new Promise((resolve, reject) => {
         let res = null;
@@ -248,11 +232,14 @@ const TermManagement = () => {
           density: false,
           reload: false,
         }}
-        request={() => {
-          const params = {
-            xxid:xxjbData
-          }
-          return getAllXNXQ(params);
+        request={(params, sorter, filter) => {
+          // 表单搜索项会从 params 传入，传递给后端接口。
+          const opts: TableListParams = {
+            ...params,
+            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+            filter,
+          };
+          return getAllXNXQ(opts);
         }}
         pagination={paginationConfig}
         rowKey="id"
