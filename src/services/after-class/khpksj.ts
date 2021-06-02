@@ -11,7 +11,7 @@ export async function getKHPKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -59,7 +59,7 @@ export async function getKHPKSJ(
     message?: string;
   }>(`/khpksj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -73,10 +73,10 @@ export async function deleteKHPKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khpksj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -106,51 +106,17 @@ export async function getAllKHPKSJ(
 }
 
 /** 创建课后排课数据 PUT /khpksj/create */
-export async function createKHPKSJ(body: API.CreateKHPKSJ, options?: { [key: string]: any }) {
+export async function createKHPKSJ(body: API.CreateKHPKSJ[], options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data: {
+    data?: {
       id?: string;
-      WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
-      KHBJSJ?: {
-        id?: string;
-        BJMC?: string;
-        BJMS?: string;
-        BJZT?: string;
-        ZJS?: string;
-        FJS?: string;
-        BJRS?: number;
-        KSS?: number;
-        KKRQ?: string;
-        JKRQ?: string;
-        KHKCSJ?: {
-          id?: string;
-          KCMC?: string;
-          KCTP?: string;
-          KCSC?: number;
-          KCZT?: string;
-          KCMS?: string;
-        };
-      };
-      XXSJPZ?: {
-        id?: string;
-        KSSJ?: string;
-        JSSJ?: string;
-        KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
-        SDMC?: string;
-        BZXX?: string;
-      };
-      FJSJ?: {
-        id?: string;
-        FJBH?: string;
-        FJMC?: string;
-        FJLC?: string;
-        FJJZMJ?: number;
-        FJSYMJ?: number;
-        FJRS?: number;
-        FJLX?: string;
-      };
-    };
+      WEEKDAY?: string;
+      XXSJPZId?: string;
+      KHBJSJId?: string;
+      FJSJId?: string;
+      XNXQId?: string;
+    }[];
     message?: string;
   }>('/khpksj/create', {
     method: 'PUT',
@@ -172,13 +138,13 @@ export async function updateKHPKSJ(
   body: API.UpdateKHPKSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khpksj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

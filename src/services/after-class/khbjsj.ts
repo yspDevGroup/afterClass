@@ -11,7 +11,7 @@ export async function getKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -36,6 +36,7 @@ export async function getKHBJSJ(
         KCSC?: number;
         KCZT?: string;
         KCMS?: string;
+        XNXQId?: string;
       };
       NJSJs?: { id?: string; NJ?: number; NJMC?: string }[];
       KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
@@ -43,7 +44,7 @@ export async function getKHBJSJ(
     message?: string;
   }>(`/khbjsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -57,10 +58,10 @@ export async function deleteKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -72,8 +73,10 @@ export async function getAllKHBJSJ(
     kcId?: string;
     /** 年级ID */
     njId?: string;
-    /** 学年学期ID */
-    xnxqId?: string;
+    /** 学年 */
+    xn?: string;
+    /** 学期 */
+    xq?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -119,6 +122,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         KCSC?: number;
         KCZT?: string;
         KCMS?: string;
+        XNXQId?: string;
       };
       NJSJs?: { id?: string; NJ?: number; NJMC?: string }[];
       KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
@@ -144,13 +148,13 @@ export async function updateKHBJSJ(
   body: API.UpdateKHBJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

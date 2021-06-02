@@ -2,40 +2,26 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取学年学期数据 GET /xnxq/${param0} */
+/** 获取学年学期数据 POST /xnxq */
 export async function getXNXQ(
-  params: {
-    // path
-    /** 学年学期ID */
-    id: string;
+  body: {
+    /** 学年 */
+    xn?: string;
+    /** 学期 */
+    xq?: string;
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
     message?: string;
-  }>(`/xnxq/${param0}`, {
-    method: 'GET',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** 删除学年学期数据 DELETE /xnxq/${param0} */
-export async function deleteXNXQ(
-  params: {
-    // path
-    /** 学年学期ID */
-    id: string;
-  },
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xnxq/${param0}`, {
-    method: 'DELETE',
-    params: { ...queryParams },
+  }>('/xnxq', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -64,6 +50,23 @@ export async function createXNXQ(body: API.CreateXNXQ, options?: { [key: string]
   });
 }
 
+/** 删除学年学期数据 DELETE /xnxq/${param0} */
+export async function deleteXNXQ(
+  params: {
+    // path
+    /** 学年学期ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0 } = params;
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xnxq/${param0}`, {
+    method: 'DELETE',
+    params: { ...params },
+    ...(options || {}),
+  });
+}
+
 /** 更新学年学期数据 PUT /xnxq/update/${param0} */
 export async function updateXNXQ(
   params: {
@@ -74,13 +77,13 @@ export async function updateXNXQ(
   body: API.UpdateXNXQ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xnxq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from 'antd';
@@ -7,14 +8,17 @@ import PageContainer from '@/components/PageContainer';
 import SearchComponent from '@/components/Search';
 import ExcelTable from '@/components/ExcelTable';
 import { theme } from '@/theme-default';
+import { getFJPlan } from '@/services/after-class/fjsj';
+
 import AddArranging from './components/AddArranging';
 import AddClass from './components/AddClass';
 import type { ClassItem } from './data';
 import { searchData } from './serarchConfig';
-import { newClassData } from './mock';
 import './index.less';
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from '@/components/Search/util';
+
+type pkIdListType = { jsId: string; pkId: Set<unknown> };
 
 const ClassManagement = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -24,6 +28,8 @@ const ClassManagement = () => {
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [xn, setXn] = useState<any>();
   const [xq, setXq] = useState<any>();
+  const [tableDataSource, setTableDataSource] = useState<any>([]);
+
   useEffect(() => {
     (async () => {
       // 学年学期数据的获取
@@ -45,10 +51,8 @@ const ClassManagement = () => {
       } else {
         console.log(res.message);
       }
-    })()
-
-
-  }, [])
+    })();
+  }, []);
   // 头部input事件
   const handlerSearch = (type: string, value: string) => {
     console.log(value);
@@ -58,15 +62,78 @@ const ClassManagement = () => {
     // setCurrent(undefined);
     // setModalVisible(true);
   };
+  useEffect(() => {
+    const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const res = getFJPlan({ xn: '2020-2021', xq: '第一学期' });
+    Promise.resolve(res).then((data: any) => {
+      if (data.status === 'ok') {
+        const pkIdList: pkIdListType[] = [];
 
+        // 1、先拿出每个场地所有的排课
+        data.data.map((item: any) => {
+          const pkList: pkIdListType = {
+            jsId: item.id,
+            pkId: new Set(),
+          };
+          item.KHPKSJs.map((pkItem: any) => {
+            pkList.pkId.add(pkItem.XXSJPZ.id);
+          });
+          pkIdList.push(pkList);
+        });
+        const tableData: any[] = [];
+        // TODO 可能存在的问题：2个以上不同的场地可能会出现问题
+
+        // 2、根据排课的个数去循环教室场地
+        pkIdList.map((kcIdItem: pkIdListType) => {
+          const pkData = [...kcIdItem.pkId];
+
+          // 每个教室的排课
+          pkData.map((pkItem: any, pkKey: number) => {
+            const table = {
+              room: {},
+              course: {},
+            };
+
+            data.data.map((item: any) => {
+              // 教室
+              table.room = {
+                cla: item.FJMC,
+                teacher: '',
+                jsId: item.id,
+                rowspan: pkKey === 0 ? pkData.length : 0,
+              };
+
+              item.KHPKSJs.map((pItem: any) => {
+                // 教室周几的课 （根据第一步去重的排课作比较）
+                if (pkItem === pItem.XXSJPZ.id) {
+                  table[week[pItem.WEEKDAY]] = {
+                    weekId: pItem.id,
+                    cla: pItem.KHBJSJ.BJMC,
+                    teacher: pItem.KHBJSJ.ZJS,
+                    bjId: pItem.KHBJSJ.id,
+                    key: '1',
+                    dis: true,
+                  };
+                  // 教室课节
+                  table.course = {
+                    cla: pItem.XXSJPZ.SDMC,
+                    teacher: `${pItem.XXSJPZ.KSSJ}-${pItem.XXSJPZ.JSSJ}`,
+                    hjId: pItem.XXSJPZ.id,
+                  };
+                }
+              });
+            });
+            tableData.push(table);
+          });
+        });
+        setTableDataSource(tableData);
+      }
+    });
+  }, []);
   const onClose = () => {
     setModalVisible(false);
   };
 
-  const chosenData = {
-    cla: '幼儿班',
-    teacher: '刘进',
-  };
   const onExcelTableClick = (value: any) => {
     console.log('onExcelTableClickvalue', value);
   };
@@ -76,7 +143,7 @@ const ClassManagement = () => {
       dataIndex: 'room',
       key: 'room',
       align: 'center',
-      width: 66,
+      width: 100,
     },
     {
       title: '',
@@ -146,7 +213,6 @@ const ClassManagement = () => {
                   dataSource={dataSource}
                   onChange={(type: string, value: string) => handlerSearch(type, value)}
                 />
-
               </div>
               <div style={{ position: 'absolute', right: 24 }}>
                 <Button
@@ -161,8 +227,7 @@ const ClassManagement = () => {
             </div>
             <ExcelTable
               columns={columns}
-              dataSource={newClassData}
-              chosenData={chosenData}
+              dataSource={tableDataSource}
               onExcelTableClick={onExcelTableClick}
               switchPages={showDrawer}
             />

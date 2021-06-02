@@ -186,9 +186,8 @@ export const newClassData: any[] = [
     wednesday: '',
     thursday: { cla: '五年级一班', teacher: '张三', key: '3', dis: true },
     friday: { cla: '六年级一班', teacher: '张三', key: '3', dis: true },
-    saturday: { cla: '加班', teacher: '刘进', key: '1', dis: true },
+    saturday: '',
     sunday: '',
-    dataKey: 1,
   },
   {
     room: { cla: 'A301 画室', teacher: '' },
@@ -198,9 +197,8 @@ export const newClassData: any[] = [
     wednesday: '',
     thursday: { cla: '五年级二班', teacher: '李四', key: '4', dis: true },
     friday: '',
-    saturday: { cla: '加班', teacher: '佳佳姐', key: '1', dis: true },
+    saturday: '',
     sunday: '',
-    dataKey: 2,
   },
   {
     room: { cla: 'A301 画室', teacher: '' },
@@ -210,9 +208,8 @@ export const newClassData: any[] = [
     wednesday: { cla: '一年级一班', teacher: '张三', key: '0', dis: true },
     thursday: '',
     friday: { cla: '六年级二班', teacher: '李四', key: '4', dis: true },
-    saturday: { cla: '加班', teacher: '媛媛姐', key: '1', dis: true },
+    saturday: '',
     sunday: '',
-    dataKey: 3,
   },
   {
     room: { cla: 'A301 画室', teacher: '' },
@@ -222,8 +219,7 @@ export const newClassData: any[] = [
     wednesday: { cla: '一年级二班', teacher: '李四', key: '2', dis: true },
     thursday: '',
     friday: '',
-    saturday: { cla: '加班', teacher: '艳妮姐', key: '1', dis: true },
+    saturday: '',
     sunday: '',
-    dataKey: 4,
   },
 ];
