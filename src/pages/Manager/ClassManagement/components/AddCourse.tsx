@@ -113,13 +113,15 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
     {
       type:'textArea',
       label: '适用年级',
-
+      
+      readonly,
     },
     {
       type: 'uploadImage',
       label: '封面：',
       name: 'KCTP',
       key: 'KCTP',
+      readonly,
       upurl: '',
       imageurl: formValues?.KCTP,
     },

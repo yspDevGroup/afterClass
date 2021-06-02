@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React from 'react';
 import { useRef, useState, useEffect } from 'react';
-import { message, Popconfirm, Divider, Button, Modal, Tag } from 'antd';
+import { Button, Modal, Tag } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -16,7 +16,7 @@ import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./serarchConfig";
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from "@/components/Search/util";
-import { deleteKHBJSJ, getAllKHBJSJ } from '@/services/after-class/khbjsj';
+import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { list } from './mock';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
@@ -27,10 +27,10 @@ const CourseManagement = () => {
   const [openes, setopenes] = useState(false);
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
+  const [readonly,stereadonly]=useState<boolean>(false) 
 
   useEffect(() => {
     (async () => {
-      // 学年学期数据的获取
       const res = await getAllXNXQ({});
       if (res.status === 'ok') {
         const { data = [] } = res;
@@ -62,9 +62,13 @@ const CourseManagement = () => {
   };
 
   const handleEdit = (data: CourseItem) => {
+    console.log(data.BJZT)
     console.log(data)
     setVisible(true);
     setCurrent(data);
+    if( data.BJZT==='已发布'|| data.BJZT==='已过期'){
+      stereadonly(true)
+    }
   };
 
   const onClose = () => {
@@ -148,7 +152,7 @@ const CourseManagement = () => {
       title: '操作',
       valueType: 'option',
       key: 'option',
-      width: 100,
+      width: 200,
       align: 'center',
       render: (_, record) => { 
         return(
@@ -157,36 +161,6 @@ const CourseManagement = () => {
           record={record}
           handleEdit={handleEdit}
            />
-          <a onClick={() => handleEdit(record)}>编辑</a>
-          <Divider type="vertical" />
-          <Popconfirm
-            title="删除之后，数据不可恢复，确定要删除吗?"
-            onConfirm={async () => {
-              try {
-                if (record.id) {
-                  const params = { id: record.id };
-                  const res = deleteKHBJSJ(params);
-                  new Promise((resolve) => {
-                    resolve(res);
-                  }).then((data: any) => {
-                    if (data.status === 'ok') {
-                      message.success('删除成功');
-                      actionRef.current?.reload();
-                    } else {
-                      message.error('删除失败');
-                    }
-                  });
-                }
-              } catch (err) {
-                message.error('删除失败，请联系管理员或稍后重试。');
-              }
-            }}
-            okText="确定"
-            cancelText="取消"
-            placement="topLeft"
-          >
-            <a>删除</a>
-          </Popconfirm>
         </>
       )},
       
@@ -240,7 +214,7 @@ const CourseManagement = () => {
             </Button>,
           ]}
         />
-        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} />
+        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current}  readonly={readonly}/>
         <Modal
           visible={openes}
           onCancel={showmodal}

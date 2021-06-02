@@ -17,7 +17,6 @@ import { getInitialState } from '@/app';
 import { Divider } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { TermItem } from './data';
-import { listData } from './mock';
 import { createXNXQ, deleteXNXQ, getAllXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
 import moment from 'moment';
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
@@ -238,7 +237,6 @@ const TermManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
-        dataSource={listData}
         headerTitle={
           <SearchComponent
             dataSource={dataSource}

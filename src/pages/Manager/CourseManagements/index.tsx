@@ -66,8 +66,8 @@ const NewClassManagement = () => {
         },
         {
             title: '类型',
-            dataIndex: 'KHKCLX',
-            key: 'KHKCLX',
+            dataIndex: 'KCLX',
+            key: 'KCLX',
             align: 'center',
             width: '10%',
         },
@@ -79,11 +79,18 @@ const NewClassManagement = () => {
             width: '10%',
             render:(dom)=>{
                 return(
-                    <Link to='/basicalSettings/courseManagement'>
+                    <Link to='/classManagement'>
                     <a>{dom}</a>
                     </Link>
                 )
             }
+        },
+        {
+            title: '简介',
+            dataIndex: 'BJMS',
+            key: 'BJMS',
+            align: 'center',
+            ellipsis: true,
         },
         {
             title: '简介',

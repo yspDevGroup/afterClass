@@ -54,7 +54,6 @@ const PeriodMaintenance = () => {
           const { id, ...rest } = values;
           rest.KSSJ = moment(rest.KSSJ).format('HH:mm:ss')
           rest.JSSJ = moment(rest.JSSJ).format('HH:mm:ss')
-          // 更新或新增场地信息
           const result = id ? await updateXXSJPZ({ id }, { ...rest }) : await createXXSJPZ({ ...rest });
           if (result.status === 'ok') {
             message.success(id ? '信息更新成功' : '信息新增成功');
@@ -149,7 +148,7 @@ const PeriodMaintenance = () => {
             <PageContainer cls={styles.roomWrapper} >
                 <ProTable<Maintenance>
                     columns={columns}
-                    headerTitle="时段维护"
+                    headerTitle="时段维护(请先在本页面设置学校上课的时间段)"
                     search={false}
                     options={{
                         setting: false,
