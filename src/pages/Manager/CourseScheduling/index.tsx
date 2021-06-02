@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from 'antd';
 import type { ActionType } from '@ant-design/pro-table';
 import type { SearchDataType } from '@/components/Search/data';
@@ -13,15 +13,45 @@ import type { ClassItem } from './data';
 import { searchData } from './serarchConfig';
 import { newClassData } from './mock';
 import './index.less';
+import { getAllXNXQ } from '@/services/after-class/xnxq';
+import { convertData } from '@/components/Search/util';
 
 const ClassManagement = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [current] = useState<ClassItem>();
-  const [dataSource] = useState<SearchDataType>(searchData);
   const actionRef = useRef<ActionType>();
   const [state, setState] = useState(true);
+  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
+  const [xn, setXn] = useState<any>();
+  const [xq, setXq] = useState<any>();
+  useEffect(() => {
+    (async () => {
+      // 学年学期数据的获取
+      const res = await getAllXNXQ({});
+      if (res.status === 'ok') {
+        const { data = [] } = res;
+        const defaultData = [...searchData];
+        const newData = convertData(data);
+        const term = newData.subData[newData.data[0].key];
+        const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+        if (chainSel && chainSel.defaultValue) {
+          chainSel.defaultValue.first = newData.data[0].key;
+          chainSel.defaultValue.second = term[0].key;
+          setXn(chainSel.defaultValue.first);
+          setXq(chainSel.defaultValue.second);
+          chainSel.data = newData;
+        }
+        setDataSource(defaultData);
+      } else {
+        console.log(res.message);
+      }
+    })()
+
+
+  }, [])
+  // 头部input事件
   const handlerSearch = (type: string, value: string) => {
-    console.log(type, value);
+    console.log(value);
   };
   const showDrawer = () => {
     setState(false);
@@ -116,6 +146,7 @@ const ClassManagement = () => {
                   dataSource={dataSource}
                   onChange={(type: string, value: string) => handlerSearch(type, value)}
                 />
+
               </div>
               <div style={{ position: 'absolute', right: 24 }}>
                 <Button
@@ -137,7 +168,7 @@ const ClassManagement = () => {
             />
           </div>
         ) : (
-          <AddArranging setState={setState} />
+          <AddArranging setState={setState} xn={xn} xq={xq} />
         )}
         <AddClass
           visible={modalVisible}

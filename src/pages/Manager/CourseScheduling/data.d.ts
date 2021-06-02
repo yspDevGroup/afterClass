@@ -65,10 +65,68 @@ export type StudentType = {
 }
 
 
+/**
+ * 
+ *  班级字段
+    id : UUID;
+    BJ: 班级
+    LS: 老师
+ */
+
 export type BJType = {
     id?: string;
-    BJ?: string;
-    LS?: string;
+    BJMC?: string;
+    ZJS?: string;
 }
+
+/**
+ * 
+ *  年级字段
+    id : UUID;
+    NJ: 年级
+    NJMC: 年级名称
+ */
+
+export type GradeType = {
+    id?: string;
+    NJ?: string;
+    NJMC?: string;
+}
+    
+/**
+ * 
+ *  场地类型字段
+    id  UUID;
+    FJLX:场地类型
+ */
+export type  RoomType= {
+    id?: string;
+    FJLX?: string;
+}
+    
+/**
+ * 
+ *  场地字段
+    id  UUID;
+    FJLX:场地类型
+ */
+export type  SiteType= {
+    id?: string;
+    FJMC?: string;
+}
+    
+    
+/**
+ * 
+ *  课程字段
+    id  UUID;
+    KCMC:课程名称
+ */
+export type  CourseType= {
+    id?: string;
+    KCMC?: string;
+}
+    
+    
 
 
