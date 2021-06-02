@@ -4,7 +4,7 @@
  * @description: OAuth认证通过后的跳转页面
  * @author: zpl
  * @Date: 2021-05-13 09:08:04
- * @LastEditTime: 2021-05-31 18:19:40
+ * @LastEditTime: 2021-06-02 18:31:10
  * @LastEditors: zpl
  */
 import React, { useCallback, useEffect } from 'react';
@@ -31,10 +31,9 @@ const Comp = () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
       setInitialState(initialState ? { ...initialState, currentUser: userInfo } : undefined);
-      // TODO: 调试完成后取消注释使页面自动跳转
-      // setTimeout(() => {
-      //   history.replace('/');
-      // }, 10);
+      setTimeout(() => {
+        history.replace('/');
+      }, 10);
     }
   }, []);
 

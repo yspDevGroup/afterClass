@@ -97,7 +97,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         ![loginPath, authCallbackPath].includes(location.pathname)
       ) {
         if (loginPath.startsWith('http')) {
-          // 企业微信手机端打开
+          // 企业微信端打开
           window.location.href = loginPath;
         } else {
           history.push(loginPath);
