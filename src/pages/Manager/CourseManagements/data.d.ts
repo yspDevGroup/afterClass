@@ -1,74 +1,15 @@
-/**
- * 
- * 排课管理维护字段
-    id  UUID;
-    BJMC:班级名称；
-    FJSJ 上课地点；
-    ZJS 授课老师；
-    FJS 助教老师；
-    BJRS 学生人数；
-    BJMS 简介 ;
-    BJZT 状态 ;
+/*
+ * @,@Author: ,: your name
+ * @,@Date: ,: 2021-06-01 09:52:34
+ * @,@LastEditTime: ,: 2021-06-01 12:21:43
+ * @,@LastEditors: ,: Please set LastEditors
+ * @,@Description: ,: In User Settings Edit
+ * @,@FilePath: ,: \afterClass\src\pages\Manager\BasicalSettings\NewClassManagement\data.d.ts
  */
-
-export type ClassItem = {
+export type classType={
     id?: string;
-    BJMC?: string;
-    FJSJ?: FJSJtype;
-    ZJS?: string;
-    FJS?: string;
-    BJRS?: number;
+    KCMC?: string;
+    KHKCLX?: string;
+    BJS?: number;
     BJMS?: string;
-    BJZT?: string;
-};
-/**
- * 
-    "FJBH": 房间编号 ,
-    "FJMC": 房间名称,
-    "FJLC": 房间楼层, 
-    "FJJZMJ": 房间建筑面积,
-    "FJSYMJ": 房间使用面积,
-    "FJRS":房间容纳人数 ,
-    "FJLX": 房间类型
- * 
- */
-
-
-type FJSJtype = {
-    id?: string,
-    FJBH?: string,
-    FJMC?: string,
-    FJLC?: string, 
-    FJJZMJ?: number,
-    FJSYMJ?: number,
-    FJRS?: number,
-    FJLX?: string,
 }
-
-
-/**
- * 
- *  学生信息字段
-    id  UUID;
-    XM:姓名
-    SKDD 学号
-    SSNJ 所属年级;
-    SSBJ 所属班级;
- */
-
-export type StudentType = {
-    id?: string;
-    XM?: string;
-    XH?: string;
-    SSNJ?: string;
-    SSBJ?: string;
-}
-
-
-export type BJType = {
-    id?: string;
-    BJ?: string;
-    LS?: string;
-}
-
-

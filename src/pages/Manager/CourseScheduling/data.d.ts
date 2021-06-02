@@ -1,55 +1,74 @@
-
 /**
  * 
- * 
- 课程管理维护字段
-  id  UUID;
-  BJMC 班级名称；
-  BJZT 班级状态；
-  FY 费用；
-  ZJS 主教师；
-  FJS 副教师；
-  NJMC 年级名称；
-  BJMS 班级描述；
+ * 排课管理维护字段
+    id  UUID;
+    BJMC:班级名称；
+    FJSJ 上课地点；
+    ZJS 授课老师；
+    FJS 助教老师；
+    BJRS 学生人数；
+    BJMS 简介 ;
+    BJZT 状态 ;
  */
 
-export type CourseItem = {
+export type ClassItem = {
     id?: string;
     BJMC?: string;
-    BJZT?: string;
-    FY?: number;
+    FJSJ?: FJSJtype;
     ZJS?: string;
     FJS?: string;
-    NJMC?: string;
+    BJRS?: number;
     BJMS?: string;
+    BJZT?: string;
 };
-
 /**
- * 查询参数
- *
- * @export
- * @interface TableListParams
+ * 
+    "FJBH": 房间编号 ,
+    "FJMC": 房间名称,
+    "FJLC": 房间楼层, 
+    "FJJZMJ": 房间建筑面积,
+    "FJSYMJ": 房间使用面积,
+    "FJRS":房间容纳人数 ,
+    "FJLX": 房间类型
+ * 
  */
-export type TableListParams = {
-    pageSize?: number;
-    current?: number;
-    search?: string;
-    filter?: Record<string, any[]>;
-    sorter?: Record<string, any>;
-  } & Record<string, any>;
-  
+
+
+type FJSJtype = {
+    id?: string,
+    FJBH?: string,
+    FJMC?: string,
+    FJLC?: string, 
+    FJJZMJ?: number,
+    FJSYMJ?: number,
+    FJRS?: number,
+    FJLX?: string,
+}
 
 
 /**
  * 
-课程类型维护 字段
- KCMS 描述
- KCLX 类型
+ *  学生信息字段
+    id  UUID;
+    XM:姓名
+    SKDD 学号
+    SSNJ 所属年级;
+    SSBJ 所属班级;
  */
 
-export type DataSourceType = {
+export type StudentType = {
     id?: string;
-    KCLX?: string;
-    KCMS?: string;
-    title?: string;
-};
+    XM?: string;
+    XH?: string;
+    SSNJ?: string;
+    SSBJ?: string;
+}
+
+
+export type BJType = {
+    id?: string;
+    BJ?: string;
+    LS?: string;
+}
+
+

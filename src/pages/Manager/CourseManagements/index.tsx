@@ -1,275 +1,175 @@
-/* eslint-disable no-console */
-import React, { useEffect, useRef, useState } from "react";
 import PageContainer from "@/components/PageContainer";
+import { paginationConfig } from "@/constant";
+import { theme } from "@/theme-default";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
-import { Divider, message, Tag, Tooltip, Button, Popconfirm } from "antd";
-import styles from './index.less';
-import type { ClassItem } from "./data";
-import { theme } from "@/theme-default";
-import { paginationConfig } from '@/constant';
-import AddClass from "./components/AddClass";
-import StudentInformation from "./components/StudentInformation";
-import { getAllXNXQ } from '@/services/after-class/xnxq';
-import { deleteKHPKSJ, getAllKHPKSJ } from "@/services/after-class/khpksj";
-import SearchComponent from "@/components/Search";
-import {
-    convertData,
-    //  convertSelectData 
-} from "@/components/Search/util";
-import { searchData } from "./serarchConfig";
-import { getAllNJSJ } from "@/services/after-class/njsj";
-import type { SearchDataType } from "@/components/Search/data";
+import type { FormInstance} from "antd";
+import { Button, Modal, Popconfirm } from "antd";
+import { Divider } from "antd";
+import React, { useRef } from "react";
+import { useState } from "react";
+import type { classType } from "./data";
+import NewCourses from "./components/NewCourses";
+import styles from './index.less'
+import { list } from "./mock";
+import { Link } from "umi";
+import Sitclass from "./components/Sitclass";
 
-const ClassManagement = (
-) => {
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [current, setCurrent] = useState<ClassItem>();
-    const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
+
+const NewClassManagement = () => {
     const actionRef = useRef<ActionType>();
-    useEffect(() => {
-        (async () => {
-            // 学年学期数据的获取
-            const res = await getAllXNXQ({});
-            if (res.status === 'ok') {
-                const { data = [] } = res;
-                const defaultData = [...searchData];
-                const newData = convertData(data);
-                const term = newData.subData[newData.data[0].key];
-                const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-                if (chainSel && chainSel.defaultValue) {
-                    chainSel.defaultValue.first = newData.data[0].key;
-                    chainSel.defaultValue.second = term[0].key;
-                    chainSel.data = newData;
-                }
-                setDataSource(defaultData);
-            } else {
-                console.log(res.message);
-            }
-            // 年级数据的获取
-            const result = await getAllNJSJ();
-            if (result.status === 'ok') {
-                const { data = [] } = result;
-                const defaultData = [...searchData];
-                const grideSel = defaultData.find((item: any) => item.type === 'select');
-                if (grideSel && grideSel.data) {
-                    grideSel.defaultValue!.first = data[0].NJMC;
-                    grideSel.data = data;
-                }
-                setDataSource(defaultData);
-            } else {
-                console.log(result.message);
-            }
-            // 年级数据的获取
-            // const result = await getAllNJSJ();
-            // if (result.status === 'ok') {
-            //     const { data = [] } = result;
-            //     const defaultData = [...searchData];
-            //     const selsetNewData = convertSelectData(data)
-            //     const grideSels = defaultData.find((item: any) => item.type === 'select');
-            //     grideSels!.data = selsetNewData
-            //     setDataSource(defaultData);
-            // } else {
-            //     console.log(result.message);
-            // }
-
-        })()
-    }, [])
-    // 头部input事件
-    const handlerSearch = (type: string, value: string) => {
-        console.log(type, value);
-
-    };
+    const [current, setCurrent] = useState<classType>();
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [modalType, setModalType] = useState<string>('add');
+    const [form, setForm] = useState<FormInstance<any>>();
+    console.log(form)
     const getModelTitle = () => {
+        if (modalType === 'uphold') {
+            return '课程类型维护';
+          }
         if (current) {
-            return '编辑信息';
+          return '编辑信息';
         }
-        return '新增';
-    };
-    const showDrawer = () => {
-        setCurrent(undefined);
-        setModalVisible(true);
-    };
-
-    const handleEdit = (data: ClassItem) => {
-        setCurrent(data);
+        return '新增信息';
+      };
+    const handleOperation = (type: string, data?: classType) => {
+        if (data) {
+          setCurrent(data)
+        } else {
+          setCurrent(undefined);
+        }
+        setModalType(type);
         getModelTitle();
         setModalVisible(true);
     };
-
-    const onClose = () => {
-        setModalVisible(false);
+    const handleSubmit = () => {
+        console.log(666)
+      };
+    const maintain = () => {
+        setModalType('uphold')
+        setModalVisible(true);
     };
-
-    const columns: ProColumns<ClassItem>[] = [
+    const columns: ProColumns<classType>[] = [
         {
             title: '序号',
             dataIndex: 'index',
+            key: 'index',
             valueType: 'index',
             width: 48,
         },
         {
-            title: '班级名称',
-            dataIndex: 'BJMC',
+            title: '课程名称',
+            dataIndex: 'KCMC',
+            key: 'KCMC',
             align: 'center',
-            width: 100,
+            width: '12%',
         },
         {
-            title: '上课地点',
-            dataIndex: 'FJSJ',
+            title: '类型',
+            dataIndex: 'KHKCLX',
+            key: 'KHKCLX',
             align: 'center',
-            ellipsis: true,
-            width: 100,
-            render: (_, record) => {
-                return <div >
-                    {record.FJSJ?.FJMC}
-                </div>
-            }
+            width: '10%',
         },
         {
-            title: '授课老师',
-            dataIndex: 'ZJS',
+            title: '班级数',
+            dataIndex: 'BJS',
+            key: 'BJS',
             align: 'center',
-            width: 80,
-        },
-        {
-            title: `助教老师`,
-            dataIndex: 'FJS',
-            align: 'center',
-            ellipsis: true,
-            width: 100,
-            render: (_, record) => {
-                return (
-                    <div className='ui-table-col-elp'>
-                        <Tooltip title={record.FJS} arrowPointAtCenter>
-                            {
-                                record.FJS?.split(',').map((item) => {
-                                    return (
-                                        <>
-                                            <Tag>{item}</Tag>
-                                        </>
-                                    )
-                                })
-                            }
-                        </Tooltip>
-                    </div>
+            width: '10%',
+            render:(dom)=>{
+                return(
+                    <Link to='/basicalSettings/courseManagement'>
+                    <a>{dom}</a>
+                    </Link>
                 )
             }
-        },
-        {
-            title: '学生人数',
-            dataIndex: 'BJRS',
-            align: 'center',
-            width: 80,
-            render: (dom) => {
-                return (
-                    <a >
-                        <StudentInformation dom={dom} />
-                    </a>
-                )
-            }
-
         },
         {
             title: '简介',
             dataIndex: 'BJMS',
+            key: 'BJMS',
             align: 'center',
             ellipsis: true,
-            width: 100,
-        },
-        {
-            title: '状态',
-            dataIndex: 'BJZT',
-            align: 'center',
-            width: 70,
         },
         {
             title: '操作',
             valueType: 'option',
+            key: 'option',
             width: 100,
             render: (_, record) => (
                 <>
-                    <a onClick={() => handleEdit(record)} >编辑</a>
+                    <a onClick={() => handleOperation('add', record)}>编辑</a>
                     <Divider type="vertical" />
                     <Popconfirm
                         title="删除之后，数据不可恢复，确定要删除吗?"
-                        onConfirm={async () => {
-                            try {
-                                if (record.id) {
-                                    const params = { id: record.id };
-                                    const res = deleteKHPKSJ(params);
-                                    new Promise((resolve) => {
-                                        resolve(res);
-                                    }).then((data: any) => {
-                                        if (data.status === 'ok') {
-                                            message.success('删除成功');
-                                            actionRef.current?.reload();
-                                        } else {
-                                            message.error('删除失败');
-                                        }
-                                    });
-                                }
-                            } catch (err) {
-                                message.error('删除失败，请联系管理员或稍后重试。');
-                            }
-                        }}
                         okText="确定"
                         cancelText="取消"
                         placement="topLeft"
                     >
-                        <a>删除</a>
+                    <a>删除</a>
                     </Popconfirm>
                 </>
             ),
             align: 'center',
         },
     ];
-
     return (
         <>
-            <PageContainer cls={styles.roomWrapper} >
-                <ProTable<ClassItem>
+            <PageContainer cls={styles.roomWrapper}>
+                <ProTable<classType>
+                    actionRef={actionRef}
                     columns={columns}
-                    search={false}
-                    headerTitle={
-                        <SearchComponent
-                            dataSource={dataSource}
-                            onChange={(type: string, value: string) => handlerSearch(type, value)} />
-                    }
+                    rowKey="id"
                     options={{
                         setting: false,
                         fullScreen: false,
                         density: false,
                         reload: false,
                     }}
-                    request={(param, sorter, filter) => {
-                        const obj = {
-                            param,
-                            sorter,
-                            filter,
-                            njId: 'dd149420-7d4b-4191-8ddc-6b686a2bd63f',
-                            xn: '2021学年',
-                            xq: '第一学期',
-                            name: '',
-                        };
-                        return getAllKHPKSJ(obj);
-                    }}
+                    search={false}
+                    dataSource={list}
                     pagination={paginationConfig}
                     toolBarRender={() => [
+                        <Button key="wh" onClick={() => maintain()}>
+                            课程类型维护
+                        </Button>,
                         <Button
                             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
                             type="primary"
                             key="add"
-                            onClick={() => showDrawer()}
+                            onClick={() => handleOperation('add')}
                         >
                             新增课程
-                         </Button>,
+                        </Button>,
                     ]}
                 />
-                <AddClass visible={modalVisible} onClose={onClose} formValues={current} actionRef={actionRef} />
+                <Modal
+                     title={getModelTitle()}
+                     destroyOnClose
+                     width='30vw'
+                     visible={modalVisible}
+                     onCancel={() => setModalVisible(false)}
+                     footer={[
+                       <Button key="back" onClick={() => setModalVisible(false)}>
+                         取消
+                       </Button>,
+                       <Button key="submit" type="primary" onClick={handleSubmit}>
+                         确定
+                       </Button>
+                     ]}
+                     centered
+                     maskClosable={false}
+                     bodyStyle={{
+                       maxHeight: '65vh',
+                       overflowY: 'auto',
+                     }}
+                >
+                {modalType === 'uphold' ?<Sitclass/>:<NewCourses current={current} setForm={setForm} />}   
+                </Modal>
             </PageContainer>
         </>
-
     )
 }
-export default ClassManagement;
+
+export default NewClassManagement

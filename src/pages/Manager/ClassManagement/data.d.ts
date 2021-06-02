@@ -1,15 +1,55 @@
-/*
- * @,@Author: ,: your name
- * @,@Date: ,: 2021-06-01 09:52:34
- * @,@LastEditTime: ,: 2021-06-01 12:21:43
- * @,@LastEditors: ,: Please set LastEditors
- * @,@Description: ,: In User Settings Edit
- * @,@FilePath: ,: \afterClass\src\pages\Manager\BasicalSettings\NewClassManagement\data.d.ts
+
+/**
+ * 
+ * 
+ 课程管理维护字段
+  id  UUID;
+  BJMC 班级名称；
+  BJZT 班级状态；
+  FY 费用；
+  ZJS 主教师；
+  FJS 副教师；
+  NJMC 年级名称；
+  BJMS 班级描述；
  */
-export type classType={
+
+export type CourseItem = {
     id?: string;
-    KCMC?: string;
-    KHKCLX?: string;
-    BJS?: number;
+    BJMC?: string;
+    BJZT?: string;
+    FY?: number;
+    ZJS?: string;
+    FJS?: string;
+    NJMC?: string;
     BJMS?: string;
-}
+};
+
+/**
+ * 查询参数
+ *
+ * @export
+ * @interface TableListParams
+ */
+export type TableListParams = {
+    pageSize?: number;
+    current?: number;
+    search?: string;
+    filter?: Record<string, any[]>;
+    sorter?: Record<string, any>;
+  } & Record<string, any>;
+  
+
+
+/**
+ * 
+课程类型维护 字段
+ KCMS 描述
+ KCLX 类型
+ */
+
+export type DataSourceType = {
+    id?: string;
+    KCLX?: string;
+    KCMS?: string;
+    title?: string;
+};
