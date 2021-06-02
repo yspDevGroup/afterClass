@@ -1,3 +1,170 @@
 .ListComponentBigBox {
-  
+  padding: 10px;
+  .ListHeader {
+    display: flex;
+    justify-content: space-between;
+    height: 22px;
+    margin-bottom: 10px;
+    line-height: 22px;
+    .ListHeaderTitle {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .ListHeaderMore {
+      font-size: 11px;
+      a {
+        color: #999999;
+        cursor: pointer;
+      }
+      a:hover {
+        color: @primary-color;
+      }
+    }
+  }
+  .ListHeaderTab {
+    display: flex;
+    justify-content: space-between;
+    height: 22px;
+    margin-bottom: 12px;
+    line-height: 22px;
+    .ListHeaderTabLeft {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .ListHeaderTabRight {
+      a {
+        color: #999999;
+        font-size: 11px;
+        cursor: pointer;
+      }
+      a:hover {
+        color: @primary-color;
+      }
+    }
+    :global {
+      .ant-tabs-tab {
+        padding: 0;
+      }
+      .ant-tabs-ink-bar {
+        display: none;
+      }
+      .ant-tabs-tab + .ant-tabs-tab {
+        margin-left: 28px;
+      }
+      .ant-tabs-top > .ant-tabs-nav,
+      .ant-tabs-bottom > .ant-tabs-nav,
+      .ant-tabs-top > div > .ant-tabs-nav,
+      .ant-tabs-bottom > div > .ant-tabs-nav {
+        margin-bottom: 0;
+      }
+      .ant-tabs-top > .ant-tabs-nav::before,
+      .ant-tabs-bottom > .ant-tabs-nav::before,
+      .ant-tabs-top > div > .ant-tabs-nav::before,
+      .ant-tabs-bottom > div > .ant-tabs-nav::before {
+        border-bottom: 0;
+      }
+    }
+  }
+  .ListTabs {
+    padding-bottom: 12px;
+    :global {
+      .ant-tabs-tab {
+        padding: 0;
+      }
+      .ant-tabs-ink-bar {
+        display: none;
+      }
+      .ant-tabs-tab + .ant-tabs-tab {
+        margin-left: 28px;
+      }
+      .ant-tabs-top > .ant-tabs-nav,
+      .ant-tabs-bottom > .ant-tabs-nav,
+      .ant-tabs-top > div > .ant-tabs-nav,
+      .ant-tabs-bottom > div > .ant-tabs-nav {
+        margin-bottom: 0;
+      }
+      .ant-tabs-top > .ant-tabs-nav::before,
+      .ant-tabs-bottom > .ant-tabs-nav::before,
+      .ant-tabs-top > div > .ant-tabs-nav::before,
+      .ant-tabs-bottom > div > .ant-tabs-nav::before {
+        border-bottom: 0;
+      }
+    }
+  }
+  .Listvertical {
+    .OpenTime {
+      height: 18px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .TotalHour {
+      height: 18px;
+      font-size: 12px;
+      line-height: 18px;
+    }
+    :global {
+      .ant-list-item-meta {
+        margin-bottom: 12px;
+      }
+      .ant-list-item-meta-avatar {
+        margin-right: 10px;
+      }
+      .ant-list-item-meta-title {
+        height: 21px;
+        margin-bottom: 7px;
+        font-weight: bold;
+        line-height: 21px;
+      }
+    }
+  }
+  .Listhorizontal {
+    a {
+      .ListComDiv {
+        margin-bottom: 10px;
+        color: #333333;
+        span {
+          margin-right: 8px;
+        }
+      }
+    }
+    a:hover {
+      .ListComDiv {
+        color: @primary-color;
+      }
+    }
+  }
+  .cardList {
+    height: 65px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: rgba(69, 201, 119, 0.05);
+    border-radius: 8px;
+    .ListBoxOne {
+      display: flex;
+      justify-content: space-between;
+      height: 20px;
+      margin-bottom: 8px;
+      line-height: 20px;
+      a {
+        color: #333333;
+      }
+      a:hover {
+        color: @primary-color;
+      }
+    }
+
+    .ListBoxTwo {
+      display: flex;
+      justify-content: space-between;
+      height: 17px;
+      line-height: 17px;
+      .ListSideLeftBox {
+        font-size: 12px;
+      }
+      .ListSideRightBox {
+        font-size: 12px;
+      }
+    }
+  }
 }

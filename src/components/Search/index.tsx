@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-05-24 16:33:45
- * @LastEditTime: 2021-05-29 18:06:33
+ * @LastEditTime: 2021-06-02 08:49:21
  * @LastEditors: txx
  */
 
@@ -121,7 +121,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
                 <Search
                   placeholder={placeHolder}
                   onSearch={onSearch}
-                  onPressEnter={(val) => { onChange("customSearch", (val.target as HTMLInputElement).value) }}
+                  onPressEnter={(val) => { onChange("customSearch", (val.target as unknown as HTMLInputElement).value) }}
                   style={{ width: 200 }}
                 />
               </div>

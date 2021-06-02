@@ -80,7 +80,9 @@
   },
   {
     path: '/listComponent',
-    layout:false,
+    name: 'listComponent',
+    icon: 'smile',
+    layout: false,
     component: './Parent/ListComponent',
   },
   {
