@@ -20,7 +20,12 @@ export type CourseItem = {
     FY?: number;
     ZJS?: string;
     FJS?: string;
-    NJMC?: string;
+    NJSJs?:
+    [{
+        id: string,
+        NJ: number,
+        NJMC: string,
+    }]
     BJMS?: string;
 };
 
@@ -36,8 +41,8 @@ export type TableListParams = {
     search?: string;
     filter?: Record<string, any[]>;
     sorter?: Record<string, any>;
-  } & Record<string, any>;
-  
+} & Record<string, any>;
+
 
 
 /**

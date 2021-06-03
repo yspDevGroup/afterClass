@@ -18,6 +18,7 @@ import { convertData } from "@/components/Search/util";
 import { getAllXNXQ } from "@/services/after-class/xnxq";
 import SearchComponent from "@/components/Search";
 import { message } from "antd";
+import Choice from "./components/Choice";
 
 
 
@@ -125,7 +126,7 @@ const NewClassManagement = () => {
             render: (_, record) => {
                 return (
                     <>
-                        {record.KHBJSJs?.length}
+                       <a>{record.KHBJSJs?.length}</a>
                     </>
                 )
             }
@@ -150,13 +151,24 @@ const NewClassManagement = () => {
             width:'20%',
             ellipsis: true,
         },
-
+        {
+            title:'当前时段',
+            align: 'center',
+            ellipsis: true,
+            render:(_,record)=>{
+                return(
+                    <>
+                    <Choice record={record}/>
+                    </>
+                )
+            }
+        },
         {
             title: '状态',
             align: 'center',
             ellipsis: true,
-            dataIndex: 'KCZT',
-            key: 'KCZT',
+            dataIndex:'KCZT',
+            key:'KCZT'
         },
         {
             title: '操作',

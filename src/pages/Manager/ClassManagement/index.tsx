@@ -28,11 +28,13 @@ const CourseManagement = () => {
   const [openes, setopenes] = useState(false);
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
-  const [readonly,stereadonly]=useState<boolean>(false);
-  const [moduletype,setmoduletype ]=useState<string>('crourse')
+  const [readonly, stereadonly] = useState<boolean>(false);
+  const [moduletype, setmoduletype] = useState<string>('crourse');
+  const [xn, setxn] = useState<string>('2020-2021');
+  const [xq, setxq] = useState<string>('第一学期')
 
   useEffect(() => {
-    (async () => {
+    async function fetchData() {
       const res = await getAllXNXQ({});
       if (res.status === 'ok') {
         const { data = [] } = res;
@@ -49,16 +51,20 @@ const CourseManagement = () => {
       } else {
         console.log(res.message);
       }
-    })()
-
-  }, [])
+    }
+    fetchData();
+  }, []);
   // 头部input事件
   const handlerSearch = (type: string, value: string) => {
-    console.log(type, value);
-
-  };
-  const getTitle=()=>{
-    if(moduletype==='crourse'){
+    if (type === 'year') {
+        setxn(value)
+        return actionRef.current?.reload();
+    }
+    setxq(value)
+    return actionRef.current?.reload();
+};
+  const getTitle = () => {
+    if (moduletype === 'crourse') {
       return '课程类型维护'
     }
     return '开班信息'
@@ -70,11 +76,9 @@ const CourseManagement = () => {
   };
 
   const handleEdit = (data: CourseItem) => {
-    console.log(data.BJZT)
-    console.log(data)
     setVisible(true);
     setCurrent(data);
-    if( data.BJZT==='已发布'|| data.BJZT==='已过期'){
+    if (data.BJZT === '已发布' || data.BJZT === '已结课') {
       stereadonly(true)
     }
   };
@@ -133,22 +137,28 @@ const CourseManagement = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
+        const cc: any[]=[]
+        record.NJSJs?.map((item: any)=>{    
+          return (
+            cc.push(item.NJMC)
+          )
+        })
         return (
-            <div className='ui-table-col-elp'>
-                <Tooltip title={record.NJMC} arrowPointAtCenter>
-                    {
-                        record.NJMC?.split(',').map((item) => {
-                            return (
-                                <>
-                                    <Tag>{item}</Tag>
-                                </>
-                            )
-                        })
-                    }
-                </Tooltip>
-            </div>
+          <div className='ui-table-col-elp'>
+            <Tooltip title={cc} arrowPointAtCenter>
+              {
+                cc?.map((item) => {
+                  return (
+                    <>
+                      <Tag>{item}</Tag>
+                    </>
+                  )
+                })
+              }
+            </Tooltip>
+          </div>
         )
-    }
+      }
     },
     {
       title: '状态',
@@ -163,17 +173,18 @@ const CourseManagement = () => {
       key: 'option',
       width: 200,
       align: 'center',
-      render: (_, record) => { 
-        return(
-        <>
-          <ActionBar
-          record={record}
-          handleEdit={handleEdit}
-          maintain={maintain}
-           />
-        </>
-      )},
-      
+      render: (_, record) => {
+        return (
+          <>
+            <ActionBar
+              record={record}
+              handleEdit={handleEdit}
+              maintain={maintain}
+            />
+          </>
+        )
+      },
+
     },
   ];
 
@@ -190,8 +201,10 @@ const CourseManagement = () => {
               param,
               sorter,
               filter,
-              xn: '2020-2021',
-              xq: '第一学期',
+              xn,
+              xq,
+              page:1,
+              pageCount:20,
               name: '',
             };
             const res = await getAllKHBJSJ(obj);
@@ -224,7 +237,7 @@ const CourseManagement = () => {
             </Button>,
           ]}
         />
-        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current}  readonly={readonly}/>
+        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} />
         <Modal
           visible={openes}
           onCancel={showmodal}
@@ -234,7 +247,7 @@ const CourseManagement = () => {
             maxHeight: '65vh',
             overflowY: 'auto',
           }}
-          width={moduletype==='crourse'?'40vw':'30vw'}
+          width={moduletype === 'crourse' ? '40vw' : '30vw'}
           footer={[
             <Button key="back" onClick={() => setopenes(false)}>
               取消
@@ -243,8 +256,8 @@ const CourseManagement = () => {
               确定
             </Button>,
           ]}
-        > 
-          {moduletype==='crourse'? <CourseType />:<ClassStart/>}
+        >
+          {moduletype === 'crourse' ? <CourseType /> : <ClassStart />}
         </Modal>
       </PageContainer>
     </>

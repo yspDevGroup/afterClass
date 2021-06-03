@@ -20,7 +20,7 @@ const formLayout = {
 
 const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef }) => {
   const [form, setForm] = useState<any>();
- 
+
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
@@ -29,7 +29,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           id: formValues?.id,
         };
         const options = values;
-        res =  updateKHBJSJ(params, options);
+        res = updateKHBJSJ(params, options);
       } else {
         res = createKHBJSJ(values);
       }
@@ -59,23 +59,21 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       type: 'input',
       readonly,
       label: '课程名称：',
-      name: 'KCMC',
-      key: 'KCMC',
+      name: 'BJMC',
+      key: 'BJMC',
     },
     {
       type: 'group',
       readonly,
-      groupItems:[
+      groupItems: [
         {
           type: 'input',
           label: '状态：',
           name: 'BJZT',
           key: 'BJZT',
-          fieldProps :{
-            disabled:true,
-            defaultValue:'未排课'
+          fieldProps: {
+            disabled:true
           }
-      
         },
         {
           type: 'input',
@@ -83,20 +81,19 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           name: 'FY',
           key: 'FY',
           readonly,
-          
         },
       ]
     },
     {
       type: 'group',
       readonly,
-      groupItems:[
+      groupItems: [
         {
           type: 'select',
           label: '主班：',
           name: 'ZJS',
           key: 'ZJS',
-          readonly,   
+          readonly,
         },
         {
           type: 'select',
@@ -104,16 +101,15 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           name: 'FJS',
           key: 'FJS',
           readonly,
-          fieldProps :{
-            mode:"multiple"
+          fieldProps: {
+            mode: "multiple"
           }
         },
       ]
     },
     {
-      type:'textArea',
+      type: 'textArea',
       label: '适用年级',
-      
       readonly,
     },
     {
@@ -136,7 +132,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
   return (
     <div>
       <Drawer
-        title="新增课程"
+        title={formValues ? '编辑信息' : "新增信息"}
         width={480}
         onClose={onClose}
         visible={visible}
@@ -164,7 +160,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           setForm={setForm}
           formItems={formItems}
           formItemLayout={formLayout}
-          values={formValues}
+          values={formValues || { BJZT: '未排课' }}
         />
       </Drawer>
     </div>
