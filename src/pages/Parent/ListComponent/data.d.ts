@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-01 17:45:37
- * @LastEditTime: 2021-06-02 14:37:46
+ * @LastEditTime: 2021-06-03 15:35:13
  * @LastEditors: txx
  */
 export type IListmock = {
@@ -64,6 +64,7 @@ export type ListItem = {
 type ListType = 'list' | 'picList' | 'descList';
 export type ListData = {
   type?: ListType;
+  cls?: string; // 组件自定义类名
   header?: {
     title: string;
     link?: string;
