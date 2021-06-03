@@ -30,33 +30,6 @@ const ClassManagement = () => {
   const [xq, setXq] = useState<any>();
   const [tableDataSource, setTableDataSource] = useState<any>([]);
 
-  useEffect(() => {
-    (async () => {
-      // 学年学期数据的获取
-      const res = await getAllXNXQ({});
-      if (res.status === 'ok') {
-        const { data = [] } = res;
-        const defaultData = [...searchData];
-        const newData = convertData(data);
-        const term = newData.subData[newData.data[0].key];
-        const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-        if (chainSel && chainSel.defaultValue) {
-          chainSel.defaultValue.first = newData.data[0].key;
-          chainSel.defaultValue.second = term[0].key;
-          setXn(chainSel.defaultValue.first);
-          setXq(chainSel.defaultValue.second);
-          chainSel.data = newData;
-        }
-        setDataSource(defaultData);
-      } else {
-        console.log(res.message);
-      }
-    })();
-  }, []);
-  // 头部input事件
-  const handlerSearch = (type: string, value: string) => {
-    console.log(value);
-  };
   const showDrawer = () => {
     setState(false);
     // setCurrent(undefined);
@@ -125,14 +98,49 @@ const ClassManagement = () => {
     });
     return tableData;
   };
-  useEffect(() => {
-    const res = getFJPlan({ xn: '2020-2021', xq: '第一学期' });
+
+  // 头部input事件
+  const handlerSearch = (type: string, value: string) => {
+    const res = getFJPlan({ xn: type === 'year' ? value : '', xq: type === 'term' ? value : '' });
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
         const tableData = processingData(data.data);
         setTableDataSource(tableData);
       }
     });
+  };
+  useEffect(() => {
+    (async () => {
+      // 学年学期数据的获取
+      const res = await getAllXNXQ({});
+      if (res.status === 'ok') {
+        const { data = [] } = res;
+        const defaultData = [...searchData];
+        const newData = convertData(data);
+        const term = newData.subData[newData.data[0].key];
+        const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+        if (chainSel && chainSel.defaultValue) {
+          chainSel.defaultValue.first = newData.data[0].key;
+          chainSel.defaultValue.second = term[0].key;
+          setXn(chainSel.defaultValue.first);
+          setXq(chainSel.defaultValue.second);
+          chainSel.data = newData;
+        }
+        setDataSource(defaultData);
+        const resla = getFJPlan({
+          xn: defaultData[0].defaultValue?.first,
+          xq: defaultData[0].defaultValue?.second,
+        });
+        Promise.resolve(resla).then((datas: any) => {
+          if (datas.status === 'ok') {
+            const tableData = processingData(datas.data);
+            setTableDataSource(tableData);
+          }
+        });
+      } else {
+        console.log(res.message);
+      }
+    })();
   }, []);
   const onClose = () => {
     setModalVisible(false);
@@ -202,7 +210,9 @@ const ClassManagement = () => {
       width: 136,
     },
   ];
-
+  const onExcelTableClick = (value: any) => {
+    console.log('value', value);
+  };
   return (
     <>
       <PageContainer>
@@ -226,7 +236,12 @@ const ClassManagement = () => {
                 </Button>
               </div>
             </div>
-            <ExcelTable columns={columns} dataSource={tableDataSource} switchPages={showDrawer} />
+            <ExcelTable
+              columns={columns}
+              dataSource={tableDataSource}
+              switchPages={showDrawer}
+              onExcelTableClick={onExcelTableClick}
+            />
           </div>
         ) : (
           <AddArranging

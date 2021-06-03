@@ -53,7 +53,6 @@ const Index: FC<IndexPropsType> = ({
         rowData[colItem.dataIndex] = {
           cla: chosenData?.cla,
           teacher: chosenData?.teacher,
-          key: '8',
           dis: false,
         };
       } else {
@@ -79,7 +78,6 @@ const Index: FC<IndexPropsType> = ({
   };
 
   const datas = stateTableData || dataSource;
-  // const co = {color: 'rgba(234, 17, 28, 1)'}
   return (
     <div className={styles.excelTable}>
       <table>
