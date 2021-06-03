@@ -11,7 +11,7 @@ export async function getKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -26,6 +26,9 @@ export async function getKHBJSJ(
       FY?: number;
       KKRQ?: string;
       JKRQ?: string;
+      BMKSSJ?: string;
+      BMJSSJ?: string;
+      KCTP?: string;
       KBYS?: string;
       KHKCSJId?: string;
       KHKCSJ?: {
@@ -36,6 +39,10 @@ export async function getKHBJSJ(
         KCSC?: number;
         KCZT?: string;
         KCMS?: string;
+        KKRQ?: string;
+        JKRQ?: string;
+        BMKSSJ?: string;
+        BMJSSJ?: string;
         XNXQId?: string;
       };
       NJSJs?: { id?: string; NJ?: number; NJMC?: string }[];
@@ -44,7 +51,7 @@ export async function getKHBJSJ(
     message?: string;
   }>(`/khbjsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -58,10 +65,10 @@ export async function deleteKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -112,6 +119,9 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       FY?: number;
       KKRQ?: string;
       JKRQ?: string;
+      BMKSSJ?: string;
+      BMJSSJ?: string;
+      KCTP?: string;
       KBYS?: string;
       KHKCSJId?: string;
       KHKCSJ?: {
@@ -122,6 +132,10 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         KCSC?: number;
         KCZT?: string;
         KCMS?: string;
+        KKRQ?: string;
+        JKRQ?: string;
+        BMKSSJ?: string;
+        BMJSSJ?: string;
         XNXQId?: string;
       };
       NJSJs?: { id?: string; NJ?: number; NJMC?: string }[];
@@ -148,13 +162,13 @@ export async function updateKHBJSJ(
   body: API.UpdateKHBJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

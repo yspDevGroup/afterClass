@@ -10,14 +10,6 @@ export async function githubCallback(options?: { [key: string]: any }) {
   });
 }
 
-/** wechat认证回调 GET /auth/wechat/callback */
-export async function wechatCallback(options?: { [key: string]: any }) {
-  return request<any>('/auth/wechat/callback', {
-    method: 'GET',
-    ...(options || {}),
-  });
-}
-
 /** Route used by the frontend app to validate the session and retrieve the CSRF token. GET /user/refresh */
 export async function getUserRefresh(options?: { [key: string]: any }) {
   return request<{ csrfToken?: string }>('/user/refresh', {
@@ -51,7 +43,7 @@ export async function currentUser(options?: { [key: string]: any }) {
         identityId?: string;
         departmentId?: string;
         status?: number;
-        createdAt?: string;
+        auth?: '老师' | '家长' | '管理员';
       };
       token?: string;
     };
@@ -87,7 +79,7 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
       identityId?: string;
       departmentId?: string;
       status?: number;
-      createdAt?: string;
+      auth?: '老师' | '家长' | '管理员';
     };
     message?: string;
   }>('/user/create', {
@@ -109,10 +101,10 @@ export async function deleteUser(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/user/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }

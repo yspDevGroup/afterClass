@@ -145,10 +145,10 @@ const PeriodMaintenance = () => {
     ]
     return (
         <>
-            <PageContainer cls={styles.roomWrapper} >
+            <PageContainer cls={styles.periodWrapper} >
                 <ProTable<Maintenance>
                     columns={columns}
-                    headerTitle="时段维护(请先在本页面设置学校上课的时间段)"
+                    headerTitle={<div className={styles.tableTitle}>时段维护<span>（请先在本页面设置学校上课的时间段）</span></div>}
                     search={false}
                     options={{
                         setting: false,

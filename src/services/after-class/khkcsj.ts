@@ -11,7 +11,7 @@ export async function getKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -21,6 +21,10 @@ export async function getKHKCSJ(
       KCSC?: number;
       KCZT?: string;
       KCMS?: string;
+      KKRQ?: string;
+      JKRQ?: string;
+      BMKSSJ?: string;
+      BMJSSJ?: string;
       XNXQId?: string;
       XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
       KHKCLX?: { id?: string; KCLX?: string };
@@ -36,13 +40,16 @@ export async function getKHKCSJ(
         FY?: number;
         KKRQ?: string;
         JKRQ?: string;
+        BMKSSJ?: string;
+        BMJSSJ?: string;
+        KCTP?: string;
         KBYS?: string;
       }[];
     };
     message?: string;
   }>(`/khkcsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -56,10 +63,10 @@ export async function deleteKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -101,6 +108,10 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
       KCSC?: number;
       KCZT?: string;
       KCMS?: string;
+      KKRQ?: string;
+      JKRQ?: string;
+      BMKSSJ?: string;
+      BMJSSJ?: string;
       XNXQId?: string;
       XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
       KHKCLX?: { id?: string; KCLX?: string };
@@ -116,6 +127,9 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
         FY?: number;
         KKRQ?: string;
         JKRQ?: string;
+        BMKSSJ?: string;
+        BMJSSJ?: string;
+        KCTP?: string;
         KBYS?: string;
       }[];
     };
@@ -140,14 +154,64 @@ export async function updateKHKCSJ(
   body: API.UpdateKHKCSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
+    ...(options || {}),
+  });
+}
+
+/** 根据ID查找所有年级 GET /khkcsj/njs/${param0} */
+export async function allNJs(
+  params: {
+    // path
+    /** 课后课程ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { id?: string; NJ?: number; NJMC?: string }[];
+    message?: string;
+  }>(`/khkcsj/njs/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 根据年级ID查找所有课后课程 GET /khkcsj/khkcs/${param0} */
+export async function allKCsByNJ(
+  params: {
+    // path
+    /** 年级ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{
+    status?: 'ok' | 'error';
+    data?: {
+      id?: string;
+      KCMC?: string;
+      KCTP?: string;
+      KCSC?: number;
+      KCZT?: string;
+      KCMS?: string;
+      XNXQId?: string;
+    }[];
+    message?: string;
+  }>(`/khkcsj/khkcs/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }

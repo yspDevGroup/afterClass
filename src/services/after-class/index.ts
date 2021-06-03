@@ -7,8 +7,8 @@ import * as auth from './auth';
 import * as user from './user';
 import * as bjsj from './bjsj';
 import * as jcsj from './jcsj';
-import * as fjsj from './fjsj';
 import * as fjlx from './fjlx';
+import * as fjsj from './fjsj';
 import * as jcxx from './jcxx';
 import * as jxjhsj from './jxjhsj';
 import * as khbjsj from './khbjsj';
@@ -21,11 +21,11 @@ import * as njsj from './njsj';
 import * as pksj from './pksj';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
+import * as xqsj from './xqsj';
 import * as xnxq from './xnxq';
 import * as xsjbsj from './xsjbsj';
-import * as xqsj from './xqsj';
-import * as xxjbsj from './xxjbsj';
 import * as xxsjpz from './xxsjpz';
+import * as xxjbsj from './xxjbsj';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
@@ -34,8 +34,8 @@ export default {
   user,
   bjsj,
   jcsj,
-  fjsj,
   fjlx,
+  fjsj,
   jcxx,
   jxjhsj,
   khbjsj,
@@ -48,11 +48,11 @@ export default {
   pksj,
   xl,
   xnjgsj,
+  xqsj,
   xnxq,
   xsjbsj,
-  xqsj,
-  xxjbsj,
   xxsjpz,
+  xxjbsj,
   zxfa,
   zxsj,
 };
