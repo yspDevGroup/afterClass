@@ -2,6 +2,7 @@
 import React from 'react';
 import { useRef, useState, useEffect } from 'react';
 import { Button, Modal, Tag } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import PageContainer from '@/components/PageContainer';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -13,7 +14,7 @@ import CourseType from './components/CourseType';
 import type { CourseItem } from './data';
 import styles from './index.less';
 import type { SearchDataType } from "@/components/Search/data";
-import { searchData } from "./serarchConfig";
+import { searchData } from "./searchConfig";
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
@@ -129,6 +130,7 @@ const CourseManagement = () => {
       key: 'index',
       valueType: 'index',
       width: 48,
+      align: 'center',
     },
     {
       title: '班级名称',
@@ -250,7 +252,7 @@ const CourseManagement = () => {
           headerTitle={
             <SearchComponent
               dataSource={dataSource}
-              onChange={(type: string, value: string) => handlerSearch(type, value)} />
+              onChange={(type: string, value: string,term: string) => handlerSearch(type, value,term)} />
           }
           toolBarRender={() => [
             <Button
@@ -259,7 +261,7 @@ const CourseManagement = () => {
               key="add"
               onClick={() => showDrawer()}
             >
-              新增班级
+              <PlusOutlined />新增班级
             </Button>,
           ]}
         />

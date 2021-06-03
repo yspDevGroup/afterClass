@@ -73,6 +73,7 @@ const PeriodMaintenance = () => {
             dataIndex: 'index',
             valueType: 'index',
             width: 48,
+            align: 'center',
         },
         {
             title: '时段名称',

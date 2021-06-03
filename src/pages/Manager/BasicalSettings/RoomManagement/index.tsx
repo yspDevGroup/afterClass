@@ -97,6 +97,7 @@ const RoomManagement = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 48,
+      align: 'center',
     },
     {
       title: '名称',

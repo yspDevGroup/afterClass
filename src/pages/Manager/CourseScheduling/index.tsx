@@ -9,10 +9,11 @@ import SearchComponent from '@/components/Search';
 import ExcelTable from '@/components/ExcelTable';
 import { theme } from '@/theme-default';
 import { getFJPlan } from '@/services/after-class/fjsj';
+import { PlusOutlined } from '@ant-design/icons';
 import AddArranging from './components/AddArranging';
 import AddClass from './components/AddClass';
 import type { ClassItem } from './data';
-import { searchData } from './serarchConfig';
+import { searchData } from './searchConfig';
 import './index.less';
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from '@/components/Search/util';
@@ -229,7 +230,7 @@ const ClassManagement = () => {
                   key="add"
                   onClick={() => showDrawer()}
                 >
-                  新增课程
+                  <PlusOutlined />新增课程
                 </Button>
               </div>
             </div>

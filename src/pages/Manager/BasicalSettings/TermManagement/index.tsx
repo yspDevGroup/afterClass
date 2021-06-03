@@ -144,6 +144,7 @@ const TermManagement = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 48,
+      align: 'center',
     },
     {
       title: '学年',

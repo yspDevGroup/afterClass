@@ -4,6 +4,7 @@ import { theme } from "@/theme-default";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
 import { Button, Modal, Popconfirm } from "antd";
+import { PlusOutlined } from '@ant-design/icons';
 import { Divider } from "antd";
 import React, { useRef, useEffect } from "react";
 import { useState } from "react";
@@ -13,7 +14,7 @@ import styles from './index.less';
 import Sitclass from "./components/Sitclass";
 import {  deleteKHKCSJ, getAllKHKCSJ} from "@/services/after-class/khkcsj";
 import type { SearchDataType } from "@/components/Search/data";
-import { searchData } from "./serarchConfig";
+import { searchData } from "./searchConfig";
 import { convertData } from "@/components/Search/util";
 import { getAllXNXQ } from "@/services/after-class/xnxq";
 import SearchComponent from "@/components/Search";
@@ -99,6 +100,7 @@ const NewClassManagement = () => {
             key: 'index',
             valueType: 'index',
             width: 48,
+            align: 'center',
         },
         {
             title: '课程名称',
@@ -241,7 +243,7 @@ const NewClassManagement = () => {
                             key="add"
                             onClick={() => handleOperation('add')}
                         >
-                            新增课程
+                            <PlusOutlined />新增课程
                         </Button>,
                     ]}
                 />
