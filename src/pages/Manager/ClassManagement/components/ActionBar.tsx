@@ -17,6 +17,7 @@ const ActionBar = (props: propstype) => {
 
   switch (record.BJZT) {
     case '未排课':
+    case '已下架':
       return (
         <>
           <a>
@@ -107,48 +108,7 @@ const ActionBar = (props: propstype) => {
         </>
       );
       break;
-    case '已下架':
-      return (
-        <>
-          <a>
-            <Link to='/courseScheduling'>
-              排课
-            </Link>
-          </a>
-          <Divider type="vertical" />
-          <a onClick={() => handleEdit(record)}>编辑</a>
-          <Divider type="vertical" />
-          <Popconfirm
-            title="删除之后，数据不可恢复，确定要删除吗?"
-            onConfirm={async () => {
-              try {
-                if (record.id) {
-                  const params = { id: record.id };
-                  const res = deleteKHBJSJ(params);
-                  new Promise((resolve) => {
-                    resolve(res);
-                  }).then((data: any) => {
-                    if (data.status === 'ok') {
-                      message.success('删除成功');
-                    } else {
-                      message.error('删除失败');
-                    }
-                  });
-                }
-              } catch (err) {
-                message.error('删除失败，请联系管理员或稍后重试。');
-              }
-            }}
-            okText="确定"
-            cancelText="取消"
-            placement="topLeft"
-          >
-            <a>删除</a>
-          </Popconfirm>
-        </>
-      );
-      break;
-    default:
+      default:
       return (
         <>
           <a onClick={() => handleEdit(record)}>查看</a>

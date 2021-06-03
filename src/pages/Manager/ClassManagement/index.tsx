@@ -14,13 +14,14 @@ import type { CourseItem } from './data';
 import styles from './index.less';
 import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./serarchConfig";
-import { getAllXNXQ } from '@/services/after-class/xnxq';
-import { convertData } from "@/components/Search/util";
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
-import { list } from './mock';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
 import ClassStart from './components/ClassStart';
+import { getAllNJSJ } from '@/services/after-class/njsj';
+import { getAllXNXQ } from '@/services/after-class/xnxq';
+import { convertData } from "@/components/Search/util";
+import { getQueryString } from '@/utils/utils';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -31,7 +32,8 @@ const CourseManagement = () => {
   const [readonly, stereadonly] = useState<boolean>(false);
   const [moduletype, setmoduletype] = useState<string>('crourse');
   const [xn, setxn] = useState<string>('2020-2021');
-  const [xq, setxq] = useState<string>('第一学期')
+  const [xq, setxq] = useState<string>('第一学期');
+  const [kcId,setkcId] =useState<string>('')
 
   useEffect(() => {
     async function fetchData() {
@@ -51,9 +53,29 @@ const CourseManagement = () => {
       } else {
         console.log(res.message);
       }
+      // 年级数据的获取
+      const result = await getAllNJSJ();
+      if (result.status === 'ok') {
+        const { data = [] } = result;
+        const defaultData = [...searchData];
+        const grideSel = defaultData.find((item: any) => item.type === 'select');
+        if (grideSel && grideSel.data) {
+          grideSel.defaultValue!.first = data[0].NJMC;
+          grideSel.data = data;
+        }
+        setDataSource(defaultData);
+      } else {
+        console.log(result.message);
+      }
     }
     fetchData();
   }, []);
+  useEffect(() => {
+    const curId = getQueryString("courseId");
+    if(curId){
+      setkcId(curId)
+    }
+  }, [])
   // 头部input事件
   const handlerSearch = (type: string, value: string) => {
     if (type === 'year') {
@@ -78,6 +100,7 @@ const CourseManagement = () => {
   const handleEdit = (data: CourseItem) => {
     setVisible(true);
     setCurrent(data);
+    console.log(data)
     if (data.BJZT === '已发布' || data.BJZT === '已结课') {
       stereadonly(true)
     }
@@ -113,7 +136,7 @@ const CourseManagement = () => {
       dataIndex: 'FY',
       key: 'FY',
       align: 'center',
-      width: '10%',
+      width: 100,
     },
     {
       title: '主班',
@@ -128,7 +151,7 @@ const CourseManagement = () => {
       key: 'FJS',
       align: 'center',
       ellipsis: true,
-      width: 100,
+      
     },
     {
       title: '适用年级',
@@ -191,11 +214,10 @@ const CourseManagement = () => {
   return (
     <>
       <PageContainer cls={styles.roomWrapper}>
-        <ProTable<CourseItem>
+        <ProTable<any>
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          dataSource={list}
           request={async (param, sorter, filter) => {
             const obj = {
               param,
@@ -203,6 +225,7 @@ const CourseManagement = () => {
               filter,
               xn,
               xq,
+              kcId,
               page:1,
               pageCount:20,
               name: '',
@@ -224,16 +247,13 @@ const CourseManagement = () => {
               onChange={(type: string, value: string) => handlerSearch(type, value)} />
           }
           toolBarRender={() => [
-            <Button key="wh" onClick={() => maintain('crourse')}>
-              课程类型维护
-            </Button>,
             <Button
               style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
               type="primary"
               key="add"
               onClick={() => showDrawer()}
             >
-              新增课程
+              新增班级
             </Button>,
           ]}
         />

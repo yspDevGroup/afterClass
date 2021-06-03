@@ -19,6 +19,7 @@ import { getAllXNXQ } from "@/services/after-class/xnxq";
 import SearchComponent from "@/components/Search";
 import { message } from "antd";
 import Choice from "./components/Choice";
+import { Link } from "umi";
 
 
 
@@ -124,10 +125,10 @@ const NewClassManagement = () => {
             align: 'center',
             width: '10%',
             render: (_, record) => {
+                console.log(record)
+                const Url = `/classManagement?courseId=${record.id}`;
                 return (
-                    <>
-                       <a>{record.KHBJSJs?.length}</a>
-                    </>
+                       <Link to={Url} >{record.KHBJSJs?.length}</Link>
                 )
             }
         },
@@ -138,7 +139,7 @@ const NewClassManagement = () => {
             render:(_,record)=>{
                 return(
                     <>
-                    <a href={record.KCTP}>课程封面.png</a>
+                    <a href={record.KCTP}  target='_blank'>课程封面.png</a>
                     </>
                 )
             }

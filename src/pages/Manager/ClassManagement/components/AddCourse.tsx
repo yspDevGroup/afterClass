@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { Button, Drawer, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
 import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
+import { getAllNJSJ } from '@/services/after-class/njsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -20,6 +21,22 @@ const formLayout = {
 
 const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef }) => {
   const [form, setForm] = useState<any>();
+  const [njData, setNjData] = useState<{ label: string; value: string; }[]>([])
+  useEffect(() => {
+    const res = getAllNJSJ();
+    Promise.resolve(res).then((data: any) => {
+      if (data.status === 'ok') {
+        const njArry: { label: string; value: string; }[] = []
+        data.data.map((item: any) => {
+            return njArry.push({
+            label: item.NJMC,
+            value: item.id
+          })
+        })
+        setNjData(njArry);
+      }
+    })
+  }, [])
 
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
@@ -72,7 +89,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           name: 'BJZT',
           key: 'BJZT',
           fieldProps: {
-            disabled:true
+            disabled: true
           }
         },
         {
@@ -108,9 +125,15 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       ]
     },
     {
-      type: 'textArea',
+      type: 'select',
+      name: 'NJMC',
       label: '适用年级',
+      fieldProps: {
+        mode: 'multiple',
+        options: njData
+      },
       readonly,
+
     },
     {
       type: 'uploadImage',

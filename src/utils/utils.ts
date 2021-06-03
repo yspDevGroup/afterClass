@@ -93,3 +93,15 @@ export const envjudge = () => {
   }
   return 'pc'; // PC
 };
+/**
+ * 根据路径search拼接参数获取参数对应的值
+ *
+ * @export
+ * @returns
+ */
+export function getQueryString(name: string) {
+  const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
+  const r = decodeURI(window.location.search.substr(1)).match(reg);
+  if (r != null) return unescape(r[2]);
+  return null;
+}
