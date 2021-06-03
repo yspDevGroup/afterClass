@@ -39,15 +39,19 @@ export const initialStateConfig = {
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  fetchUserInfo?: (debug?: boolean) => Promise<API.CurrentUser | undefined>;
 }> {
-  const fetchUserInfo = async () => {
+  const fetchUserInfo = async (debug?: boolean) => {
     try {
       const currentUserRes = await queryCurrentUser();
       if (currentUserRes.status === 'ok') {
         // sessionStorage.setItem('csrf', currentUser?.csrfToken || '');
         const { token = '', info } = currentUserRes.data || {};
         if (!info) {
+          if (debug) {
+            // eslint-disable-next-line no-debugger
+            debugger;
+          }
           // 如果后台未查询到用户信息，则跳转到登录页
           // 此时不能无条件跳转向认证页，否则可能产生无限循环
           history.push('/user/login');

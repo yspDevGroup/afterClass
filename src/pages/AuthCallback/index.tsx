@@ -4,7 +4,7 @@
  * @description: OAuth认证通过后的跳转页面
  * @author: zpl
  * @Date: 2021-05-13 09:08:04
- * @LastEditTime: 2021-06-02 18:31:10
+ * @LastEditTime: 2021-06-03 14:49:46
  * @LastEditors: zpl
  */
 import React, { useCallback, useEffect } from 'react';
@@ -27,11 +27,17 @@ const toHome = (
 const Comp = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
-  const fetchUserInfo = useCallback(async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
+  const fetchUserInfo = useCallback(async (debug: boolean) => {
+    const userInfo = await initialState?.fetchUserInfo?.(debug);
     if (userInfo) {
       setInitialState(initialState ? { ...initialState, currentUser: userInfo } : undefined);
       setTimeout(() => {
+        if (debug) {
+          // eslint-disable-next-line no-debugger
+          debugger;
+          // eslint-disable-next-line no-console
+          console.log('39------', userInfo);
+        }
         history.replace('/');
       }, 10);
     }
