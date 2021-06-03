@@ -6,6 +6,8 @@ import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllNJSJ } from '@/services/after-class/njsj';
+import { getAllKHKCLX } from '@/services/after-class/khkclx';
+import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -13,17 +15,22 @@ type AddCourseProps = {
   readonly?: boolean;
   formValues?: Record<string, any>;
   actionRef?: React.MutableRefObject<ActionType | undefined>;
+  xn?: string;
+  xq?: string;
 };
 const formLayout = {
   labelCol: {},
   wrapperCol: {},
 };
 
-const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef }) => {
+const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef,xn,xq }) => {
   const [form, setForm] = useState<any>();
-  const [njData, setNjData] = useState<{ label: string; value: string; }[]>([])
+  const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
+  const [kcData, setkcData] =  useState<{ label: string; value: string; }[]>([]);
+  const [mcData, setmcData] = useState<{ label: string; value: string; }[]>([]);
+  const [kcid, setkcid] = useState<string>('')
   useEffect(() => {
-    const res = getAllNJSJ();
+    const res = getAllNJSJ({});
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
         const njArry: { label: string; value: string; }[] = []
@@ -37,10 +44,41 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       }
     })
   }, [])
+  useEffect(() => {
+    const res = getAllKHKCLX({},{name:''});
+    Promise.resolve(res).then((data: any) => {
+      if (data.status === 'ok') {
+        const njArry: { label: string; value: string; }[] = []
+        data.data.map((item: any) => {
+            return njArry.push({
+            label: item.KCLX,
+            value: item.id
+          })
+        })
+        setkcData(njArry);
+      }
+    })
+  }, [])
+  useEffect(() => {
+    const res = getAllKHKCSJ({},{lxId:kcid,name:'',xn,xq,page:0,pageCount:0});
+    Promise.resolve(res).then((data: any) => {
+      if (data.status === 'ok') {
+        const njArry: { label: string; value: string; }[] = []
+        data.data.map((item: any) => {
+            return njArry.push({
+            label: item.KCMC,
+            value: item.id
+          })
+        })
+        setmcData(njArry);
+      }
+    })
+  }, [])
 
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
+      console.log('object',formValues)
       if (formValues?.id) {
         const params = {
           id: formValues?.id,
@@ -73,11 +111,27 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
 
   const formItems: any[] = [
     {
-      type: 'input',
+      type: 'select',
+      readonly,
+      label: '课程类型：',
+      name: 'KCLX',
+      key: 'KCLX',
+      fieldProps: {
+        options: kcData,
+        onChange:(value: any)=>{
+            setkcid(value)
+        }
+      },
+    },
+    {
+      type: 'select',
       readonly,
       label: '课程名称：',
-      name: 'BJMC',
-      key: 'BJMC',
+      name: 'KCMC',
+      key: 'KCMC',
+      fieldProps: {
+        options: mcData
+      },
     },
     {
       type: 'group',
@@ -126,7 +180,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
     },
     {
       type: 'select',
-      name: 'NJMC',
+      name: 'NJSJs',
       label: '适用年级',
       fieldProps: {
         mode: 'multiple',
@@ -152,6 +206,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       key: 'KCMS',
     },
   ];
+  
   return (
     <div>
       <Drawer

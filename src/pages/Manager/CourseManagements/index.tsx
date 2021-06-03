@@ -84,10 +84,10 @@ const NewClassManagement = () => {
     };
     const onClose = () => {
         setopen(false);
-    };
-    const handleSubmit = async () => {
-
-    };
+      };
+      const handleSubmit =  () => {
+        setModalVisible(false);
+      };
     const maintain = () => {
         setModalType('uphold')
         setModalVisible(true);

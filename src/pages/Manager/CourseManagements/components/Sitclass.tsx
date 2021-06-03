@@ -1,9 +1,11 @@
+import { createKHKCLX, getAllKHKCLX, updateKHKCLX } from "@/services/after-class/khkclx";
 import { PlusOutlined } from "@ant-design/icons";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
+import { message } from "antd";
 import { Button, Popconfirm } from "antd";
 import React, { useRef, useState } from "react";
-import type { classType } from "../data";
+import type { classType, TableListParams } from "../data";
 
 const Sitclass =()=>{
     const actionRef = useRef<ActionType>();
@@ -20,7 +22,7 @@ const Sitclass =()=>{
         },
         {
             title: '名称',
-            dataIndex: 'FJLX',
+            dataIndex: 'KCLX',
             align: 'center',
             ellipsis: true,
         },
@@ -67,11 +69,19 @@ const Sitclass =()=>{
             >
                 新建一行
             </Button>
-            <EditableProTable<classType>
+            <EditableProTable<any>
                 // style={{minWidth:'600px'}}
                 rowKey="id"
                 actionRef={actionRef}
                 columns={columns}
+                request={(params, sorter, filter) => {
+                    const opts: TableListParams = {
+                        ...params,
+                        sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+                        filter,
+                    };
+                    return getAllKHKCLX({ name: ''},opts)
+                }}
                 value={dataSource}
                 recordCreatorProps={false}
                 onChange={setDataSource}
@@ -79,6 +89,26 @@ const Sitclass =()=>{
                     type: 'multiple',
                     editableKeys,
                     onChange: setEditableRowKeys,
+                    onSave: async (key, row) => {
+                        console.log('row',row)
+                        try {
+                            const result = row.title? await createKHKCLX({
+                                KCLX: row.KCLX!
+                            }) : await updateKHKCLX({
+                                id: row.id!
+                            }, {
+                                KCLX: row.KCLX!
+                            });
+                            if (result.status === 'ok') {
+                                message.success(row.title ?'信息新增成功':'信息更新成功');
+                                actionRef.current?.reload();
+                            } else {
+                                message.error(`${result.message},请联系管理员或稍后再试`);
+                            }
+                        } catch (errorInfo) {
+                            console.log('Failed:', errorInfo);
+                        }
+                    },
                 }}
             />
         </>

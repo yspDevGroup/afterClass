@@ -53,7 +53,20 @@ const CourseManagement = () => {
       } else {
         console.log(res.message);
       }
-     
+      // 年级数据的获取
+      const result = await getAllNJSJ();
+      if (result.status === 'ok') {
+        const { data = [] } = result;
+        const defaultData = [...searchData];
+        const grideSel = defaultData.find((item: any) => item.type === 'select');
+        if (grideSel && grideSel.data) {
+          grideSel.defaultValue!.first = data[0].NJMC;
+          grideSel.data = data;
+        }
+        setDataSource(defaultData);
+      } else {
+        console.log(result.message);
+      }
     }
     fetchData();
   }, []);
@@ -64,14 +77,14 @@ const CourseManagement = () => {
     }
   }, [])
   // 头部input事件
-  const handlerSearch = (type: string, value: string, term: string) => {
-    if (type === 'year' || type === 'term') {
-      setxn(value);
-      setxq(term);
-      return actionRef.current?.reload();
+  const handlerSearch = (type: string, value: string) => {
+    if (type === 'year') {
+        setxn(value)
+        return actionRef.current?.reload();
     }
+    setxq(value)
     return actionRef.current?.reload();
-  };
+};
   const getTitle = () => {
     if (moduletype === 'crourse') {
       return '课程类型维护'
@@ -84,10 +97,17 @@ const CourseManagement = () => {
     setCurrent(undefined);
   };
 
-  const handleEdit = (data: CourseItem) => {
+  const handleEdit = (data: any) => {
+    const NJSJs: any[] = [];
+    data.NJSJs.map((item: any)=>(
+      NJSJs.push(item.id)
+    ))
+    const list = {...data,NJSJs}
+    list.KCTP='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
     setVisible(true);
-    setCurrent(data);
-    if (data.BJZT === '已发布' || data.BJZT === '已结课') {
+    setCurrent(list);
+    console.log(data)
+    if (data.BJZT === '已结课' || data.BJZT === '已发布') {
       stereadonly(true)
     }
   };
@@ -180,7 +200,7 @@ const CourseManagement = () => {
       title: '操作',
       valueType: 'option',
       key: 'option',
-      width: 200,
+      width: '14%',
       align: 'center',
       render: (_, record) => {
         return (
@@ -243,7 +263,7 @@ const CourseManagement = () => {
             </Button>,
           ]}
         />
-        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} />
+        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} xn={xn} xq={xq}/>
         <Modal
           visible={openes}
           onCancel={showmodal}
