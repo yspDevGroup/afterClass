@@ -229,7 +229,14 @@ const ClassManagement = () => {
             <ExcelTable columns={columns} dataSource={tableDataSource} switchPages={showDrawer} />
           </div>
         ) : (
-          <AddArranging setState={setState} xn={xn} xq={xq} />
+          <AddArranging
+            setState={setState}
+            xn={xn}
+            xq={xq}
+            tableDataSource={tableDataSource}
+            processingData={processingData}
+            setTableDataSource={setTableDataSource}
+          />
         )}
         <AddClass
           visible={modalVisible}
