@@ -45,10 +45,10 @@ const Comp = () => {
 
   useEffect(() => {
     (async () => {
-      const { token } = query;
+      const { token, debug } = query;
       if (token) {
         localStorage.setItem('token', Array.isArray(token) ? token.toString() : token);
-        await fetchUserInfo();
+        await fetchUserInfo(!!debug);
       }
     })();
   }, [query]);
