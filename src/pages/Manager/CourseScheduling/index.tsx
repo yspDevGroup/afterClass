@@ -108,7 +108,7 @@ const ClassManagement = () => {
                 cla: pItem.KHBJSJ.BJMC,
                 teacher: pItem.KHBJSJ.ZJS,
                 bjId: pItem.KHBJSJ.id,
-                key: '1',
+                color: pItem.KHBJSJ.KBYS,
                 dis: true,
               };
               // 教室课节
@@ -138,9 +138,6 @@ const ClassManagement = () => {
     setModalVisible(false);
   };
 
-  const onExcelTableClick = (value: any) => {
-    console.log('onExcelTableClickvalue', value);
-  };
   const columns = [
     {
       title: '',
@@ -229,12 +226,7 @@ const ClassManagement = () => {
                 </Button>
               </div>
             </div>
-            <ExcelTable
-              columns={columns}
-              dataSource={tableDataSource}
-              onExcelTableClick={onExcelTableClick}
-              switchPages={showDrawer}
-            />
+            <ExcelTable columns={columns} dataSource={tableDataSource} switchPages={showDrawer} />
           </div>
         ) : (
           <AddArranging setState={setState} xn={xn} xq={xq} />

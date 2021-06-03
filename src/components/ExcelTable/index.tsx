@@ -10,7 +10,7 @@ type IndexPropsType = {
   /** 表格的数据 */
   dataSource: any[];
   /** 选中的值  在type='edit'时必传  KHBJSJId: 班级ID，XNXQId： 学年学期ID  */
-  chosenData?: { cla: string; teacher: string; KHBJSJId: string; XNXQId: string };
+  chosenData?: { cla: string; teacher: string; KHBJSJId?: string; XNXQId?: string; color?: string };
   /** 选中项发生变化时的回调 */
   onExcelTableClick?: (value: any) => void;
   /** see: 单元格中不存在disable属性，edit： 单元格中存在disable属性  */
@@ -79,6 +79,7 @@ const Index: FC<IndexPropsType> = ({
   };
 
   const datas = stateTableData || dataSource;
+  // const co = {color: 'rgba(234, 17, 28, 1)'}
   return (
     <div className={styles.excelTable}>
       <table>
@@ -109,21 +110,21 @@ const Index: FC<IndexPropsType> = ({
                         style={{ width: item.width, textAlign: item.align }}
                         rowSpan={item.dataIndex === 'room' ? data.room.rowspan : ''}
                       >
-                        <div className="classCard" style={{ textAlign: item.align }}>
-                          <div className={`cardTop cardTop${data[item.dataIndex].key}`} />
-                          <div
-                            className={`cardcontent cardTop${data[item.dataIndex].key} cardcontent${
-                              data[item.dataIndex].key
-                            }`}
-                          >
-                            <div className="cla">{data[item.dataIndex].cla}</div>
-                            {type === 'see' && item.dataIndex === 'course' ? (
-                              <div className="teacher">{data[item.dataIndex].teacher}</div>
-                            ) : (
-                              ''
-                            )}
+                        {type === 'edit' ? (
+                          <div className="classCard" style={{ textAlign: item.align }}>
+                            <div className={`cardcontent`}>
+                              <div className="cla">{data[item.dataIndex].cla}</div>
+                            </div>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="classCard" style={{ textAlign: item.align }}>
+                            <div className={`cardTop`} />
+                            <div className={`cardcontent`}>
+                              <div className="cla">{data[item.dataIndex].cla}</div>
+                              <div className="teacher">{data[item.dataIndex].teacher}</div>
+                            </div>
+                          </div>
+                        )}
                       </td>
                     );
                   }
@@ -132,7 +133,7 @@ const Index: FC<IndexPropsType> = ({
                     <td key={`${item.key}-${data.key}`} style={{ width: item.width }}>
                       <Button
                         type="text"
-                        disabled={type === 'edit' ? false : !!data[item.dataIndex]?.dis}
+                        disabled={type === 'see' ? false : !!data[item.dataIndex]?.dis}
                         onClick={() => {
                           onTdClick(dataKey, itemKey);
                         }}
@@ -146,11 +147,20 @@ const Index: FC<IndexPropsType> = ({
                       >
                         {data[item.dataIndex] ? (
                           <div className="classCard">
-                            <div className={`cardTop cardTop${data[item.dataIndex].key}`} />
                             <div
-                              className={`cardcontent cardTop${
-                                data[item.dataIndex].key
-                              } cardcontent${data[item.dataIndex].key}`}
+                              className={`cardTop`}
+                              style={{
+                                background: chosenData?.color || data[item.dataIndex]?.color,
+                              }}
+                            />
+                            <div
+                              className={`cardcontent`}
+                              style={{
+                                color: chosenData?.color || data[item.dataIndex]?.color,
+                                background: chosenData?.color
+                                  ? chosenData?.color?.replace('1)', '0.1)')
+                                  : data[item.dataIndex]?.color?.replace('1)', '0.1)'),
+                              }}
                             >
                               <div className="cla">{data[item.dataIndex].cla}</div>
                               {type === 'edit' ? (
