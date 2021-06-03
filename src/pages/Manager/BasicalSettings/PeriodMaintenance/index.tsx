@@ -13,10 +13,10 @@ import type { Maintenance } from "./data";
 import styles from './index.less'
 import Modal from "antd/lib/modal/Modal";
 import { paginationConfig } from "@/constant";
-import TimePeriodForm from "./components/TimePeriodForm";
 import { createXXSJPZ, deleteXXSJPZ, getAllXXSJPZ, updateXXSJPZ } from "@/services/after-class/xxsjpz";
 import { message } from "antd";
 import moment from "moment";
+import AsyncTimePeriodForm from "./components/AsyncTimePeriodForm";
 
 
 const PeriodMaintenance = () => {
@@ -203,7 +203,7 @@ const PeriodMaintenance = () => {
                         overflowY: 'auto',
                     }}
                 >
-                    <TimePeriodForm current={current} setForm={setForm} />
+                    <AsyncTimePeriodForm current={current} setForm={setForm} />
                 </Modal>
             </PageContainer>
         </>

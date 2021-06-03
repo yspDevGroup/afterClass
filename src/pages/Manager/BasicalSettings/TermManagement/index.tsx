@@ -1,20 +1,15 @@
 /* eslint-disable no-console */
-import PageContainer from '@/components/PageContainer';
-import styles from './index.less';
-import ManagementTable from './components/ManagementTable'
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { theme } from '@/theme-default';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import SearchComponent from '@/components/Search';
+import PageContainer from '@/components/PageContainer';
+import styles from './index.less';
 import type { FormInstance } from 'antd';
-import { Modal } from 'antd';
-import { message, Popconfirm } from 'antd';
-import { Button } from 'antd';
+import { Modal, message, Popconfirm, Button, Divider } from 'antd';
 import type { TableListParams } from '@/constant';
 import { paginationConfig } from '@/constant';
-import { useEffect } from 'react';
-import { Divider } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { TermItem } from './data';
 import { createXNXQ, deleteXNXQ, getAllXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
@@ -23,6 +18,7 @@ import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./serarchConfig";
 import { convertData } from "@/components/Search/util";
 import { getAllNJSJ } from "@/services/after-class/njsj";
+import AsyncManagementTable from './components/AsyncManagementTable';
 
 
 const TermManagement = () => {
@@ -87,7 +83,7 @@ const TermManagement = () => {
     }
     fetchData();
   }, []);
- // 头部input事件
+  // 头部input事件
   const handlerSearch = (type: string, value: string) => {
     console.log(type, value);
 
@@ -276,7 +272,7 @@ const TermManagement = () => {
           overflowY: 'auto',
         }}
       >
-        <ManagementTable current={current} setForm={setForm} actionRef={actionRef} onClose={onClose} />
+        <AsyncManagementTable current={current} setForm={setForm} actionRef={actionRef} onClose={onClose} />
       </Modal>
     </PageContainer>
   );
