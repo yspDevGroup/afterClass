@@ -5,6 +5,8 @@ import styles from './index.less';
 import { Button } from 'antd';
 
 type IndexPropsType = {
+  /** 表格自定义类名 */
+  className?: string;
   /** 表格列 */
   columns: any[];
   /** 表格的数据 */
@@ -20,6 +22,7 @@ type IndexPropsType = {
 };
 
 const Index: FC<IndexPropsType> = ({
+  className,
   columns,
   dataSource,
   chosenData,
@@ -79,7 +82,7 @@ const Index: FC<IndexPropsType> = ({
 
   const datas = stateTableData || dataSource;
   return (
-    <div className={styles.excelTable}>
+    <div className={`${styles.excelTable} ${className}`}>
       <table>
         <thead>
           <tr>

@@ -9,7 +9,6 @@ import SearchComponent from '@/components/Search';
 import ExcelTable from '@/components/ExcelTable';
 import { theme } from '@/theme-default';
 import { getFJPlan } from '@/services/after-class/fjsj';
-
 import AddArranging from './components/AddArranging';
 import AddClass from './components/AddClass';
 import type { ClassItem } from './data';
@@ -216,14 +215,14 @@ const ClassManagement = () => {
       <PageContainer>
         {state === true ? (
           <div>
-            <div style={{ display: 'flex',paddingBottom:'16px', boxShadow: '0px 1px 0px #E4E4E4' }}>
+            <div style={{ display: 'flex',paddingBottom:'16px',paddingTop:'16px',paddingLeft:'24px', boxShadow: '0px 1px 0px #E4E4E4' }}>
               <div>
                 <SearchComponent
                   dataSource={dataSource}
                   onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)}
                 />
               </div>
-              <div style={{ position: 'absolute', right: 24 }}>
+              <div style={{ position: 'absolute', right: 48 }}>
                 <Button
                   style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
                   type="primary"

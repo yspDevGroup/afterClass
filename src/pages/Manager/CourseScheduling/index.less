@@ -12,6 +12,21 @@
     }
   }
 }
+.borderTable{
+  padding: 0;
+  border:1px solid #e4e4e4;
+  table:nth-child(1){
+    th{
+      border-left:1px solid #e4e4e4;
+      &:nth-child(1),&:nth-child(2){
+        border-left:none;
+      }
+    }
+    &+div{
+      border:none;
+    }
+  }
+}
 
 .cardTop0 {
   background-color: #ff6f6f;

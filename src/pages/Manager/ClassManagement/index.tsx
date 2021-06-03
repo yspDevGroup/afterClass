@@ -77,14 +77,14 @@ const CourseManagement = () => {
     }
   }, [])
   // 头部input事件
-  const handlerSearch = (type: string, value: string) => {
-    if (type === 'year') {
-        setxn(value)
-        return actionRef.current?.reload();
+  const handlerSearch = (type: string, value: string, term: string) => {
+    if (type === 'year' || type === 'term') {
+      setxn(value);
+      setxq(term);
+      return actionRef.current?.reload();
     }
-    setxq(value)
     return actionRef.current?.reload();
-};
+  };
   const getTitle = () => {
     if (moduletype === 'crourse') {
       return '课程类型维护'

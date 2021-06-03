@@ -9,7 +9,7 @@ import React, { useRef, useEffect } from "react";
 import { useState } from "react";
 import type { classType } from "./data";
 import NewCourses from "./components/NewCourses";
-import styles from './index.less'
+import styles from './index.less';
 import Sitclass from "./components/Sitclass";
 import {  deleteKHKCSJ, getAllKHKCSJ} from "@/services/after-class/khkcsj";
 import type { SearchDataType } from "@/components/Search/data";
