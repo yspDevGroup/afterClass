@@ -32,8 +32,6 @@ const ClassManagement = () => {
 
   const showDrawer = () => {
     setState(false);
-    // setCurrent(undefined);
-    // setModalVisible(true);
   };
   const processingData = (data: any[]) => {
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -100,8 +98,8 @@ const ClassManagement = () => {
   };
 
   // 头部input事件
-  const handlerSearch = (type: string, value: string) => {
-    const res = getFJPlan({ xn: type === 'year' ? value : '', xq: type === 'term' ? value : '' });
+  const handlerSearch = (type: string, value: string,term: string) => {
+    const res = getFJPlan({ xn: value,xq:term});
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
         const tableData = processingData(data.data);
@@ -218,11 +216,11 @@ const ClassManagement = () => {
       <PageContainer>
         {state === true ? (
           <div>
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex',paddingBottom:'16px', boxShadow: '0px 1px 0px #E4E4E4' }}>
               <div>
                 <SearchComponent
                   dataSource={dataSource}
-                  onChange={(type: string, value: string) => handlerSearch(type, value)}
+                  onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)}
                 />
               </div>
               <div style={{ position: 'absolute', right: 24 }}>

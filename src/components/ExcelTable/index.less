@@ -1,24 +1,70 @@
 .excelTable {
-  margin-top: 20px;
+  padding: 24px;
+
+  .tableContent {
+    border-bottom: 1px solid #e4e4e4;
+    border-right: 1px solid #e4e4e4;
+  }
+
+  .noContent {
+    border-top: 1px solid #e4e4e4;
+    text-align: center;
+    line-height: 300px;
+    font-size: 24px;
+    color: rgba(40, 156, 51, 0.5);
+    letter-spacing: 2px;
+  }
+
   table {
     width: 100%;
-  }
-  th,
-  td {
-    padding: 14px;
-    border: 1px solid #e4e4e4;
+
+    th {
+      padding: 16px 0 8px;
+    }
+
+    tbody {
+      tr {
+        >td:nth-child(1) {
+          border-left: 0;
+        }
+
+        td {
+          padding: 14px;
+          border: 1px solid #e4e4e4;
+
+          &:nth-last-child(1) {
+            border-right: none;
+          }
+        }
+
+        &:nth-last-child(1) {
+          td {
+            border-bottom: none;
+          }
+        }
+
+        &:nth-last-child(2) {
+          td[rowspan] {
+            border-bottom: none;
+          }
+        }
+      }
+    }
   }
 }
 
 .classCard {
   text-align: left;
+
   .cardTop {
     height: 6px;
     border-radius: 4px 4px 0 0;
   }
+
   .cardcontent {
     padding: 8px;
     border-radius: 0 0 4px 4px;
+
     .cla {
       font-weight: bold;
     }
@@ -28,6 +74,7 @@
 .cardTop0 {
   background-color: #ff6f6f;
 }
+
 .cardcontent0 {
   color: #ff6f6f;
   background-color: #ffe6e6;
@@ -36,6 +83,7 @@
 .cardTop1 {
   background-color: #53c1ff;
 }
+
 .cardcontent1 {
   color: #53c1ff;
   background-color: #eff9ff;
@@ -44,6 +92,7 @@
 .cardTop2 {
   background-color: #ff8f51;
 }
+
 .cardcontent2 {
   color: #ff8f51;
   background-color: #ffe2d2;
@@ -52,6 +101,7 @@
 .cardTop3 {
   background-color: #f8cc34;
 }
+
 .cardcontent3 {
   color: #f8cc34;
   background-color: #fffdef;
@@ -60,6 +110,7 @@
 .cardTop4 {
   background-color: #ff79cc;
 }
+
 .cardcontent4 {
   color: #ff79cc;
   background-color: #ffe2f4;
@@ -68,6 +119,7 @@
 .cardTop5 {
   background-color: #5ce369;
 }
+
 .cardcontent5 {
   color: #5ce369;
   background-color: #e0ffe3;
@@ -76,6 +128,7 @@
 .cardTop6 {
   background-color: #7e82ff;
 }
+
 .cardcontent6 {
   color: #7e82ff;
   background-color: #d7d8ff;
@@ -84,6 +137,7 @@
 .cardTop7 {
   background-color: #7e82ff;
 }
+
 .cardcontent7 {
   color: #7e82ff;
   background-color: #d7d8ff;

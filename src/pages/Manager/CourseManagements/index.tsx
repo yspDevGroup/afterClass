@@ -55,12 +55,12 @@ const NewClassManagement = () => {
         fetchData();
     }, []);
     // 头部input事件
-    const handlerSearch = (type: string, value: string) => {
-        if (type === 'year') {
-            setxn(value)
+    const handlerSearch = (type: string, value: string,term: string) => {
+        if (type === 'year'|| type==='term') {
+            setxn(value);
+            setxq(term);
             return actionRef.current?.reload();
         }
-        setxq(value)
         return actionRef.current?.reload();
     };
     const getModelTitle = () => {
@@ -84,9 +84,9 @@ const NewClassManagement = () => {
     };
     const onClose = () => {
         setopen(false);
-      };
+    };
     const handleSubmit = async () => {
-       
+
     };
     const maintain = () => {
         setModalType('uphold')
@@ -125,7 +125,6 @@ const NewClassManagement = () => {
             align: 'center',
             width: '10%',
             render: (_, record) => {
-                console.log(record)
                 const Url = `/classManagement?courseId=${record.id}`;
                 return (
                        <Link to={Url} >{record.KHBJSJs?.length}</Link>
@@ -157,11 +156,7 @@ const NewClassManagement = () => {
             align: 'center',
             ellipsis: true,
             render:(_,record)=>{
-                return(
-                    <>
-                    <Choice record={record}/>
-                    </>
-                )
+                return(<Choice record={record}/>)
             }
         },
         {
@@ -221,7 +216,8 @@ const NewClassManagement = () => {
                     headerTitle={
                         <SearchComponent
                             dataSource={dataSource}
-                            onChange={(type: string, value: string) => handlerSearch(type, value)} />
+                            onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)}
+                        />
                     }
                     request={(params, sorter, filter) => {
                         console.log(params, sorter, filter)

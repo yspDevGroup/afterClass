@@ -11,15 +11,6 @@ export const searchData: SearchDataType = [
     },
     data: [],
   },
-  // {
-  //   label: '年级：',
-  //   type: 'select',
-  //   placeHolder: '请选择',
-  //   defaultValue: {
-  //     first: ''
-  //   },
-  //   data: [],
-  // },
   {
     label: '班级名称',
     type: 'input',

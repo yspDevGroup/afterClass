@@ -92,94 +92,98 @@ const Index: FC<IndexPropsType> = ({
             })}
           </tr>
         </thead>
-        <tbody>
-          {datas.map((data: any, dataKey: any) => {
-            return (
-              <tr key={Math.random()}>
-                {columns.map((item, itemKey) => {
-                  // 前两列没有事件
-                  if (item.dataIndex === 'room' || item.dataIndex === 'course') {
-                    if (item.dataIndex === 'room' && data.room.rowspan === 0) {
-                      return '';
+      </table>
+      {datas && datas.length >0 ? <div className={styles.tableContent}>
+         <table>
+          <tbody>
+            {datas.map((data: any, dataKey: any) => {
+              return (
+                <tr key={Math.random()}>
+                  {columns.map((item, itemKey) => {
+                    // 前两列没有事件
+                    if (item.dataIndex === 'room' || item.dataIndex === 'course') {
+                      if (item.dataIndex === 'room' && data.room.rowspan === 0) {
+                        return '';
+                      }
+                      return (
+                        <td
+                          key={`${item.key}-${data.key}`}
+                          style={{ width: item.width, textAlign: item.align }}
+                          rowSpan={item.dataIndex === 'room' ? data.room.rowspan : ''}
+                        >
+                          {type === 'edit' ? (
+                            <div className="classCard" style={{ textAlign: item.align }}>
+                              <div className={`cardcontent`}>
+                                <div className="cla">{data[item.dataIndex].cla}</div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="classCard" style={{ textAlign: item.align }}>
+                              <div className={`cardTop`} />
+                              <div className={`cardcontent`}>
+                                <div className="cla">{data[item.dataIndex].cla}</div>
+                                <div className="teacher">{data[item.dataIndex].teacher}</div>
+                              </div>
+                            </div>
+                          )}
+                        </td>
+                      );
                     }
+
                     return (
-                      <td
-                        key={`${item.key}-${data.key}`}
-                        style={{ width: item.width, textAlign: item.align }}
-                        rowSpan={item.dataIndex === 'room' ? data.room.rowspan : ''}
-                      >
-                        {type === 'edit' ? (
-                          <div className="classCard" style={{ textAlign: item.align }}>
-                            <div className={`cardcontent`}>
-                              <div className="cla">{data[item.dataIndex].cla}</div>
+                      <td key={`${item.key}-${data.key}`} style={{ width: item.width }}>
+                        <Button
+                          type="text"
+                          disabled={type === 'see' ? false : !!data[item.dataIndex]?.dis}
+                          onClick={() => {
+                            onTdClick(dataKey, itemKey);
+                          }}
+                          style={{
+                            height: 70,
+                            padding: 0,
+                            border: 0,
+                            background: 'transparent',
+                            width: '100%',
+                          }}
+                        >
+                          {data[item.dataIndex] ? (
+                            <div className="classCard">
+                              <div
+                                className={`cardTop`}
+                                style={{
+                                  background: chosenData?.color || data[item.dataIndex]?.color,
+                                }}
+                              />
+                              <div
+                                className={`cardcontent`}
+                                style={{
+                                  color: chosenData?.color || data[item.dataIndex]?.color,
+                                  background: chosenData?.color
+                                    ? chosenData?.color?.replace('1)', '0.1)')
+                                    : data[item.dataIndex]?.color?.replace('1)', '0.1)'),
+                                }}
+                              >
+                                <div className="cla">{data[item.dataIndex].cla}</div>
+                                {type === 'edit' ? (
+                                  ''
+                                ) : (
+                                  <div className="teacher">{data[item.dataIndex].teacher}</div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="classCard" style={{ textAlign: item.align }}>
-                            <div className={`cardTop`} />
-                            <div className={`cardcontent`}>
-                              <div className="cla">{data[item.dataIndex].cla}</div>
-                              <div className="teacher">{data[item.dataIndex].teacher}</div>
-                            </div>
-                          </div>
-                        )}
+                          ) : (
+                            ' '
+                          )}
+                        </Button>
                       </td>
                     );
-                  }
-
-                  return (
-                    <td key={`${item.key}-${data.key}`} style={{ width: item.width }}>
-                      <Button
-                        type="text"
-                        disabled={type === 'see' ? false : !!data[item.dataIndex]?.dis}
-                        onClick={() => {
-                          onTdClick(dataKey, itemKey);
-                        }}
-                        style={{
-                          height: 70,
-                          padding: 0,
-                          border: 0,
-                          background: 'transparent',
-                          width: '100%',
-                        }}
-                      >
-                        {data[item.dataIndex] ? (
-                          <div className="classCard">
-                            <div
-                              className={`cardTop`}
-                              style={{
-                                background: chosenData?.color || data[item.dataIndex]?.color,
-                              }}
-                            />
-                            <div
-                              className={`cardcontent`}
-                              style={{
-                                color: chosenData?.color || data[item.dataIndex]?.color,
-                                background: chosenData?.color
-                                  ? chosenData?.color?.replace('1)', '0.1)')
-                                  : data[item.dataIndex]?.color?.replace('1)', '0.1)'),
-                              }}
-                            >
-                              <div className="cla">{data[item.dataIndex].cla}</div>
-                              {type === 'edit' ? (
-                                ''
-                              ) : (
-                                <div className="teacher">{data[item.dataIndex].teacher}</div>
-                              )}
-                            </div>
-                          </div>
-                        ) : (
-                          ' '
-                        )}
-                      </Button>
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div> : <div className={styles.noContent}>当前暂无课程安排</div>}
     </div>
   );
 };

@@ -84,8 +84,8 @@ const TermManagement = () => {
     fetchData();
   }, []);
   // 头部input事件
-  const handlerSearch = (type: string, value: string) => {
-    console.log(type, value);
+  const handlerSearch = (type: string, value: string, term: string) => {
+    console.log(type, value, term);
 
   };
   const handleEdit = (data: TermItem) => {
@@ -220,7 +220,7 @@ const TermManagement = () => {
         headerTitle={
           <SearchComponent
             dataSource={dataSource}
-            onChange={(type: string, value: string) => handlerSearch(type, value)} />
+            onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)} />
         }
         options={{
           setting: false,

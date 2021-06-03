@@ -57,12 +57,12 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
     if (ter.length) {
       setCurTerm(ter[0].key)
     }
-    onChange('year', value);
+    onChange('year', value, ter[0].key);
   };
    // 点击学期的事件
   const onTermChange = (value: any) => {
     setCurTerm(value);
-    onChange('term', value);
+    onChange('term',currentXN, value);
   };
   // 点击年级的事件
   const onGrideChange = (value: any) => {
