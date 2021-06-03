@@ -50,3 +50,24 @@ export type IListmock = {
   isImg: boolean;
 }
 
+export type ListItem = {
+  id?: string; // udid
+  title: string; // 标题
+  link?: string;  // 链接
+  titleRight?: string;  // 标题右边显示信息
+  desc?: {
+    left: string[];
+    right?: string;
+  }[];  // 摘要信息（左右分布）
+  img?: string; // 缩略图地址
+};
+type ListType = 'list' | 'picList' | 'descList';
+export type ListData = {
+  type?: ListType;
+  header?: {
+    title: string;
+    link?: string;
+    moreText?: string;
+  },
+  list: ListItem[];
+};
