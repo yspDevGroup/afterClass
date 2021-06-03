@@ -62,7 +62,7 @@ const Index: FC<IndexPropsType> = ({
       setStateTableData(newData);
     }
 
-    let selectList = {};
+    let selectList = null;
     if (rowData[colItem.dataIndex]) {
       selectList = {
         WEEKDAY: weekDay[colItem.dataIndex], // 周
@@ -117,7 +117,11 @@ const Index: FC<IndexPropsType> = ({
                             }`}
                           >
                             <div className="cla">{data[item.dataIndex].cla}</div>
-                            <div className="teacher">{data[item.dataIndex].teacher}</div>
+                            {type === 'see' && item.dataIndex === 'course' ? (
+                              <div className="teacher">{data[item.dataIndex].teacher}</div>
+                            ) : (
+                              ''
+                            )}
                           </div>
                         </div>
                       </td>
@@ -128,7 +132,7 @@ const Index: FC<IndexPropsType> = ({
                     <td key={`${item.key}-${data.key}`} style={{ width: item.width }}>
                       <Button
                         type="text"
-                        disabled={type === 'see' ? false : !!data[item.dataIndex]?.dis}
+                        disabled={type === 'edit' ? false : !!data[item.dataIndex]?.dis}
                         onClick={() => {
                           onTdClick(dataKey, itemKey);
                         }}
@@ -149,7 +153,11 @@ const Index: FC<IndexPropsType> = ({
                               } cardcontent${data[item.dataIndex].key}`}
                             >
                               <div className="cla">{data[item.dataIndex].cla}</div>
-                              <div className="teacher">{data[item.dataIndex].teacher}</div>
+                              {type === 'edit' ? (
+                                ''
+                              ) : (
+                                <div className="teacher">{data[item.dataIndex].teacher}</div>
+                              )}
                             </div>
                           </div>
                         ) : (
