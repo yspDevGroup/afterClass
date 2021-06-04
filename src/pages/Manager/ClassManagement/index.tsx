@@ -52,12 +52,11 @@ const CourseManagement = () => {
           if (chainSel && chainSel.defaultValue) {
             chainSel.defaultValue.first = newData.data[0].key;
             chainSel.defaultValue.second = term[0].key;
-            setxn(chainSel.defaultValue.first);
-            setxq(chainSel.defaultValue.second);
-            actionRef.current?.reload();
             chainSel.data = newData;
+            setDataSource(defaultData);
+            setxq(chainSel.defaultValue.second);
+            setxn(chainSel.defaultValue.first);
           }
-          setDataSource(defaultData);
         } else {
           <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' />
         }
@@ -87,6 +86,14 @@ const CourseManagement = () => {
       setkcId(curId)
     }
   }, [])
+  // 监听学年学期更新
+  useEffect(() => {
+    if (xn && xq) {
+      setTimeout(() => {
+        actionRef.current?.reload();
+      }, 0);
+    }
+  }, [xn, xq])
   // 头部input事件
   const handlerSearch = (type: string, value: string, term: string) => {
     if (type === 'year' || type === 'term') {

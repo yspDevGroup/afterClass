@@ -34,36 +34,45 @@ const NewClassManagement = () => {
     const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
     const [xn, setxn] = useState<string>();
     const [xq, setxq] = useState<string>();
- // 设置表单的查询更新
+    // 设置表单的查询更新
     const [name, setName] = useState<string>('');
 
     useEffect(() => {
         async function fetchData() {
-          const res = await getAllXNXQ({});
-          if (res.status === 'ok') {
-            const { data = [] } = res;
-            const defaultData = [...searchData];
-            const newData = convertData(data);
-            if (newData.data && newData.data.length > 0) {
-              const term = newData.subData[newData.data[0].key];
-              const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-              if (chainSel && chainSel.defaultValue) {
-                chainSel.defaultValue.first = newData.data[0].key;
-                chainSel.defaultValue.second = term[0].key;
-                setxq(chainSel.defaultValue.second);
-                setxn(chainSel.defaultValue.first);
-                chainSel.data = newData;
-              }
-              setDataSource(defaultData);
-            }else{
-                <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来'  link='/basicalSettings/termManagement'/>
+            const res = await getAllXNXQ({});
+            if (res.status === 'ok') {
+                const { data = [] } = res;
+                const defaultData = [...searchData];
+                const newData = convertData(data);
+                if (newData.data && newData.data.length > 0) {
+                    const term = newData.subData[newData.data[0].key];
+                    const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+                    if (chainSel && chainSel.defaultValue) {
+                        chainSel.defaultValue.first = newData.data[0].key;
+                        chainSel.defaultValue.second = term[0].key;
+                        chainSel.data = newData;
+                        setDataSource(defaultData);
+                        setxq(chainSel.defaultValue.second);
+                        setxn(chainSel.defaultValue.first);
+                    }
+                } else {
+                    <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' />
+                }
+            } 
+           else {
+                console.log(res.message);
             }
-          } else {
-            console.log(res.message);
-          }
         }
         fetchData();
-      }, []);
+    }, []);
+    // 监听学年学期更新
+    useEffect(() => {
+        if (xn && xq) {
+            setTimeout(() => {
+                actionRef.current?.reload();
+            }, 0);
+        }
+    }, [xn, xq])
     // 头部input事件
     const handlerSearch = (type: string, value: string, term: string) => {
         if (type === 'year' || type === 'term') {

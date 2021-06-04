@@ -30,7 +30,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
   const [mcData, setmcData] = useState<{ label: string; value: string; }[]>([]);
   const [kcid, setkcid] = useState<string>('')
   useEffect(() => {
-    const res = getAllNJSJ({});
+    const res = getAllNJSJ();
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
         const njArry: { label: string; value: string; }[] = []
@@ -45,7 +45,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
     })
   }, [])
   useEffect(() => {
-    const res = getAllKHKCLX({},{name:''});
+    const res = getAllKHKCLX({name:''});
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
         const njArry: { label: string; value: string; }[] = []
