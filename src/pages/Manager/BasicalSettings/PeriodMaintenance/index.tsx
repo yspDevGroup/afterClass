@@ -149,6 +149,7 @@ const PeriodMaintenance = () => {
             <PageContainer cls={styles.periodWrapper} >
                 <ProTable<Maintenance>
                     columns={columns}
+                    actionRef={actionRef}
                     headerTitle={<div className={styles.tableTitle}>时段维护<span>（请先在本页面设置学校上课的时间段）</span></div>}
                     search={false}
                     options={{
@@ -158,15 +159,12 @@ const PeriodMaintenance = () => {
                         reload: false,
                     }}
                     request={async (param, sorter, filter) => {
-                        const obj = {
+                        const opt = {
                             param,
                             sorter,
                             filter,
-                            xn: '2020-2021',
-                            xq: '第一学期',
-                            name: '',
                         };
-                        const res = await getAllXXSJPZ(obj);
+                        const res = await getAllXXSJPZ(opt);
                         return res;
                     }}
                     rowKey="id"
@@ -192,10 +190,10 @@ const PeriodMaintenance = () => {
                     footer={[
                         <Button key="back" onClick={() => setModalVisible(false)}>
                             取消
-               </Button>,
+                        </Button>,
                         <Button key="submit" type="primary" onClick={handleSubmit}>
                             确定
-               </Button>
+                        </Button>
                     ]}
                     centered
                     maskClosable={false}
