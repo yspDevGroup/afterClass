@@ -101,7 +101,9 @@ const CourseManagement = () => {
       setxq(term);
       return actionRef.current?.reload();
     }
-    setName(value);
+    if (type === 'input') {
+      setName(value);
+    }
     return actionRef.current?.reload();
   };
   const getTitle = () => {

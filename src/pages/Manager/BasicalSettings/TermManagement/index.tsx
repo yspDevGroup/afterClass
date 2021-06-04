@@ -167,7 +167,7 @@ const TermManagement = () => {
     },
   ];
   return (
-    <PageContainer cls={styles.roomWrapper}>
+    <PageContainer cls={styles.termManagementBox}>
       <ProTable<TermItem>
         columns={columns}
         actionRef={actionRef}
