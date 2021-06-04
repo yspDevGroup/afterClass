@@ -11,7 +11,7 @@ import { paginationConfig } from '@/constant';
 import SearchComponent from '@/components/Search';
 import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
-import type { CourseItem } from './data';
+import type { CourseItem ,TableListParams} from './data';
 import styles from './index.less';
 import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./searchConfig";
@@ -36,6 +36,8 @@ const CourseManagement = () => {
   const [xn, setxn] = useState<string>();
   const [xq, setxq] = useState<string>();
   const [kcId, setkcId] = useState<string>('')
+   // 设置表单的查询更新
+  const [name, setName] = useState<string>('');
 
   useEffect(() => {
     async function fetchData() {
@@ -92,6 +94,7 @@ const CourseManagement = () => {
       setxq(term);
       return actionRef.current?.reload();
     }
+    setName(value);
     return actionRef.current?.reload();
   };
   const getTitle = () => {
@@ -234,6 +237,12 @@ const CourseManagement = () => {
           columns={columns}
           rowKey="id"
           request={async (param, sorter, filter) => {
+             // 表单搜索项会从 params 传入，传递给后端接口。
+          const opts: TableListParams = {
+            ...param,
+            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+            filter,
+          };
             const obj = {
               param,
               sorter,
@@ -243,9 +252,9 @@ const CourseManagement = () => {
               kcId,
               page: 1,
               pageCount: 20,
-              name: '',
+              name,
             };
-            const res = await getAllKHBJSJ(obj);
+            const res = await getAllKHBJSJ(obj,opts);
             return res;
           }}
           options={{

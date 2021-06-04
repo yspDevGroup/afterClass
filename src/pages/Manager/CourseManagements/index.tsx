@@ -8,7 +8,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Divider } from "antd";
 import React, { useRef, useEffect } from "react";
 import { useState } from "react";
-import type { classType } from "./data";
+import type { classType, TableListParams } from "./data";
 import NewCourses from "./components/NewCourses";
 import styles from './index.less';
 import Sitclass from "./components/Sitclass";
@@ -34,6 +34,8 @@ const NewClassManagement = () => {
     const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
     const [xn, setxn] = useState<string>();
     const [xq, setxq] = useState<string>();
+ // 设置表单的查询更新
+    const [name, setName] = useState<string>('');
 
     useEffect(() => {
         async function fetchData() {
@@ -69,6 +71,7 @@ const NewClassManagement = () => {
             setxq(term);
             return actionRef.current?.reload();
         }
+        setName(value);
         return actionRef.current?.reload();
     };
     const getModelTitle = () => {
@@ -229,8 +232,13 @@ const NewClassManagement = () => {
                         />
                     }
                     request={(params, sorter, filter) => {
-                        console.log(params, sorter, filter)
-                        return getAllKHKCSJ({ name: '', xn, xq, pageCount: 20, page: 1 })
+                        // 表单搜索项会从 params 传入，传递给后端接口。
+                        const opts: TableListParams = {
+                            ...params,
+                            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+                            filter,
+                        };
+                        return getAllKHKCSJ({ name, xn, xq, pageCount: 20, page: 1 }, opts)
                     }}
                     options={{
                         setting: false,
