@@ -85,7 +85,7 @@ const ClassManagement = () => {
               // 教室课节
               table.course = {
                 cla: pItem.XXSJPZ.SDMC,
-                teacher: `${pItem.XXSJPZ.KSSJ}-${pItem.XXSJPZ.JSSJ}`,
+                teacher: `${pItem.XXSJPZ.KSSJ.slice(0, 5)} — ${pItem.XXSJPZ.JSSJ.slice(0, 5)}`,
                 hjId: pItem.XXSJPZ.id,
               };
             }
@@ -98,8 +98,8 @@ const ClassManagement = () => {
   };
 
   // 头部input事件
-  const handlerSearch = (type: string, value: string,term: string) => {
-    const res = getFJPlan({ xn: value,xq:term});
+  const handlerSearch = (type: string, value: string, term: string) => {
+    const res = getFJPlan({ xn: value, xq: term });
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
         const tableData = processingData(data.data);
@@ -115,11 +115,11 @@ const ClassManagement = () => {
         const { data = [] } = res;
         const defaultData = [...searchData];
         const newData = convertData(data);
-        const term = newData.subData[newData.data[0].key];
+        const term = newData.subData[newData?.data[0]?.key];
         const chainSel = defaultData.find((item) => item.type === 'chainSelect');
         if (chainSel && chainSel.defaultValue) {
-          chainSel.defaultValue.first = newData.data[0].key;
-          chainSel.defaultValue.second = term[0].key;
+          chainSel.defaultValue.first = newData?.data[0].key;
+          chainSel.defaultValue.second = term[0]?.key;
           setXn(chainSel.defaultValue.first);
           setXq(chainSel.defaultValue.second);
           chainSel.data = newData;
@@ -144,7 +144,13 @@ const ClassManagement = () => {
     setModalVisible(false);
   };
 
-  const columns = [
+  const columns: {
+    title: string;
+    dataIndex: string;
+    key: string;
+    align: 'center' | 'left' | 'right';
+    width: number;
+  }[] = [
     {
       title: '',
       dataIndex: 'room',
@@ -156,6 +162,7 @@ const ClassManagement = () => {
       title: '',
       dataIndex: 'course',
       key: 'course',
+      align: 'left',
       width: 136,
     },
     {
@@ -216,11 +223,21 @@ const ClassManagement = () => {
       <PageContainer>
         {state === true ? (
           <div>
-            <div style={{ display: 'flex',paddingBottom:'16px',paddingTop:'16px',paddingLeft:'24px', boxShadow: '0px 1px 0px #E4E4E4' }}>
+            <div
+              style={{
+                display: 'flex',
+                paddingBottom: '16px',
+                paddingTop: '16px',
+                paddingLeft: '24px',
+                boxShadow: '0px 1px 0px #E4E4E4',
+              }}
+            >
               <div>
                 <SearchComponent
                   dataSource={dataSource}
-                  onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)}
+                  onChange={(type: string, value: string, term: string) =>
+                    handlerSearch(type, value, term)
+                  }
                 />
               </div>
               <div style={{ position: 'absolute', right: 48 }}>
@@ -230,11 +247,13 @@ const ClassManagement = () => {
                   key="add"
                   onClick={() => showDrawer()}
                 >
-                  <PlusOutlined />新增课程
+                  <PlusOutlined />
+                  新增课程
                 </Button>
               </div>
             </div>
             <ExcelTable
+              className={''}
               columns={columns}
               dataSource={tableDataSource}
               switchPages={showDrawer}

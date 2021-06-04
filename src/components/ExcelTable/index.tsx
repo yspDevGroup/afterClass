@@ -1,24 +1,117 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
 import React, { useState } from 'react';
 import type { FC } from 'react';
 import styles from './index.less';
 import { Button } from 'antd';
 
+type KBItemProps = {
+  mode: 'see' | 'edit';
+  data:
+    | {
+        cla: string;
+        teacher: string;
+        color: string;
+      }
+    | '';
+  disabled: boolean;
+  onClick?: () => void;
+};
+
+type DataSourceType = {
+  key: string;
+  room: { cla: string; teacher: string; rowspan?: number; jsId: string };
+  course: { cla: string; teacher: string; hjId: string };
+  monday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
+  tuesday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
+  wednesday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
+  thursday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
+  friday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
+  saturday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
+  sunday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
+}[];
+
+const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
+  if (mode === 'edit' && disabled) {
+    return (
+      <Button
+        type="text"
+        disabled={disabled}
+        style={{
+          height: 70,
+          padding: 0,
+          border: 0,
+          background: 'transparent',
+          width: '100%',
+        }}
+      >
+        <div className={styles.disImage}>&nbsp;</div>
+      </Button>
+    );
+  }
+  return (
+    <Button
+      type="text"
+      disabled={mode === 'see' ? false : disabled}
+      onClick={() => {
+        if (typeof onClick === 'function') {
+          onClick();
+        }
+      }}
+      style={{
+        height: 70,
+        padding: 0,
+        border: 0,
+        background: 'transparent',
+        width: '100%',
+      }}
+    >
+      {data === '' ? (
+        <>&nbsp;</>
+      ) : (
+        <div className="classCard">
+          <div
+            className={`cardTop`}
+            style={{
+              background: data?.color,
+            }}
+          />
+          <div
+            className={`cardcontent`}
+            style={{
+              color: data?.color,
+              background: data?.color.replace('1)', '0.1)'),
+            }}
+          >
+            <div className="cla">{data?.cla}</div>
+            <div className="teacher">{data?.teacher}</div>
+          </div>
+        </div>
+      )}
+    </Button>
+  );
+};
+
 type IndexPropsType = {
-  /** 表格自定义类名 */
-  className?: string;
   /** 表格列 */
-  columns: any[];
+  columns: {
+    title: string;
+    dataIndex: string;
+    key: string;
+    align: 'center' | 'left' | 'right';
+    width: number;
+  }[];
   /** 表格的数据 */
-  dataSource: any[];
+  dataSource: DataSourceType;
   /** 选中的值  在type='edit'时必传  KHBJSJId: 班级ID，XNXQId： 学年学期ID  */
-  chosenData?: { cla: string; teacher: string; KHBJSJId?: string; XNXQId?: string; color?: string };
+  chosenData?: { cla: string; teacher: string; KHBJSJId?: string; XNXQId?: string; color: string };
   /** 选中项发生变化时的回调 */
   onExcelTableClick?: (value: any) => void;
   /** see: 单元格中不存在disable属性，edit： 单元格中存在disable属性  */
   type?: 'see' | 'edit';
   /** 切换页面  仅在type='see'起作用 */
   switchPages?: () => void;
+  className: '' | undefined;
 };
 
 const Index: FC<IndexPropsType> = ({
@@ -30,7 +123,7 @@ const Index: FC<IndexPropsType> = ({
   type = 'see',
   switchPages,
 }) => {
-  let [stateTableData, setStateTableData] = useState<any>();
+  let [stateTableData, setStateTableData] = useState<DataSourceType>();
   const weekDay = {
     monday: '1',
     tuesday: '2',
@@ -41,10 +134,9 @@ const Index: FC<IndexPropsType> = ({
     sunday: '0',
   };
   const onTdClick = (rowKey: number, colKey: number) => {
-    stateTableData = stateTableData || [...dataSource];
+    const newData = stateTableData ? [...stateTableData] : [...dataSource];
     const colItem = columns[colKey] || {};
 
-    const newData = [...stateTableData];
     const rowData = newData[rowKey] || {};
 
     if (type === 'see' && !chosenData) {
@@ -57,6 +149,7 @@ const Index: FC<IndexPropsType> = ({
           cla: chosenData?.cla,
           teacher: chosenData?.teacher,
           dis: false,
+          color: chosenData.color,
         };
       } else {
         rowData[colItem.dataIndex] = '';
@@ -68,9 +161,9 @@ const Index: FC<IndexPropsType> = ({
     if (rowData[colItem.dataIndex]) {
       selectList = {
         WEEKDAY: weekDay[colItem.dataIndex], // 周
-        XXSJPZId: rowData.course.hjId, // 时间ID
+        XXSJPZId: rowData.course?.hjId, // 时间ID
         KHBJSJId: chosenData?.KHBJSJId, // 班级ID
-        FJSJId: rowData.room.jsId, // 教室ID
+        FJSJId: rowData.room?.jsId, // 教室ID
         XNXQId: chosenData?.XNXQId, // 学年学期ID
       };
     }
@@ -80,7 +173,6 @@ const Index: FC<IndexPropsType> = ({
     }
   };
 
-  const datas = stateTableData || dataSource;
   return (
     <div className={`${styles.excelTable} ${className}`}>
       <table>
@@ -96,97 +188,66 @@ const Index: FC<IndexPropsType> = ({
           </tr>
         </thead>
       </table>
-      {datas && datas.length >0 ? <div className={styles.tableContent}>
-         <table>
-          <tbody>
-            {datas.map((data: any, dataKey: any) => {
-              return (
-                <tr key={Math.random()}>
-                  {columns.map((item, itemKey) => {
-                    // 前两列没有事件
-                    if (item.dataIndex === 'room' || item.dataIndex === 'course') {
-                      if (item.dataIndex === 'room' && data.room.rowspan === 0) {
-                        return '';
+      {dataSource && dataSource.length > 0 ? (
+        <div className={styles.tableContent}>
+          <table>
+            <tbody>
+              {dataSource.map((data, dataKey: any) => {
+                return (
+                  <tr key={Math.random()}>
+                    {columns.map((item, itemKey) => {
+                      // 前两列没有事件
+                      if (item.dataIndex === 'room' || item.dataIndex === 'course') {
+                        if (item.dataIndex === 'room' && data.room.rowspan === 0) {
+                          return '';
+                        }
+                        return (
+                          <td
+                            key={`${item.key}-${data.key}`}
+                            style={{ width: item.width, textAlign: item.align }}
+                            rowSpan={item.dataIndex === 'room' ? data.room.rowspan : undefined}
+                          >
+                            {type === 'edit' ? (
+                              <div className="classCard" style={{ textAlign: item.align }}>
+                                <div className={`cardcontent`}>
+                                  <div className="cla">{data[item.dataIndex].cla}</div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="classCard" style={{ textAlign: item.align }}>
+                                <div className={`cardTop`} />
+                                <div className={`cardcontent`}>
+                                  <div className="cla">{data[item.dataIndex].cla}</div>
+                                  <div className="teacher">{data[item.dataIndex].teacher}</div>
+                                </div>
+                              </div>
+                            )}
+                          </td>
+                        );
                       }
+
                       return (
-                        <td
-                          key={`${item.key}-${data.key}`}
-                          style={{ width: item.width, textAlign: item.align }}
-                          rowSpan={item.dataIndex === 'room' ? data.room.rowspan : ''}
-                        >
-                          {type === 'edit' ? (
-                            <div className="classCard" style={{ textAlign: item.align }}>
-                              <div className={`cardcontent`}>
-                                <div className="cla">{data[item.dataIndex].cla}</div>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="classCard" style={{ textAlign: item.align }}>
-                              <div className={`cardTop`} />
-                              <div className={`cardcontent`}>
-                                <div className="cla">{data[item.dataIndex].cla}</div>
-                                <div className="teacher">{data[item.dataIndex].teacher}</div>
-                              </div>
-                            </div>
-                          )}
+                        <td key={`${item.key}-${data.key}`} style={{ width: item.width }}>
+                          <KBItem
+                            mode={type}
+                            data={data[item.dataIndex]}
+                            disabled={!!data[item.dataIndex]?.dis}
+                            onClick={() => {
+                              onTdClick(dataKey, itemKey);
+                            }}
+                          />
                         </td>
                       );
-                    }
-
-                    return (
-                      <td key={`${item.key}-${data.key}`} style={{ width: item.width }}>
-                        <Button
-                          type="text"
-                          disabled={type === 'see' ? false : !!data[item.dataIndex]?.dis}
-                          onClick={() => {
-                            onTdClick(dataKey, itemKey);
-                          }}
-                          style={{
-                            height: 70,
-                            padding: 0,
-                            border: 0,
-                            background: 'transparent',
-                            width: '100%',
-                          }}
-                        >
-                          {data[item.dataIndex] ? (
-                            <div className="classCard">
-                              <div
-                                className={`cardTop`}
-                                style={{
-                                  background: chosenData?.color || data[item.dataIndex]?.color,
-                                }}
-                              />
-                              <div
-                                className={`cardcontent`}
-                                style={{
-                                  color: chosenData?.color || data[item.dataIndex]?.color,
-                                  background: chosenData?.color
-                                    ? chosenData?.color?.replace('1)', '0.1)')
-                                    : data[item.dataIndex]?.color?.replace('1)', '0.1)'),
-                                }}
-                              >
-                                <div className="cla">{data[item.dataIndex].cla}</div>
-                                {type === 'edit' ? (
-                                  ''
-                                ) : (
-                                  <div className="teacher">{data[item.dataIndex].teacher}</div>
-                                )}
-                              </div>
-                            </div>
-                          ) : (
-                            ' '
-                          )}
-                        </Button>
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div> : <div className={styles.noContent}>当前暂无课程安排</div>}
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className={styles.noContent}>当前暂无课程安排</div>
+      )}
     </div>
   );
 };
