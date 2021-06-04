@@ -115,7 +115,6 @@ const CourseManagement = () => {
     list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
     setVisible(true);
     setCurrent(list);
-    console.log(data)
     if (data.BJZT === '已结课' || data.BJZT === '已发布') {
       stereadonly(true)
     }

@@ -78,7 +78,6 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
-      console.log('object',formValues)
       if (formValues?.id) {
         const params = {
           id: formValues?.id,
