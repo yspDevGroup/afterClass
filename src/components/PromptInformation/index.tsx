@@ -31,7 +31,7 @@ const PromptInformation: FC<propttype> = (
                 maskClosable={true}
                 keyboard
                 closable={false}
-                width='500px'
+                width='35vw'
                 centered
             >
                 <div className={styles.box}>

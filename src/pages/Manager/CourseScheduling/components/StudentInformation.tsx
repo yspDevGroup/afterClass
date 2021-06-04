@@ -55,6 +55,7 @@ const StudentInformation: FC<listProps> = (props) => {
         <ModalForm
             className='StudentInformation'
             title="学生信息"
+            width='35vw'
             trigger={<span>{dom}</span>}
             submitter={{
             }}
