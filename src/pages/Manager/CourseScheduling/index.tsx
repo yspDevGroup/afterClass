@@ -115,26 +115,28 @@ const ClassManagement = () => {
         const { data = [] } = res;
         const defaultData = [...searchData];
         const newData = convertData(data);
-        const term = newData.subData[newData?.data[0]?.key];
-        const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-        if (chainSel && chainSel.defaultValue) {
-          chainSel.defaultValue.first = newData?.data[0].key;
-          chainSel.defaultValue.second = term[0]?.key;
-          setXn(chainSel.defaultValue.first);
-          setXq(chainSel.defaultValue.second);
-          chainSel.data = newData;
-        }
-        setDataSource(defaultData);
-        const resla = getFJPlan({
-          xn: defaultData[0].defaultValue?.first,
-          xq: defaultData[0].defaultValue?.second,
-        });
-        Promise.resolve(resla).then((datas: any) => {
-          if (datas.status === 'ok') {
-            const tableData = processingData(datas.data);
-            setTableDataSource(tableData);
+        if (newData.data && newData.data.length > 0) {
+          const term = newData.subData[newData?.data[0]?.key];
+          const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+          if (chainSel && chainSel.defaultValue) {
+            chainSel.defaultValue.first = newData?.data[0].key;
+            chainSel.defaultValue.second = term[0]?.key;
+            setXn(chainSel.defaultValue.first);
+            setXq(chainSel.defaultValue.second);
+            chainSel.data = newData;
           }
-        });
+          setDataSource(defaultData);
+          const resla = getFJPlan({
+            xn: defaultData[0].defaultValue?.first,
+            xq: defaultData[0].defaultValue?.second,
+          });
+          Promise.resolve(resla).then((datas: any) => {
+            if (datas.status === 'ok') {
+              const tableData = processingData(datas.data);
+              setTableDataSource(tableData);
+            }
+          });
+        }
       } else {
         console.log(res.message);
       }
@@ -248,7 +250,7 @@ const ClassManagement = () => {
                   onClick={() => showDrawer()}
                 >
                   <PlusOutlined />
-                  新增课程
+                  新增排课
                 </Button>
               </div>
             </div>

@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { theme } from '@/theme-default';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import SearchComponent from '@/components/Search';
 import PageContainer from '@/components/PageContainer';
 import styles from './index.less';
 import type { FormInstance } from 'antd';
@@ -14,10 +13,6 @@ import { PlusOutlined } from '@ant-design/icons';
 import type { TermItem } from './data';
 import { createXNXQ, deleteXNXQ, getAllXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
 import moment from 'moment';
-import type { SearchDataType } from "@/components/Search/data";
-import { searchData } from "./serarchConfig";
-import { convertData } from "@/components/Search/util";
-import { getAllNJSJ } from "@/services/after-class/njsj";
 import AsyncManagementTable from './components/AsyncManagementTable';
 
 
@@ -32,7 +27,6 @@ const TermManagement = () => {
   const [form, setForm] = useState<FormInstance<any>>();
   // 当前信息，用于回填表单
   const [current, setCurrent] = useState<TermItem>();
-  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   /**
    * 实时设置模态框标题
    *
@@ -47,47 +41,7 @@ const TermManagement = () => {
     }
     return '新增学年信息';
   };
-  useEffect(() => {
-    async function fetchData() {
-      // 学年学期数据的获取
-      const res = await getAllXNXQ({});
-      if (res.status === 'ok') {
-        const { data = [] } = res;
-        const defaultData = [...searchData];
-        const newData = convertData(data);
-        const term = newData.subData[newData.data[0].key];
-        const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-        if (chainSel && chainSel.defaultValue) {
-          chainSel.defaultValue.first = newData.data[0].key;
-          chainSel.defaultValue.second = term[0].key;
-          chainSel.data = newData;
-        }
-        setDataSource(defaultData);
-      } else {
-        console.log(res.message);
-      }
-      // 年级数据的获取
-      const result = await getAllNJSJ();
-      if (result.status === 'ok') {
-        const { data = [] } = result;
-        const defaultData = [...searchData];
-        const grideSel = defaultData.find((item: any) => item.type === 'select');
-        if (grideSel && grideSel.data) {
-          grideSel.defaultValue!.first = data[0].NJMC;
-          grideSel.data = data;
-        }
-        setDataSource(defaultData);
-      } else {
-        console.log(result.message);
-      }
-    }
-    fetchData();
-  }, []);
-  // 头部input事件
-  const handlerSearch = (type: string, value: string, term: string) => {
-    console.log(type, value, term);
 
-  };
   const handleEdit = (data: TermItem) => {
     setModalType('add');
     setCurrent(data);
@@ -218,11 +172,6 @@ const TermManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
-        headerTitle={
-          <SearchComponent
-            dataSource={dataSource}
-            onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)} />
-        }
         options={{
           setting: false,
           fullScreen: false,

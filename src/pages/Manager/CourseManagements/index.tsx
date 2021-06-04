@@ -41,14 +41,16 @@ const NewClassManagement = () => {
                 const { data = [] } = res;
                 const defaultData = [...searchData];
                 const newData = convertData(data);
-                const term = newData.subData[newData.data[0].key];
-                const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-                if (chainSel && chainSel.defaultValue) {
-                    chainSel.defaultValue.first = newData.data[0].key;
-                    chainSel.defaultValue.second = term[0].key;
-                    chainSel.data = newData;
+                if (newData.data && newData.data.length > 0) {
+                    const term = newData.subData[newData.data[0].key];
+                    const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+                    if (chainSel && chainSel.defaultValue) {
+                        chainSel.defaultValue.first = newData.data[0].key;
+                        chainSel.defaultValue.second = term[0].key;
+                        chainSel.data = newData;
+                    }
+                    setDataSource(defaultData);
                 }
-                setDataSource(defaultData);
             } else {
                 console.log(res.message);
             }
