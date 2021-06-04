@@ -19,9 +19,11 @@ import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
 import ClassStart from './components/ClassStart';
+import { getAllNJSJ } from '@/services/after-class/njsj';
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from "@/components/Search/util";
 import { getQueryString } from '@/utils/utils';
+import PromptInformation from '@/components/PromptInformation';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -33,7 +35,7 @@ const CourseManagement = () => {
   const [moduletype, setmoduletype] = useState<string>('crourse');
   const [xn, setxn] = useState<string>('2020-2021');
   const [xq, setxq] = useState<string>('第一学期');
-  const [kcId,setkcId] =useState<string>('')
+  const [kcId, setkcId] = useState<string>('')
 
   useEffect(() => {
     async function fetchData() {
@@ -51,16 +53,32 @@ const CourseManagement = () => {
             chainSel.data = newData;
           }
           setDataSource(defaultData);
-        }
+        }else{
+          <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来'  link='/basicalSettings/termManagement'/>
+      }
       } else {
         console.log(res.message);
+      }
+      // 年级数据的获取
+      const result = await getAllNJSJ({});
+      if (result.status === 'ok') {
+        const { data = [] } = result;
+        const defaultData = [...searchData];
+        const grideSel = defaultData.find((item: any) => item.type === 'select');
+        if (grideSel && grideSel.data) {
+          grideSel.defaultValue!.first = data[0].NJMC;
+          grideSel.data = data;
+        }
+        setDataSource(defaultData);
+      } else {
+        console.log(result.message);
       }
     }
     fetchData();
   }, []);
   useEffect(() => {
     const curId = getQueryString("courseId");
-    if(curId){
+    if (curId) {
       setkcId(curId)
     }
   }, [])
@@ -87,11 +105,11 @@ const CourseManagement = () => {
 
   const handleEdit = (data: any) => {
     const NJSJs: any[] = [];
-    data.NJSJs.map((item: any)=>(
+    data.NJSJs.map((item: any) => (
       NJSJs.push(item.id)
     ))
-    const list = {...data,NJSJs}
-    list.KCTP='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+    const list = { ...data, NJSJs }
+    list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
     setVisible(true);
     setCurrent(list);
     console.log(data)
@@ -146,7 +164,7 @@ const CourseManagement = () => {
       key: 'FJS',
       align: 'center',
       ellipsis: true,
-      
+
     },
     {
       title: '适用年级',
@@ -155,8 +173,8 @@ const CourseManagement = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        const cc: any[]=[]
-        record.NJSJs?.map((item: any)=>{    
+        const cc: any[] = []
+        record.NJSJs?.map((item: any) => {
           return (
             cc.push(item.NJMC)
           )
@@ -221,8 +239,8 @@ const CourseManagement = () => {
               xn,
               xq,
               kcId,
-              page:1,
-              pageCount:20,
+              page: 1,
+              pageCount: 20,
               name: '',
             };
             const res = await getAllKHBJSJ(obj);
@@ -239,7 +257,7 @@ const CourseManagement = () => {
           headerTitle={
             <SearchComponent
               dataSource={dataSource}
-              onChange={(type: string, value: string,term: string) => handlerSearch(type, value,term)} />
+              onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)} />
           }
           toolBarRender={() => [
             <Button
@@ -252,7 +270,7 @@ const CourseManagement = () => {
             </Button>,
           ]}
         />
-        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} xn={xn} xq={xq}/>
+        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} xn={xn} xq={xq} />
         <Modal
           visible={openes}
           onCancel={showmodal}
@@ -262,7 +280,7 @@ const CourseManagement = () => {
             maxHeight: '65vh',
             overflowY: 'auto',
           }}
-          width={moduletype === 'crourse' ? '40vw' : '30vw'}
+          width='35vw'
           footer={[
             <Button key="back" onClick={() => setopenes(false)}>
               取消

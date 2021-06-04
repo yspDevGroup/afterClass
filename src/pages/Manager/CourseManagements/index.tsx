@@ -12,7 +12,7 @@ import type { classType } from "./data";
 import NewCourses from "./components/NewCourses";
 import styles from './index.less';
 import Sitclass from "./components/Sitclass";
-import {  deleteKHKCSJ, getAllKHKCSJ} from "@/services/after-class/khkcsj";
+import { deleteKHKCSJ, getAllKHKCSJ } from "@/services/after-class/khkcsj";
 import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./searchConfig";
 import { convertData } from "@/components/Search/util";
@@ -21,6 +21,7 @@ import SearchComponent from "@/components/Search";
 import { message } from "antd";
 import Choice from "./components/Choice";
 import { Link } from "umi";
+import PromptInformation from "@/components/PromptInformation";
 
 
 
@@ -28,38 +29,42 @@ const NewClassManagement = () => {
     const actionRef = useRef<ActionType>();
     const [current, setCurrent] = useState<classType>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [open,setopen]=useState<boolean>(false)
+    const [open, setopen] = useState<boolean>(false)
     const [modalType, setModalType] = useState<string>('add');
     const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
-    const [xn, setxn] = useState<string>('2020-2021');
-    const [xq, setxq] = useState<string>('第一学期')
+    const [xn, setxn] = useState<string>();
+    const [xq, setxq] = useState<string>();
 
     useEffect(() => {
         async function fetchData() {
-            const res = await getAllXNXQ({});
-            if (res.status === 'ok') {
-                const { data = [] } = res;
-                const defaultData = [...searchData];
-                const newData = convertData(data);
-                if (newData.data && newData.data.length > 0) {
-                    const term = newData.subData[newData.data[0].key];
-                    const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-                    if (chainSel && chainSel.defaultValue) {
-                        chainSel.defaultValue.first = newData.data[0].key;
-                        chainSel.defaultValue.second = term[0].key;
-                        chainSel.data = newData;
-                    }
-                    setDataSource(defaultData);
-                }
-            } else {
-                console.log(res.message);
+          const res = await getAllXNXQ({});
+          if (res.status === 'ok') {
+            const { data = [] } = res;
+            const defaultData = [...searchData];
+            const newData = convertData(data);
+            if (newData.data && newData.data.length > 0) {
+              const term = newData.subData[newData.data[0].key];
+              const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+              if (chainSel && chainSel.defaultValue) {
+                chainSel.defaultValue.first = newData.data[0].key;
+                chainSel.defaultValue.second = term[0].key;
+                setxq(term[0].key);
+                setxn(newData.data[0].key);
+                chainSel.data = newData;
+              }
+              setDataSource(defaultData);
+            }else{
+                <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来'  link='/basicalSettings/termManagement'/>
             }
+          } else {
+            console.log(res.message);
+          }
         }
         fetchData();
-    }, []);
+      }, []);
     // 头部input事件
-    const handlerSearch = (type: string, value: string,term: string) => {
-        if (type === 'year'|| type==='term') {
+    const handlerSearch = (type: string, value: string, term: string) => {
+        if (type === 'year' || type === 'term') {
             setxn(value);
             setxq(term);
             return actionRef.current?.reload();
@@ -87,10 +92,10 @@ const NewClassManagement = () => {
     };
     const onClose = () => {
         setopen(false);
-      };
-      const handleSubmit =  () => {
+    };
+    const handleSubmit = () => {
         setModalVisible(false);
-      };
+    };
     const maintain = () => {
         setModalType('uphold')
         setModalVisible(true);
@@ -131,18 +136,18 @@ const NewClassManagement = () => {
             render: (_, record) => {
                 const Url = `/classManagement?courseId=${record.id}`;
                 return (
-                       <Link to={Url} >{record.KHBJSJs?.length}</Link>
+                    <Link to={Url} >{record.KHBJSJs?.length}</Link>
                 )
             }
         },
         {
-            title:'课程封面',
-            align:'center',
-            width:'10%',
-            render:(_,record)=>{
-                return(
+            title: '课程封面',
+            align: 'center',
+            width: '10%',
+            render: (_, record) => {
+                return (
                     <>
-                    <a href={record.KCTP}  target='_blank'>课程封面.png</a>
+                        <a href={record.KCTP} target='_blank'>课程封面.png</a>
                     </>
                 )
             }
@@ -152,23 +157,23 @@ const NewClassManagement = () => {
             dataIndex: 'KCMS',
             key: 'KCMS',
             align: 'center',
-            width:'20%',
+            width: '20%',
             ellipsis: true,
         },
         {
-            title:'当前时段',
+            title: '当前时段',
             align: 'center',
             ellipsis: true,
-            render:(_,record)=>{
-                return(<Choice record={record}/>)
+            render: (_, record) => {
+                return (<Choice record={record} />)
             }
         },
         {
             title: '状态',
             align: 'center',
             ellipsis: true,
-            dataIndex:'KCZT',
-            key:'KCZT'
+            dataIndex: 'KCZT',
+            key: 'KCZT'
         },
         {
             title: '操作',
@@ -253,7 +258,7 @@ const NewClassManagement = () => {
                 <Modal
                     title={getModelTitle()}
                     destroyOnClose
-                    width='30vw'
+                    width='35vw'
                     visible={modalVisible}
                     onCancel={() => setModalVisible(false)}
                     footer={[
@@ -273,6 +278,7 @@ const NewClassManagement = () => {
                 >
                     <Sitclass />
                 </Modal>
+               
             </PageContainer>
         </>
     )
