@@ -19,7 +19,7 @@ export async function getKHKCSJ(
       KCMC?: string;
       KCTP?: string;
       KCSC?: number;
-      KCZT?: string;
+      KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
       KCMS?: string;
       KKRQ?: string;
       JKRQ?: string;
@@ -32,7 +32,7 @@ export async function getKHKCSJ(
         id?: string;
         BJMC?: string;
         BJMS?: string;
-        BJZT?: string;
+        BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
         ZJS?: string;
         FJS?: string;
         BJRS?: number;
@@ -74,6 +74,8 @@ export async function deleteKHKCSJ(
 /** 查询所有课后课程数据 POST /khkcsj/ */
 export async function getAllKHKCSJ(
   body: {
+    /** 课程类型ID */
+    lxId?: string;
     /** 学年 */
     xn?: string;
     /** 学期 */
@@ -106,7 +108,7 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
       KCMC?: string;
       KCTP?: string;
       KCSC?: number;
-      KCZT?: string;
+      KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
       KCMS?: string;
       KKRQ?: string;
       JKRQ?: string;
@@ -119,7 +121,7 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
         id?: string;
         BJMC?: string;
         BJMS?: string;
-        BJZT?: string;
+        BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
         ZJS?: string;
         FJS?: string;
         BJRS?: number;
@@ -204,7 +206,7 @@ export async function allKCsByNJ(
       KCMC?: string;
       KCTP?: string;
       KCSC?: number;
-      KCZT?: string;
+      KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
       KCMS?: string;
       XNXQId?: string;
     }[];

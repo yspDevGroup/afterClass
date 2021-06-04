@@ -198,7 +198,7 @@ export async function getFJPlan(
           id?: string;
           BJMC?: string;
           BJMS?: string;
-          BJZT?: string;
+          BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
           ZJS?: string;
           FJS?: string;
           BJRS?: number;

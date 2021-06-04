@@ -18,7 +18,7 @@ export async function getKHBJSJ(
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: string;
+      BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -37,7 +37,7 @@ export async function getKHBJSJ(
         KCLX?: string;
         KCTP?: string;
         KCSC?: number;
-        KCZT?: string;
+        KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
         KCMS?: string;
         KKRQ?: string;
         JKRQ?: string;
@@ -111,7 +111,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: string;
+      BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -130,7 +130,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         KCLX?: string;
         KCTP?: string;
         KCSC?: number;
-        KCZT?: string;
+        KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
         KCMS?: string;
         KKRQ?: string;
         JKRQ?: string;

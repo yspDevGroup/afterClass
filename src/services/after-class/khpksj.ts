@@ -21,7 +21,7 @@ export async function getKHPKSJ(
         id?: string;
         BJMC?: string;
         BJMS?: string;
-        BJZT?: string;
+        BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
         ZJS?: string;
         FJS?: string;
         BJRS?: number;
@@ -36,7 +36,7 @@ export async function getKHPKSJ(
           KCMC?: string;
           KCTP?: string;
           KCSC?: number;
-          KCZT?: string;
+          KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
           KCMS?: string;
           KKRQ?: string;
           JKRQ?: string;
