@@ -244,9 +244,6 @@ const CourseManagement = () => {
             filter,
           };
             const obj = {
-              param,
-              sorter,
-              filter,
               xn,
               xq,
               kcId,

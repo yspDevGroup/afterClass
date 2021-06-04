@@ -14,8 +14,6 @@ const PageContain = ({ children, cls }: pageProp) => {
         title: '',
         breadcrumbRender: (props, defaultDom) => {
           const { breadcrumb, currentMenu } = props as PageHeaderProps & {currentMenu: any};
-          console.log(props);
-
           if (breadcrumb?.routes === undefined && currentMenu.name !== '首页') {
             return <div className="ant-breadcrumb">
               <span>
