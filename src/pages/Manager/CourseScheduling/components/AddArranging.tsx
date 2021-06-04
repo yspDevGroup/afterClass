@@ -46,7 +46,6 @@ const AddArranging: FC<PropsType> = (props) => {
   //     setColors(e.key);
   // }
   async function handleMenuClick(e: any) {
-    console.log('click', e.key);
     setColors(e.key);
     if (Bj?.id) {
       const params = {
@@ -170,7 +169,6 @@ const AddArranging: FC<PropsType> = (props) => {
   ];
   const arr: any[] = [];
   const onExcelTableClick = (value: any) => {
-    console.log('onExcelTableClickvalue', value);
     if (JSON.stringify(value) === '{}') {
       arr.splice(arr.length - 1);
     } else {
@@ -188,7 +186,6 @@ const AddArranging: FC<PropsType> = (props) => {
   // 班级选择
   const BjClick = (value: BJType, key: any) => {
     setBj(value);
-    console.log(value);
     setIndex(key);
   };
 
@@ -217,7 +214,7 @@ const AddArranging: FC<PropsType> = (props) => {
   };
   const onReset = (prop: any) => {
     prop.form?.resetFields();
-    setState(true);
+    window.location.reload();
   };
   useEffect(() => {
     async function fetchData() {
@@ -249,7 +246,6 @@ const AddArranging: FC<PropsType> = (props) => {
           name: '',
         });
         setBjData(bjList.data);
-        console.log(bjList);
         // 获取所有课程数据
         const kcList = await getAllKHKCSJ({
           xn,
@@ -412,44 +408,54 @@ const AddArranging: FC<PropsType> = (props) => {
             <div>
               {packUp === false ? (
                 <ProCard ghost className="banjiCard">
-                  {bjData
-                    .slice(0, 13)
-                    .map(
-                      (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
-                        return (
-                          <ProCard
-                            layout="center"
-                            bordered
-                            onClick={() => BjClick(value, key)}
-                            style={{ borderColor: index === key ? '#51d081' : '' }}
-                          >
-                            <p>{value.BJMC}</p>
-                            <span>{value.ZJS}</span>
-                          </ProCard>
-                        );
-                      },
-                    )}
+                  {bjData && bjData.length > 0
+                    ? bjData
+                        .slice(0, 13)
+                        .map(
+                          (
+                            value: { BJMC: any; ZJS: any; id?: string | undefined },
+                            key: undefined,
+                          ) => {
+                            return (
+                              <ProCard
+                                layout="center"
+                                bordered
+                                onClick={() => BjClick(value, key)}
+                                style={{ borderColor: index === key ? '#51d081' : '' }}
+                              >
+                                <p>{value.BJMC}</p>
+                                <span>{value.ZJS}</span>
+                              </ProCard>
+                            );
+                          },
+                        )
+                    : ''}
                   <ProCard layout="center" bordered onClick={unFold} className="unFold">
                     展开 <DownOutlined style={{ color: '#4884FF' }} />
                   </ProCard>
                 </ProCard>
               ) : (
                 <ProCard ghost className="banjiCard">
-                  {bjData.map(
-                    (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
-                      return (
-                        <ProCard
-                          layout="center"
-                          bordered
-                          onClick={() => BjClick(value, key)}
-                          style={{ borderColor: index === key ? '#51d081' : '' }}
-                        >
-                          <p>{value.BJMC}</p>
-                          <span>{value.ZJS}</span>
-                        </ProCard>
-                      );
-                    },
-                  )}
+                  {bjData && bjData.length > 0
+                    ? bjData.map(
+                        (
+                          value: { BJMC: any; ZJS: any; id?: string | undefined },
+                          key: undefined,
+                        ) => {
+                          return (
+                            <ProCard
+                              layout="center"
+                              bordered
+                              onClick={() => BjClick(value, key)}
+                              style={{ borderColor: index === key ? '#51d081' : '' }}
+                            >
+                              <p>{value.BJMC}</p>
+                              <span>{value.ZJS}</span>
+                            </ProCard>
+                          );
+                        },
+                      )
+                    : ''}
                   <ProCard layout="center" bordered onClick={unFold} className="unFold">
                     收起 <UpOutlined style={{ color: '#4884FF' }} />
                   </ProCard>
@@ -507,7 +513,6 @@ const AddArranging: FC<PropsType> = (props) => {
           fieldProps={{
             async onChange(value) {
               setCdmcData(value);
-              console.log(value);
               // 查询房间占用情况
               const Fjplan = await getFJPlan({
                 lxId: cdlxId === undefined ? '' : cdlxId,
@@ -517,9 +522,7 @@ const AddArranging: FC<PropsType> = (props) => {
               });
               if (Fjplan.status === 'ok') {
                 const data = processingData(Fjplan.data);
-                console.log('datadatadata', data);
                 setTableDataSource(data);
-                console.log(Fjplan);
               } else {
                 message.error(Fjplan.message);
               }

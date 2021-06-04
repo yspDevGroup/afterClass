@@ -18,17 +18,26 @@ type KBItemProps = {
   onClick?: () => void;
 };
 
+type WeenType = {
+  cla: string;
+  teacher: string;
+  key: string;
+  dis: boolean;
+  bjId: string;
+  color: string;
+};
+
 type DataSourceType = {
   key: string;
   room: { cla: string; teacher: string; rowspan?: number; jsId: string };
   course: { cla: string; teacher: string; hjId: string };
-  monday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
-  tuesday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
-  wednesday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
-  thursday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
-  friday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
-  saturday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
-  sunday: { cla: string; teacher: string; key: string; dis: boolean; bjId: string } | '';
+  monday: WeenType | '';
+  tuesday: WeenType | '';
+  wednesday: WeenType | '';
+  thursday: WeenType | '';
+  friday: WeenType | '';
+  saturday: WeenType | '';
+  sunday: WeenType | '';
 }[];
 
 const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
@@ -38,7 +47,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
         type="text"
         disabled={disabled}
         style={{
-          height: 70,
+          height: 48,
           padding: 0,
           border: 0,
           background: 'transparent',
@@ -59,8 +68,8 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
         }
       }}
       style={{
-        height: 70,
-        padding: 0,
+        height: mode === 'see' ? 78 : 48,
+        padding: mode === 'see' ? 4 : 2,
         border: 0,
         background: 'transparent',
         width: '100%',
@@ -84,7 +93,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             }}
           >
             <div className="cla">{data?.cla}</div>
-            <div className="teacher">{data?.teacher}</div>
+            {mode === 'see' ? <div className="teacher">{data?.teacher}</div> : ''}
           </div>
         </div>
       )}
@@ -208,7 +217,7 @@ const Index: FC<IndexPropsType> = ({
                             rowSpan={item.dataIndex === 'room' ? data.room.rowspan : undefined}
                           >
                             {type === 'edit' ? (
-                              <div className="classCard" style={{ textAlign: item.align }}>
+                              <div className="classCard" style={{ textAlign: 'center' }}>
                                 <div className={`cardcontent`}>
                                   <div className="cla">{data[item.dataIndex].cla}</div>
                                 </div>

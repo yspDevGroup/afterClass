@@ -44,7 +44,6 @@ export async function currentUser(options?: { [key: string]: any }) {
         departmentId?: string;
         status?: number;
         auth?: '老师' | '家长' | '管理员';
-        userId?: string;
       };
       token?: string;
     };
@@ -81,7 +80,6 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
       departmentId?: string;
       status?: number;
       auth?: '老师' | '家长' | '管理员';
-      userId?: string;
     };
     message?: string;
   }>('/user/create', {
@@ -103,10 +101,10 @@ export async function deleteUser(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/user/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
