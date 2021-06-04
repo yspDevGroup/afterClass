@@ -48,8 +48,8 @@ const NewClassManagement = () => {
               if (chainSel && chainSel.defaultValue) {
                 chainSel.defaultValue.first = newData.data[0].key;
                 chainSel.defaultValue.second = term[0].key;
-                setxq(term[0].key);
-                setxn(newData.data[0].key);
+                setxq(chainSel.defaultValue.second);
+                setxn(chainSel.defaultValue.first);
                 chainSel.data = newData;
               }
               setDataSource(defaultData);

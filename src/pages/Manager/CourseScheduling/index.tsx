@@ -17,6 +17,7 @@ import { searchData } from './searchConfig';
 import './index.less';
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from '@/components/Search/util';
+import PromptInformation from '@/components/PromptInformation';
 
 type pkIdListType = { jsId: string; pkId: Set<unknown> };
 
@@ -137,6 +138,9 @@ const ClassManagement = () => {
             }
           });
         }
+        else{
+          <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来'  link='/basicalSettings/termManagement'/>
+      }
       } else {
         console.log(res.message);
       }

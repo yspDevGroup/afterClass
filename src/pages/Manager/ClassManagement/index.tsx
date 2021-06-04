@@ -33,8 +33,8 @@ const CourseManagement = () => {
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [readonly, stereadonly] = useState<boolean>(false);
   const [moduletype, setmoduletype] = useState<string>('crourse');
-  const [xn, setxn] = useState<string>('2020-2021');
-  const [xq, setxq] = useState<string>('第一学期');
+  const [xn, setxn] = useState<string>();
+  const [xq, setxq] = useState<string>();
   const [kcId, setkcId] = useState<string>('')
 
   useEffect(() => {
@@ -50,12 +50,15 @@ const CourseManagement = () => {
           if (chainSel && chainSel.defaultValue) {
             chainSel.defaultValue.first = newData.data[0].key;
             chainSel.defaultValue.second = term[0].key;
+            setxn(chainSel.defaultValue.first);
+            setxq(chainSel.defaultValue.second);
+            actionRef.current?.reload();
             chainSel.data = newData;
           }
           setDataSource(defaultData);
-        }else{
-          <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来'  link='/basicalSettings/termManagement'/>
-      }
+        } else {
+          <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' />
+        }
       } else {
         console.log(res.message);
       }
