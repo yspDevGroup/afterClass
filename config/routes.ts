@@ -88,8 +88,18 @@
   {
     path: '/',
     layout: false,
-    redirect: './homepage',
+    redirect: './courseManagements',
   },
+  /*** 老师路由 start ***/
+  {
+    path: '/teacher/home',
+    layout: false,
+    component: './Teacher/CheckonManagement',
+  },
+  /*** 老师路由 end ***/
+
+  /*** 家长路由 start ***/
+  /*** 家长路由 end ***/
   {
     component: './404',
   },

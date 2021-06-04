@@ -1,10 +1,11 @@
+/* eslint-disable no-debugger */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /*
  * @description: OAuth认证通过后的跳转页面
  * @author: zpl
  * @Date: 2021-05-13 09:08:04
- * @LastEditTime: 2021-06-03 14:49:46
+ * @LastEditTime: 2021-06-04 14:38:12
  * @LastEditors: zpl
  */
 import React, { useCallback, useEffect } from 'react';
@@ -29,16 +30,31 @@ const Comp = () => {
 
   const fetchUserInfo = useCallback(async (debug: boolean) => {
     const userInfo = await initialState?.fetchUserInfo?.(debug);
+    if (typeof debug !== 'undefined') {
+      debugger;
+    }
     if (userInfo) {
       setInitialState(initialState ? { ...initialState, currentUser: userInfo } : undefined);
       setTimeout(() => {
-        if (debug) {
-          // eslint-disable-next-line no-debugger
+        // eslint-disable-next-line no-console
+        console.log('userInfo', userInfo);
+        if (typeof debug !== 'undefined') {
           debugger;
-          // eslint-disable-next-line no-console
-          console.log('39------', userInfo);
         }
-        history.replace('/');
+        switch (userInfo.auth) {
+          case '管理员':
+            history.replace('/courseManagements');
+            break;
+          case '老师':
+            history.replace('/teacher/home');
+            break;
+          case '家长':
+            history.replace('/homepage');
+            break;
+          default:
+            history.replace('/');
+            break;
+        }
       }, 10);
     }
   }, []);
@@ -46,6 +62,9 @@ const Comp = () => {
   useEffect(() => {
     (async () => {
       const { token, debug } = query;
+      if (typeof debug !== 'undefined') {
+        debugger;
+      }
       if (token) {
         localStorage.setItem('token', Array.isArray(token) ? token.toString() : token);
         await fetchUserInfo(!!debug);
