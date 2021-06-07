@@ -29,6 +29,10 @@
       margin-bottom: 7px;
       line-height: 19.6px;
       .Title {
+        width: calc(~'100% - 79px');
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         a {
           color: #333333;
           font-weight: 600;
@@ -50,7 +54,11 @@
       font-size: 12px;
       line-height: 16.8px;
       .descleft {
+        width: calc(~'100% - 79px');
+        overflow: hidden;
         color: #999999;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         .descleftInspan {
           padding: 0 8px;
         }
