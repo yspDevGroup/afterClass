@@ -1,0 +1,52 @@
+.IconTextCompBox {
+  margin: 10px;
+  border-radius: 8px;
+
+  a {
+    color: #333333;
+    .Box {
+      text-align: center;
+      .iconBox {
+        width: 30px;
+        height: 30px;
+        margin: 10px auto 4px;
+        border-radius: 12px;
+        svg {
+          width: 18px;
+          height: 18px;
+          margin: 6px;
+        }
+      }
+      .imgBox {
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+        img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .TextBox {
+        height: 17px;
+        line-height: 17px;
+      }
+    }
+  }
+  :global {
+    .ant-list-split .ant-list-header {
+      height: 22px;
+      color: #333333;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 22px;
+      border-bottom: 0px;
+    }
+    .ant-list-header {
+      margin-bottom: 18px;
+      padding-left: 10px;
+    }
+    .ant-list-grid .ant-col > .ant-list-item {
+      margin-bottom: 10px;
+    }
+  }
+}

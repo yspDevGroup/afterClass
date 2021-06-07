@@ -86,6 +86,13 @@
     component: './Parent/ListComponent',
   },
   {
+    path: '/displayColumn',
+    name: 'displayColumn',
+    icon: 'smile',
+    layout: false,
+    component: './Parent/DisplayColumn',
+  },
+  {
     path: '/',
     layout: false,
     redirect: './courseManagements',

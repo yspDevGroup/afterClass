@@ -9,4 +9,5 @@ export default {
   'menu.classManagement': '班级管理',
   'menu.courseScheduling': '排课管理',
   'menu.listComponent': 'List组件',
+  'menu.displayColumn': '图标文字组件',
 };
