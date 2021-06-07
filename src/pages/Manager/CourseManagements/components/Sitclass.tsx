@@ -65,9 +65,9 @@ const Sitclass =()=>{
                     });
                 }}
                 icon={<PlusOutlined />}
-                style={{marginLeft:"25px"}}
+                style={{marginLeft:"25px",marginBottom:'16px'}}
             >
-                新建一行
+                新建
             </Button>
             <EditableProTable<any>
                 // style={{minWidth:'600px'}}

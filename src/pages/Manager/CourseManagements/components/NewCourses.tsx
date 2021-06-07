@@ -1,13 +1,16 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable prefer-destructuring */
 import ProFormFields from "@/components/ProFormFields";
 import { getAllKHKCLX } from "@/services/after-class/khkclx";
 import { createKHKCSJ, updateKHKCSJ } from "@/services/after-class/khkcsj";
+import { getAllXNXQ } from "@/services/after-class/xnxq";
 import type { ActionType } from "@ant-design/pro-table/lib/typing";
 import { message } from "antd";
 import { Button, Drawer } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import type { classType } from "../data";
 import styles from './index.less';
-
 
 type PropsType = {
   current?: classType;
@@ -25,6 +28,41 @@ const NewCourses = (props: PropsType) => {
   const { current, onClose, visible, actionRef } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [form, setForm] = useState<any>();
+  const [xn, setxn] = useState<any[]>();
+  const [xq, setxq] = useState<any[]>();
+  const imgurl = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
+
+  useEffect(() => {
+    async function fetchData() {
+        const res = await getAllXNXQ({});
+        if (res.status === 'ok') {
+          const xns: any[] = []
+          const xqs: any[] = []
+          if(res.data){
+            res.data.map((item: any)=>{
+              return(
+                xns.push({
+                  label:item.XN,
+                  value:item.XN
+                }),
+                xqs.push({
+                  label:item.XQ,
+                  value:item.XQ
+                })
+              )
+            })
+            setxn(xns);
+            setxq(xqs);
+            actionRef?.current?.reload();
+          }
+        } 
+       else {
+            console.log(res.message);
+        }
+    }
+    fetchData();
+}, []);
+
   useEffect(() => {
     const res = getAllKHKCLX({ name: '' })
     Promise.resolve(res).then((data) => {
@@ -50,10 +88,18 @@ const NewCourses = (props: PropsType) => {
         const params = {
           id: current?.id,
         };
-        const optionse = values;
+        const optionse = {...values, KCTP: imgurl};
         res = updateKHKCSJ(params, optionse);
       } else {
-        res = createKHKCSJ(values);
+        if(values.KKRQ){
+          values.JKRQ=values.KKRQ[1];
+          values.KKRQ=values.KKRQ[0];
+        }
+        if(values.BMKSSJ){
+          values.BMJSSJ= moment(values.BMKSSJ[1]);
+          values.BMKSSJ= moment(values.BMKSSJ[0]);
+        }
+        res = createKHKCSJ({...values, KCTP: imgurl});
       }
       resolve(res);
       reject(res);
@@ -89,9 +135,61 @@ const NewCourses = (props: PropsType) => {
     {
       type: 'select',
       label: '课程类型:',
-      name: 'KCLXId',
-      key: 'KCLXId',
+      name: 'KHKCLXId',
+      key: 'KHKCLXId',
       options
+    },
+    {
+      type: 'inputNumber',
+      label: '课程时长(小时):',
+      name: 'KCSC',
+      key: 'KCSC',
+      fieldProps:{
+        min:0
+      }
+    },
+    {
+      type: 'select',
+      label: '课程状态:',
+      name: 'KCZT',
+      key: 'KCZT',
+      valueEnum: {
+        '待发布': '待发布',
+        '已发布':'已发布',
+        '已下架':'已下架',
+        '已结课':'已结课'
+      }
+    },
+    {
+      type: 'dateRange',
+      label: '开课日期-结课日期:',
+      name: 'KKRQ',
+      key: 'KKRQ',
+      width: '100%'
+    },
+    {
+      type: 'dateTimeRange',
+      label: '报名开始时间-报名结束时间:',
+      name: 'BMKSSJ',
+      key: 'BMKSSJ',
+      width: '100%',
+      fieldProps :{
+        format: "YYYY-MM-DD HH:mm"
+      }
+    },
+    {
+      type: 'select',
+      label: '学期:',
+      name: 'XQ',
+      key: 'XQ',
+      options: xq
+    },
+    {
+      type: 'select',
+      label: '学年:',
+      name: 'XN',
+      key: 'XN',
+      options: xn
     },
     {
       type: 'uploadImage',
@@ -99,7 +197,7 @@ const NewCourses = (props: PropsType) => {
       name: 'KCTP',
       key: 'KCTP',
       upurl: '',
-      // imageurl: current?.KCTP,
+      imageurl: current?.KCTP,
     },
     {
       type: 'textArea',
@@ -111,7 +209,7 @@ const NewCourses = (props: PropsType) => {
   return (
     <>
       <Drawer
-        title={current?'编辑课程':'新增课程'}
+        title={current ? '编辑课程' : '新增课程'}
         width={480}
         onClose={onClose}
         visible={visible}

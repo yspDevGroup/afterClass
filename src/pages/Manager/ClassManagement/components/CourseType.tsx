@@ -81,9 +81,9 @@ const CourseType = () => {
                     });
                 }}
                 icon={<PlusOutlined />}
-                style={{ marginLeft: "25px" }}
+                style={{ marginLeft: "25px" ,marginBottom:'16px'}}
             >
-                新建一行
+                新建
             </Button>
             <EditableProTable<DataSourceType>
                 // style={{minWidth:'600px'}}

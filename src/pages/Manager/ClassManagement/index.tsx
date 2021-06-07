@@ -116,6 +116,7 @@ const CourseManagement = () => {
   const showDrawer = () => {
     setVisible(true);
     setCurrent(undefined);
+    stereadonly(false);
   };
 
   const handleEdit = (data: any) => {
@@ -127,8 +128,10 @@ const CourseManagement = () => {
     list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
     setVisible(true);
     setCurrent(list);
-    if (data.BJZT === '已结课' || data.BJZT === '已发布') {
+    if (!(data.BJZT === '未排课') && !(data.BJZT === '已下架')&&!(data.BJZT === '已排课')) {
       stereadonly(true)
+    }else{
+      stereadonly(false)
     }
   };
 

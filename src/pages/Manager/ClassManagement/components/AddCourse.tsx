@@ -6,7 +6,6 @@ import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllNJSJ } from '@/services/after-class/njsj';
-import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 
 type AddCourseProps = {
@@ -26,9 +25,8 @@ const formLayout = {
 const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef,xn,xq }) => {
   const [form, setForm] = useState<any>();
   const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
-  const [kcData, setkcData] =  useState<{ label: string; value: string; }[]>([]);
   const [mcData, setmcData] = useState<{ label: string; value: string; }[]>([]);
-  const [kcid, setkcid] = useState<string>('')
+  // 获取年级数据
   useEffect(() => {
     const res = getAllNJSJ();
     Promise.resolve(res).then((data: any) => {
@@ -43,24 +41,10 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
         setNjData(njArry);
       }
     })
-  }, [])
+  }, []);
+  // 获取课程名称
   useEffect(() => {
-    const res = getAllKHKCLX({name:''});
-    Promise.resolve(res).then((data: any) => {
-      if (data.status === 'ok') {
-        const njArry: { label: string; value: string; }[] = []
-        data.data.map((item: any) => {
-            return njArry.push({
-            label: item.KCLX,
-            value: item.id
-          })
-        })
-        setkcData(njArry);
-      }
-    })
-  }, [])
-  useEffect(() => {
-    const res = getAllKHKCSJ({},{lxId:kcid,name:'',xn,xq,page:0,pageCount:0});
+    const res = getAllKHKCSJ({name:'',xn,xq,page:0,pageCount:0});
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
         const njArry: { label: string; value: string; }[] = []
@@ -110,24 +94,18 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
 
   const formItems: any[] = [
     {
-      type: 'select',
+      type: 'input',
+      label: '班级名称：',
+      name: 'BJMC',
+      key: 'BJMC',
       readonly,
-      label: '课程类型：',
-      name: 'KCLX',
-      key: 'KCLX',
-      fieldProps: {
-        options: kcData,
-        onChange:(value: any)=>{
-            setkcid(value)
-        }
-      },
     },
     {
       type: 'select',
       readonly,
       label: '课程名称：',
-      name: 'KCMC',
-      key: 'KCMC',
+      name: 'KHKCSJId',
+      key: 'KHKCSJId',
       fieldProps: {
         options: mcData
       },
@@ -179,7 +157,8 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
     },
     {
       type: 'select',
-      name: 'NJSJs',
+      name: 'njIds',
+      key:'njIds',
       label: '适用年级',
       fieldProps: {
         mode: 'multiple',
@@ -237,7 +216,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           setForm={setForm}
           formItems={formItems}
           formItemLayout={formLayout}
-          values={formValues || { BJZT: '未排课' }}
+          values={formValues || { BJZT: '待发布' }}
         />
       </Drawer>
     </div>

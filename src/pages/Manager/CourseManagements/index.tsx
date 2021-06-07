@@ -107,9 +107,6 @@ const NewClassManagement = () => {
     const onClose = () => {
         setopen(false);
     };
-    const handleSubmit = () => {
-        setModalVisible(false);
-    };
     const maintain = () => {
         setModalType('uphold')
         setModalVisible(true);
@@ -158,6 +155,7 @@ const NewClassManagement = () => {
             title: '课程封面',
             align: 'center',
             width: '10%',
+            dataIndex:'KCTP',
             render: (_, record) => {
                 return (
                     <>
@@ -280,14 +278,7 @@ const NewClassManagement = () => {
                     width='35vw'
                     visible={modalVisible}
                     onCancel={() => setModalVisible(false)}
-                    footer={[
-                        <Button key="back" onClick={() => setModalVisible(false)}>
-                            取消
-                       </Button>,
-                        <Button key="submit" type="primary" onClick={handleSubmit}>
-                            确定
-                       </Button>
-                    ]}
+                    footer={null}
                     centered
                     maskClosable={false}
                     bodyStyle={{
