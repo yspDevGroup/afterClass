@@ -45,6 +45,7 @@ export type FormItemsProps = {
   imageurl?: string;
   /** 图片上传地址 */
   upurl?: string;
+  readonly?: boolean;
 };
 
 export type ProFormFieldsPropsType = {

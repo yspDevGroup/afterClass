@@ -35,3 +35,14 @@ export const colorDisk = [
   'rgba(149, 118, 204, 1)', // 图标底色-紫色
   'rgba(240, 97, 145, 1)', // 图标底色-绯红
 ];
+
+// 课程颜色
+export const courseColorType: Record<string, string> = {
+  crimson: 'rgba(240, 97, 145, 1)', // 绯红
+  orange: 'rgba(255, 137, 100, 1)', // 橙色
+  yellow: 'rgba(255, 213, 65, 1)', // 黄色
+  green: 'rgba(81, 208, 129, 1)', // 绿色
+  skyBlue: 'rgba(83, 193, 255, 1)', // 天空蓝
+  violet: 'rgba(149, 118, 204, 1)', // 紫色
+  purplishRed: 'rgba(255, 121, 204, 1)', // 紫红色
+};
