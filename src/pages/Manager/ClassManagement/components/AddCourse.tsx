@@ -6,7 +6,6 @@ import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllNJSJ } from '@/services/after-class/njsj';
-import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -14,18 +13,16 @@ type AddCourseProps = {
   readonly?: boolean;
   formValues?: Record<string, any>;
   actionRef?: React.MutableRefObject<ActionType | undefined>;
-  xn?: string;
-  xq?: string;
+  mcData?: { label: string; value: string; }[];
 };
 const formLayout = {
   labelCol: {},
   wrapperCol: {},
 };
 
-const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef,xn,xq }) => {
+const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef, mcData}) => {
   const [form, setForm] = useState<any>();
   const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
-  const [mcData, setmcData] = useState<{ label: string; value: string; }[]>([]);
   // 获取年级数据
   useEffect(() => {
     const res = getAllNJSJ();
@@ -42,22 +39,6 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       }
     })
   }, []);
-  // 获取课程名称
-  useEffect(() => {
-    const res = getAllKHKCSJ({name:'',xn,xq,page:0,pageCount:0});
-    Promise.resolve(res).then((data: any) => {
-      if (data.status === 'ok') {
-        const njArry: { label: string; value: string; }[] = []
-        data.data.map((item: any) => {
-            return njArry.push({
-            label: item.KCMC,
-            value: item.id
-          })
-        })
-        setmcData(njArry);
-      }
-    })
-  }, [])
 
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {

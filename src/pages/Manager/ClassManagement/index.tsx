@@ -11,7 +11,7 @@ import { paginationConfig } from '@/constant';
 import SearchComponent from '@/components/Search';
 import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
-import type { CourseItem ,TableListParams} from './data';
+import type { CourseItem, TableListParams } from './data';
 import styles from './index.less';
 import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./searchConfig";
@@ -24,6 +24,7 @@ import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from "@/components/Search/util";
 import { getQueryString } from '@/utils/utils';
 import PromptInformation from '@/components/PromptInformation';
+import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -33,11 +34,15 @@ const CourseManagement = () => {
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [readonly, stereadonly] = useState<boolean>(false);
   const [moduletype, setmoduletype] = useState<string>('crourse');
-  const [xn, setxn] = useState<string>();
+  const [xn, setxn] = useState<string>();  
   const [xq, setxq] = useState<string>();
-  const [kcId, setkcId] = useState<string>('')
-   // 设置表单的查询更新
+  const [kcId, setkcId] = useState<string>('');
+  // 查询课程名称
+  const [mcData, setmcData] = useState<{ label: string; value: string; }[]>([]);
   const [name, setName] = useState<string>('');
+  let newxq='';
+  let newxn='';
+
 
   useEffect(() => {
     async function fetchData() {
@@ -54,8 +59,23 @@ const CourseManagement = () => {
             chainSel.defaultValue.second = term[0].key;
             chainSel.data = newData;
             setDataSource(defaultData);
+            newxn=chainSel.defaultValue.first
+            newxq=chainSel.defaultValue.second
             setxq(chainSel.defaultValue.second);
             setxn(chainSel.defaultValue.first);
+            const ress = getAllKHKCSJ({ name: '', xn: chainSel.defaultValue.first, xq: chainSel.defaultValue.second, page: 0, pageCount: 0 });
+            Promise.resolve(ress).then((dataes: any) => {
+              if (dataes.status === 'ok') {
+                const njArry: { label: string; value: string; }[] = []
+                dataes.data.map((item: any) => {
+                  return njArry.push({
+                    label: item.KCMC,
+                    value: item.id
+                  })
+                })
+                setmcData(njArry);
+              }
+            })
           }
         } else {
           <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' />
@@ -128,9 +148,9 @@ const CourseManagement = () => {
     list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
     setVisible(true);
     setCurrent(list);
-    if (!(data.BJZT === '未排课') && !(data.BJZT === '已下架')&&!(data.BJZT === '已排课')) {
+    if (!(data.BJZT === '未排课') && !(data.BJZT === '已下架') && !(data.BJZT === '已排课')) {
       stereadonly(true)
-    }else{
+    } else {
       stereadonly(false)
     }
   };
@@ -249,21 +269,21 @@ const CourseManagement = () => {
           columns={columns}
           rowKey="id"
           request={async (param, sorter, filter) => {
-             // 表单搜索项会从 params 传入，传递给后端接口。
-          const opts: TableListParams = {
-            ...param,
-            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-            filter,
-          };
+            // 表单搜索项会从 params 传入，传递给后端接口。
+            const opts: TableListParams = {
+              ...param,
+              sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+              filter,
+            };
             const obj = {
-              xn,
-              xq,
+              xn:xn||newxn,
+              xq:xq||newxq,
               kcId,
               page: 1,
               pageCount: 20,
               name,
             };
-            const res = await getAllKHBJSJ(obj,opts);
+            const res = await getAllKHBJSJ(obj, opts);
             return res;
           }}
           options={{
@@ -290,7 +310,7 @@ const CourseManagement = () => {
             </Button>,
           ]}
         />
-        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} xn={xn} xq={xq} />
+        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} mcData={mcData} />
         <Modal
           visible={openes}
           onCancel={showmodal}
