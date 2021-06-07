@@ -1,12 +1,12 @@
-import ProFormFields from "@/components/ProFormFields";
-import type { FormInstance } from "antd";
-import React from "react";
-import type { Maintenance } from "../data";
+import ProFormFields from '@/components/ProFormFields';
+import type { FormInstance } from 'antd';
+import React from 'react';
+import type { Maintenance } from '../data';
 
 const formLayout = {
   labelCol: { span: 5 },
   wrapperCol: { span: 16 },
-}
+};
 
 type PropsType = {
   current?: Maintenance;
@@ -14,10 +14,8 @@ type PropsType = {
   setForm: React.Dispatch<React.SetStateAction<FormInstance<any> | undefined>>;
 };
 
-
 const TimePeriodForm = (props: PropsType) => {
   const { current, setForm } = props;
-  
 
   const formItems: any[] = [
     {
@@ -39,7 +37,10 @@ const TimePeriodForm = (props: PropsType) => {
       name: 'KSSJ',
       key: 'KSSJ',
       width: '100%',
-      rules: [{ type: 'any', required: true, messsage: '请填写日期' }]
+      fieldProps: {
+        format: 'HH:mm',
+      },
+      rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
     },
     {
       type: 'time',
@@ -47,7 +48,10 @@ const TimePeriodForm = (props: PropsType) => {
       name: 'JSSJ',
       key: 'JSSJ',
       width: '100%',
-      rules: [{ type: 'any', required: true, messsage: '请填写日期' }]
+      fieldProps: {
+        format: 'HH:mm',
+      },
+      rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
     },
     {
       type: 'textArea',
@@ -66,6 +70,6 @@ const TimePeriodForm = (props: PropsType) => {
         formItemLayout={formLayout}
       />
     </>
-  )
-}
-export default TimePeriodForm
+  );
+};
+export default TimePeriodForm;
