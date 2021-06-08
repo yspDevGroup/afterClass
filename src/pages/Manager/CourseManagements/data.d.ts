@@ -6,29 +6,30 @@
  * @,@Description: ,: In User Settings Edit
  * @,@FilePath: ,: \afterClass\src\pages\Manager\BasicalSettings\NewClassManagement\data.d.ts
  */
-export type classType={
+export type classType = {
+  id?: string;
+  KCMC?: string;
+  KHKCLX?: kcshj;
+  KCTP?: string;
+  BJS?: number;
+  title?: string;
+  KHBJSJs?: {
     id?: string;
-    KCMC?: string;
-    KHKCLX?: kcshj;
-    KCTP?: string;
-    BJS?: number;
-    title?: string;
-    KHBJSJs?: {
-        id?: string;
-        BJMC?: string;
-        BJMS?: string;
-        BJZT?: string;
-        ZJS?: string;
-        FJS?: string;
-        BJRS?: number;
-        KSS?: number;
-        FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
-        KBYS?: string;
-      }[];
-}
-type kcshj={ id?: string; KCLX?: string };
+    BJMC?: string;
+    BJMS?: string;
+    BJZT?: string;
+    ZJS?: string;
+    FJS?: string;
+    BJRS?: number;
+    KSS?: number;
+    FY?: number;
+    KKRQ?: string;
+    JKRQ?: string;
+    KBYS?: string;
+  }[];
+  KBYS?: string;
+};
+type kcshj = { id?: string; KCLX?: string };
 
 /**
  * 查询参数
@@ -37,10 +38,9 @@ type kcshj={ id?: string; KCLX?: string };
  * @interface TableListParams
  */
 export type TableListParams = {
-    pageSize?: number;
-    current?: number;
-    search?: string;
-    filter?: Record<string, any[]>;
-    sorter?: Record<string, any>;
-  } & Record<string, any>;
-  
+  pageSize?: number;
+  current?: number;
+  search?: string;
+  filter?: Record<string, any[]>;
+  sorter?: Record<string, any>;
+} & Record<string, any>;
