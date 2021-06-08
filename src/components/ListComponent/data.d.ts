@@ -61,9 +61,9 @@ export type ListItem = {
   }[];  // 摘要信息（左右分布）
   img?: string; // 缩略图地址
 };
-type ListType = 'list' | 'picList' | 'descList';
+type ListType = 'list' | 'picList' | 'descList' | 'onlyList' | 'onlyOneList';
 export type ListData = {
-  type?: ListType;
+  type: ListType;
   cls?: string; // 组件自定义类名
   header?: {
     title: string;

@@ -2,26 +2,25 @@
  * @description: 
  * @author: txx
  * @Date: 2021-05-31 10:24:05
- * @LastEditTime: 2021-06-03 15:37:13
+ * @LastEditTime: 2021-06-08 15:31:38
  * @LastEditors: txx
  */
-import type { ListData, ListItem } from "./data";
+
+import type { ListData, ListItem, ListType } from "./data";
 import { List } from 'antd';
-// import { listData } from "./mock";
 import styles from "./index.less";
 
 
-const NewsList = (props: { data: ListItem[] }) => {
-  const { data } = props;
-  return <div className={styles.Listvertical}>
+const NewsList = (props: { data: ListItem[], type: ListType }) => {
+  const { data, type } = props;
+  return <div className={styles[type]}>
     <List
       dataSource={data}
       renderItem={(v) => (
         <List.Item.Meta
-        style={{ marginBottom: `${!v.img && !v.desc ? "0" : "12px"}` }}
           avatar={v.img ? <img width="110" height="70" alt={v.title} src={v.img} /> : ''}
-          title={<div className={styles.ListverticalTitleRow}>
-            <div className={`${!v.img && !v.desc ? styles.onlyTitle : styles.Title}`} >
+          title={<div className={styles.TitleRow}>
+            <div className={styles.Title} >
               <a href={v.link}>
                 {v.title}
               </a>
@@ -56,7 +55,7 @@ const NewsList = (props: { data: ListItem[] }) => {
   </div>
 };
 const ListComp = (props: { listData: ListData }) => {
-  const { header, list, cls } = props.listData;
+  const { header, list, cls, type } = props.listData;
   return (
     <div className={`${styles.ListComponentBigBox} ${cls}`}>
       {header ? <div className={styles.ListHeader}>
@@ -69,7 +68,7 @@ const ListComp = (props: { listData: ListData }) => {
           </a>
         </div>
       </div> : ''}
-      <NewsList data={list} />
+      <NewsList data={list} type={type} />
     </div >
   )
 }

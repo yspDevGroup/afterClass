@@ -21,15 +21,14 @@
       }
     }
   }
-  .Listvertical {
-    .ListverticalTitleRow {
-      display: flex;
-      justify-content: space-between;
+  // type = 'picList'
+  .picList {
+    .TitleRow {
       height: 21px;
       margin-bottom: 7px;
-      line-height: 19.6px;
+      line-height: 21px;
       .Title {
-        width: calc(~'100% - 79px');
+        width: 100%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -39,17 +38,95 @@
           font-size: 14px;
         }
       }
-      .onlyTitle {
-        width: 100%;
-        height: 22px;
-        margin-bottom: 10px;
+    }
+    .descRow {
+      height: 18px;
+      font-size: 12px;
+      line-height: 18px;
+      .descleft {
         overflow: hidden;
-        line-height: 22px;
+        color: #999999;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        .descleftInspan {
+          padding: 0 8px;
+        }
+      }
+    }
+    .descRow:first-child {
+      margin-bottom: 6px;
+    }
+    :global {
+      .ant-list-item-meta {
+        margin-bottom: 12px;
+      }
+      .ant-list-item-meta-avatar {
+        margin-right: 10px;
+      }
+    }
+  }
+  // type='list'
+  .list {
+    .TitleRow {
+      height: 20px;
+      margin-bottom: 8px;
+      line-height: 20px;
+      .Title {
+        width: 100%;
+        overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
         a {
           color: #333333;
-          font-weight: 400;
+          font-weight: 600;
+          font-size: 14px;
+        }
+      }
+    }
+    .descRow {
+      height: 18px;
+      font-size: 12px;
+      line-height: 18px;
+      .descleft {
+        overflow: hidden;
+        color: #999999;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        .descleftInspan {
+          padding: 0 8px;
+        }
+      }
+    }
+    .descRow:first-child {
+      margin-bottom: 6px;
+    }
+    :global {
+      .ant-list-item-meta {
+        margin-bottom: 10px;
+        padding: 10px;
+        background: #ffffff;
+        border-radius: 8px;
+      }
+    }
+  }
+
+  // type='descList'
+  .descList {
+    .TitleRow {
+      display: flex;
+      justify-content: space-between;
+      height: 20px;
+      margin-bottom: 8px;
+      line-height: 20px;
+      .Title {
+        width: calc(~'100% - 80px');
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        a {
+          color: #333333;
+          font-weight: 600;
+          font-size: 14px;
         }
       }
       .TitleRight {
@@ -59,15 +136,14 @@
         }
       }
     }
-
     .descRow {
       display: flex;
       justify-content: space-between;
-      height: 18px;
+      height: 17px;
       font-size: 12px;
-      line-height: 16.8px;
+      line-height: 17px;
       .descleft {
-        width: calc(~'100% - 79px');
+        width: calc(~'100% - 80px');
         overflow: hidden;
         color: #999999;
         white-space: nowrap;
@@ -76,16 +152,57 @@
           padding: 0 8px;
         }
       }
-      .descright {
-        color: #666666;
+    }
+
+    :global {
+      .ant-list-item-meta {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 8px;
       }
     }
-    .descRow:first-child {
-      margin-bottom: 6px;
+  }
+  // type='onlyList'
+  .onlyList {
+    .TitleRow {
+      display: flex;
+      justify-content: space-between;
+      height: 20px;
+      line-height: 20px;
+      .Title {
+        width: calc(~'100% - 80px');
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        a {
+          color: #333333;
+          font-size: 14px;
+        }
+      }
+      .TitleRight {
+        span {
+          color: #999999;
+          font-weight: 400;
+          font-size: 12px;
+        }
+      }
     }
-    :global {
-      .ant-list-item-meta-avatar {
-        margin-right: 10px;
+  }
+  // type='onlyOneList'
+  .onlyOneList {
+    .TitleRow {
+      display: flex;
+      justify-content: space-between;
+      height: 20px;
+      line-height: 20px;
+      .Title {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        a {
+          color: #333333;
+          font-size: 14px;
+        }
       }
     }
   }
