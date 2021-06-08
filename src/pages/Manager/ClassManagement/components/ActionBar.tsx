@@ -9,7 +9,8 @@ import type { CourseItem } from "../data";
 type propstype = {
   handleEdit: (data: CourseItem) => void;
   record: CourseItem;
-  maintain: (type: string) => void
+  maintain: (type: string) => void;
+  // setnames: () => void;
 }
 
 const ActionBar = (props: propstype) => {

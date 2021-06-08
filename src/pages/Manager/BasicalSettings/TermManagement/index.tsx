@@ -120,8 +120,8 @@ const TermManagement = () => {
     },
     {
       title: '结束日期',
-      key: 'JSSJ',
-      dataIndex: 'JSSJ',
+      key: 'JSRQ',
+      dataIndex: 'JSRQ',
       align: 'center',
 
     },

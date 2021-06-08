@@ -34,7 +34,7 @@ const CourseManagement = () => {
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [readonly, stereadonly] = useState<boolean>(false);
   const [moduletype, setmoduletype] = useState<string>('crourse');
-  const [xn, setxn] = useState<string>();  
+  const [xn, setxn] = useState<string>();
   const [xq, setxq] = useState<string>();
   const [kcId, setkcId] = useState<string>('');
   // 查询课程名称
@@ -43,11 +43,13 @@ const CourseManagement = () => {
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 控制学期学年数据提示框的函数
-  const kaiguan=()=>{
+  const kaiguan = () => {
     setkai(false);
   };
-  let newxq='';
-  let newxn='';
+  // 弹框名称设定
+  const [names, setnames] = useState<string>('bianji')
+  let newxq = '';
+  let newxn = '';
 
 
   useEffect(() => {
@@ -65,8 +67,8 @@ const CourseManagement = () => {
             chainSel.defaultValue.second = term[0].key;
             chainSel.data = newData;
             setDataSource(defaultData);
-            newxn=chainSel.defaultValue.first
-            newxq=chainSel.defaultValue.second
+            newxn = chainSel.defaultValue.first
+            newxq = chainSel.defaultValue.second
             setxq(chainSel.defaultValue.second);
             setxn(chainSel.defaultValue.first);
             const ress = getAllKHKCSJ({ name: '', xn: chainSel.defaultValue.first, xq: chainSel.defaultValue.second, page: 0, pageCount: 0 });
@@ -146,18 +148,20 @@ const CourseManagement = () => {
   };
 
   const handleEdit = (data: any) => {
-    const NJSJs: any[] = [];
+    const njIds: any[] = [];
     data.NJSJs.map((item: any) => (
-      NJSJs.push(item.id)
+      njIds.push(item.id)
     ))
-    const list = { ...data, NJSJs }
+    const list = { ...data, njIds }
     list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
     setVisible(true);
     setCurrent(list);
     if (!(data.BJZT === '未排课') && !(data.BJZT === '已下架') && !(data.BJZT === '已排课')) {
       stereadonly(true)
+      setnames('chakan')
     } else {
       stereadonly(false)
+      setnames('add')
     }
   };
 
@@ -282,8 +286,8 @@ const CourseManagement = () => {
               filter,
             };
             const obj = {
-              xn:xn||newxn,
-              xq:xq||newxq,
+              xn: xn || newxn,
+              xq: xq || newxq,
               kcId,
               page: 1,
               pageCount: 20,
@@ -316,8 +320,8 @@ const CourseManagement = () => {
             </Button>,
           ]}
         />
-        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} mcData={mcData} />
-        <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' open={kai} colse={kaiguan}/>
+        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} mcData={mcData} names={names} />
+        <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' open={kai} colse={kaiguan} />
         <Modal
           visible={openes}
           onCancel={showmodal}
@@ -327,6 +331,7 @@ const CourseManagement = () => {
             maxHeight: '65vh',
             overflowY: 'auto',
           }}
+          style={{maxHeight:'430px'}}
           width='35vw'
           footer={[
             <Button key="back" onClick={() => setopenes(false)}>

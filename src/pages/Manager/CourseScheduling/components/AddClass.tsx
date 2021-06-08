@@ -61,6 +61,9 @@ const AddClass: FC<AddClassProps> = ({ visible, onClose, readonly, formValues, a
       label: '班级名称：',
       name: 'BJMC',
       key: 'BJMC',
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
     {
       type: 'select',

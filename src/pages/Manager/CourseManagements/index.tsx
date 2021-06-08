@@ -100,9 +100,19 @@ const NewClassManagement = () => {
         }
         return '新增信息';
     };
-    const handleOperation = (type: string, data?: classType) => {
+    const handleOperation = (type: string, data?: any) => {
+        console.log(data)
         if (data) {
-            setCurrent(data)
+            let KHKCLXId: any[] = [];
+            KHKCLXId=data.KHKCLX.id;
+            const KKRQ: any[] =[];
+            KKRQ.push(data.KKRQ);
+            KKRQ.push(data.JKRQ);
+            const BMKSSJ: any[]=[];
+            BMKSSJ.push(data.BMKSSJ);
+            BMKSSJ.push(data.BMJSSJ);
+            const list = { ...data, KHKCLXId,KKRQ,BMKSSJ }
+            setCurrent(list)
         } else {
             setCurrent(undefined);
         }
@@ -137,7 +147,7 @@ const NewClassManagement = () => {
             title: '课程类型',
             align: 'center',
             width: '10%',
-            key: 'KCLX',
+            key: 'KHKCLXId',
             render: (_, record) => {
                 return (
                     <>
@@ -283,6 +293,7 @@ const NewClassManagement = () => {
                     title={getModelTitle()}
                     destroyOnClose
                     width='35vw'
+                    style={{maxHeight:'430px',overflow:'auto'}}
                     visible={modalVisible}
                     onCancel={() => setModalVisible(false)}
                     footer={null}

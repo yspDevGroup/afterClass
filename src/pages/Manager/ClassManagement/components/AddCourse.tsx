@@ -14,13 +14,14 @@ type AddCourseProps = {
   formValues?: Record<string, any>;
   actionRef?: React.MutableRefObject<ActionType | undefined>;
   mcData?: { label: string; value: string; }[];
+  names?: string;
 };
 const formLayout = {
   labelCol: {},
   wrapperCol: {},
 };
 
-const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef, mcData}) => {
+const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef, mcData,names}) => {
   const [form, setForm] = useState<any>();
   const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
   // 获取年级数据
@@ -39,6 +40,15 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       }
     })
   }, []);
+  // 获取标题
+  const getTitle=()=>{
+    if(formValues&&names==='bianji'){
+      return '编辑信息'
+    }if(formValues&&names==='chakan'){
+      return '查看信息'
+    }
+      return '新增信息' 
+  }
 
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
@@ -80,6 +90,9 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       name: 'BJMC',
       key: 'BJMC',
       readonly,
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
     {
       type: 'select',
@@ -101,7 +114,8 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           name: 'BJZT',
           key: 'BJZT',
           fieldProps: {
-            disabled: true
+            disabled: true ,
+            autocomplete:'off'
           }
         },
         {
@@ -110,6 +124,9 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           name: 'FY',
           key: 'FY',
           readonly,
+          fieldProps:{
+            autocomplete:'off'
+          }
         },
       ]
     },
@@ -169,7 +186,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
   return (
     <div>
       <Drawer
-        title={formValues ? '编辑信息' : "新增信息"}
+        title={getTitle()}
         width={480}
         onClose={onClose}
         visible={visible}

@@ -30,6 +30,9 @@ const TimePeriodForm = (props: PropsType) => {
       name: 'SDMC',
       key: 'SDMC',
       rules: [{ required: true, message: '请填写名称' }],
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
     {
       type: 'time',
@@ -39,6 +42,7 @@ const TimePeriodForm = (props: PropsType) => {
       width: '100%',
       fieldProps: {
         format: 'HH:mm',
+
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
     },

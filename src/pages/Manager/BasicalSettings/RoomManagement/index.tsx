@@ -239,7 +239,7 @@ const RoomManagement = () => {
       <Modal
         title={getModelTitle()}
         destroyOnClose
-        width='50vw'
+        width='35vw'
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={modalType === 'uphold'? null :[
@@ -250,10 +250,11 @@ const RoomManagement = () => {
             确定
           </Button>
         ]}
+        style={{maxHeight:'430px'}}
         centered
         maskClosable={false}
         bodyStyle={{
-          maxHeight: '65vh',
+          maxHeight: '334px',
           overflowY: 'auto',
         }}
       >

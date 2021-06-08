@@ -74,6 +74,9 @@ const AddRoom = (props: PropsType) => {
       hidden: true,
       name: 'id',
       key: 'id',
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
     {
       type: 'input',
@@ -81,6 +84,9 @@ const AddRoom = (props: PropsType) => {
       label: '名称',
       name: 'FJMC',
       key: 'FJMC',
+      fieldProps:{
+        autocomplete:'off'
+      },
       rules: [{ required: true, message: '请填写名称' }],
     },
     {
@@ -90,6 +96,9 @@ const AddRoom = (props: PropsType) => {
       name: 'FJBH',
       key: 'FJBH',
       rules: [{ required: true, message: '请填写编号' }],
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
     {
       type: 'select',
@@ -123,6 +132,9 @@ const AddRoom = (props: PropsType) => {
       name: 'BZXX',
       key: 'BZXX',
       rules: [{ required: true, message: '请填写场地地址' }],
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
   ];
   return (

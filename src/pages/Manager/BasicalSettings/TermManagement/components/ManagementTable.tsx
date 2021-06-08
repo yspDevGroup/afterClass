@@ -31,6 +31,9 @@ const OrganizationTable = (props: PropsType) => {
       name: 'XN',
       key: 'XN',
       rules: [{ required: true, message: '请填写学年' }],
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
     {
       type: 'input',
@@ -39,6 +42,9 @@ const OrganizationTable = (props: PropsType) => {
       name: 'XQ',
       key: 'XQ',
       rules: [{ required: true, message: '请填写学年' }],
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
     {
       type: 'dateRange',

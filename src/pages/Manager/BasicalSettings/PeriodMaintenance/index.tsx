@@ -208,7 +208,7 @@ const PeriodMaintenance = () => {
         <Modal
           title={getModelTitle()}
           destroyOnClose
-          width="30vw"
+          width="35vw"
           visible={modalVisible}
           onCancel={() => setModalVisible(false)}
           footer={[
@@ -219,6 +219,7 @@ const PeriodMaintenance = () => {
               确定
             </Button>,
           ]}
+          style={{maxHeight:'430px'}}
           centered
           maskClosable={false}
           bodyStyle={{

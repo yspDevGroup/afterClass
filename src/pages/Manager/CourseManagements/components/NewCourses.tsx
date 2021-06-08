@@ -28,33 +28,44 @@ const NewCourses = (props: PropsType) => {
   const { current, onClose, visible, actionRef } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [form, setForm] = useState<any>();
-  const [xn, setxn] = useState<any[]>();
-  const [xq, setxq] = useState<any[]>();
+  const [XNData, setXNData] = useState<any>([]);
+  const [XQData, setXQData] = useState<any>([]);
+  const [XN, setXN] = useState<any>();
+  const [XQ, setXQ] = useState<any>();
   const imgurl = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
 
   useEffect(() => {
     async function fetchData() {
       const res = await getAllXNXQ({});
       if (res.status === 'ok') {
-        const xns: any[] = [];
-        const xqs: any[] = [];
-        if (res.data) {
-          res.data.map((item: any) => {
-            return (
-              xns.push({
-                label: item.XN,
-                value: item.XN,
-              }),
-              xqs.push({
-                label: item.XQ,
-                value: item.XQ,
-              })
-            );
+        const xnxqAllData = res.data;
+        const xnData: any[] = [];
+        xnxqAllData?.map((item: any) => xnData.push(item.XN));
+
+        // 数组去重
+        const unique = (ary: any) => {
+          const s = new Set(ary);
+          return Array.from(s);
+        };
+
+        const xnDataKey = unique(xnData);
+
+        const xq = {};
+        const xn: { label: any; value: any }[] = [];
+        xnDataKey.map((item: any) => {
+          const xqData: { label: any; value: any }[] = [];
+          xnxqAllData?.map((xnxqItem: any) => {
+            if (item === xnxqItem.XN) {
+              return xqData.push({ label: xnxqItem.XQ, value: xnxqItem.XQ });
+            }
+            return ''
           });
-          setxn(xns);
-          setxq(xqs);
-          actionRef?.current?.reload();
-        }
+          xq[`${item}`] = xqData;
+          xn.push({ label: item, value: item });
+          return ''
+        });
+        setXNData(xn);
+        setXQData(xq);
       } else {
         console.log(res.message);
       }
@@ -123,6 +134,9 @@ const NewCourses = (props: PropsType) => {
       hidden: true,
       name: 'id',
       key: 'id',
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
     {
       type: 'input',
@@ -130,6 +144,9 @@ const NewCourses = (props: PropsType) => {
       name: 'KCMC',
       key: 'KCMC',
       width: '100%',
+      fieldProps:{
+        autocomplete:'off'
+      }
     },
     {
       type: 'select',
@@ -177,18 +194,35 @@ const NewCourses = (props: PropsType) => {
       },
     },
     {
-      type: 'select',
-      label: '学期:',
-      name: 'XQ',
-      key: 'XQ',
-      options: xq,
-    },
-    {
-      type: 'select',
-      label: '学年:',
-      name: 'XN',
-      key: 'XN',
-      options: xn,
+      type: 'cascader',
+      label: '学年学期：',
+      key: 'XNXQId',
+      cascaderItem: [
+        {
+          type: 'select',
+          width: '100%',
+          name: 'XN',
+          key: 'XN',
+          placeholder: '请选择学年',
+          noStyle: true,
+          options: XNData,
+          fieldProps: {
+            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+              setXN(event);
+              setXQ(XQData[`${event}`]);
+            },
+          },
+        },
+        {
+          type: 'select',
+          name: 'XQ',
+          width: '100%',
+          key: 'XQ',
+          placeholder: '请选择学期',
+          noStyle: true,
+          options: XQ,
+        },
+      ],
     },
     {
       type: 'uploadImage',
@@ -237,7 +271,7 @@ const NewCourses = (props: PropsType) => {
           layout="vertical"
           setForm={setForm}
           onFinish={onFinish}
-          values={(() => {
+          values={XN ? { XQ: XQData[XN][0].label } : (() => {
             if (current) {
               const { KHKCLX, ...info } = current;
               return {

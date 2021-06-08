@@ -142,7 +142,9 @@ body,
     }
 
     .ant-modal-content {
+      max-height: 430px;
       .ant-modal-header {
+        height: 48px;
         .ant-modal-title {
           font-weight: bold;
           font-size: @font-size-base;
@@ -158,16 +160,19 @@ body,
       }
 
       .ant-modal-footer {
-        padding: @padding-sm @padding-lg;
-
+        padding: 10px 24px;
+        height: 48px;
         .ant-btn {
-          width: 80px;
-          height: 32px;
+          width: 72px;
+          height: 28px;
           font-weight: normal;
           font-size: @font-size-base;
-          line-height: 22px;
+          line-height: 18px;
           text-align: center;
           border-radius: 2px;
+        }
+        .ant-btn-primary{
+          margin-left: 16px;
         }
       }
     }
