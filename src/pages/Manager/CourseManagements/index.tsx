@@ -34,12 +34,18 @@ const NewClassManagement = () => {
     const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
     const [xn, setxn] = useState<string>();
     const [xq, setxq] = useState<string>();
+    // 学年学期没有时的提示框控制
+    const [kai, setkai] = useState<boolean>(false)
     // 设置表单的查询更新
     const [name, setName] = useState<string>('');
+    // 关闭学期学年提示框
+    const kaiguan = () => {
+        setkai(false)
+    }
 
     useEffect(() => {
         async function fetchData() {
-            const res = await getAllXNXQ({});
+            const res = await getAllXNXQ();
             if (res.status === 'ok') {
                 const { data = [] } = res;
                 const defaultData = [...searchData];
@@ -56,10 +62,10 @@ const NewClassManagement = () => {
                         setxn(chainSel.defaultValue.first);
                     }
                 } else {
-                    <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' />
+                    setkai(true)
                 }
-            } 
-           else {
+            }
+            else {
                 console.log(res.message);
             }
         }
@@ -155,7 +161,7 @@ const NewClassManagement = () => {
             title: '课程封面',
             align: 'center',
             width: '10%',
-            dataIndex:'KCTP',
+            dataIndex: 'KCTP',
             render: (_, record) => {
                 return (
                     <>
@@ -272,6 +278,7 @@ const NewClassManagement = () => {
                     ]}
                 />
                 <NewCourses actionRef={actionRef} visible={open} onClose={onClose} current={current} />
+                <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' open={kai} colse={kaiguan} />
                 <Modal
                     title={getModelTitle()}
                     destroyOnClose
@@ -288,7 +295,7 @@ const NewClassManagement = () => {
                 >
                     <Sitclass />
                 </Modal>
-               
+
             </PageContainer>
         </>
     )

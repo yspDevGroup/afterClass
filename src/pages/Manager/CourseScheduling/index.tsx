@@ -30,7 +30,12 @@ const ClassManagement = () => {
   const [xn, setXn] = useState<any>();
   const [xq, setXq] = useState<any>();
   const [tableDataSource, setTableDataSource] = useState<any>([]);
-
+  // 学期学年没有数据时提示的开关
+  const [kai, setkai] = useState<boolean>(false);
+  // 控制学期学年数据提示框的函数
+  const kaiguan=()=>{
+    setkai(false);
+  };
   const showDrawer = () => {
     setState(false);
   };
@@ -139,7 +144,7 @@ const ClassManagement = () => {
           });
         }
         else{
-          <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来'  link='/basicalSettings/termManagement'/>
+         setkai(true)
       }
       } else {
         console.log(res.message);
@@ -227,6 +232,7 @@ const ClassManagement = () => {
   return (
     <>
       <PageContainer>
+      <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来'  link='/basicalSettings/termManagement' open={kai} colse={kaiguan}/>
         {state === true ? (
           <div>
             <div

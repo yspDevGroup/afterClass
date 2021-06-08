@@ -1,6 +1,5 @@
 import Modal from "antd/lib/modal/Modal"
 import type { FC} from "react";
-import { useState } from "react"
 import { Link } from "umi"
 import styles from './index.less'
 
@@ -9,21 +8,20 @@ import styles from './index.less'
 type propttype = {
     text: string;
     link?: string;
+    open: boolean;
+    colse: () => void
 }
 
 
 const PromptInformation: FC<propttype> = (
     { text,
         link,
+        open,
+        colse
      }
 ) => {
-    const [open, setopen] = useState<boolean>(true)
-    const colse=()=>{
-        setopen(false)
-    }
-   
+
     return (
-        <>
             <Modal
                 title={null}
                 footer={null}
@@ -46,7 +44,6 @@ const PromptInformation: FC<propttype> = (
                     </div>
                 </div>
             </Modal>
-        </>
     )
 }
 
