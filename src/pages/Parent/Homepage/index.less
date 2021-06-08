@@ -1,31 +1,56 @@
-.LayoutBox {
-  max-width: 1920px;
-  // padding: 20px;
-  .leftCard {
-    margin-bottom: 16px;
+.mobilePageHeader {
+  height: 100vh;
+  width: 100vw;
+  background: #fff;
+  overflow: hidden;
+  position: relative;
+
+  .menuTab {
+    width: 100%;
+
+    :global {
+      .ant-tabs-nav {
+        width: 100%;
+        height: 40px;
+        position: fixed;
+        bottom: 0;
+        margin: 0;
+        display: block;
+
+        &:before {
+          top: 0;
+          bottom: auto;
+        }
+
+        .ant-tabs-nav-wrap {
+          display: block;
+
+          .ant-tabs-nav-list {
+            flex-flow: initial;
+            justify-content: space-around;
+
+            .ant-tabs-tab {
+              .anticon {
+                display: block;
+                margin: 0;
+              }
+
+              font-size: @font-size-sm;
+              color: @text-color-secondary;
+
+              &+.ant-tabs-tab {
+                margin: 0;
+              }
+            }
+          }
+
+        }
+
+        .ant-tabs-nav-operations,
+        .ant-tabs-ink-bar {
+          display: none;
+        }
+      }
+    }
   }
-  // .leftOne {
-  //   margin-bottom: 16px;
-  // }
-  // .leftTwo {
-  //   margin: 16px 0 0 20px;
-  // }
-  // .leftThree {
-  //   margin: 16px 0 0 20px;
-  // }
-  .rightCard {
-    margin-bottom: 16px;
-  }
-  // .rightOne {
-  //   margin: 20px 20px 0 0;
-  // }
-  // .rightTwo {
-  //   margin: 16px 20px 0 0;
-  // }
-  // .rightThree {
-  //   margin: 16px 20px 0 0;
-  // }
-  // .rightFour {
-  //   margin: 16px 20px 60px 0;
-  // }
 }

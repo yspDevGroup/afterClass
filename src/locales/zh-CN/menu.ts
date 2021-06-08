@@ -8,6 +8,7 @@ export default {
   'menu.courseManagements': '课程管理',
   'menu.classManagement': '班级管理',
   'menu.courseScheduling': '排课管理',
-  'menu.listComponent': 'List组件',
-  'menu.displayColumn': '图标文字组件',
+  'menu.parent': '家长端',
+  'menu.parent.home': '首页',
+  'menu.parent.listComponent': '列表组件',
 };

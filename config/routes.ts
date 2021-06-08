@@ -26,12 +26,6 @@
     ],
   },
   {
-    path: '/homepage',
-    name: 'homePage',
-    icon: 'smile',
-    component: './Parent/Homepage',
-  },
-  {
     path: '/basicalSettings',
     name: 'basicalSettings',
     icon: 'crown',
@@ -79,20 +73,6 @@
     component: './Manager/CourseScheduling',
   },
   {
-    path: '/listComponent',
-    name: 'listComponent',
-    icon: 'smile',
-    layout: false,
-    component: './Parent/ListComponent',
-  },
-  {
-    path: '/displayColumn',
-    name: 'displayColumn',
-    icon: 'smile',
-    layout: false,
-    component: './Parent/DisplayColumn',
-  },
-  {
     path: '/',
     layout: false,
     redirect: './courseManagements',
@@ -104,8 +84,21 @@
     component: './Teacher/CheckonManagement',
   },
   /*** 老师路由 end ***/
-
   /*** 家长路由 start ***/
+  {
+    path: '/parent',
+    name: 'parent',
+    layout: false,
+    icon: 'smile',
+    routes: [
+      {
+        path: '/parent/home',
+        name: 'home',
+        icon: 'smile',
+        component: './Parent/Homepage',
+      }
+    ]
+  },
   /*** 家长路由 end ***/
   {
     component: './404',

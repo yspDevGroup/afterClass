@@ -5,9 +5,9 @@
  * @LastEditTime: 2021-06-03 15:37:13
  * @LastEditors: txx
  */
-import type { ListItem } from "./data";
+import type { ListData, ListItem } from "./data";
 import { List } from 'antd';
-import { listData } from "./mock";
+// import { listData } from "./mock";
 import styles from "./index.less";
 
 
@@ -54,8 +54,8 @@ const NewsList = (props: { data: ListItem[] }) => {
     />
   </div>
 };
-const ListComp = () => {
-  const { header, list, cls } = listData;
+const ListComp = (props: { listData: ListData }) => {
+  const { header, list, cls } = props.listData;
   return (
     <div className={`${styles.ListComponentBigBox} ${cls}`}>
       {header ? <div className={styles.ListHeader}>
@@ -72,4 +72,4 @@ const ListComp = () => {
     </div >
   )
 }
-export default ListComp
+export default ListComp;
