@@ -5,6 +5,7 @@ import imgNotice from '@/assets/notice.png';
 import { RightOutlined } from '@ant-design/icons';
 import ListComponent from '@/components/ListComponent';
 import { listData } from './listData';
+import CourseTab from './components/CourseTab';
 
 const Home = () => {
   return <div className={styles.indexPage}>
@@ -31,7 +32,7 @@ const Home = () => {
         <div className={styles.enrollDate}>选课时间：2021.09.02 12:00—2021.09.05 18:00</div>
       </div>
       <div className={styles.courseArea}>
-
+        <CourseTab />
       </div>
       <div className={styles.announceArea}>
         <ListComponent listData={listData} />

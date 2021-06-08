@@ -3,6 +3,8 @@ import { Tabs } from 'antd';
 import { HomeOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import Home from './Home';
+import Study from './Studay';
+import Mine from './Mine';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
@@ -22,7 +24,7 @@ const PersonalHomepage = () => {
           学习园地
         </span>
       } key="study">
-        学习园地
+        <Study />
       </TabPane>
       <TabPane tab={
         <span>
@@ -30,7 +32,7 @@ const PersonalHomepage = () => {
           我的
         </span>
       } key="mine">
-        我的
+        <Mine />
       </TabPane>
     </Tabs>
   </div>;
