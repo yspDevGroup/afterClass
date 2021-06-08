@@ -18,9 +18,10 @@ const NewsList = (props: { data: ListItem[] }) => {
       dataSource={data}
       renderItem={(v) => (
         <List.Item.Meta
+        style={{ marginBottom: `${!v.img && !v.desc ? "0" : "12px"}` }}
           avatar={v.img ? <img width="110" height="70" alt={v.title} src={v.img} /> : ''}
           title={<div className={styles.ListverticalTitleRow}>
-            <div className={styles.Title} >
+            <div className={`${!v.img && !v.desc ? styles.onlyTitle : styles.Title}`} >
               <a href={v.link}>
                 {v.title}
               </a>
