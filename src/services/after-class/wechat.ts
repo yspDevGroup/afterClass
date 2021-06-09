@@ -68,37 +68,9 @@ export async function getQYJsSignature(
 ) {
   return request<{
     status?: 'ok' | 'error';
-    data: { appId?: string; timestamp?: number; nonceStr?: string; signature?: string };
+    data?: { appId?: string; timestamp?: number; nonceStr?: string; signature?: string };
     message?: string;
   }>('/wechat/getQYJsSignature', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** 获取wx.agentConfig签名 POST /wechat/getYYJsSignature */
-export async function getYYJsSignature(
-  body: {
-    /** 签名用的url必须是调用JS接口页面的完整URL */
-    url?: string;
-  },
-  options?: { [key: string]: any },
-) {
-  return request<{
-    status?: 'ok' | 'error';
-    data: {
-      corpid?: string;
-      agentid?: string;
-      timestamp?: number;
-      nonceStr?: string;
-      signature?: string;
-    };
-    message?: string;
-  }>('/wechat/getYYJsSignature', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

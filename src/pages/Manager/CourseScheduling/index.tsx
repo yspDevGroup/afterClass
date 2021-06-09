@@ -1,9 +1,8 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Radio } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import type { ActionType } from '@ant-design/pro-table';
 
 import type { SearchDataType } from '@/components/Search/data';
 import PageContainer from '@/components/PageContainer';
@@ -18,15 +17,10 @@ import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 
 import AddArranging from './components/AddArranging';
-import AddClass from './components/AddClass';
-import type { ClassItem } from './data';
 import { searchData } from './searchConfig';
 import './index.less';
 
 const ClassManagement = () => {
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [current] = useState<ClassItem>();
-  const actionRef = useRef<ActionType>();
   const [state, setState] = useState(true);
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [xn, setXn] = useState<any>();
@@ -151,9 +145,6 @@ const ClassManagement = () => {
       }
     })();
   }, []);
-  const onClose = () => {
-    setModalVisible(false);
-  };
 
   const columns: {
     title: string;
@@ -293,15 +284,10 @@ const ClassManagement = () => {
             xq={xq}
             tableDataSource={tableDataSource}
             processingData={processingData}
+            xXSJPZData={xXSJPZData}
             setTableDataSource={setTableDataSource}
           />
         )}
-        <AddClass
-          visible={modalVisible}
-          onClose={onClose}
-          formValues={current}
-          actionRef={actionRef}
-        />
       </PageContainer>
     </>
   );

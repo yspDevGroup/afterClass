@@ -181,7 +181,6 @@ const Index: FC<IndexPropsType> = ({
       onExcelTableClick(selectList);
     }
   };
-
   return (
     <div className={`${styles.excelTable} ${className}`}>
       <table>

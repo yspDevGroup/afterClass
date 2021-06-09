@@ -2,20 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
-import styles from '../index.less';
 import ProCard from '@ant-design/pro-card';
-import type { BJType, RoomType, GradeType, SiteType, CourseType } from '../data';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Menu, message } from 'antd';
+import { Button, Form, message } from 'antd';
+
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllNJSJ } from '@/services/after-class/njsj';
-import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
+import { allKCsByNJ, allNJs, getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllFJSJ } from '@/services/after-class/fjsj';
-import ExcelTable from '@/components/ExcelTable';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
 import { getFJPlan } from '@/services/after-class/fjsj';
-import { updateKHBJSJ } from '@/services/after-class/khbjsj';
+
+import type { BJType, RoomType, GradeType, SiteType, CourseType } from '../data';
+import ExcelTable from '@/components/ExcelTable';
+import styles from '../index.less';
 
 type PropsType = {
   setState?: any;
@@ -24,12 +25,23 @@ type PropsType = {
   tableDataSource: any[];
   processingData: (value: any, timeSlot: any) => void;
   setTableDataSource: (value: any) => void;
+  formValues?: Record<string, any>;
+  xXSJPZData?: any;
 };
 
 const AddArranging: FC<PropsType> = (props) => {
-  const { setState, xn, xq, tableDataSource, processingData, setTableDataSource } = props;
+  const {
+    setState,
+    xn,
+    xq,
+    tableDataSource,
+    processingData,
+    setTableDataSource,
+    formValues,
+    xXSJPZData,
+  } = props;
   const [packUp, setPackUp] = useState(false);
-  const [Bj, setBj] = useState<any>();
+  const [Bj, setBj] = useState<any>(undefined);
   const [index, setIndex] = useState();
   const [njId, setNjId] = useState();
   const [kcId, setKcId] = useState();
@@ -41,61 +53,12 @@ const AddArranging: FC<PropsType> = (props) => {
   const [siteType, setSiteType] = useState<any>([]);
   const [kcType, setKcType] = useState<any>([]);
   const [bjData, setBjData] = useState<any>([]);
+  const [form] = Form.useForm();
+
   // const handleMenuClick = (e: any) => {
   //     console.log('click', e.key);
   //     setColors(e.key);
   // }
-  async function handleMenuClick(e: any) {
-    setColors(e.key);
-    if (Bj?.id) {
-      const params = {
-        id: Bj?.id,
-      };
-      const options = {
-        KBYS: e.key,
-      };
-      const updateBj = await updateKHBJSJ(params, options);
-      console.log(updateBj);
-    }
-  }
-
-  const menu = (
-    <Menu onClick={handleMenuClick} className="colors">
-      <Menu.Item
-        key="rgba(255, 213, 65, 1)"
-        style={{ backgroundColor: 'rgba(255, 213, 65, 1)' }}
-      ></Menu.Item>
-      <Menu.Item
-        key="rgba(218, 233, 76, 1)"
-        style={{ backgroundColor: 'rgba(218, 233, 76, 1)' }}
-      ></Menu.Item>
-      <Menu.Item
-        key="rgba(255, 137, 100, 1)"
-        style={{ backgroundColor: 'rgba(255, 137, 100, 1)' }}
-      ></Menu.Item>
-      <Menu.Item
-        key="rgba(125, 206, 129, 1)"
-        style={{ backgroundColor: 'rgba(125, 206, 129, 1)' }}
-      ></Menu.Item>
-      <Menu.Item
-        key="rgba(100, 213, 227, 1)"
-        style={{ backgroundColor: 'rgba(100, 213, 227, 1)' }}
-      ></Menu.Item>
-      <Menu.Item
-        key="rgba(99, 181, 246, 1)"
-        style={{ backgroundColor: 'rgba(99, 181, 246, 1)' }}
-      ></Menu.Item>
-      <Menu.Item
-        key="rgba(149, 118, 204, 1)"
-        style={{ backgroundColor: 'rgba(149, 118, 204, 1)' }}
-      ></Menu.Item>
-      <Menu.Item
-        key="rgba(240, 97, 145, 1)"
-        style={{ backgroundColor: 'rgba(240, 97, 145, 1)' }}
-      ></Menu.Item>
-    </Menu>
-  );
-
   const columns: {
     title: string;
     dataIndex: string;
@@ -184,8 +147,16 @@ const AddArranging: FC<PropsType> = (props) => {
     }
   };
   // 班级选择
-  const BjClick = (value: BJType, key: any) => {
-    setBj(value);
+  const BjClick = (value: any, key: any) => {
+    const chosenData = {
+      cla: value.BJMC || '',
+      teacher: value.ZJS || '',
+      XNXQId: value.KHKCSJ.XNXQId || '',
+      KHBJSJId: value.id || '',
+      color: value.KHKCSJ.KHKCLX.KBYS || 'rgb(81, 208, 129, 1)',
+    };
+
+    setBj(chosenData);
     setIndex(key);
   };
 
@@ -255,15 +226,13 @@ const AddArranging: FC<PropsType> = (props) => {
           name: '',
         });
         if (kcList.status === 'ok') {
-          if (kcList.data && kcList.data.length > 0) {
-            const data: any = [].map.call(kcList.data, (item: CourseType) => {
-              return {
-                label: item.KCMC,
-                value: item.id,
-              };
-            });
-            setKcType(data);
-          }
+          const data: any = [].map.call(kcList.data, (item: CourseType) => {
+            return {
+              label: item.KCMC,
+              value: item.id,
+            };
+          });
+          setKcType(data);
         } else {
           message.error(kcList.message);
         }
@@ -312,21 +281,20 @@ const AddArranging: FC<PropsType> = (props) => {
     }
     fetchData();
   }, []);
-  const chosenData = {
-    cla: Bj ? Bj.BJMC : '',
-    teacher: Bj ? Bj.ZJS : '',
-    XNXQId: Bj ? Bj.KHKCSJ.XNXQId : '',
-    KHBJSJId: Bj ? Bj.id : '',
-    color: colors || 'rgb(81, 208, 129, 1)',
-  };
+
+  useEffect(() => {
+    if (formValues) {
+      form.setFieldsValue(formValues);
+    }
+  }, [formValues]);
   return (
     <div style={{ background: '#FFFFFF' }}>
       <p className="xinzen">新增排课</p>
       <ProForm
         className="ArrangingFrom"
         name="validate_other"
-        initialValues={{}}
         layout="horizontal"
+        form={form}
         onFinish={submit}
         submitter={{
           render: (Props) => {
@@ -348,10 +316,13 @@ const AddArranging: FC<PropsType> = (props) => {
           options={gradeType}
           fieldProps={{
             async onChange(value) {
-              setNjId(value);
+              // 年级选择时将选中的课程清空
+              form.setFieldsValue({ KC: undefined });
+
+              // 获取班级的数据
               const bjList = await getAllKHBJSJ({
                 kcId: kcId === undefined ? '' : kcId,
-                njId: value,
+                njId: value || '',
                 xn,
                 xq,
                 page: 0,
@@ -359,6 +330,27 @@ const AddArranging: FC<PropsType> = (props) => {
                 name: '',
               });
               setBjData(bjList.data);
+
+              // 根据班级ID 获取课程数据
+              const parma = {
+                id: value,
+                xn,
+                xq,
+              };
+              const kcList = await allKCsByNJ(parma);
+              if (kcList.status === 'ok') {
+                if (kcList.data?.length === 0) {
+                  setKcType([]);
+                  setNjId(undefined);
+                } else if (kcList.data && kcList.data.length > 0) {
+                  const kcData = kcList.data.map((item: any) => ({
+                    label: item.KCMC,
+                    value: item.id,
+                  }));
+                  setKcType(kcData);
+                  setNjId(value);
+                }
+              }
             },
           }}
         />
@@ -370,17 +362,33 @@ const AddArranging: FC<PropsType> = (props) => {
           showSearch
           fieldProps={{
             async onChange(value) {
-              setKcId(value);
+              // 获取班级的数据
               const bjList = await getAllKHBJSJ({
-                kcId: value,
+                kcId: value || '',
                 njId: njId === undefined ? '' : njId,
-                xn,
-                xq,
+                xn: value ? '' : xn,
+                xq: value ? '' : xq,
                 page: 0,
                 pageCount: 0,
                 name: '',
               });
               setBjData(bjList.data);
+
+              // 获取年级的数据
+              const njList = await allNJs({ id: value });
+              if (njList.status === 'ok') {
+                if (njList.data?.length === 0) {
+                  setGradeType([]);
+                  setKcId(undefined);
+                } else if (njList.data && njList.data.length > 0) {
+                  const njData = njList.data.map((item: any) => ({
+                    label: item.NJMC,
+                    value: item.id,
+                  }));
+                  setGradeType(njData);
+                  setKcId(value);
+                }
+              }
             },
           }}
         />
@@ -471,7 +479,10 @@ const AddArranging: FC<PropsType> = (props) => {
           label="场地类型"
           fieldProps={{
             async onChange(value) {
-              setCdlxId(value);
+              // 场地类型选择时将选中的场地名称清空
+              form.setFieldsValue({ CDMC: undefined });
+
+              // 获取场地的数据
               const fjList = await getAllFJSJ({
                 lxId: value,
                 page: 0,
@@ -485,7 +496,13 @@ const AddArranging: FC<PropsType> = (props) => {
                     value: item.id,
                   };
                 });
-                setSiteType(data);
+                if (data.length > 0) {
+                  setSiteType(data);
+                  setCdlxId(value);
+                } else if (data.length === 0) {
+                  setCdlxId(undefined);
+                  setSiteType([]);
+                }
               } else {
                 message.error(fjList.message);
               }
@@ -494,10 +511,11 @@ const AddArranging: FC<PropsType> = (props) => {
                 fjId: '',
                 xn,
                 xq,
+                isPk: false,
               });
               if (Fjplan.status === 'ok') {
-                // const data = processingData(Fjplan.data);
-                // setTableDataSource(data);
+                const data = processingData(Fjplan.data, xXSJPZData);
+                setTableDataSource(data);
               } else {
                 message.error(Fjplan.message);
               }
@@ -519,10 +537,11 @@ const AddArranging: FC<PropsType> = (props) => {
                 fjId: value,
                 xn,
                 xq,
+                isPk: false,
               });
               if (Fjplan.status === 'ok') {
-                // const data = processingData(Fjplan.data);
-                // setTableDataSource(data);
+                const data = processingData(Fjplan.data, xXSJPZData);
+                setTableDataSource(data);
               } else {
                 message.error(Fjplan.message);
               }
@@ -530,22 +549,20 @@ const AddArranging: FC<PropsType> = (props) => {
           }}
         />
 
-        <Dropdown overlay={menu} className="btn">
-          <Button>
-            颜色选择 <DownOutlined />
-          </Button>
-        </Dropdown>
-
         <div className="site">
           <span>场地：</span>
-          <ExcelTable
-            className={styles.borderTable}
-            columns={columns}
-            dataSource={tableDataSource}
-            chosenData={chosenData}
-            onExcelTableClick={onExcelTableClick}
-            type="edit"
-          />
+          {Bj ? (
+            <ExcelTable
+              className={styles.borderTable}
+              columns={columns}
+              dataSource={tableDataSource}
+              chosenData={Bj}
+              onExcelTableClick={onExcelTableClick}
+              type="edit"
+            />
+          ) : (
+            <div className={styles.noContent}>请先选择班级后再进行排课</div>
+          )}
         </div>
       </ProForm>
     </div>

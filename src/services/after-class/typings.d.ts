@@ -760,6 +760,7 @@ declare namespace API {
       BMKSSJ?: string;
       BMJSSJ?: string;
       XNXQId?: string;
+      KHKCLX?: { id?: string; KCLX?: string; KBYS?: string };
     };
     NJSJs?: { id?: string; NJ?: number; NJMC?: string }[];
     KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
@@ -1745,40 +1746,30 @@ declare namespace API {
   };
 
   type XXPZ = {
-    id: string;
-    /** 报名开始时间 */
-    BMKSSJ?: string;
-    /** 报名结束时间 */
-    BMJSSJ?: string;
+    /** 键 */
+    KEY?: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ';
+    /** 值 */
+    VALUE?: string;
     /** 备注信息 */
-    BZXX?: string;
-    XXJBSJ?: {
-      id?: string;
-      XXDM?: string;
-      XXMC?: string;
-      XXYWMC?: string;
-      XXDZ?: string;
-      XXYZBM?: string;
-      XZQHM?: string;
-    };
+    REMARK?: string;
   };
 
   type CreateXXPZ = {
-    /** 报名开始时间 */
-    BMKSSJ: string;
-    /** 报名结束时间 */
-    BMJSSJ: string;
+    /** 键 */
+    KEY: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ';
+    /** 值 */
+    VALUE: string;
     /** 备注信息 */
-    BZXX?: string;
+    REMARK?: string;
   };
 
   type UpdateXXPZ = {
-    /** 报名开始时间 */
-    BMKSSJ?: string;
-    /** 报名结束时间 */
-    BMJSSJ?: string;
+    /** 键 */
+    KEY: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ';
+    /** 值 */
+    VALUE: string;
     /** 备注信息 */
-    BZXX?: string;
+    REMARK?: string;
   };
 
   type XXSJPZ = {
