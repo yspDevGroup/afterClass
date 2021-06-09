@@ -80,17 +80,10 @@ const NewClassManagement = () => {
         }
     }, [xn, xq])
     // 头部input事件
-    const handlerSearch = (type: string, value: string, term: string) => {
-        if (type === 'year' || type === 'term') {
-            setxn(value);
-            setxq(term);
-            return actionRef.current?.reload();
-        }
-        if (type === 'input') {
-            setName(value);
-        }
-        return actionRef.current?.reload();
-    };
+    const handlerSearch = (type: string, value: string) => {
+        setName(value);
+        actionRef.current?.reload();
+      };
     const getModelTitle = () => {
         if (modalType === 'uphold') {
             return '课程类型维护';
@@ -101,7 +94,6 @@ const NewClassManagement = () => {
         return '新增信息';
     };
     const handleOperation = (type: string, data?: any) => {
-        console.log(data)
         if (data) {
             let KHKCLXId: any[] = [];
             KHKCLXId=data.KHKCLX.id;
@@ -111,7 +103,11 @@ const NewClassManagement = () => {
             const BMKSSJ: any[]=[];
             BMKSSJ.push(data.BMKSSJ);
             BMKSSJ.push(data.BMJSSJ);
-            const list = { ...data, KHKCLXId,KKRQ,BMKSSJ }
+            const XNXQ = {
+                XN: data.XNXQ.XN,
+                XQ: data.XNXQ.XQ
+            };
+            const list = { ...data, KHKCLXId,KKRQ,BMKSSJ, ...XNXQ }
             setCurrent(list)
         } else {
             setCurrent(undefined);
@@ -253,7 +249,7 @@ const NewClassManagement = () => {
                     headerTitle={
                         <SearchComponent
                             dataSource={dataSource}
-                            onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)}
+                            onChange={(type: string, value: string,) => handlerSearch(type, value,)}
                         />
                     }
                     request={(params, sorter, filter) => {

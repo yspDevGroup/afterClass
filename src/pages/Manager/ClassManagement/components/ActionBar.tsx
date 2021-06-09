@@ -1,4 +1,5 @@
 import { deleteKHBJSJ } from "@/services/after-class/khbjsj";
+import type { ActionType } from "@ant-design/pro-table";
 import { Popconfirm } from "antd";
 import { message } from "antd";
 import { Divider } from "antd";
@@ -10,19 +11,21 @@ type propstype = {
   handleEdit: (data: CourseItem) => void;
   record: CourseItem;
   maintain: (type: string) => void;
+  actionRef: React.MutableRefObject<ActionType | undefined>;
   // setnames: () => void;
 }
 
 const ActionBar = (props: propstype) => {
-  const { handleEdit, record, maintain } = props
-
+  const { handleEdit, record, maintain,actionRef } = props;
+  const Url = `/courseScheduling?courseId=${record.id}`;
   switch (record.BJZT) {
+    case '待发布':
     case '未排课':
     case '已下架':
       return (
         <>
           <a>
-            <Link to='/courseScheduling'>
+            <Link to={Url}>
               排课
             </Link>
           </a>
@@ -41,6 +44,7 @@ const ActionBar = (props: propstype) => {
                   }).then((data: any) => {
                     if (data.status === 'ok') {
                       message.success('删除成功');
+                      actionRef.current?.reload();
                     } else {
                       message.error('删除失败');
                     }

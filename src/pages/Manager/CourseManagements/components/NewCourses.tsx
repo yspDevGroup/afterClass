@@ -196,7 +196,7 @@ const NewCourses = (props: PropsType) => {
     {
       type: 'cascader',
       label: '学年学期：',
-      key: 'XNXQId',
+      key: 'XNXQ',
       cascaderItem: [
         {
           type: 'select',

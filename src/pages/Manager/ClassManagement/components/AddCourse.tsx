@@ -119,7 +119,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           }
         },
         {
-          type: 'input',
+          type: 'inputNumber',
           label: '费用：',
           name: 'FY',
           key: 'FY',
@@ -193,7 +193,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
-        footer={
+        footer={(names==='chakan')?null:
           <div
             style={{
               textAlign: 'right',
