@@ -71,7 +71,10 @@ export const currentData: ListData = {
   list: [
     {
       title: '初中部绘画艺术素描基础课',
-      titleRight:'待上课',
+      titleRight: {
+        text: "待上课",
+        color: "#45C977",
+      },
       link: 'https://www.pgyer.com/',
       desc: [
         {
@@ -82,7 +85,10 @@ export const currentData: ListData = {
     },
     {
       title: '初中部绘画艺术素描基础课',
-      titleRight:'已请假',
+      titleRight: {
+        text: "已请假",
+        color: "#999999",
+      },
       link: 'https://www.pgyer.com/',
       desc: [
         {

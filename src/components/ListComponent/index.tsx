@@ -27,8 +27,8 @@ const NewsList = (props: { data: ListItem[], type: ListType }) => {
             </div>
             <div className={styles.TitleRight}>
               {v.titleRight ?
-                <span >
-                  {v.titleRight}
+                <span style={{ color: v.titleRight.color }} >
+                  {v.titleRight.text}
                 </span>
                 : ''}
             </div>

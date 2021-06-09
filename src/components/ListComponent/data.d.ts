@@ -10,14 +10,17 @@ export type ListItem = {
   id?: string; // udid
   title: string; // 标题
   link?: string;  // 链接
-  titleRight?: string;  // 标题右边显示信息
+  titleRight?: {
+    text?: string;
+    color?: string;
+  };  // 标题右边显示信息
   desc?: {
     left: string[];
     right?: string;
   }[];  // 摘要信息（左右分布）
   img?: string; // 缩略图地址
 };
-// 无图片无右边 | 图片列表 | 描述列表 | 一行中左右两边 | 一行中仅有左边
+// 无图片仅左边描述列表 | 图片描述列表 | 无图片左右两边描述列表 | 一行有左右两边的列表 | 一行中仅有左边的列表
 type ListType = 'list' | 'picList' | 'descList' | 'onlyList' | 'onlyLeftList';
 export type ListData = {
   type: ListType;

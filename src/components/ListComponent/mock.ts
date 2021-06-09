@@ -19,7 +19,10 @@ export const listData: ListData = {
   list: [
     {
       title: '秋季开设课程相关信息及收费标准公示',
-      titleRight: '2020-06-04',
+      titleRight: {
+        text: "2020-06-04",
+        color: "red",
+      },
       img: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
       link: 'https://www.pgyer.com/',
       desc: [
@@ -34,7 +37,10 @@ export const listData: ListData = {
     },
     {
       title: '秋季开设课程相关信息及收费标准公示',
-      titleRight: '2020-06-04',
+      titleRight: {
+        text: "2020-06-04",
+        color: "red",
+      },
       img: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
       link: 'https://www.pgyer.com/',
       desc: [
