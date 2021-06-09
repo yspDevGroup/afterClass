@@ -3,7 +3,7 @@ import { Tabs } from 'antd';
 import { HomeOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import Home from './Home';
-import Study from './Studay';
+import Study from './Study';
 import Mine from './Mine';
 
 const { TabPane } = Tabs;

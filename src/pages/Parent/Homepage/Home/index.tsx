@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import styles from './index.less';
 import imgPop from '@/assets/mobileBg.png';
 import imgNotice from '@/assets/notice.png';
 import { RightOutlined } from '@ant-design/icons';
 import ListComp from '@/components/ListComponent';
 import { annoceData, currentData } from './listData';
 import CourseTab from './components/CourseTab';
+import styles from './index.less';
 
 const Home = () => {
   const [enroll, setEnroll] = useState<boolean>(false);
@@ -14,7 +14,7 @@ const Home = () => {
     setInterval(()=>{
       setEnroll(!enroll);
     },10000);
-  },[enroll])
+  },[])
   return <div className={styles.indexPage}>
     <header className={styles.cusHeader}>
       <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}>
