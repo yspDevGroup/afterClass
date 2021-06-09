@@ -20,6 +20,7 @@ export default defineConfig({
     ENV_subTitle: '',
     ENV_copyRight: '2021 版权所有：陕西凯锐信息技术有限公司',
     ENV_backUrl: 'http://api.xianyunshipei.com',
+    ENV_host: 'http://afterclass.xianyunshipei.com',
   },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
