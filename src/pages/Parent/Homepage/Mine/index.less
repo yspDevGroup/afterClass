@@ -1,0 +1,44 @@
+.statistical{
+    padding: 10px;
+    width: 100%;
+    >p{
+        font-weight: 600;
+        color:#333333;
+    }
+    .diagram{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .cards{
+            width: 48%;
+            border-radius: 8px;
+            background-color: #F5F5F5;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 13px;
+            >div{
+                margin-top: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                span{
+                    display: block;
+                    font-size: 12px;
+                    color:#666666;
+                }
+            }
+        }
+        .pies{
+            canvas{
+                height: 100px !important;
+            }
+            .g2-html-annotation{
+                display: none !important;
+            }
+        }
+        
+    }
+    
+   
+}

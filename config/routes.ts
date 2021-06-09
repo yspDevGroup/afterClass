@@ -73,6 +73,13 @@
     component: './Manager/CourseScheduling',
   },
   {
+    path: '/courseDetails',
+    name: 'courseDetails',
+    icon: 'smile',
+    layout: false,
+    component: './Parent/CourseDetails',
+  },
+  {
     path: '/',
     layout: false,
     redirect: './courseManagements',

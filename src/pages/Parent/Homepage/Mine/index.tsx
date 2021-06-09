@@ -1,9 +1,10 @@
 import React from 'react';
+import Statistical from './components/Statistical'
+const Mine: React.FC= () => {
 
-const Mine = () => {
-  return <div >
-    我的
-  </div>;
+  return (
+    <Statistical/>
+  );
 };
 
 export default Mine;
