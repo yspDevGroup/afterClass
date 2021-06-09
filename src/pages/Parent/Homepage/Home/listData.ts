@@ -1,8 +1,8 @@
 import type { ListData } from "@/components/ListComponent/data";
 
 export const annoceData: ListData = {
-  type: 'list',
-  cls: 'list',
+  type: 'onlyLeftList',
+  cls: 'onlyOneList',
   header: {
     title: '公示栏',
     moreText: '全部 >',

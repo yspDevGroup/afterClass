@@ -14,6 +14,8 @@
       padding: 26px 0 0 @padding-md;
 
       h4 {
+        margin-bottom: 6px;
+        color: #333333;
         font-weight: 600;
         font-size: @font-size-lg;
         line-height: 24px;
@@ -112,6 +114,73 @@
         line-height: 26px;
         padding: 7px;
         text-align: center;
+      }
+    }
+    .todayCourses {
+      :global {
+        .ant-list-item-meta:first-child {
+          background: rgba(69, 201, 119, 0.05);
+        }
+        .ant-list-item-meta:nth-child(2) {
+          background: rgba(102, 102, 102, 0.05);
+        }
+      }
+    }
+  }
+  :global {
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin-left: 28px;
+    }
+    .ant-tabs-top > .ant-tabs-nav,
+    .ant-tabs-bottom > .ant-tabs-nav,
+    .ant-tabs-top > div > .ant-tabs-nav,
+    .ant-tabs-bottom > div > .ant-tabs-nav {
+      height: 22px;
+      margin-bottom: 12px;
+      line-height: 22px;
+    }
+    .ant-tabs-top > .ant-tabs-nav::before,
+    .ant-tabs-bottom > .ant-tabs-nav::before,
+    .ant-tabs-top > div > .ant-tabs-nav::before,
+    .ant-tabs-bottom > div > .ant-tabs-nav::before {
+      border-bottom: 0px;
+    }
+     .ant-tabs-ink-bar {
+      display: none;
+    }
+    .ant-tabs-tab:hover {
+      color: #333333;
+      font-weight: 600;
+      font-size: @font-size-lg;
+    }
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+      color: #333333;
+      font-weight: 600;
+      font-size: @font-size-lg;
+    }
+    .ant-tabs-tab-btn {
+      font-size: @font-size-lg;
+    }
+    .ant-tabs-extra-content {
+      a {
+        color: #999999;
+        font-size: @font-size-sm;
+      }
+    }
+  }
+  .courseType {
+    :global {
+       .ant-tabs-ink-bar {
+        display: block;
+      }
+      .ant-tabs-tab:hover {
+        font-size: 14px;
+      }
+      .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        font-size: 14px;
+      }
+      .ant-tabs-tab-btn {
+        font-size: 14px;
       }
     }
   }

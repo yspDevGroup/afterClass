@@ -3,7 +3,7 @@ import styles from './index.less';
 import imgPop from '@/assets/mobileBg.png';
 import imgNotice from '@/assets/notice.png';
 import { RightOutlined } from '@ant-design/icons';
-import ListComponent from '@/components/ListComponent';
+import ListComp from '@/components/ListComponent';
 import { annoceData, currentData } from './listData';
 import CourseTab from './components/CourseTab';
 
@@ -38,7 +38,7 @@ const Home = () => {
           <div className={styles.enrollText}>2021秋季课后服务课程报名开始了！</div>
           <div className={styles.enrollDate}>选课时间：2021.09.02 12:00—2021.09.05 18:00</div>
         </> : <><div className={styles.todayCourses}>
-          <ListComponent listData={currentData} />
+          <ListComp listData={currentData} />
         </div>
           <div className={styles.enrollText}>2021秋季课后服务课程报名已结束！</div></>}
       </div>
@@ -46,7 +46,7 @@ const Home = () => {
         <CourseTab />
       </div>
       <div className={styles.announceArea}>
-        <ListComponent listData={annoceData} />
+        <ListComp listData={annoceData} />
       </div>
     </div>
   </div>

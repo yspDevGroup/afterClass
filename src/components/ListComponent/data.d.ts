@@ -2,53 +2,9 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-01 17:45:37
- * @LastEditTime: 2021-06-03 15:35:13
+ * @LastEditTime: 2021-06-08 17:37:02
  * @LastEditors: txx
  */
-export type IListmock = {
-  type?: "header" | "headerTab" | "tabs" | "verticalList" | "horizontalList" | "cardList";
-  headerdata?: {
-    key?: string;
-    title?: string;
-    jump?: string;
-    href?: string;
-  };
-  headerTabdata?: {
-    key?: string;
-    tabText?: string;
-  }[];
-  tabsdata?: {
-    key?: string;
-    tabs?: string;
-  }[];
-  verticalListdata?: {
-    key?: string;
-    img?: string;
-    imgWidth?: string;
-    imgHeight?: string;
-    alt?: string;
-    title?: string;
-    openTime?: string;
-    totalClassTime?: string;
-    href?: string;
-  }[];
-  horizontalListdata?: {
-    key?: string;
-    horizontalListText?: string;
-    href?: string;
-  }[];
-  cardListdata?: {
-    key?: string;
-    courseName?: string;
-    state?: string;
-    howLong?: string;
-    address?: string;
-    RemainingClassTime?: string;
-    href?: string;
-    backgroundColor?: string;
-  };
-  isImg: boolean;
-}
 
 export type ListItem = {
   id?: string; // udid
@@ -61,7 +17,8 @@ export type ListItem = {
   }[];  // 摘要信息（左右分布）
   img?: string; // 缩略图地址
 };
-type ListType = 'list' | 'picList' | 'descList' | 'onlyList' | 'onlyOneList';
+// 无图片无右边 | 图片列表 | 描述列表 | 一行中左右两边 | 一行中仅有左边
+type ListType = 'list' | 'picList' | 'descList' | 'onlyList' | 'onlyLeftList';
 export type ListData = {
   type: ListType;
   cls?: string; // 组件自定义类名
