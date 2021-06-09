@@ -73,13 +73,6 @@
     component: './Manager/CourseScheduling',
   },
   {
-    path: '/courseDetails',
-    name: 'courseDetails',
-    icon: 'smile',
-    layout: false,
-    component: './Parent/CourseDetails',
-  },
-  {
     path: '/',
     layout: false,
     redirect: './courseManagements',
@@ -103,7 +96,13 @@
         name: 'home',
         icon: 'smile',
         component: './Parent/Homepage',
-      }
+      },
+      {
+        path: '/parent/courseDetails',
+        name: 'courseDetails',
+        icon: 'smile',
+        component: './Parent/CourseDetails',
+      },
     ]
   },
   /*** 家长路由 end ***/

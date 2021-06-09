@@ -1,5 +1,6 @@
 import type { ListData } from "@/components/ListComponent/data";
 
+// 公告栏数据
 export const annoceData: ListData = {
   type: 'onlyLeftList',
   cls: 'onlyOneList',
@@ -17,6 +18,8 @@ export const annoceData: ListData = {
     }
   ]
 };
+
+// 开设课程数据 
 export const courseData: ListData = {
   type: 'picList',
   cls: 'picList',
@@ -62,6 +65,7 @@ export const courseData: ListData = {
     },
   ]
 };
+// 今日课程数据
 export const currentData: ListData = {
   type: 'descList',
   cls: 'descList',
@@ -93,6 +97,49 @@ export const currentData: ListData = {
       desc: [
         {
           left: ['17:00—18:10','本校'],
+        },
+      ],
+    },
+  ]
+};
+// 已选数据
+export const electiveData: ListData = {
+  type: 'list',
+  cls: 'list',
+  list: [
+    {
+      title: '硬笔书法',
+      link: 'https://www.pgyer.com/',
+      desc: [
+        {
+          left: ['每周三', '15:50—16:50', '本校'],
+        },
+        {
+          left: ['共16课时', '已学6课时'],
+        },
+      ],
+    },
+    {
+      title: '硬笔书法',
+      link: 'https://www.pgyer.com/',
+      desc: [
+        {
+          left: ['每周三', '15:50—16:50', '本校'],
+        },
+        {
+          left: ['共16课时', '已学6课时'],
+        },
+      ],
+    },
+    {
+      title: '硬笔书法',
+      link: 'https://www.pgyer.com/',
+      desc: [
+        {
+          left: ['每周三', '15:50—16:50', '本校'],
+        },
+        {
+          left: ['共16课时', '已学6课时'],
         },
       ],
     },

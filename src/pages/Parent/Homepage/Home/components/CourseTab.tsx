@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from 'umi';
 import { Tabs } from 'antd';
 import ListComponent from '@/components/ListComponent';
-import { courseData } from '../listData';
+import { courseData } from '../../listData';
 import styles from '../index.less';
 
 const { TabPane } = Tabs;
-const CourseTab = () => {
-  return <div className={styles.tabHeader}>
+const CourseTab = (props: {cls?: string}) => {
+  const {cls} = props;
+  return <div className={`${styles.tabHeader} ${cls}`}>
     <Tabs tabBarExtraContent={{ right: <Link to='/parent/home'>全部 {'>'}</Link> }} className={styles.courseTab}>
       <TabPane tab="开设课程" key="setup">
         <Tabs className={styles.courseType}>

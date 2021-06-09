@@ -3,7 +3,7 @@ import imgPop from '@/assets/mobileBg.png';
 import imgNotice from '@/assets/notice.png';
 import { RightOutlined } from '@ant-design/icons';
 import ListComp from '@/components/ListComponent';
-import { annoceData, currentData } from './listData';
+import { annoceData, currentData } from '../listData';
 import CourseTab from './components/CourseTab';
 import styles from './index.less';
 
