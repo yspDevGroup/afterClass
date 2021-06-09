@@ -123,16 +123,9 @@ const CourseManagement = () => {
     }
   }, [xn, xq])
   // 头部input事件
-  const handlerSearch = (type: string, value: string, term: string) => {
-    if (type === 'year' || type === 'term') {
-      setxn(value);
-      setxq(term);
-      return actionRef.current?.reload();
-    }
-    if (type === 'input') {
-      setName(value);
-    }
-    return actionRef.current?.reload();
+  const handlerSearch = (type: string, value: string) => {
+    setName(value);
+    actionRef.current?.reload();
   };
   const getTitle = () => {
     if (moduletype === 'crourse') {
@@ -156,7 +149,7 @@ const CourseManagement = () => {
     list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
     setVisible(true);
     setCurrent(list);
-    if (!(data.BJZT === '未排课') && !(data.BJZT === '已下架') && !(data.BJZT === '已排课')) {
+    if (!(data.BJZT === '待发布') && !(data.BJZT === '未排课') && !(data.BJZT === '已下架') && !(data.BJZT === '已排课')) {
       stereadonly(true)
       setnames('chakan')
     } else {
@@ -263,6 +256,7 @@ const CourseManagement = () => {
               record={record}
               handleEdit={handleEdit}
               maintain={maintain}
+              actionRef={actionRef}
             />
           </>
         )
@@ -307,7 +301,7 @@ const CourseManagement = () => {
           headerTitle={
             <SearchComponent
               dataSource={dataSource}
-              onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)} />
+              onChange={(type: string, value: string) => handlerSearch(type, value)} />
           }
           toolBarRender={() => [
             <Button
