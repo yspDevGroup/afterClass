@@ -29,7 +29,6 @@ export async function getKHBJSJ(
       BMKSSJ?: string;
       BMJSSJ?: string;
       KCTP?: string;
-      KBYS?: string;
       KHKCSJId?: string;
       KHKCSJ?: {
         id?: string;
@@ -122,7 +121,6 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       BMKSSJ?: string;
       BMJSSJ?: string;
       KCTP?: string;
-      KBYS?: string;
       KHKCSJId?: string;
       KHKCSJ?: {
         id?: string;

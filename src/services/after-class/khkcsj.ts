@@ -74,8 +74,6 @@ export async function deleteKHKCSJ(
 /** 查询所有课后课程数据 POST /khkcsj/ */
 export async function getAllKHKCSJ(
   body: {
-    /** 课程类型ID */
-    lxId?: string;
     /** 学年 */
     xn?: string;
     /** 学期 */

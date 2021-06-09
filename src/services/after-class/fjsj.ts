@@ -167,6 +167,8 @@ export async function getFJPlan(
     lxId?: string;
     /** 场地ID */
     fjId?: string;
+    /** 是否有排课 */
+    isPk?: boolean;
     /** 学年 */
     xn?: string;
     /** 学期 */
@@ -204,9 +206,13 @@ export async function getFJPlan(
           BJRS?: number;
           KSS?: number;
           FY?: number;
-          KBYS?: string;
           KKRQ?: string;
           JKRQ?: string;
+          KHKCSJ?: {
+            id?: string;
+            KCMC?: string;
+            KHKCLX?: { id?: string; KCLX?: string; KBYS?: string };
+          };
         };
       }[];
     }[];

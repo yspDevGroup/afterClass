@@ -1,25 +1,27 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from 'antd';
+import { Button, Radio } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType } from '@ant-design/pro-table';
+
 import type { SearchDataType } from '@/components/Search/data';
 import PageContainer from '@/components/PageContainer';
 import SearchComponent from '@/components/Search';
 import ExcelTable from '@/components/ExcelTable';
+import { convertData } from '@/components/Search/util';
+import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
+
 import { getFJPlan } from '@/services/after-class/fjsj';
-import { PlusOutlined } from '@ant-design/icons';
+import { getAllXNXQ } from '@/services/after-class/xnxq';
+import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
+
 import AddArranging from './components/AddArranging';
 import AddClass from './components/AddClass';
 import type { ClassItem } from './data';
 import { searchData } from './searchConfig';
 import './index.less';
-import { getAllXNXQ } from '@/services/after-class/xnxq';
-import { convertData } from '@/components/Search/util';
-import PromptInformation from '@/components/PromptInformation';
-
-type pkIdListType = { jsId: string; pkId: Set<unknown> };
 
 const ClassManagement = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -30,73 +32,52 @@ const ClassManagement = () => {
   const [xn, setXn] = useState<any>();
   const [xq, setXq] = useState<any>();
   const [tableDataSource, setTableDataSource] = useState<any>([]);
+  const [radioValue, setRadioValue] = React.useState(false);
+  const [xXSJPZData, setXXSJPZData] = useState<any>([]);
+
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 控制学期学年数据提示框的函数
-  const kaiguan=()=>{
+  const kaiguan = () => {
     setkai(false);
   };
   const showDrawer = () => {
     setState(false);
   };
-  const processingData = (data: any[]) => {
+
+  const processingData = (data: any, timeData: any) => {
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const pkIdList: pkIdListType[] = [];
-
-    // 1、先拿出每个场地所有的排课
-    data.map((item: any) => {
-      const pkList: pkIdListType = {
-        jsId: item.id,
-        pkId: new Set(),
-      };
-      item.KHPKSJs.map((pkItem: any) => {
-        pkList.pkId.add(pkItem.XXSJPZ.id);
-      });
-      pkIdList.push(pkList);
-    });
     const tableData: any[] = [];
-    // TODO 可能存在的问题：2个以上不同的场地可能会出现问题
 
-    // 2、根据排课的个数去循环教室场地
-    pkIdList.map((kcIdItem: pkIdListType) => {
-      const pkData = [...kcIdItem.pkId];
-
-      // 每个教室的排课
-      pkData.map((pkItem: any, pkKey: number) => {
+    data.map((item: any) => {
+      timeData.map((timeItem: any, timeKey: number) => {
         const table = {
-          room: {},
-          course: {},
-        };
-
-        data.map((item: any) => {
-          // 教室
-          table.room = {
+          room: {
             cla: item.FJMC,
             teacher: '',
             jsId: item.id,
-            rowspan: pkKey === 0 ? pkData.length : 0,
-          };
-
-          item.KHPKSJs.map((pItem: any) => {
-            // 教室周几的课 （根据第一步去重的排课作比较）
-            if (pkItem === pItem.XXSJPZ.id) {
-              table[week[pItem.WEEKDAY]] = {
-                weekId: pItem.id,
-                cla: pItem.KHBJSJ.BJMC,
-                teacher: pItem.KHBJSJ.ZJS,
-                bjId: pItem.KHBJSJ.id,
-                color: pItem.KHBJSJ.KBYS,
+            rowspan: timeKey === 0 ? timeData.length : 0,
+          },
+          course: {
+            cla: timeItem.SDMC,
+            teacher: `${timeItem.KSSJ.slice(0, 5)} — ${timeItem.JSSJ.slice(0, 5)}`,
+            hjId: timeItem.id,
+          },
+        };
+        if (item.KHPKSJs.length > 0) {
+          item.KHPKSJs.map((KHItem: any) => {
+            if (KHItem.XXSJPZ.id === timeItem.id) {
+              table[week[KHItem.WEEKDAY]] = {
+                weekId: KHItem.id,
+                cla: KHItem.KHBJSJ.BJMC,
+                teacher: KHItem.KHBJSJ.ZJS,
+                bjId: KHItem.KHBJSJ.id,
+                color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(81, 208, 129, 1)',
                 dis: true,
-              };
-              // 教室课节
-              table.course = {
-                cla: pItem.XXSJPZ.SDMC,
-                teacher: `${pItem.XXSJPZ.KSSJ.slice(0, 5)} — ${pItem.XXSJPZ.JSSJ.slice(0, 5)}`,
-                hjId: pItem.XXSJPZ.id,
               };
             }
           });
-        });
+        }
         tableData.push(table);
       });
     });
@@ -105,10 +86,22 @@ const ClassManagement = () => {
 
   // 头部input事件
   const handlerSearch = (type: string, value: string, term: string) => {
-    const res = getFJPlan({ xn: value, xq: term });
+    setXn(value);
+    setXq(term);
+    const res = getFJPlan({ xn: value, xq: term, isPk: radioValue });
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
-        const tableData = processingData(data.data);
+        const tableData = processingData(data.data, xXSJPZData);
+        setTableDataSource(tableData);
+      }
+    });
+  };
+  const onRadioChange = (e: any) => {
+    setRadioValue(e.target.value);
+    const res = getFJPlan({ xn, xq, isPk: e.target.value });
+    Promise.resolve(res).then((data: any) => {
+      if (data.status === 'ok') {
+        const tableData = processingData(data.data, xXSJPZData);
         setTableDataSource(tableData);
       }
     });
@@ -132,20 +125,27 @@ const ClassManagement = () => {
             chainSel.data = newData;
           }
           setDataSource(defaultData);
-          const resla = getFJPlan({
-            xn: defaultData[0].defaultValue?.first,
-            xq: defaultData[0].defaultValue?.second,
-          });
-          Promise.resolve(resla).then((datas: any) => {
-            if (datas.status === 'ok') {
-              const tableData = processingData(datas.data);
+
+          // 查询所有课程的时间段
+          const resultTime = await getAllXXSJPZ();
+          if (resultTime.status === 'ok') {
+            const timeSlot = resultTime.data;
+            setXXSJPZData(timeSlot);
+
+            // 查询排课数据
+            const resultPlan = await getFJPlan({
+              xn: defaultData[0].defaultValue?.first,
+              xq: defaultData[0].defaultValue?.second,
+              isPk: radioValue,
+            });
+            if (resultPlan.status === 'ok') {
+              const tableData = processingData(resultPlan.data, timeSlot);
               setTableDataSource(tableData);
             }
-          });
+          }
+        } else {
+          setkai(true);
         }
-        else{
-         setkai(true)
-      }
       } else {
         console.log(res.message);
       }
@@ -232,7 +232,12 @@ const ClassManagement = () => {
   return (
     <>
       <PageContainer>
-      <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来'  link='/basicalSettings/termManagement' open={kai} colse={kaiguan}/>
+        <PromptInformation
+          text="未查询到学年学期数据，请设置学年学期后再来"
+          link="/basicalSettings/termManagement"
+          open={kai}
+          colse={kaiguan}
+        />
         {state === true ? (
           <div>
             <div
@@ -263,6 +268,15 @@ const ClassManagement = () => {
                   新增排课
                 </Button>
               </div>
+            </div>
+            <div style={{ padding: '24px 0 0 24px' }}>
+              <span>场地排课情况：</span>
+              <span>
+                <Radio.Group onChange={onRadioChange} value={radioValue} style={{ marginLeft: 8 }}>
+                  <Radio value={false}>全部</Radio>
+                  <Radio value={true}>已有</Radio>
+                </Radio.Group>
+              </span>
             </div>
             <ExcelTable
               className={''}

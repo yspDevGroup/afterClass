@@ -6,53 +6,55 @@ import * as other from './other';
 import * as auth from './auth';
 import * as user from './user';
 import * as bjsj from './bjsj';
-import * as fjlx from './fjlx';
-import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
+import * as fjsj from './fjsj';
+import * as fjlx from './fjlx';
 import * as jcxx from './jcxx';
-import * as jzgjbsj from './jzgjbsj';
 import * as jxjhsj from './jxjhsj';
-import * as kcsj from './kcsj';
 import * as khbjsj from './khbjsj';
 import * as khkclx from './khkclx';
+import * as kcsj from './kcsj';
+import * as jzgjbsj from './jzgjbsj';
 import * as khkcsj from './khkcsj';
-import * as pksj from './pksj';
 import * as khpksj from './khpksj';
+import * as pksj from './pksj';
 import * as njsj from './njsj';
-import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
+import * as xl from './xl';
 import * as xnxq from './xnxq';
-import * as xsjbsj from './xsjbsj';
 import * as xqsj from './xqsj';
 import * as xxjbsj from './xxjbsj';
-import * as zxfa from './zxfa';
+import * as xsjbsj from './xsjbsj';
+import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
+import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
   other,
   auth,
   user,
   bjsj,
-  fjlx,
-  fjsj,
   jcsj,
+  fjsj,
+  fjlx,
   jcxx,
-  jzgjbsj,
   jxjhsj,
-  kcsj,
   khbjsj,
   khkclx,
+  kcsj,
+  jzgjbsj,
   khkcsj,
-  pksj,
   khpksj,
+  pksj,
   njsj,
-  xl,
   xnjgsj,
+  xl,
   xnxq,
-  xsjbsj,
   xqsj,
   xxjbsj,
-  zxfa,
+  xsjbsj,
+  xxpz,
   xxsjpz,
+  zxfa,
   zxsj,
 };

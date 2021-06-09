@@ -219,14 +219,30 @@ const Index: FC<IndexPropsType> = ({
                             {type === 'edit' ? (
                               <div className="classCard" style={{ textAlign: 'center' }}>
                                 <div className={`cardcontent`}>
-                                  <div className="cla">{data[item.dataIndex].cla}</div>
+                                  <div
+                                    className="cla"
+                                    style={{
+                                      width: item.dataIndex === 'room' ? 20 : '100%',
+                                      margin: '0 auto',
+                                    }}
+                                  >
+                                    {data[item.dataIndex].cla}
+                                  </div>
                                 </div>
                               </div>
                             ) : (
                               <div className="classCard" style={{ textAlign: item.align }}>
                                 <div className={`cardTop`} />
                                 <div className={`cardcontent`}>
-                                  <div className="cla">{data[item.dataIndex].cla}</div>
+                                  <div
+                                    className="cla"
+                                    style={{
+                                      width: item.dataIndex === 'room' ? 20 : '100%',
+                                      margin: '0 auto',
+                                    }}
+                                  >
+                                    {data[item.dataIndex].cla}
+                                  </div>
                                   <div className="teacher">{data[item.dataIndex].teacher}</div>
                                 </div>
                               </div>

@@ -22,7 +22,7 @@ type PropsType = {
   xn?: any;
   xq?: any;
   tableDataSource: any[];
-  processingData: (value: any) => void;
+  processingData: (value: any, timeSlot: any) => void;
   setTableDataSource: (value: any) => void;
 };
 
@@ -496,8 +496,8 @@ const AddArranging: FC<PropsType> = (props) => {
                 xq,
               });
               if (Fjplan.status === 'ok') {
-                const data = processingData(Fjplan.data);
-                setTableDataSource(data);
+                // const data = processingData(Fjplan.data);
+                // setTableDataSource(data);
               } else {
                 message.error(Fjplan.message);
               }
@@ -521,8 +521,8 @@ const AddArranging: FC<PropsType> = (props) => {
                 xq,
               });
               if (Fjplan.status === 'ok') {
-                const data = processingData(Fjplan.data);
-                setTableDataSource(data);
+                // const data = processingData(Fjplan.data);
+                // setTableDataSource(data);
               } else {
                 message.error(Fjplan.message);
               }
