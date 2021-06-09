@@ -24,7 +24,7 @@ import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from "@/components/Search/util";
 import { getQueryString } from '@/utils/utils';
 import PromptInformation from '@/components/PromptInformation';
-import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
+import { getAllKHKCSJ, getKHKCSJ } from '@/services/after-class/khkcsj';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -48,9 +48,6 @@ const CourseManagement = () => {
   };
   // 弹框名称设定
   const [names, setnames] = useState<string>('bianji')
-  let newxq = '';
-  let newxn = '';
-
 
   useEffect(() => {
     async function fetchData() {
@@ -67,13 +64,11 @@ const CourseManagement = () => {
             chainSel.defaultValue.second = term[0].key;
             chainSel.data = newData;
             setDataSource(defaultData);
-            newxn = chainSel.defaultValue.first
-            newxq = chainSel.defaultValue.second
             setxq(chainSel.defaultValue.second);
             setxn(chainSel.defaultValue.first);
             const ress = getAllKHKCSJ({ name: '', xn: chainSel.defaultValue.first, xq: chainSel.defaultValue.second, page: 0, pageCount: 0 });
             Promise.resolve(ress).then((dataes: any) => {
-              if (dataes.status === 'ok') {
+              if (dataes.status === 'ok'){
                 const njArry: { label: string; value: string; }[] = []
                 dataes.data.map((item: any) => {
                   return njArry.push({
@@ -111,7 +106,28 @@ const CourseManagement = () => {
   useEffect(() => {
     const curId = getQueryString("courseId");
     if (curId) {
-      setkcId(curId)
+      // 根据课程id重新获取学年学期回调搜索框
+      setkcId(curId),
+        (
+          async () => {
+            const id = { id: curId }
+            const res = await getKHKCSJ(id);
+            const ress = getAllKHKCSJ({ name: '', xn: res.data.XNXQ.XN, xq: res.data.XNXQ.XQ, page: 0, pageCount: 0 });
+            Promise.resolve(ress).then((dataes: any) => {
+              if (dataes.status === 'ok') {
+                const njArry: { label: string; value: string; }[] = []
+                dataes.data.map((item: any) => {
+                  return njArry.push({
+                    label: item.KCMC,
+                    value: item.id
+                  })
+                })
+                setmcData(njArry);
+                actionRef.current?.reload();
+              }
+            })
+          }
+        )()
     }
   }, [])
   // 监听学年学期更新
@@ -128,23 +144,24 @@ const CourseManagement = () => {
       setxn(value);
       setxq(term);
       const ress = getAllKHKCSJ({ name: '', xn: value, xq: term, page: 0, pageCount: 0 });
-            Promise.resolve(ress).then((dataes: any) => {
-              if (dataes.status === 'ok') {
-                const njArry: { label: string; value: string; }[] = []
-                dataes.data.map((item: any) => {
-                  return njArry.push({
-                    label: item.KCMC,
-                    value: item.id
-                  })
-                })
-                setmcData(njArry);
-              }
+      Promise.resolve(ress).then((dataes: any) => {
+        if (dataes.status === 'ok') {
+          const njArry: { label: string; value: string; }[] = []
+          dataes.data.map((item: any) => {
+            return njArry.push({
+              label: item.KCMC,
+              value: item.id
             })
+          })
+          setmcData(njArry);
+        }
+      })
       actionRef.current?.reload();
     }
     setName(value);
     actionRef.current?.reload();
   };
+  // 获取弹框标题
   const getTitle = () => {
     if (moduletype === 'crourse') {
       return '课程类型维护'
@@ -298,8 +315,8 @@ const CourseManagement = () => {
               filter,
             };
             const obj = {
-              xn: xn || newxn,
-              xq: xq || newxq,
+              xn: xn,
+              xq: xq,
               kcId,
               page: 1,
               pageCount: 20,
