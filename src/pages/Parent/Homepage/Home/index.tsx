@@ -46,7 +46,7 @@ const Home = () => {
         <CourseTab />
       </div>
       <div className={styles.announceArea}>
-        <ListComp listData={annoceData} />
+        <ListComp listData={annoceData}  cls={styles.announceList} />
       </div>
     </div>
   </div>

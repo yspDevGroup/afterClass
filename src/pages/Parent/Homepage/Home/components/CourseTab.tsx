@@ -4,16 +4,17 @@ import { Tabs } from 'antd';
 import ListComponent from '@/components/ListComponent';
 import { courseData } from '../../listData';
 import styles from '../index.less';
+import { ListData } from '@/components/ListComponent/data';
 
 const { TabPane } = Tabs;
-const CourseTab = (props: {cls?: string}) => {
-  const {cls} = props;
+const CourseTab = (props: {cls?: string; listData?: ListData; centered?: boolean}) => {
+  const {cls,listData=courseData, centered=false } = props;
   return <div className={`${styles.tabHeader} ${cls}`}>
-    <Tabs tabBarExtraContent={{ right: <Link to='/parent/home'>全部 {'>'}</Link> }} className={styles.courseTab}>
+    <Tabs centered={centered} tabBarExtraContent={ !centered ? { right: <Link to='/parent/home/course'>全部 {'>'}</Link> } : ''} className={styles.courseTab}>
       <TabPane tab="开设课程" key="setup">
         <Tabs className={styles.courseType}>
           <TabPane tab="文化" key="culture">
-            <ListComponent listData={courseData} />
+            <ListComponent listData={listData} />
           </TabPane>
           <TabPane tab="艺术" key="art">
 
@@ -27,7 +28,7 @@ const CourseTab = (props: {cls?: string}) => {
         </Tabs>
       </TabPane>
       <TabPane tab="已选课程" key="elective">
-        <ListComponent listData={courseData} />
+        <ListComponent listData={listData} />
       </TabPane>
     </Tabs>
   </div>;

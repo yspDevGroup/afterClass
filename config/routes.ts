@@ -104,6 +104,24 @@
         component: './Parent/CourseDetails',
         hideInMenu: 'true',
       },
+      {
+        path: '/parent/home/course',
+        name: 'course',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Course',
+      },
+      {
+        path: '/parent/home/notice',
+        name: 'notice',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Notice',
+      },
+      {
+        path: '/parent/home/notice/details',
+        name: 'details',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Details',
+      }
     ]
   },
   /*** 家长路由 end ***/

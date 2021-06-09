@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-05-31 10:24:05
- * @LastEditTime: 2021-06-08 15:31:38
+ * @LastEditTime: 2021-06-09 17:56:00
  * @LastEditors: txx
  */
 
@@ -54,8 +54,9 @@ const NewsList = (props: { data: ListItem[], type: ListType }) => {
     />
   </div>
 };
-const ListComp = (props: { listData: ListData }) => {
-  const { header, list, cls, type } = props.listData;
+const ListComp = (props: { listData: ListData, cls?: string }) => {
+  const { header, list, type } = props.listData;
+  const { cls } = props;
   return (
     <div className={`${styles.ListComponentBigBox} ${cls}`}>
       {header ? <div className={styles.ListHeader}>
