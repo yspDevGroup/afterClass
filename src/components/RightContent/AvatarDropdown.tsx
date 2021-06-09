@@ -1,56 +1,30 @@
-import React, { useCallback } from 'react';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Spin } from 'antd';
-import { history, useModel } from 'umi';
-import { stringify } from 'querystring';
-import HeaderDropdown from '../HeaderDropdown';
+import React, { useEffect, useRef } from 'react';
+import { Avatar, Spin } from 'antd';
+import { useModel } from 'umi';
 import styles from './index.less';
-import { outLogin } from '@/services/after-class/auth';
+import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import defaultAvatar from '@/assets/avatar.png';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
 
-/**
- * 退出登录，并且将当前的 url 保存
- */
-const loginOut = async () => {
-  await outLogin();
-  const { query = {}, pathname } = history.location;
-  const { redirect } = query;
-  localStorage.removeItem('token');
-  // Note: There may be security issues, please note
-  if (window.location.pathname !== '/user/login' && !redirect) {
-    history.replace({
-      pathname: '/user/login',
-      search: stringify({
-        redirect: pathname,
-      }),
-    });
-  }
-};
+const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const userRef = useRef(null);
 
-const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
-  const { initialState, setInitialState } = useModel('@@initialState');
-
-  const onMenuClick = useCallback(
-    (event: {
-      key: React.Key;
-      keyPath: React.Key[];
-      item: React.ReactInstance;
-      domEvent: React.MouseEvent<HTMLElement>;
-    }) => {
-      const { key } = event;
-      if (key === 'logout' && initialState) {
-        setInitialState({ ...initialState, currentUser: undefined });
-        loginOut();
-        return;
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
       }
-      history.push(`/account/${key}`);
-    },
-    [initialState, setInitialState],
-  );
+      await initWXAgentConfig(['checkJsApi']);
+      showUserName(userRef?.current, currentUser?.userId);
+      // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
+      WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+    })();
+  }, [currentUser]);
 
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
@@ -68,35 +42,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     return loading;
   }
 
-  const { currentUser } = initialState;
   if (!currentUser || !currentUser.username) {
     return loading;
   }
 
-  const menuHeaderDropdown = (
-    <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-      {menu && (
-        <Menu.Item key="center">
-          <UserOutlined />
-          个人中心
-        </Menu.Item>
-      )}
-      {menu && (
-        <Menu.Item key="settings">
-          <SettingOutlined />
-          个人设置
-        </Menu.Item>
-      )}
-      {menu && <Menu.Divider />}
-
-      <Menu.Item key="logout">
-        <LogoutOutlined />
-        退出登录
-      </Menu.Item>
-    </Menu>
-  );
   return (
-    <HeaderDropdown overlay={menuHeaderDropdown}>
+    <>
       <span className={`${styles.action} ${styles.account}`}>
         <Avatar
           size="small"
@@ -104,11 +55,11 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
           src={currentUser.avatar || defaultAvatar}
           alt="avatar"
         />
-        <span className={`${styles.name} anticon`}>{currentUser.username}</span>
+        <span className={`${styles.name} anticon`} ref={userRef}></span>
         {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
         <span className={`${styles.name} anticon`}>{currentUser.username}</span> */}
       </span>
-    </HeaderDropdown>
+    </>
   );
 };
 
