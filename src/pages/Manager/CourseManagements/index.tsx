@@ -80,10 +80,15 @@ const NewClassManagement = () => {
         }
     }, [xn, xq])
     // 头部input事件
-    const handlerSearch = (type: string, value: string) => {
+    const handlerSearch = (type: string, value: string, term: string) => {
+        if (type === 'year' || type === 'term') {
+            setxn(value);
+            setxq(term);
+            return actionRef.current?.reload();
+        }
         setName(value);
         actionRef.current?.reload();
-      };
+    };
     const getModelTitle = () => {
         if (modalType === 'uphold') {
             return '课程类型维护';
@@ -96,18 +101,18 @@ const NewClassManagement = () => {
     const handleOperation = (type: string, data?: any) => {
         if (data) {
             let KHKCLXId: any[] = [];
-            KHKCLXId=data.KHKCLX.id;
-            const KKRQ: any[] =[];
+            KHKCLXId = data.KHKCLX.id;
+            const KKRQ: any[] = [];
             KKRQ.push(data.KKRQ);
             KKRQ.push(data.JKRQ);
-            const BMKSSJ: any[]=[];
+            const BMKSSJ: any[] = [];
             BMKSSJ.push(data.BMKSSJ);
             BMKSSJ.push(data.BMJSSJ);
             const XNXQ = {
                 XN: data.XNXQ.XN,
                 XQ: data.XNXQ.XQ
             };
-            const list = { ...data, KHKCLXId,KKRQ,BMKSSJ, ...XNXQ }
+            const list = { ...data, KHKCLXId, KKRQ, BMKSSJ, ...XNXQ }
             setCurrent(list)
         } else {
             setCurrent(undefined);
@@ -249,7 +254,7 @@ const NewClassManagement = () => {
                     headerTitle={
                         <SearchComponent
                             dataSource={dataSource}
-                            onChange={(type: string, value: string,) => handlerSearch(type, value,)}
+                            onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)}
                         />
                     }
                     request={(params, sorter, filter) => {
@@ -289,7 +294,7 @@ const NewClassManagement = () => {
                     title={getModelTitle()}
                     destroyOnClose
                     width='35vw'
-                    style={{maxHeight:'430px',overflow:'auto'}}
+                    style={{ maxHeight: '430px', overflow: 'auto' }}
                     visible={modalVisible}
                     onCancel={() => setModalVisible(false)}
                     footer={null}

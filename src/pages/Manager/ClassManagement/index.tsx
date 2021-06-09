@@ -123,7 +123,25 @@ const CourseManagement = () => {
     }
   }, [xn, xq])
   // 头部input事件
-  const handlerSearch = (type: string, value: string) => {
+  const handlerSearch = (type: string, value: string, term: string) => {
+    if (type === 'year' || type === 'term') {
+      setxn(value);
+      setxq(term);
+      const ress = getAllKHKCSJ({ name: '', xn: value, xq: term, page: 0, pageCount: 0 });
+            Promise.resolve(ress).then((dataes: any) => {
+              if (dataes.status === 'ok') {
+                const njArry: { label: string; value: string; }[] = []
+                dataes.data.map((item: any) => {
+                  return njArry.push({
+                    label: item.KCMC,
+                    value: item.id
+                  })
+                })
+                setmcData(njArry);
+              }
+            })
+      actionRef.current?.reload();
+    }
     setName(value);
     actionRef.current?.reload();
   };
@@ -301,7 +319,7 @@ const CourseManagement = () => {
           headerTitle={
             <SearchComponent
               dataSource={dataSource}
-              onChange={(type: string, value: string) => handlerSearch(type, value)} />
+              onChange={(type: string, value: string, trem: string) => handlerSearch(type, value, trem)} />
           }
           toolBarRender={() => [
             <Button
@@ -325,7 +343,7 @@ const CourseManagement = () => {
             maxHeight: '65vh',
             overflowY: 'auto',
           }}
-          style={{maxHeight:'430px'}}
+          style={{ maxHeight: '430px' }}
           width='35vw'
           footer={[
             <Button key="back" onClick={() => setopenes(false)}>
