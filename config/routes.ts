@@ -102,6 +102,7 @@
         name: 'courseDetails',
         icon: 'smile',
         component: './Parent/CourseDetails',
+        hideInMenu: 'true',
       },
     ]
   },

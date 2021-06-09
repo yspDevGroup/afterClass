@@ -8,7 +8,7 @@ import styles from "./index.less"
 
 const IconFont = createFromIconfontCN({
     scriptUrl: [
-        '//at.alicdn.com/t/font_2600907_igu7pew1mqj.js',
+        '//at.alicdn.com/t/font_2600907_5ddrm1ag9xl.js',
     ],
 });
 

@@ -2,8 +2,9 @@ import React from 'react';
 import { Pie } from '@ant-design/charts';
 import '../index.less';
 import {statisticalList} from '../mock';
+
 const Statistical: React.FC= () => {
-  var data = [
+  const data = [
     {
       type: '正常',
       value: 12,
@@ -18,15 +19,15 @@ const Statistical: React.FC= () => {
     },
   ];
   
-  var config = {
+  const config = {
     appendPadding: 0,
-    data:data,
+    data,
     angleField: 'value',
     colorField: 'type',
-    color: ({ type }:any) => {
+    color: ({ type }: any) => {
       if(type === '正常'){
         return '#31D99F';
-      }else if(type === '异常'){
+      }if(type === '异常'){
         return '#FF7171';
       }
       return '#DDDDDD';
@@ -54,7 +55,7 @@ const Statistical: React.FC= () => {
       <p>出勤统计</p>
           <div className='diagram'>
             {
-              statisticalList.map((value:any)=>{
+              statisticalList.map((value: any)=>{
                 return <div className='cards'> 
                   <p>{value.KC}</p>
                   <Pie className='pies' {...config} />
