@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
+/* eslint-disable no-console */
+import React, { useEffect, useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Tooltip } from 'antd';
 import { message, Popconfirm } from 'antd';
 import { Button, Divider, Modal } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import type { SearchDataType } from "@/components/Search/data";
+import type { SearchDataType } from '@/components/Search/data';
 import type { RoomItem, TableListParams } from './data';
 import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
@@ -14,9 +15,10 @@ import { PlusOutlined } from '@ant-design/icons';
 import SearchComponent from '@/components/Search';
 import { createFJSJ, deleteFJSJ, getAllFJSJ, updateFJSJ } from '@/services/after-class/fjsj';
 import styles from './index.less';
-import { searchData } from "./serarchConfig";
+import { searchData } from './serarchConfig';
 import AsyncAddRoom from './components/AsyncAddRoom';
 import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
+import { getDepList } from '@/services/after-class/wechat';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -34,8 +36,14 @@ const RoomManagement = () => {
 
   const [dataSource] = useState<SearchDataType>(searchData);
 
-  
- // 头部input事件
+  useEffect(() => {
+    (async () => {
+      const res = await getDepList({});
+      console.log('res: ', res);
+    })();
+  }, []);
+
+  // 头部input事件
   const handlerSearch = (type: string, value: string) => {
     setName(value);
     actionRef.current?.reload();
@@ -54,14 +62,14 @@ const RoomManagement = () => {
     }
     return '新增场地信息';
   };
-   /**
+  /**
    * 根据不同按钮显示不同模态框与title
    *
    * @return {*}
    */
   const handleOperation = (type: string, data?: RoomItem) => {
     if (data) {
-      setCurrent(data)
+      setCurrent(data);
     } else {
       setCurrent(undefined);
     }
@@ -73,7 +81,7 @@ const RoomManagement = () => {
    * 更新或新增场地信息
    *
    * @return {*}
-   */ 
+   */
   const handleSubmit = async () => {
     try {
       const values = await form?.validateFields();
@@ -120,11 +128,14 @@ const RoomManagement = () => {
       width: '12%',
       ellipsis: true,
       render: (_, record) => {
-        return <div className='ui-table-col-elp'>
-          <Tooltip title={record.FJLX?.FJLX} arrowPointAtCenter>
-            {record.FJLX?.FJLX}
-          </Tooltip></div>
-      }
+        return (
+          <div className="ui-table-col-elp">
+            <Tooltip title={record.FJLX?.FJLX} arrowPointAtCenter>
+              {record.FJLX?.FJLX}
+            </Tooltip>
+          </div>
+        );
+      },
     },
     {
       title: '所属校区',
@@ -133,11 +144,14 @@ const RoomManagement = () => {
       width: '15%',
       ellipsis: true,
       render: (_, record) => {
-        return <div className='ui-table-col-elp'>
-          <Tooltip title={record.XQSJ?.XQMC} arrowPointAtCenter>
-            {record.XQSJ?.XQMC}
-          </Tooltip></div>
-      }
+        return (
+          <div className="ui-table-col-elp">
+            <Tooltip title={record.XQSJ?.XQMC} arrowPointAtCenter>
+              {record.XQSJ?.XQMC}
+            </Tooltip>
+          </div>
+        );
+      },
     },
     {
       title: '容纳人数',
@@ -165,7 +179,7 @@ const RoomManagement = () => {
             onConfirm={async () => {
               try {
                 if (record.id) {
-                  const result = await deleteFJSJ({id: record.id});
+                  const result = await deleteFJSJ({ id: record.id });
                   if (result.status === 'ok') {
                     message.success('场地信息删除成功');
                     actionRef.current?.reload();
@@ -181,9 +195,7 @@ const RoomManagement = () => {
             cancelText="取消"
             placement="topLeft"
           >
-            <a>
-              删除
-            </a>
+            <a>删除</a>
           </Popconfirm>
         </>
       ),
@@ -191,7 +203,7 @@ const RoomManagement = () => {
     },
   ];
   return (
-    <PageContainer cls={styles.roomWrapper} >
+    <PageContainer cls={styles.roomWrapper}>
       <ProTable<RoomItem>
         columns={columns}
         actionRef={actionRef}
@@ -203,12 +215,13 @@ const RoomManagement = () => {
             sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
             filter,
           };
-          return getAllFJSJ({ name, page: 1 ,pageCount: 20}, opts);
+          return getAllFJSJ({ name, page: 1, pageCount: 20 }, opts);
         }}
         headerTitle={
           <SearchComponent
             dataSource={dataSource}
-            onChange={(type: string, value: string) => handlerSearch(type, value)} />
+            onChange={(type: string, value: string) => handlerSearch(type, value)}
+          />
         }
         options={{
           setting: false,
@@ -220,10 +233,7 @@ const RoomManagement = () => {
         rowKey="id"
         dateFormatter="string"
         toolBarRender={() => [
-          <Button
-            key="uphold"
-            onClick={() => handleOperation('uphold')}
-          >
+          <Button key="uphold" onClick={() => handleOperation('uphold')}>
             场地类型维护
           </Button>,
           <Button
@@ -232,25 +242,30 @@ const RoomManagement = () => {
             key="add"
             onClick={() => handleOperation('add')}
           >
-            <PlusOutlined />新增场地
+            <PlusOutlined />
+            新增场地
           </Button>,
         ]}
       />
       <Modal
         title={getModelTitle()}
         destroyOnClose
-        width='35vw'
+        width="35vw"
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
-        footer={modalType === 'uphold'? null :[
-          <Button key="back" onClick={() => setModalVisible(false)}>
-            取消
-          </Button>,
-          <Button key="submit" type="primary" onClick={handleSubmit}>
-            确定
-          </Button>
-        ]}
-        style={{maxHeight:'430px'}}
+        footer={
+          modalType === 'uphold'
+            ? null
+            : [
+                <Button key="back" onClick={() => setModalVisible(false)}>
+                  取消
+                </Button>,
+                <Button key="submit" type="primary" onClick={handleSubmit}>
+                  确定
+                </Button>,
+              ]
+        }
+        style={{ maxHeight: '430px' }}
         centered
         maskClosable={false}
         bodyStyle={{
@@ -258,7 +273,11 @@ const RoomManagement = () => {
           overflowY: 'auto',
         }}
       >
-        {modalType === 'uphold' ? <AsyncSiteMaintenance /> : <AsyncAddRoom current={current} setForm={setForm} />}
+        {modalType === 'uphold' ? (
+          <AsyncSiteMaintenance />
+        ) : (
+          <AsyncAddRoom current={current} setForm={setForm} />
+        )}
       </Modal>
     </PageContainer>
   );
