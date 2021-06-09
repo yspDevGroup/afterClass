@@ -11,14 +11,14 @@ export async function getXL(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
     message?: string;
   }>(`/xl/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -32,10 +32,10 @@ export async function deleteXL(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xl/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -74,13 +74,13 @@ export async function updateXL(
   body: API.UpdateXL,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xl/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
