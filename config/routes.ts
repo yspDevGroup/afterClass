@@ -74,9 +74,16 @@
   },
   /*** 老师路由 start ***/
   {
-    path: '/teacher/home',
+    path: '/teacher',
     layout: false,
-    component: './Teacher/CheckonManagement',
+    routes: [
+      {
+        path: '/teacher/home',
+        name: 'home',
+        icon: 'smile',
+        component: './Teacher/CheckonManagement',
+      }
+    ]
   },
   /*** 老师路由 end ***/
   /*** 家长路由 start ***/

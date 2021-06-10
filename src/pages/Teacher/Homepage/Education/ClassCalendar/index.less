@@ -1,0 +1,81 @@
+@import '../../theme.less';
+
+.schedule {
+  position: relative;
+
+  .today {
+    position: absolute;
+    right: 0;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    background-color: @GreenColor;
+    color: #fff;
+    border-radius: 14px;
+  }
+
+  .subTitle {
+    font-size: @font-size-sm;
+    line-height: 17px;
+    margin: 12px 0;
+
+    &:before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 12px;
+      background-color: @GreenColor;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+  }
+
+  :global {
+    .react-h5-calendar {
+      background: none;
+      padding: 0;
+
+      .calendar-operate {
+        .icon {
+          display: none;
+        }
+      }
+
+      .calendar-head {
+        line-height: 42px;
+        border-bottom: 1px solid @border-color-base;
+
+        .head-cell {
+          height: 42px;
+        }
+      }
+
+      .calendar-body {
+        background-color: #fff;
+
+        &.week-mode {
+          height: 60px;
+        }
+
+        .month-cell {
+          .day-cell {
+            height: 50px;
+
+            .current-day {
+              background-color: @GreenColor;
+            }
+
+            .dot-mark {
+              background-color: @text-color  !important;
+            }
+          }
+        }
+      }
+
+      .bottom-operate {
+        display: none;
+      }
+    }
+  }
+}
