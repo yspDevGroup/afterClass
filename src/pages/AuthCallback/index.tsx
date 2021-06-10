@@ -5,7 +5,7 @@
  * @description: OAuth认证通过后的跳转页面
  * @author: zpl
  * @Date: 2021-05-13 09:08:04
- * @LastEditTime: 2021-06-10 13:31:32
+ * @LastEditTime: 2021-06-10 14:34:02
  * @LastEditors: zpl
  */
 import React, { useCallback, useEffect } from 'react';
@@ -20,11 +20,11 @@ const backToLogin = (
     <Button type="primary">返回登录</Button>
   </Link>
 );
-const toHome = (
-  <Link to="/">
-    <Button type="primary">进入主页</Button>
-  </Link>
-);
+// const toHome = (
+//   <Link to="/">
+//     <Button type="primary">进入主页</Button>
+//   </Link>
+// );
 const Comp = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
@@ -80,7 +80,7 @@ const Comp = () => {
       subTitle={
         query.token ? `欢迎使用本系统，页面正在跳转中...${window.location.href}` : query.error || ''
       }
-      extra={query.token ? [toHome, backToLogin] : [backToLogin]}
+      extra={query.token ? [] : [backToLogin]}
       style={{
         position: 'absolute',
         top: '40%',
