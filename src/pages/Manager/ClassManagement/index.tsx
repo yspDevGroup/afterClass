@@ -107,7 +107,8 @@ const CourseManagement = () => {
     const curId = getQueryString("courseId");
     if (curId) {
       // 根据课程id重新获取学年学期回调搜索框
-      setkcId(curId),
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      setkcId(curId);
         (
           async () => {
             const id = { id: curId }
@@ -282,7 +283,7 @@ const CourseManagement = () => {
       title: '操作',
       valueType: 'option',
       key: 'option',
-      width: '14%',
+      width: '150px',
       align: 'center',
       render: (_, record) => {
         return (

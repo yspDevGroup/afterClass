@@ -100,6 +100,12 @@
         hideInMenu: 'true',
       },
       {
+        path: '/parent/home/myOrder',
+        name: 'myOrder',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Mine/Pages/MyOrder',
+      },
+      {
         path: '/parent/home/course',
         name: 'course',
         hideInMenu: 'true',

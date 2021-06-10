@@ -24,7 +24,7 @@ const DisplayColumn: FC<IiconTextData> = ({ title, type, grid, dataSource, ishea
                 renderItem={(item) => {
                     const { icon, text, img, link, background } = item
                     return (<List.Item>
-                        <Link to={link!} target="_blank">
+                        <Link to={link!}>
                             <div className={styles.Box}>
                                 {type === "img" ?
                                     (<div className={styles.imgBox}>

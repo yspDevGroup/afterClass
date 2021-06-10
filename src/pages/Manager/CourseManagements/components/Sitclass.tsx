@@ -34,6 +34,7 @@ const Sitclass = () => {
       dataIndex: 'KCLX',
       align: 'center',
       ellipsis: true,
+      width:100,
     },
     {
       title: '课程颜色',
@@ -55,7 +56,7 @@ const Sitclass = () => {
     {
       title: '操作',
       valueType: 'option',
-      width: 150,
+      width: 100,
       align: 'center',
       render: (text, record, _, action) => [
         <a
