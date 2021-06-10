@@ -5,7 +5,7 @@
  * @description: OAuth认证通过后的跳转页面
  * @author: zpl
  * @Date: 2021-05-13 09:08:04
- * @LastEditTime: 2021-06-04 14:38:12
+ * @LastEditTime: 2021-06-10 13:31:32
  * @LastEditors: zpl
  */
 import React, { useCallback, useEffect } from 'react';
@@ -49,10 +49,11 @@ const Comp = () => {
             history.replace('/teacher/home');
             break;
           case '家长':
-            history.replace('/homepage');
+            history.replace('/parent/home');
             break;
           default:
-            history.replace('/');
+            // TODO: 后期需要修改为跳转向非法访问提示页面
+            history.replace('/courseManagements');
             break;
         }
       }, 10);

@@ -1117,6 +1117,7 @@ declare namespace API {
     userId?: string;
     /** 微信用户企业ID */
     CorpId?: string;
+    subscriber_info?: { remark?: string };
   };
 
   type CreateUser = {

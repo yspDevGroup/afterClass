@@ -72,11 +72,6 @@
     icon: 'smile',
     component: './Manager/CourseScheduling',
   },
-  {
-    path: '/',
-    layout: false,
-    redirect: './courseManagements',
-  },
   /*** 老师路由 start ***/
   {
     path: '/teacher/home',
@@ -121,10 +116,15 @@
         name: 'details',
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/Details',
-      }
-    ]
+      },
+    ],
   },
   /*** 家长路由 end ***/
+  {
+    path: '/',
+    layout: false,
+    component: './index',
+  },
   {
     component: './404',
   },

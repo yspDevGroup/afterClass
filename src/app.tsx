@@ -26,7 +26,7 @@ switch (envjudge()) {
 }
 // const loginPath = 'http://api.xianyunshipei.com/auth/wechat'; // '/user/login';
 const authCallbackPath = '/auth_callback';
-let currentToken: string;
+// let currentToken: string;
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -55,11 +55,11 @@ export async function getInitialState(): Promise<{
           // 如果后台未查询到用户信息，则跳转到登录页
           // 此时不能无条件跳转向认证页，否则可能产生无限循环
           history.push('/user/login');
-          currentToken = '';
+          // currentToken = '';
           localStorage.removeItem('token');
           return undefined;
         }
-        currentToken = token;
+        // currentToken = token;
         localStorage.setItem('token', token || '');
         return info as API.CurrentUser;
       }
@@ -185,7 +185,7 @@ export const request: RequestConfig = {
     async function middlewareA(ctx, next) {
       ctx.req.options.headers = {
         ...ctx.req.options.headers,
-        Authorization: `Bearer ${currentToken || localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       };
       await next();
     },
