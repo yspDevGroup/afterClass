@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
-import { courseData } from '../../listData';
+import { myData } from '../../listData';
 
 const ClassCalendar = () => {
   const [day,setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
@@ -35,7 +35,7 @@ const ClassCalendar = () => {
       <div className={styles.subTitle}>
         {cDay}
       </div>
-      <ListComponent listData={courseData} />
+      <ListComponent listData={myData} />
     </div>
   )
 }

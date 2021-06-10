@@ -1,24 +1,31 @@
 export const iconTextData = [
   {
+    text: "课堂点名",
+    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
+    icon: "icon-qingjia",
+    link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
+    background: "#FF8964",
+  },
+  {
+    text: "离校通知",
+    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
+    icon: "icon-comlist",
+    link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
+    background: "#7DCE81",
+  },
+  {
     text: "请假",
     img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
     icon: "icon-qingjia",
     link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
-    background: "#63B5F6",
+    background: "#2FA3FF",
   },
   {
-    text: "课程评价",
+    text: "学生评价",
     img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
     icon: "icon-comlist",
     link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
-    background: "#F06191",
-  },
-  {
-    text: "待定",
-    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    icon: "icon-todo",
-    link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
-    background: "#FFD541",
+    background: "#FFC700",
   },
 ]
 

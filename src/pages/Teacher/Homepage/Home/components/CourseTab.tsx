@@ -4,7 +4,7 @@ import { Tabs } from 'antd';
 import ListComponent from '@/components/ListComponent';
 import { courseData } from '../../listData';
 import styles from '../index.less';
-import { ListData } from '@/components/ListComponent/data';
+import type { ListData } from '@/components/ListComponent/data';
 
 const { TabPane } = Tabs;
 const CourseTab = (props: {cls?: string; listData?: ListData; centered?: boolean}) => {

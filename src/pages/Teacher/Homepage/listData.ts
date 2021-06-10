@@ -21,10 +21,13 @@ export const annoceData: ListData = {
   ]
 };
 
-// 开设课程数据 
+// 任课课程数据 
 export const courseData: ListData = {
   type: 'picList',
   cls: 'picList',
+  header: {
+    title: '任教课程',
+  },
   list: [
     {
       title: '硬笔书法',
@@ -104,23 +107,57 @@ export const currentData: ListData = {
     },
   ]
 };
+// 我的课表数据 
+export const myData: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [
+    {
+      title: '硬笔书法',
+      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
+      link: 'https://www.pgyer.com/',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '硬笔书法',
+      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
+      link: 'https://www.pgyer.com/',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '硬笔书法',
+      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
+      link: 'https://www.pgyer.com/',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+  ]
+};
 // 已选数据
 export const electiveData: ListData = {
   type: 'list',
   cls: 'list',
   list: [
-    {
-      title: '硬笔书法',
-      link: 'https://www.pgyer.com/',
-      desc: [
-        {
-          left: ['每周三', '15:50—16:50', '本校'],
-        },
-        {
-          left: ['共16课时', '已学6课时'],
-        },
-      ],
-    },
     {
       title: '硬笔书法',
       link: 'https://www.pgyer.com/',

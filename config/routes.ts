@@ -76,12 +76,12 @@
   {
     path: '/teacher',
     layout: false,
-    routes: [
+    routes: [         
       {
         path: '/teacher/home',
         name: 'home',
         icon: 'smile',
-        component: './Teacher/CheckonManagement',
+        component: './Teacher/Homepage',
       }
     ]
   },
@@ -105,12 +105,6 @@
         icon: 'smile',
         component: './Parent/CourseDetails',
         hideInMenu: 'true',
-      },
-      {
-        path: '/parent/home/myOrder',
-        name: 'myOrder',
-        hideInMenu: 'true',
-        component: './Parent/Homepage/Mine/Pages/MyOrder',
       },
       {
         path: '/parent/home/course',

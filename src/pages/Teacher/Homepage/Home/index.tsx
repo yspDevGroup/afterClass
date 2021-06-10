@@ -4,8 +4,7 @@ import imgPop from '@/assets/mobileBg.png';
 import imgNotice from '@/assets/notice.png';
 import { RightOutlined } from '@ant-design/icons';
 import ListComp from '@/components/ListComponent';
-import { annoceData, currentData } from '../listData';
-import CourseTab from './components/CourseTab';
+import { annoceData, courseData, currentData } from '../listData';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 
@@ -33,7 +32,7 @@ const Home = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div>
         <div className={styles.headerText}>
           <h4>
-          <span ref={userRef}></span>
+            <span ref={userRef}></span>
            老师，你好！
           </h4>
           <div>欢迎使用课后帮，课后服务选我就对了！ </div>
@@ -44,27 +43,27 @@ const Home = () => {
           <img className={styles.noticeImg} src={imgNotice} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
-            <span>2021秋季课后服务课程报名开始了！</span>
+            <span>2021秋季课后服务将于2021.09.02正式开课...</span>
           </div>
           <RightOutlined />
         </div>
         <div className={styles.enrollArea}>
           {enroll ? (
             <>
-              <div className={styles.enrollText}>2021秋季课后服务课程报名开始了！</div>
-              <div className={styles.enrollDate}>选课时间：2021.09.02 12:00—2021.09.05 18:00</div>
+              <div className={styles.enrollText}>2021秋季课后服务将于2021.09.02正式开课！</div>
             </>
           ) : (
             <>
-              <div className={styles.todayCourses}>
-                <ListComp listData={currentData} />
-              </div>
-              <div className={styles.enrollText}>2021秋季课后服务课程报名已结束！</div>
+              <div className={styles.enrollText}>2021秋季课后服务已正式开课！</div>
             </>
           )}
         </div>
-        <div className={styles.courseArea}>
-          <CourseTab />
+
+        <div className={styles.todayCourses}>
+          <ListComp listData={currentData} />
+        </div>
+        <div className={styles.teachCourses}>
+          <ListComp listData={courseData} />
         </div>
         <div className={styles.announceArea}>
           <ListComp listData={annoceData} cls={styles.announceList} />

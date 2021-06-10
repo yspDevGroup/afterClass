@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link, useModel } from 'umi';
-import DisplayColumn from '@/components/DisplayColumn';
 import { createFromIconfontCN } from '@ant-design/icons';
-import Statistical from './components/Statistical';
 import styles from './index.less';
 import imgPop from '@/assets/mobileBg.png';
-import { iconTextData } from './mock';
+import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 
 const IconFont = createFromIconfontCN({
   scriptUrl: [
@@ -15,6 +13,18 @@ const IconFont = createFromIconfontCN({
 const Mine = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const userRef = useRef(null);
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      await initWXAgentConfig(['checkJsApi']);
+      showUserName(userRef?.current, currentUser?.userId);
+      // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
+      WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+    })();
+  }, [currentUser]);
 
   return (
     <div className={styles.minePage}>
@@ -24,31 +34,14 @@ const Mine = () => {
         <div className={styles.header}>
           <img src={currentUser?.avatar} />
           <div className={styles.headerName}>
-            <h4>{currentUser?.subscriber_info?.remark || currentUser?.username || '家长'}</h4>
+            <h4><span ref={userRef}></span>老师</h4>
             <span>微信名：{currentUser?.username}</span>
           </div>
         </div>
       </header>
-      <div className={styles.payList}>
-        <DisplayColumn
-          type="icon"
-          title="我的订单"
-          isheader={true}
-          grid={{ column: 4 }}
-          dataSource={iconTextData}
-        />
-      </div>
-      <Statistical />
       <div className={styles.linkWrapper}>
         <ul>
-          <li>
-            <IconFont type='icon-dingdan' />
-            <Link to='/'>
-              历史课程
-              <IconFont type='icon-arrow' />
-            </Link>
-          </li>
-          <li>
+         <li>
             <IconFont type='icon-dingdan' />
             <Link to='/'>
               我要反馈

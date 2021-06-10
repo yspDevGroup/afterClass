@@ -11,15 +11,15 @@ const Study = () => {
     <DisplayColumn
       type="icon"
       isheader={false}
-      grid={{ column: 3 }}
+      grid={{ column: 4 }}
       dataSource={iconTextData}
     />
     <div className={styles.funWrapper}>
-      <div className={styles.titleBar}>孩子课表</div>
+      <div className={styles.titleBar}>我的课表</div>
       <ClassCalendar />
     </div>
     <div className={styles.funWrapper}>
-      <div className={styles.titleBar}>在学课程 3</div>
+      <div className={styles.titleBar}>任教课程 2</div>
       <ListComponent listData={electiveData} />
     </div>
   </div>;

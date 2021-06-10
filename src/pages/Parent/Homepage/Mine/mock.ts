@@ -61,7 +61,7 @@ export const iconTextData = [
   {
     text: "待付款",
     icon: "icon-dingdan",
-    link: "/parent/home/myOrder",
+    link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
     background: "#F5F5F5",
   },
   {

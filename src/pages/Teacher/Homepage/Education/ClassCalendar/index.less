@@ -8,41 +8,52 @@
     right: 0;
     width: 28px;
     height: 28px;
+    color: #fff;
     line-height: 28px;
     text-align: center;
     background-color: @GreenColor;
-    color: #fff;
     border-radius: 14px;
   }
 
   .subTitle {
+    margin: 12px 0;
     font-size: @font-size-sm;
     line-height: 17px;
-    margin: 12px 0;
 
     &:before {
-      content: '';
       display: inline-block;
       width: 3px;
       height: 12px;
+      color: @text-color;
+      vertical-align: baseline;
       background-color: @GreenColor;
-      vertical-align: middle;
+      content: '';
       margin-right: 4px;
     }
   }
 
   :global {
+    .ant-list-item-meta {
+      padding: 10px;
+      background: #ffffff;
+      border-radius: 8px;
+    }
     .react-h5-calendar {
-      background: none;
       padding: 0;
+      background: none;
 
       .calendar-operate {
+        color: @text-color;
+        font-weight: 600;
+        font-size: 14px;
         .icon {
           display: none;
         }
       }
 
       .calendar-head {
+        margin-top: 7px;
+        font-size: 14px;
         line-height: 42px;
         border-bottom: 1px solid @border-color-base;
 
