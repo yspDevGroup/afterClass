@@ -30,8 +30,8 @@ export const courseData: ListData = {
   },
   list: [
     {
-      title: '硬笔书法',
-      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
+      title: '儿童体能训练',
+      img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
       link: 'https://www.pgyer.com/',
       desc: [
         {
@@ -43,28 +43,28 @@ export const courseData: ListData = {
       ],
     },
     {
-      title: '硬笔书法',
-      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
+      title: '专业武术培训',
+      img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
       link: 'https://www.pgyer.com/',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
         },
         {
-          left: ['共16课时'],
+          left: ['共20课时'],
         },
       ],
     },
     {
-      title: '硬笔书法',
-      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
+      title: '青少年搏击',
+      img: 'https://i.postimg.cc/MHXHFJd3/6.jpg',
       link: 'https://www.pgyer.com/',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
         },
         {
-          left: ['共16课时'],
+          left: ['共20课时'],
         },
       ],
     },
@@ -79,7 +79,7 @@ export const currentData: ListData = {
   },
   list: [
     {
-      title: '初中部绘画艺术素描基础课',
+      title: '小学体能训练',
       titleRight: {
         text: "待上课",
         color: "#45C977",
@@ -93,7 +93,7 @@ export const currentData: ListData = {
       ],
     },
     {
-      title: '初中部绘画艺术素描基础课',
+      title: '专业武术培训',
       titleRight: {
         text: "已请假",
         color: "#999999",
@@ -113,8 +113,8 @@ export const myData: ListData = {
   cls: 'picList',
   list: [
     {
-      title: '硬笔书法',
-      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
+      title: '儿童体能训练',
+      img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
       link: 'https://www.pgyer.com/',
       desc: [
         {
@@ -126,21 +126,21 @@ export const myData: ListData = {
       ],
     },
     {
-      title: '硬笔书法',
-      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
+      title: '专业武术培训',
+      img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
       link: 'https://www.pgyer.com/',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
         },
         {
-          left: ['共16课时'],
+          left: ['共20课时'],
         },
       ],
     },
     {
-      title: '硬笔书法',
-      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
+      title: '儿童体能训练',
+      img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
       link: 'https://www.pgyer.com/',
       desc: [
         {
@@ -159,7 +159,7 @@ export const electiveData: ListData = {
   cls: 'list',
   list: [
     {
-      title: '硬笔书法',
+      title: '儿童体能训练',
       link: 'https://www.pgyer.com/',
       desc: [
         {
@@ -171,14 +171,14 @@ export const electiveData: ListData = {
       ],
     },
     {
-      title: '硬笔书法',
+      title: '专业武术培训',
       link: 'https://www.pgyer.com/',
       desc: [
         {
           left: ['每周三', '15:50—16:50', '本校'],
         },
         {
-          left: ['共16课时', '已学6课时'],
+          left: ['共20课时', '已学6课时'],
         },
       ],
     },

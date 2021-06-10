@@ -32,8 +32,8 @@ const NewClassManagement = () => {
     const [open, setopen] = useState<boolean>(false)
     const [modalType, setModalType] = useState<string>('add');
     const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
-    const [xn, setxn] = useState<string>();
-    const [xq, setxq] = useState<string>();
+    const [xn, setxn] = useState<string>('');
+    const [xq, setxq] = useState<string>('');
     // 学年学期没有时的提示框控制
     const [kai, setkai] = useState<boolean>(false)
     // 设置表单的查询更新
@@ -53,13 +53,14 @@ const NewClassManagement = () => {
                 if (newData.data && newData.data.length > 0) {
                     const term = newData.subData[newData.data[0].key];
                     const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-                    if (chainSel && chainSel.defaultValue) {
+                    if (chainSel && chainSel.defaultValue) {            
                         chainSel.defaultValue.first = newData.data[0].key;
+                        await setxn(chainSel.defaultValue.first);
                         chainSel.defaultValue.second = term[0].key;
+                        await setxq(chainSel.defaultValue.second);
+                        await setDataSource(defaultData);
                         chainSel.data = newData;
-                        setDataSource(defaultData);
-                        setxq(chainSel.defaultValue.second);
-                        setxn(chainSel.defaultValue.first);
+                        actionRef.current?.reload();
                     }
                 } else {
                     setkai(true)
@@ -71,15 +72,7 @@ const NewClassManagement = () => {
         }
         fetchData();
     }, []);
-    // 监听学年学期更新
-    useEffect(() => {
-        if (xn && xq) {
-            setTimeout(() => {
-                actionRef.current?.reload();
-            }, 0);
-        }
-    }, [xn, xq])
-    // 头部input事件
+
     const handlerSearch = (type: string, value: string, term: string) => {
         if (type === 'year' || type === 'term') {
             setxn(value);
@@ -87,7 +80,7 @@ const NewClassManagement = () => {
             return actionRef.current?.reload();
         }
         setName(value);
-        actionRef.current?.reload();
+        return actionRef.current?.reload();
     };
     const getModelTitle = () => {
         if (modalType === 'uphold') {
@@ -128,6 +121,19 @@ const NewClassManagement = () => {
         setModalType('uphold')
         setModalVisible(true);
     };
+
+    const request = async (params: TableListParams, sorter: Record<string, any> | undefined, filter: any) => {
+        const opts: TableListParams = {
+            ...params,
+            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+            filter,
+        };
+        if (xn === '' || xq === '') {
+            return ''
+        }
+        return getAllKHKCSJ({ name, xn, xq, pageCount: 20, page: 1 }, opts)
+    }
+
     const columns: ProColumns<classType>[] = [
         {
             title: '序号',
@@ -257,15 +263,7 @@ const NewClassManagement = () => {
                             onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)}
                         />
                     }
-                    request={(params, sorter, filter) => {
-                        // 表单搜索项会从 params 传入，传递给后端接口。
-                        const opts: TableListParams = {
-                            ...params,
-                            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-                            filter,
-                        };
-                        return getAllKHKCSJ({ name, xn, xq, pageCount: 20, page: 1 }, opts)
-                    }}
+                    request={request}
                     options={{
                         setting: false,
                         fullScreen: false,

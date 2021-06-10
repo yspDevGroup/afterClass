@@ -34,8 +34,8 @@ const CourseManagement = () => {
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [readonly, stereadonly] = useState<boolean>(false);
   const [moduletype, setmoduletype] = useState<string>('crourse');
-  const [xn, setxn] = useState<string>();
-  const [xq, setxq] = useState<string>();
+  const [xn, setxn] = useState<string>('');
+  const [xq, setxq] = useState<string>('');
   const [kcId, setkcId] = useState<string>('');
   // 查询课程名称
   const [mcData, setmcData] = useState<{ label: string; value: string; }[]>([]);
@@ -61,14 +61,15 @@ const CourseManagement = () => {
           const chainSel = defaultData.find((item) => item.type === 'chainSelect');
           if (chainSel && chainSel.defaultValue) {
             chainSel.defaultValue.first = newData.data[0].key;
+            await setxn(chainSel.defaultValue.first);
             chainSel.defaultValue.second = term[0].key;
+            await setxq(chainSel.defaultValue.second);
+            await setDataSource(defaultData);
             chainSel.data = newData;
-            setDataSource(defaultData);
-            setxq(chainSel.defaultValue.second);
-            setxn(chainSel.defaultValue.first);
+            actionRef.current?.reload();
             const ress = getAllKHKCSJ({ name: '', xn: chainSel.defaultValue.first, xq: chainSel.defaultValue.second, page: 0, pageCount: 0 });
             Promise.resolve(ress).then((dataes: any) => {
-              if (dataes.status === 'ok'){
+              if (dataes.status === 'ok') {
                 const njArry: { label: string; value: string; }[] = []
                 dataes.data.map((item: any) => {
                   return njArry.push({
@@ -109,26 +110,26 @@ const CourseManagement = () => {
       // 根据课程id重新获取学年学期回调搜索框
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       setkcId(curId);
-        (
-          async () => {
-            const id = { id: curId }
-            const res = await getKHKCSJ(id);
-            const ress = getAllKHKCSJ({ name: '', xn: res.data.XNXQ.XN, xq: res.data.XNXQ.XQ, page: 0, pageCount: 0 });
-            Promise.resolve(ress).then((dataes: any) => {
-              if (dataes.status === 'ok') {
-                const njArry: { label: string; value: string; }[] = []
-                dataes.data.map((item: any) => {
-                  return njArry.push({
-                    label: item.KCMC,
-                    value: item.id
-                  })
+      (
+        async () => {
+          const id = { id: curId }
+          const res = await getKHKCSJ(id);
+          const ress = getAllKHKCSJ({ name: '', xn: res.data?.XNXQ?.XN, xq: res.data?.XNXQ?.XQ, page: 0, pageCount: 0 });
+          Promise.resolve(ress).then((dataes: any) => {
+            if (dataes.status === 'ok') {
+              const njArry: { label: string; value: string; }[] = []
+              dataes.data.map((item: any) => {
+                return njArry.push({
+                  label: item.KCMC,
+                  value: item.id
                 })
-                setmcData(njArry);
-                actionRef.current?.reload();
-              }
-            })
-          }
-        )()
+              })
+              setmcData(njArry);
+              actionRef.current?.reload();
+            }
+          })
+        }
+      )()
     }
   }, [])
   // 监听学年学期更新
@@ -204,6 +205,25 @@ const CourseManagement = () => {
   const showmodal = () => {
     setopenes(false);
   };
+  const request = async (param: TableListParams, sorter: Record<string, any> | undefined, filter: any) => {
+    const opts: TableListParams = {
+      ...param,
+      sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+      filter,
+    };
+    const obj = {
+      xn,
+      xq,
+      kcId,
+      page: 1,
+      pageCount: 20,
+      name,
+    };
+    if(xn===''||xq===''){
+      return ''
+    }
+    return getAllKHBJSJ(obj, opts);
+  }
   const columns: ProColumns<CourseItem>[] = [
     {
       title: '序号',
@@ -308,24 +328,7 @@ const CourseManagement = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          request={async (param, sorter, filter) => {
-            // 表单搜索项会从 params 传入，传递给后端接口。
-            const opts: TableListParams = {
-              ...param,
-              sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-              filter,
-            };
-            const obj = {
-              xn: xn,
-              xq: xq,
-              kcId,
-              page: 1,
-              pageCount: 20,
-              name,
-            };
-            const res = await getAllKHBJSJ(obj, opts);
-            return res;
-          }}
+          request={request}
           options={{
             setting: false,
             fullScreen: false,
