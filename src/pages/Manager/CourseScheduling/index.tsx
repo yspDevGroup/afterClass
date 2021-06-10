@@ -2,7 +2,6 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { Button, Radio } from 'antd';
-import { useModel } from 'umi';
 import { PlusOutlined } from '@ant-design/icons';
 
 import type { SearchDataType } from '@/components/Search/data';
@@ -16,6 +15,7 @@ import { theme } from '@/theme-default';
 import { getFJPlan } from '@/services/after-class/fjsj';
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
+import { queryXQList } from '@/services/wechat/service';
 
 import AddArranging from './components/AddArranging';
 import { searchData } from './searchConfig';
@@ -32,6 +32,16 @@ const ClassManagement = () => {
 
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
+
+  useEffect(() => {
+    (async () => {
+      // 获取年级信息
+      console.log('开始获取年级信息...');
+      const currentXQ = await queryXQList();
+      console.log('currentXQ: ', currentXQ);
+    })();
+  }, []);
+
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
     setkai(false);
@@ -222,9 +232,6 @@ const ClassManagement = () => {
     console.log('value', value);
   };
 
-  const { initialState } = useModel('@@initialState');
-  const { handleWxData } = initialState || {};
-  console.log('handleWxData', handleWxData);
   return (
     <>
       <PageContainer>

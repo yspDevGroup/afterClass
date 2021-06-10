@@ -4,14 +4,12 @@ import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, useModel } from 'umi';
 import Footer from '@/components/Footer';
 import { postAccount } from '@/services/after-class/auth';
-import { getDepList } from '@/services/after-class/wechat';
 import leftBg from '@/assets/leftBg.png';
 import peopleBg from '@/assets/peopleBg.png';
 import rightBg from '@/assets/rightBg.png';
 import logo from '@/assets/logo.png';
 import styles from './index.less';
 import { GithubOutlined, WechatOutlined } from '@ant-design/icons';
-import { getInitialState } from '@/app';
 
 /** 此方法会跳转到 redirect 参数所在的位置 */
 const goto = () => {
@@ -49,11 +47,6 @@ const Login: React.FC = () => {
         message.success('登录成功！');
         localStorage.setItem('token', msg.data.token || '');
 
-        // 获取部门列表
-        const res = await getDepList({});
-        if (res.errmsg === 'ok') {
-          await getInitialState(res.departments);
-        }
         await fetchUserInfo();
         goto();
 

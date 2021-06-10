@@ -8,7 +8,6 @@ import type { ResponseError } from 'umi-request';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { envjudge } from './utils/utils';
-import type { DepListType } from './constant';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 let loginPath: string;
@@ -37,19 +36,10 @@ export const initialStateConfig = {
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
-export async function getInitialState(
-  value?: DepListType,
-): Promise<{
+export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   fetchUserInfo?: (debug?: boolean) => Promise<API.CurrentUser | undefined>;
-  handleWxData?: {
-    one: DepListType; // 表示班级
-    two: DepListType; // 表示年级
-    tree: DepListType; // 表示学段
-    four: DepListType; // 表示校区
-    five: DepListType; // 表示学校
-  };
 }> {
   const fetchUserInfo = async (debug?: boolean) => {
     try {
@@ -79,15 +69,6 @@ export async function getInitialState(
     }
     return undefined;
   };
-  const handleWxDataFunc = (data?: DepListType) => {
-    return {
-      one: data?.filter((item: any) => item?.type === 1) || [],
-      two: data?.filter((item: any) => item?.type === 2) || [],
-      tree: data?.filter((item: any) => item?.type === 3) || [],
-      four: data?.filter((item: any) => item?.type === 4) || [],
-      five: data?.filter((item: any) => item?.type === 5) || [],
-    };
-  };
   // 如果是登录页面及认证跳转页，不执行
   if (history.location.pathname !== loginPath && history.location.pathname !== authCallbackPath) {
     const currentUser = await fetchUserInfo();
@@ -95,13 +76,11 @@ export async function getInitialState(
       fetchUserInfo,
       currentUser,
       settings: {},
-      handleWxData: handleWxDataFunc(value),
     };
   }
   return {
     fetchUserInfo,
     settings: {},
-    handleWxData: handleWxDataFunc(value),
   };
 }
 
