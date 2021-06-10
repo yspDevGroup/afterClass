@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useModel } from 'umi';
 import imgPop from '@/assets/mobileBg.png';
 import imgNotice from '@/assets/notice.png';
 import { RightOutlined } from '@ant-design/icons';
@@ -6,21 +7,32 @@ import ListComp from '@/components/ListComponent';
 import { annoceData, currentData } from '../listData';
 import CourseTab from './components/CourseTab';
 import styles from './index.less';
+import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 
 const Home = () => {
-  const [enroll, setEnroll] = useState<boolean>(false);
-  // TODO方便样式处理，每隔1分钟修改报名状态，后期删除
-  useEffect(()=>{
-    setInterval(()=>{
-      setEnroll(!enroll);
-    },10000);
-  },[])
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const userRef = useRef(null);
+  const [enroll] = useState<boolean>(true);
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      await initWXAgentConfig(['checkJsApi']);
+      showUserName(userRef?.current, currentUser?.userId);
+      // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
+      WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+    })();
+  }, [currentUser]);
+  
   return <div className={styles.indexPage}>
     <header className={styles.cusHeader}>
       <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}>
       </div>
       <div className={styles.headerText}>
-        <h4>某某，你好！</h4>
+        <h4>
+        <span ref={userRef}></span>，你好！</h4>
         <div>欢迎使用课后帮，课后服务选我就对了！ </div>
       </div>
     </header>
