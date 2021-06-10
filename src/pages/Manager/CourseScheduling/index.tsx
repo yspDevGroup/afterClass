@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { Button, Radio } from 'antd';
+import { useModel } from 'umi';
 import { PlusOutlined } from '@ant-design/icons';
 
 import type { SearchDataType } from '@/components/Search/data';
@@ -220,6 +221,10 @@ const ClassManagement = () => {
   const onExcelTableClick = (value: any) => {
     console.log('value', value);
   };
+
+  const { initialState } = useModel('@@initialState');
+  const { handleWxData } = initialState || {};
+  console.log('handleWxData', handleWxData);
   return (
     <>
       <PageContainer>

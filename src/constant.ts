@@ -12,20 +12,51 @@ export const paginationConfig: TablePaginationConfig = {
   showTotal: undefined,
 };
 
-
 /**
  * 查询参数
  *
  * @export
  * @interface TableListParams
  */
- export type TableListParams = {
+export type TableListParams = {
   pageSize?: number;
   current?: number;
   search?: string;
   filter?: Record<string, any[]>;
   sorter?: Record<string, any>;
 } & Record<string, any>;
+
+// 部门列表的数据类型
+export type DepListType = {
+  /** 部门名称 */
+  name?: string;
+  /** 父亲部门id,根部门该项为0 */
+  parentid?: number;
+  /** 部门id,根部门固定为1 */
+  id?: number;
+  /** 部门类型，32位整型，1表示班级，2表示年级，3表示学段，4表示校区，5表示学校（根部门） */
+  type?: number;
+  /** 入学年份，仅标准年级返回，格式为YYYY */
+  register_year?: number;
+  /** 标准年级 */
+  standard_grade?: number;
+  /** 在父部门中的次序值，order值大的排序靠前。 */
+  order?: number;
+  department_admins?: {
+    /** 部门管理员的userid */
+    userid?: string;
+    /** 部门管理员的类型，1表示校区负责人，2表示年级负责人，3表示班主任，4表示任课老师，5表示学段负责人 */
+    type?: number;
+    /** 教师或班主任的科目 */
+    subject?: string;
+  }[];
+  /** 是否是已毕业，1表示是，0表示不是。仅部门类型为年级时才返回该字段 */
+  is_graduated?: number;
+  /** 是否开启班级群，1表示开启，0表示关闭。仅部门类型为班级时才返回该字段 */
+  open_group_chat?: number;
+  /** 班级群id。仅部门类型为班级时且open_group_chat为1时才返回该字段 */
+  group_chat_id?: number;
+}[];
 
 // 上课地点
 export const ClassLocation: Record<string, string>[] = [
