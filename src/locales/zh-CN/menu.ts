@@ -1,4 +1,5 @@
 export default {
+  "menu.home":'首页',
   'menu.login': '登录',
   'menu.homePage': '首页',
   'menu.basicalSettings': '基本信息管理',
@@ -11,4 +12,10 @@ export default {
   'menu.parent': '家长端',
   'menu.parent.home': '首页',
   'menu.parent.listComponent': '列表组件',
+  'menu.parent.courseDetails':'课程详情',
+  "menu.parent.myOrder":'我的订单',
+  'menu.parent.course':'课程列表',
+  "menu.parent.notice":'通知',
+  "menu.parent.details" :'在学课程详情',
+  "pages.login.teacherLogin.tab":'教师登录'
 };
