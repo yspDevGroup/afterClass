@@ -100,10 +100,24 @@
         component: './Parent/Homepage',
       },
       {
-        path: '/parent/courseDetails',
+        path: '/parent/home/courseDetails',
         name: 'courseDetails',
         icon: 'smile',
-        component: './Parent/CourseDetails',
+        component: './Parent/Homepage/Home/Pages/CourseDetails',
+        hideInMenu: 'true',
+      },
+      {
+        path: '/parent/mine/orderDetails',
+        name: 'orderDetails',
+        icon: 'smile',
+        component: './Parent/Homepage/Mine/Pages/OrderDetails',
+        hideInMenu: 'true',
+      },
+      {
+        path: '/parent/mine/order',
+        name: 'order',
+        icon: 'smile',
+        component: './Parent/Homepage/Mine/Pages/Order',
         hideInMenu: 'true',
       },
       {

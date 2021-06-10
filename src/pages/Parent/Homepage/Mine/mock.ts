@@ -61,25 +61,25 @@ export const iconTextData = [
   {
     text: "待付款",
     icon: "icon-dingdan",
-    link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
+    link: "/parent/mine/order?id=1",
     background: "#F5F5F5",
   },
   {
     text: "已完成",
     icon: "icon-dingdan",
-    link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
+    link: "/parent/mine/order?id=2",
     background: "#F5F5F5",
   },
   {
     text: "退课退款",
     icon: "icon-dingdan",
-    link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
+    link: "/parent/mine/order?id=3",
     background: "#F5F5F5",
   },
   {
     text: "全部订单",
     icon: "icon-dingdan",
-    link: "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
+    link: "/parent/mine/order?id=4",
     background: "#F5F5F5",
   },
 ]
