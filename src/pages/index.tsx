@@ -2,7 +2,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-06-09 12:09:25
+ * @LastEditTime: 2021-06-10 09:39:44
  * @LastEditors: zpl
  */
 import { useModel, history } from 'umi';
@@ -34,7 +34,7 @@ const Index = () => {
       history.replace('/teacher/home');
       break;
     case '家长':
-      history.replace('/homepage');
+      history.replace('/parent/home');
       break;
     default:
       // TODO: 后期需要修改为跳转向非法访问提示页面
