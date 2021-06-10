@@ -9,7 +9,8 @@ type propttype = {
     text: string;
     link?: string;
     open: boolean;
-    colse: () => void
+    colse: () => void;
+    event?: () => void;
 }
 
 
@@ -17,7 +18,8 @@ const PromptInformation: FC<propttype> = (
     { text,
         link,
         open,
-        colse
+        colse,
+        event
      }
 ) => {
 
@@ -38,7 +40,7 @@ const PromptInformation: FC<propttype> = (
                     <div className={styles.link}>
                        
                     <span style={{marginRight:'10px'}} onClick={colse}>关闭</span>
-                    <Link to={link!}>
+                    <Link to={link!} onClick={event}>
                             <span style={{color:'rgba(81, 208, 129, 1)',opacity:0.7}}>现在去设置</span>
                     </Link>
                     </div>

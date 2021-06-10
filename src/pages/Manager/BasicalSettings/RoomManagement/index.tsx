@@ -19,6 +19,7 @@ import { searchData } from './serarchConfig';
 import AsyncAddRoom from './components/AsyncAddRoom';
 import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
 import { getDepList } from '@/services/after-class/wechat';
+import PromptInformation from '@/components/PromptInformation';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -35,7 +36,12 @@ const RoomManagement = () => {
   const [name, setName] = useState<string>('');
 
   const [dataSource] = useState<SearchDataType>(searchData);
+  const [opens, setopens] = useState<boolean>(false);
 
+  const guanbi=()=>{
+    setopens(false)
+  }
+ 
   useEffect(() => {
     (async () => {
       const res = await getDepList({});
@@ -77,6 +83,12 @@ const RoomManagement = () => {
     getModelTitle();
     setModalVisible(true);
   };
+
+  const eventclose=()=>{
+    setopens(false);
+    setModalVisible(false);
+    handleOperation('uphold');
+  }
   /**
    * 更新或新增场地信息
    *
@@ -204,6 +216,7 @@ const RoomManagement = () => {
   ];
   return (
     <PageContainer cls={styles.roomWrapper}>
+       <PromptInformation  text='还没有设置场地类型，请先维护场地类型' open={opens} colse={guanbi} event={eventclose} />
       <ProTable<RoomItem>
         columns={columns}
         actionRef={actionRef}
@@ -276,7 +289,7 @@ const RoomManagement = () => {
         {modalType === 'uphold' ? (
           <AsyncSiteMaintenance />
         ) : (
-          <AsyncAddRoom current={current} setForm={setForm} />
+          <AsyncAddRoom current={current} setForm={setForm} setopens={setopens} setModalVisible={setModalVisible}/>
         )}
       </Modal>
     </PageContainer>

@@ -16,10 +16,12 @@ type PropsType = {
   onCancel?: () => void;
   setForm: React.Dispatch<React.SetStateAction<FormInstance<any> | undefined>>;
   readonly?: boolean;
+  setopens: (value: boolean) => void;
+  setModalVisible: (value: boolean) => void;
 };
 
 const AddRoom = (props: PropsType) => {
-  const { current, setForm, readonly } = props;
+  const { current, setForm, readonly,setopens,setModalVisible } = props;
   const [schoolArea, setSchoolArea] = useState<Record<string, string>[]>([]);
   const [roomType, setRoomType] = useState<Record<string, string>[]>([]);
 
@@ -56,6 +58,9 @@ const AddRoom = (props: PropsType) => {
               };
             });
             setRoomType(data);
+          } else {
+            setModalVisible(false)
+            setopens(true)
           }
         } else {
           message.info(result.message);
@@ -74,8 +79,8 @@ const AddRoom = (props: PropsType) => {
       hidden: true,
       name: 'id',
       key: 'id',
-      fieldProps:{
-        autocomplete:'off'
+      fieldProps: {
+        autocomplete: 'off'
       }
     },
     {
@@ -84,8 +89,8 @@ const AddRoom = (props: PropsType) => {
       label: '名称',
       name: 'FJMC',
       key: 'FJMC',
-      fieldProps:{
-        autocomplete:'off'
+      fieldProps: {
+        autocomplete: 'off'
       },
       rules: [{ required: true, message: '请填写名称' }],
     },
@@ -96,8 +101,8 @@ const AddRoom = (props: PropsType) => {
       name: 'FJBH',
       key: 'FJBH',
       rules: [{ required: true, message: '请填写编号' }],
-      fieldProps:{
-        autocomplete:'off'
+      fieldProps: {
+        autocomplete: 'off'
       }
     },
     {
@@ -132,8 +137,8 @@ const AddRoom = (props: PropsType) => {
       name: 'BZXX',
       key: 'BZXX',
       rules: [{ required: true, message: '请填写场地地址' }],
-      fieldProps:{
-        autocomplete:'off'
+      fieldProps: {
+        autocomplete: 'off'
       }
     },
   ];
