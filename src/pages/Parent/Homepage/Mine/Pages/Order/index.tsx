@@ -1,7 +1,8 @@
 /* eslint-disable array-callback-return */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Tabs } from 'antd';
 import styles from './index.less';
+import { Link } from 'umi';
 
 const { TabPane } = Tabs;
 
@@ -21,7 +22,7 @@ const Order: React.FC = () => {
                 </div>
                 <p className={styles.price}>实付: <span>￥50.00</span></p>
                 <div className={styles.buttons}>
-                    <span>更多</span>
+                <Link to="/parent/mine/orderDetails?id=true">  <span>更多</span></Link>
                     <div>
                         <button>退课退款</button>
                         <button>课程评价</button>
@@ -81,7 +82,8 @@ const Order: React.FC = () => {
                 </div>
                 <div className={styles.btns}>
                         <button>取消订单</button>
-                        <button>去支付</button>
+                        <Link to="/parent/mine/orderDetails?id=false">  <button>去支付</button></Link>
+                        
                 </div>
             </div>
           </TabPane>
@@ -94,7 +96,7 @@ const Order: React.FC = () => {
                 </div>
                 <p className={styles.price}>实付: <span>￥50.00</span></p>
                 <div className={styles.buttons}>
-                    <span>更多</span>
+                <Link to="/parent/mine/orderDetails?id=true">  <span>更多</span></Link>
                     <div>
                         <button>退课退款</button>
                         <button>课程评价</button>

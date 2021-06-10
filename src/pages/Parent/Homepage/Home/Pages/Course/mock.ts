@@ -13,7 +13,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -26,7 +26,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -39,7 +39,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -52,7 +52,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -65,7 +65,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -78,7 +78,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -91,7 +91,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -104,7 +104,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -117,7 +117,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -130,7 +130,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -143,7 +143,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -156,7 +156,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -169,7 +169,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -182,7 +182,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -195,7 +195,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -208,7 +208,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -221,7 +221,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -234,7 +234,7 @@ export const mock: ListData = {
     {
       title: '硬笔书法',
       img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: 'https://www.pgyer.com/',
+      link: '/parent/home/courseDetails?id=true',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],

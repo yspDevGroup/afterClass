@@ -1,6 +1,7 @@
 /* eslint-disable array-callback-return */
 import { Button, message, Radio, Tooltip } from 'antd';
 import React, { useState } from 'react';
+import { Link } from 'umi';
 import styles from './index.less';
 import { statisticalList ,TimetableList } from './mock'
 
@@ -8,7 +9,8 @@ const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState();
   const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
-  const [kcxxType, setKcxxType] = useState(false);
+  const [toLink, setToLink] = useState<any>();
+  const valueKey = window.location.href.split('id=')[1];
   const onclick = () => { 
     setstate(true);
   }
@@ -25,9 +27,9 @@ const CourseDetails: React.FC = () => {
     e.stopPropagation()
   }
   const submit = async () => {
-    if (XY === false) {
-      message.info('请阅读并同意《课后服务协议》')
-    }
+    // if (XY === false) {
+    //   message.info('请阅读并同意《课后服务协议》')
+    // }
     const data ={
       BJ,
       XY
@@ -37,7 +39,7 @@ const CourseDetails: React.FC = () => {
   }
   return <>
   {
-    kcxxType === true ?
+    valueKey === 'true' ?
     <div className={styles.CourseDetails}>
     <div className={styles.wrap}>
       <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4140089676,162112200&fm=11&gp=0.jpg" alt="" />
@@ -84,7 +86,8 @@ const CourseDetails: React.FC = () => {
               className={styles.agreement}
               onChange={onXYChange}
             >  <p>我已阅读并同意<a href='www.baidu.com'>《课后帮服务协议》</a></p></Radio>
-            <Button className={styles.submit} onClick={submit}>确定并付款</Button>
+             <Link to='/parent/mine/orderDetails?id=false'><Button className={styles.submit} onClick={submit}>确定并付款</Button></Link>
+            
           </div>
         </div> : ''
     }

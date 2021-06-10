@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './index.less';
 
 const OrderDetails: React.FC = () => {
-  const [state, setstate] = useState(false);
+  // const [state, setstate] = useState(true);
+  const valueKey = window.location.href.split('id=')[1];
   const onclick = ()=>{ 
   }
   return <div className={styles.OrderDetails}>
     {
-      state === true ? 
+      valueKey === 'true' ? 
       <div className={styles.hender}>已完成</div>
       :
       <div className={styles.hender}>
@@ -16,7 +17,7 @@ const OrderDetails: React.FC = () => {
         </div>
     }
     
-    <div className={styles.content} style={{marginTop: state === true ? '-38px' : '-20px'}}>
+    <div className={styles.content} style={{marginTop: valueKey === 'true' ? '-38px' : '-20px'}}>
     <div className={styles.KCXX}>
         <p className={styles.title}>青少年足球兴趣培训课程</p>
         <ul>
@@ -37,14 +38,14 @@ const OrderDetails: React.FC = () => {
         <li><span>下单时间</span><span>2021-09-10 12:01:20</span></li>
         <li><span>支付方式</span><span>在线支付</span></li>
         {
-          state === true ?
+          valueKey === 'true' ?
           <><li><span>支付时间</span><span>2021-09-10 12:02:11</span></li>
           <li><span>电子发票</span><span>电子发票(商品明细-个人)</span></li></>:""
         }
       </ul>
     </div>
     {
-      state === true ?
+      valueKey === 'true' ?
       <div className={styles.buttons}>
       <button>申请开票</button>
       <button style={{marginRight:'10px'}}>退课退款</button>
@@ -54,7 +55,7 @@ const OrderDetails: React.FC = () => {
     }
     </div>
     {
-      state === true ? "":
+      valueKey === 'true' ? "":
       <div className={styles.footer}>
       <span>实付:</span><span>￥50</span>
       <button className={styles.btn} onClick={onclick}>去支付</button>
