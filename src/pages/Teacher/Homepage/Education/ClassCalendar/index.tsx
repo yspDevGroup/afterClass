@@ -4,11 +4,13 @@ import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
-import { myData } from '../../listData';
+import { courseArr } from '../mock';
+import PromptInformation from './components/PromptInformation';
 
 const ClassCalendar = () => {
   const [day,setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay,setCDay] = useState<string>(dayjs().format('M月D日'));
+  const [course, setCourse] = useState<any>();
   return (
     <div className={styles.schedule}>
       <span className={styles.today} onClick={()=>{
@@ -20,13 +22,15 @@ const ClassCalendar = () => {
       <Calendar
         showType={'week'}
         markDates={[
-          { date: '2021-6-7' },
-          { date: '2021-6-9'},
-          { date: '2021-6-10'},
+          { date: '2021-09-02' },
+          { date: '2021-09-07'},
+          { date: '2021-09-09'},
         ]}
         onDateClick={(date: { format: (arg: string) => any; }) => {
           setDay(date.format('YYYY-MM-DD'));
-          setCDay(date.format('M月D日'))
+          setCDay(date.format('M月D日'));
+          const curCourse = courseArr[date.format('YYYY-MM-DD')];
+          setCourse(curCourse);
         }}
         markType="dot"
         transitionDuration="0.1"
@@ -35,7 +39,7 @@ const ClassCalendar = () => {
       <div className={styles.subTitle}>
         {cDay}
       </div>
-      <ListComponent listData={myData} />
+      {course ? <ListComponent listData={course} /> :<PromptInformation/>}
     </div>
   )
 }

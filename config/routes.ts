@@ -82,7 +82,14 @@
         name: 'home',
         icon: 'smile',
         component: './Teacher/Homepage',
-      }
+      },
+      {
+        path: '/teacher/home/courseDetails',
+        name: 'courseDetails',
+        icon: 'smile',
+        component: './Teacher/Homepage/Home/Pages/CourseDetails',
+        hideInMenu: 'true',
+      },
     ]
   },
   /*** 老师路由 end ***/
