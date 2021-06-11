@@ -320,12 +320,12 @@ export const noticData: ListData = {
   },
   list: [
     {
-      title: '秋季开设课程相关信息及收费标准公示。',
+      title: '本校户籍生现场材料审核公告',
       link: '/parent/home/notice/details'
     },
     {
-      title: '3年级秋季开设课程公示。',
-      link: '/parent/home/notice/details'
+      title: '我校被评为“2020年度家校合作示范学校”',
+      link: '/parent/home/notice/details2'
     }
   ]
 };

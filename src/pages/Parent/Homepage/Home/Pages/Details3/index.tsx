@@ -2,14 +2,14 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:36:02
- * @LastEditTime: 2021-06-11 09:32:56
+ * @LastEditTime: 2021-06-11 09:36:22
  * @LastEditors: txx
  */
 import React from 'react'
 import { mock } from "./mock"
 import styles from "./index.less"
 
-const Details = () => {
+const Details3 = () => {
   return (
     <div className={styles.DetailsBox}>
       <div className={styles.title}>{mock.title}</div>
@@ -19,7 +19,6 @@ const Details = () => {
         {mock.list.map((i) => {
           return (
             <div>
-              <h3>{i.subtitle}</h3>
               <p>{i.content}</p>
             </div>
           )
@@ -29,4 +28,4 @@ const Details = () => {
   )
 }
 
-export default Details
+export default Details3

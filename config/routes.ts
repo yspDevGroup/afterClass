@@ -145,6 +145,18 @@
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/Details',
       },
+      {
+        path: '/parent/home/notice/details2',
+        name: 'details2',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Details2',
+      },
+      {
+        path: '/parent/home/notice/details3',
+        name: 'details3',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Details3',
+      },
     ],
   },
   /*** 家长路由 end ***/
