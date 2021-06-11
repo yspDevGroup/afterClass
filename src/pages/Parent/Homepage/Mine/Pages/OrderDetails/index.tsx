@@ -5,8 +5,10 @@ import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icon
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
 import {culturedata,artdata,techdata,sportsdata,learndata} from '../../../listData'
+import { Link } from 'umi';
 
 const OrderDetails: React.FC = () => {
+  const [state, setstate] = useState(false);
   const valueKey = window.location.href.split('type=')[1];
   const id = window.location.href.split('id=')[1].split('&')[0];
   const [KcData, setKcData] = useState<any>();
@@ -61,7 +63,13 @@ const OrderDetails: React.FC = () => {
    
   }, [id]);
   const onclick = ()=>{ 
-   
+    setstate(true)
+  }
+  const onclose = () => {
+    setstate(false);
+  }
+  const onchanges = (e: { stopPropagation: () => void; }) => {
+    e.stopPropagation()
   }
   return <div className={styles.OrderDetails}>
     {
@@ -118,6 +126,15 @@ const OrderDetails: React.FC = () => {
       <button className={styles.btn} onClick={onclick}>去支付</button>
     </div>
     }
+    {state === true ?
+      <div className={styles.payment} onClick={onclose}>
+        <div onClick={onchanges}>
+        <p>支付成功</p>
+        <p><CheckCircleOutlined /></p>
+        <Link to='/parent/mine/order?id=4'> <button>已完成支付</button></Link>
+        </div>
+      </div>:''
+  }
   </div>
 };
 
