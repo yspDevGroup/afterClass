@@ -85,7 +85,7 @@ export const currentData: ListData = {
         text: "待上课",
         color: "#45C977",
       },
-      link: 'https://www.pgyer.com/',
+      link:  '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['15:50—16:50','本校'],
@@ -99,7 +99,7 @@ export const currentData: ListData = {
         text: "已请假",
         color: "#999999",
       },
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=two',
       desc: [
         {
           left: ['17:00—18:10','本校'],
@@ -116,7 +116,7 @@ export const electiveData: ListData = {
   list: [
     {
       title: '儿童体能训练',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['每周二', '15:50—16:50', '本校'],
@@ -128,7 +128,7 @@ export const electiveData: ListData = {
     },
     {
       title: '专业武术培训',
-      link: 'https://www.pgyer.com/',
+      link:'/teacher/home/courseDetails?courseId=two',
       desc: [
         {
           left: ['每周四', '15:50—16:50', '本校'],
@@ -140,7 +140,7 @@ export const electiveData: ListData = {
     },
     {
       title: '青少年搏击',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=the',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
