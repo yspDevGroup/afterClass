@@ -19,5 +19,7 @@ export default {
   "menu.parent.notice":'通知',
   "menu.parent.details" :'在学课程详情',
   'menu.courseDetails':'课程详情',
-  "pages.login.teacherLogin.tab":'教师登录'
+  "pages.login.teacherLogin.tab":'教师登录',
+  "menu.notice":'公告',
+  "menu.details":'公告详情',
 };
