@@ -20,6 +20,7 @@ export type ListItem = {
   }[];  // 摘要信息（左右分布）
   img?: string; // 缩略图地址
   introduction?: string; // 课程详情
+  price?: string; // 课程价格
 };
 // 无图片仅左边描述列表 | 图片描述列表 | 无图片左右两边描述列表 | 一行有左右两边的列表 | 一行中仅有左边的列表
 type ListType = 'list' | 'picList' | 'descList' | 'onlyList' | 'onlyLeftList';

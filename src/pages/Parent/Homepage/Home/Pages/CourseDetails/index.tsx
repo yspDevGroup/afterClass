@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'umi';
 import styles from './index.less';
 import { statisticalList ,TimetableList } from './mock'
-import {culturedata,artdata,techdata,sportsdata} from '../../../listData'
+import {culturedata,artdata,techdata,sportsdata,learndata} from '../../../listData'
 
 
 const CourseDetails: React.FC = () => {
@@ -14,6 +14,7 @@ const CourseDetails: React.FC = () => {
   const [KcData, setKcData] = useState<any>();
   const valueKey = window.location.href.split('type=')[1];
   const id = window.location.href.split('id=')[1].split('&')[0];
+  
   useEffect(() => {
     culturedata.list.map((value)=>{
       if(value.id === id){
@@ -35,8 +36,12 @@ const CourseDetails: React.FC = () => {
         setKcData(value)
       }
     })
+    learndata.list.map((value)=>{
+      if(value.id === id){
+        setKcData(value)
+      }
+    })
   }, [id]);
-  // console.log(KcData?.desc[1].left[0].split('：')[1])
   const onclick = () => { 
     setstate(true);
   }
@@ -53,9 +58,11 @@ const CourseDetails: React.FC = () => {
     e.stopPropagation()
   }
   const submit = async () => {
-    // if (XY === false) {
-    //   message.info('请阅读并同意《课后服务协议》')
-    // }
+    if(BJ === undefined){
+      message.error("请选择班级")
+    }else if (XY === false) {
+      message.info('请阅读并同意《课后服务协议》')
+    }
     const data ={
       BJ,
       XY
@@ -86,7 +93,7 @@ const CourseDetails: React.FC = () => {
       </ul>
     </div>
     <div className={styles.footer}>
-      <span>￥50</span><span>/学期</span>
+      <span>￥{KcData?.price}</span><span>/学期</span>
       <button className={styles.btn} onClick={onclick}>立即报名</button>
     </div>
     {
@@ -94,7 +101,7 @@ const CourseDetails: React.FC = () => {
         <div className={styles.payment} onClick={onclose}>
           <div onClick={onchanges}>
             <p className={styles.title}>{KcData?.title}</p>
-            <p className={styles.price}><span>￥50</span><span>/学期</span></p>
+            <p className={styles.price}><span>￥{KcData?.price}</span><span>/学期</span></p>
             <p className={styles.title} style={{ fontSize: '14px' }}>班级</p>
             <Radio.Group onChange={onBJChange}>
               {
@@ -111,8 +118,13 @@ const CourseDetails: React.FC = () => {
             <Radio 
               className={styles.agreement}
               onChange={onXYChange}
-            >  <p>我已阅读并同意<a href='www.baidu.com'>《课后帮服务协议》</a></p></Radio>
-             <Link to='/parent/mine/orderDetails?id=false'><Button className={styles.submit} onClick={submit}>确定并付款</Button></Link>
+            >  <p>我已阅读并同意<a href=''>《课后帮服务协议》</a></p></Radio>
+            {
+              XY === false || BJ === undefined ?
+              <Button className={styles.submit} onClick={submit} >确定并付款</Button>:
+              <Link to={`/parent/mine/orderDetails?id=${id}&type=false`}><Button className={styles.submit} onClick={submit} >确定并付款</Button></Link>
+            }
+             
             
           </div>
         </div> : ''
@@ -121,11 +133,11 @@ const CourseDetails: React.FC = () => {
   </div>:
   <div className={styles.CourseDetails2}>
      <div className={styles.KCXX}>
-        <p className={styles.title}>青少年足球兴趣培训课程</p>
+        <p className={styles.title}>{KcData?.title}</p>
         <ul>
           <li>上课时段：2021.09.12—2021.11.20</li>
-          <li>上课地点：本校</li>
-          <li>总课时：16节</li>
+          <li>上课地点：{KcData?.desc[0].left[2]}</li>
+          <li>总课时：{KcData?.desc[1].left[0]}</li>
           <li>班级：A班</li>
           <li>学生：刘大大</li>
         </ul>

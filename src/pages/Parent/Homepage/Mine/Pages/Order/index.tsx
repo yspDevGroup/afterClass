@@ -17,12 +17,12 @@ const Order: React.FC = () => {
             <div className={styles.Information}>
                 <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span style={{color:'#45C977'}}>已完成</span></p>
                 <div className={styles.KCMC}>
-                    <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥50.00</span>
+                    <p>少儿音乐课</p>
+                    <span>￥830</span>
                 </div>
-                <p className={styles.price}>实付: <span>￥50.00</span></p>
+                <p className={styles.price}>实付: <span>￥830</span></p>
                 <div className={styles.buttons}>
-                <Link to="/parent/mine/orderDetails?id=true">  <span>更多</span></Link>
+                <Link to="/parent/mine/orderDetails?id=25554456&type=true">  <span>更多</span></Link>
                     <div>
                         <button>退课退款</button>
                         <button>课程评价</button>
@@ -33,19 +33,19 @@ const Order: React.FC = () => {
             <div className={styles.Information}>
                 <p className={styles.orderNumber}><span>订单编号：TY2021542000001</span><span style={{color:'#FF6600'}}>待付款</span></p>
                 <div className={styles.KCMC}>
-                    <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥50.00</span>
+                    <p>儿童机器人</p>
+                    <span>￥700</span>
                 </div>
                 <div className={styles.btns}>
                         <button>取消订单</button>
-                        <button>去支付</button>
+                        <Link to="/parent/mine/orderDetails?id=123456789&type=false">  <button>去支付</button></Link>
                 </div>
             </div>
             <div className={styles.Information}>
                 <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>已取消</span></p>
                 <div className={styles.KCMC}>
                     <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥50.00</span>
+                    <span>￥500</span>
                 </div>
                 <div className={styles.btns}>
                         <button>删除订单</button>
@@ -55,7 +55,7 @@ const Order: React.FC = () => {
                 <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>退款成功</span></p>
                 <div className={styles.KCMC}>
                     <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥50.00</span>
+                    <span>￥590.00</span>
                 </div>
                 <div className={styles.btns}>
                         <button>删除订单</button>
@@ -66,7 +66,7 @@ const Order: React.FC = () => {
                 <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>退款中</span></p>
                 <div className={styles.KCMC}>
                     <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥50.00</span>
+                    <span>￥500</span>
                 </div>
                 <div className={styles.btns}>
                         <button>退款详情</button>
@@ -77,12 +77,12 @@ const Order: React.FC = () => {
           <div className={styles.Information}>
                 <p className={styles.orderNumber}><span>订单编号：TY2021542000001</span><span style={{color:'#FF6600'}}>待付款</span></p>
                 <div className={styles.KCMC}>
-                    <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥50.00</span>
+                    <p>儿童机器人</p>
+                    <span>￥700</span>
                 </div>
                 <div className={styles.btns}>
                         <button>取消订单</button>
-                        <Link to="/parent/mine/orderDetails?id=false">  <button>去支付</button></Link>
+                        <Link to="/parent/mine/orderDetails?id=123456789&type=false">  <button>去支付</button></Link>
                         
                 </div>
             </div>
@@ -91,12 +91,12 @@ const Order: React.FC = () => {
           <div className={styles.Information}>
                 <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>已完成</span></p>
                 <div className={styles.KCMC}>
-                    <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥50.00</span>
+                    <p>少儿音乐课</p>
+                    <span>￥500</span>
                 </div>
-                <p className={styles.price}>实付: <span>￥50.00</span></p>
+                <p className={styles.price}>实付: <span>￥830</span></p>
                 <div className={styles.buttons}>
-                <Link to="/parent/mine/orderDetails?id=true">  <span>更多</span></Link>
+                <Link to="/parent/mine/orderDetails?id=25554456&type=true">  <span>更多</span></Link>
                     <div>
                         <button>退课退款</button>
                         <button>课程评价</button>
@@ -110,7 +110,7 @@ const Order: React.FC = () => {
                 <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>退款成功</span></p>
                 <div className={styles.KCMC}>
                     <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥50.00</span>
+                    <span>￥500</span>
                 </div>
                 <div className={styles.btns}>
                         <button>删除订单</button>
@@ -121,7 +121,7 @@ const Order: React.FC = () => {
                 <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>退款中</span></p>
                 <div className={styles.KCMC}>
                     <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥50.00</span>
+                    <span>￥500</span>
                 </div>
                 <div className={styles.btns}>
                         <button>退款详情</button>
