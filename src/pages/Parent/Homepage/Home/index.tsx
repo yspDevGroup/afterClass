@@ -30,14 +30,16 @@ const Home = () => {
           <img className={styles.noticeImg} src={imgNotice} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
-            <span>2021秋季课后服务课程报名开始了！</span>
+            <span>本校户籍生现场材料审核公告</span>
           </div>
+          <a href="/parent/home/notice/details">
           <RightOutlined />
+          </a>
         </div>
         <div className={styles.enrollArea}>
           {enroll ? (
             <>
-              <div className={styles.enrollText}>2021秋季课后服务课程报名开始了！</div>
+              <div className={styles.enrollText}>本校户籍生现场材料审核公告</div>
               <div className={styles.enrollDate}>选课时间：2021.09.02 12:00—2021.09.05 18:00</div>
             </>
           ) : (
