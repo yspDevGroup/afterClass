@@ -36,9 +36,9 @@ const s1d: ListData = {
   cls: 'picList',
   list: [
     {
-      title: '儿童体能训练',
+       title: '儿童体能训练',
       img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['课程时段：2021.04.02—2021.06.22'],
@@ -51,7 +51,7 @@ const s1d: ListData = {
     {
       title: '专业武术培训',
       img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
-      link: 'https://www.pgyer.com/',
+      link:'/teacher/home/courseDetails?courseId=two',
       desc: [
         {
           left: ['课程时段：2021.04.02—2021.06.22'],
@@ -64,7 +64,7 @@ const s1d: ListData = {
     {
       title: '青少年搏击',
       img: 'https://i.postimg.cc/MHXHFJd3/6.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=the',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -81,9 +81,9 @@ const s2d: ListData = {
   cls: 'picList',
   list: [
     {
-      title: '儿童体能训练',
+       title: '儿童体能训练',
       img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['课程时段：2021.04.02—2021.06.22'],
@@ -96,7 +96,7 @@ const s2d: ListData = {
     {
       title: '专业武术培训',
       img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
-      link: 'https://www.pgyer.com/',
+      link:'/teacher/home/courseDetails?courseId=two',
       desc: [
         {
           left: ['课程时段：2021.04.02—2021.06.22'],
@@ -113,9 +113,9 @@ const s3d: ListData = {
   cls: 'picList',
   list: [
     {
-      title: '儿童体能训练',
+       title: '儿童体能训练',
       img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['课程时段：2021.04.02—2021.06.22'],
@@ -128,7 +128,7 @@ const s3d: ListData = {
     {
       title: '专业武术培训',
       img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
-      link: 'https://www.pgyer.com/',
+      link:'/teacher/home/courseDetails?courseId=two',
       desc: [
         {
           left: ['课程时段：2021.04.02—2021.06.22'],
@@ -141,7 +141,7 @@ const s3d: ListData = {
     {
       title: '青少年搏击',
       img: 'https://i.postimg.cc/MHXHFJd3/6.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=the',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -158,9 +158,9 @@ const firstData: ListData = {
   cls: 'picList',
   list: [
     {
-      title: '儿童体能训练',
+       title: '儿童体能训练',
       img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['课程时段：2021.09.02—2021.09.20'],
@@ -173,7 +173,7 @@ const firstData: ListData = {
     {
       title: '专业武术培训',
       img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
-      link: 'https://www.pgyer.com/',
+      link:'/teacher/home/courseDetails?courseId=two',
       desc: [
         {
           left: ['课程时段：2021.09.02—2021.09.20'],
@@ -184,9 +184,9 @@ const firstData: ListData = {
       ],
     },
     {
-      title: '儿童体能训练',
+       title: '儿童体能训练',
       img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['课程时段：2021.09.02—2021.09.20'],
@@ -204,9 +204,9 @@ const secData: ListData = {
   cls: 'picList',
   list: [
     {
-      title: '儿童体能训练',
+       title: '儿童体能训练',
       img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['课程时段：2021.09.02—2021.09.20'],
@@ -219,7 +219,7 @@ const secData: ListData = {
     {
       title: '专业武术培训',
       img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
-      link: 'https://www.pgyer.com/',
+      link:'/teacher/home/courseDetails?courseId=two',
       desc: [
         {
           left: ['课程时段：2021.09.02—2021.09.20'],
@@ -236,9 +236,9 @@ const theData: ListData = {
   cls: 'picList',
   list: [
     {
-      title: '儿童体能训练',
+       title: '儿童体能训练',
       img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['课程时段：2021.09.02—2021.09.20'],
@@ -251,7 +251,7 @@ const theData: ListData = {
     {
       title: '专业武术培训',
       img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
-      link: 'https://www.pgyer.com/',
+      link:'/teacher/home/courseDetails?courseId=two',
       desc: [
         {
           left: ['课程时段：2021.09.02—2021.09.20'],
@@ -262,9 +262,9 @@ const theData: ListData = {
       ],
     },
     {
-      title: '儿童体能训练',
+       title: '儿童体能训练',
       img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['课程时段：2021.09.02—2021.09.20'],

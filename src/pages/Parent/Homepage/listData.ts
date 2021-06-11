@@ -263,26 +263,7 @@ export const selecteddata: ListData = {
     },
   ]
 };
-// 孩子课表数据
-export const childlearndata: ListData = {
-  type: 'picList',
-  cls: 'picList',
-  list: [
-    {
-      title: '少儿跆拳道',
-      img: 'https://i.postimg.cc/dtkDRv7L/5.jpg',
-      link: 'https://fanyi.baidu.com/?id=1',
-      desc: [
-        {
-          left: ['课程时段：2021.09.12—2021.11.20'],
-        },
-        {
-          left: ['共16课时'],
-        },
-      ],
-    },
-  ]
-};
+
 // 在学数据
 export const learndata: ListData = {
   type: 'list',
