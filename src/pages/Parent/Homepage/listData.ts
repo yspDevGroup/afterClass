@@ -1,72 +1,5 @@
 import type { ListData } from "@/components/ListComponent/data";
 
-// 公告栏数据
-export const annoceData: ListData = {
-  type: 'onlyLeftList',
-  cls: 'onlyOneList',
-  header: {
-    title: '公示栏',
-    moreText: '全部 >',
-    link: '/parent/home/notice'
-  },
-  list: [
-    {
-      title: '秋季开设课程相关信息及收费标准公示。',
-      link: '/parent/home/notice/details'
-    },
-    {
-      title: '9年级秋季开设课程公示。',
-      link: '/parent/home/notice/details'
-    }
-  ]
-};
-
-// 开设课程数据 
-export const courseData: ListData = {
-  type: 'picList',
-  cls: 'picList',
-  list: [
-    {
-      title: '硬笔书法',
-      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: '/parent/home/courseDetails?id=true',
-      desc: [
-        {
-          left: ['课程时段：2021.09.12—2021.11.20'],
-        },
-        {
-          left: ['共16课时'],
-        },
-      ],
-    },
-    {
-      title: '硬笔书法',
-      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: '/parent/home/courseDetails?id=true',
-      desc: [
-        {
-          left: ['课程时段：2021.09.12—2021.11.20'],
-        },
-        {
-          left: ['共16课时'],
-        },
-      ],
-    },
-    {
-      title: '硬笔书法',
-      img: 'https://i.postimg.cc/43D4nKmD/Rectangle-37.png',
-      link: '/parent/home/courseDetails?id=true',
-      desc: [
-        {
-          left: ['课程时段：2021.09.12—2021.11.20'],
-        },
-        {
-          left: ['共16课时'],
-        },
-      ],
-    },
-  ]
-};
 // 今日课程数据
 export const currentData: ListData = {
   type: 'descList',
@@ -104,46 +37,295 @@ export const currentData: ListData = {
     },
   ]
 };
+
+// 开设课程中文化数据
+export const culturedata: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [
+    {
+      title: '儿童机器人',
+      img: 'https://i.postimg.cc/5t10MCsC/8.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '少儿数学辅导',
+      img: 'https://i.postimg.cc/g0Pwk52r/1.webp',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '国际象棋',
+      img: 'https://i.postimg.cc/ZKGnVg3j/2.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+  ]
+};
+// 开设课程中艺术数据 
+export const artdata: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [
+    {
+      title: '少儿音乐课',
+      img: 'https://i.postimg.cc/3RxxkH5r/11.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '中国少儿舞',
+      img: 'https://i.postimg.cc/j292V31x/3.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '专业武术',
+      img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+  ]
+};
+// 开设课程中科技数据 
+export const techdata: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [
+    {
+      title: '少儿机器人',
+      img: 'https://i.postimg.cc/xjFcbq1w/7.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+
+  ]
+};
+// 开设课程中体育数据
+export const sportsdata: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [
+    {
+      title: '少儿足球',
+      img: 'https://i.postimg.cc/Ss1N8tk6/10.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '乒乓球青训',
+      img: 'https://i.postimg.cc/DzgzfwNY/9.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '少儿跆拳道',
+      img: 'https://i.postimg.cc/dtkDRv7L/5.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+  ]
+};
 // 已选数据
-export const electiveData: ListData = {
+export const selecteddata: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [
+    {
+      title: '少儿机器人',
+      img: 'https://i.postimg.cc/xjFcbq1w/7.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '国际象棋',
+      img: 'https://i.postimg.cc/ZKGnVg3j/2.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+    {
+      title: '少儿跆拳道',
+      img: 'https://i.postimg.cc/dtkDRv7L/5.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+  ]
+};
+// 孩子课表数据
+export const childlearndata: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [
+    {
+      title: '少儿跆拳道',
+      img: 'https://i.postimg.cc/dtkDRv7L/5.jpg',
+      link: 'https://fanyi.baidu.com/?id=1',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共16课时'],
+        },
+      ],
+    },
+  ]
+};
+// 在学数据
+export const learndata: ListData = {
   type: 'list',
   cls: 'list',
   list: [
     {
-      title: '硬笔书法',
-      link: '/parent/home/courseDetails?id=false',
+      title: '少儿机器人',
+      link: 'https://fanyi.baidu.com/?id=1',
       desc: [
         {
-          left: ['每周三', '15:50—16:50', '本校'],
+          left: ['每周一', '16:50—17:50', '本校'],
         },
         {
-          left: ['共16课时', '已学6课时'],
+          left: ['共16课时', '已学3课时'],
         },
       ],
     },
     {
-      title: '硬笔书法',
-      link: '/parent/home/courseDetails?id=false',
+      title: '国际象棋',
+      link: 'https://fanyi.baidu.com/?id=1',
       desc: [
         {
-          left: ['每周三', '15:50—16:50', '本校'],
+          left: ['每周三', '16:50—17:50', '本校'],
         },
         {
-          left: ['共16课时', '已学6课时'],
+          left: ['共16课时', '已学2课时'],
         },
       ],
     },
     {
-      title: '硬笔书法',
-      link: '/parent/home/courseDetails?id=false',
+      title: '少儿跆拳道',
+      link: 'https://fanyi.baidu.com/?id=1',
       desc: [
         {
-          left: ['每周三', '15:50—16:50', '本校'],
+          left: ['每周五', '16:50—17:50', '本校'],
         },
         {
-          left: ['共16课时', '已学6课时'],
+          left: ['共16课时', '已学4课时'],
         },
       ],
     },
+
+
+
+  ]
+};
+// 公告栏数据
+export const noticData: ListData = {
+  type: 'onlyLeftList',
+  cls: 'onlyOneList',
+  header: {
+    title: '公示栏',
+    moreText: '全部 >',
+    link: '/parent/home/notice'
+  },
+  list: [
+    {
+      title: '秋季开设课程相关信息及收费标准公示。',
+      link: '/parent/home/notice/details'
+    },
+    {
+      title: '3年级秋季开设课程公示。',
+      link: '/parent/home/notice/details'
+    }
   ]
 };

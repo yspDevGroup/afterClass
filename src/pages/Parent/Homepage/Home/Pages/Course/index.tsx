@@ -2,25 +2,30 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:30:23
- * @LastEditTime: 2021-06-09 18:06:08
+ * @LastEditTime: 2021-06-11 08:51:00
  * @LastEditors: txx
  */
 
 import React from 'react'
 import CourseTab from '../../components/CourseTab'
-import type { ListData } from "@/components/ListComponent/data";
+import { Pagination } from 'antd';
 import styles from "./index.less"
-import { mock } from './mock';
+import { culturedata, artdata, techdata, sportsdata, selecteddata } from '../../../listData';
 
-const Course = (porp: { listData?: ListData }) => {
-  const { listData = mock } = porp
+const Course = () => {
+ 
   return (
     <div className={styles.CourseBox}>
       <CourseTab
         cls={styles.courseCenterTab}
-        listData={listData}
+        cultureData = {culturedata}
+        artData = {artdata}
+        techData = {techdata}
+        sportsData ={ sportsdata}
+        selectedData = {selecteddata}
         centered={true}
       />
+       <Pagination size="small" total={5} />
     </div>
   )
 }

@@ -2,21 +2,21 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:32:04
- * @LastEditTime: 2021-06-09 17:38:39
+ * @LastEditTime: 2021-06-11 09:06:30
  * @LastEditors: txx
  */
 import React from 'react';
 import ListComp from '@/components/ListComponent';
 import styles from "./index.less";
-import { ListData } from '@/components/ListComponent/data';
-import { mock } from './mock';
+import { noticData } from "../../../listData"
+import { Pagination } from 'antd';
 
 
-const Notice = (porps: { listData?: ListData }) => {
-  const { listData = mock } = porps
+const Notice = () => {
   return (
     <div className={styles.NoticeBox}>
-      <ListComp listData={listData} />
+      <ListComp listData={noticData} />
+      <Pagination size="small" total={5} />
     </div>
   )
 }
