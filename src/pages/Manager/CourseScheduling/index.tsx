@@ -29,6 +29,11 @@ const ClassManagement = () => {
   const [tableDataSource, setTableDataSource] = useState<any>([]);
   const [radioValue, setRadioValue] = React.useState(false);
   const [xXSJPZData, setXXSJPZData] = useState<any>([]);
+  const [recordValue, setRecordValue] = useState<any>({});
+  // 校区
+  const [campus, setCampus] = useState<any>([]);
+  // 年级
+  const [grade, setGrade] = useState<any>({});
 
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
@@ -36,8 +41,21 @@ const ClassManagement = () => {
   useEffect(() => {
     (async () => {
       // 获取年级信息
-      console.log('开始获取年级信息...');
       const currentXQ = await queryXQList();
+      const XQ: { label: any; value: any }[] = [];
+      const NJ = {};
+      currentXQ.map((item: any) => {
+        XQ.push({
+          label: item.name,
+          value: item.name,
+        });
+        NJ[item.name] = item.njList.map((njItem: any) => ({
+          label: njItem.name,
+          value: njItem.name,
+        }));
+      });
+      setCampus(XQ);
+      setGrade(NJ);
       console.log('currentXQ: ', currentXQ);
     })();
   }, []);
@@ -61,6 +79,7 @@ const ClassManagement = () => {
             cla: item.FJMC,
             teacher: '',
             jsId: item.id,
+            FJLXId: item.FJLX.id, // 场地类型ID
             rowspan: timeKey === 0 ? timeData.length : 0,
           },
           course: {
@@ -69,16 +88,19 @@ const ClassManagement = () => {
             hjId: timeItem.id,
           },
         };
-        if (item.KHPKSJs.length > 0) {
+        if (item.KHPKSJs && item.KHPKSJs.length > 0) {
           item.KHPKSJs.map((KHItem: any) => {
             if (KHItem.XXSJPZ.id === timeItem.id) {
               table[week[KHItem.WEEKDAY]] = {
-                weekId: KHItem.id,
-                cla: KHItem.KHBJSJ.BJMC,
-                teacher: KHItem.KHBJSJ.ZJS,
-                bjId: KHItem.KHBJSJ.id,
+                weekId: KHItem.id, // 周
+                cla: KHItem.KHBJSJ.BJMC, // 班级名称
+                teacher: KHItem.KHBJSJ.ZJS, // 主教师
+                bjId: KHItem.KHBJSJ.id, // 班级ID
+                kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
+                njId: KHItem.KHBJSJ.NJS.split(',')[0], // 年级ID
+                xqId: KHItem.KHBJSJ.XQ, // 校区ID
                 color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(81, 208, 129, 1)',
-                dis: true,
+                dis: !(recordValue.BJId === KHItem.KHBJSJ.id),
               };
             }
           });
@@ -228,8 +250,8 @@ const ClassManagement = () => {
       width: 136,
     },
   ];
-  const onExcelTableClick = (value: any) => {
-    console.log('value', value);
+  const onExcelTableClick = (value: any, record: any) => {
+    setRecordValue(record);
   };
 
   return (
@@ -291,9 +313,12 @@ const ClassManagement = () => {
           </div>
         ) : (
           <AddArranging
+            formValues={recordValue}
             setState={setState}
             xn={xn}
             xq={xq}
+            campus={campus}
+            grade={grade}
             tableDataSource={tableDataSource}
             processingData={processingData}
             xXSJPZData={xXSJPZData}

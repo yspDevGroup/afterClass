@@ -2,11 +2,11 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取校历数据 GET /xl/${param0} */
-export async function getXL(
+/** 获取学校公告记录 GET /xxgg/${param0} */
+export async function getXXGG(
   params: {
     // path
-    /** 校历ID */
+    /** 学校配置ID */
     id: string;
   },
   options?: { [key: string]: any },
@@ -14,47 +14,47 @@ export async function getXL(
   const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
+    data?: { BT?: string; NR?: string };
     message?: string;
-  }>(`/xl/${param0}`, {
+  }>(`/xxgg/${param0}`, {
     method: 'GET',
     params: { ...params },
     ...(options || {}),
   });
 }
 
-/** 删除校历数据 DELETE /xl/${param0} */
-export async function deleteXL(
+/** 删除学校公告记录 DELETE /xxgg/${param0} */
+export async function deleteXXGG(
   params: {
     // path
-    /** 校历ID */
+    /** 学校配置ID */
     id: string;
   },
   options?: { [key: string]: any },
 ) {
   const { id: param0 } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xl/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxgg/${param0}`, {
     method: 'DELETE',
     params: { ...params },
     ...(options || {}),
   });
 }
 
-/** 查询所有校历数据 GET /xl/ */
-export async function getAllXL(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: API.XL[]; message?: string }>('/xl/', {
+/** 查询所有学校公告记录 GET /xxgg/all */
+export async function getAllXXGG(options?: { [key: string]: any }) {
+  return request<{ status?: 'ok' | 'error'; data?: API.XXGG[]; message?: string }>('/xxgg/all', {
     method: 'GET',
     ...(options || {}),
   });
 }
 
-/** 创建校历数据 PUT /xl/create */
-export async function createXL(body: API.CreateXL, options?: { [key: string]: any }) {
+/** 创建学校公告记录 PUT /xxgg/create */
+export async function createXXGG(body: API.CreateXXGG[], options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
+    data?: { BT?: string; NR?: string };
     message?: string;
-  }>('/xl/create', {
+  }>('/xxgg/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -64,18 +64,18 @@ export async function createXL(body: API.CreateXL, options?: { [key: string]: an
   });
 }
 
-/** 更新校历数据 PUT /xl/update/${param0} */
-export async function updateXL(
+/** 更新学校公告记录 PUT /xxgg/update/${param0} */
+export async function updateXXGG(
   params: {
     // path
-    /** 校历ID */
+    /** 学校配置ID */
     id: string;
   },
-  body: API.UpdateXL,
+  body: API.UpdateXXGG,
   options?: { [key: string]: any },
 ) {
   const { id: param0 } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xl/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxgg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

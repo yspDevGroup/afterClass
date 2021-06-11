@@ -17,14 +17,18 @@ import * as khbjsj from './khbjsj';
 import * as khkclx from './khkclx';
 import * as khkcsj from './khkcsj';
 import * as khpksj from './khpksj';
-import * as njsj from './njsj';
+import * as khxscq from './khxscq';
+import * as khxsdd from './khxsdd';
+import * as khxsqj from './khxsqj';
 import * as pksj from './pksj';
+import * as njsj from './njsj';
 import * as wechat from './wechat';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
-import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
+import * as xnxq from './xnxq';
 import * as xsjbsj from './xsjbsj';
+import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
 import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
@@ -46,14 +50,18 @@ export default {
   khkclx,
   khkcsj,
   khpksj,
-  njsj,
+  khxscq,
+  khxsdd,
+  khxsqj,
   pksj,
+  njsj,
   wechat,
   xl,
   xnjgsj,
-  xnxq,
   xqsj,
+  xnxq,
   xsjbsj,
+  xxgg,
   xxjbsj,
   xxpz,
   xxsjpz,

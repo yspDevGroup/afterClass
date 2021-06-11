@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable array-callback-return */
 import { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { Button, Drawer, message } from 'antd';
@@ -6,6 +8,7 @@ import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllNJSJ } from '@/services/after-class/njsj';
+import { queryXQList } from '@/services/wechat/service';
 
 type AddCourseProps = {
   visible: boolean;
@@ -13,7 +16,7 @@ type AddCourseProps = {
   readonly?: boolean;
   formValues?: Record<string, any>;
   actionRef?: React.MutableRefObject<ActionType | undefined>;
-  mcData?: { label: string; value: string; }[];
+  mcData?: { label: string; value: string }[];
   names?: string;
 };
 const formLayout = {
@@ -21,34 +24,69 @@ const formLayout = {
   wrapperCol: {},
 };
 
-const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues, actionRef, mcData,names}) => {
+const AddCourse: FC<AddCourseProps> = ({
+  visible,
+  onClose,
+  readonly,
+  formValues,
+  actionRef,
+  mcData,
+  names,
+}) => {
   const [form, setForm] = useState<any>();
-  const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
+  // const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
+  // 校区
+  const [campus, setCampus] = useState<any>([]);
+  // 年级
+  const [grade, setGrade] = useState<any>();
+  const [xQItem, setXQItem] = useState<any>([]);
+
   // 获取年级数据
   useEffect(() => {
     const res = getAllNJSJ();
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
-        const njArry: { label: string; value: string; }[] = []
+        const njArry: { label: string; value: string }[] = [];
         data.data.map((item: any) => {
-            return njArry.push({
+          return njArry.push({
             label: item.NJMC,
-            value: item.id
-          })
-        })
-        setNjData(njArry);
+            value: item.id,
+          });
+        });
+        // setNjData(njArry);
       }
-    })
+    });
+  }, []);
+  useEffect(() => {
+    (async () => {
+      // 获取年级信息
+      const currentXQ = await queryXQList();
+      const XQ: { label: any; value: any }[] = [];
+      const NJ = {};
+      currentXQ.map((item: any) => {
+        XQ.push({
+          label: item.name,
+          value: item.name,
+        });
+        NJ[item.name] = item.njList.map((njItem: any) => ({
+          label: njItem.name,
+          value: njItem.name,
+        }));
+      });
+      setCampus(XQ);
+      setGrade(NJ);
+    })();
   }, []);
   // 获取标题
-  const getTitle=()=>{
-    if(formValues&&names==='bianji'){
-      return '编辑信息'
-    }if(formValues&&names==='chakan'){
-      return '查看信息'
+  const getTitle = () => {
+    if (formValues && names === 'bianji') {
+      return '编辑信息';
     }
-      return '新增信息' 
-  }
+    if (formValues && names === 'chakan') {
+      return '查看信息';
+    }
+    return '新增信息';
+  };
 
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
@@ -90,9 +128,9 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       name: 'BJMC',
       key: 'BJMC',
       readonly,
-      fieldProps:{
-        autocomplete:'off'
-      }
+      fieldProps: {
+        autocomplete: 'off',
+      },
     },
     {
       type: 'select',
@@ -101,7 +139,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       name: 'KHKCSJId',
       key: 'KHKCSJId',
       fieldProps: {
-        options: mcData
+        options: mcData,
       },
     },
     {
@@ -114,9 +152,9 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           name: 'BJZT',
           key: 'BJZT',
           fieldProps: {
-            disabled: true ,
-            autocomplete:'off'
-          }
+            disabled: true,
+            autocomplete: 'off',
+          },
         },
         {
           type: 'inputNumber',
@@ -124,11 +162,11 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           name: 'FY',
           key: 'FY',
           readonly,
-          fieldProps:{
-            autocomplete:'off'
-          }
+          fieldProps: {
+            autocomplete: 'off',
+          },
         },
-      ]
+      ],
     },
     {
       type: 'group',
@@ -148,22 +186,34 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
           key: 'FJS',
           readonly,
           fieldProps: {
-            mode: "multiple"
-          }
+            mode: 'multiple',
+          },
         },
-      ]
+      ],
+    },
+    {
+      type: 'select',
+      name: 'XQ',
+      key: 'XQ',
+      label: '所属校区',
+      readonly,
+      fieldProps: {
+        options: campus,
+        onChange(value: any) {
+          setXQItem(value);
+        },
+      },
     },
     {
       type: 'select',
       name: 'njIds',
-      key:'njIds',
+      key: 'njIds',
       label: '适用年级',
       fieldProps: {
         mode: 'multiple',
-        options: njData
+        options: grade ? grade[xQItem] : [],
       },
       readonly,
-
     },
     {
       type: 'uploadImage',
@@ -182,7 +232,7 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
       key: 'KCMS',
     },
   ];
-  
+
   return (
     <div>
       <Drawer
@@ -193,19 +243,21 @@ const AddCourse: FC<AddCourseProps> = ({ visible, onClose, readonly, formValues,
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
-        footer={(names==='chakan')?null:
-          <div
-            style={{
-              textAlign: 'right',
-            }}
-          >
-            <Button onClick={onClose} style={{ marginRight: 16 }}>
-              取消
-            </Button>
-            <Button onClick={handleSubmit} type="primary">
-              保存
-            </Button>
-          </div>
+        footer={
+          names === 'chakan' ? null : (
+            <div
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              <Button onClick={onClose} style={{ marginRight: 16 }}>
+                取消
+              </Button>
+              <Button onClick={handleSubmit} type="primary">
+                保存
+              </Button>
+            </div>
+          )
         }
       >
         <ProFormFields

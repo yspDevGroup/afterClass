@@ -13,15 +13,15 @@ import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
 import type { CourseItem, TableListParams } from './data';
 import styles from './index.less';
-import type { SearchDataType } from "@/components/Search/data";
-import { searchData } from "./searchConfig";
+import type { SearchDataType } from '@/components/Search/data';
+import { searchData } from './searchConfig';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
 import ClassStart from './components/ClassStart';
 import { getAllNJSJ } from '@/services/after-class/njsj';
 import { getAllXNXQ } from '@/services/after-class/xnxq';
-import { convertData } from "@/components/Search/util";
+import { convertData } from '@/components/Search/util';
 import { getQueryString } from '@/utils/utils';
 import PromptInformation from '@/components/PromptInformation';
 import { getAllKHKCSJ, getKHKCSJ } from '@/services/after-class/khkcsj';
@@ -38,7 +38,7 @@ const CourseManagement = () => {
   const [xq, setxq] = useState<string>('');
   const [kcId, setkcId] = useState<string>('');
   // 查询课程名称
-  const [mcData, setmcData] = useState<{ label: string; value: string; }[]>([]);
+  const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
   const [name, setName] = useState<string>('');
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
@@ -47,7 +47,7 @@ const CourseManagement = () => {
     setkai(false);
   };
   // 弹框名称设定
-  const [names, setnames] = useState<string>('bianji')
+  const [names, setnames] = useState<string>('bianji');
 
   useEffect(() => {
     async function fetchData() {
@@ -67,22 +67,28 @@ const CourseManagement = () => {
             await setDataSource(defaultData);
             chainSel.data = newData;
             actionRef.current?.reload();
-            const ress = getAllKHKCSJ({ name: '', xn: chainSel.defaultValue.first, xq: chainSel.defaultValue.second, page: 0, pageCount: 0 });
+            const ress = getAllKHKCSJ({
+              name: '',
+              xn: chainSel.defaultValue.first,
+              xq: chainSel.defaultValue.second,
+              page: 0,
+              pageCount: 0,
+            });
             Promise.resolve(ress).then((dataes: any) => {
               if (dataes.status === 'ok') {
-                const njArry: { label: string; value: string; }[] = []
+                const njArry: { label: string; value: string }[] = [];
                 dataes.data.map((item: any) => {
                   return njArry.push({
                     label: item.KCMC,
-                    value: item.id
-                  })
-                })
+                    value: item.id,
+                  });
+                });
                 setmcData(njArry);
               }
-            })
+            });
           }
         } else {
-          setkai(true)
+          setkai(true);
         }
       } else {
         console.log(res.message);
@@ -105,33 +111,37 @@ const CourseManagement = () => {
     fetchData();
   }, []);
   useEffect(() => {
-    const curId = getQueryString("courseId");
+    const curId = getQueryString('courseId');
     if (curId) {
       // 根据课程id重新获取学年学期回调搜索框
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       setkcId(curId);
-      (
-        async () => {
-          const id = { id: curId }
-          const res = await getKHKCSJ(id);
-          const ress = getAllKHKCSJ({ name: '', xn: res.data?.XNXQ?.XN, xq: res.data?.XNXQ?.XQ, page: 0, pageCount: 0 });
-          Promise.resolve(ress).then((dataes: any) => {
-            if (dataes.status === 'ok') {
-              const njArry: { label: string; value: string; }[] = []
-              dataes.data.map((item: any) => {
-                return njArry.push({
-                  label: item.KCMC,
-                  value: item.id
-                })
-              })
-              setmcData(njArry);
-              actionRef.current?.reload();
-            }
-          })
-        }
-      )()
+      (async () => {
+        const id = { id: curId };
+        const res = await getKHKCSJ(id);
+        const ress = getAllKHKCSJ({
+          name: '',
+          xn: res.data?.XNXQ?.XN,
+          xq: res.data?.XNXQ?.XQ,
+          page: 0,
+          pageCount: 0,
+        });
+        Promise.resolve(ress).then((dataes: any) => {
+          if (dataes.status === 'ok') {
+            const njArry: { label: string; value: string }[] = [];
+            dataes.data.map((item: any) => {
+              return njArry.push({
+                label: item.KCMC,
+                value: item.id,
+              });
+            });
+            setmcData(njArry);
+            actionRef.current?.reload();
+          }
+        });
+      })();
     }
-  }, [])
+  }, []);
   // 监听学年学期更新
   useEffect(() => {
     if (xn && xq) {
@@ -139,7 +149,7 @@ const CourseManagement = () => {
         actionRef.current?.reload();
       }, 0);
     }
-  }, [xn, xq])
+  }, [xn, xq]);
   // 头部input事件
   const handlerSearch = (type: string, value: string, term: string) => {
     if (type === 'year' || type === 'term') {
@@ -148,16 +158,16 @@ const CourseManagement = () => {
       const ress = getAllKHKCSJ({ name: '', xn: value, xq: term, page: 0, pageCount: 0 });
       Promise.resolve(ress).then((dataes: any) => {
         if (dataes.status === 'ok') {
-          const njArry: { label: string; value: string; }[] = []
+          const njArry: { label: string; value: string }[] = [];
           dataes.data.map((item: any) => {
             return njArry.push({
               label: item.KCMC,
-              value: item.id
-            })
-          })
+              value: item.id,
+            });
+          });
           setmcData(njArry);
         }
-      })
+      });
       actionRef.current?.reload();
     }
     setName(value);
@@ -166,10 +176,10 @@ const CourseManagement = () => {
   // 获取弹框标题
   const getTitle = () => {
     if (moduletype === 'crourse') {
-      return '课程类型维护'
+      return '课程类型维护';
     }
-    return '开班信息'
-  }
+    return '开班信息';
+  };
 
   const showDrawer = () => {
     setVisible(true);
@@ -179,19 +189,22 @@ const CourseManagement = () => {
 
   const handleEdit = (data: any) => {
     const njIds: any[] = [];
-    data.NJSJs.map((item: any) => (
-      njIds.push(item.id)
-    ))
-    const list = { ...data, njIds }
-    list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+    data.NJSJs.map((item: any) => njIds.push(item.id));
+    const list = { ...data, njIds };
+    list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
     setVisible(true);
     setCurrent(list);
-    if (!(data.BJZT === '待发布') && !(data.BJZT === '未排课') && !(data.BJZT === '已下架') && !(data.BJZT === '已排课')) {
-      stereadonly(true)
-      setnames('chakan')
+    if (
+      !(data.BJZT === '待发布') &&
+      !(data.BJZT === '未排课') &&
+      !(data.BJZT === '已下架') &&
+      !(data.BJZT === '已排课')
+    ) {
+      stereadonly(true);
+      setnames('chakan');
     } else {
-      stereadonly(false)
-      setnames('add')
+      stereadonly(false);
+      setnames('add');
     }
   };
 
@@ -200,12 +213,16 @@ const CourseManagement = () => {
   };
   const maintain = (type: string) => {
     setopenes(true);
-    setmoduletype(type)
+    setmoduletype(type);
   };
   const showmodal = () => {
     setopenes(false);
   };
-  const request = async (param: TableListParams, sorter: Record<string, any> | undefined, filter: any) => {
+  const request = async (
+    param: TableListParams,
+    sorter: Record<string, any> | undefined,
+    filter: any,
+  ) => {
     const opts: TableListParams = {
       ...param,
       sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
@@ -219,11 +236,11 @@ const CourseManagement = () => {
       pageCount: 20,
       name,
     };
-    if(xn===''||xq===''){
-      return ''
+    if (xn === '' || xq === '') {
+      return '';
     }
     return getAllKHBJSJ(obj, opts);
-  }
+  };
   const columns: ProColumns<CourseItem>[] = [
     {
       title: '序号',
@@ -254,13 +271,17 @@ const CourseManagement = () => {
       align: 'center',
       width: '10%',
     },
+
     {
       title: '副班',
       dataIndex: 'FJS',
       key: 'FJS',
       align: 'center',
       ellipsis: true,
-
+    },
+    {
+      title: '所属校区',
+      align: 'center',
     },
     {
       title: '适用年级',
@@ -269,28 +290,24 @@ const CourseManagement = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        const cc: any[] = []
+        const cc: any[] = [];
         record.NJSJs?.map((item: any) => {
-          return (
-            cc.push(item.NJMC)
-          )
-        })
+          return cc.push(item.NJMC);
+        });
         return (
-          <div className='ui-table-col-elp'>
+          <div className="ui-table-col-elp">
             <Tooltip title={cc} arrowPointAtCenter>
-              {
-                cc?.map((item) => {
-                  return (
-                    <>
-                      <Tag>{item}</Tag>
-                    </>
-                  )
-                })
-              }
+              {cc?.map((item) => {
+                return (
+                  <>
+                    <Tag>{item}</Tag>
+                  </>
+                );
+              })}
             </Tooltip>
           </div>
-        )
-      }
+        );
+      },
     },
     {
       title: '状态',
@@ -315,9 +332,8 @@ const CourseManagement = () => {
               actionRef={actionRef}
             />
           </>
-        )
+        );
       },
-
     },
   ];
 
@@ -340,7 +356,10 @@ const CourseManagement = () => {
           headerTitle={
             <SearchComponent
               dataSource={dataSource}
-              onChange={(type: string, value: string, trem: string) => handlerSearch(type, value, trem)} />
+              onChange={(type: string, value: string, trem: string) =>
+                handlerSearch(type, value, trem)
+              }
+            />
           }
           toolBarRender={() => [
             <Button
@@ -349,12 +368,26 @@ const CourseManagement = () => {
               key="add"
               onClick={() => showDrawer()}
             >
-              <PlusOutlined />新增班级
+              <PlusOutlined />
+              新增班级
             </Button>,
           ]}
         />
-        <AddCourse actionRef={actionRef} visible={visible} onClose={onClose} formValues={current} readonly={readonly} mcData={mcData} names={names} />
-        <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' open={kai} colse={kaiguan} />
+        <AddCourse
+          actionRef={actionRef}
+          visible={visible}
+          onClose={onClose}
+          formValues={current}
+          readonly={readonly}
+          mcData={mcData}
+          names={names}
+        />
+        <PromptInformation
+          text="未查询到学年学期数据，请设置学年学期后再来"
+          link="/basicalSettings/termManagement"
+          open={kai}
+          colse={kaiguan}
+        />
         <Modal
           visible={openes}
           onCancel={showmodal}
@@ -365,7 +398,7 @@ const CourseManagement = () => {
             overflowY: 'auto',
           }}
           style={{ maxHeight: '430px' }}
-          width='35vw'
+          width="35vw"
           footer={[
             <Button key="back" onClick={() => setopenes(false)}>
               取消

@@ -38,10 +38,10 @@ const RoomManagement = () => {
   const [dataSource] = useState<SearchDataType>(searchData);
   const [opens, setopens] = useState<boolean>(false);
 
-  const guanbi=()=>{
-    setopens(false)
-  }
- 
+  const guanbi = () => {
+    setopens(false);
+  };
+
   useEffect(() => {
     (async () => {
       const res = await getDepList({});
@@ -84,11 +84,11 @@ const RoomManagement = () => {
     setModalVisible(true);
   };
 
-  const eventclose=()=>{
+  const eventclose = () => {
     setopens(false);
     setModalVisible(false);
     handleOperation('uphold');
-  }
+  };
   /**
    * 更新或新增场地信息
    *
@@ -216,7 +216,12 @@ const RoomManagement = () => {
   ];
   return (
     <PageContainer cls={styles.roomWrapper}>
-       <PromptInformation  text='还没有设置场地类型，请先维护场地类型' open={opens} colse={guanbi} event={eventclose} />
+      <PromptInformation
+        text="还没有设置场地类型，请先维护场地类型"
+        open={opens}
+        colse={guanbi}
+        event={eventclose}
+      />
       <ProTable<RoomItem>
         columns={columns}
         actionRef={actionRef}
@@ -289,7 +294,12 @@ const RoomManagement = () => {
         {modalType === 'uphold' ? (
           <AsyncSiteMaintenance />
         ) : (
-          <AsyncAddRoom current={current} setForm={setForm} setopens={setopens} setModalVisible={setModalVisible}/>
+          <AsyncAddRoom
+            current={current}
+            setForm={setForm}
+            setopens={setopens}
+            setModalVisible={setModalVisible}
+          />
         )}
       </Modal>
     </PageContainer>

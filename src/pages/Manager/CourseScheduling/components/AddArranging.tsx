@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
@@ -10,9 +11,8 @@ import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllNJSJ } from '@/services/after-class/njsj';
 import { allKCsByNJ, allNJs, getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
-import { getAllFJSJ } from '@/services/after-class/fjsj';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
-import { getFJPlan } from '@/services/after-class/fjsj';
+import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
 
 import type { BJType, RoomType, GradeType, SiteType, CourseType } from '../data';
 import ExcelTable from '@/components/ExcelTable';
@@ -27,6 +27,8 @@ type PropsType = {
   setTableDataSource: (value: any) => void;
   formValues?: Record<string, any>;
   xXSJPZData?: any;
+  campus?: any;
+  grade?: any;
 };
 
 const AddArranging: FC<PropsType> = (props) => {
@@ -39,14 +41,15 @@ const AddArranging: FC<PropsType> = (props) => {
     setTableDataSource,
     formValues,
     xXSJPZData,
+    campus,
+    grade,
   } = props;
   const [packUp, setPackUp] = useState(false);
   const [Bj, setBj] = useState<any>(undefined);
-  const [index, setIndex] = useState();
-  const [njId, setNjId] = useState();
-  const [kcId, setKcId] = useState();
-  const [cdlxId, setCdlxId] = useState();
-  const [colors, setColors] = useState();
+  const [index, setIndex] = useState(formValues?.BJId);
+  const [njId, setNjId] = useState(formValues?.NJ);
+  const [kcId, setKcId] = useState(formValues?.KC);
+  const [cdlxId, setCdlxId] = useState(formValues?.CDLX);
   const [cdmcData, setCdmcData] = useState<any>([]);
   const [roomType, setRoomType] = useState<any>([]);
   const [gradeType, setGradeType] = useState<any>([]);
@@ -54,11 +57,10 @@ const AddArranging: FC<PropsType> = (props) => {
   const [kcType, setKcType] = useState<any>([]);
   const [bjData, setBjData] = useState<any>([]);
   const [form] = Form.useForm();
+  const [xQItem, setXQItem] = useState<any>([]);
+  const [excelTableValue] = useState<any[]>([]);
+  const [bjIdData] = useState<any[]>([]);
 
-  // const handleMenuClick = (e: any) => {
-  //     console.log('click', e.key);
-  //     setColors(e.key);
-  // }
   const columns: {
     title: string;
     dataIndex: string;
@@ -130,12 +132,13 @@ const AddArranging: FC<PropsType> = (props) => {
       width: 136,
     },
   ];
-  const arr: any[] = [];
-  const onExcelTableClick = (value: any) => {
-    if (JSON.stringify(value) === '{}') {
-      arr.splice(arr.length - 1);
+
+  const onExcelTableClick = (value: any, record: any, bjId: any) => {
+    bjIdData.push(bjId);
+    if (value === null) {
+      excelTableValue.splice(excelTableValue.length - 1);
     } else {
-      arr.push(value);
+      excelTableValue.push(value);
     }
   };
   // 班级展开收起
@@ -147,7 +150,7 @@ const AddArranging: FC<PropsType> = (props) => {
     }
   };
   // 班级选择
-  const BjClick = (value: any, key: any) => {
+  const BjClick = (value: any) => {
     const chosenData = {
       cla: value.BJMC || '',
       teacher: value.ZJS || '',
@@ -157,19 +160,20 @@ const AddArranging: FC<PropsType> = (props) => {
     };
 
     setBj(chosenData);
-    setIndex(key);
+    setIndex(value.id);
   };
 
   const submit = async (params: any) => {
     try {
-      const result = await createKHPKSJ(arr);
-      console.dir(result);
+      // 所选班级ID
+      const bj = Array.from(new Set(bjIdData));
+      const result = await createKHPKSJ(excelTableValue);
       if (result.status === 'ok') {
-        if (arr.length === 0) {
+        if (excelTableValue.length === 0) {
           message.info('请添加排课信息');
         } else {
           message.success('保存成功');
-          setState(true);
+          window.location.reload();
           return true;
         }
       } else {
@@ -217,6 +221,14 @@ const AddArranging: FC<PropsType> = (props) => {
           name: '',
         });
         setBjData(bjList.data);
+        if (bjList.status === 'ok') {
+          bjList.data?.map((item: any) => {
+            if (index === item.id) {
+              BjClick(item);
+            }
+            return '';
+          });
+        }
         // 获取所有课程数据
         const kcList = await getAllKHKCSJ({
           xn,
@@ -275,6 +287,19 @@ const AddArranging: FC<PropsType> = (props) => {
         } else {
           message.error(fjList.message);
         }
+
+        // 查询房间占用情况
+        const Fjplan = await getFJPlan({
+          lxId: cdlxId === undefined ? '' : cdlxId,
+          fjId: formValues?.CDMC,
+          xn,
+          xq,
+          isPk: false,
+        });
+        if (Fjplan.status === 'ok') {
+          const data = processingData(Fjplan.data, xXSJPZData);
+          setTableDataSource(data);
+        }
       } catch (error) {
         message.error('error');
       }
@@ -289,7 +314,7 @@ const AddArranging: FC<PropsType> = (props) => {
   }, [formValues]);
   return (
     <div style={{ background: '#FFFFFF' }}>
-      <p className="xinzen">新增排课</p>
+      <p className="xinzen"> {formValues ? '编辑排课' : '新增排课'}</p>
       <ProForm
         className="ArrangingFrom"
         name="validate_other"
@@ -310,18 +335,47 @@ const AddArranging: FC<PropsType> = (props) => {
         }}
       >
         <ProFormSelect
+          label="校区"
+          width="md"
+          name="XQ"
+          options={campus}
+          fieldProps={{
+            onChange(value) {
+              console.log('setXQItem', value);
+
+              setXQItem(value);
+            },
+          }}
+        />
+        <ProFormSelect
           width="md"
           name="NJ"
           label="年级"
-          options={gradeType}
+          options={grade ? grade[xQItem] : ''}
           fieldProps={{
             async onChange(value) {
+              if (!value) {
+                // 获取所有年级数据
+                const result = await getAllNJSJ();
+                if (result.status === 'ok') {
+                  if (result.data && result.data.length > 0) {
+                    const data: any = [].map.call(result.data, (item: GradeType) => {
+                      return {
+                        label: item.NJMC,
+                        value: item.id,
+                      };
+                    });
+                    setGradeType(data);
+                  }
+                }
+              }
+
               // 年级选择时将选中的课程清空
               form.setFieldsValue({ KC: undefined });
 
               // 获取班级的数据
               const bjList = await getAllKHBJSJ({
-                kcId: kcId === undefined ? '' : kcId,
+                kcId: value ? kcId : '',
                 njId: value || '',
                 xn,
                 xq,
@@ -333,7 +387,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
               // 根据班级ID 获取课程数据
               const parma = {
-                id: value,
+                njId: value,
                 xn,
                 xq,
               };
@@ -365,7 +419,7 @@ const AddArranging: FC<PropsType> = (props) => {
               // 获取班级的数据
               const bjList = await getAllKHBJSJ({
                 kcId: value || '',
-                njId: njId === undefined ? '' : njId,
+                njId: value ? njId : '',
                 xn: value ? '' : xn,
                 xq: value ? '' : xq,
                 page: 0,
@@ -374,19 +428,35 @@ const AddArranging: FC<PropsType> = (props) => {
               });
               setBjData(bjList.data);
 
-              // 获取年级的数据
-              const njList = await allNJs({ id: value });
-              if (njList.status === 'ok') {
-                if (njList.data?.length === 0) {
-                  setGradeType([]);
-                  setKcId(undefined);
-                } else if (njList.data && njList.data.length > 0) {
-                  const njData = njList.data.map((item: any) => ({
-                    label: item.NJMC,
-                    value: item.id,
-                  }));
-                  setGradeType(njData);
-                  setKcId(value);
+              if (value) {
+                // 根据班级ID获取年级的数据
+                const njList = await allNJs({ id: value });
+                if (njList.status === 'ok') {
+                  if (njList.data?.length === 0) {
+                    setGradeType([]);
+                    setKcId(undefined);
+                  } else if (njList.data && njList.data.length > 0) {
+                    const njData = njList.data.map((item: any) => ({
+                      label: item.NJMC,
+                      value: item.id,
+                    }));
+                    setGradeType(njData);
+                    setKcId(value);
+                  }
+                }
+              } else {
+                // 获取所有年级数据
+                const result = await getAllNJSJ();
+                if (result.status === 'ok') {
+                  if (result.data && result.data.length > 0) {
+                    const data: any = [].map.call(result.data, (item: GradeType) => {
+                      return {
+                        label: item.NJMC,
+                        value: item.id,
+                      };
+                    });
+                    setGradeType(data);
+                  }
                 }
               }
             },
@@ -402,8 +472,8 @@ const AddArranging: FC<PropsType> = (props) => {
                     <ProCard
                       layout="center"
                       bordered
-                      onClick={() => BjClick(value, key)}
-                      style={{ borderColor: index === key ? '#51d081' : '' }}
+                      onClick={() => BjClick(value)}
+                      style={{ borderColor: index === value.id ? '#51d081' : '' }}
                     >
                       <p>{value.BJMC}</p>
                       <span>{value.ZJS}</span>
@@ -428,7 +498,7 @@ const AddArranging: FC<PropsType> = (props) => {
                               <ProCard
                                 layout="center"
                                 bordered
-                                onClick={() => BjClick(value, key)}
+                                onClick={() => BjClick(value)}
                                 style={{ borderColor: index === key ? '#51d081' : '' }}
                               >
                                 <p>{value.BJMC}</p>
@@ -454,7 +524,7 @@ const AddArranging: FC<PropsType> = (props) => {
                             <ProCard
                               layout="center"
                               bordered
-                              onClick={() => BjClick(value, key)}
+                              onClick={() => BjClick(value)}
                               style={{ borderColor: index === key ? '#51d081' : '' }}
                             >
                               <p>{value.BJMC}</p>
@@ -551,7 +621,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
         <div className="site">
           <span>场地：</span>
-          {Bj ? (
+          {Bj || index ? (
             <ExcelTable
               className={styles.borderTable}
               columns={columns}

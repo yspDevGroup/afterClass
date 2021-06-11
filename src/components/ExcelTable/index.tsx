@@ -19,17 +19,35 @@ type KBItemProps = {
 };
 
 type WeenType = {
+  /** 班级名称 */
   cla: string;
+  /** 主教师 */
   teacher: string;
   key: string;
+  /** 是否禁用 */
   dis: boolean;
+  /** 班级ID */
   bjId: string;
   color: string;
+  /** 校区 */
+  XQ: string;
+  /** 年级 */
+  NJS: string;
+  /** 课程 */
+  KCId: string;
 };
 
 type DataSourceType = {
   key: string;
-  room: { cla: string; teacher: string; rowspan?: number; jsId: string };
+  room: {
+    cla: string;
+    teacher: string;
+    rowspan?: number;
+    // 场地ID
+    jsId: string;
+    /** 场地类型ID */
+    FJLXId: string;
+  };
   course: { cla: string; teacher: string; hjId: string };
   monday: WeenType | '';
   tuesday: WeenType | '';
@@ -114,8 +132,8 @@ type IndexPropsType = {
   dataSource: DataSourceType;
   /** 选中的值  在type='edit'时必传  KHBJSJId: 班级ID，XNXQId： 学年学期ID  */
   chosenData?: { cla: string; teacher: string; KHBJSJId?: string; XNXQId?: string; color: string };
-  /** 选中项发生变化时的回调 */
-  onExcelTableClick?: (value: any) => void;
+  /** 选中项发生变化时的回调 value: type='edit'时的数据； record：type='see'时的数据； bjId： 班级ID */
+  onExcelTableClick?: (value: any, record: any, bjId: any) => void;
   /** see: 单元格中不存在disable属性，edit： 单元格中存在disable属性  */
   type?: 'see' | 'edit';
   /** 切换页面  仅在type='see'起作用 */
@@ -148,7 +166,19 @@ const Index: FC<IndexPropsType> = ({
 
     const rowData = newData[rowKey] || {};
 
+    let seeChosenItem = null;
     if (type === 'see' && !chosenData) {
+      seeChosenItem = {
+        XQ: rowData[colItem.dataIndex].xqId, // 校区ID
+        NJ: rowData[colItem.dataIndex].njId, // 年级ID
+        KC: rowData[colItem.dataIndex].kcId, // 课程ID
+        BJId: rowData[colItem.dataIndex].bjId, //  班级ID
+        CDLX: rowData.room.FJLXId, // 场地类型ID
+        CDMC: rowData.room.jsId, // 场地名称
+        weekId: rowData[colItem.dataIndex].weekId, // 排课ID
+        jsId: rowData.room?.jsId, // 教室ID
+        hjId: rowData.course?.hjId, // 时间ID
+      };
       if (typeof switchPages === 'function') {
         switchPages();
       }
@@ -176,9 +206,15 @@ const Index: FC<IndexPropsType> = ({
         XNXQId: chosenData?.XNXQId, // 学年学期ID
       };
     }
+    let bjId = null;
+    if (type === 'edit') {
+      bjId = chosenData?.KHBJSJId;
+    } else if (type === 'see') {
+      bjId = rowData[colItem.dataIndex].bjId;
+    }
 
     if (typeof onExcelTableClick === 'function') {
-      onExcelTableClick(selectList);
+      onExcelTableClick(selectList, seeChosenItem, bjId);
     }
   };
   return (
