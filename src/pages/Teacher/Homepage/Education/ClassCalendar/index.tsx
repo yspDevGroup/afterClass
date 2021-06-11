@@ -8,12 +8,12 @@ import { courseArr } from '../mock';
 import PromptInformation from './components/PromptInformation';
 
 const ClassCalendar = () => {
-  const [day,setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
-  const [cDay,setCDay] = useState<string>(dayjs().format('M月D日'));
+  const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
+  const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>();
   return (
     <div className={styles.schedule}>
-      <span className={styles.today} onClick={()=>{
+      <span className={styles.today} onClick={() => {
         setDay(dayjs().format('YYYY-MM-DD'));
         setCDay(dayjs().format('M月D日'))
       }}>
@@ -22,9 +22,15 @@ const ClassCalendar = () => {
       <Calendar
         showType={'week'}
         markDates={[
+          { date: '2021-06-08' },
+          { date: '2021-06-10' },
+          { date: '2021-06-15' },
+          { date: '2021-06-17' },
+          { date: '2021-06-24' },
+          { date: '2021-06-22' },
           { date: '2021-09-02' },
-          { date: '2021-09-07'},
-          { date: '2021-09-09'},
+          { date: '2021-09-07' },
+          { date: '2021-09-09' },
         ]}
         onDateClick={(date: { format: (arg: string) => any; }) => {
           setDay(date.format('YYYY-MM-DD'));
@@ -39,7 +45,7 @@ const ClassCalendar = () => {
       <div className={styles.subTitle}>
         {cDay}
       </div>
-      {course ? <ListComponent listData={course} /> :<PromptInformation/>}
+      {course ? <ListComponent listData={course} /> : <PromptInformation />}
     </div>
   )
 }

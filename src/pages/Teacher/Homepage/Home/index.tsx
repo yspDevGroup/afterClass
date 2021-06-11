@@ -7,15 +7,29 @@ import ListComp from '@/components/ListComponent';
 import { annoceData, courseData, currentData } from '../listData';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
+import PromptInformation from './components/PromptInformation';
+
 
 const Home = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [enroll] = useState<boolean>(true);
   const userRef = useRef(null);
-
+  const [open, setOpen] = useState<boolean>(false)
+  const getWeekDate=()=> {
+    const now = new Date();
+    const day = now.getDay();
+    const weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+    const week = weeks[day];
+    if(week==='星期二'||week==='星期四'){
+      setOpen(true)
+    }
+    setOpen(false)
+ }
+ 
   useEffect(() => {
     (async () => {
+      getWeekDate()
       if (/MicroMessenger/i.test(navigator.userAgent)) {
         await initWXConfig(['checkJsApi']);
       }
@@ -60,7 +74,7 @@ const Home = () => {
         </div>
 
         <div className={styles.todayCourses}>
-          <ListComp listData={currentData} />
+       {open? <ListComp listData={currentData} /> :<PromptInformation/> }
         </div>
         <div className={styles.teachCourses}>
           <ListComp listData={courseData} />

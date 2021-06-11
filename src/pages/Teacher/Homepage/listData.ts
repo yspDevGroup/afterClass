@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import type { ListData } from "@/components/ListComponent/data";
 
 // 公告栏数据
@@ -32,7 +33,7 @@ export const courseData: ListData = {
     {
       title: '儿童体能训练',
       img: 'https://i.postimg.cc/Jzjngq58/4.jpg',
-      link: '/teacher/home/courseDetails?id=true',
+      link: '/teacher/home/courseDetails?courseId=one',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -45,7 +46,7 @@ export const courseData: ListData = {
     {
       title: '专业武术培训',
       img: 'https://i.postimg.cc/85Zs4zBr/2.webp',
-      link: 'https://www.pgyer.com/',
+      link:'/teacher/home/courseDetails?courseId=two',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -58,7 +59,7 @@ export const courseData: ListData = {
     {
       title: '青少年搏击',
       img: 'https://i.postimg.cc/MHXHFJd3/6.jpg',
-      link: 'https://www.pgyer.com/',
+      link: '/teacher/home/courseDetails?courseId=the',
       desc: [
         {
           left: ['课程时段：2021.09.12—2021.11.20'],
@@ -88,7 +89,7 @@ export const currentData: ListData = {
       desc: [
         {
           left: ['15:50—16:50','本校'],
-          right: '2时43分后开课'
+          right:`1时20分后开课`
         },
       ],
     },
@@ -121,7 +122,7 @@ export const electiveData: ListData = {
           left: ['每周二', '15:50—16:50', '本校'],
         },
         {
-          left: ['共16课时', '已上6课时'],
+          left: ['共16课时', '已上13课时'],
         },
       ],
     },
@@ -133,7 +134,19 @@ export const electiveData: ListData = {
           left: ['每周四', '15:50—16:50', '本校'],
         },
         {
-          left: ['共20课时', '已上6课时'],
+          left: ['共20课时', '已上17课时'],
+        },
+      ],
+    },
+    {
+      title: '青少年搏击',
+      link: 'https://www.pgyer.com/',
+      desc: [
+        {
+          left: ['课程时段：2021.09.12—2021.11.20'],
+        },
+        {
+          left: ['共20课时', '已上17课时'],
         },
       ],
     },
