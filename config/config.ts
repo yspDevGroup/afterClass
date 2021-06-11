@@ -16,7 +16,7 @@ export default defineConfig({
     hmr: true,
   },
   define: {
-    ENV_title: '课后服务平台',
+    ENV_title: '课后帮',
     ENV_subTitle: '',
     ENV_copyRight: '2021 版权所有：陕西凯锐信息技术有限公司',
     ENV_backUrl: 'http://api.xianyunshipei.com',

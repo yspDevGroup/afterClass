@@ -2,26 +2,10 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-06-10 09:39:44
+ * @LastEditTime: 2021-06-11 08:34:29
  * @LastEditors: zpl
  */
 import { useModel, history } from 'umi';
-// import { envjudge } from '@/utils/utils';
-
-// let loginPath: string;
-// switch (envjudge()) {
-//   case 'com-wx-mobile': // 手机端企业微信
-//   case 'wx-mobile': // 手机端微信
-//   case 'com-wx-pc': // PC端企业微信
-//   case 'wx-pc': // PC端微信
-//     loginPath = `${ENV_backUrl}/wechat/platAuth`;
-//     break;
-//   case 'mobile': // 手机
-//   case 'pc': // PC
-//   default:
-//     loginPath = '/user/login'; // `${ENV_backUrl}/auth/wechat`;
-//     break;
-// }
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
