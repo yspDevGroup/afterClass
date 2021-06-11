@@ -5,7 +5,7 @@
  * @description: OAuth认证通过后的跳转页面
  * @author: zpl
  * @Date: 2021-05-13 09:08:04
- * @LastEditTime: 2021-06-11 08:32:56
+ * @LastEditTime: 2021-06-11 08:46:14
  * @LastEditors: zpl
  */
 import React, { useCallback, useEffect } from 'react';
@@ -77,7 +77,7 @@ const Comp = () => {
       status={query.token ? 'success' : 'error'}
       icon={query.token ? <Spin /> : undefined}
       title={query.token ? '' : '非法访问'}
-      subTitle={query.token ? `欢迎使用本系统，页面正在跳转中...` : query.error || ''}
+      subTitle={query.token ? `` : query.error || ''}
       extra={query.token ? [] : [backToLogin]}
       style={{
         position: 'absolute',

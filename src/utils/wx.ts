@@ -1,13 +1,13 @@
+/* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable no-console */
 /*
  * @description:
  * @author: zpl
  * @Date: 2021-06-09 08:57:20
- * @LastEditTime: 2021-06-09 15:52:06
+ * @LastEditTime: 2021-06-11 09:06:49
  * @LastEditors: zpl
  */
 import { getQYJsSignature, getYYJsSignature } from '@/services/after-class/wechat';
-import { message } from 'antd';
 
 /**
  * 通过config接口注入权限验证配置
@@ -32,11 +32,11 @@ export const initWXConfig = async (jsApiList: string[]) => {
       wx.ready(resolve);
       wx.error((err: any) => {
         console.log('wx.error', err);
-        reject(new Error(`注入权限验证配置失败： ${err}`));
+        reject(`注入权限验证配置失败： ${err}`);
       });
     });
   }
-  return Promise.reject(new Error(`获取签名失败： ${res.message}`));
+  return Promise.reject(`获取签名失败： ${res.message}`);
 };
 
 /**
@@ -62,20 +62,19 @@ export const initWXAgentConfig = async (jsApiList: string[]) => {
         success: (r: any) => {
           // 回调
           console.log('wx.agentConfig success');
-          message.success(r);
           resolve(r);
         },
         fail: (r: any) => {
           console.log('wx.agentConfig fail:', r);
           if (r.errMsg.indexOf('function not exist') > -1) {
-            message.warning('版本过低请升级');
+            console.log('版本过低请升级');
           }
-          reject(new Error(`注入应用的权限失败： ${r}`));
+          reject(`注入应用的权限失败： ${r}`);
         },
       });
     });
   }
-  return Promise.reject(new Error(`获取签名失败： ${res.message}`));
+  return Promise.reject(`获取签名失败： ${res.message}`);
 };
 
 /**
@@ -90,5 +89,7 @@ export const showUserName = (container?: HTMLElement | null, openid?: string) =>
   const element = document.createElement('ww-open-data');
   element.setAttribute('type', 'userName');
   element.setAttribute('openid', openid);
+  // eslint-disable-next-line no-param-reassign
+  container.innerHTML = '';
   container.appendChild(element);
 };

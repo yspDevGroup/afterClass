@@ -19,10 +19,11 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
         await initWXConfig(['checkJsApi']);
       }
-      await initWXAgentConfig(['checkJsApi']);
-      showUserName(userRef?.current, currentUser?.userId);
-      // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
-      WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+      if (await initWXAgentConfig(['checkJsApi'])) {
+        showUserName(userRef?.current, currentUser?.userId);
+        // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
+        WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+      }
     })();
   }, [currentUser]);
 
@@ -55,9 +56,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
           src={currentUser.avatar || defaultAvatar}
           alt="avatar"
         />
-        <span className={`${styles.name} anticon`} ref={userRef}></span>
-        {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-        <span className={`${styles.name} anticon`}>{currentUser.username}</span> */}
+        <span className={`${styles.name} anticon`} ref={userRef}>
+          {currentUser.username}
+        </span>
       </span>
     </>
   );
