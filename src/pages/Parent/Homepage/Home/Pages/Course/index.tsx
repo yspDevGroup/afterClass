@@ -2,15 +2,15 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:30:23
- * @LastEditTime: 2021-06-11 08:51:00
+ * @LastEditTime: 2021-06-11 15:07:18
  * @LastEditors: txx
  */
 
 import React from 'react'
 import CourseTab from '../../components/CourseTab'
-import { Pagination } from 'antd';
 import styles from "./index.less"
 import { culturedata, artdata, techdata, sportsdata, selecteddata } from '../../../listData';
+import Pagina from '../../components/Pagination/Pagination';
 
 const Course = () => {
  
@@ -25,7 +25,7 @@ const Course = () => {
         selectedData = {selecteddata}
         centered={true}
       />
-       <Pagination size="small" total={5} />
+       <Pagina/>
     </div>
   )
 }

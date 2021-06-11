@@ -2,12 +2,12 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 14:55:39
- * @LastEditTime: 2021-06-09 15:00:30
+ * @LastEditTime: 2021-06-11 15:11:57
  * @LastEditors: txx
  */
 export const mock = {
   title: "本校户籍生现场材料审核公告",
-  time: "2021.09.01 08:32:23",
+  time: "2021.05.10 08:32:23",
   list: [
     {
       subtitle: "一、审核时间：",
