@@ -31,6 +31,7 @@ const CheckOnChart = (props: { data: ItemType[], title?: string, cls?: string })
       position: 'right'
     },
     xAxis: false,
+    tooltip: false,
     barStyle: {
       radius: [10, 10, 0, 0],
     }

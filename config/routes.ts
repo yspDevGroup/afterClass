@@ -76,6 +76,7 @@
   {
     path: '/teacher',
     layout: false,
+    hideInMenu: 'true',
     routes: [         
       {
         path: '/teacher/home',
@@ -99,12 +100,14 @@
     name: 'parent',
     layout: false,
     icon: 'smile',
+    hideInMenu: 'true',
     routes: [
       {
         path: '/parent/home',
         name: 'home',
         icon: 'smile',
         component: './Parent/Homepage',
+        hideInMenu: 'true',
       },
       {
         path: '/parent/home/courseDetails',
