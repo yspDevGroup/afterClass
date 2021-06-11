@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import imgPop from '@/assets/mobileBg.png';
 import imgNotice from '@/assets/notice.png';
 import { RightOutlined } from '@ant-design/icons';
@@ -30,11 +30,13 @@ const Home = () => {
           <img className={styles.noticeImg} src={imgNotice} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
-            <span>本校户籍生现场材料审核公告</span>
+            <Link to="/parent/home/notice/details?listpage=page1">
+              <span>本校户籍生现场材料审核公告</span>
+            </Link>
           </div>
-          <a href="/parent/home/notice/details">
-          <RightOutlined />
-          </a>
+          <Link to="/parent/home/notice/details?listpage=page1">
+            <RightOutlined />
+          </Link>
         </div>
         <div className={styles.enrollArea}>
           {enroll ? (

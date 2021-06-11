@@ -78,7 +78,7 @@
         flex: auto;
         padding-left: @padding-md;
 
-        span {
+        >span {
           display: block;
 
           width: calc(~'100vw - 110px');
@@ -96,6 +96,9 @@
             text-align: center;
             border: 1px solid @oriangeColor;
             border-radius: 9px;
+          }
+          &+a{
+            color: @text-color;
           }
         }
       }
