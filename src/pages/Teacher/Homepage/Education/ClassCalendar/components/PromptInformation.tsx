@@ -1,7 +1,7 @@
 
 const PromptInformation=()=>{
     return(
-        <div style={{width:'100%',height:'90px',background:'#fff',textAlign:'center',lineHeight:'90px'}}>
+        <div style={{width:'100%',height:'90px',background:'#fff',textAlign:'center',lineHeight:'90px',borderRadius:'8px'}}>
             今日暂无课程安排
         </div>
     )
