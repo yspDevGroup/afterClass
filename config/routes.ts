@@ -91,6 +91,18 @@
         component: './Teacher/Homepage/Home/Pages/CourseDetails',
         hideInMenu: 'true',
       },
+      {
+        path: '/teacher/home/notice',
+        name: 'notice',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Home/Pages/Notice',
+      },
+      {
+        path: '/teacher/home/notice/details',
+        name: 'details',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Home/Pages/Details',
+      },
     ]
   },
   /*** 老师路由 end ***/

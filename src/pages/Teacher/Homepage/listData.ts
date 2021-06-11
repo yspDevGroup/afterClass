@@ -12,13 +12,17 @@ export const annoceData: ListData = {
   },
   list: [
     {
-      title: '秋季开设课程相关信息及收费标准公示。',
-      link: '/parent/home/notice/details'
+      title: '本校户籍生现场材料审核公告',
+      link: "/teacher/home/notice/details?listpage=page1",
     },
     {
-      title: '9年级秋季开设课程公示。',
-      link: '/parent/home/notice/details'
-    }
+      title: '我校被评为“2020年度家校合作示范学校”',
+      link: "/teacher/home/notice/details?listpage=page2",
+    },
+    {
+      title: '我校承办了西安市小学智慧课堂观摩研讨活动',
+      link: "/teacher/home/notice/details?listpage=page3",
+    },
   ]
 };
 
