@@ -4,7 +4,7 @@ import imgPop from '@/assets/mobileBg.png';
 import imgNotice from '@/assets/notice.png';
 import { RightOutlined } from '@ant-design/icons';
 import ListComp from '@/components/ListComponent';
-import { annoceData, currentData } from '../listData';
+import { noticData, currentData } from '../listData';
 import CourseTab from './components/CourseTab';
 import styles from './index.less';
 
@@ -53,7 +53,7 @@ const Home = () => {
           <CourseTab />
         </div>
         <div className={styles.announceArea}>
-          <ListComp listData={annoceData} cls={styles.announceList} />
+          <ListComp listData={noticData} cls={styles.announceList} />
         </div>
       </div>
     </div>
