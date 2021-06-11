@@ -5,6 +5,7 @@ import styles from './index.less';
 import imgPop from '@/assets/mobileBg.png';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import CheckOnChart from './components/CheckOnChart';
+import { childData, childEvu, martialData, martialEvu } from './mock';
 
 const IconFont = createFromIconfontCN({
   scriptUrl: [
@@ -41,8 +42,26 @@ const Mine = () => {
         </div>
       </header>
       <div className={styles.funWrapper}>
-        <div className={styles.titleBar}>考勤统计</div>
-        <CheckOnChart />
+        <div className={styles.titleBar}>
+          出勤统计
+          <div>
+            <span></span>正常
+            <span></span>异常
+            <span></span>待上
+          </div>
+        </div>
+        <CheckOnChart data={childData} title='儿童体能训练' />
+        <CheckOnChart data={martialData} title='专业武术培训' cls={styles.martialWrapper} />
+      </div>
+      <div className={styles.funWrapper}>
+        <div className={styles.titleBar}>
+          教学评价
+          <div>
+            好评率<a style={{color:'#FF6600'}}>99.88%</a>
+          </div>
+        </div>
+        <CheckOnChart data={childEvu} title='儿童体能训练' cls={styles.childEvuWrapper}  />
+        <CheckOnChart data={martialEvu} title='专业武术培训' cls={styles.martialEvuWrapper} />
       </div>
       <div className={styles.linkWrapper}>
         <ul>

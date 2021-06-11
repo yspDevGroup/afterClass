@@ -55,14 +55,17 @@
   .linkWrapper {
     padding-top: 10px;
     background-color: #f5f5f5;
+
     ul {
       margin: 0;
       padding: 0;
+
       li {
         height: 40px;
         padding-left: 10px;
         line-height: 40px;
         background-color: #ffffff;
+
         span {
           margin-right: 5px;
         }
@@ -73,6 +76,7 @@
           width: calc(~'100% - 20px');
           color: @text-color-secondary;
           border-bottom: 1px solid @border-color-base;
+
           span {
             position: absolute;
             right: 5px;
@@ -80,23 +84,72 @@
           }
         }
       }
+
       li:last-child {
         padding-bottom: 100px;
       }
     }
   }
-  .funWrapper{
+
+  .funWrapper {
     margin-top: 20px;
-    .titleBar{
+    padding: 0 10px;
+
+    .titleBar {
       font-size: @font-size-lg;
       font-weight: 600;
       line-height: 22px;
       margin-bottom: 10px;
+      position: relative;
+
+      >div {
+        position: absolute;
+        right: 10px;
+        top: 0;
+        color: @normal-color;
+        font-size: @font-size-sm;
+        font-weight: normal;
+
+        span {
+          width: 14px;
+          height: 14px;
+          display: inline-block;
+          vertical-align: sub;
+          border-radius: 14px;
+          background: linear-gradient(270deg, #31D99F 0%, rgba(49, 217, 159, 0) 100%);
+          margin-right: 5px;
+
+          &+span {
+            margin-left: 5px;
+          }
+
+          &:nth-child(2) {
+            background: linear-gradient(270deg, #FF7171 0%, rgba(255, 113, 113, 0) 100%);
+          }
+
+          &:nth-child(3) {
+            background: linear-gradient(270deg, #DDDDDD 0%, rgba(221, 221, 221, 0) 100%);
+          }
+        }
+      }
     }
-    .chartWrapper{
+
+    .chartWrapper {
       width: 100%;
+      height: 160px;
+      background-color: #F5F5F5;
+      margin-bottom: 10px;
+      border-radius: 8px;
       padding: 10px;
-      height:160px;
+    }
+
+    .martialWrapper,
+    .childEvuWrapper {
+      height: 120px;
+    }
+
+    .martialEvuWrapper {
+      height: 70px;
     }
   }
 }
