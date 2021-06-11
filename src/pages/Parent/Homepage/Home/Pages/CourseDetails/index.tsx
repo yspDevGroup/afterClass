@@ -1,16 +1,42 @@
 /* eslint-disable array-callback-return */
 import { Button, message, Radio, Tooltip } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'umi';
 import styles from './index.less';
 import { statisticalList ,TimetableList } from './mock'
+import {culturedata,artdata,techdata,sportsdata} from '../../../listData'
+
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState();
   const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
-  const [toLink, setToLink] = useState<any>();
-  const valueKey = window.location.href.split('id=')[1];
+  const [KcData, setKcData] = useState<any>();
+  const valueKey = window.location.href.split('type=')[1];
+  const id = window.location.href.split('id=')[1].split('&')[0];
+  useEffect(() => {
+    culturedata.list.map((value)=>{
+      if(value.id === id){
+        setKcData(value)
+      }
+    })
+    artdata.list.map((value)=>{
+      if(value.id === id){
+        setKcData(value)
+      }
+    })
+    techdata.list.map((value)=>{
+      if(value.id === id){
+        setKcData(value)
+      }
+    })
+    sportsdata.list.map((value)=>{
+      if(value.id === id){
+        setKcData(value)
+      }
+    })
+  }, [id]);
+  // console.log(KcData?.desc[1].left[0].split('：')[1])
   const onclick = () => { 
     setstate(true);
   }
@@ -42,16 +68,16 @@ const CourseDetails: React.FC = () => {
     valueKey === 'true' ?
     <div className={styles.CourseDetails}>
     <div className={styles.wrap}>
-      <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4140089676,162112200&fm=11&gp=0.jpg" alt="" />
-      <p className={styles.title}>青少年足球兴趣培训课程</p>
+      <img src={KcData?.img} alt="" />
+      <p className={styles.title}>{KcData?.title}</p>
+      
       <ul>
-        <li>上课时段：2021.09.12—2021.11.20</li>
+        <li>上课时段：{KcData?.desc[0].left[0].split('：')[1]}</li>
         <li>上课地点：本校</li>
-        <li>总课时：16节</li>
+        <li>总课时：{KcData?.desc[1].left[0]}</li>
       </ul>
       <p className={styles.title}>课程简介</p>
-      <p className={styles.content}>让每一个喜爱足球的孩子拥有“出色的技术+挺拔的身姿+坚强快乐的个性”，快乐足球的本质是除了拥有出色的技术，也着重强调身体健康和身心健康相结合。<br />
-        球感、带球、带球速度变化、带球变换方向、不触球假动作、触球假动作、地面球传球、地面球接停球、接球转身、护球转身、个人防守、二人配合；常用的用球方法背正面运球、脚背内侧运球、脚背外侧运球和脚内半侧运球等。</p>
+      <p className={styles.content}>{KcData?.introduction}</p>
       <p className={styles.content} style={{ marginTop: '20px' }}>开设班级：</p>
       <ul className={styles.classInformation}>
         <li>A班：上课时间：周一、三16:00—18:00，上课地点：本校室外足球场，班主任：刘某某，副班：刘大大，代课老师：刘七七。</li>
@@ -67,7 +93,7 @@ const CourseDetails: React.FC = () => {
       state === true ?
         <div className={styles.payment} onClick={onclose}>
           <div onClick={onchanges}>
-            <p className={styles.title}>青少年足球兴趣培训课程</p>
+            <p className={styles.title}>{KcData?.title}</p>
             <p className={styles.price}><span>￥50</span><span>/学期</span></p>
             <p className={styles.title} style={{ fontSize: '14px' }}>班级</p>
             <Radio.Group onChange={onBJChange}>

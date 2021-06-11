@@ -1,3 +1,4 @@
+import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React from 'react';
 import styles from './index.less';
 
@@ -9,10 +10,10 @@ const OrderDetails: React.FC = () => {
   return <div className={styles.OrderDetails}>
     {
       valueKey === 'true' ? 
-      <div className={styles.hender}>已完成</div>
+      <div className={styles.hender}><CheckCircleOutlined />已完成</div>
       :
       <div className={styles.hender}>
-        待付款
+        <ExclamationCircleOutlined />待付款
         <p>请在23:57:00内支付，逾期订单将自动取消</p>
         </div>
     }
