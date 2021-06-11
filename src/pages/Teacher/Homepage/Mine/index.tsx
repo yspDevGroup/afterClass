@@ -16,17 +16,18 @@ const Mine = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const userRef = useRef(null);
-  // useEffect(() => {
-  //   (async () => {
-  //     if (/MicroMessenger/i.test(navigator.userAgent)) {
-  //       await initWXConfig(['checkJsApi']);
-  //     }
-  //     await initWXAgentConfig(['checkJsApi']);
-  //     showUserName(userRef?.current, currentUser?.userId);
-  //     // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
-  //     WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
-  //   })();
-  // }, [currentUser]);
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      if (await initWXAgentConfig(['checkJsApi'])) {
+        showUserName(userRef?.current, currentUser?.userId);
+        // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
+        WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+      }
+    })();
+  }, [currentUser]);
 
   return (
     <div className={styles.minePage}>
@@ -37,7 +38,6 @@ const Mine = () => {
           <img src={currentUser?.avatar} />
           <div className={styles.headerName}>
             <h4><span ref={userRef}></span>老师</h4>
-            <span>微信名：{currentUser?.username}</span>
           </div>
         </div>
       </header>
@@ -57,31 +57,31 @@ const Mine = () => {
         <div className={styles.titleBar}>
           教学评价
           <div>
-            好评率<a style={{color:'#FF6600'}}>99.88%</a>
+            好评率<a style={{ color: '#FF6600' }}>99.88%</a>
           </div>
         </div>
-        <CheckOnChart data={childEvu} title='儿童体能训练' cls={styles.childEvuWrapper}  />
+        <CheckOnChart data={childEvu} title='儿童体能训练' cls={styles.childEvuWrapper} />
         <CheckOnChart data={martialEvu} title='专业武术培训' cls={styles.martialEvuWrapper} />
       </div>
       <div className={styles.linkWrapper}>
         <ul>
           <li>
             <IconFont type='icon-dingdan' />
-            <Link to='/'>
+            <Link to='/teacher/home'>
               我要反馈
               <IconFont type='icon-arrow' />
             </Link>
           </li>
           <li>
             <IconFont type='icon-dingdan' />
-            <Link to='/'>
+            <Link to='/teacher/home'>
               服务公告
               <IconFont type='icon-arrow' />
             </Link>
           </li>
           <li>
             <IconFont type='icon-dingdan' />
-            <Link to='/'>
+            <Link to='/teacher/home'>
               关于
               <IconFont type='icon-arrow' />
             </Link>
