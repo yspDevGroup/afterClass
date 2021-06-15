@@ -19,5 +19,6 @@ export type IiconTextData = {
     img?: string;
     link?: string;
     background?: string;
+    fontSize?: string;
   }[];
 }

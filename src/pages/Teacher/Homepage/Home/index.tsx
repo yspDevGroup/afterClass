@@ -21,7 +21,6 @@ const Home = () => {
     const day = now.getDay();
     const weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
     const week = weeks[day];
-    console.log(week==="星期二")
     if(week==="星期二"||week==="星期四"){
       return setOpen(true)
     }

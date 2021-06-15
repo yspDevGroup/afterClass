@@ -1,17 +1,12 @@
 import React from 'react';
 import { Link, useModel } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
-import { createFromIconfontCN } from '@ant-design/icons';
 import Statistical from './components/Statistical';
 import styles from './index.less';
 import imgPop from '@/assets/mobileBg.png';
 import { iconTextData } from './mock';
+import IconFont from '@/components/CustomIcon';
 
-const IconFont = createFromIconfontCN({
-  scriptUrl: [
-    '//at.alicdn.com/t/font_2600907_vq6xh8ec86m.js',
-  ],
-});
 const Mine = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -42,31 +37,31 @@ const Mine = () => {
       <div className={styles.linkWrapper}>
         <ul>
           <li>
-            <IconFont type='icon-dingdan' />
+            <IconFont type='icon-chengchangjilu' style={{'fontSize':'18px'}}  />
             <Link to='/'>
               历史课程
-              <IconFont type='icon-arrow' />
+              <IconFont type='icon-xiayiye' />
             </Link>
           </li>
           <li>
-            <IconFont type='icon-dingdan' />
+            <IconFont type='icon-woyaofankui' style={{'fontSize':'18px'}} />
             <Link to='/'>
               我要反馈
-              <IconFont type='icon-arrow' />
+              <IconFont type='icon-xiayiye' />
             </Link>
           </li>
           <li>
-            <IconFont type='icon-dingdan' />
+            <IconFont type='icon-fuwugonggao' style={{'fontSize':'18px'}}  />
             <Link to='/'>
               服务公告
-              <IconFont type='icon-arrow' />
+              <IconFont type='icon-xiayiye' />
             </Link>
           </li>
           <li>
-            <IconFont type='icon-dingdan' />
+            <IconFont type='icon-guanyu' style={{'fontSize':'18px'}}  />
             <Link to='/'>
               关于
-              <IconFont type='icon-arrow' />
+              <IconFont type='icon-xiayiye' />
             </Link>
           </li>
         </ul>

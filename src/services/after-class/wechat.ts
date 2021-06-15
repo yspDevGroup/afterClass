@@ -68,9 +68,37 @@ export async function getQYJsSignature(
 ) {
   return request<{
     status?: 'ok' | 'error';
-    data?: { appId?: string; timestamp?: number; nonceStr?: string; signature?: string };
+    data: { appId?: string; timestamp?: number; nonceStr?: string; signature?: string };
     message?: string;
   }>('/wechat/getQYJsSignature', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取wx.agentConfig签名 POST /wechat/getYYJsSignature */
+export async function getYYJsSignature(
+  body: {
+    /** 签名用的url必须是调用JS接口页面的完整URL */
+    url?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data: {
+      corpid?: string;
+      agentid?: string;
+      timestamp?: number;
+      nonceStr?: string;
+      signature?: string;
+    };
+    message?: string;
+  }>('/wechat/getYYJsSignature', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -84,6 +112,44 @@ export async function getQYJsSignature(
 export async function settingOnWechat(options?: { [key: string]: any }) {
   return request<any>('/wechat/settings', {
     method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** 获取部门列表 GET /wechat/getDepList */
+export async function getDepList(
+  params: {
+    // query
+    /** 部门id。获取指定部门及其下的子部门。 如果不填，默认获取全量组织架构 */
+    id?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/wechat/getDepList', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
+/** 获取部门成员详情 GET /wechat/getDepUsers */
+export async function getDepUsers(
+  params: {
+    // query
+    /** 部门id */
+    id: string;
+    /** 1/0：是否递归获取子部门下面的成员 */
+    fetch_child: 0 | 1;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/wechat/getDepUsers', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
     ...(options || {}),
   });
 }

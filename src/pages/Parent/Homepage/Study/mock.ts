@@ -3,22 +3,19 @@ import type { ListData } from "@/components/ListComponent/data";
 export const iconTextData = [
   {
     text: "请假",
-    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    icon: "icon-qingjia",
+    icon: "icon-xueshengqingjia",
     link: "#",
     background: "#63B5F6",
   },
   {
     text: "课程评价",
-    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    icon: "icon-comlist",
+    icon: "icon-jiaoxuepingjia",
     link: "#",
     background: "#F06191",
   },
   {
     text: "待定",
-    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    icon: "icon-todo",
+    icon: "icon-chengchangjilu",
     link: "#",
     background: "#FFD541",
   },

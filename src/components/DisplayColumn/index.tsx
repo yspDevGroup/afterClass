@@ -2,15 +2,10 @@ import React from 'react';
 import type { FC } from 'react';
 import { Link } from 'umi';
 import { List } from 'antd';
-import { createFromIconfontCN } from '@ant-design/icons';
 import type { IiconTextData } from './data';
-import styles from "./index.less"
+import IconFont from '../CustomIcon';
+import styles from "./index.less";
 
-const IconFont = createFromIconfontCN({
-    scriptUrl: [
-        '//at.alicdn.com/t/font_2600907_5ddrm1ag9xl.js',
-    ],
-});
 
 const DisplayColumn: FC<IiconTextData> = ({ title, type, grid, dataSource, isheader }) => {
     return (
@@ -22,7 +17,7 @@ const DisplayColumn: FC<IiconTextData> = ({ title, type, grid, dataSource, ishea
                     (<div >{title}</div>)
                     : ""}
                 renderItem={(item) => {
-                    const { icon, text, img, link, background } = item
+                    const { icon, text, img, link, background,fontSize } = item
                     return (<List.Item>
                         <Link to={link!}>
                             <div className={styles.Box}>
@@ -32,7 +27,7 @@ const DisplayColumn: FC<IiconTextData> = ({ title, type, grid, dataSource, ishea
                                     </div>)
                                     :
                                     (<div className={styles.iconBox} style={{ background }}>
-                                        <IconFont type={icon} />
+                                        <IconFont type={icon} style={{ 'color': !isheader ? '#fff' : 'inherit','fontSize': fontSize || '18px' }} />
                                     </div>)
                                 }
                                 <div className={styles.TextBox}>{text}</div>

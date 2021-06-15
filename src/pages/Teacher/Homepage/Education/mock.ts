@@ -3,30 +3,22 @@ import type { ListData } from "@/components/ListComponent/data";
 export const iconTextData = [
   {
     text: "课堂点名",
-    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    icon: "icon-qingjia",
-    // link: "/",
+    icon: "icon-yiwancheng",
     background: "#FF8964",
   },
   {
     text: "离校通知",
-    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    icon: "icon-comlist",
-    // link: " ",
+    icon: "icon-quanbudingdan",
     background: "#7DCE81",
   },
   {
     text: "请假",
-    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    icon: "icon-qingjia",
-    // link: "",
+    icon: "icon-xueshengqingjia",
     background: "#2FA3FF",
   },
   {
     text: "学生评价",
-    img: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-    icon: "icon-comlist",
-    // link: " ",
+    icon: "icon-jiaoxuepingjia",
     background: "#FFC700",
   },
 ];

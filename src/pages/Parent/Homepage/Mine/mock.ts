@@ -60,26 +60,30 @@ export const statisticalList: statisticalType[] = [
 export const iconTextData = [
   {
     text: "待付款",
-    icon: "icon-dingdan",
+    icon: "icon-weifukuan",
     link: "/parent/mine/order?id=1",
     background: "#F5F5F5",
+    fontSize: '28px',
   },
   {
     text: "已完成",
-    icon: "icon-dingdan",
+    icon: "icon-yiwancheng",
     link: "/parent/mine/order?id=2",
     background: "#F5F5F5",
+    fontSize: '28px',
   },
   {
     text: "退课退款",
-    icon: "icon-dingdan",
+    icon: "icon-tuiketuikuan",
     link: "/parent/mine/order?id=3",
     background: "#F5F5F5",
+    fontSize: '28px',
   },
   {
     text: "全部订单",
-    icon: "icon-dingdan",
+    icon: "icon-quanbudingdan",
     link: "/parent/mine/order?id=4",
     background: "#F5F5F5",
+    fontSize: '28px',
   },
 ]

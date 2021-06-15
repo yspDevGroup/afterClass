@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Link, useModel } from 'umi';
 import imgPop from '@/assets/mobileBg.png';
 import imgNotice from '@/assets/notice.png';
-import { RightOutlined } from '@ant-design/icons';
 import ListComp from '@/components/ListComponent';
 import { noticData, currentData } from '../listData';
 import CourseTab from './components/CourseTab';
 import styles from './index.less';
+import IconFont from '@/components/CustomIcon';
 
 const Home = () => {
   const { initialState } = useModel('@@initialState');
@@ -35,7 +35,7 @@ const Home = () => {
             </Link>
           </div>
           <Link to="/parent/home/notice/details?listpage=page1">
-            <RightOutlined />
+            <IconFont type='icon-xiayiye' />
           </Link>
         </div>
         <div className={styles.enrollArea}>
