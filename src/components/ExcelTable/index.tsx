@@ -139,6 +139,7 @@ type IndexPropsType = {
   /** 切换页面  仅在type='see'起作用 */
   switchPages?: () => void;
   className: '' | undefined;
+  getSelectdata?: (value: any) => void;
 };
 
 const Index: FC<IndexPropsType> = ({
@@ -149,6 +150,7 @@ const Index: FC<IndexPropsType> = ({
   onExcelTableClick,
   type = 'see',
   switchPages,
+  getSelectdata,
 }) => {
   let [stateTableData, setStateTableData] = useState<DataSourceType>();
   const weekDay = {
@@ -169,13 +171,13 @@ const Index: FC<IndexPropsType> = ({
     let seeChosenItem = null;
     if (type === 'see' && !chosenData) {
       seeChosenItem = {
-        XQ: rowData[colItem.dataIndex].xqId, // 校区ID
-        NJ: rowData[colItem.dataIndex].njId, // 年级ID
-        KC: rowData[colItem.dataIndex].kcId, // 课程ID
-        BJId: rowData[colItem.dataIndex].bjId, //  班级ID
-        CDLX: rowData.room.FJLXId, // 场地类型ID
-        CDMC: rowData.room.jsId, // 场地名称
-        weekId: rowData[colItem.dataIndex].weekId, // 排课ID
+        XQ: rowData[colItem.dataIndex]?.xqId, // 校区ID
+        NJ: rowData[colItem.dataIndex]?.njId, // 年级ID
+        KC: rowData[colItem.dataIndex]?.kcId, // 课程ID
+        BJId: rowData[colItem.dataIndex]?.bjId, //  班级ID
+        CDLX: rowData.room?.FJLXId, // 场地类型ID
+        CDMC: rowData.room?.jsId, // 场地名称
+        weekId: rowData[colItem.dataIndex]?.weekId, // 排课ID
         jsId: rowData.room?.jsId, // 教室ID
         hjId: rowData.course?.hjId, // 时间ID
       };
@@ -206,11 +208,23 @@ const Index: FC<IndexPropsType> = ({
         XNXQId: chosenData?.XNXQId, // 学年学期ID
       };
     }
+    if (type === 'edit') {
+      const selectdata = {
+        WEEKDAY: weekDay[colItem.dataIndex], // 周
+        XXSJPZId: rowData.course?.hjId, // 时间ID
+        KHBJSJId: chosenData?.KHBJSJId, // 班级ID
+        FJSJId: rowData.room?.jsId, // 教室ID
+        XNXQId: chosenData?.XNXQId, // 学年学期ID
+      };
+      if (typeof getSelectdata === 'function') {
+        getSelectdata(selectdata);
+      }
+    }
     let bjId = null;
     if (type === 'edit') {
       bjId = chosenData?.KHBJSJId;
     } else if (type === 'see') {
-      bjId = rowData[colItem.dataIndex].bjId;
+      bjId = rowData[colItem.dataIndex]?.bjId;
     }
 
     if (typeof onExcelTableClick === 'function') {

@@ -11,14 +11,13 @@ export async function getKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
       id?: string;
       KCMC?: string;
       KCTP?: string;
-      KCSC?: number;
       KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
       KCMS?: string;
       KKRQ?: string;
@@ -44,12 +43,14 @@ export async function getKHKCSJ(
         BMJSSJ?: string;
         KCTP?: string;
         KBYS?: string;
+        NJS?: string;
+        XQ?: string;
       }[];
     };
     message?: string;
   }>(`/khkcsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -63,10 +64,10 @@ export async function deleteKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -105,7 +106,6 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
       id?: string;
       KCMC?: string;
       KCTP?: string;
-      KCSC?: number;
       KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
       KCMS?: string;
       KKRQ?: string;
@@ -131,6 +131,8 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
         BMJSSJ?: string;
         KCTP?: string;
         KBYS?: string;
+        NJS?: string;
+        XQ?: string;
       }[];
     };
     message?: string;
@@ -154,13 +156,13 @@ export async function updateKHKCSJ(
   body: API.UpdateKHKCSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -175,14 +177,14 @@ export async function allNJs(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: { id?: string; NJ?: number; NJMC?: string }[];
     message?: string;
   }>(`/khkcsj/njs/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -205,7 +207,6 @@ export async function allKCsByNJ(
       id?: string;
       KCMC?: string;
       KCTP?: string;
-      KCSC?: number;
       KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
       KCMS?: string;
       XNXQId?: string;

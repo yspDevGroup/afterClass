@@ -5,7 +5,7 @@ import type { FC } from 'react';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Form, message } from 'antd';
+import { Button, Form, message, Spin } from 'antd';
 
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllNJSJ } from '@/services/after-class/njsj';
@@ -29,11 +29,13 @@ type PropsType = {
   xXSJPZData?: any;
   campus?: any;
   grade?: any;
+  sameClass?: any;
+  setBJIDData?: any;
 };
 
 const AddArranging: FC<PropsType> = (props) => {
   const {
-    setState,
+    sameClass,
     xn,
     xq,
     tableDataSource,
@@ -43,6 +45,7 @@ const AddArranging: FC<PropsType> = (props) => {
     xXSJPZData,
     campus,
     grade,
+    setBJIDData,
   } = props;
   const [packUp, setPackUp] = useState(false);
   const [Bj, setBj] = useState<any>(undefined);
@@ -60,6 +63,9 @@ const AddArranging: FC<PropsType> = (props) => {
   const [xQItem, setXQItem] = useState<any>([]);
   const [excelTableValue] = useState<any[]>([]);
   const [bjIdData] = useState<any[]>([]);
+  const sameClassDatas = [...sameClass];
+  const [loading, setLoading] = useState(true);
+  const [CDLoading, setCDLoading] = useState(false);
 
   const columns: {
     title: string;
@@ -133,6 +139,19 @@ const AddArranging: FC<PropsType> = (props) => {
     },
   ];
 
+  const getSelectdata = (value: any) => {
+    sameClassDatas.map((item: any, key: number) => {
+      if (
+        item.FJSJId === value.FJSJId &&
+        item.KHBJSJId === value.KHBJSJId &&
+        item.WEEKDAY === value.WEEKDAY
+      ) {
+        sameClassDatas.splice(key, 1);
+      }
+      return '';
+    });
+  };
+
   const onExcelTableClick = (value: any, record: any, bjId: any) => {
     bjIdData.push(bjId);
     if (value === null) {
@@ -161,23 +180,32 @@ const AddArranging: FC<PropsType> = (props) => {
 
     setBj(chosenData);
     setIndex(value.id);
+    setBJIDData(value.id);
+    setCDLoading(true);
+    setTimeout(() => {
+      setCDLoading(false);
+    }, 2000);
   };
 
   const submit = async (params: any) => {
     try {
+      const data = [...excelTableValue].concat(sameClassDatas);
       // 所选班级ID
       const bj = Array.from(new Set(bjIdData));
-      const result = await createKHPKSJ(excelTableValue);
+      const parameter = {
+        bjIds: bj,
+        data,
+      };
+      const result = await createKHPKSJ(parameter);
       if (result.status === 'ok') {
-        if (excelTableValue.length === 0) {
-          message.info('请添加排课信息');
-        } else {
-          message.success('保存成功');
-          window.location.reload();
-          return true;
+        message.success('保存成功');
+        window.location.reload();
+        return true;
+      }
+      if (result.status === 'error') {
+        if (result.message === 'Validation error') {
+          message.error('保存失败,排课冲突');
         }
-      } else {
-        message.error('保存失败');
       }
     } catch (err) {
       console.log(err);
@@ -303,6 +331,7 @@ const AddArranging: FC<PropsType> = (props) => {
       } catch (error) {
         message.error('error');
       }
+      setLoading(false);
     }
     fetchData();
   }, []);
@@ -315,326 +344,336 @@ const AddArranging: FC<PropsType> = (props) => {
   return (
     <div style={{ background: '#FFFFFF' }}>
       <p className="xinzen"> {formValues ? '编辑排课' : '新增排课'}</p>
-      <ProForm
-        className="ArrangingFrom"
-        name="validate_other"
-        layout="horizontal"
-        form={form}
-        onFinish={submit}
-        submitter={{
-          render: (Props) => {
-            return [
-              <Button key="rest" onClick={() => onReset(Props)}>
-                取消
-              </Button>,
-              <Button key="submit" onClick={() => Props.form?.submit?.()}>
-                保存
-              </Button>,
-            ];
-          },
-        }}
-      >
-        <ProFormSelect
-          label="校区"
-          width="md"
-          name="XQ"
-          options={campus}
-          fieldProps={{
-            onChange(value) {
-              console.log('setXQItem', value);
+      <Spin spinning={loading} style={{ height: '100vh' }} size="large">
+        {!loading ? (
+          <ProForm
+            className="ArrangingFrom"
+            name="validate_other"
+            layout="horizontal"
+            form={form}
+            onFinish={submit}
+            submitter={{
+              render: (Props) => {
+                return [
+                  <Button key="rest" onClick={() => onReset(Props)}>
+                    取消
+                  </Button>,
+                  <Button key="submit" onClick={() => Props.form?.submit?.()}>
+                    保存
+                  </Button>,
+                ];
+              },
+            }}
+          >
+            <ProFormSelect
+              label="校区"
+              width="md"
+              name="XQ"
+              options={campus}
+              fieldProps={{
+                onChange(value) {
+                  console.log('setXQItem', value);
 
-              setXQItem(value);
-            },
-          }}
-        />
-        <ProFormSelect
-          width="md"
-          name="NJ"
-          label="年级"
-          options={grade ? grade[xQItem] : ''}
-          fieldProps={{
-            async onChange(value) {
-              if (!value) {
-                // 获取所有年级数据
-                const result = await getAllNJSJ();
-                if (result.status === 'ok') {
-                  if (result.data && result.data.length > 0) {
-                    const data: any = [].map.call(result.data, (item: GradeType) => {
-                      return {
-                        label: item.NJMC,
-                        value: item.id,
-                      };
-                    });
-                    setGradeType(data);
-                  }
-                }
-              }
-
-              // 年级选择时将选中的课程清空
-              form.setFieldsValue({ KC: undefined });
-
-              // 获取班级的数据
-              const bjList = await getAllKHBJSJ({
-                kcId: value ? kcId : '',
-                njId: value || '',
-                xn,
-                xq,
-                page: 0,
-                pageCount: 0,
-                name: '',
-              });
-              setBjData(bjList.data);
-
-              // 根据班级ID 获取课程数据
-              const parma = {
-                njId: value,
-                xn,
-                xq,
-              };
-              const kcList = await allKCsByNJ(parma);
-              if (kcList.status === 'ok') {
-                if (kcList.data?.length === 0) {
-                  setKcType([]);
-                  setNjId(undefined);
-                } else if (kcList.data && kcList.data.length > 0) {
-                  const kcData = kcList.data.map((item: any) => ({
-                    label: item.KCMC,
-                    value: item.id,
-                  }));
-                  setKcType(kcData);
-                  setNjId(value);
-                }
-              }
-            },
-          }}
-        />
-        <ProFormSelect
-          width="md"
-          options={kcType}
-          name="KC"
-          label="课程"
-          showSearch
-          fieldProps={{
-            async onChange(value) {
-              // 获取班级的数据
-              const bjList = await getAllKHBJSJ({
-                kcId: value || '',
-                njId: value ? njId : '',
-                xn: value ? '' : xn,
-                xq: value ? '' : xq,
-                page: 0,
-                pageCount: 0,
-                name: '',
-              });
-              setBjData(bjList.data);
-
-              if (value) {
-                // 根据班级ID获取年级的数据
-                const njList = await allNJs({ id: value });
-                if (njList.status === 'ok') {
-                  if (njList.data?.length === 0) {
-                    setGradeType([]);
-                    setKcId(undefined);
-                  } else if (njList.data && njList.data.length > 0) {
-                    const njData = njList.data.map((item: any) => ({
-                      label: item.NJMC,
-                      value: item.id,
-                    }));
-                    setGradeType(njData);
-                    setKcId(value);
-                  }
-                }
-              } else {
-                // 获取所有年级数据
-                const result = await getAllNJSJ();
-                if (result.status === 'ok') {
-                  if (result.data && result.data.length > 0) {
-                    const data: any = [].map.call(result.data, (item: GradeType) => {
-                      return {
-                        label: item.NJMC,
-                        value: item.id,
-                      };
-                    });
-                    setGradeType(data);
-                  }
-                }
-              }
-            },
-          }}
-        />
-        <div className="banji">
-          <span>班级：</span>
-          {bjData && bjData.length < 15 ? (
-            <ProCard ghost className="banjiCard">
-              {bjData.map(
-                (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
-                  return (
-                    <ProCard
-                      layout="center"
-                      bordered
-                      onClick={() => BjClick(value)}
-                      style={{ borderColor: index === value.id ? '#51d081' : '' }}
-                    >
-                      <p>{value.BJMC}</p>
-                      <span>{value.ZJS}</span>
-                    </ProCard>
-                  );
+                  setXQItem(value);
                 },
-              )}
-            </ProCard>
-          ) : (
-            <div>
-              {packUp === false ? (
+              }}
+            />
+            <ProFormSelect
+              width="md"
+              name="NJ"
+              label="年级"
+              options={grade ? grade[xQItem] : ''}
+              fieldProps={{
+                async onChange(value) {
+                  if (!value) {
+                    // 获取所有年级数据
+                    const result = await getAllNJSJ();
+                    if (result.status === 'ok') {
+                      if (result.data && result.data.length > 0) {
+                        const data: any = [].map.call(result.data, (item: GradeType) => {
+                          return {
+                            label: item.NJMC,
+                            value: item.id,
+                          };
+                        });
+                        setGradeType(data);
+                      }
+                    }
+                  }
+
+                  // 年级选择时将选中的课程清空
+                  form.setFieldsValue({ KC: undefined });
+
+                  // 获取班级的数据
+                  const bjList = await getAllKHBJSJ({
+                    kcId: value ? kcId : '',
+                    njId: value || '',
+                    xn,
+                    xq,
+                    page: 0,
+                    pageCount: 0,
+                    name: '',
+                  });
+                  setBjData(bjList.data);
+
+                  // 根据班级ID 获取课程数据
+                  const parma = {
+                    njId: value,
+                    xn,
+                    xq,
+                  };
+                  const kcList = await allKCsByNJ(parma);
+                  if (kcList.status === 'ok') {
+                    if (kcList.data?.length === 0) {
+                      setKcType([]);
+                      setNjId(undefined);
+                    } else if (kcList.data && kcList.data.length > 0) {
+                      const kcData = kcList.data.map((item: any) => ({
+                        label: item.KCMC,
+                        value: item.id,
+                      }));
+                      setKcType(kcData);
+                      setNjId(value);
+                    }
+                  }
+                },
+              }}
+            />
+            <ProFormSelect
+              width="md"
+              options={kcType}
+              name="KC"
+              label="课程"
+              showSearch
+              fieldProps={{
+                async onChange(value) {
+                  // 获取班级的数据
+                  const bjList = await getAllKHBJSJ({
+                    kcId: value || '',
+                    njId: value ? njId : '',
+                    xn: value ? '' : xn,
+                    xq: value ? '' : xq,
+                    page: 0,
+                    pageCount: 0,
+                    name: '',
+                  });
+                  setBjData(bjList.data);
+
+                  if (value) {
+                    // 根据班级ID获取年级的数据
+                    const njList = await allNJs({ id: value });
+                    if (njList.status === 'ok') {
+                      if (njList.data?.length === 0) {
+                        setGradeType([]);
+                        setKcId(undefined);
+                      } else if (njList.data && njList.data.length > 0) {
+                        const njData = njList.data.map((item: any) => ({
+                          label: item.NJMC,
+                          value: item.id,
+                        }));
+                        setGradeType(njData);
+                        setKcId(value);
+                      }
+                    }
+                  } else {
+                    // 获取所有年级数据
+                    const result = await getAllNJSJ();
+                    if (result.status === 'ok') {
+                      if (result.data && result.data.length > 0) {
+                        const data: any = [].map.call(result.data, (item: GradeType) => {
+                          return {
+                            label: item.NJMC,
+                            value: item.id,
+                          };
+                        });
+                        setGradeType(data);
+                      }
+                    }
+                  }
+                },
+              }}
+            />
+            <div className="banji">
+              <span>班级：</span>
+              {bjData && bjData.length < 15 ? (
                 <ProCard ghost className="banjiCard">
-                  {bjData && bjData.length > 0
-                    ? bjData
-                        .slice(0, 13)
-                        .map(
-                          (
-                            value: { BJMC: any; ZJS: any; id?: string | undefined },
-                            key: undefined,
-                          ) => {
-                            return (
-                              <ProCard
-                                layout="center"
-                                bordered
-                                onClick={() => BjClick(value)}
-                                style={{ borderColor: index === key ? '#51d081' : '' }}
-                              >
-                                <p>{value.BJMC}</p>
-                                <span>{value.ZJS}</span>
-                              </ProCard>
-                            );
-                          },
-                        )
-                    : ''}
-                  <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                    展开 <DownOutlined style={{ color: '#4884FF' }} />
-                  </ProCard>
+                  {bjData.map(
+                    (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
+                      return (
+                        <ProCard
+                          layout="center"
+                          bordered
+                          onClick={() => BjClick(value)}
+                          style={{ borderColor: index === value.id ? '#51d081' : '' }}
+                        >
+                          <p>{value.BJMC}</p>
+                          <span>{value.ZJS}</span>
+                        </ProCard>
+                      );
+                    },
+                  )}
                 </ProCard>
               ) : (
-                <ProCard ghost className="banjiCard">
-                  {bjData && bjData.length > 0
-                    ? bjData.map(
-                        (
-                          value: { BJMC: any; ZJS: any; id?: string | undefined },
-                          key: undefined,
-                        ) => {
-                          return (
-                            <ProCard
-                              layout="center"
-                              bordered
-                              onClick={() => BjClick(value)}
-                              style={{ borderColor: index === key ? '#51d081' : '' }}
-                            >
-                              <p>{value.BJMC}</p>
-                              <span>{value.ZJS}</span>
-                            </ProCard>
-                          );
-                        },
-                      )
-                    : ''}
-                  <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                    收起 <UpOutlined style={{ color: '#4884FF' }} />
-                  </ProCard>
-                </ProCard>
+                <div>
+                  {packUp === false ? (
+                    <ProCard ghost className="banjiCard">
+                      {bjData && bjData.length > 0
+                        ? bjData
+                            .slice(0, 13)
+                            .map(
+                              (
+                                value: { BJMC: any; ZJS: any; id?: string | undefined },
+                                key: undefined,
+                              ) => {
+                                return (
+                                  <ProCard
+                                    layout="center"
+                                    bordered
+                                    onClick={() => BjClick(value)}
+                                    style={{ borderColor: index === key ? '#51d081' : '' }}
+                                  >
+                                    <p>{value.BJMC}</p>
+                                    <span>{value.ZJS}</span>
+                                  </ProCard>
+                                );
+                              },
+                            )
+                        : ''}
+                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                        展开 <DownOutlined style={{ color: '#4884FF' }} />
+                      </ProCard>
+                    </ProCard>
+                  ) : (
+                    <ProCard ghost className="banjiCard">
+                      {bjData && bjData.length > 0
+                        ? bjData.map(
+                            (
+                              value: { BJMC: any; ZJS: any; id?: string | undefined },
+                              key: undefined,
+                            ) => {
+                              return (
+                                <ProCard
+                                  layout="center"
+                                  bordered
+                                  onClick={() => BjClick(value)}
+                                  style={{ borderColor: index === key ? '#51d081' : '' }}
+                                >
+                                  <p>{value.BJMC}</p>
+                                  <span>{value.ZJS}</span>
+                                </ProCard>
+                              );
+                            },
+                          )
+                        : ''}
+                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                        收起 <UpOutlined style={{ color: '#4884FF' }} />
+                      </ProCard>
+                    </ProCard>
+                  )}
+                </div>
               )}
             </div>
-          )}
-        </div>
-        <ProFormSelect
-          width="md"
-          options={roomType}
-          name="CDLX"
-          label="场地类型"
-          fieldProps={{
-            async onChange(value) {
-              // 场地类型选择时将选中的场地名称清空
-              form.setFieldsValue({ CDMC: undefined });
+            <ProFormSelect
+              width="md"
+              options={roomType}
+              name="CDLX"
+              label="场地类型"
+              fieldProps={{
+                async onChange(value) {
+                  // 场地类型选择时将选中的场地名称清空
+                  form.setFieldsValue({ CDMC: undefined });
 
-              // 获取场地的数据
-              const fjList = await getAllFJSJ({
-                lxId: value,
-                page: 0,
-                pageCount: 0,
-                name: '',
-              });
-              if (fjList.status === 'ok') {
-                const data: any = [].map.call(fjList.data, (item: SiteType) => {
-                  return {
-                    label: item.FJMC,
-                    value: item.id,
-                  };
-                });
-                if (data.length > 0) {
-                  setSiteType(data);
-                  setCdlxId(value);
-                } else if (data.length === 0) {
-                  setCdlxId(undefined);
-                  setSiteType([]);
-                }
-              } else {
-                message.error(fjList.message);
-              }
-              const Fjplan = await getFJPlan({
-                lxId: value,
-                fjId: '',
-                xn,
-                xq,
-                isPk: false,
-              });
-              if (Fjplan.status === 'ok') {
-                const data = processingData(Fjplan.data, xXSJPZData);
-                setTableDataSource(data);
-              } else {
-                message.error(Fjplan.message);
-              }
-            },
-          }}
-        />
-        <ProFormSelect
-          width="md"
-          options={siteType}
-          name="CDMC"
-          label="场地名称"
-          showSearch
-          fieldProps={{
-            async onChange(value) {
-              setCdmcData(value);
-              // 查询房间占用情况
-              const Fjplan = await getFJPlan({
-                lxId: cdlxId === undefined ? '' : cdlxId,
-                fjId: value,
-                xn,
-                xq,
-                isPk: false,
-              });
-              if (Fjplan.status === 'ok') {
-                const data = processingData(Fjplan.data, xXSJPZData);
-                setTableDataSource(data);
-              } else {
-                message.error(Fjplan.message);
-              }
-            },
-          }}
-        />
-
-        <div className="site">
-          <span>场地：</span>
-          {Bj || index ? (
-            <ExcelTable
-              className={styles.borderTable}
-              columns={columns}
-              dataSource={tableDataSource}
-              chosenData={Bj}
-              onExcelTableClick={onExcelTableClick}
-              type="edit"
+                  // 获取场地的数据
+                  const fjList = await getAllFJSJ({
+                    lxId: value,
+                    page: 0,
+                    pageCount: 0,
+                    name: '',
+                  });
+                  if (fjList.status === 'ok') {
+                    const data: any = [].map.call(fjList.data, (item: SiteType) => {
+                      return {
+                        label: item.FJMC,
+                        value: item.id,
+                      };
+                    });
+                    if (data.length > 0) {
+                      setSiteType(data);
+                      setCdlxId(value);
+                    } else if (data.length === 0) {
+                      setCdlxId(undefined);
+                      setSiteType([]);
+                    }
+                  } else {
+                    message.error(fjList.message);
+                  }
+                  const Fjplan = await getFJPlan({
+                    lxId: value,
+                    fjId: '',
+                    xn,
+                    xq,
+                    isPk: false,
+                  });
+                  if (Fjplan.status === 'ok') {
+                    const data = processingData(Fjplan.data, xXSJPZData);
+                    setTableDataSource(data);
+                  } else {
+                    message.error(Fjplan.message);
+                  }
+                },
+              }}
             />
-          ) : (
-            <div className={styles.noContent}>请先选择班级后再进行排课</div>
-          )}
-        </div>
-      </ProForm>
+            <ProFormSelect
+              width="md"
+              options={siteType}
+              name="CDMC"
+              label="场地名称"
+              showSearch
+              fieldProps={{
+                async onChange(value) {
+                  setCdmcData(value);
+                  // 查询房间占用情况
+                  const Fjplan = await getFJPlan({
+                    lxId: cdlxId === undefined ? '' : cdlxId,
+                    fjId: value,
+                    xn,
+                    xq,
+                    isPk: false,
+                  });
+                  if (Fjplan.status === 'ok') {
+                    const data = processingData(Fjplan.data, xXSJPZData);
+                    setTableDataSource(data);
+                  } else {
+                    message.error(Fjplan.message);
+                  }
+                },
+              }}
+            />
+
+            <div className="site">
+              <span>场地：</span>
+
+              {Bj || index ? (
+                <Spin spinning={CDLoading}>
+                  <ExcelTable
+                    className={styles.borderTable}
+                    columns={columns}
+                    dataSource={tableDataSource}
+                    chosenData={Bj}
+                    onExcelTableClick={onExcelTableClick}
+                    type="edit"
+                    getSelectdata={getSelectdata}
+                  />
+                </Spin>
+              ) : (
+                <div className={styles.noContent}>请先选择班级后再进行排课</div>
+              )}
+            </div>
+          </ProForm>
+        ) : (
+          ''
+        )}
+      </Spin>
     </div>
   );
 };

@@ -11,7 +11,7 @@ export async function getFJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -33,21 +33,12 @@ export async function getFJSJ(
         XXYZBM?: string;
         XZQHM?: string;
       };
-      XQSJ?: {
-        id?: string;
-        XQH?: string;
-        XQMC?: string;
-        XQDZ?: string;
-        XQYZBM?: string;
-        XQLXDH?: string;
-        XQCZDH?: string;
-      };
       FJLX?: { id?: string; FJLX?: string };
     };
     message?: string;
   }>(`/fjsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -61,10 +52,10 @@ export async function deleteFJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -116,15 +107,6 @@ export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]
         XXYZBM?: string;
         XZQHM?: string;
       };
-      XQSJ?: {
-        id?: string;
-        XQH?: string;
-        XQMC?: string;
-        XQDZ?: string;
-        XQYZBM?: string;
-        XQLXDH?: string;
-        XQCZDH?: string;
-      };
       FJLX?: { id?: string; FJLX?: string };
     };
     message?: string;
@@ -148,13 +130,13 @@ export async function updateFJSJ(
   body: API.UpdateFJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -185,9 +167,11 @@ export async function getFJPlan(
       FJLC?: string;
       JXL?: string;
       BZXX?: string;
+      FJLX?: { id?: string; FJLX?: string };
       KHPKSJs?: {
         id?: string;
         WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+        XNXQId?: string;
         XXSJPZ?: {
           id?: string;
           KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
@@ -208,6 +192,8 @@ export async function getFJPlan(
           FY?: number;
           KKRQ?: string;
           JKRQ?: string;
+          NJS?: string;
+          XQ?: string;
           KHKCSJ?: {
             id?: string;
             KCMC?: string;

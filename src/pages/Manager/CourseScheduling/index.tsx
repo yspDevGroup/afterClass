@@ -30,6 +30,8 @@ const ClassManagement = () => {
   const [radioValue, setRadioValue] = React.useState(false);
   const [xXSJPZData, setXXSJPZData] = useState<any>([]);
   const [recordValue, setRecordValue] = useState<any>({});
+  const [BJID, setBJIDData] = useState<any>('');
+
   // 校区
   const [campus, setCampus] = useState<any>([]);
   // 年级
@@ -37,6 +39,7 @@ const ClassManagement = () => {
 
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
+  const [sameClass, setSameClassData] = useState<any>([]);
 
   useEffect(() => {
     (async () => {
@@ -68,9 +71,17 @@ const ClassManagement = () => {
     setState(false);
   };
 
+  /**
+   * 把接口返回的数据处理成ExcelTable组件所需要的
+   *
+   * @param data  接口返回的数据
+   * @param timeData  课程时间段数据
+   * @returns
+   */
   const processingData = (data: any, timeData: any) => {
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const tableData: any[] = [];
+    const sameClassData: any[] = [];
 
     data.map((item: any) => {
       timeData.map((timeItem: any, timeKey: number) => {
@@ -91,6 +102,7 @@ const ClassManagement = () => {
         if (item.KHPKSJs && item.KHPKSJs.length > 0) {
           item.KHPKSJs.map((KHItem: any) => {
             if (KHItem.XXSJPZ.id === timeItem.id) {
+              // console.log('BJID',);
               table[week[KHItem.WEEKDAY]] = {
                 weekId: KHItem.id, // 周
                 cla: KHItem.KHBJSJ.BJMC, // 班级名称
@@ -100,14 +112,28 @@ const ClassManagement = () => {
                 njId: KHItem.KHBJSJ.NJS.split(',')[0], // 年级ID
                 xqId: KHItem.KHBJSJ.XQ, // 校区ID
                 color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(81, 208, 129, 1)',
-                dis: !(recordValue.BJId === KHItem.KHBJSJ.id),
+                dis: BJID ? !(BJID === KHItem.KHBJSJ.id) : !(recordValue.BJId === KHItem.KHBJSJ.id),
               };
+              if (
+                (!BJID && recordValue.BJId === KHItem.KHBJSJ.id) ||
+                (BJID && BJID === KHItem.KHBJSJ.id)
+              ) {
+                sameClassData.push({
+                  WEEKDAY: KHItem.WEEKDAY, // 周
+                  XXSJPZId: KHItem.XXSJPZ.id, // 时间ID
+                  KHBJSJId: KHItem.KHBJSJ.id, // 班级ID
+                  FJSJId: item.id, // 教室ID
+                  XNXQId: KHItem.XNXQId, // 学年学期ID
+                });
+              }
             }
           });
         }
+
         tableData.push(table);
       });
     });
+    setSameClassData(sameClassData);
     return tableData;
   };
 
@@ -177,7 +203,7 @@ const ClassManagement = () => {
         console.log(res.message);
       }
     })();
-  }, []);
+  }, [BJID]);
 
   const columns: {
     title: string;
@@ -323,6 +349,8 @@ const ClassManagement = () => {
             processingData={processingData}
             xXSJPZData={xXSJPZData}
             setTableDataSource={setTableDataSource}
+            sameClass={sameClass}
+            setBJIDData={setBJIDData}
           />
         )}
       </PageContainer>

@@ -11,7 +11,7 @@ export async function getKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -29,13 +29,14 @@ export async function getKHBJSJ(
       BMKSSJ?: string;
       BMJSSJ?: string;
       KCTP?: string;
+      NJS?: string;
+      XQ?: string;
       KHKCSJId?: string;
       KHKCSJ?: {
         id?: string;
         KCMC?: string;
         KCLX?: string;
         KCTP?: string;
-        KCSC?: number;
         KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
         KCMS?: string;
         KKRQ?: string;
@@ -45,13 +46,12 @@ export async function getKHBJSJ(
         XNXQId?: string;
         KHKCLX?: { id?: string; KCLX?: string; KBYS?: string };
       };
-      NJSJs?: { id?: string; NJ?: number; NJMC?: string }[];
       KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
     };
     message?: string;
   }>(`/khbjsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -65,10 +65,10 @@ export async function deleteKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -122,13 +122,14 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       BMKSSJ?: string;
       BMJSSJ?: string;
       KCTP?: string;
+      NJS?: string;
+      XQ?: string;
       KHKCSJId?: string;
       KHKCSJ?: {
         id?: string;
         KCMC?: string;
         KCLX?: string;
         KCTP?: string;
-        KCSC?: number;
         KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
         KCMS?: string;
         KKRQ?: string;
@@ -138,7 +139,6 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         XNXQId?: string;
         KHKCLX?: { id?: string; KCLX?: string; KBYS?: string };
       };
-      NJSJs?: { id?: string; NJ?: number; NJMC?: string }[];
       KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
     };
     message?: string;
@@ -162,13 +162,13 @@ export async function updateKHBJSJ(
   body: API.UpdateKHBJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

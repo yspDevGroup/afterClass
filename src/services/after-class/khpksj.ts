@@ -11,7 +11,7 @@ export async function getKHPKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -31,11 +31,12 @@ export async function getKHPKSJ(
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
+        NJS?: string;
+        XQ?: string;
         KHKCSJ?: {
           id?: string;
           KCMC?: string;
           KCTP?: string;
-          KCSC?: number;
           KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
           KCMS?: string;
           KKRQ?: string;
@@ -66,7 +67,7 @@ export async function getKHPKSJ(
     message?: string;
   }>(`/khpksj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -80,10 +81,10 @@ export async function deleteKHPKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khpksj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -113,7 +114,13 @@ export async function getAllKHPKSJ(
 }
 
 /** 创建课后排课数据 PUT /khpksj/create */
-export async function createKHPKSJ(body: API.CreateKHPKSJ[], options?: { [key: string]: any }) {
+export async function createKHPKSJ(
+  body: {
+    bjIds?: string[];
+    data?: API.CreateKHPKSJ[];
+  },
+  options?: { [key: string]: any },
+) {
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -145,13 +152,13 @@ export async function updateKHPKSJ(
   body: API.UpdateKHPKSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khpksj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
