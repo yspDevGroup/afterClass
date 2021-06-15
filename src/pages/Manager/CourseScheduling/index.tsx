@@ -47,7 +47,7 @@ const ClassManagement = () => {
       const currentXQ = await queryXQList();
       const XQ: { label: any; value: any }[] = [];
       const NJ = {};
-      currentXQ.map((item: any) => {
+      currentXQ?.map((item: any) => {
         XQ.push({
           label: item.name,
           value: item.name,

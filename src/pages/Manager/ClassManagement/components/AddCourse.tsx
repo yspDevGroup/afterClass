@@ -9,6 +9,7 @@ import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllNJSJ } from '@/services/after-class/njsj';
 import { queryXQList } from '@/services/wechat/service';
+import { getKHKCSJ } from '@/services/after-class/khkcsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -18,6 +19,7 @@ type AddCourseProps = {
   actionRef?: React.MutableRefObject<ActionType | undefined>;
   mcData?: { label: string; value: string }[];
   names?: string;
+  kcId?: string;
 };
 const formLayout = {
   labelCol: {},
@@ -32,6 +34,7 @@ const AddCourse: FC<AddCourseProps> = ({
   actionRef,
   mcData,
   names,
+  kcId
 }) => {
   const [form, setForm] = useState<any>();
   // const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
@@ -42,6 +45,18 @@ const AddCourse: FC<AddCourseProps> = ({
   const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
+
+  // 获取报名时段和上课时段
+  useEffect(() => {
+    console.log(666)
+    if (kcId) {
+      const res = getKHKCSJ({ id: kcId });
+        console.log('res',res)
+    }
+
+
+  }, [])
+
 
   // 获取年级数据
   useEffect(() => {
@@ -65,7 +80,7 @@ const AddCourse: FC<AddCourseProps> = ({
       const currentXQ = await queryXQList();
       const XQ: { label: any; value: any }[] = [];
       const NJ = {};
-      currentXQ.map((item: any) => {
+      currentXQ?.map((item: any) => {
         XQ.push({
           label: item.name,
           value: item.name,
@@ -151,8 +166,8 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'KCSC',
       key: 'KCSC',
       fieldProps: {
-        min:0,
-        max:100,
+        min: 0,
+        max: 100,
       },
     },
     {
@@ -165,8 +180,8 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'BJZT',
           key: 'BJZT',
           fieldProps: {
-            disabled: true ,
-            autocomplete:'off'
+            disabled: true,
+            autocomplete: 'off'
           }
         },
         {
@@ -175,8 +190,8 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'FY',
           key: 'FY',
           readonly,
-          fieldProps:{
-            autocomplete:'off'
+          fieldProps: {
+            autocomplete: 'off'
           }
         },
       ]
@@ -239,7 +254,7 @@ const AddCourse: FC<AddCourseProps> = ({
           }
           return setBaoming(false)
         },
-        defaultValue:false
+        defaultValue: false
       }
     },
     {
@@ -248,8 +263,8 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'BMSD',
       key: 'BMSD',
       width: '100%',
-      hidden:  baoming,
-      fieldProps:{
+      hidden: baoming,
+      fieldProps: {
         // disabledDate={disabledDate}
       },
     },
@@ -264,7 +279,7 @@ const AddCourse: FC<AddCourseProps> = ({
           }
           return setKaike(false)
         },
-        defaultValue:false
+        defaultValue: false
       }
     },
     {
@@ -274,7 +289,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'SKSD',
       width: '100%',
       hidden: kaike,
-      fieldProps:{
+      fieldProps: {
         // disabledDate={disabledDate}
       },
     },
@@ -295,7 +310,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KCMS',
     },
   ];
-  
+
   return (
     <div>
       <Drawer
@@ -306,7 +321,7 @@ const AddCourse: FC<AddCourseProps> = ({
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
-        footer={(names==='chakan')?null:
+        footer={(names === 'chakan') ? null :
           <div
             style={{
               textAlign: 'right',

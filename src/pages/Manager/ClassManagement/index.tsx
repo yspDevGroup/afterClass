@@ -374,6 +374,7 @@ const CourseManagement = () => {
           ]}
         />
         <AddCourse
+          kcId={kcId}
           actionRef={actionRef}
           visible={visible}
           onClose={onClose}

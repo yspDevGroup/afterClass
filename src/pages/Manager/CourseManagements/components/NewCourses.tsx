@@ -176,17 +176,16 @@ const NewCourses = (props: PropsType) => {
         已结课: '已结课',
       },
     },
-    {
-      type: 'dateRange',
-      label: '开课日期-结课日期:',
-      name: 'KKRQ',
-      key: 'KKRQ',
-      width: '100%',
-    },
+    // {
+    //   type: 'dateRange',
+    //   label: '开课日期-结课日期:',
+    //   name: 'KKRQ',
+    //   key: 'KKRQ',
+    //   width: '100%',
+    // },
     {
       type: 'switch',
-      label: '单独设置报名时段:',
-      // width: '100%',
+      label: '单独设置报名时间:',
       fieldProps: {
         onChange: (item: any) => {
           if (item === false) {
@@ -199,19 +198,19 @@ const NewCourses = (props: PropsType) => {
     },
     {
       type: 'dateRange',
-      label: '报名时段:',
-      name: 'BMSD',
-      key: 'BMSD',
+      label: '报名时间:',
+      name: 'BMKSSJ',
+      key: 'BMKSSJ',
       width: '100%',
       hidden:  baoming ,
       fieldProps:{
-        // disabledDate={disabledDate}
+        // disabledDate={disabledDate},
+        format: 'YYYY-MM-DD HH:mm',
       },
     },
     {
       type: 'switch',
       label: '单独设置上课时段:',
-      // width: '100%',
       fieldProps: {
         onChange: (item: any) => {
           if (item === false) {
@@ -225,24 +224,24 @@ const NewCourses = (props: PropsType) => {
     {
       type: 'dateRange',
       label: '上课时间:',
-      name: 'SKSD',
-      key: 'SKSD',
+      name: 'KKRQ',
+      key: 'KKRQ',
       width: '100%',
       hidden: kaike,
       fieldProps:{
         // disabledDate={disabledDate}
       },
     },
-    {
-      type: 'dateTimeRange',
-      label: '报名开始时间-报名结束时间:',
-      name: 'BMKSSJ',
-      key: 'BMKSSJ',
-      width: '100%',
-      fieldProps: {
-        format: 'YYYY-MM-DD HH:mm',
-      },
-    },
+    // {
+    //   type: 'dateTimeRange',
+    //   label: '报名开始时间-报名结束时间:',
+    //   name: 'BMKSSJ',
+    //   key: 'BMKSSJ',
+    //   width: '100%',
+    //   fieldProps: {
+    //     format: 'YYYY-MM-DD HH:mm',
+    //   },
+    // },
     {
       type: 'cascader',
       label: '学年学期：',
