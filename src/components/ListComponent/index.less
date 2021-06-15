@@ -202,6 +202,16 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        &:before {
+          display: inline-block;
+          width: 4px;
+          height: 4px;
+          margin-right: 8px;
+          margin-bottom:3px;
+          background-color: @text-color;
+          border-radius: 50%;
+          content: '';
+        }
         a {
           color: #333333;
           font-size: 14px;
