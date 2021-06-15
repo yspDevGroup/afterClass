@@ -139,7 +139,18 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'KHKCSJId',
       key: 'KHKCSJId',
       fieldProps: {
-        options: mcData,
+        options: mcData
+      },
+    },
+    {
+      type: 'inputNumber',
+      readonly,
+      label: '课时数：',
+      name: 'KCSC',
+      key: 'KCSC',
+      fieldProps: {
+        min:0,
+        max:100,
       },
     },
     {
@@ -152,9 +163,9 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'BJZT',
           key: 'BJZT',
           fieldProps: {
-            disabled: true,
-            autocomplete: 'off',
-          },
+            disabled: true ,
+            autocomplete:'off'
+          }
         },
         {
           type: 'inputNumber',
@@ -162,11 +173,11 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'FY',
           key: 'FY',
           readonly,
-          fieldProps: {
-            autocomplete: 'off',
-          },
+          fieldProps:{
+            autocomplete:'off'
+          }
         },
-      ],
+      ]
     },
     {
       type: 'group',
@@ -186,10 +197,10 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'FJS',
           readonly,
           fieldProps: {
-            mode: 'multiple',
-          },
+            mode: "multiple"
+          }
         },
-      ],
+      ]
     },
     {
       type: 'select',
@@ -232,7 +243,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KCMS',
     },
   ];
-
+  
   return (
     <div>
       <Drawer
@@ -243,21 +254,19 @@ const AddCourse: FC<AddCourseProps> = ({
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
-        footer={
-          names === 'chakan' ? null : (
-            <div
-              style={{
-                textAlign: 'right',
-              }}
-            >
-              <Button onClick={onClose} style={{ marginRight: 16 }}>
-                取消
-              </Button>
-              <Button onClick={handleSubmit} type="primary">
-                保存
-              </Button>
-            </div>
-          )
+        footer={(names==='chakan')?null:
+          <div
+            style={{
+              textAlign: 'right',
+            }}
+          >
+            <Button onClick={onClose} style={{ marginRight: 16 }}>
+              取消
+            </Button>
+            <Button onClick={handleSubmit} type="primary">
+              保存
+            </Button>
+          </div>
         }
       >
         <ProFormFields

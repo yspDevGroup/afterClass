@@ -32,6 +32,10 @@ const NewCourses = (props: PropsType) => {
   const [XQData, setXQData] = useState<any>([]);
   const [XN, setXN] = useState<any>();
   const [XQ, setXQ] = useState<any>();
+  const [baoming, setBaoming] = useState<boolean>(true);
+  const [kaike, setKaike] = useState<boolean>(true);
+  console.log('kaike',kaike);
+  
   const imgurl = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
 
   useEffect(() => {
@@ -134,8 +138,8 @@ const NewCourses = (props: PropsType) => {
       hidden: true,
       name: 'id',
       key: 'id',
-      fieldProps:{
-        autocomplete:'off'
+      fieldProps: {
+        autocomplete: 'off'
       }
     },
     {
@@ -144,8 +148,8 @@ const NewCourses = (props: PropsType) => {
       name: 'KCMC',
       key: 'KCMC',
       width: '100%',
-      fieldProps:{
-        autocomplete:'off'
+      fieldProps: {
+        autocomplete: 'off'
       }
     },
     {
@@ -154,15 +158,6 @@ const NewCourses = (props: PropsType) => {
       name: 'KHKCLXId',
       key: 'KHKCLXId',
       options,
-    },
-    {
-      type: 'inputNumber',
-      label: '课程时长(小时):',
-      name: 'KCSC',
-      key: 'KCSC',
-      fieldProps: {
-        min: 0,
-      },
     },
     {
       type: 'select',
@@ -182,6 +177,75 @@ const NewCourses = (props: PropsType) => {
       name: 'KKRQ',
       key: 'KKRQ',
       width: '100%',
+    },
+    {
+      type: 'radio',
+      label: '报名时段:',
+      name: 'BMSD',
+      key: 'BMSD',
+      width: '100%',
+      fieldProps: {
+        options: [
+          {
+            label: '默认报名时间',
+            value: 'a',
+          },
+          {
+            label: '自定义报名时间',
+            value: 'b',
+          },
+        ],
+        onChange:(value: string)=>{
+          if(value==='a'){
+            setBaoming(false)
+          }
+          setBaoming(true) 
+        }
+      }
+    },
+    {
+      type: 'dateRange',
+      label: '报名时段:',
+      name: 'BMSD',
+      key: 'BMSD',
+      width: '100%',
+      hidden: {baoming}
+    },
+    {
+      type: 'radio',
+      label: '上课时段:',
+      name: 'SKSD',
+      key: 'SKSD',
+      width: '100%',
+      fieldProps: {
+        options: [
+          {
+            label: '默认上课时间',
+            value: 'a',
+          },
+          {
+            label: '自定义上课时间',
+            value: 'b',
+          },
+        ],
+        onChange:(item: any)=>{
+          const { values } = item.target.value;
+          console.log('valuesssss',values);
+          if(values==='a'){
+            setKaike(false);
+            actionRef?.current?.reload()
+          }
+          setKaike(true) 
+        }
+      }
+    },
+    {
+      type: 'dateRange',
+      label: '上课时间:',
+      name: 'SKSD',
+      key: 'SKSD',
+      width: '100%',
+      hidden: kaike
     },
     {
       type: 'dateTimeRange',
