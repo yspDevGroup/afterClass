@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable array-callback-return */
 import { Button, message, Radio, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -12,6 +13,7 @@ const CourseDetails: React.FC = () => {
   const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
   const [KcData, setKcData] = useState<any>();
+  const [currentDate, setCurrentDate] = useState<string>();
   const valueKey = window.location.href.split('type=')[1];
   const id = window.location.href.split('id=')[1].split('&')[0];
   
@@ -41,6 +43,8 @@ const CourseDetails: React.FC = () => {
         setKcData(value)
       }
     })
+    const myDate = new Date().toLocaleDateString().slice(5,9);
+    setCurrentDate(myDate)
   }, [id]);
   const onclick = () => { 
     setstate(true);
@@ -68,7 +72,6 @@ const CourseDetails: React.FC = () => {
       XY
     }
     console.log('data',data)
-   
   }
   return <>
   {
@@ -147,10 +150,11 @@ const CourseDetails: React.FC = () => {
       <div className={styles.cards}>
         {
           TimetableList.map((value)=>{
-            return  <div className={value.type === '已上' ? styles.card1:styles.card} >
-            <p>{value.JC}</p>
-            <p>{value.data}</p>
-          </div>
+            return<div className={value.data === currentDate ? styles.card2:(value.type === '已上' ? styles.card1:(value.type === '未上' ? styles.card3:styles.card ))} >
+              <p>{value.JC}</p>
+              <p>{value.data}</p>
+            </div>
+          
           })
         }
       </div>
