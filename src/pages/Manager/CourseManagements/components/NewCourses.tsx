@@ -34,9 +34,14 @@ const NewCourses = (props: PropsType) => {
   const [XQ, setXQ] = useState<any>();
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
-  console.log('kaike',kaike);
-  
+
   const imgurl = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
+
+  const Close=()=>{
+    setBaoming(true);
+    setKaike(true);
+    onClose!();
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -179,28 +184,17 @@ const NewCourses = (props: PropsType) => {
       width: '100%',
     },
     {
-      type: 'radio',
-      label: '报名时段:',
-      name: 'BMSD',
-      key: 'BMSD',
-      width: '100%',
+      type: 'switch',
+      label: '单独设置报名时段:',
+      // width: '100%',
       fieldProps: {
-        options: [
-          {
-            label: '默认报名时间',
-            value: 'a',
-          },
-          {
-            label: '自定义报名时间',
-            value: 'b',
-          },
-        ],
-        onChange:(value: string)=>{
-          if(value==='a'){
-            setBaoming(false)
+        onChange: (item: any) => {
+          if (item === false) {
+            return setBaoming(true)
           }
-          setBaoming(true) 
-        }
+          return setBaoming(false)
+        },
+        defaultValue:false
       }
     },
     {
@@ -209,34 +203,23 @@ const NewCourses = (props: PropsType) => {
       name: 'BMSD',
       key: 'BMSD',
       width: '100%',
-      hidden: {baoming}
+      hidden:  baoming ,
+      fieldProps:{
+        // disabledDate={disabledDate}
+      },
     },
     {
-      type: 'radio',
-      label: '上课时段:',
-      name: 'SKSD',
-      key: 'SKSD',
-      width: '100%',
+      type: 'switch',
+      label: '单独设置上课时段:',
+      // width: '100%',
       fieldProps: {
-        options: [
-          {
-            label: '默认上课时间',
-            value: 'a',
-          },
-          {
-            label: '自定义上课时间',
-            value: 'b',
-          },
-        ],
-        onChange:(item: any)=>{
-          const { values } = item.target.value;
-          console.log('valuesssss',values);
-          if(values==='a'){
-            setKaike(false);
-            actionRef?.current?.reload()
+        onChange: (item: any) => {
+          if (item === false) {
+            return setKaike(true)
           }
-          setKaike(true) 
-        }
+          return setKaike(false)
+        },
+        defaultValue:false
       }
     },
     {
@@ -245,7 +228,10 @@ const NewCourses = (props: PropsType) => {
       name: 'SKSD',
       key: 'SKSD',
       width: '100%',
-      hidden: kaike
+      hidden: kaike,
+      fieldProps:{
+        // disabledDate={disabledDate}
+      },
     },
     {
       type: 'dateTimeRange',
@@ -311,7 +297,7 @@ const NewCourses = (props: PropsType) => {
       <Drawer
         title={current ? '编辑课程' : '新增课程'}
         width={480}
-        onClose={onClose}
+        onClose={Close}
         visible={visible}
         className={styles.courseStyles}
         destroyOnClose={true}
@@ -322,7 +308,7 @@ const NewCourses = (props: PropsType) => {
               textAlign: 'right',
             }}
           >
-            <Button onClick={onClose} style={{ marginRight: 16 }}>
+            <Button onClick={Close} style={{ marginRight: 16 }}>
               取消
             </Button>
             <Button onClick={handleSubmit} type="primary">

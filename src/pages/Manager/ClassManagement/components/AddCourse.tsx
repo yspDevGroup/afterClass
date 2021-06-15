@@ -40,6 +40,8 @@ const AddCourse: FC<AddCourseProps> = ({
   // 年级
   const [grade, setGrade] = useState<any>();
   const [xQItem, setXQItem] = useState<any>([]);
+  const [baoming, setBaoming] = useState<boolean>(true);
+  const [kaike, setKaike] = useState<boolean>(true);
 
   // 获取年级数据
   useEffect(() => {
@@ -225,6 +227,56 @@ const AddCourse: FC<AddCourseProps> = ({
         options: grade ? grade[xQItem] : [],
       },
       readonly,
+    },
+    {
+      type: 'switch',
+      label: '单独设置报名时段:',
+      // width: '100%',
+      fieldProps: {
+        onChange: (item: any) => {
+          if (item === false) {
+            return setBaoming(true)
+          }
+          return setBaoming(false)
+        },
+        defaultValue:false
+      }
+    },
+    {
+      type: 'dateRange',
+      label: '报名时段:',
+      name: 'BMSD',
+      key: 'BMSD',
+      width: '100%',
+      hidden:  baoming,
+      fieldProps:{
+        // disabledDate={disabledDate}
+      },
+    },
+    {
+      type: 'switch',
+      label: '单独设置上课时段:',
+      // width: '100%',
+      fieldProps: {
+        onChange: (item: any) => {
+          if (item === false) {
+            return setKaike(true)
+          }
+          return setKaike(false)
+        },
+        defaultValue:false
+      }
+    },
+    {
+      type: 'dateRange',
+      label: '上课时间:',
+      name: 'SKSD',
+      key: 'SKSD',
+      width: '100%',
+      hidden: kaike,
+      fieldProps:{
+        // disabledDate={disabledDate}
+      },
     },
     {
       type: 'uploadImage',
