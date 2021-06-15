@@ -34,7 +34,7 @@ const AddCourse: FC<AddCourseProps> = ({
   actionRef,
   mcData,
   names,
-  kcId
+  kcId,
 }) => {
   const [form, setForm] = useState<any>();
   // const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
@@ -48,15 +48,12 @@ const AddCourse: FC<AddCourseProps> = ({
 
   // 获取报名时段和上课时段
   useEffect(() => {
-    console.log(666)
+    console.log(666);
     if (kcId) {
       const res = getKHKCSJ({ id: kcId });
-        console.log('res',res)
+      console.log('res', res);
     }
-
-
-  }, [])
-
+  }, []);
 
   // 获取年级数据
   useEffect(() => {
@@ -83,11 +80,11 @@ const AddCourse: FC<AddCourseProps> = ({
       currentXQ?.map((item: any) => {
         XQ.push({
           label: item.name,
-          value: item.name,
+          value: item.id,
         });
         NJ[item.name] = item.njList.map((njItem: any) => ({
           label: njItem.name,
-          value: njItem.name,
+          value: njItem.id,
         }));
       });
       setCampus(XQ);
@@ -156,7 +153,7 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'KHKCSJId',
       key: 'KHKCSJId',
       fieldProps: {
-        options: mcData
+        options: mcData,
       },
     },
     {
@@ -181,8 +178,8 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'BJZT',
           fieldProps: {
             disabled: true,
-            autocomplete: 'off'
-          }
+            autocomplete: 'off',
+          },
         },
         {
           type: 'inputNumber',
@@ -191,10 +188,10 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'FY',
           readonly,
           fieldProps: {
-            autocomplete: 'off'
-          }
+            autocomplete: 'off',
+          },
         },
-      ]
+      ],
     },
     {
       type: 'group',
@@ -214,10 +211,10 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'FJS',
           readonly,
           fieldProps: {
-            mode: "multiple"
-          }
+            mode: 'multiple',
+          },
         },
-      ]
+      ],
     },
     {
       type: 'select',
@@ -250,12 +247,12 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         onChange: (item: any) => {
           if (item === false) {
-            return setBaoming(true)
+            return setBaoming(true);
           }
-          return setBaoming(false)
+          return setBaoming(false);
         },
-        defaultValue: false
-      }
+        defaultValue: false,
+      },
     },
     {
       type: 'dateRange',
@@ -275,12 +272,12 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         onChange: (item: any) => {
           if (item === false) {
-            return setKaike(true)
+            return setKaike(true);
           }
-          return setKaike(false)
+          return setKaike(false);
         },
-        defaultValue: false
-      }
+        defaultValue: false,
+      },
     },
     {
       type: 'dateRange',
@@ -321,19 +318,21 @@ const AddCourse: FC<AddCourseProps> = ({
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
-        footer={(names === 'chakan') ? null :
-          <div
-            style={{
-              textAlign: 'right',
-            }}
-          >
-            <Button onClick={onClose} style={{ marginRight: 16 }}>
-              取消
-            </Button>
-            <Button onClick={handleSubmit} type="primary">
-              保存
-            </Button>
-          </div>
+        footer={
+          names === 'chakan' ? null : (
+            <div
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              <Button onClick={onClose} style={{ marginRight: 16 }}>
+                取消
+              </Button>
+              <Button onClick={handleSubmit} type="primary">
+                保存
+              </Button>
+            </div>
+          )
         }
       >
         <ProFormFields

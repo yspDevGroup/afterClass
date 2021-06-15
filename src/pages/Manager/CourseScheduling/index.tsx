@@ -50,11 +50,11 @@ const ClassManagement = () => {
       currentXQ?.map((item: any) => {
         XQ.push({
           label: item.name,
-          value: item.name,
+          value: item.id,
         });
         NJ[item.name] = item.njList.map((njItem: any) => ({
           label: njItem.name,
-          value: njItem.name,
+          value: njItem.id,
         }));
       });
       setCampus(XQ);

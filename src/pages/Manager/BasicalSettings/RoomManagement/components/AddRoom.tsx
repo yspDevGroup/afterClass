@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
@@ -5,6 +6,7 @@ import type { RoomType, RoomItem, SchoolAreaType } from '../data';
 import ProFormFields from '@/components/ProFormFields';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllFJLX } from '@/services/after-class/fjlx';
+import { queryXQList } from '@/services/wechat/service';
 
 const formLayout = {
   labelCol: { span: 5 },
@@ -21,10 +23,26 @@ type PropsType = {
 };
 
 const AddRoom = (props: PropsType) => {
-  const { current, setForm, readonly,setopens,setModalVisible } = props;
-  const [schoolArea, setSchoolArea] = useState<Record<string, string>[]>([]);
+  const { current, setForm, readonly, setopens, setModalVisible } = props;
+  // const [schoolArea, setSchoolArea] = useState<Record<string, string>[]>([]);
   const [roomType, setRoomType] = useState<Record<string, string>[]>([]);
-
+  // 校区
+  const [campus, setCampus] = useState<any>([]);
+  useEffect(() => {
+    (async () => {
+      // 获取年级信息
+      const currentXQ = await queryXQList();
+      const XQ: { label: any; value: any }[] = [];
+      currentXQ?.map((item: any) => {
+        XQ.push({
+          label: item.name,
+          value: item.id,
+        });
+        return '';
+      });
+      setCampus(XQ);
+    })();
+  }, []);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -34,13 +52,13 @@ const AddRoom = (props: PropsType) => {
         });
         if (result.status === 'ok') {
           if (result.data && result.data.length > 0) {
-            const data: any = [].map.call(result.data, (item: SchoolAreaType) => {
-              return {
-                label: item.XQMC,
-                value: item.id,
-              };
-            });
-            setSchoolArea(data);
+            // const data: any = [].map.call(result.data, (item: SchoolAreaType) => {
+            //   return {
+            //     label: item.XQMC,
+            //     value: item.id,
+            //   };
+            // });
+            // setSchoolArea(data);
           }
         } else {
           message.info(result.message);
@@ -59,8 +77,8 @@ const AddRoom = (props: PropsType) => {
             });
             setRoomType(data);
           } else {
-            setModalVisible(false)
-            setopens(true)
+            setModalVisible(false);
+            setopens(true);
           }
         } else {
           message.info(result.message);
@@ -80,8 +98,8 @@ const AddRoom = (props: PropsType) => {
       name: 'id',
       key: 'id',
       fieldProps: {
-        autocomplete: 'off'
-      }
+        autocomplete: 'off',
+      },
     },
     {
       type: 'input',
@@ -90,7 +108,7 @@ const AddRoom = (props: PropsType) => {
       name: 'FJMC',
       key: 'FJMC',
       fieldProps: {
-        autocomplete: 'off'
+        autocomplete: 'off',
       },
       rules: [{ required: true, message: '请填写名称' }],
     },
@@ -102,8 +120,8 @@ const AddRoom = (props: PropsType) => {
       key: 'FJBH',
       rules: [{ required: true, message: '请填写编号' }],
       fieldProps: {
-        autocomplete: 'off'
-      }
+        autocomplete: 'off',
+      },
     },
     {
       type: 'select',
@@ -112,7 +130,7 @@ const AddRoom = (props: PropsType) => {
       name: 'FJLXId',
       key: 'FJLXId',
       rules: [{ required: true, message: '请填写类型' }],
-      options: roomType
+      options: roomType,
     },
     {
       type: 'select',
@@ -120,7 +138,7 @@ const AddRoom = (props: PropsType) => {
       label: '所属校区',
       name: 'XQSJId',
       key: 'XQSJId',
-      options: schoolArea
+      options: campus,
     },
     {
       type: 'inputNumber',
@@ -138,8 +156,8 @@ const AddRoom = (props: PropsType) => {
       key: 'BZXX',
       rules: [{ required: true, message: '请填写场地地址' }],
       fieldProps: {
-        autocomplete: 'off'
-      }
+        autocomplete: 'off',
+      },
     },
   ];
   return (
