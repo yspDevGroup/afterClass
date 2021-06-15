@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:30:23
- * @LastEditTime: 2021-06-11 15:07:18
+ * @LastEditTime: 2021-06-15 16:41:49
  * @LastEditors: txx
  */
 
@@ -25,7 +25,7 @@ const Course = () => {
         selectedData = {selecteddata}
         centered={true}
       />
-       <Pagina/>
+       <Pagina total={5}/>
     </div>
   )
 }
