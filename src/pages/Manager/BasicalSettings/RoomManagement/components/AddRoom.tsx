@@ -138,7 +138,9 @@ const AddRoom = (props: PropsType) => {
       label: '所属校区',
       name: 'XQSJId',
       key: 'XQSJId',
-      options: campus,
+      fieldProps: {
+        options: campus,
+      },
     },
     {
       type: 'inputNumber',
