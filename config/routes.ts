@@ -49,6 +49,12 @@
         component: './Manager/BasicalSettings/TermManagement',
       },
       {
+        path: '/basicalSettings/signUpTimeManagement',
+        name: 'signUpTimeManagement',
+        icon: 'smile',
+        component: './Manager/BasicalSettings/SignUpTimeManagement',
+      },
+      {
         path: '/basicalSettings/',
         redirect: '/basicalSettings/roomManagement',
       },
