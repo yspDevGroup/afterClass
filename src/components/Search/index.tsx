@@ -85,14 +85,14 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
                 <div className={styles.HeaderSelect}>
                   <span className={styles.HeaderSelectOne}>
                     <Select onChange={handleChainChange} value={currentXN} style={{ width: 120 }} >
-                      {chainData?.data?.map((year: any) => (
+                      {chainData?.data && chainData?.data.length && chainData?.data.map((year: any) => (
                         <Option value={year.key} key={year.key}>{year.title}</Option>
                       ))}
                     </Select>
                   </span>
                   <span className={styles.HeaderSelectTwo}>
                     <Select onChange={onTermChange} value={curTerm} style={{ width: 120 }}>
-                      {terms?.map((term: any) => (
+                      {terms && terms.length && terms.map((term: any) => (
                         <Option value={term.key} key={term.key}>{term.title}</Option>
                       ))}
                     </Select>
@@ -107,8 +107,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
                 <div className={styles.HeaderSelect}>
                   <span className={styles.HeaderSelectTwo}>
                     <Select onChange={onGrideChange} value={curGride} style={{ width: '120px' }}>
-                      {/* {data?.map((op: any) => <Option value={op.key} key={op.key}>{op.title}</Option>)} */}
-                      {data?.map((op: any) => <Option value={op.id} key={op.id}>{op.NJMC}</Option>)}
+                      {data && data.length && data.map((op: any) => <Option value={op.key} key={op.key}>{op.title}</Option>)}
                     </Select>
                   </span>
                 </div>

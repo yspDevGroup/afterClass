@@ -8,8 +8,9 @@
 
 import type { ListData, ListItem, ListType } from "./data";
 import { List } from 'antd';
-import styles from "./index.less";
 import { Link } from "umi";
+import styles from "./index.less";
+import noData from '@/assets/noData.png';
 
 
 const NewsList = (props: { data: ListItem[], type: ListType }) => {
@@ -56,7 +57,7 @@ const NewsList = (props: { data: ListItem[], type: ListType }) => {
   </div>
 };
 const ListComp = (props: { listData: ListData, cls?: string }) => {
-  const { header, list, type } = props.listData;
+  const { header, list, type, noDataText } = props.listData;
   const { cls } = props;
   return (
     <div className={`${styles.ListComponentBigBox} ${cls}`}>
@@ -71,7 +72,8 @@ const ListComp = (props: { listData: ListData, cls?: string }) => {
         </div>
       </div> : ''}
       {list && list.length ? <NewsList data={list} type={type} /> : <div className={styles.noData}>
-        <img src="" alt="暂无数据" />
+        <img src={noData} alt="暂无数据" />
+        <h4>{noDataText}</h4>
       </div>}
     </div >
   )

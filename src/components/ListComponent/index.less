@@ -5,32 +5,49 @@
     height: 22px;
     margin-bottom: 10px;
     line-height: 22px;
+
     .ListHeaderTitle {
       font-weight: 600;
       font-size: 16px;
     }
+
     .ListHeaderMore {
       font-size: 11px;
+
       a {
         color: #999999;
         cursor: pointer;
       }
+
       a:hover {
         color: @primary-color;
       }
     }
   }
+
+  .noData {
+    text-align: center;
+
+    h4 {
+      font-size: 12px;
+      line-height: 17px;
+      color: #DDDDDD;
+    }
+  }
+
   // type = 'picList'
   .picList {
     .TitleRow {
       height: 21px;
       margin-bottom: 7px;
       line-height: 21px;
+
       .Title {
         width: 100%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         a {
           color: #333333;
           font-weight: 600;
@@ -38,46 +55,56 @@
         }
       }
     }
+
     .descRow {
       height: 18px;
       font-size: 12px;
       line-height: 18px;
+
       .descleft {
         overflow: hidden;
         color: #999999;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         .descleftInspan {
           padding: 0 8px;
         }
       }
     }
+
     .descRow:first-child {
       margin-bottom: 6px;
     }
+
     :global {
       .ant-list-item-meta {
         margin-bottom: 12px;
       }
+
       .ant-list-item-meta-avatar {
         margin-right: 10px;
-        img{
+
+        img {
           border-radius: 8px;
         }
       }
     }
   }
+
   // type='list'
   .list {
     .TitleRow {
       height: 20px;
       margin-bottom: 8px;
       line-height: 20px;
+
       .Title {
         width: 100%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         a {
           color: #333333;
           font-weight: 600;
@@ -85,23 +112,28 @@
         }
       }
     }
+
     .descRow {
       height: 18px;
       font-size: 12px;
       line-height: 18px;
+
       .descleft {
         overflow: hidden;
         color: #999999;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         .descleftInspan {
           padding: 0 8px;
         }
       }
     }
+
     .descRow:first-child {
       margin-bottom: 6px;
     }
+
     :global {
       .ant-list-item-meta {
         margin-bottom: 10px;
@@ -120,17 +152,20 @@
       height: 20px;
       margin-bottom: 8px;
       line-height: 20px;
+
       .Title {
         width: calc(~'100% - 100px');
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         a {
           color: #333333;
           font-weight: 600;
           font-size: 14px;
         }
       }
+
       .TitleRight {
         span {
           font-weight: 400;
@@ -138,18 +173,21 @@
         }
       }
     }
+
     .descRow {
       display: flex;
       justify-content: space-between;
       height: 17px;
       font-size: 12px;
       line-height: 17px;
+
       .descleft {
         width: calc(~'100% - 100px');
         overflow: hidden;
         color: #999999;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         .descleftInspan {
           padding: 0 8px;
         }
@@ -164,6 +202,7 @@
       }
     }
   }
+
   // type='onlyList'
   .onlyList {
     .TitleRow {
@@ -171,16 +210,19 @@
       justify-content: space-between;
       height: 20px;
       line-height: 20px;
+
       .Title {
         width: calc(~'100% - 80px');
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         a {
           color: #333333;
           font-size: 14px;
         }
       }
+
       .TitleRight {
         span {
           color: #999999;
@@ -190,6 +232,7 @@
       }
     }
   }
+
   // type='onlyLeftList'
   .onlyLeftList {
     .TitleRow {
@@ -198,20 +241,23 @@
       height: 20px;
       line-height: 20px;
       margin-bottom: 10px;
+
       .Title {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         &:before {
           display: inline-block;
           width: 4px;
           height: 4px;
           margin-right: 8px;
-          margin-bottom:3px;
+          margin-bottom: 3px;
           background-color: @text-color;
           border-radius: 50%;
           content: '';
         }
+
         a {
           color: #333333;
           font-size: 14px;

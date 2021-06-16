@@ -19,7 +19,6 @@ import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
 import ClassStart from './components/ClassStart';
-import { getAllNJSJ } from '@/services/after-class/njsj';
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from '@/components/Search/util';
 import { getQueryString } from '@/utils/utils';
@@ -94,20 +93,13 @@ const ClassMaintenance = () => {
       } else {
         console.log(res.message);
       }
-      // 年级数据的获取
-      const result = await getAllNJSJ({});
-      if (result.status === 'ok') {
-        const { data = [] } = result;
         const defaultData = [...searchData];
         const grideSel = defaultData.find((item: any) => item.type === 'select');
         if (grideSel && grideSel.data) {
-          grideSel.defaultValue!.first = data[0].NJMC;
-          grideSel.data = data;
+          grideSel.defaultValue!.first = '';
+          grideSel.data = '';
         }
         setDataSource(defaultData);
-      } else {
-        console.log(result.message);
-      }
     }
     fetchData();
   }, []);
