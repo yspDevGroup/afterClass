@@ -33,4 +33,5 @@ export type ListData = {
     moreText?: string;
   },
   list: ListItem[];
+  noDataText?: string;
 };

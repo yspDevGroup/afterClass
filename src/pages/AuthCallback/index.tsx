@@ -15,11 +15,11 @@ import { getPageQuery } from '@/utils/utils';
 
 const query = getPageQuery();
 
-const backToLogin = (
-  <Link to="/user/login">
-    <Button type="primary">返回登录</Button>
-  </Link>
-);
+// const backToLogin = (
+//   <Link to="/user/login">
+//     <Button type="primary">返回登录</Button>
+//   </Link>
+// );
 // const toHome = (
 //   <Link to="/">
 //     <Button type="primary">进入主页</Button>
@@ -78,7 +78,7 @@ const Comp = () => {
       icon={query.token ? <Spin /> : undefined}
       title={query.token ? '' : '非法访问'}
       subTitle={query.token ? `` : query.error || ''}
-      extra={query.token ? [] : [backToLogin]}
+      extra={query.token ? [] : []}
       style={{
         position: 'absolute',
         top: '40%',

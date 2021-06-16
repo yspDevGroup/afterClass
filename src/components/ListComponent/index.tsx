@@ -70,7 +70,9 @@ const ListComp = (props: { listData: ListData, cls?: string }) => {
           </a>
         </div>
       </div> : ''}
-      <NewsList data={list} type={type} />
+      {list && list.length ? <NewsList data={list} type={type} /> : <div className={styles.noData}>
+        <img src="" alt="暂无数据" />
+      </div>}
     </div >
   )
 }
