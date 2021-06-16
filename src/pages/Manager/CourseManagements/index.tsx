@@ -3,25 +3,24 @@ import { paginationConfig } from "@/constant";
 import { theme } from "@/theme-default";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table";
-import { Button, Modal, Popconfirm } from "antd";
+import { Button, Modal } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
-import { Divider } from "antd";
 import React, { useRef, useEffect } from "react";
 import { useState } from "react";
 import type { classType, TableListParams } from "./data";
 import NewCourses from "./components/NewCourses";
 import styles from './index.less';
 import Sitclass from "./components/Sitclass";
-import { deleteKHKCSJ, getAllKHKCSJ } from "@/services/after-class/khkcsj";
+import { getAllKHKCSJ } from "@/services/after-class/khkcsj";
 import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./searchConfig";
 import { convertData } from "@/components/Search/util";
 import { getAllXNXQ } from "@/services/after-class/xnxq";
 import SearchComponent from "@/components/Search";
-import { message } from "antd";
 import Choice from "./components/Choice";
 import { Link } from "umi";
 import PromptInformation from "@/components/PromptInformation";
+import Operation from "./components/Operation";
 
 
 
@@ -168,9 +167,15 @@ const NewClassManagement = () => {
             align: 'center',
             width: '10%',
             render: (_, record) => {
-                const Url = `/classManagement?courseId=${record.id}`;
+                const Url = `/classMaintenance?courseId=${record.id}`;
+                const classes=[];
+                record.KHBJSJs?.map((item)=>{
+                    if(item.BJZT==='已发布'){
+                        classes.push(item)
+                    }
+                })
                 return (
-                    <Link to={Url} >{record.KHBJSJs?.length}</Link>
+                    <Link to={Url} >{classes.length}</Link>
                 )
             }
         },
@@ -216,36 +221,7 @@ const NewClassManagement = () => {
             key: 'option',
             width: 100,
             render: (_, record) => (
-                <>
-                    <a onClick={() => handleOperation('add', record)}>编辑</a>
-                    <Divider type="vertical" />
-                    <Popconfirm
-                        title="删除之后，数据不可恢复，确定要删除吗?"
-                        onConfirm={async () => {
-                            try {
-                                if (record.id) {
-                                    const result = await deleteKHKCSJ({ id: record.id })
-                                    if (result.status === 'ok') {
-                                        message.success('信息删除成功');
-                                        actionRef.current?.reload();
-                                    } else {
-                                        message.error(`${result.message},请联系管理员或者稍后重试`)
-                                    }
-                                }
-
-                            } catch (err) {
-                                message.error('删除失败，请联系管理员或稍后重试')
-                            }
-                        }
-
-                        }
-                        okText="确定"
-                        cancelText="取消"
-                        placement="topLeft"
-                    >
-                        <a>删除</a>
-                    </Popconfirm>
-                </>
+                <Operation  record={record} handleOperation={handleOperation} actionRef={actionRef}/>
             ),
             align: 'center',
         },
@@ -292,7 +268,7 @@ const NewClassManagement = () => {
                     title={getModelTitle()}
                     destroyOnClose
                     width='35vw'
-                    style={{ maxHeight: '430px' }}
+                    style={{ maxHeight: '430px',minWidth:'480px' }}
                     visible={modalVisible}
                     onCancel={() => setModalVisible(false)}
                     footer={null}

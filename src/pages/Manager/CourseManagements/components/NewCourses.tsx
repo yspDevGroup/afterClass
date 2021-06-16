@@ -42,6 +42,13 @@ const NewCourses = (props: PropsType) => {
     setKaike(true);
     onClose!();
   }
+  
+  useEffect(() => {
+    if(current){
+      setBaoming(false);
+      setKaike(false);
+    }
+  }, [current])
 
   useEffect(() => {
     async function fetchData() {
@@ -129,7 +136,7 @@ const NewCourses = (props: PropsType) => {
           onClose!();
           actionRef?.current?.reload();
         } else {
-          message.error('保存失败');
+          message.error( `保存失败，${data.message}`);
         }
       })
       .catch((error) => {
@@ -170,19 +177,13 @@ const NewCourses = (props: PropsType) => {
       name: 'KCZT',
       key: 'KCZT',
       valueEnum: {
-        待发布: '待发布',
-        已发布: '已发布',
-        已下架: '已下架',
-        已结课: '已结课',
+        待排班: '待排班',
+      },
+      fieldProps:{
+        disabled:true,
+        defaultValue:'待排班'
       },
     },
-    // {
-    //   type: 'dateRange',
-    //   label: '开课日期-结课日期:',
-    //   name: 'KKRQ',
-    //   key: 'KKRQ',
-    //   width: '100%',
-    // },
     {
       type: 'div',
       key: 'div',
@@ -190,7 +191,6 @@ const NewCourses = (props: PropsType) => {
       lineItem:[
         {
           type: 'switch',
-          
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -204,7 +204,7 @@ const NewCourses = (props: PropsType) => {
       ]
     },
     {
-      type: 'dateTimeRange',
+      type: 'dateRange',
       label: '报名时间:',
       name: 'BMKSSJ',
       key: 'BMKSSJ',
@@ -290,7 +290,7 @@ const NewCourses = (props: PropsType) => {
     },
     {
       type: 'textArea',
-      label: '备 注:',
+      label: '简 介:',
       name: 'KCMS',
       key: 'KCMS',
     },
@@ -329,10 +329,15 @@ const NewCourses = (props: PropsType) => {
               const { KHKCLX, ...info } = current;
               return {
                 KCLXId: KHKCLX?.id,
+                BMKSSJ:baoming,
+                KKRQ:kaike,
                 ...info,
               };
             }
-            return undefined;
+            return {
+              BMKSSJ:baoming,
+              KKRQ:kaike,
+            };
           })()}
           formItems={formItems}
           formItemLayout={formLayout}

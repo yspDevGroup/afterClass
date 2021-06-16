@@ -37,6 +37,9 @@ const AddCourse: FC<AddCourseProps> = ({
   names,
   kcId,
 }) => {
+  if(formValues){
+    const {}=formValues
+  }
   const [form, setForm] = useState<any>();
   // const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
   // 校区
@@ -50,8 +53,8 @@ const AddCourse: FC<AddCourseProps> = ({
   const [classattend, setClassattend] = useState<any>('');
   // 报名时间
   const [signup, setSignup] = useState<any>('');
- 
-  
+
+
   // 获取报名时段和上课时段
   useEffect(() => {
     if (kcId) {

@@ -60,6 +60,14 @@
     icon: 'smile',
     component: './Manager/CourseManagements',
   },
+ 
+  {
+    path: '/classMaintenance',
+    name: 'classMaintenance',
+    icon: 'smile',
+    hideInMenu: 'true',
+    component: './Manager/ClassMaintenance',
+  },
   {
     path: '/classManagement',
     name: 'classManagement',

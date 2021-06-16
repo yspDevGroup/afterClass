@@ -8,6 +8,7 @@ export default {
   'menu.basicalSettings.termManagement': '学期学年维护',
   'menu.courseManagements': '课程管理',
   'menu.classManagement': '班级管理',
+  'menu.classMaintenance': '班级维护',
   'menu.courseScheduling': '排课管理',
   'menu.parent': '家长端',
   'menu.parent.home': '首页',
