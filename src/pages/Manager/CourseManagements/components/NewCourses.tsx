@@ -184,20 +184,27 @@ const NewCourses = (props: PropsType) => {
     //   width: '100%',
     // },
     {
-      type: 'switch',
-      label: '单独设置报名时间:',
-      fieldProps: {
-        onChange: (item: any) => {
-          if (item === false) {
-            return setBaoming(true)
+      type: 'div',
+      key: 'div',
+      label: '单独设置报名时段：',
+      lineItem:[
+        {
+          type: 'switch',
+          
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item === false) {
+                return setBaoming(true);
+              }
+              return setBaoming(false);
+            },
+            defaultValue: false,
           }
-          return setBaoming(false)
-        },
-        defaultValue:false
-      }
+        }
+      ]
     },
     {
-      type: 'dateRange',
+      type: 'dateTimeRange',
       label: '报名时间:',
       name: 'BMKSSJ',
       key: 'BMKSSJ',
@@ -209,18 +216,25 @@ const NewCourses = (props: PropsType) => {
       },
     },
     {
-      type: 'switch',
-      label: '单独设置上课时段:',
-      fieldProps: {
-        onChange: (item: any) => {
-          if (item === false) {
-            return setKaike(true)
-          }
-          return setKaike(false)
+      type: 'div',
+      key: 'div1',
+      label: '单独设置上课时段：',
+      lineItem: [
+        {
+          type: 'switch',
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item === false) {
+                return setKaike(true);
+              }
+              return setKaike(false);
+            },
+            defaultValue: false,
+          },
         },
-        defaultValue:false
-      }
-    },
+        
+      ]
+     },
     {
       type: 'dateRange',
       label: '上课时间:',
@@ -232,16 +246,6 @@ const NewCourses = (props: PropsType) => {
         // disabledDate={disabledDate}
       },
     },
-    // {
-    //   type: 'dateTimeRange',
-    //   label: '报名开始时间-报名结束时间:',
-    //   name: 'BMKSSJ',
-    //   key: 'BMKSSJ',
-    //   width: '100%',
-    //   fieldProps: {
-    //     format: 'YYYY-MM-DD HH:mm',
-    //   },
-    // },
     {
       type: 'cascader',
       label: '学年学期：',

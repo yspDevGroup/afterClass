@@ -20,7 +20,7 @@ import UploadImage from './components/UploadImage';
 
 const renderFormItems = (formItems: FormItemsProps[]) => {
   return formItems.map((formItem: FormItemsProps) => {
-    const { type, key, groupItems, span, flex, cascaderItem, ...currentProps } = formItem;
+    const { type, key, groupItems, span, flex, cascaderItem, lineItem, ...currentProps } = formItem;
 
     switch (type) {
       case 'input':
@@ -73,6 +73,15 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
             </Space>
           </ProForm.Item>
         );
+      case 'div':
+        return <div style={{display: 'flex', height: 40}} key={key}>
+          <div style={{marginLeft: -40}}>{formItem.label}</div>
+          <div style={{marginTop: -27, marginLeft: -30}}>
+            {lineItem?.map((item: any)=>{
+              return renderFormItems([item]);
+            })}
+          </div>
+        </div>
       case 'group': {
         const colW = 24 / (groupItems ? groupItems.length : 1);
         return (

@@ -189,7 +189,7 @@ const CourseManagement = () => {
 
   const handleEdit = (data: any) => {
     const njIds: any[] = [];
-    data.NJSJs.map((item: any) => njIds.push(item.id));
+    data.NJSJs?.map((item: any) => njIds.push(item.id));
     const list = { ...data, njIds };
     list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
     setVisible(true);

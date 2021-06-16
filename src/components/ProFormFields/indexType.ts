@@ -1,3 +1,11 @@
+/*
+ * @,@Author: ,: your name
+ * @,@Date: ,: 2021-06-15 08:38:48
+ * @,@LastEditTime: ,: 2021-06-16 11:34:21
+ * @,@LastEditors: ,: Please set LastEditors
+ * @,@Description: ,: In User Settings Edit
+ * @,@FilePath: ,: \afterClass\src\components\ProFormFields\indexType.ts
+ */
 import type { SubmitterProps } from '@ant-design/pro-form/lib/components/Submitter';
 import type { FormInstance } from 'antd';
 
@@ -23,6 +31,7 @@ export type FormItemsProps = {
     | 'timeRange' // 时间区间
     | 'uploadImage' // 上传
     | 'cascader' // 级联（适用于一项有多个控件）
+    | 'div'
     | 'group'
     | 'empty';
   /** 表单项的key */
@@ -46,6 +55,9 @@ export type FormItemsProps = {
   /** 图片上传地址 */
   upurl?: string;
   readonly?: boolean;
+  label?: string;
+  lineItem?: any[];
+  
 };
 
 export type ProFormFieldsPropsType = {

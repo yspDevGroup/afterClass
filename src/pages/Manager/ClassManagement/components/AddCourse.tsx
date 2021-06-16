@@ -10,6 +10,7 @@ import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllNJSJ } from '@/services/after-class/njsj';
 import { queryXQList } from '@/services/wechat/service';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
+import moment from 'moment';
 
 type AddCourseProps = {
   visible: boolean;
@@ -45,16 +46,30 @@ const AddCourse: FC<AddCourseProps> = ({
   const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
-
+  // 上课时间
+  const [classattend, setClassattend] = useState<any>('');
+  // 报名时间
+  const [signup, setSignup] = useState<any>('');
+ 
+  
   // 获取报名时段和上课时段
   useEffect(() => {
-    console.log(666);
     if (kcId) {
       const res = getKHKCSJ({ id: kcId });
-      console.log('res', res);
+      Promise.resolve(res).then((data: any) => {
+        if (data.status === 'ok') {
+          const arry = []
+          arry.push(data.data.BMKSSJ)
+          arry.push(data.data.BMJSSJ)
+          setSignup(arry);
+          const erry = []
+          erry.push(data.data.JKRQ)
+          erry.push(data.data.KKRQ)
+          setClassattend(erry)
+        }
+      });
     }
-  }, []);
-
+  }, [kcId])
   // 获取年级数据
   useEffect(() => {
     const res = getAllNJSJ();
@@ -241,44 +256,60 @@ const AddCourse: FC<AddCourseProps> = ({
       readonly,
     },
     {
-      type: 'switch',
-      label: '单独设置报名时段:',
-      // width: '100%',
-      fieldProps: {
-        onChange: (item: any) => {
-          if (item === false) {
-            return setBaoming(true);
+      type: 'div',
+      key: 'div',
+      label: '单独设置报名时段：',
+      lineItem:[
+        {
+          type: 'switch',
+          
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item === false) {
+                return setBaoming(true);
+              }
+              return setBaoming(false);
+            },
+            defaultValue: false,
           }
-          return setBaoming(false);
-        },
-        defaultValue: false,
-      },
+        }
+      ]
     },
+   
     {
-      type: 'dateRange',
+      type: 'dateTimeRange',
       label: '报名时段:',
       name: 'BMSD',
       key: 'BMSD',
       width: '100%',
       hidden: baoming,
       fieldProps: {
-        // disabledDate={disabledDate}
+        disabledDate:(current: any)=>{
+          const defaults =  moment(current).format('YYYY-MM-DD HH:mm:ss')
+          return defaults > signup[1] || defaults < signup[0]
+        }
       },
     },
     {
-      type: 'switch',
-      label: '单独设置上课时段:',
-      // width: '100%',
-      fieldProps: {
-        onChange: (item: any) => {
-          if (item === false) {
-            return setKaike(true);
-          }
-          return setKaike(false);
+      type: 'div',
+      key: 'div1',
+      label: '单独设置上课时段：',
+      lineItem: [
+        {
+          type: 'switch',
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item === false) {
+                return setKaike(true);
+              }
+              return setKaike(false);
+            },
+            defaultValue: false,
+          },
         },
-        defaultValue: false,
-      },
-    },
+        
+      ]
+     },
     {
       type: 'dateRange',
       label: '上课时间:',
@@ -287,7 +318,10 @@ const AddCourse: FC<AddCourseProps> = ({
       width: '100%',
       hidden: kaike,
       fieldProps: {
-        // disabledDate={disabledDate}
+        disabledDate:(current: any)=>{
+          const defaults =  moment(current).format('YYYY-MM-DD HH:mm:ss')
+          return defaults > classattend[0] || defaults < classattend[1]
+        }
       },
     },
     {
@@ -318,21 +352,19 @@ const AddCourse: FC<AddCourseProps> = ({
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
-        footer={
-          names === 'chakan' ? null : (
-            <div
-              style={{
-                textAlign: 'right',
-              }}
-            >
-              <Button onClick={onClose} style={{ marginRight: 16 }}>
-                取消
-              </Button>
-              <Button onClick={handleSubmit} type="primary">
-                保存
-              </Button>
-            </div>
-          )
+        footer={(names === 'chakan') ? null :
+          (<div
+            style={{
+              textAlign: 'right',
+            }}
+          >
+            <Button onClick={onClose} style={{ marginRight: 16 }}>
+              取消
+            </Button>
+            <Button onClick={handleSubmit} type="primary">
+              保存
+            </Button>
+          </div>)
         }
       >
         <ProFormFields
