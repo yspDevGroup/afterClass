@@ -105,3 +105,17 @@ export function getQueryString(name: string) {
   if (r != null) return unescape(r[2]);
   return null;
 }
+
+export const getCurrentXQ = (list: any[]) => {
+  const today = new Date();
+  const currentXQ = list.find((xq: any) => {
+    const begin = new Date(xq.KSRQ);
+    const end = new Date(xq.JSRQ);
+    if (begin <= today && today <= end) {
+      return true;
+    }
+    return false;
+  })
+  console.log(currentXQ);
+  return currentXQ;
+}

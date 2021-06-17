@@ -84,3 +84,7 @@ declare const WWOpenData: any;
 declare const wxInfo: {
   xqList: (WXDepType & { njList?: WXDepType[] })[];
 };
+declare const xnxqInfo: {
+  xnxqList: any;
+  current: any;
+};
