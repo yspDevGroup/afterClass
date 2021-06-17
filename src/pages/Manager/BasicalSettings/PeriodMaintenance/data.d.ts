@@ -12,9 +12,9 @@ export type Maintenance = {
     /** 标题 */
     TITLE?: string;
     /** 开始时间 */
-    KSSJ?: string;
+    KSSJ?: moment.Moment | string;
     /** 结束时间 */
-    JSSJ?: string;
+    JSSJ?: moment.Moment | string;
     /** 类型 */
     TYPE?: string;
     /** 备注信息 */
@@ -36,5 +36,5 @@ export type Maintenance = {
     /** 学校基本数据 */
     XXJBSJ?: SchoolType;
     SDMC?: string;
-   
+
 }

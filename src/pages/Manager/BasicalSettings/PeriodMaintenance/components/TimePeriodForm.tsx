@@ -21,6 +21,7 @@ const TimePeriodForm = (props: PropsType) => {
   const { currentStatus, current, setForm } = props;
   const [chainData, setchainData] = useState<ChainDataType>();// 联动数据
   const [terms, setTerms] = useState<{ label: string; value: string }[]>();// 联动数据中的学期数据   
+  const [currentTerm,setCurrentTerm] = useState<string>();
   useEffect(() => {
     async function fetchData() {
       // 从本地获取学期学年信息
@@ -29,6 +30,7 @@ const TimePeriodForm = (props: PropsType) => {
     }
     fetchData();
   }, []);
+
   const formItems: any[] = [
     {
       type: 'input',
@@ -61,7 +63,8 @@ const TimePeriodForm = (props: PropsType) => {
           noStyle: true,
           fieldProps: {
             onChange: (event: string) => {
-              setTerms(chainData?.subData[event])
+              setTerms(chainData?.subData[event]);
+              setCurrentTerm(chainData?.subData[event][0].value);
             },
           },
         },
@@ -120,7 +123,7 @@ const TimePeriodForm = (props: PropsType) => {
       <ProFormFields
         layout="horizontal"
         setForm={setForm}
-        values={current}
+        values={currentTerm ? {xq: currentTerm} :current}
         formItems={formItems}
         formItemLayout={formLayout}
       />

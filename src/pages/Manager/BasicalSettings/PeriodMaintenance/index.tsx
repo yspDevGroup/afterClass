@@ -31,10 +31,12 @@ const PeriodMaintenance = () => {
   const [form, setForm] = useState<FormInstance<any>>();
   const actionRef = useRef<ActionType>();
   let requestType = "1";
+  let formatType = 'YYYY-MM-DD';
   if (currentStatus === 'education') {
     requestType = "2";
   } else if (currentStatus === 'schedule') {
     requestType = "0";
+    formatType = 'HH:mm:ss';
   }
   const getModelTitle = () => {
     if (current) {
@@ -43,11 +45,16 @@ const PeriodMaintenance = () => {
     return '新增';
   };
   const handleEdit = (data: Maintenance) => {
+    if (currentStatus === 'schedule') {
+      formatType = 'HH:mm';
+    }
     const parpm = {
-      KSSJ: moment(data.KSSJ, 'HH:mm'),
-      JSSJ: moment(data.JSSJ, 'HH:mm'),
+      xn: data.XNXQ?.XN,
+      xq: data.XNXQ?.XQ,
+      KSSJ: moment(data.KSSJ, formatType),
+      JSSJ: moment(data.JSSJ, formatType),
     };
-    setCurrent({ ...data, ...parpm });
+    setCurrent({ ...data,...parpm});
     getModelTitle();
     setModalVisible(true);
   };
@@ -65,13 +72,13 @@ const PeriodMaintenance = () => {
     try {
       const values = await form?.validateFields();
       const { id, ...rest } = values;
-      const KSSJ = moment(rest.KSSJ).format('HH:mm:ss');
-      const JSSJ = moment(rest.JSSJ).format('HH:mm:ss');
+      const KSSJ = moment(rest.KSSJ).format(formatType);
+      const JSSJ = moment(rest.JSSJ).format(formatType);
       if (KSSJ > JSSJ) {
         message.warning('"开始时间"不能大于"结束时间"');
       } else {
-        rest.KSSJ = moment(rest.KSSJ).format('HH:mm:ss');
-        rest.JSSJ = moment(rest.JSSJ).format('HH:mm:ss');
+        rest.KSSJ = moment(rest.KSSJ).format(formatType);
+        rest.JSSJ = moment(rest.JSSJ).format(formatType);
         const result = id
           ? await updateXXSJPZ({ id }, { ...rest,TYPE: requestType })
           : await createXXSJPZ({ ...rest,TYPE: requestType });
@@ -121,7 +128,7 @@ const PeriodMaintenance = () => {
       width: '10%',
       ellipsis: true,
       render: (text, record: any) => {
-        return record.KSSJ.slice(0, 5);
+        return currentStatus === 'schedule' ? record.KSSJ.slice(0, 5) : record.KSSJ;
       },
     },
     {
@@ -131,7 +138,7 @@ const PeriodMaintenance = () => {
       width: '10%',
       ellipsis: true,
       render: (text, record: any) => {
-        return record.JSSJ.slice(0, 5);
+        return currentStatus === 'schedule' ? record.JSSJ.slice(0, 5): record.JSSJ;
       },
     },
     {
