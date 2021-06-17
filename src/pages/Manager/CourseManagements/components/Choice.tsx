@@ -3,7 +3,6 @@ const Choice =(props: any)=>{
     const {record} =props;
     const myDate = new Date();
     const nowdata=myDate.toLocaleDateString();
-    console.log(nowdata)
     if(record.KCZT==='报名中'){
         return <span>已发布</span>
     }if(record.KCZT==='报名结束'){

@@ -233,7 +233,6 @@ const NewCourses = (props: PropsType) => {
               }
               return setKaike(false);
             },
-            // defaultChecked: (!kaike),
             checked: !kaike
           },
         },

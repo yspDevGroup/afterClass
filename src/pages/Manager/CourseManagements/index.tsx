@@ -41,6 +41,9 @@ const NewClassManagement = () => {
     const kaiguan = () => {
         setkai(false)
     }
+    // 图片展示框
+    const [exhibition, setExhibition] = useState<'none'|'block'>('none');
+    const [url, setUrl] = useState<string>('')
 
     useEffect(() => {
         async function fetchData() {
@@ -120,6 +123,11 @@ const NewClassManagement = () => {
         setModalType('uphold')
         setModalVisible(true);
     };
+    const cover=(img: any)=>{
+        console.log(6666)
+        setExhibition('block');
+        setUrl(img);
+    }
     const columns: ProColumns<classType>[] = [
         {
             title: '序号',
@@ -175,7 +183,7 @@ const NewClassManagement = () => {
             render: (_, record) => {
                 return (
                     <>
-                        <a href={record.KCTP} target='_blank'>课程封面.png</a>
+                        <a ><span onClick={()=>cover(record.KCTP)}>课程封面.png</span></a>
                     </>
                 )
             }
@@ -216,6 +224,10 @@ const NewClassManagement = () => {
     ];
     return (
         <>
+             <div style={{display:`${exhibition}`,width:"90vw",height:'100vh',background:'rgba(0,0,0,.45)',position:'fixed',zIndex:1080,}}>
+                <div style={{width:'100%',height:'20px',display:'flex',flexDirection:'row-reverse'}}><span style={{color:'red'}}>X</span></div>
+                        <img src={url} alt=''style={{margin:'auto' }}/ >
+                </div>
             <PageContainer cls={styles.roomWrapper}>
                 <ProTable<classType>
                     actionRef={actionRef}
@@ -277,7 +289,6 @@ const NewClassManagement = () => {
                 >
                     <Sitclass />
                 </Modal>
-
             </PageContainer>
         </>
     )
