@@ -153,3 +153,31 @@ export async function getDepUsers(
     ...(options || {}),
   });
 }
+
+/** 获取部门成员列表(教师) GET /wechat/getDepUserList */
+export async function getDepUserList(
+  params: {
+    // query
+    /** 部门id */
+    id: string;
+    /** 1/0：是否递归获取子部门下面的成员 */
+    fetch_child: 0 | 1;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/wechat/getDepUserList', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
+/** wechat支付回调 POST /wechat/trade/callback */
+export async function wechatTradeCallback(options?: { [key: string]: any }) {
+  return request<any>('/wechat/trade/callback', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}

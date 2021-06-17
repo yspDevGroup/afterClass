@@ -11,16 +11,17 @@ export async function getXXSJPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
       id?: string;
       KSSJ?: string;
       JSSJ?: string;
-      KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+      KJS?: string;
       SDMC?: string;
       BZXX?: string;
+      TYPE?: '0' | '1' | '2';
       XXJBSJ?: {
         id?: string;
         XXDM?: string;
@@ -30,11 +31,12 @@ export async function getXXSJPZ(
         XXYZBM?: string;
         XZQHM?: string;
       };
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
     };
     message?: string;
   }>(`/xxsjpz/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -48,20 +50,32 @@ export async function deleteXXSJPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxsjpz/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** 查询所有学校时间配置数据 GET /xxsjpz/all */
-export async function getAllXXSJPZ(options?: { [key: string]: any }) {
+/** 查询所有学校时间配置数据 POST /xxsjpz/all */
+export async function getAllXXSJPZ(
+  body: {
+    /** 学年 */
+    xn?: string;
+    /** 学期 */
+    xq?: string;
+  },
+  options?: { [key: string]: any },
+) {
   return request<{ status?: 'ok' | 'error'; data?: API.XXSJPZ[]; message?: string }>(
     '/xxsjpz/all',
     {
-      method: 'GET',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
       ...(options || {}),
     },
   );
@@ -75,9 +89,10 @@ export async function createXXSJPZ(body: API.CreateXXSJPZ, options?: { [key: str
       id?: string;
       KSSJ?: string;
       JSSJ?: string;
-      KJS?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+      KJS?: string;
       SDMC?: string;
       BZXX?: string;
+      TYPE?: '0' | '1' | '2';
       XXJBSJ?: {
         id?: string;
         XXDM?: string;
@@ -87,6 +102,7 @@ export async function createXXSJPZ(body: API.CreateXXSJPZ, options?: { [key: str
         XXYZBM?: string;
         XZQHM?: string;
       };
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
     };
     message?: string;
   }>('/xxsjpz/create', {
@@ -109,13 +125,13 @@ export async function updateXXSJPZ(
   body: API.UpdateXXSJPZ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxsjpz/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

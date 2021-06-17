@@ -11,14 +11,19 @@ export async function getXXPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data?: { KEY?: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ'; VALUE?: string; REMARK?: string };
+    data?: {
+      KEY?: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ' | 'TITLE';
+      VALUE?: string;
+      REMARK?: string;
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+    };
     message?: string;
   }>(`/xxpz/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -32,18 +37,30 @@ export async function deleteXXPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxpz/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有学校配置数据 GET /xxpz/all */
-export async function getAllXXPZ(options?: { [key: string]: any }) {
+export async function getAllXXPZ(
+  body: {
+    /** 学年 */
+    xn?: string;
+    /** 学期 */
+    xq?: string;
+  },
+  options?: { [key: string]: any },
+) {
   return request<{ status?: 'ok' | 'error'; data?: API.XXPZ[]; message?: string }>('/xxpz/all', {
     method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -52,7 +69,12 @@ export async function getAllXXPZ(options?: { [key: string]: any }) {
 export async function createXXPZ(body: API.CreateXXPZ[], options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data?: { KEY?: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ'; VALUE?: string; REMARK?: string };
+    data?: {
+      KEY?: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ' | 'TITLE';
+      VALUE?: string;
+      REMARK?: string;
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+    };
     message?: string;
   }>('/xxpz/create', {
     method: 'PUT',
@@ -74,13 +96,13 @@ export async function updateXXPZ(
   body: API.UpdateXXPZ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxpz/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

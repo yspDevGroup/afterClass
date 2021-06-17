@@ -48,7 +48,13 @@ type WXDepType = {
   /** 班级群id。仅部门类型为班级时且open_group_chat为1时才返回该字段 */
   group_chat_id?: number;
 };
-
+// 学年学期的数据类型
+type ChainDataType = {
+  /** 联动一级数据 类型 */
+ data: { label: string, value: string }[],
+  /** 联动二级数据类型 */
+ subData: Record<string, { label: string, value: string }[]>
+}
 // google analytics interface
 type GAFieldsObject = {
   eventCategory: string;

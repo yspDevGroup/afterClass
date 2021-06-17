@@ -11,7 +11,7 @@ export async function getKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -45,12 +45,16 @@ export async function getKHKCSJ(
         KBYS?: string;
         NJS?: string;
         XQ?: string;
+        NJSName?: string;
+        XQName?: string;
+        ZJSName?: string;
+        FJSName?: string;
       }[];
     };
     message?: string;
   }>(`/khkcsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -64,10 +68,10 @@ export async function deleteKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -79,6 +83,8 @@ export async function getAllKHKCSJ(
     xn?: string;
     /** 学期 */
     xq?: string;
+    /** 课程类型ID */
+    kclxId?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -133,6 +139,10 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
         KBYS?: string;
         NJS?: string;
         XQ?: string;
+        NJSName?: string;
+        XQName?: string;
+        ZJSName?: string;
+        FJSName?: string;
       }[];
     };
     message?: string;
@@ -156,13 +166,13 @@ export async function updateKHKCSJ(
   body: API.UpdateKHKCSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -177,14 +187,14 @@ export async function allNJs(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: { id?: string; NJ?: number; NJMC?: string }[];
     message?: string;
   }>(`/khkcsj/njs/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -196,6 +206,10 @@ export async function allKCsByNJ(
     xn?: string;
     /** 学期 */
     xq?: string;
+    /** 课程类型ID */
+    kclxId?: string;
+    /** 课程状态 */
+    kczt?: string;
     /** 年级ID */
     njId?: string;
   },
@@ -210,6 +224,10 @@ export async function allKCsByNJ(
       KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
       KCMS?: string;
       XNXQId?: string;
+      KKRQ?: string;
+      JKRQ?: string;
+      BMKSSJ?: string;
+      BMJSSJ?: string;
     }[];
     message?: string;
   }>('/khkcsj/khkcs', {

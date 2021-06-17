@@ -18,12 +18,6 @@ type ISearchComponent = {
    /** input值改变的方法 */
   onChange?: any;
 }
-type ChainDataType = {
-   /** 联动一级数据 类型 */
-  data: { title: string, key: string }[],
-   /** 联动二级数据类型 */
-  subData: Record<string, { title: string; key: string }[]>
-}
 
 const { Search } = Input;
 const { Option } = Select;
@@ -31,7 +25,7 @@ const { Option } = Select;
 const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
   const [chainData, setchainData] = useState<ChainDataType>();// 联动数据
   const [currentXN, setCurrentXN] = useState<string>();// 学年默认值
-  const [terms, setTerms] = useState<{ title: string; key: string }[]>();// 联动数据中的学期数据   
+  const [terms, setTerms] = useState<{ label: string; value: string }[]>();// 联动数据中的学期数据   
   const [curTerm, setCurTerm] = useState<string>();// 学期默认值
   const [curGride, setCurGride] = useState<string>();// 年级数据
 
@@ -55,9 +49,9 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
     const ter = chainData?.subData[value] || []
     setTerms(ter);
     if (ter.length) {
-      setCurTerm(ter[0].key)
+      setCurTerm(ter[0].value)
     }
-    onChange('year', value, ter[0].key);
+    onChange('year', value, ter[0].value);
   };
    // 点击学期的事件
   const onTermChange = (value: any) => {
@@ -86,14 +80,14 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
                   <span className={styles.HeaderSelectOne}>
                     <Select onChange={handleChainChange} value={currentXN} style={{ width: 120 }} >
                       {chainData?.data && chainData?.data.length && chainData?.data.map((year: any) => (
-                        <Option value={year.key} key={year.key}>{year.title}</Option>
+                        <Option value={year.value} key={year.value}>{year.label}</Option>
                       ))}
                     </Select>
                   </span>
                   <span className={styles.HeaderSelectTwo}>
                     <Select onChange={onTermChange} value={curTerm} style={{ width: 120 }}>
                       {terms && terms.length && terms.map((term: any) => (
-                        <Option value={term.key} key={term.key}>{term.title}</Option>
+                        <Option value={term.value} key={term.value}>{term.label}</Option>
                       ))}
                     </Select>
                   </span>
@@ -107,7 +101,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
                 <div className={styles.HeaderSelect}>
                   <span className={styles.HeaderSelectTwo}>
                     <Select onChange={onGrideChange} value={curGride} style={{ width: '120px' }}>
-                      {data && data.length && data.map((op: any) => <Option value={op.key} key={op.key}>{op.title}</Option>)}
+                      {data && data.length && data.map((op: any) => <Option value={op.key} key={op.key}>{op.label}</Option>)}
                     </Select>
                   </span>
                 </div>

@@ -49,61 +49,6 @@ const ClassMaintenance = () => {
   const [names, setnames] = useState<string>('bianji');
 
   useEffect(() => {
-    async function fetchData() {
-      const res = await getAllXNXQ({});
-      if (res.status === 'ok') {
-        const { data = [] } = res;
-        const defaultData = [...searchData];
-        const newData = convertData(data);
-        if (newData.data && newData.data.length > 0) {
-          const term = newData.subData[newData.data[0].key];
-          const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-          if (chainSel && chainSel.defaultValue) {
-            chainSel.defaultValue.first = newData.data[0].key;
-            await setxn(chainSel.defaultValue.first);
-            chainSel.defaultValue.second = term[0].key;
-            await setxq(chainSel.defaultValue.second);
-            await setDataSource(defaultData);
-            chainSel.data = newData;
-            actionRef.current?.reload();
-            
-            const ress = getAllKHKCSJ({
-              name: '',
-              xn: chainSel.defaultValue.first,
-              xq: chainSel.defaultValue.second,
-              page: 0,
-              pageCount: 0,
-            });
-            Promise.resolve(ress).then((dataes: any) => {
-              if (dataes.status === 'ok') {
-                const njArry: { label: string; value: string }[] = [];
-                dataes.data.map((item: any) => {
-                  return njArry.push({
-                    label: item.KCMC,
-                    value: item.id,
-                  });
-                });
-                setmcData(njArry);
-              }
-            });
-          }
-        } else {
-          setkai(true);
-        }
-      } else {
-        console.log(res.message);
-      }
-        const defaultData = [...searchData];
-        const grideSel = defaultData.find((item: any) => item.type === 'select');
-        if (grideSel && grideSel.data) {
-          grideSel.defaultValue!.first = '';
-          grideSel.data = '';
-        }
-        setDataSource(defaultData);
-    }
-    fetchData();
-  }, []);
-  useEffect(() => {
     const curId = getQueryString('courseId');
     if (curId) {
       // 根据课程id重新获取学年学期回调搜索框
@@ -348,7 +293,6 @@ const ClassMaintenance = () => {
           pagination={paginationConfig}
           headerTitle={
             <SearchComponent
-              dataSource={dataSource}
               onChange={(type: string, value: string, trem: string) =>
                 handlerSearch(type, value, trem)
               }

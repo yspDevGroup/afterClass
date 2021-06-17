@@ -6,7 +6,6 @@ export default {
   'menu.basicalSettings.roomManagement': '场地维护',
   'menu.basicalSettings.periodMaintenance': '时段维护',
   'menu.basicalSettings.termManagement': '学期学年维护',
-  'menu.basicalSettings.signUpTimeManagement': '报名时间管理',
   'menu.courseManagements': '课程管理',
   'menu.courseManagements.courseManagements': '课程管理',
   'menu.courseManagements.classMaintenance': '班级维护',

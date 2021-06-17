@@ -31,10 +31,10 @@
     icon: 'crown',
     routes: [
       {
-        path: '/basicalSettings/roomManagement',
-        name: 'roomManagement',
+        path: '/basicalSettings/termManagement',
+        name: 'termManagement',
         icon: 'smile',
-        component: './Manager/BasicalSettings/RoomManagement',
+        component: './Manager/BasicalSettings/TermManagement',
       },
       {
         path: '/basicalSettings/periodMaintenance',
@@ -43,20 +43,14 @@
         component: './Manager/BasicalSettings/PeriodMaintenance',
       },
       {
-        path: '/basicalSettings/termManagement',
-        name: 'termManagement',
+        path: '/basicalSettings/roomManagement',
+        name: 'roomManagement',
         icon: 'smile',
-        component: './Manager/BasicalSettings/TermManagement',
-      },
-      {
-        path: '/basicalSettings/signUpTimeManagement',
-        name: 'signUpTimeManagement',
-        icon: 'smile',
-        component: './Manager/BasicalSettings/SignUpTimeManagement',
+        component: './Manager/BasicalSettings/RoomManagement',
       },
       {
         path: '/basicalSettings/',
-        redirect: '/basicalSettings/roomManagement',
+        redirect: '/basicalSettings/termManagement',
       },
     ],
   },

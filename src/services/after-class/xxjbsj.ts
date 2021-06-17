@@ -11,7 +11,7 @@ export async function getXXJBSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { XXDM: param0 } = params;
+  const { XXDM: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -54,7 +54,7 @@ export async function getXXJBSJ(
     message?: string;
   }>(`/xxjbsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -128,10 +128,10 @@ export async function deleteXXJBSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxjbsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -146,13 +146,13 @@ export async function updateXXJBSJ(
   body: API.UpdateXXJBSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxjbsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

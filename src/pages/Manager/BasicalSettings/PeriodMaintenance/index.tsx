@@ -24,10 +24,17 @@ import moment from 'moment';
 import AsyncTimePeriodForm from './components/AsyncTimePeriodForm';
 
 const PeriodMaintenance = () => {
+  const [currentStatus, setCurrentStatus] = useState<string | undefined>('enroll');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<Maintenance>();
   const [form, setForm] = useState<FormInstance<any>>();
   const actionRef = useRef<ActionType>();
+  let requestType = "1";
+  if (currentStatus === 'education') {
+    requestType = "2";
+  } else if (currentStatus === 'schedule') {
+    requestType = "0";
+  }
   const getModelTitle = () => {
     if (current) {
       return '编辑信息';
@@ -65,8 +72,8 @@ const PeriodMaintenance = () => {
         rest.KSSJ = moment(rest.KSSJ).format('HH:mm:ss');
         rest.JSSJ = moment(rest.JSSJ).format('HH:mm:ss');
         const result = id
-          ? await updateXXSJPZ({ id }, { ...rest })
-          : await createXXSJPZ({ ...rest });
+          ? await updateXXSJPZ({ id }, { ...rest,TYPE: requestType })
+          : await createXXSJPZ({ ...rest,TYPE: requestType });
         if (result.status === 'ok') {
           message.success(id ? '信息更新成功' : '信息新增成功');
           setModalVisible(false);
@@ -169,11 +176,29 @@ const PeriodMaintenance = () => {
         <ProTable<Maintenance>
           columns={columns}
           actionRef={actionRef}
-          headerTitle={
-            <div className={styles.tableTitle}>
-              时段维护<span>（请先在本页面设置学校上课的时间段）</span>
-            </div>
-          }
+          toolbar={{
+            menu: {
+              type: 'tab',
+              items: [
+                {
+                  label: '报名时段维护',
+                  key: 'enroll',
+                },
+                {
+                  label: '开课时段维护',
+                  key: 'education',
+                },
+                {
+                  label: '排课时段维护',
+                  key: 'schedule',
+                },
+              ],
+              onChange: (activeKey) => {
+                setCurrentStatus(activeKey?.toString());
+                actionRef.current?.reload();
+              },
+            },
+          }}
           search={false}
           options={{
             setting: false,
@@ -181,11 +206,11 @@ const PeriodMaintenance = () => {
             density: false,
             reload: false,
           }}
-          request={async (param, sorter, filter) => {
+          request={async () => {
             const opt = {
-              param,
-              sorter,
-              filter,
+              xn: '',
+              xq: '',
+              type: requestType
             };
             const res = await getAllXXSJPZ(opt);
             return res;
@@ -219,7 +244,6 @@ const PeriodMaintenance = () => {
               确定
             </Button>,
           ]}
-          style={{maxHeight:'430px'}}
           centered
           maskClosable={false}
           bodyStyle={{
@@ -227,7 +251,7 @@ const PeriodMaintenance = () => {
             overflowY: 'auto',
           }}
         >
-          <AsyncTimePeriodForm current={current} setForm={setForm} />
+          <AsyncTimePeriodForm currentStatus={currentStatus} current={current} setForm={setForm} />
         </Modal>
       </PageContainer>
     </>
