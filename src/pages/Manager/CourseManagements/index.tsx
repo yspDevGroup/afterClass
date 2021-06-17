@@ -120,19 +120,6 @@ const NewClassManagement = () => {
         setModalType('uphold')
         setModalVisible(true);
     };
-
-    const request = async (params: TableListParams, sorter: Record<string, any> | undefined, filter: any) => {
-        const opts: TableListParams = {
-            ...params,
-            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-            filter,
-        };
-        if (xn === '' || xq === '') {
-            return ''
-        }
-        return getAllKHKCSJ({ name, xn, xq, pageCount: 20, page: 1 }, opts)
-    }
-
     const columns: ProColumns<classType>[] = [
         {
             title: '序号',
@@ -240,7 +227,15 @@ const NewClassManagement = () => {
                             onChange={(type: string, value: string, term: string) => handlerSearch(type, value, term)}
                         />
                     }
-                    request={request}
+                    request={(params, sorter, filter) => {
+                        // 表单搜索项会从 params 传入，传递给后端接口。
+                        const opts: TableListParams = {
+                            ...params,
+                            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+                            filter,
+                        };
+                        return getAllKHKCSJ({ name, xn, xq, pageCount: 20, page: 1 }, opts)
+                    }}
                     options={{
                         setting: false,
                         fullScreen: false,

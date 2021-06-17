@@ -216,29 +216,7 @@ const CourseManagement = () => {
   const showmodal = () => {
     setopenes(false);
   };
-  const request = async (
-    param: TableListParams,
-    sorter: Record<string, any> | undefined,
-    filter: any,
-  ) => {
-    const opts: TableListParams = {
-      ...param,
-      sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-      filter,
-    };
-    const obj = {
-      xn,
-      xq,
-      kcId,
-      page: 1,
-      pageCount: 20,
-      name,
-    };
-    if (xn === '' || xq === '') {
-      return '';
-    }
-    return getAllKHBJSJ(obj, opts);
-  };
+
   const columns: ProColumns<CourseItem>[] = [
     {
       title: '序号',
@@ -342,7 +320,24 @@ const CourseManagement = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          request={request}
+          request={async (param, sorter, filter) => {
+            // 表单搜索项会从 params 传入，传递给后端接口。
+            const opts: TableListParams = {
+              ...param,
+              sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+              filter,
+            };
+            const obj = {
+              xn: xn ,
+              xq: xq ,
+              kcId,
+              page: 1,
+              pageCount: 20,
+              name,
+            };
+            const res = await getAllKHBJSJ(obj, opts);
+            return res;
+          }}
           options={{
             setting: false,
             fullScreen: false,
@@ -387,7 +382,7 @@ const CourseManagement = () => {
           open={kai}
           colse={kaiguan}
         />
-        <PromptInformation 
+        <PromptInformation
           text='未查询到课程名称，请设置课程后再来'
           link=''
           open={tips}
