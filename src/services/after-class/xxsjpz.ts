@@ -11,7 +11,7 @@ export async function getXXSJPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -19,7 +19,7 @@ export async function getXXSJPZ(
       KSSJ?: string;
       JSSJ?: string;
       KJS?: string;
-      SDMC?: string;
+      TITLE?: string;
       BZXX?: string;
       TYPE?: '0' | '1' | '2';
       XXJBSJ?: {
@@ -36,7 +36,7 @@ export async function getXXSJPZ(
     message?: string;
   }>(`/xxsjpz/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -50,10 +50,10 @@ export async function deleteXXSJPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxsjpz/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -90,7 +90,7 @@ export async function createXXSJPZ(body: API.CreateXXSJPZ, options?: { [key: str
       KSSJ?: string;
       JSSJ?: string;
       KJS?: string;
-      SDMC?: string;
+      TITLE?: string;
       BZXX?: string;
       TYPE?: '0' | '1' | '2';
       XXJBSJ?: {
@@ -125,13 +125,13 @@ export async function updateXXSJPZ(
   body: API.UpdateXXSJPZ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxsjpz/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

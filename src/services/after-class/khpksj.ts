@@ -11,7 +11,7 @@ export async function getKHPKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -54,7 +54,7 @@ export async function getKHPKSJ(
         KSSJ?: string;
         JSSJ?: string;
         KJS?: string;
-        SDMC?: string;
+        TITLE?: string;
         BZXX?: string;
         TYPE?: 0 | 1 | 2;
       };
@@ -67,12 +67,14 @@ export async function getKHPKSJ(
         FJSYMJ?: number;
         FJRS?: number;
         FJLX?: string;
+        XQ?: string;
+        XQName?: string;
       };
     };
     message?: string;
   }>(`/khpksj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -86,10 +88,10 @@ export async function deleteKHPKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khpksj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -157,13 +159,13 @@ export async function updateKHPKSJ(
   body: API.UpdateKHPKSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khpksj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

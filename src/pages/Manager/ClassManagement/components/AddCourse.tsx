@@ -49,14 +49,14 @@ const AddCourse: FC<AddCourseProps> = ({
   // 报名时间
   const [signup, setSignup] = useState<any>('');
   // 校区ID
-  const [xQId, setXQId] = useState('')
+  const [xQId, setXQId] = useState('');
   // 校区名字
   const [xQItem, setXQLabelItem] = useState<any>([]);
 
   // // 年级ID
   // const [nJID, setNJID] = useState([]);
   // 年级名字
-  const [nJLabelItem, setNJLabelItem] = useState<any>([])
+  const [nJLabelItem, setNJLabelItem] = useState<any>([]);
 
   // 获取报名时段和上课时段
   useEffect(() => {
@@ -64,18 +64,36 @@ const AddCourse: FC<AddCourseProps> = ({
       const res = getKHKCSJ({ id: kcId });
       Promise.resolve(res).then((data: any) => {
         if (data.status === 'ok') {
-          const arry = []
-          arry.push(data.data.BMKSSJ)
-          arry.push(data.data.BMJSSJ)
+          const arry = [];
+          arry.push(data.data.BMKSSJ);
+          arry.push(data.data.BMJSSJ);
           setSignup(arry);
-          const erry = []
-          erry.push(data.data.JKRQ)
-          erry.push(data.data.KKRQ)
-          setClassattend(erry)
+          const erry = [];
+          erry.push(data.data.JKRQ);
+          erry.push(data.data.KKRQ);
+          setClassattend(erry);
         }
       });
     }
-  }, [kcId])
+  }, [kcId]);
+
+  useEffect(() => {
+    (async () => {
+      // 获取教师
+      const resTeacher0 = await getDepUserList({
+        id: xQId,
+        fetch_child: 0,
+      });
+      console.log('resTeacher0', resTeacher0);
+
+      const resTeacher1 = await getDepUserList({
+        id: xQId,
+        fetch_child: 1,
+      });
+      console.log('resTeacher1', resTeacher1);
+    })();
+  }, []);
+
   useEffect(() => {
     (async () => {
       // 获取年级信息
@@ -94,19 +112,6 @@ const AddCourse: FC<AddCourseProps> = ({
       });
       setCampus(XQ);
       setGrade(NJ);
-
-      // 获取教师
-      const resTeacher0 = await getDepUserList({
-        id: xQId,
-        fetch_child: 0
-      });
-      console.log('resTeacher0',resTeacher0);
-
-      const resTeacher1 = await getDepUserList({
-        id: xQId,
-        fetch_child: 1
-      });
-      console.log('resTeacher1',resTeacher1);
     })();
   }, []);
   // 获取标题
@@ -226,6 +231,7 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         options: campus,
         onChange(value: any, option: any) {
+          form.setFieldsValue({ njIds: undefined });
           setXQId(value);
           setXQLabelItem(option.label);
         },
@@ -241,10 +247,10 @@ const AddCourse: FC<AddCourseProps> = ({
         options: grade ? grade[xQItem] : [],
         onChange(value: any, option: any) {
           // setNJID(value);
-          const njsIabel: any[] = []
-          option.map((item: any)=>{
+          const njsIabel: any[] = [];
+          option.map((item: any) => {
             njsIabel.push(item.label);
-          })
+          });
           setNJLabelItem(njsIabel);
         },
       },
@@ -261,11 +267,8 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'ZJS',
           readonly,
           fieldProps: {
-            onChange: async(value: any)=>{
-
-            }
-
-          }
+            onChange: async (value: any) => {},
+          },
         },
         {
           type: 'select',
@@ -296,9 +299,9 @@ const AddCourse: FC<AddCourseProps> = ({
               return setBaoming(false);
             },
             defaultValue: false,
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
 
     {
@@ -310,9 +313,9 @@ const AddCourse: FC<AddCourseProps> = ({
       hidden: baoming,
       fieldProps: {
         disabledDate: (current: any) => {
-          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss')
-          return defaults > signup[1] || defaults < signup[0]
-        }
+          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
+          return defaults > signup[1] || defaults < signup[0];
+        },
       },
     },
     {
@@ -332,8 +335,7 @@ const AddCourse: FC<AddCourseProps> = ({
             defaultValue: false,
           },
         },
-
-      ]
+      ],
     },
     {
       type: 'dateRange',
@@ -344,9 +346,9 @@ const AddCourse: FC<AddCourseProps> = ({
       hidden: kaike,
       fieldProps: {
         disabledDate: (current: any) => {
-          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss')
-          return defaults > classattend[0] || defaults < classattend[1]
-        }
+          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
+          return defaults > classattend[0] || defaults < classattend[1];
+        },
       },
     },
     {
@@ -366,7 +368,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KCMS',
     },
   ];
-  
+
   return (
     <div>
       <Drawer
@@ -377,19 +379,21 @@ const AddCourse: FC<AddCourseProps> = ({
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
-        footer={(names === 'chakan') ? null :
-          (<div
-            style={{
-              textAlign: 'right',
-            }}
-          >
-            <Button onClick={onClose} style={{ marginRight: 16 }}>
-              取消
-            </Button>
-            <Button onClick={handleSubmit} type="primary">
-              保存
-            </Button>
-          </div>)
+        footer={
+          names === 'chakan' ? null : (
+            <div
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              <Button onClick={onClose} style={{ marginRight: 16 }}>
+                取消
+              </Button>
+              <Button onClick={handleSubmit} type="primary">
+                保存
+              </Button>
+            </div>
+          )
         }
       >
         <ProFormFields
@@ -398,13 +402,13 @@ const AddCourse: FC<AddCourseProps> = ({
           setForm={setForm}
           formItems={formItems}
           formItemLayout={formLayout}
-          values={formValues
-            
-            || {
-            BJZT: '待发布', 
-            BMKSSJ: baoming,
-            KKRQ: kaike,
-          }}
+          values={
+            formValues || {
+              BJZT: '待发布',
+              BMKSSJ: baoming,
+              KKRQ: kaike,
+            }
+          }
         />
       </Drawer>
     </div>

@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Form, message, Spin } from 'antd';
+import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
+import { Button, Form, message, Spin, Modal } from 'antd';
 
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllNJSJ } from '@/services/after-class/njsj';
@@ -17,6 +17,8 @@ import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
 import type { BJType, RoomType, GradeType, SiteType, CourseType } from '../data';
 import ExcelTable from '@/components/ExcelTable';
 import styles from '../index.less';
+
+const { confirm } = Modal;
 
 type PropsType = {
   setState?: any;
@@ -62,7 +64,7 @@ const AddArranging: FC<PropsType> = (props) => {
   const [form] = Form.useForm();
   const [xQItem, setXQLabelItem] = useState<any>([]);
   const [excelTableValue] = useState<any[]>([]);
-  const [bjIdData] = useState<any[]>([]);
+  const [bjIdData] = useState<any[]>([formValues?.BJId]);
   const sameClassDatas = [...sameClass];
   const [loading, setLoading] = useState(true);
   const [CDLoading, setCDLoading] = useState(false);
@@ -153,7 +155,6 @@ const AddArranging: FC<PropsType> = (props) => {
   };
 
   const onExcelTableClick = (value: any, record: any, bjId: any) => {
-    bjIdData.push(bjId);
     if (value === null) {
       excelTableValue.splice(excelTableValue.length - 1);
     } else {
@@ -181,6 +182,7 @@ const AddArranging: FC<PropsType> = (props) => {
     setBj(chosenData);
     setIndex(value.id);
     setBJIDData(value.id);
+    bjIdData.push(value.id);
     setCDLoading(true);
     setTimeout(() => {
       setCDLoading(false);
@@ -341,6 +343,27 @@ const AddArranging: FC<PropsType> = (props) => {
       form.setFieldsValue(formValues);
     }
   }, [formValues]);
+
+  // 清除
+  const showDeleteConfirm = () => {
+    confirm({
+      title: '温馨提示',
+      icon: <QuestionCircleOutlined style={{ color: 'red' }} />,
+      content: '将会清除当前班级已排好的所有课程，您确定要继续吗？',
+      onOk() {
+        const parameter = {
+          bjIds: [index],
+          data: [],
+        };
+        const result = createKHPKSJ(parameter);
+        Promise.resolve(result).then((data) => {
+          if (data.status === 'ok') {
+            message.success('清除成功');
+          }
+        });
+      },
+    });
+  };
   return (
     <div style={{ background: '#FFFFFF' }}>
       <p className="xinzen"> {formValues ? '编辑排课' : '新增排课'}</p>
@@ -355,13 +378,19 @@ const AddArranging: FC<PropsType> = (props) => {
             submitter={{
               render: (Props) => {
                 return [
-                  <Button key="rest" style={{marginRight: 8}} onClick={() => onReset(Props)}>
+                  <Button key="rest" style={{ marginRight: 8 }} onClick={() => onReset(Props)}>
                     取消
                   </Button>,
-                  <Button key="submit" style={{marginRight: 8}} onClick={() => Props.form?.submit?.()}>
+                  <Button
+                    key="submit"
+                    style={{ marginRight: 8 }}
+                    onClick={() => Props.form?.submit?.()}
+                  >
                     保存
                   </Button>,
-                  <Button danger >清除</Button>
+                  <Button danger onClick={showDeleteConfirm}>
+                    清除
+                  </Button>,
                 ];
               },
             }}
@@ -373,6 +402,7 @@ const AddArranging: FC<PropsType> = (props) => {
               options={campus}
               fieldProps={{
                 onChange(value: any, option: any) {
+                  form.setFieldsValue({ NJ: undefined });
                   setXQLabelItem(option.label);
                 },
               }}

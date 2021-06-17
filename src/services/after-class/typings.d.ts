@@ -137,6 +137,10 @@ declare namespace API {
     JXL?: string;
     /** 备注信息 */
     BZXX?: string;
+    /** 校区ID */
+    XQ?: string;
+    /** 校区名称 */
+    XQName?: string;
     XXJBSJ?: {
       id?: string;
       XXDM?: string;
@@ -166,6 +170,10 @@ declare namespace API {
     JXL?: string;
     /** 备注信息 */
     BZXX?: string;
+    /** 校区ID */
+    XQ?: string;
+    /** 校区名称 */
+    XQName?: string;
     /** 房间类型ID */
     FJLXId?: string;
   };
@@ -187,42 +195,12 @@ declare namespace API {
     JXL?: string;
     /** 备注信息 */
     BZXX?: string;
+    /** 校区ID */
+    XQ?: string;
+    /** 校区名称 */
+    XQName?: string;
     /** 房间类型ID */
     FJLXId?: string;
-  };
-
-  type JCXX = {
-    id: string;
-    /** 名称 */
-    MC: string;
-    /** 英文名称 */
-    YWMC?: string;
-    /** 时长 */
-    SC: number;
-    /** 说明 */
-    SM?: string;
-  };
-
-  type CreateJCXX = {
-    /** 名称 */
-    MC: string;
-    /** 英文名称 */
-    YWMC?: string;
-    /** 时长 */
-    SC: number;
-    /** 说明 */
-    SM?: string;
-  };
-
-  type UpdateJCXX = {
-    /** 名称 */
-    MC?: string;
-    /** 英文名称 */
-    YWMC?: string;
-    /** 时长 */
-    SC?: number;
-    /** 说明 */
-    SM?: string;
   };
 
   type JCSJ = {
@@ -323,6 +301,40 @@ declare namespace API {
     YS?: number;
     /** 内容简介 */
     NRJJ?: string;
+  };
+
+  type JCXX = {
+    id: string;
+    /** 名称 */
+    MC: string;
+    /** 英文名称 */
+    YWMC?: string;
+    /** 时长 */
+    SC: number;
+    /** 说明 */
+    SM?: string;
+  };
+
+  type CreateJCXX = {
+    /** 名称 */
+    MC: string;
+    /** 英文名称 */
+    YWMC?: string;
+    /** 时长 */
+    SC: number;
+    /** 说明 */
+    SM?: string;
+  };
+
+  type UpdateJCXX = {
+    /** 名称 */
+    MC?: string;
+    /** 英文名称 */
+    YWMC?: string;
+    /** 时长 */
+    SC?: number;
+    /** 说明 */
+    SM?: string;
   };
 
   type JXJHSJ = {
@@ -618,6 +630,92 @@ declare namespace API {
     ZYRKXD?: string;
   };
 
+  type KCSJ = {
+    id: string;
+    /** 课程名称 */
+    KCMC: string;
+    /** 课程码 */
+    KCM: string;
+    /** 课程等级码 */
+    KCDJM: string;
+    /** 课程别名 */
+    KCBM: string;
+    /** 课程简介 */
+    KCJJ?: string;
+    /** 课程要求 */
+    KCYQ?: string;
+    /** 总学时 */
+    ZXS?: number;
+    /** 周学时 */
+    ZHXS?: number;
+    /** 自学学时 */
+    ZXXS?: number;
+    /** 授课方式码 */
+    SKFSM: string;
+    /** 教材编码 */
+    JCBM?: string;
+    /** 参考书目 */
+    CKSM?: string;
+  };
+
+  type CreateKCSJ = {
+    /** 课程号 */
+    KCH: string;
+    /** 课程名称 */
+    KCMC: string;
+    /** 课程码 */
+    KCM: string;
+    /** 课程等级码 */
+    KCDJM: string;
+    /** 课程别名 */
+    KCBM: string;
+    /** 课程简介 */
+    KCJJ?: string;
+    /** 课程要求 */
+    KCYQ?: string;
+    /** 总学时 */
+    ZXS?: number;
+    /** 周学时 */
+    ZHXS?: number;
+    /** 自学学时 */
+    ZXXS?: number;
+    /** 授课方式码 */
+    SKFSM: string;
+    /** 教材编码 */
+    JCBM?: string;
+    /** 参考书目 */
+    CKSM?: string;
+  };
+
+  type UpdateKCSJ = {
+    /** 课程号 */
+    KCH?: string;
+    /** 课程名称 */
+    KCMC?: string;
+    /** 课程码 */
+    KCM?: string;
+    /** 课程等级码 */
+    KCDJM?: string;
+    /** 课程别名 */
+    KCBM?: string;
+    /** 课程简介 */
+    KCJJ?: string;
+    /** 课程要求 */
+    KCYQ?: string;
+    /** 总学时 */
+    ZXS?: number;
+    /** 周学时 */
+    ZHXS?: number;
+    /** 自学学时 */
+    ZXXS?: number;
+    /** 授课方式码 */
+    SKFSM?: string;
+    /** 教材编码 */
+    JCBM?: string;
+    /** 参考书目 */
+    CKSM?: string;
+  };
+
   type KHBJSJ = {
     id: string;
     /** 班级名称 */
@@ -761,92 +859,6 @@ declare namespace API {
     FJSName?: string;
     /** 课后课程ID */
     KHKCSJId?: string;
-  };
-
-  type KCSJ = {
-    id: string;
-    /** 课程名称 */
-    KCMC: string;
-    /** 课程码 */
-    KCM: string;
-    /** 课程等级码 */
-    KCDJM: string;
-    /** 课程别名 */
-    KCBM: string;
-    /** 课程简介 */
-    KCJJ?: string;
-    /** 课程要求 */
-    KCYQ?: string;
-    /** 总学时 */
-    ZXS?: number;
-    /** 周学时 */
-    ZHXS?: number;
-    /** 自学学时 */
-    ZXXS?: number;
-    /** 授课方式码 */
-    SKFSM: string;
-    /** 教材编码 */
-    JCBM?: string;
-    /** 参考书目 */
-    CKSM?: string;
-  };
-
-  type CreateKCSJ = {
-    /** 课程号 */
-    KCH: string;
-    /** 课程名称 */
-    KCMC: string;
-    /** 课程码 */
-    KCM: string;
-    /** 课程等级码 */
-    KCDJM: string;
-    /** 课程别名 */
-    KCBM: string;
-    /** 课程简介 */
-    KCJJ?: string;
-    /** 课程要求 */
-    KCYQ?: string;
-    /** 总学时 */
-    ZXS?: number;
-    /** 周学时 */
-    ZHXS?: number;
-    /** 自学学时 */
-    ZXXS?: number;
-    /** 授课方式码 */
-    SKFSM: string;
-    /** 教材编码 */
-    JCBM?: string;
-    /** 参考书目 */
-    CKSM?: string;
-  };
-
-  type UpdateKCSJ = {
-    /** 课程号 */
-    KCH?: string;
-    /** 课程名称 */
-    KCMC?: string;
-    /** 课程码 */
-    KCM?: string;
-    /** 课程等级码 */
-    KCDJM?: string;
-    /** 课程别名 */
-    KCBM?: string;
-    /** 课程简介 */
-    KCJJ?: string;
-    /** 课程要求 */
-    KCYQ?: string;
-    /** 总学时 */
-    ZXS?: number;
-    /** 周学时 */
-    ZHXS?: number;
-    /** 自学学时 */
-    ZXXS?: number;
-    /** 授课方式码 */
-    SKFSM?: string;
-    /** 教材编码 */
-    JCBM?: string;
-    /** 参考书目 */
-    CKSM?: string;
   };
 
   type KHJSPJ = {
@@ -1059,7 +1071,7 @@ declare namespace API {
       KSSJ?: string;
       JSSJ?: string;
       KJS?: string;
-      SDMC?: string;
+      TITLE?: string;
       BZXX?: string;
       TYPE?: 0 | 1 | 2;
     };
@@ -1072,6 +1084,8 @@ declare namespace API {
       FJSYMJ?: number;
       FJRS?: number;
       FJLX?: string;
+      XQ?: string;
+      XQName?: string;
     };
   };
 
@@ -2145,7 +2159,7 @@ declare namespace API {
     /** 课节数 */
     KJS?: string;
     /** 标题/名称 */
-    SDMC?: string;
+    TITLE?: string;
     /** 备注信息 */
     BZXX?: string;
     /** 类型，0:时段维护，1:报名开始/结束时间，2:开课/结课日期 */
@@ -2170,15 +2184,15 @@ declare namespace API {
     /** 课节数 */
     KJS?: string;
     /** 标题/名称 */
-    SDMC?: string;
+    TITLE?: string;
     /** 备注信息 */
     BZXX?: string;
     /** 类型，0:时段维护，1:报名开始/结束时间，2:开课/结课日期 */
     TYPE?: '0' | '1' | '2';
     /** 学年 */
-    xn?: string;
+    xn: string;
     /** 学期 */
-    xq?: string;
+    xq: string;
   };
 
   type UpdateXXSJPZ = {
@@ -2189,7 +2203,7 @@ declare namespace API {
     /** 课节数 */
     KJS?: string;
     /** 标题/名称 */
-    SDMC?: string;
+    TITLE?: string;
     /** 备注信息 */
     BZXX?: string;
     /** 类型，0:时段维护，1:报名开始/结束时间，2:开课/结课日期 */

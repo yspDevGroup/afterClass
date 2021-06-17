@@ -43,15 +43,17 @@ const ClassManagement = () => {
 
   useEffect(() => {
     (async () => {
-      // 获取年级信息
+      // 获取微信部门信息
       const currentXQ = await queryXQList();
       const XQ: { label: any; value: any }[] = [];
       const NJ = {};
       currentXQ?.map((item: any) => {
+        // 校区
         XQ.push({
           label: item.name,
           value: item.name,
         });
+        // 年级
         NJ[item.name] = item.njList.map((njItem: any) => ({
           label: njItem.name,
           value: njItem.name,
@@ -179,21 +181,29 @@ const ClassManagement = () => {
           }
           setDataSource(defaultData);
 
-          // 查询所有课程的时间段
-          const resultTime = await getAllXXSJPZ();
-          if (resultTime.status === 'ok') {
-            const timeSlot = resultTime.data;
-            setXXSJPZData(timeSlot);
+          const xNData = defaultData[0].defaultValue?.first;
+          const xQData = defaultData[0].defaultValue?.second;
 
-            // 查询排课数据
-            const resultPlan = await getFJPlan({
-              xn: defaultData[0].defaultValue?.first,
-              xq: defaultData[0].defaultValue?.second,
-              isPk: radioValue,
+          // 查询所有课程的时间段
+          if (xNData && xQData) {
+            const resultTime = await getAllXXSJPZ({
+              xn: xNData,
+              xq: xQData,
             });
-            if (resultPlan.status === 'ok') {
-              const tableData = processingData(resultPlan.data, timeSlot);
-              setTableDataSource(tableData);
+            if (resultTime.status === 'ok') {
+              const timeSlot = resultTime.data;
+              setXXSJPZData(timeSlot);
+
+              // 查询排课数据
+              const resultPlan = await getFJPlan({
+                xn: xNData,
+                xq: xQData,
+                isPk: radioValue,
+              });
+              if (resultPlan.status === 'ok') {
+                const tableData = processingData(resultPlan.data, timeSlot);
+                setTableDataSource(tableData);
+              }
             }
           }
         } else {

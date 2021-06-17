@@ -11,7 +11,7 @@ export async function getFJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -24,6 +24,8 @@ export async function getFJSJ(
       FJRS?: number;
       JXL?: string;
       BZXX?: string;
+      XQ?: string;
+      XQName?: string;
       XXJBSJ?: {
         id?: string;
         XXDM?: string;
@@ -38,7 +40,7 @@ export async function getFJSJ(
     message?: string;
   }>(`/fjsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -52,10 +54,10 @@ export async function deleteFJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -98,6 +100,8 @@ export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]
       FJRS?: number;
       JXL?: string;
       BZXX?: string;
+      XQ?: string;
+      XQName?: string;
       XXJBSJ?: {
         id?: string;
         XXDM?: string;
@@ -130,13 +134,13 @@ export async function updateFJSJ(
   body: API.UpdateFJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -177,7 +181,7 @@ export async function getFJPlan(
           KSSJ?: string;
           JSSJ?: string;
           KJS?: string;
-          SDMC?: string;
+          TITLE?: string;
           BZXX?: string;
           TYPE?: '0' | '1' | '2';
         };

@@ -8,12 +8,12 @@ import * as user from './user';
 import * as bjsj from './bjsj';
 import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
-import * as jcxx from './jcxx';
 import * as jcsj from './jcsj';
+import * as jcxx from './jcxx';
 import * as jxjhsj from './jxjhsj';
 import * as jzgjbsj from './jzgjbsj';
-import * as khbjsj from './khbjsj';
 import * as kcsj from './kcsj';
+import * as khbjsj from './khbjsj';
 import * as khjspj from './khjspj';
 import * as khkclx from './khkclx';
 import * as khkcsj from './khkcsj';
@@ -43,12 +43,12 @@ export default {
   bjsj,
   fjlx,
   fjsj,
-  jcxx,
   jcsj,
+  jcxx,
   jxjhsj,
   jzgjbsj,
-  khbjsj,
   kcsj,
+  khbjsj,
   khjspj,
   khkclx,
   khkcsj,
