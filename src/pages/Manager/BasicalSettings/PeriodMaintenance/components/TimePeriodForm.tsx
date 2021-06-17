@@ -38,8 +38,8 @@ const TimePeriodForm = (props: PropsType) => {
     {
       type: 'input',
       label: '时段名称',
-      name: 'SDMC',
-      key: 'SDMC',
+      name: 'TITLE',
+      key: 'TITLE',
       rules: [{ required: true, message: '请填写名称' }],
       fieldProps: {
         autocomplete: 'off'
@@ -53,8 +53,8 @@ const TimePeriodForm = (props: PropsType) => {
         {
           type: 'select',
           width: '100%',
-          name: 'XN',
-          key: 'XN',
+          name: 'xn',
+          key: 'xn',
           placeholder: '请选择学年',
           options: chainData?.data,
           noStyle: true,
@@ -66,9 +66,9 @@ const TimePeriodForm = (props: PropsType) => {
         },
         {
           type: 'select',
-          name: 'XQ',
+          name: 'xq',
           width: '100%',
-          key: 'XQ',
+          key: 'xq',
           placeholder: '请选择学期',
           noStyle: true,
           options: terms,

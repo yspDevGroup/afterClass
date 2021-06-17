@@ -9,9 +9,9 @@ const reg =
 export const isUrl = (path: string): boolean => reg.test(path);
 
 export const isAntDesignPro = (): boolean => {
-  if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
-    return true;
-  }
+  // if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
+  //   return true;
+  // }
   return window.location.hostname === 'preview.pro.ant.design';
 };
 
@@ -99,13 +99,18 @@ export const envjudge = () => {
  * @export
  * @returns
  */
-export function getQueryString(name: string) {
-  const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
-  const r = decodeURI(window.location.search.substr(1)).match(reg);
+export const getQueryString = (name: string) => {
+  const regs = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
+  const r = decodeURI(window.location.search.substr(1)).match(regs);
   if (r != null) return unescape(r[2]);
   return null;
 }
-
+/**
+ * 根据当前时间获取学年学期
+ *
+ * @export
+ * @returns
+ */
 export const getCurrentXQ = (list: any[]) => {
   const today = new Date();
   const currentXQ = list.find((xq: any) => {

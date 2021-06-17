@@ -97,7 +97,7 @@ const PeriodMaintenance = () => {
     },
     {
       title: '时段名称',
-      dataIndex: 'SDMC',
+      dataIndex: 'TITLE',
       align: 'center',
       width: '15%',
       ellipsis: true,

@@ -10,9 +10,9 @@ export const dataSource = {
       type: 'select',
       placeHolder: '请选择',
       data: [
-        { title: "一年级", key: "1" },
-        { title: "二年级", key: "2" },
-        { title: "三年级", key: "3" },
+        { label: "一年级", value: "1" },
+        { label: "二年级", value: "2" },
+        { label: "三年级", value: "3" },
       ]
     },
     {
@@ -24,14 +24,14 @@ export const dataSource = {
   ],
   chainData: {
     data: [
-      { title: "2020 - 2021", key: "2020" },
-      { title: "2019 - 2020", key: "2019" },
-      { title: "2018 - 2019", key: "2018" },
+      { label: "2020 - 2021", value: "2020" },
+      { label: "2019 - 2020", value: "2019" },
+      { label: "2018 - 2019", value: "2018" },
     ],
     subData: {
-      '2020': [{ title: "第一学期", key: "1" }],
-      '2019': [{ title: "第一学期", key: "1" }, { title: "第二学期", key: "2" },],
-      '2018': [{ title: "第一学期", key: "1" }, { title: "第二学期", key: "2" },],
+      '2020': [{ label: "第一学期", value: "1" }],
+      '2019': [{ label: "第一学期", value: "1" }, { label: "第二学期", value: "2" },],
+      '2018': [{ label: "第一学期", value: "1" }, { label: "第二学期", value: "2" },],
     }
   }
 };

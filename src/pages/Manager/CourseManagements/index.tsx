@@ -1,12 +1,11 @@
 import PageContainer from "@/components/PageContainer";
 import { paginationConfig } from "@/constant";
 import { theme } from "@/theme-default";
-import type { ActionType, ProColumns } from "@ant-design/pro-table";
-import ProTable from "@ant-design/pro-table";
+import React, { useState,useRef, useEffect } from "react";
 import { Button, Modal } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
-import React, { useRef, useEffect } from "react";
-import { useState } from "react";
+import ProTable from "@ant-design/pro-table";
+import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import type { classType, TableListParams } from "./data";
 import NewCourses from "./components/NewCourses";
 import styles from './index.less';
@@ -14,13 +13,12 @@ import Sitclass from "./components/Sitclass";
 import { getAllKHKCSJ } from "@/services/after-class/khkcsj";
 import type { SearchDataType } from "@/components/Search/data";
 import { searchData } from "./searchConfig";
-import { convertData } from "@/components/Search/util";
-import { getAllXNXQ } from "@/services/after-class/xnxq";
 import SearchComponent from "@/components/Search";
 import Choice from "./components/Choice";
 import { Link } from "umi";
 import PromptInformation from "@/components/PromptInformation";
 import Operation from "./components/Operation";
+import { queryXNXQList } from "@/services/local-services/xnxq";
 
 
 
@@ -47,29 +45,25 @@ const NewClassManagement = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const res = await getAllXNXQ();
-            if (res.status === 'ok') {
-                const { data = [] } = res;
-                const defaultData = [...searchData];
-                const newData = convertData(data);
-                if (newData.data && newData.data.length > 0) {
-                    const term = newData.subData[newData.data[0].key];
+            const res = await queryXNXQList();
+            const newData = res.xnxqList;
+            const curTerm = res.current;
+            const defaultData = [...searchData];
+            if (newData.data && newData.data.length) {
+                if (curTerm) {
+                    await setxn(curTerm.XN);
+                    await setxq(curTerm.XQ);
+                    actionRef.current?.reload();
                     const chainSel = defaultData.find((item) => item.type === 'chainSelect');
                     if (chainSel && chainSel.defaultValue) {
-                        chainSel.defaultValue.first = newData.data[0].key;
-                        await setxn(chainSel.defaultValue.first);
-                        chainSel.defaultValue.second = term[0].key;
-                        await setxq(chainSel.defaultValue.second);
+                        chainSel.defaultValue.first = curTerm.XN;
+                        chainSel.defaultValue.second = curTerm.XQ;
                         await setDataSource(defaultData);
                         chainSel.data = newData;
-                        actionRef.current?.reload();
                     }
-                } else {
-                    setkai(true)
                 }
-            }
-            else {
-                console.log(res.message);
+            } else {
+                setkai(true)
             }
         }
         fetchData();

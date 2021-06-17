@@ -19,11 +19,10 @@ import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
 import ClassStart from './components/ClassStart';
-import { getAllXNXQ } from '@/services/after-class/xnxq';
-import { convertData } from '@/components/Search/util';
 import { getQueryString } from '@/utils/utils';
 import PromptInformation from '@/components/PromptInformation';
 import { getAllKHKCSJ, getKHKCSJ } from '@/services/after-class/khkcsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -47,15 +46,15 @@ const CourseManagement = () => {
   const kaiguan = () => {
     setkai(false);
   };
-  const clstips =()=>{
+  const clstips = () => {
     setTips(false);
   }
   // 弹框名称设定
   const [names, setnames] = useState<string>('bianji');
 
   useEffect(() => {
-    if(mcData===[]){
-      return  setTips(true)
+    if (mcData === []) {
+      return setTips(true)
     }
     return setTips(false)
   }, [mcData])
@@ -63,47 +62,45 @@ const CourseManagement = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await getAllXNXQ({});
-      if (res.status === 'ok') {
-        const { data = [] } = res;
-        const defaultData = [...searchData];
-        const newData = convertData(data);
-        if (newData.data && newData.data.length > 0) {
-          const term = newData.subData[newData.data[0].key];
+      const res = await queryXNXQList();
+      const newData = res.xnxqList;
+      const curTerm = res.current;
+      const defaultData = [...searchData];
+      if (newData.data && newData.data.length) {
+        if (curTerm) {
+          await setxn(curTerm.XN);
+          await setxq(curTerm.XQ);
+          actionRef.current?.reload();
           const chainSel = defaultData.find((item) => item.type === 'chainSelect');
           if (chainSel && chainSel.defaultValue) {
-            chainSel.defaultValue.first = newData.data[0].key;
-            await setxn(chainSel.defaultValue.first);
-            chainSel.defaultValue.second = term[0].key;
-            await setxq(chainSel.defaultValue.second);
+            chainSel.defaultValue.first = curTerm.XN;
+            chainSel.defaultValue.second = curTerm.XQ;
             await setDataSource(defaultData);
             chainSel.data = newData;
-            actionRef.current?.reload();
-            const ress = getAllKHKCSJ({
-              name: '',
-              xn: chainSel.defaultValue.first,
-              xq: chainSel.defaultValue.second,
-              page: 0,
-              pageCount: 0,
-            });
-            Promise.resolve(ress).then((dataes: any) => {
-              if (dataes.status === 'ok') {
-                const njArry: { label: string; value: string }[] = [];
-                dataes.data.map((item: any) => {
-                  return njArry.push({
-                    label: item.KCMC,
-                    value: item.id,
-                  });
-                });
-                setmcData(njArry);
-              }
-            });
           }
-        } else {
-          setkai(true);
+          const ress = getAllKHKCSJ({
+            name: '',
+            xn: curTerm.XN,
+            xq: curTerm.XQ,
+            page: 0,
+            pageCount: 0,
+          });
+          Promise.resolve(ress).then((dataes: any) => {
+            if (dataes.status === 'ok') {
+              const njArry: { label: string; value: string }[] = [];
+              dataes.data.map((item: any) => {
+                return njArry.push({
+                  label: item.KCMC,
+                  value: item.id,
+                });
+              });
+              setmcData(njArry);
+            }
+          });
         }
+
       } else {
-        console.log(res.message);
+        setkai(true);
       }
     }
     fetchData();
@@ -331,8 +328,8 @@ const CourseManagement = () => {
               filter,
             };
             const obj = {
-              xn: xn ,
-              xq: xq ,
+              xn,
+              xq,
               kcId,
               page: 1,
               pageCount: 20,

@@ -91,6 +91,6 @@ declare const wxInfo: {
   xqList: (WXDepType & { njList?: WXDepType[] })[];
 };
 declare const xnxqInfo: {
-  xnxqList: any;
+  xnxqList: ChainDataType;
   current: any;
 };
