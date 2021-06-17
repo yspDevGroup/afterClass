@@ -201,7 +201,8 @@ const NewCourses = (props: PropsType) => {
               }
               return setBaoming(false);
             },
-            defaultChecked:!baoming,
+            // defaultChecked:!baoming,
+            checked:!baoming,
           }
         }
       ]
@@ -232,7 +233,8 @@ const NewCourses = (props: PropsType) => {
               }
               return setKaike(false);
             },
-            defaultChecked: (!kaike),
+            // defaultChecked: (!kaike),
+            checked: !kaike
           },
         },
         

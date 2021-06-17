@@ -52,7 +52,7 @@ const NewClassManagement = () => {
                 if (newData.data && newData.data.length > 0) {
                     const term = newData.subData[newData.data[0].key];
                     const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-                    if (chainSel && chainSel.defaultValue) {            
+                    if (chainSel && chainSel.defaultValue) {
                         chainSel.defaultValue.first = newData.data[0].key;
                         await setxn(chainSel.defaultValue.first);
                         chainSel.defaultValue.second = term[0].key;
@@ -168,11 +168,12 @@ const NewClassManagement = () => {
             width: '10%',
             render: (_, record) => {
                 const Url = `/courseManagements/classMaintenance?courseId=${record.id}`;
-                const classes=[];
-                record.KHBJSJs?.map((item)=>{
-                    if(item.BJZT==='已发布'){
-                        classes.push(item)
+                const classes = [];
+                record.KHBJSJs?.map((item) => {
+                    if (item.BJZT === '已发布') {
+                       return  classes.push(item)
                     }
+                    return false;
                 })
                 return (
                     <Link to={Url} >{classes.length}</Link>
@@ -221,7 +222,7 @@ const NewClassManagement = () => {
             key: 'option',
             width: 150,
             render: (_, record) => (
-                <Operation  record={record} handleOperation={handleOperation} actionRef={actionRef}/>
+                <Operation record={record} handleOperation={handleOperation} actionRef={actionRef} />
             ),
             align: 'center',
         },
@@ -268,7 +269,7 @@ const NewClassManagement = () => {
                     title={getModelTitle()}
                     destroyOnClose
                     width='35vw'
-                    style={{ maxHeight: '430px',minWidth:'480px' }}
+                    style={{ maxHeight: '430px', minWidth: '480px' }}
                     visible={modalVisible}
                     onCancel={() => setModalVisible(false)}
                     footer={null}
