@@ -93,7 +93,7 @@ const ClassManagement = () => {
             rowspan: timeKey === 0 ? timeData.length : 0,
           },
           course: {
-            cla: timeItem.SDMC,
+            cla: timeItem.TITLE,
             teacher: `${timeItem.KSSJ.slice(0, 5)} — ${timeItem.JSSJ.slice(0, 5)}`,
             hjId: timeItem.id,
           },
@@ -177,11 +177,14 @@ const ClassManagement = () => {
             chainSel.data = newData;
           }
           // 查询所有课程的时间段
-          const resultTime = await getAllXXSJPZ();
+          const resultTime = await getAllXXSJPZ({
+            xn: curTerm.XN,
+            xq: curTerm.XQ,
+          });
           if (resultTime.status === 'ok') {
             const timeSlot = resultTime.data;
             setXXSJPZData(timeSlot);
-  
+
             // 查询排课数据
             const resultPlan = await getFJPlan({
               xn: curTerm.XN,
@@ -194,7 +197,6 @@ const ClassManagement = () => {
             }
           }
         }
-
       } else {
         setkai(true);
       }
@@ -208,70 +210,70 @@ const ClassManagement = () => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-      {
-        title: '',
-        dataIndex: 'room',
-        key: 'room',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '',
-        dataIndex: 'course',
-        key: 'course',
-        align: 'left',
-        width: 136,
-      },
-      {
-        title: '周一',
-        dataIndex: 'monday',
-        key: 'monday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周二',
-        dataIndex: 'tuesday',
-        key: 'tuesday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周三',
-        dataIndex: 'wednesday',
-        key: 'wednesday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周四',
-        dataIndex: 'thursday',
-        key: 'thursday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周五',
-        dataIndex: 'friday',
-        key: 'friday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周六',
-        dataIndex: 'saturday',
-        key: 'saturday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周日',
-        dataIndex: 'sunday',
-        key: 'sunday',
-        align: 'center',
-        width: 136,
-      },
-    ];
+    {
+      title: '',
+      dataIndex: 'room',
+      key: 'room',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '',
+      dataIndex: 'course',
+      key: 'course',
+      align: 'left',
+      width: 136,
+    },
+    {
+      title: '周一',
+      dataIndex: 'monday',
+      key: 'monday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周二',
+      dataIndex: 'tuesday',
+      key: 'tuesday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周三',
+      dataIndex: 'wednesday',
+      key: 'wednesday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周四',
+      dataIndex: 'thursday',
+      key: 'thursday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周五',
+      dataIndex: 'friday',
+      key: 'friday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周六',
+      dataIndex: 'saturday',
+      key: 'saturday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周日',
+      dataIndex: 'sunday',
+      key: 'sunday',
+      align: 'center',
+      width: 136,
+    },
+  ];
   const onExcelTableClick = (value: any, record: any) => {
     setRecordValue(record);
   };
@@ -331,6 +333,7 @@ const ClassManagement = () => {
               dataSource={tableDataSource}
               switchPages={showDrawer}
               onExcelTableClick={onExcelTableClick}
+              radioValue={radioValue}
             />
           </div>
         ) : (

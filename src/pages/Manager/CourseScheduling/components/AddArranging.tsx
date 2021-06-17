@@ -356,9 +356,22 @@ const AddArranging: FC<PropsType> = (props) => {
           data: [],
         };
         const result = createKHPKSJ(parameter);
+        setCDLoading(true);
         Promise.resolve(result).then((data) => {
           if (data.status === 'ok') {
-            message.success('清除成功');
+            setCDLoading(false);
+            const Fjplan = getFJPlan({
+              xn,
+              xq,
+              isPk: false,
+            });
+            Promise.resolve(Fjplan).then((FjplanData) => {
+              if (FjplanData.status === 'ok') {
+                const datad = processingData(FjplanData.data, xXSJPZData);
+                setTableDataSource(datad);
+                message.success('清除成功');
+              }
+            });
           }
         });
       },
@@ -366,7 +379,7 @@ const AddArranging: FC<PropsType> = (props) => {
   };
   return (
     <div style={{ background: '#FFFFFF' }}>
-      <p className="xinzen"> {formValues ? '编辑排课' : '新增排课'}</p>
+      <p className="xinzen"> {formValues && formValues.BJId ? '编辑排课' : '新增排课'}</p>
       <Spin spinning={loading} style={{ height: '100vh' }} size="large">
         {!loading ? (
           <ProForm

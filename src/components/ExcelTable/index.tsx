@@ -140,6 +140,7 @@ type IndexPropsType = {
   switchPages?: () => void;
   className: '' | undefined;
   getSelectdata?: (value: any) => void;
+  radioValue?: boolean;
 };
 
 const Index: FC<IndexPropsType> = ({
@@ -151,6 +152,7 @@ const Index: FC<IndexPropsType> = ({
   type = 'see',
   switchPages,
   getSelectdata,
+  radioValue,
 }) => {
   let [stateTableData, setStateTableData] = useState<DataSourceType>();
   const weekDay = {
@@ -162,6 +164,10 @@ const Index: FC<IndexPropsType> = ({
     saturday: '6',
     sunday: '0',
   };
+  // useEffect(() => {
+  //   const newData = stateTableData ? [...stateTableData] : [...dataSource];
+  //   setStateTableData(newData);
+  // }, [chosenData])
   const onTdClick = (rowKey: number, colKey: number) => {
     const newData = stateTableData ? [...stateTableData] : [...dataSource];
     const colItem = columns[colKey] || {};
@@ -231,6 +237,7 @@ const Index: FC<IndexPropsType> = ({
       onExcelTableClick(selectList, seeChosenItem, bjId);
     }
   };
+  const datas = stateTableData ? [...stateTableData] : [...dataSource];
   return (
     <div className={`${styles.excelTable} ${className}`}>
       <table>
@@ -246,11 +253,11 @@ const Index: FC<IndexPropsType> = ({
           </tr>
         </thead>
       </table>
-      {dataSource && dataSource.length > 0 ? (
+      {datas && datas.length > 0 ? (
         <div className={styles.tableContent}>
           <table>
             <tbody>
-              {dataSource.map((data, dataKey: any) => {
+              {datas.map((data, dataKey: any) => {
                 return (
                   <tr key={Math.random()}>
                     {columns.map((item, itemKey) => {
@@ -320,7 +327,9 @@ const Index: FC<IndexPropsType> = ({
           </table>
         </div>
       ) : (
-        <div className={styles.noContent}>当前暂无课程安排</div>
+        <div className={styles.noContent}>
+          {radioValue ? '当前暂无课程安排' : '当前暂无排课的场地'}
+        </div>
       )}
     </div>
   );
