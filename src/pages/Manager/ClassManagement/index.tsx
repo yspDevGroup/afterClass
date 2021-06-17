@@ -40,14 +40,27 @@ const CourseManagement = () => {
   // 查询课程名称
   const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
   const [name, setName] = useState<string>('');
+  // 控制提示开关
+  const [tips, setTips] = useState<boolean>(false)
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
     setkai(false);
   };
+  const clstips =()=>{
+    setTips(false);
+  }
   // 弹框名称设定
   const [names, setnames] = useState<string>('bianji');
+
+  useEffect(() => {
+    if(mcData===[]){
+      return  setTips(true)
+    }
+    return setTips(false)
+  }, [mcData])
+
 
   useEffect(() => {
     async function fetchData() {
@@ -388,6 +401,12 @@ const CourseManagement = () => {
           link="/basicalSettings/termManagement"
           open={kai}
           colse={kaiguan}
+        />
+        <PromptInformation 
+          text='未查询到课程名称，请设置课程后再来'
+          link=''
+          open={tips}
+          colse={clstips}
         />
         <Modal
           visible={openes}

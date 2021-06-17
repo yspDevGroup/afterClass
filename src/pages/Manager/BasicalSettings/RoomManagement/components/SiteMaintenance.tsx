@@ -60,7 +60,7 @@ const SiteMaintenance = () => {
                 }}
                 okText="确定"
                 cancelText="取消"
-                placement="leftBottom"
+                placement="topRight"
             >
                 <a>
                     删除

@@ -69,8 +69,8 @@ const TimePeriodForm = (props: PropsType) => {
     {
       type: 'textArea',
       label: '备注',
-      name: 'BZ',
-      key: 'BZ',
+      name: 'BZXX',
+      key: 'BZXX',
     },
   ];
   return (
