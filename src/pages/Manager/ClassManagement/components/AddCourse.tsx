@@ -116,12 +116,12 @@ const AddCourse: FC<AddCourseProps> = ({
   }, []);
   // 获取标题
   const getTitle = () => {
-    if (formValues && names === 'bianji') {
-      return '编辑信息';
-    }
     if (formValues && names === 'chakan') {
       return '查看信息';
     }
+    if (formValues) {
+      return '编辑信息';
+    } 
     return '新增信息';
   };
 
