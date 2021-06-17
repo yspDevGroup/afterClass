@@ -118,9 +118,11 @@ const NewClassManagement = () => {
         setModalVisible(true);
     };
     const cover=(img: any)=>{
-        console.log(6666)
         setExhibition('block');
         setUrl(img);
+    }
+    const xclose=()=>{
+        setExhibition('none');
     }
     const columns: ProColumns<classType>[] = [
         {
@@ -218,10 +220,11 @@ const NewClassManagement = () => {
     ];
     return (
         <>
-             <div style={{display:`${exhibition}`,width:"90vw",height:'100vh',background:'rgba(0,0,0,.45)',position:'fixed',zIndex:1080,}}>
-                <div style={{width:'100%',height:'20px',display:'flex',flexDirection:'row-reverse'}}><span style={{color:'red'}}>X</span></div>
-                        <img src={url} alt=''style={{margin:'auto' }}/ >
-                </div>
+        {/* display:`${exhibition}` */}
+             <div style={{ display:`${exhibition}`,width:"87vw",height:'100vh',background:'rgba(0,0,0,.45)',position:'fixed',zIndex:1080,}}>
+                <div style={{width:'100%',height:'20px',display:'flex',flexDirection:'row-reverse'}}><a style={{color:'red',marginRight:'10px'}} onClick={xclose}>X</a></div>
+                <div style={{display:"flex",alignItems:'center',justifyContent:'center'}}> <img src={url} alt=''style={{margin:'auto' }}/ ></div>
+            </div>
             <PageContainer cls={styles.roomWrapper}>
                 <ProTable<classType>
                     actionRef={actionRef}

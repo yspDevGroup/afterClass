@@ -3,6 +3,7 @@ import type { FormInstance } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import type { Maintenance } from '../data';
+import styles from './index.less';
 
 const formLayout = {
   labelCol: { span: 5 },
@@ -115,7 +116,7 @@ const TimePeriodForm = (props: PropsType) => {
     },
   ];
   return (
-    <>
+    <div className={styles.courseStyles}>
       <ProFormFields
         layout="horizontal"
         setForm={setForm}
@@ -123,7 +124,7 @@ const TimePeriodForm = (props: PropsType) => {
         formItems={formItems}
         formItemLayout={formLayout}
       />
-    </>
+    </div>
   );
 };
 export default TimePeriodForm;
