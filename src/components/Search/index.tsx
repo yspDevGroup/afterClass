@@ -38,7 +38,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
   useEffect(() => {
     if (dataSource) {
       const chainSel = dataSource.find((item) => item.type === 'chainSelect');// 找到类型为chainSelect的
-      const grideSel = dataSource.find((item: any) => item.type === 'select');// 找到类型为select的
+      const singleSel = dataSource.find((item: any) => item.type === 'select');// 找到类型为select的
       const curXn = chainSel?.defaultValue?.first;// 学年默认值为第一个
       setchainData(chainSel?.data); // 改变联动数据
       if(curXn){
@@ -46,7 +46,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
       }
       setCurrentXN(chainSel?.defaultValue?.first);// 学年数据默认值为第一个
       setCurTerm(chainSel?.defaultValue?.second);// 学期数据默认值为第二个
-      setCurGride(grideSel?.defaultValue?.first);// 年级数据默认值为第一个
+      setCurGride(singleSel?.defaultValue?.first);// select数据默认值为第一个
     }
   }, [dataSource])
  // 点击学年的事件
@@ -64,10 +64,10 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
     setCurTerm(value);
     onChange('term',currentXN, value);
   };
-  // 点击年级的事件
+  // 点击select的事件
   const onGrideChange = (value: any) => {
     setCurGride(value);
-    onChange('gride', value);
+    onChange('select', value);
   }
   // 点击搜索事件
   const onSearch = (value: any) => {

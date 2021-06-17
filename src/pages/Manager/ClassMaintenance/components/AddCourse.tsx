@@ -37,11 +37,7 @@ const AddCourse: FC<AddCourseProps> = ({
   names,
   kcId,
 }) => {
-  if(formValues){
-    const {}=formValues
-  }
   const [form, setForm] = useState<any>();
-  // const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
   // 校区
   const [campus, setCampus] = useState<any>([]);
   // 年级
@@ -53,8 +49,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const [classattend, setClassattend] = useState<any>('');
   // 报名时间
   const [signup, setSignup] = useState<any>('');
-
-
   // 获取报名时段和上课时段
   useEffect(() => {
     if (kcId) {
@@ -73,25 +67,10 @@ const AddCourse: FC<AddCourseProps> = ({
       });
     }
   }, [kcId])
-  // 获取年级数据
-  useEffect(() => {
-    const res = getAllNJSJ();
-    Promise.resolve(res).then((data: any) => {
-      if (data.status === 'ok') {
-        const njArry: { label: string; value: string }[] = [];
-        data.data.map((item: any) => {
-          return njArry.push({
-            label: item.NJMC,
-            value: item.id,
-          });
-        });
-        // setNjData(njArry);
-      }
-    });
-  }, []);
+
   useEffect(() => {
     (async () => {
-      // 获取年级信息
+      // 从企微获取校区年级信息
       const currentXQ = await queryXQList();
       const XQ: { label: any; value: any }[] = [];
       const NJ = {};

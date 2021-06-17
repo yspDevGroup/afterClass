@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
-import type { RoomType, RoomItem, SchoolAreaType } from '../data';
+import type { RoomType, RoomItem } from '../data';
 import ProFormFields from '@/components/ProFormFields';
-import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { queryXQList } from '@/services/wechat/service';
 
@@ -24,45 +23,24 @@ type PropsType = {
 
 const AddRoom = (props: PropsType) => {
   const { current, setForm, readonly, setopens, setModalVisible } = props;
-  // const [schoolArea, setSchoolArea] = useState<Record<string, string>[]>([]);
   const [roomType, setRoomType] = useState<Record<string, string>[]>([]);
   // 校区
   const [campus, setCampus] = useState<any>([]);
-  useEffect(() => {
-    (async () => {
-      // 获取年级信息
-      const currentXQ = await queryXQList();
-      const XQ: { label: any; value: any }[] = [];
-      currentXQ?.map((item: any) => {
-        XQ.push({
-          label: item.name,
-          value: item.id,
-        });
-        return '';
-      });
-      setCampus(XQ);
-    })();
-  }, []);
+
   useEffect(() => {
     async function fetchData() {
       try {
-        // 根据学校ID获取所有校区信息
-        const result = await getAllXQSJ({
-          xxid: 'd6879944-be88-11eb-9edd-00ff016ba5b8',
+        // 获取所有校区信息
+        const currentXQ = await queryXQList();
+        const XQ: { label: any; value: any }[] = [];
+        currentXQ?.map((item: any) => {
+          XQ.push({
+            label: item.name,
+            value: item.id,
+          });
+          return '';
         });
-        if (result.status === 'ok') {
-          if (result.data && result.data.length > 0) {
-            // const data: any = [].map.call(result.data, (item: SchoolAreaType) => {
-            //   return {
-            //     label: item.XQMC,
-            //     value: item.id,
-            //   };
-            // });
-            // setSchoolArea(data);
-          }
-        } else {
-          message.info(result.message);
-        }
+        setCampus(XQ);
         // 根据学校ID获取所有场地类型
         const response = await getAllFJLX({
           name: '',
@@ -81,7 +59,7 @@ const AddRoom = (props: PropsType) => {
             setopens(true);
           }
         } else {
-          message.info(result.message);
+          message.info(response.message);
         }
       } catch (error) {
         console.log('数据获取失败');
