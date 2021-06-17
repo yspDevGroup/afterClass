@@ -167,7 +167,7 @@ const NewClassManagement = () => {
             align: 'center',
             width: '10%',
             render: (_, record) => {
-                const Url = `/classManagement/classMaintenance?courseId=${record.id}`;
+                const Url = `/courseManagements/classMaintenance?courseId=${record.id}`;
                 const classes=[];
                 record.KHBJSJs?.map((item)=>{
                     if(item.BJZT==='已发布'){

@@ -64,36 +64,28 @@
     path: '/courseManagements',
     name: 'courseManagements',
     icon: 'smile',
-    component: './Manager/CourseManagements',
-  },
- 
-  {
-    path: '/classMaintenance',
-    name: 'classMaintenance',
-    icon: 'smile',
-    hideInMenu: 'true',
-    component: './Manager/ClassMaintenance',
-  },
-  {
-    path: '/classManagement',
-    name: 'classManagement',
-    icon: 'smile',
     routes: [  
       {
-        path: '/classManagement/',
-        name: 'classManagement',
+        path: '/courseManagements/',
+        name: 'courseManagements',
         icon: 'smile',
-        component: './Manager/ClassManagement',
+        component: './Manager/CourseManagements',
         hideInMenu: 'true',
       },       
       {
-        path: '/classManagement/classMaintenance',
+        path: '/courseManagements/classMaintenance',
         name: 'classMaintenance',
         icon: 'smile',
         hideInMenu: 'true',
         component: './Manager/ClassMaintenance',    
       },
     ]
+  },
+  {
+    path: '/classManagement',
+    name: 'classManagement',
+    icon: 'smile',
+    component: './Manager/ClassManagement',
   },
   {
     path: '/courseScheduling',
