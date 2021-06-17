@@ -19,10 +19,11 @@ type PropsType = {
   readonly?: boolean;
   setopens: (value: boolean) => void;
   setModalVisible: (value: boolean) => void;
+  setXQLabelItem: (value: string) => void
 };
 
 const AddRoom = (props: PropsType) => {
-  const { current, setForm, readonly, setopens, setModalVisible } = props;
+  const { current, setForm, readonly, setopens, setModalVisible, setXQLabelItem } = props;
   const [roomType, setRoomType] = useState<Record<string, string>[]>([]);
   // 校区
   const [campus, setCampus] = useState<any>([]);
@@ -114,10 +115,13 @@ const AddRoom = (props: PropsType) => {
       type: 'select',
       readonly,
       label: '所属校区',
-      name: 'XQSJId',
-      key: 'XQSJId',
+      name: 'XQ',
+      key: 'XQ',
       fieldProps: {
         options: campus,
+        onChange(value: any, option: any){
+          setXQLabelItem(option.label);
+        }
       },
     },
     {

@@ -7,10 +7,10 @@ import ProFormFields from '@/components/ProFormFields';
 import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
-import { getAllNJSJ } from '@/services/after-class/njsj';
 import { queryXQList } from '@/services/wechat/service';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
+import { getDepUserList } from '@/services/after-class/wechat';
 
 type AddCourseProps = {
   visible: boolean;
@@ -38,20 +38,26 @@ const AddCourse: FC<AddCourseProps> = ({
   kcId,
 }) => {
   const [form, setForm] = useState<any>();
-  // const [njData, setNjData] = useState<{ label: string; value: string; }[]>([]);
   // 校区
   const [campus, setCampus] = useState<any>([]);
   // 年级
   const [grade, setGrade] = useState<any>();
-  const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
   // 上课时间
   const [classattend, setClassattend] = useState<any>('');
   // 报名时间
   const [signup, setSignup] = useState<any>('');
- 
-  
+  // 校区ID
+  const [xQId, setXQId] = useState('')
+  // 校区名字
+  const [xQItem, setXQLabelItem] = useState<any>([]);
+
+  // // 年级ID
+  // const [nJID, setNJID] = useState([]);
+  // 年级名字
+  const [nJLabelItem, setNJLabelItem] = useState<any>([])
+
   // 获取报名时段和上课时段
   useEffect(() => {
     if (kcId) {
@@ -70,22 +76,6 @@ const AddCourse: FC<AddCourseProps> = ({
       });
     }
   }, [kcId])
-  // 获取年级数据
-  useEffect(() => {
-    const res = getAllNJSJ();
-    Promise.resolve(res).then((data: any) => {
-      if (data.status === 'ok') {
-        const njArry: { label: string; value: string }[] = [];
-        data.data.map((item: any) => {
-          return njArry.push({
-            label: item.NJMC,
-            value: item.id,
-          });
-        });
-        // setNjData(njArry);
-      }
-    });
-  }, []);
   useEffect(() => {
     (async () => {
       // 获取年级信息
@@ -104,6 +94,19 @@ const AddCourse: FC<AddCourseProps> = ({
       });
       setCampus(XQ);
       setGrade(NJ);
+
+      // 获取教师
+      const resTeacher0 = await getDepUserList({
+        id: xQId,
+        fetch_child: 0
+      });
+      console.log('resTeacher0',resTeacher0);
+
+      const resTeacher1 = await getDepUserList({
+        id: xQId,
+        fetch_child: 1
+      });
+      console.log('resTeacher1',resTeacher1);
     })();
   }, []);
   // 获取标题
@@ -120,14 +123,20 @@ const AddCourse: FC<AddCourseProps> = ({
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
+      const options = {
+        ...values,
+        NJS: values.njIds?.toString(), // 年级ID
+        NJSName: nJLabelItem, // 年级名称
+        XQName: xQItem, // 校区名称
+      };
       if (formValues?.id) {
         const params = {
           id: formValues?.id,
         };
-        const options = values;
+
         res = updateKHBJSJ(params, options);
       } else {
-        res = createKHBJSJ(values);
+        res = createKHBJSJ(options);
       }
       resolve(res);
       reject(res);
@@ -209,6 +218,39 @@ const AddCourse: FC<AddCourseProps> = ({
       ],
     },
     {
+      type: 'select',
+      name: 'XQ',
+      key: 'XQ',
+      label: '所属校区',
+      readonly,
+      fieldProps: {
+        options: campus,
+        onChange(value: any, option: any) {
+          setXQId(value);
+          setXQLabelItem(option.label);
+        },
+      },
+    },
+    {
+      type: 'select',
+      name: 'njIds',
+      key: 'njIds',
+      label: '适用年级',
+      fieldProps: {
+        mode: 'multiple',
+        options: grade ? grade[xQItem] : [],
+        onChange(value: any, option: any) {
+          // setNJID(value);
+          const njsIabel: any[] = []
+          option.map((item: any)=>{
+            njsIabel.push(item.label);
+          })
+          setNJLabelItem(njsIabel);
+        },
+      },
+      readonly,
+    },
+    {
       type: 'group',
       readonly,
       groupItems: [
@@ -218,6 +260,12 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'ZJS',
           key: 'ZJS',
           readonly,
+          fieldProps: {
+            onChange: async(value: any)=>{
+
+            }
+
+          }
         },
         {
           type: 'select',
@@ -231,30 +279,7 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
-    {
-      type: 'select',
-      name: 'XQ',
-      key: 'XQ',
-      label: '所属校区',
-      readonly,
-      fieldProps: {
-        options: campus,
-        onChange(value: any) {
-          setXQItem(value);
-        },
-      },
-    },
-    {
-      type: 'select',
-      name: 'njIds',
-      key: 'njIds',
-      label: '适用年级',
-      fieldProps: {
-        mode: 'multiple',
-        options: grade ? grade[xQItem] : [],
-      },
-      readonly,
-    },
+
     {
       type: 'div',
       key: 'div',

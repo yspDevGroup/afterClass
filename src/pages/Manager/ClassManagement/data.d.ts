@@ -27,6 +27,7 @@ export type CourseItem = {
         NJMC: string,
     }]
     BJMS?: string;
+    ZJSName?: string;
 };
 
 /**

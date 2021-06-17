@@ -50,11 +50,11 @@ const ClassManagement = () => {
       currentXQ?.map((item: any) => {
         XQ.push({
           label: item.name,
-          value: item.id,
+          value: item.name,
         });
         NJ[item.name] = item.njList.map((njItem: any) => ({
           label: njItem.name,
-          value: njItem.id,
+          value: njItem.name,
         }));
       });
       setCampus(XQ);
@@ -109,8 +109,8 @@ const ClassManagement = () => {
                 teacher: KHItem.KHBJSJ.ZJS, // 主教师
                 bjId: KHItem.KHBJSJ.id, // 班级ID
                 kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
-                njId: KHItem.KHBJSJ.NJS.split(',')[0], // 年级ID
-                xqId: KHItem.KHBJSJ.XQ, // 校区ID
+                njId: KHItem.KHBJSJ.NJSName.split(',')[0], // 年级ID
+                xqId: KHItem.KHBJSJ.XQName, // 校区ID
                 color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(81, 208, 129, 1)',
                 dis: BJID ? !(BJID === KHItem.KHBJSJ.id) : !(recordValue.BJId === KHItem.KHBJSJ.id),
               };

@@ -19,7 +19,6 @@ import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
 import ClassStart from './components/ClassStart';
-import { getAllNJSJ } from '@/services/after-class/njsj';
 import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { convertData } from '@/components/Search/util';
 import { getQueryString } from '@/utils/utils';

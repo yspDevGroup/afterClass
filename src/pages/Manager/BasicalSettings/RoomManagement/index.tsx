@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Tooltip } from 'antd';
 import { message, Popconfirm } from 'antd';
@@ -18,7 +18,6 @@ import styles from './index.less';
 import { searchData } from './serarchConfig';
 import AsyncAddRoom from './components/AsyncAddRoom';
 import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
-import { getDepList } from '@/services/after-class/wechat';
 import PromptInformation from '@/components/PromptInformation';
 
 const RoomManagement = () => {
@@ -37,17 +36,11 @@ const RoomManagement = () => {
 
   const [dataSource] = useState<SearchDataType>(searchData);
   const [opens, setopens] = useState<boolean>(false);
+  const [xQLabelItem, setXQLabelItem] = useState('')
 
   const guanbi = () => {
     setopens(false);
   };
-
-  useEffect(() => {
-    (async () => {
-      const res = await getDepList({});
-      console.log('res: ', res);
-    })();
-  }, []);
 
   // 头部input事件
   const handlerSearch = (type: string, value: string) => {
@@ -99,7 +92,7 @@ const RoomManagement = () => {
       const values = await form?.validateFields();
       const { id, ...rest } = values;
       // 更新或新增场地信息
-      const result = id ? await updateFJSJ({ id }, { ...rest }) : await createFJSJ({ ...rest });
+      const result = id ? await updateFJSJ({ id }, { ...rest, XQName: xQLabelItem }) : await createFJSJ({ ...rest, XQName: xQLabelItem });
       if (result.status === 'ok') {
         message.success(id ? '场地信息更新成功' : '场地信息新增成功');
         setModalVisible(false);
@@ -151,19 +144,19 @@ const RoomManagement = () => {
     },
     {
       title: '所属校区',
-      dataIndex: 'XQSJ',
+      dataIndex: 'XQName',
       align: 'center',
       width: '15%',
       ellipsis: true,
-      render: (_, record) => {
-        return (
-          <div className="ui-table-col-elp">
-            <Tooltip title={record.XQSJ?.XQMC} arrowPointAtCenter>
-              {record.XQSJ?.XQMC}
-            </Tooltip>
-          </div>
-        );
-      },
+      // render: (_, record) => {
+      //   return (
+      //     <div className="ui-table-col-elp">
+      //       <Tooltip title={record.XQSJ?.XQMC} arrowPointAtCenter>
+      //         {record.XQSJ?.XQMC}
+      //       </Tooltip>
+      //     </div>
+      //   );
+      // },
     },
     {
       title: '容纳人数',
@@ -299,6 +292,7 @@ const RoomManagement = () => {
             setForm={setForm}
             setopens={setopens}
             setModalVisible={setModalVisible}
+            setXQLabelItem={setXQLabelItem}
           />
         )}
       </Modal>

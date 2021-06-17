@@ -60,7 +60,7 @@ const AddArranging: FC<PropsType> = (props) => {
   const [kcType, setKcType] = useState<any>([]);
   const [bjData, setBjData] = useState<any>([]);
   const [form] = Form.useForm();
-  const [xQItem, setXQItem] = useState<any>([]);
+  const [xQItem, setXQLabelItem] = useState<any>([]);
   const [excelTableValue] = useState<any[]>([]);
   const [bjIdData] = useState<any[]>([]);
   const sameClassDatas = [...sameClass];
@@ -355,12 +355,13 @@ const AddArranging: FC<PropsType> = (props) => {
             submitter={{
               render: (Props) => {
                 return [
-                  <Button key="rest" onClick={() => onReset(Props)}>
+                  <Button key="rest" style={{marginRight: 8}} onClick={() => onReset(Props)}>
                     取消
                   </Button>,
-                  <Button key="submit" onClick={() => Props.form?.submit?.()}>
+                  <Button key="submit" style={{marginRight: 8}} onClick={() => Props.form?.submit?.()}>
                     保存
                   </Button>,
+                  <Button danger >清除</Button>
                 ];
               },
             }}
@@ -371,10 +372,8 @@ const AddArranging: FC<PropsType> = (props) => {
               name="XQ"
               options={campus}
               fieldProps={{
-                onChange(value) {
-                  console.log('setXQItem', value);
-
-                  setXQItem(value);
+                onChange(value: any, option: any) {
+                  setXQLabelItem(option.label);
                 },
               }}
             />

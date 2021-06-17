@@ -242,32 +242,35 @@ const CourseManagement = () => {
     },
     {
       title: '主班',
-      dataIndex: 'ZJS',
-      key: 'ZJS',
+      dataIndex: 'ZJSName',
+      key: 'ZJSName',
       align: 'center',
       width: '10%',
     },
 
     {
       title: '副班',
-      dataIndex: 'FJS',
-      key: 'FJS',
+      dataIndex: 'FJSName',
+      key: 'FJSName',
       align: 'center',
       ellipsis: true,
     },
     {
       title: '所属校区',
       align: 'center',
+      dataIndex: 'XQName',
+      key: 'XQName',
+      ellipsis: true,
     },
     {
       title: '适用年级',
-      dataIndex: 'NJMC',
-      key: 'NJMC',
+      dataIndex: 'NJSName',
+      key: 'NJSName',
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
         const cc: any[] = [];
-        record.NJSJs?.map((item: any) => {
+        record.ZJSName?.split(',')?.map((item: any) => {
           return cc.push(item.NJMC);
         });
         return (
