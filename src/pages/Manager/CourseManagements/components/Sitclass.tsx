@@ -1,4 +1,4 @@
-import { createKHKCLX, getAllKHKCLX, updateKHKCLX } from '@/services/after-class/khkclx';
+import { createKHKCLX, deleteKHKCLX, getAllKHKCLX, updateKHKCLX } from '@/services/after-class/khkclx';
 import { courseColorType } from '@/theme-default';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -34,7 +34,7 @@ const Sitclass = () => {
       dataIndex: 'KCLX',
       align: 'center',
       ellipsis: true,
-      width:90,
+      width: 90,
     },
     {
       title: '课程颜色',
@@ -69,12 +69,29 @@ const Sitclass = () => {
         </a>,
         <Popconfirm
           title="删除之后，数据不可恢复，确定要删除吗?"
+          onConfirm={async () => {
+            try {
+              if (record.id) {
+                const result = await deleteKHKCLX({ id: `${record.id}` });
+                if (result.status === 'ok') {
+                  message.success('信息删除成功');
+                  actionRef.current?.reload();
+                } else {
+                  message.error(`${result.message},请联系管理员或稍后再试`);
+                }
+              }
+            } catch (err) {
+              message.error('删除失败，请联系管理员或稍后重试。');
+            }
+          }}
           okText="确定"
           cancelText="取消"
-          placement="topLeft"
+          placement="leftBottom"
         >
-          <a>删除</a>
-        </Popconfirm>,
+          <a>
+            删除
+    </a>
+        </Popconfirm>
       ],
     },
   ];
@@ -118,18 +135,18 @@ const Sitclass = () => {
             try {
               const result = row.title
                 ? await createKHKCLX({
+                  KCLX: row.KCLX!,
+                  KBYS: row.KBYS,
+                })
+                : await updateKHKCLX(
+                  {
+                    id: row.id!,
+                  },
+                  {
                     KCLX: row.KCLX!,
                     KBYS: row.KBYS,
-                  })
-                : await updateKHKCLX(
-                    {
-                      id: row.id!,
-                    },
-                    {
-                      KCLX: row.KCLX!,
-                      KBYS: row.KBYS,
-                    },
-                  );
+                  },
+                );
               if (result.status === 'ok') {
                 message.success(row.title ? '信息新增成功' : '信息更新成功');
                 actionRef.current?.reload();

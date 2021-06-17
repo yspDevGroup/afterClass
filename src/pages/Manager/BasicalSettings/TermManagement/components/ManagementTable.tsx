@@ -1,6 +1,7 @@
 import ProFormFields from "@/components/ProFormFields";
 import type { FormInstance } from "@ant-design/pro-form";
 import type { ActionType } from "@ant-design/pro-table";
+import { constant } from "lodash";
 import React from "react";
 import type { TermItem } from "../data";
 
@@ -20,7 +21,7 @@ const formLayout = {
 const OrganizationTable = (props: PropsType) => {
   const { current, setForm, readonly } = props;
   const onFinish = () => {
-    
+
   };
 
   const formItems: any[] = [
@@ -31,20 +32,22 @@ const OrganizationTable = (props: PropsType) => {
       name: 'XN',
       key: 'XN',
       rules: [{ required: true, message: '请填写学年' }],
-      fieldProps:{
-        autocomplete:'off'
+      fieldProps: {
+        autocomplete: 'off',
+        placeholder:'如2021-2022'
       }
     },
     {
-      type: 'input',
+      type: 'select',
       readonly,
       label: '学期',
       name: 'XQ',
       key: 'XQ',
-      rules: [{ required: true, message: '请填写学年' }],
-      fieldProps:{
-        autocomplete:'off'
-      }
+      rules: [{ required: true, message: '请选择学年' }],
+      valueEnum: {
+        第一学期: '第一学期',
+        第二学期: '第二学期',
+      },
     },
     {
       type: 'dateRange',
@@ -59,11 +62,25 @@ const OrganizationTable = (props: PropsType) => {
 
   return (
     <div>
-     <ProFormFields
+      <ProFormFields
         layout="horizontal"
         onFinish={onFinish}
         setForm={setForm}
-        values={current}
+        values={
+          (() => {
+            if (current) {
+              const { KSRQ, ...info } = current;
+              const cc=[];
+              cc.push(current.KSRQ);
+              cc.push(current.JSRQ);
+              return {
+                  KSRQ:cc,
+                  ...info
+              };
+            }
+            return  undefined;
+          })()
+        }
         formItems={formItems}
         formItemLayout={formLayout}
       />

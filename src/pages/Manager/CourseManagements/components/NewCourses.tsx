@@ -47,6 +47,9 @@ const NewCourses = (props: PropsType) => {
     if(current){
       setBaoming(false);
       setKaike(false);
+    }else{
+      setBaoming(true);
+      setKaike(true);
     }
   }, [current])
 
@@ -125,7 +128,7 @@ const NewCourses = (props: PropsType) => {
           values.BMJSSJ = moment(values.BMKSSJ[1]);
           values.BMKSSJ = moment(values.BMKSSJ[0]);
         }
-        res = createKHKCSJ({ ...values, KCTP: imgurl });
+        res = createKHKCSJ({ ...values, KCTP: imgurl ,KCZT:'待发布'});
       }
       resolve(res);
       reject(res);
@@ -198,7 +201,7 @@ const NewCourses = (props: PropsType) => {
               }
               return setBaoming(false);
             },
-            defaultValue: false,
+            defaultChecked:!baoming,
           }
         }
       ]
@@ -229,7 +232,7 @@ const NewCourses = (props: PropsType) => {
               }
               return setKaike(false);
             },
-            defaultValue: false,
+            defaultChecked: (!kaike),
           },
         },
         

@@ -78,7 +78,22 @@
     path: '/classManagement',
     name: 'classManagement',
     icon: 'smile',
-    component: './Manager/ClassManagement',
+    routes: [  
+      {
+        path: '/classManagement/',
+        name: 'classManagement',
+        icon: 'smile',
+        component: './Manager/ClassManagement',
+        hideInMenu: 'true',
+      },       
+      {
+        path: '/classManagement/classMaintenance',
+        name: 'classMaintenance',
+        icon: 'smile',
+        hideInMenu: 'true',
+        component: './Manager/ClassMaintenance',    
+      },
+    ]
   },
   {
     path: '/courseScheduling',

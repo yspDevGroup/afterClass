@@ -157,7 +157,7 @@ const TermManagement = () => {
             }}
             okText="确定"
             cancelText="取消"
-            placement="topLeft"
+            placement="leftBottom"
           >
             <a>删除</a>
           </Popconfirm>

@@ -17,7 +17,7 @@ type propstype = {
 
 const ActionBar = (props: propstype) => {
   const { handleEdit, record, maintain,actionRef } = props;
-  const Url = `/courseScheduling?courseId=${record.id}`;
+  const Url = `/courseScheduling?classId=${record.id}`;
   switch (record.BJZT) {
     case '待发布':
     case '未排课':
@@ -56,7 +56,7 @@ const ActionBar = (props: propstype) => {
             }}
             okText="确定"
             cancelText="取消"
-            placement="topLeft"
+            placement="leftBottom"
           >
             <a>删除</a>
           </Popconfirm>
@@ -95,7 +95,7 @@ const ActionBar = (props: propstype) => {
             }}
             okText="确定"
             cancelText="取消"
-            placement="topLeft"
+            placement="leftBottom"
           >
             <a>删除</a>
           </Popconfirm>

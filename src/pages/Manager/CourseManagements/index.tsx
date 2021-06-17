@@ -167,7 +167,7 @@ const NewClassManagement = () => {
             align: 'center',
             width: '10%',
             render: (_, record) => {
-                const Url = `/classMaintenance?courseId=${record.id}`;
+                const Url = `/classManagement/classMaintenance?courseId=${record.id}`;
                 const classes=[];
                 record.KHBJSJs?.map((item)=>{
                     if(item.BJZT==='已发布'){
@@ -219,7 +219,7 @@ const NewClassManagement = () => {
             title: '操作',
             valueType: 'option',
             key: 'option',
-            width: 100,
+            width: 150,
             render: (_, record) => (
                 <Operation  record={record} handleOperation={handleOperation} actionRef={actionRef}/>
             ),
