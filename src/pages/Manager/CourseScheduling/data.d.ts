@@ -95,17 +95,6 @@ export type GradeType = {
     
 /**
  * 
- *  场地类型字段
-    id  UUID;
-    FJLX:场地类型
- */
-export type  RoomType= {
-    id?: string;
-    FJLX?: string;
-}
-    
-/**
- * 
  *  场地字段
     id  UUID;
     FJLX:场地类型

@@ -14,7 +14,7 @@ import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
 import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
 
-import type { BJType, RoomType, GradeType, SiteType, CourseType } from '../data';
+import type { BJType, GradeType, SiteType, CourseType } from '../data';
 import ExcelTable from '@/components/ExcelTable';
 import styles from '../index.less';
 

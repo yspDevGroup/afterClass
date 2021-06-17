@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
-import type { RoomType, RoomItem } from '../data';
 import ProFormFields from '@/components/ProFormFields';
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { queryXQList } from '@/services/wechat/service';

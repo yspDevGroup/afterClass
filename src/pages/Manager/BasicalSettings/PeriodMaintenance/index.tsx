@@ -22,6 +22,7 @@ import {
 import { message } from 'antd';
 import moment from 'moment';
 import AsyncTimePeriodForm from './components/AsyncTimePeriodForm';
+import type { ReactNode } from 'react';
 
 const PeriodMaintenance = () => {
   const [currentStatus, setCurrentStatus] = useState<string | undefined>('enroll');
@@ -97,10 +98,21 @@ const PeriodMaintenance = () => {
     },
     {
       title: '时段名称',
-      dataIndex: 'TITLE',
+      dataIndex: 'SDMC',
       align: 'center',
       width: '15%',
       ellipsis: true,
+    },
+    {
+      title: '所属学期',
+      dataIndex: 'SSXQ',
+      align: 'center',
+      width: '15%',
+      render: (_: ReactNode, entity: Maintenance) => {
+        return (
+          <div>{entity.XNXQ?.XN}{entity.XNXQ?.XQ}</div>
+        )
+      }
     },
     {
       title: '开始时间',
