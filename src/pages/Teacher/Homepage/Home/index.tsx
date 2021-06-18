@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import imgPop from '@/assets/mobileBg.png';
+import imgPop from '@/assets/teacherBg.png';
 import imgNotice from '@/assets/notice.png';
 import { RightOutlined } from '@ant-design/icons';
 import ListComp from '@/components/ListComponent';

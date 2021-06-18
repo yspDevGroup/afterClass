@@ -58,6 +58,17 @@ const AddCourse: FC<AddCourseProps> = ({
   // 年级名字
   const [nJLabelItem, setNJLabelItem] = useState<any>([]);
 
+  
+  useEffect(() => {
+    if(formValues){
+      setBaoming(false);
+      setKaike(false);
+    }else{
+      setBaoming(true);
+      setKaike(true);
+    }
+  }, [formValues])
+
   // 获取报名时段和上课时段
   useEffect(() => {
     if (kcId) {
@@ -300,7 +311,7 @@ const AddCourse: FC<AddCourseProps> = ({
               }
               return setBaoming(false);
             },
-            defaultValue: false,
+            checked:!baoming,
           },
         },
       ],
@@ -334,7 +345,7 @@ const AddCourse: FC<AddCourseProps> = ({
               }
               return setKaike(false);
             },
-            defaultValue: false,
+            checked: !kaike
           },
         },
       ],

@@ -220,7 +220,6 @@ const NewClassManagement = () => {
     ];
     return (
         <>
-        {/* display:`${exhibition}` */}
              <div style={{ display:`${exhibition}`,width:"100vw",height:'100vh',background:'rgba(0,0,0,.45)',position:'fixed',zIndex:1080,left:'0',top:'0'}}>
                 <div style={{width:'100%',height:'35px',display:'flex',flexDirection:'row-reverse'}}><a style={{color:'#fff',marginRight:'10px',fontSize:"24px"}} onClick={xclose} >X</a></div>
                 <div style={{display:"flex",alignItems:'center',justifyContent:'center'}}> <img src={url} alt=''style={{margin:'auto',maxHeight:'100vh',maxWidth:'100vw',paddingBottom:"80px" }}/ ></div>

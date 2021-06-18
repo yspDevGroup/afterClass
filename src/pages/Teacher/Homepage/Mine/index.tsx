@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
-import imgPop from '@/assets/mobileBg.png';
+import imgPop from '@/assets/teacherBg.png';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import CheckOnChart from './components/CheckOnChart';
 import { childData, childEvu, martialData, martialEvu } from './mock';
