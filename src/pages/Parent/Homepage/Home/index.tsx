@@ -34,7 +34,7 @@ const Home = () => {
             </Link>
           </div>
           <Link to="/parent/home/notice/details?listpage=page1">
-            <IconFont type='icon-xiayiye' />
+            <IconFont type='icon-gengduo'className={styles.gengduo} />
           </Link>
         </div>
         <div className={styles.enrollArea}>

@@ -76,8 +76,8 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
       case 'div':
         return (
           <div style={{ display: 'flex', height: 40 }} key={key}>
-            <div style={{ marginLeft: -40 }}>{formItem.label}</div>
-            <div style={{ marginTop: -27, marginLeft: -30 }}>
+            <div >{formItem.label}</div>
+            <div style={{ marginTop: -6 }}>
               {lineItem?.map((item: any) => {
                 return renderFormItems([item]);
               })}

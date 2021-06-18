@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import imgPop from '@/assets/teacherBg.png';
-import imgNotice from '@/assets/notice.png';
-import { RightOutlined } from '@ant-design/icons';
 import ListComp from '@/components/ListComponent';
 import { annoceData, courseData, currentData } from '../listData';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import PromptInformation from './components/PromptInformation';
+import IconFont from '@/components/CustomIcon';
 
 
 const Home = () => {
@@ -54,12 +53,12 @@ const Home = () => {
       </header>
       <div className={styles.pageContent}>
         <div className={styles.noticeArea}>
-          <img className={styles.noticeImg} src={imgNotice} />
+        <IconFont type='icon-gonggao' className={styles.noticeImg} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
             <span>2021秋季课后服务将于2021.09.02正式开课...</span>
           </div>
-          <RightOutlined />
+          <IconFont type='icon-gengduo' className={styles.gengduo}/>
         </div>
         <div className={styles.enrollArea}>
           {enroll ? (
