@@ -37,7 +37,7 @@ const Mine = () => {
       <div className={styles.linkWrapper}>
         <ul>
           <li>
-            <IconFont type='icon-chengchangjilu' style={{'fontSize':'18px'}}  />
+            <IconFont type='icon-lishikecheng' style={{'fontSize':'18px'}}  />
             <Link to='/'>
               历史课程
               <IconFont type='icon-xiayiye' />

@@ -3,22 +3,22 @@ import type { ListData } from "@/components/ListComponent/data";
 export const iconTextData = [
   {
     text: "课堂点名",
-    icon: "icon-yiwancheng",
+    icon: "icon-dianming",
     background: "#FF8964",
   },
   {
     text: "离校通知",
-    icon: "icon-quanbudingdan",
+    icon: "icon-lixiao",
     background: "#7DCE81",
   },
   {
     text: "请假",
-    icon: "icon-xueshengqingjia",
+    icon: "icon-jiaoshiqingjia",
     background: "#2FA3FF",
   },
   {
     text: "学生评价",
-    icon: "icon-jiaoxuepingjia",
+    icon: "icon-xuexipingjia",
     background: "#FFC700",
   },
 ];

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useModel } from 'umi';
 import imgPop from '@/assets/mobileBg.png';
-import imgNotice from '@/assets/notice.png';
 import ListComp from '@/components/ListComponent';
 import { noticData, currentData } from '../listData';
 import CourseTab from './components/CourseTab';
@@ -27,7 +26,7 @@ const Home = () => {
       </header>
       <div className={styles.pageContent}>
         <div className={styles.noticeArea}>
-          <img className={styles.noticeImg} src={imgNotice} />
+          <IconFont type='icon-gonggao' className={styles.noticeImg} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
             <Link to="/parent/home/notice/details?listpage=page1">
