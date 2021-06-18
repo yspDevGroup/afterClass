@@ -10,23 +10,24 @@ import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
-import * as jxjhsj from './jxjhsj';
 import * as jzgjbsj from './jzgjbsj';
+import * as jxjhsj from './jxjhsj';
 import * as kcsj from './kcsj';
 import * as khbjsj from './khbjsj';
 import * as khjspj from './khjspj';
 import * as khkclx from './khkclx';
 import * as khkcsj from './khkcsj';
 import * as khpksj from './khpksj';
-import * as khxscq from './khxscq';
 import * as khxsdd from './khxsdd';
+import * as khxscq from './khxscq';
 import * as khxspj from './khxspj';
 import * as khxsqj from './khxsqj';
 import * as njsj from './njsj';
 import * as pksj from './pksj';
-import * as wechat from './wechat';
+import * as upload from './upload';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
+import * as wechat from './wechat';
 import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
 import * as xsjbsj from './xsjbsj';
@@ -45,23 +46,24 @@ export default {
   fjsj,
   jcsj,
   jcxx,
-  jxjhsj,
   jzgjbsj,
+  jxjhsj,
   kcsj,
   khbjsj,
   khjspj,
   khkclx,
   khkcsj,
   khpksj,
-  khxscq,
   khxsdd,
+  khxscq,
   khxspj,
   khxsqj,
   njsj,
   pksj,
-  wechat,
+  upload,
   xl,
   xnjgsj,
+  wechat,
   xnxq,
   xqsj,
   xsjbsj,

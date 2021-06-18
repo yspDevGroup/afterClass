@@ -79,20 +79,22 @@ const AddCourse: FC<AddCourseProps> = ({
 
   useEffect(() => {
     (async () => {
-      // 获取教师
-      const resTeacher0 = await getDepUserList({
-        id: xQId,
-        fetch_child: 0,
-      });
-      console.log('resTeacher0', resTeacher0);
+      if (xQId) {
+        // 获取教师
+        const resTeacher0 = await getDepUserList({
+          id: xQId,
+          fetch_child: 0,
+        });
+        console.log('resTeacher0', resTeacher0);
 
-      const resTeacher1 = await getDepUserList({
-        id: xQId,
-        fetch_child: 1,
-      });
-      console.log('resTeacher1', resTeacher1);
+        const resTeacher1 = await getDepUserList({
+          id: xQId,
+          fetch_child: 1,
+        });
+        console.log('resTeacher1', resTeacher1);
+      }
     })();
-  }, []);
+  }, [xQId]);
 
   useEffect(() => {
     (async () => {
@@ -121,7 +123,7 @@ const AddCourse: FC<AddCourseProps> = ({
     }
     if (formValues) {
       return '编辑信息';
-    } 
+    }
     return '新增信息';
   };
 
