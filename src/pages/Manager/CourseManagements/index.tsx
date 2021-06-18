@@ -69,13 +69,8 @@ const NewClassManagement = () => {
     }, []);
     // 监听学年学期更新
     useEffect(() => {
-        console.log(xn);
-        console.log(xq);
-        
-        
         if (xn && xq) {
             setTimeout(() => {
-                console.log('inin');
                 actionRef.current?.reload();
             }, 0);
         }

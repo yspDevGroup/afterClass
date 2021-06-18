@@ -20,7 +20,9 @@ type AddCourseProps = {
   actionRef?: React.MutableRefObject<ActionType | undefined>;
   mcData?: { label: string; value: string }[];
   names?: string;
-  kcId?: string;
+  kcId: string;
+  classattend: string[];
+  signup: string[]
 };
 const formLayout = {
   labelCol: {},
@@ -36,6 +38,8 @@ const AddCourse: FC<AddCourseProps> = ({
   mcData,
   names,
   kcId,
+  classattend,
+  signup
 }) => {
   const [form, setForm] = useState<any>();
   // 校区
@@ -45,28 +49,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
-  // 上课时间
-  const [classattend, setClassattend] = useState<any>('');
-  // 报名时间
-  const [signup, setSignup] = useState<any>('');
-  // 获取报名时段和上课时段
-  useEffect(() => {
-    if (kcId) {
-      const res = getKHKCSJ({ id: kcId });
-      Promise.resolve(res).then((data: any) => {
-        if (data.status === 'ok') {
-          const arry = []
-          arry.push(data.data.BMKSSJ)
-          arry.push(data.data.BMJSSJ)
-          setSignup(arry);
-          const erry = []
-          erry.push(data.data.JKRQ)
-          erry.push(data.data.KKRQ)
-          setClassattend(erry)
-        }
-      });
-    }
-  }, [kcId])
 
   useEffect(() => {
     (async () => {

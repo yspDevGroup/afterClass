@@ -32,6 +32,12 @@ const ClassMaintenance = () => {
   const [readonly, stereadonly] = useState<boolean>(false);
   const [moduletype, setmoduletype] = useState<string>('crourse');
   const [kcId, setkcId] = useState<string>('');
+  // 查询课程名称
+  const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
+  // 查询课程开课时间
+  const [classattend, setClassattend] = useState<string[]>([]);
+  // 查询课程报名时间
+  const [signup, setSignup] = useState<string[]>([]);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 控制学期学年数据提示框的函数
@@ -50,12 +56,16 @@ const ClassMaintenance = () => {
       (async () => {
         const id = { id: curId };
         const res = await getKHKCSJ(id);
-        if (res.status === 'ok') {
-          const newData =  [...searchData];
+        if (res.status === 'ok' && res.data.KCMC) {
+          const newData = [...searchData];
           newData[0].data = [res.data.KCMC];
-          console.log(newData);
-          
           setDataSource(newData)
+          setmcData([{
+            label: res.data.KCMC,
+            value: curId
+          }]);
+          setClassattend([res.data.JKRQ!,res.data.KKRQ!]);
+          setSignup([res.data.BMKSSJ!,res.data.BMJSSJ!]);
         }
       })();
     }
@@ -220,7 +230,7 @@ const ClassMaintenance = () => {
             };
             return getAllKHBJSJ({
               kcId,
-              name:'',
+              name: '',
               page: 1,
               pageCount: 20,
             }, opts);
@@ -250,11 +260,14 @@ const ClassMaintenance = () => {
         />
         <AddCourse
           kcId={kcId}
+          classattend={classattend}
+          signup={signup}
           actionRef={actionRef}
           visible={visible}
           onClose={onClose}
           formValues={current}
           readonly={readonly}
+          mcData={mcData}
           names={names}
         />
         <PromptInformation
