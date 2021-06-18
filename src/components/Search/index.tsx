@@ -13,9 +13,9 @@ import styles from "./index.less";
 import type { SearchDataType } from './data';
 
 type ISearchComponent = {
-    /** 数据类型 */
+  /** 数据类型 */
   dataSource?: SearchDataType;
-   /** input值改变的方法 */
+  /** input值改变的方法 */
   onChange?: any;
 }
 
@@ -35,7 +35,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
       const singleSel = dataSource.find((item: any) => item.type === 'select');// 找到类型为select的
       const curXn = chainSel?.defaultValue?.first;// 学年默认值为第一个
       setchainData(chainSel?.data); // 改变联动数据
-      if(curXn){
+      if (curXn) {
         setTerms(chainSel?.data?.subData[curXn])// 改变学期数据 --->联动数据下学年数据对应的学期数据
       }
       setCurrentXN(chainSel?.defaultValue?.first);// 学年数据默认值为第一个
@@ -43,7 +43,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
       setCurGride(singleSel?.defaultValue?.first);// select数据默认值为第一个
     }
   }, [dataSource])
- // 点击学年的事件
+  // 点击学年的事件
   const handleChainChange = (value: string) => {
     setCurrentXN(value);
     const ter = chainData?.subData[value] || []
@@ -53,10 +53,10 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
     }
     onChange('year', value, ter[0].value);
   };
-   // 点击学期的事件
+  // 点击学期的事件
   const onTermChange = (value: any) => {
     setCurTerm(value);
-    onChange('term',currentXN, value);
+    onChange('term', currentXN, value);
   };
   // 点击select的事件
   const onGrideChange = (value: any) => {
@@ -117,6 +117,14 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
                   onPressEnter={(val) => { onChange("customSearch", (val.target as unknown as HTMLInputElement).value) }}
                   style={{ width: 200 }}
                 />
+              </div>
+            </div>;
+            break;
+          case 'text':
+            return <div style={{ display: "inline-block" }} >
+              <div className={styles.HeaderSearch} >
+                {isLabel ? <span>{label}</span> : ''}
+                <span>{data[0]}</span>
               </div>
             </div>;
             break;

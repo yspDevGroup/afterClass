@@ -13,32 +13,25 @@ import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
 import type { CourseItem, TableListParams } from './data';
 import styles from './index.less';
-import type { SearchDataType } from '@/components/Search/data';
 import { searchData } from './searchConfig';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
 import ClassStart from './components/ClassStart';
-import { getAllXNXQ } from '@/services/after-class/xnxq';
-import { convertData } from '@/components/Search/util';
 import { getQueryString } from '@/utils/utils';
 import PromptInformation from '@/components/PromptInformation';
-import { getAllKHKCSJ, getKHKCSJ } from '@/services/after-class/khkcsj';
+import { getKHKCSJ } from '@/services/after-class/khkcsj';
+import type { SearchDataType } from '@/components/Search/data';
 
 const ClassMaintenance = () => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
+  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [openes, setopenes] = useState(false);
   const actionRef = useRef<ActionType>();
-  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [readonly, stereadonly] = useState<boolean>(false);
   const [moduletype, setmoduletype] = useState<string>('crourse');
-  const [xn, setxn] = useState<string>('');
-  const [xq, setxq] = useState<string>('');
   const [kcId, setkcId] = useState<string>('');
-  // 查询课程名称
-  const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
-  const [name, setName] = useState<string>('');
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 控制学期学年数据提示框的函数
@@ -57,60 +50,16 @@ const ClassMaintenance = () => {
       (async () => {
         const id = { id: curId };
         const res = await getKHKCSJ(id);
-        const ress = getAllKHKCSJ({
-          name: '',
-          xn: res.data?.XNXQ?.XN,
-          xq: res.data?.XNXQ?.XQ,
-          page: 0,
-          pageCount: 0,
-        });
-        Promise.resolve(ress).then((dataes: any) => {
-          if (dataes.status === 'ok') {
-            const njArry: { label: string; value: string }[] = [];
-            dataes.data.map((item: any) => {
-              return njArry.push({
-                label: item.KCMC,
-                value: item.id,
-              });
-            });
-            setmcData(njArry);
-            actionRef.current?.reload();
-          }
-        });
+        if (res.status === 'ok') {
+          const newData =  [...searchData];
+          newData[0].data = [res.data.KCMC];
+          console.log(newData);
+          
+          setDataSource(newData)
+        }
       })();
     }
   }, []);
-  // 监听学年学期更新
-  useEffect(() => {
-    if (xn && xq) {
-      setTimeout(() => {
-        actionRef.current?.reload();
-      }, 0);
-    }
-  }, [xn, xq]);
-  // 头部input事件
-  const handlerSearch = (type: string, value: string, term: string) => {
-    if (type === 'year' || type === 'term') {
-      setxn(value);
-      setxq(term);
-      const ress = getAllKHKCSJ({ name: '', xn: value, xq: term, page: 0, pageCount: 0 });
-      Promise.resolve(ress).then((dataes: any) => {
-        if (dataes.status === 'ok') {
-          const njArry: { label: string; value: string }[] = [];
-          dataes.data.map((item: any) => {
-            return njArry.push({
-              label: item.KCMC,
-              value: item.id,
-            });
-          });
-          setmcData(njArry);
-        }
-      });
-      actionRef.current?.reload();
-    }
-    setName(value);
-    actionRef.current?.reload();
-  };
   // 获取弹框标题
   const getTitle = () => {
     if (moduletype === 'crourse') {
@@ -155,29 +104,6 @@ const ClassMaintenance = () => {
   };
   const showmodal = () => {
     setopenes(false);
-  };
-  const request = async (
-    param: TableListParams,
-    sorter: Record<string, any> | undefined,
-    filter: any,
-  ) => {
-    const opts: TableListParams = {
-      ...param,
-      sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-      filter,
-    };
-    const obj = {
-      xn,
-      xq,
-      kcId,
-      page: 1,
-      pageCount: 20,
-      name,
-    };
-    if (xn === '' || xq === '') {
-      return '';
-    }
-    return getAllKHBJSJ(obj, opts);
   };
   const columns: ProColumns<CourseItem>[] = [
     {
@@ -282,7 +208,23 @@ const ClassMaintenance = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          request={request}
+          request={async (
+            param: TableListParams,
+            sorter: Record<string, any> | undefined,
+            filter: any,
+          ) => {
+            const opts: TableListParams = {
+              ...param,
+              sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+              filter,
+            };
+            return getAllKHBJSJ({
+              kcId,
+              name:'',
+              page: 1,
+              pageCount: 20,
+            }, opts);
+          }}
           options={{
             setting: false,
             fullScreen: false,
@@ -292,11 +234,7 @@ const ClassMaintenance = () => {
           search={false}
           pagination={paginationConfig}
           headerTitle={
-            <SearchComponent
-              onChange={(type: string, value: string, trem: string) =>
-                handlerSearch(type, value, trem)
-              }
-            />
+            <SearchComponent dataSource={dataSource} />
           }
           toolBarRender={() => [
             <Button
@@ -317,7 +255,6 @@ const ClassMaintenance = () => {
           onClose={onClose}
           formValues={current}
           readonly={readonly}
-          mcData={mcData}
           names={names}
         />
         <PromptInformation

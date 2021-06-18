@@ -1,6 +1,6 @@
 export type SearchDataType = {
   label?: string,
-  type?: 'chainSelect'|'select'|'input',
+  type?: 'chainSelect'|'select'|'input'|'text',
   placeHolder?: string,
   defaultValue?: {
     first?: string,
