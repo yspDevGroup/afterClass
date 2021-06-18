@@ -19,9 +19,9 @@ type PropsType = {
 
 const TimePeriodForm = (props: PropsType) => {
   const { currentStatus, current, setForm } = props;
-  const [chainData, setchainData] = useState<ChainDataType>();// 联动数据
-  const [terms, setTerms] = useState<{ label: string; value: string }[]>();// 联动数据中的学期数据   
-  const [currentTerm,setCurrentTerm] = useState<string>();
+  const [chainData, setchainData] = useState<ChainDataType>(); // 联动数据
+  const [terms, setTerms] = useState<{ label: string; value: string }[]>(); // 联动数据中的学期数据
+  const [currentTerm, setCurrentTerm] = useState<string>();
   useEffect(() => {
     async function fetchData() {
       // 从本地获取学期学年信息
@@ -45,8 +45,8 @@ const TimePeriodForm = (props: PropsType) => {
       key: 'TITLE',
       rules: [{ required: true, message: '请填写名称' }],
       fieldProps: {
-        autocomplete: 'off'
-      }
+        autocomplete: 'off',
+      },
     },
     {
       type: 'cascader',
@@ -60,6 +60,7 @@ const TimePeriodForm = (props: PropsType) => {
           key: 'xn',
           placeholder: '请选择学年',
           options: chainData?.data,
+          rules: [{ required: true, messsage: '请选择学年' }],
           noStyle: true,
           fieldProps: {
             onChange: (event: string) => {
@@ -73,6 +74,7 @@ const TimePeriodForm = (props: PropsType) => {
           name: 'xq',
           width: '100%',
           key: 'xq',
+          rules: [{ required: true, messsage: '请选择学期' }],
           placeholder: '请选择学期',
           noStyle: true,
           options: terms,
@@ -90,8 +92,8 @@ const TimePeriodForm = (props: PropsType) => {
         minuteStep: 5,
         hideDisabledOptions: true,
         disabledHours: () => {
-          return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 21, 22, 23, 24]
-        }
+          return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 21, 22, 23, 24];
+        },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
     },
@@ -106,8 +108,8 @@ const TimePeriodForm = (props: PropsType) => {
         minuteStep: 5,
         hideDisabledOptions: true,
         disabledHours: () => {
-          return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 21, 22, 23, 24]
-        }
+          return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 21, 22, 23, 24];
+        },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
     },
@@ -123,7 +125,7 @@ const TimePeriodForm = (props: PropsType) => {
       <ProFormFields
         layout="horizontal"
         setForm={setForm}
-        values={currentTerm ? {xq: currentTerm} :current}
+        values={currentTerm ? { xq: currentTerm } : current}
         formItems={formItems}
         formItemLayout={formLayout}
       />

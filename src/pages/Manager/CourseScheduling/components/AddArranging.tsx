@@ -37,6 +37,7 @@ type PropsType = {
 
 const AddArranging: FC<PropsType> = (props) => {
   const {
+    setState,
     sameClass,
     xn,
     xq,
@@ -69,6 +70,20 @@ const AddArranging: FC<PropsType> = (props) => {
   const [loading, setLoading] = useState(true);
   const [CDLoading, setCDLoading] = useState(false);
 
+  // 获取排课的接口
+  const tableServers = () => {
+    const Fjplan = getFJPlan({
+      xn,
+      xq,
+      isPk: false,
+    });
+    Promise.resolve(Fjplan).then((FjplanData) => {
+      if (FjplanData.status === 'ok') {
+        const datad = processingData(FjplanData.data, xXSJPZData);
+        setTableDataSource(datad);
+      }
+    });
+  };
   const columns: {
     title: string;
     dataIndex: string;
@@ -189,6 +204,7 @@ const AddArranging: FC<PropsType> = (props) => {
     }, 2000);
   };
 
+  // 保存
   const submit = async (params: any) => {
     try {
       const data = [...excelTableValue].concat(sameClassDatas);
@@ -201,7 +217,8 @@ const AddArranging: FC<PropsType> = (props) => {
       const result = await createKHPKSJ(parameter);
       if (result.status === 'ok') {
         message.success('保存成功');
-        window.location.reload();
+        tableServers();
+        setState(true);
         return true;
       }
       if (result.status === 'error') {
@@ -218,8 +235,9 @@ const AddArranging: FC<PropsType> = (props) => {
     return true;
   };
   const onReset = (prop: any) => {
-    prop.form?.resetFields();
-    window.location.reload();
+    tableServers();
+    setState(true);
+    // window.location.reload();
   };
   useEffect(() => {
     async function fetchData() {

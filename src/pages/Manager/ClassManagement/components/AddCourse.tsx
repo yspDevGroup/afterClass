@@ -58,16 +58,15 @@ const AddCourse: FC<AddCourseProps> = ({
   // 年级名字
   const [nJLabelItem, setNJLabelItem] = useState<any>([]);
 
-  
   useEffect(() => {
-    if(formValues){
+    if (formValues) {
       setBaoming(false);
       setKaike(false);
-    }else{
+    } else {
       setBaoming(true);
       setKaike(true);
     }
-  }, [formValues])
+  }, [formValues]);
 
   // 获取报名时段和上课时段
   useEffect(() => {
@@ -93,13 +92,13 @@ const AddCourse: FC<AddCourseProps> = ({
       if (xQId) {
         // 获取教师
         const resTeacher0 = await getDepUserList({
-          id: xQId,
+          id: '1688850803156037',
           fetch_child: 0,
         });
         console.log('resTeacher0', resTeacher0);
 
         const resTeacher1 = await getDepUserList({
-          id: xQId,
+          id: '1688850803156037',
           fetch_child: 1,
         });
         console.log('resTeacher1', resTeacher1);
@@ -311,7 +310,7 @@ const AddCourse: FC<AddCourseProps> = ({
               }
               return setBaoming(false);
             },
-            checked:!baoming,
+            checked: !baoming,
           },
         },
       ],
@@ -345,7 +344,7 @@ const AddCourse: FC<AddCourseProps> = ({
               }
               return setKaike(false);
             },
-            checked: !kaike
+            checked: !kaike,
           },
         },
       ],
