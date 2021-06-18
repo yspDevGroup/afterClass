@@ -19,6 +19,8 @@ import AddArranging from './components/AddArranging';
 import { searchData } from './searchConfig';
 import './index.less';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getQueryString } from '@/utils/utils';
 
 const ClassManagement = () => {
   const [state, setState] = useState(true);
@@ -40,6 +42,23 @@ const ClassManagement = () => {
   const [kai, setkai] = useState<boolean>(false);
   const [sameClass, setSameClassData] = useState<any>([]);
 
+  useEffect(() => {
+    (async () => {
+      const bjID = getQueryString('classId');
+      if (bjID) {
+        const njInfo = await getKHBJSJ({ id: bjID });
+        if (njInfo.status === 'ok') {
+          setRecordValue({
+            BJId: njInfo.data.id,
+            NJ: njInfo.data.NJSName?.split(',')[0],
+            KC: njInfo.data.KHKCSJId,
+            XQ: njInfo.data.XQName,
+          });
+          setState(false);
+        }
+      }
+    })();
+  }, []);
   useEffect(() => {
     (async () => {
       // 获取年级信息
