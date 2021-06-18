@@ -114,8 +114,9 @@ const AddRoom = (props: PropsType) => {
       type: 'select',
       readonly,
       label: '所属校区',
-      name: 'XQSJId',
-      key: 'XQSJId',
+      name: 'XQ',
+      key: 'XQ',
+      rules: [{ required: true, message: '请填写所属校区' }],
       fieldProps: {
         options: campus,
         onChange(value: any, option: any){
