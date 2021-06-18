@@ -1,7 +1,7 @@
 import PageContainer from "@/components/PageContainer";
 import { paginationConfig } from "@/constant";
 import { theme } from "@/theme-default";
-import React, { useState,useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Modal } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import ProTable from "@ant-design/pro-table";
@@ -40,7 +40,7 @@ const NewClassManagement = () => {
         setkai(false)
     }
     // 图片展示框
-    const [exhibition, setExhibition] = useState<'none'|'block'>('none');
+    const [exhibition, setExhibition] = useState<'none' | 'block'>('none');
     const [url, setUrl] = useState<string>('')
 
     useEffect(() => {
@@ -53,7 +53,6 @@ const NewClassManagement = () => {
                 if (curTerm) {
                     await setxn(curTerm.XN);
                     await setxq(curTerm.XQ);
-                    actionRef.current?.reload();
                     const chainSel = defaultData.find((item) => item.type === 'chainSelect');
                     if (chainSel && chainSel.defaultValue) {
                         chainSel.defaultValue.first = curTerm.XN;
@@ -68,15 +67,29 @@ const NewClassManagement = () => {
         }
         fetchData();
     }, []);
-
+    // 监听学年学期更新
+    useEffect(() => {
+        console.log(xn);
+        console.log(xq);
+        
+        
+        if (xn && xq) {
+            setTimeout(() => {
+                console.log('inin');
+                actionRef.current?.reload();
+            }, 0);
+        }
+    }, [xn, xq]);
     const handlerSearch = (type: string, value: string, term: string) => {
         if (type === 'year' || type === 'term') {
             setxn(value);
             setxq(term);
-            return actionRef.current?.reload();
+            return true;
         }
         setName(value);
-        return actionRef.current?.reload();
+        actionRef.current?.reload();
+        return true;
+
     };
     const getModelTitle = () => {
         if (modalType === 'uphold') {
@@ -117,11 +130,11 @@ const NewClassManagement = () => {
         setModalType('uphold')
         setModalVisible(true);
     };
-    const cover=(img: any)=>{
+    const cover = (img: any) => {
         setExhibition('block');
         setUrl(img);
     }
-    const xclose=()=>{
+    const xclose = () => {
         setExhibition('none');
     }
     const columns: ProColumns<classType>[] = [
@@ -162,7 +175,7 @@ const NewClassManagement = () => {
                 const classes = [];
                 record.KHBJSJs?.map((item) => {
                     if (item.BJZT === '已发布') {
-                       return  classes.push(item)
+                        return classes.push(item)
                     }
                     return false;
                 })
@@ -179,7 +192,7 @@ const NewClassManagement = () => {
             render: (_, record) => {
                 return (
                     <>
-                        <a ><span onClick={()=>cover(record.KCTP)}>课程封面.png</span></a>
+                        <a ><span onClick={() => cover(record.KCTP)}>课程封面.png</span></a>
                     </>
                 )
             }
@@ -220,9 +233,9 @@ const NewClassManagement = () => {
     ];
     return (
         <>
-             <div style={{ display:`${exhibition}`,width:"100vw",height:'100vh',background:'rgba(0,0,0,.45)',position:'fixed',zIndex:1080,left:'0',top:'0'}}>
-                <div style={{width:'100%',height:'35px',display:'flex',flexDirection:'row-reverse'}}><a style={{color:'#fff',marginRight:'10px',fontSize:"24px"}} onClick={xclose} >X</a></div>
-                <div style={{display:"flex",alignItems:'center',justifyContent:'center'}}> <img src={url} alt=''style={{margin:'auto',maxHeight:'100vh',maxWidth:'100vw',paddingBottom:"80px" }}/ ></div>
+            <div style={{ display: `${exhibition}`, width: "100vw", height: '100vh', background: 'rgba(0,0,0,.45)', position: 'fixed', zIndex: 1080, left: '0', top: '0' }}>
+                <div style={{ width: '100%', height: '35px', display: 'flex', flexDirection: 'row-reverse' }}><a style={{ color: '#fff', marginRight: '10px', fontSize: "24px" }} onClick={xclose} >X</a></div>
+                <div style={{ display: "flex", alignItems: 'center', justifyContent: 'center' }}> <img src={url} alt='' style={{ margin: 'auto', maxHeight: '100vh', maxWidth: '100vw', paddingBottom: "80px" }} /></div>
             </div>
             <PageContainer cls={styles.roomWrapper}>
                 <ProTable<classType>
