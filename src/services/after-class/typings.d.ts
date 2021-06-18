@@ -337,6 +337,49 @@ declare namespace API {
     SM?: string;
   };
 
+  type JXJHSJ = {
+    id: string;
+    /** 课程号 */
+    KCH: string;
+    /** 授课年级 */
+    SKNJ: string;
+    /** 上课学年 */
+    SKXN: string;
+    /** 上课学期码 */
+    SKXQM: string;
+    /** 考试方式码 */
+    KSFSM?: string;
+    KCSJId: string;
+  };
+
+  type CreateJXJHSJ = {
+    /** 课程号 */
+    KCH: string;
+    /** 授课年级 */
+    SKNJ: string;
+    /** 上课学年 */
+    SKXN: string;
+    /** 上课学期码 */
+    SKXQM: string;
+    /** 考试方式码 */
+    KSFSM?: string;
+    KCSJId: string;
+  };
+
+  type UpdateJXJHSJ = {
+    /** 课程号 */
+    KCH?: string;
+    /** 授课年级 */
+    SKNJ?: string;
+    /** 上课学年 */
+    SKXN?: string;
+    /** 上课学期码 */
+    SKXQM?: string;
+    /** 考试方式码 */
+    KSFSM?: string;
+    KCSJId?: string;
+  };
+
   type JZGJBSJ = {
     id: string;
     /** 工号 */
@@ -585,49 +628,6 @@ declare namespace API {
     GWZYM?: string;
     /** 主要任课学段 */
     ZYRKXD?: string;
-  };
-
-  type JXJHSJ = {
-    id: string;
-    /** 课程号 */
-    KCH: string;
-    /** 授课年级 */
-    SKNJ: string;
-    /** 上课学年 */
-    SKXN: string;
-    /** 上课学期码 */
-    SKXQM: string;
-    /** 考试方式码 */
-    KSFSM?: string;
-    KCSJId: string;
-  };
-
-  type CreateJXJHSJ = {
-    /** 课程号 */
-    KCH: string;
-    /** 授课年级 */
-    SKNJ: string;
-    /** 上课学年 */
-    SKXN: string;
-    /** 上课学期码 */
-    SKXQM: string;
-    /** 考试方式码 */
-    KSFSM?: string;
-    KCSJId: string;
-  };
-
-  type UpdateJXJHSJ = {
-    /** 课程号 */
-    KCH?: string;
-    /** 授课年级 */
-    SKNJ?: string;
-    /** 上课学年 */
-    SKXN?: string;
-    /** 上课学期码 */
-    SKXQM?: string;
-    /** 考试方式码 */
-    KSFSM?: string;
-    KCSJId?: string;
   };
 
   type KCSJ = {
@@ -1115,6 +1115,61 @@ declare namespace API {
     XNXQId?: string;
   };
 
+  type KHXSCQ = {
+    /** 出勤状态 */
+    CQZT?: '出勤' | '请假' | '缺勤';
+    /** 出勤日期 */
+    CQRQ?: string;
+    /** 学生Id */
+    XSId?: string;
+    KHBJSJ?: {
+      id?: string;
+      BJMC?: string;
+      BJMS?: string;
+      BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
+      ZJS?: string;
+      FJS?: string;
+      BJRS?: number;
+      KSS?: number;
+      FY?: number;
+      KKRQ?: string;
+      JKRQ?: string;
+      BMKSSJ?: string;
+      BMJSSJ?: string;
+      KCTP?: string;
+    };
+    /** 年级ID */
+    NJS?: string;
+    /** 校区ID */
+    XQ?: string;
+    /** 年级名称 */
+    NJSName?: string;
+    /** 校区名称 */
+    XQName?: string;
+    /** 主教名称 */
+    ZJSName?: string;
+    /** 副教名称 */
+    FJSName?: string;
+  };
+
+  type CreateKHXSCQ = {
+    /** 出勤状态 */
+    CQZT?: '出勤' | '请假' | '缺勤';
+    /** 出勤日期 */
+    CQRQ?: string;
+    /** 学生Id */
+    XSId?: string;
+    /** 班级ID */
+    KHBJSJId?: string;
+  };
+
+  type UpdateKHXSCQ = {
+    /** 出勤状态 */
+    CQZT?: '出勤' | '请假' | '缺勤';
+    /** 出勤日期 */
+    CQRQ?: string;
+  };
+
   type KHXSDD = {
     /** 订单编号 */
     DDBH?: string;
@@ -1194,61 +1249,6 @@ declare namespace API {
     DDZT?: '待付款' | '已付款' | '已取消' | '待退款' | '已退款';
     /** 订单费用 */
     DDFY?: number;
-  };
-
-  type KHXSCQ = {
-    /** 出勤状态 */
-    CQZT?: '出勤' | '请假' | '缺勤';
-    /** 出勤日期 */
-    CQRQ?: string;
-    /** 学生Id */
-    XSId?: string;
-    KHBJSJ?: {
-      id?: string;
-      BJMC?: string;
-      BJMS?: string;
-      BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
-      ZJS?: string;
-      FJS?: string;
-      BJRS?: number;
-      KSS?: number;
-      FY?: number;
-      KKRQ?: string;
-      JKRQ?: string;
-      BMKSSJ?: string;
-      BMJSSJ?: string;
-      KCTP?: string;
-    };
-    /** 年级ID */
-    NJS?: string;
-    /** 校区ID */
-    XQ?: string;
-    /** 年级名称 */
-    NJSName?: string;
-    /** 校区名称 */
-    XQName?: string;
-    /** 主教名称 */
-    ZJSName?: string;
-    /** 副教名称 */
-    FJSName?: string;
-  };
-
-  type CreateKHXSCQ = {
-    /** 出勤状态 */
-    CQZT?: '出勤' | '请假' | '缺勤';
-    /** 出勤日期 */
-    CQRQ?: string;
-    /** 学生Id */
-    XSId?: string;
-    /** 班级ID */
-    KHBJSJId?: string;
-  };
-
-  type UpdateKHXSCQ = {
-    /** 出勤状态 */
-    CQZT?: '出勤' | '请假' | '缺勤';
-    /** 出勤日期 */
-    CQRQ?: string;
   };
 
   type KHXSPJ = {

@@ -52,6 +52,7 @@ const TimePeriodForm = (props: PropsType) => {
       type: 'cascader',
       label: '学年学期：',
       key: 'XNXQ',
+      style: { marginBottom: 0 },
       cascaderItem: [
         {
           type: 'select',
@@ -60,12 +61,14 @@ const TimePeriodForm = (props: PropsType) => {
           key: 'xn',
           placeholder: '请选择学年',
           options: chainData?.data,
-          rules: [{ required: true, messsage: '请选择学年' }],
-          noStyle: true,
+          rules: [{ required: true, message: '请选择学年' }],
+          // noStyle: true,
           fieldProps: {
             onChange: (event: string) => {
-              setTerms(chainData?.subData[event]);
-              setCurrentTerm(chainData?.subData[event][0].value);
+              if (event) {
+                setTerms(chainData?.subData[event]);
+                setCurrentTerm(chainData?.subData[event][0].value);
+              }
             },
           },
         },
@@ -74,9 +77,9 @@ const TimePeriodForm = (props: PropsType) => {
           name: 'xq',
           width: '100%',
           key: 'xq',
-          rules: [{ required: true, messsage: '请选择学期' }],
+          rules: [{ required: true, message: '请选择学期' }],
           placeholder: '请选择学期',
-          noStyle: true,
+          // noStyle: true,
           options: terms,
         },
       ],

@@ -10,7 +10,7 @@ import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXQList } from '@/services/wechat/service';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
-import { getDepUserList } from '@/services/after-class/wechat';
+import { getDepUserList, getSchDepList } from '@/services/after-class/wechat';
 
 type AddCourseProps = {
   visible: boolean;
@@ -91,16 +91,10 @@ const AddCourse: FC<AddCourseProps> = ({
     (async () => {
       if (xQId) {
         // 获取教师
-        const resTeacher0 = await getDepUserList({
-          id: '1688850803156037',
-          fetch_child: 0,
-        });
+        const resTeacher0 = await getSchDepList({});
         console.log('resTeacher0', resTeacher0);
 
-        const resTeacher1 = await getDepUserList({
-          id: '1688850803156037',
-          fetch_child: 1,
-        });
+        const resTeacher1 = await getSchDepList({ id: xQId });
         console.log('resTeacher1', resTeacher1);
       }
     })();

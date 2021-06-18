@@ -174,6 +174,24 @@ export async function getDepUserList(
   });
 }
 
+/** 获取部门列表(学校) GET /wechat/getSchDepList */
+export async function getSchDepList(
+  params: {
+    // query
+    /** 部门id */
+    id?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/wechat/getSchDepList', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** wechat支付回调 POST /wechat/trade/callback */
 export async function wechatTradeCallback(options?: { [key: string]: any }) {
   return request<any>('/wechat/trade/callback', {
