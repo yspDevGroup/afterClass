@@ -25,7 +25,7 @@ const formLayout = {
 };
 
 const NewCourses = (props: PropsType) => {
-  const { current, onClose, visible, actionRef } = props;
+  const { current, onClose, visible, actionRef,readonly, } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [form, setForm] = useState<any>();
   const [XNData, setXNData] = useState<any>([]);
@@ -34,6 +34,10 @@ const NewCourses = (props: PropsType) => {
   const [XQ, setXQ] = useState<any>();
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
+  // 上课时间
+  const [classattend, setClassattend] = useState<any>('');
+  // 报名时间
+  const [signup, setSignup] = useState<any>('');
 
   const imgurl = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
 
@@ -117,6 +121,14 @@ const NewCourses = (props: PropsType) => {
         const params = {
           id: current?.id,
         };
+        if (values.KKRQ) {
+          values.JKRQ = values.KKRQ[1];
+          values.KKRQ = values.KKRQ[0];
+        }
+        if (values.BMKSSJ) {
+          values.BMJSSJ = moment(values.BMKSSJ[1]);
+          values.BMKSSJ = moment(values.BMKSSJ[0]);
+        }
         const optionse = { ...values, KCTP: imgurl };
         res = updateKHKCSJ(params, optionse);
       } else {
@@ -163,6 +175,7 @@ const NewCourses = (props: PropsType) => {
       name: 'KCMC',
       key: 'KCMC',
       width: '100%',
+      readonly,
       fieldProps: {
         autocomplete: 'off'
       }
@@ -172,6 +185,7 @@ const NewCourses = (props: PropsType) => {
       label: '课程类型:',
       name: 'KHKCLXId',
       key: 'KHKCLXId',
+      readonly,
       options,
     },
     {
@@ -191,9 +205,11 @@ const NewCourses = (props: PropsType) => {
       type: 'div',
       key: 'div',
       label: '单独设置报名时段：',
+      readonly,
       lineItem:[
         {
           type: 'switch',
+          readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -213,19 +229,24 @@ const NewCourses = (props: PropsType) => {
       name: 'BMKSSJ',
       key: 'BMKSSJ',
       width: '100%',
+      readonly,
       hidden:  baoming ,
-      fieldProps:{
-        // disabledDate={disabledDate},
-        format: 'YYYY-MM-DD HH:mm',
+      fieldProps: {
+        disabledDate: (current: any) => {
+          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
+          return defaults > signup[1] || defaults < signup[0];
+        },
       },
     },
     {
       type: 'div',
       key: 'div1',
       label: '单独设置上课时段：',
+      readonly,
       lineItem: [
         {
           type: 'switch',
+          readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -245,15 +266,20 @@ const NewCourses = (props: PropsType) => {
       name: 'KKRQ',
       key: 'KKRQ',
       width: '100%',
+      readonly,
       hidden: kaike,
-      fieldProps:{
-        // disabledDate={disabledDate}
+      fieldProps: {
+        disabledDate: (current: any) => {
+          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
+          return defaults > classattend[0] || defaults < classattend[1];
+        },
       },
     },
     {
       type: 'cascader',
       label: '学年学期：',
       key: 'XNXQ',
+      readonly,
       cascaderItem: [
         {
           type: 'select',
@@ -262,6 +288,7 @@ const NewCourses = (props: PropsType) => {
           key: 'XN',
           placeholder: '请选择学年',
           noStyle: true,
+          readonly,
           options: XNData,
           fieldProps: {
             onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -275,6 +302,7 @@ const NewCourses = (props: PropsType) => {
           name: 'XQ',
           width: '100%',
           key: 'XQ',
+          readonly,
           placeholder: '请选择学期',
           noStyle: true,
           options: XQ,
@@ -286,6 +314,7 @@ const NewCourses = (props: PropsType) => {
       label: '封面：',
       name: 'KCTP',
       key: 'KCTP',
+      readonly,
       upurl: '', // 上传地址
       imageurl: current?.KCTP, // 回显地址
       imagename: 'file', // 发到后台的文件参数名
@@ -296,6 +325,7 @@ const NewCourses = (props: PropsType) => {
       type: 'textArea',
       label: '简 介:',
       name: 'KCMS',
+      readonly,
       key: 'KCMS',
     },
   ];
@@ -310,7 +340,8 @@ const NewCourses = (props: PropsType) => {
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
         footer={
-          <div
+          readonly?'':
+         ( <div
             style={{
               textAlign: 'right',
             }}
@@ -321,7 +352,7 @@ const NewCourses = (props: PropsType) => {
             <Button onClick={handleSubmit} type="primary">
               保存
             </Button>
-          </div>
+          </div>)
         }
       >
         <ProFormFields

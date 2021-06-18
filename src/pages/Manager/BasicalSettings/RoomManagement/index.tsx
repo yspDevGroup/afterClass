@@ -40,6 +40,7 @@ const RoomManagement = () => {
 
   const guanbi = () => {
     setopens(false);
+    setModalVisible(true);
   };
 
   // 头部input事件

@@ -3,6 +3,7 @@ import { ActionType } from "@ant-design/pro-table";
 import { Divider, message, notification } from "antd";
 import Popconfirm from "antd/es/popconfirm";
 import React from "react";
+import { Link } from "umi";
 
 type PropsType = {
     record: any;
@@ -12,6 +13,7 @@ type PropsType = {
 
 const Operation = (props: PropsType) => {
     const { actionRef, handleOperation, record } = props;
+    const Url = `/courseManagements/classMaintenance?courseId=${record.id}`;
     // 发布按钮事件
     const release = async (record: any) => {
         const classes = [];
@@ -21,21 +23,29 @@ const Operation = (props: PropsType) => {
             };
             return false;
         });
-        if(classes.length===0){
-            return   notification['warning']({
+        if (classes.length === 0) {
+            return notification['warning']({
                 message: '没有班级可以发布',
                 description:
-                  '当前没有已经排课的班级可以发布，请维护班级后再来发布课程.',
+                    '当前没有已经排课的班级可以发布，请维护班级后再来发布课程.',
                 onClick: () => {
-                  console.log('Notification Clicked!');
+                    console.log('Notification Clicked!');
                 },
-              });
+            });
         }
-        const res=await updateKHKCSJ(record.id,{KCZT:'已发布'})
-        if(res.status==='ok'){
-             actionRef?.current?.reload()
-        }return false  
+        const res = await updateKHKCSJ(record.id, { KCZT: '已发布' })
+        if (res.status === 'ok') {
+            actionRef?.current?.reload()
+        } return false
     };
+    //  下架事件
+    const Offtheshelf = async (record: any) => {
+        const res = await updateKHKCSJ(record.id, { KCZT: '已下架' })
+        if (res.status === 'ok') {
+            actionRef?.current?.reload()
+        } return false
+    }
+
     switch (record.KCZT) {
         case '待发布':
             return (
@@ -71,9 +81,19 @@ const Operation = (props: PropsType) => {
                         <a>删除</a>
                     </Popconfirm>
                 </>)
-        default:
+        case '已发布':
             return (
                 <>
+                    <a onClick={() => Offtheshelf(record)}>下架</a>
+                    <Divider type="vertical" />
+                    <a onClick={() => handleOperation('chakan', record)}>查看</a>
+                </>)
+        case '未排课':
+        case '已下架':
+            return (
+                <>
+                    <Link to={Url} >排课</Link>
+                    <Divider type="vertical" />
                     <a onClick={() => handleOperation('add', record)}>编辑</a>
                     <Divider type="vertical" />
                     <Popconfirm
@@ -102,7 +122,11 @@ const Operation = (props: PropsType) => {
                     >
                         <a>删除</a>
                     </Popconfirm>
-
+                </>)
+        default:
+            return (
+                <>
+                    <a onClick={() => handleOperation('chakan', record)}>查看</a>
                 </>
             )
     }

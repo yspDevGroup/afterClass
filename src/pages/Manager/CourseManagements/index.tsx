@@ -31,6 +31,7 @@ const NewClassManagement = () => {
     const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
     const [xn, setxn] = useState<string>('');
     const [xq, setxq] = useState<string>('');
+    const [readonly, stereadonly] = useState<boolean>(false);
     // 学年学期没有时的提示框控制
     const [kai, setkai] = useState<boolean>(false)
     // 设置表单的查询更新
@@ -96,6 +97,11 @@ const NewClassManagement = () => {
         return '新增信息';
     };
     const handleOperation = (type: string, data?: any) => {
+        if(type==='chakan'){
+            stereadonly(true);
+        }else{
+            stereadonly(false);
+        }
         if (data) {
             let KHKCLXId: any[] = [];
             KHKCLXId = data.KHKCLX.id;
@@ -274,7 +280,7 @@ const NewClassManagement = () => {
                         </Button>,
                     ]}
                 />
-                <NewCourses actionRef={actionRef} visible={open} onClose={onClose} current={current} />
+                <NewCourses actionRef={actionRef} visible={open} onClose={onClose} current={current} readonly={readonly}/>
                 <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' open={kai} colse={kaiguan} />
                 <Modal
                     title={getModelTitle()}
