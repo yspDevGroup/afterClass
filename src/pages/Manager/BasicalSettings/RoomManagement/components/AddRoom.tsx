@@ -55,8 +55,8 @@ const AddRoom = (props: PropsType) => {
             });
             setRoomType(data);
           } else {
-            setModalVisible(false);
-            setopens(true);
+           setopens(true);
+          //  setTimeout( function(){setModalVisible(false)},500) 
           }
         } else {
           message.info(response.message);
@@ -114,9 +114,8 @@ const AddRoom = (props: PropsType) => {
       type: 'select',
       readonly,
       label: '所属校区',
-      name: 'XQ',
-      key: 'XQ',
-      rules: [{ required: true, message: '请填写所属校区' }],
+      name: 'XQSJId',
+      key: 'XQSJId',
       fieldProps: {
         options: campus,
         onChange(value: any, option: any){

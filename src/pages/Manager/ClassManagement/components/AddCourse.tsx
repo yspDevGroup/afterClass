@@ -239,7 +239,7 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'select',
       name: 'XQ',
       key: 'XQ',
-      label: '所属校区',
+      label: '所属校区:',
       readonly,
       fieldProps: {
         options: campus,
@@ -254,7 +254,7 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'select',
       name: 'njIds',
       key: 'njIds',
-      label: '适用年级',
+      label: '适用年级:',
       fieldProps: {
         mode: 'multiple',
         options: grade ? grade[xQItem] : [],
@@ -295,11 +295,15 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
-
+    {
+      type: 'divTab',
+      text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
+      style: { marginBottom: 8, color: "#bbbbbb" }
+    },
     {
       type: 'div',
       key: 'div',
-      label: '单独设置报名时段：',
+      label: `单独设置报名时段`,
       lineItem: [
         {
           type: 'switch',
@@ -316,10 +320,9 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
-
     {
       type: 'dateRange',
-      label: '报名时段:',
+      label: `报名时段:`,
       name: 'BMSD',
       key: 'BMSD',
       width: '100%',
@@ -332,9 +335,14 @@ const AddCourse: FC<AddCourseProps> = ({
       },
     },
     {
+      type: 'divTab',
+      text: `(默认上课时间段)：${ classattend[1] } — ${classattend[0]}`,
+      style: { marginBottom: 8, color: "#bbbbbb" }
+    },
+    {
       type: 'div',
       key: 'div1',
-      label: '单独设置上课时段：',
+      label: `单独设置上课时段：`,
       lineItem: [
         {
           type: 'switch',

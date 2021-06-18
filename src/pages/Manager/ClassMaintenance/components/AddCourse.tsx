@@ -49,6 +49,7 @@ const AddCourse: FC<AddCourseProps> = ({
   const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
+ 
 
   useEffect(() => {
     (async () => {
@@ -220,9 +221,14 @@ const AddCourse: FC<AddCourseProps> = ({
       readonly,
     },
     {
+      type: 'divTab',
+      text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
+      style: { marginBottom: 8, color: "#bbbbbb" }
+    },
+    {
       type: 'div',
       key: 'div',
-      label: '单独设置报名时段：',
+      label: `单独设置报名时段：`,
       lineItem: [
         {
           type: 'switch',
@@ -239,7 +245,7 @@ const AddCourse: FC<AddCourseProps> = ({
         }
       ]
     },
-
+    
     {
       type: 'dateRange',
       label: '报名时段:',
@@ -255,9 +261,14 @@ const AddCourse: FC<AddCourseProps> = ({
       },
     },
     {
+      type: 'divTab',
+      text: `(默认上课时间段)：${ classattend[1] } — ${classattend[0]}`,
+      style: { marginBottom: 8, color: "#bbbbbb" }
+    },
+    {
       type: 'div',
       key: 'div1',
-      label: '单独设置上课时段：',
+      label: `单独设置上课时段：`,
       lineItem: [
         {
           type: 'switch',

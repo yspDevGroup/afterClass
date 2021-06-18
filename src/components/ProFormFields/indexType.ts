@@ -1,7 +1,7 @@
 /*
  * @,@Author: ,: your name
  * @,@Date: ,: 2021-06-15 08:38:48
- * @,@LastEditTime: ,: 2021-06-16 11:34:21
+ * @,@LastEditTime: ,: 2021-06-18 17:02:43
  * @,@LastEditors: ,: Please set LastEditors
  * @,@Description: ,: In User Settings Edit
  * @,@FilePath: ,: \afterClass\src\components\ProFormFields\indexType.ts
@@ -32,6 +32,7 @@ export type FormItemsProps = {
     | 'uploadImage' // 上传
     | 'cascader' // 级联（适用于一项有多个控件）
     | 'div'
+    | 'divTab'
     | 'group'
     | 'empty';
   /** 表单项的key */
@@ -57,6 +58,8 @@ export type FormItemsProps = {
   readonly?: boolean;
   label?: string;
   lineItem?: any[];
+  text?: string;
+  style?: Record<string, any>;
   
 };
 

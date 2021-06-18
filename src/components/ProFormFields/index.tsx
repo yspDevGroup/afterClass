@@ -84,6 +84,8 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
             </div>
           </div>
         );
+      case 'divTab':
+        return <div style={formItem.style}>{formItem.text}</div>
       case 'group': {
         const colW = 24 / (groupItems ? groupItems.length : 1);
         return (
