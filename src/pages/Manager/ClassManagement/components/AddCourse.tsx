@@ -11,7 +11,7 @@ import { queryXQList } from '@/services/wechat/service';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
 import { getDepUserList, getSchDepList } from '@/services/after-class/wechat';
-import { showUserName } from '@/utils/wx';
+import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 
 type AddCourseProps = {
   visible: boolean;
@@ -93,11 +93,16 @@ const AddCourse: FC<AddCourseProps> = ({
       // 获取教师
       const resTeacher = await getDepUserList({ id: '1', fetch_child: 1 });
       if (resTeacher.status === 'ok') {
-        const teacherData = resTeacher.data.userlist.map((item: any) => {
-          showUserName(userRef?.current, item?.userid);
-          WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
-        });
-        console.log('teacherData', teacherData);
+        if (/MicroMessenger/i.test(navigator.userAgent)) {
+          await initWXConfig(['checkJsApi']);
+        }
+        if (await initWXAgentConfig(['checkJsApi'])) {
+          const teacherData = resTeacher.data.userlist.map((item: any) => {
+            showUserName(userRef?.current, item?.userid);
+            WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+          });
+          console.log('teacherData', teacherData);
+        }
       }
     })();
   }, []);
