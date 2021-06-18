@@ -89,16 +89,14 @@ const AddCourse: FC<AddCourseProps> = ({
 
   useEffect(() => {
     (async () => {
-      if (xQId) {
-        // 获取教师
-        const resTeacher0 = await getSchDepList({});
-        console.log('resTeacher0', resTeacher0);
+      // 获取教师
+      // const resTeacher0 = await getSchDepList({id: xQId});
+      // console.log('resTeacher0', resTeacher0);
 
-        const resTeacher1 = await getSchDepList({ id: xQId });
-        console.log('resTeacher1', resTeacher1);
-      }
+      const resTeacher1 = await getDepUserList({ id: '1', fetch_child: 1 });
+      console.log('resTeacher1', resTeacher1);
     })();
-  }, [xQId]);
+  }, []);
 
   useEffect(() => {
     (async () => {
