@@ -31,6 +31,7 @@ const Mine = () => {
           isheader={true}
           grid={{ column: 4 }}
           dataSource={iconTextData}
+          totil={true}
         />
       </div>
       <Statistical />

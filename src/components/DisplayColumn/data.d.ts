@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-07 12:10:01
- * @LastEditTime: 2021-06-07 15:44:54
+ * @LastEditTime: 2021-06-18 15:47:58
  * @LastEditors: txx
  */
 export type IiconTextData = {
@@ -19,6 +19,9 @@ export type IiconTextData = {
     img?: string;
     link?: string;
     background?: string;
-    fontSize?: string;
-  }[];
+    fontSize?: string; /** 我的订单中数量决定徽标点是否展示 */
+    count?: ReactNode
+ }[];
+   /** 是否有背景色及徽标点 */
+   totil?: boolean;
 }

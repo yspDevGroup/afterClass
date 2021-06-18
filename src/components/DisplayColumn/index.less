@@ -8,13 +8,24 @@
       text-align: center;
 
       .iconBox {
-        width: 30px;
-        height: 30px;
-        margin: 10px auto 4px;
-        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin: 10px auto 4px;
+        border-radius: 10px;
+      }
+      .iconShwBox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin: -34px auto 4px;
+        border-radius: 10px;
+        transform: rotate(30deg);
+        opacity: 0.3;
       }
 
       .imgBox {
@@ -30,8 +41,8 @@
 
       .TextBox {
         height: 17px;
-        line-height: 17px;
         font-size: 12px;
+        line-height: 17px;
       }
     }
   }
@@ -51,7 +62,7 @@
       padding-left: 10px;
     }
 
-    .ant-list-grid .ant-col>.ant-list-item {
+    .ant-list-grid .ant-col > .ant-list-item {
       margin-bottom: 10px;
     }
   }
