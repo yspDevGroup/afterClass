@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import { Button, Drawer, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
@@ -11,6 +11,7 @@ import { queryXQList } from '@/services/wechat/service';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
 import { getDepUserList, getSchDepList } from '@/services/after-class/wechat';
+import { showUserName } from '@/utils/wx';
 
 type AddCourseProps = {
   visible: boolean;
@@ -57,7 +58,7 @@ const AddCourse: FC<AddCourseProps> = ({
   // const [nJID, setNJID] = useState([]);
   // 年级名字
   const [nJLabelItem, setNJLabelItem] = useState<any>([]);
-
+  const userRef = useRef(null);
   useEffect(() => {
     if (formValues) {
       setBaoming(false);
@@ -90,11 +91,14 @@ const AddCourse: FC<AddCourseProps> = ({
   useEffect(() => {
     (async () => {
       // 获取教师
-      // const resTeacher0 = await getSchDepList({id: xQId});
-      // console.log('resTeacher0', resTeacher0);
-
-      const resTeacher1 = await getDepUserList({ id: '1', fetch_child: 1 });
-      console.log('resTeacher1', resTeacher1);
+      const resTeacher = await getDepUserList({ id: '1', fetch_child: 1 });
+      if (resTeacher.status === 'ok') {
+        const teacherData = resTeacher.data.userlist.map((item: any) => {
+          showUserName(userRef?.current, item?.userid);
+          WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+        });
+        console.log('teacherData', teacherData);
+      }
     })();
   }, []);
 
