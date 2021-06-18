@@ -14,6 +14,7 @@ import type { TermItem } from './data';
 import { createXNXQ, deleteXNXQ, getAllXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
 import moment from 'moment';
 import AsyncManagementTable from './components/AsyncManagementTable';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 
 const TermManagement = () => {
@@ -71,8 +72,10 @@ const TermManagement = () => {
             id: current?.id,
           };
           const options = values;
+          queryXNXQList(true)
           res = updateXNXQ(params, options);
         } else {
+          queryXNXQList(true)
           res = createXNXQ(values);
         }
         resolve(res);
@@ -166,6 +169,7 @@ const TermManagement = () => {
       align: 'center',
     },
   ];
+  
   return (
     <PageContainer cls={styles.termManagementBox}>
       <ProTable<TermItem>
@@ -185,6 +189,11 @@ const TermManagement = () => {
             sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
             filter,
           };
+          // const res= queryXNXQList().then((item)=>{
+          //   console.log('item',item)
+          // })
+          // console.log('res',res)
+                  queryXNXQList()
           return getAllXNXQ(opts);
         }}
         pagination={paginationConfig}

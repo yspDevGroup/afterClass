@@ -1,3 +1,5 @@
+@import './theme.less';
+
 .mobilePageHeader {
   height: 100vh;
   width: 100vw;
@@ -22,6 +24,11 @@
       }
 
       :global {
+        .ant-tabs-tab-active{
+          .ant-tabs-tab-btn{
+            color: @GreenColor;
+          }
+        }
         .ant-tabs-nav-wrap {
           display: block;
 
