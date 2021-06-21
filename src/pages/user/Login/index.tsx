@@ -1,12 +1,8 @@
-import { Divider, message, Space, Tabs } from 'antd';
+import { message, Space } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, useModel } from 'umi';
-import Footer from '@/components/Footer';
 import { postAccount } from '@/services/after-class/auth';
-import leftBg from '@/assets/leftBg.png';
-import peopleBg from '@/assets/peopleBg.png';
-import rightBg from '@/assets/rightBg.png';
 import logo from '@/assets/logo.png';
 import styles from './index.less';
 import { GithubOutlined, WechatOutlined } from '@ant-design/icons';
@@ -25,7 +21,7 @@ const goto = () => {
 
 const Login: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
-  const [type, setType] = useState<string>('account');
+  const [type] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const intl = useIntl();
@@ -62,12 +58,6 @@ const Login: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <div className={styles.leftBg}>
-          <img src={leftBg} />
-        </div>
-        <div className={styles.middleBg}>
-          <img src={peopleBg} />
-        </div>
         <div className={styles.main}>
           <div className={styles.top}>
             <img src={logo} />
@@ -101,90 +91,38 @@ const Login: React.FC = () => {
               handleSubmit(values as API.LoginParams);
             }}
           >
-            <Tabs activeKey={type} onChange={setType}>
-              <Tabs.TabPane
-                key="account"
-                tab={intl.formatMessage({
-                  id: 'pages.login.teacherLogin.tab',
-                  defaultMessage: '教师登录',
-                })}
+            <>
+              <ProFormText
+                name="username"
+                placeholder="账号/手机号/邮箱"
+                rules={[
+                  {
+                    required: true,
+                    message: (
+                      <FormattedMessage
+                        id="pages.login.username.required"
+                        defaultMessage="请输入账号/手机号/邮箱!"
+                      />
+                    ),
+                  },
+                ]}
               />
-              <Tabs.TabPane
-                key="student"
-                tab={intl.formatMessage({
-                  id: 'pages.login.studentLogin.tab',
-                  defaultMessage: '学生登录',
-                })}
+              <ProFormText.Password
+                name="password"
+                placeholder="密码"
+                rules={[
+                  {
+                    required: true,
+                    message: (
+                      <FormattedMessage
+                        id="pages.login.password.required"
+                        defaultMessage="请输入密码！"
+                      />
+                    ),
+                  },
+                ]}
               />
-            </Tabs>
-            {type === 'account' && (
-              <>
-                <ProFormText
-                  name="username"
-                  placeholder="账号/手机号/邮箱"
-                  rules={[
-                    {
-                      required: true,
-                      message: (
-                        <FormattedMessage
-                          id="pages.login.username.required"
-                          defaultMessage="请输入账号/手机号/邮箱!"
-                        />
-                      ),
-                    },
-                  ]}
-                />
-                <ProFormText.Password
-                  name="password"
-                  placeholder="密码"
-                  rules={[
-                    {
-                      required: true,
-                      message: (
-                        <FormattedMessage
-                          id="pages.login.password.required"
-                          defaultMessage="请输入密码！"
-                        />
-                      ),
-                    },
-                  ]}
-                />
-              </>
-            )}
-            {type === 'student' && (
-              <>
-                <ProFormText
-                  name="username"
-                  placeholder="学号"
-                  rules={[
-                    {
-                      required: true,
-                      message: (
-                        <FormattedMessage
-                          id="pages.login.phoneNumber.required"
-                          defaultMessage="请输入学号！"
-                        />
-                      ),
-                    },
-                  ]}
-                />
-                <ProFormText.Password
-                  name="password"
-                  placeholder="密码"
-                  rules={[
-                    {
-                      required: true,
-                      message: (
-                        <FormattedMessage
-                          id="pages.login.password.required"
-                          defaultMessage="请输入密码！"
-                        />
-                      ),
-                    },
-                  ]}
-                />
-              </>
-            )}
+            </>
             <div
               style={{
                 marginBottom: 32,
@@ -193,26 +131,6 @@ const Login: React.FC = () => {
               <ProFormCheckbox noStyle name="autoLogin">
                 下次自动登录
               </ProFormCheckbox>
-              <a
-                style={{
-                  float: 'right',
-                }}
-              >
-                注册
-              </a>
-              <Divider
-                type="vertical"
-                style={{
-                  float: 'right',
-                }}
-              />
-              <a
-                style={{
-                  float: 'right',
-                }}
-              >
-                忘记密码
-              </a>
             </div>
           </ProForm>
           <Space className={styles.other}>
@@ -225,11 +143,7 @@ const Login: React.FC = () => {
             </a>
           </Space>
         </div>
-        <div className={styles.rightBg}>
-          <img src={rightBg} />
-        </div>
       </div>
-      <Footer />
     </div>
   );
 };
