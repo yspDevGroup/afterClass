@@ -121,6 +121,5 @@ export const getCurrentXQ = (list: any[]) => {
     }
     return false;
   })
-  console.log(currentXQ);
   return currentXQ;
 }

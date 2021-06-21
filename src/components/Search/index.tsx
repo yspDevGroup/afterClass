@@ -73,7 +73,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
         const { label, type, placeHolder = '请输入', isLabel = true, data } = item;
         switch (type) {
           case 'chainSelect':
-            return <div style={{ display: "inline-block" }}  >
+            return <div style={{ display: "inline-block" }} key={`chainSelect${label}`}  >
               <div>
                 <div className={styles.HeaderLable}>{label}</div>
                 <div className={styles.HeaderSelect}>
@@ -95,7 +95,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
               </div>
             </div>
           case 'select':
-            return <div style={{ display: "inline-block" }} >
+            return <div style={{ display: "inline-block" }}  key={`select${label}`} >
               <div>
                 <div className={styles.HeaderLable}>{label}</div>
                 <div className={styles.HeaderSelect}>
@@ -108,7 +108,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
               </div>
             </div>
           case 'input':
-            return <div style={{ display: "inline-block" }} >
+            return <div style={{ display: "inline-block" }}  key={`input${label}`}>
               <div className={styles.HeaderSearch} >
                 {isLabel ? <span>{label}</span> : ''}
                 <Search

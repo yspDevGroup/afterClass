@@ -73,7 +73,7 @@ const NewClassManagement = () => {
         if (xn && xq) {
             setTimeout(() => {
                 actionRef.current?.reload();
-            }, 0);
+            }, 500);
         }
     }, [xn, xq]);
     const handlerSearch = (type: string, value: string, term: string) => {
