@@ -12,6 +12,7 @@ import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
 import { getDepUserList, getSchDepList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
+import TeacherName from './TeacherName';
 
 type AddCourseProps = {
   visible: boolean;
@@ -53,6 +54,8 @@ const AddCourse: FC<AddCourseProps> = ({
   const [xQId, setXQId] = useState('');
   // 校区名字
   const [xQItem, setXQLabelItem] = useState<any>([]);
+
+  const [teacherName, setTeacherName] = useState<any>([]);
 
   // // 年级ID
   // const [nJID, setNJID] = useState([]);
@@ -96,14 +99,8 @@ const AddCourse: FC<AddCourseProps> = ({
           await initWXConfig(['checkJsApi']);
         }
         if (await initWXAgentConfig(['checkJsApi'])) {
-          const teacherData = resTeacher.data.userlist.map((item: any, key: any) => {
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const userRef = { key: useRef(null) };
-            showUserName(userRef.key.current, item?.userid);
-            WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
-            return <div ref={userRef.key}>{item.name}</div>;
-          });
-          console.log('teacherData', teacherData);
+          const teacherData = resTeacher.data.userlist;
+          setTeacherName(teacherData);
         }
       }
     })();
@@ -421,6 +418,12 @@ const AddCourse: FC<AddCourseProps> = ({
           )
         }
       >
+        <div>
+          {teacherName &&
+            teacherName.map((item: any) => {
+              return <TeacherName userId={item.userid} />;
+            })}
+        </div>
         <ProFormFields
           layout="vertical"
           onFinish={onFinish}
