@@ -57,7 +57,7 @@
   {
     path: '/courseManagements',
     name: 'courseManagements',
-    icon: 'smile',
+    icon: 'ProfileOutlined',
     routes: [  
       {
         path: '/courseManagements/',
@@ -78,13 +78,13 @@
   {
     path: '/classManagement',
     name: 'classManagement',
-    icon: 'smile',
+    icon: 'CreditCardOutlined',
     component: './Manager/ClassManagement',
   },
   {
     path: '/courseScheduling',
     name: 'courseScheduling',
-    icon: 'smile',
+    icon: 'CarryOutOutlined',
     component: './Manager/CourseScheduling',
   },
   /*** 老师路由 start ***/
