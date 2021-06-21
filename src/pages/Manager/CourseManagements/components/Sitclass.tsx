@@ -34,13 +34,14 @@ const Sitclass = () => {
       dataIndex: 'KCLX',
       align: 'center',
       ellipsis: true,
-      width: 90,
+      width: 130,
     },
     {
       title: '课程颜色',
       dataIndex: 'KBYS',
       align: 'center',
       valueType: 'select',
+      width: 120,
       fieldProps: {
         options,
       },

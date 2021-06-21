@@ -285,8 +285,7 @@ const NewClassManagement = () => {
                 <Modal
                     title={getModelTitle()}
                     destroyOnClose
-                    width='35vw'
-                    style={{ maxHeight: '430px', minWidth: '480px' }}
+                    width='500px'
                     visible={modalVisible}
                     onCancel={() => setModalVisible(false)}
                     footer={null}
