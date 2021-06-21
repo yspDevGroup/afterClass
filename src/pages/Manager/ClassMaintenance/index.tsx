@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
-import React from 'react';
-import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tag } from 'antd';
+import React , { useRef, useState, useEffect } from 'react';
+import { Button, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import PageContainer from '@/components/PageContainer';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -10,14 +9,12 @@ import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
 import SearchComponent from '@/components/Search';
 import AddCourse from './components/AddCourse';
-import CourseType from './components/CourseType';
 import type { CourseItem, TableListParams } from './data';
 import styles from './index.less';
 import { searchData } from './searchConfig';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { Tooltip } from 'antd';
 import ActionBar from './components/ActionBar';
-import ClassStart from './components/ClassStart';
 import { getQueryString } from '@/utils/utils';
 import PromptInformation from '@/components/PromptInformation';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
@@ -27,10 +24,8 @@ const ClassMaintenance = () => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
-  const [openes, setopenes] = useState(false);
   const actionRef = useRef<ActionType>();
   const [readonly, stereadonly] = useState<boolean>(false);
-  const [moduletype, setmoduletype] = useState<string>('crourse');
   const [kcId, setkcId] = useState<string>('');
   // 查询课程名称
   const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
@@ -70,13 +65,6 @@ const ClassMaintenance = () => {
       })();
     }
   }, []);
-  // 获取弹框标题
-  const getTitle = () => {
-    if (moduletype === 'crourse') {
-      return '课程类型维护';
-    }
-    return '开班信息';
-  };
 
   const showDrawer = () => {
     setVisible(true);
@@ -107,13 +95,6 @@ const ClassMaintenance = () => {
 
   const onClose = () => {
     setVisible(false);
-  };
-  const maintain = (type: string) => {
-    setopenes(true);
-    setmoduletype(type);
-  };
-  const showmodal = () => {
-    setopenes(false);
   };
   const columns: ProColumns<CourseItem>[] = [
     {
@@ -202,7 +183,6 @@ const ClassMaintenance = () => {
             <ActionBar
               record={record}
               handleEdit={handleEdit}
-              maintain={maintain}
               actionRef={actionRef}
             />
           </>
@@ -276,28 +256,6 @@ const ClassMaintenance = () => {
           open={kai}
           colse={kaiguan}
         />
-        <Modal
-          visible={openes}
-          onCancel={showmodal}
-          title={getTitle()}
-          centered
-          bodyStyle={{
-            maxHeight: '65vh',
-            overflowY: 'auto',
-          }}
-          style={{ maxHeight: '430px' }}
-          width="35vw"
-          footer={[
-            <Button key="back" onClick={() => setopenes(false)}>
-              取消
-            </Button>,
-            <Button key="submit" type="primary">
-              确定
-            </Button>,
-          ]}
-        >
-          {moduletype === 'crourse' ? <CourseType /> : <ClassStart />}
-        </Modal>
       </PageContainer>
     </>
   );

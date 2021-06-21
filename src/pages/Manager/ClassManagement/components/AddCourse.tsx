@@ -12,7 +12,7 @@ import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
 import { getDepUserList, getSchDepList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
-import TeacherName from './TeacherName';
+import { lowerFirst } from 'lodash';
 
 type AddCourseProps = {
   visible: boolean;
@@ -39,6 +39,7 @@ const AddCourse: FC<AddCourseProps> = ({
   names,
   kcId,
 }) => {
+  const userRef = useRef(null);
   const [form, setForm] = useState<any>();
   // 校区
   const [campus, setCampus] = useState<any>([]);
@@ -54,8 +55,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const [xQId, setXQId] = useState('');
   // 校区名字
   const [xQItem, setXQLabelItem] = useState<any>([]);
-
-  const [teacherName, setTeacherName] = useState<any>([]);
 
   // // 年级ID
   // const [nJID, setNJID] = useState([]);
@@ -100,7 +99,10 @@ const AddCourse: FC<AddCourseProps> = ({
         }
         if (await initWXAgentConfig(['checkJsApi'])) {
           const teacherData = resTeacher.data.userlist;
-          setTeacherName(teacherData);
+          for (let i = 0; i < teacherData.length; i += 1) {
+            showUserName(userRef?.current, teacherData[i].userid,true);
+          }
+          WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
         }
       }
     })();
@@ -279,7 +281,7 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'ZJS',
           readonly,
           fieldProps: {
-            onChange: async (value: any) => {},
+            onChange: async (value: any) => { },
           },
         },
         {
@@ -393,6 +395,8 @@ const AddCourse: FC<AddCourseProps> = ({
 
   return (
     <div>
+    <div ref={userRef}>
+    </div>
       <Drawer
         title={getTitle()}
         width={480}
@@ -418,12 +422,6 @@ const AddCourse: FC<AddCourseProps> = ({
           )
         }
       >
-        <div>
-          {teacherName &&
-            teacherName.map((item: any) => {
-              return <TeacherName userId={item.userid} />;
-            })}
-        </div>
         <ProFormFields
           layout="vertical"
           onFinish={onFinish}
