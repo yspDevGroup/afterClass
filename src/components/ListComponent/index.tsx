@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-05-31 10:24:05
- * @LastEditTime: 2021-06-15 10:12:24
+ * @LastEditTime: 2021-06-21 11:19:57
  * @LastEditors: txx
  */
 
@@ -21,6 +21,7 @@ const NewsList = (props: { data: ListItem[], type: ListType }) => {
       renderItem={(v) => (
         <Link to={v.link!}>
           <List.Item.Meta
+            style={type === 'descList' ? { background: v.titleRight?.text === "待上课" ? "rgba(69, 201, 119, 0.05)" : "rgba(102, 102, 102, 0.05)" } : {}}
             avatar={v.img ? <img width="110" height="70" alt={v.title} src={v.img} /> : ''}
             title={<div className={styles.TitleRow}>
               <div className={styles.Title} >
@@ -28,7 +29,7 @@ const NewsList = (props: { data: ListItem[], type: ListType }) => {
               </div>
               <div className={styles.TitleRight}>
                 {v.titleRight ?
-                  <span style={{ color: v.titleRight.color }} >
+                  <span style={{ color: v.titleRight.text === "待上课" ? "#45C977" : "#999999" }}  >
                     {v.titleRight.text}
                   </span>
                   : ''}
