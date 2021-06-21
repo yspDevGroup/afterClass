@@ -8,8 +8,9 @@ import { getAllXNXQ } from "../after-class/xnxq";
  * @param {true} [refresh] 是否强制刷新
  * @return {*}
  */
- export const queryXNXQList = async (
+export const queryXNXQList = async (
   refresh?: true,
+  params?: any
 ): Promise<any> => {
   if (typeof xnxqInfo === 'undefined') {
     ((w) => {
@@ -18,12 +19,15 @@ import { getAllXNXQ } from "../after-class/xnxq";
     })(window as Window & typeof globalThis & { xnxqInfo: any });
   }
   if (!xnxqInfo.xnxqList || refresh) {
-    const res = await getAllXNXQ({});
+    const res = await getAllXNXQ(params || {});
     if (res.status === 'ok') {
       const { data = [] } = res;
       const currentXQ = getCurrentXQ(data);
-      xnxqInfo.xnxqList= convertData(data);
+      xnxqInfo.xnxqList = convertData(data);
       xnxqInfo.current = currentXQ;
+    }
+    if (refresh) {
+      return res;
     }
   }
   return xnxqInfo;
