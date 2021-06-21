@@ -11,7 +11,7 @@ export async function getKHJSPJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -27,7 +27,7 @@ export async function getKHJSPJ(
     message?: string;
   }>(`/khjspj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -41,16 +41,19 @@ export async function deleteKHJSPJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjspj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有教师评价记录 POST /khjspj/ */
 export async function getAllKHJSPJ(
+  params: {
+    // path
+  },
   body: {
     /** 学生ID */
     xsId?: string;
@@ -63,18 +66,27 @@ export async function getAllKHJSPJ(
   },
   options?: { [key: string]: any },
 ) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHJSPJ[]; message?: string }>('/khjspj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建教师评价记录 PUT /khjspj/create */
-export async function createKHJSPJ(body: API.CreateKHJSPJ, options?: { [key: string]: any }) {
+export async function createKHJSPJ(
+  params: {
+    // path
+  },
+  body: API.CreateKHJSPJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -93,6 +105,7 @@ export async function createKHJSPJ(body: API.CreateKHJSPJ, options?: { [key: str
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -108,13 +121,13 @@ export async function updateKHJSPJ(
   body: API.UpdateKHJSPJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjspj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

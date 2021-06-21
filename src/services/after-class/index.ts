@@ -24,18 +24,19 @@ import * as khxspj from './khxspj';
 import * as khxsqj from './khxsqj';
 import * as njsj from './njsj';
 import * as pksj from './pksj';
+import * as upload from './upload';
 import * as wechat from './wechat';
 import * as xl from './xl';
+import * as xqsj from './xqsj';
 import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
-import * as xqsj from './xqsj';
-import * as xsjbsj from './xsjbsj';
 import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
-import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
-import * as zxfa from './zxfa';
+import * as xsjbsj from './xsjbsj';
+import * as xxpz from './xxpz';
 import * as zxsj from './zxsj';
+import * as zxfa from './zxfa';
 export default {
   other,
   auth,
@@ -59,16 +60,17 @@ export default {
   khxsqj,
   njsj,
   pksj,
+  upload,
   wechat,
   xl,
+  xqsj,
   xnjgsj,
   xnxq,
-  xqsj,
-  xsjbsj,
   xxgg,
   xxjbsj,
-  xxpz,
   xxsjpz,
-  zxfa,
+  xsjbsj,
+  xxpz,
   zxsj,
+  zxfa,
 };

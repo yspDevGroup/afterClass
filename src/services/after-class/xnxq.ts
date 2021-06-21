@@ -4,6 +4,9 @@ import { request } from 'umi';
 
 /** 获取学年学期数据 POST /xnxq */
 export async function getXNXQ(
+  params: {
+    // path
+  },
   body: {
     /** 学年 */
     xn?: string;
@@ -12,6 +15,7 @@ export async function getXNXQ(
   },
   options?: { [key: string]: any },
 ) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
@@ -21,21 +25,36 @@ export async function getXNXQ(
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 查询所有学年学期数据 GET /xnxq/all */
-export async function getAllXNXQ(options?: { [key: string]: any }) {
+export async function getAllXNXQ(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.XNXQ[]; message?: string }>('/xnxq/all', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建学年学期数据 PUT /xnxq/create */
-export async function createXNXQ(body: API.CreateXNXQ, options?: { [key: string]: any }) {
+export async function createXNXQ(
+  params: {
+    // path
+  },
+  body: API.CreateXNXQ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
@@ -45,6 +64,7 @@ export async function createXNXQ(body: API.CreateXNXQ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -59,10 +79,10 @@ export async function deleteXNXQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xnxq/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -77,13 +97,13 @@ export async function updateXNXQ(
   body: API.UpdateXNXQ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xnxq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

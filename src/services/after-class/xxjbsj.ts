@@ -11,7 +11,7 @@ export async function getXXJBSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { XXDM: param0 } = params;
+  const { XXDM: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -54,21 +54,35 @@ export async function getXXJBSJ(
     message?: string;
   }>(`/xxjbsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有学校基本数据 GET /xxjbsj/ */
-export async function getAllXXJBSJ(options?: { [key: string]: any }) {
+export async function getAllXXJBSJ(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.XXJBSJ[]; message?: string }>('/xxjbsj/', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建学校基本数据 PUT /xxjbsj/create */
-export async function createXXJBSJ(body: API.CreateXXJBSJ, options?: { [key: string]: any }) {
+export async function createXXJBSJ(
+  params: {
+    // path
+  },
+  body: API.CreateXXJBSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -114,6 +128,7 @@ export async function createXXJBSJ(body: API.CreateXXJBSJ, options?: { [key: str
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -128,10 +143,10 @@ export async function deleteXXJBSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxjbsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -146,13 +161,13 @@ export async function updateXXJBSJ(
   body: API.UpdateXXJBSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxjbsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

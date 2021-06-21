@@ -11,7 +11,7 @@ export async function getKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -32,7 +32,7 @@ export async function getKCSJ(
     message?: string;
   }>(`/kcsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -46,10 +46,10 @@ export async function deleteKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/kcsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -63,19 +63,26 @@ export async function getKCSJByXX(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KCSJ[]; message?: string }>(
     `/kcsj/xxdm/${param0}`,
     {
       method: 'GET',
-      params: { ...params },
+      params: { ...queryParams },
       ...(options || {}),
     },
   );
 }
 
 /** 创建课程数据 PUT /kcsj/create */
-export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]: any }) {
+export async function createKCSJ(
+  params: {
+    // path
+  },
+  body: API.CreateKCSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -99,6 +106,7 @@ export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -114,13 +122,13 @@ export async function updateKCSJ(
   body: API.UpdateKCSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/kcsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

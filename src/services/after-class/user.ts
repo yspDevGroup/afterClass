@@ -3,34 +3,61 @@
 import { request } from 'umi';
 
 /** github认证回调 GET /auth/github/callback */
-export async function githubCallback(options?: { [key: string]: any }) {
+export async function githubCallback(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<any>('/auth/github/callback', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** Route used by the frontend app to validate the session and retrieve the CSRF token. GET /user/refresh */
-export async function getUserRefresh(options?: { [key: string]: any }) {
+export async function getUserRefresh(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ csrfToken?: string }>('/user/refresh', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有用户 GET /user/ */
-export async function getAllUser(options?: { [key: string]: any }) {
+export async function getAllUser(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.CurrentUser[]; message?: string }>(
     '/user/',
     {
       method: 'GET',
+      params: { ...queryParams },
       ...(options || {}),
     },
   );
 }
 
 /** 获取当前用户 GET /user/currentUser */
-export async function currentUser(options?: { [key: string]: any }) {
+export async function currentUser(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -53,24 +80,40 @@ export async function currentUser(options?: { [key: string]: any }) {
     message?: string;
   }>('/user/currentUser', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 更新当前用户信息 PUT /user/currentUser */
-export async function updateUser(body: API.CreateUser, options?: { [key: string]: any }) {
+export async function updateUser(
+  params: {
+    // path
+  },
+  body: API.CreateUser,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>('/user/currentUser', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建用户 PUT /user/create */
-export async function createUser(body: API.CreateUser, options?: { [key: string]: any }) {
+export async function createUser(
+  params: {
+    // path
+  },
+  body: API.CreateUser,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -93,6 +136,7 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -107,10 +151,10 @@ export async function deleteUser(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/user/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }

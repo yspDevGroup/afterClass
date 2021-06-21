@@ -11,7 +11,7 @@ export async function getXXPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -23,7 +23,7 @@ export async function getXXPZ(
     message?: string;
   }>(`/xxpz/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -37,16 +37,19 @@ export async function deleteXXPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxpz/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有学校配置数据 GET /xxpz/all */
 export async function getAllXXPZ(
+  params: {
+    // path
+  },
   body: {
     /** 学年 */
     xn?: string;
@@ -55,18 +58,27 @@ export async function getAllXXPZ(
   },
   options?: { [key: string]: any },
 ) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.XXPZ[]; message?: string }>('/xxpz/all', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建学校配置数据 PUT /xxpz/create */
-export async function createXXPZ(body: API.CreateXXPZ[], options?: { [key: string]: any }) {
+export async function createXXPZ(
+  params: {
+    // path
+  },
+  body: API.CreateXXPZ[],
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -81,6 +93,7 @@ export async function createXXPZ(body: API.CreateXXPZ[], options?: { [key: strin
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -96,13 +109,13 @@ export async function updateXXPZ(
   body: API.UpdateXXPZ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxpz/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

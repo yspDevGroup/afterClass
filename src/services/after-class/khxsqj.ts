@@ -11,7 +11,7 @@ export async function getKHXSQJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -48,7 +48,7 @@ export async function getKHXSQJ(
     message?: string;
   }>(`/khxsqj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -62,34 +62,46 @@ export async function deleteKHXSQJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsqj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有课后服务请假记录 POST /khxsqj/ */
 export async function getAllKHXSQJ(
+  params: {
+    // path
+  },
   body: {
     /** 学生ID */
     XSId?: string;
   },
   options?: { [key: string]: any },
 ) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHXSQJ[]; message?: string }>('/khxsqj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课后服务请假记录 PUT /khxsqj/create */
-export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: string]: any }) {
+export async function createKHXSQJ(
+  params: {
+    // path
+  },
+  body: API.CreateKHXSQJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -129,6 +141,42 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 按时间请假获取请假课时数 POST /khxsqj/qjkss */
+export async function getQJKSS(
+  params: {
+    // path
+  },
+  body: {
+    /** 请假开始时间 */
+    KSSJ?: string;
+    /** 请假结束时间 */
+    JSSJ?: string;
+    /** 学年 */
+    xn?: string;
+    /** 学期 */
+    xq?: string;
+    /** 学生ID */
+    XSId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { KHBJSJId?: string; QJRQ?: string }[];
+    message?: string;
+  }>('/khxsqj/qjkss', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -144,13 +192,13 @@ export async function updateKHXSQJ(
   body: API.UpdateKHXSQJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsqj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

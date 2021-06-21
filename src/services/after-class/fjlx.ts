@@ -11,14 +11,14 @@ export async function getFJLX(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; FJLX?: string };
     message?: string;
   }>(`/fjlx/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -32,34 +32,46 @@ export async function deleteFJLX(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjlx/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有房间类型 POST /fjlx/ */
 export async function getAllFJLX(
+  params: {
+    // path
+  },
   body: {
     /** 房间类型 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.FJLX[]; message?: string }>('/fjlx/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建房间类型 PUT /fjlx/create */
-export async function createFJLX(body: API.CreateFJLX, options?: { [key: string]: any }) {
+export async function createFJLX(
+  params: {
+    // path
+  },
+  body: API.CreateFJLX,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; FJLX?: string };
@@ -69,6 +81,7 @@ export async function createFJLX(body: API.CreateFJLX, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -84,13 +97,13 @@ export async function updateFJLX(
   body: API.UpdateFJLX,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjlx/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

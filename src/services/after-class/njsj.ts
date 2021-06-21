@@ -11,14 +11,14 @@ export async function getNJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; NJ?: number; NJMC?: string };
     message?: string;
   }>(`/njsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -32,24 +32,38 @@ export async function deleteNJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/njsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有年级数据 GET /njsj/all */
-export async function getAllNJSJ(options?: { [key: string]: any }) {
+export async function getAllNJSJ(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.NJSJ[]; message?: string }>('/njsj/all', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建年级数据 PUT /njsj/create */
-export async function createNJSJ(body: API.CreateNJSJ, options?: { [key: string]: any }) {
+export async function createNJSJ(
+  params: {
+    // path
+  },
+  body: API.CreateNJSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; NJ?: number; NJMC?: string };
@@ -59,6 +73,7 @@ export async function createNJSJ(body: API.CreateNJSJ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -74,13 +89,13 @@ export async function updateNJSJ(
   body: API.UpdateNJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/njsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -11,7 +11,7 @@ export async function getKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -49,7 +49,7 @@ export async function getKHXSDD(
     message?: string;
   }>(`/khxsdd/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -63,16 +63,19 @@ export async function deleteKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有课后服务订单记录 POST /khxsdd/ */
 export async function getAllKHXSDD(
+  params: {
+    // path
+  },
   body: {
     /** 学生ID */
     XSId?: string;
@@ -81,18 +84,27 @@ export async function getAllKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHXSDD[]; message?: string }>('/khxsdd/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课后服务订单记录 PUT /khxsdd/create */
-export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: string]: any }) {
+export async function createKHXSDD(
+  params: {
+    // path
+  },
+  body: API.CreateKHXSDD,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -133,6 +145,7 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -148,13 +161,13 @@ export async function updateKHXSDD(
   body: API.UpdateKHXSDD,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

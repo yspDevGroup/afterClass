@@ -11,14 +11,14 @@ export async function getZXSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; SD?: string; SX?: string; KSSJ?: string; JSSJ?: string; SYXQ?: string };
     message?: string;
   }>(`/zxsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -32,24 +32,38 @@ export async function deleteZXSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/zxsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 查询所有作息时间数据 GET /zxsj/ */
-export async function getAllZXSJ(options?: { [key: string]: any }) {
+export async function getAllZXSJ(
+  params: {
+    // path
+  },
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.ZXSJ[]; message?: string }>('/zxsj/', {
     method: 'GET',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建作息时间数据 PUT /zxsj/create */
-export async function createZXSJ(body: API.CreateZXSJ, options?: { [key: string]: any }) {
+export async function createZXSJ(
+  params: {
+    // path
+  },
+  body: API.CreateZXSJ,
+  options?: { [key: string]: any },
+) {
+  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; SD?: string; SX?: string; KSSJ?: string; JSSJ?: string; SYXQ?: string };
@@ -59,6 +73,7 @@ export async function createZXSJ(body: API.CreateZXSJ, options?: { [key: string]
     headers: {
       'Content-Type': 'application/json',
     },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -74,13 +89,13 @@ export async function updateZXSJ(
   body: API.UpdateZXSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/zxsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

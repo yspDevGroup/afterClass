@@ -2,16 +2,16 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** Returns status and version of the application GET /_app/status */
-export async function getStatus(
+/** 上传图片 POST /upload/images */
+export async function uploadPic(
   params: {
     // path
   },
   options?: { [key: string]: any },
 ) {
   const { ...queryParams } = params;
-  return request<{ status?: string; version?: string }>('/_app/status', {
-    method: 'GET',
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/upload/images', {
+    method: 'POST',
     params: { ...queryParams },
     ...(options || {}),
   });
