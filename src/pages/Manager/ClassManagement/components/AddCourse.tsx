@@ -58,7 +58,6 @@ const AddCourse: FC<AddCourseProps> = ({
   // const [nJID, setNJID] = useState([]);
   // 年级名字
   const [nJLabelItem, setNJLabelItem] = useState<any>([]);
-  const userRef = useRef(null);
   useEffect(() => {
     if (formValues) {
       setBaoming(false);
@@ -97,10 +96,12 @@ const AddCourse: FC<AddCourseProps> = ({
           await initWXConfig(['checkJsApi']);
         }
         if (await initWXAgentConfig(['checkJsApi'])) {
-          const teacherData = resTeacher.data.userlist.map((item: any) => {
-            showUserName(userRef?.current, item?.userid);
+          const teacherData = resTeacher.data.userlist.map((item: any, key: any) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const userRef = { key: useRef(null) };
+            showUserName(userRef.key.current, item?.userid);
             WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
-            return <div ref={userRef}>{item.name}</div>;
+            return <div ref={userRef.key}>{item.name}</div>;
           });
           console.log('teacherData', teacherData);
         }
@@ -298,8 +299,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'divTab',
-      text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
-      style: { marginBottom: 8, color: "#bbbbbb" }
+      text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
+        signup[1],
+      ).format('YYYY-MM-DD')}`,
+      style: { marginBottom: 8, color: '#bbbbbb' },
     },
     {
       type: 'div',
@@ -337,8 +340,8 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'divTab',
-      text: `(默认上课时间段)：${ classattend[1] } — ${classattend[0]}`,
-      style: { marginBottom: 8, color: "#bbbbbb" }
+      text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+      style: { marginBottom: 8, color: '#bbbbbb' },
     },
     {
       type: 'div',
