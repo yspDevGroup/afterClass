@@ -17,7 +17,7 @@ const Mine = () => {
         await initWXConfig(['checkJsApi']);
       }
       if (await initWXAgentConfig(['checkJsApi'])) {
-        showUserName(userRef?.current, currentUser?.userId);
+        showUserName(userRef, currentUser?.userId);
         // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
         WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
       }
@@ -27,12 +27,13 @@ const Mine = () => {
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader}>
-        <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}>
-        </div>
+        <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div>
         <div className={styles.header}>
           <img src={currentUser?.avatar} />
           <div className={styles.headerName}>
-            <h4><span ref={userRef}></span>老师</h4>
+            <h4>
+              <span ref={userRef}></span>老师
+            </h4>
           </div>
         </div>
       </header>
@@ -45,8 +46,8 @@ const Mine = () => {
             <span></span>待上
           </div>
         </div>
-        <CheckOnChart data={childData} title='儿童体能训练' />
-        <CheckOnChart data={martialData} title='专业武术培训' cls={styles.martialWrapper} />
+        <CheckOnChart data={childData} title="儿童体能训练" />
+        <CheckOnChart data={martialData} title="专业武术培训" cls={styles.martialWrapper} />
       </div>
       <div className={styles.funWrapper}>
         <div className={styles.titleBar}>
@@ -55,30 +56,30 @@ const Mine = () => {
             好评率<a style={{ color: '#FF6600' }}>99.88%</a>
           </div>
         </div>
-        <CheckOnChart data={childEvu} title='儿童体能训练' cls={styles.childEvuWrapper} />
-        <CheckOnChart data={martialEvu} title='专业武术培训' cls={styles.martialEvuWrapper} />
+        <CheckOnChart data={childEvu} title="儿童体能训练" cls={styles.childEvuWrapper} />
+        <CheckOnChart data={martialEvu} title="专业武术培训" cls={styles.martialEvuWrapper} />
       </div>
       <div className={styles.linkWrapper}>
         <ul>
           <li>
-            <IconFont type='icon-woyaofankui' style={{'fontSize':'18px'}} />
-            <Link to='/teacher/home'>
+            <IconFont type="icon-woyaofankui" style={{ fontSize: '18px' }} />
+            <Link to="/teacher/home">
               我要反馈
-              <IconFont type='icon-xiayiye' />
+              <IconFont type="icon-xiayiye" />
             </Link>
           </li>
           <li>
-            <IconFont type='icon-fuwugonggao' style={{'fontSize':'18px'}} />
-            <Link to='/teacher/home'>
+            <IconFont type="icon-fuwugonggao" style={{ fontSize: '18px' }} />
+            <Link to="/teacher/home">
               服务公告
-              <IconFont type='icon-xiayiye' />
+              <IconFont type="icon-xiayiye" />
             </Link>
           </li>
           <li>
-            <IconFont type='icon-guanyu' style={{'fontSize':'18px'}} />
-            <Link to='/teacher/home'>
+            <IconFont type="icon-guanyu" style={{ fontSize: '18px' }} />
+            <Link to="/teacher/home">
               关于
-              <IconFont type='icon-xiayiye' />
+              <IconFont type="icon-xiayiye" />
             </Link>
           </li>
         </ul>

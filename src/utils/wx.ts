@@ -95,6 +95,8 @@ export const showUserName = (useRef: any, openid?: string, multi?: boolean) => {
     useRef.current.innerHTML = '';
   }
   useRef.current.appendChild(element);
-  const father = document.getElementById(`${openid}`);
-  father?.insertBefore(element, father.childNodes[0]);
+  if (multi) {
+    const father = document.getElementById(`${openid}`);
+    father?.appendChild(element);
+  }
 };

@@ -8,32 +8,31 @@ import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import PromptInformation from './components/PromptInformation';
 import IconFont from '@/components/CustomIcon';
 
-
 const Home = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [enroll] = useState<boolean>(true);
   const userRef = useRef(null);
-  const [open, setOpen] = useState<boolean>(false)
-  const getWeekDate=()=> {
+  const [open, setOpen] = useState<boolean>(false);
+  const getWeekDate = () => {
     const now = new Date();
     const day = now.getDay();
-    const weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+    const weeks = new Array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
     const week = weeks[day];
-    if(week==="星期二"||week==="星期四"){
-      return setOpen(true)
+    if (week === '星期二' || week === '星期四') {
+      return setOpen(true);
     }
-      return setOpen(false)
- }
- 
+    return setOpen(false);
+  };
+
   useEffect(() => {
     (async () => {
-      getWeekDate()
+      getWeekDate();
       if (/MicroMessenger/i.test(navigator.userAgent)) {
         await initWXConfig(['checkJsApi']);
       }
       await initWXAgentConfig(['checkJsApi']);
-      showUserName(userRef?.current, currentUser?.userId);
+      showUserName(userRef, currentUser?.userId);
       // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
       WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
     })();
@@ -46,19 +45,19 @@ const Home = () => {
         <div className={styles.headerText}>
           <h4>
             <span ref={userRef}></span>
-           老师，你好！
+            老师，你好！
           </h4>
           <div>欢迎使用课后帮，课后服务选我就对了！ </div>
         </div>
       </header>
       <div className={styles.pageContent}>
         <div className={styles.noticeArea}>
-        <IconFont type='icon-gonggao' className={styles.noticeImg} />
+          <IconFont type="icon-gonggao" className={styles.noticeImg} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
             <span>2021秋季课后服务将于2021.09.02正式开课...</span>
           </div>
-          <IconFont type='icon-gengduo' className={styles.gengduo}/>
+          <IconFont type="icon-gengduo" className={styles.gengduo} />
         </div>
         <div className={styles.enrollArea}>
           {enroll ? (
@@ -73,7 +72,7 @@ const Home = () => {
         </div>
 
         <div className={styles.todayCourses}>
-       {open? <ListComp listData={currentData} /> :<PromptInformation/> }
+          {open ? <ListComp listData={currentData} /> : <PromptInformation />}
         </div>
         <div className={styles.teachCourses}>
           <ListComp listData={courseData} />
