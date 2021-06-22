@@ -30,12 +30,12 @@ const PeriodMaintenance = () => {
   const [current, setCurrent] = useState<Maintenance>();
   const [form, setForm] = useState<FormInstance<any>>();
   const actionRef = useRef<ActionType>();
-  let requestType = "1";
+  let requestType = ["1"];
   let formatType = 'YYYY-MM-DD';
   if (currentStatus === 'education') {
-    requestType = "2";
+    requestType = ["2"];
   } else if (currentStatus === 'schedule') {
-    requestType = "0";
+    requestType = ["0"];
     formatType = 'HH:mm:ss';
   }
   const getModelTitle = () => {
@@ -80,8 +80,8 @@ const PeriodMaintenance = () => {
         rest.KSSJ = moment(rest.KSSJ).format(formatType);
         rest.JSSJ = moment(rest.JSSJ).format(formatType);
         const result = id
-          ? await updateXXSJPZ({ id }, { ...rest,TYPE: requestType })
-          : await createXXSJPZ({ ...rest,TYPE: requestType });
+          ? await updateXXSJPZ({ id }, { ...rest,TYPE: requestType[0] })
+          : await createXXSJPZ({ ...rest,TYPE: requestType[0] });
         if (result.status === 'ok') {
           message.success(id ? '信息更新成功' : '信息新增成功');
           setModalVisible(false);

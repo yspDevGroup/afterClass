@@ -32,13 +32,20 @@ const NewClassManagement = () => {
     const [xn, setxn] = useState<string>('');
     const [xq, setxq] = useState<string>('');
     const [readonly, stereadonly] = useState<boolean>(false);
+    const [opentype, setOpentype] = useState(false);
     // 学年学期没有时的提示框控制
     const [kai, setkai] = useState<boolean>(false)
     // 设置表单的查询更新
     const [name, setName] = useState<string>('');
     // 关闭学期学年提示框
     const kaiguan = () => {
-        setkai(false)
+        setkai(false);
+        setOpentype(false);
+    }
+    const Tips=()=>{
+        setModalVisible(true);
+        setopen(false)
+        setOpentype(false);
     }
     // 图片展示框
     const [exhibition, setExhibition] = useState<'none' | 'block'>('none');
@@ -96,7 +103,7 @@ const NewClassManagement = () => {
         }
         return '新增信息';
     };
-    const handleOperation = (type: string, data?: any) => {
+    const handleOperation = (type: string, data?: any) => {   
         if(type==='chakan'){
             stereadonly(true);
         }else{
@@ -280,8 +287,9 @@ const NewClassManagement = () => {
                         </Button>,
                     ]}
                 />
-                <NewCourses actionRef={actionRef} visible={open} onClose={onClose} current={current} readonly={readonly}/>
+                <NewCourses actionRef={actionRef} visible={open} onClose={onClose} current={current} readonly={readonly} xn={xn} xq={xq} setOpentype={setOpentype}/>
                 <PromptInformation text='未查询到学年学期数据，请设置学年学期后再来' link='/basicalSettings/termManagement' open={kai} colse={kaiguan} />
+                <PromptInformation text='未查询到课程类型，请设置课程类型后再来' open={opentype} colse={kaiguan} event={Tips}/>
                 <Modal
                     title={getModelTitle()}
                     destroyOnClose
