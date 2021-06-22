@@ -161,11 +161,11 @@ const NewCourses = (props: PropsType) => {
         res = updateKHKCSJ(params, optionse);
       } else {
         if (kaike === true) {
-          values.KKRQ = new Date(moment(new Date(classattend[0])).format('YYYY-MM-DD HH:mm:ss'));;
-          values.JKRQ = new Date(moment(new Date(classattend[1])).format('YYYY-MM-DD HH:mm:ss'));
+          values.KKRQ = classattend[0];
+          values.JKRQ = classattend[1];
         } if (baoming === true) {
-          values.BMKSSJ =signup[0];
-          values.BMJSSJ =signup[1];
+          values.BMKSSJ =new Date(moment(new Date(signup[0])).format('YYYY-MM-DD HH:mm:ss'));
+          values.BMJSSJ =new Date(moment(new Date(signup[1])).format('YYYY-MM-DD HH:mm:ss'));
         }
         res = createKHKCSJ({ ...values, KCTP: imgurl, KCZT: '待发布' });
       }
