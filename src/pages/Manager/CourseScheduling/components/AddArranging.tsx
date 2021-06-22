@@ -264,7 +264,7 @@ const AddArranging: FC<PropsType> = (props) => {
           njId: njId === undefined ? '' : njId,
           xn,
           xq,
-          page: 0,
+          page: 1,
           pageCount: 0,
           name: '',
         });
@@ -281,7 +281,7 @@ const AddArranging: FC<PropsType> = (props) => {
         const kcList = await getAllKHKCSJ({
           xn,
           xq,
-          page: 0,
+          page: 1,
           pageCount: 0,
           name: '',
         });
@@ -318,7 +318,7 @@ const AddArranging: FC<PropsType> = (props) => {
         // 获取所有场地数据
         const fjList = await getAllFJSJ({
           lxId: cdlxId === undefined ? '' : cdlxId,
-          page: 0,
+          page: 1,
           pageCount: 0,
           name: '',
         });
@@ -470,7 +470,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     njId: value || '',
                     xn,
                     xq,
-                    page: 0,
+                    page: 1,
                     pageCount: 0,
                     name: '',
                   });
@@ -513,7 +513,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     njId: value ? njId : '',
                     xn: value ? '' : xn,
                     xq: value ? '' : xq,
-                    page: 0,
+                    page: 1,
                     pageCount: 0,
                     name: '',
                   });
@@ -646,7 +646,7 @@ const AddArranging: FC<PropsType> = (props) => {
                   // 获取场地的数据
                   const fjList = await getAllFJSJ({
                     lxId: value,
-                    page: 0,
+                    page: 1,
                     pageCount: 0,
                     name: '',
                   });

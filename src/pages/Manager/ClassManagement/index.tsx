@@ -82,7 +82,7 @@ const CourseManagement = () => {
             name: '',
             xn: curTerm.XN,
             xq: curTerm.XQ,
-            page: 0,
+            page: 1,
             pageCount: 0,
           });
           Promise.resolve(ress).then((dataes: any) => {
@@ -332,7 +332,7 @@ const CourseManagement = () => {
               xq,
               kcId,
               page: 1,
-              pageCount: 20,
+              pageCount: 0,
               name,
             };
             const res = await getAllKHBJSJ(obj, opts);

@@ -212,7 +212,7 @@ const ClassMaintenance = () => {
               kcId,
               name: '',
               page: 1,
-              pageCount: 20,
+              pageCount: 0,
             }, opts);
           }}
           options={{
