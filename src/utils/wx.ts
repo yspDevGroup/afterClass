@@ -93,5 +93,10 @@ export const showUserName = (container?: HTMLElement | null, openid?: string, mu
     // eslint-disable-next-line no-param-reassign
     container.innerHTML = '';
   }
+  if (multi) {
+    const checkBox: any = document.getElementById('checkBox');
+    element?.parentNode?.replaceChild(checkBox, element);
+    checkBox?.appendChild(checkBox);
+  }
   container.appendChild(element);
 };

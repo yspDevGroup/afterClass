@@ -103,14 +103,6 @@ const AddCourse: FC<AddCourseProps> = ({
             showUserName(userRef?.current, teacherData[i].userid, true);
           }
           WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
-          const checkBox = document.getElementById('checkBox');
-          WWOpenData.map((item: any) => {
-            console.log('itemitemitemitem', item);
-            item.parentNode.replaceChild(checkBox, item);
-            checkBox?.appendChild(item);
-          });
-          console.log('WWOpenDataWWOpenData', WWOpenData);
-          console.log('checkBoxcheckBox', checkBox);
         }
       }
     })();
