@@ -49,7 +49,16 @@ const AddCourse: FC<AddCourseProps> = ({
   const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
- 
+  useEffect(() => {
+    if (formValues) {
+      setBaoming(false);
+      setKaike(false);
+    } else {
+      setBaoming(true);
+      setKaike(true);
+    }
+  }, [formValues]);
+
 
   useEffect(() => {
     (async () => {
@@ -73,11 +82,11 @@ const AddCourse: FC<AddCourseProps> = ({
   }, []);
   // 获取标题
   const getTitle = () => {
-    if (formValues && names === 'bianji') {
-      return '编辑信息';
-    }
     if (formValues && names === 'chakan') {
       return '查看信息';
+    }
+    if (formValues) {
+      return '编辑信息';
     }
     return '新增信息';
   };
@@ -220,58 +229,21 @@ const AddCourse: FC<AddCourseProps> = ({
       },
       readonly,
     },
-    {
-      type: 'divTab',
-      text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
-      style: { marginBottom: 8, color: "#bbbbbb" }
-    },
+    signup.length > 0 ?
+      {
+        type: 'divTab',
+        text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+        style: { marginBottom: 8, color: "#bbbbbb" }
+      } : '',
     {
       type: 'div',
       key: 'div',
       label: `单独设置报名时段：`,
+      readonly,
       lineItem: [
         {
           type: 'switch',
-
-          fieldProps: {
-            onChange: (item: any) => {
-              if (item === false) {
-                return setBaoming(true);
-              }
-              return setBaoming(false);
-            },
-            defaultValue: false,
-          }
-        }
-      ]
-    },
-    
-    {
-      type: 'dateRange',
-      label: '报名时段:',
-      name: 'BMSD',
-      key: 'BMSD',
-      width: '100%',
-      hidden: baoming,
-      fieldProps: {
-        disabledDate: (current: any) => {
-          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss')
-          return defaults > signup[1] || defaults < signup[0]
-        }
-      },
-    },
-    {
-      type: 'divTab',
-      text: `(默认上课时间段)：${ classattend[1] } — ${classattend[0]}`,
-      style: { marginBottom: 8, color: "#bbbbbb" }
-    },
-    {
-      type: 'div',
-      key: 'div1',
-      label: `单独设置上课时段：`,
-      lineItem: [
-        {
-          type: 'switch',
+          readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -279,7 +251,50 @@ const AddCourse: FC<AddCourseProps> = ({
               }
               return setKaike(false);
             },
-            defaultValue: false,
+            checked: !kaike,
+          },
+        },
+      ],
+    },
+
+    {
+      type: 'dateRange',
+      label: '报名时段:',
+      name: 'BMSD',
+      key: 'BMSD',
+      width: '100%',
+      hidden: baoming,
+      readonly,
+      fieldProps: {
+        disabledDate: (current: any) => {
+          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss')
+          return defaults > signup[1] || defaults < signup[0]
+        }
+      },
+    },
+    classattend.length > 0 ?
+      {
+        type: 'divTab',
+        text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+        style: { marginBottom: 8, color: "#bbbbbb" }
+      } : '',
+    {
+      type: 'div',
+      key: 'div1',
+      label: `单独设置上课时段：`,
+      readonly,
+      lineItem: [
+        {
+          type: 'switch',
+          readonly,
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item === false) {
+                return setKaike(true);
+              }
+              return setKaike(false);
+            },
+            checked: !kaike,
           },
         },
 
@@ -288,6 +303,7 @@ const AddCourse: FC<AddCourseProps> = ({
     {
       type: 'dateRange',
       label: '上课时间:',
+      readonly,
       name: 'SKSD',
       key: 'SKSD',
       width: '100%',
@@ -316,7 +332,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KCMS',
     },
   ];
-  
+
   return (
     <div>
       <Drawer
@@ -349,9 +365,9 @@ const AddCourse: FC<AddCourseProps> = ({
           formItems={formItems}
           formItemLayout={formLayout}
           values={formValues
-            
+
             || {
-            BJZT: '待发布', 
+            BJZT: '待发布',
             BMKSSJ: baoming,
             KKRQ: kaike,
           }}

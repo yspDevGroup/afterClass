@@ -185,7 +185,7 @@ const NewCourses = (props: PropsType) => {
           onClose!();
           actionRef?.current?.reload();
         } else {
-          message.error(`保存失败，${data.message}`);
+          message.error(`保存失败，${data.message},请联系管理员`);
         }
       })
       .catch((error) => {
@@ -230,11 +230,11 @@ const NewCourses = (props: PropsType) => {
       name: 'KCZT',
       key: 'KCZT',
       valueEnum: {
-        待排班: '待排班',
+        待发布: '待发布',
       },
       fieldProps: {
         disabled: true,
-        defaultValue: '待排班'
+        defaultValue: '待发布'
       },
     },
     classattend.length > 0 ?
