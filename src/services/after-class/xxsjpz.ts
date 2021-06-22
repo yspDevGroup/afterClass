@@ -60,9 +60,6 @@ export async function deleteXXSJPZ(
 
 /** 查询所有学校时间配置数据 POST /xxsjpz/all */
 export async function getAllXXSJPZ(
-  params: {
-    // path
-  },
   body: {
     /** 学年 */
     xn?: string;
@@ -73,7 +70,6 @@ export async function getAllXXSJPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.XXSJPZ[]; message?: string }>(
     '/xxsjpz/all',
     {
@@ -81,7 +77,6 @@ export async function getAllXXSJPZ(
       headers: {
         'Content-Type': 'application/json',
       },
-      params: { ...queryParams },
       data: body,
       ...(options || {}),
     },
@@ -89,14 +84,7 @@ export async function getAllXXSJPZ(
 }
 
 /** 创建学校时间配置数据 PUT /xxsjpz/create */
-export async function createXXSJPZ(
-  params: {
-    // path
-  },
-  body: API.CreateXXSJPZ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createXXSJPZ(body: API.CreateXXSJPZ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -124,7 +112,6 @@ export async function createXXSJPZ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

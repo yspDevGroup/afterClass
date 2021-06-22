@@ -98,9 +98,6 @@ export async function deleteKHPKSJ(
 
 /** 查询所有课后排课数据 POST /khpksj/ */
 export async function getAllKHPKSJ(
-  params: {
-    // path
-  },
   body: {
     /** 年级ID */
     njId?: string;
@@ -113,13 +110,11 @@ export async function getAllKHPKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHPKSJ[]; message?: string }>('/khpksj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -127,16 +122,12 @@ export async function getAllKHPKSJ(
 
 /** 创建课后排课数据 PUT /khpksj/create */
 export async function createKHPKSJ(
-  params: {
-    // path
-  },
   body: {
     bjIds?: string[];
     data?: API.CreateKHPKSJ[];
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -153,7 +144,6 @@ export async function createKHPKSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

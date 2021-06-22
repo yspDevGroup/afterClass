@@ -69,14 +69,7 @@ export async function getJXJHSJByXX(
 }
 
 /** 创建教学计划数据 PUT /jxjhsj/create */
-export async function createJXJHSJ(
-  params: {
-    // path
-  },
-  body: API.CreateJXJHSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createJXJHSJ(body: API.CreateJXJHSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -94,7 +87,6 @@ export async function createJXJHSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

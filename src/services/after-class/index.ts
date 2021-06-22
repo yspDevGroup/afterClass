@@ -6,12 +6,12 @@ import * as other from './other';
 import * as auth from './auth';
 import * as user from './user';
 import * as bjsj from './bjsj';
-import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
+import * as fjlx from './fjlx';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
-import * as jxjhsj from './jxjhsj';
 import * as jzgjbsj from './jzgjbsj';
+import * as jxjhsj from './jxjhsj';
 import * as kcsj from './kcsj';
 import * as khbjsj from './khbjsj';
 import * as khjspj from './khjspj';
@@ -27,27 +27,27 @@ import * as pksj from './pksj';
 import * as upload from './upload';
 import * as wechat from './wechat';
 import * as xl from './xl';
-import * as xqsj from './xqsj';
 import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
+import * as xqsj from './xqsj';
+import * as xsjbsj from './xsjbsj';
 import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
-import * as xxsjpz from './xxsjpz';
-import * as xsjbsj from './xsjbsj';
 import * as xxpz from './xxpz';
-import * as zxsj from './zxsj';
+import * as xxsjpz from './xxsjpz';
 import * as zxfa from './zxfa';
+import * as zxsj from './zxsj';
 export default {
   other,
   auth,
   user,
   bjsj,
-  fjlx,
   fjsj,
+  fjlx,
   jcsj,
   jcxx,
-  jxjhsj,
   jzgjbsj,
+  jxjhsj,
   kcsj,
   khbjsj,
   khjspj,
@@ -63,14 +63,14 @@ export default {
   upload,
   wechat,
   xl,
-  xqsj,
   xnjgsj,
   xnxq,
+  xqsj,
+  xsjbsj,
   xxgg,
   xxjbsj,
-  xxsjpz,
-  xsjbsj,
   xxpz,
-  zxsj,
+  xxsjpz,
   zxfa,
+  zxsj,
 };

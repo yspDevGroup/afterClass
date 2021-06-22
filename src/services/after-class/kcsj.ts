@@ -75,14 +75,7 @@ export async function getKCSJByXX(
 }
 
 /** 创建课程数据 PUT /kcsj/create */
-export async function createKCSJ(
-  params: {
-    // path
-  },
-  body: API.CreateKCSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -106,7 +99,6 @@ export async function createKCSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

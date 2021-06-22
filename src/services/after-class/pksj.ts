@@ -49,29 +49,15 @@ export async function deletePKSJ(
 }
 
 /** 查询所有排课数据 GET /pksj/ */
-export async function getAllPKSJ(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllPKSJ(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.PKSJ[]; message?: string }>('/pksj/', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建排课数据 PUT /pksj/create */
-export async function createPKSJ(
-  params: {
-    // path
-  },
-  body: API.CreatePKSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createPKSJ(body: API.CreatePKSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -89,7 +75,6 @@ export async function createPKSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

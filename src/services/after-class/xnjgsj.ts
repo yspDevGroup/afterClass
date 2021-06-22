@@ -48,29 +48,15 @@ export async function deleteXNJGSJ(
 }
 
 /** 查询所有校内机构数据 GET /xnjgsj/ */
-export async function getAllXNJGSJ(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllXNJGSJ(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.XNJGSJ[]; message?: string }>('/xnjgsj/', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建校内机构数据 PUT /xnjgsj/create */
-export async function createXNJGSJ(
-  params: {
-    // path
-  },
-  body: API.CreateXNJGSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createXNJGSJ(body: API.CreateXNJGSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -87,7 +73,6 @@ export async function createXNJGSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

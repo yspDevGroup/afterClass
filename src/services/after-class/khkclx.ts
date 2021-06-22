@@ -42,36 +42,24 @@ export async function deleteKHKCLX(
 
 /** 查询所有课程类型 POST /khkclx/ */
 export async function getAllKHKCLX(
-  params: {
-    // path
-  },
   body: {
     /** 课程类型 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHKCLX[]; message?: string }>('/khkclx/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课程类型 PUT /khkclx/create */
-export async function createKHKCLX(
-  params: {
-    // path
-  },
-  body: API.CreateKHKCLX,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createKHKCLX(body: API.CreateKHKCLX, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; KCLX?: string; KBYS?: string };
@@ -81,7 +69,6 @@ export async function createKHKCLX(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -42,36 +42,24 @@ export async function deleteFJLX(
 
 /** 查询所有房间类型 POST /fjlx/ */
 export async function getAllFJLX(
-  params: {
-    // path
-  },
   body: {
     /** 房间类型 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.FJLX[]; message?: string }>('/fjlx/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建房间类型 PUT /fjlx/create */
-export async function createFJLX(
-  params: {
-    // path
-  },
-  body: API.CreateFJLX,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createFJLX(body: API.CreateFJLX, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; FJLX?: string };
@@ -81,7 +69,6 @@ export async function createFJLX(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

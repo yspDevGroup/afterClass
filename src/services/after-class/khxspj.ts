@@ -51,9 +51,6 @@ export async function deleteKHXSPJ(
 
 /** 查询所有学生评价记录 POST /khxspj/ */
 export async function getAllKHXSPJ(
-  params: {
-    // path
-  },
   body: {
     /** 教师ID */
     jsId?: string;
@@ -66,27 +63,18 @@ export async function getAllKHXSPJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHXSPJ[]; message?: string }>('/khxspj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建学生评价记录 PUT /khxspj/create */
-export async function createKHXSPJ(
-  params: {
-    // path
-  },
-  body: API.CreateKHXSPJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createKHXSPJ(body: API.CreateKHXSPJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -105,7 +93,6 @@ export async function createKHXSPJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

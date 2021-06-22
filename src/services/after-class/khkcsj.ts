@@ -78,9 +78,6 @@ export async function deleteKHKCSJ(
 
 /** 查询所有课后课程数据 POST /khkcsj/ */
 export async function getAllKHKCSJ(
-  params: {
-    // path
-  },
   body: {
     /** 学年 */
     xn?: string;
@@ -97,27 +94,18 @@ export async function getAllKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHKCSJ[]; message?: string }>('/khkcsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课后课程数据 PUT /khkcsj/create */
-export async function createKHKCSJ(
-  params: {
-    // path
-  },
-  body: API.CreateKHKCSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -163,7 +151,6 @@ export async function createKHKCSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -214,9 +201,6 @@ export async function allNJs(
 
 /** 根据年级ID查找所有课后课程 POST /khkcsj/khkcs */
 export async function allKCsByNJ(
-  params: {
-    // path
-  },
   body: {
     /** 学年 */
     xn?: string;
@@ -231,7 +215,6 @@ export async function allKCsByNJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -252,7 +235,6 @@ export async function allKCsByNJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

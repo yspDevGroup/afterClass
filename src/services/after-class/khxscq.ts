@@ -68,9 +68,6 @@ export async function deleteKHXSCQ(
 
 /** 查询所有课后服务出勤记录 POST /khxscq/ */
 export async function getAllKHXSCQ(
-  params: {
-    // path
-  },
   body: {
     /** 学生ID */
     xsId?: string;
@@ -83,27 +80,18 @@ export async function getAllKHXSCQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHXSCQ[]; message?: string }>('/khxscq/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课后服务出勤记录 PUT /khxscq/create */
-export async function createKHXSCQ(
-  params: {
-    // path
-  },
-  body: API.CreateKHXSCQ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createKHXSCQ(body: API.CreateKHXSCQ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -139,7 +127,6 @@ export async function createKHXSCQ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

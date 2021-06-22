@@ -64,9 +64,6 @@ export async function deleteFJSJ(
 
 /** 查询所有房间数据 POST /fjsj/ */
 export async function getAllFJSJ(
-  params: {
-    // path
-  },
   body: {
     /** 场地类型ID */
     lxId?: string;
@@ -79,27 +76,18 @@ export async function getAllFJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.FJSJ[]; message?: string }>('/fjsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建房间数据 PUT /fjsj/create */
-export async function createFJSJ(
-  params: {
-    // path
-  },
-  body: API.CreateFJSJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -131,7 +119,6 @@ export async function createFJSJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -161,9 +148,6 @@ export async function updateFJSJ(
 
 /** 查询房间占用情况 POST /fjsj/plan */
 export async function getFJPlan(
-  params: {
-    // path
-  },
   body: {
     /** 场地类型ID */
     lxId?: string;
@@ -178,7 +162,6 @@ export async function getFJPlan(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -234,7 +217,6 @@ export async function getFJPlan(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

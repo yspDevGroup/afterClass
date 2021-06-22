@@ -41,29 +41,15 @@ export async function deleteXXGG(
 }
 
 /** 查询所有学校公告记录 GET /xxgg/all */
-export async function getAllXXGG(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllXXGG(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.XXGG[]; message?: string }>('/xxgg/all', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建学校公告记录 PUT /xxgg/create */
-export async function createXXGG(
-  params: {
-    // path
-  },
-  body: API.CreateXXGG[],
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createXXGG(body: API.CreateXXGG[], options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data?: { BT?: string; NR?: string };
@@ -73,7 +59,6 @@ export async function createXXGG(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

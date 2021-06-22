@@ -47,9 +47,6 @@ export async function deleteXXPZ(
 
 /** 查询所有学校配置数据 GET /xxpz/all */
 export async function getAllXXPZ(
-  params: {
-    // path
-  },
   body: {
     /** 学年 */
     xn?: string;
@@ -58,27 +55,18 @@ export async function getAllXXPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.XXPZ[]; message?: string }>('/xxpz/all', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建学校配置数据 PUT /xxpz/create */
-export async function createXXPZ(
-  params: {
-    // path
-  },
-  body: API.CreateXXPZ[],
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createXXPZ(body: API.CreateXXPZ[], options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -93,7 +81,6 @@ export async function createXXPZ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

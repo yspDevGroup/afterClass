@@ -72,36 +72,24 @@ export async function deleteKHXSQJ(
 
 /** 查询所有课后服务请假记录 POST /khxsqj/ */
 export async function getAllKHXSQJ(
-  params: {
-    // path
-  },
   body: {
     /** 学生ID */
     XSId?: string;
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHXSQJ[]; message?: string }>('/khxsqj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课后服务请假记录 PUT /khxsqj/create */
-export async function createKHXSQJ(
-  params: {
-    // path
-  },
-  body: API.CreateKHXSQJ,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -141,7 +129,6 @@ export async function createKHXSQJ(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -149,9 +136,6 @@ export async function createKHXSQJ(
 
 /** 按时间请假获取请假课时数 POST /khxsqj/qjkss */
 export async function getQJKSS(
-  params: {
-    // path
-  },
   body: {
     /** 请假开始时间 */
     KSSJ?: string;
@@ -166,7 +150,6 @@ export async function getQJKSS(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: { KHBJSJId?: string; QJRQ?: string }[];
@@ -176,7 +159,6 @@ export async function getQJKSS(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -73,9 +73,6 @@ export async function deleteKHXSDD(
 
 /** 查询所有课后服务订单记录 POST /khxsdd/ */
 export async function getAllKHXSDD(
-  params: {
-    // path
-  },
   body: {
     /** 学生ID */
     XSId?: string;
@@ -84,27 +81,18 @@ export async function getAllKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.KHXSDD[]; message?: string }>('/khxsdd/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
 }
 
 /** 创建课后服务订单记录 PUT /khxsdd/create */
-export async function createKHXSDD(
-  params: {
-    // path
-  },
-  body: API.CreateKHXSDD,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -145,7 +133,6 @@ export async function createKHXSDD(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

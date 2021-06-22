@@ -41,29 +41,15 @@ export async function deleteXL(
 }
 
 /** 查询所有校历数据 GET /xl/ */
-export async function getAllXL(
-  params: {
-    // path
-  },
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function getAllXL(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: API.XL[]; message?: string }>('/xl/', {
     method: 'GET',
-    params: { ...queryParams },
     ...(options || {}),
   });
 }
 
 /** 创建校历数据 PUT /xl/create */
-export async function createXL(
-  params: {
-    // path
-  },
-  body: API.CreateXL,
-  options?: { [key: string]: any },
-) {
-  const { ...queryParams } = params;
+export async function createXL(body: API.CreateXL, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
@@ -73,7 +59,6 @@ export async function createXL(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
