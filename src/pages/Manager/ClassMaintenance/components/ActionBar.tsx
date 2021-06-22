@@ -1,10 +1,9 @@
-import { deleteKHBJSJ } from "@/services/after-class/khbjsj";
+import { deleteKHBJSJ, updateKHBJSJ } from "@/services/after-class/khbjsj";
 import type { ActionType } from "@ant-design/pro-table";
 import { Popconfirm } from "antd";
 import { message } from "antd";
 import { Divider } from "antd";
 import React from "react";
-import { Link } from "umi";
 import type { CourseItem } from "../data";
 
 type propstype = {
@@ -16,19 +15,26 @@ type propstype = {
 
 const ActionBar = (props: propstype) => {
   const { handleEdit, record,actionRef } = props;
-  const Url = `/courseScheduling?courseId=${record.id}`;
+  const shelf=(record : any)=>{
+      record.BJZT='已下架'
+      const res =updateKHBJSJ({id:record.id}, record);
+      new Promise((resolve)=>{
+        resolve(res);
+      }).then((data:any)=>{
+        if (data.status === 'ok') {
+          message.success('下架成功');
+          actionRef.current?.reload();
+        } else {
+          message.error('下架失败，请联系管理员或稍后重试');
+          actionRef.current?.reload();
+        }
+      })  
+  }
   switch (record.BJZT) {
     case '待发布':
-    case '未排课':
     case '已下架':
       return (
         <>
-          <a>
-            <Link to={Url}>
-              排课
-            </Link>
-          </a>
-          <Divider type="vertical" />
           <a onClick={() => handleEdit(record)}>编辑</a>
           <Divider type="vertical" />
           <Popconfirm
@@ -65,7 +71,7 @@ const ActionBar = (props: propstype) => {
     case '已发布':
       return (
         <>
-          <a>
+          <a onClick={()=>shelf(record)}>
             下架
           </a>
           <Divider type="vertical" />

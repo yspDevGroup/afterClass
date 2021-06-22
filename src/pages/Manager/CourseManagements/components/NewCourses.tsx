@@ -137,7 +137,7 @@ const NewCourses = (props: PropsType) => {
         setOptions(opt);
       }
     });
-  }, []);
+  }, [visible]);
   const handleSubmit = () => {
     form.submit();
   };
@@ -163,9 +163,16 @@ const NewCourses = (props: PropsType) => {
         if (kaike === true) {
           values.KKRQ = classattend[0];
           values.JKRQ = classattend[1];
-        } if (baoming === true) {
-          values.BMKSSJ =new Date(moment(new Date(signup[0])).format('YYYY-MM-DD HH:mm:ss'));
-          values.BMJSSJ =new Date(moment(new Date(signup[1])).format('YYYY-MM-DD HH:mm:ss'));
+        } else {
+          values.JKRQ = values.KKRQ[1];
+          values.KKRQ = values.KKRQ[0];
+        }
+        if (baoming === true) {
+          values.BMKSSJ = new Date(moment(new Date(signup[0])).format('YYYY-MM-DD HH:mm:ss'));
+          values.BMJSSJ = new Date(moment(new Date(signup[1])).format('YYYY-MM-DD HH:mm:ss'));
+        } else {
+          values.BMJSSJ = moment(values.BMKSSJ[1]);
+          values.BMKSSJ = moment(values.BMKSSJ[0]);
         }
         res = createKHKCSJ({ ...values, KCTP: imgurl, KCZT: '待发布' });
       }
@@ -202,6 +209,7 @@ const NewCourses = (props: PropsType) => {
       name: 'KCMC',
       key: 'KCMC',
       width: '100%',
+      rules: [{ required: true, message: '请填写名称' }],
       readonly,
       fieldProps: {
         autocomplete: 'off'
@@ -212,6 +220,7 @@ const NewCourses = (props: PropsType) => {
       label: '课程类型:',
       name: 'KHKCLXId',
       key: 'KHKCLXId',
+      rules: [{ required: true, message: '请填写名称' }],
       readonly,
       options,
     },
@@ -257,7 +266,7 @@ const NewCourses = (props: PropsType) => {
       ]
     },
     {
-      type: 'dateRange',
+      type: 'dateTimeRange',
       label: '报名时间:',
       name: 'BMKSSJ',
       key: 'BMKSSJ',
@@ -320,6 +329,7 @@ const NewCourses = (props: PropsType) => {
       label: '学年学期：',
       key: 'XNXQ',
       readonly,
+      rules: [{ required: true, message: '请填写名称' }],
       cascaderItem: [
         {
           type: 'select',

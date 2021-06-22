@@ -35,6 +35,14 @@ const Sitclass = () => {
       align: 'center',
       ellipsis: true,
       width: 130,
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此项为必填项',
+          },
+        ],
+      },
     },
     {
       title: '课程颜色',
@@ -44,6 +52,14 @@ const Sitclass = () => {
       width: 120,
       fieldProps: {
         options,
+      },
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此项为必选项',
+          },
+        ],
       },
       render: (_, item) => {
         return options.map((oItem) => {
@@ -152,7 +168,7 @@ const Sitclass = () => {
                 message.success(row.title ? '信息新增成功' : '信息更新成功');
                 actionRef.current?.reload();
               } else {
-                message.error(`${result.message},请联系管理员或稍后再试`);
+                message.error(`${result.message},请联系管理员或稍后再试`);   
               }
             } catch (errorInfo) {
               console.log('Failed:', errorInfo);

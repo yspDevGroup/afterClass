@@ -100,7 +100,7 @@ const AddCourse: FC<AddCourseProps> = ({
         if (await initWXAgentConfig(['checkJsApi'])) {
           const teacherData = resTeacher.data.userlist;
           for (let i = 0; i < teacherData.length; i += 1) {
-            showUserName(userRef?.current, teacherData[i].userid, true);
+            showUserName(userRef?.current, teacherData[i].userid,true);
           }
           WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
         }
@@ -281,7 +281,7 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'ZJS',
           readonly,
           fieldProps: {
-            onChange: async (value: any) => {},
+            onChange: async (value: any) => { },
           },
         },
         {
@@ -296,21 +296,21 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
-    signup.length > 0
-      ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
-      : '',
+    signup.length>0?
+    {
+      type: 'divTab',
+      text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+      style: { marginBottom: 8, color: "#bbbbbb" }
+    }:'',
     {
       type: 'div',
       key: 'div',
       label: `单独设置报名时段：`,
+      readonly,
       lineItem: [
         {
           type: 'switch',
-
+          readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -328,6 +328,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: `报名时段:`,
       name: 'BMSD',
       key: 'BMSD',
+      readonly,
       width: '100%',
       hidden: baoming,
       fieldProps: {
@@ -337,20 +338,21 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       },
     },
-    classattend.length > 0
-      ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
-      : '',
+    classattend.length>0?
+    {
+      type: 'divTab',
+      text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+      style: { marginBottom: 8, color: "#bbbbbb" }
+    }:'',
     {
       type: 'div',
       key: 'div1',
+      readonly,
       label: `单独设置上课时段：`,
       lineItem: [
         {
           type: 'switch',
+          readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -370,6 +372,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'SKSD',
       width: '100%',
       hidden: kaike,
+      readonly,
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');

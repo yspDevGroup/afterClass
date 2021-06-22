@@ -23,6 +23,7 @@ import { getQueryString } from '@/utils/utils';
 import PromptInformation from '@/components/PromptInformation';
 import { getAllKHKCSJ, getKHKCSJ } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import { Link } from 'umi';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -244,14 +245,6 @@ const CourseManagement = () => {
       align: 'center',
       width: '10%',
     },
-
-    {
-      title: '副班',
-      dataIndex: 'FJSName',
-      key: 'FJSName',
-      align: 'center',
-      ellipsis: true,
-    },
     {
       title: '所属校区',
       align: 'center',
@@ -284,6 +277,26 @@ const CourseManagement = () => {
           </div>
         );
       },
+    },
+    {
+      title: '排课',
+      align: 'center',
+      width: 100,
+      render:(_,record)=>{
+        const Url = `/courseScheduling?courseId=${record.id}`;
+        if(record.BJZT==='待发布'||record.BJZT==='已下架'){
+          return <a>
+          <Link to={Url}>
+            排课
+          </Link>
+        </a>
+        }
+        return(
+          <>
+            已排课
+          </>
+        )
+      }
     },
     {
       title: '状态',
