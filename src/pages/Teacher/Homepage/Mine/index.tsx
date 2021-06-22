@@ -17,7 +17,7 @@ const Mine = () => {
         await initWXConfig(['checkJsApi']);
       }
       if (await initWXAgentConfig(['checkJsApi'])) {
-        showUserName(userRef, currentUser?.userId);
+        showUserName(userRef?.current, currentUser?.userId);
         // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
         WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
       }

@@ -90,6 +90,7 @@ type RoomItem = {
   XXJBSJ?: SchoolType;
   XQSJ?: SchoolAreaType;
   BZXX?: string;
+  XQName?: string;
 };
 
 // 微信部门的数据类型
@@ -126,10 +127,10 @@ type WXDepType = {
 // 学年学期的数据类型
 type ChainDataType = {
   /** 联动一级数据 类型 */
- data: { label: string, value: string }[],
+  data: { label: string; value: string }[];
   /** 联动二级数据类型 */
- subData: Record<string, { label: string, value: string }[]>
-}
+  subData: Record<string, { label: string; value: string }[]>;
+};
 // google analytics interface
 type GAFieldsObject = {
   eventCategory: string;

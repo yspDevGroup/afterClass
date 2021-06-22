@@ -18,7 +18,7 @@ type PropsType = {
   readonly?: boolean;
   setopens: (value: boolean) => void;
   setModalVisible: (value: boolean) => void;
-  setXQLabelItem: (value: string) => void
+  setXQLabelItem: (value: string) => void;
 };
 
 const AddRoom = (props: PropsType) => {
@@ -55,8 +55,8 @@ const AddRoom = (props: PropsType) => {
             });
             setRoomType(data);
           } else {
-           setopens(true);
-          //  setTimeout( function(){setModalVisible(false)},500) 
+            setopens(true);
+            //  setTimeout( function(){setModalVisible(false)},500)
           }
         } else {
           message.info(response.message);
@@ -119,9 +119,9 @@ const AddRoom = (props: PropsType) => {
       rules: [{ required: true, message: '请填写所属校区' }],
       fieldProps: {
         options: campus,
-        onChange(value: any, option: any){
+        onChange(value: any, option: any) {
           setXQLabelItem(option.label);
-        }
+        },
       },
     },
     {
@@ -151,10 +151,11 @@ const AddRoom = (props: PropsType) => {
         setForm={setForm}
         values={(() => {
           if (current) {
-            const { FJLX, XQSJ, ...info } = current;
+            const { FJLX, XQSJ, XQName, ...info } = current;
             return {
               FJLXId: FJLX?.id,
               XQSJId: XQSJ?.id,
+              XQ: XQName,
               ...info,
             };
           }

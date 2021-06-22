@@ -362,6 +362,7 @@ const ClassManagement = () => {
             xn={xn}
             xq={xq}
             campus={campus}
+            setCampus={setCampus}
             grade={grade}
             tableDataSource={tableDataSource}
             processingData={processingData}

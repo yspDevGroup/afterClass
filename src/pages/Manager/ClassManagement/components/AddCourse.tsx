@@ -60,8 +60,6 @@ const AddCourse: FC<AddCourseProps> = ({
   // const [nJID, setNJID] = useState([]);
   // 年级名字
   const [nJLabelItem, setNJLabelItem] = useState<any>([]);
-  const [teacherDataList, setTeacherDataList] = useState<any>([]);
-
   useEffect(() => {
     if (formValues) {
       setBaoming(false);
@@ -90,9 +88,7 @@ const AddCourse: FC<AddCourseProps> = ({
       });
     }
   }, [kcId]);
-  // const check = () =>{
-  //   return <Checkbox id="father"></Checkbox>
-  // }
+
   useEffect(() => {
     (async () => {
       // 获取教师
@@ -104,10 +100,9 @@ const AddCourse: FC<AddCourseProps> = ({
         if (await initWXAgentConfig(['checkJsApi'])) {
           const teacherData = resTeacher.data.userlist;
           for (let i = 0; i < teacherData.length; i += 1) {
-            showUserName(userRef, teacherData[i].userid, true);
+            showUserName(userRef?.current, teacherData[i].userid, true);
           }
           WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
-          setTeacherDataList(teacherData);
         }
       }
     })();
@@ -190,6 +185,7 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'BJMC',
       key: 'BJMC',
       readonly,
+      rules: [{ required: true, message: '请填写班级名称' }],
       fieldProps: {
         autocomplete: 'off',
       },
@@ -200,6 +196,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '课程名称：',
       name: 'KHKCSJId',
       key: 'KHKCSJId',
+      rules: [{ required: true, message: '请填写课程名称' }],
       fieldProps: {
         options: mcData,
       },
@@ -210,6 +207,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '课时数：',
       name: 'KCSC',
       key: 'KCSC',
+      rules: [{ required: true, message: '请填写课时数' }],
       fieldProps: {
         min: 0,
         max: 100,
@@ -235,6 +233,7 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'FY',
           key: 'FY',
           readonly,
+          rules: [{ required: true, message: '请填写费用' }],
           fieldProps: {
             autocomplete: 'off',
           },
@@ -247,6 +246,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'XQ',
       label: '所属校区:',
       readonly,
+      rules: [{ required: true, message: '请填写所属校区' }],
       fieldProps: {
         options: campus,
         onChange(value: any, option: any) {
@@ -261,6 +261,7 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'njIds',
       key: 'njIds',
       label: '适用年级:',
+      rules: [{ required: true, message: '请填写适用年级' }],
       fieldProps: {
         mode: 'multiple',
         options: grade ? grade[xQItem] : [],
@@ -404,16 +405,10 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KCMS',
     },
   ];
-  console.log('useRef22222', userRef);
-  console.log('useRef333333', userRef.current);
 
   return (
     <div>
-      <div>
-        {teacherDataList.map((item: any) => {
-          return <Checkbox id={`${item.userid}`}></Checkbox>;
-        })}
-      </div>
+      <div ref={userRef}></div>
       <Drawer
         title={getTitle()}
         width={480}

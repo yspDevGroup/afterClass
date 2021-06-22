@@ -31,6 +31,7 @@ type PropsType = {
   xXSJPZData?: any;
   campus?: any;
   grade?: any;
+  setCampus: (value: any) => void;
   sameClass?: any;
   setBJIDData?: any;
 };
@@ -47,6 +48,7 @@ const AddArranging: FC<PropsType> = (props) => {
     formValues,
     xXSJPZData,
     campus,
+    setCampus,
     grade,
     setBJIDData,
   } = props;
@@ -206,32 +208,35 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 保存
   const submit = async (params: any) => {
-    try {
-      const data = [...excelTableValue].concat(sameClassDatas);
-      // 所选班级ID
-      const bj = Array.from(new Set(bjIdData));
-      const parameter = {
-        bjIds: bj,
-        data,
-      };
-      const result = await createKHPKSJ(parameter);
-      if (result.status === 'ok') {
-        message.success('保存成功');
-        tableServers();
-        setState(true);
+    if (Bj || index) {
+      try {
+        const data = [...excelTableValue].concat(sameClassDatas);
+        // 所选班级ID
+        const bj = Array.from(new Set(bjIdData));
+        const parameter = {
+          bjIds: bj,
+          data,
+        };
+        const result = await createKHPKSJ(parameter);
+        if (result.status === 'ok') {
+          message.success('保存成功');
+          tableServers();
+          setState(true);
+          return true;
+        }
+        if (result.status === 'error') {
+          if (result.message === 'Validation error') {
+            message.error('保存失败,排课冲突');
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        message.error('保存失败');
         return true;
       }
-      if (result.status === 'error') {
-        if (result.message === 'Validation error') {
-          message.error('保存失败,排课冲突');
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      message.error('保存失败');
-      return true;
+    } else {
+      message.warning('请先选择班级后再进行排课');
     }
-
     return true;
   };
   const onReset = (prop: any) => {
@@ -520,35 +525,32 @@ const AddArranging: FC<PropsType> = (props) => {
                   setBjData(bjList.data);
 
                   if (value) {
-                    // 根据班级ID获取年级的数据
+                    // 根据课程ID获取年级的数据
                     const njList = await allNJs({ id: value });
+
                     if (njList.status === 'ok') {
-                      if (njList.data?.length === 0) {
-                        setGradeType([]);
+                      const NJSName = njList.data?.NJSName;
+                      const NJS = njList.data?.NJS || [];
+
+                      if (NJSName?.length === 0) {
+                        setCampus([]);
                         setKcId(undefined);
-                      } else if (njList.data && njList.data.length > 0) {
-                        const njData = njList.data.map((item: any) => ({
-                          label: item.NJMC,
-                          value: item.id,
-                        }));
-                        setGradeType(njData);
+                      } else if (NJSName && NJSName?.length > 0) {
+                        const NJ = {};
+                        NJSName.map((item: any, key: any) => {
+                          NJ[NJS[key]] = {
+                            label: item,
+                            value: item,
+                          };
+                          return '';
+                        });
+                        setCampus(NJ);
                         setKcId(value);
                       }
                     }
                   } else {
                     // 获取所有年级数据
-                    const result = await getAllNJSJ();
-                    if (result.status === 'ok') {
-                      if (result.data && result.data.length > 0) {
-                        const data: any = [].map.call(result.data, (item: GradeType) => {
-                          return {
-                            label: item.NJMC,
-                            value: item.id,
-                          };
-                        });
-                        setGradeType(data);
-                      }
-                    }
+                    setCampus(grade);
                   }
                 },
               }}
