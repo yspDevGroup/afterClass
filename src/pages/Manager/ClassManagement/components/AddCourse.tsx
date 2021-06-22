@@ -60,6 +60,8 @@ const AddCourse: FC<AddCourseProps> = ({
   // const [nJID, setNJID] = useState([]);
   // 年级名字
   const [nJLabelItem, setNJLabelItem] = useState<any>([]);
+  const [teacherDataList, setTeacherDataList] = useState<any>([]);
+
   useEffect(() => {
     if (formValues) {
       setBaoming(false);
@@ -88,7 +90,9 @@ const AddCourse: FC<AddCourseProps> = ({
       });
     }
   }, [kcId]);
-
+  // const check = () =>{
+  //   return <Checkbox id="father"></Checkbox>
+  // }
   useEffect(() => {
     (async () => {
       // 获取教师
@@ -100,9 +104,10 @@ const AddCourse: FC<AddCourseProps> = ({
         if (await initWXAgentConfig(['checkJsApi'])) {
           const teacherData = resTeacher.data.userlist;
           for (let i = 0; i < teacherData.length; i += 1) {
-            showUserName(userRef?.current, teacherData[i].userid,true);
+            showUserName(userRef, teacherData[i].userid, true);
           }
           WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+          setTeacherDataList(teacherData);
         }
       }
     })();
@@ -281,7 +286,7 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'ZJS',
           readonly,
           fieldProps: {
-            onChange: async (value: any) => { },
+            onChange: async (value: any) => {},
           },
         },
         {
@@ -296,12 +301,13 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
-    signup.length>0?
-    {
-      type: 'divTab',
-      text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
-      style: { marginBottom: 8, color: "#bbbbbb" }
-    }:'',
+    signup.length > 0
+      ? {
+          type: 'divTab',
+          text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
+      : '',
     {
       type: 'div',
       key: 'div',
@@ -338,12 +344,13 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       },
     },
-    classattend.length>0?
-    {
-      type: 'divTab',
-      text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
-      style: { marginBottom: 8, color: "#bbbbbb" }
-    }:'',
+    classattend.length > 0
+      ? {
+          type: 'divTab',
+          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
+      : '',
     {
       type: 'div',
       key: 'div1',
@@ -397,11 +404,16 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KCMS',
     },
   ];
+  console.log('useRef22222', userRef);
+  console.log('useRef333333', userRef.current);
 
   return (
     <div>
-      <div ref={userRef}></div>
-      <Checkbox id="checkBox"></Checkbox>
+      <div>
+        {teacherDataList.map((item: any) => {
+          return <Checkbox id={`${item.userid}`}></Checkbox>;
+        })}
+      </div>
       <Drawer
         title={getTitle()}
         width={480}

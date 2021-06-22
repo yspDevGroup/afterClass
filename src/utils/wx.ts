@@ -84,19 +84,17 @@ export const initWXAgentConfig = async (jsApiList: string[]) => {
  * @param {string} [openid]
  * @return {*}
  */
-export const showUserName = (container?: HTMLElement | null, openid?: string, multi?: boolean) => {
-  if (!container || !openid) return;
+export const showUserName = (useRef: any, openid?: string, multi?: boolean) => {
+  if (!useRef.current || !openid) return;
   const element = document.createElement('ww-open-data');
   element.setAttribute('type', 'userName');
   element.setAttribute('openid', openid);
+  element.setAttribute('ref', useRef);
   if (!multi) {
     // eslint-disable-next-line no-param-reassign
-    container.innerHTML = '';
+    useRef.current.innerHTML = '';
   }
-  if (multi) {
-    const checkBox: any = document.getElementById('checkBox');
-    element?.parentNode?.replaceChild(checkBox, element);
-    checkBox?.appendChild(checkBox);
-  }
-  container.appendChild(element);
+  useRef.current.appendChild(element);
+  const father = document.getElementById(`${openid}`);
+  father?.insertBefore(element, father.childNodes[0]);
 };
