@@ -2,7 +2,7 @@
 /* eslint-disable array-callback-return */
 import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
-import { Button, Drawer, message } from 'antd';
+import { Button, Checkbox, Drawer, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
 import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
@@ -100,9 +100,17 @@ const AddCourse: FC<AddCourseProps> = ({
         if (await initWXAgentConfig(['checkJsApi'])) {
           const teacherData = resTeacher.data.userlist;
           for (let i = 0; i < teacherData.length; i += 1) {
-            showUserName(userRef?.current, teacherData[i].userid,true);
+            showUserName(userRef?.current, teacherData[i].userid, true);
           }
           WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+          const checkBox = document.getElementById('checkBox');
+          WWOpenData.map((item: any) => {
+            console.log('itemitemitemitem', item);
+            item.parentNode.replaceChild(checkBox, item);
+            checkBox?.appendChild(item);
+          });
+          console.log('WWOpenDataWWOpenData', WWOpenData);
+          console.log('checkBoxcheckBox', checkBox);
         }
       }
     })();
@@ -281,7 +289,7 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'ZJS',
           readonly,
           fieldProps: {
-            onChange: async (value: any) => { },
+            onChange: async (value: any) => {},
           },
         },
         {
@@ -296,12 +304,13 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
-    signup.length>0?
-    {
-      type: 'divTab',
-      text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
-      style: { marginBottom: 8, color: "#bbbbbb" }
-    }:'',
+    signup.length > 0
+      ? {
+          type: 'divTab',
+          text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
+      : '',
     {
       type: 'div',
       key: 'div',
@@ -336,12 +345,13 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       },
     },
-    classattend.length>0?
-    {
-      type: 'divTab',
-      text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
-      style: { marginBottom: 8, color: "#bbbbbb" }
-    }:'',
+    classattend.length > 0
+      ? {
+          type: 'divTab',
+          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
+      : '',
     {
       type: 'div',
       key: 'div1',
@@ -395,8 +405,8 @@ const AddCourse: FC<AddCourseProps> = ({
 
   return (
     <div>
-    <div ref={userRef}>
-    </div>
+      <div ref={userRef}></div>
+      <Checkbox id="checkBox"></Checkbox>
       <Drawer
         title={getTitle()}
         width={480}
