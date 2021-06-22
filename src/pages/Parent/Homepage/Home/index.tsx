@@ -8,6 +8,7 @@ import styles from './index.less';
 import IconFont from '@/components/CustomIcon';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getCurrentStatus } from '@/utils/utils';
 
 const Home = () => {
   const { initialState } = useModel('@@initialState');
@@ -19,20 +20,28 @@ const Home = () => {
   const [courseSelectTime, setCourseSelectTime] = useState<any>();
 
   useEffect(() => {
-    async function fetchData() {
-      // 获取后台学年学期数据
-      const result = await queryXNXQList();
-      // 获取后台学校数据配置数据
-      const res = await getAllXXSJPZ({}, { xn: result.current.xn, xq: result.current.xq, type: ["2"] })
-      if (res.status === "ok") {
-        if (res.data && res.data.length > 0) {
-          setRegistrationPeriod(res.data[0].TITLE?.slice(0, 6))
-          setCourseSelectTime(`${res.data[0].KSSJ}—${res.data[0].JSSJ}`)
-        }
-      }
-    }
-    fetchData()
-
+    // async function fetchData() {
+    //   // 获取后台学年学期数据
+    //   const result = await queryXNXQList();
+    //   // 获取后台学校数据配置数据
+    //   const res = await getAllXXSJPZ({}, { xn: result.current.xn, xq: result.current.xq, type: ["1","2"] });
+    //   if (res.status === "ok") {
+    //     if (res.data && res.data.length > 0) {
+    //       setRegistrationPeriod(res.data[0].TITLE?.slice(0, 6));
+    //       setCourseSelectTime(`${res.data[0].KSSJ}—${res.data[0].JSSJ}`);
+    //     }
+    //   }
+    // }
+    // fetchData()
+    const date = {
+      BMKSRQ: '2021-02-24',
+      BMJSRQ: '2021-06-24',
+      KKKSRQ: '2021-05-20',
+      KKJSRQ: '2021-07-21'
+    };
+    const courseStatus = getCurrentStatus(date);
+    console.log(courseStatus);
+    
   }, [])
   return (
     <div className={styles.indexPage}>

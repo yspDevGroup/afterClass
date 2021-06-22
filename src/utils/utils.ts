@@ -108,8 +108,8 @@ export const getQueryString = (name: string) => {
 /**
  * 根据当前时间获取学年学期
  *
- * @export
- * @returns
+ * @export getCurrentXQ
+ * @returns currentXQ || null
  */
 export const getCurrentXQ = (list: any[]) => {
   const today = new Date();
@@ -122,4 +122,30 @@ export const getCurrentXQ = (list: any[]) => {
     return false;
   })
   return currentXQ;
+}
+/**
+ * 根据当前时间获取移动端时段
+ *
+ * @export getCurrentStatus
+ * @returns string
+ */
+export const getCurrentStatus = (date: any) => {
+  let currentStatus = 'empty';
+  const today = new Date();
+  const BMbegin = new Date(date.BMKSRQ);
+  const BMend = new Date(date.BMJSRQ);
+  const KKbegin = new Date(date.KKKSRQ);
+  const KKend = new Date(date.KKJSRQ);
+
+  if (BMbegin <= today && today <= BMend) {
+    currentStatus = 'enroll';
+    if (KKbegin <= today && today <= BMend){
+      currentStatus = 'enrolling';
+    }
+  } else if (BMbegin <= today && today <= KKbegin){
+    currentStatus = 'enrolled';
+  } else if(BMbegin <= today && today <= KKend){
+    currentStatus = 'education';
+  }
+    return currentStatus;
 }
