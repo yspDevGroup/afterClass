@@ -43,7 +43,7 @@ const OrganizationTable = (props: PropsType) => {
       label: '学期',
       name: 'XQ',
       key: 'XQ',
-      rules: [{ required: true, message: '请选择学年' }],
+      rules: [{ required: true, message: '请选择学期' }],
       valueEnum: {
         第一学期: '第一学期',
         第二学期: '第二学期',
@@ -55,7 +55,7 @@ const OrganizationTable = (props: PropsType) => {
       label: '日期',
       name: 'KSRQ',
       key: 'KSRQ',
-      rules: [{ required: true, message: '请填写学年' }],
+      rules: [{ required: true, message: '请选择日期' }],
       width: '100%'
     },
   ];
