@@ -296,17 +296,16 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
+    signup.length>0?
     {
       type: 'divTab',
-      text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
-        signup[1],
-      ).format('YYYY-MM-DD')}`,
-      style: { marginBottom: 8, color: '#bbbbbb' },
-    },
+      text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+      style: { marginBottom: 8, color: "#bbbbbb" }
+    }:'',
     {
       type: 'div',
       key: 'div',
-      label: `单独设置报名时段`,
+      label: `单独设置报名时段：`,
       lineItem: [
         {
           type: 'switch',
@@ -337,11 +336,12 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       },
     },
+    classattend.length>0?
     {
       type: 'divTab',
       text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
-      style: { marginBottom: 8, color: '#bbbbbb' },
-    },
+      style: { marginBottom: 8, color: "#bbbbbb" }
+    }:'',
     {
       type: 'div',
       key: 'div1',

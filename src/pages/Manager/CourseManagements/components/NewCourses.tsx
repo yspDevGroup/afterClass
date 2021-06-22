@@ -4,6 +4,7 @@ import ProFormFields from '@/components/ProFormFields';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllXNXQ } from '@/services/after-class/xnxq';
+import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import type { ActionType } from '@ant-design/pro-table/lib/typing';
 import { message } from 'antd';
 import { Button, Drawer } from 'antd';
@@ -18,6 +19,9 @@ type PropsType = {
   readonly?: boolean;
   visible?: boolean;
   actionRef?: React.MutableRefObject<ActionType | undefined>;
+  xn?: string;
+  xq?: string;
+  setOpentype: (arg0: boolean) => void;
 };
 const formLayout = {
   labelCol: {},
@@ -25,7 +29,7 @@ const formLayout = {
 };
 
 const NewCourses = (props: PropsType) => {
-  const { current, onClose, visible, actionRef,readonly, } = props;
+  const { current, onClose, visible, actionRef, readonly, xn, xq, setOpentype } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [form, setForm] = useState<any>();
   const [XNData, setXNData] = useState<any>([]);
@@ -41,17 +45,37 @@ const NewCourses = (props: PropsType) => {
 
   const imgurl = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
 
-  const Close=()=>{
+  const Close = () => {
     setBaoming(true);
     setKaike(true);
     onClose!();
   }
-  
+  //  根据学年学期获取报名时间与开课时间
   useEffect(() => {
-    if(current){
+    (async () => {
+      const res = await getAllXXSJPZ({ xn, xq, type: ['1', '2'] });
+      if (res.status === 'ok') {
+        const arry: any[] = [];
+        const erry: any[] = [];
+        res.data?.map((item: any) => {
+          if (item.TYPE === '1') {
+            arry.push(item.KSSJ, item.JSSJ);
+          } if (item.TYPE === '2') {
+            erry.push(item.KSSJ, item.JSSJ);
+          }
+          return true
+        })
+        setSignup(arry);
+        setClassattend(erry);
+      }
+    })()
+  }, [xn, xq])
+
+  useEffect(() => {
+    if (current) {
       setBaoming(false);
       setKaike(false);
-    }else{
+    } else {
       setBaoming(true);
       setKaike(true);
     }
@@ -107,6 +131,9 @@ const NewCourses = (props: PropsType) => {
             value: item.id,
           });
         });
+        if (opt === []) {
+          setOpentype(true);
+        }
         setOptions(opt);
       }
     });
@@ -114,6 +141,7 @@ const NewCourses = (props: PropsType) => {
   const handleSubmit = () => {
     form.submit();
   };
+ 
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
@@ -132,15 +160,14 @@ const NewCourses = (props: PropsType) => {
         const optionse = { ...values, KCTP: imgurl };
         res = updateKHKCSJ(params, optionse);
       } else {
-        if (values.KKRQ) {
-          values.JKRQ = values.KKRQ[1];
-          values.KKRQ = values.KKRQ[0];
+        if (kaike === true) {
+          values.KKRQ = new Date(moment(new Date(classattend[0])).format('YYYY-MM-DD HH:mm:ss'));;
+          values.JKRQ = new Date(moment(new Date(classattend[1])).format('YYYY-MM-DD HH:mm:ss'));
+        } if (baoming === true) {
+          values.BMKSSJ =signup[0];
+          values.BMJSSJ =signup[1];
         }
-        if (values.BMKSSJ) {
-          values.BMJSSJ = moment(values.BMKSSJ[1]);
-          values.BMKSSJ = moment(values.BMKSSJ[0]);
-        }
-        res = createKHKCSJ({ ...values, KCTP: imgurl ,KCZT:'待发布'});
+        res = createKHKCSJ({ ...values, KCTP: imgurl, KCZT: '待发布' });
       }
       resolve(res);
       reject(res);
@@ -151,7 +178,7 @@ const NewCourses = (props: PropsType) => {
           onClose!();
           actionRef?.current?.reload();
         } else {
-          message.error( `保存失败，${data.message}`);
+          message.error(`保存失败，${data.message}`);
         }
       })
       .catch((error) => {
@@ -196,17 +223,24 @@ const NewCourses = (props: PropsType) => {
       valueEnum: {
         待排班: '待排班',
       },
-      fieldProps:{
-        disabled:true,
-        defaultValue:'待排班'
+      fieldProps: {
+        disabled: true,
+        defaultValue: '待排班'
       },
     },
+    classattend.length > 0 ?
+      {
+        type: 'divTab',
+        text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
+        style: { marginBottom: 8, color: "#bbbbbb" },
+      }
+      : '',
     {
       type: 'div',
       key: 'div',
       label: '单独设置报名时段：',
       readonly,
-      lineItem:[
+      lineItem: [
         {
           type: 'switch',
           readonly,
@@ -217,8 +251,7 @@ const NewCourses = (props: PropsType) => {
               }
               return setBaoming(false);
             },
-            // defaultChecked:!baoming,
-            checked:!baoming,
+            checked: !baoming,
           }
         }
       ]
@@ -230,14 +263,21 @@ const NewCourses = (props: PropsType) => {
       key: 'BMKSSJ',
       width: '100%',
       readonly,
-      hidden:  baoming ,
+      hidden: baoming,
       fieldProps: {
-        disabledDate: (current: any) => {
-          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
+        disabledDate: (currente: any) => {
+          const defaults = moment(currente).format('YYYY-MM-DD HH:mm:ss');
           return defaults > signup[1] || defaults < signup[0];
         },
       },
     },
+    signup.length > 0 ?
+      {
+        type: 'divTab',
+        text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
+        style: { marginBottom: 8, color: "#bbbbbb" },
+      }
+      : '',
     {
       type: 'div',
       key: 'div1',
@@ -257,9 +297,9 @@ const NewCourses = (props: PropsType) => {
             checked: !kaike
           },
         },
-        
+
       ]
-     },
+    },
     {
       type: 'dateRange',
       label: '上课时间:',
@@ -269,9 +309,9 @@ const NewCourses = (props: PropsType) => {
       readonly,
       hidden: kaike,
       fieldProps: {
-        disabledDate: (current: any) => {
-          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > classattend[0] || defaults < classattend[1];
+        disabledDate: (currente: any) => {
+          const defaults = moment(currente).format('YYYY-MM-DD HH:mm:ss');
+          return defaults > classattend[1] || defaults < classattend[0];
         },
       },
     },
@@ -340,19 +380,19 @@ const NewCourses = (props: PropsType) => {
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
         footer={
-          readonly?'':
-         ( <div
-            style={{
-              textAlign: 'right',
-            }}
-          >
-            <Button onClick={Close} style={{ marginRight: 16 }}>
-              取消
-            </Button>
-            <Button onClick={handleSubmit} type="primary">
-              保存
-            </Button>
-          </div>)
+          readonly ? '' :
+            (<div
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              <Button onClick={Close} style={{ marginRight: 16 }}>
+                取消
+              </Button>
+              <Button onClick={handleSubmit} type="primary">
+                保存
+              </Button>
+            </div>)
         }
       >
         <ProFormFields
@@ -364,14 +404,14 @@ const NewCourses = (props: PropsType) => {
               const { KHKCLX, ...info } = current;
               return {
                 KCLXId: KHKCLX?.id,
-                BMKSSJ:baoming,
-                KKRQ:kaike,
+                BMKSSJ: baoming,
+                KKRQ: kaike,
                 ...info,
               };
             }
             return {
-              BMKSSJ:baoming,
-              KKRQ:kaike,
+              BMKSSJ: baoming,
+              KKRQ: kaike,
             };
           })()}
           formItems={formItems}
