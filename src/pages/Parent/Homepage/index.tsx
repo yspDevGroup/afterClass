@@ -35,18 +35,22 @@ const PersonalHomepage = () => {
           学习园地
         </span>
       } key="study">
-        <Study />
+        <div style={{ height: '100%', overflowY: 'auto' }} >
+          <Study />
+        </div>
       </TabPane>
       <TabPane tab={
         <span>
           <IconFont
-            style={{'fontSize':'16px'}}
+            style={{ 'fontSize': '16px' }}
             type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
           />
           我的
         </span>
       } key="mine">
-        <Mine />
+        <div style={{ height: '100%', overflowY: 'auto' }} >
+          <Mine />
+        </div>
       </TabPane>
     </Tabs>
   </div>;

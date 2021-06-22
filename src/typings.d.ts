@@ -153,6 +153,8 @@ type Window = {
 
 declare let ga: () => void;
 
+declare module 'react-h5-calendar';
+
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 
 declare const ENV_title: string;
