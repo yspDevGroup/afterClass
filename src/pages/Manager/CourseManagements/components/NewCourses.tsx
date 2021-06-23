@@ -192,8 +192,12 @@ const NewCourses = (props: PropsType) => {
           values.BMKSSJ = new Date(moment(new Date(signup[0])).format('YYYY-MM-DD HH:mm:ss'));
           values.BMJSSJ = new Date(moment(new Date(signup[1])).format('YYYY-MM-DD HH:mm:ss'));
         } else {
-          values.BMJSSJ = moment(values.BMKSSJ[1]);
-          values.BMKSSJ = moment(values.BMKSSJ[0]);
+          values.BMJSSJ = new Date(
+            moment(new Date(values.BMKSSJ[1])).format('YYYY-MM-DD HH:mm:ss'),
+          );
+          values.BMKSSJ = new Date(
+            moment(new Date(values.BMKSSJ[0])).format('YYYY-MM-DD HH:mm:ss'),
+          );
         }
         res = createKHKCSJ({ ...values, KCTP: imageUrl, KCZT: '待发布' });
       }
@@ -258,7 +262,7 @@ const NewCourses = (props: PropsType) => {
         defaultValue: '待发布',
       },
     },
-    classattend.length > 0
+    signup.length > 0
       ? {
           type: 'divTab',
           text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
@@ -289,7 +293,7 @@ const NewCourses = (props: PropsType) => {
       ],
     },
     {
-      type: 'dateTimeRange',
+      type: 'dateRange',
       label: '报名时间:',
       name: 'BMKSSJ',
       key: 'BMKSSJ',
@@ -303,7 +307,7 @@ const NewCourses = (props: PropsType) => {
         },
       },
     },
-    signup.length > 0
+    classattend.length > 0
       ? {
           type: 'divTab',
           text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
