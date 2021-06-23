@@ -37,7 +37,7 @@ const Home = () => {
           </Link>
         </div>
         <div className={styles.enrollArea}>
-          <EnrollClassTime  />
+          <EnrollClassTime type={"enroll"} />
         </div>
         <div className={styles.courseArea}>
           <CourseTab />
