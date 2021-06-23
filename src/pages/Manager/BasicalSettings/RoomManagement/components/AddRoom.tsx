@@ -36,7 +36,8 @@ const AddRoom = (props: PropsType) => {
         currentXQ?.map((item: any) => {
           XQ.push({
             label: item.name,
-            value: item.id,
+            // 因列表中学区ID返回的是字符串类型的
+            value: item.id.toString(),
           });
           return '';
         });
@@ -155,7 +156,6 @@ const AddRoom = (props: PropsType) => {
             return {
               FJLXId: FJLX?.id,
               XQSJId: XQSJ?.id,
-              XQ: XQName,
               ...info,
             };
           }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable prefer-destructuring */
 import ProFormFields from '@/components/ProFormFields';
@@ -43,13 +44,14 @@ const NewCourses = (props: PropsType) => {
   // 报名时间
   const [signup, setSignup] = useState<any>('');
 
-  const imgurl = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
+  // 上传成功后返回的图片地址
+  const [imageUrl, setImageUrl] = useState('');
 
   const Close = () => {
     setBaoming(true);
     setKaike(true);
     onClose!();
-  }
+  };
   //  根据学年学期获取报名时间与开课时间
   useEffect(() => {
     (async () => {
@@ -60,16 +62,17 @@ const NewCourses = (props: PropsType) => {
         res.data?.map((item: any) => {
           if (item.TYPE === '1') {
             arry.push(item.KSSJ, item.JSSJ);
-          } if (item.TYPE === '2') {
+          }
+          if (item.TYPE === '2') {
             erry.push(item.KSSJ, item.JSSJ);
           }
-          return true
-        })
+          return true;
+        });
         setSignup(arry);
         setClassattend(erry);
       }
-    })()
-  }, [xn, xq])
+    })();
+  }, [xn, xq]);
 
   useEffect(() => {
     if (current) {
@@ -79,7 +82,7 @@ const NewCourses = (props: PropsType) => {
       setBaoming(true);
       setKaike(true);
     }
-  }, [current])
+  }, [current]);
 
   useEffect(() => {
     async function fetchData() {
@@ -105,11 +108,11 @@ const NewCourses = (props: PropsType) => {
             if (item === xnxqItem.XN) {
               return xqData.push({ label: xnxqItem.XQ, value: xnxqItem.XQ });
             }
-            return ''
+            return '';
           });
           xq[`${item}`] = xqData;
           xn.push({ label: item, value: item });
-          return ''
+          return '';
         });
         setXNData(xn);
         setXQData(xq);
@@ -141,7 +144,25 @@ const NewCourses = (props: PropsType) => {
   const handleSubmit = () => {
     form.submit();
   };
- 
+  const handleImageChange = (e: any) => {
+    if (e.file.status === 'done') {
+      const mas = e.file.response.message;
+      if (typeof e.file.response === 'object' && e.file.response.status === 'error') {
+        message.error(`上传失败，${mas}`);
+      } else {
+        const res = e.file.response;
+        if (res.status === 'ok') {
+          message.success(`上传成功`);
+          setImageUrl(res.data);
+        }
+      }
+    } else if (e.file.status === 'error') {
+      const mass = e.file.response.message;
+
+      message.error(`上传失败，${mass}`);
+    }
+  };
+
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
@@ -157,7 +178,7 @@ const NewCourses = (props: PropsType) => {
           values.BMJSSJ = moment(values.BMKSSJ[1]);
           values.BMKSSJ = moment(values.BMKSSJ[0]);
         }
-        const optionse = { ...values, KCTP: imgurl };
+        const optionse = { ...values, KCTP: imageUrl };
         res = updateKHKCSJ(params, optionse);
       } else {
         if (kaike === true) {
@@ -174,7 +195,7 @@ const NewCourses = (props: PropsType) => {
           values.BMJSSJ = moment(values.BMKSSJ[1]);
           values.BMKSSJ = moment(values.BMKSSJ[0]);
         }
-        res = createKHKCSJ({ ...values, KCTP: imgurl, KCZT: '待发布' });
+        res = createKHKCSJ({ ...values, KCTP: imageUrl, KCZT: '待发布' });
       }
       resolve(res);
       reject(res);
@@ -200,8 +221,8 @@ const NewCourses = (props: PropsType) => {
       name: 'id',
       key: 'id',
       fieldProps: {
-        autocomplete: 'off'
-      }
+        autocomplete: 'off',
+      },
     },
     {
       type: 'input',
@@ -212,8 +233,8 @@ const NewCourses = (props: PropsType) => {
       rules: [{ required: true, message: '请填写名称' }],
       readonly,
       fieldProps: {
-        autocomplete: 'off'
-      }
+        autocomplete: 'off',
+      },
     },
     {
       type: 'select',
@@ -234,15 +255,17 @@ const NewCourses = (props: PropsType) => {
       },
       fieldProps: {
         disabled: true,
-        defaultValue: '待发布'
+        defaultValue: '待发布',
       },
     },
-    classattend.length > 0 ?
-      {
-        type: 'divTab',
-        text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
-        style: { marginBottom: 8, color: "#bbbbbb" },
-      }
+    classattend.length > 0
+      ? {
+          type: 'divTab',
+          text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
+            signup[1],
+          ).format('YYYY-MM-DD')}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -261,9 +284,9 @@ const NewCourses = (props: PropsType) => {
               return setBaoming(false);
             },
             checked: !baoming,
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       type: 'dateTimeRange',
@@ -280,12 +303,12 @@ const NewCourses = (props: PropsType) => {
         },
       },
     },
-    signup.length > 0 ?
-      {
-        type: 'divTab',
-        text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
-        style: { marginBottom: 8, color: "#bbbbbb" },
-      }
+    signup.length > 0
+      ? {
+          type: 'divTab',
+          text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -303,11 +326,10 @@ const NewCourses = (props: PropsType) => {
               }
               return setKaike(false);
             },
-            checked: !kaike
+            checked: !kaike,
           },
         },
-
-      ]
+      ],
     },
     {
       type: 'dateRange',
@@ -365,11 +387,11 @@ const NewCourses = (props: PropsType) => {
       name: 'KCTP',
       key: 'KCTP',
       readonly,
-      upurl: '', // 上传地址
-      imageurl: current?.KCTP, // 回显地址
-      imagename: 'file', // 发到后台的文件参数名
+      imagename: 'image', // 发到后台的文件参数名
+      upurl: '/api/upload/uploadFile', // 上传地址
+      imageurl: imageUrl || current?.KCTP, // 回显地址
+      handleImageChange,
       accept: '.jpg, .jpeg, .png', // 接受上传的文件类型
-      data: {}, // 上传所需额外参数或返回上传额外参数的方法
     },
     {
       type: 'textArea',
@@ -390,8 +412,10 @@ const NewCourses = (props: PropsType) => {
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
         footer={
-          readonly ? '' :
-            (<div
+          readonly ? (
+            ''
+          ) : (
+            <div
               style={{
                 textAlign: 'right',
               }}
@@ -402,28 +426,33 @@ const NewCourses = (props: PropsType) => {
               <Button onClick={handleSubmit} type="primary">
                 保存
               </Button>
-            </div>)
+            </div>
+          )
         }
       >
         <ProFormFields
           layout="vertical"
           setForm={setForm}
           onFinish={onFinish}
-          values={XN ? { XQ: XQData[XN][0].label } : (() => {
-            if (current) {
-              const { KHKCLX, ...info } = current;
-              return {
-                KCLXId: KHKCLX?.id,
-                BMKSSJ: baoming,
-                KKRQ: kaike,
-                ...info,
-              };
-            }
-            return {
-              BMKSSJ: baoming,
-              KKRQ: kaike,
-            };
-          })()}
+          values={
+            XN
+              ? { XQ: XQData[XN][0].label }
+              : (() => {
+                  if (current) {
+                    const { KHKCLX, ...info } = current;
+                    return {
+                      KCLXId: KHKCLX?.id,
+                      BMKSSJ: baoming,
+                      KKRQ: kaike,
+                      ...info,
+                    };
+                  }
+                  return {
+                    BMKSSJ: baoming,
+                    KKRQ: kaike,
+                  };
+                })()
+          }
           formItems={formItems}
           formItemLayout={formLayout}
         />

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import { Button, Checkbox, Drawer, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
@@ -13,6 +13,14 @@ import moment from 'moment';
 import { getDepUserList, getSchDepList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { lowerFirst } from 'lodash';
+
+const WWOpenDataCom = ({ type, openid }: { type: string; openid: string }) => {
+  const ref = useRef(null);
+  useLayoutEffect(() => {
+    WWOpenData.bind(ref.current);
+  });
+  return <ww-open-data ref={ref} type={type} openid={openid} />;
+};
 
 type AddCourseProps = {
   visible: boolean;
@@ -47,6 +55,8 @@ const AddCourse: FC<AddCourseProps> = ({
   const [grade, setGrade] = useState<any>();
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
+  // 教师
+  const [teacherData, setTeacherData] = useState<any[]>([]);
   // 上课时间
   const [classattend, setClassattend] = useState<any>('');
   // 报名时间
@@ -60,6 +70,10 @@ const AddCourse: FC<AddCourseProps> = ({
   // const [nJID, setNJID] = useState([]);
   // 年级名字
   const [nJLabelItem, setNJLabelItem] = useState<any>([]);
+
+  // 上传成功后返回的图片地址
+  const [imageUrl, setImageUrl] = useState('');
+
   useEffect(() => {
     if (formValues) {
       setBaoming(false);
@@ -91,22 +105,30 @@ const AddCourse: FC<AddCourseProps> = ({
 
   useEffect(() => {
     (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      await initWXAgentConfig(['checkJsApi']);
+
       // 获取教师
       const resTeacher = await getDepUserList({ id: '1', fetch_child: 1 });
       if (resTeacher.status === 'ok') {
-        if (/MicroMessenger/i.test(navigator.userAgent)) {
-          await initWXConfig(['checkJsApi']);
-        }
-        if (await initWXAgentConfig(['checkJsApi'])) {
-          const teacherData = resTeacher.data.userlist;
-          for (let i = 0; i < teacherData.length; i += 1) {
-            showUserName(userRef?.current, teacherData[i].userid, true);
-          }
-          WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
-        }
+        setTeacherData(resTeacher.data.userlist);
       }
     })();
   }, []);
+
+  // useEffect(() => {
+  //   if (teacherData.length) {
+  //     setTimeout(() => {
+  //       const wwList = document.querySelectorAll('.ww-open-data');
+  //       wwList.forEach((ww) => {
+  //         showUserName(ww as HTMLDivElement, ww.getAttribute('data-id') || '', true);
+  //       });
+  //       WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+  //     }, 0);
+  //   }
+  // }, [teacherData])
 
   useEffect(() => {
     (async () => {
@@ -147,6 +169,7 @@ const AddCourse: FC<AddCourseProps> = ({
         NJS: values.njIds?.toString(), // 年级ID
         NJSName: nJLabelItem?.toString(), // 年级名称
         XQName: xQItem, // 校区名称
+        KCTP: imageUrl,
       };
       if (formValues?.id) {
         const params = {
@@ -177,7 +200,24 @@ const AddCourse: FC<AddCourseProps> = ({
   const handleSubmit = () => {
     form.submit();
   };
+  const handleImageChange = (e: any) => {
+    if (e.file.status === 'done') {
+      const mas = e.file.response.message;
+      if (typeof e.file.response === 'object' && e.file.response.status === 'error') {
+        message.error(`上传失败，${mas}`);
+      } else {
+        const res = e.file.response;
+        if (res.status === 'ok') {
+          message.success(`上传成功`);
+          setImageUrl(res.data);
+        }
+      }
+    } else if (e.file.status === 'error') {
+      const mass = e.file.response.message;
 
+      message.error(`上传失败，${mass}`);
+    }
+  };
   const formItems: any[] = [
     {
       type: 'input',
@@ -287,6 +327,18 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'ZJS',
           readonly,
           fieldProps: {
+            labelInValue: true,
+            options: teacherData.map((item) => {
+              // const dom = (
+              //   <div className='ww-open-data' data-id={item.userid}>
+              //     {item.name}
+              //   </div>
+              // )
+              return {
+                label: <WWOpenDataCom type="userName" openid={item.userid} />,
+                value: item.userid,
+              };
+            }),
             onChange: async (value: any) => {},
           },
         },
@@ -394,8 +446,11 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'KCTP',
       key: 'KCTP',
       readonly,
-      upurl: '',
-      imageurl: formValues?.KCTP,
+      imagename: 'image',
+      upurl: '/api/upload/uploadFile',
+      imageurl: imageUrl || formValues?.KCTP,
+      handleImageChange,
+      accept: '.jpg, .jpeg, .png',
     },
     {
       type: 'textArea',
