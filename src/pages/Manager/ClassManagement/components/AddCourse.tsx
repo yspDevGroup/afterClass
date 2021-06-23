@@ -12,7 +12,6 @@ import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
 import { getDepUserList, getSchDepList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
-import { lowerFirst } from 'lodash';
 
 const WWOpenDataCom = ({ type, openid }: { type: string; openid: string }) => {
   const ref = useRef(null);
@@ -327,7 +326,7 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'ZJS',
           readonly,
           fieldProps: {
-            labelInValue: true,
+            virtual: false,
             options: teacherData.map((item) => {
               // const dom = (
               //   <div className='ww-open-data' data-id={item.userid}>
@@ -339,7 +338,6 @@ const AddCourse: FC<AddCourseProps> = ({
                 value: item.userid,
               };
             }),
-            onChange: async (value: any) => {},
           },
         },
         {
@@ -350,6 +348,12 @@ const AddCourse: FC<AddCourseProps> = ({
           readonly,
           fieldProps: {
             mode: 'multiple',
+            options: teacherData.map((item) => {
+              return {
+                label: <WWOpenDataCom type="userName" openid={item.userid} />,
+                value: item.userid,
+              };
+            }),
           },
         },
       ],
