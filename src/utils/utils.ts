@@ -129,23 +129,23 @@ export const getCurrentXQ = (list: any[]) => {
  * @export getCurrentStatus
  * @returns string
  */
-export const getCurrentStatus = (date: any) => {
+export const getCurrentStatus = (BMKSRQ: string, BMJSRQ: string, KKKSRQ: string, KKJSRQ: string) => {
   let currentStatus = 'empty';
   const today = new Date();
-  const BMbegin = new Date(date.BMKSRQ);
-  const BMend = new Date(date.BMJSRQ);
-  const KKbegin = new Date(date.KKKSRQ);
-  const KKend = new Date(date.KKJSRQ);
+  const BMbegin = new Date(BMKSRQ);
+  const BMend = new Date(BMJSRQ);
+  const KKbegin = new Date(KKKSRQ);
+  const KKend = new Date(KKJSRQ);
 
   if (BMbegin <= today && today <= BMend) {
     currentStatus = 'enroll';
-    if (KKbegin <= today && today <= BMend){
+    if (KKbegin <= today && today <= BMend) {
       currentStatus = 'enrolling';
     }
-  } else if (BMbegin <= today && today <= KKbegin){
+  } else if (BMbegin <= today && today <= KKbegin) {
     currentStatus = 'enrolled';
-  } else if(BMbegin <= today && today <= KKend){
+  } else if (BMbegin <= today && today <= KKend) {
     currentStatus = 'education';
   }
-    return currentStatus;
+  return currentStatus;
 }
