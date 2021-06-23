@@ -11,23 +11,11 @@ import styles from "./index.less";
 import ListComp from '../ListComponent';
 import type { ListData } from '../ListComponent/data';
 import myContext from '@/pages/Parent/Homepage/myContext';
-type IType = {
-  dataSourse: {
-    /** 在报名 | 在报名在上课 | 报名结束未上课 | 上课时间段 |未报名未上课 */
-    type?: 'enroll' | 'enrolling' | 'enrolled' | 'education' | 'empty';
-    /** 报名时段 */
-    period?: string;
-    /** 选课时间 */
-    time?: string;
-    listData: ListData;
-
-  }[]
-}
 
 const EnrollClassTime = () => {
   // 获取首页数据
   const { courseStatus, weekSchedule } = useContext(myContext);
-  console.log('2222', courseStatus, weekSchedule);
+  console.log(courseStatus, weekSchedule);
   return (<div className={styles.EnrollClassTime}>
     {/* {dataSourse.map((item) => {
       const { type, period, time, listData } = item;

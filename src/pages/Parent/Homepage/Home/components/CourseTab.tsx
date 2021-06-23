@@ -6,8 +6,9 @@ import ListComponent from '@/components/ListComponent';
 import { Link } from 'umi';
 const { TabPane } = Tabs;
 const CourseTab = () => {
+  // 获取首页数据
   const { courseStatus, kskc, yxkc } = useContext(myContext);
-  const centered=false
+  const centered=false;
   return (
     <div className={`${styles.tabHeader}`}>
       <Tabs centered={centered} tabBarExtraContent={!centered ? { right: <Link to='/parent/home/course'>全部 {'>'}</Link> } : ''} className={styles.courseTab}>
