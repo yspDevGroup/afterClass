@@ -9,6 +9,7 @@ import IconFont from '@/components/CustomIcon';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getCurrentStatus } from '@/utils/utils';
+import EnrollClassTime from '@/components/EnrollClassTime';
 
 const Home = () => {
   const { initialState } = useModel('@@initialState');
@@ -43,6 +44,47 @@ const Home = () => {
     console.log(courseStatus);
     
   }, [])
+  const dataSourses = [
+    {
+      type: 'empty',
+      listData: {
+        type: 'descList',
+        cls: 'descList',
+        header: {
+          title: '今日课程',
+        },
+        list: [
+          {
+            title: '初中部绘画艺术素描基础课',
+            titleRight: {
+              text: "待上课",
+              color: "#45C977",
+            },
+            link: 'https://www.pgyer.com/',
+            desc: [
+              {
+                left: ['15:50—16:50', '本校'],
+                right: '2时43分后开课'
+              },
+            ],
+          },
+          {
+            title: '初中部绘画艺术素描基础课',
+            titleRight: {
+              text: "已请假",
+              color: "#999999",
+            },
+            link: 'https://www.pgyer.com/',
+            desc: [
+              {
+                left: ['17:00—18:10', '本校'],
+              },
+            ],
+          },
+        ]
+      }
+    },
+  ]
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>
@@ -68,6 +110,7 @@ const Home = () => {
             <IconFont type='icon-gengduo' className={styles.gengduo} />
           </Link>
         </div>
+        <EnrollClassTime dataSourse={dataSourses} />
         <div className={styles.enrollArea}>
           {enroll ? (
             <>
