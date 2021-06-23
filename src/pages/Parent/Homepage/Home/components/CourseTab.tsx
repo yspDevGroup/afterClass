@@ -53,13 +53,13 @@ const CourseTab = () => {
                 cls: 'picList',
                 list: [
                   {
-                    id: item.KHKCSJ.id,
+                    id: item.id,
                     title: item.KHKCSJ.KCMC,
-                    img: item.KHKCSJ.KCTP,
+                    img: item.KCTP ? item.KCTP : item.KHKCSJ.KCTP,
                     link: `/parent/home/courseDetails?id=${item.KHKCSJ.id}&type=true`,
                     desc: [
                       {
-                        left: [`课程时段：${item.KHKCSJ.KKRQ}-${item.KHKCSJ.JKRQ}`],
+                        left: [`课程时段：${item.KKRQ ? item.KKRQ : item.KHKCSJ.KKRQ}-${item.JKRQ ? item.JKRQ : item.KHKCSJ.JKRQ}`],
                       },
                       {
                         left: [`共${item.KSS}课时`],
