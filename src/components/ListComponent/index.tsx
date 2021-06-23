@@ -2,8 +2,8 @@
  * @description: 
  * @author: txx
  * @Date: 2021-05-31 10:24:05
- * @LastEditTime: 2021-06-21 11:19:57
- * @LastEditors: txx
+ * @,@LastEditTime: ,: 2021-06-23 09:47:05
+ * @,@LastEditors: ,: Please set LastEditors
  */
 
 import type { ListData, ListItem, ListType } from "./data";
@@ -58,25 +58,30 @@ const NewsList = (props: { data: ListItem[], type: ListType }) => {
   </div>
 };
 const ListComp = (props: { listData: ListData, cls?: string }) => {
-  const { header, list, type, noDataText } = props.listData;
-  const { cls } = props;
-  return (
-    <div className={`${styles.ListComponentBigBox} ${cls}`}>
-      {header ? <div className={styles.ListHeader}>
-        <div className={styles.ListHeaderTitle}>
-          {header?.title}
-        </div>
-        <div className={styles.ListHeaderMore}>
-          <a href={header?.link}>
-            {header?.moreText}
-          </a>
-        </div>
-      </div> : ''}
-      {list && list.length ? <NewsList data={list} type={type} /> : <div className={styles.noData}>
-        <img src={noData} alt="暂无数据" />
-        <h4>{noDataText}</h4>
-      </div>}
-    </div >
-  )
+  if(props.listData){
+    const { header, list, type, noDataText } = props.listData;
+    const { cls } = props;
+    return (
+      <div className={`${styles.ListComponentBigBox} ${cls}`}>
+        {header ? <div className={styles.ListHeader}>
+          <div className={styles.ListHeaderTitle}>
+            {header?.title}
+          </div>
+          <div className={styles.ListHeaderMore}>
+            <a href={header?.link}>
+              {header?.moreText}
+            </a>
+          </div>
+        </div> : ''}
+        {list && list.length ? <NewsList data={list} type={type} /> : <div className={styles.noData}>
+          <img src={noData} alt="暂无数据" />
+          <h4>{noDataText}</h4>
+        </div>}
+      </div >
+    )
+
+  }
+  return <></>
+  
 }
 export default ListComp;
