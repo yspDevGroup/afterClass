@@ -87,6 +87,7 @@ const ClassManagement = () => {
   };
   const showDrawer = () => {
     setState(false);
+    setRecordValue({});
   };
 
   /**
@@ -199,6 +200,7 @@ const ClassManagement = () => {
           const resultTime = await getAllXXSJPZ({
             xn: curTerm.XN,
             xq: curTerm.XQ,
+            type: ['0'],
           });
           if (resultTime.status === 'ok') {
             const timeSlot = resultTime.data;
