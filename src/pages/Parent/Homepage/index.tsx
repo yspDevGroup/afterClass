@@ -14,7 +14,7 @@ const { TabPane } = Tabs;
 const PersonalHomepage = () => {
   const [activeKey, setActiveKey] = useState<string>('index');
   const [courseStatus, setCourseStatus] = useState<string>('enroll');
-  const { bmkssj, bmjssj, skkssj, skjssj, ...rest } = data;
+  const { bmkssj, bmjssj, skkssj, skjssj} = data;
   useEffect(() => {
 
     async function fetchData() {
@@ -28,7 +28,7 @@ const PersonalHomepage = () => {
     setCourseStatus(cStatus);
   }, [])
   return <div className={styles.mobilePageHeader}>
-    <myContext.Provider value={{ ...rest, courseStatus}}>
+    <myContext.Provider value={{ ...data, courseStatus}}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
         setActiveKey(key);
       }}>
