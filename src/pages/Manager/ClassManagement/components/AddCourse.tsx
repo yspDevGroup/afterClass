@@ -18,7 +18,7 @@ const WWOpenDataCom = ({ type, openid }: { type: string; openid: string }) => {
   useLayoutEffect(() => {
     WWOpenData.bind(ref.current);
   });
-  return <ww-open-data ref={ref} type={type} openid={openid} />;
+  return <ww-open-data ref={ref} type={type} openid={openid} style={{ color: '#333' }} />;
 };
 
 type AddCourseProps = {
@@ -348,6 +348,7 @@ const AddCourse: FC<AddCourseProps> = ({
           readonly,
           fieldProps: {
             mode: 'multiple',
+            virtual: false,
             options: teacherData.map((item) => {
               return {
                 label: <WWOpenDataCom type="userName" openid={item.userid} />,
