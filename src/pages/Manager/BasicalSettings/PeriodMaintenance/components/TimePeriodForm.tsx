@@ -27,6 +27,9 @@ const TimePeriodForm = (props: PropsType) => {
       // 从本地获取学期学年信息
       const currentXQXN = await queryXNXQList();
       setchainData(currentXQXN?.xnxqList); // 改变联动数据
+      if (current?.XNXQ?.XN) {
+        setTerms(currentXQXN?.xnxqList.subData[current?.XNXQ?.XN]);
+      }
     }
     fetchData();
   }, []);
