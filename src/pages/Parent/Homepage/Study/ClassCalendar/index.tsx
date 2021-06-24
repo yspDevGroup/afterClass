@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
-// 因为插件为JS，TS校验报错，不影响使用
 import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
