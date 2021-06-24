@@ -8,8 +8,8 @@ import myContext from '../../myContext';
 import moment from 'moment';
 
 
-type propstype={
-  setDatedata:(data: any)=>void;
+type propstype = {
+  setDatedata: (data: any) => void;
 }
 const defaultMsg = {
   type: 'picList',
@@ -18,8 +18,8 @@ const defaultMsg = {
   noDataText: '当日无课',
 };
 
-const ClassCalendar = (props:propstype) => {
-  const {setDatedata}=props
+const ClassCalendar = (props: propstype) => {
+  const { setDatedata } = props
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
@@ -31,10 +31,15 @@ const ClassCalendar = (props:propstype) => {
   const getCalendarData = (data: any) => {
     const courseData = {};
     const markDays = [];
+    const learnData = [];
     for (let k = 0; k < data.length; k += 1) {
       const item = data[k];
+      const courseDays = {
+        learnDay: ''
+      };
       const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
       const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
+      courseDays[item.id] = [];
       item.kcxx = {
         type: 'picList',
         cls: 'picList',
@@ -55,26 +60,29 @@ const ClassCalendar = (props:propstype) => {
         ]
       };
       const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
-      setDatedata(res)
       for (let i = 0; i < res.length; i += 1) {
         const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
         if (weekDay === item.WEEKDAY) {
+          courseDays.learnDay = item.WEEKDAY;
           courseData[res[i]] = item.kcxx;
           markDays.push({
             date: res[i]
           });
+          courseDays[item.id].push(res[i])
         }
       }
+      learnData.push(courseDays);
     }
 
     return {
       markDays,
       courseData,
+      learnData
     };
   }
-
   useEffect(() => {
-    const { markDays, courseData } = getCalendarData(weekSchedule);
+    const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
+    setDatedata(learnData);
     setDates(markDays);
     setCourse(courseData[day]);
     setCourseArr(courseData);

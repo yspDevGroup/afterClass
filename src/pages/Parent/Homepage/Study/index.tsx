@@ -16,7 +16,7 @@ const Study = () => {
   const myDate = new Date();
   const nowdata = new Date(moment(myDate.toLocaleDateString()).format('YYYY-MM-DD'));
   const Timetable = [];
-  for (let i = 0; i < datedata.length; i++) {
+  for (let i = 0; i < datedata.length; i+=1) {
     if (new Date(datedata[i]) < nowdata) {
       Timetable.push(datedata[i]);
     }
@@ -57,7 +57,7 @@ const Study = () => {
     <div className={styles.funWrapper}>
       <div className={styles.titleBar}>{`在学课程 ${yxkc?.length}`}</div>
       {
-        weekSchedule.map((item:any)=>{
+        weekSchedule.map((item: any)=>{
         return   <ListComponent listData={item.zxkc} />
         })
       }
