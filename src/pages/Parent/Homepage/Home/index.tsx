@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, useModel } from 'umi';
+import React, { useContext } from 'react';
+import { Link } from 'umi';
 import imgPop from '@/assets/mobileBg.png';
 import ListComp from '@/components/ListComponent';
 import { noticData, } from '../listData';
@@ -7,10 +7,10 @@ import CourseTab from './components/CourseTab';
 import styles from './index.less';
 import IconFont from '@/components/CustomIcon';
 import EnrollClassTime from '@/components/EnrollClassTime';
+import myContext from '../myContext';
 
 const Home = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
+  const { currentUser } = useContext(myContext);
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>

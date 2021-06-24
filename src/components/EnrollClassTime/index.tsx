@@ -13,8 +13,6 @@ import myContext from '@/pages/Parent/Homepage/myContext';
 const EnrollClassTime = () => {
   // 获取首页数据
   const { courseStatus, weekSchedule } = useContext(myContext);
-  console.log(courseStatus, weekSchedule);
-
   switch (courseStatus) {
     case 'enroll':
       return (<div>

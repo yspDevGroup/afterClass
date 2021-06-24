@@ -5,18 +5,13 @@
  * @LastEditTime: 2021-06-23 15:21:28
  * @LastEditors: txx
  */
-import React, { useState } from 'react'
-import { useModel } from 'umi';
+import React, { useContext } from 'react';
 import imgPop from '@/assets/mobileBg.png';
-import styles from "./index.less"
-import IconFont from '@/components/CustomIcon';
-import { Tabs } from 'antd';
+import styles from "./index.less";
+import myContext from '../../../myContext';
 
-const { TabPane } = Tabs;
 const Empty = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  const [activeKey, setActiveKey] = useState<string>('index');
+  const { currentUser } = useContext(myContext);
   const title = '课后帮课后服务报名通知';
   const time = '2021.09.01 08:32:23';
   const content = `1.服务时间：一、二年级16:10-17:00，其中周二16:50-17:40，三——六年级17:00-17:50（夏令时间顺延20分钟）。\n
@@ -42,37 +37,7 @@ const Empty = () => {
         <div className={styles.opacity}></div>
         <textarea disabled value={content} />
       </div>
-      <div className={styles.Tabs}>
-        <Tabs
-          tabPosition='bottom'
-          className={styles.menuTab}
-          onTabClick={(key: string) => { setActiveKey(key) }}
-        >
-          <TabPane tab={
-            <span>
-              <IconFont
-                style={{ 'fontSize': '16px' }}
-                type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
-              />
-              首页
-            </span>
-          } key="index">
-
-          </TabPane>
-          <TabPane tab={
-            <span>
-              <IconFont
-                style={{ 'fontSize': '16px' }}
-                type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
-              />
-              我的
-            </span>
-          } key="mine">
-
-          </TabPane>
-        </Tabs>
-      </div>
     </div>
   )
 }
-export default Empty
+export default Empty;

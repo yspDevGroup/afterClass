@@ -1,9 +1,11 @@
+/* eslint-disable no-param-reassign */
 import React, { useContext } from 'react';
 import { Tabs } from 'antd';
 import styles from '../index.less';
 import myContext from '../../myContext';
 import ListComponent from '@/components/ListComponent';
 import { Link } from 'umi';
+
 const { TabPane } = Tabs;
 const CourseTab = () => {
   // 获取首页数据
@@ -69,7 +71,6 @@ const CourseTab = () => {
                   },
                 ]
               }
-              console.log(item)
               return <ListComponent listData={item.yy} />
             })
           }

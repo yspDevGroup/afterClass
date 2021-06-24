@@ -1,33 +1,91 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-// 因为插件为JS，TS校验报错，不影响使用
 import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
 import PromptInformation from './components/PromptInformation';
-import { courseArr } from '../mock';
+import { DateRange, Week } from '@/utils/Timefunction';
+import myContext from '../../myContext';
+import moment from 'moment';
 
-const ClassCalendar = () => {
-  const [day,setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
-  const [cDay,setCDay] = useState<string>(dayjs().format('M月D日'));
+
+type propstype={
+  setDatedata:(data: any)=>void;
+}
+
+const ClassCalendar = (props:propstype) => {
+  const {setDatedata}=props
+  const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
+  const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>();
+  const { weekSchedule } = useContext(myContext);
+  const [dates, setDates] = useState<any[]>([]);
+  const [courseArr, setCourseArr] = useState<any>({});
+
+  // 后台返回的周数据的遍历
+  const getCalendarData = (data: any) => {
+    const courseData = {};
+    const markDays = [];
+    for (let k = 0; k < data.length; k += 1) {
+      const item = data[k];
+      const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
+      const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
+      item.kcxx = {
+        type: 'picList',
+        cls: 'picList',
+        list: [
+          {
+            title: item.KHBJSJ.KHKCSJ.KCMC,
+            img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
+            link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
+            desc: [
+              {
+                left: [`课程时段：${item.XXSJPZ.KSSJ}-${item.XXSJPZ.JSSJ}`],
+              },
+              {
+                left: [`上课地点：${item.KHBJSJ.XQName}`],
+              },
+            ],
+          },
+        ]
+      };
+      const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
+      for (let i = 0; i < res.length; i += 1) {
+        const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
+        if (weekDay === item.WEEKDAY) {
+          courseData[res[i]] = item.kcxx;
+          markDays.push({
+            date: res[i]
+          });
+        }
+      }
+    }
+
+    setDatedata(arry)
+    return {
+      markDays,
+      courseData,
+    };
+  }
+
+  useEffect(() => {
+    const { markDays, courseData } = getCalendarData(weekSchedule);
+    setDates(markDays);
+    setCourseArr(courseData);
+  }, [])
+
 
   return (
     <div className={styles.schedule}>
-      <span className={styles.today} onClick={()=>{
+      <span className={styles.today} onClick={() => {
         setDay(dayjs().format('YYYY-MM-DD'));
         setCDay(dayjs().format('M月D日'))
       }}>
         今
       </span>
       <Calendar
-
         showType={'week'}
-        markDates={[
-          { date: '2021-6-7' },
-          { date: '2021-6-9'},
-          { date: '2021-6-10'},
-        ]}
+        markDates={dates}
         onDateClick={(date: { format: (arg: string) => any; }) => {
           setDay(date.format('YYYY-MM-DD'));
           setCDay(date.format('M月D日'));
@@ -41,7 +99,7 @@ const ClassCalendar = () => {
       <div className={styles.subTitle}>
         {cDay}
       </div>
-   { course ? <ListComponent listData={course} />: <PromptInformation />}
+      {course ? <ListComponent listData={course} /> : <PromptInformation />}
     </div>
   )
 }

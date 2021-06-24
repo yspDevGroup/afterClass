@@ -181,3 +181,23 @@ export async function updateKHBJSJ(
     ...(options || {}),
   });
 }
+
+/** 获取班级已报名人数 GET /khbjsj/enrolled/${param0} */
+export async function getEnrolled(
+  params: {
+    // path
+    /** 课后班级ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{ status?: 'ok' | 'error'; data?: number; message?: string }>(
+    `/khbjsj/enrolled/${param0}`,
+    {
+      method: 'GET',
+      params: { ...queryParams },
+      ...(options || {}),
+    },
+  );
+}
