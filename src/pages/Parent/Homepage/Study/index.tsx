@@ -32,7 +32,7 @@ const Study = () => {
             link: `/parent/home/courseDetails?classid=${record.KHBJSJ.id}&type=false`,
             desc: [
               {
-                left: ['每周一', `${record.XXSJPZ.KSSJ}-${record.XXSJPZ.JSSJ}`, '本校'],
+                left: ['每周一', `${(record.XXSJPZ.KSSJ).substring(0,5)}-${(record.XXSJPZ.JSSJ).substring(0,5)}`,`${record.FJSJ.FJMC}` ],
               },
               {
                 left: [`共${record.KHBJSJ.KSS}`,`已学${Timetable.length}课时`],

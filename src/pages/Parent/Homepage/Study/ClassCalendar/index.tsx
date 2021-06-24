@@ -50,10 +50,10 @@ const ClassCalendar = (props: propstype) => {
             link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
             desc: [
               {
-                left: [`课程时段：${item.XXSJPZ.KSSJ}-${item.XXSJPZ.JSSJ}`],
+                left: [`课程时段：${(item.XXSJPZ.KSSJ).substring(0,5)}-${(item.XXSJPZ.JSSJ).substring(0,5)}`],
               },
               {
-                left: [`上课地点：${item.KHBJSJ.XQName}`],
+                left: [`上课地点：${item.FJSJ.FJMC}`],
               },
             ],
           },
