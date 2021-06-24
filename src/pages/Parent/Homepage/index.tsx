@@ -8,28 +8,42 @@ import Study from './Study';
 import Mine from './Mine';
 import IconFont from '@/components/CustomIcon';
 import myContext from './myContext';
-import { data } from './mock';
 import Empty from './Home/Pages/Empty';
+import { homePageInfo } from '@/services/after-class/user';
+import { useModel } from 'umi';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [activeKey, setActiveKey] = useState<string>('index');
   const [courseStatus, setCourseStatus] = useState<string>('empty');
-  const { bmkssj, bmjssj, skkssj, skjssj } = data;
+  const [dataSource, setDataSource] = useState<any>();
   useEffect(() => {
-
     async function fetchData() {
       // 获取后台学年学期数据
       const result = await queryXNXQList();
       const { XN, XQ } = result.current;
-      console.log(XN, XQ);
+      const res = await homePageInfo({
+        xn: XN,
+        xq: XQ,
+        XSId: currentUser?.userId || currentUser?.id,
+        njId: '1'
+      });
+      if (res.status === 'ok' && res.data) {
+        setDataSource(res.data);
+        const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
+        if (bmkssj && bmjssj && skkssj && skjssj) {
+          const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
+          setCourseStatus(cStatus);
+        }
+      }
     }
     fetchData();
-    const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
-    setCourseStatus(cStatus);
+
   }, [])
   return <div className={styles.mobilePageHeader}>
-    <myContext.Provider value={{ ...data, courseStatus }}>
+    <myContext.Provider value={{ ...dataSource, courseStatus }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
         setActiveKey(key);
       }}>

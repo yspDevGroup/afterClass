@@ -2,16 +2,16 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取课后课程数据 GET /khkcsj/${param0} */
+/** 获取课后课程数据详情 POST /khkcsj/detail */
 export async function getKHKCSJ(
-  params: {
-    // path
-    /** 课后课程ID */
-    id: string;
+  body: {
+    /** 课程ID */
+    kcId?: string;
+    /** 班级状态 */
+    bjzt?: '待发布' | '已发布' | '已下架' | '已结课';
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -52,26 +52,12 @@ export async function getKHKCSJ(
       }[];
     };
     message?: string;
-  }>(`/khkcsj/${param0}`, {
-    method: 'GET',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** 删除课后课程数据 DELETE /khkcsj/${param0} */
-export async function deleteKHKCSJ(
-  params: {
-    // path
-    /** 课后课程ID */
-    id: string;
-  },
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/${param0}`, {
-    method: 'DELETE',
-    params: { ...queryParams },
+  }>('/khkcsj/detail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -152,6 +138,23 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
       'Content-Type': 'application/json',
     },
     data: body,
+    ...(options || {}),
+  });
+}
+
+/** 删除课后课程数据 DELETE /khkcsj/${param0} */
+export async function deleteKHKCSJ(
+  params: {
+    // path
+    /** 课后课程ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/${param0}`, {
+    method: 'DELETE',
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
