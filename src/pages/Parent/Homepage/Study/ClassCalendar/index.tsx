@@ -3,21 +3,21 @@ import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
-import PromptInformation from './components/PromptInformation';
 import { DateRange, Week } from '@/utils/Timefunction';
 import myContext from '../../myContext';
 import moment from 'moment';
 
+const defaultMsg={
+  type: 'picList',
+  cls: 'picList',
+  list: [],
+  noDataText: '当日无课',
+};
+const ClassCalendar = () => {
 
-type propstype={
-  setDatedata:(data: any)=>void;
-}
-
-const ClassCalendar = (props:propstype) => {
-  const {setDatedata}=props
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
-  const [course, setCourse] = useState<any>();
+  const [course, setCourse] = useState<any>(defaultMsg);
   const { weekSchedule } = useContext(myContext);
   const [dates, setDates] = useState<any[]>([]);
   const [courseArr, setCourseArr] = useState<any>({});
@@ -61,7 +61,6 @@ const ClassCalendar = (props:propstype) => {
       }
     }
 
-    setDatedata(arry)
     return {
       markDays,
       courseData,
@@ -71,6 +70,7 @@ const ClassCalendar = (props:propstype) => {
   useEffect(() => {
     const { markDays, courseData } = getCalendarData(weekSchedule);
     setDates(markDays);
+    setCourse(courseData[day]);
     setCourseArr(courseData);
   }, [])
 
@@ -80,6 +80,7 @@ const ClassCalendar = (props:propstype) => {
       <span className={styles.today} onClick={() => {
         setDay(dayjs().format('YYYY-MM-DD'));
         setCDay(dayjs().format('M月D日'))
+        setCourse(courseArr[dayjs().format('YYYY-MM-DD')] || defaultMsg);
       }}>
         今
       </span>
@@ -89,7 +90,7 @@ const ClassCalendar = (props:propstype) => {
         onDateClick={(date: { format: (arg: string) => any; }) => {
           setDay(date.format('YYYY-MM-DD'));
           setCDay(date.format('M月D日'));
-          const curCourse = courseArr[date.format('YYYY-MM-DD')];
+          const curCourse = courseArr[date.format('YYYY-MM-DD')] || defaultMsg;
           setCourse(curCourse);
         }}
         markType="dot"
@@ -99,7 +100,7 @@ const ClassCalendar = (props:propstype) => {
       <div className={styles.subTitle}>
         {cDay}
       </div>
-      {course ? <ListComponent listData={course} /> : <PromptInformation />}
+      <ListComponent listData={course} />
     </div>
   )
 }

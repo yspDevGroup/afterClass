@@ -22,7 +22,7 @@ const NewsList = (props: { data: ListItem[], type: ListType }) => {
         <Link to={v.link!}>
           <List.Item.Meta
             style={type === 'descList' ? { background: v.titleRight?.text === "待上课" ? "rgba(69, 201, 119, 0.05)" : "rgba(102, 102, 102, 0.05)" } : {}}
-            avatar={v.img ? <img width="110" height="70" alt={v.title} src={v.img} /> : ''}
+            avatar={v.img ? <img width="110" height="70" alt={v.title} src={v.img.indexOf('http') > -1 ? v.img : 'https://i.postimg.cc/XXxH96fZ/noData.png'} /> : ''}
             title={<div className={styles.TitleRow}>
               <div className={styles.Title} >
                 {v.title}
