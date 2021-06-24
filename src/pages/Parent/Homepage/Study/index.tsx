@@ -4,7 +4,6 @@ import { iconTextData } from './mock';
 import styles from './index.less';
 import ClassCalendar from './ClassCalendar';
 import ListComponent from '@/components/ListComponent';
-import { learndata } from '../listData';
 import moment from 'moment';
 import myContext from '../myContext';
 
@@ -12,17 +11,37 @@ const Study = () => {
   // 从日历中获取的时间
   const [datedata, setDatedata] = useState<any[]>([]);
   // 获取列表数据
-  const { weekSchedule } = useContext(myContext);
-  console.log('weekSchedule',weekSchedule)
-
+  const { weekSchedule, yxkc } = useContext(myContext);
+  // 在学课程数据
   const myDate = new Date();
-  const nowdata=new Date(moment(myDate.toLocaleDateString()).format('YYYY-MM-DD'));
-  const Timetable=[];
-  datedata.map((item:any)=>{
-    const cc=new Date(item);
-    if(cc<=nowdata){
-      Timetable.push(cc);
+  const nowdata = new Date(moment(myDate.toLocaleDateString()).format('YYYY-MM-DD'));
+  const Timetable = [];
+  for (let i = 0; i < datedata.length; i++) {
+    if (new Date(datedata[i]) < nowdata) {
+      Timetable.push(datedata[i]);
     }
+  }
+  weekSchedule.map((record: any) => {
+      record.zxkc = {
+        type: 'list',
+        cls: 'list',
+        list: [
+          {
+            id: record.KHBJSJ.id,
+            title: record.KHBJSJ.KHKCSJ.KCMC,
+            link: `/parent/home/courseDetails?classid=${record.KHBJSJ.id}&type=false`,
+            desc: [
+              {
+                left: ['每周一', `${record.XXSJPZ.KSSJ}-${record.XXSJPZ.JSSJ}`, '本校'],
+              },
+              {
+                left: [`共${record.KHBJSJ.KSS}`,`已学${Timetable.length}课时`],
+              },
+            ],
+          },
+        ],
+        noDataText: '暂无课程',
+      }
   })
   return <div className={styles.studyPage}>
     <DisplayColumn
@@ -33,11 +52,15 @@ const Study = () => {
     />
     <div className={styles.funWrapper}>
       <div className={styles.titleBar}>孩子课表</div>
-      <ClassCalendar setDatedata={setDatedata}/>
+      <ClassCalendar setDatedata={setDatedata} />
     </div>
     <div className={styles.funWrapper}>
-      <div className={styles.titleBar}>在学课程 3</div>
-      <ListComponent listData={learndata} />
+      <div className={styles.titleBar}>{`在学课程 ${yxkc?.length}`}</div>
+      {
+        weekSchedule.map((item:any)=>{
+        return   <ListComponent listData={item.zxkc} />
+        })
+      }
     </div>
   </div>;
 };

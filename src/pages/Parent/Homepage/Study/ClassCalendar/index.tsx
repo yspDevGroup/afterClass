@@ -7,14 +7,19 @@ import { DateRange, Week } from '@/utils/Timefunction';
 import myContext from '../../myContext';
 import moment from 'moment';
 
+
+type propstype={
+  setDatedata:(data: any)=>void;
+}
 const defaultMsg = {
   type: 'picList',
   cls: 'picList',
   list: [],
   noDataText: '当日无课',
 };
-const ClassCalendar = () => {
 
+const ClassCalendar = (props:propstype) => {
+  const {setDatedata}=props
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
@@ -50,6 +55,7 @@ const ClassCalendar = () => {
         ]
       };
       const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
+      setDatedata(res)
       for (let i = 0; i < res.length; i += 1) {
         const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
         if (weekDay === item.WEEKDAY) {
