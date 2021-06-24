@@ -30,7 +30,7 @@ const formLayout = {
 };
 
 const NewCourses = (props: PropsType) => {
-  const { current, onClose, visible, actionRef, readonly, xn, xq, setOpentype } = props;
+  const { current, onClose, visible, actionRef, readonly, setOpentype } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [form, setForm] = useState<any>();
   const [XNData, setXNData] = useState<any>([]);
@@ -46,34 +46,36 @@ const NewCourses = (props: PropsType) => {
 
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
+  const [isXn, setIsXn] = useState<boolean>(true);
 
   const Close = () => {
     setBaoming(true);
     setKaike(true);
     onClose!();
   };
-  //  根据学年学期获取报名时间与开课时间
-  useEffect(() => {
-    (async () => {
-      const res = await getAllXXSJPZ({ xn, xq, type: ['1', '2'] });
-      if (res.status === 'ok') {
-        const arry: any[] = [];
-        const erry: any[] = [];
-        res.data?.map((item: any) => {
-          if (item.TYPE === '1') {
-            arry.push(item.KSSJ, item.JSSJ);
-          }
-          if (item.TYPE === '2') {
-            erry.push(item.KSSJ, item.JSSJ);
-          }
-          return true;
-        });
-        setSignup(arry);
-        setClassattend(erry);
-      }
-    })();
-  }, [xn, xq]);
-
+  const onXnXqChange = async (xnValue: any, xqvalue: any) => {
+    const params = {
+      xn: xnValue,
+      xq: xqvalue,
+      type: ['1', '2'],
+    };
+    const res = await getAllXXSJPZ(params);
+    if (res.status === 'ok') {
+      const arry: any[] = [];
+      const erry: any[] = [];
+      res.data?.map((item: any) => {
+        if (item.TYPE === '1') {
+          arry.push(item.KSSJ, item.JSSJ);
+        }
+        if (item.TYPE === '2') {
+          erry.push(item.KSSJ, item.JSSJ);
+        }
+        return true;
+      });
+      setSignup(arry);
+      setClassattend(erry);
+    }
+  };
   useEffect(() => {
     if (current) {
       setBaoming(false);
@@ -262,6 +264,49 @@ const NewCourses = (props: PropsType) => {
         defaultValue: '待发布',
       },
     },
+    {
+      type: 'cascader',
+      label: '学年学期：',
+      key: 'XNXQ',
+      readonly,
+      rules: [{ required: true, message: '请填写名称' }],
+      cascaderItem: [
+        {
+          type: 'select',
+          width: '100%',
+          name: 'XN',
+          key: 'XN',
+          placeholder: '请选择学年',
+          noStyle: true,
+          readonly,
+          options: XNData,
+          fieldProps: {
+            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+              setXN(event);
+              setXQ(XQData[`${event}`]);
+              setIsXn(true);
+              onXnXqChange(event, XQData[`${event}`][0].label);
+            },
+          },
+        },
+        {
+          type: 'select',
+          name: 'XQ',
+          width: '100%',
+          key: 'XQ',
+          readonly,
+          placeholder: '请选择学期',
+          noStyle: true,
+          options: XQ,
+          fieldProps: {
+            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+              onXnXqChange(XN, event);
+              setIsXn(false);
+            },
+          },
+        },
+      ],
+    },
     signup.length > 0
       ? {
           type: 'divTab',
@@ -351,41 +396,6 @@ const NewCourses = (props: PropsType) => {
       },
     },
     {
-      type: 'cascader',
-      label: '学年学期：',
-      key: 'XNXQ',
-      readonly,
-      rules: [{ required: true, message: '请填写名称' }],
-      cascaderItem: [
-        {
-          type: 'select',
-          width: '100%',
-          name: 'XN',
-          key: 'XN',
-          placeholder: '请选择学年',
-          noStyle: true,
-          readonly,
-          options: XNData,
-          fieldProps: {
-            onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-              setXN(event);
-              setXQ(XQData[`${event}`]);
-            },
-          },
-        },
-        {
-          type: 'select',
-          name: 'XQ',
-          width: '100%',
-          key: 'XQ',
-          readonly,
-          placeholder: '请选择学期',
-          noStyle: true,
-          options: XQ,
-        },
-      ],
-    },
-    {
       type: 'uploadImage',
       label: '封面：',
       name: 'KCTP',
@@ -439,7 +449,7 @@ const NewCourses = (props: PropsType) => {
           setForm={setForm}
           onFinish={onFinish}
           values={
-            XN
+            XN && isXn
               ? { XQ: XQData[XN][0].label }
               : (() => {
                   if (current) {
