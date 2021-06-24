@@ -13,7 +13,6 @@ export const DateRange = (startDate: string, endDate: string) => {
     //截取的结束时间
     var endTime = new Date(endDate);
     //利用setTime获取两个日期之间差值,差值毫秒换算成天1000*60*60*24
-    window.console.log(startTime.getTime());
     var distanceDayLength = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60 * 24);
     var startDay = startTime.getDate();
     for (let i = 0; i <= distanceDayLength; i++) {

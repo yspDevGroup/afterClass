@@ -15,32 +15,32 @@ const ClassCalendar = () => {
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>();
   const { weekSchedule } = useContext(myContext);
-  console.log('weekSchedule', weekSchedule[0].KHBJSJ)
-  console.log(DateRange('2021/06/01', '2021/06/30'))
-  console.log(Week('2021/06/24'))
+  // console.log('weekSchedule', weekSchedule[0].KHBJSJ)
+  // console.log(DateRange('2021/06/01', '2021/06/30'))
+  // console.log(Week('2021/06/24'))
   // 后台返回的周数据的遍历
-  weekSchedule.map((item: any) => {
+ const arry= weekSchedule.map((item: any) => {
     const arry: any[] = [];
     if (item.KHBJSJ.KKRQ && item.KHBJSJ.JKRQ) {
-      const res = DateRange(item.KHBJSJ.KKRQ, item.KHBJSJ.JKRQ);
+      const res = DateRange(moment(item.KHBJSJ.KKRQ).format('YYYY/MM/DD'), moment(item.KHBJSJ.JKRQ).format('YYYY/MM/DD'));
       res.map((arrye: any) => {
         const erry = Week(moment(arrye).format('YYYY/MM/DD'));
         if (erry === item.WEEKDAY) {
-          arry.push(erry);
+          arry.push(arrye);
         }
       })
     }else{
-      const res =DateRange(item.KHBJSJ.KHKCSJ.KKRQ,item.KHBJSJ.KHKCSJ.JKRQ);
+      const res =DateRange(moment(item.KHBJSJ.KHKCSJ.KKRQ).format('YYYY/MM/DD'),moment(item.KHBJSJ.KHKCSJ.JKRQ).format('YYYY/MM/DD'));
       res.map((arrye: any) => {
         const erry = Week(moment(arrye).format('YYYY/MM/DD'));
         if (erry === item.WEEKDAY) {
-          arry.push(erry);
+          arry.push(arrye);
         }
       })
     }
     return arry;
   })
-
+  console.log('arry',arry)
   return (
     <div className={styles.schedule}>
       <span className={styles.today} onClick={() => {
