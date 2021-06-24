@@ -31,15 +31,12 @@ const ClassCalendar = (props: propstype) => {
   const getCalendarData = (data: any) => {
     const courseData = {};
     const markDays = [];
-    const learnData = [];
+    const learnData = {};
     for (let k = 0; k < data.length; k += 1) {
       const item = data[k];
-      const courseDays = {
-        learnDay: ''
-      };
+      const courseDays = [];
       const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
       const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
-      courseDays[item.id] = [];
       item.kcxx = {
         type: 'picList',
         cls: 'picList',
@@ -50,10 +47,10 @@ const ClassCalendar = (props: propstype) => {
             link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
             desc: [
               {
-                left: [`课程时段：${(item.XXSJPZ.KSSJ).substring(0,5)}-${(item.XXSJPZ.JSSJ).substring(0,5)}`],
+                left: [`课程时段：${item.XXSJPZ.KSSJ}-${item.XXSJPZ.JSSJ}`],
               },
               {
-                left: [`上课地点：${item.FJSJ.FJMC}`],
+                left: [`上课地点：${item.KHBJSJ.XQName}`],
               },
             ],
           },
@@ -63,15 +60,27 @@ const ClassCalendar = (props: propstype) => {
       for (let i = 0; i < res.length; i += 1) {
         const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
         if (weekDay === item.WEEKDAY) {
-          courseDays.learnDay = item.WEEKDAY;
           courseData[res[i]] = item.kcxx;
           markDays.push({
             date: res[i]
           });
-          courseDays[item.id].push(res[i])
+          courseDays.push(res[i])
         }
       }
-      learnData.push(courseDays);
+      if (learnData[item.KHBJSJ.id]) {
+        const val = learnData[item.KHBJSJ.id];
+        learnData[item.KHBJSJ.id] = {
+          dates: val.dates.concat(courseDays),
+          weekDay: `${val.weekDay},${item.WEEKDAY}`,
+          courseInfo: item
+        };
+      } else {
+        learnData[item.KHBJSJ.id] = {
+          dates: courseDays,
+          weekDay: item.WEEKDAY,
+          courseInfo: item
+        }
+      }
     }
 
     return {
