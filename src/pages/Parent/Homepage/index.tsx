@@ -43,7 +43,7 @@ const PersonalHomepage = () => {
 
   }, [])
   return <div className={styles.mobilePageHeader}>
-    <myContext.Provider value={{ ...dataSource, courseStatus }}>
+    <myContext.Provider value={{ ...dataSource, courseStatus,currentUser }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
         setActiveKey(key);
       }}>

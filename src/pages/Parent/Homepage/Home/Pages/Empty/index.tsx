@@ -5,14 +5,13 @@
  * @LastEditTime: 2021-06-23 15:21:28
  * @LastEditors: txx
  */
-import React from 'react';
-import { useModel } from 'umi';
+import React, { useContext } from 'react';
 import imgPop from '@/assets/mobileBg.png';
 import styles from "./index.less";
+import myContext from '../../../myContext';
 
 const Empty = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
+  const { currentUser } = useContext(myContext);
   const title = '课后帮课后服务报名通知';
   const time = '2021.09.01 08:32:23';
   const content = `1.服务时间：一、二年级16:10-17:00，其中周二16:50-17:40，三——六年级17:00-17:50（夏令时间顺延20分钟）。\n

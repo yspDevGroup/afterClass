@@ -49,7 +49,7 @@ const TimePeriodForm = (props: PropsType) => {
       rules: [{ required: true, message: '请填写名称' }],
       fieldProps: {
         autocomplete: 'off',
-        placeholder: currentStatus === 'schedule' ?'如：第一节课':'',
+        placeholder: currentStatus === 'schedule' ?'如：第一节课':(currentStatus === 'enroll' ? '如：2020-2021':'如：2021春季'),
       },
     },
     {
