@@ -89,6 +89,15 @@ export async function getAllKHKCSJ(
     ...(options || {}),
   });
 }
+//根据ID获取课后课程数据详情
+export async function getDetailsKHKCSJ(kcId: string) {
+  return request('/khkcsj/detail', {
+    method: 'POST',
+    data: {
+      kcId,
+    },
+  });
+}
 
 /** 创建课后课程数据 PUT /khkcsj/create */
 export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: string]: any }) {

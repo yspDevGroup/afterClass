@@ -6,54 +6,73 @@ import { Link } from 'umi';
 import styles from './index.less';
 import { statisticalList ,TimetableList } from './mock'
 import {culturedata,artdata,techdata,sportsdata,learndata} from '../../../listData'
-
+import type {KcDetailType} from './data'
+import { getDetailsKHKCSJ } from '@/services/after-class/khkcsj';
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState();
+  const [FY, setFY] = useState();
   const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
   const [KcData, setKcData] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>();
+  const [KcDetail, setKcDetail] = useState<KcDetailType>();
   const valueKey = window.location.href.split('type=')[1];
-  const id = window.location.href.split('id=')[1].split('&')[0];
+  const ids = window.location.href.split('id=')[1].split('&')[0];
   
   useEffect(() => {
+    (async () => {
+      const id = '9e0c756d-e074-4480-99fc-378a4401cd64';
+      const result = await getDetailsKHKCSJ(id);
+      if (result.status === 'ok') {
+        // eslint-disable-next-line no-console
+        console.log(result,"++++++++++++")
+        setKcDetail(result.data)
+        setFY(result.data.KHBJSJs[0].FY)
+        setBJ(result.data.KHBJSJs[0].id)
+      } else {
+        message.error(result.message);
+      }
+    })();
+    
     culturedata.list.map((value)=>{
-      if(value.id === id){
+      if(value.id === ids){
         setKcData(value)
       }
     })
     artdata.list.map((value)=>{
-      if(value.id === id){
+      if(value.id === ids){
         setKcData(value)
       }
     })
     techdata.list.map((value)=>{
-      if(value.id === id){
+      if(value.id === ids){
         setKcData(value)
       }
     })
     sportsdata.list.map((value)=>{
-      if(value.id === id){
+      if(value.id === ids){
         setKcData(value)
       }
     })
     learndata.list.map((value)=>{
-      if(value.id === id){
+      if(value.id === ids){
         setKcData(value)
       }
     })
     const myDate = new Date().toLocaleDateString().slice(5,9);
-    setCurrentDate(myDate)
-  }, [id]);
+    setCurrentDate(myDate);
+   
+  }, [ ids]);
   const onclick = () => { 
-    setstate(true);
+    setstate(true); 
   }
   const onclose = () => {
     setstate(false);
   }
   const onBJChange = (e: any) => {
-    setBJ(e.target.value)
+    setBJ(e.target.value.split('+')[0]);
+    setFY(e.target.value.split('+')[1]);
   }
   const onXYChange = () => {
     setXY(true)
@@ -67,52 +86,94 @@ const CourseDetails: React.FC = () => {
     }else if (XY === false) {
       message.info('请阅读并同意《课后服务协议》')
     }
-    const data ={
-      BJ,
-      XY
-    }
-    console.log('data',data)
+    // const data ={
+    //   BJ,
+    //   XY
+    // }
   }
+  const valueNames = `${BJ}+${FY}`;
   return <>
   {
     valueKey === 'true' ?
     <div className={styles.CourseDetails}>
     <div className={styles.wrap}>
-      <img src={KcData?.img} alt="" />
-      <p className={styles.title}>{KcData?.title}</p>
+      <img src={KcDetail?.KCTP} alt="" />
+      <p className={styles.title}>{KcDetail?.KCMC}</p>
       
       <ul>
-        <li>上课时段：{KcData?.desc[0].left[0].split('：')[1]}</li>
+        <li>上课时段：{KcDetail?.KKRQ}~{KcDetail?.JKRQ}</li>
         <li>上课地点：本校</li>
-        <li>总课时：{KcData?.desc[1].left[0]}</li>
       </ul>
       <p className={styles.title}>课程简介</p>
-      <p className={styles.content}>{KcData?.introduction}</p>
+      <p className={styles.content}>{KcDetail?.KCMS}</p>
       <p className={styles.content} style={{ marginTop: '20px' }}>开设班级：</p>
       <ul className={styles.classInformation}>
-        <li>A班：上课时间：周一、三16:00—18:00，上课地点：本校室外足球场，班主任：刘某某，副班：刘大大，代课老师：刘七七。</li>
-        <li>B班：上课时间：周一、三16:00—18:00，班主任：刘某某，副班：刘大大，代课老师：刘七七。</li>
-        <li>C班：上课时间：周一、三16:00—18:00，班主任：刘某某，副班：刘大大，代课老师：刘七七。</li>
+        {
+          KcDetail?.KHBJSJs?.map((value: {BJMC: string,ZJS: string,FJS: string,KCSC: string,KHPKSJs: any})=>{
+            // console.log(value)
+            return<li>{value.BJMC}：总课时：{value.KCSC},
+             上课时间：{
+                value.KHPKSJs.map((values: {FJSJ: any,XXSJPZ: any,WEEKDAY: string})=>{
+                  let weeks = '';
+                  if(values.WEEKDAY === '1'){
+                    weeks = '周一'
+                  }else if(values.WEEKDAY === '2'){
+                    weeks = '周二'
+                  }else if(values.WEEKDAY === '3'){
+                    weeks = '周三'
+                  }else if(values.WEEKDAY === '4'){
+                    weeks = '周四'
+                  }else if(values.WEEKDAY === '5'){
+                    weeks = '周五'
+                  }else if(values.WEEKDAY === '6'){
+                    weeks = '周六'
+                  }else if(values.WEEKDAY === '7'){
+                    weeks = '周日'
+                  }
+                  let kssj = '';
+                  if(values.XXSJPZ.KSSJ){
+                    values.XXSJPZ.KSSJ.split(':')
+                    kssj = `${values.XXSJPZ.KSSJ.split(':')[0]}:${values.XXSJPZ.KSSJ.split(':')[1]}`
+                  }
+                  let jssj = '';
+                  if(values.XXSJPZ.JSSJ){
+                    values.XXSJPZ.JSSJ.split(':')
+                    jssj = `${values.XXSJPZ.JSSJ.split(':')[0]}:${values.XXSJPZ.JSSJ.split(':')[1]}`
+                  }
+                  return<span>{weeks}{kssj}-{jssj},</span>
+                })
+            }
+            上课地点：{
+              value.KHPKSJs.map((values: {FJSJ: any},index: number)=>{
+                if (index === 1) {
+                  return false;
+                }
+                return<span>{values.FJSJ.FJMC},</span>
+              })
+            }
+            班主任：{value.ZJS},副班：{value.FJS}。</li>
+          })
+        }
       </ul>
     </div>
     <div className={styles.footer}>
-      <span>￥{KcData?.price}</span><span>/学期</span>
       <button className={styles.btn} onClick={onclick}>立即报名</button>
     </div>
     {
       state === true ?
         <div className={styles.payment} onClick={onclose}>
           <div onClick={onchanges}>
-            <p className={styles.title}>{KcData?.title}</p>
-            <p className={styles.price}><span>￥{KcData?.price}</span><span>/学期</span></p>
+            <p className={styles.title}>{KcDetail?.KCMC}</p>
+            <p className={styles.price}><span>￥{FY}</span><span>/学期</span></p>
             <p className={styles.title} style={{ fontSize: '14px' }}>班级</p>
-            <Radio.Group onChange={onBJChange}>
+            <Radio.Group onChange={onBJChange} defaultValue={valueNames}>
               {
-                statisticalList.map((value) => {
-                  const text = `${value.BJMC}已有${value.BMRS}人报名，共${value.BJME}个名额`;
+                KcDetail?.KHBJSJs?.map((value: {BJMC: string,id: string,FJS: string,FY: string}) => {
+                  const text = `${value.BJMC}已有12人报名，共50个名额`;
+                  const valueName = `${value.id}+${value.FY}`;
                   return <div className={styles.BjInformation}>
                     <Tooltip placement="bottomLeft" title={text}>
-                      <Radio.Button value={value.id}>{value.BJMC}</Radio.Button>
+                      <Radio.Button value={valueName}>{value.BJMC}</Radio.Button>
                     </Tooltip>
                   </div>
                 })
@@ -125,10 +186,8 @@ const CourseDetails: React.FC = () => {
             {
               XY === false || BJ === undefined ?
               <Button className={styles.submit} onClick={submit} >确定并付款</Button>:
-              <Link to={`/parent/mine/orderDetails?id=${id}&type=false`}><Button className={styles.submit} onClick={submit} >确定并付款</Button></Link>
+              <Link to={`/parent/mine/orderDetails?id=${ids}&type=false`}><Button className={styles.submit} onClick={submit} >确定并付款</Button></Link>
             }
-             
-            
           </div>
         </div> : ''
     }
