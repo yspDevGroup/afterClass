@@ -11,6 +11,9 @@ import EnrollClassTime from '@/components/EnrollClassTime';
 const Home = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  alert(JSON.stringify(currentUser));
+  alert(JSON.stringify(currentUser.children));
+  
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>

@@ -9,12 +9,13 @@ import Mine from './Mine';
 import IconFont from '@/components/CustomIcon';
 import myContext from './myContext';
 import { data } from './mock';
+import Empty from './Home/Pages/Empty';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
   const [activeKey, setActiveKey] = useState<string>('index');
-  const [courseStatus, setCourseStatus] = useState<string>('enroll');
-  const { bmkssj, bmjssj, skkssj, skjssj} = data;
+  const [courseStatus, setCourseStatus] = useState<string>('empty');
+  const { bmkssj, bmjssj, skkssj, skjssj } = data;
   useEffect(() => {
 
     async function fetchData() {
@@ -28,7 +29,7 @@ const PersonalHomepage = () => {
     setCourseStatus(cStatus);
   }, [])
   return <div className={styles.mobilePageHeader}>
-    <myContext.Provider value={{ ...data, courseStatus}}>
+    <myContext.Provider value={{ ...data, courseStatus }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
         setActiveKey(key);
       }}>
@@ -42,10 +43,10 @@ const PersonalHomepage = () => {
           </span>
         } key="index">
           <div style={{ height: '100%', overflowY: 'auto' }} >
-            <Home />
+            {courseStatus === 'empty' ? <Empty /> : <Home />}
           </div>
         </TabPane>
-        <TabPane tab={
+        {courseStatus === 'empty' ? '' : <TabPane tab={
           <span>
             <IconFont
               style={{ 'fontSize': '16px' }}
@@ -57,7 +58,7 @@ const PersonalHomepage = () => {
           <div style={{ height: '100%', overflowY: 'auto' }} >
             <Study />
           </div>
-        </TabPane>
+        </TabPane>}
         <TabPane tab={
           <span>
             <IconFont
