@@ -40,7 +40,7 @@ const CourseManagement = () => {
   const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
   const [name, setName] = useState<string>('');
   // 控制提示开关
-  const [tips, setTips] = useState<boolean>(false)
+  const [tips, setTips] = useState<boolean>(false);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 控制学期学年数据提示框的函数
@@ -49,17 +49,16 @@ const CourseManagement = () => {
   };
   const clstips = () => {
     setTips(false);
-  }
+  };
   // 弹框名称设定
   const [names, setnames] = useState<string>('bianji');
 
   useEffect(() => {
     if (mcData === []) {
-      return setTips(true)
+      return setTips(true);
     }
-    return setTips(false)
-  }, [mcData])
-
+    return setTips(false);
+  }, [mcData]);
 
   useEffect(() => {
     async function fetchData() {
@@ -99,7 +98,6 @@ const CourseManagement = () => {
             }
           });
         }
-
       } else {
         setkai(true);
       }
@@ -113,7 +111,7 @@ const CourseManagement = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       setkcId(curId);
       (async () => {
-        const id = { id: curId };
+        const id = { kcId: curId };
         const res = await getKHKCSJ(id);
         const ress = getAllKHKCSJ({
           name: '',
@@ -282,21 +280,17 @@ const CourseManagement = () => {
       title: '排课',
       align: 'center',
       width: 100,
-      render:(_,record)=>{
+      render: (_, record) => {
         const Url = `/courseScheduling?courseId=${record.id}`;
-        if(record.BJZT==='待发布'||record.BJZT==='已下架'){
-          return <a>
-          <Link to={Url}>
-            排课
-          </Link>
-        </a>
+        if (record.BJZT === '待发布' || record.BJZT === '已下架') {
+          return (
+            <a>
+              <Link to={Url}>排课</Link>
+            </a>
+          );
         }
-        return(
-          <>
-            已排课
-          </>
-        )
-      }
+        return <>已排课</>;
+      },
     },
     {
       title: '状态',
@@ -396,8 +390,8 @@ const CourseManagement = () => {
           colse={kaiguan}
         />
         <PromptInformation
-          text='未查询到课程名称，请设置课程后再来'
-          link=''
+          text="未查询到课程名称，请设置课程后再来"
+          link=""
           open={tips}
           colse={clstips}
         />

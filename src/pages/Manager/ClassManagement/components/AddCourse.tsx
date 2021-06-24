@@ -86,7 +86,7 @@ const AddCourse: FC<AddCourseProps> = ({
   // 获取报名时段和上课时段
   useEffect(() => {
     if (kcId) {
-      const res = getKHKCSJ({ id: kcId });
+      const res = getKHKCSJ({ kcId });
       Promise.resolve(res).then((data: any) => {
         if (data.status === 'ok') {
           const arry = [];
@@ -162,7 +162,7 @@ const AddCourse: FC<AddCourseProps> = ({
 
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
-      let res = null;
+      const res = null;
       const options = {
         ...values,
         NJS: values.njIds?.toString(), // 年级ID
@@ -170,15 +170,17 @@ const AddCourse: FC<AddCourseProps> = ({
         XQName: xQItem, // 校区名称
         KCTP: imageUrl,
       };
-      if (formValues?.id) {
-        const params = {
-          id: formValues?.id,
-        };
+      console.log('values', values);
 
-        res = updateKHBJSJ(params, options);
-      } else {
-        res = createKHBJSJ(options);
-      }
+      // if (formValues?.id) {
+      //   const params = {
+      //     id: formValues?.id,
+      //   };
+
+      //   res = updateKHBJSJ(params, options);
+      // } else {
+      //   res = createKHBJSJ(options);
+      // }
       resolve(res);
       reject(res);
     })
@@ -338,6 +340,9 @@ const AddCourse: FC<AddCourseProps> = ({
                 value: item.userid,
               };
             }),
+            onChange: (event: any) => {
+              console.log('event', event);
+            },
           },
         },
         {

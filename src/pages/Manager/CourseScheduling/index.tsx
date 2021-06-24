@@ -44,7 +44,7 @@ const ClassManagement = () => {
 
   useEffect(() => {
     (async () => {
-      const bjID = getQueryString('classId');
+      const bjID = getQueryString('courseId');
       if (bjID) {
         const njInfo = await getKHBJSJ({ id: bjID });
         if (njInfo.status === 'ok') {

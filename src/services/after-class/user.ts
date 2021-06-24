@@ -46,7 +46,15 @@ export async function currentUser(options?: { [key: string]: any }) {
         auth?: '老师' | '家长' | '管理员';
         userId?: string;
         CorpId?: string;
-        subscriber_info?: { remark?: string };
+        subscriber_info?: {
+          remark?: string;
+          children?: {
+            njId?: string;
+            department?: string[];
+            student_userid?: string;
+            name?: string;
+          }[];
+        };
       };
       token?: string;
     };
@@ -85,7 +93,15 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
       auth?: '老师' | '家长' | '管理员';
       userId?: string;
       CorpId?: string;
-      subscriber_info?: { remark?: string };
+      subscriber_info?: {
+        remark?: string;
+        children?: {
+          njId?: string;
+          department?: string[];
+          student_userid?: string;
+          name?: string;
+        }[];
+      };
     };
     message?: string;
   }>('/user/create', {
@@ -107,10 +123,10 @@ export async function deleteUser(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/user/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }

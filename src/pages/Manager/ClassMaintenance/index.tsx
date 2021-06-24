@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React , { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import PageContainer from '@/components/PageContainer';
@@ -50,18 +50,20 @@ const ClassMaintenance = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       setkcId(curId);
       (async () => {
-        const id = { id: curId };
+        const id = { kcId: curId };
         const res = await getKHKCSJ(id);
         if (res.status === 'ok' && res.data.KCMC) {
           const newData = [...searchData];
           newData[0].data = [res.data.KCMC];
-          setDataSource(newData)
-          setmcData([{
-            label: res.data.KCMC,
-            value: curId
-          }]);
-          setClassattend([res.data.JKRQ!,res.data.KKRQ!]);
-          setSignup([res.data.BMKSSJ!,res.data.BMJSSJ!]);
+          setDataSource(newData);
+          setmcData([
+            {
+              label: res.data.KCMC,
+              value: curId,
+            },
+          ]);
+          setClassattend([res.data.JKRQ!, res.data.KKRQ!]);
+          setSignup([res.data.BMKSSJ!, res.data.BMJSSJ!]);
         }
       })();
     }
@@ -80,9 +82,7 @@ const ClassMaintenance = () => {
     list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
     setVisible(true);
     setCurrent(list);
-    if (
-      !(data.BJZT === '待发布') 
-    ) {
+    if (!(data.BJZT === '待发布')) {
       stereadonly(true);
       setnames('chakan');
     } else {
@@ -158,21 +158,17 @@ const ClassMaintenance = () => {
       title: '排课',
       align: 'center',
       width: 100,
-      render:(_,record)=>{
+      render: (_, record) => {
         const Url = `/courseScheduling?courseId=${record.id}`;
-        if(record.BJZT==='待发布'||record.BJZT==='已下架'){
-          return <a>
-          <Link to={Url}>
-            排课
-          </Link>
-        </a>
+        if (record.BJZT === '待发布' || record.BJZT === '已下架') {
+          return (
+            <a>
+              <Link to={Url}>排课</Link>
+            </a>
+          );
         }
-        return(
-          <>
-            已排课
-          </>
-        )
-      }
+        return <>已排课</>;
+      },
     },
     {
       title: '状态',
@@ -190,11 +186,7 @@ const ClassMaintenance = () => {
       render: (_, record) => {
         return (
           <>
-            <ActionBar
-              record={record}
-              handleEdit={handleEdit}
-              actionRef={actionRef}
-            />
+            <ActionBar record={record} handleEdit={handleEdit} actionRef={actionRef} />
           </>
         );
       },
@@ -218,12 +210,15 @@ const ClassMaintenance = () => {
               sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
               filter,
             };
-            return getAllKHBJSJ({
-              kcId,
-              name: '',
-              page: 1,
-              pageCount: 0,
-            }, opts);
+            return getAllKHBJSJ(
+              {
+                kcId,
+                name: '',
+                page: 1,
+                pageCount: 0,
+              },
+              opts,
+            );
           }}
           options={{
             setting: false,
@@ -233,9 +228,7 @@ const ClassMaintenance = () => {
           }}
           search={false}
           pagination={paginationConfig}
-          headerTitle={
-            <SearchComponent dataSource={dataSource} />
-          }
+          headerTitle={<SearchComponent dataSource={dataSource} />}
           toolBarRender={() => [
             <Button
               style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
