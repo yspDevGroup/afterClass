@@ -14,11 +14,12 @@ export const DateRange = (startDate: string, endDate: string) => {
     const endTime = new Date(endDate);
     // 利用setTime获取两个日期之间差值,差值毫秒换算成天1000*60*60*24
     const distanceDayLength = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60 * 24);
-    const startDay = startTime.getDate();
+    
     for (let i = 0; i <= distanceDayLength; i+=1) {
-        groupDate.push(moment(startTime.setDate(startDay + i)).format("yyyy-MM-DD"));
+        const curDate = startTime.getTime()+(1000 * 60 * 60 * 24)*i;
+        groupDate.push(moment(curDate).format("yyyy-MM-DD"));
     }
-    return groupDate
+    return groupDate;
 }
 
 // 获取某一天是周几

@@ -7,7 +7,7 @@ import { DateRange, Week } from '@/utils/Timefunction';
 import myContext from '../../myContext';
 import moment from 'moment';
 
-const defaultMsg={
+const defaultMsg = {
   type: 'picList',
   cls: 'picList',
   list: [],
