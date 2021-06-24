@@ -18,60 +18,56 @@ const ClassCalendar = () => {
   const [courseArr, setCourseArr] = useState<any>({})
 
   // 后台返回的周数据的遍历
-  const yy = {};
-  const arrys = weekSchedule.map((item: any) => {
-    const arry: any[] = [];
-    item.xx = {
-      type: 'picList',
-      cls: 'picList',
-      list: [
-        {
-          title: item.KHBJSJ.KHKCSJ.KCMC,
-          img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
-          link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
-          desc: [
-            {
-              left: [`课程时段：${item.XXSJPZ.KSSJ}-${item.XXSJPZ.JSSJ}`],
-            },
-            {
-              left: [`上课地点：${item.KHBJSJ.XQName}`],
-            },
-          ],
-        },
-      ]
-    };
-    if (item.KHBJSJ.KKRQ && item.KHBJSJ.JKRQ) {
-      const res = DateRange(moment(item.KHBJSJ.KKRQ).format('YYYY/MM/DD'), moment(item.KHBJSJ.JKRQ).format('YYYY/MM/DD'));
-      res.map((arrye: any) => {
-        const erry = Week(moment(arrye).format('YYYY/MM/DD'));
-        if (erry === item.WEEKDAY) {
-          arry.push(arrye);
-          yy[arrye] = item.xx;
+  const getCalendarData = (data: any) => {
+    const courseData = {};
+    const markDays = [];
+    for (let k = 0; k < data.length; k += 1) {
+      const item = data[k];
+      const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
+      const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
+      item.kcxx = {
+        type: 'picList',
+        cls: 'picList',
+        list: [
+          {
+            title: item.KHBJSJ.KHKCSJ.KCMC,
+            img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
+            link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
+            desc: [
+              {
+                left: [`课程时段：${item.XXSJPZ.KSSJ}-${item.XXSJPZ.JSSJ}`],
+              },
+              {
+                left: [`上课地点：${item.KHBJSJ.XQName}`],
+              },
+            ],
+          },
+        ]
+      };
+      const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
+      for (let i = 0; i < res.length; i += 1) {
+        const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
+        if (weekDay === item.WEEKDAY) {
+          courseData[res[i]] = item.kcxx;
+          markDays.push({
+            date: res[i]
+          });
         }
-      })
-    } else {
-      const res = DateRange(moment(item.KHBJSJ.KHKCSJ.KKRQ).format('YYYY/MM/DD'), moment(item.KHBJSJ.KHKCSJ.JKRQ).format('YYYY/MM/DD'));
-      res.map((arrye: any) => {
-        const erry = Week(moment(arrye).format('YYYY/MM/DD'));
-        if (erry === item.WEEKDAY) {
-          arry.push(arrye);
-          yy[arrye] = item.xx;
-        }
-      })
+      }
     }
-    setCourseArr(yy);
-    return arry;
-  })
+
+    return {
+      markDays,
+      courseData,
+    };
+  }
+
   useEffect(() => {
-    const eray: any[] = []
-    arrys.map((item: any) => {
-      item.map((items: any) => {
-        eray.push({ date: items })
-      })
-    })
-    setDates(eray);
+    const { markDays, courseData } = getCalendarData(weekSchedule);
+    setDates(markDays);
+    setCourseArr(courseData);
   }, [])
-console.log('courseArr',courseArr)
+
 
   return (
     <div className={styles.schedule}>
@@ -97,7 +93,7 @@ console.log('courseArr',courseArr)
       <div className={styles.subTitle}>
         {cDay}
       </div>
-      { course ? <ListComponent listData={course} /> : <PromptInformation />}
+      {course ? <ListComponent listData={course} /> : <PromptInformation />}
     </div>
   )
 }
