@@ -24,5 +24,5 @@ export const DateRange = (startDate: string, endDate: string) => {
 
 // 获取某一天是周几
 export const Week = (time: any) => {
-    return "星期" + "天一二三四五六".charAt(new Date(time).getDay())
+    return "0123456".charAt(new Date(time).getDay())
 }
