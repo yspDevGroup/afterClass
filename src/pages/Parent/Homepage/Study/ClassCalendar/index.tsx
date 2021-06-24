@@ -9,13 +9,18 @@ import myContext from '../../myContext';
 import moment from 'moment';
 
 
-const ClassCalendar = () => {
+type propstype={
+  setDatedata:(data: any)=>void;
+}
+
+const ClassCalendar = (props:propstype) => {
+  const {setDatedata}=props
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>();
   const { weekSchedule } = useContext(myContext);
   const [dates, setDates] = useState<any[]>([]);
-  const [courseArr, setCourseArr] = useState<any>({})
+  const [courseArr, setCourseArr] = useState<any>({});
 
   // 后台返回的周数据的遍历
   const getCalendarData = (data: any) => {
@@ -56,6 +61,7 @@ const ClassCalendar = () => {
       }
     }
 
+    setDatedata(arry)
     return {
       markDays,
       courseData,
