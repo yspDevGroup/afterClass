@@ -28,7 +28,7 @@ const CourseTab = () => {
                           id: record.id,
                           title: record.KCMC,
                           img: record.KCTP,
-                          link: `/parent/home/courseDetails?id=${record.id}&type=true`,
+                          link: `/parent/home/courseDetails?courseid=${record.id}`,
                           desc: [
                             {
                               left: [`课程时段：${record.KKRQ}-${record.JKRQ}`],
@@ -58,7 +58,7 @@ const CourseTab = () => {
                     id: item.id,
                     title: item.KHKCSJ.KCMC,
                     img: item.KCTP ? item.KCTP : item.KHKCSJ.KCTP,
-                    link: `/parent/home/courseDetails?id=${item.KHKCSJ.id}&type=false`,
+                    link: `/parent/home/courseDetails?classid=${item.id}&courseid=${item.KHKCSJ.id}`,
                     desc: [
                       {
                         left: [`课程时段：${item.KKRQ ? item.KKRQ : item.KHKCSJ.KKRQ}-${item.JKRQ ? item.JKRQ : item.KHKCSJ.JKRQ}`],

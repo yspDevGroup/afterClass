@@ -57,7 +57,7 @@ const EnrollClassTime = () => {
             titleRight: {
               text: titleRightText,
             },
-            link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=false`,
+            link: `/parent/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}`,
             desc: [
               {
                 left: [`${(item.XXSJPZ.KSSJ).substring(0, 5)}-${(item.XXSJPZ.JSSJ).substring(0, 5)}`, `${item.FJSJ.FJMC}`],

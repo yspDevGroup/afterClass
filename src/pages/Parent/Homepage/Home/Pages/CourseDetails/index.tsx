@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable array-callback-return */
 import { Button, message, Radio, Tooltip } from 'antd';
@@ -16,12 +17,23 @@ const CourseDetails: React.FC = () => {
   const [KcData, setKcData] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>();
   const [KcDetail, setKcDetail] = useState<KcDetailType>();
-  const valueKey = window.location.href.split('type=')[1];
-  const ids = window.location.href.split('id=')[1].split('&')[0];
-  
+  const hrefs = window.location.href;
+  let courseid = '';
+  let classid = '';
+  let valueKey = '';
+  if(hrefs.indexOf('classid') === -1){
+    courseid = window.location.href.split('courseid=')[1].split('&')[0];
+    valueKey = 'true';
+  }else{
+    courseid = window.location.href.split('courseid=')[1].split('&')[0];
+    classid = window.location.href.split('classid=')[1].split('&')[0];
+    valueKey = 'false';
+  }
+
   useEffect(() => {
     (async () => {
-      const result = await getDetailsKHKCSJ(ids);
+      const result = await getDetailsKHKCSJ(courseid);
+      console.log(result)
       if (result.status === 'ok') {
         setKcDetail(result.data)
         setFY(result.data.KHBJSJs[0].FY)
@@ -31,11 +43,11 @@ const CourseDetails: React.FC = () => {
       }
     })();
     
-    
+   
     const myDate = new Date().toLocaleDateString().slice(5,9);
     setCurrentDate(myDate);
 
-  }, [ids]);
+  }, [courseid]);
   const onclick = () => {
     setstate(true);
   }
@@ -86,7 +98,6 @@ const CourseDetails: React.FC = () => {
       <ul className={styles.classInformation}>
         {
           KcDetail?.KHBJSJs?.map((value: {BJMC: string,ZJS: string,FJS: string,KCSC: string,KHPKSJs: any})=>{
-            // console.log(value)
             return<li>{value.BJMC}：总课时：{value.KCSC},
              上课时间：{
                 value.KHPKSJs.map((values: {FJSJ: any,XXSJPZ: any,WEEKDAY: number})=>{
@@ -155,11 +166,24 @@ const CourseDetails: React.FC = () => {
      <div className={styles.KCXX}>
         <p className={styles.title}>{KcData?.title}</p>
         <ul>
-          <li>上课时段：2021.09.12—2021.11.20</li>
-          <li>上课地点：{KcData?.desc[0].left[2]}</li>
-          <li>总课时：{KcData?.desc[1].left[0]}</li>
-          <li>班级：A班</li>
-          <li>学生：刘大大</li>
+        {
+          KcDetail?.KHBJSJs?.map((value: {id: string,KSS: string,KHPKSJs: any,KKRQ: string,JKRQ: string,BJMC: string})=>{
+            // console.log(value)
+            if(value.id === classid){
+              return<> <li>上课时段：{value.KKRQ}~{value.JKRQ}</li>
+              <li> 上课地点：{
+             value.KHPKSJs.map((values: {FJSJ: any})=>{
+               return<span>{values.FJSJ.FJMC},</span>
+                })
+              }</li>
+              <li>总课时：{value.KSS}</li>
+              <li>班级：{value.BJMC}</li>
+              <li>学生：刘大大</li>
+           </>
+            }
+              return ''
+          })
+        } 
         </ul>
     </div>
     <div className={styles.Timetable}>
@@ -171,7 +195,6 @@ const CourseDetails: React.FC = () => {
               <p>{value.JC}</p>
               <p>{value.data}</p>
             </div>
-          
           })
         }
       </div>
