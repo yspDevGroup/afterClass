@@ -5,36 +5,38 @@ import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icon
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
 import {culturedata,artdata,techdata,sportsdata,learndata} from '../../../listData'
+import { Statistic } from 'antd';
 import { Link } from 'umi';
 
+const { Countdown } = Statistic;
 const OrderDetails: React.FC = () => {
   const [state, setstate] = useState(false);
   const valueKey = window.location.href.split('type=')[1];
   const id = window.location.href.split('id=')[1].split('&')[0];
   const [KcData, setKcData] = useState<any>();
-  const [countdown, setCountdown] = useState('24:00:00');
+  // const [countdown, setCountdown] = useState('24:00:00');
 
 
   useEffect(() => {
-    let h=23;
-    let m=59;
-    let s=59;
-    setInterval(() => {
-      --s;
-      if(s<0){
-          --m;
-          s=59;
-      }
-      if(m<0){
-          --h;
-          m=59
-      }
-      if(h<0){
-          s=0;
-          m=0;
-      }
-      setCountdown(`${h}:${m}:${s}`);
-  }, 1000);
+  //   let h=23;
+  //   let m=59;
+  //   let s=59;
+  //   setInterval(() => {
+  //     --s;
+  //     if(s<0){
+  //         --m;
+  //         s=59;
+  //     }
+  //     if(m<0){
+  //         --h;
+  //         m=59
+  //     }
+  //     if(h<0){
+  //         s=0;
+  //         m=0;
+  //     }
+  //     setCountdown(`${h}:${m}:${s}`);
+  // }, 1000);
     culturedata.list.map((value)=>{
       if(value.id === id){
         setKcData(value)
@@ -71,6 +73,11 @@ const OrderDetails: React.FC = () => {
   const onchanges = (e: { stopPropagation: () => void; }) => {
     e.stopPropagation()
   }
+  const deadline = Date.now() + 1000 * 60 * 60 * 24 * 1 + 1000 ;
+  const onFinish=()=> {
+    // eslint-disable-next-line no-console
+    console.log('倒计时结束!');
+  }
   return <div className={styles.OrderDetails}>
     {
       valueKey === 'true' ? 
@@ -78,7 +85,7 @@ const OrderDetails: React.FC = () => {
       :
       <div className={styles.hender}>
         <ExclamationCircleOutlined />待付款
-        <p>请在{countdown}内支付，逾期订单将自动取消</p>
+        <p>请在<Countdown className={styles.countdown}  value={deadline} onFinish={onFinish} />内支付，逾期订单将自动取消</p>
         </div>
     }
     

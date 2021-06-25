@@ -29,7 +29,7 @@ const EnrollClassTime = () => {
             titleRight: {
               text: '待上课',
             },
-            link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
+            link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=false`,
             desc: [
               {
                 left: [`${(item.XXSJPZ.KSSJ).substring(0, 5)}-${(item.XXSJPZ.JSSJ).substring(0, 5)}`, `${item.FJSJ.FJMC}`],

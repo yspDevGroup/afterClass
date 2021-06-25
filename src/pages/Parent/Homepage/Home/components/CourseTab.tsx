@@ -58,7 +58,7 @@ const CourseTab = () => {
                     id: item.id,
                     title: item.KHKCSJ.KCMC,
                     img: item.KCTP ? item.KCTP : item.KHKCSJ.KCTP,
-                    link: `/parent/home/courseDetails?id=${item.KHKCSJ.id}&type=true`,
+                    link: `/parent/home/courseDetails?id=${item.KHKCSJ.id}&type=false`,
                     desc: [
                       {
                         left: [`课程时段：${item.KKRQ ? item.KKRQ : item.KHKCSJ.KKRQ}-${item.JKRQ ? item.JKRQ : item.KHKCSJ.JKRQ}`],
