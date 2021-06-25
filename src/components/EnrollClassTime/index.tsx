@@ -13,7 +13,7 @@ import type { ListData } from '../ListComponent/data';
 
 const EnrollClassTime = () => {
   // 获取首页数据
-  const { courseStatus, weekSchedule } = useContext(myContext);
+  const { courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj } = useContext(myContext);
   const [datasourse, setDatasourse] = useState<ListData>();// 今日课程中的数据
   const getTodayData = (data: any) => {
     const day = new Date();// 获取现在的时间  eg:day Thu Jun 24 2021 18:54:38 GMT+0800 (中国标准时间)
@@ -59,27 +59,27 @@ const EnrollClassTime = () => {
     case 'enroll':
       return (<div>
         <div className={styles.enrollText}>课后服务课程报名开始了！</div>
-        <div className={styles.enrollDate}>选课时间：</div>
+        <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`}</div>
       </div>);
       break;
     case 'education':
       return (<div>
         <div> <ListComp listData={datasourse} /> </div>
         <div className={styles.enrollText}>课后服务课程已开课！</div>
-        <div className={styles.enrollDate}>开课时间： </div>
+        <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div>
       </div>);
       break;
     case 'enrolling':
       return (<div>
         <div> <ListComp listData={datasourse} /></div>
         <div className={styles.enrollText}>课后服务课程报名开始了！</div>
-        <div className={styles.enrollDate}>选课时间： </div>
+        <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`} </div>
       </div>);
       break;
     case 'enrolled':
       return (<div>
         <div className={styles.enrollText}>课后服务课程报名已结束！</div>
-        <div className={styles.enrollDate}>开课时间： </div>
+        <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div>
       </div>);
       break;
     default:
