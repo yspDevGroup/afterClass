@@ -31,31 +31,7 @@ const CourseDetails: React.FC = () => {
       }
     })();
     
-    culturedata.list.map((value)=>{
-      if(value.id === ids){
-        setKcData(value)
-      }
-    })
-    artdata.list.map((value)=>{
-      if(value.id === ids){
-        setKcData(value)
-      }
-    })
-    techdata.list.map((value)=>{
-      if(value.id === ids){
-        setKcData(value)
-      }
-    })
-    sportsdata.list.map((value)=>{
-      if(value.id === ids){
-        setKcData(value)
-      }
-    })
-    learndata.list.map((value)=>{
-      if(value.id === ids){
-        setKcData(value)
-      }
-    })
+    
     const myDate = new Date().toLocaleDateString().slice(5,9);
     setCurrentDate(myDate);
 
