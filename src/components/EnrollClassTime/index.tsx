@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-22 11:13:07
- * @LastEditTime: 2021-06-25 08:33:18
+ * @LastEditTime: 2021-06-25 14:35:09
  * @LastEditors: txx
  */
 import { useContext, useEffect, useState } from 'react';
@@ -24,16 +24,44 @@ const EnrollClassTime = () => {
         const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;// 开课日期
         const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;// 结课日期
         if (new Date(startDate) <= day && day <= new Date(endDate)) {// 开课时间与现在时间与结课时间做判断
+          const startTime1 = (item.XXSJPZ.KSSJ).substring(0, 2)
+          const startTime2 = (item.XXSJPZ.KSSJ).substring(3, 5)
+          const endTime1 = (item.XXSJPZ.JSSJ).substring(0, 2)
+          const endTime2 = (item.XXSJPZ.JSSJ).substring(3, 5)
+          let titleRightText = ''
+          if ((startTime1 - day.getHours() > 0) || startTime1 === day.getHours() && startTime2 > day.getMinutes()) {
+            titleRightText = '待上课'
+          }
+          if (((startTime1 - day.getHours() <= 0) && (startTime2 - day.getMinutes() <= 0)) && ((day.getHours() <= endTime1) && (day.getMinutes() <= endTime2))) {
+            titleRightText = '上课中'
+          }
+          if ((day.getHours() - endTime1 > 0) || (day.getHours() === endTime1) && (day.getMinutes() > endTime2)) {
+            titleRightText = '已下课'
+          }
+          let nowMin
+          let classMin
+          let hour
+          let min
+          let diff = 0
+          let desRight = ''
+          if (titleRightText === '待上课') {
+            nowMin = Number(day.getHours() * 60) + Number(day.getMinutes())
+            classMin = Number(startTime1 * 60) + Number(startTime2)
+            diff = Number(classMin - nowMin)
+            hour = Math.floor(diff / 60)
+            min = diff % 60
+            desRight = ` ${hour}时${min}分后开课`
+          }
           curCourse.push({
             title: item.KHBJSJ.KHKCSJ.KCMC,
             titleRight: {
-              text: '待上课',
+              text: titleRightText,
             },
-            link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=false`,
+            link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
             desc: [
               {
                 left: [`${(item.XXSJPZ.KSSJ).substring(0, 5)}-${(item.XXSJPZ.JSSJ).substring(0, 5)}`, `${item.FJSJ.FJMC}`],
-                right: '2时43分后开课'
+                right: desRight,
               },
             ],
           })
