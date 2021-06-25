@@ -1,15 +1,15 @@
-import React from 'react';
-import { Link, useModel } from 'umi';
+import React, { useContext } from 'react';
+import { Link } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
 import styles from './index.less';
 import imgPop from '@/assets/mobileBg.png';
 import { iconTextData } from './mock';
 import IconFont from '@/components/CustomIcon';
+import myContext from '../myContext';
 
 const Mine = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
+  const { currentUser, courseStatus } = useContext(myContext);
 
   return (
     <div className={styles.minePage}>
@@ -34,32 +34,32 @@ const Mine = () => {
           totil={true}
         />
       </div>
-      <Statistical />
+      {courseStatus === 'empty' ? '' : <Statistical />}
       <div className={styles.linkWrapper}>
         <ul>
           <li>
-            <IconFont type='icon-lishikecheng' style={{'fontSize':'18px'}}  />
+            <IconFont type='icon-lishikecheng' style={{ 'fontSize': '18px' }} />
             <Link to='/'>
               历史课程
               <IconFont type='icon-xiayiye' />
             </Link>
           </li>
           <li>
-            <IconFont type='icon-woyaofankui' style={{'fontSize':'18px'}} />
+            <IconFont type='icon-woyaofankui' style={{ 'fontSize': '18px' }} />
             <Link to='/'>
               我要反馈
               <IconFont type='icon-xiayiye' />
             </Link>
           </li>
           <li>
-            <IconFont type='icon-fuwugonggao' style={{'fontSize':'18px'}}  />
+            <IconFont type='icon-fuwugonggao' style={{ 'fontSize': '18px' }} />
             <Link to='/'>
               服务公告
               <IconFont type='icon-xiayiye' />
             </Link>
           </li>
           <li>
-            <IconFont type='icon-guanyu' style={{'fontSize':'18px'}}  />
+            <IconFont type='icon-guanyu' style={{ 'fontSize': '18px' }} />
             <Link to='/'>
               关于
               <IconFont type='icon-xiayiye' />
