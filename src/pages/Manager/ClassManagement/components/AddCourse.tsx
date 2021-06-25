@@ -12,14 +12,7 @@ import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
 import { getDepUserList, getSchDepList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
-
-const WWOpenDataCom = ({ type, openid }: { type: string; openid: string }) => {
-  const ref = useRef(null);
-  useLayoutEffect(() => {
-    WWOpenData.bind(ref.current);
-  });
-  return <ww-open-data ref={ref} type={type} openid={openid} style={{ color: '#333' }} />;
-};
+import WWOpenDataCom from './WWOpenDataCom';
 
 type AddCourseProps = {
   visible: boolean;
@@ -162,7 +155,7 @@ const AddCourse: FC<AddCourseProps> = ({
 
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
-      const res = null;
+      let res = null;
       const options = {
         ...values,
         NJS: values.njIds?.toString(), // 年级ID
@@ -170,17 +163,16 @@ const AddCourse: FC<AddCourseProps> = ({
         XQName: xQItem, // 校区名称
         KCTP: imageUrl,
       };
-      console.log('values', values);
 
-      // if (formValues?.id) {
-      //   const params = {
-      //     id: formValues?.id,
-      //   };
+      if (formValues?.id) {
+        const params = {
+          id: formValues?.id,
+        };
 
-      //   res = updateKHBJSJ(params, options);
-      // } else {
-      //   res = createKHBJSJ(options);
-      // }
+        res = updateKHBJSJ(params, options);
+      } else {
+        res = createKHBJSJ(options);
+      }
       resolve(res);
       reject(res);
     })
@@ -340,10 +332,6 @@ const AddCourse: FC<AddCourseProps> = ({
                 value: item.userid,
               };
             }),
-            onChange: (event: any, label: any) => {
-              console.log('ZJSevent', event);
-              console.log('ZJSlabel', label);
-            },
           },
         },
         {
@@ -361,10 +349,6 @@ const AddCourse: FC<AddCourseProps> = ({
                 value: item.userid,
               };
             }),
-            onChange: (event: any, label: any) => {
-              console.log('FJSevent', event);
-              console.log('FJSlabel', label);
-            },
           },
         },
       ],

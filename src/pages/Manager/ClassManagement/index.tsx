@@ -24,6 +24,8 @@ import PromptInformation from '@/components/PromptInformation';
 import { getAllKHKCSJ, getKHKCSJ } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { Link } from 'umi';
+import WWOpenDataCom from './components/WWOpenDataCom';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -52,6 +54,15 @@ const CourseManagement = () => {
   };
   // 弹框名称设定
   const [names, setnames] = useState<string>('bianji');
+
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      await initWXAgentConfig(['checkJsApi']);
+    })();
+  }, []);
 
   useEffect(() => {
     if (mcData === []) {
@@ -242,6 +253,13 @@ const CourseManagement = () => {
       key: 'ZJSName',
       align: 'center',
       width: '10%',
+      render: (_, record) => {
+        return (
+          <div>
+            <WWOpenDataCom type="userName" openid={record.userid} />
+          </div>
+        );
+      },
     },
     {
       title: '所属校区',
@@ -257,19 +275,11 @@ const CourseManagement = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        const cc: any[] = [];
-        record.ZJSName?.split(',')?.map((item: any) => {
-          return cc.push(item.NJMC);
-        });
         return (
           <div className="ui-table-col-elp">
-            <Tooltip title={cc} arrowPointAtCenter>
-              {cc?.map((item) => {
-                return (
-                  <>
-                    <Tag>{item}</Tag>
-                  </>
-                );
+            <Tooltip title={record.NJSName} arrowPointAtCenter>
+              {record.NJSName?.split(',')?.map((item: any) => {
+                return <Tag>{item}</Tag>;
               })}
             </Tooltip>
           </div>
@@ -334,16 +344,19 @@ const CourseManagement = () => {
               sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
               filter,
             };
-            const obj = {
-              xn,
-              xq,
-              kcId,
-              page: 1,
-              pageCount: 0,
-              name,
-            };
-            const res = await getAllKHBJSJ(obj, opts);
-            return res;
+            if (xn && xq) {
+              const obj = {
+                xn,
+                xq,
+                kcId,
+                page: 1,
+                pageCount: 0,
+                name,
+              };
+              const res = await getAllKHBJSJ(obj, opts);
+              return res;
+            }
+            return [];
           }}
           options={{
             setting: false,

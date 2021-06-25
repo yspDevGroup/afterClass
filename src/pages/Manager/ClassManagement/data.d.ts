@@ -1,7 +1,6 @@
-
 /**
- * 
- * 
+ *
+ *
  课程管理维护字段
   id  UUID;
   BJMC 班级名称；
@@ -14,20 +13,23 @@
  */
 
 export type CourseItem = {
-    id?: string;
-    BJMC?: string;
-    BJZT?: string;
-    FY?: number;
-    ZJS?: string;
-    FJS?: string;
-    NJSJs?:
-    [{
-        id: string,
-        NJ: number,
-        NJMC: string,
-    }]
-    BJMS?: string;
-    ZJSName?: string;
+  id?: string;
+  BJMC?: string;
+  BJZT?: string;
+  FY?: number;
+  ZJS?: string;
+  FJS?: string;
+  NJSJs?: [
+    {
+      id: string;
+      NJ: number;
+      NJMC: string;
+    },
+  ];
+  BJMS?: string;
+  ZJSName?: string;
+  NJSName?: string;
+  userid?: string;
 };
 
 /**
@@ -37,25 +39,23 @@ export type CourseItem = {
  * @interface TableListParams
  */
 export type TableListParams = {
-    pageSize?: number;
-    current?: number;
-    search?: string;
-    filter?: Record<string, any[]>;
-    sorter?: Record<string, any>;
+  pageSize?: number;
+  current?: number;
+  search?: string;
+  filter?: Record<string, any[]>;
+  sorter?: Record<string, any>;
 } & Record<string, any>;
 
-
-
 /**
- * 
+ *
 课程类型维护 字段
  KCMS 描述
  KCLX 类型
  */
 
 export type DataSourceType = {
-    id?: string;
-    KCLX?: string;
-    KCMS?: string;
-    title?: string;
+  id?: string;
+  KCLX?: string;
+  KCMS?: string;
+  title?: string;
 };
