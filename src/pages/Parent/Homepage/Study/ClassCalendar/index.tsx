@@ -37,30 +37,30 @@ const ClassCalendar = (props: propstype) => {
       const courseDays = [];
       const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
       const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
-      item.kcxx = {
-        type: 'picList',
-        cls: 'picList',
-        list: [
-          {
-            title: item.KHBJSJ.KHKCSJ.KCMC,
-            img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
-            link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
-            desc: [
-              {
-                left: [`课程时段：${(item.XXSJPZ.KSSJ).substring(0,5)}-${(item.XXSJPZ.JSSJ).substring(0,5)}`],
-              },
-              {
-                left: [`上课地点：${item.FJSJ.FJMC}`],
-              },
-            ],
-          },
-        ]
-      };
+      const kcxxInfo = [
+        {
+          title: item.KHBJSJ.KHKCSJ.KCMC,
+          img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
+          link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
+          desc: [
+            {
+              left: [`课程时段：${(item.XXSJPZ.KSSJ).substring(0, 5)}-${(item.XXSJPZ.JSSJ).substring(0, 5)}`],
+            },
+            {
+              left: [`上课地点：${item.FJSJ.FJMC}`],
+            },
+          ],
+        },
+      ];
       const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
       for (let i = 0; i < res.length; i += 1) {
         const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
         if (weekDay === item.WEEKDAY) {
-          courseData[res[i]] = item.kcxx;
+          if (courseData[res[i]]) {
+            courseData[res[i]] = courseData[res[i]].concat(kcxxInfo);
+          } else {
+            courseData[res[i]] = kcxxInfo;
+          }
           markDays.push({
             date: res[i]
           });
@@ -93,7 +93,12 @@ const ClassCalendar = (props: propstype) => {
     const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
     setDatedata(learnData);
     setDates(markDays);
-    setCourse(courseData[day]);
+    setCourse({
+      type: 'picList',
+      cls: 'picList',
+      list: courseData[day] || [],
+      noDataText: '当天无课',
+    });
     setCourseArr(courseData);
   }, [])
 
@@ -103,7 +108,12 @@ const ClassCalendar = (props: propstype) => {
       <span className={styles.today} onClick={() => {
         setDay(dayjs().format('YYYY-MM-DD'));
         setCDay(dayjs().format('M月D日'))
-        setCourse(courseArr[dayjs().format('YYYY-MM-DD')] || defaultMsg);
+        setCourse({
+          type: 'picList',
+          cls: 'picList',
+          list: courseArr[dayjs().format('YYYY-MM-DD')] || [],
+          noDataText: '当天无课',
+        });
       }}>
         今
       </span>
@@ -113,7 +123,12 @@ const ClassCalendar = (props: propstype) => {
         onDateClick={(date: { format: (arg: string) => any; }) => {
           setDay(date.format('YYYY-MM-DD'));
           setCDay(date.format('M月D日'));
-          const curCourse = courseArr[date.format('YYYY-MM-DD')] || defaultMsg;
+          const curCourse ={
+              type: 'picList',
+              cls: 'picList',
+              list: courseArr[date.format('YYYY-MM-DD')] || [],
+              noDataText: '当天无课',
+            };;
           setCourse(curCourse);
         }}
         markType="dot"
