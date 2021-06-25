@@ -340,8 +340,9 @@ const AddCourse: FC<AddCourseProps> = ({
                 value: item.userid,
               };
             }),
-            onChange: (event: any) => {
-              console.log('event', event);
+            onChange: (event: any, label: any) => {
+              console.log('ZJSevent', event);
+              console.log('ZJSlabel', label);
             },
           },
         },
@@ -360,6 +361,10 @@ const AddCourse: FC<AddCourseProps> = ({
                 value: item.userid,
               };
             }),
+            onChange: (event: any, label: any) => {
+              console.log('FJSevent', event);
+              console.log('FJSlabel', label);
+            },
           },
         },
       ],
