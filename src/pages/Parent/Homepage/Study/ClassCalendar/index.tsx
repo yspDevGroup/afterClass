@@ -15,7 +15,7 @@ const defaultMsg = {
   type: 'picList',
   cls: 'picList',
   list: [],
-  noDataText: '当日无课',
+  noDataText: '当天无课',
 };
 
 const ClassCalendar = (props: propstype) => {
