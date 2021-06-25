@@ -8,13 +8,14 @@ import styles from './index.less';
 import { TimetableList } from './mock';
 import type { KcDetailType } from './data'
 import { getDetailsKHKCSJ } from '@/services/after-class/khkcsj';
+import {currentUser} from '@/services/after-class/user'
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState();
   const [FY, setFY] = useState();
   const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
-  const [KcData, setKcData] = useState<any>();
+  const [Student, setStudent] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>();
   const [KcDetail, setKcDetail] = useState<KcDetailType>();
   const hrefs = window.location.href;
@@ -22,18 +23,24 @@ const CourseDetails: React.FC = () => {
   let classid = '';
   let valueKey = '';
   if(hrefs.indexOf('classid') === -1){
-    courseid = window.location.href.split('courseid=')[1].split('&')[0];
+    courseid = hrefs.split('courseid=')[1].split('&')[0];
     valueKey = 'true';
   }else{
-    courseid = window.location.href.split('courseid=')[1].split('&')[0];
-    classid = window.location.href.split('classid=')[1].split('&')[0];
+    courseid = hrefs.split('courseid=')[1].split('&')[0];
+    classid = hrefs.split('classid=')[1].split('&')[0];
     valueKey = 'false';
   }
 
   useEffect(() => {
     (async () => {
       const result = await getDetailsKHKCSJ(courseid);
-      console.log(result)
+      const resultUser = await currentUser();
+
+      if (resultUser.status === 'ok') {
+        setStudent(resultUser.data?.info.username)
+      } else {
+        message.error(result.message);
+      }
       if (result.status === 'ok') {
         setKcDetail(result.data)
         setFY(result.data.KHBJSJs[0].FY)
@@ -42,8 +49,6 @@ const CourseDetails: React.FC = () => {
         message.error(result.message);
       }
     })();
-    
-   
     const myDate = new Date().toLocaleDateString().slice(5,9);
     setCurrentDate(myDate);
 
@@ -164,7 +169,7 @@ const CourseDetails: React.FC = () => {
   </div>:
   <div className={styles.CourseDetails2}>
      <div className={styles.KCXX}>
-        <p className={styles.title}>{KcData?.title}</p>
+        <p className={styles.title}>{KcDetail?.KCMC}</p>
         <ul>
         {
           KcDetail?.KHBJSJs?.map((value: {id: string,KSS: string,KHPKSJs: any,KKRQ: string,JKRQ: string,BJMC: string})=>{
@@ -178,7 +183,7 @@ const CourseDetails: React.FC = () => {
               }</li>
               <li>总课时：{value.KSS}</li>
               <li>班级：{value.BJMC}</li>
-              <li>学生：刘大大</li>
+              <li>学生：{Student}</li>
            </>
             }
               return ''
