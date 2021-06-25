@@ -195,9 +195,9 @@ const CourseManagement = () => {
   const handleEdit = (data: any) => {
     const list = {
       ...data,
-      NJS: data.NJS?.split(','),
+      NJS: data.NJSName ? data.NJSName?.split(',') : [],
       ZJS: data.ZJS || undefined,
-      FJS: data.FJS?.split(',') || undefined,
+      FJS: data.FJS ? data.FJS?.split(',') : [],
     };
     if (!data.KCTP) {
       list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
