@@ -32,7 +32,7 @@ const Study = () => {
         courseData.push({
           id: record.id,
           title: record.KHKCSJ.KCMC,
-          link: `/parent/home/courseDetails?classid=${record.id}&type=false`,
+          link: `/parent/home/courseDetails?classid=${record.id}&courseid=${record.KHKCSJ.id}`,
           desc: [
             {
               left: [`${((datedata[record.id].weekDay).split(',')).map((item: any) => {
