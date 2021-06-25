@@ -131,7 +131,7 @@ const AddCourse: FC<AddCourseProps> = ({
       currentXQ?.map((item: any) => {
         XQ.push({
           label: item.name,
-          value: item.id,
+          value: item.id.toString(),
         });
         NJ[item.name] = item.njList.map((njItem: any) => ({
           label: njItem.name,
@@ -158,8 +158,9 @@ const AddCourse: FC<AddCourseProps> = ({
       let res = null;
       const options = {
         ...values,
-        NJS: values.njIds?.toString(), // 年级ID
+        NJS: values.NJS?.toString(), // 年级ID
         NJSName: nJLabelItem?.toString(), // 年级名称
+        FJS: values.FJS?.toString(), // 副班
         XQName: xQItem, // 校区名称
         KCTP: imageUrl,
       };
@@ -291,8 +292,8 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'select',
-      name: 'njIds',
-      key: 'njIds',
+      name: 'NJS',
+      key: 'NJS',
       label: '适用年级:',
       rules: [{ required: true, message: '请填写适用年级' }],
       fieldProps: {

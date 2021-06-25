@@ -193,10 +193,16 @@ const CourseManagement = () => {
   };
 
   const handleEdit = (data: any) => {
-    const njIds: any[] = [];
-    data.NJSJs?.map((item: any) => njIds.push(item.id));
-    const list = { ...data, njIds };
-    list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
+    const list = {
+      ...data,
+      NJS: data.NJS?.split(','),
+      ZJS: data.ZJS || undefined,
+      FJS: data.FJS?.split(',') || undefined,
+    };
+    if (!data.KCTP) {
+      list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
+    }
+
     setVisible(true);
     setCurrent(list);
     if (
