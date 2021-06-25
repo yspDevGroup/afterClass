@@ -9,6 +9,7 @@ import { TimetableList } from './mock';
 import type { KcDetailType } from './data'
 import { getDetailsKHKCSJ } from '@/services/after-class/khkcsj';
 import {currentUser} from '@/services/after-class/user'
+import { getQueryString } from '@/utils/utils';
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState();
@@ -19,15 +20,15 @@ const CourseDetails: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<string>();
   const [KcDetail, setKcDetail] = useState<KcDetailType>();
   const hrefs = window.location.href;
-  let courseid = '';
-  let classid = '';
+  let courseid: any ;
+  let classid: any ;
   let valueKey = '';
   if(hrefs.indexOf('classid') === -1){
-    courseid = hrefs.split('courseid=')[1].split('&')[0];
+    courseid = getQueryString('courseid');
     valueKey = 'true';
   }else{
-    courseid = hrefs.split('courseid=')[1].split('&')[0];
-    classid = hrefs.split('classid=')[1].split('&')[0];
+    courseid = getQueryString('courseid');
+    classid = getQueryString('classid');
     valueKey = 'false';
   }
 
@@ -160,7 +161,7 @@ const CourseDetails: React.FC = () => {
             {
               XY === false || BJ === undefined ?
               <Button className={styles.submit} onClick={submit} >确定并付款</Button>:
-              <Link to={`/parent/mine/orderDetails?id=${ids}&type=false`}><Button className={styles.submit} onClick={submit} >确定并付款</Button></Link>
+              <Link to={`/parent/mine/orderDetails?id=${courseid}&type=false`}><Button className={styles.submit} onClick={submit} >确定并付款</Button></Link>
             }
           </div>
         </div> : ''
