@@ -4,7 +4,6 @@
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
-import {culturedata,artdata,techdata,sportsdata,learndata} from '../../../listData'
 import { Statistic } from 'antd';
 import { Link } from 'umi';
 
@@ -14,55 +13,8 @@ const OrderDetails: React.FC = () => {
   const valueKey = window.location.href.split('type=')[1];
   const id = window.location.href.split('id=')[1].split('&')[0];
   const [KcData, setKcData] = useState<any>();
-  // const [countdown, setCountdown] = useState('24:00:00');
-
 
   useEffect(() => {
-  //   let h=23;
-  //   let m=59;
-  //   let s=59;
-  //   setInterval(() => {
-  //     --s;
-  //     if(s<0){
-  //         --m;
-  //         s=59;
-  //     }
-  //     if(m<0){
-  //         --h;
-  //         m=59
-  //     }
-  //     if(h<0){
-  //         s=0;
-  //         m=0;
-  //     }
-  //     setCountdown(`${h}:${m}:${s}`);
-  // }, 1000);
-    culturedata.list.map((value)=>{
-      if(value.id === id){
-        setKcData(value)
-      }
-    })
-    artdata.list.map((value)=>{
-      if(value.id === id){
-        setKcData(value)
-      }
-    })
-    techdata.list.map((value)=>{
-      if(value.id === id){
-        setKcData(value)
-      }
-    })
-    sportsdata.list.map((value)=>{
-      if(value.id === id){
-        setKcData(value)
-      }
-    })
-    learndata.list.map((value)=>{
-      if(value.id === id){
-        setKcData(value)
-      }
-    })
-   
   }, [id]);
   const onclick = ()=>{ 
     setstate(true)
