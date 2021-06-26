@@ -7,9 +7,10 @@ import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import IconFont from '@/components/CustomIcon';
 import EnrollClassTime from '@/components/EnrollClassTime';
 import myContext from '@/utils/MyContext';
+import TeachCourses from './components/TeachCourses';
 
 const Home = () => {
-  const { courseStatus,currentUserInfo, rjkc } = useContext(myContext);
+  const { courseStatus,currentUserInfo} = useContext(myContext);
   const userRef = useRef(null);
 
   useEffect(() => {
@@ -58,32 +59,7 @@ const Home = () => {
           <EnrollClassTime teacher={true} />
         </div>
         <div className={styles.teachCourses}>
-          {/* <ListComp listData={courseData} /> */}
-          {rjkc?.map((item: any) => {
-            // eslint-disable-next-line no-param-reassign
-            item.yy = {
-              type: 'picList',
-              cls: 'picList',
-              list: [
-                {
-                  id: item.id,
-                  title: item.KHKCSJ.KCMC,
-                  img: item.KCTP ? item.KCTP : item.KHKCSJ.KCTP,
-                  link: `/parent/home/courseDetails?id=${item.KHKCSJ.id}&type=false`,
-                  desc: [
-                    {
-                      left: [`课程时段：${item.KKRQ ? item.KKRQ : item.KHKCSJ.KKRQ}-${item.JKRQ ? item.JKRQ : item.KHKCSJ.JKRQ}`],
-                    },
-                    {
-                      left: [`共${item.KSS}课时`],
-                    },
-                  ],
-                  introduction: item.KHKCSJ.KCMS,
-                },
-              ]
-            }
-            return <ListComp listData={item.yy} />
-          })}
+         <TeachCourses/>
         </div>
         <div className={styles.announceArea}>
           <ListComp listData={annoceData} cls={styles.announceList} />

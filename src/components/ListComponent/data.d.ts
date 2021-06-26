@@ -16,7 +16,7 @@ export type ListItem = {
   };  // 标题右边显示信息
   desc?: {
     left: string[];
-    right?: string;
+    right?: string | ReactDOM;
   }[];  // 摘要信息（左右分布）
   img?: string; // 缩略图地址
   introduction?: string; // 课程详情

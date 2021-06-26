@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-22 11:13:07
- * @LastEditTime: 2021-06-25 19:16:02
+ * @LastEditTime: 2021-06-26 18:52:54
  * @LastEditors: txx
  */
 import { useContext, useEffect, useState } from 'react';
@@ -10,6 +10,7 @@ import styles from "./index.less";
 import ListComp from '../ListComponent';
 import type { ListData } from '../ListComponent/data';
 import myContext from '@/utils/MyContext';
+import TimeRight from './TimeRight';
 
 const EnrollClassTime = (props: { teacher?: boolean }) => {
   const { teacher = false } = props;
@@ -39,19 +40,11 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
           if ((day.getHours() - endTime1 > 0) || ((day.getHours() === endTime1) && (day.getMinutes() > endTime2))) {
             titleRightText = '已下课';
           }
-          let nowMin;// 现在的总分钟
-          let classMin;// 上课的总分钟
-          let diff; // 剩余总分钟
-          let hour;// 剩余小时
-          let min;// 剩余分钟
-          let desRight // 剩余时间显示
+
+          let rightDom = <></>;
           if (titleRightText === '待上课') {
-            nowMin = Number(day.getHours() * 60) + Number(day.getMinutes());
-            classMin = Number(startTime1 * 60) + Number(startTime2);
-            diff = Number(classMin - nowMin);
-            hour = Math.floor(diff / 60);
-            min = diff % 60;
-            desRight = ` ${hour}时${min}分后开课`;
+
+            rightDom = <TimeRight startTimeHour={startTime1} startTimeMin={startTime2} />
           }
           curCourse.push({
             title: item.KHBJSJ.KHKCSJ.KCMC,
@@ -62,7 +55,7 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
             desc: [
               {
                 left: [`${(item.XXSJPZ.KSSJ).substring(0, 5)}-${(item.XXSJPZ.JSSJ).substring(0, 5)}`, `${item.FJSJ.FJMC}`],
-                right: desRight,
+                right: rightDom,
               },
             ],
           })
@@ -88,8 +81,10 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
   switch (courseStatus) {
     case 'enroll':
       return (<div>
-        <div className={styles.enrollText}>课后服务课程报名开始了！</div>
-        <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`}</div>
+        {teacher === false ?
+          (<><div className={styles.enrollText}>课后服务课程报名开始了！</div>
+            <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`}</div></>)
+          : <></>}
       </div>);
       break;
     case 'education':
@@ -98,22 +93,26 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
         {teacher === false ?
           (<><div className={styles.enrollText}>课后服务课程已开课！</div>
             <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div></>)
-          : <></>
-        }
+          : <></>}
 
       </div>);
       break;
     case 'enrolling':
       return (<div>
         <div> <ListComp listData={datasourse} /></div>
-        <div className={styles.enrollText}>课后服务课程报名开始了！</div>
-        <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`} </div>
+        {teacher === false ?
+          (<> <div className={styles.enrollText}>课后服务课程报名开始了！</div>
+            <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`} </div></>)
+          : <></>}
+
       </div>);
       break;
     case 'enrolled':
       return (<div>
-        <div className={styles.enrollText}>课后服务课程报名已结束！</div>
-        <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div>
+        {teacher === false ?
+          (<><div className={styles.enrollText}>课后服务课程报名已结束！</div>
+            <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div></>)
+          : <></>}
       </div>);
       break;
     default:
