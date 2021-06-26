@@ -3,13 +3,19 @@
 /* eslint-disable array-callback-return */
 import { Button, message, Radio, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'umi';
+import { Link, useModel } from 'umi';
 import styles from './index.less';
 import { TimetableList } from './mock';
 import type { KcDetailType } from './data'
 import { getDetailsKHKCSJ } from '@/services/after-class/khkcsj';
 import {currentUser} from '@/services/after-class/user'
 import { getQueryString } from '@/utils/utils';
+import { getAllKHXSCQ } from '@/services/after-class/khxscq';
+import { DateRange, Week } from '@/utils/Timefunction';
+import moment from 'moment';
+import { getKHBJSJ } from '@/services/after-class/khbjsj';
+
+
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState();
@@ -19,12 +25,77 @@ const CourseDetails: React.FC = () => {
   const [Student, setStudent] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>();
   const [KcDetail, setKcDetail] = useState<KcDetailType>();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const [timetableList, setTimetableList] = useState<any[]>()
   const hrefs = window.location.href;
   let courseid: any ;
   let classid: any ;
   let valueKey = '';
-  if(hrefs.indexOf('classid') === -1){
-    courseid = getQueryString('courseid');
+
+  useEffect(() => {
+    const bjid = getQueryString('classid');
+    const skrq = getQueryString('kss');
+    const xx = (skrq?.split(','));
+    async function Learning() {
+      const res = await getAllKHXSCQ(
+        {
+          xsId: currentUser!.id,
+          bjId: bjid!,
+          CQZT: '',
+          CQRQ: '',
+        }
+      );
+      if (res.status === 'ok' && res.data) {
+        const cc: any[] = [];
+        res.data.map((item: any) => {
+          DateRange(item.KHBJSJ.KKRQ, item.KHBJSJ.JKRQ).map((record: any) => {
+            for (let i = 0; i < xx!.length; i += 1) {
+              if (Week(record) === xx![i]) {
+                cc.push(record)
+              }
+            }
+          })
+        })
+        const dd = [];
+        for (let i = 0; i < cc.length; i += 1) {
+          dd.push(moment(cc[i]).format('MM/DD'))
+        }
+        const ee: any[] = [];
+        dd.map((record: any, index: number) => {
+          for (let i = 0; i < res.data!.length; i += 1) {
+            if (res.data![i].CQZT === '出勤' && moment(res.data![i].CQRQ).format('MM/DD') === record) {
+              return ee.push({
+                id: `kc${index}`,
+                JC: `第${index + 1}节`,
+                data: record,
+                type: `出勤`
+              })
+            } if (res.data![i] === '缺勤' && moment(res.data![i].CQRQ).format('MM/DD')) {
+              return ee.push({
+                id: `kc${index}`,
+                JC: `第${index + 1}节`,
+                data: record,
+                type: `缺勤`
+              })
+            }
+            return ee.push({
+              id: `kc${index}`,
+              JC: `第${index + 1}节`,
+              data: record,
+              type: ``
+            })
+          }
+          return true
+        })
+        setTimetableList(ee)
+      }
+    }
+    Learning()
+  }, [])
+
+  if (hrefs.indexOf('classid') === -1) {
+    courseid = hrefs.split('courseid=')[1].split('&')[0];
     valueKey = 'true';
   }else{
     courseid = getQueryString('courseid');
@@ -167,43 +238,46 @@ const CourseDetails: React.FC = () => {
         </div> : ''
     }
 
-  </div>:
-  <div className={styles.CourseDetails2}>
-     <div className={styles.KCXX}>
-        <p className={styles.title}>{KcDetail?.KCMC}</p>
-        <ul>
-        {
-          KcDetail?.KHBJSJs?.map((value: {id: string,KSS: string,KHPKSJs: any,KKRQ: string,JKRQ: string,BJMC: string})=>{
-            // console.log(value)
-            if(value.id === classid){
-              return<> <li>上课时段：{value.KKRQ}~{value.JKRQ}</li>
-              <li> 上课地点：{
-             value.KHPKSJs.map((values: {FJSJ: any})=>{
-               return<span>{values.FJSJ.FJMC},</span>
+        </div> :
+        <div className={styles.CourseDetails2}>
+          <div className={styles.KCXX}>
+            {/* 上课时段 */}
+            <p className={styles.title}>{KcDetail?.KCMC}</p>
+            <ul>
+              {
+                KcDetail?.KHBJSJs?.map((value: { id: string, KSS: string, KHPKSJs: any, KKRQ: string, JKRQ: string, BJMC: string }) => {
+                  // console.log(value)
+                  if (value.id === classid) {
+                    return <> <li>上课时段：{value.KKRQ}~{value.JKRQ}</li>
+                      <li> 上课地点：{
+                        value.KHPKSJs.map((values: { FJSJ: any }) => {
+                          return <span>{values.FJSJ.FJMC},</span>
+                        })
+                      }</li>
+                      <li>总课时：{value.KSS}</li>
+                      <li>班级：{value.BJMC}</li>
+                      <li>学生：{Student}</li>
+                    </>
+                  }
+                  return ''
                 })
-              }</li>
-              <li>总课时：{value.KSS}</li>
-              <li>班级：{value.BJMC}</li>
-              <li>学生：{Student}</li>
-           </>
-            }
-              return ''
-          })
-        } 
-        </ul>
-    </div>
-    <div className={styles.Timetable}>
-      <p className={styles.title}>课程表</p>
-      <div className={styles.cards}>
-        {
-          TimetableList.map((value)=>{
-            return<div className={value.data === currentDate ? styles.card2:(value.type === '已上' ? styles.card1:(value.type === '未上' ? styles.card3:styles.card ))} >
-              <p>{value.JC}</p>
-              <p>{value.data}</p>
+              }
+            </ul>
+          </div>
+          <div className={styles.Timetable}>
+            <p className={styles.title}>课程表</p>
+            <div className={styles.cards}>
+              {
+                timetableList?.map((value) => {
+                  return <div className={value.data === currentDate ? styles.card2 : (value.type === '缺勤' ? styles.card1 : (value.type === ' 出勤' ? styles.card3 : styles.card))} >
+                    <p>{value.JC}</p>
+                    <p>{value.data}</p>
+                  </div>
+                })
+              }
             </div>
-          })
-        }
-      </div>
+          
+     
     </div>
   </div>
   }

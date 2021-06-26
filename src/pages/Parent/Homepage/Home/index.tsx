@@ -7,7 +7,7 @@ import CourseTab from './components/CourseTab';
 import styles from './index.less';
 import IconFont from '@/components/CustomIcon';
 import EnrollClassTime from '@/components/EnrollClassTime';
-import myContext from '@/utils/MyContext';
+import myContext from '../myContext';
 
 const Home = () => {
   const { currentUserInfo } = useContext(myContext);
@@ -17,7 +17,7 @@ const Home = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div>
         <div className={styles.headerText}>
           <h4>
-            <span>{currentUser?.subscriber_info?.remark || currentUser?.username || '家长'}</span>
+            <span>{currentUserInfo?.subscriber_info?.remark || currentUserInfo?.username || '家长'}</span>
             ，你好！
           </h4>
           <div>欢迎使用课后帮，课后服务选我就对了！ </div>
