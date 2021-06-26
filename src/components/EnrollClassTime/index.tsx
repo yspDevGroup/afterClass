@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-22 11:13:07
- * @LastEditTime: 2021-06-25 15:04:59
+ * @LastEditTime: 2021-06-25 19:16:02
  * @LastEditors: txx
  */
 import { useContext, useEffect, useState } from 'react';
@@ -11,7 +11,8 @@ import ListComp from '../ListComponent';
 import myContext from '@/pages/Parent/Homepage/myContext';
 import type { ListData } from '../ListComponent/data';
 
-const EnrollClassTime = () => {
+const EnrollClassTime = (props: { teacher?: boolean }) => {
+  const { teacher = false } = props
   // 获取首页数据
   const { courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj } = useContext(myContext);
   const [datasourse, setDatasourse] = useState<ListData>();// 今日课程中的数据
@@ -93,8 +94,12 @@ const EnrollClassTime = () => {
     case 'education':
       return (<div>
         <div> <ListComp listData={datasourse} /> </div>
-        <div className={styles.enrollText}>课后服务课程已开课！</div>
-        <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div>
+        {teacher === false ?
+          (<><div className={styles.enrollText}>课后服务课程已开课！</div>
+            <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div></>)
+          : <></>
+        }
+
       </div>);
       break;
     case 'enrolling':
