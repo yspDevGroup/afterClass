@@ -6,7 +6,7 @@ import ClassCalendar from './ClassCalendar';
 import ListComponent from '@/components/ListComponent';
 import moment from 'moment';
 import myContext from '@/utils/MyContext';
-import type { ListData, ListItem } from '@/components/ListComponent/data';
+import type { ListData } from '@/components/ListComponent/data';
 
 const Study = () => {
   // 从日历中获取的时间
