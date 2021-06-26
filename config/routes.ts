@@ -58,22 +58,22 @@
     path: '/courseManagements',
     name: 'courseManagements',
     icon: 'ProfileOutlined',
-    routes: [  
+    routes: [
       {
         path: '/courseManagements/',
         name: 'courseManagements',
         icon: 'smile',
         component: './Manager/CourseManagements',
         hideInMenu: 'true',
-      },       
+      },
       {
         path: '/courseManagements/classMaintenance',
         name: 'classMaintenance',
         icon: 'smile',
         hideInMenu: 'true',
-        component: './Manager/ClassMaintenance',    
+        component: './Manager/ClassMaintenance',
       },
-    ]
+    ],
   },
   {
     path: '/classManagement',
@@ -92,7 +92,7 @@
     path: '/teacher',
     layout: false,
     hideInMenu: 'true',
-    routes: [         
+    routes: [
       {
         path: '/teacher/home',
         name: 'home',
@@ -118,7 +118,13 @@
         hideInMenu: 'true',
         component: './Teacher/Homepage/Home/Pages/Details',
       },
-    ]
+      {
+        path: '/teacher/education/callTheRoll',
+        name: 'details',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/CallTheRoll',
+      },
+    ],
   },
   /*** 老师路由 end ***/
   /*** 家长路由 start ***/
