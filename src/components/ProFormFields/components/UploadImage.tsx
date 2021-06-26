@@ -61,6 +61,9 @@ const UploadImage = (props: UploadImageProps) => {
               onChange={handleImageChange}
               accept={accept}
               data={data}
+              headers={{
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              }}
             >
               <Button type="primary">上传</Button>
             </Upload>
