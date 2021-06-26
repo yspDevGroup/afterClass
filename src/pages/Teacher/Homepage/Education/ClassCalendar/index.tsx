@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
-// import { courseArr } from '../mock';
 import PromptInformation from './components/PromptInformation';
 import moment from 'moment';
 import { DateRange, Week } from '@/utils/Timefunction';
@@ -108,30 +107,6 @@ useEffect(() => {
   setCourseArr(courseData);
 }, [])
 
-  // useEffect(() => {
-  //   const date = new Date();
-  //   const year = date.getFullYear();
-  //   let month = date.getMonth() + 1;
-  //   let days = date.getDate();
-   
-  //   if (month > 0 && month < 10) {
-  //     month = `0${month}`
-  //   }
-  //   if (days > 0 && days < 10) {
-  //     days = `0${days}`
-  //   }
-  //   const toDay = `${year}-${month}-${days}`
-  //   const curCourse = courseArr[toDay];
-  //   setCourse(curCourse)
-  // }, [])
-
-  // const click = (date: { format: (arg: string) => any; }) => {
-  //   setDay(date.format('YYYY-MM-DD'));
-  //   setCDay(date.format('M月D日'));
-  //   const curCourse = courseArr[date.format('YYYY-MM-DD')];
-  //   setCourse(curCourse);
-  // }
-
   return (
     <div className={styles.schedule}>
       <span className={styles.today} onClick={() => {
@@ -149,17 +124,6 @@ useEffect(() => {
       <Calendar
         showType={'week'}
         markDates={dates}
-        // markDates={[
-        //   { date: '2021-06-08' },
-        //   { date: '2021-06-10' },
-        //   { date: '2021-06-15' },
-        //   { date: '2021-06-17' },
-        //   { date: '2021-06-24' },
-        //   { date: '2021-06-22' },
-        //   { date: '2021-09-02' },
-        //   { date: '2021-09-07' },
-        //   { date: '2021-09-09' },
-        // ]}
         onDateClick={(date: { format: (arg: string) => any; }) => {
           setDay(date.format('YYYY-MM-DD'));
           setCDay(date.format('M月D日'));
@@ -171,7 +135,6 @@ useEffect(() => {
             };;
           setCourse(curCourse);
         }}
-        // onDateClick={click}
         markType="dot"
         transitionDuration="0.1"
         currentDate={day}
