@@ -6,10 +6,10 @@ import styles from './index.less';
 import imgPop from '@/assets/mobileBg.png';
 import { iconTextData } from './mock';
 import IconFont from '@/components/CustomIcon';
-import myContext from '../myContext';
+import myContext from '@/utils/MyContext';
 
 const Mine = () => {
-  const { currentUser, courseStatus } = useContext(myContext);
+  const { currentUserInfo, courseStatus } = useContext(myContext);
 
   return (
     <div className={styles.minePage}>
@@ -17,10 +17,10 @@ const Mine = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}>
         </div>
         <div className={styles.header}>
-          <img src={currentUser?.avatar} />
+          <img src={currentUserInfo?.avatar} />
           <div className={styles.headerName}>
-            <h4>{currentUser?.subscriber_info?.remark || currentUser?.username || '家长'}</h4>
-            <span>微信名：{currentUser?.username}</span>
+            <h4>{currentUserInfo?.subscriber_info?.remark || currentUserInfo?.username || '家长'}</h4>
+            <span>微信名：{currentUserInfo?.username}</span>
           </div>
         </div>
       </header>

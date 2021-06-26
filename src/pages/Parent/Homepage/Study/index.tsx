@@ -5,7 +5,7 @@ import styles from './index.less';
 import ClassCalendar from './ClassCalendar';
 import ListComponent from '@/components/ListComponent';
 import moment from 'moment';
-import myContext from '../myContext';
+import myContext from '@/utils/MyContext';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 
 const Study = () => {

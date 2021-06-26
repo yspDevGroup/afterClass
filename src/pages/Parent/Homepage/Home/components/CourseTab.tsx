@@ -2,7 +2,8 @@
 import React, { useContext } from 'react';
 import { Tabs } from 'antd';
 import styles from '../index.less';
-import myContext from '../../myContext';
+import myContext from '@/utils/MyContext';
+
 import ListComponent from '@/components/ListComponent';
 import { Link } from 'umi';
 

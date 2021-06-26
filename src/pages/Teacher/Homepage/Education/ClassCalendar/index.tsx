@@ -7,7 +7,7 @@ import ListComponent from '@/components/ListComponent';
 import PromptInformation from './components/PromptInformation';
 import moment from 'moment';
 import { DateRange, Week } from '@/utils/Timefunction';
-import myContext from '@/pages/Parent/Homepage/myContext';
+import myContext from '@/utils/MyContext';
 
 type propstype = {
   setDatedata: (data: any) => void;

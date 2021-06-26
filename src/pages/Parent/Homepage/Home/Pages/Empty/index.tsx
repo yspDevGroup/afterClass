@@ -8,10 +8,10 @@
 import React, { useContext } from 'react';
 import imgPop from '@/assets/mobileBg.png';
 import styles from "./index.less";
-import myContext from '../../../myContext';
+import myContext from '@/utils/MyContext';
 
 const Empty = () => {
-  const { currentUser } = useContext(myContext);
+  const { currentUserInfo } = useContext(myContext);
   const title = '课后帮课后服务报名通知';
   const time = '2021.09.01 08:32:23';
   const content = `1.服务时间：一、二年级16:10-17:00，其中周二16:50-17:40，三——六年级17:00-17:50（夏令时间顺延20分钟）。\n
@@ -24,7 +24,7 @@ const Empty = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div>
         <div className={styles.headerText}>
           <h4>
-            <span>{currentUser?.subscriber_info?.remark || currentUser?.username || '家长'}</span>
+            <span>{currentUserInfo?.subscriber_info?.remark || currentUserInfo?.username || '家长'}</span>
             ，你好！
           </h4>
           <div>欢迎使用课后帮，课后服务选我就对了！ </div>

@@ -8,11 +8,11 @@
 import { useContext, useEffect, useState } from 'react';
 import styles from "./index.less";
 import ListComp from '../ListComponent';
-import myContext from '@/pages/Parent/Homepage/myContext';
 import type { ListData } from '../ListComponent/data';
+import myContext from '@/utils/MyContext';
 
 const EnrollClassTime = (props: { teacher?: boolean }) => {
-  const { teacher = false } = props
+  const { teacher = false } = props;
   // 获取首页数据
   const { courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj } = useContext(myContext);
   const [datasourse, setDatasourse] = useState<ListData>();// 今日课程中的数据
@@ -72,18 +72,19 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
     return { curCourse, };
   }
   useEffect(() => {
-    const { curCourse } = getTodayData(weekSchedule);
-    const todayList: ListData = {
-      type: "descList",
-      cls: 'descList',
-      header: {
-        title: '今日课程',
-      },
-      list: curCourse,
+    if (weekSchedule) {
+      const { curCourse } = getTodayData(weekSchedule);
+      const todayList: ListData = {
+        type: "descList",
+        cls: 'descList',
+        header: {
+          title: '今日课程',
+        },
+        list: curCourse,
+      }
+      setDatasourse(todayList);
     }
-    setDatasourse(todayList);
-
-  }, [courseStatus, weekSchedule])
+  }, [weekSchedule])
   switch (courseStatus) {
     case 'enroll':
       return (<div>

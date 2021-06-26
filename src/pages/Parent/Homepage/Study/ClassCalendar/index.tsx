@@ -4,7 +4,7 @@ import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
 import { DateRange, Week } from '@/utils/Timefunction';
-import myContext from '../../myContext';
+import myContext from '@/utils/MyContext';
 import moment from 'moment';
 
 

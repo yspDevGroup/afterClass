@@ -7,7 +7,7 @@ import ListComponent from '@/components/ListComponent';
 // import { electiveData } from '../listData';
 import type{ ListData } from '@/components/ListComponent/data';
 import moment from 'moment';
-import myContext from '@/pages/Parent/Homepage/myContext';
+import myContext from '@/utils/MyContext';
 
 const Study = () => {
    // 从日历中获取的时间
@@ -52,14 +52,16 @@ const Study = () => {
      }
    }
    useEffect(() => {
-     const { courseData } = Selectedcourses(rjkc);
-     const Selected: ListData = {
-       type: 'list',
-       cls: 'list',
-       list: courseData,
-       noDataText: '暂无课程',
-     };
-     setListData(Selected);
+     if(rjkc){
+       const { courseData } = Selectedcourses(rjkc);
+       const Selected: ListData = {
+         type: 'list',
+         cls: 'list',
+         list: courseData,
+         noDataText: '暂无课程',
+       };
+       setListData(Selected);
+     }
    }, [rjkc, datedata])
  
   return <div className={styles.studyPage}>

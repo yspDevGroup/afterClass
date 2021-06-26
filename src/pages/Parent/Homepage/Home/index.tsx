@@ -7,10 +7,10 @@ import CourseTab from './components/CourseTab';
 import styles from './index.less';
 import IconFont from '@/components/CustomIcon';
 import EnrollClassTime from '@/components/EnrollClassTime';
-import myContext from '../myContext';
+import myContext from '@/utils/MyContext';
 
 const Home = () => {
-  const { currentUser } = useContext(myContext);
+  const { currentUserInfo } = useContext(myContext);
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>

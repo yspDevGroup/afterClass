@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Pie } from '@ant-design/charts';
 import styles from '../index.less';
 import { Badge } from 'antd';
-import myContext from '../../myContext';
+import myContext from '@/utils/MyContext';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 
 const Statistical: React.FC = () => {
 
-  const { currentUser, yxkc } = useContext(myContext);
+  const { currentUserInfo, yxkc } = useContext(myContext);
   const [checkIn, setCheckIn] = useState<any>();
   const [satistics, setStatistics] = useState<any[]>();
 
@@ -60,7 +60,7 @@ const Statistical: React.FC = () => {
     async function fetchData() {
       if (yxkc) {
         const res = await getAllKHXSCQ({
-          xsId: currentUser?.userId || currentUser?.id,
+          xsId: currentUserInfo?.userId || currentUserInfo?.id,
           bjId: '',
           CQZT: '',
           CQRQ: '',

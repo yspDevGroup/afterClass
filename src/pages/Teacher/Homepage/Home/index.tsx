@@ -5,11 +5,11 @@ import { annoceData } from '../listData';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import IconFont from '@/components/CustomIcon';
-import myContext from '@/pages/Parent/Homepage/myContext';
 import EnrollClassTime from '@/components/EnrollClassTime';
+import myContext from '@/utils/MyContext';
 
 const Home = () => {
-  const { courseStatus, rjkc } = useContext(myContext);
+  const { courseStatus,currentUserInfo, rjkc } = useContext(myContext);
   const userRef = useRef(null);
 
   useEffect(() => {
@@ -18,11 +18,11 @@ const Home = () => {
         await initWXConfig(['checkJsApi']);
       }
       await initWXAgentConfig(['checkJsApi']);
-      showUserName(userRef?.current, currentUser?.userId);
+      showUserName(userRef?.current, currentUserInfo?.userId);
       // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
       WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
     })();
-  }, [currentUser]);
+  }, [currentUserInfo]);
 
   return (
     <div className={styles.indexPage}>
@@ -60,6 +60,7 @@ const Home = () => {
         <div className={styles.teachCourses}>
           {/* <ListComp listData={courseData} /> */}
           {rjkc?.map((item: any) => {
+            // eslint-disable-next-line no-param-reassign
             item.yy = {
               type: 'picList',
               cls: 'picList',

@@ -7,7 +7,7 @@ import Home from './Home';
 import Study from './Study';
 import Mine from './Mine';
 import IconFont from '@/components/CustomIcon';
-import myContext from './myContext';
+import myContext from '@/utils/MyContext';
 import Empty from './Home/Pages/Empty';
 import { homePageInfo } from '@/services/after-class/user';
 import { useModel } from 'umi';
@@ -43,7 +43,7 @@ const PersonalHomepage = () => {
 
   }, [])
   return <div className={styles.mobilePageHeader}>
-    <myContext.Provider value={{ ...dataSource, courseStatus,currentUser }}>
+    <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
         setActiveKey(key);
       }}>
