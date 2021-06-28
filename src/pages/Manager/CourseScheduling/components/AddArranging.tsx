@@ -5,7 +5,7 @@ import type { FC } from 'react';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Form, message, Spin, Modal, Tooltip } from 'antd';
+import { Button, Form, message, Spin, Modal, Tooltip, Empty } from 'antd';
 
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllNJSJ } from '@/services/after-class/njsj';
@@ -557,85 +557,87 @@ const AddArranging: FC<PropsType> = (props) => {
             />
             <div className="banji">
               <span>班级：</span>
-              {bjData && bjData.length < 15 ? (
-                <ProCard ghost className="banjiCard">
-                  {bjData.map(
-                    (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
-                      return (
-                        <ProCard
-                          layout="center"
-                          bordered
-                          onClick={() => BjClick(value)}
-                          style={{ borderColor: index === value.id ? '#51d081' : '' }}
-                        >
-                           <Tooltip title={value.BJMC}><p>{value.BJMC}</p>
-  </Tooltip>
-                          
-                          <span>{value.ZJS}</span>
-                        </ProCard>
-                      );
-                    },
-                  )}
-                </ProCard>
-              ) : (
-                <div>
-                  {packUp === false ? (
-                    <ProCard ghost className="banjiCard">
-                      {bjData && bjData.length > 0
-                        ? bjData
-                            .slice(0, 13)
-                            .map(
-                              (
-                                value: { BJMC: any; ZJS: any; id?: string | undefined },
-                                key: undefined,
-                              ) => {
-                                return (
-                                  <ProCard
-                                    layout="center"
-                                    bordered
-                                    onClick={() => BjClick(value)}
-                                    style={{ borderColor: index === key ? '#51d081' : '' }}
-                                  >
-                                    <p>{value.BJMC}</p>
-                                    <span>{value.ZJS}</span>
-                                  </ProCard>
-                                );
-                              },
-                            )
-                        : ''}
-                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                        展开 <DownOutlined style={{ color: '#4884FF' }} />
+              {
+                bjData && bjData.length === 0 ?(
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                ):(bjData && bjData.length < 15 ? <ProCard ghost className="banjiCard">
+                {bjData.map(
+                  (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
+                    return (
+                      <ProCard
+                        layout="center"
+                        bordered
+                        onClick={() => BjClick(value)}
+                        style={{ borderColor: index === value.id ? '#51d081' : '' }}
+                      >
+                         <Tooltip title={value.BJMC}><p>{value.BJMC}</p>
+</Tooltip>
+                        
+                        <span>{value.ZJS}</span>
                       </ProCard>
-                    </ProCard>
-                  ) : (
-                    <ProCard ghost className="banjiCard">
-                      {bjData && bjData.length > 0
-                        ? bjData.map(
-                            (
-                              value: { BJMC: any; ZJS: any; id?: string | undefined },
-                              key: undefined,
-                            ) => {
-                              return (
-                                <ProCard
-                                  layout="center"
-                                  bordered
-                                  onClick={() => BjClick(value)}
-                                  style={{ borderColor: index === key ? '#51d081' : '' }}
-                                >
-                                  <p>{value.BJMC}</p>
-                                  <span>{value.ZJS}</span>
-                                </ProCard>
-                              );
-                            },
-                          )
-                        : ''}
-                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                        收起 <UpOutlined style={{ color: '#4884FF' }} />
-                      </ProCard>
-                    </ProCard>
-                  )}
-                </div>
-              )}
+                    );
+                  },
+                )}
+              </ProCard>:(
+                 <div>
+                 {packUp === false ? (
+                   <ProCard ghost className="banjiCard">
+                     {bjData && bjData.length > 0
+                       ? bjData
+                           .slice(0, 13)
+                           .map(
+                             (
+                               value: { BJMC: any; ZJS: any; id?: string | undefined },
+                               key: undefined,
+                             ) => {
+                               return (
+                                 <ProCard
+                                   layout="center"
+                                   bordered
+                                   onClick={() => BjClick(value)}
+                                   style={{ borderColor: index === key ? '#51d081' : '' }}
+                                 >
+                                   <p>{value.BJMC}</p>
+                                   <span>{value.ZJS}</span>
+                                 </ProCard>
+                               );
+                             },
+                           )
+                       : ''}
+                     <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                       展开 <DownOutlined style={{ color: '#4884FF' }} />
+                     </ProCard>
+                   </ProCard>
+                 ) : (
+                   <ProCard ghost className="banjiCard">
+                     {bjData && bjData.length > 0
+                       ? bjData.map(
+                           (
+                             value: { BJMC: any; ZJS: any; id?: string | undefined },
+                             key: undefined,
+                           ) => {
+                             return (
+                               <ProCard
+                                 layout="center"
+                                 bordered
+                                 onClick={() => BjClick(value)}
+                                 style={{ borderColor: index === key ? '#51d081' : '' }}
+                               >
+                                 <p>{value.BJMC}</p>
+                                 <span>{value.ZJS}</span>
+                               </ProCard>
+                             );
+                           },
+                         )
+                       : ''}
+                     <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                       收起 <UpOutlined style={{ color: '#4884FF' }} />
+                     </ProCard>
+                   </ProCard>
+                 )}
+               </div>
+              ))
+              }
             </div>
             <ProFormSelect
               width="md"
