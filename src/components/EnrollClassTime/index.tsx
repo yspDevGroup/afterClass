@@ -80,8 +80,9 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
       setDatasourse(todayList);
     }
   }, [weekSchedule]);
-  
+
   switch (courseStatus) {
+
     case 'enroll':
       return (<div>
         {teacher === false ?
@@ -93,22 +94,24 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
     case 'education':
     case 'noTips':
       return (<div>
-        <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /> </div>
-        {teacher === false ?
-          (<><div className={styles.enrollText}>课后服务课程已正式开课！</div>
-            {courseStatus === 'education' ? <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div> : ''}</>)
-          : <></>
-        }
-
+        {teacher === false ? <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /> </div> : <></>}
+        <><div className={styles.enrollText}>课后服务课程已正式开课！</div>
+          {courseStatus === 'education' ? <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div> : ''}</>
       </div>);
       break;
     case 'enrolling':
       return (<div>
-        <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /></div>
         {teacher === false ?
-          (<> <div className={styles.enrollText}>课后服务课程报名开始了！</div>
-            <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`} </div></>)
-          : <></>}
+          (<>
+            <div><ListComp listData={datasourse} cls={styles.todayNOImg} /></div>
+            <div className={styles.enrollText}>课后服务课程报名开始了！</div>
+            <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`} </div>
+          </>)
+          : <>
+            <div className={styles.enrollText}>课后服务课程已正式开课！</div>
+            <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div>
+            <div><ListComp listData={datasourse} cls={styles.todayNOImg} /></div>
+          </>}
 
       </div>);
       break;
@@ -117,7 +120,7 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
         {teacher === false ?
           (<><div className={styles.enrollText}>课后服务课程报名已结束！</div>
             <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div></>)
-          : <></>}
+          : <div className={styles.enrollText}>课后服务课程将于{`${skkssj}`}正式开课！</div>}
       </div>);
       break;
     default:

@@ -46,15 +46,6 @@ const Home = () => {
           </div>
           <IconFont type="icon-gengduo" className={styles.gengduo} />
         </div>
-        <div className={styles.enrollArea}>
-          {courseStatus === 'education' ?
-            (<>
-              <div className={styles.enrollText}>课后服务已正式开课！</div>
-            </>) : (<>
-              <div className={styles.enrollText}>课后服务将正式开课！</div>
-            </>)}
-        </div>
-
         <div className={styles.todayCourses}>
           <EnrollClassTime teacher={true} />
         </div>
