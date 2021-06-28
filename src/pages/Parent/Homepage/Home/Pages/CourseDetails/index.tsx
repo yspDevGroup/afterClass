@@ -50,44 +50,70 @@ const CourseDetails: React.FC = () => {
         res.data.map((item: any) => {
           DateRange(item.KHBJSJ.KKRQ, item.KHBJSJ.JKRQ).map((record: any) => {
             for (let i = 0; i < xx!.length; i += 1) {
-              if (Week(record) === xx![i]) {
+              if (Week(record) === xx![i] && !cc.includes(record)) {
                 cc.push(record)
               }
             }
           })
         })
-        const dd = [];
+        const dd: any[] = [];
         for (let i = 0; i < cc.length; i += 1) {
           dd.push(moment(cc[i]).format('MM/DD'))
         }
-        const ee: any[] = [];
+        const absence: any[] = [];
+        const myDate = new Date();
+        const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD')
         dd.map((record: any, index: number) => {
-          for (let i = 0; i < res.data!.length; i += 1) {
-            if (res.data![i].CQZT === '出勤' && moment(res.data![i].CQRQ).format('MM/DD') === record) {
-              return ee.push({
-                id: `kc${index}`,
-                JC: `第${index + 1}节`,
-                data: record,
-                type: `出勤`
-              })
-            } if (res.data![i] === '缺勤' && moment(res.data![i].CQRQ).format('MM/DD')) {
-              return ee.push({
-                id: `kc${index}`,
-                JC: `第${index + 1}节`,
-                data: record,
-                type: `缺勤`
-              })
+          if (res.data) {
+            for (let i = 0; i < res.data.length; i += 1) {
+              const chuqindate = moment(res.data[i].CQRQ).format('MM/DD');
+              if (res.data[i].CQZT === '出勤' && chuqindate === record) {
+                absence.push({
+                  id: `kc${index}`,
+                  JC: `第${index + 1}节`,
+                  data: record,
+                  type: '出勤'
+                })
+              } else if ((res.data[i].CQZT === '请假' || res.data[i].CQZT === '缺席') && chuqindate === record) {
+                absence.push({
+                  id: `kc${index}`,
+                  JC: `第${index + 1}节`,
+                  data: record,
+                  type: `缺勤`
+                })
+              } else if (nowtime === record) {
+                absence.push({
+                  id: `kc${index}`,
+                  JC: `第${index + 1}节`,
+                  data: record,
+                  type: `今日`
+                })
+              }
+              else {
+                absence.push({
+                  id: `kc${index}`,
+                  JC: `第${index + 1}节`,
+                  data: record,
+                  type: ``
+                })
+              }
             }
-            return ee.push({
-              id: `kc${index}`,
-              JC: `第${index + 1}节`,
-              data: record,
-              type: ``
-            })
           }
           return true
         })
-        setTimetableList(ee)
+        // 获取课程表数据
+        const Section = [];
+        const intercept = {};
+        for (let i = 0; i < absence.length; i += 1) {
+          if (!intercept[absence[i].id]) {
+            Section.push(absence[i]);
+            intercept[absence[i].id] = true;
+          }
+          if (Section[(Section.length - 1)].id === absence[i].id && Section[Section.length - 1].type === '') {
+            Section[(Section.length - 1)] = absence[i]
+          }
+        }
+        setTimetableList(Section);
       }
     }
     Learning()
@@ -262,7 +288,7 @@ const CourseDetails: React.FC = () => {
             <div className={styles.cards}>
               {
                 timetableList?.map((value) => {
-                  return <div className={value.data === currentDate ? styles.card2 : (value.type === '缺勤' ? styles.card1 : (value.type === ' 出勤' ? styles.card3 : styles.card))} >
+                  return <div className={value.data === currentDate ? styles.card2 : (value.type === '缺勤' ? styles.card1 : (value.type === '出勤' ? styles.card3 : (value.type === '今日' ? styles.card4 : styles.card)))} >
                     <p>{value.JC}</p>
                     <p>{value.data}</p>
                   </div>

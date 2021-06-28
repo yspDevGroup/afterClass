@@ -87,6 +87,12 @@
     icon: 'CarryOutOutlined',
     component: './Manager/CourseScheduling',
   },
+  {
+    path: '/noticenotice',
+    name: 'noticenotice',
+    icon: 'CarryOutOutlined',
+    component: './Manager/Noticenotice',
+  },
   /*** 老师路由 start ***/
   {
     path: '/teacher',

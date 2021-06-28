@@ -41,7 +41,7 @@ const ClassCalendar = (props: propstype) => {
         {
           title: item.KHBJSJ.KHKCSJ.KCMC,
           img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
-          link: `/parent/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}&type=true`,
+          link: `/parent/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}&kss=${weekSchedule[k].weekDay}&type=true`,
           desc: [
             {
               left: [`课程时段：${(item.XXSJPZ.KSSJ).substring(0, 5)}-${(item.XXSJPZ.JSSJ).substring(0, 5)}`],

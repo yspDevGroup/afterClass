@@ -11,6 +11,7 @@ export default {
   'menu.courseManagements.classMaintenance': '班级维护',
   'menu.classManagement': '班级管理',
   'menu.courseScheduling': '排课管理',
+  'menu.noticenotice': '通知公告',
   'menu.parent': '家长端',
   'menu.parent.home': '首页',
   'menu.parent.listComponent': '列表组件',

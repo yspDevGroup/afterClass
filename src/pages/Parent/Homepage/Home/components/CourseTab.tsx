@@ -3,14 +3,13 @@ import React, { useContext } from 'react';
 import { Tabs } from 'antd';
 import styles from '../index.less';
 import myContext from '@/utils/MyContext';
-
 import ListComponent from '@/components/ListComponent';
 import { Link } from 'umi';
 
 const { TabPane } = Tabs;
 const CourseTab = () => {
   // 获取首页数据
-  const { courseStatus, kskc, yxkc } = useContext(myContext);
+  const { courseStatus, kskc, yxkc,weekSchedule } = useContext(myContext);
   const centered=false;
   return (
     <div className={`${styles.tabHeader}`}>
@@ -50,7 +49,7 @@ const CourseTab = () => {
           </TabPane>:''}
         <TabPane tab="已选课程" key="elective">
           {
-            yxkc?.map((item: any) => {
+            yxkc?.map((item: any,index: number) => {
               item.yy = {
                 type: 'picList',
                 cls: 'picList',
@@ -59,7 +58,7 @@ const CourseTab = () => {
                     id: item.id,
                     title: item.KHKCSJ.KCMC,
                     img: item.KCTP ? item.KCTP : item.KHKCSJ.KCTP,
-                    link: `/parent/home/courseDetails?classid=${item.id}&courseid=${item.KHKCSJ.id}`,
+                    link: `/parent/home/courseDetails?classid=${item.id}&courseid=${item.KHKCSJ.id}&kss=${weekSchedule[index].WEEKDAY} `,
                     desc: [
                       {
                         left: [`课程时段：${item.KKRQ ? item.KKRQ : item.KHKCSJ.KKRQ}-${item.JKRQ ? item.JKRQ : item.KHKCSJ.JKRQ}`],
