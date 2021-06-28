@@ -22,6 +22,7 @@ export async function getKHXSDD(
       DZFP?: string;
       DDZT?: '待付款' | '已付款' | '已取消' | '待退款' | '已退款';
       DDFY?: number;
+      TKSJ?: string;
       XSId?: string;
       KHBJSJ?: {
         id?: string;
@@ -103,6 +104,7 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
       DZFP?: string;
       DDZT?: '待付款' | '已付款' | '已取消' | '待退款' | '已退款';
       DDFY?: number;
+      TKSJ?: string;
       XSId?: string;
       KHBJSJ?: {
         id?: string;
@@ -138,24 +140,74 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
   });
 }
 
-/** 更新课后服务订单记录 PUT /khxsdd/update/${param0} */
-export async function updateKHXSDD(
-  params: {
-    // path
-    /** 类型ID */
-    id: string;
+/** 订单支付，获取支付链接 POST /khxsdd/pay */
+export async function payKHXSDD(
+  body: {
+    /** 课后服务订单ID */
+    ddIds?: string[];
+    /** 课后服务班级ID */
+    bjId?: string;
+    /** 跳转地址 */
+    returnUrl?: string;
+    /** 学生ID */
+    xsId?: string;
+    /** 课程名称 */
+    kcmc?: string;
+    /** 课后服务订单支付金额 */
+    amount?: number;
   },
-  body: API.UpdateKHXSDD,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/update/${param0}`, {
-    method: 'PUT',
+  return request<any>('/khxsdd/pay', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
     data: body,
     ...(options || {}),
   });
+}
+
+/** 订单申请退款 POST /khxsdd/refund */
+export async function refundKHXSDD(
+  body: {
+    /** 课后服务订单ID */
+    ddId?: string;
+    /** 课后服务订单退款金额 */
+    amount?: number;
+    /** 课后服务订单退款原因 */
+    reason?: string;
+    /** 使用设备所在网络的IP地址 */
+    deviceIp?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/khxsdd/refund', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 取消订单 DELETE /khxsdd/cancle/${param0} */
+export async function cancleKHXSDD(
+  params: {
+    // path
+    /** 订单ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0 } = params;
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+    `/khxsdd/cancle/${param0}`,
+    {
+      method: 'DELETE',
+      params: { ...params },
+      ...(options || {}),
+    },
+  );
 }

@@ -14,7 +14,7 @@ export async function getXXGG(
   const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
-    data?: { BT?: string; NR?: string };
+    data?: { BT?: string; NR?: string; ZT?: string; updatedAt?: string };
     message?: string;
   }>(`/xxgg/${param0}`, {
     method: 'GET',
@@ -41,9 +41,19 @@ export async function deleteXXGG(
 }
 
 /** 查询所有学校公告记录 GET /xxgg/all */
-export async function getAllXXGG(options?: { [key: string]: any }) {
+export async function getAllXXGG(
+  body: {
+    /** 公告状态 */
+    status?: string[];
+  },
+  options?: { [key: string]: any },
+) {
   return request<{ status?: 'ok' | 'error'; data?: API.XXGG[]; message?: string }>('/xxgg/all', {
     method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -52,7 +62,7 @@ export async function getAllXXGG(options?: { [key: string]: any }) {
 export async function createXXGG(body: API.CreateXXGG[], options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data?: { BT?: string; NR?: string };
+    data?: { BT?: string; NR?: string; ZT?: string; updatedAt?: string };
     message?: string;
   }>('/xxgg/create', {
     method: 'PUT',

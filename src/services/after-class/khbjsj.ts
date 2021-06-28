@@ -182,7 +182,7 @@ export async function updateKHBJSJ(
   });
 }
 
-/** 获取班级已报名人数 GET /khbjsj/enrolled/${param0} */
+/** 获取班级已报名学生信息 GET /khbjsj/enrolled/${param0} */
 export async function getEnrolled(
   params: {
     // path
@@ -192,12 +192,13 @@ export async function getEnrolled(
   options?: { [key: string]: any },
 ) {
   const { id: param0 } = params;
-  return request<{ status?: 'ok' | 'error'; data?: number; message?: string }>(
-    `/khbjsj/enrolled/${param0}`,
-    {
-      method: 'GET',
-      params: { ...params },
-      ...(options || {}),
-    },
-  );
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { id?: string; XSId?: string }[];
+    message?: string;
+  }>(`/khbjsj/enrolled/${param0}`, {
+    method: 'GET',
+    params: { ...params },
+    ...(options || {}),
+  });
 }

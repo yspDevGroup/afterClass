@@ -6,7 +6,7 @@ import { request } from 'umi';
 export async function getKHXSCQ(
   params: {
     // path
-    /** 类型ID */
+    /** 出勤记录ID */
     id: string;
   },
   options?: { [key: string]: any },
@@ -15,7 +15,8 @@ export async function getKHXSCQ(
   return request<{
     status?: 'ok' | 'error';
     data?: {
-      CQZT?: '出勤' | '请假' | '缺勤';
+      id?: string;
+      CQZT?: '出勤' | '请假' | '缺席';
       CQRQ?: string;
       XSId?: string;
       KHBJSJ?: {
@@ -33,13 +34,13 @@ export async function getKHXSCQ(
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
+        NJS?: string;
+        XQ?: string;
+        NJSName?: string;
+        XQName?: string;
+        ZJSName?: string;
+        FJSName?: string;
       };
-      NJS?: string;
-      XQ?: string;
-      NJSName?: string;
-      XQName?: string;
-      ZJSName?: string;
-      FJSName?: string;
     };
     message?: string;
   }>(`/khxscq/${param0}`, {
@@ -53,7 +54,7 @@ export async function getKHXSCQ(
 export async function deleteKHXSCQ(
   params: {
     // path
-    /** 类型ID */
+    /** 出勤记录ID */
     id: string;
   },
   options?: { [key: string]: any },
@@ -91,11 +92,12 @@ export async function getAllKHXSCQ(
 }
 
 /** 创建课后服务出勤记录 PUT /khxscq/create */
-export async function createKHXSCQ(body: API.CreateKHXSCQ, options?: { [key: string]: any }) {
+export async function createKHXSCQ(body: API.CreateKHXSCQ[], options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data?: {
-      CQZT?: '出勤' | '请假' | '缺勤';
+      id?: string;
+      CQZT?: '出勤' | '请假' | '缺席';
       CQRQ?: string;
       XSId?: string;
       KHBJSJ?: {
@@ -113,13 +115,13 @@ export async function createKHXSCQ(body: API.CreateKHXSCQ, options?: { [key: str
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
+        NJS?: string;
+        XQ?: string;
+        NJSName?: string;
+        XQName?: string;
+        ZJSName?: string;
+        FJSName?: string;
       };
-      NJS?: string;
-      XQ?: string;
-      NJSName?: string;
-      XQName?: string;
-      ZJSName?: string;
-      FJSName?: string;
     };
     message?: string;
   }>('/khxscq/create', {
@@ -136,7 +138,7 @@ export async function createKHXSCQ(body: API.CreateKHXSCQ, options?: { [key: str
 export async function updateKHXSCQ(
   params: {
     // path
-    /** 类型ID */
+    /** 出勤记录ID */
     id: string;
   },
   body: API.UpdateKHXSCQ,

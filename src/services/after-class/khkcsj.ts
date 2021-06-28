@@ -14,7 +14,7 @@ export async function getKHKCSJ(
 ) {
   return request<{
     status?: 'ok' | 'error';
-    data: {
+    data?: {
       id?: string;
       KCMC?: string;
       KCTP?: string;
@@ -49,6 +49,31 @@ export async function getKHKCSJ(
         XQName?: string;
         ZJSName?: string;
         FJSName?: string;
+        KHPKSJs?: {
+          id?: string;
+          WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+          XXSJPZ?: {
+            id?: string;
+            KSSJ?: string;
+            JSSJ?: string;
+            KJS?: string;
+            TITLE?: string;
+            BZXX?: string;
+            TYPE?: 0 | 1 | 2;
+          };
+          FJSJ?: {
+            id?: string;
+            FJBH?: string;
+            FJMC?: string;
+            FJLC?: string;
+            FJJZMJ?: number;
+            FJSYMJ?: number;
+            FJRS?: number;
+            FJLX?: string;
+            XQ?: string;
+            XQName?: string;
+          };
+        }[];
       }[];
     };
     message?: string;
@@ -87,15 +112,6 @@ export async function getAllKHKCSJ(
     },
     data: body,
     ...(options || {}),
-  });
-}
-//根据ID获取课后课程数据详情
-export async function getDetailsKHKCSJ(kcId: string) {
-  return request('/khkcsj/detail', {
-    method: 'POST',
-    data: {
-      kcId,
-    },
   });
 }
 
@@ -160,10 +176,10 @@ export async function deleteKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -178,13 +194,13 @@ export async function updateKHKCSJ(
   body: API.UpdateKHKCSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -199,14 +215,14 @@ export async function allNJs(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: { NJS?: string[]; NJSName?: string[] };
     message?: string;
   }>(`/khkcsj/njs/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }

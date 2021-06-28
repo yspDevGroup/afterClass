@@ -1116,8 +1116,9 @@ declare namespace API {
   };
 
   type KHXSCQ = {
+    id?: string;
     /** 出勤状态 */
-    CQZT?: '出勤' | '请假' | '缺勤';
+    CQZT?: '出勤' | '请假' | '缺席';
     /** 出勤日期 */
     CQRQ?: string;
     /** 学生Id */
@@ -1137,35 +1138,31 @@ declare namespace API {
       BMKSSJ?: string;
       BMJSSJ?: string;
       KCTP?: string;
+      NJS?: string;
+      XQ?: string;
+      NJSName?: string;
+      XQName?: string;
+      ZJSName?: string;
+      FJSName?: string;
     };
-    /** 年级ID */
-    NJS?: string;
-    /** 校区ID */
-    XQ?: string;
-    /** 年级名称 */
-    NJSName?: string;
-    /** 校区名称 */
-    XQName?: string;
-    /** 主教名称 */
-    ZJSName?: string;
-    /** 副教名称 */
-    FJSName?: string;
   };
 
   type CreateKHXSCQ = {
     /** 出勤状态 */
-    CQZT?: '出勤' | '请假' | '缺勤';
+    CQZT?: '出勤' | '请假' | '缺席';
     /** 出勤日期 */
     CQRQ?: string;
     /** 学生Id */
     XSId?: string;
     /** 班级ID */
     KHBJSJId?: string;
+    /** 排课ID */
+    KHPKSJId?: string;
   };
 
   type UpdateKHXSCQ = {
     /** 出勤状态 */
-    CQZT?: '出勤' | '请假' | '缺勤';
+    CQZT?: '出勤' | '请假' | '缺席';
     /** 出勤日期 */
     CQRQ?: string;
   };
@@ -1185,6 +1182,8 @@ declare namespace API {
     DDZT?: '待付款' | '已付款' | '已取消' | '待退款' | '已退款';
     /** 订单费用 */
     DDFY?: number;
+    /** 退款时间 */
+    TKSJ?: string;
     /** 学生Id */
     XSId?: string;
     KHBJSJ?: {
@@ -1230,6 +1229,8 @@ declare namespace API {
     DDZT?: '待付款' | '已付款' | '已取消' | '待退款' | '已退款';
     /** 订单费用 */
     DDFY?: number;
+    /** 退款时间 */
+    TKSJ?: string;
     /** 学生Id */
     XSId?: string;
     /** 班级ID */
@@ -1892,6 +1893,10 @@ declare namespace API {
     BT?: string;
     /** 公告内容 */
     NR?: string;
+    /** 公告状态 */
+    ZT?: string;
+    /** 修改时间 */
+    updatedAt?: string;
   };
 
   type CreateXXGG = {
@@ -1899,6 +1904,8 @@ declare namespace API {
     BT?: string;
     /** 公告内容 */
     NR?: string;
+    /** 公告状态 */
+    ZT?: string;
   };
 
   type UpdateXXGG = {
@@ -1906,6 +1913,8 @@ declare namespace API {
     BT?: string;
     /** 公告内容 */
     NR?: string;
+    /** 公告状态 */
+    ZT?: string;
   };
 
   type XXJBSJ = {
@@ -2212,6 +2221,10 @@ declare namespace API {
     BZXX?: string;
     /** 类型，0:时段维护，1:报名开始/结束时间，2:开课/结课日期 */
     TYPE?: '0' | '1' | '2';
+    /** 学年 */
+    xn?: string;
+    /** 学期 */
+    xq?: string;
   };
 
   type ZXFA = {

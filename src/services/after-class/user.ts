@@ -258,7 +258,19 @@ export async function homePageInfo(
           XNXQId?: string;
         };
       }[];
-      lskc?: string;
+      lskc?: {
+        id?: string;
+        JSPY?: string;
+        KCMC?: string;
+        KCFY?: string;
+        SJJF?: string;
+        KSS?: string;
+        CQS?: string;
+        BJMC?: string;
+        XSId?: string;
+        KHBJSJId?: string;
+        XNXQId?: string;
+      }[];
     };
     message?: string;
   }>('/user/homepage', {
