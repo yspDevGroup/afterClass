@@ -38,20 +38,6 @@ const Mine = () => {
       <div className={styles.linkWrapper}>
         <ul>
           <li>
-            <IconFont type='icon-lishikecheng' style={{ 'fontSize': '18px' }} />
-            <Link to='/'>
-              历史课程
-              <IconFont type='icon-xiayiye' />
-            </Link>
-          </li>
-          <li>
-            <IconFont type='icon-woyaofankui' style={{ 'fontSize': '18px' }} />
-            <Link to='/'>
-              我要反馈
-              <IconFont type='icon-xiayiye' />
-            </Link>
-          </li>
-          <li>
             <IconFont type='icon-fuwugonggao' style={{ 'fontSize': '18px' }} />
             <Link to='/'>
               服务公告

@@ -11,6 +11,7 @@ import { getQueryString } from '@/utils/utils';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { DateRange, Week } from '@/utils/Timefunction';
 import moment from 'moment';
+import IconFont from '@/components/CustomIcon';
 
 
 
@@ -151,9 +152,9 @@ const CourseDetails: React.FC = () => {
         <div className={styles.CourseDetails}>
           <div className={styles.wrap}>
             {
-              KcDetail?.KCTP === 'string' || KcDetail?.KCTP === '' ?
-                <img src='https://i.postimg.cc/XXxH96fZ/noData.png' alt="" /> :
-                <img src={KcDetail?.KCTP} alt="" />
+              KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
+                <img src={KcDetail?.KCTP} alt="" /> :
+                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px' }} />
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 
@@ -168,7 +169,7 @@ const CourseDetails: React.FC = () => {
               {
                 KcDetail?.KHBJSJs?.map((value: { BJMC: string, ZJS: string, FJS: string, KCSC: string, KHPKSJs: any }) => {
                   return <li>{value.BJMC}：总课时：{value.KCSC},
-             上课时间：{
+                    上课时间：{
                       value.KHPKSJs.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number }) => {
                         const weeks = `周${'日一二三四五六'.charAt(values.WEEKDAY)}`;
                         let kssj = '';
@@ -184,12 +185,12 @@ const CourseDetails: React.FC = () => {
                         return <span>{weeks}{kssj}-{jssj},</span>
                       })
                     }
-            上课地点：{
+                    上课地点：{
                       value.KHPKSJs.map((values: { FJSJ: any }) => {
                         return <span>{values.FJSJ.FJMC},</span>
                       })
                     }
-            班主任：{value.ZJS},副班：{value.FJS}。</li>
+                    班主任：{value.ZJS},副班：{value.FJS}。</li>
                 })
               }
             </ul>

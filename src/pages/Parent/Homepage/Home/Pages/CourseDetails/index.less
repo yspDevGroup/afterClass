@@ -1,229 +1,267 @@
-.CourseDetails{
-  button{
-    outline: none;
-  }
-    .wrap{
-      padding: 10px;
-      padding-bottom: 54px;
-      p{
-        margin-bottom: 6px;
-      }
-      img{
-        width: 100%;
-        height: 226px;
-        margin-bottom: 18px;
-      }
-      ul{
-        padding: 0;
-        font-size:14px;
-        color:#666666;
-      }
-      .title{
-        font-weight: 600;
-        color:#333333;
-        font-size: 16px;
-      }
-      .content{
-        font-size:14px;
-        color:#666666;
-      }
-      .classInformation{
-        li{
-          margin-bottom: 4px;
-        }
-      }
-    }
-    .footer{
-      width: 100vw;
-      height: 54px;
-      line-height: 54px;
-      position: fixed;
-      bottom: 0;
-      padding:0 14px 0 14px;
-      background: #FFFFFF;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-      .btn{
-        width: 100%;
-        height: 38px;
-        color:#fff;
-        line-height: 38px;
-        font-size: 18px;
-        background-color: #45C977;
-        border-radius: 19px;
-        border: none;
-        margin-top: 8px;
-      }
-    } 
-    .payment{
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      width: 100%;
+.CourseDetails {
+  :global {
+    .anticon svg {
       height: 100%;
-      background: rgba(0,0,0,0.4);
-      >div{
-        position: fixed;
-        bottom: 0;
-        width: 100vw;
-        height: 380px;
-        background-color: #fff;
-        padding:14px;
-        .title{
-          font-weight: 600;
-          color:#333333;
-          font-size: 16px;
-        }
-        .price{
-          span:nth-of-type(1){
-            font-size: 18px;
-            color:#FF6600;
-          }
-          span:nth-of-type(2){
-            font-size: 14px;
-            color:#FF6600;
-          }
-        }
-      }
-      :global{
-        .ant-radio-group {
-          display: flex;
-          flex-wrap: wrap;
-      }
-      }
-      .BjInformation{
-        :global{
-          label{
-            margin-bottom: 10px;
-            margin-right:14px ;
-            height: 32px;
-            font-weight: 600;
-            border-radius: 16px;
-            border:none;
-            background: #F5F5F5;
-            padding: 0 20px 0 20px;
-          }
-        }
     }
-     
-      .agreement{
-        position: fixed;
-        bottom: 50px;
-      }
-      .submit{
-        display: block;
-        position: fixed;
-        width: calc( ~ '100% - 28px');
-        height: 38px;
-        border-radius: 19px;
-        background: #45C977;
-        color: #fff;
-        bottom: 14px;
-        span{
-          font-size: 16px;
-        }
-      }
-    }
-    
   }
 
-.CourseDetails2{
-  padding:10px;
+  button {
+    outline: none;
+  }
+
+  .wrap {
+    padding: 10px;
+    padding-bottom: 54px;
+
+    p {
+      margin-bottom: 6px;
+    }
+
+    img {
+      width: 100%;
+      height: 226px;
+      margin-bottom: 18px;
+    }
+
+    ul {
+      padding: 0;
+      font-size: 14px;
+      color: #666666;
+    }
+
+    .title {
+      font-weight: 600;
+      color: #333333;
+      font-size: 16px;
+    }
+
+    .content {
+      font-size: 14px;
+      color: #666666;
+    }
+
+    .classInformation {
+      li {
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  .footer {
+    width: 100vw;
+    height: 54px;
+    line-height: 54px;
+    position: fixed;
+    bottom: 0;
+    padding: 0 14px 0 14px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+
+    .btn {
+      width: 100%;
+      height: 38px;
+      color: #fff;
+      line-height: 38px;
+      font-size: 18px;
+      background-color: #45C977;
+      border-radius: 19px;
+      border: none;
+      margin-top: 8px;
+    }
+  }
+
+  .payment {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+
+    >div {
+      position: fixed;
+      bottom: 0;
+      width: 100vw;
+      height: 380px;
+      background-color: #fff;
+      padding: 14px;
+
+      .title {
+        font-weight: 600;
+        color: #333333;
+        font-size: 16px;
+      }
+
+      .price {
+        span:nth-of-type(1) {
+          font-size: 18px;
+          color: #FF6600;
+        }
+
+        span:nth-of-type(2) {
+          font-size: 14px;
+          color: #FF6600;
+        }
+      }
+    }
+
+    :global {
+      .ant-radio-group {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+
+    .BjInformation {
+      :global {
+        label {
+          margin-bottom: 10px;
+          margin-right: 14px;
+          height: 32px;
+          font-weight: 600;
+          border-radius: 16px;
+          border: none;
+          background: #F5F5F5;
+          padding: 0 20px 0 20px;
+        }
+      }
+    }
+
+    .agreement {
+      position: fixed;
+      bottom: 50px;
+    }
+
+    .submit {
+      display: block;
+      position: fixed;
+      width: calc(~ '100% - 28px');
+      height: 38px;
+      border-radius: 19px;
+      background: #45C977;
+      color: #fff;
+      bottom: 14px;
+
+      span {
+        font-size: 16px;
+      }
+    }
+  }
+
+}
+
+.CourseDetails2 {
+  padding: 10px;
   background: #F5F5F5;
   min-height: 100vh;
-  .KCXX{
+
+  .KCXX {
     width: 100%;
     height: 170px;
     background-color: #FFFFFF;
     border-radius: 8px;
     padding: 10px;
-    .title{
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 22px;
-        color:@text-color;
-    }
-    ul{
-        padding: 0;
-        color: @text-color-secondary;
-    }
-  }
-  .Timetable{
-    margin-top: 18px;
-    .title{
+
+    .title {
       font-weight: 600;
       font-size: 16px;
       line-height: 22px;
-      color:@text-color;
-  }
-  .cards{
-    display: flex;
-    width: 102%;
-    flex-wrap: wrap;
-    .card1{
-      width: 18%;
-      height: 48px;
-      border-radius: 8px;
-      background: #FFFFFF;
-      padding:5px;
-      margin-right: 2%;
-      margin-bottom: 10px;
-      text-align: center;
-      font-size: 12px;
-      color:@normal-color;
-      p{
-        margin: 0;
-        padding: 0;
-      }
+      color: @text-color;
     }
-    .card2{
-      width: 18%;
-      height: 48px;
-      border-radius: 8px;
-      background: @primary-color;
-      padding:5px;
-      margin-right: 2%;
-      margin-bottom: 10px;
-      text-align: center;
-      font-size: 12px;
-      color:#FFFFFF;
-      p{
-        margin: 0;
-        padding: 0;
-      }
-    }
-    .card3{
-      width: 18%;
-      height: 48px;
-      border-radius: 8px;
-      background:rgba(255, 102, 0, 0.1);
-      padding:5px;
-      margin-right: 2%;
-      margin-bottom: 10px;
-      text-align: center;
-      font-size: 12px;
-      color:@normal-color;
-      p{
-        margin: 0;
-        padding: 0;
-      }
-    }
-    .card{
-      width: 18%;
-      height: 48px;
-      border-radius: 8px;
-      background: rgba(69, 201, 119, 0.1);
-      padding:5px;
-      margin-right: 2%;
-      margin-bottom: 10px;
-      text-align: center;
-      font-size: 12px;
-      p{
-        margin: 0;
-        padding: 0;
-      }
+
+    ul {
+      padding: 0;
+      color: @text-color-secondary;
     }
   }
+
+  .Timetable {
+    margin-top: 18px;
+
+    .title {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 22px;
+      color: @text-color;
+    }
+
+    .cards {
+      display: flex;
+      width: 102%;
+      flex-wrap: wrap;
+
+      .card1 {
+        width: 18%;
+        height: 48px;
+        border-radius: 8px;
+        background: #FFFFFF;
+        padding: 5px;
+        margin-right: 2%;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: @normal-color;
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .card2 {
+        width: 18%;
+        height: 48px;
+        border-radius: 8px;
+        background: @primary-color;
+        padding: 5px;
+        margin-right: 2%;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: #FFFFFF;
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .card3 {
+        width: 18%;
+        height: 48px;
+        border-radius: 8px;
+        background: rgba(255, 102, 0, 0.1);
+        padding: 5px;
+        margin-right: 2%;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: @normal-color;
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .card {
+        width: 18%;
+        height: 48px;
+        border-radius: 8px;
+        background: rgba(69, 201, 119, 0.1);
+        padding: 5px;
+        margin-right: 2%;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 12px;
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+    }
   }
 }

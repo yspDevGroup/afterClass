@@ -1,6 +1,6 @@
 export const data = {
   "bmkssj": "2021-03-05",
-  "bmjssj": "2021-08-05",
+  "bmjssj": "2021-07-05",
   "skkssj": "2021-04-05",
   "skjssj": "2021-08-25",
   "weekSchedule": [
@@ -69,8 +69,8 @@ export const data = {
         "FJS": "5753333", // 辅导老师ID
         "BJRS": 30, // 班级人数
         "KSS": 20, // 课时数
-        "KKRQ": "2021-06-28", // 开课日期
-        "JKRQ": "2021-07-01", // 结课日期
+        "KKRQ": "2021-03-06", // 开课日期
+        "JKRQ": "2021-07-20", // 结课日期
         "BMKSSJ": "2021-03-22T08:13:59.344Z",
         "BMJSSJ": "2021-06-22T08:13:59.344Z",
         "KCTP": "https://i.postimg.cc/5t10MCsC/8.jpg",

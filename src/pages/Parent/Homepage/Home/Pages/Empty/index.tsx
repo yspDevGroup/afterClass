@@ -7,6 +7,7 @@
  */
 import React, { useContext } from 'react';
 import imgPop from '@/assets/mobileBg.png';
+import EmptyBGC from '@/assets/EmptyBGC.png';
 import styles from "./index.less";
 import myContext from '@/utils/MyContext';
 
@@ -34,7 +35,8 @@ const Empty = () => {
         <div className={styles.title}>{title}</div>
         <div className={styles.time}>{time}</div>
         <div className={styles.line}></div>
-        <div className={styles.opacity}></div>
+        <div className={styles.opacity} style={{backgroundImage:`url(${EmptyBGC})`}}>
+        </div>
         <textarea disabled value={content} />
       </div>
     </div>

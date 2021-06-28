@@ -4,6 +4,7 @@ import styles from '../index.less';
 import { Badge } from 'antd';
 import myContext from '@/utils/MyContext';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
+import IconFont from '@/components/CustomIcon';
 
 const Statistical: React.FC = () => {
 
@@ -125,7 +126,7 @@ const Statistical: React.FC = () => {
       </p>
       <div className={styles.diagram}>
         {
-          satistics?.map((value: any) => {
+          satistics && satistics.length ? satistics.map((value: any) => {
             config.data=value.data 
             return <div className={styles.cards}>
               <p>{value.title}</p>
@@ -136,7 +137,8 @@ const Statistical: React.FC = () => {
                 <span>待上:{value.ds}课时</span>
               </div>
             </div>
-          })
+          }) :
+          <IconFont type='icon-zanwu' style={{fontSize: '80px',display:'block',margin:'20px auto'}} />
         }
       </div>
     </div>
