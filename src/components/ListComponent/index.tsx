@@ -11,6 +11,7 @@ import { List } from 'antd';
 import { Link } from "umi";
 import styles from "./index.less";
 import noData from '@/assets/noData.png';
+import IconFont from "../CustomIcon";
 
 
 const NewsList = (props: { data: ListItem[], type: ListType }) => {
@@ -59,8 +60,9 @@ const NewsList = (props: { data: ListItem[], type: ListType }) => {
 };
 const ListComp = (props: { listData?: ListData, cls?: string }) => {
   if (props.listData) {
-    const { header, list, type, noDataText } = props.listData;
+    const { header, list, type, noDataImg, noDataText, noDataIcon} = props.listData;
     const { cls } = props;
+    
     return (
       <div className={`${styles.ListComponentBigBox} ${cls}`}>
         {header ? <div className={styles.ListHeader}>
@@ -74,14 +76,14 @@ const ListComp = (props: { listData?: ListData, cls?: string }) => {
           </div>
         </div> : ''}
         {list && list.length ? <NewsList data={list} type={type} /> : <div className={styles.noData}>
-          <img src={noData} alt="暂无数据" />
-          <h4>{noDataText}</h4>
+          <img src={noDataImg || noData} alt="暂无数据" />
+          <h4>{noDataIcon ? <IconFont type='icon-xiuxi' />:''}{noDataText} </h4>
         </div>}
       </div >
     )
 
   }
   return <></>
-  
+
 }
 export default ListComp;

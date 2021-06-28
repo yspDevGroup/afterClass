@@ -74,10 +74,13 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
           title: '今日课程',
         },
         list: curCourse,
+        noDataText: '今日无课呦',
+        noDataIcon: true
       }
       setDatasourse(todayList);
     }
-  }, [weekSchedule])
+  }, [weekSchedule]);
+  
   switch (courseStatus) {
     case 'enroll':
       return (<div>
@@ -88,18 +91,20 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
       </div>);
       break;
     case 'education':
+    case 'noTips':
       return (<div>
-        <div> <ListComp listData={datasourse} /> </div>
+        <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /> </div>
         {teacher === false ?
-          (<><div className={styles.enrollText}>课后服务课程已开课！</div>
-            <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div></>)
-          : <></>}
+          (<><div className={styles.enrollText}>课后服务课程已正式开课！</div>
+            {courseStatus === 'education' ? <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div> : ''}</>)
+          : <></>
+        }
 
       </div>);
       break;
     case 'enrolling':
       return (<div>
-        <div> <ListComp listData={datasourse} /></div>
+        <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /></div>
         {teacher === false ?
           (<> <div className={styles.enrollText}>课后服务课程报名开始了！</div>
             <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`} </div></>)

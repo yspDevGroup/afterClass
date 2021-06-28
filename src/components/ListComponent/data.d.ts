@@ -34,4 +34,6 @@ export type ListData = {
   },
   list: ListItem[];
   noDataText?: string;
+  noDataImg?: string;
+  noDataIcon?: boolean;
 };
