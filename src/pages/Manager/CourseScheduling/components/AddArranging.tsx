@@ -5,7 +5,7 @@ import type { FC } from 'react';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Form, message, Spin, Modal } from 'antd';
+import { Button, Form, message, Spin, Modal, Tooltip } from 'antd';
 
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllNJSJ } from '@/services/after-class/njsj';
@@ -568,7 +568,9 @@ const AddArranging: FC<PropsType> = (props) => {
                           onClick={() => BjClick(value)}
                           style={{ borderColor: index === value.id ? '#51d081' : '' }}
                         >
-                          <p>{value.BJMC}</p>
+                           <Tooltip title={value.BJMC}><p>{value.BJMC}</p>
+  </Tooltip>
+                          
                           <span>{value.ZJS}</span>
                         </ProCard>
                       );

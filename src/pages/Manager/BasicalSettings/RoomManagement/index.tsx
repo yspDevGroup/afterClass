@@ -107,13 +107,6 @@ const RoomManagement = () => {
   };
   const columns: ProColumns<RoomItem>[] = [
     {
-      title: '序号',
-      dataIndex: 'index',
-      valueType: 'index',
-      width: 48,
-      align: 'center',
-    },
-    {
       title: '名称',
       dataIndex: 'FJMC',
       align: 'center',

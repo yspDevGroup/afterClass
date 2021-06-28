@@ -96,13 +96,7 @@ const PeriodMaintenance = () => {
   };
 
   const columns: ProColumns<Maintenance>[] = [
-    {
-      title: '序号',
-      dataIndex: 'index',
-      valueType: 'index',
-      width: 48,
-      align: 'center',
-    },
+   
     {
       title: '时段名称',
       dataIndex: 'TITLE',
@@ -114,7 +108,7 @@ const PeriodMaintenance = () => {
       title: '所属学期',
       dataIndex: 'SSXQ',
       align: 'center',
-      width: '15%',
+      width: '20%',
       render: (_: ReactNode, entity: Maintenance) => {
         return (
           <div>{entity.XNXQ?.XN}{entity.XNXQ?.XQ}</div>
@@ -125,7 +119,7 @@ const PeriodMaintenance = () => {
       title: '开始时间',
       dataIndex: 'KSSJ',
       align: 'center',
-      width: '10%',
+      width: '15%',
       ellipsis: true,
       render: (text, record: any) => {
         return currentStatus === 'schedule' ? record.KSSJ.slice(0, 5) : record.KSSJ;
@@ -135,7 +129,7 @@ const PeriodMaintenance = () => {
       title: '结束时间',
       dataIndex: 'JSSJ',
       align: 'center',
-      width: '10%',
+      width: '15%',
       ellipsis: true,
       render: (text, record: any) => {
         return currentStatus === 'schedule' ? record.JSSJ.slice(0, 5): record.JSSJ;
@@ -145,7 +139,7 @@ const PeriodMaintenance = () => {
       title: '备注',
       dataIndex: 'BZXX',
       align: 'center',
-      width: '10%',
+      width: '20%',
       ellipsis: true,
     },
     {
