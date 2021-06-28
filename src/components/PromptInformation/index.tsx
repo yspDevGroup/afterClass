@@ -35,13 +35,13 @@ const PromptInformation: FC<propttype> = (
                 centered
             >
                 <div className={styles.box}>
-                    <h2 style={{textAlign:'center',color:'rgba(81, 208, 129, 1)'}}>系统提示</h2>
+                    <h2 style={{textAlign:'center',color:'rgba(36, 54, 81, 1)'}}>系统提示</h2>
                     <div className={styles.text}>{text}</div>
                     <div className={styles.link}>
                        
                     <span style={{marginRight:'10px'}} onClick={colse}>关闭</span>
                     <Link to={link!} onClick={event}>
-                            <span style={{color:'rgba(81, 208, 129, 1)',opacity:0.7}}>现在去设置</span>
+                            <span style={{color:'rgba(36, 54, 81, 1)',opacity:0.7}}>现在去设置</span>
                     </Link>
                     </div>
                 </div>

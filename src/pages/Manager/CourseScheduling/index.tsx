@@ -130,7 +130,7 @@ const ClassManagement = () => {
                 kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
                 njId: KHItem.KHBJSJ.NJSName.split(',')[0], // 年级ID
                 xqId: KHItem.KHBJSJ.XQName, // 校区ID
-                color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(81, 208, 129, 1)',
+                color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(36, 54, 81, 1)',
                 dis: BJID ? !(BJID === KHItem.KHBJSJ.id) : !(recordValue.BJId === KHItem.KHBJSJ.id),
               };
               if (
@@ -329,7 +329,7 @@ const ClassManagement = () => {
               </div>
               <div style={{ position: 'absolute', right: 48 }}>
                 <Button
-                  style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
+                  style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg  }}
                   type="primary"
                   key="add"
                   onClick={() => showDrawer()}

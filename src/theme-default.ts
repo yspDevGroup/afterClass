@@ -2,18 +2,18 @@
  * @description: 运行时主题配置，可在部署后实时变更
  * @author: zpl
  * @Date: 2021-03-30 10:02:36
- * @LastEditTime: 2021-04-19 14:35:56
- * @LastEditors: zpl
+ * @LastEditTime: 2021-06-28 11:28:31
+ * @LastEditors: txx
  */
 const themeColor = {
   blue: 'rgba(47, 84, 235, 1)', // 极客蓝
-  green: 'rgba(81, 208, 129, 1)', // 浅葱绿
+  navyBlue: 'rgba(36, 54, 81, 1)', // 深蓝色
   yellow: 'rgba(246, 164, 0, 1)', // 秋叶黄
   orange: 'rgba(250, 84, 28, 1)', // 朱砂橙
   red: 'rgba(235, 47, 47, 1)', // 赤焰红
 };
 
-const mainColor = themeColor.green;
+const mainColor = themeColor.navyBlue;
 
 // 主题配置
 export const theme: Record<string, string> = {
@@ -41,7 +41,7 @@ export const courseColorType: Record<string, string> = {
   crimson: 'rgba(240, 97, 145, 1)', // 绯红
   orange: 'rgba(255, 137, 100, 1)', // 橙色
   yellow: 'rgba(255, 213, 65, 1)', // 黄色
-  green: 'rgba(81, 208, 129, 1)', // 绿色
+  blue: 'rgba(62, 136, 248, 1)', // 蓝色
   skyBlue: 'rgba(83, 193, 255, 1)', // 天空蓝
   violet: 'rgba(149, 118, 204, 1)', // 紫色
   purplishRed: 'rgba(255, 121, 204, 1)', // 紫红色

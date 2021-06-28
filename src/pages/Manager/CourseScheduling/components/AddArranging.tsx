@@ -193,7 +193,7 @@ const AddArranging: FC<PropsType> = (props) => {
       teacher: value.ZJS || '',
       XNXQId: value.KHKCSJ.XNXQId || '',
       KHBJSJId: value.id || '',
-      color: value.KHKCSJ.KHKCLX.KBYS || 'rgb(81, 208, 129, 1)',
+      color: value.KHKCSJ.KHKCLX.KBYS || 'rgba(62, 136, 248, 1)',
     };
 
     setBj(chosenData);
@@ -568,7 +568,7 @@ const AddArranging: FC<PropsType> = (props) => {
                         layout="center"
                         bordered
                         onClick={() => BjClick(value)}
-                        style={{ borderColor: index === value.id ? '#51d081' : '' }}
+                        style={{ borderColor: index === value.id ? 'rgba(36,54,81,1)' : '' }}
                       >
                          <Tooltip title={value.BJMC}><p>{value.BJMC}</p>
 </Tooltip>
@@ -595,7 +595,7 @@ const AddArranging: FC<PropsType> = (props) => {
                                    layout="center"
                                    bordered
                                    onClick={() => BjClick(value)}
-                                   style={{ borderColor: index === key ? '#51d081' : '' }}
+                                   style={{ borderColor: index === key ? 'rgba(36,54,81,1)' : '' }}
                                  >
                                    <p>{value.BJMC}</p>
                                    <span>{value.ZJS}</span>
@@ -621,7 +621,7 @@ const AddArranging: FC<PropsType> = (props) => {
                                  layout="center"
                                  bordered
                                  onClick={() => BjClick(value)}
-                                 style={{ borderColor: index === key ? '#51d081' : '' }}
+                                 style={{ borderColor: index === key ? 'rgba(36,54,81,1)' : '' }}
                                >
                                  <p>{value.BJMC}</p>
                                  <span>{value.ZJS}</span>

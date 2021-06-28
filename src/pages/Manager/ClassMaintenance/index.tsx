@@ -231,7 +231,7 @@ const ClassMaintenance = () => {
           headerTitle={<SearchComponent dataSource={dataSource} />}
           toolBarRender={() => [
             <Button
-              style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
+              style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg  }}
               type="primary"
               key="add"
               onClick={() => showDrawer()}
