@@ -33,11 +33,45 @@
   }
 
   :global {
-    .ant-list-item-meta {
-      padding: 10px;
+    div.ui-listItemWrapper {
+      padding: 10px 10px 0;
       background: #ffffff;
       border-radius: 8px;
+      margin-bottom: 12px;
+      >div.ui-listItemContent{
+        display: flex;
+        >a{
+          flex: 1 auto;
+          .ant-list-item-meta{
+            margin-bottom: 0;
+          }
+        }
+        .anticon{
+          width:40px;
+          position: relative;
+          svg{
+            position: absolute;
+            bottom: -3px;
+            height: 20px;
+            transform:rotate(90deg);
+            -ms-transform:rotate(90deg); 	/* IE 9 */
+            -moz-transform:rotate(90deg); 	/* Firefox */
+            -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+            -o-transform:rotate(90deg);
+          }
+        }
+      }
+      &.ui-revert{
+        svg{
+          transform:rotate(-90deg);
+          -ms-transform:rotate(-90deg); 	/* IE 9 */
+          -moz-transform:rotate(-90deg); 	/* Firefox */
+          -webkit-transform:rotate(-90deg); /* Safari 和 Chrome */
+          -o-transform:rotate(-90deg);
+        }
+      }
     }
+
     .react-h5-calendar {
       padding: 0;
       background: none;
@@ -46,6 +80,7 @@
         color: @text-color;
         font-weight: 600;
         font-size: 14px;
+
         .icon {
           display: none;
         }

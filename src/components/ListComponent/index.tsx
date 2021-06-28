@@ -12,58 +12,75 @@ import { Link } from "umi";
 import styles from "./index.less";
 import noData from '@/assets/noData.png';
 import IconFont from "../CustomIcon";
+import DisplayColumn from "../DisplayColumn";
 
-
-const NewsList = (props: { data: ListItem[], type: ListType }) => {
-  const { data, type } = props;
+const NewsList = (props: { data: ListItem[], type: ListType, operation: any }) => {
+  const { data, type, operation } = props;
   return <div className={styles[type]}>
     <List
       dataSource={data}
       renderItem={(v) => (
-        <Link to={v.link!}>
-          <List.Item.Meta
-            style={type === 'descList' ? { background: v.titleRight?.text === "待上课" ? "rgba(69, 201, 119, 0.05)" : "rgba(102, 102, 102, 0.05)" } : {}}
-            // eslint-disable-next-line no-nested-ternary
-            avatar={v.img ?( v.img.indexOf('http') > -1 ? <img width="110" height="70" alt={v.title} src={v.img} /> : <IconFont type="icon-zanwutupian1" style={{fontSize:'110px',height:'70px'}} />):''}
-            title={<div className={styles.TitleRow}>
-              <div className={styles.Title} >
-                {v.title}
-              </div>
-              <div className={styles.TitleRight}>
-                {v.titleRight ?
-                  <span style={{ color: v.titleRight.text === "待上课" ? "#45C977" : "#999999" }}  >
-                    {v.titleRight.text}
-                  </span>
-                  : ''}
-              </div>
-            </div>}
-            description={<>{v.desc?.map((item, index) => {
-              return <div className={styles.descRow} key={`${v.title}${index.toString()}`}>
-                <div className={styles.descleft}>
-                  {item.left.map((t, i) => {
-                    return <span key={t} className={styles.descleftspan}>
-                      {i === 0 ? '' : <span className={styles.descleftInspan}>|</span>}
-                      {t}
-                    </span>
-                  })}
-                </div>
-                <div className={styles.descright}>
-                  {item.right}
-                </div>
-              </div>
-            })}</>}
-          />
-        </Link>
-
+        <div className={operation ? 'ui-listItemWrapper' : ''}>
+          <div className={operation ? 'ui-listItemContent' : ''}>
+            <Link to={v.link!}>
+              <List.Item.Meta
+                style={type === 'descList' ? { background: v.titleRight?.text === "待上课" ? "rgba(69, 201, 119, 0.05)" : "rgba(102, 102, 102, 0.05)" } : {}}
+                // eslint-disable-next-line no-nested-ternary
+                avatar={v.img ? (v.img.indexOf('http') > -1 ? <img width="110" height="70" alt={v.title} src={v.img} /> : <IconFont type="icon-zanwutupian1" style={{ fontSize: '110px', height: '70px' }} />) : ''}
+                title={<div className={styles.TitleRow}>
+                  <div className={styles.Title} >
+                    {v.title}
+                  </div>
+                  <div className={styles.TitleRight}>
+                    {v.titleRight ?
+                      <span style={{ color: v.titleRight.text === "待上课" ? "#45C977" : "#999999" }}  >
+                        {v.titleRight.text}
+                      </span>
+                      : ''}
+                  </div>
+                </div>}
+                description={<>{v.desc?.map((item, index) => {
+                  return <div className={styles.descRow} key={`${v.title}${index.toString()}`}>
+                    <div className={styles.descleft}>
+                      {item.left.map((t, i) => {
+                        return <span key={t} className={styles.descleftspan}>
+                          {i === 0 ? '' : <span className={styles.descleftInspan}>|</span>}
+                          {t}
+                        </span>
+                      })}
+                    </div>
+                    <div className={styles.descright}>
+                      {item.right}
+                    </div>
+                  </div>
+                })}</>}
+              />
+            </Link>
+            {operation ? <IconFont type='icon-arrow' onClick={(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+              console.log(e);
+              
+              
+              // tar!.className = tar?.className === 'ui-listItemContent ui-revert' ? 'ui-listItemContent' : 'ui-listItemContent ui-revert';
+            }} /> : ''}
+          </div>
+          {operation ? <>
+            <DisplayColumn
+              hidden={true}
+              type="icon"
+              grid={{ column: 2 }}
+              dataSource={operation}
+            />
+          </> : ''}
+        </div>
       )}
     />
   </div>
 };
-const ListComp = (props: { listData?: ListData, cls?: string,operation?: any }) => {
+const ListComp = (props: { listData?: ListData, cls?: string, operation?: any }) => {
   if (props.listData) {
-    const { header, list, type, noDataImg, noDataText, noDataIcon} = props.listData;
-    const { cls } = props;
-    
+    const { header, list, type, noDataImg, noDataText, noDataIcon } = props.listData;
+    const { cls, operation } = props;
+
     return (
       <div className={`${styles.ListComponentBigBox} ${cls}`}>
         {header ? <div className={styles.ListHeader}>
@@ -76,9 +93,9 @@ const ListComp = (props: { listData?: ListData, cls?: string,operation?: any }) 
             </a>
           </div>
         </div> : ''}
-        {list && list.length ? <NewsList data={list} type={type} /> : <div className={styles.noData}>
+        {list && list.length ? <NewsList data={list} type={type} operation={operation} /> : <div className={styles.noData}>
           <img src={noDataImg || noData} alt="暂无数据" />
-          <h4>{noDataIcon ? <IconFont type='icon-xiuxi' />:''}{noDataText} </h4>
+          <h4>{noDataIcon ? <IconFont type='icon-xiuxi' /> : ''}{noDataText} </h4>
         </div>}
       </div >
     )

@@ -6,6 +6,7 @@
  * @LastEditors: txx
  */
 export type IiconTextData = {
+  hidden?: boolean;
   title?: string;
   type?: "icon" | "img";
   isheader?: boolean;

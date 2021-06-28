@@ -7,9 +7,10 @@ import ListComponent from '@/components/ListComponent';
 import moment from 'moment';
 import { DateRange, Week } from '@/utils/Timefunction';
 import myContext from '@/utils/MyContext';
+import { iconTextData } from '../mock';
 
 type propstype = {
-  setDatedata: (data: any) => void;
+  setDatedata?: (data: any) => void;
 }
 const defaultMsg = {
   type: 'picList',
@@ -18,7 +19,7 @@ const defaultMsg = {
   noDataText: '当天无课',
 };
 const ClassCalendar = (props: propstype) => {
-  const { setDatedata } = props
+  const { setDatedata } = props;
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
@@ -90,9 +91,10 @@ const ClassCalendar = (props: propstype) => {
 }
 useEffect(() => {
   const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
-  setDatedata(learnData);
+  if(setDatedata){
+    setDatedata(learnData);
+  }
   setDates(markDays);
- 
   setCourse({
     type: 'picList',
     cls: 'picList',
@@ -132,12 +134,12 @@ useEffect(() => {
         }}
         markType="dot"
         transitionDuration="0.1"
-        currentDate={day}
+        currentDate={day} 
       />
       <div className={styles.subTitle}>
         {cDay}
       </div>
-      <ListComponent listData={course} operation={'ad'} />
+      <ListComponent listData={course} operation={iconTextData} />
     </div>
   )
 }

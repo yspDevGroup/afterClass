@@ -7,9 +7,9 @@ import IconFont from '../CustomIcon';
 import styles from "./index.less";
 
 
-const DisplayColumn: FC<IiconTextData> = ({ title, type, grid, dataSource, isheader, totil }) => {
+const DisplayColumn: FC<IiconTextData> = ({hidden = false, title, type, grid, dataSource, isheader, totil }) => {
     return (
-        <div className={styles.IconTextCompBox} style={{ background: `${!isheader ? '#FFFFFF' : '#F5F5F5'}` }}>
+        <div className={styles.IconTextCompBox} style={{ background: `${!isheader ? '#FFFFFF' : '#F5F5F5'}`, display: hidden? 'none':'block' }}>
             <List
                 grid={grid}
                 dataSource={dataSource}
