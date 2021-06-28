@@ -1,6 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import DisplayColumn from '@/components/DisplayColumn';
-import { iconTextData } from './mock';
 import styles from './index.less';
 import ClassCalendar from './ClassCalendar';
 import ListComponent from '@/components/ListComponent';
@@ -13,7 +11,7 @@ const Study = () => {
    // 从日历中获取的时间
    const [datedata, setDatedata] = useState<any>();
    // 获取列表数据
-   const { rjkc } = useContext(myContext);
+   const { yxkc } = useContext(myContext);
    // 在学课程数据
    const myDate = new Date();
    const nowdata = new Date(moment(myDate.toLocaleDateString()).format('YYYY-MM-DD'));
@@ -52,8 +50,8 @@ const Study = () => {
      }
    }
    useEffect(() => {
-     if(rjkc){
-       const { courseData } = Selectedcourses(rjkc);
+     if(yxkc){
+       const { courseData } = Selectedcourses(yxkc);
        const Selected: ListData = {
          type: 'list',
          cls: 'list',
@@ -62,21 +60,15 @@ const Study = () => {
        };
        setListData(Selected);
      }
-   }, [rjkc, datedata])
+   }, [yxkc, datedata])
  
   return <div className={styles.studyPage}>
-    <DisplayColumn
-      type="icon"
-      isheader={false}
-      grid={{ column: 4 }}
-      dataSource={iconTextData}
-    />
     <div className={styles.funWrapper}>
       <div className={styles.titleBar}>我的课表</div>
       <ClassCalendar setDatedata={setDatedata}/>
     </div>
     <div className={styles.funWrapper}>
-      <div className={styles.titleBar}>{`任教课程 ${rjkc?.length}`}</div>
+      <div className={styles.titleBar}>{`任教课程 ${yxkc?.length}`}</div>
       <ListComponent listData={listData} />
     </div>
   </div>;

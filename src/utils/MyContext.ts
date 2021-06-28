@@ -8,7 +8,6 @@ export default createContext<{
   yxkc?: any[];
   kskc?: any[];
   weekSchedule?: any;
-  rjkc?: any[];
   courseStatus?: string;
   currentUserInfo?: API.CurrentUser
 }>({});

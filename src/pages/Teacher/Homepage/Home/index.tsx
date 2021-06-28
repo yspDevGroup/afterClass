@@ -10,7 +10,7 @@ import myContext from '@/utils/MyContext';
 import TeachCourses from './components/TeachCourses';
 
 const Home = () => {
-  const { courseStatus,currentUserInfo} = useContext(myContext);
+  const { currentUserInfo} = useContext(myContext);
   const userRef = useRef(null);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Home = () => {
           </div>
           <IconFont type="icon-gengduo" className={styles.gengduo} />
         </div>
-        <div className={styles.todayCourses}>
+        <div className={styles.enrollArea}>
           <EnrollClassTime teacher={true} />
         </div>
         <div className={styles.teachCourses}>

@@ -11,8 +11,9 @@ import ListComp from '../ListComponent';
 import type { ListData } from '../ListComponent/data';
 import myContext from '@/utils/MyContext';
 import TimeRight from './TimeRight';
+import noData1 from '@/assets/noData1.png';
 
-const EnrollClassTime = (props: { teacher?: boolean }) => {
+const  EnrollClassTime = (props: { teacher?: boolean }) => {
   const { teacher = false } = props;
   // 获取首页数据
   const { courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj } = useContext(myContext);
@@ -74,8 +75,9 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
           title: '今日课程',
         },
         list: curCourse,
-        noDataText: '今日无课呦',
-        noDataIcon: true
+        noDataText: '今日没有课呦',
+        noDataIcon: !teacher,
+        noDataImg: teacher ? noData1 : null
       }
       setDatasourse(todayList);
     }
@@ -88,7 +90,7 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
         {teacher === false ?
           (<><div className={styles.enrollText}>课后服务课程报名开始了！</div>
             <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`}</div></>)
-          : <></>}
+          : <div className={styles.enrollText}>课后服务课程将于{`${skkssj}`}正式开课！</div>}
       </div>);
       break;
     case 'education':
@@ -96,7 +98,9 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
       return (<div>
         {teacher === false ? <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /> </div> : <></>}
         <><div className={styles.enrollText}>课后服务课程已正式开课！</div>
-          {courseStatus === 'education' ? <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div> : ''}</>
+          {courseStatus === 'education' ? <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div> : ''}
+          <ListComp listData={datasourse} cls={styles.todayImg} />
+          </>
       </div>);
       break;
     case 'enrolling':
@@ -110,9 +114,8 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
           : <>
             <div className={styles.enrollText}>课后服务课程已正式开课！</div>
             <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div>
-            <div><ListComp listData={datasourse} cls={styles.todayNOImg} /></div>
+            <div><ListComp listData={datasourse} cls={styles.todayImg} /></div>
           </>}
-
       </div>);
       break;
     case 'enrolled':

@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
-import PromptInformation from './components/PromptInformation';
 import moment from 'moment';
 import { DateRange, Week } from '@/utils/Timefunction';
 import myContext from '@/utils/MyContext';
@@ -26,10 +25,6 @@ const ClassCalendar = (props: propstype) => {
   const { weekSchedule } = useContext(myContext);
   const [dates, setDates] = useState<any[]>([]);
   const [courseArr, setCourseArr] = useState<any>({});
-  // const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
-  // const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
-  // const [course, setCourse] = useState<any>();
-
 
  // 后台返回的周数据的遍历
  const getCalendarData = (data: any) => {
@@ -142,7 +137,7 @@ useEffect(() => {
       <div className={styles.subTitle}>
         {cDay}
       </div>
-      {course ? <ListComponent listData={course} /> : <PromptInformation />}
+      <ListComponent listData={course} operation={'ad'} />
     </div>
   )
 }

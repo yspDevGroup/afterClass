@@ -59,7 +59,7 @@ const NewsList = (props: { data: ListItem[], type: ListType }) => {
     />
   </div>
 };
-const ListComp = (props: { listData?: ListData, cls?: string }) => {
+const ListComp = (props: { listData?: ListData, cls?: string,operation?: any }) => {
   if (props.listData) {
     const { header, list, type, noDataImg, noDataText, noDataIcon} = props.listData;
     const { cls } = props;
