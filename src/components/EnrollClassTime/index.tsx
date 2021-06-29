@@ -13,7 +13,7 @@ import myContext from '@/utils/MyContext';
 import TimeRight from './TimeRight';
 import noData1 from '@/assets/noData1.png';
 
-const  EnrollClassTime = (props: { teacher?: boolean }) => {
+const EnrollClassTime = (props: { teacher?: boolean }) => {
   const { teacher = false } = props;
   // 获取首页数据
   const { courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj } = useContext(myContext);
@@ -72,7 +72,7 @@ const  EnrollClassTime = (props: { teacher?: boolean }) => {
         type: "descList",
         cls: 'descList',
         header: {
-          title: '今日课程',
+          title: curCourse && curCourse.length ? '今日课程' : '',
         },
         list: curCourse,
         noDataText: '今日没有课呦',
@@ -99,8 +99,8 @@ const  EnrollClassTime = (props: { teacher?: boolean }) => {
         {teacher === false ? <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /> </div> : <></>}
         <><div className={styles.enrollText}>课后服务课程已正式开课！</div>
           {courseStatus === 'education' ? <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div> : ''}
-          <ListComp listData={datasourse} cls={styles.todayImg} />
-          </>
+          {teacher === false ? '' : <ListComp listData={datasourse} cls={styles.todayImg} />}
+        </>
       </div>);
       break;
     case 'enrolling':

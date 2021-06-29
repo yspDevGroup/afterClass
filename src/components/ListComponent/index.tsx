@@ -83,7 +83,7 @@ const ListComp = (props: { listData?: ListData, cls?: string, operation?: any })
 
     return (
       <div className={`${styles.ListComponentBigBox} ${cls}`}>
-        {header ? <div className={styles.ListHeader}>
+        {header && header.title ? <div className={styles.ListHeader}>
           <div className={styles.ListHeaderTitle}>
             {header?.title}
           </div>
