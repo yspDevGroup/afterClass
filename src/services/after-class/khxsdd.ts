@@ -11,7 +11,7 @@ export async function getKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -39,31 +39,18 @@ export async function getKHXSDD(
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
-        NJS?: string;
-        XQ?: string;
-        NJSName?: string;
-        XQName?: string;
-        ZJSName?: string;
-        FJSName?: string;
-        KHKCSJ?: {
-          id?: string;
-          KCMC?: string;
-          KCLX?: string;
-          KCTP?: string;
-          KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
-          KCMS?: string;
-          KKRQ?: string;
-          JKRQ?: string;
-          BMKSSJ?: string;
-          BMJSSJ?: string;
-          XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
-        };
       };
+      NJS?: string;
+      XQ?: string;
+      NJSName?: string;
+      XQName?: string;
+      ZJSName?: string;
+      FJSName?: string;
     };
     message?: string;
   }>(`/khxsdd/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -77,10 +64,10 @@ export async function deleteKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -90,16 +77,6 @@ export async function getAllKHXSDD(
   body: {
     /** 学生ID */
     XSId?: string;
-    /** 年级ID */
-    njId?: string;
-    /** 学年 */
-    xn?: string;
-    /** 学期 */
-    xq?: string;
-    /** 班级名称 */
-    bjmc?: string;
-    /** 课程名称 */
-    kcmc?: string;
     /** 课后服务订单状态 */
     DDZT?: string;
   },
@@ -144,26 +121,13 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
-        NJS?: string;
-        XQ?: string;
-        NJSName?: string;
-        XQName?: string;
-        ZJSName?: string;
-        FJSName?: string;
-        KHKCSJ?: {
-          id?: string;
-          KCMC?: string;
-          KCLX?: string;
-          KCTP?: string;
-          KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
-          KCMS?: string;
-          KKRQ?: string;
-          JKRQ?: string;
-          BMKSSJ?: string;
-          BMJSSJ?: string;
-          XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
-        };
       };
+      NJS?: string;
+      XQ?: string;
+      NJSName?: string;
+      XQName?: string;
+      ZJSName?: string;
+      FJSName?: string;
     };
     message?: string;
   }>('/khxsdd/create', {
@@ -237,12 +201,12 @@ export async function cancleKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
     `/khxsdd/cancle/${param0}`,
     {
       method: 'DELETE',
-      params: { ...params },
+      params: { ...queryParams },
       ...(options || {}),
     },
   );

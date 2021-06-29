@@ -6,20 +6,19 @@ import { Button, message, Radio, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'umi';
 import styles from './index.less';
-import { getDetailsKHKCSJ } from '@/services/after-class/khkcsj';
-import { currentUser } from '@/services/after-class/user'
-import type { KcDetailType } from '@/pages/Parent/Homepage/Home/Pages/CourseDetails/data';
+import { getKHKCSJ } from '@/services/after-class/khkcsj';
+import { currentUser } from '@/services/after-class/user';
 import { TimetableList } from '@/pages/Parent/Homepage/Home/Pages/CourseDetails/mock';
 import IconFont from '@/components/CustomIcon';
 
 const CourseDetails: React.FC = () => {
-  const [BJ, setBJ] = useState();
-  const [FY, setFY] = useState();
+  const [BJ, setBJ] = useState<string>();
+  const [FY, setFY] = useState<number>();
   const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
   const [Student, setStudent] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>();
-  const [KcDetail, setKcDetail] = useState<KcDetailType>();
+  const [KcDetail, setKcDetail] = useState<any>();
   const hrefs = window.location.href;
   let courseid = '';
   let classid = '';
@@ -35,7 +34,9 @@ const CourseDetails: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await getDetailsKHKCSJ(courseid);
+      const result = await getKHKCSJ({
+        kcId:courseid
+      });
       const resultUser = await currentUser();
 
       if (resultUser.status === 'ok') {
@@ -45,8 +46,8 @@ const CourseDetails: React.FC = () => {
       }
       if (result.status === 'ok') {
         setKcDetail(result.data)
-        setFY(result.data.KHBJSJs[0].FY)
-        setBJ(result.data.KHBJSJs[0].id)
+        setFY(result.data!.KHBJSJs![0].FY)
+        setBJ(result.data!.KHBJSJs![0].id)
       } else {
         message.error(result.message);
       }

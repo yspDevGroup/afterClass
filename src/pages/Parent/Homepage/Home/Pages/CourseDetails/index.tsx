@@ -5,8 +5,7 @@ import { Button, message, Radio, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
-import type { KcDetailType } from './data'
-import { getDetailsKHKCSJ } from '@/services/after-class/khkcsj';
+import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import { getQueryString } from '@/utils/utils';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { DateRange, Week } from '@/utils/Timefunction';
@@ -17,13 +16,13 @@ import IconFont from '@/components/CustomIcon';
 
 
 const CourseDetails: React.FC = () => {
-  const [BJ, setBJ] = useState();
-  const [FY, setFY] = useState();
+  const [BJ, setBJ] = useState<string>();
+  const [FY, setFY] = useState<number>();
   const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
   const [Student, setStudent] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>();
-  const [KcDetail, setKcDetail] = useState<KcDetailType>();
+  const [KcDetail, setKcDetail] = useState<any>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [timetableList, setTimetableList] = useState<any[]>()
@@ -130,12 +129,12 @@ const CourseDetails: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await getDetailsKHKCSJ(courseid);
+      const result = await getKHKCSJ(courseid);
       setStudent(currentUser?.username);
       if (result.status === 'ok') {
-        setKcDetail(result.data)
-        setFY(result.data.KHBJSJs[0].FY)
-        setBJ(result.data.KHBJSJs[0].id)
+        setKcDetail(result.data);
+        setFY(result.data!.KHBJSJs![0].FY);
+        setBJ(result.data!.KHBJSJs![0].id);
       } else {
         message.error(result.message);
       }

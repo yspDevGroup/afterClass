@@ -11,7 +11,7 @@ export async function getKHXSCQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -45,7 +45,7 @@ export async function getKHXSCQ(
     message?: string;
   }>(`/khxscq/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -59,10 +59,10 @@ export async function deleteKHXSCQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxscq/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -78,8 +78,6 @@ export async function getAllKHXSCQ(
     CQZT?: string;
     /** 出勤日期 */
     CQRQ?: string;
-    /** 课程排课ID */
-    pkId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -146,46 +144,13 @@ export async function updateKHXSCQ(
   body: API.UpdateKHXSCQ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxscq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** 学生出勤记录统计 POST /khxscq/statistical */
-export async function countKHXSCQ(
-  body: {
-    /** 学生ID */
-    XSId?: string;
-    /** 学年 */
-    xn?: string;
-    /** 学期 */
-    xq?: string;
-  },
-  options?: { [key: string]: any },
-) {
-  return request<{
-    status?: 'ok' | 'error';
-    data?: {
-      KHBJSJId?: string;
-      KCMC?: string;
-      BJMC?: string;
-      KSS?: number;
-      normal?: number;
-      abnormal?: number;
-    }[];
-    message?: string;
-  }>('/khxscq/statistical', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
