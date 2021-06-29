@@ -5,13 +5,11 @@ import Home from './Home';
 import Education from './Education';
 import Mine from './Mine';
 import styles from './index.less';
-// import { dataSource } from '@/components/Search/mock';
 import { useModel } from '@/.umi/plugin-model/useModel';
-// import { queryXNXQList } from '@/services/local-services/xnxq';
-// import { homePageInfo } from '@/services/after-class/user';
 import { getCurrentStatus } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
-import { data } from '@/pages/Teacher/Homepage/mock';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { homePageInfo } from '@/services/after-class/user';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
@@ -21,40 +19,37 @@ const PersonalHomepage = () => {
   const [courseStatus, setCourseStatus] = useState<string>('empty');
   const [dataSource, setDataSource] = useState<any>();
   useEffect(() => {
-    // async function fetchData() {
-    //   // 获取后台学年学期数据
-    //   const result = await queryXNXQList();
-    //   const { XN, XQ } = result.current;
-    //   const res = await homePageInfo({
-    //     xn: XN,
-    //     xq: XQ,
-    //     XSId: currentUser?.userId || currentUser?.id,
-    //     njId: '1'
-    //   });
-    //   if (res.status === 'ok' && res.data) {
-    //     setDataSource(res.data);	
-    //     const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
-    //     if (bmkssj && bmjssj && skkssj && skjssj) {
-    //       const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
-    //       setCourseStatus(cStatus);
-    //     }
-    //   }
-    // }
-    // fetchData();
-    // 假数据
-    setDataSource(data);
-    const { bmkssj, bmjssj, skkssj, skjssj } = data;
-    if (bmkssj && bmjssj && skkssj && skjssj) {
-      const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
-      setCourseStatus(cStatus);
+    async function fetchData() {
+      // 获取后台学年学期数据
+      const result = await queryXNXQList();
+      const { XN, XQ } = result.current;
+      const res = await homePageInfo({
+        xn: XN,
+        xq: XQ,
+      });
+      if (res.status === 'ok' && res.data) {
+        setDataSource(res.data);	
+        const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
+        if (bmkssj && bmjssj && skkssj && skjssj) {
+          const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
+          setCourseStatus(cStatus);
+        }
+      }
     }
+    fetchData();
+    // 假数据
+    // setDataSource(data);
+    // const { bmkssj, bmjssj, skkssj, skjssj } = data;
+    // if (bmkssj && bmjssj && skkssj && skjssj) {
+    //   const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
+    //   setCourseStatus(cStatus);
+    // }
 
   }, [])
   return <div className={styles.mobilePageHeader}>
     <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
         setActiveKey(key);
-
       }}>
         <TabPane tab={
           <span>

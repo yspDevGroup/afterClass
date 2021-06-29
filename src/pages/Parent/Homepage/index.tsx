@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getCurrentStatus } from '@/utils/utils';
-import styles from './index.less';
+import { useModel, history, } from 'umi';
 import Home from './Home';
 import Study from './Study';
 import Mine from './Mine';
 import IconFont from '@/components/CustomIcon';
+import { getCurrentStatus } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
+import styles from './index.less';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
-import { useModel, history } from 'umi';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [activeKey, setActiveKey] = useState<string>('index');
-  const [courseStatus, setCourseStatus] = useState<string>('empty');
+  const [courseStatus, setCourseStatus] = useState<string>('');
   const [dataSource, setDataSource] = useState<any>();
   useEffect(() => {
     async function fetchData() {
@@ -42,10 +42,11 @@ const PersonalHomepage = () => {
 
   }, [])
 
-  if (courseStatus === 'empty') {
-    history.push('/parent/home/emptyArticle?articlepage=empty')
-    return <></>;
-  }
+  useEffect(() => {
+    if (courseStatus === 'empty') {
+      history.push('/parent/home/emptyArticle?articlepage=empty');
+    }
+  }, [courseStatus])
   return <div className={styles.mobilePageHeader}>
     <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {

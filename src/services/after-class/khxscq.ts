@@ -78,6 +78,8 @@ export async function getAllKHXSCQ(
     CQZT?: string;
     /** 出勤日期 */
     CQRQ?: string;
+    /** 课程排课ID */
+    pkId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -151,6 +153,39 @@ export async function updateKHXSCQ(
       'Content-Type': 'application/json',
     },
     params: { ...queryParams },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 学生出勤记录统计 POST /khxscq/statistical */
+export async function countKHXSCQ(
+  body: {
+    /** 学生ID */
+    XSId?: string;
+    /** 学年 */
+    xn?: string;
+    /** 学期 */
+    xq?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: {
+      KHBJSJId?: string;
+      KCMC?: string;
+      BJMC?: string;
+      KSS?: number;
+      normal?: number;
+      abnormal?: number;
+    }[];
+    message?: string;
+  }>('/khxscq/statistical', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     data: body,
     ...(options || {}),
   });
