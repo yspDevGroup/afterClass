@@ -96,6 +96,26 @@ export async function deleteKHPKSJ(
   });
 }
 
+/** 获取课后排课数据 GET /khpksj/weekSchedule/${param0} */
+export async function getKHPKSJByBJID(
+  params: {
+    // path
+    /** 班级ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{ status?: 'ok' | 'error'; data?: API.KHPKSJ[]; message?: string }>(
+    `/khpksj/weekSchedule/${param0}`,
+    {
+      method: 'GET',
+      params: { ...queryParams },
+      ...(options || {}),
+    },
+  );
+}
+
 /** 查询所有课后排课数据 POST /khpksj/ */
 export async function getAllKHPKSJ(
   body: {

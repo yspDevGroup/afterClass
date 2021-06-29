@@ -129,7 +129,7 @@ const CourseDetails: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await getKHKCSJ(courseid);
+      const result = await getKHKCSJ({ kcId: courseid });
       setStudent(currentUser?.username);
       if (result.status === 'ok') {
         setKcDetail(result.data);
