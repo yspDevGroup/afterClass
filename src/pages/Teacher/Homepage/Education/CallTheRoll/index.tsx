@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
-import { Data } from './mock';
 import styles from './index.less';
 import { Table, Button, Switch, message, Modal } from 'antd';
 import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
@@ -8,6 +7,7 @@ import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenData
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
+import { getQueryString } from '@/utils/utils';
 
 /**
  * 课堂点名
@@ -60,6 +60,12 @@ const CallTheRoll = () => {
   // 表格数据
   const [dataSource, setDataScouse] = useState<any>([]);
   const [butDis, setButDis] = useState<boolean>(false);
+
+  const pkid = getQueryString('id'); // 排课ID
+  const bjids = getQueryString('bjid'); // 班级ID
+  const pkDate = getQueryString('date')?.replace(/\//g, '-'); // 日期
+  const kjs = getQueryString('kjs'); // 课时数
+
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -71,9 +77,9 @@ const CallTheRoll = () => {
   useEffect(() => {
     // 查询所有课后服务出勤记录
     const resAll = getAllKHXSCQ({
-      bjId: 'string', // 班级ID
-      CQRQ: 'string', // 日期
-      // pkId: 'string', // 排课ID
+      bjId: bjids || undefined, // 班级ID
+      CQRQ: pkDate, // 日期
+      pkId: pkid || undefined, // 排课ID
     });
     Promise.resolve(resAll).then((datas) => {
       const allData = datas.data;
@@ -85,9 +91,8 @@ const CallTheRoll = () => {
         setButDis(true);
       }
     });
-    const id = '1abc6708-648e-4d7c-87cc-88f54e747a4f';
     // 获取班级已报名人数
-    const resStudent = getEnrolled({ id });
+    const resStudent = getEnrolled({ id: bjids || '' });
     Promise.resolve(resStudent).then((data: any) => {
       if (data.status === 'ok') {
         const studentData = data.data;
@@ -99,7 +104,7 @@ const CallTheRoll = () => {
     });
 
     // 获取课后班级数据
-    const resClass = getKHBJSJ({ id });
+    const resClass = getKHBJSJ({ id: bjids || '' });
     Promise.resolve(resClass).then((data) => {
       if (data.status === 'ok') {
         const name: claNameType = {
@@ -144,10 +149,10 @@ const CallTheRoll = () => {
     dataSource.forEach((item: any) => {
       value.push({
         CQZT: item.isRealTo, // 出勤 / 缺席
-        CQRQ: '2021-06-30', // 日期
+        CQRQ: pkDate, // 日期
         XSId: item.XSId, // 学生ID
-        KHBJSJId: '1abc6708-648e-4d7c-87cc-88f54e747a4f', // 班级ID
-        KHPKSJId: '3e3b6360-7780-4234-9c4f-5f93913e55e4', // 排课ID
+        KHBJSJId: bjids, // 班级ID
+        KHPKSJId: pkid, // 排课ID
       });
     });
     const res = await createKHXSCQ(value);
@@ -203,7 +208,7 @@ const CallTheRoll = () => {
     <div className={styles.callTheRoll}>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
-        {claName?.BJMC} ｜ 第 {Data.classCurrent}/{claName?.KSS} 课时
+        {claName?.BJMC} ｜ 第 {kjs}/{claName?.KSS} 课时
       </div>
       <div className={styles.checkWorkAttendance}>
         {checkWorkInfo.map((item) => {
