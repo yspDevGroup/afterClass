@@ -1,4 +1,4 @@
-import React, { useState,useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import dayjs from 'dayjs';
 // 因为插件为JS，TS校验报错，不影响使用
 import { Calendar } from 'react-h5-calendar';
@@ -7,7 +7,6 @@ import ListComponent from '@/components/ListComponent';
 import moment from 'moment';
 import { DateRange, Week } from '@/utils/Timefunction';
 import myContext from '@/utils/MyContext';
-import { iconTextData } from '../mock';
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -18,6 +17,18 @@ const defaultMsg = {
   list: [],
   noDataText: '当天无课',
 };
+const iconTextData = [
+  {
+    text: "课堂点名",
+    icon: "icon-dianming",
+    background: "#FF8964",
+  },
+  {
+    text: "离校通知",
+    icon: "icon-lixiao",
+    background: "#7DCE81",
+  },
+];
 const ClassCalendar = (props: propstype) => {
   const { setDatedata } = props;
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
@@ -27,18 +38,17 @@ const ClassCalendar = (props: propstype) => {
   const [dates, setDates] = useState<any[]>([]);
   const [courseArr, setCourseArr] = useState<any>({});
 
- // 后台返回的周数据的遍历
- const getCalendarData = (data: any) => {
-  const courseData = {};
-  const markDays = [];
-  const learnData = {};
-  for (let k = 0; k < data.length; k += 1) {
-    const item = data[k];
-    const courseDays = [];
-    const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
-    const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
-    const kcxxInfo = [
-      {
+  // 后台返回的周数据的遍历
+  const getCalendarData = (data: any) => {
+    const courseData = {};
+    const markDays = [];
+    const learnData = {};
+    for (let k = 0; k < data.length; k += 1) {
+      const item = data[k];
+      const courseDays = [];
+      const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
+      const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
+      const kcxxInfo = {
         title: item.KHBJSJ.KHKCSJ.KCMC,
         img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
         link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
@@ -50,59 +60,65 @@ const ClassCalendar = (props: propstype) => {
             left: [`上课地点：${item.FJSJ.FJMC}`],
           },
         ],
-      },
-    ];
-    const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
-    for (let i = 0; i < res.length; i += 1) {
-      const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
-      if (weekDay === item.WEEKDAY) {
-        if (courseData[res[i]]) {
-          courseData[res[i]] = courseData[res[i]].concat(kcxxInfo);
-        } else {
-          courseData[res[i]] = kcxxInfo;
-        }
-        markDays.push({
-          date: res[i]
-        });
-        courseDays.push(res[i])
-      }
-    }
-    if (learnData[item.KHBJSJ.id]) {
-      const val = learnData[item.KHBJSJ.id];
-      learnData[item.KHBJSJ.id] = {
-        dates: val.dates.concat(courseDays),
-        weekDay: `${val.weekDay},${item.WEEKDAY}`,
-        courseInfo: item
       };
-    } else {
-      learnData[item.KHBJSJ.id] = {
-        dates: courseDays,
-        weekDay: item.WEEKDAY,
-        courseInfo: item
+      const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
+      let kjs = 0;
+      for (let i = 0; i < res.length; i += 1) {
+        const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
+        if (weekDay === item.WEEKDAY) {
+          kjs += 1;
+          const enrollLink = `/teacher/education/callTheRoll?id=${item.id}&bjid=${item.KHBJSJ.id}&date=${moment(res[i]).format('YYYY/MM/DD')}&kjs=${kjs}`;
+          const curInfo = [{
+            enrollLink,
+            ...kcxxInfo 
+          }];
+          if (courseData[res[i]]) {
+            courseData[res[i]] = courseData[res[i]].concat(curInfo);
+          } else {
+            courseData[res[i]] = curInfo;
+          }
+          markDays.push({
+            date: res[i]
+          });
+          courseDays.push(res[i])
+        }
+      }
+      if (learnData[item.KHBJSJ.id]) {
+        const val = learnData[item.KHBJSJ.id];
+        learnData[item.KHBJSJ.id] = {
+          dates: val.dates.concat(courseDays),
+          weekDay: `${val.weekDay},${item.WEEKDAY}`,
+          courseInfo: item
+        };
+      } else {
+        learnData[item.KHBJSJ.id] = {
+          dates: courseDays,
+          weekDay: item.WEEKDAY,
+          courseInfo: item
+        }
       }
     }
-  }
 
-  return {
-    markDays,
-    courseData,
-    learnData
-  };
-}
-useEffect(() => {
-  const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
-  if(setDatedata){
-    setDatedata(learnData);
+    return {
+      markDays,
+      courseData,
+      learnData
+    };
   }
-  setDates(markDays);
-  setCourse({
-    type: 'picList',
-    cls: 'picList',
-    list: courseData[day] || [],
-    noDataText: '当天无课',
-  });
-  setCourseArr(courseData);
-}, [])
+  useEffect(() => {
+    const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
+    if (setDatedata) {
+      setDatedata(learnData);
+    }
+    setDates(markDays);
+    setCourse({
+      type: 'picList',
+      cls: 'picList',
+      list: courseData[day] || [],
+      noDataText: '当天无课',
+    });
+    setCourseArr(courseData);
+  }, [])
 
   return (
     <div className={styles.schedule}>
@@ -124,17 +140,17 @@ useEffect(() => {
         onDateClick={(date: { format: (arg: string) => any; }) => {
           setDay(date.format('YYYY-MM-DD'));
           setCDay(date.format('M月D日'));
-          const curCourse ={
-              type: 'picList',
-              cls: 'picList',
-              list: courseArr[date.format('YYYY-MM-DD')] || [],
-              noDataText: '当天无课',
-            };;
+          const curCourse = {
+            type: 'picList',
+            cls: 'picList',
+            list: courseArr[date.format('YYYY-MM-DD')] || [],
+            noDataText: '当天无课',
+          };;
           setCourse(curCourse);
         }}
         markType="dot"
         transitionDuration="0.1"
-        currentDate={day} 
+        currentDate={day}
       />
       <div className={styles.subTitle}>
         {cDay}

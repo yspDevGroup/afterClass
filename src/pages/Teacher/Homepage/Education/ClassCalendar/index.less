@@ -34,41 +34,55 @@
 
   :global {
     div.ui-listItemWrapper {
-      padding: 10px 10px 0;
+      padding: 10px;
       background: #ffffff;
       border-radius: 8px;
       margin-bottom: 12px;
-      >div.ui-listItemContent{
+
+      >div.ui-listItemContent {
         display: flex;
-        >a{
+
+        >a {
           flex: 1 auto;
-          .ant-list-item-meta{
+
+          .ant-list-item-meta {
             margin-bottom: 0;
           }
         }
-        .anticon{
-          width:40px;
+
+        .anticon {
+          width: 40px;
           position: relative;
-          svg{
+
+          svg {
             position: absolute;
             bottom: -3px;
             height: 20px;
-            transform:rotate(90deg);
-            -ms-transform:rotate(90deg); 	/* IE 9 */
-            -moz-transform:rotate(90deg); 	/* Firefox */
-            -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
-            -o-transform:rotate(90deg);
+            transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            /* IE 9 */
+            -moz-transform: rotate(90deg);
+            /* Firefox */
+            -webkit-transform: rotate(90deg);
+            /* Safari 和 Chrome */
+            -o-transform: rotate(90deg);
+          }
+
+          &.ui-revert {
+            svg {
+              bottom: 0;
+              transform: rotate(-90deg);
+              -ms-transform: rotate(-90deg);
+              /* IE 9 */
+              -moz-transform: rotate(-90deg);
+              /* Firefox */
+              -webkit-transform: rotate(-90deg);
+              /* Safari 和 Chrome */
+              -o-transform: rotate(-90deg);
+            }
           }
         }
-      }
-      &.ui-revert{
-        svg{
-          transform:rotate(-90deg);
-          -ms-transform:rotate(-90deg); 	/* IE 9 */
-          -moz-transform:rotate(-90deg); 	/* Firefox */
-          -webkit-transform:rotate(-90deg); /* Safari 和 Chrome */
-          -o-transform:rotate(-90deg);
-        }
+
       }
     }
 

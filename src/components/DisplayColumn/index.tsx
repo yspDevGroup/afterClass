@@ -17,7 +17,7 @@ const DisplayColumn: FC<IiconTextData> = ({hidden = false, title, type, grid, da
                     (<div >{title}</div>)
                     : ""}
                 renderItem={(item) => {
-                    const { icon, text, img, link, background, fontSize, count } = item
+                    const { icon, text, img, link, background, fontSize, count } = item;
                     return (<List.Item>
                         <Link to={link!}>
                             <div className={styles.Box}>

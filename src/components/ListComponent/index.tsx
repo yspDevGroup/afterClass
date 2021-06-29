@@ -14,13 +14,23 @@ import noData from '@/assets/noData.png';
 import IconFont from "../CustomIcon";
 import DisplayColumn from "../DisplayColumn";
 
+const findSpan: (dom: any) => any = (dom: any) => {
+  if (dom.tagName === 'SPAN') {
+    return dom;
+  }
+  return findSpan(dom.parentElement);
+};
 const NewsList = (props: { data: ListItem[], type: ListType, operation: any }) => {
   const { data, type, operation } = props;
+
   return <div className={styles[type]}>
     <List
       dataSource={data}
-      renderItem={(v) => (
-        <div className={operation ? 'ui-listItemWrapper' : ''}>
+      renderItem={(v) => {
+        if(operation){
+          operation[0].link = v.enrollLink;
+        }
+        return <div className={operation ? 'ui-listItemWrapper' : ''}>
           <div className={operation ? 'ui-listItemContent' : ''}>
             <Link to={v.link!}>
               <List.Item.Meta
@@ -57,22 +67,26 @@ const NewsList = (props: { data: ListItem[], type: ListType, operation: any }) =
               />
             </Link>
             {operation ? <IconFont type='icon-arrow' onClick={(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-              console.log(e);
-              
-              
-              // tar!.className = tar?.className === 'ui-listItemContent ui-revert' ? 'ui-listItemContent' : 'ui-listItemContent ui-revert';
+              const tar = findSpan(e.target);
+              const next = tar.closest('.ui-listItemContent').nextElementSibling;
+              if (tar?.className === 'anticon') {
+                tar.className = 'anticon ui-revert';
+                next.style.display = 'block';
+              } else {
+                tar!.className = 'anticon';
+                next.style.display = 'none';
+              }
             }} /> : ''}
           </div>
-          {operation ? <>
+          {operation ? <div className='ui-operation' style={{ display: 'none', paddingTop: '10px' }}>
             <DisplayColumn
-              hidden={true}
               type="icon"
               grid={{ column: 2 }}
               dataSource={operation}
             />
-          </> : ''}
+          </div> : ''}
         </div>
-      )}
+      }}
     />
   </div>
 };
