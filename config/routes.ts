@@ -93,6 +93,12 @@
     icon: 'CarryOutOutlined',
     component: './Manager/Noticenotice',
   },
+  {
+    path: '/orderInquiry',
+    name: 'orderInquiry',
+    icon: 'BarsOutlined',
+    component: './Manager/OrderInquiry',
+  },
   /*** 老师路由 start ***/
   {
     path: '/teacher',
