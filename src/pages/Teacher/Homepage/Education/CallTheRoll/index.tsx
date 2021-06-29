@@ -1,13 +1,15 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
-import styles from './index.less';
+import { history } from 'umi';
 import { Table, Button, Switch, message, Modal } from 'antd';
 import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
 import { getQueryString } from '@/utils/utils';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+
+import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+import styles from './index.less';
 
 /**
  * 课堂点名
@@ -158,8 +160,8 @@ const CallTheRoll = () => {
     const res = await createKHXSCQ(value);
     if (res.status === 'ok') {
       message.success('操作成功');
+      history.push('/teacher/home');
     }
-    console.log('res', res);
   };
   const columns: any = [
     {
