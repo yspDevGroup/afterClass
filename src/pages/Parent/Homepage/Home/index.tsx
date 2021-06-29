@@ -2,13 +2,12 @@ import React, { useContext } from 'react';
 import { Link } from 'umi';
 import EmptyBGC from '@/assets/EmptyBGC.png';
 import imgPop from '@/assets/mobileBg.png';
-import ListComp from '@/components/ListComponent';
 import IconFont from '@/components/CustomIcon';
 import EnrollClassTime from '@/components/EnrollClassTime';
 import myContext from '@/utils/MyContext';
-import { noticData, } from '../listData';
 import CourseTab from './components/CourseTab';
 import styles from './index.less';
+import Details from './Pages/Details';
 
 const Home = () => {
   const { currentUserInfo, courseStatus } = useContext(myContext);
@@ -45,7 +44,7 @@ const Home = () => {
           <CourseTab />
         </div>
         <div className={styles.announceArea}>
-          <ListComp listData={noticData} cls={styles.announceList} />
+        <Details />
         </div>
       </div>}
     </div>

@@ -1,3 +1,11 @@
+/*
+ * @,@Author: ,: your name
+ * @,@Date: ,: 2021-06-28 12:12:10
+ * @,@LastEditTime: ,: 2021-06-29 09:49:57
+ * @,@LastEditors: ,: your name
+ * @,@Description: ,: In User Settings Edit
+ * @,@FilePath: ,: \afterClass\src\pages\Manager\Noticenotice\data.d.ts
+ */
 /**
  * 
  * id:id
@@ -9,8 +17,8 @@
 
 export type NoticeItem = {
     id?: string;
-    title?: string;
-    content?: string;
-    describe?: string;
-    date?: string;
+    BT?: string;
+    NR?: string;
+    ZT?: string;
+    updatedAt?: string;
 }

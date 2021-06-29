@@ -2,22 +2,53 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:32:04
- * @LastEditTime: 2021-06-15 16:40:55
- * @LastEditors: txx
+ * @,@LastEditTime: ,: 2021-06-29 15:28:14
+ * @,@LastEditors: ,: Please set LastEditors
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ListComp from '@/components/ListComponent';
 import styles from "./index.less";
-import { mock } from "./mock"
+
 import Pagina from '../../components/Pagination/Pagination';
-
-
+import { ListData } from '@/components/ListComponent/data';
+import { getAllXXGG } from '@/services/after-class/xxgg';
+import moment from 'moment';
 
 const Notice = () => {
+  const [notification, setNotification] = useState<any[]>();
+  useEffect(() => {
+    async function announcements() {
+      const res = await getAllXXGG({ status: ['·¢²¼'] });
+      if (res.status === 'ok' && !(res.data === [])) {
+        const newdata: any = [];
+        await res.data!.map((record: any) => {
+          const listdata = {
+            title: record.BT,
+            link: `/parent/home/notice/announcement?listid=${record.id}`,
+            titleRight: {
+              text: moment(record.updatedAt).format('YYYY-MM-DD'),
+            },
+          }
+         newdata.push(listdata)
+        })
+        setNotification(newdata)
+      } else {
+
+      };
+    };
+    announcements();
+  }, [])
+
+
+  const mock: ListData = {
+    type: 'onlyList',
+    cls: 'onlyOneList',
+    list: notification!
+  }
   return (
     <div className={styles.NoticeBox}>
       <ListComp listData={mock} />
-      <Pagina total={5}/>
+      <Pagina total={5} />
     </div>
   )
 }

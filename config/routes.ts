@@ -182,10 +182,10 @@
         component: './Parent/Homepage/Home/Pages/Notice',
       },
       {
-        path: '/parent/home/notice/details',
-        name: 'details',
+        path: '/parent/home/notice/announcement',
+        name: 'announcement',
         hideInMenu: 'true',
-        component: './Parent/Homepage/Home/Pages/Details',
+        component: './Parent/Homepage/Home/Pages/Announcement',
       },
       {
         path: '/parent/home/emptyArticle',
