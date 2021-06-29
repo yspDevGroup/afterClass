@@ -23,24 +23,31 @@ const Announcement = (props: PropsType) => {
       fieldProps: {
         autocomplete: 'off',
       },
-      rules: [{ required: true, message: '请填写名称' }],
+      rules: [{ required: true, message: '请填写标题' }],
     },
     {
-      type: 'input',
+      type: 'select',
       label: '状态',
       name: 'ZT',
       key: 'ZT',
-      rules: [{ required: true, message: '请填写编号' }],
-      fieldProps: {
-        autocomplete: 'off',
-      },
+      rules: [{ required: true, message: '请填选择状态' }],
+      options:[
+        {
+          label: '拟稿',
+          value: '拟稿',
+        },
+        {
+          label: '发布',
+          value: '发布',
+        }
+      ]
     },
     {
       type: 'textArea',
       label: '内容',
       name: 'NR',
       key: 'NR',
-      rules: [{ required: true, message: '请填写编号' }],
+      rules: [{ required: true, message: '请填写内容' }],
       fieldProps: {
         rows:18
       },

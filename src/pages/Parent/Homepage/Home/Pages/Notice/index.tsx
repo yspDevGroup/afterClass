@@ -18,7 +18,7 @@ const Notice = () => {
   const [notification, setNotification] = useState<any[]>();
   useEffect(() => {
     async function announcements() {
-      const res = await getAllXXGG({ status: ['·¢²¼'] });
+      const res = await getAllXXGG({ status: ['å‘å¸ƒ'] });
       if (res.status === 'ok' && !(res.data === [])) {
         const newdata: any = [];
         await res.data!.map((record: any) => {

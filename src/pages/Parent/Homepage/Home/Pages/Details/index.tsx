@@ -20,18 +20,18 @@ const Details = () => {
     };
     announcements();
   }, []);
-  // `/parent/home/notice/details?listid=${record.id}`
+
   return (
     <div className={styles.bigbox}>
       <div className={styles.header}>
         <h3 className={styles.title}>公示栏</h3>
-      <Link to='/parent/home/notice'>  <span className={styles.all} >全部 ＞</span></Link>
+        <Link to='/parent/home/notice'>  <span className={styles.all} >全部 ＞</span></Link>
       </div>
       {
         exhibition ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
           {notification?.map((record: any, index: number) => {
             if (index < 4) {
-              return  <Link to={`/parent/home/notice/announcement?listid=${record.id}`}><li >{record.BT} </li></Link>
+              return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{color:'#333'}}><li >{record.BT} </li></Link>
             } else {
               return ''
             }
