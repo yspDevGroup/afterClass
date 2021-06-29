@@ -2,11 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { Data } from './mock';
 import styles from './index.less';
-import { Table, Button, Switch, message } from 'antd';
+import { Table, Button, Switch, message, Modal } from 'antd';
 import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import { createKHXSCQ } from '@/services/after-class/khxscq';
+import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
+import { theme } from '@/theme-default';
 
 /**
  * 课堂点名
@@ -43,16 +44,22 @@ const SwitchIndex: any = (props: {
   );
 };
 
+type claNameType = {
+  BJMC?: string;
+  KSS?: number;
+  KCMC?: string;
+};
+
 const CallTheRoll = () => {
   // '缺席'
   const [absent, setAbsent] = useState<number>(0);
   // '出勤'
   const [comeClass, setComeClass] = useState<number>(0);
   // 班级需要数据
-  const [claName, setClaName] = useState<{ BJMC: string; KSS: number; KCMC: string }>();
+  const [claName, setClaName] = useState<claNameType>();
   // 表格数据
   const [dataSource, setDataScouse] = useState<any>([]);
-
+  const [butDis, setButDis] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -62,15 +69,30 @@ const CallTheRoll = () => {
     })();
   }, []);
   useEffect(() => {
+    // 查询所有课后服务出勤记录
+    const resAll = getAllKHXSCQ({
+      bjId: 'string', // 班级ID
+      CQRQ: 'string', // 日期
+      // pkId: 'string', // 排课ID
+    });
+    Promise.resolve(resAll).then((datas) => {
+      const allData = datas.data;
+      // allData 有值时已点过名
+      if (allData && allData?.length > 0) {
+        Modal.warning({
+          title: '本节课已点过名',
+        });
+        setButDis(true);
+      }
+    });
     const id = '1abc6708-648e-4d7c-87cc-88f54e747a4f';
     // 获取班级已报名人数
     const resStudent = getEnrolled({ id });
     Promise.resolve(resStudent).then((data: any) => {
       if (data.status === 'ok') {
         const studentData = data.data;
-        studentData?.map((item: any) => {
+        studentData?.forEach((item: any) => {
           item.isRealTo = '出勤';
-          return '';
         });
         setDataScouse(studentData);
       }
@@ -80,13 +102,7 @@ const CallTheRoll = () => {
     const resClass = getKHBJSJ({ id });
     Promise.resolve(resClass).then((data) => {
       if (data.status === 'ok') {
-        const name:
-          | {
-              BJMC: string;
-              KSS: number;
-              KCMC: string;
-            }
-          | undefined = {
+        const name: claNameType = {
           BJMC: data.data?.BJMC || '',
           KSS: data.data?.KSS || 0,
           KCMC: data.data?.KHKCSJ?.KCMC || '',
@@ -103,14 +119,14 @@ const CallTheRoll = () => {
   }, [dataSource]);
   const checkWorkInfo = [
     { shouldArrive: dataSource.length, text: '应到', key: 1 },
-    { shouldArrive: comeClass, text: '出勤', key: 2 },
+    { shouldArrive: comeClass, text: '到课', key: 2 },
     // { shouldArrive: Data.leave, text: '请假', key: 3 },
     { shouldArrive: absent, text: '缺席', key: 4 },
   ];
 
   const onSwitchItem = (value: any, checked: boolean) => {
     const newData = [...dataSource];
-    newData.map((item: any) => {
+    newData.forEach((item: any) => {
       if (item.id === value.id) {
         if (checked) {
           item.isRealTo = '出勤';
@@ -118,7 +134,6 @@ const CallTheRoll = () => {
           item.isRealTo = '缺席';
         }
       }
-      return '';
     });
 
     setDataScouse(newData);
@@ -126,7 +141,7 @@ const CallTheRoll = () => {
 
   const onButtonClick = async () => {
     const value: any[] = [];
-    dataSource.map((item: any) => {
+    dataSource.forEach((item: any) => {
       value.push({
         CQZT: item.isRealTo, // 出勤 / 缺席
         CQRQ: '2021-06-30', // 日期
@@ -134,7 +149,6 @@ const CallTheRoll = () => {
         KHBJSJId: '1abc6708-648e-4d7c-87cc-88f54e747a4f', // 班级ID
         KHPKSJId: '3e3b6360-7780-4234-9c4f-5f93913e55e4', // 排课ID
       });
-      return '';
     });
     const res = await createKHXSCQ(value);
     if (res.status === 'ok') {
@@ -211,7 +225,13 @@ const CallTheRoll = () => {
         />
       </div>
       <div className={styles.footerButton}>
-        <Button style={{ width: '100%' }} type="primary" shape="round" onClick={onButtonClick}>
+        <Button
+          style={{ background: theme.primaryColor, borderColor: theme.primaryColor, width: '100%' }}
+          type="primary"
+          shape="round"
+          onClick={onButtonClick}
+          disabled={butDis}
+        >
           确认点名
         </Button>
       </div>
