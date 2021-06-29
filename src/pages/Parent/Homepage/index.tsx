@@ -8,9 +8,8 @@ import Study from './Study';
 import Mine from './Mine';
 import IconFont from '@/components/CustomIcon';
 import myContext from '@/utils/MyContext';
-import Empty from './Home/Pages/Empty';
 import { homePageInfo } from '@/services/after-class/user';
-import { useModel } from 'umi';
+import { useModel, history } from 'umi';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
@@ -42,6 +41,11 @@ const PersonalHomepage = () => {
     fetchData();
 
   }, [])
+
+  if (courseStatus === 'empty') {
+    history.push('/parent/home/emptyArticle?articlepage=empty')
+    return <></>;
+  }
   return <div className={styles.mobilePageHeader}>
     <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
@@ -57,7 +61,7 @@ const PersonalHomepage = () => {
           </span>
         } key="index">
           <div style={{ height: '100%', overflowY: 'auto' }} >
-            {courseStatus === 'empty' ? <Empty /> : <Home />}
+            <Home />
           </div>
         </TabPane>
         {courseStatus === 'empty' ? '' : <TabPane tab={

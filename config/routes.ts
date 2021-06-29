@@ -181,6 +181,12 @@
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/Details',
       },
+      {
+        path: '/parent/home/emptyArticle',
+        name: 'emptyArticle',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/EmptyArticle',
+      },
     ],
   },
   /*** 家长路由 end ***/

@@ -39,14 +39,14 @@ const Mine = () => {
         <ul>
           <li>
             <IconFont type='icon-fuwugonggao' style={{ 'fontSize': '18px' }} />
-            <Link to='/'>
+            <Link to='/parent/home/emptyArticle?articlepage=serveAnnounce'>
               服务公告
               <IconFont type='icon-xiayiye' />
             </Link>
           </li>
           <li>
             <IconFont type='icon-guanyu' style={{ 'fontSize': '18px' }} />
-            <Link to='/'>
+            <Link to='/parent/home/emptyArticle?articlepage=about'>
               关于
               <IconFont type='icon-xiayiye' />
             </Link>
