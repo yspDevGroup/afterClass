@@ -4,7 +4,7 @@ import styles from './index.less';
 import imgPop from '@/assets/teacherBg.png';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import CheckOnChart from './components/CheckOnChart';
-import { childData, childEvu, martialData, martialEvu } from './mock';
+import { childData, martialData,} from './mock';
 import IconFont from '@/components/CustomIcon';
 
 const Mine = () => {
@@ -49,7 +49,7 @@ const Mine = () => {
         <CheckOnChart data={childData} title="儿童体能训练" />
         <CheckOnChart data={martialData} title="专业武术培训" cls={styles.martialWrapper} />
       </div>
-      <div className={styles.funWrapper}>
+      {/* <div className={styles.funWrapper}>
         <div className={styles.titleBar}>
           教学评价
           <div>
@@ -58,16 +58,16 @@ const Mine = () => {
         </div>
         <CheckOnChart data={childEvu} title="儿童体能训练" cls={styles.childEvuWrapper} />
         <CheckOnChart data={martialEvu} title="专业武术培训" cls={styles.martialEvuWrapper} />
-      </div>
+      </div> */}
       <div className={styles.linkWrapper}>
         <ul>
-          <li>
+          {/* <li>
             <IconFont type="icon-woyaofankui" style={{ fontSize: '18px' }} />
             <Link to="/teacher/home">
               我要反馈
               <IconFont type="icon-xiayiye" />
             </Link>
-          </li>
+          </li> */}
           <li>
             <IconFont type="icon-fuwugonggao" style={{ fontSize: '18px' }} />
             <Link to="/teacher/home">
