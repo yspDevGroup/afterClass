@@ -8,15 +8,15 @@ import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/ic
 import { Button, Form, message, Spin, Modal, Tooltip, Empty } from 'antd';
 
 import { getAllFJLX } from '@/services/after-class/fjlx';
-import { getAllNJSJ } from '@/services/after-class/njsj';
-import { allKCsByNJ, allNJs, getAllKHKCSJ } from '@/services/after-class/khkcsj';
+import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
 import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
 
-import type { BJType, GradeType, SiteType, CourseType } from '../data';
-import ExcelTable from '@/components/ExcelTable';
 import styles from '../index.less';
+import ExcelTable from '@/components/ExcelTable';
+import type { SiteType, CourseType } from '../data';
+import WWOpenDataCom from '../../ClassManagement/components/WWOpenDataCom';
 
 const { confirm } = Modal;
 
@@ -48,19 +48,14 @@ const AddArranging: FC<PropsType> = (props) => {
     formValues,
     xXSJPZData,
     campus,
-    setCampus,
     grade,
     setBJIDData,
   } = props;
   const [packUp, setPackUp] = useState(false);
   const [Bj, setBj] = useState<any>(undefined);
   const [index, setIndex] = useState(formValues?.BJId);
-  const [njId, setNjId] = useState(formValues?.NJ);
-  const [kcId, setKcId] = useState(formValues?.KC);
   const [cdlxId, setCdlxId] = useState(formValues?.CDLX);
-  const [cdmcData, setCdmcData] = useState<any>([]);
   const [roomType, setRoomType] = useState<any>([]);
-  const [gradeType, setGradeType] = useState<any>([]);
   const [siteType, setSiteType] = useState<any>([]);
   const [kcType, setKcType] = useState<any>([]);
   const [bjData, setBjData] = useState<any>([]);
@@ -71,7 +66,8 @@ const AddArranging: FC<PropsType> = (props) => {
   const sameClassDatas = [...sameClass];
   const [loading, setLoading] = useState(true);
   const [CDLoading, setCDLoading] = useState(false);
-
+  const [XQID, setXQID] = useState<any>('');
+  const [NJID, setNJID] = useState<any>('');
   // 获取排课的接口
   const tableServers = () => {
     const Fjplan = getFJPlan({
@@ -247,26 +243,8 @@ const AddArranging: FC<PropsType> = (props) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        // 获取所有年级数据
-        const result = await getAllNJSJ();
-        if (result.status === 'ok') {
-          if (result.data && result.data.length > 0) {
-            const data: any = [].map.call(result.data, (item: GradeType) => {
-              return {
-                label: item.NJMC,
-                value: item.id,
-              };
-            });
-            setGradeType(data);
-          }
-        } else {
-          message.error(result.message);
-        }
-
         // 获取所有班级数据
         const bjList = await getAllKHBJSJ({
-          kcId: kcId === undefined ? '' : kcId,
-          njId: njId === undefined ? '' : njId,
           xn,
           xq,
           page: 1,
@@ -437,9 +415,38 @@ const AddArranging: FC<PropsType> = (props) => {
               name="XQ"
               options={campus}
               fieldProps={{
-                onChange(value: any, option: any) {
-                  form.setFieldsValue({ NJ: undefined });
-                  setXQLabelItem(option.label);
+                async onChange(value: any, option: any) {
+                  form.setFieldsValue({ NJ: undefined, KC: undefined });
+
+                  setXQLabelItem(option?.label);
+                  setXQID(value);
+
+                  const params = {
+                    xqId: value || '',
+                    xn,
+                    xq,
+                    page: 1,
+                    pageCount: 0,
+                    name: '',
+                  };
+                  // 获取课程的数据
+                  const kcList = await getAllKHKCSJ(params);
+                  if (kcList.status === 'ok') {
+                    const data: any = [].map.call(kcList.data, (item: CourseType) => {
+                      return {
+                        label: item.KCMC,
+                        value: item.id,
+                      };
+                    });
+                    setKcType(data);
+                  } else {
+                    message.error(kcList.message);
+                  }
+                  // 获取班级的数据
+                  const bjList = await getAllKHBJSJ(params);
+                  if (bjList.status === 'ok') {
+                    setBjData(bjList.data);
+                  }
                 },
               }}
             />
@@ -450,56 +457,38 @@ const AddArranging: FC<PropsType> = (props) => {
               options={grade ? grade[xQItem] : ''}
               fieldProps={{
                 async onChange(value) {
-                  if (!value) {
-                    // 获取所有年级数据
-                    const result = await getAllNJSJ();
-                    if (result.status === 'ok') {
-                      if (result.data && result.data.length > 0) {
-                        const data: any = [].map.call(result.data, (item: GradeType) => {
-                          return {
-                            label: item.NJMC,
-                            value: item.id,
-                          };
-                        });
-                        setGradeType(data);
-                      }
-                    }
-                  }
-
                   // 年级选择时将选中的课程清空
                   form.setFieldsValue({ KC: undefined });
 
-                  // 获取班级的数据
-                  const bjList = await getAllKHBJSJ({
-                    kcId: value ? kcId : '',
+                  setNJID(value);
+
+                  const params = {
+                    xqId: XQID || '',
                     njId: value || '',
                     xn,
                     xq,
                     page: 1,
                     pageCount: 0,
                     name: '',
-                  });
-                  setBjData(bjList.data);
-
-                  // 根据班级ID 获取课程数据
-                  const parma = {
-                    njId: value,
-                    xn,
-                    xq,
                   };
-                  const kcList = await allKCsByNJ(parma);
+
+                  // 获取课程的数据
+                  const kcList = await getAllKHKCSJ(params);
                   if (kcList.status === 'ok') {
-                    if (kcList.data?.length === 0) {
-                      setKcType([]);
-                      setNjId(undefined);
-                    } else if (kcList.data && kcList.data.length > 0) {
-                      const kcData = kcList.data.map((item: any) => ({
+                    const data: any = [].map.call(kcList.data, (item: CourseType) => {
+                      return {
                         label: item.KCMC,
                         value: item.id,
-                      }));
-                      setKcType(kcData);
-                      setNjId(value);
-                    }
+                      };
+                    });
+                    setKcType(data);
+                  } else {
+                    message.error(kcList.message);
+                  }
+                  // 获取班级的数据
+                  const bjList = await getAllKHBJSJ(params);
+                  if (bjList.status === 'ok') {
+                    setBjData(bjList.data);
                   }
                 },
               }}
@@ -512,132 +501,111 @@ const AddArranging: FC<PropsType> = (props) => {
               showSearch
               fieldProps={{
                 async onChange(value) {
-                  // 获取班级的数据
-                  const bjList = await getAllKHBJSJ({
+                  const params = {
+                    xqId: XQID || '',
+                    njId: NJID || '',
                     kcId: value || '',
-                    njId: value ? njId : '',
-                    xn: value ? '' : xn,
-                    xq: value ? '' : xq,
+                    xn,
+                    xq,
                     page: 1,
                     pageCount: 0,
                     name: '',
-                  });
+                  };
+                  // 获取班级的数据
+                  const bjList = await getAllKHBJSJ(params);
                   setBjData(bjList.data);
-
-                  if (value) {
-                    // 根据课程ID获取年级的数据
-                    const njList = await allNJs({ id: value });
-
-                    if (njList.status === 'ok') {
-                      const NJSName = njList.data?.NJSName;
-                      const NJS = njList.data?.NJS || [];
-
-                      if (NJSName?.length === 0) {
-                        setCampus([]);
-                        setKcId(undefined);
-                      } else if (NJSName && NJSName?.length > 0) {
-                        const NJ = {};
-                        NJSName.map((item: any, key: any) => {
-                          NJ[NJS[key]] = {
-                            label: item,
-                            value: item,
-                          };
-                          return '';
-                        });
-                        setCampus(NJ);
-                        setKcId(value);
-                      }
-                    }
-                  } else {
-                    // 获取所有年级数据
-                    setCampus(grade);
-                  }
                 },
               }}
             />
             <div className="banji">
               <span>班级：</span>
-              {
-                bjData && bjData.length === 0 ?(
-                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                ):(bjData && bjData.length < 15 ? <ProCard ghost className="banjiCard">
-                {bjData.map(
-                  (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
-                    return (
-                      <ProCard
-                        layout="center"
-                        bordered
-                        onClick={() => BjClick(value)}
-                        style={{ borderColor: index === value.id ? 'rgba(36,54,81,1)' : '' }}
-                      >
-                         <Tooltip title={value.BJMC}><p>{value.BJMC}</p>
-</Tooltip>
-                        
-                        <span>{value.ZJS}</span>
+              {bjData && bjData.length === 0 ? (
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+              ) : bjData && bjData.length < 15 ? (
+                <ProCard ghost className="banjiCard">
+                  {bjData.map(
+                    (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
+                      return (
+                        <ProCard
+                          layout="center"
+                          bordered
+                          onClick={() => BjClick(value)}
+                          style={{ borderColor: index === value.id ? 'rgba(36,54,81,1)' : '' }}
+                        >
+                          <Tooltip title={value.BJMC}>
+                            <p>{value.BJMC}</p>
+                          </Tooltip>
+                          <span>
+                            <WWOpenDataCom type="userName" openid={value.ZJS} />
+                          </span>
+                        </ProCard>
+                      );
+                    },
+                  )}
+                </ProCard>
+              ) : (
+                <div>
+                  {packUp === false ? (
+                    <ProCard ghost className="banjiCard">
+                      {bjData && bjData.length > 0
+                        ? bjData
+                            .slice(0, 13)
+                            .map(
+                              (
+                                value: { BJMC: any; ZJS: any; id?: string | undefined },
+                                key: undefined,
+                              ) => {
+                                return (
+                                  <ProCard
+                                    layout="center"
+                                    bordered
+                                    onClick={() => BjClick(value)}
+                                    style={{ borderColor: index === key ? 'rgba(36,54,81,1)' : '' }}
+                                  >
+                                    <p>{value.BJMC}</p>
+                                    <span>
+                                      <WWOpenDataCom type="userName" openid={value.ZJS} />
+                                    </span>
+                                  </ProCard>
+                                );
+                              },
+                            )
+                        : ''}
+                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                        展开 <DownOutlined style={{ color: '#4884FF' }} />
                       </ProCard>
-                    );
-                  },
-                )}
-              </ProCard>:(
-                 <div>
-                 {packUp === false ? (
-                   <ProCard ghost className="banjiCard">
-                     {bjData && bjData.length > 0
-                       ? bjData
-                           .slice(0, 13)
-                           .map(
-                             (
-                               value: { BJMC: any; ZJS: any; id?: string | undefined },
-                               key: undefined,
-                             ) => {
-                               return (
-                                 <ProCard
-                                   layout="center"
-                                   bordered
-                                   onClick={() => BjClick(value)}
-                                   style={{ borderColor: index === key ? 'rgba(36,54,81,1)' : '' }}
-                                 >
-                                   <p>{value.BJMC}</p>
-                                   <span>{value.ZJS}</span>
-                                 </ProCard>
-                               );
-                             },
-                           )
-                       : ''}
-                     <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                       展开 <DownOutlined style={{ color: '#4884FF' }} />
-                     </ProCard>
-                   </ProCard>
-                 ) : (
-                   <ProCard ghost className="banjiCard">
-                     {bjData && bjData.length > 0
-                       ? bjData.map(
-                           (
-                             value: { BJMC: any; ZJS: any; id?: string | undefined },
-                             key: undefined,
-                           ) => {
-                             return (
-                               <ProCard
-                                 layout="center"
-                                 bordered
-                                 onClick={() => BjClick(value)}
-                                 style={{ borderColor: index === key ? 'rgba(36,54,81,1)' : '' }}
-                               >
-                                 <p>{value.BJMC}</p>
-                                 <span>{value.ZJS}</span>
-                               </ProCard>
-                             );
-                           },
-                         )
-                       : ''}
-                     <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                       收起 <UpOutlined style={{ color: '#4884FF' }} />
-                     </ProCard>
-                   </ProCard>
-                 )}
-               </div>
-              ))
-              }
+                    </ProCard>
+                  ) : (
+                    <ProCard ghost className="banjiCard">
+                      {bjData && bjData.length > 0
+                        ? bjData.map(
+                            (
+                              value: { BJMC: any; ZJS: any; id?: string | undefined },
+                              key: undefined,
+                            ) => {
+                              return (
+                                <ProCard
+                                  layout="center"
+                                  bordered
+                                  onClick={() => BjClick(value)}
+                                  style={{ borderColor: index === key ? 'rgba(36,54,81,1)' : '' }}
+                                >
+                                  <p>{value.BJMC}</p>
+                                  <span>
+                                    <WWOpenDataCom type="userName" openid={value.ZJS} />
+                                  </span>
+                                </ProCard>
+                              );
+                            },
+                          )
+                        : ''}
+                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                        收起 <UpOutlined style={{ color: '#4884FF' }} />
+                      </ProCard>
+                    </ProCard>
+                  )}
+                </div>
+              )}
             </div>
             <ProFormSelect
               width="md"
@@ -697,7 +665,6 @@ const AddArranging: FC<PropsType> = (props) => {
               showSearch
               fieldProps={{
                 async onChange(value) {
-                  setCdmcData(value);
                   // 查询房间占用情况
                   const Fjplan = await getFJPlan({
                     lxId: cdlxId === undefined ? '' : cdlxId,

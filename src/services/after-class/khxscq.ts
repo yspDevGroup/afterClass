@@ -11,7 +11,7 @@ export async function getKHXSCQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -19,6 +19,7 @@ export async function getKHXSCQ(
       CQZT?: '出勤' | '请假' | '缺席';
       CQRQ?: string;
       XSId?: string;
+      KHPKSJId?: string;
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
@@ -45,7 +46,7 @@ export async function getKHXSCQ(
     message?: string;
   }>(`/khxscq/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -59,10 +60,10 @@ export async function deleteKHXSCQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxscq/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -102,6 +103,7 @@ export async function createKHXSCQ(body: API.CreateKHXSCQ[], options?: { [key: s
       CQZT?: '出勤' | '请假' | '缺席';
       CQRQ?: string;
       XSId?: string;
+      KHPKSJId?: string;
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
@@ -146,13 +148,13 @@ export async function updateKHXSCQ(
   body: API.UpdateKHXSCQ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxscq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -176,9 +178,9 @@ export async function countKHXSCQ(
       KHBJSJId?: string;
       KCMC?: string;
       BJMC?: string;
-      KSS?: number;
       normal?: number;
       abnormal?: number;
+      remain?: number;
     }[];
     message?: string;
   }>('/khxscq/statistical', {

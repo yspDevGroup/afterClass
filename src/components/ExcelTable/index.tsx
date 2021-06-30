@@ -1,9 +1,10 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
 import React, { useState } from 'react';
-import type { FC } from 'react';
-import styles from './index.less';
 import { Button } from 'antd';
+import type { FC } from 'react';
+import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+import styles from './index.less';
 
 type KBItemProps = {
   mode: 'see' | 'edit';
@@ -111,7 +112,13 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             }}
           >
             <div className="cla">{data?.cla}</div>
-            {mode === 'see' ? <div className="teacher">{data?.teacher}</div> : ''}
+            {mode === 'see' ? (
+              <div className="teacher">
+                <WWOpenDataCom type="userName" openid={data?.teacher} />
+              </div>
+            ) : (
+              ''
+            )}
           </div>
         </div>
       )}

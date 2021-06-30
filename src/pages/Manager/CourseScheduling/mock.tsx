@@ -307,3 +307,53 @@ export const newClassData: any[] = [
     sunday: '',
   },
 ];
+
+export const XQData = [
+  {
+    label: '本校',
+    value: '2',
+  },
+  {
+    label: '国际部',
+    value: '283',
+  },
+];
+
+export const NJData = {
+  本校: [
+    {
+      label: '一年级',
+      value: '1',
+    },
+    {
+      label: '二年级',
+      value: '2',
+    },
+    {
+      label: '三年级',
+      value: '3',
+    },
+    {
+      label: '四年级',
+      value: '4',
+    },
+    {
+      label: '五年级',
+      value: '5',
+    },
+  ],
+  国际部: [
+    {
+      label: '一年级',
+      value: '1',
+    },
+    {
+      label: '三年级',
+      value: '3',
+    },
+    {
+      label: '四年级',
+      value: '4',
+    },
+  ],
+};

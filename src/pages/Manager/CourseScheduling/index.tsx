@@ -11,16 +11,18 @@ import ExcelTable from '@/components/ExcelTable';
 import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
 
-import { getFJPlan } from '@/services/after-class/fjsj';
-import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { queryXQList } from '@/services/wechat/service';
+import { getFJPlan } from '@/services/after-class/fjsj';
+import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getQueryString } from '@/utils/utils';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
 import AddArranging from './components/AddArranging';
 import { searchData } from './searchConfig';
+// import { NJData, XQData } from './mock';
 import './index.less';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
-import { getQueryString } from '@/utils/utils';
 
 const ClassManagement = () => {
   const [state, setState] = useState(true);
@@ -40,8 +42,19 @@ const ClassManagement = () => {
 
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
+  // 排课时段的提示开关
+  const [pKiskai, setPKiskai] = useState<boolean>(false);
+
   const [sameClass, setSameClassData] = useState<any>([]);
 
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      await initWXAgentConfig(['checkJsApi']);
+    })();
+  }, []);
   useEffect(() => {
     (async () => {
       const bjID = getQueryString('courseId');
@@ -68,11 +81,11 @@ const ClassManagement = () => {
       currentXQ?.map((item: any) => {
         XQ.push({
           label: item.name,
-          value: item.name,
+          value: item.id,
         });
         NJ[item.name] = item.njList.map((njItem: any) => ({
           label: njItem.name,
-          value: njItem.name,
+          value: njItem.id,
         }));
       });
       setCampus(XQ);
@@ -85,6 +98,12 @@ const ClassManagement = () => {
   const kaiguan = () => {
     setkai(false);
   };
+
+  // 控制学期学年数据提示框的函数
+  const onPkiskaiClick = () => {
+    setPKiskai(false);
+  };
+
   const showDrawer = () => {
     setState(false);
     setRecordValue({});
@@ -204,17 +223,20 @@ const ClassManagement = () => {
           });
           if (resultTime.status === 'ok') {
             const timeSlot = resultTime.data;
-            setXXSJPZData(timeSlot);
-
-            // 查询排课数据
-            const resultPlan = await getFJPlan({
-              xn: curTerm.XN,
-              xq: curTerm.XQ,
-              isPk: radioValue,
-            });
-            if (resultPlan.status === 'ok') {
-              const tableData = processingData(resultPlan.data, timeSlot);
-              setTableDataSource(tableData);
+            if (timeSlot && timeSlot?.length > 0) {
+              setXXSJPZData(timeSlot);
+              // 查询排课数据
+              const resultPlan = await getFJPlan({
+                xn: curTerm.XN,
+                xq: curTerm.XQ,
+                isPk: radioValue,
+              });
+              if (resultPlan.status === 'ok') {
+                const tableData = processingData(resultPlan.data, timeSlot);
+                setTableDataSource(tableData);
+              }
+            } else {
+              setPKiskai(true);
             }
           }
         }
@@ -308,6 +330,12 @@ const ClassManagement = () => {
           open={kai}
           colse={kaiguan}
         />
+        <PromptInformation
+          text="未查询到排课时段数据，请先设置排课时段"
+          link="/basicalSettings/periodMaintenance"
+          open={pKiskai}
+          colse={onPkiskaiClick}
+        />
         {state === true ? (
           <div>
             <div
@@ -329,7 +357,7 @@ const ClassManagement = () => {
               </div>
               <div style={{ position: 'absolute', right: 48 }}>
                 <Button
-                  style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg  }}
+                  style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
                   type="primary"
                   key="add"
                   onClick={() => showDrawer()}
