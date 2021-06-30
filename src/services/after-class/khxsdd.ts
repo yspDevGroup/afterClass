@@ -11,16 +11,17 @@ export async function getKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
+      id?: string;
       DDBH?: string;
       XDSJ?: string;
       ZFFS?: '线上支付' | '线下支付';
       ZFSJ?: string;
       DZFP?: string;
-      DDZT?: '待付款' | '已付款' | '已取消' | '待退款' | '已退款';
+      DDZT?: '待付款' | '已付款' | '已过期' | '待退款' | '已退款';
       DDFY?: number;
       TKSJ?: string;
       XSId?: string;
@@ -63,7 +64,7 @@ export async function getKHXSDD(
     message?: string;
   }>(`/khxsdd/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -77,10 +78,10 @@ export async function deleteKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -120,12 +121,13 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
   return request<{
     status?: 'ok' | 'error';
     data?: {
+      id?: string;
       DDBH?: string;
       XDSJ?: string;
       ZFFS?: '线上支付' | '线下支付';
       ZFSJ?: string;
       DZFP?: string;
-      DDZT?: '待付款' | '已付款' | '已取消' | '待退款' | '已退款';
+      DDZT?: '待付款' | '已付款' | '已过期' | '待退款' | '已退款';
       DDFY?: number;
       TKSJ?: string;
       XSId?: string;
@@ -228,8 +230,8 @@ export async function refundKHXSDD(
   });
 }
 
-/** 取消订单 DELETE /khxsdd/cancle/${param0} */
-export async function cancleKHXSDD(
+/** 订单过期 DELETE /khxsdd/overdue/${param0} */
+export async function overdueKHXSDD(
   params: {
     // path
     /** 订单ID */
@@ -237,13 +239,10 @@ export async function cancleKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
-    `/khxsdd/cancle/${param0}`,
-    {
-      method: 'DELETE',
-      params: { ...params },
-      ...(options || {}),
-    },
-  );
+  const { id: param0, ...queryParams } = params;
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/overdue/${param0}`, {
+    method: 'DELETE',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
 }
