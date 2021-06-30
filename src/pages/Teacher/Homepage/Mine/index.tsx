@@ -49,25 +49,8 @@ const Mine = () => {
         <CheckOnChart data={childData} title="儿童体能训练" />
         <CheckOnChart data={martialData} title="专业武术培训" cls={styles.martialWrapper} />
       </div>
-      {/* <div className={styles.funWrapper}>
-        <div className={styles.titleBar}>
-          教学评价
-          <div>
-            好评率<a style={{ color: '#FF6600' }}>99.88%</a>
-          </div>
-        </div>
-        <CheckOnChart data={childEvu} title="儿童体能训练" cls={styles.childEvuWrapper} />
-        <CheckOnChart data={martialEvu} title="专业武术培训" cls={styles.martialEvuWrapper} />
-      </div> */}
       <div className={styles.linkWrapper}>
         <ul>
-          {/* <li>
-            <IconFont type="icon-woyaofankui" style={{ fontSize: '18px' }} />
-            <Link to="/teacher/home">
-              我要反馈
-              <IconFont type="icon-xiayiye" />
-            </Link>
-          </li> */}
           <li>
             <IconFont type="icon-fuwugonggao" style={{ fontSize: '18px' }} />
             <Link to="/teacher/home">
