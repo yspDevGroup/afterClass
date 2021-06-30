@@ -1,3 +1,5 @@
+@import '../../../theme.less';
+
 .CourseDetails {
   :global {
     .anticon svg {
@@ -114,9 +116,24 @@
       }
     }
 
+    :global {
+      .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):focus-within {
+        box-shadow: none;
+      }
+      .ant-radio-checked .ant-radio-inner {
+        border-color: @GreenColor;
+        &:after{
+          background-color: @GreenColor;
+        }
+      }
+    }
+
     .BjInformation {
+      border: none;
+
       :global {
-        label {
+
+        .ant-radio-button {
           margin-bottom: 10px;
           margin-right: 14px;
           height: 32px;
@@ -125,6 +142,11 @@
           border: none;
           background: #F5F5F5;
           padding: 0 20px 0 20px;
+
+          &.ant-radio-button-checked {
+            border: 1px solid @GreenColor;
+            background: rgba(69, 201, 119, 0.1);
+          }
         }
       }
     }
