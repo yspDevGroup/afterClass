@@ -31,10 +31,10 @@ const Details = () => {
         exhibition ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
           {notification?.map((record: any, index: number) => {
             if (index < 4) {
-              return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li >{record.BT} </li></Link>
+              return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{color:'#333'}}><li >{record.BT} </li></Link>
+            } else {
+              return ''
             }
-            return ''
-
           })}
         </ul> : <div className={styles.noull}>暂无课程</div>
       }
