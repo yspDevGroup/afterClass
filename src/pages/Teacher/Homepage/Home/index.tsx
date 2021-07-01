@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef } from 'react';
+import React, { useEffect, useContext, useRef, useState } from 'react';
 import imgPop from '@/assets/teacherBg.png';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
@@ -7,11 +7,14 @@ import EnrollClassTime from '@/components/EnrollClassTime';
 import myContext from '@/utils/MyContext';
 import TeachCourses from './components/TeachCourses';
 import Details from './Pages/Details';
+import { getAllXXGG } from '@/services/after-class/xxgg';
+import { Link } from 'umi';
+
 
 const Home = () => {
-  const { currentUserInfo} = useContext(myContext);
+  const { currentUserInfo } = useContext(myContext);
   const userRef = useRef(null);
-
+  const [notification, setNotification] = useState<any[]>();
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -23,6 +26,17 @@ const Home = () => {
       WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
     })();
   }, [currentUserInfo]);
+  useEffect(() => {
+    async function announcements() {
+      const res = await getAllXXGG({ status: ['发布'] });
+      if (res.status === 'ok' && !(res.data === [])) {
+        setNotification(res.data);
+      } else {
+
+      };
+    };
+    announcements();
+  }, []);
 
   return (
     <div className={styles.indexPage}>
@@ -41,7 +55,13 @@ const Home = () => {
           <IconFont type="icon-gonggao" className={styles.noticeImg} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
-            <span>2021秋季课后服务将于2021.09.02正式开课...</span>
+            {notification?.map((record: any, index: number) => {
+              if (index < 1) {
+                return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li >{record.BT} </li></Link>
+              } else {
+                return ''
+              }
+            })}
           </div>
           <IconFont type="icon-gengduo" className={styles.gengduo} />
         </div>
@@ -49,10 +69,10 @@ const Home = () => {
           <EnrollClassTime teacher={true} />
         </div>
         <div className={styles.teachCourses}>
-         <TeachCourses/>
+          <TeachCourses />
         </div>
         <div className={styles.announceArea}>
-        <Details />
+          <Details />
         </div>
       </div>
     </div>

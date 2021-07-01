@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable array-callback-return */
-import { Button, message, Radio, Tooltip } from 'antd';
+import { Badge, Button, message, Radio, Tooltip } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, } from 'umi';
 import styles from './index.less';
@@ -43,7 +43,7 @@ const CourseDetails: React.FC = () => {
     })();
   }, []);
 
-  const Learning = async (bjid: any,attend: any[]) => {
+  const Learning = async (bjid: any, attend: any[]) => {
     const res1 = await getAllKHXSCQ(
       {
         xsId: currentUser!.id,
@@ -128,27 +128,27 @@ const CourseDetails: React.FC = () => {
     const res = await getKHPKSJByBJID({ id: bjid });
     if (res.status === 'ok' && res.data) {
       const attend = [...new Set(res.data.map(n => n.WEEKDAY))]
-      return await Learning(bjid,attend);
+      return await Learning(bjid, attend);
     }
     return []
   }
-  const usename= async (kcId:string) => {
-    const res= await getEnrolled({id:kcId});
-    if(res.status==='ok'&&res.data){
+  const usename = async (kcId: string) => {
+    const res = await getEnrolled({ id: kcId });
+    if (res.status === 'ok' && res.data) {
       console.log(res.data)
-     
+
       const XSid: any[] = []
-      res.data.forEach((item:any)=>{
+      res.data.forEach((item: any) => {
         // return <WWOpenDataCom type="userName" openid={item.XSId} />;
         XSid.push(item.XSId)
       })
-        setUserID(XSid);
+      setUserID(XSid);
     }
 
   }
 
   useEffect(() => {
-    async function fetchData(){
+    async function fetchData() {
       if (classid) {
         const schedule = await ksssj(classid);
         setTimetableList(schedule);
@@ -318,8 +318,8 @@ const CourseDetails: React.FC = () => {
                       }</li>
                       <li>总课时：{value.KSS}</li>
                       <li>班级：{value.BJMC}</li>
-                      <li>学生：{userID.length>0&&userID.map((item: any)=>{
-                        return <span style={{marginRight: 8}}><WWOpenDataCom type="userName" openid={item} /></span>
+                      <li>学生：{userID.length > 0 && userID.map((item: any) => {
+                        return <span style={{ marginRight: 8 }}><WWOpenDataCom type="userName" openid={item} /></span>
                       })}</li>
                     </>
                   }
@@ -329,7 +329,13 @@ const CourseDetails: React.FC = () => {
             </ul>
           </div>
           <div className={styles.Timetable}>
-            <p className={styles.title}>课程表</p>
+            <p className={styles.title}><span>课程表</span>
+              <span>
+                <Badge className={styles.legend} color="#45C977" text="今日" />
+                <Badge className={styles.legend} color="#FF6600" text="缺勤" />
+                <Badge className={styles.legend} color="#FFFFFF" text="出勤" />
+                <Badge className={styles.legend} color="#45C977" text="待上" />
+              </span>  </p>
             <div className={styles.cards}>
               {
                 !(timetableList?.length === 0) ? timetableList?.map((value) => {

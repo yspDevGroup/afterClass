@@ -39,7 +39,6 @@ const PersonalHomepage = () => {
       }
     }
     fetchData();
-
   }, [])
 
   useEffect(() => {

@@ -175,6 +175,12 @@
         component: './Parent/Homepage/Mine/Pages/Order',
         hideInMenu: 'true',
       },
+       {
+        path: '/parent/home/course',
+        name: 'course',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Course',
+      },
       {
         path: '/parent/home/notice',
         name: 'notice',

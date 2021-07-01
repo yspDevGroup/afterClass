@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable array-callback-return */
-import { Button, message, Radio, Tooltip } from 'antd';
+import { Badge, Button, message, Radio, Tooltip } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, } from 'umi';
 import styles from './index.less';
@@ -301,7 +301,13 @@ const CourseDetails: React.FC = () => {
             </ul>
           </div>
           <div className={styles.Timetable}>
-            <p className={styles.title}>课程表</p>
+            <p className={styles.title}><p className={styles.title}><span>课程表</span>
+              <span>
+                <Badge className={styles.legend} color="#45C977" text="今日" />
+                <Badge className={styles.legend} color="#FF6600" text="缺勤" />
+                <Badge className={styles.legend} color="#FFFFFF" text="出勤" />
+                <Badge className={styles.legend} color="#45C977" text="待上" />
+              </span>  </p></p>
             <div className={styles.cards}>
               {
                 !(timetableList?.length === 0) ? timetableList?.map((value) => {

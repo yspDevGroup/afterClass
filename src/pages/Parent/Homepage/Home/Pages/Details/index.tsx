@@ -2,7 +2,8 @@
 import { getAllXXGG } from '@/services/after-class/xxgg';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'umi';
-import styles from './index.less'
+import styles from './index.less';
+import noData from '@/assets/noData.png';
 
 const Details = () => {
   const [exhibition, setExhibition] = useState<boolean>(false);
@@ -30,13 +31,22 @@ const Details = () => {
       {
         exhibition ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
           {notification?.map((record: any, index: number) => {
-            if (index < 4) {
-              return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{color:'#333'}}><li >{record.BT} </li></Link>
-            } else {
-              return ''
+            if(notification.length>0){
+              if (index < 4) {
+                return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{color:'#333'}}><li >{record.BT} </li></Link>
+              } else {
+                return ''
+              }
+            }else{
+              return <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px',width:'100%' }}>
+              <img src={noData} alt="暂无数据" />
+            </div>
             }
+           
           })}
-        </ul> : <div className={styles.noull}>暂无课程</div>
+        </ul> :  <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px',width:'100%' }}>
+                  <img src={noData} alt="暂无数据" />
+                </div>
       }
     </div>
   )
