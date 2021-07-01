@@ -120,74 +120,89 @@ const ClassManagement = () => {
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const tableData: any[] = [];
     const sameClassData: any[] = [];
-
-    data.map((item: any) => {
-      timeData.map((timeItem: any, timeKey: number) => {
-        const table = {
-          room: {
-            cla: item.FJMC,
-            teacher: '',
-            jsId: item.id,
-            FJLXId: item.FJLX.id, // 场地类型ID
-            rowspan: timeKey === 0 ? timeData.length : 0,
-          },
-          course: {
-            cla: timeItem.TITLE,
-            teacher: `${timeItem.KSSJ.slice(0, 5)} — ${timeItem.JSSJ.slice(0, 5)}`,
-            hjId: timeItem.id,
-          },
-        };
-        if (item.KHPKSJs && item.KHPKSJs.length > 0) {
-          item.KHPKSJs.map((KHItem: any) => {
-            if (KHItem.XXSJPZ.id === timeItem.id) {
-              // console.log('BJID',);
-              table[week[KHItem.WEEKDAY]] = {
-                weekId: KHItem.id, // 周
-                cla: KHItem.KHBJSJ.BJMC, // 班级名称
-                teacher: KHItem.KHBJSJ.ZJS, // 主教师
-                bjId: KHItem.KHBJSJ.id, // 班级ID
-                kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
-                njId: KHItem.KHBJSJ.NJSName.split(',')[0], // 年级ID
-                xqId: KHItem.KHBJSJ.XQName, // 校区ID
-                color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(36, 54, 81, 1)',
-                dis: BJID ? !(BJID === KHItem.KHBJSJ.id) : !(recordValue.BJId === KHItem.KHBJSJ.id),
-              };
-              if (
-                (!BJID && recordValue.BJId === KHItem.KHBJSJ.id) ||
-                (BJID && BJID === KHItem.KHBJSJ.id)
-              ) {
-                sameClassData.push({
-                  WEEKDAY: KHItem.WEEKDAY, // 周
-                  XXSJPZId: KHItem.XXSJPZ.id, // 时间ID
-                  KHBJSJId: KHItem.KHBJSJ.id, // 班级ID
-                  FJSJId: item.id, // 教室ID
-                  XNXQId: KHItem.XNXQId, // 学年学期ID
-                });
+    if (!timeData.length) {
+      setPKiskai(true);
+    } else {
+      data.map((item: any) => {
+        timeData.map((timeItem: any, timeKey: number) => {
+          const table = {
+            room: {
+              cla: item.FJMC,
+              teacher: '',
+              jsId: item.id,
+              FJLXId: item.FJLX.id, // 场地类型ID
+              rowspan: timeKey === 0 ? timeData.length : 0,
+            },
+            course: {
+              cla: timeItem.TITLE,
+              teacher: `${timeItem.KSSJ.slice(0, 5)} — ${timeItem.JSSJ.slice(0, 5)}`,
+              hjId: timeItem.id,
+            },
+          };
+          if (item.KHPKSJs && item.KHPKSJs.length > 0) {
+            item.KHPKSJs.map((KHItem: any) => {
+              if (KHItem.XXSJPZ.id === timeItem.id) {
+                // console.log('BJID',);
+                table[week[KHItem.WEEKDAY]] = {
+                  weekId: KHItem.id, // 周
+                  cla: KHItem.KHBJSJ.BJMC, // 班级名称
+                  teacher: KHItem.KHBJSJ.ZJS, // 主教师
+                  bjId: KHItem.KHBJSJ.id, // 班级ID
+                  kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
+                  njId: KHItem.KHBJSJ.NJSName.split(',')[0], // 年级ID
+                  xqId: KHItem.KHBJSJ.XQName, // 校区ID
+                  color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(36, 54, 81, 1)',
+                  dis: BJID
+                    ? !(BJID === KHItem.KHBJSJ.id)
+                    : !(recordValue.BJId === KHItem.KHBJSJ.id),
+                };
+                if (
+                  (!BJID && recordValue.BJId === KHItem.KHBJSJ.id) ||
+                  (BJID && BJID === KHItem.KHBJSJ.id)
+                ) {
+                  sameClassData.push({
+                    WEEKDAY: KHItem.WEEKDAY, // 周
+                    XXSJPZId: KHItem.XXSJPZ.id, // 时间ID
+                    KHBJSJId: KHItem.KHBJSJ.id, // 班级ID
+                    FJSJId: item.id, // 教室ID
+                    XNXQId: KHItem.XNXQId, // 学年学期ID
+                  });
+                }
               }
-            }
-          });
-        } else {
-          setPKiskai(true);
-        }
-
-        tableData.push(table);
+            });
+          }
+          tableData.push(table);
+        });
       });
-    });
+    }
     setSameClassData(sameClassData);
     return tableData;
   };
 
   // 头部input事件
-  const handlerSearch = (type: string, value: string, term: string) => {
+  const handlerSearch = async (type: string, value: string, term: string) => {
     setXn(value);
     setXq(term);
-    const res = getFJPlan({ xn: value, xq: term, isPk: radioValue });
-    Promise.resolve(res).then((data: any) => {
-      if (data.status === 'ok') {
-        const tableData = processingData(data.data, xXSJPZData);
+    // 查询所有课程的时间段
+    const resultTime = await getAllXXSJPZ({
+      xn: value,
+      xq: term,
+      type: ['0'],
+    });
+    if (resultTime.status === 'ok') {
+      const timeSlot = resultTime.data;
+      setXXSJPZData(timeSlot);
+      // 查询排课数据
+      const resultPlan = await getFJPlan({
+        xn: value,
+        xq: term,
+        isPk: radioValue,
+      });
+      if (resultPlan.status === 'ok') {
+        const tableData = processingData(resultPlan.data, timeSlot);
         setTableDataSource(tableData);
       }
-    });
+    }
   };
   const onRadioChange = (e: any) => {
     setRadioValue(e.target.value);
@@ -329,7 +344,7 @@ const ClassManagement = () => {
           colse={kaiguan}
         />
         <PromptInformation
-          text="未查询到排课时段数据，请先设置排课时段"
+          text="该学年学期未查询到排课时段数据，请先设置排课时段"
           link="/basicalSettings/periodMaintenance"
           open={pKiskai}
           colse={onPkiskaiClick}

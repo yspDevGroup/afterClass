@@ -171,10 +171,6 @@ const Index: FC<IndexPropsType> = ({
     saturday: '6',
     sunday: '0',
   };
-  // useEffect(() => {
-  //   const newData = stateTableData ? [...stateTableData] : [...dataSource];
-  //   setStateTableData(newData);
-  // }, [chosenData])
   const onTdClick = (rowKey: number, colKey: number) => {
     const newData = stateTableData ? [...stateTableData] : [...dataSource];
     const colItem = columns[colKey] || {};
