@@ -46,7 +46,6 @@ const ClassManagement = () => {
   const [pKiskai, setPKiskai] = useState<boolean>(false);
 
   const [sameClass, setSameClassData] = useState<any>([]);
-  const [rawData, setRawData] = useState<any>([]);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -178,9 +177,14 @@ const ClassManagement = () => {
     return tableData;
   };
   useEffect(() => {
-    if (BJID || recordValue.BJId) {
-      const tableData = processingData(rawData, xXSJPZData);
-      setTableDataSource(tableData);
+    if (BJID) {
+      const res = getFJPlan({ xn, xq, isPk: false });
+      Promise.resolve(res).then((data: any) => {
+        if (data.status === 'ok') {
+          const tableData = processingData(data.data, xXSJPZData);
+          setTableDataSource(tableData);
+        }
+      });
     }
   }, [BJID]);
   // 头部input事件
@@ -204,7 +208,6 @@ const ClassManagement = () => {
       });
       if (resultPlan.status === 'ok') {
         const tableData = processingData(resultPlan.data, timeSlot);
-        setRawData(resultPlan.data);
         setTableDataSource(tableData);
       }
     }
@@ -214,7 +217,6 @@ const ClassManagement = () => {
     const res = getFJPlan({ xn, xq, isPk: e.target.value });
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
-        setRawData(data.data);
         const tableData = processingData(data.data, xXSJPZData);
         setTableDataSource(tableData);
       }
@@ -254,7 +256,6 @@ const ClassManagement = () => {
               isPk: radioValue,
             });
             if (resultPlan.status === 'ok') {
-              setRawData(resultPlan.data);
               const tableData = processingData(resultPlan.data, timeSlot);
               setTableDataSource(tableData);
             }
