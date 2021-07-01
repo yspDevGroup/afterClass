@@ -200,7 +200,8 @@ const CourseManagement = () => {
       FJS: data.FJS ? data.FJS?.split(',') : [],
     };
     if (!data.KCTP) {
-      list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
+      // 默认图片地址
+      list.KCTP = '';
     }
 
     setVisible(true);

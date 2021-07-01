@@ -16,13 +16,13 @@ type propstype = {
 }
 
 const ActionBar = (props: propstype) => {
-  const { handleEdit, record, maintain,actionRef } = props;
-  const shelf=(record : any)=>{
-    record.BJZT='已下架'
-    const res =updateKHBJSJ({id:record.id}, record);
-    new Promise((resolve)=>{
+  const { handleEdit, record, maintain, actionRef } = props;
+  const shelf = (record: any) => {
+    record.BJZT = '已下架'
+    const res = updateKHBJSJ({ id: record.id }, record);
+    new Promise((resolve) => {
       resolve(res);
-    }).then((data:any)=>{
+    }).then((data: any) => {
       if (data.status === 'ok') {
         message.success('下架成功');
         actionRef.current?.reload();
@@ -30,13 +30,30 @@ const ActionBar = (props: propstype) => {
         message.error('下架失败，请联系管理员或稍后重试');
         actionRef.current?.reload();
       }
-    })  
-}
+    })
+  }
+  const release = (record: any) => {
+    record.BJZT = '已发布'
+    const res = updateKHBJSJ({ id: record.id }, record);
+    new Promise((resolve) => {
+      resolve(res);
+    }).then((data: any) => {
+      if (data.status === 'ok') {
+        message.success('发布成功');
+        actionRef.current?.reload();
+      } else {
+        message.error('发布失败，请联系管理员或稍后重试');
+        actionRef.current?.reload();
+      }
+    })
+  }
   switch (record.BJZT) {
     case '待发布':
     case '已下架':
       return (
         <>
+          <a onClick={() => release(record)}>发布</a>
+          <Divider type="vertical" />
           <a onClick={() => handleEdit(record)}>编辑</a>
           <Divider type="vertical" />
           <Popconfirm
@@ -73,7 +90,7 @@ const ActionBar = (props: propstype) => {
     case '已排课':
       return (
         <>
-          <a onClick={()=>{maintain('startclass')}}>
+          <a onClick={() => { maintain('startclass') }}>
             开班
           </a>
           <Divider type="vertical" />
@@ -112,7 +129,7 @@ const ActionBar = (props: propstype) => {
     case '已发布':
       return (
         <>
-          <a onClick={()=>shelf(record)}>
+          <a onClick={() => shelf(record)}>
             下架
           </a>
           <Divider type="vertical" />
@@ -120,7 +137,7 @@ const ActionBar = (props: propstype) => {
         </>
       );
       break;
-      default:
+    default:
       return (
         <>
           <a onClick={() => handleEdit(record)}>查看</a>

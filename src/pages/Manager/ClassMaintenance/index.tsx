@@ -88,7 +88,8 @@ const ClassMaintenance = () => {
     const njIds: any[] = [];
     data.NJSJs?.map((item: any) => njIds.push(item.id));
     const list = { ...data, njIds };
-    list.KCTP = 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
+    // 默认图片地址
+    list.KCTP = '';
     setVisible(true);
     setCurrent(list);
     if (!(data.BJZT === '待发布')) {

@@ -160,7 +160,6 @@ const NewCourses = (props: PropsType) => {
       }
     } else if (e.file.status === 'error') {
       const mass = e.file.response.message;
-
       message.error(`上传失败，${mass}`);
     }
   };
