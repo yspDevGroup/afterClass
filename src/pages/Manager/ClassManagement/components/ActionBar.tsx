@@ -19,6 +19,8 @@ const ActionBar = (props: propstype) => {
   const { handleEdit, record, maintain, actionRef } = props;
   const shelf = (record: any) => {
     record.BJZT = '已下架'
+    record.BMKSSJ=new Date(record.BMKSSJ);
+    record.BMJSSJ=new Date(record.BMJSSJ);
     const res = updateKHBJSJ({ id: record.id }, record);
     new Promise((resolve) => {
       resolve(res);

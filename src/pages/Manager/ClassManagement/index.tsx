@@ -305,7 +305,7 @@ const CourseManagement = () => {
       align: 'center',
       width: 100,
       render: (_, record) => {
-        const Url = `/courseScheduling?courseId=${record.id}`;
+        const Url = `/courseScheduling?courseId=${record.id}&xn=${xn}&xq=${xq}`;
         if (record.BJZT === '待发布' || record.BJZT === '已下架') {
           return (
             <a>
