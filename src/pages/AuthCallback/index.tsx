@@ -5,7 +5,7 @@
  * @description: OAuth认证通过后的跳转页面
  * @author: zpl
  * @Date: 2021-05-13 09:08:04
- * @LastEditTime: 2021-06-11 08:46:14
+ * @LastEditTime: 2021-07-01 09:52:47
  * @LastEditors: zpl
  */
 import React, { useCallback, useEffect } from 'react';
@@ -28,19 +28,13 @@ const query = getPageQuery();
 const Comp = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
-  const fetchUserInfo = useCallback(async (debug: boolean) => {
-    const userInfo = await initialState?.fetchUserInfo?.(debug);
-    if (typeof debug !== 'undefined') {
-      debugger;
-    }
+  const fetchUserInfo = useCallback(async () => {
+    const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
       setInitialState(initialState ? { ...initialState, currentUser: userInfo } : undefined);
       setTimeout(() => {
         // eslint-disable-next-line no-console
         console.log('userInfo', userInfo);
-        if (typeof debug !== 'undefined') {
-          debugger;
-        }
         switch (userInfo.auth) {
           case '管理员':
             history.replace('/courseManagements');
@@ -62,13 +56,10 @@ const Comp = () => {
 
   useEffect(() => {
     (async () => {
-      const { token, debug } = query;
-      if (typeof debug !== 'undefined') {
-        debugger;
-      }
+      const { token } = query;
       if (token) {
         localStorage.setItem('token', Array.isArray(token) ? token.toString() : token);
-        await fetchUserInfo(!!debug);
+        await fetchUserInfo();
       }
     })();
   }, [query]);

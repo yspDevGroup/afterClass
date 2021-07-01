@@ -2,7 +2,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-06-11 08:34:29
+ * @LastEditTime: 2021-07-01 11:11:18
  * @LastEditors: zpl
  */
 import { useModel, history } from 'umi';
@@ -22,7 +22,6 @@ const Index = () => {
       break;
     default:
       // TODO: 后期需要修改为跳转向非法访问提示页面
-      history.replace('/courseManagements');
       // history.replace(loginPath);
       break;
   }
