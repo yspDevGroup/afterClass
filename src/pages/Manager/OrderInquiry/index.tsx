@@ -151,7 +151,7 @@ const OrderInquiry = () => {
       key: 'XSId',
       align: 'center',
       render: (text: string, record: any) => {
-        return <WWOpenDataCom type="userName" openid={text} />;
+        return <WWOpenDataCom type="userName" openid={record.XSId} />;
       },
     },
     {

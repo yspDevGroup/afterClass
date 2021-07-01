@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Button, message, Radio } from 'antd';
+import { Button, Radio } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import type { SearchDataType } from '@/components/Search/data';
@@ -23,7 +23,6 @@ import AddArranging from './components/AddArranging';
 import { searchData } from './searchConfig';
 // import { NJData, XQData } from './mock';
 import './index.less';
-import { getKHKCSJ } from '@/services/after-class/khkcsj';
 
 const ClassManagement = () => {
   const [state, setState] = useState(true);
@@ -164,43 +163,39 @@ const ClassManagement = () => {
   useEffect(() => {
     (async () => {
       const bjID = getQueryString('courseId');
+      const xnD = getQueryString('xn') || '';
+      const xqD = getQueryString('xq') || '';
+
       if (bjID) {
-        const resultKHKC = await getKHKCSJ({ kcId: bjID });
-        if (resultKHKC.status === 'ok') {
-          const xNDa = resultKHKC.data?.XNXQ?.XN;
-          const xQDa = resultKHKC.data?.XNXQ?.XQ;
-          // 查询所有课程的时间段
-          const resultTime = await getAllXXSJPZ({
-            xn: xNDa,
-            xq: xQDa,
-            type: ['0'],
+        // 查询所有课程的时间段
+        const resultTime = await getAllXXSJPZ({
+          xn: xnD,
+          xq: xqD,
+          type: ['0'],
+        });
+        if (resultTime.status === 'ok') {
+          const timeSlot = resultTime.data;
+          setXXSJPZData(timeSlot);
+          // 查询排课数据
+          const resultPlan = await getFJPlan({
+            xn: xnD,
+            xq: xqD,
+            isPk: radioValue,
           });
-          if (resultTime.status === 'ok') {
-            const timeSlot = resultTime.data;
-            setXXSJPZData(timeSlot);
-            // 查询排课数据
-            const resultPlan = await getFJPlan({
-              xn: xNDa,
-              xq: xQDa,
-              isPk: radioValue,
-            });
-            if (resultPlan.status === 'ok') {
-              const tableData = processingData(resultPlan.data, timeSlot);
-              setTableDataSource(tableData);
-            }
+          if (resultPlan.status === 'ok') {
+            const tableData = processingData(resultPlan.data, timeSlot);
+            setTableDataSource(tableData);
           }
-          const njInfo = await getKHBJSJ({ id: bjID });
-          if (njInfo.status === 'ok') {
-            setRecordValue({
-              BJId: njInfo.data.id,
-              NJ: njInfo.data.NJSName?.split(',')[0],
-              KC: njInfo.data.KHKCSJId,
-              XQ: njInfo.data.XQName,
-            });
-            setState(false);
-          }
-        } else {
-          message.error(resultKHKC.message);
+        }
+        const njInfo = await getKHBJSJ({ id: bjID });
+        if (njInfo.status === 'ok') {
+          setRecordValue({
+            BJId: njInfo.data.id,
+            NJ: njInfo.data.NJSName?.split(',')[0],
+            KC: njInfo.data.KHKCSJId,
+            XQ: njInfo.data.XQName,
+          });
+          setState(false);
         }
       }
     })();
