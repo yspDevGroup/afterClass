@@ -2,8 +2,8 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-26 11:20:42
- * @LastEditTime: 2021-06-26 11:24:46
- * @LastEditors: txx
+ * @,@LastEditTime: ,: 2021-07-01 09:52:06
+ * @,@LastEditors: ,: Please set LastEditors
  */
 import React, { useContext, useEffect } from 'react'
 import ListComp from '@/components/ListComponent'
@@ -19,7 +19,7 @@ const TeachCourses = () => {
         id: item.id,
         title: item.KHKCSJ.KCMC,
         img: item.KCTP ? item.KCTP : item.KHKCSJ.KCTP,
-        link: `/parent/home/courseDetails?id=${item.KHKCSJ.id}&type=false`,
+        link: `/teacher/home/courseDetails?classid=${item.id}&courseid=${item.KHKCSJ.id}`,
         desc: [
           {
             left: [`课程时段：${item.KKRQ ? item.KKRQ : item.KHKCSJ.KKRQ}-${item.JKRQ ? item.JKRQ : item.KHKCSJ.JKRQ}`],

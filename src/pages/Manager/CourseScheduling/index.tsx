@@ -120,7 +120,6 @@ const ClassManagement = () => {
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const tableData: any[] = [];
     const sameClassData: any[] = [];
-    console.log('timeData', timeData);
 
     data.map((item: any) => {
       timeData.map((timeItem: any, timeKey: number) => {

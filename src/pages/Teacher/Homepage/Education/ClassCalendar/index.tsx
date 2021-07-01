@@ -51,7 +51,7 @@ const ClassCalendar = (props: propstype) => {
       const kcxxInfo = {
         title: item.KHBJSJ.KHKCSJ.KCMC,
         img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
-        link: `/parent/home/courseDetails?id=${item.KHBJSJ.id}&type=true`,
+        link: `/teacher/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}`,
         desc: [
           {
             left: [`课程时段：${(item.XXSJPZ.KSSJ).substring(0, 5)}-${(item.XXSJPZ.JSSJ).substring(0, 5)}`],

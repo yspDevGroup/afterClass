@@ -1,47 +1,45 @@
-/*
- * @description: 
- * @author: txx
- * @Date: 2021-06-09 10:36:02
- * @LastEditTime: 2021-06-11 16:56:08
- * @LastEditors: txx
- */
+
+import { getAllXXGG } from '@/services/after-class/xxgg';
 import React, { useEffect, useState } from 'react'
-import { Articles } from "./mock"
-import styles from "./index.less"
-import { getQueryString } from '@/utils/utils'
-
-
+import { Link } from 'umi';
+import styles from './index.less'
 
 const Details = () => {
-  const [content, setContent] = useState<any>();
+  const [exhibition, setExhibition] = useState<boolean>(false);
+  const [notification, setNotification] = useState<any[]>();
+
   useEffect(() => {
-    const pageId = getQueryString("listpage");
+    async function announcements() {
+      const res = await getAllXXGG({ status: ['发布'] });
+      if (res.status === 'ok' && !(res.data === [])) {
+        await setExhibition(true);
+        await setNotification(res.data);
+      } else {
+        setExhibition(false);
+      };
+    };
+    announcements();
+  }, []);
 
-    if (pageId) {
-      setContent(Articles[pageId]);
-    }
-  }, [])
-  if (content) {
-
-    return (
-      <div className={styles.DetailsBox}>
-        <div className={styles.title}>{content.title}</div>
-        <div className={styles.time}>发布时间：{content.time}</div>
-        <div className={styles.line}></div>
-        <div className={styles.text}>
-          {content.list.map((i: any) => {
-            return (
-              <div>
-                {i.subtitle ? <h3>{i.subtitle}</h3> : ''}
-                <p>{i.content}</p>
-              </div>
-            )
-          })}
-        </div>
+  return (
+    <div className={styles.bigbox}>
+      <div className={styles.header}>
+        <h3 className={styles.title}>公示栏</h3>
+        <Link to='/parent/home/notice'>  <span className={styles.all} >全部 ＞</span></Link>
       </div>
-    )
-  }
-  return ''
+      {
+        exhibition ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
+          {notification?.map((record: any, index: number) => {
+            if (index < 4) {
+              return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{color:'#333'}}><li >{record.BT} </li></Link>
+            } else {
+              return ''
+            }
+          })}
+        </ul> : <div className={styles.noull}>暂无课程</div>
+      }
+    </div>
+  )
 }
 
 export default Details

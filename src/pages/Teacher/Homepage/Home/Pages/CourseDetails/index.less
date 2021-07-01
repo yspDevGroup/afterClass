@@ -1,8 +1,14 @@
+@import '../../../theme.less';
+
 .CourseDetails {
   :global {
     .anticon svg {
       height: 100%;
     }
+  }
+
+  button {
+    outline: none;
   }
 
   .wrap {
@@ -53,28 +59,16 @@
     background: #FFFFFF;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 
-    span:nth-of-type(1) {
-      font-size: 18px;
-      color: #FF6600;
-    }
-
-    span:nth-of-type(2) {
-      font-size: 14px;
-      color: #FF6600;
-    }
-
     .btn {
-      width: 60vw;
+      width: 100%;
       height: 38px;
-      position: absolute;
-      right: 14px;
-      top: 8px;
       color: #fff;
       line-height: 38px;
       font-size: 18px;
       background-color: #45C977;
       border-radius: 19px;
       border: none;
+      margin-top: 8px;
     }
   }
 
@@ -122,9 +116,24 @@
       }
     }
 
+    :global {
+      .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):focus-within {
+        box-shadow: none;
+      }
+      .ant-radio-checked .ant-radio-inner {
+        border-color: @GreenColor;
+        &:after{
+          background-color: @GreenColor;
+        }
+      }
+    }
+
     .BjInformation {
+      border: none;
+
       :global {
-        label {
+
+        .ant-radio-button {
           margin-bottom: 10px;
           margin-right: 14px;
           height: 32px;
@@ -133,6 +142,11 @@
           border: none;
           background: #F5F5F5;
           padding: 0 20px 0 20px;
+
+          &.ant-radio-button-checked {
+            border: 1px solid @GreenColor;
+            background: rgba(69, 201, 119, 0.1);
+          }
         }
       }
     }
@@ -204,13 +218,66 @@
         width: 18%;
         height: 48px;
         border-radius: 8px;
-        background: #FFFFFF;
+        background:rgba(255, 102, 0, 0.1);
         padding: 5px;
         margin-right: 2%;
         margin-bottom: 10px;
         text-align: center;
         font-size: 12px;
-        color: #999999;
+        color: @normal-color;
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .card2 {
+        width: 18%;
+        height: 48px;
+        border-radius: 8px;
+        background: @primary-color;
+        padding: 5px;
+        margin-right: 2%;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: #FFFFFF;
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .card3 {
+        width: 18%;
+        height: 48px;
+        border-radius: 8px;
+        background: #fff;
+        padding: 5px;
+        margin-right: 2%;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: @normal-color;
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+      .card4 {
+        width: 18%;
+        height: 48px;
+        border-radius: 8px;
+        background:#45C977;
+        padding: 5px;
+        margin-right: 2%;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: @normal-color;
 
         p {
           margin: 0;

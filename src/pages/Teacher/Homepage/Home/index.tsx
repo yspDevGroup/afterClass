@@ -1,13 +1,12 @@
 import React, { useEffect, useContext, useRef } from 'react';
 import imgPop from '@/assets/teacherBg.png';
-import ListComp from '@/components/ListComponent';
-import { annoceData } from '../listData';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import IconFont from '@/components/CustomIcon';
 import EnrollClassTime from '@/components/EnrollClassTime';
 import myContext from '@/utils/MyContext';
 import TeachCourses from './components/TeachCourses';
+import Details from './Pages/Details';
 
 const Home = () => {
   const { currentUserInfo} = useContext(myContext);
@@ -53,7 +52,7 @@ const Home = () => {
          <TeachCourses/>
         </div>
         <div className={styles.announceArea}>
-          <ListComp listData={annoceData} cls={styles.announceList} />
+        <Details />
         </div>
       </div>
     </div>
