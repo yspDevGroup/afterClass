@@ -120,6 +120,7 @@ const ClassManagement = () => {
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const tableData: any[] = [];
     const sameClassData: any[] = [];
+    console.log('timeData', timeData);
 
     data.map((item: any) => {
       timeData.map((timeItem: any, timeKey: number) => {
@@ -166,6 +167,8 @@ const ClassManagement = () => {
               }
             }
           });
+        } else {
+          setPKiskai(true);
         }
 
         tableData.push(table);
@@ -223,20 +226,16 @@ const ClassManagement = () => {
           });
           if (resultTime.status === 'ok') {
             const timeSlot = resultTime.data;
-            if (timeSlot && timeSlot?.length > 0) {
-              setXXSJPZData(timeSlot);
-              // 查询排课数据
-              const resultPlan = await getFJPlan({
-                xn: curTerm.XN,
-                xq: curTerm.XQ,
-                isPk: radioValue,
-              });
-              if (resultPlan.status === 'ok') {
-                const tableData = processingData(resultPlan.data, timeSlot);
-                setTableDataSource(tableData);
-              }
-            } else {
-              setPKiskai(true);
+            setXXSJPZData(timeSlot);
+            // 查询排课数据
+            const resultPlan = await getFJPlan({
+              xn: curTerm.XN,
+              xq: curTerm.XQ,
+              isPk: radioValue,
+            });
+            if (resultPlan.status === 'ok') {
+              const tableData = processingData(resultPlan.data, timeSlot);
+              setTableDataSource(tableData);
             }
           }
         }

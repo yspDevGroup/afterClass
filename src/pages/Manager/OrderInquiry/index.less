@@ -15,8 +15,14 @@
 
 .tableStyle {
   :global {
-    .ant-table-thead > tr > th {
-      padding: 12px 8px;
+    .ant-table-thead,
+    .ant-table-tbody {
+      > tr {
+        > td,
+        > th {
+          padding: 12px 8px;
+        }
+      }
     }
   }
 }
