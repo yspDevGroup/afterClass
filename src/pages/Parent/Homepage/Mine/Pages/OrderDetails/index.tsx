@@ -31,7 +31,9 @@ const OrderDetails: React.FC = (props: any) => {
       kcmc: title,
       amount: orderInfo.DDFY,
     });
-    console.log(res);
+    if(res.status === 'ok'){
+      window.open(res.data)
+    }
 
   };
   const handleCancle = async () => {

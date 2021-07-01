@@ -5,39 +5,36 @@ import styles from './index.less';
 import { Link, useModel, } from 'umi';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { deleteKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
+import { deleteKHXSDD, getAllKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
+import { getQueryString } from '@/utils/utils';
 
 const { TabPane } = Tabs;
 
-const OrderList = (props: { data?: any[] }) => {
-    const { data } = props;
-    const { initialState } = useModel('@@initialState');
-    const { currentUser } = initialState || {};
-    const children = currentUser?.subscriber_info?.children || [{
-        student_userid: currentUser?.userId,
-        njId: '1'
-      }];
+const OrderList = (props: { data?: any[], children: any[], currentUser?: API.CurrentUser,triggerEvt: (param: any[]) => Promise<any> }) => {
+    const { data, children, currentUser,triggerEvt } = props;
     const handlePay = async (d: any) => {
         const res = await payKHXSDD({
-          ddIds: [d.id],
-          bjId: d.KHBJSJ.id,
-          returnUrl: '/parent/home',
-          xsId: '23' || children[0].student_userid,
-          kcmc: d.KHBJSJ.KHKCSJ.KCMC,
-          amount: d.DDFY,
+            ddIds: [d.id],
+            bjId: d.KHBJSJ.id,
+            returnUrl: '/parent/home',
+            xsId: '23' || children && children[0].student_userid,
+            kcmc: d.KHBJSJ.KHKCSJ.KCMC,
+            amount: d.DDFY,
         });
-        console.log(res);
-    
-      };
-      const handleCancle = async (d: any) => {
+        if (res.status === 'ok') {
+            window.open(res.data);
+        }
+    };
+    const handleCancle = async (d: any) => {
         const res = await deleteKHXSDD({ id: d.id });
         const { DDZT } = d;
         if (res.status === 'ok') {
-          message.success(`订单${DDZT === '已过期' ? '删除' : '取消'}成功`);
+            message.success(`订单${DDZT === '已过期' ? '删除' : '取消'}成功`);
+            triggerEvt(children);
         } else {
-          message.error(res.message);
+            message.error(res.message);
         }
-      };
+    };
     return <>
         {data && data.length ? data.map((item) => {
             const { KHBJSJ, ...rest } = item;
@@ -58,35 +55,58 @@ const OrderList = (props: { data?: any[] }) => {
                     {item.DDZT === '已付款' ? <p className={styles.price}>实付: <span>￥{item.DDFY}</span></p> : ''}
                 </Link>
                 {item.DDZT === '待付款' ? <div className={styles.btns}>
-                    <button onClick={()=>handleCancle(item)}>取消订单</button>
-                    <button onClick={()=>handlePay(item)}>去支付</button>
+                    <button onClick={() => handleCancle(item)}>取消订单</button>
+                    <button onClick={() => handlePay(item)}>去支付</button>
                 </div> : ''}
                 {item.DDZT === '已过期' ? <div className={styles.btns}>
-                    <button onClick={()=>handleCancle(item)}>删除订单</button>
+                    <button onClick={() => handleCancle(item)}>删除订单</button>
                 </div> : ''}
             </div>
         })
             : <></>}
     </>
 };
-const Order: React.FC = (props: any) => {
-    const { orderInfo, key } = props.location && props.location.state;
+const Order: React.FC = () => {
     const [valueKey, setValueKey] = useState<string>('toPay');
+    const [orderInfo, setOrderInfo] = useState<API.KHXSDD[]>([]);
+    const { initialState } = useModel('@@initialState');
+    const { currentUser } = initialState || {};
+    const children = currentUser?.subscriber_info?.children || [{
+        student_userid: currentUser?.userId,
+        njId: '1'
+    }];
+    const fetch = async (param: any[]) => {
+        const res = await getAllKHXSDD({
+            XSId: param[0].student_userid,
+            njId: param[0].njId,
+            DDZT: ''
+        });
+        if (res.status === 'ok') {
+            if (res.data) {
+                setOrderInfo(res.data);
+            }
+        } else {
+            message.warning(res.message)
+        }
+    };
     useEffect(() => {
-        if (key)
-            setValueKey(key);
-    }, [key])
+        fetch(children);
+        const type = getQueryString("type");
+        if (type) {
+            setValueKey(type);
+        }
+    }, []);
     return (
         <div className={styles.orderList}>
             <Tabs type="card" defaultActiveKey={valueKey}>
                 <TabPane tab="全部" key="total">
-                    <OrderList data={orderInfo} />
+                    <OrderList data={orderInfo} children={children} currentUser={currentUser} triggerEvt={fetch} />
                 </TabPane>
                 <TabPane tab="待付款" key="toPay">
-                    <OrderList data={orderInfo?.filter((item: { DDZT: string; }) => item.DDZT === '待付款')} />
+                    <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '待付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
                 </TabPane>
                 <TabPane tab="已付款" key="paid">
-                    <OrderList data={orderInfo?.filter((item: { DDZT: string; }) => item.DDZT === '已付款')} />
+                    <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '已付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
                 </TabPane>
             </Tabs>
         </div>

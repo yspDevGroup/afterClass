@@ -13,7 +13,6 @@ import { iconTextData } from './mock';
 const Mine = () => {
   const { currentUserInfo, courseStatus, } = useContext(myContext);
   const [totail, setTotail] = useState<boolean>(false);
-  const [orderInfo, setOrderInfo] = useState<any[]>();
   useEffect(() => {
     const data = currentUserInfo?.subscriber_info?.children || [{
       student_userid: currentUserInfo?.userId,
@@ -23,12 +22,10 @@ const Mine = () => {
       const res = await getAllKHXSDD({
         XSId: children[0].student_userid,
         njId: children[0].njId,
-        DDZT: ''
+        DDZT: '待付款'
       });
       if (res.status === 'ok') {
-        setOrderInfo(res.data);
-        const toPay = res.data?.find((item) => item.DDZT === '待付款');
-        if (toPay) {
+        if (res.data && res.data.length) {
           setTotail(true);
         }
       } else {
@@ -59,7 +56,6 @@ const Mine = () => {
           isheader={true}
           grid={{ column: 3 }}
           dataSource={iconTextData}
-          exteraLink = {orderInfo}
           totil={totail}
         />
       </div>

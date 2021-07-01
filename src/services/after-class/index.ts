@@ -29,14 +29,14 @@ import * as wechat from './wechat';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
-import * as xqsj from './xqsj';
 import * as xsjbsj from './xsjbsj';
+import * as xqsj from './xqsj';
 import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
+import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
-import * as xxpz from './xxpz';
 export default {
   other,
   auth,
@@ -65,12 +65,12 @@ export default {
   xl,
   xnjgsj,
   xnxq,
-  xqsj,
   xsjbsj,
+  xqsj,
   xxgg,
   xxjbsj,
+  xxpz,
   xxsjpz,
   zxfa,
   zxsj,
-  xxpz,
 };

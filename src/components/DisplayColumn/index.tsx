@@ -7,7 +7,7 @@ import IconFont from '../CustomIcon';
 import styles from "./index.less";
 
 
-const DisplayColumn: FC<IiconTextData> = ({ hidden = false, title, type, grid, dataSource, isheader, exteraLink, totil }) => {
+const DisplayColumn: FC<IiconTextData> = ({ hidden = false, title, type, grid, dataSource, isheader, totil }) => {
     return (
         <div className={styles.IconTextCompBox} style={{ background: `${!isheader ? '#FFFFFF' : '#F5F5F5'}`, display: hidden ? 'none' : 'block' }}>
             <List
@@ -17,22 +17,10 @@ const DisplayColumn: FC<IiconTextData> = ({ hidden = false, title, type, grid, d
                     (<div >{title}</div>)
                     : ""}
                 renderItem={(item, index) => {
-                    const { icon, text, img, link, background, fontSize, count, key } = item;
-                    let aLink: any = {
-                        pathname: link,
-                    };
-                    if (exteraLink) {
-                        aLink = {
-                            pathname: link,
-                            state: {
-                                orderInfo: exteraLink,
-                                key
-                            }
-                        }
-                    }
+                    const { icon, text, img, link, background, fontSize, count, } = item;
 
                     return (<List.Item>
-                        <Link to={aLink!}>
+                        <Link to={link!}>
                             <div className={styles.Box}>
                                 {type === "img" ?
                                     (<div className={styles.imgBox}>
