@@ -62,7 +62,6 @@ const AddArranging: FC<PropsType> = (props) => {
   const [form] = Form.useForm();
   const [xQItem, setXQLabelItem] = useState<any>([]);
   const [excelTableValue] = useState<any[]>([]);
-  const [bjIdData] = useState<any[]>([formValues?.BJId]);
   const sameClassDatas = [...sameClass];
   const [loading, setLoading] = useState(true);
   const [CDLoading, setCDLoading] = useState(false);
@@ -195,7 +194,6 @@ const AddArranging: FC<PropsType> = (props) => {
     setBj(chosenData);
     setIndex(value.id);
     setBJIDData(value.id);
-    bjIdData.push(value.id);
     setCDLoading(true);
     setTimeout(() => {
       setCDLoading(false);
@@ -207,6 +205,10 @@ const AddArranging: FC<PropsType> = (props) => {
     if (Bj || index) {
       try {
         const data = [...excelTableValue].concat(sameClassDatas);
+        const bjIdData: any[] = [];
+        data.forEach((item: any) => {
+          bjIdData.push(item.KHBJSJId);
+        });
         // 所选班级ID
         const bj = Array.from(new Set(bjIdData));
         const parameter = {
