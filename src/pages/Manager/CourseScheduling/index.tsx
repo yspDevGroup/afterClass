@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Button, Radio } from 'antd';
+import { Button, message, Radio } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import type { SearchDataType } from '@/components/Search/data';
@@ -23,6 +23,7 @@ import AddArranging from './components/AddArranging';
 import { searchData } from './searchConfig';
 // import { NJData, XQData } from './mock';
 import './index.less';
+import { getKHKCSJ } from '@/services/after-class/khkcsj';
 
 const ClassManagement = () => {
   const [state, setState] = useState(true);
@@ -54,23 +55,7 @@ const ClassManagement = () => {
       await initWXAgentConfig(['checkJsApi']);
     })();
   }, []);
-  useEffect(() => {
-    (async () => {
-      const bjID = getQueryString('courseId');
-      if (bjID) {
-        const njInfo = await getKHBJSJ({ id: bjID });
-        if (njInfo.status === 'ok') {
-          setRecordValue({
-            BJId: njInfo.data.id,
-            NJ: njInfo.data.NJSName?.split(',')[0],
-            KC: njInfo.data.KHKCSJId,
-            XQ: njInfo.data.XQName,
-          });
-          setState(false);
-        }
-      }
-    })();
-  }, []);
+
   useEffect(() => {
     (async () => {
       // 获取年级信息
@@ -177,6 +162,50 @@ const ClassManagement = () => {
     return tableData;
   };
   useEffect(() => {
+    (async () => {
+      const bjID = getQueryString('courseId');
+      if (bjID) {
+        const resultKHKC = await getKHKCSJ({ kcId: bjID });
+        if (resultKHKC.status === 'ok') {
+          const xNDa = resultKHKC.data?.XNXQ?.XN;
+          const xQDa = resultKHKC.data?.XNXQ?.XQ;
+          // 查询所有课程的时间段
+          const resultTime = await getAllXXSJPZ({
+            xn: xNDa,
+            xq: xQDa,
+            type: ['0'],
+          });
+          if (resultTime.status === 'ok') {
+            const timeSlot = resultTime.data;
+            setXXSJPZData(timeSlot);
+            // 查询排课数据
+            const resultPlan = await getFJPlan({
+              xn: xNDa,
+              xq: xQDa,
+              isPk: radioValue,
+            });
+            if (resultPlan.status === 'ok') {
+              const tableData = processingData(resultPlan.data, timeSlot);
+              setTableDataSource(tableData);
+            }
+          }
+          const njInfo = await getKHBJSJ({ id: bjID });
+          if (njInfo.status === 'ok') {
+            setRecordValue({
+              BJId: njInfo.data.id,
+              NJ: njInfo.data.NJSName?.split(',')[0],
+              KC: njInfo.data.KHKCSJId,
+              XQ: njInfo.data.XQName,
+            });
+            setState(false);
+          }
+        } else {
+          message.error(resultKHKC.message);
+        }
+      }
+    })();
+  }, []);
+  useEffect(() => {
     if (BJID) {
       const res = getFJPlan({ xn, xq, isPk: false });
       Promise.resolve(res).then((data: any) => {
@@ -223,48 +252,51 @@ const ClassManagement = () => {
     });
   };
   useEffect(() => {
-    (async () => {
-      // 学年学期数据的获取
-      const res = await queryXNXQList();
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      const defaultData = [...searchData];
-      if (newData.data && newData.data.length) {
-        if (curTerm) {
-          await setXn(curTerm.XN);
-          await setXq(curTerm.XQ);
-          const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-          if (chainSel && chainSel.defaultValue) {
-            chainSel.defaultValue.first = curTerm.XN;
-            chainSel.defaultValue.second = curTerm.XQ;
-            await setDataSource(defaultData);
-            chainSel.data = newData;
-          }
-          // 查询所有课程的时间段
-          const resultTime = await getAllXXSJPZ({
-            xn: curTerm.XN,
-            xq: curTerm.XQ,
-            type: ['0'],
-          });
-          if (resultTime.status === 'ok') {
-            const timeSlot = resultTime.data;
-            setXXSJPZData(timeSlot);
-            // 查询排课数据
-            const resultPlan = await getFJPlan({
+    const bjID = getQueryString('courseId');
+    if (!bjID) {
+      (async () => {
+        // 学年学期数据的获取
+        const res = await queryXNXQList();
+        const newData = res.xnxqList;
+        const curTerm = res.current;
+        const defaultData = [...searchData];
+        if (newData.data && newData.data.length) {
+          if (curTerm) {
+            await setXn(curTerm.XN);
+            await setXq(curTerm.XQ);
+            const chainSel = defaultData.find((item) => item.type === 'chainSelect');
+            if (chainSel && chainSel.defaultValue) {
+              chainSel.defaultValue.first = curTerm.XN;
+              chainSel.defaultValue.second = curTerm.XQ;
+              await setDataSource(defaultData);
+              chainSel.data = newData;
+            }
+            // 查询所有课程的时间段
+            const resultTime = await getAllXXSJPZ({
               xn: curTerm.XN,
               xq: curTerm.XQ,
-              isPk: radioValue,
+              type: ['0'],
             });
-            if (resultPlan.status === 'ok') {
-              const tableData = processingData(resultPlan.data, timeSlot);
-              setTableDataSource(tableData);
+            if (resultTime.status === 'ok') {
+              const timeSlot = resultTime.data;
+              setXXSJPZData(timeSlot);
+              // 查询排课数据
+              const resultPlan = await getFJPlan({
+                xn: curTerm.XN,
+                xq: curTerm.XQ,
+                isPk: radioValue,
+              });
+              if (resultPlan.status === 'ok') {
+                const tableData = processingData(resultPlan.data, timeSlot);
+                setTableDataSource(tableData);
+              }
             }
           }
+        } else {
+          setkai(true);
         }
-      } else {
-        setkai(true);
-      }
-    })();
+      })();
+    }
   }, []);
 
   const columns: {
