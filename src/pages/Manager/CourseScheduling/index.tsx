@@ -46,7 +46,7 @@ const ClassManagement = () => {
   const [pKiskai, setPKiskai] = useState<boolean>(false);
 
   const [sameClass, setSameClassData] = useState<any>([]);
-
+  const [rawData, setRawData] = useState<any>([]);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -142,7 +142,6 @@ const ClassManagement = () => {
           if (item.KHPKSJs && item.KHPKSJs.length > 0) {
             item.KHPKSJs.map((KHItem: any) => {
               if (KHItem.XXSJPZ.id === timeItem.id) {
-                // console.log('BJID',);
                 table[week[KHItem.WEEKDAY]] = {
                   weekId: KHItem.id, // 周
                   cla: KHItem.KHBJSJ.BJMC, // 班级名称
@@ -178,7 +177,12 @@ const ClassManagement = () => {
     setSameClassData(sameClassData);
     return tableData;
   };
-
+  useEffect(() => {
+    if (BJID || recordValue.BJId) {
+      const tableData = processingData(rawData, xXSJPZData);
+      setTableDataSource(tableData);
+    }
+  }, [BJID]);
   // 头部input事件
   const handlerSearch = async (type: string, value: string, term: string) => {
     setXn(value);
@@ -200,6 +204,7 @@ const ClassManagement = () => {
       });
       if (resultPlan.status === 'ok') {
         const tableData = processingData(resultPlan.data, timeSlot);
+        setRawData(resultPlan.data);
         setTableDataSource(tableData);
       }
     }
@@ -209,6 +214,7 @@ const ClassManagement = () => {
     const res = getFJPlan({ xn, xq, isPk: e.target.value });
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
+        setRawData(data.data);
         const tableData = processingData(data.data, xXSJPZData);
         setTableDataSource(tableData);
       }
@@ -248,6 +254,7 @@ const ClassManagement = () => {
               isPk: radioValue,
             });
             if (resultPlan.status === 'ok') {
+              setRawData(resultPlan.data);
               const tableData = processingData(resultPlan.data, timeSlot);
               setTableDataSource(tableData);
             }
@@ -257,7 +264,7 @@ const ClassManagement = () => {
         setkai(true);
       }
     })();
-  }, [BJID]);
+  }, []);
 
   const columns: {
     title: string;

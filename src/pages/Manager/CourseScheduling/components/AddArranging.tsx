@@ -199,7 +199,7 @@ const AddArranging: FC<PropsType> = (props) => {
     setCDLoading(true);
     setTimeout(() => {
       setCDLoading(false);
-    }, 2000);
+    }, 500);
   };
 
   // 保存
@@ -238,6 +238,7 @@ const AddArranging: FC<PropsType> = (props) => {
   const onReset = (prop: any) => {
     tableServers();
     setState(true);
+    setBJIDData('');
     // window.location.reload();
   };
   useEffect(() => {
