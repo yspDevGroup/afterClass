@@ -1,135 +1,95 @@
 /* eslint-disable array-callback-return */
 import React from 'react';
-import { Tabs } from 'antd';
+import { message, Tabs } from 'antd';
 import styles from './index.less';
-import { Link } from 'umi';
+import { Link, useModel, } from 'umi';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { deleteKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
 
 const { TabPane } = Tabs;
 
-
-
-const Order: React.FC = () => {
-    const valueKey = window.location.href.split('id=')[1];
+const OrderList = (props: { data?: any[] }) => {
+    const { data } = props;
+    const { initialState } = useModel('@@initialState');
+    const { currentUser } = initialState || {};
+    const children = currentUser?.subscriber_info?.children || [{
+        student_userid: currentUser?.userId,
+        njId: '1'
+      }];
+    const handlePay = async (d: any) => {
+        const res = await payKHXSDD({
+          ddIds: [d.id],
+          bjId: d.KHBJSJ.id,
+          returnUrl: '/parent/home',
+          xsId: '23' || children[0].student_userid,
+          kcmc: d.KHBJSJ.KHKCSJ.KCMC,
+          amount: d.DDFY,
+        });
+        console.log(res);
+    
+      };
+      const handleCancle = async (d: any) => {
+        const res = await deleteKHXSDD({ id: d.id });
+        const { DDZT } = d;
+        if (res.status === 'ok') {
+          message.success(`订单${DDZT === '已过期' ? '删除' : '取消'}成功`);
+        } else {
+          message.error(res.message);
+        }
+      };
+    return <>
+        {data && data.length ? data.map((item) => {
+            const { KHBJSJ, ...rest } = item;
+            return <div className={styles.Information}>
+                <Link to={{
+                    pathname: '/parent/mine/orderDetails', state: {
+                        title: KHBJSJ.KHKCSJ.KCMC,
+                        detail: KHBJSJ,
+                        payOrder: { ...rest },
+                        user: currentUser
+                    }
+                }} >
+                    <p className={styles.orderNumber}><span>订单编号：{item.DDBH}</span><span style={{ color: '#45C977' }}>{item.DDZT}</span></p>
+                    <div className={styles.KCMC}>
+                        <p>{item.KHBJSJ.KHKCSJ.KCMC}</p>
+                        <span>￥{item.KHBJSJ.FY}</span>
+                    </div>
+                    {item.DDZT === '已付款' ? <p className={styles.price}>实付: <span>￥{item.DDFY}</span></p> : ''}
+                </Link>
+                {item.DDZT === '待付款' ? <div className={styles.btns}>
+                    <button onClick={()=>handleCancle(item)}>取消订单</button>
+                    <button onClick={()=>handlePay(item)}>去支付</button>
+                </div> : ''}
+                {item.DDZT === '已过期' ? <div className={styles.btns}>
+                    <button onClick={()=>handleCancle(item)}>删除订单</button>
+                </div> : ''}
+            </div>
+        })
+            : <></>}
+    </>
+};
+const Order: React.FC = (props: any) => {
+    const { orderInfo, key } = props.location && props.location.state;
+    const [valueKey, setValueKey] = useState<string>('toPay');
+    useEffect(() => {
+        if (key)
+            setValueKey(key);
+    }, [key])
     return (
         <div className={styles.orderList}>
-        <Tabs type="card" defaultActiveKey={valueKey}>
-          <TabPane tab="全部" key="4">
-            <div className={styles.Information}>
-                <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span style={{color:'#45C977'}}>已完成</span></p>
-                <div className={styles.KCMC}>
-                    <p>少儿音乐课</p>
-                    <span>￥830</span>
-                </div>
-                <p className={styles.price}>实付: <span>￥830</span></p>
-                <div className={styles.buttons}>
-                <Link to="/parent/mine/orderDetails?id=25554456&type=true">  <span>更多</span></Link>
-                    <div>
-                        <button>退课退款</button>
-                        <button>课程评价</button>
-                        <button>申请开票</button>
-                    </div>
-                </div>
-            </div>
-            <div className={styles.Information}>
-                <p className={styles.orderNumber}><span>订单编号：TY2021542000001</span><span style={{color:'#FF6600'}}>待付款</span></p>
-                <div className={styles.KCMC}>
-                    <p>儿童机器人</p>
-                    <span>￥700</span>
-                </div>
-                <div className={styles.btns}>
-                        <button>取消订单</button>
-                        <Link to="/parent/mine/orderDetails?id=123456789&type=false">  <button>去支付</button></Link>
-                </div>
-            </div>
-            <div className={styles.Information}>
-                <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>已取消</span></p>
-                <div className={styles.KCMC}>
-                    <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥500</span>
-                </div>
-                <div className={styles.btns}>
-                        <button>删除订单</button>
-                </div>
-            </div>
-            <div className={styles.Information}>
-                <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>退款成功</span></p>
-                <div className={styles.KCMC}>
-                    <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥590.00</span>
-                </div>
-                <div className={styles.btns}>
-                        <button>删除订单</button>
-                        <button>退款详情</button>
-                </div>
-            </div>
-            <div className={styles.Information}>
-                <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>退款中</span></p>
-                <div className={styles.KCMC}>
-                    <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥500</span>
-                </div>
-                <div className={styles.btns}>
-                        <button>退款详情</button>
-                </div>
-            </div>
-          </TabPane>
-          <TabPane tab="待付款" key="1">
-          <div className={styles.Information}>
-                <p className={styles.orderNumber}><span>订单编号：TY2021542000001</span><span style={{color:'#FF6600'}}>待付款</span></p>
-                <div className={styles.KCMC}>
-                    <p>儿童机器人</p>
-                    <span>￥700</span>
-                </div>
-                <div className={styles.btns}>
-                        <button>取消订单</button>
-                        <Link to="/parent/mine/orderDetails?id=123456789&type=false">  <button>去支付</button></Link>
-                        
-                </div>
-            </div>
-          </TabPane>
-          <TabPane tab="已完成" key="2">
-          <div className={styles.Information}>
-                <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>已完成</span></p>
-                <div className={styles.KCMC}>
-                    <p>少儿音乐课</p>
-                    <span>￥500</span>
-                </div>
-                <p className={styles.price}>实付: <span>￥830</span></p>
-                <div className={styles.buttons}>
-                <Link to="/parent/mine/orderDetails?id=25554456&type=true">  <span>更多</span></Link>
-                    <div>
-                        <button>退课退款</button>
-                        <button>课程评价</button>
-                        <button>申请开票</button>
-                    </div>
-                </div>
-            </div>
-          </TabPane>
-          <TabPane tab="退课退款" key="3">
-          <div className={styles.Information}>
-                <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>退款成功</span></p>
-                <div className={styles.KCMC}>
-                    <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥500</span>
-                </div>
-                <div className={styles.btns}>
-                        <button>删除订单</button>
-                        <button>退款详情</button>
-                </div>
-            </div>
-          <div className={styles.Information}>
-                <p className={styles.orderNumber}><span>订单编号：TY20210910000001</span><span>退款中</span></p>
-                <div className={styles.KCMC}>
-                    <p>青少年足球兴趣培训课程青少年足球兴趣培训课程</p>
-                    <span>￥500</span>
-                </div>
-                <div className={styles.btns}>
-                        <button>退款详情</button>
-                </div>
-            </div>
-          </TabPane>
-        </Tabs>
-      </div>
+            <Tabs type="card" defaultActiveKey={valueKey}>
+                <TabPane tab="全部" key="total">
+                    <OrderList data={orderInfo} />
+                </TabPane>
+                <TabPane tab="待付款" key="toPay">
+                    <OrderList data={orderInfo?.filter((item: { DDZT: string; }) => item.DDZT === '待付款')} />
+                </TabPane>
+                <TabPane tab="已付款" key="paid">
+                    <OrderList data={orderInfo?.filter((item: { DDZT: string; }) => item.DDZT === '已付款')} />
+                </TabPane>
+            </Tabs>
+        </div>
     )
 };
 

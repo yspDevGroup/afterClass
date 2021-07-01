@@ -22,20 +22,28 @@ const PersonalHomepage = () => {
     async function fetchData() {
       // 获取后台学年学期数据
       const result = await queryXNXQList();
-      const { XN, XQ } = result.current;
-      const res = await homePageInfo({
-        xn: XN,
-        xq: XQ,
-        XSId: currentUser?.userId || currentUser?.id,
-        njId: '1'
-      });
-      if (res.status === 'ok' && res.data) {
-        setDataSource(res.data);
-        const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
-        if (bmkssj && bmjssj && skkssj && skjssj) {
-          const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
-          setCourseStatus(cStatus);
+      if (result.current) {
+        const { XN, XQ } = result.current;
+        const children = currentUser?.subscriber_info?.children || [{
+          student_userid: currentUser?.userId,
+          njId: '1'
+        }];
+        const res = await homePageInfo({
+          xn: XN,
+          xq: XQ,
+          XSId: children && children[0].student_userid,
+          njId: children && children[0].njId
+        });
+        if (res.status === 'ok' && res.data) {
+          setDataSource(res.data);
+          const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
+          if (bmkssj && bmjssj && skkssj && skjssj) {
+            const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
+            setCourseStatus(cStatus);
+          }
         }
+      } else {
+        history.push('/parent/home/emptyArticle?articlepage=empty');
       }
     }
     fetchData();

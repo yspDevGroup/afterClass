@@ -1,15 +1,43 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { message } from 'antd';
 import { Link } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
-import styles from './index.less';
-import imgPop from '@/assets/mobileBg.png';
-import { iconTextData } from './mock';
 import IconFont from '@/components/CustomIcon';
 import myContext from '@/utils/MyContext';
+import { getAllKHXSDD } from '@/services/after-class/khxsdd';
+import imgPop from '@/assets/mobileBg.png';
+import styles from './index.less';
+import { iconTextData } from './mock';
 
 const Mine = () => {
-  const { currentUserInfo, courseStatus } = useContext(myContext);
+  const { currentUserInfo, courseStatus, } = useContext(myContext);
+  const [totail, setTotail] = useState<boolean>(false);
+  const [orderInfo, setOrderInfo] = useState<any[]>();
+  useEffect(() => {
+    const data = currentUserInfo?.subscriber_info?.children || [{
+      student_userid: currentUserInfo?.userId,
+      njId: '1'
+    }];
+    async function fetch(children: any[]) {
+      const res = await getAllKHXSDD({
+        XSId: children[0].student_userid,
+        njId: children[0].njId,
+        DDZT: ''
+      });
+      if (res.status === 'ok') {
+        setOrderInfo(res.data);
+        const toPay = res.data?.find((item) => item.DDZT === '待付款');
+        if (toPay) {
+          setTotail(true);
+        }
+      } else {
+        message.warning(res.message)
+      }
+
+    };
+    fetch(data);
+  }, []);
 
   return (
     <div className={styles.minePage}>
@@ -29,9 +57,10 @@ const Mine = () => {
           type="icon"
           title="我的订单"
           isheader={true}
-          grid={{ column: 4 }}
+          grid={{ column: 3 }}
           dataSource={iconTextData}
-          totil={true}
+          exteraLink = {orderInfo}
+          totil={totail}
         />
       </div>
       {courseStatus === 'empty' ? '' : <Statistical />}

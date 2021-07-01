@@ -355,6 +355,4 @@ const CourseDetails: React.FC = () => {
 
 };
 
-export default CourseDetails
-
-  ;
+export default CourseDetails;
