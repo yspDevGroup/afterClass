@@ -20,6 +20,8 @@ import PromptInformation from '@/components/PromptInformation';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import type { SearchDataType } from '@/components/Search/data';
 import { Link } from 'umi';
+import WWOpenDataCom from '../ClassManagement/components/WWOpenDataCom';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
 const ClassMaintenance = () => {
   const [visible, setVisible] = useState(false);
@@ -42,7 +44,14 @@ const ClassMaintenance = () => {
   };
   // 弹框名称设定
   const [names, setnames] = useState<string>('bianji');
-
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      await initWXAgentConfig(['checkJsApi']);
+    })();
+  }, []);
   useEffect(() => {
     const curId = getQueryString('courseId');
     if (curId) {
@@ -52,7 +61,7 @@ const ClassMaintenance = () => {
       (async () => {
         const id = { kcId: curId };
         const res = await getKHKCSJ(id);
-        if (res.status === 'ok' && res.data.KCMC) {
+        if (res.status === 'ok' && res.data?.KCMC) {
           const newData = [...searchData];
           newData[0].data = [res.data.KCMC];
           setDataSource(newData);
@@ -118,36 +127,44 @@ const ClassMaintenance = () => {
       width: 100,
     },
     {
+      title: '班级人数(人)',
+      dataIndex: 'BJRS',
+      key: 'BJRS',
+      align: 'center',
+      width: 100,
+    },
+    {
       title: '主班',
       dataIndex: 'ZJS',
       key: 'ZJS',
       align: 'center',
       width: '10%',
+      render: (_, record) => {
+        return (
+          <div>
+            <WWOpenDataCom type="userName" openid={record.ZJS} />
+          </div>
+        );
+      },
     },
     {
       title: '所属校区',
       align: 'center',
+      dataIndex: 'XQName',
+      key: 'XQName',
     },
     {
       title: '适用年级',
-      dataIndex: 'NJMC',
-      key: 'NJMC',
+      dataIndex: 'NJSName',
+      key: 'NJSName',
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        const cc: any[] = [];
-        record.NJSJs?.map((item: any) => {
-          return cc.push(item.NJMC);
-        });
         return (
           <div className="ui-table-col-elp">
-            <Tooltip title={cc} arrowPointAtCenter>
-              {cc?.map((item) => {
-                return (
-                  <>
-                    <Tag>{item}</Tag>
-                  </>
-                );
+            <Tooltip title={record.NJSName} arrowPointAtCenter>
+              {record.NJSName?.split(',')?.map((item: any) => {
+                return <Tag>{item}</Tag>;
               })}
             </Tooltip>
           </div>
@@ -231,7 +248,7 @@ const ClassMaintenance = () => {
           headerTitle={<SearchComponent dataSource={dataSource} />}
           toolBarRender={() => [
             <Button
-              style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg  }}
+              style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
               type="primary"
               key="add"
               onClick={() => showDrawer()}

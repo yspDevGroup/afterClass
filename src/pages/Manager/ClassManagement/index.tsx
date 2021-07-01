@@ -254,15 +254,22 @@ const CourseManagement = () => {
       width: 100,
     },
     {
+      title: '班级人数(人)',
+      dataIndex: 'BJRS',
+      key: 'BJRS',
+      align: 'center',
+      width: 100,
+    },
+    {
       title: '主班',
-      dataIndex: 'ZJSName',
-      key: 'ZJSName',
+      dataIndex: 'ZJS',
+      key: 'ZJS',
       align: 'center',
       width: '10%',
       render: (_, record) => {
         return (
           <div>
-            <WWOpenDataCom type="userName" openid={record.userid} />
+            <WWOpenDataCom type="userName" openid={record.ZJS} />
           </div>
         );
       },
@@ -382,7 +389,7 @@ const CourseManagement = () => {
           }
           toolBarRender={() => [
             <Button
-              style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg  }}
+              style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
               type="primary"
               key="add"
               onClick={() => showDrawer()}

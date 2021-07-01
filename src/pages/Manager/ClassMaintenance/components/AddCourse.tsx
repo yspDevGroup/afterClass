@@ -11,6 +11,9 @@ import { getAllNJSJ } from '@/services/after-class/njsj';
 import { queryXQList } from '@/services/wechat/service';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+import { getDepUserList } from '@/services/after-class/wechat';
+import WWOpenDataCom from '../../ClassManagement/components/WWOpenDataCom';
 
 type AddCourseProps = {
   visible: boolean;
@@ -22,7 +25,7 @@ type AddCourseProps = {
   names?: string;
   kcId: string;
   classattend: string[];
-  signup: string[]
+  signup: string[];
 };
 const formLayout = {
   labelCol: {},
@@ -39,7 +42,7 @@ const AddCourse: FC<AddCourseProps> = ({
   names,
   kcId,
   classattend,
-  signup
+  signup,
 }) => {
   const [form, setForm] = useState<any>();
   // 校区
@@ -49,6 +52,23 @@ const AddCourse: FC<AddCourseProps> = ({
   const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
+  // 教师
+  const [teacherData, setTeacherData] = useState<any[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      await initWXAgentConfig(['checkJsApi']);
+
+      // 获取教师
+      const resTeacher = await getDepUserList({ id: '1', fetch_child: 1 });
+      if (resTeacher.status === 'ok') {
+        setTeacherData(resTeacher.data.userlist);
+      }
+    })();
+  }, []);
   useEffect(() => {
     if (formValues) {
       setBaoming(false);
@@ -58,7 +78,6 @@ const AddCourse: FC<AddCourseProps> = ({
       setKaike(true);
     }
   }, [formValues]);
-
 
   useEffect(() => {
     (async () => {
@@ -149,12 +168,20 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'inputNumber',
       readonly,
       label: '课时数：',
-      name: 'KCSC',
-      key: 'KCSC',
+      name: 'KSS',
+      key: 'KSS',
       fieldProps: {
         min: 0,
         max: 100,
       },
+    },
+    {
+      type: 'inputNumber',
+      readonly,
+      label: '班级人数：',
+      name: 'BJRS',
+      key: 'BJRS',
+      rules: [{ required: true, message: '请填写班级人数' }],
     },
     {
       type: 'group',
@@ -192,6 +219,15 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'ZJS',
           key: 'ZJS',
           readonly,
+          fieldProps: {
+            virtual: false,
+            options: teacherData.map((item) => {
+              return {
+                label: <WWOpenDataCom type="userName" openid={item.userid} />,
+                value: item.userid,
+              };
+            }),
+          },
         },
         {
           type: 'select',
@@ -201,6 +237,13 @@ const AddCourse: FC<AddCourseProps> = ({
           readonly,
           fieldProps: {
             mode: 'multiple',
+            virtual: false,
+            options: teacherData.map((item) => {
+              return {
+                label: <WWOpenDataCom type="userName" openid={item.userid} />,
+                value: item.userid,
+              };
+            }),
           },
         },
       ],
@@ -229,12 +272,13 @@ const AddCourse: FC<AddCourseProps> = ({
       },
       readonly,
     },
-    signup.length > 0 ?
-      {
-        type: 'divTab',
-        text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
-        style: { marginBottom: 8, color: "#bbbbbb" }
-      } : '',
+    signup.length > 0
+      ? {
+          type: 'divTab',
+          text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
+      : '',
     {
       type: 'div',
       key: 'div',
@@ -267,17 +311,18 @@ const AddCourse: FC<AddCourseProps> = ({
       readonly,
       fieldProps: {
         disabledDate: (current: any) => {
-          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss')
-          return defaults > signup[1] || defaults < signup[0]
-        }
+          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
+          return defaults > signup[1] || defaults < signup[0];
+        },
       },
     },
-    classattend.length > 0 ?
-      {
-        type: 'divTab',
-        text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
-        style: { marginBottom: 8, color: "#bbbbbb" }
-      } : '',
+    classattend.length > 0
+      ? {
+          type: 'divTab',
+          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
+      : '',
     {
       type: 'div',
       key: 'div1',
@@ -297,8 +342,7 @@ const AddCourse: FC<AddCourseProps> = ({
             checked: !kaike,
           },
         },
-
-      ]
+      ],
     },
     {
       type: 'dateRange',
@@ -310,9 +354,9 @@ const AddCourse: FC<AddCourseProps> = ({
       hidden: kaike,
       fieldProps: {
         disabledDate: (current: any) => {
-          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss')
-          return defaults > classattend[0] || defaults < classattend[1]
-        }
+          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
+          return defaults > classattend[0] || defaults < classattend[1];
+        },
       },
     },
     {
@@ -343,19 +387,21 @@ const AddCourse: FC<AddCourseProps> = ({
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
-        footer={(names === 'chakan') ? null :
-          (<div
-            style={{
-              textAlign: 'right',
-            }}
-          >
-            <Button onClick={onClose} style={{ marginRight: 16 }}>
-              取消
-            </Button>
-            <Button onClick={handleSubmit} type="primary">
-              保存
-            </Button>
-          </div>)
+        footer={
+          names === 'chakan' ? null : (
+            <div
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              <Button onClick={onClose} style={{ marginRight: 16 }}>
+                取消
+              </Button>
+              <Button onClick={handleSubmit} type="primary">
+                保存
+              </Button>
+            </div>
+          )
         }
       >
         <ProFormFields
@@ -364,13 +410,13 @@ const AddCourse: FC<AddCourseProps> = ({
           setForm={setForm}
           formItems={formItems}
           formItemLayout={formLayout}
-          values={formValues
-
-            || {
-            BJZT: '待发布',
-            BMKSSJ: baoming,
-            KKRQ: kaike,
-          }}
+          values={
+            formValues || {
+              BJZT: '待发布',
+              BMKSSJ: baoming,
+              KKRQ: kaike,
+            }
+          }
         />
       </Drawer>
     </div>

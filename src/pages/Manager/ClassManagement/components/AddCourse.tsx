@@ -239,13 +239,21 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'inputNumber',
       readonly,
       label: '课时数：',
-      name: 'KCSC',
-      key: 'KCSC',
+      name: 'KSS',
+      key: 'KSS',
       rules: [{ required: true, message: '请填写课时数' }],
       fieldProps: {
         min: 0,
         max: 100,
       },
+    },
+    {
+      type: 'inputNumber',
+      readonly,
+      label: '班级人数：',
+      name: 'BJRS',
+      key: 'BJRS',
+      rules: [{ required: true, message: '请填写班级人数' }],
     },
     {
       type: 'group',
@@ -284,9 +292,9 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         options: campus,
         onChange(value: any, option: any) {
-          form.setFieldsValue({ njIds: undefined });
+          form.setFieldsValue({ NJS: undefined });
           setXQId(value);
-          setXQLabelItem(option.label);
+          setXQLabelItem(option?.label);
         },
       },
     },
@@ -303,7 +311,7 @@ const AddCourse: FC<AddCourseProps> = ({
           // setNJID(value);
           const njsIabel: any[] = [];
           option.map((item: any) => {
-            njsIabel.push(item.label);
+            njsIabel.push(item?.label);
           });
           setNJLabelItem(njsIabel);
         },
@@ -323,11 +331,6 @@ const AddCourse: FC<AddCourseProps> = ({
           fieldProps: {
             virtual: false,
             options: teacherData.map((item) => {
-              // const dom = (
-              //   <div className='ww-open-data' data-id={item.userid}>
-              //     {item.name}
-              //   </div>
-              // )
               return {
                 label: <WWOpenDataCom type="userName" openid={item.userid} />,
                 value: item.userid,
