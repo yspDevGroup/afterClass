@@ -27,8 +27,8 @@ import './index.less';
 const ClassManagement = () => {
   const [state, setState] = useState(true);
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
-  const [xn, setXn] = useState<any>();
-  const [xq, setXq] = useState<any>();
+  const [xn, setXn] = useState<any>(getQueryString('xn'));
+  const [xq, setXq] = useState<any>(getQueryString('xq'));
   const [tableDataSource, setTableDataSource] = useState<any>([]);
   const [radioValue, setRadioValue] = React.useState(false);
   const [xXSJPZData, setXXSJPZData] = useState<any>([]);
@@ -163,14 +163,11 @@ const ClassManagement = () => {
   useEffect(() => {
     (async () => {
       const bjID = getQueryString('courseId');
-      const xnD = getQueryString('xn') || '';
-      const xqD = getQueryString('xq') || '';
-
       if (bjID) {
         // 查询所有课程的时间段
         const resultTime = await getAllXXSJPZ({
-          xn: xnD,
-          xq: xqD,
+          xn,
+          xq,
           type: ['0'],
         });
         if (resultTime.status === 'ok') {
@@ -178,8 +175,8 @@ const ClassManagement = () => {
           setXXSJPZData(timeSlot);
           // 查询排课数据
           const resultPlan = await getFJPlan({
-            xn: xnD,
-            xq: xqD,
+            xn,
+            xq,
             isPk: radioValue,
           });
           if (resultPlan.status === 'ok') {
@@ -249,6 +246,8 @@ const ClassManagement = () => {
   useEffect(() => {
     const bjID = getQueryString('courseId');
     if (!bjID) {
+      console.log('123131313');
+
       (async () => {
         // 学年学期数据的获取
         const res = await queryXNXQList();
