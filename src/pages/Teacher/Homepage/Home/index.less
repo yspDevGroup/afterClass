@@ -98,13 +98,22 @@
 
           &:nth-child(1) {
             width: 55px;
-            margin-bottom: 4px;
+            margin: 4px 0;
             color: @oriangeColor;
             font-size: @font-size-sm;
             line-height: 16px;
             text-align: center;
             border: 1px solid @oriangeColor;
             border-radius: 9px;
+          }
+
+          &+a {
+            color: @text-color;
+            display: inline-block;
+            width:  calc(~'100vw - 125px'); 
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
         }
       }

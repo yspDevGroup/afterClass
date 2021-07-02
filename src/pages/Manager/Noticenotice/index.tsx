@@ -65,7 +65,8 @@ const Noticenotice = () => {
             dataIndex: 'BT',
             key: 'BT',
             align: 'center',
-            width: '12%',
+            width:250,
+            ellipsis:true
         },
         {
             title: '日期',
@@ -99,7 +100,7 @@ const Noticenotice = () => {
         {
             title: '操作',
             align: 'center',
-            width: '10%',
+            width: 150,
             render: (_, record) => {
                 return (
                     <Choice record={record} handleOperation={handleOperation} actionRef={actionRef}  setRefresh={setRefresh}/>

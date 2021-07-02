@@ -29,11 +29,15 @@ const Details = () => {
         <Link to='/teacher/home/notice'>  <span className={styles.all} >全部 ＞</span></Link>
       </div>
       {
-        exhibition ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
+        exhibition ? <ul style={{ listStyle: 'initial', paddingLeft: '5px' }}>
           {notification?.map((record: any, index: number) => {
             if (notification.length > 0) {
               if (index < 4) {
-                return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li >{record.BT} </li></Link>
+                return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}>
+                  <li style={{width:'100%',overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis',listStyle:'inside'}} >
+                    {record.BT} 
+                  </li>
+                  </Link>
               } else {
                 return ''
               }

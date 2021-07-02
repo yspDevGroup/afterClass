@@ -57,7 +57,7 @@ const Home = () => {
             <span>学校公告</span>
             {!(notification?.length===0) ? notification?.map((record: any, index: number) => {
               if (index < 1) {
-                return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li >{record.BT} </li></Link>
+                return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}>{record.BT}</Link>
               } else {
                 return ''
               }
