@@ -31,6 +31,10 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
+  const children = currentUser?.subscriber_info?.children || [{
+    student_userid: currentUser?.userId,
+    njId: '1'
+  }];
   const Learning = async (bjid: any, attend: any[]) => {
     const res1 = await getAllKHXSCQ(
       {
@@ -176,7 +180,7 @@ const CourseDetails: React.FC = () => {
       "ZFFS": "线上支付",
       "DDZT": "待付款",
       "DDFY": FY!,
-      "XSId": currentUser!.userId! || currentUser!.id!,
+      "XSId": children[0].student_userid!,
       "KHBJSJId": BJ!,
     };
     const res = await createKHXSDD(data);

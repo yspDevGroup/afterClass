@@ -12,8 +12,8 @@ const Details = (props: { data?: any[] }) => {
       <div className={styles.header}>
         <h3 className={styles.title}>公示栏</h3>
         <Link to={{
-          pathname:'/parent/home/notice',
-          state:{
+          pathname: '/parent/home/notice',
+          state: {
             notification: data
           }
         }}>  <span className={styles.all} >全部 ＞</span></Link>
@@ -26,9 +26,9 @@ const Details = (props: { data?: any[] }) => {
             }
             return ''
           })}
-        </ul> : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+        </ul> : <div style={{ textAlign: 'center',width: '100%' }}>
           <img src={noData} alt="暂无数据" />
-          <h4 style={{ color: '#999' }}>暂无通知公告</h4>
+          <h4 style={{ 'fontSize': '12px',lineHeight: '17px',color: '#DDDDDD'}}>暂无通知公告</h4>
         </div>
       }
     </div>

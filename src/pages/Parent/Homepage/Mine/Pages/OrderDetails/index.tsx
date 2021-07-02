@@ -14,6 +14,10 @@ const OrderDetails: React.FC = (props: any) => {
   const [deadline, setDeadline] = useState<number>();
   const [orderInfo, setOrderInfo] = useState<any>();
   const { title, detail, payOrder, user } = props.location.state;
+  const children = user?.subscriber_info?.children || [{
+    student_userid: user?.userId,
+    njId: '1'
+  }];
   useEffect(() => {
     const orderTime = new Date(payOrder.XDSJ).getTime();
     setOrderInfo(payOrder);
@@ -23,10 +27,6 @@ const OrderDetails: React.FC = (props: any) => {
     e.stopPropagation()
   };
   const handlePay = async () => {
-    const children = user?.subscriber_info?.children || [{
-      student_userid: user?.userId,
-      njId: '1'
-    }];
     const res = await payKHXSDD({
       ddIds: [orderInfo.id],
       bjId: detail.id,

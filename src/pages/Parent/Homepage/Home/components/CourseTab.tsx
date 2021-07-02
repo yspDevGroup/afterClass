@@ -12,13 +12,15 @@ const { TabPane } = Tabs;
 const defaultMsg: ListData = {
   type: 'picList',
   cls: 'picList',
-  list: []
+  list: [],
+  noDataText: '暂无课程信息'
 };
 const CourseTab = () => {
   // 获取首页数据
   const { courseStatus, kskc, yxkc } = useContext(myContext);
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
   const centered = false;
+
   useEffect(() => {
     if (yxkc) {
       const listData: ListItem[] = [].map.call(yxkc, (record: any) => {
@@ -39,9 +41,11 @@ const CourseTab = () => {
         };
         return nodeData;
       });
-      const newData = { ...defaultMsg };
-      newData.list = listData;
-      setYxkcData(newData);
+      const { list, ...rest } = { ...defaultMsg };
+      setYxkcData({
+        list: listData,
+        ...rest,
+      });
     }
   }, [yxkc])
 
@@ -53,7 +57,7 @@ const CourseTab = () => {
             {
               kskc && kskc.length ? <Tabs className={styles.courseType}>
                 {kskc.map((item: any) => {
-                  const listData: ListItem[] = [].map.call(item.KHKCSJs, (record: any, index: number) => {
+                  const courseData: ListItem[] = [].map.call(item.KHKCSJs, (record: any, index: number) => {
                     if (index < 3) {
                       const nodeData: ListItem = {
                         id: record.id,
@@ -72,24 +76,21 @@ const CourseTab = () => {
                     return {
                       title: 'null'
                     };
-                  })
-                  defaultMsg.list = listData.filter((it: ListItem) => { return it.title !== 'null' });
+                  });
+
+                  const { list, ...rest } = { ...defaultMsg };
                   return (<TabPane tab={item.KCLX} key={item.KCLX}>
-                    <ListComponent listData={defaultMsg} />
+                    <ListComponent listData={{
+                      list:courseData.filter((it: ListItem)=>it.title!=='null'),
+                      ...rest
+                    }} />
                   </TabPane>)
                 })
                 }
-              </Tabs> : <div style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}>
-                <img src={noData} alt="暂无数据" />
-                <h4 style={{ color: '#999' }}>暂无开设课程</h4>
-              </div>}
+              </Tabs> : <ListComponent listData={defaultMsg} />}
           </TabPane> : ''}
         <TabPane tab="已选课程" key="elective">
-          {yxkc && yxkc.length ? <ListComponent listData={yxkcData} /> :
-            <div style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}>
-              <img src={noData} alt="暂无数据" />
-              <h4 style={{ color: '#999' }}>暂无已选课程</h4>
-            </div>}
+          <ListComponent listData={yxkcData} />
         </TabPane>
       </Tabs>
     </div>);

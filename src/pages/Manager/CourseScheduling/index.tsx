@@ -246,8 +246,6 @@ const ClassManagement = () => {
   useEffect(() => {
     const bjID = getQueryString('courseId');
     if (!bjID) {
-      console.log('123131313');
-
       (async () => {
         // 学年学期数据的获取
         const res = await queryXNXQList();
