@@ -12,7 +12,7 @@ const Details = () => {
   useEffect(() => {
     async function announcements() {
       const res = await getAllXXGG({ status: ['发布'] });
-      if (res.status === 'ok' && !(res.data === [])) {
+      if (res.status === 'ok' && !(res.data?.length === 0)) {
         await setExhibition(true);
         await setNotification(res.data);
       } else {
@@ -31,22 +31,25 @@ const Details = () => {
       {
         exhibition ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
           {notification?.map((record: any, index: number) => {
-            if(notification.length>0){
+            if (notification.length > 0) {
               if (index < 4) {
-                return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{color:'#333'}}><li >{record.BT} </li></Link>
+                return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li >{record.BT} </li></Link>
               } else {
                 return ''
               }
-            }else{
-              return <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px',width:'100%' }}>
-              <img src={noData} alt="暂无数据" />
-            </div>
+            } else {
+              return <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+                <img src={noData} alt="暂无数据" />
+                <h4 style={{ color: '#999' }}>暂无已选课程</h4>
+              </div>
+
             }
-           
+
           })}
-        </ul> :  <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px',width:'100%' }}>
-                  <img src={noData} alt="暂无数据" />
-                </div>
+        </ul> : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+            <img src={noData} alt="暂无数据" />
+            <h4 style={{ color: '#999' }}>暂无已选课程</h4>
+          </div>
       }
     </div>
   )

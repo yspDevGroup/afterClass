@@ -13,6 +13,7 @@ import moment from 'moment';
 import IconFont from '@/components/CustomIcon';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
+import noData from '@/assets/noData.png';
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState<string>();
@@ -30,7 +31,7 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
-  const Learning = async (bjid: any,attend: any[]) => {
+  const Learning = async (bjid: any, attend: any[]) => {
     const res1 = await getAllKHXSCQ(
       {
         xsId: currentUser!.id,
@@ -115,14 +116,14 @@ const CourseDetails: React.FC = () => {
     const res = await getKHPKSJByBJID({ id: bjid });
     if (res.status === 'ok' && res.data) {
       const attend = [...new Set(res.data.map(n => n.WEEKDAY))]
-      return await Learning(bjid,attend);
+      return await Learning(bjid, attend);
     }
     return []
   }
 
 
   useEffect(() => {
-    async function fetchData(){
+    async function fetchData() {
       if (classid) {
         const schedule = await ksssj(classid);
         setTimetableList(schedule);
@@ -301,13 +302,17 @@ const CourseDetails: React.FC = () => {
             </ul>
           </div>
           <div className={styles.Timetable}>
-            <p className={styles.title}><p className={styles.title}><span>课程表</span>
+            <p className={styles.title}>
+
+              <span>课程表</span>
               <span>
                 <Badge className={styles.legend} color="#45C977" text="今日" />
                 <Badge className={styles.legend} color="#FF6600" text="缺勤" />
                 <Badge className={styles.legend} color="#FFFFFF" text="出勤" />
                 <Badge className={styles.legend} color="#45C977" text="待上" />
-              </span>  </p></p>
+              </span>
+
+            </p>
             <div className={styles.cards}>
               {
                 !(timetableList?.length === 0) ? timetableList?.map((value) => {
@@ -315,7 +320,10 @@ const CourseDetails: React.FC = () => {
                     <p>{value.JC}</p>
                     <p>{value.data}</p>
                   </div>
-                }) : <div>班级暂无排课</div>
+                }) : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+                    <img src={noData} alt="暂无数据" />
+                    <h4 style={{ color: '#999' }}>暂无已选课程</h4>
+                  </div>
               }
             </div>
 

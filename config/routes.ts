@@ -136,6 +136,18 @@
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/CallTheRoll',
       },
+      {
+        path: '/teacher/home/notice/announcement',
+        name: 'announcement',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Home/Pages/Announcement',
+      },
+      {
+        path: '/teacher/home/emptyArticle',
+        name: 'emptyArticle',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Home/Pages/EmptyArticle',
+      },
     ],
   },
   /*** 老师路由 end ***/

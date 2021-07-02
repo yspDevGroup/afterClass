@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-26 11:20:42
- * @,@LastEditTime: ,: 2021-07-01 09:52:06
+ * @,@LastEditTime: ,: 2021-07-02 09:50:39
  * @,@LastEditors: ,: Please set LastEditors
  */
 import React, { useContext, useEffect } from 'react'
@@ -45,7 +45,7 @@ const TeachCourses = () => {
     setDataSource(newData);
   }, [yxkc])
   return (
-    <div>
+    <div style={{marginBottom:'5px'}}>
       <ListComp listData={dataSource} />
     </div>
   )

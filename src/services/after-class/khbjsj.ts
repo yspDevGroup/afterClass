@@ -51,6 +51,7 @@ export async function getKHBJSJ(
         KHKCLX?: { id?: string; KCLX?: string; KBYS?: string };
       };
       KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
+      KHXSBJs?: { id?: string; XSId?: string }[];
     };
     message?: string;
   }>(`/khbjsj/${param0}`, {
@@ -150,6 +151,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         KHKCLX?: { id?: string; KCLX?: string; KBYS?: string };
       };
       KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
+      KHXSBJs?: { id?: string; XSId?: string }[];
     };
     message?: string;
   }>('/khbjsj/create', {

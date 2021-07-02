@@ -4,7 +4,6 @@ import { Popconfirm } from "antd";
 import { message } from "antd";
 import { Divider } from "antd";
 import React from "react";
-import { Link } from "umi";
 import type { CourseItem } from "../data";
 
 type propstype = {
@@ -18,21 +17,25 @@ type propstype = {
 const ActionBar = (props: propstype) => {
   const { handleEdit, record, maintain, actionRef } = props;
   const shelf = (record: any) => {
-    record.BJZT = '已下架'
-    record.BMKSSJ=new Date(record.BMKSSJ);
-    record.BMJSSJ=new Date(record.BMJSSJ);
-    const res = updateKHBJSJ({ id: record.id }, record);
-    new Promise((resolve) => {
-      resolve(res);
-    }).then((data: any) => {
-      if (data.status === 'ok') {
-        message.success('下架成功');
-        actionRef.current?.reload();
-      } else {
-        message.error('下架失败，请联系管理员或稍后重试');
-        actionRef.current?.reload();
-      }
-    })
+    if(record.KHXSBJs.length===0){
+      record.BJZT = '已下架'
+      record.BMKSSJ=new Date(record.BMKSSJ);
+      record.BMJSSJ=new Date(record.BMJSSJ);
+      const res = updateKHBJSJ({ id: record.id }, record);
+      new Promise((resolve) => {
+        resolve(res);
+      }).then((data: any) => {
+        if (data.status === 'ok') {
+          message.success('下架成功');
+          actionRef.current?.reload();
+        } else {
+          message.error('下架失败，请联系管理员或稍后重试');
+          actionRef.current?.reload();
+        }
+      })
+    }else{
+      message.error('下架失败，请先将所有学生清除');
+    }
   }
   const release = (record: any) => {
     record.BJZT = '已发布'

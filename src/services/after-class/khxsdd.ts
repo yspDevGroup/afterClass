@@ -196,7 +196,7 @@ export async function payKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  return request<any>('/khxsdd/pay', {
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/khxsdd/pay', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

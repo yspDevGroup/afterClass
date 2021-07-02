@@ -7,11 +7,12 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { deleteKHXSDD, getAllKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
 import { getQueryString } from '@/utils/utils';
+import noData from '@/assets/noData.png';
 
 const { TabPane } = Tabs;
 
-const OrderList = (props: { data?: any[], children: any[], currentUser?: API.CurrentUser,triggerEvt: (param: any[]) => Promise<any> }) => {
-    const { data, children, currentUser,triggerEvt } = props;
+const OrderList = (props: { data?: any[], children: any[], currentUser?: API.CurrentUser, triggerEvt: (param: any[]) => Promise<any> }) => {
+    const { data, children, currentUser, triggerEvt } = props;
     const handlePay = async (d: any) => {
         const res = await payKHXSDD({
             ddIds: [d.id],
@@ -47,7 +48,13 @@ const OrderList = (props: { data?: any[], children: any[], currentUser?: API.Cur
                         user: currentUser
                     }
                 }} >
-                    <p className={styles.orderNumber}><span>订单编号：{item.DDBH}</span><span style={{ color: '#45C977' }}>{item.DDZT}</span></p>
+                    <p className={styles.orderNumber}>
+                        <span>订单编号：{item.DDBH}</span>
+                        {
+                            item.DDZT==='已付款'?<span style={{ color: '#45C977' }}>{item.DDZT}</span>:(item.DDZT==='待付款'?<span style={{ color: 'red' }}>{item.DDZT}</span>:<span style={{ color: '#eee' }}>{item.DDZT}</span>)
+                        }
+                        
+                    </p>
                     <div className={styles.KCMC}>
                         <p>{item.KHBJSJ.KHKCSJ.KCMC}</p>
                         <span>￥{item.KHBJSJ.FY}</span>
@@ -96,17 +103,35 @@ const Order: React.FC = () => {
             setValueKey(type);
         }
     }, []);
+
     return (
         <div className={styles.orderList}>
             <Tabs type="card" defaultActiveKey={valueKey}>
                 <TabPane tab="全部" key="total">
-                    <OrderList data={orderInfo} children={children} currentUser={currentUser} triggerEvt={fetch} />
+                    {!(orderInfo.length === 0) ? <OrderList data={orderInfo} children={children} currentUser={currentUser} triggerEvt={fetch} /> :
+                        <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+                            <img src={noData} alt="暂无数据" />
+                            <h4 style={{ color: '#999' }}>暂无订单</h4>
+                        </div>}
                 </TabPane>
                 <TabPane tab="待付款" key="toPay">
-                    <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '待付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
+                    {
+                        !((orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '待付款')).length === 0) ? <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '待付款')} children={children} currentUser={currentUser} triggerEvt={fetch} /> :
+                            <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+                                <img src={noData} alt="暂无数据" />
+                                <h4 style={{ color: '#999' }}>暂无待付款</h4>
+                            </div>
+                    }
                 </TabPane>
                 <TabPane tab="已付款" key="paid">
-                    <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '已付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
+                    {
+                        !((orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '已付款')).length === 0) ? <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '已付款')} children={children} currentUser={currentUser} triggerEvt={fetch} /> :
+                            <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+                                <img src={noData} alt="暂无数据" />
+                                <h4 style={{ color: '#999' }}>暂无已付款</h4>
+                            </div>
+                    }
+
                 </TabPane>
             </Tabs>
         </div>

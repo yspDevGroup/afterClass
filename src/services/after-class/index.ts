@@ -5,8 +5,8 @@
 import * as other from './other';
 import * as auth from './auth';
 import * as user from './user';
-import * as bjsj from './bjsj';
 import * as fjlx from './fjlx';
+import * as bjsj from './bjsj';
 import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
@@ -29,20 +29,20 @@ import * as wechat from './wechat';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
-import * as xsjbsj from './xsjbsj';
 import * as xqsj from './xqsj';
+import * as xsjbsj from './xsjbsj';
 import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
-import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
+import * as xxpz from './xxpz';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
   other,
   auth,
   user,
-  bjsj,
   fjlx,
+  bjsj,
   fjsj,
   jcsj,
   jcxx,
@@ -65,12 +65,12 @@ export default {
   xl,
   xnjgsj,
   xnxq,
-  xsjbsj,
   xqsj,
+  xsjbsj,
   xxgg,
   xxjbsj,
-  xxpz,
   xxsjpz,
+  xxpz,
   zxfa,
   zxsj,
 };

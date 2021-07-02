@@ -16,6 +16,7 @@ import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import { getEnrolled } from '@/services/after-class/khbjsj';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+import noData from '@/assets/noData.png';
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState<string>();
@@ -32,7 +33,8 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
-  const [userID, setUserID] = useState<any>([])
+  const [userID, setUserID] = useState<any>([]);
+
 
   useEffect(() => {
     (async () => {
@@ -343,7 +345,10 @@ const CourseDetails: React.FC = () => {
                     <p>{value.JC}</p>
                     <p>{value.data}</p>
                   </div>
-                }) : <div>班级暂无排课</div>
+                }) : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+                    <img src={noData} alt="暂无数据" />
+                    <h4 style={{ color: '#999' }}>暂无排课日期</h4>
+                  </div>
               }
             </div>
 

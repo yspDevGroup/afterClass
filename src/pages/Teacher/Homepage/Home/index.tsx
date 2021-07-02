@@ -9,7 +9,7 @@ import TeachCourses from './components/TeachCourses';
 import Details from './Pages/Details';
 import { getAllXXGG } from '@/services/after-class/xxgg';
 import { Link } from 'umi';
-
+import noData from '@/assets/noData.png';
 
 const Home = () => {
   const { currentUserInfo } = useContext(myContext);
@@ -55,13 +55,14 @@ const Home = () => {
           <IconFont type="icon-gonggao" className={styles.noticeImg} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
-            {notification?.map((record: any, index: number) => {
+            {!(notification?.length===0) ? notification?.map((record: any, index: number) => {
               if (index < 1) {
-                return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li >{record.BT} </li></Link>
+                return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li >{record.BT} </li></Link>
               } else {
                 return ''
               }
-            })}
+            }) : '暂无公告'
+            }
           </div>
           <IconFont type="icon-gengduo" className={styles.gengduo} />
         </div>

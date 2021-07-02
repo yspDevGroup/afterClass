@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'umi';
 import EmptyBGC from '@/assets/EmptyBGC.png';
 import imgPop from '@/assets/mobileBg.png';
@@ -8,9 +8,22 @@ import myContext from '@/utils/MyContext';
 import CourseTab from './components/CourseTab';
 import styles from './index.less';
 import Details from './Pages/Details';
+import { getAllXXGG } from '@/services/after-class/xxgg';
 
 const Home = () => {
   const { currentUserInfo, courseStatus } = useContext(myContext);
+  const [notification, setNotification] = useState<any[]>();
+  useEffect(() => {
+    async function announcements() {
+      const res = await getAllXXGG({ status: ['发布'] });
+      if (res.status === 'ok' && !(res.data?.length===0)) {
+        setNotification(res.data);
+      } else {
+
+      };
+    };
+    announcements();
+  }, []);
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>
@@ -25,28 +38,30 @@ const Home = () => {
       </header>
       {courseStatus === '' ? <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }}>
       </div> : <div className={styles.pageContent}>
-        <div className={styles.noticeArea}>
-          <IconFont type='icon-gonggao' className={styles.noticeImg} />
-          <div className={styles.noticeText}>
-            <span>学校公告</span>
-            <Link to="/parent/home/notice/details?listpage=page1">
-              <span>本校户籍生现场材料审核公告</span>
-            </Link>
+          <div className={styles.noticeArea}>
+            <IconFont type='icon-gonggao' className={styles.noticeImg} />
+            <div className={styles.noticeText}>
+              <span>学校公告</span>
+              {notification? notification?.map((record: any, index: number) => {
+                if (index < 1) {
+                  return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li >{record.BT} </li></Link>
+                } else {
+                  return ''
+                }
+              }):'暂无公告'
+            }
+            </div>
           </div>
-          <Link to="/parent/home/notice/details?listpage=page1">
-            <IconFont type='icon-gengduo' className={styles.gengduo} />
-          </Link>
-        </div>
-        <div className={styles.enrollArea}>
-          <EnrollClassTime />
-        </div>
-        <div className={styles.courseArea}>
-          <CourseTab />
-        </div>
-        <div className={styles.announceArea}>
-        <Details />
-        </div>
-      </div>}
+          <div className={styles.enrollArea}>
+            <EnrollClassTime />
+          </div>
+          <div className={styles.courseArea}>
+            <CourseTab />
+          </div>
+          <div className={styles.announceArea}>
+            <Details />
+          </div>
+        </div>}
     </div>
   );
 };

@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:30:23
- * @,@LastEditTime: ,: 2021-07-01 14:48:41
+ * @,@LastEditTime: ,: 2021-07-02 09:24:49
  * @,@LastEditors: ,: Please set LastEditors
  */
 
@@ -15,14 +15,22 @@ import { useModel } from 'umi';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
 import noData from '@/assets/noData.png';
+import { ListData, ListItem } from '@/components/ListComponent/data';
 
+
+const defaultMsg: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: []
+};
 
 const Course = () => {
   const { TabPane } = Tabs;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [yxkc, setYxkc] = useState<any>();
-  const [kskc, setKskc] = useState<any>()
+  const [kskc, setKskc] = useState<any>();
+  const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
@@ -41,91 +49,76 @@ const Course = () => {
     }
     fetchData();
   }, [])
+  useEffect(() => {
+    if (yxkc) {
+      const listData: ListItem[] = [].map.call(yxkc, (record: any) => {
+        const nodeData: ListItem = {
+          id: record.id,
+          title: record.KHKCSJ.KCMC,
+          img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
+          link: `/parent/home/courseDetails?classid=${record.id}&courseid=${record.KHKCSJ.id}`,
+          desc: [
+            {
+              left: [`课程时段：${record.KKRQ ? record.KKRQ : record.KHKCSJ.KKRQ}-${record.JKRQ ? record.JKRQ : record.KHKCSJ.JKRQ}`],
+            },
+            {
+              left: [`共${record.KSS}课时`],
+            },
+          ],
+          introduction: record.KHKCSJ.KCMS,
+        };
+        return nodeData;
+      });
+      const newData = { ...defaultMsg };
+      newData.list = listData;
+      setYxkcData(newData);
+    }
+  }, [yxkc])
 
 
   return (
     <div className={styles.CourseBox}>
       <div className={`${styles.tabHeader}`}>
-        <Tabs className={styles.courseTab} centered={true}>
+        <Tabs centered={true} className={styles.courseTab}>
           <TabPane tab="开设课程" key="setup">
-            <Tabs className={styles.courseType}>
-              {
-                kskc?.map((item: any, index: number) => {
-                  if (kskc.length > 0) {
-                    item.xx = item.KHKCSJs.map((record: any) => {
-                      if (item.KHKCSJs.length > 0) {
-                        record.yy = {
-                          type: 'picList',
-                          cls: 'picList',
-                          list: [
-                            {
-                              id: record.id,
-                              title: record.KCMC,
-                              img: record.KCTP,
-                              link: `/parent/home/courseDetails?courseid=${record.id}`,
-                              desc: [
-                                {
-                                  left: [`课程时段：${record.KKRQ}-${record.JKRQ}`],
-                                },
-                              ],
-                              introduction: record.KCMS,
-                            },
-                          ]
-                        }
-                        return <ListComponent listData={record.yy} />
-                      }
-                      return <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px' }}>
-                        <img src={noData} alt="暂无数据" />
-                      </div>
-                    })
-                    return (<TabPane tab={item.KCLX} key={index}>
-                      {item.xx}
-                    </TabPane>)
-                  }
-                  return <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px' }}>
-                    <img src={noData} alt="暂无数据" />
-                  </div>
+            {
+              kskc && kskc.length ? <Tabs className={styles.courseType}>
+                {kskc.map((item: any) => {
+                  const listData: ListItem[] = [].map.call(item.KHKCSJs, (record: any) => {
+                    const nodeData: ListItem = {
+                      id: record.id,
+                      title: record.KCMC,
+                      img: record.KCTP,
+                      link: `/parent/home/courseDetails?courseid=${record.id}`,
+                      desc: [
+                        {
+                          left: [`课程时段：${record.KKRQ}-${record.JKRQ}`],
+                        },
+                      ],
+                      introduction: record.KCMS,
+                    };
+                    return nodeData;
+                  })
+                  defaultMsg.list = listData;
+                  return (<TabPane tab={item.KCLX} key={item.KCLX}>
+                    <ListComponent listData={defaultMsg} />
+                  </TabPane>)
                 })
-              }
-            </Tabs>
+                }
+              </Tabs> : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%', marginBottom: '20px' }}>
+                  <img src={noData} alt="暂无数据" />
+                  <h4 style={{ color: '#999' }}>暂无开设课程</h4>
+                </div>}
           </TabPane>
           <TabPane tab="已选课程" key="elective">
-            {
-              yxkc?.map((item: any) => {
-                if (yxkc.length > 0) {
-                  item.yy = {
-                    type: 'picList',
-                    cls: 'picList',
-                    list: [
-                      {
-                        id: item.id,
-                        title: item.KHKCSJ.KCMC,
-                        img: item.KCTP ? item.KCTP : item.KHKCSJ.KCTP,
-                        link: `/parent/home/courseDetails?classid=${item.id}&courseid=${item.KHKCSJ.id}`,
-                        desc: [
-                          {
-                            left: [`课程时段：${item.KKRQ ? item.KKRQ : item.KHKCSJ.KKRQ}-${item.JKRQ ? item.JKRQ : item.KHKCSJ.JKRQ}`],
-                          },
-                          {
-                            left: [`共${item.KSS}课时`],
-                          },
-                        ],
-                        introduction: item.KHKCSJ.KCMS,
-                      },
-                    ]
-                  }
-                  return <ListComponent listData={item.yy} />
-                }
-                return <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px' }}>
-                  <img src={noData} alt="暂无数据" />
-                </div>
-              })
-            }
+            {yxkc && yxkc.length ? <ListComponent listData={yxkcData} /> :
+              <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+                <img src={noData} alt="暂无数据" />
+                <h4 style={{ color: '#999' }}>暂无已选课程</h4>
+              </div>}
           </TabPane>
         </Tabs>
       </div>
-
-
       <Pagina total={5} />
     </div>
   )

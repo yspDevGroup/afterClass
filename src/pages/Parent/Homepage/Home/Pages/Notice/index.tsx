@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:32:04
- * @,@LastEditTime: ,: 2021-06-29 15:28:14
+ * @,@LastEditTime: ,: 2021-07-02 11:06:28
  * @,@LastEditors: ,: Please set LastEditors
  */
 import React, { useEffect, useState } from 'react';
@@ -19,7 +19,7 @@ const Notice = () => {
   useEffect(() => {
     async function announcements() {
       const res = await getAllXXGG({ status: ['发布'] });
-      if (res.status === 'ok' && !(res.data === [])) {
+      if (res.status === 'ok' && !(res.data?.length===0)) {
         const newdata: any = [];
         await res.data!.map((record: any) => {
           const listdata = {
