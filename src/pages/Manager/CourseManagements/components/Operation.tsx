@@ -13,7 +13,6 @@ type PropsType = {
 
 const Operation = (props: PropsType) => {
     const { actionRef, handleOperation, record } = props;
-    const Url = `/courseManagements/classMaintenance?courseId=${record.id}`;
     // 发布按钮事件
     const release = async (record: any) => {
         const classes = [];
@@ -32,18 +31,39 @@ const Operation = (props: PropsType) => {
                     console.log('Notification Clicked!');
                 },
             });
+        } else {
+            record.KCZT = '已发布'
+            record.BMKSSJ=new Date(record.BMKSSJ)
+            record.BMJSSJ=new Date(record.BMJSSJ)
+            const res = await updateKHKCSJ({ id: record.id }, { ...record })
+            if (res.status === 'ok') {
+                actionRef?.current?.reload()
+            }
         }
-        const res = await updateKHKCSJ(record.id, { KCZT: '已发布' })
-        if (res.status === 'ok') {
-            actionRef?.current?.reload()
-        } return false
     };
     //  下架事件
     const Offtheshelf = async (record: any) => {
-        const res = await updateKHKCSJ(record.id, { KCZT: '已下架' })
-        if (res.status === 'ok') {
-            actionRef?.current?.reload()
-        } return false
+        const sj: any = [];
+        await record.KHBJSJs.forEach((item: any) => {
+            if (item.BJZT === '已发布') {
+                sj.push(item)
+            }
+        });
+        console.log(sj.length)
+        if (sj.length = '0') {
+            const res = await updateKHKCSJ({ id: record.id }, { KCZT: '已下架' })
+            if (res.status === 'ok') {
+                actionRef?.current?.reload()
+            }
+        } else {
+            console.log(666)
+            notification['warning']({
+                message: '有已排课班级',
+                description:
+                    '当前课程有已排课的班级，请删除后再下架.',
+            });
+        }
+
     }
 
     switch (record.KCZT) {
@@ -92,7 +112,7 @@ const Operation = (props: PropsType) => {
         case '已下架':
             return (
                 <>
-                    <Link to={Url} >排课</Link>
+                    <a onClick={() => release(record)}>发布</a>
                     <Divider type="vertical" />
                     <a onClick={() => handleOperation('add', record)}>编辑</a>
                     <Divider type="vertical" />
