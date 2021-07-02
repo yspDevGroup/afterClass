@@ -270,6 +270,7 @@ const AddArranging: FC<PropsType> = (props) => {
           page: 1,
           pageCount: 0,
           name: '',
+          isReuired: true,
         });
         if (kcList.status === 'ok') {
           const data: any = [].map.call(kcList.data, (item: CourseType) => {
@@ -433,7 +434,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     name: '',
                   };
                   // 获取课程的数据
-                  const kcList = await getAllKHKCSJ(params);
+                  const kcList = await getAllKHKCSJ({ ...params, isReuired: true });
                   if (kcList.status === 'ok') {
                     const data: any = [].map.call(kcList.data, (item: CourseType) => {
                       return {
@@ -476,7 +477,7 @@ const AddArranging: FC<PropsType> = (props) => {
                   };
 
                   // 获取课程的数据
-                  const kcList = await getAllKHKCSJ(params);
+                  const kcList = await getAllKHKCSJ({ ...params, isReuired: true });
                   if (kcList.status === 'ok') {
                     const data: any = [].map.call(kcList.data, (item: CourseType) => {
                       return {

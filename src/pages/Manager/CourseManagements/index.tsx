@@ -282,7 +282,7 @@ const NewClassManagement = () => {
               sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
               filter,
             };
-            return getAllKHKCSJ({ name, xn, xq, pageCount: 0, page: 1 }, opts);
+            return getAllKHKCSJ({ name, xn, xq, pageCount: 0, page: 1, isReuired: false }, opts);
           }}
           options={{
             setting: false,

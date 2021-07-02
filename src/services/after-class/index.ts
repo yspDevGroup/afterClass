@@ -5,15 +5,15 @@
 import * as other from './other';
 import * as auth from './auth';
 import * as user from './user';
-import * as fjlx from './fjlx';
 import * as bjsj from './bjsj';
 import * as fjsj from './fjsj';
+import * as fjlx from './fjlx';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
 import * as jxjhsj from './jxjhsj';
 import * as jzgjbsj from './jzgjbsj';
-import * as kcsj from './kcsj';
 import * as khbjsj from './khbjsj';
+import * as kcsj from './kcsj';
 import * as khjspj from './khjspj';
 import * as khkclx from './khkclx';
 import * as khkcsj from './khkcsj';
@@ -33,23 +33,23 @@ import * as xqsj from './xqsj';
 import * as xsjbsj from './xsjbsj';
 import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
-import * as xxsjpz from './xxsjpz';
 import * as xxpz from './xxpz';
+import * as xxsjpz from './xxsjpz';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
   other,
   auth,
   user,
-  fjlx,
   bjsj,
   fjsj,
+  fjlx,
   jcsj,
   jcxx,
   jxjhsj,
   jzgjbsj,
-  kcsj,
   khbjsj,
+  kcsj,
   khjspj,
   khkclx,
   khkcsj,
@@ -69,8 +69,8 @@ export default {
   xsjbsj,
   xxgg,
   xxjbsj,
-  xxsjpz,
   xxpz,
+  xxsjpz,
   zxfa,
   zxsj,
 };

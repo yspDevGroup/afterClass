@@ -105,20 +105,20 @@ const OrderInquiry = () => {
     })();
   }, [xn, xq]);
   const columns: ColumnsType<API.KHXSDD> | undefined = [
-    {
-      title: '学年学期',
-      dataIndex: 'XNXQ',
-      key: 'XNXQ',
-      align: 'center',
-      render: (text: any, record: any) => {
-        const XNXQ = record?.KHBJSJ?.KHKCSJ?.XNXQ;
-        return (
-          <div>
-            {XNXQ?.XN} {XNXQ?.XQ}
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: '学年学期',
+    //   dataIndex: 'XNXQ',
+    //   key: 'XNXQ',
+    //   align: 'center',
+    //   render: (text: any, record: any) => {
+    //     const XNXQ = record?.KHBJSJ?.KHKCSJ?.XNXQ;
+    //     return (
+    //       <div>
+    //         {XNXQ?.XN} {XNXQ?.XQ}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       title: '课程名称',
       dataIndex: 'KCMC',
@@ -129,7 +129,13 @@ const OrderInquiry = () => {
       },
     },
     {
-      title: '班级',
+      title: '订单费用(元)',
+      dataIndex: 'DDFY',
+      key: 'DDFY',
+      align: 'center',
+    },
+    {
+      title: '年级',
       dataIndex: 'class',
       key: 'class',
       align: 'center',
@@ -147,8 +153,8 @@ const OrderInquiry = () => {
     },
     {
       title: '学生姓名',
-      dataIndex: 'XSId',
-      key: 'XSId',
+      dataIndex: 'name',
+      key: 'name',
       align: 'center',
       render: (text: string, record: any) => {
         return <WWOpenDataCom type="userName" openid={record.XSId} />;

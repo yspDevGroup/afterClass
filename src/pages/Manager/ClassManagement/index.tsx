@@ -255,11 +255,14 @@ const CourseManagement = () => {
       width: 100,
     },
     {
-      title: '班级人数(人)',
-      dataIndex: 'BJRS',
-      key: 'BJRS',
+      title: '报名人数(人)',
+      dataIndex: 'BMRS',
+      key: 'BMRS',
       align: 'center',
       width: 100,
+      render: (text) => {
+        return <a>{text}</a>;
+      },
     },
     {
       title: '主班',
@@ -275,13 +278,13 @@ const CourseManagement = () => {
         );
       },
     },
-    {
-      title: '所属校区',
-      align: 'center',
-      dataIndex: 'XQName',
-      key: 'XQName',
-      ellipsis: true,
-    },
+    // {
+    //   title: '所属校区',
+    //   align: 'center',
+    //   dataIndex: 'XQName',
+    //   key: 'XQName',
+    //   ellipsis: true,
+    // },
     {
       title: '适用年级',
       dataIndex: 'NJSName',
@@ -317,9 +320,16 @@ const CourseManagement = () => {
       },
     },
     {
-      title: '状态',
+      title: '发布状态',
       dataIndex: 'BJZT',
       key: 'BJZT',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '课程状态',
+      dataIndex: 'KCZT',
+      key: 'KCZT',
       align: 'center',
       width: 100,
     },

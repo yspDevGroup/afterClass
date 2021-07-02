@@ -1,4 +1,9 @@
-import { createKHKCLX, deleteKHKCLX, getAllKHKCLX, updateKHKCLX } from '@/services/after-class/khkclx';
+import {
+  createKHKCLX,
+  deleteKHKCLX,
+  getAllKHKCLX,
+  updateKHKCLX,
+} from '@/services/after-class/khkclx';
 import { courseColorType } from '@/theme-default';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -16,7 +21,7 @@ const Sitclass = () => {
     { label: '绯红', value: courseColorType.crimson },
     { label: '橙色', value: courseColorType.orange },
     { label: '黄色', value: courseColorType.yellow },
-    { label: '绿色', value: courseColorType.green },
+    { label: '蓝色', value: courseColorType.blue },
     { label: '天空蓝', value: courseColorType.skyBlue },
     { label: '紫色', value: courseColorType.violet },
     { label: '紫红色', value: courseColorType.purplishRed },
@@ -105,10 +110,8 @@ const Sitclass = () => {
           cancelText="取消"
           placement="topRight"
         >
-          <a>
-            删除
-    </a>
-        </Popconfirm>
+          <a>删除</a>
+        </Popconfirm>,
       ],
     },
   ];
@@ -152,23 +155,23 @@ const Sitclass = () => {
             try {
               const result = row.title
                 ? await createKHKCLX({
-                  KCLX: row.KCLX!,
-                  KBYS: row.KBYS,
-                })
-                : await updateKHKCLX(
-                  {
-                    id: row.id!,
-                  },
-                  {
                     KCLX: row.KCLX!,
                     KBYS: row.KBYS,
-                  },
-                );
+                  })
+                : await updateKHKCLX(
+                    {
+                      id: row.id!,
+                    },
+                    {
+                      KCLX: row.KCLX!,
+                      KBYS: row.KBYS,
+                    },
+                  );
               if (result.status === 'ok') {
                 message.success(row.title ? '信息新增成功' : '信息更新成功');
                 actionRef.current?.reload();
               } else {
-                message.error(`${result.message},请联系管理员或稍后再试`);   
+                message.error(`${result.message},请联系管理员或稍后再试`);
               }
             } catch (errorInfo) {
               console.log('Failed:', errorInfo);
