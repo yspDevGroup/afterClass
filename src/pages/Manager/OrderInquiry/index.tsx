@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Select, Table, Tag, Tooltip } from 'antd';
+import { Pagination, Select, Table, Tag, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
@@ -40,6 +40,8 @@ const OrderInquiry = () => {
   const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
   const [kcmcValue, setKcmcValue] = useState<any>();
   const [bjmcValue, setBjmcValue] = useState<any>();
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -89,7 +91,14 @@ const OrderInquiry = () => {
         }
 
         // 通过课程数据接口拿到所有的课程
-        const khkcResl = await getAllKHKCSJ({ xn, xq, page: 0, pageCount: 0, name: '' });
+        const khkcResl = await getAllKHKCSJ({
+          xn,
+          xq,
+          page: 0,
+          pageCount: 0,
+          name: '',
+          isReuired: false,
+        });
         if (khkcResl.status === 'ok') {
           const KCMC = khkcResl.data?.map((item: any) => ({ label: item.KCMC, value: item.KCMC }));
           setKcmcData(KCMC);
@@ -126,6 +135,15 @@ const OrderInquiry = () => {
       align: 'center',
       render: (text: any, record: any) => {
         return <div>{record?.KHBJSJ?.KHKCSJ?.KCMC}</div>;
+      },
+    },
+    {
+      title: '班级',
+      dataIndex: 'BJMC',
+      key: 'BJMC',
+      align: 'center',
+      render: (text: any, record: any) => {
+        return <div>{record?.KHBJSJ?.BJMC}</div>;
       },
     },
     {
@@ -187,6 +205,8 @@ const OrderInquiry = () => {
       xn,
       xq,
       kcmc: value,
+      page: current,
+      pageCount: pageSize,
     });
     if (resl.status === 'ok') {
       setTableLoading(false);
@@ -203,9 +223,25 @@ const OrderInquiry = () => {
       xn,
       xq,
       bjmc: value,
+      page: current,
+      pageCount: pageSize,
     });
     if (resl.status === 'ok') {
       setTableLoading(false);
+      setDataSource(resl.data);
+    }
+  };
+  const onShowSizeChange = async (currents: any, pageSizes: any) => {
+    setCurrent(currents);
+    setPageSize(pageSizes);
+    // 获取订单查询的表格数据
+    const resl = await getAllKHXSDD({
+      xn,
+      xq,
+      page: currents,
+      pageCount: pageSizes,
+    });
+    if (resl.status === 'ok') {
       setDataSource(resl.data);
     }
   };
@@ -268,6 +304,14 @@ const OrderInquiry = () => {
           columns={columns}
           pagination={false}
           rowKey={() => Math.random()}
+        />
+        <Pagination
+          defaultCurrent={1}
+          total={dataSource?.length}
+          current={current}
+          pageSize={pageSize}
+          onShowSizeChange={onShowSizeChange}
+          style={{ textAlign: 'center', padding: '32px 0', background: '#FFF' }}
         />
       </div>
       <PromptInformation

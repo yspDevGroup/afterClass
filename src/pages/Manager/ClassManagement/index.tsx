@@ -95,7 +95,7 @@ const CourseManagement = () => {
             xq: curTerm.XQ,
             page: 1,
             pageCount: 0,
-            isReuired: false
+            isReuired: false,
           });
           Promise.resolve(ress).then((dataes: any) => {
             if (dataes.status === 'ok') {
@@ -176,7 +176,9 @@ const CourseManagement = () => {
       });
       actionRef.current?.reload();
     }
-    setName(value);
+    if (type === 'customSearch') {
+      setName(value);
+    }
     actionRef.current?.reload();
   };
   // 获取弹框标题

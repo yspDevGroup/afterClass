@@ -25,6 +25,7 @@ export async function getKHXSDD(
       DDFY?: number;
       TKSJ?: string;
       XSId?: string;
+      XSXM?: string;
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
@@ -131,6 +132,7 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
       DDFY?: number;
       TKSJ?: string;
       XSId?: string;
+      XSXM?: string;
       KHBJSJ?: {
         id?: string;
         BJMC?: string;

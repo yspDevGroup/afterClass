@@ -562,7 +562,9 @@ const AddArranging: FC<PropsType> = (props) => {
                                     layout="center"
                                     bordered
                                     onClick={() => BjClick(value)}
-                                    style={{ borderColor: index === key ? 'rgba(36,54,81,1)' : '' }}
+                                    style={{
+                                      borderColor: index === value.id ? 'rgba(36,54,81,1)' : '',
+                                    }}
                                   >
                                     <p>{value.BJMC}</p>
                                     <span>
@@ -590,7 +592,9 @@ const AddArranging: FC<PropsType> = (props) => {
                                   layout="center"
                                   bordered
                                   onClick={() => BjClick(value)}
-                                  style={{ borderColor: index === key ? 'rgba(36,54,81,1)' : '' }}
+                                  style={{
+                                    borderColor: index === value.id ? 'rgba(36,54,81,1)' : '',
+                                  }}
                                 >
                                   <p>{value.BJMC}</p>
                                   <span>
