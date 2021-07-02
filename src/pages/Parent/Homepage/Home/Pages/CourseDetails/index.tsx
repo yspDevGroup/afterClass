@@ -322,7 +322,7 @@ const CourseDetails: React.FC = () => {
                   </div>
                 }) : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
                     <img src={noData} alt="暂无数据" />
-                    <h4 style={{ color: '#999' }}>暂无已选课程</h4>
+                    <h4 style={{ color: '#999' }}>暂无排课</h4>
                   </div>
               }
             </div>

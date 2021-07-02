@@ -37,7 +37,9 @@ const ActionBar = (props: propstype) => {
     }
   }
   const release = (record: any) => {
-    record.BJZT = '已发布'
+    record.BJZT = '已发布';
+    record.BMKSSJ = new Date(record.BMKSSJ);
+    record.BMJSSJ = new Date(record.BMJSSJ);
     const res = updateKHBJSJ({ id: record.id }, record);
     new Promise((resolve) => {
       resolve(res);

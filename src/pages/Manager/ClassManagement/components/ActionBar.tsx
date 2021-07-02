@@ -17,10 +17,10 @@ type propstype = {
 const ActionBar = (props: propstype) => {
   const { handleEdit, record, maintain, actionRef } = props;
   const shelf = (record: any) => {
-    if(record.KHXSBJs.length===0){
+    if (record.KHXSBJs.length === 0) {
       record.BJZT = '已下架'
-      record.BMKSSJ=new Date(record.BMKSSJ);
-      record.BMJSSJ=new Date(record.BMJSSJ);
+      record.BMKSSJ = new Date(record.BMKSSJ);
+      record.BMJSSJ = new Date(record.BMJSSJ);
       const res = updateKHBJSJ({ id: record.id }, record);
       new Promise((resolve) => {
         resolve(res);
@@ -33,12 +33,14 @@ const ActionBar = (props: propstype) => {
           actionRef.current?.reload();
         }
       })
-    }else{
+    } else {
       message.error('下架失败，请先将所有学生清除');
     }
   }
   const release = (record: any) => {
     record.BJZT = '已发布'
+    record.BMKSSJ = new Date(record.BMKSSJ);
+    record.BMJSSJ = new Date(record.BMJSSJ);
     const res = updateKHBJSJ({ id: record.id }, record);
     new Promise((resolve) => {
       resolve(res);

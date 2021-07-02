@@ -95,6 +95,7 @@ const CourseManagement = () => {
             xq: curTerm.XQ,
             page: 1,
             pageCount: 0,
+            isReuired: false
           });
           Promise.resolve(ress).then((dataes: any) => {
             if (dataes.status === 'ok') {

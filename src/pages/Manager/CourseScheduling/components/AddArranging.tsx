@@ -6,13 +6,11 @@ import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Form, message, Spin, Modal, Tooltip, Empty } from 'antd';
-
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
 import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
-
 import styles from '../index.less';
 import ExcelTable from '@/components/ExcelTable';
 import type { SiteType, CourseType } from '../data';
@@ -270,7 +268,7 @@ const AddArranging: FC<PropsType> = (props) => {
           page: 1,
           pageCount: 0,
           name: '',
-          isReuired: true,
+          isReuired: false,
         });
         if (kcList.status === 'ok') {
           const data: any = [].map.call(kcList.data, (item: CourseType) => {

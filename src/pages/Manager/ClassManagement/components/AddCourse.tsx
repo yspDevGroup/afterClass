@@ -461,7 +461,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '简介：',
       name: 'KCMS',
       key: 'KCMS',
-    },
+    }, 
   ];
 
   return (

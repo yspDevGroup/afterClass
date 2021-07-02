@@ -275,7 +275,7 @@ const AddCourse: FC<AddCourseProps> = ({
     signup.length > 0
       ? {
           type: 'divTab',
-          text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+          text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
           style: { marginBottom: 8, color: '#bbbbbb' },
         }
       : '',
@@ -291,11 +291,11 @@ const AddCourse: FC<AddCourseProps> = ({
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
-                return setKaike(true);
+                return setBaoming(true);
               }
-              return setKaike(false);
+              return setBaoming(false);
             },
-            checked: !kaike,
+            checked: !baoming,
           },
         },
       ],

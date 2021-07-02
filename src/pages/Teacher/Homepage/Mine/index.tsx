@@ -76,66 +76,67 @@ const Mine = () => {
           </div>
         </div>
         {
-          arry.map((item: any) => {
-            // 取出数组的键值对
-            for (let i in item) {
-              const kcData: { label: string; type?: string | undefined; value: number; color: string; }[] = [];
-              //  遍历值获取日期数据
-              item[i].forEach((record: any) => {
-                // 获取上课区间
-                const datelist = DateRange(record.KKRQ, record.JKRQ);
-                // 上课日期数组
-                const Classdate: any = [];
-                datelist.forEach((list: any) => {
-                  // 获取周几上课，在上课区间拿出上课日期
-                  newskrq[record.id].forEach((ite: any) => {
-                    if (Week(list) === ite) {
-                      Classdate.push(list)
+          !(arry.length === 0) ?
+            arry.map((item: any) => {
+              // 取出数组的键值对
+              for (let i in item) {
+                const kcData: { label: string; type?: string | undefined; value: number; color: string; }[] = [];
+                //  遍历值获取日期数据
+                item[i].forEach((record: any) => {
+                  // 获取上课区间
+                  const datelist = DateRange(record.KKRQ, record.JKRQ);
+                  // 上课日期数组
+                  const Classdate: any = [];
+                  datelist.forEach((list: any) => {
+                    // 获取周几上课，在上课区间拿出上课日期
+                    newskrq[record.id].forEach((ite: any) => {
+                      if (Week(list) === ite) {
+                        Classdate.push(list)
+                      }
+                    })
+                  })
+                  // 已上课程
+                  const oldclass = [];
+                  // 未上课程
+                  const newclass = [];
+                  Classdate.forEach((item: any) => {
+                    if (new Date(nowdate) > new Date(item)) {
+                      oldclass.push(item);
+                    } else {
+                      newclass.push(item);
                     }
                   })
-                })
-                // 已上课程
-                const oldclass = [];
-                // 未上课程
-                const newclass = [];
-                Classdate.forEach((item: any) => {
-                  if (new Date(nowdate) > new Date(item)) {
-                    oldclass.push(item);
-                  } else {
-                    newclass.push(item);
-                  }
-                })
-                // 出勤数据 
-                kcData.push({
-                  label: record.BJMC,
-                  type: '正常',
-                  value: oldclass.length,
-                  color: 'l(180) 0:rgba(49, 217, 159, 1) 1:rgba(49, 217, 159, 0.04)',
-                },
-                  {
+                  // 出勤数据 
+                  kcData.push({
                     label: record.BJMC,
-                    type: '异常',
-                    value: 0,
-                    color: 'l(180) 0:rgba(255, 113, 113, 1) 1:rgba(255, 113, 113, 0.04)',
+                    type: '正常',
+                    value: oldclass.length,
+                    color: 'l(180) 0:rgba(49, 217, 159, 1) 1:rgba(49, 217, 159, 0.04)',
                   },
-                  {
-                    label: record.BJMC,
-                    type: '待上',
-                    value: newclass.length,
-                    color: 'l(180) 0:rgba(221, 221, 221, 1) 1:rgba(221, 221, 221, 0.04)',
-                  })
+                    {
+                      label: record.BJMC,
+                      type: '异常',
+                      value: 0,
+                      color: 'l(180) 0:rgba(255, 113, 113, 1) 1:rgba(255, 113, 113, 0.04)',
+                    },
+                    {
+                      label: record.BJMC,
+                      type: '待上',
+                      value: newclass.length,
+                      color: 'l(180) 0:rgba(221, 221, 221, 1) 1:rgba(221, 221, 221, 0.04)',
+                    })
 
-              });
-              return <CheckOnChart data={kcData} title={i} />
-            }
-            return ''
-          })
+                });
+                return <CheckOnChart data={kcData} title={i} />
+              }
+              return ''
+            }) : <IconFont type='icon-zanwu' style={{ fontSize: '80px', display: 'block', margin: '50px auto' }} />
         }
       </div>
       <div className={styles.linkWrapper}>
         <ul>
           <li>
-          <IconFont type='icon-fuwugonggao' style={{ 'fontSize': '18px' }} />
+            <IconFont type='icon-fuwugonggao' style={{ 'fontSize': '18px' }} />
             <Link to='/teacher/home/emptyArticle?articlepage=serveAnnounce'>
               服务公告
               <IconFont type='icon-xiayiye' />
