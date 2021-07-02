@@ -1,6 +1,6 @@
 .EmptyPage {
   height: 100%;
-
+  background: #fafafa;
   .cusHeader {
     position: relative;
     height: 126px;
@@ -58,8 +58,8 @@
     position: relative;
     top: -30px;
     margin: 0 10px;
-    background: #ffffff;
-    min-height: 90vh;
+    background: #eee;
+    min-height: calc(100vh - 128px);
     border-radius: 30px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     .title {
@@ -87,7 +87,7 @@
     .opacity {
       position: absolute;
       width: 100%;
-      height: calc(100vh - 10rem);
+      // height: calc(100vh - 10rem);
       margin: 20px 0;
       background-size: contain;
       background-repeat: no-repeat;
@@ -99,10 +99,9 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: calc(100vh - 10rem);
-      margin: 20px 0 50px;
+      height: calc(100vh - 195px);
       padding: 0 14px;
-      overflow: hidden;
+      overflow: auto;
       color: #333333;
       font-size: 14px;
       line-height: 27px;
