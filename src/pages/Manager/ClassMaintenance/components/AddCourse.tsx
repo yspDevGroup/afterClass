@@ -7,9 +7,7 @@ import ProFormFields from '@/components/ProFormFields';
 import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
-import { getAllNJSJ } from '@/services/after-class/njsj';
 import { queryXQList } from '@/services/wechat/service';
-import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import { getDepUserList } from '@/services/after-class/wechat';
@@ -117,9 +115,15 @@ const AddCourse: FC<AddCourseProps> = ({
         const params = {
           id: formValues?.id,
         };
+        if (values.BMKSSJ && values.BMJSSJ) {
+          values.BMKSSJ = new Date(values.BMKSSJ);
+          values.BMJSSJ = new Date(values.BMJSSJ);
+        }
         const options = values;
         res = updateKHBJSJ(params, options);
       } else {
+        values.BMKSSJ = new Date(values.BMKSSJ);
+        values.BMJSSJ = new Date(values.BMJSSJ);
         res = createKHBJSJ(values);
       }
       resolve(res);
@@ -274,10 +278,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     signup.length > 0
       ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -318,10 +322,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     classattend.length > 0
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',

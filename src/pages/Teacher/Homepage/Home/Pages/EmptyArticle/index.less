@@ -8,26 +8,22 @@
     background: -moz-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
     background: -webkit-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
     background: linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
-
     .headerText {
       position: relative;
       z-index: 2;
       padding: 26px 0 0 @padding-md;
-
       h4 {
         margin-bottom: 6px;
         color: #333333;
         font-weight: 600;
         font-size: @font-size-lg;
         line-height: 24px;
-
         & + div {
           color: @text-color-secondary;
           font-size: @font-size-sm;
         }
       }
     }
-
     .headerPop {
       position: absolute;
       right: 0;
@@ -37,7 +33,6 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
-
       .announceList {
         div[class*='Title'] a {
           &:before {
@@ -60,7 +55,7 @@
     margin: 0 10px;
     background-color: #eee;
     min-height: calc(100vh - 128px);
-    border-radius: 30px;
+    border-radius: 30px 30px 0 0;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     .title {
       height: 22px;
@@ -87,7 +82,7 @@
     .opacity {
       position: absolute;
       width: 100%;
-      height: 100vh;
+      height: calc(100vh - 195px);
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;

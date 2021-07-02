@@ -56,7 +56,7 @@ const AddCourse: FC<AddCourseProps> = ({
   // 校区ID
   const [xQId, setXQId] = useState('');
   // 校区名字
-  const [xQItem, setXQLabelItem] = useState<any>([]);
+  const [xQItem, setXQLabelItem] = useState<any>('');
 
   // // 年级ID
   // const [nJID, setNJID] = useState([]);
@@ -156,6 +156,10 @@ const AddCourse: FC<AddCourseProps> = ({
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
+      if(values.BMKSSJ&&values.BMJSSJ){
+        values.BMKSSJ=new Date(values.BMKSSJ);
+        values.BMJSSJ=new Date(values.BMJSSJ);
+      }
       const options = {
         ...values,
         NJS: values.NJS?.toString(), // 年级ID
@@ -164,12 +168,10 @@ const AddCourse: FC<AddCourseProps> = ({
         XQName: xQItem, // 校区名称
         KCTP: imageUrl,
       };
-
       if (formValues?.id) {
         const params = {
           id: formValues?.id,
         };
-
         res = updateKHBJSJ(params, options);
       } else {
         res = createKHBJSJ(options);
@@ -359,10 +361,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     signup.length > 0
       ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -402,10 +404,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     classattend.length > 0
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -461,7 +463,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '简介：',
       name: 'KCMS',
       key: 'KCMS',
-    }, 
+    },
   ];
 
   return (
