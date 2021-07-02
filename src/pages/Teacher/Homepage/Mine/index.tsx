@@ -76,7 +76,7 @@ const Mine = () => {
           </div>
         </div>
         {
-          !(arry.length === 0) ?
+          !(arry&&arry.length === 0) ?
             arry.map((item: any) => {
               // 取出数组的键值对
               for (let i in item) {

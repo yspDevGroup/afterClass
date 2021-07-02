@@ -137,7 +137,7 @@ const Statistical: React.FC = () => {
                 <span>待上:{value.ds}课时</span>
               </div>
             </div>
-          }) : 
+          }) :
           <IconFont type='icon-zanwu' style={{fontSize: '80px',display:'block',margin:'20px auto'}} />
         }
       </div>

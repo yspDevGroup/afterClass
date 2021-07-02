@@ -5,9 +5,9 @@
  * @LastEditTime: 2021-06-15 16:44:15
  * @LastEditors: txx
  */
-import { JSXElementConstructor, ReactElement } from 'react'
 import { Pagination } from 'antd';
-import styles from "./index.less"
+import styles from "./index.less";
+import type { JSXElementConstructor, ReactElement } from 'react';
 import { LeftOutlined, RightOutlined, VerticalLeftOutlined, VerticalRightOutlined } from '@ant-design/icons';
 
 function itemRender(

@@ -16,11 +16,9 @@ const Home = () => {
   useEffect(() => {
     async function announcements() {
       const res = await getAllXXGG({ status: ['发布'] });
-      if (res.status === 'ok' && !(res.data?.length===0)) {
+      if (res.status === 'ok' && !(res.data?.length === 0)) {
         setNotification(res.data);
-      } else {
-
-      };
+      }
     };
     announcements();
   }, []);
@@ -38,30 +36,23 @@ const Home = () => {
       </header>
       {courseStatus === '' ? <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }}>
       </div> : <div className={styles.pageContent}>
-          <div className={styles.noticeArea}>
-            <IconFont type='icon-gonggao' className={styles.noticeImg} />
-            <div className={styles.noticeText}>
-              <span>学校公告</span>
-              {notification? notification?.map((record: any, index: number) => {
-                if (index < 1) {
-                  return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li >{record.BT} </li></Link>
-                } else {
-                  return ''
-                }
-              }):'暂无公告'
-            }
-            </div>
+        <div className={styles.noticeArea}>
+          <IconFont type='icon-gonggao' className={styles.noticeImg} />
+          <div className={styles.noticeText}>
+            <span>学校公告</span>
+            {notification && notification.length ? <Link to={`/parent/home/notice/announcement?listid=${notification[0].id}`} style={{ color: '#333' }}><li >{notification[0].BT} </li></Link> : '暂无公告'}
           </div>
-          <div className={styles.enrollArea}>
-            <EnrollClassTime />
-          </div>
-          <div className={styles.courseArea}>
-            <CourseTab />
-          </div>
-          <div className={styles.announceArea}>
-            <Details />
-          </div>
-        </div>}
+        </div>
+        <div className={styles.enrollArea}>
+          <EnrollClassTime />
+        </div>
+        <div className={styles.courseArea}>
+          <CourseTab />
+        </div>
+        <div className={styles.announceArea}>
+          <Details data={notification} />
+        </div>
+      </div>}
     </div>
   );
 };

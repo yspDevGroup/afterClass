@@ -23,18 +23,21 @@ const OrderDetails: React.FC = (props: any) => {
     e.stopPropagation()
   };
   const handlePay = async () => {
+    const children = user?.subscriber_info?.children || [{
+      student_userid: user?.userId,
+      njId: '1'
+    }];
     const res = await payKHXSDD({
       ddIds: [orderInfo.id],
       bjId: detail.id,
       returnUrl: '/parent/home',
-      xsId: '23' || user.id,
+      xsId: children[0].student_userid,
       kcmc: title,
       amount: orderInfo.DDFY,
     });
-    if(res.status === 'ok'){
+    if (res.status === 'ok') {
       window.open(res.data)
     }
-
   };
   const handleCancle = async () => {
     const res = await deleteKHXSDD({ id: orderInfo.id });

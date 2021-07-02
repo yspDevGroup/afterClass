@@ -20,8 +20,8 @@ const CourseTab = () => {
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
   const centered = false;
   useEffect(() => {
-    if(yxkc){
-      const listData: ListItem[] = [].map.call(yxkc,(record: any) => {
+    if (yxkc) {
+      const listData: ListItem[] = [].map.call(yxkc, (record: any) => {
         const nodeData: ListItem = {
           id: record.id,
           title: record.KHKCSJ.KCMC,
@@ -39,7 +39,7 @@ const CourseTab = () => {
         };
         return nodeData;
       });
-      const newData = {...defaultMsg};
+      const newData = { ...defaultMsg };
       newData.list = listData;
       setYxkcData(newData);
     }
@@ -53,35 +53,40 @@ const CourseTab = () => {
             {
               kskc && kskc.length ? <Tabs className={styles.courseType}>
                 {kskc.map((item: any) => {
-                  const listData: ListItem[] = [].map.call(item.KHKCSJs, (record: any) => {
-                    const nodeData: ListItem = {
-                      id: record.id,
-                      title: record.KCMC,
-                      img: record.KCTP,
-                      link: `/parent/home/courseDetails?courseid=${record.id}`,
-                      desc: [
-                        {
-                          left: [`课程时段：${record.KKRQ}-${record.JKRQ}`],
-                        },
-                      ],
-                      introduction: record.KCMS,
+                  const listData: ListItem[] = [].map.call(item.KHKCSJs, (record: any, index: number) => {
+                    if (index < 3) {
+                      const nodeData: ListItem = {
+                        id: record.id,
+                        title: record.KCMC,
+                        img: record.KCTP,
+                        link: `/parent/home/courseDetails?courseid=${record.id}`,
+                        desc: [
+                          {
+                            left: [`课程时段：${record.KKRQ}-${record.JKRQ}`],
+                          },
+                        ],
+                        introduction: record.KCMS,
+                      };
+                      return nodeData;
                     };
-                    return nodeData;
+                    return {
+                      title: 'null'
+                    };
                   })
-                  defaultMsg.list = listData;
+                  defaultMsg.list = listData.filter((it: ListItem) => { return it.title !== 'null' });
                   return (<TabPane tab={item.KCLX} key={item.KCLX}>
                     <ListComponent listData={defaultMsg} />
                   </TabPane>)
                 })
                 }
-              </Tabs> : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%',marginBottom:'20px' }}>
-                  <img src={noData} alt="暂无数据" />
-                  <h4 style={{ color: '#999' }}>暂无开设课程</h4>
-                </div>}
+              </Tabs> : <div style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}>
+                <img src={noData} alt="暂无数据" />
+                <h4 style={{ color: '#999' }}>暂无开设课程</h4>
+              </div>}
           </TabPane> : ''}
         <TabPane tab="已选课程" key="elective">
           {yxkc && yxkc.length ? <ListComponent listData={yxkcData} /> :
-            <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
+            <div style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}>
               <img src={noData} alt="暂无数据" />
               <h4 style={{ color: '#999' }}>暂无已选课程</h4>
             </div>}

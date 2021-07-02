@@ -8,46 +8,37 @@
 import React, { useEffect, useState } from 'react';
 import ListComp from '@/components/ListComponent';
 import styles from "./index.less";
-
 import Pagina from '../../components/Pagination/Pagination';
-import { ListData } from '@/components/ListComponent/data';
-import { getAllXXGG } from '@/services/after-class/xxgg';
+import type { ListData, ListItem } from '@/components/ListComponent/data';
 import moment from 'moment';
 
-const Notice = () => {
-  const [notification, setNotification] = useState<any[]>();
+const defaultList: ListData = {
+  type: 'onlyList',
+  cls: 'onlyOneList',
+  list: []
+}
+const Notice = (props: any) => {
+  const { notification } = props.location.state;
+  const [annoceList, setAnnoceList] = useState<ListData>(defaultList);
   useEffect(() => {
-    async function announcements() {
-      const res = await getAllXXGG({ status: ['发布'] });
-      if (res.status === 'ok' && !(res.data?.length===0)) {
-        const newdata: any = [];
-        await res.data!.map((record: any) => {
-          const listdata = {
-            title: record.BT,
-            link: `/parent/home/notice/announcement?listid=${record.id}`,
-            titleRight: {
-              text: moment(record.updatedAt).format('YYYY-MM-DD'),
-            },
-          }
-         newdata.push(listdata)
-        })
-        setNotification(newdata)
-      } else {
-
+    const data: ListItem[] = [].map.call(notification, (record: any) => {
+      const listdata: ListItem = {
+        title: record.BT,
+        link: `/parent/home/notice/announcement?listid=${record.id}`,
+        titleRight: {
+          text: moment(record.updatedAt).format('YYYY-MM-DD'),
+        },
       };
-    };
-    announcements();
-  }, [])
+      return listdata;
+    });
+    const newData = { ...defaultList };
+    newData.list = data;
+    setAnnoceList(newData);
+  }, [notification])
 
-
-  const mock: ListData = {
-    type: 'onlyList',
-    cls: 'onlyOneList',
-    list: notification!
-  }
   return (
     <div className={styles.NoticeBox}>
-      <ListComp listData={mock} />
+      <ListComp listData={annoceList} />
       <Pagina total={5} />
     </div>
   )
