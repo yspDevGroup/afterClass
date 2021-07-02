@@ -33,7 +33,8 @@ const CourseDetails: React.FC = () => {
   const courseid = getQueryString('courseid');
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.userId,
-    njId: '1'
+    njId: '1',
+    name: currentUser?.username
   }];
   const Learning = async (bjid: any, attend: any[]) => {
     const res1 = await getAllKHXSCQ(
@@ -181,6 +182,7 @@ const CourseDetails: React.FC = () => {
       "DDZT": "待付款",
       "DDFY": FY!,
       "XSId": children[0].student_userid!,
+      "XSXM": children[0].name!,
       "KHBJSJId": BJ!,
     };
     const res = await createKHXSDD(data);
