@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useModel } from 'umi';
 import { Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
 import Home from './Home';
 import Education from './Education';
 import Mine from './Mine';
 import styles from './index.less';
-import { useModel } from '@/.umi/plugin-model/useModel';
 import { getCurrentStatus } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -28,7 +28,7 @@ const PersonalHomepage = () => {
         xq: XQ,
       });
       if (res.status === 'ok' && res.data) {
-        setDataSource(res.data);	
+        setDataSource(res.data);
         const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
         if (bmkssj && bmjssj && skkssj && skjssj) {
           const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
@@ -44,50 +44,65 @@ const PersonalHomepage = () => {
     //   const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
     //   setCourseStatus(cStatus);
     // }
-
-  }, [])
-  return <div className={styles.mobilePageHeader}>
-    <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
-      <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
-        setActiveKey(key);
-      }}>
-        <TabPane tab={
-          <span>
-            <IconFont
-              style={{ 'fontSize': '16px' }}
-              type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
-            />
-            首页
-          </span>
-        } key="index">
-          <Home />
-        </TabPane>
-        <TabPane tab={
-          <span>
-            <IconFont
-              style={{ 'fontSize': '16px' }}
-              type={activeKey === 'education' ? 'icon-jiaoxuezhongxinfill' : 'icon-jiaoxuezhongxin'}
-            />
-            教学中心
-          </span>
-        } key="education">
-          <Education />
-        </TabPane>
-        <TabPane tab={
-          <span>
-            <IconFont
-              style={{ 'fontSize': '16px' }}
-              type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
-            />
-            我的
-          </span>
-        } key="mine">
-          <Mine />
-        </TabPane>
-      </Tabs>
-
-    </myContext.Provider>
-  </div>;
+  }, []);
+  return (
+    <div className={styles.mobilePageHeader}>
+      <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
+        <Tabs
+          tabPosition="bottom"
+          className={styles.menuTab}
+          onTabClick={(key: string) => {
+            setActiveKey(key);
+          }}
+        >
+          <TabPane
+            tab={
+              <span>
+                <IconFont
+                  style={{ fontSize: '16px' }}
+                  type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
+                />
+                首页
+              </span>
+            }
+            key="index"
+          >
+            <Home />
+          </TabPane>
+          <TabPane
+            tab={
+              <span>
+                <IconFont
+                  style={{ fontSize: '16px' }}
+                  type={
+                    activeKey === 'education' ? 'icon-jiaoxuezhongxinfill' : 'icon-jiaoxuezhongxin'
+                  }
+                />
+                教学中心
+              </span>
+            }
+            key="education"
+          >
+            <Education />
+          </TabPane>
+          <TabPane
+            tab={
+              <span>
+                <IconFont
+                  style={{ fontSize: '16px' }}
+                  type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
+                />
+                我的
+              </span>
+            }
+            key="mine"
+          >
+            <Mine />
+          </TabPane>
+        </Tabs>
+      </myContext.Provider>
+    </div>
+  );
 };
 
 export default PersonalHomepage;
