@@ -1,59 +1,16 @@
-/*
- * @description: 
- * @author: txx
- * @Date: 2021-06-11 15:02:49
- * @LastEditTime: 2021-06-15 16:44:15
- * @LastEditors: txx
- */
 import { Pagination } from 'antd';
 import styles from "./index.less";
-import type { JSXElementConstructor, ReactElement } from 'react';
-import { LeftOutlined, RightOutlined, VerticalLeftOutlined, VerticalRightOutlined } from '@ant-design/icons';
 
-function itemRender(
-  page?: number,
-  type?: "page" | "prev" | "next" | "jump-prev" | "jump-next",
-  originalElement?: ReactElement<HTMLElement, string | JSXElementConstructor<any>>
-) {
-  if (type === "prev") {
-    return (
-      <div className={styles.left}>
-        <div>
-          <a href="">
-            <VerticalRightOutlined />
-          </a>
-        </div>
-        <div >
-          <a href="">
-            <LeftOutlined />
-          </a>
-        </div>
-      </div>)
-  }
-  if (type === "next") {
-    return (
-      <div className={styles.right}>
-        <div>
-          <a href="">
-            <RightOutlined />
-          </a>
-        </div>
-        <div>
-          <a href="">
-            <VerticalLeftOutlined />
-          </a>
-        </div>
-      </div >
-    )
-  }
-  return originalElement
-}
+const Pagina = (props: { total: number, setPages: React.Dispatch<React.SetStateAction<number>> }) => {
+  const { total, setPages } = props;
 
-const Pagina = (props: { total?: number }) => {
-  const { total } = props
+  const onChange = (pageNumber: number) => {
+    setPages(pageNumber);
+  
+  }
   return (
     <div className={styles.paginationBox}>
-      <Pagination size="small" total={total} itemRender={itemRender} />
+      <Pagination size="small" total={total} onChange={onChange} pageSizeOptions={['10']} />
     </div>
   )
 }

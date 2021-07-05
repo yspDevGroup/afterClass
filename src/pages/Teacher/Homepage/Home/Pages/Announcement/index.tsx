@@ -9,14 +9,11 @@ const Announcement = () => {
   const [content, setContent] = useState<any>();
   useEffect(() => {
     const pageId = getQueryString("listid");
-    console.log(pageId);
     async function announcements() {
         const res = await getXXGG({id:pageId!});
         if (res.status === 'ok' && res.data) {
             setContent(res.data);
-        } else {
-          
-        };
+        } 
       };
       announcements();
   }, [])

@@ -8,7 +8,6 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from "./index.less";
-import Pagina from '../../components/Pagination/Pagination';
 import { Tabs } from 'antd';
 import ListComponent from '@/components/ListComponent';
 import { useModel } from 'umi';
@@ -67,7 +66,9 @@ const Course = () => {
           ],
           introduction: record.KHKCSJ.KCMS,
         };
+
         return nodeData;
+
       });
       const newData = { ...defaultMsg };
       newData.list = listData;
@@ -97,29 +98,32 @@ const Course = () => {
                       ],
                       introduction: record.KCMS,
                     };
+
                     return nodeData;
+
                   })
                   defaultMsg.list = listData;
                   return (<TabPane tab={item.KCLX} key={item.KCLX}>
                     <ListComponent listData={defaultMsg} />
+
                   </TabPane>)
                 })
                 }
               </Tabs> : <div style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}>
-                  <img src={noData} alt="暂无数据" />
-                  <h4 style={{ color: '#999' }}>暂无开设课程</h4>
-                </div>}
+                <img src={noData} alt="暂无数据" />
+                <h4 style={{ color: '#999' }}>暂无开设课程</h4>
+              </div>}
           </TabPane>
           <TabPane tab="已选课程" key="elective">
-            {yxkc && yxkc.length ? <ListComponent listData={yxkcData} /> :
-              <div style={{ textAlign: 'center', marginBottom:'20px',width: '100%' }}>
+            {yxkc && yxkc.length ? <div><ListComponent listData={yxkcData} /> </div> :
+              <div style={{ textAlign: 'center', marginBottom: '20px', width: '100%' }}>
                 <img src={noData} alt="暂无数据" />
                 <h4 style={{ color: '#999' }}>暂无已选课程</h4>
               </div>}
           </TabPane>
         </Tabs>
       </div>
-      <Pagina total={5} />
+
     </div>
   )
 }

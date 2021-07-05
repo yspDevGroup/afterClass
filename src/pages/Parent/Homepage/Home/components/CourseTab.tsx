@@ -5,7 +5,6 @@ import styles from '../index.less';
 import myContext from '@/utils/MyContext';
 import ListComponent from '@/components/ListComponent';
 import { Link } from 'umi';
-import noData from '@/assets/noData.png';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 
 const { TabPane } = Tabs;
