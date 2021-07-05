@@ -11,7 +11,7 @@ export async function getKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -51,12 +51,12 @@ export async function getKHBJSJ(
         KHKCLX?: { id?: string; KCLX?: string; KBYS?: string };
       };
       KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
-      KHXSBJs?: { id?: string; XSId?: string; XSXM?: string }[];
+      KHXSBJs?: { id?: string; createdAt?: string; XSId?: string; XSXM?: string }[];
     };
     message?: string;
   }>(`/khbjsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -70,10 +70,10 @@ export async function deleteKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -151,7 +151,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         KHKCLX?: { id?: string; KCLX?: string; KBYS?: string };
       };
       KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
-      KHXSBJs?: { id?: string; XSId?: string; XSXM?: string }[];
+      KHXSBJs?: { id?: string; createdAt?: string; XSId?: string; XSXM?: string }[];
     };
     message?: string;
   }>('/khbjsj/create', {
@@ -174,13 +174,13 @@ export async function updateKHBJSJ(
   body: API.UpdateKHBJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -195,14 +195,14 @@ export async function getEnrolled(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: { id?: string; XSId?: string }[];
     message?: string;
   }>(`/khbjsj/enrolled/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }

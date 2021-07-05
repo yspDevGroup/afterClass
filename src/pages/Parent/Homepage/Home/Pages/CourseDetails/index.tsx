@@ -32,7 +32,7 @@ const CourseDetails: React.FC = () => {
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
   const children = currentUser?.subscriber_info?.children || [{
-    student_userid: currentUser?.userId,
+    student_userid: currentUser?.UserId,
     njId: '1',
     name: currentUser?.username
   }];

@@ -65,12 +65,12 @@ const OrderList = (props: { data?: any[], children: any[], currentUser?: API.Cur
     </>
 };
 const Order: React.FC = () => {
-    const [valueKey, setValueKey] = useState<string>('toPay');
     const [orderInfo, setOrderInfo] = useState<API.KHXSDD[]>([]);
     const { initialState } = useModel('@@initialState');
     const { currentUser } = initialState || {};
+    const type = getQueryString("type")|| undefined;
     const children = currentUser?.subscriber_info?.children || [{
-        student_userid: currentUser?.userId,
+        student_userid: currentUser?.UserId,
         njId: '1'
     }];
     const fetch = async (param: any[]) => {
@@ -89,14 +89,10 @@ const Order: React.FC = () => {
     };
     useEffect(() => {
         fetch(children);
-        const type = getQueryString("type");
-        if (type) {
-            setValueKey(type);
-        }
     }, []);
     return (
         <div className={styles.orderList}>
-            <Tabs type="card" defaultActiveKey={valueKey}>
+            <Tabs type="card" defaultActiveKey={type}>
                 <TabPane tab="全部" key="total">
                     <OrderList data={orderInfo} children={children} currentUser={currentUser} triggerEvt={fetch} />
                 </TabPane>

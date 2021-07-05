@@ -61,7 +61,7 @@ const Statistical: React.FC = () => {
     async function fetchData() {
       if (yxkc) {
         const res = await getAllKHXSCQ({
-          xsId: currentUserInfo?.userId || currentUserInfo?.id,
+          xsId: currentUserInfo?.UserId || currentUserInfo?.id,
           bjId: '',
           CQZT: '',
           CQRQ: '',

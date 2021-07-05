@@ -203,7 +203,7 @@ const CourseDetails: React.FC = () => {
       "ZFFS": "线上支付",
       "DDZT": "待付款",
       "DDFY": FY!,
-      "XSId": currentUser!.userId! || currentUser!.id!,
+      "XSId": currentUser!.UserId! || currentUser!.id!,
       "KHBJSJId": BJ!,
     };
     const res = await createKHXSDD(data);

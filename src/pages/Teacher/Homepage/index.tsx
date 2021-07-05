@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useModel, history } from 'umi';
 import { Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
 import Home from './Home';
@@ -10,13 +10,14 @@ import { getCurrentStatus } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
+// import { data } from './mock';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
   const { initialState } = useModel('@@initialState');
   const [activeKey, setActiveKey] = useState<string>('index');
   const { currentUser } = initialState || {};
-  const [courseStatus, setCourseStatus] = useState<string>('empty');
+  const [courseStatus, setCourseStatus] = useState<string>('');
   const [dataSource, setDataSource] = useState<any>();
   useEffect(() => {
     async function fetchData() {
@@ -28,7 +29,7 @@ const PersonalHomepage = () => {
         xq: XQ,
       });
       if (res.status === 'ok' && res.data) {
-        setDataSource(res.data);
+        setDataSource(res.data);	
         const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
         if (bmkssj && bmjssj && skkssj && skjssj) {
           const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
@@ -45,6 +46,11 @@ const PersonalHomepage = () => {
     //   setCourseStatus(cStatus);
     // }
   }, []);
+  useEffect(() => {
+    if (courseStatus === 'empty') {
+      history.push('/teacher/home/emptyArticle?articlepage=empty');
+    }
+  }, [courseStatus])
   return (
     <div className={styles.mobilePageHeader}>
       <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>

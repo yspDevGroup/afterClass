@@ -1,14 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
 import imgPop from '@/assets/teacherBg.png';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import CheckOnChart from './components/CheckOnChart';
 import IconFont from '@/components/CustomIcon';
 import myContext from '@/utils/MyContext';
 import { DateRange, Week } from '@/utils/Timefunction';
 import moment from 'moment';
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 
 const Mine = () => {
   const { initialState } = useModel('@@initialState');
@@ -18,14 +17,19 @@ const Mine = () => {
   const [wekDay, setWekDay] = useState<any>();
   // 当前时间
   const nowdate = moment(new Date().toLocaleDateString()).format('YYYY-MM-DD');
+  const userRef = useRef(null);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
         await initWXConfig(['checkJsApi']);
       }
-      await initWXAgentConfig(['checkJsApi']);
+      if (await initWXAgentConfig(['checkJsApi'])) {
+        showUserName(userRef?.current, currentUser?.UserId);
+        // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
+        WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+      }
     })();
-  }, []);
+  }, [currentUser]);
 
   const getChechIn = (data?: any[]) => {
     const courseData: any = [];
@@ -117,7 +121,10 @@ const Mine = () => {
           <img src={currentUser?.avatar} />
           <div className={styles.headerName}>
             <h4>
-              <WWOpenDataCom type="userName" openid={currentUser?.userId} />老师
+              <span ref={userRef}>
+                {currentUser?.username}
+              </span>
+              老师
             </h4>
           </div>
         </div>

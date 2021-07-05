@@ -25,7 +25,7 @@ const PersonalHomepage = () => {
       if (result.current) {
         const { XN, XQ } = result.current;
         const children = currentUser?.subscriber_info?.children || [{
-          student_userid: currentUser?.userId,
+          student_userid: currentUser?.UserId,
           njId: '1'
         }];
         const res = await homePageInfo({

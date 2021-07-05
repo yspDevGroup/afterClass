@@ -17,7 +17,7 @@ const OrderDetails: React.FC = (props: any) => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const { title, detail, payOrder, user } = props.location.state;
   const children = user?.subscriber_info?.children || [{
-    student_userid: user?.userId,
+    student_userid: user?.UserId,
     njId: '1'
   }];
   useEffect(() => {
@@ -108,16 +108,7 @@ const OrderDetails: React.FC = (props: any) => {
         orderInfo.DDZT === '待付款' ? <div className={styles.footer}>
           <span>实付:</span><span>￥{orderInfo.DDFY}</span>
           <button className={styles.btn} onClick={handlePay}>去支付</button>
-          <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: urlPath }}></Link>
-        </div> : ''
-      }
-      {orderInfo.DDZT === '已付款' ?
-        <div className={styles.payment}>
-          <div onClick={onchanges}>
-            <p>支付成功</p>
-            <p><CheckCircleOutlined /></p>
-            <Link to='/parent/mine/order?id=4'> <button>已完成支付</button></Link>
-          </div>
+          <a style={{ visibility: 'hidden' }} ref={linkRef} href={urlPath}></a>
         </div> : ''
       }
     </div>

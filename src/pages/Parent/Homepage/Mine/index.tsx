@@ -15,7 +15,7 @@ const Mine = () => {
   const [totail, setTotail] = useState<boolean>(false);
   useEffect(() => {
     const data = currentUserInfo?.subscriber_info?.children || [{
-      student_userid: currentUserInfo?.userId,
+      student_userid: currentUserInfo?.UserId,
       njId: '1'
     }];
     async function fetch(children: any[]) {

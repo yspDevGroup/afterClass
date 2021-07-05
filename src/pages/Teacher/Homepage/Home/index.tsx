@@ -19,10 +19,11 @@ const Home = () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
         await initWXConfig(['checkJsApi']);
       }
-      await initWXAgentConfig(['checkJsApi']);
-      showUserName(userRef?.current, currentUserInfo?.userId);
-      // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
-      WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+      if (await initWXAgentConfig(['checkJsApi'])) {
+        showUserName(userRef?.current, currentUserInfo?.UserId);
+        // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
+        WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+      }
     })();
   }, [currentUserInfo]);
 
@@ -43,7 +44,9 @@ const Home = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div>
         <div className={styles.headerText}>
           <h4>
-            <span ref={userRef}></span>
+            <span ref={userRef}>
+              {currentUserInfo?.username}
+            </span>
             老师，你好！
           </h4>
           <div>欢迎使用课后帮，课后服务选我就对了！ </div>

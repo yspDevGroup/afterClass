@@ -7,6 +7,7 @@
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
+import loadImg from '@/assets/loading.gif';
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
@@ -25,7 +26,7 @@ const Index = () => {
         break;
     }
   }, [initialState?.currentUser?.auth]);
-  return <div>loading...</div>;
+  return <div><img width='100%' style={{marginTop: '150px'}} src={loadImg} /></div>;
 };
 
 export default Index;
