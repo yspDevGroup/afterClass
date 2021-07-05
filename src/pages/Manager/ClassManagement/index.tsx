@@ -1,31 +1,34 @@
 /* eslint-disable no-console */
 import React from 'react';
+import { Link } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tag } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import PageContainer from '@/components/PageContainer';
-import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import { Button, Modal, Tag, Tooltip, Select } from 'antd';
 import ProTable from '@ant-design/pro-table';
+import { PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+
+import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getAllKHKCSJ, getKHKCSJ } from '@/services/after-class/khkcsj';
+
 import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
 import SearchComponent from '@/components/Search';
+import PageContainer from '@/components/PageContainer';
+import PromptInformation from '@/components/PromptInformation';
+import type { SearchDataType } from '@/components/Search/data';
+import { getQueryString } from '@/utils/utils';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+
+import styles from './index.less';
+import { searchData } from './searchConfig';
+import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
-import type { CourseItem, TableListParams } from './data';
-import styles from './index.less';
-import type { SearchDataType } from '@/components/Search/data';
-import { searchData } from './searchConfig';
-import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
-import { Tooltip } from 'antd';
-import ActionBar from './components/ActionBar';
 import ClassStart from './components/ClassStart';
-import { getQueryString } from '@/utils/utils';
-import PromptInformation from '@/components/PromptInformation';
-import { getAllKHKCSJ, getKHKCSJ } from '@/services/after-class/khkcsj';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { Link } from 'umi';
-import WWOpenDataCom from './components/WWOpenDataCom';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+import type { CourseItem, TableListParams } from './data';
+// import WWOpenDataCom from './components/WWOpenDataCom';
+const { Option } = Select;
 
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
@@ -45,6 +48,9 @@ const CourseManagement = () => {
   const [tips, setTips] = useState<boolean>(false);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
+  // const [bjmcValue, setBjmcValue] = useState<any>();
+  // const [kCData, setKcmcData] = useState<any>();
+
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
     setkai(false);
@@ -63,7 +69,15 @@ const CourseManagement = () => {
       await initWXAgentConfig(['checkJsApi']);
     })();
   }, []);
+  // useEffect(() => {
+  //   (
+  //     async ()=>{
+  //       if(xn && xq){
 
+  //       }
+  //     }
+  //   )()
+  // }, [])
   useEffect(() => {
     if (mcData === []) {
       return setTips(true);
@@ -176,7 +190,9 @@ const CourseManagement = () => {
       });
       actionRef.current?.reload();
     }
-    setName(value);
+    if (type === 'customSearch') {
+      setName(value);
+    }
     actionRef.current?.reload();
   };
   // 获取弹框标题
@@ -233,12 +249,30 @@ const CourseManagement = () => {
   };
 
   const columns: ProColumns<CourseItem>[] = [
+    // {
+    //   title: '序号',
+    //   dataIndex: 'index',
+    //   key: 'index',
+    //   valueType: 'index',
+    //   width: 48,
+    //   align: 'center',
+    // },
     {
       title: '班级名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
-      width: 120,
+      width: 180,
+    },
+    {
+      title: '课程名称',
+      dataIndex: 'KCMC',
+      key: 'KCMC',
+      align: 'center',
+      width: 150,
+      render: (text: any, record: any) => {
+        return <div>{record.KHKCSJ.KCMC}</div>;
+      },
     },
     {
       title: '费用(元)',
@@ -257,20 +291,20 @@ const CourseManagement = () => {
         return <a>{text}</a>;
       },
     },
-    {
-      title: '主班',
-      dataIndex: 'ZJS',
-      key: 'ZJS',
-      align: 'center',
-      width: 100,
-      render: (_, record) => {
-        return (
-          <div>
-            <WWOpenDataCom type="userName" openid={record.ZJS} />
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: '主班',
+    //   dataIndex: 'ZJS',
+    //   key: 'ZJS',
+    //   align: 'center',
+    //   width: '10%',
+    //   render: (_, record) => {
+    //     return (
+    //       <div>
+    //         <WWOpenDataCom type="userName" openid={record.ZJS} />
+    //       </div>
+    //     );
+    //   },
+    // },
     // {
     //   title: '所属校区',
     //   align: 'center',
@@ -346,7 +380,10 @@ const CourseManagement = () => {
       },
     },
   ];
-
+  const onBjmcChange = async (value: any) => {
+    setkcId(value);
+    actionRef.current?.reload();
+  };
   return (
     <>
       <PageContainer cls={styles.roomWrapper}>
@@ -384,12 +421,34 @@ const CourseManagement = () => {
           search={false}
           pagination={paginationConfig}
           headerTitle={
-            <SearchComponent
-              dataSource={dataSource}
-              onChange={(type: string, value: string, trem: string) =>
-                handlerSearch(type, value, trem)
-              }
-            />
+            <div style={{ display: 'flex' }}>
+              <SearchComponent
+                dataSource={dataSource}
+                onChange={(type: string, value: string, trem: string) =>
+                  handlerSearch(type, value, trem)
+                }
+              />
+              <div style={{ display: 'flex', lineHeight: '32px', marginLeft: 15 }}>
+                <span style={{ fontSize: 14, color: '#666' }}>课程名称：</span>
+                <div>
+                  <Select
+                    style={{ width: 200 }}
+                    value={kcId || undefined}
+                    allowClear
+                    placeholder="请选择"
+                    onChange={onBjmcChange}
+                  >
+                    {mcData?.map((item: any) => {
+                      return (
+                        <Option value={item.value} key={item.value}>
+                          {item.label}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+              </div>
+            </div>
           }
           toolBarRender={() => [
             <Button
