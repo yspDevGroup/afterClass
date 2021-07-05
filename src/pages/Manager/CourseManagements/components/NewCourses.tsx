@@ -246,7 +246,7 @@ const NewCourses = (props: PropsType) => {
       label: '课程类型:',
       name: 'KHKCLXId',
       key: 'KHKCLXId',
-      rules: [{ required: true, message: '请填写名称' }],
+      rules: [{ required: true, message: '请填选择类型' }],
       readonly,
       options,
     },
@@ -268,7 +268,7 @@ const NewCourses = (props: PropsType) => {
       label: '学年学期：',
       key: 'XNXQ',
       readonly,
-      rules: [{ required: true, message: '请填写名称' }],
+      rules: [{ required: true, message: '请填写学年学期' }],
       cascaderItem: [
         {
           type: 'select',
@@ -279,6 +279,7 @@ const NewCourses = (props: PropsType) => {
           noStyle: true,
           readonly,
           options: XNData,
+          rules: [{ required: true, message: '请填写学年' }],
           fieldProps: {
             onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
               setXN(event);
@@ -297,6 +298,7 @@ const NewCourses = (props: PropsType) => {
           placeholder: '请选择学期',
           noStyle: true,
           options: XQ,
+          rules: [{ required: true, message: '请填写学期' }],
           fieldProps: {
             onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
               onXnXqChange(XN, event);

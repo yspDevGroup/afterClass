@@ -49,7 +49,7 @@ const TimePeriodForm = (props: PropsType) => {
       rules: [{ required: true, message: '请填写名称' }],
       fieldProps: {
         autocomplete: 'off',
-        placeholder: currentStatus === 'schedule' ?'如：第一节课':(currentStatus === 'enroll' ? '如：2020-2021':'如：2021春季'),
+        placeholder: currentStatus === 'schedule' ? '如：第一节课' : (currentStatus === 'enroll' ? '如：2020-2021' : '如：2021春季'),
       },
     },
     {
@@ -57,6 +57,7 @@ const TimePeriodForm = (props: PropsType) => {
       label: '学年学期：',
       key: 'XNXQ',
       style: { marginBottom: 0 },
+      rules: [{ required: true, message: '请填写学年学期' }],
       cascaderItem: [
         {
           type: 'select',
@@ -66,7 +67,6 @@ const TimePeriodForm = (props: PropsType) => {
           placeholder: '请选择学年',
           options: chainData?.data,
           rules: [{ required: true, message: '请选择学年' }],
-          // noStyle: true,
           fieldProps: {
             onChange: (event: string) => {
               if (event) {
@@ -97,6 +97,7 @@ const TimePeriodForm = (props: PropsType) => {
       fieldProps: {
         format: currentStatus === 'schedule' ? 'HH:mm' : 'YYYY-MM-DD',
         minuteStep: 5,
+        rules: [{ required: true, message: '请填写开始时间' }],
         hideDisabledOptions: true,
         disabledHours: () => {
           return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 21, 22, 23, 24];
@@ -111,6 +112,7 @@ const TimePeriodForm = (props: PropsType) => {
       key: 'JSSJ',
       width: '100%',
       fieldProps: {
+        rules: [{ required: true, message: '请填写结束时间' }],
         format: currentStatus === 'schedule' ? 'HH:mm' : 'YYYY-MM-DD',
         minuteStep: 5,
         hideDisabledOptions: true,

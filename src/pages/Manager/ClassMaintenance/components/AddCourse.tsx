@@ -38,7 +38,6 @@ const AddCourse: FC<AddCourseProps> = ({
   actionRef,
   mcData,
   names,
-  kcId,
   classattend,
   signup,
 }) => {
@@ -166,6 +165,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KHKCSJId',
       fieldProps: {
         options: mcData,
+        disabled:true
       },
     },
     {
@@ -416,6 +416,7 @@ const AddCourse: FC<AddCourseProps> = ({
           formItemLayout={formLayout}
           values={
             formValues || {
+              KHKCSJId:mcData,
               BJZT: '待发布',
               BMKSSJ: baoming,
               KKRQ: kaike,

@@ -83,6 +83,10 @@ const TermManagement = () => {
           message.success('保存成功');
           onClose();
           actionRef?.current?.reload();
+        } else if ((data.message!).indexOf('Validation') > -1) {
+          message.error('已存在该学年学期，请勿重复添加');
+        } else if ((data.message!).indexOf('token') > -1) {
+          message.error('身份验证过期，请重新登录');
         } else {
           message.error('保存失败');
         }
@@ -94,13 +98,6 @@ const TermManagement = () => {
     }
   };
   const columns: ProColumns<TermItem>[] = [
-    {
-      title: '序号',
-      dataIndex: 'index',
-      valueType: 'index',
-      width: 48,
-      align: 'center',
-    },
     {
       title: '学年',
       dataIndex: 'XN',
@@ -167,7 +164,7 @@ const TermManagement = () => {
       align: 'center',
     },
   ];
-  
+
   return (
     <PageContainer cls={styles.termManagementBox}>
       <ProTable<TermItem>
@@ -187,14 +184,14 @@ const TermManagement = () => {
             sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
             filter,
           };
-          return queryXNXQList(true,opts);
+          return queryXNXQList(true, opts);
         }}
         pagination={paginationConfig}
         rowKey="id"
         dateFormatter="string"
         toolBarRender={() => [
           <Button
-            style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg  }}
+            style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
             type="primary"
             key="add"
             onClick={() => handleOperation('add')}

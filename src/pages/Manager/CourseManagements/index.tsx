@@ -144,24 +144,16 @@ const NewClassManagement = () => {
   };
   const columns: ProColumns<classType>[] = [
     {
-      title: '序号',
-      dataIndex: 'index',
-      key: 'index',
-      valueType: 'index',
-      width: 48,
-      align: 'center',
-    },
-    {
       title: '课程名称',
       dataIndex: 'KCMC',
       key: 'KCMC',
       align: 'center',
-      width: '12%',
+      width: 150,
     },
     {
       title: '课程类型',
       align: 'center',
-      width: '10%',
+      width: 110,
       key: 'KHKCLXId',
       render: (_, record) => {
         return <>{record.KHKCLX?.KCLX}</>;
@@ -170,7 +162,7 @@ const NewClassManagement = () => {
     {
       title: '班级数',
       align: 'center',
-      width: '10%',
+      width: 100,
       render: (_, record) => {
         const Url = `/courseManagements/classMaintenance?courseId=${record.id}`;
         const classes = [];
@@ -186,8 +178,9 @@ const NewClassManagement = () => {
     {
       title: '课程封面',
       align: 'center',
-      width: '10%',
+      width: 120,
       dataIndex: 'KCTP',
+      ellipsis: true,
       render: (_, record) => {
         return (
           <>
@@ -203,7 +196,6 @@ const NewClassManagement = () => {
       dataIndex: 'KCMS',
       key: 'KCMS',
       align: 'center',
-      width: '20%',
       ellipsis: true,
     },
     // {
@@ -220,6 +212,7 @@ const NewClassManagement = () => {
       ellipsis: true,
       dataIndex: 'KCZT',
       key: 'KCZT',
+      width:110
     },
     {
       title: '操作',

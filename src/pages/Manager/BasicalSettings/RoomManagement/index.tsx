@@ -98,6 +98,8 @@ const RoomManagement = () => {
         message.success(id ? '场地信息更新成功' : '场地信息新增成功');
         setModalVisible(false);
         actionRef.current?.reload();
+      } else if ((result.message!).indexOf('Cannot') > -1) {
+        message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
       } else {
         message.error(`${result.message},请联系管理员或稍后再试`);
       }
@@ -110,21 +112,21 @@ const RoomManagement = () => {
       title: '名称',
       dataIndex: 'FJMC',
       align: 'center',
-      width: '15%',
+      width: 130,
       ellipsis: true,
     },
     {
       title: '编号',
       dataIndex: 'FJBH',
       align: 'center',
-      width: '10%',
+      width: 100,
       ellipsis: true,
     },
     {
       title: '类型',
       dataIndex: 'FJLX',
       align: 'center',
-      width: '12%',
+      width: 150,
       ellipsis: true,
       render: (_, record) => {
         return (
@@ -140,17 +142,8 @@ const RoomManagement = () => {
       title: '所属校区',
       dataIndex: 'XQName',
       align: 'center',
-      width: '15%',
+      width: 150,
       ellipsis: true,
-      // render: (_, record) => {
-      //   return (
-      //     <div className="ui-table-col-elp">
-      //       <Tooltip title={record.XQSJ?.XQMC} arrowPointAtCenter>
-      //         {record.XQSJ?.XQMC}
-      //       </Tooltip>
-      //     </div>
-      //   );
-      // },
     },
     {
       title: '容纳人数',
@@ -162,13 +155,12 @@ const RoomManagement = () => {
       title: '地址',
       dataIndex: 'BZXX',
       align: 'center',
-      width: '18%',
       ellipsis: true,
     },
     {
       title: '操作',
       valueType: 'option',
-      width: 100,
+      width: 110,
       render: (_, record) => (
         <>
           <a onClick={() => handleOperation('add', record)}>编辑</a>
@@ -182,6 +174,10 @@ const RoomManagement = () => {
                   if (result.status === 'ok') {
                     message.success('场地信息删除成功');
                     actionRef.current?.reload();
+                  } else if ((result.message!).indexOf('Cannot') > -1) {
+                    message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
+                  } else if ((result.message!).indexOf('token') > -1) {
+                    message.error('身份验证过期，请重新登录');
                   } else {
                     message.error(`${result.message},请联系管理员或稍后再试`);
                   }
@@ -242,7 +238,7 @@ const RoomManagement = () => {
             场地类型维护
           </Button>,
           <Button
-            style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg  }}
+            style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
             type="primary"
             key="add"
             onClick={() => handleOperation('add')}
@@ -262,13 +258,13 @@ const RoomManagement = () => {
           modalType === 'uphold'
             ? null
             : [
-                <Button key="back" onClick={() => setModalVisible(false)}>
-                  取消
-                </Button>,
-                <Button key="submit" type="primary" onClick={handleSubmit}>
-                  确定
-                </Button>,
-              ]
+              <Button key="back" onClick={() => setModalVisible(false)}>
+                取消
+              </Button>,
+              <Button key="submit" type="primary" onClick={handleSubmit}>
+                确定
+              </Button>,
+            ]
         }
         style={{ maxHeight: '430px' }}
         centered

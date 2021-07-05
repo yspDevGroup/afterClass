@@ -54,7 +54,7 @@ const PeriodMaintenance = () => {
       KSSJ: moment(data.KSSJ, formatType),
       JSSJ: moment(data.JSSJ, formatType),
     };
-    setCurrent({ ...data,...parpm});
+    setCurrent({ ...data, ...parpm });
     getModelTitle();
     setModalVisible(true);
   };
@@ -80,12 +80,18 @@ const PeriodMaintenance = () => {
         rest.KSSJ = moment(rest.KSSJ).format(formatType);
         rest.JSSJ = moment(rest.JSSJ).format(formatType);
         const result = id
-          ? await updateXXSJPZ({ id }, { ...rest,TYPE: requestType[0] })
-          : await createXXSJPZ({ ...rest,TYPE: requestType[0] });
+          ? await updateXXSJPZ({ id }, { ...rest, TYPE: requestType[0] })
+          : await createXXSJPZ({ ...rest, TYPE: requestType[0] });
         if (result.status === 'ok') {
           message.success(id ? '信息更新成功' : '信息新增成功');
           setModalVisible(false);
           actionRef.current?.reload();
+        } else if ((result.message!).indexOf('Cannot') > -1) {
+          message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
+        } else if ((result.message!).indexOf('token') > -1) {
+          message.error('身份验证过期，请重新登录');
+        } else if ((result.message!).indexOf('Validation') > -1) {
+          message.error('已存在该数据，请勿重复添加');
         } else {
           message.error(`${result.message},请联系管理员或稍后再试`);
         }
@@ -96,19 +102,19 @@ const PeriodMaintenance = () => {
   };
 
   const columns: ProColumns<Maintenance>[] = [
-   
+
     {
       title: '时段名称',
       dataIndex: 'TITLE',
       align: 'center',
-      width: '15%',
+      width: 130,
       ellipsis: true,
     },
     {
       title: '所属学期',
       dataIndex: 'SSXQ',
       align: 'center',
-      width: '20%',
+      width: 150,
       render: (_: ReactNode, entity: Maintenance) => {
         return (
           <div>{entity.XNXQ?.XN}{entity.XNXQ?.XQ}</div>
@@ -119,9 +125,9 @@ const PeriodMaintenance = () => {
       title: '开始时间',
       dataIndex: 'KSSJ',
       align: 'center',
-      width: '15%',
+      width: 150,
       ellipsis: true,
-      render: (text, record: any) => {
+      render: (_, record: any) => {
         return currentStatus === 'schedule' ? record.KSSJ.slice(0, 5) : record.KSSJ;
       },
     },
@@ -129,23 +135,22 @@ const PeriodMaintenance = () => {
       title: '结束时间',
       dataIndex: 'JSSJ',
       align: 'center',
-      width: '15%',
+      width: 150,
       ellipsis: true,
-      render: (text, record: any) => {
-        return currentStatus === 'schedule' ? record.JSSJ.slice(0, 5): record.JSSJ;
+      render: (_, record: any) => {
+        return currentStatus === 'schedule' ? record.JSSJ.slice(0, 5) : record.JSSJ;
       },
     },
     {
       title: '备注',
       dataIndex: 'BZXX',
       align: 'center',
-      width: '20%',
       ellipsis: true,
     },
     {
       title: '操作',
       valueType: 'option',
-      width: 100,
+      width: 120,
       align: 'center',
       render: (_, record) => (
         <>

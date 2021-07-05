@@ -106,19 +106,11 @@ const ClassMaintenance = () => {
   };
   const columns: ProColumns<CourseItem>[] = [
     {
-      title: '序号',
-      dataIndex: 'index',
-      key: 'index',
-      valueType: 'index',
-      width: 48,
-      align: 'center',
-    },
-    {
       title: '班级名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
-      width: '12%',
+      width: 120,
     },
     {
       title: '费用(元)',
@@ -139,7 +131,7 @@ const ClassMaintenance = () => {
       dataIndex: 'ZJS',
       key: 'ZJS',
       align: 'center',
-      width: '10%',
+      width: 100,
       render: (_, record) => {
         return (
           <div>
@@ -199,7 +191,7 @@ const ClassMaintenance = () => {
       title: '操作',
       valueType: 'option',
       key: 'option',
-      width: '150px',
+      width: 150,
       align: 'center',
       render: (_, record) => {
         return (

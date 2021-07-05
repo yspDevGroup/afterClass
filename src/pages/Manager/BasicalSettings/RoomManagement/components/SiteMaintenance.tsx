@@ -2,7 +2,7 @@ import { createFJLX, deleteFJLX, getAllFJLX, updateFJLX } from "@/services/after
 import { PlusOutlined } from "@ant-design/icons";
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
-import { Button, message, Popconfirm  } from "antd";
+import { Button, message, Popconfirm } from "antd";
 import React, { useRef, useState } from "react";
 import type { TableListParams } from "../../RoomManagement/data";
 import type { DataSourceType } from "../data";
@@ -15,17 +15,18 @@ const SiteMaintenance = () => {
 
     const columns: ProColumns<DataSourceType>[] = [
         {
-            title: '序号',
-            dataIndex: 'index',
-            valueType: 'index',
-            ellipsis: true,
-            width: 48,
-        },
-        {
             title: '名称',
             dataIndex: 'FJLX',
             align: 'center',
             ellipsis: true,
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '此项为必填项',
+                    },
+                ],
+            },
         },
         {
             title: '操作',
@@ -42,37 +43,41 @@ const SiteMaintenance = () => {
                     编辑
                 </a>,
                 <Popconfirm
-                title="删除之后，数据不可恢复，确定要删除吗?"
-                onConfirm={async () => {
-                    try {
-                        if (record.id) {
-                            const result = await deleteFJLX({ id: `${record.id}` });
-                            if (result.status === 'ok') {
-                                message.success('信息删除成功');
-                                actionRef.current?.reload();
-                            } else {
-                                message.error(`${result.message},请联系管理员或稍后再试`);
+                    title="删除之后，数据不可恢复，确定要删除吗?"
+                    onConfirm={async () => {
+                        try {
+                            if (record.id) {
+                                const result = await deleteFJLX({ id: `${record.id}` });
+                                if (result.status === 'ok') {
+                                    message.success('信息删除成功');
+                                    actionRef.current?.reload();
+                                } else if ((result.message!).indexOf('Cannot') > -1) {
+                                    message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
+                                } else if ((result.message!).indexOf('token') > -1) {
+                                    message.error('身份验证过期，请重新登录');
+                                } else {
+                                    message.error(`${result.message},请联系管理员或稍后再试`);
+                                }
                             }
+                        } catch (err) {
+                            message.error('删除失败，请联系管理员或稍后重试。');
                         }
-                    } catch (err) {
-                        message.error('删除失败，请联系管理员或稍后重试。');
-                    }
-                }}
-                okText="确定"
-                cancelText="取消"
-                placement="topRight"
-            >
-                <a>
-                    删除
-           </a>
-            </Popconfirm>
+                    }}
+                    okText="确定"
+                    cancelText="取消"
+                    placement="topRight"
+                >
+                    <a>
+                        删除
+                    </a>
+                </Popconfirm>
             ],
         },
     ];
 
     return (
         <>
-             <Button
+            <Button
                 type="primary"
                 onClick={() => {
                     actionRef.current?.addEditRecord?.({
@@ -81,12 +86,11 @@ const SiteMaintenance = () => {
                     });
                 }}
                 icon={<PlusOutlined />}
-                style={{marginLeft:"25px",marginBottom:'16px'}}
+                style={{ marginLeft: "25px", marginBottom: '16px' }}
             >
                 新建
             </Button>
             <EditableProTable<DataSourceType>
-                // style={{minWidth:'600px'}}
                 rowKey="id"
                 actionRef={actionRef}
                 columns={columns}
@@ -106,7 +110,7 @@ const SiteMaintenance = () => {
                     type: 'multiple',
                     editableKeys,
                     onChange: setEditableRowKeys,
-                    onSave: async (key, row) => {
+                    onSave: async (_, row) => {
                         try {
                             // 更新或新增场地信息
                             const result = row.title ? await createFJLX({
@@ -117,8 +121,13 @@ const SiteMaintenance = () => {
                                 FJLX: row.FJLX!
                             });
                             if (result.status === 'ok') {
-                                message.success(row.title ?'信息新增成功':'信息更新成功');
+                                message.success(row.title ? '信息新增成功' : '信息更新成功');
                                 actionRef.current?.reload();
+                            } else if ((result.message!).indexOf('token') > -1) {
+                                message.error('身份验证过期，请重新登录');
+                            }
+                            else if ((result.message!).indexOf('Validation') > -1) {
+                                message.error('已存在该数据，请勿重复添加');
                             } else {
                                 message.error(`${result.message},请联系管理员或稍后再试`);
                             }

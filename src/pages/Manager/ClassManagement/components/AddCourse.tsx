@@ -1,8 +1,9 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
-import { Button, Checkbox, Drawer, message } from 'antd';
+import { Button, Drawer, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
 import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
@@ -10,8 +11,8 @@ import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXQList } from '@/services/wechat/service';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
-import { getDepUserList, getSchDepList } from '@/services/after-class/wechat';
-import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
+import { getDepUserList } from '@/services/after-class/wechat';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import WWOpenDataCom from './WWOpenDataCom';
 
 type AddCourseProps = {
@@ -110,18 +111,6 @@ const AddCourse: FC<AddCourseProps> = ({
     })();
   }, []);
 
-  // useEffect(() => {
-  //   if (teacherData.length) {
-  //     setTimeout(() => {
-  //       const wwList = document.querySelectorAll('.ww-open-data');
-  //       wwList.forEach((ww) => {
-  //         showUserName(ww as HTMLDivElement, ww.getAttribute('data-id') || '', true);
-  //       });
-  //       WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
-  //     }, 0);
-  //   }
-  // }, [teacherData])
-
   useEffect(() => {
     (async () => {
       // 获取年级信息
@@ -156,9 +145,9 @@ const AddCourse: FC<AddCourseProps> = ({
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
-      if(values.BMKSSJ&&values.BMJSSJ){
-        values.BMKSSJ=new Date(values.BMKSSJ);
-        values.BMJSSJ=new Date(values.BMJSSJ);
+      if (values.BMKSSJ && values.BMJSSJ) {
+        values.BMKSSJ = new Date(values.BMKSSJ);
+        values.BMJSSJ = new Date(values.BMJSSJ);
       }
       const options = {
         ...values,
@@ -184,8 +173,12 @@ const AddCourse: FC<AddCourseProps> = ({
           message.success('保存成功');
           onClose();
           actionRef?.current?.reload();
+        } else if ((data.message!).indexOf('token') > -1) {
+          message.error('身份验证过期，请重新登录');
+        } else if ((data.message!).indexOf('Validation') > -1) {
+          message.error('已存在该数据，请勿重复添加');
         } else {
-          message.error(`保存失败，${data.message}`);
+          message.error(`${data.message},请联系管理员或稍后再试`);
         }
       })
       .catch((error) => {
@@ -309,8 +302,7 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         mode: 'multiple',
         options: grade ? grade[xQItem] : [],
-        onChange(value: any, option: any) {
-          // setNJID(value);
+        onChange(_: any, option: any) {
           const njsIabel: any[] = [];
           option.map((item: any) => {
             njsIabel.push(item?.label);
@@ -330,6 +322,7 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'ZJS',
           key: 'ZJS',
           readonly,
+          rules: [{ required: true, message: '请选择班主任' }],
           fieldProps: {
             virtual: false,
             options: teacherData.map((item) => {
@@ -346,6 +339,7 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'FJS',
           key: 'FJS',
           readonly,
+          rules: [{ required: true, message: '请选择副班主任' }],
           fieldProps: {
             mode: 'multiple',
             virtual: false,

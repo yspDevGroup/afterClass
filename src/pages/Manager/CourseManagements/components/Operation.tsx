@@ -1,9 +1,10 @@
+/* eslint-disable no-param-reassign */
 import { deleteKHKCSJ, updateKHKCSJ } from "@/services/after-class/khkcsj";
-import { ActionType } from "@ant-design/pro-table";
+import type { ActionType } from "@ant-design/pro-table";
 import { Divider, message, notification } from "antd";
 import Popconfirm from "antd/es/popconfirm";
 import React from "react";
-import { Link } from "umi";
+
 
 type PropsType = {
     record: any;
@@ -14,16 +15,16 @@ type PropsType = {
 const Operation = (props: PropsType) => {
     const { actionRef, handleOperation, record } = props;
     // 发布按钮事件
-    const release = async (record: any) => {
+    const release = async (recorde: any) => {
         const classes = [];
-        record.KHBJSJs?.map((item: any) => {
+        recorde.KHBJSJs?.forEach((item: any) => {
             if (item.BJZT === '已发布') {
-                return classes.push(item)
+                classes.push(item)
             };
-            return false;
+
         });
         if (classes.length === 0) {
-            return notification['warning']({
+            return notification.warning({
                 message: '没有班级可以发布',
                 description:
                     '当前没有已经排课的班级可以发布，请维护班级后再来发布课程.',
@@ -31,39 +32,38 @@ const Operation = (props: PropsType) => {
                     console.log('Notification Clicked!');
                 },
             });
-        } else {
-            record.KCZT = '已发布'
-            record.BMKSSJ=new Date(record.BMKSSJ)
-            record.BMJSSJ=new Date(record.BMJSSJ)
-            const res = await updateKHKCSJ({ id: record.id }, { ...record })
-            if (res.status === 'ok') {
-                actionRef?.current?.reload()
-            }
         }
+        recorde.KCZT = '已发布'
+        recorde.BMKSSJ = new Date(recorde.BMKSSJ)
+        recorde.BMJSSJ = new Date(recorde.BMJSSJ)
+        const res = await updateKHKCSJ({ id: recorde.id }, { ...recorde })
+        if (res.status === 'ok') {
+            actionRef?.current?.reload()
+        }
+
     };
-    //  下架事件
-    const Offtheshelf = async (record: any) => {
+    //  下架事件s
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const Offtheshelf = async (_ites: any) => {
         const sj: any = [];
-        await record.KHBJSJs.forEach((item: any) => {
-            if (item.BJZT === '已发布') {
-                sj.push(item)
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        await record.KHBJSJs.forEach((ites: any) => {
+            if (ites.BJZT === '已发布') {
+                sj.push(ites)
             }
         });
-        console.log(sj.length)
-        if (sj.length = '0') {
+        if (sj.length === 0) {
             const res = await updateKHKCSJ({ id: record.id }, { KCZT: '已下架' })
             if (res.status === 'ok') {
                 actionRef?.current?.reload()
             }
         } else {
-            console.log(666)
-            notification['warning']({
+            notification.warning({
                 message: '有已排课班级',
                 description:
                     '当前课程有已排课的班级，请删除后再下架.',
             });
         }
-
     }
 
     switch (record.KCZT) {
@@ -83,8 +83,12 @@ const Operation = (props: PropsType) => {
                                     if (result.status === 'ok') {
                                         message.success('信息删除成功');
                                         actionRef?.current?.reload();
+                                    } else if ((result.message!).indexOf('Cannot') > -1) {
+                                        message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
+                                    } else if ((result.message!).indexOf('token') > -1) {
+                                        message.error('身份验证过期，请重新登录');
                                     } else {
-                                        message.error(`${result.message},请联系管理员或者稍后重试`)
+                                        message.error(`${result.message},请联系管理员或稍后再试`);
                                     }
                                 }
 
@@ -125,6 +129,11 @@ const Operation = (props: PropsType) => {
                                     if (result.status === 'ok') {
                                         message.success('信息删除成功');
                                         actionRef?.current?.reload();
+                                    }
+                                    else if ((result.message!).indexOf('token') > -1) {
+                                        message.error('身份验证过期，请重新登录');
+                                    } else if ((result.message!).indexOf('Cannot') > -1) {
+                                        message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
                                     } else {
                                         message.error(`${result.message},请联系管理员或者稍后重试`)
                                     }
@@ -134,7 +143,6 @@ const Operation = (props: PropsType) => {
                                 message.error('删除失败，请联系管理员或稍后重试')
                             }
                         }
-
                         }
                         okText="确定"
                         cancelText="取消"
