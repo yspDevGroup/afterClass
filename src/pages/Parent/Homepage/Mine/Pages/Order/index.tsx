@@ -5,7 +5,7 @@ import styles from './index.less';
 import { Link, useModel, } from 'umi';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { deleteKHXSDD, getAllKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
+import { deleteKHXSDD, getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { getQueryString } from '@/utils/utils';
 import noOrder from '@/assets/noOrder.png';
 
@@ -13,18 +13,9 @@ const { TabPane } = Tabs;
 
 const OrderList = (props: { data?: any[], children: any[], currentUser?: API.CurrentUser, triggerEvt: (param: any[]) => Promise<any> }) => {
     const { data, children, currentUser, triggerEvt } = props;
-    const handlePay = async (d: any) => {
-        const res = await payKHXSDD({
-            ddIds: [d.id],
-            bjId: d.KHBJSJ.id,
-            returnUrl: '/parent/home',
-            xsId: children && children[0].student_userid,
-            kcmc: d.KHBJSJ.KHKCSJ.KCMC,
-            amount: d.DDFY,
-        });
-        if (res.status === 'ok') {
-            window.open(res.data);
-        }
+    const handlePay = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        const par = (e.target as HTMLButtonElement).closest('div[class*="Information"]');
+        (par?.children[0] as HTMLElement)?.click();
     };
     const handleCancle = async (d: any) => {
         const res = await deleteKHXSDD({ id: d.id });
@@ -61,7 +52,7 @@ const OrderList = (props: { data?: any[], children: any[], currentUser?: API.Cur
                 </Link>
                 {item.DDZT === '待付款' ? <div className={styles.btns}>
                     <button onClick={() => handleCancle(item)}>取消订单</button>
-                    <button onClick={() => handlePay(item)}>去支付</button>
+                    <button onClick={(e) => handlePay(e)}>去支付</button>
                 </div> : ''}
                 {item.DDZT === '已过期' ? <div className={styles.btns}>
                     <button onClick={() => handleCancle(item)}>删除订单</button>

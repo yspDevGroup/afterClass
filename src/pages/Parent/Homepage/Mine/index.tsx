@@ -42,7 +42,7 @@ const Mine = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}>
         </div>
         <div className={styles.header}>
-          <img src={currentUserInfo?.avatar} />
+          {currentUserInfo?.avatar ? <img src={currentUserInfo?.avatar} /> :''}
           <div className={styles.headerName}>
             <h4>{currentUserInfo?.subscriber_info?.remark || currentUserInfo?.username || '家长'}</h4>
             <span>微信名：{currentUserInfo?.username}</span>

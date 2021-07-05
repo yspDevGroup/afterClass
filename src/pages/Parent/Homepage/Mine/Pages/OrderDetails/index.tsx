@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-plusplus */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, history } from 'umi';
 import { message, Statistic } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
@@ -13,6 +13,8 @@ const { Countdown } = Statistic;
 const OrderDetails: React.FC = (props: any) => {
   const [deadline, setDeadline] = useState<number>();
   const [orderInfo, setOrderInfo] = useState<any>();
+  const [urlPath, setUrlPath] = useState<any>();
+  const linkRef = useRef<HTMLAnchorElement | null>(null);
   const { title, detail, payOrder, user } = props.location.state;
   const children = user?.subscriber_info?.children || [{
     student_userid: user?.userId,
@@ -23,6 +25,9 @@ const OrderDetails: React.FC = (props: any) => {
     setOrderInfo(payOrder);
     setDeadline(orderTime + 1000 * 60 * 30);
   }, [payOrder]);
+  useEffect(()=>{
+    linkRef.current?.click();
+  },[urlPath]);
   const onchanges = (e: { stopPropagation: () => void; }) => {
     e.stopPropagation()
   };
@@ -36,7 +41,7 @@ const OrderDetails: React.FC = (props: any) => {
       amount: orderInfo.DDFY,
     });
     if (res.status === 'ok') {
-      window.open(res.data)
+      setUrlPath(res.data);
     }
   };
   const handleCancle = async () => {
@@ -101,8 +106,9 @@ const OrderDetails: React.FC = (props: any) => {
       </div>
       {
         orderInfo.DDZT === '待付款' ? <div className={styles.footer}>
-          <span>实付:</span><span>￥{detail.FY}</span>
+          <span>实付:</span><span>￥{orderInfo.DDFY}</span>
           <button className={styles.btn} onClick={handlePay}>去支付</button>
+          <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: urlPath }}></Link>
         </div> : ''
       }
       {orderInfo.DDZT === '已付款' ?
