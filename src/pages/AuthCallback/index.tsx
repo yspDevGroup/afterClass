@@ -1,30 +1,25 @@
-/* eslint-disable no-debugger */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /*
  * @description: OAuth认证通过后的跳转页面
  * @author: zpl
  * @Date: 2021-05-13 09:08:04
- * @LastEditTime: 2021-07-01 09:52:47
+ * @LastEditTime: 2021-07-05 11:29:11
  * @LastEditors: zpl
  */
 import React, { useCallback, useEffect } from 'react';
-import { Link, history, useModel } from 'umi';
-import { Button, Result, Spin } from 'antd';
+import { history, useModel } from 'umi';
+import { Result, Spin } from 'antd';
 import { getPageQuery } from '@/utils/utils';
 
 const query = getPageQuery();
 
-// const backToLogin = (
-//   <Link to="/user/login">
-//     <Button type="primary">返回登录</Button>
-//   </Link>
-// );
-// const toHome = (
-//   <Link to="/">
-//     <Button type="primary">进入主页</Button>
-//   </Link>
-// );
+const goto = () => {
+  if (!history) return;
+  setTimeout(() => {
+    history.replace('/');
+  }, 10);
+};
+
 const Comp = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
@@ -32,25 +27,6 @@ const Comp = () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
       setInitialState(initialState ? { ...initialState, currentUser: userInfo } : undefined);
-      setTimeout(() => {
-        // eslint-disable-next-line no-console
-        console.log('userInfo', userInfo);
-        switch (userInfo.auth) {
-          case '管理员':
-            history.replace('/courseManagements');
-            break;
-          case '老师':
-            history.replace('/teacher/home');
-            break;
-          case '家长':
-            history.replace('/parent/home');
-            break;
-          default:
-            // TODO: 后期需要修改为跳转向非法访问提示页面
-            history.replace('/courseManagements');
-            break;
-        }
-      }, 10);
     }
   }, []);
 
@@ -60,6 +36,9 @@ const Comp = () => {
       if (token) {
         localStorage.setItem('token', Array.isArray(token) ? token.toString() : token);
         await fetchUserInfo();
+        goto();
+      } else {
+        localStorage.removeItem('token');
       }
     })();
   }, [query]);

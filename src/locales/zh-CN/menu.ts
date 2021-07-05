@@ -1,7 +1,6 @@
 export default {
   'menu.home': '首页',
   'menu.login': '登录',
-  'menu.homePage': '首页',
   'menu.basicalSettings': '基本信息管理',
   'menu.basicalSettings.roomManagement': '场地维护',
   'menu.basicalSettings.periodMaintenance': '时段维护',
@@ -13,7 +12,7 @@ export default {
   'menu.courseScheduling': '排课管理',
   'menu.noticenotice': '通知公告',
   'menu.parent': '家长端',
-  'menu.parent.home': '首页',
+  'menu.parent.home': '家长首页',
   'menu.parent.listComponent': '列表组件',
   'menu.parent.courseDetails': '课程详情',
   'menu.parent.orderDetails': '订单详情',
@@ -26,6 +25,6 @@ export default {
   'menu.notice': '公告',
   'menu.details': '公告详情',
   'menu.orderInquiry': '订单查询',
-  'menu.parent.announcement':'公告详情',
-  "menu.parent.emptyArticle":'报名通知'
+  'menu.parent.announcement': '公告详情',
+  'menu.parent.emptyArticle': '报名通知',
 };

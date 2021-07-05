@@ -7,24 +7,10 @@ import Footer from '@/components/Footer';
 import type { ResponseError } from 'umi-request';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import { envjudge } from './utils/utils';
+import { getLoginPath } from './utils/utils';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
-let loginPath: string;
-switch (envjudge()) {
-  case 'com-wx-mobile': // 手机端企业微信
-  case 'wx-mobile': // 手机端微信
-  case 'com-wx-pc': // PC端企业微信
-  case 'wx-pc': // PC端微信
-    loginPath = `${ENV_backUrl}/wechat/platAuth`;
-    break;
-  case 'mobile': // 手机
-  case 'pc': // PC
-  default:
-    loginPath = '/user/login'; // `${ENV_backUrl}/auth/wechat`;
-    break;
-}
-// const loginPath = 'http://api.xianyunshipei.com/auth/wechat'; // '/user/login';
+const loginPath: string = getLoginPath();
 const authCallbackPath = '/auth_callback';
 // let currentToken: string;
 

@@ -93,6 +93,25 @@ export const envjudge = () => {
   }
   return 'pc'; // PC
 };
+
+export const getLoginPath = () => {
+  let loginPath: string;
+  switch (envjudge()) {
+    case 'com-wx-mobile': // 手机端企业微信
+    case 'wx-mobile': // 手机端微信
+    case 'com-wx-pc': // PC端企业微信
+    case 'wx-pc': // PC端微信
+      loginPath = `${ENV_backUrl}/wechat/platAuth`;
+      break;
+    case 'mobile': // 手机
+    case 'pc': // PC
+    default:
+      loginPath = '/user/login'; // `${ENV_backUrl}/auth/wechat`;
+      break;
+  }
+  return loginPath;
+};
+
 /**
  * 根据路径search拼接参数获取参数对应的值
  *
@@ -104,7 +123,7 @@ export const getQueryString = (name: string) => {
   const r = decodeURI(window.location.search.substr(1)).match(regs);
   if (r != null) return unescape(r[2]);
   return null;
-}
+};
 /**
  * 根据当前时间获取学年学期
  *
@@ -120,16 +139,21 @@ export const getCurrentXQ = (list: any[]) => {
       return true;
     }
     return false;
-  })
+  });
   return currentXQ;
-}
+};
 /**
  * 根据当前时间获取移动端时段
  *
  * @export getCurrentStatus
  * @returns string
  */
-export const getCurrentStatus = (BMKSRQ: string, BMJSRQ: string, KKKSRQ: string, KKJSRQ: string) => {
+export const getCurrentStatus = (
+  BMKSRQ: string,
+  BMJSRQ: string,
+  KKKSRQ: string,
+  KKJSRQ: string,
+) => {
   let currentStatus = 'empty';
   const today = new Date();
   const BMbegin = new Date(BMKSRQ);
@@ -144,7 +168,7 @@ export const getCurrentStatus = (BMKSRQ: string, BMJSRQ: string, KKKSRQ: string,
       // if (nowSta > 2) {
       //   currentStatus = 'noTips';
       // } else {
-        currentStatus = 'enrolling';
+      currentStatus = 'enrolling';
       // }
     }
   } else if (BMbegin <= today && today <= KKbegin) {
@@ -158,4 +182,4 @@ export const getCurrentStatus = (BMKSRQ: string, BMJSRQ: string, KKKSRQ: string,
     }
   }
   return currentStatus;
-}
+};
