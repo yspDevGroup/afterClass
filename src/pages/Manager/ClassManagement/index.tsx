@@ -27,6 +27,7 @@ import AddCourse from './components/AddCourse';
 import CourseType from './components/CourseType';
 import ClassStart from './components/ClassStart';
 import type { CourseItem, TableListParams } from './data';
+import ApplicantInfoTable from './components/ApplicantInfoTable';
 // import WWOpenDataCom from './components/WWOpenDataCom';
 const { Option } = Select;
 
@@ -48,8 +49,8 @@ const CourseManagement = () => {
   const [tips, setTips] = useState<boolean>(false);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
-  // const [bjmcValue, setBjmcValue] = useState<any>();
-  // const [kCData, setKcmcData] = useState<any>();
+  // 报名列表数据
+  const [applicantData, setApplicantData] = useState<any>([]);
 
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
@@ -60,6 +61,7 @@ const CourseManagement = () => {
   };
   // 弹框名称设定
   const [names, setnames] = useState<string>('bianji');
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -69,15 +71,26 @@ const CourseManagement = () => {
       await initWXAgentConfig(['checkJsApi']);
     })();
   }, []);
-  // useEffect(() => {
-  //   (
-  //     async ()=>{
-  //       if(xn && xq){
 
-  //       }
-  //     }
-  //   )()
-  // }, [])
+  const showModal = (record: any) => {
+    const { BJMC, XQName, KHXSBJs } = record;
+    const bmInfo: any[] = [];
+    if (KHXSBJs.length > 0) {
+      KHXSBJs.forEach((item: any) => {
+        bmInfo.push({ ...item, BJMC, XQName });
+      });
+    }
+    setApplicantData(bmInfo);
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   useEffect(() => {
     if (mcData === []) {
       return setTips(true);
@@ -282,13 +295,17 @@ const CourseManagement = () => {
       width: 100,
     },
     {
-      title: '报名人数(人)',
+      title: '报名人数',
       dataIndex: 'BMRS',
       key: 'BMRS',
       align: 'center',
       width: 100,
-      render: (text) => {
-        return <a>{text}</a>;
+      render: (text: any, record: any) => {
+        return (
+          <a onClick={() => showModal(record)}>
+            {record.KHXSBJs.length}/{record.BJRS}
+          </a>
+        );
       },
     },
     // {
@@ -484,6 +501,16 @@ const CourseManagement = () => {
           open={tips}
           colse={clstips}
         />
+        <Modal
+          title="报名列表"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+          width="40vw"
+        >
+          <ApplicantInfoTable dataSource={applicantData} />
+        </Modal>
         <Modal
           visible={openes}
           onCancel={showmodal}
