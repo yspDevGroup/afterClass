@@ -203,7 +203,7 @@ const AddArranging: FC<PropsType> = (props) => {
     if (Bj || index) {
       try {
         const data = [...excelTableValue].concat(sameClassDatas);
-        const bjIdData: any[] = [];
+        const bjIdData: any[] = [index];
         data.forEach((item: any) => {
           bjIdData.push(item.KHBJSJId);
         });
@@ -323,7 +323,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
         // 查询房间占用情况
         const Fjplan = await getFJPlan({
-          lxId: cdlxId === undefined ? '' : cdlxId,
+          lxId: cdlxId,
           fjId: formValues?.CDMC,
           xn,
           xq,

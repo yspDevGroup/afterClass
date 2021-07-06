@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import type { FC } from 'react';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
@@ -171,10 +171,9 @@ const Index: FC<IndexPropsType> = ({
     saturday: '6',
     sunday: '0',
   };
-  // useEffect(() => {
-  //   const newData = stateTableData ? [...stateTableData] : [...dataSource];
-  //   setStateTableData(newData);
-  // }, [chosenData])
+  useEffect(() => {
+    setStateTableData(dataSource);
+  }, [dataSource]);
   const onTdClick = (rowKey: number, colKey: number) => {
     const newData = stateTableData ? [...stateTableData] : [...dataSource];
     const colItem = columns[colKey] || {};
