@@ -219,6 +219,17 @@ const CourseDetails: React.FC = () => {
       return <span>{values}</span>
     })
   }
+  const baomzt = (BMJSSJ: Date, BMKSSJ: Date) => {
+    if (BMJSSJ > new Date(nowtime) && new Date(nowtime) > BMKSSJ) {
+      setPdtj(true)
+    } else if (new Date(nowtime) > BMJSSJ) {
+      setZt(true)
+      setPdtj(false)
+    } else {
+      setZt(false)
+      setPdtj(false)
+    }
+  }
   return <>
     {
       !classid ?
@@ -232,7 +243,7 @@ const CourseDetails: React.FC = () => {
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 
             <ul>
-              <li>上课时段：{(KcDetail.KKRQ&&KcDetail.JKRQ)?`${KcDetail.KKRQ}~${KcDetail.JKRQ}`:`${KcDetail.KKRQ}~${KcDetail?.JKRQ}`}</li>
+              <li>上课时段：{KcDetail.KKRQ}~{KcDetail.JKRQ}</li>
               <li>上课地点：本校</li>
             </ul>
             <p className={styles.title}>课程简介</p>
@@ -293,15 +304,7 @@ const CourseDetails: React.FC = () => {
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date }) => {
-                        if (value.BMJSSJ > new Date(nowtime) && new Date(nowtime) > value.BMKSSJ) {
-                          setPdtj(true)
-                        } else if (new Date(nowtime) > value.BMJSSJ) {
-                          setZt(true)
-                          setPdtj(false)
-                        } else {
-                          setZt(false)
-                          setPdtj(false)
-                        }
+                        baomzt(value.BMJSSJ, value.BMKSSJ);
                         const text = `${value.BJMC}已有12人报名，共50个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         return <Radio.Button className={styles.BjInformation} value={valueName}>
@@ -316,7 +319,7 @@ const CourseDetails: React.FC = () => {
                   >  <p>我已阅读并同意<a href=''>《课后帮服务协议》</a></p></Radio>
                   {
                     pdtj ? <Button className={styles.submit} disabled={XY === false || BJ === undefined} onClick={submit} >确定并付款</Button>
-                      : <Button className={styles.submits}>课程报名{zt ? '未开始' : '已结束'}</Button>
+                      : <Button className={styles.submits}>课程报名{zt ? '已结束' : '未开始'}</Button>
                   }
 
                   <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser } }}>
@@ -350,7 +353,6 @@ const CourseDetails: React.FC = () => {
           </div>
           <div className={styles.Timetable}>
             <p className={styles.title}>
-
               <span>课程表</span>
               <span>
                 <Badge className={styles.legend} color="#45C977" text="今日" />
