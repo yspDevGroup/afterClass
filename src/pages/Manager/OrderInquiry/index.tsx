@@ -171,12 +171,12 @@ const OrderInquiry = () => {
     },
     {
       title: '学生姓名',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'XSXM',
+      key: 'XSXM',
       align: 'center',
-      render: (text: string, record: any) => {
-        return <WWOpenDataCom type="userName" openid={record.XSId} />;
-      },
+      // render: (text: string, record: any) => {
+      //   return <WWOpenDataCom type="userName" openid={record.XSId} />;
+      // },
     },
     {
       title: '订单状态',
@@ -205,8 +205,6 @@ const OrderInquiry = () => {
       xn,
       xq,
       kcmc: value,
-      page: current,
-      pageCount: pageSize,
     });
     if (resl.status === 'ok') {
       setTableLoading(false);
@@ -223,8 +221,6 @@ const OrderInquiry = () => {
       xn,
       xq,
       bjmc: value,
-      page: current,
-      pageCount: pageSize,
     });
     if (resl.status === 'ok') {
       setTableLoading(false);
@@ -238,8 +234,6 @@ const OrderInquiry = () => {
     const resl = await getAllKHXSDD({
       xn,
       xq,
-      page: currents,
-      pageCount: pageSizes,
     });
     if (resl.status === 'ok') {
       setDataSource(resl.data);
