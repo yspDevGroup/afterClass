@@ -14,6 +14,8 @@ import IconFont from '@/components/CustomIcon';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import noData from '@/assets/noData.png';
+import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState<string>();
@@ -137,7 +139,14 @@ const CourseDetails: React.FC = () => {
     fetchData();
   }, [classid])
 
-
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      await initWXAgentConfig(['checkJsApi']);
+    })();
+  }, []);
 
   useEffect(() => {
     if (courseid) {
@@ -247,7 +256,7 @@ const CourseDetails: React.FC = () => {
                         return <span>{values.FJSJ.FJMC},</span>
                       })
                     }
-                    班主任：{value.ZJS},副班：{value.FJS}。</li>
+                     班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />},副班：{<WWOpenDataCom type="userName" openid={value.FJS} />}。</li>
                 })
               }
             </ul>
@@ -328,7 +337,7 @@ const CourseDetails: React.FC = () => {
                   </div>
                 }) : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
                     <img src={noData} alt="暂无数据" />
-                    <h4 style={{ color: '#999' }}>暂无已选课程</h4>
+                    <h4 style={{ color: '#999' }}>暂无课表信息</h4>
                   </div>
               }
             </div>

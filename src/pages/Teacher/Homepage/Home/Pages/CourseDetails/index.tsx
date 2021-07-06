@@ -268,7 +268,7 @@ const CourseDetails: React.FC = () => {
                         return <span>{values.FJSJ.FJMC},</span>
                       })
                     }
-                    班主任：{value.ZJS},副班：{value.FJS}。</li>
+                    班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />},副班：{<WWOpenDataCom type="userName" openid={value.FJS} />}。</li>
                 })
               }
             </ul>
@@ -347,7 +347,7 @@ const CourseDetails: React.FC = () => {
                   </div>
                 }) : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
                     <img src={noData} alt="暂无数据" />
-                    <h4 style={{ color: '#999' }}>暂无排课日期</h4>
+                    <h4 style={{ color: '#999' }}>暂无课表信息</h4>
                   </div>
               }
             </div>

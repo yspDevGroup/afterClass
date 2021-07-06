@@ -27,4 +27,6 @@ export default {
   'menu.orderInquiry': '订单查询',
   'menu.parent.announcement': '公告详情',
   'menu.parent.emptyArticle': '报名通知',
+  'menu.announcement': '公告',
+  "menu.emptyArticle": '服务公告',
 };
