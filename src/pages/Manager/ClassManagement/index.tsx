@@ -356,11 +356,10 @@ const CourseManagement = () => {
       render: (_, record) => {
         const Url = `/courseScheduling?courseId=${record.id}&xn=${xn}&xq=${xq}`;
         if (record.BJZT === '待发布' || record.BJZT === '已下架') {
-          return (
-            <a>
-              <Link to={Url}>排课</Link>
-            </a>
-          );
+          if (record.KHPKSJs && record.KHPKSJs?.length === 0) {
+            return <Link to={Url}>未排课</Link>;
+          }
+          return <Link to={Url}>已排课</Link>;
         }
         return <>已排课</>;
       },

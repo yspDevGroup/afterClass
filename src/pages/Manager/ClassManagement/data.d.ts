@@ -30,6 +30,7 @@ export type CourseItem = {
   ZJSName?: string;
   NJSName?: string;
   userid?: string;
+  KHPKSJs?: any[];
 };
 
 /**
