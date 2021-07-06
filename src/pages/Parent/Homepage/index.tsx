@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Tabs } from 'antd';
 import { useModel, history, } from 'umi';
 import Home from './Home';
@@ -18,6 +18,9 @@ const PersonalHomepage = () => {
   const [activeKey, setActiveKey] = useState<string>('index');
   const [courseStatus, setCourseStatus] = useState<string>('');
   const [dataSource, setDataSource] = useState<any>();
+  const homeRef = useRef(null);
+  const studyRef = useRef(null);
+  const mineRef = useRef(null);
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
@@ -58,50 +61,56 @@ const PersonalHomepage = () => {
     <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
         setActiveKey(key);
+        if (homeRef.current)
+          (homeRef.current as unknown as HTMLElement).scrollTop = 0;
+        if (studyRef.current)
+          (studyRef.current as unknown as HTMLElement).scrollTop = 0;
+        if (mineRef.current)
+          (mineRef.current as unknown as HTMLElement).scrollTop = 0;
       }}>
-        <TabPane tab={
-          <span>
-            <IconFont
-              style={{ 'fontSize': '16px' }}
-              type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
-            />
-            首页
-          </span>
-        } key="index">
-          <div style={{ height: '100%', overflowY: 'auto' }} >
-            <Home />
-          </div>
-        </TabPane>
-        {courseStatus === 'empty' ? '' : <TabPane tab={
-          <span>
-            <IconFont
-              style={{ 'fontSize': '16px' }}
-              type={activeKey === 'study' ? 'icon-xuexiyuandifill' : 'icon-xuexiyuandi'}
-            />
-            学习园地
-          </span>
-        } key="study">
-          <div style={{ height: '100%', overflowY: 'auto' }} >
-            <Study />
-          </div>
-        </TabPane>}
-        <TabPane tab={
-          <span>
-            <IconFont
-              style={{ 'fontSize': '16px' }}
-              type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
-            />
-            我的
-          </span>
-        } key="mine">
-          <div style={{ height: '100%', overflowY: 'auto' }} >
-            <Mine />
-          </div>
-        </TabPane>
+      <TabPane tab={
+        <span>
+          <IconFont
+            style={{ 'fontSize': '16px' }}
+            type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
+          />
+          首页
+        </span>
+      } key="index">
+        <div style={{ height: '100%', overflowY: 'auto' }} ref={homeRef} >
+          <Home />
+        </div>
+      </TabPane>
+      {courseStatus === 'empty' ? '' : <TabPane tab={
+        <span>
+          <IconFont
+            style={{ 'fontSize': '16px' }}
+            type={activeKey === 'study' ? 'icon-xuexiyuandifill' : 'icon-xuexiyuandi'}
+          />
+          学习园地
+        </span>
+      } key="study">
+        <div style={{ height: '100%', overflowY: 'auto' }} ref={studyRef} >
+          <Study />
+        </div>
+      </TabPane>}
+      <TabPane tab={
+        <span>
+          <IconFont
+            style={{ 'fontSize': '16px' }}
+            type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
+          />
+          我的
+        </span>
+      } key="mine">
+        <div style={{ height: '100%', overflowY: 'auto' }} ref={mineRef} >
+          <Mine />
+        </div>
+      </TabPane>
       </Tabs>
 
     </myContext.Provider>
-  </div>;
+  </div >;
 };
 
 export default PersonalHomepage;

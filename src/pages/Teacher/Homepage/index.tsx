@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useModel, history } from 'umi';
 import { Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
@@ -19,6 +19,9 @@ const PersonalHomepage = () => {
   const { currentUser } = initialState || {};
   const [courseStatus, setCourseStatus] = useState<string>('');
   const [dataSource, setDataSource] = useState<any>();
+  const homeRef = useRef(null);
+  const eduRef = useRef(null);
+  const mineRef = useRef(null);
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
@@ -29,7 +32,7 @@ const PersonalHomepage = () => {
         xq: XQ,
       });
       if (res.status === 'ok' && res.data) {
-        setDataSource(res.data);	
+        setDataSource(res.data);
         const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
         if (bmkssj && bmjssj && skkssj && skjssj) {
           const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
@@ -59,6 +62,12 @@ const PersonalHomepage = () => {
           className={styles.menuTab}
           onTabClick={(key: string) => {
             setActiveKey(key);
+            if (homeRef.current)
+              (homeRef.current as unknown as HTMLElement).scrollTop = 0;
+            if (eduRef.current)
+              (eduRef.current as unknown as HTMLElement).scrollTop = 0;
+            if (mineRef.current)
+              (mineRef.current as unknown as HTMLElement).scrollTop = 0;
           }}
         >
           <TabPane
@@ -73,7 +82,9 @@ const PersonalHomepage = () => {
             }
             key="index"
           >
-            <Home />
+            <div style={{ height: '100%', overflowY: 'auto' }} ref={homeRef} >
+              <Home />
+            </div>
           </TabPane>
           <TabPane
             tab={
@@ -89,7 +100,10 @@ const PersonalHomepage = () => {
             }
             key="education"
           >
-            <Education />
+            <div style={{ height: '100%', overflowY: 'auto' }} ref={eduRef} >
+              <Education />
+              </div>
+
           </TabPane>
           <TabPane
             tab={
@@ -103,7 +117,9 @@ const PersonalHomepage = () => {
             }
             key="mine"
           >
+          <div style={{ height: '100%', overflowY: 'auto' }} ref={mineRef} >
             <Mine />
+            </div>
           </TabPane>
         </Tabs>
       </myContext.Provider>
