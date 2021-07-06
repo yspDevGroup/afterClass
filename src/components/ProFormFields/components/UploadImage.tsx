@@ -42,7 +42,7 @@ const UploadImage = (props: UploadImageProps) => {
     <div className={styles.uploadStyles}>
       {imageUrl ? (
         <div style={{ marginRight: 16 }}>
-          <Image width={110} height={130} src={imageUrl} />
+          <Image width={110} height={70} src={imageUrl} />
         </div>
       ) : (
         <div className={styles.defImgStyles}>

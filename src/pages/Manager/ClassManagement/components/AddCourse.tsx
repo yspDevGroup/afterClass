@@ -213,7 +213,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '班级名称：',
       name: 'BJMC',
       key: 'BJMC',
-      readonly,
+      disabled:readonly,
       rules: [{ required: true, message: '请填写班级名称' }],
       fieldProps: {
         autocomplete: 'off',
@@ -221,7 +221,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'select',
-      readonly,
+      disabled:readonly,
       label: '课程名称：',
       name: 'KHKCSJId',
       key: 'KHKCSJId',
@@ -232,7 +232,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'inputNumber',
-      readonly,
+      disabled:readonly,
       label: '课时数：',
       name: 'KSS',
       key: 'KSS',
@@ -244,7 +244,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'inputNumber',
-      readonly,
+      disabled:readonly,
       label: '班级人数：',
       name: 'BJRS',
       key: 'BJRS',
@@ -252,7 +252,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'group',
-      readonly,
+      disabled:readonly,
       groupItems: [
         {
           type: 'input',
@@ -269,7 +269,7 @@ const AddCourse: FC<AddCourseProps> = ({
           label: '费用：',
           name: 'FY',
           key: 'FY',
-          readonly,
+          disabled:readonly,
           rules: [{ required: true, message: '请填写费用' }],
           fieldProps: {
             autocomplete: 'off',
@@ -282,7 +282,7 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'XQ',
       key: 'XQ',
       label: '所属校区:',
-      readonly,
+      disabled:readonly,
       rules: [{ required: true, message: '请填写所属校区' }],
       fieldProps: {
         options: campus,
@@ -310,18 +310,18 @@ const AddCourse: FC<AddCourseProps> = ({
           setNJLabelItem(njsIabel);
         },
       },
-      readonly,
+      disabled:readonly,
     },
     {
       type: 'group',
-      readonly,
+      disabled:readonly,
       groupItems: [
         {
           type: 'select',
           label: '主班：',
           name: 'ZJS',
           key: 'ZJS',
-          readonly,
+          disabled:readonly,
           rules: [{ required: true, message: '请选择班主任' }],
           fieldProps: {
             virtual: false,
@@ -338,7 +338,7 @@ const AddCourse: FC<AddCourseProps> = ({
           label: '副班：(多选)',
           name: 'FJS',
           key: 'FJS',
-          readonly,
+          disabled:readonly,
           rules: [{ required: true, message: '请选择副班主任' }],
           fieldProps: {
             mode: 'multiple',
@@ -364,7 +364,7 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'div',
       key: 'div',
       label: `单独设置报名时段：`,
-      readonly,
+      disabled:readonly,
       lineItem: [
         {
           type: 'switch',
@@ -386,7 +386,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: `报名时段:`,
       name: 'BMSD',
       key: 'BMSD',
-      readonly,
+      disabled:readonly,
       width: '100%',
       hidden: baoming,
       fieldProps: {
@@ -406,12 +406,12 @@ const AddCourse: FC<AddCourseProps> = ({
     {
       type: 'div',
       key: 'div1',
-      readonly,
+      disabled:readonly,
       label: `单独设置上课时段：`,
       lineItem: [
         {
           type: 'switch',
-          readonly,
+          disabled:readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -431,7 +431,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'SKSD',
       width: '100%',
       hidden: kaike,
-      readonly,
+      disabled:readonly,
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
@@ -444,7 +444,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '封面：',
       name: 'KCTP',
       key: 'KCTP',
-      readonly,
+      disabled:readonly,
       imagename: 'image',
       upurl: '/api/upload/uploadFile',
       imageurl: imageUrl || formValues?.KCTP,
@@ -453,7 +453,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'textArea',
-      readonly,
+      disabled:readonly,
       label: '简介：',
       name: 'KCMS',
       key: 'KCMS',
@@ -470,6 +470,7 @@ const AddCourse: FC<AddCourseProps> = ({
         visible={visible}
         className={styles.courseStyles}
         destroyOnClose={true}
+        maskClosable={false}
         bodyStyle={{ paddingBottom: 80 }}
         footer={
           names === 'chakan' ? null : (

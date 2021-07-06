@@ -17,7 +17,6 @@ import noData from '@/assets/noData.png';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
-
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState<string>();
   const [FY, setFY] = useState<number>();
@@ -247,7 +246,6 @@ const CourseDetails: React.FC = () => {
            
             <ul>
               <li>上课时段：{KcDetail?.KKRQ}~{KcDetail?.JKRQ}</li>
-              {console.log(555)}
               <li>上课地点：本校</li>
             </ul>
             <p className={styles.title}>课程简介</p>

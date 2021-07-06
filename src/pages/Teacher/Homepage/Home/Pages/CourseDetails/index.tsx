@@ -43,9 +43,7 @@ const CourseDetails: React.FC = () => {
       }
       await initWXAgentConfig(['checkJsApi']);
     })();
-   
   }, []);
-
 
   const Learning = async (bjid: any, attend: any[]) => {
     const res1 = await getAllKHXSCQ(
@@ -183,8 +181,6 @@ const CourseDetails: React.FC = () => {
       setCurrentDate(myDate);
     }
   }, [courseid]);
-
-  
   useEffect(() => {
     if (orderInfo)
       linkRef.current?.click();
@@ -276,7 +272,7 @@ const CourseDetails: React.FC = () => {
                       班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />}
                     </span>
                       ,
-                      <span className={styles.fbname}>
+                      <span className={styles.bzrname}>
                       副班：{
                         value.FJS.split(',').map((item: any) => {
                           return <WWOpenDataCom type="userName" openid={item} />

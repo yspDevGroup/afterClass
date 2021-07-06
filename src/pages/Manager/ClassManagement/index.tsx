@@ -35,11 +35,9 @@ const { Option } = Select;
 const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
-  const [openes, setopenes] = useState(false);
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [readonly, stereadonly] = useState<boolean>(false);
-  const [moduletype, setmoduletype] = useState<string>('crourse');
   const [xn, setxn] = useState<string>('');
   const [xq, setxq] = useState<string>('');
   const [kcId, setkcId] = useState<string>('');
@@ -209,13 +207,6 @@ const CourseManagement = () => {
     }
     actionRef.current?.reload();
   };
-  // 获取弹框标题
-  const getTitle = () => {
-    if (moduletype === 'crourse') {
-      return '课程类型维护';
-    }
-    return '开班信息';
-  };
 
   const showDrawer = () => {
     setVisible(true);
@@ -254,15 +245,7 @@ const CourseManagement = () => {
   const onClose = () => {
     setVisible(false);
   };
-  const maintain = (type: string) => {
-    setopenes(true);
-    setmoduletype(type);
-  };
-  const showmodal = () => {
-    setopenes(false);
-  };
   const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-
   const columns: ProColumns<CourseItem>[] = [
     // {
     //   title: '序号',
@@ -413,7 +396,6 @@ const CourseManagement = () => {
             <ActionBar
               record={record}
               handleEdit={handleEdit}
-              maintain={maintain}
               actionRef={actionRef}
             />
           </>
@@ -534,28 +516,6 @@ const CourseManagement = () => {
           width="40vw"
         >
           <ApplicantInfoTable dataSource={applicantData} />
-        </Modal>
-        <Modal
-          visible={openes}
-          onCancel={showmodal}
-          title={getTitle()}
-          centered
-          bodyStyle={{
-            maxHeight: '65vh',
-            overflowY: 'auto',
-          }}
-          style={{ maxHeight: '430px' }}
-          width="35vw"
-          footer={[
-            <Button key="back" onClick={() => setopenes(false)}>
-              取消
-            </Button>,
-            <Button key="submit" type="primary">
-              确定
-            </Button>,
-          ]}
-        >
-          {moduletype === 'crourse' ? <CourseType /> : <ClassStart />}
         </Modal>
       </PageContainer>
     </>

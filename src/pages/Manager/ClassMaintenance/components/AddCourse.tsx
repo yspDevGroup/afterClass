@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
 import { useEffect, useState } from 'react';
@@ -152,14 +153,14 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '班级名称：',
       name: 'BJMC',
       key: 'BJMC',
-      readonly,
+      disabled: readonly,
       fieldProps: {
         autocomplete: 'off',
       },
     },
     {
       type: 'select',
-      readonly,
+      disabled: readonly,
       label: '课程名称：',
       name: 'KHKCSJId',
       key: 'KHKCSJId',
@@ -170,7 +171,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'inputNumber',
-      readonly,
+      disabled: readonly,
       label: '课时数：',
       name: 'KSS',
       key: 'KSS',
@@ -181,7 +182,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'inputNumber',
-      readonly,
+      disabled: readonly,
       label: '班级人数：',
       name: 'BJRS',
       key: 'BJRS',
@@ -206,7 +207,7 @@ const AddCourse: FC<AddCourseProps> = ({
           label: '费用：',
           name: 'FY',
           key: 'FY',
-          readonly,
+          disabled: readonly,
           fieldProps: {
             autocomplete: 'off',
           },
@@ -222,7 +223,7 @@ const AddCourse: FC<AddCourseProps> = ({
           label: '主班：',
           name: 'ZJS',
           key: 'ZJS',
-          readonly,
+          disabled: readonly,
           fieldProps: {
             virtual: false,
             options: teacherData.map((item) => {
@@ -238,7 +239,7 @@ const AddCourse: FC<AddCourseProps> = ({
           label: '副班：(多选)',
           name: 'FJS',
           key: 'FJS',
-          readonly,
+          disabled: readonly,
           fieldProps: {
             mode: 'multiple',
             virtual: false,
@@ -257,7 +258,7 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'XQ',
       key: 'XQ',
       label: '所属校区',
-      readonly,
+      disabled: readonly,
       fieldProps: {
         options: campus,
         onChange(value: any) {
@@ -274,7 +275,7 @@ const AddCourse: FC<AddCourseProps> = ({
         mode: 'multiple',
         options: grade ? grade[xQItem] : [],
       },
-      readonly,
+      disabled: readonly,
     },
     signup.length > 0
       ? {
@@ -287,11 +288,11 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'div',
       key: 'div',
       label: `单独设置报名时段：`,
-      readonly,
+      disabled: readonly,
       lineItem: [
         {
           type: 'switch',
-          readonly,
+          disabled: readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -312,7 +313,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'BMSD',
       width: '100%',
       hidden: baoming,
-      readonly,
+      disabled: readonly,
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
@@ -331,11 +332,11 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'div',
       key: 'div1',
       label: `单独设置上课时段：`,
-      readonly,
+      disabled: readonly,
       lineItem: [
         {
           type: 'switch',
-          readonly,
+          disabled: readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -351,7 +352,7 @@ const AddCourse: FC<AddCourseProps> = ({
     {
       type: 'dateRange',
       label: '上课时间:',
-      readonly,
+      disabled: readonly,
       name: 'SKSD',
       key: 'SKSD',
       width: '100%',
@@ -368,13 +369,13 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '封面：',
       name: 'KCTP',
       key: 'KCTP',
-      readonly,
+      disabled: readonly,
       upurl: '',
       imageurl: formValues?.KCTP,
     },
     {
       type: 'textArea',
-      readonly,
+      disabled: readonly,
       label: '简介：',
       name: 'KCMS',
       key: 'KCMS',
