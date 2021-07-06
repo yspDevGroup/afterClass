@@ -263,7 +263,7 @@ const CourseDetails: React.FC = () => {
                       <span style={{ lineHeight: "19px", height: 19 }}>
                       副班：{
                         value.FJS.split(',').map((item: any) => {
-                          return <WWOpenDataCom type="userName" openid={item} />
+                          return <span style={{marginRight:'5px'}}><WWOpenDataCom type="userName" openid={item} /></span>
                         })
                       }。
                       </span>
@@ -320,7 +320,7 @@ const CourseDetails: React.FC = () => {
                       }</li>
                       <li>总课时：{value.KSS}</li>
                       <li>班级：{value.BJMC}</li>
-                      <li>学生：{Student}</li>
+                      <li>学生：<WWOpenDataCom type="userName" openid={Student} /></li>
                     </>
                   }
                   return ''

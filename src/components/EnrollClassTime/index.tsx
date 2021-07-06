@@ -2,8 +2,8 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-22 11:13:07
- * @LastEditTime: 2021-06-26 18:52:54
- * @LastEditors: txx
+ * @,@LastEditTime: ,: 2021-07-06 15:50:17
+ * @,@LastEditors: ,: Please set LastEditors
  */
 import { useContext, useEffect, useState } from 'react';
 import styles from "./index.less";
@@ -12,6 +12,7 @@ import type { ListData } from '../ListComponent/data';
 import myContext from '@/utils/MyContext';
 import TimeRight from './TimeRight';
 import noData1 from '@/assets/noData1.png';
+import moment from 'moment';
 
 const EnrollClassTime = (props: { teacher?: boolean }) => {
   const { teacher = false } = props;
@@ -89,8 +90,8 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
       return (<div>
         {teacher === false ?
           (<><div className={styles.enrollText}>课后服务课程报名开始了！</div>
-            <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`}</div></>)
-          : <div className={styles.enrollText}>课后服务课程将于{`${skkssj}`}正式开课！</div>}
+            <div className={styles.enrollDate}>选课时间：{`${moment(bmkssj).format('YYYY.MM.DD')}—${moment(bmjssj).format('YYYY.MM.DD')}`}</div></>)
+          : <div className={styles.enrollText}>课后服务课程将于{`${moment(skkssj).format('YYYY.MM.DD')}`}正式开课！</div>}
       </div>);
       break;
     case 'education':
@@ -98,7 +99,7 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
       return (<div>
         {teacher === false ? <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /> </div> : <></>}
         <><div className={styles.enrollText}>课后服务课程已正式开课！</div>
-          {courseStatus === 'education' ? <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div> : ''}
+          {courseStatus === 'education' ? <div className={styles.enrollDate}>开课时间：{`${moment(skkssj).format('YYYY.MM.DD')}—${moment(skjssj).format('YYYY.MM.DD')}`} </div> : ''}
           {teacher === false ? '' : <ListComp listData={datasourse} cls={styles.todayImg} />}
         </>
       </div>);
@@ -109,11 +110,11 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
           (<>
             <div><ListComp listData={datasourse} cls={styles.todayNOImg} /></div>
             <div className={styles.enrollText}>课后服务课程报名开始了！</div>
-            <div className={styles.enrollDate}>选课时间：{`${bmkssj}—${bmjssj}`} </div>
+            <div className={styles.enrollDate}>选课时间：{`${moment(bmkssj).format('YYYY.MM.DD')}—${moment(bmjssj).format('YYYY.MM.DD')}`}</div>
           </>)
           : <>
             <div className={styles.enrollText}>课后服务课程已正式开课！</div>
-            <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div>
+            <div className={styles.enrollDate}>开课时间：{`${moment(skkssj).format('YYYY.MM.DD')}—${moment(skjssj).format('YYYY.MM.DD')}`} </div>
             <div><ListComp listData={datasourse} cls={styles.todayImg} /></div>
           </>}
       </div>);
@@ -122,8 +123,8 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
       return (<div>
         {teacher === false ?
           (<><div className={styles.enrollText}>课后服务课程报名已结束！</div>
-            <div className={styles.enrollDate}>开课时间：{`${skkssj}—${skjssj}`} </div></>)
-          : <div className={styles.enrollText}>课后服务课程将于{`${skkssj}`}正式开课！</div>}
+            <div className={styles.enrollDate}>开课时间：{`${moment(skkssj).format('YYYY.MM.DD')}—${moment(skjssj).format('YYYY.MM.DD')}`} </div></>)
+          : <div className={styles.enrollText}>课后服务课程将于{`${moment(skkssj).format('YYYY.MM.DD')}`}正式开课！</div>}
       </div>);
       break;
     default:
