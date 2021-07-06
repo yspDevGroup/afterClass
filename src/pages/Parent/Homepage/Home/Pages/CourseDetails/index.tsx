@@ -57,7 +57,9 @@ const CourseDetails: React.FC = () => {
     if (res1.status === 'ok' && res1.data) {
       const classbegins: any[] = [];
       res1.data.forEach((item: any) => {
+        console.log(222)
         const datex = DateRange(item.KHBJSJ.KKRQ, item.KHBJSJ.JKRQ)
+        console.log(223)
         datex.forEach((record: any) => {
           for (let i = 0; i < attend.length; i += 1) {
             if (Week(record) === attend[i] && !classbegins.includes(record)) {
@@ -234,6 +236,7 @@ const CourseDetails: React.FC = () => {
     {
       !classid ?
         <div className={styles.CourseDetails}>
+          {console.log(444)}
           <div className={styles.wrap}>
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
@@ -241,9 +244,10 @@ const CourseDetails: React.FC = () => {
                 <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px' }} />
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
-
+           
             <ul>
-              <li>上课时段：{KcDetail.KKRQ}~{KcDetail.JKRQ}</li>
+              <li>上课时段：{KcDetail?.KKRQ}~{KcDetail?.JKRQ}</li>
+              {console.log(555)}
               <li>上课地点：本校</li>
             </ul>
             <p className={styles.title}>课程简介</p>
@@ -337,6 +341,7 @@ const CourseDetails: React.FC = () => {
               {
                 KcDetail?.KHBJSJs?.map((value: { id: string, KSS: string, KHPKSJs: any, KKRQ: string, JKRQ: string, BJMC: string }) => {
                   if (value.id === classid) {
+                    console.log(666)
                     return <> <li>上课时段：{value.KKRQ}~{value.JKRQ}</li>
                       <li> 上课地点：{
                         tempfun(value.KHPKSJs)
