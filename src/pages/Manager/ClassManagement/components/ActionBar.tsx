@@ -18,10 +18,10 @@ const ActionBar = (props: propstype) => {
   const { handleEdit, record, maintain, actionRef } = props;
   const shelf = (recorde: any) => {
     if (recorde.KHXSBJs.length === 0) {
-      recorde.BJZT = '已下架';
-      recorde.BMKSSJ = new Date(recorde.BMKSSJ);
-      recorde.BMJSSJ = new Date(recorde.BMJSSJ);
-      const res = updateKHBJSJ({ id: recorde.id }, recorde);
+      // recorde.BJZT = '已下架';
+      // recorde.BMKSSJ = new Date(recorde.BMKSSJ);
+      // recorde.BMJSSJ = new Date(recorde.BMJSSJ);
+      const res = updateKHBJSJ({ id: recorde.id }, { BJZT: '已下架' });
       new Promise((resolve) => {
         resolve(res);
       }).then((data: any) => {
@@ -40,10 +40,10 @@ const ActionBar = (props: propstype) => {
     }
   };
   const release = (records: any) => {
-    records.BJZT = '已发布';
-    records.BMKSSJ = new Date(records.BMKSSJ);
-    records.BMJSSJ = new Date(records.BMJSSJ);
-    const res = updateKHBJSJ({ id: records.id }, records);
+    // records.BJZT = '已发布';
+    // records.BMKSSJ = new Date(records.BMKSSJ);
+    // records.BMJSSJ = new Date(records.BMJSSJ);
+    const res = updateKHBJSJ({ id: records.id }, { BJZT: '已发布' });
     new Promise((resolve) => {
       resolve(res);
     }).then((data: any) => {
