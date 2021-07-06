@@ -124,13 +124,17 @@ export const getQueryString = (name: string) => {
   if (r != null) return unescape(r[2]);
   return null;
 };
+
 /**
  * 根据当前时间获取学年学期
  *
- * @export getCurrentXQ
- * @returns currentXQ || null
+ * @param {API.XNXQ[]} list
+ * @return {*}  {(API.XNXQ | null)}
  */
-export const getCurrentXQ = (list: any[]) => {
+export const getCurrentXQ = (list: API.XNXQ[]): API.XNXQ | null => {
+  if (!list.length) {
+    return null;
+  }
   const today = new Date();
   const currentXQ = list.find((xq: any) => {
     const begin = new Date(xq.KSRQ);
@@ -140,13 +144,27 @@ export const getCurrentXQ = (list: any[]) => {
     }
     return false;
   });
-  return currentXQ;
+  if (currentXQ) {
+    return currentXQ;
+  }
+  // 未找到匹配学期时返回前一个
+  // 先按降序排序
+  const tempList = list.sort((a, b) => new Date(a.KSRQ).getTime() - new Date(b.KSRQ).getTime());
+  const previousXQ = tempList.find((xq) => new Date() >= new Date(xq.JSRQ));
+  if (previousXQ) {
+    return previousXQ;
+  }
+  return tempList[tempList.length - 1];
 };
+
 /**
  * 根据当前时间获取移动端时段
  *
- * @export getCurrentStatus
- * @returns string
+ * @param {string} BMKSRQ 报名开始时间
+ * @param {string} BMJSRQ 报名结束时间
+ * @param {string} KKKSRQ 开课开始时间
+ * @param {string} KKJSRQ 开课结束时间
+ * @return {*}
  */
 export const getCurrentStatus = (
   BMKSRQ: string,
@@ -154,7 +172,8 @@ export const getCurrentStatus = (
   KKKSRQ: string,
   KKJSRQ: string,
 ) => {
-  let currentStatus = 'empty';
+  let currentStatus: 'enroll' | 'enrolling' | 'enrolled' | 'education' | 'noTips' | 'empty' | '' =
+    '';
   const today = new Date();
   const BMbegin = new Date(BMKSRQ);
   const BMend = new Date(BMJSRQ);
