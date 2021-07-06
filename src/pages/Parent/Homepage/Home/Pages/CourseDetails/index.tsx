@@ -17,6 +17,7 @@ import noData from '@/assets/noData.png';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
+
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState<string>();
   const [FY, setFY] = useState<number>();
@@ -33,6 +34,12 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
+  const [pdtj, setPdtj] = useState<boolean>(false)
+  const [zt, setZt] = useState<boolean>(false)
+
+  const myDate = new Date();
+  const nowtime = myDate.toLocaleDateString();
+
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
     njId: '1',
@@ -225,7 +232,7 @@ const CourseDetails: React.FC = () => {
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 
             <ul>
-              <li>上课时段：{KcDetail?.KKRQ}~{KcDetail?.JKRQ}</li>
+              <li>上课时段：{(KcDetail.KKRQ&&KcDetail.JKRQ)?`${KcDetail.KKRQ}~${KcDetail.JKRQ}`:`${KcDetail.KKRQ}~${KcDetail?.JKRQ}`}</li>
               <li>上课地点：本校</li>
             </ul>
             <p className={styles.title}>课程简介</p>
@@ -263,7 +270,7 @@ const CourseDetails: React.FC = () => {
                       <span style={{ lineHeight: "19px", height: 19 }}>
                       副班：{
                         value.FJS.split(',').map((item: any) => {
-                          return <span style={{marginRight:'5px'}}><WWOpenDataCom type="userName" openid={item} /></span>
+                          return <span style={{ marginRight: '5px' }}><WWOpenDataCom type="userName" openid={item} /></span>
                         })
                       }。
                       </span>
@@ -285,7 +292,16 @@ const CourseDetails: React.FC = () => {
                   <p className={styles.title} style={{ fontSize: '14px' }}>班级</p>
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
-                      KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string }) => {
+                      KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date }) => {
+                        if (value.BMJSSJ > new Date(nowtime) && new Date(nowtime) > value.BMKSSJ) {
+                          setPdtj(true)
+                        } else if (new Date(nowtime) > value.BMJSSJ) {
+                          setZt(true)
+                          setPdtj(false)
+                        } else {
+                          setZt(false)
+                          setPdtj(false)
+                        }
                         const text = `${value.BJMC}已有12人报名，共50个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         return <Radio.Button className={styles.BjInformation} value={valueName}>
@@ -298,7 +314,11 @@ const CourseDetails: React.FC = () => {
                     className={styles.agreement}
                     onChange={() => setXY(true)}
                   >  <p>我已阅读并同意<a href=''>《课后帮服务协议》</a></p></Radio>
-                  <Button className={styles.submit} disabled={XY === false || BJ === undefined} onClick={submit} >确定并付款</Button>
+                  {
+                    pdtj ? <Button className={styles.submit} disabled={XY === false || BJ === undefined} onClick={submit} >确定并付款</Button>
+                      : <Button className={styles.submits}>课程报名{zt ? '未开始' : '已结束'}</Button>
+                  }
+
                   <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser } }}>
                   </Link>
                 </div>

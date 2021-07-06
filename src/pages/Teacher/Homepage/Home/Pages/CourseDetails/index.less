@@ -49,6 +49,14 @@
       li {
         margin-bottom: 4px;
       }
+      .bzrname *{
+        height: 19px;
+        line-height: 19px;
+      }
+      .fbname *{
+        height: 19px;
+        line-height: 19px;
+      }
     }
   }
 
@@ -133,7 +141,9 @@
 
     .BjInformation {
       border: none;
-
+      z-index: 1;
+      margin-right: 5px;
+      color: black;
       :global {
 
         .ant-radio-button {
@@ -162,13 +172,13 @@
     .submit {
       display: block;
       position: fixed;
+      border: none;
       width: calc(~ '100% - 28px');
       height: 38px;
       border-radius: 19px;
       background: #45C977;
       color: #fff;
       bottom: 14px;
-
       span {
         font-size: 16px;
       }

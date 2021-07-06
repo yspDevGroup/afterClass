@@ -98,7 +98,7 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
     case 'noTips':
       return (<div>
         {teacher === false ? <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /> </div> : <></>}
-        <><div className={styles.enrollText}>课后服务课程已正式开课！</div>
+        <><div className={styles.enrollText}>课后服务课程{teacher ? '已正式开课！' : '开课了'}</div>
           {courseStatus === 'education' ? <div className={styles.enrollDate}>开课时间：{`${moment(skkssj).format('YYYY.MM.DD')}—${moment(skjssj).format('YYYY.MM.DD')}`} </div> : ''}
           {teacher === false ? '' : <ListComp listData={datasourse} cls={styles.todayImg} />}
         </>
