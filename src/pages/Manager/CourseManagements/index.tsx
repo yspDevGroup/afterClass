@@ -24,12 +24,11 @@ const NewClassManagement = () => {
   const actionRef = useRef<ActionType>();
   const [current, setCurrent] = useState<classType>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [open, setopen] = useState<boolean>(false);
-  const [modalType, setModalType] = useState<string>('add');
+  const [open, setOpen] = useState<boolean>(false);
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [xn, setxn] = useState<string>('');
   const [xq, setxq] = useState<string>('');
-  const [readonly, stereadonly] = useState<boolean>(false);
+  const [readonly, setReadonly] = useState<boolean>(false);
   const [opentype, setOpentype] = useState(false);
   // 学年学期没有时的提示框控制
   const [kai, setkai] = useState<boolean>(false);
@@ -42,7 +41,7 @@ const NewClassManagement = () => {
   };
   const Tips = () => {
     setModalVisible(true);
-    setopen(false);
+    setOpen(false);
     setOpentype(false);
   };
   // 图片展示框
@@ -91,20 +90,11 @@ const NewClassManagement = () => {
     actionRef.current?.reload();
     return true;
   };
-  const getModelTitle = () => {
-    if (modalType === 'uphold') {
-      return '课程类型维护';
-    }
-    if (current) {
-      return '编辑信息';
-    }
-    return '新增信息';
-  };
   const handleOperation = (type: string, data?: any) => {
     if (type === 'chakan') {
-      stereadonly(true);
+      setReadonly(true);
     } else {
-      stereadonly(false);
+      setReadonly(false);
     }
     if (data) {
       let KHKCLXId: any[] = [];
@@ -124,16 +114,10 @@ const NewClassManagement = () => {
     } else {
       setCurrent(undefined);
     }
-    setModalType(type);
-    getModelTitle();
-    setopen(true);
+    setOpen(true);
   };
   const onClose = () => {
-    setopen(false);
-  };
-  const maintain = () => {
-    setModalType('uphold');
-    setModalVisible(true);
+    setOpen(false);
   };
   const cover = (img: any) => {
     setExhibition('block');
@@ -286,7 +270,7 @@ const NewClassManagement = () => {
           search={false}
           pagination={paginationConfig}
           toolBarRender={() => [
-            <Button key="wh" onClick={() => maintain()}>
+            <Button key="wh" onClick={() => setModalVisible(true)}>
               课程类型维护
             </Button>,
             <Button
@@ -323,7 +307,7 @@ const NewClassManagement = () => {
           event={Tips}
         />
         <Modal
-          title={getModelTitle()}
+          title='课程类型维护'
           destroyOnClose
           width="500px"
           visible={modalVisible}

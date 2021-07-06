@@ -8,6 +8,7 @@ type UploadImageProps = {
   imageurl?: string; // 回显地址
   upurl?: string; // 上传地址
   readonly?: boolean; // 值为true时，不展示上传按钮
+  disabled?: boolean; // 值为true时，上传按钮不可点击
   accept?: string; // 类型
   imagename?: string; // 发到后台的文件参数名
   handleImageChange?: () => void;
@@ -15,7 +16,7 @@ type UploadImageProps = {
 };
 
 const UploadImage = (props: UploadImageProps) => {
-  const { upurl, readonly, accept, imagename, data, handleImageChange } = props;
+  const { upurl, readonly, disabled, accept, imagename, data, handleImageChange } = props;
   const [imageUrl, setImageUrl] = useState(props.imageurl);
   useEffect(() => {
     setImageUrl(props.imageurl);
@@ -57,6 +58,7 @@ const UploadImage = (props: UploadImageProps) => {
               showUploadList={false}
               name={imagename}
               action={upurl}
+              disabled={disabled}
               beforeUpload={beforeUpload}
               onChange={handleImageChange}
               accept={accept}
@@ -65,10 +67,10 @@ const UploadImage = (props: UploadImageProps) => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
               }}
             >
-              <Button type="primary">上传</Button>
+              <Button type="primary" disabled={disabled}>上传</Button>
             </Upload>
           </ImgCrop>
-          <Button style={{ marginTop: 8 }} onClick={onResetClick}>
+          <Button disabled={disabled} style={{ marginTop: 8 }} onClick={onResetClick}>
             重置
           </Button>
         </div>

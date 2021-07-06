@@ -47,7 +47,7 @@ const NewCourses = (props: PropsType) => {
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
   const [isXn, setIsXn] = useState<boolean>(true);
-
+  
   const Close = () => {
     setBaoming(true);
     setKaike(true);
@@ -236,7 +236,7 @@ const NewCourses = (props: PropsType) => {
       key: 'KCMC',
       width: '100%',
       rules: [{ required: true, message: '请填写名称' }],
-      readonly,
+      disabled: readonly,
       fieldProps: {
         autocomplete: 'off',
       },
@@ -247,7 +247,7 @@ const NewCourses = (props: PropsType) => {
       name: 'KHKCLXId',
       key: 'KHKCLXId',
       rules: [{ required: true, message: '请填选择类型' }],
-      readonly,
+      disabled: readonly,
       options,
     },
     {
@@ -267,7 +267,7 @@ const NewCourses = (props: PropsType) => {
       type: 'cascader',
       label: '学年学期：',
       key: 'XNXQ',
-      readonly,
+      disabled: readonly,
       rules: [{ required: true, message: '请填写学年学期' }],
       cascaderItem: [
         {
@@ -277,7 +277,7 @@ const NewCourses = (props: PropsType) => {
           key: 'XN',
           placeholder: '请选择学年',
           noStyle: true,
-          readonly,
+          disabled: readonly,
           options: XNData,
           rules: [{ required: true, message: '请填写学年' }],
           fieldProps: {
@@ -294,7 +294,7 @@ const NewCourses = (props: PropsType) => {
           name: 'XQ',
           width: '100%',
           key: 'XQ',
-          readonly,
+          disabled: readonly,
           placeholder: '请选择学期',
           noStyle: true,
           options: XQ,
@@ -321,11 +321,11 @@ const NewCourses = (props: PropsType) => {
       type: 'div',
       key: 'div',
       label: '单独设置报名时段：',
-      readonly,
+      disabled: readonly,
       lineItem: [
         {
           type: 'switch',
-          readonly,
+          disabled: readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -344,7 +344,7 @@ const NewCourses = (props: PropsType) => {
       name: 'BMKSSJ',
       key: 'BMKSSJ',
       width: '100%',
-      readonly,
+      disabled: readonly,
       hidden: baoming,
       fieldProps: {
         disabledDate: (currente: any) => {
@@ -364,11 +364,11 @@ const NewCourses = (props: PropsType) => {
       type: 'div',
       key: 'div1',
       label: '单独设置上课时段：',
-      readonly,
+      disabled: readonly,
       lineItem: [
         {
           type: 'switch',
-          readonly,
+          disabled: readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -387,7 +387,7 @@ const NewCourses = (props: PropsType) => {
       name: 'KKRQ',
       key: 'KKRQ',
       width: '100%',
-      readonly,
+      disabled: readonly,
       hidden: kaike,
       fieldProps: {
         disabledDate: (currente: any) => {
@@ -401,7 +401,7 @@ const NewCourses = (props: PropsType) => {
       label: '封面：',
       name: 'KCTP',
       key: 'KCTP',
-      readonly,
+      disabled: readonly,
       imagename: 'image', // 发到后台的文件参数名
       upurl: '/api/upload/uploadFile', // 上传地址
       imageurl: imageUrl || current?.KCTP, // 回显地址
@@ -412,20 +412,22 @@ const NewCourses = (props: PropsType) => {
       type: 'textArea',
       label: '简 介:',
       name: 'KCMS',
-      readonly,
+      disabled: readonly,
       key: 'KCMS',
     },
   ];
+  const title = (current ? '编辑课程' : '新增课程');
   return (
     <>
       <Drawer
-        title={current ? '编辑课程' : '新增课程'}
+        title={readonly ? '查看信息' : title}
         width={480}
         onClose={Close}
         visible={visible}
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
+        maskClosable={false}
         footer={
           readonly ? (
             ''

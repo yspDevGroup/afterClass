@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Avatar, Spin } from 'antd';
+import { Avatar, message, Spin } from 'antd';
 import { useModel } from 'umi';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
@@ -23,6 +23,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
         showUserName(userRef?.current, currentUser?.userId);
         // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
         WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+      } else {
+        console.warn('微信登录过期，请重新授权')
+        message.warn('微信登录过期，请重新授权')
       }
     })();
   }, [currentUser]);

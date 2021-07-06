@@ -6,14 +6,14 @@
  * @LastEditors: txx
  */
 const themeColor = {
-  blue: 'rgba(47, 84, 235, 1)', // 极客蓝
+  blue: 'rgba(72, 132, 255, 1)', // 极客蓝
   navyBlue: 'rgba(36, 54, 81, 1)', // 深蓝色
   yellow: 'rgba(246, 164, 0, 1)', // 秋叶黄
   orange: 'rgba(250, 84, 28, 1)', // 朱砂橙
   red: 'rgba(235, 47, 47, 1)', // 赤焰红
 };
 
-const mainColor = themeColor.navyBlue;
+const mainColor = themeColor.blue;
 
 // 主题配置
 export const theme: Record<string, string> = {
