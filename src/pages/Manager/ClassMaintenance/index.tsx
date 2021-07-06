@@ -22,6 +22,7 @@ import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import { Link } from 'umi';
 import WWOpenDataCom from '../ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+import moment from 'moment';
 
 const ClassMaintenance = () => {
   const [visible, setVisible] = useState(false);
@@ -106,6 +107,7 @@ const ClassMaintenance = () => {
   const onClose = () => {
     setVisible(false);
   };
+  const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   const columns: ProColumns<CourseItem>[] = [
     {
       title: '班级名称',
@@ -173,21 +175,50 @@ const ClassMaintenance = () => {
       render: (_, record) => {
         const Url = `/courseScheduling?courseId=${record.id}`;
         if (record.BJZT === '待发布' || record.BJZT === '已下架') {
-          return (
-            <a>
-              <Link to={Url}>排课</Link>
-            </a>
-          );
+          if (record.KHPKSJs && record.KHPKSJs?.length === 0) {
+            return <Link to={Url}>未排课</Link>;
+          }
+          return <Link to={Url}>已排课</Link>;
         }
         return <>已排课</>;
       },
     },
     {
-      title: '状态',
+      title: '发布状态',
       dataIndex: 'BJZT',
       key: 'BJZT',
       align: 'center',
       width: 100,
+    },
+    {
+      title: '课程状态',
+      dataIndex: 'KCZT',
+      key: 'KCZT',
+      align: 'center',
+      width: 100,
+      render: (text: any, record: any) => {
+        const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
+        // 报名开始时间
+        const BMStartDate = BMKSSJ || KHKCSJ?.BMKSSJ;
+        // 报名结束时间
+        const BMEndDate = BMJSSJ || KHKCSJ?.BMJSSJ;
+        if (BMStartDate > toDay) {
+          return <div>未报名</div>;
+        }
+        if (toDay > BMStartDate && toDay < BMEndDate) {
+          return <div>报名中</div>;
+        }
+        if (toDay < BMEndDate && toDay > KHKCSJ?.KKRQ) {
+          return <div>未开课</div>;
+        }
+        if (toDay > KHKCSJ?.KKRQ && toDay < KHKCSJ?.JKRQ) {
+          return <div>开课中</div>;
+        }
+        if (toDay > KHKCSJ?.JKRQ) {
+          return <div>已开课</div>;
+        }
+        return <></>;
+      },
     },
     {
       title: '操作',

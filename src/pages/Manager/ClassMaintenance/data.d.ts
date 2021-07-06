@@ -28,6 +28,7 @@ export type CourseItem = {
   ];
   BJMS?: string;
   NJSName?: string;
+  KHPKSJs?: any[];
 };
 
 /**
