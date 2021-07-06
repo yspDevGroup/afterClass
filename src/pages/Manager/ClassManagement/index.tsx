@@ -28,6 +28,7 @@ import CourseType from './components/CourseType';
 import ClassStart from './components/ClassStart';
 import type { CourseItem, TableListParams } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
+import moment from 'moment';
 // import WWOpenDataCom from './components/WWOpenDataCom';
 const { Option } = Select;
 
@@ -260,6 +261,7 @@ const CourseManagement = () => {
   const showmodal = () => {
     setopenes(false);
   };
+  const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
   const columns: ProColumns<CourseItem>[] = [
     // {
@@ -376,6 +378,29 @@ const CourseManagement = () => {
       key: 'KCZT',
       align: 'center',
       width: 100,
+      render: (text: any, record: any) => {
+        const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
+        // 报名开始时间
+        const BMStartDate = BMKSSJ || KHKCSJ?.BMKSSJ;
+        // 报名结束时间
+        const BMEndDate = BMJSSJ || KHKCSJ?.BMJSSJ;
+        if (BMStartDate > toDay) {
+          return <div>未报名</div>;
+        }
+        if (toDay > BMStartDate && toDay < BMEndDate) {
+          return <div>报名中</div>;
+        }
+        if (toDay < BMEndDate && toDay > KHKCSJ?.KKRQ) {
+          return <div>未开课</div>;
+        }
+        if (toDay > KHKCSJ?.KKRQ && toDay < KHKCSJ?.JKRQ) {
+          return <div>开课中</div>;
+        }
+        if (toDay > KHKCSJ?.JKRQ) {
+          return <div>已开课</div>;
+        }
+        return <></>;
+      },
     },
     {
       title: '操作',
