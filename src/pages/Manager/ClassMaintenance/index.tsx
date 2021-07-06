@@ -7,7 +7,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
-import SearchComponent from '@/components/Search';
+// import SearchComponent from '@/components/Search';
 import AddCourse from './components/AddCourse';
 import type { CourseItem, TableListParams } from './data';
 import styles from './index.less';
@@ -18,7 +18,7 @@ import ActionBar from './components/ActionBar';
 import { getQueryString } from '@/utils/utils';
 import PromptInformation from '@/components/PromptInformation';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
-import type { SearchDataType } from '@/components/Search/data';
+// import type { SearchDataType } from '@/components/Search/data';
 import { Link } from 'umi';
 import WWOpenDataCom from '../ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
@@ -26,7 +26,7 @@ import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 const ClassMaintenance = () => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
-  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
+  // const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const actionRef = useRef<ActionType>();
   const [readonly, stereadonly] = useState<boolean>(false);
   const [kcId, setkcId] = useState<string>('');
@@ -38,6 +38,7 @@ const ClassMaintenance = () => {
   const [signup, setSignup] = useState<string[]>([]);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
+  const [KCName, setKCName] = useState<string>('');
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
     setkai(false);
@@ -62,9 +63,10 @@ const ClassMaintenance = () => {
         const id = { kcId: curId };
         const res = await getKHKCSJ(id);
         if (res.status === 'ok' && res.data?.KCMC) {
+          setKCName(res.data?.KCMC);
           const newData = [...searchData];
           newData[0].data = [res.data.KCMC];
-          setDataSource(newData);
+          // setDataSource(newData);
           setmcData([
             {
               label: res.data.KCMC,
@@ -238,7 +240,7 @@ const ClassMaintenance = () => {
           }}
           search={false}
           pagination={paginationConfig}
-          headerTitle={<SearchComponent dataSource={dataSource} />}
+          headerTitle={`课程名称：${KCName}`}
           toolBarRender={() => [
             <Button
               style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
