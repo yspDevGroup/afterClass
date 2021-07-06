@@ -9,10 +9,11 @@ import type { ColumnsType } from 'antd/lib/table';
  * @return {*}
  */
 type ApplicantPropsType = {
-  dataSource: any[];
+  dataSource: Record<any, any>;
 };
 
-const ApplicantInfoTable: FC<ApplicantPropsType> = ({ dataSource }) => {
+const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
+  const { KHXSBJs, BJMC } = props.dataSource;
   const columns: ColumnsType<any> | undefined = [
     {
       title: '学生姓名',
@@ -20,24 +21,24 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = ({ dataSource }) => {
       key: 'XSXM',
       align: 'center',
     },
-    {
-      title: '班级',
-      dataIndex: 'BJMC',
-      key: 'BJMC',
-      align: 'center',
-    },
-    {
-      title: '年级',
-      dataIndex: 'address',
-      key: 'address',
-      align: 'center',
-    },
-    {
-      title: '校区',
-      dataIndex: 'XQName',
-      key: 'XQName',
-      align: 'center',
-    },
+    // {
+    //   title: '班级',
+    //   dataIndex: 'BJMC',
+    //   key: 'BJMC',
+    //   align: 'center',
+    // },
+    // {
+    //   title: '年级',
+    //   dataIndex: 'address',
+    //   key: 'address',
+    //   align: 'center',
+    // },
+    // {
+    //   title: '校区',
+    //   dataIndex: 'XQName',
+    //   key: 'XQName',
+    //   align: 'center',
+    // },
     {
       title: '报名时间',
       dataIndex: 'createdAt',
@@ -47,7 +48,8 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = ({ dataSource }) => {
   ];
   return (
     <div>
-      <Table dataSource={dataSource} columns={columns} pagination={false} />
+      <div style={{ marginBottom: 16 }}>班级名称：{BJMC}</div>
+      <Table dataSource={KHXSBJs} columns={columns} pagination={false} />
     </div>
   );
 };

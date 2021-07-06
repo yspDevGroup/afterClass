@@ -147,13 +147,7 @@ const OrderInquiry = () => {
       },
     },
     {
-      title: '订单费用(元)',
-      dataIndex: 'DDFY',
-      key: 'DDFY',
-      align: 'center',
-    },
-    {
-      title: '年级',
+      title: '适用年级',
       dataIndex: 'class',
       key: 'class',
       align: 'center',
@@ -168,6 +162,12 @@ const OrderInquiry = () => {
           </div>
         );
       },
+    },
+    {
+      title: '订单费用(元)',
+      dataIndex: 'DDFY',
+      key: 'DDFY',
+      align: 'center',
     },
     {
       title: '学生姓名',

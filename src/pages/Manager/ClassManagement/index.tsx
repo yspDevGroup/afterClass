@@ -51,7 +51,7 @@ const CourseManagement = () => {
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 报名列表数据
-  const [applicantData, setApplicantData] = useState<any>([]);
+  const [applicantData, setApplicantData] = useState<any>({});
 
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
@@ -75,13 +75,13 @@ const CourseManagement = () => {
 
   const showModal = (record: any) => {
     const { BJMC, XQName, KHXSBJs } = record;
-    const bmInfo: any[] = [];
-    if (KHXSBJs.length > 0) {
-      KHXSBJs.forEach((item: any) => {
-        bmInfo.push({ ...item, BJMC, XQName });
-      });
-    }
-    setApplicantData(bmInfo);
+    // const bmInfo: any[] = [];
+    // if (KHXSBJs.length > 0) {
+    //   KHXSBJs.forEach((item: any) => {
+    //     bmInfo.push({ ...item, BJMC, XQName });
+    //   });
+    // }
+    setApplicantData({ KHXSBJs, BJMC, XQName });
     setIsModalVisible(true);
   };
 
