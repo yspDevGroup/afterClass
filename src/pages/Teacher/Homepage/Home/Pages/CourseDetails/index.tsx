@@ -268,7 +268,17 @@ const CourseDetails: React.FC = () => {
                         return <span>{values.FJSJ.FJMC},</span>
                       })
                     }
-                    班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />},副班：{<WWOpenDataCom type="userName" openid={value.FJS} />}。</li>
+                     <span style={{ lineHeight: "19px", height: 19 }}>
+                      班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />}
+                    </span>
+                      ,
+                      <span style={{ lineHeight: "19px", height: 19 }}>
+                      副班：{
+                        value.FJS.split(',').map((item: any) => {
+                          return <WWOpenDataCom type="userName" openid={item} />
+                        })
+                      }。
+                      </span></li>
                 })
               }
             </ul>
