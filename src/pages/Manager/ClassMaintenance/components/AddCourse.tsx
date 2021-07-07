@@ -118,8 +118,8 @@ const AddCourse: FC<AddCourseProps> = ({
       let res = null;
       values.BMKSSJ = new Date(values?.BMSD[0] || signup[0]);
       values.BMJSSJ = new Date(values?.BMSD[1] || signup[1]);
-      values.KKRQ = new Date(values?.SKSD[0] || classattend[0]);
-      values.JKRQ = new Date(values?.SKSD[1] || classattend[1]);
+      values.KKRQ = values?.SKSD[0] || classattend[0];
+      values.JKRQ = values?.SKSD[1] || classattend[1];
       const options = {
         ...values,
         NJS: values.NJS?.toString(), // 年级ID
