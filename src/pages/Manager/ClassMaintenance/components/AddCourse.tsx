@@ -166,7 +166,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KHKCSJId',
       fieldProps: {
         options: mcData,
-        disabled:true
+        disabled: true,
       },
     },
     {
@@ -190,6 +190,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'group',
+      key: 'group',
       readonly,
       groupItems: [
         {
@@ -216,6 +217,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'group',
+      key: 'group1',
       readonly,
       groupItems: [
         {
@@ -279,10 +281,12 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     signup.length > 0
       ? {
-        type: 'divTab',
-        text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(signup[1]).format('YYYY-MM-DD')}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
+            signup[1],
+          ).format('YYYY-MM-DD')}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -323,10 +327,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     classattend.length > 0
       ? {
-        type: 'divTab',
-        text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -417,7 +421,7 @@ const AddCourse: FC<AddCourseProps> = ({
           formItemLayout={formLayout}
           values={
             formValues || {
-              KHKCSJId:mcData,
+              KHKCSJId: mcData && mcData[0]?.value,
               BJZT: '待发布',
               BMKSSJ: baoming,
               KKRQ: kaike,

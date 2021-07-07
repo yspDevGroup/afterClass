@@ -192,8 +192,8 @@ const Index: FC<IndexPropsType> = ({
           NJ: rowData[colItem.dataIndex]?.njId, // 年级ID
           KC: rowData[colItem.dataIndex]?.kcId, // 课程ID
           BJId: rowData[colItem.dataIndex]?.bjId, //  班级ID
-          // CDLX: rowData.room?.FJLXId, // 场地类型ID
-          // CDMC: rowData.room?.jsId, // 场地名称
+          CDLX: rowData.room?.FJLXId, // 场地类型ID
+          CDMC: rowData.room?.jsId, // 场地名称
           weekId: rowData[colItem.dataIndex]?.weekId, // 排课ID
           jsId: rowData.room?.jsId, // 教室ID
           hjId: rowData.course?.hjId, // 时间ID

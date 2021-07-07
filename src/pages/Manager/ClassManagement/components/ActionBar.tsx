@@ -35,7 +35,7 @@ const ActionBar = (props: propstype) => {
         }
       });
     } else {
-      message.error('下架失败，请先将所有学生清除');
+      message.warning('有学生报名时，此班级不能下架');
     }
   };
   const release = (records: any) => {
@@ -107,7 +107,7 @@ const ActionBar = (props: propstype) => {
         </>
       );
       break;
-      case '已发布':
+    case '已发布':
       return (
         <>
           <a onClick={() => shelf(record)}>下架</a>

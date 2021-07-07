@@ -24,8 +24,8 @@ import styles from './index.less';
 import { searchData } from './searchConfig';
 import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
-import CourseType from './components/CourseType';
-import ClassStart from './components/ClassStart';
+// import CourseType from './components/CourseType';
+// import ClassStart from './components/ClassStart';
 import type { CourseItem, TableListParams } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 import moment from 'moment';
@@ -73,12 +73,6 @@ const CourseManagement = () => {
 
   const showModal = (record: any) => {
     const { BJMC, XQName, KHXSBJs } = record;
-    // const bmInfo: any[] = [];
-    // if (KHXSBJs.length > 0) {
-    //   KHXSBJs.forEach((item: any) => {
-    //     bmInfo.push({ ...item, BJMC, XQName });
-    //   });
-    // }
     setApplicantData({ KHXSBJs, BJMC, XQName });
     setIsModalVisible(true);
   };
@@ -361,27 +355,29 @@ const CourseManagement = () => {
       align: 'center',
       width: 100,
       render: (text: any, record: any) => {
-        const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
-        // 报名开始时间
-        const BMStartDate = BMKSSJ || KHKCSJ?.BMKSSJ;
-        // 报名结束时间
-        const BMEndDate = BMJSSJ || KHKCSJ?.BMJSSJ;
-        if (BMStartDate > toDay) {
-          return <div>未报名</div>;
+        if (record.BJZT === '已发布') {
+          const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
+          // 报名开始时间
+          const BMStartDate = BMKSSJ || KHKCSJ?.BMKSSJ;
+          // 报名结束时间
+          const BMEndDate = BMJSSJ || KHKCSJ?.BMJSSJ;
+          if (BMStartDate > toDay) {
+            return <div>未报名</div>;
+          }
+          if (toDay > BMStartDate && toDay < BMEndDate) {
+            return <div>报名中</div>;
+          }
+          if (toDay < BMEndDate && toDay > KHKCSJ?.KKRQ) {
+            return <div>未开课</div>;
+          }
+          if (toDay > KHKCSJ?.KKRQ && toDay < KHKCSJ?.JKRQ) {
+            return <div>开课中</div>;
+          }
+          if (toDay > KHKCSJ?.JKRQ) {
+            return <div>已结课</div>;
+          }
         }
-        if (toDay > BMStartDate && toDay < BMEndDate) {
-          return <div>报名中</div>;
-        }
-        if (toDay < BMEndDate && toDay > KHKCSJ?.KKRQ) {
-          return <div>未开课</div>;
-        }
-        if (toDay > KHKCSJ?.KKRQ && toDay < KHKCSJ?.JKRQ) {
-          return <div>开课中</div>;
-        }
-        if (toDay > KHKCSJ?.JKRQ) {
-          return <div>已开课</div>;
-        }
-        return <></>;
+        return <>-</>;
       },
     },
     {
@@ -393,11 +389,7 @@ const CourseManagement = () => {
       render: (_, record) => {
         return (
           <>
-            <ActionBar
-              record={record}
-              handleEdit={handleEdit}
-              actionRef={actionRef}
-            />
+            <ActionBar record={record} handleEdit={handleEdit} actionRef={actionRef} />
           </>
         );
       },

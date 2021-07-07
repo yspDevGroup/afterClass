@@ -36,7 +36,7 @@ const ActionBar = (props: propstype) => {
         }
       });
     } else {
-      message.error('下架失败，请先将所有学生清除');
+      message.warning('有学生报名时，此班级不能下架');
     }
   };
   const release = (recorde: any) => {

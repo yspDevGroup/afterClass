@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { useRef, useState, useEffect } from 'react';
-import { Button, Tag } from 'antd';
+import { Button, Modal, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import PageContainer from '@/components/PageContainer';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -20,9 +20,10 @@ import PromptInformation from '@/components/PromptInformation';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 // import type { SearchDataType } from '@/components/Search/data';
 import { Link } from 'umi';
-import WWOpenDataCom from '../ClassManagement/components/WWOpenDataCom';
+// import WWOpenDataCom from '../ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import moment from 'moment';
+import ApplicantInfoTable from '../ClassManagement/components/ApplicantInfoTable';
 
 const ClassMaintenance = () => {
   const [visible, setVisible] = useState(false);
@@ -40,6 +41,9 @@ const ClassMaintenance = () => {
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   const [KCName, setKCName] = useState<string>('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  // 报名列表数据
+  const [applicantData, setApplicantData] = useState<any>({});
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
     setkai(false);
@@ -87,6 +91,18 @@ const ClassMaintenance = () => {
     stereadonly(false);
   };
 
+  const showModal = (record: any) => {
+    const { BJMC, XQName, KHXSBJs } = record;
+    setApplicantData({ KHXSBJs, BJMC, XQName });
+    setIsModalVisible(true);
+  };
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   const handleEdit = (data: any) => {
     const njIds: any[] = [];
     data.NJSJs?.map((item: any) => njIds.push(item.id));
@@ -109,12 +125,30 @@ const ClassMaintenance = () => {
   };
   const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   const columns: ProColumns<CourseItem>[] = [
+    // {
+    //   title: '序号',
+    //   dataIndex: 'index',
+    //   key: 'index',
+    //   valueType: 'index',
+    //   width: 48,
+    //   align: 'center',
+    // },
     {
       title: '班级名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
-      width: 120,
+      width: 180,
+    },
+    {
+      title: '课程名称',
+      dataIndex: 'KCMC',
+      key: 'KCMC',
+      align: 'center',
+      width: 150,
+      render: (text: any, record: any) => {
+        return <div>{record.KHKCSJ.KCMC}</div>;
+      },
     },
     {
       title: '费用(元)',
@@ -124,32 +158,40 @@ const ClassMaintenance = () => {
       width: 100,
     },
     {
-      title: '班级人数(人)',
-      dataIndex: 'BJRS',
-      key: 'BJRS',
+      title: '报名人数',
+      dataIndex: 'BMRS',
+      key: 'BMRS',
       align: 'center',
       width: 100,
-    },
-    {
-      title: '主班',
-      dataIndex: 'ZJS',
-      key: 'ZJS',
-      align: 'center',
-      width: 100,
-      render: (_, record) => {
+      render: (text: any, record: any) => {
         return (
-          <div>
-            <WWOpenDataCom type="userName" openid={record.ZJS} />
-          </div>
+          <a onClick={() => showModal(record)}>
+            {record.KHXSBJs.length}/{record.BJRS}
+          </a>
         );
       },
     },
-    {
-      title: '所属校区',
-      align: 'center',
-      dataIndex: 'XQName',
-      key: 'XQName',
-    },
+    // {
+    //   title: '主班',
+    //   dataIndex: 'ZJS',
+    //   key: 'ZJS',
+    //   align: 'center',
+    //   width: '10%',
+    //   render: (_, record) => {
+    //     return (
+    //       <div>
+    //         <WWOpenDataCom type="userName" openid={record.ZJS} />
+    //       </div>
+    //     );
+    //   },
+    // },
+    // {
+    //   title: '所属校区',
+    //   align: 'center',
+    //   dataIndex: 'XQName',
+    //   key: 'XQName',
+    //   ellipsis: true,
+    // },
     {
       title: '适用年级',
       dataIndex: 'NJSName',
@@ -173,12 +215,12 @@ const ClassMaintenance = () => {
       align: 'center',
       width: 100,
       render: (_, record) => {
-        const Url = `/courseScheduling?courseId=${record.id}`;
+        // const Url = `/courseScheduling?courseId=${record.id}&xn=${xn}&xq=${xq}`;
         if (record.BJZT === '待发布' || record.BJZT === '已下架') {
           if (record.KHPKSJs && record.KHPKSJs?.length === 0) {
-            return <Link to={Url}>未排课</Link>;
+            return <Link to={'Url'}>未排课</Link>;
           }
-          return <Link to={Url}>已排课</Link>;
+          return <Link to={'Url'}>已排课</Link>;
         }
         return <>已排课</>;
       },
@@ -197,27 +239,29 @@ const ClassMaintenance = () => {
       align: 'center',
       width: 100,
       render: (text: any, record: any) => {
-        const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
-        // 报名开始时间
-        const BMStartDate = BMKSSJ || KHKCSJ?.BMKSSJ;
-        // 报名结束时间
-        const BMEndDate = BMJSSJ || KHKCSJ?.BMJSSJ;
-        if (BMStartDate > toDay) {
-          return <div>未报名</div>;
+        if (record.BJZT === '已发布') {
+          const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
+          // 报名开始时间
+          const BMStartDate = BMKSSJ || KHKCSJ?.BMKSSJ;
+          // 报名结束时间
+          const BMEndDate = BMJSSJ || KHKCSJ?.BMJSSJ;
+          if (BMStartDate > toDay) {
+            return <div>未报名</div>;
+          }
+          if (toDay > BMStartDate && toDay < BMEndDate) {
+            return <div>报名中</div>;
+          }
+          if (toDay < BMEndDate && toDay > KHKCSJ?.KKRQ) {
+            return <div>未开课</div>;
+          }
+          if (toDay > KHKCSJ?.KKRQ && toDay < KHKCSJ?.JKRQ) {
+            return <div>开课中</div>;
+          }
+          if (toDay > KHKCSJ?.JKRQ) {
+            return <div>已结课</div>;
+          }
         }
-        if (toDay > BMStartDate && toDay < BMEndDate) {
-          return <div>报名中</div>;
-        }
-        if (toDay < BMEndDate && toDay > KHKCSJ?.KKRQ) {
-          return <div>未开课</div>;
-        }
-        if (toDay > KHKCSJ?.KKRQ && toDay < KHKCSJ?.JKRQ) {
-          return <div>开课中</div>;
-        }
-        if (toDay > KHKCSJ?.JKRQ) {
-          return <div>已开课</div>;
-        }
-        return <></>;
+        return <>-</>;
       },
     },
     {
@@ -235,7 +279,6 @@ const ClassMaintenance = () => {
       },
     },
   ];
-
   return (
     <>
       <PageContainer cls={styles.roomWrapper}>
@@ -302,6 +345,16 @@ const ClassMaintenance = () => {
           open={kai}
           colse={kaiguan}
         />
+        <Modal
+          title="报名列表"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+          width="40vw"
+        >
+          <ApplicantInfoTable dataSource={applicantData} />
+        </Modal>
       </PageContainer>
     </>
   );
