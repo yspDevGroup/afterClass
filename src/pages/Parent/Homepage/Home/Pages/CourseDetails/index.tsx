@@ -16,6 +16,8 @@ import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import noData from '@/assets/noData.png';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+import { getEnrolled } from '@/services/after-class/khbjsj';
+
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState<string>();
@@ -56,9 +58,7 @@ const CourseDetails: React.FC = () => {
     if (res1.status === 'ok' && res1.data) {
       const classbegins: any[] = [];
       res1.data.forEach((item: any) => {
-        console.log(222)
         const datex = DateRange(item.KHBJSJ.KKRQ, item.KHBJSJ.JKRQ)
-        console.log(223)
         datex.forEach((record: any) => {
           for (let i = 0; i < attend.length; i += 1) {
             if (Week(record) === attend[i] && !classbegins.includes(record)) {
@@ -176,6 +176,8 @@ const CourseDetails: React.FC = () => {
       setCurrentDate(myDate);
     }
   }, [courseid]);
+
+
   useEffect(() => {
     if (orderInfo)
       linkRef.current?.click();
@@ -220,16 +222,24 @@ const CourseDetails: React.FC = () => {
       return <span>{values}</span>
     })
   }
-  const baomzt = (BMJSSJ: Date, BMKSSJ: Date) => {
-    if (BMJSSJ > new Date(nowtime) && new Date(nowtime) > BMKSSJ) {
+
+  const bjxx = (kssj: Date, jssj: Date) => {
+    if (jssj > new Date(nowtime) && new Date(nowtime) > kssj) {
       setPdtj(true)
-    } else if (new Date(nowtime) > BMJSSJ) {
+    } else if (new Date(nowtime) > jssj) {
       setZt(true)
       setPdtj(false)
     } else {
       setZt(false)
       setPdtj(false)
     }
+  }
+  // 获取班级报名人数
+  const getrs = async (id: string) => {
+    const res = await getEnrolled({ id: id });
+    if (res.status === 'ok' && res.data) {
+      return res.data.length
+    } return 0
   }
   return <>
     {
@@ -243,7 +253,7 @@ const CourseDetails: React.FC = () => {
                 <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px' }} />
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
-           
+
             <ul>
               <li>上课时段：{KcDetail?.KKRQ}~{KcDetail?.JKRQ}</li>
               <li>上课地点：本校</li>
@@ -305,12 +315,13 @@ const CourseDetails: React.FC = () => {
                   <p className={styles.title} style={{ fontSize: '14px' }}>班级</p>
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
-                      KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date }) => {
-                        baomzt(value.BMJSSJ, value.BMKSSJ);
-                        const text = `${value.BJMC}已有12人报名，共50个名额`;
+                      KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }) => {
+                        const text = `${value.BJMC}已有${getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
-                        return <Radio.Button className={styles.BjInformation} value={valueName}>
-                          <Tooltip placement="bottomLeft" title={text} color='cyan'>{value.BJMC}</Tooltip>
+                        return <Radio.Button className={styles.BjInformation} value={valueName} onClick={() => bjxx(value.BMKSSJ, value.BMJSSJ)}>
+                          {/* <Tooltip placement="bottomLeft" title={text} color='cyan'> */}
+                            {value.BJMC}
+                            {/* </Tooltip> */}
                         </Radio.Button>
                       })
                     }
@@ -323,7 +334,6 @@ const CourseDetails: React.FC = () => {
                     pdtj ? <Button className={styles.submit} disabled={XY === false || BJ === undefined} onClick={submit} >确定并付款</Button>
                       : <Button className={styles.submits}>课程报名{zt ? '已结束' : '未开始'}</Button>
                   }
-
                   <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser } }}>
                   </Link>
                 </div>
@@ -339,7 +349,6 @@ const CourseDetails: React.FC = () => {
               {
                 KcDetail?.KHBJSJs?.map((value: { id: string, KSS: string, KHPKSJs: any, KKRQ: string, JKRQ: string, BJMC: string }) => {
                   if (value.id === classid) {
-                    console.log(666)
                     return <> <li>上课时段：{value.KKRQ}~{value.JKRQ}</li>
                       <li> 上课地点：{
                         tempfun(value.KHPKSJs)
