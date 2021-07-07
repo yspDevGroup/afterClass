@@ -39,7 +39,10 @@ const Home = () => {
           <IconFont type='icon-gonggao' className={styles.noticeImg} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
-            {notification && notification.length ? <Link to={`/parent/home/notice/announcement?listid=${notification[0].id}`} style={{ color: '#333' }}>{notification[0].BT}</Link> : '暂无公告'}
+            {notification && notification.length ? 
+            <Link to={`/parent/home/notice/announcement?listid=${notification[0].id}`} style={{ color: '#333',margin:'0 9px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap' }}>
+              {notification[0].BT}
+            </Link> : '暂无公告'}
           </div>
         </div>
         <div className={styles.enrollArea}>

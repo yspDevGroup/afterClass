@@ -150,15 +150,15 @@ const Mine = () => {
       <div className={styles.linkWrapper}>
         <ul>
           <li>
-            <IconFont type='icon-fuwugonggao' style={{ 'fontSize': '18px' }} />
-            <Link to='/teacher/home/emptyArticle?articlepage=serveAnnounce'>
+            <IconFont type='icon-fuwugonggao' style={{ 'fontSize': '18px' ,lineHeight:'46px'}} />
+            <Link to='/teacher/home/notice/announcement?articlepage=serveAnnounce'>
               服务公告
               <IconFont type='icon-xiayiye' />
             </Link>
           </li>
           <li>
-            <IconFont type="icon-guanyu" style={{ fontSize: '18px' }} />
-            <Link to='/teacher/home/emptyArticle?articlepage=about'>
+            <IconFont type="icon-guanyu" style={{ fontSize: '18px' ,lineHeight:'46px'}} />
+            <Link to='/teacher/home/notice/announcement?articlepage=about'>
               关于
               <IconFont type="icon-xiayiye" />
             </Link>

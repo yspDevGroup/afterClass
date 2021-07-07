@@ -247,8 +247,8 @@ const CourseDetails: React.FC = () => {
           <div className={styles.wrap}>
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
-                <img src={KcDetail?.KCTP} alt="" style={{marginBottom:'10px'}}/> :
-                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px',margin:'10px' }} />
+                <img src={KcDetail?.KCTP} alt="" style={{marginBottom:'18px',height:'200px'}}/> :
+                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px', marginBottom:'18px' }} />
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 

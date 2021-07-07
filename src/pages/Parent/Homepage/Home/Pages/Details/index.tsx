@@ -21,7 +21,13 @@ const Details = (props: { data?: any[] }) => {
         data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
           {data?.map((record: any, index: number) => {
             if (index < 4) {
-              return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}><li style={{lineHeight:'35px'}}>{record.BT} </li></Link>
+              return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}>
+               <li style={{lineHeight:'35px'}}>
+                  <div style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',width:'100%'}}>
+                    {record.BT}
+                    </div> 
+                </li>
+                </Link>
             }
             return ''
           })}
