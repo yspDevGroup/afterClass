@@ -298,7 +298,9 @@ const CourseDetails: React.FC = () => {
                         const text = `${value.BJMC}已有12人报名，共50个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         return <Radio.Button className={styles.BjInformation} value={valueName}>
-                          <Tooltip placement="bottomLeft" title={text} color='cyan'>{value.BJMC}</Tooltip>
+                          {/* <Tooltip placement="bottomLeft" title={text} color='cyan'> */}
+                          {value.BJMC}
+                          {/* </Tooltip> */}
                         </Radio.Button>
                       })
                     }
