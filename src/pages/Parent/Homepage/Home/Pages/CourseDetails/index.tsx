@@ -35,12 +35,12 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
-  const [pdtj, setPdtj] = useState<boolean>(false)
-  const [zt, setZt] = useState<boolean>(false)
-
+  const [pdtj, setPdtj] = useState<boolean>(false);
+  const [zt, setZt] = useState<boolean>(false);
+  const [kaiguan, setKaiguan] = useState<boolean>(false);
   const myDate = new Date();
   const nowtime = myDate.toLocaleDateString();
-
+  const [opem, setOpem] = useState<boolean>(false);
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
     njId: '1',
@@ -174,6 +174,15 @@ const CourseDetails: React.FC = () => {
       })();
       const myDate = new Date().toLocaleDateString().slice(5, 9);
       setCurrentDate(myDate);
+      if (new Date(nowtime) >new Date( KcDetail.BMKSSJ) && new Date(nowtime) < new Date(KcDetail.BMJSSJ)) {
+        setKaiguan(true);
+      } else if (new Date(nowtime) > new Date(KcDetail.BMJSSJ)) {
+        setKaiguan(false);
+        setOpem(true);
+      } else {
+        setKaiguan(false);
+        setOpem(false);
+      }
     }
   }, [courseid]);
   useEffect(() => {
@@ -239,16 +248,18 @@ const CourseDetails: React.FC = () => {
       return res.data.length
     } return 0
   }
+
+
+
   return <>
     {
       !classid ?
         <div className={styles.CourseDetails}>
-          {console.log(444)}
           <div className={styles.wrap}>
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
-                <img src={KcDetail?.KCTP} alt="" style={{marginBottom:'18px',height:'200px'}}/> :
-                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px', marginBottom:'18px' }} />
+                <img src={KcDetail?.KCTP} alt="" style={{ marginBottom: '18px', height: '200px' }} /> :
+                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px', marginBottom: '18px' }} />
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 
@@ -295,14 +306,17 @@ const CourseDetails: React.FC = () => {
                         })
                       }。
                       </span>
-
                   </li>
                 })
               }
             </ul>
           </div>
           <div className={styles.footer}>
-            <button className={styles.btn} onClick={() => setstate(true)}>立即报名</button>
+            {kaiguan ?
+              <button className={styles.btn} onClick={() => setstate(true)}>立即报名</button>
+              :
+              <button className={styles.btn} >课程{opem ? `已结束报名` : `暂未开始报名`}</button>
+            }
           </div>
           {
             state === true ?
@@ -314,12 +328,12 @@ const CourseDetails: React.FC = () => {
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }) => {
-                        const text = `${value.BJMC}已有${()=>getrs(value.id)}人报名，共${value.BJRS}个名额`;
+                        const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         return <Radio.Button className={styles.BjInformation} value={valueName} onClick={() => bjxx(value.BMKSSJ, value.BMJSSJ)}>
                           {/* <Tooltip placement="bottomLeft" title={text} color='cyan'> */}
-                            {value.BJMC}
-                            {/* </Tooltip> */}
+                          {value.BJMC}
+                          {/* </Tooltip> */}
                         </Radio.Button>
                       })
                     }
