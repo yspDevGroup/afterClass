@@ -65,6 +65,7 @@ const NewCourses = (props: PropsType) => {
   const Close = () => {
     setBaoming(false);
     setKaike(false);
+    setImageUrl('');
     onClose!();
   };
   const onXnXqChange = async (xnValue: any, xqvalue: any) => {
@@ -135,15 +136,16 @@ const NewCourses = (props: PropsType) => {
     if (current) {
       if (signup) {
         const date = current.BMKSSJ && current.BMKSSJ[0].substring(0, 10);
-        const date1 = current.BMJSSJ && current.BMJSSJ[0].substring(0, 10);
+        const date1 = current.BMKSSJ && current.BMKSSJ[1].substring(0, 10);
         if (!(date === signup[0] && date1 === signup[1])) {
           setBaoming(true);
         }
       }
       if (classattend) {
         const date = current.KKRQ && current.KKRQ[0].substring(0, 10);
-        const date1 = current.JKRQ && current.JKRQ[0].substring(0, 10);
-        if (!(date === signup[0] && date1 === signup[1])) {
+        const date1 = current.KKRQ && current.KKRQ[1].substring(0, 10);
+        
+        if (!(date === classattend[0] && date1 === classattend[1])) {
           setKaike(true);
         }
       }
@@ -334,9 +336,9 @@ const NewCourses = (props: PropsType) => {
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
-                return setBaoming(true);
+                return setBaoming(false);
               }
-              return setBaoming(false);
+              return setBaoming(true);
             },
             checked: baoming,
           },
@@ -377,9 +379,9 @@ const NewCourses = (props: PropsType) => {
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
-                return setKaike(true);
+                return setKaike(false);
               }
-              return setKaike(false);
+              return setKaike(true);
             },
             checked: kaike,
           },
