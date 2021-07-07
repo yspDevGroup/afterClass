@@ -47,10 +47,10 @@ const CourseTab = () => {
       });
     }
   }, [yxkc])
-
+  const url=`/parent/home/course&courseStatus=${courseStatus}`
   return (
     <div className={`${styles.tabHeader}`}>
-      <Tabs centered={centered} tabBarExtraContent={!centered ? { right: <Link to='/parent/home/course'>全部 {'>'}</Link> } : ''} className={styles.courseTab}>
+      <Tabs centered={centered} tabBarExtraContent={!centered ? { right: <Link to={url}>全部 {'>'}</Link> } : ''} className={styles.courseTab}>
         {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
           <TabPane tab="开设课程" key="setup">
             {

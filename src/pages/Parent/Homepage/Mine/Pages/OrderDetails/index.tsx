@@ -8,6 +8,8 @@ import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icon
 import { overdueKHXSDD, deleteKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
 import moment from 'moment';
 import styles from './index.less';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
 const { Countdown } = Statistic;
 const OrderDetails: React.FC = (props: any) => {
@@ -66,6 +68,14 @@ const OrderDetails: React.FC = (props: any) => {
       message.error(res.message);
     }
   };
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      await initWXAgentConfig(['checkJsApi']);
+    })();
+  }, []);
   if (orderInfo) {
     return <div className={styles.OrderDetails}>
       <div className={styles.hender}>
@@ -81,7 +91,7 @@ const OrderDetails: React.FC = (props: any) => {
             <li>上课地点：本校</li>
             <li>总课时：{detail.KSS}</li>
             <li>班级：{detail.BJMC}</li>
-            <li>学生：{user.username}</li>
+            <li>学生：{<WWOpenDataCom type="userName" openid={user.username} />}</li>
           </ul>
         </div>
         <div className={styles.KCZE}>

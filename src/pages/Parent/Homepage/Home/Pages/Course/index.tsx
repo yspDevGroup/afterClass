@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:30:23
- * @,@LastEditTime: ,: 2021-07-02 09:24:49
+ * @,@LastEditTime: ,: 2021-07-07 14:54:47
  * @,@LastEditors: ,: Please set LastEditors
  */
 
@@ -15,6 +15,7 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
 import noData from '@/assets/noData.png';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
+import { getQueryString } from '@/utils/utils';
 
 
 const defaultMsg: ListData = {
@@ -30,6 +31,7 @@ const Course = () => {
   const [yxkc, setYxkc] = useState<any>();
   const [kskc, setKskc] = useState<any>();
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
+  const courseStatus = getQueryString('courseStatus');
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
@@ -79,39 +81,40 @@ const Course = () => {
     <div className={styles.CourseBox}>
       <div className={`${styles.tabHeader}`}>
         <Tabs centered={true} className={styles.courseTab}>
-          <TabPane tab="开设课程" key="setup">
-            {
-              kskc && kskc.length ? <Tabs className={styles.courseType}>
-                {kskc.map((item: any) => {
-                  const listData: ListItem[] = [].map.call(item.KHKCSJs, (record: any) => {
-                    const nodeData: ListItem = {
-                      id: record.id,
-                      title: record.KCMC,
-                      img: record.KCTP,
-                      link: `/parent/home/courseDetails?courseid=${record.id}`,
-                      desc: [
-                        {
-                          left: [`课程时段：${record.KKRQ}-${record.JKRQ}`],
-                        },
-                      ],
-                      introduction: record.KCMS,
-                    };
-                    return nodeData;
+          {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
+            <TabPane tab="开设课程" key="setup">
+              {
+                kskc && kskc.length ? <Tabs className={styles.courseType}>
+                  {kskc.map((item: any) => {
+                    const listData: ListItem[] = [].map.call(item.KHKCSJs, (record: any) => {
+                      const nodeData: ListItem = {
+                        id: record.id,
+                        title: record.KCMC,
+                        img: record.KCTP,
+                        link: `/parent/home/courseDetails?courseid=${record.id}`,
+                        desc: [
+                          {
+                            left: [`课程时段：${record.KKRQ}-${record.JKRQ}`],
+                          },
+                        ],
+                        introduction: record.KCMS,
+                      };
+                      return nodeData;
+                    })
+                    defaultMsg.list = listData;
+                    return (<TabPane tab={item.KCLX} key={item.KCLX}>
+                      <ListComponent listData={defaultMsg} />
+                    </TabPane>)
                   })
-                  defaultMsg.list = listData;
-                  return (<TabPane tab={item.KCLX} key={item.KCLX}>
-                    <ListComponent listData={defaultMsg} />
-                  </TabPane>)
-                })
-                }
-              </Tabs> : <div style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}>
-                  <img src={noData} alt="暂无数据" />
-                  <h4 style={{ color: '#999' }}>暂无开设课程</h4>
-                </div>}
-          </TabPane>
+                  }
+                </Tabs> : <div style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}>
+                    <img src={noData} alt="暂无数据" />
+                    <h4 style={{ color: '#999' }}>暂无开设课程</h4>
+                  </div>}
+            </TabPane> : ''}
           <TabPane tab="已选课程" key="elective">
             {yxkc && yxkc.length ? <ListComponent listData={yxkcData} /> :
-              <div style={{ textAlign: 'center', marginBottom:'20px',width: '100%' }}>
+              <div style={{ textAlign: 'center', marginBottom: '20px', width: '100%' }}>
                 <img src={noData} alt="暂无数据" />
                 <h4 style={{ color: '#999' }}>暂无已选课程</h4>
               </div>}
