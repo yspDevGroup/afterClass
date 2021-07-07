@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tabs } from 'antd';
-import { useModel, history, } from 'umi';
+import { useModel, } from 'umi';
 import Home from './Home';
 import Study from './Study';
 import Mine from './Mine';
@@ -46,17 +46,11 @@ const PersonalHomepage = () => {
           }
         }
       } else {
-        history.push('/parent/home/emptyArticle?articlepage=empty');
+        setCourseStatus('empty');
       }
     }
     fetchData();
   }, [])
-
-  useEffect(() => {
-    if (courseStatus === 'empty') {
-      history.push('/parent/home/emptyArticle?articlepage=empty');
-    }
-  }, [courseStatus]);
 
   return <div className={styles.mobilePageHeader}>
     {courseStatus === '' ? '' : <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
@@ -82,7 +76,7 @@ const PersonalHomepage = () => {
             <Home />
           </div>
         </TabPane>
-        <TabPane tab={
+        {courseStatus === 'empty' ? '' : <TabPane tab={
           <span>
             <IconFont
               style={{ 'fontSize': '16px' }}
@@ -94,7 +88,7 @@ const PersonalHomepage = () => {
           <div style={{ height: '100%', overflowY: 'auto' }} ref={studyRef} >
             <Study />
           </div>
-        </TabPane>
+        </TabPane>}
         <TabPane tab={
           <span>
             <IconFont

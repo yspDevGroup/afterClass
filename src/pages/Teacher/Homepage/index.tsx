@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useModel, history } from 'umi';
+import { useModel } from 'umi';
 import { Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
 import Home from './Home';
@@ -26,18 +26,22 @@ const PersonalHomepage = () => {
     async function fetchData() {
       // 获取后台学年学期数据
       const result = await queryXNXQList();
-      const { XN, XQ } = result.current;
-      const res = await homePageInfo({
-        xn: XN,
-        xq: XQ,
-      });
-      if (res.status === 'ok' && res.data) {
-        setDataSource(res.data);
-        const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
-        if (bmkssj && bmjssj && skkssj && skjssj) {
-          const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
-          setCourseStatus(cStatus);
+      if (result.current) {
+        const { XN, XQ } = result.current;
+        const res = await homePageInfo({
+          xn: XN,
+          xq: XQ,
+        });
+        if (res.status === 'ok' && res.data) {
+          setDataSource(res.data);
+          const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
+          if (bmkssj && bmjssj && skkssj && skjssj) {
+            const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
+            setCourseStatus(cStatus);
+          }
         }
+      } else {
+        setCourseStatus('empty');
       }
     }
     fetchData();
@@ -49,11 +53,6 @@ const PersonalHomepage = () => {
     //   setCourseStatus(cStatus);
     // }
   }, []);
-  useEffect(() => {
-    if (courseStatus === 'empty') {
-      history.push('/teacher/home/emptyArticle?articlepage=empty');
-    }
-  }, [courseStatus])
   return (
     <div className={styles.mobilePageHeader}>
       {courseStatus === '' ? '' : <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
@@ -86,7 +85,7 @@ const PersonalHomepage = () => {
               <Home />
             </div>
           </TabPane>
-          <TabPane
+          {courseStatus === 'empty' ? '' : <TabPane
             tab={
               <span>
                 <IconFont
@@ -103,7 +102,7 @@ const PersonalHomepage = () => {
             <div style={{ height: '100%', overflowY: 'auto' }} ref={eduRef} >
               <Education />
             </div>
-          </TabPane>
+          </TabPane>}
           <TabPane
             tab={
               <span>

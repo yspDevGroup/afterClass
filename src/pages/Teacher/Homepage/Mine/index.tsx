@@ -12,7 +12,7 @@ import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 const Mine = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { yxkc, weekSchedule } = useContext(myContext);
+  const { yxkc, weekSchedule,courseStatus } = useContext(myContext);
   const [checkIn, setCheckIn] = useState<any[]>();
   const [wekDay, setWekDay] = useState<any>();
   // 当前时间
@@ -129,7 +129,7 @@ const Mine = () => {
           </div>
         </div>
       </header>
-      <div className={styles.funWrapper}>
+      {courseStatus === 'empty'?'':<div className={styles.funWrapper}>
         <div className={styles.titleBar}>
           出勤统计
           <div>
@@ -146,7 +146,7 @@ const Mine = () => {
             })
             : <IconFont type='icon-zanwu' style={{ fontSize: '80px', display: 'block', margin: '50px auto' }} />
         }
-      </div>
+      </div>}
       <div className={styles.linkWrapper}>
         <ul>
           <li>

@@ -9,9 +9,10 @@ import TeachCourses from './components/TeachCourses';
 import Details from './Pages/Details';
 import { getAllXXGG } from '@/services/after-class/xxgg';
 import { Link } from 'umi';
+import EmptyArticle from './Pages/EmptyArticle';
 
 const Home = () => {
-  const { currentUserInfo } = useContext(myContext);
+  const { currentUserInfo,courseStatus } = useContext(myContext);
   const userRef = useRef(null);
   const [notification, setNotification] = useState<any[]>();
   useEffect(() => {
@@ -52,7 +53,7 @@ const Home = () => {
           <div>欢迎使用课后帮，课后服务选我就对了！ </div>
         </div>
       </header>
-      <div className={styles.pageContent}>
+      {courseStatus === 'empty' ? <EmptyArticle />: <div className={styles.pageContent}>
         <div className={styles.noticeArea}>
           <IconFont type="icon-gonggao" className={styles.noticeImg} />
           <div className={styles.noticeText}>
@@ -70,7 +71,7 @@ const Home = () => {
         <div className={styles.announceArea}>
         <Details data={notification} />
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

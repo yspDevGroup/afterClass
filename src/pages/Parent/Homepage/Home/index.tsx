@@ -8,9 +8,10 @@ import CourseTab from './components/CourseTab';
 import styles from './index.less';
 import Details from './Pages/Details';
 import { getAllXXGG } from '@/services/after-class/xxgg';
+import EmptyArticle from './Pages/EmptyArticle';
 
 const Home = () => {
-  const { currentUserInfo } = useContext(myContext);
+  const { currentUserInfo, courseStatus } = useContext(myContext);
   const [notification, setNotification] = useState<any[]>();
   useEffect(() => {
     async function announcements() {
@@ -33,7 +34,7 @@ const Home = () => {
           <div>欢迎使用课后帮，课后服务选我就对了！ </div>
         </div>
       </header>
-      <div className={styles.pageContent}>
+      {courseStatus === 'empty' ? <EmptyArticle /> : <div className={styles.pageContent}>
         <div className={styles.noticeArea}>
           <IconFont type='icon-gonggao' className={styles.noticeImg} />
           <div className={styles.noticeText}>
@@ -50,7 +51,7 @@ const Home = () => {
         <div className={styles.announceArea}>
           <Details data={notification} />
         </div>
-      </div>
+      </div>}
     </div>
   );
 };
