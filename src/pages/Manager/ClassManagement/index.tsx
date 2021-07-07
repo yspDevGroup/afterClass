@@ -214,6 +214,8 @@ const CourseManagement = () => {
       NJS: data.NJSName ? data.NJSName?.split(',') : [],
       ZJS: data.ZJS || undefined,
       FJS: data.FJS ? data.FJS?.split(',') : [],
+      BMSD: [data.BMKSSJ, data.BMJSSJ],
+      SKSD: [data.KKRQ, data.JKRQ],
     };
     if (!data.KCTP) {
       // 默认图片地址
