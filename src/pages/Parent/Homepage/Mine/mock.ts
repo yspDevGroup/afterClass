@@ -7,8 +7,8 @@ export const iconTextData = [
     fontSize: '28px',
   },
   {
-    text: "已付款",
-    icon: "icon-weifukuan",
+    text: "已完成",
+    icon: "icon-yiwancheng",
     link: "/parent/mine/order?type=paid",
     background: "#F5F5F5",
     fontSize: '28px',

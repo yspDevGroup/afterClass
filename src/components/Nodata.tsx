@@ -1,0 +1,20 @@
+import type { FC } from "react";
+
+type propttype = {
+  imgSrc?: string;
+  desc?: string;
+}
+
+
+const Nodata: FC<propttype> = ({ imgSrc, desc }) => {
+  return (
+    <div style={{ width: '100%' }}>
+      <img src={imgSrc} style={{ margin: '0 auto', width: '180px', display: 'block' }} />
+      <p style={{ lineHeight: '40px', color: '#999', textAlign: 'center', fontSize: '12px' }}>
+        {desc}
+      </p>
+    </div>
+  )
+}
+
+export default Nodata

@@ -4,7 +4,8 @@ import styles from '../index.less';
 import { Badge } from 'antd';
 import myContext from '@/utils/MyContext';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
-import IconFont from '@/components/CustomIcon';
+import noChart from '@/assets/noChart.png';
+import Nodata from '@/components/Nodata';
 
 const Statistical: React.FC = () => {
 
@@ -138,7 +139,7 @@ const Statistical: React.FC = () => {
               </div>
             </div>
           }) :
-          <IconFont type='icon-zanwu' style={{fontSize: '80px',display:'block',margin:'20px auto'}} />
+          <Nodata imgSrc={noChart} desc='暂无统计数据' />
         }
       </div>
     </div>

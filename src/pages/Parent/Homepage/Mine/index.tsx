@@ -54,7 +54,7 @@ const Mine = () => {
           type="icon"
           title="我的订单"
           isheader={true}
-          grid={{ column: 3 }}
+          grid={{ column: 4 }}
           dataSource={iconTextData}
           totil={totail}
         />

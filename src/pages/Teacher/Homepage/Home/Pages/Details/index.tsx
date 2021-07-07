@@ -21,7 +21,7 @@ const Details = (props: { data?: any[] }) => {
           {data?.map((record: any, index: number) => {
             if (index < 4) {
               return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}>
-              <li style={{lineHeight:'35px'}}>
+              <li style={{lineHeight:'30px'}}>
                  <div style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',width:'100%'}}>
                    {record.BT}
                    </div> 

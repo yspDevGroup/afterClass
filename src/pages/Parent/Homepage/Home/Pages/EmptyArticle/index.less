@@ -1,184 +1,77 @@
 .EmptyPage {
-  height: 100%;
-  background: rgba(255, 255, 255, 0.5);
-  .cusHeader {
-    position: relative;
-    height: 126px;
-    background: -o-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
-    background: -moz-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
-    background: -webkit-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
-    background: linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
+  position: relative;
+  top: -30px;
+  margin: 0 10px;
+  background-color: rgba(255, 255, 255, 0.4);
+  height: calc(100vh - 170px);
+  overflow: hidden;
+  border-radius: 30px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 
-    .headerText {
-      position: relative;
-      z-index: 2;
-      padding: 26px 0 0 @padding-md;
+  .header {
+    background-color: rgba(255, 255, 255);
 
-      h4 {
-        margin-bottom: 6px;
-        color: #333333;
-        font-weight: 600;
-        font-size: @font-size-lg;
-        line-height: 24px;
-
-        & + div {
-          color: @text-color-secondary;
-          font-size: @font-size-sm;
-        }
-      }
-    }
-
-    .headerPop {
-      position: absolute;
-      right: 0;
-      width: 40%;
-      max-width: 300px;
-      height: 100%;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-
-      .announceList {
-        div[class*='Title'] a {
-          &:before {
-            display: inline-block;
-            width: 4px;
-            height: 4px;
-            margin-right: 8px;
-            vertical-align: super;
-            background-color: @text-color;
-            border-radius: 50%;
-            content: '';
-          }
-        }
-      }
-    }
-  }
-  .cusContent {
-    position: relative;
-    top: -30px;
-    margin: 0 10px;
-    background-color: rgba(255, 255, 255,0.4);
-    min-height: calc(100vh - 128px);
-    border-radius: 30px 30px 30px 30px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    .header{
-      border-radius: 30px 30px 0 0;
-      background-color: rgba(255, 255, 255);
-      .title {
-        height: 22px;
-        padding-top: 20px;
-        color: #333333;
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 22px;
-        text-align: center;
-        
-      }
-      .time {
-        height: 17px;
-        margin-top: 30px;
-        margin-bottom: 14px;
-        color: #999999;
-        font-size: 12px;
-        line-height: 17px;
-        text-align: center;
-      }
-    }
-   
-    .line {
-      height: 0.5px;
-      background: rgba(0, 0, 0, 0.1);
-    }
-    .opacity {
-      position: absolute;
-      width: 300px;
-      margin: 40px  ;
-      height: 60%;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      z-index: 1;
-      opacity: 0.16;
-    }
-    .imges{
-      background-image{
-        opacity: 0.5;
-      }
-    }
-    textarea {
-      padding: 20px 14px;
-      resize: none ;
-      background: inherit;
-      position: relative;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: calc(100vh - 195px);
-      overflow: auto;
+    .title {
+      height: 22px;
+      padding-top: 20px;
       color: #333333;
-      font-size: 14px;
-      line-height: 27px;
-      text-indent: 1em;
-      border: none;
-      opacity: 1 !important ;
-      z-index: 2;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 22px;
+      text-align: center;
+
+    }
+
+    .time {
+      height: 17px;
+      margin-top: 30px;
+      margin-bottom: 14px;
+      color: #999999;
+      font-size: 12px;
+      line-height: 17px;
+      text-align: center;
     }
   }
-  .Tabs {
-    margin-top: 20px;
-    .menuTab {
-      width: 100%;
-      > div[class='ant-tabs-nav'] {
-        position: fixed;
-        bottom: 0;
-        display: block;
-        width: 100%;
-        height: 44px;
-        margin: 0;
 
-        &:before {
-          top: 0;
-          bottom: auto;
-        }
+  .line {
+    height: 0.5px;
+    background: rgba(0, 0, 0, 0.1);
+  }
 
-        :global {
-          .ant-tabs-nav-wrap {
-            display: block;
+  .opacity {
+    position: absolute;
+    width: 300px;
+    margin: 40px;
+    height: 60%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 1;
+    opacity: 0.6;
+  }
 
-            .ant-tabs-nav-list {
-              flex-flow: initial;
-              justify-content: space-around;
-
-              .ant-tabs-tab {
-                .anticon {
-                  display: block;
-                  margin: 0;
-                }
-                color: @text-color-secondary;
-
-                font-size: @font-size-sm;
-
-                & + .ant-tabs-tab {
-                  margin: 0;
-                }
-              }
-            }
-          }
-
-          .ant-tabs-nav-operations,
-          .ant-tabs-ink-bar {
-            display: none;
-          }
-        }
-      }
-
-      > div[class='ant-tabs-content-holder'] {
-        overflow-y: auto;
-        > div {
-          height: 100%;
-        }
-      }
+  .imges {
+    background-image {
+      opacity: 0.5;
     }
+  }
+
+  textarea {
+    padding: 20px 14px;
+    resize: none;
+    background: inherit;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(~'100vh - 270px');
+    overflow: auto;
+    color: #333333;
+    font-size: 14px;
+    line-height: 27px;
+    text-indent: 1em;
+    border: none;
+    opacity: 1 !important;
+    z-index: 2;
   }
 }

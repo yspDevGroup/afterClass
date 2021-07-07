@@ -6,6 +6,7 @@ import myContext from '@/utils/MyContext';
 import ListComponent from '@/components/ListComponent';
 import { Link } from 'umi';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
+import IconFont from '@/components/CustomIcon';
 
 const { TabPane } = Tabs;
 const defaultMsg: ListData = {
@@ -50,7 +51,7 @@ const CourseTab = () => {
   const url=`/parent/home/course&courseStatus=${courseStatus}`
   return (
     <div className={`${styles.tabHeader}`}>
-      <Tabs centered={centered} tabBarExtraContent={!centered ? { right: <Link to={url}>全部 {'>'}</Link> } : ''} className={styles.courseTab}>
+      <Tabs centered={centered} tabBarExtraContent={!centered ? { right: <Link to={url}>全部 <IconFont type="icon-gengduo" className={styles.gengduo} /></Link> } : ''} className={styles.courseTab}>
         {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
           <TabPane tab="开设课程" key="setup">
             {

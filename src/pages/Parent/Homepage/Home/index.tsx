@@ -44,6 +44,7 @@ const Home = () => {
               {notification[0].BT}
             </Link> : '暂无公告'}
           </div>
+          <IconFont type="icon-gengduo" className={styles.gengduo} />
         </div>
         <div className={styles.enrollArea}>
           <EnrollClassTime />
