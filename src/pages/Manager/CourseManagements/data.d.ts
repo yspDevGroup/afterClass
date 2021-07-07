@@ -11,6 +11,7 @@ export type classType = {
   KCMC?: string;
   KHKCLX?: kcshj;
   KCTP?: string;
+  KCZT?: string;
   BJS?: number;
   title?: string;
   KHBJSJs?: {
@@ -27,6 +28,10 @@ export type classType = {
     JKRQ?: string;
     KBYS?: string;
   }[];
+  XNXQ?: {
+    XN?: string;
+    XQ?: string;
+  },
   KBYS?: string;
 };
 type kcshj = { id?: string; KCLX?: string };

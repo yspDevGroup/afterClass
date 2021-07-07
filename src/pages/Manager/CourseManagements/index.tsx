@@ -28,6 +28,7 @@ const NewClassManagement = () => {
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [xn, setxn] = useState<string>('');
   const [xq, setxq] = useState<string>('');
+  const [xnxq, setXnxq] = useState<any>();
   const [readonly, setReadonly] = useState<boolean>(false);
   const [opentype, setOpentype] = useState(false);
   // 学年学期没有时的提示框控制
@@ -54,6 +55,7 @@ const NewClassManagement = () => {
       const newData = res.xnxqList;
       const curTerm = res.current;
       const defaultData = [...searchData];
+      setXnxq(newData);
       if (newData.data && newData.data.length) {
         if (curTerm) {
           await setxn(curTerm.XN);
@@ -96,6 +98,7 @@ const NewClassManagement = () => {
     } else {
       setReadonly(false);
     }
+    
     if (data) {
       let KHKCLXId: any[] = [];
       KHKCLXId = data.KHKCLX.id;
@@ -292,6 +295,7 @@ const NewClassManagement = () => {
           readonly={readonly}
           xn={xn}
           xq={xq}
+          xnxq={xnxq}
           setOpentype={setOpentype}
         />
         <PromptInformation

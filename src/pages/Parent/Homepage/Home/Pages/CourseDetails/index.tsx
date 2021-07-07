@@ -176,8 +176,6 @@ const CourseDetails: React.FC = () => {
       setCurrentDate(myDate);
     }
   }, [courseid]);
-
-
   useEffect(() => {
     if (orderInfo)
       linkRef.current?.click();

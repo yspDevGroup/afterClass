@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable prefer-destructuring */
+import React, { useEffect, useState } from 'react';
 import ProFormFields from '@/components/ProFormFields';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
-import { getAllXNXQ } from '@/services/after-class/xnxq';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import type { ActionType } from '@ant-design/pro-table/lib/typing';
-import { message } from 'antd';
+import { message, notification } from 'antd';
 import { Button, Drawer } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
 import type { classType } from '../data';
 import styles from './index.less';
 
@@ -22,6 +21,7 @@ type PropsType = {
   actionRef?: React.MutableRefObject<ActionType | undefined>;
   xn?: string;
   xq?: string;
+  xnxq?: any;
   setOpentype: (arg0: boolean) => void;
 };
 const formLayout = {
@@ -30,7 +30,7 @@ const formLayout = {
 };
 
 const NewCourses = (props: PropsType) => {
-  const { current, onClose, visible, actionRef, readonly, setOpentype } = props;
+  const { current, xn, xq, xnxq, onClose, visible, actionRef, readonly, setOpentype } = props;
   const [options, setOptions] = useState<any[]>([]);
   const [form, setForm] = useState<any>();
   const [XNData, setXNData] = useState<any>([]);
@@ -43,11 +43,26 @@ const NewCourses = (props: PropsType) => {
   const [classattend, setClassattend] = useState<any>('');
   // 报名时间
   const [signup, setSignup] = useState<any>('');
-
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
-  const [isXn, setIsXn] = useState<boolean>(true);
-  
+
+  const title = (current ? '编辑课程' : '新增课程');
+  const values = () => {
+    if (current) {
+      const { KHKCLX, KCZT, ...info } = current;
+      return {
+        KCZT: KCZT === '已下架' ? '待发布' : KCZT,
+        KCLXId: KHKCLX?.id,
+        BMKSSJ: baoming,
+        KKRQ: kaike,
+        ...info,
+      };
+    }
+    return {
+      XN: xn,
+      XQ: xq
+    };
+  };
   const Close = () => {
     setBaoming(true);
     setKaike(true);
@@ -61,88 +76,64 @@ const NewCourses = (props: PropsType) => {
     };
     const res = await getAllXXSJPZ(params);
     if (res.status === 'ok') {
-      const arry: any[] = [];
-      const erry: any[] = [];
-      res.data?.map((item: any) => {
-        if (item.TYPE === '1') {
-          arry.push(item.KSSJ, item.JSSJ);
-        }
-        if (item.TYPE === '2') {
-          erry.push(item.KSSJ, item.JSSJ);
-        }
-        return true;
-      });
-      setSignup(arry);
-      setClassattend(erry);
+      if (res.data && res.data.length) {
+        const arry: any[] = [];
+        const erry: any[] = [];
+        res.data?.map((item: any) => {
+          if (item.TYPE === '1') {
+            arry.push(item.KSSJ, item.JSSJ);
+          }
+          if (item.TYPE === '2') {
+            erry.push(item.KSSJ, item.JSSJ);
+          }
+          return true;
+        });
+        setSignup(arry);
+        setClassattend(erry);
+      } else {
+        notification.warning({
+          message: '缺少系统配置时间',
+          description: '当前没有该学期的系统配置时间，请先前往时段维护配置系统时间.',
+          onClick: () => {
+            console.log('Notification Clicked!');
+          },
+        });
+      }
     }
   };
   useEffect(() => {
-    if (current) {
-      setBaoming(false);
-      setKaike(false);
-    } else {
-      setBaoming(true);
-      setKaike(true);
-    }
-  }, [current]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const res = await getAllXNXQ({});
-      if (res.status === 'ok') {
-        const xnxqAllData = res.data;
-        const xnData: any[] = [];
-        xnxqAllData?.map((item: any) => xnData.push(item.XN));
-
-        // 数组去重
-        const unique = (ary: any) => {
-          const s = new Set(ary);
-          return Array.from(s);
-        };
-
-        const xnDataKey = unique(xnData);
-
-        const xq = {};
-        const xn: { label: any; value: any }[] = [];
-        xnDataKey.map((item: any) => {
-          const xqData: { label: any; value: any }[] = [];
-          xnxqAllData?.map((xnxqItem: any) => {
-            if (item === xnxqItem.XN) {
-              return xqData.push({ label: xnxqItem.XQ, value: xnxqItem.XQ });
-            }
-            return '';
-          });
-          xq[`${item}`] = xqData;
-          xn.push({ label: item, value: item });
-          return '';
-        });
-        setXNData(xn);
-        setXQData(xq);
+    if (visible) {
+      if (xnxq) {
+        setXNData(xnxq.data);
+        setXQData(xnxq.subData);
+      }
+      if (current) {
+        onXnXqChange(current.XNXQ?.XN,current.XNXQ?.XQ);
       } else {
-        console.log(res.message);
+        onXnXqChange(xn, xq);
+      }
+      if (!options || options.length === 0) {
+        const res = getAllKHKCLX({ name: '' });
+        Promise.resolve(res).then((data) => {
+          if (data.status === 'ok') {
+            const opt: any[] = [];
+            data.data?.map((item: any) => {
+              return opt.push({
+                label: item.KCLX,
+                value: item.id,
+              });
+            });
+            if (opt === []) {
+              setOpentype(true);
+            }
+            setOptions(opt);
+          }
+        });
       }
     }
-    fetchData();
-  }, []);
 
-  useEffect(() => {
-    const res = getAllKHKCLX({ name: '' });
-    Promise.resolve(res).then((data) => {
-      if (data.status === 'ok') {
-        const opt: any[] = [];
-        data.data?.map((item: any) => {
-          return opt.push({
-            label: item.KCLX,
-            value: item.id,
-          });
-        });
-        if (opt === []) {
-          setOpentype(true);
-        }
-        setOptions(opt);
-      }
-    });
-  }, [visible]);
+  }, [visible, xnxq, xn, xq, current]);
+
   const handleSubmit = () => {
     form.submit();
   };
@@ -226,7 +217,7 @@ const NewCourses = (props: PropsType) => {
       name: 'id',
       key: 'id',
       fieldProps: {
-        autocomplete: 'off',
+        autoComplete: 'off',
       },
     },
     {
@@ -260,7 +251,7 @@ const NewCourses = (props: PropsType) => {
       },
       fieldProps: {
         disabled: true,
-        defaultValue: '待发布',
+        initialValues: '待发布',
       },
     },
     {
@@ -284,7 +275,6 @@ const NewCourses = (props: PropsType) => {
             onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
               setXN(event);
               setXQ(XQData[`${event}`]);
-              setIsXn(true);
               onXnXqChange(event, XQData[`${event}`][0].label);
             },
           },
@@ -302,7 +292,6 @@ const NewCourses = (props: PropsType) => {
           fieldProps: {
             onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
               onXnXqChange(XN, event);
-              setIsXn(false);
             },
           },
         },
@@ -310,12 +299,12 @@ const NewCourses = (props: PropsType) => {
     },
     signup.length > 0
       ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
-            signup[1],
-          ).format('YYYY-MM-DD')}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
+          signup[1],
+        ).format('YYYY-MM-DD')}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -355,10 +344,10 @@ const NewCourses = (props: PropsType) => {
     },
     classattend.length > 0
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -416,7 +405,7 @@ const NewCourses = (props: PropsType) => {
       key: 'KCMS',
     },
   ];
-  const title = (current ? '编辑课程' : '新增课程');
+
   return (
     <>
       <Drawer
@@ -451,25 +440,7 @@ const NewCourses = (props: PropsType) => {
           layout="vertical"
           setForm={setForm}
           onFinish={onFinish}
-          values={
-            XN && isXn
-              ? { XQ: XQData[XN][0].label }
-              : (() => {
-                  if (current) {
-                    const { KHKCLX, ...info } = current;
-                    return {
-                      KCLXId: KHKCLX?.id,
-                      BMKSSJ: baoming,
-                      KKRQ: kaike,
-                      ...info,
-                    };
-                  }
-                  return {
-                    BMKSSJ: baoming,
-                    KKRQ: kaike,
-                  };
-                })()
-          }
+          values={values()}
           formItems={formItems}
           formItemLayout={formLayout}
         />

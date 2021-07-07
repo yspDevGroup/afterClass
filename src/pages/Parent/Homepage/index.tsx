@@ -56,7 +56,8 @@ const PersonalHomepage = () => {
     if (courseStatus === 'empty') {
       history.push('/parent/home/emptyArticle?articlepage=empty');
     }
-  }, [courseStatus])
+  }, [courseStatus]);
+  
   return <div className={styles.mobilePageHeader}>
     <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {

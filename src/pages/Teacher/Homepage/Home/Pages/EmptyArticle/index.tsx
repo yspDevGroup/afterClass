@@ -1,10 +1,3 @@
-/*
- * @description: 
- * @author: txx
- * @Date: 2021-06-23 10:35:06
- * @,@LastEditTime: ,: 2021-07-07 11:11:10
- * @,@LastEditors: ,: Please set LastEditors
- */
 import React, { useEffect, useRef, useState } from 'react';
 import imgPop from '@/assets/teacherBg.png';
 import EmptyBGC from '@/assets/EmptyBGC.png';

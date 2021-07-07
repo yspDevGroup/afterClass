@@ -149,7 +149,7 @@ export const getCurrentXQ = (list: API.XNXQ[]): API.XNXQ | null => {
   }
   // 未找到匹配学期时返回前一个
   // 先按降序排序
-  const tempList = list.sort((a, b) => new Date(a.KSRQ).getTime() - new Date(b.KSRQ).getTime());
+  const tempList = list.sort((a, b) => new Date(b.KSRQ).getTime() - new Date(a.KSRQ).getTime());
   const previousXQ = tempList.find((xq) => new Date() >= new Date(xq.JSRQ));
   if (previousXQ) {
     return previousXQ;
@@ -172,8 +172,8 @@ export const getCurrentStatus = (
   KKKSRQ: string,
   KKJSRQ: string,
 ) => {
-  let currentStatus: 'enroll' | 'enrolling' | 'enrolled' | 'education' | 'noTips' | 'empty' | '' =
-    '';
+  let currentStatus: 'enroll' | 'enrolling' | 'enrolled' | 'education' | 'noTips' | 'empty' =
+    'empty';
   const today = new Date();
   const BMbegin = new Date(BMKSRQ);
   const BMend = new Date(BMJSRQ);
