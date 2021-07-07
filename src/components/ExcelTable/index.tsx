@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import type { FC } from 'react';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
@@ -182,19 +182,25 @@ const Index: FC<IndexPropsType> = ({
 
     let seeChosenItem = null;
     if (type === 'see' && !chosenData) {
-      seeChosenItem = {
-        XQ: rowData[colItem.dataIndex]?.xqId, // 校区ID
-        NJ: rowData[colItem.dataIndex]?.njId, // 年级ID
-        KC: rowData[colItem.dataIndex]?.kcId, // 课程ID
-        BJId: rowData[colItem.dataIndex]?.bjId, //  班级ID
-        CDLX: rowData.room?.FJLXId, // 场地类型ID
-        CDMC: rowData.room?.jsId, // 场地名称
-        weekId: rowData[colItem.dataIndex]?.weekId, // 排课ID
-        jsId: rowData.room?.jsId, // 教室ID
-        hjId: rowData.course?.hjId, // 时间ID
-      };
-      if (typeof switchPages === 'function') {
-        switchPages();
+      if (rowData[colItem.dataIndex]?.bjzt === '已发布') {
+        Modal.warning({
+          title: '此班级已发布，不能再进行排课操作',
+        });
+      } else {
+        seeChosenItem = {
+          XQ: rowData[colItem.dataIndex]?.xqId, // 校区ID
+          NJ: rowData[colItem.dataIndex]?.njId, // 年级ID
+          KC: rowData[colItem.dataIndex]?.kcId, // 课程ID
+          BJId: rowData[colItem.dataIndex]?.bjId, //  班级ID
+          // CDLX: rowData.room?.FJLXId, // 场地类型ID
+          // CDMC: rowData.room?.jsId, // 场地名称
+          weekId: rowData[colItem.dataIndex]?.weekId, // 排课ID
+          jsId: rowData.room?.jsId, // 教室ID
+          hjId: rowData.course?.hjId, // 时间ID
+        };
+        if (typeof switchPages === 'function') {
+          switchPages();
+        }
       }
     } else if (type === 'edit') {
       if (chosenData && !rowData[colItem.dataIndex]) {

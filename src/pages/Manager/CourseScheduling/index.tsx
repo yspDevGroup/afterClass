@@ -132,6 +132,7 @@ const ClassManagement = () => {
                   bjId: KHItem.KHBJSJ.id, // 班级ID
                   kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
                   njId: KHItem.KHBJSJ.NJSName.split(',')[0], // 年级ID
+                  bjzt: KHItem.KHBJSJ.BJZT, // 班级状态
                   xqId: KHItem.KHBJSJ.XQName, // 校区ID
                   color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(36, 54, 81, 1)',
                   dis: BJID
