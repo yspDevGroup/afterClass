@@ -154,13 +154,13 @@ const AddArranging: FC<PropsType> = (props) => {
   const getSelectdata = (value: any) => {
     sameClassDatas.map((item: any, key: number) => {
       if (
-        item.FJSJId === value.FJSJId &&
-        item.KHBJSJId === value.KHBJSJId &&
-        item.WEEKDAY === value.WEEKDAY
+        item.FJSJId === value.FJSJId && // 教室ID
+        item.XXSJPZId === value.XXSJPZId && // 时间ID
+        item.WEEKDAY === value.WEEKDAY // 周
       ) {
         sameClassDatas.splice(key, 1);
       }
-      return '';
+      return item;
     });
   };
 
@@ -197,7 +197,6 @@ const AddArranging: FC<PropsType> = (props) => {
       setCDLoading(false);
     }, 500);
   };
-
   // 保存
   const submit = async (params: any) => {
     if (Bj || index) {
@@ -218,6 +217,7 @@ const AddArranging: FC<PropsType> = (props) => {
           message.success('保存成功');
           tableServers();
           setState(true);
+          setBJIDData('');
           return true;
         }
         if (result.status === 'error') {
@@ -251,6 +251,7 @@ const AddArranging: FC<PropsType> = (props) => {
           page: 1,
           pageCount: 0,
           name: '',
+          bjzt: ['待发布', '已下架'],
         });
         setBjData(bjList.data);
         if (bjList.status === 'ok') {
@@ -445,7 +446,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     message.error(kcList.message);
                   }
                   // 获取班级的数据
-                  const bjList = await getAllKHBJSJ(params);
+                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待发布', '已下架'] });
                   if (bjList.status === 'ok') {
                     setBjData(bjList.data);
                   }
@@ -488,7 +489,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     message.error(kcList.message);
                   }
                   // 获取班级的数据
-                  const bjList = await getAllKHBJSJ(params);
+                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待发布', '已下架'] });
                   if (bjList.status === 'ok') {
                     setBjData(bjList.data);
                   }
@@ -514,7 +515,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     name: '',
                   };
                   // 获取班级的数据
-                  const bjList = await getAllKHBJSJ(params);
+                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待发布', '已下架'] });
                   setBjData(bjList.data);
                 },
               }}
