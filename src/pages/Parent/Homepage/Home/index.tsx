@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'umi';
-import EmptyBGC from '@/assets/EmptyBGC.png';
 import imgPop from '@/assets/mobileBg.png';
 import IconFont from '@/components/CustomIcon';
 import EnrollClassTime from '@/components/EnrollClassTime';
@@ -11,7 +10,7 @@ import Details from './Pages/Details';
 import { getAllXXGG } from '@/services/after-class/xxgg';
 
 const Home = () => {
-  const { currentUserInfo, courseStatus } = useContext(myContext);
+  const { currentUserInfo } = useContext(myContext);
   const [notification, setNotification] = useState<any[]>();
   useEffect(() => {
     async function announcements() {
@@ -34,8 +33,7 @@ const Home = () => {
           <div>欢迎使用课后帮，课后服务选我就对了！ </div>
         </div>
       </header>
-      {courseStatus === '' ? <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }}>
-      </div> : <div className={styles.pageContent}>
+      <div className={styles.pageContent}>
         <div className={styles.noticeArea}>
           <IconFont type='icon-gonggao' className={styles.noticeImg} />
           <div className={styles.noticeText}>
@@ -52,7 +50,7 @@ const Home = () => {
         <div className={styles.announceArea}>
           <Details data={notification} />
         </div>
-      </div>}
+      </div>
     </div>
   );
 };

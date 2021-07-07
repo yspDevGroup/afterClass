@@ -36,6 +36,8 @@ const Operation = (props: PropsType) => {
     const res = await updateKHKCSJ({ id: recorde.id }, { ...recorde });
     if (res.status === 'ok') {
       actionRef?.current?.reload();
+    }else{
+      message.error('课程发布失败，请联系管理员或稍后重试')
     }
     return '';
   };

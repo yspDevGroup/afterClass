@@ -56,7 +56,7 @@ const PersonalHomepage = () => {
   }, [courseStatus])
   return (
     <div className={styles.mobilePageHeader}>
-      <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
+      {courseStatus === '' ? '' : <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
         <Tabs
           tabPosition="bottom"
           className={styles.menuTab}
@@ -102,8 +102,7 @@ const PersonalHomepage = () => {
           >
             <div style={{ height: '100%', overflowY: 'auto' }} ref={eduRef} >
               <Education />
-              </div>
-
+            </div>
           </TabPane>
           <TabPane
             tab={
@@ -117,12 +116,12 @@ const PersonalHomepage = () => {
             }
             key="mine"
           >
-          <div style={{ height: '100%', overflowY: 'auto' }} ref={mineRef} >
-            <Mine />
+            <div style={{ height: '100%', overflowY: 'auto' }} ref={mineRef} >
+              <Mine />
             </div>
           </TabPane>
         </Tabs>
-      </myContext.Provider>
+      </myContext.Provider>}
     </div>
   );
 };

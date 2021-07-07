@@ -97,11 +97,17 @@ export const envjudge = () => {
 export const getLoginPath = () => {
   let loginPath: string;
   switch (envjudge()) {
-    case 'com-wx-mobile': // 手机端企业微信
-    case 'wx-mobile': // 手机端微信
     case 'com-wx-pc': // PC端企业微信
+      loginPath = `${ENV_backUrl}/wechat/platAuth?plat=qywx&isMobile=false`;
+      break;
+    case 'com-wx-mobile': // 手机端企业微信
+      loginPath = `${ENV_backUrl}/wechat/platAuth?plat=qywx&isMobile=true`;
+      break;
     case 'wx-pc': // PC端微信
-      loginPath = `${ENV_backUrl}/wechat/platAuth`;
+      loginPath = `${ENV_backUrl}/wechat/platAuth?plat=wx&isMobile=false`;
+      break;
+    case 'wx-mobile': // 手机端微信
+      loginPath = `${ENV_backUrl}/wechat/platAuth?plat=wx&isMobile=true`;
       break;
     case 'mobile': // 手机
     case 'pc': // PC

@@ -8,6 +8,10 @@
  */
 export type classType = {
   id?: string;
+  BMJSSJ?: string;
+  BMKSSJ?: string;
+  JKRQ?: string;
+  KKRQ?: string;
   KCMC?: string;
   KHKCLX?: kcshj;
   KCTP?: string;

@@ -37,8 +37,8 @@ const NewCourses = (props: PropsType) => {
   const [XQData, setXQData] = useState<any>([]);
   const [XN, setXN] = useState<any>();
   const [XQ, setXQ] = useState<any>();
-  const [baoming, setBaoming] = useState<boolean>(true);
-  const [kaike, setKaike] = useState<boolean>(true);
+  const [baoming, setBaoming] = useState<boolean>(false);
+  const [kaike, setKaike] = useState<boolean>(false);
   // 上课时间
   const [classattend, setClassattend] = useState<any>('');
   // 报名时间
@@ -53,19 +53,18 @@ const NewCourses = (props: PropsType) => {
       return {
         KCZT: KCZT === '已下架' ? '待发布' : KCZT,
         KCLXId: KHKCLX?.id,
-        BMKSSJ: baoming,
-        KKRQ: kaike,
         ...info,
       };
     }
     return {
       XN: xn,
-      XQ: xq
+      XQ: xq,
+      KCZT: '待发布'
     };
   };
   const Close = () => {
-    setBaoming(true);
-    setKaike(true);
+    setBaoming(false);
+    setKaike(false);
     onClose!();
   };
   const onXnXqChange = async (xnValue: any, xqvalue: any) => {
@@ -76,21 +75,20 @@ const NewCourses = (props: PropsType) => {
     };
     const res = await getAllXXSJPZ(params);
     if (res.status === 'ok') {
-      if (res.data && res.data.length) {
-        const arry: any[] = [];
-        const erry: any[] = [];
-        res.data?.map((item: any) => {
-          if (item.TYPE === '1') {
-            arry.push(item.KSSJ, item.JSSJ);
-          }
-          if (item.TYPE === '2') {
-            erry.push(item.KSSJ, item.JSSJ);
-          }
-          return true;
-        });
-        setSignup(arry);
-        setClassattend(erry);
-      } else {
+      const arry: any[] = [];
+      const erry: any[] = [];
+      res.data?.map((item: any) => {
+        if (item.TYPE === '1') {
+          arry.push(item.KSSJ, item.JSSJ);
+        }
+        if (item.TYPE === '2') {
+          erry.push(item.KSSJ, item.JSSJ);
+        }
+        return true;
+      });
+      setSignup(arry);
+      setClassattend(erry);
+      if (arry.length === 0 || erry.length === 0) {
         notification.warning({
           message: '缺少系统配置时间',
           description: '当前没有该学期的系统配置时间，请先前往时段维护配置系统时间.',
@@ -108,7 +106,7 @@ const NewCourses = (props: PropsType) => {
         setXQData(xnxq.subData);
       }
       if (current) {
-        onXnXqChange(current.XNXQ?.XN,current.XNXQ?.XQ);
+        onXnXqChange(current.XNXQ?.XN, current.XNXQ?.XQ);
       } else {
         onXnXqChange(xn, xq);
       }
@@ -133,6 +131,24 @@ const NewCourses = (props: PropsType) => {
     }
 
   }, [visible, xnxq, xn, xq, current]);
+  useEffect(() => {
+    if (current) {
+      if (signup) {
+        const date = current.BMKSSJ && current.BMKSSJ[0].substring(0, 10);
+        const date1 = current.BMJSSJ && current.BMJSSJ[0].substring(0, 10);
+        if (!(date === signup[0] && date1 === signup[1])) {
+          setBaoming(true);
+        }
+      }
+      if (classattend) {
+        const date = current.KKRQ && current.KKRQ[0].substring(0, 10);
+        const date1 = current.JKRQ && current.JKRQ[0].substring(0, 10);
+        if (!(date === signup[0] && date1 === signup[1])) {
+          setKaike(true);
+        }
+      }
+    }
+  }, [current, signup, classattend])
 
   const handleSubmit = () => {
     form.submit();
@@ -173,14 +189,14 @@ const NewCourses = (props: PropsType) => {
         const optionse = { ...values, KCTP: imageUrl };
         res = updateKHKCSJ(params, optionse);
       } else {
-        if (kaike === true) {
+        if (!kaike) {
           values.KKRQ = classattend[0];
           values.JKRQ = classattend[1];
         } else {
           values.JKRQ = values.KKRQ[1];
           values.KKRQ = values.KKRQ[0];
         }
-        if (baoming === true) {
+        if (!baoming) {
           values.BMKSSJ = new Date(moment(new Date(signup[0])).format('YYYY-MM-DD HH:mm:ss'));
           values.BMJSSJ = new Date(moment(new Date(signup[1])).format('YYYY-MM-DD HH:mm:ss'));
         } else {
@@ -322,7 +338,7 @@ const NewCourses = (props: PropsType) => {
               }
               return setBaoming(false);
             },
-            checked: !baoming,
+            checked: baoming,
           },
         },
       ],
@@ -334,7 +350,7 @@ const NewCourses = (props: PropsType) => {
       key: 'BMKSSJ',
       width: '100%',
       disabled: readonly,
-      hidden: baoming,
+      hidden: !baoming,
       fieldProps: {
         disabledDate: (currente: any) => {
           const defaults = moment(currente).format('YYYY-MM-DD HH:mm:ss');
@@ -365,7 +381,7 @@ const NewCourses = (props: PropsType) => {
               }
               return setKaike(false);
             },
-            checked: !kaike,
+            checked: kaike,
           },
         },
       ],
@@ -377,7 +393,7 @@ const NewCourses = (props: PropsType) => {
       key: 'KKRQ',
       width: '100%',
       disabled: readonly,
-      hidden: kaike,
+      hidden: !kaike,
       fieldProps: {
         disabledDate: (currente: any) => {
           const defaults = moment(currente).format('YYYY-MM-DD HH:mm:ss');

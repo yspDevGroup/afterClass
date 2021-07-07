@@ -57,9 +57,9 @@ const PersonalHomepage = () => {
       history.push('/parent/home/emptyArticle?articlepage=empty');
     }
   }, [courseStatus]);
-  
+
   return <div className={styles.mobilePageHeader}>
-    <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
+    {courseStatus === '' ? '' : <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
       <Tabs tabPosition='bottom' className={styles.menuTab} onTabClick={(key: string) => {
         setActiveKey(key);
         if (homeRef.current)
@@ -69,48 +69,48 @@ const PersonalHomepage = () => {
         if (mineRef.current)
           (mineRef.current as unknown as HTMLElement).scrollTop = 0;
       }}>
-      <TabPane tab={
-        <span>
-          <IconFont
-            style={{ 'fontSize': '16px' }}
-            type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
-          />
-          首页
-        </span>
-      } key="index">
-        <div style={{ height: '100%', overflowY: 'auto' }} ref={homeRef} >
-          <Home />
-        </div>
-      </TabPane>
-      {courseStatus === 'empty' ? '' : <TabPane tab={
-        <span>
-          <IconFont
-            style={{ 'fontSize': '16px' }}
-            type={activeKey === 'study' ? 'icon-xuexiyuandifill' : 'icon-xuexiyuandi'}
-          />
-          学习园地
-        </span>
-      } key="study">
-        <div style={{ height: '100%', overflowY: 'auto' }} ref={studyRef} >
-          <Study />
-        </div>
-      </TabPane>}
-      <TabPane tab={
-        <span>
-          <IconFont
-            style={{ 'fontSize': '16px' }}
-            type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
-          />
-          我的
-        </span>
-      } key="mine">
-        <div style={{ height: '100%', overflowY: 'auto' }} ref={mineRef} >
-          <Mine />
-        </div>
-      </TabPane>
+        <TabPane tab={
+          <span>
+            <IconFont
+              style={{ 'fontSize': '16px' }}
+              type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
+            />
+            首页
+          </span>
+        } key="index">
+          <div style={{ height: '100%', overflowY: 'auto' }} ref={homeRef} >
+            <Home />
+          </div>
+        </TabPane>
+        <TabPane tab={
+          <span>
+            <IconFont
+              style={{ 'fontSize': '16px' }}
+              type={activeKey === 'study' ? 'icon-xuexiyuandifill' : 'icon-xuexiyuandi'}
+            />
+            学习园地
+          </span>
+        } key="study">
+          <div style={{ height: '100%', overflowY: 'auto' }} ref={studyRef} >
+            <Study />
+          </div>
+        </TabPane>
+        <TabPane tab={
+          <span>
+            <IconFont
+              style={{ 'fontSize': '16px' }}
+              type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
+            />
+            我的
+          </span>
+        } key="mine">
+          <div style={{ height: '100%', overflowY: 'auto' }} ref={mineRef} >
+            <Mine />
+          </div>
+        </TabPane>
       </Tabs>
 
-    </myContext.Provider>
+    </myContext.Provider>}
   </div >;
 };
 
