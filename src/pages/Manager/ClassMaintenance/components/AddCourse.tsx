@@ -47,14 +47,17 @@ const AddCourse: FC<AddCourseProps> = ({
   const [campus, setCampus] = useState<any>([]);
   // 年级
   const [grade, setGrade] = useState<any>();
-  const [xQItem, setXQItem] = useState<any>([]);
+  // const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
   // 教师
   const [teacherData, setTeacherData] = useState<any[]>([]);
-
+  // 年级名字
+  const [nJLabelItem, setNJLabelItem] = useState<any>([]);
+  // 校区名字
+  const [xQItem, setXQLabelItem] = useState<any>('');
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -111,22 +114,25 @@ const AddCourse: FC<AddCourseProps> = ({
   };
 
   const onFinish = (values: any) => {
-    console.log('values', values);
-
     new Promise((resolve, reject) => {
       let res = null;
+      values.BMKSSJ = new Date(values?.BMSD[0] || signup[0]);
+      values.BMJSSJ = new Date(values?.BMSD[1] || signup[1]);
+      const options = {
+        ...values,
+        NJS: values.NJS?.toString(), // 年级ID
+        NJSName: nJLabelItem?.toString(), // 年级名称
+        FJS: values.FJS?.toString(), // 副班
+        XQName: xQItem, // 校区名称
+        KCTP: imageUrl,
+      };
       if (formValues?.id) {
         const params = {
           id: formValues?.id,
         };
-        values.BMKSSJ = new Date(values?.BMSD[0] || signup[0]);
-        values.BMJSSJ = new Date(values?.BMSD[1] || signup[1]);
-        const options = values;
         res = updateKHBJSJ(params, options);
       } else {
-        values.BMKSSJ = new Date(values?.BMSD[0] || signup[0]);
-        values.BMJSSJ = new Date(values?.BMSD[1] || signup[1]);
-        res = createKHBJSJ(values);
+        res = createKHBJSJ(options);
       }
       resolve(res);
       reject(res);
@@ -136,8 +142,12 @@ const AddCourse: FC<AddCourseProps> = ({
           message.success('保存成功');
           onClose();
           actionRef?.current?.reload();
+        } else if (data.message!.indexOf('token') > -1) {
+          message.error('身份验证过期，请重新登录');
+        } else if (data.message!.indexOf('Validation') > -1) {
+          message.error('已存在该数据，请勿重复添加');
         } else {
-          message.error(`保存失败，${data.message}`);
+          message.error(`${data.message},请联系管理员或稍后再试`);
         }
       })
       .catch((error) => {
@@ -280,23 +290,33 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'select',
       name: 'XQ',
       key: 'XQ',
-      label: '所属校区',
+      label: '所属校区:',
       disabled: readonly,
+      rules: [{ required: true, message: '请填写所属校区' }],
       fieldProps: {
         options: campus,
-        onChange(value: any) {
-          setXQItem(value);
+        onChange(value: any, option: any) {
+          form.setFieldsValue({ NJS: undefined });
+          setXQLabelItem(option?.label);
         },
       },
     },
     {
       type: 'select',
-      name: 'njIds',
-      key: 'njIds',
-      label: '适用年级',
+      name: 'NJS',
+      key: 'NJS',
+      label: '适用年级:',
+      rules: [{ required: true, message: '请填写适用年级' }],
       fieldProps: {
         mode: 'multiple',
         options: grade ? grade[xQItem] : [],
+        onChange(_: any, option: any) {
+          const njsIabel: any[] = [];
+          option.map((item: any) => {
+            njsIabel.push(item?.label);
+          });
+          setNJLabelItem(njsIabel);
+        },
       },
       disabled: readonly,
     },
