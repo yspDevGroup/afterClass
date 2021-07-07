@@ -231,11 +231,10 @@ const CourseDetails: React.FC = () => {
           <div className={styles.wrap}>
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
-                <img src={KcDetail?.KCTP} alt="" /> :
-                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px' }} />
+                <img src={KcDetail?.KCTP} alt="" style={{marginBottom:'10px'}}/> :
+                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px',margin:'10px' }} />
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
-
             <ul>
               <li>上课时段：{KcDetail?.KKRQ}~{KcDetail?.JKRQ}</li>
               <li>上课地点：本校</li>

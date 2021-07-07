@@ -249,8 +249,8 @@ const CourseDetails: React.FC = () => {
           <div className={styles.wrap}>
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
-                <img src={KcDetail?.KCTP} alt="" /> :
-                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px' }} />
+                <img src={KcDetail?.KCTP} alt="" style={{marginBottom:'10px'}}/> :
+                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px',margin:'10px' }} />
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 
@@ -316,7 +316,7 @@ const CourseDetails: React.FC = () => {
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }) => {
-                        const text = `${value.BJMC}已有${getrs(value.id)}人报名，共${value.BJRS}个名额`;
+                        const text = `${value.BJMC}已有${()=>getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         return <Radio.Button className={styles.BjInformation} value={valueName} onClick={() => bjxx(value.BMKSSJ, value.BMJSSJ)}>
                           {/* <Tooltip placement="bottomLeft" title={text} color='cyan'> */}

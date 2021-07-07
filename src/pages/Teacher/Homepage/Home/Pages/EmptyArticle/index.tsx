@@ -2,11 +2,11 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-23 10:35:06
- * @LastEditTime: 2021-06-28 16:34:33
- * @LastEditors: txx
+ * @,@LastEditTime: ,: 2021-07-07 11:11:10
+ * @,@LastEditors: ,: Please set LastEditors
  */
 import React, { useEffect, useRef, useState } from 'react';
-import imgPop from '@/assets/mobileBg.png';
+import imgPop from '@/assets/teacherBg.png';
 import EmptyBGC from '@/assets/EmptyBGC.png';
 import styles from "./index.less";
 import { Article } from './mock';
@@ -54,12 +54,14 @@ const EmptyArticle = () => {
           </div>
         </header>
         <div className={styles.cusContent}>
+          <div className={styles.header}>
           <div className={styles.title}>{content.title}</div>
           <div className={styles.time}>{content.time}</div>
-          <div className={styles.line}></div>
-          <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }}>
           </div>
-          <textarea disabled value={content.text} />
+          <div className={styles.line}></div>
+          <div className={styles.opacity}  style={{ backgroundImage: `url(${EmptyBGC})`}}>
+          </div>
+          <textarea disabled value={content.text} className={styles.imges}/>
         </div>
       </div>
     )
