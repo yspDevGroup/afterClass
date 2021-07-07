@@ -50,6 +50,8 @@ const AddCourse: FC<AddCourseProps> = ({
   const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
+  // 上传成功后返回的图片地址
+  const [imageUrl, setImageUrl] = useState('');
   // 教师
   const [teacherData, setTeacherData] = useState<any[]>([]);
 
@@ -109,21 +111,21 @@ const AddCourse: FC<AddCourseProps> = ({
   };
 
   const onFinish = (values: any) => {
+    console.log('values', values);
+
     new Promise((resolve, reject) => {
       let res = null;
       if (formValues?.id) {
         const params = {
           id: formValues?.id,
         };
-        if (values.BMKSSJ && values.BMJSSJ) {
-          values.BMKSSJ = new Date(values.BMKSSJ);
-          values.BMJSSJ = new Date(values.BMJSSJ);
-        }
+        values.BMKSSJ = new Date(values?.BMSD[0] || signup[0]);
+        values.BMJSSJ = new Date(values?.BMSD[1] || signup[1]);
         const options = values;
         res = updateKHBJSJ(params, options);
       } else {
-        values.BMKSSJ = new Date(values.BMKSSJ);
-        values.BMJSSJ = new Date(values.BMJSSJ);
+        values.BMKSSJ = new Date(values?.BMSD[0] || signup[0]);
+        values.BMJSSJ = new Date(values?.BMSD[1] || signup[1]);
         res = createKHBJSJ(values);
       }
       resolve(res);
@@ -145,6 +147,25 @@ const AddCourse: FC<AddCourseProps> = ({
 
   const handleSubmit = () => {
     form.submit();
+  };
+
+  const handleImageChange = (e: any) => {
+    if (e.file.status === 'done') {
+      const mas = e.file.response.message;
+      if (typeof e.file.response === 'object' && e.file.response.status === 'error') {
+        message.error(`上传失败，${mas}`);
+      } else {
+        const res = e.file.response;
+        if (res.status === 'ok') {
+          message.success(`上传成功`);
+          setImageUrl(res.data);
+        }
+      }
+    } else if (e.file.status === 'error') {
+      const mass = e.file.response.message;
+
+      message.error(`上传失败，${mass}`);
+    }
   };
 
   const formItems: any[] = [
@@ -374,8 +395,11 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'KCTP',
       key: 'KCTP',
       disabled: readonly,
-      upurl: '',
-      imageurl: formValues?.KCTP,
+      imagename: 'image',
+      upurl: '/api/upload/uploadFile',
+      imageurl: imageUrl || formValues?.KCTP,
+      handleImageChange,
+      accept: '.jpg, .jpeg, .png',
     },
     {
       type: 'textArea',
@@ -395,6 +419,7 @@ const AddCourse: FC<AddCourseProps> = ({
         visible={visible}
         className={styles.courseStyles}
         destroyOnClose={true}
+        maskClosable={false}
         bodyStyle={{ paddingBottom: 80 }}
         footer={
           names === 'chakan' ? null : (
@@ -403,7 +428,13 @@ const AddCourse: FC<AddCourseProps> = ({
                 textAlign: 'right',
               }}
             >
-              <Button onClick={onClose} style={{ marginRight: 16 }}>
+              <Button
+                onClick={() => {
+                  onClose();
+                  setImageUrl('');
+                }}
+                style={{ marginRight: 16 }}
+              >
                 取消
               </Button>
               <Button onClick={handleSubmit} type="primary">

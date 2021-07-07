@@ -124,6 +124,8 @@ const ClassMaintenance = () => {
     setVisible(false);
   };
   const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+  const xn = getQueryString('xn');
+  const xq = getQueryString('xq');
   const columns: ProColumns<CourseItem>[] = [
     // {
     //   title: '序号',
@@ -215,12 +217,12 @@ const ClassMaintenance = () => {
       align: 'center',
       width: 100,
       render: (_, record) => {
-        // const Url = `/courseScheduling?courseId=${record.id}&xn=${xn}&xq=${xq}`;
+        const Url = `/courseScheduling?courseId=${record.id}&xn=${xn}&xq=${xq}`;
         if (record.BJZT === '待发布' || record.BJZT === '已下架') {
           if (record.KHPKSJs && record.KHPKSJs?.length === 0) {
-            return <Link to={'Url'}>未排课</Link>;
+            return <Link to={Url}>未排课</Link>;
           }
-          return <Link to={'Url'}>已排课</Link>;
+          return <Link to={Url}>已排课</Link>;
         }
         return <>已排课</>;
       },

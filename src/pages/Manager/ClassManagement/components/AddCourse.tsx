@@ -145,10 +145,8 @@ const AddCourse: FC<AddCourseProps> = ({
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
-      if (values.BMKSSJ && values.BMJSSJ) {
-        values.BMKSSJ = new Date(values.BMKSSJ);
-        values.BMJSSJ = new Date(values.BMJSSJ);
-      }
+      values.BMKSSJ = new Date(values?.BMSD[0] || signup[0]);
+      values.BMJSSJ = new Date(values?.BMSD[1] || signup[1]);
       const options = {
         ...values,
         NJS: values.NJS?.toString(), // 年级ID
@@ -173,9 +171,9 @@ const AddCourse: FC<AddCourseProps> = ({
           message.success('保存成功');
           onClose();
           actionRef?.current?.reload();
-        } else if ((data.message!).indexOf('token') > -1) {
+        } else if (data.message!.indexOf('token') > -1) {
           message.error('身份验证过期，请重新登录');
-        } else if ((data.message!).indexOf('Validation') > -1) {
+        } else if (data.message!.indexOf('Validation') > -1) {
           message.error('已存在该数据，请勿重复添加');
         } else {
           message.error(`${data.message},请联系管理员或稍后再试`);
@@ -213,7 +211,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '班级名称：',
       name: 'BJMC',
       key: 'BJMC',
-      disabled:readonly,
+      disabled: readonly,
       rules: [{ required: true, message: '请填写班级名称' }],
       fieldProps: {
         autocomplete: 'off',
@@ -221,7 +219,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'select',
-      disabled:readonly,
+      disabled: readonly,
       label: '课程名称：',
       name: 'KHKCSJId',
       key: 'KHKCSJId',
@@ -232,7 +230,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'inputNumber',
-      disabled:readonly,
+      disabled: readonly,
       label: '课时数：',
       name: 'KSS',
       key: 'KSS',
@@ -244,7 +242,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'inputNumber',
-      disabled:readonly,
+      disabled: readonly,
       label: '班级人数：',
       name: 'BJRS',
       key: 'BJRS',
@@ -252,7 +250,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'group',
-      disabled:readonly,
+      disabled: readonly,
       groupItems: [
         {
           type: 'input',
@@ -269,7 +267,7 @@ const AddCourse: FC<AddCourseProps> = ({
           label: '费用：',
           name: 'FY',
           key: 'FY',
-          disabled:readonly,
+          disabled: readonly,
           rules: [{ required: true, message: '请填写费用' }],
           fieldProps: {
             autocomplete: 'off',
@@ -282,7 +280,7 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'XQ',
       key: 'XQ',
       label: '所属校区:',
-      disabled:readonly,
+      disabled: readonly,
       rules: [{ required: true, message: '请填写所属校区' }],
       fieldProps: {
         options: campus,
@@ -310,18 +308,18 @@ const AddCourse: FC<AddCourseProps> = ({
           setNJLabelItem(njsIabel);
         },
       },
-      disabled:readonly,
+      disabled: readonly,
     },
     {
       type: 'group',
-      disabled:readonly,
+      disabled: readonly,
       groupItems: [
         {
           type: 'select',
           label: '主班：',
           name: 'ZJS',
           key: 'ZJS',
-          disabled:readonly,
+          disabled: readonly,
           rules: [{ required: true, message: '请选择班主任' }],
           fieldProps: {
             virtual: false,
@@ -338,7 +336,7 @@ const AddCourse: FC<AddCourseProps> = ({
           label: '副班：(多选)',
           name: 'FJS',
           key: 'FJS',
-          disabled:readonly,
+          disabled: readonly,
           rules: [{ required: true, message: '请选择副班主任' }],
           fieldProps: {
             mode: 'multiple',
@@ -355,16 +353,16 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     signup.length > 0
       ? {
-        type: 'divTab',
-        text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
       key: 'div',
       label: `单独设置报名时段：`,
-      disabled:readonly,
+      disabled: readonly,
       lineItem: [
         {
           type: 'switch',
@@ -386,7 +384,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: `报名时段:`,
       name: 'BMSD',
       key: 'BMSD',
-      disabled:readonly,
+      disabled: readonly,
       width: '100%',
       hidden: baoming,
       fieldProps: {
@@ -398,20 +396,20 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     classattend.length > 0
       ? {
-        type: 'divTab',
-        text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
       key: 'div1',
-      disabled:readonly,
+      disabled: readonly,
       label: `单独设置上课时段：`,
       lineItem: [
         {
           type: 'switch',
-          disabled:readonly,
+          disabled: readonly,
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
@@ -431,7 +429,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'SKSD',
       width: '100%',
       hidden: kaike,
-      disabled:readonly,
+      disabled: readonly,
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
@@ -444,7 +442,7 @@ const AddCourse: FC<AddCourseProps> = ({
       label: '封面：',
       name: 'KCTP',
       key: 'KCTP',
-      disabled:readonly,
+      disabled: readonly,
       imagename: 'image',
       upurl: '/api/upload/uploadFile',
       imageurl: imageUrl || formValues?.KCTP,
@@ -453,7 +451,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'textArea',
-      disabled:readonly,
+      disabled: readonly,
       label: '简介：',
       name: 'KCMS',
       key: 'KCMS',

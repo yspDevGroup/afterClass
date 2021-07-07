@@ -98,7 +98,7 @@ const NewClassManagement = () => {
     } else {
       setReadonly(false);
     }
-    
+
     if (data) {
       let KHKCLXId: any[] = [];
       KHKCLXId = data.KHKCLX.id;
@@ -151,15 +151,13 @@ const NewClassManagement = () => {
       align: 'center',
       width: 100,
       render: (_, record) => {
-        const Url = `/courseManagements/classMaintenance?courseId=${record.id}`;
-        const classes = [];
-        record.KHBJSJs?.map((item) => {
-          if (item.BJZT === '已发布') {
-            return classes.push(item);
-          }
-          return false;
-        });
-        return <Link to={Url}>{classes.length}</Link>;
+        const Url = `/courseManagements/classMaintenance?courseId=${record.id}&xn=${xn}&xq=${xq}`;
+        const classes = record.KHBJSJs?.filter((item) => item.BJZT === '已发布');
+        return (
+          <Link to={Url}>
+            {classes?.length}/{record.KHBJSJs?.length}
+          </Link>
+        );
       },
     },
     {
@@ -199,7 +197,7 @@ const NewClassManagement = () => {
       ellipsis: true,
       dataIndex: 'KCZT',
       key: 'KCZT',
-      width:110
+      width: 110,
     },
     {
       title: '操作',
@@ -311,7 +309,7 @@ const NewClassManagement = () => {
           event={Tips}
         />
         <Modal
-          title='课程类型维护'
+          title="课程类型维护"
           destroyOnClose
           width="500px"
           visible={modalVisible}

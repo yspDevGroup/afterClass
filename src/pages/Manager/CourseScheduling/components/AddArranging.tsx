@@ -323,17 +323,17 @@ const AddArranging: FC<PropsType> = (props) => {
         }
 
         // 查询房间占用情况
-        const Fjplan = await getFJPlan({
-          lxId: cdlxId,
-          fjId: formValues?.CDMC,
-          xn,
-          xq,
-          isPk: false,
-        });
-        if (Fjplan.status === 'ok') {
-          const data = processingData(Fjplan.data, xXSJPZData);
-          setTableDataSource(data);
-        }
+        // const Fjplan = await getFJPlan({
+        //   lxId: cdlxId,
+        //   fjId: formValues?.CDMC,
+        //   xn,
+        //   xq,
+        //   isPk: false,
+        // });
+        // if (Fjplan.status === 'ok') {
+        //   const data = processingData(Fjplan.data, xXSJPZData);
+        //   setTableDataSource(data);
+        // }
       } catch (error) {
         message.error('error');
       }
@@ -614,7 +614,7 @@ const AddArranging: FC<PropsType> = (props) => {
                 </div>
               )}
             </div>
-            <ProFormSelect
+            {/* <ProFormSelect
               width="md"
               options={roomType}
               name="CDLX"
@@ -688,7 +688,7 @@ const AddArranging: FC<PropsType> = (props) => {
                   }
                 },
               }}
-            />
+            /> */}
 
             <div className="site">
               <span>场地：</span>
