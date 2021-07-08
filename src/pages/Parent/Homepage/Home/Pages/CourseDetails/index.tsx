@@ -154,13 +154,18 @@ const CourseDetails: React.FC = () => {
     fetchData();
   }, [classid])
   useEffect(() => {
-    if(gl&&classid&&weekd){
-      const bjpk=async()=>{
-        const res=await getKHBJSJ({id:classid})
-        if(res.status==='ok'&&res.data){
+    if (gl && classid && weekd) {
+      const bjpk = async () => {
+        const res = await getKHBJSJ({ id: classid })
+        if (res.status === 'ok' && res.data) {
           const classbegins: any[] = [];
           const absence: any[] = [];
-          const datex = DateRange(res.data.KKRQ!, res.data.JKRQ!);
+          const datex: any[] = []
+          if (res.data.KKRQ && res.data.JKRQ) {
+            datex.push(DateRange(res.data.KKRQ, res.data.JKRQ));
+          } else {
+            datex.push(DateRange(res.data.KHKCSJ!.KKRQ!, res.data.KHKCSJ!.JKRQ!));
+          }
           const myDate = new Date();
           const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD')
           datex.forEach((record: any) => {
@@ -170,19 +175,19 @@ const CourseDetails: React.FC = () => {
               }
             }
           });
-          classbegins.forEach((record:any,index:number)=>{
-            if(record>nowtime){
+          classbegins.forEach((record: any, index: number) => {
+            if (record < nowtime) {
               absence.push({
                 id: `kc${index}`,
                 JC: `第${index + 1}节`,
                 data: moment(record).format('MM/DD'),
                 type: '出勤'
               })
-            }else{
+            } else {
               absence.push({
                 id: `kc${index}`,
                 JC: `第${index + 1}节`,
-                data:  moment(record).format('MM/DD'),
+                data: moment(record).format('MM/DD'),
                 type: ``
               })
             }
@@ -192,9 +197,9 @@ const CourseDetails: React.FC = () => {
       }
       bjpk()
     }
-  }, [Learning,weekd,gl])
+  }, [Learning, weekd,gl])
 
- 
+
 
   useEffect(() => {
     (async () => {
@@ -413,13 +418,12 @@ const CourseDetails: React.FC = () => {
               {
                 KcDetail?.KHBJSJs?.map((value: { id: string, KSS: string, KHPKSJs: any, KKRQ: string, JKRQ: string, BJMC: string }) => {
                   if (value.id === classid) {
-                    return <> <li>上课时段：{value.KKRQ}~{value.JKRQ}</li>
+                    return <> <li>上课时段：{value.KKRQ ? value.KKRQ : KcDetail?.KKRQ}~{value.JKRQ ? value.JKRQ : KcDetail?.JKRQ}</li>
                       <li> 上课地点：{
                         tempfun(value.KHPKSJs)
                       }</li>
-                      <li>总课时：{value.KSS}</li>
+                      <li>总课时：{value.KSS}课时</li>
                       <li>班级：{value.BJMC}</li>
-                      <li>学生：<WWOpenDataCom type="userName" openid={Student} /></li>
                     </>
                   }
                   return ''

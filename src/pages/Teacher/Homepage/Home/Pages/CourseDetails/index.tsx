@@ -134,7 +134,12 @@ const CourseDetails: React.FC = () => {
         if (res.status === 'ok' && res.data) {
           const classbegins: any[] = [];
           const absence: any[] = [];
-          const datex = DateRange(res.data.KKRQ!, res.data.JKRQ!);
+          const datex: any[] = []
+          if (res.data.KKRQ && res.data.JKRQ) {
+            datex.push(DateRange(res.data.KKRQ, res.data.JKRQ));
+          } else {
+            datex.push(DateRange(res.data.KHKCSJ!.KKRQ!, res.data.KHKCSJ!.JKRQ!));
+          }
           const myDate = new Date();
           const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD')
           datex.forEach((record: any) => {
@@ -145,7 +150,7 @@ const CourseDetails: React.FC = () => {
             }
           });
           classbegins.forEach((record: any, index: number) => {
-            if (record > nowtime) {
+            if (record < nowtime) {
               absence.push({
                 id: `kc${index}`,
                 JC: `第${index + 1}节`,
