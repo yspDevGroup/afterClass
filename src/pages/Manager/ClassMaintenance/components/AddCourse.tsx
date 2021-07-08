@@ -20,8 +20,7 @@ type AddCourseProps = {
   mcData?: { label: string; value: string }[];
   names?: string;
   kcId: string;
-  classattend: string[];
-  signup: string[];
+  RQDate: any;
 };
 const formLayout = {
   labelCol: {},
@@ -36,6 +35,7 @@ const AddCourse: FC<AddCourseProps> = ({
   actionRef,
   mcData,
   names,
+  RQDate,
 }) => {
   const [form, setForm] = useState<any>();
   // 校区
@@ -53,6 +53,10 @@ const AddCourse: FC<AddCourseProps> = ({
   const [nJLabelItem, setNJLabelItem] = useState<any>([]);
   // 校区名字
   const [xQItem, setXQLabelItem] = useState<any>('');
+  const KSSJ = formValues?.BMKSSJ || RQDate.BMKSSJ;
+  const JSSJ = formValues?.BMJSSJ || RQDate.BMJSSJ;
+  const KKRQ = formValues?.KKRQ || RQDate.KKRQ;
+  const JKRQ = formValues?.JKRQ || RQDate.JKRQ;
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -118,10 +122,10 @@ const AddCourse: FC<AddCourseProps> = ({
         FJS: values.FJS?.toString(), // 副班
         XQName: xQItem, // 校区名称
         KCTP: imageUrl,
-        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : formValues?.BMKSSJ),
-        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : formValues?.BMJSSJ),
-        KKRQ: values?.SKSD ? values?.SKSD[0] : formValues?.KKRQ,
-        JKRQ: values?.SKSD ? values?.SKSD[1] : formValues?.JKRQ,
+        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : KSSJ),
+        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : JSSJ),
+        KKRQ: values?.SKSD ? values?.SKSD[0] : KKRQ,
+        JKRQ: values?.SKSD ? values?.SKSD[1] : JKRQ,
       };
       if (formValues?.id) {
         delete options.BJZT;
@@ -332,7 +336,11 @@ const AddCourse: FC<AddCourseProps> = ({
           )} — ${formValues?.BMJSSJ?.slice(0, 10)}`,
           style: { marginBottom: 8, color: '#bbbbbb' },
         }
-      : '',
+      : {
+          type: 'divTab',
+          text: `(默认报名时间段)：${KSSJ?.slice(0, 10)} — ${JSSJ?.slice(0, 10)}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        },
     {
       type: 'div',
       key: 'div',
@@ -376,7 +384,11 @@ const AddCourse: FC<AddCourseProps> = ({
           text: `(默认上课时间段)：${formValues?.KKRQ} — ${formValues?.JKRQ}`,
           style: { marginBottom: 8, color: '#bbbbbb' },
         }
-      : '',
+      : {
+          type: 'divTab',
+          text: `(默认上课时间段)：${KKRQ} — ${JKRQ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        },
     {
       type: 'div',
       key: 'div1',

@@ -34,16 +34,18 @@ const ClassMaintenance = () => {
   const [kcId, setkcId] = useState<string>('');
   // 查询课程名称
   const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
-  // 查询课程开课时间
-  const [classattend, setClassattend] = useState<string[]>([]);
-  // 查询课程报名时间
-  const [signup, setSignup] = useState<string[]>([]);
+  // // 查询课程开课时间
+  // const [classattend, setClassattend] = useState<string[]>([]);
+  // // 查询课程报名时间
+  // const [signup, setSignup] = useState<string[]>([]);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   const [KCName, setKCName] = useState<string>('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   // 报名列表数据
   const [applicantData, setApplicantData] = useState<any>({});
+  const [RQDate, setRQDate] = useState<any>([]);
+
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
     setkai(false);
@@ -78,8 +80,9 @@ const ClassMaintenance = () => {
               value: curId,
             },
           ]);
-          setClassattend([res.data.JKRQ!, res.data.KKRQ!]);
-          setSignup([res.data.BMKSSJ!, res.data.BMJSSJ!]);
+          // setClassattend([res.data.JKRQ!, res.data.KKRQ!]);
+          // setSignup([res.data.BMKSSJ!, res.data.BMJSSJ!]);
+          setRQDate(res.data);
         }
       })();
     }
@@ -338,8 +341,7 @@ const ClassMaintenance = () => {
         />
         <AddCourse
           kcId={kcId}
-          classattend={classattend}
-          signup={signup}
+          RQDate={RQDate}
           actionRef={actionRef}
           visible={visible}
           onClose={onClose}
