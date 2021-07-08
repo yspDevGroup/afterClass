@@ -1,11 +1,23 @@
 .bigbox{
   width: 100%;
+
+  .yuan{
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #333333;
+    display: inline-block;
+    margin: 0 10px 3px 0;
+  }
   :global{
     .ul{
       color: #333;
     }
     .link{
       color: #333;
+    }
+    ul li::marker{
+      font-size: 4px;
     }
   }
   .header{

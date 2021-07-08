@@ -1,10 +1,3 @@
-/*
- * @description: 
- * @author: txx
- * @Date: 2021-06-22 11:13:07
- * @,@LastEditTime: ,: 2021-07-06 15:50:17
- * @,@LastEditors: ,: Please set LastEditors
- */
 import { useContext, useEffect, useState } from 'react';
 import styles from "./index.less";
 import ListComp from '../ListComponent';

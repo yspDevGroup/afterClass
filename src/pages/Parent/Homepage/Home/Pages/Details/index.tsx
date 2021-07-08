@@ -17,19 +17,21 @@ const Details = (props: { data?: any[] }) => {
           state: {
             notification: data
           }
-        }}>  <span className={styles.all} >全部 <IconFont type="icon-gengduo" className={styles.gengduo} /></span></Link>
+        }}>  
+        <span className={styles.all} >全部 <IconFont type="icon-gengduo" className={styles.gengduo} /></span></Link>
       </div>
       {
-        data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
+        data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '5px' }}>
           {data?.map((record: any, index: number) => {
             if (index < 4) {
               return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}>
-               <li style={{lineHeight:'30px'}}>
-                  <div style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',width:'100%'}}>
-                    {record.BT}
-                    </div> 
+                <li style={{ lineHeight: '30px',listStyle:'none' }}>
+                  <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+                    <div className={styles.yuan}></div>
+                       {record.BT}
+                  </div>
                 </li>
-                </Link>
+              </Link>
             }
             return ''
           })}
