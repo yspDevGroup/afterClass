@@ -30,14 +30,16 @@ const Operation = (props: PropsType) => {
         },
       });
     }
-    recorde.KCZT = '已发布';
-    recorde.BMKSSJ = new Date(recorde.BMKSSJ);
-    recorde.BMJSSJ = new Date(recorde.BMJSSJ);
-    const res = await updateKHKCSJ({ id: recorde.id }, { ...recorde });
+    const res = await updateKHKCSJ({ id: recorde.id }, 
+      { ...recorde,
+        KCZT:'已发布',
+        BMKSSJ:new Date(recorde.BMKSSJ),
+        BMJSSJ:new Date(recorde.BMJSSJ)
+      });
     if (res.status === 'ok') {
       actionRef?.current?.reload();
     }else{
-      message.error('课程发布失败，请联系管理员或稍后重试')
+      message.error(`${res.message},请联系管理员或稍后再试`);
     }
     return '';
   };
