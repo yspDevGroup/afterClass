@@ -27,7 +27,6 @@ const CourseDetails: React.FC = () => {
   const [FY, setFY] = useState<number>();
   // const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
-  const [Student, setStudent] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>();
   const [KcDetail, setKcDetail] = useState<any>();
   const [orderInfo, setOrderInfo] = useState<any>();
@@ -42,13 +41,53 @@ const CourseDetails: React.FC = () => {
   const myDate = new Date();
   const nowtime = myDate.toLocaleDateString();
   const [fk, setFk] = useState<boolean>(false);
-  const [weekd, setWeekd] = useState<any[]>();
-  const [gl, setGl] = useState<boolean>(false);
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
     njId: '1',
     name: currentUser?.username
   }];
+  const getCqDay = (wkd?: any[], start?: string, end?: string,) => {
+    const myDate = new Date();
+    const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD');
+    if (start && end && wkd) {
+      const arr = DateRange(start, end);
+      const classbegins: any[] = [];
+      const absence: any[] = [];
+      arr.forEach((record: any) => {
+        for (let i = 0; i < wkd.length; i += 1) {
+          if (Week(record) === wkd[i] && !classbegins.includes(record)) {
+            classbegins.push(record);
+          }
+        }
+      });
+      classbegins.forEach((record: any, index: number) => {
+        if (new Date(record) < myDate) {
+          absence.push({
+            id: `kc${index}`,
+            JC: `第${index + 1}节`,
+            data: moment(record).format('MM/DD'),
+            type: '出勤'
+          })
+        }else if (nowtime === moment(record).format('MM/DD')) {
+          absence.push({
+            id: `kc${index}`,
+            JC: `第${index + 1}节`,
+            data: record,
+            type: `今日`
+          })
+        } else {
+          absence.push({
+            id: `kc${index}`,
+            JC: `第${index + 1}节`,
+            data: moment(record).format('MM/DD'),
+            type: ``
+          })
+        }
+      })
+      return absence;
+    }
+    return [];
+  };
   const Learning = async (bjid: any, attend: any[]) => {
     const res1 = await getAllKHXSCQ(
       {
@@ -58,148 +97,114 @@ const CourseDetails: React.FC = () => {
         CQRQ: '',
       }
     );
-    if (res1.status === 'ok' && res1.data) {
-      const classbegins: any[] = [];
-      res1.data.forEach((item: any) => {
-        const datex = DateRange(item.KHBJSJ.KKRQ, item.KHBJSJ.JKRQ)
-        datex.forEach((record: any) => {
-          for (let i = 0; i < attend.length; i += 1) {
-            if (Week(record) === attend[i] && !classbegins.includes(record)) {
-              classbegins.push(record);
+    if (res1.status === 'ok') {
+      if (res1.data && res1.data.length) {
+        const classbegins: any[] = [];
+        res1.data.forEach((item: any) => {
+          const datex = DateRange(item.KHBJSJ.KKRQ, item.KHBJSJ.JKRQ)
+          datex.forEach((record: any) => {
+            for (let i = 0; i < attend.length; i += 1) {
+              if (Week(record) === attend[i] && !classbegins.includes(record)) {
+                classbegins.push(record);
+              }
+            }
+          })
+        })
+        const Attendancedate: any[] = [];
+        for (let i = 0; i < classbegins.length; i += 1) {
+          Attendancedate.push(moment(classbegins[i]).format('MM/DD'))
+        }
+        const absence: any[] = [];
+        const myDate = new Date();
+        const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD');
+        Attendancedate.forEach((record: any, index: number) => {
+          if (res1.data) {
+            for (let i = 0; i < res1.data.length; i += 1) {
+              const chuqindate = moment(res1.data[i].CQRQ).format('MM/DD');
+              if (res1.data[i].CQZT === '出勤' && chuqindate === record) {
+                absence.push({
+                  id: `kc${index}`,
+                  JC: `第${index + 1}节`,
+                  data: record,
+                  type: '出勤'
+                })
+              } else if ((res1.data[i].CQZT === '请假' || res1.data[i].CQZT === '缺席') && chuqindate === record) {
+                absence.push({
+                  id: `kc${index}`,
+                  JC: `第${index + 1}节`,
+                  data: record,
+                  type: `缺勤`
+                })
+              } else if (nowtime === record) {
+                absence.push({
+                  id: `kc${index}`,
+                  JC: `第${index + 1}节`,
+                  data: record,
+                  type: `今日`
+                })
+              }
+              else {
+                absence.push({
+                  id: `kc${index}`,
+                  JC: `第${index + 1}节`,
+                  data: record,
+                  type: ``
+                })
+              }
             }
           }
         })
-      })
-      const Attendancedate: any[] = [];
-      for (let i = 0; i < classbegins.length; i += 1) {
-        Attendancedate.push(moment(classbegins[i]).format('MM/DD'))
-      }
-      const absence: any[] = [];
-      const myDate = new Date();
-      const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD')
-      Attendancedate.forEach((record: any, index: number) => {
-        if (res1.data) {
-          for (let i = 0; i < res1.data.length; i += 1) {
-            const chuqindate = moment(res1.data[i].CQRQ).format('MM/DD');
-            if (res1.data[i].CQZT === '出勤' && chuqindate === record) {
-              absence.push({
-                id: `kc${index}`,
-                JC: `第${index + 1}节`,
-                data: record,
-                type: '出勤'
-              })
-            } else if ((res1.data[i].CQZT === '请假' || res1.data[i].CQZT === '缺席') && chuqindate === record) {
-              absence.push({
-                id: `kc${index}`,
-                JC: `第${index + 1}节`,
-                data: record,
-                type: `缺勤`
-              })
-            } else if (nowtime === record) {
-              absence.push({
-                id: `kc${index}`,
-                JC: `第${index + 1}节`,
-                data: record,
-                type: `今日`
-              })
-            }
-            else {
-              absence.push({
-                id: `kc${index}`,
-                JC: `第${index + 1}节`,
-                data: record,
-                type: ``
-              })
-            }
+        // 获取课程表数据
+        const Section = [];
+        const intercept = {};
+        for (let i = 0; i < absence.length; i += 1) {
+          if (!intercept[absence[i].id]) {
+            Section.push(absence[i]);
+            intercept[absence[i].id] = true;
+          }
+          if (Section[(Section.length - 1)].id === absence[i].id && Section[Section.length - 1].type === '') {
+            Section[(Section.length - 1)] = absence[i]
           }
         }
-      })
-      // 获取课程表数据
-      const Section = [];
-      const intercept = {};
-      for (let i = 0; i < absence.length; i += 1) {
-        if (!intercept[absence[i].id]) {
-          Section.push(absence[i]);
-          intercept[absence[i].id] = true;
-        }
-        if (Section[(Section.length - 1)].id === absence[i].id && Section[Section.length - 1].type === '') {
-          Section[(Section.length - 1)] = absence[i]
-        }
+        return Section;
       }
-      return Section;
     }
     return [];
   }
-  
-  const ksssj = async (bjid: string) => {
-    const res = await getKHPKSJByBJID({ id: bjid });
-    if (res.status === 'ok' && res.data) {
-      const attend = [...new Set(res.data.map(n => n.WEEKDAY))];
-      setWeekd(attend)
-      return await Learning(bjid, attend);
+
+  const getNormal = async (bjid: string,attend: any[])=>{
+    const res = await getKHBJSJ({ id: bjid });
+    if (res.status === 'ok' && res.data && attend) {
+      const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;
+      const end = res.data.JKRQ ? res.data.JKRQ : res.data.KHKCSJ!.JKRQ;
+      return getCqDay(attend, start, end);
     }
-    return []
+    return [];
+  };
+  const ksssj = async (bjid: string) => {
+    const res1 = await getKHPKSJByBJID({ id: bjid });
+    if (res1.status === 'ok' && res1.data) {
+      const attend = [...new Set(res1.data.map(n => n.WEEKDAY))];
+      return {
+        real: await Learning(bjid, attend),
+        cq : await getNormal(bjid, attend),
+      }
+    }
+    return {real:[],cq:[]}
   }
   useEffect(() => {
     async function fetchData() {
       if (classid) {
         const schedule = await ksssj(classid);
-        if(schedule.length===0){
-          setGl(true)
+        if(schedule.real && schedule.real.length){
+          setTimetableList(schedule.real);
+        }else{
+          setTimetableList(schedule.cq);
         }
-        setGl(false)
-        setTimetableList(schedule);
       }
     };
     fetchData();
   }, [classid])
-  useEffect(() => {
-    if (gl && classid && weekd) {
-      const bjpk = async () => {
-        const res = await getKHBJSJ({ id: classid })
-        if (res.status === 'ok' && res.data) {
-          const classbegins: any[] = [];
-          const absence: any[] = [];
-          const datex: any[] = []
-          if (res.data.KKRQ && res.data.JKRQ) {
-            datex.push(DateRange(res.data.KKRQ, res.data.JKRQ));
-          } else {
-            datex.push(DateRange(res.data.KHKCSJ!.KKRQ!, res.data.KHKCSJ!.JKRQ!));
-          }
-          const myDate = new Date();
-          const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD')
-          datex.forEach((record: any) => {
-            for (let i = 0; i < weekd.length; i += 1) {
-              if (Week(record) === weekd[i] && !classbegins.includes(record)) {
-                classbegins.push(record);
-              }
-            }
-          });
-          classbegins.forEach((record: any, index: number) => {
-            if (record < nowtime) {
-              absence.push({
-                id: `kc${index}`,
-                JC: `第${index + 1}节`,
-                data: moment(record).format('MM/DD'),
-                type: '出勤'
-              })
-            } else {
-              absence.push({
-                id: `kc${index}`,
-                JC: `第${index + 1}节`,
-                data: moment(record).format('MM/DD'),
-                type: ``
-              })
-            }
-          })
-          setTimetableList(absence);
-        }
-      }
-      bjpk()
-    }
-  }, [Learning, weekd,gl])
-
-
 
   useEffect(() => {
     (async () => {
@@ -220,13 +225,12 @@ const CourseDetails: React.FC = () => {
           bjzt: '已发布',
           njId: children[0].njId
         });
-        setStudent(currentUser?.username);
         if (result.status === 'ok' && result.data) {
           const current = result.data.KHBJSJs![0];
           const start = current.BMKSSJ ? current.BMKSSJ : result.data.BMKSSJ;
           const end = current.BMKSSJ ? current.BMJSSJ : result.data.BMJSSJ;
           const enAble = new Date(nowtime) > new Date(start!) && new Date(nowtime) < new Date(end!);
-          const btnEnable = new Date(nowtime) > new Date(result.data.BMKSSJ!) && new Date(nowtime) < new Date(result.data.BMKSSJ!);
+          const btnEnable = new Date(nowtime) > new Date(result.data.BMKSSJ!) && new Date(nowtime) < new Date(result.data.BMJSSJ!);
           setKcDetail(result.data);
           setFY(current.FY);
           setBJ(current.id);
@@ -238,8 +242,6 @@ const CourseDetails: React.FC = () => {
       })();
       const myDate = new Date().toLocaleDateString().slice(5, 9);
       setCurrentDate(myDate);
-
-
     }
   }, [courseid]);
 
@@ -305,7 +307,7 @@ const CourseDetails: React.FC = () => {
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
                 <img src={KcDetail?.KCTP} alt="" style={{ marginBottom: '18px', height: '200px' }} /> :
-                <div style={{ padding: '10px', border: '1px solid #F7F7F7', textAlign: 'center',marginBottom:'18px' }}><img style={{ width: '180px', height: 'auto',marginBottom:0 }} src={noPic} /></div>
+                <div style={{ padding: '10px', border: '1px solid #F7F7F7', textAlign: 'center', marginBottom: '18px' }}><img style={{ width: '180px', height: 'auto', marginBottom: 0 }} src={noPic} /></div>
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 
@@ -336,7 +338,7 @@ const CourseDetails: React.FC = () => {
                         return <span>{weeks}{kssj}-{jssj},</span>
                       })
                     }
-                    上课地点：{tempfun(value.KHPKSJs)}
+                    上课地点：{tempfun(value.KHPKSJs)}，
                     <span className={styles.bzrname}>
                       班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />}
                     </span>
@@ -435,9 +437,9 @@ const CourseDetails: React.FC = () => {
             <p className={styles.title}>
               <span>课程表</span>
               <span>
-                <Badge className={styles.legend} color="#45C977" text="今日" />
+                <Badge className={`${styles.legend} ${styles.legend1}`} color="#FFF" text="出勤" />
                 <Badge className={styles.legend} color="#fd8b8b" text="缺勤" />
-                <Badge className={styles.legend} color="##FF7171" text="出勤" />
+                <Badge className={styles.legend} color="#45C977" text="今日" />
                 <Badge className={styles.legend} color="#d2ecdc" text="待上" />
               </span>
 

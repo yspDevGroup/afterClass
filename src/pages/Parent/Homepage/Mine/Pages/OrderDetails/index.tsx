@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-plusplus */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, history } from 'umi';
 import { message, Statistic } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import myContext from '@/utils/MyContext';
 import { overdueKHXSDD, deleteKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
 import moment from 'moment';
 import styles from './index.less';
@@ -14,7 +13,6 @@ import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenData
 
 const { Countdown } = Statistic;
 const OrderDetails: React.FC = (props: any) => {
-  const { currentUserInfo } = useContext(myContext);
   const [deadline, setDeadline] = useState<number>();
   const [orderInfo, setOrderInfo] = useState<any>();
   const [urlPath, setUrlPath] = useState<any>();
@@ -24,7 +22,7 @@ const OrderDetails: React.FC = (props: any) => {
     student_userid: user?.UserId,
     njId: '1'
   }];
-  const name = currentUserInfo?.subscriber_info?.remark || currentUserInfo?.username
+  const name = user?.subscriber_info?.remark || user?.username;
   useEffect(() => {
     const orderTime = new Date(payOrder.XDSJ).getTime();
     setOrderInfo(payOrder);
