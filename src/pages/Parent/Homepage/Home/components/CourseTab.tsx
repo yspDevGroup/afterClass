@@ -48,7 +48,7 @@ const CourseTab = () => {
       });
     }
   }, [yxkc])
-  const url=`/parent/home/course&courseStatus=${courseStatus}`
+  const url=`/parent/home/course?courseStatus=${courseStatus}`
   return (
     <div className={`${styles.tabHeader}`}>
       <Tabs centered={centered} tabBarExtraContent={!centered ? { right: <Link to={url}>全部 <IconFont type="icon-gengduo" className={styles.gengduo} /></Link> } : ''} className={styles.courseTab}>
