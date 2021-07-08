@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { deleteKHXSDD, getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { getQueryString } from '@/utils/utils';
 import noOrder from '@/assets/noOrder.png';
+import Nodata from '@/components/Nodata';
 
 const { TabPane } = Tabs;
 
@@ -59,9 +60,7 @@ const OrderList = (props: { data?: any[], children: any[], currentUser?: API.Cur
                 </div> : ''}
             </div>
         })
-            : <div className={styles.noData}>
-                <img src={noOrder} />
-            </div>}
+            :  <Nodata imgSrc={noOrder} desc='暂无订单信息' />}
     </>
 };
 const Order: React.FC = () => {

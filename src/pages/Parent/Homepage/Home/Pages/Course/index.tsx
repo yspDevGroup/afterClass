@@ -13,9 +13,10 @@ import ListComponent from '@/components/ListComponent';
 import { useModel } from 'umi';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
-import noData from '@/assets/noData.png';
+import noData from '@/assets/noCourses.png';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import { getQueryString } from '@/utils/utils';
+import Nodata from '@/components/Nodata';
 
 
 const defaultMsg: ListData = {
@@ -107,17 +108,11 @@ const Course = () => {
                     </TabPane>)
                   })
                   }
-                </Tabs> : <div style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}>
-                    <img src={noData} alt="暂无数据" />
-                    <h4 style={{ color: '#999' }}>暂无开设课程</h4>
-                  </div>}
+                </Tabs> : <Nodata imgSrc={noData} desc='暂无课程信息' />}
             </TabPane> : ''}
           <TabPane tab="已选课程" key="elective">
             {yxkc && yxkc.length ? <ListComponent listData={yxkcData} /> :
-              <div style={{ textAlign: 'center', marginBottom: '20px', width: '100%' }}>
-                <img src={noData} alt="暂无数据" />
-                <h4 style={{ color: '#999' }}>暂无已选课程</h4>
-              </div>}
+               <Nodata imgSrc={noData} desc='暂无课程信息' />}
           </TabPane>
         </Tabs>
       </div>

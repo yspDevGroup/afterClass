@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-22 11:13:07
- * @,@LastEditTime: ,: 2021-07-08 09:54:45
+ * @,@LastEditTime: ,: 2021-07-06 15:50:17
  * @,@LastEditors: ,: Please set LastEditors
  */
 import { useContext, useEffect, useState } from 'react';
@@ -11,7 +11,7 @@ import ListComp from '../ListComponent';
 import type { ListData } from '../ListComponent/data';
 import myContext from '@/utils/MyContext';
 import TimeRight from './TimeRight';
-import noData1 from '@/assets/noData1.png';
+import noData1 from '@/assets/noCourse.png';
 import moment from 'moment';
 
 const EnrollClassTime = (props: { teacher?: boolean }) => {

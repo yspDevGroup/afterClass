@@ -26,7 +26,7 @@ const Index = () => {
         break;
     }
   }, [initialState?.currentUser?.auth]);
-  return <div><img style={{width:'50vw',maxWidth:'400px',margin:'15vh auto',display:'block'}} src={loadImg} /></div>;
+  return <div><img style={{width:'50vw',maxWidth:'400px',margin:'0 auto',paddingTop:'15vh',display:'block'}} src={loadImg} /></div>;
 };
 
 export default Index;

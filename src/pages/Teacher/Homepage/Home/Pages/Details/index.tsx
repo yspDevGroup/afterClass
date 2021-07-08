@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'umi';
 import styles from './index.less';
-import noData from '@/assets/noData.png';
+import noData from '@/assets/noTzgg.png';
+import IconFont from '@/components/CustomIcon';
+import Nodata from '@/components/Nodata';
 
 const Details = (props: { data?: any[] }) => {
   const { data } = props;
@@ -14,26 +16,23 @@ const Details = (props: { data?: any[] }) => {
           state: {
             notification: data
           }
-        }}>  <span className={styles.all} >全部 ＞</span></Link>
+        }}>  <span className={styles.all} >全部 <IconFont type="icon-gengduo" /></span></Link>
       </div>
       {
         data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
           {data?.map((record: any, index: number) => {
             if (index < 4) {
               return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }}>
-              <li style={{lineHeight:'30px'}}>
-                 <div style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',width:'100%'}}>
-                   {record.BT}
-                   </div> 
-               </li>
-               </Link>
+                <li style={{ lineHeight: '30px' }}>
+                  <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+                    {record.BT}
+                  </div>
+                </li>
+              </Link>
             }
             return ''
           })}
-        </ul> : <div style={{ textAlign: 'center', width: '100%' }}>
-            <img src={noData} alt="暂无数据" />
-            <h4 style={{ 'fontSize': '12px', lineHeight: '17px', color: '#DDDDDD' }}>暂无通知公告</h4>
-          </div>
+        </ul> :  <Nodata imgSrc={noData} desc='暂无通知公告' />
       }
     </div>
   )

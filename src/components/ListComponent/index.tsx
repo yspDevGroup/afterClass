@@ -10,9 +10,9 @@ import type { ListData, ListItem, ListType } from "./data";
 import { List } from 'antd';
 import { Link } from "umi";
 import styles from "./index.less";
-import noData from '@/assets/noData.png';
 import IconFont from "../CustomIcon";
 import DisplayColumn from "../DisplayColumn";
+import Nodata from "../Nodata";
 
 const findSpan: (dom: any) => any = (dom: any) => {
   if (dom.tagName === 'SPAN') {
@@ -27,7 +27,7 @@ const NewsList = (props: { data: ListItem[], type: ListType, operation: any }) =
     <List
       dataSource={data}
       renderItem={(v) => {
-        if(operation){
+        if (operation) {
           operation[0].link = v.enrollLink;
         }
         return <div className={operation ? 'ui-listItemWrapper' : ''}>
@@ -107,10 +107,10 @@ const ListComp = (props: { listData?: ListData, cls?: string, operation?: any })
             </a>
           </div>
         </div> : ''}
-        {list && list.length ? <NewsList data={list} type={type} operation={operation} /> : <div className={styles.noData}>
-          <img src={noDataImg || noData} alt="暂无数据" />
-          <h4>{noDataIcon ? <IconFont type='icon-xiuxi' /> : ''}{noDataText} </h4>
-        </div>}
+        {list && list.length ? <NewsList data={list} type={type} operation={operation} /> : <>{noDataIcon ? (<div className={styles.noData}>
+          <h4><IconFont type='icon-xiuxi' /> {noDataText} </h4>
+        </div>) : <Nodata imgSrc={noDataImg} desc={noDataText} />
+        }</>}
       </div >
     )
 

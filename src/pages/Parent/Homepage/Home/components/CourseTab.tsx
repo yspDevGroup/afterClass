@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import styles from '../index.less';
 import myContext from '@/utils/MyContext';
 import ListComponent from '@/components/ListComponent';
+import noData from '@/assets/noCourses.png';
 import { Link } from 'umi';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import IconFont from '@/components/CustomIcon';
@@ -13,7 +14,8 @@ const defaultMsg: ListData = {
   type: 'picList',
   cls: 'picList',
   list: [],
-  noDataText: '暂无课程信息'
+  noDataText: '暂无课程信息',
+  noDataImg: noData
 };
 const CourseTab = () => {
   // 获取首页数据
@@ -48,7 +50,7 @@ const CourseTab = () => {
       });
     }
   }, [yxkc])
-  const url=`/parent/home/course?courseStatus=${courseStatus}`
+  const url = `/parent/home/course?courseStatus=${courseStatus}`
   return (
     <div className={`${styles.tabHeader}`}>
       <Tabs centered={centered} tabBarExtraContent={!centered ? { right: <Link to={url}>全部 <IconFont type="icon-gengduo" className={styles.gengduo} /></Link> } : ''} className={styles.courseTab}>
@@ -81,7 +83,7 @@ const CourseTab = () => {
                   const { list, ...rest } = { ...defaultMsg };
                   return (<TabPane tab={item.KCLX} key={item.KCLX}>
                     <ListComponent listData={{
-                      list:courseData.filter((it: ListItem)=>it.title!=='null'),
+                      list: courseData.filter((it: ListItem) => it.title !== 'null'),
                       ...rest
                     }} />
                   </TabPane>)

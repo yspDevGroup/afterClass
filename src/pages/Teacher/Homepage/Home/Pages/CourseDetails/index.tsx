@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable array-callback-return */
-import { Badge, Button, message, Radio, Tooltip } from 'antd';
+import { Badge, Button, message, Radio, } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, } from 'umi';
 import styles from './index.less';
@@ -16,7 +16,8 @@ import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import { getEnrolled } from '@/services/after-class/khbjsj';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
-import noData from '@/assets/noData.png';
+import noData from '@/assets/noCourse.png';
+import Nodata from '@/components/Nodata';
 
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState<string>();
@@ -356,10 +357,7 @@ const CourseDetails: React.FC = () => {
                     <p>{value.JC}</p>
                     <p>{value.data}</p>
                   </div>
-                }) : <div style={{ textAlign: 'center', background: "#eee", borderRadius: '8px', paddingBottom: '10px', width: '100%' }}>
-                    <img src={noData} alt="暂无数据" />
-                    <h4 style={{ color: '#999' }}>暂无课表信息</h4>
-                  </div>
+                }) :  <Nodata imgSrc={noData} desc='暂无课表信息' />
               }
             </div>
 
