@@ -9,7 +9,7 @@ import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { DateRange, Week } from '@/utils/Timefunction';
 import moment from 'moment';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
-import { getEnrolled } from '@/services/after-class/khbjsj';
+import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import noData from '@/assets/noCourse1.png';
@@ -24,7 +24,8 @@ const CourseDetails: React.FC = () => {
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
   const [userID, setUserID] = useState<any>([]);
-
+  const [weekd, setWeekd] = useState<any[]>();
+  const [gl, setGl] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -121,6 +122,7 @@ const CourseDetails: React.FC = () => {
     const res = await getKHPKSJByBJID({ id: bjid });
     if (res.status === 'ok' && res.data) {
       const attend = [...new Set(res.data.map(n => n.WEEKDAY))]
+      setWeekd(attend)
       return await Learning(bjid, attend);
     }
     return []
@@ -139,9 +141,54 @@ const CourseDetails: React.FC = () => {
   }
 
   useEffect(() => {
+    if (gl && classid && weekd) {
+      const bjpk = async () => {
+        const res = await getKHBJSJ({ id: classid })
+        if (res.status === 'ok' && res.data) {
+          const classbegins: any[] = [];
+          const absence: any[] = [];
+          const datex = DateRange(res.data.KKRQ!, res.data.JKRQ!);
+          const myDate = new Date();
+          const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD')
+          datex.forEach((record: any) => {
+            for (let i = 0; i < weekd.length; i += 1) {
+              if (Week(record) === weekd[i] && !classbegins.includes(record)) {
+                classbegins.push(record);
+              }
+            }
+          });
+          classbegins.forEach((record: any, index: number) => {
+            if (record > nowtime) {
+              absence.push({
+                id: `kc${index}`,
+                JC: `第${index + 1}节`,
+                data: moment(record).format('MM/DD'),
+                type: '出勤'
+              })
+            } else {
+              absence.push({
+                id: `kc${index}`,
+                JC: `第${index + 1}节`,
+                data: moment(record).format('MM/DD'),
+                type: ``
+              })
+            }
+          })
+          setTimetableList(absence);
+        }
+      }
+      bjpk()
+    }
+  }, [Learning, weekd])
+
+  useEffect(() => {
     async function fetchData() {
       if (classid) {
         const schedule = await ksssj(classid);
+        if (schedule.length === 0) {
+          setGl(true)
+        }
+        setGl(false)
         setTimetableList(schedule);
         usename(classid);
       }
@@ -203,9 +250,9 @@ const CourseDetails: React.FC = () => {
       <p className={styles.title}><span>课程表</span>
         <span>
           <Badge className={styles.legend} color="#45C977" text="今日" />
-          <Badge className={styles.legend} color="#FF6600" text="缺勤" />
-          <Badge className={styles.legend} color="#FFFFFF" text="出勤" />
-          <Badge className={styles.legend} color="#45C977" text="待上" />
+          <Badge className={styles.legend} color="#fd8b8b" text="缺勤" />
+          <Badge className={styles.legend} color="##FF7171" text="出勤" />
+          <Badge className={styles.legend} color="#d2ecdc" text="待上" />
         </span>  </p>
       <div className={styles.cards}>
         {

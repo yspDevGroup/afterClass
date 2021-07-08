@@ -19,6 +19,7 @@ import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 // import { getEnrolled } from '@/services/after-class/khbjsj';
 import Nodata from '@/components/Nodata';
 import noPic from '@/assets/noPic.png';
+import { getKHBJSJ } from '@/services/after-class/khbjsj';
 
 
 const CourseDetails: React.FC = () => {
@@ -37,10 +38,13 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
-  const [kaiguan, setKaiguan] = useState<boolean>(true);
+  const [kaiguan, setKaiguan] = useState<boolean>(false);
   const myDate = new Date();
   const nowtime = myDate.toLocaleDateString();
+  const [opem, setOpem] = useState<boolean>(false);
   const [fk, setFk] = useState<boolean>(false);
+  const [weekd, setWeekd] = useState<any[]>();
+  const [gl, setGl] = useState<boolean>(false);
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
     njId: '1',
@@ -127,25 +131,71 @@ const CourseDetails: React.FC = () => {
     }
     return [];
   }
+  
   const ksssj = async (bjid: string) => {
     const res = await getKHPKSJByBJID({ id: bjid });
     if (res.status === 'ok' && res.data) {
-      const attend = [...new Set(res.data.map(n => n.WEEKDAY))]
+      const attend = [...new Set(res.data.map(n => n.WEEKDAY))];
+      setWeekd(attend)
       return await Learning(bjid, attend);
     }
     return []
   }
-
-
   useEffect(() => {
     async function fetchData() {
       if (classid) {
         const schedule = await ksssj(classid);
+        if(schedule.length===0){
+          setGl(true)
+        }
+        setGl(false)
         setTimetableList(schedule);
       }
     };
     fetchData();
   }, [classid])
+  useEffect(() => {
+    if(gl&&classid&&weekd){
+      const bjpk=async()=>{
+        const res=await getKHBJSJ({id:classid})
+        if(res.status==='ok'&&res.data){
+          const classbegins: any[] = [];
+          const absence: any[] = [];
+          const datex = DateRange(res.data.KKRQ!, res.data.JKRQ!);
+          const myDate = new Date();
+          const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD')
+          datex.forEach((record: any) => {
+            for (let i = 0; i < weekd.length; i += 1) {
+              if (Week(record) === weekd[i] && !classbegins.includes(record)) {
+                classbegins.push(record);
+              }
+            }
+          });
+          classbegins.forEach((record:any,index:number)=>{
+            if(record>nowtime){
+              absence.push({
+                id: `kc${index}`,
+                JC: `第${index + 1}节`,
+                data: moment(record).format('MM/DD'),
+                type: '出勤'
+              })
+            }else{
+              absence.push({
+                id: `kc${index}`,
+                JC: `第${index + 1}节`,
+                data:  moment(record).format('MM/DD'),
+                type: ``
+              })
+            }
+          })
+          setTimetableList(absence);
+        }
+      }
+      bjpk()
+    }
+  }, [Learning,weekd])
+
+ 
 
   useEffect(() => {
     (async () => {
@@ -188,7 +238,19 @@ const CourseDetails: React.FC = () => {
 
     }
   }, [courseid]);
-
+  useEffect(() => {
+    if (KcDetail) {
+      if (new Date(nowtime) > new Date(KcDetail.BMKSSJ) && new Date(nowtime) < new Date(KcDetail.BMJSSJ)) {
+        setKaiguan(true);
+      } else if (new Date(nowtime) > new Date(KcDetail.BMJSSJ)) {
+        setKaiguan(false);
+        setOpem(true);
+      } else {
+        setKaiguan(false);
+        setOpem(false);
+      }
+    }
+  }, [KcDetail])
   useEffect(() => {
     if (orderInfo)
       linkRef.current?.click();
@@ -383,9 +445,9 @@ const CourseDetails: React.FC = () => {
               <span>课程表</span>
               <span>
                 <Badge className={styles.legend} color="#45C977" text="今日" />
-                <Badge className={styles.legend} color="#FF6600" text="缺勤" />
-                <Badge className={styles.legend} color="#FFFFFF" text="出勤" />
-                <Badge className={styles.legend} color="#45C977" text="待上" />
+                <Badge className={styles.legend} color="#fd8b8b" text="缺勤" />
+                <Badge className={styles.legend} color="##FF7171" text="出勤" />
+                <Badge className={styles.legend} color="#d2ecdc" text="待上" />
               </span>
 
             </p>
