@@ -136,6 +136,7 @@ const NewClassManagement = () => {
       key: 'KCMC',
       align: 'center',
       width: 150,
+      ellipsis: true,
     },
     {
       title: '课程类型',

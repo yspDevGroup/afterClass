@@ -247,6 +247,7 @@ const NewCourses = (props: PropsType) => {
       disabled: readonly,
       fieldProps: {
         autocomplete: 'off',
+        maxLength: 23,
       },
     },
     {
