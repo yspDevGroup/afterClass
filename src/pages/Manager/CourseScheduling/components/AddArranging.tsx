@@ -164,9 +164,19 @@ const AddArranging: FC<PropsType> = (props) => {
     });
   };
 
-  const onExcelTableClick = (value: any, record: any, bjId: any) => {
+  const onExcelTableClick = (value: any, record: any, pkData: any) => {
+    let connt = 0;
     if (value === null) {
-      excelTableValue.splice(excelTableValue.length - 1);
+      excelTableValue.forEach((item: any, key) => {
+        if (
+          item.FJSJId === pkData.FJSJId &&
+          item.KHBJSJId === pkData.KHBJSJId &&
+          item.WEEKDAY === pkData.WEEKDAY
+        ) {
+          connt = key;
+        }
+      });
+      excelTableValue.splice(connt, 1);
     } else {
       excelTableValue.push(value);
     }
@@ -556,7 +566,11 @@ const AddArranging: FC<PropsType> = (props) => {
                             <p>{value.BJMC}</p>
                           </Tooltip>
                           <span>
-                            <WWOpenDataCom type="userName" openid={value.ZJS} />
+                            <WWOpenDataCom
+                              style={{ color: '#666' }}
+                              type="userName"
+                              openid={value.ZJS}
+                            />
                           </span>
                         </ProCard>
                       );
@@ -586,7 +600,11 @@ const AddArranging: FC<PropsType> = (props) => {
                                   >
                                     <p>{value.BJMC}</p>
                                     <span>
-                                      <WWOpenDataCom type="userName" openid={value.ZJS} />
+                                      <WWOpenDataCom
+                                        style={{ color: '#666' }}
+                                        type="userName"
+                                        openid={value.ZJS}
+                                      />
                                     </span>
                                   </ProCard>
                                 );
@@ -616,7 +634,11 @@ const AddArranging: FC<PropsType> = (props) => {
                                 >
                                   <p>{value.BJMC}</p>
                                   <span>
-                                    <WWOpenDataCom type="userName" openid={value.ZJS} />
+                                    <WWOpenDataCom
+                                      style={{ color: '#666' }}
+                                      type="userName"
+                                      openid={value.ZJS}
+                                    />
                                   </span>
                                 </ProCard>
                               );

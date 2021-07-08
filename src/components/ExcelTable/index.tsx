@@ -113,8 +113,12 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
           >
             <div className="cla">{data?.cla}</div>
             {mode === 'see' ? (
-              <div className="teacher" style={{ color: data?.color }}>
-                <WWOpenDataCom type="userName" openid={data?.teacher} />
+              <div className="teacher">
+                <WWOpenDataCom
+                  type="userName"
+                  style={{ color: data?.color }}
+                  openid={data?.teacher}
+                />
               </div>
             ) : (
               ''
@@ -238,15 +242,19 @@ const Index: FC<IndexPropsType> = ({
         getSelectdata(selectdata);
       }
     }
-    let bjId = null;
+    let pkData = null;
     if (type === 'edit') {
-      bjId = chosenData?.KHBJSJId;
+      pkData = {
+        KHBJSJId: chosenData?.KHBJSJId,
+        FJSJId: rowData.room?.jsId,
+        WEEKDAY: weekDay[colItem.dataIndex],
+      };
     } else if (type === 'see') {
-      bjId = rowData[colItem.dataIndex]?.bjId;
+      pkData = rowData[colItem.dataIndex]?.bjId;
     }
 
     if (typeof onExcelTableClick === 'function') {
-      onExcelTableClick(selectList, seeChosenItem, bjId);
+      onExcelTableClick(selectList, seeChosenItem, pkData);
     }
   };
   const datas = stateTableData ? [...stateTableData] : [...dataSource];

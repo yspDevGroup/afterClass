@@ -1,6 +1,14 @@
 import { useLayoutEffect, useRef } from 'react';
 
-const WWOpenDataCom = ({ type, openid }: { type: string; openid?: string }) => {
+const WWOpenDataCom = ({
+  type,
+  openid,
+  style,
+}: {
+  type: string;
+  openid?: string;
+  style?: Record<any, any>;
+}) => {
   const ref = useRef(null);
   useLayoutEffect(() => {
     WWOpenData.bind(ref.current);
@@ -10,7 +18,7 @@ const WWOpenDataCom = ({ type, openid }: { type: string; openid?: string }) => {
       ref={ref}
       type={type}
       openid={openid}
-      style={{ color: '#333', with: '100%', height: '22px' }}
+      style={{ color: style.color || '#333', with: '100%', height: '22px' }}
     />
   );
 };
