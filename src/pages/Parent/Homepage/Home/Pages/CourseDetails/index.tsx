@@ -174,15 +174,18 @@ const CourseDetails: React.FC = () => {
       })();
       const myDate = new Date().toLocaleDateString().slice(5, 9);
       setCurrentDate(myDate);
-      if (new Date(nowtime) >new Date( KcDetail.BMKSSJ) && new Date(nowtime) < new Date(KcDetail.BMJSSJ)) {
-        setKaiguan(true);
-      } else if (new Date(nowtime) > new Date(KcDetail.BMJSSJ)) {
-        setKaiguan(false);
-        setOpem(true);
-      } else {
-        setKaiguan(false);
-        setOpem(false);
+      if(KcDetail){
+        if (new Date(nowtime) >new Date( KcDetail.BMKSSJ) && new Date(nowtime) < new Date(KcDetail.BMJSSJ)) {
+          setKaiguan(true);
+        } else if (new Date(nowtime) > new Date(KcDetail.BMJSSJ)) {
+          setKaiguan(false);
+          setOpem(true);
+        } else {
+          setKaiguan(false);
+          setOpem(false);
+        }
       }
+      
     }
   }, [courseid]);
   useEffect(() => {
@@ -292,6 +295,7 @@ const CourseDetails: React.FC = () => {
                     }
                     上课地点：{
                       value.KHPKSJs.map((values: { FJSJ: any }) => {
+
                         return <span>{values.FJSJ.FJMC},</span>
                       })
                     }
@@ -315,7 +319,7 @@ const CourseDetails: React.FC = () => {
             {kaiguan ?
               <button className={styles.btn} onClick={() => setstate(true)}>立即报名</button>
               :
-              <button className={styles.btn} >课程{opem ? `已结束报名` : `暂未开始报名`}</button>
+              <button className={styles.btnes} >课程{opem ? `已结束报名` : `暂未开始报名`}</button>
             }
           </div>
           {
