@@ -37,10 +37,9 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
-  const [kaiguan, setKaiguan] = useState<boolean>(false);
+  const [kaiguan, setKaiguan] = useState<boolean>(true);
   const myDate = new Date();
   const nowtime = myDate.toLocaleDateString();
-  const [opem, setOpem] = useState<boolean>(false);
   const [fk, setFk] = useState<boolean>(false);
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
@@ -153,7 +152,9 @@ const CourseDetails: React.FC = () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
         await initWXConfig(['checkJsApi']);
       }
-      await initWXAgentConfig(['checkJsApi']);
+      if (await initWXConfig(['checkJsApi'])) {
+        await initWXAgentConfig(['checkJsApi']);
+      }
     })();
   }, []);
 
@@ -163,13 +164,20 @@ const CourseDetails: React.FC = () => {
         const result = await getKHKCSJ({
           kcId: courseid,
           bjzt: '已发布',
-          njId:children[0].njId
+          njId: children[0].njId
         });
         setStudent(currentUser?.username);
-        if (result.status === 'ok') {
+        if (result.status === 'ok' && result.data) {
+          const current = result.data.KHBJSJs![0];
+          const start = current.BMKSSJ ? current.BMKSSJ : result.data.BMKSSJ;
+          const end = current.BMKSSJ ? current.BMJSSJ : result.data.BMJSSJ;
+          const enAble = new Date(nowtime) > new Date(start!) && new Date(nowtime) < new Date(end!);
+          const btnEnable = new Date(nowtime) > new Date(result.data.BMKSSJ!) && new Date(nowtime) < new Date(result.data.BMKSSJ!);
           setKcDetail(result.data);
-          setFY(result.data!.KHBJSJs![0].FY);
-          setBJ(result.data!.KHBJSJs![0].id);
+          setFY(current.FY);
+          setBJ(current.id);
+          setFk(!enAble);
+          setKaiguan(btnEnable);
         } else {
           message.error(result.message);
         }
@@ -180,19 +188,7 @@ const CourseDetails: React.FC = () => {
 
     }
   }, [courseid]);
-  useEffect(() => {
-    if (KcDetail) {
-      if (new Date(nowtime) > new Date(KcDetail.BMKSSJ) && new Date(nowtime) < new Date(KcDetail.BMJSSJ)) {
-        setKaiguan(true);
-      } else if (new Date(nowtime) > new Date(KcDetail.BMJSSJ)) {
-        setKaiguan(false);
-        setOpem(true);
-      } else {
-        setKaiguan(false);
-        setOpem(false);
-      }
-    }
-  }, [KcDetail])
+
   useEffect(() => {
     if (orderInfo)
       linkRef.current?.click();
@@ -246,14 +242,6 @@ const CourseDetails: React.FC = () => {
   //     return res.data.length
   //   } return 0
   // }
-  // 获取选中班级信息
-  const checkClass = () => {
-    setFk(true);
-  }
-  const noCheckclass = () => {
-    setFk(false);
-  }
-
 
   return <>
     {
@@ -263,7 +251,7 @@ const CourseDetails: React.FC = () => {
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
                 <img src={KcDetail?.KCTP} alt="" style={{ marginBottom: '18px', height: '200px' }} /> :
-                <div style={{ padding: '10px',border: '1px solid #F7F7F7', borderRadius: '8px', textAlign: 'center' }}><img style={{width:'180px',height:'auto'}} src={noPic} /></div>
+                <div style={{ padding: '10px', border: '1px solid #F7F7F7', borderRadius: '8px', textAlign: 'center' }}><img style={{ width: '180px', height: 'auto' }} src={noPic} /></div>
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 
@@ -298,14 +286,14 @@ const CourseDetails: React.FC = () => {
                     <span className={styles.bzrname}>
                       班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />}
                     </span>
-                      ,
-                      <span className={styles.bzrname}>
+                    ,
+                    <span className={styles.bzrname}>
                       副班：{
                         value.FJS.split(',').map((item: any) => {
                           return <span style={{ marginRight: '5px' }}><WWOpenDataCom type="userName" openid={item} /></span>
                         })
                       }。
-                      </span>
+                    </span>
                   </li>
                 })
               }
@@ -315,7 +303,7 @@ const CourseDetails: React.FC = () => {
             {kaiguan ?
               <button className={styles.btn} onClick={() => setstate(true)}>立即报名</button>
               :
-              <button className={styles.btnes} >课程{opem ? `已结束报名` : `暂未开始报名`}</button>
+              <button className={styles.btnes} >课程不在报名时间范围内</button>
             }
           </div>
           {
@@ -330,23 +318,19 @@ const CourseDetails: React.FC = () => {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }) => {
                         // const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
-                        if (new Date(nowtime) > new Date(value.BMKSSJ) && new Date(nowtime) < new Date(value.BMJSSJ)) {
-                          return (
-                            // <Tooltip placement="bottomLeft" title={text} color='cyan' defaultVisible={true}>
-                            <Radio.Button className={styles.BjInformation} value={valueName} onClick={checkClass}>
-                              {value.BJMC}
-                            </Radio.Button>
-                            // </Tooltip>
-                          )
-                        } else {
-                          return (
-                            // <Tooltip placement="bottomLeft" title={text} color='cyan' defaultVisible={true}>
-                            <Radio.Button className={styles.BjInformations} value={valueName} onClick={noCheckclass}>
-                              {value.BJMC}
-                            </Radio.Button>
-                            // </Tooltip>
-                          )
-                        }
+                        const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
+                        const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
+                        const enAble = new Date(nowtime) > new Date(start) && new Date(nowtime) < new Date(end);
+
+                        return (
+                          // <Tooltip placement="bottomLeft"  title={text} color='cyan' defaultVisible={true}>
+                          <Radio.Button value={valueName}
+                            disabled={!enAble}>
+                            {value.BJMC}
+                          </Radio.Button>
+                          // </Tooltip>
+                        )
+
                       })
                     }
                   </Radio.Group>
@@ -360,18 +344,11 @@ const CourseDetails: React.FC = () => {
                      </a>
                     </p>
                   </Radio> */}
-                  {
-                    fk ? <Button className={styles.submit}
-                      //  disabled={XY === false || BJ === undefined}
-                      onClick={submit} >
-                      确定并付款
-                        </Button> :
-                      <Button className={styles.submit}
-                        style={{ background: '#eee', color: '#fff' }}
-                        onClick={submit} >
-                        确定并付款
-                      </Button>
-                  }
+                  <Button className={styles.submit}
+                    disabled={fk || BJ === undefined}
+                    onClick={submit} >
+                    确定并付款
+                  </Button>
                   <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser } }}>
                   </Link>
                 </div>

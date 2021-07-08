@@ -2,11 +2,13 @@
 
 .CourseDetails {
   line-height: 28px;
+
   :global {
     .anticon svg {
       height: 100%;
     }
-    .ant-radio-button-wrapper:not(:first-child)::before{
+
+    .ant-radio-button-wrapper:not(:first-child)::before {
       display: none;
     }
   }
@@ -50,7 +52,8 @@
       li {
         margin-bottom: 4px;
       }
-      .bzrname *{
+
+      .bzrname * {
         height: 16px !important;
         line-height: 16px !important;
       }
@@ -72,19 +75,20 @@
       height: 38px;
       color: #fff;
       line-height: 38px;
-      font-size: 18px;
+      font-size: 16px;
       background-color: #45C977;
       border-radius: 19px;
       border: none;
       margin-top: 8px;
     }
-    .btnes{
+
+    .btnes {
       width: 100%;
       height: 38px;
       color: #999;
       line-height: 38px;
-      font-size: 16px;
-      background-color: #eee;
+      font-size: 14px;
+      background-color: #f5f5f5;
       border-radius: 19px;
       border: none;
       margin-top: 8px;
@@ -133,6 +137,22 @@
       .ant-radio-group {
         display: flex;
         flex-wrap: wrap;
+
+        label.ant-radio-button-wrapper {
+          overflow: hidden;
+          border-radius: 16px;
+          border: none;
+          background-color: #f5f5f5;
+          color:#333333;
+
+          &.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+            background: rgba(69, 201, 119, 0.1);
+            color: #45C977;
+          }
+          &.ant-radio-button-wrapper-disabled{
+            color:#999999;
+          }
+        }
       }
     }
 
@@ -140,60 +160,16 @@
       .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):focus-within {
         box-shadow: none;
       }
+
       .ant-radio-checked .ant-radio-inner {
         border-color: @GreenColor;
-        &:after{
+
+        &:after {
           background-color: @GreenColor;
         }
       }
     }
 
-    .BjInformation {
-      border: none;
-      z-index: 1;
-      margin-right: 5px;
-      color: black;
-      :global {
-
-        .ant-radio-button {
-          margin-bottom: 10px;
-          margin-right: 14px;
-          height: 32px;
-          font-weight: 600;
-          border-radius: 16px;
-          border: none;
-          background: #F5F5F5;
-          padding: 0 20px 0 20px;
-
-          &.ant-radio-button-checked {
-            border: 1px solid @GreenColor;
-            background: rgba(69, 201, 119, 0.1);
-          }
-        }
-      }
-    }
-    .BjInformations {
-      border: none;
-      z-index: 1;
-      margin-right: 5px;
-      color: #fff;
-      :global {
-        .ant-radio-button {
-          margin-bottom: 10px;
-          margin-right: 14px;
-          height: 32px;
-          font-weight: 600;
-          border-radius: 16px;
-          border: none;
-          background: #eee;
-          padding: 0 20px 0 20px;
-          &.ant-radio-button-checked {
-            border: 1px solid @GreenColor;
-            background:inherit;
-          }
-        }
-      }
-    }
 
     .agreement {
       position: fixed;
@@ -210,20 +186,14 @@
       background: #45C977;
       color: #fff;
       bottom: 14px;
-      span {
-        font-size: 16px;
+
+      &[disabled] {
+        color: #bbbbbb;
+        background-color: #e6e6e6;
+        border-color: #e4e4e4;
+        box-shadow: none;
       }
-    }
-    .submits{
-      display: block;
-      position: fixed;
-      border: none;
-      width: calc(~ '100% - 28px');
-      height: 38px;
-      border-radius: 19px;
-      background: #eee;
-      color: #333333;
-      bottom: 14px;
+
       span {
         font-size: 16px;
       }
@@ -261,14 +231,15 @@
     margin-top: 18px;
 
     .title {
-      
+
       font-weight: 600;
       font-size: 16px;
       line-height: 28px;
       color: @text-color;
       display: flex;
       justify-content: space-between;
-      .legend{
+
+      .legend {
         margin-left: 5px;
       }
     }
@@ -282,7 +253,7 @@
         width: 18%;
         height: 48px;
         border-radius: 8px;
-        background:rgba(255, 102, 0, 0.1);
+        background: rgba(255, 102, 0, 0.1);
         padding: 5px;
         margin-right: 2%;
         margin-bottom: 10px;
@@ -331,11 +302,12 @@
           padding: 0;
         }
       }
+
       .card4 {
         width: 18%;
         height: 48px;
         border-radius: 8px;
-        background:#45C977;
+        background: #45C977;
         padding: 5px;
         margin-right: 2%;
         margin-bottom: 10px;
