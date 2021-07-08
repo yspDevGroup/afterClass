@@ -222,7 +222,7 @@ const AddArranging: FC<PropsType> = (props) => {
         }
         if (result.status === 'error') {
           if (result.message === 'Validation error') {
-            message.error('保存失败,排课冲突');
+            message.error('保存失败,在同一天的同一时间段内不能排同一个班');
           }
         }
       } catch (err) {
@@ -395,18 +395,35 @@ const AddArranging: FC<PropsType> = (props) => {
             submitter={{
               render: (Props) => {
                 return [
-                  <Button key="rest" style={{ marginRight: 8 }} onClick={() => onReset(Props)}>
-                    取消
-                  </Button>,
                   <Button
                     key="submit"
-                    style={{ marginRight: 8 }}
+                    style={{
+                      border: '1px solid #3E88F8 ',
+                      marginRight: 8,
+                      background: '#3E88F8',
+                      color: '#fff',
+                    }}
                     onClick={() => Props.form?.submit?.()}
                   >
                     保存
                   </Button>,
-                  <Button danger onClick={showDeleteConfirm}>
+                  <Button
+                    style={{
+                      border: '1px solid #F04D4D ',
+                      marginRight: 8,
+                      background: '#F04D4D',
+                      color: '#fff',
+                    }}
+                    onClick={showDeleteConfirm}
+                  >
                     清除
+                  </Button>,
+                  <Button
+                    key="rest"
+                    style={{ border: '1px solid #EAEDEE ', background: '#EAEDEE', color: '#999' }}
+                    onClick={() => onReset(Props)}
+                  >
+                    取消
                   </Button>,
                 ];
               },
