@@ -5,72 +5,72 @@
 import * as other from './other';
 import * as auth from './auth';
 import * as user from './user';
-import * as fjlx from './fjlx';
 import * as bjsj from './bjsj';
-import * as jcsj from './jcsj';
+import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
-import * as jxjhsj from './jxjhsj';
+import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
-import * as kcsj from './kcsj';
+import * as jxjhsj from './jxjhsj';
 import * as jzgjbsj from './jzgjbsj';
-import * as khbjsj from './khbjsj';
 import * as khjspj from './khjspj';
-import * as khkclx from './khkclx';
-import * as khpksj from './khpksj';
+import * as khbjsj from './khbjsj';
+import * as kcsj from './kcsj';
 import * as khkcsj from './khkcsj';
+import * as khkclx from './khkclx';
 import * as khxscq from './khxscq';
 import * as khxsdd from './khxsdd';
+import * as khpksj from './khpksj';
 import * as khxspj from './khxspj';
-import * as khxsqj from './khxsqj';
 import * as njsj from './njsj';
+import * as khxsqj from './khxsqj';
 import * as pksj from './pksj';
 import * as upload from './upload';
-import * as xl from './xl';
 import * as wechat from './wechat';
+import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
 import * as xsjbsj from './xsjbsj';
 import * as xxgg from './xxgg';
-import * as xxjbsj from './xxjbsj';
 import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
+import * as xxjbsj from './xxjbsj';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
   other,
   auth,
   user,
-  fjlx,
   bjsj,
-  jcsj,
+  fjlx,
   fjsj,
-  jxjhsj,
+  jcsj,
   jcxx,
-  kcsj,
+  jxjhsj,
   jzgjbsj,
-  khbjsj,
   khjspj,
-  khkclx,
-  khpksj,
+  khbjsj,
+  kcsj,
   khkcsj,
+  khkclx,
   khxscq,
   khxsdd,
+  khpksj,
   khxspj,
-  khxsqj,
   njsj,
+  khxsqj,
   pksj,
   upload,
-  xl,
   wechat,
+  xl,
   xnjgsj,
   xnxq,
   xqsj,
   xsjbsj,
   xxgg,
-  xxjbsj,
   xxpz,
   xxsjpz,
+  xxjbsj,
   zxfa,
   zxsj,
 };

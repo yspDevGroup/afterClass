@@ -162,7 +162,8 @@ const CourseDetails: React.FC = () => {
       (async () => {
         const result = await getKHKCSJ({
           kcId: courseid,
-          bjzt: '已发布'
+          bjzt: '已发布',
+          njId:children[0].njId
         });
         setStudent(currentUser?.username);
         if (result.status === 'ok') {
