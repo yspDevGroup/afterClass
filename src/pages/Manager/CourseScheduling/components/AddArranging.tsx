@@ -557,10 +557,11 @@ const AddArranging: FC<PropsType> = (props) => {
                     (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
                       return (
                         <ProCard
+                          className="banjiItem"
                           layout="center"
                           bordered
                           onClick={() => BjClick(value)}
-                          style={{ borderColor: index === value.id ? 'rgba(36,54,81,1)' : '' }}
+                          style={{ borderColor: index === value.id ? 'rgba(62,136,248,1)' : '' }}
                         >
                           <Tooltip title={value.BJMC}>
                             <p>{value.BJMC}</p>
@@ -572,6 +573,7 @@ const AddArranging: FC<PropsType> = (props) => {
                               openid={value.ZJS}
                             />
                           </span>
+                          {index === value.id ? <span className="douhao">√</span> : ''}
                         </ProCard>
                       );
                     },
@@ -593,9 +595,10 @@ const AddArranging: FC<PropsType> = (props) => {
                                   <ProCard
                                     layout="center"
                                     bordered
+                                    className="banjiItem"
                                     onClick={() => BjClick(value)}
                                     style={{
-                                      borderColor: index === value.id ? 'rgba(36,54,81,1)' : '',
+                                      borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
                                     }}
                                   >
                                     <p>{value.BJMC}</p>
@@ -606,6 +609,7 @@ const AddArranging: FC<PropsType> = (props) => {
                                         openid={value.ZJS}
                                       />
                                     </span>
+                                    {index === value.id ? <span className="douhao">√</span> : ''}
                                   </ProCard>
                                 );
                               },
@@ -627,9 +631,10 @@ const AddArranging: FC<PropsType> = (props) => {
                                 <ProCard
                                   layout="center"
                                   bordered
+                                  className="banjiItem"
                                   onClick={() => BjClick(value)}
                                   style={{
-                                    borderColor: index === value.id ? 'rgba(36,54,81,1)' : '',
+                                    borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
                                   }}
                                 >
                                   <p>{value.BJMC}</p>
@@ -640,6 +645,7 @@ const AddArranging: FC<PropsType> = (props) => {
                                       openid={value.ZJS}
                                     />
                                   </span>
+                                  {index === value.id ? <span className="douhao">√</span> : ''}
                                 </ProCard>
                               );
                             },
