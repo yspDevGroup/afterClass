@@ -178,7 +178,8 @@ const CourseManagement = () => {
   const handleEdit = (data: any) => {
     const list = {
       ...data,
-      NJS: data.NJS ? data.NJS?.split(',') : [],
+      NJS: data.NJSName ? data.NJSName?.split(',') : [],
+      XQ: data.XQ ? data.XQ?.split(',') : [],
       ZJS: data.ZJS || undefined,
       FJS: data.FJS ? data.FJS?.split(',') : [],
       BMSD: [data.BMKSSJ || data.KHKCSJ.BMKSSJ, data.BMJSSJ || data.KHKCSJ.BMJSSJ],
