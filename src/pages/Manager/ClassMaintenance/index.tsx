@@ -114,8 +114,8 @@ const ClassMaintenance = () => {
       NJS: data.NJS ? data.NJS?.split(',') : [],
       ZJS: data.ZJS || undefined,
       FJS: data.FJS ? data.FJS?.split(',') : [],
-      BMSD: [data.BMKSSJ, data.BMJSSJ],
-      SKSD: [data.KKRQ, data.JKRQ],
+      BMSD: [data.BMKSSJ || data.KHKCSJ.BMKSSJ, data.BMJSSJ || data.KHKCSJ.BMJSSJ],
+      SKSD: [data.JKRQ || data.KHKCSJ.JKRQ, data.KKRQ || data.KHKCSJ.KKRQ],
     };
     setVisible(true);
     setCurrent(list);
