@@ -88,25 +88,25 @@
         flex: auto;
         padding-left: @padding-md;
 
-        span {
+        >span {
           display: block;
-
           width: calc(~'100vw - 110px');
           overflow: hidden;
           line-height: 18px;
           white-space: nowrap;
           text-overflow: ellipsis;
-
+          padding: 0 6px ;
+          margin: 10px 6px 4px 6px;
           &:nth-child(1) {
             padding: 2px 5px;
             width: 63px;
-            margin: 4px 0;
+            margin: 10px 6px 4px 6px;
             color: @oriangeColor;
             font-size: @font-size-sm;
             line-height: 16px;
             text-align: center;
             border: 1px solid @oriangeColor;
-            border-radius: 9px;
+            border-radius: 11px;
           }
 
           &+a {
@@ -195,7 +195,7 @@
       font-weight: 600;
       font-size: @font-size-lg;
     }
-    .ant-tabs-tab-btn {
+    .ant-tabs-tab-btn { 
       font-size: @font-size-lg;
     }
     .ant-tabs-extra-content {

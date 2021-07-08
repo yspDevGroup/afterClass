@@ -12,7 +12,7 @@ const Details = (props: { data?: any[] }) => {
       <div className={styles.header}>
         <h3 className={styles.title}>公示栏</h3>
         <Link to={{
-          pathname: '/parent/home/notice',
+          pathname: '/teacher/home/notice',
           state: {
             notification: data
           }

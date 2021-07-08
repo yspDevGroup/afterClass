@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:30:23
- * @,@LastEditTime: ,: 2021-07-07 15:32:09
+ * @,@LastEditTime: ,: 2021-07-08 12:33:21
  * @,@LastEditors: ,: Please set LastEditors
  */
 
@@ -85,9 +85,10 @@ const Course = () => {
           {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
             <TabPane tab="开设课程" key="setup">
               {
-                kskc && kskc.length ? <Tabs className={styles.courseType}>
-                  {kskc.map((item: any) => {
-                    const listData: ListItem[] = [].map.call(item.KHKCSJs, (record: any) => {
+              kskc && kskc.length ? <Tabs className={styles.courseType}>
+                {kskc.map((item: any) => {
+                  const courseData: ListItem[] = [].map.call(item.KHKCSJs, (record: any, index: number) => {
+                    if (index < 3) {
                       const nodeData: ListItem = {
                         id: record.id,
                         title: record.KCMC,
@@ -101,15 +102,22 @@ const Course = () => {
                         introduction: record.KCMS,
                       };
                       return nodeData;
-                    })
-                    defaultMsg.list = listData;
-                    return (<TabPane tab={item.KCLX} key={item.KCLX}>
-                      <ListComponent listData={defaultMsg} />
-                    </TabPane>)
-                  })
-                  }
-                </Tabs> : <Nodata imgSrc={noData} desc='暂无课程信息' />}
-            </TabPane> : ''}
+                    };
+                    return {
+                      title: 'null'
+                    };
+                  });
+                  const { list, ...rest } = { ...defaultMsg };
+                  return (<TabPane tab={item.KCLX} key={item.KCLX}>
+                    <ListComponent listData={{
+                      list: courseData.filter((it: ListItem) => it.title !== 'null'),
+                      ...rest
+                    }} />
+                  </TabPane>)
+                })
+                }
+              </Tabs> : <ListComponent listData={defaultMsg} />}
+          </TabPane> : ''}
           <TabPane tab="已选课程" key="elective">
             {yxkc && yxkc.length ? <ListComponent listData={yxkcData} /> :
                <Nodata imgSrc={noData} desc='暂无课程信息' />}
