@@ -42,7 +42,7 @@ const UploadImage = (props: UploadImageProps) => {
     <div className={styles.uploadStyles}>
       {imageUrl ? (
         <div style={{ marginRight: 16 }}>
-          <Image width={110} height={70} src={imageUrl} />
+          <Image width={110} height={72} src={imageUrl} />
         </div>
       ) : (
         <div className={styles.defImgStyles}>
@@ -53,7 +53,7 @@ const UploadImage = (props: UploadImageProps) => {
         ''
       ) : (
         <div className={styles.uploadButStyles}>
-          <ImgCrop rotate aspect={110 / 70}>
+          <ImgCrop rotate aspect={110 / 72}>
             <Upload
               showUploadList={false}
               name={imagename}
@@ -67,7 +67,9 @@ const UploadImage = (props: UploadImageProps) => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
               }}
             >
-              <Button type="primary" disabled={disabled}>上传</Button>
+              <Button type="primary" disabled={disabled}>
+                上传
+              </Button>
             </Upload>
           </ImgCrop>
           <Button disabled={disabled} style={{ marginTop: 8 }} onClick={onResetClick}>

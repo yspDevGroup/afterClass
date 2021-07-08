@@ -113,7 +113,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
           >
             <div className="cla">{data?.cla}</div>
             {mode === 'see' ? (
-              <div className="teacher">
+              <div className="teacher" style={{ color: data?.color }}>
                 <WWOpenDataCom type="userName" openid={data?.teacher} />
               </div>
             ) : (
