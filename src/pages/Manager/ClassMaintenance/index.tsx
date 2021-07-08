@@ -161,8 +161,13 @@ const ClassMaintenance = () => {
       key: 'KCMC',
       align: 'center',
       width: 150,
+      ellipsis: true,
       render: (text: any, record: any) => {
-        return <div>{record.KHKCSJ.KCMC}</div>;
+        return (
+          <Tooltip title={record.KHKCSJ.KCMC}>
+            <div className="ui-table-col-elp">{record.KHKCSJ.KCMC}</div>
+          </Tooltip>
+        );
       },
     },
     {

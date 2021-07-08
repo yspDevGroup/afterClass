@@ -1,6 +1,6 @@
-import ProFormFields from "@/components/ProFormFields";
-import type { FormInstance } from "antd";
-import type { NoticeItem } from "../data";
+import ProFormFields from '@/components/ProFormFields';
+import type { FormInstance } from 'antd';
+import type { NoticeItem } from '../data';
 
 type PropsType = {
   current?: NoticeItem;
@@ -11,10 +11,18 @@ const formLayout = {
   wrapperCol: { span: 16 },
 };
 
-
 const Announcement = (props: PropsType) => {
   const { current, setForm } = props;
   const formItems: any[] = [
+    {
+      type: 'input',
+      hidden: true,
+      name: 'id',
+      key: 'id',
+      fieldProps: {
+        autoComplete: 'off',
+      },
+    },
     {
       type: 'input',
       label: '标题',
@@ -31,7 +39,7 @@ const Announcement = (props: PropsType) => {
       name: 'ZT',
       key: 'ZT',
       rules: [{ required: true, message: '请填选择状态' }],
-      options:[
+      options: [
         {
           label: '拟稿',
           value: '拟稿',
@@ -39,8 +47,8 @@ const Announcement = (props: PropsType) => {
         {
           label: '发布',
           value: '发布',
-        }
-      ]
+        },
+      ],
     },
     {
       type: 'textArea',
@@ -49,7 +57,7 @@ const Announcement = (props: PropsType) => {
       key: 'NR',
       rules: [{ required: true, message: '请填写内容' }],
       fieldProps: {
-        rows:18
+        rows: 18,
       },
     },
   ];
@@ -63,6 +71,6 @@ const Announcement = (props: PropsType) => {
         formItemLayout={formLayout}
       />
     </>
-  )
-}
-export default Announcement
+  );
+};
+export default Announcement;

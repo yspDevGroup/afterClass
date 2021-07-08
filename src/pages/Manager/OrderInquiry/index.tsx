@@ -227,6 +227,7 @@ const OrderInquiry = () => {
       setDataSource(resl.data);
     }
   };
+  // 点击分页器
   const onShowSizeChange = async (currents: any, pageSizes: any) => {
     setCurrent(currents);
     setPageSize(pageSizes);
@@ -236,9 +237,27 @@ const OrderInquiry = () => {
       xq,
     });
     if (resl.status === 'ok') {
+      // TODO
+      const datas = resl.data?.slice();
       setDataSource(resl.data);
     }
   };
+  // 点击上一页/下一页
+  const onPaginationChange = async (page: any) => {
+    console.log(page);
+    setCurrent(page);
+    // 获取订单查询的表格数据
+    const resl = await getAllKHXSDD({
+      xn,
+      xq,
+    });
+    if (resl.status === 'ok') {
+      // TODO
+      const datas = resl.data?.slice();
+      setDataSource(resl.data);
+    }
+  };
+
   return (
     <PageContainer>
       <div className={styles.searchs}>
@@ -305,6 +324,7 @@ const OrderInquiry = () => {
           current={current}
           pageSize={pageSize}
           onShowSizeChange={onShowSizeChange}
+          onChange={onPaginationChange}
           style={{ textAlign: 'center', padding: '32px 0', background: '#FFF' }}
         />
       </div>
