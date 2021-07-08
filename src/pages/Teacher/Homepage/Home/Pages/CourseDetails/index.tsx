@@ -295,7 +295,7 @@ const CourseDetails: React.FC = () => {
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string }) => {
-                        const text = `${value.BJMC}已有12人报名，共50个名额`;
+                        // const text = `${value.BJMC}已有12人报名，共50个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         return <Radio.Button className={styles.BjInformation} value={valueName}>
                           {/* <Tooltip placement="bottomLeft" title={text} color='cyan'> */}

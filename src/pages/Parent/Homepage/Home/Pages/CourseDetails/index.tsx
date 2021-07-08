@@ -224,6 +224,7 @@ const CourseDetails: React.FC = () => {
     }
     message.error(res.message);
   }
+  // 房间数据去重
   const tempfun = (arr: any) => {
     const fjname: string[] = [];
     arr.forEach((item: any) => {
@@ -270,7 +271,7 @@ const CourseDetails: React.FC = () => {
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 
             <ul>
-              <li>上课时段：{KcDetail?.KKRQ}~{KcDetail?.JKRQ}</li>
+              <li>上课时段：{moment(KcDetail?.KKRQ).format('YYYY.MM.DD')}~{moment(KcDetail?.JKRQ).format('YYYY.MM.DD')}</li>
               <li>上课地点：本校</li>
             </ul>
             <p className={styles.title}>课程简介</p>
@@ -278,8 +279,8 @@ const CourseDetails: React.FC = () => {
             <p className={styles.content} style={{ marginTop: '20px' }}>开设班级：</p>
             <ul className={styles.classInformation}>
               {
-                KcDetail?.KHBJSJs?.map((value: { BJMC: string, ZJS: string, FJS: string, KCSC: string, KHPKSJs: any }) => {
-                  return <li>{value.BJMC}：总课时：{value.KCSC},
+                KcDetail?.KHBJSJs?.map((value: { BJMC: string, ZJS: string, FJS: string, KSS: number, KHPKSJs: any }) => {
+                  return <li>{value.BJMC}：总课时：{value.KSS},
                     上课时间：{
                       value.KHPKSJs.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number }) => {
                         const weeks = `周${'日一二三四五六'.charAt(values.WEEKDAY)}`;
@@ -296,12 +297,7 @@ const CourseDetails: React.FC = () => {
                         return <span>{weeks}{kssj}-{jssj},</span>
                       })
                     }
-                    上课地点：{
-                      value.KHPKSJs.map((values: { FJSJ: any }) => {
-
-                        return <span>{values.FJSJ.FJMC},</span>
-                      })
-                    }
+                    上课地点：{tempfun(value.KHPKSJs)}
                     <span className={styles.bzrname}>
                       班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />}
                     </span>
@@ -335,7 +331,7 @@ const CourseDetails: React.FC = () => {
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }) => {
-                        const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
+                        // const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         return <Radio.Button className={styles.BjInformation} value={valueName} onClick={() => bjxx(value.BMKSSJ, value.BMJSSJ)}>
                           {/* <Tooltip placement="bottomLeft" title={text} color='cyan'> */}
