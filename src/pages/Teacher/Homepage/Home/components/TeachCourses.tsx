@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-26 11:20:42
- * @,@LastEditTime: ,: 2021-07-02 09:50:39
+ * @,@LastEditTime: ,: 2021-07-08 16:04:43
  * @,@LastEditors: ,: Please set LastEditors
  */
 import React, { useContext, useEffect } from 'react'
@@ -10,6 +10,7 @@ import ListComp from '@/components/ListComponent'
 import myContext from '@/utils/MyContext';
 import noData from '@/assets/noCourses1.png';
 import { useState } from 'react';
+import moment from 'moment';
 
 const TeachCourses = () => {
   const { yxkc } = useContext(myContext);
@@ -23,7 +24,7 @@ const TeachCourses = () => {
         link: `/teacher/home/courseDetails?classid=${item.id}&courseid=${item.KHKCSJ.id}`,
         desc: [
           {
-            left: [`课程时段：${item.KKRQ ? item.KKRQ : item.KHKCSJ.KKRQ}-${item.JKRQ ? item.JKRQ : item.KHKCSJ.JKRQ}`],
+            left: [`课程时段：${item.KKRQ ? moment(item.KKRQ).format('YYYY.MM.DD') : moment(item.KHKCSJ.KKRQ).format('YYYY.MM.DD')}-${item.JKRQ ? moment(item.JKRQ).format('YYYY.MM.DD') : moment(item.KHKCSJ.JKRQ).format('YYYY.MM.DD')}`],
           },
           {
             left: [`共${item.KSS}课时`],

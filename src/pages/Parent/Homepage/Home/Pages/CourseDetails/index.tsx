@@ -41,6 +41,7 @@ const CourseDetails: React.FC = () => {
   const myDate = new Date();
   const nowtime = myDate.toLocaleDateString();
   const [opem, setOpem] = useState<boolean>(false);
+  const [fk, setFk] = useState<boolean>(false);
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
     njId: '1',
@@ -244,6 +245,14 @@ const CourseDetails: React.FC = () => {
   //     return res.data.length
   //   } return 0
   // }
+  // 获取选中班级信息
+  const checkClass = () => {
+    setFk(true);
+  }
+  const noCheckclass = () => {
+    setFk(false);
+  }
+
 
   return <>
     {
@@ -320,23 +329,23 @@ const CourseDetails: React.FC = () => {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }) => {
                         // const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
-                        if(new Date(nowtime)>value.BMKSSJ&&new Date(nowtime)<value.BMJSSJ){
+                        if (new Date(nowtime) > new Date(value.BMKSSJ) && new Date(nowtime) < new Date(value.BMJSSJ)) {
                           return (
                             // <Tooltip placement="bottomLeft" title={text} color='cyan' defaultVisible={true}>
-                              <Radio.Button className={styles.BjInformation} value={valueName} >
-                                {value.BJMC}
-                              </Radio.Button>
+                            <Radio.Button className={styles.BjInformation} value={valueName} onClick={checkClass}>
+                              {value.BJMC}
+                            </Radio.Button>
                             // </Tooltip>
-                            )
+                          )
+                        } else {
+                          return (
+                            // <Tooltip placement="bottomLeft" title={text} color='cyan' defaultVisible={true}>
+                            <Radio.Button className={styles.BjInformations} value={valueName} onClick={noCheckclass}>
+                              {value.BJMC}
+                            </Radio.Button>
+                            // </Tooltip>
+                          )
                         }
-                          return (
-                            // <Tooltip placement="bottomLeft" title={text} color='cyan' defaultVisible={true}>
-                              <Radio.Button className={styles.BjInformation} value={valueName}  disabled> 
-                                {value.BJMC}
-                              </Radio.Button>
-                            // </Tooltip>
-                            )
-                        
                       })
                     }
                   </Radio.Group>
@@ -350,11 +359,18 @@ const CourseDetails: React.FC = () => {
                      </a>
                     </p>
                   </Radio> */}
-                  <Button className={styles.submit}
-                  //  disabled={XY === false || BJ === undefined}
-                    onClick={submit} >
-                    确定并付款
+                  {
+                    fk ? <Button className={styles.submit}
+                      //  disabled={XY === false || BJ === undefined}
+                      onClick={submit} >
+                      确定并付款
+                        </Button> :
+                      <Button className={styles.submit}
+                        style={{ background: '#eee', color: '#fff' }}
+                        onClick={submit} >
+                        确定并付款
                       </Button>
+                  }
                   <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser } }}>
                   </Link>
                 </div>
@@ -402,7 +418,7 @@ const CourseDetails: React.FC = () => {
                     <p>{value.JC}</p>
                     <p>{value.data}</p>
                   </div>
-                }) :  <Nodata imgSrc={noData} desc='暂无课表' />
+                }) : <Nodata imgSrc={noData} desc='暂无课表' />
               }
             </div>
 

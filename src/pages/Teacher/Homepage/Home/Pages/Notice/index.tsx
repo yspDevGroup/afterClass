@@ -3,9 +3,9 @@ import ListComp from '@/components/ListComponent';
 import styles from "./index.less";
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import moment from 'moment';
-import Pagina from '@/pages/Parent/Homepage/Home/components/Pagination/Pagination';
 import Nodata from '@/components/Nodata';
 import noData from '@/assets/noTzgg1.png';
+import Pagina from '../../components/Pagination/Pagination';
 
 const defaultList: ListData = {
   type: 'onlyList',

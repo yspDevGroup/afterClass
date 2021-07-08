@@ -8,6 +8,7 @@ import noData from '@/assets/noCourses.png';
 import { Link } from 'umi';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import IconFont from '@/components/CustomIcon';
+import moment from 'moment';
 
 const { TabPane } = Tabs;
 const defaultMsg: ListData = {
@@ -33,7 +34,7 @@ const CourseTab = () => {
           link: `/parent/home/courseDetails?classid=${record.id}&courseid=${record.KHKCSJ.id}`,
           desc: [
             {
-              left: [`课程时段：${record.KKRQ ? record.KKRQ : record.KHKCSJ.KKRQ}-${record.JKRQ ? record.JKRQ : record.KHKCSJ.JKRQ}`],
+              left: [`课程时段：${record.KKRQ ? moment(record.KKRQ).format('YYYY.MM.DD') : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')}-${record.JKRQ ? moment(record.JKRQ).format('YYYY.MM.DD') : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')}`],
             },
             {
               left: [`共${record.KSS}课时`],
@@ -68,7 +69,7 @@ const CourseTab = () => {
                         link: `/parent/home/courseDetails?courseid=${record.id}`,
                         desc: [
                           {
-                            left: [`课程时段：${record.KKRQ}-${record.JKRQ}`],
+                            left: [`课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(record.JKRQ).format('YYYY.MM.DD')}`],
                           },
                         ],
                         introduction: record.KCMS,
