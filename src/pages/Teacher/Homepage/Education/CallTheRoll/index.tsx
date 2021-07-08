@@ -134,7 +134,7 @@ const CallTheRoll = () => {
   const onSwitchItem = (value: any, checked: boolean) => {
     const newData = [...dataSource];
     newData.forEach((item: any) => {
-      if (item.id === value.id) {
+      if (item.XSId === value.XSId) {
         if (checked) {
           item.isRealTo = '出勤';
         } else {

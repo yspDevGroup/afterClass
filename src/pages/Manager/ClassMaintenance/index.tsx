@@ -117,11 +117,14 @@ const ClassMaintenance = () => {
       BMSD: [data.BMKSSJ, data.BMJSSJ],
       SKSD: [data.KKRQ, data.JKRQ],
     };
-    // 默认图片地址
-    list.KCTP = '';
     setVisible(true);
     setCurrent(list);
-    if (!(data.BJZT === '待发布')) {
+    if (
+      !(data.BJZT === '待发布') &&
+      !(data.BJZT === '未排课') &&
+      !(data.BJZT === '已下架') &&
+      !(data.BJZT === '已排课')
+    ) {
       stereadonly(true);
       setnames('chakan');
     } else {

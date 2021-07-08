@@ -218,6 +218,8 @@ const NewCourses = (props: PropsType) => {
           message.success('保存成功');
           onClose!();
           actionRef?.current?.reload();
+        } else if (data.message === 'Validation error') {
+          message.error(`保存失败，课程名称重复`);
         } else {
           message.error(`保存失败，${data.message},请联系管理员`);
         }
