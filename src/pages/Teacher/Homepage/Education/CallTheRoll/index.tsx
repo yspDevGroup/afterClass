@@ -6,9 +6,9 @@ import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
 import { getQueryString } from '@/utils/utils';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+// import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+// import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
 
 /**
@@ -68,14 +68,14 @@ const CallTheRoll = () => {
   const pkDate = getQueryString('date')?.replace(/\//g, '-'); // 日期
   const kjs = getQueryString('kjs'); // 课时数
 
-  useEffect(() => {
-    (async () => {
-      if (/MicroMessenger/i.test(navigator.userAgent)) {
-        await initWXConfig(['checkJsApi']);
-      }
-      await initWXAgentConfig(['checkJsApi']);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (/MicroMessenger/i.test(navigator.userAgent)) {
+  //       await initWXConfig(['checkJsApi']);
+  //     }
+  //     await initWXAgentConfig(['checkJsApi']);
+  //   })();
+  // }, []);
   useEffect(() => {
     // 查询所有课后服务出勤记录
     const resAll = getAllKHXSCQ({
@@ -166,12 +166,12 @@ const CallTheRoll = () => {
   const columns: any = [
     {
       title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'XSXM',
+      key: 'XSXM',
       align: 'center',
-      render: (text: string, record: any) => {
-        return <WWOpenDataCom type="userName" openid={record.XSId} />;
-      },
+      // render: (text: string, record: any) => {
+      //   return <WWOpenDataCom type="userName" openid={record.XSId} />;
+      // },
     },
     {
       title: '班级',

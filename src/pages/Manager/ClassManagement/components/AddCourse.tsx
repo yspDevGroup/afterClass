@@ -124,7 +124,7 @@ const AddCourse: FC<AddCourseProps> = ({
       let res = null;
       const options = {
         ...values,
-        NJS: values.NJS?.toString(), // 年级ID
+        NJS: values.NJS?.toString() || KHDateAll.NJS, // 年级ID
         NJSName: nJLabelItem?.toString(), // 年级名称
         FJS: values.FJS?.toString(), // 副班
         XQName: xQItem, // 校区名称
@@ -134,8 +134,8 @@ const AddCourse: FC<AddCourseProps> = ({
         KKRQ: values?.SKSD ? values?.SKSD[0] : KHDateAll?.KKRQ,
         JKRQ: values?.SKSD ? values?.SKSD[1] : KHDateAll?.JKRQ,
       };
-      delete options.BJZT;
       if (formValues?.id) {
+        delete options.BJZT;
         const params = {
           id: formValues?.id,
         };
