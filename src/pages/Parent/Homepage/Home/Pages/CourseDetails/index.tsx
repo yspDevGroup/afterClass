@@ -403,7 +403,7 @@ const CourseDetails: React.FC = () => {
                     onClick={submit} >
                     确定并付款
                   </Button>
-                  <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser } }}>
+                  <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser ,KKRQ:KcDetail?.KCRQ,JKRO:KcDetail?.KCRQ} }}>
                   </Link>
                 </div>
               </div> : ''

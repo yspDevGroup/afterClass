@@ -12,8 +12,8 @@ import Nodata from '@/components/Nodata';
 
 const { TabPane } = Tabs;
 
-const OrderList = (props: { data?: any[], children: any[], currentUser?: API.CurrentUser, triggerEvt: (param: any[]) => Promise<any> }) => {
-    const { data, children, currentUser, triggerEvt } = props;
+const OrderList = (props: { data?: any[],KKRQ?:string,JKRQ?:string, children: any[], currentUser?: API.CurrentUser, triggerEvt: (param: any[]) => Promise<any> }) => {
+    const { data, children, currentUser, triggerEvt,KKRQ,JKRQ } = props;
     const handlePay = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const par = (e.target as HTMLButtonElement).closest('div[class*="Information"]');
         (par?.children[0] as HTMLElement)?.click();
@@ -38,7 +38,9 @@ const OrderList = (props: { data?: any[], children: any[], currentUser?: API.Cur
                         title: KHBJSJ.KHKCSJ.KCMC,
                         detail: KHBJSJ,
                         payOrder: { ...rest },
-                        user: currentUser
+                        user: currentUser,
+                        KKRQ:KKRQ,
+                        JKRQ:JKRQ,
                     }
                 }} >
                     <p className={styles.orderNumber}>

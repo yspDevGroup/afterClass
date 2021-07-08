@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-plusplus */
 /* eslint-disable array-callback-return */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { Link, history } from 'umi';
 import { message, Statistic } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import myContext from '@/utils/MyContext';
 import { overdueKHXSDD, deleteKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
 import moment from 'moment';
 import styles from './index.less';
@@ -13,15 +14,17 @@ import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenData
 
 const { Countdown } = Statistic;
 const OrderDetails: React.FC = (props: any) => {
+  const { currentUserInfo } = useContext(myContext);
   const [deadline, setDeadline] = useState<number>();
   const [orderInfo, setOrderInfo] = useState<any>();
   const [urlPath, setUrlPath] = useState<any>();
   const linkRef = useRef<HTMLAnchorElement | null>(null);
-  const { title, detail, payOrder, user } = props.location.state;
+  const { title, detail, payOrder, user,KKRQ,JKRQ } = props.location.state;
   const children = user?.subscriber_info?.children || [{
     student_userid: user?.UserId,
     njId: '1'
   }];
+  const name = currentUserInfo?.subscriber_info?.remark || currentUserInfo?.username
   useEffect(() => {
     const orderTime = new Date(payOrder.XDSJ).getTime();
     setOrderInfo(payOrder);
@@ -87,11 +90,11 @@ const OrderDetails: React.FC = (props: any) => {
         <div className={styles.KCXX}>
           <p className={styles.title}>{title}</p>
           <ul>
-            <li>上课时段：{detail.KKRQ}~{detail.JKRQ}</li>
+            <li>上课时段：{detail.KKRQ?detail.KKRQ:KKRQ}~{detail.JKRQ?detail.JKRQ:JKRQ}</li>
             <li>上课地点：本校</li>
             <li>总课时：{detail.KSS}</li>
             <li>班级：{detail.BJMC}</li>
-            <li>学生：{<WWOpenDataCom type="userName" openid={user.username} />}</li>
+            <li >学生：<span className={styles.xx}>{name?.split('-')[0]}</span></li>
           </ul>
         </div>
         <div className={styles.KCZE}>
