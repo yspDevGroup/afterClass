@@ -1,6 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable array-callback-return */
 import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import { Button, Drawer, message } from 'antd';
@@ -54,8 +51,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const [classattend, setClassattend] = useState<any>('');
   // 报名时间
   const [signup, setSignup] = useState<any>('');
-  // 校区ID
-  const [xQId, setXQId] = useState('');
   // 校区名字
   const [xQItem, setXQLabelItem] = useState<any>('');
 
@@ -117,7 +112,7 @@ const AddCourse: FC<AddCourseProps> = ({
       const currentXQ = await queryXQList();
       const XQ: { label: any; value: any }[] = [];
       const NJ = {};
-      currentXQ?.map((item: any) => {
+      currentXQ?.forEach((item: any) => {
         XQ.push({
           label: item.name,
           value: item.id.toString(),
@@ -145,10 +140,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
-      values.BMKSSJ = new Date(values?.BMSD ? values?.BMSD[0] : signup[0]);
-      values.BMJSSJ = new Date(values?.BMSD ? values?.BMSD[1] : signup[1]);
-      values.KKRQ = values?.SKSD ? values?.SKSD[0] : classattend[0];
-      values.JKRQ = values?.SKSD ? values?.SKSD[1] : classattend[1];
       const options = {
         ...values,
         NJS: values.NJS?.toString(), // 年级ID
@@ -156,6 +147,10 @@ const AddCourse: FC<AddCourseProps> = ({
         FJS: values.FJS?.toString(), // 副班
         XQName: xQItem, // 校区名称
         KCTP: imageUrl,
+        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : signup[0]),
+        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : signup[1]),
+        KKRQ: values?.SKSD ? values?.SKSD[0] : classattend[0],
+        JKRQ: values?.SKSD ? values?.SKSD[1] : classattend[1],
       };
       if (formValues?.id) {
         const params = {
@@ -173,6 +168,7 @@ const AddCourse: FC<AddCourseProps> = ({
           message.success('保存成功');
           onClose();
           actionRef?.current?.reload();
+          setImageUrl('');
         } else if (data.message!.indexOf('token') > -1) {
           message.error('身份验证过期，请重新登录');
         } else if (data.message!.indexOf('Validation') > -1) {
@@ -288,7 +284,6 @@ const AddCourse: FC<AddCourseProps> = ({
         options: campus,
         onChange(value: any, option: any) {
           form.setFieldsValue({ NJS: undefined });
-          setXQId(value);
           setXQLabelItem(option?.label);
         },
       },
@@ -304,7 +299,7 @@ const AddCourse: FC<AddCourseProps> = ({
         options: grade ? grade[xQItem] : [],
         onChange(_: any, option: any) {
           const njsIabel: any[] = [];
-          option.map((item: any) => {
+          option?.forEach((item: any) => {
             njsIabel.push(item?.label);
           });
           setNJLabelItem(njsIabel);
@@ -479,7 +474,13 @@ const AddCourse: FC<AddCourseProps> = ({
                 textAlign: 'right',
               }}
             >
-              <Button onClick={onClose} style={{ marginRight: 16 }}>
+              <Button
+                onClick={() => {
+                  onClose();
+                  setImageUrl('');
+                }}
+                style={{ marginRight: 16 }}
+              >
                 取消
               </Button>
               <Button onClick={handleSubmit} type="primary">
