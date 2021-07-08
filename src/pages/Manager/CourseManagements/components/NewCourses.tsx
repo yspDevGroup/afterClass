@@ -111,24 +111,22 @@ const NewCourses = (props: PropsType) => {
       } else {
         onXnXqChange(xn, xq);
       }
-      if (!options || options.length === 0) {
-        const res = getAllKHKCLX({ name: '' });
-        Promise.resolve(res).then((data) => {
-          if (data.status === 'ok') {
-            const opt: any[] = [];
-            data.data?.map((item: any) => {
-              return opt.push({
-                label: item.KCLX,
-                value: item.id,
-              });
+      const res = getAllKHKCLX({ name: '' });
+      Promise.resolve(res).then((data) => {
+        if (data.status === 'ok') {
+          const opt: any[] = [];
+          data.data?.map((item: any) => {
+            return opt.push({
+              label: item.KCLX,
+              value: item.id,
             });
-            if (opt === []) {
-              setOpentype(true);
-            }
-            setOptions(opt);
+          });
+          if (opt === []) {
+            setOpentype(true);
           }
-        });
-      }
+          setOptions(opt);
+        }
+      });
     }
   }, [visible, xnxq, xn, xq, current]);
   useEffect(() => {
