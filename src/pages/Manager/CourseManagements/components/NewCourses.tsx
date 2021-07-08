@@ -46,7 +46,7 @@ const NewCourses = (props: PropsType) => {
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
 
-  const title = (current ? '编辑课程' : '新增课程');
+  const title = current ? '编辑课程' : '新增课程';
   const values = () => {
     if (current) {
       const { KHKCLX, KCZT, ...info } = current;
@@ -59,7 +59,7 @@ const NewCourses = (props: PropsType) => {
     return {
       XN: xn,
       XQ: xq,
-      KCZT: '待发布'
+      KCZT: '待发布',
     };
   };
   const Close = () => {
@@ -130,27 +130,26 @@ const NewCourses = (props: PropsType) => {
         });
       }
     }
-
   }, [visible, xnxq, xn, xq, current]);
   useEffect(() => {
     if (current) {
       if (signup) {
-        const date = current.BMKSSJ && current.BMKSSJ[0].substring(0, 10);
-        const date1 = current.BMKSSJ && current.BMKSSJ[1].substring(0, 10);
+        const date = current.BMKSSJ && current.BMKSSJ[0]?.substring(0, 10);
+        const date1 = current.BMKSSJ && current.BMKSSJ[1]?.substring(0, 10);
         if (!(date === signup[0] && date1 === signup[1])) {
           setBaoming(true);
         }
       }
       if (classattend) {
-        const date = current.KKRQ && current.KKRQ[0].substring(0, 10);
-        const date1 = current.KKRQ && current.KKRQ[1].substring(0, 10);
-        
+        const date = current.KKRQ && current.KKRQ[0]?.substring(0, 10);
+        const date1 = current.KKRQ && current.KKRQ[1]?.substring(0, 10);
+
         if (!(date === classattend[0] && date1 === classattend[1])) {
           setKaike(true);
         }
       }
     }
-  }, [current, signup, classattend])
+  }, [current, signup, classattend]);
 
   const handleSubmit = () => {
     form.submit();
@@ -317,12 +316,12 @@ const NewCourses = (props: PropsType) => {
     },
     signup.length > 0
       ? {
-        type: 'divTab',
-        text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
-          signup[1],
-        ).format('YYYY-MM-DD')}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
+            signup[1],
+          ).format('YYYY-MM-DD')}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -362,10 +361,10 @@ const NewCourses = (props: PropsType) => {
     },
     classattend.length > 0
       ? {
-        type: 'divTab',
-        text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',

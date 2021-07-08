@@ -9,7 +9,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllKHKCSJ, getKHKCSJ } from '@/services/after-class/khkcsj';
+import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 
 import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
@@ -17,15 +17,12 @@ import SearchComponent from '@/components/Search';
 import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
 import type { SearchDataType } from '@/components/Search/data';
-import { getQueryString } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
 import styles from './index.less';
 import { searchData } from './searchConfig';
 import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
-// import CourseType from './components/CourseType';
-// import ClassStart from './components/ClassStart';
 import type { CourseItem, TableListParams } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 import moment from 'moment';
@@ -61,7 +58,7 @@ const CourseManagement = () => {
   // 弹框名称设定
   const [names, setnames] = useState<string>('bianji');
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [KHKCAllData, setKHKCAllData] = useState<any>([]);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -120,13 +117,14 @@ const CourseManagement = () => {
           Promise.resolve(ress).then((dataes: any) => {
             if (dataes.status === 'ok') {
               const njArry: { label: string; value: string }[] = [];
-              dataes.data.map((item: any) => {
-                return njArry.push({
+              dataes.data.forEach((item: any) => {
+                njArry.push({
                   label: item.KCMC,
                   value: item.id,
                 });
               });
               setmcData(njArry);
+              setKHKCAllData(dataes.data);
             }
           });
         }
@@ -135,38 +133,6 @@ const CourseManagement = () => {
       }
     }
     fetchData();
-  }, []);
-  useEffect(() => {
-    const curId = getQueryString('courseId');
-    if (curId) {
-      // 根据课程id重新获取学年学期回调搜索框
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      setkcId(curId);
-      (async () => {
-        const id = { kcId: curId };
-        const res = await getKHKCSJ(id);
-        const ress = getAllKHKCSJ({
-          name: '',
-          xn: res.data?.XNXQ?.XN,
-          xq: res.data?.XNXQ?.XQ,
-          page: 0,
-          pageCount: 0,
-        });
-        Promise.resolve(ress).then((dataes: any) => {
-          if (dataes.status === 'ok') {
-            const njArry: { label: string; value: string }[] = [];
-            dataes.data.map((item: any) => {
-              return njArry.push({
-                label: item.KCMC,
-                value: item.id,
-              });
-            });
-            setmcData(njArry);
-            actionRef.current?.reload();
-          }
-        });
-      })();
-    }
   }, []);
   // 监听学年学期更新
   useEffect(() => {
@@ -192,6 +158,7 @@ const CourseManagement = () => {
             });
           });
           setmcData(njArry);
+          setKHKCAllData(dataes.data);
         }
       });
       actionRef.current?.reload();
@@ -472,7 +439,10 @@ const CourseManagement = () => {
               style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
               type="primary"
               key="add"
-              onClick={() => showDrawer()}
+              onClick={() => {
+                showDrawer();
+                setCurrent(undefined);
+              }}
             >
               <PlusOutlined />
               新增班级
@@ -480,7 +450,6 @@ const CourseManagement = () => {
           ]}
         />
         <AddCourse
-          kcId={kcId}
           actionRef={actionRef}
           visible={visible}
           onClose={onClose}
@@ -488,6 +457,7 @@ const CourseManagement = () => {
           readonly={readonly}
           mcData={mcData}
           names={names}
+          KHKCAllData={KHKCAllData}
         />
         <PromptInformation
           text="未查询到学年学期数据，请设置学年学期后再来"

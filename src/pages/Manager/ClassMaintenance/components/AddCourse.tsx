@@ -36,8 +36,6 @@ const AddCourse: FC<AddCourseProps> = ({
   actionRef,
   mcData,
   names,
-  classattend,
-  signup,
 }) => {
   const [form, setForm] = useState<any>();
   // 校区
@@ -120,11 +118,12 @@ const AddCourse: FC<AddCourseProps> = ({
         FJS: values.FJS?.toString(), // 副班
         XQName: xQItem, // 校区名称
         KCTP: imageUrl,
-        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : signup[0]),
-        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : signup[1]),
-        KKRQ: values?.SKSD ? values?.SKSD[0] : classattend[0],
-        JKRQ: values?.SKSD ? values?.SKSD[1] : classattend[1],
+        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : formValues?.BMKSSJ),
+        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : formValues?.BMJSSJ),
+        KKRQ: values?.SKSD ? values?.SKSD[0] : formValues?.KKRQ,
+        JKRQ: values?.SKSD ? values?.SKSD[1] : formValues?.JKRQ,
       };
+      delete options.BJZT;
       if (formValues?.id) {
         const params = {
           id: formValues?.id,
@@ -187,6 +186,7 @@ const AddCourse: FC<AddCourseProps> = ({
       disabled: readonly,
       fieldProps: {
         autocomplete: 'off',
+        length: 23,
       },
     },
     {
@@ -323,12 +323,13 @@ const AddCourse: FC<AddCourseProps> = ({
       },
       disabled: readonly,
     },
-    signup.length > 0
+    formValues?.id
       ? {
           type: 'divTab',
-          text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
-            signup[1],
-          ).format('YYYY-MM-DD')}`,
+          text: `(默认报名时间段)：${formValues?.BMKSSJ?.slice(
+            0,
+            10,
+          )} — ${formValues?.BMJSSJ?.slice(0, 10)}`,
           style: { marginBottom: 8, color: '#bbbbbb' },
         }
       : '',
@@ -365,14 +366,14 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > signup[1] || defaults < signup[0];
+          return defaults > formValues?.BMJSSJ || defaults < formValues?.BMKSSJ;
         },
       },
     },
-    classattend.length > 0
+    formValues?.id
       ? {
           type: 'divTab',
-          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+          text: `(默认上课时间段)：${formValues?.KKRQ} — ${formValues?.JKRQ}`,
           style: { marginBottom: 8, color: '#bbbbbb' },
         }
       : '',
@@ -408,7 +409,7 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > classattend[0] || defaults < classattend[1];
+          return defaults > formValues?.KKRQ || defaults < formValues?.JKRQ;
         },
       },
     },

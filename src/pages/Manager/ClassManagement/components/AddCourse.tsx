@@ -6,7 +6,7 @@ import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXQList } from '@/services/wechat/service';
-import { getKHKCSJ } from '@/services/after-class/khkcsj';
+// import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
 import { getDepUserList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
@@ -20,7 +20,7 @@ type AddCourseProps = {
   actionRef?: React.MutableRefObject<ActionType | undefined>;
   mcData?: { label: string; value: string }[];
   names?: string;
-  kcId?: string;
+  KHKCAllData?: any[];
 };
 const formLayout = {
   labelCol: {},
@@ -35,7 +35,7 @@ const AddCourse: FC<AddCourseProps> = ({
   actionRef,
   mcData,
   names,
-  kcId,
+  KHKCAllData,
 }) => {
   const userRef = useRef(null);
   const [form, setForm] = useState<any>();
@@ -47,10 +47,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const [kaike, setKaike] = useState<boolean>(true);
   // 教师
   const [teacherData, setTeacherData] = useState<any[]>([]);
-  // 上课时间
-  const [classattend, setClassattend] = useState<any>('');
-  // 报名时间
-  const [signup, setSignup] = useState<any>('');
   // 校区名字
   const [xQItem, setXQLabelItem] = useState<any>('');
 
@@ -61,35 +57,21 @@ const AddCourse: FC<AddCourseProps> = ({
 
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
+  const [KHDateAll, setKHDateAll] = useState<any>({});
 
   useEffect(() => {
     if (formValues) {
       setBaoming(false);
       setKaike(false);
+      // 在课程的数据里筛选出当前课程的相关时间
+      const khDate = KHKCAllData?.find((item: any) => item.id === formValues?.KHKCSJ?.id);
+      setKHDateAll(khDate);
     } else {
       setBaoming(true);
       setKaike(true);
+      setKHDateAll({});
     }
   }, [formValues]);
-
-  // 获取报名时段和上课时段
-  useEffect(() => {
-    if (kcId) {
-      const res = getKHKCSJ({ kcId });
-      Promise.resolve(res).then((data: any) => {
-        if (data.status === 'ok') {
-          const arry = [];
-          arry.push(data.data.BMKSSJ);
-          arry.push(data.data.BMJSSJ);
-          setSignup(arry);
-          const erry = [];
-          erry.push(data.data.JKRQ);
-          erry.push(data.data.KKRQ);
-          setClassattend(erry);
-        }
-      });
-    }
-  }, [kcId]);
 
   useEffect(() => {
     (async () => {
@@ -147,11 +129,12 @@ const AddCourse: FC<AddCourseProps> = ({
         FJS: values.FJS?.toString(), // 副班
         XQName: xQItem, // 校区名称
         KCTP: imageUrl,
-        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : signup[0]),
-        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : signup[1]),
-        KKRQ: values?.SKSD ? values?.SKSD[0] : classattend[0],
-        JKRQ: values?.SKSD ? values?.SKSD[1] : classattend[1],
+        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : KHDateAll?.BMKSSJ),
+        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : KHDateAll?.BMJSSJ),
+        KKRQ: values?.SKSD ? values?.SKSD[0] : KHDateAll?.KKRQ,
+        JKRQ: values?.SKSD ? values?.SKSD[1] : KHDateAll?.JKRQ,
       };
+      delete options.BJZT;
       if (formValues?.id) {
         const params = {
           id: formValues?.id,
@@ -213,6 +196,7 @@ const AddCourse: FC<AddCourseProps> = ({
       rules: [{ required: true, message: '请填写班级名称' }],
       fieldProps: {
         autocomplete: 'off',
+        maxLength: 23,
       },
     },
     {
@@ -224,6 +208,10 @@ const AddCourse: FC<AddCourseProps> = ({
       rules: [{ required: true, message: '请填写课程名称' }],
       fieldProps: {
         options: mcData,
+        onChange: (value: any) => {
+          const khDate = KHKCAllData?.find((item: any) => item.id === value);
+          setKHDateAll(khDate);
+        },
       },
     },
     {
@@ -348,10 +336,13 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
-    signup.length > 0
+    KHDateAll?.id
       ? {
           type: 'divTab',
-          text: `(默认报名时间段)：${signup[0]} — ${signup[1]}`,
+          text: `(默认报名时间段)：${KHDateAll?.BMKSSJ?.slice(0, 10)} — ${KHDateAll?.BMJSSJ?.slice(
+            0,
+            10,
+          )}`,
           style: { marginBottom: 8, color: '#bbbbbb' },
         }
       : '',
@@ -387,14 +378,14 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > signup[1] || defaults < signup[0];
+          return defaults > KHDateAll?.BMJSSJ || defaults < KHDateAll?.BMKSSJ;
         },
       },
     },
-    classattend.length > 0
+    KHDateAll?.id
       ? {
           type: 'divTab',
-          text: `(默认上课时间段)：${classattend[1]} — ${classattend[0]}`,
+          text: `(默认上课时间段)：${KHDateAll?.KKRQ} — ${KHDateAll?.JKRQ}`,
           style: { marginBottom: 8, color: '#bbbbbb' },
         }
       : '',
@@ -430,7 +421,7 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > classattend[0] || defaults < classattend[1];
+          return defaults > KHDateAll?.KKRQ || defaults < KHDateAll?.JKRQ;
         },
       },
     },
