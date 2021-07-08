@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'umi';
 import styles from './index.less';
-import noData from '@/assets/noTzgg.png';
+import noData from '@/assets/noTzgg1.png';
 import IconFont from '@/components/CustomIcon';
 import Nodata from '@/components/Nodata';
 
@@ -32,7 +32,7 @@ const Details = (props: { data?: any[] }) => {
             }
             return ''
           })}
-        </ul> :  <Nodata imgSrc={noData} desc='暂无通知公告' />
+        </ul> :  <Nodata imgSrc={noData} desc='暂无公告' />
       }
     </div>
   )

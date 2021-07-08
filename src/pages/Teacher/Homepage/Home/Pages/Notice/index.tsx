@@ -4,6 +4,8 @@ import styles from "./index.less";
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import moment from 'moment';
 import Pagina from '@/pages/Parent/Homepage/Home/components/Pagination/Pagination';
+import Nodata from '@/components/Nodata';
+import noData from '@/assets/noTzgg1.png';
 
 const defaultList: ListData = {
   type: 'onlyList',
@@ -15,29 +17,31 @@ const Notice = (props: any) => {
   const [annoceList, setAnnoceList] = useState<ListData>(defaultList);
   const [pages, setPages] = useState<number>(1);
   useEffect(() => {
-    const data: ListItem[] = [];
-    for (let i = 0; i < notification.length; i += 1) {
-      const listdata: ListItem = {
-        title: notification[i].BT,
-        link: `/teacher/home/notice/announcement?listid=${notification[i].id}`,
-        titleRight: {
-          text: moment(notification[i].updatedAt).format('YYYY-MM-DD'),
-        },
-      };
-      if (i >= ((pages - 1) * 10) && i < pages * 10) {
-        data.push(listdata)
+    if (notification && notification.length) {
+      const data: ListItem[] = [];
+      for (let i = 0; i < notification.length; i += 1) {
+        const listdata: ListItem = {
+          title: notification[i].BT,
+          link: `/teacher/home/notice/announcement?listid=${notification[i].id}`,
+          titleRight: {
+            text: moment(notification[i].updatedAt).format('YYYY-MM-DD'),
+          },
+        };
+        if (i >= ((pages - 1) * 10) && i < pages * 10) {
+          data.push(listdata)
+        }
       }
+      const newData = { ...defaultList };
+      newData.list = data;
+      setAnnoceList(newData);
     }
-    const newData = { ...defaultList };
-    newData.list = data;
-    setAnnoceList(newData);
-  }, [notification,pages])
+  }, [notification, pages])
 
   return (
-    <div className={styles.NoticeBox}>
+    <>{notification && notification.length ? <div className={styles.NoticeBox}>
       <ListComp listData={annoceList} />
-      <Pagina total={notification.length} setPages={setPages}/>
-    </div>
+      <Pagina total={notification.length} setPages={setPages} />
+    </div> : <Nodata imgSrc={noData} desc='暂无公告' />}</>
   )
 }
 

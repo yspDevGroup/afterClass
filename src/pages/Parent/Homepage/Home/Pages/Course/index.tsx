@@ -120,7 +120,7 @@ const Course = () => {
           </TabPane> : ''}
           <TabPane tab="已选课程" key="elective">
             {yxkc && yxkc.length ? <ListComponent listData={yxkcData} /> :
-               <Nodata imgSrc={noData} desc='暂无课程信息' />}
+               <Nodata imgSrc={noData} desc='暂无课程' />}
           </TabPane>
         </Tabs>
       </div>

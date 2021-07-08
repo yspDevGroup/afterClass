@@ -398,7 +398,7 @@ const CourseDetails: React.FC = () => {
                     <p>{value.JC}</p>
                     <p>{value.data}</p>
                   </div>
-                }) :  <Nodata imgSrc={noData} desc='暂无课表信息' />
+                }) :  <Nodata imgSrc={noData} desc='暂无课表' />
               }
             </div>
 

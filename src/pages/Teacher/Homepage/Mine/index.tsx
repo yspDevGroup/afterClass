@@ -8,6 +8,8 @@ import myContext from '@/utils/MyContext';
 import { DateRange, Week } from '@/utils/Timefunction';
 import moment from 'moment';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
+import Nodata from '@/components/Nodata';
+import noChart from '@/assets/noChart1.png';
 
 const Mine = () => {
   const { initialState } = useModel('@@initialState');
@@ -144,7 +146,7 @@ const Mine = () => {
               const kcData = getKcData(item);
               return <CheckOnChart data={kcData} title={item.KCMC} />
             })
-            : <IconFont type='icon-zanwu' style={{ fontSize: '80px', display: 'block', margin: '50px auto' }} />
+            : <Nodata imgSrc={noChart} desc='暂无数据' />
         }
       </div>}
       <div className={styles.linkWrapper}>

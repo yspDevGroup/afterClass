@@ -17,8 +17,7 @@ const Details = (props: { data?: any[] }) => {
           state: {
             notification: data
           }
-        }}>  
-        <span className={styles.all} >全部 <IconFont type="icon-gengduo" className={styles.gengduo} /></span></Link>
+        }}>  <span className={styles.all} >全部 <IconFont type="icon-gengduo" className={styles.gengduo} /></span></Link>
       </div>
       {
         data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '5px' }}>
@@ -35,7 +34,7 @@ const Details = (props: { data?: any[] }) => {
             }
             return ''
           })}
-        </ul> :  <Nodata imgSrc={noData} desc='暂无通知公告' />
+        </ul> :  <Nodata imgSrc={noData} desc='暂无公告' />
       }
     </div>
   )

@@ -60,7 +60,7 @@ const OrderList = (props: { data?: any[], children: any[], currentUser?: API.Cur
                 </div> : ''}
             </div>
         })
-            :  <Nodata imgSrc={noOrder} desc='暂无订单信息' />}
+            :  <Nodata imgSrc={noOrder} desc='暂无订单' />}
     </>
 };
 const Order: React.FC = () => {

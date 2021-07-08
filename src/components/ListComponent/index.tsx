@@ -108,7 +108,7 @@ const ListComp = (props: { listData?: ListData, cls?: string, operation?: any })
           </div>
         </div> : ''}
         {list && list.length ? <NewsList data={list} type={type} operation={operation} /> : <>{noDataIcon ? (<div className={styles.noData}>
-          <h4><IconFont type='icon-xiuxi' /> {noDataText} </h4>
+          <Nodata imgSrc={noDataImg} desc={noDataText} />
         </div>) : <Nodata imgSrc={noDataImg} desc={noDataText} />
         }</>}
       </div >

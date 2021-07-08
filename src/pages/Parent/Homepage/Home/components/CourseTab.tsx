@@ -14,7 +14,7 @@ const defaultMsg: ListData = {
   type: 'picList',
   cls: 'picList',
   list: [],
-  noDataText: '暂无课程信息',
+  noDataText: '暂无课程',
   noDataImg: noData
 };
 const CourseTab = () => {

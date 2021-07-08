@@ -139,7 +139,7 @@ const Statistical: React.FC = () => {
               </div>
             </div>
           }) :
-          <Nodata imgSrc={noChart} desc='暂无统计数据' />
+          <Nodata imgSrc={noChart} desc='暂无数据' />
         }
       </div>
     </div>

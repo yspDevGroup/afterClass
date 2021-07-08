@@ -8,6 +8,7 @@
 import React, { useContext, useEffect } from 'react'
 import ListComp from '@/components/ListComponent'
 import myContext from '@/utils/MyContext';
+import noData from '@/assets/noCourses1.png';
 import { useState } from 'react';
 
 const TeachCourses = () => {
@@ -40,7 +41,8 @@ const TeachCourses = () => {
       type: 'picList',
       cls: 'picList',
       list: yxkc && getDataList(yxkc) || [],
-      noDataText: '暂无任课数据'
+      noDataText: '暂无课程',
+      noDataImg: noData
     };
     setDataSource(newData);
   }, [yxkc])

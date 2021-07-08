@@ -5,8 +5,8 @@ import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
 import { DateRange, Week } from '@/utils/Timefunction';
 import myContext from '@/utils/MyContext';
+import noData from '@/assets/noCourse.png';
 import moment from 'moment';
-
 
 type propstype = {
   setDatedata: (data: any) => void;
@@ -16,6 +16,7 @@ const defaultMsg = {
   cls: 'picList',
   list: [],
   noDataText: '当天无课',
+  noDataImg: noData
 };
 
 const ClassCalendar = (props: propstype) => {
@@ -98,6 +99,7 @@ const ClassCalendar = (props: propstype) => {
       cls: 'picList',
       list: courseData[day] || [],
       noDataText: '当天无课',
+      noDataImg: noData
     });
     setCourseArr(courseData);
   }, [])
@@ -113,6 +115,7 @@ const ClassCalendar = (props: propstype) => {
           cls: 'picList',
           list: courseArr[dayjs().format('YYYY-MM-DD')] || [],
           noDataText: '当天无课',
+          noDataImg: noData
         });
       }}>
         今
@@ -128,6 +131,7 @@ const ClassCalendar = (props: propstype) => {
               cls: 'picList',
               list: courseArr[date.format('YYYY-MM-DD')] || [],
               noDataText: '当天无课',
+              noDataImg: noData
             };;
           setCourse(curCourse);
         }}

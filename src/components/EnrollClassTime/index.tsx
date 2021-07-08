@@ -4,7 +4,8 @@ import ListComp from '../ListComponent';
 import type { ListData } from '../ListComponent/data';
 import myContext from '@/utils/MyContext';
 import TimeRight from './TimeRight';
-import noData1 from '@/assets/noCourse.png';
+import noData from '@/assets/today.png';
+import noData1 from '@/assets/today1.png';
 import moment from 'moment';
 
 const EnrollClassTime = (props: { teacher?: boolean }) => {
@@ -66,12 +67,12 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
         type: "descList",
         cls: 'descList',
         header: {
-          title: curCourse && curCourse.length ? '今日课程' : '',
+          title:'今日课程',
         },
         list: curCourse,
         noDataText: '今日没有课呦',
-        noDataIcon: !teacher,
-        noDataImg: teacher ? noData1 : null
+        noDataIcon: true,
+        noDataImg: teacher ? noData1 : noData
       }
       setDatasourse(todayList);
     }
@@ -90,7 +91,7 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
     case 'education':
     case 'noTips':
       return (<div>
-        {teacher === false ? <div> <ListComp listData={datasourse} cls={styles.todayNOImg} /> </div> : <></>}
+        {teacher === false ? <div> <ListComp listData={datasourse} cls={styles.todayImg} /> </div> : <></>}
         <><div className={styles.enrollText}>课后服务课程{teacher ? '已正式开课！' : '开课了！'}</div>
           {teacher === false ? '' : <ListComp listData={datasourse} cls={styles.todayImg} />}
         </>
@@ -100,7 +101,7 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
       return (<div>
         {teacher === false ?
           (<>
-            <div><ListComp listData={datasourse} cls={styles.todayNOImg} /></div>
+            <div><ListComp listData={datasourse} cls={styles.todayImg} /></div>
             <div className={styles.enrollText}>课后服务课程报名开始了！</div>
             <div className={styles.enrollDate}>报名时间：{`${moment(bmkssj).format('YYYY.MM.DD')}—${moment(bmjssj).format('YYYY.MM.DD')}`}</div>
           </>)

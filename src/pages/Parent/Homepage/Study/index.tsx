@@ -5,6 +5,7 @@ import ListComponent from '@/components/ListComponent';
 import moment from 'moment';
 import myContext from '@/utils/MyContext';
 import type { ListData } from '@/components/ListComponent/data';
+import noData from '@/assets/noCourses.png';
 
 const Study = () => {
   // 从日历中获取的时间
@@ -55,6 +56,7 @@ const Study = () => {
       cls: 'list',
       list: courseData,
       noDataText: '暂无课程',
+      noDataImg: noData
     };
     setListData(Selected);
   }, [yxkc, datedata])
