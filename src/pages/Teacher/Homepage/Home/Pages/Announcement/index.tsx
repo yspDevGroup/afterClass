@@ -28,7 +28,7 @@ const Announcement = () => {
       <div className={styles.title}>{content?.BT}</div>
       <div className={styles.time}>发布时间：{content?.updatedAt}</div>
       <div className={styles.line}></div>
-      <textarea className={styles.text} value={content?.NR}>
+      <textarea className={styles.text} value={content?.NR} disabled>
       </textarea>
     </div>
   )

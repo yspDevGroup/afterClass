@@ -246,7 +246,7 @@ const CourseDetails: React.FC = () => {
             <ul className={styles.classInformation}>
               {
                 KcDetail?.KHBJSJs?.map((value: { BJMC: string, ZJS: string, FJS: string, KCSC: string, KHPKSJs: any }) => {
-                  return <li>{value.BJMC}：总课时：{value.KCSC},
+                  return <li>{value.BJMC}：总课时：{value.KCSC} 课时,
                     上课时间：{
                       value.KHPKSJs.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number }) => {
                         const weeks = `周${'日一二三四五六'.charAt(values.WEEKDAY)}`;
@@ -267,7 +267,7 @@ const CourseDetails: React.FC = () => {
                       value.KHPKSJs.map((values: { FJSJ: any }) => {
                         return <span>{values.FJSJ.FJMC},</span>
                       })
-                    }
+                    },
                     <span className={styles.bzrname}>
                       班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />}
                     </span>
@@ -309,8 +309,11 @@ const CourseDetails: React.FC = () => {
                   <Radio
                     className={styles.agreement}
                     onChange={() => setXY(true)}
-                  >  <p>我已阅读并同意<a href=''>《课后帮服务协议》</a></p></Radio>
-                  <Button className={styles.submit} disabled={XY === false || BJ === undefined} onClick={submit} >确定并付款</Button>
+                  >  <p>我已阅读并同意<a href=''>《课后帮服务协议》</a></p>
+                  </Radio>
+                  <Button className={styles.submit} disabled={XY === false || BJ === undefined} onClick={submit} >
+                    确定并付款
+                    </Button>
                   <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser } }}>
                   </Link>
                 </div>

@@ -17,7 +17,7 @@ import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import noData from '@/assets/noCourse.png';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import { getEnrolled } from '@/services/after-class/khbjsj';
+// import { getEnrolled } from '@/services/after-class/khbjsj';
 import Nodata from '@/components/Nodata';
 
 
@@ -37,8 +37,6 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
-  const [pdtj, setPdtj] = useState<boolean>(false);
-  const [zt, setZt] = useState<boolean>(false);
   const [kaiguan, setKaiguan] = useState<boolean>(false);
   const myDate = new Date();
   const nowtime = myDate.toLocaleDateString();
@@ -239,24 +237,13 @@ const CourseDetails: React.FC = () => {
     })
   }
 
-  const bjxx = (kssj: Date, jssj: Date) => {
-    if (jssj > new Date(nowtime) && new Date(nowtime) > kssj) {
-      setPdtj(true)
-    } else if (new Date(nowtime) > jssj) {
-      setZt(true)
-      setPdtj(false)
-    } else {
-      setZt(false)
-      setPdtj(false)
-    }
-  }
   // 获取班级报名人数
-  const getrs = async (id: string) => {
-    const res = await getEnrolled({ id });
-    if (res.status === 'ok' && res.data) {
-      return res.data.length
-    } return 0
-  }
+  // const getrs = async (id: string) => {
+  //   const res = await getEnrolled({ id });
+  //   if (res.status === 'ok' && res.data) {
+  //     return res.data.length
+  //   } return 0
+  // }
 
 
 
@@ -282,7 +269,7 @@ const CourseDetails: React.FC = () => {
             <ul className={styles.classInformation}>
               {
                 KcDetail?.KHBJSJs?.map((value: { BJMC: string, ZJS: string, FJS: string, KSS: number, KHPKSJs: any }) => {
-                  return <li>{value.BJMC}：总课时：{value.KSS},
+                  return <li>{value.BJMC}：总课时：{value.KSS}课时,
                     上课时间：{
                       value.KHPKSJs.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number }) => {
                         const weeks = `周${'日一二三四五六'.charAt(values.WEEKDAY)}`;
@@ -335,22 +322,39 @@ const CourseDetails: React.FC = () => {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }) => {
                         // const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
-                        return <Radio.Button className={styles.BjInformation} value={valueName} onClick={() => bjxx(value.BMKSSJ, value.BMJSSJ)}>
-                          {/* <Tooltip placement="bottomLeft" title={text} color='cyan'> */}
-                          {value.BJMC}
-                          {/* </Tooltip> */}
-                        </Radio.Button>
+                        if(new Date(nowtime)>value.BMKSSJ&&new Date(nowtime)<value.BMJSSJ){
+                          return (
+                            // <Tooltip placement="bottomLeft" title={text} color='cyan' defaultVisible={true}>
+                              <Radio.Button className={styles.BjInformation} value={valueName} >
+                                {value.BJMC}
+                              </Radio.Button>
+                            // </Tooltip>
+                            )
+                        }else{
+                          return (
+                            // <Tooltip placement="bottomLeft" title={text} color='cyan' defaultVisible={true}>
+                              <Radio.Button className={styles.BjInformation} value={valueName}  disabled> 
+                                {value.BJMC}
+                              </Radio.Button>
+                            // </Tooltip>
+                            )
+                        }
                       })
                     }
                   </Radio.Group>
                   <Radio
                     className={styles.agreement}
                     onChange={() => setXY(true)}
-                  >  <p>我已阅读并同意<a href=''>《课后帮服务协议》</a></p></Radio>
-                  {
-                    pdtj ? <Button className={styles.submit} disabled={XY === false || BJ === undefined} onClick={submit} >确定并付款</Button>
-                      : <Button className={styles.submits}>课程报名{zt ? '已结束' : '未开始'}</Button>
-                  }
+                  >
+                    <p>我已阅读并同意
+                     <a href=''>
+                        《课后帮服务协议》
+                     </a>
+                    </p>
+                  </Radio>
+                  <Button className={styles.submit} disabled={XY === false || BJ === undefined} onClick={submit} >
+                    确定并付款
+                      </Button>
                   <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser } }}>
                   </Link>
                 </div>
