@@ -157,7 +157,7 @@ const Noticenotice = () => {
         centered
         maskClosable={false}
         bodyStyle={{
-          maxHeight: '65vh',
+          maxHeight: 334,
           overflowY: 'auto',
         }}
       >

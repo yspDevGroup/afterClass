@@ -106,6 +106,9 @@ const AddCourse: FC<AddCourseProps> = ({
       });
       setCampus(XQ);
       setGrade(NJ);
+      if (formValues?.id) {
+        setXQLabelItem(formValues?.NJSName);
+      }
     })();
   }, []);
   // 获取标题
@@ -124,11 +127,11 @@ const AddCourse: FC<AddCourseProps> = ({
       let res = null;
       const options = {
         ...values,
-        NJS: values.NJS?.toString() || KHDateAll.NJS, // 年级ID
-        NJSName: nJLabelItem?.toString(), // 年级名称
+        NJS: values.NJS?.toString() || formValues?.NJS, // 年级ID
+        NJSName: nJLabelItem?.toString() || formValues?.NJSName, // 年级名称
         FJS: values.FJS?.toString(), // 副班
         XQName: xQItem, // 校区名称
-        KCTP: imageUrl,
+        KCTP: imageUrl || formValues?.KCTP,
         BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : KHDateAll?.BMKSSJ),
         BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : KHDateAll?.BMJSSJ),
         KKRQ: values?.SKSD ? values?.SKSD[0] : KHDateAll?.KKRQ,

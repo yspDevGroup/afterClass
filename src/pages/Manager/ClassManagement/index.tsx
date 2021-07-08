@@ -178,17 +178,12 @@ const CourseManagement = () => {
   const handleEdit = (data: any) => {
     const list = {
       ...data,
-      NJS: data.NJSName ? data.NJSName?.split(',') : [],
+      NJS: data.NJS ? data.NJS?.split(',') : [],
       ZJS: data.ZJS || undefined,
       FJS: data.FJS ? data.FJS?.split(',') : [],
       BMSD: [data.BMKSSJ, data.BMJSSJ],
       SKSD: [data.KKRQ, data.JKRQ],
     };
-    if (!data.KCTP) {
-      // 默认图片地址
-      list.KCTP = '';
-    }
-
     setVisible(true);
     setCurrent(list);
     if (
