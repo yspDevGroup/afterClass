@@ -427,8 +427,8 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'textArea',
       disabled: readonly,
       label: '简介：',
-      name: 'KCMS',
-      key: 'KCMS',
+      name: 'BJMS',
+      key: 'BJMS',
     },
   ];
 
