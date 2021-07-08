@@ -8,11 +8,13 @@
 
 import type { ListData, ListItem, ListType } from "./data";
 import { List } from 'antd';
-import { Link } from "umi";
+import { Link, history } from "umi";
 import styles from "./index.less";
 import IconFont from "../CustomIcon";
 import DisplayColumn from "../DisplayColumn";
 import Nodata from "../Nodata";
+import noPic from '@/assets/noPic.png';
+import noPic1 from '@/assets/noPic1.png';
 
 const findSpan: (dom: any) => any = (dom: any) => {
   if (dom.tagName === 'SPAN') {
@@ -22,6 +24,7 @@ const findSpan: (dom: any) => any = (dom: any) => {
 };
 const NewsList = (props: { data: ListItem[], type: ListType, operation: any }) => {
   const { data, type, operation } = props;
+  const teacher = history.location.pathname.indexOf('teacher') > -1;
 
   return <div className={styles[type]}>
     <List
@@ -36,7 +39,7 @@ const NewsList = (props: { data: ListItem[], type: ListType, operation: any }) =
               <List.Item.Meta
                 style={type === 'descList' ? { background: v.titleRight?.text === "待上课" ? "rgba(69, 201, 119, 0.05)" : "rgba(102, 102, 102, 0.05)" } : {}}
                 // eslint-disable-next-line no-nested-ternary
-                avatar={v.img || v.img === '' ? (v.img.indexOf('http') > -1 ? <img width="110" height="70" alt={v.title} src={v.img} /> : <IconFont type="icon-zanwutupian1" style={{ fontSize: '110px', height: '70px' }} />) : ''}
+                avatar={v.img || v.img === '' ? (v.img.indexOf('http') > -1 ? <img width="110" height="70" alt={v.title} src={v.img} /> : <div style={{ width: '110px', height: '70px', border: '1px solid #F7F7F7', borderRadius: '8px', textAlign: 'center' }}><img width="68" src={teacher ? noPic1 : noPic} /></div>) : ''}
                 title={<div className={styles.TitleRow}>
                   <div className={styles.Title} >
                     {v.title}

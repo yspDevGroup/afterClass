@@ -64,7 +64,7 @@ const Home = () => {
               </Link> : '暂无公告'}
           </div>
           <Link  to={{
-          pathname: '/parent/home/notice',
+          pathname: '/teacher/home/notice',
           state: {
             notification: notification
           }

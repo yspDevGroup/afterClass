@@ -11,7 +11,6 @@ import { getQueryString } from '@/utils/utils';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { DateRange, Week } from '@/utils/Timefunction';
 import moment from 'moment';
-import IconFont from '@/components/CustomIcon';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import noData from '@/assets/noCourse.png';
@@ -19,6 +18,7 @@ import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenData
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 // import { getEnrolled } from '@/services/after-class/khbjsj';
 import Nodata from '@/components/Nodata';
+import noPic from '@/assets/noPic.png';
 
 
 const CourseDetails: React.FC = () => {
@@ -245,8 +245,6 @@ const CourseDetails: React.FC = () => {
   //   } return 0
   // }
 
-
-
   return <>
     {
       !classid ?
@@ -255,7 +253,7 @@ const CourseDetails: React.FC = () => {
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
                 <img src={KcDetail?.KCTP} alt="" style={{ marginBottom: '18px', height: '200px' }} /> :
-                <IconFont type="icon-zanwutupian1" style={{ fontSize: 'calc(100vw - 20px)', height: '200px', marginBottom: '18px' }} />
+                <div style={{ padding: '10px',border: '1px solid #F7F7F7', borderRadius: '8px', textAlign: 'center' }}><img style={{width:'180px',height:'auto'}} src={noPic} /></div>
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 
@@ -330,7 +328,7 @@ const CourseDetails: React.FC = () => {
                               </Radio.Button>
                             // </Tooltip>
                             )
-                        }else{
+                        }
                           return (
                             // <Tooltip placement="bottomLeft" title={text} color='cyan' defaultVisible={true}>
                               <Radio.Button className={styles.BjInformation} value={valueName}  disabled> 
@@ -338,7 +336,7 @@ const CourseDetails: React.FC = () => {
                               </Radio.Button>
                             // </Tooltip>
                             )
-                        }
+                        
                       })
                     }
                   </Radio.Group>
