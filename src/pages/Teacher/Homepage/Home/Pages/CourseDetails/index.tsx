@@ -192,9 +192,6 @@ const CourseDetails: React.FC = () => {
                 }</li>
                 <li>总课时：{value.KSS}</li>
                 <li>班级：{value.BJMC}</li>
-                <li>学生：{userID.length > 0 && userID.map((item: any) => {
-                  return <span style={{ marginRight: 8 }}><WWOpenDataCom type="userName" openid={item} /></span>
-                })}</li>
               </>
             }
             return ''

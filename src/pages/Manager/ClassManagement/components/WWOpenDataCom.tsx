@@ -18,7 +18,7 @@ const WWOpenDataCom = ({
       ref={ref}
       type={type}
       openid={openid}
-      style={{ color: style.color || '#333', with: '100%', height: '22px' }}
+      style={{ color: style?.color || '#333', with: '100%', height: '22px' }}
     />
   );
 };
