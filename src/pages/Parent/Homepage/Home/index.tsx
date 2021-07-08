@@ -44,7 +44,12 @@ const Home = () => {
               {notification[0].BT}
             </Link> : '暂无公告'}
           </div>
-          <IconFont type="icon-gengduo" className={styles.gengduo} />
+         <Link  to={{
+          pathname: '/parent/home/notice',
+          state: {
+            notification: notification
+          }
+        }}> <IconFont type="icon-gengduo" className={styles.gengduo} /></Link>
         </div>
         <div className={styles.enrollArea}>
           <EnrollClassTime />

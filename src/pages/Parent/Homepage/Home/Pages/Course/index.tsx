@@ -2,7 +2,7 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-09 10:30:23
- * @,@LastEditTime: ,: 2021-07-08 12:33:21
+ * @,@LastEditTime: ,: 2021-07-08 15:38:51
  * @,@LastEditors: ,: Please set LastEditors
  */
 
@@ -108,7 +108,7 @@ const Course = () => {
                     };
                   });
                   const { list, ...rest } = { ...defaultMsg };
-                  return (<TabPane tab={item.KCLX} key={item.KCLX}>
+                  return (<TabPane tab={item.KCLX} key={item.KCLX} style={{marginTop:'5px'}}>
                     <ListComponent listData={{
                       list: courseData.filter((it: ListItem) => it.title !== 'null'),
                       ...rest

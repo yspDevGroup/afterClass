@@ -24,7 +24,7 @@ import Nodata from '@/components/Nodata';
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState<string>();
   const [FY, setFY] = useState<number>();
-  const [XY, setXY] = useState(false);
+  // const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
   const [Student, setStudent] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>();
@@ -342,7 +342,7 @@ const CourseDetails: React.FC = () => {
                       })
                     }
                   </Radio.Group>
-                  <Radio
+                  {/* <Radio
                     className={styles.agreement}
                     onChange={() => setXY(true)}
                   >
@@ -351,8 +351,10 @@ const CourseDetails: React.FC = () => {
                         《课后帮服务协议》
                      </a>
                     </p>
-                  </Radio>
-                  <Button className={styles.submit} disabled={XY === false || BJ === undefined} onClick={submit} >
+                  </Radio> */}
+                  <Button className={styles.submit}
+                  //  disabled={XY === false || BJ === undefined}
+                    onClick={submit} >
                     确定并付款
                       </Button>
                   <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser } }}>
