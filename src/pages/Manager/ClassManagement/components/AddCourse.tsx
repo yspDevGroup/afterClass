@@ -424,7 +424,7 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > KHDateAll?.KKRQ || defaults < KHDateAll?.JKRQ;
+          return defaults < formValues?.KKRQ || defaults > formValues?.JKRQ;
         },
       },
     },
