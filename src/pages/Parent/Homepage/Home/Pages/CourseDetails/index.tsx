@@ -174,20 +174,23 @@ const CourseDetails: React.FC = () => {
       })();
       const myDate = new Date().toLocaleDateString().slice(5, 9);
       setCurrentDate(myDate);
-      if(KcDetail){
-        if (new Date(nowtime) >new Date( KcDetail.BMKSSJ) && new Date(nowtime) < new Date(KcDetail.BMJSSJ)) {
-          setKaiguan(true);
-        } else if (new Date(nowtime) > new Date(KcDetail.BMJSSJ)) {
-          setKaiguan(false);
-          setOpem(true);
-        } else {
-          setKaiguan(false);
-          setOpem(false);
-        }
-      }
-      
+
+
     }
   }, [courseid]);
+  useEffect(() => {
+    if (KcDetail) {
+      if (new Date(nowtime) > new Date(KcDetail.BMKSSJ) && new Date(nowtime) < new Date(KcDetail.BMJSSJ)) {
+        setKaiguan(true);
+      } else if (new Date(nowtime) > new Date(KcDetail.BMJSSJ)) {
+        setKaiguan(false);
+        setOpem(true);
+      } else {
+        setKaiguan(false);
+        setOpem(false);
+      }
+    }
+  }, [KcDetail])
   useEffect(() => {
     if (orderInfo)
       linkRef.current?.click();
