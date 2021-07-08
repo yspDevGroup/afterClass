@@ -7,6 +7,9 @@
         outline: none;
       }
     :global{
+        .ant-tabs-nav:before{
+            display: none !important;
+        }
         .ant-tabs-nav-list{
             width: 100vw;
             height: 54px;
@@ -15,8 +18,8 @@
                 font-size: 16px;
                 margin: 0;
                 padding:0;
-                border:none;
-                background-color:#F5F5F5;
+                border:none !important;
+                background-color:#F5F5F5 !important;
                 .ant-tabs-tab-btn{
                     margin: auto;
                 }            

@@ -12,7 +12,7 @@ const EmptyArticle = () => {
     <div className={styles.EmptyPage}>
       <div className={styles.header}>
         <div className={styles.title}>{content?.title}</div>
-        <div className={styles.time}>{content?.time}</div>
+        <div className={styles.time}>发布时间：{content?.time}</div>
       </div>
       <div className={styles.line}></div>
       <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }}>

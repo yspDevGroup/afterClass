@@ -38,10 +38,9 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
-  const [kaiguan, setKaiguan] = useState<boolean>(false);
+  const [kaiguan, setKaiguan] = useState<boolean>(true);
   const myDate = new Date();
   const nowtime = myDate.toLocaleDateString();
-  const [opem, setOpem] = useState<boolean>(false);
   const [fk, setFk] = useState<boolean>(false);
   const [weekd, setWeekd] = useState<any[]>();
   const [gl, setGl] = useState<boolean>(false);
@@ -193,7 +192,7 @@ const CourseDetails: React.FC = () => {
       }
       bjpk()
     }
-  }, [Learning,weekd])
+  }, [Learning,weekd,gl])
 
  
 
@@ -238,19 +237,7 @@ const CourseDetails: React.FC = () => {
 
     }
   }, [courseid]);
-  useEffect(() => {
-    if (KcDetail) {
-      if (new Date(nowtime) > new Date(KcDetail.BMKSSJ) && new Date(nowtime) < new Date(KcDetail.BMJSSJ)) {
-        setKaiguan(true);
-      } else if (new Date(nowtime) > new Date(KcDetail.BMJSSJ)) {
-        setKaiguan(false);
-        setOpem(true);
-      } else {
-        setKaiguan(false);
-        setOpem(false);
-      }
-    }
-  }, [KcDetail])
+
   useEffect(() => {
     if (orderInfo)
       linkRef.current?.click();
@@ -313,7 +300,7 @@ const CourseDetails: React.FC = () => {
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
                 <img src={KcDetail?.KCTP} alt="" style={{ marginBottom: '18px', height: '200px' }} /> :
-                <div style={{ padding: '10px', border: '1px solid #F7F7F7', borderRadius: '8px', textAlign: 'center' }}><img style={{ width: '180px', height: 'auto' }} src={noPic} /></div>
+                <div style={{ padding: '10px', border: '1px solid #F7F7F7', textAlign: 'center',marginBottom:'18px' }}><img style={{ width: '180px', height: 'auto',marginBottom:0 }} src={noPic} /></div>
             }
             <p className={styles.title}>{KcDetail?.KCMC}</p>
 

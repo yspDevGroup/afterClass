@@ -11,7 +11,6 @@ import moment from 'moment';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import noData from '@/assets/noCourse1.png';
 import Nodata from '@/components/Nodata';
 
@@ -23,7 +22,7 @@ const CourseDetails: React.FC = () => {
   const [timetableList, setTimetableList] = useState<any[]>();
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
-  const [userID, setUserID] = useState<any>([]);
+
   const [weekd, setWeekd] = useState<any[]>();
   const [gl, setGl] = useState<boolean>(false);
   useEffect(() => {
@@ -127,18 +126,6 @@ const CourseDetails: React.FC = () => {
     }
     return []
   }
-  const usename = async (kcId: string) => {
-    const res = await getEnrolled({ id: kcId });
-    if (res.status === 'ok' && res.data) {
-      const XSid: any[] = []
-      res.data.forEach((item: any) => {
-        // return <WWOpenDataCom type="userName" openid={item.XSId} />;
-        XSid.push(item.XSId)
-      })
-      setUserID(XSid);
-    }
-
-  }
 
   useEffect(() => {
     if (gl && classid && weekd) {
@@ -179,7 +166,7 @@ const CourseDetails: React.FC = () => {
       }
       bjpk()
     }
-  }, [Learning, weekd])
+  }, [Learning, weekd,gl])
 
   useEffect(() => {
     async function fetchData() {
