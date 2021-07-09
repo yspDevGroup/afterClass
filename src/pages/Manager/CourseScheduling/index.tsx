@@ -12,7 +12,7 @@ import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
 
 import { queryXQList } from '@/services/wechat/service';
-import { getFJPlan } from '@/services/after-class/fjsj';
+import { getAllFJSJ, getFJPlan } from '@/services/after-class/fjsj';
 import { getAllKHBJSJ, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -24,6 +24,7 @@ import { searchData } from './searchConfig';
 // import { NJData, XQData } from './mock';
 import './index.less';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
+import { getAllFJLX } from '@/services/after-class/fjlx';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
@@ -52,10 +53,17 @@ const ClassManagement = () => {
   const [sameClass, setSameClassData] = useState<any>([]);
   // 课程选择框的数据
   const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
+  const [kcmcValue, setKcmcValue] = useState<any>();
   // 班级名称选择框的数据
   const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
-  const [kcmcValue, setKcmcValue] = useState<any>();
   const [bjmcValue, setBjmcValue] = useState<any>();
+  // 场地类型选择框的数据
+  const [cdlxData, setCdlxData] = useState<selectType[] | undefined>([]);
+  const [cdlxValue, setCdlxValue] = useState<any>();
+  // 场地名称选择框的数据
+  const [cdmcData, setCdmcData] = useState<selectType[] | undefined>([]);
+  const [cdmcValue, setCdmcValue] = useState<any>();
+
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -323,6 +331,32 @@ const ClassManagement = () => {
           const BJMC = bjmcResl.data?.map((item: any) => ({ label: item.BJMC, value: item.id }));
           setBjmcData(BJMC);
         }
+
+        // 获取所有场地类型
+        const response = await getAllFJLX({ name: '' });
+        if (response.status === 'ok') {
+          if (response.data && response.data.length > 0) {
+            const data: any = [].map.call(response.data, (item: RoomType) => {
+              return { label: item.FJLX, value: item.id };
+            });
+            setCdlxData(data);
+          }
+        }
+
+        // 获取所有场地数据
+        const fjList = await getAllFJSJ({
+          page: 1,
+          pageCount: 0,
+          name: '',
+        });
+        if (fjList.status === 'ok') {
+          if (fjList.data && fjList.data.length > 0) {
+            const data: any = [].map.call(fjList.data, (item: any) => {
+              return { label: item.FJMC, value: item.id };
+            });
+            setCdmcData(data);
+          }
+        }
       }
     })();
   }, [xn, xq]);
@@ -350,6 +384,42 @@ const ClassManagement = () => {
     setBjmcValue(value);
     // 排课的接口
     const res = await getFJPlan({ bjId: value, xn, xq, isPk: radioValue });
+    if (res.status === 'ok') {
+      const tableData = processingData(res.data, xXSJPZData);
+      setTableDataSource(tableData);
+    }
+  };
+
+  // 场地类型下拉框点击事件
+  const onCdlxChange = async (value: any) => {
+    setCdlxValue(value);
+    // 排课的接口
+    const res = await getFJPlan({ lxId: value, xn, xq, isPk: radioValue });
+    if (res.status === 'ok') {
+      const tableData = processingData(res.data, xXSJPZData);
+      setTableDataSource(tableData);
+    }
+    // 获取场地的数据
+    const fjList = await getAllFJSJ({
+      lxId: value,
+      page: 1,
+      pageCount: 0,
+      name: '',
+    });
+    if (fjList.status === 'ok') {
+      if (fjList.data && fjList.data.length > 0) {
+        const data: any = [].map.call(fjList.data, (item: any) => {
+          return { label: item.FJMC, value: item.id };
+        });
+        setCdmcData(data);
+      }
+    }
+  };
+  // 场地名称下拉框点击事件
+  const onCdmcChange = async (value: any) => {
+    setCdmcValue(value);
+    // 排课的接口
+    const res = await getFJPlan({ fjId: value, xn, xq, isPk: radioValue });
     if (res.status === 'ok') {
       const tableData = processingData(res.data, xXSJPZData);
       setTableDataSource(tableData);
@@ -484,7 +554,7 @@ const ClassManagement = () => {
                   </Select>
                 </div>
               </div>
-              <div style={{ display: 'flex', lineHeight: 2.3 }}>
+              <div style={{ display: 'flex', lineHeight: 2.3, marginRight: 16 }}>
                 <span>班级名称：</span>
                 <div>
                   <Select
@@ -495,6 +565,46 @@ const ClassManagement = () => {
                     onChange={onBjmcChange}
                   >
                     {bjmcData?.map((item: selectType) => {
+                      return (
+                        <Option value={item.value} key={item.value}>
+                          {item.label}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+              </div>
+              <div style={{ display: 'flex', lineHeight: 2.3, marginRight: 16 }}>
+                <span>场地类型：</span>
+                <div>
+                  <Select
+                    style={{ width: 200 }}
+                    value={cdlxValue}
+                    allowClear
+                    placeholder="请选择"
+                    onChange={onCdlxChange}
+                  >
+                    {cdlxData?.map((item: selectType) => {
+                      return (
+                        <Option value={item.value} key={item.value}>
+                          {item.label}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+              </div>
+              <div style={{ display: 'flex', lineHeight: 2.3 }}>
+                <span>场地名称：</span>
+                <div>
+                  <Select
+                    style={{ width: 200 }}
+                    value={cdmcValue}
+                    allowClear
+                    placeholder="请选择"
+                    onChange={onCdmcChange}
+                  >
+                    {cdmcData?.map((item: selectType) => {
                       return (
                         <Option value={item.value} key={item.value}>
                           {item.label}

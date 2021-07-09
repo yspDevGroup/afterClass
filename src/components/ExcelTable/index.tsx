@@ -215,12 +215,14 @@ const Index: FC<IndexPropsType> = ({
       if (chosenData && !rowData[colItem.dataIndex]) {
         let connst = -1;
         basicData?.forEach((item: any) => {
-          connst = item.KHPKSJs.findIndex((KHPKSJsItem: any) => {
-            return (
+          item.KHPKSJs.forEach((KHPKSJsItem: any, key: any) => {
+            if (
               KHPKSJsItem.WEEKDAY === weekDay[colItem.dataIndex] &&
               KHPKSJsItem.XXSJPZ.id === rowData.course?.hjId &&
               KHPKSJsItem.KHBJSJ.ZJS === tearchId
-            );
+            ) {
+              connst = key;
+            }
           });
         });
         if (connst === -1) {
