@@ -234,13 +234,17 @@
       color: @text-color;
       display: flex;
       justify-content: space-between;
-      .legend{
+      .legend {
         margin-left: 5px;
         :global {
           .ant-badge-status-dot{
             width: 10px;
             height: 10px;
             border-radius: 10px;
+          }
+        }
+        &.legend1{
+          span[class="ant-badge-status-dot"]{
             border: 0.5px solid rgb(160, 159, 159);
           }
         }

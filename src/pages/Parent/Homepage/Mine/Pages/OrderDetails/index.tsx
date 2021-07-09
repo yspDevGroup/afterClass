@@ -106,7 +106,7 @@ const OrderDetails: React.FC = (props: any) => {
             <li><span>支付方式</span><span>{orderInfo.ZFFS}</span></li>
             {
               orderInfo.DDZT === '已付款' ?
-                <><li><span>支付时间</span><span>2021-09-10 12:02:11</span></li>
+                <><li><span>支付时间</span><span>{moment(orderInfo.ZFSJ).format('YYYY.MM.DD  hh:mm:ss')}</span></li>
                 </> : ""
             }
           </ul>

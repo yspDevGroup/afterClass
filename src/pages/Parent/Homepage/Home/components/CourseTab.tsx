@@ -23,6 +23,7 @@ const CourseTab = () => {
   const { courseStatus, kskc, yxkc } = useContext(myContext);
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
   const centered = false;
+  const [keys, setKeys] = useState('setup')
 
   useEffect(() => {
     if (yxkc) {
@@ -51,13 +52,20 @@ const CourseTab = () => {
       });
     }
   }, [yxkc])
- 
+  const oncuechange = (key: string) => {
+    setKeys(key)
+  }
+
   return (
     <div className={`${styles.tabHeader}`}>
-      <Tabs centered={centered} tabBarExtraContent={!centered ?
-         { right: <Link to={{pathname:'/parent/home/course',state:{courseStatus:courseStatus,kskc:kskc,yxkc:yxkc}}} >
-           全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
-           </Link> } : ''} className={styles.courseTab}>
+      <Tabs centered={centered}
+        onTabClick={(key: string) => oncuechange(key)}
+        tabBarExtraContent={!centered ?
+          {
+            right: <Link to={{ pathname: '/parent/home/course', state: { courseStatus: courseStatus, kskc: kskc, yxkc: yxkc, keys: keys } }} >
+              全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
+            </Link>
+          } : ''} className={styles.courseTab}>
         {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
           <TabPane tab="开设课程" key="setup">
             {
@@ -85,7 +93,7 @@ const CourseTab = () => {
                   });
 
                   const { list, ...rest } = { ...defaultMsg };
-                  return (<TabPane tab={item.KCLX} key={item.KCLX}  style={{margin:'8px 0'}}> 
+                  return (<TabPane tab={item.KCLX} key={item.KCLX} style={{ margin: '8px 0' }}>
                     <ListComponent listData={{
                       list: courseData.filter((it: ListItem) => it.title !== 'null'),
                       ...rest

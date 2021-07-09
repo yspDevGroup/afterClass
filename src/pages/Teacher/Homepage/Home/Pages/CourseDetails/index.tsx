@@ -248,9 +248,9 @@ const CourseDetails: React.FC = () => {
     <div className={styles.Timetable}>
       <p className={styles.title}><span>课程表</span>
         <span>
-          <Badge className={styles.legend} color="#45C977" text="今日" />
+          <Badge className={`${styles.legend} ${styles.legend1}`} color="#FFF" text="出勤" />
           <Badge className={styles.legend} color="#fd8b8b" text="缺勤" />
-          <Badge className={styles.legend} color="##FF7171" text="出勤" />
+          <Badge className={styles.legend} color="#45C977" text="今日" />
           <Badge className={styles.legend} color="#d2ecdc" text="待上" />
         </span>  </p>
       <div className={styles.cards}>

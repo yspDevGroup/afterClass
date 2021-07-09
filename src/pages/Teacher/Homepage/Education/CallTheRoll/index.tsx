@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
 import { history } from 'umi';
-import { Table, Button, Switch, message, Modal } from 'antd';
+import { Table, Button, Switch, message, notification } from 'antd';
 import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
@@ -87,21 +87,30 @@ const CallTheRoll = () => {
       const allData = datas.data;
       // allData 有值时已点过名
       if (allData && allData?.length > 0) {
-        Modal.warning({
-          title: '本节课已点过名',
+        notification.warning({
+          message: '',
+          description:
+            '本节课已点名.请勿重复操作',
+          duration: 0,
         });
         setButDis(true);
-      }
-    });
-    // 获取班级已报名人数
-    const resStudent = getEnrolled({ id: bjids || '' });
-    Promise.resolve(resStudent).then((data: any) => {
-      if (data.status === 'ok') {
-        const studentData = data.data;
-        studentData?.forEach((item: any) => {
-          item.isRealTo = '出勤';
+        allData.forEach((item: any) => {
+          item.isRealTo = item.CQZT
+        })
+        setDataScouse(allData);
+      } else {
+
+        // 获取班级已报名人数
+        const resStudent = getEnrolled({ id: bjids || '' });
+        Promise.resolve(resStudent).then((data: any) => {
+          if (data.status === 'ok') {
+            const studentData = data.data;
+            studentData?.forEach((item: any) => {
+              item.isRealTo = '出勤';
+            });
+            setDataScouse(studentData);
+          }
         });
-        setDataScouse(studentData);
       }
     });
 
@@ -142,7 +151,6 @@ const CallTheRoll = () => {
         }
       }
     });
-
     setDataScouse(newData);
   };
 

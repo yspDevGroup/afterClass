@@ -16,7 +16,7 @@ const defaultMsg: ListData = {
 
 const Course = (props: any) => {
   const { TabPane } = Tabs;
-  const { yxkc,kskc,courseStatus } = props.location.state;
+  const { yxkc,kskc,courseStatus,keys } = props.location.state;
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const Course = (props: any) => {
   return (
     <div className={styles.CourseBox}>
       <div className={`${styles.tabHeader}`}>
-        <Tabs centered={true} className={styles.courseTab}>
+        <Tabs centered={true} className={styles.courseTab} defaultActiveKey={keys}>
           {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
             <TabPane tab="开设课程" key="setup">
               {

@@ -72,7 +72,7 @@ const CourseDetails: React.FC = () => {
           absence.push({
             id: `kc${index}`,
             JC: `第${index + 1}节`,
-            data: record,
+            data:  moment(record).format('MM/DD'),
             type: `今日`
           })
         } else {
@@ -229,8 +229,8 @@ const CourseDetails: React.FC = () => {
           const current = result.data.KHBJSJs![0];
           const start = current.BMKSSJ ? current.BMKSSJ : result.data.BMKSSJ;
           const end = current.BMKSSJ ? current.BMJSSJ : result.data.BMJSSJ;
-          const enAble = new Date(nowtime) > new Date(start!) && new Date(nowtime) < new Date(end!);
-          const btnEnable = new Date(nowtime) > new Date(result.data.BMKSSJ!) && new Date(nowtime) < new Date(result.data.BMJSSJ!);
+          const enAble = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(moment(start).format('YYYY/MM/DD')) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(moment(end).format('YYYY/MM/DD'));
+          const btnEnable = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(result.data.BMKSSJ!) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(result.data.BMJSSJ!);
           setKcDetail(result.data);
           setFY(current.FY);
           setBJ(current.id);

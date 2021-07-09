@@ -1,6 +1,9 @@
 .callTheRoll {
   height: 100%;
   background: #f5f5f5;
+  .noScrollBar::-webkit-scrollbar {
+    display: none !important; /* Chrome Safari */
+  }
   .classCourseName {
     padding-top: 15px;
     color: #333;
@@ -86,6 +89,10 @@
     line-height: 54px;
     background: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    &[disabled]{
+      background-color: #999 !important;
+      border-color: #eee !important;
+    }
     :global {
       .ant-btn-round {
         height: 38px;

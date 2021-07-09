@@ -15,18 +15,26 @@ const Study = () => {
   // 在学课程数据
   const myDate = new Date();
   const nowdata = new Date(moment(myDate.toLocaleDateString()).format('YYYY-MM-DD'));
-  const Timetable = [];
+  
   const [listData, setListData] = useState<ListData>();
   const Selectedcourses = (data: any) => {
     const courseData: any[] = [];
     for (let i = 0; i < data.length; i += 1) {
+      const Timetable = [];
       const record = data[i];
       if (datedata && datedata[record.id]) {
-        datedata[record.id].dates.map((item: any) => {
+        for (let z = 0; z < datedata[record.id].dates.length; z += 1) {
+          for (let j = z + 1; j < datedata[record.id].dates.length; j += 1) {
+            if (datedata[record.id].dates[z] === datedata[record.id].dates[j]) {
+              datedata[record.id].dates.splice(j, 1);
+              j -= 1
+            }
+          }
+        }
+        datedata[record.id].dates.forEach((item: any) => {
           if (new Date(item) < nowdata) {
             Timetable.push(item);
           }
-          return true
         })
         courseData.push({
           id: record.id,
@@ -39,7 +47,7 @@ const Study = () => {
               })}`, `${(datedata[record.id].courseInfo.XXSJPZ.KSSJ).substring(0, 5)}-${(datedata[record.id].courseInfo.XXSJPZ.JSSJ).substring(0, 5)}`, `${datedata[record.id].courseInfo.FJSJ.FJMC}`],
             },
             {
-              left: [`共${record.KSS}`, `已学${Timetable.length}课时`],
+              left: [`共${datedata[record.id].dates.length}课时`, `已学${Timetable.length}课时`],
             },
           ],
         })
