@@ -325,7 +325,7 @@ const OrderInquiry = () => {
           pageSize={pageSize}
           onShowSizeChange={onShowSizeChange}
           onChange={onPaginationChange}
-          style={{ textAlign: 'center', padding: '32px 0', background: '#FFF', color: '#3e88f8' }}
+          style={{ textAlign: 'center', padding: '32px 0', background: '#FFF' }}
         />
       </div>
       <PromptInformation

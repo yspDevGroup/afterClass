@@ -13,7 +13,7 @@ import { theme } from '@/theme-default';
 
 import { queryXQList } from '@/services/wechat/service';
 import { getFJPlan } from '@/services/after-class/fjsj';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getAllKHBJSJ, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getQueryString } from '@/utils/utils';
@@ -23,6 +23,7 @@ import AddArranging from './components/AddArranging';
 import { searchData } from './searchConfig';
 // import { NJData, XQData } from './mock';
 import './index.less';
+import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
@@ -301,15 +302,58 @@ const ClassManagement = () => {
     }
   }, []);
   useEffect(() => {
-    setKcmcData(undefined);
-    setBjmcData(undefined);
-  }, []);
+    (async () => {
+      if (xn && xq) {
+        const params = {
+          xn,
+          xq,
+          page: 0,
+          pageCount: 0,
+          name: '',
+        };
+        // 通过课程数据接口拿到所有的课程
+        const khkcResl = await getAllKHKCSJ({ ...params, isReuired: false });
+        if (khkcResl.status === 'ok') {
+          const KCMC = khkcResl.data?.map((item: any) => ({ label: item.KCMC, value: item.id }));
+          setKcmcData(KCMC);
+        }
+        // 通过班级数据接口拿到所有的班级
+        const bjmcResl = await getAllKHBJSJ(params);
+        if (bjmcResl.status === 'ok') {
+          const BJMC = bjmcResl.data?.map((item: any) => ({ label: item.BJMC, value: item.id }));
+          setBjmcData(BJMC);
+        }
+      }
+    })();
+  }, [xn, xq]);
+  // 课程名称下拉框点击事件
   const onKcmcChange = async (value: any) => {
     setKcmcValue(value);
+
+    // 排课的接口
+    const res = await getFJPlan({ kcId: value, xn, xq, isPk: radioValue });
+    if (res.status === 'ok') {
+      const tableData = processingData(res.data, xXSJPZData);
+      setTableDataSource(tableData);
+    }
+
+    // 根据课程ID 获取班级数据
+    const bjRes = await getAllKHBJSJ({ kcId: value, name: '', page: 1, pageCount: 0 });
+    if (bjRes.status === 'ok') {
+      const BJMC = bjRes.data?.map((item: any) => ({ label: item.BJMC, value: item.id }));
+      setBjmcData(BJMC);
+    }
   };
 
+  // 班级名称下拉框点击事件
   const onBjmcChange = async (value: any) => {
     setBjmcValue(value);
+    // 排课的接口
+    const res = await getFJPlan({ bjId: value, xn, xq, isPk: radioValue });
+    if (res.status === 'ok') {
+      const tableData = processingData(res.data, xXSJPZData);
+      setTableDataSource(tableData);
+    }
   };
   const columns: {
     title: string;
@@ -432,7 +476,7 @@ const ClassManagement = () => {
                   >
                     {kcmcData?.map((item: selectType) => {
                       return (
-                        <Option value={item.label} key={item.label}>
+                        <Option value={item.value} key={item.value}>
                           {item.label}
                         </Option>
                       );
@@ -452,7 +496,7 @@ const ClassManagement = () => {
                   >
                     {bjmcData?.map((item: selectType) => {
                       return (
-                        <Option value={item.label} key={item.label}>
+                        <Option value={item.value} key={item.value}>
                           {item.label}
                         </Option>
                       );
