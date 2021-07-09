@@ -23,7 +23,7 @@ const CourseTab = () => {
   const { courseStatus, kskc, yxkc } = useContext(myContext);
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
   const centered = false;
-  const [keys, setKeys] = useState('setup')
+  const [keys, setKeys] = useState('setup');
 
   useEffect(() => {
     if (yxkc) {
@@ -53,8 +53,8 @@ const CourseTab = () => {
     }
   }, [yxkc])
   const oncuechange = (key: string) => {
-    setKeys(key)
-  }
+    setKeys(key);
+  };
 
   return (
     <div className={`${styles.tabHeader}`}>
