@@ -45,8 +45,34 @@ const ClassCalendar = (props: propstype) => {
     const courseData = {};
     const markDays = [];
     const learnData = {};
+    let newData = {};
+    data.forEach((item: any) => {
+      if (Object.keys(newData).indexOf('' + item.KHBJSJ.id) === -1) {
+        newData[item.KHBJSJ.id] = []
+      }
+      newData[item.KHBJSJ.id].push(item)
+    });
+
     for (let k = 0; k < data.length; k += 1) {
       const item = data[k];
+      const weeked: any[] = [];
+      const dates: any[] = [];
+      newData[item.KHBJSJ.id].forEach((rea: any) => {
+        if (dates.length===0) {
+          dates.push(DateRange(rea.KHBJSJ.KKRQ, rea.KHBJSJ.JKRQ))
+        }
+        if (weeked.indexOf(rea.WEEKDAY) === -1) {
+          weeked.push(rea.WEEKDAY);
+        }
+      })
+      const sj :any[]=[];
+      dates[0].forEach((as:any)=>{
+        weeked.forEach((ds:any)=>{
+          if(Week(as)===ds){
+            sj.push(as)
+          }
+        })
+      })
       const courseDays = [];
       const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
       const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
@@ -65,14 +91,18 @@ const ClassCalendar = (props: propstype) => {
       };
       const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
       let kjs = 0;
+      
       for (let i = 0; i < res.length; i += 1) {
         const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
         if (weekDay === item.WEEKDAY) {
           kjs += 1;
-          const enrollLink = `/teacher/education/callTheRoll?id=${item.id}&bjid=${item.KHBJSJ.id}&date=${moment(res[i]).format('YYYY/MM/DD')}&kjs=${kjs}`;
+          const enrollLink = {pathname:'/teacher/education/callTheRoll',state:{
+            pkid:item.id,bjids:item.KHBJSJ.id,date:moment(res[i]).format('YYYY/MM/DD'),kjs:sj.length,sj:sj
+          }};
+          // `/teacher/education/callTheRoll?id=${item.id}&bjid=${item.KHBJSJ.id}&date=${moment(res[i]).format('YYYY/MM/DD')}&kjs=${sj.length}`;
           const curInfo = [{
             enrollLink,
-            ...kcxxInfo 
+            ...kcxxInfo
           }];
           if (courseData[res[i]]) {
             courseData[res[i]] = courseData[res[i]].concat(curInfo);

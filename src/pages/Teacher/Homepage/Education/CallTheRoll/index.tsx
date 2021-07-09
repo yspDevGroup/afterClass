@@ -10,6 +10,7 @@ import { getQueryString } from '@/utils/utils';
 
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
+import Item from 'antd/lib/list/Item';
 
 /**
  * 课堂点名
@@ -52,7 +53,7 @@ type claNameType = {
   KCMC?: string;
 };
 
-const CallTheRoll = () => {
+const CallTheRoll = (props:any) => {
   // '缺席'
   const [absent, setAbsent] = useState<number>(0);
   // '出勤'
@@ -63,11 +64,12 @@ const CallTheRoll = () => {
   const [dataSource, setDataScouse] = useState<any>([]);
   const [butDis, setButDis] = useState<boolean>(false);
 
-  const pkid = getQueryString('id'); // 排课ID
-  const bjids = getQueryString('bjid'); // 班级ID
-  const pkDate = getQueryString('date')?.replace(/\//g, '-'); // 日期
-  const kjs = getQueryString('kjs'); // 课时数
+  // const pkid = getQueryString('id'); // 排课ID
+  // const bjids = getQueryString('bjid'); // 班级ID
+  // const kjs = getQueryString('kjs'); // 课时数
 
+  const { pkid,bjids,date,kjs,sj } = props.location.state;
+  const pkDate = date?.replace(/\//g, '-'); // 日期
   // useEffect(() => {
   //   (async () => {
   //     if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -76,6 +78,12 @@ const CallTheRoll = () => {
   //     await initWXAgentConfig(['checkJsApi']);
   //   })();
   // }, []);
+  const wxad :any=[]
+  sj.forEach((item:any) => {
+    if(new Date(pkDate)>new Date(item) ){
+      wxad.push(item)
+    }
+  });
   useEffect(() => {
     // 查询所有课后服务出勤记录
     const resAll = getAllKHXSCQ({
@@ -94,12 +102,24 @@ const CallTheRoll = () => {
           duration: 0,
         });
         setButDis(true);
+        const resStudent = getEnrolled({ id: bjids || '' });
+        Promise.resolve(resStudent).then((data: any) => {
+          if (data.status === 'ok') {
+            const studentData = data.data;
+            studentData?.forEach((item: any) => {
+              allData.forEach((sj: any) => {
+                if (item.XSId === sj.XSId) {
+                  sj.XSXM = item.XSXM
+                }
+              })
+            });
+          }
+        });
         allData.forEach((item: any) => {
-          item.isRealTo = item.CQZT
+          item.isRealTo = item.CQZT;
         })
         setDataScouse(allData);
       } else {
-
         // 获取班级已报名人数
         const resStudent = getEnrolled({ id: bjids || '' });
         Promise.resolve(resStudent).then((data: any) => {
@@ -218,7 +238,7 @@ const CallTheRoll = () => {
     <div className={styles.callTheRoll}>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
-        {claName?.BJMC} ｜ 第 {kjs}/{claName?.KSS} 课时
+        {claName?.BJMC} ｜ 第 {wxad.length}/{kjs} 课时
       </div>
       <div className={styles.checkWorkAttendance}>
         {checkWorkInfo.map((item) => {
@@ -245,6 +265,7 @@ const CallTheRoll = () => {
           type="primary"
           shape="round"
           onClick={onButtonClick}
+          className={butDis? styles.disabl:styles.xuanzhong}
           disabled={butDis}
         >
           确认点名
