@@ -213,6 +213,7 @@ const Index: FC<IndexPropsType> = ({
       }
     } else if (type === 'edit') {
       if (chosenData && !rowData[colItem.dataIndex]) {
+        let isShow = false;
         basicData?.forEach((item: any) => {
           item.KHPKSJs.forEach((KHPKSJsItem: any) => {
             if (
@@ -220,19 +221,24 @@ const Index: FC<IndexPropsType> = ({
               KHPKSJsItem.XXSJPZ.id === rowData.course?.hjId &&
               KHPKSJsItem.KHBJSJ.ZJS === tearchId
             ) {
-              message.warning({
-                title: '不能将同一个老师安排在同一天的同一时段内上课',
-              });
+              isShow = false;
             } else {
-              rowData[colItem.dataIndex] = {
-                cla: chosenData?.cla,
-                teacher: chosenData?.teacher,
-                dis: false,
-                color: chosenData.color,
-              };
+              isShow = true;
             }
           });
         });
+        if (isShow) {
+          rowData[colItem.dataIndex] = {
+            cla: chosenData?.cla,
+            teacher: chosenData?.teacher,
+            dis: false,
+            color: chosenData.color,
+          };
+        } else {
+          message.warning({
+            title: '不能将同一个老师安排在同一天的同一时段内上课',
+          });
+        }
       } else {
         rowData[colItem.dataIndex] = '';
       }
