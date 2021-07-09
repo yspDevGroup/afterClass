@@ -120,8 +120,8 @@ const AddCourse: FC<AddCourseProps> = ({
       let res = null;
       const options = {
         ...values,
-        NJS: values.NJS?.toString() || formValues?.NJS, // 年级ID
-        NJSName: nJLabelItem?.toString() || formValues?.NJSName, // 年级名称
+        NJS: values.NJS?.toString() || formValues?.NJS.toString(), // 年级ID
+        NJSName: nJLabelItem?.toString() || formValues?.NJSName.toString(), // 年级名称
         FJS: values.FJS?.toString(), // 副班
         XQName: xQItem, // 校区名称
         KCTP: imageUrl || formValues?.KCTP,

@@ -111,8 +111,10 @@ const ClassMaintenance = () => {
     data.NJSJs?.map((item: any) => njIds.push(item.id));
     const list = {
       ...data,
-      NJS: data.NJSName ? data.NJSName?.split(',') : [],
-      XQ: data.XQName ? data.XQName?.split(',') : [],
+      XQ: data.XQ ? data.XQ?.split(',') : [],
+      NJS: data.NJS ? data.NJS?.split(',') : [],
+      NJSName: data.NJSName ? data.NJSName?.split(',') : [],
+      XQName: data.XQName ? data.XQName?.split(',') : [],
       ZJS: data.ZJS || undefined,
       FJS: data.FJS ? data.FJS?.split(',') : [],
       BMSD: [data.BMKSSJ || data.KHKCSJ.BMKSSJ, data.BMJSSJ || data.KHKCSJ.BMJSSJ],
