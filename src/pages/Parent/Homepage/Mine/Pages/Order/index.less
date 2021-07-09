@@ -1,120 +1,145 @@
-.orderList{
-    background-color:#F5F5F5;
-    height: auto;
-    min-height: 100vh;
-    padding: 0 10px 0 10px;
-    button{
-        outline: none;
-      }
-    :global{
-        .ant-tabs-nav:before{
-            display: none !important;
-        }
-        .ant-tabs-nav-list{
-            width: 100vw;
-            height: 54px;
-            .ant-tabs-tab{
-                width: 25%;
-                font-size: 16px;
-                margin: 0;
-                padding:0;
-                border:none !important;
-                background-color:#F5F5F5 !important;
-                .ant-tabs-tab-btn{
-                    margin: auto;
-                }            
-            }
-            .ant-tabs-tab-active{
-                .ant-tabs-tab-btn{
-                    font-weight: 600;
-                    color:#44CA7A;
-                }
-            }
-        }
-        .ant-tabs-tab:hover{
-            color:#44CA7A;
-        }
-        .ant-tabs-tab-btn:focus, .ant-tabs-tab-remove:focus, .ant-tabs-tab-btn:active, .ant-tabs-tab-remove:active{
-            color:#44CA7A;
-        }
-    }
-    .Information{
-        width: 100%;
-        padding: 10px;
-        background-color: #FFFFFF;
-        margin-bottom: 10px;
-        border-radius: 8px;
-        .orderNumber{
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            span{
-                color: #999999;
-            }
-        }
-        .KCMC{
-            display: flex;
-            justify-content: space-between;
-            p{
-                width: 75%;
-                font-weight: 600;
-                font-size: 16px;
-                color: @text-color-secondary;
-            }
-            span{
-                width: 25%;
-                color: #999999;
-                text-align: right;
-            }
-        }
-        .price{
-            text-align: right;
-            span{
-                font-size: 16px;
-                font-weight: 600;
-            }
-        }
-        .buttons{
-            display: flex;
-            justify-content: space-between;
-            span{
-                color: #999999;
-                line-height: 30px;
-            }
-            >div{
-                button{
-                    margin-left: 8px;
-                    padding: 0 12px;
-                    line-height: 30px;
-                    height: 30px;
-                    background-color: transparent;
-                    border-radius: 15px;
-                    border: 1px solid #DDDDDD ;
-                    color:#666666
-                }
-            }
-        }
-        .btns{
-            display: flex;
-            justify-content: flex-end;
-            button{
-                margin-left: 8px;
-                padding: 0 12px;
-                line-height: 30px;
-                height: 30px;
-                background-color: transparent;
-                border-radius: 15px;
-                border: 1px solid #DDDDDD ;
-                color:#666666
-            }
-        }
-    }
-    .noData{
-        img{
-            width:60%;
-            margin: 50px auto;
-            display: block;
-        }
-    }
-}
+.orderList {
+  background-color: #F5F5F5;
+  height: auto;
+  min-height: 100vh;
+  padding: 0 10px 0 10px;
 
+  button {
+    outline: none;
+  }
+
+  :global {
+    .ant-tabs-nav:before {
+      display: none !important;
+    }
+
+    .ant-tabs-nav-list {
+      width: 100vw;
+      height: 54px;
+
+      .ant-tabs-tab {
+        width: 25%;
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+        border: none !important;
+        background-color: #F5F5F5 !important;
+
+        .ant-tabs-tab-btn {
+          margin: auto;
+        }
+      }
+
+      .ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+          font-weight: 600;
+          color: #44CA7A;
+        }
+      }
+    }
+
+    .ant-tabs-tab:hover {
+      color: #44CA7A;
+    }
+
+    .ant-tabs-tab-btn:focus,
+    .ant-tabs-tab-remove:focus,
+    .ant-tabs-tab-btn:active,
+    .ant-tabs-tab-remove:active {
+      color: #44CA7A;
+    }
+  }
+
+  .Information {
+    width: 100%;
+    padding: 10px;
+    background-color: #FFFFFF;
+    margin-bottom: 10px;
+    border-radius: 8px;
+
+    .orderNumber {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+
+      span {
+        color: #999999;
+      }
+    }
+
+    .KCMC {
+      display: flex;
+      justify-content: space-between;
+
+      p {
+        width: 75%;
+        font-weight: 600;
+        font-size: 16px;
+        color: @text-color-secondary;
+      }
+
+      span {
+        width: 25%;
+        color: #999999;
+        text-align: right;
+      }
+    }
+
+    .price {
+      text-align: right;
+      color: #333;
+      span {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        color: #999999;
+        line-height: 30px;
+      }
+
+      >div {
+        button {
+          margin-left: 8px;
+          padding: 0 12px;
+          line-height: 30px;
+          height: 30px;
+          background-color: transparent;
+          border-radius: 15px;
+          border: 1px solid #DDDDDD;
+          color: #666666
+        }
+      }
+    }
+
+    .btns {
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        margin-left: 8px;
+        padding: 0 12px;
+        line-height: 30px;
+        height: 30px;
+        background-color: transparent;
+        border-radius: 15px;
+        border: 1px solid #DDDDDD;
+        color: #666666
+      }
+    }
+  }
+
+  .noData {
+    img {
+      width: 60%;
+      margin: 50px auto;
+      display: block;
+    }
+  }
+}

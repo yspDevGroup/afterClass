@@ -12,8 +12,8 @@ import Nodata from '@/components/Nodata';
 
 const { TabPane } = Tabs;
 
-const OrderList = (props: { data?: any[],KKRQ?:string,JKRQ?:string, children: any[], currentUser?: API.CurrentUser, triggerEvt: (param: any[]) => Promise<any> }) => {
-    const { data, children, currentUser, triggerEvt,KKRQ,JKRQ } = props;
+const OrderList = (props: { data?: any[], children: any[], currentUser?: API.CurrentUser, triggerEvt: (param: any[]) => Promise<any> }) => {
+    const { data, children, currentUser, triggerEvt,} = props;
     const handlePay = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const par = (e.target as HTMLButtonElement).closest('div[class*="Information"]');
         (par?.children[0] as HTMLElement)?.click();
@@ -39,8 +39,8 @@ const OrderList = (props: { data?: any[],KKRQ?:string,JKRQ?:string, children: an
                         detail: KHBJSJ,
                         payOrder: { ...rest },
                         user: currentUser,
-                        KKRQ:KKRQ,
-                        JKRQ:JKRQ,
+                        KKRQ:KHBJSJ.KHKCSJ.KKRQ,
+                        JKRQ:KHBJSJ.KHKCSJ.JKRQ,
                     }
                 }} >
                     <p className={styles.orderNumber}>
@@ -62,14 +62,14 @@ const OrderList = (props: { data?: any[],KKRQ?:string,JKRQ?:string, children: an
                 </div> : ''}
             </div>
         })
-            :  <Nodata imgSrc={noOrder} desc='暂无订单' />}
+            : <Nodata imgSrc={noOrder} desc='暂无订单' />}
     </>
 };
 const Order: React.FC = () => {
     const [orderInfo, setOrderInfo] = useState<API.KHXSDD[]>([]);
     const { initialState } = useModel('@@initialState');
     const { currentUser } = initialState || {};
-    const type = getQueryString("type")|| undefined;
+    const type = getQueryString("type") || undefined;
     const children = currentUser?.subscriber_info?.children || [{
         student_userid: currentUser?.UserId,
         njId: '1'
@@ -100,7 +100,7 @@ const Order: React.FC = () => {
                 <TabPane tab="待付款" key="toPay">
                     <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '待付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
                 </TabPane>
-                <TabPane tab="已付款" key="paid">
+                <TabPane tab="已完成" key="paid">
                     <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '已付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
                 </TabPane>
             </Tabs>

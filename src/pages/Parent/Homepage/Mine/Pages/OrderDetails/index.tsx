@@ -17,7 +17,7 @@ const OrderDetails: React.FC = (props: any) => {
   const [orderInfo, setOrderInfo] = useState<any>();
   const [urlPath, setUrlPath] = useState<any>();
   const linkRef = useRef<HTMLAnchorElement | null>(null);
-  const { title, detail, payOrder, user,KKRQ,JKRQ } = props.location.state;
+  const { title, detail, payOrder, user, KKRQ, JKRQ } = props.location.state;
   const children = user?.subscriber_info?.children || [{
     student_userid: user?.UserId,
     njId: '1'
@@ -28,9 +28,9 @@ const OrderDetails: React.FC = (props: any) => {
     setOrderInfo(payOrder);
     setDeadline(orderTime + 1000 * 60 * 30);
   }, [payOrder]);
-  useEffect(()=>{
+  useEffect(() => {
     linkRef.current?.click();
-  },[urlPath]);
+  }, [urlPath]);
   const onchanges = (e: { stopPropagation: () => void; }) => {
     e.stopPropagation()
   };

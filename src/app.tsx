@@ -1,5 +1,4 @@
 import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
-import { PageLoading } from '@ant-design/pro-layout';
 import { notification } from 'antd';
 import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
@@ -102,6 +101,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
           </Link>,
         ]
       : [],
+    collapsedButtonRender: false,
     menuHeaderRender: (logo, title) => {
       return <Link to="/">{title}</Link>;
     },

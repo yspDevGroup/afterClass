@@ -13,12 +13,14 @@ body,
     width: 8px; // 高宽分别对应横竖滚动条的尺寸
     height: 8px;
   }
+
   ::-webkit-scrollbar-thumb {
     background: #c1c1c1;
     // 滚动条里面小方块
     border-radius: 8px;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   }
+
   ::-webkit-scrollbar-track {
     background: #ededed;
     border-radius: 8px;
@@ -49,59 +51,75 @@ body,
       .ant-pro-sider-logo {
         height: 80px;
         background-color: rgba(33, 48, 69, 1);
-
+        justify-content: center;
         h1 {
           color: #fff;
+          margin: 0;
         }
 
-        & + div {
+        &+div {
           margin-top: @padding-lg;
         }
       }
 
       .ant-menu {
         background: transparent;
+
+          
+        .ant-menu-item::after{
+          border-right: 3px solid rgba(62, 136, 248, 1);
+        }
         .ant-menu-item,
         .ant-menu-submenu {
+
           .ant-pro-menu-item-title,
           .anticon,
           .ant-menu-submenu-arrow {
-            color: #fff;
+            color: rgba(255,255,255,0.6);
           }
 
           &.ant-menu-item-selected,
           &:active,
           .ant-menu-submenu-title:active {
             background: rgba(62, 136, 248, 1);
+            span{
+              color: #fff;
+            }
           }
         }
-      .ant-menu-inline{
+
+        .ant-menu-inline {
           background: rgba(33, 48, 69, 1);
         }
       }
     }
+
     // 调整按钮与icon间距
-    .ant-btn > .anticon + span, .ant-btn > span + .anticon{
+    .ant-btn>.anticon+span,
+    .ant-btn>span+.anticon {
       margin-left: 5px;
     }
+
     //调整头部样式
-    .ant-pro-table-list-toolbar-container{
-        padding:16px 24px;
+    .ant-pro-table-list-toolbar-container {
+      padding: 16px 24px;
     }
-    .ant-pro-table{
-      .ant-card{
-        .ant-card-body{
-          padding:0px;
+
+    .ant-pro-table {
+      .ant-card {
+        .ant-card-body {
+          padding: 0px;
         }
 
       }
     }
+
     // 调整protable下翻页的样式
     .ant-pro-table {
       .ant-table-wrapper .ant-table-pagination-right {
         justify-content: center;
 
-        > li {
+        >li {
           width: 26px;
           height: 26px;
           margin: @padding-sm;
@@ -112,24 +130,27 @@ body,
 
           &.ant-pagination-item-active {
             color: @primary-color;
-            border-color: @primary-color;
+            border-color: #3e88f8;
           }
         }
       }
-      .ant-table-pagination.ant-pagination{
-       margin: 32px 0;
+
+      .ant-table-pagination.ant-pagination {
+        margin: 32px 0;
       }
     }
+
     // 取消内容部分底部外边距
-    .ant-pro-basicLayout-content{
+    .ant-pro-basicLayout-content {
       margin-bottom: 0px;
     }
 
     // 取消footer的链接信息
     .ant-pro-global-footer {
       //底部样式
-      padding:10px 0;
+      padding: 10px 0;
       margin: 0;
+
       .ant-pro-global-footer-links {
         display: none;
       }
@@ -147,8 +168,10 @@ body,
 
     .ant-modal-content {
       min-width: 410px;
+
       .ant-modal-header {
         height: 48px;
+
         .ant-modal-title {
           font-weight: bold;
           font-size: @font-size-base;
@@ -166,6 +189,7 @@ body,
       .ant-modal-footer {
         padding: 10px 24px;
         height: 48px;
+
         .ant-btn {
           width: 72px;
           height: 28px;
@@ -175,7 +199,8 @@ body,
           text-align: center;
           border-radius: 2px;
         }
-        .ant-btn-primary{
+
+        .ant-btn-primary {
           margin-left: 16px;
         }
       }
@@ -186,6 +211,7 @@ body,
   .ant-btn-primary {
     background-color: @btn-primary-bg;
     border-color: @btn-primary-bg;
+
     span {
       color: #fff;
     }
@@ -197,13 +223,14 @@ body,
     width: 100%;
     overflow-x: auto;
 
-    &-thead > tr,
-    &-tbody > tr {
-      > th,
-      > td {
+    &-thead>tr,
+    &-tbody>tr {
+
+      >th,
+      >td {
         white-space: pre;
 
-        > span {
+        >span {
           display: block;
         }
       }
@@ -212,8 +239,9 @@ body,
 }
 
 // 兼容IE11
-@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
-  body .ant-design-pro > .ant-layout {
+@media screen and(-ms-high-contrast: active),
+(-ms-high-contrast: none) {
+  body .ant-design-pro>.ant-layout {
     min-height: 100vh;
   }
 }

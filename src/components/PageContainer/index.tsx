@@ -26,7 +26,7 @@ const PageContain = ({ children, cls }: pageProp) => {
     }
 }
 const {width} = getWidHei();
-const xx=1
+const xx=1;
 useCallback(
   () => {
       if(width<1200){
@@ -54,7 +54,6 @@ useCallback(
               </span>
             </div>
           }
-
           return <>{defaultDom}</>
         },
         extra: <RightContent />,
