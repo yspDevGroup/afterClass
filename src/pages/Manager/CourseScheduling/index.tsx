@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Button, Radio } from 'antd';
+import { Button, Radio, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import type { SearchDataType } from '@/components/Search/data';
@@ -23,6 +23,9 @@ import AddArranging from './components/AddArranging';
 import { searchData } from './searchConfig';
 // import { NJData, XQData } from './mock';
 import './index.less';
+
+const { Option } = Select;
+type selectType = { label: string; value: string };
 
 const ClassManagement = () => {
   const [state, setState] = useState(true);
@@ -46,6 +49,12 @@ const ClassManagement = () => {
   const [pKiskai, setPKiskai] = useState<boolean>(false);
 
   const [sameClass, setSameClassData] = useState<any>([]);
+  // 课程选择框的数据
+  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
+  // 班级名称选择框的数据
+  const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
+  const [kcmcValue, setKcmcValue] = useState<any>();
+  const [bjmcValue, setBjmcValue] = useState<any>();
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -291,7 +300,17 @@ const ClassManagement = () => {
       })();
     }
   }, []);
+  useEffect(() => {
+    setKcmcData(undefined);
+    setBjmcData(undefined);
+  }, []);
+  const onKcmcChange = async (value: any) => {
+    setKcmcValue(value);
+  };
 
+  const onBjmcChange = async (value: any) => {
+    setBjmcValue(value);
+  };
   const columns: {
     title: string;
     dataIndex: string;
@@ -400,6 +419,46 @@ const ClassManagement = () => {
                     handlerSearch(type, value, term)
                   }
                 />
+              </div>
+              <div style={{ display: 'flex', lineHeight: 2.3, marginRight: 16 }}>
+                <span>课程名称：</span>
+                <div>
+                  <Select
+                    style={{ width: 200 }}
+                    value={kcmcValue}
+                    allowClear
+                    placeholder="请选择"
+                    onChange={onKcmcChange}
+                  >
+                    {kcmcData?.map((item: selectType) => {
+                      return (
+                        <Option value={item.label} key={item.label}>
+                          {item.label}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+              </div>
+              <div style={{ display: 'flex', lineHeight: 2.3 }}>
+                <span>班级名称：</span>
+                <div>
+                  <Select
+                    style={{ width: 200 }}
+                    value={bjmcValue}
+                    allowClear
+                    placeholder="请选择"
+                    onChange={onBjmcChange}
+                  >
+                    {bjmcData?.map((item: selectType) => {
+                      return (
+                        <Option value={item.label} key={item.label}>
+                          {item.label}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
               </div>
               <div style={{ position: 'absolute', right: 48 }}>
                 <Button
