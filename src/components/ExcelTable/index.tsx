@@ -213,46 +213,31 @@ const Index: FC<IndexPropsType> = ({
       }
     } else if (type === 'edit') {
       if (chosenData && !rowData[colItem.dataIndex]) {
-        console.log('basicData', basicData);
-        console.log('weekDay[colItem.dataIndex]1111', weekDay[colItem.dataIndex]);
-        console.log('rowData.course?.hjId1111', rowData.course?.hjId);
-        console.log('tearchId1111', tearchId);
-        basicData?.forEach((item: any) => {
-          item.KHPKSJs.forEach((KHPKSJsItem: any) => {
-            if (
-              KHPKSJsItem.WEEKDAY === weekDay[colItem.dataIndex] &&
-              KHPKSJsItem.XXSJPZ.id === rowData.course?.hjId &&
-              KHPKSJsItem.KHBJSJ.ZJS === tearchId
-            ) {
-              console.log('1231321313213');
-              Modal.warning({
-                title: '不能将同一个老师安排在同一天的同一时段内上课',
-                onOk() {
-                  rowData[colItem.dataIndex] = '';
-                },
-              });
-            } else {
-              rowData[colItem.dataIndex] = {
-                cla: chosenData?.cla,
-                teacher: chosenData?.teacher,
-                dis: false,
-                color: chosenData.color,
-              };
-            }
+        if (
+          basicData?.every((item: any) => {
+            return item.KHPKSJs.every((KHPKSJsItem: any) => {
+              return (
+                KHPKSJsItem.WEEKDAY === weekDay[colItem.dataIndex] &&
+                KHPKSJsItem.XXSJPZ.id === rowData.course?.hjId &&
+                KHPKSJsItem.KHBJSJ.ZJS === tearchId
+              );
+            });
+          })
+        ) {
+          Modal.warning({
+            title: '不能将同一个老师安排在同一天的同一时段内上课',
+            onOk() {
+              rowData[colItem.dataIndex] = '';
+            },
           });
-        });
-        // if (isShow) {
-        //   rowData[colItem.dataIndex] = {
-        //     cla: chosenData?.cla,
-        //     teacher: chosenData?.teacher,
-        //     dis: false,
-        //     color: chosenData.color,
-        //   };
-        // } else {
-        //   message.warning({
-        //     title: '不能将同一个老师安排在同一天的同一时段内上课',
-        //   });
-        // }
+        } else {
+          rowData[colItem.dataIndex] = {
+            cla: chosenData?.cla,
+            teacher: chosenData?.teacher,
+            dis: false,
+            color: chosenData.color,
+          };
+        }
       } else {
         rowData[colItem.dataIndex] = '';
       }
@@ -337,8 +322,9 @@ const Index: FC<IndexPropsType> = ({
                                   <div
                                     className="cla"
                                     style={{
-                                      width: item.dataIndex === 'room' ? 20 : '100%',
+                                      width: item.dataIndex === 'room' ? 40 : '100%',
                                       margin: '0 auto',
+                                      wordBreak: 'break-word',
                                     }}
                                   >
                                     {data[item.dataIndex].cla}

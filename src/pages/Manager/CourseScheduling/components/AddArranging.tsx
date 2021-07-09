@@ -193,7 +193,6 @@ const AddArranging: FC<PropsType> = (props) => {
   };
   // 班级选择
   const BjClick = (value: any) => {
-    console.log('value', value);
     setTearchId(value.ZJS);
     const chosenData = {
       cla: value.BJMC || '',
