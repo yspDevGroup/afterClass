@@ -100,7 +100,9 @@ const AddCourse: FC<AddCourseProps> = ({
       setCampus(XQ);
       setGrade(NJ);
       if (formValues?.id) {
-        setXQLabelItem(formValues?.NJSName);
+        setXQLabelItem(formValues?.NJSName?.toString());
+      } else {
+        setXQLabelItem('');
       }
     })();
   }, []);
