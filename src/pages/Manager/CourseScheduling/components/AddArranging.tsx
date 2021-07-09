@@ -236,7 +236,7 @@ const AddArranging: FC<PropsType> = (props) => {
         }
         if (result.status === 'error') {
           if (result.message === 'Validation error') {
-            message.error({
+            Modal.error({
               title: '保存失败',
               content: '在同一天的同一时间段内不能排同一个班',
             });

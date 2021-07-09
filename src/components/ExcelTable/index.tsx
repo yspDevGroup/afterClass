@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
-import { Button, message, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import type { FC } from 'react';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
@@ -225,8 +225,11 @@ const Index: FC<IndexPropsType> = ({
               KHPKSJsItem.KHBJSJ.ZJS === tearchId
             ) {
               console.log('1231321313213');
-              message.warning({
+              Modal.warning({
                 title: '不能将同一个老师安排在同一天的同一时段内上课',
+                onOk() {
+                  rowData[colItem.dataIndex] = '';
+                },
               });
             } else {
               rowData[colItem.dataIndex] = {
