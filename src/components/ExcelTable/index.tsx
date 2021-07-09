@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
-import { Button, Modal } from 'antd';
+import { Button, message, Modal } from 'antd';
 import type { FC } from 'react';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
@@ -152,6 +152,9 @@ type IndexPropsType = {
   className: '' | undefined;
   getSelectdata?: (value: any) => void;
   radioValue?: boolean;
+  tearchId?: string;
+  /** 表格接口没有处理的数据 */
+  basicData?: any[];
 };
 
 const Index: FC<IndexPropsType> = ({
@@ -164,6 +167,8 @@ const Index: FC<IndexPropsType> = ({
   switchPages,
   getSelectdata,
   radioValue,
+  basicData,
+  tearchId,
 }) => {
   let [stateTableData, setStateTableData] = useState<DataSourceType>();
   const weekDay = {
@@ -208,12 +213,26 @@ const Index: FC<IndexPropsType> = ({
       }
     } else if (type === 'edit') {
       if (chosenData && !rowData[colItem.dataIndex]) {
-        rowData[colItem.dataIndex] = {
-          cla: chosenData?.cla,
-          teacher: chosenData?.teacher,
-          dis: false,
-          color: chosenData.color,
-        };
+        basicData?.forEach((item: any) => {
+          item.KHPKSJs.forEach((KHPKSJsItem: any) => {
+            if (
+              KHPKSJsItem.WEEKDAY === weekDay[colItem.dataIndex] &&
+              KHPKSJsItem.XXSJPZ.id === rowData.course?.hjId &&
+              KHPKSJsItem.KHBJSJ.ZJS === tearchId
+            ) {
+              message.warning({
+                title: '不能将同一个老师安排在同一天的同一时段内上课',
+              });
+            } else {
+              rowData[colItem.dataIndex] = {
+                cla: chosenData?.cla,
+                teacher: chosenData?.teacher,
+                dis: false,
+                color: chosenData.color,
+              };
+            }
+          });
+        });
       } else {
         rowData[colItem.dataIndex] = '';
       }

@@ -65,6 +65,8 @@ const AddArranging: FC<PropsType> = (props) => {
   const [CDLoading, setCDLoading] = useState(false);
   const [XQID, setXQID] = useState<any>('');
   const [NJID, setNJID] = useState<any>('');
+  const [tearchId, setTearchId] = useState('');
+  const [basicData, setBasicData] = useState<any>([]);
   // 获取排课的接口
   const tableServers = () => {
     const Fjplan = getFJPlan({
@@ -191,6 +193,8 @@ const AddArranging: FC<PropsType> = (props) => {
   };
   // 班级选择
   const BjClick = (value: any) => {
+    console.log('value', value);
+    setTearchId(value.ZJS);
     const chosenData = {
       cla: value.BJMC || '',
       teacher: value.ZJS || '',
@@ -265,11 +269,10 @@ const AddArranging: FC<PropsType> = (props) => {
         });
         setBjData(bjList.data);
         if (bjList.status === 'ok') {
-          bjList.data?.map((item: any) => {
+          bjList.data?.forEach((item: any) => {
             if (index === item.id) {
               BjClick(item);
             }
-            return '';
           });
         }
         // 获取所有课程数据
@@ -344,6 +347,14 @@ const AddArranging: FC<PropsType> = (props) => {
         //   const data = processingData(Fjplan.data, xXSJPZData);
         //   setTableDataSource(data);
         // }
+        const Fjplan = await getFJPlan({
+          xn,
+          xq,
+          isPk: true,
+        });
+        if (Fjplan.status === 'ok') {
+          setBasicData(Fjplan.data);
+        }
       } catch (error) {
         message.error('error');
       }
@@ -748,6 +759,8 @@ const AddArranging: FC<PropsType> = (props) => {
                     onExcelTableClick={onExcelTableClick}
                     type="edit"
                     getSelectdata={getSelectdata}
+                    tearchId={tearchId}
+                    basicData={basicData}
                   />
                 </Spin>
               ) : (
