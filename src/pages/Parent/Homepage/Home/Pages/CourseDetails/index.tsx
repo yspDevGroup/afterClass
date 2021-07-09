@@ -11,7 +11,7 @@ import { getQueryString } from '@/utils/utils';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { DateRange, Week } from '@/utils/Timefunction';
 import moment from 'moment';
-import { createKHXSDD } from '@/services/after-class/khxsdd';
+import { createKHXSDD, getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import noData from '@/assets/noCourse.png';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
@@ -61,18 +61,18 @@ const CourseDetails: React.FC = () => {
         }
       });
       classbegins.forEach((record: any, index: number) => {
-        if (new Date(moment(record).format('YYYY/MM/DD')) <new Date( moment(myDate).format('YYYY/MM/DD'))) {
+        if (new Date(moment(record).format('YYYY/MM/DD')) < new Date(moment(myDate).format('YYYY/MM/DD'))) {
           absence.push({
             id: `kc${index}`,
             JC: `第${index + 1}节`,
             data: moment(record).format('MM/DD'),
             type: '出勤'
           })
-        }else if (nowtime === moment(record).format('MM/DD')) {
+        } else if (nowtime === moment(record).format('MM/DD')) {
           absence.push({
             id: `kc${index}`,
             JC: `第${index + 1}节`,
-            data:  moment(record).format('MM/DD'),
+            data: moment(record).format('MM/DD'),
             type: `今日`
           })
         } else {
@@ -172,7 +172,7 @@ const CourseDetails: React.FC = () => {
     return [];
   }
 
-  const getNormal = async (bjid: string,attend: any[])=>{
+  const getNormal = async (bjid: string, attend: any[]) => {
     const res = await getKHBJSJ({ id: bjid });
     if (res.status === 'ok' && res.data && attend) {
       const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;
@@ -187,18 +187,18 @@ const CourseDetails: React.FC = () => {
       const attend = [...new Set(res1.data.map(n => n.WEEKDAY))];
       return {
         real: await Learning(bjid, attend),
-        cq : await getNormal(bjid, attend),
+        cq: await getNormal(bjid, attend),
       }
     }
-    return {real:[],cq:[]}
+    return { real: [], cq: [] }
   }
   useEffect(() => {
     async function fetchData() {
       if (classid) {
         const schedule = await ksssj(classid);
-        if(schedule.real && schedule.real.length){
+        if (schedule.real && schedule.real.length) {
           setTimetableList(schedule.real);
-        }else{
+        } else {
           setTimetableList(schedule.cq);
         }
       }
@@ -261,22 +261,28 @@ const CourseDetails: React.FC = () => {
     const bjInfo = KcDetail.KHBJSJs.find((item: any) => {
       return item.id === BJ
     });
-    await setClassDetail(bjInfo);
-    const data: API.CreateKHXSDD = {
-      'XDSJ': (new Date).toISOString(),
-      "ZFFS": "线上支付",
-      "DDZT": "待付款",
-      "DDFY": FY!,
-      "XSId": children[0].student_userid!,
-      "XSXM": children[0].name!,
-      "KHBJSJId": BJ!,
-    };
-    const res = await createKHXSDD(data);
-    if (res.status === 'ok') {
-      setOrderInfo(res.data);
-      return;
+    console.log(bjInfo)
+    const ress = await getAllKHXSDD({ XSId: children[0].student_userid!, DDZT: '已完成', });
+    if (ress.status === 'ok'&&ress.data!.length>0) {
+
+    } else {
+      await setClassDetail(bjInfo);
+      const data: API.CreateKHXSDD = {
+        'XDSJ': (new Date).toISOString(),
+        "ZFFS": "线上支付",
+        "DDZT": "待付款",
+        "DDFY": FY!,
+        "XSId": children[0].student_userid!,
+        "XSXM": children[0].name!,
+        "KHBJSJId": BJ!,
+      };
+      const res = await createKHXSDD(data);
+      if (res.status === 'ok') {
+        setOrderInfo(res.data);
+        return;
+      }
+      message.error(res.message);
     }
-    message.error(res.message);
   }
   // 房间数据去重
   const tempfun = (arr: any) => {
@@ -380,7 +386,7 @@ const CourseDetails: React.FC = () => {
 
                         return (
                           // <Tooltip placement="bottomLeft"  title={text} color='cyan' defaultVisible={true}>
-                          <Radio.Button value={valueName} style={{marginLeft:'14px'}}
+                          <Radio.Button value={valueName} style={{ marginLeft: '14px' }}
                             disabled={!enAble}>
                             {value.BJMC}
                           </Radio.Button>
@@ -405,7 +411,7 @@ const CourseDetails: React.FC = () => {
                     onClick={submit} >
                     确定并付款
                   </Button>
-                  <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser ,KKRQ:KcDetail?.KCRQ,JKRO:KcDetail?.KCRQ} }}>
+                  <Link style={{ visibility: 'hidden' }} ref={linkRef} to={{ pathname: '/parent/mine/orderDetails', state: { title: KcDetail?.KCMC, detail: classDetail, payOrder: orderInfo, user: currentUser, KKRQ: KcDetail?.KCRQ, JKRO: KcDetail?.KCRQ } }}>
                   </Link>
                 </div>
               </div> : ''
