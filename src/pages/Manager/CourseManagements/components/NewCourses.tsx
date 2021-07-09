@@ -161,6 +161,7 @@ const NewCourses = (props: PropsType) => {
         const res = e.file.response;
         if (res.status === 'ok') {
           message.success(`上传成功`);
+          form.setFieldsValue({ KCTP: res.data });
           setImageUrl(res.data);
         }
       }
@@ -414,6 +415,7 @@ const NewCourses = (props: PropsType) => {
       imageurl: imageUrl || current?.KCTP, // 回显地址
       handleImageChange,
       accept: '.jpg, .jpeg, .png', // 接受上传的文件类型
+      rules: [{ required: true, message: '请上传封面图片' }],
     },
     {
       type: 'textArea',
