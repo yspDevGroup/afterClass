@@ -88,7 +88,7 @@ const OrderDetails: React.FC = (props: any) => {
         <div className={styles.KCXX}>
           <p className={styles.title}>{title}</p>
           <ul>
-            <li>上课时段：{detail.KKRQ?detail.KKRQ:KKRQ}~{detail.JKRQ?detail.JKRQ:JKRQ}</li>
+            <li>上课时段：{detail.KKRQ?moment(detail.KKRQ).format('YYYY.MM.DD'):moment(KKRQ).format('YYYY.MM.DD')}~{detail.JKRQ?moment(detail.JKRQ).format('YYYY.MM.DD'):moment(JKRQ).format('YYYY.MM.DD')}</li>
             <li>上课地点：本校</li>
             <li>总课时：{detail.KSS}</li>
             <li>班级：{detail.BJMC}</li>
@@ -102,7 +102,7 @@ const OrderDetails: React.FC = (props: any) => {
         <div className={styles.DDXX}>
           <ul>
             <li><span>订单编号</span><span>{orderInfo.DDBH}</span></li>
-            <li><span>下单时间</span><span>{moment(orderInfo.XDSJ).format('YYYY-MM-DD hh:mm:ss')}</span></li>
+            <li><span>下单时间</span><span>{moment(orderInfo.XDSJ).format('YYYY.MM.DD hh:mm:ss')}</span></li>
             <li><span>支付方式</span><span>{orderInfo.ZFFS}</span></li>
             {
               orderInfo.DDZT === '已付款' ?

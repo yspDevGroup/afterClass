@@ -51,10 +51,13 @@ const CourseTab = () => {
       });
     }
   }, [yxkc])
-  const url = `/parent/home/course?courseStatus=${courseStatus}`
+ 
   return (
     <div className={`${styles.tabHeader}`}>
-      <Tabs centered={centered} tabBarExtraContent={!centered ? { right: <Link to={url}>全部 <IconFont type="icon-gengduo" className={styles.gengduo} /></Link> } : ''} className={styles.courseTab}>
+      <Tabs centered={centered} tabBarExtraContent={!centered ?
+         { right: <Link to={{pathname:'/parent/home/course',state:{courseStatus:courseStatus,kskc:kskc,yxkc:yxkc}}} >
+           全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
+           </Link> } : ''} className={styles.courseTab}>
         {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
           <TabPane tab="开设课程" key="setup">
             {
@@ -82,7 +85,7 @@ const CourseTab = () => {
                   });
 
                   const { list, ...rest } = { ...defaultMsg };
-                  return (<TabPane tab={item.KCLX} key={item.KCLX}>
+                  return (<TabPane tab={item.KCLX} key={item.KCLX}  style={{margin:'8px 0'}}> 
                     <ListComponent listData={{
                       list: courseData.filter((it: ListItem) => it.title !== 'null'),
                       ...rest

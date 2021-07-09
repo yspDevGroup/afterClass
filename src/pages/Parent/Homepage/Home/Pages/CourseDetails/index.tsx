@@ -380,7 +380,7 @@ const CourseDetails: React.FC = () => {
 
                         return (
                           // <Tooltip placement="bottomLeft"  title={text} color='cyan' defaultVisible={true}>
-                          <Radio.Button value={valueName}
+                          <Radio.Button value={valueName} style={{marginLeft:'14px'}}
                             disabled={!enAble}>
                             {value.BJMC}
                           </Radio.Button>
@@ -420,7 +420,7 @@ const CourseDetails: React.FC = () => {
               {
                 KcDetail?.KHBJSJs?.map((value: { id: string, KSS: string, KHPKSJs: any, KKRQ: string, JKRQ: string, BJMC: string }) => {
                   if (value.id === classid) {
-                    return <> <li>上课时段：{value.KKRQ ? value.KKRQ : KcDetail?.KKRQ}~{value.JKRQ ? value.JKRQ : KcDetail?.JKRQ}</li>
+                    return <> <li>上课时段：{value.KKRQ ? moment(value.KKRQ).format('YYYY.MM.DD') : moment(KcDetail?.KKRQ).format('YYYY.MM.DD')}~{value.JKRQ ? moment(value.JKRQ).format('YYYY.MM.DD') : moment(KcDetail?.JKRQ).format('YYYY.MM.DD')}</li>
                       <li> 上课地点：{
                         tempfun(value.KHPKSJs)
                       }</li>

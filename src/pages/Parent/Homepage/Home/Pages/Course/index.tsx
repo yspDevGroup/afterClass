@@ -1,22 +1,11 @@
-/*
- * @description: 
- * @author: txx
- * @Date: 2021-06-09 10:30:23
- * @,@LastEditTime: ,: 2021-07-08 15:38:51
- * @,@LastEditors: ,: Please set LastEditors
- */
-
 import React, { useEffect, useState } from 'react';
 import styles from "./index.less";
 import { Tabs } from 'antd';
 import ListComponent from '@/components/ListComponent';
-import { useModel } from 'umi';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { homePageInfo } from '@/services/after-class/user';
 import noData from '@/assets/noCourses.png';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
-import { getQueryString } from '@/utils/utils';
 import Nodata from '@/components/Nodata';
+import moment from 'moment';
 
 
 const defaultMsg: ListData = {
@@ -25,32 +14,11 @@ const defaultMsg: ListData = {
   list: []
 };
 
-const Course = () => {
+const Course = (props: any) => {
   const { TabPane } = Tabs;
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  const [yxkc, setYxkc] = useState<any>();
-  const [kskc, setKskc] = useState<any>();
+  const { yxkc,kskc,courseStatus } = props.location.state;
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
-  const courseStatus = getQueryString('courseStatus');
-  useEffect(() => {
-    async function fetchData() {
-      // 获取后台学年学期数据
-      const result = await queryXNXQList();
-      const { XN, XQ } = result.current;
-      const res = await homePageInfo({
-        xn: XN,
-        xq: XQ,
-        XSId: currentUser?.UserId || currentUser?.id,
-        njId: '1'
-      });
-      if (res.status === 'ok' && res.data) {
-        setYxkc(res.data.yxkc);
-        setKskc(res.data.kskc);
-      }
-    }
-    fetchData();
-  }, [])
+
   useEffect(() => {
     if (yxkc) {
       const listData: ListItem[] = [].map.call(yxkc, (record: any) => {
@@ -61,7 +29,7 @@ const Course = () => {
           link: `/parent/home/courseDetails?classid=${record.id}&courseid=${record.KHKCSJ.id}`,
           desc: [
             {
-              left: [`课程时段：${record.KKRQ ? record.KKRQ : record.KHKCSJ.KKRQ}-${record.JKRQ ? record.JKRQ : record.KHKCSJ.JKRQ}`],
+              left: [`课程时段：${record.KKRQ ?moment(record.KKRQ).format('YYYY.MM.DD'): moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')}-${record.JKRQ ? moment(record.JKRQ).format('YYYY.MM.DD'): moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')}`],
             },
             {
               left: [`共${record.KSS}课时`],
@@ -96,7 +64,7 @@ const Course = () => {
                         link: `/parent/home/courseDetails?courseid=${record.id}`,
                         desc: [
                           {
-                            left: [`课程时段：${record.KKRQ}-${record.JKRQ}`],
+                            left: [`课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(record.JKRQ).format('YYYY.MM.DD')}`],
                           },
                         ],
                         introduction: record.KCMS,
@@ -108,7 +76,7 @@ const Course = () => {
                     };
                   });
                   const { list, ...rest } = { ...defaultMsg };
-                  return (<TabPane tab={item.KCLX} key={item.KCLX} style={{marginTop:'5px'}}>
+                  return (<TabPane tab={item.KCLX} key={item.KCLX} style={{margin:'8px 0'}}>
                     <ListComponent listData={{
                       list: courseData.filter((it: ListItem) => it.title !== 'null'),
                       ...rest
