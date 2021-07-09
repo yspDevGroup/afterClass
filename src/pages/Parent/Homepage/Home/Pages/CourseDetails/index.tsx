@@ -61,7 +61,7 @@ const CourseDetails: React.FC = () => {
         }
       });
       classbegins.forEach((record: any, index: number) => {
-        if (new Date(record) < myDate) {
+        if (new Date(moment(record).format('YYYY/MM/DD')) <new Date( moment(myDate).format('YYYY/MM/DD'))) {
           absence.push({
             id: `kc${index}`,
             JC: `第${index + 1}节`,
