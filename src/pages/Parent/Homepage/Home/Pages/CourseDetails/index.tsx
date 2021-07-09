@@ -261,11 +261,11 @@ const CourseDetails: React.FC = () => {
     const bjInfo = KcDetail.KHBJSJs.find((item: any) => {
       return item.id === BJ
     });
-    console.log(bjInfo)
-    const ress = await getAllKHXSDD({ XSId: children[0].student_userid!, DDZT: '已完成', });
-    if (ress.status === 'ok'&&ress.data!.length>0) {
+    // console.log(bjInfo)
+    // const ress = await getAllKHXSDD({ XSId: children[0].student_userid!, DDZT: '已完成', });
+    // if (ress.status === 'ok'&&ress.data!.length>0) {
 
-    } else {
+    // } else {
       await setClassDetail(bjInfo);
       const data: API.CreateKHXSDD = {
         'XDSJ': (new Date).toISOString(),
@@ -282,7 +282,7 @@ const CourseDetails: React.FC = () => {
         return;
       }
       message.error(res.message);
-    }
+    // }
   }
   // 房间数据去重
   const tempfun = (arr: any) => {

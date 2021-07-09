@@ -45,6 +45,8 @@ const OrderDetails: React.FC = (props: any) => {
     });
     if (res.status === 'ok') {
       setUrlPath(res.data);
+    }else{
+      message.error(res.message);
     }
   };
   const handleCancle = async () => {
