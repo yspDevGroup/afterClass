@@ -123,7 +123,8 @@ const AddCourse: FC<AddCourseProps> = ({
         NJS: values.NJS?.toString() || formValues?.NJS.toString(), // 年级ID
         NJSName: nJLabelItem?.toString() || formValues?.NJSName.toString(), // 年级名称
         FJS: values.FJS?.toString(), // 副班
-        XQName: xQItem, // 校区名称
+        XQ: values.XQ?.toString() || formValues?.XQ.toString(), // 校区ID
+        XQName: values.XQName?.toString() || formValues?.XQName.toString(), // 校区名称
         KCTP: imageUrl || formValues?.KCTP,
         BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : KSSJ),
         BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : JSSJ),
