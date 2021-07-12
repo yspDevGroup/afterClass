@@ -5,10 +5,8 @@ import { Table, Button, Switch, message, notification } from 'antd';
 import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
-import { getQueryString } from '@/utils/utils';
-// import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-// import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
+
 
 /**
  * 课堂点名
@@ -51,7 +49,7 @@ type claNameType = {
   KCMC?: string;
 };
 
-const CallTheRoll = (props:any) => {
+const CallTheRoll = (props: any) => {
   // '缺席'
   const [absent, setAbsent] = useState<number>(0);
   // '出勤'
@@ -62,23 +60,12 @@ const CallTheRoll = (props:any) => {
   const [dataSource, setDataScouse] = useState<any>([]);
   const [butDis, setButDis] = useState<boolean>(false);
 
-  // const pkid = getQueryString('id'); // 排课ID
-  // const bjids = getQueryString('bjid'); // 班级ID
-  // const kjs = getQueryString('kjs'); // 课时数
-
-  const { pkid,bjids,date,kjs,sj } = props.location.state;
+  const { pkid, bjids, date, kjs, sj } = props.location.state;
   const pkDate = date?.replace(/\//g, '-'); // 日期
-  // useEffect(() => {
-  //   (async () => {
-  //     if (/MicroMessenger/i.test(navigator.userAgent)) {
-  //       await initWXConfig(['checkJsApi']);
-  //     }
-  //     await initWXAgentConfig(['checkJsApi']);
-  //   })();
-  // }, []);
-  const wxad :any=[]
-  sj.forEach((item:any) => {
-    if(new Date(pkDate)>new Date(item) ){
+
+  const wxad: any = []
+  sj.forEach((item: any) => {
+    if (new Date(pkDate) > new Date(item)) {
       wxad.push(item)
     }
   });
@@ -97,24 +84,9 @@ const CallTheRoll = (props:any) => {
           message: '',
           description:
             '本节课已点名.请勿重复操作',
-          duration: 0,
+          duration: 3,
         });
         setButDis(true);
-        // const resStudent = getEnrolled({ id: bjids || '' });
-        // Promise.resolve(resStudent).then((data: any) => {
-        //   if (data.status === 'ok') {
-        //     const studentData = data.data;
-        //     studentData?.forEach((item: any) => {
-        //       allData.forEach((sj: any) => {
-        //         console.log('item.XSId',item.XSId)
-        //         console.log('sj.XSId',sj.XSId)
-        //         if (item.XSId === sj.XSId) {
-        //           sj.XSXM = item.XSXM
-        //         }
-        //       })
-        //     });
-        //   }
-        // });
         allData.forEach((item: any) => {
           item.isRealTo = item.CQZT;
         })
@@ -156,7 +128,6 @@ const CallTheRoll = (props:any) => {
   const checkWorkInfo = [
     { shouldArrive: dataSource.length, text: '应到', key: 1 },
     { shouldArrive: comeClass, text: '到课', key: 2 },
-    // { shouldArrive: Data.leave, text: '请假', key: 3 },
     { shouldArrive: absent, text: '缺席', key: 4 },
   ];
 
@@ -198,9 +169,6 @@ const CallTheRoll = (props:any) => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
-      // render: (text: string, record: any) => {
-      //   return <WWOpenDataCom type="userName" openid={record.XSId} />;
-      // },
     },
     {
       title: '班级',
@@ -211,16 +179,6 @@ const CallTheRoll = (props:any) => {
         return claName?.BJMC;
       },
     },
-    // {
-    //   title: '请假',
-    //   dataIndex: 'isLeave',
-    //   key: 'isLeave',
-    //   align: 'center',
-    //   width: '25%',
-    //   render: (text: any)=>{
-    //     return <div style={{color: text === '是' ? '#FF4D4D': '#999'}}>{text}</div>
-    //   }
-    // },
     {
       title: '到课',
       dataIndex: 'isRealTo',
@@ -266,7 +224,7 @@ const CallTheRoll = (props:any) => {
           type="primary"
           shape="round"
           onClick={onButtonClick}
-          className={butDis? styles.disabl:styles.xuanzhong}
+          className={butDis ? styles.disabl : styles.xuanzhong}
           disabled={butDis}
         >
           确认点名

@@ -132,7 +132,7 @@
       },
       {
         path: '/teacher/education/callTheRoll',
-        name: 'details',
+        name: 'callTheRoll',
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/CallTheRoll',
       },

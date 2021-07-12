@@ -24,6 +24,7 @@ export default {
   'pages.login.teacherLogin.tab': '教师登录',
   'menu.notice': '公告',
   'menu.details': '公告详情',
+  'menu.callTheRoll':'课堂点名',
   'menu.orderInquiry': '订单查询',
   'menu.parent.announcement': '公告详情',
   'menu.parent.emptyArticle': '报名通知',
