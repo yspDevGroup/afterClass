@@ -7,213 +7,49 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, } from 'umi';
 import styles from './index.less';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
-import { getQueryString } from '@/utils/utils';
-import { getAllKHXSCQ } from '@/services/after-class/khxscq';
-import { DateRange, Week } from '@/utils/Timefunction';
+import { getData, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
-import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import noData from '@/assets/noCourse.png';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import Nodata from '@/components/Nodata';
 import noPic from '@/assets/noPic.png';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
 
 
 const CourseDetails: React.FC = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [BJ, setBJ] = useState<string>();
   const [FY, setFY] = useState<number>();
   const [state, setstate] = useState(false);
-  const [currentDate, setCurrentDate] = useState<string>();
   const [KcDetail, setKcDetail] = useState<any>();
   const [orderInfo, setOrderInfo] = useState<any>();
   const [classDetail, setClassDetail] = useState<any>();
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
   const [timetableList, setTimetableList] = useState<any[]>();
+  const [kaiguan, setKaiguan] = useState<boolean>(true);
+  const [fk, setFk] = useState<boolean>(false);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
-  const [kaiguan, setKaiguan] = useState<boolean>(true);
-  const myDate = new Date();
-  const nowtime = myDate.toLocaleDateString();
-  const [fk, setFk] = useState<boolean>(false);
+  const myDate: Date = new Date();
+  const currentDate = moment(myDate).format('MM/DD');
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
     njId: '1',
     name: currentUser?.username
   }];
-  const getCqDay = (wkd?: any[], start?: string, end?: string,) => {
-    const myDate = new Date();
-    const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD');
-    if (start && end && wkd) {
-      const arr = DateRange(start, end);
-      const classbegins: any[] = [];
-      const absence: any[] = [];
-      arr.forEach((record: any) => {
-        for (let i = 0; i < wkd.length; i += 1) {
-          if (Week(record) === wkd[i] && !classbegins.includes(record)) {
-            classbegins.push(record);
-          }
-        }
-      });
-      classbegins.forEach((record: any, index: number) => {
-        if (new Date(moment(record).format('YYYY/MM/DD')) < new Date(moment(myDate).format('YYYY/MM/DD'))) {
-          absence.push({
-            id: `kc${index}`,
-            JC: `第${index + 1}节`,
-            data: moment(record).format('MM/DD'),
-            type: '出勤'
-          })
-        } else if (nowtime === moment(record).format('MM/DD')) {
-          absence.push({
-            id: `kc${index}`,
-            JC: `第${index + 1}节`,
-            data: moment(record).format('MM/DD'),
-            type: `今日`
-          })
-        } else {
-          absence.push({
-            id: `kc${index}`,
-            JC: `第${index + 1}节`,
-            data: moment(record).format('MM/DD'),
-            type: ``
-          })
-        }
-      })
-      return absence;
-    }
-    return [];
-  };
-  const Learning = async (bjid: any, attend: any[]) => {
-    const res1 = await getAllKHXSCQ(
-      {
-        xsId: currentUser!.id,
-        bjId: bjid!,
-        CQZT: '',
-        CQRQ: '',
-      }
-    );
-    if (res1.status === 'ok') {
-      if (res1.data && res1.data.length) {
-        const classbegins: any[] = [];
-        res1.data.forEach((item: any) => {
-          const datex = DateRange(item.KHBJSJ.KKRQ, item.KHBJSJ.JKRQ)
-          datex.forEach((record: any) => {
-            for (let i = 0; i < attend.length; i += 1) {
-              if (Week(record) === attend[i] && !classbegins.includes(record)) {
-                classbegins.push(record);
-              }
-            }
-          })
-        })
-        const Attendancedate: any[] = [];
-        for (let i = 0; i < classbegins.length; i += 1) {
-          Attendancedate.push(moment(classbegins[i]).format('MM/DD'))
-        }
-        const absence: any[] = [];
-        const myDate = new Date();
-        const nowtime = moment(myDate.toLocaleDateString()).format('MM/DD');
-        Attendancedate.forEach((record: any, index: number) => {
-          if (res1.data) {
-            for (let i = 0; i < res1.data.length; i += 1) {
-              const chuqindate = moment(res1.data[i].CQRQ).format('MM/DD');
-              if (res1.data[i].CQZT === '出勤' && chuqindate === record) {
-                absence.push({
-                  id: `kc${index}`,
-                  JC: `第${index + 1}节`,
-                  data: record,
-                  type: '出勤'
-                })
-              } else if ((res1.data[i].CQZT === '请假' || res1.data[i].CQZT === '缺席') && chuqindate === record) {
-                absence.push({
-                  id: `kc${index}`,
-                  JC: `第${index + 1}节`,
-                  data: record,
-                  type: `缺勤`
-                })
-              } else if (nowtime === record) {
-                absence.push({
-                  id: `kc${index}`,
-                  JC: `第${index + 1}节`,
-                  data: record,
-                  type: `今日`
-                })
-              }
-              else {
-                absence.push({
-                  id: `kc${index}`,
-                  JC: `第${index + 1}节`,
-                  data: record,
-                  type: ``
-                })
-              }
-            }
-          }
-        })
-        // 获取课程表数据
-        const Section = [];
-        const intercept = {};
-        for (let i = 0; i < absence.length; i += 1) {
-          if (!intercept[absence[i].id]) {
-            Section.push(absence[i]);
-            intercept[absence[i].id] = true;
-          }
-          if (Section[(Section.length - 1)].id === absence[i].id && Section[Section.length - 1].type === '') {
-            Section[(Section.length - 1)] = absence[i]
-          }
-        }
-        return Section;
-      }
-    }
-    return [];
-  }
 
-  const getNormal = async (bjid: string, attend: any[]) => {
-    const res = await getKHBJSJ({ id: bjid });
-    if (res.status === 'ok' && res.data && attend) {
-      const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;
-      const end = res.data.JKRQ ? res.data.JKRQ : res.data.KHKCSJ!.JKRQ;
-      return getCqDay(attend, start, end);
-    }
-    return [];
-  };
-  const ksssj = async (bjid: string) => {
-    const res1 = await getKHPKSJByBJID({ id: bjid });
-    if (res1.status === 'ok' && res1.data) {
-      const attend = [...new Set(res1.data.map(n => n.WEEKDAY))];
-      return {
-        real: await Learning(bjid, attend),
-        cq: await getNormal(bjid, attend),
-      }
-    }
-    return { real: [], cq: [] }
-  }
-  const changeStatus = (index: number,data?: any)=>{
+  const changeStatus = (index: number, data?: any) => {
     const detail = data || KcDetail;
     const current = detail.KHBJSJs![index];
     const start = current.BMKSSJ ? current.BMKSSJ : detail.BMKSSJ;
     const end = current.BMKSSJ ? current.BMJSSJ : detail.BMJSSJ;
-    const enAble = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(moment(start).format('YYYY/MM/DD')) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(moment(end).format('YYYY/MM/DD'));
+    const enAble = myDate > new Date(moment(start).format('YYYY/MM/DD')) && myDate < new Date(moment(end).format('YYYY/MM/DD'));
     setFY(current.FY);
     setBJ(current.id);
     setFk(!enAble);
   };
-  useEffect(() => {
-    async function fetchData() {
-      if (classid) {
-        const schedule = await ksssj(classid);
-        if (schedule.real && schedule.real.length) {
-          setTimetableList(schedule.real);
-        } else {
-          setTimetableList(schedule.cq);
-        }
-      }
-    };
-    fetchData();
-  }, [classid])
-
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -224,6 +60,15 @@ const CourseDetails: React.FC = () => {
       }
     })();
   }, []);
+  useEffect(() => {
+    async function fetchData() {
+      if (classid) {
+        const schedule = await getData(classid, children[0].student_userid!);
+        setTimetableList(schedule.data);
+      }
+    };
+    fetchData();
+  }, [classid])
 
   useEffect(() => {
     if (courseid) {
@@ -235,17 +80,15 @@ const CourseDetails: React.FC = () => {
         });
         if (result.status === 'ok' && result.data) {
           setKcDetail(result.data);
-          changeStatus(0,result.data);
+          changeStatus(0, result.data);
           const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
           const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
-          const btnEnable = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(kcstart) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(kcend);
+          const btnEnable = myDate > new Date(kcstart) && myDate < new Date(kcend);
           setKaiguan(btnEnable);
         } else {
           message.error(result.message);
         }
       })();
-      const myDate = new Date().toLocaleDateString().slice(5, 9);
-      setCurrentDate(myDate);
     }
   }, [courseid]);
 
@@ -371,22 +214,35 @@ const CourseDetails: React.FC = () => {
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }, index: number) => {
+                        // const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
                         const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
-                        const enAble = new Date(nowtime) > new Date(start) && new Date(nowtime) < new Date(end);
+                        const enAble = myDate > new Date(start) && myDate < new Date(end);
                         return (
-                          <Radio.Button value={valueName} style={{ marginLeft: '14px',marginBottom:'8px' }}
+                          // <Tooltip placement="bottomLeft"  title={text} color='cyan' defaultVisible={true}>
+                          <Radio.Button value={valueName} style={{ marginLeft: '14px' }}
                             disabled={!enAble}
                             onClick={() => butonclick(index)}
                           >
                             {value.BJMC}
                           </Radio.Button>
+                          // </Tooltip>
                         )
 
                       })
                     }
                   </Radio.Group>
+                  {/* <Radio
+                    className={styles.agreement}
+                    onChange={() => setXY(true)}
+                  >
+                    <p>我已阅读并同意
+                     <a href=''>
+                        《课后帮服务协议》
+                     </a>
+                    </p>
+                  </Radio> */}
                   <Button className={styles.submit}
                     disabled={fk || BJ === undefined}
                     onClick={submit} >
@@ -433,10 +289,10 @@ const CourseDetails: React.FC = () => {
             </p>
             <div className={styles.cards}>
               {
-                !(timetableList?.length === 0) ? timetableList?.map((value) => {
-                  return <div className={value.data === currentDate ? styles.card2 : (value.type === '缺勤' ? styles.card1 : (value.type === '出勤' ? styles.card3 : (value.type === '今日' ? styles.card4 : styles.card)))} >
-                    <p>{value.JC}</p>
-                    <p>{value.data}</p>
+                !(timetableList?.length === 0) ? timetableList?.map((value, index) => {
+                  return <div className={value.date === currentDate ? styles.card2 : (value.status === '缺席' ? styles.card1 : (value.status === '出勤' ? styles.card3 : styles.card))} >
+                    <p>第{index + 1}节</p>
+                    <p>{value.date}</p>
                   </div>
                 }) : <Nodata imgSrc={noData} desc='暂无课表' />
               }

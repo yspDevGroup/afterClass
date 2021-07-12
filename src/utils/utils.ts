@@ -265,7 +265,10 @@ export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?:
                 }
               })
             }
-            classbegins.push({ status, date: moment(record).format('MM/DD') })
+            classbegins.push({  
+              status, 
+              date: moment(record).format('MM/DD'),
+             })
           }
         }
       });
