@@ -227,36 +227,36 @@ const OrderInquiry = () => {
       setDataSource(resl.data);
     }
   };
-  // 点击分页器
-  const onShowSizeChange = async (currents: any, pageSizes: any) => {
-    setCurrent(currents);
-    setPageSize(pageSizes);
-    // 获取订单查询的表格数据
-    const resl = await getAllKHXSDD({
-      xn,
-      xq,
-    });
-    if (resl.status === 'ok') {
-      // TODO
-      const datas = resl.data?.slice();
-      setDataSource(resl.data);
-    }
-  };
-  // 点击上一页/下一页
-  const onPaginationChange = async (page: any) => {
-    console.log(page);
-    setCurrent(page);
-    // 获取订单查询的表格数据
-    const resl = await getAllKHXSDD({
-      xn,
-      xq,
-    });
-    if (resl.status === 'ok') {
-      // TODO
-      const datas = resl.data?.slice();
-      setDataSource(resl.data);
-    }
-  };
+  // // 点击分页器
+  // const onShowSizeChange = async (currents: any, pageSizes: any) => {
+  //   setCurrent(currents);
+  //   setPageSize(pageSizes);
+  //   // 获取订单查询的表格数据
+  //   const resl = await getAllKHXSDD({
+  //     xn,
+  //     xq,
+  //   });
+  //   if (resl.status === 'ok') {
+  //     // TODO
+  //     const datas = resl.data?.slice();
+  //     setDataSource(resl.data);
+  //   }
+  // };
+  // // 点击上一页/下一页
+  // const onPaginationChange = async (page: any) => {
+  //   console.log(page);
+  //   setCurrent(page);
+  //   // 获取订单查询的表格数据
+  //   const resl = await getAllKHXSDD({
+  //     xn,
+  //     xq,
+  //   });
+  //   if (resl.status === 'ok') {
+  //     // TODO
+  //     const datas = resl.data?.slice();
+  //     setDataSource(resl.data);
+  //   }
+  // };
 
   return (
     <PageContainer>
@@ -315,10 +315,10 @@ const OrderInquiry = () => {
           loading={tableLoading}
           dataSource={dataSource}
           columns={columns}
-          pagination={false}
-          rowKey={() => Math.random()}
+          // pagination={false}
+          rowKey="id"
         />
-        <Pagination
+        {/* <Pagination
           defaultCurrent={1}
           total={dataSource?.length}
           current={current}
@@ -326,7 +326,7 @@ const OrderInquiry = () => {
           onShowSizeChange={onShowSizeChange}
           onChange={onPaginationChange}
           style={{ textAlign: 'center', padding: '32px 0', background: '#FFF' }}
-        />
+        /> */}
       </div>
       <PromptInformation
         text="未查询到学年学期数据，请设置学年学期后再来"
