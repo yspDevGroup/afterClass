@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { parse } from 'querystring';
 import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
+import { message } from 'antd';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg =
@@ -207,4 +208,21 @@ export const getCurrentStatus = (
     }
   }
   return currentStatus;
+};
+
+/**
+ * 根据返回错误信息优化页面错误提示
+ *
+ * @param msg: string
+ */
+ export const enHenceMsg = (msg: string) => {
+  if (msg.indexOf('Cannot') > -1) {
+    message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
+  } else if (msg.indexOf('token') > -1) {
+    message.error('身份验证过期，请重新登录');
+  } else if (msg.indexOf('Validation') > -1) {
+    message.error('已存在该数据，请勿重复添加');
+  } else {
+    message.error(`${msg},请联系管理员或稍后再试`);
+  }
 };

@@ -10,11 +10,9 @@ import moment from 'moment';
 import { DateRange, Week } from '@/utils/Timefunction';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
-import { data } from '../../mock';
 
 const Statistical: React.FC = () => {
-  const { currentUserInfo } = useContext(myContext);
-  const { yxkc } = data;
+  const { currentUserInfo, yxkc } = useContext(myContext);
   const [checkIn, setCheckIn] = useState<any>();
   const [satistics, setStatistics] = useState<any[]>();
 

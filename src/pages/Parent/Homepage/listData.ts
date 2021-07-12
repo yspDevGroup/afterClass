@@ -23,5 +23,5 @@ export const noticData: ListData = {
       link: "/parent/home/notice/details?listpage=page3",
     },
   ],
-  noDataText: '暂无通知公告',
+  noDataText: '暂无公告',
 };

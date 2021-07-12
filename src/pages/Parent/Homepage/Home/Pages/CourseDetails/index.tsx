@@ -11,7 +11,7 @@ import { getQueryString } from '@/utils/utils';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { DateRange, Week } from '@/utils/Timefunction';
 import moment from 'moment';
-import { createKHXSDD, getAllKHXSDD } from '@/services/after-class/khxsdd';
+import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import noData from '@/assets/noCourse.png';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
@@ -226,12 +226,14 @@ const CourseDetails: React.FC = () => {
           njId: children[0].njId
         });
         if (result.status === 'ok' && result.data) {
+          setKcDetail(result.data);
           const current = result.data.KHBJSJs![0];
           const start = current.BMKSSJ ? current.BMKSSJ : result.data.BMKSSJ;
           const end = current.BMKSSJ ? current.BMJSSJ : result.data.BMJSSJ;
+          const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
+          const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
           const enAble = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(moment(start).format('YYYY/MM/DD')) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(moment(end).format('YYYY/MM/DD'));
-          const btnEnable = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(result.data.BMKSSJ!) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(result.data.BMJSSJ!);
-          setKcDetail(result.data);
+          const btnEnable = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(kcstart) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(kcend);
           setFY(current.FY);
           setBJ(current.id);
           setFk(!enAble);
@@ -386,7 +388,7 @@ const CourseDetails: React.FC = () => {
 
                         return (
                           // <Tooltip placement="bottomLeft"  title={text} color='cyan' defaultVisible={true}>
-                          <Radio.Button value={valueName} style={{ marginLeft: '14px' }}
+                          <Radio.Button  value={valueName} style={{ marginLeft: '14px' }}
                             disabled={!enAble}>
                             {value.BJMC}
                           </Radio.Button>
