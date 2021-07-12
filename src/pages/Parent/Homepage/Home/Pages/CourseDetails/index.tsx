@@ -246,7 +246,7 @@ const CourseDetails: React.FC = () => {
       const myDate = new Date().toLocaleDateString().slice(5, 9);
       setCurrentDate(myDate);
     }
-  }, [courseid]);
+  }, [courseid,index]);
 
   useEffect(() => {
     if (orderInfo)
