@@ -372,7 +372,7 @@ const ClassManagement = () => {
     }
 
     // 根据课程ID 获取班级数据
-    const bjRes = await getAllKHBJSJ({ kcId: value, name: '', page: 1, pageCount: 0 });
+    const bjRes = await getAllKHBJSJ({ kcId: value, xn, xq, name: '', page: 1, pageCount: 0 });
     if (bjRes.status === 'ok') {
       const BJMC = bjRes.data?.map((item: any) => ({ label: item.BJMC, value: item.id }));
       setBjmcData(BJMC);

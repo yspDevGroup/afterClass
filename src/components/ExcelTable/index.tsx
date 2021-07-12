@@ -167,7 +167,7 @@ const Index: FC<IndexPropsType> = ({
   switchPages,
   getSelectdata,
   radioValue,
-  basicData,
+  // basicData,
   tearchId,
 }) => {
   let [stateTableData, setStateTableData] = useState<DataSourceType>();
@@ -214,16 +214,23 @@ const Index: FC<IndexPropsType> = ({
     } else if (type === 'edit') {
       if (chosenData && !rowData[colItem.dataIndex]) {
         let connst = -1;
-        basicData?.forEach((item: any) => {
-          item.KHPKSJs.forEach((KHPKSJsItem: any, key: any) => {
-            if (
-              KHPKSJsItem.WEEKDAY === weekDay[colItem.dataIndex] &&
-              KHPKSJsItem.XXSJPZ.id === rowData.course?.hjId &&
-              KHPKSJsItem.KHBJSJ.ZJS === tearchId
-            ) {
-              connst = key;
-            }
-          });
+        newData?.forEach((item: any, key: any) => {
+          if (
+            item[colItem.dataIndex] &&
+            item.course.hjId === rowData.course?.hjId &&
+            item[colItem.dataIndex]?.teacher === tearchId
+          ) {
+            connst = key;
+          }
+          // item.KHPKSJs.forEach((KHPKSJsItem: any, key: any) => {
+          //   if (
+          //     KHPKSJsItem.WEEKDAY === weekDay[colItem.dataIndex] && // 周
+          //     KHPKSJsItem.XXSJPZ.id === rowData.course?.hjId && // 时间ID
+          //     KHPKSJsItem.KHBJSJ.ZJS === tearchId // 教师ID
+          //   ) {
+          //     connst = key;
+          //   }
+          // });
         });
         if (connst === -1) {
           rowData[colItem.dataIndex] = {
@@ -342,6 +349,7 @@ const Index: FC<IndexPropsType> = ({
                                     style={{
                                       width: item.dataIndex === 'room' ? 20 : '100%',
                                       margin: '0 auto',
+                                      wordBreak: 'break-word',
                                     }}
                                   >
                                     {data[item.dataIndex].cla}
