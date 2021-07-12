@@ -1,11 +1,12 @@
 .periodWrapper {
-  .tableTitle {
-    font-size: @font-size-base;
-    color: @text-color;
-
-    span {
-      font-size: @font-size-sm;
-      color: @normal-color;
+  :global {
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+      color: #333;
+      font-weight: bold;
+      text-shadow: none;
+    }
+    .ant-tabs-ink-bar {
+      color: #333;
     }
   }
 }
