@@ -416,7 +416,9 @@ const CourseManagement = () => {
                   handlerSearch(type, value, trem)
                 }
               />
-              <div style={{ display: 'flex', lineHeight: '32px', marginLeft: 15 }}>
+              <div
+                style={{ display: 'flex', lineHeight: '32px', marginLeft: 15, flexWrap: 'wrap' }}
+              >
                 <span style={{ fontSize: 14, color: '#666' }}>课程名称：</span>
                 <div>
                   <Select

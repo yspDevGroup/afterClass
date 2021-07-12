@@ -524,6 +524,9 @@ const ClassManagement = () => {
                 paddingTop: '16px',
                 paddingLeft: '24px',
                 boxShadow: '0px 1px 0px #E4E4E4',
+                height: 110,
+                flexWrap: 'wrap',
+                alignContent: 'space-between',
               }}
             >
               <div>

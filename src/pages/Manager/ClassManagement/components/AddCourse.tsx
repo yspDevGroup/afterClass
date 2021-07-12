@@ -384,6 +384,7 @@ const AddCourse: FC<AddCourseProps> = ({
       disabled: readonly,
       width: '100%',
       hidden: baoming,
+      rules: [{ required: !baoming, message: '请选择报名时段' }],
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
@@ -426,6 +427,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'SKSD',
       width: '100%',
       hidden: kaike,
+      rules: [{ required: !kaike, message: '请选择上课时间' }],
       disabled: readonly,
       fieldProps: {
         disabledDate: (current: any) => {
