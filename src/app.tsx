@@ -7,6 +7,7 @@ import type { ResponseError } from 'umi-request';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { getLoginPath } from './utils/utils';
+import headerTop from '@/assets/headerTop.png';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 const loginPath: string = getLoginPath();
@@ -102,8 +103,12 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         ]
       : [],
     collapsedButtonRender: false,
-    menuHeaderRender: (logo, title) => {
-      return <Link to="/">{title}</Link>;
+    menuHeaderRender: () => {
+      return (
+        <Link to="/">
+          <img src={headerTop} />
+        </Link>
+      );
     },
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,

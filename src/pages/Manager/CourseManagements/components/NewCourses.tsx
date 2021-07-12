@@ -438,7 +438,7 @@ const NewCourses = (props: PropsType) => {
         className={styles.courseStyles}
         destroyOnClose={true}
         bodyStyle={{ paddingBottom: 80 }}
-        maskClosable={false}
+        maskClosable={readonly}
         footer={
           readonly ? (
             ''

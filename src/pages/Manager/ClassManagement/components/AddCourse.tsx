@@ -467,7 +467,7 @@ const AddCourse: FC<AddCourseProps> = ({
         visible={visible}
         className={styles.courseStyles}
         destroyOnClose={true}
-        maskClosable={false}
+        maskClosable={names === 'chakan'}
         bodyStyle={{ paddingBottom: 80 }}
         footer={
           names === 'chakan' ? null : (
