@@ -41,6 +41,7 @@ const CourseDetails: React.FC = () => {
   const myDate = new Date();
   const nowtime = myDate.toLocaleDateString();
   const [fk, setFk] = useState<boolean>(false);
+  const [index, setIndex] = useState<number>(0);
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
     njId: '1',
@@ -227,7 +228,7 @@ const CourseDetails: React.FC = () => {
         });
         if (result.status === 'ok' && result.data) {
           setKcDetail(result.data);
-          const current = result.data.KHBJSJs![0];
+          const current = result.data.KHBJSJs![index];
           const start = current.BMKSSJ ? current.BMKSSJ : result.data.BMKSSJ;
           const end = current.BMKSSJ ? current.BMJSSJ : result.data.BMJSSJ;
           const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
@@ -298,7 +299,10 @@ const CourseDetails: React.FC = () => {
       return <span>{values}</span>
     })
   }
-
+  const butonclick = (index: number) => {
+    console.log(index)
+    setIndex(index)
+  }
   // 获取班级报名人数
   // const getrs = async (id: string) => {
   //   const res = await getEnrolled({ id });
@@ -379,17 +383,18 @@ const CourseDetails: React.FC = () => {
                   <p className={styles.title} style={{ fontSize: '14px' }}>班级</p>
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
-                      KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }) => {
+                      KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }, index: number) => {
                         // const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
                         const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
                         const enAble = new Date(nowtime) > new Date(start) && new Date(nowtime) < new Date(end);
-
                         return (
                           // <Tooltip placement="bottomLeft"  title={text} color='cyan' defaultVisible={true}>
-                          <Radio.Button  value={valueName} style={{ marginLeft: '14px' }}
-                            disabled={!enAble}>
+                          <Radio.Button value={valueName} style={{ marginLeft: '14px' }}
+                            disabled={!enAble}
+                            onClick={() => butonclick(index)}
+                          >
                             {value.BJMC}
                           </Radio.Button>
                           // </Tooltip>
