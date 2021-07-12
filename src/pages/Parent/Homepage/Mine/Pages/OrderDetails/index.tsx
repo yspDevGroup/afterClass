@@ -2,14 +2,13 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, history } from 'umi';
+import { history } from 'umi';
 import { message, Statistic } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { overdueKHXSDD, deleteKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
 import moment from 'moment';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
 const { Countdown } = Statistic;
 const OrderDetails: React.FC = (props: any) => {
@@ -31,9 +30,7 @@ const OrderDetails: React.FC = (props: any) => {
   useEffect(() => {
     linkRef.current?.click();
   }, [urlPath]);
-  const onchanges = (e: { stopPropagation: () => void; }) => {
-    e.stopPropagation()
-  };
+ 
   const handlePay = async () => {
     const res = await payKHXSDD({
       ddIds: [orderInfo.id],

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import dayjs from 'dayjs';
-// 因为插件为JS，TS校验报错，不影响使用
 import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
@@ -58,17 +57,17 @@ const ClassCalendar = (props: propstype) => {
       const weeked: any[] = [];
       const dates: any[] = [];
       newData[item.KHBJSJ.id].forEach((rea: any) => {
-        if (dates.length===0) {
+        if (dates.length === 0) {
           dates.push(DateRange(rea.KHBJSJ.KKRQ, rea.KHBJSJ.JKRQ))
         }
         if (weeked.indexOf(rea.WEEKDAY) === -1) {
           weeked.push(rea.WEEKDAY);
         }
       })
-      const sj :any[]=[];
-      dates[0].forEach((as:any)=>{
-        weeked.forEach((ds:any)=>{
-          if(Week(as)===ds){
+      const sj: any[] = [];
+      dates[0].forEach((as: any) => {
+        weeked.forEach((ds: any) => {
+          if (Week(as) === ds) {
             sj.push(as)
           }
         })
@@ -91,15 +90,16 @@ const ClassCalendar = (props: propstype) => {
       };
       const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
       let kjs = 0;
-      
+
       for (let i = 0; i < res.length; i += 1) {
         const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
         if (weekDay === item.WEEKDAY) {
           kjs += 1;
-          const enrollLink = {pathname:'/teacher/education/callTheRoll',state:{
-            pkid:item.id,bjids:item.KHBJSJ.id,date:moment(res[i]).format('YYYY/MM/DD'),kjs:sj.length,sj:sj
-          }};
-          // `/teacher/education/callTheRoll?id=${item.id}&bjid=${item.KHBJSJ.id}&date=${moment(res[i]).format('YYYY/MM/DD')}&kjs=${sj.length}`;
+          const enrollLink = {
+            pathname: '/teacher/education/callTheRoll', state: {
+              pkid: item.id, bjids: item.KHBJSJ.id, date: moment(res[i]).format('YYYY/MM/DD'), kjs: sj.length, sj: sj
+            }
+          };
           const curInfo = [{
             enrollLink,
             ...kcxxInfo

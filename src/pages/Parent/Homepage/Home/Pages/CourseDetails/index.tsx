@@ -265,28 +265,22 @@ const CourseDetails: React.FC = () => {
     const bjInfo = KcDetail.KHBJSJs.find((item: any) => {
       return item.id === BJ
     });
-    // console.log(bjInfo)
-    // const ress = await getAllKHXSDD({ XSId: children[0].student_userid!, DDZT: '已完成', });
-    // if (ress.status === 'ok'&&ress.data!.length>0) {
-
-    // } else {
-      await setClassDetail(bjInfo);
-      const data: API.CreateKHXSDD = {
-        'XDSJ': (new Date).toISOString(),
-        "ZFFS": "线上支付",
-        "DDZT": "待付款",
-        "DDFY": FY!,
-        "XSId": children[0].student_userid!,
-        "XSXM": children[0].name!,
-        "KHBJSJId": BJ!,
-      };
-      const res = await createKHXSDD(data);
-      if (res.status === 'ok') {
-        setOrderInfo(res.data);
-        return;
-      }
-      message.error(res.message);
-    // }
+    await setClassDetail(bjInfo);
+    const data: API.CreateKHXSDD = {
+      'XDSJ': (new Date).toISOString(),
+      "ZFFS": "线上支付",
+      "DDZT": "待付款",
+      "DDFY": FY!,
+      "XSId": children[0].student_userid!,
+      "XSXM": children[0].name!,
+      "KHBJSJId": BJ!,
+    };
+    const res = await createKHXSDD(data);
+    if (res.status === 'ok') {
+      setOrderInfo(res.data);
+      return;
+    }
+    message.error(res.message);
   }
   // 房间数据去重
   const tempfun = (arr: any) => {
@@ -303,13 +297,6 @@ const CourseDetails: React.FC = () => {
   const butonclick = (index: number) => {
     changeStatus(index);
   }
-  // 获取班级报名人数
-  // const getrs = async (id: string) => {
-  //   const res = await getEnrolled({ id });
-  //   if (res.status === 'ok' && res.data) {
-  //     return res.data.length
-  //   } return 0
-  // }
 
   return <>
     {
@@ -384,35 +371,22 @@ const CourseDetails: React.FC = () => {
                   <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                     {
                       KcDetail?.KHBJSJs?.map((value: { BJMC: string, id: string, FJS: string, FY: string, BMKSSJ: Date, BMJSSJ: Date, BJRS: number }, index: number) => {
-                        // const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
                         const valueName = `${value.id}+${value.FY}`;
                         const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
                         const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
                         const enAble = new Date(nowtime) > new Date(start) && new Date(nowtime) < new Date(end);
                         return (
-                          // <Tooltip placement="bottomLeft"  title={text} color='cyan' defaultVisible={true}>
-                          <Radio.Button value={valueName} style={{ marginLeft: '14px' }}
+                          <Radio.Button value={valueName} style={{ marginLeft: '14px',marginBottom:'8px' }}
                             disabled={!enAble}
                             onClick={() => butonclick(index)}
                           >
                             {value.BJMC}
                           </Radio.Button>
-                          // </Tooltip>
                         )
 
                       })
                     }
                   </Radio.Group>
-                  {/* <Radio
-                    className={styles.agreement}
-                    onChange={() => setXY(true)}
-                  >
-                    <p>我已阅读并同意
-                     <a href=''>
-                        《课后帮服务协议》
-                     </a>
-                    </p>
-                  </Radio> */}
                   <Button className={styles.submit}
                     disabled={fk || BJ === undefined}
                     onClick={submit} >

@@ -63,14 +63,14 @@ const Mine = () => {
       <div className={styles.linkWrapper}>
         <ul>
           <li>
-            <IconFont type='icon-fuwugonggao' style={{ 'fontSize': '18px', lineHeight: '40px' }} />
+            <IconFont type='icon-fuwugonggao' style={{ 'fontSize': '18px'}} />
             <Link to='/parent/home/notice/announcement?articlepage=serveAnnounce'>
               服务公告
               <IconFont type="icon-gengduo" />
             </Link>
           </li>
           <li>
-            <IconFont type='icon-guanyu' style={{ 'fontSize': '18px', lineHeight: '40px' }} />
+            <IconFont type='icon-guanyu' style={{ 'fontSize': '18px' }} />
             <Link to='/parent/home/notice/announcement?articlepage=about'>
               关于
               <IconFont type="icon-gengduo" />

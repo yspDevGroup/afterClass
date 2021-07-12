@@ -45,6 +45,8 @@ const PersonalHomepage = () => {
           if (bmkssj && bmjssj && skkssj && skjssj) {
             const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
             setCourseStatus(cStatus);
+          }else{
+            setCourseStatus('empty');
           }
         }
       } else {
