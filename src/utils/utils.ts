@@ -2,6 +2,11 @@
 import { parse } from 'querystring';
 import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
 import { message } from 'antd';
+import moment from 'moment';
+import { getAllKHXSCQ } from '@/services/after-class/khxscq';
+import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
+import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { DateRange, Week } from './Timefunction';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg =
@@ -215,7 +220,7 @@ export const getCurrentStatus = (
  *
  * @param msg: string
  */
- export const enHenceMsg = (msg: string) => {
+export const enHenceMsg = (msg: string) => {
   if (msg.indexOf('Cannot') > -1) {
     message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
   } else if (msg.indexOf('token') > -1) {
@@ -225,4 +230,71 @@ export const getCurrentStatus = (
   } else {
     message.error(`${msg},请联系管理员或稍后再试`);
   }
+};
+/**
+ * 获取班级出勤信息
+ * @param wkd 课程周几上课
+ * @param start 开课时间
+ * @param end 结课时间
+ * @param bjid 班级ID
+ * @param xsId 学生ID
+ * @returns {}
+ */
+export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?: string, xsId?: string) => {
+  const myDate = new Date();
+  const nowDate = new Date(moment(myDate).format('YYYY/MM/DD'));
+  const res = await getAllKHXSCQ({
+    xsId,
+    bjId: bjid || '',
+    CQZT: '',
+    CQRQ: '',
+  });
+  if (res.status === 'ok') {
+    if (start && end && wkd) {
+      const arr = DateRange(start, end);
+      const classbegins: any[] = [];
+      arr.forEach((record: any) => {
+        for (let i = 0; i < wkd.length; i += 1) {
+          if (Week(record) === wkd[i] && !classbegins.includes(record)) {
+            const current = new Date(moment(record).format('YYYY/MM/DD'));
+            let status = current < nowDate ? '出勤' : '待上';
+            if (res.data && res.data.length) {
+              res.data.forEach((date: any) => {
+                if (date.CQRQ === record) {
+                  status = date.CQZT;
+                }
+              })
+            }
+            classbegins.push({ status, date: moment(record).format('MM/DD') })
+          }
+        }
+      });
+      return classbegins;
+    }
+  }
+  return [];
+};
+/**
+ * 组装班级出勤信息
+ * @param bjid 班级ID
+ * @param xsId 学生ID
+ * @returns {}
+ */
+export const getData = async (bjid: string, xsId: string) => {
+  const res1 = await getKHPKSJByBJID({ id: bjid });
+  if (res1.status === 'ok' && res1.data) {
+    const attend = [...new Set(res1.data.map(n => n.WEEKDAY))];
+    const res = await getKHBJSJ({ id: bjid });
+    if (res.status === 'ok' && res.data && attend) {
+      const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;
+      const end = res.data.JKRQ ? res.data.JKRQ : res.data.KHKCSJ!.JKRQ;
+      return {
+        title: res.data.BJMC,
+        data: await getCqDay(attend, start, end, bjid, xsId)
+      }
+    }
+  }
+  return {
+    status: 'nothing'
+  };
 };

@@ -16,7 +16,6 @@ import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import noData from '@/assets/noCourse.png';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-// import { getEnrolled } from '@/services/after-class/khbjsj';
 import Nodata from '@/components/Nodata';
 import noPic from '@/assets/noPic.png';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
@@ -25,7 +24,6 @@ import { getKHBJSJ } from '@/services/after-class/khbjsj';
 const CourseDetails: React.FC = () => {
   const [BJ, setBJ] = useState<string>();
   const [FY, setFY] = useState<number>();
-  // const [XY, setXY] = useState(false);
   const [state, setstate] = useState(false);
   const [currentDate, setCurrentDate] = useState<string>();
   const [KcDetail, setKcDetail] = useState<any>();
@@ -41,7 +39,6 @@ const CourseDetails: React.FC = () => {
   const myDate = new Date();
   const nowtime = myDate.toLocaleDateString();
   const [fk, setFk] = useState<boolean>(false);
-  const [index, setIndex] = useState<number>(0);
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
     njId: '1',
@@ -193,6 +190,16 @@ const CourseDetails: React.FC = () => {
     }
     return { real: [], cq: [] }
   }
+  const changeStatus = (index: number,data?: any)=>{
+    const detail = data || KcDetail;
+    const current = detail.KHBJSJs![index];
+    const start = current.BMKSSJ ? current.BMKSSJ : detail.BMKSSJ;
+    const end = current.BMKSSJ ? current.BMJSSJ : detail.BMJSSJ;
+    const enAble = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(moment(start).format('YYYY/MM/DD')) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(moment(end).format('YYYY/MM/DD'));
+    setFY(current.FY);
+    setBJ(current.id);
+    setFk(!enAble);
+  };
   useEffect(() => {
     async function fetchData() {
       if (classid) {
@@ -228,16 +235,10 @@ const CourseDetails: React.FC = () => {
         });
         if (result.status === 'ok' && result.data) {
           setKcDetail(result.data);
-          const current = result.data.KHBJSJs![index];
-          const start = current.BMKSSJ ? current.BMKSSJ : result.data.BMKSSJ;
-          const end = current.BMKSSJ ? current.BMJSSJ : result.data.BMJSSJ;
+          changeStatus(0,result.data);
           const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
           const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
-          const enAble = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(moment(start).format('YYYY/MM/DD')) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(moment(end).format('YYYY/MM/DD'));
           const btnEnable = new Date(moment(nowtime).format('YYYY/MM/DD')) > new Date(kcstart) && new Date(moment(nowtime).format('YYYY/MM/DD')) < new Date(kcend);
-          setFY(current.FY);
-          setBJ(current.id);
-          setFk(!enAble);
           setKaiguan(btnEnable);
         } else {
           message.error(result.message);
@@ -246,7 +247,7 @@ const CourseDetails: React.FC = () => {
       const myDate = new Date().toLocaleDateString().slice(5, 9);
       setCurrentDate(myDate);
     }
-  }, [courseid,index]);
+  }, [courseid]);
 
   useEffect(() => {
     if (orderInfo)
@@ -300,8 +301,7 @@ const CourseDetails: React.FC = () => {
     })
   }
   const butonclick = (index: number) => {
-    console.log(index)
-    setIndex(index)
+    changeStatus(index);
   }
   // 获取班级报名人数
   // const getrs = async (id: string) => {

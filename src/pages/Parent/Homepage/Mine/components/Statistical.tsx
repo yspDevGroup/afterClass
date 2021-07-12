@@ -3,108 +3,64 @@ import { Pie } from '@ant-design/charts';
 import styles from '../index.less';
 import { Badge } from 'antd';
 import myContext from '@/utils/MyContext';
-import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import noChart from '@/assets/noChart.png';
 import Nodata from '@/components/Nodata';
-import moment from 'moment';
-import { DateRange, Week } from '@/utils/Timefunction';
-import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getData } from '@/utils/utils';
 
 const Statistical: React.FC = () => {
   const { currentUserInfo, yxkc } = useContext(myContext);
-  const [checkIn, setCheckIn] = useState<any>();
   const [satistics, setStatistics] = useState<any[]>();
-
-  const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?: string) => {
-    const myDate = new Date();
-    const nowDate = new Date(moment(myDate).format('YYYY/MM/DD'));
-    const res = await getAllKHXSCQ({
-      xsId: currentUserInfo?.UserId || currentUserInfo?.id,
-      bjId: bjid || '',
-      CQZT: '',
-      CQRQ: '',
-    });
-    if (res.status === 'ok') {
-      if (start && end && wkd) {
-        const arr = DateRange(start, end);
-        const classbegins: any[] = [];
-        arr.forEach((record: any) => {
-          for (let i = 0; i < wkd.length; i += 1) {
-            if (Week(record) === wkd[i] && !classbegins.includes(record)) {
-              const current = new Date(moment(record).format('YYYY/MM/DD'));
-              let status = current < nowDate ? '出勤' : '待上';
-              if (res.data && res.data.length) {
-                res.data.forEach((date: any) => {
-                  if (date.CQRQ === record) {
-                    status = date.CQZT;
-                  }
-                })
-              }
-              classbegins.push({ status })
-            }
-          }
-        });
-        return classbegins;
+  const children = currentUserInfo?.subscriber_info?.children || [
+    {
+      student_userid: currentUserInfo?.UserId || currentUserInfo?.id,
+      njId: '1',
+    },
+  ];
+  const convertData = (title: string, dataArr: any) => {
+    if (dataArr && dataArr.length) {
+      const nor = dataArr.filter((item: any) => item.status === '出勤');
+      const abnor = dataArr.filter((item: any) => item.status === '缺席');
+      const toDo = dataArr.filter((item: any) => item.status === '待上');
+      return {
+        title,
+        zc: nor && nor.length,
+        yc: abnor && abnor.length,
+        ds: toDo && toDo.length,
+        data: [
+          {
+            type: '正常',
+            value: nor && nor.length,
+          },
+          {
+            type: '异常',
+            value: abnor && abnor.length,
+          },
+          {
+            type: '待上',
+            value: toDo && toDo.length,
+          },
+        ]
       }
     }
-    return [];
-  };
-  const getData = async (bjid: string) => {
-    const res1 = await getKHPKSJByBJID({ id: bjid });
-    if (res1.status === 'ok' && res1.data) {
-      const attend = [...new Set(res1.data.map(n => n.WEEKDAY))];
-      const res = await getKHBJSJ({ id: bjid });
-      if (res.status === 'ok' && res.data && attend) {
-        const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;
-        const end = res.data.JKRQ ? res.data.JKRQ : res.data.KHKCSJ!.JKRQ;
-        const dataArr = await getCqDay(attend, start, end, bjid);
-        if (dataArr && dataArr.length) {
-          const nor = dataArr.filter((item) => item.status === '出勤');
-          const abnor = dataArr.filter((item) => item.status === '缺席');
-          const toDo = dataArr.filter((item) => item.status === '待上');
-          return {
-            title: res.data.BJMC,
-            zc: nor && nor.length,
-            yc: abnor && abnor.length,
-            ds: toDo && toDo.length,
-            data: [
-              {
-                type: '正常',
-                value: nor && nor.length,
-              },
-              {
-                type: '异常',
-                value: abnor && abnor.length,
-              },
-              {
-                type: '待上',
-                value: toDo && toDo.length,
-              },
-            ]
-          }
-        }
-      }
-    }
-    return {
-      status: 'nothing'
-    };
+    return {}
   };
   useEffect(() => {
     async function fetchData() {
       if (yxkc) {
-        const arr = [].map.call(yxkc, (item: any) => {
-          return getData(item.id);
+        const arr = [].map.call(yxkc, async (item: any) => {
+          const { title, data } = await getData(item.id, children[0].student_userid!);
+          if(data && title){
+            return convertData(title, data);
+          }
+          return {status:'nothing'};
         });
         const result = await Promise.all(arr);
-        setCheckIn(result.filter((item: any) => item.status !== 'nothing'));
+        const realResult = result.filter((item: any) => item.status !== 'nothing');
+        setStatistics(realResult);
       }
     }
     fetchData();
   }, [yxkc]);
-  useEffect(() => {
-    setStatistics(checkIn);
-  }, [checkIn, yxkc])
 
   const config: any = {
     data: '',
