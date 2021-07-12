@@ -221,6 +221,7 @@ const ClassMaintenance = () => {
       key: 'NJSName',
       align: 'center',
       ellipsis: true,
+      width: 300,
       render: (_, record) => {
         return (
           <div className="ui-table-col-elp">

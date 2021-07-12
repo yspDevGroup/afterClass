@@ -89,7 +89,10 @@ const AddRoom = (props: PropsType) => {
       fieldProps: {
         autocomplete: 'off',
       },
-      rules: [{ required: true, message: '请填写名称' }],
+      rules: [
+        { required: true, message: '请填写名称' },
+        { max: 10, message: '最长为 10 位' },
+      ],
     },
     {
       type: 'input',

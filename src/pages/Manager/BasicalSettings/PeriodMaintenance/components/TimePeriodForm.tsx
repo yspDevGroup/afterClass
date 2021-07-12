@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
@@ -32,7 +33,7 @@ const TimePeriodForm = (props: PropsType) => {
       }
     }
     fetchData();
-  }, []);
+  }, [current?.XNXQ?.XN]);
 
   const formItems: any[] = [
     {
@@ -46,10 +47,18 @@ const TimePeriodForm = (props: PropsType) => {
       label: '时段名称',
       name: 'TITLE',
       key: 'TITLE',
-      rules: [{ required: true, message: '请填写名称' }],
+      rules: [
+        { required: true, message: '请填写名称' },
+        { max: 10, message: '最长为 10 位' },
+      ],
       fieldProps: {
         autocomplete: 'off',
-        placeholder: currentStatus === 'schedule' ? '如：第一节课' : (currentStatus === 'enroll' ? '如：2020-2021' : '如：2021春季'),
+        placeholder:
+          currentStatus === 'schedule'
+            ? '如：第一节课'
+            : currentStatus === 'enroll'
+            ? '如：2020-2021'
+            : '如：2021春季',
       },
     },
     {

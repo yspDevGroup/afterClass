@@ -244,11 +244,13 @@ const NewCourses = (props: PropsType) => {
       name: 'KCMC',
       key: 'KCMC',
       width: '100%',
-      rules: [{ required: true, message: '请填写名称' }],
+      rules: [
+        { required: true, message: '请填写名称' },
+        { max: 18, message: '最长为 18 位' },
+      ],
       disabled: readonly,
       fieldProps: {
         autocomplete: 'off',
-        maxLength: 23,
       },
     },
     {

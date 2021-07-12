@@ -57,7 +57,7 @@ const Announcement = (props: PropsType) => {
       key: 'NR',
       rules: [{ required: true, message: '请填写内容' }],
       fieldProps: {
-        rows: 18,
+        rows: 5,
       },
     },
   ];

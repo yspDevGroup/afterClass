@@ -1,9 +1,8 @@
-import ProFormFields from "@/components/ProFormFields";
-import type { FormInstance } from "@ant-design/pro-form";
-import type { ActionType } from "@ant-design/pro-table";
-import { constant } from "lodash";
-import React from "react";
-import type { TermItem } from "../data";
+import ProFormFields from '@/components/ProFormFields';
+import type { FormInstance } from '@ant-design/pro-form';
+import type { ActionType } from '@ant-design/pro-table';
+import React from 'react';
+import type { TermItem } from '../data';
 
 type PropsType = {
   current?: TermItem;
@@ -20,9 +19,7 @@ const formLayout = {
 
 const OrganizationTable = (props: PropsType) => {
   const { current, setForm, readonly } = props;
-  const onFinish = () => {
-
-  };
+  const onFinish = () => {};
 
   const formItems: any[] = [
     {
@@ -31,11 +28,14 @@ const OrganizationTable = (props: PropsType) => {
       label: '学年',
       name: 'XN',
       key: 'XN',
-      rules: [{ required: true, message: '请填写学年' }],
+      rules: [
+        { required: true, message: '请填写学年' },
+        { max: 10, message: '最长为 10 位' },
+      ],
       fieldProps: {
         autocomplete: 'off',
-        placeholder:'如2021-2022'
-      }
+        placeholder: '如2021-2022',
+      },
     },
     {
       type: 'select',
@@ -56,7 +56,7 @@ const OrganizationTable = (props: PropsType) => {
       name: 'KSRQ',
       key: 'KSRQ',
       rules: [{ required: true, message: '请选择日期' }],
-      width: '100%'
+      width: '100%',
     },
   ];
 
@@ -66,21 +66,19 @@ const OrganizationTable = (props: PropsType) => {
         layout="horizontal"
         onFinish={onFinish}
         setForm={setForm}
-        values={
-          (() => {
-            if (current) {
-              const { KSRQ, ...info } = current;
-              const cc=[];
-              cc.push(current.KSRQ);
-              cc.push(current.JSRQ);
-              return {
-                  KSRQ:cc,
-                  ...info
-              };
-            }
-            return  undefined;
-          })()
-        }
+        values={(() => {
+          if (current) {
+            const { KSRQ, ...info } = current;
+            const cc = [];
+            cc.push(current.KSRQ);
+            cc.push(current.JSRQ);
+            return {
+              KSRQ: cc,
+              ...info,
+            };
+          }
+          return undefined;
+        })()}
         formItems={formItems}
         formItemLayout={formLayout}
       />

@@ -7,7 +7,7 @@ import { Button, Divider, Modal } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import type { SearchDataType } from '@/components/Search/data';
-import type { RoomItem, TableListParams } from './data';
+import type { TableListParams } from './data';
 import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
 import { paginationConfig } from '@/constant';
@@ -36,7 +36,7 @@ const RoomManagement = () => {
 
   const [dataSource] = useState<SearchDataType>(searchData);
   const [opens, setopens] = useState<boolean>(false);
-  const [xQLabelItem, setXQLabelItem] = useState('')
+  const [xQLabelItem, setXQLabelItem] = useState('');
 
   const guanbi = () => {
     setopens(false);
@@ -93,12 +93,14 @@ const RoomManagement = () => {
       const values = await form?.validateFields();
       const { id, ...rest } = values;
       // 更新或新增场地信息
-      const result = id ? await updateFJSJ({ id }, { ...rest, XQName: xQLabelItem }) : await createFJSJ({ ...rest, XQName: xQLabelItem });
+      const result = id
+        ? await updateFJSJ({ id }, { ...rest, XQName: xQLabelItem })
+        : await createFJSJ({ ...rest, XQName: xQLabelItem });
       if (result.status === 'ok') {
         message.success(id ? '场地信息更新成功' : '场地信息新增成功');
         setModalVisible(false);
         actionRef.current?.reload();
-      } else if ((result.message!).indexOf('Cannot') > -1) {
+      } else if (result.message!.indexOf('Cannot') > -1) {
         message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
       } else {
         message.error(`${result.message},请联系管理员或稍后再试`);
@@ -174,9 +176,9 @@ const RoomManagement = () => {
                   if (result.status === 'ok') {
                     message.success('场地信息删除成功');
                     actionRef.current?.reload();
-                  } else if ((result.message!).indexOf('Cannot') > -1) {
+                  } else if (result.message!.indexOf('Cannot') > -1) {
                     message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
-                  } else if ((result.message!).indexOf('token') > -1) {
+                  } else if (result.message!.indexOf('token') > -1) {
                     message.error('身份验证过期，请重新登录');
                   } else {
                     message.error(`${result.message},请联系管理员或稍后再试`);
@@ -258,13 +260,13 @@ const RoomManagement = () => {
           modalType === 'uphold'
             ? null
             : [
-              <Button key="back" onClick={() => setModalVisible(false)}>
-                取消
-              </Button>,
-              <Button key="submit" type="primary" onClick={handleSubmit}>
-                确定
-              </Button>,
-            ]
+                <Button key="back" onClick={() => setModalVisible(false)}>
+                  取消
+                </Button>,
+                <Button key="submit" type="primary" onClick={handleSubmit}>
+                  确定
+                </Button>,
+              ]
         }
         style={{ maxHeight: '430px' }}
         centered

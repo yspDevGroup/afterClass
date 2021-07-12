@@ -46,6 +46,7 @@ const Sitclass = () => {
             required: true,
             message: '此项为必填项',
           },
+          { max: 10, message: '最长为 10 位' },
         ],
       },
     },
@@ -98,7 +99,7 @@ const Sitclass = () => {
                 if (result.status === 'ok') {
                   message.success('信息删除成功');
                   actionRef.current?.reload();
-                } else if ((result.message).indexOf('Cannot') > -1) {
+                } else if (result?.message && result.message?.indexOf('Cannot') > -1) {
                   message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
                 } else {
                   message.error(`${result.message},请联系管理员或稍后再试`);
@@ -157,18 +158,18 @@ const Sitclass = () => {
             try {
               const result = row.title
                 ? await createKHKCLX({
-                  KCLX: row.KCLX!,
-                  KBYS: row.KBYS,
-                })
-                : await updateKHKCLX(
-                  {
-                    id: row.id!,
-                  },
-                  {
                     KCLX: row.KCLX!,
                     KBYS: row.KBYS,
-                  },
-                );
+                  })
+                : await updateKHKCLX(
+                    {
+                      id: row.id!,
+                    },
+                    {
+                      KCLX: row.KCLX!,
+                      KBYS: row.KBYS,
+                    },
+                  );
               if (result.status === 'ok') {
                 message.success(row.title ? '信息新增成功' : '信息更新成功');
                 actionRef.current?.reload();

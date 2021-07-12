@@ -32,6 +32,7 @@ type PropsType = {
   setCampus: (value: any) => void;
   sameClass?: any;
   setBJIDData?: any;
+  cdmcData?: any[];
 };
 
 const AddArranging: FC<PropsType> = (props) => {
@@ -48,6 +49,7 @@ const AddArranging: FC<PropsType> = (props) => {
     campus,
     grade,
     setBJIDData,
+    cdmcData,
   } = props;
   const [packUp, setPackUp] = useState(false);
   const [Bj, setBj] = useState<any>(undefined);
@@ -213,38 +215,42 @@ const AddArranging: FC<PropsType> = (props) => {
   // 保存
   const submit = async (params: any) => {
     if (Bj || index) {
-      try {
-        const data = [...excelTableValue].concat(sameClassDatas);
-        const bjIdData: any[] = [index];
-        data.forEach((item: any) => {
-          bjIdData.push(item.KHBJSJId);
-        });
-        // 所选班级ID
-        const bj = Array.from(new Set(bjIdData));
-        const parameter = {
-          bjIds: bj,
-          data,
-        };
-        const result = await createKHPKSJ(parameter);
-        if (result.status === 'ok') {
-          message.success('保存成功');
-          tableServers();
-          setState(true);
-          setBJIDData('');
+      if (cdmcData && cdmcData?.length > 0) {
+        try {
+          const data = [...excelTableValue].concat(sameClassDatas);
+          const bjIdData: any[] = [index];
+          data.forEach((item: any) => {
+            bjIdData.push(item.KHBJSJId);
+          });
+          // 所选班级ID
+          const bj = Array.from(new Set(bjIdData));
+          const parameter = {
+            bjIds: bj,
+            data,
+          };
+          const result = await createKHPKSJ(parameter);
+          if (result.status === 'ok') {
+            message.success('保存成功');
+            tableServers();
+            setState(true);
+            setBJIDData('');
+            return true;
+          }
+          if (result.status === 'error') {
+            if (result.message === 'Validation error') {
+              Modal.error({
+                title: '保存失败',
+                content: '在同一天的同一时间段内不能排同一个班',
+              });
+            }
+          }
+        } catch (err) {
+          console.log(err);
+          message.error('保存失败');
           return true;
         }
-        if (result.status === 'error') {
-          if (result.message === 'Validation error') {
-            Modal.error({
-              title: '保存失败',
-              content: '在同一天的同一时间段内不能排同一个班',
-            });
-          }
-        }
-      } catch (err) {
-        console.log(err);
-        message.error('保存失败');
-        return true;
+      } else {
+        message.warning('请先添加场地在进行排课');
       }
     } else {
       message.warning('请先选择班级后再进行排课');

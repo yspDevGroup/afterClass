@@ -659,6 +659,7 @@ const ClassManagement = () => {
             setTableDataSource={setTableDataSource}
             sameClass={sameClass}
             setBJIDData={setBJIDData}
+            cdmcData={cdmcData}
           />
         )}
       </PageContainer>
