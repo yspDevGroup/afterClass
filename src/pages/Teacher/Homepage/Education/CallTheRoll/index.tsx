@@ -7,10 +7,8 @@ import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
 import { getQueryString } from '@/utils/utils';
 // import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
-import Item from 'antd/lib/list/Item';
 
 /**
  * 课堂点名
@@ -102,19 +100,21 @@ const CallTheRoll = (props:any) => {
           duration: 0,
         });
         setButDis(true);
-        const resStudent = getEnrolled({ id: bjids || '' });
-        Promise.resolve(resStudent).then((data: any) => {
-          if (data.status === 'ok') {
-            const studentData = data.data;
-            studentData?.forEach((item: any) => {
-              allData.forEach((sj: any) => {
-                if (item.XSId === sj.XSId) {
-                  sj.XSXM = item.XSXM
-                }
-              })
-            });
-          }
-        });
+        // const resStudent = getEnrolled({ id: bjids || '' });
+        // Promise.resolve(resStudent).then((data: any) => {
+        //   if (data.status === 'ok') {
+        //     const studentData = data.data;
+        //     studentData?.forEach((item: any) => {
+        //       allData.forEach((sj: any) => {
+        //         console.log('item.XSId',item.XSId)
+        //         console.log('sj.XSId',sj.XSId)
+        //         if (item.XSId === sj.XSId) {
+        //           sj.XSXM = item.XSXM
+        //         }
+        //       })
+        //     });
+        //   }
+        // });
         allData.forEach((item: any) => {
           item.isRealTo = item.CQZT;
         })
@@ -183,6 +183,7 @@ const CallTheRoll = (props:any) => {
         XSId: item.XSId, // 学生ID
         KHBJSJId: bjids, // 班级ID
         KHPKSJId: pkid, // 排课ID
+        XSXM: item.XSXM // 学生姓名
       });
     });
     const res = await createKHXSCQ(value);
