@@ -46,7 +46,7 @@ const PersonalHomepage = () => {
           if (bmkssj && bmjssj && skkssj && skjssj) {
             const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
             setCourseStatus(cStatus);
-          }else{
+          } else {
             setCourseStatus('empty');
           }
         }
@@ -74,6 +74,18 @@ const PersonalHomepage = () => {
               }}
               defaultActiveKey={index || 'index'}
             >
+              <TabPane
+              tab={
+                <span>
+                  <IconFont
+                    style={{ fontSize: '16px' }}
+                    type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
+                  />
+                  首页
+                </span>
+              }
+              key="index"
+            >
               <div
                 className={styles.noScrollBar}
                 style={{ height: '100%', overflowY: 'auto' }}
@@ -81,53 +93,54 @@ const PersonalHomepage = () => {
               >
                 <Home />
               </div>
-            {courseStatus === 'empty' ? (
-              ''
-            ) : (
+            </TabPane>
+              {courseStatus === 'empty' ? (
+                ''
+              ) : (
+                  <TabPane
+                    tab={
+                      <span>
+                        <IconFont
+                          style={{ fontSize: '16px' }}
+                          type={activeKey === 'study' ? 'icon-xuexiyuandifill' : 'icon-xuexiyuandi'}
+                        />
+                    学习园地
+                  </span>
+                    }
+                    key="study"
+                  >
+                    <div
+                      className={styles.noScrollBar}
+                      style={{ height: '100%', overflowY: 'auto' }}
+                      ref={studyRef}
+                    >
+                      <Study />
+                    </div>
+                  </TabPane>
+                )}
               <TabPane
                 tab={
                   <span>
                     <IconFont
                       style={{ fontSize: '16px' }}
-                      type={activeKey === 'study' ? 'icon-xuexiyuandifill' : 'icon-xuexiyuandi'}
+                      type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
                     />
-                    学习园地
-                  </span>
+                  我的
+                </span>
                 }
-                key="study"
+                key="mine"
               >
                 <div
                   className={styles.noScrollBar}
                   style={{ height: '100%', overflowY: 'auto' }}
-                  ref={studyRef}
+                  ref={mineRef}
                 >
-                  <Study />
+                  <Mine />
                 </div>
               </TabPane>
-            )}
-            <TabPane
-              tab={
-                <span>
-                  <IconFont
-                    style={{ fontSize: '16px' }}
-                    type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
-                  />
-                  我的
-                </span>
-              }
-              key="mine"
-            >
-              <div
-                className={styles.noScrollBar}
-                style={{ height: '100%', overflowY: 'auto' }}
-                ref={mineRef}
-              >
-                <Mine />
-              </div>
-            </TabPane>
-          </Tabs>
-        </myContext.Provider>
-      )}
+            </Tabs>
+          </myContext.Provider>
+        )}
     </div>
   );
 };

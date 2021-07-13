@@ -27,15 +27,25 @@ const Announcement = () => {
   }, []);
   return (
     <div className={styles.DetailsBox}>
-      {pageId&&!index ? <GoBack title='公告' />:'' }
-      {pageId&&index ? <GoBack title='公告' onclick='/teacher/home?index=index'/>:'' }
-      {articlepage ? <GoBack title={articlepage === 'serveAnnounce' ? '服务公告' : '关于'} onclick='/teacher/home?index=mine' />:''}
-      <div className={styles.title}>{content?.BT}</div>
-      <div className={styles.time}>发布时间：{content?.updatedAt}</div>
-      <div className={styles.line}></div>
+    {pageId && !index ? <GoBack title='公告' /> : ''}
+    {pageId && index ? <GoBack title='公告' onclick='/teacher/home?index=index' /> : ''}
+    {articlepage ? <GoBack title={articlepage === 'serveAnnounce' ? '服务公告' : '关于'} onclick='/teacher/home?index=mine' /> : ''}
+    {content?.BT ? <div className={styles.title}>{content?.BT}</div> : ''}
+    {content?.updatedAt ? <div className={styles.time}>发布时间：{content?.updatedAt}</div> : ''}
+    {(content?.BT || content?.updatedAt) ? <div className={styles.line}></div> : ''}
+    {articlepage === 'about' ?
+      <div className={styles.guanyu}>
+        <div  className={styles.tp}>
+        <img src={content?.NR} alt='' style={{width:'120px'}}/>
+        </div>
+        <div className={styles.wz}>课后课程服务平台</div>
+        <div className={styles.xb}>© 2021 版权所有：陕西凯锐信息技术有限公司 </div>
+        <div className={styles.bbh}> v1.0.0</div>
+      </div> :
       <textarea className={styles.text} value={content?.NR} readOnly>
-      </textarea>
-    </div>
+      </textarea>}
+
+  </div>
   )
 }
 
