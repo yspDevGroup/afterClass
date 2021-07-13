@@ -244,7 +244,7 @@ export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?:
   const myDate = new Date();
   const nowDate = new Date(moment(myDate).format('YYYY/MM/DD'));
   const res = await getAllKHXSCQ({
-    xsId,
+    xsId: xsId || '',
     bjId: bjid || '',
     CQZT: '',
     CQRQ: '',
@@ -283,7 +283,7 @@ export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?:
  * @param xsId 学生ID
  * @returns {}
  */
-export const getData = async (bjid: string, xsId: string) => {
+export const getData = async (bjid: string, xsId?: string) => {
   const res1 = await getKHPKSJByBJID({ id: bjid });
   if (res1.status === 'ok' && res1.data) {
     const attend = [...new Set(res1.data.map(n => n.WEEKDAY))];

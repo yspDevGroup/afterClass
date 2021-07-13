@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { Badge, message, } from 'antd';
 import React, { useEffect, useState, } from 'react';
-import { useModel } from 'umi';
 import styles from './index.less';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import { getData, getQueryString } from '@/utils/utils';
@@ -11,19 +10,12 @@ import noData from '@/assets/noCourse1.png';
 import Nodata from '@/components/Nodata';
 
 const CourseDetails: React.FC = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
   const [KcDetail, setKcDetail] = useState<any>();
   const [timetableList, setTimetableList] = useState<any[]>();
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
   const myDate: Date = new Date();
   const currentDate = moment(myDate).format('MM/DD');
-  const children = currentUser?.subscriber_info?.children || [{
-    student_userid: currentUser?.UserId,
-    njId: '1',
-    name: currentUser?.username
-  }];
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -38,7 +30,7 @@ const CourseDetails: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       if (classid) {
-        const schedule = await getData(classid, children[0].student_userid!);
+        const schedule = await getData(classid);
         setTimetableList(schedule.data);
       }
     };
@@ -52,7 +44,6 @@ const CourseDetails: React.FC = () => {
         const result = await getKHKCSJ({
           kcId: courseid,
           bjzt: '已发布',
-          njId: children[0].njId
         });
         if (result.status === 'ok' && result.data) {
           setKcDetail(result.data);
