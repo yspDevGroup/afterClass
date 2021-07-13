@@ -79,7 +79,7 @@ const CourseTab = () => {
                         id: record.id,
                         title: record.KCMC,
                         img: record.KCTP,
-                        link: `/parent/home/courseDetails?courseid=${record.id}&index=all`,
+                        link: `/parent/home/courseDetails?courseid=${record.id}`,
                         desc: [
                           {
                             left: [`课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(record.JKRQ).format('YYYY.MM.DD')}`],

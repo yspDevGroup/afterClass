@@ -7,16 +7,17 @@ import styles from './index.less'
 type backtye = {
     title: string;
     onclick?: string;
+    teacher?: boolean;
 }
 
 
 const GoBack = (props: backtye) => {
-    const { title, onclick } = props;
+    const { title, onclick, teacher } = props;
     const toback = () => {
         window.history.go(-1)
     }
     return (
-        <div className={styles.hz} >
+        <div className={styles.hz} style={{ background: teacher ? '#1877cb' : '#efefef' }}>
             {
                 onclick ? <>
                     <div className={styles.tp}>
