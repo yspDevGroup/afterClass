@@ -95,7 +95,6 @@ const Noticenotice = () => {
     },
     {
       title: '操作',
-      align: 'center',
       width: 150,
       render: (_, record) => {
         return (
