@@ -45,7 +45,7 @@ const CourseDetails: React.FC = () => {
     const current = detail.KHBJSJs![index];
     const start = current.BMKSSJ ? current.BMKSSJ : detail.BMKSSJ;
     const end = current.BMKSSJ ? current.BMJSSJ : detail.BMJSSJ;
-    const enAble = myDate > new Date(moment(start).format('YYYY/MM/DD')) && myDate < new Date(moment(end).format('YYYY/MM/DD'));
+    const enAble = myDate >= new Date(moment(start).format('YYYY/MM/DD')) && myDate <= new Date(moment(end).format('YYYY/MM/DD'));
     setFY(current.FY);
     setBJ(current.id);
     setFk(!enAble);
@@ -83,7 +83,7 @@ const CourseDetails: React.FC = () => {
           changeStatus(0, result.data);
           const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
           const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
-          const btnEnable = myDate > new Date(kcstart) && myDate < new Date(kcend);
+          const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
           setKaiguan(btnEnable);
         } else {
           message.error(result.message);
@@ -218,7 +218,7 @@ const CourseDetails: React.FC = () => {
                         const valueName = `${value.id}+${value.FY}`;
                         const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
                         const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
-                        const enAble = myDate > new Date(start) && myDate < new Date(end);
+                        const enAble = myDate >= new Date(moment(start).format('YYYY/MM/DD')) && myDate <= new Date(moment(end).format('YYYY/MM/DD'));
                         return (
                           // <Tooltip placement="bottomLeft"  title={text} color='cyan' defaultVisible={true}>
                           <Radio.Button value={valueName} style={{ marginLeft: '14px' }}
