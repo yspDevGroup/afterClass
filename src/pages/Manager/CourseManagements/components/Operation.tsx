@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { deleteKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
+import { DownOutlined } from '@ant-design/icons';
 import type { ActionType } from '@ant-design/pro-table';
-import { Divider, message, notification } from 'antd';
+import { Divider, Dropdown, Menu, message, notification } from 'antd';
 import Popconfirm from 'antd/es/popconfirm';
 import React from 'react';
 
@@ -30,15 +31,18 @@ const Operation = (props: PropsType) => {
         },
       });
     }
-    const res = await updateKHKCSJ({ id: recorde.id }, 
-      { ...recorde,
-        KCZT:'已发布',
-        BMKSSJ:new Date(recorde.BMKSSJ),
-        BMJSSJ:new Date(recorde.BMJSSJ)
-      });
+    const res = await updateKHKCSJ(
+      { id: recorde.id },
+      {
+        ...recorde,
+        KCZT: '已发布',
+        BMKSSJ: new Date(recorde.BMKSSJ),
+        BMJSSJ: new Date(recorde.BMJSSJ),
+      },
+    );
     if (res.status === 'ok') {
       actionRef?.current?.reload();
-    }else{
+    } else {
       message.error(`${res.message},请联系管理员或稍后再试`);
     }
     return '';
@@ -66,41 +70,54 @@ const Operation = (props: PropsType) => {
     }
   };
 
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <a onClick={() => handleOperation('add', record)}>编辑</a>
+      </Menu.Item>
+      <Menu.Item>
+        <Popconfirm
+          title="删除之后，数据不可恢复，确定要删除吗?"
+          onConfirm={async () => {
+            try {
+              if (record.id) {
+                const result = await deleteKHKCSJ({ id: record.id });
+                if (result.status === 'ok') {
+                  message.success('信息删除成功');
+                  actionRef?.current?.reload();
+                } else if (result.message!.indexOf('Cannot') > -1) {
+                  message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
+                } else if (result.message!.indexOf('token') > -1) {
+                  message.error('身份验证过期，请重新登录');
+                } else {
+                  message.error(`${result.message},请联系管理员或稍后再试`);
+                }
+              }
+            } catch (err) {
+              message.error('删除失败，请联系管理员或稍后重试');
+            }
+          }}
+          okText="确定"
+          cancelText="取消"
+          placement="topRight"
+        >
+          <a>删除</a>
+        </Popconfirm>
+      </Menu.Item>
+    </Menu>
+  );
+
   switch (record.KCZT) {
     case '待发布':
       return (
         <>
           <a onClick={() => release(record)}>发布</a>
           <Divider type="vertical" />
-          <a onClick={() => handleOperation('add', record)}>编辑</a>
-          <Divider type="vertical" />
-          <Popconfirm
-            title="删除之后，数据不可恢复，确定要删除吗?"
-            onConfirm={async () => {
-              try {
-                if (record.id) {
-                  const result = await deleteKHKCSJ({ id: record.id });
-                  if (result.status === 'ok') {
-                    message.success('信息删除成功');
-                    actionRef?.current?.reload();
-                  } else if (result.message!.indexOf('Cannot') > -1) {
-                    message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
-                  } else if (result.message!.indexOf('token') > -1) {
-                    message.error('身份验证过期，请重新登录');
-                  } else {
-                    message.error(`${result.message},请联系管理员或稍后再试`);
-                  }
-                }
-              } catch (err) {
-                message.error('删除失败，请联系管理员或稍后重试');
-              }
-            }}
-            okText="确定"
-            cancelText="取消"
-            placement="topRight"
-          >
-            <a>删除</a>
-          </Popconfirm>
+          <Dropdown overlay={menu}>
+            <a onClick={(e) => e.preventDefault()}>
+              更多 <DownOutlined />
+            </a>
+          </Dropdown>
         </>
       );
     case '已发布':
@@ -117,35 +134,11 @@ const Operation = (props: PropsType) => {
         <>
           <a onClick={() => release(record)}>发布</a>
           <Divider type="vertical" />
-          <a onClick={() => handleOperation('add', record)}>编辑</a>
-          <Divider type="vertical" />
-          <Popconfirm
-            title="删除之后，数据不可恢复，确定要删除吗?"
-            onConfirm={async () => {
-              try {
-                if (record.id) {
-                  const result = await deleteKHKCSJ({ id: record.id });
-                  if (result.status === 'ok') {
-                    message.success('信息删除成功');
-                    actionRef?.current?.reload();
-                  } else if (result.message!.indexOf('token') > -1) {
-                    message.error('身份验证过期，请重新登录');
-                  } else if (result.message!.indexOf('Cannot') > -1) {
-                    message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
-                  } else {
-                    message.error(`${result.message},请联系管理员或者稍后重试`);
-                  }
-                }
-              } catch (err) {
-                message.error('删除失败，请联系管理员或稍后重试');
-              }
-            }}
-            okText="确定"
-            cancelText="取消"
-            placement="topRight"
-          >
-            <a>删除</a>
-          </Popconfirm>
+          <Dropdown overlay={menu}>
+            <a onClick={(e) => e.preventDefault()}>
+              更多 <DownOutlined />
+            </a>
+          </Dropdown>
         </>
       );
     default:

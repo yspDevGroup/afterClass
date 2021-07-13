@@ -208,7 +208,6 @@ const NewClassManagement = () => {
       render: (_, record) => (
         <Operation record={record} handleOperation={handleOperation} actionRef={actionRef} />
       ),
-      align: 'center',
     },
   ];
   return (

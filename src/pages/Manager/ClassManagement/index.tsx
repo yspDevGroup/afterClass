@@ -358,7 +358,6 @@ const CourseManagement = () => {
       valueType: 'option',
       key: 'option',
       width: 150,
-      align: 'center',
       render: (_, record) => {
         return (
           <>

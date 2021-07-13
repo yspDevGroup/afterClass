@@ -220,7 +220,7 @@ const NewCourses = (props: PropsType) => {
         } else if (data.message === 'Validation error') {
           message.error(`保存失败，课程名称重复`);
         } else {
-          message.error(`保存失败，${data.message},请联系管理员`);
+          message.error(`保存失败，${data.message}，请联系管理员`);
         }
       })
       .catch((error) => {

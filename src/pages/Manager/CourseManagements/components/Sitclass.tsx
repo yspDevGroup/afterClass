@@ -100,7 +100,7 @@ const Sitclass = () => {
                   message.success('信息删除成功');
                   actionRef.current?.reload();
                 } else if (result?.message && result.message?.indexOf('Cannot') > -1) {
-                  message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
+                  message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
                 } else {
                   message.error(`${result.message},请联系管理员或稍后再试`);
                 }

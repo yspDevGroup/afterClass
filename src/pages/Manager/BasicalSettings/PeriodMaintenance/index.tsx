@@ -30,12 +30,12 @@ const PeriodMaintenance = () => {
   const [current, setCurrent] = useState<Maintenance>();
   const [form, setForm] = useState<FormInstance<any>>();
   const actionRef = useRef<ActionType>();
-  let requestType = ["1"];
+  let requestType = ['1'];
   let formatType = 'YYYY-MM-DD';
   if (currentStatus === 'education') {
-    requestType = ["2"];
+    requestType = ['2'];
   } else if (currentStatus === 'schedule') {
-    requestType = ["0"];
+    requestType = ['0'];
     formatType = 'HH:mm:ss';
   }
   const getModelTitle = () => {
@@ -86,11 +86,11 @@ const PeriodMaintenance = () => {
           message.success(id ? '信息更新成功' : '信息新增成功');
           setModalVisible(false);
           actionRef.current?.reload();
-        } else if ((result.message!).indexOf('Cannot') > -1) {
-          message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
-        } else if ((result.message!).indexOf('token') > -1) {
+        } else if (result.message!.indexOf('Cannot') > -1) {
+          message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
+        } else if (result.message!.indexOf('token') > -1) {
           message.error('身份验证过期，请重新登录');
-        } else if ((result.message!).indexOf('Validation') > -1) {
+        } else if (result.message!.indexOf('Validation') > -1) {
           message.error('已存在该数据，请勿重复添加');
         } else {
           message.error(`${result.message},请联系管理员或稍后再试`);
@@ -102,7 +102,6 @@ const PeriodMaintenance = () => {
   };
 
   const columns: ProColumns<Maintenance>[] = [
-
     {
       title: '时段名称',
       dataIndex: 'TITLE',
@@ -117,9 +116,12 @@ const PeriodMaintenance = () => {
       width: 150,
       render: (_: ReactNode, entity: Maintenance) => {
         return (
-          <div>{entity.XNXQ?.XN}{entity.XNXQ?.XQ}</div>
-        )
-      }
+          <div>
+            {entity.XNXQ?.XN}
+            {entity.XNXQ?.XQ}
+          </div>
+        );
+      },
     },
     {
       title: '开始时间',
@@ -228,7 +230,7 @@ const PeriodMaintenance = () => {
             const opt = {
               xn: '',
               xq: '',
-              type: requestType
+              type: requestType,
             };
             const res = await getAllXXSJPZ(opt);
             return res;
