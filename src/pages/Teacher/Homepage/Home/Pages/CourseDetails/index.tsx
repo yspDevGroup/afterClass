@@ -8,12 +8,14 @@ import moment from 'moment';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noData from '@/assets/noCourse1.png';
 import Nodata from '@/components/Nodata';
+import GoBack from '@/components/GoBack';
 
 const CourseDetails: React.FC = () => {
   const [KcDetail, setKcDetail] = useState<any>();
   const [timetableList, setTimetableList] = useState<any[]>();
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
+  const index = getQueryString('index');
   const myDate: Date = new Date();
   const currentDate = moment(myDate).format('MM/DD');
   useEffect(() => {
@@ -66,6 +68,11 @@ const CourseDetails: React.FC = () => {
     })
   }
   return <div className={styles.CourseDetails2}>
+    {
+      index==='all' ?
+        <GoBack title={'课程详情'} onclick='/teacher/home?index=education' /> :
+        <GoBack title={'课程详情'} onclick='/teacher/home'/>
+    }
     <div className={styles.KCXX}>
       {/* 上课时段 */}
       <p className={styles.title}>{KcDetail?.KCMC}</p>

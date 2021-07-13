@@ -10,6 +10,7 @@ import type { ListData, ListItem } from '@/components/ListComponent/data';
 import IconFont from '@/components/CustomIcon';
 import moment from 'moment';
 
+
 const { TabPane } = Tabs;
 const defaultMsg: ListData = {
   type: 'picList',
@@ -32,7 +33,7 @@ const CourseTab = () => {
           id: record.id,
           title: record.KHKCSJ.KCMC,
           img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
-          link: `/parent/home/courseDetails?classid=${record.id}&courseid=${record.KHKCSJ.id}`,
+          link: `/parent/home/courseDetails?classid=${record.id}&courseid=${record.KHKCSJ.id}&index=all`,
           desc: [
             {
               left: [`课程时段：${record.KKRQ ? moment(record.KKRQ).format('YYYY.MM.DD') : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')}-${record.JKRQ ? moment(record.JKRQ).format('YYYY.MM.DD') : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')}`],
@@ -58,6 +59,7 @@ const CourseTab = () => {
 
   return (
     <div className={`${styles.tabHeader}`}>
+     
       <Tabs centered={centered}
         onTabClick={(key: string) => oncuechange(key)}
         tabBarExtraContent={!centered ?

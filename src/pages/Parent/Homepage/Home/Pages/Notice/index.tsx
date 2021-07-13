@@ -6,6 +6,7 @@ import Pagina from '../../components/Pagination/Pagination';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import moment from 'moment';
 import Nodata from '@/components/Nodata';
+import GoBack from '@/components/GoBack';
 
 const defaultList: ListData = {
   type: 'onlyList',
@@ -39,6 +40,7 @@ const Notice = (props: any) => {
 
   return (
     <>
+      <GoBack title={ '公告' } onclick='/parent/home?index=index'/>
     {notification && notification.length ? <div className={styles.NoticeBox}>
       <ListComp listData={annoceList} />
       <Pagina total={notification.length} setPages={setPages} />

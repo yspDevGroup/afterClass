@@ -9,6 +9,7 @@ import { deleteKHXSDD, getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { getQueryString } from '@/utils/utils';
 import noOrder from '@/assets/noOrder.png';
 import Nodata from '@/components/Nodata';
+import GoBack from '@/components/GoBack';
 
 const { TabPane } = Tabs;
 
@@ -93,6 +94,7 @@ const Order: React.FC = () => {
     }, []);
     return (
         <div className={styles.orderList}>
+            <GoBack title={ '订单' } onclick='/parent/home?index=mine'/>
             <Tabs type="card" defaultActiveKey={type}>
                 <TabPane tab="全部" key="total">
                     <OrderList data={orderInfo} children={children} currentUser={currentUser} triggerEvt={fetch} />

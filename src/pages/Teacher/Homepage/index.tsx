@@ -6,7 +6,7 @@ import Home from './Home';
 import Education from './Education';
 import Mine from './Mine';
 import styles from './index.less';
-import { getCurrentStatus } from '@/utils/utils';
+import { getCurrentStatus, getQueryString } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
@@ -22,6 +22,7 @@ const PersonalHomepage = () => {
   const homeRef = useRef(null);
   const eduRef = useRef(null);
   const mineRef = useRef(null);
+  const index = getQueryString('index');
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
@@ -70,6 +71,7 @@ const PersonalHomepage = () => {
               if (eduRef.current) (eduRef.current as unknown as HTMLElement).scrollTop = 0;
               if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
             }}
+            defaultActiveKey={index || 'index'}
           >
             <TabPane
               tab={

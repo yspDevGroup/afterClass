@@ -5,7 +5,7 @@ import Home from './Home';
 import Study from './Study';
 import Mine from './Mine';
 import IconFont from '@/components/CustomIcon';
-import { getCurrentStatus } from '@/utils/utils';
+import { getCurrentStatus, getQueryString } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
 import styles from './index.less';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -21,6 +21,7 @@ const PersonalHomepage = () => {
   const homeRef = useRef(null);
   const studyRef = useRef(null);
   const mineRef = useRef(null);
+  const index = getQueryString('index');
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
@@ -61,28 +62,17 @@ const PersonalHomepage = () => {
       {courseStatus === '' ? (
         ''
       ) : (
-        <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
-          <Tabs
-            tabPosition="bottom"
-            className={styles.menuTab}
-            onTabClick={(key: string) => {
-              setActiveKey(key);
-              if (homeRef.current) (homeRef.current as unknown as HTMLElement).scrollTop = 0;
-              if (studyRef.current) (studyRef.current as unknown as HTMLElement).scrollTop = 0;
-              if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
-            }}
-          >
-            <TabPane
-              tab={
-                <span>
-                  <IconFont
-                    style={{ fontSize: '16px' }}
-                    type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
-                  />
-                  首页
-                </span>
-              }
-              key="index"
+          <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
+            <Tabs
+              tabPosition="bottom"
+              className={styles.menuTab}
+              onTabClick={(key: string) => {
+                setActiveKey(key);
+                if (homeRef.current) (homeRef.current as unknown as HTMLElement).scrollTop = 0;
+                if (studyRef.current) (studyRef.current as unknown as HTMLElement).scrollTop = 0;
+                if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
+              }}
+              defaultActiveKey={index || 'index'}
             >
               <div
                 className={styles.noScrollBar}
@@ -91,7 +81,6 @@ const PersonalHomepage = () => {
               >
                 <Home />
               </div>
-            </TabPane>
             {courseStatus === 'empty' ? (
               ''
             ) : (

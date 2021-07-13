@@ -78,7 +78,7 @@ const ClassCalendar = (props: propstype) => {
       const kcxxInfo = {
         title: item.KHBJSJ.KHKCSJ.KCMC,
         img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
-        link: `/teacher/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}`,
+        link: `/teacher/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}&index=all`,
         desc: [
           {
             left: [`课程时段：${(item.XXSJPZ.KSSJ).substring(0, 5)}-${(item.XXSJPZ.JSSJ).substring(0, 5)}`],
@@ -90,7 +90,6 @@ const ClassCalendar = (props: propstype) => {
       };
       const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
       let kjs = 0;
-
       for (let i = 0; i < res.length; i += 1) {
         const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
         if (weekDay === item.WEEKDAY) {

@@ -15,6 +15,7 @@ import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenData
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import Nodata from '@/components/Nodata';
 import noPic from '@/assets/noPic.png';
+import GoBack from '@/components/GoBack';
 
 
 const CourseDetails: React.FC = () => {
@@ -32,6 +33,7 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const classid = getQueryString('classid');
   const courseid = getQueryString('courseid');
+  const index=getQueryString('index');
   const myDate: Date = new Date();
   const currentDate = moment(myDate).format('MM/DD');
   const children = currentUser?.subscriber_info?.children || [{
@@ -145,6 +147,11 @@ const CourseDetails: React.FC = () => {
     {
       !classid ?
         <div className={styles.CourseDetails}>
+          {
+            index==='all'?
+            <GoBack title={ '课程详情' } />:
+            <GoBack title={ '课程详情' } onclick='/parent/home?index=index'/>
+          }
           <div className={styles.wrap}>
             {
               KcDetail?.KCTP && KcDetail?.KCTP.indexOf('http') > -1 ?
@@ -256,6 +263,12 @@ const CourseDetails: React.FC = () => {
 
         </div> :
         <div className={styles.CourseDetails2}>
+          {
+            index?
+            <GoBack title={ '课程详情' }/>:
+            <GoBack title={ '课程详情' } onclick='/parent/home?index=study'/>
+          }
+            
           <div className={styles.KCXX}>
             {/* 上课时段 */}
             <p className={styles.title}>{KcDetail?.KCMC}</p>

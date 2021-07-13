@@ -6,6 +6,7 @@ import moment from 'moment';
 import Nodata from '@/components/Nodata';
 import noData from '@/assets/noTzgg1.png';
 import Pagina from '../../components/Pagination/Pagination';
+import GoBack from '@/components/GoBack';
 
 const defaultList: ListData = {
   type: 'onlyList',
@@ -38,7 +39,9 @@ const Notice = (props: any) => {
   }, [notification, pages])
 
   return (
-    <>{notification && notification.length ? <div className={styles.NoticeBox}>
+    <>
+     <GoBack title={ '公告' } onclick='/teacher/home?index=index'/>
+    {notification && notification.length ? <div className={styles.NoticeBox}>
       <ListComp listData={annoceList} />
       <Pagina total={notification.length} setPages={setPages} />
     </div> : <Nodata imgSrc={noData} desc='暂无公告' />}</>

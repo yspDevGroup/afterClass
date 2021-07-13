@@ -6,6 +6,7 @@ import noData from '@/assets/noCourses.png';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import Nodata from '@/components/Nodata';
 import moment from 'moment';
+import GoBack from '@/components/GoBack';
 
 
 const defaultMsg: ListData = {
@@ -26,7 +27,7 @@ const Course = (props: any) => {
           id: record.id,
           title: record.KHKCSJ.KCMC,
           img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
-          link: `/parent/home/courseDetails?classid=${record.id}&courseid=${record.KHKCSJ.id}`,
+          link: `/parent/home/courseDetails?classid=${record.id}&courseid=${record.KHKCSJ.id}&index=all`,
           desc: [
             {
               left: [`课程时段：${record.KKRQ ?moment(record.KKRQ).format('YYYY.MM.DD'): moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')}-${record.JKRQ ? moment(record.JKRQ).format('YYYY.MM.DD'): moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')}`],
@@ -48,6 +49,7 @@ const Course = (props: any) => {
 
   return (
     <div className={styles.CourseBox}>
+       <GoBack title={ '全部' } onclick='/parent/home?index=index'/>
       <div className={`${styles.tabHeader}`}>
         <Tabs centered={true} className={styles.courseTab} defaultActiveKey={keys}>
           {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
@@ -61,7 +63,7 @@ const Course = (props: any) => {
                         id: record.id,
                         title: record.KCMC,
                         img: record.KCTP,
-                        link: `/parent/home/courseDetails?courseid=${record.id}`,
+                        link: `/parent/home/courseDetails?courseid=${record.id}&index=all`,
                         desc: [
                           {
                             left: [`课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(record.JKRQ).format('YYYY.MM.DD')}`],
