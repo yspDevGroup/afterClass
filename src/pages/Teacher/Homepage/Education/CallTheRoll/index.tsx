@@ -6,6 +6,7 @@ import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
 import styles from './index.less';
+import { enHenceMsg } from '@/utils/utils';
 
 
 /**
@@ -161,6 +162,8 @@ const CallTheRoll = (props: any) => {
     if (res.status === 'ok') {
       message.success('操作成功');
       history.push('/teacher/home');
+    }else{
+      enHenceMsg(res.message);
     }
   };
   const columns: any = [

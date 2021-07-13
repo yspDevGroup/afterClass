@@ -10,9 +10,10 @@ import Details from './Pages/Details';
 import { getAllXXGG } from '@/services/after-class/xxgg';
 import { Link } from 'umi';
 import EmptyArticle from './Pages/EmptyArticle';
+import { enHenceMsg } from '@/utils/utils';
 
 const Home = () => {
-  const { currentUserInfo,courseStatus } = useContext(myContext);
+  const { currentUserInfo, courseStatus } = useContext(myContext);
   const userRef = useRef(null);
   const [notification, setNotification] = useState<any[]>();
   useEffect(() => {
@@ -29,11 +30,15 @@ const Home = () => {
   }, [currentUserInfo]);
 
 
-   useEffect(() => {
+  useEffect(() => {
     async function announcements() {
       const res = await getAllXXGG({ status: ['发布'] });
-      if (res.status === 'ok' && !(res.data?.length === 0)) {
-        setNotification(res.data);
+      if (res.status === 'ok') {
+        if (!(res.data?.length === 0)) {
+          setNotification(res.data);
+        }
+      } else {
+        enHenceMsg(res.message);
       }
     };
     announcements();
@@ -63,12 +68,12 @@ const Home = () => {
               {notification[0].BT}
               </Link> : '暂无公告'}
           </div>
-          <Link  to={{
-          pathname: '/teacher/home/notice',
-          state: {
-            notification: notification
-          }
-        }}> <IconFont type="icon-gengduo" className={styles.gengduo} /></Link>
+          <Link to={{
+            pathname: '/teacher/home/notice',
+            state: {
+              notification
+            }
+          }}> <IconFont type="icon-gengduo" className={styles.gengduo} /></Link>
         </div>
         <div className={styles.enrollArea}>
           <EnrollClassTime teacher={true} />
@@ -77,7 +82,7 @@ const Home = () => {
           <TeachCourses />
         </div>
         <div className={styles.announceArea}>
-        <Details data={notification} />
+          <Details data={notification} />
         </div>
       </div>}
     </div>

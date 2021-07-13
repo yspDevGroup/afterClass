@@ -10,7 +10,6 @@ import type { ListData, ListItem } from '@/components/ListComponent/data';
 import IconFont from '@/components/CustomIcon';
 import moment from 'moment';
 
-
 const { TabPane } = Tabs;
 const defaultMsg: ListData = {
   type: 'picList',
@@ -23,12 +22,13 @@ const CourseTab = () => {
   // 获取首页数据
   const { courseStatus, kskc, yxkc } = useContext(myContext);
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
+  const [yxkcAllData, setYxkcAllData] = useState<ListData>(defaultMsg);
   const centered = false;
   const [keys, setKeys] = useState('setup');
 
   useEffect(() => {
     if (yxkc) {
-      const listData: ListItem[] = [].map.call(yxkc, (record: any) => {
+      const listData: any = [].map.call(yxkc, (record: any) => {
         const nodeData: ListItem = {
           id: record.id,
           title: record.KHKCSJ.KCMC,
@@ -47,8 +47,9 @@ const CourseTab = () => {
         return nodeData;
       });
       const { list, ...rest } = { ...defaultMsg };
+      setYxkcAllData(listData);
       setYxkcData({
-        list: listData,
+        list: listData.slice(0, 3),
         ...rest,
       });
     }
@@ -59,12 +60,11 @@ const CourseTab = () => {
 
   return (
     <div className={`${styles.tabHeader}`}>
-     
       <Tabs centered={centered}
         onTabClick={(key: string) => oncuechange(key)}
         tabBarExtraContent={!centered ?
           {
-            right: <Link to={{ pathname: '/parent/home/course', state: { courseStatus: courseStatus, kskc: kskc, yxkc: yxkc, keys: keys } }} >
+            right: <Link to={{ pathname: '/parent/home/course', state: { courseStatus, kskc, yxkcAllData, keys } }} >
               全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
             </Link>
           } : ''} className={styles.courseTab}>
@@ -73,13 +73,13 @@ const CourseTab = () => {
             {
               kskc && kskc.length ? <Tabs className={styles.courseType}>
                 {kskc.map((item: any) => {
-                  const courseData: ListItem[] = [].map.call(item.KHKCSJs, (record: any, index: number) => {
+                  const courseData: any = [].map.call(item.KHKCSJs, (record: any, index: number) => {
                     if (index < 3) {
                       const nodeData: ListItem = {
                         id: record.id,
                         title: record.KCMC,
                         img: record.KCTP,
-                        link: `/parent/home/courseDetails?courseid=${record.id}`,
+                        link: `/parent/home/courseDetails?courseid=${record.id}&index=all`,
                         desc: [
                           {
                             left: [`课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(record.JKRQ).format('YYYY.MM.DD')}`],

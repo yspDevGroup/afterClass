@@ -5,7 +5,7 @@ import Home from './Home';
 import Study from './Study';
 import Mine from './Mine';
 import IconFont from '@/components/CustomIcon';
-import { getCurrentStatus, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getCurrentStatus, getQueryString  } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
 import styles from './index.less';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -40,15 +40,21 @@ const PersonalHomepage = () => {
           XSId: children && children[0].student_userid,
           njId: children && children[0].njId,
         });
-        if (res.status === 'ok' && res.data) {
-          setDataSource(res.data);
-          const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
-          if (bmkssj && bmjssj && skkssj && skjssj) {
-            const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
-            setCourseStatus(cStatus);
-          } else {
+        if (res.status === 'ok') {
+          if(res.data){
+            setDataSource(res.data);
+            const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
+            if (bmkssj && bmjssj && skkssj && skjssj) {
+              const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
+              setCourseStatus(cStatus);
+            }else{
+              setCourseStatus('empty');
+            }
+          }else{
             setCourseStatus('empty');
           }
+        }else{
+          enHenceMsg(res.message);
         }
       } else {
         setCourseStatus('empty');

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from "./index.less"
-import { getQueryString } from '@/utils/utils'
+import { enHenceMsg, getQueryString } from '@/utils/utils'
 import { getXXGG } from '@/services/after-class/xxgg';
 import { data } from './mock';
 import GoBack from '@/components/GoBack';
@@ -14,8 +14,12 @@ const Announcement = () => {
   useEffect(() => {
     async function announcements() {
       const res = await getXXGG({ id: pageId! });
-      if (res.status === 'ok' && !(res.data === [])) {
-        setContent(res.data);
+      if (res.status === 'ok') {
+        if(!(res.data === [])){
+          setContent(res.data);
+        }
+      }else{
+        enHenceMsg(res.message)
       }
     };
     if (pageId) {

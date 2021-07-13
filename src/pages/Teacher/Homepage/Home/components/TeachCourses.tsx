@@ -1,20 +1,18 @@
-/*
- * @description: 
- * @author: txx
- * @Date: 2021-06-26 11:20:42
- * @,@LastEditTime: ,: 2021-07-13 15:17:20
- * @,@LastEditors: ,: Please set LastEditors
- */
-import React, { useContext, useEffect } from 'react'
-import ListComp from '@/components/ListComponent'
+import React, { useContext, useEffect, useState } from 'react';
 import myContext from '@/utils/MyContext';
 import noData from '@/assets/noCourses1.png';
-import { useState } from 'react';
 import moment from 'moment';
+import styles from '../index.less';
+import { Link } from 'umi';
+import { Tabs } from 'antd';
+import IconFont from '@/components/CustomIcon';
+import ListComponent from '@/components/ListComponent';
 
+const { TabPane } = Tabs;
 const TeachCourses = () => {
   const { yxkc } = useContext(myContext);
   const [dataSource, setDataSource] = useState<any>();
+  const [allDataSource, setAllDataSource] = useState<any>();
   const getDataList = (data: any) => {
     return [].map.call(data, (item: any) => {
       return {
@@ -36,24 +34,28 @@ const TeachCourses = () => {
   };
   useEffect(() => {
     const newData = {
-      header: {
-        title: '任教课程'
-      },
       type: 'picList',
       cls: 'picList',
-      list: yxkc && getDataList(yxkc) || [],
+      list: yxkc && getDataList(yxkc).slice(0,3) || [],
       noDataText: '暂无课程',
       noDataImg: noData
     };
+    setAllDataSource(getDataList(yxkc));
     setDataSource(newData);
   }, [yxkc])
   return (
-    <div style={{marginBottom:'5px'}}>
-      <ListComp listData={dataSource} />
+    <div className={`${styles.tabHeader}`}>
+      <Tabs centered={false}
+        tabBarExtraContent={{ right: <Link to={{ pathname: '/teacher/home/course', state: { allDataSource } }} >全部 <IconFont type="icon-gengduo" className={styles.gengduo} /></Link> }}
+        className={styles.courseTab}>
+        <TabPane tab="任教课程" key="elective">
+          <ListComponent listData={dataSource} />
+        </TabPane>
+      </Tabs>
     </div>
   )
 }
 
-export default TeachCourses
+export default TeachCourses;
 
 

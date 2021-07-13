@@ -1,4 +1,5 @@
 import { createFJLX, deleteFJLX, getAllFJLX, updateFJLX } from '@/services/after-class/fjlx';
+import { enHenceMsg } from '@/utils/utils';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
@@ -54,12 +55,8 @@ const SiteMaintenance = () => {
                 if (result.status === 'ok') {
                   message.success('信息删除成功');
                   actionRef.current?.reload();
-                } else if (result.message!.indexOf('Cannot') > -1) {
-                  message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
-                } else if (result.message!.indexOf('token') > -1) {
-                  message.error('身份验证过期，请重新登录');
                 } else {
-                  message.error(`${result.message},请联系管理员或稍后再试`);
+                  enHenceMsg(result.message);
                 }
               }
             } catch (err) {
@@ -129,12 +126,8 @@ const SiteMaintenance = () => {
               if (result.status === 'ok') {
                 message.success(row.title ? '信息新增成功' : '信息更新成功');
                 actionRef.current?.reload();
-              } else if (result.message!.indexOf('token') > -1) {
-                message.error('身份验证过期，请重新登录');
-              } else if (result.message!.indexOf('Validation') > -1) {
-                message.error('已存在该数据，请勿重复添加');
               } else {
-                message.error(`${result.message},请联系管理员或稍后再试`);
+                enHenceMsg(result.message);
               }
             } catch (errorInfo) {
               console.log('Failed:', errorInfo);

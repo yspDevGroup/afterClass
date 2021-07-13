@@ -1,12 +1,12 @@
 /* eslint-disable no-param-reassign */
-import { deleteKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
+import React from 'react';
+import { Dropdown, Menu, Popconfirm,message, Divider } from 'antd';
+import { history } from 'umi';
 import { DownOutlined } from '@ant-design/icons';
 import type { ActionType } from '@ant-design/pro-table';
-import { Dropdown, Menu, Popconfirm } from 'antd';
-import { message } from 'antd';
-import { Divider } from 'antd';
-import React from 'react';
+import { deleteKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import type { CourseItem } from '../data';
+import { enHenceMsg } from '@/utils/utils';
 
 type propstype = {
   handleEdit: (data: CourseItem) => void;
@@ -29,8 +29,8 @@ const ActionBar = (props: propstype) => {
         if (data.status === 'ok') {
           message.success('下架成功');
           actionRef.current?.reload();
-        } else if (data.message!.indexOf('token') > -1) {
-          message.error('身份验证过期，请重新登录');
+        } else if (data.message!.indexOf('token') > -1||(data.message!).indexOf('Token') > -1) {
+          history.replace('/auth_callback/overDue');
         } else {
           message.error('下架失败，请联系管理员或稍后重试');
           actionRef.current?.reload();
@@ -76,12 +76,8 @@ const ActionBar = (props: propstype) => {
                   if (data.status === 'ok') {
                     message.success('删除成功');
                     actionRef.current?.reload();
-                  } else if (data.message!.indexOf('Cannot') > -1) {
-                    message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
-                  } else if (data.message!.indexOf('token') > -1) {
-                    message.error('身份验证过期，请重新登录');
-                  } else {
-                    message.error('删除失败');
+                  } else{
+                    enHenceMsg(data.message);
                   }
                 });
               }
@@ -130,12 +126,8 @@ const ActionBar = (props: propstype) => {
                         if (data.status === 'ok') {
                           message.success('删除成功');
                           actionRef.current?.reload();
-                        } else if (data.message!.indexOf('Cannot') > -1) {
-                          message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
-                        } else if (data.message!.indexOf('token') > -1) {
-                          message.error('身份验证过期，请重新登录');
-                        } else {
-                          message.error('删除失败');
+                        }else{
+                          enHenceMsg(data.message);
                         }
                       });
                     }

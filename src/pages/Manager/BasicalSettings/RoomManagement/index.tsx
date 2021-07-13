@@ -19,6 +19,7 @@ import { searchData } from './serarchConfig';
 import AsyncAddRoom from './components/AsyncAddRoom';
 import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
 import PromptInformation from '@/components/PromptInformation';
+import { enHenceMsg } from '@/utils/utils';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -100,10 +101,8 @@ const RoomManagement = () => {
         message.success(id ? '场地信息更新成功' : '场地信息新增成功');
         setModalVisible(false);
         actionRef.current?.reload();
-      } else if (result.message!.indexOf('Cannot') > -1) {
-        message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
       } else {
-        message.error(`${result.message},请联系管理员或稍后再试`);
+        enHenceMsg(result.message);
       }
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
@@ -176,12 +175,8 @@ const RoomManagement = () => {
                   if (result.status === 'ok') {
                     message.success('场地信息删除成功');
                     actionRef.current?.reload();
-                  } else if (result.message!.indexOf('Cannot') > -1) {
-                    message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
-                  } else if (result.message!.indexOf('token') > -1) {
-                    message.error('身份验证过期，请重新登录');
                   } else {
-                    message.error(`${result.message},请联系管理员或稍后再试`);
+                    enHenceMsg(result.message);
                   }
                 }
               } catch (err) {

@@ -9,6 +9,7 @@ import styles from './index.less';
 import Details from './Pages/Details';
 import { getAllXXGG } from '@/services/after-class/xxgg';
 import EmptyArticle from './Pages/EmptyArticle';
+import { enHenceMsg } from '@/utils/utils';
 
 const Home = () => {
   const { currentUserInfo, courseStatus } = useContext(myContext);
@@ -18,6 +19,8 @@ const Home = () => {
       const res = await getAllXXGG({ status: ['发布'] });
       if (res.status === 'ok' && !(res.data?.length === 0)) {
         setNotification(res.data);
+      }else{
+        enHenceMsg(res.message)
       }
     };
     announcements();
@@ -47,7 +50,7 @@ const Home = () => {
          <Link  to={{
           pathname: '/parent/home/notice',
           state: {
-            notification: notification
+            notification
           }
         }}> <IconFont type="icon-gengduo" className={styles.gengduo} /></Link>
         </div>

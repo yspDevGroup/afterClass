@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { message } from 'antd';
 import { Link } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
@@ -9,6 +8,7 @@ import { getAllKHXSDD } from '@/services/after-class/khxsdd';
 import imgPop from '@/assets/mobileBg.png';
 import styles from './index.less';
 import { iconTextData } from './mock';
+import { enHenceMsg } from '@/utils/utils';
 
 const Mine = () => {
   const { currentUserInfo, courseStatus, } = useContext(myContext);
@@ -28,8 +28,8 @@ const Mine = () => {
         if (res.data && res.data.length) {
           setTotail(true);
         }
-      } else {
-        message.warning(res.message)
+      }else{
+        enHenceMsg(res.message)
       }
 
     };

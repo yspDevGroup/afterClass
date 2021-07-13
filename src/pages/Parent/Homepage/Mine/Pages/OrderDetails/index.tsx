@@ -9,6 +9,7 @@ import { overdueKHXSDD, deleteKHXSDD, payKHXSDD } from '@/services/after-class/k
 import moment from 'moment';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+import { enHenceMsg } from '@/utils/utils';
 
 const { Countdown } = Statistic;
 const OrderDetails: React.FC = (props: any) => {
@@ -43,7 +44,7 @@ const OrderDetails: React.FC = (props: any) => {
     if (res.status === 'ok') {
       setUrlPath(res.data);
     }else{
-      message.error(res.message);
+      enHenceMsg(res.message)
     }
   };
   const handleCancle = async () => {
@@ -52,8 +53,8 @@ const OrderDetails: React.FC = (props: any) => {
     if (res.status === 'ok') {
       message.success(`订单${DDZT === '已过期' ? '删除' : '取消'}成功`);
       history.go(-1);
-    } else {
-      message.error(res.message);
+    }else{
+      enHenceMsg(res.message)
     }
   };
   const handleFinish = async () => {
@@ -64,8 +65,8 @@ const OrderDetails: React.FC = (props: any) => {
         DDZT: '已过期',
         ...rest,
       });
-    } else {
-      message.error(res.message);
+    }else{
+      enHenceMsg(res.message)
     }
   };
   useEffect(() => {

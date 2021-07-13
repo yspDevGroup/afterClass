@@ -22,6 +22,9 @@
       {
         path: '/auth_callback',
         component: './AuthCallback',
+      }, {
+        path: '/auth_callback/overDue',
+        component: './AuthCallback/OverDue',
       },
     ],
   },
@@ -131,6 +134,12 @@
         component: './Teacher/Homepage/Home/Pages/Details',
       },
       {
+        path: '/teacher/home/course',
+        name: 'course',
+        hideInMenu: 'true',
+        component: './teacher/Homepage/Home/Pages/Course',
+      },
+      {
         path: '/teacher/education/callTheRoll',
         name: 'callTheRoll',
         hideInMenu: 'true',
@@ -187,7 +196,7 @@
         component: './Parent/Homepage/Mine/Pages/Order',
         hideInMenu: 'true',
       },
-       {
+      {
         path: '/parent/home/course',
         name: 'course',
         hideInMenu: 'true',

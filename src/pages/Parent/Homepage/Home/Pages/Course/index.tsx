@@ -17,34 +17,16 @@ const defaultMsg: ListData = {
 
 const Course = (props: any) => {
   const { TabPane } = Tabs;
-  const { yxkc,kskc,courseStatus,keys } = props.location.state;
+  const { yxkcAllData,kskc,courseStatus,keys } = props.location.state;
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
 
   useEffect(() => {
-    if (yxkc) {
-      const listData: ListItem[] = [].map.call(yxkc, (record: any) => {
-        const nodeData: ListItem = {
-          id: record.id,
-          title: record.KHKCSJ.KCMC,
-          img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
-          link: `/parent/home/courseDetails?classid=${record.id}&courseid=${record.KHKCSJ.id}&index=all`,
-          desc: [
-            {
-              left: [`课程时段：${record.KKRQ ?moment(record.KKRQ).format('YYYY.MM.DD'): moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')}-${record.JKRQ ? moment(record.JKRQ).format('YYYY.MM.DD'): moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')}`],
-            },
-            {
-              left: [`共${record.KSS}课时`],
-            },
-          ],
-          introduction: record.KHKCSJ.KCMS,
-        };
-        return nodeData;
-      });
+    if (yxkcAllData) {
       const newData = { ...defaultMsg };
-      newData.list = listData;
+      newData.list = yxkcAllData;
       setYxkcData(newData);
     }
-  }, [yxkc])
+  }, [yxkcAllData])
 
 
   return (
@@ -57,7 +39,7 @@ const Course = (props: any) => {
               {
               kskc && kskc.length ? <Tabs className={styles.courseType}>
                 {kskc.map((item: any) => {
-                  const courseData: ListItem[] = [].map.call(item.KHKCSJs, (record: any, index: number) => {
+                  const courseData: any = [].map.call(item.KHKCSJs, (record: any, index: number) => {
                     if (index < 3) {
                       const nodeData: ListItem = {
                         id: record.id,
@@ -89,7 +71,7 @@ const Course = (props: any) => {
               </Tabs> : <ListComponent listData={defaultMsg} />}
           </TabPane> : ''}
           <TabPane tab="已选课程" key="elective">
-            {yxkc && yxkc.length ? <ListComponent listData={yxkcData} /> :
+            {yxkcAllData && yxkcAllData.length ? <ListComponent listData={yxkcData} /> :
                <Nodata imgSrc={noData} desc='暂无课程' />}
           </TabPane>
         </Tabs>

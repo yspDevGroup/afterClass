@@ -5,6 +5,7 @@ import { message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { queryXQList } from '@/services/wechat/service';
+import { enHenceMsg } from '@/utils/utils';
 
 const formLayout = {
   labelCol: { span: 5 },
@@ -60,7 +61,7 @@ const AddRoom = (props: PropsType) => {
             //  setTimeout( function(){setModalVisible(false)},500)
           }
         } else {
-          message.info(response.message);
+          enHenceMsg(response.message);
         }
       } catch (error) {
         console.log('数据获取失败');

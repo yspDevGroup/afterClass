@@ -2,6 +2,7 @@
 import { parse } from 'querystring';
 import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
 import { message } from 'antd';
+import { history } from 'umi';
 import moment from 'moment';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
@@ -220,13 +221,13 @@ export const getCurrentStatus = (
  *
  * @param msg: string
  */
-export const enHenceMsg = (msg: string) => {
-  if (msg.indexOf('Cannot') > -1) {
-    message.error(`删除失败，请先删除关联数据,请联系管理员或稍后再试`);
-  } else if (msg.indexOf('token') > -1) {
-    message.error('身份验证过期，请重新登录');
-  } else if (msg.indexOf('Validation') > -1) {
-    message.error('已存在该数据，请勿重复添加');
+export const enHenceMsg = (msg?: string) => {
+  if (msg && msg.indexOf('Cannot') > -1) {
+    message.error(`操作失败，该项存在关联数据,请清除关联数据后再试`);
+  } else if (msg && msg.indexOf('token') > -1 || msg && msg.indexOf('Token') > -1) {
+    history.replace('/auth_callback/overDue');
+  } else if (msg && msg.indexOf('Validation') > -1) {
+    message.error('操作失败，该项未通过校验，请检查数据是否重复后再试');
   } else {
     message.error(`${msg},请联系管理员或稍后再试`);
   }

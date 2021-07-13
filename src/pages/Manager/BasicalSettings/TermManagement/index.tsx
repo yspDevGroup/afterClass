@@ -6,6 +6,7 @@ import ProTable from '@ant-design/pro-table';
 import PageContainer from '@/components/PageContainer';
 import styles from './index.less';
 import type { FormInstance } from 'antd';
+import { history } from 'umi';
 import { Modal, message, Popconfirm, Button, Divider } from 'antd';
 import type { TableListParams } from '@/constant';
 import { paginationConfig } from '@/constant';
@@ -85,8 +86,8 @@ const TermManagement = () => {
           actionRef?.current?.reload();
         } else if ((data.message!).indexOf('Validation') > -1) {
           message.error('已存在该学年学期，请勿重复添加');
-        } else if ((data.message!).indexOf('token') > -1) {
-          message.error('身份验证过期，请重新登录');
+        } else if ((data.message!).indexOf('token') > -1||(data.message!).indexOf('Token') > -1) {
+          history.replace('/auth_callback/overDue');
         } else {
           message.error('保存失败');
         }

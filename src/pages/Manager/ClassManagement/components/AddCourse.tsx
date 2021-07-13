@@ -11,6 +11,7 @@ import moment from 'moment';
 import { getDepUserList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import WWOpenDataCom from './WWOpenDataCom';
+import { enHenceMsg } from '@/utils/utils';
 
 type AddCourseProps = {
   visible: boolean;
@@ -159,12 +160,8 @@ const AddCourse: FC<AddCourseProps> = ({
           onClose();
           actionRef?.current?.reload();
           setImageUrl('');
-        } else if (data.message!.indexOf('token') > -1) {
-          message.error('身份验证过期，请重新登录');
-        } else if (data.message!.indexOf('Validation') > -1) {
-          message.error('已存在该数据，请勿重复添加');
         } else {
-          message.error(`${data.message},请联系管理员或稍后再试`);
+          enHenceMsg(data.message);
         }
       })
       .catch((error) => {

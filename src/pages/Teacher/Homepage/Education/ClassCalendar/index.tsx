@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React, { useState, useEffect, useContext } from 'react';
 import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
@@ -44,9 +45,9 @@ const ClassCalendar = (props: propstype) => {
     const courseData = {};
     const markDays = [];
     const learnData = {};
-    let newData = {};
+    const newData = {};
     data.forEach((item: any) => {
-      if (Object.keys(newData).indexOf('' + item.KHBJSJ.id) === -1) {
+      if (Object.keys(newData).indexOf(`${  item.KHBJSJ.id}`) === -1) {
         newData[item.KHBJSJ.id] = []
       }
       newData[item.KHBJSJ.id].push(item)
@@ -89,14 +90,12 @@ const ClassCalendar = (props: propstype) => {
         ],
       };
       const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
-      let kjs = 0;
       for (let i = 0; i < res.length; i += 1) {
         const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
         if (weekDay === item.WEEKDAY) {
-          kjs += 1;
           const enrollLink = {
             pathname: '/teacher/education/callTheRoll', state: {
-              pkid: item.id, bjids: item.KHBJSJ.id, date: moment(res[i]).format('YYYY/MM/DD'), kjs: sj.length, sj: sj
+              pkid: item.id, bjids: item.KHBJSJ.id, date: moment(res[i]).format('YYYY/MM/DD'), kjs: sj.length, sj
             }
           };
           const curInfo = [{

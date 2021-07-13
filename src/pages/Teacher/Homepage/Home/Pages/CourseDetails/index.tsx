@@ -1,9 +1,9 @@
 /* eslint-disable no-nested-ternary */
-import { Badge, message, } from 'antd';
+import { Badge,} from 'antd';
 import React, { useEffect, useState, } from 'react';
 import styles from './index.less';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
-import { getData, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getData, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noData from '@/assets/noCourse1.png';
@@ -49,8 +49,8 @@ const CourseDetails: React.FC = () => {
         });
         if (result.status === 'ok' && result.data) {
           setKcDetail(result.data);
-        } else {
-          message.error(result.message);
+        }else{
+          enHenceMsg(result.message);
         }
       })();
     }

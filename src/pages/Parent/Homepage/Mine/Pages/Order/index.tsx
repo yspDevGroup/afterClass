@@ -6,7 +6,7 @@ import { Link, useModel, } from 'umi';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { deleteKHXSDD, getAllKHXSDD } from '@/services/after-class/khxsdd';
-import { getQueryString } from '@/utils/utils';
+import { enHenceMsg, getQueryString } from '@/utils/utils';
 import noOrder from '@/assets/noOrder.png';
 import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
@@ -14,7 +14,7 @@ import GoBack from '@/components/GoBack';
 const { TabPane } = Tabs;
 
 const OrderList = (props: { data?: any[], children: any[], currentUser?: API.CurrentUser, triggerEvt: (param: any[]) => Promise<any> }) => {
-    const { data, children, currentUser, triggerEvt,} = props;
+    const { data, children, currentUser, triggerEvt, } = props;
     const handlePay = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const par = (e.target as HTMLButtonElement).closest('div[class*="Information"]');
         (par?.children[0] as HTMLElement)?.click();
@@ -26,7 +26,7 @@ const OrderList = (props: { data?: any[], children: any[], currentUser?: API.Cur
             message.success(`订单${DDZT === '已过期' ? '删除' : '取消'}成功`);
             triggerEvt(children);
         } else {
-            message.error(res.message);
+            enHenceMsg(res.message)
         }
     };
     return <>
@@ -40,8 +40,8 @@ const OrderList = (props: { data?: any[], children: any[], currentUser?: API.Cur
                         detail: KHBJSJ,
                         payOrder: { ...rest },
                         user: currentUser,
-                        KKRQ:KHBJSJ.KHKCSJ.KKRQ,
-                        JKRQ:KHBJSJ.KHKCSJ.JKRQ,
+                        KKRQ: KHBJSJ.KHKCSJ.KKRQ,
+                        JKRQ: KHBJSJ.KHKCSJ.JKRQ,
                     }
                 }} >
                     <p className={styles.orderNumber}>
@@ -86,7 +86,7 @@ const Order: React.FC = () => {
                 setOrderInfo(res.data);
             }
         } else {
-            message.warning(res.message)
+            enHenceMsg(res.message)
         }
     };
     useEffect(() => {

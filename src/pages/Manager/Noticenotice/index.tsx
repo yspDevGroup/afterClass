@@ -2,6 +2,7 @@ import PageContainer from '@/components/PageContainer';
 import { paginationConfig } from '@/constant';
 import { createXXGG, getAllXXGG, updateXXGG } from '@/services/after-class/xxgg';
 import { theme } from '@/theme-default';
+import { enHenceMsg } from '@/utils/utils';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -42,7 +43,7 @@ const Noticenotice = () => {
         setModalVisible(false);
         actionRef.current?.reload();
       } else {
-        message.error(`${result.message},请联系管理员或稍后再试`);
+        enHenceMsg(result.message);
       }
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);

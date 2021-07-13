@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { deleteXXGG, updateXXGG } from '@/services/after-class/xxgg';
+import { enHenceMsg } from '@/utils/utils';
 import { DownOutlined } from '@ant-design/icons';
 import type { ActionType } from '@ant-design/pro-table';
 import { Divider, Dropdown, Menu, message, Popconfirm } from 'antd';
@@ -21,10 +22,8 @@ const Choice = (props: propstype) => {
     if (reustle.status === 'ok') {
       message.success('发布成功');
       setRefresh(+1);
-    } else if (reustle.message!.indexOf('Cannot') > -1) {
-      message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
     } else {
-      message.error(`${reustle.message},请联系管理员或稍后再试`);
+      enHenceMsg(reustle.message);
     }
   };
   const withdraw = async (data: NoticeItem) => {
@@ -97,10 +96,8 @@ const Choice = (props: propstype) => {
                   if (result.status === 'ok') {
                     message.success('信息删除成功');
                     actionRef.current?.reload();
-                  } else if (result.message!.indexOf('Cannot') > -1) {
-                    message.error(`删除失败，请先删除关联数据，请联系管理员或稍后再试`);
                   } else {
-                    message.error(`${result.message},请联系管理员或稍后再试`);
+                    enHenceMsg(result.message);
                   }
                 }
               } catch (err) {

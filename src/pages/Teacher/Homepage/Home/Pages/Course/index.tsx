@@ -1,26 +1,34 @@
-/*
- * @description: 
- * @author: txx
- * @Date: 2021-06-09 10:30:23
- * @,@LastEditTime: ,: 2021-07-12 17:16:36
- * @,@LastEditors: ,: Please set LastEditors
- */
-
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import type { ListData } from "@/components/ListComponent/data";
-import styles from "./index.less"
-import { mock } from './mock';
-import CourseTab from '@/pages/Parent/Homepage/Home/components/CourseTab';
+import styles from "./index.less";
+import ListComponent from '@/components/ListComponent';
+import Nodata from '@/components/Nodata';
+import noDataImg from '@/assets/noCourses1.png';
 
-const Course = (porp: { listData?: ListData }) => {
-  const { listData = mock } = porp
+const defaultMsg: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: []
+};
+const Course = (props: any) => {
+  const { allDataSource } = props.location.state;
+  const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
+  useEffect(() => {
+    if (allDataSource) {
+      const { list, ...rest } = { ...defaultMsg };
+      setYxkcData({
+        list: allDataSource,
+        ...rest,
+      });
+    }
+  }, [allDataSource])
   return (
     <div className={styles.CourseBox}>
-      <CourseTab
-        cls={styles.courseCenterTab}
-        listData={listData}
-        centered={true}
-      />
+      <div className={styles.header}>
+        <h3 className={styles.title}>任教课程</h3>
+      </div>
+      {allDataSource && allDataSource.length ? <ListComponent listData={yxkcData} /> :
+        <Nodata imgSrc={noDataImg} desc='暂无课程' />}
     </div>
   )
 }

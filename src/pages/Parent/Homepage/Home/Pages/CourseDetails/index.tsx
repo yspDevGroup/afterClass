@@ -2,12 +2,12 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable array-callback-return */
-import { Badge, Button, message, Radio } from 'antd';
+import { Badge, Button, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, } from 'umi';
 import styles from './index.less';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
-import { getData, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getData, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import noData from '@/assets/noCourse.png';
@@ -80,15 +80,17 @@ const CourseDetails: React.FC = () => {
           bjzt: '已发布',
           njId: children[0].njId
         });
-        if (result.status === 'ok' && result.data) {
-          setKcDetail(result.data);
-          changeStatus(0, result.data);
-          const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
-          const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
-          const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
-          setKaiguan(btnEnable);
-        } else {
-          message.error(result.message);
+        if (result.status === 'ok') {
+          if(result.data){
+            setKcDetail(result.data);
+            changeStatus(0, result.data);
+            const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
+            const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
+            const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
+            setKaiguan(btnEnable);
+          }
+        }else{
+          enHenceMsg(result.message)
         }
       })();
     }
@@ -123,9 +125,9 @@ const CourseDetails: React.FC = () => {
     const res = await createKHXSDD(data);
     if (res.status === 'ok') {
       setOrderInfo(res.data);
-      return;
+    }else{
+      enHenceMsg(res.message)
     }
-    message.error(res.message);
   }
   // 房间数据去重
   const tempfun = (arr: any) => {
