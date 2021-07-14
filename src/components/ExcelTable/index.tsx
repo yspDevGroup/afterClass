@@ -347,7 +347,7 @@ const Index: FC<IndexPropsType> = ({
                                   <div
                                     className="cla"
                                     style={{
-                                      width: item.dataIndex === 'room' ? 20 : '100%',
+                                      width: item.dataIndex === 'room' ? 40 : '100%',
                                       margin: '0 auto',
                                       wordBreak: 'break-word',
                                     }}

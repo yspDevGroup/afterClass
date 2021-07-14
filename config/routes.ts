@@ -22,7 +22,8 @@
       {
         path: '/auth_callback',
         component: './AuthCallback',
-      }, {
+      },
+      {
         path: '/auth_callback/overDue',
         component: './AuthCallback/OverDue',
       },
@@ -144,6 +145,12 @@
         name: 'callTheRoll',
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/CallTheRoll',
+      },
+      {
+        path: '/teacher/education/rollcallrecord',
+        name: 'callTheRoll',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/RollCallRecord',
       },
       {
         path: '/teacher/home/notice/announcement',

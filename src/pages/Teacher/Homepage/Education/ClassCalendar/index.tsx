@@ -11,24 +11,24 @@ import myContext from '@/utils/MyContext';
 
 type propstype = {
   setDatedata?: (data: any) => void;
-}
+};
 const defaultMsg = {
   type: 'picList',
   cls: 'picList',
   list: [],
   noDataText: '当天无课',
-  noDataImg: noData
+  noDataImg: noData,
 };
 const iconTextData = [
   {
-    text: "课堂点名",
-    icon: "icon-dianming",
-    background: "#FF8964",
+    text: '课堂点名',
+    icon: 'icon-dianming',
+    background: '#FF8964',
   },
   {
-    text: "离校通知",
-    icon: "icon-lixiao",
-    background: "#7DCE81",
+    text: '考勤记录',
+    icon: 'icon-lixiao',
+    background: '#7DCE81',
   },
 ];
 const ClassCalendar = (props: propstype) => {
@@ -47,10 +47,10 @@ const ClassCalendar = (props: propstype) => {
     const learnData = {};
     const newData = {};
     data.forEach((item: any) => {
-      if (Object.keys(newData).indexOf(`${  item.KHBJSJ.id}`) === -1) {
-        newData[item.KHBJSJ.id] = []
+      if (Object.keys(newData).indexOf(`${item.KHBJSJ.id}`) === -1) {
+        newData[item.KHBJSJ.id] = [];
       }
-      newData[item.KHBJSJ.id].push(item)
+      newData[item.KHBJSJ.id].push(item);
     });
 
     for (let k = 0; k < data.length; k += 1) {
@@ -59,20 +59,20 @@ const ClassCalendar = (props: propstype) => {
       const dates: any[] = [];
       newData[item.KHBJSJ.id].forEach((rea: any) => {
         if (dates.length === 0) {
-          dates.push(DateRange(rea.KHBJSJ.KKRQ, rea.KHBJSJ.JKRQ))
+          dates.push(DateRange(rea.KHBJSJ.KKRQ, rea.KHBJSJ.JKRQ));
         }
         if (weeked.indexOf(rea.WEEKDAY) === -1) {
           weeked.push(rea.WEEKDAY);
         }
-      })
+      });
       const sj: any[] = [];
       dates[0].forEach((as: any) => {
         weeked.forEach((ds: any) => {
           if (Week(as) === ds) {
-            sj.push(as)
+            sj.push(as);
           }
-        })
-      })
+        });
+      });
       const courseDays = [];
       const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
       const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
@@ -82,35 +82,58 @@ const ClassCalendar = (props: propstype) => {
         link: `/teacher/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}&index=all`,
         desc: [
           {
-            left: [`课程时段：${(item.XXSJPZ.KSSJ).substring(0, 5)}-${(item.XXSJPZ.JSSJ).substring(0, 5)}`],
+            left: [
+              `课程时段：${item.XXSJPZ.KSSJ.substring(0, 5)}-${item.XXSJPZ.JSSJ.substring(0, 5)}`,
+            ],
           },
           {
             left: [`上课地点：${item.FJSJ.FJMC}`],
           },
         ],
       };
-      const res = DateRange(moment(startDate).format('YYYY/MM/DD'), moment(endDate).format('YYYY/MM/DD'));
+      const res = DateRange(
+        moment(startDate).format('YYYY/MM/DD'),
+        moment(endDate).format('YYYY/MM/DD'),
+      );
       for (let i = 0; i < res.length; i += 1) {
         const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
         if (weekDay === item.WEEKDAY) {
           const enrollLink = {
-            pathname: '/teacher/education/callTheRoll', state: {
-              pkid: item.id, bjids: item.KHBJSJ.id, date: moment(res[i]).format('YYYY/MM/DD'), kjs: sj.length, sj
-            }
+            pathname: '/teacher/education/callTheRoll',
+            state: {
+              pkid: item.id,
+              bjids: item.KHBJSJ.id,
+              date: moment(res[i]).format('YYYY/MM/DD'),
+              kjs: sj.length,
+              sj,
+            },
           };
-          const curInfo = [{
-            enrollLink,
-            ...kcxxInfo
-          }];
+          const recordLink = {
+            pathname: '/teacher/education/rollcallrecord',
+            state: {
+              pkid: item.id,
+              bjids: item.KHBJSJ.id,
+              date: moment(res[i]).format('YYYY/MM/DD'),
+              kjs: sj.length,
+              sj,
+            },
+          };
+          const curInfo = [
+            {
+              enrollLink,
+              recordLink,
+              ...kcxxInfo,
+            },
+          ];
           if (courseData[res[i]]) {
             courseData[res[i]] = courseData[res[i]].concat(curInfo);
           } else {
             courseData[res[i]] = curInfo;
           }
           markDays.push({
-            date: res[i]
+            date: res[i],
           });
-          courseDays.push(res[i])
+          courseDays.push(res[i]);
         }
       }
       if (learnData[item.KHBJSJ.id]) {
@@ -118,23 +141,23 @@ const ClassCalendar = (props: propstype) => {
         learnData[item.KHBJSJ.id] = {
           dates: val.dates.concat(courseDays),
           weekDay: `${val.weekDay},${item.WEEKDAY}`,
-          courseInfo: item
+          courseInfo: item,
         };
       } else {
         learnData[item.KHBJSJ.id] = {
           dates: courseDays,
           weekDay: item.WEEKDAY,
-          courseInfo: item
-        }
+          courseInfo: item,
+        };
       }
     }
 
     return {
       markDays,
       courseData,
-      learnData
+      learnData,
     };
-  }
+  };
   useEffect(() => {
     const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
     if (setDatedata) {
@@ -146,30 +169,33 @@ const ClassCalendar = (props: propstype) => {
       cls: 'picList',
       list: courseData[day] || [],
       noDataText: '当天无课',
-      noDataImg: noData
+      noDataImg: noData,
     });
     setCourseArr(courseData);
-  }, [])
+  }, []);
 
   return (
     <div className={styles.schedule}>
-      <span className={styles.today} onClick={() => {
-        setDay(dayjs().format('YYYY-MM-DD'));
-        setCDay(dayjs().format('M月D日'))
-        setCourse({
-          type: 'picList',
-          cls: 'picList',
-          list: courseArr[dayjs().format('YYYY-MM-DD')] || [],
-          noDataText: '当天无课',
-          noDataImg: noData
-        });
-      }}>
+      <span
+        className={styles.today}
+        onClick={() => {
+          setDay(dayjs().format('YYYY-MM-DD'));
+          setCDay(dayjs().format('M月D日'));
+          setCourse({
+            type: 'picList',
+            cls: 'picList',
+            list: courseArr[dayjs().format('YYYY-MM-DD')] || [],
+            noDataText: '当天无课',
+            noDataImg: noData,
+          });
+        }}
+      >
         今
       </span>
       <Calendar
         showType={'week'}
         markDates={dates}
-        onDateClick={(date: { format: (arg: string) => any; }) => {
+        onDateClick={(date: { format: (arg: string) => any }) => {
           setDay(date.format('YYYY-MM-DD'));
           setCDay(date.format('M月D日'));
           const curCourse = {
@@ -177,19 +203,17 @@ const ClassCalendar = (props: propstype) => {
             cls: 'picList',
             list: courseArr[date.format('YYYY-MM-DD')] || [],
             noDataText: '当天无课',
-            noDataImg: noData
-          };;
+            noDataImg: noData,
+          };
           setCourse(curCourse);
         }}
         markType="dot"
         transitionDuration="0.1"
         currentDate={day}
       />
-      <div className={styles.subTitle}>
-        {cDay}
-      </div>
+      <div className={styles.subTitle}>{cDay}</div>
       <ListComponent listData={course} operation={iconTextData} />
     </div>
-  )
-}
+  );
+};
 export default ClassCalendar;
