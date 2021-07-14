@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import styles from './index.less';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
 import moment from 'moment';
+import { Divider } from 'antd';
+import { enHenceMsg, getQueryString } from '@/utils/utils';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
+import styles from './index.less';
 
-
-const CourseDetails: React.FC = () => {
+const Detail: React.FC = () => {
   const [classDetail, setClassDetail] = useState<any>();
+  const [extra, setExtra] = useState<any>();
   const classid = getQueryString('classid');
+  const index = getQueryString('index');
   const fetchData = async (bjid: string) => {
     const res = await getKHBJSJ({ id: bjid });
     if (res.status === 'ok') {
@@ -20,6 +23,21 @@ const CourseDetails: React.FC = () => {
       }
     } else {
       enHenceMsg(res.message);
+    }
+    const res1 = await getKHPKSJByBJID({ id: bjid });
+    if (res1.status === 'ok') {
+      if (res1.data && res1.data.length) {
+        const extraInfo = [].map.call(res1.data, (item: any) => {
+          return {
+            FJSJ: item.FJSJ,
+            XXSJPZ: item.XXSJPZ,
+            WEEKDAY: item.WEEKDAY
+          }
+        });
+        setExtra(extraInfo);
+      }
+    } else {
+      enHenceMsg(res1.message);
     }
   }
   useEffect(() => {
@@ -39,22 +57,12 @@ const CourseDetails: React.FC = () => {
     }
   }, [classid]);
 
-  // 房间数据去重
-  const tempfun = (arr: any) => {
-    const fjname: string[] = [];
-    if(arr){
-      arr.forEach((item: any) => {
-        if (!fjname.includes(item.FJSJ.FJMC)) {
-          fjname.push(item.FJSJ.FJMC)
-        }
-      });
-    }
-    return fjname.map((values: any) => {
-      return <span>{values}</span>
-    })
-  }
   return <div className={styles.CourseDetails}>
-    <GoBack title={'课程简介'} />
+    {
+      index === 'all' ?
+        <GoBack title={'课程简介'} /> :
+        <GoBack title={'课程简介'} onclick='/parent/home?index=index' />
+    }
     <div className={styles.wrap}>
       {
         classDetail?.KHKCSJ?.KCTP && classDetail?.KHKCSJ?.KCTP.indexOf('http') > -1 ?
@@ -65,41 +73,50 @@ const CourseDetails: React.FC = () => {
 
       <ul>
         <li>上课时段：{moment(classDetail?.KKRQ).format('YYYY.MM.DD')}~{moment(classDetail?.JKRQ).format('YYYY.MM.DD')}</li>
-        <li>上课地点：本校</li>
+        <li>上课地点：{classDetail?.XQName}</li>
       </ul>
       <p className={styles.title}>课程简介</p>
       <p className={styles.content}>{classDetail?.KHKCSJ?.KCMS}</p>
-      <p className={styles.content} style={{ marginTop: '20px' }}>所在班级：</p>
+      <Divider />
       <ul className={styles.classInformation}>
-        <li>{classDetail?.BJMC}：总课时：{classDetail?.KSS}课时,
-          上课时间：{
-            classDetail?.KHPKSJs?.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number }) => {
-              const weeks = `周${'日一二三四五六'.charAt(values.WEEKDAY)}`;
-              let kssj = '';
-              if (values.XXSJPZ.KSSJ) {
-                values.XXSJPZ.KSSJ.split(':')
-                kssj = `${values.XXSJPZ.KSSJ.split(':')[0]}:${values.XXSJPZ.KSSJ.split(':')[1]}`
+        <li>所在班级：{classDetail?.BJMC}</li>
+        <li>总课时：{classDetail?.KSS}课时</li>
+        <li>上课安排：
+          <table width='100%'>
+            <thead>
+              <tr>
+                <th>星期</th>
+                <th>节次</th>
+                <th>时间</th>
+                <th>教室</th>
+                <th>校区</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                extra?.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number }) => {
+                  const weeks = `星期${'日一二三四五六'.charAt(values.WEEKDAY)}`;
+                  return <tr>
+                    <td>{weeks}</td>
+                    <td>{values.XXSJPZ.TITLE}</td>
+                    <td>{values.XXSJPZ.KSSJ.substring(0,5)}-{values.XXSJPZ.JSSJ.substring(0,5)}</td>
+                    <td>{values.FJSJ.XQName}</td>
+                    <td>{values.FJSJ.FJMC}</td>
+                  </tr>
+                })
               }
-              let jssj = '';
-              if (values.XXSJPZ.JSSJ) {
-                values.XXSJPZ.JSSJ.split(':')
-                jssj = `${values.XXSJPZ.JSSJ.split(':')[0]}:${values.XXSJPZ.JSSJ.split(':')[1]}`
-              }
-              return <span>{weeks}{kssj}-{jssj},</span>
+            </tbody>
+          </table>
+        </li>
+        <li className={styles.bzrname}>
+          班主任：{<WWOpenDataCom type="userName" openid={classDetail?.ZJS} />}
+        </li>
+        <li className={styles.bzrname}>
+          副班：{
+            classDetail?.FJS.split(',').map((item: any) => {
+              return <span style={{ marginRight: '1em' }}><WWOpenDataCom type="userName" openid={item} /></span>
             })
           }
-          上课地点：{tempfun(classDetail?.KHPKSJs)}，
-          <span className={styles.bzrname}>
-            班主任：{<WWOpenDataCom type="userName" openid={classDetail?.ZJS} />}
-          </span>
-          ,
-          <span className={styles.bzrname}>
-            副班：{
-              classDetail?.FJS.split(',').map((item: any) => {
-                return <span style={{ marginRight: '5px' }}><WWOpenDataCom type="userName" openid={item} /></span>
-              })
-            }。
-          </span>
         </li>
       </ul>
     </div>
@@ -107,4 +124,4 @@ const CourseDetails: React.FC = () => {
 
 };
 
-export default CourseDetails;
+export default Detail;

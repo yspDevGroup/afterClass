@@ -23,7 +23,7 @@ const Notice = (props: any) => {
       for (let i = 0; i < notification.length; i += 1) {
         const listdata: ListItem = {
           title: notification[i].BT,
-          link: `/parent/home/notice/announcement?listid=${notification[i].id}`,
+          link: `/parent/home/notice/announcement?listid=${notification[i].id}&index=all`,
           titleRight: {
             text: moment(notification[i].updatedAt).format('YYYY-MM-DD'),
           },
@@ -40,11 +40,11 @@ const Notice = (props: any) => {
 
   return (
     <>
-      <GoBack title={ '公告' } onclick='/parent/home?index=index'/>
-    {notification && notification.length ? <div className={styles.NoticeBox}>
-      <ListComp listData={annoceList} />
-      <Pagina total={notification.length} setPages={setPages} />
-    </div> : <Nodata imgSrc={noData} desc='暂无公告' />}</>
+      <GoBack title={'公告'} onclick='/parent/home?index=index' />
+      {notification && notification.length ? <div className={styles.NoticeBox}>
+        <ListComp listData={annoceList} />
+        <Pagina total={notification.length} setPages={setPages} />
+      </div> : <Nodata imgSrc={noData} desc='暂无公告' />}</>
   )
 }
 

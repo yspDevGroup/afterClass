@@ -32,8 +32,7 @@ const Announcement = () => {
 
   return (
     <div className={styles.DetailsBox}>
-      {pageId && !index ? <GoBack title='公告' /> : ''}
-      {pageId && index ? <GoBack title='公告' onclick='/parent/home?index=index' /> : ''}
+      {pageId ? <GoBack title='公告' onclick={index ? undefined:'/parent/home?index=index'} /> : ''}
       {articlepage ? <GoBack title={articlepage === 'serveAnnounce' ? '服务公告' : '关于'} onclick='/parent/home?index=mine' /> : ''}
       {content?.BT ? <div className={styles.title}>{content?.BT}</div> : ''}
       {content?.updatedAt ? <div className={styles.time}>发布时间：{content?.updatedAt}</div> : ''}

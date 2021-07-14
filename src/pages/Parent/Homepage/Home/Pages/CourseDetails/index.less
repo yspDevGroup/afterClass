@@ -51,6 +51,14 @@
     .classInformation {
       li {
         margin-bottom: 4px;
+        table{
+          td,th{
+            border: 1px solid #dadada;
+            text-align: center;
+            padding: 2px 5px;
+            font-size: 12px;
+          }
+        }
       }
 
       .bzrname * {
@@ -209,8 +217,6 @@
 
   .KCXX {
     margin: 10px;
-    height: 155px;
-
     background-color: #FFFFFF;
     border-radius: 8px;
     padding: 10px;
@@ -218,13 +224,17 @@
     .title {
       font-weight: 600;
       font-size: 16px;
-      line-height: 28px;
       color: @text-color;
+      margin-bottom: 10px;
     }
 
     ul {
       padding: 0;
+      margin: 0;
       color: @text-color-secondary;
+      li{
+        line-height: 26px;
+      }
     }
   }
 

@@ -93,20 +93,22 @@ const Order: React.FC = () => {
         fetch(children);
     }, []);
     return (
-        <div className={styles.orderList}>
-            <GoBack title={ '订单' } onclick='/parent/home?index=mine'/>
-            <Tabs type="card" defaultActiveKey={type}>
-                <TabPane tab="全部" key="total">
-                    <OrderList data={orderInfo} children={children} currentUser={currentUser} triggerEvt={fetch} />
-                </TabPane>
-                <TabPane tab="待付款" key="toPay">
-                    <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '待付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
-                </TabPane>
-                <TabPane tab="已完成" key="paid">
-                    <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '已付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
-                </TabPane>
-            </Tabs>
-        </div>
+        <>
+            <GoBack title={'订单'} onclick='/parent/home?index=mine' />
+            <div className={styles.orderList}>
+                <Tabs type="card" defaultActiveKey={type}>
+                    <TabPane tab="全部" key="total">
+                        <OrderList data={orderInfo} children={children} currentUser={currentUser} triggerEvt={fetch} />
+                    </TabPane>
+                    <TabPane tab="待付款" key="toPay">
+                        <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '待付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
+                    </TabPane>
+                    <TabPane tab="已完成" key="paid">
+                        <OrderList data={orderInfo?.filter((item: API.KHXSDD) => item.DDZT === '已付款')} children={children} currentUser={currentUser} triggerEvt={fetch} />
+                    </TabPane>
+                </Tabs>
+            </div>
+        </>
     )
 };
 

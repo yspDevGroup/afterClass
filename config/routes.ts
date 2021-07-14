@@ -197,6 +197,13 @@
         hideInMenu: 'true',
       },
       {
+        path: '/parent/home/courseTable',
+        name: 'courseIntro',
+        icon: 'smile',
+        component: './Parent/Homepage/Home/Pages/CourseDetails/CourseTable',
+        hideInMenu: 'true',
+      },
+      {
         path: '/parent/mine/orderDetails',
         name: 'orderDetails',
         icon: 'smile',

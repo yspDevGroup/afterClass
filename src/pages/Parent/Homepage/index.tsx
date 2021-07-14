@@ -63,6 +63,11 @@ const PersonalHomepage = () => {
     fetchData();
   }, []);
 
+  useEffect(()=>{
+    if(index){
+      setActiveKey(index);
+    }
+  },[index])
   return (
     <div className={styles.mobilePageHeader}>
       {courseStatus === '' ? (
@@ -78,7 +83,7 @@ const PersonalHomepage = () => {
                 if (studyRef.current) (studyRef.current as unknown as HTMLElement).scrollTop = 0;
                 if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
               }}
-              defaultActiveKey={index || 'index'}
+              activeKey={activeKey}
             >
               <TabPane
               tab={

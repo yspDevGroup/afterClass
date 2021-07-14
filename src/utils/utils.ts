@@ -266,10 +266,10 @@ export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?:
                 }
               })
             }
-            classbegins.push({  
-              status, 
+            classbegins.push({
+              status,
               date: moment(record).format('MM/DD'),
-             })
+            })
           }
         }
       });
@@ -294,6 +294,11 @@ export const getData = async (bjid: string, xsId?: string) => {
       const end = res.data.JKRQ ? res.data.JKRQ : res.data.KHKCSJ!.JKRQ;
       return {
         title: res.data.BJMC,
+        start,
+        end,
+        kss: res.data.KSS,
+        XQName: res.data.XQName,
+        kcmc: res.data.KHKCSJ!.KCMC,
         data: await getCqDay(attend, start, end, bjid, xsId)
       }
     }
