@@ -11,17 +11,16 @@ type propstype = {
   handleOperation: (data: NoticeItem) => void;
   record: NoticeItem;
   actionRef: React.MutableRefObject<ActionType | undefined>;
-  setRefresh: (data: number) => void;
 };
 
 const Choice = (props: propstype) => {
-  const { handleOperation, record, actionRef, setRefresh } = props;
+  const { handleOperation, record, actionRef } = props;
   const release = async (data: NoticeItem) => {
     data.ZT = '发布';
     const reustle = await updateXXGG({ id: data.id! }, { ...data });
     if (reustle.status === 'ok') {
       message.success('发布成功');
-      setRefresh(+1);
+      actionRef.current?.reload();
     } else {
       enHenceMsg(reustle.message);
     }
@@ -31,7 +30,7 @@ const Choice = (props: propstype) => {
     const reustle = await updateXXGG({ id: data.id! }, { ...data });
     if (reustle.status === 'ok') {
       message.success('撤除成功');
-      setRefresh(-1);
+      actionRef.current?.reload();
     } else {
       message.error(`${reustle.message},请联系管理员或稍后再试`);
     }

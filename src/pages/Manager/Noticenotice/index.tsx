@@ -9,7 +9,6 @@ import ProTable from '@ant-design/pro-table';
 import type { FormInstance } from 'antd';
 import { Button, message, Modal } from 'antd';
 import moment from 'moment';
-import React, { useEffect } from 'react';
 import { useRef, useState } from 'react';
 import Announcement from './components/Announcement';
 import Choice from './components/Choice';
@@ -21,16 +20,12 @@ const Noticenotice = () => {
   const [current, setCurrent] = useState<any>();
   const [form, setForm] = useState<FormInstance<any>>();
   const [title, setTitle] = useState<string>('');
-  const [refresh, setRefresh] = useState<number>(0);
   const getModelTitle = () => {
     if (title === 'current') {
       return '编辑公告';
     }
     return '新增公告';
   };
-  useEffect(() => {
-    actionRef.current?.reload();
-  }, [refresh]);
   // 表单提交
   const handleSubmit = async () => {
     try {
@@ -98,14 +93,7 @@ const Noticenotice = () => {
       title: '操作',
       width: 150,
       render: (_, record) => {
-        return (
-          <Choice
-            record={record}
-            handleOperation={handleOperation}
-            actionRef={actionRef}
-            setRefresh={setRefresh}
-          />
-        );
+        return <Choice record={record} handleOperation={handleOperation} actionRef={actionRef} />;
       },
     },
   ];
