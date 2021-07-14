@@ -190,6 +190,13 @@
         hideInMenu: 'true',
       },
       {
+        path: '/parent/home/courseIntro',
+        name: 'courseIntro',
+        icon: 'smile',
+        component: './Parent/Homepage/Home/Pages/CourseDetails/Detail',
+        hideInMenu: 'true',
+      },
+      {
         path: '/parent/mine/orderDetails',
         name: 'orderDetails',
         icon: 'smile',

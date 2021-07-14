@@ -5,7 +5,7 @@ import Home from './Home';
 import Study from './Study';
 import Mine from './Mine';
 import IconFont from '@/components/CustomIcon';
-import { enHenceMsg, getCurrentStatus, getQueryString  } from '@/utils/utils';
+import { enHenceMsg, getCurrentStatus, getQueryString } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
 import styles from './index.less';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -30,7 +30,7 @@ const PersonalHomepage = () => {
         const { XN, XQ } = result.current;
         const children = currentUser?.subscriber_info?.children || [
           {
-            student_userid: currentUser?.UserId,
+            student_userid: currentUser?.UserId || currentUser?.id,
             njId: '1',
           },
         ];
