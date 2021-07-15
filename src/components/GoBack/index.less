@@ -1,88 +1,40 @@
 .hz {
   width: 100%;
   height: 44px;
-  background:#efefef;
-  border-bottom: 1px solid #eee;
-  box-shadow: rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #ededed;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.16);
+  position: relative;
+  line-height: 44px;
 
   .tp {
-    width: 50px;
     transform: rotate(180deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    float: left;
     height: 44px;
+    position: absolute;
+    left: 0;
+    padding: 0 10px 0 30px;
 
-    >a {
-      color: black;
-    }
-
-    .ch {
-      width: 100%;
-      height: 100%;
+    span[class*='anticon'] {
+      color: #333;
     }
   }
 
   .wz {
     display: inline-block;
     width: 100%;
-    height: 100%;
-    padding-right: 50px;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 17px;
-    line-height: 44px;
+    font-weight: bold;
+    font-size: 16px;
     text-align: center;
-    color: #000000;
-    opacity: 0.9;
+    color: #333;
   }
-}
 
-.th {
-  width: 100%;
-  height: 44px;
-  background:#1876cd;
-  border-bottom: 1px solid #eee;
-  box-shadow: rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  &.th {
+    background: #1876cd;
+    box-shadow: 0px 1px 2px rgba(10, 75, 136, 0.6);
 
-  .tp {
-    width: 50px;
-    transform: rotate(180deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    float: left;
-    height: 44px;
-    color: #fff;
-
-    >a {
+    .tp,
+    span[class*='anticon'],
+    .wz {
       color: #fff;
     }
-
-    .ch {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  .wz {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    padding-right: 50px;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 17px;
-    line-height: 44px;
-    text-align: center;
-    color: #fff;
-    opacity: 0.9;
   }
 }

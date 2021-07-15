@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "umi";
+import { history } from "umi";
 import IconFont from "../CustomIcon";
 import styles from './index.less'
 
@@ -13,27 +13,19 @@ type backtye = {
 
 const GoBack = (props: backtye) => {
     const { title, onclick, teacher } = props;
-    const toback = () => {
-        window.history.go(-1)
-    }
+    const toback = (url?: string) => {
+        if (url) {
+            history.replace(url);
+        } else {
+            history.go(-1);
+        }
+    };
     return (
-        <div className={teacher ? styles.th : styles.hz} >
-            {
-                onclick ? <>
-                    <div className={styles.tp}>
-                        <Link to={onclick}>
-                            <IconFont type="icon-gengduo" />
-                        </Link>
-                    </div>
-                    <div className={styles.wz}>{title}</div></>
-                    :
-                    <>
-                        <div className={styles.tp} onClick={() => toback()}>
-                            <IconFont type="icon-gengduo" />
-                        </div>
-                        <div className={styles.wz}>{title}</div>
-                    </>
-            }
+        <div className={teacher ? `${styles.hz} ${styles.th}` : styles.hz} >
+            <div className={styles.tp} onClick={() => toback(onclick)}>
+                <IconFont type="icon-gengduo" />
+            </div>
+            <div className={styles.wz}>{title}</div>
         </div>
     )
 }
