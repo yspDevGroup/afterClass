@@ -47,20 +47,19 @@ const CourseDetails: React.FC = () => {
     setBJ(current.id);
     setFk(!enAble);
   };
+  const getWxData = async () => {
+    if (/MicroMessenger/i.test(navigator.userAgent)) {
+      await initWXConfig(['checkJsApi']);
+    }
+    await initWXAgentConfig(['checkJsApi']);
+    setIsLoading(true);
+  };
   useEffect(() => {
-    (async () => {
-      if (/MicroMessenger/i.test(navigator.userAgent)) {
-        await initWXConfig(['checkJsApi']);
-      }
-      if (await initWXConfig(['checkJsApi'])) {
-        await initWXAgentConfig(['checkJsApi']);
-        setIsLoading(true);
-      }
-    })();
-  }, []);
-
+    getWxData();
+  }, [isLoading]);
   useEffect(() => {
     if (courseid) {
+      getWxData();
       (async () => {
         const result = await getKHKCSJ({
           kcId: courseid,
