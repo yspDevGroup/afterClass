@@ -208,7 +208,7 @@ const ClassCalendar = (props: propstype) => {
           setCourse(curCourse);
         }}
         markType="dot"
-        transitionDuration="0.1"
+        transitionDuration={0.1}
         currentDate={day}
       />
       <div className={styles.subTitle}>{cDay}</div>
