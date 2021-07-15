@@ -43,9 +43,13 @@ const CourseDetails: React.FC = () => {
     const enAble =
       myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
       myDate <= new Date(moment(end).format('YYYY/MM/DD'));
+    if (current.KHXSBJs.length >= current.BJRS || !enAble) {
+      setFk(true);
+    }else{
+      setFk(false);
+    }
     setFY(current.FY);
     setBJ(current.id);
-    setFk(!enAble);
   };
   const getWxData = async () => {
     if (/MicroMessenger/i.test(navigator.userAgent)) {
