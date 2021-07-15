@@ -153,66 +153,70 @@ const CourseDetails: React.FC = () => {
         <Divider />
         <p className={styles.content}>开设班级：</p>
         <ul className={styles.classInformation}>
-          {KcDetail?.KHBJSJs?.map(
-            (value: any) => {
-              return (
-                <li>
-                  <div>
-                    <p style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>{value.BJMC}</p>
-                    <p className={styles.bzrname}>
-                      班主任：{isLoading ? <WWOpenDataCom type="userName" openid={value.ZJS} /> : <></>}
-                    </p>
-                    <p className={styles.bzrname}>
-                      副班：
-                      {isLoading ? value.FJS.split(',').map((item: any) => {
+          {KcDetail?.KHBJSJs?.map((value: any) => {
+            return (
+              <li>
+                <div>
+                  <p style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
+                    {value.BJMC}
+                  </p>
+                  <p className={styles.bzrname}>
+                    班主任：
+                    {isLoading ? <WWOpenDataCom type="userName" openid={value.ZJS} /> : <></>}
+                  </p>
+                  <p className={styles.bzrname}>
+                    副班：
+                    {isLoading ? (
+                      value.FJS.split(',').map((item: any) => {
                         return (
                           <span style={{ marginRight: '5px' }}>
                             <WWOpenDataCom type="userName" openid={item} />
                           </span>
                         );
-                      }) : <></>}
-                    </p>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>课时数</th>
-                          <th>总人数</th>
-                          <th>报名费</th>
-                          <th>上课时间</th>
-                          <th>上课地点</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{value.KSS}课时</td>
-                          <td>{value.BJRS}人</td>
-                          <td>{value.FY}元</td>
-                          <td style={{ padding: '2px 0' }}>
-                            {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                              const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
-                              return (
-                                <p>
-                                  {weeks}
-                                  {val.XXSJPZ.KSSJ.substring(0, 5)}-{val.XXSJPZ.JSSJ.substring(0, 5)}
-                                </p>
-                              );
-                            })}
-                          </td>
-                          <td style={{ padding: '2px 0' }}>
-                            {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                              return <p>{val.FJSJ.FJMC}</p>
-                            })}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </li>
-              );
-            },
-          )}
+                      })
+                    ) : (
+                      <></>
+                    )}
+                  </p>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>课时数</th>
+                        <th>总人数</th>
+                        <th>报名费</th>
+                        <th>上课时间</th>
+                        <th>上课地点</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{value.KSS}课时</td>
+                        <td>{value.BJRS}人</td>
+                        <td>{value.FY}元</td>
+                        <td style={{ padding: '2px 0' }}>
+                          {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                            const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
+                            return (
+                              <p>
+                                {weeks}
+                                {val.XXSJPZ.KSSJ.substring(0, 5)}-{val.XXSJPZ.JSSJ.substring(0, 5)}
+                              </p>
+                            );
+                          })}
+                        </td>
+                        <td style={{ padding: '2px 0' }}>
+                          {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                            return <p>{val.FJSJ.FJMC}</p>;
+                          })}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            );
+          })}
         </ul>
-
       </div>
       <div className={styles.footer}>
         {kaiguan ? (
@@ -261,6 +265,7 @@ const CourseDetails: React.FC = () => {
                       overlayClassName={styles.confirmStyles}
                       placement="bottomRight"
                       title={text}
+                      defaultVisible={BJ === value.id}
                     >
                       <Radio.Button
                         value={valueName}
