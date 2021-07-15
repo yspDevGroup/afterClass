@@ -123,6 +123,13 @@
         hideInMenu: 'true',
       },
       {
+        path: '/teacher/home/courseIntro',
+        name: 'courseIntro',
+        icon: 'smile',
+        component: './Teacher/Homepage/Home/Pages/CourseDetails/Detail',
+        hideInMenu: 'true',
+      },
+      {
         path: '/teacher/home/notice',
         name: 'notice',
         hideInMenu: 'true',

@@ -1,96 +1,57 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
-import { Badge,} from 'antd';
-import React, { useEffect, useState, } from 'react';
-import styles from './index.less';
-import { getKHKCSJ } from '@/services/after-class/khkcsj';
-import { enHenceMsg, getData, getQueryString } from '@/utils/utils';
+/* eslint-disable array-callback-return */
+import React, { useEffect, useState } from 'react';
+import { useModel } from 'umi';
+import { Badge } from 'antd';
+import { getData, getQueryString } from '@/utils/utils';
 import moment from 'moment';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import noData from '@/assets/noCourse1.png';
+import styles from './index.less';
+import noData from '@/assets/noCourse.png';
 import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
 
 const CourseDetails: React.FC = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [KcDetail, setKcDetail] = useState<any>();
   const [timetableList, setTimetableList] = useState<any[]>();
   const classid = getQueryString('classid');
-  const courseid = getQueryString('courseid');
-  const index = getQueryString('index');
   const myDate: Date = new Date();
   const currentDate = moment(myDate).format('MM/DD');
-  useEffect(() => {
-    (async () => {
-      if (/MicroMessenger/i.test(navigator.userAgent)) {
-        await initWXConfig(['checkJsApi']);
-      }
-      if (await initWXConfig(['checkJsApi'])) {
-        await initWXAgentConfig(['checkJsApi']);
-      }
-    })();
-  }, []);
-
+  const children = currentUser?.subscriber_info?.children || [{
+    student_userid: currentUser?.UserId,
+    njId: '1'
+  }];
+  const xsName = currentUser?.subscriber_info?.remark || currentUser?.username;
   useEffect(() => {
     async function fetchData() {
       if (classid) {
-        const schedule = await getData(classid);
-        setTimetableList(schedule.data);
+        const schedule = await getData(classid, children[0].student_userid!);
+        const { data, ...rest } = schedule;
+        setKcDetail({
+          ...rest
+        });
+        setTimetableList(data);
       }
     };
     fetchData();
-  }, [classid])
+  }, [classid]);
 
-
-  useEffect(() => {
-    if (courseid) {
-      (async () => {
-        const result = await getKHKCSJ({
-          kcId: courseid,
-          bjzt: '已发布',
-        });
-        if (result.status === 'ok' && result.data) {
-          setKcDetail(result.data);
-        }else{
-          enHenceMsg(result.message);
-        }
-      })();
-    }
-  }, [courseid]);
-
-  const tempfun = (arr: any) => {
-    const fjname: string[] = [];
-    arr.forEach((item: any) => {
-      if (!fjname.includes(item.FJSJ.FJMC)) {
-        fjname.push(item.FJSJ.FJMC)
-      }
-    });
-    return fjname.map((values: any) => {
-      return <span>{values}</span>
-    })
-  }
   return <div className={styles.CourseDetails2}>
-    {
-      index==='all' ?
-        <GoBack title={'课程详情'} onclick='/teacher/home?index=education' /> :
-        <GoBack title={'课程详情'} onclick='/teacher/home'/>
-    }
+    <GoBack title={'课程详情'} onclick='/teacher/home?index=education' />
     <div className={styles.KCXX}>
       {/* 上课时段 */}
-      <p className={styles.title}>{KcDetail?.KCMC}</p>
+      <p className={styles.title}>{KcDetail?.kcmc}</p>
       <ul>
-        {
-          KcDetail?.KHBJSJs?.map((value: { id: string, KSS: string, KHPKSJs: any, KKRQ: string, JKRQ: string, BJMC: string }) => {
-            if (value.id === classid) {
-              return <> <li>上课时段：{value.KKRQ ? moment(value.KKRQ).format('YYYY.MM.DD') : moment(KcDetail?.KKRQ).format('YYYY.MM.DD')}~{value.JKRQ ? moment(value.JKRQ).format('YYYY.MM.DD') : moment(KcDetail?.JKRQ).format('YYYY.MM.DD')}</li>
-                <li> 上课地点：{
-                  tempfun(value.KHPKSJs)
-                }</li>
-                <li>总课时：{value.KSS}课时</li>
-                <li>班级：{value.BJMC}</li>
-              </>
-            }
-            return ''
-          })
-        }
+      <ul>
+        <li>上课时段：{moment(KcDetail?.start).format('YYYY.MM.DD')}~{moment(KcDetail?.end).format('YYYY.MM.DD')}</li>
+        <li>上课地点：{KcDetail?.XQName}</li>
+        <li>总课时：{KcDetail?.kss}课时</li>
+        <li>班级：{KcDetail?.title}</li>
+        <li>学生：{xsName?.split('-')[0]}</li>
+      </ul>
       </ul>
     </div>
     <div className={styles.Timetable}>
@@ -102,6 +63,7 @@ const CourseDetails: React.FC = () => {
           <Badge className={styles.legend} color="#45C977" text="今日" />
           <Badge className={styles.legend} color="#d2ecdc" text="待上" />
         </span>
+
       </p>
       <div className={styles.cards}>
         {
@@ -113,8 +75,11 @@ const CourseDetails: React.FC = () => {
           }) : <Nodata imgSrc={noData} desc='暂无课表' />
         }
       </div>
+
+
     </div>
   </div>
+
 };
 
 export default CourseDetails;

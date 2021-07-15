@@ -19,7 +19,7 @@ const TeachCourses = () => {
         id: item.id,
         title: item.KHKCSJ.KCMC,
         img: item.KCTP ? item.KCTP : item.KHKCSJ.KCTP,
-        link: `/teacher/home/courseDetails?classid=${item.id}&courseid=${item.KHKCSJ.id}`,
+        link: `/teacher/home/courseIntro?classid=${item.id}`,
         desc: [
           {
             left: [`课程时段：${item.KKRQ ? moment(item.KKRQ).format('YYYY.MM.DD') : moment(item.KHKCSJ.KKRQ).format('YYYY.MM.DD')}-${item.JKRQ ? moment(item.JKRQ).format('YYYY.MM.DD') : moment(item.KHKCSJ.JKRQ).format('YYYY.MM.DD')}`],
