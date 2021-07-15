@@ -1,4 +1,4 @@
-import { Button, Radio } from 'antd';
+import { Button, Radio, Tooltip } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link } from 'umi';
 import styles from './index.less';
@@ -10,6 +10,7 @@ import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenData
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
+import { getKHBJSJ } from '@/services/after-class/khbjsj';
 
 const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -129,7 +130,13 @@ const CourseDetails: React.FC = () => {
   const butonclick = (ind: number) => {
     changeStatus(ind);
   };
-
+  const getrs = async (id: string) => {
+    const res = await getKHBJSJ({ id });
+    if (res.status === 'ok') {
+      return res.data.KHXSBJs?.length;
+    }
+    return 0;
+  };
   return (
     <div className={styles.CourseDetails}>
       {index === 'all' ? (
@@ -254,7 +261,9 @@ const CourseDetails: React.FC = () => {
                   },
                   ind: number,
                 ) => {
-                  // const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${value.BJRS}个名额`;
+                  const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${
+                    value.BJRS
+                  }个名额`;
                   const valueName = `${value.id}+${value.FY}`;
                   const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
                   const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
@@ -262,16 +271,16 @@ const CourseDetails: React.FC = () => {
                     myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
                     myDate <= new Date(moment(end).format('YYYY/MM/DD'));
                   return (
-                    // <Tooltip placement="bottomLeft"  title={text} color='cyan' defaultVisible={true}>
-                    <Radio.Button
-                      value={valueName}
-                      style={{ marginRight: '14px' }}
-                      disabled={!enAble}
-                      onClick={() => butonclick(ind)}
-                    >
-                      {value.BJMC}
-                    </Radio.Button>
-                    // </Tooltip>
+                    <Tooltip placement="bottomLeft" title={text} color="cyan" defaultVisible={true}>
+                      <Radio.Button
+                        value={valueName}
+                        style={{ marginRight: '14px' }}
+                        disabled={!enAble}
+                        onClick={() => butonclick(ind)}
+                      >
+                        {value.BJMC}
+                      </Radio.Button>
+                    </Tooltip>
                   );
                 },
               )}
