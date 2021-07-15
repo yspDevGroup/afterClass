@@ -201,7 +201,7 @@ const CallTheRoll = (props: any) => {
   ];
   return (
     <div className={styles.callTheRoll}>
-      <GoBack title='课堂点名' teacher/>
+      <GoBack title='课堂点名' teacher onclick='/teacher/home?index=education'/>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
         {claName?.BJMC} ｜ 第 {wxad.length}/{kjs} 课时
