@@ -19,6 +19,7 @@ export async function getKHXSCQ(
       CQZT?: '出勤' | '请假' | '缺席';
       CQRQ?: string;
       XSId?: string;
+      XSXM?: string;
       KHPKSJId?: string;
       KHBJSJ?: {
         id?: string;
@@ -103,6 +104,7 @@ export async function createKHXSCQ(body: API.CreateKHXSCQ[], options?: { [key: s
       CQZT?: '出勤' | '请假' | '缺席';
       CQRQ?: string;
       XSId?: string;
+      XSXM?: string;
       KHPKSJId?: string;
       KHBJSJ?: {
         id?: string;

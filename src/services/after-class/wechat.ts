@@ -199,3 +199,29 @@ export async function wechatTradeCallback(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+/** 发送消息 POST /wechat/sendMsg */
+export async function sendMsg(
+  body: {
+    /** 成员ID列表 */
+    touser?: string;
+    /** 部门ID列表 */
+    toparty?: string;
+    /** 标签ID列表 */
+    totag?: string;
+    /** 消息类型 */
+    msgtype?: string;
+    /** 消息内容 */
+    content?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/wechat/sendMsg', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

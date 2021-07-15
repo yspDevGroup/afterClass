@@ -1,17 +1,31 @@
 @import '../../../theme.less';
 
-.CourseDetails {
-  line-height: 28px;
-
+.confirmStyles {
   :global {
-    .anticon svg {
-      height: 100%;
-    }
-
-    .ant-radio-button-wrapper:not(:first-child)::before {
-      display: none;
+    .ant-popover-content {
+      .ant-popover-inner {
+        border-radius: 8px;
+        .ant-popover-inner-content {
+          padding: 6px 8px;
+          .ant-popover-buttons {
+            display: none;
+          }
+          .ant-popover-message {
+            padding: 0;
+            > span {
+              display: none;
+            }
+            .ant-popover-message-title {
+              padding-left: 0;
+            }
+          }
+        }
+      }
     }
   }
+}
+.CourseDetails {
+  line-height: 28px;
 
   button {
     outline: none;
@@ -32,49 +46,48 @@
 
     ul {
       padding: 0;
-      font-size: 14px;
       color: #515151;
+      font-size: 14px;
     }
 
     .title {
+      color: #333;
       font-weight: 600;
-      color: #333333;
       font-size: 16px;
     }
 
     .content {
-      font-size: 14px;
       color: #515151;
+      font-size: 14px;
     }
   }
 
   .classInformation {
     padding: 0 0 54px;
 
-    >p {
-      padding: 0 10px;
+    > p {
       margin: 0;
+      padding: 0 10px;
     }
 
     table {
-      margin-bottom: 10px;
       width: 100%;
+      margin-bottom: 10px;
 
-      >tbody,
-      >thead {
-        >tr {
-
-          >td,
-          >th {
-            border: 1px solid #dadada;
-            text-align: center;
+      > tbody,
+      > thead {
+        > tr {
+          > td,
+          > th {
             padding: 2px;
             font-size: 12px;
+            text-align: center;
+            border: 1px solid #dadada;
 
-            >p {
-              border-bottom: 1px solid #dadada;
+            > p {
               margin: 0;
               padding: 0 2px;
+              border-bottom: 1px solid #dadada;
 
               &:nth-last-child(1) {
                 border: none;
@@ -87,7 +100,7 @@
 
     li {
       padding: 10px;
-      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.16);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
     }
 
     .bzrname * {
@@ -97,103 +110,105 @@
   }
 
   .footer {
-    width: 100vw;
-    height: 54px;
-    line-height: 54px;
     position: fixed;
     bottom: 0;
+    width: 100vw;
+    height: 54px;
     padding: 0 14px 0 14px;
-    background: #FFFFFF;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    line-height: 54px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
     .btn {
       width: 100%;
       height: 38px;
-      color: #fff;
-      line-height: 38px;
-      font-size: 16px;
-      background-color: #45C977;
-      border-radius: 19px;
-      border: none;
       margin-top: 8px;
+      color: #fff;
+      font-size: 16px;
+      line-height: 38px;
+      background-color: #45c977;
+      border: none;
+      border-radius: 19px;
     }
 
     .btnes {
       width: 100%;
       height: 38px;
-      color: #999;
-      line-height: 38px;
-      font-size: 14px;
-      background-color: #f5f5f5;
-      border-radius: 19px;
-      border: none;
       margin-top: 8px;
+      color: #999;
+      font-size: 14px;
+      line-height: 38px;
+      background-color: #f5f5f5;
+      border: none;
+      border-radius: 19px;
     }
   }
-
   .payment {
     position: fixed;
     top: 0;
-    left: 0;
-    bottom: 0;
     right: 0;
+    bottom: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
 
-    >div {
+    > div {
       position: fixed;
       bottom: 0;
       width: 100vw;
       height: 380px;
-      background-color: #fff;
       padding: 14px;
+      background-color: #fff;
 
       .title {
-        font-weight: 600;
-        color: #333333;
-        font-size: 16px;
         margin-top: 8px;
+        color: #333;
+        font-weight: 600;
+        font-size: 16px;
       }
 
       .price {
         span:nth-of-type(1) {
+          color: #f60;
           font-size: 18px;
-          color: #FF6600;
         }
 
         span:nth-of-type(2) {
+          color: #f60;
           font-size: 14px;
-          color: #FF6600;
         }
       }
     }
-
     :global {
+      .anticon svg {
+        height: 100%;
+      }
+
+      .ant-radio-button-wrapper:not(:first-child)::before {
+        display: none;
+      }
       .ant-radio-group {
         display: flex;
         flex-wrap: wrap;
 
         label.ant-radio-button-wrapper {
           overflow: hidden;
-          border-radius: 16px;
-          border: none;
+          color: #333;
           background-color: #f5f5f5;
-          color: #333333;
+          border: none;
+          border-radius: 16px;
 
           &.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+            color: #45c977;
             background: rgba(69, 201, 119, 0.1);
-            color: #45C977;
           }
 
           &.ant-radio-button-wrapper-disabled {
-            color: #999999;
+            color: #999;
           }
         }
       }
-    }
-
-    :global {
       .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):focus-within {
         box-shadow: none;
       }
@@ -201,12 +216,11 @@
       .ant-radio-checked .ant-radio-inner {
         border-color: @GreenColor;
 
-        &:after {
+        &::after {
           background-color: @GreenColor;
         }
       }
     }
-
 
     .agreement {
       position: fixed;
@@ -214,18 +228,18 @@
     }
 
     .submit {
-      display: block;
       position: fixed;
-      border: none;
-      width: calc(~ '100% - 28px');
-      height: 38px;
-      border-radius: 19px;
-      background: #45C977;
-      color: #fff;
       bottom: 14px;
+      display: block;
+      width: calc(~'100% - 28px');
+      height: 38px;
+      color: #fff;
+      background: #45c977;
+      border: none;
+      border-radius: 19px;
 
       &[disabled] {
-        color: #bbbbbb;
+        color: #bbb;
         background-color: #e6e6e6;
         border-color: #e4e4e4;
         box-shadow: none;
@@ -236,30 +250,28 @@
       }
     }
   }
-
 }
 
 .CourseDetails2 {
-
-  background: #F5F5F5;
   min-height: 100vh;
+  background: #f5f5f5;
 
   .KCXX {
     margin: 10px;
-    background-color: #FFFFFF;
-    border-radius: 8px;
     padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
 
     .title {
+      margin-bottom: 10px;
+      color: @text-color;
       font-weight: 600;
       font-size: 16px;
-      color: @text-color;
-      margin-bottom: 10px;
     }
 
     ul {
-      padding: 0;
       margin: 0;
+      padding: 0;
       color: @text-color-secondary;
 
       li {
@@ -272,13 +284,12 @@
     margin: 18px 10px 0 10px;
 
     .title {
-
+      display: flex;
+      justify-content: space-between;
+      color: @text-color;
       font-weight: 600;
       font-size: 16px;
       line-height: 28px;
-      color: @text-color;
-      display: flex;
-      justify-content: space-between;
 
       .legend {
         margin-left: 5px;
@@ -292,7 +303,7 @@
         }
 
         &.legend1 {
-          span[class="ant-badge-status-dot"] {
+          span[class='ant-badge-status-dot'] {
             border: 0.5px solid rgb(160, 159, 159);
           }
         }
@@ -301,20 +312,20 @@
 
     .cards {
       display: flex;
-      width: 102%;
       flex-wrap: wrap;
+      width: 102%;
 
       .card1 {
         width: 18%;
         height: 48px;
-        border-radius: 8px;
-        background: rgba(255, 102, 0, 0.1);
-        padding: 5px;
         margin-right: 2%;
         margin-bottom: 10px;
-        text-align: center;
-        font-size: 12px;
+        padding: 5px;
         color: @normal-color;
+        font-size: 12px;
+        text-align: center;
+        background: rgba(255, 102, 0, 0.1);
+        border-radius: 8px;
 
         p {
           margin: 0;
@@ -325,14 +336,14 @@
       .card2 {
         width: 18%;
         height: 48px;
-        border-radius: 8px;
-        background: #45C977;
-        padding: 5px;
         margin-right: 2%;
         margin-bottom: 10px;
-        text-align: center;
-        font-size: 12px;
+        padding: 5px;
         color: #fff;
+        font-size: 12px;
+        text-align: center;
+        background: #45c977;
+        border-radius: 8px;
 
         p {
           margin: 0;
@@ -343,14 +354,14 @@
       .card3 {
         width: 18%;
         height: 48px;
-        border-radius: 8px;
-        background: #fff;
-        padding: 5px;
         margin-right: 2%;
         margin-bottom: 10px;
-        text-align: center;
-        font-size: 12px;
+        padding: 5px;
         color: @normal-color;
+        font-size: 12px;
+        text-align: center;
+        background: #fff;
+        border-radius: 8px;
 
         p {
           margin: 0;
@@ -361,13 +372,13 @@
       .card {
         width: 18%;
         height: 48px;
-        border-radius: 8px;
-        background: rgba(69, 201, 119, 0.1);
-        padding: 5px;
         margin-right: 2%;
         margin-bottom: 10px;
-        text-align: center;
+        padding: 5px;
         font-size: 12px;
+        text-align: center;
+        background: rgba(69, 201, 119, 0.1);
+        border-radius: 8px;
 
         p {
           margin: 0;

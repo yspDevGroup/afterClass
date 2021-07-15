@@ -1,4 +1,4 @@
-import { Button, Divider, Radio, Tooltip } from 'antd';
+import { Button, Divider, Popconfirm, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link } from 'umi';
 import styles from './index.less';
@@ -10,7 +10,6 @@ import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenData
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
 
 const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -118,13 +117,6 @@ const CourseDetails: React.FC = () => {
   const butonclick = (ind: number) => {
     changeStatus(ind);
   };
-  const getrs = async (id: string) => {
-    const res = await getKHBJSJ({ id });
-    if (res.status === 'ok') {
-      return res.data.KHXSBJs?.length;
-    }
-    return 0;
-  };
   return (
     <div className={styles.CourseDetails}>
       {index === 'all' ? (
@@ -161,65 +153,69 @@ const CourseDetails: React.FC = () => {
       </div>
       <Divider />
       <ul className={styles.classInformation}>
-      <p>开设班级：</p>
-        {KcDetail?.KHBJSJs?.map(
-          (value: any) => {
-            return (
-              <li>
-                <div>
-                  <p style={{ color: '#45c977', fontWeight: 'bold', textAlign: 'center' }}>{value.BJMC}</p>
-                  <p className={styles.bzrname}>
-                    班主任：{isLoading ? <WWOpenDataCom type="userName" openid={value.ZJS} /> : <></>}
-                  </p>
-                  <p className={styles.bzrname}>
-                    副班：
-                    {isLoading ? value.FJS.split(',').map((item: any) => {
+        <p>开设班级：</p>
+        {KcDetail?.KHBJSJs?.map((value: any) => {
+          return (
+            <li>
+              <div>
+                <p style={{ color: '#45c977', fontWeight: 'bold', textAlign: 'center' }}>
+                  {value.BJMC}
+                </p>
+                <p className={styles.bzrname}>
+                  班主任：{isLoading ? <WWOpenDataCom type="userName" openid={value.ZJS} /> : <></>}
+                </p>
+                <p className={styles.bzrname}>
+                  副班：
+                  {isLoading ? (
+                    value.FJS.split(',').map((item: any) => {
                       return (
                         <span style={{ marginRight: '5px' }}>
                           <WWOpenDataCom type="userName" openid={item} />
                         </span>
                       );
-                    }) : <></>}
-                  </p>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>课时数</th>
-                        <th>总人数</th>
-                        <th>报名费</th>
-                        <th>上课时间</th>
-                        <th>上课地点</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{value.KSS}课时</td>
-                        <td>{value.BJRS}人</td>
-                        <td>{value.FY}元</td>
-                        <td style={{ padding: '2px 0' }}>
-                          {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                            const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
-                            return (
-                              <p>
-                                {weeks}
-                                {val.XXSJPZ.KSSJ.substring(0, 5)}-{val.XXSJPZ.JSSJ.substring(0, 5)}
-                              </p>
-                            );
-                          })}
-                        </td>
-                        <td style={{ padding: '2px 0' }}>
-                          {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                            return <p>{val.FJSJ.FJMC}</p>
-                          })}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </li>
-            );
-          },
-        )}
+                    })
+                  ) : (
+                    <></>
+                  )}
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>课时数</th>
+                      <th>总人数</th>
+                      <th>报名费</th>
+                      <th>上课时间</th>
+                      <th>上课地点</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{value.KSS}课时</td>
+                      <td>{value.BJRS}人</td>
+                      <td>{value.FY}元</td>
+                      <td style={{ padding: '2px 0' }}>
+                        {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                          const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
+                          return (
+                            <p>
+                              {weeks}
+                              {val.XXSJPZ.KSSJ.substring(0, 5)}-{val.XXSJPZ.JSSJ.substring(0, 5)}
+                            </p>
+                          );
+                        })}
+                      </td>
+                      <td style={{ padding: '2px 0' }}>
+                        {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                          return <p>{val.FJSJ.FJMC}</p>;
+                        })}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </li>
+          );
+        })}
       </ul>
       <div className={styles.footer}>
         {kaiguan ? (
@@ -252,12 +248,11 @@ const CourseDetails: React.FC = () => {
                     BMKSSJ: Date;
                     BMJSSJ: Date;
                     BJRS: number;
+                    KHXSBJs: any[];
                   },
                   ind: number,
                 ) => {
-                  const text = `${value.BJMC}已有${() => getrs(value.id)}人报名，共${
-                    value.BJRS
-                  }个名额`;
+                  const text = `${value.BJMC}已有${value.KHXSBJs.length}人报名，共${value.BJRS}个名额`;
                   const valueName = `${value.id}+${value.FY}`;
                   const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
                   const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
@@ -265,7 +260,11 @@ const CourseDetails: React.FC = () => {
                     myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
                     myDate <= new Date(moment(end).format('YYYY/MM/DD'));
                   return (
-                    <Tooltip placement="bottomLeft" title={text} color="cyan" defaultVisible={true}>
+                    <Popconfirm
+                      overlayClassName={styles.confirmStyles}
+                      placement="bottomRight"
+                      title={text}
+                    >
                       <Radio.Button
                         value={valueName}
                         style={{ marginRight: '14px' }}
@@ -274,7 +273,7 @@ const CourseDetails: React.FC = () => {
                       >
                         {value.BJMC}
                       </Radio.Button>
-                    </Tooltip>
+                    </Popconfirm>
                   );
                 },
               )}
