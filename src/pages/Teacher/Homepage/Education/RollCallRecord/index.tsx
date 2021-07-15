@@ -4,6 +4,7 @@ import { Table } from 'antd';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import styles from './index.less';
+import GoBack from '@/components/GoBack';
 
 /**
  * 点名记录
@@ -106,6 +107,7 @@ const RollCallRecord = (props: any) => {
   ];
   return (
     <div className={styles.callTheRoll}>
+       <GoBack title='考勤记录' teacher/>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
         {claName?.BJMC} ｜ 第 {wxad.length}/{kjs} 课时

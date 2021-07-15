@@ -61,8 +61,8 @@ const Detail: React.FC = () => {
   return <div className={styles.CourseDetails}>
     {
       index === 'all' ?
-        <GoBack title={'课程简介'} /> :
-        <GoBack title={'课程简介'} onclick='/teacher/home?index=index' />
+        <GoBack title={'课程简介'} teacher/> :
+        <GoBack title={'课程简介'} onclick='/teacher/home?index=index' teacher/>
     }
     <div className={styles.wrap}>
       {

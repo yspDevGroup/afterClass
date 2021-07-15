@@ -31,9 +31,9 @@ const Announcement = () => {
   }, []);
   return (
     <div className={styles.DetailsBox}>
-    {pageId && !index ? <GoBack title='公告' /> : ''}
-    {pageId && index ? <GoBack title='公告' onclick='/teacher/home?index=index' /> : ''}
-    {articlepage ? <GoBack title={articlepage === 'serveAnnounce' ? '服务公告' : '关于'} onclick='/teacher/home?index=mine' /> : ''}
+    {pageId && !index ? <GoBack title='公告' teacher/> : ''}
+    {pageId && index ? <GoBack title='公告' onclick='/teacher/home?index=index' teacher/> : ''}
+    {articlepage ? <GoBack title={articlepage === 'serveAnnounce' ? '服务公告' : '关于' } teacher onclick='/teacher/home?index=mine' /> : ''}
     {content?.BT ? <div className={styles.title}>{content?.BT}</div> : ''}
     {content?.updatedAt ? <div className={styles.time}>发布时间：{content?.updatedAt}</div> : ''}
     {(content?.BT || content?.updatedAt) ? <div className={styles.line}></div> : ''}

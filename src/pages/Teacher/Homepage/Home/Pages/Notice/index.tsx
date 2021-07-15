@@ -40,7 +40,7 @@ const Notice = (props: any) => {
 
   return (
     <>
-     <GoBack title={ '公告' } onclick='/teacher/home?index=index'/>
+     <GoBack title={ '公告' } onclick='/teacher/home?index=index' teacher/>
     {notification && notification.length ? <div className={styles.NoticeBox}>
       <ListComp listData={annoceList} />
       <Pagina total={notification.length} setPages={setPages} />

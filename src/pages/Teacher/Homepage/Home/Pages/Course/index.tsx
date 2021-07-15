@@ -28,13 +28,13 @@ const Course = (props: any) => {
     }
   }, [allDataSource])
   return (
-    <>
-      <GoBack title={'任教课程'} onclick='/teacher/home?index=index' />
-      <div className={styles.CourseBox}>
+    <div className={styles.CourseBox}>
+      <GoBack title={'任教课程'} onclick='/teacher/home?index=index' teacher />
+      <div className={styles.kb}>
         {allDataSource && allDataSource.length ? <ListComponent listData={yxkcData} /> :
           <Nodata imgSrc={noDataImg} desc='暂无课程' />}
       </div>
-    </>
+    </div>
   )
 }
 

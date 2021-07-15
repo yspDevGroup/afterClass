@@ -37,7 +37,7 @@ const CourseDetails: React.FC = () => {
   }, [classid]);
 
   return <div className={styles.CourseDetails2}>
-    <GoBack title={'课程详情'} onclick='/teacher/home?index=education' />
+    <GoBack title={'课程详情'} onclick='/teacher/home?index=education' teacher/>
     <div className={styles.KCXX}>
       {/* 上课时段 */}
       <p className={styles.title}>{KcDetail?.kcmc}</p>

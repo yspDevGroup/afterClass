@@ -17,7 +17,7 @@ const GoBack = (props: backtye) => {
         window.history.go(-1)
     }
     return (
-        <div className={styles.hz} style={{ background: teacher ? '#1877cb' : '#efefef' }}>
+        <div className={teacher ? styles.th : styles.hz} >
             {
                 onclick ? <>
                     <div className={styles.tp}>

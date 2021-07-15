@@ -7,6 +7,7 @@ import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
 import styles from './index.less';
 import { enHenceMsg } from '@/utils/utils';
+import GoBack from '@/components/GoBack';
 
 
 /**
@@ -15,11 +16,12 @@ import { enHenceMsg } from '@/utils/utils';
  */
 
 const SwitchIndex: any = (props: {
+  butDis: boolean;
   realTo: any;
   record: number;
   onSwitchItem: (value: any, checked?: boolean, refc?: any) => void;
 }) => {
-  const { realTo, record, onSwitchItem } = props;
+  const { realTo, record, onSwitchItem, butDis } = props;
   const [state, setstate] = useState<boolean>();
   useEffect(() => {
     if (realTo === '出勤') {
@@ -39,6 +41,7 @@ const SwitchIndex: any = (props: {
         unCheckedChildren="缺席"
         checked={state}
         onChange={(checked) => onSwitchChange(checked)}
+        disabled={butDis}
       />
     </div>
   );
@@ -162,7 +165,7 @@ const CallTheRoll = (props: any) => {
     if (res.status === 'ok') {
       message.success('操作成功');
       history.push('/teacher/home');
-    }else{
+    } else {
       enHenceMsg(res.message);
     }
   };
@@ -190,7 +193,7 @@ const CallTheRoll = (props: any) => {
       render: (text: string, record: any) => {
         return (
           <div key={record.id}>
-            <SwitchIndex realTo={text} record={record} onSwitchItem={onSwitchItem} />
+            <SwitchIndex realTo={text} record={record} onSwitchItem={onSwitchItem} butDis={butDis} />
           </div>
         );
       },
@@ -198,6 +201,7 @@ const CallTheRoll = (props: any) => {
   ];
   return (
     <div className={styles.callTheRoll}>
+      <GoBack title='课堂点名' teacher/>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
         {claName?.BJMC} ｜ 第 {wxad.length}/{kjs} 课时
