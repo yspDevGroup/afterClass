@@ -35,7 +35,7 @@ const Course = (props: any) => {
 
   return (
     <div className={styles.CourseBox}>
-      <GoBack title={'全部'} onclick='/parent/home?index=index' />
+      <GoBack title={'课程列表'} onclick='/parent/home?index=index' />
       <div className={`${styles.tabHeader}`}>
         <Tabs centered={true} className={styles.courseTab} defaultActiveKey={keys}>
           {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
