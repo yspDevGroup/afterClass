@@ -156,9 +156,9 @@ const CourseDetails: React.FC = () => {
           {KcDetail?.KHBJSJs?.map((value: any) => {
             return (
               <li>
-                <div>
-                  <p style={{ color: '#333', fontWeight: 'bold', textAlign: 'center' }}>
-                    {value.BJMC}
+                <div style={{paddingBottom: '10px'}}>
+                  <p className={styles.bjname}>
+                    <span>{value.BJMC}</span>
                   </p>
                   <p className={styles.bzrname}>
                     班主任：

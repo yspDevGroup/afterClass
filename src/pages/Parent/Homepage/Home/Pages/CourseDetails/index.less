@@ -97,6 +97,26 @@
           }
         }
       }
+      .bjname{
+        color: #333;
+        font-weight: bold;
+        text-align: center;
+        position: relative;
+        &::before{
+          content: '';
+          display: block;
+          height: 1px;
+          width:100%;
+          background-color: #eee;
+          position: absolute;
+          top:13px;
+        }
+        span{
+          position: relative;
+          padding: 0 16px;
+          background-color: #fff;
+        }
+      }
 
       .bzrname * {
         height: 16px !important;

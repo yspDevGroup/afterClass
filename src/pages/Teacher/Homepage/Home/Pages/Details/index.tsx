@@ -20,7 +20,7 @@ const Details = (props: { data?: any[] }) => {
       </div>
       {
         data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
-          {data?.map((record: any) => {
+          {data?.map((record: any,index: number) => {
             if (index < 4) {
               return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }} key={record.id}>
                 <li style={{ lineHeight: '30px' }}>
