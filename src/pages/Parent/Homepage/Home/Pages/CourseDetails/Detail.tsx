@@ -13,6 +13,7 @@ import styles from './index.less';
 const Detail: React.FC = () => {
   const [classDetail, setClassDetail] = useState<any>();
   const [extra, setExtra] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
   const classid = getQueryString('classid');
   const index = getQueryString('index');
   const fetchData = async (bjid: string) => {
@@ -40,19 +41,20 @@ const Detail: React.FC = () => {
       enHenceMsg(res1.message);
     }
   }
+  const getWxData = async () => {
+    if (/MicroMessenger/i.test(navigator.userAgent)) {
+      await initWXConfig(['checkJsApi']);
+    }
+    await initWXAgentConfig(['checkJsApi']);
+    setIsLoading(true);
+  };
   useEffect(() => {
-    (async () => {
-      if (/MicroMessenger/i.test(navigator.userAgent)) {
-        await initWXConfig(['checkJsApi']);
-      }
-      if (await initWXConfig(['checkJsApi'])) {
-        await initWXAgentConfig(['checkJsApi']);
-      }
-    })();
-  }, []);
+    getWxData();
+  }, [isLoading]);
 
   useEffect(() => {
     if (classid) {
+      getWxData();
       fetchData(classid);
     }
   }, [classid]);
@@ -99,7 +101,7 @@ const Detail: React.FC = () => {
                   return <tr>
                     <td>{weeks}</td>
                     <td>{values.XXSJPZ.TITLE}</td>
-                    <td>{values.XXSJPZ.KSSJ.substring(0,5)}-{values.XXSJPZ.JSSJ.substring(0,5)}</td>
+                    <td>{values.XXSJPZ.KSSJ.substring(0, 5)}-{values.XXSJPZ.JSSJ.substring(0, 5)}</td>
                     <td>{values.FJSJ.XQName}</td>
                     <td>{values.FJSJ.FJMC}</td>
                   </tr>
@@ -109,13 +111,13 @@ const Detail: React.FC = () => {
           </table>
         </li>
         <li className={styles.bzrname}>
-          班主任：{<WWOpenDataCom type="userName" openid={classDetail?.ZJS} />}
+          班主任：{isLoading ? <WWOpenDataCom type="userName" openid={classDetail?.ZJS} /> : <></>}
         </li>
         <li className={styles.bzrname}>
-          副班：{
+          副班：{isLoading ? 
             classDetail?.FJS.split(',').map((item: any) => {
               return <span style={{ marginRight: '1em' }}><WWOpenDataCom type="userName" openid={item} /></span>
-            })
+            }): <></>
           }
         </li>
       </ul>

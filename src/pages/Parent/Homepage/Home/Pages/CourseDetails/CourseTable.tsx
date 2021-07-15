@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { Badge } from 'antd';
