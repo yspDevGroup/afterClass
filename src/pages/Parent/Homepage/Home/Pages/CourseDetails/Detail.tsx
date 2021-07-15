@@ -96,9 +96,9 @@ const Detail: React.FC = () => {
             </thead>
             <tbody>
               {
-                extra?.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number },index:number) => {
+                extra?.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number }) => {
                   const weeks = `星期${'日一二三四五六'.charAt(values.WEEKDAY)}`;
-                  return <tr key={index+1}>
+                  return <tr key={values.XXSJPZ.TITLE}>
                     <td>{weeks}</td>
                     <td>{values.XXSJPZ.TITLE}</td>
                     <td>{values.XXSJPZ.KSSJ.substring(0, 5)}-{values.XXSJPZ.JSSJ.substring(0, 5)}</td>

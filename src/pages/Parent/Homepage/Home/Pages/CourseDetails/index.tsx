@@ -1,4 +1,4 @@
-import { Button, Radio, Tooltip } from 'antd';
+import { Button, Divider, Radio, Tooltip } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link } from 'umi';
 import styles from './index.less';
@@ -115,18 +115,6 @@ const CourseDetails: React.FC = () => {
       enHenceMsg(res.message);
     }
   };
-  // 房间数据去重
-  const tempfun = (arr: any) => {
-    const fjname: string[] = [];
-    arr.forEach((item: any) => {
-      if (!fjname.includes(item.FJSJ.FJMC)) {
-        fjname.push(item.FJSJ.FJMC);
-      }
-    });
-    return fjname.map((values: any) => {
-      return <span>{values}</span>;
-    });
-  };
   const butonclick = (ind: number) => {
     changeStatus(ind);
   };
@@ -170,63 +158,69 @@ const CourseDetails: React.FC = () => {
         </ul>
         <p className={styles.title}>课程简介</p>
         <p className={styles.content}>{KcDetail?.KCMS}</p>
-        <p className={styles.content} style={{ marginTop: '20px' }}>
-          开设班级：
-        </p>
-        <ul className={styles.classInformation}>
-          {KcDetail?.KHBJSJs?.map(
-            (value: { BJMC: string; ZJS: string; FJS: string; KSS: number; KHPKSJs: any }) => {
-              if (isLoading) {
-                return (
-                  <li>
-                    {value.BJMC}：总课时：{value.KSS}课时, 上课时间：
-                    {value.KHPKSJs.map((values: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                      const weeks = `周${'日一二三四五六'.charAt(values.WEEKDAY)}`;
-                      let kssj = '';
-                      if (values.XXSJPZ.KSSJ) {
-                        values.XXSJPZ.KSSJ.split(':');
-                        kssj = `${values.XXSJPZ.KSSJ.split(':')[0]}:${
-                          values.XXSJPZ.KSSJ.split(':')[1]
-                        }`;
-                      }
-                      let jssj = '';
-                      if (values.XXSJPZ.JSSJ) {
-                        values.XXSJPZ.JSSJ.split(':');
-                        jssj = `${values.XXSJPZ.JSSJ.split(':')[0]}:${
-                          values.XXSJPZ.JSSJ.split(':')[1]
-                        }`;
-                      }
+      </div>
+      <Divider />
+      <ul className={styles.classInformation}>
+      <p>开设班级：</p>
+        {KcDetail?.KHBJSJs?.map(
+          (value: any) => {
+            return (
+              <li>
+                <div>
+                  <p style={{ color: '#45c977', fontWeight: 'bold', textAlign: 'center' }}>{value.BJMC}</p>
+                  <p className={styles.bzrname}>
+                    班主任：{isLoading ? <WWOpenDataCom type="userName" openid={value.ZJS} /> : <></>}
+                  </p>
+                  <p className={styles.bzrname}>
+                    副班：
+                    {isLoading ? value.FJS.split(',').map((item: any) => {
                       return (
-                        <span>
-                          {weeks}
-                          {kssj}-{jssj},
+                        <span style={{ marginRight: '5px' }}>
+                          <WWOpenDataCom type="userName" openid={item} />
                         </span>
                       );
-                    })}
-                    上课地点：{tempfun(value.KHPKSJs)}，
-                    <span className={styles.bzrname}>
-                      班主任：{<WWOpenDataCom type="userName" openid={value.ZJS} />}
-                    </span>
-                    ,
-                    <span className={styles.bzrname}>
-                      副班：
-                      {value.FJS.split(',').map((item: any) => {
-                        return (
-                          <span style={{ marginRight: '5px' }}>
-                            <WWOpenDataCom type="userName" openid={item} />
-                          </span>
-                        );
-                      })}
-                      。
-                    </span>
-                  </li>
-                );
-              }
-              return <></>;
-            },
-          )}
-        </ul>
-      </div>
+                    }) : <></>}
+                  </p>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>课时数</th>
+                        <th>总人数</th>
+                        <th>报名费</th>
+                        <th>上课时间</th>
+                        <th>上课地点</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{value.KSS}课时</td>
+                        <td>{value.BJRS}人</td>
+                        <td>{value.FY}元</td>
+                        <td style={{ padding: '2px 0' }}>
+                          {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                            const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
+                            return (
+                              <p>
+                                {weeks}
+                                {val.XXSJPZ.KSSJ.substring(0, 5)}-{val.XXSJPZ.JSSJ.substring(0, 5)}
+                              </p>
+                            );
+                          })}
+                        </td>
+                        <td style={{ padding: '2px 0' }}>
+                          {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                            return <p>{val.FJSJ.FJMC}</p>
+                          })}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            );
+          },
+        )}
+      </ul>
       <div className={styles.footer}>
         {kaiguan ? (
           <button className={styles.btn} onClick={() => setstate(true)}>
