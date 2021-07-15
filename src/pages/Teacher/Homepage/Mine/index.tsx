@@ -142,9 +142,9 @@ const Mine = () => {
         </div>
         {
           checkIn && checkIn.length ?
-            checkIn.map((item: any,index:number) => {
+            checkIn.map((item: any) => {
               const kcData = getKcData(item);
-              return <CheckOnChart data={kcData} title={item.KCMC} key={index+1}/>
+              return <CheckOnChart data={kcData} title={item.KCMC} key={item.KCMC}/>
             })
             : <Nodata imgSrc={noChart} desc='暂无数据' />
         }

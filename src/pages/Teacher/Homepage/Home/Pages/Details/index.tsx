@@ -20,9 +20,9 @@ const Details = (props: { data?: any[] }) => {
       </div>
       {
         data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
-          {data?.map((record: any, index: number) => {
+          {data?.map((record: any) => {
             if (index < 4) {
-              return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }} key={index+1}>
+              return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }} key={record.id}>
                 <li style={{ lineHeight: '30px' }}>
                   <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
                     {record.BT}

@@ -82,7 +82,16 @@ const Detail: React.FC = () => {
       <Divider />
       <ul className={styles.classInformation}>
         <li>所在班级：{classDetail?.BJMC}</li>
-        <li>总课时：{classDetail?.KSS}课时</li>
+        <li className={styles.bzrname}>
+          班主任：{isLoading ? <WWOpenDataCom type="userName" openid={classDetail?.ZJS} /> : <></>}
+        </li>
+        <li className={styles.bzrname}>
+          副班：{isLoading ? 
+            classDetail?.FJS.split(',').map((item: any) => {
+              return <span style={{ marginRight: '1em' }}><WWOpenDataCom type="userName" openid={item} /></span>
+            }): <></>
+          }
+        </li>
         <li>上课安排：
           <table width='100%'>
             <thead>
@@ -96,9 +105,9 @@ const Detail: React.FC = () => {
             </thead>
             <tbody>
               {
-                extra?.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number },index:number) => {
+                extra?.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number }) => {
                   const weeks = `星期${'日一二三四五六'.charAt(values.WEEKDAY)}`;
-                  return <tr key={index+1}>
+                  return <tr key={values.XXSJPZ.TITLE}>
                     <td>{weeks}</td>
                     <td>{values.XXSJPZ.TITLE}</td>
                     <td>{values.XXSJPZ.KSSJ.substring(0, 5)}-{values.XXSJPZ.JSSJ.substring(0, 5)}</td>
@@ -109,16 +118,6 @@ const Detail: React.FC = () => {
               }
             </tbody>
           </table>
-        </li>
-        <li className={styles.bzrname}>
-          班主任：{isLoading ? <WWOpenDataCom type="userName" openid={classDetail?.ZJS} /> : <></>}
-        </li>
-        <li className={styles.bzrname}>
-          副班：{isLoading ? 
-            classDetail?.FJS.split(',').map((item: any) => {
-              return <span style={{ marginRight: '1em' }}><WWOpenDataCom type="userName" openid={item} /></span>
-            }): <></>
-          }
         </li>
       </ul>
     </div>
