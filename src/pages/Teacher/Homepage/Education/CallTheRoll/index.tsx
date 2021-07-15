@@ -63,7 +63,8 @@ const CallTheRoll = (props: any) => {
   // 表格数据
   const [dataSource, setDataScouse] = useState<any>([]);
   const [butDis, setButDis] = useState<boolean>(false);
-
+  // 获取当前日期
+  const nowDate = new Date();
   const { pkid, bjids, date, kjs, sj } = props.location.state;
   const pkDate = date?.replace(/\//g, '-'); // 日期
 
@@ -96,6 +97,7 @@ const CallTheRoll = (props: any) => {
         })
         setDataScouse(allData);
       } else {
+        const nowSta = (nowDate.getTime() - new Date(pkDate).getTime()) / 7 / 24 / 60 / 60 / 1000;
         // 获取班级已报名人数
         const resStudent = getEnrolled({ id: bjids || '' });
         Promise.resolve(resStudent).then((data: any) => {
@@ -105,6 +107,15 @@ const CallTheRoll = (props: any) => {
               item.isRealTo = '出勤';
             });
             setDataScouse(studentData);
+            setButDis(nowSta >= 1);
+            if(nowSta >= 1){
+              notification.warning({
+                message: '',
+                description:
+                  '本节课因考勤超时已默认点名',
+                duration: 3,
+              });
+            }
           }
         });
       }

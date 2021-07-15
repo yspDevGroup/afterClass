@@ -43,11 +43,7 @@ const CourseDetails: React.FC = () => {
     const enAble =
       myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
       myDate <= new Date(moment(end).format('YYYY/MM/DD'));
-    if (current.KHXSBJs.length >= current.BJRS || !enAble) {
-      setFk(true);
-    }else{
-      setFk(false);
-    }
+    setFk(current.KHXSBJs.length >= current.BJRS || !enAble);
     setFY(current.FY);
     setBJ(current.id);
   };
