@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Divider } from 'antd';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { ChangePageTitle, enHenceMsg, getQueryString } from '@/utils/utils';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
@@ -16,6 +16,7 @@ const Detail: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const classid = getQueryString('classid');
   const index = getQueryString('index');
+  ChangePageTitle(ENV_subTitle);
   const fetchData = async (bjid: string) => {
     const res = await getKHBJSJ({ id: bjid });
     if (res.status === 'ok') {
@@ -61,8 +62,8 @@ const Detail: React.FC = () => {
   return <div className={styles.CourseDetails}>
     {
       index === 'all' ?
-        <GoBack title={'课程简介'} teacher/> :
-        <GoBack title={'课程简介'} onclick='/teacher/home?index=index' teacher/>
+        <GoBack title={'课程简介'} teacher /> :
+        <GoBack title={'课程简介'} onclick='/teacher/home?index=index' teacher />
     }
     <div className={styles.wrap}>
       {
@@ -80,8 +81,18 @@ const Detail: React.FC = () => {
       <p className={styles.content}>{classDetail?.KHKCSJ?.KCMS}</p>
       <Divider />
       <ul className={styles.classInformation}>
-        <li>所在班级：{classDetail?.BJMC}</li>
-        <li>总课时：{classDetail?.KSS}课时</li>
+        <li>授课班级：{classDetail?.BJMC}</li>
+        <li className={styles.bzrname}>
+          班主任：{isLoading ? <WWOpenDataCom type="userName" openid={classDetail?.ZJS} /> : <></>}
+        </li>
+        <li className={styles.bzrname}>
+          副班：{isLoading ?
+            classDetail?.FJS.split(',').map((item: any) => {
+              return <span style={{ marginRight: '1em' }}><WWOpenDataCom type="userName" openid={item} /></span>
+            }) : <></>
+          }
+        </li>
+
         <li>上课安排：
           <table width='100%'>
             <thead>
@@ -108,16 +119,6 @@ const Detail: React.FC = () => {
               }
             </tbody>
           </table>
-        </li>
-        <li className={styles.bzrname}>
-          班主任：{isLoading ? <WWOpenDataCom type="userName" openid={classDetail?.ZJS} /> :<></>}
-        </li>
-        <li className={styles.bzrname}>
-          副班：{isLoading ?
-            classDetail?.FJS.split(',').map((item: any) => {
-              return <span style={{ marginRight: '1em' }}><WWOpenDataCom type="userName" openid={item} /></span>
-            }):<></>
-          }
         </li>
       </ul>
     </div>

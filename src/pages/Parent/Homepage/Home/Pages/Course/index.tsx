@@ -7,6 +7,7 @@ import type { ListData } from '@/components/ListComponent/data';
 import Nodata from '@/components/Nodata';
 import moment from 'moment';
 import GoBack from '@/components/GoBack';
+import { ChangePageTitle } from '@/utils/utils';
 
 
 const defaultMsg: ListData = {
@@ -20,6 +21,7 @@ const Course = (props: any) => {
   const { yxkcAllData, kskc, courseStatus, keys } = props.location.state;
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
 
+  ChangePageTitle(ENV_subTitle);
   useEffect(() => {
     if (yxkcAllData) {
       const newData = { ...defaultMsg };

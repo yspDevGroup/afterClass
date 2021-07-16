@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from "./index.less"
-import { enHenceMsg, getQueryString } from '@/utils/utils'
+import { ChangePageTitle, enHenceMsg, getQueryString } from '@/utils/utils'
 import { getXXGG } from '@/services/after-class/xxgg';
 import { data } from './mock';
 import GoBack from '@/components/GoBack';
@@ -12,6 +12,7 @@ const Announcement = () => {
   const articlepage = getQueryString('articlepage');
   const index=getQueryString('index');
   useEffect(() => {
+    ChangePageTitle(ENV_subTitle);
     async function announcements() {
       const res = await getXXGG({ id: pageId! });
       if (res.status === 'ok') {

@@ -8,8 +8,7 @@ import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icon
 import { overdueKHXSDD, deleteKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
 import moment from 'moment';
 import styles from './index.less';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import { enHenceMsg } from '@/utils/utils';
+import { ChangePageTitle, enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
 
 const { Countdown } = Statistic;
@@ -71,12 +70,7 @@ const OrderDetails: React.FC = (props: any) => {
     }
   };
   useEffect(() => {
-    (async () => {
-      if (/MicroMessenger/i.test(navigator.userAgent)) {
-        await initWXConfig(['checkJsApi']);
-      }
-      await initWXAgentConfig(['checkJsApi']);
-    })();
+    ChangePageTitle(ENV_subTitle);
   }, []);
   if (orderInfo) {
     return <>

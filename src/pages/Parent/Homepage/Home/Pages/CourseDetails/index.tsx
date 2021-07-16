@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link } from 'umi';
 import styles from './index.less';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { ChangePageTitle, enHenceMsg, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
@@ -34,6 +34,7 @@ const CourseDetails: React.FC = () => {
       name: currentUser?.username,
     },
   ];
+  ChangePageTitle(ENV_subTitle);
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
@@ -280,6 +281,16 @@ const CourseDetails: React.FC = () => {
                 },
               )}
             </Radio.Group>
+            {/* <Radio
+                    className={styles.agreement}
+                    onChange={() => setXY(true)}
+                  >
+                    <p>我已阅读并同意
+                     <a href=''>
+                        《课后帮服务协议》
+                     </a>
+                    </p>
+                  </Radio> */}
             <Button className={styles.submit} disabled={fk || BJ === undefined} onClick={submit}>
               确定并付款
             </Button>

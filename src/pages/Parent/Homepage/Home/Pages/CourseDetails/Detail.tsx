@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Divider } from 'antd';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { ChangePageTitle, enHenceMsg, getQueryString } from '@/utils/utils';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
@@ -16,6 +16,7 @@ const Detail: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const classid = getQueryString('classid');
   const index = getQueryString('index');
+  ChangePageTitle(ENV_subTitle);
   const fetchData = async (bjid: string) => {
     const res = await getKHBJSJ({ id: bjid });
     if (res.status === 'ok') {

@@ -6,7 +6,7 @@ import { Link, useModel, } from 'umi';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { deleteKHXSDD, getAllKHXSDD } from '@/services/after-class/khxsdd';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { ChangePageTitle, enHenceMsg, getQueryString } from '@/utils/utils';
 import noOrder from '@/assets/noOrder.png';
 import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
@@ -90,6 +90,7 @@ const Order: React.FC = () => {
         }
     };
     useEffect(() => {
+        ChangePageTitle(ENV_subTitle);
         fetch(children);
     }, []);
     return (

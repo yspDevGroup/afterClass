@@ -287,7 +287,7 @@ export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?:
 export const getData = async (bjid: string, xsId?: string) => {
   const res1 = await getKHPKSJByBJID({ id: bjid });
   if (res1.status === 'ok' && res1.data) {
-    const attend = [...new Set(res1.data.map(n => n.WEEKDAY))];
+    const attend = [...new Set(res1.data.map((n: { WEEKDAY: any; }) => n.WEEKDAY))];
     const res = await getKHBJSJ({ id: bjid });
     if (res.status === 'ok' && res.data && attend) {
       const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;
@@ -306,4 +306,19 @@ export const getData = async (bjid: string, xsId?: string) => {
   return {
     status: 'nothing'
   };
+};
+/**
+ * 修改头部标题的函数
+ * @param title 
+ */
+export const ChangePageTitle = (title: string) => {
+  document.title = title;
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText ='display: none;';
+  document.body.appendChild(iframe);
+  iframe.onload = () =>{
+    setTimeout(()=> {
+      iframe.onload =()=>{};
+    }, 0);
+  }
 };

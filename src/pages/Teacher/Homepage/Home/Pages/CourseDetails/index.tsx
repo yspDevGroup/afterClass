@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { Badge } from 'antd';
-import { getData, getQueryString } from '@/utils/utils';
+import { ChangePageTitle, getData, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import styles from './index.less';
 import noData from '@/assets/noCourse.png';
@@ -21,7 +21,7 @@ const CourseDetails: React.FC = () => {
     student_userid: currentUser?.UserId,
     njId: '1'
   }];
-  const xsName = currentUser?.subscriber_info?.remark || currentUser?.username;
+  ChangePageTitle(ENV_subTitle);
   useEffect(() => {
     async function fetchData() {
       if (classid) {
@@ -46,8 +46,7 @@ const CourseDetails: React.FC = () => {
         <li>上课时段：{moment(KcDetail?.start).format('YYYY.MM.DD')}~{moment(KcDetail?.end).format('YYYY.MM.DD')}</li>
         <li>上课地点：{KcDetail?.XQName}</li>
         <li>总课时：{KcDetail?.kss}课时</li>
-        <li>班级：{KcDetail?.title}</li>
-        <li>学生：{xsName?.split('-')[0]}</li>
+        <li>授课班级：{KcDetail?.title}</li>
       </ul>
       </ul>
     </div>
