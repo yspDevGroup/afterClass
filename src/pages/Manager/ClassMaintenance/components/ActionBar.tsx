@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import React from 'react';
-import { Dropdown, Menu, Popconfirm,message, Divider } from 'antd';
+import { Dropdown, Menu, Popconfirm, message, Divider } from 'antd';
 import { history } from 'umi';
 import { DownOutlined } from '@ant-design/icons';
 import type { ActionType } from '@ant-design/pro-table';
@@ -12,16 +12,12 @@ type propstype = {
   handleEdit: (data: CourseItem) => void;
   record: CourseItem;
   actionRef: React.MutableRefObject<ActionType | undefined>;
-  // setnames: () => void;
 };
 
 const ActionBar = (props: propstype) => {
   const { handleEdit, record, actionRef } = props;
   const shelf = (records: any) => {
     if (records.KHXSBJs.length === 0) {
-      // records.BJZT = '已下架'
-      // records.BMKSSJ = new Date(records.BMKSSJ);
-      // records.BMJSSJ = new Date(records.BMJSSJ);
       const res = updateKHBJSJ({ id: records.id }, { BJZT: '已下架' });
       new Promise((resolve) => {
         resolve(res);
@@ -29,7 +25,7 @@ const ActionBar = (props: propstype) => {
         if (data.status === 'ok') {
           message.success('下架成功');
           actionRef.current?.reload();
-        } else if (data.message!.indexOf('token') > -1||(data.message!).indexOf('Token') > -1) {
+        } else if (data.message!.indexOf('token') > -1 || (data.message!).indexOf('Token') > -1) {
           history.replace('/auth_callback/overDue');
         } else {
           message.error('下架失败，请联系管理员或稍后重试');
@@ -41,9 +37,6 @@ const ActionBar = (props: propstype) => {
     }
   };
   const release = (recorde: any) => {
-    // recorde.BJZT = '已发布';
-    // recorde.BMKSSJ = new Date(recorde.BMKSSJ);
-    // recorde.BMJSSJ = new Date(recorde.BMJSSJ);
     const res = updateKHBJSJ({ id: recorde.id }, { BJZT: '已发布' });
     new Promise((resolve) => {
       resolve(res);
@@ -76,7 +69,7 @@ const ActionBar = (props: propstype) => {
                   if (data.status === 'ok') {
                     message.success('删除成功');
                     actionRef.current?.reload();
-                  } else{
+                  } else {
                     enHenceMsg(data.message);
                   }
                 });
@@ -110,39 +103,39 @@ const ActionBar = (props: propstype) => {
               </Dropdown>
             </>
           ) : (
-            <>
-              <a onClick={() => handleEdit(record)}>编辑</a>
-              <Divider type="vertical" />
-              <Popconfirm
-                title="删除之后，数据不可恢复，确定要删除吗?"
-                onConfirm={async () => {
-                  try {
-                    if (record.id) {
-                      const params = { id: record.id };
-                      const res = deleteKHBJSJ(params);
-                      new Promise((resolve) => {
-                        resolve(res);
-                      }).then((data: any) => {
-                        if (data.status === 'ok') {
-                          message.success('删除成功');
-                          actionRef.current?.reload();
-                        }else{
-                          enHenceMsg(data.message);
-                        }
-                      });
+              <>
+                <a onClick={() => handleEdit(record)}>编辑</a>
+                <Divider type="vertical" />
+                <Popconfirm
+                  title="删除之后，数据不可恢复，确定要删除吗?"
+                  onConfirm={async () => {
+                    try {
+                      if (record.id) {
+                        const params = { id: record.id };
+                        const res = deleteKHBJSJ(params);
+                        new Promise((resolve) => {
+                          resolve(res);
+                        }).then((data: any) => {
+                          if (data.status === 'ok') {
+                            message.success('删除成功');
+                            actionRef.current?.reload();
+                          } else {
+                            enHenceMsg(data.message);
+                          }
+                        });
+                      }
+                    } catch (err) {
+                      message.error('删除失败，请联系管理员或稍后重试。');
                     }
-                  } catch (err) {
-                    message.error('删除失败，请联系管理员或稍后重试。');
-                  }
-                }}
-                okText="确定"
-                cancelText="取消"
-                placement="topRight"
-              >
-                <a>删除</a>
-              </Popconfirm>
-            </>
-          )}
+                  }}
+                  okText="确定"
+                  cancelText="取消"
+                  placement="topRight"
+                >
+                  <a>删除</a>
+                </Popconfirm>
+              </>
+            )}
         </>
       );
       break;
