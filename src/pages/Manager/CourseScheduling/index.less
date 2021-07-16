@@ -1,33 +1,41 @@
 .classCard {
   text-align: left;
+
   .cardTop {
     height: 6px;
     border-radius: 4px 4px 0 0;
   }
+
   .cardcontent {
     padding: 8px;
     border-radius: 0 0 4px 4px;
+
     .cla {
       font-weight: bold;
     }
   }
 }
+
 .borderTable {
   padding: 0;
   border: 1px solid #e4e4e4;
+
   table:nth-child(1) {
     th {
       border-left: 1px solid #e4e4e4;
+
       &:nth-child(1),
       &:nth-child(2) {
         border-left: none;
       }
     }
-    & + div {
+
+    &+div {
       border: none;
     }
   }
 }
+
 .noContent {
   width: 1200px;
   color: rgba(33, 48, 69, 0.5);
@@ -41,7 +49,7 @@
 .ArrangingFrom {
   padding: 30px 10px 50px 10px;
 
-  > div {
+  >div {
     margin-bottom: 35px;
 
     .ant-form-item-label {
@@ -60,29 +68,27 @@
     padding-left: calc(~'42% - 70px');
     background: #fff;
     box-shadow: 0 -3px 2px rgba(181, 190, 192, 0.1);
-    // > div:nth-of-type(2) {
-    //   button {
-    //     color: #fff;
-    //     background-color: #3E88F8;
-    //     border-color: #3E88F8;
-    //   }
-    // }
   }
+
   .banji {
     display: flex;
     margin-bottom: 20px;
-    > span {
+
+    >span {
       width: 75px;
       text-align: right;
     }
+
     .ant-empty-normal {
       margin: 0;
     }
 
     .banjiCard {
       max-width: 950px;
+
       .banjiItem {
         position: relative;
+
         .douhao {
           position: absolute;
           right: 0;
@@ -97,12 +103,14 @@
           border-radius: 10px 0 0 0;
         }
       }
+
       .ant-pro-card-body {
         flex-wrap: wrap;
 
         .ant-pro-card-col {
           width: auto;
         }
+
         .ant-pro-card-border {
           width: 8vw;
           min-width: 105px;
@@ -113,7 +121,7 @@
           border-radius: 2px;
           cursor: pointer;
 
-          > div {
+          >div {
             display: block;
             padding: 10px;
             line-height: 24px;
@@ -133,7 +141,7 @@
         }
 
         .unFold {
-          > div {
+          >div {
             color: #4884ff;
             line-height: 40px;
             text-align: center;
@@ -142,24 +150,28 @@
       }
     }
   }
+
   .site {
     display: flex;
-    // min-width: 1022px;
     margin-bottom: 20px;
-    > span {
+
+    >span {
       width: 75px;
       min-width: 75px;
       text-align: right;
     }
-    > div {
+
+    >div {
       margin-top: 0;
     }
   }
+
   .btn {
     margin-bottom: 10px;
     margin-left: 75px;
   }
 }
+
 .colors {
   li {
     height: 30px;

@@ -1,9 +1,11 @@
 .callTheRoll {
   height: 100%;
   background: #f5f5f5;
+
   .noScrollBar::-webkit-scrollbar {
-    display: none !important; /* Chrome Safari */
+    display: none !important;
   }
+
   .classCourseName {
     padding-top: 15px;
     color: #333;
@@ -14,6 +16,7 @@
     line-height: 20px;
     text-align: center;
   }
+
   .classCourseInfo {
     margin-top: 6px;
     color: #999;
@@ -21,6 +24,7 @@
     line-height: 17px;
     text-align: center;
   }
+
   .checkWorkAttendance {
     display: flex;
     justify-content: space-around;
@@ -28,14 +32,17 @@
     padding: 10px 0;
     background: #fff;
     border-radius: 8px;
+
     .checkWorkInfo {
       text-align: center;
+
       .number {
         color: #333;
         font-weight: 600;
         font-size: 20px;
         line-height: 28px;
       }
+
       .word {
         color: #666;
         font-size: 14px;
@@ -43,15 +50,18 @@
       }
     }
   }
+
   .studentList {
     margin-bottom: 54px;
+
     :global {
       .ant-table-container {
         table {
           background: #f5f5f5;
         }
       }
-      .ant-table-thead > tr > th {
+
+      .ant-table-thead>tr>th {
         height: 28px;
         padding: 0;
         color: #666;
@@ -59,27 +69,33 @@
         line-height: 28px;
         background: #eee;
       }
-      .ant-table-thead > tr {
+
+      .ant-table-thead>tr {
         th:first-child {
           border-top-left-radius: 8px;
         }
+
         th:last-child {
           border-top-right-radius: 8px;
         }
       }
+
       .ant-table-tbody {
         tr {
           height: 40px;
+
           td {
             padding: 0;
           }
         }
+
         tr:nth-child(even) {
           background: #fff;
         }
       }
     }
   }
+
   .footerButton {
     position: absolute;
     bottom: 0;
@@ -89,14 +105,17 @@
     line-height: 54px;
     background: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
     &[disabled] {
       background-color: #999 !important;
       border-color: #eee !important;
     }
+
     .disabl {
       background-color: #999 !important;
       border-color: #eee !important;
     }
+
     :global {
       .ant-btn-round {
         height: 38px;

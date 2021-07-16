@@ -43,13 +43,13 @@ const CourseTable: React.FC = () => {
       {/* 上课时段 */}
       <p className={styles.title}>{KcDetail?.kcmc}</p>
       <ul>
-      <ul>
-        <li>上课时段：{moment(KcDetail?.start).format('YYYY.MM.DD')}~{moment(KcDetail?.end).format('YYYY.MM.DD')}</li>
-        <li>上课地点：{KcDetail?.XQName}</li>
-        <li>总课时：{KcDetail?.kss}课时</li>
-        <li>班级：{KcDetail?.title}</li>
-        <li>学生：{xsName?.split('-')[0]}</li>
-      </ul>
+        <ul>
+          <li>上课时段：{moment(KcDetail?.start).format('YYYY.MM.DD')}~{moment(KcDetail?.end).format('YYYY.MM.DD')}</li>
+          <li>上课地点：{KcDetail?.XQName}</li>
+          <li>总课时：{KcDetail?.kss}课时</li>
+          <li>班级：{KcDetail?.title}</li>
+          <li>学生：{xsName?.split('-')[0]}</li>
+        </ul>
       </ul>
     </div>
     <div className={styles.Timetable}>
@@ -61,7 +61,6 @@ const CourseTable: React.FC = () => {
           <Badge className={styles.legend} color="#45C977" text="今日" />
           <Badge className={styles.legend} color="#d2ecdc" text="待上" />
         </span>
-
       </p>
       <div className={styles.cards}>
         {
@@ -73,8 +72,6 @@ const CourseTable: React.FC = () => {
           }) : <Nodata imgSrc={noData} desc='暂无课表' />
         }
       </div>
-
-
     </div>
   </div>
 

@@ -280,16 +280,6 @@ const CourseDetails: React.FC = () => {
                 },
               )}
             </Radio.Group>
-            {/* <Radio
-                    className={styles.agreement}
-                    onChange={() => setXY(true)}
-                  >
-                    <p>我已阅读并同意
-                     <a href=''>
-                        《课后帮服务协议》
-                     </a>
-                    </p>
-                  </Radio> */}
             <Button className={styles.submit} disabled={fk || BJ === undefined} onClick={submit}>
               确定并付款
             </Button>

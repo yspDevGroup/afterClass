@@ -21,7 +21,7 @@
         font-size: @font-size-lg;
         line-height: 24px;
 
-        & + div {
+        &+div {
           color: @text-color-secondary;
           font-size: @font-size-sm;
         }
@@ -75,6 +75,7 @@
           height: 34px;
         }
       }
+
       .gengduo {
         svg {
           width: 18px;
@@ -94,8 +95,9 @@
           line-height: 18px;
           white-space: nowrap;
           text-overflow: ellipsis;
-          padding: 0 6px ;
+          padding: 0 6px;
           margin: 10px 6px 4px 6px;
+
           &:nth-child(1) {
             padding: 2px 5px;
             width: 63px;
@@ -111,7 +113,7 @@
           &+a {
             color: @text-color;
             display: inline-block;
-            width:  calc(~'100vw - 125px'); 
+            width: calc(~'100vw - 125px');
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -130,6 +132,7 @@
     .enrollArea {
       margin-top: 20px;
       margin-bottom: 20px;
+
       .enrollText {
         padding: 7px;
         color: #fff;
@@ -152,51 +155,61 @@
         border-radius: 20px 0px 20px 20px;
       }
     }
+
     .todayCourses {
       :global {
         .ant-list-item-meta:first-child {
           background: rgba(69, 201, 119, 0.05);
         }
+
         .ant-list-item-meta:nth-child(2) {
           background: rgba(102, 102, 102, 0.05);
         }
       }
     }
   }
+
   :global {
-    .ant-tabs-tab + .ant-tabs-tab {
+    .ant-tabs-tab+.ant-tabs-tab {
       margin-left: 28px;
     }
-    .ant-tabs-top > .ant-tabs-nav,
-    .ant-tabs-bottom > .ant-tabs-nav,
-    .ant-tabs-top > div > .ant-tabs-nav,
-    .ant-tabs-bottom > div > .ant-tabs-nav {
+
+    .ant-tabs-top>.ant-tabs-nav,
+    .ant-tabs-bottom>.ant-tabs-nav,
+    .ant-tabs-top>div>.ant-tabs-nav,
+    .ant-tabs-bottom>div>.ant-tabs-nav {
       height: 22px;
       margin-bottom: 12px;
       line-height: 22px;
     }
-    .ant-tabs-top > .ant-tabs-nav::before,
-    .ant-tabs-bottom > .ant-tabs-nav::before,
-    .ant-tabs-top > div > .ant-tabs-nav::before,
-    .ant-tabs-bottom > div > .ant-tabs-nav::before {
+
+    .ant-tabs-top>.ant-tabs-nav::before,
+    .ant-tabs-bottom>.ant-tabs-nav::before,
+    .ant-tabs-top>div>.ant-tabs-nav::before,
+    .ant-tabs-bottom>div>.ant-tabs-nav::before {
       border-bottom: 0px;
     }
-     .ant-tabs-ink-bar {
+
+    .ant-tabs-ink-bar {
       display: none;
     }
+
     .ant-tabs-tab:hover {
       color: #333333;
       font-weight: 600;
       font-size: @font-size-lg;
     }
+
     .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
       color: #333333;
       font-weight: 600;
       font-size: @font-size-lg;
     }
-    .ant-tabs-tab-btn { 
+
+    .ant-tabs-tab-btn {
       font-size: @font-size-lg;
     }
+
     .ant-tabs-extra-content {
       a {
         color: #999999;
@@ -204,19 +217,23 @@
       }
     }
   }
+
   .courseType {
     :global {
-       .ant-tabs-ink-bar {
+      .ant-tabs-ink-bar {
         display: block;
         margin-bottom: 2px;
         background: #45c977;
       }
+
       .ant-tabs-tab:hover {
         font-size: 14px;
       }
+
       .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
         font-size: 14px;
       }
+
       .ant-tabs-tab-btn {
         font-size: 14px;
       }

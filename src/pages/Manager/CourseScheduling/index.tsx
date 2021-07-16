@@ -3,14 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Radio, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-
 import type { SearchDataType } from '@/components/Search/data';
 import PageContainer from '@/components/PageContainer';
 import SearchComponent from '@/components/Search';
 import ExcelTable from '@/components/ExcelTable';
 import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
-
 import { queryXQList } from '@/services/wechat/service';
 import { getAllFJSJ, getFJPlan } from '@/services/after-class/fjsj';
 import { getAllKHBJSJ, getKHBJSJ } from '@/services/after-class/khbjsj';
@@ -18,10 +16,8 @@ import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getQueryString } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-
 import AddArranging from './components/AddArranging';
 import { searchData } from './searchConfig';
-// import { NJData, XQData } from './mock';
 import './index.less';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllFJLX } from '@/services/after-class/fjlx';
@@ -496,7 +492,7 @@ const ClassManagement = () => {
       width: 136,
     },
   ];
-  const onExcelTableClick = (value: any, record: any) => {
+  const onExcelTableClick = (_value: any, record: any) => {
     setRecordValue(record);
   };
 

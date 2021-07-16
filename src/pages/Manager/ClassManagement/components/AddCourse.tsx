@@ -6,7 +6,6 @@ import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXQList } from '@/services/wechat/service';
-// import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
 import { getDepUserList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
@@ -50,9 +49,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const [teacherData, setTeacherData] = useState<any[]>([]);
   // 校区名字
   const [xQItem, setXQLabelItem] = useState<any>('');
-
-  // // 年级ID
-  // const [nJID, setNJID] = useState([]);
   // 年级名字
   const [nJLabelItem, setNJLabelItem] = useState<any>([]);
 
@@ -276,7 +272,7 @@ const AddCourse: FC<AddCourseProps> = ({
       rules: [{ required: true, message: '请填写所属校区' }],
       fieldProps: {
         options: campus,
-        onChange(value: any, option: any) {
+        onChange(_: any, option: any) {
           form.setFieldsValue({ NJS: undefined });
           setXQLabelItem(option?.label);
         },

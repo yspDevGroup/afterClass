@@ -21,24 +21,6 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       key: 'XSXM',
       align: 'center',
     },
-    // {
-    //   title: '班级',
-    //   dataIndex: 'BJMC',
-    //   key: 'BJMC',
-    //   align: 'center',
-    // },
-    // {
-    //   title: '年级',
-    //   dataIndex: 'address',
-    //   key: 'address',
-    //   align: 'center',
-    // },
-    // {
-    //   title: '校区',
-    //   dataIndex: 'XQName',
-    //   key: 'XQName',
-    //   align: 'center',
-    // },
     {
       title: '报名时间',
       dataIndex: 'createdAt',

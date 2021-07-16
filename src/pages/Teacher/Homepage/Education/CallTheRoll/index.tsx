@@ -108,7 +108,7 @@ const CallTheRoll = (props: any) => {
             });
             setDataScouse(studentData);
             setButDis(nowSta >= 1);
-            if(nowSta >= 1){
+            if (nowSta >= 1) {
               notification.warning({
                 message: '',
                 description:
@@ -212,7 +212,7 @@ const CallTheRoll = (props: any) => {
   ];
   return (
     <div className={styles.callTheRoll}>
-      <GoBack title='课堂点名' teacher onclick='/teacher/home?index=education'/>
+      <GoBack title='课堂点名' teacher onclick='/teacher/home?index=education' />
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
         {claName?.BJMC} ｜ 第 {wxad.length}/{kjs} 课时

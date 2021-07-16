@@ -14,7 +14,6 @@ import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import type { SearchDataType } from '@/components/Search/data';
 import { searchData } from './searchConfig';
 import SearchComponent from '@/components/Search';
-// import Choice from "./components/Choice";
 import { Link } from 'umi';
 import PromptInformation from '@/components/PromptInformation';
 import Operation from './components/Operation';
@@ -98,7 +97,6 @@ const NewClassManagement = () => {
     } else {
       setReadonly(false);
     }
-
     if (data) {
       let KHKCLXId: any[] = [];
       KHKCLXId = data.KHKCLX.id;
@@ -184,14 +182,6 @@ const NewClassManagement = () => {
       align: 'center',
       ellipsis: true,
     },
-    // {
-    //     title: '当前时段',
-    //     align: 'center',
-    //     ellipsis: true,
-    //     render: (_, record) => {
-    //         return (<Choice record={record} />)
-    //     }
-    // },
     {
       title: '状态',
       align: 'center',

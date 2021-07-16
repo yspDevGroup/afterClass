@@ -1,11 +1,3 @@
-/*
- * @,@Author: ,: your name
- * @,@Date: ,: 2021-06-01 09:52:34
- * @,@LastEditTime: ,: 2021-06-03 17:45:42
- * @,@LastEditors: ,: Please set LastEditors
- * @,@Description: ,: In User Settings Edit
- * @,@FilePath: ,: \afterClass\src\pages\Manager\BasicalSettings\NewClassManagement\data.d.ts
- */
 export type classType = {
   id?: string;
   BMJSSJ?: string;

@@ -1,20 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Pagination, Select, Table, Tag, Tooltip } from 'antd';
+import { Select, Table, Tag, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
-
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-
 import SearchComponent from '@/components/Search';
 import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
 import type { SearchDataType } from '@/components/Search/data';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-
-import WWOpenDataCom from '../ClassManagement/components/WWOpenDataCom';
 import { searchData } from '../CourseScheduling/searchConfig';
 import styles from './index.less';
 
@@ -40,8 +36,6 @@ const OrderInquiry = () => {
   const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
   const [kcmcValue, setKcmcValue] = useState<any>();
   const [bjmcValue, setBjmcValue] = useState<any>();
-  const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -114,26 +108,12 @@ const OrderInquiry = () => {
     })();
   }, [xn, xq]);
   const columns: ColumnsType<API.KHXSDD> | undefined = [
-    // {
-    //   title: '学年学期',
-    //   dataIndex: 'XNXQ',
-    //   key: 'XNXQ',
-    //   align: 'center',
-    //   render: (text: any, record: any) => {
-    //     const XNXQ = record?.KHBJSJ?.KHKCSJ?.XNXQ;
-    //     return (
-    //       <div>
-    //         {XNXQ?.XN} {XNXQ?.XQ}
-    //       </div>
-    //     );
-    //   },
-    // },
     {
       title: '课程名称',
       dataIndex: 'KCMC',
       key: 'KCMC',
       align: 'center',
-      render: (text: any, record: any) => {
+      render: (_text: any, record: any) => {
         return <div>{record?.KHBJSJ?.KHKCSJ?.KCMC}</div>;
       },
     },
@@ -142,7 +122,7 @@ const OrderInquiry = () => {
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
-      render: (text: any, record: any) => {
+      render: (_text: any, record: any) => {
         return <div>{record?.KHBJSJ?.BJMC}</div>;
       },
     },
@@ -151,7 +131,7 @@ const OrderInquiry = () => {
       dataIndex: 'class',
       key: 'class',
       align: 'center',
-      render: (text: any, record: any) => {
+      render: (_text: any, record: any) => {
         return (
           <div className="ui-table-col-elp">
             <Tooltip title={record?.KHBJSJ?.NJSName} arrowPointAtCenter>
@@ -174,9 +154,6 @@ const OrderInquiry = () => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
-      // render: (text: string, record: any) => {
-      //   return <WWOpenDataCom type="userName" openid={record.XSId} />;
-      // },
     },
     {
       title: '订单状态',
@@ -192,7 +169,7 @@ const OrderInquiry = () => {
   };
 
   // 头部input事件
-  const handlerSearch = (type: string, value: string, term: string) => {
+  const handlerSearch = (_type: string, value: string, term: string) => {
     setXn(value);
     setXq(term);
   };
@@ -227,37 +204,6 @@ const OrderInquiry = () => {
       setDataSource(resl.data);
     }
   };
-  // // 点击分页器
-  // const onShowSizeChange = async (currents: any, pageSizes: any) => {
-  //   setCurrent(currents);
-  //   setPageSize(pageSizes);
-  //   // 获取订单查询的表格数据
-  //   const resl = await getAllKHXSDD({
-  //     xn,
-  //     xq,
-  //   });
-  //   if (resl.status === 'ok') {
-  //     // TODO
-  //     const datas = resl.data?.slice();
-  //     setDataSource(resl.data);
-  //   }
-  // };
-  // // 点击上一页/下一页
-  // const onPaginationChange = async (page: any) => {
-  //   console.log(page);
-  //   setCurrent(page);
-  //   // 获取订单查询的表格数据
-  //   const resl = await getAllKHXSDD({
-  //     xn,
-  //     xq,
-  //   });
-  //   if (resl.status === 'ok') {
-  //     // TODO
-  //     const datas = resl.data?.slice();
-  //     setDataSource(resl.data);
-  //   }
-  // };
-
   return (
     <PageContainer>
       <div className={styles.searchs}>
@@ -315,18 +261,8 @@ const OrderInquiry = () => {
           loading={tableLoading}
           dataSource={dataSource}
           columns={columns}
-          // pagination={false}
           rowKey="id"
         />
-        {/* <Pagination
-          defaultCurrent={1}
-          total={dataSource?.length}
-          current={current}
-          pageSize={pageSize}
-          onShowSizeChange={onShowSizeChange}
-          onChange={onPaginationChange}
-          style={{ textAlign: 'center', padding: '32px 0', background: '#FFF' }}
-        /> */}
       </div>
       <PromptInformation
         text="未查询到学年学期数据，请设置学年学期后再来"

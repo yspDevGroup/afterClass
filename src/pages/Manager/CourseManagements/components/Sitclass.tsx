@@ -82,7 +82,7 @@ const Sitclass = () => {
       valueType: 'option',
       width: 140,
       align: 'center',
-      render: (text, record, _, action) => [
+      render: (_text, record, _, action) => [
         <a
           key="editable"
           onClick={() => {
@@ -134,7 +134,6 @@ const Sitclass = () => {
         新建
       </Button>
       <EditableProTable<any>
-        // style={{minWidth:'600px'}}
         rowKey="id"
         actionRef={actionRef}
         columns={columns}
@@ -153,7 +152,7 @@ const Sitclass = () => {
           type: 'multiple',
           editableKeys,
           onChange: setEditableRowKeys,
-          onSave: async (key, row) => {
+          onSave: async (_, row) => {
             try {
               const result = row.title
                 ? await createKHKCLX({

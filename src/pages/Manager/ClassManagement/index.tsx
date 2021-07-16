@@ -6,11 +6,9 @@ import { Button, Modal, Tag, Tooltip, Select } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
-
 import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
 import SearchComponent from '@/components/Search';
@@ -18,7 +16,6 @@ import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
 import type { SearchDataType } from '@/components/Search/data';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-
 import styles from './index.less';
 import { searchData } from './searchConfig';
 import ActionBar from './components/ActionBar';
@@ -26,7 +23,7 @@ import AddCourse from './components/AddCourse';
 import type { CourseItem, TableListParams } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 import moment from 'moment';
-// import WWOpenDataCom from './components/WWOpenDataCom';
+
 const { Option } = Select;
 
 const CourseManagement = () => {
@@ -208,14 +205,6 @@ const CourseManagement = () => {
   };
   const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   const columns: ProColumns<CourseItem>[] = [
-    // {
-    //   title: '序号',
-    //   dataIndex: 'index',
-    //   key: 'index',
-    //   valueType: 'index',
-    //   width: 48,
-    //   align: 'center',
-    // },
     {
       title: '班级名称',
       dataIndex: 'BJMC',
@@ -230,7 +219,7 @@ const CourseManagement = () => {
       align: 'center',
       width: 150,
       ellipsis: true,
-      render: (text: any, record: any) => {
+      render: (_: any, record: any) => {
         return (
           <Tooltip title={record.KHKCSJ.KCMC}>
             <div className="ui-table-col-elp">{record.KHKCSJ.KCMC}</div>
@@ -259,27 +248,6 @@ const CourseManagement = () => {
         );
       },
     },
-    // {
-    //   title: '主班',
-    //   dataIndex: 'ZJS',
-    //   key: 'ZJS',
-    //   align: 'center',
-    //   width: '10%',
-    //   render: (_, record) => {
-    //     return (
-    //       <div>
-    //         <WWOpenDataCom type="userName" openid={record.ZJS} />
-    //       </div>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: '所属校区',
-    //   align: 'center',
-    //   dataIndex: 'XQName',
-    //   key: 'XQName',
-    //   ellipsis: true,
-    // },
     {
       title: '适用年级',
       dataIndex: 'NJSName',
@@ -327,7 +295,7 @@ const CourseManagement = () => {
       key: 'KCZT',
       align: 'center',
       width: 100,
-      render: (text: any, record: any) => {
+      render: (_: any, record: any) => {
         if (record.BJZT === '已发布') {
           const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
           // 报名开始时间

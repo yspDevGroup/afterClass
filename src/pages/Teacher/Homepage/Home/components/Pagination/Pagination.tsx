@@ -6,7 +6,7 @@ const Pagina = (props: { total: number, setPages: React.Dispatch<React.SetStateA
 
   const onChange = (pageNumber: number) => {
     setPages(pageNumber);
-  
+
   }
   return (
     <div className={styles.paginationBox}>

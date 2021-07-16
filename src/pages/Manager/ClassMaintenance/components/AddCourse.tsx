@@ -43,7 +43,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const [campus, setCampus] = useState<any>([]);
   // 年级
   const [grade, setGrade] = useState<any>();
-  // const [xQItem, setXQItem] = useState<any>([]);
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
   // 上传成功后返回的图片地址
@@ -310,7 +309,7 @@ const AddCourse: FC<AddCourseProps> = ({
       rules: [{ required: true, message: '请填写所属校区' }],
       fieldProps: {
         options: campus,
-        onChange(value: any, option: any) {
+        onChange(_: any, option: any) {
           form.setFieldsValue({ NJS: undefined });
           setXQLabelItem(option?.label);
         },
@@ -370,7 +369,6 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
-
     {
       type: 'dateRange',
       label: '报名时段:',

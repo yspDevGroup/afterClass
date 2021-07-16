@@ -72,8 +72,6 @@ const CourseDetails: React.FC = () => {
           }) : <Nodata imgSrc={noData} desc='暂无课表' />
         }
       </div>
-
-
     </div>
   </div>
 

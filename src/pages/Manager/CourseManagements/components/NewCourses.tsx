@@ -141,7 +141,6 @@ const NewCourses = (props: PropsType) => {
       if (classattend) {
         const date = current.KKRQ && current.KKRQ[0]?.substring(0, 10);
         const date1 = current.KKRQ && current.KKRQ[1]?.substring(0, 10);
-
         if (!(date === classattend[0] && date1 === classattend[1])) {
           setKaike(true);
         }
@@ -320,12 +319,12 @@ const NewCourses = (props: PropsType) => {
     },
     signup.length > 0
       ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
-            signup[1],
-          ).format('YYYY-MM-DD')}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
+          signup[1],
+        ).format('YYYY-MM-DD')}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -365,10 +364,10 @@ const NewCourses = (props: PropsType) => {
     },
     classattend.length > 0
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -443,19 +442,19 @@ const NewCourses = (props: PropsType) => {
           readonly ? (
             ''
           ) : (
-            <div
-              style={{
-                textAlign: 'right',
-              }}
-            >
-              <Button onClick={Close} style={{ marginRight: 16 }}>
-                取消
+              <div
+                style={{
+                  textAlign: 'right',
+                }}
+              >
+                <Button onClick={Close} style={{ marginRight: 16 }}>
+                  取消
               </Button>
-              <Button onClick={handleSubmit} type="primary">
-                保存
+                <Button onClick={handleSubmit} type="primary">
+                  保存
               </Button>
-            </div>
-          )
+              </div>
+            )
         }
       >
         <ProFormFields

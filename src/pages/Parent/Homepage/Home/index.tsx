@@ -19,7 +19,7 @@ const Home = () => {
       const res = await getAllXXGG({ status: ['发布'] });
       if (res.status === 'ok' && !(res.data?.length === 0)) {
         setNotification(res.data);
-      }else{
+      } else {
         enHenceMsg(res.message)
       }
     };
@@ -42,17 +42,17 @@ const Home = () => {
           <IconFont type='icon-gonggao' className={styles.noticeImg} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
-            {notification && notification.length ? 
-            <Link to={`/parent/home/notice/announcement?listid=${notification[0].id}&index=all`} style={{ color: '#333',margin:'0 9px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap' }}>
-              {notification[0].BT}
-            </Link> : '暂无公告'}
+            {notification && notification.length ?
+              <Link to={`/parent/home/notice/announcement?listid=${notification[0].id}`} style={{ color: '#333', margin: '0 9px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {notification[0].BT}
+              </Link> : '暂无公告'}
           </div>
-         <Link  to={{
-          pathname: '/parent/home/notice',
-          state: {
-            notification
-          }
-        }}> <IconFont type="icon-gengduo" className={styles.gengduo} /></Link>
+          <Link to={{
+            pathname: '/parent/home/notice',
+            state: {
+              notification
+            }
+          }}> <IconFont type="icon-gengduo" className={styles.gengduo} /></Link>
         </div>
         <div className={styles.enrollArea}>
           <EnrollClassTime />

@@ -36,7 +36,7 @@ const TeachCourses = () => {
     const newData = {
       type: 'picList',
       cls: 'picList',
-      list: yxkc && getDataList(yxkc).slice(0,3) || [],
+      list: yxkc && getDataList(yxkc).slice(0, 3) || [],
       noDataText: '暂无课程',
       noDataImg: noData
     };

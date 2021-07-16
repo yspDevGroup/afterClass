@@ -10,7 +10,6 @@ import { enHenceMsg, getCurrentStatus, getQueryString } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
-// import { data } from './mock';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
@@ -34,19 +33,19 @@ const PersonalHomepage = () => {
           xq: XQ,
         });
         if (res.status === 'ok') {
-          if(res.data){
+          if (res.data) {
             setDataSource(res.data);
             const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
             if (bmkssj && bmjssj && skkssj && skjssj) {
               const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
               setCourseStatus(cStatus);
-            }else{
+            } else {
               setCourseStatus('empty');
             }
-          }else{
+          } else {
             setCourseStatus('empty');
           }
-        }else{
+        } else {
           enHenceMsg(res.message);
         }
       } else {
@@ -54,108 +53,101 @@ const PersonalHomepage = () => {
       }
     }
     fetchData();
-    // 假数据
-    // setDataSource(data);
-    // const { bmkssj, bmjssj, skkssj, skjssj } = data;
-    // if (bmkssj && bmjssj && skkssj && skjssj) {
-    //   const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
-    //   setCourseStatus(cStatus);
-    // }
   }, []);
-  useEffect(()=>{
-    if(index){
+  useEffect(() => {
+    if (index) {
       setActiveKey(index);
     }
-  },[index]);
-  
+  }, [index]);
+
   return (
     <div className={styles.mobilePageHeader}>
       {courseStatus === '' ? (
         ''
       ) : (
-        <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
-          <Tabs
-            tabPosition="bottom"
-            className={styles.menuTab}
-            onTabClick={(key: string) => {
-              setActiveKey(key);
-              if (homeRef.current) (homeRef.current as unknown as HTMLElement).scrollTop = 0;
-              if (eduRef.current) (eduRef.current as unknown as HTMLElement).scrollTop = 0;
-              if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
-            }}
-            activeKey={activeKey}
-          >
-            <TabPane
-              tab={
-                <span>
-                  <IconFont
-                    style={{ fontSize: '16px' }}
-                    type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
-                  />
-                  首页
-                </span>
-              }
-              key="index"
+          <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
+            <Tabs
+              tabPosition="bottom"
+              className={styles.menuTab}
+              onTabClick={(key: string) => {
+                setActiveKey(key);
+                if (homeRef.current) (homeRef.current as unknown as HTMLElement).scrollTop = 0;
+                if (eduRef.current) (eduRef.current as unknown as HTMLElement).scrollTop = 0;
+                if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
+              }}
+              activeKey={activeKey}
             >
-              <div
-                className={styles.noScrollBar}
-                style={{ height: '100%', overflowY: 'auto' }}
-                ref={homeRef}
-              >
-                <Home />
-              </div>
-            </TabPane>
-            {courseStatus === 'empty' ? (
-              ''
-            ) : (
               <TabPane
                 tab={
                   <span>
                     <IconFont
                       style={{ fontSize: '16px' }}
-                      type={
-                        activeKey === 'education'
-                          ? 'icon-jiaoxuezhongxinfill'
-                          : 'icon-jiaoxuezhongxin'
-                      }
+                      type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
                     />
-                    教学中心
-                  </span>
+                  首页
+                </span>
                 }
-                key="education"
+                key="index"
               >
                 <div
                   className={styles.noScrollBar}
                   style={{ height: '100%', overflowY: 'auto' }}
-                  ref={eduRef}
+                  ref={homeRef}
                 >
-                  <Education />
+                  <Home />
                 </div>
               </TabPane>
-            )}
-            <TabPane
-              tab={
-                <span>
-                  <IconFont
-                    style={{ fontSize: '16px' }}
-                    type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
-                  />
+              {courseStatus === 'empty' ? (
+                ''
+              ) : (
+                  <TabPane
+                    tab={
+                      <span>
+                        <IconFont
+                          style={{ fontSize: '16px' }}
+                          type={
+                            activeKey === 'education'
+                              ? 'icon-jiaoxuezhongxinfill'
+                              : 'icon-jiaoxuezhongxin'
+                          }
+                        />
+                    教学中心
+                  </span>
+                    }
+                    key="education"
+                  >
+                    <div
+                      className={styles.noScrollBar}
+                      style={{ height: '100%', overflowY: 'auto' }}
+                      ref={eduRef}
+                    >
+                      <Education />
+                    </div>
+                  </TabPane>
+                )}
+              <TabPane
+                tab={
+                  <span>
+                    <IconFont
+                      style={{ fontSize: '16px' }}
+                      type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
+                    />
                   我的
                 </span>
-              }
-              key="mine"
-            >
-              <div
-                className={styles.noScrollBar}
-                style={{ height: '100%', overflowY: 'auto' }}
-                ref={mineRef}
+                }
+                key="mine"
               >
-                <Mine />
-              </div>
-            </TabPane>
-          </Tabs>
-        </myContext.Provider>
-      )}
+                <div
+                  className={styles.noScrollBar}
+                  style={{ height: '100%', overflowY: 'auto' }}
+                  ref={mineRef}
+                >
+                  <Mine />
+                </div>
+              </TabPane>
+            </Tabs>
+          </myContext.Provider>
+        )}
     </div>
   );
 };

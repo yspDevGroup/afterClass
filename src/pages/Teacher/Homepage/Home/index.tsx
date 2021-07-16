@@ -58,14 +58,14 @@ const Home = () => {
           <div>欢迎使用课后帮，课后服务选我就对了！ </div>
         </div>
       </header>
-      {courseStatus === 'empty' ? <EmptyArticle />: <div className={styles.pageContent}>
+      {courseStatus === 'empty' ? <EmptyArticle /> : <div className={styles.pageContent}>
         <div className={styles.noticeArea}>
           <IconFont type="icon-gonggao" className={styles.noticeImg} />
           <div className={styles.noticeText}>
             <span>学校公告</span>
-            {notification && notification.length ? 
-            <Link to={`/teacher/home/notice/announcement?listid=${notification[0].id}&index=all`} style={{ color: '#333',margin:'0 9px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'  }}>
-              {notification[0].BT}
+            {notification && notification.length ?
+              <Link to={`/teacher/home/notice/announcement?listid=${notification[0].id}&index=all`} style={{ color: '#333', margin: '0 9px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {notification[0].BT}
               </Link> : '暂无公告'}
           </div>
           <Link to={{

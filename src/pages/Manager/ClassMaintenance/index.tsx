@@ -7,7 +7,6 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
-// import SearchComponent from '@/components/Search';
 import AddCourse from './components/AddCourse';
 import type { CourseItem, TableListParams } from './data';
 import styles from './index.less';
@@ -18,9 +17,7 @@ import ActionBar from './components/ActionBar';
 import { getQueryString } from '@/utils/utils';
 import PromptInformation from '@/components/PromptInformation';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
-// import type { SearchDataType } from '@/components/Search/data';
 import { Link } from 'umi';
-// import WWOpenDataCom from '../ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import moment from 'moment';
 import ApplicantInfoTable from '../ClassManagement/components/ApplicantInfoTable';
@@ -28,16 +25,11 @@ import ApplicantInfoTable from '../ClassManagement/components/ApplicantInfoTable
 const ClassMaintenance = () => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
-  // const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const actionRef = useRef<ActionType>();
   const [readonly, stereadonly] = useState<boolean>(false);
   const [kcId, setkcId] = useState<string>('');
   // 查询课程名称
   const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
-  // // 查询课程开课时间
-  // const [classattend, setClassattend] = useState<string[]>([]);
-  // // 查询课程报名时间
-  // const [signup, setSignup] = useState<string[]>([]);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   const [KCName, setKCName] = useState<string>('');
@@ -73,15 +65,12 @@ const ClassMaintenance = () => {
           setKCName(res.data?.KCMC);
           const newData = [...searchData];
           newData[0].data = [res.data.KCMC];
-          // setDataSource(newData);
           setmcData([
             {
               label: res.data.KCMC,
               value: curId,
             },
           ]);
-          // setClassattend([res.data.JKRQ!, res.data.KKRQ!]);
-          // setSignup([res.data.BMKSSJ!, res.data.BMJSSJ!]);
           setRQDate(res.data);
         }
       })();
@@ -143,14 +132,6 @@ const ClassMaintenance = () => {
   const xn = getQueryString('xn');
   const xq = getQueryString('xq');
   const columns: ProColumns<CourseItem>[] = [
-    // {
-    //   title: '序号',
-    //   dataIndex: 'index',
-    //   key: 'index',
-    //   valueType: 'index',
-    //   width: 48,
-    //   align: 'center',
-    // },
     {
       title: '班级名称',
       dataIndex: 'BJMC',
@@ -165,7 +146,7 @@ const ClassMaintenance = () => {
       align: 'center',
       width: 150,
       ellipsis: true,
-      render: (text: any, record: any) => {
+      render: (_: any, record: any) => {
         return (
           <Tooltip title={record.KHKCSJ.KCMC}>
             <div className="ui-table-col-elp">{record.KHKCSJ.KCMC}</div>
@@ -186,7 +167,7 @@ const ClassMaintenance = () => {
       key: 'BMRS',
       align: 'center',
       width: 100,
-      render: (text: any, record: any) => {
+      render: (_: any, record: any) => {
         return (
           <a onClick={() => showModal(record)}>
             {record.KHXSBJs.length}/{record.BJRS}
@@ -194,27 +175,6 @@ const ClassMaintenance = () => {
         );
       },
     },
-    // {
-    //   title: '主班',
-    //   dataIndex: 'ZJS',
-    //   key: 'ZJS',
-    //   align: 'center',
-    //   width: '10%',
-    //   render: (_, record) => {
-    //     return (
-    //       <div>
-    //         <WWOpenDataCom type="userName" openid={record.ZJS} />
-    //       </div>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: '所属校区',
-    //   align: 'center',
-    //   dataIndex: 'XQName',
-    //   key: 'XQName',
-    //   ellipsis: true,
-    // },
     {
       title: '适用年级',
       dataIndex: 'NJSName',
@@ -262,7 +222,7 @@ const ClassMaintenance = () => {
       key: 'KCZT',
       align: 'center',
       width: 100,
-      render: (text: any, record: any) => {
+      render: (_: any, record: any) => {
         if (record.BJZT === '已发布') {
           const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
           // 报名开始时间

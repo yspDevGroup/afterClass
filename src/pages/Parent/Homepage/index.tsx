@@ -41,19 +41,19 @@ const PersonalHomepage = () => {
           njId: children && children[0].njId,
         });
         if (res.status === 'ok') {
-          if(res.data){
+          if (res.data) {
             setDataSource(res.data);
             const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
             if (bmkssj && bmjssj && skkssj && skjssj) {
               const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
               setCourseStatus(cStatus);
-            }else{
+            } else {
               setCourseStatus('empty');
             }
-          }else{
+          } else {
             setCourseStatus('empty');
           }
-        }else{
+        } else {
           enHenceMsg(res.message);
         }
       } else {
@@ -63,11 +63,11 @@ const PersonalHomepage = () => {
     fetchData();
   }, []);
 
-  useEffect(()=>{
-    if(index){
+  useEffect(() => {
+    if (index) {
       setActiveKey(index);
     }
-  },[index])
+  }, [index])
   return (
     <div className={styles.mobilePageHeader}>
       {courseStatus === '' ? (
@@ -86,25 +86,25 @@ const PersonalHomepage = () => {
               activeKey={activeKey}
             >
               <TabPane
-              tab={
-                <span>
-                  <IconFont
-                    style={{ fontSize: '16px' }}
-                    type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
-                  />
+                tab={
+                  <span>
+                    <IconFont
+                      style={{ fontSize: '16px' }}
+                      type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
+                    />
                   首页
                 </span>
-              }
-              key="index"
-            >
-              <div
-                className={styles.noScrollBar}
-                style={{ height: '100%', overflowY: 'auto' }}
-                ref={homeRef}
+                }
+                key="index"
               >
-                <Home />
-              </div>
-            </TabPane>
+                <div
+                  className={styles.noScrollBar}
+                  style={{ height: '100%', overflowY: 'auto' }}
+                  ref={homeRef}
+                >
+                  <Home />
+                </div>
+              </TabPane>
               {courseStatus === 'empty' ? (
                 ''
               ) : (

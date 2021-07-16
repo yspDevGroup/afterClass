@@ -6,14 +6,13 @@ import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Form, message, Spin, Modal, Tooltip, Empty } from 'antd';
-import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
-import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
+import { getFJPlan } from '@/services/after-class/fjsj';
 import styles from '../index.less';
 import ExcelTable from '@/components/ExcelTable';
-import type { SiteType, CourseType } from '../data';
+import type { CourseType } from '../data';
 import WWOpenDataCom from '../../ClassManagement/components/WWOpenDataCom';
 
 const { confirm } = Modal;
@@ -54,9 +53,6 @@ const AddArranging: FC<PropsType> = (props) => {
   const [packUp, setPackUp] = useState(false);
   const [Bj, setBj] = useState<any>(undefined);
   const [index, setIndex] = useState(formValues?.BJId);
-  const [cdlxId, setCdlxId] = useState(formValues?.CDLX);
-  const [roomType, setRoomType] = useState<any>([]);
-  const [siteType, setSiteType] = useState<any>([]);
   const [kcType, setKcType] = useState<any>([]);
   const [bjData, setBjData] = useState<any>([]);
   const [form] = Form.useForm();
@@ -90,70 +86,70 @@ const AddArranging: FC<PropsType> = (props) => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-    {
-      title: '',
-      dataIndex: 'room',
-      key: 'room',
-      align: 'center',
-      width: 66,
-    },
-    {
-      title: '',
-      dataIndex: 'course',
-      key: 'course',
-      align: 'left',
-      width: 100,
-    },
-    {
-      title: '周一',
-      dataIndex: 'monday',
-      key: 'monday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周二',
-      dataIndex: 'tuesday',
-      key: 'tuesday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周三',
-      dataIndex: 'wednesday',
-      key: 'wednesday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周四',
-      dataIndex: 'thursday',
-      key: 'thursday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周五',
-      dataIndex: 'friday',
-      key: 'friday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周六',
-      dataIndex: 'saturday',
-      key: 'saturday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周日',
-      dataIndex: 'sunday',
-      key: 'sunday',
-      align: 'center',
-      width: 100,
-    },
-  ];
+      {
+        title: '',
+        dataIndex: 'room',
+        key: 'room',
+        align: 'center',
+        width: 66,
+      },
+      {
+        title: '',
+        dataIndex: 'course',
+        key: 'course',
+        align: 'left',
+        width: 100,
+      },
+      {
+        title: '周一',
+        dataIndex: 'monday',
+        key: 'monday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周二',
+        dataIndex: 'tuesday',
+        key: 'tuesday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周三',
+        dataIndex: 'wednesday',
+        key: 'wednesday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周四',
+        dataIndex: 'thursday',
+        key: 'thursday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周五',
+        dataIndex: 'friday',
+        key: 'friday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周六',
+        dataIndex: 'saturday',
+        key: 'saturday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周日',
+        dataIndex: 'sunday',
+        key: 'sunday',
+        align: 'center',
+        width: 100,
+      },
+    ];
 
   const getSelectdata = (value: any) => {
     sameClassDatas.map((item: any, key: number) => {
@@ -168,7 +164,7 @@ const AddArranging: FC<PropsType> = (props) => {
     });
   };
 
-  const onExcelTableClick = (value: any, record: any, pkData: any) => {
+  const onExcelTableClick = (value: any, _record: any, pkData: any) => {
     let connt = 0;
     if (value === null) {
       excelTableValue.forEach((item: any, key) => {
@@ -213,7 +209,7 @@ const AddArranging: FC<PropsType> = (props) => {
     }, 500);
   };
   // 保存
-  const submit = async (params: any) => {
+  const submit = async (_params: any) => {
     if (Bj || index) {
       if (cdmcData && cdmcData?.length > 0) {
         try {
@@ -257,11 +253,10 @@ const AddArranging: FC<PropsType> = (props) => {
     }
     return true;
   };
-  const onReset = (prop: any) => {
+  const onReset = (_prop: any) => {
     tableServers();
     setState(true);
     setBJIDData('');
-    // window.location.reload();
   };
   useEffect(() => {
     async function fetchData() {
@@ -303,58 +298,6 @@ const AddArranging: FC<PropsType> = (props) => {
         } else {
           message.error(kcList.message);
         }
-
-        // 获取所有场地类型
-        const response = await getAllFJLX({
-          name: '',
-        });
-        if (response.status === 'ok') {
-          if (response.data && response.data.length > 0) {
-            const data: any = [].map.call(response.data, (item: RoomType) => {
-              return {
-                label: item.FJLX,
-                value: item.id,
-              };
-            });
-            setRoomType(data);
-          }
-        } else {
-          message.error(response.message);
-        }
-
-        // 获取所有场地数据
-        const fjList = await getAllFJSJ({
-          lxId: cdlxId === undefined ? '' : cdlxId,
-          page: 1,
-          pageCount: 0,
-          name: '',
-        });
-        if (fjList.status === 'ok') {
-          if (fjList.data && fjList.data.length > 0) {
-            const data: any = [].map.call(fjList.data, (item: SiteType) => {
-              return {
-                label: item.FJMC,
-                value: item.id,
-              };
-            });
-            setSiteType(data);
-          }
-        } else {
-          message.error(fjList.message);
-        }
-
-        // 查询房间占用情况
-        // const Fjplan = await getFJPlan({
-        //   lxId: cdlxId,
-        //   fjId: formValues?.CDMC,
-        //   xn,
-        //   xq,
-        //   isPk: false,
-        // });
-        // if (Fjplan.status === 'ok') {
-        //   const data = processingData(Fjplan.data, xXSJPZData);
-        //   setTableDataSource(data);
-        // }
         const Fjplan = await getFJPlan({
           xn,
           xq,
@@ -466,10 +409,8 @@ const AddArranging: FC<PropsType> = (props) => {
               fieldProps={{
                 async onChange(value: any, option: any) {
                   form.setFieldsValue({ NJ: undefined, KC: undefined });
-
                   setXQLabelItem(option?.label);
                   setXQID(value);
-
                   const params = {
                     xqId: value || '',
                     xn,
@@ -599,161 +540,85 @@ const AddArranging: FC<PropsType> = (props) => {
                   )}
                 </ProCard>
               ) : (
-                <div>
-                  {packUp === false ? (
-                    <ProCard ghost className="banjiCard">
-                      {bjData && bjData.length > 0
-                        ? bjData
-                            .slice(0, 13)
-                            .map(
-                              (
-                                value: { BJMC: any; ZJS: any; id?: string | undefined },
-                                key: undefined,
-                              ) => {
-                                return (
-                                  <ProCard
-                                    layout="center"
-                                    bordered
-                                    className="banjiItem"
-                                    onClick={() => BjClick(value)}
-                                    style={{
-                                      borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                                    }}
-                                  >
-                                    <p>{value.BJMC}</p>
-                                    <span>
-                                      <WWOpenDataCom
-                                        style={{ color: '#666' }}
-                                        type="userName"
-                                        openid={value.ZJS}
-                                      />
-                                    </span>
-                                    {index === value.id ? <span className="douhao">√</span> : ''}
-                                  </ProCard>
-                                );
-                              },
-                            )
-                        : ''}
-                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                        展开 <DownOutlined style={{ color: '#4884FF' }} />
-                      </ProCard>
-                    </ProCard>
-                  ) : (
-                    <ProCard ghost className="banjiCard">
-                      {bjData && bjData.length > 0
-                        ? bjData.map(
-                            (
-                              value: { BJMC: any; ZJS: any; id?: string | undefined },
-                              key: undefined,
-                            ) => {
-                              return (
-                                <ProCard
-                                  layout="center"
-                                  bordered
-                                  className="banjiItem"
-                                  onClick={() => BjClick(value)}
-                                  style={{
-                                    borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                                  }}
-                                >
-                                  <p>{value.BJMC}</p>
-                                  <span>
-                                    <WWOpenDataCom
-                                      style={{ color: '#666' }}
-                                      type="userName"
-                                      openid={value.ZJS}
-                                    />
-                                  </span>
-                                  {index === value.id ? <span className="douhao">√</span> : ''}
-                                </ProCard>
-                              );
-                            },
-                          )
-                        : ''}
-                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                        收起 <UpOutlined style={{ color: '#4884FF' }} />
-                      </ProCard>
-                    </ProCard>
+                    <div>
+                      {packUp === false ? (
+                        <ProCard ghost className="banjiCard">
+                          {bjData && bjData.length > 0
+                            ? bjData
+                              .slice(0, 13)
+                              .map(
+                                (
+                                  value: { BJMC: any; ZJS: any; id?: string | undefined },
+                                  key: undefined,
+                                ) => {
+                                  return (
+                                    <ProCard
+                                      layout="center"
+                                      bordered
+                                      className="banjiItem"
+                                      onClick={() => BjClick(value)}
+                                      style={{
+                                        borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
+                                      }}
+                                    >
+                                      <p>{value.BJMC}</p>
+                                      <span>
+                                        <WWOpenDataCom
+                                          style={{ color: '#666' }}
+                                          type="userName"
+                                          openid={value.ZJS}
+                                        />
+                                      </span>
+                                      {index === value.id ? <span className="douhao">√</span> : ''}
+                                    </ProCard>
+                                  );
+                                },
+                              )
+                            : ''}
+                          <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                            展开 <DownOutlined style={{ color: '#4884FF' }} />
+                          </ProCard>
+                        </ProCard>
+                      ) : (
+                          <ProCard ghost className="banjiCard">
+                            {bjData && bjData.length > 0
+                              ? bjData.map(
+                                (
+                                  value: { BJMC: any; ZJS: any; id?: string | undefined },
+                                  key: undefined,
+                                ) => {
+                                  return (
+                                    <ProCard
+                                      layout="center"
+                                      bordered
+                                      className="banjiItem"
+                                      onClick={() => BjClick(value)}
+                                      style={{
+                                        borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
+                                      }}
+                                    >
+                                      <p>{value.BJMC}</p>
+                                      <span>
+                                        <WWOpenDataCom
+                                          style={{ color: '#666' }}
+                                          type="userName"
+                                          openid={value.ZJS}
+                                        />
+                                      </span>
+                                      {index === value.id ? <span className="douhao">√</span> : ''}
+                                    </ProCard>
+                                  );
+                                },
+                              )
+                              : ''}
+                            <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                              收起 <UpOutlined style={{ color: '#4884FF' }} />
+                            </ProCard>
+                          </ProCard>
+                        )}
+                    </div>
                   )}
-                </div>
-              )}
             </div>
-            {/* <ProFormSelect
-              width="md"
-              options={roomType}
-              name="CDLX"
-              label="场地类型"
-              fieldProps={{
-                async onChange(value) {
-                  // 场地类型选择时将选中的场地名称清空
-                  form.setFieldsValue({ CDMC: undefined });
-
-                  // 获取场地的数据
-                  const fjList = await getAllFJSJ({
-                    lxId: value,
-                    page: 1,
-                    pageCount: 0,
-                    name: '',
-                  });
-                  if (fjList.status === 'ok') {
-                    const data: any = [].map.call(fjList.data, (item: SiteType) => {
-                      return {
-                        label: item.FJMC,
-                        value: item.id,
-                      };
-                    });
-                    if (data.length > 0) {
-                      setSiteType(data);
-                      setCdlxId(value);
-                    } else if (data.length === 0) {
-                      setCdlxId(undefined);
-                      setSiteType([]);
-                    }
-                  } else {
-                    message.error(fjList.message);
-                  }
-                  const Fjplan = await getFJPlan({
-                    lxId: value,
-                    fjId: '',
-                    xn,
-                    xq,
-                    isPk: false,
-                  });
-                  if (Fjplan.status === 'ok') {
-                    const data = processingData(Fjplan.data, xXSJPZData);
-                    setTableDataSource(data);
-                  } else {
-                    message.error(Fjplan.message);
-                  }
-                },
-              }}
-            />
-            <ProFormSelect
-              width="md"
-              options={siteType}
-              name="CDMC"
-              label="场地名称"
-              showSearch
-              fieldProps={{
-                async onChange(value) {
-                  // 查询房间占用情况
-                  const Fjplan = await getFJPlan({
-                    lxId: cdlxId === undefined ? '' : cdlxId,
-                    fjId: value,
-                    xn,
-                    xq,
-                    isPk: false,
-                  });
-                  if (Fjplan.status === 'ok') {
-                    const data = processingData(Fjplan.data, xXSJPZData);
-                    setTableDataSource(data);
-                  } else {
-                    message.error(Fjplan.message);
-                  }
-                },
-              }}
-            /> */}
-
             <div className="site">
               <span>场地：</span>
 
@@ -772,13 +637,13 @@ const AddArranging: FC<PropsType> = (props) => {
                   />
                 </Spin>
               ) : (
-                <div className={styles.noContent}>请先选择班级后再进行排课</div>
-              )}
+                  <div className={styles.noContent}>请先选择班级后再进行排课</div>
+                )}
             </div>
           </ProForm>
         ) : (
-          ''
-        )}
+            ''
+          )}
       </Spin>
     </div>
   );

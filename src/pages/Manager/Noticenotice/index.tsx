@@ -115,7 +115,6 @@ const Noticenotice = () => {
         }}
         search={false}
         pagination={paginationConfig}
-        // headerTitle={<SearchComponent dataSource={dataSource} />}
         toolBarRender={() => [
           <Button
             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
