@@ -13,6 +13,7 @@ type KBItemProps = {
         cla: string;
         teacher: string;
         color: string;
+        bjzt: string;
       }
     | '';
   disabled: boolean;
@@ -124,6 +125,11 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
               ''
             )}
           </div>
+          {mode === 'see' && (data?.bjzt === '已发布' || data?.bjzt === '已结课') ? (
+            <div className={styles.duihao}>√</div>
+          ) : (
+            ''
+          )}
         </div>
       )}
     </Button>
