@@ -17,7 +17,7 @@ const Home = () => {
   useEffect(() => {
     async function announcements() {
       const res = await getAllXXGG({ status: ['发布'] });
-      if (res.status === 'ok' && !(res.data?.length === 0)) {
+      if (res.status === 'ok') {
         setNotification(res.data);
       } else {
         enHenceMsg(res.message)

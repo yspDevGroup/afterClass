@@ -6,9 +6,7 @@
  * @,@LastEditors: ,: Please set LastEditors
  */
 export const Article = {
-  'empty': {
-    BT: '课后帮课后服务报名通知',
-    updatedAt: '未知',
-    NR: `暂未发布报名通知，请耐心等待。`,
-  },
+  BT: '课后帮课后服务报名通知',
+  updatedAt: '未知',
+  NR: `暂未发布报名通知，请耐心等待。`,
 }

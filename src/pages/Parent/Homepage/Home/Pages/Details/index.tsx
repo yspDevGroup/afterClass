@@ -24,7 +24,7 @@ const Details = (props: { data?: any[] }) => {
         data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '5px' }}>
           {data?.map((record: any, index: number) => {
             if (index < 4) {
-              return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }} key={index + 1}>
+              return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }} key={record.BT}>
                 <li style={{ lineHeight: '30px', listStyle: 'none' }}>
                   <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
                     <div className={styles.yuan}></div>

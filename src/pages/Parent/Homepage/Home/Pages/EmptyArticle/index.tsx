@@ -10,7 +10,7 @@ const EmptyArticle = () => {
     async function announcements() {
       const res= await getAllXXGG({status:['报名通知']})
       if (res.status === 'ok') {
-        if(res.data){
+        if(res.data && res.data.length){
           setContent(res.data[0]);
         }else{
           setContent(Article);
