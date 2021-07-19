@@ -81,6 +81,7 @@ const Choice = (props: propstype) => {
         </>
       );
       break;
+    case '报名通知':
     case '发布':
       return (
         <>
