@@ -263,7 +263,7 @@ const CourseDetails: React.FC = () => {
                   return (
                     <Popconfirm
                       overlayClassName={styles.confirmStyles}
-                      placement="bottomRight"
+                      placement="bottom"
                       title={text}
                       defaultVisible={BJ === value.id}
                     >

@@ -45,6 +45,7 @@ const NewCourses = (props: PropsType) => {
   const [signup, setSignup] = useState<any>('');
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
+  const [isTrue, setIsTrue] = useState(true);
 
   const title = current ? '编辑课程' : '新增课程';
   const values = () => {
@@ -152,6 +153,8 @@ const NewCourses = (props: PropsType) => {
     form.submit();
   };
   const handleImageChange = (e: any) => {
+    console.log("eeeeeeeeeeeee",e);
+
     if (e.file.status === 'done') {
       const mas = e.file.response.message;
       if (typeof e.file.response === 'object' && e.file.response.status === 'error') {
@@ -159,9 +162,12 @@ const NewCourses = (props: PropsType) => {
       } else {
         const res = e.file.response;
         if (res.status === 'ok') {
+          console.log('res.data',res.data);
+          
           message.success(`上传成功`);
           form.setFieldsValue({ KCTP: res.data });
           setImageUrl(res.data);
+          setIsTrue(false)
         }
       }
     } else if (e.file.status === 'error') {
@@ -416,7 +422,7 @@ const NewCourses = (props: PropsType) => {
       imageurl: imageUrl || current?.KCTP, // 回显地址
       handleImageChange,
       accept: '.jpg, .jpeg, .png', // 接受上传的文件类型
-      rules: [{ required: true, message: '请上传封面图片' }],
+      rules: [{ required: isTrue, message: '请上传封面图片' }],
     },
     {
       type: 'textArea',
