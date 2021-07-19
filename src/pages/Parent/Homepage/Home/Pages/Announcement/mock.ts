@@ -1,11 +1,3 @@
-/*
- * @,@Author: ,: your name
- * @,@Date: ,: 2021-07-07 17:02:51
- * @,@LastEditTime: ,: 2021-07-13 16:09:14
- * @,@LastEditors: ,: Please set LastEditors
- * @,@Description: ,: In User Settings Edit
- * @,@FilePath: ,: \afterClass\src\pages\Parent\Homepage\Home\Pages\Announcement\mock.ts
- */
 
 import tp from '@/assets/logo.png'
 

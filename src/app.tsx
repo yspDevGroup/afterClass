@@ -51,6 +51,10 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
+  // 处理微信端多身份数据重合问题
+  if(window.location.pathname === '/' && history.length <= 2) {
+    localStorage.removeItem('token');
+  };
   // 如果是登录页面及认证跳转页，不执行
   if (history.location.pathname !== loginPath && history.location.pathname !== authCallbackPath) {
     const currentUser = await fetchUserInfo();
@@ -80,7 +84,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      // 如果没有登录，重定向到 login
+      // 如果没有登录或第一次进入首页，重定向到 login
       if (
         !initialState?.currentUser &&
         ![loginPath, authCallbackPath].includes(location.pathname)
