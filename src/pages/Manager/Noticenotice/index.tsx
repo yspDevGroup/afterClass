@@ -29,21 +29,34 @@ const Noticenotice = () => {
   };
   useEffect(() => {
     (async () => {
-     const res=await getAllXXGG({ status: ['报名通知'] });
-     if(res.status==='ok'&&res.data!.length>0){
-      setCffrom(false);
-     }else{
-      setCffrom(true);
-     }
+      const res = await getAllXXGG({ status: ['报名通知'] });
+      if (res.status === 'ok' && res.data!.length > 0) {
+        setCffrom(false);
+      } else {
+        setCffrom(true);
+      }
     })();
   }, [form]);
   // 表单提交
   const handleSubmit = async () => {
-    if(cffrom){
-      try {
-        const values = await form?.validateFields();
-        const { id, ...rest } = values;
-        // 更新或新增加信息
+    try {
+      const values = await form?.validateFields();
+      const { id, ...rest } = values;
+      if (values.ZT === '报名通知') {
+        if (cffrom) {
+          // 更新或新增加信息
+          const result = id ? await updateXXGG({ id }, { ...rest }) : await createXXGG({ ...rest });
+          if (result.status === 'ok') {
+            message.success(id ? '信息更新成功' : '信息新增成功');
+            setModalVisible(false);
+            actionRef.current?.reload();
+          } else {
+            enHenceMsg(result.message);
+          }
+        } else {
+          message.error('首页报名提示信息只能存在一条，请不要重复创建')
+        }
+      } else {
         const result = id ? await updateXXGG({ id }, { ...rest }) : await createXXGG({ ...rest });
         if (result.status === 'ok') {
           message.success(id ? '信息更新成功' : '信息新增成功');
@@ -52,11 +65,9 @@ const Noticenotice = () => {
         } else {
           enHenceMsg(result.message);
         }
-      } catch (errorInfo) {
-        console.log('Failed:', errorInfo);
       }
-    }else{
-      message.error('首页报名提示信息只能存在一条，请不要重复创建')
+    } catch (errorInfo) {
+      console.log('Failed:', errorInfo);
     }
   };
   const handleOperation = (data?: any) => {
@@ -120,7 +131,7 @@ const Noticenotice = () => {
         columns={columns}
         rowKey="id"
         request={() => {
-          return getAllXXGG({ status: ['拟稿', '发布', '撤稿','报名通知'] });
+          return getAllXXGG({ status: ['拟稿', '发布', '撤稿', '报名通知'] });
         }}
         options={{
           setting: false,
