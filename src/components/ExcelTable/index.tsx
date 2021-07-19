@@ -195,6 +195,10 @@ const Index: FC<IndexPropsType> = ({
         Modal.warning({
           title: '此班级已发布，不能再进行排课操作',
         });
+      } else if (rowData[colItem.dataIndex]?.bjzt === '已结课') {
+        Modal.warning({
+          title: '此班级已结课，不能再进行排课操作',
+        });
       } else {
         seeChosenItem = {
           XQ: rowData[colItem.dataIndex]?.xqId, // 校区ID
@@ -222,15 +226,6 @@ const Index: FC<IndexPropsType> = ({
           ) {
             connst = key;
           }
-          // item.KHPKSJs.forEach((KHPKSJsItem: any, key: any) => {
-          //   if (
-          //     KHPKSJsItem.WEEKDAY === weekDay[colItem.dataIndex] && // 周
-          //     KHPKSJsItem.XXSJPZ.id === rowData.course?.hjId && // 时间ID
-          //     KHPKSJsItem.KHBJSJ.ZJS === tearchId // 教师ID
-          //   ) {
-          //     connst = key;
-          //   }
-          // });
         });
         if (connst === -1) {
           rowData[colItem.dataIndex] = {
