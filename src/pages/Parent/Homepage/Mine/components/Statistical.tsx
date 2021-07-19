@@ -46,7 +46,7 @@ const Statistical: React.FC = () => {
   };
   useEffect(() => {
     async function fetchData() {
-      if (yxkc) {
+      if (yxkc&&yxkc.length>0) {
         const arr = [].map.call(yxkc, async (item: any) => {
           const { title, data } = await getData(item.id, children[0].student_userid!);
           if(data && title){
@@ -57,6 +57,8 @@ const Statistical: React.FC = () => {
         const result = await Promise.all(arr);
         const realResult = result.filter((item: any) => item.status !== 'nothing');
         setStatistics(realResult);
+      }else{
+        setStatistics([])
       }
     }
     fetchData();

@@ -9,7 +9,7 @@ import ProTable from '@ant-design/pro-table';
 import type { FormInstance } from 'antd';
 import { Button, message, Modal } from 'antd';
 import moment from 'moment';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Announcement from './components/Announcement';
 import Choice from './components/Choice';
 import type { NoticeItem } from './data';
@@ -20,28 +20,43 @@ const Noticenotice = () => {
   const [current, setCurrent] = useState<any>();
   const [form, setForm] = useState<FormInstance<any>>();
   const [title, setTitle] = useState<string>('');
+  const [cffrom, setCffrom] = useState<boolean>(true);
   const getModelTitle = () => {
     if (title === 'current') {
       return '编辑公告';
     }
     return '新增公告';
   };
+  useEffect(() => {
+    (async () => {
+     const res=await getAllXXGG({ status: ['报名通知'] });
+     if(res.status==='ok'&&res.data!.length>0){
+      setCffrom(false);
+     }else{
+      setCffrom(true);
+     }
+    })();
+  }, [form]);
   // 表单提交
   const handleSubmit = async () => {
-    try {
-      const values = await form?.validateFields();
-      const { id, ...rest } = values;
-      // 更新或新增场地信息
-      const result = id ? await updateXXGG({ id }, { ...rest }) : await createXXGG({ ...rest });
-      if (result.status === 'ok') {
-        message.success(id ? '信息更新成功' : '信息新增成功');
-        setModalVisible(false);
-        actionRef.current?.reload();
-      } else {
-        enHenceMsg(result.message);
+    if(cffrom){
+      try {
+        const values = await form?.validateFields();
+        const { id, ...rest } = values;
+        // 更新或新增加信息
+        const result = id ? await updateXXGG({ id }, { ...rest }) : await createXXGG({ ...rest });
+        if (result.status === 'ok') {
+          message.success(id ? '信息更新成功' : '信息新增成功');
+          setModalVisible(false);
+          actionRef.current?.reload();
+        } else {
+          enHenceMsg(result.message);
+        }
+      } catch (errorInfo) {
+        console.log('Failed:', errorInfo);
       }
-    } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
+    }else{
+      message.error('首页报名提示信息只能存在一条，请不要重复创建')
     }
   };
   const handleOperation = (data?: any) => {
@@ -105,7 +120,7 @@ const Noticenotice = () => {
         columns={columns}
         rowKey="id"
         request={() => {
-          return getAllXXGG({ status: ['拟稿', '发布', '撤稿'] });
+          return getAllXXGG({ status: ['拟稿', '发布', '撤稿','报名通知'] });
         }}
         options={{
           setting: false,

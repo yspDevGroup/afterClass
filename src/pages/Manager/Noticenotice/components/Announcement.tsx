@@ -48,6 +48,10 @@ const Announcement = (props: PropsType) => {
           label: '发布',
           value: '发布',
         },
+        {
+          label: '报名通知',
+          value: '报名通知',
+        },
       ],
     },
     {

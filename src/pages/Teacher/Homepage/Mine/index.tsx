@@ -14,7 +14,7 @@ import noChart from '@/assets/noChart1.png';
 const Mine = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { yxkc, weekSchedule,courseStatus } = useContext(myContext);
+  const { yxkc, weekSchedule, courseStatus } = useContext(myContext);
   const [checkIn, setCheckIn] = useState<any[]>();
   const [wekDay, setWekDay] = useState<any>();
   // 当前时间
@@ -37,24 +37,28 @@ const Mine = () => {
     const courseData: any = [];
     const newskrq = {};
     // 教授的课程有几门，每门下有几个班
-    data?.forEach((item: any, index: number) => {
-      const newkec = {
-        KCMC: item.KHKCSJ.KCMC,
-        class: [item]
-      };
-      if (courseData[index - 1] && courseData[index - 1].KCMC === item.KHKCSJ.KCMC) {
-        courseData[index - 1].class.push(item)
-      } else {
-        courseData.push(newkec);
-      }
-    })
+    if (data && data.length > 0) {
+      data.forEach((item: any, index: number) => {
+        const newkec = {
+          KCMC: item.KHKCSJ.KCMC,
+          class: [item]
+        };
+        if (courseData[index - 1] && courseData[index - 1].KCMC === item.KHKCSJ.KCMC) {
+          courseData[index - 1].class.push(item)
+        } else {
+          courseData.push(newkec);
+        }
+      })
+    }
     // 周几上课
-    weekSchedule.forEach((item: any) => {
-      if (Object.keys(newskrq).indexOf(`${item.KHBJSJ.id}`) === -1) {
-        newskrq[item.KHBJSJ.id] = []
-      }
-      newskrq[item.KHBJSJ.id].push(item.WEEKDAY);
-    })
+    if (weekSchedule && weekSchedule.length > 0) {
+      weekSchedule.forEach((item: any) => {
+        if (Object.keys(newskrq).indexOf(`${item.KHBJSJ.id}`) === -1) {
+          newskrq[item.KHBJSJ.id] = []
+        }
+        newskrq[item.KHBJSJ.id].push(item.WEEKDAY);
+      })
+    }
     return {
       courseData,
       newskrq
@@ -131,7 +135,7 @@ const Mine = () => {
           </div>
         </div>
       </header>
-      {courseStatus === 'empty'?'':<div className={styles.funWrapper}>
+      {courseStatus === 'empty' ? '' : <div className={styles.funWrapper}>
         <div className={styles.titleBar}>
           出勤统计
           <div>
@@ -144,7 +148,7 @@ const Mine = () => {
           checkIn && checkIn.length ?
             checkIn.map((item: any) => {
               const kcData = getKcData(item);
-              return <CheckOnChart data={kcData} title={item.KCMC} key={item.KCMC}/>
+              return <CheckOnChart data={kcData} title={item.KCMC} key={item.KCMC} />
             })
             : <Nodata imgSrc={noChart} desc='暂无数据' />
         }
