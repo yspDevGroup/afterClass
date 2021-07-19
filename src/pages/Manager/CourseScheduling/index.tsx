@@ -218,6 +218,7 @@ const ClassManagement = () => {
   }, []);
   useEffect(() => {
     if (BJID) {
+      console.log('BJID', BJID);
       const res = getFJPlan({ xn, xq, isPk: false });
       Promise.resolve(res).then((data: any) => {
         if (data.status === 'ok') {

@@ -195,6 +195,7 @@ const AddArranging: FC<PropsType> = (props) => {
   };
   // 班级选择
   const BjClick = (value: any) => {
+    console.log('value', value);
     setTearchId(value.ZJS);
     const chosenData = {
       cla: value.BJMC || '',
@@ -687,7 +688,6 @@ const AddArranging: FC<PropsType> = (props) => {
                 async onChange(value) {
                   // 场地类型选择时将选中的场地名称清空
                   form.setFieldsValue({ CDMC: undefined });
-
                   // 获取场地的数据
                   const fjList = await getAllFJSJ({
                     lxId: value,
