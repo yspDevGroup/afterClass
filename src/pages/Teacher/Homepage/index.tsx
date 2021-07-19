@@ -6,7 +6,7 @@ import Home from './Home';
 import Education from './Education';
 import Mine from './Mine';
 import styles from './index.less';
-import { ChangePageTitle, enHenceMsg, getCurrentStatus, getQueryString } from '@/utils/utils';
+import {enHenceMsg, getCurrentStatus, getQueryString } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
@@ -23,7 +23,6 @@ const PersonalHomepage = () => {
   const mineRef = useRef(null);
   const index = getQueryString('index');
   useEffect(() => {
-    ChangePageTitle(ENV_subTitle);
     async function fetchData() {
       // 获取后台学年学期数据
       const result = await queryXNXQList();

@@ -8,7 +8,7 @@ import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icon
 import { overdueKHXSDD, deleteKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
 import moment from 'moment';
 import styles from './index.less';
-import { ChangePageTitle, enHenceMsg } from '@/utils/utils';
+import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
 
 const { Countdown } = Statistic;
@@ -69,9 +69,6 @@ const OrderDetails: React.FC = (props: any) => {
       enHenceMsg(res.message)
     }
   };
-  useEffect(() => {
-    ChangePageTitle(ENV_subTitle);
-  }, []);
   if (orderInfo) {
     return <>
       <GoBack title={'订单详情'} />

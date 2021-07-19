@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import EmptyBGC from '@/assets/EmptyBGC.png';
 import styles from "./index.less";
 import { getAllXXGG } from '@/services/after-class/xxgg';
+import { Article } from './mock';
 
 const EmptyArticle = () => {
   const [content, setContent] = useState<any>();
@@ -9,7 +10,11 @@ const EmptyArticle = () => {
     async function announcements() {
       const res= await getAllXXGG({status:['报名通知']})
       if (res.status === 'ok') {
-        setContent(res.data[0]);
+        if(res.data){
+          setContent(res.data[0]);
+        }else{
+          setContent(Article);
+        }
       }
     };
     announcements()

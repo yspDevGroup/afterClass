@@ -5,7 +5,7 @@ import ListComponent from '@/components/ListComponent';
 import Nodata from '@/components/Nodata';
 import noDataImg from '@/assets/noCourses1.png';
 import GoBack from '@/components/GoBack';
-import { ChangePageTitle } from '@/utils/utils';
+
 
 const defaultMsg: ListData = {
   type: 'picList',
@@ -15,7 +15,6 @@ const defaultMsg: ListData = {
 const Course = (props: any) => {
   const { allDataSource } = props.location.state;
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
-  ChangePageTitle(ENV_subTitle);
   useEffect(() => {
     if (allDataSource) {
       const { list, ...rest } = { ...defaultMsg };

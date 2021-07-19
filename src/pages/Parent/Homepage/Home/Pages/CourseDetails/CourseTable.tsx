@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { Badge } from 'antd';
-import { ChangePageTitle, getData, getQueryString } from '@/utils/utils';
+import { getData, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import styles from './index.less';
 import noData from '@/assets/noCourse.png';
@@ -23,7 +23,6 @@ const CourseTable: React.FC = () => {
     njId: '1'
   }];
   const xsName = currentUser?.subscriber_info?.remark || currentUser?.username;
-  ChangePageTitle(ENV_subTitle);
   useEffect(() => {
     async function fetchData() {
       if (classid) {

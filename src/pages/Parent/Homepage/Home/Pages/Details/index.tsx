@@ -4,11 +4,10 @@ import styles from './index.less';
 import noData from '@/assets/noTzgg.png';
 import IconFont from '@/components/CustomIcon';
 import Nodata from '@/components/Nodata';
-import { ChangePageTitle } from '@/utils/utils';
+
 
 const Details = (props: { data?: any[] }) => {
   const { data } = props;
-  ChangePageTitle(ENV_subTitle);
 
   return (
     <div className={styles.bigbox}>

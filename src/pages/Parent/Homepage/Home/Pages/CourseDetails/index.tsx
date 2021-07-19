@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link } from 'umi';
 import styles from './index.less';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
-import { ChangePageTitle, enHenceMsg, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
@@ -34,7 +34,6 @@ const CourseDetails: React.FC = () => {
       name: currentUser?.username,
     },
   ];
-  ChangePageTitle(ENV_subTitle);
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;

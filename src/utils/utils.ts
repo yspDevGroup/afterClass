@@ -287,7 +287,7 @@ export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?:
 export const getData = async (bjid: string, xsId?: string) => {
   const res1 = await getKHPKSJByBJID({ id: bjid });
   if (res1.status === 'ok' && res1.data) {
-    const attend = [...new Set(res1.data.map((n: { WEEKDAY: any; }) => n.WEEKDAY))];
+    const attend = [...new Set(res1.data.map((n: { WEEKDAY?: any; }) => n.WEEKDAY))];
     const res = await getKHBJSJ({ id: bjid });
     if (res.status === 'ok' && res.data && attend) {
       const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;

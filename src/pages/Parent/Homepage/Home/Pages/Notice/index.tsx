@@ -7,7 +7,7 @@ import type { ListData, ListItem } from '@/components/ListComponent/data';
 import moment from 'moment';
 import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
-import { ChangePageTitle } from '@/utils/utils';
+
 
 const defaultList: ListData = {
   type: 'onlyList',
@@ -18,7 +18,6 @@ const Notice = (props: any) => {
   const { notification } = props.location.state;
   const [annoceList, setAnnoceList] = useState<ListData>(defaultList);
   const [pages, setPages] = useState<number>(1);
-  ChangePageTitle(ENV_subTitle);
   useEffect(() => {
     if (notification && notification.length) {
       const data: ListItem[] = [];

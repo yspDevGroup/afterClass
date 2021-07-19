@@ -74,6 +74,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     waterMarkProps: {
       // content: initialState?.currentUser?.name,
     },
+    pageTitleRender: () => {
+      return `${ENV_subTitle}`
+    },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
@@ -92,15 +95,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     },
     links: isDev
       ? [
-          <Link to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>openAPI 文档</span>
-          </Link>,
-          <Link to="/~docs" target="_blank">
-            <BookOutlined />
-            <span>业务组件文档</span>
-          </Link>,
-        ]
+        <Link to="/umi/plugin/openapi" target="_blank">
+          <LinkOutlined />
+          <span>openAPI 文档</span>
+        </Link>,
+        <Link to="/~docs" target="_blank">
+          <BookOutlined />
+          <span>业务组件文档</span>
+        </Link>,
+      ]
       : [],
     collapsedButtonRender: false,
     menuHeaderRender: () => {

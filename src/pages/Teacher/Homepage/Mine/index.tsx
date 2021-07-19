@@ -37,28 +37,24 @@ const Mine = () => {
     const courseData: any = [];
     const newskrq = {};
     // 教授的课程有几门，每门下有几个班
-    if (data && data.length > 0) {
-      data.forEach((item: any, index: number) => {
-        const newkec = {
-          KCMC: item.KHKCSJ.KCMC,
-          class: [item]
-        };
-        if (courseData[index - 1] && courseData[index - 1].KCMC === item.KHKCSJ.KCMC) {
-          courseData[index - 1].class.push(item)
-        } else {
-          courseData.push(newkec);
-        }
-      })
-    }
+    data?.forEach((item: any, index: number) => {
+      const newkec = {
+        KCMC: item.KHKCSJ.KCMC,
+        class: [item]
+      };
+      if (courseData[index - 1] && courseData[index - 1].KCMC === item.KHKCSJ.KCMC) {
+        courseData[index - 1].class.push(item)
+      } else {
+        courseData.push(newkec);
+      }
+    })
     // 周几上课
-    if (weekSchedule && weekSchedule.length > 0) {
-      weekSchedule.forEach((item: any) => {
-        if (Object.keys(newskrq).indexOf(`${item.KHBJSJ.id}`) === -1) {
-          newskrq[item.KHBJSJ.id] = []
-        }
-        newskrq[item.KHBJSJ.id].push(item.WEEKDAY);
-      })
-    }
+    weekSchedule?.forEach((item: any) => {
+      if (Object.keys(newskrq).indexOf(`${item.KHBJSJ.id}`) === -1) {
+        newskrq[item.KHBJSJ.id] = []
+      }
+      newskrq[item.KHBJSJ.id].push(item.WEEKDAY);
+    })
     return {
       courseData,
       newskrq
@@ -113,11 +109,12 @@ const Mine = () => {
     return kcData;
   };
   useEffect(() => {
-    const { courseData, newskrq } = getChechIn(yxkc);
-    setCheckIn(courseData);
-    setWekDay(newskrq);
-  }, [yxkc])
-
+    if(yxkc && yxkc.length){
+      const { courseData, newskrq } = getChechIn(yxkc);
+      setCheckIn(courseData);
+      setWekDay(newskrq);
+    }
+  }, [yxkc]);
 
   return (
     <div className={styles.minePage}>
