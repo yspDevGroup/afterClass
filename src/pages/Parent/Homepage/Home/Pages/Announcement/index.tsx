@@ -40,7 +40,7 @@ const Announcement = () => {
       {articlepage === 'about' ?
         <div className={styles.guanyu}>
           <div  className={styles.tp}>
-          <img src={content?.NR} alt='' style={{width:'120px'}}/>
+          <img src={content?.NR} alt=''/>
           </div>
           <div className={styles.wz}>课后课程服务平台</div>
           <div className={styles.xb}>© 2021 版权所有：陕西凯锐信息技术有限公司 </div>

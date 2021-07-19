@@ -31,8 +31,7 @@ const Announcement = () => {
   }, []);
   return (
     <div className={styles.DetailsBox}>
-    {pageId && !index ? <GoBack title='公告' teacher/> : ''}
-    {pageId && index ? <GoBack title='公告' onclick='/teacher/home?index=index' teacher/> : ''}
+    {pageId ? <GoBack title='公告' onclick={index ? undefined: '/teacher/home?index=index'} teacher/> : ''}
     {articlepage ? <GoBack title={articlepage === 'serveAnnounce' ? '服务公告' : '关于' } teacher onclick='/teacher/home?index=mine' /> : ''}
     {content?.BT ? <div className={styles.title}>{content?.BT}</div> : ''}
     {content?.updatedAt ? <div className={styles.time}>发布时间：{content?.updatedAt}</div> : ''}
@@ -40,7 +39,7 @@ const Announcement = () => {
     {articlepage === 'about' ?
       <div className={styles.guanyu}>
         <div  className={styles.tp}>
-        <img src={content?.NR} alt='' style={{width:'120px'}}/>
+        <img src={content?.NR} alt='' />
         </div>
         <div className={styles.wz}>课后课程服务平台</div>
         <div className={styles.xb}>© 2021 版权所有：陕西凯锐信息技术有限公司 </div>
