@@ -108,6 +108,7 @@ const ClassCalendar = (props: propstype) => {
               sj,
             },
           };
+          console.log('enrollLink',enrollLink);
           const recordLink = {
             pathname: '/teacher/education/rollcallrecord',
             state: {
@@ -118,6 +119,7 @@ const ClassCalendar = (props: propstype) => {
               sj,
             },
           };
+          console.log('recordLink',recordLink);
           const curInfo = [
             {
               enrollLink,

@@ -153,8 +153,6 @@ const NewCourses = (props: PropsType) => {
     form.submit();
   };
   const handleImageChange = (e: any) => {
-    console.log("eeeeeeeeeeeee",e);
-
     if (e.file.status === 'done') {
       const mas = e.file.response.message;
       if (typeof e.file.response === 'object' && e.file.response.status === 'error') {
@@ -162,8 +160,6 @@ const NewCourses = (props: PropsType) => {
       } else {
         const res = e.file.response;
         if (res.status === 'ok') {
-          console.log('res.data',res.data);
-          
           message.success(`上传成功`);
           form.setFieldsValue({ KCTP: res.data });
           setImageUrl(res.data);
