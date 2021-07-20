@@ -99,8 +99,8 @@ const Detail: React.FC = () => {
                 <th>星期</th>
                 <th>节次</th>
                 <th>时间</th>
-                <th>教室</th>
                 <th>校区</th>
+                <th>教室</th>
               </tr>
             </thead>
             <tbody>
