@@ -110,6 +110,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             style={{
               color: data?.color,
               background: data?.color.replace('1)', '0.1)'),
+              position: 'relative',
             }}
           >
             <div className="cla">{data?.cla}</div>
@@ -124,12 +125,12 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             ) : (
               ''
             )}
+            {mode === 'see' && (data?.bjzt === '已发布' || data?.bjzt === '已结课') ? (
+              <div className={styles.duihao}>√</div>
+            ) : (
+              ''
+            )}
           </div>
-          {mode === 'see' && (data?.bjzt === '已发布' || data?.bjzt === '已结课') ? (
-            <div className={styles.duihao}>√</div>
-          ) : (
-            ''
-          )}
         </div>
       )}
     </Button>
