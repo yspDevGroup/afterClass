@@ -307,18 +307,3 @@ export const getData = async (bjid: string, xsId?: string) => {
     status: 'nothing'
   };
 };
-/**
- * 修改头部标题的函数
- * @param title 
- */
-export const ChangePageTitle = (title: string) => {
-  document.title = title;
-  const iframe = document.createElement('iframe');
-  iframe.style.cssText ='display: none;';
-  document.body.appendChild(iframe);
-  iframe.onload = () =>{
-    setTimeout(()=> {
-      iframe.onload =()=>{};
-    }, 0);
-  }
-};

@@ -76,7 +76,7 @@ const Study = () => {
       <ClassCalendar setDatedata={setDatedata} />
     </div>
     <div className={styles.funWrapper} style={{ marginTop: '20px' }}>
-      <div className={styles.titleBar}>{`在学课程 ${yxkc?.length}`}</div>
+      <div className={styles.titleBar}>{`在学课程 ${listData?.list.length}`}</div>
       <ListComponent listData={listData} />
     </div>
   </div>;

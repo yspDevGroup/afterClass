@@ -55,7 +55,7 @@ const Home = () => {
             </span>
             老师，你好！
           </h4>
-          <div>欢迎使用课后帮，课后服务选我就对了！ </div>
+          <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
         </div>
       </header>
       {courseStatus === 'empty' ? <EmptyArticle /> : <div className={styles.pageContent}>

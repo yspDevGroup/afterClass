@@ -34,7 +34,7 @@ const Home = () => {
             <span>{currentUserInfo?.subscriber_info?.remark || currentUserInfo?.username || '家长'}</span>
             ，你好！
           </h4>
-          <div>欢迎使用课后帮，课后服务选我就对了！ </div>
+          <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
         </div>
       </header>
       {courseStatus === 'empty' ? <EmptyArticle /> : <div className={styles.pageContent}>

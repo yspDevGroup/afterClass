@@ -26,7 +26,8 @@ const CourseDetails: React.FC = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const courseid = getQueryString('courseid');
   const index = getQueryString('index');
-  const myDate: Date = new Date();
+  const curDate: Date = new Date();
+  const myDate: Date  = new Date(moment(curDate).format('YYYY/MM/DD'));
   const children = currentUser?.subscriber_info?.children || [
     {
       student_userid: currentUser?.UserId,
@@ -142,6 +143,10 @@ const CourseDetails: React.FC = () => {
         <p className={styles.title}>{KcDetail?.KCMC}</p>
 
         <ul>
+          <li>
+            报名时段：{moment(KcDetail?.BMKSSJ).format('YYYY.MM.DD')}~
+            {moment(KcDetail?.BMJSSJ).format('YYYY.MM.DD')}
+          </li>
           <li>
             上课时段：{moment(KcDetail?.KKRQ).format('YYYY.MM.DD')}~
             {moment(KcDetail?.JKRQ).format('YYYY.MM.DD')}
