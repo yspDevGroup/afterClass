@@ -67,7 +67,6 @@ const CallTheRoll = (props: any) => {
   const nowDate = new Date();
   const { pkid, bjids, date, kjs, sj } = props.location.state;
   const pkDate = date?.replace(/\//g, '-'); // 日期
-
   const wxad: any = []
   sj.forEach((item: any) => {
     if (new Date(pkDate) > new Date(item)) {
@@ -88,7 +87,7 @@ const CallTheRoll = (props: any) => {
         notification.warning({
           message: '',
           description:
-            '本节课已点名.请勿重复操作',
+            '本节课已点名,请勿重复操作',
           duration: 3,
         });
         setButDis(true);
@@ -98,6 +97,7 @@ const CallTheRoll = (props: any) => {
         setDataScouse(allData);
       } else {
         const nowSta = (nowDate.getTime() - new Date(pkDate).getTime()) / 7 / 24 / 60 / 60 / 1000;
+        const futureSta = (nowDate.getTime() - new Date(pkDate).getTime()) < 0;
         // 获取班级已报名人数
         const resStudent = getEnrolled({ id: bjids || '' });
         Promise.resolve(resStudent).then((data: any) => {
@@ -107,12 +107,20 @@ const CallTheRoll = (props: any) => {
               item.isRealTo = '出勤';
             });
             setDataScouse(studentData);
-            setButDis(nowSta >= 1);
+            setButDis(nowSta >= 1 || futureSta);
             if (nowSta >= 1) {
               notification.warning({
                 message: '',
                 description:
                   '本节课因考勤超时已默认点名',
+                duration: 3,
+              });
+            }
+            if (futureSta) {
+              notification.warning({
+                message: '',
+                description:
+                  '本节课尚未开始点名',
                 duration: 3,
               });
             }
@@ -174,8 +182,8 @@ const CallTheRoll = (props: any) => {
     });
     const res = await createKHXSCQ(value);
     if (res.status === 'ok') {
-      message.success('操作成功');
-      history.push('/teacher/home');
+      message.success('点名成功');
+      history.push('/teacher/home?index=education');
     } else {
       enHenceMsg(res.message);
     }

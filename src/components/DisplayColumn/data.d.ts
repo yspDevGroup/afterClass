@@ -27,4 +27,5 @@ export type IiconTextData = {
    /** 是否有背景色及徽标点 */
    totil?: boolean;
    exteraLink?: any;
+   parentLink?: any[];
 }

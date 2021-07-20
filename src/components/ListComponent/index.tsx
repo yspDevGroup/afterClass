@@ -32,10 +32,6 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
       <List
         dataSource={data}
         renderItem={(v) => {
-          if (operation) {
-            operation[0].link = v.enrollLink;
-            operation[1].link = v.recordLink;
-          }
           return (
             <div className={operation ? 'ui-listItemWrapper' : ''}>
               <div className={operation ? 'ui-listItemContent' : ''}>
@@ -133,7 +129,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
               </div>
               {operation ? (
                 <div className="ui-operation" style={{ display: 'none', paddingTop: '10px' }}>
-                  <DisplayColumn type="icon" grid={{ column: 2 }} dataSource={operation} />
+                  <DisplayColumn type="icon" grid={{ column: 2 }} dataSource={operation} parentLink={[v.enrollLink,v.recordLink]} />
                 </div>
               ) : (
                 ''
