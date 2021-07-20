@@ -12,7 +12,7 @@ type ItemType = {
 
 const CheckOnChart = (props: { data: ItemType[], title?: string, cls?: string }) => {
   const { data, title, cls } = props;
-  const config = {
+  const config: any = {
     data,
     // height: 150,
     isGroup: true,
@@ -31,6 +31,21 @@ const CheckOnChart = (props: { data: ItemType[], title?: string, cls?: string })
       position: 'right'
     },
     xAxis: false,
+    yAxis: {
+      label:{
+        style:{
+          textAlign:'center',
+        },
+        formatter:(name: string)=>{
+          const tar = name.substring(0);
+          let str = `${tar[0]}   `;
+          for(let i=1;i<tar.length;i+=1){
+            str +=`\n${tar[i]}   `;
+          }
+          return str;
+        },
+      }
+    },
     tooltip: false,
     barStyle: {
       radius: [10, 10, 0, 0],

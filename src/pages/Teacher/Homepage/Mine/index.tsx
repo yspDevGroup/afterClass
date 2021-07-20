@@ -69,9 +69,10 @@ const Mine = () => {
       const datelist = DateRange(record.KKRQ, record.JKRQ);
       // 上课日期数组
       const Classdate: any = [];
-      datelist.forEach((list: any) => {
+      
+      datelist?.forEach((list: any) => {
         // 获取周几上课，在上课区间拿出上课日期
-        wekDay[record.id].forEach((ite: any) => {
+        wekDay[record.id]?.forEach((ite: any) => {
           if (Week(list) === ite) {
             Classdate.push(list)
           }
