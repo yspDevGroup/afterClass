@@ -283,6 +283,7 @@ const Index: FC<IndexPropsType> = ({
         KHBJSJId: chosenData?.KHBJSJId,
         FJSJId: rowData.room?.jsId,
         WEEKDAY: weekDay[colItem.dataIndex],
+        XXSJPZId: rowData.course?.hjId, // 时间ID
       };
     } else if (type === 'see') {
       pkData = rowData[colItem.dataIndex]?.bjId;

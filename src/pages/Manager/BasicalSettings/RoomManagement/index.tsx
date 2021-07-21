@@ -267,8 +267,8 @@ const RoomManagement = () => {
         centered
         maskClosable={false}
         bodyStyle={{
-          maxHeight: '334px',
-          overflowY: 'auto',
+          maxHeight: '360px',
+          // overflowY: 'auto',
         }}
       >
         {modalType === 'uphold' ? (

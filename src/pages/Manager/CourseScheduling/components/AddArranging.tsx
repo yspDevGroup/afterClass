@@ -169,18 +169,17 @@ const AddArranging: FC<PropsType> = (props) => {
   };
 
   const onExcelTableClick = (value: any, record: any, pkData: any) => {
-    let connt = 0;
     if (value === null) {
       excelTableValue.forEach((item: any, key) => {
         if (
-          item.FJSJId === pkData.FJSJId &&
-          item.KHBJSJId === pkData.KHBJSJId &&
-          item.WEEKDAY === pkData.WEEKDAY
+          item.FJSJId === pkData.FJSJId && // 场地ID
+          item.KHBJSJId === pkData.KHBJSJId && // 班级ID
+          item.XXSJPZId === pkData.XXSJPZId && // 时间ID
+          item.WEEKDAY === pkData.WEEKDAY // 周
         ) {
-          connt = key;
+          excelTableValue.splice(key, 1);
         }
       });
-      excelTableValue.splice(connt, 1);
     } else {
       excelTableValue.push(value);
     }
@@ -358,7 +357,7 @@ const AddArranging: FC<PropsType> = (props) => {
         const Fjplan = await getFJPlan({
           xn,
           xq,
-          isPk: true,
+          isPk: false,
         });
         if (Fjplan.status === 'ok') {
           setBasicData(Fjplan.data);
