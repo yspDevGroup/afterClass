@@ -365,7 +365,15 @@ const ClassManagement = () => {
     setKcmcValue(value);
 
     // 排课的接口
-    const res = await getFJPlan({ kcId: value, xn, xq, isPk: radioValue });
+    const res = await getFJPlan({
+      kcId: value,
+      bjId: bjmcValue,
+      lxId: cdlxValue,
+      fjId: cdmcValue,
+      xn,
+      xq,
+      isPk: radioValue,
+    });
     if (res.status === 'ok') {
       const tableData = processingData(res.data, xXSJPZData);
       setTableDataSource(tableData);
@@ -383,7 +391,15 @@ const ClassManagement = () => {
   const onBjmcChange = async (value: any) => {
     setBjmcValue(value);
     // 排课的接口
-    const res = await getFJPlan({ bjId: value, xn, xq, isPk: radioValue });
+    const res = await getFJPlan({
+      kcId: kcmcValue,
+      bjId: value,
+      lxId: cdlxValue,
+      fjId: cdmcValue,
+      xn,
+      xq,
+      isPk: radioValue,
+    });
     if (res.status === 'ok') {
       const tableData = processingData(res.data, xXSJPZData);
       setTableDataSource(tableData);
@@ -394,7 +410,15 @@ const ClassManagement = () => {
   const onCdlxChange = async (value: any) => {
     setCdlxValue(value);
     // 排课的接口
-    const res = await getFJPlan({ lxId: value, xn, xq, isPk: radioValue });
+    const res = await getFJPlan({
+      kcId: kcmcValue,
+      bjId: bjmcValue,
+      lxId: value,
+      fjId: cdmcValue,
+      xn,
+      xq,
+      isPk: radioValue,
+    });
     if (res.status === 'ok') {
       const tableData = processingData(res.data, xXSJPZData);
       setTableDataSource(tableData);
@@ -419,7 +443,15 @@ const ClassManagement = () => {
   const onCdmcChange = async (value: any) => {
     setCdmcValue(value);
     // 排课的接口
-    const res = await getFJPlan({ fjId: value, xn, xq, isPk: radioValue });
+    const res = await getFJPlan({
+      kcId: kcmcValue,
+      bjId: bjmcValue,
+      lxId: cdlxValue,
+      fjId: value,
+      xn,
+      xq,
+      isPk: radioValue,
+    });
     if (res.status === 'ok') {
       const tableData = processingData(res.data, xXSJPZData);
       setTableDataSource(tableData);
