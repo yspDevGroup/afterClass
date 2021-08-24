@@ -1,3 +1,4 @@
+import { history } from 'umi';
 import PageContainer from '@/components/PageContainer';
 import { paginationConfig } from '@/constant';
 import { createXXGG, getAllXXGG, updateXXGG } from '@/services/after-class/xxgg';
@@ -54,7 +55,7 @@ const Noticenotice = () => {
             enHenceMsg(result.message);
           }
         } else {
-          message.error('首页报名提示信息只能存在一条，请不要重复创建')
+          message.error('首页报名提示信息只能存在一条，请不要重复创建');
         }
       } else {
         const result = id ? await updateXXGG({ id }, { ...rest }) : await createXXGG({ ...rest });
@@ -146,7 +147,9 @@ const Noticenotice = () => {
             style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
             type="primary"
             key="add"
-            onClick={() => handleOperation()}
+            onClick={() => {
+              history.push('/editAnnouncement');
+            }}
           >
             <PlusOutlined />
             新增公告

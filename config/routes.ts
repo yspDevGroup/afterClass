@@ -98,6 +98,19 @@
     component: './Manager/Noticenotice',
   },
   {
+    path: '/policyRelease',
+    name: 'policyRelease',
+    icon: 'CarryOutOutlined',
+    component: './Manager/PolicyRelease',
+  },
+  {
+    path: '/editAnnouncement',
+    name: 'editAnnouncement',
+    icon: 'CarryOutOutlined',
+    hideInMenu: 'true',
+    component: './Manager/Noticenotice/components/EditAnnouncement',
+  },
+  {
     path: '/orderInquiry',
     name: 'orderInquiry',
     icon: 'BarsOutlined',

@@ -29,8 +29,10 @@ export default {
   'menu.parent.announcement': '公告详情',
   'menu.parent.emptyArticle': '报名通知',
   'menu.announcement': '公告',
-  "menu.emptyArticle": '服务公告',
+  'menu.emptyArticle': '服务公告',
   'menu.courseIntro': '课程简介',
-  'menu.course':'课程详情',
-  'menu.parent.courseIntro':'课程描述',
+  'menu.course': '课程详情',
+  'menu.parent.courseIntro': '课程描述',
+  'menu.policyRelease': '政策发布',
+  'menu.editAnnouncement': '新增公告',
 };
