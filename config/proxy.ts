@@ -18,6 +18,7 @@ export default {
   ssh: {
     '/api/': {
       target: 'http://api.xianyunshipei.com',
+      // target: 'http://192.168.0.113:3000',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

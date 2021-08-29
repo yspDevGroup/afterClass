@@ -261,9 +261,9 @@ const NewClassManagement = () => {
           search={false}
           pagination={paginationConfig}
           toolBarRender={() => [
-            <Button key="wh" onClick={() => setModalVisible(true)}>
-              课程类型维护
-            </Button>,
+            // <Button key="wh" onClick={() => setModalVisible(true)}>
+            //   课程类型维护
+            // </Button>,
             <Button
               style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
               type="primary"

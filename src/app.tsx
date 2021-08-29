@@ -32,7 +32,7 @@ export async function getInitialState(): Promise<{
       const currentUserRes = await queryCurrentUser();
       if (currentUserRes.status === 'ok') {
         // sessionStorage.setItem('csrf', currentUser?.csrfToken || '');
-        const { token = '', info } = currentUserRes.data || {};
+        const { info } = currentUserRes.data || {};
         if (!info) {
           // 如果后台未查询到用户信息，则跳转到登录页
           // 此时不能无条件跳转向认证页，否则可能产生无限循环
@@ -42,7 +42,7 @@ export async function getInitialState(): Promise<{
           return undefined;
         }
         // currentToken = token;
-        localStorage.setItem('token', token || '');
+        // localStorage.setItem('token', token || '');
         return info as API.CurrentUser;
       }
     } catch (error) {
@@ -52,9 +52,9 @@ export async function getInitialState(): Promise<{
     return undefined;
   };
   // 处理微信端多身份数据重合问题
-  if(window.location.pathname === '/' && history.length <= 2) {
+  if (window.location.pathname === '/' && history.length <= 2) {
     localStorage.removeItem('token');
-  };
+  }
   // 如果是登录页面及认证跳转页，不执行
   if (history.location.pathname !== loginPath && history.location.pathname !== authCallbackPath) {
     const currentUser = await fetchUserInfo();
@@ -79,7 +79,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       // content: initialState?.currentUser?.name,
     },
     pageTitleRender: () => {
-      return `${ENV_subTitle}`
+      return `${ENV_subTitle}`;
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
@@ -99,15 +99,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     },
     links: isDev
       ? [
-        <Link to="/umi/plugin/openapi" target="_blank">
-          <LinkOutlined />
-          <span>openAPI 文档</span>
-        </Link>,
-        <Link to="/~docs" target="_blank">
-          <BookOutlined />
-          <span>业务组件文档</span>
-        </Link>,
-      ]
+          <Link to="/umi/plugin/openapi" target="_blank">
+            <LinkOutlined />
+            <span>openAPI 文档</span>
+          </Link>,
+          <Link to="/~docs" target="_blank">
+            <BookOutlined />
+            <span>业务组件文档</span>
+          </Link>,
+        ]
       : [],
     collapsedButtonRender: false,
     menuHeaderRender: () => {

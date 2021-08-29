@@ -15,6 +15,8 @@ const goto = () => {
     const { redirect } = query as {
       redirect: string;
     };
+    console.log('query', query);
+
     history.push(redirect || '/');
   }, 10);
 };

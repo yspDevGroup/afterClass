@@ -64,11 +64,17 @@
     icon: 'ProfileOutlined',
     routes: [
       {
-        path: '/courseManagements/',
+        path: '/courseManagements/CourseManagements',
         name: 'courseManagements',
         icon: 'smile',
         component: './Manager/CourseManagements',
-        hideInMenu: 'true',
+        // hideInMenu: 'true',
+      },
+      {
+        path: '/courseManagements/Mechanism',
+        name: 'mechanism',
+        icon: 'smile',
+        component: './Manager/Mechanisms',
       },
       {
         path: '/courseManagements/classMaintenance',
