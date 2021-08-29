@@ -36,6 +36,8 @@ export async function currentUser(options?: { [key: string]: any }) {
     data?: {
       info: {
         id?: string;
+        jgId?: string;
+        jyjId?: string;
         XXDM?: string;
         loginName?: string;
         username?: string;
@@ -43,7 +45,9 @@ export async function currentUser(options?: { [key: string]: any }) {
         identityId?: string;
         departmentId?: string;
         status?: number;
-        auth?: '老师' | '家长' | '管理员';
+        userType?: string;
+        auth?: '老师' | '家长' | '管理员' | { authType?: string; appName?: string }[];
+        adminAuth?: string[];
         userId?: string;
         UserId?: string;
         CorpId?: string;
@@ -56,8 +60,30 @@ export async function currentUser(options?: { [key: string]: any }) {
             name?: string;
           }[];
         };
+        roles?: {
+          id?: string;
+          name?: string;
+          describe?: string;
+          roleType?: string;
+          orderIndex?: number;
+          rules?: {
+            id?: string;
+            permission?: { id?: string; describe?: string; permission?: string };
+            subApp?: {
+              id?: string;
+              describe?: string;
+              icon?: string;
+              isEnabled?: boolean;
+              isShow?: string;
+              name?: string;
+              orderIndex?: string;
+              path?: string;
+              subAppGroupId?: string;
+              target?: string;
+            };
+          }[];
+        }[];
       };
-      token?: string;
     };
     message?: string;
   }>('/user/currentUser', {
@@ -84,6 +110,8 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
     status?: 'ok' | 'error';
     data: {
       id?: string;
+      jgId?: string;
+      jyjId?: string;
       XXDM?: string;
       loginName?: string;
       username?: string;
@@ -91,7 +119,9 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
       identityId?: string;
       departmentId?: string;
       status?: number;
-      auth?: '老师' | '家长' | '管理员';
+      userType?: string;
+      auth?: '老师' | '家长' | '管理员' | { authType?: string; appName?: string }[];
+      adminAuth?: string[];
       userId?: string;
       UserId?: string;
       CorpId?: string;
@@ -104,6 +134,29 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
           name?: string;
         }[];
       };
+      roles?: {
+        id?: string;
+        name?: string;
+        describe?: string;
+        roleType?: string;
+        orderIndex?: number;
+        rules?: {
+          id?: string;
+          permission?: { id?: string; describe?: string; permission?: string };
+          subApp?: {
+            id?: string;
+            describe?: string;
+            icon?: string;
+            isEnabled?: boolean;
+            isShow?: string;
+            name?: string;
+            orderIndex?: string;
+            path?: string;
+            subAppGroupId?: string;
+            target?: string;
+          };
+        }[];
+      }[];
     };
     message?: string;
   }>('/user/create', {
@@ -166,8 +219,8 @@ export async function homePageInfo(
           FJS?: string;
           BJRS?: number;
           KSS?: number;
-          KKRQ?: string;
-          JKRQ?: string;
+          KKRQ?: string | any;
+          JKRQ?: string | any;
           BMKSSJ?: string;
           BMJSSJ?: string;
           KCTP?: string;
@@ -183,8 +236,8 @@ export async function homePageInfo(
             KCTP?: string;
             KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
             KCMS?: string;
-            KKRQ?: string;
-            JKRQ?: string;
+            KKRQ?: string | any;
+            JKRQ?: string | any;
             BMKSSJ?: string;
             BMJSSJ?: string;
           };
@@ -218,8 +271,8 @@ export async function homePageInfo(
           KCTP?: string;
           KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
           KCMS?: string;
-          KKRQ?: string;
-          JKRQ?: string;
+          KKRQ?: string | any;
+          JKRQ?: string | any;
           BMKSSJ?: string;
           BMJSSJ?: string;
         }[];
@@ -234,8 +287,8 @@ export async function homePageInfo(
         BJRS?: number;
         KSS?: number;
         FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
@@ -253,8 +306,8 @@ export async function homePageInfo(
           KCTP?: string;
           KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
           KCMS?: string;
-          KKRQ?: string;
-          JKRQ?: string;
+          KKRQ?: string | any;
+          JKRQ?: string | any;
           BMKSSJ?: string;
           BMJSSJ?: string;
           XNXQId?: string;
@@ -283,4 +336,15 @@ export async function homePageInfo(
     data: body,
     ...(options || {}),
   });
+}
+
+/** 刷新Token GET /user/refreshToken */
+export async function refreshToken(options?: { [key: string]: any }) {
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+    '/user/refreshToken',
+    {
+      method: 'GET',
+      ...(options || {}),
+    },
+  );
 }

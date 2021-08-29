@@ -2,27 +2,21 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取学校基本数据 GET /xxjbsj/${param0} */
-export async function getXXJBSJ(
-  params: {
-    // path
-    /** 学校代码 */
-    XXDM: string;
-  },
-  options?: { [key: string]: any },
-) {
-  const { XXDM: param0 } = params;
+/** 获取学校基本数据 GET /xxjbsj/ */
+export async function getXXJBSJ(options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
       id?: string;
       XXDM?: string;
+      XH?: string;
+      XXRY?: string;
       XXMC?: string;
       XXYWMC?: string;
       XXDZ?: string;
       XXYZBM?: string;
       XZQHM?: string;
-      JXNY?: string;
+      JXNY?: string | any;
       XQR?: string;
       XXBXLXM?: string;
       XXZGBMM?: string;
@@ -33,6 +27,7 @@ export async function getXXJBSJ(
       DWFZRH?: string;
       ZZJGM?: string;
       LXDH?: string;
+      LXR?: string;
       CZDH?: string;
       DZXX?: string;
       ZYDZ?: string;
@@ -50,19 +45,39 @@ export async function getXXJBSJ(
       ZJXYYM?: string;
       FJXYYM?: string;
       ZSBJ?: string;
+      XD?: string;
     };
     message?: string;
-  }>(`/xxjbsj/${param0}`, {
+  }>('/xxjbsj/', {
     method: 'GET',
-    params: { ...params },
     ...(options || {}),
   });
 }
 
-/** 查询所有学校基本数据 GET /xxjbsj/ */
-export async function getAllXXJBSJ(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: API.XXJBSJ[]; message?: string }>('/xxjbsj/', {
-    method: 'GET',
+/** 查询所有学校基本数据 POST /xxjbsj/getAll */
+export async function getAllXXJBSJ(
+  body: {
+    /** 学校代码 */
+    XXDM?: string;
+    /** 学校ID */
+    xxId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.XXJBSJ[] };
+    message?: string;
+  }>('/xxjbsj/getAll', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -74,12 +89,14 @@ export async function createXXJBSJ(body: API.CreateXXJBSJ, options?: { [key: str
     data: {
       id?: string;
       XXDM?: string;
+      XH?: string;
+      XXRY?: string;
       XXMC?: string;
       XXYWMC?: string;
       XXDZ?: string;
       XXYZBM?: string;
       XZQHM?: string;
-      JXNY?: string;
+      JXNY?: string | any;
       XQR?: string;
       XXBXLXM?: string;
       XXZGBMM?: string;
@@ -90,6 +107,7 @@ export async function createXXJBSJ(body: API.CreateXXJBSJ, options?: { [key: str
       DWFZRH?: string;
       ZZJGM?: string;
       LXDH?: string;
+      LXR?: string;
       CZDH?: string;
       DZXX?: string;
       ZYDZ?: string;
@@ -107,6 +125,7 @@ export async function createXXJBSJ(body: API.CreateXXJBSJ, options?: { [key: str
       ZJXYYM?: string;
       FJXYYM?: string;
       ZSBJ?: string;
+      XD?: string;
     };
     message?: string;
   }>('/xxjbsj/create', {

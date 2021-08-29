@@ -14,7 +14,26 @@ export async function getZXFA(
   const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; FAMC?: string; KSRQ?: string; JSRQ?: string; QSSJ?: string; SM?: string };
+    data: {
+      id?: string;
+      FAMC?: string;
+      KSRQ?: string | any;
+      JSRQ?: string | any;
+      QSSJ?: string;
+      SM?: string;
+      SFQY?: number;
+      ZXSJs?: {
+        id?: string;
+        MC?: string;
+        SD?: string;
+        SX?: string;
+        KSSJ?: string;
+        JSSJ?: string;
+        SYXQ?: string;
+        SC?: number;
+        BH?: number;
+      }[];
+    };
     message?: string;
   }>(`/zxfa/${param0}`, {
     method: 'GET',
@@ -40,10 +59,22 @@ export async function deleteZXFA(
   });
 }
 
-/** 查询所有作息方案数据 GET /zxfa/ */
-export async function getAllZXFA(options?: { [key: string]: any }) {
+/** 查询所有作息方案数据 POST /zxfa/ */
+export async function getAllZXFA(
+  body: {
+    /** 校区ID */
+    XQSJId?: string;
+    /** 方案名称 */
+    FAMC?: string;
+  },
+  options?: { [key: string]: any },
+) {
   return request<{ status?: 'ok' | 'error'; data?: API.ZXFA[]; message?: string }>('/zxfa/', {
-    method: 'GET',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -52,7 +83,26 @@ export async function getAllZXFA(options?: { [key: string]: any }) {
 export async function createZXFA(body: API.CreateZXFA, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; FAMC?: string; KSRQ?: string; JSRQ?: string; QSSJ?: string; SM?: string };
+    data: {
+      id?: string;
+      FAMC?: string;
+      KSRQ?: string | any;
+      JSRQ?: string | any;
+      QSSJ?: string;
+      SM?: string;
+      SFQY?: number;
+      ZXSJs?: {
+        id?: string;
+        MC?: string;
+        SD?: string;
+        SX?: string;
+        KSSJ?: string;
+        JSSJ?: string;
+        SYXQ?: string;
+        SC?: number;
+        BH?: number;
+      }[];
+    };
     message?: string;
   }>('/zxfa/create', {
     method: 'PUT',

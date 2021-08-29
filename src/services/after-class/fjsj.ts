@@ -70,13 +70,17 @@ export async function getAllFJSJ(
     /** 页数 */
     page?: number;
     /** 每页记录数 */
-    pageCount?: number;
+    pageSize?: number;
     /** 场地名称 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: API.FJSJ[]; message?: string }>('/fjsj/', {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.FJSJ[] };
+    message?: string;
+  }>('/fjsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -199,8 +203,8 @@ export async function getFJPlan(
           BJRS?: number;
           KSS?: number;
           FY?: number;
-          KKRQ?: string;
-          JKRQ?: string;
+          KKRQ?: string | any;
+          JKRQ?: string | any;
           NJS?: string;
           XQ?: string;
           NJSName?: string;

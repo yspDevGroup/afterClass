@@ -26,8 +26,8 @@ export async function getKHPKSJ(
         FJS?: string;
         BJRS?: number;
         KSS?: number;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
@@ -43,8 +43,8 @@ export async function getKHPKSJ(
           KCTP?: string;
           KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
           KCMS?: string;
-          KKRQ?: string;
-          JKRQ?: string;
+          KKRQ?: string | any;
+          JKRQ?: string | any;
           BMKSSJ?: string;
           BMJSSJ?: string;
         };

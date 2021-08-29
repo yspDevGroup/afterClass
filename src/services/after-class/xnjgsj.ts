@@ -16,11 +16,12 @@ export async function getXNJGSJ(
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      JGH?: string;
       LSJGH?: string;
+      LSJGMC?: string;
       JGMC?: string;
       JGJC?: string;
-      FZRGH?: string;
+      FZR?: { id?: string; GH?: string; XM?: string };
+      JZGJBSJs?: { id?: string; GH?: string; XM?: string; LXDH?: string; DZXX?: string }[];
     };
     message?: string;
   }>(`/xnjgsj/${param0}`, {
@@ -47,10 +48,34 @@ export async function deleteXNJGSJ(
   });
 }
 
-/** 查询所有校内机构数据 GET /xnjgsj/ */
-export async function getAllXNJGSJ(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: API.XNJGSJ[]; message?: string }>('/xnjgsj/', {
-    method: 'GET',
+/** 查询所有校内机构数据 POST /xnjgsj/getAll */
+export async function getAllXNJGSJ(
+  body: {
+    /** 隶属机构号 */
+    LSJGH?: string;
+    /** 机构名称 */
+    JGMC?: string;
+    /** 负责人ID */
+    FZRGH?: string;
+    /** 校区ID */
+    XQSJId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.XNJGSJ[] };
+    message?: string;
+  }>('/xnjgsj/getAll', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -61,11 +86,12 @@ export async function createXNJGSJ(body: API.CreateXNJGSJ, options?: { [key: str
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      JGH?: string;
       LSJGH?: string;
+      LSJGMC?: string;
       JGMC?: string;
       JGJC?: string;
-      FZRGH?: string;
+      FZR?: { id?: string; GH?: string; XM?: string };
+      JZGJBSJs?: { id?: string; GH?: string; XM?: string; LXDH?: string; DZXX?: string }[];
     };
     message?: string;
   }>('/xnjgsj/create', {
@@ -95,6 +121,26 @@ export async function updateXNJGSJ(
       'Content-Type': 'application/json',
     },
     params: { ...params },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 为校内机构添加成员 PUT /xnjgsj/createMembers */
+export async function createMembers(
+  body: {
+    /** 机构ID */
+    id?: string;
+    /** 教师ID数组 */
+    jzgIds?: string[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status?: 'ok' | 'error'; message?: string }>('/xnjgsj/createMembers', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     data: body,
     ...(options || {}),
   });

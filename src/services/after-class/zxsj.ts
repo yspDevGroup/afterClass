@@ -14,7 +14,16 @@ export async function getZXSJ(
   const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; SD?: string; SX?: string; KSSJ?: string; JSSJ?: string; SYXQ?: string };
+    data: {
+      id?: string;
+      MC?: string;
+      SD?: string;
+      SX?: string;
+      KSSJ?: string;
+      JSSJ?: string;
+      SYXQ?: string;
+      SC?: number;
+    };
     message?: string;
   }>(`/zxsj/${param0}`, {
     method: 'GET',
@@ -40,10 +49,19 @@ export async function deleteZXSJ(
   });
 }
 
-/** 查询所有作息时间数据 GET /zxsj/ */
-export async function getAllZXSJ(options?: { [key: string]: any }) {
+/** 查询所有作息时间数据 POST /zxsj/ */
+export async function getAllZXSJ(
+  body: {
+    ZXFAId?: string;
+  },
+  options?: { [key: string]: any },
+) {
   return request<{ status?: 'ok' | 'error'; data?: API.ZXSJ[]; message?: string }>('/zxsj/', {
-    method: 'GET',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -52,7 +70,16 @@ export async function getAllZXSJ(options?: { [key: string]: any }) {
 export async function createZXSJ(body: API.CreateZXSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; SD?: string; SX?: string; KSSJ?: string; JSSJ?: string; SYXQ?: string };
+    data: {
+      id?: string;
+      MC?: string;
+      SD?: string;
+      SX?: string;
+      KSSJ?: string;
+      JSSJ?: string;
+      SYXQ?: string;
+      SC?: number;
+    };
     message?: string;
   }>('/zxsj/create', {
     method: 'PUT',

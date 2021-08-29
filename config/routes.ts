@@ -77,6 +77,12 @@
         component: './Manager/Mechanisms',
       },
       {
+        path: '/courseManagements/mechanismCourse/edit',
+        name: 'mechanismCourseInfo',
+        hideInMenu: 'true',
+        component: './Manager/Mechanisms/edit',
+      },
+      {
         path: '/courseManagements/classMaintenance',
         name: 'classMaintenance',
         icon: 'smile',

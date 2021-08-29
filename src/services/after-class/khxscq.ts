@@ -17,7 +17,7 @@ export async function getKHXSCQ(
     data?: {
       id?: string;
       CQZT?: '出勤' | '请假' | '缺席';
-      CQRQ?: string;
+      CQRQ?: string | any;
       XSId?: string;
       XSXM?: string;
       KHPKSJId?: string;
@@ -31,8 +31,8 @@ export async function getKHXSCQ(
         BJRS?: number;
         KSS?: number;
         FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
@@ -102,7 +102,7 @@ export async function createKHXSCQ(body: API.CreateKHXSCQ[], options?: { [key: s
     data?: {
       id?: string;
       CQZT?: '出勤' | '请假' | '缺席';
-      CQRQ?: string;
+      CQRQ?: string | any;
       XSId?: string;
       XSXM?: string;
       KHPKSJId?: string;
@@ -116,8 +116,8 @@ export async function createKHXSCQ(body: API.CreateKHXSCQ[], options?: { [key: s
         BJRS?: number;
         KSS?: number;
         FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;

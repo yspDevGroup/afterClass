@@ -14,7 +14,13 @@ export async function getXL(
   const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
+    data: {
+      id?: string;
+      BT?: string;
+      KSRQ?: string;
+      JSRQ?: string;
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+    };
     message?: string;
   }>(`/xl/${param0}`, {
     method: 'GET',
@@ -40,10 +46,30 @@ export async function deleteXL(
   });
 }
 
-/** 查询所有校历数据 GET /xl/ */
-export async function getAllXL(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: API.XL[]; message?: string }>('/xl/', {
-    method: 'GET',
+/** 查询所有校历数据 POST /xl/getAll */
+export async function getAllXL(
+  body: {
+    /** 标题 */
+    BT?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.XL[] };
+    message?: string;
+  }>('/xl/getAll', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -52,7 +78,13 @@ export async function getAllXL(options?: { [key: string]: any }) {
 export async function createXL(body: API.CreateXL, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; KSRQ?: string; JSRQ?: string };
+    data: {
+      id?: string;
+      BT?: string;
+      KSRQ?: string;
+      JSRQ?: string;
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+    };
     message?: string;
   }>('/xl/create', {
     method: 'PUT',

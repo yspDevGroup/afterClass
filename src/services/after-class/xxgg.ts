@@ -14,7 +14,7 @@ export async function getXXGG(
   const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; NR?: string; ZT?: string; updatedAt?: string };
+    data: { id?: string; BT?: string; NR?: string; ZT?: string; LX?: string; updatedAt?: string };
     message?: string;
   }>(`/xxgg/${param0}`, {
     method: 'GET',
@@ -62,7 +62,7 @@ export async function getAllXXGG(
 export async function createXXGG(body: API.CreateXXGG, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; NR?: string; ZT?: string; updatedAt?: string };
+    data: { id?: string; BT?: string; NR?: string; ZT?: string; LX?: string; updatedAt?: string };
     message?: string;
   }>('/xxgg/create', {
     method: 'PUT',

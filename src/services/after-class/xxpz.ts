@@ -18,7 +18,7 @@ export async function getXXPZ(
       KEY?: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ' | 'TITLE';
       VALUE?: string;
       REMARK?: string;
-      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string | any; JSRQ?: string | any };
     };
     message?: string;
   }>(`/xxpz/${param0}`, {
@@ -73,7 +73,7 @@ export async function createXXPZ(body: API.CreateXXPZ[], options?: { [key: strin
       KEY?: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ' | 'TITLE';
       VALUE?: string;
       REMARK?: string;
-      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string | any; JSRQ?: string | any };
     };
     message?: string;
   }>('/xxpz/create', {

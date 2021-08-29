@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import PageContainer from '@/components/PageContainer';
-import { paginationConfig } from '@/constant';
 import { theme } from '@/theme-default';
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Modal } from 'antd';
@@ -243,15 +243,16 @@ const NewClassManagement = () => {
               }
             />
           }
-          request={(params, sorter, filter) => {
-            // 表单搜索项会从 params 传入，传递给后端接口。
-            const opts: TableListParams = {
-              ...params,
-              sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-              filter,
-            };
-            return getAllKHKCSJ({ name, xn, xq, pageCount: 0, page: 1, isReuired: false }, opts);
-          }}
+          // request={(params, sorter, filter) => {
+          //   // 表单搜索项会从 params 传入，传递给后端接口。
+          //   const opts: TableListParams = {
+          //     ...params,
+          //     sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+          //     filter,
+          //     name, xn, xq, pageSize: 0, page: 1, isReuired: false
+          //   };
+          //   return getAllKHKCSJ(opts);
+          // }}
           options={{
             setting: false,
             fullScreen: false,
@@ -259,7 +260,6 @@ const NewClassManagement = () => {
             reload: false,
           }}
           search={false}
-          pagination={paginationConfig}
           toolBarRender={() => [
             // <Button key="wh" onClick={() => setModalVisible(true)}>
             //   课程类型维护

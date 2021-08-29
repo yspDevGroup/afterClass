@@ -15,8 +15,8 @@ export async function getKHXSQJ(
   return request<{
     status?: 'ok' | 'error';
     data?: {
-      KSSJ?: string;
-      JSSJ?: string;
+      KSSJ?: string | any;
+      JSSJ?: string | any;
       QJSC?: number;
       QJYY?: string;
       QJZT?: '已确认' | '待确认' | '已过期';
@@ -32,8 +32,8 @@ export async function getKHXSQJ(
         BJRS?: number;
         KSS?: number;
         FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
@@ -93,8 +93,8 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
   return request<{
     status?: 'ok' | 'error';
     data?: {
-      KSSJ?: string;
-      JSSJ?: string;
+      KSSJ?: string | any;
+      JSSJ?: string | any;
       QJSC?: number;
       QJYY?: string;
       QJZT?: '已确认' | '待确认' | '已过期';
@@ -110,8 +110,8 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
         BJRS?: number;
         KSS?: number;
         FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
@@ -138,9 +138,9 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
 export async function getQJKSS(
   body: {
     /** 请假开始时间 */
-    KSSJ?: string;
+    KSSJ?: string | any;
     /** 请假结束时间 */
-    JSSJ?: string;
+    JSSJ?: string | any;
     /** 学年 */
     xn?: string;
     /** 学期 */

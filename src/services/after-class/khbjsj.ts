@@ -24,8 +24,8 @@ export async function getKHBJSJ(
       BJRS?: number;
       KSS?: number;
       FY?: number;
-      KKRQ?: string;
-      JKRQ?: string;
+      KKRQ?: string | any;
+      JKRQ?: string | any;
       BMKSSJ?: string;
       BMJSSJ?: string;
       KCTP?: string;
@@ -43,8 +43,8 @@ export async function getKHBJSJ(
         KCTP?: string;
         KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
         KCMS?: string;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         XNXQId?: string;
@@ -96,13 +96,17 @@ export async function getAllKHBJSJ(
     /** 页数 */
     page?: number;
     /** 每页记录数 */
-    pageCount?: number;
+    pageSize?: number;
     /** 班级名称 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: API.KHBJSJ[]; message?: string }>('/khbjsj/', {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.KHBJSJ[] };
+    message?: string;
+  }>('/khbjsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -126,8 +130,8 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       BJRS?: number;
       KSS?: number;
       FY?: number;
-      KKRQ?: string;
-      JKRQ?: string;
+      KKRQ?: string | any;
+      JKRQ?: string | any;
       BMKSSJ?: string;
       BMJSSJ?: string;
       KCTP?: string;
@@ -145,8 +149,8 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         KCTP?: string;
         KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
         KCMS?: string;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         XNXQId?: string;

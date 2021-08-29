@@ -36,4 +36,5 @@ export default {
   'menu.parent.courseIntro': '课程描述',
   'menu.policyRelease': '政策发布',
   'menu.editAnnouncement': '新增公告',
+  'menu.courseManagements.mechanismCourseInfo': '课程详情',
 };

@@ -2,16 +2,8 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取课程数据 GET /kcsj/${param0} */
-export async function getKCSJ(
-  params: {
-    // path
-    /** 课程ID */
-    id: string;
-  },
-  options?: { [key: string]: any },
-) {
-  const { id: param0 } = params;
+/** 创建课程数据 PUT /kcsj/create */
+export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -28,11 +20,16 @@ export async function getKCSJ(
       SKFSM?: string;
       JCBM?: string;
       CKSM?: string;
+      NJSJ?: { id?: string; NJ?: number; NJMC?: string; XD?: string };
+      XKSJ?: { id?: string; XKMC?: string; XD?: string };
     };
     message?: string;
-  }>(`/kcsj/${param0}`, {
-    method: 'GET',
-    params: { ...params },
+  }>('/kcsj/create', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -54,48 +51,26 @@ export async function deleteKCSJ(
   });
 }
 
-/** 获取学校全部课程数据 GET /kcsj/xxdm/${param0} */
-export async function getKCSJByXX(
-  params: {
-    // path
-    /** 学校代码 */
-    id: string;
+/** 获取课程数据 POST /kcsj/getAll */
+export async function getKCSJ(
+  body: {
+    /** 年级ID */
+    NJSJId?: string;
+    /** 学科ID */
+    XKSJId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
-  return request<{ status?: 'ok' | 'error'; data?: API.KCSJ[]; message?: string }>(
-    `/kcsj/xxdm/${param0}`,
-    {
-      method: 'GET',
-      params: { ...params },
-      ...(options || {}),
-    },
-  );
-}
-
-/** 创建课程数据 PUT /kcsj/create */
-export async function createKCSJ(body: API.CreateKCSJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data: {
-      id?: string;
-      KCMC?: string;
-      KCM?: string;
-      KCDJM?: string;
-      KCBM?: string;
-      KCJJ?: string;
-      KCYQ?: string;
-      ZXS?: number;
-      ZHXS?: number;
-      ZXXS?: number;
-      SKFSM?: string;
-      JCBM?: string;
-      CKSM?: string;
-    };
+    data?: { count?: number; rows?: API.KCSJ[] };
     message?: string;
-  }>('/kcsj/create', {
-    method: 'PUT',
+  }>('/kcsj/getAll', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },

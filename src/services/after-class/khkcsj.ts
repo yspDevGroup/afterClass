@@ -7,79 +7,12 @@ export async function getKHKCSJ(
   body: {
     /** 课程ID */
     kcId?: string;
-    /** 年级ID */
-    njId?: string;
-    /** 班级状态 */
-    bjzt?: '待发布' | '已发布' | '已下架' | '已结课';
+    /** 学校ID */
+    XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status?: 'ok' | 'error';
-    data?: {
-      id?: string;
-      KCMC?: string;
-      KCTP?: string;
-      KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
-      KCMS?: string;
-      KKRQ?: string;
-      JKRQ?: string;
-      BMKSSJ?: string;
-      BMJSSJ?: string;
-      XNXQId?: string;
-      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
-      KHKCLX?: { id?: string; KCLX?: string };
-      KHBJSJs?: {
-        id?: string;
-        BJMC?: string;
-        BJMS?: string;
-        BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
-        ZJS?: string;
-        FJS?: string;
-        BJRS?: number;
-        KSS?: number;
-        FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
-        BMKSSJ?: string;
-        BMJSSJ?: string;
-        KCTP?: string;
-        KBYS?: string;
-        NJS?: string;
-        XQ?: string;
-        NJSName?: string;
-        XQName?: string;
-        ZJSName?: string;
-        FJSName?: string;
-        KHPKSJs?: {
-          id?: string;
-          WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
-          XXSJPZ?: {
-            id?: string;
-            KSSJ?: string;
-            JSSJ?: string;
-            KJS?: string;
-            TITLE?: string;
-            BZXX?: string;
-            TYPE?: 0 | 1 | 2;
-          };
-          FJSJ?: {
-            id?: string;
-            FJBH?: string;
-            FJMC?: string;
-            FJLC?: string;
-            FJJZMJ?: number;
-            FJSYMJ?: number;
-            FJRS?: number;
-            FJLX?: string;
-            XQ?: string;
-            XQName?: string;
-          };
-        }[];
-      }[];
-    };
-    message?: string;
-  }>('/khkcsj/detail', {
+  return request<any>('/khkcsj/detail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -107,13 +40,17 @@ export async function getAllKHKCSJ(
     /** 页数 */
     page?: number;
     /** 每页记录数 */
-    pageCount?: number;
+    pageSize?: number;
     /** 课程名称 */
     name?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: API.KHKCSJ[]; message?: string }>('/khkcsj/', {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.KHKCSJ[] };
+    message?: string;
+  }>('/khkcsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -131,14 +68,10 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
       id?: string;
       KCMC?: string;
       KCTP?: string;
-      KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
+      KCZT?: number;
       KCMS?: string;
-      KKRQ?: string;
-      JKRQ?: string;
-      BMKSSJ?: string;
-      BMJSSJ?: string;
-      XNXQId?: string;
-      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+      SSJGLX?: string;
+      KBYS?: string;
       KHKCLX?: { id?: string; KCLX?: string };
       KHBJSJs?: {
         id?: string;
@@ -150,8 +83,8 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
         BJRS?: number;
         KSS?: number;
         FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
@@ -260,8 +193,8 @@ export async function allKCsByNJ(
       KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
       KCMS?: string;
       XNXQId?: string;
-      KKRQ?: string;
-      JKRQ?: string;
+      KKRQ?: string | any;
+      JKRQ?: string | any;
       BMKSSJ?: string;
       BMJSSJ?: string;
     }[];

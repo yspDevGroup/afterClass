@@ -203,12 +203,14 @@ export async function wechatTradeCallback(options?: { [key: string]: any }) {
 /** 发送消息 POST /wechat/sendMsg */
 export async function sendMsg(
   body: {
-    /** 成员ID列表 */
-    touser?: string;
-    /** 部门ID列表 */
-    toparty?: string;
-    /** 标签ID列表 */
-    totag?: string;
+    /** 已关注「学校通知」的家长列表 */
+    to_external_user?: string[];
+    /** 家校通讯录家长列表 */
+    to_parent_userid?: string[];
+    /** 家校通讯录学生列表 */
+    to_student_userid?: string[];
+    /** 家校通讯录部门列表 */
+    to_party?: string[];
     /** 消息类型 */
     msgtype?: string;
     /** 消息内容 */

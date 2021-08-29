@@ -36,8 +36,8 @@ export async function getKHXSDD(
         BJRS?: number;
         KSS?: number;
         FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
@@ -54,11 +54,17 @@ export async function getKHXSDD(
           KCTP?: string;
           KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
           KCMS?: string;
-          KKRQ?: string;
-          JKRQ?: string;
+          KKRQ?: string | any;
+          JKRQ?: string | any;
           BMKSSJ?: string;
           BMJSSJ?: string;
-          XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+          XNXQ?: {
+            id?: string;
+            XN?: string;
+            XQ?: string;
+            KSRQ?: string | any;
+            JSRQ?: string | any;
+          };
         };
       };
     };
@@ -143,8 +149,8 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
         BJRS?: number;
         KSS?: number;
         FY?: number;
-        KKRQ?: string;
-        JKRQ?: string;
+        KKRQ?: string | any;
+        JKRQ?: string | any;
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
@@ -161,11 +167,17 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
           KCTP?: string;
           KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
           KCMS?: string;
-          KKRQ?: string;
-          JKRQ?: string;
+          KKRQ?: string | any;
+          JKRQ?: string | any;
           BMKSSJ?: string;
           BMJSSJ?: string;
-          XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+          XNXQ?: {
+            id?: string;
+            XN?: string;
+            XQ?: string;
+            KSRQ?: string | any;
+            JSRQ?: string | any;
+          };
         };
       };
     };

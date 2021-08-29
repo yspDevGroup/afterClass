@@ -31,7 +31,7 @@ export async function getXXSJPZ(
         XXYZBM?: string;
         XZQHM?: string;
       };
-      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string | any; JSRQ?: string | any };
     };
     message?: string;
   }>(`/xxsjpz/${param0}`, {
@@ -104,7 +104,7 @@ export async function createXXSJPZ(body: API.CreateXXSJPZ, options?: { [key: str
         XXYZBM?: string;
         XZQHM?: string;
       };
-      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+      XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string | any; JSRQ?: string | any };
     };
     message?: string;
   }>('/xxsjpz/create', {

@@ -25,7 +25,7 @@ export async function getJCSJ(
       DJ?: number;
       CBS?: string;
       FXBH?: string;
-      CBRQ?: string;
+      CBRQ?: string | any;
       ZD?: string;
       KB?: string;
       ZS?: number;
@@ -92,7 +92,7 @@ export async function createJCSJ(body: API.CreateJCSJ, options?: { [key: string]
       DJ?: number;
       CBS?: string;
       FXBH?: string;
-      CBRQ?: string;
+      CBRQ?: string | any;
       ZD?: string;
       KB?: string;
       ZS?: number;

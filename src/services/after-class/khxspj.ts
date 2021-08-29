@@ -16,7 +16,7 @@ export async function getKHXSPJ(
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      PJRQ?: string;
+      PJRQ?: string | any;
       PJLX?: '节次评价' | '总评价';
       PJFS?: string;
       PY?: string;
@@ -79,7 +79,7 @@ export async function createKHXSPJ(body: API.CreateKHXSPJ, options?: { [key: str
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      PJRQ?: string;
+      PJRQ?: string | any;
       PJLX?: '节次评价' | '总评价';
       PJFS?: string;
       PY?: string;
