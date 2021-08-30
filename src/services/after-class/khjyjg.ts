@@ -245,3 +245,40 @@ export async function getAllGrades(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+/** 获取机构与学校存在合作的学年学期数据 POST /khjyjg/getAllSemester */
+export async function getAllSemester(
+  body: {
+    KHJYJGId?: string;
+    XXJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjyjg/getAllSemester', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取机构与学校存在合作的课程列表 POST /khjyjg/getAllCourses */
+export async function getAllCourses(
+  body: {
+    KHJYJGId?: string;
+    XNXQId?: string;
+    XXJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjyjg/getAllCourses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

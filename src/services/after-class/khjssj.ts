@@ -19,6 +19,7 @@ export async function KHJSSJ(
       GH?: string;
       XM?: string;
       XB?: string;
+      MZ?: string;
       LXDH?: string;
       CSRQ?: string | any;
       DZXX?: string;
@@ -29,6 +30,9 @@ export async function KHJSSJ(
       ZGZS?: string;
       JL?: number;
       XL?: string;
+      BYYX?: string;
+      SXZY?: string;
+      JSKM?: string;
     };
     message?: string;
   }>(`/khjssj/${param0}`, {
@@ -64,6 +68,7 @@ export async function createKHJSSJ(body: API.CreateKHJSSJ, options?: { [key: str
       GH?: string;
       XM?: string;
       XB?: string;
+      MZ?: string;
       LXDH?: string;
       CSRQ?: string | any;
       DZXX?: string;
@@ -74,6 +79,9 @@ export async function createKHJSSJ(body: API.CreateKHJSSJ, options?: { [key: str
       ZGZS?: string;
       JL?: number;
       XL?: string;
+      BYYX?: string;
+      SXZY?: string;
+      JSKM?: string;
     };
     message?: string;
   }>('/khjssj/create', {

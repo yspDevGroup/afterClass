@@ -70,12 +70,12 @@
         component: './Manager/CourseManagements',
         // hideInMenu: 'true',
       },
-      {
-        path: '/courseManagements/Mechanism',
-        name: 'mechanism',
-        icon: 'smile',
-        component: './Manager/Mechanisms',
-      },
+      // {
+      //   path: '/courseManagements/Mechanism',
+      //   name: 'mechanism',
+      //   icon: 'smile',
+      //   component: './Manager/Mechanisms',
+      // },
       {
         path: '/courseManagements/mechanismCourse/edit',
         name: 'mechanismCourseInfo',

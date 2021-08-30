@@ -6,7 +6,7 @@ export default {
   'menu.basicalSettings.periodMaintenance': '时段维护',
   'menu.basicalSettings.termManagement': '学期学年维护',
   'menu.courseManagements': '课程管理',
-  'menu.courseManagements.courseManagements': '本校课程',
+  'menu.courseManagements.courseManagements': '课程管理',
   'menu.courseManagements.mechanism': '机构课程',
   'menu.courseManagements.classMaintenance': '班级维护',
   'menu.classManagement': '班级管理',

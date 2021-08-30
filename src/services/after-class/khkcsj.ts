@@ -25,20 +25,22 @@ export async function getKHKCSJ(
 /** 查询所有课后课程数据 POST /khkcsj/ */
 export async function getAllKHKCSJ(
   body: {
-    /** 学年 */
-    xn?: string;
-    /** 学期 */
-    xq?: string;
     /** 是否与班级关联查询 */
-    isReuired?: boolean;
+    isRequired?: boolean;
     /** 课程类型ID */
     kclxId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
     /** 校区ID */
-    xqId?: string;
-    /** 年级ID */
+    XQSJId?: string;
+    /** 年级ID 班级维度 */
     njId?: string;
     /** 页数 */
     page?: number;
+    /** 课程来源 */
+    KCLY?: string;
     /** 每页记录数 */
     pageSize?: number;
     /** 课程名称 */
@@ -46,11 +48,7 @@ export async function getAllKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status?: 'ok' | 'error';
-    data?: { count?: number; rows?: API.KHKCSJ[] };
-    message?: string;
-  }>('/khkcsj/', {
+  return request<any>('/khkcsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
