@@ -22,7 +22,7 @@ const index = () => {
         <TabPane tab="课程列表" key="1">
           <CourseList />
         </TabPane>
-        <TabPane tab="未引入课程" key="2">
+        <TabPane tab="资源池课程" key="2">
           <CourseNotIntroduced />
         </TabPane>
         <TabPane tab="课程历史记录" key="3">

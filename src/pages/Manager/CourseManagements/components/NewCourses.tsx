@@ -4,15 +4,13 @@
 /* eslint-disable prefer-destructuring */
 import React, { useEffect, useState } from 'react';
 import ProFormFields from '@/components/ProFormFields';
-import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
-import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import type { ActionType } from '@ant-design/pro-table/lib/typing';
-import { message, notification } from 'antd';
+import { message } from 'antd';
 import { Button, Drawer } from 'antd';
-import moment from 'moment';
 import type { classType } from '../data';
 import styles from './index.less';
+import { courseColorType } from '@/theme-default';
 
 type PropsType = {
   current?: classType;
@@ -20,10 +18,10 @@ type PropsType = {
   readonly?: boolean;
   visible?: boolean;
   actionRef?: React.MutableRefObject<ActionType | undefined>;
-  xn?: string;
-  xq?: string;
-  xnxq?: any;
+  kclxOptions?: any[];
   setOpentype: (arg0: boolean) => void;
+  optionsNJ?: any[];
+  currentUser?: API.CurrentUser;
 };
 const formLayout = {
   labelCol: {},
@@ -31,19 +29,19 @@ const formLayout = {
 };
 
 const NewCourses = (props: PropsType) => {
-  const { current, onClose, visible, actionRef, readonly, setOpentype } = props;
-  const [options, setOptions] = useState<any[]>([]);
+  const {
+    current,
+    onClose,
+    visible,
+    actionRef,
+    readonly,
+    kclxOptions,
+    optionsNJ,
+    currentUser,
+  } = props;
   const [form, setForm] = useState<any>();
-  // const [XNData, setXNData] = useState<any>([]);
-  // const [XQData, setXQData] = useState<any>([]);
-  // const [XN, setXN] = useState<any>();
-  // const [XQ, setXQ] = useState<any>();
   const [baoming, setBaoming] = useState<boolean>(false);
   const [kaike, setKaike] = useState<boolean>(false);
-  // 上课时间
-  const [classattend, setClassattend] = useState<any>('');
-  // 报名时间
-  const [signup, setSignup] = useState<any>('');
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
   const [isTrue, setIsTrue] = useState(true);
@@ -59,8 +57,6 @@ const NewCourses = (props: PropsType) => {
       };
     }
     return {
-      // XN: xn,
-      // XQ: xq,
       KCZT: '待发布',
     };
   };
@@ -70,86 +66,6 @@ const NewCourses = (props: PropsType) => {
     setImageUrl('');
     onClose!();
   };
-  // const onXnXqChange = async (xnValue: any, xqvalue: any) => {
-  //   const params = {
-  //     xn: xnValue,
-  //     xq: xqvalue,
-  //     type: ['1', '2'],
-  //   };
-  //   const res = await getAllXXSJPZ(params);
-  //   if (res.status === 'ok') {
-  //     const arry: any[] = [];
-  //     const erry: any[] = [];
-  //     res.data?.map((item: any) => {
-  //       if (item.TYPE === '1') {
-  //         arry.push(item.KSSJ, item.JSSJ);
-  //       }
-  //       if (item.TYPE === '2') {
-  //         erry.push(item.KSSJ, item.JSSJ);
-  //       }
-  //       return true;
-  //     });
-  //     setSignup(arry);
-  //     setClassattend(erry);
-  //     if (arry.length === 0 || erry.length === 0) {
-  //       notification.warning({
-  //         message: '缺少系统配置时间',
-  //         description: '当前没有该学期的系统配置时间，请先前往时段维护配置系统时间.',
-  //         onClick: () => {
-  //           console.log('Notification Clicked!');
-  //         },
-  //       });
-  //     }
-  //   }
-  // };
-  useEffect(() => {
-    if (visible) {
-      // if (xnxq) {
-      //   setXNData(xnxq.data);
-      //   setXQData(xnxq.subData);
-      // }
-      // if (current) {
-      //   onXnXqChange(current.XNXQ?.XN, current.XNXQ?.XQ);
-      // } else {
-      //   onXnXqChange(xn, xq);
-      // }
-      const res = getAllKHKCLX({ name: '' });
-      Promise.resolve(res).then((data) => {
-        if (data.status === 'ok') {
-          const opt: any[] = [];
-          data.data?.map((item: any) => {
-            return opt.push({
-              label: item.KCTAG,
-              value: item.id,
-            });
-          });
-          // if (opt === []) {
-          //   setOpentype(true);
-          // }
-          setOptions(opt);
-        }
-      });
-    }
-  }, [visible, current]);
-  useEffect(() => {
-    if (current) {
-      if (signup) {
-        const date = current.BMKSSJ && current.BMKSSJ[0]?.substring(0, 10);
-        const date1 = current.BMKSSJ && current.BMKSSJ[1]?.substring(0, 10);
-        if (!(date === signup[0] && date1 === signup[1])) {
-          setBaoming(true);
-        }
-      }
-      if (classattend) {
-        const date = current.KKRQ && current.KKRQ[0]?.substring(0, 10);
-        const date1 = current.KKRQ && current.KKRQ[1]?.substring(0, 10);
-        if (!(date === classattend[0] && date1 === classattend[1])) {
-          setKaike(true);
-        }
-      }
-    }
-  }, [current, signup, classattend]);
-
   const handleSubmit = () => {
     form.submit();
   };
@@ -176,40 +92,22 @@ const NewCourses = (props: PropsType) => {
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
+      const optionse = {
+        ...values,
+        KCTP: imageUrl,
+        XXJBSJId: currentUser?.xxId,
+        SSJGLX: '校内课程',
+      };
       if (current?.id) {
         const params = {
           id: current?.id,
         };
-        if (values.KKRQ) {
-          values.JKRQ = values.KKRQ[1];
-          values.KKRQ = values.KKRQ[0];
-        }
-        if (values.BMKSSJ) {
-          values.BMJSSJ = moment(values.BMKSSJ[1]);
-          values.BMKSSJ = moment(values.BMKSSJ[0]);
-        }
-        const optionse = { ...values, KCTP: imageUrl };
         res = updateKHKCSJ(params, optionse);
       } else {
-        if (!kaike) {
-          values.KKRQ = classattend[0];
-          values.JKRQ = classattend[1];
-        } else {
-          values.JKRQ = values.KKRQ[1];
-          values.KKRQ = values.KKRQ[0];
-        }
-        if (!baoming) {
-          values.BMKSSJ = new Date(moment(new Date(signup[0])).format('YYYY-MM-DD HH:mm:ss'));
-          values.BMJSSJ = new Date(moment(new Date(signup[1])).format('YYYY-MM-DD HH:mm:ss'));
-        } else {
-          values.BMJSSJ = new Date(
-            moment(new Date(values.BMKSSJ[1])).format('YYYY-MM-DD HH:mm:ss'),
-          );
-          values.BMKSSJ = new Date(
-            moment(new Date(values.BMKSSJ[0])).format('YYYY-MM-DD HH:mm:ss'),
-          );
-        }
-        res = createKHKCSJ({ ...values, KCTP: imageUrl, KCZT: '待发布' });
+        res = createKHKCSJ({
+          ...optionse,
+          KCZT: 0,
+        });
       }
       resolve(res);
       reject(res);
@@ -257,157 +155,40 @@ const NewCourses = (props: PropsType) => {
     },
     {
       type: 'select',
-      label: '课程类型:',
+      label: '课程类型',
       name: 'KHKCLXId',
       key: 'KHKCLXId',
-      rules: [{ required: true, message: '请填选择类型' }],
+      rules: [{ required: true, message: '请填选择课程类型' }],
       disabled: readonly,
-      options,
+      options: kclxOptions,
     },
-    // {
-    //   type: 'select',
-    //   label: '课程状态:',
-    //   name: 'KCZT',
-    //   key: 'KCZT',
-    //   valueEnum: {
-    //     待发布: '待发布',
-    //   },
-    //   fieldProps: {
-    //     disabled: true,
-    //     initialValues: '待发布',
-    //   },
-    // },
-    // {
-    //   type: 'cascader',
-    //   label: '学年学期：',
-    //   key: 'XNXQ',
-    //   disabled: readonly,
-    //   rules: [{ required: true, message: '请填写学年学期' }],
-    //   cascaderItem: [
-    //     {
-    //       type: 'select',
-    //       width: '100%',
-    //       name: 'XN',
-    //       key: 'XN',
-    //       placeholder: '请选择学年',
-    //       noStyle: true,
-    //       disabled: readonly,
-    //       options: XNData,
-    //       rules: [{ required: true, message: '请填写学年' }],
-    //       fieldProps: {
-    //         onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-    //           setXN(event);
-    //           setXQ(XQData[`${event}`]);
-    //           onXnXqChange(event, XQData[`${event}`][0].label);
-    //         },
-    //       },
-    //     },
-    //     {
-    //       type: 'select',
-    //       name: 'XQ',
-    //       width: '100%',
-    //       key: 'XQ',
-    //       disabled: readonly,
-    //       placeholder: '请选择学期',
-    //       noStyle: true,
-    //       options: XQ,
-    //       rules: [{ required: true, message: '请填写学期' }],
-    //       fieldProps: {
-    //         onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-    //           onXnXqChange(XN, event);
-    //         },
-    //       },
-    //     },
-    //   ],
-    // },
-    // signup.length > 0
-    //   ? {
-    //     type: 'divTab',
-    //     text: `(默认报名时间段)：${moment(signup[0]).format('YYYY-MM-DD')} — ${moment(
-    //       signup[1],
-    //     ).format('YYYY-MM-DD')}`,
-    //     style: { marginBottom: 8, color: '#bbbbbb' },
-    //   }
-    //   : '',
-    // {
-    //   type: 'div',
-    //   key: 'div',
-    //   label: '单独设置报名时段：',
-    //   disabled: readonly,
-    //   lineItem: [
-    //     {
-    //       type: 'switch',
-    //       disabled: readonly,
-    //       fieldProps: {
-    //         onChange: (item: any) => {
-    //           if (item === false) {
-    //             return setBaoming(false);
-    //           }
-    //           return setBaoming(true);
-    //         },
-    //         checked: baoming,
-    //       },
-    //     },
-    //   ],
-    // },
-    // {
-    //   type: 'dateRange',
-    //   label: '报名时间:',
-    //   name: 'BMKSSJ',
-    //   key: 'BMKSSJ',
-    //   width: '100%',
-    //   disabled: readonly,
-    //   hidden: !baoming,
-    //   fieldProps: {
-    //     disabledDate: (currente: any) => {
-    //       const defaults = moment(currente).format('YYYY-MM-DD HH:mm:ss');
-    //       return defaults > signup[1] || defaults < signup[0];
-    //     },
-    //   },
-    // },
-    // classattend.length > 0
-    //   ? {
-    //     type: 'divTab',
-    //     text: `(默认上课时间段)：${classattend[0]} — ${classattend[1]}`,
-    //     style: { marginBottom: 8, color: '#bbbbbb' },
-    //   }
-    //   : '',
-    // {
-    //   type: 'div',
-    //   key: 'div1',
-    //   label: '单独设置上课时段：',
-    //   disabled: readonly,
-    //   lineItem: [
-    //     {
-    //       type: 'switch',
-    //       disabled: readonly,
-    //       fieldProps: {
-    //         onChange: (item: any) => {
-    //           if (item === false) {
-    //             return setKaike(false);
-    //           }
-    //           return setKaike(true);
-    //         },
-    //         checked: kaike,
-    //       },
-    //     },
-    //   ],
-    // },
-    // {
-    //   type: 'dateRange',
-    //   label: '上课时间:',
-    //   name: 'KKRQ',
-    //   key: 'KKRQ',
-    //   width: '100%',
-    //   disabled: readonly,
-    //   hidden: !kaike,
-    //   fieldProps: {
-    //     disabledDate: (currente: any) => {
-    //       const defaults = moment(currente).format('YYYY-MM-DD HH:mm:ss');
-    //       return defaults > classattend[1] || defaults < classattend[0];
-    //     },
-    //   },
-    // },
+    {
+      type: 'select',
+      label: '适用年级',
+      name: 'njIds',
+      key: 'njIds',
+      rules: [{ required: true, message: '请填选择适用年级' }],
+      disabled: readonly,
+      options: optionsNJ,
+      mode: 'multiple',
+    },
+    {
+      type: 'select',
+      label: '课程颜色',
+      name: 'KBYS',
+      key: 'KBYS',
+      disabled: readonly,
+      options: [
+        { label: '绯红', value: courseColorType.crimson },
+        { label: '橙色', value: courseColorType.orange },
+        { label: '黄色', value: courseColorType.yellow },
+        { label: '蓝色', value: courseColorType.blue },
+        { label: '天空蓝', value: courseColorType.skyBlue },
+        { label: '紫色', value: courseColorType.violet },
+        { label: '紫红色', value: courseColorType.purplishRed },
+      ],
+      rules: [{ required: true, message: '请填选择课程颜色' }],
+    },
     {
       type: 'uploadImage',
       label: '封面：',

@@ -1,23 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import PageContainer from '@/components/PageContainer';
-import { theme } from '@/theme-default';
-import React, { useState, useRef, useEffect } from 'react';
-import { Button, Modal } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import ProTable from '@ant-design/pro-table';
-import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import type { classType, TableListParams } from './data';
-import NewCourses from './components/NewCourses';
-import styles from './index.less';
-import Sitclass from './components/Sitclass';
-import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
-import type { SearchDataType } from '@/components/Search/data';
-import { searchData } from './searchConfig';
-import SearchComponent from '@/components/Search';
 import { Link, useModel } from 'umi';
+import { Button, message, Modal, Space, Tag } from 'antd';
+import React, { useState, useRef, useEffect } from 'react';
+
+import ProTable from '@ant-design/pro-table';
+import { PlusOutlined } from '@ant-design/icons';
+import type { ProCoreActionType } from '@ant-design/pro-utils';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+
+import { theme } from '@/theme-default';
+import EllipsisHint from '@/components/EllipsisHint';
 import PromptInformation from '@/components/PromptInformation';
-import Operation from './components/Operation';
-import { queryXNXQList } from '@/services/local-services/xnxq';
+
+import Sitclass from './components/Sitclass';
+import NewCourses from './components/NewCourses';
+import type { classType, TableListParams } from './data';
+
+import { getAllNJSJ } from '@/services/after-class/njsj';
+import { getAllKHKCLX } from '@/services/after-class/khkclx';
+import { updateKHKCSQ } from '@/services/after-class/khkcsq';
+import { getAllKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
@@ -26,16 +28,14 @@ const CourseList = () => {
   const [current, setCurrent] = useState<classType>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
-  const [xn, setxn] = useState<string>('');
-  const [xq, setxq] = useState<string>('');
-  const [xnxq, setXnxq] = useState<any>();
+  // 课程类型
+  const [kclxOptions, setOptions] = useState<any[]>([]);
+  // 适用年级
+  const [optionsNJ, setOptionsNJ] = useState<any[]>([]);
   const [readonly, setReadonly] = useState<boolean>(false);
   const [opentype, setOpentype] = useState(false);
   // 学年学期没有时的提示框控制
   const [kai, setkai] = useState<boolean>(false);
-  // 设置表单的查询更新
-  const [name, setName] = useState<string>('');
   // 关闭学期学年提示框
   const kaiguan = () => {
     setkai(false);
@@ -49,50 +49,41 @@ const CourseList = () => {
   // 图片展示框
   const [exhibition, setExhibition] = useState<'none' | 'block'>('none');
   const [url, setUrl] = useState<string>('');
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const res = await queryXNXQList();
-  //     const newData = res.xnxqList;
-  //     const curTerm = res.current;
-  //     const defaultData = [...searchData];
-  //     setXnxq(newData);
-  //     if (newData.data && newData.data.length) {
-  //       if (curTerm) {
-  //         await setxn(curTerm.XN);
-  //         await setxq(curTerm.XQ);
-  //         const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-  //         if (chainSel && chainSel.defaultValue) {
-  //           chainSel.defaultValue.first = curTerm.XN;
-  //           chainSel.defaultValue.second = curTerm.XQ;
-  //           await setDataSource(defaultData);
-  //           chainSel.data = newData;
-  //         }
-  //       }
-  //     } else {
-  //       setkai(true);
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
-  // 监听学年学期更新
-  // useEffect(() => {
-  //   if (xn && xq) {
-  //     setTimeout(() => {
-  //       actionRef.current?.reload();
-  //     }, 500);
-  //   }
-  // }, [xn, xq]);
-  const handlerSearch = (type: string, value: string, term: string) => {
-    if (type === 'year' || type === 'term') {
-      setxn(value);
-      setxq(term);
-      return true;
-    }
-    setName(value);
-    actionRef.current?.reload();
-    return true;
-  };
+  useEffect(() => {
+    // 课程类型
+    const res = getAllKHKCLX({ name: '' });
+    Promise.resolve(res).then((data) => {
+      if (data.status === 'ok') {
+        const opt: any[] = [];
+        data.data?.map((item: any) => {
+          return opt.push({
+            label: item.KCTAG,
+            value: item.id,
+          });
+        });
+        setOptions(opt);
+      }
+    });
+    // 适用年级
+    const resNJ = getAllNJSJ({ XXJBSJId: currentUser?.xxId });
+    Promise.resolve(resNJ).then((data) => {
+      if (data.status === 'ok') {
+        const optNJ: any[] = [];
+        const nj = ['幼儿园', '小学', '初中', '高中'];
+        nj.forEach((itemNJ) => {
+          data.data?.rows?.forEach((item) => {
+            if (item.XD === itemNJ) {
+              optNJ.push({
+                label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
+                value: item.id,
+              });
+            }
+          });
+        });
+        setOptionsNJ(optNJ);
+      }
+    });
+  }, []);
   const handleOperation = (type: string, data?: any) => {
     if (type === 'chakan') {
       setReadonly(true);
@@ -100,19 +91,7 @@ const CourseList = () => {
       setReadonly(false);
     }
     if (data) {
-      let KHKCLXId: any[] = [];
-      KHKCLXId = data.KHKCLX.id;
-      const KKRQ: any[] = [];
-      KKRQ.push(data.KKRQ);
-      KKRQ.push(data.JKRQ);
-      const BMKSSJ: any[] = [];
-      BMKSSJ.push(data.BMKSSJ);
-      BMKSSJ.push(data.BMJSSJ);
-      const XNXQ = {
-        XN: data.XNXQ.XN,
-        XQ: data.XNXQ.XQ,
-      };
-      const list = { ...data, KHKCLXId, KKRQ, BMKSSJ, ...XNXQ };
+      const list = { ...data, njIds: data.NJSJs.map((item: any) => item.id) };
       setCurrent(list);
     } else {
       setCurrent(undefined);
@@ -129,7 +108,73 @@ const CourseList = () => {
   const xclose = () => {
     setExhibition('none');
   };
-  const columns: ProColumns<classType>[] = [
+
+  /** 操作 */
+  const funOption = (record: any, action: ProCoreActionType<{}>) => {
+    if (record.SSJGLX === '机构课程') {
+      return (
+        <>
+          <a>机构详情</a>
+          {record.KHKCSQs.length > 0 ? (
+            <a
+              onClick={async () => {
+                const res = await updateKHKCSQ({ id: record?.id }, { ZT: 0 });
+                if (res.status === 'ok') {
+                  message.success('操作成功');
+                  action?.reload();
+                } else {
+                  message.error('操作失败');
+                }
+              }}
+            >
+              取消引入
+            </a>
+          ) : (
+            ''
+          )}
+        </>
+      );
+    }
+
+    return (
+      <>
+        {record.KCZT === 0 ? (
+          <>
+            <a
+              onClick={async () => {
+                const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 1 });
+                if (res.status === 'ok') {
+                  message.success('操作成功');
+                  action?.reload();
+                } else {
+                  message.error('操作失败');
+                }
+              }}
+            >
+              发布
+            </a>
+            <a onClick={() => handleOperation('add', record)}>修改</a>
+            <a>删除</a>
+          </>
+        ) : (
+          <a
+            onClick={async () => {
+              const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 0 });
+              if (res.status === 'ok') {
+                message.success('操作成功');
+                action?.reload();
+              } else {
+                message.error('操作失败');
+              }
+            }}
+          >
+            下架
+          </a>
+        )}
+      </>
+    );
+  };
+  const columns: ProColumns<any>[] = [
     {
       title: '课程名称',
       dataIndex: 'KCMC',
@@ -139,13 +184,26 @@ const CourseList = () => {
       ellipsis: true,
     },
     {
+      title: '机构名称',
+      align: 'center',
+      width: 200,
+      key: 'KHJYJG',
+      // search: false,
+      render: (_, record) => {
+        return <>{record.KHJYJG?.QYMC || '-'}</>;
+      },
+    },
+    {
       title: '课程类型',
       align: 'center',
       width: 110,
       key: 'KHKCLXId',
-      search: false,
+      valueType: 'select',
+      fieldProps: {
+        options: kclxOptions,
+      },
       render: (_, record) => {
-        return <>{record.KHKCLX?.KCLX}</>;
+        return <>{record.KHKCLX?.KCTAG}</>;
       },
     },
     {
@@ -154,50 +212,51 @@ const CourseList = () => {
       width: 110,
       key: 'SSJGLX',
       dataIndex: 'SSJGLX',
-      search: false,
+      valueType: 'select',
+      valueEnum: {
+        校内课程: { text: '校内课程' },
+        机构课程: { text: '机构课程' },
+      },
+      // search: false,
       // render: (_, record) => {
       //   return <>{record.KHKCLX?.KCLX}</>;
       // },
     },
     {
-      title: '班级数',
+      title: '适用年级',
+      key: 'NJSJs',
+      dataIndex: 'NJSJs',
+      search: false,
+      align: 'center',
+      render: (text: any) => {
+        return (
+          <EllipsisHint
+            width="100%"
+            text={text?.map((item: any) => {
+              return (
+                <Tag key={item.id}>
+                  {item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}
+                </Tag>
+              );
+            })}
+          />
+        );
+      },
+    },
+    {
+      title: '班级信息',
       align: 'center',
       search: false,
       width: 100,
       render: (_, record) => {
-        const Url = `/courseManagements/classMaintenance?courseId=${record.id}`;
-        const classes = record.KHBJSJs?.filter((item) => item.BJZT === '已发布');
+        const Url = `/classManagement`;
+        const classes = record.KHBJSJs?.filter((item: { BJZT: string }) => item.BJZT === '已发布');
         return (
           <Link to={Url}>
             {classes?.length}/{record.KHBJSJs?.length}
           </Link>
         );
       },
-    },
-    {
-      title: '课程封面',
-      align: 'center',
-      width: 120,
-      dataIndex: 'KCTP',
-      search: false,
-      ellipsis: true,
-      render: (_, record) => {
-        return (
-          <>
-            <a>
-              <span onClick={() => cover(record.KCTP)}>课程封面.png</span>
-            </a>
-          </>
-        );
-      },
-    },
-    {
-      title: '简介',
-      dataIndex: 'KCMS',
-      key: 'KCMS',
-      align: 'center',
-      search: false,
-      ellipsis: true,
     },
     {
       title: '状态',
@@ -207,15 +266,25 @@ const CourseList = () => {
       key: 'KCZT',
       search: false,
       width: 110,
+      render: (_, record) => {
+        if (record.SSJGLX === '机构课程') {
+          return record.KHKCSQs.length > 0 ? '已引入' : '';
+        }
+        return record.KCZT === 0 ? '未发布' : '已发布';
+      },
     },
     {
       title: '操作',
       valueType: 'option',
       search: false,
       key: 'option',
-      width: 150,
-      render: (_, record) => (
-        <Operation record={record} handleOperation={handleOperation} actionRef={actionRef} />
+      width: 300,
+      align: 'center',
+      render: (text, record, index, action) => (
+        <Space size="middle">
+          <a onClick={() => handleOperation('chakan', record)}>课程详情</a>
+          {funOption(record, action)}
+        </Space>
       ),
     },
   ];
@@ -261,8 +330,8 @@ const CourseList = () => {
               sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
               filter,
               name: params.keyword,
-              pageSize: 0,
-              page: 1,
+              pageSize: params.pageSize,
+              page: params.current,
               isRequired: false,
               XXJBSJId: currentUser?.xxId,
             };
@@ -298,7 +367,7 @@ const CourseList = () => {
               onClick={() => handleOperation('add')}
             >
               <PlusOutlined />
-              新增课程
+              新增本校课程
             </Button>,
           ]}
         />
@@ -308,10 +377,10 @@ const CourseList = () => {
           onClose={onClose}
           current={current}
           readonly={readonly}
-          xn={xn}
-          xq={xq}
-          xnxq={xnxq}
+          kclxOptions={kclxOptions}
           setOpentype={setOpentype}
+          optionsNJ={optionsNJ}
+          currentUser={currentUser}
         />
         <PromptInformation
           text="未查询到学年学期数据，请设置学年学期后再来"

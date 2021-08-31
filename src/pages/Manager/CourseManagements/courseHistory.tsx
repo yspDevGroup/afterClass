@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { getHistoriesBySchool } from '@/services/after-class/khkcsq';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import React, { useRef } from 'react';
-import { Link, useModel } from 'umi';
+import React, { useEffect, useRef, useState } from 'react';
+import { useModel } from 'umi';
 import type { classType, TableListParams } from './data';
 
 /**
@@ -14,7 +15,25 @@ const CourseHistory = () => {
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const columns: ProColumns<classType>[] = [
+  // 课程类型
+  const [kclxOptions, setOptions] = useState<any[]>([]);
+  useEffect(() => {
+    // 课程类型
+    const res = getAllKHKCLX({ name: '' });
+    Promise.resolve(res).then((data) => {
+      if (data.status === 'ok') {
+        const opt: any[] = [];
+        data.data?.map((item: any) => {
+          return opt.push({
+            label: item.KCTAG,
+            value: item.id,
+          });
+        });
+        setOptions(opt);
+      }
+    });
+  }, []);
+  const columns: ProColumns<any>[] = [
     {
       title: '课程名称',
       dataIndex: 'KCMC',
@@ -24,11 +43,24 @@ const CourseHistory = () => {
       ellipsis: true,
     },
     {
+      title: '机构名称',
+      align: 'center',
+      width: 200,
+      key: 'KHJYJG',
+      // search: false,
+      render: (_, record) => {
+        return <>{record.KHJYJG?.QYMC || '-'}</>;
+      },
+    },
+    {
       title: '课程类型',
       align: 'center',
       width: 110,
       key: 'KHKCLXId',
-      search: false,
+      valueType: 'select',
+      fieldProps: {
+        options: kclxOptions,
+      },
       render: (_, record) => {
         return <>{record.KHKCLX?.KCLX}</>;
       },
@@ -40,56 +72,23 @@ const CourseHistory = () => {
       key: 'SSJGLX',
       dataIndex: 'SSJGLX',
       search: false,
-      // render: (_, record) => {
-      //   return <>{record.KHKCLX?.KCLX}</>;
-      // },
     },
     {
-      title: '班级数',
+      title: '适用年级',
+      key: 'NJSJs',
+      dataIndex: 'NJSJs',
+      search: false,
       align: 'center',
-      search: false,
-      width: 100,
-      render: (_, record) => {
-        const Url = `/courseManagements/classMaintenance?courseId=${record.id}`;
-        const classes = record.KHBJSJs?.filter((item) => item.BJZT === '已发布');
-        return (
-          <Link to={Url}>
-            {classes?.length}/{record.KHBJSJs?.length}
-          </Link>
-        );
-      },
-    },
-    {
-      title: '课程封面',
-      align: 'center',
-      width: 120,
-      dataIndex: 'KCTP',
-      search: false,
-      ellipsis: true,
-    },
-    {
-      title: '简介',
-      dataIndex: 'KCMS',
-      key: 'KCMS',
-      align: 'center',
-      search: false,
-      ellipsis: true,
-    },
-    {
-      title: '状态',
-      align: 'center',
-      ellipsis: true,
-      dataIndex: 'KCZT',
-      key: 'KCZT',
-      search: false,
-      width: 110,
-    },
-    {
-      title: '操作',
-      valueType: 'option',
-      search: false,
-      key: 'option',
-      width: 150,
+      // render: (text: any) => {
+      //   return (
+      //     <EllipsisHint
+      //       width="100%"
+      //       text={text?.map((item: any) => {
+      //         return <Tag key={item.id}>{item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}</Tag>;
+      //       })}
+      //     />
+      //   );
+      // }
     },
   ];
   return (
@@ -114,7 +113,7 @@ const CourseHistory = () => {
           const resAll = await getHistoriesBySchool(opts);
           if (resAll.status === 'ok') {
             return {
-              data: resAll.data,
+              data: resAll.data.rows,
               success: true,
               total: resAll.data.count,
             };

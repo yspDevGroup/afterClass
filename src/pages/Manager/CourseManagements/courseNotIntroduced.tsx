@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { getToIntroduceBySchool } from '@/services/after-class/khkcsq';
+import EllipsisHint from '@/components/EllipsisHint';
+import { getAllKHKCLX } from '@/services/after-class/khkclx';
+import { getToIntroduceBySchool, updateKHKCSQ } from '@/services/after-class/khkcsq';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import React, { useRef } from 'react';
-import { Link, useModel } from 'umi';
+import { message, Space } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { useModel } from 'umi';
 import type { classType, TableListParams } from './data';
 
 /**
@@ -14,7 +18,25 @@ const courseNotIntroduced = () => {
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const columns: ProColumns<classType>[] = [
+  // 课程类型
+  const [kclxOptions, setOptions] = useState<any[]>([]);
+  useEffect(() => {
+    // 课程类型
+    const res = getAllKHKCLX({ name: '' });
+    Promise.resolve(res).then((data) => {
+      if (data.status === 'ok') {
+        const opt: any[] = [];
+        data.data?.map((item: any) => {
+          return opt.push({
+            label: item.KCTAG,
+            value: item.id,
+          });
+        });
+        setOptions(opt);
+      }
+    });
+  }, []);
+  const columns: ProColumns<any>[] = [
     {
       title: '课程名称',
       dataIndex: 'KCMC',
@@ -24,11 +46,24 @@ const courseNotIntroduced = () => {
       ellipsis: true,
     },
     {
+      title: '机构名称',
+      align: 'center',
+      width: 200,
+      key: 'KHJYJG',
+      // search: false,
+      render: (_, record) => {
+        return <>{record.KHJYJG?.QYMC || '-'}</>;
+      },
+    },
+    {
       title: '课程类型',
       align: 'center',
       width: 110,
       key: 'KHKCLXId',
-      search: false,
+      valueType: 'select',
+      fieldProps: {
+        options: kclxOptions,
+      },
       render: (_, record) => {
         return <>{record.KHKCLX?.KCLX}</>;
       },
@@ -45,51 +80,62 @@ const courseNotIntroduced = () => {
       // },
     },
     {
-      title: '班级数',
-      align: 'center',
+      title: '适用年级',
+      key: 'NJSJs',
+      dataIndex: 'NJSJs',
       search: false,
-      width: 100,
-      render: (_, record) => {
-        const Url = `/courseManagements/classMaintenance?courseId=${record.id}`;
-        const classes = record.KHBJSJs?.filter((item) => item.BJZT === '已发布');
-        return (
-          <Link to={Url}>
-            {classes?.length}/{record.KHBJSJs?.length}
-          </Link>
-        );
-      },
-    },
-    {
-      title: '课程封面',
       align: 'center',
-      width: 120,
-      dataIndex: 'KCTP',
-      search: false,
-      ellipsis: true,
-    },
-    {
-      title: '简介',
-      dataIndex: 'KCMS',
-      key: 'KCMS',
-      align: 'center',
-      search: false,
-      ellipsis: true,
+      // render: (text: any) => {
+      //   return (
+      //     <EllipsisHint
+      //       width="100%"
+      //       text={text?.map((item: any) => {
+      //         return <Tag key={item.id}>{item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}</Tag>;
+      //       })}
+      //     />
+      //   );
+      // }
     },
     {
       title: '状态',
       align: 'center',
       ellipsis: true,
-      dataIndex: 'KCZT',
-      key: 'KCZT',
+      dataIndex: 'KHKCSQs',
+      key: 'KHKCSQs',
       search: false,
       width: 110,
+      render: (text, record) => {
+        return record.KHKCSQs?.length === 0 ? '未引入' : '已引入';
+      },
     },
     {
       title: '操作',
       valueType: 'option',
       search: false,
       key: 'option',
-      width: 150,
+      width: 300,
+      align: 'center',
+      render: (text, record, index, action) => {
+        return (
+          <Space size="middle">
+            <a>课程详情</a>
+            <a>机构详情</a>
+            <a
+              onClick={async () => {
+                const res = await updateKHKCSQ({ id: record?.id }, { ZT: 1 });
+                if (res.status === 'ok') {
+                  message.success('操作成功');
+                  action?.reload();
+                } else {
+                  message.error('操作失败');
+                }
+              }}
+            >
+              引入
+            </a>
+          </Space>
+        );
+      },
     },
   ];
   return (
@@ -114,7 +160,7 @@ const courseNotIntroduced = () => {
           const resAll = await getToIntroduceBySchool(opts);
           if (resAll.status === 'ok') {
             return {
-              data: resAll.data,
+              data: resAll.data.rows,
               success: true,
               total: resAll.data.count,
             };
