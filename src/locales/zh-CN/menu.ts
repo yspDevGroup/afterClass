@@ -37,4 +37,10 @@ export default {
   'menu.policyRelease': '政策发布',
   'menu.editAnnouncement': '新增公告',
   'menu.courseManagements.mechanismCourseInfo': '课程详情',
+  'menu.announcements': '通知公告',
+  'menu.announcements.notice': '内部通知',
+  'menu.announcements.notice.editArticle': '编辑文章',
+  'menu.announcements.notice.noticeDetails': '公告详情',
+  'menu.announcements.policy': '政策公告',
+  'menu.announcements.policy.articleDetails': '政策详情',
 };

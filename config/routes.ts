@@ -59,6 +59,55 @@
     ],
   },
   {
+    path: '/announcements',
+    name: 'announcements',
+    icon: 'CarryOutOutlined',
+    routes: [
+      {
+        name: 'notice',
+        path: '/announcements/notice',
+        routes: [
+          {
+            path: '/announcements/notice',
+            hideInMenu: 'true',
+            name: 'notice',
+            component: './Manager/Announcements/Notice',
+          },
+          {
+            path: '/announcements/notice/editArticle',
+            hideInMenu: 'true',
+            name: 'editArticle',
+            component: './Manager/Announcements/Notice/EditArticle',
+          },
+          {
+            path: '/announcements/notice/noticeDetails',
+            hideInMenu: 'true',
+            name: 'noticeDetails',
+            component: './Manager/Announcements/Notice/NoticeDetails',
+          },
+        ],
+      },
+      {
+        path: '/announcements/policy',
+        name: 'policy',
+        routes: [
+          {
+            path: '/announcements/policy',
+            hideInMenu: 'true',
+            name: 'policy',
+            component: './Manager/Announcements/Policy',
+          },
+          {
+            path: '/announcements/policy/articleDetails',
+            hideInMenu: 'true',
+            name: 'articleDetails',
+            component: './Manager/Announcements/Policy/ArticleDetails',
+          },
+        ],
+      },
+    ],
+  },
+  {
     path: '/courseManagements',
     name: 'courseManagements',
     icon: 'ProfileOutlined',
@@ -102,25 +151,6 @@
     name: 'courseScheduling',
     icon: 'CarryOutOutlined',
     component: './Manager/CourseScheduling',
-  },
-  {
-    path: '/noticenotice',
-    name: 'noticenotice',
-    icon: 'CarryOutOutlined',
-    component: './Manager/Noticenotice',
-  },
-  {
-    path: '/policyRelease',
-    name: 'policyRelease',
-    icon: 'CarryOutOutlined',
-    component: './Manager/PolicyRelease',
-  },
-  {
-    path: '/editAnnouncement',
-    name: 'editAnnouncement',
-    icon: 'CarryOutOutlined',
-    hideInMenu: 'true',
-    component: './Manager/Noticenotice/components/EditAnnouncement',
   },
   {
     path: '/orderInquiry',

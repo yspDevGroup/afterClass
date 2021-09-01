@@ -236,14 +236,23 @@ export async function cooperateCourse(
   });
 }
 
-/** 获取机构的年级信息 GET /khjyjg/getAllGrades */
-export async function getAllGrades(options?: { [key: string]: any }) {
+/** 获取机构的年级信息 POST /khjyjg/getAllGrades */
+export async function getAllGrades(
+  body: {
+    XD?: string[];
+  },
+  options?: { [key: string]: any },
+) {
   return request<{
     status?: 'ok' | 'error';
     data?: { id?: string; XD?: string; NJMC?: string; NJJC?: string }[];
     message?: string;
   }>('/khjyjg/getAllGrades', {
-    method: 'GET',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -276,6 +285,23 @@ export async function getAllCourses(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khjyjg/getAllCourses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取机构的首页统计数据 POST /khjyjg/homePage */
+export async function homePage(
+  body: {
+    KHJYJGId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjyjg/homePage', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

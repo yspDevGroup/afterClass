@@ -253,3 +253,20 @@ export async function getCourses(
     ...(options || {}),
   });
 }
+
+/** 获取教育局的首页统计数据 POST /jyjgsj/homePage */
+export async function homePage(
+  body: {
+    JYJGSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/jyjgsj/homePage', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

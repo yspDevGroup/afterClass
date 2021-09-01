@@ -10,8 +10,7 @@ import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { DateRange, Week } from './Timefunction';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
-const reg =
-  /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
 export const isUrl = (path: string): boolean => reg.test(path);
 
@@ -224,7 +223,7 @@ export const getCurrentStatus = (
 export const enHenceMsg = (msg?: string) => {
   if (msg && msg.indexOf('Cannot') > -1) {
     message.error(`操作失败，该项存在关联数据,请清除关联数据后再试`);
-  } else if (msg && msg.indexOf('token') > -1 || msg && msg.indexOf('Token') > -1) {
+  } else if ((msg && msg.indexOf('token') > -1) || (msg && msg.indexOf('Token') > -1)) {
     history.replace('/auth_callback/overDue');
   } else if (msg && msg.indexOf('Validation') > -1) {
     message.error('操作失败，该项未通过校验，请检查数据是否重复后再试');
@@ -241,7 +240,13 @@ export const enHenceMsg = (msg?: string) => {
  * @param xsId 学生ID
  * @returns {}
  */
-export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?: string, xsId?: string) => {
+export const getCqDay = async (
+  wkd?: any[],
+  start?: string,
+  end?: string,
+  bjid?: string,
+  xsId?: string,
+) => {
   const myDate = new Date();
   const nowDate = new Date(moment(myDate).format('YYYY/MM/DD'));
   const res = await getAllKHXSCQ({
@@ -264,12 +269,12 @@ export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?:
                 if (date.CQRQ === record) {
                   status = date.CQZT;
                 }
-              })
+              });
             }
             classbegins.push({
               status,
               date: moment(record).format('MM/DD'),
-            })
+            });
           }
         }
       });
@@ -287,7 +292,7 @@ export const getCqDay = async (wkd?: any[], start?: string, end?: string, bjid?:
 export const getData = async (bjid: string, xsId?: string) => {
   const res1 = await getKHPKSJByBJID({ id: bjid });
   if (res1.status === 'ok' && res1.data) {
-    const attend = [...new Set(res1.data.map((n: { WEEKDAY?: any; }) => n.WEEKDAY))];
+    const attend = [...new Set(res1.data.map((n: { WEEKDAY?: any }) => n.WEEKDAY))];
     const res = await getKHBJSJ({ id: bjid });
     if (res.status === 'ok' && res.data && attend) {
       const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;
@@ -299,11 +304,25 @@ export const getData = async (bjid: string, xsId?: string) => {
         kss: res.data.KSS,
         XQName: res.data.XQName,
         kcmc: res.data.KHKCSJ!.KCMC,
-        data: await getCqDay(attend, start, end, bjid, xsId)
-      }
+        data: await getCqDay(attend, start, end, bjid, xsId),
+      };
     }
   }
   return {
-    status: 'nothing'
+    status: 'nothing',
   };
+};
+
+/**
+ * 组装请求头部token信息
+ *
+ * @return {*}  {string}
+ */
+export const getAuthorization = (): string => {
+  const tokenType = localStorage.getItem('ysp_token_type') || 'Bearer';
+  const accessToken = localStorage.getItem('ysp_access_token');
+  if (tokenType && accessToken) {
+    return `${tokenType} ${accessToken}`;
+  }
+  return '';
 };

@@ -95,6 +95,8 @@ export async function getJYJGTZGG(
     BT?: string;
     /** 类型 */
     LX?: number;
+    /** 行政区划码 */
+    XZQHM?: string;
     /** 状态 */
     ZT?: string[];
     /** 页数 */
