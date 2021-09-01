@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Link, useModel } from 'umi';
-import { Button, message, Modal, Space, Tag } from 'antd';
+import { Button, message, Modal, Popconfirm, Space, Tag } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 
 import ProTable from '@ant-design/pro-table';
@@ -12,6 +12,8 @@ import { theme } from '@/theme-default';
 import EllipsisHint from '@/components/EllipsisHint';
 import PromptInformation from '@/components/PromptInformation';
 
+import MechanismInfo from './components/MechanismInfo';
+import SchoolInfo from './components/SchoolInfo';
 import Sitclass from './components/Sitclass';
 import NewCourses from './components/NewCourses';
 import type { classType, TableListParams } from './data';
@@ -19,7 +21,7 @@ import type { classType, TableListParams } from './data';
 import { getAllNJSJ } from '@/services/after-class/njsj';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
-import { getAllKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
+import { deleteKHKCSJ, getAllKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
@@ -32,6 +34,12 @@ const CourseList = () => {
   const [kclxOptions, setOptions] = useState<any[]>([]);
   // 适用年级
   const [optionsNJ, setOptionsNJ] = useState<any[]>([]);
+  // 机构详情抽屉
+  const [visibleMechanismInfo, setVisibleMechanismInfo] = useState(false);
+  // 课程详情抽屉
+  const [visibleSchoolInfo, setVisibleSchoolInfo] = useState(false);
+  // 机构详情
+  const [info, setInfo] = useState({});
   const [readonly, setReadonly] = useState<boolean>(false);
   const [opentype, setOpentype] = useState(false);
   // 学年学期没有时的提示框控制
@@ -85,18 +93,17 @@ const CourseList = () => {
     });
   }, []);
   const handleOperation = (type: string, data?: any) => {
-    if (type === 'chakan') {
-      setReadonly(true);
-    } else {
+    if (type !== 'chakan') {
       setReadonly(false);
+      setOpen(true);
     }
     if (data) {
       const list = { ...data, njIds: data.NJSJs.map((item: any) => item.id) };
       setCurrent(list);
+      setInfo(data);
     } else {
       setCurrent(undefined);
     }
-    setOpen(true);
   };
   const onClose = () => {
     setOpen(false);
@@ -114,11 +121,18 @@ const CourseList = () => {
     if (record.SSJGLX === '机构课程') {
       return (
         <>
-          <a>机构详情</a>
+          <a
+            onClick={() => {
+              setVisibleMechanismInfo(true);
+              handleOperation('chakan', record);
+            }}
+          >
+            机构详情
+          </a>
           {record.KHKCSQs.length > 0 ? (
             <a
               onClick={async () => {
-                const res = await updateKHKCSQ({ id: record?.id }, { ZT: 0 });
+                const res = await updateKHKCSQ({ id: record?.KHKCSQs[0]?.id }, { ZT: 3 });
                 if (res.status === 'ok') {
                   message.success('操作成功');
                   action?.reload();
@@ -154,7 +168,20 @@ const CourseList = () => {
               发布
             </a>
             <a onClick={() => handleOperation('add', record)}>修改</a>
-            <a>删除</a>
+            <Popconfirm
+              title={`确定要删除 “${record?.KCMC}” 吗?`}
+              onConfirm={async () => {
+                const res = await deleteKHKCSJ({ id: record?.id });
+                if (res.status === 'ok') {
+                  message.success('操作成功');
+                  action?.reload();
+                } else {
+                  message.error(res.message);
+                }
+              }}
+            >
+              <a>删除</a>
+            </Popconfirm>
           </>
         ) : (
           <a
@@ -282,7 +309,14 @@ const CourseList = () => {
       align: 'center',
       render: (text, record, index, action) => (
         <Space size="middle">
-          <a onClick={() => handleOperation('chakan', record)}>课程详情</a>
+          <a
+            onClick={() => {
+              handleOperation('chakan', record);
+              setVisibleSchoolInfo(true);
+            }}
+          >
+            课程详情
+          </a>
           {funOption(record, action)}
         </Space>
       ),
@@ -370,6 +404,20 @@ const CourseList = () => {
               新增本校课程
             </Button>,
           ]}
+        />
+        <MechanismInfo // 机构详情页
+          onMechanismInfoClose={() => {
+            setVisibleMechanismInfo(false);
+          }}
+          visibleMechanismInfo={visibleMechanismInfo}
+          info={info}
+        />
+        <SchoolInfo // 课程详情页
+          onSchoolInfoClose={() => {
+            setVisibleSchoolInfo(false);
+          }}
+          visibleSchoolInfo={visibleSchoolInfo}
+          info={info}
         />
         <NewCourses
           actionRef={actionRef}

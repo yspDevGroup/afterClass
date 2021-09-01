@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import EllipsisHint from '@/components/EllipsisHint';
-import { getAllKHKCLX } from '@/services/after-class/khkclx';
-import { getToIntroduceBySchool, updateKHKCSQ } from '@/services/after-class/khkcsq';
-import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
-import { message, Space } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
+import { message, Space, Tag } from 'antd';
+import ProTable from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+
+import EllipsisHint from '@/components/EllipsisHint';
+import MechanismInfo from './components/MechanismInfo';
+import SchoolInfo from './components/SchoolInfo';
 import type { classType, TableListParams } from './data';
 
+import { getAllKHKCLX } from '@/services/after-class/khkclx';
+import { createKHKCSQ, getToIntroduceBySchool } from '@/services/after-class/khkcsq';
 /**
  * 未引入课程
  * @returns
@@ -20,6 +23,13 @@ const courseNotIntroduced = () => {
   const { currentUser } = initialState || {};
   // 课程类型
   const [kclxOptions, setOptions] = useState<any[]>([]);
+  // 机构详情抽屉
+  const [visibleMechanismInfo, setVisibleMechanismInfo] = useState(false);
+  // 课程详情抽屉
+  const [visibleSchoolInfo, setVisibleSchoolInfo] = useState(false);
+  // 机构详情
+  const [info, setInfo] = useState({});
+
   useEffect(() => {
     // 课程类型
     const res = getAllKHKCLX({ name: '' });
@@ -65,7 +75,7 @@ const courseNotIntroduced = () => {
         options: kclxOptions,
       },
       render: (_, record) => {
-        return <>{record.KHKCLX?.KCLX}</>;
+        return <>{record.KHKCLX?.KCTAG}</>;
       },
     },
     {
@@ -75,9 +85,6 @@ const courseNotIntroduced = () => {
       key: 'SSJGLX',
       dataIndex: 'SSJGLX',
       search: false,
-      // render: (_, record) => {
-      //   return <>{record.KHKCLX?.KCLX}</>;
-      // },
     },
     {
       title: '适用年级',
@@ -85,16 +92,20 @@ const courseNotIntroduced = () => {
       dataIndex: 'NJSJs',
       search: false,
       align: 'center',
-      // render: (text: any) => {
-      //   return (
-      //     <EllipsisHint
-      //       width="100%"
-      //       text={text?.map((item: any) => {
-      //         return <Tag key={item.id}>{item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}</Tag>;
-      //       })}
-      //     />
-      //   );
-      // }
+      render: (text: any) => {
+        return (
+          <EllipsisHint
+            width="100%"
+            text={text?.map((item: any) => {
+              return (
+                <Tag key={item.id}>
+                  {item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}
+                </Tag>
+              );
+            })}
+          />
+        );
+      },
     },
     {
       title: '状态',
@@ -118,11 +129,33 @@ const courseNotIntroduced = () => {
       render: (text, record, index, action) => {
         return (
           <Space size="middle">
-            <a>课程详情</a>
-            <a>机构详情</a>
+            <a
+              onClick={() => {
+                setInfo(record);
+                setVisibleSchoolInfo(true);
+              }}
+            >
+              课程详情
+            </a>
+            <a
+              onClick={() => {
+                setInfo(record);
+                setVisibleMechanismInfo(true);
+              }}
+            >
+              机构详情
+            </a>
             <a
               onClick={async () => {
-                const res = await updateKHKCSQ({ id: record?.id }, { ZT: 1 });
+                const params = {
+                  ZT: 0,
+                  KHKCSJId: record?.id || '',
+                  SQR: currentUser?.username || '',
+                  SQRId: currentUser?.userId || '',
+                  XXJBSJId: currentUser?.xxId || '',
+                  KHJYJGId: record?.KHJYJG?.id || '',
+                };
+                const res = await createKHKCSQ(params);
                 if (res.status === 'ok') {
                   message.success('操作成功');
                   action?.reload();
@@ -178,6 +211,20 @@ const courseNotIntroduced = () => {
           reload: false,
         }}
         // search={false}
+      />
+      <MechanismInfo // 机构详情页
+        onMechanismInfoClose={() => {
+          setVisibleMechanismInfo(false);
+        }}
+        visibleMechanismInfo={visibleMechanismInfo}
+        info={info}
+      />
+      <SchoolInfo // 课程详情页
+        onSchoolInfoClose={() => {
+          setVisibleSchoolInfo(false);
+        }}
+        visibleSchoolInfo={visibleSchoolInfo}
+        info={info}
       />
     </div>
   );
