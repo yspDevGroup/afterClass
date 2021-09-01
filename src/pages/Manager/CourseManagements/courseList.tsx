@@ -4,7 +4,7 @@ import { Button, message, Modal, Popconfirm, Space, Tag } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 
 import ProTable from '@ant-design/pro-table';
-import { PlusOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ProCoreActionType } from '@ant-design/pro-utils';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 
@@ -131,14 +131,26 @@ const CourseList = () => {
           </a>
           {record.KHKCSQs.length > 0 ? (
             <a
-              onClick={async () => {
-                const res = await updateKHKCSQ({ id: record?.KHKCSQs[0]?.id }, { ZT: 3 });
-                if (res.status === 'ok') {
-                  message.success('操作成功');
-                  action?.reload();
-                } else {
-                  message.error('操作失败');
-                }
+              onClick={() => {
+                Modal.confirm({
+                  title: `确认要取消引入 “ ${record.KCMC} ” 吗？`,
+                  icon: <ExclamationCircleOutlined />,
+                  content: '取消后将终止该门课程，请谨慎',
+                  okText: '确认',
+                  cancelText: '取消',
+                  onOk() {
+                    const res = updateKHKCSQ({ id: record?.KHKCSQs[0]?.id }, { ZT: 3 });
+
+                    Promise.resolve(res).then((data) => {
+                      if (data.status === 'ok') {
+                        message.success('操作成功');
+                        action?.reload();
+                      } else {
+                        message.error(data.message);
+                      }
+                    });
+                  },
+                });
               }}
             >
               取消引入
