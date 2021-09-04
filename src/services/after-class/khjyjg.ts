@@ -30,6 +30,7 @@ export async function KHJYJG(
       BXXKZ?: string;
       JGJJ?: string;
       ZT?: number;
+      CorpID?: string;
       KHJGRZSQs?: {
         id?: string;
         ZT?: number;
@@ -90,6 +91,7 @@ export async function createKHJYJG(body: API.CreateKHJYJG, options?: { [key: str
       BXXKZ?: string;
       JGJJ?: string;
       ZT?: number;
+      CorpID?: string;
       KHJGRZSQs?: {
         id?: string;
         ZT?: number;

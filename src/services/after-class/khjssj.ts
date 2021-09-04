@@ -28,6 +28,7 @@ export async function KHJSSJ(
       BZ?: string;
       ZP?: string;
       ZGZS?: string;
+      ZGZSBH?: string;
       JL?: number;
       XL?: string;
       BYYX?: string;
@@ -77,6 +78,7 @@ export async function createKHJSSJ(body: API.CreateKHJSSJ, options?: { [key: str
       BZ?: string;
       ZP?: string;
       ZGZS?: string;
+      ZGZSBH?: string;
       JL?: number;
       XL?: string;
       BYYX?: string;
@@ -97,6 +99,8 @@ export async function createKHJSSJ(body: API.CreateKHJSSJ, options?: { [key: str
 /** 获取机构教师信息 POST /khjssj/getAll */
 export async function getKHJSSJ(
   body: {
+    /** 关键字筛选，姓名/电话 */
+    keyWord?: string;
     /** 课后服务机构ID */
     JGId?: string;
     /** 页数 */

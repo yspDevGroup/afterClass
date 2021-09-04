@@ -149,7 +149,7 @@ const ClassManagement = () => {
                   teacher: KHItem.KHBJSJ.ZJS, // 主教师
                   bjId: KHItem.KHBJSJ.id, // 班级ID
                   kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
-                  njId: KHItem.KHBJSJ.NJSName.split(',')[0], // 年级ID
+                  // njId: KHItem.KHBJSJ.NJSName.split(',')[0], // 年级ID
                   bjzt: KHItem.KHBJSJ.BJZT, // 班级状态
                   xqId: KHItem.KHBJSJ.XQName, // 校区ID
                   color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(36, 54, 81, 1)',
@@ -316,7 +316,7 @@ const ClassManagement = () => {
           xn,
           xq,
           page: 0,
-          pageCount: 0,
+          pageSize: 0,
           name: '',
         };
         // 通过课程数据接口拿到所有的课程
@@ -346,7 +346,7 @@ const ClassManagement = () => {
         // 获取所有场地数据
         const fjList = await getAllFJSJ({
           page: 1,
-          pageCount: 0,
+          pageSize: 0,
           name: '',
         });
         if (fjList.status === 'ok') {
@@ -380,7 +380,7 @@ const ClassManagement = () => {
     }
 
     // 根据课程ID 获取班级数据
-    const bjRes = await getAllKHBJSJ({ kcId: value, xn, xq, name: '', page: 1, pageCount: 0 });
+    const bjRes = await getAllKHBJSJ({ kcId: value, xn, xq, name: '', page: 1, pageSize: 0 });
     if (bjRes.status === 'ok') {
       const BJMC = bjRes.data?.map((item: any) => ({ label: item.BJMC, value: item.id }));
       setBjmcData(BJMC);
@@ -427,7 +427,7 @@ const ClassManagement = () => {
     const fjList = await getAllFJSJ({
       lxId: value,
       page: 1,
-      pageCount: 0,
+      pageSize: 0,
       name: '',
     });
     if (fjList.status === 'ok') {

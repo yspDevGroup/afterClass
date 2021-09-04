@@ -204,6 +204,17 @@ const AddCourse: FC<AddCourseProps> = ({
     {
       type: 'select',
       disabled: readonly,
+      label: '课程来源：',
+      name: 'KHKCSJId',
+      key: 'KHKCSJId',
+      fieldProps: {
+        options: [],
+      },
+      rules: [{ required: true, message: '请填写课程名称' }],
+    },
+    {
+      type: 'select',
+      disabled: readonly,
       label: '课程名称：',
       name: 'KHKCSJId',
       key: 'KHKCSJId',
@@ -452,7 +463,7 @@ const AddCourse: FC<AddCourseProps> = ({
 
   return (
     <div>
-      <div ref={userRef}></div>
+      <div ref={userRef} />
       <Drawer
         title={getTitle()}
         width={480}

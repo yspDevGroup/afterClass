@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { Link } from 'umi';
+import { Link, useModel } from 'umi';
 import { useRef, useState, useEffect } from 'react';
 import { Button, Modal, Tag, Tooltip, Select } from 'antd';
 import ProTable from '@ant-design/pro-table';
@@ -56,6 +56,8 @@ const CourseManagement = () => {
   const [names, setnames] = useState<string>('bianji');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [KHKCAllData, setKHKCAllData] = useState<any>([]);
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -105,16 +107,15 @@ const CourseManagement = () => {
           }
           const ress = getAllKHKCSJ({
             name: '',
-            xn: curTerm.XN,
-            xq: curTerm.XQ,
             page: 1,
-            pageCount: 0,
-            isReuired: false,
+            pageSize: 0,
+            isRequired: false,
+            XXJBSJId: currentUser?.xxId,
           });
           Promise.resolve(ress).then((dataes: any) => {
             if (dataes.status === 'ok') {
               const njArry: { label: string; value: string }[] = [];
-              dataes.data.forEach((item: any) => {
+              dataes.data.rows.forEach((item: any) => {
                 njArry.push({
                   label: item.KCMC,
                   value: item.id,
@@ -144,7 +145,7 @@ const CourseManagement = () => {
     if (type === 'year' || type === 'term') {
       setxn(value);
       setxq(term);
-      const ress = getAllKHKCSJ({ name: '', xn: value, xq: term, page: 0, pageCount: 0 });
+      const ress = getAllKHKCSJ({ name: '', page: 0, pageSize: 0 });
       Promise.resolve(ress).then((dataes: any) => {
         if (dataes.status === 'ok') {
           const njArry: { label: string; value: string }[] = [];

@@ -29,7 +29,9 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const currentUserRes = await queryCurrentUser();
+      const currentUserRes = await queryCurrentUser({
+        plat: 'school',
+      });
       if (currentUserRes.status === 'ok') {
         // sessionStorage.setItem('csrf', currentUser?.csrfToken || '');
         const { info } = currentUserRes.data || {};

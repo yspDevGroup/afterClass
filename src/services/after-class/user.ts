@@ -30,15 +30,22 @@ export async function getAllUser(options?: { [key: string]: any }) {
 }
 
 /** 获取当前用户 GET /user/currentUser */
-export async function currentUser(options?: { [key: string]: any }) {
+export async function currentUser(
+  params: {
+    // query
+    /** 登录平台类型 */
+    plat?: string;
+  },
+  options?: { [key: string]: any },
+) {
   return request<{
     status?: 'ok' | 'error';
     data?: {
       info: {
         id?: string;
-        jgId?: string;
-        jyjId?: string;
-        xxId?: string;
+        jgId?: string | any;
+        jyjId?: string | any;
+        xxId?: string | any;
         XXDM?: string;
         loginName?: string;
         username?: string;
@@ -89,6 +96,9 @@ export async function currentUser(options?: { [key: string]: any }) {
     message?: string;
   }>('/user/currentUser', {
     method: 'GET',
+    params: {
+      ...params,
+    },
     ...(options || {}),
   });
 }
@@ -111,9 +121,9 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      jgId?: string;
-      jyjId?: string;
-      xxId?: string;
+      jgId?: string | any;
+      jyjId?: string | any;
+      xxId?: string | any;
       XXDM?: string;
       loginName?: string;
       username?: string;
