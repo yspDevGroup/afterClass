@@ -17,7 +17,7 @@ const goto = () => {
     };
     console.log('query', query);
 
-    history.push(redirect || '/');
+    history.push(redirect || '/courseManagements/CourseManagements');
   }, 10);
 };
 

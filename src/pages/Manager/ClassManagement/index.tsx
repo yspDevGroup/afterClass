@@ -30,10 +30,9 @@ const CourseManagement = () => {
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
   const actionRef = useRef<ActionType>();
-  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [readonly, stereadonly] = useState<boolean>(false);
-  const [xn, setxn] = useState<string>('');
-  const [xq, setxq] = useState<string>('');
+  const [curXNXQId, setCurXNXQId] = useState<any>();
+  const [termList, setTermList] = useState<any>();
   const [kcId, setkcId] = useState<string>('');
   // 查询课程名称
   const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
@@ -92,19 +91,11 @@ const CourseManagement = () => {
       const res = await queryXNXQList();
       const newData = res.xnxqList;
       const curTerm = res.current;
-      const defaultData = [...searchData];
-      if (newData.data && newData.data.length) {
+      if (newData?.length) {
         if (curTerm) {
-          await setxn(curTerm.XN);
-          await setxq(curTerm.XQ);
-          actionRef.current?.reload();
-          const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-          if (chainSel && chainSel.defaultValue) {
-            chainSel.defaultValue.first = curTerm.XN;
-            chainSel.defaultValue.second = curTerm.XQ;
-            await setDataSource(defaultData);
-            chainSel.data = newData;
-          }
+          setCurXNXQId(curTerm.id);
+          setTermList(newData);
+          // actionRef.current?.reload();
           const ress = getAllKHKCSJ({
             name: '',
             page: 1,
@@ -134,38 +125,12 @@ const CourseManagement = () => {
   }, []);
   // 监听学年学期更新
   useEffect(() => {
-    if (xn && xq) {
+    if (curXNXQId) {
       setTimeout(() => {
         actionRef.current?.reload();
       }, 0);
     }
-  }, [xn, xq]);
-  // 头部input事件
-  const handlerSearch = (type: string, value: string, term: string) => {
-    if (type === 'year' || type === 'term') {
-      setxn(value);
-      setxq(term);
-      const ress = getAllKHKCSJ({ name: '', page: 0, pageSize: 0 });
-      Promise.resolve(ress).then((dataes: any) => {
-        if (dataes.status === 'ok') {
-          const njArry: { label: string; value: string }[] = [];
-          dataes.data.map((item: any) => {
-            return njArry.push({
-              label: item.KCMC,
-              value: item.id,
-            });
-          });
-          setmcData(njArry);
-          setKHKCAllData(dataes.data);
-        }
-      });
-      actionRef.current?.reload();
-    }
-    if (type === 'customSearch') {
-      setName(value);
-    }
-    actionRef.current?.reload();
-  };
+  }, [curXNXQId]);
 
   const showDrawer = () => {
     setVisible(true);
@@ -273,7 +238,7 @@ const CourseManagement = () => {
       align: 'center',
       width: 100,
       render: (_, record) => {
-        const Url = `/courseScheduling?courseId=${record.id}&xn=${xn}&xq=${xq}`;
+        const Url = `/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}`;
         if (record.BJZT === '待发布' || record.BJZT === '已下架') {
           if (record.KHPKSJs && record.KHPKSJs?.length === 0) {
             return <Link to={Url}>未排课</Link>;
@@ -354,10 +319,9 @@ const CourseManagement = () => {
               sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
               filter,
             };
-            if (xn && xq) {
+            if (curXNXQId) {
               const obj = {
-                xn,
-                xq,
+                XNXQId:curXNXQId,
                 kcId,
                 page: 1,
                 pageCount: 0,
@@ -378,12 +342,20 @@ const CourseManagement = () => {
           pagination={paginationConfig}
           headerTitle={
             <div style={{ display: 'flex' }}>
-              <SearchComponent
-                dataSource={dataSource}
-                onChange={(type: string, value: string, trem: string) =>
-                  handlerSearch(type, value, trem)
-                }
-              />
+              <span>
+                所属学年学期：
+                <Select
+                  value={curXNXQId}
+                  style={{ width: 200 }}
+                  onChange={(value: string) => {
+                    setCurXNXQId(value);
+                  }}
+                >
+                  {termList?.map((item: any) => {
+                    return <Option key={item.value} value={item.value}>{item.text}</Option>;
+                  })}
+                </Select>
+              </span>
               <div
                 style={{ display: 'flex', lineHeight: '32px', marginLeft: 15, flexWrap: 'wrap' }}
               >

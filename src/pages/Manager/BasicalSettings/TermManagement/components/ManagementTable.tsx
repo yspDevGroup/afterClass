@@ -1,87 +1,70 @@
-import ProFormFields from '@/components/ProFormFields';
+import React, { useEffect } from 'react';
+import { DatePicker, Form, Select } from 'antd';
 import type { FormInstance } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
-import React from 'react';
 import type { TermItem } from '../data';
+import moment from 'moment';
 
 type PropsType = {
   current?: TermItem;
-  onCancel?: () => void;
   setForm: React.Dispatch<React.SetStateAction<FormInstance<any> | undefined>>;
-  readonly?: boolean;
-  onClose: () => void;
-  actionRef?: React.MutableRefObject<ActionType | undefined>;
-};
-const formLayout = {
-  labelCol: { span: 5 },
-  wrapperCol: { span: 16 },
 };
 
+const { RangePicker } = DatePicker;
+const { Option } = Select;
 const OrganizationTable = (props: PropsType) => {
-  const { current, setForm, readonly } = props;
-  const onFinish = () => {};
-
-  const formItems: any[] = [
-    {
-      type: 'input',
-      readonly,
-      label: '学年',
-      name: 'XN',
-      key: 'XN',
-      rules: [
-        { required: true, message: '请填写学年' },
-        { max: 10, message: '最长为 10 位' },
-      ],
-      fieldProps: {
-        autocomplete: 'off',
-        placeholder: '如2021-2022',
-      },
-    },
-    {
-      type: 'select',
-      readonly,
-      label: '学期',
-      name: 'XQ',
-      key: 'XQ',
-      rules: [{ required: true, message: '请选择学期' }],
-      valueEnum: {
-        第一学期: '第一学期',
-        第二学期: '第二学期',
-      },
-    },
-    {
-      type: 'dateRange',
-      readonly,
-      label: '日期',
-      name: 'KSRQ',
-      key: 'KSRQ',
-      rules: [{ required: true, message: '请选择日期' }],
-      width: '100%',
-    },
-  ];
-
+  const { current,setForm } = props;
+  const [form] = Form.useForm();
+  useEffect(() => {
+    if (typeof setForm === 'function') {
+      setForm(form);
+    }
+  }, [form, setForm]);
   return (
     <div>
-      <ProFormFields
-        layout="horizontal"
-        onFinish={onFinish}
-        setForm={setForm}
-        values={(() => {
+      <Form
+        labelCol={{ span: 5 }}
+        wrapperCol={{ span: 16 }}
+        form={form}
+        initialValues={(() => {
           if (current) {
-            const { KSRQ, ...info } = current;
-            const cc = [];
-            cc.push(current.KSRQ);
-            cc.push(current.JSRQ);
+            const { KSRQ,XN, ...info } = current;
+            const xn = XN.split(/-/g);
             return {
-              KSRQ: cc,
+              RQ: [moment(current.KSRQ),moment(current.JSRQ)],
+              XNs:[moment(xn?.[0]),moment(xn?.[1])],
               ...info,
             };
           }
           return undefined;
         })()}
-        formItems={formItems}
-        formItemLayout={formLayout}
-      />
+        autoComplete="off"
+      >
+        <Form.Item
+          label="学年"
+          name="XNs"
+          rules={[{ required: true, message: '请选择学年!' }]}
+        >
+          <RangePicker style={{ width: '100%' }} picker="year" />
+        </Form.Item>
+        <Form.Item
+          label="学期"
+          name="XQ"
+          rules={[{ required: true, message: '请选择学期!' }]}
+        >
+          <Select style={{ width: '100%' }} >
+            <Option value="第一学期">第一学期</Option>
+            <Option value="第二学期">第二学期</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          label="日期"
+          name="RQ"
+          rules={[{ required: true, message: '请选择日期!' }]}
+        >
+          <RangePicker style={{ width: '100%' }} />
+        </Form.Item>
+      </Form>
     </div>
   );
 };

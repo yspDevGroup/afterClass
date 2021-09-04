@@ -3,8 +3,8 @@
  * @description: OAuth认证通过后的跳转页面
  * @author: zpl
  * @Date: 2021-05-13 09:08:04
- * @LastEditTime: 2021-07-05 11:29:11
- * @LastEditors: zpl
+ * @LastEditTime: 2021-09-04 10:53:50
+ * @LastEditors: Sissle Lynn
  */
 import React, { useCallback, useEffect } from 'react';
 import { history, useModel } from 'umi';
@@ -16,7 +16,7 @@ const query = getPageQuery();
 const goto = () => {
   if (!history) return;
   setTimeout(() => {
-    history.replace('/');
+    history.replace('/courseManagements/CourseManagements');
   }, 10);
 };
 

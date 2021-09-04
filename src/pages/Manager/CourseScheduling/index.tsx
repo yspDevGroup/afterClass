@@ -32,6 +32,8 @@ type selectType = { label: string; value: string };
 const ClassManagement = () => {
   const [state, setState] = useState(true);
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
+  const [curXNXQId, setCurXNXQId] = useState<any>();
+  const [termList, setTermList] = useState<any>();
   const [xn, setXn] = useState<any>(getQueryString('xn'));
   const [xq, setXq] = useState<any>(getQueryString('xq'));
   const [tableDataSource, setTableDataSource] = useState<any>([]);
@@ -270,18 +272,10 @@ const ClassManagement = () => {
         const res = await queryXNXQList();
         const newData = res.xnxqList;
         const curTerm = res.current;
-        const defaultData = [...searchData];
-        if (newData.data && newData.data.length) {
+        if (newData?.length) {
           if (curTerm) {
-            await setXn(curTerm.XN);
-            await setXq(curTerm.XQ);
-            const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-            if (chainSel && chainSel.defaultValue) {
-              chainSel.defaultValue.first = curTerm.XN;
-              chainSel.defaultValue.second = curTerm.XQ;
-              await setDataSource(defaultData);
-              chainSel.data = newData;
-            }
+            setCurXNXQId(curTerm.id);
+            setTermList(newData);
             // 查询所有课程的时间段
             const resultTime = await getAllXXSJPZ({
               xn: curTerm.XN,
@@ -311,16 +305,15 @@ const ClassManagement = () => {
   }, []);
   useEffect(() => {
     (async () => {
-      if (xn && xq) {
+      if (curXNXQId) {
         const params = {
-          xn,
-          xq,
+          XNXQId:curXNXQId,
           page: 0,
           pageSize: 0,
           name: '',
         };
         // 通过课程数据接口拿到所有的课程
-        const khkcResl = await getAllKHKCSJ({ ...params, isReuired: false });
+        const khkcResl = await getAllKHKCSJ({ ...params, isRequired: false });
         if (khkcResl.status === 'ok') {
           const KCMC = khkcResl.data?.map((item: any) => ({ label: item.KCMC, value: item.id }));
           setKcmcData(KCMC);
@@ -350,7 +343,7 @@ const ClassManagement = () => {
           name: '',
         });
         if (fjList.status === 'ok') {
-          if (fjList.data && fjList.data.length > 0) {
+          if (fjList.data?.rows && fjList.data?.rows?.length > 0) {
             const data: any = [].map.call(fjList.data, (item: any) => {
               return { label: item.FJMC, value: item.id };
             });
@@ -359,7 +352,7 @@ const ClassManagement = () => {
         }
       }
     })();
-  }, [xn, xq]);
+  }, [curXNXQId]);
   // 课程名称下拉框点击事件
   const onKcmcChange = async (value: any) => {
     setKcmcValue(value);
@@ -380,7 +373,7 @@ const ClassManagement = () => {
     }
 
     // 根据课程ID 获取班级数据
-    const bjRes = await getAllKHBJSJ({ kcId: value, xn, xq, name: '', page: 1, pageSize: 0 });
+    const bjRes = await getAllKHBJSJ({ kcId: value, XNXQId:curXNXQId, name: '', page: 1, pageSize: 0 });
     if (bjRes.status === 'ok') {
       const BJMC = bjRes.data?.map((item: any) => ({ label: item.BJMC, value: item.id }));
       setBjmcData(BJMC);
@@ -431,7 +424,7 @@ const ClassManagement = () => {
       name: '',
     });
     if (fjList.status === 'ok') {
-      if (fjList.data && fjList.data.length > 0) {
+      if (fjList.data?.rows && fjList.data?.rows?.length > 0) {
         const data: any = [].map.call(fjList.data, (item: any) => {
           return { label: item.FJMC, value: item.id };
         });
@@ -464,70 +457,70 @@ const ClassManagement = () => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-    {
-      title: '',
-      dataIndex: 'room',
-      key: 'room',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '',
-      dataIndex: 'course',
-      key: 'course',
-      align: 'left',
-      width: 136,
-    },
-    {
-      title: '周一',
-      dataIndex: 'monday',
-      key: 'monday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周二',
-      dataIndex: 'tuesday',
-      key: 'tuesday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周三',
-      dataIndex: 'wednesday',
-      key: 'wednesday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周四',
-      dataIndex: 'thursday',
-      key: 'thursday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周五',
-      dataIndex: 'friday',
-      key: 'friday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周六',
-      dataIndex: 'saturday',
-      key: 'saturday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周日',
-      dataIndex: 'sunday',
-      key: 'sunday',
-      align: 'center',
-      width: 136,
-    },
-  ];
+      {
+        title: '',
+        dataIndex: 'room',
+        key: 'room',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '',
+        dataIndex: 'course',
+        key: 'course',
+        align: 'left',
+        width: 136,
+      },
+      {
+        title: '周一',
+        dataIndex: 'monday',
+        key: 'monday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周二',
+        dataIndex: 'tuesday',
+        key: 'tuesday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周三',
+        dataIndex: 'wednesday',
+        key: 'wednesday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周四',
+        dataIndex: 'thursday',
+        key: 'thursday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周五',
+        dataIndex: 'friday',
+        key: 'friday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周六',
+        dataIndex: 'saturday',
+        key: 'saturday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周日',
+        dataIndex: 'sunday',
+        key: 'sunday',
+        align: 'center',
+        width: 136,
+      },
+    ];
   const onExcelTableClick = (value: any, record: any) => {
     setRecordValue(record);
   };
@@ -561,14 +554,20 @@ const ClassManagement = () => {
                 alignContent: 'space-between',
               }}
             >
-              <div>
-                <SearchComponent
-                  dataSource={dataSource}
-                  onChange={(type: string, value: string, term: string) =>
-                    handlerSearch(type, value, term)
-                  }
-                />
-              </div>
+              <span>
+                所属学年学期：
+                <Select
+                  value={curXNXQId}
+                  style={{ width: 200 }}
+                  onChange={(value: string) => {
+                    setCurXNXQId(value);
+                  }}
+                >
+                  {termList?.map((item: any) => {
+                    return <Option key={item.value} value={item.value}>{item.text}</Option>;
+                  })}
+                </Select>
+              </span>
               <div style={{ display: 'flex', lineHeight: 2.3, marginRight: 16 }}>
                 <span>课程名称：</span>
                 <div>

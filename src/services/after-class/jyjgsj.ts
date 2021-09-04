@@ -259,6 +259,7 @@ export async function getCoursesBySchool(
   body: {
     XXJBSJId?: string;
     XNXQId?: string;
+    KCMC?: string;
   },
   options?: { [key: string]: any },
 ) {

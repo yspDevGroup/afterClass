@@ -14,7 +14,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import type { TermItem } from './data';
 import { createXNXQ, deleteXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
 import moment from 'moment';
-import AsyncManagementTable from './components/AsyncManagementTable';
+import ManagementTable from './components/ManagementTable';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
 
@@ -63,9 +63,11 @@ const TermManagement = () => {
   const handleSubmit = async () => {
     try {
       const values = await form?.validateFields();
-      values.JSRQ = values.KSRQ[1] ? moment(values.KSRQ[1]).format('YYYY-MM-DD') : '';
-      values.KSRQ = values.KSRQ[0] ? moment(values.KSRQ[0]).format('YYYY-MM-DD') : '';
-
+      const startYear = values?.XNs[0] ? moment(values.XNs[0]).format('YYYY'):'';
+      const endYear = values?.XNs[1] ? moment(values.XNs[1]).format('YYYY'):'';
+      values.KSRQ = values?.RQ[0] ? moment(values.RQ[0]).format('YYYY-MM-DD') : '';
+      values.JSRQ = values?.RQ[1] ? moment(values.RQ[1]).format('YYYY-MM-DD') : '';
+      values.XN = `${startYear}-${endYear}`;
       new Promise((resolve, reject) => {
         let res = null;
         if (current?.id) {
@@ -86,10 +88,10 @@ const TermManagement = () => {
           actionRef?.current?.reload();
         } else if ((data.message!).indexOf('Validation') > -1) {
           message.error('已存在该学年学期，请勿重复添加');
-        } else if ((data.message!).indexOf('token') > -1||(data.message!).indexOf('Token') > -1) {
+        } else if ((data.message!).indexOf('token') > -1 || (data.message!).indexOf('Token') > -1) {
           history.replace('/auth_callback/overDue');
         } else {
-          message.error('保存失败');
+          message.error(data.message);
         }
       }).catch((error) => {
         console.log('error', error);
@@ -146,7 +148,7 @@ const TermManagement = () => {
                       message.success('删除成功');
                       actionRef.current?.reload();
                     } else {
-                      message.error('删除失败');
+                      message.error(data.message);
                     }
                   });
                 }
@@ -222,7 +224,7 @@ const TermManagement = () => {
           overflowY: 'auto',
         }}
       >
-        <AsyncManagementTable current={current} setForm={setForm} actionRef={actionRef} onClose={onClose} />
+        <ManagementTable current={current} setForm={setForm} />
       </Modal>
     </PageContainer>
   );

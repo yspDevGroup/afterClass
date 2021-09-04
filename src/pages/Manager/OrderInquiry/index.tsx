@@ -11,7 +11,6 @@ import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
 import type { SearchDataType } from '@/components/Search/data';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import { searchData } from '../CourseScheduling/searchConfig';
 import styles from './index.less';
 
 const { Option } = Select;
@@ -25,11 +24,10 @@ type selectType = { label: string; value: string };
 const OrderInquiry = () => {
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   const [tableLoading, setTableLoading] = useState(true);
-  const [xn, setXn] = useState<any>();
-  const [xq, setXq] = useState<any>();
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
-  const [xNXQData, setXNXQData] = useState<SearchDataType>(searchData);
+  const [curXNXQId, setCurXNXQId] = useState<any>();
+  const [termList, setTermList] = useState<any>();
   // 课程选择框的数据
   const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
   // 班级名称选择框的数据
@@ -50,18 +48,10 @@ const OrderInquiry = () => {
       const res = await queryXNXQList();
       const newData = res.xnxqList;
       const curTerm = res.current;
-      const defaultData = [...searchData];
-      if (newData.data && newData.data.length) {
+      if (newData?.length) {
         if (curTerm) {
-          await setXn(curTerm.XN);
-          await setXq(curTerm.XQ);
-          const chainSel = defaultData.find((item) => item.type === 'chainSelect');
-          if (chainSel && chainSel.defaultValue) {
-            chainSel.defaultValue.first = curTerm.XN;
-            chainSel.defaultValue.second = curTerm.XQ;
-            await setXNXQData(defaultData);
-            chainSel.data = newData;
-          }
+          setCurXNXQId(curTerm.id);
+          setTermList(newData);
         }
       } else {
         setkai(true);
@@ -71,11 +61,10 @@ const OrderInquiry = () => {
 
   useEffect(() => {
     (async () => {
-      if (xn && xq) {
+      if (curXNXQId) {
         // 获取订单查询的表格数据
         const resl = await getAllKHXSDD({
-          xn,
-          xq,
+          XNXQId: curXNXQId,
         });
         if (resl.status === 'ok') {
           setTableLoading(false);
@@ -86,12 +75,11 @@ const OrderInquiry = () => {
 
         // 通过课程数据接口拿到所有的课程
         const khkcResl = await getAllKHKCSJ({
-          xn,
-          xq,
+          isRequired: false,
+          XNXQId: curXNXQId,
           page: 0,
-          pageCount: 0,
+          pageSize: 0,
           name: '',
-          isReuired: false,
         });
         if (khkcResl.status === 'ok') {
           const KCMC = khkcResl.data?.map((item: any) => ({ label: item.KCMC, value: item.KCMC }));
@@ -99,14 +87,14 @@ const OrderInquiry = () => {
         }
 
         // 通过班级数据接口拿到所有的班级
-        const bjmcResl = await getAllKHBJSJ({ xn, xq, page: 0, pageCount: 0, name: '' });
+        const bjmcResl = await getAllKHBJSJ({ XNXQId: curXNXQId, page: 0, pageSize: 0, name: '' });
         if (bjmcResl.status === 'ok') {
-          const BJMC = bjmcResl.data?.map((item: any) => ({ label: item.BJMC, value: item.BJMC }));
+          const BJMC = bjmcResl.data?.rows?.map((item: any) => ({ label: item.BJMC, value: item.BJMC }));
           setBjmcData(BJMC);
         }
       }
     })();
-  }, [xn, xq]);
+  }, [curXNXQId]);
   const columns: ColumnsType<API.KHXSDD> | undefined = [
     {
       title: '课程名称',
@@ -167,20 +155,12 @@ const OrderInquiry = () => {
   const kaiguan = () => {
     setkai(false);
   };
-
-  // 头部input事件
-  const handlerSearch = (_type: string, value: string, term: string) => {
-    setXn(value);
-    setXq(term);
-  };
-
   const onKcmcChange = async (value: any) => {
     setTableLoading(true);
     setKcmcValue(value);
     // 获取订单查询的表格数据
     const resl = await getAllKHXSDD({
-      xn,
-      xq,
+      XNXQId: curXNXQId,
       kcmc: value,
     });
     if (resl.status === 'ok') {
@@ -195,8 +175,7 @@ const OrderInquiry = () => {
 
     // 获取订单查询的表格数据
     const resl = await getAllKHXSDD({
-      xn,
-      xq,
+      XNXQId: curXNXQId,
       bjmc: value,
     });
     if (resl.status === 'ok') {
@@ -208,12 +187,20 @@ const OrderInquiry = () => {
     <PageContainer>
       <div className={styles.searchs}>
         <div>
-          <SearchComponent
-            dataSource={xNXQData}
-            onChange={(type: string, value: string, term: string) =>
-              handlerSearch(type, value, term)
-            }
-          />
+          <span>
+            所属学年学期：
+            <Select
+              value={curXNXQId}
+              style={{ width: 200 }}
+              onChange={(value: string) => {
+                setCurXNXQId(value);
+              }}
+            >
+              {termList?.map((item: any) => {
+                return <Option key={item.value} value={item.value}>{item.text}</Option>;
+              })}
+            </Select>
+          </span>
         </div>
         <div>
           <span>课程名称：</span>

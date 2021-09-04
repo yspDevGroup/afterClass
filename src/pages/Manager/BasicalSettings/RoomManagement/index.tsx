@@ -4,7 +4,7 @@ import type { FormInstance } from 'antd';
 import { Tooltip } from 'antd';
 import { message, Popconfirm } from 'antd';
 import { Button, Divider, Modal } from 'antd';
-import ProTable from '@ant-design/pro-table';
+import ProTable, { RequestData } from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import type { SearchDataType } from '@/components/Search/data';
 import type { TableListParams } from './data';
@@ -206,14 +206,30 @@ const RoomManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
-        request={(params, sorter, filter) => {
+        request={async (
+          params: RoomItem & {
+            pageSize?: number;
+            current?: number;
+            keyword?: string;
+          },
+          sort,
+          filter,
+        ): Promise<Partial<RequestData<RoomItem>>> => {
           // 表单搜索项会从 params 传入，传递给后端接口。
           const opts: TableListParams = {
             ...params,
-            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
+            sorter: sort && Object.keys(sort).length ? sort : undefined,
             filter,
           };
-          return getAllFJSJ({ name, page: 1, pageCount: 20 }, opts);
+          const res = await getAllFJSJ({ page: 0, pageSize: 0, name, }, opts);
+          if (res.status === 'ok') {
+            return {
+              data: res.data?.rows,
+              total: res.data?.count,
+              success: true,
+            };
+          }
+          return {}
         }}
         headerTitle={
           <SearchComponent
@@ -255,13 +271,13 @@ const RoomManagement = () => {
           modalType === 'uphold'
             ? null
             : [
-                <Button key="back" onClick={() => setModalVisible(false)}>
-                  取消
-                </Button>,
-                <Button key="submit" type="primary" onClick={handleSubmit}>
-                  确定
-                </Button>,
-              ]
+              <Button key="back" onClick={() => setModalVisible(false)}>
+                取消
+              </Button>,
+              <Button key="submit" type="primary" onClick={handleSubmit}>
+                确定
+              </Button>,
+            ]
         }
         style={{ maxHeight: '430px' }}
         centered
