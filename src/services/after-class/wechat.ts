@@ -2,6 +2,22 @@
 /* eslint-disable */
 import { request } from 'umi';
 
+/** 创建WechatToken GET /wechat/createToken */
+export async function createWechatToken(options?: { [key: string]: any }) {
+  return request<any>('/wechat/createToken', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** 获取当前微信用户 GET /wechat/currentUser */
+export async function currentWechatUser(options?: { [key: string]: any }) {
+  return request<any>('/wechat/currentUser', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 微信扫码认证 GET /wechat/auth */
 export async function wechatOauth(options?: { [key: string]: any }) {
   return request<any>('/wechat/auth', {

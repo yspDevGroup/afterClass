@@ -203,10 +203,10 @@ export async function homePageInfo(
   body: {
     /** 年级ID */
     njId?: string;
-    /** 学年 */
-    xn?: string;
-    /** 学期 */
-    xq?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
     /** 学生ID */
     XSId?: string;
   },

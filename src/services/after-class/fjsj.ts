@@ -65,6 +65,8 @@ export async function deleteFJSJ(
 /** 查询所有房间数据 POST /fjsj/ */
 export async function getAllFJSJ(
   body: {
+    /** 学校ID */
+    XXJBSJId?: string;
     /** 场地类型ID */
     lxId?: string;
     /** 页数 */
@@ -153,6 +155,8 @@ export async function updateFJSJ(
 /** 查询房间占用情况 POST /fjsj/plan */
 export async function getFJPlan(
   body: {
+    /** 学校ID */
+    XXJBSJId?: string;
     /** 场地类型ID */
     lxId?: string;
     /** 场地ID */
@@ -164,9 +168,7 @@ export async function getFJPlan(
     /** 是否有排课 */
     isPk?: boolean;
     /** 学年 */
-    xn?: string;
-    /** 学期 */
-    xq?: string;
+    XNXQId?: string;
   },
   options?: { [key: string]: any },
 ) {

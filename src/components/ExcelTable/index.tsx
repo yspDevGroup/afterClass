@@ -5,6 +5,7 @@ import { Button, Modal } from 'antd';
 import type { FC } from 'react';
 import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
+import EllipsisHint from '../EllipsisHint';
 
 type KBItemProps = {
   mode: 'see' | 'edit';
@@ -113,7 +114,9 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
               position: 'relative',
             }}
           >
-            <div className="cla">{data?.cla}</div>
+            <div className="cla">
+              <EllipsisHint text={data?.cla} width={70} />
+            </div>
             {mode === 'see' ? (
               <div className="teacher">
                 <WWOpenDataCom

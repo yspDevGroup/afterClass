@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import { Button, Drawer, message } from 'antd';
@@ -11,6 +12,7 @@ import { getDepUserList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import WWOpenDataCom from './WWOpenDataCom';
 import { enHenceMsg } from '@/utils/utils';
+import { getAllXQSJ } from '@/services/after-class/xqsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -21,6 +23,8 @@ type AddCourseProps = {
   mcData?: { label: string; value: string }[];
   names?: string;
   KHKCAllData?: any[];
+  curXNXQId?: string;
+  currentUser?: API.CurrentUser | undefined;
 };
 const formLayout = {
   labelCol: {},
@@ -33,9 +37,10 @@ const AddCourse: FC<AddCourseProps> = ({
   readonly,
   formValues,
   actionRef,
-  mcData,
+  curXNXQId,
   names,
   KHKCAllData,
+  currentUser,
 }) => {
   const userRef = useRef(null);
   const [form, setForm] = useState<any>();
@@ -55,7 +60,7 @@ const AddCourse: FC<AddCourseProps> = ({
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
   const [KHDateAll, setKHDateAll] = useState<any>({});
-
+  const [KCDate, setKCDate] = useState<any>([]);
   useEffect(() => {
     if (formValues) {
       setBaoming(false);
@@ -63,6 +68,8 @@ const AddCourse: FC<AddCourseProps> = ({
       // 在课程的数据里筛选出当前课程的相关时间
       const khDate = KHKCAllData?.find((item: any) => item.id === formValues?.KHKCSJ?.id);
       setKHDateAll(khDate);
+      const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX);
+      setKCDate(kcDate);
     } else {
       setBaoming(true);
       setKaike(true);
@@ -88,28 +95,39 @@ const AddCourse: FC<AddCourseProps> = ({
   useEffect(() => {
     (async () => {
       // 获取年级信息
-      const currentXQ = await queryXQList();
+      // const currentXQ = await queryXQList();
       const XQ: { label: any; value: any }[] = [];
       const NJ = {};
-      currentXQ?.forEach((item: any) => {
-        XQ.push({
-          label: item.name,
-          value: item.id.toString(),
+      // currentXQ?.forEach((item: any) => {
+      //   XQ.push({
+      //     label: item.name,
+      //     value: item.id.toString(),
+      //   });
+      //   NJ[item.name] = item.njList.map((njItem: any) => ({
+      //     label: njItem.name,
+      //     value: njItem.id,
+      //   }));
+      // });
+      // setGrade(NJ);
+      // if (formValues?.id) {
+      //   setXQLabelItem(formValues?.NJSName?.toString());
+      // } else {
+      //   setXQLabelItem('');
+      // }
+      // 获取校区数据
+      const resXQ = await getAllXQSJ({ XXJBSJId: currentUser?.xxId });
+      if (resXQ.status === 'ok') {
+        resXQ.data?.forEach((item: any) => {
+          XQ.push({
+            label: item.XQMC,
+            value: item.id,
+          });
         });
-        NJ[item.name] = item.njList.map((njItem: any) => ({
-          label: njItem.name,
-          value: njItem.id,
-        }));
-      });
-      setCampus(XQ);
-      setGrade(NJ);
-      if (formValues?.id) {
-        setXQLabelItem(formValues?.NJSName?.toString());
-      } else {
-        setXQLabelItem('');
+        setCampus(XQ);
       }
     })();
   }, []);
+
   // 获取标题
   const getTitle = () => {
     if (formValues && names === 'chakan') {
@@ -126,18 +144,14 @@ const AddCourse: FC<AddCourseProps> = ({
       let res = null;
       const options = {
         ...values,
-        NJS: values.NJS?.toString() || formValues?.NJSID.toString(), // 年级ID
-        NJSName: nJLabelItem?.toString() || formValues?.NJSName.toString(), // 年级名称
-        FJS: values.FJS?.toString(), // 副班
-        XQ: values.XQ?.toString() || formValues?.XQID.toString(), // 校区ID
-        XQName: xQItem || formValues?.XQName.toString(), // 校区名称
+        FJS: values.FJS, // 副班
         KCTP: imageUrl || formValues?.KCTP,
         BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : KHDateAll?.BMKSSJ),
         BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : KHDateAll?.BMJSSJ),
         KKRQ: values?.SKSD ? values?.SKSD[0] : KHDateAll?.KKRQ,
         JKRQ: values?.SKSD ? values?.SKSD[1] : KHDateAll?.JKRQ,
+        XNXQId: curXNXQId,
       };
-
       if (formValues?.id) {
         delete options.BJZT;
         const params = {
@@ -202,15 +216,24 @@ const AddCourse: FC<AddCourseProps> = ({
       },
     },
     {
-      type: 'select',
+      type: 'radio',
       disabled: readonly,
       label: '课程来源：',
-      name: 'KHKCSJId',
-      key: 'KHKCSJId',
+      name: 'SSJGLX',
+      key: 'SSJGLX',
       fieldProps: {
-        options: [],
+        options: [
+          { value: '校内课程', label: '校内课程' },
+          { value: '机构课程', label: '机构课程' },
+        ],
+        // 按照课程来源筛选课程
+        onChange: (values: any) => {
+          const { value } = values.target;
+          const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === value);
+          setKCDate(kcDate);
+        },
       },
-      rules: [{ required: true, message: '请填写课程名称' }],
+      rules: [{ required: true, message: '请选择课程来源' }],
     },
     {
       type: 'select',
@@ -220,7 +243,9 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KHKCSJId',
       rules: [{ required: true, message: '请填写课程名称' }],
       fieldProps: {
-        options: mcData,
+        options: KCDate.map((item: any) => {
+          return { label: item.KCMC, value: item.id };
+        }),
         onChange: (value: any) => {
           const khDate = KHKCAllData?.find((item: any) => item.id === value);
           setKHDateAll(khDate);
@@ -276,8 +301,8 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'select',
-      name: 'XQ',
-      key: 'XQ',
+      name: 'XQSJId',
+      key: 'XQSJId',
       label: '所属校区:',
       disabled: readonly,
       rules: [{ required: true, message: '请填写所属校区' }],
@@ -289,25 +314,25 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       },
     },
-    {
-      type: 'select',
-      name: 'NJS',
-      key: 'NJS',
-      label: '适用年级:',
-      rules: [{ required: true, message: '请填写适用年级' }],
-      fieldProps: {
-        mode: 'multiple',
-        options: grade ? grade[xQItem] : [],
-        onChange(_: any, option: any) {
-          const njsIabel: any[] = [];
-          option?.forEach((item: any) => {
-            njsIabel.push(item?.label);
-          });
-          setNJLabelItem(njsIabel);
-        },
-      },
-      disabled: readonly,
-    },
+    // {
+    //   type: 'select',
+    //   name: 'NJS',
+    //   key: 'NJS',
+    //   label: '适用年级:',
+    //   rules: [{ required: true, message: '请填写适用年级' }],
+    //   fieldProps: {
+    //     mode: 'multiple',
+    //     options: grade ? grade[xQItem] : [],
+    //     onChange(_: any, option: any) {
+    //       const njsIabel: any[] = [];
+    //       option?.forEach((item: any) => {
+    //         njsIabel.push(item?.label);
+    //       });
+    //       setNJLabelItem(njsIabel);
+    //     },
+    //   },
+    //   disabled: readonly,
+    // },
     {
       type: 'group',
       disabled: readonly,
@@ -321,12 +346,26 @@ const AddCourse: FC<AddCourseProps> = ({
           rules: [{ required: true, message: '请选择班主任' }],
           fieldProps: {
             virtual: false,
-            options: teacherData.map((item) => {
-              return {
-                label: <WWOpenDataCom type="userName" openid={item.userid} />,
-                value: item.userid,
-              };
-            }),
+            // options: teacherData.map((item) => {
+            //   return {
+            //     label: <WWOpenDataCom type="userName" openid={item.userid} />,
+            //     value: item.userid,
+            //   };
+            // }),
+            options: [
+              {
+                label: '张三',
+                value: '1',
+              },
+              {
+                label: '李四',
+                value: '2',
+              },
+              {
+                label: '王五',
+                value: '3',
+              },
+            ],
           },
         },
         {
@@ -339,47 +378,61 @@ const AddCourse: FC<AddCourseProps> = ({
           fieldProps: {
             mode: 'multiple',
             virtual: false,
-            options: teacherData.map((item) => {
-              return {
-                label: <WWOpenDataCom type="userName" openid={item.userid} />,
-                value: item.userid,
-              };
-            }),
+            // options: teacherData.map((item) => {
+            //   return {
+            //     label: <WWOpenDataCom type="userName" openid={item.userid} />,
+            //     value: item.userid,
+            //   };
+            // }),
+            options: [
+              {
+                label: '张三',
+                value: '1',
+              },
+              {
+                label: '李四',
+                value: '2',
+              },
+              {
+                label: '王五',
+                value: '3',
+              },
+            ],
           },
         },
       ],
     },
-    KHDateAll?.id
-      ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${KHDateAll?.BMKSSJ?.slice(0, 10)} — ${KHDateAll?.BMJSSJ?.slice(
-            0,
-            10,
-          )}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
-      : '',
-    {
-      type: 'div',
-      key: 'div',
-      label: `单独设置报名时段：`,
-      disabled: readonly,
-      lineItem: [
-        {
-          type: 'switch',
-          readonly,
-          fieldProps: {
-            onChange: (item: any) => {
-              if (item === false) {
-                return setBaoming(true);
-              }
-              return setBaoming(false);
-            },
-            checked: !baoming,
-          },
-        },
-      ],
-    },
+    // KHDateAll?.id
+    //   ? {
+    //       type: 'divTab',
+    //       text: `(默认报名时间段)：${KHDateAll?.BMKSSJ?.slice(0, 10)} — ${KHDateAll?.BMJSSJ?.slice(
+    //         0,
+    //         10,
+    //       )}`,
+    //       style: { marginBottom: 8, color: '#bbbbbb' },
+    //     }
+    //   : '',
+    // {
+    //   type: 'div',
+    //   key: 'div',
+    //   label: `单独设置报名时段：`,
+    //   disabled: readonly,
+    //   lineItem: [
+    //     {
+    //       type: 'switch',
+    //       readonly,
+    //       fieldProps: {
+    //         onChange: (item: any) => {
+    //           if (item === false) {
+    //             return setBaoming(true);
+    //           }
+    //           return setBaoming(false);
+    //         },
+    //         checked: !baoming,
+    //       },
+    //     },
+    //   ],
+    // },
     {
       type: 'dateRange',
       label: `报名时段:`,
@@ -396,34 +449,34 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       },
     },
-    KHDateAll?.id
-      ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${KHDateAll?.KKRQ} — ${KHDateAll?.JKRQ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
-      : '',
-    {
-      type: 'div',
-      key: 'div1',
-      disabled: readonly,
-      label: `单独设置上课时段：`,
-      lineItem: [
-        {
-          type: 'switch',
-          disabled: readonly,
-          fieldProps: {
-            onChange: (item: any) => {
-              if (item === false) {
-                return setKaike(true);
-              }
-              return setKaike(false);
-            },
-            checked: !kaike,
-          },
-        },
-      ],
-    },
+    // KHDateAll?.id
+    //   ? {
+    //       type: 'divTab',
+    //       text: `(默认上课时间段)：${KHDateAll?.KKRQ} — ${KHDateAll?.JKRQ}`,
+    //       style: { marginBottom: 8, color: '#bbbbbb' },
+    //     }
+    //   : '',
+    // {
+    //   type: 'div',
+    //   key: 'div1',
+    //   disabled: readonly,
+    //   label: `单独设置上课时段：`,
+    //   lineItem: [
+    //     {
+    //       type: 'switch',
+    //       disabled: readonly,
+    //       fieldProps: {
+    //         onChange: (item: any) => {
+    //           if (item === false) {
+    //             return setKaike(true);
+    //           }
+    //           return setKaike(false);
+    //         },
+    //         checked: !kaike,
+    //       },
+    //     },
+    //   ],
+    // },
     {
       type: 'dateRange',
       label: '上课时间:',
@@ -447,7 +500,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KCTP',
       disabled: readonly,
       imagename: 'image',
-      upurl: '/api/upload/uploadFile',
+      upurl: '/api/upload/uploadFile?type=badge&plat=school',
       imageurl: imageUrl || formValues?.KCTP,
       handleImageChange,
       accept: '.jpg, .jpeg, .png',

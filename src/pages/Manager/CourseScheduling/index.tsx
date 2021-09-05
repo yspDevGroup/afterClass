@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
@@ -6,7 +7,6 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import type { SearchDataType } from '@/components/Search/data';
 import PageContainer from '@/components/PageContainer';
-import SearchComponent from '@/components/Search';
 import ExcelTable from '@/components/ExcelTable';
 import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
@@ -25,6 +25,9 @@ import { searchData } from './searchConfig';
 import './index.less';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllFJLX } from '@/services/after-class/fjlx';
+import { getAllXQSJ } from '@/services/after-class/xqsj';
+import { getAllNJSJ } from '@/services/after-class/njsj';
+import { useModel } from 'umi';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
@@ -32,7 +35,7 @@ type selectType = { label: string; value: string };
 const ClassManagement = () => {
   const [state, setState] = useState(true);
   const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
-  const [curXNXQId, setCurXNXQId] = useState<any>();
+  const [curXNXQId, setCurXNXQId] = useState<any>(getQueryString('xnxqid'));
   const [termList, setTermList] = useState<any>();
   const [xn, setXn] = useState<any>(getQueryString('xn'));
   const [xq, setXq] = useState<any>(getQueryString('xq'));
@@ -65,7 +68,8 @@ const ClassManagement = () => {
   // 场地名称选择框的数据
   const [cdmcData, setCdmcData] = useState<selectType[] | undefined>([]);
   const [cdmcValue, setCdmcValue] = useState<any>();
-
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -78,22 +82,36 @@ const ClassManagement = () => {
   useEffect(() => {
     (async () => {
       // 获取年级信息
-      const currentXQ = await queryXQList();
       const XQ: { label: any; value: any }[] = [];
-      const NJ = {};
-      currentXQ?.map((item: any) => {
-        XQ.push({
-          label: item.name,
-          value: item.id,
+      // 获取校区数据
+      const resXQ = await getAllXQSJ({ XXJBSJId: currentUser?.xxId });
+      if (resXQ.status === 'ok') {
+        resXQ.data?.forEach((item: any) => {
+          XQ.push({
+            label: item.XQMC,
+            value: item.id,
+          });
         });
-        NJ[item.name] = item.njList.map((njItem: any) => ({
-          label: njItem.name,
-          value: njItem.id,
-        }));
-      });
-      setCampus(XQ);
-      setGrade(NJ);
-      console.log('currentXQ: ', currentXQ);
+        setCampus(XQ);
+      }
+
+      // 年级
+      const resNJ = await getAllNJSJ({ XXJBSJId: currentUser?.xxId });
+      if (resNJ.status === 'ok') {
+        const optNJ: any[] = [];
+        const nj = ['幼儿园', '小学', '初中', '高中'];
+        nj.forEach((itemNJ) => {
+          resNJ.data?.rows?.forEach((item) => {
+            if (item.XD === itemNJ) {
+              optNJ.push({
+                label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
+                value: item.id,
+              });
+            }
+          });
+        });
+        setGrade(optNJ);
+      }
     })();
   }, []);
 
@@ -151,10 +169,10 @@ const ClassManagement = () => {
                   teacher: KHItem.KHBJSJ.ZJS, // 主教师
                   bjId: KHItem.KHBJSJ.id, // 班级ID
                   kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
-                  // njId: KHItem.KHBJSJ.NJSName.split(',')[0], // 年级ID
+                  njId: KHItem.KHBJSJ.KHKCSJ.NJSJs[0].id, // 年级ID
                   bjzt: KHItem.KHBJSJ.BJZT, // 班级状态
-                  xqId: KHItem.KHBJSJ.XQName, // 校区ID
-                  color: KHItem.KHBJSJ.KHKCSJ.KHKCLX.KBYS || 'rgba(36, 54, 81, 1)',
+                  xqId: KHItem.KHBJSJ.XQSJ.id, // 校区ID
+                  color: KHItem.KHBJSJ.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
                   dis: BJID
                     ? !(BJID === KHItem.KHBJSJ.id)
                     : !(recordValue.BJId === KHItem.KHBJSJ.id),
@@ -187,8 +205,8 @@ const ClassManagement = () => {
       if (bjID) {
         // 查询所有课程的时间段
         const resultTime = await getAllXXSJPZ({
-          xn,
-          xq,
+          XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
           type: ['0'],
         });
         if (resultTime.status === 'ok') {
@@ -196,8 +214,8 @@ const ClassManagement = () => {
           setXXSJPZData(timeSlot);
           // 查询排课数据
           const resultPlan = await getFJPlan({
-            xn,
-            xq,
+            XNXQId: curXNXQId,
+            XXJBSJId: currentUser?.xxId,
             isPk: radioValue,
           });
           if (resultPlan.status === 'ok') {
@@ -209,9 +227,9 @@ const ClassManagement = () => {
         if (njInfo.status === 'ok') {
           setRecordValue({
             BJId: njInfo.data.id,
-            NJ: njInfo.data.NJSName?.split(',')[0],
+            NJ: njInfo.data.KHKCSJ.NJSJs[0].id,
             KC: njInfo.data.KHKCSJId,
-            XQ: njInfo.data.XQName,
+            XQ: njInfo.data.XQSJId,
           });
           setState(false);
         }
@@ -220,7 +238,11 @@ const ClassManagement = () => {
   }, []);
   useEffect(() => {
     if (BJID) {
-      const res = getFJPlan({ xn, xq, isPk: false });
+      const res = getFJPlan({
+        XNXQId: curXNXQId,
+        XXJBSJId: currentUser?.xxId,
+        isPk: false,
+      });
       Promise.resolve(res).then((data: any) => {
         if (data.status === 'ok') {
           const tableData = processingData(data.data, xXSJPZData);
@@ -229,34 +251,13 @@ const ClassManagement = () => {
       });
     }
   }, [BJID]);
-  // 头部input事件
-  const handlerSearch = async (type: string, value: string, term: string) => {
-    setXn(value);
-    setXq(term);
-    // 查询所有课程的时间段
-    const resultTime = await getAllXXSJPZ({
-      xn: value,
-      xq: term,
-      type: ['0'],
-    });
-    if (resultTime.status === 'ok') {
-      const timeSlot = resultTime.data;
-      setXXSJPZData(timeSlot);
-      // 查询排课数据
-      const resultPlan = await getFJPlan({
-        xn: value,
-        xq: term,
-        isPk: radioValue,
-      });
-      if (resultPlan.status === 'ok') {
-        const tableData = processingData(resultPlan.data, timeSlot);
-        setTableDataSource(tableData);
-      }
-    }
-  };
   const onRadioChange = (e: any) => {
     setRadioValue(e.target.value);
-    const res = getFJPlan({ xn, xq, isPk: e.target.value });
+    const res = getFJPlan({
+      isPk: e.target.value,
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+    });
     Promise.resolve(res).then((data: any) => {
       if (data.status === 'ok') {
         const tableData = processingData(data.data, xXSJPZData);
@@ -278,8 +279,8 @@ const ClassManagement = () => {
             setTermList(newData);
             // 查询所有课程的时间段
             const resultTime = await getAllXXSJPZ({
-              xn: curTerm.XN,
-              xq: curTerm.XQ,
+              XNXQId: curTerm.id,
+              XXJBSJId: currentUser?.xxId,
               type: ['0'],
             });
             if (resultTime.status === 'ok') {
@@ -287,8 +288,8 @@ const ClassManagement = () => {
               setXXSJPZData(timeSlot);
               // 查询排课数据
               const resultPlan = await getFJPlan({
-                xn: curTerm.XN,
-                xq: curTerm.XQ,
+                XNXQId: curTerm.id,
+                XXJBSJId: currentUser?.xxId,
                 isPk: radioValue,
               });
               if (resultPlan.status === 'ok') {
@@ -307,21 +308,28 @@ const ClassManagement = () => {
     (async () => {
       if (curXNXQId) {
         const params = {
-          XNXQId:curXNXQId,
           page: 0,
           pageSize: 0,
           name: '',
+          XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
         };
         // 通过课程数据接口拿到所有的课程
         const khkcResl = await getAllKHKCSJ({ ...params, isRequired: false });
         if (khkcResl.status === 'ok') {
-          const KCMC = khkcResl.data?.map((item: any) => ({ label: item.KCMC, value: item.id }));
+          const KCMC = khkcResl.data.rows?.map((item: any) => ({
+            label: item.KCMC,
+            value: item.id,
+          }));
           setKcmcData(KCMC);
         }
         // 通过班级数据接口拿到所有的班级
         const bjmcResl = await getAllKHBJSJ(params);
         if (bjmcResl.status === 'ok') {
-          const BJMC = bjmcResl.data?.map((item: any) => ({ label: item.BJMC, value: item.id }));
+          const BJMC = bjmcResl.data.rows?.map((item: any) => ({
+            label: item.BJMC,
+            value: item.id,
+          }));
           setBjmcData(BJMC);
         }
 
@@ -341,10 +349,11 @@ const ClassManagement = () => {
           page: 1,
           pageSize: 0,
           name: '',
+          XXJBSJId: currentUser?.xxId,
         });
         if (fjList.status === 'ok') {
           if (fjList.data?.rows && fjList.data?.rows?.length > 0) {
-            const data: any = [].map.call(fjList.data, (item: any) => {
+            const data: any = [].map.call(fjList.data.rows, (item: any) => {
               return { label: item.FJMC, value: item.id };
             });
             setCdmcData(data);
@@ -363,9 +372,9 @@ const ClassManagement = () => {
       bjId: bjmcValue,
       lxId: cdlxValue,
       fjId: cdmcValue,
-      xn,
-      xq,
       isPk: radioValue,
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
     });
     if (res.status === 'ok') {
       const tableData = processingData(res.data, xXSJPZData);
@@ -373,9 +382,15 @@ const ClassManagement = () => {
     }
 
     // 根据课程ID 获取班级数据
-    const bjRes = await getAllKHBJSJ({ kcId: value, XNXQId:curXNXQId, name: '', page: 1, pageSize: 0 });
+    const bjRes = await getAllKHBJSJ({
+      kcId: value,
+      XNXQId: curXNXQId,
+      name: '',
+      page: 1,
+      pageSize: 0,
+    });
     if (bjRes.status === 'ok') {
-      const BJMC = bjRes.data?.map((item: any) => ({ label: item.BJMC, value: item.id }));
+      const BJMC = bjRes.data.rows?.map((item: any) => ({ label: item.BJMC, value: item.id }));
       setBjmcData(BJMC);
     }
   };
@@ -389,9 +404,9 @@ const ClassManagement = () => {
       bjId: value,
       lxId: cdlxValue,
       fjId: cdmcValue,
-      xn,
-      xq,
       isPk: radioValue,
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
     });
     if (res.status === 'ok') {
       const tableData = processingData(res.data, xXSJPZData);
@@ -408,9 +423,9 @@ const ClassManagement = () => {
       bjId: bjmcValue,
       lxId: value,
       fjId: cdmcValue,
-      xn,
-      xq,
       isPk: radioValue,
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
     });
     if (res.status === 'ok') {
       const tableData = processingData(res.data, xXSJPZData);
@@ -441,9 +456,9 @@ const ClassManagement = () => {
       bjId: bjmcValue,
       lxId: cdlxValue,
       fjId: value,
-      xn,
-      xq,
       isPk: radioValue,
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
     });
     if (res.status === 'ok') {
       const tableData = processingData(res.data, xXSJPZData);
@@ -457,70 +472,70 @@ const ClassManagement = () => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-      {
-        title: '',
-        dataIndex: 'room',
-        key: 'room',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '',
-        dataIndex: 'course',
-        key: 'course',
-        align: 'left',
-        width: 136,
-      },
-      {
-        title: '周一',
-        dataIndex: 'monday',
-        key: 'monday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周二',
-        dataIndex: 'tuesday',
-        key: 'tuesday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周三',
-        dataIndex: 'wednesday',
-        key: 'wednesday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周四',
-        dataIndex: 'thursday',
-        key: 'thursday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周五',
-        dataIndex: 'friday',
-        key: 'friday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周六',
-        dataIndex: 'saturday',
-        key: 'saturday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周日',
-        dataIndex: 'sunday',
-        key: 'sunday',
-        align: 'center',
-        width: 136,
-      },
-    ];
+    {
+      title: '',
+      dataIndex: 'room',
+      key: 'room',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '',
+      dataIndex: 'course',
+      key: 'course',
+      align: 'left',
+      width: 136,
+    },
+    {
+      title: '周一',
+      dataIndex: 'monday',
+      key: 'monday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周二',
+      dataIndex: 'tuesday',
+      key: 'tuesday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周三',
+      dataIndex: 'wednesday',
+      key: 'wednesday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周四',
+      dataIndex: 'thursday',
+      key: 'thursday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周五',
+      dataIndex: 'friday',
+      key: 'friday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周六',
+      dataIndex: 'saturday',
+      key: 'saturday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周日',
+      dataIndex: 'sunday',
+      key: 'sunday',
+      align: 'center',
+      width: 136,
+    },
+  ];
   const onExcelTableClick = (value: any, record: any) => {
     setRecordValue(record);
   };
@@ -558,13 +573,17 @@ const ClassManagement = () => {
                 所属学年学期：
                 <Select
                   value={curXNXQId}
-                  style={{ width: 200 }}
+                  style={{ width: 200, marginRight: 16 }}
                   onChange={(value: string) => {
                     setCurXNXQId(value);
                   }}
                 >
                   {termList?.map((item: any) => {
-                    return <Option key={item.value} value={item.value}>{item.text}</Option>;
+                    return (
+                      <Option key={item.value} value={item.value}>
+                        {item.text}
+                      </Option>
+                    );
                   })}
                 </Select>
               </span>
@@ -682,8 +701,7 @@ const ClassManagement = () => {
           <AddArranging
             formValues={recordValue}
             setState={setState}
-            xn={xn}
-            xq={xq}
+            curXNXQId={curXNXQId}
             campus={campus}
             setCampus={setCampus}
             grade={grade}
@@ -694,6 +712,8 @@ const ClassManagement = () => {
             sameClass={sameClass}
             setBJIDData={setBJIDData}
             cdmcData={cdmcData}
+            kcmcData={kcmcData}
+            currentUser={currentUser}
           />
         )}
       </PageContainer>

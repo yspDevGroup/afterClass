@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 import React from 'react';
 import { Link, useModel } from 'umi';
@@ -113,7 +114,7 @@ const CourseManagement = () => {
                 });
               });
               setmcData(njArry);
-              setKHKCAllData(dataes.data);
+              setKHKCAllData(dataes.data.rows);
             }
           });
         }
@@ -141,14 +142,16 @@ const CourseManagement = () => {
   const handleEdit = (data: any) => {
     const list = {
       ...data,
-      XQID: data.XQ ? data.XQ?.split(',') : [],
-      NJSID: data.NJS ? data.NJS?.split(',') : [],
-      NJS: data.NJSName ? data.NJSName?.split(',') : [],
-      XQ: data.XQName ? data.XQName?.split(',') : [],
+      XQID: data.XQ ? data.XQ : [],
+      NJSID: data.NJS ? data.NJS : [],
+      NJS: data.NJSName ? data.NJSName : [],
+      XQ: data.XQName ? data.XQName : [],
       ZJS: data.ZJS || undefined,
-      FJS: data.FJS ? data.FJS?.split(',') : [],
+      FJS: data.FJS ? data.FJS : [],
       BMSD: [data.BMKSSJ || data.KHKCSJ.BMKSSJ, data.BMJSSJ || data.KHKCSJ.BMJSSJ],
-      SKSD: [data.JKRQ || data.KHKCSJ.JKRQ, data.KKRQ || data.KHKCSJ.KKRQ],
+      SKSD: [data.KKRQ || data.KHKCSJ.KKRQ, data.JKRQ || data.KHKCSJ.JKRQ],
+      SSJGLX: data?.KHKCSJ?.SSJGLX,
+      KHKCSJId: data?.KHKCSJ?.id,
     };
     setVisible(true);
     setCurrent(list);
@@ -169,7 +172,7 @@ const CourseManagement = () => {
   const onClose = () => {
     setVisible(false);
   };
-  const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+  // const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   const columns: ProColumns<CourseItem>[] = [
     {
       title: '班级名称',
@@ -191,6 +194,17 @@ const CourseManagement = () => {
             <div className="ui-table-col-elp">{record.KHKCSJ.KCMC}</div>
           </Tooltip>
         );
+      },
+    },
+    {
+      title: '课程来源',
+      dataIndex: 'KHKCSJ',
+      key: 'KHKCSJ',
+      align: 'center',
+      width: 150,
+      ellipsis: true,
+      render: (_: any, record: any) => {
+        return record?.KHKCSJ?.SSJGLX;
       },
     },
     {
@@ -255,38 +269,38 @@ const CourseManagement = () => {
       align: 'center',
       width: 100,
     },
-    {
-      title: '课程状态',
-      dataIndex: 'KCZT',
-      key: 'KCZT',
-      align: 'center',
-      width: 100,
-      render: (_: any, record: any) => {
-        if (record.BJZT === '已发布') {
-          const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
-          // 报名开始时间
-          const BMStartDate = BMKSSJ || KHKCSJ?.BMKSSJ;
-          // 报名结束时间
-          const BMEndDate = BMJSSJ || KHKCSJ?.BMJSSJ;
-          if (BMStartDate > toDay) {
-            return <div>未报名</div>;
-          }
-          if (toDay > BMStartDate && toDay < BMEndDate) {
-            return <div>报名中</div>;
-          }
-          if (toDay < BMEndDate && toDay > KHKCSJ?.KKRQ) {
-            return <div>未开课</div>;
-          }
-          if (toDay > KHKCSJ?.KKRQ && toDay < KHKCSJ?.JKRQ) {
-            return <div>开课中</div>;
-          }
-          if (toDay > KHKCSJ?.JKRQ) {
-            return <div>已结课</div>;
-          }
-        }
-        return <>-</>;
-      },
-    },
+    // {
+    //   title: '课程状态',
+    //   dataIndex: 'KCZT',
+    //   key: 'KCZT',
+    //   align: 'center',
+    //   width: 100,
+    //   render: (_: any, record: any) => {
+    //     if (record.BJZT === '已发布') {
+    //       const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
+    //       // 报名开始时间
+    //       const BMStartDate = BMKSSJ || KHKCSJ?.BMKSSJ;
+    //       // 报名结束时间
+    //       const BMEndDate = BMJSSJ || KHKCSJ?.BMJSSJ;
+    //       if (BMStartDate > toDay) {
+    //         return <div>未报名</div>;
+    //       }
+    //       if (toDay > BMStartDate && toDay < BMEndDate) {
+    //         return <div>报名中</div>;
+    //       }
+    //       if (toDay < BMEndDate && toDay > KHKCSJ?.KKRQ) {
+    //         return <div>未开课</div>;
+    //       }
+    //       if (toDay > KHKCSJ?.KKRQ && toDay < KHKCSJ?.JKRQ) {
+    //         return <div>开课中</div>;
+    //       }
+    //       if (toDay > KHKCSJ?.JKRQ) {
+    //         return <div>已结课</div>;
+    //       }
+    //     }
+    //     return <>-</>;
+    //   },
+    // },
     {
       title: '操作',
       valueType: 'option',
@@ -312,23 +326,24 @@ const CourseManagement = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          request={async (param, sorter, filter) => {
+          request={async (param) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
-            const opts: TableListParams = {
-              ...param,
-              sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-              filter,
-            };
             if (curXNXQId) {
               const obj = {
-                XNXQId:curXNXQId,
+                XNXQId: curXNXQId,
                 kcId,
-                page: 1,
-                pageCount: 0,
+                page: param.current,
+                pageSize: param.pageSize,
                 name,
               };
-              const res = await getAllKHBJSJ(obj, opts);
-              return res;
+              const res = await getAllKHBJSJ(obj);
+              if (res.status === 'ok') {
+                return {
+                  data: res.data.rows,
+                  success: true,
+                  total: res.data.count,
+                };
+              }
             }
             return [];
           }}
@@ -342,7 +357,7 @@ const CourseManagement = () => {
           pagination={paginationConfig}
           headerTitle={
             <div style={{ display: 'flex' }}>
-              <span>
+              <span style={{ fontSize: 14, color: '#666' }}>
                 所属学年学期：
                 <Select
                   value={curXNXQId}
@@ -352,7 +367,11 @@ const CourseManagement = () => {
                   }}
                 >
                   {termList?.map((item: any) => {
-                    return <Option key={item.value} value={item.value}>{item.text}</Option>;
+                    return (
+                      <Option key={item.value} value={item.value}>
+                        {item.text}
+                      </Option>
+                    );
                   })}
                 </Select>
               </span>
@@ -404,6 +423,8 @@ const CourseManagement = () => {
           mcData={mcData}
           names={names}
           KHKCAllData={KHKCAllData}
+          curXNXQId={curXNXQId}
+          currentUser={currentUser}
         />
         <PromptInformation
           text="未查询到学年学期数据，请设置学年学期后再来"

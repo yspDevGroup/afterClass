@@ -15,13 +15,14 @@ import styles from '../index.less';
 import ExcelTable from '@/components/ExcelTable';
 import type { SiteType, CourseType } from '../data';
 import WWOpenDataCom from '../../ClassManagement/components/WWOpenDataCom';
+import { history } from 'umi';
+import { getQueryString } from '@/utils/utils';
 
 const { confirm } = Modal;
 
 type PropsType = {
   setState?: any;
-  xn?: any;
-  xq?: any;
+  curXNXQId?: string;
   tableDataSource: any[];
   processingData: (value: any, timeSlot: any) => void;
   setTableDataSource: (value: any) => void;
@@ -33,14 +34,15 @@ type PropsType = {
   sameClass?: any;
   setBJIDData?: any;
   cdmcData?: any[];
+  kcmcData?: any[];
+  currentUser?: API.CurrentUser | undefined;
 };
 
 const AddArranging: FC<PropsType> = (props) => {
   const {
     setState,
     sameClass,
-    xn,
-    xq,
+    curXNXQId,
     tableDataSource,
     processingData,
     setTableDataSource,
@@ -50,6 +52,8 @@ const AddArranging: FC<PropsType> = (props) => {
     grade,
     setBJIDData,
     cdmcData,
+    kcmcData,
+    currentUser,
   } = props;
   const [packUp, setPackUp] = useState(false);
   const [Bj, setBj] = useState<any>(undefined);
@@ -57,7 +61,7 @@ const AddArranging: FC<PropsType> = (props) => {
   const [cdlxId, setCdlxId] = useState(formValues?.CDLX);
   const [roomType, setRoomType] = useState<any>([]);
   const [siteType, setSiteType] = useState<any>([]);
-  const [kcType, setKcType] = useState<any>([]);
+  const [kcType, setKcType] = useState<any>(kcmcData);
   const [bjData, setBjData] = useState<any>([]);
   const [form] = Form.useForm();
   const [xQItem, setXQLabelItem] = useState<any>([]);
@@ -69,11 +73,12 @@ const AddArranging: FC<PropsType> = (props) => {
   const [NJID, setNJID] = useState<any>('');
   const [tearchId, setTearchId] = useState('');
   const [basicData, setBasicData] = useState<any>([]);
+
   // 获取排课的接口
   const tableServers = () => {
     const Fjplan = getFJPlan({
-      xn,
-      xq,
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
       isPk: false,
     });
     Promise.resolve(Fjplan).then((FjplanData) => {
@@ -198,9 +203,9 @@ const AddArranging: FC<PropsType> = (props) => {
     const chosenData = {
       cla: value.BJMC || '',
       teacher: value.ZJS || '',
-      XNXQId: value.KHKCSJ.XNXQId || '',
+      XNXQId: value.XNXQId || '',
       KHBJSJId: value.id || '',
-      color: value.KHKCSJ.KHKCLX.KBYS || 'rgba(62, 136, 248, 1)',
+      color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
     };
 
     setBj(chosenData);
@@ -257,26 +262,29 @@ const AddArranging: FC<PropsType> = (props) => {
     return true;
   };
   const onReset = (prop: any) => {
-    tableServers();
-    setState(true);
-    setBJIDData('');
-    // window.location.reload();
+    const bjID = getQueryString('courseId');
+    if (bjID) {
+      history.goBack();
+    } else {
+      tableServers();
+      setState(true);
+      setBJIDData('');
+    }
   };
   useEffect(() => {
     async function fetchData() {
       try {
         // 获取所有班级数据
         const bjList = await getAllKHBJSJ({
-          xn,
-          xq,
+          XNXQId: curXNXQId,
           page: 1,
-          pageCount: 0,
+          pageSize: 0,
           name: '',
           bjzt: ['待发布', '已下架'],
         });
-        setBjData(bjList.data);
         if (bjList.status === 'ok') {
-          bjList.data?.forEach((item: any) => {
+          setBjData(bjList.data.rows);
+          bjList.data.rows?.forEach((item: any) => {
             if (index === item.id) {
               BjClick(item);
             }
@@ -284,15 +292,15 @@ const AddArranging: FC<PropsType> = (props) => {
         }
         // 获取所有课程数据
         const kcList = await getAllKHKCSJ({
-          xn,
-          xq,
+          XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
           page: 1,
-          pageCount: 0,
+          pageSize: 0,
           name: '',
-          isReuired: false,
+          isRequired: false,
         });
         if (kcList.status === 'ok') {
-          const data: any = [].map.call(kcList.data, (item: CourseType) => {
+          const data: any = [].map.call(kcList.data.rows, (item: CourseType) => {
             return {
               label: item.KCMC,
               value: item.id,
@@ -325,12 +333,13 @@ const AddArranging: FC<PropsType> = (props) => {
         const fjList = await getAllFJSJ({
           lxId: cdlxId === undefined ? '' : cdlxId,
           page: 1,
-          pageCount: 0,
+          pageSize: 0,
           name: '',
+          XXJBSJId: currentUser?.xxId,
         });
         if (fjList.status === 'ok') {
-          if (fjList.data && fjList.data.length > 0) {
-            const data: any = [].map.call(fjList.data, (item: SiteType) => {
+          if (fjList.data?.rows && fjList.data?.rows.length > 0) {
+            const data: any = [].map.call(fjList.data?.rows, (item: SiteType) => {
               return {
                 label: item.FJMC,
                 value: item.id,
@@ -355,8 +364,8 @@ const AddArranging: FC<PropsType> = (props) => {
         //   setTableDataSource(data);
         // }
         const Fjplan = await getFJPlan({
-          xn,
-          xq,
+          XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
           isPk: false,
         });
         if (Fjplan.status === 'ok') {
@@ -393,8 +402,8 @@ const AddArranging: FC<PropsType> = (props) => {
           if (data.status === 'ok') {
             setCDLoading(false);
             const Fjplan = getFJPlan({
-              xn,
-              xq,
+              XNXQId: curXNXQId,
+              XXJBSJId: currentUser?.xxId,
               isPk: false,
             });
             Promise.resolve(Fjplan).then((FjplanData) => {
@@ -471,16 +480,16 @@ const AddArranging: FC<PropsType> = (props) => {
 
                   const params = {
                     xqId: value || '',
-                    xn,
-                    xq,
+                    XNXQId: curXNXQId,
+                    XXJBSJId: currentUser?.xxId,
                     page: 1,
-                    pageCount: 0,
+                    pageSize: 0,
                     name: '',
                   };
                   // 获取课程的数据
-                  const kcList = await getAllKHKCSJ({ ...params, isReuired: true });
+                  const kcList = await getAllKHKCSJ({ ...params, isRequired: true });
                   if (kcList.status === 'ok') {
-                    const data: any = [].map.call(kcList.data, (item: CourseType) => {
+                    const data: any = [].map.call(kcList.data.rows, (item: CourseType) => {
                       return {
                         label: item.KCMC,
                         value: item.id,
@@ -493,7 +502,7 @@ const AddArranging: FC<PropsType> = (props) => {
                   // 获取班级的数据
                   const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待发布', '已下架'] });
                   if (bjList.status === 'ok') {
-                    setBjData(bjList.data);
+                    setBjData(bjList.data.rows);
                   }
                 },
               }}
@@ -502,7 +511,7 @@ const AddArranging: FC<PropsType> = (props) => {
               width="md"
               name="NJ"
               label="年级"
-              options={grade ? grade[xQItem] : ''}
+              options={grade}
               fieldProps={{
                 async onChange(value) {
                   // 年级选择时将选中的课程清空
@@ -513,17 +522,17 @@ const AddArranging: FC<PropsType> = (props) => {
                   const params = {
                     xqId: XQID || '',
                     njId: value || '',
-                    xn,
-                    xq,
+                    XNXQId: curXNXQId,
+                    XXJBSJId: currentUser?.xxId,
                     page: 1,
-                    pageCount: 0,
+                    pageSize: 0,
                     name: '',
                   };
 
                   // 获取课程的数据
-                  const kcList = await getAllKHKCSJ({ ...params, isReuired: true });
+                  const kcList = await getAllKHKCSJ({ ...params, isRequired: true });
                   if (kcList.status === 'ok') {
-                    const data: any = [].map.call(kcList.data, (item: CourseType) => {
+                    const data: any = [].map.call(kcList.data.rows, (item: CourseType) => {
                       return {
                         label: item.KCMC,
                         value: item.id,
@@ -536,7 +545,7 @@ const AddArranging: FC<PropsType> = (props) => {
                   // 获取班级的数据
                   const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待发布', '已下架'] });
                   if (bjList.status === 'ok') {
-                    setBjData(bjList.data);
+                    setBjData(bjList.data.rows);
                   }
                 },
               }}
@@ -553,15 +562,16 @@ const AddArranging: FC<PropsType> = (props) => {
                     xqId: XQID || '',
                     njId: NJID || '',
                     kcId: value || '',
-                    xn,
-                    xq,
+                    XNXQId: curXNXQId,
                     page: 1,
-                    pageCount: 0,
+                    pageSize: 0,
                     name: '',
                   };
                   // 获取班级的数据
                   const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待发布', '已下架'] });
-                  setBjData(bjList.data);
+                  if (bjList.status === 'ok') {
+                    setBjData(bjList.data?.rows);
+                  }
                 },
               }}
             />
