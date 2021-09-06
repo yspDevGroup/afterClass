@@ -16,7 +16,7 @@ const defaultMsg: ListData = {
   cls: 'picList',
   list: [],
   noDataText: '暂无课程',
-  noDataImg: noData
+  noDataImg: noData,
 };
 const CourseTab = () => {
   // 获取首页数据
@@ -36,7 +36,17 @@ const CourseTab = () => {
           link: `/parent/home/courseIntro?classid=${record.id}`,
           desc: [
             {
-              left: [`课程时段：${record.KKRQ ? moment(record.KKRQ).format('YYYY.MM.DD') : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')}-${record.JKRQ ? moment(record.JKRQ).format('YYYY.MM.DD') : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')}`],
+              left: [
+                `课程时段：${
+                  record.KKRQ
+                    ? moment(record.KKRQ).format('YYYY.MM.DD')
+                    : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
+                }-${
+                  record.JKRQ
+                    ? moment(record.JKRQ).format('YYYY.MM.DD')
+                    : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
+                }`,
+              ],
             },
             {
               left: [`共${record.KSS}课时`],
@@ -53,63 +63,93 @@ const CourseTab = () => {
         ...rest,
       });
     }
-  }, [yxkc])
+  }, [yxkc]);
   const oncuechange = (key: string) => {
     setKeys(key);
   };
 
   return (
     <div className={`${styles.tabHeader}`}>
-      <Tabs centered={centered}
+      <Tabs
+        centered={centered}
         onTabClick={(key: string) => oncuechange(key)}
-        tabBarExtraContent={!centered ?
-          {
-            right: <Link to={{ pathname: '/parent/home/course', state: { courseStatus, kskc, yxkcAllData, keys } }} >
-              全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
-            </Link>
-          } : ''} className={styles.courseTab}>
-        {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
+        tabBarExtraContent={
+          !centered
+            ? {
+                right: (
+                  <Link
+                    to={{
+                      pathname: '/parent/home/course',
+                      state: { courseStatus, kskc, yxkcAllData, keys },
+                    }}
+                  >
+                    全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
+                  </Link>
+                ),
+              }
+            : ''
+        }
+        className={styles.courseTab}
+      >
+        {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
           <TabPane tab="开设课程" key="setup">
-            {
-              kskc && kskc.length ? <Tabs className={styles.courseType}>
+            {kskc && kskc.length ? (
+              <Tabs className={styles.courseType}>
                 {kskc.map((item: any) => {
-                  const courseData: any = [].map.call(item.KHKCSJs, (record: any, index: number) => {
-                    if (index < 3) {
-                      const nodeData: ListItem = {
-                        id: record.id,
-                        title: record.KCMC,
-                        img: record.KCTP,
-                        link: `/parent/home/courseDetails?courseid=${record.id}`,
-                        desc: [
-                          {
-                            left: [`课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(record.JKRQ).format('YYYY.MM.DD')}`],
-                          },
-                        ],
-                        introduction: record.KCMS,
+                  const courseData: any = [].map.call(
+                    item.KHKCSJs,
+                    (record: any, index: number) => {
+                      if (index < 3) {
+                        const nodeData: ListItem = {
+                          id: record.id,
+                          title: record.KCMC,
+                          img: record.KCTP,
+                          link: `/parent/home/courseDetails?courseid=${record.id}`,
+                          desc: [
+                            {
+                              left: [
+                                `课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(
+                                  record.JKRQ,
+                                ).format('YYYY.MM.DD')}`,
+                              ],
+                            },
+                          ],
+                          introduction: record.KCMS,
+                        };
+                        return nodeData;
+                      }
+                      return {
+                        title: 'null',
                       };
-                      return nodeData;
-                    };
-                    return {
-                      title: 'null'
-                    };
-                  });
+                    },
+                  );
 
                   const { list, ...rest } = { ...defaultMsg };
-                  return (<TabPane tab={item.KCLX} key={item.KCLX} style={{ margin: '8px 0' }}>
-                    <ListComponent listData={{
-                      list: courseData.filter((it: ListItem) => it.title !== 'null'),
-                      ...rest
-                    }} />
-                  </TabPane>)
-                })
-                }
-              </Tabs> : <ListComponent listData={defaultMsg} />}
-          </TabPane> : ''}
+                  return (
+                    <TabPane tab={item.KCTAG} key={item.KCTAG} style={{ margin: '8px 0' }}>
+                      <ListComponent
+                        listData={{
+                          list: courseData.filter((it: ListItem) => it.title !== 'null'),
+                          ...rest,
+                        }}
+                      />
+                    </TabPane>
+                  );
+                })}
+              </Tabs>
+            ) : (
+              <ListComponent listData={defaultMsg} />
+            )}
+          </TabPane>
+        ) : (
+          ''
+        )}
         <TabPane tab="已选课程" key="elective">
           <ListComponent listData={yxkcData} />
         </TabPane>
       </Tabs>
-    </div>);
+    </div>
+  );
 };
 
 export default CourseTab;

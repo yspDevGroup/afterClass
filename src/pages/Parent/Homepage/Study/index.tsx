@@ -15,7 +15,7 @@ const Study = () => {
   // 在学课程数据
   const myDate = new Date();
   const nowdata = new Date(moment(myDate.toLocaleDateString()).format('YYYY-MM-DD'));
-  
+
   const [listData, setListData] = useState<ListData>();
   const Selectedcourses = (data: any) => {
     const courseData: any[] = [];
@@ -27,7 +27,7 @@ const Study = () => {
           for (let j = z + 1; j < datedata[record.id].dates.length; j += 1) {
             if (datedata[record.id].dates[z] === datedata[record.id].dates[j]) {
               datedata[record.id].dates.splice(j, 1);
-              j -= 1
+              j -= 1;
             }
           }
         }
@@ -35,28 +35,34 @@ const Study = () => {
           if (new Date(item) < nowdata) {
             Timetable.push(item);
           }
-        })
+        });
         courseData.push({
           id: record.id,
           title: record.KHKCSJ.KCMC,
           link: `/parent/home/courseTable?classid=${record.id}`,
           desc: [
             {
-              left: [`${((datedata[record.id].weekDay).split(',')).map((item: any) => {
-                return `每周${'日一二三四五六'.charAt(item)}`
-              })}`, `${(datedata[record.id].courseInfo.XXSJPZ.KSSJ).substring(0, 5)}-${(datedata[record.id].courseInfo.XXSJPZ.JSSJ).substring(0, 5)}`, `${datedata[record.id].courseInfo.FJSJ.FJMC}`],
+              left: [
+                `${datedata[record.id].weekDay.split(',').map((item: any) => {
+                  return `每周${'日一二三四五六'.charAt(item)}`;
+                })}`,
+                `${datedata[record.id].courseInfo.XXSJPZ.KSSJ.substring(0, 5)}-${datedata[
+                  record.id
+                ].courseInfo.XXSJPZ.JSSJ.substring(0, 5)}`,
+                `${datedata[record.id].courseInfo.FJSJ.FJMC}`,
+              ],
             },
             {
               left: [`共${datedata[record.id].dates.length}课时`, `已学${Timetable.length}课时`],
             },
           ],
-        })
+        });
       }
     }
     return {
-      courseData
-    }
-  }
+      courseData,
+    };
+  };
   useEffect(() => {
     const { courseData } = Selectedcourses(yxkc);
     const Selected: ListData = {
@@ -64,22 +70,23 @@ const Study = () => {
       cls: 'list',
       list: courseData,
       noDataText: '暂无课程',
-      noDataImg: noData
+      noDataImg: noData,
     };
     setListData(Selected);
-  }, [yxkc, datedata])
+  }, [yxkc, datedata]);
 
-
-  return <div className={styles.studyPage}>
-    <div className={styles.funWrapper}>
-      <div className={styles.titleBar}>孩子课表</div>
-      <ClassCalendar setDatedata={setDatedata} />
+  return (
+    <div className={styles.studyPage}>
+      <div className={styles.funWrapper}>
+        <div className={styles.titleBar}>孩子课表</div>
+        <ClassCalendar setDatedata={setDatedata} />
+      </div>
+      <div className={styles.funWrapper} style={{ marginTop: '20px' }}>
+        <div className={styles.titleBar}>{`在学课程 ${listData?.list.length}`}</div>
+        <ListComponent listData={listData} />
+      </div>
     </div>
-    <div className={styles.funWrapper} style={{ marginTop: '20px' }}>
-      <div className={styles.titleBar}>{`在学课程 ${listData?.list.length}`}</div>
-      <ListComponent listData={listData} />
-    </div>
-  </div>;
+  );
 };
 
 export default Study;

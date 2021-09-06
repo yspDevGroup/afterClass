@@ -10,6 +10,7 @@ import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenData
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -42,12 +43,13 @@ const CourseDetails: React.FC = () => {
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
     const current = detail.KHBJSJs![ind];
+    console.log(current, '=====');
     const start = current.BMKSSJ ? current.BMKSSJ : detail.BMKSSJ;
     const end = current.BMKSSJ ? current.BMJSSJ : detail.BMJSSJ;
     const enAble =
       myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
       myDate <= new Date(moment(end).format('YYYY/MM/DD'));
-    setFk(current.KHXSBJs.length >= current.BJRS || !enAble);
+    // setFk(current.KHXSBJs.length >= current.BJRS || !enAble);
     setFY(current.FY);
     setBJ(current.id);
   };
@@ -65,22 +67,26 @@ const CourseDetails: React.FC = () => {
     if (courseid) {
       getWxData();
       (async () => {
-        const result = await getKHKCSJ({
-          kcId: courseid,
-          bjzt: '已发布',
-          njId: children[0].njId,
-        });
-        if (result.status === 'ok') {
-          if (result.data) {
-            setKcDetail(result.data);
-            changeStatus(0, result.data);
-            const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
-            const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
-            const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
-            setKaiguan(btnEnable);
+        const res = await queryXNXQList();
+        if (res.current) {
+          const result = await getKHKCSJ({
+            kcId: courseid,
+            XXJBSJId: currentUser?.xxId,
+            XNXQId: res.current.id,
+          });
+          console.log(result, '----------------');
+          if (result.status === 'ok') {
+            if (result.data) {
+              setKcDetail(result.data);
+              changeStatus(0, result.data);
+              const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
+              const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
+              const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
+              setKaiguan(btnEnable);
+            }
+          } else {
+            enHenceMsg(result.message);
           }
-        } else {
-          enHenceMsg(result.message);
         }
       })();
     }
@@ -138,7 +144,7 @@ const CourseDetails: React.FC = () => {
     // console.log(e.target.checked);
     setXystate(e.target.checked);
   };
-  console.log(Xystate);
+  console.log(KcDetail?.KHBJSJs, '----');
   return (
     <div className={styles.CourseDetails}>
       {index === 'all' ? (
@@ -179,69 +185,75 @@ const CourseDetails: React.FC = () => {
         <Divider />
         <p className={styles.content}>开设班级：</p>
         <ul className={styles.classInformation}>
-          {KcDetail?.KHBJSJs?.map((value: any) => {
-            return (
-              <li>
-                <div style={{ paddingBottom: '10px' }}>
-                  <p className={styles.bjname}>
-                    <span>{value.BJMC}</span>
-                  </p>
-                  <p className={styles.bzrname}>
-                    班主任：
-                    {isLoading ? <WWOpenDataCom type="userName" openid={value.ZJS} /> : <></>}
-                  </p>
-                  <p className={styles.bzrname}>
-                    副班：
-                    {isLoading ? (
-                      value.FJS.split(',').map((item: any) => {
-                        return (
-                          <span style={{ marginRight: '5px' }}>
-                            <WWOpenDataCom type="userName" openid={item} />
-                          </span>
-                        );
-                      })
-                    ) : (
-                      <></>
-                    )}
-                  </p>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>课时数</th>
-                        <th>总人数</th>
-                        <th>报名费</th>
-                        <th>上课时间</th>
-                        <th>上课地点</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{value.KSS}课时</td>
-                        <td>{value.BJRS}人</td>
-                        <td>{value.FY}元</td>
-                        <td style={{ padding: '2px 0' }}>
-                          {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                            const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
-                            return (
-                              <p>
-                                {weeks}
-                                {val.XXSJPZ.KSSJ.substring(0, 5)}-{val.XXSJPZ.JSSJ.substring(0, 5)}
-                              </p>
-                            );
-                          })}
-                        </td>
-                        <td style={{ padding: '2px 0' }}>
-                          {value.KHPKSJs.map((val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                            return <p>{val.FJSJ.FJMC}</p>;
-                          })}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </li>
-            );
-          })}
+          {KcDetail?.KHBJSJs &&
+            KcDetail?.KHBJSJs.map((value: any) => {
+              return (
+                <li>
+                  <div style={{ paddingBottom: '10px' }}>
+                    <p className={styles.bjname}>
+                      <span>{value.BJMC}</span>
+                    </p>
+                    <p className={styles.bzrname}>
+                      班主任：
+                      {isLoading ? <WWOpenDataCom type="userName" openid={value.ZJS} /> : <></>}
+                    </p>
+                    <p className={styles.bzrname}>
+                      副班：
+                      {isLoading ? (
+                        value.FJS.split(',').map((item: any) => {
+                          return (
+                            <span style={{ marginRight: '5px' }}>
+                              <WWOpenDataCom type="userName" openid={item} />
+                            </span>
+                          );
+                        })
+                      ) : (
+                        <></>
+                      )}
+                    </p>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>课时数</th>
+                          <th>总人数</th>
+                          <th>报名费</th>
+                          <th>上课时间</th>
+                          <th>上课地点</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{value.KSS}课时</td>
+                          <td>{value.BJRS}人</td>
+                          <td>{value.FY}元</td>
+                          {/* <td style={{ padding: '2px 0' }}>
+                            {value.KHPKSJs.map(
+                              (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                                const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
+                                return (
+                                  <p>
+                                    {weeks}
+                                    {val.XXSJPZ.KSSJ.substring(0, 5)}-
+                                    {val.XXSJPZ.JSSJ.substring(0, 5)}
+                                  </p>
+                                );
+                              },
+                            )}
+                          </td>
+                          <td style={{ padding: '2px 0' }}>
+                            {value.KHPKSJs.map(
+                              (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                                return <p>{val.FJSJ.FJMC}</p>;
+                              },
+                            )}
+                          </td> */}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </li>
+              );
+            })}
         </ul>
       </div>
       <div className={styles.footer}>

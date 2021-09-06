@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from "./index.less";
+import styles from './index.less';
 import { Tabs } from 'antd';
 import ListComponent from '@/components/ListComponent';
 import noData from '@/assets/noCourses.png';
@@ -8,12 +8,10 @@ import Nodata from '@/components/Nodata';
 import moment from 'moment';
 import GoBack from '@/components/GoBack';
 
-
-
 const defaultMsg: ListData = {
   type: 'picList',
   cls: 'picList',
-  list: []
+  list: [],
 };
 
 const Course = (props: any) => {
@@ -31,18 +29,17 @@ const Course = (props: any) => {
       newData.list = yxkcAllData;
       setYxkcData(newData);
     }
-  }, [yxkcAllData])
-
+  }, [yxkcAllData]);
 
   return (
     <div className={styles.CourseBox}>
-      <GoBack title={'课程列表'} onclick='/parent/home?index=index' />
+      <GoBack title={'课程列表'} onclick="/parent/home?index=index" />
       <div className={`${styles.tabHeader}`}>
         <Tabs centered={true} className={styles.courseTab} defaultActiveKey={keys}>
-          {(courseStatus === 'enroll' || courseStatus === 'enrolling') ?
+          {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
             <TabPane tab="开设课程" key="setup">
-              {
-                kskc && kskc.length ? <Tabs className={styles.courseType}>
+              {kskc && kskc.length ? (
+                <Tabs className={styles.courseType}>
                   {kskc.map((item: any) => {
                     const courseData: any = [].map.call(item.KHKCSJs, (record: any) => {
                       const nodeData: any = {
@@ -52,7 +49,11 @@ const Course = (props: any) => {
                         link: `/parent/home/courseDetails?courseid=${record.id}&index=all`,
                         desc: [
                           {
-                            left: [`课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(record.JKRQ).format('YYYY.MM.DD')}`],
+                            left: [
+                              `课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(
+                                record.JKRQ,
+                              ).format('YYYY.MM.DD')}`,
+                            ],
                           },
                         ],
                         introduction: record.KCMS,
@@ -60,25 +61,36 @@ const Course = (props: any) => {
                       return nodeData;
                     });
                     const { list, ...rest } = { ...defaultMsg };
-                    return (<TabPane tab={item.KCLX} key={item.KCLX} style={{ margin: '8px 0' }}>
-                      <ListComponent listData={{
-                        list: courseData,
-                        ...rest
-                      }} />
-                    </TabPane>)
-                  })
-                  }
-                </Tabs> : <ListComponent listData={defaultMsg} />}
-            </TabPane> : ''}
+                    return (
+                      <TabPane tab={item.KCTAG} key={item.KCTAG} style={{ margin: '8px 0' }}>
+                        <ListComponent
+                          listData={{
+                            list: courseData,
+                            ...rest,
+                          }}
+                        />
+                      </TabPane>
+                    );
+                  })}
+                </Tabs>
+              ) : (
+                <ListComponent listData={defaultMsg} />
+              )}
+            </TabPane>
+          ) : (
+            ''
+          )}
           <TabPane tab="已选课程" key="elective">
-            {yxkcAllData && yxkcAllData.length ? <ListComponent listData={yxkcData} /> :
-              <Nodata imgSrc={noData} desc='暂无课程' />}
+            {yxkcAllData && yxkcAllData.length ? (
+              <ListComponent listData={yxkcData} />
+            ) : (
+              <Nodata imgSrc={noData} desc="暂无课程" />
+            )}
           </TabPane>
         </Tabs>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default Course
+export default Course;
