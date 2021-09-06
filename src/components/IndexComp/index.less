@@ -50,6 +50,11 @@
       p {
         font-size: 14px;
         line-height: 18px;
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }
@@ -107,6 +112,7 @@
 
       div[class*="ant-col"] {
         line-height: 48px;
+
         &::before {
           display: inline-block;
           content: '';
@@ -132,14 +138,14 @@
 
     .viewWrapper {
       div[class*="ant-col"] {
-        background-repeat: no-repeat;
-        background-position-x: 89%;
-        background-position-y: center;
+        text-align: center;
 
         p {
           color: @primary-color;
           font-size: 16px;
           margin: 0;
+          text-align: left;
+          padding: 0 20px;
 
           h1 {
             display: inline-block;
@@ -155,8 +161,9 @@
         }
 
         ul {
-          padding: 0;
+          padding: 0 10px;
           margin: 0;
+          text-align: left;
 
           li {
             display: inline-block;
