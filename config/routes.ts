@@ -30,7 +30,7 @@
     ],
   },
   {
-    path:'/homepage',
+    path: '/homepage',
     name: 'homepage',
     icon: 'bank',
     component: './Manager/Homepage',
@@ -63,6 +63,50 @@
         redirect: '/basicalSettings/termManagement',
       },
     ],
+  },
+  {
+    path: '/courseManagements',
+    name: 'courseManagements',
+    icon: 'ProfileOutlined',
+    routes: [
+      {
+        path: '/courseManagements/CourseManagements',
+        name: 'courseManagements',
+        icon: 'smile',
+        component: './Manager/CourseManagements',
+        // hideInMenu: 'true',
+      },
+      {
+        path: '/courseManagements/mechanismCourse/edit',
+        name: 'mechanismCourseInfo',
+        hideInMenu: 'true',
+        component: './Manager/Mechanisms/edit',
+      },
+    ],
+  },
+  {
+    path: '/classManagement',
+    name: 'classManagement',
+    icon: 'CreditCardOutlined',
+    component: './Manager/ClassManagement',
+  },
+  {
+    path: '/courseScheduling',
+    name: 'courseScheduling',
+    icon: 'CarryOutOutlined',
+    component: './Manager/CourseScheduling',
+  },
+  {
+    path: '/teacherManagement',
+    name: 'teacherManagement',
+    icon: 'CreditCardOutlined',
+    component: './Manager/TeacherManagement',
+  },
+  {
+    path: '/orderInquiry',
+    name: 'orderInquiry',
+    icon: 'BarsOutlined',
+    component: './Manager/OrderInquiry',
   },
   {
     path: '/announcements',
@@ -111,58 +155,18 @@
           },
         ],
       },
-    ],
-  },
-  {
-    path: '/courseManagements',
-    name: 'courseManagements',
-    icon: 'ProfileOutlined',
-    routes: [
       {
-        path: '/courseManagements/CourseManagements',
-        name: 'courseManagements',
-        icon: 'smile',
-        component: './Manager/CourseManagements',
-        // hideInMenu: 'true',
-      },
-      // {
-      //   path: '/courseManagements/Mechanism',
-      //   name: 'mechanism',
-      //   icon: 'smile',
-      //   component: './Manager/Mechanisms',
-      // },
-      {
-        path: '/courseManagements/mechanismCourse/edit',
-        name: 'mechanismCourseInfo',
-        hideInMenu: 'true',
-        component: './Manager/Mechanisms/edit',
+        path: '/announcements/service',
+        name: 'service',
+        component:'./Manager/Announcements/Service'
       },
       {
-        path: '/courseManagements/classMaintenance',
-        name: 'classMaintenance',
-        icon: 'smile',
+        path: '/announcements/service/editArticle',
         hideInMenu: 'true',
-        component: './Manager/ClassMaintenance',
+        name: 'articleDetails',
+        component: './Manager/Announcements/Service/editArticle',
       },
     ],
-  },
-  {
-    path: '/classManagement',
-    name: 'classManagement',
-    icon: 'CreditCardOutlined',
-    component: './Manager/ClassManagement',
-  },
-  {
-    path: '/courseScheduling',
-    name: 'courseScheduling',
-    icon: 'CarryOutOutlined',
-    component: './Manager/CourseScheduling',
-  },
-  {
-    path: '/orderInquiry',
-    name: 'orderInquiry',
-    icon: 'BarsOutlined',
-    component: './Manager/OrderInquiry',
   },
   /*** 老师路由 start ***/
   {

@@ -39,9 +39,12 @@ export default {
   'menu.editAnnouncement': '新增公告',
   'menu.courseManagements.mechanismCourseInfo': '课程详情',
   'menu.announcements': '通知公告',
-  'menu.announcements.notice': '内部通知',
+  'menu.announcements.notice': '校内通知',
   'menu.announcements.notice.editArticle': '编辑文章',
   'menu.announcements.notice.noticeDetails': '公告详情',
+  'menu.announcements.service': '课后服务协议',
+  'menu.announcements.service.editArticle': '编辑课后服务协议',
   'menu.announcements.policy': '政策公告',
   'menu.announcements.policy.articleDetails': '政策详情',
+  'menu.teacherManagement':'教师管理',
 };

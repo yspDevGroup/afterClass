@@ -3,15 +3,15 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-09 17:41:43
- * @LastEditTime: 2021-09-01 15:24:04
- * @LastEditors: wsl
+ * @LastEditTime: 2021-09-06 12:00:56
+ * @LastEditors: Sissle Lynn
  */
 import { useState, useRef } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Switch, message } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import Option from '../components/Option';
 import type { TableListItem } from '../data';
 import styles from '../index.module.less';
@@ -20,6 +20,8 @@ import PageContainer from '@/components/PageContainer';
 import { getXXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
 
 const Notice = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [dataSource, setDataSource] = useState<API.XXTZGG[]>();
   const actionRef = useRef<ActionType>();
 
@@ -169,6 +171,7 @@ const Notice = () => {
         request={async (params) => {
           if (params.ZT || params.BT) {
             const resgetXXTZGG = await getXXTZGG({
+              XXJBSJId:currentUser?.xxId,
               BT: params.BT,
               ZT: params.ZT ? [params.ZT] : ['已发布', '草稿'],
               page: 0,
@@ -179,6 +182,7 @@ const Notice = () => {
             }
           } else {
             const resgetXXTZGG = await getXXTZGG({
+              XXJBSJId:currentUser?.xxId,
               BT: '',
               ZT: ['已发布', '草稿'],
               page: 0,
