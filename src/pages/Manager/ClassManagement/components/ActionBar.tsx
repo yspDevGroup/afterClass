@@ -18,36 +18,36 @@ const ActionBar = (props: propstype) => {
   const { handleEdit, record, actionRef } = props;
   const shelf = (recorde: any) => {
     if (recorde.KHXSBJs.length === 0) {
-      const res = updateKHBJSJ({ id: recorde.id }, { BJZT: '已下架' });
+      const res = updateKHBJSJ({ id: recorde.id }, { BJZT: '待开班' });
       new Promise((resolve) => {
         resolve(res);
       }).then((data: any) => {
         if (data.status === 'ok') {
-          message.success('下架成功');
+          message.success('取消成功');
           actionRef.current?.reload();
         } else if (data.message!.indexOf('token') > -1 || data.message!.indexOf('Token') > -1) {
           history.replace('/auth_callback/overDue');
         } else {
-          message.error('下架失败，请联系管理员或稍后重试');
+          message.error('取消失败，请联系管理员或稍后重试');
           actionRef.current?.reload();
         }
       });
     } else {
-      message.warning('有学生报名时，此班级不能下架');
+      message.warning('有学生报名时，此班级不能取消开班');
     }
   };
   const release = (records: any) => {
-    const res = updateKHBJSJ({ id: records.id }, { BJZT: '已发布' });
+    const res = updateKHBJSJ({ id: records.id }, { BJZT: '已开班' });
     new Promise((resolve) => {
       resolve(res);
     }).then((data: any) => {
       if (data.status === 'ok') {
-        message.success('发布成功');
+        message.success('开班成功');
         actionRef.current?.reload();
       } else if (data.message!.indexOf('token') > -1 || data.message!.indexOf('Token') > -1) {
         history.replace('/auth_callback/overDue');
       } else {
-        message.error('发布失败，请联系管理员或稍后重试');
+        message.error('开班失败，请联系管理员或稍后重试');
         actionRef.current?.reload();
       }
     });
@@ -90,7 +90,7 @@ const ActionBar = (props: propstype) => {
     </Menu>
   );
   switch (record.BJZT) {
-    case '待发布':
+    case '待开班':
     case '已下架':
       return (
         <>
@@ -141,7 +141,7 @@ const ActionBar = (props: propstype) => {
         </>
       );
       break;
-    case '已发布':
+    case '已开班':
       return (
         <>
           <a onClick={() => shelf(record)}>取消开班</a>

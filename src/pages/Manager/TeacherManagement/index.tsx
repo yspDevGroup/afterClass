@@ -15,17 +15,16 @@
 import React, { useRef, useState } from 'react';
 import { useModel } from 'umi';
 import { Button, message, Modal, Upload } from 'antd';
-import ProTable, { RequestData } from '@ant-design/pro-table';
-import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import type { ActionType, ProColumns, RequestData } from '@ant-design/pro-table';
 import { UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 
-import { TableListParams } from '@/constant';
+import type { TableListParams } from '@/constant';
 import PageContain from '@/components/PageContainer';
 
 import styles from './index.less';
 import { getAuthorization } from '@/utils/utils';
 import { getKHJSSJ } from '@/services/after-class/khjssj';
-import { Record } from 'immutable';
 
 const TeacherManagement = () => {
   const { initialState } = useModel('@@initialState');
@@ -42,7 +41,7 @@ const TeacherManagement = () => {
     name: 'xlsx',
     action: '/api/upload/importWechatTeachers',
     headers: {
-      authorization: getAuthorization()
+      authorization: getAuthorization(),
     },
     beforeUpload(file: any) {
       const isLt2M = file.size / 1024 < 200;
@@ -64,7 +63,7 @@ const TeacherManagement = () => {
         const code = info.file.response;
         message.error(`${code.message}`);
       }
-    }
+    },
   };
   const columns: ProColumns<any>[] = [
     {
@@ -88,7 +87,7 @@ const TeacherManagement = () => {
       key: 'XB',
       align: 'center',
       width: 90,
-      render:(_,record)=>record?.XB?.substring(0,1)
+      render: (_, record) => record?.XB?.substring(0, 1),
     },
     {
       title: '部门',
@@ -120,23 +119,25 @@ const TeacherManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
-        request={
-          async (
-            params: any & {
-              pageSize?: number;
-              current?: number;
-              keyword?: string;
-            },
-            sort,
-            filter,
-          ): Promise<Partial<RequestData<any>>> => {
-           // 表单搜索项会从 params 传入，传递给后端接口。
+        request={async (
+          params: any & {
+            pageSize?: number;
+            current?: number;
+            keyword?: string;
+          },
+          sort,
+          filter,
+        ): Promise<Partial<RequestData<any>>> => {
+          // 表单搜索项会从 params 传入，传递给后端接口。
           const opts: TableListParams = {
             ...params,
             sorter: sort && Object.keys(sort).length ? sort : undefined,
             filter,
           };
-          const res = await getKHJSSJ({ JGId: currentUser?.xxId, keyWord: opts.keyword, page: 0, pageSize: 0 }, opts);
+          const res = await getKHJSSJ(
+            { JGId: currentUser?.xxId, keyWord: opts.keyword, page: 0, pageSize: 0 },
+            opts,
+          );
           if (res.status === 'ok') {
             return {
               data: res.data?.rows,
@@ -144,8 +145,8 @@ const TeacherManagement = () => {
               success: true,
             };
           }
-          return {}
-          }}
+          return {};
+        }}
         options={{
           setting: false,
           fullScreen: false,
@@ -153,14 +154,14 @@ const TeacherManagement = () => {
           reload: false,
           search: {
             placeholder: '教师名称/联系电话',
-            allowClear: true
-          }
+            allowClear: true,
+          },
         }}
         // eslint-disable-next-line react/no-unstable-nested-components
         toolBarRender={() => [
-          <Button key="button" type="primary" onClick={()=>setModalVisible(true)}>
+          <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
             <VerticalAlignBottomOutlined /> 导入
-          </Button>
+          </Button>,
         ]}
         rowKey="id"
         dateFormatter="string"
@@ -177,13 +178,13 @@ const TeacherManagement = () => {
           </Button>,
           <Button key="submit" type="primary" onClick={onClose}>
             确定
-          </Button>
+          </Button>,
         ]}
         centered
         maskClosable={false}
         bodyStyle={{
           maxHeight: '65vh',
-          overflowY: 'auto'
+          overflowY: 'auto',
         }}
       >
         <p className={styles.uploadBtn}>

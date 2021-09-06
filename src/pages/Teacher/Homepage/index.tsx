@@ -6,7 +6,7 @@ import Home from './Home';
 import Education from './Education';
 import Mine from './Mine';
 import styles from './index.less';
-import {enHenceMsg, getCurrentStatus, getQueryString } from '@/utils/utils';
+import { enHenceMsg, getCurrentStatus, getQueryString } from '@/utils/utils';
 import myContext from '@/utils/MyContext';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
@@ -27,10 +27,10 @@ const PersonalHomepage = () => {
       // 获取后台学年学期数据
       const result = await queryXNXQList();
       if (result.current) {
-        const { XN, XQ } = result.current;
         const res = await homePageInfo({
-          xn: XN,
-          xq: XQ,
+          JSId: '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
+          XNXQId: result.current.id,
+          XXJBSJId: currentUser!.xxId,
         });
         if (res.status === 'ok') {
           if (res.data) {
@@ -65,89 +65,89 @@ const PersonalHomepage = () => {
       {courseStatus === '' ? (
         ''
       ) : (
-          <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
-            <Tabs
-              tabPosition="bottom"
-              className={styles.menuTab}
-              onTabClick={(key: string) => {
-                setActiveKey(key);
-                if (homeRef.current) (homeRef.current as unknown as HTMLElement).scrollTop = 0;
-                if (eduRef.current) (eduRef.current as unknown as HTMLElement).scrollTop = 0;
-                if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
-              }}
-              activeKey={activeKey}
-            >
-              <TabPane
-                tab={
-                  <span>
-                    <IconFont
-                      style={{ fontSize: '16px' }}
-                      type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
-                    />
+        <myContext.Provider value={{ ...dataSource, courseStatus, currentUserInfo: currentUser }}>
+          <Tabs
+            tabPosition="bottom"
+            className={styles.menuTab}
+            onTabClick={(key: string) => {
+              setActiveKey(key);
+              if (homeRef.current) ((homeRef.current as unknown) as HTMLElement).scrollTop = 0;
+              if (eduRef.current) ((eduRef.current as unknown) as HTMLElement).scrollTop = 0;
+              if (mineRef.current) ((mineRef.current as unknown) as HTMLElement).scrollTop = 0;
+            }}
+            activeKey={activeKey}
+          >
+            <TabPane
+              tab={
+                <span>
+                  <IconFont
+                    style={{ fontSize: '16px' }}
+                    type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
+                  />
                   首页
                 </span>
-                }
-                key="index"
+              }
+              key="index"
+            >
+              <div
+                className={styles.noScrollBar}
+                style={{ height: '100%', overflowY: 'auto' }}
+                ref={homeRef}
               >
-                <div
-                  className={styles.noScrollBar}
-                  style={{ height: '100%', overflowY: 'auto' }}
-                  ref={homeRef}
-                >
-                  <Home />
-                </div>
-              </TabPane>
-              {courseStatus === 'empty' ? (
-                ''
-              ) : (
-                  <TabPane
-                    tab={
-                      <span>
-                        <IconFont
-                          style={{ fontSize: '16px' }}
-                          type={
-                            activeKey === 'education'
-                              ? 'icon-jiaoxuezhongxinfill'
-                              : 'icon-jiaoxuezhongxin'
-                          }
-                        />
-                    教学中心
-                  </span>
-                    }
-                    key="education"
-                  >
-                    <div
-                      className={styles.noScrollBar}
-                      style={{ height: '100%', overflowY: 'auto' }}
-                      ref={eduRef}
-                    >
-                      <Education />
-                    </div>
-                  </TabPane>
-                )}
+                <Home />
+              </div>
+            </TabPane>
+            {courseStatus === 'empty' ? (
+              ''
+            ) : (
               <TabPane
                 tab={
                   <span>
                     <IconFont
                       style={{ fontSize: '16px' }}
-                      type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
+                      type={
+                        activeKey === 'education'
+                          ? 'icon-jiaoxuezhongxinfill'
+                          : 'icon-jiaoxuezhongxin'
+                      }
                     />
-                  我的
-                </span>
+                    教学中心
+                  </span>
                 }
-                key="mine"
+                key="education"
               >
                 <div
                   className={styles.noScrollBar}
                   style={{ height: '100%', overflowY: 'auto' }}
-                  ref={mineRef}
+                  ref={eduRef}
                 >
-                  <Mine />
+                  <Education />
                 </div>
               </TabPane>
-            </Tabs>
-          </myContext.Provider>
-        )}
+            )}
+            <TabPane
+              tab={
+                <span>
+                  <IconFont
+                    style={{ fontSize: '16px' }}
+                    type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
+                  />
+                  我的
+                </span>
+              }
+              key="mine"
+            >
+              <div
+                className={styles.noScrollBar}
+                style={{ height: '100%', overflowY: 'auto' }}
+                ref={mineRef}
+              >
+                <Mine />
+              </div>
+            </TabPane>
+          </Tabs>
+        </myContext.Provider>
+      )}
     </div>
   );
 };

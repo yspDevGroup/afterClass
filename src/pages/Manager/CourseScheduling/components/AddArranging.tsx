@@ -280,7 +280,7 @@ const AddArranging: FC<PropsType> = (props) => {
           page: 1,
           pageSize: 0,
           name: '',
-          bjzt: ['待发布', '已下架'],
+          bjzt: ['待开班'],
         });
         if (bjList.status === 'ok') {
           setBjData(bjList.data.rows);
@@ -296,7 +296,6 @@ const AddArranging: FC<PropsType> = (props) => {
           XXJBSJId: currentUser?.xxId,
           page: 1,
           pageSize: 0,
-          name: '',
           isRequired: false,
         });
         if (kcList.status === 'ok') {
@@ -500,7 +499,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     message.error(kcList.message);
                   }
                   // 获取班级的数据
-                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待发布', '已下架'] });
+                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待开班'] });
                   if (bjList.status === 'ok') {
                     setBjData(bjList.data.rows);
                   }
@@ -543,7 +542,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     message.error(kcList.message);
                   }
                   // 获取班级的数据
-                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待发布', '已下架'] });
+                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待开班'] });
                   if (bjList.status === 'ok') {
                     setBjData(bjList.data.rows);
                   }
@@ -568,7 +567,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     name: '',
                   };
                   // 获取班级的数据
-                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待发布', '已下架'] });
+                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待开班'] });
                   if (bjList.status === 'ok') {
                     setBjData(bjList.data?.rows);
                   }

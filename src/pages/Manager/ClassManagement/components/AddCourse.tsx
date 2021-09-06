@@ -9,10 +9,10 @@ import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import moment from 'moment';
 import { getDepUserList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import WWOpenDataCom from './WWOpenDataCom';
 import { enHenceMsg } from '@/utils/utils';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
+import { getKHJSSJ } from '@/services/after-class/khjssj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -65,9 +65,6 @@ const AddCourse: FC<AddCourseProps> = ({
     if (formValues) {
       setBaoming(false);
       setKaike(false);
-      // 在课程的数据里筛选出当前课程的相关时间
-      const khDate = KHKCAllData?.find((item: any) => item.id === formValues?.KHKCSJ?.id);
-      setKHDateAll(khDate);
       const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX);
       setKCDate(kcDate);
     } else {
@@ -83,12 +80,6 @@ const AddCourse: FC<AddCourseProps> = ({
         await initWXConfig(['checkJsApi']);
       }
       await initWXAgentConfig(['checkJsApi']);
-
-      // 获取教师
-      const resTeacher = await getDepUserList({ id: '1', fetch_child: 1 });
-      if (resTeacher.status === 'ok') {
-        setTeacherData(resTeacher.data.userlist);
-      }
     })();
   }, []);
 
@@ -105,6 +96,20 @@ const AddCourse: FC<AddCourseProps> = ({
           });
         });
         setCampus(XQ);
+      }
+
+      // 获取教师
+      const res = await getKHJSSJ({ JGId: currentUser?.xxId, page: 0, pageSize: 0 });
+      if (res.status === 'ok') {
+        const data = res.data?.rows;
+        const teachOption: any = [];
+        data?.forEach((item) => {
+          teachOption.push({
+            label: item.XM,
+            value: item.id,
+          });
+        });
+        setTeacherData(teachOption);
       }
     })();
   }, []);
@@ -147,10 +152,10 @@ const AddCourse: FC<AddCourseProps> = ({
         ...values,
         FJS: values.FJS, // 副班
         KCTP: imageUrl || formValues?.KCTP,
-        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : KHDateAll?.BMKSSJ),
-        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : KHDateAll?.BMJSSJ),
-        KKRQ: values?.SKSD ? values?.SKSD[0] : KHDateAll?.KKRQ,
-        JKRQ: values?.SKSD ? values?.SKSD[1] : KHDateAll?.JKRQ,
+        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : BMData?.KSSJ),
+        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : BMData?.JSSJ),
+        KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
+        JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSQ,
         XNXQId: curXNXQId,
       };
       if (formValues?.id) {
@@ -247,10 +252,6 @@ const AddCourse: FC<AddCourseProps> = ({
         options: KCDate.map((item: any) => {
           return { label: item.KCMC, value: item.id };
         }),
-        onChange: (value: any) => {
-          const khDate = KHKCAllData?.find((item: any) => item.id === value);
-          setKHDateAll(khDate);
-        },
       },
     },
     {
@@ -327,27 +328,10 @@ const AddCourse: FC<AddCourseProps> = ({
           disabled: readonly,
           rules: [{ required: true, message: '请选择班主任' }],
           fieldProps: {
-            virtual: false,
-            // options: teacherData.map((item) => {
-            //   return {
-            //     label: <WWOpenDataCom type="userName" openid={item.userid} />,
-            //     value: item.userid,
-            //   };
-            // }),
-            options: [
-              {
-                label: '张三',
-                value: '1',
-              },
-              {
-                label: '李四',
-                value: '2',
-              },
-              {
-                label: '王五',
-                value: '3',
-              },
-            ],
+            showSearch: true,
+            options: teacherData,
+            optionFilterProp: 'label',
+            allowClear: true,
           },
         },
         {
@@ -359,27 +343,10 @@ const AddCourse: FC<AddCourseProps> = ({
           rules: [{ required: true, message: '请选择副班主任' }],
           fieldProps: {
             mode: 'multiple',
-            virtual: false,
-            // options: teacherData.map((item) => {
-            //   return {
-            //     label: <WWOpenDataCom type="userName" openid={item.userid} />,
-            //     value: item.userid,
-            //   };
-            // }),
-            options: [
-              {
-                label: '张三',
-                value: '1',
-              },
-              {
-                label: '李四',
-                value: '2',
-              },
-              {
-                label: '王五',
-                value: '3',
-              },
-            ],
+            showSearch: true,
+            options: teacherData,
+            optionFilterProp: 'label',
+            allowClear: true,
           },
         },
       ],
@@ -480,7 +447,7 @@ const AddCourse: FC<AddCourseProps> = ({
           formItemLayout={formLayout}
           values={
             formValues || {
-              BJZT: '待发布',
+              BJZT: '待开班',
               BMKSSJ: baoming,
               KKRQ: kaike,
             }

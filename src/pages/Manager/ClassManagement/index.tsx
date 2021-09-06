@@ -20,7 +20,6 @@ import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
 import type { CourseItem } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
-import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 
 const { Option } = Select;
 
@@ -95,7 +94,6 @@ const CourseManagement = () => {
           setTermList(newData);
           // actionRef.current?.reload();
           const ress = getAllKHKCSJ({
-            name: '',
             page: 1,
             pageSize: 0,
             isRequired: false,
@@ -152,12 +150,7 @@ const CourseManagement = () => {
     };
     setVisible(true);
     setCurrent(list);
-    if (
-      !(data.BJZT === '待发布') &&
-      !(data.BJZT === '未排课') &&
-      !(data.BJZT === '已下架') &&
-      !(data.BJZT === '已排课')
-    ) {
+    if (!(data.BJZT === '待开班') && !(data.BJZT === '未排课') && !(data.BJZT === '已排课')) {
       stereadonly(true);
       setnames('chakan');
     } else {
@@ -231,7 +224,7 @@ const CourseManagement = () => {
       width: 100,
       render: (_, record) => {
         const Url = `/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}`;
-        if (record.BJZT === '待发布' || record.BJZT === '已下架') {
+        if (record.BJZT === '待开班') {
           if (record.KHPKSJs && record.KHPKSJs?.length === 0) {
             return <Link to={Url}>未排课</Link>;
           }
@@ -246,16 +239,6 @@ const CourseManagement = () => {
       key: 'BJZT',
       align: 'center',
       width: 100,
-      render: (text, record) => {
-        switch (text) {
-          case '已发布':
-            return '已开班';
-          case '已下架':
-            return '已取消';
-          default:
-            return text;
-        }
-      },
     },
     {
       title: '操作',
