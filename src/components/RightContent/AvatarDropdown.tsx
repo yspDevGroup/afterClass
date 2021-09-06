@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, message, Spin } from 'antd';
 import { useModel } from 'umi';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import defaultAvatar from '@/assets/avatar.png';
+import { getXXJBSJ } from '@/services/after-class/xxjbsj';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -12,8 +13,17 @@ export type GlobalHeaderRightProps = {
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const [xxData, setXxData] = useState<any>();
   const userRef = useRef(null);
-
+  useEffect(() => {
+    async function fetchData() {
+      const res = await getXXJBSJ();
+      if (res.status === 'ok') {
+        setXxData(res.data);
+      }
+    }
+    fetchData();
+  }, []);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -53,6 +63,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   return (
     <>
       <span className={`${styles.action} ${styles.account}`}>
+      {xxData ? <span style={{paddingRight:'40px'}}>
+      {xxData?.XH && xxData?.XH.indexOf('http')>-1 ? <img style={{width:'40px',height:'40px'}} src={xxData?.XH} />:''} {xxData?.XXMC}
+        </span> : ''}
         <Avatar
           size="small"
           className={styles.avatar}

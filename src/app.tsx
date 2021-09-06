@@ -101,22 +101,25 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     },
     links: isDev
       ? [
-          <Link to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>openAPI 文档</span>
-          </Link>,
-          <Link to="/~docs" target="_blank">
-            <BookOutlined />
-            <span>业务组件文档</span>
-          </Link>,
-        ]
+        <Link to="/umi/plugin/openapi" target="_blank">
+          <LinkOutlined />
+          <span>openAPI 文档</span>
+        </Link>,
+        <Link to="/~docs" target="_blank">
+          <BookOutlined />
+          <span>业务组件文档</span>
+        </Link>,
+      ]
       : [],
     collapsedButtonRender: false,
     menuHeaderRender: () => {
       return (
-        <Link to="/">
-          <img src={headerTop} />
-        </Link>
+        <div className='cusHeaderLogo'>
+          <Link to="/">
+            <img src={headerTop} />
+          </Link>
+          <h1>— 学校端 —</h1>
+        </div>
       );
     },
     // 自定义 403 页面

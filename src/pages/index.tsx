@@ -2,8 +2,8 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-07-05 11:49:14
- * @LastEditors: zpl
+ * @LastEditTime: 2021-09-05 10:35:52
+ * @LastEditors: Sissle Lynn
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
@@ -14,7 +14,7 @@ const Index = () => {
   useEffect(() => {
     switch (initialState?.currentUser?.auth) {
       case '管理员':
-        history.replace('/courseManagements');
+        history.replace('/homepage');
         break;
       case '老师':
         history.replace('/teacher/home');

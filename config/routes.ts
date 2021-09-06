@@ -30,6 +30,12 @@
     ],
   },
   {
+    path:'/homepage',
+    name: 'homepage',
+    icon: 'bank',
+    component: './Manager/Homepage',
+  },
+  {
     path: '/basicalSettings',
     name: 'basicalSettings',
     icon: 'crown',

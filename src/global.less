@@ -40,25 +40,29 @@ body,
   ol {
     list-style: none;
   }
+
   .ant-input-affix-wrapper:focus,
   .ant-input-affix-wrapper-focused {
     border-color: @input-hover-border-color;
     box-shadow: none;
   }
+
   .ant-input:focus,
   .ant-input-focused {
     border-color: @input-hover-border-color;
     box-shadow: none;
   }
-  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
-    .ant-select-selector {
+
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
     border-color: @input-hover-border-color;
     box-shadow: none;
   }
+
   .ant-picker-focused {
     border-color: @input-hover-border-color;
     box-shadow: none;
   }
+
   .ant-picker-range .ant-picker-active-bar {
     background: @input-hover-border-color;
   }
@@ -72,17 +76,24 @@ body,
 
       .ant-pro-sider-logo {
         justify-content: center;
-        height: 80px;
+        height: 115px;
         background-color: rgba(33, 48, 69, 1);
+
         h1 {
           margin: 0;
           color: #fff;
+          text-align: center;
+          line-height: 50px;
+          display: block;
+          font-weight: normal;
+          font-size: @font-size-lg;
         }
+
         img {
           height: auto !important;
         }
 
-        & + div {
+        &+div {
           margin-top: @padding-lg;
         }
       }
@@ -93,8 +104,10 @@ body,
         .ant-menu-item::after {
           border-right: 3px solid rgba(62, 136, 248, 1);
         }
+
         .ant-menu-item,
         .ant-menu-submenu {
+
           .ant-pro-menu-item-title,
           .anticon,
           .ant-menu-submenu-arrow {
@@ -105,6 +118,7 @@ body,
           &:active,
           .ant-menu-submenu-title:active {
             background: rgba(62, 136, 248, 1);
+
             span {
               color: #fff;
             }
@@ -118,8 +132,8 @@ body,
     }
 
     // 调整按钮与icon间距
-    .ant-btn > .anticon + span,
-    .ant-btn > span + .anticon {
+    .ant-btn>.anticon+span,
+    .ant-btn>span+.anticon {
       margin-left: 5px;
     }
 
@@ -135,10 +149,11 @@ body,
           padding: 0;
         }
       }
+
       .ant-table-wrapper .ant-table-pagination-right {
         justify-content: center;
 
-        > li {
+        >li {
           // width: 26px;
           height: 26px;
           margin: @padding-sm;
@@ -228,20 +243,23 @@ body,
       }
     }
   }
+
   .ant-table-thead {
-    > tr {
-      > th {
+    >tr {
+      >th {
         padding: 12px;
       }
     }
   }
+
   .ant-table-tbody {
-    > tr {
-      > td {
+    >tr {
+      >td {
         padding: 12px;
       }
     }
   }
+
   // 调整主色调按钮的颜色
   .ant-btn-primary {
     background-color: @btn-primary-bg;
@@ -258,13 +276,14 @@ body,
     width: 100%;
     overflow-x: auto;
 
-    &-thead > tr,
-    &-tbody > tr {
-      > th,
-      > td {
+    &-thead>tr,
+    &-tbody>tr {
+
+      >th,
+      >td {
         white-space: pre;
 
-        > span {
+        >span {
           display: block;
         }
       }
@@ -273,8 +292,9 @@ body,
 }
 
 // 兼容IE11
-@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
-  body .ant-design-pro > .ant-layout {
+@media screen and(-ms-high-contrast: active),
+(-ms-high-contrast: none) {
+  body .ant-design-pro>.ant-layout {
     min-height: 100vh;
   }
 }
