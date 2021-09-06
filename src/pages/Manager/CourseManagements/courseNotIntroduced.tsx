@@ -116,7 +116,7 @@ const courseNotIntroduced = () => {
       search: false,
       width: 110,
       render: (text, record) => {
-        return record.KHKCSQs?.length === 0 ? '未引入' : '已引入';
+        return record.KHKCSQs?.length === 0 ? '未引入' : '待确认';
       },
     },
     {
@@ -145,27 +145,49 @@ const courseNotIntroduced = () => {
             >
               机构详情
             </a>
-            <a
-              onClick={async () => {
-                const params = {
-                  ZT: 0,
-                  KHKCSJId: record?.id || '',
-                  SQR: currentUser?.username || '',
-                  SQRId: currentUser?.userId || '',
-                  XXJBSJId: currentUser?.xxId || '',
-                  KHJYJGId: record?.KHJYJG?.id || '',
-                };
-                const res = await createKHKCSQ(params);
-                if (res.status === 'ok') {
-                  message.success('操作成功');
-                  action?.reload();
-                } else {
-                  message.error('操作失败');
-                }
-              }}
-            >
-              引入
-            </a>
+            {record.KHKCSQs?.length === 0 ? (
+              <a
+                onClick={async () => {
+                  const params = {
+                    KHKCSJId: record?.id || '',
+                    SQR: currentUser?.username || '',
+                    SQRId: currentUser?.userId || '',
+                    XXJBSJId: currentUser?.xxId || '',
+                    KHJYJGId: record?.KHJYJG?.id || '',
+                  };
+                  const res = await createKHKCSQ({ ...params, ZT: 0 });
+                  if (res.status === 'ok') {
+                    message.success('操作成功');
+                    action?.reload();
+                  } else {
+                    message.error('操作失败');
+                  }
+                }}
+              >
+                引入
+              </a>
+            ) : (
+              <a
+                onClick={async () => {
+                  const params = {
+                    KHKCSJId: record?.id || '',
+                    SQR: currentUser?.username || '',
+                    SQRId: currentUser?.userId || '',
+                    XXJBSJId: currentUser?.xxId || '',
+                    KHJYJGId: record?.KHJYJG?.id || '',
+                  };
+                  const res = await createKHKCSQ({ ...params, ZT: 3 });
+                  if (res.status === 'ok') {
+                    message.success('操作成功');
+                    action?.reload();
+                  } else {
+                    message.error('操作失败');
+                  }
+                }}
+              >
+                取消引入
+              </a>
+            )}
           </Space>
         );
       },

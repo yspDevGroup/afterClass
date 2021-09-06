@@ -241,11 +241,21 @@ const CourseManagement = () => {
       },
     },
     {
-      title: '发布状态',
+      title: '班级状态',
       dataIndex: 'BJZT',
       key: 'BJZT',
       align: 'center',
       width: 100,
+      render: (text, record) => {
+        switch (text) {
+          case '已发布':
+            return '已开班';
+          case '已下架':
+            return '已取消';
+          default:
+            return text;
+        }
+      },
     },
     {
       title: '操作',
