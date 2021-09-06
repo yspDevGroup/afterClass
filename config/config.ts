@@ -25,7 +25,7 @@ export default defineConfig({
     ssoHost: 'http://platform.test.xianyunshipei.com',
     authType: 'wechat',
     clientId: 'ww20993d96d6755f55',
-    clientSecret: 'GioaHZFINvGOlb3e6rW2BBgjVEpHi-CUYBxGpC0NI9c',
+    clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
   },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout

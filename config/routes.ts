@@ -28,6 +28,10 @@
         component: './AuthCallback/password',
       },
       {
+        path: '/auth_callback/wechat',
+        component: './AuthCallback/wechat',
+      },
+      {
         path: '/auth_callback/overDue',
         component: './AuthCallback/OverDue',
       },
