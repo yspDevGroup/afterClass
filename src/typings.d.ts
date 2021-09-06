@@ -160,8 +160,18 @@ declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 declare const ENV_title: string;
 declare const ENV_subTitle: string;
 declare const ENV_copyRight: string;
-declare const ENV_backUrl: string;
+/** 访问域名 */
 declare const ENV_host: string;
+/** 后台地址 */
+declare const ENV_backUrl: string;
+/** 统一认证地址 */
+declare const ssoHost: string;
+/** 认证类型 */
+declare const authType: 'wechat' | 'password' | 'authorization_code';
+/** 认证客户端id */
+declare const clientId: string;
+/** 认证客户端密钥 */
+declare const clientSecret: string;
 
 declare const wx: any;
 declare const WWOpenData: any;
@@ -171,4 +181,18 @@ declare const wxInfo: {
 declare const xnxqInfo: {
   xnxqList: any;
   current: any;
+};
+
+type InitialState = {
+  settings?: Partial<LayoutSettings>;
+  currentUser?: API.CurrentUser;
+  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+};
+
+/** oAuth认证token */
+type TokenInfo = {
+  access_token: string;
+  expires_in?: string;
+  refresh_token?: string;
+  token_type?: string;
 };

@@ -1,13 +1,13 @@
-import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { notification } from 'antd';
-import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
+import type { RequestConfig } from 'umi';
 import { history, Link } from 'umi';
 import Footer from '@/components/Footer';
 import type { ResponseError } from 'umi-request';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import { getLoginPath } from './utils/utils';
+import { getAuthorization, getLoginPath, removeOAuthToken } from './utils/utils';
 import headerTop from '@/assets/headerTop.png';
+import { currentWechatUser } from './services/after-class/wechat';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 const loginPath: string = getLoginPath();
@@ -22,43 +22,38 @@ export const initialStateConfig = {
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
-export async function getInitialState(): Promise<{
-  settings?: Partial<LayoutSettings>;
-  currentUser?: API.CurrentUser;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
-}> {
+export async function getInitialState(): Promise<InitialState> {
   const fetchUserInfo = async () => {
     try {
-      const currentUserRes = await queryCurrentUser({
-        plat: 'school',
-      });
+      const currentUserRes =
+        authType === 'wechat' ? await currentWechatUser() : await queryCurrentUser({});
       if (currentUserRes.status === 'ok') {
-        // sessionStorage.setItem('csrf', currentUser?.csrfToken || '');
         const { info } = currentUserRes.data || {};
         if (!info) {
           // 如果后台未查询到用户信息，则跳转到登录页
           // 此时不能无条件跳转向认证页，否则可能产生无限循环
           history.push('/user/login');
-          // currentToken = '';
           localStorage.removeItem('token');
           return undefined;
         }
-        // currentToken = token;
-        // localStorage.setItem('token', token || '');
         return info as API.CurrentUser;
       }
     } catch (error) {
-      // history.push(loginPath);
-      window.location.href = loginPath;
+      if (loginPath.startsWith('http')) {
+        // 企业微信端打开
+        window.location.href = loginPath;
+      } else {
+        history.push(loginPath);
+      }
     }
     return undefined;
   };
   // 处理微信端多身份数据重合问题
   if (window.location.pathname === '/' && history.length <= 2) {
-    localStorage.removeItem('token');
+    removeOAuthToken();
   }
   // 如果是登录页面及认证跳转页，不执行
-  if (history.location.pathname !== loginPath && history.location.pathname !== authCallbackPath) {
+  if (history.location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
@@ -73,7 +68,7 @@ export async function getInitialState(): Promise<{
 }
 
 // https://umijs.org/zh-CN/plugins/plugin-layout
-export const layout: RunTimeLayoutConfig = ({ initialState }) => {
+export const layout = ({ initialState }: { initialState: InitialState }) => {
   return {
     rightContentRender: false,
     disableContentMargin: false,
@@ -89,7 +84,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       // 如果没有登录或第一次进入首页，重定向到 login
       if (
         !initialState?.currentUser &&
-        ![loginPath, authCallbackPath].includes(location.pathname)
+        location.pathname !== loginPath &&
+        !location.pathname.startsWith(authCallbackPath)
       ) {
         if (loginPath.startsWith('http')) {
           // 企业微信端打开
@@ -101,20 +97,20 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     },
     links: isDev
       ? [
-        <Link to="/umi/plugin/openapi" target="_blank">
-          <LinkOutlined />
-          <span>openAPI 文档</span>
-        </Link>,
-        <Link to="/~docs" target="_blank">
-          <BookOutlined />
-          <span>业务组件文档</span>
-        </Link>,
-      ]
+          <Link to="/umi/plugin/openapi" target="_blank">
+            <LinkOutlined />
+            <span>openAPI 文档</span>
+          </Link>,
+          <Link to="/~docs" target="_blank">
+            <BookOutlined />
+            <span>业务组件文档</span>
+          </Link>,
+        ]
       : [],
     collapsedButtonRender: false,
     menuHeaderRender: () => {
       return (
-        <div className='cusHeaderLogo'>
+        <div className="cusHeaderLogo">
           <Link to="/">
             <img src={headerTop} />
           </Link>
@@ -184,7 +180,7 @@ export const request: RequestConfig = {
     async function middlewareA(ctx, next) {
       ctx.req.options.headers = {
         ...ctx.req.options.headers,
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: getAuthorization(),
       };
       await next();
     },

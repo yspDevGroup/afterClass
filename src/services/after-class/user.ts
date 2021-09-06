@@ -47,6 +47,7 @@ export async function currentUser(
         jyjId?: string | any;
         xxId?: string | any;
         XXDM?: string;
+        XD?: string;
         loginName?: string;
         username?: string;
         avatar?: string;
@@ -125,6 +126,7 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
       jyjId?: string | any;
       xxId?: string | any;
       XXDM?: string;
+      XD?: string;
       loginName?: string;
       username?: string;
       avatar?: string;
@@ -190,10 +192,10 @@ export async function deleteUser(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/user/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -209,6 +211,8 @@ export async function homePageInfo(
     XXJBSJId?: string;
     /** 学生ID */
     XSId?: string;
+    /** 教师ID */
+    JSId?: string;
   },
   options?: { [key: string]: any },
 ) {

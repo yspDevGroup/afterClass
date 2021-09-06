@@ -2,8 +2,8 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-09-05 10:35:52
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-09-06 18:50:37
+ * @LastEditors: zpl
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
@@ -25,8 +25,25 @@ const Index = () => {
       default:
         break;
     }
-  }, [initialState?.currentUser?.auth]);
-  return <div><img style={{width:'50vw',maxWidth:'400px',margin:'0 auto',paddingTop:'15vh',display:'block'}} src={loadImg} /></div>;
+    if (initialState?.currentUser?.adminAuth?.includes('系统管理')) {
+      // 支持PC登录，默认为管理员
+      history.replace('/homepage');
+    }
+  }, [initialState?.currentUser?.adminAuth, initialState?.currentUser?.auth]);
+  return (
+    <div>
+      <img
+        style={{
+          width: '50vw',
+          maxWidth: '400px',
+          margin: '0 auto',
+          paddingTop: '15vh',
+          display: 'block',
+        }}
+        src={loadImg}
+      />
+    </div>
+  );
 };
 
 export default Index;

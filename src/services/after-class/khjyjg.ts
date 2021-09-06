@@ -11,7 +11,7 @@ export async function KHJYJG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -49,7 +49,7 @@ export async function KHJYJG(
     message?: string;
   }>(`/khjyjg/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -63,10 +63,10 @@ export async function deleteKHJYJG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjyjg/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -152,13 +152,13 @@ export async function updateKHJYJG(
   body: API.UpdateKHJYJG,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjyjg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

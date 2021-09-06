@@ -10,7 +10,8 @@ import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { DateRange, Week } from './Timefunction';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
-const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+const reg =
+  /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
 export const isUrl = (path: string): boolean => reg.test(path);
 
@@ -76,6 +77,77 @@ export const mergeAuthority = (router: MenuDataItem, ahList: AhType[]): MenuData
   };
 };
 
+/**
+ * 从缓存中取出oAuth token
+ *
+ * @return {*}
+ */
+export const getOauthToken = () => {
+  return {
+    ysp_access_token: localStorage.getItem('ysp_access_token'),
+    ysp_expires_in: localStorage.getItem('ysp_expires_in'),
+    ysp_refresh_token: localStorage.getItem('ysp_refresh_token'),
+    ysp_token_type: localStorage.getItem('ysp_token_type'),
+  };
+};
+
+/**
+ * 客户端保存oAuth token
+ *
+ * @param {TokenInfo} token
+ */
+export const saveOAuthToken = async (token: TokenInfo) => {
+  return new Promise((resolve) => {
+    localStorage.setItem('ysp_access_token', token.access_token);
+    localStorage.setItem('ysp_expires_in', token.expires_in || '0');
+    localStorage.setItem('ysp_refresh_token', token.refresh_token || '');
+    localStorage.setItem('ysp_token_type', token.token_type || 'Bearer');
+    setTimeout(() => {
+      resolve('');
+    }, 200);
+  });
+};
+
+/**
+ * 客户端清除oAuth token
+ *
+ */
+export const removeOAuthToken = () => {
+  localStorage.removeItem('ysp_access_token');
+  localStorage.removeItem('ysp_expires_in');
+  localStorage.removeItem('ysp_refresh_token');
+  localStorage.removeItem('ysp_token_type');
+};
+
+/**
+ * 组装请求头部token信息
+ *
+ * @return {*}  {string}
+ */
+export const getAuthorization = (): string => {
+  const tokenType = localStorage.getItem('ysp_token_type') || 'Bearer';
+  const accessToken = localStorage.getItem('ysp_access_token');
+  if (tokenType && accessToken) {
+    return `${tokenType} ${accessToken}`;
+  }
+  return '';
+};
+
+/**
+ * 封装获取 cookie 的方法
+ *
+ * @param {string} name
+ * @return {*}
+ */
+export const getCookie = (name: string): string => {
+  const cookieReg = new RegExp(`(^| )${name}=([^;]*)(;|$)`);
+  const arr = document.cookie.match(cookieReg);
+  if (arr) {
+    return unescape(arr[2]);
+  }
+  return '';
+};
+
 export const envjudge = () => {
   const isMobile = window.navigator.userAgent.match(
     /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
@@ -102,23 +174,41 @@ export const envjudge = () => {
 
 export const getLoginPath = () => {
   let loginPath: string;
-  switch (envjudge()) {
-    case 'com-wx-pc': // PC端企业微信
-      loginPath = `${ENV_backUrl}/wechat/platAuth?plat=qywx&isMobile=false`;
+  // switch (envjudge()) {
+  //   case 'com-wx-pc': // PC端企业微信
+  //     loginPath = `${ENV_backUrl}/wechat/platAuth?plat=qywx&isMobile=false`;
+  //     break;
+  //   case 'com-wx-mobile': // 手机端企业微信
+  //     loginPath = `${ENV_backUrl}/wechat/platAuth?plat=qywx&isMobile=true`;
+  //     break;
+  //   case 'wx-pc': // PC端微信
+  //     loginPath = `${ENV_backUrl}/wechat/platAuth?plat=wx&isMobile=false`;
+  //     break;
+  //   case 'wx-mobile': // 手机端微信
+  //     loginPath = `${ENV_backUrl}/wechat/platAuth?plat=wx&isMobile=true`;
+  //     break;
+  //   case 'mobile': // 手机
+  //   case 'pc': // PC
+  //   default:
+  //     loginPath = '/user/login'; // `${ENV_backUrl}/auth/wechat`;
+  //     break;
+  // }
+  switch (authType) {
+    case 'wechat':
+      // 前提是本应该已经注册为微信认证，且正确配置认证回调地址为 ${ENV_host}/auth_callback/wechat
+      loginPath = `${ssoHost}/oauth2/Wechat?client_id=${clientId}&client_secret=${clientSecret}`;
       break;
-    case 'com-wx-mobile': // 手机端企业微信
-      loginPath = `${ENV_backUrl}/wechat/platAuth?plat=qywx&isMobile=true`;
+    case 'authorization_code':
+      // TODO 待处理
+      loginPath = `${ssoHost}/oauth2/code?client_id=${clientId}&response_type=${authType}&redirect_uri=${''}state=${''}scope=${''}`;
       break;
-    case 'wx-pc': // PC端微信
-      loginPath = `${ENV_backUrl}/wechat/platAuth?plat=wx&isMobile=false`;
-      break;
-    case 'wx-mobile': // 手机端微信
-      loginPath = `${ENV_backUrl}/wechat/platAuth?plat=wx&isMobile=true`;
-      break;
-    case 'mobile': // 手机
-    case 'pc': // PC
+    case 'password':
     default:
-      loginPath = '/user/login'; // `${ENV_backUrl}/auth/wechat`;
+      {
+        // 为方便本地调试登录，认证回调地址通过参数传递给后台
+        const callback = encodeURIComponent(`${ENV_host}/auth_callback/password`);
+        loginPath = `${ssoHost}/oauth2/password?response_type=${authType}&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${callback}`;
+      }
       break;
   }
   return loginPath;
@@ -311,18 +401,4 @@ export const getData = async (bjid: string, xsId?: string) => {
   return {
     status: 'nothing',
   };
-};
-
-/**
- * 组装请求头部token信息
- *
- * @return {*}  {string}
- */
-export const getAuthorization = (): string => {
-  const tokenType = localStorage.getItem('ysp_token_type') || 'Bearer';
-  const accessToken = localStorage.getItem('ysp_access_token');
-  if (tokenType && accessToken) {
-    return `${tokenType} ${accessToken}`;
-  }
-  return '';
 };

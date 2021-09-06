@@ -20,8 +20,12 @@ export default defineConfig({
     ENV_title: '课后帮',
     ENV_subTitle: '',
     ENV_copyRight: '2021 版权所有：陕西凯锐信息技术有限公司',
-    ENV_backUrl: 'https://api.prod.xianyunshipei.com',
-    ENV_host: 'https://afterclass.prod.xianyunshipei.com',
+    ENV_host: 'http://afterclass.test.xianyunshipei.com',
+    ENV_backUrl: 'http://api.test.xianyunshipei.com',
+    ssoHost: 'http://platform.test.xianyunshipei.com',
+    authType: 'wechat',
+    clientId: 'ww20993d96d6755f55',
+    clientSecret: 'GioaHZFINvGOlb3e6rW2BBgjVEpHi-CUYBxGpC0NI9c',
   },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
@@ -76,9 +80,8 @@ export default defineConfig({
   openAPI: [
     {
       requestLibPath: "import { request } from 'umi'",
-      // schemaPath: 'https://api.prod.xianyunshipei.com/documentation/json',
-      schemaPath: 'http://192.168.0.113:3000/documentation/json',
-      // schemaPath: 'http://zpldongxie.gicp.net:3000/documentation/json',
+      schemaPath: 'http://api.test.xianyunshipei.com/documentation/json',
+      // schemaPath: 'http://192.168.0.113:3000/documentation/json',
       // schemaPath: join(__dirname, 'oneapi.json'),
       mock: false,
     },

@@ -24,6 +24,10 @@
         component: './AuthCallback',
       },
       {
+        path: '/auth_callback/password',
+        component: './AuthCallback/password',
+      },
+      {
         path: '/auth_callback/overDue',
         component: './AuthCallback/OverDue',
       },
@@ -158,7 +162,7 @@
       {
         path: '/announcements/service',
         name: 'service',
-        component:'./Manager/Announcements/Service'
+        component: './Manager/Announcements/Service',
       },
       {
         path: '/announcements/service/editArticle',
