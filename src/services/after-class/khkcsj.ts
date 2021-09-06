@@ -30,7 +30,7 @@ export async function getAllKHKCSJ(
     /** 是否与班级关联查询 */
     isRequired?: boolean;
     /** 课程类型ID */
-    kclxId?: string;
+    KHKCLXId?: string;
     /** 学年学期ID */
     XNXQId?: string;
     /** 学校ID */
@@ -42,11 +42,13 @@ export async function getAllKHKCSJ(
     /** 页数 */
     page?: number;
     /** 课程来源 */
-    KCLY?: string;
+    SSJGLX?: string;
     /** 每页记录数 */
     pageSize?: number;
     /** 课程名称 */
-    name?: string;
+    KCMC?: string;
+    /** 课后教育机构名称 */
+    KHJYJG?: string;
   },
   options?: { [key: string]: any },
 ) {

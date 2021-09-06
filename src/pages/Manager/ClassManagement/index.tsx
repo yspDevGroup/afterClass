@@ -374,13 +374,13 @@ const CourseManagement = () => {
           currentUser={currentUser}
         />
         <PromptInformation
-          text="未查询到学年学期数据，请设置学年学期后再来"
+          text="未查询到学年学期数据，请先设置学年学期"
           link="/basicalSettings/termManagement"
           open={kai}
           colse={kaiguan}
         />
         <PromptInformation
-          text="未查询到课程名称，请设置课程后再来"
+          text="未查询到课程名称，请先设置课程"
           link=""
           open={tips}
           colse={clstips}

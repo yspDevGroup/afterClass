@@ -30,7 +30,7 @@
     ],
   },
   {
-    path:'/homepage',
+    path: '/homepage',
     name: 'homepage',
     icon: 'bank',
     component: './Manager/Homepage',
@@ -111,6 +111,17 @@
           },
         ],
       },
+      {
+        path: '/announcements/service',
+        name: 'service',
+        component:'./Manager/Announcements/Service'
+      },
+      {
+        path: '/announcements/service/editArticle',
+        hideInMenu: 'true',
+        name: 'articleDetails',
+        component: './Manager/Announcements/Service/editArticle',
+      },
     ],
   },
   {
@@ -125,24 +136,11 @@
         component: './Manager/CourseManagements',
         // hideInMenu: 'true',
       },
-      // {
-      //   path: '/courseManagements/Mechanism',
-      //   name: 'mechanism',
-      //   icon: 'smile',
-      //   component: './Manager/Mechanisms',
-      // },
       {
         path: '/courseManagements/mechanismCourse/edit',
         name: 'mechanismCourseInfo',
         hideInMenu: 'true',
         component: './Manager/Mechanisms/edit',
-      },
-      {
-        path: '/courseManagements/classMaintenance',
-        name: 'classMaintenance',
-        icon: 'smile',
-        hideInMenu: 'true',
-        component: './Manager/ClassMaintenance',
       },
     ],
   },
@@ -157,6 +155,12 @@
     name: 'courseScheduling',
     icon: 'CarryOutOutlined',
     component: './Manager/CourseScheduling',
+  },
+  {
+    path: '/teacherManagement',
+    name: 'teacherManagement',
+    icon: 'CreditCardOutlined',
+    component: './Manager/TeacherManagement',
   },
   {
     path: '/orderInquiry',
