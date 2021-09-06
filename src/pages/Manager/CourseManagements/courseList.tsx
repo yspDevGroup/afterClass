@@ -22,6 +22,7 @@ import { getAllNJSJ } from '@/services/after-class/njsj';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
 import { deleteKHKCSJ, getAllKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
+import { getAllGrades } from '@/services/after-class/khjyjg';
 
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
@@ -73,13 +74,13 @@ const CourseList = () => {
       }
     });
     // 适用年级
-    const resNJ = getAllNJSJ({ XXJBSJId: currentUser?.xxId });
+    const resNJ = getAllGrades({ XD: currentUser?.XD?.split(',') });
     Promise.resolve(resNJ).then((data) => {
       if (data.status === 'ok') {
         const optNJ: any[] = [];
         const nj = ['幼儿园', '小学', '初中', '高中'];
         nj.forEach((itemNJ) => {
-          data.data?.rows?.forEach((item) => {
+          data.data?.forEach((item) => {
             if (item.XD === itemNJ) {
               optNJ.push({
                 label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
