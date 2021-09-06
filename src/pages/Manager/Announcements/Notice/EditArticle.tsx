@@ -46,7 +46,6 @@ const EditArticle = () => {
   const [form] = Form.useForm();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { jgId } = currentUser!;
   const initialValues = {
     LX: 0,
     BH: 10,
@@ -68,8 +67,8 @@ const EditArticle = () => {
       SFTJ: SFTJ === true ? 1 : SFTJ,
       SFTT: SFTT === true ? 1 : SFTT,
       NR: NR.toHTML(),
-      KHJYJGId: jgId,
       TP: stateImg || '',
+      XXJBSJId: currentUser?.xxId,
     };
     try {
       if (typeof id === 'undefined') {

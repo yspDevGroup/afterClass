@@ -4,14 +4,14 @@
   .cusHeader {
     position: relative;
     height: 126px;
-    background: -o-linear-gradient(90deg, #1CDFA5 0%, #31AD65 100%);
-    background: -moz-linear-gradient(90deg, #1CDFA5 0%, #31AD65 100%);
-    background: -webkit-linear-gradient(90deg, #1CDFA5 0%, #31AD65 100%);
-    background: linear-gradient(90deg, #1CDFA5 0%, #31AD65 100%);
+    background: -o-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
+    background: -moz-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
+    background: -webkit-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
+    background: linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
 
     .headerText {
-      z-index: 2;
       position: relative;
+      z-index: 2;
       padding: 26px 0 0 @padding-md;
 
       h4 {
@@ -21,7 +21,7 @@
         font-size: @font-size-lg;
         line-height: 24px;
 
-        &+div {
+        & + div {
           color: @text-color-secondary;
           font-size: @font-size-sm;
         }
@@ -60,9 +60,9 @@
     width: 100%;
     height: calc(100vh - 10rem);
     margin: 20px 0;
-    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    background-size: contain;
     opacity: 0.3;
   }
 
@@ -99,25 +99,24 @@
         color: #cccccc;
       }
 
-
       .noticeText {
         flex: auto;
         padding-left: @padding-md;
 
-        >span {
+        > span {
           display: block;
           width: calc(~'100vw - 110px');
+          margin: 10px 6px 4px 6px;
+          padding: 0 6px;
           overflow: hidden;
           line-height: 18px;
           white-space: nowrap;
           text-overflow: ellipsis;
-          padding: 0 6px;
-          margin: 10px 6px 4px 6px;
 
           &:nth-child(1) {
-            padding: 2px 5px;
             width: 63px;
             margin: 10px 6px 4px 6px;
+            padding: 2px 5px;
             color: @oriangeColor;
             font-size: @font-size-sm;
             line-height: 16px;
@@ -126,11 +125,11 @@
             border-radius: 11px;
           }
 
-          &+a {
-            color: @text-color;
+          & + a {
             display: inline-block;
             width: calc(~'100vw - 125px');
             overflow: hidden;
+            color: @text-color;
             white-space: nowrap;
             text-overflow: ellipsis;
           }
@@ -151,15 +150,15 @@
 
       .enrollText {
         padding: 7px;
+        overflow: hidden;
         color: #fff;
         font-weight: 600;
         line-height: 26px;
+        white-space: nowrap;
         text-align: center;
+        text-overflow: ellipsis;
         background: @oriangeBgColor;
         border-radius: 20px 20px 0px 20px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
       }
 
       .enrollDate {
@@ -174,23 +173,23 @@
   }
 
   :global {
-    .ant-tabs-tab+.ant-tabs-tab {
+    .ant-tabs-tab + .ant-tabs-tab {
       margin-left: 28px;
     }
 
-    .ant-tabs-top>.ant-tabs-nav,
-    .ant-tabs-bottom>.ant-tabs-nav,
-    .ant-tabs-top>div>.ant-tabs-nav,
-    .ant-tabs-bottom>div>.ant-tabs-nav {
+    .ant-tabs-top > .ant-tabs-nav,
+    .ant-tabs-bottom > .ant-tabs-nav,
+    .ant-tabs-top > div > .ant-tabs-nav,
+    .ant-tabs-bottom > div > .ant-tabs-nav {
       height: 22px;
       margin-bottom: 12px;
       line-height: 22px;
     }
 
-    .ant-tabs-top>.ant-tabs-nav::before,
-    .ant-tabs-bottom>.ant-tabs-nav::before,
-    .ant-tabs-top>div>.ant-tabs-nav::before,
-    .ant-tabs-bottom>div>.ant-tabs-nav::before {
+    .ant-tabs-top > .ant-tabs-nav::before,
+    .ant-tabs-bottom > .ant-tabs-nav::before,
+    .ant-tabs-top > div > .ant-tabs-nav::before,
+    .ant-tabs-bottom > div > .ant-tabs-nav::before {
       border-bottom: 0px;
     }
 
@@ -238,6 +237,7 @@
       }
 
       .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: #45c977;
         font-size: 14px;
       }
 
