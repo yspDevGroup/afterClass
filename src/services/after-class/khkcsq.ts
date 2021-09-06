@@ -133,12 +133,6 @@ export async function updateKHKCSQ(
 /** 学校查看机构课程的历史记录 POST /khkcsq/getHistoriesBySchool */
 export async function getHistoriesBySchool(
   body: {
-    /** 课程名称 */
-    KCMC?: string;
-    /** 课后教育机构名称 */
-    KHJYJG?: string;
-    /** 课程类型ID */
-    KHKCLXId?: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 页数 */
@@ -163,12 +157,6 @@ export async function getToIntroduceBySchool(
   body: {
     /** 行政区划码 */
     XZQHM?: string;
-    /** 课程名称 */
-    KCMC?: string;
-    /** 课后教育机构名称 */
-    KHJYJG?: string;
-    /** 课程类型ID */
-    KHKCLXId?: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 页数 */

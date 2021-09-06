@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-06 15:28:36
+ * @LastEditTime: 2021-09-05 16:15:20
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -24,17 +24,14 @@ import styles from './index.less';
 import { homePage } from '@/services/after-class/xxjbsj';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import DobuleList from './DobuleList';
-import { getXXTZGG } from '@/services/after-class/xxtzgg';
-import { KHJYJG } from '@/services/after-class/khjyjg';
-import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [homeData, setHomeData] = useState<any>();
-  const [policyData, setPolicyData] = useState<any>();
-  const [annoceData, setAnnoceData] = useState<any>();
+  const [courseData, setCourseData] = useState<any>();
+  const [applyData, setApplyData] = useState<any>();
 
   useEffect(() => {
     async function fetchData() {
@@ -46,34 +43,26 @@ const Index = () => {
         // 配置头部统计栏目数据
         setHomeData({ ...rest });
       };
-      // 校内通知
-      const result = await getXXTZGG({
-        XXJBSJId: currentUser?.xxId,
-        BT: '',
-        ZT: ['已发布'],
+      // 配置开设课程数据
+      const result = await getAllKHKCSJ({
+        pageSize: 6,
         page: 1,
-        pageSize: 3
+        isRequired: false,
+        XXJBSJId: currentUser?.xxId,
       });
       if (result.status === 'ok') {
-        setAnnoceData(result.data?.rows);
+        setCourseData(result.data?.rows);
       }
-      // 配置政策公告数据
-      if (currentUser?.jgId) {
-        const resgetKHJYJG = await KHJYJG({ id: currentUser?.jgId });
-        if (resgetKHJYJG.status === 'ok') {
-          const resgetXXTZGG = await getJYJGTZGG({
-            BT: '',
-            LX: 1,
-            ZT: ['已发布'],
-            XZQHM: resgetKHJYJG.data.XZQHM,
-            page: 1,
-            pageSize: 3
-          });
-          if (resgetXXTZGG.status === 'ok') {
-            setPolicyData(resgetXXTZGG.data?.rows);
-          }
-        }
-      }
+      // 配置待确认课程申请数据
+      // const response = await getKHKCSQ({
+      //   JGId: currentUser?.jgId,
+      //   ZT: [0],
+      //   page: 1,
+      //   pageSize: 3
+      // });
+      // if (response.status === 'ok') {
+      //   setApplyData(response.data?.rows);
+      // }
     };
     fetchData();
   }, []);
@@ -83,37 +72,33 @@ const Index = () => {
       <Topbar data={homeData} />
       <Row gutter={[24, 24]} className={styles.listWrapper}>
         <Col span={12}>
-          <Card title="校内通知" bordered={false} extra={<a href="/announcements/notice">更多<RightOutlined style={{ fontSize: '12px' }} /></a>}>
-            <List type='policy' data={annoceData} noDataImg={noAnnoce} noDataText="暂无信息" />
+          <Card title="开设课程" bordered={false} extra={<a href="/announcements/notice">更多<RightOutlined style={{ fontSize: '12px' }} /></a>}>
+            <DobuleList type='notice' data={courseData} noDataImg={noAnnoce} noDataText="暂无通知" />
           </Card>
         </Col>
         <Col span={12}>
-          <Card title="政策公告" bordered={false} extra={<a href="/announcements/policy">更多<RightOutlined style={{ fontSize: '12px' }} /></a>}>
-            <List type='policy' data={policyData} noDataImg={noData} noDataText="暂无信息" />
+          <Card title="待处理退课申请" bordered={false} extra={<a href="/announcements/policy">更多<RightOutlined style={{ fontSize: '12px' }} /></a>}>
+            <List type='policy' data={applyData} noDataImg={noData} noDataText="暂无信息" />
           </Card>
         </Col>
       </Row>
       <Row gutter={[24, 24]} className={styles.chartWrapper}>
         <Col span={24}>
-          <Card title="课后服务开启流程" bordered={false} extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>}>
-            <Row gutter={[24, 0]} className={styles.viewWrapper}>
-              <Col span={5}>
+          <Card title="课后服务开启流程" bordered={false} extra={<Button type='primary'><img src={exportImg} style={{marginRight:16}} />下载使用手册</Button>}>
+            <Row gutter={[24,0]} className={styles.viewWrapper}>
+              <Col span={6} style={{backgroundImage:`url(${arrow})`}}>
                 <p>
                   <h1>01</h1>
                   基本信息管理
                 </p>
                 <img src={home1} alt="" />
                 <ul>
-                  <li><Link to='/announcements/service'>课后服务协议配置</Link></li>
                   <li><Link to='/basicalSettings/termManagement'>学期学年维护</Link></li>
                   <li><Link to='/basicalSettings/periodMaintenance'>时段维护</Link></li>
                   <li><Link to='/basicalSettings/roomManagement'>场地维护</Link></li>
                 </ul>
               </Col>
-              <Col span={1} style={{display: 'flex',alignItems: 'center'}}>
-                <img src={arrow} alt="" />
-              </Col>
-              <Col span={5}>
+              <Col span={6} style={{backgroundImage:`url(${arrow})`}}>
                 <p>
                   <h1>02</h1>
                   课程、班级管理
@@ -124,10 +109,7 @@ const Index = () => {
                   <li><Link to='/classManagement'>班级管理</Link></li>
                 </ul>
               </Col>
-              <Col span={1} style={{display: 'flex',alignItems: 'center'}}>
-                <img src={arrow} alt="" />
-              </Col>
-              <Col span={5}>
+              <Col span={6} style={{backgroundImage:`url(${arrow})`}}>
                 <p>
                   <h1>03</h1>
                   排课管理
@@ -137,10 +119,7 @@ const Index = () => {
                   <li><Link to='/courseScheduling'>排课管理</Link></li>
                 </ul>
               </Col>
-              <Col span={1} style={{display: 'flex',alignItems: 'center'}}>
-                <img src={arrow} alt="" />
-              </Col>
-              <Col span={5}>
+              <Col span={6}>
                 <p>
                   <h1>04</h1>
                   班级、课程发布

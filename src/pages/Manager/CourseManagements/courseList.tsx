@@ -443,10 +443,16 @@ const CourseList = () => {
           currentUser={currentUser}
         />
         <PromptInformation
-          text="未查询到学年学期数据，请先设置学年学期"
+          text="未查询到学年学期数据，请设置学年学期后再来"
           link="/basicalSettings/termManagement"
           open={kai}
           colse={kaiguan}
+        />
+        <PromptInformation
+          text="未查询到课程类型，请设置课程类型后再来"
+          open={opentype}
+          colse={kaiguan}
+          event={Tips}
         />
         <Modal
           title="课程类型维护"

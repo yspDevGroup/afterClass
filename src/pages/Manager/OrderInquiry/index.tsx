@@ -6,8 +6,10 @@ import { getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import SearchComponent from '@/components/Search';
 import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
+import type { SearchDataType } from '@/components/Search/data';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import styles from './index.less';
 
@@ -95,10 +97,13 @@ const OrderInquiry = () => {
   }, [curXNXQId]);
   const columns: ColumnsType<API.KHXSDD> | undefined = [
     {
-      title: '学生姓名',
-      dataIndex: 'XSXM',
-      key: 'XSXM',
+      title: '课程名称',
+      dataIndex: 'KCMC',
+      key: 'KCMC',
       align: 'center',
+      render: (_text: any, record: any) => {
+        return <div>{record?.KHBJSJ?.KHKCSJ?.KCMC}</div>;
+      },
     },
     {
       title: '班级',
@@ -110,24 +115,32 @@ const OrderInquiry = () => {
       },
     },
     {
-      title: '课程名称',
-      dataIndex: 'KCMC',
-      key: 'KCMC',
+      title: '适用年级',
+      dataIndex: 'class',
+      key: 'class',
       align: 'center',
       render: (_text: any, record: any) => {
-        return <div>{record?.KHBJSJ?.KHKCSJ?.KCMC}</div>;
+        return (
+          <div className="ui-table-col-elp">
+            <Tooltip title={record?.KHBJSJ?.NJSName} arrowPointAtCenter>
+              {record?.KHBJSJ?.NJSName?.split(',')?.map((item: any, key: any) => {
+                return <Tag key={key}>{item}</Tag>;
+              })}
+            </Tooltip>
+          </div>
+        );
       },
-    },
-    {
-      title: '付款时间',
-      dataIndex: 'ZFSJ',
-      key: 'ZFSJ',
-      align: 'center',
     },
     {
       title: '订单费用(元)',
       dataIndex: 'DDFY',
       key: 'DDFY',
+      align: 'center',
+    },
+    {
+      title: '学生姓名',
+      dataIndex: 'XSXM',
+      key: 'XSXM',
       align: 'center',
     },
     {
@@ -239,7 +252,7 @@ const OrderInquiry = () => {
         />
       </div>
       <PromptInformation
-        text="未查询到学年学期数据，请先设置学年学期"
+        text="未查询到学年学期数据，请设置学年学期后再来"
         link="/basicalSettings/termManagement"
         open={kai}
         colse={kaiguan}

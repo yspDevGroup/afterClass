@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 11:07:27
- * @LastEditTime: 2021-09-06 14:06:21
+ * @LastEditTime: 2021-09-03 18:58:23
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
@@ -10,6 +10,7 @@ import { Empty } from 'antd';
 import noData from '@/assets/noData.png';
 
 import styles from './index.less';
+import moment from 'moment';
 import { Link } from 'umi';
 
 const List = (props: { type: string, data?: any, noDataImg?: any, noDataText?: string }) => {

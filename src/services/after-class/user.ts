@@ -47,7 +47,6 @@ export async function currentUser(
         jyjId?: string | any;
         xxId?: string | any;
         XXDM?: string;
-        XD?: string;
         loginName?: string;
         username?: string;
         avatar?: string;
@@ -126,7 +125,6 @@ export async function createUser(body: API.CreateUser, options?: { [key: string]
       jyjId?: string | any;
       xxId?: string | any;
       XXDM?: string;
-      XD?: string;
       loginName?: string;
       username?: string;
       avatar?: string;

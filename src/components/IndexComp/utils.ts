@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-08-24 19:59:45
- * @LastEditTime: 2021-09-06 15:30:47
+ * @LastEditTime: 2021-09-04 16:02:36
  * @LastEditors: Sissle Lynn
  */
 export const bgColor = [
@@ -33,28 +33,28 @@ export const bgColor = [
 ];
 export const topNum = [
   {
-    title: '本校课程班',
+    title: '本校开课中课程班',
     type: 'xxbjNum'
   },
   {
-    title: '机构课程班',
+    title: '机构开课中课程班',
     type: 'jgbjNum',
-  },
-  {
-    title: '开设课程',
-    type: 'kskcNum'
   },
   {
     title: '引入课程',
     type: 'yrkcNum'
   },
   {
-    title: '学校教师',
-    type: 'jsNum'
-  },
-  {
     title: '报名学生',
     type: 'xsNum'
+  },
+  {
+    title: '待处理反馈',
+    type: 'fkNum'
+  },
+  {
+    title: '待处理退款信息',
+    type: 'amount'
   }
 ];
 export const chartConfig: any = {
