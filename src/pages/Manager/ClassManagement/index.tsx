@@ -12,18 +12,15 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
-import SearchComponent from '@/components/Search';
 import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
-import type { SearchDataType } from '@/components/Search/data';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import styles from './index.less';
-import { searchData } from './searchConfig';
 import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
-import type { CourseItem, TableListParams } from './data';
+import type { CourseItem } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
-import moment from 'moment';
+import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 
 const { Option } = Select;
 
@@ -229,25 +226,6 @@ const CourseManagement = () => {
       },
     },
     {
-      title: '适用年级',
-      dataIndex: 'NJSName',
-      key: 'NJSName',
-      align: 'center',
-      ellipsis: true,
-      width: 300,
-      render: (_, record) => {
-        return (
-          <div className="ui-table-col-elp">
-            <Tooltip title={record.NJSName} arrowPointAtCenter>
-              {record.NJSName?.split(',')?.map((item: any) => {
-                return <Tag>{item}</Tag>;
-              })}
-            </Tooltip>
-          </div>
-        );
-      },
-    },
-    {
       title: '排课',
       align: 'center',
       width: 100,
@@ -269,42 +247,11 @@ const CourseManagement = () => {
       align: 'center',
       width: 100,
     },
-    // {
-    //   title: '课程状态',
-    //   dataIndex: 'KCZT',
-    //   key: 'KCZT',
-    //   align: 'center',
-    //   width: 100,
-    //   render: (_: any, record: any) => {
-    //     if (record.BJZT === '已发布') {
-    //       const { BMJSSJ, BMKSSJ, KHKCSJ } = record;
-    //       // 报名开始时间
-    //       const BMStartDate = BMKSSJ || KHKCSJ?.BMKSSJ;
-    //       // 报名结束时间
-    //       const BMEndDate = BMJSSJ || KHKCSJ?.BMJSSJ;
-    //       if (BMStartDate > toDay) {
-    //         return <div>未报名</div>;
-    //       }
-    //       if (toDay > BMStartDate && toDay < BMEndDate) {
-    //         return <div>报名中</div>;
-    //       }
-    //       if (toDay < BMEndDate && toDay > KHKCSJ?.KKRQ) {
-    //         return <div>未开课</div>;
-    //       }
-    //       if (toDay > KHKCSJ?.KKRQ && toDay < KHKCSJ?.JKRQ) {
-    //         return <div>开课中</div>;
-    //       }
-    //       if (toDay > KHKCSJ?.JKRQ) {
-    //         return <div>已结课</div>;
-    //       }
-    //     }
-    //     return <>-</>;
-    //   },
-    // },
     {
       title: '操作',
       valueType: 'option',
       key: 'option',
+      align: 'center',
       width: 150,
       render: (_, record) => {
         return (

@@ -24,6 +24,7 @@ import moment from 'moment';
 import AsyncTimePeriodForm from './components/AsyncTimePeriodForm';
 import type { ReactNode } from 'react';
 import { enHenceMsg } from '@/utils/utils';
+import { useModel } from 'umi';
 
 const PeriodMaintenance = () => {
   const [currentStatus, setCurrentStatus] = useState<string | undefined>('enroll');
@@ -31,6 +32,8 @@ const PeriodMaintenance = () => {
   const [current, setCurrent] = useState<Maintenance>();
   const [form, setForm] = useState<FormInstance<any>>();
   const actionRef = useRef<ActionType>();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   let requestType = ['1'];
   let formatType = 'YYYY-MM-DD';
   if (currentStatus === 'education') {
@@ -50,8 +53,7 @@ const PeriodMaintenance = () => {
       formatType = 'HH:mm';
     }
     const parpm = {
-      xn: data.XNXQ?.XN,
-      xq: data.XNXQ?.XQ,
+      XNXQId: data.XNXQ?.id,
       KSSJ: moment(data.KSSJ, formatType),
       JSSJ: moment(data.JSSJ, formatType),
     };
@@ -81,8 +83,11 @@ const PeriodMaintenance = () => {
         rest.KSSJ = moment(rest.KSSJ).format(formatType);
         rest.JSSJ = moment(rest.JSSJ).format(formatType);
         const result = id
-          ? await updateXXSJPZ({ id }, { ...rest, TYPE: requestType[0] })
-          : await createXXSJPZ({ ...rest, TYPE: requestType[0] });
+          ? await updateXXSJPZ(
+              { id },
+              { ...rest, TYPE: requestType[0], XXJBSJId: currentUser?.xxId },
+            )
+          : await createXXSJPZ({ ...rest, TYPE: requestType[0], XXJBSJId: currentUser?.xxId });
         if (result.status === 'ok') {
           message.success(id ? '信息更新成功' : '信息新增成功');
           setModalVisible(false);

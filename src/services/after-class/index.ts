@@ -8,8 +8,8 @@ import * as user from './user';
 import * as bjsj from './bjsj';
 import * as jzgjbsj from './jzgjbsj';
 import * as fjlx from './fjlx';
-import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
+import * as fjsj from './fjsj';
 import * as jcxx from './jcxx';
 import * as jxjhsj from './jxjhsj';
 import * as jyjgsj from './jyjgsj';
@@ -31,36 +31,36 @@ import * as khjytzgg from './khjytzgg';
 import * as khkclx from './khkclx';
 import * as khkcsj from './khkcsj';
 import * as khkcsq from './khkcsq';
+import * as khpksj from './khpksj';
 import * as khtksj from './khtksj';
 import * as khxscq from './khxscq';
 import * as khxsdd from './khxsdd';
-import * as khpksj from './khpksj';
 import * as khxspj from './khxspj';
-import * as njsj from './njsj';
 import * as khxsqj from './khxsqj';
 import * as pksj from './pksj';
-import * as redis from './redis';
+import * as njsj from './njsj';
 import * as sso from './sso';
 import * as upload from './upload';
 import * as xksj from './xksj';
 import * as wechat from './wechat';
-import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
-import * as xnxq from './xnxq';
-import * as xqsj from './xqsj';
+import * as xl from './xl';
 import * as xscfsj from './xscfsj';
+import * as xqsj from './xqsj';
+import * as xnxq from './xnxq';
 import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
 import * as xsjtcy from './xsjtcy';
+import * as redis from './redis';
+import * as xsxxjl from './xsxxjl';
 import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
-import * as xsxxjl from './xsxxjl';
-import * as xxpz from './xxpz';
 import * as xxjbpz from './xxjbpz';
-import * as xxsjpz from './xxsjpz';
+import * as xxpz from './xxpz';
 import * as xxtzgg from './xxtzgg';
-import * as zxsj from './zxsj';
+import * as xxsjpz from './xxsjpz';
 import * as zxfa from './zxfa';
+import * as zxsj from './zxsj';
 export default {
   other,
   auth,
@@ -68,8 +68,8 @@ export default {
   bjsj,
   jzgjbsj,
   fjlx,
-  fjsj,
   jcsj,
+  fjsj,
   jcxx,
   jxjhsj,
   jyjgsj,
@@ -91,34 +91,34 @@ export default {
   khkclx,
   khkcsj,
   khkcsq,
+  khpksj,
   khtksj,
   khxscq,
   khxsdd,
-  khpksj,
   khxspj,
-  njsj,
   khxsqj,
   pksj,
-  redis,
+  njsj,
   sso,
   upload,
   xksj,
   wechat,
-  xl,
   xnjgsj,
-  xnxq,
-  xqsj,
+  xl,
   xscfsj,
+  xqsj,
+  xnxq,
   xsjbsj,
   xsjlsj,
   xsjtcy,
+  redis,
+  xsxxjl,
   xxgg,
   xxjbsj,
-  xsxxjl,
-  xxpz,
   xxjbpz,
-  xxsjpz,
+  xxpz,
   xxtzgg,
-  zxsj,
+  xxsjpz,
   zxfa,
+  zxsj,
 };

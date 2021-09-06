@@ -6,13 +6,13 @@ import ProFormFields from '@/components/ProFormFields';
 import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
-import { queryXQList } from '@/services/wechat/service';
 import moment from 'moment';
 import { getDepUserList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import WWOpenDataCom from './WWOpenDataCom';
 import { enHenceMsg } from '@/utils/utils';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
+import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 
 type AddCourseProps = {
   visible: boolean;
@@ -46,21 +46,21 @@ const AddCourse: FC<AddCourseProps> = ({
   const [form, setForm] = useState<any>();
   // 校区
   const [campus, setCampus] = useState<any>([]);
-  // 年级
-  const [grade, setGrade] = useState<any>();
   const [baoming, setBaoming] = useState<boolean>(true);
   const [kaike, setKaike] = useState<boolean>(true);
   // 教师
   const [teacherData, setTeacherData] = useState<any[]>([]);
   // 校区名字
   const [xQItem, setXQLabelItem] = useState<any>('');
-  // 年级名字
-  const [nJLabelItem, setNJLabelItem] = useState<any>([]);
 
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
   const [KHDateAll, setKHDateAll] = useState<any>({});
   const [KCDate, setKCDate] = useState<any>([]);
+  // 报名时间
+  const [BMData, setBMData] = useState<any>();
+  // 开课时间
+  const [KKData, setKKData] = useState<any>();
   useEffect(() => {
     if (formValues) {
       setBaoming(false);
@@ -94,26 +94,7 @@ const AddCourse: FC<AddCourseProps> = ({
 
   useEffect(() => {
     (async () => {
-      // 获取年级信息
-      // const currentXQ = await queryXQList();
       const XQ: { label: any; value: any }[] = [];
-      const NJ = {};
-      // currentXQ?.forEach((item: any) => {
-      //   XQ.push({
-      //     label: item.name,
-      //     value: item.id.toString(),
-      //   });
-      //   NJ[item.name] = item.njList.map((njItem: any) => ({
-      //     label: njItem.name,
-      //     value: njItem.id,
-      //   }));
-      // });
-      // setGrade(NJ);
-      // if (formValues?.id) {
-      //   setXQLabelItem(formValues?.NJSName?.toString());
-      // } else {
-      //   setXQLabelItem('');
-      // }
       // 获取校区数据
       const resXQ = await getAllXQSJ({ XXJBSJId: currentUser?.xxId });
       if (resXQ.status === 'ok') {
@@ -127,7 +108,27 @@ const AddCourse: FC<AddCourseProps> = ({
       }
     })();
   }, []);
+  useEffect(() => {
+    (async () => {
+      if (curXNXQId) {
+        // 获取时间配置
+        const resSJ = await getAllXXSJPZ({
+          XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
+          type: ['1', '2'],
+        });
 
+        if (resSJ.status === 'ok') {
+          // 报名时间 [1]
+          const BM = resSJ.data?.find((item) => item.TYPE === '1');
+          // 上课时间 [2]
+          const KK = resSJ.data?.find((item) => item.TYPE === '2');
+          setBMData(BM);
+          setKKData(KK);
+        }
+      }
+    })();
+  }, [curXNXQId]);
   // 获取标题
   const getTitle = () => {
     if (formValues && names === 'chakan') {
@@ -314,25 +315,6 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       },
     },
-    // {
-    //   type: 'select',
-    //   name: 'NJS',
-    //   key: 'NJS',
-    //   label: '适用年级:',
-    //   rules: [{ required: true, message: '请填写适用年级' }],
-    //   fieldProps: {
-    //     mode: 'multiple',
-    //     options: grade ? grade[xQItem] : [],
-    //     onChange(_: any, option: any) {
-    //       const njsIabel: any[] = [];
-    //       option?.forEach((item: any) => {
-    //         njsIabel.push(item?.label);
-    //       });
-    //       setNJLabelItem(njsIabel);
-    //     },
-    //   },
-    //   disabled: readonly,
-    // },
     {
       type: 'group',
       disabled: readonly,
@@ -402,37 +384,6 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
-    // KHDateAll?.id
-    //   ? {
-    //       type: 'divTab',
-    //       text: `(默认报名时间段)：${KHDateAll?.BMKSSJ?.slice(0, 10)} — ${KHDateAll?.BMJSSJ?.slice(
-    //         0,
-    //         10,
-    //       )}`,
-    //       style: { marginBottom: 8, color: '#bbbbbb' },
-    //     }
-    //   : '',
-    // {
-    //   type: 'div',
-    //   key: 'div',
-    //   label: `单独设置报名时段：`,
-    //   disabled: readonly,
-    //   lineItem: [
-    //     {
-    //       type: 'switch',
-    //       readonly,
-    //       fieldProps: {
-    //         onChange: (item: any) => {
-    //           if (item === false) {
-    //             return setBaoming(true);
-    //           }
-    //           return setBaoming(false);
-    //         },
-    //         checked: !baoming,
-    //       },
-    //     },
-    //   ],
-    // },
     {
       type: 'dateRange',
       label: `报名时段:`,
@@ -440,56 +391,28 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'BMSD',
       disabled: readonly,
       width: '100%',
-      hidden: baoming,
-      rules: [{ required: !baoming, message: '请选择报名时段' }],
+      // hidden: baoming,
+      rules: [{ required: true, message: '请选择报名时段' }],
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > KHDateAll?.BMJSSJ || defaults < KHDateAll?.BMKSSJ;
+          return defaults > BMData?.JSSJ || defaults < BMData?.KSSJ;
         },
       },
     },
-    // KHDateAll?.id
-    //   ? {
-    //       type: 'divTab',
-    //       text: `(默认上课时间段)：${KHDateAll?.KKRQ} — ${KHDateAll?.JKRQ}`,
-    //       style: { marginBottom: 8, color: '#bbbbbb' },
-    //     }
-    //   : '',
-    // {
-    //   type: 'div',
-    //   key: 'div1',
-    //   disabled: readonly,
-    //   label: `单独设置上课时段：`,
-    //   lineItem: [
-    //     {
-    //       type: 'switch',
-    //       disabled: readonly,
-    //       fieldProps: {
-    //         onChange: (item: any) => {
-    //           if (item === false) {
-    //             return setKaike(true);
-    //           }
-    //           return setKaike(false);
-    //         },
-    //         checked: !kaike,
-    //       },
-    //     },
-    //   ],
-    // },
     {
       type: 'dateRange',
-      label: '上课时间:',
+      label: '上课时段:',
       name: 'SKSD',
       key: 'SKSD',
       width: '100%',
-      hidden: kaike,
-      rules: [{ required: !kaike, message: '请选择上课时间' }],
+      // hidden: kaike,
+      rules: [{ required: true, message: '请选择上课时间' }],
       disabled: readonly,
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults < formValues?.KKRQ || defaults > formValues?.JKRQ;
+          return defaults < KKData?.KSSJ || defaults > KKData?.JSSJ;
         },
       },
     },

@@ -276,7 +276,7 @@ export async function homePageInfo(
       kskc?: {
         id?: string;
         KCLX?: string;
-        KBYS?: string;
+        KCTAG?: string;
         KHKCSJs?: {
           id?: string;
           KCMC?: string;

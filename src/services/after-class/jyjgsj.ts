@@ -25,6 +25,7 @@ export async function JYJGSJ(
       BMIPFW?: string;
       BZ?: string;
       ZT?: number;
+      CorpID?: string;
     };
     message?: string;
   }>(`/jyjgsj/${param0}`, {
@@ -66,6 +67,7 @@ export async function createJYJGSJ(body: API.CreateJYJGSJ, options?: { [key: str
       BMIPFW?: string;
       BZ?: string;
       ZT?: number;
+      CorpID?: string;
     };
     message?: string;
   }>('/jyjgsj/create', {

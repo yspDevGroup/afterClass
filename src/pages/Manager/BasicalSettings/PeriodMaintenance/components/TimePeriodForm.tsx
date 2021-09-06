@@ -20,20 +20,21 @@ type PropsType = {
 
 const TimePeriodForm = (props: PropsType) => {
   const { currentStatus, current, setForm } = props;
-  const [chainData, setchainData] = useState<ChainDataType>(); // 联动数据
   const [terms, setTerms] = useState<{ label: string; value: string }[]>(); // 联动数据中的学期数据
-  const [currentTerm, setCurrentTerm] = useState<string>();
   useEffect(() => {
     async function fetchData() {
       // 从本地获取学期学年信息
-      const currentXQXN = await queryXNXQList();
-      setchainData(currentXQXN?.xnxqList); // 改变联动数据
-      if (current?.XNXQ?.XN) {
-        setTerms(currentXQXN?.xnxqList.subData[current?.XNXQ?.XN]);
-      }
+      const res = await queryXNXQList();
+      const newData = res.xnxqList.map((item: any) => {
+        return {
+          label: item.text,
+          value: item.value,
+        };
+      });
+      setTerms(newData);
     }
     fetchData();
-  }, [current?.XNXQ?.XN]);
+  }, []);
 
   const formItems: any[] = [
     {
@@ -62,40 +63,14 @@ const TimePeriodForm = (props: PropsType) => {
       },
     },
     {
-      type: 'cascader',
+      type: 'select',
       label: '学年学期：',
-      key: 'XNXQ',
-      style: { marginBottom: 0 },
-      rules: [{ required: true, message: '请填写学年学期' }],
-      cascaderItem: [
-        {
-          type: 'select',
-          width: '100%',
-          name: 'xn',
-          key: 'xn',
-          placeholder: '请选择学年',
-          options: chainData?.data,
-          rules: [{ required: true, message: '请选择学年' }],
-          fieldProps: {
-            onChange: (event: string) => {
-              if (event) {
-                setTerms(chainData?.subData[event]);
-                setCurrentTerm(chainData?.subData[event][0].value);
-              }
-            },
-          },
-        },
-        {
-          type: 'select',
-          name: 'xq',
-          width: '100%',
-          key: 'xq',
-          rules: [{ required: true, message: '请选择学期' }],
-          placeholder: '请选择学期',
-          // noStyle: true,
-          options: terms,
-        },
-      ],
+      name: 'XNXQId',
+      width: '100%',
+      key: 'XNXQId',
+      rules: [{ required: true, message: '请选择学期' }],
+      placeholder: '请选择学期',
+      options: terms,
     },
     {
       type: currentStatus === 'schedule' ? 'time' : 'date',
@@ -143,7 +118,7 @@ const TimePeriodForm = (props: PropsType) => {
       <ProFormFields
         layout="horizontal"
         setForm={setForm}
-        values={currentTerm ? { xq: currentTerm } : current}
+        values={current}
         formItems={formItems}
         formItemLayout={formLayout}
       />
