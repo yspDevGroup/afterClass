@@ -223,6 +223,18 @@ const CourseList = () => {
       ellipsis: true,
     },
     {
+      title: '课程来源',
+      align: 'center',
+      width: 110,
+      key: 'SSJGLX',
+      dataIndex: 'SSJGLX',
+      valueType: 'select',
+      valueEnum: {
+        校内课程: { text: '校内课程' },
+        机构课程: { text: '机构课程' },
+      },
+    },
+    {
       title: '机构名称',
       align: 'center',
       width: 200,
@@ -244,22 +256,6 @@ const CourseList = () => {
       render: (_, record) => {
         return <>{record.KHKCLX?.KCTAG}</>;
       },
-    },
-    {
-      title: '课程来源',
-      align: 'center',
-      width: 110,
-      key: 'SSJGLX',
-      dataIndex: 'SSJGLX',
-      valueType: 'select',
-      valueEnum: {
-        校内课程: { text: '校内课程' },
-        机构课程: { text: '机构课程' },
-      },
-      // search: false,
-      // render: (_, record) => {
-      //   return <>{record.KHKCLX?.KCLX}</>;
-      // },
     },
     {
       title: '适用年级',

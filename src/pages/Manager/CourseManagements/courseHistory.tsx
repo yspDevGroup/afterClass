@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import EllipsisHint from '@/components/EllipsisHint';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { getHistoriesBySchool } from '@/services/after-class/khkcsq';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
+import { Tag } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import type { classType, TableListParams } from './data';
@@ -79,16 +81,20 @@ const CourseHistory = () => {
       dataIndex: 'NJSJs',
       search: false,
       align: 'center',
-      // render: (text: any) => {
-      //   return (
-      //     <EllipsisHint
-      //       width="100%"
-      //       text={text?.map((item: any) => {
-      //         return <Tag key={item.id}>{item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}</Tag>;
-      //       })}
-      //     />
-      //   );
-      // }
+      render: (text: any) => {
+        return (
+          <EllipsisHint
+            width="100%"
+            text={text?.map((item: any) => {
+              return (
+                <Tag key={item.id}>
+                  {item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}
+                </Tag>
+              );
+            })}
+          />
+        );
+      },
     },
   ];
   return (

@@ -25,7 +25,7 @@ const ActionBar = (props: propstype) => {
         if (data.status === 'ok') {
           message.success('下架成功');
           actionRef.current?.reload();
-        } else if (data.message!.indexOf('token') > -1 || (data.message!).indexOf('Token') > -1) {
+        } else if (data.message!.indexOf('token') > -1 || data.message!.indexOf('Token') > -1) {
           history.replace('/auth_callback/overDue');
         } else {
           message.error('下架失败，请联系管理员或稍后重试');
@@ -44,7 +44,7 @@ const ActionBar = (props: propstype) => {
       if (data.status === 'ok') {
         message.success('发布成功');
         actionRef.current?.reload();
-      } else if (data.message!.indexOf('token') > -1 || (data.message!).indexOf('Token') > -1) {
+      } else if (data.message!.indexOf('token') > -1 || data.message!.indexOf('Token') > -1) {
         history.replace('/auth_callback/overDue');
       } else {
         message.error('发布失败，请联系管理员或稍后重试');
@@ -96,7 +96,7 @@ const ActionBar = (props: propstype) => {
         <>
           {record.KHPKSJs && record.KHPKSJs?.length > 0 ? (
             <>
-              <a onClick={() => release(record)}>发布</a>
+              <a onClick={() => release(record)}>开班</a>
               <Divider type="vertical" />
               <Dropdown overlay={menu}>
                 <a onClick={(e) => e.preventDefault()}>
@@ -105,46 +105,46 @@ const ActionBar = (props: propstype) => {
               </Dropdown>
             </>
           ) : (
-              <>
-                <a onClick={() => handleEdit(record)}>编辑</a>
-                <Divider type="vertical" />
-                <Popconfirm
-                  title="删除之后，数据不可恢复，确定要删除吗?"
-                  onConfirm={async () => {
-                    try {
-                      if (record.id) {
-                        const params = { id: record.id };
-                        const res = deleteKHBJSJ(params);
-                        new Promise((resolve) => {
-                          resolve(res);
-                        }).then((data: any) => {
-                          if (data.status === 'ok') {
-                            message.success('删除成功');
-                            actionRef.current?.reload();
-                          } else {
-                            enHenceMsg(data.message);
-                          }
-                        });
-                      }
-                    } catch (err) {
-                      message.error('删除失败，请联系管理员或稍后重试。');
+            <>
+              <a onClick={() => handleEdit(record)}>编辑</a>
+              <Divider type="vertical" />
+              <Popconfirm
+                title="删除之后，数据不可恢复，确定要删除吗?"
+                onConfirm={async () => {
+                  try {
+                    if (record.id) {
+                      const params = { id: record.id };
+                      const res = deleteKHBJSJ(params);
+                      new Promise((resolve) => {
+                        resolve(res);
+                      }).then((data: any) => {
+                        if (data.status === 'ok') {
+                          message.success('删除成功');
+                          actionRef.current?.reload();
+                        } else {
+                          enHenceMsg(data.message);
+                        }
+                      });
                     }
-                  }}
-                  okText="确定"
-                  cancelText="取消"
-                  placement="topRight"
-                >
-                  <a>删除</a>
-                </Popconfirm>
-              </>
-            )}
+                  } catch (err) {
+                    message.error('删除失败，请联系管理员或稍后重试。');
+                  }
+                }}
+                okText="确定"
+                cancelText="取消"
+                placement="topRight"
+              >
+                <a>删除</a>
+              </Popconfirm>
+            </>
+          )}
         </>
       );
       break;
     case '已发布':
       return (
         <>
-          <a onClick={() => shelf(record)}>下架</a>
+          <a onClick={() => shelf(record)}>取消开班</a>
           <Divider type="vertical" />
           <a onClick={() => handleEdit(record)}>查看</a>
         </>
