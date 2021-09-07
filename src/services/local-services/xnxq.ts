@@ -1,6 +1,6 @@
-import { convertData } from "@/components/Search/util";
-import { getCurrentXQ } from "@/utils/utils";
-import { getAllXNXQ } from "../after-class/xnxq";
+import { convertData } from '@/components/Search/util';
+import { getCurrentXQ } from '@/utils/utils';
+import { getAllXNXQ } from '../after-class/xnxq';
 
 /**
  * 获取学年学期列表，使用缓存
@@ -8,10 +8,7 @@ import { getAllXNXQ } from "../after-class/xnxq";
  * @param {true} [refresh] 是否强制刷新
  * @return {*}
  */
-export const queryXNXQList = async (
-  refresh?: true,
-  params?: any
-): Promise<any> => {
+export const queryXNXQList = async (refresh?: true, params?: any): Promise<any> => {
   if (typeof xnxqInfo === 'undefined') {
     ((w) => {
       // eslint-disable-next-line no-param-reassign

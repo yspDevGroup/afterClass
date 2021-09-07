@@ -25,7 +25,7 @@ const PersonalHomepage = () => {
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
-      const result = await queryXNXQList();
+      const result = await queryXNXQList(undefined, { XXJBSJId: currentUser.xxId });
       if (result.current) {
         const children = currentUser?.subscriber_info?.children || [
           {

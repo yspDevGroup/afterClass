@@ -32,15 +32,15 @@ const Detail: React.FC = () => {
           return {
             FJSJ: item.FJSJ,
             XXSJPZ: item.XXSJPZ,
-            WEEKDAY: item.WEEKDAY
-          }
+            WEEKDAY: item.WEEKDAY,
+          };
         });
         setExtra(extraInfo);
       }
     } else {
       enHenceMsg(res1.message);
     }
-  }
+  };
   const getWxData = async () => {
     if (/MicroMessenger/i.test(navigator.userAgent)) {
       await initWXConfig(['checkJsApi']);
@@ -58,71 +58,99 @@ const Detail: React.FC = () => {
       fetchData(classid);
     }
   }, [classid]);
+  console.log(extra, '=====');
+  return (
+    <div className={styles.CourseDetails}>
+      {index === 'all' ? (
+        <GoBack title={'课程简介'} />
+      ) : (
+        <GoBack title={'课程简介'} onclick="/parent/home?index=index" />
+      )}
+      <div className={styles.wrap}>
+        {classDetail?.KHKCSJ?.KCTP && classDetail?.KHKCSJ?.KCTP.indexOf('http') > -1 ? (
+          <img
+            src={classDetail?.KHKCSJ?.KCTP}
+            alt=""
+            style={{ marginBottom: '18px', height: '200px' }}
+          />
+        ) : (
+          <div
+            style={{
+              padding: '10px',
+              border: '1px solid #F7F7F7',
+              textAlign: 'center',
+              marginBottom: '18px',
+            }}
+          >
+            <img style={{ width: '180px', height: 'auto', marginBottom: 0 }} src={noPic} />
+          </div>
+        )}
+        <p className={styles.title}>{classDetail?.KHKCSJ?.KCMC}</p>
 
-  return <div className={styles.CourseDetails}>
-    {
-      index === 'all' ?
-        <GoBack title={'课程简介'} /> :
-        <GoBack title={'课程简介'} onclick='/parent/home?index=index' />
-    }
-    <div className={styles.wrap}>
-      {
-        classDetail?.KHKCSJ?.KCTP && classDetail?.KHKCSJ?.KCTP.indexOf('http') > -1 ?
-          <img src={classDetail?.KHKCSJ?.KCTP} alt="" style={{ marginBottom: '18px', height: '200px' }} /> :
-          <div style={{ padding: '10px', border: '1px solid #F7F7F7', textAlign: 'center', marginBottom: '18px' }}><img style={{ width: '180px', height: 'auto', marginBottom: 0 }} src={noPic} /></div>
-      }
-      <p className={styles.title}>{classDetail?.KHKCSJ?.KCMC}</p>
-
-      <ul>
-        <li>上课时段：{moment(classDetail?.KKRQ).format('YYYY.MM.DD')}~{moment(classDetail?.JKRQ).format('YYYY.MM.DD')}</li>
-        <li>上课地点：{classDetail?.XQName}</li>
-      </ul>
-      <p className={styles.title}>课程简介</p>
-      <p className={styles.content}>{classDetail?.KHKCSJ?.KCMS}</p>
-      <Divider />
-      <ul className={styles.classInformation}>
-        <li>所在班级：{classDetail?.BJMC}</li>
-        <li className={styles.bzrname}>
-          班主任：{isLoading ? <WWOpenDataCom type="userName" openid={classDetail?.ZJS} /> : <></>}
-        </li>
-        <li className={styles.bzrname}>
-          副班：{isLoading ? 
-            classDetail?.FJS.split(',').map((item: any) => {
-              return <span style={{ marginRight: '1em' }}><WWOpenDataCom type="userName" openid={item} /></span>
-            }): <></>
-          }
-        </li>
-        <li>上课安排：
-          <table width='100%'>
-            <thead>
-              <tr>
-                <th>星期</th>
-                <th>节次</th>
-                <th>时间</th>
-                <th>校区</th>
-                <th>教室</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                extra?.map((values: { FJSJ: any, XXSJPZ: any, WEEKDAY: number }) => {
-                  const weeks = `星期${'日一二三四五六'.charAt(values.WEEKDAY)}`;
-                  return <tr key={values.XXSJPZ.TITLE}>
-                    <td>{weeks}</td>
-                    <td>{values.XXSJPZ.TITLE}</td>
-                    <td>{values.XXSJPZ.KSSJ.substring(0, 5)}-{values.XXSJPZ.JSSJ.substring(0, 5)}</td>
-                    <td>{values.FJSJ.XQName}</td>
-                    <td>{values.FJSJ.FJMC}</td>
-                  </tr>
-                })
+        <ul>
+          <li>
+            上课时段：{moment(classDetail?.KKRQ).format('YYYY.MM.DD')}~
+            {moment(classDetail?.JKRQ).format('YYYY.MM.DD')}
+          </li>
+          <li>上课地点：本校</li>
+        </ul>
+        <p className={styles.title}>课程简介</p>
+        <p className={styles.content}>{classDetail?.KHKCSJ?.KCMS}</p>
+        <Divider />
+        <ul className={styles.classInformation}>
+          <li>所在班级：{classDetail?.BJMC}</li>
+          <li className={styles.bzrname}>
+            班主任：
+            {classDetail?.KHBJJs.map((item: any) => {
+              if (item.JSLX.indexOf('主') !== -1) {
+                return <span style={{ marginRight: '1em' }}>{item.JSXM}</span>;
               }
-            </tbody>
-          </table>
-        </li>
-      </ul>
+              return '';
+            })}
+          </li>
+          <li className={styles.bzrname}>
+            副班：
+            {classDetail?.KHBJJs.map((item: any) => {
+              if (item.JSLX.indexOf('主') === -1) {
+                return <span style={{ marginRight: '1em' }}>{item.JSXM}</span>;
+              }
+              return '';
+            })}
+          </li>
+          <li>
+            上课安排：
+            <table width="100%">
+              <thead>
+                <tr>
+                  <th>星期</th>
+                  <th>节次</th>
+                  <th>时间</th>
+                  <th>校区</th>
+                  <th>教室</th>
+                </tr>
+              </thead>
+              <tbody>
+                {extra?.map((values: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                  const weeks = `星期${'日一二三四五六'.charAt(values.WEEKDAY)}`;
+                  return (
+                    <tr key={values.XXSJPZ.TITLE}>
+                      <td>{weeks}</td>
+                      <td>{values.XXSJPZ.TITLE}</td>
+                      <td>
+                        {values.XXSJPZ.KSSJ.substring(0, 5)}-{values.XXSJPZ.JSSJ.substring(0, 5)}
+                      </td>
+                      <td>本校</td>
+                      <td>{values.FJSJ.FJMC}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-
+  );
 };
 
 export default Detail;

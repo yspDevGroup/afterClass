@@ -27,13 +27,26 @@ export async function getXNXQ(
 }
 
 /** 查询所有学年学期数据 GET /xnxq/all */
-export async function getAllXNXQ(options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; data?: API.XNXQ[]; message?: string }>('/xnxq/all', {
-    method: 'GET',
+export async function getAllXNXQ(
+  body: {
+    /** 学校Id */
+    XXJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data: API.XNXQ[];
+    message?: string;
+  }>('/xnxq/all', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
-
 /** 创建学年学期数据 PUT /xnxq/create */
 export async function createXNXQ(body: API.CreateXNXQ, options?: { [key: string]: any }) {
   return request<{
