@@ -32,7 +32,9 @@ const ServiceDetails = (props: any) => {
     <PageContainer>
       <Button
       style={{
-        float:'right'
+        float:'right',
+        marginTop: '24px',
+        marginRight:'24px'
       }}
             key="xinjian"
             type="primary"

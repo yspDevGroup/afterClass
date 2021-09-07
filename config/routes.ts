@@ -40,30 +40,27 @@
   {
     path: '/homepage',
     name: 'homepage',
-    icon: 'bank',
+    icon: 'home',
     component: './Manager/Homepage',
   },
   {
     path: '/basicalSettings',
     name: 'basicalSettings',
-    icon: 'crown',
+    icon: 'fileText',
     routes: [
       {
         path: '/basicalSettings/termManagement',
         name: 'termManagement',
-        icon: 'smile',
         component: './Manager/BasicalSettings/TermManagement',
       },
       {
         path: '/basicalSettings/periodMaintenance',
         name: 'periodMaintenance',
-        icon: 'smile',
         component: './Manager/BasicalSettings/PeriodMaintenance',
       },
       {
         path: '/basicalSettings/roomManagement',
         name: 'roomManagement',
-        icon: 'smile',
         component: './Manager/BasicalSettings/RoomManagement',
       },
       {
@@ -75,19 +72,17 @@
   {
     path: '/courseManagements',
     name: 'courseManagements',
-    icon: 'ProfileOutlined',
+    icon: 'AppstoreAdd',
     routes: [
       {
         path: '/courseManagements/CourseManagements',
         name: 'courseManagements',
-        icon: 'smile',
         component: './Manager/CourseManagements',
         // hideInMenu: 'true',
       },
       {
         path: '/courseManagements/mechanismCourse/edit',
         name: 'mechanismCourseInfo',
-        hideInMenu: 'true',
         component: './Manager/Mechanisms/edit',
       },
     ],
@@ -95,31 +90,31 @@
   {
     path: '/classManagement',
     name: 'classManagement',
-    icon: 'CreditCardOutlined',
+    icon: 'InsertRowAbove',
     component: './Manager/ClassManagement',
   },
   {
     path: '/courseScheduling',
     name: 'courseScheduling',
-    icon: 'CarryOutOutlined',
+    icon: 'Build',
     component: './Manager/CourseScheduling',
   },
   {
     path: '/teacherManagement',
     name: 'teacherManagement',
-    icon: 'CreditCardOutlined',
+    icon: 'Team',
     component: './Manager/TeacherManagement',
   },
   {
     path: '/orderInquiry',
     name: 'orderInquiry',
-    icon: 'BarsOutlined',
+    icon: 'Profile',
     component: './Manager/OrderInquiry',
   },
   {
     path: '/announcements',
     name: 'announcements',
-    icon: 'CarryOutOutlined',
+    icon: 'Notification',
     routes: [
       {
         name: 'notice',
@@ -166,7 +161,7 @@
       {
         path: '/announcements/service',
         name: 'service',
-        component: './Manager/Announcements/Service',
+        component:'./Manager/Announcements/Service'
       },
       {
         path: '/announcements/service/editArticle',

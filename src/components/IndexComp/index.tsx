@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-06 15:28:36
+ * @LastEditTime: 2021-09-07 12:15:40
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -104,7 +104,7 @@ const Index = () => {
                 </p>
                 <img src={home1} alt="" />
                 <ul>
-                  <li><Link to='/announcements/service'>课后服务协议配置</Link></li>
+                  <li><Link to='/announcements/service'>服务协议配置</Link></li>
                   <li><Link to='/basicalSettings/termManagement'>学期学年维护</Link></li>
                   <li><Link to='/basicalSettings/periodMaintenance'>时段维护</Link></li>
                   <li><Link to='/basicalSettings/roomManagement'>场地维护</Link></li>
