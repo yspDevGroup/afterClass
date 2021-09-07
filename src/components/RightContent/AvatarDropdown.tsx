@@ -17,7 +17,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const userRef = useRef(null);
   useEffect(() => {
     async function fetchData() {
-      const res = await getXXJBSJ();
+      const res = await getXXJBSJ({ id: currentUser?.xxId });
       if (res.status === 'ok') {
         setXxData(res.data);
       }
@@ -34,8 +34,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
         // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
         WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
       } else {
-        console.warn('微信登录过期，请重新授权')
-        message.warn('微信登录过期，请重新授权')
+        console.warn('微信登录过期，请重新授权');
+        message.warn('微信登录过期，请重新授权');
       }
     })();
   }, [currentUser]);
@@ -63,9 +63,18 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   return (
     <>
       <span className={`${styles.action} ${styles.account}`}>
-      {xxData ? <span style={{paddingRight:'40px'}}>
-      {xxData?.XH && xxData?.XH.indexOf('http')>-1 ? <img style={{width:'40px',height:'40px'}} src={xxData?.XH} />:''} {xxData?.XXMC}
-        </span> : ''}
+        {xxData ? (
+          <span style={{ paddingRight: '40px' }}>
+            {xxData?.XH && xxData?.XH.indexOf('http') > -1 ? (
+              <img style={{ width: '40px', height: '40px' }} src={xxData?.XH} />
+            ) : (
+              ''
+            )}{' '}
+            {xxData?.XXMC}
+          </span>
+        ) : (
+          ''
+        )}
         <Avatar
           size="small"
           className={styles.avatar}

@@ -79,11 +79,15 @@ const OrderInquiry = () => {
         const khkcResl = await getAllKHKCSJ({
           isRequired: false,
           XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
           page: 0,
           pageSize: 0,
         });
         if (khkcResl.status === 'ok') {
-          const KCMC = khkcResl.data?.map((item: any) => ({ label: item.KCMC, value: item.KCMC }));
+          const KCMC = khkcResl.data.rows?.map((item: any) => ({
+            label: item.KCMC,
+            value: item.KCMC,
+          }));
           setKcmcData(KCMC);
         }
 
