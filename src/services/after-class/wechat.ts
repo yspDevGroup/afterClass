@@ -11,9 +11,27 @@ export async function createWechatToken(options?: { [key: string]: any }) {
 }
 
 /** 获取当前微信用户 GET /wechat/currentUser */
-export async function currentWechatUser(options?: { [key: string]: any }) {
+export async function currentWechatUser(
+  params: {
+    // query
+    /** 登录平台类型 */
+    plat?: string;
+  },
+  options?: { [key: string]: any },
+) {
   return request<any>('/wechat/currentUser', {
     method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
+/** 接收应用注册信息并入库 POST /wechat/syncAuthInfo */
+export async function syncAuthInfo(options?: { [key: string]: any }) {
+  return request<any>('/wechat/syncAuthInfo', {
+    method: 'POST',
     ...(options || {}),
   });
 }

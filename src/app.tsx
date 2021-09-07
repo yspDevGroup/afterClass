@@ -27,7 +27,7 @@ export async function getInitialState(): Promise<InitialState> {
     try {
       const currentUserRes =
         authType === 'wechat'
-          ? await currentWechatUser({ params: { plat: 'school' } })
+          ? await currentWechatUser({ plat: 'school' })
           : await queryCurrentUser({ plat: 'school' });
       if (currentUserRes.status === 'ok') {
         const { info } = currentUserRes.data || {};

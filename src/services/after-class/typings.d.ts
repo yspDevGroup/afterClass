@@ -1864,6 +1864,8 @@ declare namespace API {
     QYJGDZ?: string;
     /** 行政区划码 */
     XZQHM?: string;
+    /** 行政区 */
+    XZQ?: string;
     /** 联系人姓名 */
     LXRXM?: string;
     /** 联系电话 */
@@ -1911,6 +1913,8 @@ declare namespace API {
     QYJGDZ?: string;
     /** 行政区划码 */
     XZQHM: string;
+    /** 行政区 */
+    XZQ?: string;
     /** 联系人姓名 */
     LXRXM?: string;
     /** 联系电话 */
@@ -1946,6 +1950,8 @@ declare namespace API {
     QYJGDZ?: string;
     /** 行政区划码 */
     XZQHM?: string;
+    /** 行政区 */
+    XZQ?: string;
     /** 联系人姓名 */
     LXRXM?: string;
     /** 联系电话 */
@@ -1994,6 +2000,10 @@ declare namespace API {
     SFTJ?: number;
     /** 内容 */
     NR?: string;
+    /** 创建日期 */
+    createdAt?: string;
+    /** 更新日期 */
+    updatedAt?: string;
   };
 
   type CreateKHJYTZGG = {
@@ -2771,6 +2781,8 @@ declare namespace API {
     XXDM?: string;
     /** 学段 */
     XD?: string;
+    /** 行政区划码 */
+    XZQHM?: string | any;
     /** 登录名，学号或工号 */
     loginName?: string;
     /** 姓名 */
