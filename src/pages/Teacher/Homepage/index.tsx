@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import { Tabs } from 'antd';
@@ -25,7 +26,7 @@ const PersonalHomepage = () => {
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
-      const result = await queryXNXQList();
+      const result = await queryXNXQList(currentUser?.xxId);
       if (result.current) {
         const res = await homePageInfo({
           JSId: '1965a118-4b5b-4b58-bf16-d5f45e78b28c',

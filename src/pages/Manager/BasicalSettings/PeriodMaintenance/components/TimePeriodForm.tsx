@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
@@ -5,6 +6,7 @@ import ProFormFields from '@/components/ProFormFields';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import type { Maintenance } from '../data';
 import styles from './index.less';
+import { useModel } from 'umi';
 
 const formLayout = {
   labelCol: { span: 5 },
@@ -20,11 +22,13 @@ type PropsType = {
 
 const TimePeriodForm = (props: PropsType) => {
   const { currentStatus, current, setForm } = props;
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [terms, setTerms] = useState<{ label: string; value: string }[]>(); // 联动数据中的学期数据
   useEffect(() => {
     async function fetchData() {
       // 从本地获取学期学年信息
-      const res = await queryXNXQList();
+      const res = await queryXNXQList(currentUser?.xxId);
       const newData = res.xnxqList.map((item: any) => {
         return {
           label: item.text,

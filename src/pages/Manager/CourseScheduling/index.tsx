@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
@@ -5,13 +6,11 @@ import React, { useEffect, useState } from 'react';
 import { Button, Radio, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import type { SearchDataType } from '@/components/Search/data';
 import PageContainer from '@/components/PageContainer';
 import ExcelTable from '@/components/ExcelTable';
 import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
 
-import { queryXQList } from '@/services/wechat/service';
 import { getAllFJSJ, getFJPlan } from '@/services/after-class/fjsj';
 import { getAllKHBJSJ, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
@@ -20,25 +19,21 @@ import { getQueryString } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
 import AddArranging from './components/AddArranging';
-import { searchData } from './searchConfig';
 // import { NJData, XQData } from './mock';
 import './index.less';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
-import { getAllNJSJ } from '@/services/after-class/njsj';
 import { useModel } from 'umi';
+import { getAllGrades } from '@/services/after-class/khjyjg';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
 
 const ClassManagement = () => {
   const [state, setState] = useState(true);
-  const [dataSource, setDataSource] = useState<SearchDataType>(searchData);
   const [curXNXQId, setCurXNXQId] = useState<any>(getQueryString('xnxqid'));
   const [termList, setTermList] = useState<any>();
-  const [xn, setXn] = useState<any>(getQueryString('xn'));
-  const [xq, setXq] = useState<any>(getQueryString('xq'));
   const [tableDataSource, setTableDataSource] = useState<any>([]);
   const [radioValue, setRadioValue] = React.useState(false);
   const [xXSJPZData, setXXSJPZData] = useState<any>([]);
@@ -96,12 +91,12 @@ const ClassManagement = () => {
       }
 
       // 年级
-      const resNJ = await getAllNJSJ({ XXJBSJId: currentUser?.xxId });
+      const resNJ = await getAllGrades({ XD: currentUser?.XD?.split(',') });
       if (resNJ.status === 'ok') {
         const optNJ: any[] = [];
         const nj = ['幼儿园', '小学', '初中', '高中'];
         nj.forEach((itemNJ) => {
-          resNJ.data?.rows?.forEach((item) => {
+          resNJ.data?.forEach((item) => {
             if (item.XD === itemNJ) {
               optNJ.push({
                 label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
@@ -270,7 +265,7 @@ const ClassManagement = () => {
     if (!bjID) {
       (async () => {
         // 学年学期数据的获取
-        const res = await queryXNXQList();
+        const res = await queryXNXQList(currentUser?.xxId);
         const newData = res.xnxqList;
         const curTerm = res.current;
         if (newData?.length) {
@@ -667,7 +662,7 @@ const ClassManagement = () => {
                   </Select>
                 </div>
               </div>
-              <div style={{ position: 'absolute', right: 48 }}>
+              <div style={{ position: 'absolute', right: 25 }}>
                 <Button
                   style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
                   type="primary"

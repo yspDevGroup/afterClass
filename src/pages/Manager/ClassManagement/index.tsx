@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 import React from 'react';
@@ -85,7 +86,7 @@ const CourseManagement = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await queryXNXQList();
+      const res = await queryXNXQList(currentUser?.xxId);
       const newData = res.xnxqList;
       const curTerm = res.current;
       if (newData?.length) {

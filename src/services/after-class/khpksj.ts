@@ -21,7 +21,7 @@ export async function getKHPKSJ(
         id?: string;
         BJMC?: string;
         BJMS?: string;
-        BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
+        BJZT?: '待开班' | '已开班' | '已结课';
         ZJS?: string;
         FJS?: string;
         BJRS?: number;
@@ -41,7 +41,7 @@ export async function getKHPKSJ(
           id?: string;
           KCMC?: string;
           KCTP?: string;
-          KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
+          KCZT?: number;
           KCMS?: string;
           KKRQ?: string | any;
           JKRQ?: string | any;
@@ -121,10 +121,8 @@ export async function getAllKHPKSJ(
   body: {
     /** 年级ID */
     njId?: string;
-    /** 学年 */
-    xn?: string;
-    /** 学期 */
-    xq?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
     /** 课程名称 */
     name?: string;
   },

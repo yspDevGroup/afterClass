@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-console */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
@@ -469,7 +471,7 @@ const AddArranging: FC<PropsType> = (props) => {
               label="校区"
               width="md"
               name="XQ"
-              options={campus}
+              options={campus || []}
               fieldProps={{
                 async onChange(value: any, option: any) {
                   form.setFieldsValue({ NJ: undefined, KC: undefined });
@@ -510,7 +512,7 @@ const AddArranging: FC<PropsType> = (props) => {
               width="md"
               name="NJ"
               label="年级"
-              options={grade}
+              options={grade || []}
               fieldProps={{
                 async onChange(value) {
                   // 年级选择时将选中的课程清空
@@ -551,7 +553,7 @@ const AddArranging: FC<PropsType> = (props) => {
             />
             <ProFormSelect
               width="md"
-              options={kcType}
+              options={kcType || []}
               name="KC"
               label="课程"
               showSearch

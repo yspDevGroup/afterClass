@@ -6,7 +6,7 @@ import ProTable from '@ant-design/pro-table';
 import PageContainer from '@/components/PageContainer';
 import styles from './index.less';
 import type { FormInstance } from 'antd';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import { Modal, message, Popconfirm, Button, Divider } from 'antd';
 import type { TableListParams } from '@/constant';
 import { paginationConfig } from '@/constant';
@@ -17,8 +17,9 @@ import moment from 'moment';
 import ManagementTable from './components/ManagementTable';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
-
 const TermManagement = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   // 列表对象引用，可主动执行刷新等操作
   const actionRef = useRef<ActionType>();
   // 设置模态框显示状态
@@ -63,8 +64,8 @@ const TermManagement = () => {
   const handleSubmit = async () => {
     try {
       const values = await form?.validateFields();
-      const startYear = values?.XNs[0] ? moment(values.XNs[0]).format('YYYY'):'';
-      const endYear = values?.XNs[1] ? moment(values.XNs[1]).format('YYYY'):'';
+      const startYear = values?.XNs[0] ? moment(values.XNs[0]).format('YYYY') : '';
+      const endYear = values?.XNs[1] ? moment(values.XNs[1]).format('YYYY') : '';
       values.KSRQ = values?.RQ[0] ? moment(values.RQ[0]).format('YYYY-MM-DD') : '';
       values.JSRQ = values?.RQ[1] ? moment(values.RQ[1]).format('YYYY-MM-DD') : '';
       values.XN = `${startYear}-${endYear}`;
@@ -81,21 +82,23 @@ const TermManagement = () => {
         }
         resolve(res);
         reject(res);
-      }).then((data: any) => {
-        if (data.status === 'ok') {
-          message.success('保存成功');
-          onClose();
-          actionRef?.current?.reload();
-        } else if ((data.message!).indexOf('Validation') > -1) {
-          message.error('已存在该学年学期，请勿重复添加');
-        } else if ((data.message!).indexOf('token') > -1 || (data.message!).indexOf('Token') > -1) {
-          history.replace('/auth_callback/overDue');
-        } else {
-          message.error(data.message);
-        }
-      }).catch((error) => {
-        console.log('error', error);
-      });
+      })
+        .then((data: any) => {
+          if (data.status === 'ok') {
+            message.success('保存成功');
+            onClose();
+            actionRef?.current?.reload();
+          } else if (data.message!.indexOf('Validation') > -1) {
+            message.error('已存在该学年学期，请勿重复添加');
+          } else if (data.message!.indexOf('token') > -1 || data.message!.indexOf('Token') > -1) {
+            history.replace('/auth_callback/overDue');
+          } else {
+            message.error(data.message);
+          }
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
@@ -124,7 +127,6 @@ const TermManagement = () => {
       key: 'JSRQ',
       dataIndex: 'JSRQ',
       align: 'center',
-
     },
     {
       title: '操作',
@@ -187,7 +189,7 @@ const TermManagement = () => {
             sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
             filter,
           };
-          return queryXNXQList(true, opts);
+          return queryXNXQList(currentUser?.xxId, true, opts);
         }}
         pagination={paginationConfig}
         rowKey="id"
@@ -199,14 +201,15 @@ const TermManagement = () => {
             key="add"
             onClick={() => handleOperation('add')}
           >
-            <PlusOutlined />新增学年学期
+            <PlusOutlined />
+            新增学年学期
           </Button>,
         ]}
       />
       <Modal
         title={getModelTitle()}
         destroyOnClose
-        width='35vw'
+        width="35vw"
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={[
@@ -215,7 +218,7 @@ const TermManagement = () => {
           </Button>,
           <Button key="submit" type="primary" onClick={handleSubmit}>
             确定
-          </Button>
+          </Button>,
         ]}
         centered
         maskClosable={false}

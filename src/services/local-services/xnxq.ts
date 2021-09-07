@@ -8,7 +8,7 @@ import { getAllXNXQ } from '../after-class/xnxq';
  * @param {true} [refresh] 是否强制刷新
  * @return {*}
  */
-export const queryXNXQList = async (refresh?: true, params?: any): Promise<any> => {
+export const queryXNXQList = async (xxid?: string, refresh?: true, params?: any): Promise<any> => {
   if (typeof xnxqInfo === 'undefined') {
     ((w) => {
       // eslint-disable-next-line no-param-reassign
@@ -16,7 +16,12 @@ export const queryXNXQList = async (refresh?: true, params?: any): Promise<any> 
     })(window as Window & typeof globalThis & { xnxqInfo: any });
   }
   if (!xnxqInfo.xnxqList || refresh) {
-    const res = await getAllXNXQ(params || {});
+    const res = await getAllXNXQ(
+      {
+        XXJBSJId: xxid,
+      },
+      params || {},
+    );
     if (res.status === 'ok') {
       const { data = [] } = res;
       xnxqInfo.xnxqList = convertData(data);

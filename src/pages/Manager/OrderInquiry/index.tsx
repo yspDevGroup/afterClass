@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Select, Table, Tag, Tooltip } from 'antd';
@@ -10,6 +11,7 @@ import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import styles from './index.less';
+import { useModel } from 'umi';
 
 const { Option } = Select;
 
@@ -20,6 +22,8 @@ type selectType = { label: string; value: string };
  * @return
  */
 const OrderInquiry = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   const [tableLoading, setTableLoading] = useState(true);
   // 学期学年没有数据时提示的开关
@@ -43,7 +47,7 @@ const OrderInquiry = () => {
   useEffect(() => {
     (async () => {
       // 学年学期数据的获取
-      const res = await queryXNXQList();
+      const res = await queryXNXQList(currentUser?.xxId);
       const newData = res.xnxqList;
       const curTerm = res.current;
       if (newData?.length) {
@@ -77,7 +81,6 @@ const OrderInquiry = () => {
           XNXQId: curXNXQId,
           page: 0,
           pageSize: 0,
-          name: '',
         });
         if (khkcResl.status === 'ok') {
           const KCMC = khkcResl.data?.map((item: any) => ({ label: item.KCMC, value: item.KCMC }));
@@ -87,7 +90,10 @@ const OrderInquiry = () => {
         // 通过班级数据接口拿到所有的班级
         const bjmcResl = await getAllKHBJSJ({ XNXQId: curXNXQId, page: 0, pageSize: 0, name: '' });
         if (bjmcResl.status === 'ok') {
-          const BJMC = bjmcResl.data?.rows?.map((item: any) => ({ label: item.BJMC, value: item.BJMC }));
+          const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
+            label: item.BJMC,
+            value: item.BJMC,
+          }));
           setBjmcData(BJMC);
         }
       }
@@ -184,7 +190,11 @@ const OrderInquiry = () => {
               }}
             >
               {termList?.map((item: any) => {
-                return <Option key={item.value} value={item.value}>{item.text}</Option>;
+                return (
+                  <Option key={item.value} value={item.value}>
+                    {item.text}
+                  </Option>
+                );
               })}
             </Select>
           </span>
@@ -231,12 +241,7 @@ const OrderInquiry = () => {
         </div>
       </div>
       <div className={styles.tableStyle}>
-        <Table
-          loading={tableLoading}
-          dataSource={dataSource}
-          columns={columns}
-          rowKey="id"
-        />
+        <Table loading={tableLoading} dataSource={dataSource} columns={columns} rowKey="id" />
       </div>
       <PromptInformation
         text="未查询到学年学期数据，请先设置学年学期"

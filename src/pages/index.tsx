@@ -23,6 +23,7 @@ const Index = () => {
         history.replace('/parent/home');
         break;
       default:
+        history.replace('/homepage');
         break;
     }
     if (initialState?.currentUser?.adminAuth?.includes('系统管理')) {

@@ -20,9 +20,9 @@ const Course = (props: any) => {
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
 
   useEffect(() => {
-    if (yxkcAllData) {
+    if (yxkcAllData?.length) {
       const newData = { ...defaultMsg };
-      yxkcAllData.forEach((item: any) => {
+      yxkcAllData?.forEach((item: any) => {
         // eslint-disable-next-line no-param-reassign
         item.link += '&index=all';
       });

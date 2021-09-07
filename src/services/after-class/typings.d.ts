@@ -130,6 +130,7 @@ declare namespace API {
   type CreateFJLX = {
     /** 房间类型 */
     FJLX: string;
+    XXJBSJId: string;
   };
 
   type UpdateFJLX = {
@@ -192,6 +193,8 @@ declare namespace API {
     XQ?: string;
     /** 校区名称 */
     XQName?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
     /** 房间类型ID */
     FJLXId?: string;
   };
@@ -1516,7 +1519,7 @@ declare namespace API {
       KCMC?: string;
       KCLX?: string;
       KCTP?: string;
-      KCZT?: '待开班' | '已开班' | '已结课';
+      KCZT?: number;
       KCMS?: string;
       KKRQ?: string | any;
       JKRQ?: string | any;
@@ -2098,7 +2101,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
+      BJZT?: '待开班' | '已开班' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -2233,7 +2236,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
+      BJZT?: '待开班' | '已开班' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -2253,7 +2256,7 @@ declare namespace API {
         id?: string;
         KCMC?: string;
         KCTP?: string;
-        KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
+        KCZT?: number;
         KCMS?: string;
         KKRQ?: string | any;
         JKRQ?: string | any;
@@ -2372,7 +2375,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
+      BJZT?: '待开班' | '已开班' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -2440,7 +2443,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
+      BJZT?: '待开班' | '已开班' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -2462,7 +2465,7 @@ declare namespace API {
         KCMC?: string;
         KCLX?: string;
         KCTP?: string;
-        KCZT?: '待发布' | '已发布' | '已下架' | '已结课';
+        KCZT?: number;
         KCMS?: string;
         KKRQ?: string | any;
         JKRQ?: string | any;
@@ -2578,7 +2581,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待发布' | '已发布' | '已下架' | '已结课';
+      BJZT?: '待开班' | '已开班' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -2771,7 +2774,7 @@ declare namespace API {
     /** 登录名，学号或工号 */
     loginName?: string;
     /** 姓名 */
-    username: string;
+    username?: string;
     /** 头像 */
     avatar?: string;
     /** 身份ID */
@@ -2955,6 +2958,7 @@ declare namespace API {
     KSRQ: string;
     /** 结束日期 */
     JSRQ: string;
+    XXJBSJId: string;
   };
 
   type UpdateXNXQ = {

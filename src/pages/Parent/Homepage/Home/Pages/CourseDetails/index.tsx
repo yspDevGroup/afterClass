@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Checkbox, Divider, Modal, Popconfirm, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link } from 'umi';
@@ -22,7 +23,7 @@ const CourseDetails: React.FC = () => {
   const [orderInfo, setOrderInfo] = useState<any>();
   const [classDetail, setClassDetail] = useState<any>();
   const [kaiguan, setKaiguan] = useState<boolean>(true);
-  const [fk, setFk] = useState<boolean>(false);
+  const [fk] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const courseid = getQueryString('courseid');
@@ -43,13 +44,6 @@ const CourseDetails: React.FC = () => {
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
     const current = detail.KHBJSJs![ind];
-    console.log(current, '=====');
-    const start = current.BMKSSJ ? current.BMKSSJ : detail.BMKSSJ;
-    const end = current.BMKSSJ ? current.BMJSSJ : detail.BMJSSJ;
-    const enAble =
-      myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
-      myDate <= new Date(moment(end).format('YYYY/MM/DD'));
-    // setFk(current.KHXSBJs.length >= current.BJRS || !enAble);
     setFY(current.FY);
     setBJ(current.id);
   };
@@ -67,14 +61,13 @@ const CourseDetails: React.FC = () => {
     if (courseid) {
       getWxData();
       (async () => {
-        const res = await queryXNXQList();
+        const res = await queryXNXQList(currentUser?.xxId);
         if (res.current) {
           const result = await getKHKCSJ({
             kcId: courseid,
             XXJBSJId: currentUser?.xxId,
             XNXQId: res.current.id,
           });
-          console.log(result, '----------------');
           if (result.status === 'ok') {
             if (result.data) {
               setKcDetail(result.data);
@@ -144,7 +137,6 @@ const CourseDetails: React.FC = () => {
     // console.log(e.target.checked);
     setXystate(e.target.checked);
   };
-  console.log(KcDetail?.KHBJSJs, '----');
   return (
     <div className={styles.CourseDetails}>
       {index === 'all' ? (
@@ -341,7 +333,7 @@ const CourseDetails: React.FC = () => {
                   JKRO: KcDetail?.KCRQ,
                 },
               }}
-            ></Link>
+            />
           </div>
         </div>
       ) : (

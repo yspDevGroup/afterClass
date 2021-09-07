@@ -43,6 +43,8 @@ export async function deleteFJLX(
 /** 查询所有房间类型 POST /fjlx/ */
 export async function getAllFJLX(
   body: {
+    /** 学校ID */
+    XXJBSJId?: string;
     /** 房间类型 */
     name?: string;
   },

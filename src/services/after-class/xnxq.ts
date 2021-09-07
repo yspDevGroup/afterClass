@@ -9,6 +9,7 @@ export async function getXNXQ(
     xn?: string;
     /** 学期 */
     xq?: string;
+    XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -26,19 +27,14 @@ export async function getXNXQ(
   });
 }
 
-/** 查询所有学年学期数据 GET /xnxq/all */
+/** 查询所有学年学期数据 POST /xnxq/all */
 export async function getAllXNXQ(
   body: {
-    /** 学校Id */
     XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status?: 'ok' | 'error';
-    data: API.XNXQ[];
-    message?: string;
-  }>('/xnxq/all', {
+  return request<{ status?: 'ok' | 'error'; data?: API.XNXQ[]; message?: string }>('/xnxq/all', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,6 +43,7 @@ export async function getAllXNXQ(
     ...(options || {}),
   });
 }
+
 /** 创建学年学期数据 PUT /xnxq/create */
 export async function createXNXQ(body: API.CreateXNXQ, options?: { [key: string]: any }) {
   return request<{

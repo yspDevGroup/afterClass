@@ -99,7 +99,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
         KCMC?: string;
         KCLX?: string;
         KCTP?: string;
-        KCZT?: '待开班' | '已开班' | '已结课';
+        KCZT?: number;
         KCMS?: string;
         KKRQ?: string | any;
         JKRQ?: string | any;
