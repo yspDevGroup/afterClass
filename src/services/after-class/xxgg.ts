@@ -11,14 +11,14 @@ export async function getXXGG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; BT?: string; NR?: string; ZT?: string; LX?: string; updatedAt?: string };
     message?: string;
   }>(`/xxgg/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -32,10 +32,10 @@ export async function deleteXXGG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxgg/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -45,6 +45,8 @@ export async function getAllXXGG(
   body: {
     /** 公告状态 */
     status?: string[];
+    /** 学校ID */
+    XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -84,13 +86,13 @@ export async function updateXXGG(
   body: API.UpdateXXGG,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxgg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

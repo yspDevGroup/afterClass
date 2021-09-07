@@ -24,7 +24,8 @@ import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 const { Option } = Select;
 
-const CourseManagement = () => {
+const CourseManagement = (props: { location: { state: any } }) => {
+  const { state } = props.location;
   const [visible, setVisible] = useState(false);
   const [current, setCurrent] = useState<CourseItem>();
   const actionRef = useRef<ActionType>();
@@ -272,7 +273,7 @@ const CourseManagement = () => {
             if (curXNXQId) {
               const obj = {
                 XNXQId: curXNXQId,
-                kcId,
+                kcId: kcId || state?.id,
                 page: param.current,
                 pageSize: param.pageSize,
                 name,
@@ -323,7 +324,7 @@ const CourseManagement = () => {
                 <div>
                   <Select
                     style={{ width: 200 }}
-                    value={kcId || undefined}
+                    value={kcId || state?.id}
                     allowClear
                     placeholder="请选择"
                     onChange={onBjmcChange}

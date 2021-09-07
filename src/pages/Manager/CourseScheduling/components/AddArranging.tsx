@@ -315,6 +315,7 @@ const AddArranging: FC<PropsType> = (props) => {
         // 获取所有场地类型
         const response = await getAllFJLX({
           name: '',
+          XXJBSJId: currentUser?.xxId,
         });
         if (response.status === 'ok') {
           if (response.data && response.data.length > 0) {
@@ -688,81 +689,6 @@ const AddArranging: FC<PropsType> = (props) => {
                 </div>
               )}
             </div>
-            {/* <ProFormSelect
-              width="md"
-              options={roomType}
-              name="CDLX"
-              label="场地类型"
-              fieldProps={{
-                async onChange(value) {
-                  // 场地类型选择时将选中的场地名称清空
-                  form.setFieldsValue({ CDMC: undefined });
-                  // 获取场地的数据
-                  const fjList = await getAllFJSJ({
-                    lxId: value,
-                    page: 1,
-                    pageCount: 0,
-                    name: '',
-                  });
-                  if (fjList.status === 'ok') {
-                    const data: any = [].map.call(fjList.data, (item: SiteType) => {
-                      return {
-                        label: item.FJMC,
-                        value: item.id,
-                      };
-                    });
-                    if (data.length > 0) {
-                      setSiteType(data);
-                      setCdlxId(value);
-                    } else if (data.length === 0) {
-                      setCdlxId(undefined);
-                      setSiteType([]);
-                    }
-                  } else {
-                    message.error(fjList.message);
-                  }
-                  const Fjplan = await getFJPlan({
-                    lxId: value,
-                    fjId: '',
-                    xn,
-                    xq,
-                    isPk: false,
-                  });
-                  if (Fjplan.status === 'ok') {
-                    const data = processingData(Fjplan.data, xXSJPZData);
-                    setTableDataSource(data);
-                  } else {
-                    message.error(Fjplan.message);
-                  }
-                },
-              }}
-            />
-            <ProFormSelect
-              width="md"
-              options={siteType}
-              name="CDMC"
-              label="场地名称"
-              showSearch
-              fieldProps={{
-                async onChange(value) {
-                  // 查询房间占用情况
-                  const Fjplan = await getFJPlan({
-                    lxId: cdlxId === undefined ? '' : cdlxId,
-                    fjId: value,
-                    xn,
-                    xq,
-                    isPk: false,
-                  });
-                  if (Fjplan.status === 'ok') {
-                    const data = processingData(Fjplan.data, xXSJPZData);
-                    setTableDataSource(data);
-                  } else {
-                    message.error(Fjplan.message);
-                  }
-                },
-              }}
-            /> */}
-
             <div className="site">
               <span>场地：</span>
 

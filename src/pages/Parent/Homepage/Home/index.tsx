@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/self-closing-comp */
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'umi';
 import imgPop from '@/assets/mobileBg.png';
@@ -7,7 +9,6 @@ import myContext from '@/utils/MyContext';
 import CourseTab from './components/CourseTab';
 import styles from './index.less';
 import Details from './Pages/Details';
-import { getAllXXGG } from '@/services/after-class/xxgg';
 import EmptyArticle from './Pages/EmptyArticle';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';

@@ -19,7 +19,7 @@ const Study = () => {
   const [listData, setListData] = useState<ListData>();
   const Selectedcourses = (data: any) => {
     const courseData: any[] = [];
-    for (let i = 0; i < data.length; i += 1) {
+    for (let i = 0; i < data?.length; i += 1) {
       const Timetable = [];
       const record = data[i];
       if (datedata && datedata[record.id]) {

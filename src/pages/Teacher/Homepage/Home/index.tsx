@@ -8,7 +8,7 @@ import myContext from '@/utils/MyContext';
 import TeachCourses from './components/TeachCourses';
 import Details from './Pages/Details';
 import { getAllXXGG } from '@/services/after-class/xxgg';
-import { Link } from 'umi';
+import { useModel, Link } from 'umi';
 import EmptyArticle from './Pages/EmptyArticle';
 import { enHenceMsg } from '@/utils/utils';
 
@@ -16,6 +16,8 @@ const Home = () => {
   const { currentUserInfo, courseStatus } = useContext(myContext);
   const userRef = useRef(null);
   const [notification, setNotification] = useState<any[]>();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -29,10 +31,9 @@ const Home = () => {
     })();
   }, [currentUserInfo]);
 
-
   useEffect(() => {
     async function announcements() {
-      const res = await getAllXXGG({ status: ['发布'] });
+      const res = await getAllXXGG({ status: ['发布'], XXJBSJId: currentUser?.xxId });
       if (res.status === 'ok') {
         if (!(res.data?.length === 0)) {
           setNotification(res.data);
@@ -40,51 +41,70 @@ const Home = () => {
       } else {
         enHenceMsg(res.message);
       }
-    };
+    }
     announcements();
   }, []);
 
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>
-        <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div>
+        <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.headerText}>
           <h4>
-            <span ref={userRef}>
-              {currentUserInfo?.username}
-            </span>
+            <span ref={userRef}>{currentUserInfo?.username}</span>
             老师，你好！
           </h4>
           <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
         </div>
       </header>
-      {courseStatus === 'empty' ? <EmptyArticle /> : <div className={styles.pageContent}>
-        <div className={styles.noticeArea}>
-          <IconFont type="icon-gonggao" className={styles.noticeImg} />
-          <div className={styles.noticeText}>
-            <span>学校公告</span>
-            {notification && notification.length ?
-              <Link to={`/teacher/home/notice/announcement?listid=${notification[0].id}&index=all`} style={{ color: '#333', margin: '0 9px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {notification[0].BT}
-              </Link> : '暂无公告'}
+      {courseStatus === 'empty' ? (
+        <EmptyArticle />
+      ) : (
+        <div className={styles.pageContent}>
+          <div className={styles.noticeArea}>
+            <IconFont type="icon-gonggao" className={styles.noticeImg} />
+            <div className={styles.noticeText}>
+              <span>学校公告</span>
+              {notification && notification.length ? (
+                <Link
+                  to={`/teacher/home/notice/announcement?listid=${notification[0].id}&index=all`}
+                  style={{
+                    color: '#333',
+                    margin: '0 9px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {notification[0].BT}
+                </Link>
+              ) : (
+                '暂无公告'
+              )}
+            </div>
+            <Link
+              to={{
+                pathname: '/teacher/home/notice',
+                state: {
+                  notification,
+                },
+              }}
+            >
+              {' '}
+              <IconFont type="icon-gengduo" className={styles.gengduo} />
+            </Link>
           </div>
-          <Link to={{
-            pathname: '/teacher/home/notice',
-            state: {
-              notification
-            }
-          }}> <IconFont type="icon-gengduo" className={styles.gengduo} /></Link>
+          <div className={styles.enrollArea}>
+            <EnrollClassTime teacher={true} />
+          </div>
+          <div className={styles.teachCourses}>
+            <TeachCourses />
+          </div>
+          <div className={styles.announceArea}>
+            <Details data={notification} />
+          </div>
         </div>
-        <div className={styles.enrollArea}>
-          <EnrollClassTime teacher={true} />
-        </div>
-        <div className={styles.teachCourses}>
-          <TeachCourses />
-        </div>
-        <div className={styles.announceArea}>
-          <Details data={notification} />
-        </div>
-      </div>}
+      )}
     </div>
   );
 };

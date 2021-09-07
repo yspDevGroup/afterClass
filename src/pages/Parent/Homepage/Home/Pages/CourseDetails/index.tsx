@@ -7,7 +7,6 @@ import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
@@ -187,20 +186,14 @@ const CourseDetails: React.FC = () => {
                     </p>
                     <p className={styles.bzrname}>
                       班主任：
-                      {isLoading ? <WWOpenDataCom type="userName" openid={value.ZJS} /> : <></>}
+                      {value.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师').JSXM}
                     </p>
                     <p className={styles.bzrname}>
                       副班：
-                      {isLoading ? (
-                        value.FJS.split(',').map((item: any) => {
-                          return (
-                            <span style={{ marginRight: '5px' }}>
-                              <WWOpenDataCom type="userName" openid={item} />
-                            </span>
-                          );
-                        })
-                      ) : (
-                        <></>
+                      {value.KHBJJs?.filter((item: { JSLX: string }) => item.JSLX === '副教师').map(
+                        (item: any) => {
+                          return <span style={{ marginRight: '5px' }}>{item.JSXM}</span>;
+                        },
                       )}
                     </p>
                     <table>
@@ -218,8 +211,8 @@ const CourseDetails: React.FC = () => {
                           <td>{value.KSS}课时</td>
                           <td>{value.BJRS}人</td>
                           <td>{value.FY}元</td>
-                          {/* <td style={{ padding: '2px 0' }}>
-                            {value.KHPKSJs.map(
+                          <td style={{ padding: '2px 0' }}>
+                            {value?.KHPKSJs?.map(
                               (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
                                 const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
                                 return (
@@ -233,12 +226,12 @@ const CourseDetails: React.FC = () => {
                             )}
                           </td>
                           <td style={{ padding: '2px 0' }}>
-                            {value.KHPKSJs.map(
+                            {value?.KHPKSJs?.map(
                               (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
                                 return <p>{val.FJSJ.FJMC}</p>;
                               },
                             )}
-                          </td> */}
+                          </td>
                         </tr>
                       </tbody>
                     </table>

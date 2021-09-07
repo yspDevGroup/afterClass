@@ -219,6 +219,7 @@ const ClassManagement = () => {
           }
         }
         const njInfo = await getKHBJSJ({ id: bjID });
+
         if (njInfo.status === 'ok') {
           setRecordValue({
             BJId: njInfo.data.id,
@@ -329,7 +330,7 @@ const ClassManagement = () => {
         }
 
         // 获取所有场地类型
-        const response = await getAllFJLX({ name: '' });
+        const response = await getAllFJLX({ name: '', XXJBSJId: currentUser?.xxId });
         if (response.status === 'ok') {
           if (response.data && response.data.length > 0) {
             const data: any = [].map.call(response.data, (item: RoomType) => {

@@ -84,6 +84,7 @@
         path: '/courseManagements/mechanismCourse/edit',
         name: 'mechanismCourseInfo',
         component: './Manager/Mechanisms/edit',
+        hideInMenu: 'true',
       },
     ],
   },
@@ -161,7 +162,7 @@
       {
         path: '/announcements/service',
         name: 'service',
-        component:'./Manager/Announcements/Service'
+        component: './Manager/Announcements/Service',
       },
       {
         path: '/announcements/service/editArticle',

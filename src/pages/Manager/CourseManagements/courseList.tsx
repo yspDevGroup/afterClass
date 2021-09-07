@@ -18,7 +18,6 @@ import Sitclass from './components/Sitclass';
 import NewCourses from './components/NewCourses';
 import type { classType, TableListParams } from './data';
 
-import { getAllNJSJ } from '@/services/after-class/njsj';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
 import { deleteKHKCSJ, getAllKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
@@ -286,9 +285,14 @@ const CourseList = () => {
       width: 100,
       render: (_, record) => {
         const Url = `/classManagement`;
-        const classes = record.KHBJSJs?.filter((item: { BJZT: string }) => item.BJZT === '已发布');
+        const classes = record.KHBJSJs?.filter((item: { BJZT: string }) => item.BJZT === '已开班');
         return (
-          <Link to={Url}>
+          <Link
+            to={{
+              pathname: Url,
+              state: record,
+            }}
+          >
             {classes?.length}/{record.KHBJSJs?.length}
           </Link>
         );

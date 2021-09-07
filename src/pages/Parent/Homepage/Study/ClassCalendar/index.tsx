@@ -33,7 +33,7 @@ const ClassCalendar = (props: propstype) => {
     const courseData = {};
     const markDays = [];
     const learnData = {};
-    for (let k = 0; k < data.length; k += 1) {
+    for (let k = 0; k < data?.length; k += 1) {
       const item = data[k];
       const courseDays = [];
       const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
