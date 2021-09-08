@@ -4,8 +4,8 @@ import type { FormInstance } from 'antd';
 import { Tooltip } from 'antd';
 import { message, Popconfirm } from 'antd';
 import { Button, Divider, Modal } from 'antd';
-import ProTable, { RequestData } from '@ant-design/pro-table';
-import type { ProColumns, ActionType } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import type { ProColumns, ActionType, RequestData } from '@ant-design/pro-table';
 import type { SearchDataType } from '@/components/Search/data';
 import type { TableListParams } from './data';
 import { theme } from '@/theme-default';
@@ -20,6 +20,7 @@ import AsyncAddRoom from './components/AsyncAddRoom';
 import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
 import PromptInformation from '@/components/PromptInformation';
 import { enHenceMsg } from '@/utils/utils';
+import { useModel } from 'umi';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -38,7 +39,8 @@ const RoomManagement = () => {
   const [dataSource] = useState<SearchDataType>(searchData);
   const [opens, setopens] = useState<boolean>(false);
   const [xQLabelItem, setXQLabelItem] = useState('');
-
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const guanbi = () => {
     setopens(false);
     setModalVisible(true);
@@ -95,8 +97,8 @@ const RoomManagement = () => {
       const { id, ...rest } = values;
       // 更新或新增场地信息
       const result = id
-        ? await updateFJSJ({ id }, { ...rest, XQName: xQLabelItem })
-        : await createFJSJ({ ...rest, XQName: xQLabelItem });
+        ? await updateFJSJ({ id }, { ...rest, XQName: xQLabelItem, XXJBSJId: currentUser?.xxId })
+        : await createFJSJ({ ...rest, XQName: xQLabelItem, XXJBSJId: currentUser?.xxId });
       if (result.status === 'ok') {
         message.success(id ? '场地信息更新成功' : '场地信息新增成功');
         setModalVisible(false);
@@ -221,7 +223,10 @@ const RoomManagement = () => {
             sorter: sort && Object.keys(sort).length ? sort : undefined,
             filter,
           };
-          const res = await getAllFJSJ({ page: 0, pageSize: 0, name, }, opts);
+          const res = await getAllFJSJ(
+            { page: 0, pageSize: 0, name, XXJBSJId: currentUser?.xxId },
+            opts,
+          );
           if (res.status === 'ok') {
             return {
               data: res.data?.rows,
@@ -229,7 +234,7 @@ const RoomManagement = () => {
               success: true,
             };
           }
-          return {}
+          return {};
         }}
         headerTitle={
           <SearchComponent
@@ -271,13 +276,13 @@ const RoomManagement = () => {
           modalType === 'uphold'
             ? null
             : [
-              <Button key="back" onClick={() => setModalVisible(false)}>
-                取消
-              </Button>,
-              <Button key="submit" type="primary" onClick={handleSubmit}>
-                确定
-              </Button>,
-            ]
+                <Button key="back" onClick={() => setModalVisible(false)}>
+                  取消
+                </Button>,
+                <Button key="submit" type="primary" onClick={handleSubmit}>
+                  确定
+                </Button>,
+              ]
         }
         style={{ maxHeight: '430px' }}
         centered

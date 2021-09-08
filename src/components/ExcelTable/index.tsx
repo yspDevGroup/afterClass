@@ -128,7 +128,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             ) : (
               ''
             )}
-            {mode === 'see' && (data?.bjzt === '已发布' || data?.bjzt === '已结课') ? (
+            {mode === 'see' && data?.bjzt === '已开班' ? (
               <div className={styles.duihao}>√</div>
             ) : (
               ''
@@ -201,9 +201,9 @@ const Index: FC<IndexPropsType> = ({
 
     let seeChosenItem = null;
     if (type === 'see' && !chosenData) {
-      if (rowData[colItem.dataIndex]?.bjzt === '已发布') {
+      if (rowData[colItem.dataIndex]?.bjzt === '已开班') {
         Modal.warning({
-          title: '此班级已发布，不能再进行排课操作',
+          title: '此班级已开班，不能再进行排课操作',
         });
       } else if (rowData[colItem.dataIndex]?.bjzt === '已结课') {
         Modal.warning({

@@ -6,6 +6,8 @@ import ProFormFields from '@/components/ProFormFields';
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { queryXQList } from '@/services/wechat/service';
 import { enHenceMsg } from '@/utils/utils';
+import { useModel } from 'umi';
+import { getAllXQSJ } from '@/services/after-class/xqsj';
 
 const formLayout = {
   labelCol: { span: 5 },
@@ -27,25 +29,27 @@ const AddRoom = (props: PropsType) => {
   const [roomType, setRoomType] = useState<Record<string, string>[]>([]);
   // 校区
   const [campus, setCampus] = useState<any>([]);
-
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   useEffect(() => {
     async function fetchData() {
       try {
         // 获取所有校区信息
-        const currentXQ = await queryXQList();
         const XQ: { label: any; value: any }[] = [];
-        currentXQ?.map((item: any) => {
-          XQ.push({
-            label: item.name,
-            // 因列表中学区ID返回的是字符串类型的
-            value: item.id.toString(),
+        const resXQ = await getAllXQSJ({ XXJBSJId: currentUser?.xxId });
+        if (resXQ.status === 'ok') {
+          resXQ.data?.forEach((item: any) => {
+            XQ.push({
+              label: item.XQMC,
+              value: item.id,
+            });
           });
-          return '';
-        });
-        setCampus(XQ);
+          setCampus(XQ);
+        }
         // 根据学校ID获取所有场地类型
         const response = await getAllFJLX({
           name: '',
+          XXJBSJId: currentUser?.xxId,
         });
         if (response.status === 'ok') {
           if (response.data && response.data.length > 0) {

@@ -7,12 +7,14 @@ import { Button, message, Popconfirm } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { TableListParams } from '../../RoomManagement/data';
 import type { DataSourceType } from '../data';
+import { useModel } from 'umi';
 
 const SiteMaintenance = () => {
   const actionRef = useRef<ActionType>();
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [dataSource, setDataSource] = useState<DataSourceType[]>([]);
-
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const columns: ProColumns<DataSourceType>[] = [
     {
       title: '名称',
@@ -100,7 +102,7 @@ const SiteMaintenance = () => {
             sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
             filter,
           };
-          return getAllFJLX({ name: '' }, opts);
+          return getAllFJLX({ name: '', XXJBSJId: currentUser?.xxId }, opts);
         }}
         recordCreatorProps={false}
         onChange={setDataSource}
@@ -114,6 +116,7 @@ const SiteMaintenance = () => {
               const result = row.title
                 ? await createFJLX({
                     FJLX: row.FJLX!,
+                    XXJBSJId: currentUser?.xxId,
                   })
                 : await updateFJLX(
                     {
@@ -121,6 +124,7 @@ const SiteMaintenance = () => {
                     },
                     {
                       FJLX: row.FJLX!,
+                      XXJBSJId: currentUser?.xxId,
                     },
                   );
               if (result.status === 'ok') {
