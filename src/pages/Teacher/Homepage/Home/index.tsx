@@ -7,13 +7,12 @@ import EnrollClassTime from '@/components/EnrollClassTime';
 import myContext from '@/utils/MyContext';
 import TeachCourses from './components/TeachCourses';
 import Details from './Pages/Details';
-import { getAllXXGG } from '@/services/after-class/xxgg';
 import { useModel, Link } from 'umi';
-import EmptyArticle from './Pages/EmptyArticle';
 import { enHenceMsg } from '@/utils/utils';
+import { getXXTZGG } from '@/services/after-class/xxtzgg';
 
 const Home = () => {
-  const { currentUserInfo, courseStatus } = useContext(myContext);
+  const { currentUserInfo } = useContext(myContext);
   const userRef = useRef(null);
   const [notification, setNotification] = useState<any[]>();
   const { initialState } = useModel('@@initialState');
@@ -33,10 +32,15 @@ const Home = () => {
 
   useEffect(() => {
     async function announcements() {
-      const res = await getAllXXGG({ status: ['已发布'], XXJBSJId: currentUser?.xxId });
+      const res = await getXXTZGG({
+        ZT: ['已发布'],
+        XXJBSJId: currentUser?.xxId,
+        page: 0,
+        pageSize: 0,
+      });
       if (res.status === 'ok') {
-        if (!(res.data?.length === 0)) {
-          setNotification(res.data);
+        if (!(res.data?.rows?.length === 0)) {
+          setNotification(res.data?.rows);
         }
       } else {
         enHenceMsg(res.message);
@@ -57,54 +61,51 @@ const Home = () => {
           <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
         </div>
       </header>
-      {courseStatus === 'empty' ? (
-        <EmptyArticle />
-      ) : (
-        <div className={styles.pageContent}>
-          <div className={styles.noticeArea}>
-            <IconFont type="icon-gonggao" className={styles.noticeImg} />
-            <div className={styles.noticeText}>
-              <span>学校公告</span>
-              {notification && notification.length ? (
-                <Link
-                  to={`/teacher/home/notice/announcement?listid=${notification[0].id}&index=all`}
-                  style={{
-                    color: '#333',
-                    margin: '0 9px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {notification[0].BT}
-                </Link>
-              ) : (
-                '暂无公告'
-              )}
-            </div>
-            <Link
-              to={{
-                pathname: '/teacher/home/notice',
-                state: {
-                  notification,
-                },
-              }}
-            >
-              {' '}
-              <IconFont type="icon-gengduo" className={styles.gengduo} />
-            </Link>
+      <div className={styles.pageContent}>
+        <div className={styles.noticeArea}>
+          <IconFont type="icon-gonggao" className={styles.noticeImg} />
+          <div className={styles.noticeText}>
+            <span>学校公告</span>
+            {notification && notification.length ? (
+              <Link
+                to={`/teacher/home/notice/announcement?listid=${notification[0].id}&index=all`}
+                style={{
+                  color: '#333',
+                  margin: '0 9px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {notification[0].BT}
+              </Link>
+            ) : (
+              '暂无公告'
+            )}
           </div>
-          <div className={styles.enrollArea}>
-            <EnrollClassTime teacher={true} />
-          </div>
-          <div className={styles.teachCourses}>
-            <TeachCourses />
-          </div>
-          <div className={styles.announceArea}>
-            <Details data={notification} />
-          </div>
+          <Link
+            to={{
+              pathname: '/teacher/home/notice',
+              state: {
+                notification,
+              },
+            }}
+          >
+            {' '}
+            <IconFont type="icon-gengduo" className={styles.gengduo} />
+          </Link>
         </div>
-      )}
+        <div className={styles.enrollArea}>
+          <EnrollClassTime teacher={true} />
+        </div>
+        <div className={styles.teachCourses}>
+          <TeachCourses />
+        </div>
+        <div className={styles.announceArea}>
+          <Details data={notification} />
+        </div>
+      </div>
+      )
     </div>
   );
 };

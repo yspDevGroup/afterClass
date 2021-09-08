@@ -10,8 +10,7 @@ import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { DateRange, Week } from './Timefunction';
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
-const reg =
-  /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
 export const isUrl = (path: string): boolean => reg.test(path);
 
@@ -274,15 +273,24 @@ export const getCurrentStatus = (
   KKKSRQ: string,
   KKJSRQ: string,
 ) => {
-  let currentStatus: 'enroll' | 'enrolling' | 'enrolled' | 'education' | 'noTips' | 'empty' =
-    'empty';
+  let currentStatus:
+    | 'unstart'
+    | 'enroll'
+    | 'enrolling'
+    | 'enrolled'
+    | 'education'
+    | 'end'
+    | 'noTips'
+    | 'empty' = 'empty';
   const today = new Date();
   const BMbegin = new Date(BMKSRQ);
   const BMend = new Date(BMJSRQ);
   const KKbegin = new Date(KKKSRQ);
   const KKend = new Date(KKJSRQ);
 
-  if (BMbegin <= today && today <= BMend) {
+  if (today < BMbegin) {
+    currentStatus = 'unstart';
+  } else if (BMbegin <= today && today <= BMend) {
     currentStatus = 'enroll';
     if (KKbegin <= today && today <= BMend) {
       // const nowSta = (today.getTime() - KKbegin.getTime()) / 7 / 24 / 60 / 60 / 1000;
@@ -301,6 +309,8 @@ export const getCurrentStatus = (
     } else {
       currentStatus = 'education';
     }
+  } else if (today > KKend) {
+    currentStatus = 'end';
   }
   return currentStatus;
 };

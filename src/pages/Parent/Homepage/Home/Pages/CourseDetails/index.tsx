@@ -108,6 +108,7 @@ const CourseDetails: React.FC = () => {
       XSId: children[0].student_userid!,
       XSXM: children[0].name!,
       KHBJSJId: BJ!,
+      XXJBSJId: currentUser?.xxId,
     };
     const res = await createKHXSDD(data);
     if (res.status === 'ok') {
