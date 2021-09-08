@@ -3,6 +3,7 @@ import { Button, message, Upload, Image } from 'antd';
 import ImgCrop from 'antd-img-crop';
 
 import styles from './UploadImage.less';
+import { getAuthorization } from '@/utils/utils';
 
 type UploadImageProps = {
   imageurl?: string; // 回显地址
@@ -64,7 +65,7 @@ const UploadImage = (props: UploadImageProps) => {
               accept={accept}
               data={data}
               headers={{
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                Authorization: getAuthorization(),
               }}
             >
               <Button type="primary" disabled={disabled}>
