@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
@@ -137,14 +139,24 @@ const CourseManagement = (props: { location: { state: any } }) => {
   };
 
   const handleEdit = (data: any) => {
+    const FJS =
+      data.KHBJJs?.length > 0
+        ? data.KHBJJs?.map((item: any) => {
+            if (item.JSLX === '副教师') {
+              return item?.KHJSSJId;
+            }
+          })
+        : [];
     const list = {
       ...data,
       XQID: data.XQ ? data.XQ : [],
       NJSID: data.NJS ? data.NJS : [],
       NJS: data.NJSName ? data.NJSName : [],
       XQ: data.XQName ? data.XQName : [],
-      ZJS: data.ZJS || undefined,
-      FJS: data.FJS ? data.FJS : [],
+      ZJS:
+        data.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.KHJSSJId ||
+        undefined,
+      FJS,
       BMSD: [data.BMKSSJ || data.KHKCSJ.BMKSSJ, data.BMJSSJ || data.KHKCSJ.BMJSSJ],
       SKSD: [data.KKRQ || data.KHKCSJ.KKRQ, data.JKRQ || data.KHKCSJ.JKRQ],
       SSJGLX: data?.KHKCSJ?.SSJGLX,
