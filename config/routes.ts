@@ -49,6 +49,17 @@
     icon: 'fileText',
     routes: [
       {
+        path: '/basicalSettings/schoolInfo',
+        name: 'schoolInfo',
+        component: './Manager/BasicalSettings/SchoolInfo',
+      },
+      {
+        path:'/basicalSettings/schoolInfo/schoolEditor',
+        name: 'schoolEditor',
+        hideInMenu: true,
+        component: './Manager/BasicalSettings/SchoolInfo/SchoolEditor',
+      },
+      {
         path: '/basicalSettings/service',
         name: 'service',
         component: './Manager/Announcements/Service',

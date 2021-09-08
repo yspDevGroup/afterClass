@@ -24,6 +24,7 @@ export async function getXXJBSJ(
       XXDZ?: string;
       XXYZBM?: string;
       XZQHM?: string;
+      XZQ?: string;
       JXNY?: string | any;
       XQR?: string;
       XXBXLXM?: string;
@@ -122,6 +123,7 @@ export async function createXXJBSJ(body: API.CreateXXJBSJ, options?: { [key: str
       XXDZ?: string;
       XXYZBM?: string;
       XZQHM?: string;
+      XZQ?: string;
       JXNY?: string | any;
       XQR?: string;
       XXBXLXM?: string;
