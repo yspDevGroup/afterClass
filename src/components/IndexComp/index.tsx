@@ -6,7 +6,7 @@
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Row } from 'antd';
+import { Card, Col, Row } from 'antd';
 import { Link, useModel } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
 import Topbar from './Topbar';
@@ -18,16 +18,12 @@ import home2 from '@/assets/home2.png';
 import home3 from '@/assets/home3.png';
 import home4 from '@/assets/home4.png';
 import arrow from '@/assets/arrow.png';
-import exportImg from '@/assets/export.png';
 
 import styles from './index.less';
 import { homePage } from '@/services/after-class/xxjbsj';
-import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
-import DobuleList from './DobuleList';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { KHJYJG } from '@/services/after-class/khjyjg';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
-
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
@@ -39,20 +35,20 @@ const Index = () => {
   useEffect(() => {
     async function fetchData() {
       const res = await homePage({
-        XXJBSJId: currentUser?.xxId
+        XXJBSJId: currentUser?.xxId,
       });
       if (res.status === 'ok') {
         const { xxbm, kcbm, ...rest } = res.data;
         // 配置头部统计栏目数据
         setHomeData({ ...rest });
-      };
+      }
       // 校内通知
       const result = await getXXTZGG({
         XXJBSJId: currentUser?.xxId,
         BT: '',
         ZT: ['已发布'],
         page: 1,
-        pageSize: 3
+        pageSize: 3,
       });
       if (result.status === 'ok') {
         setAnnoceData(result.data?.rows);
@@ -67,14 +63,14 @@ const Index = () => {
             ZT: ['已发布'],
             XZQHM: resgetKHJYJG.data.XZQHM,
             page: 1,
-            pageSize: 3
+            pageSize: 3,
           });
           if (resgetXXTZGG.status === 'ok') {
             setPolicyData(resgetXXTZGG.data?.rows);
           }
         }
       }
-    };
+    }
     fetchData();
   }, []);
 
@@ -83,19 +79,38 @@ const Index = () => {
       <Topbar data={homeData} />
       <Row gutter={[24, 24]} className={styles.listWrapper}>
         <Col span={12}>
-          <Card title="校内通知" bordered={false} extra={<a href="/announcements/notice">更多<RightOutlined style={{ fontSize: '12px' }} /></a>}>
-            <List type='policy' data={annoceData} noDataImg={noAnnoce} noDataText="暂无信息" />
+          <Card
+            title="校内通知"
+            bordered={false}
+            extra={
+              <a href="/announcements/notice">
+                更多
+                <RightOutlined style={{ fontSize: '12px' }} />
+              </a>
+            }
+          >
+            <List type="policy" data={annoceData} noDataImg={noAnnoce} noDataText="暂无信息" />
           </Card>
         </Col>
         <Col span={12}>
-          <Card title="政策公告" bordered={false} extra={<a href="/announcements/policy">更多<RightOutlined style={{ fontSize: '12px' }} /></a>}>
-            <List type='policy' data={policyData} noDataImg={noData} noDataText="暂无信息" />
+          <Card
+            title="政策公告"
+            bordered={false}
+            extra={
+              <a href="/announcements/policy">
+                更多
+                <RightOutlined style={{ fontSize: '12px' }} />
+              </a>
+            }
+          >
+            <List type="policy" data={policyData} noDataImg={noData} noDataText="暂无信息" />
           </Card>
         </Col>
       </Row>
       <Row gutter={[24, 24]} className={styles.chartWrapper}>
         <Col span={24}>
-          <Card title="课后服务开启流程" bordered={false} extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>}>
+          {/* extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>} */}
+          <Card title="课后服务开启流程" bordered={false}>
             <Row gutter={[24, 0]} className={styles.viewWrapper}>
               <Col span={5}>
                 <p>
@@ -104,13 +119,21 @@ const Index = () => {
                 </p>
                 <img src={home1} alt="" />
                 <ul>
-                  <li><Link to='/announcements/service'>服务协议配置</Link></li>
-                  <li><Link to='/basicalSettings/termManagement'>学期学年维护</Link></li>
-                  <li><Link to='/basicalSettings/periodMaintenance'>时段维护</Link></li>
-                  <li><Link to='/basicalSettings/roomManagement'>场地维护</Link></li>
+                  <li>
+                    <Link to="/basicalSettings/service">服务协议配置</Link>
+                  </li>
+                  <li>
+                    <Link to="/basicalSettings/termManagement">学期学年维护</Link>
+                  </li>
+                  <li>
+                    <Link to="/basicalSettings/periodMaintenance">时段维护</Link>
+                  </li>
+                  <li>
+                    <Link to="/basicalSettings/roomManagement">场地维护</Link>
+                  </li>
                 </ul>
               </Col>
-              <Col span={1} style={{display: 'flex',alignItems: 'center'}}>
+              <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
                 <img src={arrow} alt="" />
               </Col>
               <Col span={5}>
@@ -120,11 +143,15 @@ const Index = () => {
                 </p>
                 <img src={home2} alt="" />
                 <ul>
-                  <li><Link to='/courseManagements/CourseManagements'>课程管理</Link></li>
-                  <li><Link to='/classManagement'>班级管理</Link></li>
+                  <li>
+                    <Link to="/courseManagements/CourseManagements">课程管理</Link>
+                  </li>
+                  <li>
+                    <Link to="/classManagement">班级管理</Link>
+                  </li>
                 </ul>
               </Col>
-              <Col span={1} style={{display: 'flex',alignItems: 'center'}}>
+              <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
                 <img src={arrow} alt="" />
               </Col>
               <Col span={5}>
@@ -134,10 +161,12 @@ const Index = () => {
                 </p>
                 <img src={home3} alt="" />
                 <ul>
-                  <li><Link to='/courseScheduling'>排课管理</Link></li>
+                  <li>
+                    <Link to="/courseScheduling">排课管理</Link>
+                  </li>
                 </ul>
               </Col>
-              <Col span={1} style={{display: 'flex',alignItems: 'center'}}>
+              <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
                 <img src={arrow} alt="" />
               </Col>
               <Col span={5}>
@@ -147,8 +176,12 @@ const Index = () => {
                 </p>
                 <img src={home4} alt="" />
                 <ul>
-                  <li><Link to='/classManagement'>班级发布</Link></li>
-                  <li><Link to='/courseManagements/CourseManagements'>课程发布</Link></li>
+                  <li>
+                    <Link to="/classManagement">班级发布</Link>
+                  </li>
+                  <li>
+                    <Link to="/courseManagements/CourseManagements">课程发布</Link>
+                  </li>
                 </ul>
               </Col>
             </Row>

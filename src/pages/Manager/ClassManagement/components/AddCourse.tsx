@@ -150,7 +150,6 @@ const AddCourse: FC<AddCourseProps> = ({
       let res = null;
       const options = {
         ...values,
-        FJS: values.FJS, // 副班
         KCTP: imageUrl || formValues?.KCTP,
         BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : BMData?.KSSJ),
         BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : BMData?.JSSJ),
@@ -158,14 +157,41 @@ const AddCourse: FC<AddCourseProps> = ({
         JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSQ,
         XNXQId: curXNXQId,
       };
+
       if (formValues?.id) {
+        const ZJS = [
+          {
+            JSLX: '主教师',
+            KHJSSJId: values.ZJS,
+            KHBJSJId: formValues?.id,
+          },
+        ];
+        const FJS = values.FJS.map((item: any) => {
+          return {
+            JSLX: '副教师',
+            KHJSSJId: item,
+            KHBJSJId: formValues?.id,
+          };
+        });
         delete options.BJZT;
         const params = {
           id: formValues?.id,
         };
-        res = updateKHBJSJ(params, options);
+        res = updateKHBJSJ(params, { ...options, KHBJJSs: [...ZJS, ...FJS] });
       } else {
-        res = createKHBJSJ(options);
+        const ZJS = [
+          {
+            JSLX: '主教师',
+            KHJSSJId: values.ZJS,
+          },
+        ];
+        const FJS = values.FJS.map((item: any) => {
+          return {
+            JSLX: '副教师',
+            KHJSSJId: item,
+          };
+        });
+        res = createKHBJSJ({ ...options, KHBJJSs: [...ZJS, ...FJS] });
       }
       resolve(res);
       reject(res);

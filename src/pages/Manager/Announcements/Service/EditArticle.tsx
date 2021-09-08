@@ -51,17 +51,17 @@ const EditArticle = (props: any) => {
         });
         if (result.status === 'ok') {
           message.success('保存成功');
-          history.push('/announcements/service');
+          history.push('/basicalSettings/service');
         } else {
-          message.error('保存失败，请联系管理员或稍后再试。');
+          message.error(result.message);
         }
       } else {
         const resUpdateXXTZGG = await updateXXTZGG({ id }, data);
         if (resUpdateXXTZGG.status === 'ok') {
           message.success('修改成功');
-          history.push('/announcements/service');
+          history.push('/basicalSettings/service');
         } else {
-          message.error('修改失败，请联系管理员或稍后再试。');
+          message.error(resUpdateXXTZGG.message);
         }
       }
     } catch (err) {
