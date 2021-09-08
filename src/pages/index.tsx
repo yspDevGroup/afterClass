@@ -2,7 +2,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-09-06 22:42:08
+ * @LastEditTime: 2021-09-08 13:03:51
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -23,13 +23,13 @@ const Index = () => {
         history.replace('/parent/home');
         break;
       default:
-        history.replace('/homepage');
+        history.replace('/403');
         break;
     }
-    if (initialState?.currentUser?.adminAuth?.includes('系统管理')) {
-      // 支持PC登录，默认为管理员
-      history.replace('/homepage');
-    }
+    // if (initialState?.currentUser?.adminAuth?.includes('系统管理')) {
+    //   // 支持PC登录，默认为管理员
+    //   history.replace('/homepage');
+    // }
   }, [initialState?.currentUser?.adminAuth, initialState?.currentUser?.auth]);
   return (
     <div>

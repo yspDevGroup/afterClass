@@ -326,6 +326,11 @@
     component: './index',
   },
   {
+    path: '/403',
+    layout: false,
+    component: './403',
+  },
+  {
     component: './404',
   },
 ];
