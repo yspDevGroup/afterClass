@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { notification } from 'antd';
 import type { RequestConfig } from 'umi';
 import { history, Link } from 'umi';
@@ -35,19 +36,14 @@ export async function getInitialState(): Promise<InitialState> {
         if (!info) {
           // 如果后台未查询到用户信息，则跳转到登录页
           // 此时不能无条件跳转向认证页，否则可能产生无限循环
-          history.push('/user/login');
-          localStorage.removeItem('token');
+          history.push('/403');
+          removeOAuthToken();
           return undefined;
         }
         return info as API.CurrentUser;
       }
     } catch (error) {
-      if (loginPath.startsWith('http')) {
-        // 企业微信端打开
-        window.location.href = loginPath;
-      } else {
-        history.push(loginPath);
-      }
+      console.warn(error);
     }
     return undefined;
   };
@@ -55,8 +51,8 @@ export async function getInitialState(): Promise<InitialState> {
   if (window.location.pathname === '/' && history.length <= 2) {
     removeOAuthToken();
   }
-  // 如果是登录页面及认证跳转页，不执行
-  if (history.location.pathname !== loginPath) {
+  // 如果是登录页面，不执行
+  if (window.location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
@@ -83,13 +79,14 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
-      const { location } = history;
+      const path = window.location.pathname.toLowerCase();
       // 如果没有登录或第一次进入首页，重定向到 login
       if (
         !initialState?.currentUser &&
-        location.pathname !== loginPath &&
-        !location.pathname.startsWith(authCallbackPath) &&
-        !location.pathname.startsWith('/40')
+        path !== loginPath &&
+        path !== '/' &&
+        !path.startsWith(authCallbackPath) &&
+        !path.startsWith('/40')
       ) {
         if (loginPath.startsWith('http')) {
           // 企业微信端打开
