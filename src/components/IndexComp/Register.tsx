@@ -3,15 +3,15 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-08 12:02:57
- * @LastEditors: wsl
+ * @LastEditTime: 2021-09-08 13:26:48
+ * @LastEditors: zpl
  */
 import React, { useEffect, useState } from 'react';
 import { Button, Form, message, Select } from 'antd';
+import { useModel } from 'umi';
 import img from '@/assets/Company.png';
 import styles from './index.less';
 import { updateXXJBSJ } from '@/services/after-class/xxjbsj';
-import { useModel } from '@/.umi/plugin-model/useModel';
 
 const { Option } = Select;
 
