@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-08 11:20:14
+ * @LastEditTime: 2021-09-08 12:02:57
  * @LastEditors: wsl
  */
 import React, { useEffect, useState } from 'react';
@@ -151,13 +151,7 @@ const Register = () => {
           </Select>
         </Form.Item>
         <Form.Item name="XD" key="XD" label="学段">
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: '100%' }}
-            placeholder="请选择"
-            onChange={handleChange}
-          >
+          <Select mode="multiple" allowClear style={{ width: '100%' }} placeholder="请选择">
             <Option value="幼儿园">幼儿园</Option>
             <Option value="小学">小学</Option>
             <Option value="初中">初中</Option>
