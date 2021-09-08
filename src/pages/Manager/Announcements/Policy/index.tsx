@@ -98,7 +98,7 @@ const TableList = () => {
   return (
     <PageContainer>
       <ProTable<any>
-        headerTitle="政策列表"
+        headerTitle={<div style={{ fontWeight: 'bold' }}>政策列表</div>}
         actionRef={actionRef}
         className={styles.proTableStyles}
         rowKey="id"

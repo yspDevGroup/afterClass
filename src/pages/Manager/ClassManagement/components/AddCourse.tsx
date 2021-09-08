@@ -154,10 +154,9 @@ const AddCourse: FC<AddCourseProps> = ({
         BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : BMData?.KSSJ),
         BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : BMData?.JSSJ),
         KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
-        JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSQ,
+        JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
         XNXQId: curXNXQId,
       };
-
       if (formValues?.id) {
         const ZJS = [
           {
@@ -377,6 +376,34 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
+    BMData?.id
+      ? {
+          type: 'divTab',
+          text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
+      : '',
+    {
+      type: 'div',
+      key: 'div',
+      label: `单独设置报名时段：`,
+      disabled: readonly,
+      lineItem: [
+        {
+          type: 'switch',
+          readonly,
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item === false) {
+                return setBaoming(true);
+              }
+              return setBaoming(false);
+            },
+            checked: !baoming,
+          },
+        },
+      ],
+    },
     {
       type: 'dateRange',
       label: `报名时段:`,
@@ -384,8 +411,8 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'BMSD',
       disabled: readonly,
       width: '100%',
-      // hidden: baoming,
-      rules: [{ required: true, message: '请选择报名时段' }],
+      hidden: baoming,
+      rules: [{ required: !baoming, message: '请选择报名时段' }],
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
@@ -393,14 +420,43 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       },
     },
+    KKData?.id
+      ? {
+          type: 'divTab',
+          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
+      : '',
+    {
+      type: 'div',
+      key: 'div1',
+      disabled: readonly,
+      label: `单独设置上课时段：`,
+
+      lineItem: [
+        {
+          type: 'switch',
+          disabled: readonly,
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item === false) {
+                return setKaike(true);
+              }
+              return setKaike(false);
+            },
+            checked: !kaike,
+          },
+        },
+      ],
+    },
     {
       type: 'dateRange',
       label: '上课时段:',
       name: 'SKSD',
       key: 'SKSD',
       width: '100%',
-      // hidden: kaike,
-      rules: [{ required: true, message: '请选择上课时间' }],
+      hidden: kaike,
+      rules: [{ required: !kaike, message: '请选择上课时间' }],
       disabled: readonly,
       fieldProps: {
         disabledDate: (current: any) => {

@@ -153,7 +153,7 @@ const Notice = () => {
   return (
     <PageContainer>
       <ProTable<any>
-        headerTitle="通知列表"
+        headerTitle={<div style={{ fontWeight: 'bold' }}>通知列表</div>}
         actionRef={actionRef}
         className={styles.proTableStyles}
         rowKey="id"

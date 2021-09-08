@@ -23,6 +23,7 @@ import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
 import type { CourseItem } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
+import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 
 const { Option } = Select;
 
@@ -139,14 +140,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
   };
 
   const handleEdit = (data: any) => {
-    const FJS =
-      data.KHBJJs?.length > 0
-        ? data.KHBJJs?.map((item: any) => {
-            if (item.JSLX === '副教师') {
-              return item?.KHJSSJId;
-            }
-          })
-        : [];
+    const FJS: any[] = [];
+    data.KHBJJs?.map((item: any) => {
+      if (item.JSLX === '副教师') {
+        FJS.push(item?.KHJSSJId);
+      }
+    });
     const list = {
       ...data,
       XQID: data.XQ ? data.XQ : [],
