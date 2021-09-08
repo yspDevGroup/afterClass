@@ -2,7 +2,7 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-31 10:08:34
- * @LastEditTime: 2021-09-08 17:06:39
+ * @LastEditTime: 2021-09-08 18:59:40
  * @LastEditors: wsl
  */
 import { useState, useRef } from 'react';
@@ -52,6 +52,9 @@ const TableList = () => {
       width: '9em',
       align: 'center',
       search: false,
+      render: (text, record) => {
+        return <>{record.JYJGSJ.BMMC}</>;
+      },
     },
     {
       title: '关键词',
