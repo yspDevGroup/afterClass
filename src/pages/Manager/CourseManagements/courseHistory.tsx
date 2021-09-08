@@ -114,7 +114,7 @@ const CourseHistory = () => {
             page: 1,
             isRequired: false,
             XXJBSJId: currentUser?.xxId,
-            XZQHM: '610324',
+            XZQHM: currentUser?.XZQHM,
           };
           const resAll = await getHistoriesBySchool(opts);
           if (resAll.status === 'ok') {

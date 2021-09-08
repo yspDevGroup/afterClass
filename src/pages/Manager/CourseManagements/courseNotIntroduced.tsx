@@ -210,7 +210,7 @@ const courseNotIntroduced = () => {
             page: 1,
             isRequired: false,
             XXJBSJId: currentUser?.xxId,
-            XZQHM: '610324',
+            XZQHM: currentUser?.XZQHM,
           };
           const resAll = await getToIntroduceBySchool(opts);
           if (resAll.status === 'ok') {
