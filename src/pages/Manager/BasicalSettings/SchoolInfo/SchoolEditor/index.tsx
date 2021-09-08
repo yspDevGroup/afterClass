@@ -169,7 +169,7 @@ const SchoolEditor = (props: any) => {
       });
       setInfo({
         ...info,
-        XD: XD?.split(',')
+        XD: XD? XD.split(','): undefined
       });
     }
   }, [currentValue]);
