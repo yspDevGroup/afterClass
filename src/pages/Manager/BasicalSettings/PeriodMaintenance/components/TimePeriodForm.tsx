@@ -29,7 +29,7 @@ const TimePeriodForm = (props: PropsType) => {
     async function fetchData() {
       // 从本地获取学期学年信息
       const res = await queryXNXQList(currentUser?.xxId);
-      const newData = res.xnxqList.map((item: any) => {
+      const newData = res?.xnxqList?.map((item: any) => {
         return {
           label: item.text,
           value: item.value,

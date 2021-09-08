@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 11:07:27
- * @LastEditTime: 2021-09-06 14:06:21
+ * @LastEditTime: 2021-09-08 09:18:37
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
@@ -17,7 +17,7 @@ const List = (props: { type: string, data?: any, noDataImg?: any, noDataText?: s
   return (
     <div className={styles.annceList}>
       {data?.length ? <ul>
-        {data.map((item: { BT?: string, RQ?: string }) => {
+        {data.map((item: { BT?: string, updatedAt?: string ,RQ?: string }) => {
           return <li key={item.BT}>
             <Link
               key="ck"
@@ -27,7 +27,7 @@ const List = (props: { type: string, data?: any, noDataImg?: any, noDataText?: s
               }}
             >
               <span>{item.BT}</span>
-              <span>{item.RQ}</span>
+              <span>{item.updatedAt||item.RQ}</span>
             </Link>
           </li>
         })}

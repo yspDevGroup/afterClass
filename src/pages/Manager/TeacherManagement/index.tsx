@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-09-06 17:33:53
+ * @LastEditTime: 2021-09-08 09:40:20
  * @LastEditors: Sissle Lynn
  */
 /*
@@ -39,7 +39,7 @@ const TeacherManagement = () => {
   // 上传配置
   const UploadProps: any = {
     name: 'xlsx',
-    action: '/api/upload/importWechatTeachers',
+    action: '/api/upload/importWechatTeachers?plat=school',
     headers: {
       authorization: getAuthorization(),
     },

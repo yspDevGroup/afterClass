@@ -1,13 +1,14 @@
 import { notification } from 'antd';
 import type { RequestConfig } from 'umi';
 import { history, Link } from 'umi';
-import Footer from '@/components/Footer';
 import type { ResponseError } from 'umi-request';
-import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { getAuthorization, getLoginPath, removeOAuthToken } from './utils/utils';
-import headerTop from '@/assets/headerTop.png';
+import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { currentWechatUser } from './services/after-class/wechat';
+import Footer from '@/components/Footer';
+import headerTop from '@/assets/headerTop.png';
+import headerTopSmall from '@/assets/headerTopSmall.png'
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 const loginPath: string = getLoginPath();
@@ -99,18 +100,26 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
     },
     links: isDev
       ? [
-          <Link to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>openAPI 文档</span>
-          </Link>,
-          <Link to="/~docs" target="_blank">
-            <BookOutlined />
-            <span>业务组件文档</span>
-          </Link>,
-        ]
+        <Link to="/umi/plugin/openapi" target="_blank">
+          <LinkOutlined />
+          <span>openAPI 文档</span>
+        </Link>,
+        <Link to="/~docs" target="_blank">
+          <BookOutlined />
+          <span>业务组件文档</span>
+        </Link>,
+      ]
       : [],
     collapsedButtonRender: false,
-    menuHeaderRender: () => {
+    menuHeaderRender: (logo: any, title: any, props: any) => {
+      if (props?.collapsed) {
+        return <div className="cusHeaderLogoSmall">
+          <Link to="/">
+            <img src={headerTopSmall} />
+          </Link>
+          <span>学校<br />端</span>
+        </div>
+      }
       return (
         <div className="cusHeaderLogo">
           <Link to="/">
