@@ -2,11 +2,12 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-09-08 13:03:51
+ * @LastEditTime: 2021-09-08 19:37:44
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
+import { getLoginPath } from '@/utils/utils';
 import loadImg from '@/assets/loading.gif';
 
 const Index = () => {
@@ -23,7 +24,14 @@ const Index = () => {
         history.replace('/parent/home');
         break;
       default:
-        history.replace('/403');
+        {
+          const loginPath = getLoginPath();
+          if (loginPath.startsWith('http')) {
+            window.location.href = loginPath;
+          } else {
+            history.replace(loginPath);
+          }
+        }
         break;
     }
     // if (initialState?.currentUser?.adminAuth?.includes('系统管理')) {
