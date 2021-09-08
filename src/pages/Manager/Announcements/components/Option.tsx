@@ -8,11 +8,9 @@
 import React from 'react';
 import { Divider, Popconfirm, message, Tooltip } from 'antd';
 import { history, Link } from 'umi';
-import styles from '../index.module.less';
 import type { TableListItem } from '../data';
 
 import moment from 'moment';
-import { ClearOutlined, EyeOutlined } from '@ant-design/icons';
 import { deleteXXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
 import { deleteKHJYTZGG } from '@/services/after-class/khjytzgg';
 
