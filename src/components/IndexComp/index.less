@@ -4,15 +4,16 @@
   background-color: #fff;
 
   .hello {
-    margin-top: 120px;
+    margin-top: 20px;
+    margin-bottom: 10px;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 20px;
     text-align: center;
   }
 
   .apply {
     color: #333333;
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
   }
 
@@ -21,6 +22,7 @@
     width: 400px;
     height: 300px;
     margin: 0 auto;
+    margin-top: 50px;
   }
 
   button {
@@ -196,6 +198,32 @@
     }
     .ant-empty-description{
       color: @normal-color;
+    }
+  }
+}
+.Forms {
+  :global {
+    .ant-row:nth-child(1) {
+      display: flex;
+      justify-content: center;
+      .ant-col:nth-child(1) {
+        width: 70px;
+      }
+      .ant-col:nth-child(2) {
+        flex: inherit;
+        width: 380px;
+      }
+    }
+    .ant-row:nth-child(2) {
+      display: flex;
+      justify-content: center;
+      .ant-col:nth-child(1) {
+        width: 70px;
+      }
+      .ant-col:nth-child(2) {
+        flex: inherit;
+        width: 380px;
+      }
     }
   }
 }
