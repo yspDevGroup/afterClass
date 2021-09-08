@@ -49,6 +49,17 @@
     icon: 'fileText',
     routes: [
       {
+        path: '/basicalSettings/service',
+        name: 'service',
+        component: './Manager/Announcements/Service',
+      },
+      {
+        path: '/basicalSettings/service/editArticle',
+        hideInMenu: 'true',
+        name: 'articleDetails',
+        component: './Manager/Announcements/Service/editArticle',
+      },
+      {
         path: '/basicalSettings/termManagement',
         name: 'termManagement',
         component: './Manager/BasicalSettings/TermManagement',
@@ -158,17 +169,6 @@
             component: './Manager/Announcements/Policy/ArticleDetails',
           },
         ],
-      },
-      {
-        path: '/announcements/service',
-        name: 'service',
-        component: './Manager/Announcements/Service',
-      },
-      {
-        path: '/announcements/service/editArticle',
-        hideInMenu: 'true',
-        name: 'articleDetails',
-        component: './Manager/Announcements/Service/editArticle',
       },
     ],
   },

@@ -1,17 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
-import { useEffect, useState } from 'react';
-import {
-  Row,
-  Col,
-  Divider,
-  Form,
-  Input,
-  Button,
-  Space,
-  message,
-} from 'antd';
-import dayjs from 'dayjs';
+import { useEffect } from 'react';
+import { Row, Col, Divider, Form, Input, Button, Space, message } from 'antd';
 // 引入编辑器组件
 import BraftEditor from 'braft-editor';
 // 引入编辑器样式
@@ -19,8 +9,7 @@ import 'braft-editor/dist/index.css';
 import { history, useModel } from 'umi';
 import styles from '../index.module.less';
 import PageContainer from '@/components/PageContainer';
-import { createXXTZGG, XXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
-
+import { createXXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
 
 const formItemLayout = {
   labelCol: {
@@ -58,7 +47,7 @@ const EditArticle = (props: any) => {
       if (typeof id === 'undefined') {
         const result = await createXXTZGG({
           ...data,
-          ZT:'已发布'
+          ZT: '已发布',
         });
         if (result.status === 'ok') {
           message.success('保存成功');
@@ -85,8 +74,7 @@ const EditArticle = (props: any) => {
     (() => {
       const initData = {
         ...state,
-        RQ: dayjs(state.RQ),
-        NR: BraftEditor.createEditorState(state.NR),
+        NR: BraftEditor.createEditorState(state?.NR || ''),
       };
       form.setFieldsValue(initData);
     })();
@@ -108,10 +96,7 @@ const EditArticle = (props: any) => {
               },
             ]}
           >
-            <BraftEditor
-              className="my-editor"
-              placeholder="请输入协议内容"
-            />
+            <BraftEditor className="my-editor" placeholder="请输入协议内容" />
           </Form.Item>
           <Row justify="end">
             <Col>
@@ -123,7 +108,7 @@ const EditArticle = (props: any) => {
                   <Button
                     htmlType="button"
                     onClick={() => {
-                      history.push('/announcements/service');
+                      history.push('/basicalSettings/service');
                     }}
                   >
                     取消
