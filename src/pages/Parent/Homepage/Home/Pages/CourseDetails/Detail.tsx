@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Divider } from 'antd';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
@@ -58,7 +57,6 @@ const Detail: React.FC = () => {
       fetchData(classid);
     }
   }, [classid]);
-  console.log(extra, '=====');
   return (
     <div className={styles.CourseDetails}>
       {index === 'all' ? (
