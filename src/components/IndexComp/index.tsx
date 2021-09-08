@@ -54,21 +54,16 @@ const Index = () => {
         setAnnoceData(result.data?.rows);
       }
       // 配置政策公告数据
-      if (currentUser?.jgId) {
-        const resgetKHJYJG = await KHJYJG({ id: currentUser?.jgId });
-        if (resgetKHJYJG.status === 'ok') {
-          const resgetXXTZGG = await getJYJGTZGG({
-            BT: '',
-            LX: 1,
-            ZT: ['已发布'],
-            XZQHM: resgetKHJYJG.data.XZQHM,
-            page: 1,
-            pageSize: 3,
-          });
-          if (resgetXXTZGG.status === 'ok') {
-            setPolicyData(resgetXXTZGG.data?.rows);
-          }
-        }
+      const resgetXXTZGG = await getJYJGTZGG({
+        BT: '',
+        LX: 1,
+        ZT: ['已发布'],
+        XZQHM: currentUser?.XZQHM,
+        page: 1,
+        pageSize: 3
+      });
+      if (resgetXXTZGG.status === 'ok') {
+        setPolicyData(resgetXXTZGG.data?.rows);
       }
     }
     fetchData();
