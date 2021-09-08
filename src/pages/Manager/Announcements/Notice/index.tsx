@@ -3,8 +3,8 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-09 17:41:43
- * @LastEditTime: 2021-09-06 12:00:56
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-09-08 17:08:19
+ * @LastEditors: wsl
  */
 import { useState, useRef } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
@@ -153,7 +153,7 @@ const Notice = () => {
   return (
     <PageContainer>
       <ProTable<any>
-        headerTitle="公告列表"
+        headerTitle="通知列表"
         actionRef={actionRef}
         className={styles.proTableStyles}
         rowKey="id"
@@ -171,7 +171,7 @@ const Notice = () => {
         request={async (params) => {
           if (params.ZT || params.BT) {
             const resgetXXTZGG = await getXXTZGG({
-              XXJBSJId:currentUser?.xxId,
+              XXJBSJId: currentUser?.xxId,
               BT: params.BT,
               ZT: params.ZT ? [params.ZT] : ['已发布', '草稿'],
               page: 0,
@@ -182,7 +182,7 @@ const Notice = () => {
             }
           } else {
             const resgetXXTZGG = await getXXTZGG({
-              XXJBSJId:currentUser?.xxId,
+              XXJBSJId: currentUser?.xxId,
               BT: '',
               ZT: ['已发布', '草稿'],
               page: 0,

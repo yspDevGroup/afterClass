@@ -2,7 +2,7 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-31 10:08:34
- * @LastEditTime: 2021-09-01 15:01:16
+ * @LastEditTime: 2021-09-08 17:06:39
  * @LastEditors: wsl
  */
 import { useState, useRef } from 'react';
@@ -12,7 +12,6 @@ import { Link, useModel } from 'umi';
 import type { TableListItem } from '../data';
 import styles from '../index.module.less';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
-import { KHJYJG } from '@/services/after-class/khjyjg';
 import PageContainer from '@/components/PageContainer';
 
 const TableList = () => {
@@ -20,7 +19,6 @@ const TableList = () => {
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { jgId } = currentUser!;
 
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -105,32 +103,29 @@ const TableList = () => {
         className={styles.proTableStyles}
         rowKey="id"
         request={async (params) => {
-          const resgetKHJYJG = await KHJYJG({ id: jgId! });
-          if (resgetKHJYJG.status === 'ok') {
-            if (params.ZT || params.BT) {
-              const resgetXXTZGG = await getJYJGTZGG({
-                BT: params.BT,
-                LX: 1,
-                XZQHM: resgetKHJYJG.data.XZQHM,
-                ZT: params.ZT ? [params.ZT] : ['已发布'],
-                page: 0,
-                pageSize: 0,
-              });
-              if (resgetXXTZGG.status === 'ok') {
-                setDataSource(resgetXXTZGG.data?.rows);
-              }
-            } else {
-              const resgetXXTZGG = await getJYJGTZGG({
-                BT: '',
-                LX: 1,
-                ZT: ['已发布'],
-                XZQHM: resgetKHJYJG.data.XZQHM,
-                page: 0,
-                pageSize: 0,
-              });
-              if (resgetXXTZGG.status === 'ok') {
-                setDataSource(resgetXXTZGG.data?.rows);
-              }
+          if (params.ZT || params.BT) {
+            const resgetXXTZGG = await getJYJGTZGG({
+              BT: params.BT,
+              LX: 1,
+              XZQHM: currentUser?.XZQHM,
+              ZT: params.ZT ? [params.ZT] : ['已发布'],
+              page: 0,
+              pageSize: 0,
+            });
+            if (resgetXXTZGG.status === 'ok') {
+              setDataSource(resgetXXTZGG.data?.rows);
+            }
+          } else {
+            const resgetXXTZGG = await getJYJGTZGG({
+              BT: '',
+              LX: 1,
+              ZT: ['已发布'],
+              XZQHM: currentUser?.XZQHM,
+              page: 0,
+              pageSize: 0,
+            });
+            if (resgetXXTZGG.status === 'ok') {
+              setDataSource(resgetXXTZGG.data?.rows);
             }
           }
 
