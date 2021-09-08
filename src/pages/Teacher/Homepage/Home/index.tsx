@@ -33,7 +33,7 @@ const Home = () => {
 
   useEffect(() => {
     async function announcements() {
-      const res = await getAllXXGG({ status: ['发布'], XXJBSJId: currentUser?.xxId });
+      const res = await getAllXXGG({ status: ['已发布'], XXJBSJId: currentUser?.xxId });
       if (res.status === 'ok') {
         if (!(res.data?.length === 0)) {
           setNotification(res.data);
