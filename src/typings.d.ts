@@ -185,7 +185,7 @@ declare const xnxqInfo: {
 
 type InitialState = {
   settings?: Partial<LayoutSettings>;
-  currentUser?: API.CurrentUser;
+  currentUser?: any; // API.CurrentUser;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 };
 

@@ -40,7 +40,9 @@ const Home = () => {
         <div className={styles.headerText}>
           <h4>
             <span>
-              {currentUserInfo?.subscriber_info?.remark || currentUserInfo?.username || '家长'}
+              {currentUserInfo?.external_contact?.subscriber_info.remark?.split('-')[0] ||
+                currentUserInfo?.username ||
+                '家长'}
             </span>
             ，你好！
           </h4>
