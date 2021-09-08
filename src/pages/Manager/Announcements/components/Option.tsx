@@ -29,9 +29,7 @@ const EditOpt = ({ id }: { id: string }) => (
     }}
   >
     <Tooltip title="编辑">
-      <a>
-        <div className={styles.editImg} />
-      </a>
+      <a>编辑</a>
     </Tooltip>
   </a>
 );
@@ -58,9 +56,7 @@ const PubOpt = ({ refreshHandler, record }: OptType) => (
     }}
   >
     <Tooltip title="发布">
-      <a>
-        <div className={styles.submitImg} />
-      </a>
+      <a>发布</a>
     </Tooltip>
   </a>
 );
@@ -87,9 +83,7 @@ const UnPubOpt = ({ refreshHandler, record }: OptType) => (
     }}
   >
     <Tooltip title="撤稿">
-      <a>
-        <ClearOutlined className={styles.chegao} />
-      </a>
+      <a>撤稿</a>
     </Tooltip>
   </a>
 );
@@ -102,9 +96,7 @@ const View = ({ record }: OptType) => (
     }}
   >
     <Tooltip title="查看">
-      <a>
-        <EyeOutlined className={styles.chegao} />
-      </a>
+      <a>查看</a>
     </Tooltip>
   </Link>
 );
@@ -132,9 +124,7 @@ const UnDelOpt = ({ refreshHandler, record }: OptType) => (
     }}
   >
     <Tooltip title="恢复">
-      <a>
-        <div className={styles.recoveryImg} />
-      </a>
+      <a>恢复</a>
     </Tooltip>
   </a>
 );
@@ -161,9 +151,7 @@ const DelOpt = ({ id, refreshHandler }: OptType) => (
   >
     <a href="#" style={{ color: 'red' }}>
       <Tooltip title="删除">
-        <a>
-          <div className={styles.delectImg} />
-        </a>
+        <a>删除</a>
       </Tooltip>
     </a>
   </Popconfirm>
@@ -191,9 +179,7 @@ const RealDelOpt = ({ id, refreshHandler }: OptType) => (
   >
     <a href="#" style={{ color: 'red' }}>
       <Tooltip title="彻底删除">
-        <a>
-          <div className={styles.delectImg} />
-        </a>
+        <a>彻底删除</a>
       </Tooltip>
     </a>
   </Popconfirm>
