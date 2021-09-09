@@ -66,7 +66,10 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
         {xxData ? (
           <span style={{ paddingRight: '40px' }}>
             {xxData?.XH && xxData?.XH.indexOf('http') > -1 ? (
-              <img style={{ width: '40px', height: '40px' }} src={xxData?.XH} />
+              <img
+                style={{ width: '40px', height: '40px', borderRadius: '40px' }}
+                src={xxData?.XH}
+              />
             ) : (
               ''
             )}{' '}
