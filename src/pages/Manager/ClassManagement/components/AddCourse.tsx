@@ -7,7 +7,6 @@ import type { ActionType } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import moment from 'moment';
-import { getDepUserList } from '@/services/after-class/wechat';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
@@ -50,27 +49,30 @@ const AddCourse: FC<AddCourseProps> = ({
   const [kaike, setKaike] = useState<boolean>(true);
   // 教师
   const [teacherData, setTeacherData] = useState<any[]>([]);
-  // 校区名字
-  const [xQItem, setXQLabelItem] = useState<any>('');
 
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
-  const [KHDateAll, setKHDateAll] = useState<any>({});
   const [KCDate, setKCDate] = useState<any>([]);
   // 报名时间
   const [BMData, setBMData] = useState<any>();
   // 开课时间
   const [KKData, setKKData] = useState<any>();
+
+  // 选中机构课程的任课老师
+  const [JGKCTeacherData, setJGKCTeacherData] = useState<any>([]);
+
   useEffect(() => {
     if (formValues) {
-      setBaoming(false);
-      setKaike(false);
       const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX);
       setKCDate(kcDate);
+
+      if (formValues.SSJGLX === '机构课程') {
+        const JGJS = formValues.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师');
+        setJGKCTeacherData([{ label: JGJS?.KHJSSJ?.XM, value: JGJS?.KHJSSJId }]);
+      }
     } else {
       setBaoming(true);
       setKaike(true);
-      setKHDateAll({});
     }
   }, [formValues]);
 
@@ -130,6 +132,21 @@ const AddCourse: FC<AddCourseProps> = ({
           const KK = resSJ.data?.find((item) => item.TYPE === '2');
           setBMData(BM);
           setKKData(KK);
+
+          if (
+            formValues?.BMKSSJ === new Date(BM?.KSSJ || '') &&
+            formValues?.BMJSSJ === new Date(BM?.JSSJ || '')
+          ) {
+            setBaoming(true);
+          } else {
+            setBaoming(false);
+          }
+
+          if (formValues?.KKRQ === KK?.KSSJ && formValues?.JKRQ === KK?.JSSJ) {
+            setKaike(true);
+          } else {
+            setKaike(false);
+          }
         }
       }
     })();
@@ -233,6 +250,33 @@ const AddCourse: FC<AddCourseProps> = ({
   };
   const formItems: any[] = [
     {
+      type: 'radio',
+      disabled: readonly,
+      label: '课程来源：',
+      name: 'SSJGLX',
+      key: 'SSJGLX',
+      fieldProps: {
+        options: [
+          { value: '校内课程', label: '校内课程' },
+          { value: '机构课程', label: '机构课程' },
+        ],
+        // 按照课程来源筛选课程
+        onChange: (values: any) => {
+          // 在切换的时候把选中的课程、主教师、副教师清空
+          form.setFieldsValue({
+            KHKCSJId: undefined,
+            ZJS: undefined,
+            FJS: undefined,
+          });
+
+          const { value } = values.target;
+          const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === value);
+          setKCDate(kcDate);
+        },
+      },
+      rules: [{ required: true, message: '请选择课程来源' }],
+    },
+    {
       type: 'input',
       label: '班级名称：',
       name: 'BJMC',
@@ -246,26 +290,7 @@ const AddCourse: FC<AddCourseProps> = ({
         autocomplete: 'off',
       },
     },
-    {
-      type: 'radio',
-      disabled: readonly,
-      label: '课程来源：',
-      name: 'SSJGLX',
-      key: 'SSJGLX',
-      fieldProps: {
-        options: [
-          { value: '校内课程', label: '校内课程' },
-          { value: '机构课程', label: '机构课程' },
-        ],
-        // 按照课程来源筛选课程
-        onChange: (values: any) => {
-          const { value } = values.target;
-          const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === value);
-          setKCDate(kcDate);
-        },
-      },
-      rules: [{ required: true, message: '请选择课程来源' }],
-    },
+
     {
       type: 'select',
       disabled: readonly,
@@ -277,6 +302,25 @@ const AddCourse: FC<AddCourseProps> = ({
         options: KCDate.map((item: any) => {
           return { label: item.KCMC, value: item.id };
         }),
+        onChange: (values: any) => {
+          // 取出选中机构课程的任课老师
+          const KCData = KCDate.find((item: any) => {
+            if (item.SSJGLX === '机构课程') {
+              if (item.id === values) {
+                // 在切换课程的时候把选中的任课老师先清空
+                form.setFieldsValue({ ZJS: undefined, FJS: undefined });
+
+                return item;
+              }
+            }
+            return false;
+          });
+          const teacher = KCData?.KHKCJs?.map((items: any) => {
+            return { label: items.KHJSSJ.XM, value: items.KHJSSJId };
+          });
+
+          setJGKCTeacherData(teacher || []);
+        },
       },
     },
     {
@@ -335,10 +379,6 @@ const AddCourse: FC<AddCourseProps> = ({
       rules: [{ required: true, message: '请填写所属校区' }],
       fieldProps: {
         options: campus,
-        onChange(_: any, option: any) {
-          form.setFieldsValue({ NJS: undefined });
-          setXQLabelItem(option?.label);
-        },
       },
     },
     {
@@ -354,7 +394,8 @@ const AddCourse: FC<AddCourseProps> = ({
           rules: [{ required: true, message: '请选择班主任' }],
           fieldProps: {
             showSearch: true,
-            options: teacherData,
+            // 创建机构课程的时 主班选择的是机构分配的任课老师
+            options: JGKCTeacherData.length > 0 ? JGKCTeacherData : teacherData,
             optionFilterProp: 'label',
             allowClear: true,
           },
@@ -369,7 +410,8 @@ const AddCourse: FC<AddCourseProps> = ({
           fieldProps: {
             mode: 'multiple',
             showSearch: true,
-            options: teacherData,
+            // 创建机构课程的时 副班选择的是机构分配和学校一起的任课老师
+            options: [...teacherData, ...JGKCTeacherData],
             optionFilterProp: 'label',
             allowClear: true,
           },
@@ -395,6 +437,8 @@ const AddCourse: FC<AddCourseProps> = ({
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
+                // 将按钮关闭的时候 传成默认时间段
+                form.setFieldsValue({ BMSD: [BMData?.KSSJ, BMData?.JSSJ] });
                 return setBaoming(true);
               }
               return setBaoming(false);
@@ -440,6 +484,8 @@ const AddCourse: FC<AddCourseProps> = ({
           fieldProps: {
             onChange: (item: any) => {
               if (item === false) {
+                // 将按钮关闭的时候 传成默认时间段
+                form.setFieldsValue({ SKSD: [KKData?.KSSJ, KKData?.JSSJ] });
                 return setKaike(true);
               }
               return setKaike(false);
@@ -530,8 +576,6 @@ const AddCourse: FC<AddCourseProps> = ({
           values={
             formValues || {
               BJZT: '待开班',
-              BMKSSJ: baoming,
-              KKRQ: kaike,
             }
           }
         />

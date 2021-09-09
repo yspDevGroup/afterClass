@@ -148,10 +148,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
     });
     const list = {
       ...data,
-      XQID: data.XQ ? data.XQ : [],
-      NJSID: data.NJS ? data.NJS : [],
-      NJS: data.NJSName ? data.NJSName : [],
-      XQ: data.XQName ? data.XQName : [],
       ZJS:
         data.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.KHJSSJId ||
         undefined,
