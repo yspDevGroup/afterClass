@@ -1,15 +1,15 @@
 .searchs {
   display: flex;
-  padding: 16px 24px;
+  padding: 16px 0;
   line-height: 2.3;
   background: #fff;
 
-  >div {
+  > div {
     display: flex;
     flex-wrap: wrap;
     margin-right: 16px;
 
-    >span {
+    > span {
       display: inline-block;
     }
   }
@@ -17,13 +17,11 @@
 
 .tableStyle {
   :global {
-
     .ant-table-thead,
     .ant-table-tbody {
-      >tr {
-
-        >td,
-        >th {
+      > tr {
+        > td,
+        > th {
           padding: 12px 8px;
         }
       }

@@ -48,16 +48,16 @@ const PersonalHomepage = () => {
               const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
               setCourseStatus(cStatus);
             } else {
-              // setCourseStatus('empty');
+              setCourseStatus('empty');
             }
           } else {
-            // setCourseStatus('empty');
+            setCourseStatus('empty');
           }
         } else {
           enHenceMsg(res.message);
         }
       } else {
-        // setCourseStatus('empty');
+        setCourseStatus('empty');
       }
     }
     fetchData();

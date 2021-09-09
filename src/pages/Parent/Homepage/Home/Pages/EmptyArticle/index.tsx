@@ -1,35 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import EmptyBGC from '@/assets/EmptyBGC.png';
-import styles from "./index.less";
-import { getAllXXGG } from '@/services/after-class/xxgg';
-import { Article } from './mock';
+import styles from './index.less';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { homePageInfo } from '@/services/after-class/user';
+import { useModel } from 'umi';
 
 const EmptyArticle = () => {
-  const [content, setContent] = useState<any>();
+  const [Datas, setDatas] = useState<any>();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   useEffect(() => {
-    async function announcements() {
-      const res= await getAllXXGG({status:['报名通知']})
-      if (res.status === 'ok') {
-        if(res.data && res.data.length){
-          setContent(res.data[0]);
-        }else{
-          setContent(Article);
+    (async () => {
+      const result = await queryXNXQList(currentUser?.xxId, undefined);
+      if (result.current) {
+        const { student } = currentUser || {};
+        const res = await homePageInfo({
+          XSId: student && student.student_userid,
+          // XSId: '20210901',
+          // njId: children && children[0].njId,
+          XNXQId: result.current.id,
+          XXJBSJId: currentUser!.xxId,
+        });
+        if (res.status === 'ok') {
+          setDatas(res.data);
         }
       }
-    };
-    announcements()
-  }, [])
+    })();
+  }, []);
   return (
     <div className={styles.EmptyPage}>
-      <div className={styles.header}>
-        <div className={styles.title}>{content?.BT}</div>
-        <div className={styles.time}>发布时间：{content?.updatedAt}</div>
-      </div>
-      <div className={styles.line}></div>
-      <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }}>
-      </div>
-      <textarea disabled value={content?.NR} className={styles.imges} />
+      <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }} />
+      <p className={styles.title}>课后服务报名暂未开始</p>
+      {Datas?.bmkssj && Datas?.bmkssj ? (
+        <>
+          <p className={styles.title} style={{ marginBottom: '5px' }}>
+            请在{Datas?.bmkssj}—{Datas?.bmjssj}
+          </p>
+          <p className={styles.title}>前来报名</p>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
-  )
-}
+  );
+};
 export default EmptyArticle;

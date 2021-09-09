@@ -1,17 +1,17 @@
 .EmptyPage {
   position: relative;
   top: -30px;
-  margin: 0 10px;
-  background-color: rgba(255, 255, 255, 0.4);
   height: calc(100vh - 170px);
+  margin: 0 10px;
   overflow: hidden;
+  background-color: rgb(255, 255, 255);
   border-radius: 30px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   &::-webkit-scrollbar {
     width: 0 !important;
-    -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
   }
 
   .header {
@@ -20,40 +20,36 @@
     .title {
       height: 22px;
       padding-top: 20px;
-      color: #333333;
+      color: #333;
       font-weight: 600;
       font-size: 16px;
       line-height: 22px;
       text-align: center;
-
     }
 
     .time {
       height: 17px;
       margin-top: 30px;
       margin-bottom: 14px;
-      color: #999999;
+      color: #999;
       font-size: 12px;
       line-height: 17px;
       text-align: center;
     }
   }
 
-  .line {
-    height: 0.5px;
-    background: rgba(0, 0, 0, 0.1);
-  }
-
   .opacity {
-    position: absolute;
-    width: 300px;
-    margin: 40px;
+    z-index: 10;
+    width: 65%;
     height: 60%;
-    background-size: contain;
+    margin: 0 auto;
+    margin-top: 40px;
     background-repeat: no-repeat;
     background-position: center;
-    z-index: 1;
-    opacity: 0.6;
+    background-size: contain;
+  }
+  .title {
+    text-align: center;
   }
 
   .imges {
@@ -63,21 +59,21 @@
   }
 
   textarea {
-    padding: 20px 14px;
-    resize: none;
-    background: inherit;
     position: relative;
     top: 0;
     left: 0;
+    z-index: 2;
     width: 100%;
     height: calc(~'100vh - 270px');
+    padding: 20px 14px;
     overflow: auto;
-    color: #333333;
+    color: #333;
     font-size: 14px;
     line-height: 27px;
     text-indent: 1em;
+    background: inherit;
     border: none;
     opacity: 1 !important;
-    z-index: 2;
+    resize: none;
   }
 }

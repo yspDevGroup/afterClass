@@ -561,7 +561,6 @@ const ClassManagement = () => {
                 display: 'flex',
                 paddingBottom: '16px',
                 paddingTop: '16px',
-                paddingLeft: '24px',
                 boxShadow: '0px 1px 0px #E4E4E4',
                 height: 110,
                 flexWrap: 'wrap',
@@ -666,7 +665,7 @@ const ClassManagement = () => {
                   </Select>
                 </div>
               </div>
-              <div style={{ position: 'absolute', right: 25 }}>
+              <div style={{ position: 'absolute', right: 48 }}>
                 <Button
                   style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
                   type="primary"

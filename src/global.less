@@ -40,7 +40,12 @@ body,
   ol {
     list-style: none;
   }
-
+  .ant-pro-table-list-toolbar-container {
+    padding: 16px 0 !important;
+  }
+  .ant-pro-table-search {
+    padding: 0;
+  }
   .ant-input-affix-wrapper:focus,
   .ant-input-affix-wrapper-focused {
     border-color: @input-hover-border-color;
@@ -53,7 +58,8 @@ body,
     box-shadow: none;
   }
 
-  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+    .ant-select-selector {
     border-color: @input-hover-border-color;
     box-shadow: none;
   }
@@ -78,33 +84,33 @@ body,
         justify-content: center;
         height: 115px;
         background-color: rgba(33, 48, 69, 1);
-        .cusHeaderLogoSmall{
+        .cusHeaderLogoSmall {
           img {
             width: 48px;
           }
 
           span {
-            color: #f0f5f9;
             display: block;
-            text-align: center;
+            color: #f0f5f9;
             font-size: 12px;
+            text-align: center;
           }
         }
         h1 {
+          display: block;
           margin: 0;
           color: #fff;
-          text-align: center;
-          line-height: 50px;
-          display: block;
           font-weight: normal;
           font-size: @font-size-lg;
+          line-height: 50px;
+          text-align: center;
         }
 
         img {
           height: auto !important;
         }
 
-        &+div {
+        & + div {
           margin-top: @padding-lg;
         }
       }
@@ -118,7 +124,6 @@ body,
 
         .ant-menu-item,
         .ant-menu-submenu {
-
           .ant-pro-menu-item-title,
           .anticon,
           .ant-menu-submenu-arrow {
@@ -143,8 +148,8 @@ body,
     }
 
     // 调整按钮与icon间距
-    .ant-btn>.anticon+span,
-    .ant-btn>span+.anticon {
+    .ant-btn > .anticon + span,
+    .ant-btn > span + .anticon {
       margin-left: 5px;
     }
 
@@ -164,7 +169,7 @@ body,
       .ant-table-wrapper .ant-table-pagination-right {
         justify-content: center;
 
-        >li {
+        > li {
           // width: 26px;
           height: 26px;
           margin: @padding-sm;
@@ -256,16 +261,16 @@ body,
   }
 
   .ant-table-thead {
-    >tr {
-      >th {
+    > tr {
+      > th {
         padding: 12px;
       }
     }
   }
 
   .ant-table-tbody {
-    >tr {
-      >td {
+    > tr {
+      > td {
         padding: 12px;
       }
     }
@@ -287,14 +292,13 @@ body,
     width: 100%;
     overflow-x: auto;
 
-    &-thead>tr,
-    &-tbody>tr {
-
-      >th,
-      >td {
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
         white-space: pre;
 
-        >span {
+        > span {
           display: block;
         }
       }
@@ -303,9 +307,8 @@ body,
 }
 
 // 兼容IE11
-@media screen and(-ms-high-contrast: active),
-(-ms-high-contrast: none) {
-  body .ant-design-pro>.ant-layout {
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
     min-height: 100vh;
   }
 }

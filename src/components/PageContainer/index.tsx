@@ -65,7 +65,7 @@ const PageContain = ({ children, cls }: pageProp) => {
       }}
       fixedHeader
     >
-      {children}
+      <div style={{ padding: 24, background: '#fff' }}>{children}</div>
     </PageContainer>
   );
 };

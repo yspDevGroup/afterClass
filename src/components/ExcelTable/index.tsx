@@ -115,7 +115,8 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             }}
           >
             <div className="cla">
-              <EllipsisHint text={data?.cla} width={70} />
+              <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : 70} />
+              {/* {data?.cla} */}
             </div>
             {mode === 'see' ? (
               <div className="teacher">
