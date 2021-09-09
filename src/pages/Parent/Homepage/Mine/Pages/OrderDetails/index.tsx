@@ -117,7 +117,7 @@ const OrderDetails: React.FC = (props: any) => {
                 <li>总课时：{detail.KSS}</li>
                 <li>班级：{detail.BJMC}</li>
                 <li>
-                  学生：<span className={styles.xx}>{name?.split('-')[0]}</span>
+                  学生：<span className={styles.xx}>{currentUser?.student?.name}</span>
                 </li>
               </ul>
             </div>

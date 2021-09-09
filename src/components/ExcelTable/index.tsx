@@ -153,7 +153,14 @@ type IndexPropsType = {
   /** 表格的数据 */
   dataSource: DataSourceType;
   /** 选中的值  在type='edit'时必传  KHBJSJId: 班级ID，XNXQId： 学年学期ID  */
-  chosenData?: { cla: string; teacher: string; KHBJSJId?: string; XNXQId?: string; color: string };
+  chosenData?: {
+    cla: string;
+    teacher: string;
+    KHBJSJId?: string;
+    XNXQId?: string;
+    color: string;
+    teacherID: string;
+  };
   /** 选中项发生变化时的回调 value: type='edit'时的数据； record：type='see'时的数据； bjId： 班级ID */
   onExcelTableClick?: (value: any, record: any, bjId: any) => void;
   /** see: 单元格中不存在disable属性，edit： 单元格中存在disable属性  */
@@ -233,7 +240,7 @@ const Index: FC<IndexPropsType> = ({
           if (
             item[colItem.dataIndex] &&
             item.course.hjId === rowData.course?.hjId &&
-            item[colItem.dataIndex]?.teacher === tearchId
+            item[colItem.dataIndex]?.teacherID === tearchId
           ) {
             connst = key;
           }
@@ -242,6 +249,7 @@ const Index: FC<IndexPropsType> = ({
           rowData[colItem.dataIndex] = {
             cla: chosenData?.cla,
             teacher: chosenData?.teacher,
+            teacherID: chosenData?.teacherID,
             dis: false,
             color: chosenData.color,
           };

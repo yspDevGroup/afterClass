@@ -10,7 +10,7 @@ import Details from './Pages/Details';
 import { useModel, Link } from 'umi';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+// import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
 const Home = () => {
   const { currentUserInfo } = useContext(myContext);
@@ -58,11 +58,12 @@ const Home = () => {
           <h4>
             <span ref={userRef}>
               {
-                <WWOpenDataCom
-                  style={{ color: '#666' }}
-                  type="userName"
-                  openid={currentUserInfo?.username}
-                />
+                // <WWOpenDataCom
+                //   style={{ color: '#666' }}
+                //   type="userName"
+                //   openid={currentUserInfo?.UserId}
+                // />
+                currentUserInfo?.name
               }
             </span>
             老师，你好！

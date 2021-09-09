@@ -202,10 +202,13 @@ const AddArranging: FC<PropsType> = (props) => {
   // 班级选择
   const BjClick = (value: any) => {
     const ZJSID = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.KHJSSJId;
+    const ZJSName = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.KHJSSJ?.XM;
+
     setTearchId(ZJSID);
     const chosenData = {
       cla: value.BJMC || '',
-      teacher: value.ZJS || '',
+      teacher: ZJSName || '',
+      teacherID: ZJSID || '',
       XNXQId: value.XNXQId || '',
       KHBJSJId: value.id || '',
       color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
