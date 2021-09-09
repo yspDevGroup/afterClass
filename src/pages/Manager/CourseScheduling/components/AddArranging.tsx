@@ -201,7 +201,8 @@ const AddArranging: FC<PropsType> = (props) => {
   };
   // 班级选择
   const BjClick = (value: any) => {
-    setTearchId(value.ZJS);
+    const ZJSID = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.KHJSSJId;
+    setTearchId(ZJSID);
     const chosenData = {
       cla: value.BJMC || '',
       teacher: value.ZJS || '',
@@ -286,6 +287,7 @@ const AddArranging: FC<PropsType> = (props) => {
         });
         if (bjList.status === 'ok') {
           setBjData(bjList.data.rows);
+
           bjList.data.rows?.forEach((item: any) => {
             if (index === item.id) {
               BjClick(item);
@@ -583,67 +585,63 @@ const AddArranging: FC<PropsType> = (props) => {
                 <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
               ) : bjData && bjData.length < 15 ? (
                 <ProCard ghost className="banjiCard">
-                  {bjData.map(
-                    (value: { BJMC: any; ZJS: any; id?: string | undefined }, key: undefined) => {
-                      return (
-                        <ProCard
-                          className="banjiItem"
-                          layout="center"
-                          bordered
-                          onClick={() => BjClick(value)}
-                          style={{ borderColor: index === value.id ? 'rgba(62,136,248,1)' : '' }}
-                        >
-                          <Tooltip title={value.BJMC}>
-                            <p>{value.BJMC}</p>
-                          </Tooltip>
-                          <span>
-                            <WWOpenDataCom
+                  {bjData.map((value: any) => {
+                    return (
+                      <ProCard
+                        className="banjiItem"
+                        layout="center"
+                        bordered
+                        onClick={() => BjClick(value)}
+                        style={{ borderColor: index === value.id ? 'rgba(62,136,248,1)' : '' }}
+                      >
+                        <Tooltip title={value.BJMC}>
+                          <p>{value.BJMC}</p>
+                        </Tooltip>
+                        <span>
+                          {value?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.KHJSSJ?.XM}
+                          {/* <WWOpenDataCom
                               style={{ color: '#666' }}
                               type="userName"
                               openid={value.ZJS}
-                            />
-                          </span>
-                          {index === value.id ? <span className="douhao">√</span> : ''}
-                        </ProCard>
-                      );
-                    },
-                  )}
+                            /> */}
+                        </span>
+                        {index === value.id ? <span className="douhao">√</span> : ''}
+                      </ProCard>
+                    );
+                  })}
                 </ProCard>
               ) : (
                 <div>
                   {packUp === false ? (
                     <ProCard ghost className="banjiCard">
                       {bjData && bjData.length > 0
-                        ? bjData
-                            .slice(0, 13)
-                            .map(
-                              (
-                                value: { BJMC: any; ZJS: any; id?: string | undefined },
-                                key: undefined,
-                              ) => {
-                                return (
-                                  <ProCard
-                                    layout="center"
-                                    bordered
-                                    className="banjiItem"
-                                    onClick={() => BjClick(value)}
-                                    style={{
-                                      borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                                    }}
-                                  >
-                                    <p>{value.BJMC}</p>
-                                    <span>
-                                      <WWOpenDataCom
+                        ? bjData.slice(0, 13).map((value: any, key: undefined) => {
+                            return (
+                              <ProCard
+                                layout="center"
+                                bordered
+                                className="banjiItem"
+                                onClick={() => BjClick(value)}
+                                style={{
+                                  borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
+                                }}
+                              >
+                                <p>{value.BJMC}</p>
+                                <span>
+                                  {
+                                    value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                      ?.KHJSSJ?.XM
+                                  }
+                                  {/* <WWOpenDataCom
                                         style={{ color: '#666' }}
                                         type="userName"
                                         openid={value.ZJS}
-                                      />
-                                    </span>
-                                    {index === value.id ? <span className="douhao">√</span> : ''}
-                                  </ProCard>
-                                );
-                              },
-                            )
+                                      /> */}
+                                </span>
+                                {index === value.id ? <span className="douhao">√</span> : ''}
+                              </ProCard>
+                            );
+                          })
                         : ''}
                       <ProCard layout="center" bordered onClick={unFold} className="unFold">
                         展开 <DownOutlined style={{ color: '#4884FF' }} />
@@ -652,34 +650,33 @@ const AddArranging: FC<PropsType> = (props) => {
                   ) : (
                     <ProCard ghost className="banjiCard">
                       {bjData && bjData.length > 0
-                        ? bjData.map(
-                            (
-                              value: { BJMC: any; ZJS: any; id?: string | undefined },
-                              key: undefined,
-                            ) => {
-                              return (
-                                <ProCard
-                                  layout="center"
-                                  bordered
-                                  className="banjiItem"
-                                  onClick={() => BjClick(value)}
-                                  style={{
-                                    borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                                  }}
-                                >
-                                  <p>{value.BJMC}</p>
-                                  <span>
-                                    <WWOpenDataCom
+                        ? bjData.map((value: any, key: undefined) => {
+                            return (
+                              <ProCard
+                                layout="center"
+                                bordered
+                                className="banjiItem"
+                                onClick={() => BjClick(value)}
+                                style={{
+                                  borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
+                                }}
+                              >
+                                <p>{value.BJMC}</p>
+                                <span>
+                                  {
+                                    value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                      ?.KHJSSJ?.XM
+                                  }
+                                  {/* <WWOpenDataCom
                                       style={{ color: '#666' }}
                                       type="userName"
                                       openid={value.ZJS}
-                                    />
-                                  </span>
-                                  {index === value.id ? <span className="douhao">√</span> : ''}
-                                </ProCard>
-                              );
-                            },
-                          )
+                                    /> */}
+                                </span>
+                                {index === value.id ? <span className="douhao">√</span> : ''}
+                              </ProCard>
+                            );
+                          })
                         : ''}
                       <ProCard layout="center" bordered onClick={unFold} className="unFold">
                         收起 <UpOutlined style={{ color: '#4884FF' }} />
