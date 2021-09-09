@@ -7,8 +7,8 @@ import * as auth from './auth';
 import * as user from './user';
 import * as bjsj from './bjsj';
 import * as jzgjbsj from './jzgjbsj';
-import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
+import * as fjlx from './fjlx';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
 import * as jxjhsj from './jxjhsj';
@@ -22,29 +22,29 @@ import * as jzglwsj from './jzglwsj';
 import * as jzgrysj from './jzgrysj';
 import * as jzgxxjl from './jzgxxjl';
 import * as kcsj from './kcsj';
-import * as khbjsj from './khbjsj';
-import * as khjgrzsq from './khjgrzsq';
 import * as khjspj from './khjspj';
+import * as khjgrzsq from './khjgrzsq';
 import * as khjssj from './khjssj';
-import * as khjyjg from './khjyjg';
+import * as khbjsj from './khbjsj';
 import * as khjytzgg from './khjytzgg';
+import * as khjyjg from './khjyjg';
 import * as khkclx from './khkclx';
-import * as khkcsj from './khkcsj';
 import * as khkcsq from './khkcsq';
+import * as khkcsj from './khkcsj';
 import * as khpksj from './khpksj';
 import * as khtksj from './khtksj';
-import * as khxscq from './khxscq';
 import * as khxsdd from './khxsdd';
-import * as khxspj from './khxspj';
+import * as khxscq from './khxscq';
 import * as khxsqj from './khxsqj';
-import * as njsj from './njsj';
-import * as pksj from './pksj';
-import * as redis from './redis';
+import * as khxspj from './khxspj';
 import * as sso from './sso';
+import * as pksj from './pksj';
+import * as njsj from './njsj';
+import * as redis from './redis';
 import * as upload from './upload';
 import * as wechat from './wechat';
-import * as xksj from './xksj';
 import * as xl from './xl';
+import * as xksj from './xksj';
 import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
@@ -57,8 +57,8 @@ import * as xxgg from './xxgg';
 import * as xxjbpz from './xxjbpz';
 import * as xxjbsj from './xxjbsj';
 import * as xxpz from './xxpz';
-import * as xxtzgg from './xxtzgg';
 import * as xxsjpz from './xxsjpz';
+import * as xxtzgg from './xxtzgg';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
@@ -67,8 +67,8 @@ export default {
   user,
   bjsj,
   jzgjbsj,
-  fjlx,
   fjsj,
+  fjlx,
   jcsj,
   jcxx,
   jxjhsj,
@@ -82,29 +82,29 @@ export default {
   jzgrysj,
   jzgxxjl,
   kcsj,
-  khbjsj,
-  khjgrzsq,
   khjspj,
+  khjgrzsq,
   khjssj,
-  khjyjg,
+  khbjsj,
   khjytzgg,
+  khjyjg,
   khkclx,
-  khkcsj,
   khkcsq,
+  khkcsj,
   khpksj,
   khtksj,
-  khxscq,
   khxsdd,
-  khxspj,
+  khxscq,
   khxsqj,
-  njsj,
-  pksj,
-  redis,
+  khxspj,
   sso,
+  pksj,
+  njsj,
+  redis,
   upload,
   wechat,
-  xksj,
   xl,
+  xksj,
   xnjgsj,
   xnxq,
   xqsj,
@@ -117,8 +117,8 @@ export default {
   xxjbpz,
   xxjbsj,
   xxpz,
-  xxtzgg,
   xxsjpz,
+  xxtzgg,
   zxfa,
   zxsj,
 };

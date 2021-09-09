@@ -149,7 +149,7 @@ const SchoolEditor = (props: any) => {
     }
   };
   useEffect(() => {
-    if (currentValue) {
+    if (currentValue && currentValue.schoolInfo) {
       const current = currentValue.schoolInfo;
       const { XD, XZQHM, XZQ, ...info } = current;
       setProvinceVal({
