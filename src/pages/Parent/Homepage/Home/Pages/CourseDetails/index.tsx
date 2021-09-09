@@ -32,13 +32,13 @@ const CourseDetails: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
 
-  const children = currentUser?.subscriber_info?.children || [
-    {
-      student_userid: currentUser?.UserId,
-      njId: '1',
-      name: currentUser?.username,
-    },
-  ];
+  // const children = currentUser?.subscriber_info?.children || [
+  //   {
+  //     student_userid: currentUser?.UserId,
+  //     njId: '1',
+  //     name: currentUser?.username,
+  //   },
+  // ];
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
@@ -105,8 +105,8 @@ const CourseDetails: React.FC = () => {
       ZFFS: '线上支付',
       DDZT: '待付款',
       DDFY: FY!,
-      XSId: children[0].student_userid!,
-      XSXM: children[0].name!,
+      XSId: currentUser?.student?.student_userid,
+      XSXM: currentUser?.student?.name,
       KHBJSJId: BJ!,
       XXJBSJId: currentUser?.xxId,
     };

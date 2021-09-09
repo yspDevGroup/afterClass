@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'antd';
 import type { FC } from 'react';
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+// import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
 import EllipsisHint from '../EllipsisHint';
 
@@ -119,11 +119,12 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             </div>
             {mode === 'see' ? (
               <div className="teacher">
-                <WWOpenDataCom
+                {data?.teacher}
+                {/* <WWOpenDataCom
                   type="userName"
                   style={{ color: data?.color }}
                   openid={data?.teacher}
-                />
+                /> */}
               </div>
             ) : (
               ''

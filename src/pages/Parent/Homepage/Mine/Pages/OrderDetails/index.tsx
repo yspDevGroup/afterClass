@@ -20,9 +20,9 @@ const OrderDetails: React.FC = (props: any) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { title, detail, payOrder, user, KKRQ, JKRQ } = props.location.state;
-  const children = user?.subscriber_info?.children || [
+  const children = [
     {
-      student_userid: user?.UserId,
+      student_userid: currentUser.student.student_userid,
       njId: '1',
     },
   ];

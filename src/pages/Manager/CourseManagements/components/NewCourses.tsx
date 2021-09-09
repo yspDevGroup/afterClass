@@ -6,11 +6,11 @@ import React, { useEffect, useState } from 'react';
 import ProFormFields from '@/components/ProFormFields';
 import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import type { ActionType } from '@ant-design/pro-table/lib/typing';
-import { message } from 'antd';
-import { Button, Drawer } from 'antd';
+import { message, Table, Button, Drawer } from 'antd';
 import type { classType } from '../data';
 import styles from './index.less';
 import { courseColorType } from '@/theme-default';
+import { history } from 'umi';
 
 type PropsType = {
   current?: classType;

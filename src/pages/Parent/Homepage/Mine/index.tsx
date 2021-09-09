@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Link, history } from 'umi';
+import { Link, useModel } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
 import IconFont from '@/components/CustomIcon';
@@ -17,17 +17,19 @@ import { enHenceMsg } from '@/utils/utils';
 const Mine = () => {
   const { currentUserInfo, courseStatus } = useContext(myContext);
   const [totail, setTotail] = useState<boolean>(false);
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   useEffect(() => {
-    const data = currentUserInfo?.subscriber_info?.children || [
-      {
-        student_userid: currentUserInfo?.UserId,
-        njId: '1',
-      },
-    ];
-    async function fetch(children: any[]) {
+    // const data = currentUserInfo?.subscriber_info?.children || [
+    //   {
+    //     student_userid: currentUserInfo?.UserId,
+    //     njId: '1',
+    //   },
+    // ];
+    async function fetch() {
       const res = await getAllKHXSDD({
-        XSId: children[0].student_userid,
-        njId: children[0].njId,
+        XSId: currentUser.student.student_userid,
+        // njId: currentUser.njId,
         DDZT: '待付款',
       });
       if (res.status === 'ok') {
@@ -38,18 +40,16 @@ const Mine = () => {
         enHenceMsg(res.message);
       }
     }
-    fetch(data);
+    fetch();
   }, []);
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader}>
-        <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div>
+        <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.header}>
           {currentUserInfo?.avatar ? <img src={currentUserInfo?.avatar} /> : ''}
           <div className={styles.headerName}>
-            <h4>
-              {currentUserInfo?.subscriber_info?.remark || currentUserInfo?.username || '家长'}
-            </h4>
+            <h4>{currentUser?.student?.name || currentUserInfo?.username || '家长'}</h4>
             <span>微信名：{currentUserInfo?.username}</span>
           </div>
         </div>

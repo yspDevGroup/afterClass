@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { Descriptions, Drawer, Tag, Image } from 'antd';
+import { Descriptions, Drawer, Tag, Image, Table } from 'antd';
 import classes from './index.less';
+import { history } from 'umi';
 
 /**
  * 课程详情
@@ -8,6 +10,58 @@ import classes from './index.less';
  */
 const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean; info: any }) => {
   const { onSchoolInfoClose, visibleSchoolInfo, info } = props;
+  const columns: any = [
+    {
+      title: '姓名',
+      dataIndex: 'XM',
+      key: 'XM',
+      align: 'center',
+      render: (text: any, record: any) => {
+        return record?.KHJSSJ?.XM;
+      },
+    },
+    {
+      title: '联系电话',
+      dataIndex: 'LXDH',
+      key: 'LXDH',
+      align: 'center',
+      render: (text: any, record: any) => {
+        return record?.KHJSSJ?.LXDH;
+      },
+    },
+    {
+      title: '邮箱',
+      dataIndex: 'DZXX',
+      key: 'DZXX',
+      align: 'center',
+      render: (text: any, record: any) => {
+        return record?.KHJSSJ?.DZXX;
+      },
+    },
+    {
+      title: '操作',
+      dataIndex: 'opthion',
+      key: 'opthion',
+      align: 'center',
+      //   render: (text: any, record: any) => {
+      //     return (
+      //       <a
+      //         onClick={() => {
+      //           history.push({
+      //             pathname: `/basicalSetting/teacherManagement/detail`,
+      //             state: {
+      //               type: 'detail',
+      //               data: record
+      //             }
+      //           });
+      //         }}
+      //       >
+      //         详情
+      //       </a>
+      //     );
+      //   }
+    },
+  ];
   return (
     <div>
       <Drawer
@@ -36,6 +90,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           </Descriptions.Item>
           <Descriptions.Item label="课程简介">{info?.KCMS}</Descriptions.Item>
         </Descriptions>
+        <Table
+          style={{ display: info?.SSJGLX === '机构课程' ? 'initial' : 'none' }}
+          dataSource={info?.KHKCJs}
+          columns={columns}
+          pagination={false}
+          size="small"
+          title={() => '任课教师列表'}
+        />
       </Drawer>
     </div>
   );
