@@ -54,7 +54,7 @@
         component: './Manager/BasicalSettings/SchoolInfo',
       },
       {
-        path:'/basicalSettings/schoolInfo/schoolEditor',
+        path: '/basicalSettings/schoolInfo/schoolEditor',
         name: 'schoolEditor',
         hideInMenu: true,
         component: './Manager/BasicalSettings/SchoolInfo/SchoolEditor',
@@ -90,6 +90,12 @@
         redirect: '/basicalSettings/termManagement',
       },
     ],
+  },
+  {
+    path: '/basicalSetting/teacherManagement/detail',
+    name: 'teacherManagement',
+    hideInMenu: 'true',
+    component: './Manager/BasicalSettings/TeacherManagement/Detail',
   },
   {
     path: '/courseManagements',

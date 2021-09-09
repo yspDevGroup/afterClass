@@ -3,8 +3,8 @@ export default {
   'menu.login': '登录',
   'menu.homepage': '首页',
   'menu.basicalSettings': '基本信息管理',
-  'menu.basicalSettings.schoolInfo':'学校信息维护',
-  'menu.basicalSettings.schoolEditor':'学校信息修改',
+  'menu.basicalSettings.schoolInfo': '学校信息维护',
+  'menu.basicalSettings.schoolEditor': '学校信息修改',
   'menu.basicalSettings.roomManagement': '场地维护',
   'menu.basicalSettings.periodMaintenance': '时段维护',
   'menu.basicalSettings.termManagement': '学期学年维护',
@@ -49,4 +49,5 @@ export default {
   'menu.announcements.notice.noticeDetails': '公告详情',
   'menu.announcements.policy': '政策公告',
   'menu.teacherManagement': '教师管理',
+  'menu.basicalSettings.teacherManagement': '教师详情',
 };

@@ -43,23 +43,23 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
       dataIndex: 'opthion',
       key: 'opthion',
       align: 'center',
-      //   render: (text: any, record: any) => {
-      //     return (
-      //       <a
-      //         onClick={() => {
-      //           history.push({
-      //             pathname: `/basicalSetting/teacherManagement/detail`,
-      //             state: {
-      //               type: 'detail',
-      //               data: record
-      //             }
-      //           });
-      //         }}
-      //       >
-      //         详情
-      //       </a>
-      //     );
-      //   }
+      render: (text: any, record: any) => {
+        return (
+          <a
+            onClick={() => {
+              history.push({
+                pathname: `/basicalSetting/teacherManagement/detail`,
+                state: {
+                  type: 'detail',
+                  data: record,
+                },
+              });
+            }}
+          >
+            详情
+          </a>
+        );
+      },
     },
   ];
   return (

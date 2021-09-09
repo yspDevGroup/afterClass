@@ -1,0 +1,59 @@
+.teacherWrapper {
+  padding: @padding-lg;
+  background: #fff;
+
+  :global {
+    .ant-tabs-nav-list {
+      .ant-tabs-tab-btn {
+        padding: @padding-sm;
+      }
+    }
+
+    .ant-form-item-label {
+      text-align: right;
+    }
+
+    .ant-form-item-control-input {
+      line-height: 32px;
+    }
+
+    .ant-input[disabled],
+    .ant-picker-disabled,
+    .ant-input-number-disabled,
+    .ant-select-disabled .ant-select-selector {
+      color: @text-color !important;
+      text-overflow: ellipsis;
+      background: none !important;
+      background-color: inherit;
+      border: none;
+      cursor: default;
+      resize: none;
+
+      .ant-picker-suffix {
+        display: none;
+      }
+    }
+
+    .ant-select-disabled .ant-select-arrow {
+      display: none;
+    }
+  }
+
+  .teacherInfoBody {
+    width: 85%;
+    min-width: 850px;
+    margin: 0 auto;
+
+    :global {
+      .ant-form-horizontal .ant-form-item-control {
+        flex: 1 1;
+        padding-right: 6em;
+      }
+
+      .ant-picker,
+      .ant-input-number {
+        width: 100%;
+      }
+    }
+  }
+}
