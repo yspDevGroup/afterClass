@@ -10,6 +10,7 @@ import Details from './Pages/Details';
 import { useModel, Link } from 'umi';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
+import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
 const Home = () => {
   const { currentUserInfo } = useContext(myContext);
@@ -55,7 +56,15 @@ const Home = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.headerText}>
           <h4>
-            <span ref={userRef}>{currentUserInfo?.username}</span>
+            <span ref={userRef}>
+              {
+                <WWOpenDataCom
+                  style={{ color: '#666' }}
+                  type="userName"
+                  openid={currentUserInfo?.username}
+                />
+              }
+            </span>
             老师，你好！
           </h4>
           <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
