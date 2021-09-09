@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-07 12:15:40
+ * @LastEditTime: 2021-09-09 13:47:53
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -72,7 +72,7 @@ const Index = () => {
   return (
     <div className={styles.pageWrapper}>
       <Topbar data={homeData} />
-      <Row gutter={[24, 24]} className={styles.listWrapper}>
+      <Row className={`${styles.listWrapper} ${styles.rowWrapper}`}>
         <Col span={12}>
           <Card
             title="校内通知"
@@ -102,7 +102,7 @@ const Index = () => {
           </Card>
         </Col>
       </Row>
-      <Row gutter={[24, 24]} className={styles.chartWrapper}>
+      <Row className={styles.chartWrapper}>
         <Col span={24}>
           {/* extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>} */}
           <Card title="课后服务开启流程" bordered={false}>

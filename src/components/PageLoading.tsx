@@ -3,7 +3,14 @@ import loadImg from '@/assets/loading.gif';
 
 const PageLoading: FC = () => {
   return (
-    <div style={{ width: '100vw', height: '100vh', background: 'rgba(255,255,255,0.2)' }}>
+    <div style={{
+      background: 'rgba(255,255,255,0.2)',
+      position: 'fixed',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+    }}>
       <img
         src={loadImg}
         alt="loading"
@@ -13,6 +20,9 @@ const PageLoading: FC = () => {
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '200px',
+          backgroundColor: '#fff',
+          borderRadius: '200px',
+          padding: '14px'
         }}
       />
     </div>

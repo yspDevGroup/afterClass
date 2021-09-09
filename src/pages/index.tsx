@@ -2,8 +2,8 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-09-09 09:29:18
- * @LastEditors: zpl
+ * @LastEditTime: 2021-09-09 13:42:41
+ * @LastEditors: Sissle Lynn
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
@@ -40,16 +40,27 @@ const Index = () => {
     // }
   }, [initialState?.currentUser?.adminAuth, initialState?.currentUser?.type]);
   return (
-    <div>
+    <div style={{
+      background: 'rgba(255,255,255,0.2)',
+      position: 'fixed',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+    }}>
       <img
+        src={loadImg}
+        alt="loading"
         style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '200px',
+          backgroundColor: '#fff',
+          borderRadius: '200px',
+          padding: '14px'
         }}
-        src={loadImg}
       />
     </div>
   );
