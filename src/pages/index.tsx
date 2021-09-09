@@ -2,7 +2,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-09-08 19:37:44
+ * @LastEditTime: 2021-09-09 08:37:41
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -43,11 +43,11 @@ const Index = () => {
     <div>
       <img
         style={{
-          width: '50vw',
-          maxWidth: '400px',
-          margin: '0 auto',
-          paddingTop: '15vh',
-          display: 'block',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '200px',
         }}
         src={loadImg}
       />
