@@ -2,7 +2,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-09-09 08:37:41
+ * @LastEditTime: 2021-09-09 09:29:18
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -13,7 +13,7 @@ import loadImg from '@/assets/loading.gif';
 const Index = () => {
   const { initialState } = useModel('@@initialState');
   useEffect(() => {
-    switch (initialState?.currentUser?.auth) {
+    switch (initialState?.currentUser?.type) {
       case '管理员':
         history.replace('/homepage');
         break;
@@ -38,7 +38,7 @@ const Index = () => {
     //   // 支持PC登录，默认为管理员
     //   history.replace('/homepage');
     // }
-  }, [initialState?.currentUser?.adminAuth, initialState?.currentUser?.auth]);
+  }, [initialState?.currentUser?.adminAuth, initialState?.currentUser?.type]);
   return (
     <div>
       <img
