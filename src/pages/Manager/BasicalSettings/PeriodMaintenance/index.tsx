@@ -106,14 +106,14 @@ const PeriodMaintenance = () => {
       title: '时段名称',
       dataIndex: 'TITLE',
       align: 'center',
-      width: 130,
+      width: 200,
       ellipsis: true,
     },
     {
       title: '所属学期',
       dataIndex: 'SSXQ',
       align: 'center',
-      width: 150,
+      width: 200,
       render: (_: ReactNode, entity: Maintenance) => {
         return (
           <div>
@@ -127,7 +127,7 @@ const PeriodMaintenance = () => {
       title: '开始时间',
       dataIndex: 'KSSJ',
       align: 'center',
-      width: 150,
+      width: 200,
       ellipsis: true,
       render: (_, record: any) => {
         return currentStatus === 'schedule' ? record.KSSJ.slice(0, 5) : record.KSSJ;
@@ -137,7 +137,7 @@ const PeriodMaintenance = () => {
       title: '结束时间',
       dataIndex: 'JSSJ',
       align: 'center',
-      width: 150,
+      width: 200,
       ellipsis: true,
       render: (_, record: any) => {
         return currentStatus === 'schedule' ? record.JSSJ.slice(0, 5) : record.JSSJ;
@@ -148,11 +148,12 @@ const PeriodMaintenance = () => {
       dataIndex: 'BZXX',
       align: 'center',
       ellipsis: true,
+      width: 200,
     },
     {
       title: '操作',
       valueType: 'option',
-      width: 120,
+      width: 300,
       align: 'center',
       render: (_, record) => (
         <>

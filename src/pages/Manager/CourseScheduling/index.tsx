@@ -361,6 +361,30 @@ const ClassManagement = () => {
             setCdmcData(data);
           }
         }
+        // 查询所有课程的时间段
+        const resultTime = await getAllXXSJPZ({
+          XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
+          type: ['0'],
+        });
+        if (resultTime.status === 'ok') {
+          const timeSlot = resultTime.data;
+          setXXSJPZData(timeSlot);
+          // 排课的接口
+          const res = await getFJPlan({
+            kcId: kcmcValue,
+            bjId: bjmcValue,
+            lxId: cdlxValue,
+            fjId: cdmcValue,
+            isPk: radioValue,
+            XNXQId: curXNXQId,
+            XXJBSJId: currentUser?.xxId,
+          });
+          if (res.status === 'ok') {
+            const tableData = processingData(res.data, timeSlot);
+            setTableDataSource(tableData);
+          }
+        }
       }
     })();
   }, [curXNXQId]);
@@ -475,14 +499,14 @@ const ClassManagement = () => {
     width: number;
   }[] = [
     {
-      title: '',
+      title: '场地',
       dataIndex: 'room',
       key: 'room',
       align: 'center',
       width: 100,
     },
     {
-      title: '',
+      title: '时间',
       dataIndex: 'course',
       key: 'course',
       align: 'left',

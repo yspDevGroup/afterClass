@@ -30,7 +30,7 @@ const { Option } = Select;
 const CourseManagement = (props: { location: { state: any } }) => {
   const { state } = props.location;
   const [visible, setVisible] = useState(false);
-  const [current, setCurrent] = useState<CourseItem>();
+  const [current, setCurrent] = useState<any>();
   const actionRef = useRef<ActionType>();
   const [readonly, stereadonly] = useState<boolean>(false);
   const [curXNXQId, setCurXNXQId] = useState<any>();
@@ -355,8 +355,11 @@ const CourseManagement = (props: { location: { state: any } }) => {
               key="add"
               onClick={() => {
                 showDrawer();
-                setCurrent(undefined);
                 setnames('add');
+                setCurrent({
+                  SSJGLX: state?.id ? '校内课程' : '',
+                  KHKCSJId: state?.id || '',
+                });
               }}
             >
               <PlusOutlined />

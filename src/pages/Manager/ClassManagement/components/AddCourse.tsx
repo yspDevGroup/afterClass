@@ -24,6 +24,7 @@ type AddCourseProps = {
   KHKCAllData?: any[];
   curXNXQId?: string;
   currentUser?: API.CurrentUser | undefined;
+  kCID?: string;
 };
 const formLayout = {
   labelCol: {},
@@ -40,6 +41,7 @@ const AddCourse: FC<AddCourseProps> = ({
   names,
   KHKCAllData,
   currentUser,
+  kCID,
 }) => {
   const userRef = useRef(null);
   const [form, setForm] = useState<any>();
@@ -63,9 +65,12 @@ const AddCourse: FC<AddCourseProps> = ({
 
   useEffect(() => {
     if (formValues) {
-      const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX);
+      const kcDate = KHKCAllData?.filter(
+        (item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX || formValues.SSJGLX,
+      );
       setKCDate(kcDate);
-
+      // const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === kCID);
+      // setKCDate(kcDate);
       if (formValues.SSJGLX === '机构课程') {
         const JGJS = formValues.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师');
         setJGKCTeacherData([{ label: JGJS?.KHJSSJ?.XM, value: JGJS?.KHJSSJId }]);
