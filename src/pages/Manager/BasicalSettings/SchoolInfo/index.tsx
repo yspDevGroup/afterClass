@@ -2,7 +2,7 @@ import { Link,  useModel } from 'umi';
 import PageContainer from '@/components/PageContainer';
 import CustomForm from '@/components/CustomForm';
 import styles from './index.less';
-import logoImg from '@/assets/logo.png';
+import xxImg from '@/assets/vector.png';
 import { basicForm } from './FormItems';
 import { useEffect, useState } from 'react';
 import { XXJBSJ } from './data';
@@ -34,7 +34,7 @@ const SchoolInfo = () => {
         {/* 学校基本信息标题 */}
         <div className={styles.schoolInfoTitle}>
           <div className={styles.schoolInfoLogo}>
-            <img src={schoolInfo?.XH || logoImg} alt='logo' />
+            <img src={schoolInfo?.XH || xxImg} alt='logo' />
           </div>
           <div className={styles.schoolInfoTitleHeader} >
             <p>{schoolInfo?.XXMC}</p>

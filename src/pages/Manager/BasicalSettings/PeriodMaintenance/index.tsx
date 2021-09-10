@@ -229,8 +229,7 @@ const PeriodMaintenance = () => {
           }}
           request={async () => {
             const opt = {
-              xn: '',
-              xq: '',
+              XXJBSJId: currentUser.xxId,
               type: requestType,
             };
             const res = await getAllXXSJPZ(opt);
