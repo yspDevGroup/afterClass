@@ -12,6 +12,7 @@ import Details from './Pages/Details';
 import EmptyArticle from './Pages/EmptyArticle';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
+import bannerIcon from '@/assets/szjyzyIcon.png';
 
 const Home = () => {
   const { currentUserInfo, courseStatus } = useContext(myContext);
@@ -92,6 +93,15 @@ const Home = () => {
           <div className={styles.courseArea}>
             <CourseTab />
           </div>
+          <a
+            className={styles.banner}
+            href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>素质教育资源{` >`}</span>
+            <img src={bannerIcon} />
+          </a>
           <div className={styles.announceArea}>
             <Details data={notification} />
           </div>
