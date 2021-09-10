@@ -208,3 +208,23 @@ export async function allKCsByNJ(
     ...(options || {}),
   });
 }
+
+/** 根据课程ID获取合作中学校列表 POST /khkcsj/getSchools */
+export async function getSchools(
+  body: {
+    /** 课程ID */
+    KHKCSJId?: string;
+    /** 学校名称 */
+    XXMC?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khkcsj/getSchools', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

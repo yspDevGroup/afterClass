@@ -71,17 +71,24 @@ const SchoolEditor = (props: any) => {
   const onFinish = async (values: any) => {
     values.XH = xhimg ? xhimg : values.XH;
     values.XD = values?.XD?.toString();
-    values.XZQHM = cityAdcode;
+    console.log(values);
+    values.XZQHM = cityAdcode||values.XZQHM;
+    console.log(values.XZQHM);
+
     values.XZQ = `${provinceVal?.label}${cityVal?.label ? `/${cityVal?.label}` : ''}${countyVal?.label ? `/${countyVal?.label}` : ''}`;
-    const res = await updateXXJBSJ({
-      id: values.id!,
-    }, values);
-    if (res.status === 'ok') {
-      message.success('保存成功');
-      history.push('/basicalSettings/schoolInfo');
-    } else {
-      let msg = res.message;
-      message.error(msg);
+    if(values.XZQHM){
+      const res = await updateXXJBSJ({
+        id: values.id!,
+      }, values);
+      if (res.status === 'ok') {
+        message.success('保存成功');
+        history.push('/basicalSettings/schoolInfo');
+      } else {
+        let msg = res.message;
+        message.error(msg);
+      }
+    }else{
+      message.error('请选择政区域');
     }
   };
   const onCancelClick = () => {
@@ -151,12 +158,50 @@ const SchoolEditor = (props: any) => {
       });
     }
   };
+  const requestData1 = (XZQHM: string) => {
+    const ajax = new XMLHttpRequest();
+    ajax.open(
+      'get',
+      `http://datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(0, 2)}0000_city.json`
+    );
+    ajax.send();
+    ajax.onreadystatechange = function () {
+      if (ajax.readyState === 4 && ajax.status === 200) {
+        const data = JSON.parse(ajax.responseText);
+        setSecondCity(data.rows);
+      }
+    };
+  };
+  const requestData2 = (XZQHM: string) => {
+    const ajax = new XMLHttpRequest();
+    ajax.open(
+      'get',
+      `http://datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(0, 4)}00_district.json`
+    );
+    ajax.send();
+    ajax.onreadystatechange = function () {
+      if (ajax.readyState === 4 && ajax.status === 200) {
+        const data = JSON.parse(ajax.responseText);
+        let newArr: any[] = [];
+        data.rows.forEach((item: any) => {
+          if (item.adcode.substring(0, 4) === XZQHM?.substring(0, 4)) {
+            newArr.push(item);
+          }
+        });
+        setCounty(newArr);
+      }
+    };
+  };
   useEffect(() => {
     if (currentValue && currentValue.schoolInfo) {
       const current = currentValue.schoolInfo;
-      const { XD, XZQHM, XZQ, ...info } = current;
+      const { XD, XZQHM, XZQ} = current;
       if (XZQHM === '810000' || XZQHM === '820000' || XZQHM === '710000') {
         setShowCity(false);
+      }
+      if(XZQHM){
+        requestData1(XZQHM);
+        requestData2(XZQHM);
       }
       setProvinceVal({
         value: `${XZQHM?.substring(0, 2)}0000`,
@@ -174,7 +219,7 @@ const SchoolEditor = (props: any) => {
         key: XZQHM
       });
       setInfo({
-        ...info,
+        ...current,
         XD: XD ? XD.split(',') : undefined
       });
     }
@@ -243,6 +288,7 @@ const SchoolEditor = (props: any) => {
           key: 'XD',
           items: schoolLevel,
           mode: 'multiple',
+          rules: [{ required: true, message: '该项不能为空，请选择' }],
           span: 12
         },
         {
@@ -264,6 +310,7 @@ const SchoolEditor = (props: any) => {
           name: 'XZQHM',
           key: 'XZQHM',
           span: 12,
+          className:'ui-form-required',
           valuePropName: 'XZQHM',
           children: (
             <>

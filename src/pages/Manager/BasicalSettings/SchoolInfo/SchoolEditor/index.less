@@ -1,5 +1,5 @@
 .schoolEditor {
-  width: 950px;
+  width: 88%;
   margin: 0 auto;
 
   .smalldiv {
@@ -49,6 +49,18 @@
           }
         }
       }
+
+      .ui-form-required {
+        label::before {
+          display: inline-block;
+          margin-right: 4px;
+          color: #ff4d4f;
+          font-size: 14px;
+          font-family: SimSun, sans-serif;
+          line-height: 1;
+          content: '*';
+        }
+      }
     }
   }
 }
@@ -87,10 +99,8 @@
   height: 72px;
   box-shadow: 0 -1px 0 #e4e4e4;
 
-  button {
-    width: 144px;
+  button+ button {
     margin-left: 16px;
-    border-radius: 4px;
   }
 }
 
