@@ -356,6 +356,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
               onClick={() => {
                 showDrawer();
                 setCurrent(undefined);
+                setnames('add');
               }}
             >
               <PlusOutlined />
