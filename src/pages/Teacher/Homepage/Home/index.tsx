@@ -57,14 +57,7 @@ const Home = () => {
         <div className={styles.headerText}>
           <h4>
             <span ref={userRef}>
-              {
-                // <WWOpenDataCom
-                //   style={{ color: '#666' }}
-                //   type="userName"
-                //   openid={currentUserInfo?.UserId}
-                // />
-                currentUser?.UserId
-              }
+              {currentUser?.UserId}
             </span>
             老师，你好！
           </h4>

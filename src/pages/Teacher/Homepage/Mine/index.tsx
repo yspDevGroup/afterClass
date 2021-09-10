@@ -136,31 +136,29 @@ const Mine = () => {
           </div>
         </div>
       </header>
-      {courseStatus === 'empty' ? (
-        ''
-      ) : (
-        <div className={styles.funWrapper}>
-          <div className={styles.titleBar}>
-            出勤统计
-            <div>
-              <span />
-              正常
-              <span />
-              异常
-              <span />
-              待上
-            </div>
+
+      <div className={styles.funWrapper}>
+        <div className={styles.titleBar}>
+          出勤统计
+          <div>
+            <span />
+            正常
+            <span />
+            异常
+            <span />
+            待上
           </div>
-          {checkIn && checkIn.length ? (
-            checkIn.map((item: any) => {
-              const kcData = getKcData(item);
-              return <CheckOnChart data={kcData} title={item.KCMC} key={item.KCMC} />;
-            })
-          ) : (
-            <Nodata imgSrc={noChart} desc="暂无数据" />
-          )}
         </div>
-      )}
+        {checkIn && checkIn.length ? (
+          checkIn.map((item: any) => {
+            const kcData = getKcData(item);
+            return <CheckOnChart data={kcData} title={item.KCMC} key={item.KCMC} />;
+          })
+        ) : (
+          <Nodata imgSrc={noChart} desc="暂无数据" />
+        )}
+      </div>
+
       <div className={styles.linkWrapper}>
         <ul>
           <li>

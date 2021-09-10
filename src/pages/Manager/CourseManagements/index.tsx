@@ -19,10 +19,10 @@ const index = () => {
   return (
     <PageContainer>
       <Tabs onChange={callback}>
-        <TabPane tab="课程列表" key="1">
+        <TabPane tab="本校课程" key="1">
           <CourseList />
         </TabPane>
-        <TabPane tab="资源池课程" key="2">
+        <TabPane tab="可选课程" key="2">
           <CourseNotIntroduced />
         </TabPane>
         <TabPane tab="课程历史记录" key="3">
