@@ -64,7 +64,7 @@ const Announcement = () => {
           </div>
           <div className={styles.xb}>
             <p>版本号：V1.0.0</p>
-            <p>© 2021 版权所有：陕西凯锐信息技术有限公司 </p>
+            <p>© 2021 版权所有：陕西五育汇智信息技术有限公司 </p>
           </div>
         </div>
       ) : (
