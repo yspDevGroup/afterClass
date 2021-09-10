@@ -115,14 +115,14 @@ const RoomManagement = () => {
       title: '名称',
       dataIndex: 'FJMC',
       align: 'center',
-      width: 130,
+      width: 200,
       ellipsis: true,
     },
     {
       title: '编号',
       dataIndex: 'FJBH',
       align: 'center',
-      width: 100,
+      width: 150,
       ellipsis: true,
     },
     {
@@ -145,7 +145,7 @@ const RoomManagement = () => {
       title: '所属校区',
       dataIndex: 'XQName',
       align: 'center',
-      width: 150,
+      width: 200,
       ellipsis: true,
     },
     {
@@ -159,11 +159,13 @@ const RoomManagement = () => {
       dataIndex: 'BZXX',
       align: 'center',
       ellipsis: true,
+      width: 250,
     },
     {
       title: '操作',
       valueType: 'option',
-      width: 110,
+      width: 300,
+      align: 'center',
       render: (_, record) => (
         <>
           <a onClick={() => handleOperation('add', record)}>编辑</a>
@@ -193,7 +195,6 @@ const RoomManagement = () => {
           </Popconfirm>
         </>
       ),
-      align: 'center',
     },
   ];
   return (
