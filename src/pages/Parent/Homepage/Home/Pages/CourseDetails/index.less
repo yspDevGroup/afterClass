@@ -245,9 +245,19 @@
 
     .agreement {
       position: fixed;
-      bottom: 50px;
+      bottom: 65px;
+      :global {
+        .ant-checkbox-wrapper {
+          border-color: #45c977;
+        }
+        .ant-checkbox-wrapper-checked {
+          .ant-checkbox-inner {
+            background-color: #45c977;
+            border-color: #45c977;
+          }
+        }
+      }
     }
-
     .submit {
       position: fixed;
       bottom: 14px;
