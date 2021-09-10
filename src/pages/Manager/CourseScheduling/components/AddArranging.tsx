@@ -8,15 +8,13 @@ import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Form, message, Spin, Modal, Tooltip, Empty } from 'antd';
-import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
-import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
+import { getFJPlan } from '@/services/after-class/fjsj';
 import styles from '../index.less';
 import ExcelTable from '@/components/ExcelTable';
-import type { SiteType, CourseType } from '../data';
-import WWOpenDataCom from '../../ClassManagement/components/WWOpenDataCom';
+import type { CourseType } from '../data';
 import { history } from 'umi';
 import { getQueryString } from '@/utils/utils';
 
@@ -60,13 +58,9 @@ const AddArranging: FC<PropsType> = (props) => {
   const [packUp, setPackUp] = useState(false);
   const [Bj, setBj] = useState<any>(undefined);
   const [index, setIndex] = useState(formValues?.BJId);
-  const [cdlxId, setCdlxId] = useState(formValues?.CDLX);
-  const [roomType, setRoomType] = useState<any>([]);
-  const [siteType, setSiteType] = useState<any>([]);
   const [kcType, setKcType] = useState<any>(kcmcData);
   const [bjData, setBjData] = useState<any>([]);
   const [form] = Form.useForm();
-  const [xQItem, setXQLabelItem] = useState<any>([]);
   const [excelTableValue] = useState<any[]>([]);
   const sameClassDatas = [...sameClass];
   const [loading, setLoading] = useState(true);
@@ -162,6 +156,7 @@ const AddArranging: FC<PropsType> = (props) => {
     },
   ];
 
+  // 将排好的课程再次点击可以取消
   const getSelectdata = (value: any) => {
     sameClassDatas.map((item: any, key: number) => {
       if (
@@ -317,59 +312,6 @@ const AddArranging: FC<PropsType> = (props) => {
           message.error(kcList.message);
         }
 
-        // 获取所有场地类型
-        const response = await getAllFJLX({
-          name: '',
-          XXJBSJId: currentUser?.xxId,
-        });
-        if (response.status === 'ok') {
-          if (response.data && response.data.length > 0) {
-            const data: any = [].map.call(response.data, (item: RoomType) => {
-              return {
-                label: item.FJLX,
-                value: item.id,
-              };
-            });
-            setRoomType(data);
-          }
-        } else {
-          message.error(response.message);
-        }
-
-        // 获取所有场地数据
-        const fjList = await getAllFJSJ({
-          lxId: cdlxId === undefined ? '' : cdlxId,
-          page: 1,
-          pageSize: 0,
-          name: '',
-          XXJBSJId: currentUser?.xxId,
-        });
-        if (fjList.status === 'ok') {
-          if (fjList.data?.rows && fjList.data?.rows.length > 0) {
-            const data: any = [].map.call(fjList.data?.rows, (item: SiteType) => {
-              return {
-                label: item.FJMC,
-                value: item.id,
-              };
-            });
-            setSiteType(data);
-          }
-        } else {
-          message.error(fjList.message);
-        }
-
-        // 查询房间占用情况
-        // const Fjplan = await getFJPlan({
-        //   lxId: cdlxId,
-        //   fjId: formValues?.CDMC,
-        //   xn,
-        //   xq,
-        //   isPk: false,
-        // });
-        // if (Fjplan.status === 'ok') {
-        //   const data = processingData(Fjplan.data, xXSJPZData);
-        //   setTableDataSource(data);
-        // }
         const Fjplan = await getFJPlan({
           XNXQId: curXNXQId,
           XXJBSJId: currentUser?.xxId,
@@ -481,10 +423,7 @@ const AddArranging: FC<PropsType> = (props) => {
               fieldProps={{
                 async onChange(value: any, option: any) {
                   form.setFieldsValue({ NJ: undefined, KC: undefined });
-
-                  setXQLabelItem(option?.label);
                   setXQID(value);
-
                   const params = {
                     xqId: value || '',
                     XNXQId: curXNXQId,

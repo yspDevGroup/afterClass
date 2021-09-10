@@ -28,7 +28,7 @@ const Mine = () => {
     // ];
     async function fetch() {
       const res = await getAllKHXSDD({
-        XSId: currentUser.student.student_userid,
+        XSId: currentUser?.student?.student_userid,
         // njId: currentUser.njId,
         DDZT: '待付款',
       });

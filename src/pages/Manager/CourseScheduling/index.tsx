@@ -34,6 +34,7 @@ const ClassManagement = () => {
   const [state, setState] = useState(true);
   const [curXNXQId, setCurXNXQId] = useState<any>(getQueryString('xnxqid'));
   const [termList, setTermList] = useState<any>();
+  // ExcelTable表格所需要的数据
   const [tableDataSource, setTableDataSource] = useState<any>([]);
   const [radioValue, setRadioValue] = React.useState(false);
   const [xXSJPZData, setXXSJPZData] = useState<any>([]);
@@ -121,7 +122,9 @@ const ClassManagement = () => {
   };
 
   const showDrawer = () => {
+    // 打开编辑页面
     setState(false);
+    // 将选中的单元格数据清空 以免新增时数据又回显
     setRecordValue({});
   };
 
@@ -535,6 +538,11 @@ const ClassManagement = () => {
       width: 136,
     },
   ];
+  /**
+   * 获取Excel表格中数据的方法
+   * @param value 在type="edit" 的时候使用；选中将要排课的班级的数据
+   * @param record 获取点击某个单元格的所有数据
+   */
   const onExcelTableClick = (value: any, record: any) => {
     setRecordValue(record);
   };

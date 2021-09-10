@@ -5,8 +5,8 @@ import type { PageHeaderProps } from 'antd/lib/page-header';
 
 import styles from './index.less';
 
-type pageProp = { children?: React.ReactNode; cls?: string };
-const PageContain = ({ children, cls }: pageProp) => {
+type pageProp = { children?: React.ReactNode; cls?: string; type?: string };
+const PageContain = ({ children, cls, type }: pageProp) => {
   // 获取当前页面大小的方法
   const getWidHei = () => {
     let width;
@@ -65,7 +65,7 @@ const PageContain = ({ children, cls }: pageProp) => {
       }}
       fixedHeader
     >
-      <div style={{ padding: 24, background: '#fff' }}>{children}</div>
+      <div style={type === 'homepage' ? {} : { padding: 24, background: '#fff' }}>{children}</div>
     </PageContainer>
   );
 };

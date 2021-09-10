@@ -42,7 +42,9 @@ type WeenType = {
 
 type DataSourceType = {
   key: string;
+  /** 场地 */
   room: {
+    /** 场地名称 */
     cla: string;
     teacher: string;
     rowspan?: number;
@@ -51,7 +53,15 @@ type DataSourceType = {
     /** 场地类型ID */
     FJLXId: string;
   };
-  course: { cla: string; teacher: string; hjId: string };
+  /** 课次 */
+  course: {
+    /** 课次名称 */
+    cla: string;
+    /** 时间 */
+    teacher: string;
+    /** 时间ID */
+    hjId: string;
+  };
   monday: WeenType | '';
   tuesday: WeenType | '';
   wednesday: WeenType | '';
@@ -199,15 +209,24 @@ const Index: FC<IndexPropsType> = ({
     saturday: '6',
     sunday: '0',
   };
+
+  // 获取到最新的表格数据 以便渲染
   useEffect(() => {
     setStateTableData(dataSource);
   }, [dataSource]);
+
   const onTdClick = (rowKey: number, colKey: number) => {
+    //  不能直接操作表格的数据
+    // 需要复制一份数据出来进行修改  不然在操作表格时容易触发state 导致重新渲染
     const newData = stateTableData ? [...stateTableData] : [...dataSource];
+
+    // 表头数据： 根据在表格上点击获取到的key值来获取此单元格的表头数据
     const colItem = columns[colKey] || {};
 
+    // 一行的数据：根据在表格上点击获取到的key值来获取此单元格的行数据
     const rowData = newData[rowKey] || {};
 
+    // type === 'see'时 获取到点击单元格的数据
     let seeChosenItem = null;
     if (type === 'see' && !chosenData) {
       if (rowData[colItem.dataIndex]?.bjzt === '已开班') {
@@ -268,6 +287,7 @@ const Index: FC<IndexPropsType> = ({
       setStateTableData(newData);
     }
 
+    // 选中班级后 单元格的数据
     let selectList = null;
     if (rowData[colItem.dataIndex]) {
       selectList = {
@@ -278,7 +298,9 @@ const Index: FC<IndexPropsType> = ({
         XNXQId: chosenData?.XNXQId, // 学年学期ID
       };
     }
+
     if (type === 'edit') {
+      // 将排好的课程再次点击可以取消时所需要的数据
       const selectdata = {
         WEEKDAY: weekDay[colItem.dataIndex], // 周
         XXSJPZId: rowData.course?.hjId, // 时间ID
@@ -286,6 +308,7 @@ const Index: FC<IndexPropsType> = ({
         FJSJId: rowData.room?.jsId, // 教室ID
         XNXQId: chosenData?.XNXQId, // 学年学期ID
       };
+      // 将获取取消单元格的数据传到父级
       if (typeof getSelectdata === 'function') {
         getSelectdata(selectdata);
       }
@@ -293,15 +316,15 @@ const Index: FC<IndexPropsType> = ({
     let pkData = null;
     if (type === 'edit') {
       pkData = {
-        KHBJSJId: chosenData?.KHBJSJId,
-        FJSJId: rowData.room?.jsId,
-        WEEKDAY: weekDay[colItem.dataIndex],
+        KHBJSJId: chosenData?.KHBJSJId, // 班级ID
+        FJSJId: rowData.room?.jsId, // 教室ID
+        WEEKDAY: weekDay[colItem.dataIndex], // 周
         XXSJPZId: rowData.course?.hjId, // 时间ID
       };
     } else if (type === 'see') {
       pkData = rowData[colItem.dataIndex]?.bjId;
     }
-
+    // 将表格的所有数据传输到父级的方法
     if (typeof onExcelTableClick === 'function') {
       onExcelTableClick(selectList, seeChosenItem, pkData);
     }

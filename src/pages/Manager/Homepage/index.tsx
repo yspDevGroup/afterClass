@@ -15,7 +15,11 @@ const Index = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
 
-  return <PageContainer>{currentUser?.XZQHM ? <IndexComp /> : <Register />}</PageContainer>;
+  return (
+    <PageContainer type="homepage">
+      {currentUser?.XZQHM ? <IndexComp /> : <Register />}
+    </PageContainer>
+  );
 };
 
 export default Index;
