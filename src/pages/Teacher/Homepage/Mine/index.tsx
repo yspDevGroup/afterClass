@@ -10,7 +10,7 @@ import moment from 'moment';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import Nodata from '@/components/Nodata';
 import noChart from '@/assets/noChart1.png';
-import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+// import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
 const Mine = () => {
   const { initialState } = useModel('@@initialState');
@@ -130,15 +130,7 @@ const Mine = () => {
           <img src={currentUser?.avatar} />
           <div className={styles.headerName}>
             <h4>
-              <span ref={userRef}>
-                {
-                  <WWOpenDataCom
-                    style={{ color: '#666' }}
-                    type="userName"
-                    openid={currentUser?.username}
-                  />
-                }
-              </span>
+              <span ref={userRef}>{currentUser?.UserId}</span>
               老师
             </h4>
           </div>

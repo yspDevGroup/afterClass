@@ -63,7 +63,7 @@ const Home = () => {
                 //   type="userName"
                 //   openid={currentUserInfo?.UserId}
                 // />
-                currentUserInfo?.name
+                currentUser?.UserId
               }
             </span>
             老师，你好！
