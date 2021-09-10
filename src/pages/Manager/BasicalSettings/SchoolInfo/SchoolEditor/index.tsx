@@ -10,7 +10,7 @@ import { updateXXJBSJ } from '@/services/after-class/xxjbsj';
 
 const { Option } = Select;
 const formItemLayout = {
-  labelCol: { flex: '7em' },
+  labelCol: { flex: '6em' },
   wrapperCol: { flex: 'auto' }
 };
 
@@ -44,6 +44,7 @@ const SchoolEditor = (props: any) => {
   const [provinceVal, setProvinceVal] = useState<any>();
   const [cityVal, setCityVal] = useState<any>();
   const [countyVal, setCountyVal] = useState<any>();
+  const [showCity, setShowCity] = useState<boolean>(true);
   const currentValue = props.location.state;
 
   const onSubmit = () => {
@@ -97,9 +98,11 @@ const SchoolEditor = (props: any) => {
       ajax.onreadystatechange = function () {
         if (ajax.readyState === 4 && ajax.status === 200) {
           if (value.value === '810000' || value.value === '820000' || value.value === '710000') {
+            setShowCity(false);
             setCityAdcode(value.value);
           } else {
             setCityAdcode(undefined);
+            setShowCity(true);
           }
           const data = JSON.parse(ajax.responseText);
           setSecondCity(data.rows);
@@ -152,6 +155,9 @@ const SchoolEditor = (props: any) => {
     if (currentValue && currentValue.schoolInfo) {
       const current = currentValue.schoolInfo;
       const { XD, XZQHM, XZQ, ...info } = current;
+      if (XZQHM === '810000' || XZQHM === '820000' || XZQHM === '710000') {
+        setShowCity(false);
+      }
       setProvinceVal({
         value: `${XZQHM?.substring(0, 2)}0000`,
         label: XZQ?.split('/')[0],
@@ -169,7 +175,7 @@ const SchoolEditor = (props: any) => {
       });
       setInfo({
         ...info,
-        XD: XD? XD.split(','): undefined
+        XD: XD ? XD.split(',') : undefined
       });
     }
   }, [currentValue]);
@@ -265,7 +271,7 @@ const SchoolEditor = (props: any) => {
                 placeholder="请选择"
                 labelInValue
                 value={provinceVal}
-                style={{ width: 120, marginRight: 10 }}
+                style={{ width: 105, marginRight: 10 }}
                 onChange={(value: any) => {
                   handleChange('cities', value);
                 }}
@@ -278,40 +284,42 @@ const SchoolEditor = (props: any) => {
                   );
                 })}
               </Select>
-              <Select
-                placeholder="请选择"
-                style={{ width: 120, marginRight: 10 }}
-                labelInValue
-                value={cityVal}
-                onChange={(value: any) => {
-                  handleChange('secondCity', value);
-                }}
-              >
-                {secondCity?.map((item: any) => {
-                  return (
-                    <Option value={item.adcode} key={item.name}>
-                      {item.name}
-                    </Option>
-                  );
-                })}
-              </Select>
-              <Select
-                style={{ width: 120 }}
-                placeholder="请选择"
-                labelInValue
-                value={countyVal}
-                onChange={(value: any) => {
-                  handleChange('county', value);
-                }}
-              >
-                {county?.map((item: any) => {
-                  return (
-                    <Option value={item.adcode} key={item.adcode}>
-                      {item.name}
-                    </Option>
-                  );
-                })}
-              </Select>
+              {showCity ? <>
+                <Select
+                  placeholder="请选择"
+                  style={{ width: 105, marginRight: 10 }}
+                  labelInValue
+                  value={cityVal}
+                  onChange={(value: any) => {
+                    handleChange('secondCity', value);
+                  }}
+                >
+                  {secondCity?.map((item: any) => {
+                    return (
+                      <Option value={item.adcode} key={item.name}>
+                        {item.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <Select
+                  style={{ width: 105 }}
+                  placeholder="请选择"
+                  labelInValue
+                  value={countyVal}
+                  onChange={(value: any) => {
+                    handleChange('county', value);
+                  }}
+                >
+                  {county?.map((item: any) => {
+                    return (
+                      <Option value={item.adcode} key={item.adcode}>
+                        {item.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </> : ''}
             </>
           )
         },

@@ -1,54 +1,62 @@
 .schoolInfoBody {
-  padding: @padding-lg;
-  background: #ffffff;
+  width: 950px;
+  margin: 0 auto;
+
   .schoolInfoTitle {
     display: flex;
     justify-content: space-between;
+
     .schoolInfoLogo {
       padding: 0 @padding-lg;
+
       img {
         width: 60px;
         height: 60px;
       }
     }
+
     .schoolInfoTitleHeader {
       color: @text-color;
       font-weight: bold;
       font-size: 18px;
       flex: 1;
+
       p {
-        height: 22px;
-        line-height: 22px;
+        height: 60px;
+        line-height: 60px;
         margin-bottom: 0;
-        &+p {
-          margin-top: @padding-md;
-          color: @normal-color;
-        }
       }
     }
+
     .schoolInfoTitleButton {
       display: flex;
       justify-content: center;
       flex-flow: column;
-      a{
+
+      a {
         border: 1px solid @primary-color;
-        color: @primary-color;
+        background: @primary-color;
+        color: #fff;
         padding: 0 @padding-md;
         line-height: 30px;
         border-radius: 4px;
       }
     }
   }
+
   .schoolInfoBasic {
     margin-top: 24px;
     padding: 24px;
+
     :global {
       .ant-form-item-label {
         text-align: left;
       }
+
       .ant-form-item-control-input {
         line-height: 32px;
       }
+
       .ant-input[disabled] {
         color: @text-color;
         background-color: inherit;
