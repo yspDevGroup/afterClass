@@ -12,7 +12,7 @@ import SchoolInfo from './components/SchoolInfo';
 import type { classType, TableListParams } from './data';
 
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
-import { createKHKCSQ, getToIntroduceBySchool } from '@/services/after-class/khkcsq';
+import { createKHKCSQ, getToIntroduceBySchool, updateKHKCSQ } from '@/services/after-class/khkcsq';
 /**
  * 未引入课程
  * @returns
@@ -116,7 +116,11 @@ const courseNotIntroduced = () => {
       search: false,
       width: 110,
       render: (text, record) => {
-        return record.KHKCSQs?.length === 0 ? '未引入' : '待确认';
+        let status = '未引入';
+        if (record.KHKCSQs?.length) {
+          status = record.KHKCSQs[0].ZT === 0 ? '待确认' : '已引入';
+        }
+        return status;
       },
     },
     {
@@ -160,7 +164,7 @@ const courseNotIntroduced = () => {
                     message.success('操作成功');
                     action?.reload();
                   } else {
-                    message.error('操作失败');
+                    message.error(res.message);
                   }
                 }}
               >
@@ -169,19 +173,12 @@ const courseNotIntroduced = () => {
             ) : (
               <a
                 onClick={async () => {
-                  const params = {
-                    KHKCSJId: record?.id || '',
-                    SQR: currentUser?.username || '',
-                    SQRId: currentUser?.userId || '',
-                    XXJBSJId: currentUser?.xxId || '',
-                    KHJYJGId: record?.KHJYJG?.id || '',
-                  };
-                  const res = await createKHKCSQ({ ...params, ZT: 3 });
+                  const res = await updateKHKCSQ({id:record?.KHKCSQs?.[0]?.id}, {ZT: 3 });
                   if (res.status === 'ok') {
                     message.success('操作成功');
                     action?.reload();
                   } else {
-                    message.error('操作失败');
+                    message.error(res.message);
                   }
                 }}
               >
@@ -232,7 +229,7 @@ const courseNotIntroduced = () => {
           density: false,
           reload: false,
         }}
-        // search={false}
+      // search={false}
       />
       <MechanismInfo // 机构详情页
         onMechanismInfoClose={() => {

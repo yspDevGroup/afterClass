@@ -425,10 +425,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     BMData?.id
       ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -471,10 +471,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',

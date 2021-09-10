@@ -102,12 +102,13 @@ const CourseManagement = (props: { location: { state: any } }) => {
             page: 1,
             pageSize: 0,
             isRequired: false,
+            KCZT:[1,2],
             XXJBSJId: currentUser?.xxId,
           });
           Promise.resolve(ress).then((dataes: any) => {
-            if (dataes.status === 'ok') {
+            if (dataes?.status === 'ok') {
               const njArry: { label: string; value: string }[] = [];
-              dataes.data.rows.forEach((item: any) => {
+              dataes?.data?.rows?.forEach((item: any) => {
                 njArry.push({
                   label: item.KCMC,
                   value: item.id,
@@ -356,10 +357,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
               onClick={() => {
                 showDrawer();
                 setnames('add');
-                setCurrent({
-                  SSJGLX: state?.id ? '校内课程' : '',
-                  KHKCSJId: state?.id || '',
-                });
               }}
             >
               <PlusOutlined />

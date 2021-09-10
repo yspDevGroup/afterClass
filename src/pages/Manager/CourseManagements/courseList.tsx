@@ -284,18 +284,21 @@ const CourseList = () => {
       search: false,
       width: 100,
       render: (_, record) => {
-        const Url = `/classManagement`;
-        const classes = record.KHBJSJs?.filter((item: { BJZT: string }) => item.BJZT === '已开班');
-        return (
-          <Link
-            to={{
-              pathname: Url,
-              state: record,
-            }}
-          >
-            {classes?.length}/{record.KHBJSJs?.length}
-          </Link>
-        );
+        if([1,2].includes(record.KCZT)) {
+          const Url = `/classManagement`;
+          const classes = record.KHBJSJs?.filter((item: { BJZT: string }) => item.BJZT === '已开班');
+          return (
+            <Link
+              to={{
+                pathname: Url,
+                state: record,
+              }}
+            >
+              {classes?.length}/{record.KHBJSJs?.length}
+            </Link>
+          );
+        }
+        return '-'
       },
     },
     {

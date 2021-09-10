@@ -47,6 +47,8 @@ export async function getAllKHKCSJ(
     pageSize?: number;
     /** 课程名称 */
     KCMC?: string;
+    /** 课程状态 */
+    KCZT?: number[];
     /** 课后教育机构名称 */
     KHJYJG?: string;
   },

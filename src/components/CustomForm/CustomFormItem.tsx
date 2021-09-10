@@ -123,7 +123,7 @@ export const FormSelect = (props: FormSelectProps) => {
         optionFilterProp="children"
         onChange={onChange}
         filterOption={(inputValue: string, option: any) =>
-          option.children.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0
+          option?.children.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0
         }
       >
         {items.map((item) => (

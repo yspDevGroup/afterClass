@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-09 13:47:53
+ * @LastEditTime: 2021-09-10 18:51:36
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -172,10 +172,10 @@ const Index = () => {
                 <img src={home4} alt="" />
                 <ul>
                   <li>
-                    <Link to="/classManagement">班级发布</Link>
+                    <Link to="/courseManagements/CourseManagements">课程发布</Link>
                   </li>
                   <li>
-                    <Link to="/courseManagements/CourseManagements">课程发布</Link>
+                    <Link to="/classManagement">开班</Link>
                   </li>
                 </ul>
               </Col>
