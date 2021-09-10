@@ -115,7 +115,6 @@ const Home = () => {
           <Details data={notification} />
         </div>
       </div>
-      )
     </div>
   );
 };

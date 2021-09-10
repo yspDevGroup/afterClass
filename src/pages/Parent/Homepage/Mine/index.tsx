@@ -49,7 +49,12 @@ const Mine = () => {
         <div className={styles.header}>
           {currentUserInfo?.avatar ? <img src={currentUserInfo?.avatar} /> : ''}
           <div className={styles.headerName}>
-            <h4>{currentUser?.student?.name || currentUserInfo?.username || '家长'}</h4>
+            <h4>
+              {currentUserInfo?.external_contact?.subscriber_info.remark ||
+                currentUserInfo?.username ||
+                '家长'}
+            </h4>
+            {/* <h4>{currentUser?.student?.name || currentUserInfo?.username || '家长'}</h4> */}
             <span>微信名：{currentUserInfo?.username}</span>
           </div>
         </div>
