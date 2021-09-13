@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './index.less';
 import { Button, FormInstance, message, Select } from 'antd';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import PageContainer from '@/components/PageContainer';
 import CustomForm from '@/components/CustomForm';
 import AvatarUpload from '@/components/AvatarUpload';
@@ -34,6 +34,7 @@ const schoolLevel = [
 ];
 
 const SchoolEditor = (props: any) => {
+  const { refresh} = useModel('@@initialState');
   const [editForm, setEditForm] = useState<FormInstance<any>>();
   const [info, setInfo] = useState<any>();
   const [xhimg, setXhimg] = useState<any>();
@@ -71,10 +72,7 @@ const SchoolEditor = (props: any) => {
   const onFinish = async (values: any) => {
     values.XH = xhimg ? xhimg : values.XH;
     values.XD = values?.XD?.toString();
-    console.log(values);
     values.XZQHM = cityAdcode||values.XZQHM;
-    console.log(values.XZQHM);
-
     values.XZQ = `${provinceVal?.label}${cityVal?.label ? `/${cityVal?.label}` : ''}${countyVal?.label ? `/${countyVal?.label}` : ''}`;
     if(values.XZQHM){
       const res = await updateXXJBSJ({
@@ -82,6 +80,7 @@ const SchoolEditor = (props: any) => {
       }, values);
       if (res.status === 'ok') {
         message.success('保存成功');
+        refresh();
         history.push('/basicalSettings/schoolInfo');
       } else {
         let msg = res.message;
