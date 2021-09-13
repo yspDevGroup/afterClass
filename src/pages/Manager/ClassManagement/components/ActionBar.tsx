@@ -91,7 +91,7 @@ const ActionBar = (props: propstype) => {
   );
   switch (record.BJZT) {
     case '待开班':
-    case '已下架':
+    case '已取消':
       return (
         <>
           {record.KHPKSJs && record.KHPKSJs?.length > 0 ? (

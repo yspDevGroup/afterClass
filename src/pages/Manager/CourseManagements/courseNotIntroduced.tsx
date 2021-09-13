@@ -204,7 +204,7 @@ const courseNotIntroduced = () => {
             filter,
             name: params.keyword,
             pageSize: 0,
-            page: 1,
+            page: 0,
             isRequired: false,
             XXJBSJId: currentUser?.xxId,
             XZQHM: currentUser?.XZQHM,

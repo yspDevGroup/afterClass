@@ -51,7 +51,7 @@ const NewCourses = (props: PropsType) => {
     if (current) {
       const { KHKCLX, KCZT, ...info } = current;
       return {
-        KCZT: KCZT === '已下架' ? '待发布' : KCZT,
+        KCZT: KCZT === '已取消' ? '待发布' : KCZT,
         KCLXId: KHKCLX?.id,
         ...info,
       };
