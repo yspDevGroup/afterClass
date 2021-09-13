@@ -27,8 +27,8 @@ type AddCourseProps = {
   kCID?: string;
 };
 const formLayout = {
-  labelCol: {},
-  wrapperCol: {},
+  labelCol: { flex: '7em' },
+  wrapperCol: { },
 };
 
 const AddCourse: FC<AddCourseProps> = ({
@@ -282,21 +282,6 @@ const AddCourse: FC<AddCourseProps> = ({
       rules: [{ required: true, message: '请选择课程来源' }],
     },
     {
-      type: 'input',
-      label: '班级名称：',
-      name: 'BJMC',
-      key: 'BJMC',
-      disabled: readonly,
-      rules: [
-        { required: true, message: '请填写班级名称' },
-        { max: 18, message: '最长为 18 位' },
-      ],
-      fieldProps: {
-        autocomplete: 'off',
-      },
-    },
-
-    {
       type: 'select',
       disabled: readonly,
       label: '课程名称：',
@@ -329,27 +314,87 @@ const AddCourse: FC<AddCourseProps> = ({
       },
     },
     {
-      type: 'inputNumber',
+      type: 'input',
+      label: '班级名称：',
+      name: 'BJMC',
+      key: 'BJMC',
       disabled: readonly,
-      label: '课时数：',
-      name: 'KSS',
-      key: 'KSS',
-      rules: [{ required: true, message: '请填写课时数' }],
+      rules: [
+        { required: true, message: '请填写班级名称' },
+        { max: 18, message: '最长为 18 位' },
+      ],
       fieldProps: {
-        min: 0,
-        max: 100,
+        autocomplete: 'off',
       },
     },
     {
-      type: 'inputNumber',
+      type: 'group',
+      key: 'group1',
       disabled: readonly,
-      label: '班级人数：',
-      name: 'BJRS',
-      key: 'BJRS',
-      rules: [{ required: true, message: '请填写班级人数' }],
+      groupItems: [
+        {
+          type: 'inputNumber',
+          disabled: readonly,
+          label: '课时数：',
+          name: 'KSS',
+          key: 'KSS',
+          rules: [{ required: true, message: '请填写课时数' }],
+          fieldProps: {
+            min: 0,
+            max: 100,
+          },
+        },
+        {
+          type: 'inputNumber',
+          disabled: readonly,
+          label: '班级人数：',
+          name: 'BJRS',
+          key: 'BJRS',
+          rules: [{ required: true, message: '请填写班级人数' }],
+        },
+      ]
     },
     {
       type: 'group',
+      key: 'group2',
+      disabled: readonly,
+      groupItems: [
+        {
+          type: 'select',
+          label: '主班：',
+          name: 'ZJS',
+          key: 'ZJS',
+          disabled: readonly,
+          rules: [{ required: true, message: '请选择班主任' }],
+          fieldProps: {
+            showSearch: true,
+            // 创建机构课程的时 主班选择的是机构分配的任课老师
+            options: JGKCTeacherData.length > 0 ? JGKCTeacherData : teacherData,
+            optionFilterProp: 'label',
+            allowClear: true,
+          },
+        },
+        {
+          type: 'select',
+          label: '副班：(多选)',
+          name: 'FJS',
+          key: 'FJS',
+          disabled: readonly,
+          rules: [{ required: true, message: '请选择副班主任' }],
+          fieldProps: {
+            mode: 'multiple',
+            showSearch: true,
+            // 创建机构课程的时 副班选择的是机构分配和学校一起的任课老师
+            options: [...teacherData, ...JGKCTeacherData],
+            optionFilterProp: 'label',
+            allowClear: true,
+          },
+        },
+      ],
+    },
+    {
+      type: 'group',
+      key: 'group3',
       disabled: readonly,
       groupItems: [
         {
@@ -385,43 +430,6 @@ const AddCourse: FC<AddCourseProps> = ({
       fieldProps: {
         options: campus,
       },
-    },
-    {
-      type: 'group',
-      disabled: readonly,
-      groupItems: [
-        {
-          type: 'select',
-          label: '主班：',
-          name: 'ZJS',
-          key: 'ZJS',
-          disabled: readonly,
-          rules: [{ required: true, message: '请选择班主任' }],
-          fieldProps: {
-            showSearch: true,
-            // 创建机构课程的时 主班选择的是机构分配的任课老师
-            options: JGKCTeacherData.length > 0 ? JGKCTeacherData : teacherData,
-            optionFilterProp: 'label',
-            allowClear: true,
-          },
-        },
-        {
-          type: 'select',
-          label: '副班：(多选)',
-          name: 'FJS',
-          key: 'FJS',
-          disabled: readonly,
-          rules: [{ required: true, message: '请选择副班主任' }],
-          fieldProps: {
-            mode: 'multiple',
-            showSearch: true,
-            // 创建机构课程的时 副班选择的是机构分配和学校一起的任课老师
-            options: [...teacherData, ...JGKCTeacherData],
-            optionFilterProp: 'label',
-            allowClear: true,
-          },
-        },
-      ],
     },
     BMData?.id
       ? {
@@ -542,7 +550,7 @@ const AddCourse: FC<AddCourseProps> = ({
       <div ref={userRef} />
       <Drawer
         title={getTitle()}
-        width={480}
+        width={580}
         onClose={onClose}
         visible={visible}
         className={styles.courseStyles}
@@ -573,7 +581,6 @@ const AddCourse: FC<AddCourseProps> = ({
         }
       >
         <ProFormFields
-          layout="vertical"
           onFinish={onFinish}
           setForm={setForm}
           formItems={formItems}

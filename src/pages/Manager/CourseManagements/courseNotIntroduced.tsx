@@ -92,6 +92,7 @@ const courseNotIntroduced = () => {
       dataIndex: 'NJSJs',
       search: false,
       align: 'center',
+      width: 200,
       render: (text: any) => {
         return (
           <EllipsisHint

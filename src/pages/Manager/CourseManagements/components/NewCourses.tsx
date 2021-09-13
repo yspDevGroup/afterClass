@@ -40,8 +40,6 @@ const NewCourses = (props: PropsType) => {
     currentUser,
   } = props;
   const [form, setForm] = useState<any>();
-  const [baoming, setBaoming] = useState<boolean>(false);
-  const [kaike, setKaike] = useState<boolean>(false);
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
   const [isTrue, setIsTrue] = useState(true);
@@ -61,10 +59,8 @@ const NewCourses = (props: PropsType) => {
     };
   };
   const Close = () => {
-    setBaoming(false);
-    setKaike(false);
     setImageUrl('');
-    onClose!();
+    onClose?.();
   };
   const handleSubmit = () => {
     form.submit();
@@ -115,7 +111,7 @@ const NewCourses = (props: PropsType) => {
       .then((data: any) => {
         if (data.status === 'ok') {
           message.success('保存成功');
-          onClose!();
+          Close?.();
           actionRef?.current?.reload();
         } else if (data.message === 'Validation error') {
           message.error(`保存失败，课程名称重复`);
