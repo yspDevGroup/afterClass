@@ -245,7 +245,7 @@
 
     .agreement {
       position: fixed;
-      bottom: 65px;
+      bottom: 70px;
       :global {
         .ant-checkbox-wrapper {
           border-color: #45c977;
@@ -430,6 +430,11 @@
   :global {
     .ant-modal-content {
       min-width: 100% !important;
+      .ant-modal-footer {
+        .ant-btn {
+          margin-left: 0 !important;
+        }
+      }
     }
     .ant-modal-body {
       width: 100% !important;
