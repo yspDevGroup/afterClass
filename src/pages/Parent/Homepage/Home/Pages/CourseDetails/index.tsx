@@ -11,6 +11,7 @@ import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getXXTZGG } from '@/services/after-class/xxtzgg';
 
 const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -31,6 +32,7 @@ const CourseDetails: React.FC = () => {
   const myDate: Date = new Date(moment(curDate).format('YYYY/MM/DD'));
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
+  const [KHFUXY, setKHFUXY] = useState<any>();
 
   // const children = currentUser?.subscriber_info?.children || [
   //   {
@@ -83,6 +85,21 @@ const CourseDetails: React.FC = () => {
       })();
     }
   }, [courseid]);
+  useEffect(() => {
+    (async () => {
+      const res = await getXXTZGG({
+        BT: '',
+        LX: '课后服务协议',
+        XXJBSJId: currentUser?.xxId,
+        ZT: ['已发布'],
+        page: 0,
+        pageSize: 0,
+      });
+      if (res.status === 'ok') {
+        setKHFUXY(res.data?.rows?.[0].NR);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (orderInfo) linkRef.current?.click();
@@ -187,15 +204,21 @@ const CourseDetails: React.FC = () => {
                     </p>
                     <p className={styles.bzrname}>
                       班主任：
-                      {value.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师').JSXM}
+                      {value?.KHBJJs?.map((item: any) => {
+                        if (item.JSLX.indexOf('副') === -1) {
+                          return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
+                        }
+                        return '';
+                      })}
                     </p>
                     <p className={styles.bzrname}>
                       副班：
-                      {value.KHBJJs?.filter((item: { JSLX: string }) => item.JSLX === '副教师').map(
-                        (item: any) => {
-                          return <span style={{ marginRight: '5px' }}>{item.JSXM}</span>;
-                        },
-                      )}
+                      {value?.KHBJJs?.map((item: any) => {
+                        if (item.JSLX.indexOf('主') === -1) {
+                          return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
+                        }
+                        return '';
+                      })}
                     </p>
                     <table>
                       <thead>
@@ -308,9 +331,9 @@ const CourseDetails: React.FC = () => {
               <Checkbox onChange={onFxChange} checked={Xystate}>
                 <span>我已阅读并同意</span>
               </Checkbox>
-              <a onClick={showModal}>《课后帮服务协议》</a>
+              <a onClick={showModal}>《课后服务协议》</a>
             </div>
-            <Button className={styles.submit} disabled={fk || BJ === undefined} onClick={submit}>
+            <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
               确定并付款
             </Button>
             <Link
@@ -342,24 +365,14 @@ const CourseDetails: React.FC = () => {
           width: 200,
         }}
         className={styles.showagreement}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleOk}>
+            确定
+          </Button>,
+        ]}
       >
-        <p>课后帮服务协议书</p>
-        <div>
-          <p>
-            尊敬的各位家长或监护人:
-            根据《教育部办公厅关于做好中小学生课后服务工作的指导意见》（教基一厅[2017]2号）要求，丹东市教育局《关于做好中小学课后服务工作的实施意见》，丹东市教育局关于开展中小学课后服务工作的通知精神，我校中学部决定从本学期开始在七至九年级开展课后服务工作。为了学生安全，请家长积极配合学校管理学生，家校共同承担教育责任，协定如下:
-            一、课后服务说明
-            1、参加课后服务纯属学生及家长自愿，学校尊重学生和家长的自主选择。2、不愿意参加的同学，不作强行要求。
-            3、课后服务时间:平均每次不超过1.5小时。（冬季时间稍短，夏季时间稍长。节假日及学生下午离校时间除外，特殊情况另行通知）
-            4、学生有病或者有特殊事情时家长必须提前亲自到校或电话为学生请假。
-            5、参加课后服务的学生自下午放学后不得擅自离校，要严格遵守学校的各项规章制度，服从教师管理，对严重违纪或屡教不改的学生学校有权终止其参加课后服务的资格。
-            6、为解决学生参加课后服务期间晚餐的问题，家长可以为学生自备饮食，也可以购买配餐单位为学生提供的间食（按月收取费用），学生和家长自愿选择。严禁放学后外出就餐或购买外卖，违者取消其参加课后服务的资格。
-            二、安全要求
-            1、服务期间，学校和家长共同做好安全工作，加强安全教育。参加服务的学生严格遵守校规校纪，严禁在走廊跑跳、疯闹、打架等;严禁携带危险物品(如刀具）到校。教育学生服务期间遵守交通规则。家长必须叮嘱学生上学放学路上的安全,按时回家，不得在外逗留。
-            2、家长必须加强对孩子交通安全教育和防溺水等安全教育，严格监控学生的时间。3、参加课后服务的学生家长要保持通讯畅通，便于及时沟通。
-            4、家长对回家较晚或离家较早的学生要注意动向，及时打电话与学校联系。三、本协议未尽之处由学校及家长委员会另行补充。
-          </p>
-        </div>
+        <p>课后服务协议书</p>
+        <div dangerouslySetInnerHTML={{ __html: KHFUXY }} />
       </Modal>
     </div>
   );
