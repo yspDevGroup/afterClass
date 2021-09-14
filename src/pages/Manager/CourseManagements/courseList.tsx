@@ -13,7 +13,7 @@ import EllipsisHint from '@/components/EllipsisHint';
 import PromptInformation from '@/components/PromptInformation';
 
 import MechanismInfo from './components/MechanismInfo';
-import SchoolInfo from './components/SchoolInfo';
+import CourseInfo from './components/CourseInfo';
 import Sitclass from './components/Sitclass';
 import NewCourses from './components/NewCourses';
 import type { classType, TableListParams } from './data';
@@ -429,7 +429,7 @@ const CourseList = () => {
           visibleMechanismInfo={visibleMechanismInfo}
           info={info}
         />
-        <SchoolInfo // 课程详情页
+        <CourseInfo // 课程详情页
           onSchoolInfoClose={() => {
             setVisibleSchoolInfo(false);
           }}

@@ -16,7 +16,7 @@ import {
   FormInputNumber,
   FormCheckbox,
   FormDateRange,
-  FormButton,
+  FormButton
 } from './CustomFormItem';
 
 import type { FormInstance } from 'antd';
@@ -34,7 +34,9 @@ import type {
   FormItemType,
   FormUploadProps,
   FormCheckboxProps,
+  FormDropMenuProps,
   FormButtonProps,
+  UploadImageProp
 } from './interfice';
 
 import styles from './index.module.less';
@@ -81,9 +83,9 @@ const renderFormItems = (formItems: FormItemType[], formDisabled: boolean) => {
       case 'uploadImage':
         return (
           <Form.Item {...currentProps} key={key}>
-            <UploadImage {...currentProps} key={key} />
+            <UploadImage { ...currentProps} key={key} />
           </Form.Item>
-        );
+          );
       case 'group': {
         const colW = 24 / (groupItems ? groupItems.length : 1);
         return (
@@ -159,7 +161,7 @@ type Props = {
   layoutType?: 'horizontal' | 'vertical' | 'inline';
   onFinish?: (values: any) => void;
   onFinishFailed?: ({
-    errorFields,
+    errorFields
   }: {
     errorFields: {
       name: (string | number)[];
@@ -188,7 +190,7 @@ const CustomForm = (props: Props) => {
     onFinish,
     onFinishFailed,
     onCancel,
-    style,
+    style
   } = props;
   const [form] = Form.useForm();
 

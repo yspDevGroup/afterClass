@@ -1,21 +1,16 @@
-/* eslint-disable no-unneeded-ternary */
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 /*
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-08-26 16:24:39
- * @LastEditTime: 2021-09-08 17:45:48
+ * @LastEditTime: 2021-09-13 18:17:38
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import moment from 'moment';
-import type { FormInstance } from 'antd';
-import { message } from 'antd';
+import { FormInstance, message } from 'antd';
 import CustomForm from '@/components/CustomForm';
-import { history } from 'umi';
+import { FormItemType } from '@/components/CustomForm/interfice';
 
 import 'antd/es/modal/style';
 import styles from './components.less';
@@ -62,20 +57,20 @@ const SchoolInfo = (props: PropsType) => {
       message.error(`上传失败，${mass}`);
     }
   };
-  const basicForm: any[] = [
+  const basicForm: FormItemType[] = [
     {
       type: 'input',
       label: 'id',
       name: 'id',
       key: 'id',
-      hidden: true,
+      hidden: true
     },
     {
       type: 'input',
       label: 'KHJYJGId',
       name: 'KHJYJGId',
       key: 'KHJYJGId',
-      hidden: true,
+      hidden: true
     },
     {
       type: 'group',
@@ -94,7 +89,7 @@ const SchoolInfo = (props: PropsType) => {
           imagename: 'image',
           handleImageChange: (value: any) => {
             imageChange('ZP', value);
-          },
+          }
         },
         {
           type: 'uploadImage',
@@ -109,9 +104,9 @@ const SchoolInfo = (props: PropsType) => {
           imagename: 'image',
           handleImageChange: (value: any) => {
             imageChange('ZGZS', value);
-          },
-        },
-      ],
+          }
+        }
+      ]
     },
     {
       type: 'group',
@@ -123,16 +118,16 @@ const SchoolInfo = (props: PropsType) => {
           name: 'XM',
           key: 'XM',
           rules: [{ required: true, message: '请输入姓名' }],
-          placeholder: readonly ? '-' : '',
+          placeholder: readonly ? '-' : ''
         },
         {
           type: 'input',
           label: '资格证书编号',
           name: 'ZGZSBH',
           key: 'ZGZSBH',
-          placeholder: readonly ? '-' : '',
-        },
-      ],
+          placeholder: readonly ? '-' : ''
+        }
+      ]
     },
     {
       type: 'group',
@@ -143,25 +138,37 @@ const SchoolInfo = (props: PropsType) => {
           name: 'XB',
           key: 'XB',
           label: '性别',
+          hidden: readonly,
+          span:12,
           items: [
             {
               text: '男',
-              value: '男',
+              value: '男性'
             },
             {
               text: '女',
-              value: '女',
-            },
-          ],
+              value: '女性'
+            }
+          ]
+        },
+        {
+          type: 'input',
+          label: '性别',
+          span:12,
+          name: 'XB',
+          key: 'XB',
+          hidden: !readonly,
+          placeholder: readonly ? '-' : '',
         },
         {
           type: 'input',
           label: '学历',
+          span:12,
           name: 'XL',
           key: 'XL',
-          placeholder: readonly ? '-' : '',
-        },
-      ],
+          placeholder: readonly ? '-' : ''
+        }
+      ]
     },
     {
       type: 'group',
@@ -172,16 +179,16 @@ const SchoolInfo = (props: PropsType) => {
           label: '民族',
           name: 'MZ',
           key: 'MZ',
-          placeholder: readonly ? '-' : '',
+          placeholder: readonly ? '-' : ''
         },
         {
           type: 'input',
           label: '毕业院校',
           name: 'BYYX',
           key: 'BYYX',
-          placeholder: readonly ? '-' : '',
-        },
-      ],
+          placeholder: readonly ? '-' : ''
+        }
+      ]
     },
     {
       type: 'group',
@@ -193,16 +200,16 @@ const SchoolInfo = (props: PropsType) => {
           label: '出生日期',
           name: 'CSRQ',
           key: 'CSRQ',
-          placeholder: readonly ? '-' : '',
+          placeholder: readonly ? '-' : ''
         },
         {
           type: 'input',
           label: '专业',
           name: 'SXZY',
           key: 'ZY',
-          placeholder: readonly ? '-' : '',
-        },
-      ],
+          placeholder: readonly ? '-' : ''
+        }
+      ]
     },
     {
       type: 'group',
@@ -214,18 +221,20 @@ const SchoolInfo = (props: PropsType) => {
           name: 'LXDH',
           key: 'LXDH',
           placeholder: readonly ? '-' : '',
-          rules: [{ required: true, message: '请输入联系电话' }],
+          rules: [{ required: true, message: '请输入联系电话' }]
         },
         {
           type: 'inputNumber',
           label: '教龄（年）',
           name: 'JL',
           key: 'JL',
+          max: 100,
+          min: 1,
           placeholder: readonly ? '-' : '',
-          formatter: (value: any) => `${Math.round(value)}`,
-          tooltip: '注意：教龄四舍五入，只能填写整数',
-        },
-      ],
+          formatter: (value: number) => `${Math.round(value)}`,
+          tooltip: '注意：教龄四舍五入，只能填写整数'
+        }
+      ]
     },
     {
       type: 'group',
@@ -240,30 +249,30 @@ const SchoolInfo = (props: PropsType) => {
           items: [
             {
               value: '居民身份证',
-              text: '居民身份证',
+              text: '居民身份证'
             },
             {
               value: '护照',
-              text: '护照',
+              text: '护照'
             },
             {
               value: '户口簿',
-              text: '户口簿',
+              text: '户口簿'
             },
             {
               value: '其他',
-              text: '其他',
-            },
-          ],
+              text: '其他'
+            }
+          ]
         },
         {
           type: 'input',
           label: '教授科目',
           name: 'JSKM',
           key: 'JSKM',
-          placeholder: readonly ? '-' : '',
-        },
-      ],
+          placeholder: readonly ? '-' : ''
+        }
+      ]
     },
     {
       type: 'group',
@@ -274,16 +283,16 @@ const SchoolInfo = (props: PropsType) => {
           key: 'SFZJH',
           name: 'SFZJH',
           label: '证件号码',
-          placeholder: readonly ? '-' : '',
+          placeholder: readonly ? '-' : ''
         },
         {
           type: 'input',
           label: '电子邮箱',
           name: 'DZXX',
           key: 'DZXX',
-          placeholder: readonly ? '-' : '',
-        },
-      ],
+          placeholder: readonly ? '-' : ''
+        }
+      ]
     },
     {
       type: 'group',
@@ -295,10 +304,10 @@ const SchoolInfo = (props: PropsType) => {
           label: '个人简介',
           name: 'BZ',
           key: 'BZ',
-          placeholder: readonly ? '-' : '',
-        },
-      ],
-    },
+          placeholder: readonly ? '-' : ''
+        }
+      ]
+    }
   ];
   const onFinish = async (values: any) => {
     let res;
@@ -308,9 +317,9 @@ const SchoolInfo = (props: PropsType) => {
     if (values.id) {
       res = await updateKHJSSJ(
         {
-          id: values.id,
+          id: values.id
         },
-        values,
+        values
       );
     } else {
       res = await createKHJSSJ(values);
@@ -319,7 +328,7 @@ const SchoolInfo = (props: PropsType) => {
       message.success('保存成功');
       history.go(-1);
     } else {
-      const msg = res.message;
+      let msg = res.message;
       message.error(msg);
     }
   };
@@ -329,15 +338,16 @@ const SchoolInfo = (props: PropsType) => {
         <CustomForm
           values={(() => {
             if (info) {
-              const { CSRQ, ...rest } = info;
+              const { CSRQ, XB,...rest } = info;
               return {
                 CSRQ: CSRQ ? moment(CSRQ) : '',
-                ...rest,
+                XB: readonly ? XB?.substring(0, 1):XB,
+                ...rest
               };
             }
             return {
-              XB: '男',
-              KHJYJGId: currentUser?.jgId,
+              XB: '男性',
+              KHJYJGId: currentUser?.jgId
             };
           })()}
           formDisabled={readonly}

@@ -92,12 +92,6 @@
     ],
   },
   {
-    path: '/basicalSetting/teacherManagement/detail',
-    name: 'teacherManagement',
-    hideInMenu: 'true',
-    component: './Manager/BasicalSettings/TeacherManagement/Detail',
-  },
-  {
     path: '/courseManagements',
     name: 'courseManagements',
     icon: 'AppstoreAdd',
@@ -133,6 +127,12 @@
     name: 'teacherManagement',
     icon: 'Team',
     component: './Manager/TeacherManagement',
+  },
+  {
+    path: '/teacherManagement/detail',
+    name: 'teacherInfo',
+    hideInMenu: 'true',
+    component: './Manager/TeacherManagement/Detail',
   },
   {
     path: '/orderInquiry',

@@ -8,7 +8,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 
 import EllipsisHint from '@/components/EllipsisHint';
 import MechanismInfo from './components/MechanismInfo';
-import SchoolInfo from './components/SchoolInfo';
+import CourseInfo from './components/CourseInfo';
 import type { classType, TableListParams } from './data';
 
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
@@ -239,7 +239,7 @@ const courseNotIntroduced = () => {
         visibleMechanismInfo={visibleMechanismInfo}
         info={info}
       />
-      <SchoolInfo // 课程详情页
+      <CourseInfo // 课程详情页
         onSchoolInfoClose={() => {
           setVisibleSchoolInfo(false);
         }}

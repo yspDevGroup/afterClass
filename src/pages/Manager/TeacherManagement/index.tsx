@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-09-08 09:40:20
+ * @LastEditTime: 2021-09-13 17:55:43
  * @LastEditors: Sissle Lynn
  */
 /*
@@ -13,8 +13,8 @@
  * @LastEditors: Sissle Lynn
  */
 import React, { useRef, useState } from 'react';
-import { useModel } from 'umi';
-import { Button, message, Modal, Upload } from 'antd';
+import { Link, useModel } from 'umi';
+import { Button, Divider, message, Modal, Popconfirm, Upload } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns, RequestData } from '@ant-design/pro-table';
 import { UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
@@ -24,7 +24,7 @@ import PageContain from '@/components/PageContainer';
 
 import styles from './index.less';
 import { getAuthorization } from '@/utils/utils';
-import { getKHJSSJ } from '@/services/after-class/khjssj';
+import { deleteKHJSSJ, getKHJSSJ } from '@/services/after-class/khjssj';
 
 const TeacherManagement = () => {
   const { initialState } = useModel('@@initialState');
@@ -65,6 +65,15 @@ const TeacherManagement = () => {
       }
     },
   };
+  const handleConfirm = async (id: any) => {
+    const res = await deleteKHJSSJ({ id });
+    if (res.status === 'ok') {
+      message.success('删除成功');
+      actionRef.current?.reload();
+    } else {
+      message.error(res.message);
+    }
+  };
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -90,26 +99,47 @@ const TeacherManagement = () => {
       render: (_, record) => record?.XB?.substring(0, 1),
     },
     {
-      title: '部门',
-      key: 'BM',
-      dataIndex: 'BM',
-      align: 'center',
-      width: 110,
-      ellipsis: true,
-    },
-    {
       title: '联系电话',
       key: 'LXDH',
       dataIndex: 'LXDH',
       align: 'center',
-      width: 180,
+      width: 200,
     },
     {
       title: '电子邮箱',
       key: 'DZYX',
       dataIndex: 'DZYX',
       align: 'center',
-      width: 180,
+      width: 200,
+    },
+    {
+      title: '操作',
+      valueType: 'option',
+      width: 220,
+      align: 'center',
+      render: (_, record) => (
+        <>
+          <Link to={{
+            pathname: '/teacherManagement/detail',
+            state: {
+              type: 'detail',
+              data: record
+            }
+          }}>详情</Link>
+          <Divider type='vertical' />
+          <Link to={{
+            pathname: '/teacherManagement/detail',
+            state: {
+              type: 'edit',
+              data: record
+            }
+          }}>编辑</Link>
+          <Divider type='vertical' />
+          <Popconfirm title={`确定要删除 “${record?.XM}” 数据吗?`} onConfirm={() => handleConfirm(record?.id)}>
+            <a>删除</a>
+          </Popconfirm>
+        </>
+      )
     },
   ];
 

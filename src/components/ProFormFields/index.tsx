@@ -118,6 +118,13 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
           </Row>
         );
       }
+      case 'custom':
+        return <ProForm.Item
+          label={formItem.text}
+          name="dataSource"
+        >
+          {formItem.children}
+        </ProForm.Item>;
       case 'empty':
       default:
         return '';

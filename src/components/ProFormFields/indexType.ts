@@ -1,8 +1,8 @@
 /*
  * @,@Author: ,: your name
  * @,@Date: ,: 2021-06-15 08:38:48
- * @,@LastEditTime: ,: 2021-06-18 17:02:43
- * @,@LastEditors: ,: Please set LastEditors
+ * @LastEditTime: 2021-09-13 19:44:12
+ * @LastEditors: Sissle Lynn
  * @,@Description: ,: In User Settings Edit
  * @,@FilePath: ,: \afterClass\src\components\ProFormFields\indexType.ts
  */
@@ -12,29 +12,30 @@ import type { FormInstance } from 'antd';
 export type FormItemsProps = {
   /** 表单项的类型 */
   type?:
-    | 'input' // 输入框
-    | 'textArea' // 多行输入框
-    | 'password' // 密码输入框
-    | 'select' // 选择框
-    | 'radio' // 单选
-    | 'checkbox' // 多选
-    | 'inputNumber' // 数字输入框
-    | 'switch' // 开关
-    | 'date' // 日期
-    | 'dateWeek' // 周
-    | 'dateMonth' // 月
-    | 'dateYear' // 年
-    | 'dateTime' // 日期时间
-    | 'dateRange' // 日期区间
-    | 'dateTimeRange' // 日期时间区间
-    | 'time' // 时间
-    | 'timeRange' // 时间区间
-    | 'uploadImage' // 上传
-    | 'cascader' // 级联（适用于一项有多个控件）
-    | 'div'
-    | 'divTab'
-    | 'group'
-    | 'empty';
+  | 'input' // 输入框
+  | 'textArea' // 多行输入框
+  | 'password' // 密码输入框
+  | 'select' // 选择框
+  | 'radio' // 单选
+  | 'checkbox' // 多选
+  | 'inputNumber' // 数字输入框
+  | 'switch' // 开关
+  | 'date' // 日期
+  | 'dateWeek' // 周
+  | 'dateMonth' // 月
+  | 'dateYear' // 年
+  | 'dateTime' // 日期时间
+  | 'dateRange' // 日期区间
+  | 'dateTimeRange' // 日期时间区间
+  | 'time' // 时间
+  | 'timeRange' // 时间区间
+  | 'uploadImage' // 上传
+  | 'cascader' // 级联（适用于一项有多个控件）
+  | 'div'
+  | 'divTab'
+  | 'group'
+  | 'custom'
+  | 'empty';
   /** 表单项的key */
   key: string;
   /** 表单的数组项 */
@@ -59,8 +60,9 @@ export type FormItemsProps = {
   label?: string;
   lineItem?: any[];
   text?: string;
+  children?: any;
   style?: Record<string, any>;
-  
+
 };
 
 export type ProFormFieldsPropsType = {

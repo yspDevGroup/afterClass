@@ -14,7 +14,7 @@ type UploadImageProps = {
   disabled?: boolean; // 值为true时，上传按钮不可点击
   accept?: string; // 类型
   imagename?: string; // 发到后台的文件参数名
-  handleImageChange?: () => void;
+  handleImageChange?: (value?: any) => void;
   data?: object | ((file: any) => object) | Promise<object>; // 上传所需额外参数或返回上传额外参数的方法
 };
 
@@ -28,7 +28,7 @@ const UploadImage = (props: UploadImageProps) => {
     accept,
     imagename,
     data,
-    handleImageChange,
+    handleImageChange
   } = props;
   const [imageUrl, setImageUrl] = useState(props.imageurl);
   useEffect(() => {

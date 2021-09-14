@@ -9,6 +9,19 @@
         font-size: @font-size-sm;
     }
 }
+.btnWrapper {
+  width: 100%;
+  text-align: center;
+
+  button+button {
+    margin-left: @padding-lg*2;
+  }
+}
+
+.contentWrapper {
+  background-color: #fff;
+  padding-bottom: @padding-lg;
+}
 :global{
   .ant-pro-field-index-column{
     width:100% !important;

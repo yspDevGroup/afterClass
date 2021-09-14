@@ -49,5 +49,5 @@ export default {
   'menu.announcements.notice.noticeDetails': '公告详情',
   'menu.announcements.policy': '政策公告',
   'menu.teacherManagement': '教师管理',
-  'menu.basicalSettings.teacherManagement': '教师详情',
+  'menu.teacherInfo': '教师详情',
 };

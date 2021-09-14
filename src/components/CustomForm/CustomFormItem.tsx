@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React from 'react';
 import {
   Form,
@@ -14,11 +13,12 @@ import {
   Col,
   TimePicker,
   Button,
-  Upload,
+  Upload
 } from 'antd';
 import type { Moment } from 'moment';
 import moment from 'moment';
-import { UploadOutlined } from '@ant-design/icons/lib/icons';
+import { UploadOutlined } from '@ant-design/icons';
+import { useModel } from 'umi';
 
 import type {
   FormInputProps,
@@ -34,7 +34,7 @@ import type {
   FormUploadProps,
   FormInputNumberProps,
   FormCheckboxProps,
-  FormButtonProps,
+  FormButtonProps
 } from './interfice';
 
 const { TextArea } = Input;
@@ -68,17 +68,21 @@ export const FormInput = (props: FormInputProps) => {
  * @returns
  */
 export const FormInputNumber = (props: FormInputNumberProps) => {
-  const { disabled, percent, ...formProps } = props;
+  const { disabled, min, max, percent, formatter, ...formProps } = props;
   return (
     <Form.Item {...formProps}>
       {percent ? (
         <InputNumber
           disabled={disabled}
           formatter={(value) => `${value}%`}
-          parser={(value) => value!.replace('%', '')}
+          parser={(value: any) => value!.replace('%', '')}
         />
       ) : (
-        <InputNumber disabled={disabled} />
+        <InputNumber
+          min={min}
+          max={max}
+          formatter={formatter}
+          disabled={disabled} />
       )}
     </Form.Item>
   );

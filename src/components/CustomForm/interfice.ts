@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/type-annotation-spacing */
 /*
  * @description:
  * @author: zpl
  * @Date: 2020-07-30 10:21:18
- * @LastEditTime: 2021-08-28 14:22:48
+ * @LastEditTime: 2021-09-10 09:05:56
  * @LastEditors: Sissle Lynn
  */
 import type { UploadListType } from 'antd/es/upload/interface';
@@ -33,7 +32,10 @@ export type FormInputProps = {
 export type FormInputNumberProps = {
   disabled?: boolean;
   percent?: boolean;
+  min?: number;
+  max?: number;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  formatter?: (value: any | undefined) => any;
 } & FormItemProps;
 
 export type FormPasswordProps = {
@@ -114,24 +116,24 @@ export type MenuProp = {
   name: string;
 };
 export type UploadImageProp = {
-  /**
+/**
    * 上传图片组件-回显地址
    */
-  imageurl?: string;
-  imgWidth?: number;
-  imgHeight?: number;
-  /**
-   * 上传图片组件-上传地址
-   */
-  upurl?: string;
-  /**
-   * 上传图片组件-发到后台的文件参数名
-   */
-  imagename?: string;
-  /**
-   * 上传图片组件-文件状态改变的回调
-   */
-  handleImageChange?: (value?: any) => void;
+ imageurl?: string;
+ imgWidth?: number;
+ imgHeight?: number;
+ /**
+  * 上传图片组件-上传地址
+  */
+ upurl?: string;
+ /**
+  * 上传图片组件-发到后台的文件参数名
+  */
+ imagename?: string;
+ /**
+  * 上传图片组件-文件状态改变的回调
+  */
+ handleImageChange?: (value?: any)=>void;
 };
 export type FormDropMenuProps = {
   disabled?: boolean;
@@ -155,7 +157,7 @@ export type FormUploadProps = {
   listType?: UploadListType;
   icon?: React.RefAttributes<IconType>;
   normFile?: (e: any) => any;
-  uploadProps?: Record<any, any>[];
+  uploadProps?: {};
   accept?: string;
 } & FormItemProps;
 
@@ -177,27 +179,27 @@ export type FormItemType = (
 ) & {
   key?: string | number;
   type?:
-    | 'input'
-    | 'inputNumber'
-    | 'password'
-    | 'select'
-    | 'treeSelect'
-    | 'radio'
-    | 'time'
-    | 'timeRange'
-    | 'dateRange'
-    | 'textArea'
-    | 'switch'
-    | 'custom'
-    | 'group'
-    | 'empty'
-    | 'label'
-    | 'pdf'
-    | 'upload'
-    | 'checkbox'
-    | 'dropMenu'
-    | 'button'
-    | 'uploadImage';
+  | 'input'
+  | 'inputNumber'
+  | 'password'
+  | 'select'
+  | 'treeSelect'
+  | 'radio'
+  | 'time'
+  | 'timeRange'
+  | 'dateRange'
+  | 'textArea'
+  | 'switch'
+  | 'custom'
+  | 'group'
+  | 'empty'
+  | 'label'
+  | 'pdf'
+  | 'upload'
+  | 'checkbox'
+  | 'dropMenu'
+  | 'button'
+  | 'uploadImage'
   /**
    * 类型为group横向排列时，需要设置子数组
    *
@@ -242,12 +244,12 @@ export type FormItemType = (
   /**
    * Checkbox
    */
-  options?: Record<any, any>[];
+  options?: {}[];
   /**
    * 下拉菜单数据传输
    */
-  data?: Record<any, any>[];
+  data?: {};
   handleCate?: (data: any) => void;
   handleLevel?: (data: any) => void;
-} & RowProps &
-  UploadImageProp;
+} & RowProps
+  & UploadImageProp;

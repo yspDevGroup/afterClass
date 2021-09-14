@@ -48,7 +48,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           <a
             onClick={() => {
               history.push({
-                pathname: `/basicalSetting/teacherManagement/detail`,
+                pathname: `/teacherManagement/detail`,
                 state: {
                   type: 'detail',
                   data: record,

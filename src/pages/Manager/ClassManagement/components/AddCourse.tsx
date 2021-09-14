@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
-import { Button, Drawer, message } from 'antd';
+import { Button, Drawer, InputNumber, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
-import type { ActionType } from '@ant-design/pro-table';
+import { ActionType, EditableProTable, ProColumns } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import moment from 'moment';
@@ -28,7 +28,7 @@ type AddCourseProps = {
 };
 const formLayout = {
   labelCol: { flex: '7em' },
-  wrapperCol: { },
+  wrapperCol: {},
 };
 
 const AddCourse: FC<AddCourseProps> = ({
@@ -45,10 +45,11 @@ const AddCourse: FC<AddCourseProps> = ({
 }) => {
   const userRef = useRef(null);
   const [form, setForm] = useState<any>();
+  const tableRef = useRef<ActionType>();
   // 校区
   const [campus, setCampus] = useState<any>([]);
-  const [baoming, setBaoming] = useState<boolean>(true);
-  const [kaike, setKaike] = useState<boolean>(true);
+  const [baoming, setBaoming] = useState<boolean>(false);
+  const [kaike, setKaike] = useState<boolean>(false);
   // 教师
   const [teacherData, setTeacherData] = useState<any[]>([]);
 
@@ -59,28 +60,156 @@ const AddCourse: FC<AddCourseProps> = ({
   const [BMData, setBMData] = useState<any>();
   // 开课时间
   const [KKData, setKKData] = useState<any>();
+  // 是否选择教辅
+  const [choosenJf, setChoosenJf] = useState<boolean>(false);
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
+  const [dataSource, setDataSource] = useState<any[]>([]);
 
   // 选中机构课程的任课老师
   const [JGKCTeacherData, setJGKCTeacherData] = useState<any>([]);
 
+  const columns: ProColumns<any>[] = [
+    {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 48,
+      align: 'center',
+    },
+    {
+      title: '名称',
+      key: 'JCMC',
+      dataIndex: 'JCMC',
+      align: 'center',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此项为必填项',
+          },
+        ],
+      },
+    },
+    {
+      title: '费用',
+      dataIndex: 'JCFY',
+      width: 80,
+      align: 'center',
+      renderFormItem: () => (<InputNumber min={0} />),
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此项为必填项',
+          },
+        ],
+      },
+    },
+    {
+      title: '操作',
+      valueType: 'option',
+      align: 'center',
+      width: 120,
+      hideInTable:readonly,
+      render: (text, record, _, action) => [
+        <a
+          key="editable"
+          onClick={() => {
+            action?.startEditable?.(record.id);
+          }}
+        >
+          编辑
+        </a>,
+        <a
+          key="delete"
+          onClick={() => {
+            console.log(dataSource);
+            setDataSource(dataSource.filter((item) => item.id !== record.id));
+            action?.reload();
+          }}
+        >
+          删除
+        </a>,
+      ],
+    },
+  ];
+  const getChildren = () => {
+    return (
+      <EditableProTable<any>
+        bordered
+        rowKey="id"
+        toolBarRender={false}
+        request={async () => ({
+          data: dataSource,
+          total: dataSource.length,
+          success: true,
+        })}
+        recordCreatorProps={readonly ? false : undefined}
+        value={dataSource}
+        onChange={setDataSource}
+        actionRef={tableRef}
+        columns={columns}
+        editable={{
+          type: 'single',
+          editableKeys,
+          onChange: setEditableRowKeys,
+          actionRender: (row, config, dom) => [dom.save, dom.cancel],
+        }}
+      />
+    )
+  }
+
+  useEffect(() => {
+    (async () => {
+      if (curXNXQId) {
+        // 获取时间配置
+        const resSJ = await getAllXXSJPZ({
+          XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
+          type: ['1', '2'],
+        });
+
+        if (resSJ.status === 'ok') {
+          // 报名时间 [1]
+          const BM = resSJ.data?.find((item) => item.TYPE === '1');
+          // 上课时间 [2]
+          const KK = resSJ.data?.find((item) => item.TYPE === '2');
+          setBMData(BM);
+          setKKData(KK);
+        }
+      }
+    })();
+  }, [curXNXQId]);
   useEffect(() => {
     if (formValues) {
       const kcDate = KHKCAllData?.filter(
         (item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX || formValues.SSJGLX,
       );
       setKCDate(kcDate);
-      // const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === kCID);
-      // setKCDate(kcDate);
+      if (
+        formValues?.BMKSSJ === new Date(BMData?.KSSJ || '') &&
+        formValues?.BMJSSJ === new Date(BMData?.JSSJ || '')
+      ) {
+        setBaoming(false);
+      } else {
+        setBaoming(true);
+      }
+      if (formValues?.KKRQ === new Date(KKData?.KSSJ || '') && formValues?.JKRQ === new Date(KKData?.JSSJ || '')) {
+        setKaike(false);
+      } else {
+        setKaike(true);
+      }
       if (formValues.SSJGLX === '机构课程') {
         const JGJS = formValues.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师');
         setJGKCTeacherData([{ label: JGJS?.KHJSSJ?.XM, value: JGJS?.KHJSSJId }]);
       }
-    } else {
-      setBaoming(true);
-      setKaike(true);
+      if (formValues?.KHKCJCs?.length) {
+        setChoosenJf(true);
+        console.log(formValues?.KHKCJCs);
+        setDataSource(formValues?.KHKCJCs);
+      }
     }
   }, [formValues]);
-
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -89,7 +218,6 @@ const AddCourse: FC<AddCourseProps> = ({
       await initWXAgentConfig(['checkJsApi']);
     })();
   }, []);
-
   useEffect(() => {
     (async () => {
       const XQ: { label: any; value: any }[] = [];
@@ -120,42 +248,6 @@ const AddCourse: FC<AddCourseProps> = ({
       }
     })();
   }, []);
-  useEffect(() => {
-    (async () => {
-      if (curXNXQId) {
-        // 获取时间配置
-        const resSJ = await getAllXXSJPZ({
-          XNXQId: curXNXQId,
-          XXJBSJId: currentUser?.xxId,
-          type: ['1', '2'],
-        });
-
-        if (resSJ.status === 'ok') {
-          // 报名时间 [1]
-          const BM = resSJ.data?.find((item) => item.TYPE === '1');
-          // 上课时间 [2]
-          const KK = resSJ.data?.find((item) => item.TYPE === '2');
-          setBMData(BM);
-          setKKData(KK);
-
-          if (
-            formValues?.BMKSSJ === new Date(BM?.KSSJ || '') &&
-            formValues?.BMJSSJ === new Date(BM?.JSSJ || '')
-          ) {
-            setBaoming(true);
-          } else {
-            setBaoming(false);
-          }
-
-          if (formValues?.KKRQ === KK?.KSSJ && formValues?.JKRQ === KK?.JSSJ) {
-            setKaike(true);
-          } else {
-            setKaike(false);
-          }
-        }
-      }
-    })();
-  }, [curXNXQId]);
   // 获取标题
   const getTitle = () => {
     if (formValues && names === 'chakan') {
@@ -166,8 +258,24 @@ const AddCourse: FC<AddCourseProps> = ({
     }
     return '新增信息';
   };
-
+  const handleClose = () => {
+    setKaike(false);
+    setBaoming(false);
+    setChoosenJf(false);
+    setDataSource([]);
+    onClose();
+  };
   const onFinish = (values: any) => {
+    let mertial: any[] = [];
+    if (values?.dataSource?.length && choosenJf) {
+      mertial = [].map.call(values?.dataSource, (item: any) => {
+        return {
+          KHBJSJId: formValues?.id,
+          JCFY: item.JCFY,
+          JCMC: item.JCMC
+        }
+      })
+    }
     new Promise((resolve, reject) => {
       let res = null;
       const options = {
@@ -178,6 +286,7 @@ const AddCourse: FC<AddCourseProps> = ({
         KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
         JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
         XNXQId: curXNXQId,
+        KHKCJCs: mertial
       };
       if (formValues?.id) {
         const ZJS = [
@@ -220,7 +329,7 @@ const AddCourse: FC<AddCourseProps> = ({
       .then((data: any) => {
         if (data.status === 'ok') {
           message.success('保存成功');
-          onClose();
+          handleClose();
           actionRef?.current?.reload();
           setImageUrl('');
         } else {
@@ -231,7 +340,6 @@ const AddCourse: FC<AddCourseProps> = ({
         console.log('error', error);
       });
   };
-
   const handleSubmit = () => {
     form.submit();
   };
@@ -431,6 +539,31 @@ const AddCourse: FC<AddCourseProps> = ({
         options: campus,
       },
     },
+    {
+      type: 'checkbox',
+      label: '教辅',
+      name: 'KHKCJC',
+      key: 'KHKCJC',
+      value: choosenJf ? 'kcjc' : '',
+      valueEnum: {
+        'kcjc': { text: '包含教辅' },
+      },
+      disabled: readonly,
+      onChange: (e: any) => {
+        if (e?.length) {
+          setChoosenJf(true);
+        } else {
+          setChoosenJf(false);
+        }
+      }
+    },
+    choosenJf ? {
+      type: 'custom',
+      text: '教辅材料',
+      name: 'KHKCJCs',
+      key: 'KHKCJCs',
+      children: getChildren()
+    } : '',
     BMData?.id
       ? {
         type: 'divTab',
@@ -446,17 +579,17 @@ const AddCourse: FC<AddCourseProps> = ({
       lineItem: [
         {
           type: 'switch',
-          readonly,
+          disabled: readonly,
           fieldProps: {
             onChange: (item: any) => {
-              if (item === false) {
-                // 将按钮关闭的时候 传成默认时间段
-                form.setFieldsValue({ BMSD: [BMData?.KSSJ, BMData?.JSSJ] });
+              if (item) {
                 return setBaoming(true);
               }
-              return setBaoming(false);
+              // 将按钮关闭的时候 传成默认时间段
+              form.setFieldsValue({ BMSD: [BMData?.KSSJ, BMData?.JSSJ] });
+              setBaoming(false);;
             },
-            checked: !baoming,
+            checked: baoming,
           },
         },
       ],
@@ -468,8 +601,8 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'BMSD',
       disabled: readonly,
       width: '100%',
-      hidden: baoming,
-      rules: [{ required: !baoming, message: '请选择报名时段' }],
+      hidden: !baoming,
+      rules: [{ required: baoming, message: '请选择报名时段' }],
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
@@ -489,21 +622,20 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'div1',
       disabled: readonly,
       label: `单独设置上课时段：`,
-
       lineItem: [
         {
           type: 'switch',
           disabled: readonly,
           fieldProps: {
             onChange: (item: any) => {
-              if (item === false) {
-                // 将按钮关闭的时候 传成默认时间段
-                form.setFieldsValue({ SKSD: [KKData?.KSSJ, KKData?.JSSJ] });
+              if (item) {
                 return setKaike(true);
               }
+              // 将按钮关闭的时候 传成默认时间段
+              form.setFieldsValue({ SKSD: [KKData?.KSSJ, KKData?.JSSJ] });
               return setKaike(false);
             },
-            checked: !kaike,
+            checked: kaike,
           },
         },
       ],
@@ -514,8 +646,8 @@ const AddCourse: FC<AddCourseProps> = ({
       name: 'SKSD',
       key: 'SKSD',
       width: '100%',
-      hidden: kaike,
-      rules: [{ required: !kaike, message: '请选择上课时间' }],
+      hidden: !kaike,
+      rules: [{ required: kaike, message: '请选择上课时间' }],
       disabled: readonly,
       fieldProps: {
         disabledDate: (current: any) => {
@@ -551,7 +683,7 @@ const AddCourse: FC<AddCourseProps> = ({
       <Drawer
         title={getTitle()}
         width={580}
-        onClose={onClose}
+        onClose={handleClose}
         visible={visible}
         className={styles.courseStyles}
         destroyOnClose={true}
@@ -566,7 +698,7 @@ const AddCourse: FC<AddCourseProps> = ({
             >
               <Button
                 onClick={() => {
-                  onClose();
+                  handleClose();
                   setImageUrl('');
                 }}
                 style={{ marginRight: 16 }}
