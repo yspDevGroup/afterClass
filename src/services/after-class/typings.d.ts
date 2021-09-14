@@ -2508,6 +2508,7 @@ declare namespace API {
     XSXM?: string;
     /** 班级ID */
     KHBJSJId: string;
+    XXJBSJId: string;
   };
 
   type UpdateKHXSDD = {

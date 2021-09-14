@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Checkbox, Divider, Modal, Popconfirm, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
@@ -23,7 +24,6 @@ const CourseDetails: React.FC = () => {
   const [orderInfo, setOrderInfo] = useState<any>();
   const [classDetail, setClassDetail] = useState<any>();
   const [kaiguan, setKaiguan] = useState<boolean>(true);
-  const [fk] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const courseid = getQueryString('courseid');
@@ -32,15 +32,11 @@ const CourseDetails: React.FC = () => {
   const myDate: Date = new Date(moment(curDate).format('YYYY/MM/DD'));
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
+  const [JFstate, setJFstate] = useState(false);
+  const [JFData, setJFData] = useState([])
+  const [JFTotalost, setJFTotalost] = useState<number>()
   const [KHFUXY, setKHFUXY] = useState<any>();
 
-  // const children = currentUser?.subscriber_info?.children || [
-  //   {
-  //     student_userid: currentUser?.UserId,
-  //     njId: '1',
-  //     name: currentUser?.username,
-  //   },
-  // ];
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
@@ -77,6 +73,18 @@ const CourseDetails: React.FC = () => {
               const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
               const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
               setKaiguan(btnEnable);
+              const NewArr: any[] = [];
+              result.data.KHBJSJs.forEach((value: any) => {
+                if (value.BJZT === '已开班') {
+                  NewArr.push(value)
+                }
+              })
+              let num = 0;
+              for (let i = 0; i < NewArr?.[0].KHKCJCs.length; i++) {
+                num += Number(NewArr?.[0].KHKCJCs[i].JCFY)
+              }
+              setJFTotalost(num);
+              setJFData(NewArr[0].KHKCJCs)
             }
           } else {
             enHenceMsg(result.message);
@@ -121,7 +129,7 @@ const CourseDetails: React.FC = () => {
       XDSJ: new Date().toISOString(),
       ZFFS: '线上支付',
       DDZT: '待付款',
-      DDFY: FY!,
+      DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
       XSId: currentUser?.student?.student_userid,
       XSXM: currentUser?.student?.name,
       KHBJSJId: BJ!,
@@ -134,7 +142,13 @@ const CourseDetails: React.FC = () => {
       enHenceMsg(res.message);
     }
   };
-  const butonclick = (ind: number) => {
+  const butonclick = (value: any, ind: number) => {
+    setJFData(value.KHKCJCs)
+    let num = 0;
+    for (let i = 0; i < value.KHKCJCs.length; i++) {
+      num += Number(value.KHKCJCs[i].JCFY)
+    }
+    setJFTotalost(num);
     changeStatus(ind);
   };
 
@@ -153,6 +167,9 @@ const CourseDetails: React.FC = () => {
     // eslint-disable-next-line no-console
     // console.log(e.target.checked);
     setXystate(e.target.checked);
+  };
+  const onJFChange = (e: { target: { checked: any } }) => {
+    setJFstate(e.target.checked);
   };
   return (
     <div className={styles.CourseDetails}>
@@ -196,72 +213,75 @@ const CourseDetails: React.FC = () => {
         <ul className={styles.classInformation}>
           {KcDetail?.KHBJSJs &&
             KcDetail?.KHBJSJs.map((value: any) => {
-              return (
-                <li>
-                  <div style={{ paddingBottom: '10px' }}>
-                    <p className={styles.bjname}>
-                      <span>{value.BJMC}</span>
-                    </p>
-                    <p className={styles.bzrname}>
-                      班主任：
-                      {value?.KHBJJs?.map((item: any) => {
-                        if (item.JSLX.indexOf('副') === -1) {
-                          return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
-                        }
-                        return '';
-                      })}
-                    </p>
-                    <p className={styles.bzrname}>
-                      副班：
-                      {value?.KHBJJs?.map((item: any) => {
-                        if (item.JSLX.indexOf('主') === -1) {
-                          return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
-                        }
-                        return '';
-                      })}
-                    </p>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>课时数</th>
-                          <th>总人数</th>
-                          <th>报名费</th>
-                          <th>上课时间</th>
-                          <th>上课地点</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{value.KSS}课时</td>
-                          <td>{value.BJRS}人</td>
-                          <td>{value.FY}元</td>
-                          <td style={{ padding: '2px 0' }}>
-                            {value?.KHPKSJs?.map(
-                              (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                                const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
-                                return (
-                                  <p>
-                                    {weeks}
-                                    {val.XXSJPZ.KSSJ.substring(0, 5)}-
-                                    {val.XXSJPZ.JSSJ.substring(0, 5)}
-                                  </p>
-                                );
-                              },
-                            )}
-                          </td>
-                          <td style={{ padding: '2px 0' }}>
-                            {value?.KHPKSJs?.map(
-                              (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                                return <p>{val.FJSJ.FJMC}</p>;
-                              },
-                            )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </li>
-              );
+              if (value.BJZT === "已开班") {
+                return (
+                  <li>
+                    <div style={{ paddingBottom: '10px' }}>
+                      <p className={styles.bjname}>
+                        <span>{value.BJMC}</span>
+                      </p>
+                      <p className={styles.bzrname}>
+                        班主任：
+                        {value?.KHBJJs?.map((item: any) => {
+                          if (item.JSLX.indexOf('副') === -1) {
+                            return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
+                          }
+                          return '';
+                        })}
+                      </p>
+                      <p className={styles.bzrname}>
+                        副班：
+                        {value?.KHBJJs?.map((item: any) => {
+                          if (item.JSLX.indexOf('主') === -1) {
+                            return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
+                          }
+                          return '';
+                        })}
+                      </p>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>课时数</th>
+                            <th>总人数</th>
+                            <th>报名费</th>
+                            <th>上课时间</th>
+                            <th>上课地点</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{value.KSS}课时</td>
+                            <td>{value.BJRS}人</td>
+                            <td>{value.FY}元</td>
+                            <td style={{ padding: '2px 0' }}>
+                              {value?.KHPKSJs?.map(
+                                (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                                  const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
+                                  return (
+                                    <p>
+                                      {weeks}
+                                      {val.XXSJPZ.KSSJ.substring(0, 5)}-
+                                      {val.XXSJPZ.JSSJ.substring(0, 5)}
+                                    </p>
+                                  );
+                                },
+                              )}
+                            </td>
+                            <td style={{ padding: '2px 0' }}>
+                              {value?.KHPKSJs?.map(
+                                (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                                  return <p>{val.FJSJ.FJMC}</p>;
+                                },
+                              )}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </li>
+                );
+              }
+              return ''
             })}
         </ul>
       </div>
@@ -297,6 +317,7 @@ const CourseDetails: React.FC = () => {
                     BMJSSJ: Date;
                     BJRS: number;
                     KHXSBJs: any[];
+                    BJZT: string;
                   },
                   ind: number,
                 ) => {
@@ -307,26 +328,65 @@ const CourseDetails: React.FC = () => {
                   const enAble =
                     myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
                     myDate <= new Date(moment(end).format('YYYY/MM/DD'));
-                  return (
-                    <Popconfirm
-                      overlayClassName={styles.confirmStyles}
-                      placement="bottom"
-                      title={text}
-                      defaultVisible={BJ === value.id}
-                    >
-                      <Radio.Button
-                        value={valueName}
-                        style={{ marginRight: '14px' }}
-                        disabled={!enAble}
-                        onClick={() => butonclick(ind)}
+                  if (value.BJZT === "已开班") {
+                    return (
+                      <Popconfirm
+                        overlayClassName={styles.confirmStyles}
+                        placement="bottom"
+                        title={text}
+                        defaultVisible={BJ === value.id}
                       >
-                        {value.BJMC}
-                      </Radio.Button>
-                    </Popconfirm>
-                  );
+                        <Radio.Button
+                          value={valueName}
+                          style={{ marginRight: '14px' }}
+                          disabled={!enAble}
+                          onClick={() => butonclick(value, ind)}
+                        >
+                          {value.BJMC}
+                        </Radio.Button>
+                      </Popconfirm>
+                    );
+                  }
+                  return ''
                 },
               )}
             </Radio.Group>
+            <div className={styles.Teachingaterial}>
+              {
+                JFData?.length === 0 ? <></> :
+                  <div className={styles.box} style={{borderRadius: JFstate === true ? '8px 8px 0 0':'8px'}}>
+                    <Checkbox onChange={onJFChange} checked={JFstate}>
+                      <span>选购教辅</span>
+                    </Checkbox>
+                    <div>￥{JFTotalost?.toFixed(2)}</div>
+                  </div>
+
+              }
+              <div className={styles.tables}>
+                  {
+                    JFstate === true ?
+                      <>
+                        {
+                          JFData ? <>{
+                            JFData?.map((value: any) => {
+                              return <div>
+                                <div>{value.JCMC}</div>
+                                <div>￥{value.JCFY}</div>
+                              </div>
+                            })
+                          }</> : <>{
+                            KcDetail?.KHBJSJs?.[0].KHKCJCs?.map((value: any) => {
+                              return <div>
+                                <div>{value.JCMC}</div>
+                                <div>￥{value.JCFY}</div>
+                              </div>
+                            })
+                          }</>
+                        }
+                      </> : <></>
+                  }
+              </div>
+            </div>
             <div className={styles.agreement}>
               <Checkbox onChange={onFxChange} checked={Xystate}>
                 <span>我已阅读并同意</span>
