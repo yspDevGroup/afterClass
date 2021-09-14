@@ -9,6 +9,9 @@ import imgPop from '@/assets/mobileBg.png';
 import styles from './index.less';
 import { iconTextData } from './mock';
 import { enHenceMsg } from '@/utils/utils';
+import evaluation from '@/assets/evaluation.png';
+import drop from '@/assets/drop.png';
+import icon_Rgo from '@/assets/icon_Rgo.png';
 // import { Col, Row } from 'antd';
 // import evaluation from '@/assets/evaluation.png';
 // import drop from '@/assets/drop.png';
@@ -68,6 +71,18 @@ const Mine = () => {
           dataSource={iconTextData}
           totil={totail}
         />
+      </div>
+      <div className={styles.operation}>
+        <Link to="" className={styles.drop}>
+          <img src={drop} alt="" />
+          <span className={styles.dropSpan}>我要退课</span>
+          <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
+        </Link>
+        <Link to="" className={styles.evaluation}>
+          <img src={evaluation} alt=""  />
+          <span className={styles.evaluationSpan}>课程评价</span>
+          <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
+         </Link>
       </div>
       {/* <div className={styles.wraps}>
         <Row gutter={16}>
