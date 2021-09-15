@@ -226,11 +226,6 @@ const EditArticle = () => {
                 <Input disabled={disabled} />
               </Form.Item>
             </Col>
-            {/* <Col className="gutter-row" sm={12} xs={24}>
-              <Form.Item name="TP" label="标题图片：">
-                <AvatarUpload img={stateImg} onValueChange={onValueChange} />
-              </Form.Item>
-            </Col> */}
           </Row>
 
           <Row>
@@ -239,7 +234,7 @@ const EditArticle = () => {
                 <Input disabled={disabled} />
               </Form.Item>
             </Col>
-            <Col className="gutter-row" sm={3} xs={6}>
+            <Col className="gutter-row" sm={3} xs={6} style={{ minWidth: '142px' }}>
               <Form.Item
                 name="SFTT"
                 label="是否头条："
