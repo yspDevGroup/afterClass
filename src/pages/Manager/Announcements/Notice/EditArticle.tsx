@@ -24,6 +24,7 @@ import styles from '../index.module.less';
 import AvatarUpload from '../components/AvatarUpload';
 import PageContainer from '@/components/PageContainer';
 import { createXXTZGG, XXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
+import { LeftOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -53,10 +54,6 @@ const EditArticle = () => {
     LY: '本站原创',
     SFTT: false,
     SFTJ: false,
-  };
-
-  const onValueChange = (value: any) => {
-    setstateImg(value);
   };
 
   const submit = async (params: any) => {
@@ -131,6 +128,16 @@ const EditArticle = () => {
   const disabled = pubStatus !== '草稿';
   return (
     <PageContainer>
+     <>
+      <Button
+        type="primary"
+        onClick={() => {
+          history.goBack();
+        }}
+      >
+        <LeftOutlined />
+        返回上一页
+        </Button>
       <div className={styles.container}>
         <Form {...formItemLayout} form={form} initialValues={initialValues} onFinish={submit}>
           <Divider orientation="left">文章属性</Divider>
@@ -200,18 +207,6 @@ const EditArticle = () => {
                 />
               </Form.Item>
             </Col>
-            <Col className="gutter-row" sm={12} xs={24}>
-              <Form.Item name="TP" label="标题图片：">
-                <AvatarUpload img={stateImg} onValueChange={onValueChange} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col className="gutter-row" sm={6} xs={12}>
-              <Form.Item name="ZZ" label="作者：" labelCol={{ sm: { span: 8 } }}>
-                <Input disabled={disabled} />
-              </Form.Item>
-            </Col>
             <Col className="gutter-row" sm={6} xs={12}>
               <Form.Item
                 name="RQ"
@@ -232,22 +227,23 @@ const EditArticle = () => {
                 <Input disabled={disabled} />
               </Form.Item>
             </Col>
+            {/* <Col className="gutter-row" sm={12} xs={24}>
+              <Form.Item name="TP" label="标题图片：">
+                <AvatarUpload img={stateImg} onValueChange={onValueChange} />
+              </Form.Item>
+            </Col> */}
           </Row>
+
           <Row>
-            <Col className="gutter-row" sm={3} xs={6}>
-              <Form.Item
-                name="SFTT"
-                label="是否头条："
-                valuePropName="checked"
-                labelCol={{ sm: { span: 16 } }}
-              >
-                <Switch disabled={disabled} />
+          <Col className="gutter-row" sm={6} xs={12}>
+              <Form.Item name="ZZ" label="作者：" labelCol={{ sm: { span: 8 } }}>
+                <Input disabled={disabled} />
               </Form.Item>
             </Col>
             <Col className="gutter-row" sm={3} xs={6}>
               <Form.Item
-                name="SFTJ"
-                label="是否推荐："
+                name="SFTT"
+                label="是否头条："
                 valuePropName="checked"
                 labelCol={{ sm: { span: 16 } }}
               >
@@ -283,7 +279,7 @@ const EditArticle = () => {
                   <Button
                     htmlType="button"
                     onClick={() => {
-                      history.push('/announcements/list');
+                      history.goBack();
                     }}
                   >
                     取消
@@ -295,6 +291,7 @@ const EditArticle = () => {
           </Row>
         </Form>
       </div>
+      </>
     </PageContainer>
   );
 };
