@@ -46,14 +46,14 @@ const ClassCalendar = (props: propstype) => {
     const markDays = [];
     const learnData = {};
     const newData = {};
-    data.forEach((item: any) => {
+    data?.forEach((item: any) => {
       if (Object.keys(newData).indexOf(`${item.KHBJSJ.id}`) === -1) {
         newData[item.KHBJSJ.id] = [];
       }
       newData[item.KHBJSJ.id].push(item);
     });
 
-    for (let k = 0; k < data.length; k += 1) {
+    for (let k = 0; k < data?.length; k += 1) {
       const item = data[k];
       const weeked: any[] = [];
       const dates: any[] = [];

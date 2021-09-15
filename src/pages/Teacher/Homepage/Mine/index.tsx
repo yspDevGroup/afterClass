@@ -10,6 +10,9 @@ import moment from 'moment';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import Nodata from '@/components/Nodata';
 import noChart from '@/assets/noChart1.png';
+import icon_attRecord from '@/assets/icon_attRecord.png';
+import icon_tchLeave from '@/assets/icon_tchLeave.png';
+import icon_Rgo from '@/assets/icon_Rgo.png';
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
 const Mine = () => {
@@ -138,6 +141,19 @@ const Mine = () => {
       </header>
 
       <div className={styles.funWrapper}>
+        <div className={styles.operation}>
+          <Link to="" className={styles.tchLeave}>
+            <img src={icon_tchLeave} alt="" />
+            <span className={styles.tchLeaveSpan}>我要请假</span>
+            <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
+          </Link>
+
+          <Link to="" className={styles.attRecord}>
+            <img src={icon_attRecord} alt="" />
+            <span className={styles.attRecordSpan}>出勤纪律</span>
+            <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
+          </Link>
+        </div>
         <div className={styles.titleBar}>
           出勤统计
           <div>
