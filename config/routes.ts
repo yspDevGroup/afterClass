@@ -297,6 +297,13 @@
         hideInMenu: 'true',
       },
       {
+        path: '/parent/study/askforLeave',
+        name: 'courseIntro',
+        icon: 'smile',
+        component: './Parent/Homepage/Study/AskForLeave',
+        hideInMenu: 'true',
+      },
+      {
         path: '/parent/mine/orderDetails',
         name: 'orderDetails',
         icon: 'smile',

@@ -8,7 +8,7 @@ import type { ListData } from '@/components/ListComponent/data';
 import noData from '@/assets/noCourses.png';
 import icon_curriculum from '@/assets/icon_curriculum.png';
 import icon_classroomStyle from '@/assets/classroomStyle.png';
-import icon_leave from '@/assets/icon_leave.png'; 
+import icon_leave from '@/assets/icon_leave.png';
 import { Link } from 'umi';
 
 const Study = () => {
@@ -82,8 +82,7 @@ const Study = () => {
   return (
     <div className={styles.studyPage}>
       <div className={styles.headBox}>
-        
-          <Link to="" className={styles.leave}>
+          <Link to="/parent/study/askforLeave" className={styles.leave}>
             <p className={styles.leaveP1}>
               <p className={styles.leaveP2}>
                 <img src={icon_leave} alt="" />

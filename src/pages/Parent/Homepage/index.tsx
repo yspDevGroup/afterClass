@@ -27,16 +27,9 @@ const PersonalHomepage = () => {
       // 获取后台学年学期数据
       const result = await queryXNXQList(currentUser?.xxId, undefined);
       if (result.current) {
-        // const children = currentUser?.subscriber_info?.children || [
-        //   {
-        //     student_userid: currentUser?.UserId || currentUser?.id,
-        //     njId: '1',
-        //   },
-        // ];
         const { student } = currentUser || {};
         const res = await homePageInfo({
-          XSId: student && student.student_userid,
-          // njId: children && children[0].njId,
+          XSId: student && student.student_userid||'20210901',
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
         });

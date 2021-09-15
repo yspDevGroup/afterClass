@@ -16,12 +16,10 @@ export async function getKHXSPJ(
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      PJRQ?: string | any;
-      PJLX?: '节次评价' | '总评价';
-      PJFS?: string;
+      PJFS?: number;
       PY?: string;
-      JSId?: string;
       XSId?: string;
+      XSXM?: string;
       KHBJSJId?: string;
     };
     message?: string;
@@ -56,10 +54,6 @@ export async function getAllKHXSPJ(
     jsId?: string;
     /** 班级ID */
     bjId?: string;
-    /** 评价类型 */
-    PJLX?: string;
-    /** 评价日期 */
-    PJRQ?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -79,12 +73,10 @@ export async function createKHXSPJ(body: API.CreateKHXSPJ, options?: { [key: str
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      PJRQ?: string | any;
-      PJLX?: '节次评价' | '总评价';
-      PJFS?: string;
+      PJFS?: number;
       PY?: string;
-      JSId?: string;
       XSId?: string;
+      XSXM?: string;
       KHBJSJId?: string;
     };
     message?: string;
