@@ -115,7 +115,7 @@ const AddCourse: FC<AddCourseProps> = ({
         <a
           key="editable"
           onClick={() => {
-            action?.startEditable?.(record.id);
+            action?.startEditable?.(record.index);
           }}
         >
           编辑
@@ -123,8 +123,7 @@ const AddCourse: FC<AddCourseProps> = ({
         <a
           key="delete"
           onClick={() => {
-            console.log(dataSource);
-            setDataSource(dataSource.filter((item) => item.id !== record.id));
+            setDataSource(dataSource.filter((item) => item.index !== record.index));
             action?.reload();
           }}
         >
@@ -150,7 +149,7 @@ const AddCourse: FC<AddCourseProps> = ({
         actionRef={tableRef}
         columns={columns}
         editable={{
-          type: 'single',
+          type: 'multiple',
           editableKeys,
           onChange: setEditableRowKeys,
           actionRender: (row, config, dom) => [dom.save, dom.cancel],
