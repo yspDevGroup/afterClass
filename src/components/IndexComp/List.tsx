@@ -17,7 +17,7 @@ const List = (props: { type: string, data?: any, noDataImg?: any, noDataText?: s
   return (
     <div className={styles.annceList}>
       {data?.length ? <ul>
-        {data.map((item: { BT?: string, updatedAt?: string ,RQ?: string }) => {
+        {data.map((item: { BT?: string, updatedAt?: string ,RQ?: string,SFTT?: number }) => {
           return <li key={item.BT}>
             <Link
               key="ck"
@@ -26,6 +26,7 @@ const List = (props: { type: string, data?: any, noDataImg?: any, noDataText?: s
                 state: item
               }}
             >
+              {item.SFTT === 1 ? <div className={styles.Headlines}>头条</div> : <></>}
               <span>{item.BT}</span>
               <span>{item.updatedAt||item.RQ}</span>
             </Link>

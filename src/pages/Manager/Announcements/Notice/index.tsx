@@ -27,6 +27,13 @@ const Notice = () => {
 
   const columns: ProColumns<TableListItem>[] = [
     {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 58,
+      align: 'center'
+    },
+    {
       title: '标题',
       dataIndex: 'BT',
       key: 'BT',

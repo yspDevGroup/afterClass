@@ -21,7 +21,6 @@ import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import { history, useModel } from 'umi';
 import styles from '../index.module.less';
-import AvatarUpload from '../components/AvatarUpload';
 import PageContainer from '@/components/PageContainer';
 import { createXXTZGG, XXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
 import { LeftOutlined } from '@ant-design/icons';
