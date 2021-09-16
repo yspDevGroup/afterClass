@@ -3,26 +3,26 @@
  * @description:
  * @author: txx
  * @Date: 2021-05-31 10:24:05
- * @,@LastEditTime: ,: 2021-06-23 09:47:05
- * @,@LastEditors: ,: Please set LastEditors
+ * @LastEditTime: 2021-09-15 16:51:12
+ * @LastEditors: xue.chen
  */
 
 import type { ListData, ListItem, ListType } from './data';
 import { List } from 'antd';
 import { Link, history } from 'umi';
 import styles from './index.less';
-import IconFont from '../CustomIcon';
+// import IconFont from '../CustomIcon';
 import DisplayColumn from '../DisplayColumn';
 import Nodata from '../Nodata';
 import noPic from '@/assets/noPic.png';
 import noPic1 from '@/assets/noPic1.png';
 
-const findSpan: (dom: any) => any = (dom: any) => {
-  if (dom.tagName === 'SPAN') {
-    return dom;
-  }
-  return findSpan(dom.parentElement);
-};
+// const findSpan: (dom: any) => any = (dom: any) => {
+//   if (dom.tagName === 'SPAN') {
+//     return dom;
+//   }
+//   return findSpan(dom.parentElement);
+// };
 const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) => {
   const { data, type, operation } = props;
   const teacher = history.location.pathname.indexOf('teacher') > -1;
@@ -108,7 +108,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                     }
                   />
                 </Link>
-                {operation ? (
+                {/* {operation ? (
                   <IconFont
                     type="icon-arrow"
                     onClick={(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -125,11 +125,11 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                   />
                 ) : (
                   ''
-                )}
+                )} */}
               </div>
               {operation ? (
-                <div className="ui-operation" style={{ display: 'none', paddingTop: '10px' }}>
-                  <DisplayColumn type="icon" grid={{ column: 2 }} dataSource={operation} parentLink={[v.enrollLink,v.recordLink]} />
+                <div className="ui-operation" style={{ display: 'block', paddingTop: '10px' }}>
+                  <DisplayColumn type="icon" grid={{ column: 3 }} dataSource={operation} parentLink={[v.enrollLink,v.recordLink]} />
                 </div>
               ) : (
                 ''

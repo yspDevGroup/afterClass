@@ -109,10 +109,14 @@ const Home = () => {
               <p>配餐预定</p>
               <img src={Catering} alt="" className={styles.CateringImg}/>
             </Link>
-            <Link to="" className={styles.resources}>
+            <a 
+            href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+            target="_blank"
+            rel="noreferrer"
+             className={styles.resources}>
               <p>素质教育资源</p>
               <img src={resources} alt=""/>
-            </Link>
+            </a>
           </div>
           <div className={styles.announceArea}>
             <Details data={notification} />

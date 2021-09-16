@@ -8,7 +8,7 @@ import type { ListData } from '@/components/ListComponent/data';
 import noData from '@/assets/noCourses.png';
 import icon_curriculum from '@/assets/icon_curriculum.png';
 import icon_classroomStyle from '@/assets/classroomStyle.png';
-import icon_leave from '@/assets/icon_leave.png';
+import icon_leave from '@/assets/icon_leave.png'; 
 import { Link } from 'umi';
 
 const Study = () => {

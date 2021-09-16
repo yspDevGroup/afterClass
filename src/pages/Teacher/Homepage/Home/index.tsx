@@ -10,6 +10,9 @@ import Details from './Pages/Details';
 import { useModel, Link } from 'umi';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
+import resourcesBg from '@/assets/resourcesBg.png';
+import resourcesRgo from '@/assets/resourcesRgo.png';
+
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
 const Home = () => {
@@ -103,6 +106,18 @@ const Home = () => {
         </div>
         <div className={styles.teachCourses}>
           <TeachCourses />
+        </div>
+        <div className={styles.resourcesBox}>
+         <a 
+            href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+            target="_blank"
+            rel="noreferrer"
+            className={styles.resources}
+            style={{ backgroundImage:`url(${resourcesBg})` }}
+          >
+              <p>素质教育资源</p>
+              <img src={resourcesRgo} alt="" />
+            </a>  
         </div>
         <div className={styles.announceArea}>
           <Details data={notification} />

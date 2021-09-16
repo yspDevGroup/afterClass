@@ -2,8 +2,8 @@
  * @description: 
  * @author: txx
  * @Date: 2021-06-07 12:10:01
- * @LastEditTime: 2021-06-18 15:47:58
- * @LastEditors: txx
+ * @LastEditTime: 2021-09-15 15:19:07
+ * @LastEditors: xue.chen
  */
 export type IiconTextData = {
   hidden?: boolean;
@@ -23,6 +23,7 @@ export type IiconTextData = {
     fontSize?: string; /** 我的订单中数量决定徽标点是否展示 */
     count?: ReactNode;
     key?: string;
+    itemType?: 'img' | 'icon';
  }[];
    /** 是否有背景色及徽标点 */
    totil?: boolean;
