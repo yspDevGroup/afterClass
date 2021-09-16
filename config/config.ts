@@ -16,27 +16,16 @@ export default defineConfig({
   dva: {
     hmr: true,
   },
-  // define: {
-  //   ENV_title: '课后服务平台',
-  //   ENV_subTitle: '课后服务平台',
-  //   ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
-  //   ENV_host: 'http://afterclass.prod.xianyunshipei.com',
-  //   ENV_backUrl: 'http://api.prod.xianyunshipei.com',
-  //   ssoHost: 'http://platform.prod.xianyunshipei.com',
-  //   authType: 'wechat',
-  //   clientId: '7B48RYUHNgl',
-  //   clientSecret: 'qFaaskxLbVIUnA5CRR6mHVBzXGqiNpW3a6VMQaScHcl',
-  // },
   define: {
     ENV_title: '课后服务平台',
     ENV_subTitle: '课后服务平台',
     ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
-    ENV_host: 'http://afterclass.test.xianyunshipei.com',
-    ENV_backUrl: 'http://api.test.xianyunshipei.com',
-    ssoHost: 'http://platform.test.xianyunshipei.com',
+    ENV_host: 'http://afterclass.prod.xianyunshipei.com',
+    ENV_backUrl: 'http://api.prod.xianyunshipei.com',
+    ssoHost: 'http://platform.prod.xianyunshipei.com',
     authType: 'wechat',
-    clientId: 'ww20993d96d6755f55',
-    clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
+    clientId: 'wwe2dfbe3747b6e69f',
+    clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
   },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
