@@ -17,7 +17,7 @@ import styles from './index.less';
 
 const { TabPane } = Tabs;
 
-const Evaluation = () => {
+const DropClass = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -144,13 +144,13 @@ const Evaluation = () => {
                         <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                         <p>总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：0节</p>
                         <p>未学课时：{value.KHBJSJ?.KSS}节｜可退课时：{value.KHBJSJ?.KSS}节</p>
-                        <Checkbox value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS}+${value.KHBJSJ?.KHKCSJ?.KCMC}`} disabled={newDate>JKRQ} > </Checkbox>
+                        <Checkbox value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS}+${value.KHBJSJ?.KHKCSJ?.KCMC}`} disabled={newDate<JKRQ && newDate-JKRQ<2592000000} > </Checkbox>
                       </div> :
                         <div className={styles.cards}>
                           <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                           <p>总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{arrs.length}节   </p>
                           <p>未学课时：{value.KHBJSJ?.KSS - arrs.length}节｜可退课时：{value.KHBJSJ?.KSS - arrs.length}节</p>
-                          <Checkbox value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS - arrs.length}+${value.KHBJSJ?.KHKCSJ?.KCMC}`} disabled={newDate>JKRQ}> </Checkbox>
+                          <Checkbox value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS - arrs.length}+${value.KHBJSJ?.KHKCSJ?.KCMC}`} disabled={newDate<JKRQ && newDate-JKRQ<2592000000}> </Checkbox>
                         </div>
                     }
                   </>
@@ -231,4 +231,4 @@ const Evaluation = () => {
   </div>;
 };
 
-export default Evaluation;
+export default DropClass;
