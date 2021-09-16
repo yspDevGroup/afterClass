@@ -318,6 +318,20 @@
         hideInMenu: 'true',
       },
       {
+        path: '/parent/mine/dropClass',
+        name: 'dropClass',
+        icon: 'smile',
+        component: './Parent/Homepage/Mine/Pages/DropClass',
+        hideInMenu: 'true',
+      },
+      {
+        path: '/parent/mine/evaluation',
+        name: 'evaluation',
+        icon: 'smile',
+        component: './Parent/Homepage/Mine/Pages/Evaluation',
+        hideInMenu: 'true',
+      },
+      {
         path: '/parent/home/course',
         name: 'course',
         hideInMenu: 'true',
