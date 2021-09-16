@@ -25,7 +25,7 @@ const Evaluation = () => {
   const [KHFUXY, setKHFUXY] = useState<any>();
   const [KcData, setKcData] = useState<any>();
   const [Datasourse, setDatasourse] = useState<any>();
-  const [Record, setRecord] = useState<API.KHTKSJ[]>([]);
+  const [Record, setRecord] = useState<any>([]);
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
@@ -37,7 +37,7 @@ const Evaluation = () => {
         pageSize: 0,
       });
       if (res.status === 'ok') {
-        setKHFUXY(res.data?.rows?.[0].NR);
+        setKHFUXY(res.data?.rows);
       }
     })();
   }, []);
@@ -45,8 +45,7 @@ const Evaluation = () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const { student } = currentUser || {};
     const res = await getStudentClasses({
-      XSId: student && student.student_userid,
-      // XSId: '20210901',
+      XSId: student && student.student_userid || '20210901',
       XNXQId: result.current.id,
       ZT: [0]
     });
@@ -57,8 +56,7 @@ const Evaluation = () => {
   const getKHTKSJData = async () => {
     const { student } = currentUser || {};
     const res = await getKHTKSJ({
-      XSId: student && student.student_userid,
-      // XSId: '20210901',
+      XSId: student && student.student_userid || '20210901',
       KHBJSJId: '',
       XXJBSJId: currentUser?.xxId,
       ZT: 0,
@@ -113,10 +111,8 @@ const Evaluation = () => {
     const { student } = currentUser || {};
     checkedValues.forEach((value: string) => {
       const data = {
-        XSId: student && student.student_userid,
-        // XSId: '20210901',
-        XSXM:student && student.name,
-        // XSXM: '张三',
+        XSId: student && student.student_userid || '20210901',
+        XSXM:student && student.name || '张三',
         KHBJSJId: value.split('+')[0],
         KSS: value.split('+')[1],
         ZT: 0,
@@ -140,19 +136,21 @@ const Evaluation = () => {
                   const arrs = value.KHBJSJ?.KHXSCQs.filter((val: any) => {
                     return val.CQZT === "出勤";
                   })
+                  const JKRQ = new Date(value.KHBJSJ?.JKRQ).getTime();
+                  const newDate=new Date().getTime();
                   return <>
                     {
                       value.KHBJSJ?.KHXSCQs.length === 0 ? <div className={styles.cards}>
                         <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                         <p>总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：0节</p>
                         <p>未学课时：{value.KHBJSJ?.KSS}节｜可退课时：{value.KHBJSJ?.KSS}节</p>
-                        <Checkbox value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS}+${value.KHBJSJ?.KHKCSJ?.KCMC}`}> </Checkbox>
+                        <Checkbox value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS}+${value.KHBJSJ?.KHKCSJ?.KCMC}`} disabled={newDate>JKRQ} > </Checkbox>
                       </div> :
                         <div className={styles.cards}>
                           <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                           <p>总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{arrs.length}节   </p>
                           <p>未学课时：{value.KHBJSJ?.KSS - arrs.length}节｜可退课时：{value.KHBJSJ?.KSS - arrs.length}节</p>
-                          <Checkbox value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS - arrs.length}+${value.KHBJSJ?.KHKCSJ?.KCMC}`}> </Checkbox>
+                          <Checkbox value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS - arrs.length}+${value.KHBJSJ?.KHKCSJ?.KCMC}`} disabled={newDate>JKRQ}> </Checkbox>
                         </div>
                     }
                   </>
@@ -163,7 +161,7 @@ const Evaluation = () => {
 
         </div>
           <div className={styles.wrap}>
-            <p>退课退款规则详见 <a onClick={showModal}>《课后服务协议》</a></p>
+            <p>结课后才可退课，退课退款规则详见 <a onClick={showModal}>《课后服务协议》</a></p>
             <div className={styles.btn}>
               <Button onClick={showModals} disabled={typeof Datasourse === 'undefined' || Datasourse.length === 0}>提交</Button>
             </div>
@@ -176,8 +174,8 @@ const Evaluation = () => {
             <div className={styles.Record}>
               <div>
                 {
-                  Record.map((value) => {
-                    const num = value!.KHBJSJ!.KSS! - value.KSS;
+                  Record.map((value: any) => {
+                    const num = value!.KHBJSJ!.KSS! - value?.KSS;
                     return <div className={styles.cards}>
                       <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                       <p>总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{num}节  </p>
@@ -204,11 +202,16 @@ const Evaluation = () => {
         </Button>,
       ]}
     >
-      <p>课后服务协议书</p>
-      <div dangerouslySetInnerHTML={{ __html: KHFUXY }} />
+      {
+        KHFUXY?.length !== 0 ? <>
+        <p>课后服务协议书</p>
+        <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
+        </>:<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      }
+
     </Modal>
     <Modal
-      title="确认退款"
+      title="确认退课"
       visible={ModalVisible}
       onOk={handleOks}
       onCancel={handleCancels}
