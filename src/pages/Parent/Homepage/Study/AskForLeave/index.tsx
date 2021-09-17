@@ -2,58 +2,70 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 09:57:23
- * @LastEditTime: 2021-09-15 11:46:24
+ * @LastEditTime: 2021-09-17 12:05:20
  * @LastEditors: Sissle Lynn
  */
-/* eslint-disable array-callback-return */
-import React, { useState, useEffect } from 'react';
-import { useModel } from 'umi';
+import React, { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
-import { enHenceMsg } from '@/utils/utils';
-import Nodata from '@/components/Nodata';
+import { useModel } from 'umi';
 import GoBack from '@/components/GoBack';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 
 import styles from './index.less';
 import LeaveForm from './Components/LeaveForm';
+import LeaveHistory from './Components/LeaveHistory';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
+import { enHenceMsg } from '@/utils/utils';
 const { TabPane } = Tabs;
 
 const AskForLeave: React.FC = () => {
-  const [leaveInfo, setLeaveInfo] = useState<API.KHXSQJ[]>([]);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { student } = currentUser || {};
+  const [curXNXQId, setCurXNXQId] = useState<any>();
+  const [activeKey, setActiveKey] = useState<string>('apply');
+  const [leaveInfo, setLeaveInfo] = useState<API.KHXSQJ[]>([]);
+  const [reload, setReload] = useState<boolean>(false);
   const fetch = async () => {
     // 获取后台学年学期数据
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     if (result.current) {
-      const { student } = currentUser || {};
-      const res = await getAllKHXSQJ({
-        XSId: student && student.student_userid || '20210901',
-        XNXQId: result.current.id,
-      });
-      if (res.status === 'ok') {
-        if (res.data && res.data?.rows) {
-          setLeaveInfo(res.data.rows);
-        }
-      } else {
-        enHenceMsg(res.message);
+      setCurXNXQId(result.current.id);
+    }
+  };
+  const getData = async () => {
+    const res = await getAllKHXSQJ({
+      XSId: student && student.student_userid || '20210901',
+      XNXQId: curXNXQId,
+    });
+    if (res.status === 'ok') {
+      if (res.data && res.data?.rows) {
+        setLeaveInfo(res.data.rows);
       }
+    } else {
+      enHenceMsg(res.message);
     }
   };
   useEffect(() => {
     fetch();
   }, []);
+  useEffect(() => {
+    if (activeKey === 'history' && reload) {
+      getData();
+    }
+  }, [activeKey,reload]);
   return (
     <>
       <GoBack title={'请假'} onclick="/parent/home?index=study" />
       <div className={styles.leaveList}>
-        <Tabs defaultActiveKey='apply' centered={true}>
+        <Tabs activeKey={activeKey} centered={true} onChange={(key) => {
+          setActiveKey(key);
+        }}>
           <TabPane tab="我要请假" key="apply">
-            <LeaveForm />
+            <LeaveForm setActiveKey={setActiveKey} setReload={setReload} />
           </TabPane>
           <TabPane tab="请假记录" key="history">
-
+            <LeaveHistory leaveInfo={leaveInfo} getData={getData} />
           </TabPane>
         </Tabs>
       </div>
