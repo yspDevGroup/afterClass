@@ -1,5 +1,5 @@
 .DropClass {
-  height: 100%;
+  min-height: 100%;
   background: #f5f5f5;
   :global {
     .ant-tabs-nav {
@@ -29,7 +29,7 @@
   }
   .Application,
   .Record {
-    padding: 0 10px;
+    padding: 0 10px 100px 10px;
     // height: calc(~"100vh - 85px");
     .choice {
       color: #999999;
@@ -82,10 +82,12 @@
     position: fixed;
     bottom: 0;
     width: 100%;
+    background: #f5f5f5;
     > p {
       padding-left: 10px;
       color: #666666;
       font-size: 14px;
+      margin: 5px 0;
     }
     .btn {
       height: 54px;
@@ -167,7 +169,7 @@
         }
       }
     }
-    .ant-modal-header{
+    .ant-modal-header {
       padding: 16px;
     }
     .ant-modal-body {

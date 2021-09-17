@@ -246,6 +246,18 @@
         component: './Teacher/Homepage/Education/RollCallRecord',
       },
       {
+        path: '/teacher/education/feedback',
+        name: 'feedback',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/Feedback',
+      },
+      {
+        path: '/teacher/education/studentEvaluation',
+        name: 'studentEvaluation',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/StudentEvaluation',
+      },
+      {
         path: '/teacher/home/notice/announcement',
         name: 'announcement',
         hideInMenu: 'true',
