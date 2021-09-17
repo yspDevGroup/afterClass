@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj'
 // import { message } from 'antd';
-// import type { ColumnsType } from 'antd/lib/table';
+import type { ColumnsType } from 'antd/lib/table';
 import { useModel, } from 'umi';
 import { Select, Table } from 'antd';
 import Style from './index.less'
@@ -24,6 +24,8 @@ const LeaveManagement: React.FC = () => {
     //获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
+      console.log();
+      
       // 获取到的整个列表的信息
       const newData = res.xnxqList;
       const curTerm = res.current;
@@ -45,13 +47,11 @@ const LeaveManagement: React.FC = () => {
   const ChoseSelect = async () => {
   const res3 = await getAllKHXSQJ({ XNXQId: currentUser?.xxId });
     if (res3.status === 'ok') {
- 
-      
-   setDataSource(res3.data.rows);
+    setDataSource(res3.data.rows);
     }
   }
   ///table表格数据
-  const columns = [
+  const columns: ColumnsType<API.KHXSDD> | undefined = [
     {
       title: '请假人',
       dataIndex: 'XSXM',

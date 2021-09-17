@@ -36,6 +36,7 @@ export default {
   'menu.orderInquiry': '订单查询',
   'menu.leaveManagement': '请假管理',
   'menu.reimbursementClass':'退课管理',
+  'menu.mutualEvaluation':'课程班互评统计',
   'menu.educational': '素质教育资源',
    'menu.parent.announcement': '公告详情',
   'menu.parent.emptyArticle': '报名通知',

@@ -177,9 +177,7 @@ const ReimbursementClass = () => {
 
     });
     if(res3.status === 'ok'){
-      console.log(res3?.data?.rows);
-
-      setDataSource(res3?.data?.rows);
+    setDataSource(res3?.data?.rows);
     }
 
 

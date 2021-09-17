@@ -8,6 +8,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import PageContainer from '@/components/PageContainer';
 import ExcelTable from '@/components/ExcelTable';
+// 封装的弹框组件
 import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
 
@@ -31,6 +32,8 @@ const { Option } = Select;
 type selectType = { label: string; value: string };
 
 const ClassManagement = () => {
+  //
+
   const [state, setState] = useState(true);
   const [curXNXQId, setCurXNXQId] = useState<any>(getQueryString('xnxqid'));
   const [termList, setTermList] = useState<any>();
@@ -574,6 +577,7 @@ const ClassManagement = () => {
   return (
     <>
       <PageContainer>
+        {/* 弹框提示 */}
         <PromptInformation
           text="未查询到学年学期数据，请设置学年学期后再来"
           link="/basicalSettings/termManagement"
@@ -586,8 +590,10 @@ const ClassManagement = () => {
           open={pKiskai}
           colse={onPkiskaiClick}
         />
+        {/* 默认state的来回切换 新增排课与排课管理页面 */}
         {state === true ? (
           <div>
+            {/* 渲染的是四个选项框组件 */}
             <div
               style={{
                 display: 'flex',
@@ -705,12 +711,13 @@ const ClassManagement = () => {
                   key="add"
                   onClick={() => showDrawer()}
                 >
+                  {/* 加号组件 */}
                   <PlusOutlined />
                   新增排课
                 </Button>
               </div>
             </div>
-            {/*  */}
+            {/* 场地排课情况 单选按钮组件 */}
             <div style={{ padding: '24px 0 0 24px' }}>
               <span>场地排课情况：</span>
               <span>
@@ -731,6 +738,7 @@ const ClassManagement = () => {
             />
           </div>
         ) : (
+          // AddArranging 组件是新增排课页面 
           <AddArranging
             formValues={recordValue}
             setState={setState}

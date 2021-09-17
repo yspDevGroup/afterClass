@@ -212,6 +212,21 @@
   name: 'reimbursementClass',
   component:'./Manager/ReimbursementClass',
 },
+//课程班相互统计
+{
+  path: '/mutualEvaluation',
+  icon:'UserSwitchOutlined',
+  name: 'mutualEvaluation',
+  component:'./Manager/MutualEvaluation',
+ 
+
+},
+{
+  path: '/mutualEvaluation/detail',
+  hideInMenu: 'true',
+  name: 'mutualEvaluation',
+  component:'./Manager/MutualEvaluation/Detail',
+},
   /*** 老师路由 start ***/
   {
     path: '/teacher',
