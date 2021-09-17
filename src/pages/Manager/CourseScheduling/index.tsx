@@ -697,6 +697,7 @@ const ClassManagement = () => {
                   </Select>
                 </div>
               </div>
+              {/*  添加新的课程 路由跳转*/}
               <div style={{ position: 'absolute', right: 48 }}>
                 <Button
                   style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
@@ -709,6 +710,7 @@ const ClassManagement = () => {
                 </Button>
               </div>
             </div>
+            {/*  */}
             <div style={{ padding: '24px 0 0 24px' }}>
               <span>场地排课情况：</span>
               <span>
@@ -718,6 +720,7 @@ const ClassManagement = () => {
                 </Radio.Group>
               </span>
             </div>
+            {/* 课程表组件*/}
             <ExcelTable
               className={''}
               columns={columns}

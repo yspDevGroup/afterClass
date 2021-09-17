@@ -18,7 +18,7 @@ export async function createKHTKSJ(body: API.CreateKHTKSJ[], options?: { [key: s
 export async function getKHTKSJ(
   body: {
     /** 退课状态 */
-    ZT?: number;
+    ZT?: number[];
     /** 学生ID */
     XSId?: string;
     /** 学年学期ID */
@@ -57,10 +57,10 @@ export async function deleteKHTKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khtksj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -75,13 +75,13 @@ export async function updateKHTKSJ(
   body: API.UpdateKHTKSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khtksj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

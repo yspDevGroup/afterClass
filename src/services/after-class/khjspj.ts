@@ -11,14 +11,12 @@ export async function getKHJSPJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      PJRQ?: string | any;
-      PJLX?: '节次评价' | '总评价';
-      PJFS?: string;
+      PJFS?: number;
       PY?: string;
       JSId?: string;
       XSId?: string;
@@ -27,7 +25,7 @@ export async function getKHJSPJ(
     message?: string;
   }>(`/khjspj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -41,10 +39,10 @@ export async function deleteKHJSPJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjspj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -79,9 +77,7 @@ export async function createKHJSPJ(body: API.CreateKHJSPJ, options?: { [key: str
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      PJRQ?: string | any;
-      PJLX?: '节次评价' | '总评价';
-      PJFS?: string;
+      PJFS?: number;
       PY?: string;
       JSId?: string;
       XSId?: string;
@@ -108,13 +104,13 @@ export async function updateKHJSPJ(
   body: API.UpdateKHJSPJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjspj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -1,18 +1,26 @@
 // https://umijs.org/config/
 import { defineConfig } from 'umi';
-import proxy from './proxy';
 
 export default defineConfig({
   define: {
-    ENV_title: '课后服务平台',
-    ENV_subTitle: '课后服务平台',
-    ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
-    ENV_host: 'http://afterclass.test.xianyunshipei.com',
-    ENV_backUrl: 'http://api.test.xianyunshipei.com',
-    ssoHost: 'http://platform.test.xianyunshipei.com',
-    authType: 'wechat',
+    // ENV_backUrl: 'http://192.168.0.17:3000',
+    ENV_host: 'http://localhost:8000',
+    ENV_backUrl: 'http://192.168.0.113:3000',
+    authType: 'password',
     clientId: 'ww20993d96d6755f55',
-    clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
+    clientSecret: 'wy83uVM6xgfDtE2XS5WQ',
   },
-  proxy: proxy['dev'],
+  plugins: [
+    // https://github.com/zthxxx/react-dev-inspector
+    'react-dev-inspector/plugins/umi/react-inspector',
+  ],
+  // https://github.com/zthxxx/react-dev-inspector#inspector-loader-props
+  inspectorConfig: {
+    exclude: [],
+    babelPlugins: [],
+    babelOptions: {},
+  },
+  webpack5: {
+    // lazyCompilation: {},
+  },
 });

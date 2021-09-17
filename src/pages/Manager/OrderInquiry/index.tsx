@@ -11,7 +11,7 @@ import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import styles from './index.less';
-import { useModel } from 'umi';
+import { useModel,} from 'umi';
 
 const { Option } = Select;
 
@@ -69,6 +69,8 @@ const OrderInquiry = () => {
           XNXQId: curXNXQId,
         });
         if (resl.status === 'ok') {
+          console.log(resl.data);
+          
           setTableLoading(false);
           setDataSource(resl.data);
           setKcmcValue(undefined);
@@ -181,8 +183,11 @@ const OrderInquiry = () => {
     }
   };
   return (
+    
+    
     <PageContainer>
-      <div className={styles.searchs}>
+    
+        <div className={styles.searchs}>
         <div>
           <span>
             所属学年学期：
@@ -253,6 +258,10 @@ const OrderInquiry = () => {
         open={kai}
         colse={kaiguan}
       />
+
+
+    
+    
     </PageContainer>
   );
 };

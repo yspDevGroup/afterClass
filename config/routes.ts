@@ -140,6 +140,16 @@
     icon: 'Profile',
     component: './Manager/OrderInquiry',
   },
+  //请假管理
+  {
+    icon:'SnippetsOutlined',
+    path: '/leaveManagement',
+    name: 'leaveManagement',
+    component:'./Manager/LeaveManagement',
+    
+
+  },
+
   {
     path: '/announcements',
     name: 'announcements',
@@ -189,6 +199,19 @@
       },
     ],
   },
+  {
+    path: '/educational',
+    icon:'SnippetsOutlined',
+    name: 'educational',
+    component:'./Manager/Educational',
+},
+//退课管理
+{
+  path: '/reimbursementClass',
+  icon:'RollbackOutlined',
+  name: 'reimbursementClass',
+  component:'./Manager/ReimbursementClass',
+},
   /*** 老师路由 start ***/
   {
     path: '/teacher',
@@ -342,6 +365,7 @@
     layout: false,
     component: './index',
   },
+
   {
     path: '/403',
     layout: false,

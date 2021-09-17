@@ -2,24 +2,20 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 创建教师课题研究 PUT /jzgktyj/create */
-export async function createJZGKTYJ(body: API.CreateJZGKTYJ, options?: { [key: string]: any }) {
+/** 创建课后服务-课程评价数据 PUT /khbjpj/create */
+export async function createKHBJPJ(body: API.CreateKHBJPJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
     data: {
       id?: string;
-      MC?: string;
-      LXRQ?: string;
-      JTRQ?: string | any;
-      KTBH?: string;
-      LXDW?: string;
-      CDRW?: string;
-      CY?: string;
-      NR?: string;
-      LY?: string;
+      PJFS?: number;
+      PY?: string;
+      XSId?: string;
+      XSXM?: string;
+      KHBJSJId?: string;
     };
     message?: string;
-  }>('/jzgktyj/create', {
+  }>('/khbjpj/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -29,11 +25,17 @@ export async function createJZGKTYJ(body: API.CreateJZGKTYJ, options?: { [key: s
   });
 }
 
-/** 获取教师课题研究 POST /jzgktyj/getAll */
-export async function getJZGKTYJ(
+/** 获取课后服务-课程评价数据 POST /khbjpj/getAll */
+export async function getKHBJPJ(
   body: {
-    /** 教师ID */
-    JZGJBSJId?: string;
+    /** 班级ID */
+    KHBJSJId?: string;
+    /** 学生ID */
+    XSId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -43,9 +45,9 @@ export async function getJZGKTYJ(
 ) {
   return request<{
     status?: 'ok' | 'error';
-    data?: { count?: number; rows?: API.JZGKTYJ[] };
+    data?: { count?: number; rows?: API.KHBJPJ[] };
     message?: string;
-  }>('/jzgktyj/getAll', {
+  }>('/khbjpj/getAll', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -55,35 +57,35 @@ export async function getJZGKTYJ(
   });
 }
 
-/** 删除教师课题研究 DELETE /jzgktyj/${param0} */
-export async function deleteJZGKTYJ(
+/** 删除课后服务-课程评价数据 DELETE /khbjpj/${param0} */
+export async function deleteKHBJPJ(
   params: {
     // path
-    /** 教师课题研究ID */
+    /** 课后服务-课程评价数据ID */
     id: string;
   },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jzgktyj/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjpj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** 更新教师课题研究 PUT /jzgktyj/update/${param0} */
-export async function updateJZGKTYJ(
+/** 更新课后服务-课程评价数据 PUT /khbjpj/update/${param0} */
+export async function updateKHBJPJ(
   params: {
     // path
-    /** 教师课题研究ID */
+    /** 课后服务-课程评价数据ID */
     id: string;
   },
-  body: API.UpdateJZGKTYJ,
+  body: API.UpdateKHBJPJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jzgktyj/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjpj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
