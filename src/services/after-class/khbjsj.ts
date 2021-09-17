@@ -11,10 +11,10 @@ export async function getKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<any>(`/khbjsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -28,10 +28,10 @@ export async function deleteKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -132,13 +132,13 @@ export async function updateKHBJSJ(
   body: API.UpdateKHBJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -153,14 +153,14 @@ export async function getEnrolled(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: { XSId?: string; XSXM?: string; createdAt?: string }[];
     message?: string;
   }>(`/khbjsj/enrolled/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -178,6 +178,30 @@ export async function getStudentClasses(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khbjsj/getStudentClasses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取班级基础信息 POST /khbjsj/getAllClasses */
+export async function getAllClasses(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 课程ID */
+    KHKCSJId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getAllClasses', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -11,40 +11,26 @@ export async function getKHXSQJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
-    data?: {
-      KSSJ?: string | any;
-      JSSJ?: string | any;
+    data: {
+      id?: string;
+      KSSJ?: string;
+      JSSJ?: string;
       QJSC?: number;
       QJYY?: string;
-      QJZT?: '已确认' | '待确认' | '已过期';
+      QJZT?: number;
       QJLX?: '按课时请假' | '按时间请假';
       XSId?: string;
       XSXM?: string;
-      KHQJKCs?: {
-        QJRQ?: string;
-        KHBJSJ?: {
-          id?: string;
-          BJMC?: string;
-          BJMS?: string;
-          BJZT?: '待开班' | '已开班' | '已结课';
-          BJRS?: number;
-          KSS?: number;
-          FY?: number;
-          KKRQ?: string | any;
-          JKRQ?: string | any;
-          BMKSSJ?: string;
-          BMJSSJ?: string;
-          KCTP?: string;
-        };
-      }[];
+      createdAt?: string;
+      KHQJKCs?: { QJRQ?: string; KCMC?: string }[];
     };
     message?: string;
   }>(`/khxsqj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -58,10 +44,10 @@ export async function deleteKHXSQJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsqj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -76,7 +62,7 @@ export async function getAllKHXSQJ(
     /** 教师ID */
     JSId?: string;
     /** 请假状态 */
-    QJZT?: string[];
+    QJZT?: number[];
     /** 请假类型 */
     QJLX?: string;
     /** 学年学期ID */
@@ -106,32 +92,18 @@ export async function getAllKHXSQJ(
 export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data?: {
-      KSSJ?: string | any;
-      JSSJ?: string | any;
+    data: {
+      id?: string;
+      KSSJ?: string;
+      JSSJ?: string;
       QJSC?: number;
       QJYY?: string;
-      QJZT?: '已确认' | '待确认' | '已过期';
+      QJZT?: number;
       QJLX?: '按课时请假' | '按时间请假';
       XSId?: string;
       XSXM?: string;
-      KHQJKCs?: {
-        QJRQ?: string;
-        KHBJSJ?: {
-          id?: string;
-          BJMC?: string;
-          BJMS?: string;
-          BJZT?: '待开班' | '已开班' | '已结课';
-          BJRS?: number;
-          KSS?: number;
-          FY?: number;
-          KKRQ?: string | any;
-          JKRQ?: string | any;
-          BMKSSJ?: string;
-          BMJSSJ?: string;
-          KCTP?: string;
-        };
-      }[];
+      createdAt?: string;
+      KHQJKCs?: { QJRQ?: string; KCMC?: string }[];
     };
     message?: string;
   }>('/khxsqj/create', {
@@ -182,13 +154,13 @@ export async function updateKHXSQJ(
   body: API.UpdateKHXSQJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsqj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

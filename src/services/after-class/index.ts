@@ -7,17 +7,17 @@ import * as auth from './auth';
 import * as user from './user';
 import * as bjsj from './bjsj';
 import * as jzgjbsj from './jzgjbsj';
-import * as fjsj from './fjsj';
 import * as fjlx from './fjlx';
+import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
 import * as jxjhsj from './jxjhsj';
 import * as jyjgsj from './jyjgsj';
 import * as jyjgtzgg from './jyjgtzgg';
+import * as jzgcfsj from './jzgcfsj';
 import * as jzggzjl from './jzggzjl';
 import * as jzgjtcy from './jzgjtcy';
 import * as jzgktyj from './jzgktyj';
-import * as jzgcfsj from './jzgcfsj';
 import * as jzglwsj from './jzglwsj';
 import * as jzgrysj from './jzgrysj';
 import * as jzgxxjl from './jzgxxjl';
@@ -32,10 +32,10 @@ import * as khjytzgg from './khjytzgg';
 import * as khkclx from './khkclx';
 import * as khkcsj from './khkcsj';
 import * as khkcsq from './khkcsq';
-import * as khxscq from './khxscq';
-import * as khtksj from './khtksj';
-import * as khxsdd from './khxsdd';
 import * as khpksj from './khpksj';
+import * as khtksj from './khtksj';
+import * as khxscq from './khxscq';
+import * as khxsdd from './khxsdd';
 import * as khxspj from './khxspj';
 import * as khxsqj from './khxsqj';
 import * as njsj from './njsj';
@@ -52,10 +52,10 @@ import * as xqsj from './xqsj';
 import * as xscfsj from './xscfsj';
 import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
-import * as xsxxjl from './xsxxjl';
 import * as xsjtcy from './xsjtcy';
-import * as xxgg from './xxgg';
+import * as xsxxjl from './xsxxjl';
 import * as xxjbpz from './xxjbpz';
+import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
 import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
@@ -68,17 +68,17 @@ export default {
   user,
   bjsj,
   jzgjbsj,
-  fjsj,
   fjlx,
+  fjsj,
   jcsj,
   jcxx,
   jxjhsj,
   jyjgsj,
   jyjgtzgg,
+  jzgcfsj,
   jzggzjl,
   jzgjtcy,
   jzgktyj,
-  jzgcfsj,
   jzglwsj,
   jzgrysj,
   jzgxxjl,
@@ -93,10 +93,10 @@ export default {
   khkclx,
   khkcsj,
   khkcsq,
-  khxscq,
-  khtksj,
-  khxsdd,
   khpksj,
+  khtksj,
+  khxscq,
+  khxsdd,
   khxspj,
   khxsqj,
   njsj,
@@ -113,10 +113,10 @@ export default {
   xscfsj,
   xsjbsj,
   xsjlsj,
-  xsxxjl,
   xsjtcy,
-  xxgg,
+  xsxxjl,
   xxjbpz,
+  xxgg,
   xxjbsj,
   xxpz,
   xxsjpz,
