@@ -45,7 +45,7 @@ const LeaveManagement: React.FC = () => {
   const ChoseSelect = async () => {
   const res3 = await getAllKHXSQJ({ XNXQId: currentUser?.xxId });
     if (res3.status === 'ok') {
-      console.log(res3.data.rows);
+ 
       
    setDataSource(res3.data.rows);
     }

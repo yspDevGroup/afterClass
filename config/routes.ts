@@ -320,6 +320,13 @@
         hideInMenu: 'true',
       },
       {
+        path: '/parent/study/askforLeave',
+        name: 'courseIntro',
+        icon: 'smile',
+        component: './Parent/Homepage/Study/AskForLeave',
+        hideInMenu: 'true',
+      },
+      {
         path: '/parent/mine/orderDetails',
         name: 'orderDetails',
         icon: 'smile',
@@ -331,6 +338,20 @@
         name: 'order',
         icon: 'smile',
         component: './Parent/Homepage/Mine/Pages/Order',
+        hideInMenu: 'true',
+      },
+      {
+        path: '/parent/mine/dropClass',
+        name: 'dropClass',
+        icon: 'smile',
+        component: './Parent/Homepage/Mine/Pages/DropClass',
+        hideInMenu: 'true',
+      },
+      {
+        path: '/parent/mine/evaluation',
+        name: 'evaluation',
+        icon: 'smile',
+        component: './Parent/Homepage/Mine/Pages/Evaluation',
         hideInMenu: 'true',
       },
       {

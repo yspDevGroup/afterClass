@@ -73,47 +73,18 @@ const Mine = () => {
         />
       </div>
       <div className={styles.operation}>
-        <Link to="" className={styles.drop}>
+        <Link to="/parent/mine/dropClass" className={styles.drop}>
           <img src={drop} alt="" />
           <span className={styles.dropSpan}>我要退课</span>
           <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
         </Link>
-        <Link to="" className={styles.evaluation}>
+        <Link to="/parent/mine/evaluation" className={styles.evaluation}>
           <img src={evaluation} alt=""  />
           <span className={styles.evaluationSpan}>课程评价</span>
           <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
          </Link>
       </div>
-      {/* <div className={styles.wraps}>
-        <Row gutter={16}>
-          <Col
-            className="gutter-row"
-            span={12}
-            onClick={() => {
-              history.push('/parent/mine/dropClass');
-            }}
-          >
-            <div className={styles.box}>
-              <img src={drop} alt="" />
-              我要退课
-              <RightOutlined />
-            </div>
-          </Col>
-          <Col
-            className="gutter-row"
-            span={12}
-            onClick={() => {
-              history.push('/parent/mine/evaluation');
-            }}
-          >
-            <div className={styles.box}>
-              <img src={evaluation} alt="" />
-              课程评价
-              <RightOutlined />
-            </div>
-          </Col>
-        </Row>
-      </div> */}
+
 
       {courseStatus === 'empty' ? '' : <Statistical />}
       <div className={styles.linkWrapper}>

@@ -210,3 +210,25 @@ export async function getAllClasses(
     ...(options || {}),
   });
 }
+
+/** 获取学生的班级信息 POST /khbjsj/getStudentClasses */
+export async function getStudentClasses(
+  body: {
+    /** 学生ID */
+    XSId?: string;
+    /** 状态 */
+    ZT?: number[];
+    /** 学年学期ID */
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getStudentClasses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

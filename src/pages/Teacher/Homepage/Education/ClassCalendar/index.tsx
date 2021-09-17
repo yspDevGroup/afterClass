@@ -7,7 +7,9 @@ import ListComponent from '@/components/ListComponent';
 import moment from 'moment';
 import { DateRange, Week } from '@/utils/Timefunction';
 import noData from '@/assets/noCourses1.png';
+import classroomStyle from '@/assets/classroomStyle.png';
 import myContext from '@/utils/MyContext';
+
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -21,14 +23,21 @@ const defaultMsg = {
 };
 const iconTextData = [
   {
-    text: '课堂点名',
+    text: '签到点名',
     icon: 'icon-dianming',
-    background: '#FF8964',
+    background: '#FFC700',
   },
   {
-    text: '考勤记录',
+    text: '离校通知',
     icon: 'icon-lixiao',
     background: '#7DCE81',
+  },
+  
+  {
+    text: '课堂风采',
+    itemType: 'img',
+    img: classroomStyle,
+    background: '#FF8863',
   },
 ];
 const ClassCalendar = (props: propstype) => {
@@ -46,14 +55,14 @@ const ClassCalendar = (props: propstype) => {
     const markDays = [];
     const learnData = {};
     const newData = {};
-    data.forEach((item: any) => {
+    data?.forEach((item: any) => {
       if (Object.keys(newData).indexOf(`${item.KHBJSJ.id}`) === -1) {
         newData[item.KHBJSJ.id] = [];
       }
       newData[item.KHBJSJ.id].push(item);
     });
 
-    for (let k = 0; k < data.length; k += 1) {
+    for (let k = 0; k < data?.length; k += 1) {
       const item = data[k];
       const weeked: any[] = [];
       const dates: any[] = [];
@@ -82,12 +91,12 @@ const ClassCalendar = (props: propstype) => {
         link: `/teacher/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}&index=all`,
         desc: [
           {
-            left: [
-              `课程时段：${item.XXSJPZ.KSSJ.substring(0, 5)}-${item.XXSJPZ.JSSJ.substring(0, 5)}`,
+            left: [ 
+              `${item.XXSJPZ.KSSJ.substring(0, 5)}-${item.XXSJPZ.JSSJ.substring(0, 5)}  |  ${item.KHBJSJ.BJMC} `,
             ],
           },
           {
-            left: [`上课地点：${item.FJSJ.FJMC}`],
+            left: [`${item.FJSJ.FJMC}`],
           },
         ],
       };

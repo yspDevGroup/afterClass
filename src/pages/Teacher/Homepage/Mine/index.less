@@ -94,6 +94,67 @@
   .funWrapper {
     margin-top: 20px;
     padding: 0 10px;
+    .operation {
+      height: 44px;
+      margin: 18px 0px 18px 0px;
+      display: flex;
+
+      .tchLeave {
+        padding-left: 12px;
+        display: flex;
+        align-items: center;
+        width: 50%;
+        height: 44px;
+        margin-right: 11px;
+        background-color: rgba(210, 255, 223, 0.8);
+        border-radius: 8px;
+        position: relative;
+        > img {
+          width: 28px;
+          height: 28px;
+        }
+        .tchLeaveSpan {
+          margin-left: 8px;
+          font-size: 14px;
+          color: #333333;
+          font-weight: bold;
+        }
+        .icon_Rgo {
+          width: 3px;
+          height: 6px;
+          position: absolute;
+          right: 12px;
+        }
+      }
+      .attRecord {
+        padding-left: 12px;
+        display: flex;
+        align-items: center;
+        width: 50%;
+        height: 44px;
+        font-size: 14px;
+        color: #333333;
+        background-color: rgba(205, 216, 255, 0.8);
+        border-radius: 8px;
+        position: relative;
+        > img {
+          width: 28px;
+          height: 28px;
+        }
+        .attRecordSpan {
+          margin-left: 8px;
+          font-size: 14px;
+          color: #333333;
+          font-weight: bold;
+        }
+        .icon_Rgo {
+          width: 3px;
+          height: 6px;
+          position: absolute;
+          right: 12px;
+        }
+      }
+    }
 
     .titleBar {
       font-size: @font-size-lg;
@@ -102,7 +163,7 @@
       margin-bottom: 10px;
       position: relative;
 
-      >div {
+      > div {
         position: absolute;
         right: 10px;
         top: 0;
@@ -116,19 +177,19 @@
           display: inline-block;
           vertical-align: sub;
           border-radius: 14px;
-          background: linear-gradient(270deg, #31D99F 0%, rgba(49, 217, 159, 0) 100%);
+          background: linear-gradient(270deg, #31d99f 0%, rgba(49, 217, 159, 0) 100%);
           margin-right: 5px;
 
-          &+span {
+          & + span {
             margin-left: 5px;
           }
 
           &:nth-child(2) {
-            background: linear-gradient(270deg, #FF7171 0%, rgba(255, 113, 113, 0) 100%);
+            background: linear-gradient(270deg, #ff7171 0%, rgba(255, 113, 113, 0) 100%);
           }
 
           &:nth-child(3) {
-            background: linear-gradient(270deg, #DDDDDD 0%, rgba(221, 221, 221, 0) 100%);
+            background: linear-gradient(270deg, #dddddd 0%, rgba(221, 221, 221, 0) 100%);
           }
         }
       }
@@ -137,7 +198,7 @@
     .chartWrapper {
       width: 100%;
       height: 160px;
-      background-color: #F5F5F5;
+      background-color: #f5f5f5;
       margin-bottom: 10px;
       border-radius: 8px;
       padding: 10px;

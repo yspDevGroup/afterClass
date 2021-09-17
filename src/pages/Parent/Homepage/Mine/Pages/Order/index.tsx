@@ -104,14 +104,12 @@ const Order: React.FC = () => {
   const type = getQueryString('type') || undefined;
   const children = [
     {
-      student_userid: currentUser.student.student_userid,
-      njId: '1',
+      student_userid: currentUser?.student?.student_userid,
     },
   ];
   const fetch = async (param: any[]) => {
     const res = await getAllKHXSDD({
       XSId: param[0].student_userid,
-      // njId: param[0].njId,
       DDZT: '',
     });
     if (res.status === 'ok') {

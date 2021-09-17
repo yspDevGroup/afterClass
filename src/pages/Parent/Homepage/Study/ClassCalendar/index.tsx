@@ -4,12 +4,15 @@ import { Calendar } from 'react-h5-calendar';
 import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
 import { DateRange, Week } from '@/utils/Timefunction';
-import myContext from '@/utils/MyContext';
 import noData from '@/assets/noCourse.png';
 import moment from 'moment';
+import { ParentHomeData } from '@/services/local-services/xsHome';
+import { useModel } from 'umi';
+import { List, Divider, Checkbox } from 'antd';
 
 type propstype = {
-  setDatedata: (data: any) => void;
+  setDatedata?: (data: any) => void;
+  type?: string;
 };
 const defaultMsg = {
   type: 'picList',
@@ -20,11 +23,13 @@ const defaultMsg = {
 };
 
 const ClassCalendar = (props: propstype) => {
-  const { setDatedata } = props;
+  const { setDatedata, type } = props;
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const { xxId, student } = currentUser || {};
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
-  const { weekSchedule } = useContext(myContext);
   const [dates, setDates] = useState<any[]>([]);
   const [courseArr, setCourseArr] = useState<any>({});
 
@@ -43,6 +48,9 @@ const ClassCalendar = (props: propstype) => {
           title: item.KHBJSJ.KHKCSJ.KCMC,
           img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
           link: `/parent/home/courseTable?classid=${item.KHBJSJ.id}`,
+          start: item.XXSJPZ?.KSSJ?.substring(0, 5),
+          end: item.XXSJPZ?.JSSJ?.substring(0, 5),
+          xq: `本校`,
           desc: [
             {
               left: [
@@ -96,19 +104,27 @@ const ClassCalendar = (props: propstype) => {
     };
   };
   useEffect(() => {
-    const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
-    setDatedata(learnData);
-    setDates(markDays);
-    setCourse({
-      type: 'picList',
-      cls: 'picList',
-      list: courseData[day] || [],
-      noDataText: '当天无课',
-      noDataImg: noData,
-    });
-    setCourseArr(courseData);
+    (async () => {
+      const res = await ParentHomeData(xxId, student?.student_userid || '20210901');
+      const { weekSchedule } = res;
+      const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
+      setDatedata?.(learnData);
+      setDates(markDays);
+      setCourse({
+        type: 'picList',
+        cls: 'picList',
+        list: courseData[day] || [],
+        noDataText: '当天无课',
+        noDataImg: noData,
+      });
+      setCourseArr(courseData);
+    })();
   }, []);
+  const onChange = (e: any,item: any) => {
+    console.log(`checked = ${e.target.checked}`);
+    console.log(item);
 
+  }
   return (
     <div className={styles.schedule}>
       <span
@@ -146,8 +162,26 @@ const ClassCalendar = (props: propstype) => {
         transitionDuration={0.1}
         currentDate={day}
       />
-      <div className={styles.subTitle}>{cDay}</div>
-      <ListComponent listData={course} />
+      {type && type === 'edit' ? <p style={{ lineHeight: '35px', margin: 0, color: '#888' }}>请选择课程</p> : <div className={styles.subTitle}>{cDay}</div>}
+      {type && type === 'edit' ?
+        <List
+          style={{ background: '#fff' }}
+          itemLayout="horizontal"
+          dataSource={course?.list?.length ? course?.list : []}
+          renderItem={(item: any) => (
+            <List.Item
+              actions={[<Checkbox onChange={(e)=>onChange(e,item)} />]}
+            >
+              <List.Item.Meta
+                title={item?.title}
+                description={<>{item?.editText?.map((val: string, index: number) => {
+                  return <>{val}{index < item?.editText?.length - 1 ? <Divider type='vertical' /> : ''}</>
+                })}</>}
+              />
+            </List.Item>
+          )}
+        />
+        : <ListComponent listData={course} />}
     </div>
   );
 };

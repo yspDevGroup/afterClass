@@ -67,6 +67,7 @@ export async function getAllKHXSPJ(
     /** 学生ID */
     XSId?: string;
     /** 班级ID */
+<<<<<<< HEAD
     KHBJSJId?: string;
     /** 教师ID */
     JSId?: string;
@@ -76,6 +77,9 @@ export async function getAllKHXSPJ(
     page?: number;
     /** 每页记录数 */
     pageSize?: number;
+=======
+    bjId?: string;
+>>>>>>> 63e0d06ed3c6a51ca1ac831cfdb12796739c91a4
   },
   options?: { [key: string]: any },
 ) {

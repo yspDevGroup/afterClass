@@ -10,7 +10,7 @@ export default {
   'menu.basicalSettings.termManagement': '学期学年维护',
   'menu.basicalSettings.service': '服务协议配置',
   'menu.basicalSettings.service.editArticle': '编辑服务协议',
-  'menu.basicalSettings.articleDetails': '政策详情',
+  'menu.basicalSettings.articleDetails': '服务协议',
   'menu.courseManagements': '课程管理',
   'menu.courseManagements.courseManagements': '课程列表',
   'menu.courseManagements.mechanism': '机构课程',
@@ -52,6 +52,7 @@ export default {
   'menu.announcements.notice.editArticle': '编辑文章',
   'menu.announcements.notice.noticeDetails': '公告详情',
   'menu.announcements.policy': '政策公告',
+  'menu.announcements.policy.articleDetails': '政策详情',
   'menu.teacherManagement': '教师管理',
   'menu.teacherInfo': '教师详情',
 };
