@@ -100,13 +100,24 @@
         path: '/courseManagements/CourseManagements',
         name: 'courseManagements',
         component: './Manager/CourseManagements',
-        // hideInMenu: 'true',
       },
       {
         path: '/courseManagements/mechanismCourse/edit',
         name: 'mechanismCourseInfo',
         component: './Manager/Mechanisms/edit',
         hideInMenu: 'true',
+      },
+      //请假管理
+      {
+        path: '/courseManagements/leaveManagement',
+        name: 'leaveManagement',
+        component: './Manager/CourseManagements/LeaveManagement',
+      },
+      //退课管理
+      {
+        path: '/courseManagements/reimbursementClass',
+        name: 'reimbursementClass',
+        component: './Manager/CourseManagements/ReimbursementClass',
       },
     ],
   },
@@ -140,16 +151,7 @@
     icon: 'Profile',
     component: './Manager/OrderInquiry',
   },
-  //请假管理
-  {
-    icon:'SnippetsOutlined',
-    path: '/leaveManagement',
-    name: 'leaveManagement',
-    component:'./Manager/LeaveManagement',
-    
-
-  },
-
+  // 通知公告
   {
     path: '/announcements',
     name: 'announcements',
@@ -199,34 +201,32 @@
       },
     ],
   },
+  // 统计管理
+  {
+    path: '/statistics',
+    name: 'statistics',
+    icon: 'BarChartOutlined',
+    routes: [
+      //课程班互评统计
+      {
+        path: '/statistics/mutualEvaluation',
+        name: 'mutualEvaluation',
+        component: './Manager/Statistics/MutualEvaluation',
+      },
+      {
+        path: '/statistics/mutualEvaluation/detail',
+        hideInMenu: 'true',
+        name: 'mutualEvaluationInfo',
+        component: './Manager/Statistics/MutualEvaluation/Detail',
+      },
+    ],
+  },
   {
     path: '/educational',
-    icon:'SnippetsOutlined',
+    icon: 'RadarChartOutlined',
     name: 'educational',
-    component:'./Manager/Educational',
-},
-//退课管理
-{
-  path: '/reimbursementClass',
-  icon:'RollbackOutlined',
-  name: 'reimbursementClass',
-  component:'./Manager/ReimbursementClass',
-},
-//课程班相互统计
-{
-  path: '/mutualEvaluation',
-  icon:'UserSwitchOutlined',
-  name: 'mutualEvaluation',
-  component:'./Manager/MutualEvaluation',
- 
-
-},
-{
-  path: '/mutualEvaluation/detail',
-  hideInMenu: 'true',
-  name: 'mutualEvaluation',
-  component:'./Manager/MutualEvaluation/Detail',
-},
+    component: './Manager/Educational',
+  },
   /*** 老师路由 start ***/
   {
     path: '/teacher',
