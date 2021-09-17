@@ -6,7 +6,7 @@
  * @LastEditors: wsl
  */
 import GoBack from '@/components/GoBack';
-import { deleteKHBJPJ, getKHBJPJ, updateKHBJPJ } from '@/services/after-class/khbjpj';
+import { deleteKHBJPJ, getKHBJPJ } from '@/services/after-class/khbjpj';
 import { getStudentClasses } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { Button, Empty, message, Rate, Tabs } from 'antd';
@@ -31,14 +31,12 @@ const Evaluation = () => {
       ZT: [0, 1, 2]
     });
     if (res.status === 'ok') {
-      console.log(res.data)
       const newArr: any[] = [];
       res.data.forEach((value: any)=>{
         if(value.KHBJSJ?.KHBJPJs?.length === 0){
           newArr.push(value)
         }
       })
-      console.log(newArr,'----')
       setKcData(newArr)
     }
     const resgetKHBJPJ = await getKHBJPJ({
@@ -56,7 +54,6 @@ const Evaluation = () => {
   }, []);
 
   const submit = async(value: { id: any; })=>{
-    console.log(value)
     const res = await deleteKHBJPJ({id:value.id})
     if(res.status === 'ok'){
       message.success('撤销成功');
