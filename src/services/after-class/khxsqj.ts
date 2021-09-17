@@ -11,7 +11,7 @@ export async function getKHXSQJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -25,16 +25,13 @@ export async function getKHXSQJ(
       XSId?: string;
       XSXM?: string;
       createdAt?: string;
-<<<<<<< HEAD
-=======
       updatedAt?: string;
->>>>>>> 426359c5ca3ff2749cfeb34e37bb136c32f9cffb
       KHQJKCs?: { QJRQ?: string; KCMC?: string }[];
     };
     message?: string;
   }>(`/khxsqj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -48,10 +45,10 @@ export async function deleteKHXSQJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsqj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -107,10 +104,7 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
       XSId?: string;
       XSXM?: string;
       createdAt?: string;
-<<<<<<< HEAD
-=======
       updatedAt?: string;
->>>>>>> 426359c5ca3ff2749cfeb34e37bb136c32f9cffb
       KHQJKCs?: { QJRQ?: string; KCMC?: string }[];
     };
     message?: string;
@@ -162,13 +156,13 @@ export async function updateKHXSQJ(
   body: API.UpdateKHXSQJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsqj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

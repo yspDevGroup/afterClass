@@ -426,7 +426,6 @@
     layout: false,
     component: './index',
   },
-
   {
     path: '/403',
     layout: false,

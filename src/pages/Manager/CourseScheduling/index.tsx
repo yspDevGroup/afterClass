@@ -32,8 +32,6 @@ const { Option } = Select;
 type selectType = { label: string; value: string };
 
 const ClassManagement = () => {
-  //
-
   const [state, setState] = useState(true);
   const [curXNXQId, setCurXNXQId] = useState<any>(getQueryString('xnxqid'));
   const [termList, setTermList] = useState<any>();

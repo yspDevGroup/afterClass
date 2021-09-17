@@ -435,6 +435,17 @@ const AddCourse: FC<AddCourseProps> = ({
       },
     },
     {
+      type: 'select',
+      name: 'XQSJId',
+      key: 'XQSJId',
+      label: '所属校区:',
+      disabled: readonly,
+      rules: [{ required: true, message: '请填写所属校区' }],
+      fieldProps: {
+        options: campus,
+      },
+    },
+    {
       type: 'group',
       key: 'group1',
       disabled: readonly,
@@ -526,17 +537,6 @@ const AddCourse: FC<AddCourseProps> = ({
           },
         },
       ],
-    },
-    {
-      type: 'select',
-      name: 'XQSJId',
-      key: 'XQSJId',
-      label: '所属校区:',
-      disabled: readonly,
-      rules: [{ required: true, message: '请填写所属校区' }],
-      fieldProps: {
-        options: campus,
-      },
     },
     {
       type: 'checkbox',

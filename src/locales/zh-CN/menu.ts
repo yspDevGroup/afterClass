@@ -23,7 +23,6 @@ export default {
   'menu.parent.listComponent': '列表组件',
   'menu.parent.courseDetails': '课程详情',
   'menu.parent.orderDetails': '订单详情',
-
   'menu.parent.order': '我的订单',
   'menu.parent.course': '课程列表',
   'menu.parent.notice': '通知',

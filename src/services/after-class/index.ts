@@ -54,12 +54,8 @@ import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
 import * as xsjtcy from './xsjtcy';
 import * as xsxxjl from './xsxxjl';
-<<<<<<< HEAD
-=======
 import * as xxgg from './xxgg';
->>>>>>> 426359c5ca3ff2749cfeb34e37bb136c32f9cffb
 import * as xxjbpz from './xxjbpz';
-import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
 import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
@@ -119,12 +115,8 @@ export default {
   xsjlsj,
   xsjtcy,
   xsxxjl,
-<<<<<<< HEAD
-=======
   xxgg,
->>>>>>> 426359c5ca3ff2749cfeb34e37bb136c32f9cffb
   xxjbpz,
-  xxgg,
   xxjbsj,
   xxpz,
   xxsjpz,
