@@ -43,11 +43,7 @@ export async function getKHBJPJ(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status?: 'ok' | 'error';
-    data?: { count?: number; rows?: API.KHBJPJ[] };
-    message?: string;
-  }>('/khbjpj/getAll', {
+  return request<any>('/khbjpj/getAll', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -66,17 +62,10 @@ export async function deleteKHBJPJ(
   },
   options?: { [key: string]: any },
 ) {
-<<<<<<< HEAD
   const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjpj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
-=======
-  const { id: param0 } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjpj/${param0}`, {
-    method: 'DELETE',
-    params: { ...params },
->>>>>>> 63e0d06ed3c6a51ca1ac831cfdb12796739c91a4
     ...(options || {}),
   });
 }
@@ -91,21 +80,13 @@ export async function updateKHBJPJ(
   body: API.UpdateKHBJPJ,
   options?: { [key: string]: any },
 ) {
-<<<<<<< HEAD
   const { id: param0, ...queryParams } = params;
-=======
-  const { id: param0 } = params;
->>>>>>> 63e0d06ed3c6a51ca1ac831cfdb12796739c91a4
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjpj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-<<<<<<< HEAD
     params: { ...queryParams },
-=======
-    params: { ...params },
->>>>>>> 63e0d06ed3c6a51ca1ac831cfdb12796739c91a4
     data: body,
     ...(options || {}),
   });

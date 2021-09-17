@@ -76,8 +76,12 @@ const LeaveManagement: React.FC = () => {
     {
       title: '请假状态',
       dataIndex: 'QJZT',
-      key: 'XSXM',
+      key: 'QJZT',
       align: 'center',
+      render:(record: any)=>record.QJZT?'已通过':'已取消'
+        
+
+   
     },
     {
       title: '请假开始时间',

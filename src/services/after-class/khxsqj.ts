@@ -24,28 +24,8 @@ export async function getKHXSQJ(
       QJLX?: '按课时请假' | '按时间请假';
       XSId?: string;
       XSXM?: string;
-<<<<<<< HEAD
       createdAt?: string;
       KHQJKCs?: { QJRQ?: string; KCMC?: string }[];
-=======
-      KHQJKCs?: {
-        QJRQ?: string;
-        KHBJSJ?: {
-          id?: string;
-          BJMC?: string;
-          BJMS?: string;
-          BJZT?: '待开班' | '已开班' | '已结课';
-          BJRS?: number;
-          KSS?: number;
-          FY?: number;
-          KKRQ?: string | any;
-          JKRQ?: string | any;
-          BMKSSJ?: string;
-          BMJSSJ?: string;
-          KCTP?: string;
-        };
-      }[];
->>>>>>> 63e0d06ed3c6a51ca1ac831cfdb12796739c91a4
     };
     message?: string;
   }>(`/khxsqj/${param0}`, {
@@ -82,11 +62,7 @@ export async function getAllKHXSQJ(
     /** 教师ID */
     JSId?: string;
     /** 请假状态 */
-<<<<<<< HEAD
     QJZT?: number[];
-=======
-    QJZT?: string[];
->>>>>>> 63e0d06ed3c6a51ca1ac831cfdb12796739c91a4
     /** 请假类型 */
     QJLX?: string;
     /** 学年学期ID */
@@ -126,28 +102,8 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
       QJLX?: '按课时请假' | '按时间请假';
       XSId?: string;
       XSXM?: string;
-<<<<<<< HEAD
       createdAt?: string;
       KHQJKCs?: { QJRQ?: string; KCMC?: string }[];
-=======
-      KHQJKCs?: {
-        QJRQ?: string;
-        KHBJSJ?: {
-          id?: string;
-          BJMC?: string;
-          BJMS?: string;
-          BJZT?: '待开班' | '已开班' | '已结课';
-          BJRS?: number;
-          KSS?: number;
-          FY?: number;
-          KKRQ?: string | any;
-          JKRQ?: string | any;
-          BMKSSJ?: string;
-          BMJSSJ?: string;
-          KCTP?: string;
-        };
-      }[];
->>>>>>> 63e0d06ed3c6a51ca1ac831cfdb12796739c91a4
     };
     message?: string;
   }>('/khxsqj/create', {
