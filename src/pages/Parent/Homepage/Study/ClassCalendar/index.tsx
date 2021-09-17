@@ -1,18 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useModel } from 'umi';
+import { List, Divider, Checkbox, message, FormInstance } from 'antd';
+import moment from 'moment';
 import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
-import styles from './index.less';
 import ListComponent from '@/components/ListComponent';
-import { DateRange, Week } from '@/utils/Timefunction';
+import { compareNow, DateRange, Week } from '@/utils/Timefunction';
 import noData from '@/assets/noCourse.png';
-import moment from 'moment';
 import { ParentHomeData } from '@/services/local-services/xsHome';
-import { useModel } from 'umi';
-import { List, Divider, Checkbox } from 'antd';
+
+import styles from './index.less';
 
 type propstype = {
   setDatedata?: (data: any) => void;
   type?: string;
+  form?: FormInstance<any>;
+  reload?: boolean;
+  setReloadList?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const defaultMsg = {
   type: 'picList',
@@ -23,7 +27,7 @@ const defaultMsg = {
 };
 
 const ClassCalendar = (props: propstype) => {
-  const { setDatedata, type } = props;
+  const { setDatedata, type, form, reload, setReloadList } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { xxId, student } = currentUser || {};
@@ -32,6 +36,8 @@ const ClassCalendar = (props: propstype) => {
   const [course, setCourse] = useState<any>(defaultMsg);
   const [dates, setDates] = useState<any[]>([]);
   const [courseArr, setCourseArr] = useState<any>({});
+  const [choosenCourses, setChoosenCourses] = useState<any>([]);
+  const [thisCheck, setThisCheck] = useState<boolean>(false);
 
   // 后台返回的周数据的遍历
   const getCalendarData = (data: any) => {
@@ -51,6 +57,7 @@ const ClassCalendar = (props: propstype) => {
           start: item.XXSJPZ?.KSSJ?.substring(0, 5),
           end: item.XXSJPZ?.JSSJ?.substring(0, 5),
           xq: `本校`,
+          bjId: item.KHBJSJ.id,
           desc: [
             {
               left: [
@@ -120,16 +127,38 @@ const ClassCalendar = (props: propstype) => {
       setCourseArr(courseData);
     })();
   }, []);
-  const onChange = (e: any,item: any) => {
-    console.log(`checked = ${e.target.checked}`);
-    console.log(item);
-
+  useEffect(() => {
+    setDatedata?.(choosenCourses);
+  }, [choosenCourses])
+  const onChange = (e: any, item: any) => {
+    let newChoosen = [...choosenCourses];
+    setReloadList?.(false);
+    if (e?.target?.checked) {
+      setThisCheck(true);
+      const { start, end, bjId, title } = item;
+      newChoosen.push({
+        day,
+        start,
+        end,
+        bjId,
+        title
+      });
+    } else {
+      setThisCheck(false);
+      newChoosen = newChoosen.filter((val) => val.bjId !== item.bjId);
+    }
+    setChoosenCourses(newChoosen);
   }
   return (
     <div className={styles.schedule}>
       <span
         className={styles.today}
         onClick={() => {
+          if (type && type === 'edit') {
+            setThisCheck(false);
+            form?.resetFields();
+            setChoosenCourses([]);
+          }
           setDay(dayjs().format('YYYY-MM-DD'));
           setCDay(dayjs().format('M月D日'));
           setCourse({
@@ -147,6 +176,17 @@ const ClassCalendar = (props: propstype) => {
         showType={'week'}
         markDates={dates}
         onDateClick={(date: { format: (arg: string) => any }) => {
+          if (type && type === 'edit') {
+            if (!compareNow(date.format('YYYY-MM-DD'))) {
+              message.warning('不可选择今天之前的课程');
+              return;
+            }
+            setThisCheck(false);
+            if (date.format('YYYY-MM-DD') !== day) {
+              form?.resetFields();
+              setChoosenCourses([]);
+            }
+          }
           setDay(date.format('YYYY-MM-DD'));
           setCDay(date.format('M月D日'));
           const curCourse = {
@@ -168,18 +208,19 @@ const ClassCalendar = (props: propstype) => {
           style={{ background: '#fff' }}
           itemLayout="horizontal"
           dataSource={course?.list?.length ? course?.list : []}
-          renderItem={(item: any) => (
-            <List.Item
-              actions={[<Checkbox onChange={(e)=>onChange(e,item)} />]}
-            >
-              <List.Item.Meta
-                title={item?.title}
-                description={<>{item?.editText?.map((val: string, index: number) => {
-                  return <>{val}{index < item?.editText?.length - 1 ? <Divider type='vertical' /> : ''}</>
-                })}</>}
-              />
-            </List.Item>
-          )}
+          renderItem={(item: any) => {
+            return (
+              <List.Item
+                key={`${day}+${item?.bjId}`}
+                actions={[<Checkbox checked={reload ? false : thisCheck} onChange={(e) => onChange(e, item)} />]}
+              >
+                <List.Item.Meta
+                  title={item?.title}
+                  description={<>{item.start}—{item.end}<Divider type='vertical' />{item.xq}</>}
+                />
+              </List.Item>
+            )
+          }}
         />
         : <ListComponent listData={course} />}
     </div>

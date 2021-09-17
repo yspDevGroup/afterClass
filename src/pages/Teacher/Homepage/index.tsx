@@ -27,6 +27,7 @@ const PersonalHomepage = () => {
     async function fetchData() {
       // 获取后台学年学期数据
       const result = await queryXNXQList(currentUser?.xxId);
+      console.log(result)
       if (result?.current) {
         const res = await homePageInfo({
           JSId: currentUser.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',

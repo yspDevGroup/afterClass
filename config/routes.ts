@@ -284,6 +284,24 @@
         component: './Teacher/Homepage/Education/RollCallRecord',
       },
       {
+        path: '/teacher/education/feedback',
+        name: 'feedback',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/Feedback',
+      },
+      {
+        path: '/teacher/education/feedback/details',
+        name: 'details',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/Feedback/Details',
+      },
+      {
+        path: '/teacher/education/studentEvaluation',
+        name: 'studentEvaluation',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/StudentEvaluation',
+      },
+      {
         path: '/teacher/home/notice/announcement',
         name: 'announcement',
         hideInMenu: 'true',
@@ -367,6 +385,13 @@
         name: 'evaluation',
         icon: 'smile',
         component: './Parent/Homepage/Mine/Pages/Evaluation',
+        hideInMenu: 'true',
+      },
+      {
+        path: '/parent/mine/evaluation/evaluationDetails',
+        name: 'evaluationDetails',
+        icon: 'smile',
+        component: './Parent/Homepage/Mine/Pages/Evaluation/EvaluationDetails',
         hideInMenu: 'true',
       },
       {

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /*
  * @description:
  * @author: wsl
@@ -59,7 +60,7 @@ const DropClass = () => {
       XSId: student && student.student_userid || '20210901',
       KHBJSJId: '',
       XXJBSJId: currentUser?.xxId,
-      ZT: 0,
+      ZT:[0,1,2],
       page: 0,
       pageSize: 0
     })
@@ -180,7 +181,7 @@ const DropClass = () => {
                       <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                       <p>总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{num}节  </p>
                       <p>未学课时：{value.KSS}节 ｜ 可退课时：{value.KSS}节</p>
-                      <p className={styles.state} style={{ color: value.ZT === 0 ? "#FF6600" : "#45C977" }}>{value.ZT === 0 ? "申请中" : "已退课"}</p>
+                      <p className={styles.state} style={{ color: value.ZT === 0 ? "#FF6600" : "#45C977" }}>{value.ZT === 0 ? "申请中" : value.ZT === 1 ? "已退课":"退课失败"}</p>
                     </div>
                   })
                 }

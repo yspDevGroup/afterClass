@@ -12,6 +12,7 @@ export async function createKHBJPJ(body: API.CreateKHBJPJ, options?: { [key: str
       PY?: string;
       XSId?: string;
       XSXM?: string;
+      PJR?: string;
       KHBJSJId?: string;
     };
     message?: string;
