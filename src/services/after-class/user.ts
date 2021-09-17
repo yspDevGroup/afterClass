@@ -307,6 +307,7 @@ export async function homePageInfo(
         BJRS?: number;
         KSS?: number;
         FY?: number;
+        ZHPF?: number;
         KKRQ?: string | any;
         JKRQ?: string | any;
         BMKSSJ?: string;

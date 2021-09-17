@@ -3,7 +3,7 @@ import { createKHBJPJ } from '@/services/after-class/khbjpj';
 import { Rate, Input, Button, message } from 'antd';
 import { useState } from 'react';
 import styles from './index.less';
-import { history } from 'umi';
+import { history,useModel } from 'umi';
 
 
 const { TextArea } = Input;
@@ -11,6 +11,8 @@ const { TextArea } = Input;
 
 const EvaluationDetails = (props: any) => {
   const { state } = props.location;
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [Fraction, setFraction] = useState<number>()
   const [Evaluation, setEvaluation] = useState<string>()
   const handleChange = (value: any) => {
@@ -20,12 +22,14 @@ const EvaluationDetails = (props: any) => {
     setEvaluation(e.target.value)
   };
   const submit = async () => {
+    const { external_contact } = currentUser || {};
     const res = await createKHBJPJ({
       PJFS:Fraction,
       PY:Evaluation,
       XSId:state?.XSId,
       XSXM:state?.XSXM,
-      KHBJSJId:state?.KHBJSJId
+      KHBJSJId:state?.KHBJSJId,
+      PJR:external_contact && `${state?.XSXM}${external_contact.subscriber_info.remark.split('-')[1]}` || '张三爸爸'
     })
     if(res.status === 'ok'){
       message.success('评价成功')

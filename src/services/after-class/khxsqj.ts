@@ -25,6 +25,7 @@ export async function getKHXSQJ(
       XSId?: string;
       XSXM?: string;
       createdAt?: string;
+      updatedAt?: string;
       KHQJKCs?: { QJRQ?: string; KCMC?: string }[];
     };
     message?: string;
@@ -103,6 +104,7 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
       XSId?: string;
       XSXM?: string;
       createdAt?: string;
+      updatedAt?: string;
       KHQJKCs?: { QJRQ?: string; KCMC?: string }[];
     };
     message?: string;
