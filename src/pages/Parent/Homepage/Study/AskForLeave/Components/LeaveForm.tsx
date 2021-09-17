@@ -2,10 +2,10 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-09-17 14:25:21
+ * @LastEditTime: 2021-09-17 15:19:34
  * @LastEditors: Sissle Lynn
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
 import { useModel } from 'umi';
 import ClassCalendar from '../../ClassCalendar';
@@ -59,10 +59,11 @@ const LeaveForm = (props: {
     });
     if (res.status === 'ok') {
       message.success('提交成功');
-      setActiveKey('history');
       setReload(true);
       setReloadList(true);
       setDateData([]);
+      form.resetFields();
+      setActiveKey('history');
     } else {
       let msg = res.message;
       message.error(msg);
@@ -75,7 +76,7 @@ const LeaveForm = (props: {
         <p>所选课程相应节次将自动归为请假，计入出勤统计</p>
       </div>
       <div className={styles.wrapper} >
-        <ClassCalendar setDatedata={setDateData} type='edit' reload={reloadList} />
+        <ClassCalendar setDatedata={setDateData} type='edit' form={form} reload={reloadList} setReloadList={setReloadList} />
         <Form
           name="basic"
           labelCol={{ span: 8 }}

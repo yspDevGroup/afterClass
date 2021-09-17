@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { List, Divider, Checkbox, message } from 'antd';
+import { List, Divider, Checkbox, message, FormInstance } from 'antd';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
@@ -14,7 +14,9 @@ import styles from './index.less';
 type propstype = {
   setDatedata?: (data: any) => void;
   type?: string;
+  form?: FormInstance<any>;
   reload?: boolean;
+  setReloadList?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const defaultMsg = {
   type: 'picList',
@@ -25,7 +27,7 @@ const defaultMsg = {
 };
 
 const ClassCalendar = (props: propstype) => {
-  const { setDatedata, type, reload } = props;
+  const { setDatedata, type, form, reload, setReloadList } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { xxId, student } = currentUser || {};
@@ -128,14 +130,9 @@ const ClassCalendar = (props: propstype) => {
   useEffect(() => {
     setDatedata?.(choosenCourses);
   }, [choosenCourses])
-  useEffect(() => {
-    if (reload) {
-      setThisCheck(false);
-      setChoosenCourses([]);
-    }
-  }, [reload]);
   const onChange = (e: any, item: any) => {
     let newChoosen = [...choosenCourses];
+    setReloadList?.(false);
     if (e?.target?.checked) {
       setThisCheck(true);
       const { start, end, bjId, title } = item;
@@ -159,15 +156,15 @@ const ClassCalendar = (props: propstype) => {
         onClick={() => {
           if (type && type === 'edit') {
             setThisCheck(false);
+            form?.resetFields();
             setChoosenCourses([]);
           }
-          // setDay(dayjs().format('YYYY-MM-DD'));
-          // setCDay(dayjs().format('M月D日'));
-          // list: courseArr[dayjs().format('YYYY-MM-DD')] || [],
+          setDay(dayjs().format('YYYY-MM-DD'));
+          setCDay(dayjs().format('M月D日'));
           setCourse({
             type: 'picList',
             cls: 'picList',
-            list: courseArr['2021-09-18'] || [],
+            list: courseArr[dayjs().format('YYYY-MM-DD')] || [],
             noDataText: '当天无课',
             noDataImg: noData,
           });
@@ -186,6 +183,7 @@ const ClassCalendar = (props: propstype) => {
             }
             setThisCheck(false);
             if (date.format('YYYY-MM-DD') !== day) {
+              form?.resetFields();
               setChoosenCourses([]);
             }
           }
@@ -214,7 +212,7 @@ const ClassCalendar = (props: propstype) => {
             return (
               <List.Item
                 key={`${day}+${item?.bjId}`}
-                actions={[<Checkbox checked={thisCheck} onChange={(e) => onChange(e, item)} />]}
+                actions={[<Checkbox checked={reload ? false : thisCheck} onChange={(e) => onChange(e, item)} />]}
               >
                 <List.Item.Meta
                   title={item?.title}
