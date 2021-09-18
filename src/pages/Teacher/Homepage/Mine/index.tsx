@@ -141,7 +141,7 @@ const Mine = () => {
       </header>
 
       <div className={styles.funWrapper}>
-        <div className={styles.operation}>
+        {/* <div className={styles.operation}>
           <Link to="" className={styles.tchLeave}>
             <img src={icon_tchLeave} alt="" />
             <span className={styles.tchLeaveSpan}>我要请假</span>
@@ -153,7 +153,7 @@ const Mine = () => {
             <span className={styles.attRecordSpan}>出勤纪律</span>
             <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
           </Link>
-        </div>
+        </div> */}
         <div className={styles.titleBar}>
           出勤统计
           <div>
