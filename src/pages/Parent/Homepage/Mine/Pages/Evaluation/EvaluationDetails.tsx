@@ -43,7 +43,7 @@ const EvaluationDetails = (props: any) => {
       <div>
         <p>{state?.KHBJSJ?.KHKCSJ?.KCMC}</p>
         <p>班级：{state?.KHBJSJ?.BJMC}</p>
-        <p>任课教师：{state?.KHBJSJ?.KHBJJs?.[0].JSXM}</p>
+        <p>任课教师：{state?.KHBJSJ?.KHBJJs?.[0].KHJSSJ?.XM}</p>
       </div>
     </div>
     <div className={styles.content}>
