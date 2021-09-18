@@ -65,18 +65,26 @@
         }
         .KCZE{
             width: 100%;
-            height: 90px;
+            height: auto;
             background-color: #FFFFFF;
             border-radius: 8px;
             padding: 10px;
             margin-top: 10px;
+            p{
+              margin: 0;
+            }
             P:nth-of-type(1){
                 display: flex;
                 justify-content: space-between;
             }
-            P:nth-of-type(2){
+            .JFFY{
+                margin-top: 2px;
+                display: flex;
+                justify-content: space-between;
+            }
+            P:nth-last-child(1){
                 text-align: right;
-                line-height: 40px;
+                line-height: 36px;
                 span{
                     font-weight: 600;
                     font-size: 16px;
@@ -117,7 +125,7 @@
             }
         }
     }
-    
+
     .footer{
         width: 100vw;
         height: 54px;
@@ -148,7 +156,7 @@
             border-radius: 19px;
             border: none;
         }
-        } 
+        }
         .payment{
             position: fixed;
             top: 0;

@@ -130,7 +130,7 @@ const CourseDetails: React.FC = () => {
       ZFFS: '线上支付',
       DDZT: '待付款',
       DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
-      XSId: currentUser?.student?.student_userid,
+      XSId: currentUser?.student?.student_userid || '20210901',
       XSXM: currentUser?.student?.name,
       KHBJSJId: BJ!,
       XXJBSJId: currentUser?.xxId,

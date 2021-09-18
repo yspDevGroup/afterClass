@@ -41,7 +41,7 @@ const OrderDetails: React.FC = (props: any) => {
       ddIds: [orderInfo.id],
       bjId: detail.id,
       returnUrl: '/parent/home',
-      xsId: children[0].student_userid,
+      xsId: children[0].student_userid || '20210901',
       kcmc: title,
       amount: orderInfo.DDFY,
       XXJBSJId: currentUser?.xxId,
@@ -125,6 +125,12 @@ const OrderDetails: React.FC = (props: any) => {
               <p>
                 <span>课程总额</span> <span>￥{detail.FY}</span>
               </p>
+              {
+                orderInfo.DDFY === Number(detail.FY)  ? <></>: <p className={styles.JFFY}>
+                <span>教辅费用</span> <span>￥{detail?.KHKCJCs?.[0].JCFY}</span>
+                </p>
+              }
+
               <p>
                 实付<span>￥{orderInfo.DDFY}</span>
               </p>
