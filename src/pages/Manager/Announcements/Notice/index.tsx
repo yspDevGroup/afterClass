@@ -39,7 +39,7 @@ const Notice = () => {
       key: 'BT',
       ellipsis: true,
       align: 'center',
-      width:'30%'
+      width:'12rem'
     },
     {
       title: '作者',
@@ -47,7 +47,7 @@ const Notice = () => {
       key: 'ZZ',
       ellipsis: true,
       align: 'center',
-      width:'12rem',
+      width:'8rem',
       search: false,
     },
     {
@@ -58,12 +58,13 @@ const Notice = () => {
       hideInForm: true,
       align: 'center',
       search: false,
+      width:'10rem'
     },
     {
       title: '发布状态',
       dataIndex: 'ZT',
       key: 'ZT',
-      width: '10em',
+      width: '8em',
       align: 'center',
       valueEnum: {
         草稿: { text: '草稿', status: 'Default' },
@@ -77,7 +78,7 @@ const Notice = () => {
       defaultSortOrder: 'descend',
       search: false,
       align: 'center',
-      width: '8em',
+      width: '6em',
       render: (text, record) => {
         return (
           <Switch
@@ -112,7 +113,7 @@ const Notice = () => {
       dataIndex: 'option',
       valueType: 'option',
       key: 'option',
-      width: '15em',
+      width: '10rem',
       render: (_, record) => (
         <div className={styles.optionCol}>
           <Option

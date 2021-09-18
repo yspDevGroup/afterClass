@@ -46,6 +46,7 @@ const Index = () => {
       const result = await getXXTZGG({
         XXJBSJId: currentUser?.xxId,
         BT: '',
+        LX:'0',
         ZT: ['已发布'],
         page: 1,
         pageSize: 3,
