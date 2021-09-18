@@ -13,6 +13,8 @@ import EmptyArticle from './Pages/EmptyArticle';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import bannerIcon from '@/assets/szjyzyIcon.png';
+import resourcesRgo from '@/assets/resourcesRgo.png';
+import resourcesBg from '@/assets/resourcesBg.png';
 import Catering from '@/assets/Catering.png';
 import resources from '@/assets/resources.png';
 
@@ -104,12 +106,24 @@ const Home = () => {
             <span>素质教育资源{` >`}</span>
             <img src={bannerIcon} />
           </a> */}
-          <div className={styles.container}>
+          <div className={styles.resourcesBox}>
+         <a
+            href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+            target="_blank"
+            rel="noreferrer"
+            className={styles.resources}
+            style={{ backgroundImage:`url(${resourcesBg})` }}
+          >
+              <p>素质教育资源</p>
+              <img src={resourcesRgo} alt="" />
+            </a>
+        </div>
+          {/* <div className={styles.container}>
             <Link to="" className={styles.Catering} >
               <p>配餐预定</p>
               <img src={Catering} alt="" className={styles.CateringImg}/>
             </Link>
-            <a 
+            <a
             href="http://moodle.xianyunshipei.com/course/view.php?id=12"
             target="_blank"
             rel="noreferrer"
@@ -117,7 +131,7 @@ const Home = () => {
               <p>素质教育资源</p>
               <img src={resources} alt=""/>
             </a>
-          </div>
+          </div> */}
           <div className={styles.announceArea}>
             <Details data={notification} />
           </div>
