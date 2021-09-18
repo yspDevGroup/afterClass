@@ -7,10 +7,10 @@ import { Table, Select,} from 'antd';
 import { getClassesEvaluation,} from '@/services/after-class/khbjsj'
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
-const { Option } = Select;
-
 
 import Style from './index.less'
+
+const { Option } = Select;
 
 
 
@@ -25,7 +25,7 @@ const MutualEvaluation: React.FC = () => {
   const [kai, setkai] = useState<boolean>(false);
   // 表格数据源
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
-///table表格数据
+/// table表格数据
   const columns: ColumnsType<API.KHXSDD> | undefined = [
     {
       title: '课程名称',
@@ -60,10 +60,10 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
       align: 'center',
-      // render:(test:any)=>{
-      //   return test?.SSJGLX==="校内课程"?'/':''
-
-      // }
+      render:(test: any,record: any)=>{
+        console.log(record,'=-=-=-=')
+        return record?.KHKCSJ?.KHJYJG?.QYMC || '-'
+      }
     },
     {
       title: '主讲师',
@@ -73,12 +73,6 @@ const MutualEvaluation: React.FC = () => {
       render:(text: any)=>{
         return text[0]?.KHJSSJ.XM
       }
-    },
-    {
-      title: '评价学员人数',
-      dataIndex: 'XSXM',
-      key: 'XSXM',
-      align: 'center',
     },
     {
       title: '操作',
@@ -105,7 +99,7 @@ const MutualEvaluation: React.FC = () => {
 
   ]
   useEffect(() => {
-    //获取学年学期数据的获取
+    // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
       console.log(res);
@@ -129,7 +123,7 @@ const MutualEvaluation: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     ChoseSelect(curXNXQId)
   }, [curXNXQId])
-  //学年学期选相框触发的函数
+  // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
     const res3 = await getClassesEvaluation({
       XNXQId: SelectData
@@ -147,7 +141,7 @@ const MutualEvaluation: React.FC = () => {
 
 
   return (
-    ///PageContainer组件是顶部的信息
+    /// PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.TopSearchss}>
         <span>
@@ -156,7 +150,7 @@ const MutualEvaluation: React.FC = () => {
             value={curXNXQId}
             style={{ width: 200 }}
             onChange={(value: string) => {
-              //选择不同学期从新更新页面的数据
+              // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);
             }}
           >
