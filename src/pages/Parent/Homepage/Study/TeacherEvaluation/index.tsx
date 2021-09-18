@@ -1,15 +1,14 @@
 import GoBack from "@/components/GoBack";
 import { Empty, Rate } from "antd";
 import styles from './index.less'
-import { Link, useModel } from "umi";
-import { RightOutlined } from "@ant-design/icons";
+import { useModel } from "umi";
 import { useEffect, useState } from "react";
 import { getAllKHXSPJ } from "@/services/after-class/khxspj";
 
 const TeacherEvaluation = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [Datas, setDatas] = useState<any>();
+  const [Datas, setDatas] = useState<any>([]);
   useEffect(() => {
     const { student } = currentUser || {};
     (
@@ -22,34 +21,29 @@ const TeacherEvaluation = () => {
           page:0,
           pageSize:0
         })
-        setDatas(res.data)
+        setDatas(res.data?.rows)
       }
     )()
   }, []);
   return <div className={styles.TeacherEvaluation}>
     <GoBack title={'教师寄语'} />
-    {/* {
-      state?.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> :
+
+    {
+      Datas?.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> :
         <div className={styles.wrap}>
           {
-            state?.map((value: any) => {
+            Datas?.map((value: any) => {
               return <div className={styles.cards}>
-                <p>{value?.KHKCSJ?.KCMC}</p>
-                <p>{value?.BJMC}</p>
-                <p>
-                  <Rate value={Math.round(value.ZHPF)} />
-                  <Link key="xq"
-                    to={{
-                      pathname: '/teacher/education/feedback/details',
-                      state: value
-                    }}>详情 <RightOutlined /> </Link>
-                </p>
+                <p> <span>{value?.KHJSSJ?.XM}老师</span> <Rate disabled value={value?.PJFS} /></p>
+                <p><span>{value?.KHBJSJ?.BJMC} ｜{value?.KHBJSJ?.KHKCSJ?.KCMC}</span> <span>{value?.createdAt?.split(' ')[0]}</span> </p>
+                <div className={styles.content}>
+                  {value?.PY}
+                </div>
               </div>
             })
           }
-
         </div>
-    } */}
+    }
 
 
   </div>
