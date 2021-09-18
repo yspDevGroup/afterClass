@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-16 11:53:39
- * @LastEditTime: 2021-09-18 18:22:09
+ * @LastEditTime: 2021-09-18 21:09:53
  * @LastEditors: Sissle Lynn
  */
 import { useEffect } from 'react';
@@ -43,7 +43,7 @@ const LeaveHistory = (props: propsType) => {
           return (
             <div className={styles.Information}>
               <div>
-                <h4>{item.XSXM}的请假{item.QJZT === 1 ? <span>已撤销</span> : ''}</h4>
+                <h4>{item.XSXM.split('-')[0]}的请假{item.QJZT === 1 ? <span>已撤销</span> : ''}</h4>
                 <span>
                   {moment(item.updatedAt||item.createdAt).format('YYYY.MM.DD')}
                 </span>

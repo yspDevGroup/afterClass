@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-09-18 18:48:03
+ * @LastEditTime: 2021-09-18 21:09:44
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -52,7 +52,7 @@ const LeaveForm = (props: {
       KSSJ,
       JSSJ,
       XSId: student && student.student_userid || '20210901',
-      XSXM: currentUser?.external_contact?.subscriber_info.remark ||
+      XSXM: currentUser?.external_contact?.subscriber_info.remark.split('-')[0] ||
       currentUser?.username,
       bjIds
     });
