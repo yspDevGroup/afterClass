@@ -11,6 +11,8 @@ import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getKHJSSJ } from '@/services/after-class/khjssj';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
+import { getKHKCSJ } from '@/services/after-class/khkcsj';
+import { useModel } from 'umi';
 
 type AddCourseProps = {
   visible: boolean;
@@ -61,6 +63,7 @@ const AddCourse: FC<AddCourseProps> = ({
   const [KKData, setKKData] = useState<any>();
   // 是否选择教辅
   const [choosenJf, setChoosenJf] = useState<boolean>(false);
+  const [isJg, setIsJg] = useState<boolean>(false);
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [dataSource, setDataSource] = useState<any[]>([]);
 
@@ -155,8 +158,25 @@ const AddCourse: FC<AddCourseProps> = ({
         }}
       />
     )
-  }
-
+  };
+  const getJgTeacher = async (kcId: string) => {
+    const res = await getKHKCSJ({
+      kcId: kcId,
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId
+    });
+    if (res?.status === 'ok') {
+      const { KHKCJs } = res?.data;
+      const teacherOption: any = [];
+      KHKCJs?.forEach((item: any) => {
+        teacherOption.push({
+          label: item.KHJSSJ?.XM,
+          value: item.KHJSSJId,
+        });
+      });
+      setJGKCTeacherData(teacherOption);
+    }
+  };
   useEffect(() => {
     (async () => {
       if (curXNXQId) {
@@ -190,6 +210,7 @@ const AddCourse: FC<AddCourseProps> = ({
           id: formValues.KHKCSJId
         })
       }
+      setIsJg(formValues?.KHKCSJ?.SSJGLX === '机构课程' || formValues.SSJGLX === '机构课程');
       setKCDate(kcDate);
       if (
         new Date(formValues?.BMKSSJ).getTime() === new Date(BMData?.KSSJ || '').getTime() &&
@@ -206,8 +227,7 @@ const AddCourse: FC<AddCourseProps> = ({
         setKaike(true);
       }
       if (formValues.SSJGLX === '机构课程') {
-        const JGJS = formValues.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师');
-        setJGKCTeacherData([{ label: JGJS?.KHJSSJ?.XM, value: JGJS?.KHJSSJId }]);
+        getJgTeacher(formValues.KHKCSJId);
       }
       if (formValues?.KHKCJCs?.length) {
         setChoosenJf(true);
@@ -378,10 +398,11 @@ const AddCourse: FC<AddCourseProps> = ({
             ZJS: undefined,
             FJS: undefined,
           });
-
           const { value } = values.target;
           const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === value);
           setKCDate(kcDate);
+          setJGKCTeacherData([]);
+          setIsJg(value === '机构课程');
         },
       },
       rules: [{ required: true, message: '请选择课程来源' }],
@@ -398,22 +419,9 @@ const AddCourse: FC<AddCourseProps> = ({
           return { label: item.KCMC, value: item.id };
         }),
         onChange: (values: any) => {
-          // 取出选中机构课程的任课老师
-          const KCData = KCDate.find((item: any) => {
-            if (item.SSJGLX === '机构课程') {
-              if (item.id === values) {
-                // 在切换课程的时候把选中的任课老师先清空
-                form.setFieldsValue({ ZJS: undefined, FJS: undefined });
-                return item;
-              }
-            }
-            return false;
-          });
-          const teacher = KCData?.KHKCJs?.map((items: any) => {
-            return { label: items.KHJSSJ.XM, value: items.KHJSSJId };
-          });
-
-          setJGKCTeacherData(teacher || []);
+          if (isJg) {
+            getJgTeacher(values);
+          }
         },
       },
     },
@@ -484,7 +492,7 @@ const AddCourse: FC<AddCourseProps> = ({
           fieldProps: {
             showSearch: true,
             // 创建机构课程的时 主班选择的是机构分配的任课老师
-            options: JGKCTeacherData.length ? JGKCTeacherData : teacherData,
+            options: isJg ? JGKCTeacherData : teacherData,
             optionFilterProp: 'label',
             allowClear: true,
           },

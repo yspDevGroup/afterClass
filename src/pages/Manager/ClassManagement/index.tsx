@@ -10,9 +10,8 @@ import { Button, Modal, Tag, Tooltip, Select } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
+import { getAllCourses, getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { theme } from '@/theme-default';
 import { paginationConfig } from '@/constant';
 import PageContainer from '@/components/PageContainer';
@@ -23,7 +22,7 @@ import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
 import type { CourseItem } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
-import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
+import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 
 const { Option } = Select;
 
@@ -97,27 +96,22 @@ const CourseManagement = (props: { location: { state: any } }) => {
         if (curTerm) {
           setCurXNXQId(curTerm.id);
           setTermList(newData);
-          // actionRef.current?.reload();
-          const ress = getAllKHKCSJ({
-            page: 1,
+          const ress = await getAllCourses({
+            page: 0,
             pageSize: 0,
-            isRequired: false,
-            KCZT:[1,2],
             XXJBSJId: currentUser?.xxId,
           });
-          Promise.resolve(ress).then((dataes: any) => {
-            if (dataes?.status === 'ok') {
-              const njArry: { label: string; value: string }[] = [];
-              dataes?.data?.rows?.forEach((item: any) => {
-                njArry.push({
-                  label: item.KCMC,
-                  value: item.id,
-                });
+          if (ress?.status === 'ok') {
+            const njArry: { label: string; value: string }[] = [];
+            ress?.data?.rows?.forEach((item: any) => {
+              njArry.push({
+                label: item.KCMC,
+                value: item.id,
               });
-              setmcData(njArry);
-              setKHKCAllData(dataes.data.rows);
-            }
-          });
+            });
+            setmcData(njArry);
+            setKHKCAllData(ress.data.rows);
+          }
         }
       } else {
         setkai(true);
