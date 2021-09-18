@@ -11,7 +11,7 @@ export async function KHJYTZGG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -36,7 +36,7 @@ export async function KHJYTZGG(
     message?: string;
   }>(`/khjytzgg/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -50,10 +50,10 @@ export async function deleteKHJYTZGG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjytzgg/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -99,6 +99,8 @@ export async function getKHJYTZGG(
     BT?: string;
     /** 类型 */
     LX?: number;
+    /** 机构ID */
+    KHJYJGId?: string;
     /** 状态 */
     ZT?: string[];
     /** 页数 */
@@ -132,13 +134,13 @@ export async function updateKHJYTZGG(
   body: API.UpdateKHJYTZGG,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjytzgg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -7,12 +7,18 @@ import icon_courseBack from '@/assets/icon_courseBack.png';
 import myContext from '@/utils/MyContext';
 
 const Study = () => {
-  const { yxkc} = useContext(myContext);
+  const { yxkc } = useContext(myContext);
   return (
     <div className={styles.studyPage}>
       <div className={styles.funWrapper}>
         <div className={styles.headBox}>
-          <Link to="/teacher/education/studentEvaluation" className={styles.stuEvaluat}>
+          <Link
+            key="xxpj"
+            to={{
+              pathname: '/teacher/education/studentEvaluation',
+              state: yxkc
+            }}
+            className={styles.stuEvaluat}>
             <p className={styles.stuEvaluatP1}>
               <p className={styles.stuEvaluatP2}>
                 <img src={icon_stuEvaluate} alt="" />
@@ -22,12 +28,12 @@ const Study = () => {
           </Link>
 
           <Link
-             key="kcfk"
-             to={{
-               pathname: '/teacher/education/feedback',
-               state: yxkc
-             }}
-          className={styles.courseBack}>
+            key="kcfk"
+            to={{
+              pathname: '/teacher/education/feedback',
+              state: yxkc
+            }}
+            className={styles.courseBack}>
             <p className={styles.courseBackP1}>
               <p className={styles.courseBackP2}>
                 <img src={icon_courseBack} alt="" />

@@ -302,6 +302,12 @@
         component: './Teacher/Homepage/Education/StudentEvaluation',
       },
       {
+        path: '/teacher/education/studentEvaluation/details',
+        name: 'details',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/StudentEvaluation/Details',
+      },
+      {
         path: '/teacher/home/notice/announcement',
         name: 'announcement',
         hideInMenu: 'true',

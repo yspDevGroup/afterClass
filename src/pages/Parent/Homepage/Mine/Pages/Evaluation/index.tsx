@@ -99,7 +99,7 @@ const Evaluation = () => {
                 {
                   History?.map((value: any) => {
                     return <div className={styles.Pjcards}>
-                        <p className={styles.name}><span>刘丽丽妈妈</span><Rate value={parseInt(value.PJFS,10)} /></p>
+                        <p className={styles.name}><span>{value?.PJR}</span><Rate value={parseInt(value.PJFS,10)} /></p>
                         <p>{value.createdAt.split(' ')[0]}评价</p>
                         <div className={styles.PY}>{value.PY}</div>
                         <div className={styles.BJXX}>

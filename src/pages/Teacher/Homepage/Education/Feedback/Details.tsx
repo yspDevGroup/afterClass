@@ -12,7 +12,6 @@ const Details = (props: any) => {
   const [SchoolName, setSchoolName] = useState<any>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  console.log(state)
   useEffect(() => {
     (async()=>{
       const res = await getKHBJPJ({
