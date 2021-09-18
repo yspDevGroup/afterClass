@@ -1,10 +1,10 @@
 import GoBack from '@/components/GoBack';
 import { getEnrolled } from '@/services/after-class/khbjsj';
-import { Button, message, Modal, Rate } from 'antd';
+import { Button, Empty, message, Modal, Rate } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { useEffect, useState } from 'react';
 import styles from './index.less'
-import {createKHXSPJ, getKHXSPJ, updateKHXSPJ} from '@/services/after-class/khxspj'
+import { createKHXSPJ, getKHXSPJ, updateKHXSPJ } from '@/services/after-class/khxspj'
 import { useModel } from 'umi';
 
 const Details = (props: any) => {
@@ -17,7 +17,7 @@ const Details = (props: any) => {
   const [Fraction, setFraction] = useState<number>();
   const [Evaluation, setEvaluation] = useState<string>();
   const [XsData, setXsData] = useState<any>()
-  const ongetEnrolled = async()=>{
+  const ongetEnrolled = async () => {
     const res = await getEnrolled({
       id: state?.id
     })
@@ -35,14 +35,14 @@ const Details = (props: any) => {
   }, []);
 
   /** 课后帮服务协议弹出框 */
-  const showModal = async(value: any) => {
+  const showModal = async (value: any) => {
     setIsModalVisible(true);
     setXsData(value)
-    if(value.KHXSPJId !== ""){
+    if (value.KHXSPJId !== "") {
       const res = await getKHXSPJ({
-        id:value.KHXSPJId
+        id: value.KHXSPJId
       })
-      if(res.status === 'ok'){
+      if (res.status === 'ok') {
         setFraction(res.data.PJFS)
         setEvaluation(res.data.PY)
       }
@@ -50,7 +50,7 @@ const Details = (props: any) => {
   };
   const handleOk = async () => {
     setIsModalVisible(false);
-    if(XsData?.KHXSPJId === ''){
+    if (XsData?.KHXSPJId === '') {
       const res = await createKHXSPJ({
         PJFS: Fraction || 0,
         PY: Evaluation || "",
@@ -59,16 +59,16 @@ const Details = (props: any) => {
         KHJSSJId: currentUser?.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
         KHBJSJId: state?.id
       })
-      if(res.status === 'ok'){
+      if (res.status === 'ok') {
         message.success('评价成功')
         ongetEnrolled();
       }
-    }else{
-      const res = await updateKHXSPJ({id:XsData?.KHXSPJId},{
+    } else {
+      const res = await updateKHXSPJ({ id: XsData?.KHXSPJId }, {
         PJFS: Fraction,
         PY: Evaluation,
       })
-      if(res.status === 'ok'){
+      if (res.status === 'ok') {
         message.success('修改成功')
         ongetEnrolled();
       }
@@ -91,39 +91,47 @@ const Details = (props: any) => {
     <p className={styles.BJMC}>{state?.BJMC}</p>
     <div className={styles.cards}>
       <div>
-        <div><p>{StudentData?.length}</p>总人数</div>
-        <div><p>{StudentData?.length - peopleNum?.length}</p>已评</div>
-        <div><p>{peopleNum?.length}</p>未评</div>
+        <div><p>{StudentData?.length || 0}</p>总人数</div>
+        <div><p>{StudentData?.length - peopleNum?.length || 0}</p>已评</div>
+        <div><p>{peopleNum?.length || 0}</p>未评</div>
       </div>
     </div>
-    <div className={styles.StudentList}>
-      <table>
-        <thead>
-          <tr>
-            <th>姓名</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            StudentData?.map((value: any, index: number) => {
-              return <tr style={{ backgroundColor: index % 2 === 0 ? "#F5F5F5" : "#fff" }}>
-                <td>{value?.XSXM}</td>
-                <td>
-                  <Button onClick={() => {
-                    showModal(value)
-                  }}
-                  >
-                    {value?.KHXSPJId === "" ? "去评价" : "查看"}</Button>
-                </td>
+    {
+      StudentData?.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> :
+        <div className={styles.StudentList}>
+          <table>
+            <thead>
+              <tr>
+                <th>姓名</th>
+                <th>操作</th>
               </tr>
-            })
-          }
-        </tbody>
-      </table>
-    </div>
+            </thead>
+
+            <tbody>
+
+              {
+                StudentData?.map((value: any, index: number) => {
+                  return <tr style={{ backgroundColor: index % 2 === 0 ? "#F5F5F5" : "#fff" }}>
+                    <td>{value?.XSXM}</td>
+                    <td>
+                      <Button onClick={() => {
+                        showModal(value)
+                      }}
+                      >
+                        {value?.KHXSPJId === "" ? "去评价" : "查看"}</Button>
+                    </td>
+                  </tr>
+                })
+              }
+
+
+            </tbody>
+
+          </table>
+        </div>
+    }
     <Modal
-      title={XsData?.KHXSPJId === '' ? "编辑评价":"修改评价"}
+      title={XsData?.KHXSPJId === '' ? "编辑评价" : "修改评价"}
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={handleCancel}

@@ -147,7 +147,6 @@ const Mine = () => {
             <span className={styles.tchLeaveSpan}>我要请假</span>
             <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
           </Link>
-
           <Link to="" className={styles.attRecord}>
             <img src={icon_attRecord} alt="" />
             <span className={styles.attRecordSpan}>出勤纪律</span>
