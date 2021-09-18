@@ -4,6 +4,7 @@ import styles from './index.less'
 import { useModel } from "umi";
 import { useEffect, useState } from "react";
 import { getAllKHXSPJ } from "@/services/after-class/khxspj";
+import { queryXNXQList } from "@/services/local-services/xnxq";
 
 const TeacherEvaluation = () => {
   const { initialState } = useModel('@@initialState');
@@ -13,11 +14,12 @@ const TeacherEvaluation = () => {
     const { student } = currentUser || {};
     (
       async()=>{
+        const result = await queryXNXQList(currentUser?.xxId, undefined);
         const res = await getAllKHXSPJ({
           XSId: student && student.student_userid || '20210901',
           KHBJSJId:"",
           JSId:"",
-          XNXQId:"",
+          XNXQId:result.current.id,
           page:0,
           pageSize:0
         })
