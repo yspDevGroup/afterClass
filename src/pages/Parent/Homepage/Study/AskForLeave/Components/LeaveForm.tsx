@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-09-17 15:19:34
+ * @LastEditTime: 2021-09-18 18:48:03
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -23,7 +23,6 @@ const LeaveForm = (props: {
   const { currentUser } = initialState || {};
   const { student } = currentUser || {};
   const {setActiveKey,setReload} = props;
-  const [reloadList, setReloadList] = useState<boolean>(false);
   const [form] = Form.useForm();
   // 课表中选择课程后的数据回显
   const [dateData, setDateData] = useState<any>([]);
@@ -35,12 +34,12 @@ const LeaveForm = (props: {
     }
   };
   const onFinish = async (values: any) => {
-    let KSSJ = '00:00';
+    let KSSJ = '23:59';
     let JSSJ = '00:00';
     const bjIds: any[] = [];
     dateData.forEach((ele: any) => {
-      KSSJ = compareTime(KSSJ, ele.start);
-      JSSJ = compareTime(JSSJ, ele.end);
+      KSSJ = compareTime(KSSJ, ele.start,'small');
+      JSSJ = compareTime(JSSJ, ele.end,'large');
       bjIds.push({
         KCMC: ele.title,
         QJRQ: ele.day,
@@ -60,7 +59,6 @@ const LeaveForm = (props: {
     if (res.status === 'ok') {
       message.success('提交成功');
       setReload(true);
-      setReloadList(true);
       setDateData([]);
       form.resetFields();
       setActiveKey('history');
@@ -76,7 +74,7 @@ const LeaveForm = (props: {
         <p>所选课程相应节次将自动归为请假，计入出勤统计</p>
       </div>
       <div className={styles.wrapper} >
-        <ClassCalendar setDatedata={setDateData} type='edit' form={form} reload={reloadList} setReloadList={setReloadList} />
+        <ClassCalendar setDatedata={setDateData} type='edit' form={form} />
         <Form
           name="basic"
           labelCol={{ span: 8 }}

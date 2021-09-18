@@ -35,18 +35,18 @@ const time_to_sec = (time: any) => {
   }
   return 0;
 }
-// 如果time2大于time1 返回true 否则 返回false
-export const compareTime = (time1: any, time2: any) => {
+// 根据type 类型，返回time2与time1 的大小，返回true 否则 返回false
+export const compareTime = (time1: any, time2: any, type: string) => {
   if (time_to_sec(time2) - time_to_sec(time1) > 0) {
-    return time2;
+    return type === 'large' ? time2 : time1;
   }
-  return time1;
+  return type === 'large' ? time1 : time2;
 }
 
 export const compareNow = (day: string, time?: string) => {
   const now: any = new Date();
   const date: any = time ? new Date(`${day} ${time}`) : new Date(day);
-  if (time &&(now - date > 0)||((now - date)/1000/60/60>24)) {
+  if (time && (now - date > 0) || ((now - date) / 1000 / 60 / 60 > 24)) {
     return false;
   }
   return true;

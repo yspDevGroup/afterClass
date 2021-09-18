@@ -5,13 +5,12 @@ import { Button, Drawer, InputNumber, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
 import { ActionType, EditableProTable, ProColumns } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
-import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import moment from 'moment';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getKHJSSJ } from '@/services/after-class/khjssj';
+import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -110,7 +109,7 @@ const AddCourse: FC<AddCourseProps> = ({
       valueType: 'option',
       align: 'center',
       width: 120,
-      hideInTable:readonly,
+      hideInTable: readonly,
       render: (text, record, _, action) => [
         <a
           key="editable"
@@ -184,16 +183,24 @@ const AddCourse: FC<AddCourseProps> = ({
       const kcDate = KHKCAllData?.filter(
         (item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX || formValues.SSJGLX,
       );
+      // 如果后查询的课程列表不存在此记录，则加到第一个
+      if (!kcDate?.find(n => n.value === formValues.KHKCSJId)) {
+        kcDate?.unshift({
+          KCMC: formValues.KHKCSJ?.KCMC,
+          id: formValues.KHKCSJId
+        })
+      }
       setKCDate(kcDate);
       if (
-        formValues?.BMKSSJ === new Date(BMData?.KSSJ || '') &&
-        formValues?.BMJSSJ === new Date(BMData?.JSSJ || '')
+        new Date(formValues?.BMKSSJ).getTime() === new Date(BMData?.KSSJ || '').getTime() &&
+        new Date(formValues?.BMJSSJ).getTime() === new Date(BMData?.JSSJ || '').getTime()
       ) {
         setBaoming(false);
       } else {
         setBaoming(true);
       }
-      if (formValues?.KKRQ === new Date(KKData?.KSSJ || '') && formValues?.JKRQ === new Date(KKData?.JSSJ || '')) {
+      if (new Date(formValues?.KKRQ).getTime() === new Date(KKData?.KSSJ || '').getTime() &&
+        new Date(formValues?.JKRQ).getTime() === new Date(KKData?.JSSJ || '').getTime()) {
         setKaike(false);
       } else {
         setKaike(true);
@@ -204,19 +211,10 @@ const AddCourse: FC<AddCourseProps> = ({
       }
       if (formValues?.KHKCJCs?.length) {
         setChoosenJf(true);
-        console.log(formValues?.KHKCJCs);
         setDataSource(formValues?.KHKCJCs);
       }
     }
   }, [formValues]);
-  useEffect(() => {
-    (async () => {
-      if (/MicroMessenger/i.test(navigator.userAgent)) {
-        await initWXConfig(['checkJsApi']);
-      }
-      await initWXAgentConfig(['checkJsApi']);
-    })();
-  }, []);
   useEffect(() => {
     (async () => {
       const XQ: { label: any; value: any }[] = [];
@@ -406,7 +404,6 @@ const AddCourse: FC<AddCourseProps> = ({
               if (item.id === values) {
                 // 在切换课程的时候把选中的任课老师先清空
                 form.setFieldsValue({ ZJS: undefined, FJS: undefined });
-
                 return item;
               }
             }
@@ -487,7 +484,7 @@ const AddCourse: FC<AddCourseProps> = ({
           fieldProps: {
             showSearch: true,
             // 创建机构课程的时 主班选择的是机构分配的任课老师
-            options: JGKCTeacherData.length > 0 ? JGKCTeacherData : teacherData,
+            options: JGKCTeacherData.length ? JGKCTeacherData : teacherData,
             optionFilterProp: 'label',
             allowClear: true,
           },
@@ -695,7 +692,7 @@ const AddCourse: FC<AddCourseProps> = ({
                 textAlign: 'right',
               }}
             >
-               <Button onClick={handleSubmit} type="primary"  style={{ marginRight: 16 }}>
+              <Button onClick={handleSubmit} type="primary" style={{ marginRight: 16 }}>
                 保存
               </Button>
               <Button
@@ -703,11 +700,11 @@ const AddCourse: FC<AddCourseProps> = ({
                   handleClose();
                   setImageUrl('');
                 }}
-               
+
               >
                 取消
               </Button>
-             
+
             </div>
           )
         }

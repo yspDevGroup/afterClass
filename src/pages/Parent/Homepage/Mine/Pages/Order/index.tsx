@@ -65,6 +65,9 @@ const OrderList = (props: {
                   <p>{item.KHBJSJ.KHKCSJ.KCMC}</p>
                   <span>￥{item.KHBJSJ.FY}</span>
                 </div>
+                <p className={styles.orderNumber}>
+                  <span>下单时间：{item.XDSJ}</span>
+                </p>
                 {item.DDZT === '已付款' ? (
                   <p className={styles.price}>
                     实付: <span>￥{item.DDFY}</span>

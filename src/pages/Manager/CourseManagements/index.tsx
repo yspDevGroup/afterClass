@@ -6,19 +6,14 @@ import CourseHistory from './courseHistory';
 import CourseNotIntroduced from './courseNotIntroduced';
 
 const { TabPane } = Tabs;
-
 /**
  * 课程管理
  * @returns
  */
 const index = () => {
-  const callback = (key: any) => {
-    console.log(key);
-  };
-
   return (
     <PageContainer>
-      <Tabs onChange={callback}>
+      <Tabs>
         <TabPane tab="本校课程" key="1">
           <CourseList />
         </TabPane>

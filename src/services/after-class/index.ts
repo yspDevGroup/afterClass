@@ -7,16 +7,16 @@ import * as auth from './auth';
 import * as user from './user';
 import * as bjsj from './bjsj';
 import * as jzgjbsj from './jzgjbsj';
-import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
+import * as fjlx from './fjlx';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
 import * as jxjhsj from './jxjhsj';
 import * as jyjgsj from './jyjgsj';
 import * as jyjgtzgg from './jyjgtzgg';
 import * as jzgcfsj from './jzgcfsj';
-import * as jzgjtcy from './jzgjtcy';
 import * as jzggzjl from './jzggzjl';
+import * as jzgjtcy from './jzgjtcy';
 import * as jzgktyj from './jzgktyj';
 import * as jzglwsj from './jzglwsj';
 import * as jzgrysj from './jzgrysj';
@@ -55,8 +55,8 @@ import * as xsjlsj from './xsjlsj';
 import * as xsjtcy from './xsjtcy';
 import * as xsxxjl from './xsxxjl';
 import * as xxgg from './xxgg';
-import * as xxjbsj from './xxjbsj';
 import * as xxjbpz from './xxjbpz';
+import * as xxjbsj from './xxjbsj';
 import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
 import * as xxtzgg from './xxtzgg';
@@ -68,16 +68,16 @@ export default {
   user,
   bjsj,
   jzgjbsj,
-  fjlx,
   fjsj,
+  fjlx,
   jcsj,
   jcxx,
   jxjhsj,
   jyjgsj,
   jyjgtzgg,
   jzgcfsj,
-  jzgjtcy,
   jzggzjl,
+  jzgjtcy,
   jzgktyj,
   jzglwsj,
   jzgrysj,
@@ -116,8 +116,8 @@ export default {
   xsjtcy,
   xsxxjl,
   xxgg,
-  xxjbsj,
   xxjbpz,
+  xxjbsj,
   xxpz,
   xxsjpz,
   xxtzgg,

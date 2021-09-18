@@ -15,7 +15,6 @@ type propstype = {
   setDatedata?: (data: any) => void;
   type?: string;
   form?: FormInstance<any>;
-  reload?: boolean;
   setReloadList?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const defaultMsg = {
@@ -27,7 +26,7 @@ const defaultMsg = {
 };
 
 const ClassCalendar = (props: propstype) => {
-  const { setDatedata, type, form, reload, setReloadList } = props;
+  const { setDatedata, type, form, setReloadList } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { xxId, student } = currentUser || {};
@@ -37,7 +36,6 @@ const ClassCalendar = (props: propstype) => {
   const [dates, setDates] = useState<any[]>([]);
   const [courseArr, setCourseArr] = useState<any>({});
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
-  const [thisCheck, setThisCheck] = useState<boolean>(false);
 
   // 后台返回的周数据的遍历
   const getCalendarData = (data: any) => {
@@ -134,7 +132,6 @@ const ClassCalendar = (props: propstype) => {
     let newChoosen = [...choosenCourses];
     setReloadList?.(false);
     if (e?.target?.checked) {
-      setThisCheck(true);
       const { start, end, bjId, title } = item;
       newChoosen.push({
         day,
@@ -144,7 +141,6 @@ const ClassCalendar = (props: propstype) => {
         title
       });
     } else {
-      setThisCheck(false);
       newChoosen = newChoosen.filter((val) => val.bjId !== item.bjId);
     }
     setChoosenCourses(newChoosen);
@@ -155,7 +151,6 @@ const ClassCalendar = (props: propstype) => {
         className={styles.today}
         onClick={() => {
           if (type && type === 'edit') {
-            setThisCheck(false);
             form?.resetFields();
             setChoosenCourses([]);
           }
@@ -181,7 +176,6 @@ const ClassCalendar = (props: propstype) => {
               message.warning('不可选择今天之前的课程');
               return;
             }
-            setThisCheck(false);
             if (date.format('YYYY-MM-DD') !== day) {
               form?.resetFields();
               setChoosenCourses([]);
@@ -212,7 +206,7 @@ const ClassCalendar = (props: propstype) => {
             return (
               <List.Item
                 key={`${day}+${item?.bjId}`}
-                actions={[<Checkbox checked={reload ? false : thisCheck} onChange={(e) => onChange(e, item)} />]}
+                actions={[<Checkbox onChange={(e) => onChange(e, item)} />]}
               >
                 <List.Item.Meta
                   title={item?.title}

@@ -9,7 +9,6 @@ import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Form, message, Spin, Modal, Tooltip, Empty } from 'antd';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
-import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
 import { getFJPlan } from '@/services/after-class/fjsj';
 import styles from '../index.less';
@@ -17,6 +16,7 @@ import ExcelTable from '@/components/ExcelTable';
 import type { CourseType } from '../data';
 import { history } from 'umi';
 import { getQueryString } from '@/utils/utils';
+import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 
 const { confirm } = Modal;
 
@@ -70,6 +70,19 @@ const AddArranging: FC<PropsType> = (props) => {
   const [tearchId, setTearchId] = useState('');
   const [basicData, setBasicData] = useState<any>([]);
 
+  useEffect(() => {
+    if (formValues) {
+      // 如果后查询的课程列表不存在此记录，则加到第一个
+      if (!kcmcData?.find(n => n.value === formValues.KHKCSJId)) {
+        kcmcData?.unshift({
+          label: formValues.KCMC,
+          value: formValues.KC
+        })
+      }
+      setKcType(kcmcData);
+    }
+  }, [kcmcData, formValues]);
+
   // 获取排课的接口
   const tableServers = () => {
     const Fjplan = getFJPlan({
@@ -91,70 +104,70 @@ const AddArranging: FC<PropsType> = (props) => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-    {
-      title: '',
-      dataIndex: 'room',
-      key: 'room',
-      align: 'center',
-      width: 66,
-    },
-    {
-      title: '',
-      dataIndex: 'course',
-      key: 'course',
-      align: 'left',
-      width: 100,
-    },
-    {
-      title: '周一',
-      dataIndex: 'monday',
-      key: 'monday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周二',
-      dataIndex: 'tuesday',
-      key: 'tuesday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周三',
-      dataIndex: 'wednesday',
-      key: 'wednesday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周四',
-      dataIndex: 'thursday',
-      key: 'thursday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周五',
-      dataIndex: 'friday',
-      key: 'friday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周六',
-      dataIndex: 'saturday',
-      key: 'saturday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周日',
-      dataIndex: 'sunday',
-      key: 'sunday',
-      align: 'center',
-      width: 100,
-    },
-  ];
+      {
+        title: '',
+        dataIndex: 'room',
+        key: 'room',
+        align: 'center',
+        width: 66,
+      },
+      {
+        title: '',
+        dataIndex: 'course',
+        key: 'course',
+        align: 'left',
+        width: 100,
+      },
+      {
+        title: '周一',
+        dataIndex: 'monday',
+        key: 'monday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周二',
+        dataIndex: 'tuesday',
+        key: 'tuesday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周三',
+        dataIndex: 'wednesday',
+        key: 'wednesday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周四',
+        dataIndex: 'thursday',
+        key: 'thursday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周五',
+        dataIndex: 'friday',
+        key: 'friday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周六',
+        dataIndex: 'saturday',
+        key: 'saturday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周日',
+        dataIndex: 'sunday',
+        key: 'sunday',
+        align: 'center',
+        width: 100,
+      },
+    ];
 
   // 将排好的课程再次点击可以取消
   const getSelectdata = (value: any) => {
@@ -558,32 +571,32 @@ const AddArranging: FC<PropsType> = (props) => {
                     <ProCard ghost className="banjiCard">
                       {bjData && bjData.length > 0
                         ? bjData.slice(0, 13).map((value: any, key: undefined) => {
-                            return (
-                              <ProCard
-                                layout="center"
-                                bordered
-                                className="banjiItem"
-                                onClick={() => BjClick(value)}
-                                style={{
-                                  borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                                }}
-                              >
-                                <p>{value.BJMC}</p>
-                                <span>
-                                  {
-                                    value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                      ?.KHJSSJ?.XM
-                                  }
-                                  {/* <WWOpenDataCom
+                          return (
+                            <ProCard
+                              layout="center"
+                              bordered
+                              className="banjiItem"
+                              onClick={() => BjClick(value)}
+                              style={{
+                                borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
+                              }}
+                            >
+                              <p>{value.BJMC}</p>
+                              <span>
+                                {
+                                  value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                    ?.KHJSSJ?.XM
+                                }
+                                {/* <WWOpenDataCom
                                         style={{ color: '#666' }}
                                         type="userName"
                                         openid={value.ZJS}
                                       /> */}
-                                </span>
-                                {index === value.id ? <span className="douhao">√</span> : ''}
-                              </ProCard>
-                            );
-                          })
+                              </span>
+                              {index === value.id ? <span className="douhao">√</span> : ''}
+                            </ProCard>
+                          );
+                        })
                         : ''}
                       <ProCard layout="center" bordered onClick={unFold} className="unFold">
                         展开 <DownOutlined style={{ color: '#4884FF' }} />
@@ -593,32 +606,32 @@ const AddArranging: FC<PropsType> = (props) => {
                     <ProCard ghost className="banjiCard">
                       {bjData && bjData.length > 0
                         ? bjData.map((value: any, key: undefined) => {
-                            return (
-                              <ProCard
-                                layout="center"
-                                bordered
-                                className="banjiItem"
-                                onClick={() => BjClick(value)}
-                                style={{
-                                  borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                                }}
-                              >
-                                <p>{value.BJMC}</p>
-                                <span>
-                                  {
-                                    value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                      ?.KHJSSJ?.XM
-                                  }
-                                  {/* <WWOpenDataCom
+                          return (
+                            <ProCard
+                              layout="center"
+                              bordered
+                              className="banjiItem"
+                              onClick={() => BjClick(value)}
+                              style={{
+                                borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
+                              }}
+                            >
+                              <p>{value.BJMC}</p>
+                              <span>
+                                {
+                                  value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                    ?.KHJSSJ?.XM
+                                }
+                                {/* <WWOpenDataCom
                                       style={{ color: '#666' }}
                                       type="userName"
                                       openid={value.ZJS}
                                     /> */}
-                                </span>
-                                {index === value.id ? <span className="douhao">√</span> : ''}
-                              </ProCard>
-                            );
-                          })
+                              </span>
+                              {index === value.id ? <span className="douhao">√</span> : ''}
+                            </ProCard>
+                          );
+                        })
                         : ''}
                       <ProCard layout="center" bordered onClick={unFold} className="unFold">
                         收起 <UpOutlined style={{ color: '#4884FF' }} />

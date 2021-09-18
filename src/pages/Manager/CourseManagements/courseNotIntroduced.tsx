@@ -207,6 +207,7 @@ const courseNotIntroduced = () => {
             pageSize: 0,
             page: 0,
             isRequired: false,
+            XD: currentUser?.XD?.split(/,/g),
             XXJBSJId: currentUser?.xxId,
             XZQHM: currentUser?.XZQHM,
           };

@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-16 11:53:39
- * @LastEditTime: 2021-09-17 12:07:07
+ * @LastEditTime: 2021-09-18 18:22:09
  * @LastEditors: Sissle Lynn
  */
 import { useEffect } from 'react';
@@ -49,7 +49,7 @@ const LeaveHistory = (props: propsType) => {
                 </span>
               </div>
               <p>时间：{moment(item.KHQJKCs?.[0].QJRQ).format('MM月DD日')} {item.KSSJ}-{item.JSSJ}</p>
-              <p>课程：{item.KHQJKCs?.map((it: any) => it.KCMC)}</p>
+              <p>课程：{item.KHQJKCs?.map((it: any) => <>{it.KCMC}  &nbsp; </>)}</p>
               <p>原因：{item.QJYY}</p>
               {item.QJZT === 0 && con1 ? (
                 <Button onClick={() => handleCancle(item)}>

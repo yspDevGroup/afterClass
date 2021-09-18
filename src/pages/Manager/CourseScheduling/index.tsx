@@ -13,7 +13,6 @@ import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
 
 import { getAllFJSJ, getFJPlan } from '@/services/after-class/fjsj';
-import { getAllKHBJSJ, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getQueryString } from '@/utils/utils';
@@ -27,6 +26,7 @@ import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { useModel } from 'umi';
 import { getAllGrades } from '@/services/after-class/khjyjg';
+import { getAllKHBJSJ, getKHBJSJ } from '@/services/after-class/khbjsj';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
@@ -232,6 +232,7 @@ const ClassManagement = () => {
             BJId: njInfo.data.id,
             NJ: njInfo.data.KHKCSJ.NJSJs[0].id,
             KC: njInfo.data.KHKCSJId,
+            KCMC:njInfo.data.KHKCSJ.KCMC,
             XQ: njInfo.data.XQSJId,
           });
           setState(false);
@@ -392,7 +393,6 @@ const ClassManagement = () => {
   // 课程名称下拉框点击事件
   const onKcmcChange = async (value: any) => {
     setKcmcValue(value);
-
     // 排课的接口
     const res = await getFJPlan({
       kcId: value,
@@ -736,7 +736,7 @@ const ClassManagement = () => {
             />
           </div>
         ) : (
-          // AddArranging 组件是新增排课页面 
+          // AddArranging 组件是新增排课页面
           <AddArranging
             formValues={recordValue}
             setState={setState}

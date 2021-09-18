@@ -11,7 +11,7 @@ export async function KHKCSQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -29,7 +29,7 @@ export async function KHKCSQ(
     message?: string;
   }>(`/khkcsq/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -43,10 +43,10 @@ export async function deleteKHKCSQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsq/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -118,13 +118,13 @@ export async function updateKHKCSQ(
   body: API.UpdateKHKCSQ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -165,6 +165,8 @@ export async function getToIntroduceBySchool(
     XZQHM?: string;
     /** 课程名称 */
     KCMC?: string;
+    /** 课程所属学段 */
+    XD?: string[];
     /** 课后教育机构名称 */
     KHJYJG?: string;
     /** 课程类型ID */

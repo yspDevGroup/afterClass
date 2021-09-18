@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 09:57:23
- * @LastEditTime: 2021-09-17 12:05:20
+ * @LastEditTime: 2021-09-18 18:49:00
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -62,7 +62,7 @@ const AskForLeave: React.FC = () => {
           setActiveKey(key);
         }}>
           <TabPane tab="我要请假" key="apply">
-            <LeaveForm setActiveKey={setActiveKey} setReload={setReload} />
+            {activeKey==='apply'?<LeaveForm setActiveKey={setActiveKey} setReload={setReload} />:''}
           </TabPane>
           <TabPane tab="请假记录" key="history">
             <LeaveHistory leaveInfo={leaveInfo} getData={getData} />
