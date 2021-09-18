@@ -39,6 +39,7 @@ const Home = () => {
       const res = await getXXTZGG({
         ZT: ['已发布'],
         XXJBSJId: currentUser?.xxId,
+        LX:"0",
         page: 0,
         pageSize: 0,
       });
@@ -108,7 +109,7 @@ const Home = () => {
           <TeachCourses />
         </div>
         <div className={styles.resourcesBox}>
-         <a 
+         <a
             href="http://moodle.xianyunshipei.com/course/view.php?id=12"
             target="_blank"
             rel="noreferrer"
@@ -117,7 +118,7 @@ const Home = () => {
           >
               <p>素质教育资源</p>
               <img src={resourcesRgo} alt="" />
-            </a>  
+            </a>
         </div>
         <div className={styles.announceArea}>
           <Details data={notification} />

@@ -26,6 +26,7 @@ const Home = () => {
       const res = await getXXTZGG({
         XXJBSJId: currentUserInfo?.xxId,
         BT: '',
+        LX:"0",
         ZT: ['已发布'],
         page: 0,
         pageSize: 0,
