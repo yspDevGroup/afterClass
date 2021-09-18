@@ -66,6 +66,8 @@ export async function getAllKHXSQJ(
     QJZT?: number[];
     /** 请假类型 */
     QJLX?: string;
+    /** 请假日期 */
+    QJRQ?: string;
     /** 学年学期ID */
     XNXQId?: string;
     /** 页数 */

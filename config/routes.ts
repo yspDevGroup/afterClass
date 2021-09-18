@@ -366,6 +366,13 @@
         hideInMenu: 'true',
       },
       {
+        path: '/parent/study/teacherEvaluation',
+        name: 'teacherEvaluation',
+        icon: 'smile',
+        component: './Parent/Homepage/Study/TeacherEvaluation',
+        hideInMenu: 'true',
+      },
+      {
         path: '/parent/mine/orderDetails',
         name: 'orderDetails',
         icon: 'smile',

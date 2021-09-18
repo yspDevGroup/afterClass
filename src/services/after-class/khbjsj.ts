@@ -210,3 +210,29 @@ export async function getAllClasses(
     ...(options || {}),
   });
 }
+
+/** 获取学校班级的评价信息 POST /khbjsj/getClassesEvaluation */
+export async function getClassesEvaluation(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 课程名称 */
+    KCMC?: string;
+    /** 班级名称 */
+    BJMC?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getClassesEvaluation', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

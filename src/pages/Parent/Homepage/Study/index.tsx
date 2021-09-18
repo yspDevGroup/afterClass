@@ -91,7 +91,7 @@ const Study = () => {
             <p className={styles.leaveP3}>请假</p>
           </Link>
 
-          <Link to="" className={styles.curriculum}>
+          <Link to="/parent/study/teacherEvaluation" className={styles.curriculum}>
             <p className={styles.curriculumP1}>
               <p className={styles.curriculumP2}>
                 <img src={icon_curriculum} alt="" />

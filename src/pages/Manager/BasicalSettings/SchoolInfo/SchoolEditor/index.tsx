@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import styles from './index.less';
-import { Button, FormInstance, message, Select } from 'antd';
+import type { FormInstance} from 'antd';
+import { Button, message, Select } from 'antd';
 import { history, useModel } from 'umi';
 import PageContainer from '@/components/PageContainer';
 import CustomForm from '@/components/CustomForm';
 import AvatarUpload from '@/components/AvatarUpload';
-import { FormItemType } from '@/components/CustomForm/interfice';
+import type { FormItemType } from '@/components/CustomForm/interfice';
 import { updateXXJBSJ } from '@/services/after-class/xxjbsj';
 
 const { Option } = Select;
@@ -55,7 +56,7 @@ const SchoolEditor = (props: any) => {
     const ajax = new XMLHttpRequest();
     ajax.open(
       'get',
-      'http://datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/100000_province.json',
+      '//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/100000_province.json',
     );
     ajax.send();
     // eslint-disable-next-line func-names
@@ -70,7 +71,7 @@ const SchoolEditor = (props: any) => {
     requestData();
   }, []);
   const onFinish = async (values: any) => {
-    values.XH = xhimg ? xhimg : values.XH;
+    values.XH = xhimg || values.XH;
     values.XD = values?.XD?.toString();
     values.XZQHM = cityAdcode||values.XZQHM;
     values.XZQ = `${provinceVal?.label}${cityVal?.label ? `/${cityVal?.label}` : ''}${countyVal?.label ? `/${countyVal?.label}` : ''}`;
@@ -83,7 +84,7 @@ const SchoolEditor = (props: any) => {
         refresh();
         history.push('/basicalSettings/schoolInfo');
       } else {
-        let msg = res.message;
+        const msg = res.message;
         message.error(msg);
       }
     }else{
@@ -98,7 +99,7 @@ const SchoolEditor = (props: any) => {
       const ajax = new XMLHttpRequest();
       ajax.open(
         'get',
-        `http://datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${value.value}_city.json`,
+        `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${value.value}_city.json`,
       );
       ajax.send();
       ajax.onreadystatechange = function () {
@@ -126,7 +127,7 @@ const SchoolEditor = (props: any) => {
       const ajax = new XMLHttpRequest();
       ajax.open(
         'get',
-        `http://datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${value.value}_district.json`,
+        `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${value.value}_district.json`,
       );
       ajax.send();
       ajax.onreadystatechange = function () {
@@ -161,7 +162,7 @@ const SchoolEditor = (props: any) => {
     const ajax = new XMLHttpRequest();
     ajax.open(
       'get',
-      `http://datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(0, 2)}0000_city.json`
+      `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(0, 2)}0000_city.json`
     );
     ajax.send();
     ajax.onreadystatechange = function () {
@@ -175,13 +176,13 @@ const SchoolEditor = (props: any) => {
     const ajax = new XMLHttpRequest();
     ajax.open(
       'get',
-      `http://datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(0, 4)}00_district.json`
+      `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(0, 4)}00_district.json`
     );
     ajax.send();
     ajax.onreadystatechange = function () {
       if (ajax.readyState === 4 && ajax.status === 200) {
         const data = JSON.parse(ajax.responseText);
-        let newArr: any[] = [];
+        const newArr: any[] = [];
         data.rows.forEach((item: any) => {
           if (item.adcode.substring(0, 4) === XZQHM?.substring(0, 4)) {
             newArr.push(item);
