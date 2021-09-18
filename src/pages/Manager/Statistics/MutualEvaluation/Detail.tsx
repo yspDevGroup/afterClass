@@ -6,20 +6,30 @@ import { getKHBJPJ } from '@/services/after-class/khbjpj'
 import { getAllKHXSPJ } from '@/services/after-class/khxspj'
 import { Rate, Popover } from 'antd';
 import { Table, Button } from 'antd';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 
 
 const Detail = (props: any) => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const [XNXQId, setXNXQId] = useState()
 
   const { state } = props.location
-  console.log(state)
   const { KHKCSJ, id,BJMC } = state.data
   //   学生详情评价列表
   const [StuList, setStuList] = useState<API.KHXSDD[] | undefined>([]);
   // 课堂表现的详情
   const [ClassDetail, SetClassDetail] = useState('点击课堂表现查看详情');
-
+  useEffect(() => {
+    (
+      async()=>{
+        const res = await queryXNXQList(currentUser?.xxId);
+        setXNXQId(res.current?.id)
+      }
+    )()
+  }, []);
   useEffect(() => {
     (async () => {
       const res = await getKHBJPJ({
@@ -33,19 +43,13 @@ const Detail = (props: any) => {
       })
       if (res?.data?.rows) {
         setStuList(res.data.rows)
-
       }
-
-
-
-
     })()
 
   }, [])
 
   const manifestation = async (value: any) => {
-    const res2 = await getAllKHXSPJ({ XSId: value.XSId, KHBJSJId: id, JSId: '', XNXQId: '', page: 0, pageSize: 0 })
-    console.log(res2?.data?.rows);
+    const res2 = await getAllKHXSPJ({ XSId: value.XSId, KHBJSJId: id, JSId: '', XNXQId: XNXQId!, page: 0, pageSize: 0 })
     if (res2?.data?.rows) {
       SetClassDetail(res2.data.rows[0].PY)
     }

@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 // import { message } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { useModel, Link } from 'umi';
-import { Table, Select,} from 'antd';
-import { getClassesEvaluation,} from '@/services/after-class/khbjsj'
+import { Table, Select, } from 'antd';
+import { getClassesEvaluation, } from '@/services/after-class/khbjsj'
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
 
@@ -25,14 +25,14 @@ const MutualEvaluation: React.FC = () => {
   const [kai, setkai] = useState<boolean>(false);
   // 表格数据源
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
-/// table表格数据
+  /// table表格数据
   const columns: ColumnsType<API.KHXSDD> | undefined = [
     {
       title: '课程名称',
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
       align: 'center',
-      render:(text: any)=>{
+      render: (text: any) => {
         return text?.KCMC
       }
     },
@@ -50,7 +50,7 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
       align: 'center',
-      render:(test: any)=>{
+      render: (test: any) => {
         return test?.KHKCLX.KCTAG
 
       }
@@ -60,8 +60,7 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
       align: 'center',
-      render:(test: any,record: any)=>{
-        console.log(record,'=-=-=-=')
+      render: (test: any, record: any) => {
         return record?.KHKCSJ?.KHJYJG?.QYMC || '-'
       }
     },
@@ -70,7 +69,7 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'KHBJJs',
       key: 'KHBJJs',
       align: 'center',
-      render:(text: any)=>{
+      render: (text: any) => {
         return text[0]?.KHJSSJ.XM
       }
     },
@@ -79,7 +78,7 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
-      render: (_,record) => (
+      render: (_, record) => (
         <>
           <Link to={{
             pathname: '/statistics/mutualEvaluation/detail',
@@ -102,7 +101,6 @@ const MutualEvaluation: React.FC = () => {
     // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
-      console.log(res);
 
       // 获取到的整个列表的信息
       const newData = res.xnxqList;
@@ -117,7 +115,7 @@ const MutualEvaluation: React.FC = () => {
       }
     })();
 
-  },[])
+  }, [])
   // 学年学期变化
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -130,7 +128,6 @@ const MutualEvaluation: React.FC = () => {
 
     });
     if (res3.status === 'ok') {
-      console.log(res3?.data?.rows);
 
       setDataSource(res3?.data?.rows);
     }
