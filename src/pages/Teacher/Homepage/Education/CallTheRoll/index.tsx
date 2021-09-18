@@ -1,15 +1,14 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
 import { history } from 'umi';
-import { Table, Button, Switch, message, notification } from 'antd';
-import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { Table, Button, Switch, message, notification, Tooltip } from 'antd';
 import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
 import styles from './index.less';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
-
-
+import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
+import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 /**
  * 课堂点名
  * @returns
@@ -56,6 +55,7 @@ type claNameType = {
 const CallTheRoll = (props: any) => {
   // '缺席'
   const [absent, setAbsent] = useState<number>(0);
+  const [leaveData, setLeaveData] = useState<number>(0);
   // '出勤'
   const [comeClass, setComeClass] = useState<number>(0);
   // 班级需要数据
@@ -73,17 +73,17 @@ const CallTheRoll = (props: any) => {
       wxad.push(item)
     }
   });
-  useEffect(() => {
+  const getData = async () => {
     // 查询所有课后服务出勤记录
-    const resAll = getAllKHXSCQ({
+    const resAll = await getAllKHXSCQ({
       bjId: bjids || undefined, // 班级ID
       CQRQ: pkDate, // 日期
       pkId: pkid || undefined, // 排课ID
     });
-    Promise.resolve(resAll).then((datas) => {
-      const allData = datas.data;
+    if (resAll.status === 'ok') {
+      const allData = resAll.data;
       // allData 有值时已点过名
-      if (allData && allData?.length > 0) {
+      if (allData?.length) {
         notification.warning({
           message: '',
           description:
@@ -92,43 +92,55 @@ const CallTheRoll = (props: any) => {
         });
         setButDis(true);
         allData.forEach((item: any) => {
+          item.isLeave = item.CQZT === '请假' ? true : false;
           item.isRealTo = item.CQZT;
         })
         setDataScouse(allData);
       } else {
         const nowSta = (nowDate.getTime() - new Date(pkDate).getTime()) / 7 / 24 / 60 / 60 / 1000;
         const futureSta = (nowDate.getTime() - new Date(pkDate).getTime()) < 0;
-        // 获取班级已报名人数
-        const resStudent = getEnrolled({ id: bjids || '' });
-        Promise.resolve(resStudent).then((data: any) => {
-          if (data.status === 'ok') {
-            const studentData = data.data;
-            studentData?.forEach((item: any) => {
-              item.isRealTo = '出勤';
-            });
-            setDataScouse(studentData);
-            setButDis(nowSta >= 1 || futureSta);
-            if (nowSta >= 1) {
-              notification.warning({
-                message: '',
-                description:
-                  '本节课因考勤超时已默认点名',
-                duration: 3,
-              });
-            }
-            if (futureSta) {
-              notification.warning({
-                message: '',
-                description:
-                  '本节课尚未开始点名',
-                duration: 3,
-              });
-            }
-          }
+        const resLeave = await getAllKHXSQJ({
+          XNXQId: '',
+          KHBJSJId: bjids,
+          QJRQ: pkDate
         });
+        // 获取班级已报名人数
+        const resStudent = await getEnrolled({ id: bjids || '' });
+        if (resStudent.status === 'ok') {
+          const studentData = resStudent.data;
+          const leaveInfo = resLeave?.data?.rows || [];
+          studentData?.forEach((item: any) => {
+            const leaveItem = leaveInfo?.find((val) => val.XSId === item.XSId);
+            item.isRealTo = leaveItem ? '缺席' : '出勤';
+            item.isLeave = leaveItem ? true : false;
+            item.leaveYY = leaveItem?.QJYY;
+          });
+          setDataScouse(studentData);
+          setButDis(nowSta >= 1 || futureSta);
+          if (nowSta >= 1) {
+            notification.warning({
+              message: '',
+              description:
+                '本节课因考勤超时已默认点名',
+              duration: 3,
+            });
+          }
+          if (futureSta) {
+            notification.warning({
+              message: '',
+              description:
+                '本节课尚未开始点名',
+              duration: 3,
+            });
+          }
+        }
       }
-    });
-
+    } else {
+      enHenceMsg(resAll.message);
+    }
+  };
+  useEffect(() => {
+    getData();
     // 获取课后班级数据
     const resClass = getKHBJSJ({ id: bjids || '' });
     Promise.resolve(resClass).then((data) => {
@@ -145,6 +157,8 @@ const CallTheRoll = (props: any) => {
   useEffect(() => {
     const absentData = dataSource.filter((item: any) => item.isRealTo === '缺席');
     const comeClassData = dataSource.filter((item: any) => item.isRealTo === '出勤');
+    const leaveData = dataSource.filter((item: any) => item.isLeave === true);
+    setLeaveData(leaveData.length);
     setAbsent(absentData.length);
     setComeClass(comeClassData.length);
   }, [dataSource]);
@@ -152,6 +166,7 @@ const CallTheRoll = (props: any) => {
     { shouldArrive: dataSource.length, text: '应到', key: 1 },
     { shouldArrive: comeClass, text: '到课', key: 2 },
     { shouldArrive: absent, text: '缺席', key: 4 },
+    { shouldArrive: leaveData, text: '请假', key: 3 },
   ];
 
   const onSwitchItem = (value: any, checked: boolean) => {
@@ -167,12 +182,11 @@ const CallTheRoll = (props: any) => {
     });
     setDataScouse(newData);
   };
-
   const onButtonClick = async () => {
     const value: any[] = [];
     dataSource.forEach((item: any) => {
       value.push({
-        CQZT: item.isRealTo, // 出勤 / 缺席
+        CQZT: item.isLeave ? '请假' : item.isRealTo, // 出勤 / 缺席
         CQRQ: pkDate, // 日期
         XSId: item.XSId, // 学生ID
         KHBJSJId: bjids, // 班级ID
@@ -202,6 +216,17 @@ const CallTheRoll = (props: any) => {
       align: 'center',
       render: () => {
         return claName?.BJMC;
+      },
+    },
+    {
+      title: '请假',
+      dataIndex: 'isLeave',
+      key: 'isLeave',
+      align: 'center',
+      render: (text: string, record: any) => {
+        return text ? <Tooltip title={record.leaveYY} trigger='click'>
+          <span style={{ color: 'red' }}>是</span>
+        </Tooltip> : <span>否</span>;
       },
     },
     {

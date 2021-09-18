@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-09-13 17:55:43
+ * @LastEditTime: 2021-09-17 17:28:26
  * @LastEditors: Sissle Lynn
  */
 /*
@@ -35,6 +35,7 @@ const TeacherManagement = () => {
   const actionRef = useRef<ActionType>();
   const onClose = () => {
     setModalVisible(false);
+    actionRef.current?.reload();
   };
   // 上传配置
   const UploadProps: any = {
