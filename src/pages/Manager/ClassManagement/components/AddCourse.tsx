@@ -695,18 +695,19 @@ const AddCourse: FC<AddCourseProps> = ({
                 textAlign: 'right',
               }}
             >
+               <Button onClick={handleSubmit} type="primary"  style={{ marginRight: 16 }}>
+                保存
+              </Button>
               <Button
                 onClick={() => {
                   handleClose();
                   setImageUrl('');
                 }}
-                style={{ marginRight: 16 }}
+               
               >
                 取消
               </Button>
-              <Button onClick={handleSubmit} type="primary">
-                保存
-              </Button>
+             
             </div>
           )
         }

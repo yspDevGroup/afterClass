@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 // import { message } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { useModel, Link } from 'umi';
-import { Table, Select, } from 'antd';
+import { Table, Select,Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { getAllClasses } from '@/services/after-class/khbjsj'
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
@@ -24,6 +25,8 @@ const MutualEvaluation: React.FC = () => {
   const [kai, setkai] = useState<boolean>(false);
   // 表格数据源
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
+  ///  弹出表格的
+
   ///table表格数据
   const columns: ColumnsType<API.KHXSDD> | undefined = [
     {
@@ -127,6 +130,10 @@ const MutualEvaluation: React.FC = () => {
 
 
   }
+  // type 选择打开那一类的弹框
+  const handleOperation=(type:string,data?: RoomItem)=>{
+
+  }
 
   return (
     ///PageContainer组件是顶部的信息
@@ -151,6 +158,17 @@ const MutualEvaluation: React.FC = () => {
             })}
           </Select>
         </span>
+        <div>
+        <Button
+            // style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
+            type="primary"
+            key="add"
+            onClick={() => handleOperation('add')}
+          >
+            <PlusOutlined />
+            新增场地
+          </Button>,
+        </div>
       </div>
       <div >
         <Table columns={columns} dataSource={dataSource} rowKey="id" />

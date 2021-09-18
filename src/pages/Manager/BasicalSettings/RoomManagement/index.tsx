@@ -277,12 +277,13 @@ const RoomManagement = () => {
           modalType === 'uphold'
             ? null
             : [
+              <Button key="submit" type="primary" onClick={handleSubmit}>
+              确定
+            </Button>,
                 <Button key="back" onClick={() => setModalVisible(false)}>
                   取消
                 </Button>,
-                <Button key="submit" type="primary" onClick={handleSubmit}>
-                  确定
-                </Button>,
+               
               ]
         }
         style={{ maxHeight: '430px' }}

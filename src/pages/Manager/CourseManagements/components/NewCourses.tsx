@@ -227,12 +227,13 @@ const NewCourses = (props: PropsType) => {
                 textAlign: 'right',
               }}
             >
-              <Button onClick={Close} style={{ marginRight: 16 }}>
-                取消
-              </Button>
-              <Button onClick={handleSubmit} type="primary">
+               <Button onClick={handleSubmit} type="primary" style={{ marginRight: 16 }}>
                 保存
               </Button>
+              <Button onClick={Close} >
+                取消
+              </Button>
+             
             </div>
           )
         }
