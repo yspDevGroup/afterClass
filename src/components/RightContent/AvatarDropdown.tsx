@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, message, Spin } from 'antd';
 import { useModel } from 'umi';
 import styles from './index.less';
-import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
+import { initWXAgentConfig, initWXConfig,} from '@/utils/wx';
 import defaultAvatar from '@/assets/avatar.png';
 import WWOpenDataCom from '@/components/WWOpenDataCom'
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
@@ -18,7 +18,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const [wechatInfo, setWechatInfo] = useState({
     openId: ''
   })
-  
+
   const [xxData, setXxData] = useState<any>();
   const userRef = useRef(null);
   useEffect(() => {
@@ -47,6 +47,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
     })();
   }, [currentUser]);
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     wechatReded && setWechatInfo({
       openId: currentUser?.UserId || ''
     })

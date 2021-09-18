@@ -14,21 +14,18 @@ const LeaveManagement: React.FC = () => {
   const { currentUser } = initialState || {};
   // 学年学期列表数据
   const [termList, setTermList] = useState<any>();
+  // 学期学年没有数据时提示的开关
+  const [kai, setkai] = useState<boolean>(false);
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 表格数据源
   const [dataSource, setDataSource] = useState<API.KHXSQJ[]>([]);
-  //学年学期选相框触发的函数
-  const ChoseSelect = async () => {
-    const res3 = await getAllKHXSQJ({ XNXQId: curXNXQId });
-    if (res3?.status === 'ok' && res3?.data?.rows) {
-      setDataSource(res3.data.rows);
-    }
-  }
   useEffect(() => {
     //获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
+      console.log(res);
+
       // 获取到的整个列表的信息
       const newData = res.xnxqList;
       const curTerm = res.current;
@@ -37,19 +34,36 @@ const LeaveManagement: React.FC = () => {
           setCurXNXQId(curTerm.id);
           setTermList(newData);
         }
+      } else {
+        setkai(true);
       }
     })();
-  }, []);
+
+  }, [])
   useEffect(() => {
-    ChoseSelect()
+    ChoseSelect(curXNXQId)
   }, [curXNXQId])
+  //学年学期选相框触发的函数
+  const ChoseSelect = async (SelectData: string) => {
+    const res3 = await getAllKHXSQJ({ XNXQId:SelectData});
+    if (res3?.status === 'ok' && res3?.data?.rows) {
+      setDataSource(res3.data.rows);
+    }
+  }
   ///table表格数据
   const columns: ColumnsType<API.KHXSQJ> | undefined = [
     {
-      title: '请假人',
+      title: '学生姓名',
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+    },
+    {
+    title: '班级名称',
+      dataIndex: 'XSXM',
+      key: 'XSXM',
+      align: 'center',
+
     },
     {
       title: '课程名称',
@@ -69,21 +83,21 @@ const LeaveManagement: React.FC = () => {
       dataIndex: 'QJZT',
       key: 'QJZT',
       align: 'center',
-      render: (text: any) => text ? '已取消' : '已通过'
+      render: (record: any) => record.QJZT ? '已通过' : '已取消'
     },
     {
       title: '请假开始时间',
       dataIndex: '',
       key: '',
       align: 'center',
-      render: (text: any, record: any) => text.KHQJKCs[0].QJRQ + record.KSSJ
+      render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.KSSJ}`
     },
     {
       title: '请假结束时间',
       dataIndex: '',
       key: '',
       align: 'center',
-      render: (text: any, record: any) => text.KHQJKCs[0].QJRQ + record.JSSJ
+      render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.KSSJ}`
     },
   ];
   return (

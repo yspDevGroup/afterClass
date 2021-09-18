@@ -3,15 +3,15 @@ import { useEffect, useState } from 'react';
 // import { message } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { useModel, Link } from 'umi';
-import { Table, Select,Button } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { getAllClasses } from '@/services/after-class/khbjsj'
+import { Table, Select,} from 'antd';
+import { getClassesEvaluation,} from '@/services/after-class/khbjsj'
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const { Option } = Select;
 
 
 import Style from './index.less'
+
 
 
 const MutualEvaluation: React.FC = () => {
@@ -25,42 +25,54 @@ const MutualEvaluation: React.FC = () => {
   const [kai, setkai] = useState<boolean>(false);
   // 表格数据源
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
-  ///  弹出表格的
-
-  ///table表格数据
+///table表格数据
   const columns: ColumnsType<API.KHXSDD> | undefined = [
     {
       title: '课程名称',
-      dataIndex: 'BJMC',
-      key: 'BJMC',
-      align: 'center',
-    },
-    {
-      title: '课程班名称',
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
       align: 'center',
-      render: (text: any) => {
+      render:(text: any)=>{
         return text?.KCMC
       }
     },
     {
-      title: '课程类型',
-      dataIndex: 'XSXM',
-      key: 'XSXM',
+      title: '课程班名称',
+      dataIndex: 'BJMC',
+      key: 'BJMC',
       align: 'center',
+      // render: (text: any) => {
+      //   return text?.KCMC
+      // }
+    },
+    {
+      title: '课程类型',
+      dataIndex: 'KHKCSJ',
+      key: 'KHKCSJ',
+      align: 'center',
+      render:(test: any)=>{
+        return test?.KHKCLX.KCTAG
+
+      }
     },
     {
       title: '开课机构',
-      dataIndex: 'XSXM',
-      key: 'XSXM',
+      dataIndex: 'KHKCSJ',
+      key: 'KHKCSJ',
       align: 'center',
+      // render:(test:any)=>{
+      //   return test?.SSJGLX==="校内课程"?'/':''
+
+      // }
     },
     {
       title: '主讲师',
-      dataIndex: 'XSXM',
-      key: 'XSXM',
+      dataIndex: 'KHBJJs',
+      key: 'KHBJJs',
       align: 'center',
+      render:(text: any)=>{
+        return text[0]?.KHJSSJ.XM
+      }
     },
     {
       title: '评价学员人数',
@@ -73,7 +85,7 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
-      render: (record) => (
+      render: (_,record) => (
         <>
           <Link to={{
             pathname: '/statistics/mutualEvaluation/detail',
@@ -111,14 +123,15 @@ const MutualEvaluation: React.FC = () => {
       }
     })();
 
-  }, [])
+  },[])
   // 学年学期变化
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     ChoseSelect(curXNXQId)
   }, [curXNXQId])
   //学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
-    const res3 = await getAllClasses({
+    const res3 = await getClassesEvaluation({
       XNXQId: SelectData
 
     });
@@ -130,10 +143,8 @@ const MutualEvaluation: React.FC = () => {
 
 
   }
-  // type 选择打开那一类的弹框
-  const handleOperation=(type:string,data?: RoomItem)=>{
 
-  }
+
 
   return (
     ///PageContainer组件是顶部的信息
@@ -158,17 +169,6 @@ const MutualEvaluation: React.FC = () => {
             })}
           </Select>
         </span>
-        <div>
-        <Button
-            // style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
-            type="primary"
-            key="add"
-            onClick={() => handleOperation('add')}
-          >
-            <PlusOutlined />
-            新增场地
-          </Button>,
-        </div>
       </div>
       <div >
         <Table columns={columns} dataSource={dataSource} rowKey="id" />

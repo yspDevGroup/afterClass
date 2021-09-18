@@ -7,9 +7,9 @@ import * as auth from './auth';
 import * as user from './user';
 import * as bjsj from './bjsj';
 import * as jzgjbsj from './jzgjbsj';
-import * as fjsj from './fjsj';
 import * as fjlx from './fjlx';
 import * as jcsj from './jcsj';
+import * as fjsj from './fjsj';
 import * as jcxx from './jcxx';
 import * as jxjhsj from './jxjhsj';
 import * as jyjgsj from './jyjgsj';
@@ -37,8 +37,8 @@ import * as khtksj from './khtksj';
 import * as khxscq from './khxscq';
 import * as khxsdd from './khxsdd';
 import * as khxspj from './khxspj';
-import * as khxsqj from './khxsqj';
 import * as njsj from './njsj';
+import * as khxsqj from './khxsqj';
 import * as pksj from './pksj';
 import * as redis from './redis';
 import * as sso from './sso';
@@ -47,30 +47,30 @@ import * as wechat from './wechat';
 import * as xksj from './xksj';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
-import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
 import * as xscfsj from './xscfsj';
 import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
+import * as xnxq from './xnxq';
+import * as xxgg from './xxgg';
 import * as xsjtcy from './xsjtcy';
 import * as xsxxjl from './xsxxjl';
-import * as xxgg from './xxgg';
-import * as xxjbpz from './xxjbpz';
 import * as xxjbsj from './xxjbsj';
+import * as xxjbpz from './xxjbpz';
+import * as xxtzgg from './xxtzgg';
 import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
-import * as xxtzgg from './xxtzgg';
-import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
+import * as zxfa from './zxfa';
 export default {
   other,
   auth,
   user,
   bjsj,
   jzgjbsj,
-  fjsj,
   fjlx,
   jcsj,
+  fjsj,
   jcxx,
   jxjhsj,
   jyjgsj,
@@ -98,8 +98,8 @@ export default {
   khxscq,
   khxsdd,
   khxspj,
-  khxsqj,
   njsj,
+  khxsqj,
   pksj,
   redis,
   sso,
@@ -108,19 +108,19 @@ export default {
   xksj,
   xl,
   xnjgsj,
-  xnxq,
   xqsj,
   xscfsj,
   xsjbsj,
   xsjlsj,
+  xnxq,
+  xxgg,
   xsjtcy,
   xsxxjl,
-  xxgg,
-  xxjbpz,
   xxjbsj,
+  xxjbpz,
+  xxtzgg,
   xxpz,
   xxsjpz,
-  xxtzgg,
-  zxfa,
   zxsj,
+  zxfa,
 };
