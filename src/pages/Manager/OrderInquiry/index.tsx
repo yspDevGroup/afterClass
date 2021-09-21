@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Select, Table, Tag, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
@@ -12,6 +12,7 @@ import PromptInformation from '@/components/PromptInformation';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import styles from './index.less';
 import { useModel } from 'umi';
+import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 
 const { Option } = Select;
 
@@ -24,6 +25,7 @@ type selectType = { label: string; value: string };
 const OrderInquiry = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   const [tableLoading, setTableLoading] = useState(true);
   // 学期学年没有数据时提示的开关
@@ -103,7 +105,14 @@ const OrderInquiry = () => {
       }
     })();
   }, [curXNXQId]);
-  const columns: ColumnsType<API.KHXSDD> | undefined = [
+  const columns: ProColumns<API.KHXSDD>[] | undefined = [
+    {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      align: 'center',
+      width: 60,
+    },
     {
       title: '学生姓名',
       dataIndex: 'XSXM',
@@ -127,6 +136,12 @@ const OrderInquiry = () => {
       render: (_text: any, record: any) => {
         return <div>{record?.KHBJSJ?.KHKCSJ?.KCMC}</div>;
       },
+    },
+    {
+      title: '下单时间',
+      dataIndex: 'XDSJ',
+      key: 'XDSJ',
+      align: 'center',
     },
     {
       title: '付款时间',
@@ -245,7 +260,19 @@ const OrderInquiry = () => {
         </div>
       </div>
       <div className={styles.tableStyle}>
-        <Table loading={tableLoading} dataSource={dataSource} columns={columns} rowKey="id" />
+        <ProTable<any>
+          actionRef={actionRef}
+          columns={columns}
+          rowKey="id"
+          dataSource={dataSource}
+          options={{
+            setting: false,
+            fullScreen: false,
+            density: false,
+            reload: false,
+          }}
+          search={false}
+        />
       </div>
       <PromptInformation
         text="未查询到学年学期数据，请先设置学年学期"
