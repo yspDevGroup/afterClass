@@ -11,7 +11,7 @@ import { updateXXJBSJ } from '@/services/after-class/xxjbsj';
 
 const { Option } = Select;
 const formItemLayout = {
-  labelCol: { flex: '6em' },
+  labelCol: { flex: '7em' },
   wrapperCol: { flex: 'auto' }
 };
 
@@ -270,7 +270,7 @@ const SchoolEditor = (props: any) => {
       groupItems: [
         {
           type: 'input',
-          label: '学校英文名称',
+          label: '英文名称',
           name: 'XXYWMC',
           key: 'XXYWMC',
           span: 12
