@@ -23,8 +23,9 @@ const Details = (props: { data?: any[] }) => {
           {data?.map((record: any,index: number) => {
             if (index < 4) {
               return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }} key={record.id}>
-                <li style={{ lineHeight: '30px' }}>
+                <li style={{ lineHeight: '30px', listStyle: 'none' }}>
                   <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+                  <div className={styles.yuan}/>
                     {record.BT}
                   </div>
                 </li>

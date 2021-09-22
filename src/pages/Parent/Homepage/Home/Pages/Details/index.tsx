@@ -27,7 +27,7 @@ const Details = (props: { data?: any[] }) => {
               return <Link to={`/parent/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }} key={record.BT}>
                 <li style={{ lineHeight: '30px', listStyle: 'none' }}>
                   <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
-                    <div className={styles.yuan}></div>
+                    <div className={styles.yuan}/>
                     {record.BT}
                   </div>
                 </li>

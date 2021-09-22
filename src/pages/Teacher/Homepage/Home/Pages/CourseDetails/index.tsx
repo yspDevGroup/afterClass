@@ -34,7 +34,6 @@ const CourseDetails: React.FC = () => {
     };
     fetchData();
   }, [classid]);
-console.log(KcDetail,'---')
   return <div className={styles.CourseDetails2}>
     <GoBack title={'课程详情'} onclick='/teacher/home?index=education' teacher/>
     <div className={styles.KCXX}>
