@@ -64,7 +64,6 @@ const OrderInquiry = () => {
     })();
   }, []);
 
-
   useEffect(() => {
     (async () => {
       if (curXNXQId) {

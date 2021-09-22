@@ -42,7 +42,6 @@ const Study = () => {
             <p className={styles.courseBackP3}>课程反馈</p>
           </Link>
         </div>
-
         <div className={styles.titleBar}>我的课表</div>
         <ClassCalendar />
       </div>

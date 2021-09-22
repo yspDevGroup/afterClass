@@ -36,6 +36,61 @@ export async function syncAuthInfo(options?: { [key: string]: any }) {
   });
 }
 
+/** 给家长发送消息通知 POST /wechat/sendMessageToParent */
+export async function sendMessageToParent(
+  body: {
+    to?: string;
+    text?: string;
+    ids?: string[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/wechat/sendMessageToParent', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 给老师发送消息通知 POST /wechat/sendMessageToTeacher */
+export async function sendMessageToTeacher(
+  body: {
+    to?: string;
+    text?: string;
+    ids?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/wechat/sendMessageToTeacher', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 发送离校通知 POST /wechat/msgLeaveSchool */
+export async function msgLeaveSchool(
+  body: {
+    KHBJSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/wechat/msgLeaveSchool', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 微信扫码认证 GET /wechat/auth */
 export async function wechatOauth(options?: { [key: string]: any }) {
   return request<any>('/wechat/auth', {

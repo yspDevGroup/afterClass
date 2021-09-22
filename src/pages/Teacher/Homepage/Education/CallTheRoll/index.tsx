@@ -1,14 +1,20 @@
 /* eslint-disable no-param-reassign */
-import React, { useEffect, useState } from 'react';
-import { history } from 'umi';
-import { Table, Button, Switch, message, notification, Tooltip } from 'antd';
-import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
-import { theme } from '@/theme-default';
-import styles from './index.less';
+import React, { useEffect, useRef, useState } from 'react';
+import { history, useModel } from 'umi';
+import { Modal, Table, Button, Switch, message, notification, Tooltip } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { createKHJSCQ, getAllKHJSCQ } from '@/services/after-class/khjscq';
+import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
+
+import { theme } from '@/theme-default';
+import styles from './index.less';
+
+const { confirm } = Modal;
 /**
  * 课堂点名
  * @returns
@@ -53,6 +59,9 @@ type claNameType = {
 };
 
 const CallTheRoll = (props: any) => {
+  const userRef = useRef(null);
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   // '缺席'
   const [absent, setAbsent] = useState<number>(0);
   const [leaveData, setLeaveData] = useState<number>(0);
@@ -62,19 +71,44 @@ const CallTheRoll = (props: any) => {
   const [claName, setClaName] = useState<claNameType>();
   // 表格数据
   const [dataSource, setDataScouse] = useState<any>([]);
-  const [butDis, setButDis] = useState<boolean>(false);
+  // 教师签到(undone,done,doing,todo,)
+  const [btnDis, setBtnDis] = useState<string>('doing');
+  // 学生点名(undone,done,doing,todo,)
+  const [butDis, setButDis] = useState<string>('todo');
   // 获取当前日期
   const nowDate = new Date();
   const { pkid, bjids, date, kjs, sj } = props.location.state;
   const pkDate = date?.replace(/\//g, '-'); // 日期
-  const wxad: any = []
+  const wxad: any = [];
   sj.forEach((item: any) => {
     if (new Date(pkDate) > new Date(item)) {
-      wxad.push(item)
+      wxad.push(item);
     }
   });
   const getData = async () => {
-    // 查询所有课后服务出勤记录
+    // 计算签到或点名时间与当前时间的间隔（以周为单位）
+    const nowSta = (nowDate.getTime() - new Date(pkDate).getTime()) / 7 / 24 / 60 / 60 / 1000;
+    const futureSta = (nowDate.getTime() - new Date(pkDate).getTime()) < 0;
+    // 查询教师出勤记录
+    const resCheck = await getAllKHJSCQ({
+      KHBJSJId: bjids,
+      KHJSSJId: currentUser.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
+      CQRQ: pkDate,
+    });
+    if (resCheck.status === 'ok') {
+      // data 有值时已点过名
+      if (resCheck?.data?.length) {
+        setBtnDis('done');
+      } else if (nowSta >= 1) {
+        setBtnDis('undone');
+      } else if (futureSta) {
+        setBtnDis('todo');
+      }
+    } else {
+      enHenceMsg(resCheck.message);
+    }
+
+    // 查询学生所有课后服务出勤记录
     const resAll = await getAllKHXSCQ({
       bjId: bjids || undefined, // 班级ID
       CQRQ: pkDate, // 日期
@@ -90,15 +124,16 @@ const CallTheRoll = (props: any) => {
             '本节课已点名,请勿重复操作',
           duration: 3,
         });
-        setButDis(true);
         allData.forEach((item: any) => {
           item.isLeave = item.CQZT === '请假' ? true : false;
           item.isRealTo = item.CQZT;
         })
+        setButDis('done');
         setDataScouse(allData);
       } else {
-        const nowSta = (nowDate.getTime() - new Date(pkDate).getTime()) / 7 / 24 / 60 / 60 / 1000;
-        const futureSta = (nowDate.getTime() - new Date(pkDate).getTime()) < 0;
+        if(resCheck?.data?.length){
+          setButDis('doing');
+        }
         const resLeave = await getAllKHXSQJ({
           XNXQId: '',
           KHBJSJId: bjids,
@@ -116,8 +151,8 @@ const CallTheRoll = (props: any) => {
             item.leaveYY = leaveItem?.QJYY;
           });
           setDataScouse(studentData);
-          setButDis(nowSta >= 1 || futureSta);
           if (nowSta >= 1) {
+            setButDis('undone');
             notification.warning({
               message: '',
               description:
@@ -126,6 +161,7 @@ const CallTheRoll = (props: any) => {
             });
           }
           if (futureSta) {
+            setButDis('undo');
             notification.warning({
               message: '',
               description:
@@ -139,6 +175,18 @@ const CallTheRoll = (props: any) => {
       enHenceMsg(resAll.message);
     }
   };
+  useEffect(() => {
+    (async () => {
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        await initWXConfig(['checkJsApi']);
+      }
+      if (await initWXAgentConfig(['checkJsApi'])) {
+        showUserName(userRef?.current, currentUser?.UserId);
+        // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
+        WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+      }
+    })();
+  }, [currentUser]);
   useEffect(() => {
     getData();
     // 获取课后班级数据
@@ -168,7 +216,6 @@ const CallTheRoll = (props: any) => {
     { shouldArrive: absent, text: '缺席', key: 4 },
     { shouldArrive: leaveData, text: '请假', key: 3 },
   ];
-
   const onSwitchItem = (value: any, checked: boolean) => {
     const newData = [...dataSource];
     newData.forEach((item: any) => {
@@ -200,6 +247,38 @@ const CallTheRoll = (props: any) => {
       history.push('/teacher/home?index=education');
     } else {
       enHenceMsg(res.message);
+    }
+  };
+  const showConfirm = () => {
+    let secondsToGo = 3;
+    const modal = Modal.success({
+      centered: true,
+      title: '签到成功',
+      content: ` ${secondsToGo} 秒之后可以开始点名`,
+    });
+    const timer = setInterval(() => {
+      secondsToGo -= 1;
+      modal.update({
+        content: `${secondsToGo} 秒之后可以开始点名`,
+      });
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(timer);
+      setButDis('doing');
+      modal.destroy();
+    }, secondsToGo * 1000);
+  }
+  const teacherCheckIn = async () => {
+    const res = await createKHJSCQ([{
+      KHJSSJId: currentUser.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
+      CQZT: '出勤',
+      CQRQ: pkDate,
+      KHBJSJId: bjids
+    }]);
+    if (res.status === 'ok') {
+      showConfirm();
+    } else {
+      message.error(res.message)
     }
   };
   const columns: any = [
@@ -237,7 +316,7 @@ const CallTheRoll = (props: any) => {
       render: (text: string, record: any) => {
         return (
           <div key={record.id}>
-            <SwitchIndex realTo={text} record={record} onSwitchItem={onSwitchItem} butDis={butDis} />
+            <SwitchIndex realTo={text} record={record} onSwitchItem={onSwitchItem} butDis={butDis !== 'doing'} />
           </div>
         );
       },
@@ -246,6 +325,19 @@ const CallTheRoll = (props: any) => {
   return (
     <div className={styles.callTheRoll}>
       <GoBack title='课堂点名' teacher onclick='/teacher/home?index=education' />
+      <div className={styles.rollHeader}>
+        <div>
+          <b>
+            <span ref={userRef}>
+              {currentUser?.UserId}
+            </span>
+            老师
+          </b>
+          <span>
+            <Button onClick={teacherCheckIn} disabled={btnDis !== 'doing'}>{btnDis === 'done' ? '已' : (btnDis === 'undone' ? '未' : '立即')}签到</Button>
+          </span>
+        </div>
+      </div>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
         {claName?.BJMC} ｜ 第 {wxad.length}/{kjs} 课时
@@ -275,12 +367,12 @@ const CallTheRoll = (props: any) => {
           type="primary"
           shape="round"
           onClick={onButtonClick}
-          className={butDis ? styles.disabl : styles.xuanzhong}
-          disabled={butDis}
+          disabled={butDis !== 'doing'}
         >
-          确认点名
+          {butDis === 'done' ? '已' : (butDis === 'undone' ? '已默认' : '开始')}点名
         </Button>
       </div>
+
     </div>
   );
 };
