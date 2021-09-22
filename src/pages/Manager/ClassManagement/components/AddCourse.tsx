@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import { Button, Drawer, InputNumber, message } from 'antd';
 import ProFormFields from '@/components/ProFormFields';
-import { ActionType, EditableProTable, ProColumns } from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import { EditableProTable } from '@ant-design/pro-table';
 import styles from './AddCourse.less';
 import moment from 'moment';
 import { enHenceMsg } from '@/utils/utils';
@@ -117,7 +118,7 @@ const AddCourse: FC<AddCourseProps> = ({
         <a
           key="editable"
           onClick={() => {
-            action?.startEditable?.(record.index);
+            action?.startEditable?.(record.id||record.index);
           }}
         >
           编辑
@@ -161,7 +162,7 @@ const AddCourse: FC<AddCourseProps> = ({
   };
   const getJgTeacher = async (kcId: string) => {
     const res = await getKHKCSJ({
-      kcId: kcId,
+      kcId,
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId
     });
