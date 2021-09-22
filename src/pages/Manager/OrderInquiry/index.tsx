@@ -12,7 +12,8 @@ import PromptInformation from '@/components/PromptInformation';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import styles from './index.less';
 import { useModel } from 'umi';
-import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
 
 const { Option } = Select;
 
@@ -63,6 +64,7 @@ const OrderInquiry = () => {
     })();
   }, []);
 
+
   useEffect(() => {
     (async () => {
       if (curXNXQId) {
@@ -88,13 +90,13 @@ const OrderInquiry = () => {
         if (khkcResl.status === 'ok') {
           const KCMC = khkcResl.data.rows?.map((item: any) => ({
             label: item.KCMC,
-            value: item.KCMC,
+            value: item.id,
           }));
           setKcmcData(KCMC);
         }
 
         // 通过班级数据接口拿到所有的班级
-        const bjmcResl = await getAllKHBJSJ({ XNXQId: curXNXQId, page: 0, pageSize: 0, name: '' });
+        const bjmcResl = await getAllKHBJSJ({ XNXQId: curXNXQId ,page: 0, pageSize: 0, name: '' });
         if (bjmcResl.status === 'ok') {
           const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
             label: item.BJMC,
@@ -167,9 +169,19 @@ const OrderInquiry = () => {
   const kaiguan = () => {
     setkai(false);
   };
-  const onKcmcChange = async (value: any) => {
+  const onKcmcChange = async (value: any,key: any) => {
     setTableLoading(true);
+    setBjmcValue('')
     setKcmcValue(value);
+      const bjmcResl = await getAllKHBJSJ({ XNXQId: curXNXQId, kcId:key?.key || '' ,page: 0, pageSize: 0, name: '' });
+      if (bjmcResl.status === 'ok') {
+        const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
+          label: item.BJMC,
+          value: item.BJMC,
+        }));
+        setBjmcData(BJMC);
+      }
+
     // 获取订单查询的表格数据
     const resl = await getAllKHXSDD({
       XNXQId: curXNXQId,
@@ -230,7 +242,7 @@ const OrderInquiry = () => {
             >
               {kcmcData?.map((item: selectType) => {
                 return (
-                  <Option value={item.label} key={item.label}>
+                  <Option value={item.label} key={item.value}>
                     {item.label}
                   </Option>
                 );
