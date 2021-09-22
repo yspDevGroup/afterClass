@@ -45,7 +45,7 @@ const CourseTable: React.FC = () => {
       <ul>
         <ul>
           <li>上课时段：{moment(KcDetail?.start).format('YYYY.MM.DD')}~{moment(KcDetail?.end).format('YYYY.MM.DD')}</li>
-          <li>上课地点：{KcDetail?.XQName}</li>
+          <li>上课地点：本校</li>
           <li>总课时：{KcDetail?.kss}课时</li>
           <li>班级：{KcDetail?.title}</li>
           <li>学生：{currentUser?.student?.name}</li>

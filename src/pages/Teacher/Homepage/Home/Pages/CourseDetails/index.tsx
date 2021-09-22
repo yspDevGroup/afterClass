@@ -34,7 +34,7 @@ const CourseDetails: React.FC = () => {
     };
     fetchData();
   }, [classid]);
-
+console.log(KcDetail,'---')
   return <div className={styles.CourseDetails2}>
     <GoBack title={'课程详情'} onclick='/teacher/home?index=education' teacher/>
     <div className={styles.KCXX}>
@@ -43,7 +43,7 @@ const CourseDetails: React.FC = () => {
       <ul>
       <ul>
         <li>上课时段：{moment(KcDetail?.start).format('YYYY.MM.DD')}~{moment(KcDetail?.end).format('YYYY.MM.DD')}</li>
-        <li>上课地点：{KcDetail?.XQName}</li>
+        <li>上课地点：本校</li>
         <li>总课时：{KcDetail?.kss}课时</li>
         <li>授课班级：{KcDetail?.title}</li>
       </ul>
