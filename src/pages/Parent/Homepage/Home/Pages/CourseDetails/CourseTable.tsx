@@ -48,7 +48,7 @@ const CourseTable: React.FC = () => {
           <li>上课地点：{KcDetail?.XQName}</li>
           <li>总课时：{KcDetail?.kss}课时</li>
           <li>班级：{KcDetail?.title}</li>
-          <li>学生：{xsName?.split('-')[0]}</li>
+          <li>学生：{currentUser?.student?.name}</li>
         </ul>
       </ul>
     </div>
