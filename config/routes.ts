@@ -107,12 +107,6 @@
         component: './Manager/Mechanisms/edit',
         hideInMenu: 'true',
       },
-      //请假管理
-      {
-        path: '/courseManagements/leaveManagement',
-        name: 'leaveManagement',
-        component: './Manager/CourseManagements/LeaveManagement',
-      },
       //退课管理
       {
         path: '/courseManagements/reimbursementClass',
@@ -207,6 +201,12 @@
     name: 'statistics',
     icon: 'BarChartOutlined',
     routes: [
+      //请假管理
+      {
+        path: '/statistics/leaveManagement',
+        name: 'leaveManagement',
+        component: './Manager/CourseManagements/LeaveManagement',
+      },
       //课程班互评统计
       {
         path: '/statistics/mutualEvaluation',
