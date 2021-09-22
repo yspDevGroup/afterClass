@@ -1,12 +1,12 @@
-import { useEffect, useRef } from 'react';
-const EducationalPage: React.FC = (props) => {
-  useEffect(() => {
-    window.location.href = 'http://moodle.xianyunshipei.com/course/view.php?id=12';
-  }, [])
+import { useEffect } from 'react';
+import { history } from 'umi';
 
-  return (
-    <div>
-    </div>
-  )
-}
+const EducationalPage: React.FC = () => {
+  useEffect(() => {
+    window.open('http://moodle.xianyunshipei.com/course/view.php?id=12');
+    history.goBack();
+  }, []);
+
+  return <div></div>;
+};
 export default EducationalPage;

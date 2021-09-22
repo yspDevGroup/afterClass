@@ -221,6 +221,7 @@
       },
     ],
   },
+  // 素质教育资源
   {
     path: '/educational',
     icon: 'RadarChartOutlined',
