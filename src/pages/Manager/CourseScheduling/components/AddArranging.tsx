@@ -428,6 +428,7 @@ const AddArranging: FC<PropsType> = (props) => {
               },
             }}
           >
+            <div className={styles.screen} style={{display:'flex'}}>
             <ProFormSelect
               label="校区"
               width="md"
@@ -534,6 +535,7 @@ const AddArranging: FC<PropsType> = (props) => {
                 },
               }}
             />
+            </div>
             <div className="banji">
               <span>班级：</span>
               {bjData && bjData.length === 0 ? (

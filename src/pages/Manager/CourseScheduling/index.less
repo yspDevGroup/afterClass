@@ -39,16 +39,26 @@
 }
 
 .ArrangingFrom {
-  padding: 30px 10px 50px 10px;
-
+  padding: 30px 0 50px 0;
   > div {
     margin-bottom: 35px;
-
+    min-width: 900px;
     .ant-form-item-label {
       width: 75px;
       text-align: right;
     }
+    .ant-form-item{
+      .ant-form-item-control{
+        max-width: 66%;
+        .ant-form-item-control-input{
+          .ant-select{
+            width: 300px;
+          }
+        }
+      }
+    }
   }
+
 
   .ant-space-align-center {
     position: fixed;
