@@ -143,7 +143,20 @@
     path: '/orderInquiry',
     name: 'orderInquiry',
     icon: 'Profile',
-    component: './Manager/OrderInquiry',
+    routes: [
+      {
+        path: '/orderInquiry/courseorder',
+        component: './Manager/OrderInquiry/CourseOrder',
+        name: 'courseorder',
+      },
+      {
+        path: '/orderInquiry/serviceorder',
+        component: './Manager/OrderInquiry/ServiceOrder',
+        name: 'serviceorder',
+      },
+    ],
+
+    // component: './Manager/OrderInquiry',
   },
   // 通知公告
   {
@@ -196,6 +209,7 @@
     ],
   },
   // 统计管理
+  //66
   {
     path: '/statistics',
     name: 'statistics',

@@ -38,6 +38,8 @@ export default {
   'menu.details': '公告详情',
   'menu.callTheRoll': '课堂点名',
   'menu.orderInquiry': '订单查询',
+  'menu.orderInquiry.courseorder': '课程订单',
+  'menu.orderInquiry.serviceorder': '服务订单',
   'menu.mutualEvaluation': '课程班互评统计',
   'menu.educational': '素质教育资源',
   'menu.parent.announcement': '公告详情',
