@@ -7,7 +7,7 @@ const Index = () => {
   return (
     <PageContainer>
       <Tabs>
-        <TabPane tab="代付款" key="1">
+        <TabPane tab="待付款" key="1">
           <Expired TabState="代付款" />
         </TabPane>
         <TabPane tab="已付款" key="2">
