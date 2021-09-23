@@ -23,6 +23,7 @@ export type ListItem = {
   price?: string; // 课程价格
   enrollLink?: string; // 针对课程点名使用
   recordLink?: string; // 针对考勤记录使用
+  bjid?: string;
 };
 // 无图片仅左边描述列表 | 图片描述列表 | 无图片左右两边描述列表 | 一行有左右两边的列表 | 一行中仅有左边的列表
 type ListType = 'list' | 'picList' | 'descList' | 'onlyList' | 'onlyLeftList';
