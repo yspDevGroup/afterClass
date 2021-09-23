@@ -91,6 +91,14 @@ export async function msgLeaveSchool(
   });
 }
 
+/** wechat支付回调 POST /wechat/trade/callback */
+export async function wechatTradeCallback(options?: { [key: string]: any }) {
+  return request<any>('/wechat/trade/callback', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}
+
 /** 微信扫码认证 GET /wechat/auth */
 export async function wechatOauth(options?: { [key: string]: any }) {
   return request<any>('/wechat/auth', {
@@ -277,14 +285,6 @@ export async function getSchDepList(
     params: {
       ...params,
     },
-    ...(options || {}),
-  });
-}
-
-/** wechat支付回调 POST /wechat/trade/callback */
-export async function wechatTradeCallback(options?: { [key: string]: any }) {
-  return request<any>('/wechat/trade/callback', {
-    method: 'POST',
     ...(options || {}),
   });
 }

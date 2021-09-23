@@ -31,8 +31,10 @@ const iconTextData = [
     text: '离校通知',
     icon: 'icon-lixiao',
     background: '#7DCE81',
+    handleClick:(data: any)=>{
+      console.log(data);
+    }
   },
-  
   {
     text: '课堂风采',
     itemType: 'img',
@@ -91,7 +93,7 @@ const ClassCalendar = (props: propstype) => {
         link: `/teacher/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}&index=all`,
         desc: [
           {
-            left: [ 
+            left: [
               `${item.XXSJPZ.KSSJ.substring(0, 5)}-${item.XXSJPZ.JSSJ.substring(0, 5)}  |  ${item.KHBJSJ.BJMC} `,
             ],
           },

@@ -1,9 +1,9 @@
 /*
- * @description: 
+ * @description:
  * @author: txx
  * @Date: 2021-06-07 12:10:01
- * @LastEditTime: 2021-09-15 15:19:07
- * @LastEditors: xue.chen
+ * @LastEditTime: 2021-09-22 18:47:28
+ * @LastEditors: Sissle Lynn
  */
 export type IiconTextData = {
   hidden?: boolean;
@@ -24,6 +24,7 @@ export type IiconTextData = {
     count?: ReactNode;
     key?: string;
     itemType?: 'img' | 'icon';
+    handleClick?: any;
  }[];
    /** 是否有背景色及徽标点 */
    totil?: boolean;

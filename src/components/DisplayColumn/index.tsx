@@ -14,7 +14,7 @@ const DisplayColumn: FC<IiconTextData> = ({
   dataSource,
   isheader,
   totil,
-  parentLink,
+  parentLink
 }) => {
   return (
     <div
@@ -35,7 +35,7 @@ const DisplayColumn: FC<IiconTextData> = ({
             curLink = parentLink[index];
           }
           return (
-            <List.Item>
+            <List.Item onClick={()=>item.handleClick?.(item)}>
               <Link to={curLink}>
                 <div className={styles.Box}>
                   {type === 'img' || itemType === 'img' ? (
@@ -76,9 +76,9 @@ const DisplayColumn: FC<IiconTextData> = ({
                       </div>
                       <div className={styles.TextBox}>{text}</div>
                     </div>
-                    
+
                   )}
-                  
+
                 </div>
               </Link>
             </List.Item>

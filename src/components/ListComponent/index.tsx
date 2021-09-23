@@ -3,8 +3,8 @@
  * @description:
  * @author: txx
  * @Date: 2021-05-31 10:24:05
- * @LastEditTime: 2021-09-15 16:51:12
- * @LastEditors: xue.chen
+ * @LastEditTime: 2021-09-22 18:51:20
+ * @LastEditors: Sissle Lynn
  */
 
 import type { ListData, ListItem, ListType } from './data';
@@ -129,7 +129,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
               </div>
               {operation ? (
                 <div className="ui-operation" style={{ display: 'block', paddingTop: '10px' }}>
-                  <DisplayColumn type="icon" grid={{ column: 3 }} dataSource={operation} parentLink={[v.enrollLink,v.recordLink]} />
+                  <DisplayColumn type="icon" grid={{ column: 3 }} dataSource={operation} parentLink={[v.enrollLink]} />
                 </div>
               ) : (
                 ''

@@ -291,3 +291,31 @@ export async function homePage(
     ...(options || {}),
   });
 }
+
+/** 教育局获取订单信息 POST /jyjgsj/getOrders */
+export async function getOrders(
+  body: {
+    XZQHM?: string;
+    XXJBSJId?: string;
+    DDLX?: number;
+    /** 学年学期ID */
+    XNXQId?: string;
+    KCMC?: string;
+    /** 班级名称 */
+    bjmc?: string;
+    /** 课程名称 */
+    kcmc?: string;
+    /** 课后服务订单状态 */
+    DDZT?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/jyjgsj/getOrders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

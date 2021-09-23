@@ -127,6 +127,14 @@
     icon: 'Build',
     component: './Manager/CourseScheduling',
   },
+  // 巡课管理
+  {
+    path: '/coursePatrol',
+    icon: 'RadarChartOutlined',
+    name: 'coursePatrol',
+    component: './Manager/CoursePatrol',
+  },
+  // 教师管理
   {
     path: '/teacherManagement',
     name: 'teacherManagement',
@@ -155,8 +163,6 @@
         name: 'serviceorder',
       },
     ],
-
-    // component: './Manager/OrderInquiry',
   },
   // 通知公告
   {

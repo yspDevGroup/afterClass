@@ -26,6 +26,7 @@ export async function getKHXSDD(
       TKSJ?: string;
       XSId?: string;
       XSXM?: string;
+      DDLX?: number;
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
@@ -96,6 +97,8 @@ export async function deleteKHXSDD(
 /** 查询所有课后服务订单记录 POST /khxsdd/ */
 export async function getAllKHXSDD(
   body: {
+    /** 订单类型 */
+    DDLX?: number;
     /** 学生ID */
     XSId?: string;
     /** 学年学期ID */
@@ -137,6 +140,7 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
       TKSJ?: string;
       XSId?: string;
       XSXM?: string;
+      DDLX?: number;
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
