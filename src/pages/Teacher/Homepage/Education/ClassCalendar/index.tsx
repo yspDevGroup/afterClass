@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
+import { Modal, message } from 'antd';
 import React, { useState, useEffect, useContext } from 'react';
 import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
@@ -9,6 +10,7 @@ import { DateRange, Week } from '@/utils/Timefunction';
 import noData from '@/assets/noCourses1.png';
 import classroomStyle from '@/assets/classroomStyle.png';
 import myContext from '@/utils/MyContext';
+import { msgLeaveSchool } from '@/services/after-class/wechat';
 
 
 type propstype = {
@@ -21,27 +23,7 @@ const defaultMsg = {
   noDataText: '当天无课',
   noDataImg: noData,
 };
-const iconTextData = [
-  {
-    text: '签到点名',
-    icon: 'icon-dianming',
-    background: '#FFC700',
-  },
-  {
-    text: '离校通知',
-    icon: 'icon-lixiao',
-    background: '#7DCE81',
-    handleClick:(data: any)=>{
-      console.log(data);
-    }
-  },
-  {
-    text: '课堂风采',
-    itemType: 'img',
-    img: classroomStyle,
-    background: '#FF8863',
-  },
-];
+
 const ClassCalendar = (props: propstype) => {
   const { setDatedata } = props;
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
@@ -50,7 +32,30 @@ const ClassCalendar = (props: propstype) => {
   const { weekSchedule } = useContext(myContext);
   const [dates, setDates] = useState<any[]>([]);
   const [courseArr, setCourseArr] = useState<any>({});
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [bjid,setBjid] =  useState<string>();
+  const iconTextData = [
+    {
+      text: '签到点名',
+      icon: 'icon-dianming',
+      background: '#FFC700',
+    },
+    {
+      text: '离校通知',
+      icon: 'icon-lixiao',
+      background: '#7DCE81',
+      handleClick:(bjid: string)=>{
+        setBjid(bjid);
+        setIsModalVisible(true);
+      }
+    },
+    {
+      text: '课堂风采',
+      itemType: 'img',
+      img: classroomStyle,
+      background: '#FF8863',
+    },
+  ];
   // 后台返回的周数据的遍历
   const getCalendarData = (data: any) => {
     const courseData = {};
@@ -119,20 +124,21 @@ const ClassCalendar = (props: propstype) => {
               sj,
             },
           };
-          const recordLink = {
-            pathname: '/teacher/education/rollcallrecord',
-            state: {
-              pkid: item.id,
-              bjids: item.KHBJSJ.id,
-              date: moment(res[i]).format('YYYY/MM/DD'),
-              kjs: sj.length,
-              sj,
-            },
-          };
+          // const recordLink = {
+          //   pathname: '/teacher/education/rollcallrecord',
+          //   state: {
+          //     pkid: item.id,
+          //     bjids: item.KHBJSJ.id,
+          //     date: moment(res[i]).format('YYYY/MM/DD'),
+          //     kjs: sj.length,
+          //     sj,
+          //   },
+          // };
           const curInfo = [
             {
               enrollLink,
-              recordLink,
+              bjid:item.KHBJSJ.id,
+              // recordLink,
               ...kcxxInfo,
             },
           ];
@@ -169,6 +175,23 @@ const ClassCalendar = (props: propstype) => {
       learnData,
     };
   };
+
+  const handleOk = async () => {
+    setIsModalVisible(false);
+    const res = await msgLeaveSchool({
+      KHBJSJId: bjid
+    });
+    if (res.status === 'ok' && res.data) {
+      message.success('通知已成功发送');
+    }else{
+      console.log('res: ', res);
+    };
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   useEffect(() => {
     const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
     if (setDatedata) {
@@ -224,6 +247,9 @@ const ClassCalendar = (props: propstype) => {
       />
       <div className={styles.subTitle}>{cDay}</div>
       <ListComponent listData={course} operation={iconTextData} />
+      <Modal className={styles.leaveSchool} title="离校通知" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false}>
+        <p>今日课后服务课程已结束，您的孩子已离校，请知悉。</p>
+      </Modal>
     </div>
   );
 };

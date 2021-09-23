@@ -30,4 +30,5 @@ export type IiconTextData = {
    totil?: boolean;
    exteraLink?: any;
    parentLink?: any[];
+   bjid?: string;
 }
