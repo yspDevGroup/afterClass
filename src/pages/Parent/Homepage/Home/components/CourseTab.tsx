@@ -108,9 +108,8 @@ const CourseTab = () => {
                           desc: [
                             {
                               left: [
-                                `课程时段：${moment(record.KKRQ).format('YYYY.MM.DD')}-${moment(
-                                  record.JKRQ,
-                                ).format('YYYY.MM.DD')}`,
+                                record.KCMS ? `简介：${record.KCMS}` :"",
+
                               ],
                             },
                           ],
