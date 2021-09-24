@@ -1,18 +1,17 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
 // import { message } from 'antd';
-import type { ColumnsType } from 'antd/lib/table';
+import type { ProColumns } from '@ant-design/pro-table';
+
 import { useModel, Link } from 'umi';
-import { Table, Select, } from 'antd';
-import { getClassesEvaluation, } from '@/services/after-class/khbjsj'
+import { Select } from 'antd';
+import { getClassesEvaluation } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import ProTable from '@ant-design/pro-table';
 
-
-import Style from './index.less'
+import Style from './index.less';
 
 const { Option } = Select;
-
-
 
 const MutualEvaluation: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -22,19 +21,18 @@ const MutualEvaluation: React.FC = () => {
   // 学年学期列表数据
   const [termList, setTermList] = useState<any>();
   // 学期学年没有数据时提示的开关
-  const [kai, setkai] = useState<boolean>(false);
   // 表格数据源
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   /// table表格数据
-  const columns: ColumnsType<API.KHXSDD> | undefined = [
+  const columns: ProColumns<TermItem>[] = [
     {
       title: '课程名称',
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
       align: 'center',
       render: (text: any) => {
-        return text?.KCMC
-      }
+        return text?.KCMC;
+      },
     },
     {
       title: '课程班名称',
@@ -51,9 +49,8 @@ const MutualEvaluation: React.FC = () => {
       key: 'KHKCSJ',
       align: 'center',
       render: (test: any) => {
-        return test?.KHKCLX.KCTAG
-
-      }
+        return test?.KHKCLX.KCTAG;
+      },
     },
     {
       title: '开课机构',
@@ -61,8 +58,8 @@ const MutualEvaluation: React.FC = () => {
       key: 'KHKCSJ',
       align: 'center',
       render: (test: any, record: any) => {
-        return record?.KHKCSJ?.KHJYJG?.QYMC || '-'
-      }
+        return record?.KHKCSJ?.KHJYJG?.QYMC || '-';
+      },
     },
     {
       title: '主讲师',
@@ -70,8 +67,8 @@ const MutualEvaluation: React.FC = () => {
       key: 'KHBJJs',
       align: 'center',
       render: (text: any) => {
-        return text[0]?.KHJSSJ.XM
-      }
+        return text[0]?.KHJSSJ.XM;
+      },
     },
     {
       title: '操作',
@@ -80,23 +77,21 @@ const MutualEvaluation: React.FC = () => {
       align: 'center',
       render: (_, record) => (
         <>
-          <Link to={{
-            pathname: '/statistics/mutualEvaluation/detail',
-            state: {
-              type: 'detail',
-              data: record
-            }
-          }}
+          <Link
+            to={{
+              pathname: '/statistics/mutualEvaluation/detail',
+              state: {
+                type: 'detail',
+                data: record,
+              },
+            }}
           >
             详情
           </Link>
         </>
-
-      )
-
+      ),
     },
-
-  ]
+  ];
   useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
@@ -111,31 +106,23 @@ const MutualEvaluation: React.FC = () => {
           setTermList(newData);
         }
       } else {
-        setkai(true);
       }
     })();
-
-  }, [])
+  }, []);
   // 学年学期变化
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    ChoseSelect(curXNXQId)
-  }, [curXNXQId])
+    ChoseSelect(curXNXQId);
+  }, [curXNXQId]);
   // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
     const res3 = await getClassesEvaluation({
-      XNXQId: SelectData
-
+      XNXQId: SelectData,
     });
     if (res3.status === 'ok') {
-
       setDataSource(res3?.data?.rows);
     }
-
-
-  }
-
-
+  };
 
   return (
     /// PageContainer组件是顶部的信息
@@ -161,15 +148,22 @@ const MutualEvaluation: React.FC = () => {
           </Select>
         </span>
       </div>
-      <div >
-        <Table columns={columns} dataSource={dataSource} rowKey="id" />
+      <div>
+        <ProTable
+          columns={columns}
+          dataSource={dataSource}
+          rowKey="id"
+          search={false}
+          options={{
+            setting: false,
+            fullScreen: false,
+            density: false,
+            reload: false,
+          }}
+        />
       </div>
       {/* <Link to={{ pathname: '/mutualEvaluation/detail',}}>详情</Link> */}
-
-
-
     </PageContainer>
-
-  )
-}
-export default MutualEvaluation
+  );
+};
+export default MutualEvaluation;

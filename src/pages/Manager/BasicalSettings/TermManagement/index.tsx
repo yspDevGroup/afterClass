@@ -9,7 +9,6 @@ import type { FormInstance } from 'antd';
 import { history, useModel } from 'umi';
 import { Modal, message, Popconfirm, Button, Divider } from 'antd';
 import type { TableListParams } from '@/constant';
-import { paginationConfig } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
 import type { TermItem } from './data';
 import { createXNXQ, deleteXNXQ, updateXNXQ } from '@/services/after-class/xnxq';
@@ -191,7 +190,6 @@ const TermManagement = () => {
           };
           return queryXNXQList(currentUser?.xxId, true, opts);
         }}
-        pagination={paginationConfig}
         rowKey="id"
         dateFormatter="string"
         toolBarRender={() => [
@@ -214,12 +212,11 @@ const TermManagement = () => {
         onCancel={() => setModalVisible(false)}
         footer={[
           <Button key="submit" type="primary" onClick={handleSubmit}>
-          确定
-        </Button>,
+            确定
+          </Button>,
           <Button key="back" onClick={() => setModalVisible(false)}>
             取消
           </Button>,
-        
         ]}
         centered
         maskClosable={false}
