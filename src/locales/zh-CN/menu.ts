@@ -18,7 +18,7 @@ export default {
   'menu.courseManagements.reimbursementClass': '退课管理',
   'menu.classManagement': '班级管理',
   'menu.courseScheduling': '排课管理',
-  'menu.coursePatrol':'巡课管理',
+  'menu.coursePatrol':'值班管理',
   'menu.noticenotice': '通知公告',
   'menu.statistics': '统计报表',
   'menu.statistics.leaveManagement': '考勤统计',

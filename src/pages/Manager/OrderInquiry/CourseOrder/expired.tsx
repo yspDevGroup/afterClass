@@ -2,19 +2,17 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-09-23 09:37:24
+ * @LastEditTime: 2021-09-24 09:03:59
  * @LastEditors: gxh
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
-import { Select, Table, Tag, Tooltip } from 'antd';
-import type { ColumnsType } from 'antd/lib/table';
+import { Select } from 'antd';
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import styles from './index.less';
@@ -30,7 +28,7 @@ type selectType = { label: string; value: string };
  * 订单查询页面
  * @return
  */
-const OrderInquiry = (props) => {
+const OrderInquiry = (props: any) => {
   const DDZT = props.TabState;
 
   const { initialState } = useModel('@@initialState');

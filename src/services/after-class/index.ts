@@ -7,49 +7,51 @@ import * as auth from './auth';
 import * as user from './user';
 import * as bjsj from './bjsj';
 import * as jzgjbsj from './jzgjbsj';
-import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
-import * as jcsj from './jcsj';
+import * as fjlx from './fjlx';
 import * as jcxx from './jcxx';
+import * as jcsj from './jcsj';
 import * as jxjhsj from './jxjhsj';
 import * as jyjgsj from './jyjgsj';
 import * as jyjgtzgg from './jyjgtzgg';
-import * as jzggzjl from './jzggzjl';
 import * as jzgcfsj from './jzgcfsj';
+import * as jzggzjl from './jzggzjl';
+import * as jzgjtcy from './jzgjtcy';
 import * as jzgktyj from './jzgktyj';
 import * as jzglwsj from './jzglwsj';
-import * as jzgjtcy from './jzgjtcy';
-import * as jzgxxjl from './jzgxxjl';
 import * as jzgrysj from './jzgrysj';
 import * as kcsj from './kcsj';
+import * as jzgxxjl from './jzgxxjl';
+import * as khjgrzsq from './khjgrzsq';
 import * as khbjpj from './khbjpj';
 import * as khbjsj from './khbjsj';
-import * as khjgrzsq from './khjgrzsq';
 import * as khjscq from './khjscq';
-import * as khjyjg from './khjyjg';
 import * as khjspj from './khjspj';
 import * as khjssj from './khjssj';
+import * as khjyjg from './khjyjg';
 import * as khjytzgg from './khjytzgg';
 import * as khkclx from './khkclx';
-import * as khkcsq from './khkcsq';
 import * as khkcsj from './khkcsj';
-import * as khtksj from './khtksj';
+import * as khkcsq from './khkcsq';
+import * as khxkjl from './khxkjl';
 import * as khpksj from './khpksj';
+import * as khxksj from './khxksj';
 import * as khxscq from './khxscq';
-import * as khxspj from './khxspj';
+import * as khtksj from './khtksj';
 import * as khxsdd from './khxsdd';
-import * as khxxzzfw from './khxxzzfw';
+import * as khxspj from './khxspj';
 import * as khxsqj from './khxsqj';
 import * as khzzfw from './khzzfw';
+import * as khxxzzfw from './khxxzzfw';
+import * as redis from './redis';
 import * as pksj from './pksj';
 import * as njsj from './njsj';
-import * as redis from './redis';
 import * as sso from './sso';
 import * as upload from './upload';
-import * as xl from './xl';
 import * as wechat from './wechat';
-import * as xnjgsj from './xnjgsj';
 import * as xksj from './xksj';
+import * as xl from './xl';
+import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
 import * as xscfsj from './xscfsj';
@@ -57,12 +59,12 @@ import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
 import * as xsjtcy from './xsjtcy';
 import * as xsxxjl from './xsxxjl';
-import * as xxgg from './xxgg';
 import * as xxjbpz from './xxjbpz';
+import * as xxgg from './xxgg';
 import * as xxjbsj from './xxjbsj';
 import * as xxpz from './xxpz';
-import * as xxtzgg from './xxtzgg';
 import * as xxsjpz from './xxsjpz';
+import * as xxtzgg from './xxtzgg';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
@@ -71,49 +73,51 @@ export default {
   user,
   bjsj,
   jzgjbsj,
-  fjlx,
   fjsj,
-  jcsj,
+  fjlx,
   jcxx,
+  jcsj,
   jxjhsj,
   jyjgsj,
   jyjgtzgg,
-  jzggzjl,
   jzgcfsj,
+  jzggzjl,
+  jzgjtcy,
   jzgktyj,
   jzglwsj,
-  jzgjtcy,
-  jzgxxjl,
   jzgrysj,
   kcsj,
+  jzgxxjl,
+  khjgrzsq,
   khbjpj,
   khbjsj,
-  khjgrzsq,
   khjscq,
-  khjyjg,
   khjspj,
   khjssj,
+  khjyjg,
   khjytzgg,
   khkclx,
-  khkcsq,
   khkcsj,
-  khtksj,
+  khkcsq,
+  khxkjl,
   khpksj,
+  khxksj,
   khxscq,
-  khxspj,
+  khtksj,
   khxsdd,
-  khxxzzfw,
+  khxspj,
   khxsqj,
   khzzfw,
+  khxxzzfw,
+  redis,
   pksj,
   njsj,
-  redis,
   sso,
   upload,
-  xl,
   wechat,
-  xnjgsj,
   xksj,
+  xl,
+  xnjgsj,
   xnxq,
   xqsj,
   xscfsj,
@@ -121,12 +125,12 @@ export default {
   xsjlsj,
   xsjtcy,
   xsxxjl,
-  xxgg,
   xxjbpz,
+  xxgg,
   xxjbsj,
   xxpz,
-  xxtzgg,
   xxsjpz,
+  xxtzgg,
   zxfa,
   zxsj,
 };

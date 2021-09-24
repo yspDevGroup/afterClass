@@ -10,7 +10,6 @@ import type { SearchDataType } from '@/components/Search/data';
 import type { TableListParams } from './data';
 import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
-import { paginationConfig } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
 import SearchComponent from '@/components/Search';
 import { createFJSJ, deleteFJSJ, getAllFJSJ, updateFJSJ } from '@/services/after-class/fjsj';
@@ -249,7 +248,6 @@ const RoomManagement = () => {
           density: false,
           reload: false,
         }}
-        pagination={paginationConfig}
         rowKey="id"
         dateFormatter="string"
         toolBarRender={() => [
@@ -283,7 +281,6 @@ const RoomManagement = () => {
                 <Button key="back" onClick={() => setModalVisible(false)}>
                   取消
                 </Button>,
-               
               ]
         }
         style={{ maxHeight: '430px' }}

@@ -24,6 +24,7 @@ export const queryXNXQList = async (xxid?: string, refresh?: true, params?: any)
     );
     if (res.status === 'ok') {
       const { data = [] } = res;
+      xnxqInfo.data = data;
       xnxqInfo.xnxqList = convertData(data);
       const currentXQ = getCurrentXQ(data);
       xnxqInfo.current = currentXQ;

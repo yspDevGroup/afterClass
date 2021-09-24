@@ -78,6 +78,7 @@ export async function sendMessageToTeacher(
 export async function msgLeaveSchool(
   body: {
     KHBJSJId?: string;
+    text?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -95,6 +96,14 @@ export async function msgLeaveSchool(
 export async function wechatTradeCallback(options?: { [key: string]: any }) {
   return request<any>('/wechat/trade/callback', {
     method: 'POST',
+    ...(options || {}),
+  });
+}
+
+/** 课程统计 GET /wechat/statistiCourses */
+export async function statistiCourses(options?: { [key: string]: any }) {
+  return request<any>('/wechat/statistiCourses', {
+    method: 'GET',
     ...(options || {}),
   });
 }

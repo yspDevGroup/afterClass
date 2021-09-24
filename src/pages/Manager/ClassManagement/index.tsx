@@ -298,7 +298,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
             reload: false,
           }}
           search={false}
-          pagination={paginationConfig}
           headerTitle={
             <div style={{ display: 'flex' }}>
               <span style={{ fontSize: 14, color: '#666' }}>

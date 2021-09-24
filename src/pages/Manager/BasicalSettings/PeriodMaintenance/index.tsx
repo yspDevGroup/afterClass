@@ -12,7 +12,6 @@ import { Button } from 'antd';
 import type { Maintenance } from './data';
 import styles from './index.less';
 import Modal from 'antd/lib/modal/Modal';
-import { paginationConfig } from '@/constant';
 import {
   createXXSJPZ,
   deleteXXSJPZ,
@@ -236,7 +235,6 @@ const PeriodMaintenance = () => {
             return res;
           }}
           rowKey="id"
-          pagination={paginationConfig}
           dateFormatter="string"
           toolBarRender={() => [
             <Button
@@ -263,7 +261,6 @@ const PeriodMaintenance = () => {
             <Button key="back" onClick={() => setModalVisible(false)}>
               取消
             </Button>,
-           
           ]}
           centered
           maskClosable={false}
