@@ -11,6 +11,7 @@ import noData from '@/assets/noCourses1.png';
 import classroomStyle from '@/assets/classroomStyle.png';
 import myContext from '@/utils/MyContext';
 import { msgLeaveSchool } from '@/services/after-class/wechat';
+import { DisplayColumnItem } from '@/components/data';
 
 
 type propstype = {
@@ -34,7 +35,7 @@ const ClassCalendar = (props: propstype) => {
   const [courseArr, setCourseArr] = useState<any>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [bjid,setBjid] =  useState<string>();
-  const iconTextData = [
+  const iconTextData: DisplayColumnItem[] = day === dayjs().format('YYYY-MM-DD')?[
     {
       text: '签到点名',
       icon: 'icon-dianming',
@@ -47,7 +48,19 @@ const ClassCalendar = (props: propstype) => {
       handleClick:(bjid: string)=>{
         setBjid(bjid);
         setIsModalVisible(true);
-      }
+      },
+    },
+    {
+      text: '课堂风采',
+      itemType: 'img',
+      img: classroomStyle,
+      background: '#FF8863',
+    },
+  ]:[
+    {
+      text: '签到点名',
+      icon: 'icon-dianming',
+      background: '#FFC700',
     },
     {
       text: '课堂风采',
@@ -184,7 +197,7 @@ const ClassCalendar = (props: propstype) => {
     if (res.status === 'ok' && res.data) {
       message.success('通知已成功发送');
     }else{
-      console.log('res: ', res);
+      message.error(res.message);
     };
   };
 

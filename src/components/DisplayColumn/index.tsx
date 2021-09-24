@@ -5,6 +5,7 @@ import { List, Badge } from 'antd';
 import type { IiconTextData } from './data';
 import IconFont from '../CustomIcon';
 import styles from './index.less';
+import { DisplayColumnItem } from '../data';
 
 const DisplayColumn: FC<IiconTextData> = ({
   hidden = false,
@@ -25,7 +26,7 @@ const DisplayColumn: FC<IiconTextData> = ({
         display: hidden ? 'none' : 'block',
       }}
     >
-      <List
+      <List<DisplayColumnItem>
         grid={grid}
         dataSource={dataSource}
         header={isheader === true ? <div>{title}</div> : ''}
