@@ -6,7 +6,14 @@ import { request } from 'umi';
 export async function createKHZZFW(body: API.CreateKHZZFW, options?: { [key: string]: any }) {
   return request<{
     status?: 'ok' | 'error';
-    data: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
+    data: {
+      id?: string;
+      FWMC?: string;
+      FWNR?: string;
+      FWJGMC?: string;
+      FWZT?: number;
+      NJSJs?: { id?: string; NJ?: number; NJMC?: string; XD?: string }[];
+    };
     message?: string;
   }>('/khzzfw/create', {
     method: 'PUT',
@@ -23,6 +30,10 @@ export async function getKHZZFW(
   body: {
     /** 学校ID */
     XXJBSJId?: string;
+    /** 状态 */
+    FWZT?: number;
+    /** 服务名称 */
+    FWMC?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */

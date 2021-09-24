@@ -212,8 +212,8 @@ const TermManagement = () => {
         onCancel={() => setModalVisible(false)}
         footer={[
           <Button key="submit" type="primary" onClick={handleSubmit}>
-            确定
-          </Button>,
+          确定
+        </Button>,
           <Button key="back" onClick={() => setModalVisible(false)}>
             取消
           </Button>,

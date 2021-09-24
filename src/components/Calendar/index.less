@@ -1,0 +1,461 @@
+@import '~antd/es/style/themes/default.less';
+
+.calendarContainer {
+  font-family: "Microsoft Yahei";
+  color: #4A4A4A;
+  font-size: 16px;
+  background: #fff;
+
+  .textCut {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .calendarHeader {
+    position: relative;
+    padding: 0 0 16px 0;
+    height: 80px;
+
+    .termInfo {
+      box-sizing: border-box;
+      width: 200px;
+      height: 48px;
+      border: 1px solid #e4e4e4;
+      border-radius: 2px;
+
+      // &[v-align="wk-left"] {
+      //   margin-left: 45px;
+      // }
+
+      &[v-align="center"] {
+        margin: 0 auto;
+      }
+
+      &[v-align="right"] {
+        position: absolute;
+        right: 0;
+
+        &+.weekInfo {
+          right: 216px !important;
+        }
+      }
+
+      :global(.ant-picker),
+      :global(.ant-picker-focused) {
+        position: relative;
+        width: 120px;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+
+        input {
+          padding-left: 25px;
+          color: #333333;
+          background: transparent;
+          text-align: center;
+          cursor: pointer;
+
+          &+span {
+            position: absolute;
+            left: 0;
+            color: #2f54eb;
+          }
+        }
+      }
+
+      .optionItem {
+        display: inline-block;
+        width: 38px;
+        height: 48px;
+        color: #2f54eb;
+        line-height: 48px;
+        text-align: center;
+      }
+    }
+
+    .today {
+      // visibility: hidden;
+      right: 0 !important;
+    }
+
+    // .weekInfo,
+    .today {
+      position: absolute;
+      top: 16px;
+      right: 380px;
+      color: #333;
+      font-size: 14px;
+      line-height: 32px;
+      height: 32px;
+      border-radius: 2px;
+      letter-spacing: 2px;
+      background: #3E88F8;
+
+      span {
+        padding: 0 16px 0 8px;
+        color: #fff;
+        // font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+
+        span {
+          padding: 0 8px;
+        }
+      }
+    }
+  }
+
+  .calendarBody {
+    display: flex;
+
+    .dateWrapper {
+      // box-shadow: 2px 4px 5px #bdbdbd;
+      flex-grow: 1;
+
+      &[v-align="wk-left"] {
+        .dateHeader {
+          .weekItem {
+            background: none;
+            border: none;
+
+            &.weekly {
+              visibility: hidden;
+              width: 45px;
+            }
+
+            &:nth-child(7) {
+              border-right: none !important;
+            }
+          }
+
+          .yspWeek {
+            .weekItem {
+              border-bottom: 1px solid #F1EBE4;
+            }
+          }
+        }
+
+        .dateData {
+          .weekly {
+            width: 45px;
+
+            .weeklyItem {
+              width: 45px;
+              padding: 0 20px;
+              line-height: 20px !important;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              text-align: center;
+              border: none;
+            }
+          }
+        }
+      }
+
+      .dateHeader {
+        display: flex;
+        text-align: center;
+
+        .weekItem {
+          height: 32px;
+          line-height: 32px;
+          font-size: 16px;
+          background-color: #FBEC9C;
+          border-width: 1px 0 1px 1px;
+          border-color: #ECE3B1;
+          border-style: solid;
+          box-sizing: border-box;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .yspWeek {
+          font-weight: 400;
+          color: #4A4A4A;
+          display: flex;
+          flex: 1;
+
+          .weekItem {
+            flex: 1;
+
+            &:nth-child(6),
+            &:nth-child(7) {
+              color: rgba(224, 8, 8, 0.74);
+            }
+
+            &:nth-child(7) {
+              border-right: 1px solid #F1EBE4;
+            }
+          }
+        }
+      }
+
+      .dateData {
+        display: flex;
+
+        .yspDays {
+          flex: 1;
+
+          :global {
+            #yspNoArrange{
+              background-color: #EEEEEE;
+              div[class*='noText']{
+                display: block;
+                text-align: center;
+                font-weight: normal;
+                font-size: 12px;
+                color: #999;
+              }
+            }
+          }
+
+          .dayItem {
+            flex: 1;
+            height: 60px;
+            float: left;
+            font-weight: 600;
+            color: #565555;
+            width: 14.285%;
+            padding: 10px;
+            background-color: #ffffff;
+            border-width: 0 0 1px 1px;
+            border-color: #F1EBE4;
+            border-style: solid;
+            box-sizing: border-box;
+
+            &.mark {
+              .day {
+                color: #fff !important;
+              }
+            }
+
+            .noText {
+              display: none;
+            }
+
+            &.eventItem {
+              height: 120px;
+
+              ul {
+                margin: 0;
+                padding: 0;
+                text-align: left;
+                list-style: none;
+
+                li {
+                  display: inline-block;
+                  width: 60px;
+                  // line-height: 20px;
+
+                  span:nth-child(1) {
+                    display: inline-block;
+                    width: 8px;
+                    height: 8px;
+                    margin-right: 8px;
+                    border-radius: 8px;
+                  }
+
+                  span:nth-child(2) {
+                    display: inline-block;
+                    width: calc(~'100% - 24px');
+                    font-weight: normal;
+                    font-size: 12px;
+                    vertical-align: middle;
+                  }
+                }
+              }
+
+              .eventMore {
+                >div {
+                  position: relative;
+
+                  p {
+                    color: #999;
+                    text-align: left;
+                    font-size: 12px;
+                    line-height: 22px;
+                    padding-left: 24px;
+                    font-weight: normal;
+                  }
+
+                  .listMore {
+                    position: absolute;
+                    top: 0;
+                    left: 10px;
+                    width: 100%;
+                    padding: 8px 8px 8px 0;
+                    margin-top: 0;
+                    background: #FFFFFF;
+                    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+                    border-radius: 2px;
+                  }
+                }
+              }
+            }
+
+            .lunarDay {
+              font-size: 10px;
+              font-weight: normal;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            &:nth-child(7n),
+            &:nth-child(7n+6) {
+              .day {
+                color: rgba(224, 8, 8, 0.74);
+              }
+            }
+
+            &:nth-child(7n) {
+              border-right: 1px solid #F1EBE4;
+            }
+
+            &:global(.yspOthermonth) {
+              &.noShow {
+
+                .day,
+                .lunarDay {
+                  visibility: hidden;
+                }
+              }
+
+              .day,
+              .lunarDay {
+                color: #C1C0C0;
+              }
+            }
+
+            // &:global(.yspChosenDay) {
+            //   background-color: rgba(255, 235, 59, 0.3);
+            //   color: @primary-color;
+            //   border: 1px solid rgba(255, 166, 0, 0.5);
+            // }
+            &:global(.yspToday) {
+              // background-color: orange;
+              // color: white;
+              background: rgba(62, 136, 248, 0.2);
+              // border: 1px solid orange;
+            }
+          }
+        }
+      }
+
+      .weekly {
+        width: 60px;
+
+        .weeklyItem {
+          width: 60px;
+          height: 120px;
+          line-height: 120px;
+          color: #888;
+          border-width: 0 0 1px 1px;
+          border-color: #F1EBE4;
+          border-style: solid;
+        }
+      }
+    }
+
+    .eventWrapper {
+      width: 380px;
+      padding: 0 16px 16px;
+      background: #f6f6f6;
+
+      button {
+        width: 100%;
+        height: 32px;
+        font-size: 12px;
+        border: none;
+        border-radius: 2px;
+      }
+
+      .eventsItem {
+        position: relative;
+        display: flex;
+        height: 60px;
+        margin: 16px 0;
+        padding: 8px;
+        overflow: hidden;
+        background: #fff;
+        border-radius: 2px;
+
+        >.slot {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 4px;
+          height: 100%;
+          border-radius: 0px 2px 2px 0px;
+        }
+
+        >.event {
+          width: calc(~'100% - 30px');
+          padding-left: 12px;
+
+          .eventTitle {
+            color: var(--black);
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 22px;
+          }
+
+          .eventDate {
+            color: #666;
+            font-size: 12px;
+            line-height: 22px;
+            .textCut;
+          }
+        }
+
+        .operation {
+          width: 30px;
+          text-align: right;
+
+          span {
+            height: 100%;
+            font-size: 14px;
+            line-height: 44px;
+          }
+        }
+      }
+
+      .noData {
+        line-height: 300px;
+        text-align: center;
+        font-size: 16px;
+        letter-spacing: 2px;
+        color: #888;
+
+        img {
+          width: 200px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: @screen-xs) {
+  .dateData {
+    .item {
+      height: 60px;
+
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+
+        li {
+          flex: 1;
+          text-align: center;
+
+          span {
+            display: none;
+            margin: 0 !important;
+          }
+        }
+      }
+    }
+  }
+}

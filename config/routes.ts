@@ -127,10 +127,10 @@
     icon: 'Build',
     component: './Manager/CourseScheduling',
   },
-  // 巡课管理
+  // 值班管理
   {
     path: '/coursePatrol',
-    icon: 'RadarChartOutlined',
+    icon: 'SolutionOutlined',
     name: 'coursePatrol',
     component: './Manager/CoursePatrol',
   },
@@ -167,7 +167,7 @@
   {
     path: '/valueAddedServices',
     name: 'valueAddedServices',
-    icon: 'Profile',
+    icon: 'SmileOutlined',
     routes: [
       {
         path: '/valueAddedServices/cateringService',

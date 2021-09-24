@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-09-21 15:40:24
+ * @LastEditTime: 2021-09-24 10:18:06
  * @LastEditors: Sissle Lynn
  */
 /*
@@ -45,9 +45,9 @@ const TeacherManagement = () => {
       authorization: getAuthorization(),
     },
     beforeUpload(file: any) {
-      const isLt2M = file.size / 1024 < 200;
+      const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
-        message.error('文件大小不能超过200KB');
+        message.error('文件大小不能超过2M');
       }
       return isLt2M;
     },

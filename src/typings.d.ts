@@ -181,6 +181,7 @@ declare const wxInfo: {
 declare const xnxqInfo: {
   xnxqList: any;
   current: any;
+  data: any;
 };
 
 type InitialState = {

@@ -31,8 +31,18 @@ export async function createKHXXZZFW(body: API.CreateKHXXZZFW, options?: { [key:
 /** 获取学校课后增值服务 POST /khxxzzfw/getAll */
 export async function getKHXXZZFW(
   body: {
-    /** 学生ID */
-    XSJBSJId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 学校ID */
+    XNXQId?: string;
+    /** 课后增值服务ID */
+    KHZZFWId?: string;
+    /** 状态 */
+    FWZT?: number;
+    /** 服务名称 */
+    FWMC?: string;
+    /** 增值服务名称 */
+    ZZFWMC?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */

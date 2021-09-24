@@ -232,11 +232,11 @@ export const getQueryString = (name: string) => {
  * @param {API.XNXQ[]} list
  * @return {*}  {(API.XNXQ | null)}
  */
-export const getCurrentXQ = (list: API.XNXQ[]): API.XNXQ | null => {
+export const getCurrentXQ = (list: API.XNXQ[], date?: string): API.XNXQ | null => {
   if (!list.length) {
     return null;
   }
-  const today = new Date();
+  const today = date ? new Date(date) : new Date();
   const currentXQ = list.find((xq: any) => {
     const begin = new Date(xq.KSRQ);
     const end = new Date(xq.JSRQ);
