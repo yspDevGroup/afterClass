@@ -129,7 +129,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
               </div>
               {operation ? (
                 <div className="ui-operation" style={{ display: 'block', paddingTop: '10px' }}>
-                  <DisplayColumn type="icon" grid={{ column: 3 }} dataSource={operation} parentLink={[v.enrollLink]} bjid={v.bjid}/>
+                  <DisplayColumn type="icon" grid={{ column: operation.length }} dataSource={operation} parentLink={[v.enrollLink]} bjid={v.bjid}/>
                 </div>
               ) : (
                 ''
