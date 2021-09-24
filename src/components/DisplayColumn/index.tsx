@@ -5,6 +5,7 @@ import { List, Badge } from 'antd';
 import type { IiconTextData } from './data';
 import IconFont from '../CustomIcon';
 import styles from './index.less';
+import { DisplayColumnItem } from '../data';
 
 const DisplayColumn: FC<IiconTextData> = ({
   hidden = false,
@@ -14,7 +15,8 @@ const DisplayColumn: FC<IiconTextData> = ({
   dataSource,
   isheader,
   totil,
-  parentLink
+  parentLink,
+  bjid
 }) => {
   return (
     <div
@@ -24,7 +26,7 @@ const DisplayColumn: FC<IiconTextData> = ({
         display: hidden ? 'none' : 'block',
       }}
     >
-      <List
+      <List<DisplayColumnItem>
         grid={grid}
         dataSource={dataSource}
         header={isheader === true ? <div>{title}</div> : ''}
@@ -35,7 +37,7 @@ const DisplayColumn: FC<IiconTextData> = ({
             curLink = parentLink[index];
           }
           return (
-            <List.Item onClick={()=>item.handleClick?.(item)}>
+            <List.Item onClick={()=>item.handleClick?.(bjid)}>
               <Link to={curLink}>
                 <div className={styles.Box}>
                   {type === 'img' || itemType === 'img' ? (

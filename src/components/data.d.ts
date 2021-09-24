@@ -14,3 +14,16 @@ export type CompPropsType = {
   /** 可针对各组件设置特殊配置 */
   settings?: Record<string, any>;
 };
+
+export type DisplayColumnItem = {
+  text?: string;
+  icon?: any;
+  img?: string;
+  link?: string;
+  background?: string;
+  fontSize?: string; /** 我的订单中数量决定徽标点是否展示 */
+  count?: ReactNode;
+  key?: string;
+  itemType?: 'img' | 'icon';
+  handleClick?: any;
+}

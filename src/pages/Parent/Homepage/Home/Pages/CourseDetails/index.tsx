@@ -134,6 +134,7 @@ const CourseDetails: React.FC = () => {
       XSXM: currentUser?.student?.name,
       KHBJSJId: BJ!,
       XXJBSJId: currentUser?.xxId,
+      DDLX:0
     };
     const res = await createKHXSDD(data);
     if (res.status === 'ok') {
@@ -196,14 +197,6 @@ const CourseDetails: React.FC = () => {
         <p className={styles.title}>{KcDetail?.KCMC}</p>
 
         <ul>
-          <li>
-            报名时段：{moment(KcDetail?.BMKSSJ).format('YYYY.MM.DD')}~
-            {moment(KcDetail?.BMJSSJ).format('YYYY.MM.DD')}
-          </li>
-          <li>
-            上课时段：{moment(KcDetail?.KKRQ).format('YYYY.MM.DD')}~
-            {moment(KcDetail?.JKRQ).format('YYYY.MM.DD')}
-          </li>
           <li>上课地点：本校</li>
         </ul>
         <p className={styles.title}>课程简介</p>
@@ -238,6 +231,8 @@ const CourseDetails: React.FC = () => {
                           return '';
                         })}
                       </p>
+                      <p> 报名时段：{moment(value.BMKSSJ).format('YYYY.MM.DD')}-{moment(value.BMJSSJ).format('YYYY.MM.DD')}</p>
+                      <p> 上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-{moment(value.JKRQ).format('YYYY.MM.DD')}</p>
                       <table>
                         <thead>
                           <tr>

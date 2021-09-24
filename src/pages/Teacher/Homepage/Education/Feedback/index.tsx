@@ -27,10 +27,8 @@ const Feedback = (props: any) => {
               </div>
             })
           }
-
         </div>
     }
-
 
   </div>
 }
