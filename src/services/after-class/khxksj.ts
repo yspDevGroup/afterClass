@@ -44,40 +44,33 @@ export async function getKHXKSJ(
   });
 }
 
-/** 删除巡课安排 DELETE /khxksj/${param0} */
+/** 删除巡课安排 DELETE /khxksj */
 export async function deleteKHXKSJ(
-  params: {
-    // path
-    /** 巡课安排ID */
-    id: string;
+  body: {
+    /** 巡课日期 */
+    RQ?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxksj/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>('/khxksj', {
     method: 'DELETE',
-    params: { ...params },
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
 
-/** 更新巡课安排 PUT /khxksj/update/${param0} */
-export async function updateKHXKSJ(
-  params: {
-    // path
-    /** 巡课安排数据ID */
-    id: string;
-  },
-  body: API.UpdateKHXKSJ,
-  options?: { [key: string]: any },
-) {
-  const { id: param0 } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxksj/update/${param0}`, {
+/** 更新巡课安排 PUT /khxksj/update */
+export async function updateKHXKSJ(body: API.UpdateKHXKSJ[], options?: { [key: string]: any }) {
+  return request<{ status?: 'ok' | 'error'; message?: string }>('/khxksj/update', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
     data: body,
     ...(options || {}),
   });

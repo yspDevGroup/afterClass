@@ -16,6 +16,7 @@ export async function createKHXXZZFW(body: API.CreateKHXXZZFW, options?: { [key:
       JSRQ?: string | any;
       BMKSSJ?: string;
       BMJSSJ?: string;
+      KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
     };
     message?: string;
   }>('/khxxzzfw/create', {

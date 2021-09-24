@@ -7,11 +7,13 @@ import Calendar from '@/components/Calendar';
 import NewEvent from './components/NewEvent';
 import { customConfig } from './CalendarConfig';
 import { SchoolEvent } from '@/components/Calendar/data';
-import { createKHXKSJ, getKHXKSJ, getScheduleByDate } from '@/services/after-class/khxksj';
 import { ConvertEvent, RevertEvent } from './util';
 
 import styles from './index.less';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { createKHXKSJ, deleteKHXKSJ, getKHXKSJ, getScheduleByDate, updateKHXKSJ } from '@/services/after-class/khxksj';
 
+const { confirm } = Modal;
 const CoursePatrol = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -57,6 +59,27 @@ const CoursePatrol = () => {
       setCurrent(undefined);
     }
   };
+  // 清除
+  const showDeleteConfirm = () => {
+    confirm({
+      title: '温馨提示',
+      icon: <InfoCircleOutlined style={{ color: 'red' }} />,
+      content: '重置后，当日值班信息将清空，确定重置吗？',
+      async onOk() {
+        const res = await deleteKHXKSJ({
+          RQ: moment(date).format('YYYY-MM-DD'),
+          XXJBSJId: currentUser.xxId
+        })
+        if(res.status === 'ok'){
+          message.success('信息重置完成');
+          setModalVisible(false);
+          getZBEvents();
+        }else{
+          message.warning(res.message);
+        }
+      },
+    });
+  };
   const handleOver = async (date: string) => {
     const res = await getScheduleByDate({
       XXJBSJId: currentUser.xxId,
@@ -79,8 +102,8 @@ const CoursePatrol = () => {
             XXJBSJId: currentUser.xxId
           }
           return itemData;
-        })
-        const res = await createKHXKSJ(postData as unknown as API.CreateKHXKSJ[]);
+        });
+        const res = current ? await updateKHXKSJ(postData as unknown as API.CreateKHXKSJ[]) : await createKHXKSJ(postData as unknown as API.CreateKHXKSJ[]);
         if (res.status === 'ok') {
           message.success('值班安排成功');
           setModalVisible(false);
@@ -111,6 +134,20 @@ const CoursePatrol = () => {
         onCancel={() => setModalVisible(false)}
         centered
         footer={[
+          <Button key="submit" type="primary" onClick={() => handleSubmit()}>
+            确定
+          </Button>,
+          current ? <Button
+            style={{
+              border: '1px solid #F04D4D ',
+              marginRight: 8,
+              background: '#F04D4D',
+              color: '#fff',
+            }}
+            onClick={showDeleteConfirm}
+          >
+            重置
+          </Button>:'',
           <Button key="cancel"
             style={{
               display: 'inline-block',
@@ -120,9 +157,6 @@ const CoursePatrol = () => {
               setModalVisible(false);
             }}>
             取消
-          </Button>,
-          <Button key="submit" type="primary" onClick={() => handleSubmit()}>
-            确定
           </Button>,
         ]}
         maskClosable={false}
