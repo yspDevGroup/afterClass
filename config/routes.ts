@@ -164,6 +164,23 @@
       },
     ],
   },
+  {
+    path: '/valueAddedServices',
+    name: 'valueAddedServices',
+    icon: 'Profile',
+    routes: [
+      {
+        path: '/valueAddedServices/cateringService',
+        component: './Manager/ValueAddedServices/CateringService',
+        name: 'cateringService',
+      },
+      {
+        path: '/valueAddedServices/serviceManagement',
+        component: './Manager/ValueAddedServices/ServiceManagement',
+        name: 'serviceManagement',
+      },
+    ],
+  },
   // 通知公告
   {
     path: '/announcements',
