@@ -13,7 +13,6 @@ import GoBack from '@/components/GoBack';
 
 const { Countdown } = Statistic;
 const OrderDetails: React.FC = (props: any) => {
-  const [deadline, setDeadline] = useState<number>();
   const [orderInfo, setOrderInfo] = useState<any>();
   const [urlPath, setUrlPath] = useState<any>();
   const linkRef = useRef<HTMLAnchorElement | null>(null);
@@ -22,15 +21,13 @@ const OrderDetails: React.FC = (props: any) => {
   const { title, detail, payOrder, user, KKRQ, JKRQ } = props.location.state;
   const children = [
     {
-      student_userid: currentUser.student.student_userid,
+      student_userid: currentUser?.student?.student_userid,
       njId: '1',
     },
   ];
   const name = user?.subscriber_info?.remark || user?.username;
   useEffect(() => {
-    const orderTime = new Date(payOrder.XDSJ).getTime();
     setOrderInfo(payOrder);
-    setDeadline(orderTime + 1000 * 60 * 30);
   }, [payOrder]);
   useEffect(() => {
     linkRef.current?.click();
@@ -75,6 +72,8 @@ const OrderDetails: React.FC = (props: any) => {
     }
   };
   if (orderInfo) {
+    const orderTime = new Date(orderInfo?.XDSJ).getTime();
+    const deadline = orderTime + 1000 * 60 * 30;
     return (
       <>
         <GoBack title={'订单详情'} />
@@ -143,7 +142,7 @@ const OrderDetails: React.FC = (props: any) => {
                 </li>
                 <li>
                   <span>下单时间</span>
-                  <span>{moment(orderInfo.XDSJ).format('YYYY.MM.DD hh:mm:ss')}</span>
+                  <span>{moment(orderInfo.XDSJ).format('YYYY.MM.DD HH:mm:ss')}</span>
                 </li>
                 <li>
                   <span>支付方式</span>
@@ -153,7 +152,7 @@ const OrderDetails: React.FC = (props: any) => {
                   <>
                     <li>
                       <span>支付时间</span>
-                      <span>{moment(orderInfo.ZFSJ).format('YYYY.MM.DD  hh:mm:ss')}</span>
+                      <span>{moment(orderInfo.ZFSJ).format('YYYY.MM.DD HH:mm:ss')}</span>
                     </li>
                   </>
                 ) : (
