@@ -134,7 +134,7 @@ const MutualEvaluation = () => {
       title: '类别名称',
       dataIndex: 'FWMC',
       key: 'FWMC',
-      width: 110,
+      width: 100,
       align: 'center',
       search: false,
       ellipsis: true
@@ -179,7 +179,7 @@ const MutualEvaluation = () => {
       title: '状态',
       dataIndex: 'FWZT',
       key: 'FWZT',
-      width: 100,
+      width: 80,
       onFilter: true,
       search: false,
       valueType: 'select',

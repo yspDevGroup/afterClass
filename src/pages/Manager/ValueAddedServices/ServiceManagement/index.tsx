@@ -114,7 +114,8 @@ const ServiceManagement = () => {
       key: 'FWMC',
       align: 'center',
       search: false,
-      ellipsis: true
+      ellipsis: true,
+      width:100,
     },
     {
       title: '服务类别',
@@ -123,6 +124,7 @@ const ServiceManagement = () => {
       align: 'center',
       search: false,
       ellipsis: true,
+      width:100,
       render: (text, record,) => {
         return record.KHZZFW?.FWMC
       }
@@ -146,7 +148,7 @@ const ServiceManagement = () => {
       align: 'center',
       search: false,
       ellipsis: true,
-      width: '12rem',
+      width: 190,
       render: (text, record,) => {
         return `${record.KSRQ} 至 ${record.JSRQ}`
       }
@@ -157,7 +159,8 @@ const ServiceManagement = () => {
       key: 'FY',
       align: 'center',
       search: false,
-      ellipsis: true
+      ellipsis: true,
+      width:80,
     },
     {
       title: '发布状态',
@@ -167,6 +170,7 @@ const ServiceManagement = () => {
       search: false,
       valueType: 'select',
       align: 'center',
+      width:80,
       valueEnum: {
         0: {
           text: '未发布',
@@ -373,7 +377,7 @@ const ServiceManagement = () => {
                 所属学年学期：
                 <Select
                   value={curXNXQId}
-                  style={{ width: 200 }}
+                  style={{ width: 165 }}
                   onChange={(value: string) => {
                     setCurXNXQId(value);
                   }}
@@ -392,7 +396,7 @@ const ServiceManagement = () => {
                 <Select
                   allowClear
                   value={LbState || ''}
-                  style={{ width: 200 }}
+                  style={{ width: 165 }}
                   placeholder="请选择"
                   onChange={(value: string) => {
                     setLbState(value);
@@ -409,7 +413,7 @@ const ServiceManagement = () => {
                 <Select
                   allowClear
                   value={FbState || ''}
-                  style={{ width: 200 }}
+                  style={{ width: 165 }}
                   onChange={(value: string) => {
                     setFbState(value);
                   }}
