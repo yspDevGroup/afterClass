@@ -250,6 +250,13 @@
         name: 'mutualEvaluation',
         component: './Manager/Statistics/MutualEvaluation',
       },
+      //课后班级课程统计
+      {
+        path: '/statistics/afterSchoolCourse',
+        name: 'afterschoolcoursen',
+        component: './Manager/Statistics/AfterSchoolCourse',
+
+      },
       {
         path: '/statistics/mutualEvaluation/detail',
         hideInMenu: 'true',

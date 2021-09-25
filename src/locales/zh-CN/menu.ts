@@ -23,6 +23,7 @@ export default {
   'menu.statistics': '统计报表',
   'menu.statistics.leaveManagement': '考勤统计',
   'menu.statistics.mutualEvaluation': '课程班互评统计',
+  'menu.statistics.afterschoolcoursen': '课后课程统计',
   'menu.statistics.mutualEvaluationInfo': '课程班互评统计详情',
   'menu.parent': '家长端',
   'menu.parent.home': '家长首页',
