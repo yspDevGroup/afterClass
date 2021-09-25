@@ -24,6 +24,7 @@ import styles from '../index.module.less';
 import PageContainer from '@/components/PageContainer';
 import { createXXTZGG, XXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
 import { LeftOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -49,12 +50,11 @@ const EditArticle = () => {
   const initialValues = {
     LX: 0,
     BH: 10,
-    RQ: dayjs(),
+    RQ:moment(new Date()),
     LY: '本站原创',
     SFTT: false,
     SFTJ: false,
   };
-
   const submit = async (params: any) => {
     const { NR, RQ, SFTT, SFTJ } = params;
     const data = {
@@ -108,7 +108,7 @@ const EditArticle = () => {
             const { data } = result;
             const initData = {
               ...data,
-              RQ: dayjs(data.RQ),
+              RQ: moment(data.RQ),
               NR: BraftEditor.createEditorState(data.NR),
             };
             form.setFieldsValue(initData);
