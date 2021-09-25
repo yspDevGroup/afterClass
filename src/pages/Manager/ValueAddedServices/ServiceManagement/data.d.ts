@@ -7,4 +7,11 @@ export type TableListItem = {
   XXJBSJId?: string;
   njIds?: [];
   NJSJs?: [];
+  KHZZFW?: any;
+  BMKSSJ?: any;
+  XNXQ?: any;
+  XQSJ?: any;
+  BMJSSJ?: any;
+  KSRQ?: string;
+  JSRQ?: string;
 };

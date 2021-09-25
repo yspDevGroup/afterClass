@@ -2,7 +2,7 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Button, Modal, Select, Tag, message, Form, Input, Popconfirm } from 'antd';
+import { Button, Modal, Select, Tag, message, Form, Input, Popconfirm, Divider } from 'antd';
 import styles from './index.less'
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 // import { Search } from '@ant-design/pro-table';
@@ -11,6 +11,7 @@ import type { TableListItem } from './data';
 import ProTable from '@ant-design/pro-table';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { createKHZZFW, deleteKHZZFW, getKHZZFW, updateKHZZFW } from '@/services/after-class/khzzfw';
+import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { Search } = Input;
@@ -18,21 +19,21 @@ const { Search } = Input;
 const MutualEvaluation = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [DataSource, setDataSource] = useState<API.KHZZFW[]>([])
+  const [DataSource, setDataSource] = useState<any>([])
   const [isModalVisible, setIsModalVisible] = useState(false);
   // 适用年级
   const [optionsNJ, setOptionsNJ] = useState<any[]>([]);
   const [NjId, setNjId] = useState<any[]>([])
   const [form] = Form.useForm();
   const actionRef = useRef<ActionType>();
-  // 课程名称查询
-  const [CourseName, setCourseName] = useState();
+  // 类别名称查询
+  const [CategoryName, setCategoryName] = useState();
 
 
   const ongetKHZZFW = async () => {
     const res = await getKHZZFW({
       XXJBSJId: currentUser?.xxId,
-      FWMC: CourseName || '',
+      FWMC: CategoryName || '',
       page: 0,
       pageSize: 0
     })
@@ -42,7 +43,7 @@ const MutualEvaluation = () => {
   }
   useEffect(() => {
     ongetKHZZFW();
-  }, [CourseName])
+  }, [CategoryName])
 
   useEffect(() => {
     (
@@ -79,9 +80,9 @@ const MutualEvaluation = () => {
       const data = {
         ...value,
         njIds: NjId,
-        XXJBSJId:currentUser?.xxId
+        XXJBSJId: currentUser?.xxId
       }
-      const res = await createKHZZFW( data)
+      const res = await createKHZZFW(data)
       if (res.status === 'ok') {
         message.success('保存成功')
         setIsModalVisible(false);
@@ -119,7 +120,7 @@ const MutualEvaluation = () => {
     setNjId(NewArr)
   }
   const onSearch = (value: any) => {
-    setCourseName(value)
+    setCategoryName(value)
   };
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -130,7 +131,7 @@ const MutualEvaluation = () => {
       align: 'center'
     },
     {
-      title: '服务名称',
+      title: '类别名称',
       dataIndex: 'FWMC',
       key: 'FWMC',
       width: 110,
@@ -186,7 +187,7 @@ const MutualEvaluation = () => {
       valueEnum: {
         0: {
           text: '未发布',
-          status: 'Error',
+          status: 'Default',
         },
         1: {
           text: '已发布',
@@ -206,90 +207,93 @@ const MutualEvaluation = () => {
           <div className={styles.operation}>
             {
               record.FWZT === 0 ?
-              <Popconfirm
-              title="确定发布该服务?"
-              onConfirm={async () => {
-                const NewArr: any[] = [];
-                record?.NJSJs?.forEach((item: any) => {
-                  NewArr.push(item.id)
-                })
-                const data = {
-                  ...record,
-                  njIds:NewArr,
-                  FWZT:1,
-                }
-                try {
-                  if (record.id) {
-                    const res = await updateKHZZFW({ id: record?.id }, data)
-                    if (res.status === 'ok') {
-                      message.success('发布成功');
-                      ongetKHZZFW();
-                    } else {
-                      message.error(res.message);
+                <>
+                  <Popconfirm
+                    title="确定发布该服务?"
+                    onConfirm={async () => {
+                      const NewArr: any[] = [];
+                      record?.NJSJs?.forEach((item: any) => {
+                        NewArr.push(item.id)
+                      })
+                      const data = {
+                        ...record,
+                        njIds: NewArr,
+                        FWZT: 1,
+                      }
+                      try {
+                        if (record.id) {
+                          const res = await updateKHZZFW({ id: record?.id }, data)
+                          if (res.status === 'ok') {
+                            message.success('发布成功');
+                            ongetKHZZFW();
+                          } else {
+                            message.error(res.message);
+                          }
+                        }
+                      } catch (err) {
+                        message.error('发布失败，请联系管理员或稍后重试。');
+                      }
+                    }}
+                    okText="确定"
+                    cancelText="取消"
+                    placement="topRight"
+                  >
+                    <a key='release'>发布</a>
+                  </Popconfirm> <Divider type="vertical" />
+                  <a
+                    key="editable"
+                    onClick={() => {
+                      const NewArr: any[] = [];
+                      record?.NJSJs?.forEach((item: any) => {
+                        NewArr.push(item.NJMC)
+                      })
+                      const data = {
+                        ...record,
+                        SYNJ: NewArr
+                      }
+                      form.setFieldsValue(data)
+                      setIsModalVisible(true);
+                    }}
+                  >
+                    编辑
+                  </a>
+                  <Divider type="vertical" /> </> :
+                  <>
+                <Popconfirm
+                  title="确定撤销发布该服务?"
+                  onConfirm={async () => {
+                    const NewArr: any[] = [];
+                    record?.NJSJs?.forEach((item: any) => {
+                      NewArr.push(item.id)
+                    })
+                    const data = {
+                      ...record,
+                      njIds: NewArr,
+                      FWZT: 0,
                     }
-                  }
-                } catch (err) {
-                  message.error('发布失败，请联系管理员或稍后重试。');
-                }
-              }}
-              okText="确定"
-              cancelText="取消"
-              placement="topRight"
-            >
-              <a key='release' style={{ marginRight: '10px' }}>发布</a>
-            </Popconfirm>:
-             <Popconfirm
-             title="确定撤销发布该服务?"
-             onConfirm={async () => {
-               const NewArr: any[] = [];
-               record?.NJSJs?.forEach((item: any) => {
-                 NewArr.push(item.id)
-               })
-               const data = {
-                 ...record,
-                 njIds:NewArr,
-                 FWZT:0,
-               }
-               try {
-                 if (record.id) {
-                   const res = await updateKHZZFW({ id: record?.id }, data)
-                   if (res.status === 'ok') {
-                     message.success('撤销成功');
-                     ongetKHZZFW();
-                   } else {
-                     message.error(res.message);
-                   }
-                 }
-               } catch (err) {
-                 message.error('发布失败，请联系管理员或稍后重试。');
-               }
-             }}
-             okText="确定"
-             cancelText="取消"
-             placement="topRight"
-           >
-             <a key='release' style={{ marginRight: '10px' }}>撤销发布</a>
-           </Popconfirm>
+                    try {
+                      if (record.id) {
+                        const res = await updateKHZZFW({ id: record?.id }, data)
+                        if (res.status === 'ok') {
+                          message.success('撤销成功');
+                          ongetKHZZFW();
+                        } else {
+                          message.error(res.message);
+                        }
+                      }
+                    } catch (err) {
+                      message.error('发布失败，请联系管理员或稍后重试。');
+                    }
+                  }}
+                  okText="确定"
+                  cancelText="取消"
+                  placement="topRight"
+                >
+                  <a key='release' >撤销发布</a>
+                </Popconfirm>
+                <Divider type="vertical" />
+                </>
             }
-
-            <a
-              key="editable"
-              onClick={() => {
-                const NewArr: any[] = [];
-                record?.NJSJs?.forEach((item: any) => {
-                  NewArr.push(item.NJMC)
-                })
-                const data = {
-                  ...record,
-                  SYNJ:NewArr
-                }
-                form.setFieldsValue(data)
-                setIsModalVisible(true);
-              }}
-              style={{ marginRight: '10px' }}
-            >
-              编辑
-            </a>
             <Popconfirm
               title="确定删除该服务?"
               onConfirm={async () => {
@@ -333,25 +337,25 @@ const MutualEvaluation = () => {
           dataSource={DataSource}
           dateFormatter="string"
           headerTitle={
-            <Search placeholder="请输入配餐名称" onSearch={onSearch} style={{ width: 200 }} />
+            <Search placeholder="请输入类别名称" onSearch={onSearch} style={{ width: 200 }} />
           }
           toolBarRender={() => [
             <Button type="primary" key="primary" onClick={showModal}>
-              新增服务
+              <PlusOutlined />新增类别
             </Button>
           ]}
         />
       </div>
-      <Modal title="新建服务" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="新增类别" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Form name="basic" form={form} onFinish={submit} className={styles.Forms}>
           <Form.Item name="id" hidden>
             <Input disabled />
           </Form.Item>
           <Form.Item
-            label="服务名称"
+            label="类别名称"
             name="FWMC"
             key="FWMC"
-            rules={[{ required: true, message: '请输入服务名称' }]}
+            rules={[{ required: true, message: '请输入类别名称' }]}
           >
             <Input placeholder='请输入' />
           </Form.Item>
@@ -392,7 +396,7 @@ const MutualEvaluation = () => {
             rules={[
               {
                 required: true,
-                message: '请输入配餐描述'
+                message: '请输入内容描述'
               }
             ]}
           >
