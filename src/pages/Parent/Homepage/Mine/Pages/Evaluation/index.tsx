@@ -62,7 +62,7 @@ const Evaluation = () => {
   }
 
   return <div className={styles.Evaluation}>
-    <GoBack title={'课程评价'} />
+    <GoBack title={'课程评价'} onclick="/parent/home?index=mine" />
     <Tabs type="card">
       <TabPane tab="评价" key="评价">
         {KcData?.length !== 0 ? <> <div className={styles.Application}>

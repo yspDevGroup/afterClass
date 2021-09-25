@@ -107,7 +107,7 @@ const Home = () => {
             <span>素质教育资源{` >`}</span>
             <img src={bannerIcon} />
           </a> */}
-          <div className={styles.resourcesBox}>
+          {/* <div className={styles.resourcesBox}>
          <a
             href="http://moodle.xianyunshipei.com/course/view.php?id=12"
             target="_blank"
@@ -118,10 +118,10 @@ const Home = () => {
               <p>素质教育资源</p>
               <img src={resourcesRgo} alt="" />
             </a>
-        </div>
-          {/* <div className={styles.container}>
-            <Link to="" className={styles.Catering} >
-              <p>配餐预定</p>
+        </div> */}
+          <div className={styles.container}>
+            <Link to='/parent/home/serviceReservation' className={styles.Catering} >
+              <p>服务预定</p>
               <img src={Catering} alt="" className={styles.CateringImg}/>
             </Link>
             <a
@@ -132,7 +132,7 @@ const Home = () => {
               <p>素质教育资源</p>
               <img src={resources} alt=""/>
             </a>
-          </div> */}
+          </div>
           <div className={styles.announceArea}>
             <Details data={notification} />
           </div>

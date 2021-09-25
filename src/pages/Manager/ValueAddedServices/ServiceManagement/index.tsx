@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
@@ -13,6 +14,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { createKHXXZZFW, deleteKHXXZZFW, getKHXXZZFW, updateKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import moment from 'moment';
+import UploadImage from '@/components/CustomForm/components/UploadImage';
+
 
 const { Option } = Select;
 // const { Search } = Input;
@@ -27,9 +30,10 @@ const ServiceManagement = () => {
   const actionRef = useRef<ActionType>();
   const [DataSource, setDataSource] = useState<API.KHXXZZFW[]>();
   const [CampusData, setCampusData] = useState<any>([]);
-  const [Disabled, setDisabled] = useState(false);
+  const [Disabled, setDisabled] = useState<string>();
   const [FbState, setFbState] = useState<string>();
   const [LbState, setLbState] = useState<string>();
+  const [ImageUrl, setImageUrl] = useState<string>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 学年学期列表数据
@@ -115,7 +119,7 @@ const ServiceManagement = () => {
       align: 'center',
       search: false,
       ellipsis: true,
-      width:100,
+      width: 100,
     },
     {
       title: '服务类别',
@@ -124,7 +128,7 @@ const ServiceManagement = () => {
       align: 'center',
       search: false,
       ellipsis: true,
-      width:100,
+      width: 100,
       render: (text, record,) => {
         return record.KHZZFW?.FWMC
       }
@@ -160,7 +164,7 @@ const ServiceManagement = () => {
       align: 'center',
       search: false,
       ellipsis: true,
-      width:80,
+      width: 80,
     },
     {
       title: '发布状态',
@@ -170,7 +174,7 @@ const ServiceManagement = () => {
       search: false,
       valueType: 'select',
       align: 'center',
-      width:80,
+      width: 80,
       valueEnum: {
         0: {
           text: '未发布',
@@ -231,7 +235,8 @@ const ServiceManagement = () => {
                     }
                     form.setFieldsValue(data)
                     setIsModalVisible(true);
-                    setDisabled(false)
+                    setImageUrl(record?.FWTP)
+                    setDisabled('编辑')
                   }}
                 >
                   编辑
@@ -301,7 +306,7 @@ const ServiceManagement = () => {
                       }
                       form.setFieldsValue(data)
                       setIsModalVisible(true);
-                      setDisabled(true)
+                      setDisabled('查看')
                     }}
                   >
                     查看
@@ -322,6 +327,7 @@ const ServiceManagement = () => {
       BMJSSJ: moment(BMSD[1]).format(),
       KSRQ: moment(FWSD[0]).format('YYYY-MM-DD'),
       JSRQ: moment(FWSD[1]).format('YYYY-MM-DD'),
+      FWTP: ImageUrl || ''
     }
     if (typeof value.id === 'undefined') {
       const res = await createKHXXZZFW(data)
@@ -341,7 +347,7 @@ const ServiceManagement = () => {
   }
   const showModal = () => {
     setIsModalVisible(true);
-    setDisabled(false)
+    setDisabled('新增')
     form.setFieldsValue({
       XNXQId: curXNXQId,
     })
@@ -353,11 +359,30 @@ const ServiceManagement = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setImageUrl('')
     form.resetFields();
   };
   // const onSearch = (value: any) => {
   //   setServiceName(value)
   // };
+  // 文件状态改变的回调
+  const imageChange = (e?: any) => {
+    if (e.file.status === 'done') {
+      const mas = e.file.response.message;
+      if (typeof e.file.response === 'object' && e.file.response.status === 'error') {
+        message.error(`上传失败，${mas}`);
+      } else {
+        const res = e.file.response;
+        if (res.status === 'ok') {
+          message.success(`上传成功`);
+          setImageUrl(res.data)
+        }
+      }
+    } else if (e.file.status === 'error') {
+      const mass = e.file.response.message;
+      message.error(`上传失败，${mass}`);
+    }
+  };
   return (
     <PageContainer>
       <div className={styles.ToIntroduce}>
@@ -439,7 +464,7 @@ const ServiceManagement = () => {
           ]}
         />
       </div>
-      <Modal title="新增服务" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} className={Disabled === true ? styles.modal : styles.modals}>
+      <Modal title={Disabled === '新增' ? "新增服务" : Disabled === '编辑' ? '编辑服务' : '服务详情'} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} className={Disabled === '查看' ? styles.modal : styles.modals}>
         <Form name="basic" form={form} onFinish={submit} className={styles.Forms}>
           <Form.Item name="id" hidden>
             <Input disabled />
@@ -450,7 +475,7 @@ const ServiceManagement = () => {
             label="服务类别"
             rules={[{ required: true, message: '请选择服务类别' }]}
           >
-            <Select style={{ width: '100%' }} placeholder="请选择" disabled={Disabled}>
+            <Select style={{ width: '100%' }} placeholder="请选择" disabled={Disabled === '查看'}>
               {
                 LBData?.length ? LBData?.map((item: any) => {
                   return <Option value={item?.id} key={item?.id}>{item?.FWMC}</Option>
@@ -464,7 +489,7 @@ const ServiceManagement = () => {
             key="FWMC"
             rules={[{ required: true, message: '请输入服务名称' }]}
           >
-            <Input placeholder='建议以月份开头命名' disabled={Disabled} />
+            <Input placeholder='建议以月份开头命名' disabled={Disabled === '查看'} />
           </Form.Item>
 
 
@@ -477,7 +502,7 @@ const ServiceManagement = () => {
             <Input
               type="text"
               placeholder='请输入'
-              disabled={Disabled}
+              disabled={Disabled === '查看'}
             />
           </Form.Item>
           <Form.Item
@@ -493,7 +518,7 @@ const ServiceManagement = () => {
           >
             <Select
               placeholder='请选择'
-              disabled={Disabled}
+              disabled={Disabled === '查看'}
             >
               {termList?.map((item: any) => {
                 return (
@@ -517,7 +542,7 @@ const ServiceManagement = () => {
           >
             <Select
               placeholder='请选择'
-              disabled={Disabled}
+              disabled={Disabled === '查看'}
             >
               {CampusData?.map((item: any) => {
                 return (
@@ -540,7 +565,7 @@ const ServiceManagement = () => {
               }
             ]}
           >
-            <RangePicker disabled={Disabled} />
+            <RangePicker disabled={Disabled === '查看'} />
           </Form.Item>
           <Form.Item
             label="服务时段"
@@ -553,7 +578,22 @@ const ServiceManagement = () => {
               }
             ]}
           >
-            <RangePicker disabled={Disabled} />
+            <RangePicker disabled={Disabled === '查看'} />
+          </Form.Item>
+          <Form.Item
+            label="服务图片"
+            name="FWTP"
+            key="FWTP"
+          >
+            <UploadImage
+              key="FWTP"
+              disabled={Disabled === '查看'}
+              imageurl={ImageUrl}
+              upurl="/api/upload/uploadFile?type=badge&plat=school"
+              accept=".jpg, .jpeg, .png"
+              imagename="image"
+              handleImageChange={imageChange}
+            />
           </Form.Item>
         </Form>
       </Modal>

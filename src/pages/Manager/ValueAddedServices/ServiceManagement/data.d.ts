@@ -14,4 +14,5 @@ export type TableListItem = {
   BMJSSJ?: any;
   KSRQ?: string;
   JSRQ?: string;
+  FWTP?: string;
 };

@@ -125,7 +125,7 @@ const DropClass = () => {
     setDatasourse(NewArr)
   }
   return <div className={styles.DropClass}>
-    <GoBack title={'退课'} />
+    <GoBack title={'退课'} onclick="/parent/home?index=mine" />
     <Tabs type="card">
       <TabPane tab="退课申请" key="退课申请">
         {KcData?.length !== 0 ? <> <div className={styles.Application}>

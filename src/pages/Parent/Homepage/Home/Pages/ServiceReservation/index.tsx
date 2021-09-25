@@ -14,30 +14,29 @@ const defaultMsg: ListData = {
   list: [],
 };
 
-const Course = (props: any) => {
-  const { TabPane } = Tabs;
-  const { yxkcAllData, kskc, courseStatus, keys } = props.location.state;
-  const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
+const { TabPane } = Tabs;
+const ServiceReservation = (props: any) => {
 
-  useEffect(() => {
-    if (yxkcAllData?.length) {
-      const newData = { ...defaultMsg };
-      yxkcAllData?.forEach((item: any) => {
-        // eslint-disable-next-line no-param-reassign
-        item.link += '&index=all';
-      });
-      newData.list = yxkcAllData;
-      setYxkcData(newData);
-    }
-  }, [yxkcAllData]);
+  // const { yxkcAllData, kskc, courseStatus, keys } = props.location.state;
+  // const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
 
-  console.log(defaultMsg,'------------------')
-  console.log(yxkcData,'+++++++--------')
+  // useEffect(() => {
+  //   if (yxkcAllData?.length) {
+  //     const newData = { ...defaultMsg };
+  //     yxkcAllData?.forEach((item: any) => {
+  //       // eslint-disable-next-line no-param-reassign
+  //       item.link += '&index=all';
+  //     });
+  //     newData.list = yxkcAllData;
+  //     setYxkcData(newData);
+  //   }
+  // }, [yxkcAllData]);
+
   return (
-    <div className={styles.CourseBox}>
-      <GoBack title={'课程列表'} onclick="/parent/home?index=index" />
+    <div className={styles.ServiceReservation}>
+      <GoBack title={'服务'} onclick="/parent/home?index=index" />
       <div className={`${styles.tabHeader}`}>
-        <Tabs centered={true} className={styles.courseTab} defaultActiveKey={keys}>
+        {/* <Tabs centered={true} className={styles.courseTab} defaultActiveKey={keys}>
           {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
             <TabPane tab="开设课程" key="setup">
               {kskc && kskc.length ? (
@@ -60,7 +59,6 @@ const Course = (props: any) => {
                         ],
                         introduction: record.KCMS,
                       };
-                      console.log('nodeData',nodeData)
                       return nodeData;
                     });
                     const { list, ...rest } = { ...defaultMsg };
@@ -90,10 +88,10 @@ const Course = (props: any) => {
               <Nodata imgSrc={noData} desc="暂无课程" />
             )}
           </TabPane>
-        </Tabs>
+        </Tabs> */}
       </div>
     </div>
   );
 };
 
-export default Course;
+export default ServiceReservation;

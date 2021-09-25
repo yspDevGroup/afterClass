@@ -250,19 +250,19 @@
         name: 'mutualEvaluation',
         component: './Manager/Statistics/MutualEvaluation',
       },
-      //课后班级课程统计
-      {
-        path: '/statistics/afterSchoolCourse',
-        name: 'afterschoolcoursen',
-        component: './Manager/Statistics/AfterSchoolCourse',
+      // //课后班级课程统计
+      // {
+      //   path: '/statistics/afterSchoolCourse',
+      //   name: 'afterschoolcoursen',
+      //   component: './Manager/Statistics/AfterSchoolCourse',
 
-      },
-      {
-        path: '/statistics/mutualEvaluation/detail',
-        hideInMenu: 'true',
-        name: 'mutualEvaluationInfo',
-        component: './Manager/Statistics/MutualEvaluation/Detail',
-      },
+      // },
+      // {
+      //   path: '/statistics/mutualEvaluation/detail',
+      //   hideInMenu: 'true',
+      //   name: 'mutualEvaluationInfo',
+      //   component: './Manager/Statistics/MutualEvaluation/Detail',
+      // },
     ],
   },
   // 素质教育资源
@@ -457,6 +457,12 @@
         name: 'course',
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/Course',
+      },
+      {
+        path: '/parent/home/serviceReservation',
+        name: 'serviceReservation',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/ServiceReservation',
       },
       {
         path: '/parent/home/notice',
