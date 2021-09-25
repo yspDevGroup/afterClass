@@ -68,7 +68,7 @@
         path: '/basicalSettings/service/editArticle',
         hideInMenu: 'true',
         name: 'articleDetails',
-        component: './Manager/Announcements/Service/editArticle',
+        component: './Manager/Announcements/Service/EditArticle',
       },
       {
         path: '/basicalSettings/termManagement',
@@ -261,7 +261,7 @@
       {
         path: '/statistics/afterSchoolClass',
         name: 'afterschoolclass',
-        component: './Manager/Statistics/afterSchoolClass',
+        component: './Manager/Statistics/AfterSchoolClass',
 
       },
       {
