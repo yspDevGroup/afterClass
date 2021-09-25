@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-10 18:51:36
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-09-25 11:33:48
+ * @LastEditors: zpl
  */
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'antd';
@@ -22,7 +22,7 @@ import arrow from '@/assets/arrow.png';
 import styles from './index.less';
 import { homePage } from '@/services/after-class/xxjbsj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
-import { KHJYJG } from '@/services/after-class/khjyjg';
+// import { KHJYJG } from '@/services/after-class/khjyjg';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 
 const Index = () => {
@@ -46,7 +46,7 @@ const Index = () => {
       const result = await getXXTZGG({
         XXJBSJId: currentUser?.xxId,
         BT: '',
-        LX:'0',
+        LX: '0',
         ZT: ['已发布'],
         page: 1,
         pageSize: 3,
@@ -61,7 +61,7 @@ const Index = () => {
         ZT: ['已发布'],
         XZQHM: currentUser?.XZQHM,
         page: 1,
-        pageSize: 3
+        pageSize: 3,
       });
       if (resgetXXTZGG.status === 'ok') {
         setPolicyData(resgetXXTZGG.data?.rows);
@@ -135,7 +135,7 @@ const Index = () => {
               <Col span={5}>
                 <p>
                   <h1>02</h1>
-                  课程、班级管理
+                  课程、课程班管理
                 </p>
                 <img src={home2} alt="" />
                 <ul>
@@ -143,7 +143,7 @@ const Index = () => {
                     <Link to="/courseManagements/CourseManagements">课程管理</Link>
                   </li>
                   <li>
-                    <Link to="/classManagement">班级管理</Link>
+                    <Link to="/classManagement">课程班管理</Link>
                   </li>
                 </ul>
               </Col>
