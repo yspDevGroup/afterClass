@@ -430,7 +430,6 @@ const ServiceManagement = () => {
                 服务名称：
                 <Search placeholder="请输入服务名称" onSearch={onSearch} style={{ width: 200 }} />
               </span> */}
-
             </div>
           }
           toolBarRender={() => [
@@ -465,7 +464,7 @@ const ServiceManagement = () => {
             key="FWMC"
             rules={[{ required: true, message: '请输入服务名称' }]}
           >
-            <Input placeholder='请输入' disabled={Disabled} />
+            <Input placeholder='建议以月份开头命名' disabled={Disabled} />
           </Form.Item>
 
 

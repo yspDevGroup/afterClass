@@ -257,66 +257,66 @@ const MutualEvaluation = () => {
                   >
                     编辑
                   </a>
-                  <Divider type="vertical" /> </> :
-                  <>
-                <Popconfirm
-                  title="确定撤销发布该服务?"
-                  onConfirm={async () => {
-                    const NewArr: any[] = [];
-                    record?.NJSJs?.forEach((item: any) => {
-                      NewArr.push(item.id)
-                    })
-                    const data = {
-                      ...record,
-                      njIds: NewArr,
-                      FWZT: 0,
-                    }
-                    try {
-                      if (record.id) {
-                        const res = await updateKHZZFW({ id: record?.id }, data)
-                        if (res.status === 'ok') {
-                          message.success('撤销成功');
-                          ongetKHZZFW();
-                        } else {
-                          message.error(res.message);
+                  <Divider type="vertical" />
+                  <Popconfirm
+                    title="确定删除该服务?"
+                    onConfirm={async () => {
+                      try {
+                        if (record.id) {
+                          const result = await deleteKHZZFW({ id: record.id });
+                          if (result.status === 'ok') {
+                            message.success('删除成功');
+                            ongetKHZZFW();
+                          } else {
+                            message.error(result.message);
+                          }
                         }
+                      } catch (err) {
+                        message.error('删除失败，请联系管理员或稍后重试。');
                       }
-                    } catch (err) {
-                      message.error('发布失败，请联系管理员或稍后重试。');
-                    }
-                  }}
-                  okText="确定"
-                  cancelText="取消"
-                  placement="topRight"
-                >
-                  <a key='release' >撤销发布</a>
-                </Popconfirm>
-                <Divider type="vertical" />
+                    }}
+                    okText="确定"
+                    cancelText="取消"
+                    placement="topRight"
+                  >
+                    <a key='delete'>删除</a>
+                  </Popconfirm> </> :
+                <>
+                  <Popconfirm
+                    title="确定撤销发布该服务?"
+                    onConfirm={async () => {
+                      const NewArr: any[] = [];
+                      record?.NJSJs?.forEach((item: any) => {
+                        NewArr.push(item.id)
+                      })
+                      const data = {
+                        ...record,
+                        njIds: NewArr,
+                        FWZT: 0,
+                      }
+                      try {
+                        if (record.id) {
+                          const res = await updateKHZZFW({ id: record?.id }, data)
+                          if (res.status === 'ok') {
+                            message.success('撤销成功');
+                            ongetKHZZFW();
+                          } else {
+                            message.error(res.message);
+                          }
+                        }
+                      } catch (err) {
+                        message.error('发布失败，请联系管理员或稍后重试。');
+                      }
+                    }}
+                    okText="确定"
+                    cancelText="取消"
+                    placement="topRight"
+                  >
+                    <a key='release' >撤销发布</a>
+                  </Popconfirm>
                 </>
             }
-            <Popconfirm
-              title="确定删除该服务?"
-              onConfirm={async () => {
-                try {
-                  if (record.id) {
-                    const result = await deleteKHZZFW({ id: record.id });
-                    if (result.status === 'ok') {
-                      message.success('删除成功');
-                      ongetKHZZFW();
-                    } else {
-                      message.error(result.message);
-                    }
-                  }
-                } catch (err) {
-                  message.error('删除失败，请联系管理员或稍后重试。');
-                }
-              }}
-              okText="确定"
-              cancelText="取消"
-              placement="topRight"
-            >
-              <a key='delete'>删除</a>
-            </Popconfirm>
+
 
           </div>
         );
