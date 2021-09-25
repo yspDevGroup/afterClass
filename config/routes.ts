@@ -240,9 +240,9 @@
     routes: [
       //请假管理
       {
-        path: '/statistics/leaveManagement',
-        name: 'leaveManagement',
-        component: './Manager/CourseManagements/LeaveManagement',
+        path: '/statistics/Attendance',
+        name: 'Attendancet',
+        component: './Manager/Statistics/Attendance',
       },
       //课程班互评统计
       {
