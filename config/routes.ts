@@ -255,14 +255,12 @@
         path: '/statistics/afterSchoolCourse',
         name: 'afterschoolcoursen',
         component: './Manager/Statistics/AfterSchoolCourse',
-
       },
       //课后班级统计
       {
         path: '/statistics/afterSchoolClass',
         name: 'afterschoolclass',
         component: './Manager/Statistics/AfterSchoolClass',
-
       },
       {
         path: '/statistics/mutualEvaluation/detail',
@@ -321,7 +319,7 @@
         path: '/teacher/home/course',
         name: 'course',
         hideInMenu: 'true',
-        component: './teacher/Homepage/Home/Pages/Course',
+        component: './Teacher/Homepage/Home/Pages/Course',
       },
       {
         path: '/teacher/education/callTheRoll',
