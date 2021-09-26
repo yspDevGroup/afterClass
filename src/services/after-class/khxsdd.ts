@@ -11,7 +11,7 @@ export async function getKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -27,52 +27,63 @@ export async function getKHXSDD(
       XSId?: string;
       XSXM?: string;
       DDLX?: number;
-      KHBJSJ?: {
-        id?: string;
-        BJMC?: string;
-        BJMS?: string;
-        BJZT?: '待开班' | '已开班' | '已结课';
-        ZJS?: string;
-        FJS?: string;
-        BJRS?: number;
-        KSS?: number;
-        FY?: number;
-        KKRQ?: string | any;
-        JKRQ?: string | any;
-        BMKSSJ?: string;
-        BMJSSJ?: string;
-        KCTP?: string;
-        NJS?: string;
-        XQ?: string;
-        NJSName?: string;
-        XQName?: string;
-        ZJSName?: string;
-        FJSName?: string;
-        KHKCSJ?: {
-          id?: string;
-          KCMC?: string;
-          KCLX?: string;
-          KCTP?: string;
-          KCZT?: number;
-          KCMS?: string;
-          KKRQ?: string | any;
-          JKRQ?: string | any;
-          BMKSSJ?: string;
-          BMJSSJ?: string;
-          XNXQ?: {
+      KHBJSJ?:
+        | {
             id?: string;
-            XN?: string;
+            BJMC?: string;
+            BJMS?: string;
+            BJZT?: '待开班' | '已开班' | '已结课';
+            ZJS?: string;
+            FJS?: string;
+            BJRS?: number;
+            KSS?: number;
+            FY?: string;
+            KKRQ?: string;
+            JKRQ?: string;
+            BMKSSJ?: string;
+            BMJSSJ?: string;
+            KCTP?: string;
+            NJS?: string;
             XQ?: string;
-            KSRQ?: string | any;
-            JSRQ?: string | any;
-          };
-        };
-      };
+            NJSName?: string;
+            XQName?: string;
+            ZJSName?: string;
+            FJSName?: string;
+            KHKCSJ?: {
+              id?: string;
+              KCMC?: string;
+              KCLX?: string;
+              KCTP?: string;
+              KCZT?: number;
+              KCMS?: string;
+              KKRQ?: string;
+              JKRQ?: string;
+              BMKSSJ?: string;
+              BMJSSJ?: string;
+              XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+            };
+          }
+        | any;
+      KHXXZZFW?:
+        | {
+            id?: string;
+            FWMC?: string;
+            FWNR?: string;
+            FWZT?: number;
+            FY?: string;
+            KSRQ?: string;
+            JSRQ?: string;
+            BMKSSJ?: string;
+            BMJSSJ?: string;
+            FWTP?: string;
+            KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
+          }
+        | any;
     };
     message?: string;
   }>(`/khxsdd/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -86,10 +97,10 @@ export async function deleteKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -141,47 +152,58 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
       XSId?: string;
       XSXM?: string;
       DDLX?: number;
-      KHBJSJ?: {
-        id?: string;
-        BJMC?: string;
-        BJMS?: string;
-        BJZT?: '待开班' | '已开班' | '已结课';
-        ZJS?: string;
-        FJS?: string;
-        BJRS?: number;
-        KSS?: number;
-        FY?: number;
-        KKRQ?: string | any;
-        JKRQ?: string | any;
-        BMKSSJ?: string;
-        BMJSSJ?: string;
-        KCTP?: string;
-        NJS?: string;
-        XQ?: string;
-        NJSName?: string;
-        XQName?: string;
-        ZJSName?: string;
-        FJSName?: string;
-        KHKCSJ?: {
-          id?: string;
-          KCMC?: string;
-          KCLX?: string;
-          KCTP?: string;
-          KCZT?: number;
-          KCMS?: string;
-          KKRQ?: string | any;
-          JKRQ?: string | any;
-          BMKSSJ?: string;
-          BMJSSJ?: string;
-          XNXQ?: {
+      KHBJSJ?:
+        | {
             id?: string;
-            XN?: string;
+            BJMC?: string;
+            BJMS?: string;
+            BJZT?: '待开班' | '已开班' | '已结课';
+            ZJS?: string;
+            FJS?: string;
+            BJRS?: number;
+            KSS?: number;
+            FY?: string;
+            KKRQ?: string;
+            JKRQ?: string;
+            BMKSSJ?: string;
+            BMJSSJ?: string;
+            KCTP?: string;
+            NJS?: string;
             XQ?: string;
-            KSRQ?: string | any;
-            JSRQ?: string | any;
-          };
-        };
-      };
+            NJSName?: string;
+            XQName?: string;
+            ZJSName?: string;
+            FJSName?: string;
+            KHKCSJ?: {
+              id?: string;
+              KCMC?: string;
+              KCLX?: string;
+              KCTP?: string;
+              KCZT?: number;
+              KCMS?: string;
+              KKRQ?: string;
+              JKRQ?: string;
+              BMKSSJ?: string;
+              BMJSSJ?: string;
+              XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+            };
+          }
+        | any;
+      KHXXZZFW?:
+        | {
+            id?: string;
+            FWMC?: string;
+            FWNR?: string;
+            FWZT?: number;
+            FY?: string;
+            KSRQ?: string;
+            JSRQ?: string;
+            BMKSSJ?: string;
+            BMJSSJ?: string;
+            FWTP?: string;
+            KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
+          }
+        | any;
     };
     message?: string;
   }>('/khxsdd/create', {
@@ -257,10 +279,31 @@ export async function overdueKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/overdue/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
+}
+
+/** 移动端查询学生订单信息 POST /khxsdd/getStudentOrders */
+export async function getStudentOrders(
+  body: {
+    /** 学生ID */
+    XSId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status?: 'ok' | 'error'; data?: API.KHXSDD[]; message?: string }>(
+    '/khxsdd/getStudentOrders',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
+    },
+  );
 }

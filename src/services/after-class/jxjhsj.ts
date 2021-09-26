@@ -11,7 +11,7 @@ export async function getJXJHSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -26,7 +26,7 @@ export async function getJXJHSJ(
     message?: string;
   }>(`/jxjhsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -40,10 +40,10 @@ export async function deleteJXJHSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jxjhsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -57,12 +57,12 @@ export async function getJXJHSJByXX(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.JXJHSJ[]; message?: string }>(
     `/jxjhsj/xxdm/${param0}`,
     {
       method: 'GET',
-      params: { ...queryParams },
+      params: { ...params },
       ...(options || {}),
     },
   );
@@ -102,13 +102,13 @@ export async function updateJXJHSJ(
   body: API.UpdateJXJHSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jxjhsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

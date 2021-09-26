@@ -86,8 +86,8 @@ const CoursePatrol = () => {
       RQ: date,
       WEEKDAY: new Date(date).getDay().toString()
     });
-    if (res.status === 'ok') {
-      return res.data?.length > 0
+    if (res.status === 'ok' && res.data) {
+      return res.data?.rows?.length > 0
     }
     return false;
   };

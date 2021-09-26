@@ -369,6 +369,24 @@
         hideInMenu: 'true',
         component: './Teacher/Homepage/Home/Pages/EmptyArticle',
       },
+      {
+        path: '/teacher/patrolArrange',
+        name: 'patrolArrange',
+        icon: 'smile',
+        component: './Teacher/Homepage/PatrolArrange',
+      },
+      {
+        path: '/teacher/patrolArrange/classes',
+        name: 'patrolClasses',
+        icon: 'smile',
+        component: './Teacher/Homepage/PatrolArrange/Pages/Classes',
+      },
+      {
+        path: '/teacher/patrolArrange/newPatrol',
+        name: 'newPatrol',
+        icon: 'smile',
+        component: './Teacher/Homepage/PatrolArrange/Pages/NewPatrol',
+      }
     ],
   },
   /*** 老师路由 end ***/

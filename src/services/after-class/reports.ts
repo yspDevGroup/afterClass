@@ -133,3 +133,61 @@ export async function getStudents(
     ...(options || {}),
   });
 }
+
+/** 获取课后服务班级报表详情 POST /reports/getClassDetail */
+export async function getClassDetail(
+  body: {
+    /** 班级ID */
+    KHBJSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getClassDetail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取课后服务教师考勤报表详情 POST /reports/getTeacherDetail */
+export async function getTeacherDetail(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 教师ID */
+    KHJSSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getTeacherDetail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取课后服务学生考勤报表详情 POST /reports/getStudentDetail */
+export async function getStudentDetail(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学生ID */
+    XSId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getStudentDetail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
