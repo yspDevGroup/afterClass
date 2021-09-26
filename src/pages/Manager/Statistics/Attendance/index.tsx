@@ -23,12 +23,7 @@ const LeaveManagement = () => {
 
 
         },
-        {
-            title: '性别',
-            dataIndex: 'XB',
-            key: 'XB',
-            align: 'center',
-        },
+    
         {
             title: '授课班级数',
             dataIndex: 'BJS',
@@ -59,25 +54,7 @@ const LeaveManagement = () => {
             key: 'KSSC',
             align: 'center',
         },
-        {
-            title: '学年学期',
-            dataIndex: 'XNXQ',
-            key: 'XNXQ',
-            align: 'center',
-        },
-        {
-            title: '教师ID',
-            dataIndex: 'KHJSSJId',
-            key: 'KHJSSJId',
-            align: 'center',
-        },
-        {
-            title: '学年学期ID',
-            dataIndex: 'XNXQId',
-            key: 'XNXQId',
-            align: 'center',
-        },
-
+   
     ]
     const student: ProColumns<any>[] = [
         {
@@ -93,12 +70,6 @@ const LeaveManagement = () => {
             key: 'XM',
             align: 'center',
 
-        },
-        {
-            title: '性别',
-            dataIndex: 'XB',
-            key: 'XB',
-            align: 'center',
         },
         {
             title: '报名班级数',
@@ -124,25 +95,8 @@ const LeaveManagement = () => {
             key: 'KSSC',
             align: 'center',
         },
-        {
-            title: '学年学期',
-            dataIndex: 'XNXQ',
-            key: 'XNXQ',
-            align: 'center',
-        },
-        {
-            title: '学生ID',
-            dataIndex: 'XSId',
-            key: 'XSId',
-            align: 'center',
-        },
-
-        {
-            title: '学年学期ID',
-            dataIndex: 'XNXQId',
-            key: 'XNXQId',
-            align: 'center',
-        },
+    
+     
 
 
     ]
