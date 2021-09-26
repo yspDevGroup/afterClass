@@ -3,8 +3,16 @@
     .ant-picker-range{
       width: 100%;
     }
-    .ant-row:nth-last-child(1){
-      margin-left: 10px;
+    .ant-row:nth-child(2){
+      label::before {
+        display: inline-block;
+        margin-right: 4px;
+        color: #ff4d4f;
+        font-size: 14px;
+        font-family: SimSun, sans-serif;
+        line-height: 1;
+        content: '*';
+      }
     }
   }
 }
@@ -28,6 +36,9 @@
 }
 .modals{
   :global{
+    .ant-modal-body{
+      padding-bottom: 0;
+    }
     .ant-modal-footer{
       display: block;
     }

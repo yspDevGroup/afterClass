@@ -470,6 +470,12 @@
         component: './Parent/Homepage/Home/Pages/ServiceReservation',
       },
       {
+        path: '/parent/home/serviceReservation/details',
+        name: 'details',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/ServiceReservation/Details',
+      },
+      {
         path: '/parent/home/notice',
         name: 'notice',
         hideInMenu: 'true',

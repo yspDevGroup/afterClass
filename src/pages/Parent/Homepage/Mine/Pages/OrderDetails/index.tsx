@@ -71,9 +71,11 @@ const OrderDetails: React.FC = (props: any) => {
       enHenceMsg(res.message);
     }
   };
+
   if (orderInfo) {
     const orderTime = new Date(orderInfo?.XDSJ).getTime();
     const deadline = orderTime + 1000 * 60 * 30;
+    const JFJG = orderInfo.DDFY-detail.FY;
     return (
       <>
         <GoBack title={'订单详情'} />
@@ -122,16 +124,16 @@ const OrderDetails: React.FC = (props: any) => {
             </div>
             <div className={styles.KCZE}>
               <p>
-                <span>课程总额</span> <span>￥{detail.FY}</span>
+                <span>课程总额</span> <span>￥{detail.FY.toFixed(2)}</span>
               </p>
               {
                 orderInfo.DDFY === Number(detail.FY)  ? <></>: <p className={styles.JFFY}>
-                <span>教辅费用</span> <span>￥{detail?.KHKCJCs?.[0].JCFY}</span>
+                <span>教辅费用</span> <span>￥{detail?.KHKCJCs?.[0].JCFY || JFJG.toFixed(2)}</span>
                 </p>
               }
 
               <p>
-                实付<span>￥{orderInfo.DDFY}</span>
+                实付<span>￥{orderInfo.DDFY.toFixed(2)}</span>
               </p>
             </div>
             <div className={styles.DDXX}>

@@ -36,7 +36,6 @@ const CourseTable: React.FC = () => {
     };
     fetchData();
   }, [classid]);
-
   return <div className={styles.CourseDetails2}>
     <GoBack title={'课程详情'} onclick='/parent/home?index=study' />
     <div className={styles.KCXX}>

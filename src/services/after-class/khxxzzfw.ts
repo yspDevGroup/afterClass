@@ -16,6 +16,9 @@ export async function createKHXXZZFW(body: API.CreateKHXXZZFW, options?: { [key:
       JSRQ?: string | any;
       BMKSSJ?: string;
       BMJSSJ?: string;
+      FWTP?: string;
+      XNXQ?: { id?: string; XN?: string; XQ?: string };
+      XQSJ?: { id?: string; XQMC?: string };
       KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
     };
     message?: string;
@@ -65,6 +68,41 @@ export async function getKHXXZZFW(
   });
 }
 
+/** 获取学校课后增值服务 GET /khxxzzfw/${param0} */
+export async function KHXXZZFW(
+  params: {
+    // path
+    /** 学校课后增值服务ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{
+    status?: 'ok' | 'error';
+    data: {
+      id?: string;
+      FWMC?: string;
+      FWNR?: string;
+      FWZT?: number;
+      FY?: number;
+      KSRQ?: string | any;
+      JSRQ?: string | any;
+      BMKSSJ?: string;
+      BMJSSJ?: string;
+      FWTP?: string;
+      XNXQ?: { id?: string; XN?: string; XQ?: string };
+      XQSJ?: { id?: string; XQMC?: string };
+      KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
+    };
+    message?: string;
+  }>(`/khxxzzfw/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
 /** 删除学校课后增值服务 DELETE /khxxzzfw/${param0} */
 export async function deleteKHXXZZFW(
   params: {
@@ -74,10 +112,10 @@ export async function deleteKHXXZZFW(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxxzzfw/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -92,13 +130,13 @@ export async function updateKHXXZZFW(
   body: API.UpdateKHXXZZFW,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxxzzfw/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

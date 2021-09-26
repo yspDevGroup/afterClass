@@ -167,7 +167,7 @@ const MutualEvaluation = () => {
       }
     },
     {
-      title: '内容描述',
+      title: '类别描述',
       dataIndex: 'FWNR',
       key: 'FWNR',
       width: 180,
@@ -359,16 +359,6 @@ const MutualEvaluation = () => {
           >
             <Input placeholder='请输入' />
           </Form.Item>
-
-          <Form.Item
-            label="服务单位"
-            name="FWJGMC"
-            key="FWJGMC"
-            rules={[{ required: true, message: '请输入服务单位' }]}
-          >
-            <Input placeholder='请输入' />
-          </Form.Item>
-
           <Form.Item
             name="SYNJ"
             key="SYNJ"
@@ -390,15 +380,19 @@ const MutualEvaluation = () => {
             </Select>
           </Form.Item>
           <Form.Item
-            label="内容描述"
+            label="服务单位"
+            name="FWJGMC"
+            key="FWJGMC"
+            rules={[{ required: true, message: '请输入服务单位' }]}
+          >
+            <Input placeholder='请输入' />
+          </Form.Item>
+
+
+          <Form.Item
+            label="类别描述"
             name="FWNR"
             key="FWNR"
-            rules={[
-              {
-                required: true,
-                message: '请输入内容描述'
-              }
-            ]}
           >
             <Input.TextArea placeholder='请输入' rows={4} />
           </Form.Item>

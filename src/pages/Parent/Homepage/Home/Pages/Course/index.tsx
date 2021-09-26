@@ -31,8 +31,6 @@ const Course = (props: any) => {
     }
   }, [yxkcAllData]);
 
-  console.log(defaultMsg,'------------------')
-  console.log(yxkcData,'+++++++--------')
   return (
     <div className={styles.CourseBox}>
       <GoBack title={'课程列表'} onclick="/parent/home?index=index" />
@@ -60,7 +58,6 @@ const Course = (props: any) => {
                         ],
                         introduction: record.KCMS,
                       };
-                      console.log('nodeData',nodeData)
                       return nodeData;
                     });
                     const { list, ...rest } = { ...defaultMsg };

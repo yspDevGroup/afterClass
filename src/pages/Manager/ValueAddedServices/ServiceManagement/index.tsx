@@ -321,29 +321,34 @@ const ServiceManagement = () => {
   ];
   const submit = async (value: any) => {
     const { BMSD, FWSD, ...info } = value;
-    const data = {
-      ...info,
-      BMKSSJ: moment(BMSD[0]).format(),
-      BMJSSJ: moment(BMSD[1]).format(),
-      KSRQ: moment(FWSD[0]).format('YYYY-MM-DD'),
-      JSRQ: moment(FWSD[1]).format('YYYY-MM-DD'),
-      FWTP: ImageUrl || ''
-    }
-    if (typeof value.id === 'undefined') {
-      const res = await createKHXXZZFW(data)
-      if (res.status === 'ok') {
-        message.success('保存成功')
-        setIsModalVisible(false);
-        ongetKHXXZZFW();
+    if(ImageUrl === ''){
+      message.info('请上传图片')
+    }else{
+      const data = {
+        ...info,
+        BMKSSJ: moment(BMSD[0]).format(),
+        BMJSSJ: moment(BMSD[1]).format(),
+        KSRQ: moment(FWSD[0]).format('YYYY-MM-DD'),
+        JSRQ: moment(FWSD[1]).format('YYYY-MM-DD'),
+        FWTP: ImageUrl || ''
       }
-    } else {
-      const res = await updateKHXXZZFW({ id: value?.id }, data)
-      if (res.status === 'ok') {
-        message.success('修改成功')
-        setIsModalVisible(false);
-        ongetKHXXZZFW();
+      if (typeof value.id === 'undefined') {
+        const res = await createKHXXZZFW(data)
+        if (res.status === 'ok') {
+          message.success('保存成功')
+          setIsModalVisible(false);
+          ongetKHXXZZFW();
+        }
+      } else {
+        const res = await updateKHXXZZFW({ id: value?.id }, data)
+        if (res.status === 'ok') {
+          message.success('修改成功')
+          setIsModalVisible(false);
+          ongetKHXXZZFW();
+        }
       }
     }
+
   }
   const showModal = () => {
     setIsModalVisible(true);
@@ -374,7 +379,7 @@ const ServiceManagement = () => {
       } else {
         const res = e.file.response;
         if (res.status === 'ok') {
-          message.success(`上传成功`);
+          message.success('上传成功');
           setImageUrl(res.data)
         }
       }
@@ -468,6 +473,21 @@ const ServiceManagement = () => {
         <Form name="basic" form={form} onFinish={submit} className={styles.Forms}>
           <Form.Item name="id" hidden>
             <Input disabled />
+          </Form.Item>
+          <Form.Item
+            label="服务图片"
+            name="FWTP"
+            key="FWTP"
+          >
+            <UploadImage
+              key="FWTP"
+              disabled={Disabled === '查看'}
+              imageurl={ImageUrl}
+              upurl="/api/upload/uploadFile?type=badge&plat=school"
+              accept=".jpg, .jpeg, .png"
+              imagename="image"
+              handleImageChange={imageChange}
+            />
           </Form.Item>
           <Form.Item
             name="KHZZFWId"
@@ -581,20 +601,19 @@ const ServiceManagement = () => {
             <RangePicker disabled={Disabled === '查看'} />
           </Form.Item>
           <Form.Item
-            label="服务图片"
-            name="FWTP"
-            key="FWTP"
+            label="服务内容"
+            name="FWNR"
+            key="FWNR"
+            rules={[
+              {
+                required: true,
+                message: '请输入服务内容'
+              }
+            ]}
           >
-            <UploadImage
-              key="FWTP"
-              disabled={Disabled === '查看'}
-              imageurl={ImageUrl}
-              upurl="/api/upload/uploadFile?type=badge&plat=school"
-              accept=".jpg, .jpeg, .png"
-              imagename="image"
-              handleImageChange={imageChange}
-            />
+            <Input.TextArea placeholder='请输入' disabled={Disabled === '查看'} rows={4} />
           </Form.Item>
+
         </Form>
       </Modal>
     </PageContainer>

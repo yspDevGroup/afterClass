@@ -79,6 +79,8 @@ export async function updateKHXKSJ(body: API.UpdateKHXKSJ[], options?: { [key: s
 /** 根据日期查询当天的排课数据 POST /khxksj/getScheduleByDate */
 export async function getScheduleByDate(
   body: {
+    /** 教师ID */
+    KHJSSJId?: string;
     /** 日期 */
     RQ?: string;
     /** 周几 */

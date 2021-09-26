@@ -100,14 +100,6 @@ export async function wechatTradeCallback(options?: { [key: string]: any }) {
   });
 }
 
-/** 课程统计 GET /wechat/statistiCourses */
-export async function statistiCourses(options?: { [key: string]: any }) {
-  return request<any>('/wechat/statistiCourses', {
-    method: 'GET',
-    ...(options || {}),
-  });
-}
-
 /** 微信扫码认证 GET /wechat/auth */
 export async function wechatOauth(options?: { [key: string]: any }) {
   return request<any>('/wechat/auth', {
