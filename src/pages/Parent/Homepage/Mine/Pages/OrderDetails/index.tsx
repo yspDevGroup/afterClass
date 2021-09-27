@@ -86,8 +86,9 @@ const OrderDetails: React.FC = (props: any) => {
       enHenceMsg(res.message);
     }
   };
+
   if (orderInfo) {
-    const orderTime = new Date(orderInfo?.XDSJ).getTime();
+    const orderTime = new Date(moment(orderInfo?.XDSJ).format("YYYY/MM/DD HH:mm:ss")).getTime();
     const deadline = orderTime + 1000 * 60 * 30;
     const JFJG = Number(orderInfo?.DDFY) - Number(detail?.FY);
     return (
@@ -104,7 +105,7 @@ const OrderDetails: React.FC = (props: any) => {
             {orderInfo.DDZT === '待付款' ? (
               <p>
                 请在
-                <Countdown className={styles.countdown} value={deadline} onFinish={handleFinish} />
+                <Countdown className={styles.countdown} value={deadline} format="HH:mm:ss" onFinish={handleFinish} />
                 内支付，逾期订单将自动取消
               </p>
             ) : (
