@@ -73,6 +73,10 @@ const AfterSchoolCourse: React.FC = () => {
       dataIndex: 'TKBL',
       key: 'TKBL',
       align: 'center',
+      render: (test: any, record: any) => {
+        return record.TKBL + '%';
+
+      },
     },
     {
       title: '收款总额',

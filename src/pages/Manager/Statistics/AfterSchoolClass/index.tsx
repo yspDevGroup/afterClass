@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
-import { Select } from 'antd';
+import { Select, Tag } from 'antd';
 import moment from 'moment';
 import { getClasses } from '@/services/after-class/reports';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -12,6 +12,7 @@ import ProTable from '@ant-design/pro-table';
 
 import Style from './index.less';
 import { TermItem } from '../../BasicalSettings/TermManagement/data';
+import EllipsisHint from '@/components/EllipsisHint';
 
 const { Option } = Select;
 
@@ -47,7 +48,6 @@ const AfterSchoolClass: React.FC = () => {
       align: 'center',
       render: (test: any, record: any) => {
         return moment(record?.KKSJ).format('YYYY.MM.DD') + '~' + moment(record?.JKSJ).format('YYYY.MM.DD');
-
       },
     },
     {
@@ -55,6 +55,20 @@ const AfterSchoolClass: React.FC = () => {
       dataIndex: 'KKFW',
       key: 'KKFW',
       align: 'center',
+      render: (text: any) => {
+        return (
+          <EllipsisHint
+            width="100%"
+            text={text?.split(',').map((item: any) => {
+              return (
+                <Tag key={item.id}>
+                  {item}
+                </Tag>
+              );
+            })}
+          />
+        );
+      },
     },
     {
       title: '任课教师',
