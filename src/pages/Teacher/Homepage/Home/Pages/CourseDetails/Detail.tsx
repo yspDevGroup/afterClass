@@ -99,15 +99,21 @@ const Detail: React.FC = () => {
           <li>授课班级：{classDetail?.BJMC}</li>
           <li className={styles.bzrname}>
             班主任：
-            {classDetail?.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师').JSXM}
+            {classDetail?.KHBJJs.map((item: any) => {
+              if (item.JSLX.indexOf('副') === -1) {
+                return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
+              }
+              return '';
+            })}
           </li>
           <li className={styles.bzrname}>
             副班：
-            {classDetail?.KHBJJs?.filter((item: { JSLX: string }) => item.JSLX === '副教师').map(
-              (item: any) => {
-                return <span style={{ marginRight: '5px' }}>{item.JSXM}</span>;
-              },
-            )}
+            {classDetail?.KHBJJs.map((item: any) => {
+              if (item.JSLX.indexOf('主') === -1) {
+                return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
+              }
+              return '';
+            })}
           </li>
 
           <li>
@@ -132,7 +138,7 @@ const Detail: React.FC = () => {
                       <td>
                         {values.XXSJPZ.KSSJ.substring(0, 5)}-{values.XXSJPZ.JSSJ.substring(0, 5)}
                       </td>
-                      <td>{values.FJSJ.XQName}</td>
+                      <td>{values.FJSJ.XQName || '本校'}</td>
                       <td>{values.FJSJ.FJMC}</td>
                     </tr>
                   );

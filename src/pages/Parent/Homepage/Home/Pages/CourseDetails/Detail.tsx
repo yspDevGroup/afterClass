@@ -100,8 +100,8 @@ const Detail: React.FC = () => {
           <li className={styles.bzrname}>
             班主任：
             {classDetail?.KHBJJs.map((item: any) => {
-              if (item.JSLX.indexOf('主') !== -1) {
-                return <span style={{ marginRight: '1em' }}>{item.JSXM}</span>;
+              if (item.JSLX.indexOf('副') === -1) {
+                return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
               }
               return '';
             })}
@@ -110,7 +110,7 @@ const Detail: React.FC = () => {
             副班：
             {classDetail?.KHBJJs.map((item: any) => {
               if (item.JSLX.indexOf('主') === -1) {
-                return <span style={{ marginRight: '1em' }}>{item.JSXM}</span>;
+                return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
               }
               return '';
             })}
