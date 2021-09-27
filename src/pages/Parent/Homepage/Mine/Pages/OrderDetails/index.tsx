@@ -157,7 +157,7 @@ const OrderDetails: React.FC = (props: any) => {
                 </p>
                 {
                   Number(orderInfo.DDFY) === Number(detail?.FY) ? <></> : <p className={styles.JFFY}>
-                    <span>教辅费用</span> <span>￥{Number(detail?.KHKCJCs?.[0].JCFY) || JFJG.toFixed(2)}</span>
+                    <span>教辅费用</span> <span>￥{JFJG.toFixed(2)}</span>
                   </p>
                 }
 
