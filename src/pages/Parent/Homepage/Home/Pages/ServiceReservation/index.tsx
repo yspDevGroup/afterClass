@@ -87,7 +87,6 @@ const ServiceReservation = () => {
         onChange={onchange}
       >
         <TabPane tab="已选服务" key="yxfu">
-
           {
             YxserviceData && YxserviceData?.length === 0 ?
               <div className={styles.Selected}>
@@ -124,9 +123,18 @@ const ServiceReservation = () => {
         </TabPane>
         <TabPane tab="开设服务" key="ksfw">
           <div className={styles.category}>
+          {
+                LBData && LBData.length === 0 ?  <div className={styles.Selected}>
+                <div className={styles.noOrder}>
+                  <div>
+                    <p>当前暂未开设服务</p>
+                  </div>
+                  <img src={noOrder} alt="" />
+                </div>
+              </div>:
             <Tabs type="card" onChange={callback}
             >
-              {
+                 {
                 LBData?.map((value: any) => {
                   return <TabPane tab={value.FWMC} key={value?.id}>
                     <div className={styles.wrap}>
@@ -149,6 +157,7 @@ const ServiceReservation = () => {
                 })
               }
             </Tabs>
+             }
           </div>
         </TabPane>
 
