@@ -2,43 +2,53 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-09-26 17:03:55
+ * @LastEditTime: 2021-09-27 16:16:55
  * @LastEditors: Sissle Lynn
  */
-import styles from '../index.less';
-import GoBack from '@/components/GoBack';
-import { InputNumber, Switch } from 'antd';
 import { useEffect, useState } from 'react';
+import { useModel, history } from 'umi';
+import { InputNumber, message, Switch } from 'antd';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
-import { useModel } from 'umi';
+import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
+import GoBack from '@/components/GoBack';
+
+import styles from '../index.less';
 
 const NewPatrol = (props: any) => {
-  const { kcmc, xkrq, bjxx } = props?.location?.state;
+  const { kcid, kcmc, xkrq, bjxx, check } = props?.location?.state;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  // 是否准时上课
+  const [onTime, setOnTime] = useState<boolean>(true);
+  // 是否原定教师
+  const [oriTeacher, setOriTeacher] = useState<boolean>(true);
   // 是否点名
-  const [check, setCheck] = useState<boolean>(false);
+  const [checkIn, setCheckIn] = useState<boolean>(false);
   // 实到人数准确与否
   const [accurate, setAccurate] = useState<boolean>(true);
+  // 学生出勤人数
+  const [checkNum, setCheckNum] = useState<number>(0);
+  // 巡课确认人数
+  const [realNum, setRealNum] = useState<number>(0);
+  // 其他说明
+  const [bzDetail, setBzDetail] = useState<any>();
   const teacherInfo = bjxx?.KHBJJs?.[0]?.KHJSSJ;
   const roominfo = bjxx?.KHPKSJs?.[0]?.FJSJ;
-  const recordDetail = {
+  const recordDetail: API.CreateKHXKJL = {
     /** 巡课日期 */
     RQ: xkrq,
     /** 是否准时上课 */
-    SFZSSK: true,
+    SFZSSK: onTime,
     /** 是否为原定教师 */
-    SFYDJS: true,
+    SFYDJS: oriTeacher,
     /** 是否点名 */
-    SFDM: false,
+    SFDM: checkIn,
     /** 实到人数是否准确 */
-    RSSFZQ: true,
-    /** 学生应到人数 */
-    YDRS: '',
-    /** 学生实到人数 */
-    SDRS: '',
+    RSSFZQ: accurate,
     /** 备注信息 */
     BZXX: '',
+    YDRS: bjxx?.xs_count,
+    SDRS: checkNum,
     /** 巡课教师ID */
     XKJSId: currentUser.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
     /** 授课教师ID */
@@ -58,19 +68,44 @@ const NewPatrol = (props: any) => {
       const allData = resAll.data;
       // allData 有值时已点过名
       if (allData?.length) {
-        setCheck(true);
-      } else {
-        // setCheck(false);
+        setCheckIn(true);
+        const comeClass = allData.filter((item: any) => item.CQZT === '出勤');
+        setCheckNum(comeClass?.length);
       }
     }
-  }
+  };
+  const getDetail = async (id: string) => {
+    const res = await KHXKJL({
+      id: id
+    });
+    if (res.status === 'ok' && res.data) {
+      const { data } = res;
+      setOnTime(data.SFZSSK!);
+      setOriTeacher(data.SFYDJS!);
+      setAccurate(data.RSSFZQ!);
+      setCheckNum(data.SDRS!);
+      setBzDetail(data.BZXX);
+      setRealNum(data.QRRS!);
+    }
+  };
   useEffect(() => {
     getCq();
+    if (bjxx.KHXKJLs?.length) {
+      getDetail(bjxx.KHXKJLs[0].id);
+    }
   }, [bjxx]);
-
+  const handleSubmit = async () => {
+    const res = await createKHXKJL(recordDetail);
+    if (res.status === 'ok') {
+      message.success('巡课记录已提交');
+      history.push('/teacher/patrolArrange/classes', { id: kcid, day: xkrq, xxId: currentUser?.xxId, kcmc: kcmc, });
+    } else {
+      message.error(res.message);
+    }
+  };
   return (
     <>
-      <GoBack title={'巡课记录'} onclick='/teacher/patrolArrange/classes' teacher />
+      <GoBack title={'巡课记录'} teacher />
       <div className={styles.patrolWrapper}>
         <div className={styles.patrolContent}>
           <div className={styles.patrolRecord}>
@@ -81,43 +116,65 @@ const NewPatrol = (props: any) => {
                 <li><label>班级名称</label><span>{bjxx?.BJMC}</span></li>
                 <li><label>任课教师</label><span>{bjxx?.KHBJJs?.[0]?.KHJSSJ?.XM}</span></li>
                 <li><label>上课教室</label><span>{bjxx?.KHPKSJs?.[0]?.FJSJ?.FJMC}</span></li>
-                <li><label>是否准时上课</label><span><Switch defaultChecked /></span></li>
-                <li><label>是否原定教师</label><span><Switch defaultChecked /></span></li>
+                <li>
+                  <label>是否准时上课</label>
+                  <span>
+                    <Switch disabled={check} checked={onTime} onChange={(checked) => {
+                      setOnTime(checked);
+                    }} />
+                  </span>
+                </li>
+                <li>
+                  <label>是否原定教师</label>
+                  <span>
+                    <Switch disabled={check} checked={oriTeacher} onChange={(checked) => {
+                      setOriTeacher(checked);
+                    }} />
+                  </span>
+                </li>
               </ul>
             </div>
             <div className={styles.card}>
               <h4>学生出勤情况</h4>
               <ul>
-                <li><label>是否已点名</label><span><Switch disabled checked={check} /></span></li>
+                <li><label>是否已点名</label><span><Switch disabled checked={checkIn} /></span></li>
                 <li>
                   <label>应到人数</label>
-                  <span><InputNumber value={35} disabled />人</span>
+                  <span><InputNumber value={bjxx?.xs_count} disabled />人</span>
                 </li>
                 <li>
                   <label>实到人数</label>
-                  <span>{check ? <InputNumber value={35} disabled /> : <InputNumber placeholder='请输入' min={0} max={35} />}人</span>
+                  <span>{(checkIn || check) ? <InputNumber value={checkNum} disabled /> : <InputNumber placeholder='请输入' min={0} max={35} onBlur={(e) => {
+                    recordDetail.SDRS = Number(e.target.value);
+                  }} />}人</span>
                 </li>
-                {check ? <li>
+                {checkIn ? <li>
                   <label>实到人数准确</label>
-                  <span><Switch defaultChecked onChange={(checked) => setAccurate(checked)} /></span>
+                  <span><Switch disabled={check} checked={accurate} onChange={(checked) => setAccurate(checked)} /></span>
                 </li> : ''}
                 {!accurate ? <li>
                   <label>巡课确认人数</label>
                   <span>
-                    <InputNumber placeholder='请输入' min={0} max={35} />人
+                    {check ? <InputNumber value={realNum} disabled /> : <InputNumber disabled={check} placeholder='请输入' min={0} max={35} onBlur={(e) => {
+                      recordDetail.QRRS = Number(e.target.value);
+                    }} />}人
                   </span>
                 </li> : ''}
               </ul>
             </div>
             <div className={styles.card} style={{ marginBottom: 60 }}>
               <h4>其他说明</h4>
-              <textarea name="" id="" rows={5} ></textarea>
+              {check ? <div style={{ padding: 10, color: '#666' }}>
+                {bzDetail}
+              </div> : <textarea name="" id="" rows={5} onBlur={(e) => {
+                recordDetail.BZXX = e.target.value;
+              }}></textarea>}
             </div>
             <div className={styles.footer}>
-              <button className={styles.btn} >
-                取消
+              <button className={styles.btn} onClick={() => history.go(-1)} >
+                {check ? '返回' : '取消'}
               </button>
-              <button className={styles.btnes}>提交</button>
+              {check ? '' : <button className={styles.btnes} onClick={handleSubmit}>提交</button>}
             </div>
           </div>
         </div>

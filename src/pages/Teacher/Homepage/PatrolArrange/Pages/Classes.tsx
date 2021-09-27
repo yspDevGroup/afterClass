@@ -2,30 +2,54 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 17:55:59
- * @LastEditTime: 2021-09-26 15:36:06
+ * @LastEditTime: 2021-09-27 17:28:32
  * @LastEditors: Sissle Lynn
  */
+import { useEffect, useState } from 'react';
 import { Divider } from 'antd';
-import dayjs from 'dayjs';
 import { Link } from 'umi';
+import { getCourseSchedule } from '@/services/after-class/khxksj';
 import GoBack from '@/components/GoBack';
 
 import styles from '../index.less';
 
 const PatrolArrange = (props: any) => {
-  const data = props?.location?.state;
-  const today = dayjs().format('YYYY-MM-DD');
-
+  const { id, day, xxId, kcmc } = props?.location?.state;
+  const [classData, setClassData] = useState<any>([]);
+  // 是否可以巡课
+  const [available, setAvailable] = useState<boolean>(true);
+  const today = new Date();
+  const nowDay = new Date(day);
+  const getData = async () => {
+    const res = await getCourseSchedule({
+      KHKCSJId: id,
+      RQ: day,
+      WEEKDAY: new Date(day).getDay().toString(),
+      XXJBSJId: xxId,
+    });
+    if (res.status === 'ok' && res.data) {
+      setClassData(res.data);
+    }
+  };
+  useEffect(() => {
+    if (today.getFullYear() !== nowDay.getFullYear()
+      || today.getMonth() !== nowDay.getMonth()
+      || today.getDate() !== nowDay.getDate()) {
+      setAvailable(false)
+    }
+    getData();
+  }, []);
   return (
     <>
       <GoBack title={'巡课'} onclick='/teacher/patrolArrange' teacher />
       <div className={styles.patrolWrapper}>
         <div className={styles.patrolContent}>
-          {data ? <div className={styles.patrolClass}>
-            <h4>{data.KCMC}</h4>
+          <div className={styles.patrolClass}>
+            <h4>{kcmc}</h4>
             <ul>
-              {data.KHBJSJs?.length && data.KHBJSJs.map((item: any) => {
-                const { XXSJPZ, FJSJ } = item.KHPKSJs?.[0];
+              {classData?.length && classData.map((item: any) => {
+                const { XXSJPZ, FJSJ, } = item.KHPKSJs?.[0];
+                const isXk = item.KHXKJLs?.length;
                 return <li key={item.id}>
                   <div className={styles.left}>
                     <p>{item.BJMC}</p>
@@ -33,20 +57,22 @@ const PatrolArrange = (props: any) => {
                     <p>本校 <Divider type='vertical' /> {FJSJ?.FJMC}</p>
                   </div>
                   <div className={styles.right}>
-                    <span style={{ color: '#FF6600', fontSize: 12 }}>未巡课</span>
-                    <Link to={{
+                    <span style={{ color: isXk ? '#45C977' : '#FF6600', fontSize: 12 }}>{isXk ? '已' : '未'}巡课</span>
+                    {available || isXk ? <Link style={{ borderColor: isXk ? '#DDDDDD' : '#0066FF', color: isXk ? '#666666' : '#0066FF' }} to={{
                       pathname: '/teacher/patrolArrange/newPatrol',
                       state: {
-                        kcmc: data.KCMC,
-                        xkrq: today,
-                        bjxx: item
+                        kcid: id,
+                        kcmc: kcmc,
+                        xkrq: day,
+                        bjxx: item,
+                        check: isXk
                       }
-                    }}>去巡课</Link>
+                    }}>{isXk ? '查看' : '去巡课'}</Link> : ''}
                   </div>
                 </li>
               })}
             </ul>
-          </div> : ''}
+          </div>
         </div>
       </div>
     </>

@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 09:20:56
- * @LastEditTime: 2021-09-26 10:29:40
+ * @LastEditTime: 2021-09-27 17:29:15
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -11,15 +11,15 @@ import dayjs from 'dayjs';
 
 import styles from './index.less';
 import GoBack from '@/components/GoBack';
-import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { DatePicker, List } from 'antd';
 import moment from 'moment';
 import Nodata from '@/components/Nodata';
 import noData from '@/assets/noCourses1.png';
+import { getScheduleByDate } from '@/services/after-class/khxksj';
 const PatrolArrange = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
+  const [day, setDay] = useState<string>(dayjs().format('YYYY/MM/DD'));
   // 课表中选择课程后的数据回显
   const [dateData, setDateData] = useState<any>([]);
   const getData = async (day: string) => {
@@ -31,11 +31,11 @@ const PatrolArrange = () => {
     });
     if (res.status === 'ok' && res.data) {
       const { flag, rows } = res.data;
-      // if (flag) {
+      if (flag) {
       setDateData(rows);
-      // } else {
-      // setDateData([]);
-      // }
+      } else {
+      setDateData([]);
+      }
     }
   };
   useEffect(() => {
@@ -60,10 +60,19 @@ const PatrolArrange = () => {
             renderItem={(item: any) => (
               <Link key={item.id} to={{
                 pathname: '/teacher/patrolArrange/classes',
-                state: item
+                state: {
+                  id: item.id,
+                  day: day,
+                  xxId: currentUser?.xxId,
+                  kcmc: item.KCMC
+                }
               }}>
                 <List.Item
-                  actions={[<span style={{ color: '#FF6600', fontSize: 12 }}>未巡课</span>]}
+                  actions={[<span
+                    style={{ color: item.SFXK === 1 ? '#0066FF' : (item.SFXK === 2 ? '#45C977' : '#FF6600'), fontSize: 12 }}
+                  >
+                    {item.SFXK === 1 ? '部分' : (item.SFXK === 2 ? '已' : '未')}巡课
+                  </span>]}
                 >
                   <List.Item.Meta
                     title={item.KCMC}

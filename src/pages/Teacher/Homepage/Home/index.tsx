@@ -23,7 +23,7 @@ const Home = () => {
   const [notification, setNotification] = useState<any[]>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const today = dayjs().format('YYYY-MM-DD');
+  const today = dayjs().format('YYYY/MM/DD');
   // 巡课中课程安排数据
   const [dateData, setDateData] = useState<any>([]);
   const getData = async (day: string) => {
