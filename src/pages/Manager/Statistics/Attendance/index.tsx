@@ -1,6 +1,6 @@
 import PageContainer from '@/components/PageContainer';
 import { Tabs } from 'antd';
-import StatisticsTable from './compoents/TeacherTable'
+import Table from './compoents/TableList'
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 
 // import StudentTable from './compoents/StudentTable'
@@ -19,7 +19,6 @@ const LeaveManagement = () => {
             dataIndex: 'XM',
             key: 'XM',
             align: 'center',
-            render: (text) => `${text}老师`
 
 
         },
@@ -104,11 +103,11 @@ const LeaveManagement = () => {
         <PageContainer>
             <Tabs>
                 <TabPane tab="教师考勤统计" key="1">
-                    <StatisticsTable TableList={{ position: '老师', data: teacher }} />
+                    <Table TableList={{ position: '老师', data: teacher }} />
                 </TabPane>
 
                 <TabPane tab="学生考勤统计" key="2">
-                    <StatisticsTable TableList={{ position: '学生', data: student }} />
+                    <Table TableList={{ position: '学生', data: student }} />
                 </TabPane>
             </Tabs>
 
