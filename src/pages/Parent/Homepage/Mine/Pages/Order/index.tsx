@@ -5,7 +5,7 @@ import styles from './index.less';
 import { Link, useModel } from 'umi';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { deleteKHXSDD, getAllKHXSDD } from '@/services/after-class/khxsdd';
+import { deleteKHXSDD, getAllKHXSDD, getStudentOrders } from '@/services/after-class/khxsdd';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import noOrder from '@/assets/noOrder.png';
 import Nodata from '@/components/Nodata';
@@ -38,7 +38,7 @@ const OrderList = (props: {
     <>
       {data && data.length ? (
         data.map((item) => {
-          const { KHBJSJ, ...rest } = item;
+          const { KHBJSJ,KHXXZZFW, ...rest } = item;
           const color = item.DDZT === '已付款' ? '#45C977' : '#888';
           return (
             <div className={styles.Information}>
@@ -46,12 +46,13 @@ const OrderList = (props: {
                 to={{
                   pathname: '/parent/mine/orderDetails',
                   state: {
-                    title: KHBJSJ.KHKCSJ.KCMC,
+                    title: KHBJSJ?.KHKCSJ.KCMC,
                     detail: KHBJSJ,
                     payOrder: { ...rest },
                     user: currentUser,
-                    KKRQ: KHBJSJ.KHKCSJ.KKRQ,
-                    JKRQ: KHBJSJ.KHKCSJ.JKRQ,
+                    KKRQ: KHBJSJ?.KHKCSJ.KKRQ,
+                    JKRQ: KHBJSJ?.KHKCSJ.JKRQ,
+                    fwdetail: KHXXZZFW
                   },
                 }}
               >
@@ -62,8 +63,8 @@ const OrderList = (props: {
                   </span>
                 </p>
                 <div className={styles.KCMC}>
-                  <p>{item.KHBJSJ.KHKCSJ.KCMC}</p>
-                  <span>￥{item.KHBJSJ.FY}</span>
+                  <p>{item.KHBJSJ?.KHKCSJ?.KCMC || item.KHXXZZFW?.FWMC}</p>
+                  <span>￥{item.KHBJSJ?.FY || item.KHXXZZFW?.FY}</span>
                 </div>
                 <p className={styles.orderNumber}>
                   <span>下单时间：{item.XDSJ}</span>
@@ -101,7 +102,7 @@ const OrderList = (props: {
   );
 };
 const Order: React.FC = () => {
-  const [orderInfo, setOrderInfo] = useState<API.KHXSDD[]>([]);
+  const [orderInfo, setOrderInfo] = useState<any>([]);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const type = getQueryString('type') || undefined;
@@ -110,21 +111,32 @@ const Order: React.FC = () => {
       student_userid: currentUser?.student?.student_userid,
     },
   ];
-  const fetch = async (param: any[]) => {
-    const res = await getAllKHXSDD({
-      XSId: param[0].student_userid,
-      DDZT: '',
-    });
-    if (res.status === 'ok') {
-      if (res.data) {
-        setOrderInfo(res.data);
-      }
-    } else {
-      enHenceMsg(res.message);
+  // const fetch = async (param: any[]) => {
+  //   const res = await getAllKHXSDD({
+  //     XSId: param[0].student_userid,
+  //     DDZT: '',
+  //   });
+  //   if (res.status === 'ok') {
+  //     if (res.data) {
+  //       setOrderInfo(res.data);
+  //     }
+  //   } else {
+  //     enHenceMsg(res.message);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetch(children);
+  // }, []);
+  const fetch = async()=>{
+    const res = await getStudentOrders({
+      XSId:currentUser?.student?.student_userid || '20210901',
+    })
+    if(res.status === 'ok'){
+      setOrderInfo(res.data);
     }
-  };
+  }
   useEffect(() => {
-    fetch(children);
+    fetch();
   }, []);
   return (
     <>

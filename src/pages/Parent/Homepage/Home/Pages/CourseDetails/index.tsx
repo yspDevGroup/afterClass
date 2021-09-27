@@ -166,7 +166,6 @@ const CourseDetails: React.FC = () => {
   };
   const onFxChange = (e: { target: { checked: any } }) => {
     // eslint-disable-next-line no-console
-    // console.log(e.target.checked);
     setXystate(e.target.checked);
   };
   const onJFChange = (e: { target: { checked: any } }) => {

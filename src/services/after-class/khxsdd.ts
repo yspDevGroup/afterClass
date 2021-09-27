@@ -11,7 +11,7 @@ export async function getKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -31,37 +31,11 @@ export async function getKHXSDD(
         | {
             id?: string;
             BJMC?: string;
-            BJMS?: string;
-            BJZT?: '待开班' | '已开班' | '已结课';
-            ZJS?: string;
-            FJS?: string;
-            BJRS?: number;
             KSS?: number;
             FY?: string;
             KKRQ?: string;
             JKRQ?: string;
-            BMKSSJ?: string;
-            BMJSSJ?: string;
-            KCTP?: string;
-            NJS?: string;
-            XQ?: string;
-            NJSName?: string;
-            XQName?: string;
-            ZJSName?: string;
-            FJSName?: string;
-            KHKCSJ?: {
-              id?: string;
-              KCMC?: string;
-              KCLX?: string;
-              KCTP?: string;
-              KCZT?: number;
-              KCMS?: string;
-              KKRQ?: string;
-              JKRQ?: string;
-              BMKSSJ?: string;
-              BMJSSJ?: string;
-              XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
-            };
+            KHKCSJ?: { id?: string; KCMC?: string };
           }
         | any;
       KHXXZZFW?:
@@ -83,7 +57,7 @@ export async function getKHXSDD(
     message?: string;
   }>(`/khxsdd/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -97,10 +71,10 @@ export async function deleteKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -156,37 +130,11 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
         | {
             id?: string;
             BJMC?: string;
-            BJMS?: string;
-            BJZT?: '待开班' | '已开班' | '已结课';
-            ZJS?: string;
-            FJS?: string;
-            BJRS?: number;
             KSS?: number;
             FY?: string;
             KKRQ?: string;
             JKRQ?: string;
-            BMKSSJ?: string;
-            BMJSSJ?: string;
-            KCTP?: string;
-            NJS?: string;
-            XQ?: string;
-            NJSName?: string;
-            XQName?: string;
-            ZJSName?: string;
-            FJSName?: string;
-            KHKCSJ?: {
-              id?: string;
-              KCMC?: string;
-              KCLX?: string;
-              KCTP?: string;
-              KCZT?: number;
-              KCMS?: string;
-              KKRQ?: string;
-              JKRQ?: string;
-              BMKSSJ?: string;
-              BMJSSJ?: string;
-              XNXQ?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
-            };
+            KHKCSJ?: { id?: string; KCMC?: string };
           }
         | any;
       KHXXZZFW?:
@@ -279,10 +227,10 @@ export async function overdueKHXSDD(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsdd/overdue/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
