@@ -5,11 +5,13 @@ import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
 import { Select } from 'antd';
-import { getClassesEvaluation } from '@/services/after-class/khbjsj';
+import moment from 'moment';
+import { getClasses } from '@/services/after-class/reports';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 
 import Style from './index.less';
+import { TermItem } from '../../BasicalSettings/TermManagement/data';
 
 const { Option } = Select;
 
@@ -22,7 +24,7 @@ const AfterSchoolClass: React.FC = () => {
   const [termList, setTermList] = useState<any>();
   // 学期学年没有数据时提示的开关
   // 表格数据源
-  const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
+  const [dataSource, setDataSource] = useState<any>([]);
   /// table表格数据
   const columns: ProColumns<TermItem>[] = [
     {
@@ -37,72 +39,52 @@ const AfterSchoolClass: React.FC = () => {
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
-      render: (text: any) => {
-        return text?.BJMC;
-      },
     },
     {
       title: '上课时段',
-      dataIndex: 'KKSJ',
-      key: 'KKSJ',
+      dataIndex: 'SKSD',
+      key: 'SKSD',
       align: 'center',
-      // render: (text: any) => {
-      //   return text?.KKSJ
-      // }
+      render: (test: any, record: any) => {
+        return moment(record?.KKSJ).format('YYYY.MM.DD') + '~' + moment(record?.JKSJ).format('YYYY.MM.DD');
+
+      },
     },
     {
       title: '适用年级',
       dataIndex: 'KKFW',
       key: 'KKFW',
       align: 'center',
-      render: (test: any, record: any) => {
-        return record?.KKFW;
-      },
     },
     {
       title: '任课教师',
       dataIndex: 'RKJS',
       key: 'RKJS',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.RKJS;
-      },
     },
     {
       title: '课时数',
       dataIndex: 'KSS',
       key: 'KSS',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.KSS;
-      },
     },
     {
       title: '报名人数',
       dataIndex: 'BMRS',
       key: 'BMRS',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.BMRS;
-      },
     },
     {
       title: '退课人数',
       dataIndex: 'TKRS',
       key: 'TKRS',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.TKRS;
-      },
     },
     {
       title: '收款总额',
       dataIndex: 'SKJE',
       key: 'SKJE',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.SKJE;
-      },
     },
   ];
   useEffect(() => {
@@ -129,7 +111,7 @@ const AfterSchoolClass: React.FC = () => {
   }, [curXNXQId]);
   // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
-    const res3 = await getClassesEvaluation({
+    const res3 = await getClasses({
       XNXQId: SelectData,
     });
     if (res3.status === 'ok') {
