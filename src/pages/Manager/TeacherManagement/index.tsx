@@ -224,7 +224,7 @@ const TeacherManagement = () => {
           </Upload>
           <span className={styles.uploadText}>进行批量导入用户</span>
         </p>
-        <p className={styles.uploadDescription}>上传文件从企业微信管理后台通讯录中直接导出即可</p>
+        <p className={styles.uploadDescription}>上传文件需从企业微信管理后台通讯录导出</p>
       </Modal>
     </PageContain>
   );

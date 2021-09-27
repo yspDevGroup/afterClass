@@ -1,12 +1,13 @@
 import GoBack from "@/components/GoBack";
 import { Button, Checkbox, Modal } from "antd";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from './index.less';
-import { KHXXZZFW } from '@/services/after-class/khxxzzfw';
+import { getStudent, KHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
-import { createKHXSDD, payKHXSDD } from '@/services/after-class/khxsdd';
-import { useModel } from "umi";
+import { createKHXSDD } from '@/services/after-class/khxsdd';
+import { Link, useModel } from "umi";
+import { enHenceMsg } from "@/utils/utils";
 
 const Details = () => {
   const { initialState } = useModel('@@initialState');
@@ -16,15 +17,29 @@ const Details = () => {
   const [Xystate, setXystate] = useState(false);
   const [state, setstate] = useState(false);
   const [KHFUXY, setKHFUXY] = useState<any>();
+  const linkRef = useRef<HTMLAnchorElement | null>(null);
+  const [orderInfo, setOrderInfo] = useState<any>();
 
+  const type = window.location.href.split('type=')[1].split('&id=')[0];
   useEffect(() => {
     const id = window.location.href.split('id=')[1];
     (
       async () => {
-        const res = await KHXXZZFW({ id })
-        if (res.status === 'ok') {
-          setData(res.data)
+        if(type === 'YX'){
+          const res = await getStudent({
+            XSId: currentUser?.student?.student_userid || '20210901',
+            KHZZFWId:id
+          })
+          if (res.status === 'ok') {
+            setData(res.data?.rows?.[0].KHXXZZFW)
+          }
+        }else if(type === 'KS'){
+          const res = await KHXXZZFW({ id })
+          if (res.status === 'ok') {
+            setData(res.data)
+          }
         }
+
       }
     )()
   }, []);
@@ -43,6 +58,10 @@ const Details = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (orderInfo) linkRef.current?.click();
+  }, [orderInfo]);
 
   /** 课后帮服务协议弹出框 */
   const showModal = () => {
@@ -73,20 +92,10 @@ const Details = () => {
       KHXXZZFWId:Data?.id
     };
     const res = await createKHXSDD(data)
-    if(res.status === 'ok'){
-      console.log(res,'--------------------')
-      const result = await payKHXSDD({
-        returnUrl:'www.baidu.com',
-        kcmc:Data?.FWMC,
-        ddIds:[res!.data!.id!],
-        xsId:currentUser?.student?.student_userid || '20210901',
-        amount:Data?.FY,
-        XXJBSJId:currentUser?.xxId
-      })
-      if(result.status === 'ok'){
-        console.log(result)
-      }
-
+    if (res.status === 'ok') {
+      setOrderInfo(res.data);
+    } else {
+      enHenceMsg(res.message);
     }
   }
 
@@ -96,8 +105,8 @@ const Details = () => {
       <img src={Data?.FWTP} alt="" />
       <div>
         <p className={styles.title}>{Data?.FWMC}</p>
-        <p>预定时段：{moment(Data?.BMKSSJ).format('YYYY-MM-DD')}~{moment(Data?.BMJSSJ).format('YYYY-MM-DD')}</p>
-        <p>服务时段：{Data?.KSRQ}~{Data?.JSRQ}</p>
+        <p>预定时段：{moment(Data?.BMKSSJ).format('YYYY.MM.DD')}~{moment(Data?.BMJSSJ).format('YYYY.MM.DD')}</p>
+        <p>服务时段：{moment(Data?.KSRQ).format('YYYY.MM.DD')}~{moment(Data?.JSRQ).format('YYYY.MM.DD')}</p>
         <p>合作单位：{Data?.KHZZFW.FWJGMC}</p>
       </div>
       <div>
@@ -105,12 +114,15 @@ const Details = () => {
         <p>{Data?.FWNR}</p>
       </div>
     </div>
-    <div className={styles.footer}>
+    {
+      type === 'YX' ? <></>: <div className={styles.footer}>
       <span>￥{Data?.FY}</span>
       <Button onClick={() => {
         setstate(true)
       }}>立即订购</Button>
     </div>
+    }
+
     {state === true ? <div className={styles.box} onClick={() => setstate(false)}>
       <div onClick={onchanges}>
         <p className={styles.title}>{Data?.FWMC}</p>
@@ -124,6 +136,22 @@ const Details = () => {
         <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
           确定并付款
         </Button>
+        <Link
+              style={{ visibility: 'hidden' }}
+              ref={linkRef}
+              to={{
+                pathname: '/parent/mine/orderDetails',
+                state: {
+                  title: Data.FWMC,
+                  detail: '',
+                  payOrder: orderInfo,
+                  user: currentUser,
+                  KKRQ:'',
+                  JKRQ:'',
+                  fwdetail: Data
+                },
+              }}
+            />
       </div>
     </div> : <></>
     }

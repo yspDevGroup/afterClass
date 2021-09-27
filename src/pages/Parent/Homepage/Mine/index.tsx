@@ -31,7 +31,7 @@ const Mine = () => {
     // ];
     async function fetch() {
       const res = await getAllKHXSDD({
-        XSId: currentUser?.student?.student_userid || '20210913',
+        XSId: currentUser?.student?.student_userid,
         // njId: currentUser.njId,
         DDZT: '待付款',
       });
@@ -45,6 +45,7 @@ const Mine = () => {
     }
     fetch();
   }, []);
+
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader}>

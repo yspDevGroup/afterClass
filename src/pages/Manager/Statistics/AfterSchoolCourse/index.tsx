@@ -5,7 +5,7 @@ import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
 import { Select } from 'antd';
-import { getClassesEvaluation } from '@/services/after-class/khbjsj';
+import { getCourses } from '@/services/after-class/reports';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 
@@ -22,7 +22,7 @@ const AfterSchoolCourse: React.FC = () => {
   const [termList, setTermList] = useState<any>();
   // 学期学年没有数据时提示的开关
   // 表格数据源
-  const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
+  const [dataSource, setDataSource] = useState<any>([]);
   /// table表格数据
   const columns: ProColumns<TermItem>[] = [
     {
@@ -37,72 +37,48 @@ const AfterSchoolCourse: React.FC = () => {
       dataIndex: 'KCMC',
       key: 'KCMC',
       align: 'center',
-      render: (text: any) => {
-        return text?.KCMC;
-      },
     },
     {
       title: '课程来源',
       dataIndex: 'KCLY',
       key: 'KCLY',
       align: 'center',
-      // render: (text: any) => {
-      //   return text?.KCLY
-      // }
     },
     {
       title: '课程类型',
       dataIndex: 'KCLX',
       key: 'KCLX',
       align: 'center',
-      render: (test: any) => {
-        return test?.KCLX;
-      },
     },
     {
       title: '班级数量',
       dataIndex: 'BJS',
       key: 'BJS',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.BJS;
-      },
     },
     {
       title: '报名人数',
       dataIndex: 'BMRS',
       key: 'BMRS',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.BMRS;
-      },
     },
     {
       title: '退课人数',
       dataIndex: 'TKRS',
       key: 'TKRS',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.TKRS;
-      },
     },
     {
       title: '退课比例',
       dataIndex: 'TKBL',
       key: 'TKBL',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.TKBL;
-      },
     },
     {
       title: '收款总额',
       dataIndex: 'SKJE',
       key: 'SKJE',
       align: 'center',
-      render: (text: any) => {
-        return text[0]?.SKJE;
-      },
     },
   ];
   useEffect(() => {
@@ -129,7 +105,7 @@ const AfterSchoolCourse: React.FC = () => {
   }, [curXNXQId]);
   // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
-    const res3 = await getClassesEvaluation({
+    const res3 = await getCourses({
       XNXQId: SelectData,
     });
     if (res3.status === 'ok') {

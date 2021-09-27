@@ -99,3 +99,27 @@ export async function getScheduleByDate(
     ...(options || {}),
   });
 }
+
+/** 根据课程ID查询当天的排课数据 POST /khxksj/getCourseSchedule */
+export async function getCourseSchedule(
+  body: {
+    /** 课程ID */
+    KHKCSJId?: string;
+    /** 日期 */
+    RQ?: string;
+    /** 周几 */
+    WEEKDAY?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khxksj/getCourseSchedule', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

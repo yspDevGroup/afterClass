@@ -142,7 +142,11 @@ export async function getClassDetail(
   },
   options?: { [key: string]: any },
 ) {
-  return request<any>('/reports/getClassDetail', {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { XSId?: string; XSXM?: string; ZFZT?: string; TKZT?: string; BJMC?: string };
+    message?: string;
+  }>('/reports/getClassDetail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -162,7 +166,17 @@ export async function getTeacherDetail(
   },
   options?: { [key: string]: any },
 ) {
-  return request<any>('/reports/getTeacherDetail', {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: {
+      id?: string;
+      BJMC?: string;
+      cq_count?: string;
+      qq_count?: string;
+      KHKCSJ?: { KCMC?: string };
+    };
+    message?: string;
+  }>('/reports/getTeacherDetail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -182,7 +196,17 @@ export async function getStudentDetail(
   },
   options?: { [key: string]: any },
 ) {
-  return request<any>('/reports/getStudentDetail', {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: {
+      id?: string;
+      BJMC?: string;
+      cq_count?: string;
+      qq_count?: string;
+      KHKCSJ?: { KCMC?: string };
+    };
+    message?: string;
+  }>('/reports/getStudentDetail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
