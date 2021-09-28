@@ -161,36 +161,48 @@
       border-radius: 23px;
       // transform: matrix(-1, 0, 0, 1, 0, 0);
       margin-bottom: 20px;
-      padding: 12px;
       display: flex;
       justify-content: space-between;
+      padding: 0 12px;
 
       span {
-        line-height: 22px;
+        height:46px;
+        line-height: 46px;
+        width:130px;
         font-size: 16px;
         color: #fff;
+        display: inline-block;
+        position: relative;
 
         >span {
+          position: absolute;
           display: inline-block;
           background: #FF6B17;
-          border-radius: 29px;
-          width: 29px;
-          height: 26px;
+          border-radius: 30px;
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
+          top:8px;
+          right:0px;
           text-align: center;
-          margin-left: 10px;
         }
 
         &+a {
           background: linear-gradient(270deg, #0066FF 0%, rgba(0, 102, 255, 0) 100%);
           border-radius: 30px;
           height: 26px;
+          top:10px;
           padding-right: 24px;
           position: relative;
+          width:80px;
 
           >span:nth-child(1) {
             font-size: 14px;
+            width:80px;
             display: inline-block;
-            padding: 2px 2px 2px 10px;
+            padding: 0 2px 0 10px;
+            line-height: 26px;
+            height: 26px;
           }
 
           .gengduo {
