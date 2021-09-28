@@ -192,7 +192,8 @@ const ClassCalendar = (props: propstype) => {
   const handleOk = async () => {
     setIsModalVisible(false);
     const res = await msgLeaveSchool({
-      KHBJSJId: bjid
+      KHBJSJId: bjid,
+      text: "今日课后服务课程已结束，您的孩子已离校，请知悉。",
     });
     if (res.status === 'ok' && res.data) {
       message.success('通知已成功发送');
