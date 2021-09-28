@@ -138,8 +138,12 @@ const TabList=(props:any)=>{
     });
     if (res2?.data?.rows) {
         console.log(res2?.data?.rows);
+        if(res2?.data?.rows[0].PY){
+           setStudentDetails(res2?.data?.rows[0].PY)
+
+        }
         
-      setStudentDetails(res2?.data?.rows[0].PY)
+     
       
     }
   };
