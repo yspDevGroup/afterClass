@@ -58,7 +58,7 @@ const ServiceManagement = () => {
   }, [])
   const ongetKHXXZZFW = async () => {
     let data: any = {};
-    if (typeof FbState === 'undefined') {
+    if (typeof FbState === 'undefined' || FbState==='') {
       data = {
         XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId || '',
@@ -435,6 +435,7 @@ const ServiceManagement = () => {
                   onChange={(value: string) => {
                     setLbState(value);
                   }}>
+                     <Option value='' key=''>全部</Option>
                   {
                     LBData?.length ? LBData?.map((item: any) => {
                       return <Option value={item?.id} key={item?.id}>{item?.FWMC}</Option>
@@ -452,6 +453,9 @@ const ServiceManagement = () => {
                     setFbState(value);
                   }}
                 >
+                  <Option key='' value=''>
+                    全部
+                  </Option>
                   <Option key='0' value='0'>
                     未发布
                   </Option>
