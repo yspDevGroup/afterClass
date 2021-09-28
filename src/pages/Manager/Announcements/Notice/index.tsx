@@ -156,6 +156,7 @@ const Notice = () => {
               XXJBSJId: currentUser?.xxId,
               BT: params.BT,
               ZT: params.ZT ? [params.ZT] : ['已发布', '草稿'],
+              LX: ['0','1'],
               page: 0,
               pageSize: 0,
             });
@@ -166,6 +167,7 @@ const Notice = () => {
             const resgetXXTZGG = await getXXTZGG({
               XXJBSJId: currentUser?.xxId,
               BT: '',
+              LX: ['0','1'],
               ZT: ['已发布', '草稿'],
               page: 0,
               pageSize: 0,

@@ -18,7 +18,7 @@ const ServiceDetails = (props: any) => {
       const res = await getXXTZGG({
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
-        LX: '课后服务协议',
+        LX: ['课后服务协议'],
         page: 1,
         pageSize: 1,
       });

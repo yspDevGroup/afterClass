@@ -51,29 +51,48 @@
   .title {
     text-align: center;
   }
-
-  .imges {
-    background-image {
-      opacity: 0.5;
+  >div:nth-of-type(2){
+    font-size: 16px;
+    span{
+      font-weight: bold;
     }
   }
 
-  textarea {
+
+  .notice {
+    padding:20px 10px;
+    text-align: center;
     position: relative;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    width: 100%;
-    height: calc(~'100vh - 270px');
-    padding: 20px 14px;
-    overflow: auto;
-    color: #333;
-    font-size: 14px;
-    line-height: 27px;
-    text-indent: 1em;
-    background: inherit;
-    border: none;
-    opacity: 1 !important;
-    resize: none;
+    .title {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .time {
+      color: #999;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    :global{
+      .ant-divider{
+        margin: 12px 0 0 0;
+      }
+    }
+    .box{
+      position: absolute;
+      width: 94%;
+      height: 100%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.1;
+    }
+    .contents{
+      height: calc(~'100vh - 275px');
+      overflow: auto;
+      position: relative;
+      z-index: 1;
+    }
+    .contents::-webkit-scrollbar {
+      display: none;
+  }
   }
 }

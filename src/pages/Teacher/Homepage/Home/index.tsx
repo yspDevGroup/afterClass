@@ -61,7 +61,7 @@ const Home = () => {
       const res = await getXXTZGG({
         ZT: ['已发布'],
         XXJBSJId: currentUser?.xxId,
-        LX: "0",
+        LX: ["0"],
         page: 0,
         pageSize: 0,
       });

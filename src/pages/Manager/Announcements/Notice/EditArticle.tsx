@@ -48,7 +48,7 @@ const EditArticle = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const initialValues = {
-    LX: 0,
+    LX: '0',
     BH: 10,
     RQ:moment(new Date()),
     LY: '本站原创',
@@ -184,7 +184,8 @@ const EditArticle = () => {
                 ]}
               >
                 <Select disabled={disabled}>
-                  <Option value={0}>校内通知</Option>
+                  <Option value='0'>校内通知</Option>
+                  <Option value='1'>报名通知</Option>
                 </Select>
               </Form.Item>
             </Col>
