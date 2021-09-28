@@ -204,7 +204,7 @@ const ServiceManagement = () => {
                     if (record.id) {
                       const result = await updateKHXXZZFW({ id: record.id }, { FWZT: 1 });
                       if (result.status === 'ok') {
-                        message.success('删除成功');
+                        message.success('发布成功');
                         ongetKHXXZZFW();
                       } else {
                         message.error(result.message);
@@ -275,7 +275,7 @@ const ServiceManagement = () => {
                         if (record.id) {
                           const result = await updateKHXXZZFW({ id: record.id }, { FWZT: 0 });
                           if (result.status === 'ok') {
-                            message.success('删除成功');
+                            message.success('撤销成功');
                             ongetKHXXZZFW();
                           } else {
                             message.error(result.message);
