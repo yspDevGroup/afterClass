@@ -1,0 +1,61 @@
+.searchs {
+    display: flex;
+    padding: 16px 0;
+    line-height: 2.3;
+    background: #fff;
+  
+    > div {
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: 16px;
+  
+      > span {
+        display: inline-block;
+      }
+    }
+  }
+  
+  .tableStyle {
+    :global {
+      .ant-table-thead,
+      .ant-table-tbody {
+        > tr {
+          > td,
+          > th {
+            padding: 12px 8px;
+          }
+        }
+      }
+  
+      .ant-pagination {
+        li {
+          min-width: 26px;
+          height: 26px;
+          line-height: 26px;
+        }
+  
+        .ant-select-selector {
+          height: 26px;
+          line-height: 26px;
+  
+          .ant-select-selection-item {
+            height: 26px;
+            line-height: 26px;
+          }
+        }
+      }
+  
+      .ant-pagination-item-active {
+        border-color: #3e88f8;
+  
+        a {
+          color: #3e88f8;
+        }
+      }
+  
+      .ant-table-pagination-right {
+        justify-content: center;
+      }
+    }
+  }
+  

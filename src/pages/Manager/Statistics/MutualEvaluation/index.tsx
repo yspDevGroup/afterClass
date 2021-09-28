@@ -69,15 +69,6 @@ const MutualEvaluation: React.FC = () => {
       },
     },
     {
-      title: '主讲师',
-      dataIndex: 'KHBJJs',
-      key: 'KHBJJs',
-      align: 'center',
-      render: (text: any) => {
-        return text[0]?.KHJSSJ.XM;
-      },
-    },
-    {
       title: '操作',
       dataIndex: 'XSXM',
       key: 'XSXM',

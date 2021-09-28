@@ -250,6 +250,13 @@
         name: 'mutualEvaluation',
         component: './Manager/Statistics/MutualEvaluation',
       },
+      //互评统计详情
+      {
+        path: '/statistics/mutualEvaluation/detail',
+        hideInMenu: 'true',
+        name: 'mutualEvaluationInfo',
+        component: './Manager/Statistics/MutualEvaluation/Detail',
+      },
       //课后课程统计
       {
         path: '/statistics/afterSchoolCourse',
@@ -263,12 +270,7 @@
         name: 'afterschoolclass',
         component: './Manager/Statistics/AfterSchoolCourse/Detail',
       },
-      {
-        path: '/statistics/mutualEvaluation/detail',
-        hideInMenu: 'true',
-        name: 'mutualEvaluationInfo',
-        component: './Manager/Statistics/MutualEvaluation/Detail',
-      },
+     
     ],
   },
   // 素质教育资源
