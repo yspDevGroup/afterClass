@@ -37,45 +37,62 @@ const AfterSchoolCourse: React.FC = () => {
       dataIndex: 'KCMC',
       key: 'KCMC',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '课程来源',
       dataIndex: 'KCLY',
       key: 'KCLY',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '课程类型',
       dataIndex: 'KCLX',
       key: 'KCLX',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '班级数量',
       dataIndex: 'BJS',
       key: 'BJS',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '报名人数',
       dataIndex: 'BMRS',
       key: 'BMRS',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '退课人数',
       dataIndex: 'TKRS',
       key: 'TKRS',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '退课比例',
       dataIndex: 'TKBL',
       key: 'TKBL',
       align: 'center',
-      render: (test: any, record: any) => {
-        return record.TKBL + '%';
-
+      render: (test: any,) => {
+        return test + '%';
       },
     },
     {
@@ -83,6 +100,30 @@ const AfterSchoolCourse: React.FC = () => {
       dataIndex: 'SKJE',
       key: 'SKJE',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
+    },
+    {
+      title: '操作',
+      dataIndex: 'XSXM',
+      key: 'XSXM',
+      align: 'center',
+      render: (_, record) => (
+        <>
+          <Link
+            to={{
+              pathname: '/statistics/mutualEvaluation/detail',
+              state: {
+                type: 'detail',
+                data: record,
+              },
+            }}
+          >
+            详情
+          </Link>
+        </>
+      ),
     },
   ];
   useEffect(() => {
@@ -105,7 +146,9 @@ const AfterSchoolCourse: React.FC = () => {
   // 学年学期变化
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    ChoseSelect(curXNXQId);
+    if(curXNXQId){
+      ChoseSelect(curXNXQId);
+    }
   }, [curXNXQId]);
   // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {

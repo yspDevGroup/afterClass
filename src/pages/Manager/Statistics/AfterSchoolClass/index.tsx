@@ -36,18 +36,21 @@ const AfterSchoolClass: React.FC = () => {
       align: 'center'
     },
     {
-      title: '班级名称',
-      dataIndex: 'BJMC',
-      key: 'BJMC',
-      align: 'center',
-    },
-    {
       title: '上课时段',
       dataIndex: 'SKSD',
       key: 'SKSD',
       align: 'center',
       render: (test: any, record: any) => {
         return moment(record?.KKSJ).format('YYYY.MM.DD') + '~' + moment(record?.JKSJ).format('YYYY.MM.DD');
+      },
+    },
+    {
+      title: '班级名称',
+      dataIndex: 'BJMC',
+      key: 'BJMC',
+      align: 'center',
+      render: (test: any,) => {
+        return test;
       },
     },
     {
@@ -75,30 +78,45 @@ const AfterSchoolClass: React.FC = () => {
       dataIndex: 'RKJS',
       key: 'RKJS',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '课时数',
       dataIndex: 'KSS',
       key: 'KSS',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '报名人数',
       dataIndex: 'BMRS',
       key: 'BMRS',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '退课人数',
       dataIndex: 'TKRS',
       key: 'TKRS',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
     {
       title: '收款总额',
       dataIndex: 'SKJE',
       key: 'SKJE',
       align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
     },
   ];
   useEffect(() => {
@@ -121,7 +139,9 @@ const AfterSchoolClass: React.FC = () => {
   // 学年学期变化
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    ChoseSelect(curXNXQId);
+    if(curXNXQId){
+      ChoseSelect(curXNXQId);
+    }
   }, [curXNXQId]);
   // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
