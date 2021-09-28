@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-09-27 17:53:41
+ * @LastEditTime: 2021-09-28 15:34:12
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
 import GoBack from '@/components/GoBack';
 
 import styles from '../index.less';
+import moment from 'moment';
 
 const NewPatrol = (props: any) => {
   const { kcid, kcmc, xkrq, bjxx, check } = props?.location?.state;
@@ -36,7 +37,7 @@ const NewPatrol = (props: any) => {
   const roominfo = bjxx?.KHPKSJs?.[0]?.FJSJ;
   const recordDetail: API.CreateKHXKJL = {
     /** 巡课日期 */
-    RQ: xkrq,
+    RQ: moment(xkrq).format('YYYY-MM-DD'),
     /** 是否准时上课 */
     SFZSSK: onTime,
     /** 是否为原定教师 */
@@ -137,14 +138,14 @@ const NewPatrol = (props: any) => {
             <div className={styles.card}>
               <h4>学生出勤情况</h4>
               <ul>
-                <li><label>是否已点名</label><span><Switch disabled checked={checkIn} /></span></li>
+                <li><label>是否已点名</label><span>{checkIn ? '已点名':'未点名'}</span></li>
                 <li>
                   <label>应到人数</label>
                   <span><InputNumber value={bjxx?.xs_count} disabled />人</span>
                 </li>
                 <li>
                   <label>实到人数</label>
-                  <span>{(checkIn || check) ? <InputNumber value={checkNum} disabled /> : <InputNumber placeholder='请输入' min={0} max={35} onBlur={(e) => {
+                  <span>{(checkIn || check) ? <InputNumber value={checkNum} disabled /> : <InputNumber placeholder='请输入' min={0} max={bjxx?.xs_count} onBlur={(e) => {
                     recordDetail.SDRS = Number(e.target.value);
                   }} />}人</span>
                 </li>
@@ -155,7 +156,7 @@ const NewPatrol = (props: any) => {
                 {!accurate ? <li>
                   <label>巡课确认人数</label>
                   <span>
-                    {check ? <InputNumber value={realNum} disabled /> : <InputNumber disabled={check} placeholder='请输入' min={0} max={35} onBlur={(e) => {
+                    {check ? <InputNumber value={realNum} disabled /> : <InputNumber disabled={check} placeholder='请输入' min={0} max={bjxx?.xs_count} onBlur={(e) => {
                       recordDetail.QRRS = Number(e.target.value);
                     }} />}人
                   </span>
