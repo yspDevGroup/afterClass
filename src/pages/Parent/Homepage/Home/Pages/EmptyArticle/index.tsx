@@ -47,7 +47,7 @@ const EmptyArticle = () => {
     <div className={styles.EmptyPage}>
 
       {
-        notification && notification.length !== 0 ? <>
+        notification && notification.length === 0 ? <>
           <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }} />
           <p className={styles.title}>课后服务报名暂未开始</p>
           {Datas?.bmkssj && Datas?.bmjssj ? (
