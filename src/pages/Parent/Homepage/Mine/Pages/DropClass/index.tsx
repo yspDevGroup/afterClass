@@ -11,10 +11,11 @@ import { getStudentClasses } from '@/services/after-class/khbjsj';
 import { createKHTKSJ, getKHTKSJ } from '@/services/after-class/khtksj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { Button, Checkbox, Empty, message, Modal, Tabs } from 'antd';
+import { Button, Checkbox, message, Modal, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import styles from './index.less';
+import noOrder from '@/assets/noOrder.png';
 
 const { TabPane } = Tabs;
 
@@ -31,7 +32,7 @@ const DropClass = () => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: '课后服务协议',
+        LX: ['课后服务协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
@@ -167,11 +168,17 @@ const DropClass = () => {
               <Button onClick={showModals} disabled={typeof Datasourse === 'undefined' || Datasourse.length === 0}>提交</Button>
             </div>
           </div>
-        </> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+        </> : <div className={styles.ZWSJ}>
+          <img src={noOrder} alt="" />
+          <p>暂无数据</p>
+          </div>}
       </TabPane>
       <TabPane tab="退课记录" key="退课记录">
         {
-          Record?.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> :
+          Record?.length === 0 ? <div className={styles.ZWSJ}>
+          <img src={noOrder} alt="" />
+          <p>暂无数据</p>
+          </div> :
             <div className={styles.Record}>
               <div>
                 {
@@ -207,7 +214,10 @@ const DropClass = () => {
         KHFUXY?.length !== 0 ? <>
         <p>课后服务协议书</p>
         <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
-        </>:<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </>:<div className={styles.ZWSJ}>
+          <img src={noOrder} alt="" />
+          <p>暂无数据</p>
+          </div>
       }
 
     </Modal>

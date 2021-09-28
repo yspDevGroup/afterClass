@@ -9,10 +9,11 @@ import GoBack from '@/components/GoBack';
 import { deleteKHBJPJ, getKHBJPJ } from '@/services/after-class/khbjpj';
 import { getStudentClasses } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { Button, Empty, message, Rate, Tabs } from 'antd';
+import { Button, message, Rate, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel, Link } from 'umi';
 import styles from './index.less';
+import noOrder from '@/assets/noOrder.png';
 
 const { TabPane } = Tabs;
 
@@ -72,7 +73,7 @@ const Evaluation = () => {
                 return <>
                   <div className={styles.cards}>
                     <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
-                    <p>班级：{value.KHBJSJ?.BJMC}节 ｜ 任课教师：{value.KHBJSJ?.KHBJJs?.[0].KHJSSJ?.XM}   </p>
+                    <p>班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：{value.KHBJSJ?.KHBJJs?.[0].KHJSSJ?.XM}   </p>
                     <Link
                       key="pj"
                       to={{
@@ -89,11 +90,17 @@ const Evaluation = () => {
             }
           </div>
         </div>
-        </> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+        </> : <div className={styles.ZWSJ}>
+          <img src={noOrder} alt="" />
+          <p>暂无数据</p>
+          </div>}
       </TabPane>
       <TabPane tab="评价历史" key="评价历史">
         {
-          History?.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> :
+          History?.length === 0 ? <div className={styles.ZWSJ}>
+          <img src={noOrder} alt="" />
+          <p>暂无数据</p>
+          </div> :
             <div className={styles.History}>
               <div>
                 {
