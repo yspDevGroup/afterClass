@@ -1,10 +1,11 @@
 import GoBack from "@/components/GoBack";
-import { Empty, Rate } from "antd";
+import { Rate } from "antd";
 import styles from './index.less'
 import { useEffect, useState } from "react";
 import { getKHBJPJ } from "@/services/after-class/khbjpj";
 import { useModel } from "umi";
 import { getXXJBSJ } from "@/services/after-class/xxjbsj";
+import noOrder from '@/assets/noOrder.png';
 
 const Details = (props: any) => {
   const { state } = props.location;
@@ -30,11 +31,14 @@ const Details = (props: any) => {
     })()
   }, []);
   return <div className={styles.Details}>
-    <GoBack title={'详情'} />
+    <GoBack title={'详情'} teacher />
     <p className={styles.title}>{state?.KHKCSJ?.KCMC} ｜{state?.BJMC}</p>
     <p className={styles.SchoolName}>{SchoolName?.XXMC}</p>
     {
-      Dates?.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> :
+      Dates?.length === 0 ? <div className={styles.ZWSJ}>
+      <img src={noOrder} alt="" />
+      <p>暂无数据</p>
+      </div> :
       <div className={styles.History}>
               <div>
                 {

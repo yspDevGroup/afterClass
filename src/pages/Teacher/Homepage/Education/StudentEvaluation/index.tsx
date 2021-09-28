@@ -1,14 +1,18 @@
 import GoBack from "@/components/GoBack";
-import { Button, Empty } from "antd";
+import { Button } from "antd";
 import styles from './index.less'
 import { Link } from "umi";
+import noOrder from '@/assets/noOrder.png';
 
 const StudentEvaluation = (props: any) => {
   const { state } = props.location;
   return <div className={styles.StudentEvaluation}>
-    <GoBack title={'学生评价'} />
+    <GoBack title={'学生评价'} teacher onclick='/teacher/home?index=education' />
     {
-      state?.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> :
+      state?.length === 0 ? <div className={styles.ZWSJ}>
+      <img src={noOrder} alt="" />
+      <p>暂无数据</p>
+      </div> :
         <div className={styles.wrap}>
           {
             state?.map((value: any) => {

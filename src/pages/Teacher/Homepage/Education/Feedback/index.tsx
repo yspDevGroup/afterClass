@@ -1,15 +1,19 @@
 import GoBack from "@/components/GoBack";
-import { Empty, Rate } from "antd";
+import {Rate } from "antd";
 import styles from './index.less'
 import { Link } from "umi";
 import { RightOutlined } from "@ant-design/icons";
+import noOrder from '@/assets/noOrder.png';
 
 const Feedback = (props: any) => {
   const { state } = props.location;
   return <div className={styles.Feedback}>
-    <GoBack title={'课程反馈'} />
+    <GoBack title={'课程反馈'} teacher onclick='/teacher/home?index=education' />
     {
-      state?.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> :
+      state?.length === 0 ? <div className={styles.ZWSJ}>
+      <img src={noOrder} alt="" />
+      <p>暂无数据</p>
+      </div> :
         <div className={styles.wrap}>
           {
             state?.map((value: any) => {

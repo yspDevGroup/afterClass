@@ -1,11 +1,13 @@
 import GoBack from '@/components/GoBack';
 import { getEnrolled } from '@/services/after-class/khbjsj';
-import { Button, Empty, message, Modal, Rate } from 'antd';
+import { Button, message, Modal, Rate } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { useEffect, useState } from 'react';
 import styles from './index.less'
 import { createKHXSPJ, getKHXSPJ, updateKHXSPJ } from '@/services/after-class/khxspj'
 import { useModel } from 'umi';
+import noOrder from '@/assets/noOrder.png';
+
 
 const Details = (props: any) => {
   const { initialState } = useModel('@@initialState');
@@ -86,7 +88,7 @@ const Details = (props: any) => {
     setEvaluation(e.target.value)
   };
   return <div className={styles.Details}>
-    <GoBack title={'学生评价'} />
+    <GoBack title={'学生评价'} teacher  />
     <p className={styles.KCMC}>{state?.KHKCSJ?.KCMC}</p>
     <p className={styles.BJMC}>{state?.BJMC}</p>
     <div className={styles.cards}>
@@ -97,7 +99,10 @@ const Details = (props: any) => {
       </div>
     </div>
     {
-      StudentData?.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> :
+      StudentData?.length === 0 ? <div className={styles.ZWSJ}>
+      <img src={noOrder} alt="" />
+      <p>暂无数据</p>
+      </div> :
         <div className={styles.StudentList}>
           <table>
             <thead>
