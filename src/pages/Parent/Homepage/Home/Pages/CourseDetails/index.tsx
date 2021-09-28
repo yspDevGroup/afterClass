@@ -97,7 +97,7 @@ const CourseDetails: React.FC = () => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: '课后服务协议',
+        LX: ['课后服务协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
