@@ -1,5 +1,5 @@
 import GoBack from "@/components/GoBack";
-import { Rate } from "antd";
+import {  Rate } from "antd";
 import styles from './index.less'
 import { useEffect, useState } from "react";
 import { getKHBJPJ } from "@/services/after-class/khbjpj";

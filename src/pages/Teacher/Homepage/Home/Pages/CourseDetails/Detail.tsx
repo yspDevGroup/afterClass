@@ -90,7 +90,7 @@ const Detail: React.FC = () => {
             上课时段：{moment(classDetail?.KKRQ).format('YYYY.MM.DD')}~
             {moment(classDetail?.JKRQ).format('YYYY.MM.DD')}
           </li>
-          <li>上课地点：{classDetail?.XQName}</li>
+          <li>上课地点：{classDetail?.XQName || '本校'}</li>
         </ul>
         <p className={styles.title}>课程简介</p>
         <p className={styles.content}>{classDetail?.KHKCSJ?.KCMS}</p>
