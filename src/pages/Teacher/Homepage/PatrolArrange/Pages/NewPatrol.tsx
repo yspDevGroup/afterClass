@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-09-28 15:34:12
+ * @LastEditTime: 2021-09-28 16:14:44
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -165,7 +165,7 @@ const NewPatrol = (props: any) => {
             </div>
             <div className={styles.card} style={{ marginBottom: 60 }}>
               <h4>其他说明</h4>
-              {check ? <div style={{ padding: 10, color: '#666' }}>
+              {check ? <div style={{ padding: '10px 10px 24px', color: '#666' }}>
                 {bzDetail}
               </div> : <textarea name="" id="" rows={5} onBlur={(e) => {
                 recordDetail.BZXX = e.target.value;

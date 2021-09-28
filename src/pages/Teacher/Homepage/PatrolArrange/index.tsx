@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 09:20:56
- * @LastEditTime: 2021-09-27 17:29:15
+ * @LastEditTime: 2021-09-28 16:16:22
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -76,6 +76,7 @@ const PatrolArrange = () => {
                 >
                   <List.Item.Meta
                     title={item.KCMC}
+                    description={item.SSJGLX}
                   />
                 </List.Item>
               </Link>
