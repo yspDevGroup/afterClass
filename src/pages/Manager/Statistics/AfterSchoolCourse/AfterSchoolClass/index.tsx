@@ -16,7 +16,7 @@ import EllipsisHint from '@/components/EllipsisHint';
 
 const { Option } = Select;
 
-const AfterSchoolClass: React.FC = () => {
+const AfterSchoolClass: React.FC = (props: any) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   // 选择学年学期
@@ -26,6 +26,9 @@ const AfterSchoolClass: React.FC = () => {
   // 学期学年没有数据时提示的开关
   // 表格数据源
   const [dataSource, setDataSource] = useState<any>([]);
+  const { state } = props.location;
+  const { id, KHKCSJId } = state.data;
+  console.log('state.data: ', state.data);
   /// table表格数据
   const columns: ProColumns<TermItem>[] = [
     {
@@ -147,7 +150,9 @@ const AfterSchoolClass: React.FC = () => {
   const ChoseSelect = async (SelectData: string) => {
     const res3 = await getClasses({
       XNXQId: SelectData,
+      KHKCSJId: KHKCSJId
     });
+    console.log('res3: ', res3);
     if (res3.status === 'ok') {
       setDataSource(res3?.data?.rows);
     }
