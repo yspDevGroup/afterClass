@@ -50,24 +50,24 @@ const ClassCalendar = (props: propstype) => {
         setIsModalVisible(true);
       },
     },
-    {
-      text: '课堂风采',
-      itemType: 'img',
-      img: classroomStyle,
-      background: '#FF8863',
-    },
+    // {
+    //   text: '课堂风采',
+    //   itemType: 'img',
+    //   img: classroomStyle,
+    //   background: '#FF8863',
+    // },
   ]:[
     {
       text: '签到点名',
       icon: 'icon-dianming',
       background: '#FFC700',
     },
-    {
-      text: '课堂风采',
-      itemType: 'img',
-      img: classroomStyle,
-      background: '#FF8863',
-    },
+    // {
+    //   text: '课堂风采',
+    //   itemType: 'img',
+    //   img: classroomStyle,
+    //   background: '#FF8863',
+    // },
   ];
   // 后台返回的周数据的遍历
   const getCalendarData = (data: any) => {
