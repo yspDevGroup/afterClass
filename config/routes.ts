@@ -250,6 +250,12 @@
         name: 'mutualEvaluation',
         component: './Manager/Statistics/MutualEvaluation',
       },
+      //巡课统计
+      {
+        path: '/statistics/coursePatrol',
+        name: 'coursePatrol',
+        component: './Manager/Statistics/coursePatrol',
+      },
       //互评统计详情
       {
         path: '/statistics/mutualEvaluation/detail',

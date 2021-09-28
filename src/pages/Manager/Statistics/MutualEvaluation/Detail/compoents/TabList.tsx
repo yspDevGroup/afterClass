@@ -137,8 +137,8 @@ const TabList=(props:any)=>{
       pageSize: 0,
     });
     if (res2?.data?.rows) {
-        console.log(res2?.data?.rows);
-        if(res2?.data?.rows[0].PY){
+      //判断是否有值
+        if(res2?.data?.rows[0].PY?.length){
            setStudentDetails(res2?.data?.rows[0].PY)
 
         }
