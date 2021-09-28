@@ -45,7 +45,6 @@ const EmptyArticle = () => {
   }, []);
   return (
     <div className={styles.EmptyPage}>
-
       {
         notification && notification.length === 0 ? <>
           <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }} />

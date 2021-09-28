@@ -321,9 +321,9 @@ const ServiceManagement = () => {
   ];
   const submit = async (value: any) => {
     const { BMSD, FWSD, ...info } = value;
-    if(ImageUrl === ''){
+    if (ImageUrl === '') {
       message.info('请上传图片')
-    }else{
+    } else {
       const data = {
         ...info,
         BMKSSJ: moment(BMSD[0]).format(),
@@ -337,6 +337,8 @@ const ServiceManagement = () => {
         if (res.status === 'ok') {
           message.success('保存成功')
           setIsModalVisible(false);
+          setImageUrl('')
+          form.resetFields();
           ongetKHXXZZFW();
         }
       } else {
@@ -344,6 +346,8 @@ const ServiceManagement = () => {
         if (res.status === 'ok') {
           message.success('修改成功')
           setIsModalVisible(false);
+          setImageUrl('')
+          form.resetFields();
           ongetKHXXZZFW();
         }
       }

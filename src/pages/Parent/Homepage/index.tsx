@@ -16,7 +16,7 @@ const PersonalHomepage = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [activeKey, setActiveKey] = useState<string>('index');
-  const [courseStatus, setCourseStatus] = useState<string>('empty');
+  const [courseStatus, setCourseStatus] = useState<string>('enrolling');
   const [dataSource, setDataSource] = useState<any>();
   const homeRef = useRef(null);
   const studyRef = useRef(null);
@@ -39,7 +39,7 @@ const PersonalHomepage = () => {
             const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
             if (bmkssj && bmjssj && skkssj && skjssj) {
               const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
-              // setCourseStatus(cStatus);
+              setCourseStatus(cStatus);
             } else {
               setCourseStatus('empty');
             }
