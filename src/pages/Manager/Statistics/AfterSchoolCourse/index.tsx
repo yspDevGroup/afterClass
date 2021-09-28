@@ -113,7 +113,7 @@ const AfterSchoolCourse: React.FC = () => {
         <>
           <Link
             to={{
-              pathname: 'afterSchoolCourse/afterSchoolClass',
+              pathname: 'afterSchoolCourse/detail',
               state: {
                 type: 'detail',
                 data: record,

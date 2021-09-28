@@ -256,11 +256,12 @@
         name: 'afterschoolcoursen',
         component: './Manager/Statistics/AfterSchoolCourse',
       },
-      //课后班级统计
+      //课后课程详情
       {
-        path: '/statistics/afterSchoolClass',
+        path: '/statistics/afterSchoolCourse/detail',
+        hideInMenu: 'true',
         name: 'afterschoolclass',
-        component: './Manager/Statistics/AfterSchoolClass',
+        component: './Manager/Statistics/AfterSchoolCourse/Detail',
       },
       {
         path: '/statistics/mutualEvaluation/detail',
