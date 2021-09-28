@@ -68,7 +68,7 @@ const Calendar = ({ chosenDay, terms, config, events, handleEvents, handleOver }
 
         clearInterval(inter);
       }
-    }, 500);
+    }, 300);
   };
   const hideClassInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (inter) {

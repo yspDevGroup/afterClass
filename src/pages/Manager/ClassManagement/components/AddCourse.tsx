@@ -98,7 +98,7 @@ const AddCourse: FC<AddCourseProps> = ({
       dataIndex: 'JCFY',
       width: 80,
       align: 'center',
-      renderFormItem: () => (<InputNumber min={0} />),
+      renderFormItem: () => (<InputNumber min={0} max={999} />),
       formItemProps: {
         rules: [
           {
@@ -118,7 +118,8 @@ const AddCourse: FC<AddCourseProps> = ({
         <a
           key="editable"
           onClick={() => {
-            action?.startEditable?.(record.id||record.index);
+            const judge = record.id ? record.id: record.index;
+            action?.startEditable?.(judge);
           }}
         >
           编辑
@@ -126,7 +127,14 @@ const AddCourse: FC<AddCourseProps> = ({
         <a
           key="delete"
           onClick={() => {
-            setDataSource(dataSource.filter((item) => item.index !== record.index));
+            console.log(record.id);
+            setDataSource(dataSource.filter((item) => {
+              if(item.id){
+                return item.id !== record.id
+              }else{
+                return item.index !== record.index
+              }
+            }));
             action?.reload();
           }}
         >
@@ -504,7 +512,6 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'FJS',
           key: 'FJS',
           disabled: readonly,
-          rules: [{ required: true, message: '请选择副班主任' }],
           fieldProps: {
             mode: 'multiple',
             showSearch: true,

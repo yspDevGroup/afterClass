@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-09-28 14:50:37
+ * @LastEditTime: 2021-09-28 15:34:12
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
 import GoBack from '@/components/GoBack';
 
 import styles from '../index.less';
+import moment from 'moment';
 
 const NewPatrol = (props: any) => {
   const { kcid, kcmc, xkrq, bjxx, check } = props?.location?.state;
@@ -36,7 +37,7 @@ const NewPatrol = (props: any) => {
   const roominfo = bjxx?.KHPKSJs?.[0]?.FJSJ;
   const recordDetail: API.CreateKHXKJL = {
     /** 巡课日期 */
-    RQ: xkrq,
+    RQ: moment(xkrq).format('YYYY-MM-DD'),
     /** 是否准时上课 */
     SFZSSK: onTime,
     /** 是否为原定教师 */
