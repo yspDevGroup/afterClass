@@ -1,13 +1,13 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllKHXSQJ } from '@/services/after-class/khxsqj'
+import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 // import { message } from 'antd';
-import type { ColumnsType } from 'antd/lib/table';
-import { useModel, } from 'umi';
-import { Select, Table } from 'antd';
-import Style from './index.less'
-import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
+import { useModel } from 'umi';
+import { Select } from 'antd';
+import Style from './index.less';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
 const { Option } = Select;
 
 const LeaveManagement: React.FC = () => {
@@ -52,14 +52,21 @@ const LeaveManagement: React.FC = () => {
       key: 'XSXM',
       align: 'center',
       width: 120,
-      render: (text: any) => text.split('-')[0]
+      render: (text: any) => text.split('-')[0],
     },
     {
       title: '课程名称',
       dataIndex: 'KHQJKCs',
       key: 'KHQJKCs',
       align: 'center',
-      render: (text: any) => text[0]?.KCMC
+      render: (text: any) => text[0]?.KCMC,
+    },
+    {
+      title: '课程班名称',
+      dataIndex: 'KHQJKCs',
+      key: 'KHQJKCs_BJMC',
+      align: 'center',
+      render: (text: any) => text[0]?.KHBJSJ?.BJMC || '',
     },
     {
       title: '请假原因',
@@ -73,7 +80,7 @@ const LeaveManagement: React.FC = () => {
       key: 'QJZT',
       align: 'center',
       width: 100,
-      render: (text: any) => text ? '已取消' : '已通过'
+      render: (text: any) => (text ? '已取消' : '已通过'),
     },
     {
       title: '请假开始时间',
@@ -81,7 +88,7 @@ const LeaveManagement: React.FC = () => {
       key: '',
       align: 'center',
       width: 170,
-      render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.KSSJ}`
+      render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.KSSJ}`,
     },
     {
       title: '请假结束时间',
@@ -89,7 +96,7 @@ const LeaveManagement: React.FC = () => {
       key: '',
       align: 'center',
       width: 170,
-      render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.KSSJ}`
+      render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.JSSJ}`,
     },
   ];
   return (
@@ -146,6 +153,6 @@ const LeaveManagement: React.FC = () => {
         />
       </div>
     </PageContainer>
-  )
-}
+  );
+};
 export default LeaveManagement;

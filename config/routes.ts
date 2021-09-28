@@ -92,6 +92,7 @@
     ],
   },
   {
+    // 课程管理
     path: '/courseManagements',
     name: 'courseManagements',
     icon: 'AppstoreAdd',
@@ -100,6 +101,11 @@
         path: '/courseManagements/CourseManagements',
         name: 'courseManagements',
         component: './Manager/CourseManagements',
+      },
+      {
+        path: '/courseManagements/leaveManagement',
+        name: 'leaveManagement',
+        component: './Manager/CourseManagements/LeaveManagement',
       },
       {
         path: '/courseManagements/mechanismCourse/edit',
@@ -276,7 +282,6 @@
         name: 'afterschoolclass',
         component: './Manager/Statistics/AfterSchoolCourse/Detail',
       },
-     
     ],
   },
   // 素质教育资源
@@ -395,7 +400,7 @@
         name: 'newPatrol',
         icon: 'smile',
         component: './Teacher/Homepage/PatrolArrange/Pages/NewPatrol',
-      }
+      },
     ],
   },
   /*** 老师路由 end ***/
