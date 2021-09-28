@@ -26,6 +26,13 @@ const MutualEvaluation: React.FC = () => {
   /// table表格数据
   const columns: ProColumns<TermItem>[] = [
     {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 58,
+      align: 'center'
+    },
+    {
       title: '课程名称',
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',

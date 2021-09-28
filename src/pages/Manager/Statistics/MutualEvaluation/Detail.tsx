@@ -62,6 +62,13 @@ const Detail = (props: any) => {
   /// table表格数据
   const columns: ProColumns<TermItem>[] = [
     {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 58,
+      align: 'center'
+    },
+    {
       title: '学生姓名',
       dataIndex: 'XSXM',
       key: 'XSXM',

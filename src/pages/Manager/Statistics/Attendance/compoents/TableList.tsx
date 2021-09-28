@@ -57,8 +57,8 @@ const { initialState } = useModel('@@initialState');
 
     return (
         <>
-         <div >
-        <span>
+         <div style={{padding:'24px 0'}}>
+        <span  >
           所属学年学期：
           <Select
             value={curXNXQId}
