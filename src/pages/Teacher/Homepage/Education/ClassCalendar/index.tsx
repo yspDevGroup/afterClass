@@ -260,7 +260,7 @@ const ClassCalendar = (props: propstype) => {
       />
       <div className={styles.subTitle}>{cDay}</div>
       <ListComponent listData={course} operation={iconTextData} />
-      <Modal className={styles.leaveSchool} title="离校通知" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false}>
+      <Modal className={styles.leaveSchool} title="离校通知" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
         <p>今日课后服务课程已结束，您的孩子已离校，请知悉。</p>
       </Modal>
     </div>
