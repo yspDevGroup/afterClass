@@ -20,24 +20,24 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         return record?.KHJSSJ?.XM;
       },
     },
-    {
-      title: '联系电话',
-      dataIndex: 'LXDH',
-      key: 'LXDH',
-      align: 'center',
-      render: (text: any, record: any) => {
-        return record?.KHJSSJ?.LXDH;
-      },
-    },
-    {
-      title: '邮箱',
-      dataIndex: 'DZXX',
-      key: 'DZXX',
-      align: 'center',
-      render: (text: any, record: any) => {
-        return record?.KHJSSJ?.DZXX;
-      },
-    },
+    // {
+    //   title: '联系电话',
+    //   dataIndex: 'LXDH',
+    //   key: 'LXDH',
+    //   align: 'center',
+    //   render: (text: any, record: any) => {
+    //     return record?.KHJSSJ?.LXDH;
+    //   },
+    // },
+    // {
+    //   title: '邮箱',
+    //   dataIndex: 'DZXX',
+    //   key: 'DZXX',
+    //   align: 'center',
+    //   render: (text: any, record: any) => {
+    //     return record?.KHJSSJ?.DZXX;
+    //   },
+    // },
     {
       title: '操作',
       dataIndex: 'opthion',
@@ -47,11 +47,12 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         return (
           <a
             onClick={() => {
-              history.push({
+             history.push({
+                //跳转到别的页面
                 pathname: `/teacherManagement/detail`,
                 state: {
                   type: 'detail',
-                  data: record,
+                  data: record?.KHJSSJ?.id
                 },
               });
             }}

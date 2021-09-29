@@ -13,6 +13,7 @@ const MechanismInfo = (props: {
 }) => {
   const { onMechanismInfoClose, visibleMechanismInfo, info } = props;
   const { KHJYJG } = info;
+  
   return (
     <Drawer
       title="机构详情"

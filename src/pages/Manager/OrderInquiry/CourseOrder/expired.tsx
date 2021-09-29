@@ -79,10 +79,9 @@ const OrderInquiry = (props: any) => {
           XNXQId: curXNXQId,
           //父传子判断要请求的状态
           DDZT,
+          DDLX:0
         });
         if (resl.status === 'ok') {
-          console.log(resl.data);
-
           setTableLoading(false);
           setDataSource(resl.data);
           setKcmcValue(undefined);
@@ -191,7 +190,7 @@ const OrderInquiry = (props: any) => {
       name: '',
     });
     if (bjmcResl.status === 'ok') {
-      const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
+   const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
         label: item.BJMC,
         value: item.BJMC,
       }));
@@ -202,8 +201,11 @@ const OrderInquiry = (props: any) => {
     const resl = await getAllKHXSDD({
       XNXQId: curXNXQId,
       kcmc: value,
+      DDZT
     });
     if (resl.status === 'ok') {
+      console.log(resl.data);
+      
       setTableLoading(false);
       setDataSource(resl.data);
     }
@@ -217,6 +219,7 @@ const OrderInquiry = (props: any) => {
     const resl = await getAllKHXSDD({
       XNXQId: curXNXQId,
       bjmc: value,
+      DDZT
     });
     if (resl.status === 'ok') {
       setTableLoading(false);

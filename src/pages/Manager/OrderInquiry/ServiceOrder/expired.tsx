@@ -9,12 +9,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
 import { Select } from 'antd';
-import { getAllKHXSDD } from '@/services/after-class/khxsdd';
-import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
-import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
+import {getAllKHXSDD} from '@/services/after-class/khxsdd';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import PromptInformation from '@/components/PromptInformation';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+
 import styles from './index.less';
 import { useModel } from 'umi';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -34,28 +31,15 @@ const OrderInquiry = (props: any) => {
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
-  const [tableLoading, setTableLoading] = useState(true);
-  // 学期学年没有数据时提示的开关
-  const [kai, setkai] = useState<boolean>(false);
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [termList, setTermList] = useState<any>();
-  // 课程选择框的数据
-  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
-  // 班级名称选择框的数据
-  const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
-  const [kcmcValue, setKcmcValue] = useState<any>();
-  const [bjmcValue, setBjmcValue] = useState<any>();
-  useEffect(() => {
-    (async () => {
-      if (/MicroMessenger/i.test(navigator.userAgent)) {
-        await initWXConfig(['checkJsApi']);
-      }
-      await initWXAgentConfig(['checkJsApi']);
-    })();
-  }, []);
+  // 服务名称选项框
+  const [SeverData,SetSeverData] = useState<selectType[] | undefined>([]);
   useEffect(() => {
     (async () => {
       // 学年学期数据的获取
+      console.log(currentUser);
+      
       const res = await queryXNXQList(currentUser?.xxId);
       const newData = res.xnxqList;
       const curTerm = res.current;
@@ -67,61 +51,29 @@ const OrderInquiry = (props: any) => {
           setTermList(newData);
         }
       } else {
-        setkai(true);
+       
       }
     })();
   }, []);
-   
-  useEffect(() => {
-      //学年学期改变从新渲染页面
-    (async () => {
-      if (curXNXQId) {
-        // 获取订单查询的表格数据
-        const resl = await getAllKHXSDD({
-          XNXQId: curXNXQId,
-          //父传子判断要请求的状态
-          DDZT,
-          DDLX:1
-        });
-        if (resl.status === 'ok') {
-            
-          setTableLoading(false);
-          // 从新渲染列表
-          setDataSource(resl.data);
-          setKcmcValue(undefined);
-          setBjmcValue(undefined);
-        }
+  useEffect(()=>{
+    (async()=>{
+      const res=await getAllKHXSDD({
+        XNXQId: curXNXQId,
+        //父传子判断要请求的状态
+        DDZT,
+        DDLX:1
+      })
+      if(res.status === 'ok'){
+        console.log(res.data);
+        
+        setDataSource(res.data)
 
-        // 通过课程数据接口拿到所有的课程
-        const khkcResl = await getAllKHKCSJ({
-          isRequired: false,
-          XNXQId: curXNXQId,
-          XXJBSJId: currentUser?.xxId,
-          page: 0,
-          pageSize: 0,
-        });
-        if (khkcResl.status === 'ok') {
-             const KCMC = khkcResl.data.rows?.map((item: any) => ({
-            label: item.KCMC,
-            value: item.id,
-          }));
-          //学年学期选改变 课程名称 列表改变
-          setKcmcData(KCMC);
-        }
-
-        // 通过班级数据接口拿到所有的班级
-        const bjmcResl = await getAllKHBJSJ({ XNXQId: curXNXQId, page: 0, pageSize: 0, name: '' });
-        if (bjmcResl.status === 'ok') {
-          const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
-            label: item.BJMC,
-            value: item.BJMC,
-          }));
-          //更新班级列表
-          setBjmcData(BJMC);
-        }
       }
-    })();
-  }, [curXNXQId,]);
+      
+      
+    })()
+
+  },[])
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -138,11 +90,11 @@ const OrderInquiry = (props: any) => {
     },
     {
       title: '服务名称',
-      dataIndex: 'KCMC',
-      key: 'KCMC',
+      dataIndex: 'KHXXZZFW',
+      key: 'KHXXZZFW',
       align: 'center',
-      render: (_text: any, record: any) => {
-        return <div>{record?.KHBJSJ?.KHKCSJ?.KCMC}</div>;
+      render: (text:any) => {
+        return <div>{text?.FWMC}</div>;
       },
     },
     {
@@ -153,8 +105,8 @@ const OrderInquiry = (props: any) => {
     },
     {
       title: '付款时间',
-      dataIndex: 'ZFSJ',
-      key: 'ZFSJ',
+      dataIndex: '',
+      key: '',
       align: 'center',
     },
     {
@@ -170,42 +122,9 @@ const OrderInquiry = (props: any) => {
       align: 'center',
     },
   ];
+  const onKcmcChange=()=>{
 
-  // 控制学期学年数据提示框的函数
-  const kaiguan = () => {
-    setkai(false);
-  };
-  const onKcmcChange = async (value: any, key: any) => {
-    setTableLoading(true);
-    setBjmcValue('');
-    setKcmcValue(value);
-    const bjmcResl = await getAllKHBJSJ({
-      XNXQId: curXNXQId,
-      kcId: key?.key || '',
-      page: 0,
-      pageSize: 0,
-      name: '',
-
-    });
-    if (bjmcResl.status === 'ok') {
-      const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
-        label: item.BJMC,
-        value: item.BJMC,
-      }));
-      setBjmcData(BJMC);
-    }
-
-    // 获取订单查询的表格数据
-    const resl = await getAllKHXSDD({
-      XNXQId: curXNXQId,
-      kcmc: value,
-      DDZT
-    });
-    if (resl.status === 'ok') {
-      setTableLoading(false);
-      setDataSource(resl.data);
-    }
-  };
+  }
   return (
     <>
       <div className={styles.searchs}>
@@ -234,12 +153,12 @@ const OrderInquiry = (props: any) => {
           <div>
             <Select
               style={{ width: 200 }}
-              value={kcmcValue}
+              value={SeverData}
               allowClear
               placeholder="请选择"
               onChange={onKcmcChange}
             >
-              {kcmcData?.map((item: selectType) => {
+              {SeverData?.map((item: selectType) => {
                 return (
                   <Option value={item.label} key={item.value}>
                     {item.label}
@@ -265,12 +184,6 @@ const OrderInquiry = (props: any) => {
           search={false}
         />
       </div>
-      <PromptInformation
-        text="未查询到学年学期数据，请先设置学年学期"
-        link="/basicalSettings/termManagement"
-        open={kai}
-        colse={kaiguan}
-      />
     </>
   );
 };

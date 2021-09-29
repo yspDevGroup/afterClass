@@ -94,6 +94,7 @@ const CoursePatrol = () => {
             key: 'QRRS',
             align: 'center',
         },
+        
         {
             title: '备注信息',
             dataIndex: 'BZXX',

@@ -133,12 +133,26 @@
     icon: 'Build',
     component: './Manager/CourseScheduling',
   },
-  // 值班管理
+
   {
     path: '/coursePatrol',
     icon: 'SolutionOutlined',
     name: 'coursePatrol',
-    component: './Manager/CoursePatrol',
+    routes: [
+      {
+        path: '/coursePatrol/Management',
+        name: 'Management',
+        component: './Manager/CoursePatrol',
+      },
+       //巡课记录
+      {
+        path: '/coursePatrol/Record',
+        name: 'Record',
+        component: './Manager/CoursePatrol/Record',
+      },
+      
+    ]
+    
   },
   // 教师管理
   {
@@ -263,12 +277,7 @@
         name: 'mutualEvaluation',
         component: './Manager/Statistics/MutualEvaluation',
       },
-      //巡课统计
-      {
-        path: '/statistics/coursePatrol',
-        name: 'coursePatrol',
-        component: './Manager/Statistics/CoursePatrol',
-      },
+     
       //互评统计详情
       {
         path: '/statistics/mutualEvaluation/detail',
