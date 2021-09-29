@@ -75,28 +75,28 @@ const CourseHistory = () => {
       dataIndex: 'SSJGLX',
       search: false,
     },
-    {
-      title: '适用年级',
-      key: 'NJSJs',
-      dataIndex: 'NJSJs',
-      search: false,
-      align: 'center',
-      width: 200,
-      render: (text: any) => {
-        return (
-          <EllipsisHint
-            width="100%"
-            text={text?.map((item: any) => {
-              return (
-                <Tag key={item.id}>
-                  {item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}
-                </Tag>
-              );
-            })}
-          />
-        );
-      },
-    },
+    // {
+    //   title: '适用年级',
+    //   key: 'NJSJs',
+    //   dataIndex: 'NJSJs',
+    //   search: false,
+    //   align: 'center',
+    //   width: 200,
+    //   render: (text: any) => {
+    //   return (
+    //       <EllipsisHint
+    //         width="100%"
+    //         text={text?.map((item: any) => {
+    //           return (
+    //             <Tag key={item.id}>
+    //               {item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}
+    //             </Tag>
+    //           );
+    //         })}
+    //       />
+    //     );
+    //   },
+    // },
   ];
   return (
     <div>

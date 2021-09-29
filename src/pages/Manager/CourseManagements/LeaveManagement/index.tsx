@@ -23,10 +23,12 @@ const LeaveManagement: React.FC = () => {
     //获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
+      console.log(res);
+      
       // 获取到的整个列表的信息
       const newData = res.xnxqList;
       const curTerm = res.current;
-      if (newData?.length) {
+       if (newData?.length) {
         if (curTerm) {
           setCurXNXQId(curTerm.id);
           setTermList(newData);
