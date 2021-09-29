@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import { Modal, message } from 'antd';
+import { Modal, message, Form, Input, MessageArgsProps } from 'antd';
 import React, { useState, useEffect, useContext } from 'react';
 import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
@@ -35,6 +35,7 @@ const ClassCalendar = (props: propstype) => {
   const [courseArr, setCourseArr] = useState<any>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [bjid,setBjid] =  useState<string>();
+  const formRef = React.createRef<any>();
   const iconTextData: DisplayColumnItem[] = day === dayjs().format('YYYY-MM-DD')?[
     {
       text: '签到点名',
@@ -42,7 +43,7 @@ const ClassCalendar = (props: propstype) => {
       background: '#FFC700',
     },
     {
-      text: '离校通知',
+      text: '下课通知',
       icon: 'icon-lixiao',
       background: '#7DCE81',
       handleClick:(bjid: string)=>{
@@ -189,23 +190,6 @@ const ClassCalendar = (props: propstype) => {
     };
   };
 
-  const handleOk = async () => {
-    setIsModalVisible(false);
-    const res = await msgLeaveSchool({
-      KHBJSJId: bjid,
-      text: "今日课后服务课程已结束，您的孩子已离校，请知悉。",
-    });
-    if (res.status === 'ok' && res.data) {
-      message.success('通知已成功发送');
-    }else{
-      message.error(res.message);
-    };
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   useEffect(() => {
     const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
     if (setDatedata) {
@@ -221,6 +205,31 @@ const ClassCalendar = (props: propstype) => {
     });
     setCourseArr(courseData);
   }, []);
+
+  const handleOk = async () => {
+    setIsModalVisible(false);
+    formRef.current.validateFields()
+      .then(async (values: any) => {
+        const res = await msgLeaveSchool({
+          KHBJSJId: bjid,
+          text: values.info,
+        });
+        if (res.status === 'ok' && res.data) {
+          message.success('通知已成功发送');
+        }else{
+          message.error(res.message);
+        };
+        formRef.current.validateFields()
+      })
+      .catch((info: { errorFields: any; }) => {
+        let error = info.errorFields
+        console.log(error);
+      });
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <div className={styles.schedule}>
@@ -261,8 +270,15 @@ const ClassCalendar = (props: propstype) => {
       />
       <div className={styles.subTitle}>{cDay}</div>
       <ListComponent listData={course} operation={iconTextData} />
-      <Modal className={styles.leaveSchool} title="离校通知" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
-        <p>今日课后服务课程已结束，您的孩子已离校，请知悉。</p>
+      <Modal className={styles.leaveSchool} title="下课通知" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
+        <Form ref={formRef}>
+            <Form.Item
+              name="info"
+              initialValue="今日课后服务课程已结束，您的孩子已下课，请知悉。"
+            >
+              <Input.TextArea defaultValue="今日课后服务课程已结束，您的孩子已下课，请知悉。"></Input.TextArea>
+            </Form.Item>
+          </Form>
       </Modal>
     </div>
   );
