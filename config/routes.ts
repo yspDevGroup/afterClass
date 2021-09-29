@@ -250,6 +250,13 @@
         name: 'Attendancet',
         component: './Manager/Statistics/Attendance',
       },
+      //考勤统计详情
+      {
+        path: '/statistics/Attendance/Detail',
+        hideInMenu: 'true',
+        name: 'AttendanceDetail',
+        component: './Manager/Statistics/Attendance/Detail',
+      },
       //课程班互评统计
       {
         path: '/statistics/mutualEvaluation',

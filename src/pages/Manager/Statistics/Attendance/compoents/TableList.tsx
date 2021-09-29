@@ -2,9 +2,10 @@ import ProTable from '@ant-design/pro-table';
 import type { ProColumns } from '@ant-design/pro-table';
 import { useEffect, useState } from 'react';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { useModel, } from 'umi';
+import { useModel,Link } from 'umi';
 import { Select,} from 'antd';
 import {getTeachers,getStudents}from '@/services/after-class/reports'
+
 
 
 const { Option } = Select;
@@ -39,9 +40,7 @@ const { initialState } = useModel('@@initialState');
      (async()=>{
        const res=await getTeachers({XNXQId:curXNXQId})
        if(res.status === 'ok'){
-         console.log(res?.data?.rows,'老师');
-         
-        setDataSource(res?.data?.rows)
+      setDataSource(res?.data?.rows)
        }
      })(),
      //学生列表
@@ -54,6 +53,149 @@ const { initialState } = useModel('@@initialState');
      })()
 
   },[curXNXQId])
+  const teacher: ProColumns<any>[] = [
+    {
+        title: '序号',
+        dataIndex: 'index',
+        valueType: 'index',
+        align: 'center'
+
+    },
+    {
+        title: '姓名',
+        dataIndex: 'XM',
+        key: 'XM',
+        align: 'center',
+     },
+
+    {
+        title: '授课班级数',
+        dataIndex: 'BJS',
+        key: 'BJS',
+        align: 'center',
+    },
+    {
+        title: '授课总课时数',
+        dataIndex: 'KSS',
+        key: 'KSS',
+        align: 'center',
+    },
+    {
+        title: '出勤次数',
+        dataIndex: 'CQS',
+        key: 'CQS',
+        align: 'center',
+    },
+    {
+        title: '缺勤次数',
+        dataIndex: 'QQS',
+        key: 'QQS',
+        align: 'center',
+    },
+    {
+        title: '出勤总时长(小时)',
+        dataIndex: 'KSSC',
+        key: 'KSSC',
+        align: 'center',
+    },
+    {
+
+        title: '操作',
+        dataIndex: '',
+        key: '',
+        align: 'center',
+        render: (_, record) => (
+            <>
+                <Link
+                    to={{
+                        pathname: '/statistics/attendance/detail',
+                        state: {
+                            type: 'detail',
+                            data: record,
+                            XNXQId:curXNXQId,
+                            position:TableList.position
+
+                        },
+                    }}
+                >
+                    详情
+                </Link>
+            </>
+        ),
+
+    }
+
+]
+const student: ProColumns<any>[] = [
+    {
+        title: '序号',
+        dataIndex: 'index',
+        valueType: 'index',
+        align: 'center'
+
+    },
+    {
+        title: '姓名',
+        dataIndex: 'XM',
+        key: 'XM',
+        align: 'center',
+
+    },
+    {
+        title: '报名班级数',
+        dataIndex: 'BJS',
+        key: 'BJS',
+        align: 'center',
+    },
+    {
+        title: '出勤次数',
+        dataIndex: 'CQS',
+        key: 'CQS',
+        align: 'center',
+    },
+    {
+        title: '缺勤次数',
+        dataIndex: 'QQS',
+        key: 'QQS',
+        align: 'center',
+    },
+    {
+        title: '课时总时长(小时)',
+        dataIndex: 'KSSC',
+        key: 'KSSC',
+        align: 'center',
+    },
+    {
+
+        title: '操作',
+        dataIndex: '',
+        key: '',
+        align: 'center',
+        render: (_, record) => (
+            <>
+                <Link
+                    to={{
+                        pathname: '/statistics/attendance/detail',
+                        state: {
+                            type: 'detail',
+                            data: record,
+                            XNXQId:curXNXQId,
+                            position:TableList.position
+
+                        },
+                    }}
+                >
+                    详情
+                </Link>
+            </>
+        ),
+
+    }
+
+
+
+
+]
 
     return (
         <>
@@ -79,7 +221,7 @@ const { initialState } = useModel('@@initialState');
         </span>
       </div>
             <ProTable
-              columns={TableList.data}
+              columns={TableList.position==='老师'?teacher:student}
                 options={{
                     setting: false,
                     fullScreen: false,

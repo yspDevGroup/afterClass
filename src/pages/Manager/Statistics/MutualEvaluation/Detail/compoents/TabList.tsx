@@ -18,8 +18,8 @@ const TabList=(props:any)=>{
       const handleCancel = () => {
         setIsModalVisible(false);
       };
-     /// table表格数据
-  const columns: ProColumns<TermItem>[] = [
+  
+  const teacher: ProColumns<TermItem>[] = [
     {
       title: '序号',
       dataIndex: 'index',
@@ -58,48 +58,67 @@ const TabList=(props:any)=>{
       render: (_, record) => <Rate count={5} defaultValue={record?.PJFS} disabled={true} />,
     },
      {
-        title:ListName==='课程反馈'?'评价人':'',
-        dataIndex:ListName==='课程反馈'?'PJR':'',
+        title:'评价人',
+        dataIndex:'PJR',
         key:'',
         align: 'center',
       
 
     },
     {
-      title:ListName==='课程反馈'?'评价内容':'',
+      title:'评价内容',
       dataIndex: 'PY',
       key: 'PY',
       align: 'center',
-      render: (text: any) => {
-          if(ListName==='课程反馈'){
-            return (
-                <Popover content={text}>
-                  <div
-                    style={{
-                      textOverflow: 'ellipsis',
-                      width: '100px',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textAlign: 'center',
-                      margin: '0 auto',
-                    }}
-                  >
-                    {text}
-                  </div>
-                </Popover>
-              );
+      ellipsis:true
+    },
+   
+  ];
 
-          }
-     
+  const student: ProColumns<TermItem>[] = [
+    {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 58,
+      align: 'center'
+    },
+    {
+      title: '学生姓名',
+      dataIndex: 'XSXM',
+      key: 'XSXM',
+      align: 'center',
+    },
+    {
+      title: '班级',
+      dataIndex: '',
+      key: '',
+      align: 'center',
+      render: () => {
+        return   <span>{ListState.BJMC}</span> ;
       },
     },
     {
-      title:ListName==='学生评价'?'该学生课堂表现':'',
+      title: '评价时间',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      align: 'center',
+      width: 200,
+    },
+    {
+      title: '课程评分',
+      dataIndex: '',
+      key: '',
+      align: 'center',
+      width: 200,
+      render: (_, record) => <Rate count={5} defaultValue={record?.PJFS} disabled={true} />,
+    },
+    {
+      title:'该学生课堂表现',
       dataIndex: '',
       key: '',
       align: 'center',
       render: (_, record) => {
-          if(ListName==='学生评价'){
             return (
                 <a
                   onClick={() => {
@@ -114,7 +133,7 @@ const TabList=(props:any)=>{
       
             );
 
-          }
+          
      
       },
     },
@@ -140,12 +159,8 @@ const TabList=(props:any)=>{
       //判断是否有值
         if(res2?.data?.rows[0].PY?.length){
            setStudentDetails(res2?.data?.rows[0].PY)
-
+          }
         }
-        
-     
-      
-    }
   };
    //   学生详情评价列表
    const [StuList, setStuList] = useState<API.KHXSDD[] | undefined>([]);
@@ -179,7 +194,7 @@ const TabList=(props:any)=>{
       
             <div>
           <ProTable
-            columns={columns}
+            columns={ListName==='学生评价'?student:teacher}
             dataSource={StuList}
             rowKey="id"
             search={false}

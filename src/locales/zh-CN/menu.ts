@@ -28,6 +28,7 @@ export default {
   'menu.statistics.afterschoolclass': '课后班级统计',
   'menu.statistics.mutualEvaluationInfo': '课程班互评统计详情',
   'menu.statistics.Attendancet': '考勤统计',
+  'menu.statistics.AttendanceDetail': '考勤统计详情',
   'menu.statistics.coursePatrol': '巡课统计',
   'menu.parent': '家长端',
   'menu.parent.home': '家长首页',
