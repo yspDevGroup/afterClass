@@ -260,7 +260,7 @@
       {
         path: '/statistics/coursePatrol',
         name: 'coursePatrol',
-        component: './Manager/Statistics/coursePatrol',
+        component: './Manager/Statistics/CoursePatrol',
       },
       //互评统计详情
       {
