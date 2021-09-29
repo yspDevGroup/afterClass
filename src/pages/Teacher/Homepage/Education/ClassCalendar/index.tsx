@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { Modal, message, Form, Input, MessageArgsProps } from 'antd';
+import { useModel } from 'umi';
 import React, { useState, useEffect, useContext } from 'react';
 import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
@@ -8,10 +9,10 @@ import ListComponent from '@/components/ListComponent';
 import moment from 'moment';
 import { DateRange, Week } from '@/utils/Timefunction';
 import noData from '@/assets/noCourses1.png';
-import classroomStyle from '@/assets/classroomStyle.png';
 import myContext from '@/utils/MyContext';
 import { msgLeaveSchool } from '@/services/after-class/wechat';
 import { DisplayColumnItem } from '@/components/data';
+import { getData } from '@/utils/utils';
 
 
 type propstype = {
@@ -27,6 +28,8 @@ const defaultMsg = {
 
 const ClassCalendar = (props: propstype) => {
   const { setDatedata } = props;
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
@@ -35,7 +38,12 @@ const ClassCalendar = (props: propstype) => {
   const [courseArr, setCourseArr] = useState<any>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [bjid,setBjid] =  useState<string>();
-  const formRef = React.createRef<any>();
+  const [modalContent,setModalContent] =  useState<string>();
+  const formRef =  React.createRef<any>();
+  const children = currentUser?.subscriber_info?.children || [{
+    student_userid: currentUser?.UserId,
+    njId: '1'
+  }];
   const iconTextData: DisplayColumnItem[] = day === dayjs().format('YYYY-MM-DD')?[
     {
       text: '签到点名',
@@ -46,9 +54,12 @@ const ClassCalendar = (props: propstype) => {
       text: '下课通知',
       icon: 'icon-lixiao',
       background: '#7DCE81',
-      handleClick:(bjid: string)=>{
-        setBjid(bjid);
+      handleClick:async (bjid: string)=>{
         setIsModalVisible(true);
+        const schedule = await getData(bjid, children[0].student_userid!);
+        const { ...rest } = schedule;
+        setModalContent(`今日${rest.kcmc}课${rest.title}班已下课，请知悉。`);
+        setBjid(bjid);
       },
     },
     // {
@@ -206,10 +217,17 @@ const ClassCalendar = (props: propstype) => {
     setCourseArr(courseData);
   }, []);
 
+  useEffect(() => {
+    formRef.current.setFieldsValue({
+      info: modalContent,
+    });
+  }, [modalContent]);
+
   const handleOk = async () => {
     setIsModalVisible(false);
     formRef.current.validateFields()
       .then(async (values: any) => {
+        console.log('values: ', values);
         const res = await msgLeaveSchool({
           KHBJSJId: bjid,
           text: values.info,
@@ -270,13 +288,13 @@ const ClassCalendar = (props: propstype) => {
       />
       <div className={styles.subTitle}>{cDay}</div>
       <ListComponent listData={course} operation={iconTextData} />
-      <Modal className={styles.leaveSchool} title="下课通知" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
+      <Modal className={styles.leaveSchool} title="下课通知" forceRender={true} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
         <Form ref={formRef}>
             <Form.Item
               name="info"
-              initialValue="今日课后服务课程已结束，您的孩子已下课，请知悉。"
+              initialValue={modalContent}
             >
-              <Input.TextArea defaultValue="今日课后服务课程已结束，您的孩子已下课，请知悉。"></Input.TextArea>
+              <Input.TextArea defaultValue={modalContent}></Input.TextArea>
             </Form.Item>
           </Form>
       </Modal>
