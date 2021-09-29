@@ -83,7 +83,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
             ) : (
               ''
             )}{' '}
-            {xxData?.QYMC}
+            {xxData?.XXMC}
           </span>
         ) : (
           ''
