@@ -1,24 +1,24 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
-import styles from './index.less';
-import imgPop from '@/assets/teacherBg.png';
+import { Image } from 'antd';
+import moment from 'moment';
 import CheckOnChart from './components/CheckOnChart';
 import IconFont from '@/components/CustomIcon';
 import myContext from '@/utils/MyContext';
 import { DateRange, Week } from '@/utils/Timefunction';
-import moment from 'moment';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
+import imgPop from '@/assets/teacherBg.png';
 import Nodata from '@/components/Nodata';
 import noChart from '@/assets/noChart1.png';
-import icon_attRecord from '@/assets/icon_attRecord.png';
-import icon_tchLeave from '@/assets/icon_tchLeave.png';
-import icon_Rgo from '@/assets/icon_Rgo.png';
-// import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
+// import icon_attRecord from '@/assets/icon_attRecord.png';
+// import icon_tchLeave from '@/assets/icon_tchLeave.png';
+// import icon_Rgo from '@/assets/icon_Rgo.png';
+import styles from './index.less';
 
 const Mine = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { yxkc, weekSchedule, courseStatus } = useContext(myContext);
+  const { yxkc, weekSchedule } = useContext(myContext);
   const [checkIn, setCheckIn] = useState<any[]>();
   const [wekDay, setWekDay] = useState<any>();
   // 当前时间
@@ -130,7 +130,12 @@ const Mine = () => {
       <header className={styles.cusHeader}>
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.header}>
-          <img src={currentUser?.avatar} />
+          <Image
+            width={46}
+            height={46}
+            src={currentUser?.avatar}
+            fallback="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAbFBMVEXd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTk5unl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///8Fdw+DAAACEklEQVRo3u3bbXKCMBCA4c021IogVgEpFol4/zv2X2c6Qj53Q2vzXuAZQYFdRnhbKVgRvq9QghOc4AQnOMEJTrBH/XEnEeXu2MeEx8MLfPdyGCPBai/gR2KvYsBnhIfwzA9XMFvFDS+4rrIzXMNiNSc84jKMIyNcgKaCD56EDhYTG9yBto4NrvRwxQbnejhng6UellzwBIYmJngwwQMT/GGCP5jg1gS3TPDJBJ+Y4IMJPjwbXJng6tng1Q71at/qswk+M8G9Ce6Z4JsJvnHdFjO9m7Hdj/d6eP98z1wT6lzke8rUH2uHI+0MX3TwhXN22i67W9ahrae4eniNqZsld8M8H18ozrDXRqCcd0v2VYSa/S2jYofvxzn4GGHrM87BYwR4bnST9xjw7hHeRYHL4O+0J1wFr9f+2id+fYRfY8BqZuckVAS4Dt4nesIycO/iC7ehywBPeGmNiiMvrBaf6TPFCV81s0R25YMb/XN1wwR/bk1D2/aTAR5KsKgciOGhAMuKgRB+eMWlXdTbvP6ygqd3BKfwfaKAOwnOyS4YHnPwKh/D4BrBM6wD4OsGAtpcfeEGISjNpUwH3woIrri5w0MGBGWDK9whkISdG9wIIEo0LnALhLX2sEJKeG52XoBPQFptDee0cG4NS1pYWsOCFhbWMBD3++HVznFPKsueaDCnKMEJTnCCE5zgBP93+J/9i+8LmPKq0dXXgKwAAAAASUVORK5CYII="
+          />
           <div className={styles.headerName}>
             <h4>
               <span ref={userRef}>{currentUser?.UserId}</span>
@@ -155,14 +160,14 @@ const Mine = () => {
         </div> */}
         <div className={styles.titleBar}>
           出勤统计
-          <div>
+          {/* <div>
             <span />
             正常
             <span />
             异常
             <span />
             待上
-          </div>
+          </div> */}
         </div>
         {checkIn && checkIn.length ? (
           checkIn.map((item: any) => {
