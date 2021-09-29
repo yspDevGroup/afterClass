@@ -146,8 +146,9 @@ const CallTheRoll = (props: any) => {
           const leaveInfo = resLeave?.data?.rows || [];
           studentData?.forEach((item: any) => {
             const leaveItem = leaveInfo?.find((val) => val.XSId === item.XSId);
-            item.isRealTo = leaveItem ? '缺席' : '出勤';
-            item.isLeave = leaveItem ? true : false;
+            const leaveJudge = leaveItem?.QJZT!=1;
+            item.isRealTo = leaveJudge ? '缺席' : '出勤';
+            item.isLeave = leaveJudge ? true : false;
             item.leaveYY = leaveItem?.QJYY;
           });
           setDataScouse(studentData);
@@ -277,6 +278,7 @@ const CallTheRoll = (props: any) => {
     }]);
     if (res.status === 'ok') {
       showConfirm();
+      setBtnDis('done');
     } else {
       message.error(res.message)
     }
@@ -369,7 +371,7 @@ const CallTheRoll = (props: any) => {
           onClick={onButtonClick}
           disabled={butDis !== 'doing'}
         >
-          {butDis === 'done' ? '已' : (butDis === 'undone' ? '已默认' : '开始')}点名
+          {butDis === 'done' ? '已' : (butDis === 'undone' ? '已默认' : '确认')}点名
         </Button>
       </div>
 
