@@ -14,6 +14,7 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import resourcesBg from '@/assets/resourcesBg.png';
 import resourcesRgo from '@/assets/resourcesRgo.png';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
+import { Badge } from 'antd';
 
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
@@ -61,7 +62,7 @@ const Home = () => {
       const res = await getXXTZGG({
         ZT: ['已发布'],
         XXJBSJId: currentUser?.xxId,
-        LX: ["0"],
+        LX: ['0'],
         page: 0,
         pageSize: 0,
       });
@@ -82,9 +83,7 @@ const Home = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.headerText}>
           <h4>
-            <span ref={userRef}>
-              {currentUser?.UserId}
-            </span>
+            <span ref={userRef}>{currentUser?.UserId}</span>
             老师，你好！
           </h4>
           <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
@@ -128,8 +127,11 @@ const Home = () => {
           <EnrollClassTime teacher={true} />
         </div>
         <div className={styles.patrol}>
-          <span>今日待巡课程<span>{dateData?.length}</span></span>
-          <Link to='/teacher/patrolArrange'>
+          <span>
+            今日待巡课程
+            <Badge count={dateData?.length} showZero={true} offset={[5, 0]} />
+          </span>
+          <Link to="/teacher/patrolArrange">
             <span>去巡课</span>
             <IconFont type="icon-gengduo" className={styles.gengduo} />
           </Link>
