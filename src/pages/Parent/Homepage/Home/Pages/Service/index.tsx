@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './index.less';
 import { Tabs } from 'antd';
 import noPic from '@/assets/noPic.png';
@@ -18,10 +18,9 @@ const ServiceReservation = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [LBData, setLBData] = useState<any>([]);
-  const [DataSource, setDataSource] = useState<any>();
   const [state, setstate] = useState('yxfw');
-  const [YxserviceData, setYxserviceData] = useState<any>()
-  const couterRef = useRef<HTMLDivElement>();
+  const [YxserviceData, setYxserviceData] = useState<any>();
+  const [DataSource, setDataSource] = useState<any>();
 
   useEffect(() => {
     (
@@ -45,7 +44,7 @@ const ServiceReservation = () => {
             })
             if (resGetKHXXZZFW.status === 'ok') {
               const NewData = resGetKHXXZZFW?.data?.rows?.filter((value: any) => {
-                return new Date(value?.BMJSSJ).getTime() > new Date().getTime()
+                return new Date(moment(value?.BMJSSJ).format('YYYY/MM/DD')).getTime() > new Date().getTime()
               })
               setDataSource(NewData)
             }
@@ -56,7 +55,6 @@ const ServiceReservation = () => {
     setstate('yxfu')
   }, []);
   const callback = async (key: any) => {
-
     const res = await queryXNXQList(currentUser?.xxId);
     if (res.current) {
       const result = await getKHXXZZFW({
@@ -67,15 +65,11 @@ const ServiceReservation = () => {
       })
       if (result.status === 'ok') {
         const NewData = result?.data?.rows?.filter((value: any) => {
-          const Time = new Date(value?.BMJSSJ).getTime() + 86400000;
+          const Time = new Date(moment(value?.BMJSSJ).format('YYYY/MM/DD')).getTime() + 86400000;
           return Time > new Date().getTime()
         })
         setDataSource(NewData)
-        console.log(NewData?.[0],'===')
-        console.log(JSON.stringify(NewData?.[0]),'===')
-        alert(JSON.stringify(NewData?.[0]));
-        alert( couterRef.current?.innerHTML)
-        console.log(couterRef.current?.innerHTML)
+
       }
     }
 
@@ -94,7 +88,6 @@ const ServiceReservation = () => {
   }, []);
   const onchange = (key: any) => {
     setstate(key)
-    alert(JSON.stringify(DataSource?.[0]));
   }
   return (
     <div className={styles.ServiceReservation}>
@@ -157,18 +150,19 @@ const ServiceReservation = () => {
                         return <TabPane  tab={value.FWMC} key={value?.id}>
                           <div className={styles.wrap}>
                             {
-                              DataSource && DataSource?.map((item: any) => {
-                                const hrefs = `/parent/home/service/details?type=KS&id=${item.id}`;
-                                return (<div ref={couterRef}><Link to={hrefs} key={item?.id}> <div className={styles.box} >
-                                  <div> <img src={item?.FWTP || noPic} style={{ width: item?.FWTP ? '110px' : '70px' }} alt="" /></div>
+                              DataSource?.map((items: any) => {
+                                const hrefs = `/parent/home/service/details?type=KS&id=${items.id}`;
+                                return <Link to={hrefs} key={items?.id}>
+                                <div className={styles.box} >
+                                  <div> <img src={items?.FWTP || noPic} style={{ width: items?.FWTP ? '110px' : '70px' }} alt="" /></div>
                                   <div>
-                                    <p className={styles.title}> {item?.FWMC} </p>
-                                    <p>预定时段：{moment(item?.BMKSSJ).format('YYYY.MM.DD')}~{moment(item?.BMJSSJ).format('YYYY.MM.DD')}</p>
-                                    <p>服务时段：{moment(item?.KSRQ).format('YYYY.MM.DD')}~{moment(item?.JSRQ).format('YYYY.MM.DD')}</p>
+                                    <p className={styles.title}> {items?.FWMC} </p>
+                                    <p>预定时段：{moment(items?.BMKSSJ).format('YYYY.MM.DD')}~{moment(items?.BMJSSJ).format('YYYY.MM.DD')}</p>
+                                    <p>服务时段：{moment(items?.KSRQ).format('YYYY.MM.DD')}~{moment(items?.JSRQ).format('YYYY.MM.DD')}</p>
                                   </div>
                                 </div>
                                 </Link>
-                                </div>)
+
                               })
                             }
                           </div>
