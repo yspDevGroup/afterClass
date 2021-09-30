@@ -4,6 +4,7 @@ import ImgCrop from 'antd-img-crop';
 import 'antd/es/modal/style';
 import styles from './UploadImage.less';
 import { getAuthorization } from '@/utils/utils';
+import { defImg } from '@/constant';
 
 type UploadImageProps = {
   imageurl?: string; // 回显地址
@@ -28,7 +29,7 @@ const UploadImage = (props: UploadImageProps) => {
     accept,
     imagename,
     data,
-    handleImageChange
+    handleImageChange,
   } = props;
   const [imageUrl, setImageUrl] = useState(props.imageurl);
   useEffect(() => {
@@ -55,7 +56,7 @@ const UploadImage = (props: UploadImageProps) => {
     <div className={styles.uploadStyles}>
       {imageUrl ? (
         <div style={{ marginRight: 16 }}>
-          <Image width={imgWidth} height={imgHeight} src={imageUrl} />
+          <Image width={imgWidth} height={imgHeight} src={imageUrl} fallback={defImg} />
         </div>
       ) : (
         <div

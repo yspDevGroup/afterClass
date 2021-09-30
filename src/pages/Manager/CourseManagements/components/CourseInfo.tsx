@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { Descriptions, Drawer, Tag, Image, Table, message, Space, Button } from 'antd';
 import classes from './index.less';
 import { KHJSSJ } from '@/services/after-class/khjssj';
-import { FormItemType } from '@/components/CustomForm/interfice';
+import type { FormItemType } from '@/components/CustomForm/interfice';
 import CustomForm from '@/components/CustomForm';
 import moment from 'moment';
+import { defImg } from '@/constant';
 
 /**
  * 课程详情
@@ -43,15 +44,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
             onClick={async () => {
               const jsId = record?.KHJSSJ?.id;
               const res = await KHJSSJ({
-                id: jsId
+                id: jsId,
               });
               if (res.status === 'ok') {
                 setTeacher(res.data);
                 setVisibleTeacher(true);
               } else {
-                message.error(res.message)
+                message.error(res.message);
               }
-
             }}
           >
             详情
@@ -66,14 +66,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
       label: 'id',
       name: 'id',
       key: 'id',
-      hidden: true
+      hidden: true,
     },
     {
       type: 'input',
       label: 'KHJYJGId',
       name: 'KHJYJGId',
       key: 'KHJYJGId',
-      hidden: true
+      hidden: true,
     },
     {
       type: 'group',
@@ -102,8 +102,8 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           upurl: '/api/upload/uploadFile?type=badge&plat=agency',
           accept: '.jpg, .jpeg, .png',
           imagename: 'image',
-        }
-      ]
+        },
+      ],
     },
     {
       type: 'group',
@@ -114,16 +114,16 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '姓名',
           name: 'XM',
           key: 'XM',
-          placeholder:'-'
+          placeholder: '-',
         },
         {
           type: 'input',
           label: '资格证书编号',
           name: 'ZGZSBH',
           key: 'ZGZSBH',
-          placeholder:'-'
-        }
-      ]
+          placeholder: '-',
+        },
+      ],
     },
     {
       type: 'group',
@@ -142,9 +142,9 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           span: 12,
           name: 'XL',
           key: 'XL',
-          placeholder:'-'
-        }
-      ]
+          placeholder: '-',
+        },
+      ],
     },
     {
       type: 'group',
@@ -155,16 +155,16 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '民族',
           name: 'MZ',
           key: 'MZ',
-          placeholder:'-'
+          placeholder: '-',
         },
         {
           type: 'input',
           label: '毕业院校',
           name: 'BYYX',
           key: 'BYYX',
-          placeholder:'-'
-        }
-      ]
+          placeholder: '-',
+        },
+      ],
     },
     {
       type: 'group',
@@ -176,16 +176,16 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '出生日期',
           name: 'CSRQ',
           key: 'CSRQ',
-          placeholder:'-'
+          placeholder: '-',
         },
         {
           type: 'input',
           label: '专业',
           name: 'SXZY',
           key: 'ZY',
-          placeholder:'-'
-        }
-      ]
+          placeholder: '-',
+        },
+      ],
     },
     {
       type: 'group',
@@ -196,7 +196,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '联系电话',
           name: 'LXDH',
           key: 'LXDH',
-          placeholder:'-'
+          placeholder: '-',
         },
         {
           type: 'inputNumber',
@@ -205,9 +205,9 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           key: 'JL',
           max: 100,
           min: 1,
-          formatter: (value: number) => `${Math.round(value)}`
-        }
-      ]
+          formatter: (value: number) => `${Math.round(value)}`,
+        },
+      ],
     },
     {
       type: 'group',
@@ -217,17 +217,17 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           type: 'input',
           key: 'SFZJLX',
           name: 'SFZJLX',
-          placeholder:'-',
-          label: '证件类型'
+          placeholder: '-',
+          label: '证件类型',
         },
         {
           type: 'input',
           label: '教授科目',
           name: 'JSKM',
           key: 'JSKM',
-          placeholder:'-'
-        }
-      ]
+          placeholder: '-',
+        },
+      ],
     },
     {
       type: 'group',
@@ -238,16 +238,16 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           key: 'SFZJH',
           name: 'SFZJH',
           label: '证件号码',
-          placeholder:'-'
+          placeholder: '-',
         },
         {
           type: 'input',
           label: '电子邮箱',
           name: 'DZXX',
           key: 'DZXX',
-          placeholder:'-'
-        }
-      ]
+          placeholder: '-',
+        },
+      ],
     },
     {
       type: 'group',
@@ -259,10 +259,10 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '个人简介',
           name: 'BZ',
           key: 'BZ',
-          placeholder:'-'
-        }
-      ]
-    }
+          placeholder: '-',
+        },
+      ],
+    },
   ];
   return (
     <div>
@@ -288,7 +288,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
             })}
           </Descriptions.Item>
           <Descriptions.Item label="课程封面">
-            <Image width={110} height={72} src={info?.KCTP} />
+            <Image width={110} height={72} src={info?.KCTP} fallback={defImg} />
           </Descriptions.Item>
           <Descriptions.Item label="课程简介">{info?.KCMS}</Descriptions.Item>
         </Descriptions>
@@ -317,7 +317,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
                 return {
                   CSRQ: CSRQ ? moment(CSRQ) : '',
                   XB: XB?.substring(0, 1),
-                  ...rest
+                  ...rest,
                 };
               }
             })()}
@@ -327,8 +327,8 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
             hideBtn={true}
           />
         </div>
-        <Space align='center' style={{ width: '100%', justifyContent: 'center' }}>
-          <Button type="primary" onClick={onTeacherClose} >
+        <Space align="center" style={{ width: '100%', justifyContent: 'center' }}>
+          <Button type="primary" onClick={onTeacherClose}>
             关闭
           </Button>
         </Space>
