@@ -49,6 +49,7 @@ const TermManagement = () => {
     setCurrent(data);
     getModelTitle();
     setModalVisible(true);
+    console.log(111111)
   };
   const handleOperation = (type: string) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -56,10 +57,12 @@ const TermManagement = () => {
     setModalType(type);
     getModelTitle();
     setModalVisible(true);
+    console.log()
   };
   const onClose = () => {
     setModalVisible(false);
   };
+  console.log(currentUser?.xxId,'----')
   const handleSubmit = async () => {
     try {
       const values = await form?.validateFields();
@@ -74,8 +77,11 @@ const TermManagement = () => {
           const params = {
             id: current?.id,
           };
-          const options = values;
-          res = updateXNXQ(params, options);
+          const data ={
+            ...values,
+            XXJBSJId:currentUser?.xxId
+          }
+          res = updateXNXQ(params, data);
         } else {
           res = createXNXQ(values);
         }
