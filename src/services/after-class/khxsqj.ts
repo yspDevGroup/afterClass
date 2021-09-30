@@ -38,6 +38,7 @@ export async function getKHXSQJ(
           KSS?: number;
           FY?: number;
           KCTP?: string;
+          XQSJ?: { id?: any; XXJBSJ?: { XXMC?: any } };
         };
       }[];
     };
@@ -132,6 +133,7 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
           KSS?: number;
           FY?: number;
           KCTP?: string;
+          XQSJ?: { id?: any; XXJBSJ?: { XXMC?: any } };
         };
       }[];
     };
@@ -191,6 +193,41 @@ export async function updateKHXSQJ(
       'Content-Type': 'application/json',
     },
     params: { ...queryParams },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 区县教育局查看请假记录 POST /khxsqj/getAllAbsences */
+export async function getAllAbsences(
+  body: {
+    /** 行政区划码 */
+    XZQHM?: string;
+    XXJBSJId?: string | any;
+    /** 请假状态 */
+    QJZT?: number[];
+    /** 请假类型 */
+    QJLX?: string;
+    /** 请假日期 */
+    QJRQ?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.KHXSQJ[] };
+    message?: string;
+  }>('/khxsqj/getAllAbsences', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     data: body,
     ...(options || {}),
   });

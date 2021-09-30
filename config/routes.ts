@@ -277,6 +277,15 @@
         name: 'mutualEvaluation',
         component: './Manager/Statistics/MutualEvaluation',
       },
+      {
+        path: '/statistics/mutualEvaluation/class',
+        name:'class',
+        hideInMenu: 'true',
+        component: './Manager/Statistics/MutualEvaluation/Class',
+
+        
+
+      },
 
       //互评统计详情
       {

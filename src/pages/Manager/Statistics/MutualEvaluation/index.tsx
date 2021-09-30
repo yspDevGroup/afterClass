@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
-import { Select } from 'antd';
+import { Select ,Rate} from 'antd';
 import { getClassesEvaluation } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
@@ -60,6 +60,14 @@ const MutualEvaluation: React.FC = () => {
       },
     },
     {
+      title: '课程评分',
+      dataIndex: 'pj_avg',
+      key: 'pj_avg',
+      align: 'center',
+      width: 200,
+      render: (text:any) => <Rate count={5} defaultValue={text} disabled={true} />,
+    },
+    {
       title: '开课机构',
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
@@ -77,7 +85,7 @@ const MutualEvaluation: React.FC = () => {
         <>
           <Link
             to={{
-              pathname: '/statistics/mutualEvaluation/detail',
+              pathname: '/statistics/mutualEvaluation/class',
               state: {
                 type: 'detail',
                 data: record,

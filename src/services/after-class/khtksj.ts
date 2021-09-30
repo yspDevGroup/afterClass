@@ -86,3 +86,34 @@ export async function updateKHTKSJ(
     ...(options || {}),
   });
 }
+
+/** 区县教育局获取学生退课信息 POST /khtksj/getAllTK */
+export async function getAllTK(
+  body: {
+    /** 退课状态 */
+    ZT?: number[];
+    /** 行政区划码 */
+    XZQHM?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    XXJBSJId?: string | any;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.KHTKSJ[] };
+    message?: string;
+  }>('/khtksj/getAllTK', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

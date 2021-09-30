@@ -194,6 +194,10 @@ export async function getAllClasses(
     XNXQId?: string;
     /** 课程ID */
     KHKCSJId?: string;
+    /** 学年 */
+    XN?: string;
+    /** 学期 */
+    XQ?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -216,6 +220,12 @@ export async function getClassesEvaluation(
   body: {
     /** 学年学期ID */
     XNXQId?: string;
+    /** 学年 */
+    XN?: string;
+    /** 学期 */
+    XQ?: string;
+    /** 课程ID */
+    KHKCSJId?: string;
     /** 课程名称 */
     KCMC?: string;
     /** 班级名称 */

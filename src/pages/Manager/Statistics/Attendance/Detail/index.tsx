@@ -8,11 +8,10 @@ import { LeftOutlined } from '@ant-design/icons';
 import { spawn } from '@umijs/utils';
 const AttendanceDetail = (props: any) => {
     const { data, XNXQId, position } = props.location.state
-    console.log(data);
      useEffect(() => {
         if (position === '老师') {
             (async () => {
-                const res = await getTeacherDetail({ KHJSSJId: '1965a118-4b5b-4b58-bf16-d5f45e78b28c', XNXQId })
+                const res = await getTeacherDetail({ KHJSSJId:data.KHJSSJId, XNXQId })
                 if(res.status==='ok'){
                     setDataSource(res.data)
                 }
@@ -50,14 +49,23 @@ const AttendanceDetail = (props: any) => {
 
             
          },
-    
-        {
-            title: '授课班级数',
-            dataIndex: '',
-            key: '',
+         {
+            title: '课程名称',
+            dataIndex: 'KHKCSJ',
+            key: 'KHKCSJ',
             align: 'center',
-            render:()=><div>{data.BJS}</div>
+            render:(text)=> <div>{text?.KCMC}</div>
+                
+            
         },
+        {
+            title: '班级名称',
+            dataIndex: 'BJMC',
+            key: 'BJMC',
+            align: 'center',
+        },
+    
+     
         {
             title: '授课总课时数',
             dataIndex: '',
@@ -84,21 +92,7 @@ const AttendanceDetail = (props: any) => {
             align: 'center',
             render:()=><div>{data.KSSC}</div>
         },
-        {
-            title: '课程名称',
-            dataIndex: 'KHKCSJ',
-            key: 'KHKCSJ',
-            align: 'center',
-            render:(text)=> <div>{text?.KCMC}</div>
-                
-            
-        },
-        {
-            title: '班级名称',
-            dataIndex: 'BJMC',
-            key: 'BJMC',
-            align: 'center',
-        }
+        
 
     
     ]
@@ -119,12 +113,19 @@ const AttendanceDetail = (props: any) => {
     
         },
         {
-            title: '报名班级数',
-            dataIndex: '',
-            key: '',
+            title: '班级名称',
+            dataIndex: 'BJMC',
+            key: 'BJMC',
             align: 'center',
-            render:()=><div>{data.BJS}</div>
         },
+        {
+            title: '课程名称',
+            dataIndex: 'KHKCSJ',
+            key: 'KHKCSJ',
+            align: 'center',
+            render:(text)=><div>{text?.KCMC}</div>
+        },
+     
         {
             title: '出勤次数',
             dataIndex: 'cq_count',
@@ -142,21 +143,9 @@ const AttendanceDetail = (props: any) => {
             dataIndex: 'KSSC',
             key: 'KSSC',
             align: 'center',
-            render:()=><div>{data.KSSC}</div>
+            // render:()=><div>{data.KSSC}</div>
         },
-        {
-            title: '班级名称',
-            dataIndex: 'BJMC',
-            key: 'BJMC',
-            align: 'center',
-        },
-        {
-            title: '课程名称',
-            dataIndex: 'KHKCSJ',
-            key: 'KHKCSJ',
-            align: 'center',
-            render:(text)=><div>{text?.KCMC}</div>
-        }
+    
       
     
     

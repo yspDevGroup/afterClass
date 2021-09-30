@@ -43,6 +43,8 @@ export async function getCourses(
 /** 获取课后服务班级统计报表 POST /reports/getClasses */
 export async function getClasses(
   body: {
+    /** 学年学期 */
+    XNXQ?: string;
     /** 班级名称 */
     BJMC?: string;
     /** 招生方式 */
@@ -144,7 +146,7 @@ export async function getClassDetail(
 ) {
   return request<{
     status?: 'ok' | 'error';
-    data?: { XSId?: string; XSXM?: string; ZFZT?: string; TKZT?: string; BJMC?: string };
+    data?: { XSId?: string; XSXM?: string; ZFZT?: string; TKZT?: string; BJMC?: string }[];
     message?: string;
   }>('/reports/getClassDetail', {
     method: 'POST',
@@ -171,10 +173,12 @@ export async function getTeacherDetail(
     data?: {
       id?: string;
       BJMC?: string;
+      KSS?: number;
       cq_count?: string;
       qq_count?: string;
+      KSSC?: number;
       KHKCSJ?: { KCMC?: string };
-    };
+    }[];
     message?: string;
   }>('/reports/getTeacherDetail', {
     method: 'POST',
@@ -201,10 +205,12 @@ export async function getStudentDetail(
     data?: {
       id?: string;
       BJMC?: string;
+      KSS?: number;
       cq_count?: string;
       qq_count?: string;
+      KSSC?: number;
       KHKCSJ?: { KCMC?: string };
-    };
+    }[];
     message?: string;
   }>('/reports/getStudentDetail', {
     method: 'POST',

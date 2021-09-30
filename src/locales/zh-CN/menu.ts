@@ -26,7 +26,7 @@ export default {
    'menu.coursePatrol.Record':'巡课记录',
   'menu.statistics.leaveManagement': '考勤统计',
   'menu.statistics.mutualEvaluation': '互评统计',
-  'menu.statistics.afterschoolcoursen': '课后课程统计',
+  'menu.statistics.afterschoolcoursen': '课程统计',
   'menu.statistics.afterschoolclass': '课后班级统计',
   'menu.statistics.mutualEvaluationInfo': '课程班互评统计详情',
   'menu.statistics.Attendancet': '考勤统计',
