@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Link, useModel } from 'umi';
-import { Button, message, Modal, Popconfirm, Space, Tag } from 'antd';
+import { Button, message, Modal, Popconfirm, Space, Tag, Tooltip } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 
 import ProTable from '@ant-design/pro-table';
@@ -179,7 +179,7 @@ const CourseList = () => {
             >
               发布
             </a>
-            <a onClick={() => handleOperation('add', record)}>修改</a>
+            <a onClick={() => handleOperation('add', record)}>编辑</a>
             <Popconfirm
               title={`确定要删除 “${record?.KCMC}” 吗?`}
               onConfirm={async () => {
@@ -207,7 +207,7 @@ const CourseList = () => {
               }
             }}
           >
-            取消
+            取消发布
           </a>
         )}
       </>
@@ -294,7 +294,9 @@ const CourseList = () => {
       render: (_, record) => {
         if ([1, 2].includes(record.KCZT)) {
           const Url = `/classManagement`;
-          const classes = record.KHBJSJs?.filter((item: { BJZT: string }) => item.BJZT === '已开班');
+          const classes = record.KHBJSJs?.filter(
+            (item: { BJZT: string }) => item.BJZT === '已开班',
+          );
           return (
             <Link
               to={{
@@ -302,11 +304,17 @@ const CourseList = () => {
                 state: record,
               }}
             >
-              {classes?.length}/{record.KHBJSJs?.length}
+              <Tooltip
+                title={`共${record.KHBJSJs?.length || 0}个班，其中${
+                  classes?.length || 0
+                }个已开班。`}
+              >
+                {classes?.length}/{record.KHBJSJs?.length}
+              </Tooltip>
             </Link>
           );
         }
-        return '-'
+        return '-';
       },
     },
     {

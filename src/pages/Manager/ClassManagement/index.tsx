@@ -217,7 +217,11 @@ const CourseManagement = (props: { location: { state: any } }) => {
       render: (text: any, record: any) => {
         return (
           <a onClick={() => showModal(record)}>
-            {record.KHXSBJs.length}/{record.BJRS}
+            <Tooltip
+              title={`班级招生名额为${record.BJRS || 0}人，已报${record.KHXSBJs.length || 0}人。`}
+            >
+              {record.KHXSBJs.length}/{record.BJRS}
+            </Tooltip>
           </a>
         );
       },
