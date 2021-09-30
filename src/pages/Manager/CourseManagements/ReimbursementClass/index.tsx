@@ -1,15 +1,16 @@
-import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
+import { useModel } from 'umi';
+import { Select, Popconfirm, Divider, message } from 'antd';
+import ProTable from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import PageContainer from '@/components/PageContainer';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj'
-import { useModel, } from 'umi';
-import type { ColumnsType } from 'antd/lib/table';
-import { Select, Table, Popconfirm, Divider, message } from 'antd';
-import Style from './index.less'
-import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-// import { text } from 'express';
+import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
+
+import Style from './index.less';
+
 const { Option } = Select;
-///退课
+// 退课
 const ReimbursementClass = () => {
   // 获取到当前学校的一些信息
   const { initialState } = useModel('@@initialState');
@@ -34,7 +35,6 @@ const ReimbursementClass = () => {
         }
       }
     })();
-
   }, []);
   useEffect(() => {
     actionRef.current?.reload();
@@ -60,8 +60,8 @@ const ReimbursementClass = () => {
       key: 'KHBJSJ',
       align: 'center',
       render: (text: any) => {
-        return text?.KHKCSJ?.KCMC
-      }
+        return text?.KHKCSJ?.KCMC;
+      },
     },
     {
       title: '班级名称  ',
@@ -69,9 +69,8 @@ const ReimbursementClass = () => {
       key: 'KHBJSJ',
       align: 'center',
       render: (text: any) => {
-        return text?.BJMC
-
-      }
+        return text?.BJMC;
+      },
     },
     {
       title: '退课课时数',
@@ -84,9 +83,20 @@ const ReimbursementClass = () => {
       dataIndex: 'ZT',
       key: 'ZT',
       align: 'center',
-      render: (record: any) => {
-        return record.ZT === 0 ? '申请中' : '退课'
-      }
+      valueEnum: {
+        0: {
+          text: '申请中',
+          status: 'Processing',
+        },
+        1: {
+          text: '已通过',
+          status: 'Success',
+        },
+        2: {
+          text: '已驳回',
+          status: 'Error',
+        },
+      },
     },
     {
       title: '申请时间',
@@ -99,8 +109,8 @@ const ReimbursementClass = () => {
       dataIndex: '',
       key: '',
       align: 'center',
-      render: (record: any) => (
-        record.ZT === 0 ?
+      render: (record: any) =>
+        record.ZT === 0 ? (
           <>
             <Popconfirm
               title="确认要同意么?"
@@ -118,37 +128,37 @@ const ReimbursementClass = () => {
                 } catch (err) {
                   message.error('删除课程出现错误，请联系管理员确认已删除');
                 }
-              }
-              }
+              }}
             >
               <a>同意</a>
             </Popconfirm>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <Popconfirm
               title="不同意"
-              onConfirm={
-                async () => {
-                  try {
-                    if (record.id) {
-                      const params = { id: record.id };
-                      const body = { ZT: 1 }
-                      const res3 = await updateKHTKSJ(params, body)
-                      if (res3.status === 'ok') {
-                        message.success('驳回退课申请')
-                      }
+              onConfirm={async () => {
+                try {
+                  if (record.id) {
+                    const params = { id: record.id };
+                    const body = { ZT: 2 };
+                    const res3 = await updateKHTKSJ(params, body);
+                    if (res3.status === 'ok') {
+                      message.success('驳回退课申请');
+                      actionRef.current?.reload();
                     }
-                  } catch (err) {
-                    message.error('删除课程出现错误，请联系管理员确认已删除')
                   }
+                } catch (err) {
+                  message.error('删除课程出现错误，请联系管理员确认已删除');
                 }
-              }
+              }}
             >
               <a>不同意</a>
             </Popconfirm>
-          </> : ''
-      )
+          </>
+        ) : (
+          ''
+        ),
     },
-  ]
+  ];
   return (
     ///PageContainer组件是顶部的信息
     <PageContainer>
@@ -173,7 +183,7 @@ const ReimbursementClass = () => {
           </Select>
         </span>
       </div>
-      <div >
+      <div>
         <ProTable<any>
           actionRef={actionRef}
           columns={columns}
@@ -181,7 +191,7 @@ const ReimbursementClass = () => {
           request={async () => {
             const resAll = await getKHTKSJ({
               XXJBSJId: currentUser?.xxId,
-              XNXQId: curXNXQId
+              XNXQId: curXNXQId,
             });
             if (resAll.status === 'ok') {
               return {
@@ -205,10 +215,7 @@ const ReimbursementClass = () => {
           search={false}
         />
       </div>
-
-
     </PageContainer>
-
-  )
-}
-export default ReimbursementClass
+  );
+};
+export default ReimbursementClass;
