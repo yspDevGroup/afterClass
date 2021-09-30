@@ -1,15 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
-import { Descriptions, Drawer, Tag, Image, Table } from 'antd';
+import React, { useState } from 'react';
+import { Descriptions, Drawer, Tag, Image, Table, message, Space, Button } from 'antd';
 import classes from './index.less';
-import { history } from 'umi';
+import { KHJSSJ } from '@/services/after-class/khjssj';
+import { FormItemType } from '@/components/CustomForm/interfice';
+import CustomForm from '@/components/CustomForm';
+import moment from 'moment';
 
 /**
  * 课程详情
  * @returns
  */
+const formItemLayout = {
+  labelCol: { flex: '8em' },
+  wrapperCol: { flex: 'auto' },
+};
 const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean; info: any }) => {
   const { onSchoolInfoClose, visibleSchoolInfo, info } = props;
+  const [visibleTeacher, setVisibleTeacher] = useState<boolean>(false);
+  const [teacher, setTeacher] = useState<any>();
+  const onTeacherClose = () => {
+    setVisibleTeacher(false);
+  };
   const columns: any = [
     {
       title: '姓名',
@@ -20,24 +32,6 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         return record?.KHJSSJ?.XM;
       },
     },
-    // {
-    //   title: '联系电话',
-    //   dataIndex: 'LXDH',
-    //   key: 'LXDH',
-    //   align: 'center',
-    //   render: (text: any, record: any) => {
-    //     return record?.KHJSSJ?.LXDH;
-    //   },
-    // },
-    // {
-    //   title: '邮箱',
-    //   dataIndex: 'DZXX',
-    //   key: 'DZXX',
-    //   align: 'center',
-    //   render: (text: any, record: any) => {
-    //     return record?.KHJSSJ?.DZXX;
-    //   },
-    // },
     {
       title: '操作',
       dataIndex: 'opthion',
@@ -46,15 +40,18 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
       render: (text: any, record: any) => {
         return (
           <a
-            onClick={() => {
-             history.push({
-                //跳转到别的页面
-                pathname: `/teacherManagement/detail`,
-                state: {
-                  type: 'detail',
-                  data: record?.KHJSSJ?.id
-                },
+            onClick={async () => {
+              const jsId = record?.KHJSSJ?.id;
+              const res = await KHJSSJ({
+                id: jsId
               });
+              if (res.status === 'ok') {
+                setTeacher(res.data);
+                setVisibleTeacher(true);
+              } else {
+                message.error(res.message)
+              }
+
             }}
           >
             详情
@@ -62,6 +59,210 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         );
       },
     },
+  ];
+  const basicForm: FormItemType[] = [
+    {
+      type: 'input',
+      label: 'id',
+      name: 'id',
+      key: 'id',
+      hidden: true
+    },
+    {
+      type: 'input',
+      label: 'KHJYJGId',
+      name: 'KHJYJGId',
+      key: 'KHJYJGId',
+      hidden: true
+    },
+    {
+      type: 'group',
+      key: 'group1',
+      groupItems: [
+        {
+          type: 'uploadImage',
+          label: '个人照片',
+          name: 'ZP',
+          key: 'ZP',
+          imgWidth: 100,
+          imgHeight: 100,
+          imageurl: teacher?.ZP,
+          upurl: '/api/upload/uploadFile?type=badge&plat=agency',
+          accept: '.jpg, .jpeg, .png',
+          imagename: 'image',
+        },
+        {
+          type: 'uploadImage',
+          label: '资格证书',
+          name: 'ZGZS',
+          key: 'ZGZS',
+          imgWidth: 100,
+          imgHeight: 100,
+          imageurl: teacher?.ZGZS,
+          upurl: '/api/upload/uploadFile?type=badge&plat=agency',
+          accept: '.jpg, .jpeg, .png',
+          imagename: 'image',
+        }
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group2',
+      groupItems: [
+        {
+          type: 'input',
+          label: '姓名',
+          name: 'XM',
+          key: 'XM',
+          placeholder:'-'
+        },
+        {
+          type: 'input',
+          label: '资格证书编号',
+          name: 'ZGZSBH',
+          key: 'ZGZSBH',
+          placeholder:'-'
+        }
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group3',
+      groupItems: [
+        {
+          type: 'input',
+          label: '性别',
+          span: 12,
+          name: 'XB',
+          key: 'XB',
+        },
+        {
+          type: 'input',
+          label: '学历',
+          span: 12,
+          name: 'XL',
+          key: 'XL',
+          placeholder:'-'
+        }
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group4',
+      groupItems: [
+        {
+          type: 'input',
+          label: '民族',
+          name: 'MZ',
+          key: 'MZ',
+          placeholder:'-'
+        },
+        {
+          type: 'input',
+          label: '毕业院校',
+          name: 'BYYX',
+          key: 'BYYX',
+          placeholder:'-'
+        }
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group6',
+      groupItems: [
+        {
+          type: 'time',
+          subtype: 'date',
+          label: '出生日期',
+          name: 'CSRQ',
+          key: 'CSRQ',
+          placeholder:'-'
+        },
+        {
+          type: 'input',
+          label: '专业',
+          name: 'SXZY',
+          key: 'ZY',
+          placeholder:'-'
+        }
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group7',
+      groupItems: [
+        {
+          type: 'input',
+          label: '联系电话',
+          name: 'LXDH',
+          key: 'LXDH',
+          placeholder:'-'
+        },
+        {
+          type: 'inputNumber',
+          label: '教龄（年）',
+          name: 'JL',
+          key: 'JL',
+          max: 100,
+          min: 1,
+          formatter: (value: number) => `${Math.round(value)}`
+        }
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group8',
+      groupItems: [
+        {
+          type: 'input',
+          key: 'SFZJLX',
+          name: 'SFZJLX',
+          placeholder:'-',
+          label: '证件类型'
+        },
+        {
+          type: 'input',
+          label: '教授科目',
+          name: 'JSKM',
+          key: 'JSKM',
+          placeholder:'-'
+        }
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group9',
+      groupItems: [
+        {
+          type: 'input',
+          key: 'SFZJH',
+          name: 'SFZJH',
+          label: '证件号码',
+          placeholder:'-'
+        },
+        {
+          type: 'input',
+          label: '电子邮箱',
+          name: 'DZXX',
+          key: 'DZXX',
+          placeholder:'-'
+        }
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group10',
+      groupItems: [
+        {},
+        {
+          type: 'textArea',
+          label: '个人简介',
+          name: 'BZ',
+          key: 'BZ',
+          placeholder:'-'
+        }
+      ]
+    }
   ];
   return (
     <div>
@@ -99,6 +300,38 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           size="small"
           title={() => '任课教师列表'}
         />
+      </Drawer>
+      <Drawer
+        width={680}
+        title="教师详情"
+        placement="right"
+        closable={false}
+        onClose={onTeacherClose}
+        visible={visibleTeacher}
+      >
+        <div className={classes.forms}>
+          <CustomForm
+            values={(() => {
+              if (teacher) {
+                const { CSRQ, XB, ...rest } = teacher;
+                return {
+                  CSRQ: CSRQ ? moment(CSRQ) : '',
+                  XB: XB?.substring(0, 1),
+                  ...rest
+                };
+              }
+            })()}
+            formDisabled={true}
+            formItems={basicForm}
+            formLayout={formItemLayout}
+            hideBtn={true}
+          />
+        </div>
+        <Space align='center' style={{ width: '100%', justifyContent: 'center' }}>
+          <Button type="primary" onClick={onTeacherClose} >
+            关闭
+          </Button>
+        </Space>
       </Drawer>
     </div>
   );

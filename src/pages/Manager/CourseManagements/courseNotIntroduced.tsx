@@ -48,6 +48,13 @@ const courseNotIntroduced = () => {
   }, []);
   const columns: ProColumns<any>[] = [
     {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      align: 'center',
+      width: 60,
+    },
+    {
       title: '课程名称',
       dataIndex: 'KCMC',
       key: 'KCMC',

@@ -1,5 +1,6 @@
-import { Descriptions, Drawer } from 'antd';
 import React from 'react';
+import { Drawer, Form, Input } from 'antd';
+import UploadImage from '@/components/CustomForm/components/UploadImage';
 import classes from './index.less';
 
 /**
@@ -13,7 +14,8 @@ const MechanismInfo = (props: {
 }) => {
   const { onMechanismInfoClose, visibleMechanismInfo, info } = props;
   const { KHJYJG } = info;
-  
+  const disabled = true;
+
   return (
     <Drawer
       title="机构详情"
@@ -23,14 +25,110 @@ const MechanismInfo = (props: {
       onClose={onMechanismInfoClose}
       visible={visibleMechanismInfo}
     >
-      <Descriptions className={classes.drawerstyle} layout="vertical" column={1}>
-        <Descriptions.Item label="企业名称">{KHJYJG?.QYMC}</Descriptions.Item>
-        <Descriptions.Item label="组织机构代码">{KHJYJG?.ZZJGDM}</Descriptions.Item>
-        <Descriptions.Item label="法人代表姓名">{KHJYJG?.FRDBXM}</Descriptions.Item>
-        <Descriptions.Item label="企业机构地址">{KHJYJG?.QYJGDZ}</Descriptions.Item>
-        <Descriptions.Item label="机构服务范围">{KHJYJG?.JGFWFW}</Descriptions.Item>
-        <Descriptions.Item label="机构简介">{KHJYJG?.JGJJ}</Descriptions.Item>
-      </Descriptions>
+      <Form initialValues={KHJYJG} className={classes.forms} labelCol={{ span: 6, offset: 0 }}>
+        <Form.Item name="id" hidden>
+          <Input disabled />
+        </Form.Item>
+        <Form.Item name="QYTB" key="QYTB" label="企业LOGO：">
+          <UploadImage
+            key="QYTBTP"
+            imageurl={KHJYJG?.QYTB}
+            disabled={disabled}
+            upurl="/api/upload/uploadFile?type=badge&plat=agency"
+            accept=".jpg, .jpeg, .png"
+            imagename="image"
+          />
+        </Form.Item>
+        <Form.Item
+          name="QYMC"
+          key="QYMC"
+          label="企业名称："
+        >
+          <Input placeholder={'——'} disabled={disabled} />
+        </Form.Item>
+        <Form.Item
+          name="LXRXM"
+          key="LXRXM"
+          label="联系人："
+        >
+          <Input placeholder={'——'} disabled={disabled} />
+        </Form.Item>
+        <Form.Item
+          name="LXDH"
+          key="LXDH"
+          label="联系电话："
+        >
+          <Input placeholder={'——'} disabled={disabled} />
+        </Form.Item>
+        <Form.Item
+          name="XD"
+          key="XD"
+          label="学段"
+        >
+          <Input disabled={disabled} placeholder="——" />
+        </Form.Item>
+        <Form.Item name="XZQ" key="XZQ" label="行政区域：">
+          <Input disabled={disabled} placeholder="——" />
+        </Form.Item>
+        <Form.Item name="QYJGDZ" key="QYJGDZ" label="办公地址：">
+          <Input placeholder={'——'} disabled={disabled} />
+        </Form.Item>
+        <Form.Item name="JGFWFW" key="JGFWFW" label="机构服务范围：">
+          <Input placeholder={'——'} disabled={disabled} />
+        </Form.Item>
+        <Form.Item
+          name="ZZJGDM"
+          key="ZZJGDM"
+          label="组织机构代码："
+        >
+          <Input placeholder={'——'} disabled={disabled} />
+        </Form.Item>
+        <Form.Item
+          name="FRDBXM"
+          key="FRDBXM"
+          label="法人姓名："
+        >
+          <Input placeholder={'——'} disabled={disabled} />
+        </Form.Item>
+        <Form.Item
+          name="FRDBSFZH"
+          key="FRDBSFZH"
+          label="法人身份证号："
+        >
+          <Input placeholder={'——'} disabled={disabled} />
+        </Form.Item>
+        <Form.Item
+          name="YYZZ"
+          key="YYZZ"
+          label="营业执照："
+        >
+          <UploadImage
+            key="YYZZTP"
+            disabled={disabled}
+            imageurl={KHJYJG?.YYZZ}
+            upurl="/api/upload/uploadFile?type=badge&plat=agency"
+            accept=".jpg, .jpeg, .png"
+            imagename="image"
+          />
+        </Form.Item>
+        <Form.Item
+          name="BXXKZ"
+          key="BXXKZ"
+          label="办学许可证："
+        >
+          <UploadImage
+            key="BXXKZ"
+            disabled={disabled}
+            imageurl={KHJYJG?.BXXKZ}
+            upurl="/api/upload/uploadFile?type=badge&plat=agency"
+            accept=".jpg, .jpeg, .png"
+            imagename="image"
+          />
+        </Form.Item>
+        <Form.Item name="JGJJ" key="JGJJ" label="机构简介：">
+          <Input.TextArea placeholder={'——'} rows={4} disabled={disabled} />
+        </Form.Item>
+      </Form>
     </Drawer>
   );
 };

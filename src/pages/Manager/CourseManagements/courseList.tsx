@@ -215,6 +215,13 @@ const CourseList = () => {
   };
   const columns: ProColumns<any>[] = [
     {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      align: 'center',
+      width: 60,
+    },
+    {
       title: '课程名称',
       dataIndex: 'KCMC',
       key: 'KCMC',
@@ -285,7 +292,7 @@ const CourseList = () => {
       search: false,
       width: 100,
       render: (_, record) => {
-        if([1,2].includes(record.KCZT)) {
+        if ([1, 2].includes(record.KCZT)) {
           const Url = `/classManagement`;
           const classes = record.KHBJSJs?.filter((item: { BJZT: string }) => item.BJZT === '已开班');
           return (

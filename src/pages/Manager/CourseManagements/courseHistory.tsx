@@ -1,12 +1,9 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import EllipsisHint from '@/components/EllipsisHint';
+import React, { useEffect, useRef, useState } from 'react';
+import { useModel } from 'umi';
+import ProTable from '@ant-design/pro-table';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { getHistoriesBySchool } from '@/services/after-class/khkcsq';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
-import { Tag } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
-import { useModel } from 'umi';
 import type { classType, TableListParams } from './data';
 
 /**
@@ -36,6 +33,13 @@ const CourseHistory = () => {
     });
   }, []);
   const columns: ProColumns<any>[] = [
+    {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      align: 'center',
+      width: 60,
+    },
     {
       title: '课程名称',
       dataIndex: 'KCMC',

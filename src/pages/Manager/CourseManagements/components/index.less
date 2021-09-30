@@ -5,10 +5,44 @@
     }
   }
 }
+
 .drawerstyle {
   :global {
     .ant-descriptions-item-content {
       color: #666;
+    }
+  }
+}
+
+.forms {
+  :global {
+    .ant-form-item-label {
+      text-align: right;
+    }
+
+    .ant-form-item-control-input {
+      line-height: 32px;
+    }
+
+    .ant-input[disabled],
+    .ant-picker-disabled,
+    .ant-input-number-disabled,
+    .ant-select-disabled .ant-select-selector {
+      color: @text-color  !important;
+      background-color: inherit;
+      background: none !important;
+      border: none;
+      cursor: default;
+      resize: none;
+      text-overflow: ellipsis;
+
+      .ant-picker-suffix {
+        display: none;
+      }
+    }
+
+    .ant-select-disabled .ant-select-arrow {
+      display: none;
     }
   }
 }
