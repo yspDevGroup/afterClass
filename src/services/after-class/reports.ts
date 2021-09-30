@@ -215,3 +215,59 @@ export async function getStudentDetail(
     ...(options || {}),
   });
 }
+
+/** 获取课后服务学校课程评价信息 POST /reports/getCourseEvaluation */
+export async function getCourseEvaluation(
+  body: {
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 课程名称 */
+    KCMC?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getCourseEvaluation', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 统计学校课程报表基本信息 POST /reports/statisCourses */
+export async function statisCourses(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/statisCourses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 统计学校班级报表基本信息 POST /reports/statisClasses */
+export async function statisClasses(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/statisClasses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

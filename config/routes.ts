@@ -150,9 +150,9 @@
         name: 'Record',
         component: './Manager/CoursePatrol/Record',
       },
-      
+
     ]
-    
+
   },
   // 教师管理
   {
@@ -277,7 +277,7 @@
         name: 'mutualEvaluation',
         component: './Manager/Statistics/MutualEvaluation',
       },
-     
+
       //互评统计详情
       {
         path: '/statistics/mutualEvaluation/detail',
@@ -511,6 +511,7 @@
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/Course',
       },
+      // 服务预定
       {
         path: '/parent/home/serviceReservation',
         name: 'serviceReservation',
@@ -522,6 +523,18 @@
         name: 'details',
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/ServiceReservation/Details',
+      },
+      {
+        path: '/parent/home/service',
+        name: 'service',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Service',
+      },
+      {
+        path: '/parent/home/service/details',
+        name: 'details',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Service/Details',
       },
       {
         path: '/parent/home/notice',

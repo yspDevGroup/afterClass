@@ -236,3 +236,20 @@ export async function getClassesEvaluation(
     ...(options || {}),
   });
 }
+
+/** 移动端报名时获取班级详细信息 GET /khbjsjdetail/${param0} */
+export async function getClassDetail(
+  params: {
+    // path
+    /** 课后班级ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<any>(`/khbjsjdetail/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}

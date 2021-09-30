@@ -96,7 +96,7 @@ const ServiceReservation = () => {
         <TabPane tab="已选服务" key="yxfu">
           <>
             {
-              YxserviceData && YxserviceData?.length === 0 ?
+              YxserviceData?.length === 0 ?
                 <div className={styles.Selected}>
                   <div className={styles.noOrder}>
                     <div>
@@ -111,7 +111,7 @@ const ServiceReservation = () => {
                 <div className={styles.Selected}>
                   <div className={styles.wrap}>
                     {
-                      YxserviceData && YxserviceData?.map((item: any) => {
+                      YxserviceData?.map((item: any) => {
                         const hrefs = `/parent/home/serviceReservation/details?type=YX&id=${item?.KHXXZZFW?.id}`;
                         return <Link to={hrefs} key={item?.KHXXZZFW?.id}> <div className={styles.box} >
                           <div> <img src={item?.KHXXZZFW?.FWTP || noPic} style={{ width: item?.KHXXZZFW?.FWTP ? '110px' : '70px' }} alt="" /></div>
@@ -131,7 +131,7 @@ const ServiceReservation = () => {
         <TabPane tab="开设服务" key="ksfw">
           <div className={styles.category}>
             {
-              LBData && LBData.length === 0 ? <div className={styles.Selected}>
+               LBData?.length === 0 ? <div className={styles.Selected}>
                 <div className={styles.noOrder}>
                   <div>
                     <p>当前暂未开设服务</p>
