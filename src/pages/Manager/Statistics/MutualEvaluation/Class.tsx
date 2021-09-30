@@ -8,13 +8,19 @@ import {getClassesEvaluation}from "@/services/after-class/khbjsj"
 import { useModel, Link } from 'umi';
 import styles from './index.less'
 import {getAllClasses} from '@/services/after-class/khbjsj'
+import { Button} from 'antd';
+import { LeftOutlined } from '@ant-design/icons';
+
+
 
 
 
 const { Option } = Select;
 
 const school=(props:any)=>{
-  const { id,KCMC} = props.location.state.data ;
+  // const {id} = props.location.state.data ;
+  // console.log(props.location.state.data);
+  
  // 课程列表
   const [courseList, setcourseList] = useState<any>();
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
@@ -27,7 +33,7 @@ const school=(props:any)=>{
   }
   useEffect(()=>{
     (async()=>{
-      const res=await getClassesEvaluation({XNXQId:currentUser.XNXQId})
+      const res=await getClassesEvaluation({XNXQId:currentUser.XNXQId,})
       console.log(res.data.rows);
       
       if(res.status === 'ok'){
@@ -51,16 +57,21 @@ const school=(props:any)=>{
         // render:(text:any)=>text.BJMC
       
       },
-
       {
-        title: '教育机构',
-        dataIndex: 'KHJYJG',
-        key: 'KHJYJG',
+        title: '主讲师',
+        dataIndex: '',
+        key: '',
         align: 'center',
-        // render:(text:any,record:any)=>record.KHKCSJ.KHJYJG.QYMC
+        render:(_,record)=>{
+          return record.KHBJJs.map((item) => {
+            return <div>{item.KHJSSJ.XM}</div>;
+          });
+          
 
-      
-      
+          
+
+        }
+
       },
       {
         title: '班级评分',
@@ -69,6 +80,14 @@ const school=(props:any)=>{
         align: 'center',
      render: (text:any) => <Rate count={5} defaultValue={text} disabled={true} />,
         
+      },
+      {
+        title: '评价人数',
+        dataIndex: 'pj_count',
+        key: ' pj_count',
+        align: 'center',
+        render:(text:any)=>text
+       
       },
       {
         title: '操作',
@@ -94,6 +113,18 @@ const school=(props:any)=>{
 ]
     return <div>
        <PageContainer>
+       <Button 
+          type="primary"
+          onClick={() => {
+            history.go(-1);
+          }}
+          style={{
+            marginBottom: '24px',
+          }}
+        >
+          <LeftOutlined />
+          返回上一页
+        </Button>
        <div className={styles.TopSearchss}>
         <span>
           班级名称:

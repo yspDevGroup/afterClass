@@ -5,7 +5,7 @@ import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
 import { Select ,Rate} from 'antd';
-import { getClassesEvaluation } from '@/services/after-class/khbjsj';
+import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 
@@ -16,6 +16,8 @@ const { Option } = Select;
 const MutualEvaluation: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  console.log(currentUser.xxId);
+  
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 学年学期列表数据
@@ -34,39 +36,30 @@ const MutualEvaluation: React.FC = () => {
     },
     {
       title: '课程名称',
-      dataIndex: 'KHKCSJ',
-      key: 'KHKCSJ',
+      dataIndex: 'KCMC',
+      key: 'KCMC',
       align: 'center',
       render: (text: any) => {
-        return text?.KCMC;
+        return text
       },
-    },
-    {
-      title: '课程班名称',
-      dataIndex: 'BJMC',
-      key: 'BJMC',
-      align: 'center',
-      // render: (text: any) => {
-      //   return text?.KCMC
-      // }
     },
     {
       title: '课程类型',
-      dataIndex: 'KHKCSJ',
-      key: 'KHKCSJ',
+      dataIndex: 'SSJGLX',
+      key: 'SSJGLX',
       align: 'center',
       render: (test: any) => {
-        return test?.KHKCLX.KCTAG;
+        return test
       },
     },
-    {
-      title: '课程评分',
-      dataIndex: 'pj_avg',
-      key: 'pj_avg',
-      align: 'center',
-      width: 200,
-      render: (text:any) => <Rate count={5} defaultValue={text} disabled={true} />,
-    },
+    // {
+    //   title: '课程评分',
+    //   dataIndex: 'pj_avg',
+    //   key: 'pj_avg',
+    //   align: 'center',
+    //   width: 200,
+    //   render: (text:any) => <Rate count={5} defaultValue={text} disabled={true} />,
+    // },
     {
       title: '开课机构',
       dataIndex: 'KHKCSJ',
@@ -120,14 +113,21 @@ const MutualEvaluation: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     ChoseSelect(curXNXQId);
   }, [curXNXQId]);
+  useEffect(()=>{
+    (async()=>{
+      const res3 = await getAllCourses({
+        XXJBSJId:currentUser.xxId
+      });
+      if (res3.status === 'ok') {
+        console.log(res3,'___________________');
+        
+        setDataSource(res3?.data?.rows);
+      }
+    })()
+  },[])
   // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
-    const res3 = await getClassesEvaluation({
-      XNXQId: SelectData,
-    });
-    if (res3.status === 'ok') {
-      setDataSource(res3?.data?.rows);
-    }
+   
   };
 
   return (
