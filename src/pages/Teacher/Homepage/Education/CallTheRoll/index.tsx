@@ -122,7 +122,7 @@ const CallTheRoll = (props: any) => {
           message: '',
           description:
             '本节课已点名,请勿重复操作',
-          duration: 3,
+          duration: 4,
         });
         allData.forEach((item: any) => {
           item.isLeave = item.CQZT === '请假' ? true : false;
@@ -131,7 +131,7 @@ const CallTheRoll = (props: any) => {
         setButDis('done');
         setDataScouse(allData);
       } else {
-        if(resCheck?.data?.length){
+        if (resCheck?.data?.length) {
           setButDis('doing');
         }
         const resLeave = await getAllKHXSQJ({
@@ -146,7 +146,7 @@ const CallTheRoll = (props: any) => {
           const leaveInfo = resLeave?.data?.rows || [];
           studentData?.forEach((item: any) => {
             const leaveItem = leaveInfo?.find((val) => val.XSId === item.XSId);
-            const leaveJudge = leaveItem?.QJZT!=1;
+            const leaveJudge = leaveItem?.QJZT != 1;
             item.isRealTo = leaveJudge ? '缺席' : '出勤';
             item.isLeave = leaveJudge ? true : false;
             item.leaveYY = leaveItem?.QJYY;
@@ -154,12 +154,7 @@ const CallTheRoll = (props: any) => {
           setDataScouse(studentData);
           if (nowSta >= 1) {
             setButDis('undone');
-            notification.warning({
-              message: '',
-              description:
-                '本节课因考勤超时已默认点名',
-              duration: 3,
-            });
+            showConfirm(false,'课堂点名','本节课因考勤超时已默认点名');
           }
           if (futureSta) {
             setButDis('undo');
@@ -167,7 +162,7 @@ const CallTheRoll = (props: any) => {
               message: '',
               description:
                 '本节课尚未开始点名',
-              duration: 3,
+              duration: 4,
             });
           }
         }
@@ -250,24 +245,31 @@ const CallTheRoll = (props: any) => {
       enHenceMsg(res.message);
     }
   };
-  const showConfirm = () => {
+  const showConfirm = (tm?: boolean, title?: string, content?: string,) => {
     let secondsToGo = 3;
     const modal = Modal.success({
       centered: true,
-      title: '签到成功',
-      content: ` ${secondsToGo} 秒之后可以开始点名`,
+      title: tm ? '签到成功' : title,
+      content: tm ? ` ${secondsToGo} 秒之后可以开始点名` : content,
     });
-    const timer = setInterval(() => {
-      secondsToGo -= 1;
-      modal.update({
-        content: `${secondsToGo} 秒之后可以开始点名`,
-      });
-    }, 1000);
-    setTimeout(() => {
-      clearInterval(timer);
-      setButDis('doing');
-      modal.destroy();
-    }, secondsToGo * 1000);
+    if (tm) {
+      const timer = setInterval(() => {
+        secondsToGo -= 1;
+        modal.update({
+          content: `${secondsToGo} 秒之后可以开始点名`,
+        });
+      }, 1000);
+      setTimeout(() => {
+        clearInterval(timer);
+        setButDis('doing');
+        modal.destroy();
+      }, secondsToGo * 1000);
+    } else {
+      setTimeout(() => {
+        modal.destroy();
+      }, secondsToGo * 1000);
+    }
+
   }
   const teacherCheckIn = async () => {
     const res = await createKHJSCQ([{
@@ -277,7 +279,7 @@ const CallTheRoll = (props: any) => {
       KHBJSJId: bjids
     }]);
     if (res.status === 'ok') {
-      showConfirm();
+      showConfirm(true);
       setBtnDis('done');
     } else {
       message.error(res.message)

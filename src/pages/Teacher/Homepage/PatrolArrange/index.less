@@ -16,7 +16,7 @@
         height: 32px;
 
         .ant-picker-suffix {
-          color: blue;
+          color: #3874c5;
         }
       }
     }
@@ -33,6 +33,7 @@
       li {
         background: #FFF;
         padding: 10px;
+        border-radius: 8px;
         div[class*='description']{
           color:#999;
           font-size: 12px;
@@ -219,5 +220,17 @@
         }
       }
     }
+  }
+}
+:global{
+  .ant-picker-dropdown{
+    left: 0!important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  .ant-picker-dropdown-hidden{
+    display: none !important;
   }
 }

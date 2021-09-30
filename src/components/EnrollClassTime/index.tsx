@@ -61,8 +61,8 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
               text: titleRightText,
             },
             link: teacher
-              ? `/teacher/home/courseIntro?classid=${item.KHBJSJ.id}`
-              : `/parent/home/courseIntro?classid=${item.KHBJSJ.id}`,
+              ? `/teacher/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}&index=all`
+              : `/parent/home/courseTable?classid=${item.KHBJSJ.id}`,
             desc: [
               {
                 left: [

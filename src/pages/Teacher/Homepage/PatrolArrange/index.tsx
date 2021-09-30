@@ -2,17 +2,20 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 09:20:56
- * @LastEditTime: 2021-09-28 16:16:22
+ * @LastEditTime: 2021-09-30 15:47:49
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
+import { ConfigProvider, DatePicker, List } from 'antd';
 import dayjs from 'dayjs';
+// 默认语言为 en-US，如果你需要设置其他语言，推荐在入口文件全局设置 locale
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+import locale from 'antd/lib/locale/zh_CN';
 
 import styles from './index.less';
 import GoBack from '@/components/GoBack';
-import { DatePicker, List } from 'antd';
-import moment from 'moment';
 import Nodata from '@/components/Nodata';
 import noData from '@/assets/noCourses1.png';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
@@ -32,9 +35,9 @@ const PatrolArrange = () => {
     if (res.status === 'ok' && res.data) {
       const { flag, rows } = res.data;
       if (flag) {
-      setDateData(rows);
+        setDateData(rows);
       } else {
-      setDateData([]);
+        setDateData([]);
       }
     }
   };
@@ -50,7 +53,9 @@ const PatrolArrange = () => {
       <GoBack title={'巡课安排'} onclick='/teacher/home?index=index' teacher />
       <div className={styles.patrolWrapper}>
         <header>
-          <DatePicker bordered={false} allowClear={false} value={moment(day)} onChange={onChange} />
+          <ConfigProvider locale={locale}>
+            <DatePicker bordered={false} allowClear={false} inputReadOnly={true} value={moment(day)} onChange={onChange} />
+          </ConfigProvider>
         </header>
         <div className={styles.patrolContent}>
           {dateData?.length ? <List

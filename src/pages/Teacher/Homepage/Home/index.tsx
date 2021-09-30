@@ -37,7 +37,7 @@ const Home = () => {
     if (res.status === 'ok' && res.data) {
       const { flag, rows } = res.data;
       if (flag) {
-        setDateData(rows);
+        setDateData(rows?.filter((it: any) => it.SFXK !== 2));
       } else {
         setDateData([]);
       }
