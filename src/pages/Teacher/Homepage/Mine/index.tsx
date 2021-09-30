@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
-import { Image } from 'antd';
+import { Col, Image, Row } from 'antd';
 import moment from 'moment';
 import CheckOnChart from './components/CheckOnChart';
 import IconFont from '@/components/CustomIcon';
@@ -19,6 +19,7 @@ const Mine = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { yxkc, weekSchedule } = useContext(myContext);
+
   const [checkIn, setCheckIn] = useState<any[]>();
   const [wekDay, setWekDay] = useState<any>();
   // 当前时间
@@ -41,16 +42,21 @@ const Mine = () => {
     const courseData: any = [];
     const newskrq = {};
     // 教授的课程有几门，每门下有几个班
-    data?.forEach((item: any, index: number) => {
+    data?.forEach((item: any) => {
       const newkec = {
-        KCMC: item.KHKCSJ.KCMC,
+        KCMC: (
+          <div>
+            <div>{item.KHKCSJ.KCMC}</div>
+            <div style={{ color: '#aaa', fontSize: '.9em' }}>{item.BJMC}</div>
+          </div>
+        ),
         class: [item],
       };
-      if (courseData[index - 1] && courseData[index - 1].KCMC === item.KHKCSJ.KCMC) {
-        courseData[index - 1].class.push(item);
-      } else {
-        courseData.push(newkec);
-      }
+      // if (courseData[index - 1] && courseData[index - 1].KCMC === item.KHKCSJ.KCMC) {
+      //   courseData[index - 1].class.push(item);
+      // } else {
+      courseData.push(newkec);
+      // }
     });
     // 周几上课
     weekSchedule?.forEach((item: any) => {
@@ -99,19 +105,19 @@ const Mine = () => {
           label: record.BJMC,
           type: '正常',
           value: oldclass.length,
-          color: 'l(180) 0:rgba(49, 217, 159, 1) 1:rgba(49, 217, 159, 0.04)',
+          color: 'l(180) 0:rgba(49, 217, 159, 1) 1:rgba(49, 217, 159, 0.2)',
         },
         {
           label: record.BJMC,
           type: '异常',
           value: 0,
-          color: 'l(180) 0:rgba(255, 113, 113, 1) 1:rgba(255, 113, 113, 0.04)',
+          color: 'l(180) 0:rgba(255, 113, 113, 0.2) 1:rgba(255, 113, 113, 1)',
         },
         {
           label: record.BJMC,
           type: '待上',
           value: newclass.length,
-          color: 'l(180) 0:rgba(221, 221, 221, 1) 1:rgba(221, 221, 221, 0.04)',
+          color: 'l(180) 0:rgba(0, 102, 255, 1) 1:rgba(0, 102, 255, 0.2)',
         },
       );
     }
@@ -160,20 +166,26 @@ const Mine = () => {
         </div> */}
         <div className={styles.titleBar}>
           出勤统计
-          {/* <div>
+          <div>
             <span />
             正常
             <span />
             异常
             <span />
             待上
-          </div> */}
+          </div>
         </div>
         {checkIn && checkIn.length ? (
-          checkIn.map((item: any) => {
-            const kcData = getKcData(item);
-            return <CheckOnChart data={kcData} title={item.KCMC} key={item.KCMC} />;
-          })
+          <Row gutter={8}>
+            {checkIn.map((item: any) => {
+              const kcData = getKcData(item);
+              return (
+                <Col span={12}>
+                  <CheckOnChart data={kcData} title={item.KCMC} key={item.KCMC} />
+                </Col>
+              );
+            })}
+          </Row>
         ) : (
           <Nodata imgSrc={noChart} desc="暂无数据" />
         )}

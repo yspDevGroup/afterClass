@@ -160,36 +160,48 @@
       font-size: @font-size-lg;
       line-height: 22px;
 
-      // > div {
-      //   position: absolute;
-      //   right: 10px;
-      //   top: 0;
-      //   color: @normal-color;
-      //   font-size: @font-size-sm;
-      //   font-weight: normal;
+      > div {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        color: @normal-color;
+        font-weight: normal;
+        font-size: @font-size-sm;
 
-      //   span {
-      //     width: 14px;
-      //     height: 14px;
-      //     display: inline-block;
-      //     vertical-align: sub;
-      //     border-radius: 14px;
-      //     background: linear-gradient(270deg, #31d99f 0%, rgba(49, 217, 159, 0) 100%);
-      //     margin-right: 5px;
+        span {
+          display: inline-block;
+          width: 14px;
+          height: 14px;
+          margin-right: 5px;
+          vertical-align: sub;
+          background: linear-gradient(
+            270deg,
+            rgba(49, 217, 159, 1) 0%,
+            rgba(49, 217, 159, 0.2) 100%
+          );
+          border-radius: 14px;
 
-      //     & + span {
-      //       margin-left: 5px;
-      //     }
+          & + span {
+            margin-left: 5px;
+          }
 
-      //     &:nth-child(2) {
-      //       background: linear-gradient(270deg, #ff7171 0%, rgba(255, 113, 113, 0) 100%);
-      //     }
+          &:nth-child(2) {
+            background: linear-gradient(
+              270deg,
+              rgba(255, 113, 113, 1) 0%,
+              rgba(255, 113, 113, 0.2) 100%
+            );
+          }
 
-      //     &:nth-child(3) {
-      //       background: linear-gradient(270deg, #dddddd 0%, rgba(221, 221, 221, 0) 100%);
-      //     }
-      //   }
-      // }
+          &:nth-child(3) {
+            background: linear-gradient(
+              270deg,
+              rgba(0, 102, 255, 1) 0%,
+              rgba(0, 102, 255, 0.2) 100%
+            );
+          }
+        }
+      }
     }
 
     .chartWrapper {
