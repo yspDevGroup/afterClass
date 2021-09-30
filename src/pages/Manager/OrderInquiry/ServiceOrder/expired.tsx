@@ -2,14 +2,14 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-09-24 09:03:59
- * @LastEditors: gxh
+ * @LastEditTime: 2021-09-30 20:09:22
+ * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
 import { Select } from 'antd';
-import {getAllKHXSDD} from '@/services/after-class/khxsdd';
+import { getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
 import styles from './index.less';
@@ -33,47 +33,37 @@ const OrderInquiry = (props: any) => {
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [termList, setTermList] = useState<any>();
-  // 服务名称选项框
-  const [SeverData,SetSeverData] = useState<selectType[] | undefined>([]);
   useEffect(() => {
     (async () => {
       // 学年学期数据的获取
       console.log(currentUser);
-      
       const res = await queryXNXQList(currentUser?.xxId);
       const newData = res.xnxqList;
       const curTerm = res.current;
       if (newData?.length) {
         if (curTerm) {
-            //默认续期
+          //默认续期
           setCurXNXQId(curTerm.id);
           // 学期列表
           setTermList(newData);
         }
       } else {
-       
       }
     })();
   }, []);
-  useEffect(()=>{
-    (async()=>{
-      const res=await getAllKHXSDD({
+  useEffect(() => {
+    (async () => {
+      const res = await getAllKHXSDD({
         XNXQId: curXNXQId,
         //父传子判断要请求的状态
         DDZT,
-        DDLX:1
+        DDLX: 1
       })
-      if(res.status === 'ok'){
-        console.log(res.data);
-        
+      if (res.status === 'ok') {
         setDataSource(res.data)
-
       }
-      
-      
     })()
-
-  },[])
+  }, [])
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -93,7 +83,7 @@ const OrderInquiry = (props: any) => {
       dataIndex: 'KHXXZZFW',
       key: 'KHXXZZFW',
       align: 'center',
-      render: (text:any) => {
+      render: (text: any) => {
         return <div>{text?.FWMC}</div>;
       },
     },
@@ -122,9 +112,6 @@ const OrderInquiry = (props: any) => {
       align: 'center',
     },
   ];
-  const onKcmcChange=()=>{
-
-  }
   return (
     <>
       <div className={styles.searchs}>
@@ -148,7 +135,7 @@ const OrderInquiry = (props: any) => {
             </Select>
           </span>
         </div>
-        <div>
+        {/* <div>
           <span>服务名称：</span>
           <div>
             <Select
@@ -167,7 +154,7 @@ const OrderInquiry = (props: any) => {
               })}
             </Select>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className={styles.tableStyle}>
         <ProTable<any>
