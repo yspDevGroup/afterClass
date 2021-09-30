@@ -6,5 +6,6 @@ module.exports = {
   },
   rules: {
     'no-restricted-syntax': 0,
+    'react-hooks/exhaustive-deps': 0,
   },
 };
