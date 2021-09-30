@@ -141,14 +141,15 @@ const ServiceReservation = () => {
               </div> :
                 <Tabs type="card" onChange={callback}
                 >
+                  <>
                   {
                     LBData?.map((value: any) => {
                       return <TabPane tab={value.FWMC} key={value?.id}>
                         <div className={styles.wrap}>
                           {
                             DataSource && DataSource?.map((item: any) => {
-                              const hrefs = `/parent/home/serviceReservation/details?type=KS&id=${item.id}`;
-                              return <Link to={hrefs} key={item?.id}> <div className={styles.box} >
+                              const hrefs = `/parent/home/service/details?type=KS&id=${item.id}`;
+                              return <><Link to={hrefs} key={item?.id}> <div className={styles.box} >
                                 <div> <img src={item?.FWTP || noPic} style={{ width: item?.FWTP ? '110px' : '70px' }} alt="" /></div>
                                 <div>
                                   <p className={styles.title}> {item?.FWMC} </p>
@@ -157,13 +158,16 @@ const ServiceReservation = () => {
                                 </div>
                               </div>
                               </Link>
+                              </>
                             })
                           }
                         </div>
                       </TabPane>
                     })
                   }
+                   </>
                 </Tabs>
+
             }
           </div>
         </TabPane>
