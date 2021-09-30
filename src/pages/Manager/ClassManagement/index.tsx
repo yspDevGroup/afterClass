@@ -169,7 +169,14 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   const columns: ProColumns<CourseItem>[] = [
     {
-      title: '班级名称',
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 58,
+      align: 'center'
+    },
+    {
+      title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',

@@ -15,9 +15,6 @@ const AttendanceDetail = (props: any) => {
                 if(res.status==='ok'){
                     setDataSource(res.data)
                 }
-              
-              
-
             })()
         } else {
             (async () => {
@@ -28,9 +25,7 @@ const AttendanceDetail = (props: any) => {
                     setDataSource(res.data)
                 }
             })()
-
         }
-
     },[])
     const teacher: ProColumns<any>[] = [
         {
@@ -38,7 +33,6 @@ const AttendanceDetail = (props: any) => {
             dataIndex: 'index',
             valueType: 'index',
             align: 'center'
-    
         },
         {
             title: '姓名',
@@ -46,8 +40,6 @@ const AttendanceDetail = (props: any) => {
             key: '',
             align: 'center',
             render:()=><div>{data.XM}</div>
-
-            
          },
          {
             title: '课程名称',
@@ -55,8 +47,6 @@ const AttendanceDetail = (props: any) => {
             key: 'KHKCSJ',
             align: 'center',
             render:(text)=> <div>{text?.KCMC}</div>
-                
-            
         },
         {
             title: '班级名称',
@@ -64,8 +54,6 @@ const AttendanceDetail = (props: any) => {
             key: 'BJMC',
             align: 'center',
         },
-    
-     
         {
             title: '授课总课时数',
             dataIndex: '',
@@ -91,10 +79,7 @@ const AttendanceDetail = (props: any) => {
             key: '',
             align: 'center',
             render:()=><div>{data.KSSC}</div>
-        },
-        
-
-    
+        },   
     ]
     const student: ProColumns<any>[] = [
         {
@@ -102,7 +87,6 @@ const AttendanceDetail = (props: any) => {
             dataIndex: 'index',
             valueType: 'index',
             align: 'center'
-    
         },
         {
             title: '姓名',
@@ -110,7 +94,6 @@ const AttendanceDetail = (props: any) => {
             key: '',
             align: 'center',
             render:()=><div>{data.XM}</div>
-    
         },
         {
             title: '班级名称',
@@ -125,7 +108,6 @@ const AttendanceDetail = (props: any) => {
             align: 'center',
             render:(text)=><div>{text?.KCMC}</div>
         },
-     
         {
             title: '出勤次数',
             dataIndex: 'cq_count',
@@ -145,12 +127,6 @@ const AttendanceDetail = (props: any) => {
             align: 'center',
             // render:()=><div>{data.KSSC}</div>
         },
-    
-      
-    
-    
-    
-    
     ]
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
 
@@ -183,10 +159,6 @@ const AttendanceDetail = (props: any) => {
 
                     }}
                 />
-
-
-
-
             </PageContainer>
         </div>
     )

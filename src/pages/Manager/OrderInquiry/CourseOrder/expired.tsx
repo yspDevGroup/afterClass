@@ -2,8 +2,8 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-09-24 09:03:59
- * @LastEditors: gxh
+ * @LastEditTime: 2021-09-30 19:56:01
+ * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -205,7 +205,7 @@ const OrderInquiry = (props: any) => {
     });
     if (resl.status === 'ok') {
       console.log(resl.data);
-      
+
       setTableLoading(false);
       setDataSource(resl.data);
     }
@@ -270,7 +270,7 @@ const OrderInquiry = (props: any) => {
           </div>
         </div>
         <div>
-          <span>班级名称：</span>
+          <span>课程班名称：</span>
           <div>
             <Select
               style={{ width: 200 }}

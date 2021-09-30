@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-09-28 16:14:44
+ * @LastEditTime: 2021-09-30 19:56:18
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -114,7 +114,7 @@ const NewPatrol = (props: any) => {
             <div className={styles.card}>
               <h4>教师出勤情况</h4>
               <ul>
-                <li><label>班级名称</label><span>{bjxx?.BJMC}</span></li>
+                <li><label>课程班名称</label><span>{bjxx?.BJMC}</span></li>
                 <li><label>任课教师</label><span>{bjxx?.KHBJJs?.[0]?.KHJSSJ?.XM}</span></li>
                 <li><label>上课教室</label><span>{bjxx?.KHPKSJs?.[0]?.FJSJ?.FJMC}</span></li>
                 <li>

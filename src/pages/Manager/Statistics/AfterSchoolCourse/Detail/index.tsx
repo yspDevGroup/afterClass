@@ -11,7 +11,6 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 
 import Style from './index.less';
-import { TermItem } from '../../BasicalSettings/TermManagement/data';
 import EllipsisHint from '@/components/EllipsisHint';
 
 const { Option } = Select;
@@ -30,7 +29,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
   const { id, KHKCSJId } = state.data;
   console.log('state.data: ', state.data);
   /// table表格数据
-  const columns: ProColumns<TermItem>[] = [
+  const columns: ProColumns<any>[] = [
     {
       title: '序号',
       dataIndex: 'index',
@@ -48,7 +47,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
       },
     },
     {
-      title: '班级名称',
+      title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',

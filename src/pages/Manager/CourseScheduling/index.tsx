@@ -642,7 +642,7 @@ const ClassManagement = () => {
                 </div>
               </div>
               <div style={{ display: 'flex', lineHeight: 2.3, marginRight: 16 }}>
-                <span>班级名称：</span>
+                <span>课程班名称：</span>
                 <div>
                   <Select
                     style={{ width: 200 }}

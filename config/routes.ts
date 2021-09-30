@@ -282,9 +282,6 @@
         name:'class',
         hideInMenu: 'true',
         component: './Manager/Statistics/MutualEvaluation/Class',
-
-        
-
       },
 
       //互评统计详情
