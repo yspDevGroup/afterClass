@@ -51,6 +51,7 @@ export default {
   'menu.valueAddedServices': '增值服务',
   'menu.valueAddedServices.cateringService': '服务配置',
   'menu.valueAddedServices.serviceManagement': '服务管理',
+  'menu.valueAddedServices.serviceManagement.signUp': '报名信息',
   'menu.mutualEvaluation.detail': '互评统计详情',
   'menu.educational': '素质教育资源',
   'menu.parent.announcement': '公告详情',

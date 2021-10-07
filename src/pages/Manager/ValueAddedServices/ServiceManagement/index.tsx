@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
-import { useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import { Button, Modal, Select, DatePicker, message, Form, Input, Popconfirm, Divider } from 'antd';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import styles from './index.less'
@@ -58,7 +58,7 @@ const ServiceManagement = () => {
   }, [])
   const ongetKHXXZZFW = async () => {
     let data: any = {};
-    if (typeof FbState === 'undefined' || FbState==='') {
+    if (typeof FbState === 'undefined' || FbState === '') {
       data = {
         XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId || '',
@@ -310,7 +310,15 @@ const ServiceManagement = () => {
                     }}
                   >
                     查看
-                  </a></>
+                  </a>
+                  <Divider type="vertical" />
+                  <Link
+                    to={{
+                      pathname: '/valueAddedServices/serviceManagement/signUp',
+                      state: record
+                    }}
+                  >报名信息</Link>
+                </>
             }
 
 
@@ -435,7 +443,7 @@ const ServiceManagement = () => {
                   onChange={(value: string) => {
                     setLbState(value);
                   }}>
-                     <Option value='' key=''>全部</Option>
+                  <Option value='' key=''>全部</Option>
                   {
                     LBData?.length ? LBData?.map((item: any) => {
                       return <Option value={item?.id} key={item?.id}>{item?.FWMC}</Option>

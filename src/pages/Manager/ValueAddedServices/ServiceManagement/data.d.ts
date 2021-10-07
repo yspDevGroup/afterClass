@@ -16,3 +16,9 @@ export type TableListItem = {
   JSRQ?: string;
   FWTP?: string;
 };
+export type SignUpItem = {
+  id?: string;
+  XSMC?: string;
+  BMSJ?: string;
+  FWTP?: string;
+};

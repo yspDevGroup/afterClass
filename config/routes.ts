@@ -184,6 +184,7 @@
       },
     ],
   },
+  // 服务管理
   {
     path: '/valueAddedServices',
     name: 'valueAddedServices',
@@ -196,8 +197,21 @@
       },
       {
         path: '/valueAddedServices/serviceManagement',
-        component: './Manager/ValueAddedServices/ServiceManagement',
         name: 'serviceManagement',
+        routes: [
+          {
+            path: '/valueAddedServices/serviceManagement',
+            hideInMenu: 'true',
+            name: 'serviceManagement',
+            component: './Manager/ValueAddedServices/ServiceManagement',
+          },
+          {
+            path: '/valueAddedServices/serviceManagement/signUp',
+            hideInMenu: 'true',
+            name: 'signUp',
+            component: './Manager/ValueAddedServices/ServiceManagement/SignUp',
+          }
+        ]
       },
     ],
   },
