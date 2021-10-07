@@ -436,12 +436,12 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     {
       type: 'input',
-      label: '班级名称：',
+      label: '课程班名称',
       name: 'BJMC',
       key: 'BJMC',
       disabled: readonly,
       rules: [
-        { required: true, message: '请填写班级名称' },
+        { required: true, message: '请填写课程班名称' },
         { max: 18, message: '最长为 18 位' },
       ],
       fieldProps: {

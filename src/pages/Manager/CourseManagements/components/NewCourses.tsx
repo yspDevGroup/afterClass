@@ -233,7 +233,7 @@ const NewCourses = (props: PropsType) => {
               <Button onClick={Close} >
                 取消
               </Button>
-             
+
             </div>
           )
         }

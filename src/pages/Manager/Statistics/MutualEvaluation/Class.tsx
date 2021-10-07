@@ -13,8 +13,6 @@ import { LeftOutlined } from '@ant-design/icons';
 
 
 
-
-
 const { Option } = Select;
 
 const school=(props:any)=>{

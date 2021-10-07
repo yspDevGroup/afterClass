@@ -16,8 +16,6 @@ const { Option } = Select;
 const MutualEvaluation: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  console.log(currentUser.xxId);
-  
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 学年学期列表数据

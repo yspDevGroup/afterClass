@@ -12,10 +12,10 @@ export const searchData: SearchDataType = [
     data: [],
   },
   {
-    label: '班级名称',
+    label: '课程班名称',
     type: 'input',
     isLabel: false,
-    placeHolder: '班级名称',
+    placeHolder: '课程班名称',
     data: [],
   },
 ];

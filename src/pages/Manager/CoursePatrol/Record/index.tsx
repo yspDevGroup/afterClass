@@ -31,16 +31,18 @@ const CoursePatrol = () => {
     },
     {
       title: '巡课教师',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'XKJS',
+      key: 'XKJS',
       align: 'center',
+      render: (text: any) => text?.XM,
       width: 120
     },
     {
       title: '授课教师',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'SKJS',
+      key: 'SKJS',
       align: 'center',
+      render: (text: any) => text?.XM,
       width: 120
     },
     {

@@ -8,8 +8,11 @@ import { Select } from 'antd';
 import Style from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-const { Option } = Select;
+import { getAllClasses } from '@/services/after-class/khbjsj';
+import { getAllCourses } from '@/services/after-class/khkcsj';
 
+const { Option } = Select;
+type selectType = { label: string; value: string };
 const LeaveManagement: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -17,18 +20,32 @@ const LeaveManagement: React.FC = () => {
   // 学年学期列表数据
   const [termList, setTermList] = useState<any>();
   // 选择学年学期
-  const [curXNXQId, setCurXNXQId] = useState<any>();
-
+  const [curXNXQId, setCurXNXQId] = useState<string>();
+  // 请假状态
+  const [QJZT, setQJZT] = useState<number[]>([0, 1]);
+  // 课程选择框的数据
+  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
+  const [kcmcId, setKcmcId] = useState<any>();
+  // 班级名称选择框的数据
+  const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
+  const [bjmcId, setBjmcId] = useState<string>();
+  // 数据
+  const [dataSource, setDataSourse] = useState<any>();
+  const params = {
+    page: 0,
+    pageSize: 0,
+    KHKCSJId: kcmcId,
+    XNXQId: curXNXQId,
+    XXJBSJId: currentUser?.xxId,
+  };
   useEffect(() => {
     //获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
-      console.log(res);
-      
       // 获取到的整个列表的信息
       const newData = res.xnxqList;
       const curTerm = res.current;
-       if (newData?.length) {
+      if (newData?.length) {
         if (curTerm) {
           setCurXNXQId(curTerm.id);
           setTermList(newData);
@@ -36,9 +53,51 @@ const LeaveManagement: React.FC = () => {
       }
     })();
   }, []);
+  const getData = async () => {
+    const resAll = await getAllKHXSQJ({
+      XNXQId: curXNXQId,
+      QJZT,
+      KHBJSJId: bjmcId,
+    });
+    if (resAll.status === 'ok') {
+      setDataSourse(resAll?.data?.rows);
+    } else {
+      setDataSourse([]);
+    }
+  };
+  const getBjData = async () => {
+    const bjmcResl = await getAllClasses(params);
+    if (bjmcResl.status === 'ok') {
+      const BJMC = bjmcResl.data.rows?.map((item: any) => ({
+        label: item.BJMC,
+        value: item.id,
+      }));
+      setBjmcData(BJMC);
+    }
+  }
   useEffect(() => {
-    actionRef.current?.reload();
+    (async () => {
+      if (curXNXQId) {
+        // 通过课程数据接口拿到所有的课程
+        const khkcResl = await getAllCourses(params);
+        if (khkcResl.status === 'ok') {
+          const KCMC = khkcResl.data.rows?.map((item: any) => ({
+            label: item.KCMC,
+            value: item.id,
+          }));
+          setKcmcData(KCMC);
+          getBjData();
+        }
+      }
+    })()
   }, [curXNXQId]);
+  useEffect(()=>{
+    getBjData();
+  },[kcmcId]);
+  useEffect(() => {
+    getData();
+  }, [curXNXQId, QJZT,kcmcId, bjmcId])
+
   ///table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -69,6 +128,13 @@ const LeaveManagement: React.FC = () => {
       key: 'KHQJKCs_BJMC',
       align: 'center',
       render: (text: any) => text[0]?.KHBJSJ?.BJMC || '',
+    },
+    {
+      title: '授课教师',
+      dataIndex: 'KHQJKCs',
+      key: 'KHQJKCs_JSMC',
+      align: 'center',
+      render: (text: any) => text[0]?.KHBJSJ?.KHBJJs?.[0]?.KHJSSJ?.XM || '',
     },
     {
       title: '请假原因',
@@ -124,27 +190,73 @@ const LeaveManagement: React.FC = () => {
             })}
           </Select>
         </span>
+        <span style={{ marginLeft: 16 }}>
+          所属课程：
+          <Select
+            style={{ width: 200 }}
+            allowClear
+            onChange={(value: string) => {
+              setKcmcId(value);
+            }}
+          >
+            {kcmcData?.map((item: selectType) => {
+              return (
+                <Option value={item.value} key={item.value}>
+                  {item.label}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
+        <span style={{ marginLeft: 16 }}>
+          所属课程班：
+          <Select
+            style={{ width: 200 }}
+            allowClear
+            onChange={(value: string) => {
+              setBjmcId(value);
+            }}
+          >
+            {bjmcData?.map((item: selectType) => {
+              return (
+                <Option value={item.value} key={item.value}>
+                  {item.label}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
+        <span style={{ marginLeft: 16 }}>
+          请假状态：
+          <Select
+            style={{ width: 200 }}
+            allowClear
+            onChange={(value: string) => {
+              if (value === '0,1') {
+                setQJZT([0, 1]);
+              } else {
+                setQJZT([Number(value)]);
+              }
+            }}
+          >
+            <Option key='全部' value='0,1'>
+              全部
+            </Option>
+            <Option key='已通过' value='0'>
+              已通过
+            </Option>
+            <Option key='已取销' value='1'>
+              已取销
+            </Option>
+          </Select>
+        </span>
       </div>
       <div className={Style.leaveWrapper}>
         <ProTable<any>
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          request={async () => {
-            const resAll = await getAllKHXSQJ({ XNXQId: curXNXQId });
-            if (resAll.status === 'ok') {
-              return {
-                data: resAll?.data?.rows,
-                success: true,
-                total: resAll?.data?.count,
-              };
-            }
-            return {
-              data: [],
-              success: false,
-              total: 0,
-            };
-          }}
+          dataSource={dataSource}
           options={{
             setting: false,
             fullScreen: false,

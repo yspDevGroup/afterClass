@@ -30,7 +30,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
   ];
   return (
     <div>
-      <div style={{ marginBottom: 16 }}>班级名称：{BJMC}</div>
+      <div style={{ marginBottom: 16 }}>课程班名称：{BJMC}</div>
       <Table dataSource={KHXSBJs} columns={columns} pagination={false} />
     </div>
   );

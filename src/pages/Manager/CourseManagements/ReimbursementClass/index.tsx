@@ -64,7 +64,7 @@ const ReimbursementClass = () => {
       },
     },
     {
-      title: '班级名称  ',
+      title: '课程班名称  ',
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
