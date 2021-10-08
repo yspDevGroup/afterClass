@@ -272,6 +272,19 @@
     name: 'statistics',
     icon: 'BarChartOutlined',
     routes: [
+      //课后课程统计
+      {
+        path: '/statistics/afterSchoolCourse',
+        name: 'afterschoolcoursen',
+        component: './Manager/Statistics/AfterSchoolCourse',
+      },
+      //课后课程详情
+      {
+        path: '/statistics/afterSchoolCourse/detail',
+        hideInMenu: 'true',
+        name: 'afterschoolclass',
+        component: './Manager/Statistics/AfterSchoolCourse/Detail',
+      },
       //请假管理
       {
         path: '/statistics/Attendance',

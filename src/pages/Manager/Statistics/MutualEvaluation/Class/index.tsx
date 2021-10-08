@@ -5,7 +5,7 @@ import ProTable from '@ant-design/pro-table';
 import type { ProColumns } from '@ant-design/pro-table';
 import { render } from 'react-dom';
 import { getClassesEvaluation } from "@/services/after-class/khbjsj"
-import { useModel, Link } from 'umi';
+import { useModel, Link,history } from 'umi';
 import styles from '../index.less'
 import { getAllClasses } from '@/services/after-class/khbjsj'
 import { Button } from 'antd';
@@ -18,8 +18,8 @@ import { LeftOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 const school = (props: any) => {
-  // const {id} = props.location.state.data ;
-  // console.log(props.location.state.data);
+  const {id} = props.location.state.data ;
+  console.log(props.location.state.data);
 
   // 课程列表
   const [courseList, setcourseList] = useState<any>();
@@ -33,7 +33,7 @@ const school = (props: any) => {
   }
   useEffect(() => {
     (async () => {
-      const res = await getClassesEvaluation({ XNXQId: currentUser.XNXQId, })
+      const res = await getClassesEvaluation({ XNXQId: currentUser.XNXQId,KHKCSJId:id })
       console.log(res.data.rows);
 
       if (res.status === 'ok') {

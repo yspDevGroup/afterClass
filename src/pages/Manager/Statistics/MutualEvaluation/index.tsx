@@ -110,10 +110,7 @@ const MutualEvaluation: React.FC = () => {
         XNXQId
         
       });
-      console.log(res3);
-      
-      if (res3.status === 'ok') {
-        console.log(res3?.data?.rows);
+    if (res3.status === 'ok') {
          setDataSource(res3?.data?.rows);
       }
     })()
