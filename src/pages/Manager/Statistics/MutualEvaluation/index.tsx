@@ -5,7 +5,7 @@ import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
 import { Select ,Rate} from 'antd';
-import { getAllCourses } from '@/services/after-class/khkcsj';
+import { getAllCourses} from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 
@@ -16,6 +16,7 @@ const { Option } = Select;
 const MutualEvaluation: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 学年学期列表数据
@@ -43,29 +44,42 @@ const MutualEvaluation: React.FC = () => {
     },
     {
       title: '课程类型',
+      dataIndex: 'KHKCLX',
+      key: 'KHKCLX',
+      align: 'center',
+      render: (test: any) => {
+        return test.KCTAG
+      },
+     
+    },
+    {
+      title: '课程来源',
       dataIndex: 'SSJGLX',
       key: 'SSJGLX',
       align: 'center',
       render: (test: any) => {
         return test
       },
+
     },
-    // {
-    //   title: '课程评分',
-    //   dataIndex: 'pj_avg',
-    //   key: 'pj_avg',
-    //   align: 'center',
-    //   width: 200,
-    //   render: (text:any) => <Rate count={5} defaultValue={text} disabled={true} />,
-    // },
     {
-      title: '开课机构',
-      dataIndex: 'KHKCSJ',
-      key: 'KHKCSJ',
+      title: '机构名称',
+      dataIndex: 'KHJYJG',
+      key: 'KHJYJG',
       align: 'center',
-      render: (test: any, record: any) => {
-        return record?.KHKCSJ?.KHJYJG?.QYMC || '-';
+      render: (test: any) => {
+        return test?.QYMC||'-'
       },
+    },
+    {
+      title: '开班数量',
+      dataIndex: 'bj_count',
+      key: 'bj_count',
+      align: 'center',
+      render: (test: any) => {
+        return test
+      },
+
     },
     {
       title: '操作',
@@ -89,6 +103,22 @@ const MutualEvaluation: React.FC = () => {
       ),
     },
   ];
+  const huping=(XNXQId)=>{
+    (async()=>{
+      const res3 = await getAllCourses({
+        XXJBSJId:currentUser.xxId,
+        XNXQId
+        
+      });
+      console.log(res3);
+      
+      if (res3.status === 'ok') {
+        console.log(res3?.data?.rows);
+         setDataSource(res3?.data?.rows);
+      }
+    })()
+
+  }
   useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
@@ -101,6 +131,7 @@ const MutualEvaluation: React.FC = () => {
         if (curTerm) {
           setCurXNXQId(curTerm.id);
           setTermList(newData);
+          huping(curTerm.id)
         }
       } else {
       }
@@ -108,25 +139,11 @@ const MutualEvaluation: React.FC = () => {
   }, []);
   // 学年学期变化
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    ChoseSelect(curXNXQId);
+    huping(curXNXQId)
+    
+  
   }, [curXNXQId]);
-  useEffect(()=>{
-    (async()=>{
-      const res3 = await getAllCourses({
-        XXJBSJId:currentUser.xxId
-      });
-      if (res3.status === 'ok') {
-        console.log(res3,'___________________');
-        
-        setDataSource(res3?.data?.rows);
-      }
-    })()
-  },[])
-  // 学年学期选相框触发的函数
-  const ChoseSelect = async (SelectData: string) => {
-   
-  };
+
 
   return (
     /// PageContainer组件是顶部的信息
@@ -166,7 +183,6 @@ const MutualEvaluation: React.FC = () => {
           }}
         />
       </div>
-      {/* <Link to={{ pathname: '/mutualEvaluation/detail',}}>详情</Link> */}
     </PageContainer>
   );
 };

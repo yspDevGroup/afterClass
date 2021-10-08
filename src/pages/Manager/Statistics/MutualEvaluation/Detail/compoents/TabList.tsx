@@ -104,14 +104,15 @@ const TabList=(props:any)=>{
     },
     {
       title:'该学生课堂表现',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'PY',
+      key: 'PY',
       align: 'center',
-      render: (_, record) => {
+      render: (text:any) => {
             return (
                 <a
                   onClick={() => {
-                    //发请求的函数
+                    setDetailsValue(text)
+                    
                     setIsModalVisible(true)
                   }}
           
@@ -129,57 +130,72 @@ const TabList=(props:any)=>{
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [XNXQId, setXNXQId] = useState();
-   // 弹出框的显示
+   // 弹出框显示隐藏
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [DetailsValue, setDetailsValue] = useState('');
+
  // 学生评价的详情
- const[StudentDetails,setStudentDetails]=useState('')
+//  const[StudentDetails,setStudentDetails]=useState('')
    //   学生详情评价列表
    const [StuList, setStuList] = useState<API.KHXSDD[] | undefined>([]);
    //老师列表
    const [teacherList, setTeacherList] = useState<API.KHXSDD[] | undefined>([]);
   useEffect(() => {
-    (async () => {
-      const res = await getKHBJPJ({
-        // 课后班级数据
-        KHBJSJId: ListState.id,
-        XSId: '',
-        XXJBSJId: '',
-        XNXQId,
-        page: 0,
-        pageSize: 0,
-      });
-      if (res?.data?.rows) {
-     //家长给老师的评价
-        setTeacherList(res.data.rows);
-        setStudentDetails(res.data?.rows.PY)
-      }
-    })();
+    if(ListName==='学生评价'){
+      (async()=>{
+        const res2 = await getAllKHXSPJ({
+          KHBJSJId:ListState.id,
+          JSId: '',
+          // XNXQId,
+          page: 0,
+          pageSize: 0,
+        });
+        if(res2.status==='ok'){
+          console.log(res2.data?.rows);
+          
+          // 老师给学生的评语
+          setStuList(res2.data?.rows)
+        }
+        })()
+
+    }else{
+      (async () => {
+        const res = await getKHBJPJ({
+          // 课后班级数据
+          KHBJSJId: ListState.id,
+          XSId: '',
+          XXJBSJId: '',
+          XNXQId,
+          page: 0,
+          pageSize: 0,
+        });
+        if (res?.data?.rows) {
+       //家长给老师的评价
+          setTeacherList(res.data.rows);
+         
+        }
+      })();
+    }
+  
+
   }, []);
+  // const getTeacherRemark=(data:any)=>{
+  //   (async()=>{
+  //     const res2 = await getAllKHXSPJ({
+  //       KHBJSJId:ListState.id,
+  //       JSId: '',
+  //       XNXQId:data.id,
+  //       page: 0,
+  //       pageSize: 0,
+  //     });
+  //     if(res2.status==='ok'){
+  //       console.log(res2.data?.rows);
+  //     }
+  //     })()
+    
 
-  useEffect(()=>{
-    (async()=>{
-      const res2 = await getAllKHXSPJ({
-        KHBJSJId:ListState.id,
-        JSId: '',
-        // XNXQId,
-        page: 0,
-        pageSize: 0,
-      });
-      if(res2.status==='ok'){
-        console.log(res2.data?.rows);
-        // 老师给学生的评语
-        setStuList(res2.data?.rows)
-      }
-      })()
-
-  },[])
-
-  useEffect(() => {
-    (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      setXNXQId(res.current?.id);
-    })();
-  }, []);
+  // }
+ 
   
     return(
       
@@ -199,7 +215,7 @@ const TabList=(props:any)=>{
            <Modal visible={isModalVisible} onCancel={handleCancel} title='表现详情'
         footer={null}
         >
-             <span>{StudentDetails}</span>
+             <span>{DetailsValue}</span>
         </Modal>
         </div>
 
