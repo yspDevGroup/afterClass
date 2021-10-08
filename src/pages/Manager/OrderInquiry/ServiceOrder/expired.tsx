@@ -95,8 +95,8 @@ const OrderInquiry = (props: any) => {
     },
     {
       title: '付款时间',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'ZFSJ',
+      key: 'ZFSJ',
       align: 'center',
     },
     {

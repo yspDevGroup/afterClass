@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
-import { Select, Tag } from 'antd';
+import { Select, Tag,Button } from 'antd';
 import moment from 'moment';
 import { getClasses } from '@/services/after-class/reports';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
-
+import { LeftOutlined } from '@ant-design/icons';
 import Style from './index.less';
 import EllipsisHint from '@/components/EllipsisHint';
 
@@ -160,6 +160,18 @@ const AfterSchoolClass: React.FC = (props: any) => {
   return (
     /// PageContainer组件是顶部的信息
     <PageContainer>
+       <Button
+        type="primary"
+        onClick={() => {
+          history.go(-1);
+        }}
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <LeftOutlined />
+        返回上一页
+      </Button>
       <div className={Style.TopSearchss}>
         <span>
           所属学年学期：

@@ -5,7 +5,7 @@ import ProTable from '@ant-design/pro-table';
 import type { ProColumns } from '@ant-design/pro-table';
 import { render } from 'react-dom';
 import { getClassesEvaluation } from "@/services/after-class/khbjsj"
-import { useModel, Link } from 'umi';
+import { useModel, Link,history } from 'umi';
 import styles from '../index.less'
 import { getAllClasses } from '@/services/after-class/khbjsj'
 import { Button } from 'antd';
