@@ -9,17 +9,10 @@ import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { DateRange, Week } from './Timefunction';
 
-/* eslint no-useless-escape:0 import/prefer-default-export:0 */
-const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+const reg =
+  /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
 export const isUrl = (path: string): boolean => reg.test(path);
-
-export const isAntDesignPro = (): boolean => {
-  // if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
-  //   return true;
-  // }
-  return window.location.hostname === 'preview.pro.ant.design';
-};
 
 export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
@@ -171,35 +164,12 @@ export const envjudge = () => {
   return 'pc'; // PC
 };
 
-export const getLoginPath = () => {
+export const getLoginPath = (suiteID: string, isAdmin: string) => {
   let loginPath: string;
-  // switch (envjudge()) {
-  //   case 'com-wx-pc': // PC端企业微信
-  //     loginPath = `${ENV_backUrl}/wechat/platAuth?plat=qywx&isMobile=false`;
-  //     break;
-  //   case 'com-wx-mobile': // 手机端企业微信
-  //     loginPath = `${ENV_backUrl}/wechat/platAuth?plat=qywx&isMobile=true`;
-  //     break;
-  //   case 'wx-pc': // PC端微信
-  //     loginPath = `${ENV_backUrl}/wechat/platAuth?plat=wx&isMobile=false`;
-  //     break;
-  //   case 'wx-mobile': // 手机端微信
-  //     loginPath = `${ENV_backUrl}/wechat/platAuth?plat=wx&isMobile=true`;
-  //     break;
-  //   case 'mobile': // 手机
-  //   case 'pc': // PC
-  //   default:
-  //     loginPath = '/user/login'; // `${ENV_backUrl}/auth/wechat`;
-  //     break;
-  // }
   switch (authType) {
     case 'wechat':
       // 前提是本应该已经注册为微信认证，且正确配置认证回调地址为 ${ENV_host}/auth_callback/wechat
-      loginPath = `${ssoHost}/oauth2/Wechat?client_id=${clientId}&client_secret=${clientSecret}`;
-      break;
-    case 'authorization_code':
-      // TODO 待处理
-      loginPath = `${ssoHost}/oauth2/code?client_id=${clientId}&response_type=${authType}&redirect_uri=${''}state=${''}scope=${''}`;
+      loginPath = `${ssoHost}/oauth2/Wechat?client_id=${suiteID}&isAdmin=${isAdmin}`;
       break;
     case 'password':
     default:

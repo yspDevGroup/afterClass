@@ -4,7 +4,7 @@ import type { RequestConfig } from 'umi';
 import { history, Link } from 'umi';
 import type { ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import { getAuthorization, getLoginPath, removeOAuthToken } from './utils/utils';
+import { getAuthorization, removeOAuthToken } from './utils/utils';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { currentWechatUser } from './services/after-class/wechat';
 import Footer from '@/components/Footer';
@@ -12,7 +12,6 @@ import headerTop from '@/assets/headerTop.png';
 import headerTopSmall from '@/assets/headerTopSmall.png';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
-const loginPath: string = getLoginPath();
 const authCallbackPath = '/auth_callback';
 // let currentToken: string;
 
@@ -51,15 +50,12 @@ export async function getInitialState(): Promise<InitialState> {
   if (window.location.pathname === '/' && history.length <= 2) {
     removeOAuthToken();
   }
-  // 如果是登录页面，不执行
-  if (window.location.pathname !== loginPath) {
-    const currentUser = await fetchUserInfo();
-    return {
-      fetchUserInfo,
-      currentUser,
-      settings: {},
-    };
-  }
+  const currentUser = await fetchUserInfo();
+  return {
+    fetchUserInfo,
+    currentUser,
+    settings: {},
+  };
   return {
     fetchUserInfo,
     settings: {},
@@ -80,20 +76,14 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
     footerRender: () => <Footer />,
     onPageChange: () => {
       const path = window.location.pathname.toLowerCase();
-      // 如果没有登录或第一次进入首页，重定向到 login
+      // 如果未登录，且不在首页（分发页），且不在认证页，且不是404、403等特殊页面，则重定向到403
       if (
         !initialState?.currentUser &&
-        path !== loginPath &&
         path !== '/' &&
         !path.startsWith(authCallbackPath) &&
         !path.startsWith('/40')
       ) {
-        if (loginPath.startsWith('http')) {
-          // 企业微信端打开
-          window.location.href = loginPath;
-        } else {
-          history.push(loginPath);
-        }
+        history.push('/403');
       }
     },
     links: isDev
