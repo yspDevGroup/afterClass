@@ -10,6 +10,7 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 
 import Style from './index.less';
+import { TermItem } from './data';
 
 const { Option } = Select;
 
