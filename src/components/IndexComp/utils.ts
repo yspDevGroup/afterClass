@@ -33,20 +33,20 @@ export const bgColor = [
 ];
 export const topNum = [
   {
-    title: '本校课程班',
-    type: 'xxbjNum'
-  },
-  {
-    title: '机构课程班',
-    type: 'jgbjNum',
-  },
-  {
     title: '开设课程',
     type: 'kskcNum'
   },
   {
     title: '引入课程',
     type: 'yrkcNum'
+  },
+  {
+    title: '本校课程班',
+    type: 'xxbjNum'
+  },
+  {
+    title: '机构课程班',
+    type: 'jgbjNum',
   },
   {
     title: '学校教师',

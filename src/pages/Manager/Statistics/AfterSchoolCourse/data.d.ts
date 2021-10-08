@@ -7,10 +7,11 @@
  * @,@FilePath: ,: \afterClass\src\pages\Manager\Statistics\AfterSchoolCourse\data.d.ts
  */
 
-export type TermItem = {
-    id: string,
-    XN: string,
-    XQ: string,
-    KSRQ: string,
-    JSRQ: string,
+export type TableItem = {
+  title: string,
+  dataIndex: string,
+  valueType?: string,
+  width?: number,
+  key?: string,
+  align: string,
 };

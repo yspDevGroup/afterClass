@@ -10,7 +10,7 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 
 import Style from './index.less';
-import { TermItem } from './data';
+import { TableItem } from './data';
 
 const { Option } = Select;
 
@@ -25,7 +25,7 @@ const AfterSchoolCourse: React.FC = () => {
   // 表格数据源
   const [dataSource, setDataSource] = useState<any>([]);
   /// table表格数据
-  const columns: ProColumns<TermItem>[] = [
+  const columns: ProColumns<TableItem>[] = [
     {
       title: '序号',
       dataIndex: 'index',
