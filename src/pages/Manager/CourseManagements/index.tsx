@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import CourseList from './courseList';
-import CourseHistory from './courseHistory';
+// import CourseHistory from './courseHistory';
 import CourseNotIntroduced from './courseNotIntroduced';
 
 const { TabPane } = Tabs;
@@ -20,9 +20,9 @@ const index = () => {
         <TabPane tab="可选课程" key="2">
           <CourseNotIntroduced />
         </TabPane>
-        <TabPane tab="课程历史记录" key="3">
+        {/* <TabPane tab="课程历史记录" key="3">
           <CourseHistory />
-        </TabPane>
+        </TabPane> */}
       </Tabs>
     </PageContainer>
   );
