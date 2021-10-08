@@ -24,7 +24,7 @@ const ArticleDetails = (props: any) => {
         <h1>{state.BT}</h1>
         <p className={styles.RQ}>时间：{state.RQ}</p>
         <div dangerouslySetInnerHTML={{ __html: state.NR }} />
-        <p className={styles.LY}>来源：{state.LY}</p>
+        <p className={styles.LY}>来源：{state.JYJGSJ.BMMC}</p>
       </div>
     </PageContainer>
   );
