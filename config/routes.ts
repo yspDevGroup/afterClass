@@ -318,19 +318,6 @@
         name: 'mutualEvaluationInfo',
         component: './Manager/Statistics/MutualEvaluation/Detail',
       },
-      //课后课程统计
-      {
-        path: '/statistics/afterSchoolCourse',
-        name: 'afterschoolcoursen',
-        component: './Manager/Statistics/AfterSchoolCourse',
-      },
-      //课后课程详情
-      {
-        path: '/statistics/afterSchoolCourse/detail',
-        hideInMenu: 'true',
-        name: 'afterschoolclass',
-        component: './Manager/Statistics/AfterSchoolCourse/Detail',
-      },
     ],
   },
   // 素质教育资源

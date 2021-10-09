@@ -75,10 +75,10 @@ const AttendanceDetail = (props: any) => {
         },
         {
             title: '课时总时长(小时)',
-            dataIndex: '',
-            key: '',
+            dataIndex: 'KSSC',
+            key: 'KSSC',
             align: 'center',
-            render:()=><div>{data.KSSC}</div>
+           
         },   
     ]
     const student: ProColumns<any>[] = [
@@ -125,7 +125,6 @@ const AttendanceDetail = (props: any) => {
             dataIndex: 'KSSC',
             key: 'KSSC',
             align: 'center',
-            // render:()=><div>{data.KSSC}</div>
         },
     ]
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
