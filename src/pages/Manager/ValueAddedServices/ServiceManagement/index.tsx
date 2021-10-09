@@ -192,7 +192,7 @@ const ServiceManagement = () => {
       key: 'option',
       valueType: 'option',
       align: 'center',
-      width: 180,
+      width: 210,
       render: (text, record,) => {
         return (
           <div className={styles.operation}>
