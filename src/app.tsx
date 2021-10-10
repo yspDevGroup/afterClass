@@ -4,12 +4,13 @@ import type { RequestConfig } from 'umi';
 import { history, Link } from 'umi';
 import type { ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import { getAuthorization, removeOAuthToken } from './utils/utils';
+import { getAuthorization, getOauthToken, removeOAuthToken } from './utils/utils';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { currentWechatUser } from './services/after-class/wechat';
 import Footer from '@/components/Footer';
 import headerTop from '@/assets/headerTop.png';
 import headerTopSmall from '@/assets/headerTopSmall.png';
+import { saveWechatInfo } from './utils/wx';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 const authCallbackPath = '/auth_callback';
@@ -47,15 +48,19 @@ export async function getInitialState(): Promise<InitialState> {
     return undefined;
   };
   // 处理微信端多身份数据重合问题
-  if (window.location.pathname === '/' && history.length <= 2) {
-    removeOAuthToken();
+  // if (window.location.pathname === '/' && history.length <= 2) {
+  //   removeOAuthToken();
+  // }
+  const { ysp_access_token } = getOauthToken();
+  if (ysp_access_token) {
+    const currentUser = await fetchUserInfo();
+    saveWechatInfo({ userInfo: currentUser });
+    return {
+      fetchUserInfo,
+      currentUser,
+      settings: {},
+    };
   }
-  const currentUser = await fetchUserInfo();
-  return {
-    fetchUserInfo,
-    currentUser,
-    settings: {},
-  };
   return {
     fetchUserInfo,
     settings: {},

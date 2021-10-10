@@ -1,17 +1,18 @@
 /*
- * @description:
+ * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-10-09 09:57:27
+ * @LastEditTime: 2021-10-10 17:43:37
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
 import { getLoginPath, getPageQuery } from '@/utils/utils';
 import loadImg from '@/assets/loading.gif';
+import { getWechatInfo, needGetWechatUserInfo } from '@/utils/wx';
 
 const Index = () => {
-  const { initialState } = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
 
   const gotoLogin = (suiteID: string, isAdmin: string) => {
     const loginPath = getLoginPath(suiteID, isAdmin);
@@ -33,9 +34,7 @@ const Index = () => {
 
     if (authType === 'wechat') {
       if (params.suiteID) {
-        // 应用id发生变化
-        const currentSuiteID = localStorage.getItem('suiteID');
-        if (params.suiteID !== currentSuiteID) {
+        if (needGetWechatUserInfo(params.suiteID)) {
           const loginPath = getLoginPath(params.suiteID, params.isAdmin);
           if (loginPath.startsWith('http')) {
             window.location.href = loginPath;
@@ -43,6 +42,12 @@ const Index = () => {
             history.replace(loginPath);
           }
           return;
+        }
+
+        if (!initialState?.currentUser) {
+          const currentInfo = getWechatInfo();
+          // 反向填入当前用户信息，不发送登录请求，后续其他请求可使用之前的token正常发送
+          setInitialState(currentInfo.userInfo);
         }
 
         // 检查登录状态
@@ -82,19 +87,7 @@ const Index = () => {
           gotoLogin('', '');
           break;
       }
-      // if (initialState?.currentUser) {
-      //   // history.replace('/homepage');
-      //   // history.replace('/teacher/home');
-      //   history.replace('/parent/home');
-      // } else {
-      //   gotoLogin('', '')
-      // }
     }
-
-    // if (initialState?.currentUser?.adminAuth?.includes('系统管理')) {
-    //   // 支持PC登录，默认为管理员
-    //   history.replace('/homepage');
-    // }
   }, [initialState?.currentUser?.adminAuth, initialState?.currentUser?.type]);
   return (
     <div
