@@ -59,6 +59,18 @@
         hideInMenu: true,
         component: './Manager/BasicalSettings/SchoolInfo/SchoolEditor',
       },
+       // 年级班级管理
+       {
+        path: '/basicalSettings/gradeClass',
+        name: 'gradeClass',
+        component: './Manager/BasicalSettings/GradeClass',
+      },
+      // 学生管理
+      {
+        path: '/basicalSettings/studentManagement',
+        name: 'studentManagement',
+        component: './Manager/BasicalSettings/StudentManagement',
+      },
       {
         path: '/basicalSettings/service',
         name: 'service',
@@ -310,7 +322,7 @@
         hideInMenu: 'true',
         component: './Manager/Statistics/MutualEvaluation/Class',
       },
-   
+
  //互评统计详情
       {
         path: '/statistics/mutualEvaluation/detail',

@@ -8,6 +8,8 @@ export default {
   'menu.basicalSettings.roomManagement': '场地维护',
   'menu.basicalSettings.periodMaintenance': '时段维护',
   'menu.basicalSettings.termManagement': '学期学年维护',
+  'menu.basicalSettings.gradeClass': '年级班级维护',
+  'menu.basicalSettings.studentManagement': '学生管理',
   'menu.basicalSettings.service': '服务协议配置',
   'menu.basicalSettings.service.editArticle': '编辑服务协议',
   'menu.basicalSettings.articleDetails': '服务协议',
