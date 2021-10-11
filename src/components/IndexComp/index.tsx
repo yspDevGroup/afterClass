@@ -85,7 +85,7 @@ const Index = () => {
               </a>
             }
           >
-            <List type="policy" data={annoceData} noDataImg={noAnnoce} noDataText="暂无信息" />
+            <List type="notice" data={annoceData} noDataImg={noAnnoce} noDataText="暂无信息" />
           </Card>
         </Col>
         <Col span={12}>

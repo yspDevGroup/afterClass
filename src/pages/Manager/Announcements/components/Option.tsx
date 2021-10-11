@@ -89,7 +89,7 @@ const View = ({ record }: OptType) => (
   <Link
     key="ck"
     to={{
-      pathname: '/announcements/notice/noticeDetails',
+      pathname: '/announcements/notice/articleDetails',
       state: record,
     }}
   >
