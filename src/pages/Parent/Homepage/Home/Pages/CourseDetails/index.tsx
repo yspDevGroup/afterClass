@@ -1,8 +1,8 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Checkbox, Divider, Modal, Popconfirm, Radio } from 'antd';
+import { Button, Checkbox, Divider, message, Modal, Popconfirm, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
-import { useModel, Link } from 'umi';
+import { useModel, Link, history } from 'umi';
 import styles from './index.less';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
@@ -18,7 +18,7 @@ const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [BJ, setBJ] = useState<string>();
-  const [FY, setFY] = useState<number>();
+  const [FY, setFY] = useState<number>(0);
   const [state, setstate] = useState(false);
   const [KcDetail, setKcDetail] = useState<any>();
   const [orderInfo, setOrderInfo] = useState<any>();
@@ -33,10 +33,9 @@ const CourseDetails: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
   const [JFstate, setJFstate] = useState(false);
-  const [JFData, setJFData] = useState([])
-  const [JFTotalost, setJFTotalost] = useState<number>()
+  const [JFData, setJFData] = useState([]);
+  const [JFTotalost, setJFTotalost] = useState<number>(0);
   const [KHFUXY, setKHFUXY] = useState<any>();
-
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
@@ -76,15 +75,15 @@ const CourseDetails: React.FC = () => {
               const NewArr: any[] = [];
               result.data.KHBJSJs.forEach((value: any) => {
                 if (value.BJZT === '已开班') {
-                  NewArr.push(value)
+                  NewArr.push(value);
                 }
-              })
+              });
               let num = 0;
               for (let i = 0; i < NewArr?.[0].KHKCJCs.length; i++) {
-                num += Number(NewArr?.[0].KHKCJCs[i].JCFY)
+                num += Number(NewArr?.[0].KHKCJCs[i].JCFY);
               }
               setJFTotalost(num);
-              setJFData(NewArr[0].KHKCJCs)
+              setJFData(NewArr[0].KHKCJCs);
             }
           } else {
             enHenceMsg(result.message);
@@ -104,7 +103,8 @@ const CourseDetails: React.FC = () => {
         pageSize: 0,
       });
       if (res.status === 'ok') {
-        setKHFUXY(res.data?.rows?.[0].NR);
+        const { rows = [] } = res.data || {};
+        setKHFUXY(rows[0]?.NR || '');
       }
     })();
   }, []);
@@ -134,20 +134,25 @@ const CourseDetails: React.FC = () => {
       XSXM: currentUser?.student?.name,
       KHBJSJId: BJ!,
       XXJBSJId: currentUser?.xxId,
-      DDLX:0
+      DDLX: 0,
     };
     const res = await createKHXSDD(data);
     if (res.status === 'ok') {
-      setOrderInfo(res.data);
+      if (data.DDFY > 0) {
+        setOrderInfo(res.data);
+      } else {
+        message.success('报名成功');
+        history.push('/parent/home?index=index');
+      }
     } else {
       enHenceMsg(res.message);
     }
   };
   const butonclick = (value: any, ind: number) => {
-    setJFData(value.KHKCJCs)
+    setJFData(value.KHKCJCs);
     let num = 0;
     for (let i = 0; i < value.KHKCJCs.length; i++) {
-      num += Number(value.KHKCJCs[i].JCFY)
+      num += Number(value.KHKCJCs[i].JCFY);
     }
     setJFTotalost(num);
     changeStatus(ind);
@@ -205,7 +210,7 @@ const CourseDetails: React.FC = () => {
         <ul className={styles.classInformation}>
           {KcDetail?.KHBJSJs &&
             KcDetail?.KHBJSJs.map((value: any) => {
-              if (value.BJZT === "已开班") {
+              if (value.BJZT === '已开班') {
                 return (
                   <li>
                     <div style={{ paddingBottom: '10px' }}>
@@ -230,8 +235,16 @@ const CourseDetails: React.FC = () => {
                           return '';
                         })}
                       </p>
-                      <p> 报名时段：{moment(value.BMKSSJ).format('YYYY.MM.DD')}-{moment(value.BMJSSJ).format('YYYY.MM.DD')}</p>
-                      <p> 上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-{moment(value.JKRQ).format('YYYY.MM.DD')}</p>
+                      <p>
+                        {' '}
+                        报名时段：{moment(value.BMKSSJ).format('YYYY.MM.DD')}-
+                        {moment(value.BMJSSJ).format('YYYY.MM.DD')}
+                      </p>
+                      <p>
+                        {' '}
+                        上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
+                        {moment(value.JKRQ).format('YYYY.MM.DD')}
+                      </p>
                       <table>
                         <thead>
                           <tr>
@@ -275,7 +288,7 @@ const CourseDetails: React.FC = () => {
                   </li>
                 );
               }
-              return ''
+              return '';
             })}
         </ul>
       </div>
@@ -293,8 +306,14 @@ const CourseDetails: React.FC = () => {
           <div onClick={onchanges}>
             <p className={styles.title}>{KcDetail?.KCMC}</p>
             <p className={styles.price}>
-              <span>￥{FY}</span>
-              <span>/学期</span>
+              {FY <= 0 ? (
+                <>
+                  <span>￥{FY}</span>
+                  <span>/学期</span>
+                </>
+              ) : (
+                <span>免费</span>
+              )}
             </p>
             <p className={styles.title} style={{ fontSize: '14px' }}>
               班级
@@ -322,7 +341,7 @@ const CourseDetails: React.FC = () => {
                   const enAble =
                     myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
                     myDate <= new Date(moment(end).format('YYYY/MM/DD'));
-                  if (value.BJZT === "已开班") {
+                  if (value.BJZT === '已开班') {
                     return (
                       <Popconfirm
                         overlayClassName={styles.confirmStyles}
@@ -341,44 +360,54 @@ const CourseDetails: React.FC = () => {
                       </Popconfirm>
                     );
                   }
-                  return ''
+                  return '';
                 },
               )}
             </Radio.Group>
             <div className={styles.Teachingaterial}>
-              {
-                JFData?.length === 0 ? <></> :
-                  <div className={styles.box} style={{borderRadius: JFstate === true ? '8px 8px 0 0':'8px'}}>
-                    <Checkbox onChange={onJFChange} checked={JFstate}>
-                      <span>选购教辅</span>
-                    </Checkbox>
-                    <div>￥{JFTotalost?.toFixed(2)}</div>
-                  </div>
-
-              }
+              {!JFData?.length ? (
+                <></>
+              ) : (
+                <div
+                  className={styles.box}
+                  style={{ borderRadius: JFstate === true ? '8px 8px 0 0' : '8px' }}
+                >
+                  <Checkbox onChange={onJFChange} checked={JFstate}>
+                    <span>选购教辅</span>
+                  </Checkbox>
+                  {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
+                </div>
+              )}
               <div className={styles.tables}>
-                  {
-                    JFstate === true ?
+                {JFstate === true ? (
+                  <>
+                    {JFData ? (
                       <>
-                        {
-                          JFData ? <>{
-                            JFData?.map((value: any) => {
-                              return <div>
-                                <div>{value.JCMC}</div>
-                                <div>￥{value.JCFY}</div>
-                              </div>
-                            })
-                          }</> : <>{
-                            KcDetail?.KHBJSJs?.[0].KHKCJCs?.map((value: any) => {
-                              return <div>
-                                <div>{value.JCMC}</div>
-                                <div>￥{value.JCFY}</div>
-                              </div>
-                            })
-                          }</>
-                        }
-                      </> : <></>
-                  }
+                        {JFData?.map((value: any) => {
+                          return (
+                            <div>
+                              <div>{value.JCMC}</div>
+                              {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
+                            </div>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <>
+                        {KcDetail?.KHBJSJs?.[0].KHKCJCs?.map((value: any) => {
+                          return (
+                            <div>
+                              <div>{value.JCMC}</div>
+                              {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
+                            </div>
+                          );
+                        })}
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
             <div className={styles.agreement}>
@@ -388,7 +417,7 @@ const CourseDetails: React.FC = () => {
               <a onClick={showModal}>《课后服务协议》</a>
             </div>
             <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
-              确定并付款
+              {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
             </Button>
             <Link
               style={{ visibility: 'hidden' }}

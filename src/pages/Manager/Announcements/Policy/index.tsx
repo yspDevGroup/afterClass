@@ -2,8 +2,8 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-31 10:08:34
- * @LastEditTime: 2021-09-08 18:59:40
- * @LastEditors: wsl
+ * @LastEditTime: 2021-10-11 12:06:42
+ * @LastEditors: zpl
  */
 import { useState, useRef } from 'react';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -26,7 +26,7 @@ const TableList = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
-      align: 'center'
+      align: 'center',
     },
     {
       title: '标题',
@@ -60,7 +60,7 @@ const TableList = () => {
       align: 'center',
       search: false,
       render: (text, record) => {
-        return <>{record.JYJGSJ.BMMC}</>;
+        return <>{record.JYJGSJ?.BMMC || ''}</>;
       },
     },
     {
