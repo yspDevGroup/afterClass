@@ -58,7 +58,7 @@ const ReimbursementClass = () => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
-      width: 80,
+      width: 100,
     },
     {
       title: '课程名称',
@@ -68,7 +68,7 @@ const ReimbursementClass = () => {
       render: (text: any) => {
         return text?.KHKCSJ?.KCMC;
       },
-      width: 120,
+      width: 170,
     },
     {
       title: '课程班名称',
@@ -78,24 +78,14 @@ const ReimbursementClass = () => {
       render: (text: any) => {
         return text?.BJMC;
       },
-      width: 120,
+      width: 170,
     },
     {
-      title: '退课课时',
+      title: '退课总课时',
       dataIndex: 'KSS',
       key: 'KSS',
       align: 'center',
       width: 100,
-    },
-    {
-      title: '退款金额',
-      dataIndex: 'TKJE',
-      key: 'TKJE',
-      align: 'center',
-      render: (_, record) => {
-        return ((record?.KHBJSJ?.FY / record?.KHBJSJ?.KSS) * record?.KSS).toFixed(2) + '元'
-      },
-      width: 90,
     },
     {
       title: '申请时间',
@@ -104,33 +94,6 @@ const ReimbursementClass = () => {
       align: 'center',
       render: (_, record) => {
         return record?.createdAt?.substring(0, 16)
-      },
-      width: 150,
-    },
-    {
-      title: '审批人',
-      dataIndex: 'SPSJ',
-      key: 'SPSJ',
-      align: 'center',
-      width: 90,
-    },
-    {
-      title: '审批时间',
-      dataIndex: 'SPSJ',
-      key: 'SPSJ',
-      align: 'center',
-      render: (_, record) => {
-        return record?.SPSJ?.substring(0, 16)
-      },
-      width: 150,
-    },
-    {
-      title: '退款时间',
-      dataIndex: 'TKSJ',
-      key: 'TKSJ',
-      align: 'center',
-      render: (_, record) => {
-        return record?.TKSJ?.substring(0, 16)
       },
       width: 150,
     },
@@ -185,37 +148,40 @@ const ReimbursementClass = () => {
           if (ZT === 2) {
             message.success('退课申请已驳回');
           } else {
-            const money = (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS;
-            const result = await createKHXSTK({
-              /** 退款金额 */
-              TKJE: 0.01 || money,
-              /** 退款状态 */
-              TKZT: 0,
-              /** 学生ID */
-              XSId: '61017999160006' || current?.XSId,
-              /** 学生姓名 */
-              XSXM: '高大强' || current?.XSXM,
-              /** 班级ID */
-              KHBJSJId: '276d01f1-b509-4d19-a6f3-8afc4f3659dc' || current?.KHBJSJId,
-              /** 订单ID */
-              KHXSDDId: '4d48d261-779e-4801-8579-369a3241f131',
-              /** 学校ID */
-              XXJBSJId: currentUser?.xxId
-            });
-            if (result.status === 'ok') {
-              message.success('退课成功,自动申请退款流程');
-              setVisible(false);
-              setCurrent(undefined);
+            if (current?.KHBJSJ?.FY !== 0) {
+              const money = (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS;
+              const result = await createKHXSTK({
+                /** 退款金额 */
+                TKJE: 0.01 || money,
+                /** 退款状态 */
+                TKZT: 0,
+                /** 学生ID */
+                XSId: '61017999160006' || current?.XSId,
+                /** 学生姓名 */
+                XSXM: '高大强' || current?.XSXM,
+                /** 班级ID */
+                KHBJSJId: '276d01f1-b509-4d19-a6f3-8afc4f3659dc' || current?.KHBJSJId,
+                /** 订单ID */
+                KHXSDDId: '4d48d261-779e-4801-8579-369a3241f131',
+                /** 学校ID */
+                XXJBSJId: currentUser?.xxId
+              });
+              if(result.status === 'ok'){
+                message.success('退课成功,已自动申请退款流程');
+              }
+            } else {
+              message.success('退课成功');
             }
+            setVisible(false);
+            setCurrent(undefined);
           }
-
           actionRef.current?.reload();
         } else {
-          message.error(res.message || '退课课程出现错误，请联系管理员或稍后重试。');
+          message.error(res.message || '退课流程出现错误，请联系管理员或稍后重试。');
         }
       }
     } catch (err) {
-      message.error('退课课程出现错误，请联系管理员或稍后重试。');
+      message.error('退课流程出现错误，请联系管理员或稍后重试。');
     }
   }
   return (
@@ -274,7 +240,7 @@ const ReimbursementClass = () => {
           search={false}
         />
         <Modal
-          title="退课退款审核"
+          title="退课审核"
           visible={visible}
           onOk={() => {
             form.submit();
@@ -290,13 +256,10 @@ const ReimbursementClass = () => {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 15 }}
             form={form}
-            initialValues={{ ZT: 1, TKJE: (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS }}
+            initialValues={{ ZT: 1 }}
             onFinish={handleSubmit}
             layout="horizontal"
           >
-            <Form.Item label="退款金额" name='TKJE'>
-              <InputNumber />
-            </Form.Item>
             <Form.Item label="审核意见" name="ZT">
               <Radio.Group>
                 <Radio value={1}>同意</Radio>
@@ -307,7 +270,7 @@ const ReimbursementClass = () => {
               <TextArea rows={4} maxLength={100} />
             </Form.Item>
           </Form>
-          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>注：退款金额 = (课程费用/课程总课时)*退课课时，如有调整请写明调整原因。</p>
+          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>注：如本流程涉及到退款将会自动发起退款申请。</p>
         </Modal>
       </div>
     </PageContainer>

@@ -58,6 +58,7 @@ const RefundManagement = () => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+      width: 100,
     },
     {
       title: '课程名称',
@@ -67,6 +68,8 @@ const RefundManagement = () => {
       render: (text: any) => {
         return text?.KHKCSJ?.KCMC;
       },
+      ellipsis: true,
+      width: 100,
     },
     {
       title: '课程班名称',
@@ -76,36 +79,57 @@ const RefundManagement = () => {
       render: (text: any) => {
         return text?.BJMC;
       },
+      ellipsis: true,
+      width: 100,
     },
     {
       title: '退款金额',
       dataIndex: 'TKJE',
       key: 'TKJE',
       align: 'center',
+      ellipsis: true,
+      width: 100,
     },
     {
       title: '申请时间',
       dataIndex: 'createdAt',
       key: 'createdAt',
       align: 'center',
+      ellipsis: true,
+      render: (_, record) => {
+        return record?.createdAt?.substring(0, 16)
+      },
+      width: 150,
     },
     {
       title: '审批人',
       dataIndex: 'SPSJ',
       key: 'SPSJ',
       align: 'center',
+      ellipsis: true,
+      width: 100,
     },
     {
       title: '审批时间',
       dataIndex: 'SPSJ',
       key: 'SPSJ',
       align: 'center',
+      ellipsis: true,
+      render: (_, record) => {
+        return record?.SPSJ?.substring(0, 16)
+      },
+      width: 150,
     },
     {
       title: '退款时间',
       dataIndex: 'TKSJ',
       key: 'TKSJ',
       align: 'center',
+      ellipsis: true,
+      render: (_, record) => {
+        return record?.TKSJ?.substring(0, 16)
+      },
+      width: 150,
     },
     {
       title: '状态',
@@ -134,12 +158,15 @@ const RefundManagement = () => {
           status: 'Error',
         },
       },
+      ellipsis: true,
+      width: 90,
     },
     {
       title: '操作',
       dataIndex: '',
       key: '',
       align: 'center',
+      width: 80,
       render: (record: any) =>
         record.TKZT === 0 ? (
           <a onClick={() => {
@@ -168,11 +195,11 @@ const RefundManagement = () => {
           }
           actionRef.current?.reload();
         } else {
-          message.error(res.message || '退课课程出现错误，请联系管理员或稍后重试。');
+          message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');
         }
       }
     } catch (err) {
-      message.error('退课课程出现错误，请联系管理员或稍后重试。');
+      message.error('退款流程出现错误，请联系管理员或稍后重试。');
     }
   }
   return (
@@ -249,7 +276,7 @@ const RefundManagement = () => {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 15 }}
             form={form}
-            initialValues={{ ZT: 1 }}
+            initialValues={{ TKZT: 1, TKJE: current?.TKJE }}
             onFinish={handleSubmit}
             layout="horizontal"
           >
@@ -259,7 +286,20 @@ const RefundManagement = () => {
                 parser={value => Number(value?.replace(/\￥\s?/g, ''))}
               />
             </Form.Item>
+            <Form.Item label="审核意见" name="TKZT">
+              <Radio.Group>
+                <Radio value={1}>同意</Radio>
+                <Radio value={2}>不同意</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item label="退款说明" name='BZ'>
+              <TextArea rows={4} maxLength={100} />
+            </Form.Item>
           </Form>
+          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>
+            注：退款金额 = (课程费用/课程课时总数)*退课课时数
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如若退款金额有调整，请填写退款说明。</p>
         </Modal>
       </div>
     </PageContainer>

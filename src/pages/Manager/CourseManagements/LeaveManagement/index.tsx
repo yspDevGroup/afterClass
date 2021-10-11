@@ -22,7 +22,7 @@ const LeaveManagement: React.FC = () => {
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();
   // 请假状态
-  const [QJZT, setQJZT] = useState<number[]>([0, 1]);
+  const [QJZT, setQJZT] = useState<number[]>([-1]);
   // 课程选择框的数据
   const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
   const [kcmcId, setKcmcId] = useState<any>();
@@ -56,7 +56,7 @@ const LeaveManagement: React.FC = () => {
   const getData = async () => {
     const resAll = await getAllKHXSQJ({
       XNXQId: curXNXQId,
-      QJZT,
+      QJZT: QJZT?.[0] === -1 ? [0, 1] : QJZT,
       KHBJSJId: bjmcId,
     });
     if (resAll.status === 'ok') {
@@ -91,12 +91,12 @@ const LeaveManagement: React.FC = () => {
       }
     })()
   }, [curXNXQId]);
-  useEffect(()=>{
+  useEffect(() => {
     getBjData();
-  },[kcmcId]);
+  }, [kcmcId]);
   useEffect(() => {
     getData();
-  }, [curXNXQId, QJZT,kcmcId, bjmcId])
+  }, [curXNXQId, QJZT, kcmcId, bjmcId])
 
   ///table表格数据
   const columns: ProColumns<any>[] = [
@@ -112,7 +112,7 @@ const LeaveManagement: React.FC = () => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
-      width: 120,
+      width: 100,
       render: (text: any) => text.split('-')[0],
     },
     {
@@ -120,14 +120,18 @@ const LeaveManagement: React.FC = () => {
       dataIndex: 'KHQJKCs',
       key: 'KHQJKCs',
       align: 'center',
+      ellipsis: true,
       render: (text: any) => text[0]?.KCMC,
+      width: 120,
     },
     {
       title: '课程班名称',
       dataIndex: 'KHQJKCs',
       key: 'KHQJKCs_BJMC',
       align: 'center',
+      ellipsis: true,
       render: (text: any) => text[0]?.KHBJSJ?.BJMC || '',
+      width: 120,
     },
     {
       title: '授课教师',
@@ -135,12 +139,15 @@ const LeaveManagement: React.FC = () => {
       key: 'KHQJKCs_JSMC',
       align: 'center',
       render: (text: any) => text[0]?.KHBJSJ?.KHBJJs?.[0]?.KHJSSJ?.XM || '',
+      width: 100,
     },
     {
       title: '请假原因',
       dataIndex: 'QJYY',
       key: 'QJYY',
       align: 'center',
+      ellipsis: true,
+      width: 180,
     },
     {
       title: '请假状态',
@@ -155,7 +162,7 @@ const LeaveManagement: React.FC = () => {
       dataIndex: '',
       key: '',
       align: 'center',
-      width: 170,
+      width: 160,
       render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.KSSJ}`,
     },
     {
@@ -163,7 +170,7 @@ const LeaveManagement: React.FC = () => {
       dataIndex: '',
       key: '',
       align: 'center',
-      width: 170,
+      width: 160,
       render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.JSSJ}`,
     },
   ];
@@ -179,6 +186,9 @@ const LeaveManagement: React.FC = () => {
             onChange={(value: string) => {
               //选择不同学期从新更新页面的数据
               setCurXNXQId(value);
+              setKcmcId('');
+              setBjmcId('');
+              setQJZT([-1]);
             }}
           >
             {termList?.map((item: any) => {
@@ -195,8 +205,11 @@ const LeaveManagement: React.FC = () => {
           <Select
             style={{ width: 200 }}
             allowClear
+            value={kcmcId}
             onChange={(value: string) => {
               setKcmcId(value);
+              setBjmcId('');
+              setQJZT([-1]);
             }}
           >
             {kcmcData?.map((item: selectType) => {
@@ -213,8 +226,10 @@ const LeaveManagement: React.FC = () => {
           <Select
             style={{ width: 200 }}
             allowClear
+            value={bjmcId}
             onChange={(value: string) => {
               setBjmcId(value);
+              setQJZT([-1]);
             }}
           >
             {bjmcData?.map((item: selectType) => {
@@ -231,21 +246,18 @@ const LeaveManagement: React.FC = () => {
           <Select
             style={{ width: 200 }}
             allowClear
-            onChange={(value: string) => {
-              if (value === '0,1') {
-                setQJZT([0, 1]);
-              } else {
-                setQJZT([Number(value)]);
-              }
+            value={QJZT?.[0]}
+            onChange={(value: number) => {
+              setQJZT([value]);
             }}
           >
-            <Option key='全部' value='0,1'>
+            <Option key='全部' value={-1}>
               全部
             </Option>
-            <Option key='已通过' value='0'>
+            <Option key='已通过' value={0}>
               已通过
             </Option>
-            <Option key='已取销' value='1'>
+            <Option key='已取销' value={1}>
               已取销
             </Option>
           </Select>

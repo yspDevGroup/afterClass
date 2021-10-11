@@ -136,7 +136,6 @@
         path: '/courseManagements/refundManagement',
         name: 'refundManagement',
         component: './Manager/CourseManagements/RefundManagement',
-        hideInMenu: 'true',
       },
     ],
   },
