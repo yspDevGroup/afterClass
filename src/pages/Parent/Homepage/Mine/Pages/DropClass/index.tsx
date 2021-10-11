@@ -26,7 +26,7 @@ const DropClass = () => {
   const getKHTKSJData = async () => {
     const { student } = currentUser || {};
     const res = await getKHTKSJ({
-      XSId: (student && student.student_userid) || '20210901',
+      XSId:localStorage.getItem('studentId') ||  (student && student[0].student_userid) || '20210901',
       KHBJSJId: '',
       XXJBSJId: currentUser?.xxId,
       ZT: [0, 1, 2],
@@ -70,7 +70,7 @@ const DropClass = () => {
                   </p>
                   <p
                     className={styles.state}
-                    style={{ color: color }}
+                    style={{ color }}
                   >
                     {value.ZT === 0 ? '退课中' : value.ZT === 1 ? '已退课待退款' : '退课失败'}
                   </p>

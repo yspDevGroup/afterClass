@@ -51,9 +51,10 @@ const LeaveForm = (props: {
       QJZT:0,
       KSSJ,
       JSSJ,
-      XSId: student && student.student_userid || '20210901',
-      XSXM: currentUser?.external_contact?.subscriber_info.remark.split('-')[0] ||
-      currentUser?.username,
+      XSId:localStorage.getItem('studentId') || (student && student[0].student_userid) || '20210901',
+      XSXM:localStorage.getItem('studentName') || (student && student[0].name),
+      // XSXM: currentUser?.external_contact?.subscriber_info.remark.split('-')[0] ||
+      // currentUser?.username,
       bjIds
     });
     if (res.status === 'ok') {
@@ -63,7 +64,7 @@ const LeaveForm = (props: {
       form.resetFields();
       setActiveKey('history');
     } else {
-      let msg = res.message;
+      const msg = res.message;
       message.error(msg);
     }
   };

@@ -33,7 +33,7 @@ const Details = () => {
     (async () => {
       if (type === 'YX') {
         const res = await getStudent({
-          XSId: currentUser?.student?.student_userid || '20210901',
+          XSId:localStorage.getItem('studentId') || currentUser?.student[0].student_userid || '20210901',
           KHZZFWId: id,
         });
         if (res.status === 'ok') {
@@ -90,8 +90,8 @@ const Details = () => {
       ZFFS: '线上支付',
       DDZT: '待付款',
       DDFY: Data?.FY,
-      XSId: currentUser?.student?.student_userid || '20210901',
-      XSXM: currentUser?.student?.name,
+      XSId:localStorage.getItem('studentId') || currentUser?.student[0].student_userid || '20210901',
+      XSXM:localStorage.getItem('studentName') || currentUser?.student[0].name,
       DDLX: 1,
       KHXXZZFWId: Data?.id,
     };

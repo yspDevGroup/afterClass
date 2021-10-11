@@ -56,7 +56,7 @@ const TableList = () => {
       title: '来源',
       dataIndex: 'LY',
       key: 'LY',
-      width: '9em',
+      width: '12em',
       align: 'center',
       search: false,
       render: (text, record) => {
@@ -87,7 +87,7 @@ const TableList = () => {
       dataIndex: 'option',
       valueType: 'option',
       key: 'option',
-      width: '15em',
+      width: '6em',
       align: 'center',
       render: (text, record) => {
         return (

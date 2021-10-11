@@ -18,7 +18,7 @@ const EmptyArticle = () => {
       if (result.current) {
         const { student } = currentUser || {};
         const res = await homePageInfo({
-          XSId: student && student.student_userid || '20210901',
+          XSId:localStorage.getItem('studentId') || (student && student[0].student_userid) || '20210901',
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
         });

@@ -12,16 +12,19 @@ import { enHenceMsg } from '@/utils/utils';
 import evaluation from '@/assets/evaluation.png';
 import drop from '@/assets/drop.png';
 import icon_Rgo from '@/assets/icon_Rgo.png';
+import { Select } from 'antd';
 // import { Col, Row } from 'antd';
 // import evaluation from '@/assets/evaluation.png';
 // import drop from '@/assets/drop.png';
 // import { RightOutlined } from '@ant-design/icons';
 
+const { Option } = Select;
 const Mine = () => {
   const { currentUserInfo, courseStatus } = useContext(myContext);
   const [totail, setTotail] = useState<boolean>(false);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
   useEffect(() => {
     // const data = currentUserInfo?.subscriber_info?.children || [
     //   {
@@ -29,9 +32,10 @@ const Mine = () => {
     //     njId: '1',
     //   },
     // ];
+
     async function fetch() {
       const res = await getAllKHXSDD({
-        XSId: currentUser?.student?.student_userid || '20210913',
+        XSId:localStorage.getItem('studentId') || currentUser?.student[0].student_userid || '20210913',
         // njId: currentUser.njId,
         DDZT: '待付款',
       });
@@ -45,6 +49,22 @@ const Mine = () => {
     }
     fetch();
   }, []);
+  const Storage = localStorage.getItem('studentName');
+  useEffect(() => {
+    // 存入孩子姓名和id
+    localStorage.setItem('studentName',currentUser?.student?.[0].name)
+    localStorage.setItem('studentId',currentUser?.student?.[0].student_userid)
+    const ParentalIdentitys = `${localStorage.getItem('studentName')}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
+    setParentalIdentity(ParentalIdentitys)
+  }, [Storage])
+
+  // 切换孩子
+  const handleChange = (value: any,key: any)=> {
+    localStorage.setItem('studentName',key.key)
+    localStorage.setItem('studentId',key.value)
+    const ParentalIdentitys = `${localStorage.getItem('studentName')}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
+    setParentalIdentity(ParentalIdentitys)
+  }
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader}>
@@ -53,14 +73,26 @@ const Mine = () => {
           {currentUserInfo?.avatar ? <img src={currentUserInfo?.avatar} /> : ''}
           <div className={styles.headerName}>
             <h4>
-              {currentUserInfo?.external_contact?.subscriber_info.remark ||
+              {/* {currentUserInfo?.external_contact?.subscriber_info.remark ||
                 currentUserInfo?.username ||
-                '家长'}
+                '家长'} */}
+               {ParentalIdentity || '家长'}
             </h4>
             {/* <h4>{currentUser?.student?.name || currentUserInfo?.username || '家长'}</h4> */}
             <span>微信名：{currentUserInfo?.username}</span>
           </div>
         </div>
+        {
+           currentUser?.student?.length >1 ?
+           <Select defaultValue={ currentUser?.student[0].student_userid} className={styles.XsName} onChange={handleChange}>
+          {
+            currentUser?.student?.map((value: any)=>{
+              return  <Option value={value.student_userid} key={value.name}>{value.name}</Option>
+            })
+          }
+        </Select>:<></>
+        }
+
       </header>
       <div className={styles.payList}>
         <DisplayColumn
@@ -79,10 +111,10 @@ const Mine = () => {
           <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
         </Link>
         <Link to="/parent/mine/evaluation" className={styles.evaluation}>
-          <img src={evaluation} alt=""  />
+          <img src={evaluation} alt="" />
           <span className={styles.evaluationSpan}>课程评价</span>
           <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
-         </Link>
+        </Link>
       </div>
 
 

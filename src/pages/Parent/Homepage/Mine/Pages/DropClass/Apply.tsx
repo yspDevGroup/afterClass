@@ -53,7 +53,7 @@ const Apply = () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const { student } = currentUser || {};
     const res = await getStudentClasses({
-      XSId: (student && student.student_userid) || '20210901',
+      XSId:localStorage.getItem('studentId') || (student && student.student_userid) || '20210901',
       XNXQId: result.current.id,
       ZT: [0],
     });
@@ -101,8 +101,8 @@ const Apply = () => {
     const { student } = currentUser || {};
     checkedValues.forEach((value: string) => {
       const data = {
-        XSId: (student && student.student_userid) || '20210901',
-        XSXM: (student && student.name) || '张三',
+        XSId:localStorage.getItem('studentId') || (student && student.student_userid) || '20210901',
+        XSXM:localStorage.getItem('studentName') || (student && student[0].name) || '张三',
         KHBJSJId: value.split('+')[0],
         KSS: value.split('+')[1],
         ZT: 0,

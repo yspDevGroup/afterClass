@@ -16,6 +16,7 @@ import LeaveHistory from './Components/LeaveHistory';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import { enHenceMsg } from '@/utils/utils';
+
 const { TabPane } = Tabs;
 
 const AskForLeave: React.FC = () => {
@@ -35,7 +36,7 @@ const AskForLeave: React.FC = () => {
   };
   const getData = async () => {
     const res = await getAllKHXSQJ({
-      XSId: student && student.student_userid || '20210901',
+      XSId:localStorage.getItem('studentId') || (student && student[0].student_userid) || '20210901',
       XNXQId: curXNXQId,
     });
     if (res.status === 'ok') {

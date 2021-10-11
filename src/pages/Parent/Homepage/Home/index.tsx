@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'umi';
+import { Link, useModel } from 'umi';
 import imgPop from '@/assets/mobileBg.png';
 import IconFont from '@/components/CustomIcon';
 import EnrollClassTime from '@/components/EnrollClassTime';
@@ -21,7 +21,12 @@ import resources from '@/assets/resources.png';
 const Home = () => {
   const { currentUserInfo, courseStatus } = useContext(myContext);
   const [notification, setNotification] = useState<any>([]);
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const {external_contact} = currentUser;
+  const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
   useEffect(() => {
+
     async function announcements() {
       const res = await getXXTZGG({
         XXJBSJId: currentUserInfo?.xxId,
@@ -39,6 +44,11 @@ const Home = () => {
     }
     announcements();
   }, []);
+  const Storage = localStorage.getItem('studentName');
+  useEffect(() => {
+    const ParentalIdentitys = `${localStorage.getItem('studentName')}${external_contact && external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
+      setParentalIdentity(ParentalIdentitys)
+  }, [Storage])
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>
@@ -46,9 +56,10 @@ const Home = () => {
         <div className={styles.headerText}>
           <h4>
             <span>
-              {currentUserInfo?.external_contact?.subscriber_info.remark ||
+              {/* {currentUserInfo?.external_contact?.subscriber_info.remark ||
                 currentUserInfo?.username ||
-                '家长'}
+                '家长'} */}
+               {ParentalIdentity || '家长'}
             </span>
             ，你好！
           </h4>
