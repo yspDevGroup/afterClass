@@ -78,7 +78,6 @@ const AttendanceDetail = (props: any) => {
             dataIndex: 'KSSC',
             key: 'KSSC',
             align: 'center',
-           
         },   
     ]
     const student: ProColumns<any>[] = [

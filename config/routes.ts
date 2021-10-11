@@ -131,6 +131,12 @@
         name: 'reimbursementClass',
         component: './Manager/CourseManagements/ReimbursementClass',
       },
+      //退款管理
+      {
+        path: '/courseManagements/refundManagement',
+        name: 'refundManagement',
+        component: './Manager/CourseManagements/RefundManagement',
+      },
     ],
   },
   {
@@ -521,6 +527,13 @@
         name: 'dropClass',
         icon: 'smile',
         component: './Parent/Homepage/Mine/Pages/DropClass',
+        hideInMenu: 'true',
+      },
+      {
+        path: '/parent/mine/dropClass/apply',
+        name: 'dropClassApply',
+        icon: 'smile',
+        component: './Parent/Homepage/Mine/Pages/DropClass/Apply',
         hideInMenu: 'true',
       },
       {

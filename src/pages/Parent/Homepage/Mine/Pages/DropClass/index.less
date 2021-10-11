@@ -1,73 +1,72 @@
 .DropClass {
   min-height: 100%;
   background: #f5f5f5;
-  :global {
-    .ant-tabs-nav {
-      .ant-tabs-nav-wrap {
-        .ant-tabs-nav-list {
-          width: 100%;
-          .ant-tabs-tab {
-            width: 50%;
-            margin-left: 0;
-            background: #f5f5f5;
-            border: none;
-            border-radius: 0%;
-            .ant-tabs-tab-btn {
-              margin: 0 auto;
-              font-size: 16px;
-            }
-          }
-          .ant-tabs-tab-active {
-            .ant-tabs-tab-btn {
-              color: #45c977;
-              font-weight: bold;
-            }
-          }
-        }
-      }
+
+  .appBtn {
+    display: flex;
+    padding: 16px 0;
+    flex-direction: row-reverse;
+
+    a {
+      width: 90px;
+      line-height: 30px;
+      background-color: #45c977;
+      color: #fff;
+      padding-right: 10px;
+      text-align: right;
+      border-radius: 30px 0 0 30px;
     }
   }
+
   .Application,
   .Record {
-    padding: 0 10px 100px 10px;
-    // height: calc(~"100vh - 85px");
+    padding: 0 10px 24px;
+
     .choice {
       color: #999999;
       font-size: 12px;
+      padding: 16px 0 0;
     }
+
     .cards {
       position: relative;
       width: 100%;
       height: 94px;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
       padding: 10px;
       background: #ffffff;
       background-color: #fff;
       border-radius: 8px;
+
       p {
         margin-bottom: 5px;
         color: #999999;
         font-size: 12px;
       }
+
       .title {
         margin-bottom: 10px;
         color: #333333;
         font-weight: bold;
         font-size: 14px;
       }
+
       :global {
         .ant-checkbox-wrapper {
           position: absolute;
           top: calc(~'50% - 11px');
           right: 10px;
+
           .ant-checkbox {
             .ant-checkbox-inner {
               border-color: #45c977;
             }
           }
+
           .ant-checkbox-checked::after {
             border: 1px solid #45c977;
           }
+
           .ant-checkbox-checked {
             .ant-checkbox-inner {
               background-color: #45c977;
@@ -78,22 +77,33 @@
       }
     }
   }
+
+  .Application {
+    padding-bottom: 100px;
+  }
+
   .wrap {
     position: fixed;
     bottom: 0;
     width: 100%;
     background: #f5f5f5;
-    > p {
+
+    >p {
       padding-left: 10px;
       color: #666666;
       font-size: 14px;
       margin: 5px 0;
+
+      a {
+        color: #45c977;
+      }
     }
+
     .btn {
       height: 54px;
       padding: 8px 14px;
       background-color: #fff;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+
       button {
         width: 100%;
         height: 100%;
@@ -101,13 +111,19 @@
         font-size: 16px;
         line-height: 20px;
         background-color: #45c977;
+        border-color: #45c977;
         border-radius: 19px;
+        box-shadow: 0 2px 0 rgba(11, 241, 126, 0.2);
       }
+
       button[disabled] {
         background-color: #c5c4c4;
+        border-color: #c5c4c4;
+        box-shadow: 0 2px 0 rgba(39, 36, 36, 0.2);
       }
     }
   }
+
   .Record {
     .state {
       position: absolute;
@@ -117,39 +133,48 @@
     }
   }
 }
+
 .showagreement {
   top: 0 !important;
   width: 92% !important;
   margin: 0 auto;
   margin-top: calc(50vh - 260px) !important;
   padding: 0 !important;
+
   :global {
     .ant-modal-content {
       min-width: 100% !important;
+
       .ant-modal-footer {
         .ant-btn {
           margin-left: 0 !important;
         }
       }
     }
+
     .ant-modal-body {
       width: 100% !important;
       padding: 16px;
-      > p:nth-child(1) {
+
+      >p:nth-child(1) {
         font-size: 16px;
         text-align: center;
       }
-      > div {
+
+      >div {
         height: 400px;
         overflow: auto;
       }
-      > div::-webkit-scrollbar {
+
+      >div::-webkit-scrollbar {
         display: none;
       }
     }
+
     .ant-modal-footer {
       display: flex;
       justify-content: space-evenly;
+
       .ant-btn-primary {
         background-color: #45c977;
         border: none;
@@ -157,59 +182,85 @@
     }
   }
 }
+
 .refund {
   top: 0 !important;
   width: 92% !important;
   margin: 0 auto;
   margin-top: calc(50vh - 120px) !important;
   padding: 0 !important;
+
   :global {
     .ant-modal-content {
       min-width: 100% !important;
+      border-radius: 22px;
+      overflow: hidden;
+
+      .ant-modal-header {
+        padding: 16px;
+        text-align: center;
+        border-bottom: none;
+        div{
+          font-size: 16px !important;
+        }
+      }
+
+      .ant-modal-body {
+        width: 100% !important;
+        padding: 16px;
+
+        >div {
+          min-height: 100px;
+          max-height: 180px;
+          overflow: auto;
+
+          p {
+            display: flex;
+            justify-content: space-between;
+
+            span:nth-child(1) {
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+
+            span:nth-child(2) {
+              width: 90px;
+            }
+          }
+        }
+      }
+
       .ant-modal-footer {
+        display: flex;
+        justify-content: space-evenly;
+        border-top:none;
+        height: 60px !important;
+
+        .ant-btn-primary {
+          background-color: #45c977;
+        }
+
         .ant-btn {
-          margin-left: 0 !important;
+          width:auto !important;
+          border: none;
+          height: 38px !important;
+          flex:1;
+          border-radius: 22px !important;
+          border: 1px solid #45c977;
+          color: #45c977;
         }
-      }
-    }
-    .ant-modal-header {
-      padding: 16px;
-    }
-    .ant-modal-body {
-      width: 100% !important;
-      padding: 16px;
-      > div {
-        height: 100px;
-        overflow: auto;
-        p {
-          display: flex;
-          justify-content: space-between;
-          span:nth-child(1) {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-          }
-          span:nth-child(2) {
-            width: 90px;
-          }
-        }
-      }
-    }
-    .ant-modal-footer {
-      display: flex;
-      justify-content: space-evenly;
-      .ant-btn-primary {
-        background-color: #45c977;
-        border: none;
       }
     }
   }
 }
-.ZWSJ{
+
+.ZWSJ {
   font-size: 12px;
   color: #999;
   text-align: center;
-  img{
+
+  img {
     width: 180px;
     display: block;
     margin: 0 auto;

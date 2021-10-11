@@ -75,7 +75,7 @@ const Mine = () => {
       <div className={styles.operation}>
         <Link to="/parent/mine/dropClass" className={styles.drop}>
           <img src={drop} alt="" />
-          <span className={styles.dropSpan}>我要退课</span>
+          <span className={styles.dropSpan}>退课退款</span>
           <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
         </Link>
         <Link to="/parent/mine/evaluation" className={styles.evaluation}>

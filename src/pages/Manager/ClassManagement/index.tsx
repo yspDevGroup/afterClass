@@ -99,6 +99,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           const ress = await getAllCourses({
             page: 0,
             pageSize: 0,
+            XNXQId: curTerm.id,
             XXJBSJId: currentUser?.xxId,
           });
           if (ress?.status === 'ok') {

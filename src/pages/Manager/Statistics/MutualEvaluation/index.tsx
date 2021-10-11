@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
-import { Select ,Rate} from 'antd';
-import { getAllCourses} from '@/services/after-class/khkcsj';
+import { Select, Rate } from 'antd';
+import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 
@@ -16,7 +16,7 @@ const { Option } = Select;
 const MutualEvaluation: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  
+
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 学年学期列表数据
@@ -25,7 +25,7 @@ const MutualEvaluation: React.FC = () => {
   // 表格数据源
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   /// table表格数据
-  const columns: ProColumns<TermItem>[] = [
+  const columns: ProColumns<any>[] = [
     {
       title: '序号',
       dataIndex: 'index',
@@ -50,7 +50,7 @@ const MutualEvaluation: React.FC = () => {
       render: (test: any) => {
         return test.KCTAG
       },
-     
+
     },
     {
       title: '课程来源',
@@ -68,7 +68,7 @@ const MutualEvaluation: React.FC = () => {
       key: 'KHJYJG',
       align: 'center',
       render: (test: any) => {
-        return test?.QYMC||'-'
+        return test?.QYMC || '-'
       },
     },
     {
@@ -103,15 +103,14 @@ const MutualEvaluation: React.FC = () => {
       ),
     },
   ];
-  const huping=(XNXQId)=>{
-    (async()=>{
+  const huping = (XNXQId: any) => {
+    (async () => {
       const res3 = await getAllCourses({
-        XXJBSJId:currentUser.xxId,
+        XXJBSJId: currentUser.xxId,
         XNXQId
-        
       });
-    if (res3.status === 'ok') {
-         setDataSource(res3?.data?.rows);
+      if (res3.status === 'ok') {
+        setDataSource(res3?.data?.rows);
       }
     })()
 
@@ -137,8 +136,8 @@ const MutualEvaluation: React.FC = () => {
   // 学年学期变化
   useEffect(() => {
     huping(curXNXQId)
-    
-  
+
+
   }, [curXNXQId]);
 
 
