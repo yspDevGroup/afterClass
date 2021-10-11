@@ -162,15 +162,13 @@
         name: 'Management',
         component: './Manager/CoursePatrol',
       },
-       //巡课记录
+      //巡课记录
       {
         path: '/coursePatrol/Record',
         name: 'Record',
         component: './Manager/CoursePatrol/Record',
       },
-
-    ]
-
+    ],
   },
   // 教师管理
   {
@@ -228,8 +226,8 @@
             hideInMenu: 'true',
             name: 'signUp',
             component: './Manager/ValueAddedServices/ServiceManagement/SignUp',
-          }
-        ]
+          },
+        ],
       },
     ],
   },
@@ -259,7 +257,7 @@
             path: '/announcements/notice/noticeDetails',
             hideInMenu: 'true',
             name: 'noticeDetails',
-            component: './Manager/Announcements/Notice/NoticeDetails',
+            component: './Manager/Announcements/Notice/ArticleDetails',
           },
         ],
       },
@@ -324,12 +322,12 @@
       },
       {
         path: '/statistics/mutualEvaluation/class',
-        name:'class',
+        name: 'class',
         hideInMenu: 'true',
         component: './Manager/Statistics/MutualEvaluation/Class',
       },
 
- //互评统计详情
+      //互评统计详情
       {
         path: '/statistics/mutualEvaluation/detail',
         hideInMenu: 'true',
@@ -568,18 +566,6 @@
         name: 'details',
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/ServiceReservation/Details',
-      },
-      {
-        path: '/parent/home/service',
-        name: 'service',
-        hideInMenu: 'true',
-        component: './Parent/Homepage/Home/Pages/Service',
-      },
-      {
-        path: '/parent/home/service/details',
-        name: 'details',
-        hideInMenu: 'true',
-        component: './Parent/Homepage/Home/Pages/Service/Details',
       },
       {
         path: '/parent/home/notice',
