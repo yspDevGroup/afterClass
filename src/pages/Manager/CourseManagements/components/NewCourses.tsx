@@ -29,16 +29,8 @@ const formLayout = {
 };
 
 const NewCourses = (props: PropsType) => {
-  const {
-    current,
-    onClose,
-    visible,
-    actionRef,
-    readonly,
-    kclxOptions,
-    optionsNJ,
-    currentUser,
-  } = props;
+  const { current, onClose, visible, actionRef, readonly, kclxOptions, optionsNJ, currentUser } =
+    props;
   const [form, setForm] = useState<any>();
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
@@ -116,7 +108,7 @@ const NewCourses = (props: PropsType) => {
         } else if (data.message === 'Validation error') {
           message.error(`保存失败，课程名称重复`);
         } else {
-          message.error(`保存失败，${data.message}，请联系管理员`);
+          message.error(`保存失败，${data.message || '请联系管理员'}`);
         }
       })
       .catch((error) => {
@@ -227,13 +219,10 @@ const NewCourses = (props: PropsType) => {
                 textAlign: 'right',
               }}
             >
-               <Button onClick={handleSubmit} type="primary" style={{ marginRight: 16 }}>
+              <Button onClick={handleSubmit} type="primary" style={{ marginRight: 16 }}>
                 保存
               </Button>
-              <Button onClick={Close} >
-                取消
-              </Button>
-
+              <Button onClick={Close}>取消</Button>
             </div>
           )
         }

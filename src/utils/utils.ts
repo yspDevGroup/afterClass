@@ -298,7 +298,7 @@ export const enHenceMsg = (msg?: string) => {
   } else if (msg && msg.indexOf('Validation') > -1) {
     message.error('操作失败，该项未通过校验，请检查数据是否重复后再试');
   } else {
-    message.error(`${msg},请联系管理员或稍后再试`);
+    message.error(`${msg || '请联系管理员或稍后再试'}`);
   }
 };
 /**
