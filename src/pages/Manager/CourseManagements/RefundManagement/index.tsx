@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Select, Popconfirm, Divider, message } from 'antd';
+import { Select, message, Modal, Radio, Input, Form, InputNumber } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import PageContainer from '@/components/PageContainer';
@@ -8,8 +8,10 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 
 import Style from './index.less';
+import { createKHXSTK, getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
 
 const { Option } = Select;
+const { TextArea } = Input;
 // 退款
 const RefundManagement = () => {
   // 获取到当前学校的一些信息
@@ -20,6 +22,9 @@ const RefundManagement = () => {
   const [termList, setTermList] = useState<any>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
+  const [form] = Form.useForm();
+  const [visible, setVisible] = useState<boolean>(false);
+  const [current, setCurrent] = useState<any>();
   useEffect(() => {
     //获取学年学期数据的获取
     (async () => {
@@ -55,7 +60,7 @@ const RefundManagement = () => {
       align: 'center',
     },
     {
-      title: '课程名称 ',
+      title: '课程名称',
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
@@ -64,7 +69,7 @@ const RefundManagement = () => {
       },
     },
     {
-      title: '课程班名称  ',
+      title: '课程班名称',
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
@@ -73,30 +78,10 @@ const RefundManagement = () => {
       },
     },
     {
-      title: '退课课时数',
-      dataIndex: 'KSS',
-      key: 'KSS',
+      title: '退款金额',
+      dataIndex: 'TKJE',
+      key: 'TKJE',
       align: 'center',
-    },
-    {
-      title: '状态',
-      dataIndex: 'ZT',
-      key: 'ZT',
-      align: 'center',
-      valueEnum: {
-        0: {
-          text: '申请中',
-          status: 'Processing',
-        },
-        1: {
-          text: '已通过',
-          status: 'Success',
-        },
-        2: {
-          text: '已驳回',
-          status: 'Error',
-        },
-      },
     },
     {
       title: '申请时间',
@@ -105,60 +90,91 @@ const RefundManagement = () => {
       align: 'center',
     },
     {
+      title: '审批人',
+      dataIndex: 'SPSJ',
+      key: 'SPSJ',
+      align: 'center',
+    },
+    {
+      title: '审批时间',
+      dataIndex: 'SPSJ',
+      key: 'SPSJ',
+      align: 'center',
+    },
+    {
+      title: '退款时间',
+      dataIndex: 'TKSJ',
+      key: 'TKSJ',
+      align: 'center',
+    },
+    {
+      title: '状态',
+      dataIndex: 'TKZT',
+      key: 'TKZT',
+      align: 'center',
+      valueEnum: {
+        0: {
+          text: '申请中',
+          status: 'Processing',
+        },
+        1: {
+          text: '审批通过',
+          status: 'Processing',
+        },
+        2: {
+          text: '已驳回',
+          status: 'Error',
+        },
+        3: {
+          text: '退款成功',
+          status: 'Success',
+        },
+        4: {
+          text: '退款失败',
+          status: 'Error',
+        },
+      },
+    },
+    {
       title: '操作',
       dataIndex: '',
       key: '',
       align: 'center',
       render: (record: any) =>
-        record.ZT === 0 ? (
-          <>
-            <Popconfirm
-              title="确认要同意么?"
-              onConfirm={async () => {
-                try {
-                  if (record.id) {
-                    const params = { id: record.id };
-                    const body = { ZT: 1 };
-                    const res3 = await updateKHTKSJ(params, body);
-                    if (res3.status === 'ok') {
-                      message.success('已同意退课');
-                      actionRef.current?.reload();
-                    }
-                  }
-                } catch (err) {
-                  message.error('删除课程出现错误，请联系管理员确认已删除');
-                }
-              }}
-            >
-              <a>同意</a>
-            </Popconfirm>
-            <Divider type="vertical" />
-            <Popconfirm
-              title="不同意"
-              onConfirm={async () => {
-                try {
-                  if (record.id) {
-                    const params = { id: record.id };
-                    const body = { ZT: 2 };
-                    const res3 = await updateKHTKSJ(params, body);
-                    if (res3.status === 'ok') {
-                      message.success('驳回退课申请');
-                      actionRef.current?.reload();
-                    }
-                  }
-                } catch (err) {
-                  message.error('删除课程出现错误，请联系管理员确认已删除');
-                }
-              }}
-            >
-              <a>不同意</a>
-            </Popconfirm>
-          </>
+        record.TKZT === 0 ? (
+          <a onClick={() => {
+            setCurrent(record);
+            setVisible(true);
+          }}>
+            确认
+          </a>
         ) : (
           ''
         ),
     },
   ];
+  const handleSubmit = async (params: any) => {
+    const { TKJE, TKZT } = params;
+    try {
+      if (current.id) {
+        const params = { id: current.id };
+        const body = { TKJE, TKZT };
+        const res = await updateKHXSTK(params, body);
+        if (res.status === 'ok') {
+          if (TKZT === 2) {
+            message.success('退款申请已驳回');
+          } else {
+            message.success('退款审核通过，已发起退款');
+          }
+          actionRef.current?.reload();
+        } else {
+          message.error(res.message || '退课课程出现错误，请联系管理员或稍后重试。');
+        }
+      }
+    } catch (err) {
+      message.error('退课课程出现错误，请联系管理员或稍后重试。');
+    }
+  }
   return (
     ///PageContainer组件是顶部的信息
     <PageContainer>
@@ -189,9 +205,11 @@ const RefundManagement = () => {
           columns={columns}
           rowKey="id"
           request={async () => {
-            const resAll = await getKHTKSJ({
+            const resAll = await getAllKHXSTK({
               XXJBSJId: currentUser?.xxId,
               XNXQId: curXNXQId,
+              page: 0,
+              pageSize: 0,
             });
             if (resAll.status === 'ok') {
               return {
@@ -214,6 +232,35 @@ const RefundManagement = () => {
           }}
           search={false}
         />
+        <Modal
+          title="退款确认"
+          visible={visible}
+          onOk={() => {
+            form.submit();
+          }}
+          onCancel={() => {
+            setVisible(false);
+            setCurrent(undefined);
+          }}
+          okText="确认"
+          cancelText="取消"
+        >
+          <Form
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 15 }}
+            form={form}
+            initialValues={{ ZT: 1 }}
+            onFinish={handleSubmit}
+            layout="horizontal"
+          >
+            <Form.Item label="退款金额" name='TKJE'>
+              <InputNumber
+                formatter={value => `￥ ${value}`}
+                parser={value => Number(value?.replace(/\￥\s?/g, ''))}
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     </PageContainer>
   );

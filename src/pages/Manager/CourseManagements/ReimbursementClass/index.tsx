@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Select, Popconfirm, Divider, message } from 'antd';
+import { Select, Popconfirm, Divider, message, Modal, Radio, Input, Form, InputNumber } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import PageContainer from '@/components/PageContainer';
@@ -8,8 +8,10 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 
 import Style from './index.less';
+import { createKHXSTK } from '@/services/after-class/khxstk';
 
 const { Option } = Select;
+const { TextArea } = Input;
 // 退课
 const ReimbursementClass = () => {
   // 获取到当前学校的一些信息
@@ -20,6 +22,9 @@ const ReimbursementClass = () => {
   const [termList, setTermList] = useState<any>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
+  const [form] = Form.useForm();
+  const [visible, setVisible] = useState<boolean>(false);
+  const [current, setCurrent] = useState<any>();
   useEffect(() => {
     //获取学年学期数据的获取
     (async () => {
@@ -53,30 +58,81 @@ const ReimbursementClass = () => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+      width: 80,
     },
     {
-      title: '课程名称 ',
+      title: '课程名称',
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
       render: (text: any) => {
         return text?.KHKCSJ?.KCMC;
       },
+      width: 120,
     },
     {
-      title: '课程班名称  ',
+      title: '课程班名称',
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
       render: (text: any) => {
         return text?.BJMC;
       },
+      width: 120,
     },
     {
-      title: '退课课时数',
+      title: '退课课时',
       dataIndex: 'KSS',
       key: 'KSS',
       align: 'center',
+      width: 100,
+    },
+    {
+      title: '退款金额',
+      dataIndex: 'TKJE',
+      key: 'TKJE',
+      align: 'center',
+      render: (_, record) => {
+        return ((record?.KHBJSJ?.FY / record?.KHBJSJ?.KSS) * record?.KSS).toFixed(2) + '元'
+      },
+      width: 90,
+    },
+    {
+      title: '申请时间',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      align: 'center',
+      render: (_, record) => {
+        return record?.createdAt?.substring(0, 16)
+      },
+      width: 150,
+    },
+    {
+      title: '审批人',
+      dataIndex: 'SPSJ',
+      key: 'SPSJ',
+      align: 'center',
+      width: 90,
+    },
+    {
+      title: '审批时间',
+      dataIndex: 'SPSJ',
+      key: 'SPSJ',
+      align: 'center',
+      render: (_, record) => {
+        return record?.SPSJ?.substring(0, 16)
+      },
+      width: 150,
+    },
+    {
+      title: '退款时间',
+      dataIndex: 'TKSJ',
+      key: 'TKSJ',
+      align: 'center',
+      render: (_, record) => {
+        return record?.TKSJ?.substring(0, 16)
+      },
+      width: 150,
     },
     {
       title: '状态',
@@ -89,7 +145,7 @@ const ReimbursementClass = () => {
           status: 'Processing',
         },
         1: {
-          text: '已通过',
+          text: '已完成',
           status: 'Success',
         },
         2: {
@@ -97,12 +153,7 @@ const ReimbursementClass = () => {
           status: 'Error',
         },
       },
-    },
-    {
-      title: '申请时间',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      align: 'center',
+      width: 90,
     },
     {
       title: '操作',
@@ -111,54 +162,62 @@ const ReimbursementClass = () => {
       align: 'center',
       render: (record: any) =>
         record.ZT === 0 ? (
-          <>
-            <Popconfirm
-              title="确认要同意么?"
-              onConfirm={async () => {
-                try {
-                  if (record.id) {
-                    const params = { id: record.id };
-                    const body = { ZT: 1 };
-                    const res3 = await updateKHTKSJ(params, body);
-                    if (res3.status === 'ok') {
-                      message.success('已同意退课');
-                      actionRef.current?.reload();
-                    }
-                  }
-                } catch (err) {
-                  message.error('删除课程出现错误，请联系管理员确认已删除');
-                }
-              }}
-            >
-              <a>同意</a>
-            </Popconfirm>
-            <Divider type="vertical" />
-            <Popconfirm
-              title="不同意"
-              onConfirm={async () => {
-                try {
-                  if (record.id) {
-                    const params = { id: record.id };
-                    const body = { ZT: 2 };
-                    const res3 = await updateKHTKSJ(params, body);
-                    if (res3.status === 'ok') {
-                      message.success('驳回退课申请');
-                      actionRef.current?.reload();
-                    }
-                  }
-                } catch (err) {
-                  message.error('删除课程出现错误，请联系管理员确认已删除');
-                }
-              }}
-            >
-              <a>不同意</a>
-            </Popconfirm>
-          </>
+          <a onClick={() => {
+            setCurrent(record);
+            setVisible(true);
+          }}>
+            审批
+          </a>
         ) : (
           ''
         ),
+      width: 90,
     },
   ];
+  const handleSubmit = async (params: any) => {
+    const { ZT, BZ } = params;
+    try {
+      if (current.id) {
+        const params = { id: current.id };
+        const body = { ZT, BZ };
+        const res = await updateKHTKSJ(params, body);
+        if (res.status === 'ok') {
+          if (ZT === 2) {
+            message.success('退课申请已驳回');
+          } else {
+            const money = (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS;
+            const result = await createKHXSTK({
+              /** 退款金额 */
+              TKJE: 0.01 || money,
+              /** 退款状态 */
+              TKZT: 0,
+              /** 学生ID */
+              XSId: '61017999160006' || current?.XSId,
+              /** 学生姓名 */
+              XSXM: '高大强' || current?.XSXM,
+              /** 班级ID */
+              KHBJSJId: '276d01f1-b509-4d19-a6f3-8afc4f3659dc' || current?.KHBJSJId,
+              /** 订单ID */
+              KHXSDDId: '4d48d261-779e-4801-8579-369a3241f131',
+              /** 学校ID */
+              XXJBSJId: currentUser?.xxId
+            });
+            if (result.status === 'ok') {
+              message.success('退课成功,自动申请退款流程');
+              setVisible(false);
+              setCurrent(undefined);
+            }
+          }
+
+          actionRef.current?.reload();
+        } else {
+          message.error(res.message || '退课课程出现错误，请联系管理员或稍后重试。');
+        }
+      }
+    } catch (err) {
+      message.error('退课课程出现错误，请联系管理员或稍后重试。');
+    }
+  }
   return (
     ///PageContainer组件是顶部的信息
     <PageContainer>
@@ -214,6 +273,42 @@ const ReimbursementClass = () => {
           }}
           search={false}
         />
+        <Modal
+          title="退课退款审核"
+          visible={visible}
+          onOk={() => {
+            form.submit();
+          }}
+          onCancel={() => {
+            setVisible(false);
+            setCurrent(undefined);
+          }}
+          okText="确认"
+          cancelText="取消"
+        >
+          <Form
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 15 }}
+            form={form}
+            initialValues={{ ZT: 1, TKJE: (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS }}
+            onFinish={handleSubmit}
+            layout="horizontal"
+          >
+            <Form.Item label="退款金额" name='TKJE'>
+              <InputNumber />
+            </Form.Item>
+            <Form.Item label="审核意见" name="ZT">
+              <Radio.Group>
+                <Radio value={1}>同意</Radio>
+                <Radio value={2}>不同意</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item label="审核说明" name='BZ'>
+              <TextArea rows={4} maxLength={100} />
+            </Form.Item>
+          </Form>
+          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>注：退款金额 = (课程费用/课程总课时)*退课课时，如有调整请写明调整原因。</p>
+        </Modal>
       </div>
     </PageContainer>
   );

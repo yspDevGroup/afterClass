@@ -18,7 +18,7 @@ export default {
   'menu.courseManagements.leaveManagement': '请假管理',
   'menu.courseManagements.mechanism': '机构课程',
   'menu.courseManagements.classMaintenance': '班级维护',
-  'menu.courseManagements.reimbursementClass': '退课管理',
+  'menu.courseManagements.reimbursementClass': '退课退款',
   'menu.courseManagements.refundManagement': '退款管理',
   'menu.classManagement': '课程班管理',
   'menu.coursePatrol.Management':'值班管理',
