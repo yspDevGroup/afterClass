@@ -59,6 +59,9 @@ const ReimbursementClass = () => {
       key: 'XSXM',
       align: 'center',
       width: 100,
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.XM
+      },
     },
     {
       title: '课程名称',
@@ -149,25 +152,24 @@ const ReimbursementClass = () => {
             message.success('退课申请已驳回');
           } else {
             if (current?.KHBJSJ?.FY !== 0) {
-              const money = (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS;
+              const money = (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS || current?.KHBJSJ?.FY;
               const result = await createKHXSTK({
                 /** 退款金额 */
-                TKJE: 0.01 || money,
+                TKJE: money,
                 /** 退款状态 */
                 TKZT: 0,
                 /** 学生ID */
-                XSId: '61017999160006' || current?.XSId,
-                /** 学生姓名 */
-                XSXM: '高大强' || current?.XSXM,
+                XSJBSJId: current?.XSJBSJId,
                 /** 班级ID */
-                KHBJSJId: '135a04d7-ac43-464b-80b2-42c5d58ff470' || current?.KHBJSJId,
-                /** 订单ID */
-                KHXSDDId: 'f2e94e66-f63e-44df-bba6-fbec96f51f62',
+                KHBJSJId: current?.KHBJSJId,
                 /** 学校ID */
-                XXJBSJId: currentUser?.xxId
+                XXJBSJId: currentUser?.xxId,
+                JZGJBSJId: currentUser.JSId || '065faabb-947d-4181-82a8-43d29ebb1ddd'
               });
               if (result.status === 'ok') {
                 message.success('退课成功,已自动申请退款流程');
+              }else{
+                message.warning('退课成功,退款流程由于'+result.message+'申请失败');
               }
             } else {
               message.success('退课成功');

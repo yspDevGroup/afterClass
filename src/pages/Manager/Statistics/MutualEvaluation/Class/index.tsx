@@ -28,7 +28,7 @@ const school = (props: any) => {
   const { currentUser } = initialState || {};
 
   //点击课程列表出发
-  const choseCourse = () => {
+  const choseCourse = (val: string) => {
 
   }
   useEffect(() => {
@@ -41,7 +41,7 @@ const school = (props: any) => {
       }
     })()
   }, [])
-  const columns: ProColumns<TermItem>[] = [
+  const columns: ProColumns<any>[] = [
     {
       title: '序号',
       dataIndex: 'index',
@@ -63,15 +63,10 @@ const school = (props: any) => {
       key: '',
       align: 'center',
       render: (_, record) => {
-        return record.KHBJJs.map((item) => {
-          return <div>{item.KHJSSJ.XM}</div>;
+        return record.KHBJJs.map((item: any) => {
+          return <div>{item.JZGJBSJ.XM}</div>;
         });
-
-
-
-
       }
-
     },
     {
       title: '班级评分',
@@ -99,8 +94,8 @@ const school = (props: any) => {
     },
     {
       title: '操作',
-      dataIndex: 'XSXM',
-      key: 'XSXM',
+      dataIndex: 'operation',
+      key: 'operation',
       align: 'center',
       render: (_, record) => (
         <>

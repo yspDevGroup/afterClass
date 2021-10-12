@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { FormInstance } from 'antd';
 import { useModel } from 'umi';
 import ProFormFields from '@/components/ProFormFields';
-import { getKHJSSJ } from '@/services/after-class/khjssj';
-
 import styles from '../index.less';
+import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 const formLayout = {
   labelCol: { flex: '10em' },
@@ -26,7 +25,7 @@ const NewEvent = (props: PropsType) => {
   const [teacherData, setTeacherData] = useState<any[]>([]);
   // 获取教师
   const getTeacher = async () => {
-    const res = await getKHJSSJ({ JGId: currentUser?.xxId, page: 0, pageSize: 0 });
+    const res = await getAllJZGJBSJ({ XXJBSJId: currentUser?.xxId, page: 0, pageSize: 0 });
     if (res.status === 'ok') {
       const data = res.data?.rows;
       const teachOption: any = [];
@@ -53,8 +52,8 @@ const NewEvent = (props: PropsType) => {
     {
       type: 'select',
       label: '值班教师 (多选)',
-      name: 'KHJSSJID',
-      key: 'KHJSSJID',
+      name: 'JZGJBSJId',
+      key: 'JZGJBSJId',
       rules: [{ required: true, message: '值班教师' }],
       fieldProps: {
         mode: 'multiple',

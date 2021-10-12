@@ -78,6 +78,16 @@ export async function getJZGJBSJ(
       ZYRKXD?: string;
       ZC?: string;
       ZW?: string;
+      BZ?: string;
+      ZP?: string;
+      ZGZS?: string;
+      ZGZSBH?: string;
+      JL?: number;
+      XL?: string;
+      BYYX?: string;
+      SXZY?: string;
+      JSKM?: string;
+      WechatUserId?: string;
       XNJGSJs?: { id?: string; LSJGH?: string; LSJGMC?: string; JGMC?: string; JGJC?: string }[];
     };
     message?: string;
@@ -110,6 +120,8 @@ export async function getAllJZGJBSJ(
   body: {
     /** 学校ID */
     XXJBSJId?: string;
+    /** 机构ID */
+    KHJYJGId?: string;
     /** 工号、姓名、联系电话模糊匹配 */
     keyWord?: string;
     /** 教师姓名 */
@@ -183,6 +195,16 @@ export async function createJZG(body: API.CreateJZGJBSJ, options?: { [key: strin
       ZYRKXD?: string;
       ZC?: string;
       ZW?: string;
+      BZ?: string;
+      ZP?: string;
+      ZGZS?: string;
+      ZGZSBH?: string;
+      JL?: number;
+      XL?: string;
+      BYYX?: string;
+      SXZY?: string;
+      JSKM?: string;
+      WechatUserId?: string;
       XNJGSJs?: { id?: string; LSJGH?: string; LSJGMC?: string; JGMC?: string; JGJC?: string }[];
     };
     message?: string;

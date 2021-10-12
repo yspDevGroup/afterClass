@@ -67,6 +67,9 @@ const RefundManagement = () => {
       key: 'XSXM',
       align: 'center',
       width: 100,
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.XM
+      },
     },
     {
       title: '课程名称',

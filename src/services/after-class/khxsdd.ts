@@ -24,9 +24,8 @@ export async function getKHXSDD(
       DDZT?: '待付款' | '已付款' | '已过期' | '待退款' | '已退款';
       DDFY?: number;
       TKSJ?: string;
-      XSId?: string;
-      XSXM?: string;
       DDLX?: number;
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
       KHBJSJ?:
         | {
             id?: string;
@@ -85,7 +84,7 @@ export async function getAllKHXSDD(
     /** 订单类型 */
     DDLX?: number;
     /** 学生ID */
-    XSId?: string;
+    XSJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
     /** 学校ID */
@@ -123,9 +122,8 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
       DDZT?: '待付款' | '已付款' | '已过期' | '待退款' | '已退款';
       DDFY?: number;
       TKSJ?: string;
-      XSId?: string;
-      XSXM?: string;
       DDLX?: number;
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
       KHBJSJ?:
         | {
             id?: string;
@@ -239,7 +237,7 @@ export async function overdueKHXSDD(
 export async function getStudentOrders(
   body: {
     /** 学生ID */
-    XSId?: string;
+    XSJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {

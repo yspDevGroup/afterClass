@@ -53,7 +53,7 @@ const CoursePatrol = () => {
     if (type === 'check') {
       const curValue = RevertEvent(events!);
       setCurrent({
-        KHJSSJID: curValue
+        JZGJBSJId: curValue
       });
     } else {
       setCurrent(undefined);
@@ -94,11 +94,11 @@ const CoursePatrol = () => {
   const handleSubmit = async () => {
     try {
       const values = await form?.validateFields();
-      if (values.KHJSSJID) {
-        const postData = [].map.call(values.KHJSSJID, (item) => {
+      if (values.JZGJBSJId) {
+        const postData = [].map.call(values.JZGJBSJId, (item) => {
           const itemData: API.CreateKHXKSJ = {
             RQ: moment(values.RQ).format('YYYY-MM-DD'),
-            KHJSSJId: item,
+            JZGJBSJId: item,
             XXJBSJId: currentUser.xxId
           }
           return itemData;

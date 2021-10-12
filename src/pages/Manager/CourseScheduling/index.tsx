@@ -166,9 +166,9 @@ const ClassManagement = () => {
                   weekId: KHItem.id, // 周
                   cla: KHItem.KHBJSJ.BJMC, // 班级名称
                   teacher: KHItem.KHBJSJ.KHBJJs.find((items: any) => items.JSLX === '主教师')
-                    ?.KHJSSJ?.XM, // 主教师
+                    ?.JZGJBSJ?.XM, // 主教师
                   teacherID: KHItem.KHBJSJ.KHBJJs.find((items: any) => items.JSLX === '主教师')
-                    ?.KHJSSJId, // 主教师ID
+                    ?.JZGJBSJId, // 主教师ID
                   bjId: KHItem.KHBJSJ.id, // 班级ID
                   kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
                   njId: KHItem.KHBJSJ.KHKCSJ.NJSJs[0].id, // 年级ID

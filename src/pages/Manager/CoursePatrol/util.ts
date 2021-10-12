@@ -11,8 +11,8 @@ export const ConvertEvent = (data: API.KHXKSJ[]) => {
   const list: SchoolEvent[] = [];
   for (let item of data) {
     list.push({
-      id: item.KHJSSJId,
-      title: item.KHJSSJ?.XM!,
+      id: item.JZGJBSJId,
+      title: item.JZGJBSJ?.XM!,
       range: [item.RQ!]
     })
   }

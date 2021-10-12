@@ -113,7 +113,9 @@ const LeaveManagement: React.FC = () => {
       key: 'XSXM',
       align: 'center',
       width: 100,
-      render: (text: any) => text.split('-')[0],
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.XM
+      },
     },
     {
       title: '课程名称',
@@ -138,7 +140,7 @@ const LeaveManagement: React.FC = () => {
       dataIndex: 'KHQJKCs',
       key: 'KHQJKCs_JSMC',
       align: 'center',
-      render: (text: any) => text[0]?.KHBJSJ?.KHBJJs?.[0]?.KHJSSJ?.XM || '',
+      render: (text: any) => text[0]?.KHBJSJ?.KHBJJs?.[0]?.JZGJBSJ?.XM || '',
       width: 100,
     },
     {

@@ -10,10 +10,9 @@ import moment from 'moment';
 import { enHenceMsg } from '@/utils/utils';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
-import { getKHJSSJ } from '@/services/after-class/khjssj';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
-import { useModel } from 'umi';
+import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -118,7 +117,7 @@ const AddCourse: FC<AddCourseProps> = ({
         <a
           key="editable"
           onClick={() => {
-            const judge = record.id ? record.id: record.index;
+            const judge = record.id ? record.id : record.index;
             action?.startEditable?.(judge);
           }}
         >
@@ -129,9 +128,9 @@ const AddCourse: FC<AddCourseProps> = ({
           onClick={() => {
             console.log(record.id);
             setDataSource(dataSource.filter((item) => {
-              if(item.id){
+              if (item.id) {
                 return item.id !== record.id
-              }else{
+              } else {
                 return item.index !== record.index
               }
             }));
@@ -179,8 +178,8 @@ const AddCourse: FC<AddCourseProps> = ({
       const teacherOption: any = [];
       KHKCJs?.forEach((item: any) => {
         teacherOption.push({
-          label: item.KHJSSJ?.XM,
-          value: item.KHJSSJId,
+          label: item.JZGJBSJ?.XM,
+          value: item.JZGJBSJId,
         });
       });
       setJGKCTeacherData(teacherOption);
@@ -260,7 +259,7 @@ const AddCourse: FC<AddCourseProps> = ({
       }
 
       // 获取教师
-      const res = await getKHJSSJ({ JGId: currentUser?.xxId, page: 0, pageSize: 0 });
+      const res = await getAllJZGJBSJ({ XXJBSJId: currentUser?.xxId, page: 0, pageSize: 0 });
       if (res.status === 'ok') {
         const data = res.data?.rows;
         const teachOption: any = [];
@@ -318,14 +317,14 @@ const AddCourse: FC<AddCourseProps> = ({
         const ZJS = [
           {
             JSLX: '主教师',
-            KHJSSJId: values.ZJS,
+            JZGJBSJId: values.ZJS,
             KHBJSJId: formValues?.id,
           },
         ];
         const FJS = values.FJS.map((item: any) => {
           return {
             JSLX: '副教师',
-            KHJSSJId: item,
+            JZGJBSJId: item,
             KHBJSJId: formValues?.id,
           };
         });
@@ -338,13 +337,13 @@ const AddCourse: FC<AddCourseProps> = ({
         const ZJS = [
           {
             JSLX: '主教师',
-            KHJSSJId: values.ZJS,
+            JZGJBSJId: values.ZJS,
           },
         ];
         const FJS = values.FJS.map((item: any) => {
           return {
             JSLX: '副教师',
-            KHJSSJId: item,
+            JZGJBSJId: item,
           };
         });
         res = createKHBJSJ({ ...options, KHBJJSs: [...ZJS, ...FJS] });

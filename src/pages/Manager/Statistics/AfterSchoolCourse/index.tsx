@@ -107,8 +107,8 @@ const AfterSchoolCourse: React.FC = () => {
     },
     {
       title: '操作',
-      dataIndex: 'XSXM',
-      key: 'XSXM',
+      dataIndex: 'operation',
+      key: 'operation',
       align: 'center',
       render: (_, record) => (
         <>

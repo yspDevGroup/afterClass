@@ -343,7 +343,6 @@ export async function homePageInfo(
         KSS?: string;
         CQS?: string;
         BJMC?: string;
-        XSId?: string;
         KHBJSJId?: string;
         XNXQId?: string;
       }[];

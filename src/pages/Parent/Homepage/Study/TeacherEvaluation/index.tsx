@@ -39,7 +39,7 @@ const TeacherEvaluation = () => {
               <div className={styles.cards}>
                 <p>
                   {' '}
-                  <span>{value?.KHJSSJ?.XM}老师</span> <Rate disabled value={value?.PJFS} />
+                  <span>{value?.JZGJBSJ?.XM}老师</span> <Rate disabled value={value?.PJFS} />
                 </p>
                 <p>
                   <span>

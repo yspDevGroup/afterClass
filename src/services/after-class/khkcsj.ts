@@ -236,6 +236,8 @@ export async function getAllCourses(
   body: {
     /** 学校ID */
     XXJBSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */

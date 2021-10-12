@@ -20,7 +20,7 @@ export async function getKHTKSJ(
     /** 退课状态 */
     ZT?: number[];
     /** 学生ID */
-    XSId?: string;
+    XSJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
     /** 课后服务班级ID */

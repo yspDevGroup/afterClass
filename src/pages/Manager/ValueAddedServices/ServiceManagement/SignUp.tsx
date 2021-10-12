@@ -43,6 +43,9 @@ const SignUp = (props: any) => {
       search: false,
       ellipsis: true,
       width: 100,
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.XH
+      },
     },
     {
       title: '学生姓名',
@@ -52,6 +55,9 @@ const SignUp = (props: any) => {
       search: false,
       ellipsis: true,
       width: 100,
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.XM
+      },
     },
     {
       title: '报名时间',

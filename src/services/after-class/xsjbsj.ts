@@ -52,6 +52,7 @@ export async function getXSJBSJ(
       DZXX?: string;
       ZYDZ?: string;
       XJH?: string;
+      WechatUserId?: string;
       XQSJ?: { id?: string; XQH?: string; XQMC?: string; XQDZ?: string };
       BJSJ?: {
         id?: string;
@@ -155,6 +156,7 @@ export async function createXSJBSJ(body: API.CreateXSJBSJ, options?: { [key: str
       DZXX?: string;
       ZYDZ?: string;
       XJH?: string;
+      WechatUserId?: string;
       XQSJ?: { id?: string; XQH?: string; XQMC?: string; XQDZ?: string };
       BJSJ?: {
         id?: string;

@@ -18,12 +18,11 @@ export async function getKHXSPJ(
       id?: string;
       PJFS?: number;
       PY?: string;
-      XSId?: string;
-      XSXM?: string;
       KHBJSJId?: string;
       createdAt?: string;
       updatedAt?: string;
-      KHJSSJ?: { id?: string; XM?: string };
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+      JZGJBSJ?: { id?: string; XM?: string };
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
@@ -69,7 +68,7 @@ export async function deleteKHXSPJ(
 export async function getAllKHXSPJ(
   body: {
     /** 学生ID */
-    XSId?: string;
+    XSJBSJId?: string;
     /** 班级ID */
     KHBJSJId?: string;
     /** 教师ID */
@@ -105,12 +104,11 @@ export async function createKHXSPJ(body: API.CreateKHXSPJ, options?: { [key: str
       id?: string;
       PJFS?: number;
       PY?: string;
-      XSId?: string;
-      XSXM?: string;
       KHBJSJId?: string;
       createdAt?: string;
       updatedAt?: string;
-      KHJSSJ?: { id?: string; XM?: string };
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+      JZGJBSJ?: { id?: string; XM?: string };
       KHBJSJ?: {
         id?: string;
         BJMC?: string;

@@ -19,8 +19,8 @@ export async function getKHJSPJ(
       PJFS?: number;
       PY?: string;
       JSId?: string;
-      XSId?: string;
       KHBJSJId?: string;
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
     };
     message?: string;
   }>(`/khjspj/${param0}`, {
@@ -51,7 +51,7 @@ export async function deleteKHJSPJ(
 export async function getAllKHJSPJ(
   body: {
     /** 学生ID */
-    xsId?: string;
+    XSJBSJId?: string;
     /** 班级ID */
     bjId?: string;
     /** 评价类型 */
@@ -80,8 +80,8 @@ export async function createKHJSPJ(body: API.CreateKHJSPJ, options?: { [key: str
       PJFS?: number;
       PY?: string;
       JSId?: string;
-      XSId?: string;
       KHBJSJId?: string;
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
     };
     message?: string;
   }>('/khjspj/create', {

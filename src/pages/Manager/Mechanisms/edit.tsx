@@ -5,7 +5,7 @@ import { Button, message, Table } from 'antd';
 import { history, useModel } from 'umi';
 // import classes from '../index.less';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
-import { getKHJSSJ } from '@/services/after-class/khjssj';
+import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import CustomForm from '@/components/CustomForm';
@@ -15,7 +15,7 @@ import PageContainer from '@/components/PageContainer';
 // import CustomForm from '@/components/CustomForm';
 // import { FormItemType } from '@/components/CustomForm/interfice';
 // import { getAllKHKCLX } from '@/services/after-class-pxjg/khkclx';
-// import { getKHJSSJ } from '@/services/after-class-pxjg/khjssj';
+// import { getJZGJBSJ } from '@/services/after-class-pxjg/JZGJBSJ';
 // import { getAllGrades } from '@/services/after-class-pxjg/khjyjg';
 // import { createKHKCSJ, getKHKCSJ, updateKHKCSJ } from '@/services/after-class-pxjg/khkcsj';
 /**
@@ -45,7 +45,7 @@ const Edit = (props: any) => {
       // 老师表格数据
       const thData: any[] = [];
       state.KHKCJs.forEach((item: any) => {
-        thData.push(item?.KHJSSJ);
+        thData.push(item?.JZGJBSJ);
       });
       setTeacherData(thData);
     }
@@ -55,7 +55,7 @@ const Edit = (props: any) => {
         KCMC: state?.KCMC,
         KCMS: state?.KCMS,
         njIds: state?.NJSJs?.map((item: any) => item?.id),
-        jsIds: state?.KHKCJs?.map((item: any) => item?.KHJSSJ?.id),
+        jsIds: state?.KHKCJs?.map((item: any) => item?.JZGJBSJ?.id),
         KCTP: state?.KCTP,
       };
       setFormValues(params);
@@ -75,7 +75,7 @@ const Edit = (props: any) => {
         setKCLXOptions(data);
       }
       // 代课老师
-      const resTH = await getKHJSSJ({ JGId: currentUser?.jgId, page: 0, pageSize: 0 });
+      const resTH = await getAllJZGJBSJ({ XXJBSJId: currentUser?.xxId, page: 0, pageSize: 0 });
       if (resTH.status === 'ok') {
         const datas = resTH.data?.rows?.map((item: any) => {
           return {
@@ -86,7 +86,7 @@ const Edit = (props: any) => {
         setJSSJOptions(datas);
       }
       // 适用年级
-      const resNJ = await getAllGrades({ page: 0, pageSize: 0 });
+      const resNJ = await getAllGrades({});
       if (resNJ.status === 'ok') {
         const nj = ['幼儿园', '小学', '初中', '高中'];
         const dataNJ: any[] = [];

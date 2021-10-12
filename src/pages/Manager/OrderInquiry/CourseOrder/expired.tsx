@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-09-30 19:56:01
+ * @LastEditTime: 2021-10-12 17:56:11
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -79,7 +79,7 @@ const OrderInquiry = (props: any) => {
           XNXQId: curXNXQId,
           //父传子判断要请求的状态
           DDZT,
-          DDLX:0
+          DDLX: 0
         });
         if (resl.status === 'ok') {
           setTableLoading(false);
@@ -129,6 +129,9 @@ const OrderInquiry = (props: any) => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+      render:(_text: any, record: any)=>{
+        return record?.XSJBSJ?.XM
+      }
     },
     {
       title: '班级',
@@ -190,7 +193,7 @@ const OrderInquiry = (props: any) => {
       name: '',
     });
     if (bjmcResl.status === 'ok') {
-   const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
+      const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
         label: item.BJMC,
         value: item.BJMC,
       }));

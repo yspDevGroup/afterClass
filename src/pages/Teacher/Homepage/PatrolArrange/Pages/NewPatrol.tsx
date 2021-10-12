@@ -33,7 +33,7 @@ const NewPatrol = (props: any) => {
   const [realNum, setRealNum] = useState<number>(0);
   // 其他说明
   const [bzDetail, setBzDetail] = useState<any>();
-  const teacherInfo = bjxx?.KHBJJs?.[0]?.KHJSSJ;
+  const teacherInfo = bjxx?.KHBJJs?.[0]?.JZGJBSJ;
   const roominfo = bjxx?.KHPKSJs?.[0]?.FJSJ;
   const recordDetail: API.CreateKHXKJL = {
     /** 巡课日期 */
@@ -115,7 +115,7 @@ const NewPatrol = (props: any) => {
               <h4>教师出勤情况</h4>
               <ul>
                 <li><label>课程班名称</label><span>{bjxx?.BJMC}</span></li>
-                <li><label>任课教师</label><span>{bjxx?.KHBJJs?.[0]?.KHJSSJ?.XM}</span></li>
+                <li><label>任课教师</label><span>{bjxx?.KHBJJs?.[0]?.JZGJBSJ?.XM}</span></li>
                 <li><label>上课教室</label><span>{bjxx?.KHPKSJs?.[0]?.FJSJ?.FJMC}</span></li>
                 <li>
                   <label>是否准时上课</label>

@@ -11,7 +11,7 @@ const AttendanceDetail = (props: any) => {
      useEffect(() => {
         if (position === '老师') {
             (async () => {
-                const res = await getTeacherDetail({ KHJSSJId:data.KHJSSJId, XNXQId })
+                const res = await getTeacherDetail({ JZGJBSJId:data.JZGJBSJId, XNXQId })
                 if(res.status==='ok'){
                     setDataSource(res.data)
                 }
@@ -19,7 +19,7 @@ const AttendanceDetail = (props: any) => {
         } else {
             (async () => {
                 const res = await getStudentDetail({ XSId:data.XSId, XNXQId })
-                if(res.status==='ok'){     
+                if(res.status==='ok'){
                     setDataSource(res.data)
                 }
             })()
@@ -76,7 +76,7 @@ const AttendanceDetail = (props: any) => {
             dataIndex: 'KSSC',
             key: 'KSSC',
             align: 'center',
-        },   
+        },
     ]
     const student: ProColumns<any>[] = [
         {
@@ -125,13 +125,10 @@ const AttendanceDetail = (props: any) => {
         },
     ]
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
-
-    
-
     return (
         <div>
             <PageContainer>
-            <Button 
+            <Button
           type="primary"
           onClick={() => {
             history.go(-1);

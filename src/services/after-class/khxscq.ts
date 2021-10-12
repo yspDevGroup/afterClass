@@ -18,16 +18,13 @@ export async function getKHXSCQ(
       id?: string;
       CQZT?: '出勤' | '请假' | '缺席';
       CQRQ?: string | any;
-      XSId?: string;
-      XSXM?: string;
       KHPKSJId?: string;
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
         BJMS?: string;
         BJZT?: '待开班' | '已开班' | '已结课';
-        ZJS?: string;
-        FJS?: string;
         BJRS?: number;
         KSS?: number;
         FY?: number;
@@ -36,12 +33,6 @@ export async function getKHXSCQ(
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
-        NJS?: string;
-        XQ?: string;
-        NJSName?: string;
-        XQName?: string;
-        ZJSName?: string;
-        FJSName?: string;
       };
     };
     message?: string;
@@ -103,16 +94,13 @@ export async function createKHXSCQ(body: API.CreateKHXSCQ[], options?: { [key: s
       id?: string;
       CQZT?: '出勤' | '请假' | '缺席';
       CQRQ?: string | any;
-      XSId?: string;
-      XSXM?: string;
       KHPKSJId?: string;
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
         BJMS?: string;
         BJZT?: '待开班' | '已开班' | '已结课';
-        ZJS?: string;
-        FJS?: string;
         BJRS?: number;
         KSS?: number;
         FY?: number;
@@ -121,12 +109,6 @@ export async function createKHXSCQ(body: API.CreateKHXSCQ[], options?: { [key: s
         BMKSSJ?: string;
         BMJSSJ?: string;
         KCTP?: string;
-        NJS?: string;
-        XQ?: string;
-        NJSName?: string;
-        XQName?: string;
-        ZJSName?: string;
-        FJSName?: string;
       };
     };
     message?: string;
@@ -166,7 +148,7 @@ export async function updateKHXSCQ(
 export async function countKHXSCQ(
   body: {
     /** 学生ID */
-    XSId?: string;
+    XSJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
   },

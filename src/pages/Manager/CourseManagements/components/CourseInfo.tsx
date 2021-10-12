@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import { Descriptions, Drawer, Tag, Image, Table, message, Space, Button } from 'antd';
 import classes from './index.less';
-import { KHJSSJ } from '@/services/after-class/khjssj';
 import type { FormItemType } from '@/components/CustomForm/interfice';
 import CustomForm from '@/components/CustomForm';
 import moment from 'moment';
 import { defImg } from '@/constant';
+import { getJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 /**
  * 课程详情
@@ -30,7 +30,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
       key: 'XM',
       align: 'center',
       render: (text: any, record: any) => {
-        return record?.KHJSSJ?.XM;
+        return record?.JZGJBSJ?.XM;
       },
     },
     {
@@ -42,8 +42,8 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         return (
           <a
             onClick={async () => {
-              const jsId = record?.KHJSSJ?.id;
-              const res = await KHJSSJ({
+              const jsId = record?.JZGJBSJ?.id;
+              const res = await getJZGJBSJ({
                 id: jsId,
               });
               if (res.status === 'ok') {

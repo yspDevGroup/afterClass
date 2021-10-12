@@ -2,14 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-09-24 10:18:06
- * @LastEditors: Sissle Lynn
- */
-/*
- * @description:
- * @author: Sissle Lynn
- * @Date: 2021-08-28 09:22:33
- * @LastEditTime: 2021-09-03 19:02:09
+ * @LastEditTime: 2021-10-12 17:40:13
  * @LastEditors: Sissle Lynn
  */
 import React, { useRef, useState } from 'react';
@@ -24,7 +17,7 @@ import PageContain from '@/components/PageContainer';
 
 import styles from './index.less';
 import { getAuthorization } from '@/utils/utils';
-import { deleteKHJSSJ, getKHJSSJ } from '@/services/after-class/khjssj';
+import { deleteJZGJBSJ, getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 const TeacherManagement = () => {
   const { initialState } = useModel('@@initialState');
@@ -67,7 +60,7 @@ const TeacherManagement = () => {
     },
   };
   const handleConfirm = async (id: any) => {
-    const res = await deleteKHJSSJ({ id });
+    const res = await deleteJZGJBSJ({ id });
     if (res.status === 'ok') {
       message.success('删除成功');
       actionRef.current?.reload();
@@ -93,11 +86,11 @@ const TeacherManagement = () => {
     },
     {
       title: '性别',
-      dataIndex: 'XB',
-      key: 'XB',
+      dataIndex: 'XBM',
+      key: 'XBM',
       align: 'center',
       width: 90,
-      render: (_, record) => record?.XB?.substring(0, 1),
+      render: (_, record) => record?.XBM?.substring(0, 1),
     },
     {
       title: '联系电话',
@@ -165,8 +158,8 @@ const TeacherManagement = () => {
             sorter: sort && Object.keys(sort).length ? sort : undefined,
             filter,
           };
-          const res = await getKHJSSJ(
-            { JGId: currentUser?.xxId, keyWord: opts.keyword, page: 0, pageSize: 0 },
+          const res = await getAllJZGJBSJ(
+            { XXJBSJId: currentUser?.xxId, keyWord: opts.keyword, page: 0, pageSize: 0 },
             opts,
           );
           if (res.status === 'ok') {

@@ -14,16 +14,16 @@ import { TermItem } from '@/pages/Manager/BasicalSettings/TermManagement/data';
 
 const TabList=(props:any)=>{
     const {ListName,ListState}=props.ListData
-    
+
     const handleOk = () => {
         setIsModalVisible(false);
       };
-    
+
       const handleCancel = () => {
         setIsModalVisible(false);
       };
-  
-  const teacher: ProColumns<TermItem>[] = [
+
+  const teacher: ProColumns<any>[] = [
     {
       title: '序号',
       dataIndex: 'index',
@@ -51,7 +51,6 @@ const TabList=(props:any)=>{
         dataIndex:'PJR',
         key:'',
         align: 'center',
-      
 
     },
     {
@@ -61,10 +60,10 @@ const TabList=(props:any)=>{
       align: 'center',
       ellipsis:true
     },
-   
+
   ];
 
-  const student: ProColumns<TermItem>[] = [
+  const student: ProColumns<any>[] = [
     {
       title: '序号',
       dataIndex: 'index',
@@ -77,6 +76,9 @@ const TabList=(props:any)=>{
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.XM
+      },
     },
     {
       title: '班级',
@@ -112,18 +114,12 @@ const TabList=(props:any)=>{
                 <a
                   onClick={() => {
                     setDetailsValue(text)
-                    
                     setIsModalVisible(true)
                   }}
-          
                 >
                   课堂表现
                 </a>
-      
             );
-
-          
-     
       },
     },
   ];
@@ -151,8 +147,6 @@ const TabList=(props:any)=>{
           pageSize: 0,
         });
         if(res2.status==='ok'){
-          console.log(res2.data?.rows);
-          
           // 老师给学生的评语
           setStuList(res2.data?.rows)
         }
@@ -163,7 +157,7 @@ const TabList=(props:any)=>{
         const res = await getKHBJPJ({
           // 课后班级数据
           KHBJSJId: ListState.id,
-          XSId: '',
+          XSJBSJId: '',
           XXJBSJId: '',
           XNXQId,
           page: 0,
@@ -172,11 +166,11 @@ const TabList=(props:any)=>{
         if (res?.data?.rows) {
        //家长给老师的评价
           setTeacherList(res.data.rows);
-         
+
         }
       })();
     }
-  
+
 
   }, []);
   // const getTeacherRemark=(data:any)=>{
@@ -192,13 +186,8 @@ const TabList=(props:any)=>{
   //       console.log(res2.data?.rows);
   //     }
   //     })()
-    
-
   // }
- 
-  
     return(
-      
             <div>
           <ProTable
             columns={ListName==='学生评价'?student:teacher}

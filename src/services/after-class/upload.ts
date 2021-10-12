@@ -55,3 +55,25 @@ export async function importWechatTeachers(
     },
   );
 }
+
+/** 企业微信教师同步 POST /upload/syncWechatTeachers */
+export async function syncWechatTeachers(options?: { [key: string]: any }) {
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+    '/upload/syncWechatTeachers',
+    {
+      method: 'POST',
+      ...(options || {}),
+    },
+  );
+}
+
+/** 企业微信学生同步 POST /upload/syncWechatStudents */
+export async function syncWechatStudents(options?: { [key: string]: any }) {
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+    '/upload/syncWechatStudents',
+    {
+      method: 'POST',
+      ...(options || {}),
+    },
+  );
+}

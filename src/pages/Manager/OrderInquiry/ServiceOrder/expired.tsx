@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-09-30 20:09:22
+ * @LastEditTime: 2021-10-12 18:07:41
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -77,6 +77,9 @@ const OrderInquiry = (props: any) => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.XM
+      },
     },
     {
       title: '服务名称',

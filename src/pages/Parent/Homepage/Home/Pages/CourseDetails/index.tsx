@@ -227,7 +227,7 @@ const CourseDetails: React.FC = () => {
                         班主任：
                         {value?.KHBJJs?.map((item: any) => {
                           if (item.JSLX.indexOf('副') === -1) {
-                            return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
+                            return <span style={{ marginRight: '1em' }}>{item.JZGJBSJ?.XM}</span>;
                           }
                           return '';
                         })}
@@ -236,7 +236,7 @@ const CourseDetails: React.FC = () => {
                         副班：
                         {value?.KHBJJs?.map((item: any) => {
                           if (item.JSLX.indexOf('主') === -1) {
-                            return <span style={{ marginRight: '1em' }}>{item.KHJSSJ?.XM}</span>;
+                            return <span style={{ marginRight: '1em' }}>{item.JZGJBSJ?.XM}</span>;
                           }
                           return '';
                         })}

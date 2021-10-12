@@ -139,13 +139,13 @@ const CourseManagement = (props: { location: { state: any } }) => {
     const FJS: any[] = [];
     data.KHBJJs?.map((item: any) => {
       if (item.JSLX === '副教师') {
-        FJS.push(item?.KHJSSJId);
+        FJS.push(item?.JZGJBSJId);
       }
     });
     const list = {
       ...data,
       ZJS:
-        data.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.KHJSSJId ||
+        data.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
         undefined,
       FJS,
       BMSD: [data.BMKSSJ || data.KHKCSJ.BMKSSJ, data.BMJSSJ || data.KHKCSJ.BMJSSJ],

@@ -20,6 +20,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.XM
+      },
     },
     {
       title: '报名时间',

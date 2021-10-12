@@ -3,7 +3,7 @@
  * @description: 退课
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-10-12 13:38:46
+ * @LastEditTime: 2021-10-12 19:04:58
  * @LastEditors: Sissle Lynn
  */
 import GoBack from '@/components/GoBack';
@@ -25,7 +25,7 @@ const DropClass = () => {
   const XSId = StorageXSId || (student && student[0].student_userid) || testStudentId;
   const getKHTKSJData = async () => {
     const res = await getKHTKSJ({
-      XSId,
+      XSJBSJId:XSId,
       KHBJSJId: '',
       XXJBSJId: currentUser?.xxId,
       ZT: [0, 1, 2],
@@ -34,7 +34,7 @@ const DropClass = () => {
     });
     const resAll = await getAllKHXSTK({
       XXJBSJId: currentUser?.xxId,
-      XSId,
+      XSJBSJId:XSId,
       page: 0,
       pageSize: 0,
     });
@@ -120,15 +120,11 @@ const DropClass = () => {
                       /** 退款状态 */
                       TKZT: 0,
                       /** 学生ID */
-                      XSId: '20210901' || value?.XSId,
-                      /** 学生姓名 */
-                      XSXM: '高大强' || value?.XSXM,
+                      XSJBSJId: '20210901' || XSId,
                       /** 班级ID */
                       KHBJSJId: '135a04d7-ac43-464b-80b2-42c5d58ff470' || value?.KHBJSJId,
-                      /** 订单ID */
-                      KHXSDDId: 'f2e94e66-f63e-44df-bba6-fbec96f51f62',
                       /** 学校ID */
-                      XXJBSJId: currentUser?.xxId
+                      XXJBSJId: currentUser?.xxId,
                     });
                     if (result.status === 'ok') {
                       message.success('退款申请成功');

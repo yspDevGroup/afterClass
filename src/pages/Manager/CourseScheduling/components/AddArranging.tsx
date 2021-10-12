@@ -209,8 +209,8 @@ const AddArranging: FC<PropsType> = (props) => {
   };
   // 班级选择
   const BjClick = (value: any) => {
-    const ZJSID = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.KHJSSJId;
-    const ZJSName = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.KHJSSJ?.XM;
+    const ZJSID = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJId;
+    const ZJSName = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM;
 
     setTearchId(ZJSID);
     const chosenData = {
@@ -555,7 +555,7 @@ const AddArranging: FC<PropsType> = (props) => {
                           <p>{value.BJMC}</p>
                         </Tooltip>
                         <span>
-                          {value?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.KHJSSJ?.XM}
+                          {value?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM}
                           {/* <WWOpenDataCom
                               style={{ color: '#666' }}
                               type="userName"
@@ -587,7 +587,7 @@ const AddArranging: FC<PropsType> = (props) => {
                               <span>
                                 {
                                   value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                    ?.KHJSSJ?.XM
+                                    ?.JZGJBSJ?.XM
                                 }
                                 {/* <WWOpenDataCom
                                         style={{ color: '#666' }}
@@ -622,7 +622,7 @@ const AddArranging: FC<PropsType> = (props) => {
                               <span>
                                 {
                                   value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                    ?.KHJSSJ?.XM
+                                    ?.JZGJBSJ?.XM
                                 }
                                 {/* <WWOpenDataCom
                                       style={{ color: '#666' }}

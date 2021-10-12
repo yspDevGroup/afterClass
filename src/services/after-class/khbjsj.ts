@@ -156,7 +156,7 @@ export async function getEnrolled(
   const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
-    data?: { XSId?: string; XSXM?: string; KHXSPJId?: string; createdAt?: string }[];
+    data?: { XSJBSJId?: string; KHXSPJId?: string; createdAt?: string; XSJBSJ?: { XM?: string } }[];
     message?: string;
   }>(`/khbjsj/enrolled/${param0}`, {
     method: 'GET',
@@ -169,7 +169,7 @@ export async function getEnrolled(
 export async function getStudentClasses(
   body: {
     /** 学生ID */
-    XSId?: string;
+    XSJBSJId?: string;
     /** 状态 */
     ZT?: number[];
     /** 学年学期ID */

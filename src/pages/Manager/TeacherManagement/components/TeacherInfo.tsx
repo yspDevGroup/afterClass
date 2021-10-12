@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-08-26 16:24:39
- * @LastEditTime: 2021-10-06 20:44:37
+ * @LastEditTime: 2021-10-12 17:40:09
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ import { FormItemType } from '@/components/CustomForm/interfice';
 
 import 'antd/es/modal/style';
 import styles from './components.less';
-import { createKHJSSJ, updateKHJSSJ } from '@/services/after-class/khjssj';
+import { createJZG, updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 const formItemLayout = {
   labelCol: { flex: '8em' },
@@ -135,8 +135,8 @@ const SchoolInfo = (props: PropsType) => {
       groupItems: [
         {
           type: 'radio',
-          name: 'XB',
-          key: 'XB',
+          name: 'XBM',
+          key: 'XBM',
           label: '性别',
           hidden: readonly,
           span:12,
@@ -155,8 +155,8 @@ const SchoolInfo = (props: PropsType) => {
           type: 'input',
           label: '性别',
           span:12,
-          name: 'XB',
-          key: 'XB',
+          name: 'XBM',
+          key: 'XBM',
           hidden: !readonly,
           placeholder: readonly ? '-' : '',
         },
@@ -315,14 +315,14 @@ const SchoolInfo = (props: PropsType) => {
     values.ZGZS = zgzsUrl ? zgzsUrl : values.ZGZS;
     values.ZP = zpUrl ? zpUrl : values.ZP;
     if (values.id) {
-      res = await updateKHJSSJ(
+      res = await updateJZGJBSJ(
         {
           id: values.id
         },
         values
       );
     } else {
-      res = await createKHJSSJ(values);
+      res = await createJZG(values);
     }
     if (res.status === 'ok') {
       message.success('保存成功');
@@ -338,15 +338,15 @@ const SchoolInfo = (props: PropsType) => {
         <CustomForm
           values={(() => {
             if (info) {
-              const { CSRQ, XB,...rest } = info;
+              const { CSRQ, XBM,...rest } = info;
               return {
                 CSRQ: CSRQ ? moment(CSRQ) : '',
-                XB: readonly ? XB?.substring(0, 1):XB,
+                XBM: readonly ? XBM?.substring(0, 1):XBM,
                 ...rest
               };
             }
             return {
-              XB: '男性',
+              XBM: '男性',
               KHJYJGId: currentUser?.jgId
             };
           })()}

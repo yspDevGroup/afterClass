@@ -58,7 +58,7 @@ const Details = (props: any) => {
         PY: Evaluation || "",
         XSId: XsData?.XSId,
         XSXM: XsData?.XSXM,
-        KHJSSJId: currentUser?.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
+        JZGJBSJId: currentUser?.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
         KHBJSJId: state?.id
       })
       if (res.status === 'ok') {
