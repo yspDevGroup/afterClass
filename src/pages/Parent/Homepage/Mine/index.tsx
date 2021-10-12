@@ -30,10 +30,8 @@ const Mine = () => {
 
   useEffect(() => {
     // 存入孩子姓名和id
-    localStorage.setItem('studentName','张三')
-    localStorage.setItem('studentId','zhangsan')
-    // localStorage.setItem('studentName',currentUser?.student?.[0].name)
-    // localStorage.setItem('studentId',currentUser?.student?.[0].student_userid)
+    localStorage.setItem('studentName',currentUser?.student?.[0].name)
+    localStorage.setItem('studentId',currentUser?.student?.[0].student_userid)
     const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
     setParentalIdentity(ParentalIdentitys)
   }, [])
@@ -98,12 +96,6 @@ const Mine = () => {
           }
         </Select>:<></>
         }
-          <Select defaultValue='zhangsan' className={styles.XsName} onChange={handleChange}>
-
-               <Option value='zhangsan' key='张三'>张三</Option>
-               <Option value='lisi' key='李四'>李四</Option>
-
-        </Select>
 
       </header>
       <div className={styles.payList}>
