@@ -46,8 +46,13 @@ const Home = () => {
   }, []);
   const StorageXSName = localStorage.getItem('studentName');
   useEffect(() => {
-    localStorage.setItem('studentName',currentUser?.student?.[0].name || '')
-    localStorage.setItem('studentId',currentUser?.student?.[0].student_userid || '')
+    if(localStorage.getItem('studentName') && localStorage.getItem('studentId')){
+      localStorage.getItem('studentName')
+      localStorage.getItem('studentId')
+    }else{
+      localStorage.setItem('studentName',currentUser?.student?.[0].name || '')
+      localStorage.setItem('studentId',currentUser?.student?.[0].student_userid || '')
+    }
   }, [])
   useEffect(() => {
     const ParentalIdentitys = `${StorageXSName}${external_contact && external_contact?.subscriber_info?.remark?.split('-')[1] || ''}`;

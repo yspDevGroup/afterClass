@@ -30,8 +30,13 @@ const Mine = () => {
 
   useEffect(() => {
     // 存入孩子姓名和id
-    localStorage.setItem('studentName',currentUser?.student?.[0].name || '')
-    localStorage.setItem('studentId',currentUser?.student?.[0].student_userid || '')
+    if(localStorage.getItem('studentName') && localStorage.getItem('studentId')){
+      localStorage.getItem('studentName')
+      localStorage.getItem('studentId')
+    }else{
+      localStorage.setItem('studentName',currentUser?.student?.[0].name || '')
+      localStorage.setItem('studentId',currentUser?.student?.[0].student_userid || '')
+    }
     const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''}` ;
     setParentalIdentity(ParentalIdentitys)
   }, [])
@@ -89,7 +94,7 @@ const Mine = () => {
         </div>
         {
            currentUser?.student?.length >1 ?
-           <Select defaultValue={ currentUser?.student[0].student_userid} className={styles.XsName} onChange={handleChange}>
+           <Select defaultValue={StorageXSId || currentUser?.student?.[0].student_userid} className={styles.XsName} onChange={handleChange}>
           {
             currentUser?.student?.map((value: any)=>{
               return  <Option value={value.student_userid} key={value.name}>{value.name}</Option>
@@ -97,6 +102,11 @@ const Mine = () => {
           }
         </Select>:<></>
         }
+          <Select defaultValue={StorageXSId || 'zhangsan'} className={styles.XsName} onChange={handleChange}>
+            <Option value='zhangsan' key='张三'>张三</Option>
+            <Option value='lisi' key='李四'>李四</Option>
+
+        </Select>
 
       </header>
       <div className={styles.payList}>
