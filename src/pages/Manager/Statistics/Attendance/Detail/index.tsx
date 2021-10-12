@@ -20,7 +20,7 @@ const AttendanceDetail = (props: any) => {
             (async () => {
                 const res = await getStudentDetail({ XSId:data.XSId, XNXQId })
                 if(res.status==='ok'){
-                    console.log(res.data);
+                   
                     
                     setDataSource(res.data)
                 }
@@ -56,10 +56,10 @@ const AttendanceDetail = (props: any) => {
         },
         {
             title: '授课总课时数',
-            dataIndex: '',
-            key: '',
+            dataIndex: 'KSS',
+            key: 'KSS',
             align: 'center',
-            render:()=><div>{data.KSS}</div>
+            render:(text:any)=> text
         },
         {
             title: '出勤次数',
