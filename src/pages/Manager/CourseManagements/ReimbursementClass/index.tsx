@@ -160,9 +160,9 @@ const ReimbursementClass = () => {
                 /** 学生姓名 */
                 XSXM: '高大强' || current?.XSXM,
                 /** 班级ID */
-                KHBJSJId: '276d01f1-b509-4d19-a6f3-8afc4f3659dc' || current?.KHBJSJId,
+                KHBJSJId: '135a04d7-ac43-464b-80b2-42c5d58ff470' || current?.KHBJSJId,
                 /** 订单ID */
-                KHXSDDId: '4d48d261-779e-4801-8579-369a3241f131',
+                KHXSDDId: 'f2e94e66-f63e-44df-bba6-fbec96f51f62',
                 /** 学校ID */
                 XXJBSJId: currentUser?.xxId
               });

@@ -19,9 +19,7 @@ const AttendanceDetail = (props: any) => {
         } else {
             (async () => {
                 const res = await getStudentDetail({ XSId:data.XSId, XNXQId })
-                if(res.status==='ok'){
-                   
-                    
+                if(res.status==='ok'){     
                     setDataSource(res.data)
                 }
             })()

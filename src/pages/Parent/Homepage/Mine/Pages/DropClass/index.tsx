@@ -3,37 +3,73 @@
  * @description: 退课
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-10-12 11:02:39
- * @LastEditors: zpl
+ * @LastEditTime: 2021-10-12 13:38:46
+ * @LastEditors: Sissle Lynn
  */
 import GoBack from '@/components/GoBack';
 import { getKHTKSJ } from '@/services/after-class/khtksj';
+import { message, } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
 import noOrder from '@/assets/noOrder.png';
+import { createKHXSTK, getAllKHXSTK } from '@/services/after-class/khxstk';
+
 
 const DropClass = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [Record, setRecord] = useState<any>([]);
+  const { student } = currentUser || {};
   const StorageXSId = localStorage.getItem('studentId');
+  const XSId = StorageXSId || (student && student[0].student_userid) || testStudentId;
   const getKHTKSJData = async () => {
-    const { student } = currentUser || {};
     const res = await getKHTKSJ({
-      XSId: StorageXSId || (student && student[0].student_userid) || testStudentId,
+      XSId,
       KHBJSJId: '',
       XXJBSJId: currentUser?.xxId,
       ZT: [0, 1, 2],
       page: 0,
       pageSize: 0,
     });
-    setRecord(res.data?.rows);
+    const resAll = await getAllKHXSTK({
+      XXJBSJId: currentUser?.xxId,
+      XSId,
+      page: 0,
+      pageSize: 0,
+    });
+    if (resAll.data?.count) {
+      const oriList = res.data?.rows;
+      const newList = resAll.data?.rows;
+      const curList = [].map.call(oriList, (item: API.KHTKSJ) => {
+        if (item.ZT !== 2) {
+          const TKinfo = newList?.find((val: API.KHXSTK) => item.KHBJSJId === val.KHBJSJId);
+          switch (TKinfo?.TKZT) {
+            case 0:
+            case 1:
+              item.ZT = 3;
+              break;
+            case 2:
+              item.ZT = 4;
+              break;
+            case 3:
+              item.ZT = 5;
+              break;
+            case 4:
+              item.ZT = 6;
+              break;
+          }
+        }
+        return item;
+      });
+      setRecord(curList);
+    } else {
+      setRecord(res.data?.rows);
+    }
   };
   useEffect(() => {
     getKHTKSJData();
   }, [StorageXSId]);
-
   return (
     <div className={styles.DropClass}>
       <GoBack title={'退课退款'} onclick="/parent/home?index=mine" />
@@ -65,9 +101,40 @@ const DropClass = () => {
                   <p>
                     未学课时：{value.KSS}节 ｜ 可退课时：{value.KSS}节
                   </p>
-                  <p className={styles.state} style={{ color }}>
-                    {value.ZT === 0 ? '退课中' : value.ZT === 1 ? '已退课待退款' : '退课失败'}
+                  <p
+                    className={styles.state}
+                    style={{ color }}
+                  >
+                    {value.ZT === 0 ? '申请中' : ''}
+                    {value.ZT === 2 ? '退课失败' : ''}
+                    {(value.ZT === 1||value.ZT === 3) ? '退款中' : ''}
+                    {(value.ZT === 4) ? '退款被驳回' : ''}
+                    {(value.ZT === 5) ? '退款成功' : ''}
+                    {(value.ZT === 6) ? '退款失败' : ''}
                   </p>
+                  {value.ZT === 4 ? <p>退款操作说明：</p>:''}
+                  {value.ZT === 4 ? <button onClick={async ()=>{
+                    const result = await createKHXSTK({
+                      /** 退款金额 */
+                      TKJE: 0.01 || value?.TKJE,
+                      /** 退款状态 */
+                      TKZT: 0,
+                      /** 学生ID */
+                      XSId: '20210901' || value?.XSId,
+                      /** 学生姓名 */
+                      XSXM: '高大强' || value?.XSXM,
+                      /** 班级ID */
+                      KHBJSJId: '135a04d7-ac43-464b-80b2-42c5d58ff470' || value?.KHBJSJId,
+                      /** 订单ID */
+                      KHXSDDId: 'f2e94e66-f63e-44df-bba6-fbec96f51f62',
+                      /** 学校ID */
+                      XXJBSJId: currentUser?.xxId
+                    });
+                    if (result.status === 'ok') {
+                      message.success('退款申请成功');
+                      getKHTKSJData();
+                    }
+                  }}>申请退款</button>:''}
                 </div>
               );
             })}

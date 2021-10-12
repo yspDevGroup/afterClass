@@ -54,6 +54,14 @@ const RefundManagement = () => {
       width: 60,
     },
     {
+      title: '订单编号',
+      dataIndex: 'DDBH',
+      key: 'DDBH',
+      align: 'center',
+      ellipsis: true,
+      width: 100,
+    },
+    {
       title: '学生姓名',
       dataIndex: 'XSXM',
       key: 'XSXM',
@@ -159,7 +167,7 @@ const RefundManagement = () => {
         },
       },
       ellipsis: true,
-      width: 90,
+      width: 120,
     },
     {
       title: '操作',
