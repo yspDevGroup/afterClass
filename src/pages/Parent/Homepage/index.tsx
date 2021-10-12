@@ -141,7 +141,7 @@ const PersonalHomepage = () => {
                 style={{ height: '100%', overflowY: 'auto' }}
                 ref={mineRef}
               >
-                <Mine />
+                <Mine setActiveKey={setActiveKey} />
               </div>
             </TabPane>
           </Tabs>

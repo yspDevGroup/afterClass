@@ -19,7 +19,8 @@ import { Select } from 'antd';
 // import { RightOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
-const Mine = () => {
+const Mine = (props: {setActiveKey: React.Dispatch<React.SetStateAction<string>>}) => {
+  const {setActiveKey} = props;
   const { currentUserInfo, courseStatus } = useContext(myContext);
   const [totail, setTotail] = useState<boolean>(false);
   const { initialState } = useModel('@@initialState');
@@ -47,7 +48,8 @@ const Mine = () => {
     localStorage.setItem('studentId',key.value)
     const ParentalIdentitys = `${key.key}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''}` ;
     setParentalIdentity(ParentalIdentitys)
-    window.location.reload();
+    // 切换到首页
+    setActiveKey('index')
   }
   useEffect(() => {
     // const data = currentUserInfo?.subscriber_info?.children || [
@@ -102,7 +104,6 @@ const Mine = () => {
           }
         </Select>:<></>
         }
-
       </header>
       <div className={styles.payList}>
         <DisplayColumn
