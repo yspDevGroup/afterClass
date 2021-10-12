@@ -82,34 +82,31 @@ const Study = () => {
   return (
     <div className={styles.studyPage}>
       <div className={styles.headBox}>
-        <Link to="/parent/study/askforLeave" className={styles.leave}>
-          <p className={styles.leaveP1}>
-            <p className={styles.leaveP2}>
+        <Link to="/parent/study/askforLeave" className={styles.linkItem}>
+          <p className={styles.top}>
+            <p className={styles.wrapper}>
               <img src={icon_leave} alt="" />
             </p>
           </p>
-          <p className={styles.leaveP3}>请假</p>
+          <p className={styles.text}>请假</p>
         </Link>
-
-        <Link to="/parent/study/teacherEvaluation" className={styles.curriculum}>
-          <p className={styles.curriculumP1}>
-            <p className={styles.curriculumP2}>
+        <Link to="/parent/study/teacherEvaluation" className={styles.linkItem}>
+          <p className={styles.top}>
+            <p className={styles.wrapper}>
               <img src={icon_curriculum} alt="" />
             </p>
           </p>
-          <p className={styles.curriculumP3}>教师寄语</p>
+          <p className={styles.text}>教师寄语</p>
         </Link>
-
-        {/* <Link to="" className={styles.classroomStyle}>
-            <p className={styles.classroomStyleP1}>
-              <p className={styles.classroomStyleP2}>
+        {/* <Link to="" className={styles.linkItem}>
+            <p className={styles.top}>
+              <p className={styles.wrapper}>
                 <img src={icon_classroomStyle} alt="" />
               </p>
             </p>
-            <p className={styles.classroomStyleP3}>课堂风采</p>
+            <p className={styles.text}>课堂风采</p>
           </Link> */}
       </div>
-
       <div className={styles.funWrapper}>
         <div className={styles.titleBar}>孩子课表</div>
         <ClassCalendar setDatedata={setDatedata} />

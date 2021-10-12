@@ -166,15 +166,15 @@ const ReimbursementClass = () => {
                 /** 学校ID */
                 XXJBSJId: currentUser?.xxId
               });
-              if(result.status === 'ok'){
+              if (result.status === 'ok') {
                 message.success('退课成功,已自动申请退款流程');
               }
             } else {
               message.success('退课成功');
             }
-            setVisible(false);
-            setCurrent(undefined);
           }
+          setVisible(false);
+          setCurrent(undefined);
           actionRef.current?.reload();
         } else {
           message.error(res.message || '退课流程出现错误，请联系管理员或稍后重试。');

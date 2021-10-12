@@ -185,7 +185,7 @@ const RefundManagement = () => {
     try {
       if (current.id) {
         const params = { id: current.id };
-        const body = { TKJE, TKZT };
+        const body = { TKJE, TKZT, deviceIp: '117.36.118.42' };
         const res = await updateKHXSTK(params, body);
         if (res.status === 'ok') {
           if (TKZT === 2) {
@@ -193,6 +193,8 @@ const RefundManagement = () => {
           } else {
             message.success('退款审核通过，已发起退款');
           }
+          setVisible(false);
+          setCurrent(undefined);
           actionRef.current?.reload();
         } else {
           message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');

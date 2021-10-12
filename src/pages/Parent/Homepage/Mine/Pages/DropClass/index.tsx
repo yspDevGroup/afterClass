@@ -3,7 +3,7 @@
  * @description:
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-10-09 15:58:17
+ * @LastEditTime: 2021-10-12 09:58:54
  * @LastEditors: Sissle Lynn
  */
 import GoBack from '@/components/GoBack';
@@ -61,7 +61,7 @@ const DropClass = () => {
                 <div className={styles.cards}>
                   <p className={styles.title}>
                     {value.KHBJSJ?.KHKCSJ?.KCMC}
-                    <span style={{ color: '#009688',fontWeight:'normal'  }}>【{value.KHBJSJ?.BJMC}】</span>
+                    <span style={{ color: '#009688', fontWeight: 'normal' }}>【{value.KHBJSJ?.BJMC}】</span>
                   </p>
                   <p>
                     总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{num}节{' '}
