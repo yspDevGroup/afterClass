@@ -130,7 +130,8 @@ const CourseDetails: React.FC = () => {
       ZFFS: '线上支付',
       DDZT: '待付款',
       DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
-      XSId: localStorage.getItem('studentId') || currentUser?.student?.[0].student_userid || '20210901',
+      XSId:
+        localStorage.getItem('studentId') || currentUser?.student?.[0].student_userid || '20210901',
       XSXM: localStorage.getItem('studentName') || currentUser?.student?.[0].name || '张三',
       KHBJSJId: BJ!,
       XXJBSJId: currentUser?.xxId,
@@ -307,12 +308,12 @@ const CourseDetails: React.FC = () => {
             <p className={styles.title}>{KcDetail?.KCMC}</p>
             <p className={styles.price}>
               {FY <= 0 ? (
+                <span>免费</span>
+              ) : (
                 <>
                   <span>￥{FY}</span>
                   <span>/学期</span>
                 </>
-              ) : (
-                <span>免费</span>
               )}
             </p>
             <p className={styles.title} style={{ fontSize: '14px' }}>
