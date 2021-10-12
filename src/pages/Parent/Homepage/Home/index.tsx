@@ -46,6 +46,13 @@ const Home = () => {
   }, []);
   const Storage = localStorage.getItem('studentName');
   useEffect(() => {
+    // localStorage.setItem('studentName',currentUser?.student?.[0].name)
+    // localStorage.setItem('studentId',currentUser?.student?.[0].student_userid)
+    localStorage.setItem('studentName','张三')
+    localStorage.setItem('studentId','zhangsan')
+  }, [])
+  useEffect(() => {
+
     const ParentalIdentitys = `${localStorage.getItem('studentName')}${external_contact && external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
       setParentalIdentity(ParentalIdentitys)
   }, [Storage])

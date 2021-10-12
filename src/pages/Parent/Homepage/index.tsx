@@ -22,6 +22,7 @@ const PersonalHomepage = () => {
   const studyRef = useRef(null);
   const mineRef = useRef(null);
   const index = getQueryString('index');
+  const StorageXSId = localStorage.getItem('studentId');
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
@@ -29,7 +30,7 @@ const PersonalHomepage = () => {
       if (result.current) {
         const { student } = currentUser || {};
         const res = await homePageInfo({
-          XSId: student && student.student_userid||'20210901',
+          XSId:StorageXSId || student[0].student_userid || '20210901',
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
         });
@@ -54,7 +55,7 @@ const PersonalHomepage = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [StorageXSId]);
 
   useEffect(() => {
     if (index) {

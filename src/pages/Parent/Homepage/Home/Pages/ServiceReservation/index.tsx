@@ -68,16 +68,17 @@ const ServiceReservation = () => {
       }
     }
   };
+  const StorageXSId = localStorage.getItem('studentId');
   useEffect(() => {
     (async () => {
       const res = await getStudent({
-        XSId:localStorage.getItem('studentId') || currentUser?.student[0].student_userid || '20210901',
+        XSId:StorageXSId || currentUser?.student?.[0].student_userid || '20210901',
       });
       if (res.status === 'ok') {
         setYxserviceData(res.data?.rows);
       }
     })();
-  }, []);
+  }, [StorageXSId]);
   const onchange = (key: any) => {
     setstate(key);
   };

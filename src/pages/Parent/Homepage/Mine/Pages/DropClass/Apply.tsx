@@ -49,11 +49,12 @@ const Apply = () => {
       }
     })();
   }, []);
+  const StorageXSId = localStorage.getItem('studentId');
   const getKcData = async () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const { student } = currentUser || {};
     const res = await getStudentClasses({
-      XSId:localStorage.getItem('studentId') || (student && student.student_userid) || '20210901',
+      XSId:StorageXSId || (student && student[0].student_userid) || '20210901',
       XNXQId: result.current.id,
       ZT: [0],
     });
@@ -63,10 +64,7 @@ const Apply = () => {
   };
   useEffect(() => {
     getKcData();
-  }, []);
-  useEffect(() => {
-    (async () => { })();
-  }, []);
+  }, [StorageXSId]);
 
   /** 课后帮服务协议弹出框 */
   const showModal = () => {

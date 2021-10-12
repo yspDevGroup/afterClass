@@ -129,7 +129,7 @@ const Order: React.FC = () => {
   // }, []);
   const fetch = async()=>{
     const res = await getStudentOrders({
-      XSId:localStorage.getItem('studentId') || currentUser?.student[0].student_userid || '20210901',
+      XSId:localStorage.getItem('studentId') || currentUser?.student?.[0].student_userid || '20210901',
     })
     if(res.status === 'ok'){
       setOrderInfo(res.data);

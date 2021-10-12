@@ -22,12 +22,12 @@ const Evaluation = () => {
   const { currentUser } = initialState || {};
   const [KcData, setKcData] = useState<any>();
   const [History, setHistory] = useState<any>([]);
-
+  const StorageXSId = localStorage.getItem('studentId');
   const getKcData = async () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const { student } = currentUser || {};
     const res = await getStudentClasses({
-      XSId: localStorage.getItem('studentId') || (student && student[0].student_userid) || '20210901',
+      XSId: StorageXSId || (student && student[0].student_userid) || '20210901',
       XNXQId: result.current.id,
       ZT: [0, 1, 2]
     });
@@ -42,7 +42,7 @@ const Evaluation = () => {
     }
     const resgetKHBJPJ = await getKHBJPJ({
       KHBJSJId:'',
-      XSId:localStorage.getItem('studentId') || (student && student[0].student_userid) || '20210901',
+      XSId:StorageXSId || (student && student[0].student_userid) || '20210901',
       XNXQId: '',
       XXJBSJId:'',
       page:0,
@@ -52,7 +52,7 @@ const Evaluation = () => {
   }
   useEffect(() => {
     getKcData();
-  }, []);
+  }, [StorageXSId]);
 
   const submit = async(value: { id: any; })=>{
     const res = await deleteKHBJPJ({id:value.id})

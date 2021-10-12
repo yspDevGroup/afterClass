@@ -23,10 +23,11 @@ const DropClass = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [Record, setRecord] = useState<any>([]);
+  const StorageXSId = localStorage.getItem('studentId');
   const getKHTKSJData = async () => {
     const { student } = currentUser || {};
     const res = await getKHTKSJ({
-      XSId:localStorage.getItem('studentId') ||  (student && student[0].student_userid) || '20210901',
+      XSId:StorageXSId ||  (student && student[0].student_userid) || '20210901',
       KHBJSJId: '',
       XXJBSJId: currentUser?.xxId,
       ZT: [0, 1, 2],
@@ -37,7 +38,7 @@ const DropClass = () => {
   };
   useEffect(() => {
     getKHTKSJData();
-  }, []);
+  }, [StorageXSId]);
 
   return (
     <div className={styles.DropClass}>

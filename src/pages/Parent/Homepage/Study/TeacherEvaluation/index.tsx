@@ -10,13 +10,14 @@ const TeacherEvaluation = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [Datas, setDatas] = useState<any>([]);
+  const StorageXSId = localStorage.getItem('studentId');
   useEffect(() => {
     const { student } = currentUser || {};
     (
       async()=>{
         const result = await queryXNXQList(currentUser?.xxId, undefined);
         const res = await getAllKHXSPJ({
-          XSId:localStorage.getItem('studentId') ||  student[0].student_userid || '20210901',
+          XSId:StorageXSId ||  student?.[0].student_userid || '20210901',
           KHBJSJId:"",
           JSId:"",
           XNXQId:result.current.id,
@@ -26,7 +27,7 @@ const TeacherEvaluation = () => {
         setDatas(res.data?.rows)
       }
     )()
-  }, []);
+  }, [StorageXSId]);
   return <div className={styles.TeacherEvaluation}>
     <GoBack title={'教师寄语'} />
 

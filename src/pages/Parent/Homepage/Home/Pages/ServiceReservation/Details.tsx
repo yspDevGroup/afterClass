@@ -28,13 +28,14 @@ const Details = () => {
   const [orderInfo, setOrderInfo] = useState<any>();
 
   const type = window.location.href.split('type=')[1].split('&id=')[0];
+  const StorageXSId = localStorage.getItem('studentId');
   useEffect(() => {
     const id = window.location.href.split('id=')[1];
     (async () => {
       if (type === 'YX') {
         const res = await getStudent({
-          XSId:localStorage.getItem('studentId') || currentUser?.student[0].student_userid || '20210901',
-          KHZZFWId: id,
+          XSId:StorageXSId || currentUser?.student?.[0].student_userid || '20210901',
+          KHXXZZFWId: id,
         });
         if (res.status === 'ok') {
           setData(res.data?.rows?.[0].KHXXZZFW);
@@ -46,7 +47,7 @@ const Details = () => {
         }
       }
     })();
-  }, []);
+  }, [StorageXSId]);
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({

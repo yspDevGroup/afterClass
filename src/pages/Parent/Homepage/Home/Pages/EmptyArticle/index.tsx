@@ -12,13 +12,14 @@ const EmptyArticle = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [notification, setNotification] = useState<any>([]);
+  const StorageXSId = localStorage.getItem('studentId');
   useEffect(() => {
     (async () => {
       const result = await queryXNXQList(currentUser?.xxId, undefined);
       if (result.current) {
         const { student } = currentUser || {};
         const res = await homePageInfo({
-          XSId:localStorage.getItem('studentId') || (student && student[0].student_userid) || '20210901',
+          XSId:StorageXSId || (student && student[0].student_userid) || '20210901',
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
         });
@@ -27,7 +28,7 @@ const EmptyArticle = () => {
         }
       }
     })();
-  }, []);
+  }, [StorageXSId]);
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({

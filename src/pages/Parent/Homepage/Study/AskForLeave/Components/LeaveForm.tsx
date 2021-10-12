@@ -33,6 +33,8 @@ const LeaveForm = (props: {
       message.warning('请选择请假课程');
     }
   };
+  const StorageXSId = localStorage.getItem('studentId');
+  const StorageXSName = localStorage.getItem('studentName');
   const onFinish = async (values: any) => {
     let KSSJ = '23:59';
     let JSSJ = '00:00';
@@ -51,8 +53,8 @@ const LeaveForm = (props: {
       QJZT:0,
       KSSJ,
       JSSJ,
-      XSId:localStorage.getItem('studentId') || (student && student[0].student_userid) || '20210901',
-      XSXM:localStorage.getItem('studentName') || (student && student[0].name),
+      XSId:StorageXSId || (student && student[0].student_userid) || '20210901',
+      XSXM:StorageXSName || (student && student?.[0].name) || '张三',
       // XSXM: currentUser?.external_contact?.subscriber_info.remark.split('-')[0] ||
       // currentUser?.username,
       bjIds

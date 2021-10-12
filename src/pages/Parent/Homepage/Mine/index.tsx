@@ -25,6 +25,26 @@ const Mine = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
+  const StorageXSId = localStorage.getItem('studentId');
+  const StorageXSName = localStorage.getItem('studentName');
+
+  useEffect(() => {
+    // 存入孩子姓名和id
+    localStorage.setItem('studentName','张三')
+    localStorage.setItem('studentId','zhangsan')
+    // localStorage.setItem('studentName',currentUser?.student?.[0].name)
+    // localStorage.setItem('studentId',currentUser?.student?.[0].student_userid)
+    const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
+    setParentalIdentity(ParentalIdentitys)
+  }, [])
+
+  // 切换孩子
+  const handleChange = (value: any,key: any)=> {
+    localStorage.setItem('studentName',key.key)
+    localStorage.setItem('studentId',key.value)
+    const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
+    setParentalIdentity(ParentalIdentitys)
+  }
   useEffect(() => {
     // const data = currentUserInfo?.subscriber_info?.children || [
     //   {
@@ -35,7 +55,7 @@ const Mine = () => {
 
     async function fetch() {
       const res = await getAllKHXSDD({
-        XSId:localStorage.getItem('studentId') || currentUser?.student[0].student_userid || '20210913',
+        XSId:StorageXSId || currentUser?.student?.[0].student_userid || '20210913',
         // njId: currentUser.njId,
         DDZT: '待付款',
       });
@@ -48,23 +68,9 @@ const Mine = () => {
       }
     }
     fetch();
-  }, []);
-  const Storage = localStorage.getItem('studentName');
-  useEffect(() => {
-    // 存入孩子姓名和id
-    localStorage.setItem('studentName',currentUser?.student?.[0].name)
-    localStorage.setItem('studentId',currentUser?.student?.[0].student_userid)
-    const ParentalIdentitys = `${localStorage.getItem('studentName')}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
-    setParentalIdentity(ParentalIdentitys)
-  }, [Storage])
+  }, [StorageXSId]);
 
-  // 切换孩子
-  const handleChange = (value: any,key: any)=> {
-    localStorage.setItem('studentName',key.key)
-    localStorage.setItem('studentId',key.value)
-    const ParentalIdentitys = `${localStorage.getItem('studentName')}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
-    setParentalIdentity(ParentalIdentitys)
-  }
+
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader}>
@@ -92,6 +98,12 @@ const Mine = () => {
           }
         </Select>:<></>
         }
+          <Select defaultValue='zhangsan' className={styles.XsName} onChange={handleChange}>
+
+               <Option value='zhangsan' key='张三'>张三</Option>
+               <Option value='lisi' key='李四'>李四</Option>
+
+        </Select>
 
       </header>
       <div className={styles.payList}>
