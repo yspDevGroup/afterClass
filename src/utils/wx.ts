@@ -4,7 +4,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-09 08:57:20
- * @LastEditTime: 2021-10-10 17:44:04
+ * @LastEditTime: 2021-10-12 21:03:13
  * @LastEditors: zpl
  */
 import {
@@ -84,10 +84,7 @@ export const needGetWechatUserInfo = (suiteID?: string): boolean => {
     return true;
   }
   const wechatInfo = getWechatInfo();
-  if (wechatInfo.suiteID !== suiteID || !wechatInfo.userInfo) {
-    return true;
-  }
-  return false;
+  return wechatInfo.suiteID !== suiteID || !wechatInfo.userInfo;
 };
 
 /**

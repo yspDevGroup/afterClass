@@ -4,13 +4,13 @@ import type { RequestConfig } from 'umi';
 import { history, Link } from 'umi';
 import type { ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import { getAuthorization, getOauthToken, removeOAuthToken } from './utils/utils';
+import { getAuthorization, getOauthToken, getPageQuery, removeOAuthToken } from './utils/utils';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { currentWechatUser } from './services/after-class/wechat';
 import Footer from '@/components/Footer';
 import headerTop from '@/assets/headerTop.png';
 import headerTopSmall from '@/assets/headerTopSmall.png';
-import { saveWechatInfo } from './utils/wx';
+import { getWechatInfo, needGetWechatUserInfo, saveWechatInfo } from './utils/wx';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 const authCallbackPath = '/auth_callback';
@@ -34,15 +34,16 @@ export async function getInitialState(): Promise<InitialState> {
       if (currentUserRes.status === 'ok') {
         const { info } = currentUserRes.data || {};
         if (!info) {
-          // 如果后台未查询到用户信息，则跳转到登录页
-          // 此时不能无条件跳转向认证页，否则可能产生无限循环
-          history.push('/403');
+          const indexPage = encodeURIComponent(`/${location.search}`);
+          history.push(`/403?title=您还未登录或登录信息已过期&btnTXT=重新登录&goto=${indexPage}`);
           removeOAuthToken();
           return undefined;
         }
         return info as API.CurrentUser;
       }
-      history.push(`/403?message=${currentUserRes.message}`);
+      const indexPage = encodeURIComponent(`/${location.search}`);
+      history.push(`/403?title=您还未登录或登录信息已过期&btnTXT=重新登录&goto=${indexPage}`);
+      // history.push(`/403?message=${currentUserRes.message}`);
       removeOAuthToken();
       return undefined;
     } catch (error) {
@@ -54,13 +55,33 @@ export async function getInitialState(): Promise<InitialState> {
   // if (window.location.pathname === '/' && history.length <= 2) {
   //   removeOAuthToken();
   // }
-  const { ysp_access_token } = getOauthToken();
-  if (ysp_access_token) {
-    const currentUser = await fetchUserInfo();
-    saveWechatInfo({ userInfo: currentUser });
+  const query = getPageQuery();
+  const params: Record<string, string> = {
+    ...query,
+    plat: 'school',
+  };
+  params.suiteID = params.SuiteID || params.suiteID || '';
+  if (needGetWechatUserInfo(params.suiteID)) {
+    const { ysp_access_token } = getOauthToken();
+    if (ysp_access_token) {
+      const currentUser = await fetchUserInfo();
+      saveWechatInfo({
+        suiteID: params.suiteID,
+        CorpId: currentUser?.CorpId,
+        userInfo: currentUser,
+      });
+      return {
+        fetchUserInfo,
+        currentUser,
+        settings: {},
+      };
+    }
+  }
+  const currentInfo = getWechatInfo();
+  if (authType === 'wechat' && currentInfo.userInfo) {
     return {
       fetchUserInfo,
-      currentUser,
+      currentUser: currentInfo.userInfo,
       settings: {},
     };
   }

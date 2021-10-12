@@ -2,17 +2,17 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-10-12 12:43:43
+ * @LastEditTime: 2021-10-12 23:42:20
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
-import { getLoginPath, getPageQuery } from '@/utils/utils';
+import { getLoginPath, getOauthToken, getPageQuery } from '@/utils/utils';
 import loadImg from '@/assets/loading.gif';
-import { getWechatInfo, needGetWechatUserInfo } from '@/utils/wx';
+import { removeWechatInfo } from '@/utils/wx';
 
 const Index = () => {
-  const { initialState, setInitialState } = useModel('@@initialState');
+  const { initialState } = useModel('@@initialState');
 
   const gotoLogin = (suiteID: string, isAdmin: string) => {
     const loginPath = getLoginPath(suiteID, isAdmin);
@@ -34,23 +34,8 @@ const Index = () => {
 
     if (authType === 'wechat') {
       if (params.suiteID) {
-        if (needGetWechatUserInfo(params.suiteID)) {
-          const loginPath = getLoginPath(params.suiteID, params.isAdmin);
-          if (loginPath.startsWith('http')) {
-            window.location.href = loginPath;
-          } else {
-            history.replace(loginPath);
-          }
-          return;
-        }
-
-        if (!initialState?.currentUser) {
-          const currentInfo = getWechatInfo();
-          // 反向填入当前用户信息，不发送登录请求，后续其他请求可使用之前的token正常发送
-          setInitialState(currentInfo.userInfo);
-        }
-
-        if (!initialState?.currentUser) {
+        const { ysp_access_token } = getOauthToken();
+        if (!ysp_access_token || !initialState?.currentUser) {
           gotoLogin(params.suiteID, params.isAdmin);
         }
 
@@ -70,6 +55,7 @@ const Index = () => {
             history.replace('/parent/home');
             break;
           default:
+            removeWechatInfo();
             history.replace('/403?message=未获取到合法的用户身份');
             break;
         }
