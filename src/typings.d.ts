@@ -172,6 +172,7 @@ declare const authType: 'wechat' | 'password' | 'authorization_code';
 declare const clientId: string;
 /** 认证客户端密钥 */
 declare const clientSecret: string;
+declare const testStudentId: string;
 
 declare const wx: any;
 declare const WWOpenData: any;

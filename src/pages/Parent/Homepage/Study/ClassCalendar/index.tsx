@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { List, Divider, Checkbox, message, FormInstance } from 'antd';
+import { List, Divider, Checkbox, message } from 'antd';
+import type { FormInstance } from 'antd';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
@@ -110,7 +111,7 @@ const ClassCalendar = (props: propstype) => {
   };
   useEffect(() => {
     (async () => {
-      const res = await ParentHomeData(xxId, student?.student_userid || '20210901');
+      const res = await ParentHomeData(xxId, student?.student_userid || testStudentId);
       const { weekSchedule } = res;
       const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
       setDatedata?.(learnData);
@@ -127,7 +128,7 @@ const ClassCalendar = (props: propstype) => {
   }, []);
   useEffect(() => {
     setDatedata?.(choosenCourses);
-  }, [choosenCourses])
+  }, [choosenCourses]);
   const onChange = (e: any, item: any) => {
     let newChoosen = [...choosenCourses];
     setReloadList?.(false);
@@ -138,13 +139,13 @@ const ClassCalendar = (props: propstype) => {
         start,
         end,
         bjId,
-        title
+        title,
       });
     } else {
       newChoosen = newChoosen.filter((val) => val.bjId !== item.bjId);
     }
     setChoosenCourses(newChoosen);
-  }
+  };
   return (
     <div className={styles.schedule}>
       <span
@@ -196,8 +197,12 @@ const ClassCalendar = (props: propstype) => {
         transitionDuration={0.1}
         currentDate={day}
       />
-      {type && type === 'edit' ? <p style={{ lineHeight: '35px', margin: 0, color: '#888' }}>请选择课程</p> : <div className={styles.subTitle}>{cDay}</div>}
-      {type && type === 'edit' ?
+      {type && type === 'edit' ? (
+        <p style={{ lineHeight: '35px', margin: 0, color: '#888' }}>请选择课程</p>
+      ) : (
+        <div className={styles.subTitle}>{cDay}</div>
+      )}
+      {type && type === 'edit' ? (
         <List
           style={{ background: '#fff' }}
           itemLayout="horizontal"
@@ -210,13 +215,21 @@ const ClassCalendar = (props: propstype) => {
               >
                 <List.Item.Meta
                   title={item?.title}
-                  description={<>{item.start}—{item.end}<Divider type='vertical' />{item.xq}</>}
+                  description={
+                    <>
+                      {item.start}—{item.end}
+                      <Divider type="vertical" />
+                      {item.xq}
+                    </>
+                  }
                 />
               </List.Item>
-            )
+            );
           }}
         />
-        : <ListComponent listData={course} />}
+      ) : (
+        <ListComponent listData={course} />
+      )}
     </div>
   );
 };

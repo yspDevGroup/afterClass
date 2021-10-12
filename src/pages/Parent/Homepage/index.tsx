@@ -30,7 +30,7 @@ const PersonalHomepage = () => {
       if (result.current) {
         const { student } = currentUser || {};
         const res = await homePageInfo({
-          XSId:StorageXSId || (student && student[0].student_userid) || '20210901',
+          XSId: StorageXSId || (student && student[0].student_userid) || testStudentId,
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
         });
@@ -74,9 +74,9 @@ const PersonalHomepage = () => {
             className={styles.menuTab}
             onTabClick={(key: string) => {
               setActiveKey(key);
-              if (homeRef.current) ((homeRef.current as unknown) as HTMLElement).scrollTop = 0;
-              if (studyRef.current) ((studyRef.current as unknown) as HTMLElement).scrollTop = 0;
-              if (mineRef.current) ((mineRef.current as unknown) as HTMLElement).scrollTop = 0;
+              if (homeRef.current) (homeRef.current as unknown as HTMLElement).scrollTop = 0;
+              if (studyRef.current) (studyRef.current as unknown as HTMLElement).scrollTop = 0;
+              if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
             }}
             activeKey={activeKey}
           >

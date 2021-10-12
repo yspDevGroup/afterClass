@@ -36,7 +36,10 @@ const AskForLeave: React.FC = () => {
   };
   const getData = async () => {
     const res = await getAllKHXSQJ({
-      XSId:localStorage.getItem('studentId') || (student && student[0].student_userid) || '20210901',
+      XSId:
+        localStorage.getItem('studentId') ||
+        (student && student[0].student_userid) ||
+        testStudentId,
       XNXQId: curXNXQId,
     });
     if (res.status === 'ok') {
@@ -54,16 +57,24 @@ const AskForLeave: React.FC = () => {
     if (activeKey === 'history' && reload) {
       getData();
     }
-  }, [activeKey,reload]);
+  }, [activeKey, reload]);
   return (
     <>
       <GoBack title={'请假'} onclick="/parent/home?index=study" />
       <div className={styles.leaveList}>
-        <Tabs activeKey={activeKey} centered={true} onChange={(key) => {
-          setActiveKey(key);
-        }}>
+        <Tabs
+          activeKey={activeKey}
+          centered={true}
+          onChange={(key) => {
+            setActiveKey(key);
+          }}
+        >
           <TabPane tab="我要请假" key="apply">
-            {activeKey==='apply'?<LeaveForm setActiveKey={setActiveKey} setReload={setReload} />:''}
+            {activeKey === 'apply' ? (
+              <LeaveForm setActiveKey={setActiveKey} setReload={setReload} />
+            ) : (
+              ''
+            )}
           </TabPane>
           <TabPane tab="请假记录" key="history">
             <LeaveHistory leaveInfo={leaveInfo} getData={getData} />

@@ -27,104 +27,125 @@ const Evaluation = () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const { student } = currentUser || {};
     const res = await getStudentClasses({
-      XSId: StorageXSId || (student && student[0].student_userid) || '20210901',
+      XSId: StorageXSId || (student && student[0].student_userid) || testStudentId,
       XNXQId: result.current.id,
-      ZT: [0, 1, 2]
+      ZT: [0, 1, 2],
     });
     if (res.status === 'ok') {
       const newArr: any[] = [];
-      res.data.forEach((value: any)=>{
-        if(value.KHBJSJ?.KHBJPJs?.length === 0){
-          newArr.push(value)
+      res.data.forEach((value: any) => {
+        if (value.KHBJSJ?.KHBJPJs?.length === 0) {
+          newArr.push(value);
         }
-      })
-      setKcData(newArr)
+      });
+      setKcData(newArr);
     }
     const resgetKHBJPJ = await getKHBJPJ({
-      KHBJSJId:'',
-      XSId:StorageXSId || (student && student[0].student_userid) || '20210901',
+      KHBJSJId: '',
+      XSId: StorageXSId || (student && student[0].student_userid) || testStudentId,
       XNXQId: '',
-      XXJBSJId:'',
-      page:0,
-      pageSize:0
-    })
-    setHistory(resgetKHBJPJ?.data?.rows)
-  }
+      XXJBSJId: '',
+      page: 0,
+      pageSize: 0,
+    });
+    setHistory(resgetKHBJPJ?.data?.rows);
+  };
   useEffect(() => {
     getKcData();
   }, [StorageXSId]);
 
-  const submit = async(value: { id: any; })=>{
-    const res = await deleteKHBJPJ({id:value.id})
-    if(res.status === 'ok'){
+  const submit = async (value: { id: any }) => {
+    const res = await deleteKHBJPJ({ id: value.id });
+    if (res.status === 'ok') {
       message.success('撤销成功');
       getKcData();
     }
-  }
+  };
 
-  return <div className={styles.Evaluation}>
-    <GoBack title={'课程评价'} onclick="/parent/home?index=mine" />
-    <Tabs type="card">
-      <TabPane tab="评价" key="评价">
-        {KcData?.length !== 0 ? <> <div className={styles.Application}>
-          <div>
-            {
-              KcData?.map((value: any) => {
-                return <>
-                  <div className={styles.cards}>
-                    <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
-                    <p>班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：{value.KHBJSJ?.KHBJJs?.[0].KHJSSJ?.XM}   </p>
-                    <Link
-                      key="pj"
-                      to={{
-                        pathname: '/parent/mine/evaluation/evaluationDetails',
-                        state: value
-                      }}
-                    >
-                      <Button>去评价</Button>
-                    </Link>
-
-                  </div>
-                </>
-              })
-            }
-          </div>
-        </div>
-        </> : <div className={styles.ZWSJ}>
-          <img src={noOrder} alt="" />
-          <p>暂无数据</p>
-          </div>}
-      </TabPane>
-      <TabPane tab="评价历史" key="评价历史">
-        {
-          History?.length === 0 ? <div className={styles.ZWSJ}>
-          <img src={noOrder} alt="" />
-          <p>暂无数据</p>
-          </div> :
+  return (
+    <div className={styles.Evaluation}>
+      <GoBack title={'课程评价'} onclick="/parent/home?index=mine" />
+      <Tabs type="card">
+        <TabPane tab="评价" key="评价">
+          {KcData?.length !== 0 ? (
+            <>
+              {' '}
+              <div className={styles.Application}>
+                <div>
+                  {KcData?.map((value: any) => {
+                    return (
+                      <>
+                        <div className={styles.cards}>
+                          <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
+                          <p>
+                            班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：
+                            {value.KHBJSJ?.KHBJJs?.[0].KHJSSJ?.XM}{' '}
+                          </p>
+                          <Link
+                            key="pj"
+                            to={{
+                              pathname: '/parent/mine/evaluation/evaluationDetails',
+                              state: value,
+                            }}
+                          >
+                            <Button>去评价</Button>
+                          </Link>
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className={styles.ZWSJ}>
+              <img src={noOrder} alt="" />
+              <p>暂无数据</p>
+            </div>
+          )}
+        </TabPane>
+        <TabPane tab="评价历史" key="评价历史">
+          {History?.length === 0 ? (
+            <div className={styles.ZWSJ}>
+              <img src={noOrder} alt="" />
+              <p>暂无数据</p>
+            </div>
+          ) : (
             <div className={styles.History}>
               <div>
-                {
-                  History?.map((value: any) => {
-                    return <div className={styles.Pjcards}>
-                        <p className={styles.name}><span>{value?.PJR}</span><Rate value={parseInt(value.PJFS,10)} disabled /></p>
-                        <p>{value.createdAt.split(' ')[0]}评价</p>
-                        <div className={styles.PY}>{value.PY}</div>
-                        <div className={styles.BJXX}>
-                          <p>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
-                          <p>班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：{value.KHBJSJ?.KHBJJs?.[0].KHJSSJ?.XM}</p>
-                        </div>
-                        <Button onClick={()=>{
-                          submit(value)
-                        }}>撤销</Button>
+                {History?.map((value: any) => {
+                  return (
+                    <div className={styles.Pjcards}>
+                      <p className={styles.name}>
+                        <span>{value?.PJR}</span>
+                        <Rate value={parseInt(value.PJFS, 10)} disabled />
+                      </p>
+                      <p>{value.createdAt.split(' ')[0]}评价</p>
+                      <div className={styles.PY}>{value.PY}</div>
+                      <div className={styles.BJXX}>
+                        <p>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
+                        <p>
+                          班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：
+                          {value.KHBJSJ?.KHBJJs?.[0].KHJSSJ?.XM}
+                        </p>
                       </div>
-                  })
-                }
+                      <Button
+                        onClick={() => {
+                          submit(value);
+                        }}
+                      >
+                        撤销
+                      </Button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-        }
-      </TabPane>
-    </Tabs>
-  </div>;
+          )}
+        </TabPane>
+      </Tabs>
+    </div>
+  );
 };
 
 export default Evaluation;

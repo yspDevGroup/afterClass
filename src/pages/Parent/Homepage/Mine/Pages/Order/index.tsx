@@ -5,7 +5,7 @@ import styles from './index.less';
 import { Link, useModel } from 'umi';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { deleteKHXSDD, getAllKHXSDD, getStudentOrders } from '@/services/after-class/khxsdd';
+import { deleteKHXSDD, getStudentOrders } from '@/services/after-class/khxsdd';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import noOrder from '@/assets/noOrder.png';
 import Nodata from '@/components/Nodata';
@@ -38,7 +38,7 @@ const OrderList = (props: {
     <>
       {data && data.length ? (
         data.map((item) => {
-          const { KHBJSJ,KHXXZZFW, ...rest } = item;
+          const { KHBJSJ, KHXXZZFW, ...rest } = item;
           const color = item.DDZT === '已付款' ? '#45C977' : '#888';
           return (
             <div className={styles.Information}>
@@ -52,7 +52,7 @@ const OrderList = (props: {
                     user: currentUser,
                     KKRQ: KHBJSJ?.KHKCSJ.KKRQ,
                     JKRQ: KHBJSJ?.KHKCSJ.JKRQ,
-                    fwdetail: KHXXZZFW
+                    fwdetail: KHXXZZFW,
                   },
                 }}
               >
@@ -127,14 +127,17 @@ const Order: React.FC = () => {
   // useEffect(() => {
   //   fetch(children);
   // }, []);
-  const fetch = async()=>{
+  const fetch = async () => {
     const res = await getStudentOrders({
-      XSId:localStorage.getItem('studentId') || currentUser?.student?.[0].student_userid || '20210901',
-    })
-    if(res.status === 'ok'){
+      XSId:
+        localStorage.getItem('studentId') ||
+        currentUser?.student?.[0].student_userid ||
+        testStudentId,
+    });
+    if (res.status === 'ok') {
       setOrderInfo(res.data);
     }
-  }
+  };
   useEffect(() => {
     fetch();
   }, []);

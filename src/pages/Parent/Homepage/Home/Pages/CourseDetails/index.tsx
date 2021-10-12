@@ -131,10 +131,11 @@ const CourseDetails: React.FC = () => {
       DDZT: '待付款',
       DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
       XSId:
-        localStorage.getItem('studentId') || currentUser?.student?.[0].student_userid || '20210901',
+        localStorage.getItem('studentId') ||
+        currentUser?.student?.[0].student_userid ||
+        testStudentId,
       XSXM: localStorage.getItem('studentName') || currentUser?.student?.[0].name || '张三',
       KHBJSJId: BJ!,
-      XXJBSJId: currentUser?.xxId,
       DDLX: 0,
     };
     const res = await createKHXSDD(data);

@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-09 10:48:20
- * @LastEditTime: 2021-10-09 15:54:12
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-10-12 11:07:16
+ * @LastEditors: zpl
  */
 /* eslint-disable no-nested-ternary */
 /*
@@ -15,16 +15,14 @@
  */
 import GoBack from '@/components/GoBack';
 import { getStudentClasses } from '@/services/after-class/khbjsj';
-import { createKHTKSJ, getKHTKSJ } from '@/services/after-class/khtksj';
+import { createKHTKSJ } from '@/services/after-class/khtksj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { Button, Checkbox, message, Modal, Tabs } from 'antd';
+import { Button, Checkbox, message, Modal } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import styles from './index.less';
 import noOrder from '@/assets/noOrder.png';
-
-const { TabPane } = Tabs;
 
 const Apply = () => {
   const { initialState } = useModel('@@initialState');
@@ -54,7 +52,7 @@ const Apply = () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const { student } = currentUser || {};
     const res = await getStudentClasses({
-      XSId:StorageXSId || (student && student[0].student_userid) || '20210901',
+      XSId: StorageXSId || (student && student[0].student_userid) || testStudentId,
       XNXQId: result.current.id,
       ZT: [0],
     });
@@ -99,8 +97,9 @@ const Apply = () => {
     const { student } = currentUser || {};
     checkedValues.forEach((value: string) => {
       const data = {
-        XSId:localStorage.getItem('studentId') || (student && student.student_userid) || '20210901',
-        XSXM:localStorage.getItem('studentName') || (student && student[0].name) || '张三',
+        XSId:
+          localStorage.getItem('studentId') || (student && student.student_userid) || testStudentId,
+        XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
         KHBJSJId: value.split('+')[0],
         KSS: value.split('+')[1],
         ZT: 0,
@@ -133,7 +132,9 @@ const Apply = () => {
                         <div className={styles.cards}>
                           <p className={styles.title}>
                             {value.KHBJSJ?.KHKCSJ?.KCMC}
-                            <span style={{ color: '#009688',fontWeight:'normal' }}>【{value.KHBJSJ?.BJMC}】</span>
+                            <span style={{ color: '#009688', fontWeight: 'normal' }}>
+                              【{value.KHBJSJ?.BJMC}】
+                            </span>
                           </p>
                           <p>总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：0节</p>
                           <p>
@@ -150,7 +151,9 @@ const Apply = () => {
                         <div className={styles.cards}>
                           <p className={styles.title}>
                             {value.KHBJSJ?.KHKCSJ?.KCMC}
-                            <span style={{ color: '#009688',fontWeight:'normal' }}>【{value.KHBJSJ?.BJMC}】</span>
+                            <span style={{ color: '#009688', fontWeight: 'normal' }}>
+                              【{value.KHBJSJ?.BJMC}】
+                            </span>
                           </p>
                           <p>
                             总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{arrs.length}节{' '}
@@ -160,8 +163,9 @@ const Apply = () => {
                             {value.KHBJSJ?.KSS - arrs.length}节
                           </p>
                           <Checkbox
-                            value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS - arrs.length}+${value.KHBJSJ?.KHKCSJ?.KCMC
-                              }`}
+                            value={`${value.KHBJSJId}+${value.KHBJSJ?.KSS - arrs.length}+${
+                              value.KHBJSJ?.KHKCSJ?.KCMC
+                            }`}
                             disabled={newDate - JKRQ > 2592000000}
                           >
                             {' '}

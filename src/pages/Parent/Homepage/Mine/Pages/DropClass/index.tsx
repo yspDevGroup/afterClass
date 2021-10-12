@@ -1,23 +1,17 @@
 /* eslint-disable no-nested-ternary */
 /*
- * @description:
+ * @description: 退课
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-10-12 09:58:54
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-10-12 11:02:39
+ * @LastEditors: zpl
  */
 import GoBack from '@/components/GoBack';
-import { getStudentClasses } from '@/services/after-class/khbjsj';
-import { createKHTKSJ, getKHTKSJ } from '@/services/after-class/khtksj';
-import { getXXTZGG } from '@/services/after-class/xxtzgg';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { Button, Checkbox, message, Modal, Tabs } from 'antd';
+import { getKHTKSJ } from '@/services/after-class/khtksj';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
 import noOrder from '@/assets/noOrder.png';
-
-const { TabPane } = Tabs;
 
 const DropClass = () => {
   const { initialState } = useModel('@@initialState');
@@ -27,7 +21,7 @@ const DropClass = () => {
   const getKHTKSJData = async () => {
     const { student } = currentUser || {};
     const res = await getKHTKSJ({
-      XSId:StorageXSId ||  (student && student[0].student_userid) || '20210901',
+      XSId: StorageXSId || (student && student[0].student_userid) || testStudentId,
       KHBJSJId: '',
       XXJBSJId: currentUser?.xxId,
       ZT: [0, 1, 2],
@@ -44,7 +38,7 @@ const DropClass = () => {
     <div className={styles.DropClass}>
       <GoBack title={'退课退款'} onclick="/parent/home?index=mine" />
       <div className={styles.appBtn}>
-        <Link to='/parent/mine/dropClass/apply'>我要退课</Link>
+        <Link to="/parent/mine/dropClass/apply">我要退课</Link>
       </div>
       {Record?.length === 0 ? (
         <div className={styles.ZWSJ}>
@@ -61,7 +55,9 @@ const DropClass = () => {
                 <div className={styles.cards}>
                   <p className={styles.title}>
                     {value.KHBJSJ?.KHKCSJ?.KCMC}
-                    <span style={{ color: '#009688', fontWeight: 'normal' }}>【{value.KHBJSJ?.BJMC}】</span>
+                    <span style={{ color: '#009688', fontWeight: 'normal' }}>
+                      【{value.KHBJSJ?.BJMC}】
+                    </span>
                   </p>
                   <p>
                     总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{num}节{' '}
@@ -69,10 +65,7 @@ const DropClass = () => {
                   <p>
                     未学课时：{value.KSS}节 ｜ 可退课时：{value.KSS}节
                   </p>
-                  <p
-                    className={styles.state}
-                    style={{ color }}
-                  >
+                  <p className={styles.state} style={{ color }}>
                     {value.ZT === 0 ? '退课中' : value.ZT === 1 ? '已退课待退款' : '退课失败'}
                   </p>
                 </div>

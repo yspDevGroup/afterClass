@@ -19,7 +19,7 @@ const EmptyArticle = () => {
       if (result.current) {
         const { student } = currentUser || {};
         const res = await homePageInfo({
-          XSId:StorageXSId || (student && student[0].student_userid) || '20210901',
+          XSId: StorageXSId || (student && student[0].student_userid) || testStudentId,
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
         });
@@ -46,30 +46,36 @@ const EmptyArticle = () => {
   }, []);
   return (
     <div className={styles.EmptyPage}>
-      {
-        notification && notification.length === 0 ? <>
+      {notification && notification.length === 0 ? (
+        <>
           <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }} />
           <p className={styles.title}>课后服务报名暂未开始</p>
           {Datas?.bmkssj && Datas?.bmjssj ? (
             <div>
               <p className={styles.title} style={{ marginBottom: '5px' }}>
-                请在 <span>{Datas?.bmkssj}~{Datas?.bmjssj}</span>
+                请在{' '}
+                <span>
+                  {Datas?.bmkssj}~{Datas?.bmjssj}
+                </span>
               </p>
               <p className={styles.title}>前来报名</p>
             </div>
           ) : (
             <></>
           )}
-        </> :
-          <div className={styles.notice}>
-            {notification?.[0].BT ? <div className={styles.title}>{notification?.[0].BT}</div> : ''}
-            {notification?.[0].RQ ? <div className={styles.time}>{notification?.[0].RQ}</div> : ''}
-            <Divider />
-            <div className={styles.box} style={{ backgroundImage: `url(${EmptyBGC})` }} />
-            <div dangerouslySetInnerHTML={{ __html: notification?.[0].NR }} className={styles.contents}  />
-          </div>
-      }
-
+        </>
+      ) : (
+        <div className={styles.notice}>
+          {notification?.[0].BT ? <div className={styles.title}>{notification?.[0].BT}</div> : ''}
+          {notification?.[0].RQ ? <div className={styles.time}>{notification?.[0].RQ}</div> : ''}
+          <Divider />
+          <div className={styles.box} style={{ backgroundImage: `url(${EmptyBGC})` }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: notification?.[0].NR }}
+            className={styles.contents}
+          />
+        </div>
+      )}
     </div>
   );
 };
