@@ -144,7 +144,7 @@ const Home = () => {
               <p>服务预定</p>
               <img src={Catering} alt="" className={styles.CateringImg}/>
             </Link> */}
-            <Link to='/parent/home/service' className={styles.Catering} >
+            <Link to='/parent/home/serviceReservation' className={styles.Catering} >
               <p>服务预定</p>
               <img src={Catering} alt="" className={styles.CateringImg}/>
             </Link>
