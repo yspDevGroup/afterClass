@@ -97,12 +97,6 @@ const Mine = () => {
           }
         </Select>:<></>
         }
-         <Select defaultValue='123' className={styles.XsName} onChange={handleChange}>
-
-              <Option value='123' key='3231'>321312312</Option>
-              <Option value='1ewq23' key='32ewq31'>321ewe312312</Option>
-
-        </Select>
 
       </header>
       <div className={styles.payList}>
