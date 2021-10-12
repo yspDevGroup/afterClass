@@ -102,11 +102,6 @@ const Mine = () => {
           }
         </Select>:<></>
         }
-          <Select defaultValue={StorageXSId || 'zhangsan'} className={styles.XsName} onChange={handleChange}>
-            <Option value='zhangsan' key='张三'>张三</Option>
-            <Option value='lisi' key='李四'>李四</Option>
-
-        </Select>
 
       </header>
       <div className={styles.payList}>
