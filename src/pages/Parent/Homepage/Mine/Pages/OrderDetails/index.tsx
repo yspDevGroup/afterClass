@@ -19,12 +19,10 @@ const OrderDetails: React.FC = (props: any) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { title, detail, payOrder, user, KKRQ, JKRQ, fwdetail } = props.location.state;
-  const children = [
-    {
-      student_userid: currentUser?.student?.student_userid,
-      njId: '1',
-    },
-  ];
+  const currentChildren = currentUser?.student || [];
+  const childId =
+    localStorage.getItem('studentId') ||
+    (currentChildren.length ? currentChildren[0].student_userid : '');
   const name = user?.subscriber_info?.remark || user?.username;
   useEffect(() => {
     setOrderInfo(payOrder);
@@ -38,7 +36,7 @@ const OrderDetails: React.FC = (props: any) => {
       ddIds: [orderInfo.id],
       bjId: detail.id,
       returnUrl: '/parent/home',
-      xsId: children[0].student_userid || '20210901',
+      xsId: childId,
       kcmc: title,
       amount: orderInfo.DDFY,
       XXJBSJId: currentUser?.xxId,
@@ -54,10 +52,10 @@ const OrderDetails: React.FC = (props: any) => {
       returnUrl: '/parent/home',
       kcmc: fwdetail?.FWMC,
       ddIds: [orderInfo.id],
-      xsId: currentUser?.student?.student_userid || '20210901',
+      xsId: childId,
       amount: orderInfo?.DDFY,
-      XXJBSJId: currentUser?.xxId
-    })
+      XXJBSJId: currentUser?.xxId,
+    });
     if (result.status === 'ok') {
       setUrlPath(result.data);
     } else {
@@ -88,7 +86,7 @@ const OrderDetails: React.FC = (props: any) => {
   };
 
   if (orderInfo) {
-    const orderTime = new Date(moment(orderInfo?.XDSJ).format("YYYY/MM/DD HH:mm:ss")).getTime();
+    const orderTime = new Date(moment(orderInfo?.XDSJ).format('YYYY/MM/DD HH:mm:ss')).getTime();
     const deadline = orderTime + 1000 * 60 * 30;
     const JFJG = Number(orderInfo?.DDFY) - Number(detail?.FY);
     return (
@@ -105,7 +103,12 @@ const OrderDetails: React.FC = (props: any) => {
             {orderInfo.DDZT === '待付款' ? (
               <p>
                 请在
-                <Countdown className={styles.countdown} value={deadline} format="HH:mm:ss" onFinish={handleFinish} />
+                <Countdown
+                  className={styles.countdown}
+                  value={deadline}
+                  format="HH:mm:ss"
+                  onFinish={handleFinish}
+                />
                 内支付，逾期订单将自动取消
               </p>
             ) : (
@@ -116,65 +119,71 @@ const OrderDetails: React.FC = (props: any) => {
             className={styles.content}
             style={{ marginTop: orderInfo.DDZT === '已付款' ? '-38px' : '-20px' }}
           >
-            {
-              detail ?
-                <div className={styles.KCXX}>
-                  <p className={styles.title}>{title}</p>
-                  <ul>
-                    <li>
-                      上课时段：
-                      {detail.KKRQ
-                        ? moment(detail.KKRQ).format('YYYY.MM.DD')
-                        : moment(KKRQ).format('YYYY.MM.DD')}
-                      ~
-                      {detail.JKRQ
-                        ? moment(detail.JKRQ).format('YYYY.MM.DD')
-                        : moment(JKRQ).format('YYYY.MM.DD')}
-                    </li>
-                    <li>上课地点：本校</li>
-                    <li>总课时：{detail.KSS}</li>
-                    <li>班级：{detail.BJMC}</li>
+            {detail ? (
+              <div className={styles.KCXX}>
+                <p className={styles.title}>{title}</p>
+                <ul>
+                  <li>
+                    上课时段：
+                    {detail.KKRQ
+                      ? moment(detail.KKRQ).format('YYYY.MM.DD')
+                      : moment(KKRQ).format('YYYY.MM.DD')}
+                    ~
+                    {detail.JKRQ
+                      ? moment(detail.JKRQ).format('YYYY.MM.DD')
+                      : moment(JKRQ).format('YYYY.MM.DD')}
+                  </li>
+                  <li>上课地点：本校</li>
+                  <li>总课时：{detail.KSS}</li>
+                  <li>班级：{detail.BJMC}</li>
 
-                    <li>
-                      学生：<span className={styles.xx}>{currentUser?.student?.name}</span>
-                    </li>
-                  </ul>
-                </div> :
-                <div className={styles.FWXX}>
-                  <ul>
-                    <p className={styles.title}>{fwdetail?.FWMC}</p>
-                    <li>服务时段：{moment(fwdetail?.KSRQ).format('YYYY.MM.DD')}~{moment(fwdetail?.JSRQ).format('YYYY.MM.DD')}</li>
-                    <li>
-                      学生：<span className={styles.xx}>{currentUser?.student?.name}</span>
-                    </li>
-                  </ul>
-                </div>
-            }
+                  <li>
+                    学生：<span className={styles.xx}>{currentUser?.student?.name}</span>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <div className={styles.FWXX}>
+                <ul>
+                  <p className={styles.title}>{fwdetail?.FWMC}</p>
+                  <li>
+                    服务时段：{moment(fwdetail?.KSRQ).format('YYYY.MM.DD')}~
+                    {moment(fwdetail?.JSRQ).format('YYYY.MM.DD')}
+                  </li>
+                  <li>
+                    学生：<span className={styles.xx}>{currentUser?.student?.name}</span>
+                  </li>
+                </ul>
+              </div>
+            )}
 
-            {
-              detail ? <div className={styles.KCZE}>
+            {detail ? (
+              <div className={styles.KCZE}>
                 <p>
                   <span>课程总额</span> <span>￥{Number(detail?.FY).toFixed(2)}</span>
                 </p>
-                {
-                  Number(orderInfo.DDFY) === Number(detail?.FY) ? <></> : <p className={styles.JFFY}>
+                {Number(orderInfo.DDFY) === Number(detail?.FY) ? (
+                  <></>
+                ) : (
+                  <p className={styles.JFFY}>
                     <span>教辅费用</span> <span>￥{JFJG.toFixed(2)}</span>
                   </p>
-                }
+                )}
 
                 <p>
                   实付<span>￥{Number(orderInfo.DDFY).toFixed(2)}</span>
                 </p>
-              </div> :
-                <div className={styles.KCZE}>
-                  <p>
-                    <span>服务总额</span> <span>￥{Number(fwdetail?.FY).toFixed(2)}</span>
-                  </p>
-                  <p>
-                    实付<span>￥{Number(orderInfo.DDFY).toFixed(2)}</span>
-                  </p>
-                </div>
-            }
+              </div>
+            ) : (
+              <div className={styles.KCZE}>
+                <p>
+                  <span>服务总额</span> <span>￥{Number(fwdetail?.FY).toFixed(2)}</span>
+                </p>
+                <p>
+                  实付<span>￥{Number(orderInfo.DDFY).toFixed(2)}</span>
+                </p>
+              </div>
+            )}
 
             <div className={styles.DDXX}>
               <ul>
@@ -216,22 +225,20 @@ const OrderDetails: React.FC = (props: any) => {
             <div className={styles.footer}>
               <span>实付:</span>
               <span>￥{orderInfo.DDFY}</span>
-              {
-                detail ? <button className={styles.btn} onClick={handlePay}>
+              {detail ? (
+                <button className={styles.btn} onClick={handlePay}>
                   去支付
-                </button> :
+                </button>
+              ) : (
                 <button className={styles.btn} onClick={handleFWPay}>
                   去支付
                 </button>
-              }
+              )}
               <a style={{ visibility: 'hidden' }} ref={linkRef} href={urlPath} />
             </div>
           ) : (
             ''
           )}
-
-
-
         </div>
       </>
     );
