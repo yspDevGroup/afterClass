@@ -41,7 +41,6 @@ const CourseDetails: React.FC = () => {
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
     const current = detail.KHBJSJs![ind];
-    console.log(current, '=-=-=-')
     const enAble =
       myDate >= new Date(moment(current.BMKSSJ).format('YYYY/MM/DD')) &&
       myDate <= new Date(moment(current.BMJSSJ).format('YYYY/MM/DD'));
@@ -178,15 +177,11 @@ const CourseDetails: React.FC = () => {
     setIsModalVisible(false);
   };
   const onFxChange = (e: { target: { checked: any } }) => {
-    // eslint-disable-next-line no-console
     setXystate(e.target.checked);
   };
   const onJFChange = (e: { target: { checked: any } }) => {
     setJFstate(e.target.checked);
   };
-  console.log(Xystate,'Xystate')
-  console.log(ByTime,'ByTime')
-  console.log(Xystate === true && ByTime === false)
   return (
     <div className={styles.CourseDetails}>
       {index === 'all' ? (
@@ -428,11 +423,14 @@ const CourseDetails: React.FC = () => {
               <a onClick={showModal}>《课后服务协议》</a>
             </div>
             {
-              ByTime === false
-            }
-            <Button className={styles.submit} disabled={Xystate === false && ByTime === false} onClick={submit}>
+              ByTime === true ?  <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
               {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
-            </Button>
+            </Button>:
+             <Button className={styles.submit} disabled={true} onClick={submit}>
+             {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
+           </Button>
+            }
+
             <Link
               style={{ visibility: 'hidden' }}
               ref={linkRef}

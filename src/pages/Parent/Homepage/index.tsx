@@ -23,6 +23,7 @@ const PersonalHomepage = () => {
   const mineRef = useRef(null);
   const index = getQueryString('index');
   const StorageXSId = localStorage.getItem('studentId');
+  // 未获取到孩子时跳转到403
   useEffect(() => {
     if(currentUser?.student?.length === 0 || typeof currentUser?.student === 'undefined'){
       history.replace('/403?message=系统未读取到您的孩子信息，请与学校相关负责人联系');
