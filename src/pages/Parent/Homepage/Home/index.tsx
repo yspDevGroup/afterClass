@@ -44,15 +44,15 @@ const Home = () => {
     }
     announcements();
   }, []);
-  const Storage = localStorage.getItem('studentName');
+  const StorageXSName = localStorage.getItem('studentName');
   useEffect(() => {
-    localStorage.setItem('studentName',currentUser?.student?.[0].name)
-    localStorage.setItem('studentId',currentUser?.student?.[0].student_userid)
+    localStorage.setItem('studentName',currentUser?.student?.[0].name || '')
+    localStorage.setItem('studentId',currentUser?.student?.[0].student_userid || '')
   }, [])
   useEffect(() => {
-    const ParentalIdentitys = `${localStorage.getItem('studentName')}${external_contact && external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
+    const ParentalIdentitys = `${StorageXSName}${external_contact && external_contact?.subscriber_info?.remark?.split('-')[1] || ''}`;
       setParentalIdentity(ParentalIdentitys)
-  }, [Storage])
+  }, [StorageXSName])
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>

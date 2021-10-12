@@ -30,9 +30,9 @@ const Mine = () => {
 
   useEffect(() => {
     // 存入孩子姓名和id
-    localStorage.setItem('studentName',currentUser?.student?.[0].name)
-    localStorage.setItem('studentId',currentUser?.student?.[0].student_userid)
-    const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
+    localStorage.setItem('studentName',currentUser?.student?.[0].name || '')
+    localStorage.setItem('studentId',currentUser?.student?.[0].student_userid || '')
+    const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''}` ;
     setParentalIdentity(ParentalIdentitys)
   }, [])
 
@@ -40,7 +40,7 @@ const Mine = () => {
   const handleChange = (value: any,key: any)=> {
     localStorage.setItem('studentName',key.key)
     localStorage.setItem('studentId',key.value)
-    const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1]}` || '';
+    const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''}` ;
     setParentalIdentity(ParentalIdentitys)
   }
   useEffect(() => {

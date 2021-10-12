@@ -30,7 +30,7 @@ const PersonalHomepage = () => {
       if (result.current) {
         const { student } = currentUser || {};
         const res = await homePageInfo({
-          XSId:StorageXSId || student[0].student_userid || '20210901',
+          XSId:StorageXSId || (student && student[0].student_userid) || '20210901',
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
         });
