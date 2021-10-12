@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useModel,history } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
 import IconFont from '@/components/CustomIcon';
@@ -40,8 +40,9 @@ const Mine = () => {
   const handleChange = (value: any,key: any)=> {
     localStorage.setItem('studentName',key.key)
     localStorage.setItem('studentId',key.value)
-    const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''}` ;
+    const ParentalIdentitys = `${key.key}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''}` ;
     setParentalIdentity(ParentalIdentitys)
+    window.location.reload();
   }
   useEffect(() => {
     // const data = currentUserInfo?.subscriber_info?.children || [
@@ -96,6 +97,12 @@ const Mine = () => {
           }
         </Select>:<></>
         }
+         <Select defaultValue='123' className={styles.XsName} onChange={handleChange}>
+
+              <Option value='123' key='3231'>321312312</Option>
+              <Option value='1ewq23' key='32ewq31'>321ewe312312</Option>
+
+        </Select>
 
       </header>
       <div className={styles.payList}>
