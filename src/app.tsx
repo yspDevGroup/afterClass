@@ -42,6 +42,9 @@ export async function getInitialState(): Promise<InitialState> {
         }
         return info as API.CurrentUser;
       }
+      history.push(`/403?message=${currentUserRes.message}`);
+      removeOAuthToken();
+      return undefined;
     } catch (error) {
       console.warn(error);
     }

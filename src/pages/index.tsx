@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-10-10 17:43:37
+ * @LastEditTime: 2021-10-12 12:43:43
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -50,8 +50,12 @@ const Index = () => {
           setInitialState(currentInfo.userInfo);
         }
 
+        if (!initialState?.currentUser) {
+          gotoLogin(params.suiteID, params.isAdmin);
+        }
+
         // 检查登录状态
-        switch (initialState?.currentUser?.type) {
+        switch (initialState!.currentUser.type) {
           case '管理员':
             history.replace('/homepage');
             break;
@@ -66,7 +70,7 @@ const Index = () => {
             history.replace('/parent/home');
             break;
           default:
-            gotoLogin(params.suiteID, params.isAdmin);
+            history.replace('/403?message=未获取到合法的用户身份');
             break;
         }
       } else {
