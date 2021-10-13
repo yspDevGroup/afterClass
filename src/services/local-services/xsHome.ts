@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-09-15 11:58:14
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-10-13 11:01:25
+ * @LastEditors: zpl
  */
 
 import { enHenceMsg, getCurrentStatus } from '@/utils/utils';
@@ -19,7 +19,7 @@ export const ParentHomeData = async (xxId: string, xsId: string) => {
       XXJBSJId: xxId,
     });
     if (res?.status === 'ok') {
-      let courseStatus = 'empty';
+      courseStatus = 'empty';
       if (res.data) {
         const { bmkssj, bmjssj, skkssj, skjssj } = res.data;
         if (bmkssj && bmjssj && skkssj && skjssj) {
@@ -29,17 +29,17 @@ export const ParentHomeData = async (xxId: string, xsId: string) => {
       }
       return {
         courseStatus,
-        ...res?.data
-      }
+        ...res?.data,
+      };
     } else {
       enHenceMsg(res.message);
       return {
-        courseStatus
-      }
+        courseStatus,
+      };
     }
   } else {
     return {
-      courseStatus
-    }
+      courseStatus,
+    };
   }
-}
+};

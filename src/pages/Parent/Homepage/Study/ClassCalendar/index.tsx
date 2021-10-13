@@ -111,7 +111,11 @@ const ClassCalendar = (props: propstype) => {
   };
   useEffect(() => {
     (async () => {
-      const res = await ParentHomeData(xxId, student?.student_userid || testStudentId);
+      const studentId =
+        localStorage.getItem('studentId') ||
+        (student && student[0].student_userid) ||
+        testStudentId;
+      const res = await ParentHomeData(xxId, studentId);
       const { weekSchedule } = res;
       const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
       setDatedata?.(learnData);

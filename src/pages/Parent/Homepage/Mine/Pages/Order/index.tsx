@@ -106,9 +106,13 @@ const Order: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const type = getQueryString('type') || undefined;
+  const studentId =
+    localStorage.getItem('studentId') ||
+    (currentUser?.student && currentUser.student[0].student_userid) ||
+    testStudentId;
   const children = [
     {
-      student_userid: currentUser?.student?.student_userid,
+      student_userid: studentId,
     },
   ];
   // const fetch = async (param: any[]) => {
