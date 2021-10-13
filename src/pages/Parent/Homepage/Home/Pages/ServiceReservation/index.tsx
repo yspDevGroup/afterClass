@@ -41,7 +41,7 @@ const ServiceReservation = () => {
           });
           if (resGetKHXXZZFW.status === 'ok') {
             const NewData = resGetKHXXZZFW?.data?.rows?.filter((value: any) => {
-              return new Date(value?.BMJSSJ).getTime() > new Date().getTime();
+              return new Date(moment(value?.BMJSSJ).format('YYYY/MM/DD')).getTime() > new Date().getTime()
             });
             setDataSource(NewData);
           }
@@ -61,7 +61,7 @@ const ServiceReservation = () => {
       });
       if (result.status === 'ok') {
         const NewData = result?.data?.rows?.filter((value: any) => {
-          const Time = new Date(value?.BMJSSJ).getTime() + 86400000;
+          const Time = new Date(moment(value?.BMJSSJ).format('YYYY/MM/DD')).getTime() + 86400000;
           return Time > new Date().getTime();
         });
         setDataSource(NewData);
@@ -167,10 +167,8 @@ const ServiceReservation = () => {
                             const hrefs = `/parent/home/serviceReservation/details?type=KS&id=${item.id}`;
                             return (
                               <Link to={hrefs} key={item?.id}>
-                                {' '}
                                 <div className={styles.box}>
                                   <div>
-                                    {' '}
                                     <img
                                       src={item?.FWTP || noPic}
                                       style={{ width: item?.FWTP ? '110px' : '70px' }}
