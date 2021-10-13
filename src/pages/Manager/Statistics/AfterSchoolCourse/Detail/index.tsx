@@ -120,6 +120,16 @@ const AfterSchoolClass: React.FC = (props: any) => {
         return test;
       },
     },
+    {
+      title: '退款总额',
+      dataIndex: 'TKJE',
+      key: 'TKJE',
+      align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
+
+    }
   ];
   useEffect(() => {
     // 获取学年学期数据的获取
