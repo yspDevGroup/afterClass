@@ -254,7 +254,7 @@
             component: './Manager/Announcements/Notice/EditArticle',
           },
           {
-            path: '/announcements/notice/noticeDetails',
+            path: '/announcements/notice/articleDetails',
             hideInMenu: 'true',
             name: 'noticeDetails',
             component: './Manager/Announcements/Notice/ArticleDetails',
