@@ -29,7 +29,7 @@ const Home = () => {
   const [dateData, setDateData] = useState<any>([]);
   const getData = async (day: string) => {
     const res = await getScheduleByDate({
-      JZGJBSJId: currentUser.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
+      JZGJBSJId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
       RQ: day,
       WEEKDAY: new Date(day).getDay().toString(),
       XXJBSJId: currentUser?.xxId,

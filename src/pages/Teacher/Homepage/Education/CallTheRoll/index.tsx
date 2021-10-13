@@ -92,7 +92,7 @@ const CallTheRoll = (props: any) => {
     // 查询教师出勤记录
     const resCheck = await getAllKHJSCQ({
       KHBJSJId: bjids,
-      JZGJBSJId: currentUser.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
+      JZGJBSJId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
       CQRQ: pkDate,
     });
     if (resCheck.status === 'ok') {
@@ -125,7 +125,7 @@ const CallTheRoll = (props: any) => {
           duration: 4,
         });
         allData.forEach((item: any) => {
-          item.isLeave = item.CQZT === '请假' ? true : false;
+          item.isLeave = item.CQZT === '请假';
           item.isRealTo = item.CQZT;
         })
         setButDis('done');
@@ -148,7 +148,7 @@ const CallTheRoll = (props: any) => {
             const leaveItem = leaveInfo?.find((val: API.KHXSQJ) => val.XSJBSJ?.id === item.XSId);
             const leaveJudge = leaveItem?.QJZT != 1;
             item.isRealTo = leaveJudge ? '缺席' : '出勤';
-            item.isLeave = leaveJudge ? true : false;
+            item.isLeave = !!leaveJudge;
             item.leaveYY = leaveItem?.QJYY;
           });
           setDataScouse(studentData);
@@ -273,7 +273,7 @@ const CallTheRoll = (props: any) => {
   }
   const teacherCheckIn = async () => {
     const res = await createKHJSCQ([{
-      JZGJBSJId: currentUser.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
+      JZGJBSJId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
       CQZT: '出勤',
       CQRQ: pkDate,
       KHBJSJId: bjids
@@ -291,6 +291,9 @@ const CallTheRoll = (props: any) => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+      render:(test: any,record: any)=>{
+        return record?.XSJBSJ?.XM
+      }
     },
     {
       title: '班级',

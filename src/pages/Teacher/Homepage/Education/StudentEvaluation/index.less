@@ -28,15 +28,15 @@
       button {
         float: right;
         height: 30px;
-        color: #45c977;
-        border: 1px solid #45c977;
+        color: #3874c5;
+        border: 1px solid #3874c5;
         border-radius: 15px;
       }
       :global {
         .ant-btn:hover,
         .ant-btn:focus {
-          color: #45c977;
-          border-color: #45c977;
+          color: #3874c5;
+          border-color: #3874c5;
         }
       }
     }
@@ -109,16 +109,16 @@
           button {
             width: 74px;
             height: 26px;
-            color: #45c977;
+            color: #3874c5;
             line-height: 16px;
-            border: 1px solid #45c977;
+            border: 1px solid #3874c5;
             border-radius: 13px;
           }
           :global {
             .ant-btn:hover,
             .ant-btn:focus {
-              color: #45c977;
-              border-color: #45c977;
+              color: #3874c5;
+              border-color: #3874c5;
             }
           }
         }
@@ -134,8 +134,17 @@
   margin-top: calc(50vh - 160px) !important;
   padding: 0 !important;
   :global {
+    .ant-modal-content {
+      border-radius: 24px;
+    }
     .ant-modal-header {
       padding: 16px;
+      text-align: center;
+      border: none;
+      border-radius: 24px;
+      .ant-modal-title {
+        font-size: 16px !important;
+      }
     }
     .ant-modal-content {
       min-width: 100% !important;
@@ -153,8 +162,11 @@
         text-align: center;
       }
       > div {
-        height: 200px;
+        height: 180px;
         overflow: auto;
+        textarea {
+          resize: none;
+        }
       }
       :global {
         .ant-input-textarea {
@@ -171,20 +183,31 @@
     .ant-modal-footer {
       display: flex;
       justify-content: space-evenly;
+      border: none;
+      height: auto !important;
+      padding:0 0 10px 0 !important;
       .ant-btn-primary {
-        background-color: #45c977;
+        background-color: #3874c5;
         border: none;
+        color: #fff;
+      }
+      .ant-btn{
+        width: 40% !important;
+        height: 36px !important;
+        border-radius: 18px !important;
+        border-color: #3874c5;
+        color: #3874c5;
       }
     }
   }
 }
-.ZWSJ{
-  font-size: 12px;
+.ZWSJ {
   color: #999;
+  font-size: 12px;
   text-align: center;
-  img{
-    width: 180px;
+  img {
     display: block;
+    width: 180px;
     margin: 0 auto;
     margin-top: 30px;
   }

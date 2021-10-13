@@ -51,7 +51,7 @@ const NewPatrol = (props: any) => {
     YDRS: bjxx?.xs_count,
     SDRS: checkNum,
     /** 巡课教师ID */
-    XKJSId: currentUser.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
+    XKJSId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
     /** 授课教师ID */
     SKJSId: teacherInfo?.id,
     /** 教室ID */

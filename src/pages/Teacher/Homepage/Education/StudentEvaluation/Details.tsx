@@ -56,9 +56,8 @@ const Details = (props: any) => {
       const res = await createKHXSPJ({
         PJFS: Fraction || 0,
         PY: Evaluation || "",
-        XSId: XsData?.XSId,
-        XSXM: XsData?.XSXM,
-        JZGJBSJId: currentUser?.JSId || '1965a118-4b5b-4b58-bf16-d5f45e78b28c',
+        XSJBSJId: XsData?.XSJBSJId,
+        JZGJBSJId: currentUser?.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
         KHBJSJId: state?.id
       })
       if (res.status === 'ok') {
@@ -88,7 +87,7 @@ const Details = (props: any) => {
     setEvaluation(e.target.value)
   };
   return <div className={styles.Details}>
-    <GoBack title={'学生评价'} teacher  />
+    <GoBack title={'学生评价'} teacher />
     <p className={styles.KCMC}>{state?.KHKCSJ?.KCMC}</p>
     <p className={styles.BJMC}>{state?.BJMC}</p>
     <div className={styles.cards}>
@@ -100,8 +99,8 @@ const Details = (props: any) => {
     </div>
     {
       StudentData?.length === 0 ? <div className={styles.ZWSJ}>
-      <img src={noOrder} alt="" />
-      <p>暂无数据</p>
+        <img src={noOrder} alt="" />
+        <p>暂无数据</p>
       </div> :
         <div className={styles.StudentList}>
           <table>
@@ -117,7 +116,7 @@ const Details = (props: any) => {
               {
                 StudentData?.map((value: any, index: number) => {
                   return <tr style={{ backgroundColor: index % 2 === 0 ? "#F5F5F5" : "#fff" }}>
-                    <td>{value?.XSXM}</td>
+                    <td>{value?.XSJBSJ?.XM}</td>
                     <td>
                       <Button onClick={() => {
                         showModal(value)
@@ -128,20 +127,19 @@ const Details = (props: any) => {
                   </tr>
                 })
               }
-
-
             </tbody>
-
           </table>
         </div>
     }
     <Modal
-      title={XsData?.KHXSPJId === '' ? "编辑评价" : "修改评价"}
+      title='评价详情'
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={handleCancel}
       closable={false}
       className={styles.showagreement}
+      okText="确定"
+      cancelText="取消"
     >
       <div className={styles.content}>
         <p>综合评价：<Rate onChange={handleChange} value={Fraction} /></p>
