@@ -9,8 +9,8 @@ export default {
   dev: {
     '/api/': {
       // target: 'http://192.168.0.17:3000',
-      target: 'http://192.168.0.113:3000',
-      // target: 'http://api.test.xianyunshipei.com',
+      // target: 'http://192.168.0.113:3000',
+      target: 'http://api.test.xianyunshipei.com',
       // target: 'http://zpldongxie.gicp.net:3000',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
