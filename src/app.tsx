@@ -216,6 +216,9 @@ export const request: RequestConfig = {
         Authorization: getAuthorization(),
       };
       await next();
+      if (ctx.res.status !== 'ok' && ctx.res.message?.includes('Authorization token is invalid')) {
+        history.replace('/auth_callback/overDue');
+      }
     },
   ],
 };
