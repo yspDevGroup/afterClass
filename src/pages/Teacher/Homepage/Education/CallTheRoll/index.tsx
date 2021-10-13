@@ -215,7 +215,7 @@ const CallTheRoll = (props: any) => {
   const onSwitchItem = (value: any, checked: boolean) => {
     const newData = [...dataSource];
     newData.forEach((item: any) => {
-      if (item.XSId === value.XSId) {
+      if (item.XSJBSJId === value.XSJBSJId) {
         if (checked) {
           item.isRealTo = '出勤';
         } else {
@@ -231,10 +231,9 @@ const CallTheRoll = (props: any) => {
       value.push({
         CQZT: item.isLeave ? '请假' : item.isRealTo, // 出勤 / 缺席
         CQRQ: pkDate, // 日期
-        XSId: item.XSId, // 学生ID
+        XSJBSJId: item.XSJBSJId, // 学生ID
         KHBJSJId: bjids, // 班级ID
         KHPKSJId: pkid, // 排课ID
-        XSXM: item.XSXM // 学生姓名
       });
     });
     const res = await createKHXSCQ(value);
