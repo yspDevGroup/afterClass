@@ -106,6 +106,16 @@ const AfterSchoolCourse: React.FC = () => {
       },
     },
     {
+      title: '退款总额',
+      dataIndex: 'TKJE',
+      key: 'TKJE',
+      align: 'center',
+      render: (test: any,) => {
+        return test;
+      },
+
+    },
+    {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',

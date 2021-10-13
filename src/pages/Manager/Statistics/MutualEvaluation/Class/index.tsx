@@ -1,36 +1,23 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
-import { Select, Rate } from 'antd';
+import { Rate } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns } from '@ant-design/pro-table';
-import { render } from 'react-dom';
 import { getClassesEvaluation } from "@/services/after-class/khbjsj"
 import { useModel, Link,history } from 'umi';
 import styles from '../index.less'
-import { getAllClasses } from '@/services/after-class/khbjsj'
 import { Button } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
-
-
-
-
-
-const { Option } = Select;
+import { TermItem } from '@/pages/Manager/BasicalSettings/TermManagement/data';
 
 const school = (props: any) => {
-  const {id} = props.location.state.data ;
-  console.log(props.location.state.data);
-
-  // 课程列表
-  const [courseList, setcourseList] = useState<any>();
-  const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
+const {id,KCMC} = props.location.state.data ;
+ const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
 
   //点击课程列表出发
-  const choseCourse = (val: string) => {
-
-  }
+  const choseCourse = () => {}
   useEffect(() => {
     (async () => {
       const res = await getClassesEvaluation({ XNXQId: currentUser.XNXQId,KHKCSJId:id })
@@ -41,7 +28,7 @@ const school = (props: any) => {
       }
     })()
   }, [])
-  const columns: ProColumns<any>[] = [
+  const columns: ProColumns<TermItem>[] = [
     {
       title: '序号',
       dataIndex: 'index',
@@ -63,8 +50,8 @@ const school = (props: any) => {
       key: '',
       align: 'center',
       render: (_, record) => {
-        return record.KHBJJs.map((item: any) => {
-          return <div>{item.JZGJBSJ.XM}</div>;
+        return record.KHBJJs.map((item) => {
+          return <div>{item.KHJSSJ.XM}</div>;
         });
       }
     },
@@ -130,23 +117,7 @@ const school = (props: any) => {
       </Button>
       <div className={styles.TopSearchss}>
         <span>
-          班级名称:
-          <Select
-            // value={}
-            style={{ width: 200 }}
-            onChange={(value: string) => {
-              // 选择不同课程
-              choseCourse(value);
-            }}
-          >
-            {courseList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
+          课程名称：{KCMC}
         </span>
       </div>
       <ProTable
