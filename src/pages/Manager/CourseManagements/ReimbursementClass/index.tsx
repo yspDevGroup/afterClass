@@ -154,6 +154,7 @@ const ReimbursementClass = () => {
             if (current?.KHBJSJ?.FY !== 0) {
               const money = (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS || current?.KHBJSJ?.FY;
               const result = await createKHXSTK({
+                KHTKSJId:current?.id,
                 /** 退款金额 */
                 TKJE: money,
                 /** 退款状态 */
