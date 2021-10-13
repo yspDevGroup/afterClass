@@ -275,9 +275,9 @@ const RoomManagement = () => {
           modalType === 'uphold'
             ? null
             : [
-              <Button key="submit" type="primary" onClick={handleSubmit}>
-              确定
-            </Button>,
+                <Button key="submit" type="primary" onClick={handleSubmit}>
+                  确定
+                </Button>,
                 <Button key="back" onClick={() => setModalVisible(false)}>
                   取消
                 </Button>,
@@ -287,8 +287,8 @@ const RoomManagement = () => {
         centered
         maskClosable={false}
         bodyStyle={{
-          maxHeight: '360px',
-          // overflowY: 'auto',
+          maxHeight: '50vh',
+          overflowY: 'auto',
         }}
       >
         {modalType === 'uphold' ? (

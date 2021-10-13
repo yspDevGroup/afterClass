@@ -3,7 +3,7 @@ import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import { Button, Modal, Select, Tag, message, Form, Input, Popconfirm, Divider } from 'antd';
-import styles from './index.less'
+import styles from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 // import { Search } from '@ant-design/pro-table';
 import EllipsisHint from '@/components/EllipsisHint';
@@ -19,54 +19,51 @@ const { Search } = Input;
 const MutualEvaluation = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [DataSource, setDataSource] = useState<any>([])
+  const [DataSource, setDataSource] = useState<any>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   // 适用年级
   const [optionsNJ, setOptionsNJ] = useState<any[]>([]);
-  const [NjId, setNjId] = useState<any[]>([])
+  const [NjId, setNjId] = useState<any[]>([]);
   const [form] = Form.useForm();
   const actionRef = useRef<ActionType>();
   // 类别名称查询
   const [CategoryName, setCategoryName] = useState();
-
 
   const ongetKHZZFW = async () => {
     const res = await getKHZZFW({
       XXJBSJId: currentUser?.xxId,
       FWMC: CategoryName || '',
       page: 0,
-      pageSize: 0
-    })
+      pageSize: 0,
+    });
     if (res.status === 'ok') {
-      setDataSource(res!.data!.rows!)
+      setDataSource(res!.data!.rows!);
     }
-  }
+  };
   useEffect(() => {
     ongetKHZZFW();
-  }, [CategoryName])
+  }, [CategoryName]);
 
   useEffect(() => {
-    (
-      async () => {
-        const resNJ = await getAllGrades({ XD: currentUser?.XD?.split(',') });
-        if (resNJ.status === 'ok') {
-          const optNJ: any[] = [];
-          const nj = ['幼儿园', '小学', '初中', '高中'];
-          nj.forEach((itemNJ) => {
-            resNJ.data?.forEach((item) => {
-              if (item.XD === itemNJ) {
-                optNJ.push({
-                  label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
-                  value: item.id,
-                });
-              }
-            });
+    (async () => {
+      const resNJ = await getAllGrades({ XD: currentUser?.XD?.split(',') });
+      if (resNJ.status === 'ok') {
+        const optNJ: any[] = [];
+        const nj = ['幼儿园', '小学', '初中', '高中'];
+        nj.forEach((itemNJ) => {
+          resNJ.data?.forEach((item) => {
+            if (item.XD === itemNJ) {
+              optNJ.push({
+                label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
+                value: item.id,
+              });
+            }
           });
-          setOptionsNJ(optNJ);
-        }
+        });
+        setOptionsNJ(optNJ);
       }
-    )()
-  }, [])
+    })();
+  }, []);
   useEffect(() => {
     if (isModalVisible === false) {
       setTimeout(() => {
@@ -80,11 +77,11 @@ const MutualEvaluation = () => {
       const data = {
         ...value,
         njIds: NjId,
-        XXJBSJId: currentUser?.xxId
-      }
-      const res = await createKHZZFW(data)
+        XXJBSJId: currentUser?.xxId,
+      };
+      const res = await createKHZZFW(data);
       if (res.status === 'ok') {
-        message.success('保存成功')
+        message.success('保存成功');
         setIsModalVisible(false);
         ongetKHZZFW();
       }
@@ -92,21 +89,21 @@ const MutualEvaluation = () => {
       const data = {
         ...value,
         njIds: NjId,
-      }
-      const res = await updateKHZZFW({ id: value?.id }, data)
+      };
+      const res = await updateKHZZFW({ id: value?.id }, data);
       if (res.status === 'ok') {
-        message.success('修改成功')
+        message.success('修改成功');
         setIsModalVisible(false);
         ongetKHZZFW();
       }
     }
-  }
+  };
   const showModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
-    form.submit()
+    form.submit();
   };
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -115,12 +112,12 @@ const MutualEvaluation = () => {
   const handleChange = (value: any, key: any) => {
     const NewArr: any[] = [];
     key?.forEach((item: any) => {
-      NewArr.push(item.key)
-    })
-    setNjId(NewArr)
-  }
+      NewArr.push(item.key);
+    });
+    setNjId(NewArr);
+  };
   const onSearch = (value: any) => {
-    setCategoryName(value)
+    setCategoryName(value);
   };
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -128,7 +125,7 @@ const MutualEvaluation = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
-      align: 'center'
+      align: 'center',
     },
     {
       title: '类别名称',
@@ -137,7 +134,7 @@ const MutualEvaluation = () => {
       width: 100,
       align: 'center',
       search: false,
-      ellipsis: true
+      ellipsis: true,
     },
     {
       title: '合作单位',
@@ -146,7 +143,7 @@ const MutualEvaluation = () => {
       align: 'center',
       width: 130,
       search: false,
-      ellipsis: true
+      ellipsis: true,
     },
     {
       title: '适用年级',
@@ -160,11 +157,15 @@ const MutualEvaluation = () => {
           <EllipsisHint
             width="100%"
             text={text?.map((item: any) => {
-              return <Tag key={item.id}>{item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}</Tag>;
+              return (
+                <Tag key={item.id}>
+                  {item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}
+                </Tag>
+              );
             })}
           />
         );
-      }
+      },
     },
     {
       title: '类别描述',
@@ -173,7 +174,7 @@ const MutualEvaluation = () => {
       width: 180,
       align: 'center',
       search: false,
-      ellipsis: true
+      ellipsis: true,
     },
     {
       title: '状态',
@@ -205,123 +206,123 @@ const MutualEvaluation = () => {
       render: (text, record) => {
         return (
           <div className={styles.operation}>
-            {
-              record.FWZT === 0 ?
-                <>
-                  <Popconfirm
-                    title="确定发布该服务?"
-                    onConfirm={async () => {
-                      const NewArr: any[] = [];
-                      record?.NJSJs?.forEach((item: any) => {
-                        NewArr.push(item.id)
-                      })
-                      const data = {
-                        ...record,
-                        njIds: NewArr,
-                        FWZT: 1,
-                      }
-                      try {
-                        if (record.id) {
-                          const res = await updateKHZZFW({ id: record?.id }, data)
-                          if (res.status === 'ok') {
-                            message.success('发布成功');
-                            ongetKHZZFW();
-                          } else {
-                            message.error(res.message);
-                          }
+            {record.FWZT === 0 ? (
+              <>
+                <Popconfirm
+                  title="确定发布该服务?"
+                  onConfirm={async () => {
+                    const NewArr: any[] = [];
+                    record?.NJSJs?.forEach((item: any) => {
+                      NewArr.push(item.id);
+                    });
+                    const data = {
+                      ...record,
+                      njIds: NewArr,
+                      FWZT: 1,
+                    };
+                    try {
+                      if (record.id) {
+                        const res = await updateKHZZFW({ id: record?.id }, data);
+                        if (res.status === 'ok') {
+                          message.success('发布成功');
+                          ongetKHZZFW();
+                        } else {
+                          message.error(res.message);
                         }
-                      } catch (err) {
-                        message.error('发布失败，请联系管理员或稍后重试。');
                       }
-                    }}
-                    okText="确定"
-                    cancelText="取消"
-                    placement="topRight"
-                  >
-                    <a key='release'>发布</a>
-                  </Popconfirm> <Divider type="vertical" />
-                  <a
-                    key="editable"
-                    onClick={() => {
-                      const NewArr: any[] = [];
-                      record?.NJSJs?.forEach((item: any) => {
-                        NewArr.push(item.NJMC)
-                      })
-                      const data = {
-                        ...record,
-                        SYNJ: NewArr
-                      }
-                      form.setFieldsValue(data)
-                      setIsModalVisible(true);
-                    }}
-                  >
-                    编辑
-                  </a>
-                  <Divider type="vertical" />
-                  <Popconfirm
-                    title="确定删除该服务?"
-                    onConfirm={async () => {
-                      try {
-                        if (record.id) {
-                          const result = await deleteKHZZFW({ id: record.id });
-                          if (result.status === 'ok') {
-                            message.success('删除成功');
-                            ongetKHZZFW();
-                          } else {
-                            message.error(result.message);
-                          }
+                    } catch (err) {
+                      message.error('发布失败，请联系管理员或稍后重试。');
+                    }
+                  }}
+                  okText="确定"
+                  cancelText="取消"
+                  placement="topRight"
+                >
+                  <a key="release">发布</a>
+                </Popconfirm>{' '}
+                <Divider type="vertical" />
+                <a
+                  key="editable"
+                  onClick={() => {
+                    const NewArr: any[] = [];
+                    record?.NJSJs?.forEach((item: any) => {
+                      NewArr.push(item.NJMC);
+                    });
+                    const data = {
+                      ...record,
+                      SYNJ: NewArr,
+                    };
+                    form.setFieldsValue(data);
+                    setIsModalVisible(true);
+                  }}
+                >
+                  编辑
+                </a>
+                <Divider type="vertical" />
+                <Popconfirm
+                  title="确定删除该服务?"
+                  onConfirm={async () => {
+                    try {
+                      if (record.id) {
+                        const result = await deleteKHZZFW({ id: record.id });
+                        if (result.status === 'ok') {
+                          message.success('删除成功');
+                          ongetKHZZFW();
+                        } else {
+                          message.error(result.message);
                         }
-                      } catch (err) {
-                        message.error('删除失败，请联系管理员或稍后重试。');
                       }
-                    }}
-                    okText="确定"
-                    cancelText="取消"
-                    placement="topRight"
-                  >
-                    <a key='delete'>删除</a>
-                  </Popconfirm> </> :
-                <>
-                  <Popconfirm
-                    title="确定撤销发布该服务?"
-                    onConfirm={async () => {
-                      const NewArr: any[] = [];
-                      record?.NJSJs?.forEach((item: any) => {
-                        NewArr.push(item.id)
-                      })
-                      const data = {
-                        ...record,
-                        njIds: NewArr,
-                        FWZT: 0,
-                      }
-                      try {
-                        if (record.id) {
-                          const res = await updateKHZZFW({ id: record?.id }, data)
-                          if (res.status === 'ok') {
-                            message.success('撤销成功');
-                            ongetKHZZFW();
-                          } else {
-                            message.error(res.message);
-                          }
+                    } catch (err) {
+                      message.error('删除失败，请联系管理员或稍后重试。');
+                    }
+                  }}
+                  okText="确定"
+                  cancelText="取消"
+                  placement="topRight"
+                >
+                  <a key="delete">删除</a>
+                </Popconfirm>{' '}
+              </>
+            ) : (
+              <>
+                <Popconfirm
+                  title="确定撤销发布该服务?"
+                  onConfirm={async () => {
+                    const NewArr: any[] = [];
+                    record?.NJSJs?.forEach((item: any) => {
+                      NewArr.push(item.id);
+                    });
+                    const data = {
+                      ...record,
+                      njIds: NewArr,
+                      FWZT: 0,
+                    };
+                    try {
+                      if (record.id) {
+                        const res = await updateKHZZFW({ id: record?.id }, data);
+                        if (res.status === 'ok') {
+                          message.success('撤销成功');
+                          ongetKHZZFW();
+                        } else {
+                          message.error(res.message);
                         }
-                      } catch (err) {
-                        message.error('发布失败，请联系管理员或稍后重试。');
                       }
-                    }}
-                    okText="确定"
-                    cancelText="取消"
-                    placement="topRight"
-                  >
-                    <a key='release' >撤销发布</a>
-                  </Popconfirm>
-                </>
-            }
-
-
+                    } catch (err) {
+                      message.error('发布失败，请联系管理员或稍后重试。');
+                    }
+                  }}
+                  okText="确定"
+                  cancelText="取消"
+                  placement="topRight"
+                >
+                  <a key="release">撤销发布</a>
+                </Popconfirm>
+              </>
+            )}
           </div>
         );
-      }
-    }
+      },
+    },
   ];
   return (
     <PageContainer>
@@ -331,7 +332,7 @@ const MutualEvaluation = () => {
           rowKey="key"
           actionRef={actionRef}
           pagination={{
-            showQuickJumper: true
+            showQuickJumper: true,
           }}
           search={false}
           dataSource={DataSource}
@@ -341,12 +342,13 @@ const MutualEvaluation = () => {
           }
           toolBarRender={() => [
             <Button type="primary" key="primary" onClick={showModal}>
-              <PlusOutlined />新增类别
-            </Button>
+              <PlusOutlined />
+              新增类别
+            </Button>,
           ]}
         />
       </div>
-      <Modal title="新增类别" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="增值服务类别" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Form name="basic" form={form} onFinish={submit} className={styles.Forms}>
           <Form.Item name="id" hidden>
             <Input disabled />
@@ -357,7 +359,7 @@ const MutualEvaluation = () => {
             key="FWMC"
             rules={[{ required: true, message: '请输入类别名称' }]}
           >
-            <Input placeholder='请输入' />
+            <Input placeholder="请输入" />
           </Form.Item>
           <Form.Item
             name="SYNJ"
@@ -366,17 +368,26 @@ const MutualEvaluation = () => {
             rules={[
               {
                 required: true,
-                message: '请选择适用年级'
-              }
+                message: '请选择适用年级',
+              },
             ]}
           >
-            <Select mode="multiple" allowClear style={{ width: '100%' }} placeholder="请选择" onChange={handleChange}>
-              {
-                optionsNJ?.length ? optionsNJ?.map((item: any) => {
-                  return <Option value={item?.label} key={item?.value}>{item?.label}</Option>
-                }) : ''
-
-              }
+            <Select
+              mode="multiple"
+              allowClear
+              style={{ width: '100%' }}
+              placeholder="请选择"
+              onChange={handleChange}
+            >
+              {optionsNJ?.length
+                ? optionsNJ?.map((item: any) => {
+                    return (
+                      <Option value={item?.label} key={item?.value}>
+                        {item?.label}
+                      </Option>
+                    );
+                  })
+                : ''}
             </Select>
           </Form.Item>
           <Form.Item
@@ -385,21 +396,15 @@ const MutualEvaluation = () => {
             key="FWJGMC"
             rules={[{ required: true, message: '请输入服务单位' }]}
           >
-            <Input placeholder='请输入' />
+            <Input placeholder="请输入" />
           </Form.Item>
 
-
-          <Form.Item
-            label="类别描述"
-            name="FWNR"
-            key="FWNR"
-          >
-            <Input.TextArea placeholder='请输入' rows={4} />
+          <Form.Item label="类别描述" name="FWNR" key="FWNR">
+            <Input.TextArea placeholder="请输入" rows={4} />
           </Form.Item>
         </Form>
       </Modal>
     </PageContainer>
-
-  )
-}
-export default MutualEvaluation
+  );
+};
+export default MutualEvaluation;

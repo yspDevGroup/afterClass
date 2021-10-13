@@ -129,7 +129,7 @@ const Sitclass = () => {
           });
         }}
         icon={<PlusOutlined />}
-        style={{ marginLeft: '25px', marginBottom: '16px' }}
+        style={{ marginBottom: '16px' }}
       >
         新建
       </Button>
@@ -178,6 +178,9 @@ const Sitclass = () => {
               console.log('Failed:', errorInfo);
             }
           },
+        }}
+        cardProps={{
+          bodyStyle: { padding: 0 },
         }}
       />
     </>
