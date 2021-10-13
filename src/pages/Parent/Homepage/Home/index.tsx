@@ -12,9 +12,9 @@ import Details from './Pages/Details';
 import EmptyArticle from './Pages/EmptyArticle';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
-import bannerIcon from '@/assets/szjyzyIcon.png';
-import resourcesRgo from '@/assets/resourcesRgo.png';
-import resourcesBg from '@/assets/resourcesBg.png';
+// import bannerIcon from '@/assets/szjyzyIcon.png';
+// import resourcesRgo from '@/assets/resourcesRgo.png';
+// import resourcesBg from '@/assets/resourcesBg.png';
 import Catering from '@/assets/Catering.png';
 import resources from '@/assets/resources.png';
 
@@ -23,15 +23,14 @@ const Home = () => {
   const [notification, setNotification] = useState<any>([]);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const {external_contact} = currentUser;
+  const { external_contact } = currentUser;
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
   useEffect(() => {
-
     async function announcements() {
       const res = await getXXTZGG({
         XXJBSJId: currentUserInfo?.xxId,
         BT: '',
-        LX:['0'],
+        LX: ['0'],
         ZT: ['已发布'],
         page: 0,
         pageSize: 0,
@@ -46,18 +45,20 @@ const Home = () => {
   }, []);
   const StorageXSName = localStorage.getItem('studentName');
   useEffect(() => {
-    if(localStorage.getItem('studentName') && localStorage.getItem('studentId')){
-      localStorage.getItem('studentName')
-      localStorage.getItem('studentId')
-    }else{
-      localStorage.setItem('studentName',currentUser?.student?.[0].name || '')
-      localStorage.setItem('studentId',currentUser?.student?.[0].student_userid || '')
+    if (localStorage.getItem('studentName') && localStorage.getItem('studentId')) {
+      localStorage.getItem('studentName');
+      localStorage.getItem('studentId');
+    } else {
+      localStorage.setItem('studentName', currentUser?.student?.[0].name || '');
+      localStorage.setItem('studentId', currentUser?.student?.[0].student_userid || '');
     }
-  }, [])
+  }, []);
   useEffect(() => {
-    const ParentalIdentitys = `${StorageXSName}${external_contact && external_contact?.subscriber_info?.remark?.split('-')[1] || ''}`;
-      setParentalIdentity(ParentalIdentitys)
-  }, [StorageXSName])
+    const ParentalIdentitys = `${StorageXSName}${
+      (external_contact && external_contact?.subscriber_info?.remark?.split('-')[1]) || ''
+    }`;
+    setParentalIdentity(ParentalIdentitys);
+  }, [StorageXSName]);
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>
@@ -68,7 +69,7 @@ const Home = () => {
               {/* {currentUserInfo?.external_contact?.subscriber_info.remark ||
                 currentUserInfo?.username ||
                 '家长'} */}
-               {ParentalIdentity || '家长'}
+              {ParentalIdentity || '家长'}
             </span>
             ，你好！
           </h4>
@@ -141,20 +142,21 @@ const Home = () => {
         </div> */}
           <div className={styles.container}>
             {/* <Link to='/parent/home/serviceReservation' className={styles.Catering} >
-              <p>服务预定</p>
+              <p>更多服务</p>
               <img src={Catering} alt="" className={styles.CateringImg}/>
             </Link> */}
-            <Link to='/parent/home/serviceReservation' className={styles.Catering} >
-              <p>服务预定</p>
-              <img src={Catering} alt="" className={styles.CateringImg}/>
+            <Link to="/parent/home/serviceReservation" className={styles.Catering}>
+              <p>更多服务</p>
+              <img src={Catering} alt="" className={styles.CateringImg} />
             </Link>
             <a
-            href="http://moodle.xianyunshipei.com/course/view.php?id=12"
-            target="_blank"
-            rel="noreferrer"
-             className={styles.resources}>
+              href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+              target="_blank"
+              rel="noreferrer"
+              className={styles.resources}
+            >
               <p>素质教育资源</p>
-              <img src={resources} alt=""/>
+              <img src={resources} alt="" />
             </a>
           </div>
           <div className={styles.announceArea}>

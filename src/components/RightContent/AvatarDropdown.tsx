@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, message, Spin } from 'antd';
 import { useModel } from 'umi';
 import styles from './index.less';
-import { initWXAgentConfig, initWXConfig,} from '@/utils/wx';
+import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import defaultAvatar from '@/assets/avatar.png';
-import WWOpenDataCom from '@/components/WWOpenDataCom'
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
 
 export type GlobalHeaderRightProps = {
@@ -16,8 +16,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { currentUser } = initialState || {};
   const [wechatReded, setWechatReded] = useState(false);
   const [wechatInfo, setWechatInfo] = useState({
-    openId: ''
-  })
+    openId: '',
+  });
 
   const [xxData, setXxData] = useState<any>();
   const userRef = useRef(null);
@@ -48,10 +48,11 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   }, [currentUser]);
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    wechatReded && setWechatInfo({
-      openId: currentUser?.UserId || ''
-    })
-  }, [wechatReded])
+    wechatReded &&
+      setWechatInfo({
+        openId: currentUser?.UserId || '',
+      });
+  }, [wechatReded]);
 
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
@@ -69,17 +70,20 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
     return loading;
   }
 
-  if (!currentUser || !currentUser.username) {
+  if (!currentUser || (!currentUser.username && !currentUser.name)) {
     return loading;
   }
 
   return (
     <>
       <span className={`${styles.action} ${styles.account}`}>
-      {xxData ? (
+        {xxData ? (
           <span style={{ paddingRight: '40px' }}>
             {xxData?.QYTB && xxData?.QYTB.indexOf('http') > -1 ? (
-              <img style={{ width: '40px', height: '40px', borderRadius: '40px' }} src={xxData?.QYTB} />
+              <img
+                style={{ width: '40px', height: '40px', borderRadius: '40px' }}
+                src={xxData?.QYTB}
+              />
             ) : (
               ''
             )}{' '}
@@ -95,7 +99,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
           alt="avatar"
         />
         <span className={`${styles.name} anticon`} ref={userRef}>
-        <WWOpenDataCom type='userName' openid={wechatInfo.openId} />
+          <WWOpenDataCom type="userName" openid={wechatInfo.openId} />
 
           {/* {currentUser.username} */}
         </span>
