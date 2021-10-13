@@ -110,7 +110,6 @@ const Table = (props: any) => {
                 data: record,
                 XNXQId: curXNXQId,
                 position: TableList.position
-
               },
             }}
           >
@@ -196,7 +195,7 @@ const Table = (props: any) => {
 
   return (
     <>
-      <div style={{ padding: '24px 0' }}>
+      <div style={{ padding: '0 0 24px' }}>
         <span  >
           所属学年学期：
           <Select
@@ -225,10 +224,8 @@ const Table = (props: any) => {
           density: false,
           reload: false,
         }}
-        // dataSource={dataSource}
         dataSource={TableList.position === '老师' ? dataSource : studentData}
         search={false}
-
       />
     </>
   )

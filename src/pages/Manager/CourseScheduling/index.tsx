@@ -20,7 +20,7 @@ import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
 import AddArranging from './components/AddArranging';
 // import { NJData, XQData } from './mock';
-import './index.less';
+import styles from './index.less';
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
@@ -592,17 +592,7 @@ const ClassManagement = () => {
         {state === true ? (
           <div>
             {/* 渲染的是四个选项框组件 */}
-            <div
-              style={{
-                display: 'flex',
-                paddingBottom: '16px',
-                paddingTop: '16px',
-                boxShadow: '0px 1px 0px #E4E4E4',
-                height: 110,
-                flexWrap: 'wrap',
-                alignContent: 'space-between',
-              }}
-            >
+            <div className={styles.searchWrapper} >
               <span>
                 所属学年学期：
                 <Select

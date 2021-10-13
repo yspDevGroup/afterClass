@@ -145,7 +145,7 @@ const CoursePatrol = () => {
   }, [curXNXQId])
   return (
     <PageContainer>
-      <div style={{ padding: '24px 0' }}>
+      <div style={{ padding: '0 0 24px' }}>
         <span  >
           所属学年学期：
           <Select

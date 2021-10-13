@@ -376,7 +376,7 @@ export async function getCoursesEvaluation(
   });
 }
 
-/** 区县教育局获取课程评价信息 POST /jyjgsj/getSchoolCoursesEvaluation */
+/** 区县教育局获取课程的各学校评价信息 POST /jyjgsj/getSchoolCoursesEvaluation */
 export async function getSchoolCoursesEvaluation(
   body: {
     XZQHM?: string;
@@ -386,6 +386,8 @@ export async function getSchoolCoursesEvaluation(
     XXMC?: string;
     /** 学校ID */
     XXJBSJId?: string;
+    /** 课程所属机构 */
+    SSJGLX?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
