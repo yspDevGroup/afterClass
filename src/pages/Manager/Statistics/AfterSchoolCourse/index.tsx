@@ -124,7 +124,7 @@ const AfterSchoolCourse: React.FC = () => {
         <>
           <Link
             to={{
-              pathname: 'afterSchoolCourse/detail',
+              pathname: '/statistics/afterSchoolCourse/detail',
               state: {
                 type: 'detail',
                 data: record,
@@ -141,8 +141,6 @@ const AfterSchoolCourse: React.FC = () => {
     // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
-      console.log('res: ', res);
-
       // 获取到的整个列表的信息
       const newData = res.xnxqList;
       const curTerm = res.current;

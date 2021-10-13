@@ -265,6 +265,8 @@ export async function statisClasses(
   body: {
     /** 学年学期ID */
     XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {

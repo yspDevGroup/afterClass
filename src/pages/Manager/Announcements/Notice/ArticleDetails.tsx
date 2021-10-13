@@ -8,7 +8,6 @@ const ArticleDetails = (props: any) => {
   const { state } = props.history.location;
   return (
     <PageContainer>
-
       <Button
         type="primary"
         onClick={() => {
