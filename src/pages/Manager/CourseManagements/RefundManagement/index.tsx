@@ -5,10 +5,9 @@ import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import PageContainer from '@/components/PageContainer';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 
 import Style from './index.less';
-import { createKHXSTK, getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
+import { getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -55,11 +54,11 @@ const RefundManagement = () => {
     },
     {
       title: '订单编号',
-      dataIndex: 'DDBH',
-      key: 'DDBH',
+      dataIndex: 'TKBH',
+      key: 'TKBH',
       align: 'center',
       ellipsis: true,
-      width: 100,
+      width: 150,
     },
     {
       title: '学生姓名',
@@ -76,8 +75,8 @@ const RefundManagement = () => {
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
-      render: (text: any) => {
-        return text?.KHKCSJ?.KCMC;
+      render: (text: any,record: any) => {
+        return record?.KHBJSJ?.KHKCSJ?.KCMC;
       },
       ellipsis: true,
       width: 100,
@@ -87,8 +86,8 @@ const RefundManagement = () => {
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
-      render: (text: any) => {
-        return text?.BJMC;
+      render: (text: any,record: any) => {
+        return record?.KHBJSJ?.BJMC;
       },
       ellipsis: true,
       width: 100,
@@ -119,6 +118,9 @@ const RefundManagement = () => {
       align: 'center',
       ellipsis: true,
       width: 100,
+      render:(_, record)=>{
+        return record?.JZGJBSJ?.XM
+      }
     },
     {
       title: '审批时间',
@@ -127,7 +129,7 @@ const RefundManagement = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.SPSJ?.substring(0, 16)
+        return record?.SPSJ?.replace(/T/,' ').substring(0, 16)
       },
       width: 150,
     },
@@ -196,7 +198,7 @@ const RefundManagement = () => {
     try {
       if (current.id) {
         const params = { id: current.id };
-        const body = { TKJE, TKZT, deviceIp: '117.36.118.42' };
+        const body = { TKJE, TKZT, deviceIp: '117.36.118.42', SPSJ: new Date().toISOString()};
         const res = await updateKHXSTK(params, body);
         if (res.status === 'ok') {
           if (TKZT === 2) {
