@@ -50,7 +50,7 @@ const Home = () => {
       localStorage.getItem('studentId');
     } else {
       localStorage.setItem('studentName', currentUser?.student?.[0].name || '');
-      localStorage.setItem('studentId', currentUser?.student?.[0].student_userid || '');
+      localStorage.setItem('studentId', currentUser?.student?.[0].XSJBSJId || '');
     }
   }, []);
   useEffect(() => {

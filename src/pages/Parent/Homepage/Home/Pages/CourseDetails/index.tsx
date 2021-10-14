@@ -135,7 +135,7 @@ const CourseDetails: React.FC = () => {
       ZFFS: '线上支付',
       DDZT: '待付款',
       DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
-      XSJBSJId:localStorage.getItem('studentId') || currentUser?.student?.[0].student_userid || testStudentId,
+      XSJBSJId:localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
       KHBJSJId: BJ!,
       DDLX: 0,
     };

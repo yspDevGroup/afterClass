@@ -22,7 +22,7 @@ const DropClass = () => {
   const [Record, setRecord] = useState<any>([]);
   const { student } = currentUser || {};
   const StorageXSId = localStorage.getItem('studentId');
-  const XSId = StorageXSId || (student && student[0].student_userid) || testStudentId;
+  const XSId = StorageXSId || (student && student[0].XSJBSJId) || testStudentId;
   const getKHTKSJData = async () => {
     const res = await getKHTKSJ({
       XSJBSJId:XSId,

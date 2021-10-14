@@ -36,7 +36,7 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
       localStorage.getItem('studentId');
     } else {
       localStorage.setItem('studentName', currentUser?.student?.[0].name || '');
-      localStorage.setItem('studentId', currentUser?.student?.[0].student_userid || '');
+      localStorage.setItem('studentId', currentUser?.student?.[0].XSJBSJId || '');
     }
     const ParentalIdentitys = `${StorageXSName}${
       currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
@@ -60,7 +60,7 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
 
     async function fetch() {
       const studentId: string =
-        StorageXSId || currentUser?.student?.[0].student_userid || testStudentId;
+        StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId;
       const res = await getAllKHXSDD({
         XSJBSJId: studentId,
         // njId: currentUser.njId,
@@ -97,13 +97,13 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
         {currentUser?.student?.length > 1 ? (
           <Select
             style={{ minWidth: '5em' }}
-            defaultValue={StorageXSId || currentUser?.student?.[0].student_userid}
+            defaultValue={StorageXSId || currentUser?.student?.[0].XSJBSJId}
             className={styles.XsName}
             onChange={handleChange}
           >
             {currentUser?.student?.map((value: any) => {
               return (
-                <Option value={value.student_userid} key={`${value.name}+${value.NJSJId}`}>
+                <Option value={value.XSJBSJId} key={`${value.name}+${value.NJSJId}`}>
                   {value.name}
                 </Option>
               );

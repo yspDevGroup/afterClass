@@ -113,7 +113,7 @@ const ClassCalendar = (props: propstype) => {
     (async () => {
       const studentId =
         localStorage.getItem('studentId') ||
-        (student && student[0].student_userid) ||
+        (student && student[0].XSJBSJId) ||
         testStudentId;
       const res = await ParentHomeData(xxId, studentId);
       const { weekSchedule } = res;

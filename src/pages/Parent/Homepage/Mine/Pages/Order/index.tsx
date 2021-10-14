@@ -108,7 +108,7 @@ const Order: React.FC = () => {
   const type = getQueryString('type') || undefined;
   const studentId =
     localStorage.getItem('studentId') ||
-    (currentUser?.student && currentUser.student[0].student_userid) ||
+    (currentUser?.student && currentUser.student[0].XSJBSJId) ||
     testStudentId;
   const children = [
     {
@@ -119,7 +119,7 @@ const Order: React.FC = () => {
     const res = await getStudentOrders({
       XSJBSJId:
         localStorage.getItem('studentId') ||
-        currentUser?.student?.[0].student_userid ||
+        currentUser?.student?.[0].XSJBSJId ||
         testStudentId,
     });
     if (res.status === 'ok') {

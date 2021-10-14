@@ -19,7 +19,7 @@ const EmptyArticle = () => {
       if (result.current) {
         const { student } = currentUser || {};
         const res = await homePageInfo({
-          XSId: StorageXSId || (student && student[0].student_userid) || testStudentId,
+          XSId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
         });

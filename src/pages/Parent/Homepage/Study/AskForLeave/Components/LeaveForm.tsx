@@ -53,7 +53,7 @@ const LeaveForm = (props: {
       QJZT: 0,
       KSSJ,
       JSSJ,
-      XSJBSJId: StorageXSId || (student && student[0].student_userid) || testStudentId,
+      XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
       XSXM: StorageXSName || (student && student?.[0].name) || '张三',
       bjIds,
     });

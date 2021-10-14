@@ -34,7 +34,7 @@ const Details = () => {
     (async () => {
       if (type === 'YX') {
         const res = await getStudent({
-          XSJBSJId: StorageXSId || currentUser?.student?.[0].student_userid || testStudentId,
+          XSJBSJId: StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId,
           KHXXZZFWId: id,
         });
         if (res.status === 'ok') {
@@ -93,7 +93,7 @@ const Details = () => {
       DDFY: Data?.FY,
       XSJBSJId:
         localStorage.getItem('studentId') ||
-        currentUser?.student[0].student_userid ||
+        currentUser?.student[0].XSJBSJId ||
         testStudentId,
       DDLX: 1,
       KHXXZZFWId: Data?.id,

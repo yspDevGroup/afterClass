@@ -22,7 +22,7 @@ const OrderDetails: React.FC = (props: any) => {
   const currentChildren = currentUser?.student || [];
   const childId =
     localStorage.getItem('studentId') ||
-    (currentChildren.length ? currentChildren[0].student_userid : '');
+    (currentChildren.length ? currentChildren[0].XSJBSJId : '');
   const name = user?.subscriber_info?.remark || user?.username;
   useEffect(() => {
     setOrderInfo(payOrder);

@@ -27,7 +27,7 @@ const Evaluation = () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const { student } = currentUser || {};
     const res = await getStudentClasses({
-      XSJBSJId: StorageXSId || (student && student[0].student_userid) || testStudentId,
+      XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
       XNXQId: result.current.id,
       ZT: [0, 1, 2],
     });
@@ -42,7 +42,7 @@ const Evaluation = () => {
     }
     const resgetKHBJPJ = await getKHBJPJ({
       KHBJSJId: '',
-      XSJBSJId: StorageXSId || (student && student[0].student_userid) || testStudentId,
+      XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
       XNXQId: '',
       page: 0,
       pageSize: 0,

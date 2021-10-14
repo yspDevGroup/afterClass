@@ -38,7 +38,7 @@ const AskForLeave: React.FC = () => {
     const res = await getAllKHXSQJ({
       XSJBSJId:
         localStorage.getItem('studentId') ||
-        (student && student[0].student_userid) ||
+        (student && student[0].XSJBSJId) ||
         testStudentId,
       XNXQId: curXNXQId,
     });

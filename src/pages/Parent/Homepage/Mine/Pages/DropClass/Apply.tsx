@@ -64,7 +64,7 @@ const Apply = () => {
   const getKcData = async () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const { student } = currentUser || {};
-    const XSId = StorageXSId || (student && student[0].student_userid) || testStudentId;
+    const XSId = StorageXSId || (student && student[0].XSJBSJId) || testStudentId;
     const res = await getStudentClasses({
       XSJBSJId: XSId,
       XNXQId: result.current.id,
@@ -128,7 +128,7 @@ const Apply = () => {
     checkedValues.forEach((value: string) => {
       const data = {
         XSId:
-          localStorage.getItem('studentId') || (student && student.student_userid) || testStudentId,
+          localStorage.getItem('studentId') || (student && student.XSJBSJId) || testStudentId,
         XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
         KHBJSJId: value.split('+')[0],
         KSS: value.split('+')[1],
