@@ -134,7 +134,9 @@ const LeaveManagement: React.FC = () => {
       key: 'KHQJKCs',
       align: 'center',
       ellipsis: true,
-      render: (text: any) => text[0]?.KCMC,
+      render: (text: any, record: any) => {
+        return record.KHQJKCs?.[0].KCMC
+      },
       width: 120,
     },
     {
@@ -143,7 +145,9 @@ const LeaveManagement: React.FC = () => {
       key: 'KHQJKCs_BJMC',
       align: 'center',
       ellipsis: true,
-      render: (text: any) => text[0]?.KHBJSJ?.BJMC || '',
+      render: (text: any, record: any) => {
+        return record.KHQJKCs?.[0].KHBJSJ?.BJMC
+      },
       width: 120,
     },
     {
