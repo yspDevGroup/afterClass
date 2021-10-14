@@ -2,7 +2,7 @@
  * @description: 企业微信通讯录展示组件
  * @author: zpl
  * @Date: 2021-09-17 14:41:57
- * @LastEditTime: 2021-09-17 17:06:29
+ * @LastEditTime: 2021-10-14 12:00:20
  * @LastEditors: zpl
  */
 import React, { useRef, useLayoutEffect } from 'react';
@@ -14,7 +14,7 @@ type PropsType = {
 export default function WWOpenDataCom({ type, openid }: PropsType) {
   const ref = useRef(null);
   useLayoutEffect(() => {
-    if (openid && WWOpenData?.bind) {
+    if (openid && typeof WWOpenData !== 'undefined' && WWOpenData.bind) {
       WWOpenData.bind(ref.current);
     }
   }, [openid]);

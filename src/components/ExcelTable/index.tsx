@@ -6,6 +6,7 @@ import type { FC } from 'react';
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
 import EllipsisHint from '../EllipsisHint';
+import WWOpenDataCom from '../WWOpenDataCom';
 
 type KBItemProps = {
   mode: 'see' | 'edit';
@@ -13,6 +14,7 @@ type KBItemProps = {
     | {
         cla: string;
         teacher: string;
+        teacherWechatId?: string;
         color: string;
         bjzt: string;
       }
@@ -40,13 +42,14 @@ type WeenType = {
   KCId: string;
 };
 
-type DataSourceType = {
+export type DataSourceType = {
   key: string;
   /** 场地 */
   room: {
     /** 场地名称 */
     cla: string;
     teacher: string;
+    teacherWechatId?: string;
     rowspan?: number;
     // 场地ID
     jsId: string;
@@ -59,6 +62,7 @@ type DataSourceType = {
     cla: string;
     /** 时间 */
     teacher: string;
+    teacherWechatId?: string;
     /** 时间ID */
     hjId: string;
   };
@@ -106,7 +110,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
         width: '100%',
       }}
     >
-      {data === '' ? (
+      {!data ? (
         <>&nbsp;</>
       ) : (
         <div className="classCard">
@@ -130,7 +134,11 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             </div>
             {mode === 'see' ? (
               <div className="teacher">
-                {data?.teacher}
+                {data.teacher === '未知' && data.teacherWechatId ? (
+                  <WWOpenDataCom type="userName" openid={data.teacherWechatId} />
+                ) : (
+                  data.teacher
+                )}
                 {/* <WWOpenDataCom
                   type="userName"
                   style={{ color: data?.color }}
@@ -167,6 +175,7 @@ type IndexPropsType = {
   chosenData?: {
     cla: string;
     teacher: string;
+    teacherWechatId?: string;
     KHBJSJId?: string;
     XNXQId?: string;
     color: string;
@@ -345,7 +354,7 @@ const Index: FC<IndexPropsType> = ({
           </tr>
         </thead>
       </table>
-      {datas && datas.length > 0 ? (
+      {datas && datas.length ? (
         <div className={styles.tableContent}>
           <table>
             <tbody>

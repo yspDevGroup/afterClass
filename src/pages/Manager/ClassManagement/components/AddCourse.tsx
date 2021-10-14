@@ -2,17 +2,20 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import { Button, Drawer, InputNumber, message } from 'antd';
-import ProFormFields from '@/components/ProFormFields';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
-import styles from './AddCourse.less';
 import moment from 'moment';
 import { enHenceMsg } from '@/utils/utils';
+import ProFormFields from '@/components/ProFormFields';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
+
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
+
+import styles from './AddCourse.less';
 
 type AddCourseProps = {
   visible: boolean;
@@ -53,6 +56,8 @@ const AddCourse: FC<AddCourseProps> = ({
   const [kaike, setKaike] = useState<boolean>(false);
   // 教师
   const [teacherData, setTeacherData] = useState<any[]>([]);
+  // 选中机构课程的任课老师
+  const [JGKCTeacherData, setJGKCTeacherData] = useState<any>([]);
 
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
@@ -66,9 +71,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const [isJg, setIsJg] = useState<boolean>(false);
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [dataSource, setDataSource] = useState<any[]>([]);
-
-  // 选中机构课程的任课老师
-  const [JGKCTeacherData, setJGKCTeacherData] = useState<any>([]);
 
   const columns: ProColumns<any>[] = [
     {
@@ -97,7 +99,7 @@ const AddCourse: FC<AddCourseProps> = ({
       dataIndex: 'JCFY',
       width: 80,
       align: 'center',
-      renderFormItem: () => (<InputNumber min={0} max={999} />),
+      renderFormItem: () => <InputNumber min={0} max={999} />,
       formItemProps: {
         rules: [
           {
@@ -127,13 +129,15 @@ const AddCourse: FC<AddCourseProps> = ({
           key="delete"
           onClick={() => {
             console.log(record.id);
-            setDataSource(dataSource.filter((item) => {
-              if (item.id) {
-                return item.id !== record.id
-              } else {
-                return item.index !== record.index
-              }
-            }));
+            setDataSource(
+              dataSource.filter((item) => {
+                if (item.id) {
+                  return item.id !== record.id;
+                } else {
+                  return item.index !== record.index;
+                }
+              }),
+            );
             action?.reload();
           }}
         >
@@ -165,21 +169,30 @@ const AddCourse: FC<AddCourseProps> = ({
           actionRender: (row, config, dom) => [dom.save, dom.cancel],
         }}
       />
-    )
+    );
   };
   const getJgTeacher = async (kcId: string) => {
     const res = await getKHKCSJ({
       kcId,
       XXJBSJId: currentUser?.xxId,
-      XNXQId: curXNXQId
+      XNXQId: curXNXQId,
     });
     if (res?.status === 'ok') {
       const { KHKCJs } = res?.data;
-      const teacherOption: any = [];
-      KHKCJs?.forEach((item: any) => {
+      const teacherOption: { label: string | JSX.Element; value: string; WechatUserId?: string }[] =
+        [];
+      KHKCJs?.forEach((item: { XM: string; WechatUserId: string; JZGJBSJId: any }) => {
+        // 兼顾企微
+        const label =
+          item.XM === '未知' && item.WechatUserId ? (
+            <WWOpenDataCom type="userName" openid={item.WechatUserId} />
+          ) : (
+            item.XM
+          );
         teacherOption.push({
-          label: item.JZGJBSJ?.XM,
+          label,
           value: item.JZGJBSJId,
+          WechatUserId: item.WechatUserId,
         });
       });
       setJGKCTeacherData(teacherOption);
@@ -197,9 +210,9 @@ const AddCourse: FC<AddCourseProps> = ({
 
         if (resSJ.status === 'ok') {
           // 报名时间 [1]
-          const BM = resSJ.data?.find((item) => item.TYPE === '1');
+          const BM = resSJ.data?.find((item: { TYPE: string }) => item.TYPE === '1');
           // 上课时间 [2]
-          const KK = resSJ.data?.find((item) => item.TYPE === '2');
+          const KK = resSJ.data?.find((item: { TYPE: string }) => item.TYPE === '2');
           setBMData(BM);
           setKKData(KK);
         }
@@ -212,11 +225,11 @@ const AddCourse: FC<AddCourseProps> = ({
         (item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX || formValues.SSJGLX,
       );
       // 如果后查询的课程列表不存在此记录，则加到第一个
-      if (!kcDate?.find(n => n.value === formValues.KHKCSJId)) {
+      if (!kcDate?.find((n) => n.value === formValues.KHKCSJId)) {
         kcDate?.unshift({
           KCMC: formValues.KHKCSJ?.KCMC,
-          id: formValues.KHKCSJId
-        })
+          id: formValues.KHKCSJId,
+        });
       }
       setIsJg(formValues?.KHKCSJ?.SSJGLX === '机构课程' || formValues.SSJGLX === '机构课程');
       setKCDate(kcDate);
@@ -228,8 +241,10 @@ const AddCourse: FC<AddCourseProps> = ({
       } else {
         setBaoming(true);
       }
-      if (new Date(formValues?.KKRQ).getTime() === new Date(KKData?.KSSJ || '').getTime() &&
-        new Date(formValues?.JKRQ).getTime() === new Date(KKData?.JSSJ || '').getTime()) {
+      if (
+        new Date(formValues?.KKRQ).getTime() === new Date(KKData?.KSSJ || '').getTime() &&
+        new Date(formValues?.JKRQ).getTime() === new Date(KKData?.JSSJ || '').getTime()
+      ) {
         setKaike(false);
       } else {
         setKaike(true);
@@ -262,11 +277,20 @@ const AddCourse: FC<AddCourseProps> = ({
       const res = await getAllJZGJBSJ({ XXJBSJId: currentUser?.xxId, page: 0, pageSize: 0 });
       if (res.status === 'ok') {
         const data = res.data?.rows;
-        const teachOption: any = [];
-        data?.forEach((item) => {
+        const teachOption: { label: string | JSX.Element; value: string; WechatUserId?: string }[] =
+          [];
+        data?.forEach((item: { XM: string; WechatUserId: string; id: any }) => {
+          // 兼顾企微
+          const label =
+            item.XM === '未知' && item.WechatUserId ? (
+              <WWOpenDataCom type="userName" openid={item.WechatUserId} />
+            ) : (
+              item.XM
+            );
           teachOption.push({
-            label: item.XM,
+            label,
             value: item.id,
+            WechatUserId: item.WechatUserId,
           });
         });
         setTeacherData(teachOption);
@@ -297,9 +321,9 @@ const AddCourse: FC<AddCourseProps> = ({
         return {
           KHBJSJId: formValues?.id,
           JCFY: item.JCFY,
-          JCMC: item.JCMC
-        }
-      })
+          JCMC: item.JCMC,
+        };
+      });
     }
     new Promise((resolve, reject) => {
       let res = null;
@@ -311,7 +335,7 @@ const AddCourse: FC<AddCourseProps> = ({
         KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
         JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
         XNXQId: curXNXQId,
-        KHKCJCs: mertial
+        KHKCJCs: mertial,
       };
       if (formValues?.id) {
         const ZJS = [
@@ -483,7 +507,7 @@ const AddCourse: FC<AddCourseProps> = ({
           key: 'BJRS',
           rules: [{ required: true, message: '请填写课程班人数' }],
         },
-      ]
+      ],
     },
     {
       type: 'group',
@@ -503,6 +527,16 @@ const AddCourse: FC<AddCourseProps> = ({
             options: isJg ? JGKCTeacherData : teacherData,
             optionFilterProp: 'label',
             allowClear: true,
+            // optionItemRender(item: {label: string; value: string; WechatUserId?: string;}) {
+            //   console.log('item==========1');
+            //   console.log(item);
+            //   console.log(authType);
+            //   console.log('item==========2');
+            //   if(authType === 'wechat' && item.label === '未知' && item.WechatUserId) {
+            //     return <WWOpenDataCom type='userName' openid={item.WechatUserId} />
+            //   }
+            //   return item.label;
+            // }
           },
         },
         {
@@ -518,6 +552,12 @@ const AddCourse: FC<AddCourseProps> = ({
             options: [...teacherData, ...JGKCTeacherData],
             optionFilterProp: 'label',
             allowClear: true,
+            optionItemRender(item: { label: string; value: string; WechatUserId?: string }) {
+              if (authType === 'wechat' && item.label === '未知' && item.WechatUserId) {
+                return <WWOpenDataCom type="userName" openid={item.WechatUserId} />;
+              }
+              return item.label;
+            },
           },
         },
       ],
@@ -557,7 +597,7 @@ const AddCourse: FC<AddCourseProps> = ({
       key: 'KHKCJC',
       value: choosenJf ? 'kcjc' : '',
       valueEnum: {
-        'kcjc': { text: '包含教辅' },
+        kcjc: { text: '包含教辅' },
       },
       disabled: readonly,
       onChange: (e: any) => {
@@ -566,21 +606,23 @@ const AddCourse: FC<AddCourseProps> = ({
         } else {
           setChoosenJf(false);
         }
-      }
+      },
     },
-    choosenJf ? {
-      type: 'custom',
-      text: '教辅材料',
-      name: 'KHKCJCs',
-      key: 'KHKCJCs',
-      children: getChildren()
-    } : '',
+    choosenJf
+      ? {
+          type: 'custom',
+          text: '教辅材料',
+          name: 'KHKCJCs',
+          key: 'KHKCJCs',
+          children: getChildren(),
+        }
+      : '',
     BMData?.id
       ? {
-        type: 'divTab',
-        text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -598,7 +640,7 @@ const AddCourse: FC<AddCourseProps> = ({
               }
               // 将按钮关闭的时候 传成默认时间段
               form.setFieldsValue({ BMSD: [BMData?.KSSJ, BMData?.JSSJ] });
-              setBaoming(false);;
+              setBaoming(false);
             },
             checked: baoming,
           },
@@ -623,10 +665,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-        type: 'divTab',
-        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -715,11 +757,9 @@ const AddCourse: FC<AddCourseProps> = ({
                   handleClose();
                   setImageUrl('');
                 }}
-
               >
                 取消
               </Button>
-
             </div>
           )
         }
