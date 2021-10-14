@@ -16,7 +16,7 @@ const TeacherEvaluation = () => {
     (async () => {
       const result = await queryXNXQList(currentUser?.xxId, undefined);
       const res = await getAllKHXSPJ({
-        XSId: StorageXSId || student?.[0].student_userid || testStudentId,
+        XSJBSJId: StorageXSId || student?.[0].student_userid || testStudentId,
         KHBJSJId: '',
         JSId: '',
         XNXQId: result.current.id,

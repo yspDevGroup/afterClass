@@ -17,7 +17,7 @@ const Details = (props: any) => {
     (async()=>{
       const res = await getKHBJPJ({
         KHBJSJId:state?.id,
-        XSId:'',
+        XSJBSJId:'',
         XNXQId: '',
         XXJBSJId:'',
         page:0,

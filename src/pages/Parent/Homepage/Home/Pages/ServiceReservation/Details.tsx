@@ -34,7 +34,7 @@ const Details = () => {
     (async () => {
       if (type === 'YX') {
         const res = await getStudent({
-          XSId: StorageXSId || currentUser?.student?.[0].student_userid || testStudentId,
+          XSJBSJId: StorageXSId || currentUser?.student?.[0].student_userid || testStudentId,
           KHXXZZFWId: id,
         });
         if (res.status === 'ok') {
@@ -91,11 +91,10 @@ const Details = () => {
       ZFFS: '线上支付',
       DDZT: '待付款',
       DDFY: Data?.FY,
-      XSId:
+      XSJBSJId:
         localStorage.getItem('studentId') ||
         currentUser?.student[0].student_userid ||
         testStudentId,
-      XSXM: localStorage.getItem('studentName') || currentUser?.student[0].name,
       DDLX: 1,
       KHXXZZFWId: Data?.id,
     };

@@ -120,7 +120,7 @@ const DropClass = () => {
                       /** 退款状态 */
                       TKZT: 0,
                       /** 学生ID */
-                      XSJBSJId: '20210901' || XSId,
+                      XSJBSJId: testStudentId || XSId,
                       /** 班级ID */
                       KHBJSJId: '135a04d7-ac43-464b-80b2-42c5d58ff470' || value?.KHBJSJId,
                       /** 学校ID */

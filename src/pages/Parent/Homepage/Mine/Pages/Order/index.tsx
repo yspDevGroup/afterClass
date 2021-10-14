@@ -115,25 +115,9 @@ const Order: React.FC = () => {
       student_userid: studentId,
     },
   ];
-  // const fetch = async (param: any[]) => {
-  //   const res = await getAllKHXSDD({
-  //     XSId: param[0].student_userid,
-  //     DDZT: '',
-  //   });
-  //   if (res.status === 'ok') {
-  //     if (res.data) {
-  //       setOrderInfo(res.data);
-  //     }
-  //   } else {
-  //     enHenceMsg(res.message);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetch(children);
-  // }, []);
   const fetch = async () => {
     const res = await getStudentOrders({
-      XSId:
+      XSJBSJId:
         localStorage.getItem('studentId') ||
         currentUser?.student?.[0].student_userid ||
         testStudentId,

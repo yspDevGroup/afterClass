@@ -72,7 +72,7 @@ const ServiceReservation = () => {
   useEffect(() => {
     (async () => {
       const res = await getStudent({
-        XSId: StorageXSId || currentUser?.student?.[0].student_userid || testStudentId,
+        XSJBSJId: StorageXSId || currentUser?.student?.[0].student_userid || testStudentId,
       });
       if (res.status === 'ok') {
         setYxserviceData(res.data?.rows);

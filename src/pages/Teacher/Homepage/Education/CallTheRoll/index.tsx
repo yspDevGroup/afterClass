@@ -168,7 +168,7 @@ const CallTheRoll = (props: any) => {
           const studentData = resStudent.data;
           const leaveInfo = resLeave?.data?.rows || [];
           studentData?.forEach((item: any) => {
-            const leaveItem = leaveInfo?.find((val: API.KHXSQJ) => val.XSJBSJ?.id === item.XSId);
+            const leaveItem = leaveInfo?.find((val: API.KHXSQJ) => val.XSJBSJ?.id === item.XSJBSJId);
             const leaveJudge = leaveItem?.QJZT != 1;
             item.isRealTo = leaveJudge ? '缺席' : '出勤';
             item.isLeave = !!leaveJudge;

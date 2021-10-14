@@ -11,6 +11,7 @@ const { TextArea } = Input;
 
 const EvaluationDetails = (props: any) => {
   const { state } = props.location;
+  console.log(state,'=======================')
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [Fraction, setFraction] = useState<number>()
@@ -26,8 +27,7 @@ const EvaluationDetails = (props: any) => {
     const res = await createKHBJPJ({
       PJFS:Fraction,
       PY:Evaluation,
-      XSId:state?.XSId,
-      XSXM:state?.XSXM,
+      XSJBSJId:state?.XSJBSJId,
       KHBJSJId:state?.KHBJSJId,
       PJR:external_contact && `${state?.XSXM}${external_contact.subscriber_info.remark.split('-')[1]}` || '张三爸爸'
     })

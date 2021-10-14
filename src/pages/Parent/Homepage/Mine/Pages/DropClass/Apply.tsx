@@ -66,7 +66,7 @@ const Apply = () => {
     const { student } = currentUser || {};
     const XSId = StorageXSId || (student && student[0].student_userid) || testStudentId;
     const res = await getStudentClasses({
-      XSId,
+      XSJBSJId: XSId,
       XNXQId: result.current.id,
       ZT: [0],
     });
