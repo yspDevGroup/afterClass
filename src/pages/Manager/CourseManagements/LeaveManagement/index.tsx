@@ -98,7 +98,7 @@ const LeaveManagement: React.FC = () => {
     getData();
   }, [curXNXQId, QJZT, kcmcId, bjmcId])
 
-  /// table表格数据
+  // table表格数据
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -188,7 +188,7 @@ const LeaveManagement: React.FC = () => {
     },
   ];
   return (
-    /// PageContainer组件是顶部的信息
+    // PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.TopSearchs}>
         <span>

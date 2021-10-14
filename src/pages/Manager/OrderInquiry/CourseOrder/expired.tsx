@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-12 17:56:11
+ * @LastEditTime: 2021-10-14 20:23:51
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -125,10 +125,19 @@ const OrderInquiry = (props: any) => {
       width: 60,
     },
     {
+      title: '订单编号',
+      dataIndex: 'DDBH',
+      key: 'DDBH',
+      align: 'center',
+      ellipsis: true,
+      width: 160,
+    },
+    {
       title: '学生姓名',
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+      width: 100,
       render:(_text: any, record: any)=>{
         return record?.XSJBSJ?.XM
       }
@@ -138,16 +147,19 @@ const OrderInquiry = (props: any) => {
       dataIndex: 'XSJBSJ',
       key: 'XSJBSJ',
       align: 'center',
-      render: (text: any) => {
-        return text?.BJSJ?.BJ;
+      render: (text: any, record: any) => {
+        return record.XSJBSJ?.BJSJ?.BJ;
       },
-      width: 100,
+      ellipsis: true,
+      width: 120,
     },
     {
       title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
+      ellipsis: true,
+      width: 120,
       render: (_text: any, record: any) => {
         return <div>{record?.KHBJSJ?.BJMC}</div>;
       },
@@ -157,33 +169,78 @@ const OrderInquiry = (props: any) => {
       dataIndex: 'KCMC',
       key: 'KCMC',
       align: 'center',
+      ellipsis: true,
+      width: 160,
       render: (_text: any, record: any) => {
         return <div>{record?.KHBJSJ?.KHKCSJ?.KCMC}</div>;
       },
+    },
+    {
+      title: '课程费用(元)',
+      dataIndex: 'KCFY',
+      key: 'KCFY',
+      align: 'center',
+      width: 110,
+      render: (_text: any, record: any) => {
+        return <div>{record?.KHBJSJ?.FY}</div>;
+      },
+    },
+    {
+      title: '教材费用(元)',
+      dataIndex: 'JCFY',
+      key: 'JCFY',
+      align: 'center',
+      width: 110,
+      render: (_text: any, record: any) => {
+        return <div>{record.DDFY - record?.KHBJSJ?.FY}</div>;
+      },
+    },
+    {
+      title: '订单总费用(元)',
+      dataIndex: 'DDFY',
+      key: 'DDFY',
+      align: 'center',
+      width: 120,
     },
     {
       title: '下单时间',
       dataIndex: 'XDSJ',
       key: 'XDSJ',
       align: 'center',
+      ellipsis: true,
+      width: 150,
+      render: (_text: any, record: any) => {
+        return record.XDSJ?.substring(0,16);
+      },
     },
     {
       title: '付款时间',
       dataIndex: 'ZFSJ',
       key: 'ZFSJ',
       align: 'center',
+      ellipsis: true,
+      width: 150,
+      render: (_text: any, record: any) => {
+        return record.XDSJ?.substring(0,16);
+      },
     },
     {
-      title: '订单费用(元)',
-      dataIndex: 'DDFY',
-      key: 'DDFY',
+      title: '支付方式',
+      dataIndex: 'ZFFS',
+      key: 'ZFFS',
       align: 'center',
+      ellipsis: true,
+      width: 150,
+      render: (_text: any, record: any) => {
+        return record.ZFFS?.substring(0,16);
+      },
     },
     {
       title: '订单状态',
       dataIndex: 'DDZT',
       key: 'DDZT',
       align: 'center',
+      width: 100,
     },
   ];
 

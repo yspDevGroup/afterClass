@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-12 18:07:41
+ * @LastEditTime: 2021-10-14 20:25:27
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -73,56 +73,84 @@ const OrderInquiry = (props: any) => {
       width: 60,
     },
     {
+      title: '订单编号',
+      dataIndex: 'DDBH',
+      key: 'DDBH',
+      align: 'center',
+      ellipsis: true,
+      width: 160,
+    },
+    {
       title: '学生姓名',
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
-      render: (_text: any, record: any) => {
+      width: 100,
+      render:(_text: any, record: any)=>{
         return record?.XSJBSJ?.XM
-      },
+      }
     },
     {
       title: '行政班名称',
       dataIndex: 'XSJBSJ',
       key: 'XSJBSJ',
       align: 'center',
-      render: (text: any) => {
-        return text?.BJSJ?.BJ;
+      render: (text: any, record: any) => {
+        return record.XSJBSJ?.BJSJ?.BJ;
       },
-      width: 100,
+      ellipsis: true,
+      width: 120,
     },
     {
       title: '服务名称',
       dataIndex: 'KHXXZZFW',
       key: 'KHXXZZFW',
       align: 'center',
+      width: 160,
+      ellipsis: true,
       render: (text: any) => {
         return <div>{text?.FWMC}</div>;
       },
-    },
-    {
-      title: '下单时间',
-      dataIndex: 'XDSJ',
-      key: 'XDSJ',
-      align: 'center',
-    },
-    {
-      title: '付款时间',
-      dataIndex: 'ZFSJ',
-      key: 'ZFSJ',
-      align: 'center',
     },
     {
       title: '订单费用(元)',
       dataIndex: 'DDFY',
       key: 'DDFY',
       align: 'center',
+      width: 100,
     },
     {
-      title: '订单状态',
-      dataIndex: 'DDZT',
-      key: 'DDZT',
+      title: '下单时间',
+      dataIndex: 'XDSJ',
+      key: 'XDSJ',
       align: 'center',
+      ellipsis: true,
+      width: 150,
+      render: (_text: any, record: any) => {
+        return record.XDSJ?.substring(0,16);
+      },
+    },
+    {
+      title: '付款时间',
+      dataIndex: 'ZFSJ',
+      key: 'ZFSJ',
+      align: 'center',
+      ellipsis: true,
+      width: 150,
+      render: (_text: any, record: any) => {
+        return record.XDSJ?.substring(0,16);
+      },
+    },
+    {
+      title: '支付方式',
+      dataIndex: 'ZFFS',
+      key: 'ZFFS',
+      align: 'center',
+      ellipsis: true,
+      width: 150,
+      render: (_text: any, record: any) => {
+        return record.ZFFS?.substring(0,16);
+      },
     },
   ];
   return (
