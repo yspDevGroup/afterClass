@@ -4,7 +4,13 @@ import type { RequestConfig } from 'umi';
 import { history, Link } from 'umi';
 import type { ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import { getAuthorization, getOauthToken, getPageQuery, removeOAuthToken } from './utils/utils';
+import {
+  getAuthorization,
+  getLoginPath,
+  getOauthToken,
+  getPageQuery,
+  removeOAuthToken,
+} from './utils/utils';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { currentWechatUser } from './services/after-class/wechat';
 import Footer from '@/components/Footer';
@@ -15,6 +21,29 @@ import { getWechatInfo, needGetWechatUserInfo, saveWechatInfo } from './utils/wx
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 const authCallbackPath = '/auth_callback';
 // let currentToken: string;
+
+const gotoLogin = (suiteID: string, isAdmin: string) => {
+  const loginPath = getLoginPath(suiteID, isAdmin);
+  if (loginPath.startsWith('http')) {
+    window.location.href = loginPath;
+  } else {
+    history.replace(loginPath);
+  }
+};
+
+/**
+ * 自动重新登录
+ *
+ */
+const autoLogin = () => {
+  const query = getPageQuery();
+  const params: Record<string, string> = {
+    ...query,
+    plat: 'school',
+  };
+  params.suiteID = params.SuiteID || params.suiteID || '';
+  gotoLogin(params.suiteID, params.isAdmin);
+};
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -35,19 +64,22 @@ export async function getInitialState(): Promise<InitialState> {
         const { info } = currentUserRes.data || {};
         if (!info) {
           const indexPage = encodeURIComponent(`/${location.search}`);
-          history.push(`/403?title=您还未登录或登录信息已过期&btnTXT=重新登录&goto=${indexPage}`);
-          removeOAuthToken();
+          history.push(
+            `/403?title=获取用户信息失败，请尝试重新登录&btnTXT=重新登录&goto=${indexPage}`,
+          );
           return undefined;
         }
         return info as API.CurrentUser;
       }
-      const indexPage = encodeURIComponent(`/${location.search}`);
-      history.push(`/403?title=您还未登录或登录信息已过期&btnTXT=重新登录&goto=${indexPage}`);
+      // const indexPage = encodeURIComponent(`/${location.search}`);
+      // history.push(`/403?title=您还未登录或登录信息已过期&btnTXT=重新登录&goto=${indexPage}`);
       // history.push(`/403?message=${currentUserRes.message}`);
       removeOAuthToken();
+      autoLogin();
       return undefined;
     } catch (error) {
       console.warn(error);
+      history.push(`/403?title=登录失败${error}`);
     }
     return undefined;
   };
@@ -210,13 +242,17 @@ export const request: RequestConfig = {
   //   Authorization: `Bearer ${localStorage.getItem('token')}`,
   // },
   middlewares: [
-    async function middlewareA(ctx, next) {
+    async function middlewareA(ctx: any, next: any) {
       ctx.req.options.headers = {
         ...ctx.req.options.headers,
         Authorization: getAuthorization(),
       };
       await next();
-      if (ctx.res.status !== 'ok' && ctx.res.message?.includes('Authorization token is invalid')) {
+      if (
+        ctx.res.status !== 'ok' &&
+        (ctx.res.message?.includes('Authorization token is invalid') ||
+          ctx.res.message?.includes('Invalid Token'))
+      ) {
         history.replace('/auth_callback/overDue');
       }
     },

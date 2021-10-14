@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { history, useModel } from 'umi';
 import { Modal, Table, Button, Switch, message, notification, Tooltip } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
@@ -14,7 +13,6 @@ import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
 import styles from './index.less';
 
-const { confirm } = Modal;
 /**
  * 课堂点名
  * @returns
@@ -88,7 +86,7 @@ const CallTheRoll = (props: any) => {
   const getData = async () => {
     // 计算签到或点名时间与当前时间的间隔（以周为单位）
     const nowSta = (nowDate.getTime() - new Date(pkDate).getTime()) / 7 / 24 / 60 / 60 / 1000;
-    const futureSta = (nowDate.getTime() - new Date(pkDate).getTime()) < 0;
+    const futureSta = nowDate.getTime() - new Date(pkDate).getTime() < 0;
     // 查询教师出勤记录
     const resCheck = await getAllKHJSCQ({
       KHBJSJId: bjids,
@@ -108,6 +106,32 @@ const CallTheRoll = (props: any) => {
       enHenceMsg(resCheck.message);
     }
 
+    const showConfirm = (tm?: boolean, title?: string, content?: string) => {
+      let secondsToGo = 3;
+      const modal = Modal.success({
+        centered: true,
+        title: tm ? '签到成功' : title,
+        content: tm ? ` ${secondsToGo} 秒之后可以开始点名` : content,
+      });
+      if (tm) {
+        const timer = setInterval(() => {
+          secondsToGo -= 1;
+          modal.update({
+            content: `${secondsToGo} 秒之后可以开始点名`,
+          });
+        }, 1000);
+        setTimeout(() => {
+          clearInterval(timer);
+          setButDis('doing');
+          modal.destroy();
+        }, secondsToGo * 1000);
+      } else {
+        setTimeout(() => {
+          modal.destroy();
+        }, secondsToGo * 1000);
+      }
+    };
+
     // 查询学生所有课后服务出勤记录
     const resAll = await getAllKHXSCQ({
       bjId: bjids || undefined, // 班级ID
@@ -120,14 +144,13 @@ const CallTheRoll = (props: any) => {
       if (allData?.length) {
         notification.warning({
           message: '',
-          description:
-            '本节课已点名,请勿重复操作',
+          description: '本节课已点名,请勿重复操作',
           duration: 4,
         });
         allData.forEach((item: any) => {
           item.isLeave = item.CQZT === '请假';
           item.isRealTo = item.CQZT;
-        })
+        });
         setButDis('done');
         setDataScouse(allData);
       } else {
@@ -137,7 +160,7 @@ const CallTheRoll = (props: any) => {
         const resLeave = await getAllKHXSQJ({
           XNXQId: '',
           KHBJSJId: bjids,
-          QJRQ: pkDate
+          QJRQ: pkDate,
         });
         // 获取班级已报名人数
         const resStudent = await getEnrolled({ id: bjids || '' });
@@ -154,14 +177,13 @@ const CallTheRoll = (props: any) => {
           setDataScouse(studentData);
           if (nowSta >= 1) {
             setButDis('undone');
-            showConfirm(false,'课堂点名','本节课因考勤超时已默认点名');
+            showConfirm(false, '课堂点名', '本节课因考勤超时已默认点名');
           }
           if (futureSta) {
             setButDis('undo');
             notification.warning({
               message: '',
-              description:
-                '本节课尚未开始点名',
+              description: '本节课尚未开始点名',
               duration: 4,
             });
           }
@@ -179,7 +201,7 @@ const CallTheRoll = (props: any) => {
       if (await initWXAgentConfig(['checkJsApi'])) {
         showUserName(userRef?.current, currentUser?.UserId);
         // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
-        WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
+        WWOpenData?.bindAll(document.querySelectorAll('ww-open-data'));
       }
     })();
   }, [currentUser]);
@@ -201,11 +223,12 @@ const CallTheRoll = (props: any) => {
   useEffect(() => {
     const absentData = dataSource.filter((item: any) => item.isRealTo === '缺席');
     const comeClassData = dataSource.filter((item: any) => item.isRealTo === '出勤');
-    const leaveData = dataSource.filter((item: any) => item.isLeave === true);
-    setLeaveData(leaveData.length);
+    const lData = dataSource.filter((item: any) => item.isLeave === true);
+    setLeaveData(lData.length);
     setAbsent(absentData.length);
     setComeClass(comeClassData.length);
   }, [dataSource]);
+
   const checkWorkInfo = [
     { shouldArrive: dataSource.length, text: '应到', key: 1 },
     { shouldArrive: comeClass, text: '到课', key: 2 },
@@ -244,44 +267,20 @@ const CallTheRoll = (props: any) => {
       enHenceMsg(res.message);
     }
   };
-  const showConfirm = (tm?: boolean, title?: string, content?: string,) => {
-    let secondsToGo = 3;
-    const modal = Modal.success({
-      centered: true,
-      title: tm ? '签到成功' : title,
-      content: tm ? ` ${secondsToGo} 秒之后可以开始点名` : content,
-    });
-    if (tm) {
-      const timer = setInterval(() => {
-        secondsToGo -= 1;
-        modal.update({
-          content: `${secondsToGo} 秒之后可以开始点名`,
-        });
-      }, 1000);
-      setTimeout(() => {
-        clearInterval(timer);
-        setButDis('doing');
-        modal.destroy();
-      }, secondsToGo * 1000);
-    } else {
-      setTimeout(() => {
-        modal.destroy();
-      }, secondsToGo * 1000);
-    }
-
-  }
   const teacherCheckIn = async () => {
-    const res = await createKHJSCQ([{
-      JZGJBSJId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
-      CQZT: '出勤',
-      CQRQ: pkDate,
-      KHBJSJId: bjids
-    }]);
+    const res = await createKHJSCQ([
+      {
+        JZGJBSJId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
+        CQZT: '出勤',
+        CQRQ: pkDate,
+        KHBJSJId: bjids,
+      },
+    ]);
     if (res.status === 'ok') {
       showConfirm(true);
       setBtnDis('done');
     } else {
-      message.error(res.message)
+      message.error(res.message);
     }
   };
   const columns: any = [
@@ -290,9 +289,9 @@ const CallTheRoll = (props: any) => {
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
-      render:(test: any,record: any)=>{
-        return record?.XSJBSJ?.XM
-      }
+      render: (test: any, record: any) => {
+        return record?.XSJBSJ?.XM;
+      },
     },
     {
       title: '班级',
@@ -309,9 +308,13 @@ const CallTheRoll = (props: any) => {
       key: 'isLeave',
       align: 'center',
       render: (text: string, record: any) => {
-        return text ? <Tooltip title={record.leaveYY} trigger='click'>
-          <span style={{ color: 'red' }}>是</span>
-        </Tooltip> : <span>否</span>;
+        return text ? (
+          <Tooltip title={record.leaveYY} trigger="click">
+            <span style={{ color: 'red' }}>是</span>
+          </Tooltip>
+        ) : (
+          <span>否</span>
+        );
       },
     },
     {
@@ -322,7 +325,12 @@ const CallTheRoll = (props: any) => {
       render: (text: string, record: any) => {
         return (
           <div key={record.id}>
-            <SwitchIndex realTo={text} record={record} onSwitchItem={onSwitchItem} butDis={butDis !== 'doing'} />
+            <SwitchIndex
+              realTo={text}
+              record={record}
+              onSwitchItem={onSwitchItem}
+              butDis={butDis !== 'doing'}
+            />
           </div>
         );
       },
@@ -330,17 +338,17 @@ const CallTheRoll = (props: any) => {
   ];
   return (
     <div className={styles.callTheRoll}>
-      <GoBack title='课堂点名' teacher onclick='/teacher/home?index=education' />
+      <GoBack title="课堂点名" teacher onclick="/teacher/home?index=education" />
       <div className={styles.rollHeader}>
         <div>
           <b>
-            <span ref={userRef}>
-              {currentUser?.UserId}
-            </span>
+            <span ref={userRef}>{currentUser?.UserId}</span>
             老师
           </b>
           <span>
-            <Button onClick={teacherCheckIn} disabled={btnDis !== 'doing'}>{btnDis === 'done' ? '已' : (btnDis === 'undone' ? '未' : '立即')}签到</Button>
+            <Button onClick={teacherCheckIn} disabled={btnDis !== 'doing'}>
+              {btnDis === 'done' ? '已' : btnDis === 'undone' ? '未' : '立即'}签到
+            </Button>
           </span>
         </div>
       </div>
@@ -375,10 +383,9 @@ const CallTheRoll = (props: any) => {
           onClick={onButtonClick}
           disabled={butDis !== 'doing'}
         >
-          {butDis === 'done' ? '已' : (butDis === 'undone' ? '已默认' : '确认')}点名
+          {butDis === 'done' ? '已' : butDis === 'undone' ? '已默认' : '确认'}点名
         </Button>
       </div>
-
     </div>
   );
 };

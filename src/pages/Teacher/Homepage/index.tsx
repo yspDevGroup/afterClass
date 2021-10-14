@@ -3,14 +3,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import { Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
+import { enHenceMsg, getCurrentStatus, getQueryString } from '@/utils/utils';
+import myContext from '@/utils/MyContext';
 import Home from './Home';
 import Education from './Education';
 import Mine from './Mine';
-import styles from './index.less';
-import { enHenceMsg, getCurrentStatus, getQueryString } from '@/utils/utils';
-import myContext from '@/utils/MyContext';
+
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
+
+import styles from './index.less';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
@@ -72,9 +74,9 @@ const PersonalHomepage = () => {
             className={styles.menuTab}
             onTabClick={(key: string) => {
               setActiveKey(key);
-              if (homeRef.current) ((homeRef.current as unknown) as HTMLElement).scrollTop = 0;
-              if (eduRef.current) ((eduRef.current as unknown) as HTMLElement).scrollTop = 0;
-              if (mineRef.current) ((mineRef.current as unknown) as HTMLElement).scrollTop = 0;
+              if (homeRef.current) (homeRef.current as unknown as HTMLElement).scrollTop = 0;
+              if (eduRef.current) (eduRef.current as unknown as HTMLElement).scrollTop = 0;
+              if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
             }}
             activeKey={activeKey}
           >
