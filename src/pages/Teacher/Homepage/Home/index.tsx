@@ -15,7 +15,7 @@ import resourcesBg from '@/assets/resourcesBg.png';
 import resourcesRgo from '@/assets/resourcesRgo.png';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
-import { Badge, Form, Input, message, Modal } from 'antd';
+import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
 
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
@@ -84,10 +84,10 @@ const Home = () => {
     }
   }, []);
 
-
-  const handleOk = async () => {
+  const onFinish = (values: any) => {
     formRef.current.validateFields()
       .then(async (values: any) => {
+        console.log('values: ', values);
         const res = await  updateJZGJBSJ( {id : currentUser.JSId },{ XM: values.name , LXDH: values.phone });
         if(res.status === 'ok'){
           message.success('更新成功！');
@@ -102,9 +102,6 @@ const Home = () => {
       });
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
 
   return (
     <div className={styles.indexPage}>
@@ -184,8 +181,16 @@ const Home = () => {
           <Details data={notification} />
         </div>
       </div>
-      <Modal className={styles.modalStyle} title="首次使用，请完善您的个人信息" forceRender={true} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
-        <Form ref={formRef} labelCol={{span: 3}} >
+      <Modal className={styles.modalStyle} title="首次使用，请完善您的个人信息"
+      forceRender={true}
+      visible={isModalVisible}
+      centered={true}
+      closable={false}
+      cancelText='取消'
+      okText='确认'
+      footer={false}
+      >
+        <Form ref={formRef} labelCol={{flex: '4em'}} wrapperCol={{ flex: 'auto' }} onFinish={onFinish} >
             <Form.Item
               name="name"
               label="姓名"
@@ -196,8 +201,15 @@ const Home = () => {
             <Form.Item
               name="phone"
               label="手机"
+              rules={[{ required: true,  pattern: /^1[3|4|5|7|8][0-9]\d{8}$/ ,message: '请输入您的手机！' }]}
             >
               <Input></Input>
+            </Form.Item>
+            <Divider />
+            <Form.Item>
+              <Button type="primary" htmlType="submit" style={{width: '100%'}}>
+                提交
+              </Button>
             </Form.Item>
           </Form>
       </Modal>
