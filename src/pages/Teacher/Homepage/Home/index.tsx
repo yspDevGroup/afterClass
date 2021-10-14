@@ -88,7 +88,7 @@ const Home = () => {
   const handleOk = async () => {
     formRef.current.validateFields()
       .then(async (values: any) => {
-        const res = await  updateJZGJBSJ( {id : currentUser.JSId },{ XM: values.info});
+        const res = await  updateJZGJBSJ( {id : currentUser.JSId },{ XM: values.name , LXDH: values.phone });
         if(res.status === 'ok'){
           message.success('更新成功！');
         }else{
@@ -184,10 +184,18 @@ const Home = () => {
           <Details data={notification} />
         </div>
       </div>
-      <Modal className={styles.modalStyle} title="请输入真实姓名" forceRender={true} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
-        <Form ref={formRef}>
+      <Modal className={styles.modalStyle} title="首次使用，请完善您的个人信息" forceRender={true} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
+        <Form ref={formRef} labelCol={{span: 3}} >
             <Form.Item
-              name="info"
+              name="name"
+              label="姓名"
+              rules={[{ required: true, message: '请输入您的真实姓名！' }]}
+            >
+              <Input></Input>
+            </Form.Item>
+            <Form.Item
+              name="phone"
+              label="手机"
             >
               <Input></Input>
             </Form.Item>
