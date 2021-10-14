@@ -23,6 +23,7 @@ type propsType = {
 };
 const LeaveHistory = (props: propsType) => {
   const { leaveInfo, getData } = props;
+  console.log(leaveInfo,'=-=-=-=')
   const handleCancle = async (d: any) => {
     const res = await updateKHXSQJ({ id: d.id }, { QJZT: 1 });
     if (res.status === 'ok') {
@@ -43,7 +44,7 @@ const LeaveHistory = (props: propsType) => {
           return (
             <div className={styles.Information}>
               <div>
-                <h4>{item.XSXM.split('-')[0]}的请假{item.QJZT === 1 ? <span>已撤销</span> : ''}</h4>
+                <h4>{item.XSJBSJ?.XM}的请假{item.QJZT === 1 ? <span>已撤销</span> : ''}</h4>
                 <span>
                   {moment(item.updatedAt||item.createdAt).format('YYYY.MM.DD')}
                 </span>
