@@ -47,7 +47,7 @@ const CourseTable: React.FC = () => {
           <li>上课地点：本校</li>
           <li>总课时：{KcDetail?.kss}课时</li>
           <li>班级：{KcDetail?.title}</li>
-          <li>学生：{currentUser?.student?.name}</li>
+          <li>学生：{localStorage.getItem('studentName') || currentUser?.student?.[0].name}</li>
         </ul>
       </ul>
     </div>
