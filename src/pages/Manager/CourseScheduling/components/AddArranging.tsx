@@ -1,22 +1,22 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
+import { history } from 'umi';
+import { Button, Form, message, Spin, Modal, Tooltip, Empty } from 'antd';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Form, message, Spin, Modal, Tooltip, Empty } from 'antd';
+import { getQueryString } from '@/utils/utils';
+import ExcelTable from '@/components/ExcelTable';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
+import type { CourseType } from '../data';
+
 import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
 import { getFJPlan } from '@/services/after-class/fjsj';
-import styles from '../index.less';
-import ExcelTable from '@/components/ExcelTable';
-import type { CourseType } from '../data';
-import { history } from 'umi';
-import { getQueryString } from '@/utils/utils';
 import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
+
+import styles from '../index.less';
 
 const { confirm } = Modal;
 
@@ -73,11 +73,11 @@ const AddArranging: FC<PropsType> = (props) => {
   useEffect(() => {
     if (formValues) {
       // 如果后查询的课程列表不存在此记录，则加到第一个
-      if (!kcmcData?.find(n => n.value === formValues.KHKCSJId)) {
+      if (!kcmcData?.find((n) => n.value === formValues.KHKCSJId)) {
         kcmcData?.unshift({
           label: formValues.KCMC,
-          value: formValues.KC
-        })
+          value: formValues.KC,
+        });
       }
       setKcType(kcmcData);
     }
@@ -104,70 +104,70 @@ const AddArranging: FC<PropsType> = (props) => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-      {
-        title: '',
-        dataIndex: 'room',
-        key: 'room',
-        align: 'center',
-        width: 66,
-      },
-      {
-        title: '',
-        dataIndex: 'course',
-        key: 'course',
-        align: 'left',
-        width: 100,
-      },
-      {
-        title: '周一',
-        dataIndex: 'monday',
-        key: 'monday',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '周二',
-        dataIndex: 'tuesday',
-        key: 'tuesday',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '周三',
-        dataIndex: 'wednesday',
-        key: 'wednesday',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '周四',
-        dataIndex: 'thursday',
-        key: 'thursday',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '周五',
-        dataIndex: 'friday',
-        key: 'friday',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '周六',
-        dataIndex: 'saturday',
-        key: 'saturday',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '周日',
-        dataIndex: 'sunday',
-        key: 'sunday',
-        align: 'center',
-        width: 100,
-      },
-    ];
+    {
+      title: '',
+      dataIndex: 'room',
+      key: 'room',
+      align: 'center',
+      width: 66,
+    },
+    {
+      title: '',
+      dataIndex: 'course',
+      key: 'course',
+      align: 'left',
+      width: 100,
+    },
+    {
+      title: '周一',
+      dataIndex: 'monday',
+      key: 'monday',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '周二',
+      dataIndex: 'tuesday',
+      key: 'tuesday',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '周三',
+      dataIndex: 'wednesday',
+      key: 'wednesday',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '周四',
+      dataIndex: 'thursday',
+      key: 'thursday',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '周五',
+      dataIndex: 'friday',
+      key: 'friday',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '周六',
+      dataIndex: 'saturday',
+      key: 'saturday',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '周日',
+      dataIndex: 'sunday',
+      key: 'sunday',
+      align: 'center',
+      width: 100,
+    },
+  ];
 
   // 将排好的课程再次点击可以取消
   const getSelectdata = (value: any) => {
@@ -231,7 +231,7 @@ const AddArranging: FC<PropsType> = (props) => {
     }, 500);
   };
   // 保存
-  const submit = async (params: any) => {
+  const submit = async () => {
     if (Bj || index) {
       if (cdmcData && cdmcData?.length > 0) {
         try {
@@ -276,6 +276,7 @@ const AddArranging: FC<PropsType> = (props) => {
     return true;
   };
   const onReset = (prop: any) => {
+    console.log(prop);
     const bjID = getQueryString('courseId');
     if (bjID) {
       history.goBack();
@@ -428,113 +429,113 @@ const AddArranging: FC<PropsType> = (props) => {
               },
             }}
           >
-            <div className={styles.screen} style={{display:'flex'}}>
-            <ProFormSelect
-              label="校区"
-              width="md"
-              name="XQ"
-              options={campus || []}
-              fieldProps={{
-                async onChange(value: any, option: any) {
-                  form.setFieldsValue({ NJ: undefined, KC: undefined });
-                  setXQID(value);
-                  const params = {
-                    xqId: value || '',
-                    XNXQId: curXNXQId,
-                    XXJBSJId: currentUser?.xxId,
-                    page: 1,
-                    pageSize: 0,
-                    name: '',
-                  };
-                  // 获取课程的数据
-                  const kcList = await getAllKHKCSJ({ ...params, isRequired: true });
-                  if (kcList.status === 'ok') {
-                    const data: any = [].map.call(kcList.data.rows, (item: CourseType) => {
-                      return {
-                        label: item.KCMC,
-                        value: item.id,
-                      };
-                    });
-                    setKcType(data);
-                  } else {
-                    message.error(kcList.message);
-                  }
-                  // 获取班级的数据
-                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待开班'] });
-                  if (bjList.status === 'ok') {
-                    setBjData(bjList.data.rows);
-                  }
-                },
-              }}
-            />
-            <ProFormSelect
-              width="md"
-              name="NJ"
-              label="年级"
-              options={grade || []}
-              fieldProps={{
-                async onChange(value) {
-                  // 年级选择时将选中的课程清空
-                  form.setFieldsValue({ KC: undefined });
+            <div className={styles.screen} style={{ display: 'flex' }}>
+              <ProFormSelect
+                label="校区"
+                width="md"
+                name="XQ"
+                options={campus || []}
+                fieldProps={{
+                  async onChange(value: any) {
+                    form.setFieldsValue({ NJ: undefined, KC: undefined });
+                    setXQID(value);
+                    const params = {
+                      xqId: value || '',
+                      XNXQId: curXNXQId,
+                      XXJBSJId: currentUser?.xxId,
+                      page: 1,
+                      pageSize: 0,
+                      name: '',
+                    };
+                    // 获取课程的数据
+                    const kcList = await getAllKHKCSJ({ ...params, isRequired: true });
+                    if (kcList.status === 'ok') {
+                      const data: any = [].map.call(kcList.data.rows, (item: CourseType) => {
+                        return {
+                          label: item.KCMC,
+                          value: item.id,
+                        };
+                      });
+                      setKcType(data);
+                    } else {
+                      message.error(kcList.message);
+                    }
+                    // 获取班级的数据
+                    const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待开班'] });
+                    if (bjList.status === 'ok') {
+                      setBjData(bjList.data.rows);
+                    }
+                  },
+                }}
+              />
+              <ProFormSelect
+                width="md"
+                name="NJ"
+                label="年级"
+                options={grade || []}
+                fieldProps={{
+                  async onChange(value) {
+                    // 年级选择时将选中的课程清空
+                    form.setFieldsValue({ KC: undefined });
 
-                  setNJID(value);
+                    setNJID(value);
 
-                  const params = {
-                    xqId: XQID || '',
-                    njId: value || '',
-                    XNXQId: curXNXQId,
-                    XXJBSJId: currentUser?.xxId,
-                    page: 1,
-                    pageSize: 0,
-                    name: '',
-                  };
+                    const params = {
+                      xqId: XQID || '',
+                      njId: value || '',
+                      XNXQId: curXNXQId,
+                      XXJBSJId: currentUser?.xxId,
+                      page: 1,
+                      pageSize: 0,
+                      name: '',
+                    };
 
-                  // 获取课程的数据
-                  const kcList = await getAllKHKCSJ({ ...params, isRequired: true });
-                  if (kcList.status === 'ok') {
-                    const data: any = [].map.call(kcList.data.rows, (item: CourseType) => {
-                      return {
-                        label: item.KCMC,
-                        value: item.id,
-                      };
-                    });
-                    setKcType(data);
-                  } else {
-                    message.error(kcList.message);
-                  }
-                  // 获取班级的数据
-                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待开班'] });
-                  if (bjList.status === 'ok') {
-                    setBjData(bjList.data.rows);
-                  }
-                },
-              }}
-            />
-            <ProFormSelect
-              width="md"
-              options={kcType || []}
-              name="KC"
-              label="课程"
-              showSearch
-              fieldProps={{
-                async onChange(value) {
-                  const params = {
-                    xqId: XQID || '',
-                    njId: NJID || '',
-                    kcId: value || '',
-                    XNXQId: curXNXQId,
-                    page: 1,
-                    pageSize: 0,
-                    name: '',
-                  };
-                  // 获取班级的数据
-                  const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待开班'] });
-                  if (bjList.status === 'ok') {
-                    setBjData(bjList.data?.rows);
-                  }
-                },
-              }}
-            />
+                    // 获取课程的数据
+                    const kcList = await getAllKHKCSJ({ ...params, isRequired: true });
+                    if (kcList.status === 'ok') {
+                      const data: any = [].map.call(kcList.data.rows, (item: CourseType) => {
+                        return {
+                          label: item.KCMC,
+                          value: item.id,
+                        };
+                      });
+                      setKcType(data);
+                    } else {
+                      message.error(kcList.message);
+                    }
+                    // 获取班级的数据
+                    const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待开班'] });
+                    if (bjList.status === 'ok') {
+                      setBjData(bjList.data.rows);
+                    }
+                  },
+                }}
+              />
+              <ProFormSelect
+                width="md"
+                options={kcType || []}
+                name="KC"
+                label="课程"
+                showSearch
+                fieldProps={{
+                  async onChange(value) {
+                    const params = {
+                      xqId: XQID || '',
+                      njId: NJID || '',
+                      kcId: value || '',
+                      XNXQId: curXNXQId,
+                      page: 1,
+                      pageSize: 0,
+                      name: '',
+                    };
+                    // 获取班级的数据
+                    const bjList = await getAllKHBJSJ({ ...params, bjzt: ['待开班'] });
+                    if (bjList.status === 'ok') {
+                      setBjData(bjList.data?.rows);
+                    }
+                  },
+                }}
+              />
             </div>
             <div className="banji">
               <span>课程班：</span>
@@ -543,6 +544,10 @@ const AddArranging: FC<PropsType> = (props) => {
               ) : bjData && bjData.length < 15 ? (
                 <ProCard ghost className="banjiCard">
                   {bjData.map((value: any) => {
+                    const teacher = value?.KHBJJs?.find(
+                      (items: any) => items.JSLX === '主教师',
+                    )?.JZGJBSJ;
+                    debugger;
                     return (
                       <ProCard
                         className="banjiItem"
@@ -555,12 +560,15 @@ const AddArranging: FC<PropsType> = (props) => {
                           <p>{value.BJMC}</p>
                         </Tooltip>
                         <span>
-                          {value?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM}
-                          {/* <WWOpenDataCom
+                          {teacher?.XM === '未知' && teacher?.WechatUserId ? (
+                            <WWOpenDataCom
                               style={{ color: '#666' }}
                               type="userName"
-                              openid={value.ZJS}
-                            /> */}
+                              openid={teacher.WechatUserId}
+                            />
+                          ) : (
+                            teacher?.XM
+                          )}
                         </span>
                         {index === value.id ? <span className="douhao">√</span> : ''}
                       </ProCard>
@@ -572,33 +580,33 @@ const AddArranging: FC<PropsType> = (props) => {
                   {packUp === false ? (
                     <ProCard ghost className="banjiCard">
                       {bjData && bjData.length > 0
-                        ? bjData.slice(0, 13).map((value: any, key: undefined) => {
-                          return (
-                            <ProCard
-                              layout="center"
-                              bordered
-                              className="banjiItem"
-                              onClick={() => BjClick(value)}
-                              style={{
-                                borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                              }}
-                            >
-                              <p>{value.BJMC}</p>
-                              <span>
-                                {
-                                  value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                    ?.JZGJBSJ?.XM
-                                }
-                                {/* <WWOpenDataCom
+                        ? bjData.slice(0, 13).map((value: any) => {
+                            return (
+                              <ProCard
+                                layout="center"
+                                bordered
+                                className="banjiItem"
+                                onClick={() => BjClick(value)}
+                                style={{
+                                  borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
+                                }}
+                              >
+                                <p>{value.BJMC}</p>
+                                <span>
+                                  {
+                                    value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                      ?.JZGJBSJ?.XM
+                                  }
+                                  {/* <WWOpenDataCom
                                         style={{ color: '#666' }}
                                         type="userName"
                                         openid={value.ZJS}
                                       /> */}
-                              </span>
-                              {index === value.id ? <span className="douhao">√</span> : ''}
-                            </ProCard>
-                          );
-                        })
+                                </span>
+                                {index === value.id ? <span className="douhao">√</span> : ''}
+                              </ProCard>
+                            );
+                          })
                         : ''}
                       <ProCard layout="center" bordered onClick={unFold} className="unFold">
                         展开 <DownOutlined style={{ color: '#4884FF' }} />
@@ -607,33 +615,33 @@ const AddArranging: FC<PropsType> = (props) => {
                   ) : (
                     <ProCard ghost className="banjiCard">
                       {bjData && bjData.length > 0
-                        ? bjData.map((value: any, key: undefined) => {
-                          return (
-                            <ProCard
-                              layout="center"
-                              bordered
-                              className="banjiItem"
-                              onClick={() => BjClick(value)}
-                              style={{
-                                borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                              }}
-                            >
-                              <p>{value.BJMC}</p>
-                              <span>
-                                {
-                                  value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                    ?.JZGJBSJ?.XM
-                                }
-                                {/* <WWOpenDataCom
+                        ? bjData.map((value: any) => {
+                            return (
+                              <ProCard
+                                layout="center"
+                                bordered
+                                className="banjiItem"
+                                onClick={() => BjClick(value)}
+                                style={{
+                                  borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
+                                }}
+                              >
+                                <p>{value.BJMC}</p>
+                                <span>
+                                  {
+                                    value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                      ?.JZGJBSJ?.XM
+                                  }
+                                  {/* <WWOpenDataCom
                                       style={{ color: '#666' }}
                                       type="userName"
                                       openid={value.ZJS}
                                     /> */}
-                              </span>
-                              {index === value.id ? <span className="douhao">√</span> : ''}
-                            </ProCard>
-                          );
-                        })
+                                </span>
+                                {index === value.id ? <span className="douhao">√</span> : ''}
+                              </ProCard>
+                            );
+                          })
                         : ''}
                       <ProCard layout="center" bordered onClick={unFold} className="unFold">
                         收起 <UpOutlined style={{ color: '#4884FF' }} />

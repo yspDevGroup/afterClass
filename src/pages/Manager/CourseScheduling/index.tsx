@@ -7,6 +7,7 @@ import { Button, Input, Radio, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import PageContainer from '@/components/PageContainer';
+import type { DataSourceType } from '@/components/ExcelTable';
 import ExcelTable from '@/components/ExcelTable';
 // 封装的弹框组件
 import PromptInformation from '@/components/PromptInformation';
@@ -39,7 +40,7 @@ const ClassManagement = () => {
   // 排课数据信息
   const [oriSource, setOriSource] = useState<any>();
   // ExcelTable表格所需要的数据
-  const [tableDataSource, setTableDataSource] = useState<any>([]);
+  const [tableDataSource, setTableDataSource] = useState<DataSourceType>([]);
   const [radioValue, setRadioValue] = React.useState(false);
   const [xXSJPZData, setXXSJPZData] = useState<any>([]);
   const [recordValue, setRecordValue] = useState<any>({});
@@ -97,7 +98,7 @@ const ClassManagement = () => {
         const optNJ: any[] = [];
         const nj = ['幼儿园', '小学', '初中', '高中'];
         nj.forEach((itemNJ) => {
-          resNJ.data?.forEach((item) => {
+          resNJ.data?.forEach((item: { XD: string; NJMC: any; id: any }) => {
             if (item.XD === itemNJ) {
               optNJ.push({
                 label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
@@ -173,16 +174,18 @@ const ClassManagement = () => {
               hjId: timeItem?.id,
             },
           };
-          if (item?.KHPKSJs && item?.KHPKSJs.length > 0) {
-            item?.KHPKSJs?.map((KHItem: any) => {
+          if (item?.KHPKSJs?.length) {
+            item.KHPKSJs.map((KHItem: any) => {
               if (KHItem?.XXSJPZ?.id === timeItem?.id) {
+                const currentTeacher = KHItem?.KHBJSJ?.KHBJJs?.find(
+                  (items: any) => items?.JSLX === '主教师',
+                );
                 table[week[KHItem?.WEEKDAY]] = {
                   weekId: KHItem?.id, // 周
                   cla: KHItem?.KHBJSJ?.BJMC, // 班级名称
-                  teacher: KHItem?.KHBJSJ?.KHBJJs?.find((items: any) => items?.JSLX === '主教师')
-                    ?.JZGJBSJ?.XM, // 主教师
-                  teacherID: KHItem?.KHBJSJ?.KHBJJs?.find((items: any) => items?.JSLX === '主教师')
-                    ?.JZGJBSJId, // 主教师ID
+                  teacher: currentTeacher?.JZGJBSJ?.XM, // 主教师
+                  teacherWechatId: currentTeacher?.JZGJBSJ?.WechatUserId, // 主教师微信用户ID
+                  teacherID: currentTeacher?.JZGJBSJId, // 主教师ID
                   bjId: KHItem?.KHBJSJ?.id, // 班级ID
                   kcId: KHItem?.KHBJSJ?.KHKCSJ?.id, // 课程ID
                   njId: KHItem?.KHBJSJ?.KHKCSJ?.NJSJs?.[0]?.id, // 年级ID
@@ -247,7 +250,7 @@ const ClassManagement = () => {
         isPk: radioValue,
       });
     }
-  }
+  };
   // 获取排课数据信息
   const getPKData = async () => {
     const res = await getFJPlan({
@@ -263,7 +266,7 @@ const ClassManagement = () => {
       setOriSource(res.data);
     }
   };
-// 获取课程对应课程班数据信息
+  // 获取课程对应课程班数据信息
   const getBjData = async () => {
     const bjmcResl = await getAllClasses({
       page: 0,
@@ -278,7 +281,7 @@ const ClassManagement = () => {
       }));
       setBjmcData(BJMC);
     }
-  }
+  };
   useEffect(() => {
     const bjID = getQueryString('courseId');
     if (!bjID) {
@@ -309,7 +312,7 @@ const ClassManagement = () => {
           });
           setState(false);
         }
-      })()
+      })();
     }
   }, []);
   useEffect(() => {
@@ -343,15 +346,15 @@ const ClassManagement = () => {
         setTableDataSource(tableData);
       }
     }
-  }, [xXSJPZData, oriSource])
+  }, [xXSJPZData, oriSource]);
   useEffect(() => {
     getPKData();
-  }, [kcmcValue, bjmcValue, cdmcValue, teacher, radioValue, BJID])
+  }, [kcmcValue, bjmcValue, cdmcValue, teacher, radioValue, BJID]);
   useEffect(() => {
-    if(kcmcValue){
+    if (kcmcValue) {
       getBjData();
     }
-  }, [kcmcValue])
+  }, [kcmcValue]);
   const columns: {
     title: string;
     dataIndex: string;
@@ -359,70 +362,70 @@ const ClassManagement = () => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-      {
-        title: '场地',
-        dataIndex: 'room',
-        key: 'room',
-        align: 'center',
-        width: 100,
-      },
-      {
-        title: '时间',
-        dataIndex: 'course',
-        key: 'course',
-        align: 'left',
-        width: 136,
-      },
-      {
-        title: '周一',
-        dataIndex: 'monday',
-        key: 'monday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周二',
-        dataIndex: 'tuesday',
-        key: 'tuesday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周三',
-        dataIndex: 'wednesday',
-        key: 'wednesday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周四',
-        dataIndex: 'thursday',
-        key: 'thursday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周五',
-        dataIndex: 'friday',
-        key: 'friday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周六',
-        dataIndex: 'saturday',
-        key: 'saturday',
-        align: 'center',
-        width: 136,
-      },
-      {
-        title: '周日',
-        dataIndex: 'sunday',
-        key: 'sunday',
-        align: 'center',
-        width: 136,
-      },
-    ];
+    {
+      title: '场地',
+      dataIndex: 'room',
+      key: 'room',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '时间',
+      dataIndex: 'course',
+      key: 'course',
+      align: 'left',
+      width: 136,
+    },
+    {
+      title: '周一',
+      dataIndex: 'monday',
+      key: 'monday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周二',
+      dataIndex: 'tuesday',
+      key: 'tuesday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周三',
+      dataIndex: 'wednesday',
+      key: 'wednesday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周四',
+      dataIndex: 'thursday',
+      key: 'thursday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周五',
+      dataIndex: 'friday',
+      key: 'friday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周六',
+      dataIndex: 'saturday',
+      key: 'saturday',
+      align: 'center',
+      width: 136,
+    },
+    {
+      title: '周日',
+      dataIndex: 'sunday',
+      key: 'sunday',
+      align: 'center',
+      width: 136,
+    },
+  ];
   /**
    * 获取Excel表格中数据的方法
    * @param value 在type="edit" 的时候使用；选中将要排课的班级的数据
@@ -452,13 +455,13 @@ const ClassManagement = () => {
         {state === true ? (
           <div>
             {/* 渲染的是四个选项框组件 */}
-            <div className={styles.searchWrapper} >
+            <div className={styles.searchWrapper}>
               <div>
                 <span>
                   所属学年学期：
                   <Select
                     value={curXNXQId}
-                    style={{ width: 200}}
+                    style={{ width: 200 }}
                     onChange={(value: string) => {
                       setCurXNXQId(value);
                     }}
@@ -480,7 +483,7 @@ const ClassManagement = () => {
                       value={kcmcValue}
                       allowClear
                       placeholder="请选择"
-                      onChange={(value)=>{
+                      onChange={(value) => {
                         setKcmcValue(value);
                         setBjmcData(undefined);
                         setBjmcValue(undefined);
@@ -494,7 +497,7 @@ const ClassManagement = () => {
                             </Option>
                           );
                         }
-                        return ''
+                        return '';
                       })}
                     </Select>
                   </div>
@@ -507,7 +510,7 @@ const ClassManagement = () => {
                       value={bjmcValue}
                       allowClear
                       placeholder="请选择"
-                      onChange={(value)=>setBjmcValue(value)}
+                      onChange={(value) => setBjmcValue(value)}
                     >
                       {bjmcData?.map((item: selectType) => {
                         return (
@@ -525,7 +528,7 @@ const ClassManagement = () => {
                     <Search
                       allowClear
                       style={{ width: 200 }}
-                      onChange={(value)=>setTeacher(value)}
+                      onChange={(value) => setTeacher(value)}
                     />
                   </div>
                 </div>
@@ -537,7 +540,7 @@ const ClassManagement = () => {
                       value={cdmcValue}
                       allowClear
                       placeholder="请选择"
-                      onChange={(value)=>setCdmcValue(value)}
+                      onChange={(value) => setCdmcValue(value)}
                     >
                       {cdmcData?.map((item: selectType) => {
                         return (
