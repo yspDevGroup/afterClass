@@ -177,7 +177,7 @@ export async function classTeachers(
     data?: {
       id?: string;
       KCSJ?: { id?: string; KCMC?: string };
-      JZGJBSJ?: { id?: string; GH?: string; XM?: string };
+      JZGJBSJ?: { id?: string; GH?: string; XM?: string; WechatUserId?: string };
     }[];
     message?: string;
   }>('/bjsj/classTeachers', {

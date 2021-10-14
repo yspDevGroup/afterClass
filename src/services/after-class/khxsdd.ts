@@ -25,7 +25,13 @@ export async function getKHXSDD(
       DDFY?: number;
       TKSJ?: string;
       DDLX?: number;
-      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+      XSJBSJ?: {
+        id?: string;
+        XH?: string;
+        XM?: string;
+        WechatUserId?: string;
+        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+      };
       KHBJSJ?:
         | {
             id?: string;
@@ -125,7 +131,13 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
       DDFY?: number;
       TKSJ?: string;
       DDLX?: number;
-      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+      XSJBSJ?: {
+        id?: string;
+        XH?: string;
+        XM?: string;
+        WechatUserId?: string;
+        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+      };
       KHBJSJ?:
         | {
             id?: string;

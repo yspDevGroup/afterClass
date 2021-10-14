@@ -144,14 +144,14 @@ const OrderInquiry = (props: any) => {
     },
     {
       title: '行政班名称',
-      dataIndex: 'XSJBSJ',
-      key: 'XSJBSJ',
+      dataIndex: 'XZBJSJ',
+      key: 'XZBJSJ',
       align: 'center',
-      render: (text: any, record: any) => {
-        return record.XSJBSJ?.BJSJ?.BJ;
-      },
+      width: 100,
       ellipsis: true,
-      width: 120,
+      render: (_text: any, record: any) => {
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ.BJ}`
+      },
     },
     {
       title: '课程班名称',

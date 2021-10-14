@@ -22,7 +22,7 @@ export async function getKHXSPJ(
       createdAt?: string;
       updatedAt?: string;
       XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
-      JZGJBSJ?: { id?: string; XM?: string };
+      JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
@@ -108,7 +108,7 @@ export async function createKHXSPJ(body: API.CreateKHXSPJ, options?: { [key: str
       createdAt?: string;
       updatedAt?: string;
       XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
-      JZGJBSJ?: { id?: string; XM?: string };
+      JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
       KHBJSJ?: {
         id?: string;
         BJMC?: string;

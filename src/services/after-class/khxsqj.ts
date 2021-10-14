@@ -24,7 +24,13 @@ export async function getKHXSQJ(
       QJLX?: '按课时请假' | '按时间请假';
       createdAt?: string;
       updatedAt?: string;
-      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+      XSJBSJ?: {
+        id?: string;
+        XH?: string;
+        XM?: string;
+        WechatUserId?: string;
+        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+      };
       KHQJKCs?: {
         QJRQ?: string;
         KCMC?: string;
@@ -38,7 +44,11 @@ export async function getKHXSQJ(
           FY?: number;
           KCTP?: string;
           XQSJ?: { id?: any; XXJBSJ?: { XXMC?: any } };
-          KHBJJs?: { JSLX?: string; id?: string; JZGJBSJ?: { id?: string; XM?: string } }[];
+          KHBJJs?: {
+            JSLX?: string;
+            id?: string;
+            JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
+          }[];
         };
       }[];
     };
@@ -119,7 +129,13 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
       QJLX?: '按课时请假' | '按时间请假';
       createdAt?: string;
       updatedAt?: string;
-      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+      XSJBSJ?: {
+        id?: string;
+        XH?: string;
+        XM?: string;
+        WechatUserId?: string;
+        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+      };
       KHQJKCs?: {
         QJRQ?: string;
         KCMC?: string;
@@ -133,7 +149,11 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
           FY?: number;
           KCTP?: string;
           XQSJ?: { id?: any; XXJBSJ?: { XXMC?: any } };
-          KHBJJs?: { JSLX?: string; id?: string; JZGJBSJ?: { id?: string; XM?: string } }[];
+          KHBJJs?: {
+            JSLX?: string;
+            id?: string;
+            JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
+          }[];
         };
       }[];
     };

@@ -106,11 +106,37 @@ export async function getAllTK(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status?: 'ok' | 'error';
-    data?: { count?: number; rows?: API.KHTKSJ[] };
-    message?: string;
-  }>('/khtksj/getAllTK', {
+  return request<any>('/khtksj/getAllTK', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 机构端获取学生退课信息 POST /khtksj/getAllTKByAgency */
+export async function getAllTKByAgency(
+  body: {
+    /** 退课状态 */
+    ZT?: number[];
+    /** 班级ID */
+    KHBJSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 机构ID */
+    KHJYJGId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khtksj/getAllTKByAgency', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

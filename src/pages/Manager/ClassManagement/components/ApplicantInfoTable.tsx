@@ -48,13 +48,13 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     },
     {
       title: '行政班名称',
-      dataIndex: 'BJSJ',
-      key: 'BJSJ',
+      dataIndex: 'XZBJSJ',
+      key: 'XZBJSJ',
       align: 'center',
       width: 100,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.BJSJ
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ.BJ}`
       },
     },
     {
