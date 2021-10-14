@@ -14,7 +14,8 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import resourcesBg from '@/assets/resourcesBg.png';
 import resourcesRgo from '@/assets/resourcesRgo.png';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
-import { Badge } from 'antd';
+import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
+import { Badge, Form, Input, message, Modal } from 'antd';
 
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
@@ -24,6 +25,9 @@ const Home = () => {
   const [notification, setNotification] = useState<any[]>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const formRef =  React.createRef<any>();
+
   const today = dayjs().format('YYYY/MM/DD');
   // 巡课中课程安排数据
   const [dateData, setDateData] = useState<any>([]);
@@ -75,7 +79,32 @@ const Home = () => {
       }
     }
     announcements();
+    if(currentUser.XM === '未知'){
+      setIsModalVisible(true);
+    }
   }, []);
+
+
+  const handleOk = async () => {
+    formRef.current.validateFields()
+      .then(async (values: any) => {
+        const res = await  updateJZGJBSJ( {id : currentUser.JSId },{ XM: values.info});
+        if(res.status === 'ok'){
+          message.success('更新成功！');
+        }else{
+          message.error(res.message);
+        }
+        setIsModalVisible(false);
+      })
+      .catch((info: { errorFields: any; }) => {
+        let error = info.errorFields
+        console.log(error);
+      });
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <div className={styles.indexPage}>
@@ -155,6 +184,15 @@ const Home = () => {
           <Details data={notification} />
         </div>
       </div>
+      <Modal className={styles.modalStyle} title="请输入真实姓名" forceRender={true} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
+        <Form ref={formRef}>
+            <Form.Item
+              name="info"
+            >
+              <Input></Input>
+            </Form.Item>
+          </Form>
+      </Modal>
     </div>
   );
 };
