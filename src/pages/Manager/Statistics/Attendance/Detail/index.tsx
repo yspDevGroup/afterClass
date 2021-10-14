@@ -47,7 +47,7 @@ const AttendanceDetail = (props: any) => {
       render: (text: any) => <div>{text?.KCMC}</div>
     },
     {
-      title: '班级名称',
+      title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
@@ -92,7 +92,7 @@ const AttendanceDetail = (props: any) => {
       render: () => <div>{data?.XSJBSJ?.XM}</div>
     },
     {
-      title: '班级名称',
+      title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',

@@ -31,7 +31,7 @@ const school = (props: any) => {
       align: 'center'
     },
     {
-      title: '班级名称',
+      title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       width: 180,
@@ -51,7 +51,7 @@ const school = (props: any) => {
       }
     },
     {
-      title: '班级人数',
+      title: '课程班人数',
       dataIndex: 'pj_count',
       key: 'pj_count',
       align: 'center',
@@ -67,7 +67,7 @@ const school = (props: any) => {
       render: (text: any) => text
     },
     {
-      title: '班级评分',
+      title: '课程评分',
       dataIndex: 'pj_avg',
       key: 'pj_avg',
       align: 'center',

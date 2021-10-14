@@ -33,7 +33,7 @@ const ActionBar = (props: propstype) => {
         }
       });
     } else {
-      message.warning('有学生报名时，此班级不能取消开班');
+      message.warning('有学生报名时，此课程班不能取消开班');
     }
   };
   const release = (records: any) => {

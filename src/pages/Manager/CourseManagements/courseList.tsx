@@ -287,7 +287,7 @@ const CourseList = () => {
       },
     },
     {
-      title: '班级信息',
+      title: '课程班信息',
       align: 'center',
       search: false,
       width: 100,

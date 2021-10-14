@@ -61,7 +61,7 @@ const AfterSchoolCourse: React.FC = () => {
       },
     },
     {
-      title: '班级数量',
+      title: '课程班数量',
       dataIndex: 'BJS',
       key: 'BJS',
       align: 'center',

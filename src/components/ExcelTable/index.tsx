@@ -125,7 +125,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             }}
           >
             <div className="cla">
-              <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : 70} />
+              <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
               {/* {data?.cla} */}
             </div>
             {mode === 'see' ? (
@@ -231,18 +231,18 @@ const Index: FC<IndexPropsType> = ({
     if (type === 'see' && !chosenData) {
       if (rowData[colItem.dataIndex]?.bjzt === '已开班') {
         Modal.warning({
-          title: '此班级已开班，不能再进行排课操作',
+          title: '此课程班已开班，不能再进行排课操作',
         });
       } else if (rowData[colItem.dataIndex]?.bjzt === '已结课') {
         Modal.warning({
-          title: '此班级已结课，不能再进行排课操作',
+          title: '此课程班已结课，不能再进行排课操作',
         });
       } else {
         seeChosenItem = {
           XQ: rowData[colItem.dataIndex]?.xqId, // 校区ID
           NJ: rowData[colItem.dataIndex]?.njId, // 年级ID
           KC: rowData[colItem.dataIndex]?.kcId, // 课程ID
-          BJId: rowData[colItem.dataIndex]?.bjId, //  班级ID
+          BJId: rowData[colItem.dataIndex]?.bjId, //  课程班ID
           CDLX: rowData.room?.FJLXId, // 场地类型ID
           CDMC: rowData.room?.jsId, // 场地名称
           weekId: rowData[colItem.dataIndex]?.weekId, // 排课ID

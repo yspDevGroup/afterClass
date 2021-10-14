@@ -138,7 +138,7 @@ const Table = (props: any) => {
       },
     },
     {
-      title: '报名班级数',
+      title: '报名课程班数',
       dataIndex: 'BJS',
       key: 'BJS',
       align: 'center',

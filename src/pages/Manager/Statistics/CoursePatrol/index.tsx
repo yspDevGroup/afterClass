@@ -53,7 +53,7 @@ const CoursePatrol = () => {
             render: (text) => text ? '是' : '否'
         },
         {
-            title: '为原定教师',
+            title: '原定教师',
             dataIndex: 'SFYDJS',
             key: ' SFYDJS',
             align: 'center',

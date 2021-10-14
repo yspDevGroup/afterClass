@@ -537,7 +537,7 @@ const AddArranging: FC<PropsType> = (props) => {
             />
             </div>
             <div className="banji">
-              <span>班级：</span>
+              <span>课程班：</span>
               {bjData && bjData.length === 0 ? (
                 <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
               ) : bjData && bjData.length < 15 ? (

@@ -478,10 +478,10 @@ const AddCourse: FC<AddCourseProps> = ({
         {
           type: 'inputNumber',
           disabled: readonly,
-          label: '班级人数：',
+          label: '课程班人数：',
           name: 'BJRS',
           key: 'BJRS',
-          rules: [{ required: true, message: '请填写班级人数' }],
+          rules: [{ required: true, message: '请填写课程班人数' }],
         },
       ]
     },
