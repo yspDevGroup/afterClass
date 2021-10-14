@@ -21,7 +21,7 @@ const Table = (props: any) => {
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   const [studentData, setStudent] = useState<API.KHXSDD[] | undefined>([]);
   useEffect(() => {
-    //获取学年学期数据的获取
+    // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
       // 获取到的整个列表的信息
@@ -36,14 +36,14 @@ const Table = (props: any) => {
     })();
   }, []);
   useEffect(() => {
-    //教师列表
+    // 教师列表
     (async () => {
       const res = await getTeachers({ XNXQId: curXNXQId })
       if (res.status === 'ok') {
         setDataSource(res?.data?.rows)
       }
     })(),
-      //学生列表
+      // 学生列表
       (async () => {
         const res2 = await getStudents({ XNXQId: curXNXQId })
         if (res2.status === 'ok') {
@@ -138,6 +138,17 @@ const Table = (props: any) => {
       },
     },
     {
+      title: '行政班名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
+      align: 'center',
+      ellipsis: true,
+      render: (text: any) => {
+        return text?.BJSJ?.BJ;
+      },
+      width: 100,
+    },
+    {
       title: '报名课程班数',
       dataIndex: 'BJS',
       key: 'BJS',
@@ -202,7 +213,7 @@ const Table = (props: any) => {
             value={curXNXQId}
             style={{ width: 200 }}
             onChange={(value: string) => {
-              //选择不同学期从新更新页面的数据
+              // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);
             }}
           >

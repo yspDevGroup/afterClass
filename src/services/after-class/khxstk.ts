@@ -11,7 +11,7 @@ export async function getKHXSTK(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -26,20 +26,14 @@ export async function getKHXSTK(
       KHBJSJId?: string;
       KHXSDDId?: string;
       XXJBSJId?: string;
-      XSJBSJ?: {
-        id?: string;
-        XH?: string;
-        XM?: string;
-        WechatUserId?: string;
-        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
-      };
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
       JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
       KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } };
     };
     message?: string;
   }>(`/khxstk/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -53,10 +47,10 @@ export async function deleteKHXSTK(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxstk/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -111,13 +105,7 @@ export async function createKHXSTK(body: API.CreateKHXSTK, options?: { [key: str
       KHBJSJId?: string;
       KHXSDDId?: string;
       XXJBSJId?: string;
-      XSJBSJ?: {
-        id?: string;
-        XH?: string;
-        XM?: string;
-        WechatUserId?: string;
-        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
-      };
+      XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
       JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
       KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } };
     };
@@ -142,13 +130,13 @@ export async function updateKHXSTK(
   body: API.UpdateKHXSTK,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxstk/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

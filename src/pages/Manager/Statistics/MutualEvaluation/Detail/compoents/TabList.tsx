@@ -1,10 +1,10 @@
 import ProTable from '@ant-design/pro-table';
 import { useEffect, useState } from 'react';
-//家长给老师的评价
+// 家长给老师的评价
 import { getKHBJPJ } from '@/services/after-class/khbjpj';
 import type { ProColumns } from '@ant-design/pro-table';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-//老师对学生
+// 老师对学生
 import { getAllKHXSPJ } from '@/services/after-class/khxspj';
 // khxspj
 import { useModel } from 'umi';
@@ -12,7 +12,7 @@ import {Rate,Popover}from 'antd'
 import { Modal} from 'antd';
 import { TermItem } from '@/pages/Manager/BasicalSettings/TermManagement/data';
 
-const TabList=(props:any)=>{
+const TabList=(props: any)=>{
     const {ListName,ListState}=props.ListData
 
     const handleOk = () => {
@@ -81,7 +81,18 @@ const TabList=(props:any)=>{
       },
     },
     {
-      title: '班级',
+      title: '行政班名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
+      align: 'center',
+      ellipsis: true,
+      render: (text: any) => {
+        return text?.BJSJ?.BJ;
+      },
+      width: 100,
+    },
+    {
+      title: '课程班名称',
       dataIndex: '',
       key: '',
       align: 'center',
@@ -109,7 +120,7 @@ const TabList=(props:any)=>{
       dataIndex: 'PY',
       key: 'PY',
       align: 'center',
-      render: (text:any) => {
+      render: (text: any) => {
             return (
                 <a
                   onClick={() => {
@@ -134,7 +145,7 @@ const TabList=(props:any)=>{
 //  const[StudentDetails,setStudentDetails]=useState('')
    //   学生详情评价列表
    const [StuList, setStuList] = useState<API.KHXSDD[] | undefined>([]);
-   //老师列表
+   // 老师列表
    const [teacherList, setTeacherList] = useState<API.KHXSDD[] | undefined>([]);
   useEffect(() => {
     if(ListName==='学生评价'){
@@ -164,7 +175,7 @@ const TabList=(props:any)=>{
           pageSize: 0,
         });
         if (res?.data?.rows) {
-       //家长给老师的评价
+       // 家长给老师的评价
           setTeacherList(res.data.rows);
 
         }

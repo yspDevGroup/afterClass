@@ -127,7 +127,7 @@ const Apply = () => {
     const { student } = currentUser || {};
     checkedValues.forEach((value: string) => {
       const data = {
-        XSId:
+        XSJBSJId:
           localStorage.getItem('studentId') || (student && student.XSJBSJId) || testStudentId,
         XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
         KHBJSJId: value.split('+')[0],

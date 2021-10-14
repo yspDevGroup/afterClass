@@ -2,7 +2,8 @@ import type { FC } from 'react';
 import React from 'react';
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
-import ProTable, { ProColumns } from '@ant-design/pro-table';
+import type { ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
 import { paginationConfig } from '@/constant';
 
 /**
@@ -46,7 +47,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       },
     },
     {
-      title: '行政班级',
+      title: '行政班名称',
       dataIndex: 'BJSJ',
       key: 'BJSJ',
       align: 'center',
