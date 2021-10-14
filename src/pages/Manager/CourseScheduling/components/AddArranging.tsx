@@ -547,7 +547,6 @@ const AddArranging: FC<PropsType> = (props) => {
                     const teacher = value?.KHBJJs?.find(
                       (items: any) => items.JSLX === '主教师',
                     )?.JZGJBSJ;
-                    debugger;
                     return (
                       <ProCard
                         className="banjiItem"

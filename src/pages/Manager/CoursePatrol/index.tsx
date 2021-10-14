@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { Button, FormInstance, message, Modal } from 'antd';
+import type { FormInstance } from 'antd';
+import { Button, message, Modal } from 'antd';
 import moment from 'moment';
 import PageContainer from '@/components/PageContainer';
 import Calendar from '@/components/Calendar';
 import NewEvent from './components/NewEvent';
 import { customConfig } from './CalendarConfig';
-import { SchoolEvent } from '@/components/Calendar/data';
+import type { SchoolEvent } from '@/components/Calendar/data';
 import { ConvertEvent, RevertEvent } from './util';
 
 import styles from './index.less';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { createKHXKSJ, deleteKHXKSJ, getKHXKSJ, getScheduleByDate, updateKHXKSJ } from '@/services/after-class/khxksj';
+import {
+  createKHXKSJ,
+  deleteKHXKSJ,
+  getKHXKSJ,
+  getScheduleByDate,
+  updateKHXKSJ,
+} from '@/services/after-class/khxksj';
 
 const { confirm } = Modal;
 const CoursePatrol = () => {
@@ -32,7 +39,7 @@ const CoursePatrol = () => {
     const result = await getKHXKSJ({
       XXJBSJId: currentUser.xxId,
       page: 0,
-      pageSize: 0
+      pageSize: 0,
     });
     if (result.status === 'ok') {
       const { data } = result;
@@ -41,19 +48,19 @@ const CoursePatrol = () => {
         setEvents(newList);
       }
     } else {
-      message.error(result.message)
+      message.error(result.message);
     }
   };
   useEffect(() => {
     getZBEvents();
-  }, [])
-  const handleClick = (type: string, date: string, events?: SchoolEvent[]) => {
-    setDate(date);
+  }, []);
+  const handleClick = (type: string, d: string, e?: SchoolEvent[]) => {
+    setDate(d);
     setModalVisible(true);
     if (type === 'check') {
-      const curValue = RevertEvent(events!);
+      const curValue = RevertEvent(e!);
       setCurrent({
-        JZGJBSJId: curValue
+        JZGJBSJId: curValue,
       });
     } else {
       setCurrent(undefined);
@@ -68,26 +75,26 @@ const CoursePatrol = () => {
       async onOk() {
         const res = await deleteKHXKSJ({
           RQ: moment(date).format('YYYY-MM-DD'),
-          XXJBSJId: currentUser.xxId
-        })
-        if(res.status === 'ok'){
+          XXJBSJId: currentUser.xxId,
+        });
+        if (res.status === 'ok') {
           message.success('信息重置完成');
           setModalVisible(false);
           getZBEvents();
-        }else{
+        } else {
           message.warning(res.message);
         }
       },
     });
   };
-  const handleOver = async (date: string) => {
+  const handleOver = async (d: string) => {
     const res = await getScheduleByDate({
       XXJBSJId: currentUser.xxId,
-      RQ: date,
-      WEEKDAY: new Date(date).getDay().toString()
+      RQ: d,
+      WEEKDAY: new Date(d).getDay().toString(),
     });
     if (res.status === 'ok' && res.data) {
-      return res.data?.rows?.length > 0
+      return res.data?.rows?.length > 0;
     }
     return false;
   };
@@ -99,11 +106,13 @@ const CoursePatrol = () => {
           const itemData: API.CreateKHXKSJ = {
             RQ: moment(values.RQ).format('YYYY-MM-DD'),
             JZGJBSJId: item,
-            XXJBSJId: currentUser.xxId
-          }
+            XXJBSJId: currentUser.xxId,
+          };
           return itemData;
         });
-        const res = current ? await updateKHXKSJ(postData as unknown as API.CreateKHXKSJ[]) : await createKHXKSJ(postData as unknown as API.CreateKHXKSJ[]);
+        const res = current
+          ? await updateKHXKSJ(postData as unknown as API.CreateKHXKSJ[])
+          : await createKHXKSJ(postData as unknown as API.CreateKHXKSJ[]);
         if (res.status === 'ok') {
           message.success('值班安排成功');
           setModalVisible(false);
@@ -137,25 +146,31 @@ const CoursePatrol = () => {
           <Button key="submit" type="primary" onClick={() => handleSubmit()}>
             确定
           </Button>,
-          current ? <Button
-            style={{
-              border: '1px solid #F04D4D ',
-              marginRight: 8,
-              background: '#F04D4D',
-              color: '#fff',
-            }}
-            onClick={showDeleteConfirm}
-          >
-            重置
-          </Button>:'',
-          <Button key="cancel"
+          current ? (
+            <Button
+              style={{
+                border: '1px solid #F04D4D ',
+                marginRight: 8,
+                background: '#F04D4D',
+                color: '#fff',
+              }}
+              onClick={showDeleteConfirm}
+            >
+              重置
+            </Button>
+          ) : (
+            ''
+          ),
+          <Button
+            key="cancel"
             style={{
               display: 'inline-block',
             }}
             onClick={(e) => {
               e.stopPropagation();
               setModalVisible(false);
-            }}>
+            }}
+          >
             取消
           </Button>,
         ]}

@@ -2,12 +2,12 @@
 import moment from 'moment';
 import { LunarHelp } from './LunarHelper';
 import { defaultConfig } from './DefaultSetting';
-import { Config, Day, SchoolEvent } from '../data';
+import type { Config, Day, SchoolEvent } from '../data';
 // 将日期格式规范化，默认格式为YYYY-MM-DD
 const formatDate = (date: string | moment.Moment, format?: string) => {
   const curDate = moment(date).format(format || 'YYYY-MM-DD');
   return curDate;
-}
+};
 // 遍历日期的方法
 export const DateRange = (startDate: string, endDate: string) => {
   // 存放groupDate;
@@ -20,22 +20,18 @@ export const DateRange = (startDate: string, endDate: string) => {
   const distanceDayLength = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60 * 24);
 
   for (let i = 0; i <= distanceDayLength; i += 1) {
-    const curDate = startTime.getTime() + (1000 * 60 * 60 * 24) * i;
-    groupDate.push(moment(curDate).format("yyyy-MM-DD"));
+    const curDate = startTime.getTime() + 1000 * 60 * 60 * 24 * i;
+    groupDate.push(moment(curDate).format('yyyy-MM-DD'));
   }
   return groupDate;
-}
+};
 // 将日期年月日单独拆离方便使用
 export const splitDate = (date: string | moment.Moment) => {
   const termYear = Number(formatDate(date, 'YYYY'));
   const termMonth = Number(formatDate(date, 'MM'));
   const termDay = Number(formatDate(date, 'DD'));
-  return [
-    termYear,
-    termMonth,
-    termDay
-  ];
-}
+  return [termYear, termMonth, termDay];
+};
 // 获取上下个月
 export const getNearbyMonth = (year: number, month: number, type: string) => {
   let cYear = year;
@@ -102,7 +98,6 @@ const getWeekly = (
   const termDate: any = new Date(formatDate(thisTerm.KSRQ, 'YYYY/MM/DD'));
   const termEndDate: any = new Date(formatDate(thisTerm.JSRQ, 'YYYY/MM/DD'));
 
-
   for (let i = 0; i < rowCount; i += 1) {
     let day = SatDay + i * 7;
     let cyear = year;
@@ -152,15 +147,16 @@ const exchangeEvents = (
     const { range } = item;
     const [startYear, startMonth] = splitDate(range[0]);
     const [endYear, endMonth] = splitDate(range[range.length - 1]);
-    if (startYear === year && startMonth === month || endYear === year && endMonth === month) {
+    if ((startYear === year && startMonth === month) || (endYear === year && endMonth === month)) {
       const days = DateRange(range[0], range[range.length - 1]);
-      for (let cur of days) {
+      for (const cur of days) {
         const [termYear, termMonth, termDay] = splitDate(cur);
         if (termYear === year && termMonth === month) {
           eventArr.push({
             id: item.id,
             term: item.term,
             title: item.title,
+            wechatUserId: item.wechatUserId,
             eventIndex: index,
             range: item.range,
             year,
@@ -206,13 +202,20 @@ const getEvents = (
         }
         return item;
       });
-    };
+    }
     return cDay;
-  })
+  });
   callback({ days: newDays });
 };
 // 获取M月份阳历阴历数据
-export const addData = (year: number, month: number, terms: API.XNXQ[] | null, events: SchoolEvent[], config: Config, callBack: (curData: any) => void) => {
+export const addData = (
+  year: number,
+  month: number,
+  terms: API.XNXQ[] | null,
+  events: SchoolEvent[],
+  config: Config,
+  callBack: (curData: any) => void,
+) => {
   const { nowYear, nowMonth, nowDay } = defaultConfig.today;
   const today = new Date();
   const [toYear, toMonth, toDay] = [today.getFullYear(), today.getMonth() + 1, today.getDate()];
@@ -224,13 +227,15 @@ export const addData = (year: number, month: number, terms: API.XNXQ[] | null, e
   const dayCount = new Date(year, month, 0).getDate();
 
   if (week === 0) week = 7;
-  if (week === 7 || week > 5 && dayCount === 31) {
-    rowCount = 6
+  if (week === 7 || (week > 5 && dayCount === 31)) {
+    rowCount = 6;
   }
   lastCount = rowCount * 7 - dayCount - week;
 
   // 计算得到月视图下第一个格子的日期
-  const thispageStart = new Date(Date.parse(day.toDateString()) - (week - 1) * 24 * 3600 * 1000).getDate();
+  const thispageStart = new Date(
+    Date.parse(day.toDateString()) - (week - 1) * 24 * 3600 * 1000,
+  ).getDate();
   // 获取上个月
   const [preYear, preMonth] = getNearbyMonth(year, month, 'pre');
   const preMonthDayCount: number = new Date(preYear, preMonth, 0).getDate();
@@ -241,13 +246,13 @@ export const addData = (year: number, month: number, terms: API.XNXQ[] | null, e
     for (let i = thispageStart; i <= preMonthDayCount; i += 1) {
       const item: Day = {
         text: i,
-        cls: 'yspOthermonth'
+        cls: 'yspOthermonth',
       };
       if (config.date.showLunar) {
         const writelunarday = new LunarHelp(preYear, preMonth, i).getLunarDayName();
         item.lunarday = writelunarday;
       }
-      days.push(item)
+      days.push(item);
     }
   }
 
@@ -255,7 +260,7 @@ export const addData = (year: number, month: number, terms: API.XNXQ[] | null, e
     const item: Day = {
       text: i,
       cls: 'yspNormal',
-    }
+    };
     if (config.date.showLunar) {
       const writelunarday = new LunarHelp(year, month, i).getLunarDayName();
       item.lunarday = writelunarday;
@@ -270,28 +275,33 @@ export const addData = (year: number, month: number, terms: API.XNXQ[] | null, e
       item.cls += ' yspChosenDay';
     }
     days.push(item);
-  };
+  }
 
   for (let i = 1; i <= lastCount + 1; i += 1) {
     const item: Day = {
       text: i,
-      cls: 'yspOthermonth'
+      cls: 'yspOthermonth',
     };
     if (config.date.showLunar) {
       const writelunarday = new LunarHelp(nextYear, nextMonth, i).getLunarDayName();
       item.lunarday = writelunarday;
     }
-    days.push(item)
+    days.push(item);
   }
   callBack({ days });
   getWeekly(year, month, rowCount, terms, callBack);
 
   if (events?.length) {
-    getEvents(year, month, days, events, callBack)
+    getEvents(year, month, days, events, callBack);
   }
-}
+};
 
-const getMonthData = (type: 'start' | 'middle' | 'end', year: number, month: number, day?: number) => {
+const getMonthData = (
+  type: 'start' | 'middle' | 'end',
+  year: number,
+  month: number,
+  day?: number,
+) => {
   const days = [];
   let date;
   if (type === 'middle') {
@@ -314,27 +324,36 @@ const getMonthData = (type: 'start' | 'middle' | 'end', year: number, month: num
     const item = {
       text: i,
       cls: 'yspNormal',
-      week: new Date(year, month - 1, i).getDay()
+      week: new Date(year, month - 1, i).getDay(),
     };
     days.push(item);
-  };
+  }
   return days;
 };
-const findAllData = (type: 'start' | 'middle' | 'end', data: any[], finishYear: number, finishMonth: number, finishDay: number, year: number, month: number, day?: number) => {
+const findAllData = (
+  type: 'start' | 'middle' | 'end',
+  data: any[],
+  finishYear: number,
+  finishMonth: number,
+  finishDay: number,
+  year: number,
+  month: number,
+  day?: number,
+) => {
   const [nextYear, nextMonth] = getNearbyMonth(year, month, 'next');
   if (nextYear === finishYear && nextMonth === finishMonth) {
     const curDates = getMonthData('end', year, month, finishDay);
     data.push({
       month: month,
-      date: curDates
+      date: curDates,
     });
   } else {
     const curDates = getMonthData(type, year, month, day);
     data.push({
       month: month,
-      date: curDates
+      date: curDates,
     });
-    findAllData('middle',data, finishYear, finishMonth, finishDay, nextYear, nextMonth);
+    findAllData('middle', data, finishYear, finishMonth, finishDay, nextYear, nextMonth);
   }
 };
 // 获取学期数据
@@ -342,9 +361,17 @@ export const getTermData = (term: API.XNXQ) => {
   const { KSRQ, JSRQ } = term;
   const startDay = new Date(KSRQ);
   const endDay = new Date(JSRQ);
-  const [beginYear, beginMonth, beginDay] = [startDay.getFullYear(), startDay.getMonth() + 1, startDay.getDate()];
-  const [finishYear, finishMonth, finishDay] = [endDay.getFullYear(), endDay.getMonth() + 1, endDay.getDate()];
-  let data: any[] = [];
+  const [beginYear, beginMonth, beginDay] = [
+    startDay.getFullYear(),
+    startDay.getMonth() + 1,
+    startDay.getDate(),
+  ];
+  const [finishYear, finishMonth, finishDay] = [
+    endDay.getFullYear(),
+    endDay.getMonth() + 1,
+    endDay.getDate(),
+  ];
+  const data: any[] = [];
   findAllData('start', data, finishYear, finishMonth, finishDay, beginYear, beginMonth, beginDay);
   return data;
-}
+};

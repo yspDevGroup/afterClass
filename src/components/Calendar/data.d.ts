@@ -6,24 +6,25 @@ export type SchoolEvent = {
     XN?: string;
     XQ?: string;
     KSRQ?: string;
-    JSRQ?: string
+    JSRQ?: string;
   }; // 学期
   title: string;
-  eventIndex?: number;// 当月事件顺序
+  wechatUserId?: string;
+  eventIndex?: number; // 当月事件顺序
   year?: number;
   month?: number;
   day?: number;
   range: string[]; // 事件时间
   dateItem?: string; // 事件时间转换，无需配置
   editRange?: string[]; // 事件时间转换，无需配置
-}
+};
 // 日历中日期格式
 export type Day = {
-  text: number,
-  cls: string,
+  text: number;
+  cls: string;
   lunarday?: string;
   events?: SchoolEvent[];
-}
+};
 // 日历配置参数说明
 export type Config = {
   className?: string; // 日历dom自定义类名
@@ -46,9 +47,10 @@ export type Config = {
   showEventList?: boolean; // 是否在右侧显示事件列表
   eventListWidth?: string; // 右侧显示事件列表的宽度
   nodataImg?: string; // 右侧显示事件列表的无数据的图片地址
-  today: { // 当前日期，默认展示，无需配置
+  today: {
+    // 当前日期，默认展示，无需配置
     nowYear: number;
     nowMonth: number;
     nowDay: number;
   };
-}
+};
