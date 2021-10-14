@@ -320,8 +320,6 @@ const ServiceManagement = () => {
                   >报名信息</Link>
                 </>
             }
-
-
           </div>
         );
       }
@@ -527,8 +525,6 @@ const ServiceManagement = () => {
           >
             <Input placeholder='建议以月份开头命名' disabled={Disabled === '查看'} />
           </Form.Item>
-
-
           <Form.Item
             label="服务费用"
             name="FY"
@@ -627,9 +623,8 @@ const ServiceManagement = () => {
               }
             ]}
           >
-            <Input.TextArea placeholder='请输入' disabled={Disabled === '查看'} rows={4} />
+            <Input.TextArea placeholder='请输入' showCount maxLength={200} disabled={Disabled === '查看'} rows={4} />
           </Form.Item>
-
         </Form>
       </Modal>
     </PageContainer>

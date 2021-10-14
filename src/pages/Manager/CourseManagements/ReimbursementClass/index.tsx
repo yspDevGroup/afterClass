@@ -273,7 +273,7 @@ const ReimbursementClass = () => {
               <TextArea rows={4} maxLength={100} />
             </Form.Item>
           </Form>
-          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>注：如本流程涉及到退款将会自动发起退款申请。</p>
+          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>注：同意退课后，如涉及退款，系统将自动发起退款申请。</p>
         </Modal>
       </div>
     </PageContainer>

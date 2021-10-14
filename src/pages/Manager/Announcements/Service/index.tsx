@@ -31,34 +31,36 @@ const ServiceDetails = (props: any) => {
 
   return (
     <PageContainer>
-      <Button
-        style={{
-          float: 'right',
-          marginTop: '24px',
-          marginRight: '24px',
-        }}
-        key="xinjian"
-        type="primary"
-        onClick={() => {
-          history.push('/basicalSettings/service/editArticle', content);
-        }}
-      >
-        <EditOutlined /> 编辑
-      </Button>
-      <div className={styles.ArticleDetails}>
-        <h1>课后服务协议</h1>
-        {content?.RQ ? <p className={styles?.RQ}>时间：{content?.RQ}</p> : ''}
-        {content?.NR ? (
-          <div dangerouslySetInnerHTML={{ __html: content?.NR }} />
-        ) : (
-          <Empty
-            image={noData}
-            imageStyle={{
-              height: 150,
-            }}
-            description="尚未编辑课后服务协议，请先点击右上角编辑按钮"
-          />
-        )}
+      <div className={styles.articleWraper}>
+        <Button
+          style={{
+            float: 'right',
+            marginTop: '14px',
+            padding:'4px 16px'
+          }}
+          key="xinjian"
+          type="primary"
+          onClick={() => {
+            history.push('/basicalSettings/service/editArticle', content);
+          }}
+        >
+          <EditOutlined /> 编辑
+        </Button>
+        <div className={styles.ArticleDetails}>
+          <h1>课后服务协议</h1>
+          {content?.RQ ? <p className={styles?.RQ}>时间：{content?.RQ}</p> : ''}
+          {content?.NR ? (
+            <div dangerouslySetInnerHTML={{ __html: content?.NR }} />
+          ) : (
+            <Empty
+              image={noData}
+              imageStyle={{
+                height: 150,
+              }}
+              description="尚未编辑课后服务协议，请先点击右上角编辑按钮"
+            />
+          )}
+        </div>
       </div>
     </PageContainer>
   );

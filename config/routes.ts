@@ -59,7 +59,6 @@
         hideInMenu: true,
         component: './Manager/BasicalSettings/SchoolInfo/SchoolEditor',
       },
-
       {
         path: '/basicalSettings/service',
         name: 'service',
@@ -185,7 +184,6 @@
       },
     ],
   },
-
   {
     path: '/orderInquiry',
     name: 'orderInquiry',

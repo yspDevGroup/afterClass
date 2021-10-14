@@ -345,18 +345,18 @@ const AddCourse: FC<AddCourseProps> = ({
             KHBJSJId: formValues?.id,
           },
         ];
-        const FJS = values.FJS.map((item: any) => {
+        const FJS = values?.FJS && values?.FJS?.length ? values.FJS.map((item: any) => {
           return {
             JSLX: '副教师',
             JZGJBSJId: item,
             KHBJSJId: formValues?.id,
           };
-        });
+        }) : undefined;
         delete options.BJZT;
         const params = {
           id: formValues?.id,
         };
-        res = updateKHBJSJ(params, { ...options, KHBJJSs: [...ZJS, ...FJS] });
+        res = updateKHBJSJ(params, { ...options, KHBJJSs: FJS ? [...ZJS, ...FJS]:[...ZJS] });
       } else {
         const ZJS = [
           {
@@ -364,13 +364,13 @@ const AddCourse: FC<AddCourseProps> = ({
             JZGJBSJId: values.ZJS,
           },
         ];
-        const FJS = values.FJS.map((item: any) => {
+        const FJS = values?.FJS && values?.FJS?.length ? values.FJS.map((item: any) => {
           return {
             JSLX: '副教师',
             JZGJBSJId: item,
           };
-        });
-        res = createKHBJSJ({ ...options, KHBJJSs: [...ZJS, ...FJS] });
+        }):undefined;
+        res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS]:[...ZJS] });
       }
       resolve(res);
       reject(res);

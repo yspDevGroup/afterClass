@@ -3,7 +3,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Button, Radio, Select } from 'antd';
+import { Button, Input, Radio, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import PageContainer from '@/components/PageContainer';
@@ -21,32 +21,33 @@ import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import AddArranging from './components/AddArranging';
 // import { NJData, XQData } from './mock';
 import styles from './index.less';
-import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
+import { getAllCourses, getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { useModel } from 'umi';
 import { getAllGrades } from '@/services/after-class/khjyjg';
-import { getAllKHBJSJ, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getAllClasses, getAllKHBJSJ, getKHBJSJ } from '@/services/after-class/khbjsj';
 
 const { Option } = Select;
+const { Search } = Input;
 type selectType = { label: string; value: string };
 
 const ClassManagement = () => {
   const [state, setState] = useState(true);
   const [curXNXQId, setCurXNXQId] = useState<any>(getQueryString('xnxqid'));
   const [termList, setTermList] = useState<any>();
+  // 排课数据信息
+  const [oriSource, setOriSource] = useState<any>();
   // ExcelTable表格所需要的数据
   const [tableDataSource, setTableDataSource] = useState<any>([]);
   const [radioValue, setRadioValue] = React.useState(false);
   const [xXSJPZData, setXXSJPZData] = useState<any>([]);
   const [recordValue, setRecordValue] = useState<any>({});
   const [BJID, setBJIDData] = useState<any>('');
-
   // 校区
   const [campus, setCampus] = useState<any>([]);
   // 年级
   const [grade, setGrade] = useState<any>({});
-
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 排课时段的提示开关
@@ -59,9 +60,7 @@ const ClassManagement = () => {
   // 班级名称选择框的数据
   const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
   const [bjmcValue, setBjmcValue] = useState<any>();
-  // 场地类型选择框的数据
-  const [cdlxData, setCdlxData] = useState<selectType[] | undefined>([]);
-  const [cdlxValue, setCdlxValue] = useState<any>();
+  const [teacher, setTeacher] = useState<any>();
   // 场地名称选择框的数据
   const [cdmcData, setCdmcData] = useState<selectType[] | undefined>([]);
   const [cdmcValue, setCdmcValue] = useState<any>();
@@ -108,6 +107,21 @@ const ClassManagement = () => {
           });
         });
         setGrade(optNJ);
+      }
+      // 获取所有场地数据
+      const fjList = await getAllFJSJ({
+        page: 1,
+        pageSize: 0,
+        name: '',
+        XXJBSJId: currentUser?.xxId,
+      });
+      if (fjList.status === 'ok') {
+        if (fjList.data?.rows && fjList.data?.rows?.length > 0) {
+          const data: any = [].map.call(fjList.data.rows, (item: any) => {
+            return { label: item.FJMC, value: item.id };
+          });
+          setCdmcData(data);
+        }
       }
     })();
   }, []);
@@ -201,60 +215,6 @@ const ClassManagement = () => {
     setSameClassData(sameClassData);
     return tableData;
   };
-  useEffect(() => {
-    (async () => {
-      const bjID = getQueryString('courseId');
-      if (bjID) {
-        // 查询所有课程的时间段
-        const resultTime = await getAllXXSJPZ({
-          XNXQId: curXNXQId,
-          XXJBSJId: currentUser?.xxId,
-          type: ['0'],
-        });
-        if (resultTime.status === 'ok') {
-          const timeSlot = resultTime.data;
-          setXXSJPZData(timeSlot);
-          // 查询排课数据
-          const resultPlan = await getFJPlan({
-            XNXQId: curXNXQId,
-            XXJBSJId: currentUser?.xxId,
-            isPk: radioValue,
-          });
-          if (resultPlan.status === 'ok') {
-            const tableData = processingData(resultPlan.data, timeSlot);
-            setTableDataSource(tableData);
-          }
-        }
-        const njInfo = await getKHBJSJ({ id: bjID });
-
-        if (njInfo.status === 'ok') {
-          setRecordValue({
-            BJId: njInfo.data.id,
-            NJ: njInfo.data.KHKCSJ.NJSJs[0].id,
-            KC: njInfo.data.KHKCSJId,
-            KCMC: njInfo.data.KHKCSJ.KCMC,
-            XQ: njInfo.data.XQSJId,
-          });
-          setState(false);
-        }
-      }
-    })();
-  }, []);
-  useEffect(() => {
-    if (BJID) {
-      const res = getFJPlan({
-        XNXQId: curXNXQId,
-        XXJBSJId: currentUser?.xxId,
-        isPk: false,
-      });
-      Promise.resolve(res).then((data: any) => {
-        if (data.status === 'ok') {
-          const tableData = processingData(data.data, xXSJPZData);
-          setTableDataSource(tableData);
-        }
-      });
-    }
-  }, [BJID]);
   const onRadioChange = (e: any) => {
     setRadioValue(e.target.value);
     const res = getFJPlan({
@@ -269,6 +229,56 @@ const ClassManagement = () => {
       }
     });
   };
+  // 获取系统时间配置信息
+  const getSysTime = async () => {
+    // 查询所有课程的时间段
+    const resultTime = await getAllXXSJPZ({
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+      type: ['0'],
+    });
+    if (resultTime.status === 'ok') {
+      const timeSlot = resultTime.data;
+      setXXSJPZData(timeSlot);
+      // 查询排课数据
+      const resultPlan = await getFJPlan({
+        XNXQId: curXNXQId,
+        XXJBSJId: currentUser?.xxId,
+        isPk: radioValue,
+      });
+    }
+  }
+  // 获取排课数据信息
+  const getPKData = async () => {
+    const res = await getFJPlan({
+      kcId: kcmcValue,
+      bjId: bjmcValue,
+      fjId: cdmcValue,
+      JSXM: teacher,
+      isPk: radioValue,
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+    });
+    if (res.status === 'ok') {
+      setOriSource(res.data);
+    }
+  };
+// 获取课程对应课程班数据信息
+  const getBjData = async () => {
+    const bjmcResl = await getAllClasses({
+      page: 0,
+      pageSize: 0,
+      KHKCSJId: kcmcValue,
+      XNXQId: curXNXQId,
+    });
+    if (bjmcResl.status === 'ok') {
+      const BJMC = bjmcResl.data.rows?.map((item: any) => ({
+        label: item.BJMC,
+        value: item.id,
+      }));
+      setBjmcData(BJMC);
+    }
+  }
   useEffect(() => {
     const bjID = getQueryString('courseId');
     if (!bjID) {
@@ -281,31 +291,25 @@ const ClassManagement = () => {
           if (curTerm) {
             setCurXNXQId(curTerm.id);
             setTermList(newData);
-            // 查询所有课程的时间段
-            const resultTime = await getAllXXSJPZ({
-              XNXQId: curTerm.id,
-              XXJBSJId: currentUser?.xxId,
-              type: ['0'],
-            });
-            if (resultTime.status === 'ok') {
-              const timeSlot = resultTime.data;
-              setXXSJPZData(timeSlot);
-              // 查询排课数据
-              const resultPlan = await getFJPlan({
-                XNXQId: curTerm.id,
-                XXJBSJId: currentUser?.xxId,
-                isPk: radioValue,
-              });
-              if (resultPlan.status === 'ok') {
-                const tableData = processingData(resultPlan.data, timeSlot);
-                setTableDataSource(tableData);
-              }
-            }
           }
         } else {
           setkai(true);
         }
       })();
+    } else {
+      (async () => {
+        const njInfo = await getKHBJSJ({ id: bjID });
+        if (njInfo.status === 'ok') {
+          setRecordValue({
+            BJId: njInfo.data.id,
+            NJ: njInfo.data.KHKCSJ.NJSJs[0].id,
+            KC: njInfo.data.KHKCSJId,
+            KCMC: njInfo.data.KHKCSJ.KCMC,
+            XQ: njInfo.data.XQSJId,
+          });
+          setState(false);
+        }
+      })()
     }
   }, []);
   useEffect(() => {
@@ -319,7 +323,7 @@ const ClassManagement = () => {
           XXJBSJId: currentUser?.xxId,
         };
         // 通过课程数据接口拿到所有的课程
-        const khkcResl = await getAllKHKCSJ({ ...params, isRequired: false });
+        const khkcResl = await getAllCourses(params);
         if (khkcResl.status === 'ok') {
           const KCMC = khkcResl.data.rows?.map((item: any) => ({
             label: item.KCMC,
@@ -327,171 +331,27 @@ const ClassManagement = () => {
           }));
           setKcmcData(KCMC);
         }
-        // 通过班级数据接口拿到所有的班级
-        const bjmcResl = await getAllKHBJSJ(params);
-        if (bjmcResl.status === 'ok') {
-          const BJMC = bjmcResl.data.rows?.map((item: any) => ({
-            label: item.BJMC,
-            value: item.id,
-          }));
-          setBjmcData(BJMC);
-        }
-
-        // 获取所有场地类型
-        const response = await getAllFJLX({ name: '', XXJBSJId: currentUser?.xxId });
-        if (response.status === 'ok') {
-          if (response.data && response.data.length > 0) {
-            const data: any = [].map.call(response.data, (item: RoomType) => {
-              return { label: item.FJLX, value: item.id };
-            });
-            setCdlxData(data);
-          }
-        }
-
-        // 获取所有场地数据
-        const fjList = await getAllFJSJ({
-          page: 1,
-          pageSize: 0,
-          name: '',
-          XXJBSJId: currentUser?.xxId,
-        });
-        if (fjList.status === 'ok') {
-          if (fjList.data?.rows && fjList.data?.rows?.length > 0) {
-            const data: any = [].map.call(fjList.data.rows, (item: any) => {
-              return { label: item.FJMC, value: item.id };
-            });
-            setCdmcData(data);
-          }
-        }
-        // 查询所有课程的时间段
-        const resultTime = await getAllXXSJPZ({
-          XNXQId: curXNXQId,
-          XXJBSJId: currentUser?.xxId,
-          type: ['0'],
-        });
-        if (resultTime.status === 'ok') {
-          const timeSlot = resultTime.data;
-          setXXSJPZData(timeSlot);
-          // 排课的接口
-          const res = await getFJPlan({
-            kcId: kcmcValue,
-            bjId: bjmcValue,
-            lxId: cdlxValue,
-            fjId: cdmcValue,
-            isPk: radioValue,
-            XNXQId: curXNXQId,
-            XXJBSJId: currentUser?.xxId,
-          });
-          if (res.status === 'ok') {
-            const tableData = processingData(res.data, timeSlot);
-            setTableDataSource(tableData);
-          }
-        }
+        getSysTime();
+        getPKData();
       }
     })();
   }, [curXNXQId]);
-  // 课程名称下拉框点击事件
-  const onKcmcChange = async (value: any) => {
-    setKcmcValue(value);
-    // 排课的接口
-    const res = await getFJPlan({
-      kcId: value,
-      bjId: bjmcValue,
-      lxId: cdlxValue,
-      fjId: cdmcValue,
-      isPk: radioValue,
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok') {
-      const tableData = processingData(res.data, xXSJPZData);
-      setTableDataSource(tableData);
-    }
-
-    // 根据课程ID 获取班级数据
-    const bjRes = await getAllKHBJSJ({
-      kcId: value,
-      XNXQId: curXNXQId,
-      name: '',
-      page: 1,
-      pageSize: 0,
-    });
-    if (bjRes.status === 'ok') {
-      const BJMC = bjRes.data.rows?.map((item: any) => ({ label: item.BJMC, value: item.id }));
-      setBjmcData(BJMC);
-    }
-  };
-
-  // 班级名称下拉框点击事件
-  const onBjmcChange = async (value: any) => {
-    setBjmcValue(value);
-    // 排课的接口
-    const res = await getFJPlan({
-      kcId: kcmcValue,
-      bjId: value,
-      lxId: cdlxValue,
-      fjId: cdmcValue,
-      isPk: radioValue,
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok') {
-      const tableData = processingData(res.data, xXSJPZData);
-      setTableDataSource(tableData);
-    }
-  };
-
-  // 场地类型下拉框点击事件
-  const onCdlxChange = async (value: any) => {
-    setCdlxValue(value);
-    // 排课的接口
-    const res = await getFJPlan({
-      kcId: kcmcValue,
-      bjId: bjmcValue,
-      lxId: value,
-      fjId: cdmcValue,
-      isPk: radioValue,
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok') {
-      const tableData = processingData(res.data, xXSJPZData);
-      setTableDataSource(tableData);
-    }
-    // 获取场地的数据
-    const fjList = await getAllFJSJ({
-      lxId: value,
-      page: 1,
-      pageSize: 0,
-      name: '',
-    });
-    if (fjList.status === 'ok') {
-      if (fjList.data?.rows && fjList.data?.rows?.length > 0) {
-        const data: any = [].map.call(fjList.data, (item: any) => {
-          return { label: item.FJMC, value: item.id };
-        });
-        setCdmcData(data);
+  useEffect(() => {
+    if (xXSJPZData?.length) {
+      if (oriSource) {
+        const tableData = processingData(oriSource, xXSJPZData);
+        setTableDataSource(tableData);
       }
     }
-  };
-  // 场地名称下拉框点击事件
-  const onCdmcChange = async (value: any) => {
-    setCdmcValue(value);
-    // 排课的接口
-    const res = await getFJPlan({
-      kcId: kcmcValue,
-      bjId: bjmcValue,
-      lxId: cdlxValue,
-      fjId: value,
-      isPk: radioValue,
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok') {
-      const tableData = processingData(res.data, xXSJPZData);
-      setTableDataSource(tableData);
+  }, [xXSJPZData, oriSource])
+  useEffect(() => {
+    getPKData();
+  }, [kcmcValue, bjmcValue, cdmcValue, teacher, radioValue, BJID])
+  useEffect(() => {
+    if(kcmcValue){
+      getBjData();
     }
-  };
+  }, [kcmcValue])
   const columns: {
     title: string;
     dataIndex: string;
@@ -598,7 +458,7 @@ const ClassManagement = () => {
                   所属学年学期：
                   <Select
                     value={curXNXQId}
-                    style={{ width: 200, marginRight: 16 }}
+                    style={{ width: 200}}
                     onChange={(value: string) => {
                       setCurXNXQId(value);
                     }}
@@ -620,14 +480,21 @@ const ClassManagement = () => {
                       value={kcmcValue}
                       allowClear
                       placeholder="请选择"
-                      onChange={onKcmcChange}
+                      onChange={(value)=>{
+                        setKcmcValue(value);
+                        setBjmcData(undefined);
+                        setBjmcValue(undefined);
+                      }}
                     >
                       {kcmcData?.map((item: selectType) => {
-                        return (
-                          <Option value={item.value} key={item.value}>
-                            {item.label}
-                          </Option>
-                        );
+                        if (item.value) {
+                          return (
+                            <Option value={item.value} key={item.value}>
+                              {item.label}
+                            </Option>
+                          );
+                        }
+                        return ''
                       })}
                     </Select>
                   </div>
@@ -640,7 +507,7 @@ const ClassManagement = () => {
                       value={bjmcValue}
                       allowClear
                       placeholder="请选择"
-                      onChange={onBjmcChange}
+                      onChange={(value)=>setBjmcValue(value)}
                     >
                       {bjmcData?.map((item: selectType) => {
                         return (
@@ -653,23 +520,13 @@ const ClassManagement = () => {
                   </div>
                 </div>
                 <div>
-                  <span>场地类型：</span>
+                  <span>教师名称：</span>
                   <div>
-                    <Select
-                      style={{ width: 200 }}
-                      value={cdlxValue}
+                    <Search
                       allowClear
-                      placeholder="请选择"
-                      onChange={onCdlxChange}
-                    >
-                      {cdlxData?.map((item: selectType) => {
-                        return (
-                          <Option value={item.value} key={item.value}>
-                            {item.label}
-                          </Option>
-                        );
-                      })}
-                    </Select>
+                      style={{ width: 200 }}
+                      onChange={(value)=>setTeacher(value)}
+                    />
                   </div>
                 </div>
                 <div>
@@ -680,7 +537,7 @@ const ClassManagement = () => {
                       value={cdmcValue}
                       allowClear
                       placeholder="请选择"
-                      onChange={onCdmcChange}
+                      onChange={(value)=>setCdmcValue(value)}
                     >
                       {cdmcData?.map((item: selectType) => {
                         return (

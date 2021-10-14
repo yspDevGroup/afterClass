@@ -400,7 +400,7 @@ const MutualEvaluation = () => {
           </Form.Item>
 
           <Form.Item label="类别描述" name="FWNR" key="FWNR">
-            <Input.TextArea placeholder="请输入" rows={4} />
+            <Input.TextArea placeholder="请输入" showCount maxLength={200} rows={4}  />
           </Form.Item>
         </Form>
       </Modal>

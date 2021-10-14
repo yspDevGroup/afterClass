@@ -431,7 +431,7 @@ const Index: FC<IndexPropsType> = ({
         </div>
       ) : (
         <div className={styles.noContent}>
-          {radioValue ? '当前暂无课程安排' : '当前暂无排课的场地'}
+          暂无排课信息
         </div>
       )}
     </div>

@@ -7,6 +7,7 @@ import { basicForm } from './FormItems';
 import { useEffect, useState } from 'react';
 import { XXJBSJ } from './data';
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
+import { EditOutlined } from '@ant-design/icons';
 
 const formItemLayout = {
   labelCol: { flex: '7em' },
@@ -43,7 +44,7 @@ const SchoolInfo = () => {
             <Link to={{
               pathname: '/basicalSettings/schoolInfo/schoolEditor',
               state: { schoolInfo },
-            }} >编辑</Link>
+            }} ><EditOutlined style={{marginRight: 5}} />编辑</Link>
           </div>
         </div>
         {/* 基本信息 */}
