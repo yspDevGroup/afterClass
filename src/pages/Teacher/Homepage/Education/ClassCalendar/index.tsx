@@ -58,7 +58,7 @@ const ClassCalendar = (props: propstype) => {
         setIsModalVisible(true);
         const schedule = await getData(bjid, children[0].student_userid!);
         const { ...rest } = schedule;
-        setModalContent(`今日${rest.kcmc}课${rest.title}班已下课，请知悉。`);
+        setModalContent(`今日${rest.kcmc}-${rest.title}已下课，请知悉。`);
         setBjid(bjid);
       },
     },
