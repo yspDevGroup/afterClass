@@ -4,7 +4,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-09 08:57:20
- * @LastEditTime: 2021-10-14 12:15:49
+ * @LastEditTime: 2021-10-14 17:35:55
  * @LastEditors: zpl
  */
 import {
@@ -113,7 +113,7 @@ export const creatTokenForWechat = async (params: Record<string, string>): Promi
  * @param {*} jsApiList 需要使用的JS接口列表，凡是要调用的接口都需要传进来
  */
 export const initWXConfig = async (jsApiList: string[]) => {
-  const res = await getQYJsSignature({ url: window.location.href });
+  const res = await getQYJsSignature({ url: window.location.href.split('#')[0] });
   if (res.status === 'ok') {
     const { appId, timestamp = 0, nonceStr, signature = '' } = res.data || {};
     const currentConf = {
@@ -147,7 +147,7 @@ export const initWXConfig = async (jsApiList: string[]) => {
  * @param {string[]} jsApiList 需要使用的接口名称
  */
 export const initWXAgentConfig = async (jsApiList: string[]) => {
-  const res = await getYYJsSignature({ url: window.location.href });
+  const res = await getYYJsSignature({ url: window.location.href.split('#')[0] });
   if (res.status === 'ok') {
     const { corpid, agentid, timestamp = 0, nonceStr, signature = '' } = res.data || {};
     const currentConf = {
@@ -178,6 +178,14 @@ export const initWXAgentConfig = async (jsApiList: string[]) => {
     });
   }
   return Promise.reject(`获取签名失败： ${res.message}`);
+};
+
+export const regWechatAPI = async (apiList?: string[]) => {
+  const jsApiList = apiList || ['checkJsApi'];
+  if (/MicroMessenger/i.test(navigator.userAgent)) {
+    await initWXConfig(jsApiList);
+  }
+  await initWXAgentConfig(jsApiList);
 };
 
 /**

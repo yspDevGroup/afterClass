@@ -6,23 +6,26 @@
 import React from 'react';
 import { Link, useModel } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tag, Tooltip, Select } from 'antd';
+import { Button, Modal, Tooltip, Select } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllCourses, getAllKHKCSJ } from '@/services/after-class/khkcsj';
 import { theme } from '@/theme-default';
-import { paginationConfig } from '@/constant';
+// import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+// import { paginationConfig } from '@/constant';
 import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import styles from './index.less';
+
+import { getAllCourses } from '@/services/after-class/khkcsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
+
 import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
 import type { CourseItem } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
-import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
+
+import styles from './index.less';
 
 const { Option } = Select;
 
@@ -58,14 +61,14 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [KHKCAllData, setKHKCAllData] = useState<any>([]);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  useEffect(() => {
-    (async () => {
-      if (/MicroMessenger/i.test(navigator.userAgent)) {
-        await initWXConfig(['checkJsApi']);
-      }
-      await initWXAgentConfig(['checkJsApi']);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (/MicroMessenger/i.test(navigator.userAgent)) {
+  //       await initWXConfig(['checkJsApi']);
+  //     }
+  //     await initWXAgentConfig(['checkJsApi']);
+  //   })();
+  // }, []);
 
   const showModal = (record: any) => {
     const { BJMC, XQName, KHXSBJs } = record;
@@ -174,7 +177,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
-      align: 'center'
+      align: 'center',
     },
     {
       title: '课程班名称',

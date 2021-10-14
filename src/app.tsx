@@ -16,7 +16,7 @@ import { currentWechatUser } from './services/after-class/wechat';
 import Footer from '@/components/Footer';
 import headerTop from '@/assets/headerTop.png';
 import headerTopSmall from '@/assets/headerTopSmall.png';
-import { getWechatInfo, needGetWechatUserInfo, saveWechatInfo } from './utils/wx';
+import { getWechatInfo, needGetWechatUserInfo, regWechatAPI, saveWechatInfo } from './utils/wx';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 const authCallbackPath = '/auth_callback';
@@ -146,6 +146,9 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
       ) {
         history.push('/403');
       }
+      (async () => {
+        if (initialState?.currentUser) await regWechatAPI();
+      })();
     },
     links: isDev
       ? [
