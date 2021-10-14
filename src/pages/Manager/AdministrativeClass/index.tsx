@@ -80,7 +80,6 @@ const AdministrativeClass = () => {
     //   align: 'center',
     //   width: 180,
     // },
-
     {
       title: '操作',
       valueType: 'option',
@@ -92,7 +91,7 @@ const AdministrativeClass = () => {
           <Link
             key="details"
             to={{
-              pathname: '/basicalSettings/administrativeClass/administrativeClassDetail',
+              pathname: '/administrativeClass/administrativeClassDetail',
               state: record,
             }}
           >

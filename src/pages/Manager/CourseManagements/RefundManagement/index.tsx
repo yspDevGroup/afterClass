@@ -25,7 +25,7 @@ const RefundManagement = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
   useEffect(() => {
-    //获取学年学期数据的获取
+    // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
       // 获取到的整个列表的信息
@@ -43,7 +43,7 @@ const RefundManagement = () => {
   useEffect(() => {
     actionRef.current?.reload();
   }, [curXNXQId]);
-  ///table表格数据
+  /// table表格数据
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -71,6 +71,16 @@ const RefundManagement = () => {
       },
     },
     {
+      title: '行政班名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
+      align: 'center',
+      render: (text: any) => {
+        return text?.BJSJ?.BJ;
+      },
+      width: 100,
+    },
+    {
       title: '课程名称',
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
@@ -90,7 +100,7 @@ const RefundManagement = () => {
         return record?.KHBJSJ?.BJMC;
       },
       ellipsis: true,
-      width: 100,
+      width: 120,
     },
     {
       title: '退款金额',
@@ -218,7 +228,7 @@ const RefundManagement = () => {
     }
   }
   return (
-    ///PageContainer组件是顶部的信息
+    /// PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.TopSearchs}>
         <span>
@@ -227,7 +237,7 @@ const RefundManagement = () => {
             value={curXNXQId}
             style={{ width: 200 }}
             onChange={(value: string) => {
-              //更新多选框的值
+              // 更新多选框的值
               setCurXNXQId(value);
             }}
           >

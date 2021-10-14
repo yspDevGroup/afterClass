@@ -42,7 +42,7 @@ const OrderInquiry = (props: any) => {
       const curTerm = res.current;
       if (newData?.length) {
         if (curTerm) {
-          //默认续期
+          // 默认续期
           setCurXNXQId(curTerm.id);
           // 学期列表
           setTermList(newData);
@@ -55,7 +55,7 @@ const OrderInquiry = (props: any) => {
     (async () => {
       const res = await getAllKHXSDD({
         XNXQId: curXNXQId,
-        //父传子判断要请求的状态
+        // 父传子判断要请求的状态
         DDZT,
         DDLX: 1
       })
@@ -80,6 +80,16 @@ const OrderInquiry = (props: any) => {
       render: (_text: any, record: any) => {
         return record?.XSJBSJ?.XM
       },
+    },
+    {
+      title: '行政班名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
+      align: 'center',
+      render: (text: any) => {
+        return text?.BJSJ?.BJ;
+      },
+      width: 100,
     },
     {
       title: '服务名称',

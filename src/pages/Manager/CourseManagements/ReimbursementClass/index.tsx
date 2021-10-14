@@ -26,7 +26,7 @@ const ReimbursementClass = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
   useEffect(() => {
-    //获取学年学期数据的获取
+    // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
       // 获取到的整个列表的信息
@@ -44,7 +44,7 @@ const ReimbursementClass = () => {
   useEffect(() => {
     actionRef.current?.reload();
   }, [curXNXQId]);
-  ///table表格数据
+  /// table表格数据
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -62,6 +62,16 @@ const ReimbursementClass = () => {
       render: (_text: any, record: any) => {
         return record?.XSJBSJ?.XM
       },
+    },
+    {
+      title: '行政班名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
+      align: 'center',
+      render: (text: any) => {
+        return text?.BJSJ?.BJ;
+      },
+      width: 100,
     },
     {
       title: '课程名称',
@@ -150,8 +160,7 @@ const ReimbursementClass = () => {
         if (res.status === 'ok') {
           if (ZT === 2) {
             message.success('退课申请已驳回');
-          } else {
-            if (current?.KHBJSJ?.FY !== 0) {
+          } else if (current?.KHBJSJ?.FY !== 0) {
               const money = (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS || current?.KHBJSJ?.FY;
               const result = await createKHXSTK({
                 KHTKSJId:current?.id,
@@ -170,12 +179,11 @@ const ReimbursementClass = () => {
               if (result.status === 'ok') {
                 message.success('退课成功,已自动申请退款流程');
               }else{
-                message.warning('退课成功,退款流程由于'+result.message+'申请失败');
+                message.warning(`退课成功,退款流程由于${result.message}申请失败`);
               }
             } else {
               message.success('退课成功');
             }
-          }
           setVisible(false);
           setCurrent(undefined);
           actionRef.current?.reload();
@@ -188,7 +196,7 @@ const ReimbursementClass = () => {
     }
   }
   return (
-    ///PageContainer组件是顶部的信息
+    /// PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.TopSearchs}>
         <span>
@@ -197,7 +205,7 @@ const ReimbursementClass = () => {
             value={curXNXQId}
             style={{ width: 200 }}
             onChange={(value: string) => {
-              //更新多选框的值
+              // 更新多选框的值
               setCurXNXQId(value);
             }}
           >

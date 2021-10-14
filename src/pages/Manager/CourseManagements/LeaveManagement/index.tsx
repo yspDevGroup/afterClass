@@ -39,7 +39,7 @@ const LeaveManagement: React.FC = () => {
     XXJBSJId: currentUser?.xxId,
   };
   useEffect(() => {
-    //获取学年学期数据的获取
+    // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
       // 获取到的整个列表的信息
@@ -98,7 +98,7 @@ const LeaveManagement: React.FC = () => {
     getData();
   }, [curXNXQId, QJZT, kcmcId, bjmcId])
 
-  ///table表格数据
+  /// table表格数据
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -116,6 +116,17 @@ const LeaveManagement: React.FC = () => {
       render: (_text: any, record: any) => {
         return record?.XSJBSJ?.XM
       },
+    },
+    {
+      title: '行政班名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
+      align: 'center',
+      ellipsis: true,
+      render: (text: any) => {
+        return text?.BJSJ?.BJ;
+      },
+      width: 100,
     },
     {
       title: '课程名称',
@@ -177,7 +188,7 @@ const LeaveManagement: React.FC = () => {
     },
   ];
   return (
-    ///PageContainer组件是顶部的信息
+    /// PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.TopSearchs}>
         <span>
@@ -186,7 +197,7 @@ const LeaveManagement: React.FC = () => {
             value={curXNXQId}
             style={{ width: 200 }}
             onChange={(value: string) => {
-              //选择不同学期从新更新页面的数据
+              // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);
               setKcmcId('');
               setBjmcId('');

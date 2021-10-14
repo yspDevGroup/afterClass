@@ -75,19 +75,7 @@
         name: 'termManagement',
         component: './Manager/BasicalSettings/TermManagement',
       },
-       // 行政班管理
-       {
-        path: '/basicalSettings/administrativeClass',
-        name: 'administrativeClass',
-        icon: 'CodepenOutlined',
-        component: './Manager/BasicalSettings/AdministrativeClass',
-      },
-      {
-        path: '/basicalSettings/administrativeClass/administrativeClassDetail',
-        name: 'administrativeClassDetail',
-        component: './Manager/BasicalSettings/AdministrativeClass/Detail',
-        hideInMenu: 'true',
-      },
+
       // 教师管理
       {
         path: '/basicalSettings/teacherManagement',
@@ -232,6 +220,19 @@
       },
     ],
   },
+    // 行政班管理
+    {
+      path: '/administrativeClass',
+      name: 'administrativeClass',
+      icon: 'CodepenOutlined',
+      component: './Manager/AdministrativeClass',
+    },
+    {
+      path: '/administrativeClass/administrativeClassDetail',
+      name: 'administrativeClassDetail',
+      component: './Manager/AdministrativeClass/Detail',
+      hideInMenu: 'true',
+    },
   // 通知公告
   {
     path: '/announcements',

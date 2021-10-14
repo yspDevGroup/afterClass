@@ -77,7 +77,7 @@ const OrderInquiry = (props: any) => {
         // 获取订单查询的表格数据
         const resl = await getAllKHXSDD({
           XNXQId: curXNXQId,
-          //父传子判断要请求的状态
+          // 父传子判断要请求的状态
           DDZT,
           DDLX: 0
         });
@@ -134,7 +134,17 @@ const OrderInquiry = (props: any) => {
       }
     },
     {
-      title: '班级',
+      title: '行政班名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
+      align: 'center',
+      render: (text: any) => {
+        return text?.BJSJ?.BJ;
+      },
+      width: 100,
+    },
+    {
+      title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
