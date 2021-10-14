@@ -59,18 +59,6 @@
         hideInMenu: true,
         component: './Manager/BasicalSettings/SchoolInfo/SchoolEditor',
       },
-      // 年级班级管理
-      // {
-      //   path: '/basicalSettings/gradeClass',
-      //   name: 'gradeClass',
-      //   component: './Manager/BasicalSettings/GradeClass',
-      // },
-      // 学生管理
-      // {
-      //   path: '/basicalSettings/studentManagement',
-      //   name: 'studentManagement',
-      //   component: './Manager/BasicalSettings/StudentManagement',
-      // },
       {
         path: '/basicalSettings/service',
         name: 'service',
@@ -144,7 +132,22 @@
     name: 'classManagement',
     icon: 'InsertRowAbove',
     component: './Manager/ClassManagement',
+
   },
+  // 行政班管理
+  {
+    path: '/administrativeClass',
+    name: 'administrativeClass',
+    icon: 'CodepenOutlined',
+    component: './Manager/AdministrativeClass',
+  },
+  {
+    path: '/administrativeClass/administrativeClassDetail',
+    name: 'administrativeClassDetail',
+    component: './Manager/AdministrativeClass/Detail',
+    hideInMenu: 'true',
+  },
+
   {
     path: '/courseScheduling',
     name: 'courseScheduling',
@@ -175,6 +178,7 @@
     path: '/teacherManagement',
     name: 'teacherManagement',
     icon: 'Team',
+    hideInMenu: 'true',
     component: './Manager/TeacherManagement',
   },
   {

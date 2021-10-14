@@ -21,6 +21,8 @@ export default {
   'menu.courseManagements.reimbursementClass': '退课管理',
   'menu.courseManagements.refundManagement': '退款管理',
   'menu.classManagement': '课程班管理',
+  'menu.administrativeClass': '行政班管理',
+  'menu.administrativeClassDetail': '班级详情',
   'menu.coursePatrol.Management':'值班管理',
   'menu.courseScheduling': '排课管理',
   'menu.statistics': '统计报表',
