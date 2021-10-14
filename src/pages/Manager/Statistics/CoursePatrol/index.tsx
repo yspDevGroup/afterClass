@@ -46,14 +46,14 @@ const CoursePatrol = () => {
 
         },
         {
-            title: '是否准时上课',
+            title: '准时上课',
             dataIndex: 'SFZSSK',
             key: 'SFZSSK',
             align: 'center',
             render: (text) => text ? '是' : '否'
         },
         {
-            title: '是否为原定教师',
+            title: '为原定教师',
             dataIndex: 'SFYDJS',
             key: ' SFYDJS',
             align: 'center',
@@ -69,7 +69,7 @@ const CoursePatrol = () => {
 
         },
         {
-            title: '实到人数是否准确',
+            title: '实到人数准确',
             dataIndex: 'RSSFZQ',
             key: ' RSSFZQ',
             align: 'center',
