@@ -4,7 +4,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-09 08:57:20
- * @LastEditTime: 2021-10-12 21:03:13
+ * @LastEditTime: 2021-10-14 12:15:49
  * @LastEditors: zpl
  */
 import {
@@ -113,7 +113,7 @@ export const creatTokenForWechat = async (params: Record<string, string>): Promi
  * @param {*} jsApiList 需要使用的JS接口列表，凡是要调用的接口都需要传进来
  */
 export const initWXConfig = async (jsApiList: string[]) => {
-  const res = await getQYJsSignature({ url: window.location.href.split('#')[0] });
+  const res = await getQYJsSignature({ url: window.location.href });
   if (res.status === 'ok') {
     const { appId, timestamp = 0, nonceStr, signature = '' } = res.data || {};
     const currentConf = {
@@ -126,11 +126,15 @@ export const initWXConfig = async (jsApiList: string[]) => {
       jsApiList: jsApiList || ['checkJsApi'], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
     };
     return new Promise((resolve, reject) => {
+      console.log('权限验证配置: ', currentConf);
       wx.config(currentConf);
-      wx.ready(resolve);
+      wx.ready(() => {
+        console.log('权限验证配置注入成功');
+        resolve('权限验证配置注入成功');
+      });
       wx.error((err: any) => {
         console.log('wx.error', err);
-        reject(`注入权限验证配置失败： ${err}`);
+        reject(`注入权限验证配置失败： ${JSON.stringify(err)}`);
       });
     });
   }
@@ -143,7 +147,7 @@ export const initWXConfig = async (jsApiList: string[]) => {
  * @param {string[]} jsApiList 需要使用的接口名称
  */
 export const initWXAgentConfig = async (jsApiList: string[]) => {
-  const res = await getYYJsSignature({ url: window.location.href.split('#')[0] });
+  const res = await getYYJsSignature({ url: window.location.href });
   if (res.status === 'ok') {
     const { corpid, agentid, timestamp = 0, nonceStr, signature = '' } = res.data || {};
     const currentConf = {
@@ -154,20 +158,21 @@ export const initWXAgentConfig = async (jsApiList: string[]) => {
       signature, // 必填，签名，见附录-JS-SDK使用权限签名算法
       jsApiList: jsApiList || ['selectExternalContact'], // 必填，传入需要使用的接口名称
     };
+    console.log('注入应用权限: ', currentConf);
     return new Promise((resolve, reject) => {
       wx.agentConfig({
         ...currentConf,
         success: (r: any) => {
           // 回调
-          console.log('wx.agentConfig success');
+          console.log('应用的权限注入成功');
           resolve(r);
         },
         fail: (r: any) => {
-          console.log('wx.agentConfig fail:', r);
+          console.log('注入应用权限失败:', r);
           if (r.errMsg.indexOf('function not exist') > -1) {
             console.log('版本过低请升级');
           }
-          reject(`注入应用的权限失败： ${r}`);
+          reject(`注入应用权限失败： ${r}`);
         },
       });
     });
