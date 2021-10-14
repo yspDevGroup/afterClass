@@ -29,7 +29,7 @@ const EvaluationDetails = (props: any) => {
       PY:Evaluation,
       XSJBSJId:state?.XSJBSJId,
       KHBJSJId:state?.KHBJSJId,
-      PJR:external_contact && `${state?.XSXM}${external_contact.subscriber_info.remark.split('-')[1]}` || '张三爸爸'
+      PJR:external_contact && `${state?.XSJBSJ?.XM}${external_contact.subscriber_info.remark.split('-')[1]}` || '张三爸爸'
     })
     if(res.status === 'ok'){
       message.success('评价成功')

@@ -231,13 +231,14 @@ const Apply = () => {
         onCancel={handleCancels}
         closable={false}
         className={styles.refund}
+        okText="确定"
+        cancelText="取消"
       >
         <div>
           {Datasourse?.map((value: any) => {
             return (
               <>
                 <p>
-                  {' '}
                   <span>课程名称：{value.KCMC}</span> <span>可退课时：{value.KSS}</span>
                 </p>
               </>
