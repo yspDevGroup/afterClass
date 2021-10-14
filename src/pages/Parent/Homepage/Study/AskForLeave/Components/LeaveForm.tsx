@@ -53,10 +53,8 @@ const LeaveForm = (props: {
       QJZT: 0,
       KSSJ,
       JSSJ,
-      XSId: StorageXSId || (student && student[0].student_userid) || testStudentId,
+      XSJBSJId: StorageXSId || (student && student[0].student_userid) || testStudentId,
       XSXM: StorageXSName || (student && student?.[0].name) || '张三',
-      // XSXM: currentUser?.external_contact?.subscriber_info.remark.split('-')[0] ||
-      // currentUser?.username,
       bjIds,
     });
     if (res.status === 'ok') {

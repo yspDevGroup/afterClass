@@ -13,6 +13,10 @@ export default {
   'menu.basicalSettings.service': '服务协议配置',
   'menu.basicalSettings.service.editArticle': '编辑服务协议',
   'menu.basicalSettings.articleDetails': '服务协议',
+  'menu.basicalSettings.administrativeClass': '行政班管理',
+  'menu.basicalSettings.administrativeClassDetail': '班级详情',
+  'menu.basicalSettings.teacherManagement': '教师管理',
+  'menu.basicalSettings.teacherInfo': '教师详情',
   'menu.courseManagements': '课程管理',
   'menu.courseManagements.courseManagements': '课程管理',
   'menu.courseManagements.leaveManagement': '请假管理',
@@ -21,8 +25,6 @@ export default {
   'menu.courseManagements.reimbursementClass': '退课管理',
   'menu.courseManagements.refundManagement': '退款管理',
   'menu.classManagement': '课程班管理',
-  'menu.administrativeClass': '行政班管理',
-  'menu.administrativeClassDetail': '班级详情',
   'menu.coursePatrol.Management':'值班管理',
   'menu.courseScheduling': '排课管理',
   'menu.statistics': '统计报表',
@@ -76,6 +78,5 @@ export default {
   'menu.announcements.notice.noticeDetails': '公告详情',
   'menu.announcements.policy': '政策公告',
   'menu.announcements.policy.articleDetails': '政策详情',
-  'menu.teacherManagement': '教师管理',
-  'menu.teacherInfo': '教师详情',
+
 };

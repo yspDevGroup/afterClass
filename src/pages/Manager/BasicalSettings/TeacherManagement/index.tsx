@@ -114,7 +114,7 @@ const TeacherManagement = () => {
       render: (_, record) => (
         <>
           <Link to={{
-            pathname: '/teacherManagement/detail',
+            pathname: '/basicalSettings/teacherManagement/detail',
             state: {
               type: 'detail',
               data: record
@@ -122,7 +122,7 @@ const TeacherManagement = () => {
           }}>详情</Link>
           <Divider type='vertical' />
           <Link to={{
-            pathname: '/teacherManagement/detail',
+            pathname: '/basicalSettings/teacherManagement/detail',
             state: {
               type: 'edit',
               data: record

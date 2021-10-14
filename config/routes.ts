@@ -59,6 +59,7 @@
         hideInMenu: true,
         component: './Manager/BasicalSettings/SchoolInfo/SchoolEditor',
       },
+
       {
         path: '/basicalSettings/service',
         name: 'service',
@@ -74,6 +75,32 @@
         path: '/basicalSettings/termManagement',
         name: 'termManagement',
         component: './Manager/BasicalSettings/TermManagement',
+      },
+       // 行政班管理
+       {
+        path: '/basicalSettings/administrativeClass',
+        name: 'administrativeClass',
+        icon: 'CodepenOutlined',
+        component: './Manager/BasicalSettings/AdministrativeClass',
+      },
+      {
+        path: '/basicalSettings/administrativeClass/administrativeClassDetail',
+        name: 'administrativeClassDetail',
+        component: './Manager/BasicalSettings/AdministrativeClass/Detail',
+        hideInMenu: 'true',
+      },
+      // 教师管理
+      {
+        path: '/basicalSettings/teacherManagement',
+        name: 'teacherManagement',
+        icon: 'Team',
+        component: './Manager/BasicalSettings/TeacherManagement',
+      },
+      {
+        path: '/basicalSettings/teacherManagement/detail',
+        name: 'teacherInfo',
+        hideInMenu: 'true',
+        component: './Manager/BasicalSettings/TeacherManagement/Detail',
       },
       {
         path: '/basicalSettings/periodMaintenance',
@@ -132,22 +159,7 @@
     name: 'classManagement',
     icon: 'InsertRowAbove',
     component: './Manager/ClassManagement',
-
   },
-  // 行政班管理
-  {
-    path: '/administrativeClass',
-    name: 'administrativeClass',
-    icon: 'CodepenOutlined',
-    component: './Manager/AdministrativeClass',
-  },
-  {
-    path: '/administrativeClass/administrativeClassDetail',
-    name: 'administrativeClassDetail',
-    component: './Manager/AdministrativeClass/Detail',
-    hideInMenu: 'true',
-  },
-
   {
     path: '/courseScheduling',
     name: 'courseScheduling',
@@ -173,20 +185,7 @@
       },
     ],
   },
-  // 教师管理
-  {
-    path: '/teacherManagement',
-    name: 'teacherManagement',
-    icon: 'Team',
-    hideInMenu: 'true',
-    component: './Manager/TeacherManagement',
-  },
-  {
-    path: '/teacherManagement/detail',
-    name: 'teacherInfo',
-    hideInMenu: 'true',
-    component: './Manager/TeacherManagement/Detail',
-  },
+
   {
     path: '/orderInquiry',
     name: 'orderInquiry',
