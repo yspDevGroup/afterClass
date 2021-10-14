@@ -46,9 +46,10 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
 
   // 切换孩子
   const handleChange = (value: any, key: any) => {
-    localStorage.setItem('studentName', key.key);
+    localStorage.setItem('studentName', key.key?.split('+')[0]);
     localStorage.setItem('studentId', key.value);
-    const ParentalIdentitys = `${key.key}${
+    localStorage.setItem('studentNjId',key.key?.split('+')[1]);
+    const ParentalIdentitys = `${key.key?.split('+')[0]}${
       currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
     }`;
     setParentalIdentity(ParentalIdentitys);
@@ -56,12 +57,6 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
     setActiveKey('index');
   };
   useEffect(() => {
-    // const data = currentUserInfo?.subscriber_info?.children || [
-    //   {
-    //     student_userid: currentUserInfo?.UserId,
-    //     njId: '1',
-    //   },
-    // ];
 
     async function fetch() {
       const studentId: string =
@@ -108,7 +103,7 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
           >
             {currentUser?.student?.map((value: any) => {
               return (
-                <Option value={value.student_userid} key={value.name}>
+                <Option value={value.student_userid} key={`${value.name}+${value.NJSJId}`}>
                   {value.name}
                 </Option>
               );

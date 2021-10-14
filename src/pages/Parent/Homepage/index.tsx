@@ -10,6 +10,8 @@ import myContext from '@/utils/MyContext';
 import styles from './index.less';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
+import moment from 'moment';
+import { getAllCourses } from '@/services/after-class/khkcsj';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
@@ -23,6 +25,7 @@ const PersonalHomepage = () => {
   const mineRef = useRef(null);
   const index = getQueryString('index');
   const StorageXSId = localStorage.getItem('studentId');
+  const StorageNjId = localStorage.getItem('studentNjId');
   // 未获取到孩子时跳转到403
   // useEffect(() => {
   //   if(currentUser?.student?.length === 0 || typeof currentUser?.student === 'undefined'){
@@ -39,6 +42,7 @@ const PersonalHomepage = () => {
           XSId: StorageXSId || (student && student[0].student_userid) || testStudentId ,
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
+          njId:StorageNjId || (student && student[0].NJSJId)
         });
         if (res.status === 'ok') {
           if (res.data) {
