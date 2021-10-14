@@ -251,7 +251,7 @@ const RoomManagement = () => {
         rowKey="id"
         dateFormatter="string"
         toolBarRender={() => [
-          <Button key="uphold" onClick={() => handleOperation('uphold')}>
+          <Button ghost key="uphold" onClick={() => handleOperation('uphold')}>
             场地类型维护
           </Button>,
           <Button
