@@ -205,14 +205,20 @@
 
 
 .searchWrapper {
-  display: flex;
+  position: relative;
   box-shadow: 0px 1px 0px #E4E4E4;
-  flex-wrap: wrap;
-  align-content: space-between;
-
-  >span,
-  >div {
-    margin-bottom: 24px;
+  >div:nth-child(1) {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+    width:calc(~'100% - 133px');
+    >span,
+    >div {
+      display: flex;
+      line-height: 30px;
+      margin-right: 16px;
+      margin-bottom: 24px;
+    }
   }
 }
 

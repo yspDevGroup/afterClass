@@ -64,6 +64,9 @@ body,
     justify-content: center;
     margin-top: 46px !important;
   }
+  .ant-pro-field-index-column{
+    width: auto;
+  }
 
   .ant-picker-focused {
     border-color: @input-hover-border-color;
@@ -175,7 +178,11 @@ body,
     //  调整表格操作栏样式
     .ant-pro-table-list-toolbar-container {
       padding: 0 !important;
-      .ant-pro-table-list-toolbar-left,
+      .ant-pro-table-list-toolbar-left{
+        .ant-pro-table-list-toolbar-title{
+          padding: 0 0 24px;
+        }
+      }
       .ant-pro-table-list-toolbar-right{
         >.ant-space-item {
           padding: 0 0 24px;

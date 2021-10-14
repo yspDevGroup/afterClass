@@ -147,48 +147,48 @@ const ClassManagement = () => {
         timeData.map((timeItem: any, timeKey: number) => {
           const table = {
             room: {
-              cla: item.FJMC,
+              cla: item?.FJMC,
               teacher: '',
               jsId: item.id,
-              FJLXId: item.FJLX.id, // 场地类型ID
-              rowspan: timeKey === 0 ? timeData.length : 0,
+              FJLXId: item?.FJLX?.id, // 场地类型ID
+              rowspan: timeKey === 0 ? timeData?.length : 0,
             },
             course: {
-              cla: timeItem.TITLE,
-              teacher: `${timeItem.KSSJ.slice(0, 5)} — ${timeItem.JSSJ.slice(0, 5)}`,
-              hjId: timeItem.id,
+              cla: timeItem?.TITLE,
+              teacher: `${timeItem?.KSSJ?.slice(0, 5)} — ${timeItem?.JSSJ?.slice(0, 5)}`,
+              hjId: timeItem?.id,
             },
           };
-          if (item.KHPKSJs && item.KHPKSJs.length > 0) {
-            item.KHPKSJs.map((KHItem: any) => {
-              if (KHItem.XXSJPZ.id === timeItem.id) {
-                table[week[KHItem.WEEKDAY]] = {
-                  weekId: KHItem.id, // 周
-                  cla: KHItem.KHBJSJ.BJMC, // 班级名称
-                  teacher: KHItem.KHBJSJ.KHBJJs.find((items: any) => items.JSLX === '主教师')
+          if (item?.KHPKSJs && item?.KHPKSJs.length > 0) {
+            item?.KHPKSJs?.map((KHItem: any) => {
+              if (KHItem?.XXSJPZ?.id === timeItem?.id) {
+                table[week[KHItem?.WEEKDAY]] = {
+                  weekId: KHItem?.id, // 周
+                  cla: KHItem?.KHBJSJ?.BJMC, // 班级名称
+                  teacher: KHItem?.KHBJSJ?.KHBJJs?.find((items: any) => items?.JSLX === '主教师')
                     ?.JZGJBSJ?.XM, // 主教师
-                  teacherID: KHItem.KHBJSJ.KHBJJs.find((items: any) => items.JSLX === '主教师')
+                  teacherID: KHItem?.KHBJSJ?.KHBJJs?.find((items: any) => items?.JSLX === '主教师')
                     ?.JZGJBSJId, // 主教师ID
-                  bjId: KHItem.KHBJSJ.id, // 班级ID
-                  kcId: KHItem.KHBJSJ.KHKCSJ.id, // 课程ID
-                  njId: KHItem.KHBJSJ.KHKCSJ.NJSJs[0].id, // 年级ID
-                  bjzt: KHItem.KHBJSJ.BJZT, // 班级状态
-                  xqId: KHItem.KHBJSJ.XQSJ.id, // 校区ID
-                  color: KHItem.KHBJSJ.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
+                  bjId: KHItem?.KHBJSJ?.id, // 班级ID
+                  kcId: KHItem?.KHBJSJ?.KHKCSJ?.id, // 课程ID
+                  njId: KHItem?.KHBJSJ?.KHKCSJ?.NJSJs?.[0]?.id, // 年级ID
+                  bjzt: KHItem?.KHBJSJ?.BJZT, // 班级状态
+                  xqId: KHItem?.KHBJSJ?.XQSJ?.id, // 校区ID
+                  color: KHItem?.KHBJSJ?.KHKCSJ?.KBYS || 'rgba(62, 136, 248, 1)',
                   dis: BJID
-                    ? !(BJID === KHItem.KHBJSJ.id)
-                    : !(recordValue.BJId === KHItem.KHBJSJ.id),
+                    ? !(BJID === KHItem?.KHBJSJ?.id)
+                    : !(recordValue?.BJId === KHItem?.KHBJSJ?.id),
                 };
                 if (
-                  (!BJID && recordValue.BJId === KHItem.KHBJSJ.id) ||
-                  (BJID && BJID === KHItem.KHBJSJ.id)
+                  (!BJID && recordValue?.BJId === KHItem?.KHBJSJ?.id) ||
+                  (BJID && BJID === KHItem?.KHBJSJ?.id)
                 ) {
                   sameClassData.push({
-                    WEEKDAY: KHItem.WEEKDAY, // 周
-                    XXSJPZId: KHItem.XXSJPZ.id, // 时间ID
-                    KHBJSJId: KHItem.KHBJSJ.id, // 班级ID
+                    WEEKDAY: KHItem?.WEEKDAY, // 周
+                    XXSJPZId: KHItem?.XXSJPZ?.id, // 时间ID
+                    KHBJSJId: KHItem?.KHBJSJ?.id, // 班级ID
                     FJSJId: item.id, // 教室ID
-                    XNXQId: KHItem.XNXQId, // 学年学期ID
+                    XNXQId: KHItem?.XNXQId, // 学年学期ID
                   });
                 }
               }
@@ -232,7 +232,7 @@ const ClassManagement = () => {
             BJId: njInfo.data.id,
             NJ: njInfo.data.KHKCSJ.NJSJs[0].id,
             KC: njInfo.data.KHKCSJId,
-            KCMC:njInfo.data.KHKCSJ.KCMC,
+            KCMC: njInfo.data.KHKCSJ.KCMC,
             XQ: njInfo.data.XQSJId,
           });
           setState(false);
@@ -499,70 +499,70 @@ const ClassManagement = () => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-    {
-      title: '场地',
-      dataIndex: 'room',
-      key: 'room',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '时间',
-      dataIndex: 'course',
-      key: 'course',
-      align: 'left',
-      width: 136,
-    },
-    {
-      title: '周一',
-      dataIndex: 'monday',
-      key: 'monday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周二',
-      dataIndex: 'tuesday',
-      key: 'tuesday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周三',
-      dataIndex: 'wednesday',
-      key: 'wednesday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周四',
-      dataIndex: 'thursday',
-      key: 'thursday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周五',
-      dataIndex: 'friday',
-      key: 'friday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周六',
-      dataIndex: 'saturday',
-      key: 'saturday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周日',
-      dataIndex: 'sunday',
-      key: 'sunday',
-      align: 'center',
-      width: 136,
-    },
-  ];
+      {
+        title: '场地',
+        dataIndex: 'room',
+        key: 'room',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '时间',
+        dataIndex: 'course',
+        key: 'course',
+        align: 'left',
+        width: 136,
+      },
+      {
+        title: '周一',
+        dataIndex: 'monday',
+        key: 'monday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周二',
+        dataIndex: 'tuesday',
+        key: 'tuesday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周三',
+        dataIndex: 'wednesday',
+        key: 'wednesday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周四',
+        dataIndex: 'thursday',
+        key: 'thursday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周五',
+        dataIndex: 'friday',
+        key: 'friday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周六',
+        dataIndex: 'saturday',
+        key: 'saturday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周日',
+        dataIndex: 'sunday',
+        key: 'sunday',
+        align: 'center',
+        width: 136,
+      },
+    ];
   /**
    * 获取Excel表格中数据的方法
    * @param value 在type="edit" 的时候使用；选中将要排课的班级的数据
@@ -593,106 +593,108 @@ const ClassManagement = () => {
           <div>
             {/* 渲染的是四个选项框组件 */}
             <div className={styles.searchWrapper} >
-              <span>
-                所属学年学期：
-                <Select
-                  value={curXNXQId}
-                  style={{ width: 200, marginRight: 16 }}
-                  onChange={(value: string) => {
-                    setCurXNXQId(value);
-                  }}
-                >
-                  {termList?.map((item: any) => {
-                    return (
-                      <Option key={item.value} value={item.value}>
-                        {item.text}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </span>
-              <div style={{ display: 'flex', lineHeight: 2.3, marginRight: 16 }}>
-                <span>课程名称：</span>
-                <div>
+              <div>
+                <span>
+                  所属学年学期：
                   <Select
-                    style={{ width: 200 }}
-                    value={kcmcValue}
-                    allowClear
-                    placeholder="请选择"
-                    onChange={onKcmcChange}
+                    value={curXNXQId}
+                    style={{ width: 200, marginRight: 16 }}
+                    onChange={(value: string) => {
+                      setCurXNXQId(value);
+                    }}
                   >
-                    {kcmcData?.map((item: selectType) => {
+                    {termList?.map((item: any) => {
                       return (
-                        <Option value={item.value} key={item.value}>
-                          {item.label}
+                        <Option key={item.value} value={item.value}>
+                          {item.text}
                         </Option>
                       );
                     })}
                   </Select>
+                </span>
+                <div>
+                  <span>课程名称：</span>
+                  <div>
+                    <Select
+                      style={{ width: 200 }}
+                      value={kcmcValue}
+                      allowClear
+                      placeholder="请选择"
+                      onChange={onKcmcChange}
+                    >
+                      {kcmcData?.map((item: selectType) => {
+                        return (
+                          <Option value={item.value} key={item.value}>
+                            {item.label}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </div>
                 </div>
-              </div>
-              <div style={{ display: 'flex', lineHeight: 2.3, marginRight: 16 }}>
-                <span>课程班名称：</span>
                 <div>
-                  <Select
-                    style={{ width: 200 }}
-                    value={bjmcValue}
-                    allowClear
-                    placeholder="请选择"
-                    onChange={onBjmcChange}
-                  >
-                    {bjmcData?.map((item: selectType) => {
-                      return (
-                        <Option value={item.value} key={item.value}>
-                          {item.label}
-                        </Option>
-                      );
-                    })}
-                  </Select>
+                  <span>课程班名称：</span>
+                  <div>
+                    <Select
+                      style={{ width: 200 }}
+                      value={bjmcValue}
+                      allowClear
+                      placeholder="请选择"
+                      onChange={onBjmcChange}
+                    >
+                      {bjmcData?.map((item: selectType) => {
+                        return (
+                          <Option value={item.value} key={item.value}>
+                            {item.label}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </div>
                 </div>
-              </div>
-              <div style={{ display: 'flex', lineHeight: 2.3, marginRight: 16 }}>
-                <span>场地类型：</span>
                 <div>
-                  <Select
-                    style={{ width: 200 }}
-                    value={cdlxValue}
-                    allowClear
-                    placeholder="请选择"
-                    onChange={onCdlxChange}
-                  >
-                    {cdlxData?.map((item: selectType) => {
-                      return (
-                        <Option value={item.value} key={item.value}>
-                          {item.label}
-                        </Option>
-                      );
-                    })}
-                  </Select>
+                  <span>场地类型：</span>
+                  <div>
+                    <Select
+                      style={{ width: 200 }}
+                      value={cdlxValue}
+                      allowClear
+                      placeholder="请选择"
+                      onChange={onCdlxChange}
+                    >
+                      {cdlxData?.map((item: selectType) => {
+                        return (
+                          <Option value={item.value} key={item.value}>
+                            {item.label}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </div>
                 </div>
-              </div>
-              <div style={{ display: 'flex', lineHeight: 2.3 }}>
-                <span>场地名称：</span>
                 <div>
-                  <Select
-                    style={{ width: 200 }}
-                    value={cdmcValue}
-                    allowClear
-                    placeholder="请选择"
-                    onChange={onCdmcChange}
-                  >
-                    {cdmcData?.map((item: selectType) => {
-                      return (
-                        <Option value={item.value} key={item.value}>
-                          {item.label}
-                        </Option>
-                      );
-                    })}
-                  </Select>
+                  <span>场地名称：</span>
+                  <div>
+                    <Select
+                      style={{ width: 200 }}
+                      value={cdmcValue}
+                      allowClear
+                      placeholder="请选择"
+                      onChange={onCdmcChange}
+                    >
+                      {cdmcData?.map((item: selectType) => {
+                        return (
+                          <Option value={item.value} key={item.value}>
+                            {item.label}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </div>
                 </div>
               </div>
               {/*  添加新的课程 路由跳转*/}
-              <div style={{ position: 'absolute', right: 48 }}>
+              <div style={{ position: 'absolute', right: 0, top: 0 }}>
                 <Button
                   style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
                   type="primary"

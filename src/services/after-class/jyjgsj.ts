@@ -448,6 +448,8 @@ export async function getAllCoursesInfo(
     KCLX?: string;
     /** 学校名称 */
     XXMC?: string;
+    /** 课程来源 */
+    KCLY?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
