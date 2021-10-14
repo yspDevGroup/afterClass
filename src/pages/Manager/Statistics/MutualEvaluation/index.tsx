@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
-import { Select, Rate } from 'antd';
+import { Select,Rate} from 'antd';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
@@ -82,6 +82,16 @@ const MutualEvaluation: React.FC = () => {
 
     },
     {
+      title: '课程评分',
+      dataIndex: 'PJFS',
+      key: 'PJFS',
+      align: 'center',
+      render: (test: any) => {
+        return( <Rate count={5} defaultValue={test} disabled={true} />)
+    }
+
+    },
+    {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
@@ -141,8 +151,7 @@ const MutualEvaluation: React.FC = () => {
   }, [curXNXQId]);
 
 
-  return (
-    /// PageContainer组件是顶部的信息
+  return(
     <PageContainer>
       <div className={Style.TopSearchss}>
         <span>
