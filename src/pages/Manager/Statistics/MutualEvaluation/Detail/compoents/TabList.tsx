@@ -173,7 +173,6 @@ const TabList=(props: any)=>{
           KHBJSJId:id,
           XNXQId:ListState.XNXQId,
           XXJBSJId:currentUser.xxId,
-          
           page: 0,
           pageSize: 0,
         });

@@ -92,9 +92,11 @@ const AfterSchoolCourse: React.FC = () => {
       dataIndex: 'TKBL',
       key: 'TKBL',
       align: 'center',
-      render: (test: any,) => {
-        return test + '%';
-      },
+      render:(test: any,record)=>{
+        return (record?.TKRS/record?.BMRS).toFixed(2)*100 + '%';
+      }
+   
+     
     },
     {
       title: '收款总额',
