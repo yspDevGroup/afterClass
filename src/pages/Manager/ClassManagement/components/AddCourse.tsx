@@ -210,9 +210,9 @@ const AddCourse: FC<AddCourseProps> = ({
 
         if (resSJ.status === 'ok') {
           // 报名时间 [1]
-          const BM = resSJ.data?.find((item: { TYPE: string }) => item.TYPE === '1');
+          const BM = resSJ.data?.find((item: any) => item.TYPE === '1');
           // 上课时间 [2]
-          const KK = resSJ.data?.find((item: { TYPE: string }) => item.TYPE === '2');
+          const KK = resSJ.data?.find((item: any) => item.TYPE === '2');
           setBMData(BM);
           setKKData(KK);
         }
@@ -279,7 +279,7 @@ const AddCourse: FC<AddCourseProps> = ({
         const data = res.data?.rows;
         const teachOption: { label: string | JSX.Element; value: string; WechatUserId?: string }[] =
           [];
-        data?.forEach((item: { XM: string; WechatUserId: string; id: any }) => {
+        data?.forEach((item: any) => {
           // 兼顾企微
           const label =
             item.XM === '未知' && item.WechatUserId ? (
@@ -331,7 +331,7 @@ const AddCourse: FC<AddCourseProps> = ({
         ...values,
         KCTP: imageUrl || formValues?.KCTP,
         BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : BMData?.KSSJ),
-        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : BMData?.JSSJ),
+        BMJSSJ: new Date(values?.BMSD?.[1] ? values?.BMSD[1] : BMData?.JSSJ),
         KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
         JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
         XNXQId: curXNXQId,

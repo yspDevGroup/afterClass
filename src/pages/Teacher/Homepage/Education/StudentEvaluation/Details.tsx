@@ -25,7 +25,6 @@ const Details = (props: any) => {
     })
     setStudentData(res.data)
     const newArr: any[] = [];
-    console.log(res,'======')
     res.data?.forEach((value: any) => {
       if (value.KHXSPJId === '') {
         newArr.push(value)
@@ -116,7 +115,6 @@ const Details = (props: any) => {
 
               {
                 StudentData?.map((value: any, index: number) => {
-                  console.log( value.KHXSPJId)
                   return <tr style={{ backgroundColor: index % 2 === 0 ? "#F5F5F5" : "#fff" }}>
                     <td>{value?.XSJBSJ?.XM}</td>
                     <td>

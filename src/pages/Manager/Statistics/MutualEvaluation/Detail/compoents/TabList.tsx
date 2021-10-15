@@ -150,7 +150,7 @@ const TabList=(props: any)=>{
       (async()=>{
         const res2 = await getAllKHXSPJ({
           KHBJSJId:id,
-          JSId:KHBJJs[0].JZGJBSJ.id,
+          JSId:KHBJJs?.[0]?.JZGJBSJ?.id,
           XNXQId:ListState.XNXQId,
           page: 0,
           pageSize: 0,
