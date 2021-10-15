@@ -16,6 +16,7 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
   const getTodayData = (data: any) => {
     const day = new Date(); // 获取现在的时间  eg:day Thu Jun 24 2021 18:54:38 GMT+0800 (中国标准时间)
     const curCourse = []; // list中的数据
+
     for (let i = 0; i < data.length; i += 1) {
       // 循环每一个数组
       const item = data[i]; // 每一个数组
@@ -25,10 +26,10 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
         const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ; // 结课日期
         if (new Date(startDate) <= day && day <= new Date(endDate)) {
           // 开课时间与现在时间与结课时间做判断
-          const startTime1 = item.XXSJPZ.KSSJ.substring(0, 2); // 上课开始时间的小时
-          const startTime2 = item.XXSJPZ.KSSJ.substring(3, 5); // 上课开始时间的分钟
-          const endTime1 = item.XXSJPZ.JSSJ.substring(0, 2); // 上课结束时间的小时
-          const endTime2 = item.XXSJPZ.JSSJ.substring(3, 5); // 上课结束时间的分钟
+          const startTime1 = Number(item.XXSJPZ.KSSJ.substring(0, 2)); // 上课开始时间的小时
+          const startTime2 = Number(item.XXSJPZ.KSSJ.substring(3, 5)); // 上课开始时间的分钟
+          const endTime1 = Number(item.XXSJPZ.JSSJ.substring(0, 2)); // 上课结束时间的小时
+          const endTime2 = Number(item.XXSJPZ.JSSJ.substring(3, 5)); // 上课结束时间的分钟
           let titleRightText = ''; // 上课状态
           if (
             startTime1 - day.getHours() > 0 ||
