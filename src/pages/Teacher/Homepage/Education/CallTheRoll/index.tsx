@@ -83,6 +83,32 @@ const CallTheRoll = (props: any) => {
       wxad.push(item);
     }
   });
+
+  const showConfirm = (tm?: boolean, title?: string, content?: string) => {
+    let secondsToGo = 3;
+    const modal = Modal.success({
+      centered: true,
+      title: tm ? '签到成功' : title,
+      content: tm ? ` ${secondsToGo} 秒之后可以开始点名` : content,
+    });
+    if (tm) {
+      const timer = setInterval(() => {
+        secondsToGo -= 1;
+        modal.update({
+          content: `${secondsToGo} 秒之后可以开始点名`,
+        });
+      }, 1000);
+      setTimeout(() => {
+        clearInterval(timer);
+        setButDis('doing');
+        modal.destroy();
+      }, secondsToGo * 1000);
+    } else {
+      setTimeout(() => {
+        modal.destroy();
+      }, secondsToGo * 1000);
+    }
+  };
   const getData = async () => {
     // 计算签到或点名时间与当前时间的间隔（以周为单位）
     const nowSta = (nowDate.getTime() - new Date(pkDate).getTime()) / 7 / 24 / 60 / 60 / 1000;
@@ -90,7 +116,7 @@ const CallTheRoll = (props: any) => {
     // 查询教师出勤记录
     const resCheck = await getAllKHJSCQ({
       KHBJSJId: bjids,
-      JZGJBSJId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
+      JZGJBSJId: currentUser.JSId || testTeacherId,
       CQRQ: pkDate,
     });
     if (resCheck.status === 'ok') {
@@ -105,32 +131,6 @@ const CallTheRoll = (props: any) => {
     } else {
       enHenceMsg(resCheck.message);
     }
-
-    const showConfirm = (tm?: boolean, title?: string, content?: string) => {
-      let secondsToGo = 3;
-      const modal = Modal.success({
-        centered: true,
-        title: tm ? '签到成功' : title,
-        content: tm ? ` ${secondsToGo} 秒之后可以开始点名` : content,
-      });
-      if (tm) {
-        const timer = setInterval(() => {
-          secondsToGo -= 1;
-          modal.update({
-            content: `${secondsToGo} 秒之后可以开始点名`,
-          });
-        }, 1000);
-        setTimeout(() => {
-          clearInterval(timer);
-          setButDis('doing');
-          modal.destroy();
-        }, secondsToGo * 1000);
-      } else {
-        setTimeout(() => {
-          modal.destroy();
-        }, secondsToGo * 1000);
-      }
-    };
 
     // 查询学生所有课后服务出勤记录
     const resAll = await getAllKHXSCQ({
@@ -169,7 +169,7 @@ const CallTheRoll = (props: any) => {
           const leaveInfo = resLeave?.data?.rows || [];
           studentData?.forEach((item: any) => {
             const leaveItem = leaveInfo?.find((val: API.KHXSQJ) => val.XSJBSJ?.id === item.XSJBSJId);
-            const leaveJudge = leaveItem?.QJZT != 1;
+            const leaveJudge = leaveItem && leaveItem?.QJZT != 1;
             item.isRealTo = leaveJudge ? '缺席' : '出勤';
             item.isLeave = !!leaveJudge;
             item.leaveYY = leaveItem?.QJYY;
@@ -270,7 +270,7 @@ const CallTheRoll = (props: any) => {
   const teacherCheckIn = async () => {
     const res = await createKHJSCQ([
       {
-        JZGJBSJId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
+        JZGJBSJId: currentUser.JSId || testTeacherId,
         CQZT: '出勤',
         CQRQ: pkDate,
         KHBJSJId: bjids,

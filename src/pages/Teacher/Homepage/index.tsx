@@ -31,7 +31,7 @@ const PersonalHomepage = () => {
       const result = await queryXNXQList(currentUser?.xxId);
       if (result?.current) {
         const res = await homePageInfo({
-          JSId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
+          JSId: currentUser.JSId || testTeacherId,
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
         });

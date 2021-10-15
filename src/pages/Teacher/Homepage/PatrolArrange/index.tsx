@@ -27,7 +27,7 @@ const PatrolArrange = () => {
   const [dateData, setDateData] = useState<any>([]);
   const getData = async (day: string) => {
     const res = await getScheduleByDate({
-      JZGJBSJId: currentUser.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
+      JZGJBSJId: currentUser.JSId || testTeacherId,
       RQ: day,
       WEEKDAY: new Date(day).getDay().toString(),
       XXJBSJId: currentUser?.xxId,

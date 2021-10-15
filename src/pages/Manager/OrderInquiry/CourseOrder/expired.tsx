@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-15 09:55:40
+ * @LastEditTime: 2021-10-15 14:04:54
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -186,7 +186,7 @@ const OrderInquiry = (props: any) => {
       },
     },
     {
-      title: '教材费用(元)',
+      title: '教辅费用(元)',
       dataIndex: 'JCFY',
       key: 'JCFY',
       align: 'center',

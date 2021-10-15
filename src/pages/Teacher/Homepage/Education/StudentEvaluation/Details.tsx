@@ -57,7 +57,7 @@ const Details = (props: any) => {
         PJFS: Fraction || 0,
         PY: Evaluation || "",
         XSJBSJId: XsData?.XSJBSJId,
-        JZGJBSJId: currentUser?.JSId || '22520995-d6ee-4722-8f8a-f5352efac5a9',
+        JZGJBSJId: currentUser?.JSId || testTeacherId,
         KHBJSJId: state?.id
       })
       if (res.status === 'ok') {
