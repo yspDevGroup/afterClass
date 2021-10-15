@@ -79,10 +79,15 @@ const Home = () => {
       }
     }
     announcements();
-    if(currentUser.XM === '未知'){
-      setIsModalVisible(true);
-    }
   }, []);
+
+  useEffect(()=>{
+    if(currentUser.XM == '未知'){
+      setIsModalVisible(true);
+    }else{
+      setIsModalVisible(false);
+    }
+  },[currentUser.XM])
 
   const onFinish = (values: any) => {
     formRef.current.validateFields()
@@ -201,7 +206,7 @@ const Home = () => {
             <Form.Item
               name="phone"
               label="手机"
-              rules={[{ required: true,  pattern: /^1[3|4|5|7|8][0-9]\d{8}$/ ,message: '请输入您的手机！' }]}
+              rules={[{ required: true,  pattern: /^1[3|4|5|7|8][0-9]\d{8}$/ ,message: '请输入您的手机号码！' }]}
             >
               <Input></Input>
             </Form.Item>
