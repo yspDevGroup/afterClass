@@ -38,20 +38,18 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
       localStorage.setItem('studentName', currentUser?.student?.[0].name || '');
       localStorage.setItem('studentId', currentUser?.student?.[0].XSJBSJId || '');
     }
-    const ParentalIdentitys = `${StorageXSName}${
-      currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-    }`;
+    const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
+      }`;
     setParentalIdentity(ParentalIdentitys);
   }, []);
 
   // 切换孩子
   const handleChange = (value: any, key: any) => {
-    localStorage.setItem('studentName', key.key?.split('+')[0]);
-    localStorage.setItem('studentId', key.value);
-    localStorage.setItem('studentNjId',key.key?.split('+')[1]);
-    const ParentalIdentitys = `${key.key?.split('+')[0]}${
-      currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-    }`;
+    localStorage.setItem('studentName', key.value);
+    localStorage.setItem('studentId', key.key?.split('+')[0]);
+    localStorage.setItem('studentNjId', key.key?.split('+')[1]);
+    const ParentalIdentitys = `${key.value}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
+      }`;
     setParentalIdentity(ParentalIdentitys);
     // 切换到首页
     setActiveKey('index');
@@ -97,13 +95,13 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
         {currentUser?.student?.length > 1 ? (
           <Select
             style={{ minWidth: '5em' }}
-            defaultValue={StorageXSId || currentUser?.student?.[0].XSJBSJId}
+            defaultValue={StorageXSName || currentUser?.student?.[0].studentName}
             className={styles.XsName}
             onChange={handleChange}
           >
             {currentUser?.student?.map((value: any) => {
               return (
-                <Option value={value.XSJBSJId} key={`${value.name}+${value.NJSJId}`}>
+                <Option value={value.name} key={`${value.XSJBSJId}+${value.NJSJId}`}>
                   {value.name}
                 </Option>
               );
