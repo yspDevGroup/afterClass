@@ -190,13 +190,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       width: 58,
       align: 'center',
     },
-    {
-      title: '课程班名称',
-      dataIndex: 'BJMC',
-      key: 'BJMC',
-      align: 'center',
-      width: 180,
-    },
+
     {
       title: '课程名称',
       dataIndex: 'KCMC',
@@ -211,6 +205,13 @@ const CourseManagement = (props: { location: { state: any } }) => {
           </Tooltip>
         );
       },
+    },
+    {
+      title: '课程班名称',
+      dataIndex: 'BJMC',
+      key: 'BJMC',
+      align: 'center',
+      width: 180,
     },
     {
       title: '课程来源',
