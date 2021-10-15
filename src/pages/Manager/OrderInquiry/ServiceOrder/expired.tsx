@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-14 21:25:12
+ * @LastEditTime: 2021-10-15 09:55:56
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -134,10 +134,11 @@ const OrderInquiry = (props: any) => {
       dataIndex: 'ZFSJ',
       key: 'ZFSJ',
       align: 'center',
+      hideInTable: DDZT!=='已付款',
       ellipsis: true,
       width: 150,
       render: (_text: any, record: any) => {
-        return record.XDSJ?.substring(0,16);
+        return record.ZFSJ?.substring(0,16);
       },
     },
     {

@@ -3,7 +3,7 @@
  * @description: 退课
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-10-12 19:04:58
+ * @LastEditTime: 2021-10-15 10:45:51
  * @LastEditors: Sissle Lynn
  */
 import GoBack from '@/components/GoBack';
@@ -57,6 +57,7 @@ const DropClass = () => {
               break;
             case 4:
               item.ZT = 6;
+              item.BZ = TKinfo.BZ;
               break;
           }
         }
@@ -112,7 +113,8 @@ const DropClass = () => {
                     {(value.ZT === 5) ? '退款成功' : ''}
                     {(value.ZT === 6) ? '退款失败' : ''}
                   </p>
-                  {value.ZT === 4 ? <p>退款操作说明：</p>:''}
+                  {value.ZT === 2 ? <p>退课说明：{value.BZ}</p>:''}
+                  {value.ZT === 4 ? <p>退款说明：{value.BZ}</p>:''}
                   {value.ZT === 4 ? <button onClick={async ()=>{
                     const result = await createKHXSTK({
                       /** 退款金额 */

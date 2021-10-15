@@ -412,7 +412,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           onOk={handleOk}
           onCancel={handleCancel}
           footer={null}
-          width="40vw"
+          style={{minWidth: '750px'}}
         >
           <ApplicantInfoTable dataSource={applicantData} />
         </Modal>

@@ -10,14 +10,14 @@ import { enHenceMsg } from '@/utils/utils';
 
 type propstype = {
   handleEdit: (data: CourseItem) => void;
-  record: CourseItem;
+  record: any;
   actionRef: React.MutableRefObject<ActionType | undefined>;
 };
 
 const ActionBar = (props: propstype) => {
   const { handleEdit, record, actionRef } = props;
   const shelf = (recorde: any) => {
-    if (recorde.KHXSBJs.length === 0) {
+    if (recorde.xs_count === 0) {
       const res = updateKHBJSJ({ id: recorde.id }, { BJZT: '待开班' });
       new Promise((resolve) => {
         resolve(res);
@@ -89,12 +89,13 @@ const ActionBar = (props: propstype) => {
       </Menu.Item>
     </Menu>
   );
+
   switch (record.BJZT) {
     case '待开班':
     case '已取消':
       return (
         <>
-          {record.KHPKSJs && record.KHPKSJs?.length > 0 ? (
+          {record.pk_count ? (
             <>
               <a onClick={() => release(record)}>开班</a>
               <Divider type="vertical" />

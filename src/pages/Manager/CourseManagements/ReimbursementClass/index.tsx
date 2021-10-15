@@ -82,7 +82,7 @@ const ReimbursementClass = () => {
       render: (text: any) => {
         return text?.KHKCSJ?.KCMC;
       },
-      width: 170,
+      width: 150,
     },
     {
       title: '课程班名称',
@@ -92,7 +92,7 @@ const ReimbursementClass = () => {
       render: (text: any) => {
         return text?.BJMC;
       },
-      width: 170,
+      width: 150,
     },
     {
       title: '退课总课时',
@@ -108,6 +108,28 @@ const ReimbursementClass = () => {
       align: 'center',
       render: (_, record) => {
         return record?.createdAt?.substring(0, 16)
+      },
+      width: 150,
+    },
+    {
+      title: '审批人',
+      dataIndex: 'SPSJ',
+      key: 'SPSJ',
+      align: 'center',
+      ellipsis: true,
+      width: 100,
+      render:(_, record)=>{
+        return record?.JZGJBSJ?.XM
+      }
+    },
+    {
+      title: '审批时间',
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
+      align: 'center',
+      ellipsis: true,
+      render: (_, record) => {
+        return record?.updatedAt?.replace(/T/,' ').substring(0, 16)
       },
       width: 150,
     },

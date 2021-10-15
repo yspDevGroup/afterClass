@@ -55,6 +55,7 @@ const ClassCalendar = (props: propstype) => {
           link: `/parent/home/courseTable?classid=${item.KHBJSJ.id}`,
           start: item.XXSJPZ?.KSSJ?.substring(0, 5),
           end: item.XXSJPZ?.JSSJ?.substring(0, 5),
+          jcId: item.XXSJPZ?.id,
           xq: `本校`,
           bjId: item.KHBJSJ.id,
           desc: [
@@ -137,11 +138,12 @@ const ClassCalendar = (props: propstype) => {
     let newChoosen = [...choosenCourses];
     setReloadList?.(false);
     if (e?.target?.checked) {
-      const { start, end, bjId, title } = item;
+      const { start, end, bjId, jcId, title } = item;
       newChoosen.push({
         day,
         start,
         end,
+        jcId,
         bjId,
         title,
       });

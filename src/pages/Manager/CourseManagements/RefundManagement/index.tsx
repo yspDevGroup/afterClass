@@ -205,11 +205,11 @@ const RefundManagement = () => {
     },
   ];
   const handleSubmit = async (params: any) => {
-    const { TKJE, TKZT } = params;
+    const { TKJE, TKZT,BZ } = params;
     try {
       if (current.id) {
         const params = { id: current.id };
-        const body = { TKJE, TKZT, deviceIp: '117.36.118.42', SPSJ: new Date().toISOString()};
+        const body = { TKJE, TKZT,BZ, deviceIp: '117.36.118.42', SPSJ: new Date().toISOString()};
         const res = await updateKHXSTK(params, body);
         if (res.status === 'ok') {
           if (TKZT === 2) {

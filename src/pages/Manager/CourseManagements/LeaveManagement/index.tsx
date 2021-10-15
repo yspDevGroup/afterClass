@@ -4,12 +4,13 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 // import { message } from 'antd';
 import { useModel } from 'umi';
-import { Select } from 'antd';
+import { Select, Tag } from 'antd';
 import Style from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getAllClasses } from '@/services/after-class/khbjsj';
 import { getAllCourses } from '@/services/after-class/khkcsj';
+import EllipsisHint from '@/components/EllipsisHint';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
@@ -135,7 +136,18 @@ const LeaveManagement: React.FC = () => {
       align: 'center',
       ellipsis: true,
       render: (text: any, record: any) => {
-        return record.KHQJKCs?.[0].KCMC
+        return (
+          <EllipsisHint
+            width="100%"
+            text={record.KHQJKCs?.map((item: any) => {
+              return (
+                <Tag key={item.KCMC}>
+                  {item.KCMC}
+                </Tag>
+              );
+            })}
+          />
+        )
       },
       width: 120,
     },
@@ -146,7 +158,18 @@ const LeaveManagement: React.FC = () => {
       align: 'center',
       ellipsis: true,
       render: (text: any, record: any) => {
-        return record.KHQJKCs?.[0].KHBJSJ?.BJMC
+        return (
+          <EllipsisHint
+            width="100%"
+            text={record.KHQJKCs?.map((item: any) => {
+              return (
+                <Tag key={item.KHBJSJ?.id}>
+                  {item.KHBJSJ?.BJMC}
+                </Tag>
+              );
+            })}
+          />
+        )
       },
       width: 120,
     },
@@ -155,7 +178,21 @@ const LeaveManagement: React.FC = () => {
       dataIndex: 'KHQJKCs',
       key: 'KHQJKCs_JSMC',
       align: 'center',
-      render: (text: any) => text[0]?.KHBJSJ?.KHBJJs?.[0]?.JZGJBSJ?.XM || '',
+      render: (text: any) => {
+        text[0]?.KHBJSJ?.KHBJJs?.[0]?.JZGJBSJ?.XM || ''
+        return (
+          <EllipsisHint
+            width="100%"
+            text={text[0]?.KHBJSJ?.KHBJJs?.map((item: any) => {
+              return (
+                <Tag key={item.JZGJBSJ?.id}>
+                  {item.JZGJBSJ?.XM}
+                </Tag>
+              );
+            })}
+          />
+        )
+      },
       width: 100,
     },
     {
