@@ -33,7 +33,7 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
           let titleRightText = ''; // 上课状态
           if (
             startTime1 - day.getHours() > 0 ||
-            (startTime1 === day.getHours() && startTime2 > day.getMinutes())
+            (startTime1 === day.getHours() && startTime2 < day.getMinutes())
           ) {
             titleRightText = '待上课';
           }
