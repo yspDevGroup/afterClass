@@ -3,10 +3,9 @@ import type { ProColumns } from '@ant-design/pro-table';
 import { useEffect, useState } from 'react';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { useModel, Link } from 'umi';
-import { Select, } from 'antd';
-import { getTeachers, getStudents } from '@/services/after-class/reports'
-
-
+import { Select } from 'antd';
+import { getTeachers, getStudents } from '@/services/after-class/reports';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const { Option } = Select;
 
@@ -29,7 +28,7 @@ const Table = (props: any) => {
       const curTerm = res.current;
       if (newData?.length) {
         if (curTerm) {
-          setCurXNXQId(curTerm.id)
+          setCurXNXQId(curTerm.id);
           setTermList(newData);
         }
       }
@@ -38,31 +37,38 @@ const Table = (props: any) => {
   useEffect(() => {
     // 教师列表
     (async () => {
-      const res = await getTeachers({ XNXQId: curXNXQId })
+      const res = await getTeachers({ XNXQId: curXNXQId });
       if (res.status === 'ok') {
-        setDataSource(res?.data?.rows)
+        setDataSource(res?.data?.rows);
       }
-    })(),
-      // 学生列表
-      (async () => {
-        const res2 = await getStudents({ XNXQId: curXNXQId })
-        if (res2.status === 'ok') {
-          setStudent(res2?.data?.rows)
-        }
-      })()
-  }, [curXNXQId])
+    })();
+    // 学生列表
+    (async () => {
+      const res2 = await getStudents({ XNXQId: curXNXQId });
+      if (res2.status === 'ok') {
+        setStudent(res2?.data?.rows);
+      }
+    })();
+  }, [curXNXQId]);
   const teacher: ProColumns<any>[] = [
     {
       title: '序号',
       dataIndex: 'index',
       valueType: 'index',
-      align: 'center'
+      align: 'center',
     },
     {
       title: '姓名',
       dataIndex: 'XM',
       key: 'XM',
       align: 'center',
+      render: (_, record) => {
+        const showWXName = record.JZGJBSJ?.XM === '未知' && record.JZGJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record.JZGJBSJ.WechatUserId} />;
+        }
+        return record.JZGJBSJ?.XM;
+      },
     },
     {
       title: '授课班级数',
@@ -95,7 +101,6 @@ const Table = (props: any) => {
       align: 'center',
     },
     {
-
       title: '操作',
       dataIndex: '',
       key: '',
@@ -109,7 +114,7 @@ const Table = (props: any) => {
                 type: 'detail',
                 data: record,
                 XNXQId: curXNXQId,
-                position: TableList.position
+                position: TableList.position,
               },
             }}
           >
@@ -117,16 +122,14 @@ const Table = (props: any) => {
           </Link>
         </>
       ),
-
-    }
-
-  ]
+    },
+  ];
   const student: ProColumns<any>[] = [
     {
       title: '序号',
       dataIndex: 'index',
       valueType: 'index',
-      align: 'center'
+      align: 'center',
     },
     {
       title: '姓名',
@@ -134,7 +137,7 @@ const Table = (props: any) => {
       key: 'XM',
       align: 'center',
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.XM
+        return record?.XSJBSJ?.XM;
       },
     },
     {
@@ -145,7 +148,7 @@ const Table = (props: any) => {
       width: 100,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
       },
     },
     {
@@ -173,7 +176,6 @@ const Table = (props: any) => {
       align: 'center',
     },
     {
-
       title: '操作',
       dataIndex: '',
       key: '',
@@ -187,8 +189,7 @@ const Table = (props: any) => {
                 type: 'detail',
                 data: record,
                 XNXQId: curXNXQId,
-                position: TableList.position
-
+                position: TableList.position,
               },
             }}
           >
@@ -196,18 +197,13 @@ const Table = (props: any) => {
           </Link>
         </>
       ),
-
-    }
-
-
-
-
-  ]
+    },
+  ];
 
   return (
     <>
       <div style={{ padding: '0 0 24px' }}>
-        <span  >
+        <span>
           所属学年学期：
           <Select
             value={curXNXQId}
@@ -239,6 +235,6 @@ const Table = (props: any) => {
         search={false}
       />
     </>
-  )
-}
-export default Table
+  );
+};
+export default Table;
