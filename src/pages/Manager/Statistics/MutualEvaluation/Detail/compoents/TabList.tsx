@@ -3,17 +3,19 @@ import { useEffect, useState } from 'react';
 // 家长给老师的评价
 import { getKHBJPJ } from '@/services/after-class/khbjpj';
 import type { ProColumns } from '@ant-design/pro-table';
-import { queryXNXQList } from '@/services/local-services/xnxq';
 // 老师对学生
 import { getAllKHXSPJ } from '@/services/after-class/khxspj';
 // khxspj
 import { useModel } from 'umi';
 import {Rate,Popover}from 'antd'
 import { Modal} from 'antd';
-import { TermItem } from '@/pages/Manager/BasicalSettings/TermManagement/data';
+
 
 const TabList=(props: any)=>{
     const {ListName,ListState}=props.ListData
+    const {id,KHBJJs}=ListState.record
+    console.log(ListState.record);
+    
 
     const handleOk = () => {
         setIsModalVisible(false);
@@ -93,11 +95,11 @@ const TabList=(props: any)=>{
     },
     {
       title: '课程班名称',
-      dataIndex: 'BJMC',
-      key: 'BJMC',
+      dataIndex: 'KHBJSJ',
+      key: 'KHBJSJ',
       align: 'center',
-      render: () => {
-        return   <span>{ListState.BJMC}</span> ;
+      render: (test) => {
+        return <span>{test?.BJMC}</span> ;
       },
     },
     {
@@ -134,12 +136,13 @@ const TabList=(props: any)=>{
       },
     },
   ];
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  const [XNXQId, setXNXQId] = useState();
+
+
    // 弹出框显示隐藏
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [DetailsValue, setDetailsValue] = useState('');
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
 
  // 学生评价的详情
 //  const[StudentDetails,setStudentDetails]=useState('')
@@ -151,9 +154,9 @@ const TabList=(props: any)=>{
     if(ListName==='学生评价'){
       (async()=>{
         const res2 = await getAllKHXSPJ({
-          KHBJSJId:ListState.id,
-          JSId: '',
-          // XNXQId,
+          KHBJSJId:id,
+          JSId:KHBJJs[0].id,
+          XNXQId:ListState.XNXQId,
           page: 0,
           pageSize: 0,
         });
@@ -167,10 +170,10 @@ const TabList=(props: any)=>{
       (async () => {
         const res = await getKHBJPJ({
           // 课后班级数据
-          KHBJSJId: ListState.id,
-          XSJBSJId: '',
-          XXJBSJId: '',
-          XNXQId,
+          KHBJSJId:id,
+          XNXQId:ListState.XNXQId,
+          XXJBSJId:currentUser.xxId,
+          
           page: 0,
           pageSize: 0,
         });

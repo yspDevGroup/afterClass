@@ -10,13 +10,13 @@ import { Button } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 
 const school = (props: any) => {
-  const { id, KCMC } = props.location.state.data;
-  const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
+  const {XNXQ,record} = props.location.state.data;
+  const {id, KCMC}=record
+ const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
+
   useEffect(() => {
     (async () => {
-      const res = await getClassesEvaluation({ XNXQId: currentUser.XNXQId, KHKCSJId: id })
+      const res = await getClassesEvaluation({ XNXQId:XNXQ, KHKCSJId: id })
       if (res.status === 'ok' && res.data) {
         setDataSource(res.data?.rows)
       }
@@ -87,7 +87,7 @@ const school = (props: any) => {
               pathname: '/statistics/MutualEvaluation/Detail',
               state: {
                 type: 'detail',
-                data: record,
+                data:{XNXQId:XNXQ,record} ,
               },
             }}
           >

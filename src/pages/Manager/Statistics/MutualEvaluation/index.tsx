@@ -103,7 +103,7 @@ const MutualEvaluation: React.FC = () => {
               pathname: '/statistics/mutualEvaluation/class',
               state: {
                 type: 'detail',
-                data: record,
+                data: {XNXQ:curXNXQId,record},
               },
             }}
           >

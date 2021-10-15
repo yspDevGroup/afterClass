@@ -1,15 +1,13 @@
 import PageContainer from '@/components/PageContainer';
 import { LeftOutlined } from '@ant-design/icons';
-import { useEffect, useState,useContext } from 'react';
-import { Button,Modal ,Tabs} from 'antd';
-// import type { TermItem } from '../../../BasicalSettings/TermManagement/data';
+import { Button,Tabs} from 'antd';
 import  TabList from './compoents/TabList'
 import { history} from 'umi';
 
 const { TabPane } = Tabs;
 
 const Detail = (props: any) => {
- const { state } = props.location;
+ const {data} = props.location.state;
  return (
     <div>
       <PageContainer>
@@ -27,10 +25,10 @@ const Detail = (props: any) => {
         </Button>
             <Tabs>
                 <TabPane tab="学生评价" key="1">
-                 <TabList ListData={{ListName:'学生评价',ListState:state.data}}></TabList>
+                 <TabList ListData={{ListName:'学生评价',ListState:data}}></TabList>
                 </TabPane>
                 <TabPane tab="课程反馈" key="2">
-                 <TabList ListData={{ListName:'课程反馈',ListState:state.data}}></TabList>
+                 <TabList ListData={{ListName:'课程反馈',ListState:data}}></TabList>
                 </TabPane>
             </Tabs>
    
