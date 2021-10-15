@@ -20,8 +20,8 @@ import type { classType, TableListParams } from './data';
 
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
-import { deleteKHKCSJ, getAllKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
-import { getAllGrades } from '@/services/after-class/khjyjg';
+import { deleteKHKCSJ, getAllCourses, updateKHKCSJ } from '@/services/after-class/khkcsj';
+import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
 
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
@@ -41,22 +41,12 @@ const CourseList = () => {
   // 机构详情
   const [info, setInfo] = useState({});
   const [readonly, setReadonly] = useState<boolean>(false);
-  const [opentype, setOpentype] = useState(false);
   // 学年学期没有时的提示框控制
   const [kai, setkai] = useState<boolean>(false);
   // 关闭学期学年提示框
   const kaiguan = () => {
     setkai(false);
-    setOpentype(false);
   };
-  const Tips = () => {
-    setModalVisible(true);
-    setOpen(false);
-    setOpentype(false);
-  };
-  // 图片展示框
-  const [exhibition, setExhibition] = useState<'none' | 'block'>('none');
-  const [url, setUrl] = useState<string>('');
   useEffect(() => {
     // 课程类型
     const res = getAllKHKCLX({ name: '' });
@@ -79,7 +69,7 @@ const CourseList = () => {
         const optNJ: any[] = [];
         const nj = ['幼儿园', '小学', '初中', '高中'];
         nj.forEach((itemNJ) => {
-          data.data?.forEach((item) => {
+          data.data?.forEach((item: any) => {
             if (item.XD === itemNJ) {
               optNJ.push({
                 label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
@@ -108,13 +98,15 @@ const CourseList = () => {
   const onClose = () => {
     setOpen(false);
   };
-  const cover = (img: any) => {
-    setExhibition('block');
-    setUrl(img);
-  };
-  const xclose = () => {
-    setExhibition('none');
-  };
+  const handleJgxq = async (id: string) => {
+    const res = await KHJYJG({ id });
+    if (res.status === 'ok') {
+      setInfo(res.data);
+      setVisibleMechanismInfo(true);
+    }else{
+      message.warning(res.message);
+    }
+  }
 
   /** 操作 */
   const funOption = (record: any, action: ProCoreActionType<{}>) => {
@@ -123,41 +115,35 @@ const CourseList = () => {
         <>
           <a
             onClick={() => {
-              setVisibleMechanismInfo(true);
-              handleOperation('chakan', record);
+              handleJgxq(record.KHJYJGId);
             }}
           >
             机构详情
           </a>
-          {record.KHKCSQs.length > 0 ? (
-            <a
-              onClick={() => {
-                Modal.confirm({
-                  title: `确认要取消引入 “ ${record.KCMC} ” 吗？`,
-                  icon: <ExclamationCircleOutlined />,
-                  content: '取消后将终止该门课程，请谨慎',
-                  okText: '确认',
-                  cancelText: '取消',
-                  onOk() {
-                    const res = updateKHKCSQ({ id: record?.KHKCSQs[0]?.id }, { ZT: 3 });
-
-                    Promise.resolve(res).then((data) => {
-                      if (data.status === 'ok') {
-                        message.success('操作成功');
-                        action?.reload();
-                      } else {
-                        message.error(data.message);
-                      }
-                    });
-                  },
-                });
-              }}
-            >
-              取消引入
-            </a>
-          ) : (
-            ''
-          )}
+          <a
+            onClick={() => {
+              Modal.confirm({
+                title: `确认要取消引入 “ ${record.KCMC} ” 吗？`,
+                icon: <ExclamationCircleOutlined />,
+                content: '取消后将终止该门课程，请谨慎',
+                okText: '确认',
+                cancelText: '取消',
+                onOk() {
+                  const res = updateKHKCSQ({ id: record?.KHKCSQs?.[0].id }, { ZT: 3 });
+                  Promise.resolve(res).then((data) => {
+                    if (data.status === 'ok') {
+                      message.success('操作成功');
+                      action?.reload();
+                    } else {
+                      message.error(data.message);
+                    }
+                  });
+                },
+              });
+            }}
+          >
+            取消引入
+          </a>
         </>
       );
     }
@@ -245,10 +231,11 @@ const CourseList = () => {
       title: '机构名称',
       align: 'center',
       width: 200,
-      key: 'KHJYJG',
+      key: 'JGMC',
+      dataIndex: 'JGMC',
       // search: false,
       render: (_, record) => {
-        return <>{record.KHJYJG?.QYMC || '-'}</>;
+        return <>{record?.KHJYJG?.QYMC || '-'}</>;
       },
     },
     {
@@ -256,12 +243,13 @@ const CourseList = () => {
       align: 'center',
       width: 110,
       key: 'KHKCLXId',
+      search: false,
       valueType: 'select',
       fieldProps: {
         options: kclxOptions,
       },
       render: (_, record) => {
-        return <>{record.KHKCLX?.KCTAG}</>;
+        return <>{record?.KHKCLX?.KCTAG}</>;
       },
     },
     {
@@ -277,8 +265,8 @@ const CourseList = () => {
             width="100%"
             text={text?.map((item: any) => {
               return (
-                <Tag key={item.id}>
-                  {item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}
+                <Tag key={item?.id}>
+                  {item?.XD === '初中' ? `${item?.NJMC}` : `${item?.XD}${item?.NJMC}`}
                 </Tag>
               );
             })}
@@ -290,31 +278,25 @@ const CourseList = () => {
       title: '课程班信息',
       align: 'center',
       search: false,
+      key: 'NJSJs',
+      dataIndex: 'NJSJs',
       width: 100,
       render: (_, record) => {
-        if ([1, 2].includes(record.KCZT)) {
-          const Url = `/classManagement`;
-          const classes = record.KHBJSJs?.filter(
-            (item: { BJZT: string }) => item.BJZT === '已开班',
-          );
-          return (
-            <Link
-              to={{
-                pathname: Url,
-                state: record,
-              }}
+        const Url = `/classManagement`;
+        return (
+          <Link
+            to={{
+              pathname: Url,
+              state: record,
+            }}
+          >
+            <Tooltip
+              title={`累计已开设${record.bj_count}个课程班。`}
             >
-              <Tooltip
-                title={`共${record.KHBJSJs?.length || 0}个班，其中${
-                  classes?.length || 0
-                }个已开班。`}
-              >
-                {classes?.length}/{record.KHBJSJs?.length}
-              </Tooltip>
-            </Link>
-          );
-        }
-        return '-';
+              {record.bj_count}
+            </Tooltip>
+          </Link>
+        );
       },
     },
     {
@@ -326,10 +308,10 @@ const CourseList = () => {
       search: false,
       width: 110,
       render: (_, record) => {
-        if (record.SSJGLX === '机构课程') {
-          return record.KHKCSQs.length > 0 ? '已引入' : '';
+        if (record?.SSJGLX === '机构课程') {
+          return '已引入';
         }
-        return record.KCZT === 0 ? '未发布' : '已发布';
+        return record?.KCZT === 0 ? '未发布' : '已发布';
       },
     },
     {
@@ -356,34 +338,6 @@ const CourseList = () => {
   ];
   return (
     <>
-      <div
-        style={{
-          display: `${exhibition}`,
-          width: '100vw',
-          height: '100vh',
-          background: 'rgba(0,0,0,.45)',
-          position: 'fixed',
-          zIndex: 1080,
-          left: '0',
-          top: '0',
-        }}
-      >
-        <div
-          style={{ width: '100%', height: '35px', display: 'flex', flexDirection: 'row-reverse' }}
-        >
-          <a style={{ color: '#fff', marginRight: '10px', fontSize: '24px' }} onClick={xclose}>
-            X
-          </a>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {' '}
-          <img
-            src={url}
-            alt=""
-            style={{ margin: 'auto', maxHeight: '100vh', maxWidth: '100vw', paddingBottom: '80px' }}
-          />
-        </div>
-      </div>
       <div>
         <ProTable<classType>
           actionRef={actionRef}
@@ -398,10 +352,9 @@ const CourseList = () => {
               name: params.keyword,
               pageSize: params.pageSize,
               page: params.current,
-              isRequired: false,
               XXJBSJId: currentUser?.xxId,
             };
-            const resAll = await getAllKHKCSJ(opts);
+            const resAll = await getAllCourses(opts);
             if (resAll.status === 'ok') {
               return {
                 data: resAll.data.rows,
@@ -458,7 +411,6 @@ const CourseList = () => {
           current={current}
           readonly={readonly}
           kclxOptions={kclxOptions}
-          setOpentype={setOpentype}
           optionsNJ={optionsNJ}
           currentUser={currentUser}
         />

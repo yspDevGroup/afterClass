@@ -146,8 +146,6 @@ const MutualEvaluation: React.FC = () => {
   // 学年学期变化
   useEffect(() => {
     huping(curXNXQId)
-
-
   }, [curXNXQId]);
 
 

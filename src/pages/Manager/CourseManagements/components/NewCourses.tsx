@@ -18,7 +18,6 @@ type PropsType = {
   visible?: boolean;
   actionRef?: React.MutableRefObject<ActionType | undefined>;
   kclxOptions?: any[];
-  setOpentype: (arg0: boolean) => void;
   optionsNJ?: any[];
   currentUser?: API.CurrentUser;
 };
@@ -81,7 +80,7 @@ const NewCourses = (props: PropsType) => {
       let res = null;
       const optionse = {
         ...values,
-        KCTP: imageUrl,
+        KCTP: current && imageUrl === '' ? current?.KCTP : imageUrl,
         XXJBSJId: currentUser?.xxId,
         SSJGLX: '校内课程',
       };

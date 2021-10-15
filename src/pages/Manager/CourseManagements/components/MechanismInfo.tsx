@@ -13,7 +13,6 @@ const MechanismInfo = (props: {
   info: any;
 }) => {
   const { onMechanismInfoClose, visibleMechanismInfo, info } = props;
-  const { KHJYJG } = info;
   const disabled = true;
 
   return (
@@ -25,14 +24,14 @@ const MechanismInfo = (props: {
       onClose={onMechanismInfoClose}
       visible={visibleMechanismInfo}
     >
-      <Form initialValues={KHJYJG} className={classes.forms} labelCol={{ span: 6, offset: 0 }}>
+      <Form initialValues={info} className={classes.forms} labelCol={{ span: 6, offset: 0 }}>
         <Form.Item name="id" hidden>
           <Input disabled />
         </Form.Item>
         <Form.Item name="QYTB" key="QYTB" label="企业LOGO：">
           <UploadImage
             key="QYTBTP"
-            imageurl={KHJYJG?.QYTB}
+            imageurl={info?.QYTB}
             disabled={disabled}
             upurl="/api/upload/uploadFile?type=badge&plat=agency"
             accept=".jpg, .jpeg, .png"
@@ -105,7 +104,7 @@ const MechanismInfo = (props: {
           <UploadImage
             key="YYZZTP"
             disabled={disabled}
-            imageurl={KHJYJG?.YYZZ}
+            imageurl={info?.YYZZ}
             upurl="/api/upload/uploadFile?type=badge&plat=agency"
             accept=".jpg, .jpeg, .png"
             imagename="image"
@@ -119,7 +118,7 @@ const MechanismInfo = (props: {
           <UploadImage
             key="BXXKZ"
             disabled={disabled}
-            imageurl={KHJYJG?.BXXKZ}
+            imageurl={info?.BXXKZ}
             upurl="/api/upload/uploadFile?type=badge&plat=agency"
             accept=".jpg, .jpeg, .png"
             imagename="image"

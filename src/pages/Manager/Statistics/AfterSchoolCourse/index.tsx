@@ -94,9 +94,7 @@ const AfterSchoolCourse: React.FC = () => {
       align: 'center',
       render:(test: any,record)=>{
         return (record?.TKRS/record?.BMRS).toFixed(2)*100 + '%';
-      }
-   
-     
+      }   
     },
     {
       title: '收款总额',

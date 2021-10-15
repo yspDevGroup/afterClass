@@ -121,6 +121,8 @@ export async function getAllTKByAgency(
   body: {
     /** 退课状态 */
     ZT?: number[];
+    /** 学生姓名 */
+    XSXM?: string;
     /** 班级ID */
     KHBJSJId?: string;
     /** 学年学期ID */
