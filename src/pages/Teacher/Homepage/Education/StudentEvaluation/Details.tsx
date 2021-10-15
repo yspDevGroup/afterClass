@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import styles from './index.less'
 import { createKHXSPJ, getKHXSPJ, updateKHXSPJ } from '@/services/after-class/khxspj'
 import { useModel } from 'umi';
-import noOrder from '@/assets/noOrder.png';
+import noOrder from '@/assets/noOrder1.png';
 
 
 const Details = (props: any) => {

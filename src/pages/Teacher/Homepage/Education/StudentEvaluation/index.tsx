@@ -2,7 +2,7 @@ import GoBack from "@/components/GoBack";
 import { Button } from "antd";
 import styles from './index.less'
 import { Link } from "umi";
-import noOrder from '@/assets/noOrder.png';
+import noOrder from '@/assets/noOrder1.png';
 
 const StudentEvaluation = (props: any) => {
   const { state } = props.location;

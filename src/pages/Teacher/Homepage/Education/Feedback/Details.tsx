@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getKHBJPJ } from "@/services/after-class/khbjpj";
 import { useModel } from "umi";
 import { getXXJBSJ } from "@/services/after-class/xxjbsj";
-import noOrder from '@/assets/noOrder.png';
+import noOrder from '@/assets/noOrder1.png';
 
 const Details = (props: any) => {
   const { state } = props.location;
