@@ -5,6 +5,7 @@ import { enHenceMsg, getQueryString } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import styles from './index.less';
@@ -101,7 +102,16 @@ const Detail: React.FC = () => {
             班主任：
             {classDetail?.KHBJJs.map((item: any) => {
               if (item.JSLX.indexOf('副') === -1) {
-                return <span style={{ marginRight: '1em' }}>{item.JZGJBSJ?.XM}</span>;
+                const showWXName = item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
+                return (
+                  <span style={{ marginRight: '1em' }}>
+                    {showWXName ? (
+                      <WWOpenDataCom type="userName" openid={item.JZGJBSJ.WechatUserId} />
+                    ) : (
+                      item.JZGJBSJ?.XM
+                    )}
+                  </span>
+                );
               }
               return '';
             })}
@@ -110,7 +120,16 @@ const Detail: React.FC = () => {
             副班：
             {classDetail?.KHBJJs.map((item: any) => {
               if (item.JSLX.indexOf('主') === -1) {
-                return <span style={{ marginRight: '1em' }}>{item.JZGJBSJ?.XM}</span>;
+                const showWXName = item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
+                return (
+                  <span style={{ marginRight: '1em' }}>
+                    {showWXName ? (
+                      <WWOpenDataCom type="userName" openid={item.JZGJBSJ.WechatUserId} />
+                    ) : (
+                      item.JZGJBSJ?.XM
+                    )}
+                  </span>
+                );
               }
               return '';
             })}

@@ -3,7 +3,6 @@
 import { Button, Checkbox, Divider, message, Modal, Popconfirm, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, history } from 'umi';
-import styles from './index.less';
 import { getKHKCSJ } from '@/services/after-class/khkcsj';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import moment from 'moment';
@@ -13,6 +12,9 @@ import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
+
+import styles from './index.less';
 
 const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -142,7 +144,6 @@ const CourseDetails: React.FC = () => {
     };
     const res = await createKHXSDD(data);
     if (res.status === 'ok') {
-      alert('费用： ' + data.DDFY);
       if (data.DDFY > 0) {
         setOrderInfo(res.data);
       } else {
@@ -225,7 +226,20 @@ const CourseDetails: React.FC = () => {
                         班主任：
                         {value?.KHBJJs?.map((item: any) => {
                           if (item.JSLX.indexOf('副') === -1) {
-                            return <span style={{ marginRight: '1em' }}>{item.JZGJBSJ?.XM}</span>;
+                            const showWXName =
+                              item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
+                            return (
+                              <span style={{ marginRight: '1em' }}>
+                                {showWXName ? (
+                                  <WWOpenDataCom
+                                    type="userName"
+                                    openid={item.JZGJBSJ.WechatUserId}
+                                  />
+                                ) : (
+                                  item.JZGJBSJ?.XM
+                                )}
+                              </span>
+                            );
                           }
                           return '';
                         })}
@@ -234,7 +248,20 @@ const CourseDetails: React.FC = () => {
                         副班：
                         {value?.KHBJJs?.map((item: any) => {
                           if (item.JSLX.indexOf('主') === -1) {
-                            return <span style={{ marginRight: '1em' }}>{item.JZGJBSJ?.XM}</span>;
+                            const showWXName =
+                              item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
+                            return (
+                              <span style={{ marginRight: '1em' }}>
+                                {showWXName ? (
+                                  <WWOpenDataCom
+                                    type="userName"
+                                    openid={item.JZGJBSJ.WechatUserId}
+                                  />
+                                ) : (
+                                  item.JZGJBSJ?.XM
+                                )}
+                              </span>
+                            );
                           }
                           return '';
                         })}
