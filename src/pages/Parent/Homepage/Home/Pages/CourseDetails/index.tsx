@@ -36,7 +36,7 @@ const CourseDetails: React.FC = () => {
   const [JFData, setJFData] = useState([]);
   const [JFTotalost, setJFTotalost] = useState<number>(0);
   const [KHFUXY, setKHFUXY] = useState<any>();
-  const [ByTime, setByTime] = useState(false)
+  const [ByTime, setByTime] = useState(false);
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
@@ -44,7 +44,7 @@ const CourseDetails: React.FC = () => {
     const enAble =
       myDate >= new Date(moment(current.BMKSSJ).format('YYYY/MM/DD')) &&
       myDate <= new Date(moment(current.BMJSSJ).format('YYYY/MM/DD'));
-    setByTime(enAble)
+    setByTime(enAble);
     setFY(current.FY);
     setBJ(current.id);
   };
@@ -135,12 +135,14 @@ const CourseDetails: React.FC = () => {
       ZFFS: '线上支付',
       DDZT: '待付款',
       DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
-      XSJBSJId:localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
+      XSJBSJId:
+        localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
       KHBJSJId: BJ!,
       DDLX: 0,
     };
     const res = await createKHXSDD(data);
     if (res.status === 'ok') {
+      alert('费用： ' + data.DDFY);
       if (data.DDFY > 0) {
         setOrderInfo(res.data);
       } else {
@@ -418,14 +420,15 @@ const CourseDetails: React.FC = () => {
               </Checkbox>
               <a onClick={showModal}>《课后服务协议》</a>
             </div>
-            {
-              ByTime === true ?  <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
-              {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
-            </Button>:
-             <Button className={styles.submit} disabled={true} onClick={submit}>
-             {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
-           </Button>
-            }
+            {ByTime === true ? (
+              <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
+                {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
+              </Button>
+            ) : (
+              <Button className={styles.submit} disabled={true} onClick={submit}>
+                {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
+              </Button>
+            )}
 
             <Link
               style={{ visibility: 'hidden' }}
