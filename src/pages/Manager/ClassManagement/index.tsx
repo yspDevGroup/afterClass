@@ -6,7 +6,7 @@
 import React from 'react';
 import { Link, useModel } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tooltip, Select } from 'antd';
+import { Button, Modal, Tooltip, Select, message } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -18,7 +18,7 @@ import PromptInformation from '@/components/PromptInformation';
 
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
+import { getAllClasses, getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 
 import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
@@ -40,7 +40,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [kcId, setkcId] = useState<string>('');
   // 查询课程名称
   const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
-  const [name, setName] = useState<string>('');
   // 控制提示开关
   const [tips, setTips] = useState<boolean>(false);
   // 学期学年没有数据时提示的开关
@@ -70,10 +69,17 @@ const CourseManagement = (props: { location: { state: any } }) => {
   //   })();
   // }, []);
 
-  const showModal = (record: any) => {
-    const { BJMC, XQName, KHXSBJs } = record;
-    setApplicantData({ KHXSBJs, BJMC, XQName });
-    setIsModalVisible(true);
+  const showModal = async (record: any) => {
+    const { BJMC, id } = record;
+    const res = await getEnrolled({
+      id
+    });
+    if (res.status === 'ok') {
+      setIsModalVisible(true);
+      setApplicantData({ BJMC, KHXSBJs: res.data||[] });
+    }else{
+      message.warning(res.message);
+    }
   };
 
   const handleOk = () => {
@@ -138,23 +144,28 @@ const CourseManagement = (props: { location: { state: any } }) => {
     stereadonly(false);
   };
 
-  const handleEdit = (data: any) => {
+  const handleEdit = async (data: any) => {
     const FJS: any[] = [];
-    data.KHBJJs?.map((item: any) => {
+    const res = await getKHBJSJ({
+      id: data?.id
+    });
+    const current = res.data;
+
+    current.KHBJJs?.map((item: any) => {
       if (item.JSLX === '副教师') {
         FJS.push(item?.JZGJBSJId);
       }
     });
     const list = {
-      ...data,
+      ...current,
       ZJS:
-        data.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
+        current.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
         undefined,
       FJS,
-      BMSD: [data.BMKSSJ || data.KHKCSJ.BMKSSJ, data.BMJSSJ || data.KHKCSJ.BMJSSJ],
-      SKSD: [data.KKRQ || data.KHKCSJ.KKRQ, data.JKRQ || data.KHKCSJ.JKRQ],
-      SSJGLX: data?.KHKCSJ?.SSJGLX,
-      KHKCSJId: data?.KHKCSJ?.id,
+      BMSD: [current.BMKSSJ, current.KHKCSJ.BMJSSJ],
+      SKSD: [current.KKRQ, current.JKRQ],
+      SSJGLX: current?.KHKCSJ?.SSJGLX,
+      KHKCSJId: current?.KHKCSJ?.id,
     };
     setVisible(true);
     setCurrent(list);
@@ -171,7 +182,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     setVisible(false);
   };
   // const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-  const columns: ProColumns<CourseItem>[] = [
+  const columns: ProColumns<any>[] = [
     {
       title: '序号',
       dataIndex: 'index',
@@ -229,9 +240,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
         return (
           <a onClick={() => showModal(record)}>
             <Tooltip
-              title={`班级招生名额为${record.BJRS || 0}人，已报${record.KHXSBJs.length || 0}人。`}
+              title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count || 0}人。`}
             >
-              {record.KHXSBJs.length}/{record.BJRS}
+              {record?.xs_count}/{record?.BJRS}
             </Tooltip>
           </a>
         );
@@ -244,7 +255,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       render: (_, record) => {
         const Url = `/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}`;
         if (record.BJZT === '待开班') {
-          if (record.KHPKSJs && record.KHPKSJs?.length === 0) {
+          if (record.pk_count === 0) {
             return <Link to={Url}>未排课</Link>;
           }
           return <Link to={Url}>已排课</Link>;
@@ -290,12 +301,11 @@ const CourseManagement = (props: { location: { state: any } }) => {
             if (curXNXQId) {
               const obj = {
                 XNXQId: curXNXQId,
-                kcId: kcId || state?.id,
+                KHKCSJId: kcId || state?.id,
                 page: param.current,
                 pageSize: param.pageSize,
-                name,
               };
-              const res = await getAllKHBJSJ(obj);
+              const res = await getAllClasses(obj);
               if (res.status === 'ok') {
                 return {
                   data: res.data.rows,

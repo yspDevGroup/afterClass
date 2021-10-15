@@ -29,17 +29,17 @@ import * as khjscq from './khjscq';
 import * as khjspj from './khjspj';
 import * as khjssj from './khjssj';
 import * as khjyjg from './khjyjg';
-import * as khjytzgg from './khjytzgg';
 import * as khkclx from './khkclx';
-import * as khkcsj from './khkcsj';
 import * as khkcsq from './khkcsq';
+import * as khjytzgg from './khjytzgg';
 import * as khktfc from './khktfc';
+import * as khkcsj from './khkcsj';
 import * as khpksj from './khpksj';
-import * as khtksj from './khtksj';
 import * as khxkjl from './khxkjl';
-import * as khxksj from './khxksj';
 import * as khxscq from './khxscq';
 import * as khxsdd from './khxsdd';
+import * as khtksj from './khtksj';
+import * as khxksj from './khxksj';
 import * as khxspj from './khxspj';
 import * as khxsqj from './khxsqj';
 import * as khxstk from './khxstk';
@@ -47,8 +47,8 @@ import * as khxxzzfw from './khxxzzfw';
 import * as khzzfw from './khzzfw';
 import * as njsj from './njsj';
 import * as pksj from './pksj';
-import * as redis from './redis';
 import * as reports from './reports';
+import * as redis from './redis';
 import * as sso from './sso';
 import * as upload from './upload';
 import * as wechat from './wechat';
@@ -98,17 +98,17 @@ export default {
   khjspj,
   khjssj,
   khjyjg,
-  khjytzgg,
   khkclx,
-  khkcsj,
   khkcsq,
+  khjytzgg,
   khktfc,
+  khkcsj,
   khpksj,
-  khtksj,
   khxkjl,
-  khxksj,
   khxscq,
   khxsdd,
+  khtksj,
+  khxksj,
   khxspj,
   khxsqj,
   khxstk,
@@ -116,8 +116,8 @@ export default {
   khzzfw,
   njsj,
   pksj,
-  redis,
   reports,
+  redis,
   sso,
   upload,
   wechat,

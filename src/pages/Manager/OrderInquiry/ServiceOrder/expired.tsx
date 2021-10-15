@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-14 20:25:27
+ * @LastEditTime: 2021-10-14 21:25:12
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -36,7 +36,6 @@ const OrderInquiry = (props: any) => {
   useEffect(() => {
     (async () => {
       // 学年学期数据的获取
-      console.log(currentUser);
       const res = await queryXNXQList(currentUser?.xxId);
       const newData = res.xnxqList;
       const curTerm = res.current;
@@ -63,7 +62,7 @@ const OrderInquiry = (props: any) => {
         setDataSource(res.data)
       }
     })()
-  }, [])
+  }, [curXNXQId])
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -92,8 +91,8 @@ const OrderInquiry = (props: any) => {
     },
     {
       title: '行政班名称',
-      dataIndex: 'XZBJSJ',
-      key: 'XZBJSJ',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
       align: 'center',
       width: 100,
       ellipsis: true,

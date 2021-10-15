@@ -11,7 +11,6 @@ const { TextArea } = Input;
 
 const EvaluationDetails = (props: any) => {
   const { state } = props.location;
-  console.log(state,'=======================')
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [Fraction, setFraction] = useState<number>()

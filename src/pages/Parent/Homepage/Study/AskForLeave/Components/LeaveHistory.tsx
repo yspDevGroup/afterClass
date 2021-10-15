@@ -23,7 +23,6 @@ type propsType = {
 };
 const LeaveHistory = (props: propsType) => {
   const { leaveInfo, getData } = props;
-  console.log(leaveInfo,'=-=-=-=')
   const handleCancle = async (d: any) => {
     const res = await updateKHXSQJ({ id: d.id }, { QJZT: 1 });
     if (res.status === 'ok') {

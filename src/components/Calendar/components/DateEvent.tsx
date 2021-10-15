@@ -68,7 +68,13 @@ const DateEvent = ({ colors, events }: DateEventProps) => {
                           background: colors[event.eventIndex! % colors.length],
                         }}
                       />
-                      <span className={styles.textCut}>{event.title}</span>
+                      <span className={styles.textCut}>
+                  {event.title === '未知' && event.wechatUserId ? (
+                    <WWOpenDataCom type="userName" openid={event.wechatUserId} />
+                  ) : (
+                    event.title
+                  )}
+                </span>
                     </li>
                   );
                 }
