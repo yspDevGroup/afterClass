@@ -35,11 +35,11 @@ const OrderDetails: React.FC = (props: any) => {
     const res = await payKHXSDD({
       ddIds: [orderInfo.id],
       bjId: detail.id,
-      returnUrl: '/parent/home',
       xsId: childId,
       kcmc: title,
       amount: orderInfo.DDFY,
       XXJBSJId: currentUser?.xxId,
+      returnUrl:`${window.location.origin}/parent/home?index=index`
     });
     if (res.status === 'ok') {
       setUrlPath(res.data);
@@ -49,7 +49,7 @@ const OrderDetails: React.FC = (props: any) => {
   };
   const handleFWPay = async () => {
     const result = await payKHXSDD({
-      returnUrl: '/parent/home',
+      returnUrl:`${window.location.origin}/parent/home?index=index`,
       kcmc: fwdetail?.FWMC,
       ddIds: [orderInfo.id],
       xsId: childId,
