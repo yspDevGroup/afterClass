@@ -367,6 +367,12 @@ export const getData = async (bjid: string, xsId?: string) => {
     if (res.status === 'ok' && res.data && attend) {
       const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;
       const end = res.data.JKRQ ? res.data.JKRQ : res.data.KHKCSJ!.JKRQ;
+      let ZJS: any;
+      res.data.KHBJJs.forEach((item: any)=>{
+          if(item.JSLX === '主教师') {
+            ZJS =  item.JZGJBSJ?.XM
+          }
+        });
       return {
         title: res.data.BJMC,
         start,
@@ -374,6 +380,7 @@ export const getData = async (bjid: string, xsId?: string) => {
         kss: res.data.KSS,
         XQName: res.data.XQName,
         kcmc: res.data.KHKCSJ!.KCMC,
+        skjs: ZJS || '',
         data: await getCqDay(attend, start, end, bjid, xsId),
       };
     }

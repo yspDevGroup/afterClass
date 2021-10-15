@@ -45,6 +45,7 @@ const CourseDetails: React.FC = () => {
         <li>上课地点：本校</li>
         <li>总课时：{KcDetail?.kss}课时</li>
         <li>授课班级：{KcDetail?.title}</li>
+        <li>授课教师：{KcDetail?.skjs}</li>
       </ul>
       </ul>
     </div>
