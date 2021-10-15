@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-10-12 11:03:06
- * @LastEditors: zpl
+ * @LastEditTime: 2021-10-15 10:18:19
+ * @LastEditors: Sissle Lynn
  */
 import { useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
@@ -46,6 +46,7 @@ const LeaveForm = (props: {
         KCMC: ele.title,
         QJRQ: ele.day,
         KHBJSJId: ele.bjId,
+        XXSJPZId: ele.jcId,
       });
     });
     const res = await createKHXSQJ({

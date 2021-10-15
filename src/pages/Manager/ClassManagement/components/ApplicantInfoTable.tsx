@@ -75,7 +75,14 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         search={false}
         dataSource={KHXSBJs}
         columns={columns}
-        pagination={paginationConfig}
+        pagination={{
+          pageSize: 5,
+          defaultCurrent: 1,
+          pageSizeOptions: ['5'],
+          showQuickJumper: false,
+          showSizeChanger: false,
+          showTotal: undefined,
+        }}
         options={{
           setting: false,
           fullScreen: false,
