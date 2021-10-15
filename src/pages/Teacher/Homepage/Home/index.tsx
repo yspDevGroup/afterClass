@@ -16,7 +16,6 @@ import resourcesRgo from '@/assets/resourcesRgo.png';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
-import { getInitialState } from '@/app';
 
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
@@ -24,10 +23,10 @@ const Home = () => {
   const { currentUserInfo } = useContext(myContext);
   const userRef = useRef(null);
   const [notification, setNotification] = useState<any[]>();
-  const { initialState } = useModel('@@initialState');
+  const { initialState, refresh } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const formRef =  React.createRef<any>();
+  const formRef = React.createRef<any>();
 
   const today = dayjs().format('YYYY/MM/DD');
   // 巡课中课程安排数据
@@ -80,33 +79,33 @@ const Home = () => {
       }
     }
     announcements();
-    if(currentUser.XM == '未知'){
+    if (!currentUser.XM || currentUser.XM === '未知') {
       setIsModalVisible(true);
-    }else{
-      setIsModalVisible(false);
     }
   }, []);
 
-
-  const onFinish = (values: any) => {
-    formRef.current.validateFields()
-      .then(async (values: any) => {
-        console.log('values: ', values);
-        const res = await  updateJZGJBSJ( {id : currentUser.JSId },{ XM: values.name , LXDH: values.phone });
-        if(res.status === 'ok'){
-          message.success('更新成功！');
-          getInitialState();
-        }else{
-          message.error(res.message);
-        }
-        setIsModalVisible(false);
-      })
-      .catch((info: { errorFields: any; }) => {
-        let error = info.errorFields
-        console.log(error);
-      });
+  const onFinish = async (values: { name: string; phone: string }) => {
+    // formRef.current.validateFields()
+    //   .then(async (values: any) => {
+    console.log('values: ', values);
+    const res = await updateJZGJBSJ(
+      { id: currentUser.JSId },
+      { XM: values.name, LXDH: values.phone },
+    );
+    if (res.status === 'ok') {
+      message.success('提交成功');
+      refresh();
+    } else {
+      message.error('提交失败，请联系管理');
+      console.warn(res.message);
+    }
+    setIsModalVisible(false);
+    // }).catch(e){
+    //   message.error('提交失败，请联系管理员');
+    //   let error = info.errorFields
+    //   console.log(error);
+    // });
   };
-
 
   return (
     <div className={styles.indexPage}>
@@ -186,37 +185,50 @@ const Home = () => {
           <Details data={notification} />
         </div>
       </div>
-      <Modal className={styles.modalStyle} title="首次使用，请完善您的个人信息"
-      forceRender={true}
-      visible={isModalVisible}
-      centered={true}
-      closable={false}
-      cancelText='取消'
-      okText='确认'
-      footer={false}
+      <Modal
+        className={styles.modalStyle}
+        title="首次使用，请完善您的个人信息"
+        forceRender={true}
+        visible={isModalVisible}
+        centered={true}
+        closable={false}
+        cancelText="取消"
+        okText="确认"
+        footer={false}
       >
-        <Form ref={formRef} labelCol={{flex: '4em'}} wrapperCol={{ flex: 'auto' }} onFinish={onFinish} >
-            <Form.Item
-              name="name"
-              label="姓名"
-              rules={[{ required: true, message: '请输入您的真实姓名！' }]}
-            >
-              <Input></Input>
-            </Form.Item>
-            <Form.Item
-              name="phone"
-              label="手机"
-              rules={[{ required: true,  pattern: /^1[3|4|5|7|8][0-9]\d{8}$/ ,message: '请输入您的手机号码！' }]}
-            >
-              <Input></Input>
-            </Form.Item>
-            <Divider />
-            <Form.Item>
-              <Button type="primary" htmlType="submit" style={{width: '100%'}}>
-                提交
-              </Button>
-            </Form.Item>
-          </Form>
+        <Form
+          ref={formRef}
+          labelCol={{ flex: '5em' }}
+          wrapperCol={{ flex: 'auto' }}
+          onFinish={onFinish}
+        >
+          <Form.Item
+            name="name"
+            label="姓名"
+            rules={[{ required: true, message: '请输入您的真实姓名！' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="phone"
+            label="手机号"
+            rules={[
+              {
+                required: true,
+                pattern: /^1[3|4|5|7|8][0-9]\d{8}$/,
+                message: '请输入您的手机号！',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Divider />
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+              提交
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );
