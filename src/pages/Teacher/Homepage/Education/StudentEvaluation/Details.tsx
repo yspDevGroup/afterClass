@@ -25,6 +25,7 @@ const Details = (props: any) => {
     })
     setStudentData(res.data)
     const newArr: any[] = [];
+    console.log(res,'======')
     res.data?.forEach((value: any) => {
       if (value.KHXSPJId === '') {
         newArr.push(value)
@@ -40,7 +41,7 @@ const Details = (props: any) => {
   const showModal = async (value: any) => {
     setIsModalVisible(true);
     setXsData(value)
-    if (value.KHXSPJId !== "") {
+    if (value.KHXSPJId !== null) {
       const res = await getKHXSPJ({
         id: value.KHXSPJId
       })
@@ -52,7 +53,7 @@ const Details = (props: any) => {
   };
   const handleOk = async () => {
     setIsModalVisible(false);
-    if (XsData?.KHXSPJId === '') {
+    if (XsData?.KHXSPJId === null) {
       const res = await createKHXSPJ({
         PJFS: Fraction || 0,
         PY: Evaluation || "",
@@ -115,6 +116,7 @@ const Details = (props: any) => {
 
               {
                 StudentData?.map((value: any, index: number) => {
+                  console.log( value.KHXSPJId)
                   return <tr style={{ backgroundColor: index % 2 === 0 ? "#F5F5F5" : "#fff" }}>
                     <td>{value?.XSJBSJ?.XM}</td>
                     <td>
@@ -122,7 +124,7 @@ const Details = (props: any) => {
                         showModal(value)
                       }}
                       >
-                        {value?.KHXSPJId === "" ? "去评价" : "查看"}</Button>
+                        {value?.KHXSPJId === null ? "去评价" : "查看"}</Button>
                     </td>
                   </tr>
                 })
