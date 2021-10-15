@@ -2,18 +2,18 @@
  * @description: 服务详情
  * @author: wsl
  * @Date: 2021-09-26 17:28:08
- * @LastEditTime: 2021-10-11 14:56:16
+ * @LastEditTime: 2021-10-15 15:01:42
  * @LastEditors: zpl
  */
 import GoBack from '@/components/GoBack';
-import { Button, Checkbox, Modal } from 'antd';
+import { Button, Checkbox, message, Modal } from 'antd';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.less';
 import { getStudent, KHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
-import { Link, useModel } from 'umi';
+import { Link, useModel, history } from 'umi';
 import { enHenceMsg } from '@/utils/utils';
 
 const Details = () => {
@@ -92,15 +92,18 @@ const Details = () => {
       DDZT: '待付款',
       DDFY: Data?.FY,
       XSJBSJId:
-        localStorage.getItem('studentId') ||
-        currentUser?.student[0].XSJBSJId ||
-        testStudentId,
+        localStorage.getItem('studentId') || currentUser?.student[0].XSJBSJId || testStudentId,
       DDLX: 1,
       KHXXZZFWId: Data?.id,
     };
     const res = await createKHXSDD(data);
     if (res.status === 'ok') {
-      setOrderInfo(res.data);
+      if (data.DDFY > 0) {
+        setOrderInfo(res.data);
+      } else {
+        message.success('报名成功');
+        history.push('/parent/home/serviceReservation');
+      }
     } else {
       enHenceMsg(res.message);
     }
