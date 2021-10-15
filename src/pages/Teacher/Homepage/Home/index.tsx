@@ -16,6 +16,7 @@ import resourcesRgo from '@/assets/resourcesRgo.png';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
+import { getInitialState } from '@/app';
 
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
@@ -79,15 +80,13 @@ const Home = () => {
       }
     }
     announcements();
-  }, []);
-
-  useEffect(()=>{
     if(currentUser.XM == '未知'){
       setIsModalVisible(true);
     }else{
       setIsModalVisible(false);
     }
-  },[currentUser.XM])
+  }, []);
+
 
   const onFinish = (values: any) => {
     formRef.current.validateFields()
@@ -96,6 +95,7 @@ const Home = () => {
         const res = await  updateJZGJBSJ( {id : currentUser.JSId },{ XM: values.name , LXDH: values.phone });
         if(res.status === 'ok'){
           message.success('更新成功！');
+          getInitialState();
         }else{
           message.error(res.message);
         }
