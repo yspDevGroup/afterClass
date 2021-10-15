@@ -16,6 +16,7 @@ import resourcesRgo from '@/assets/resourcesRgo.png';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
@@ -113,7 +114,13 @@ const Home = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.headerText}>
           <h4>
-            <span ref={userRef}>{currentUser?.UserId}</span>
+            <span ref={userRef}>
+              {currentUser?.UserId === '未知' && currentUser.wechatUserId ? (
+                <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
+              ) : (
+                currentUser?.UserId
+              )}
+            </span>
             老师，你好！
           </h4>
           <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>

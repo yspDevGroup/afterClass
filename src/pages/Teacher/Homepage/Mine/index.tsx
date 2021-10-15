@@ -15,6 +15,7 @@ import noChart from '@/assets/noChart1.png';
 // import icon_Rgo from '@/assets/icon_Rgo.png';
 import styles from './index.less';
 import { defUserImg } from '@/constant';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const Mine = () => {
   const { initialState } = useModel('@@initialState');
@@ -140,7 +141,12 @@ const Mine = () => {
           <Image width={46} height={46} src={currentUser?.avatar} fallback={defUserImg} />
           <div className={styles.headerName}>
             <h4>
-              <span ref={userRef}>{currentUser?.UserId}</span>
+              <span ref={userRef}>
+              {currentUser?.UserId === '未知' && currentUser.wechatUserId ? (
+                <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
+              ) : (
+                currentUser?.UserId
+              )}</span>
               老师
             </h4>
           </div>

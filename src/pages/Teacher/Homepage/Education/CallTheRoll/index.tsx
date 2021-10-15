@@ -12,6 +12,7 @@ import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 
 import { theme } from '@/theme-default';
 import styles from './index.less';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 /**
  * 课堂点名
@@ -342,7 +343,12 @@ const CallTheRoll = (props: any) => {
       <div className={styles.rollHeader}>
         <div>
           <b>
-            <span ref={userRef}>{currentUser?.UserId}</span>
+            <span ref={userRef}>
+            {currentUser?.UserId === '未知' && currentUser.wechatUserId ? (
+                <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
+              ) : (
+                currentUser?.UserId
+              )}</span>
             老师
           </b>
           <span>
