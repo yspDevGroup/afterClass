@@ -10,12 +10,9 @@ import { useModel } from 'umi';
 import {Rate,Popover}from 'antd'
 import { Modal} from 'antd';
 
-
 const TabList=(props: any)=>{
-    const {ListName,ListState}=props.ListData
-    const {id,KHBJJs}=ListState.record
-    console.log(ListState.record);
-    
+    const {ListName,ListState}=props.ListData;
+    const {id,KHBJJs}=ListState.record;
 
     const handleOk = () => {
         setIsModalVisible(false);
@@ -136,8 +133,6 @@ const TabList=(props: any)=>{
       },
     },
   ];
-
-
    // 弹出框显示隐藏
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [DetailsValue, setDetailsValue] = useState('');

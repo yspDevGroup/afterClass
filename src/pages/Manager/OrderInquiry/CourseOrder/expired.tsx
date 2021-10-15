@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-14 20:23:51
+ * @LastEditTime: 2021-10-15 09:55:40
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -220,8 +220,9 @@ const OrderInquiry = (props: any) => {
       align: 'center',
       ellipsis: true,
       width: 150,
+      hideInTable: DDZT!=='已付款',
       render: (_text: any, record: any) => {
-        return record.XDSJ?.substring(0,16);
+        return record.ZFSJ?.substring(0,16);
       },
     },
     {

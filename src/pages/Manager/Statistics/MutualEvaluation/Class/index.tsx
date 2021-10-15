@@ -11,7 +11,7 @@ import { LeftOutlined } from '@ant-design/icons';
 
 const school = (props: any) => {
   const {XNXQ,record} = props.location.state.data;
-  const {id, KCMC}=record
+  const {id, KCMC}=record;
  const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
 
   useEffect(() => {
