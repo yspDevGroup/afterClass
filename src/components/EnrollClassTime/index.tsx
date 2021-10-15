@@ -16,7 +16,6 @@ const EnrollClassTime = (props: { teacher?: boolean }) => {
   const getTodayData = (data: any) => {
     const day = new Date(); // 获取现在的时间  eg:day Thu Jun 24 2021 18:54:38 GMT+0800 (中国标准时间)
     const curCourse = []; // list中的数据
-
     for (let i = 0; i < data.length; i += 1) {
       // 循环每一个数组
       const item = data[i]; // 每一个数组

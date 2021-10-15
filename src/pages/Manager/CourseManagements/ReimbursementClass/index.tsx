@@ -113,8 +113,8 @@ const ReimbursementClass = () => {
     },
     {
       title: '审批人',
-      dataIndex: 'SPSJ',
-      key: 'SPSJ',
+      dataIndex: 'SPR',
+      key: 'SPR',
       align: 'center',
       ellipsis: true,
       width: 100,
@@ -178,7 +178,7 @@ const ReimbursementClass = () => {
     try {
       if (current.id) {
         const params = { id: current.id };
-        const body = { ZT, BZ };
+        const body = { ZT, BZ,JZGJBSJId: currentUser.JSId };
         const res = await updateKHTKSJ(params, body);
         if (res.status === 'ok') {
           if (ZT === 2) {
@@ -197,7 +197,7 @@ const ReimbursementClass = () => {
                 KHBJSJId: current?.KHBJSJId,
                 /** 学校ID */
                 XXJBSJId: currentUser?.xxId,
-                JZGJBSJId: currentUser.JSId || '065faabb-947d-4181-82a8-43d29ebb1ddd'
+                JZGJBSJId: currentUser.JSId
               });
               if (result.status === 'ok') {
                 message.success('退课成功,已自动申请退款流程');

@@ -2482,7 +2482,7 @@ declare namespace API {
     KHXSDDId?: string;
     /** 学生ID */
     XSJBSJId?: string;
-    JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
+    JZGJBSJ?: any | { id?: string; XM?: string; WechatUserId?: string };
     XSJBSJ?: {
       id?: string;
       XH?: string;
@@ -2530,6 +2530,8 @@ declare namespace API {
     ZT?: number;
     /** 班级ID */
     KHBJSJId?: string;
+    /** 教师ID */
+    JZGJBSJId?: string;
   };
 
   type KHXKJL = {
@@ -3327,6 +3329,7 @@ declare namespace API {
     KSSC?: number;
     /** 教师ID */
     JZGJBSJId?: string;
+    JZGJBSJ?: any | { id?: string; XM?: string; WechatUserId?: string };
     /** 学年学期ID */
     XNXQId?: string;
   };
@@ -3443,6 +3446,29 @@ declare namespace API {
     UserType?: { id?: string; name?: string };
   };
 
+  type XKSJ = {
+    id: string;
+    /** 学科名称 */
+    XKMC: string;
+    /** 所属学段 */
+    XD?: string;
+  };
+
+  type CreateXKSJ = {
+    /** 学科名称 */
+    XKMC: string;
+    /** 所属学段 */
+    XD?: string;
+    XQSJId?: string;
+  };
+
+  type UpdateXKSJ = {
+    /** 学科名称 */
+    XKMC: string;
+    /** 所属学段 */
+    XD?: string;
+  };
+
   type XL = {
     id: string;
     /** 标题 */
@@ -3472,29 +3498,6 @@ declare namespace API {
     /** 结束日期 */
     JSRQ?: string;
     XNXQId: string;
-  };
-
-  type XKSJ = {
-    id: string;
-    /** 学科名称 */
-    XKMC: string;
-    /** 所属学段 */
-    XD?: string;
-  };
-
-  type CreateXKSJ = {
-    /** 学科名称 */
-    XKMC: string;
-    /** 所属学段 */
-    XD?: string;
-    XQSJId?: string;
-  };
-
-  type UpdateXKSJ = {
-    /** 学科名称 */
-    XKMC: string;
-    /** 所属学段 */
-    XD?: string;
   };
 
   type XNJGSJ = {
@@ -4192,6 +4195,42 @@ declare namespace API {
     XSJBSJId?: string;
   };
 
+  type XXGG = {
+    id: string;
+    /** 公告标题 */
+    BT?: string;
+    /** 公告内容 */
+    NR?: string;
+    /** 公告状态 */
+    ZT?: string;
+    /** 公告类型 */
+    LX?: string;
+    /** 修改时间 */
+    updatedAt?: string;
+  };
+
+  type CreateXXGG = {
+    /** 公告标题 */
+    BT?: string;
+    /** 公告内容 */
+    NR?: string;
+    /** 公告状态 */
+    ZT?: string;
+    /** 公告类型 */
+    LX?: string;
+  };
+
+  type UpdateXXGG = {
+    /** 公告标题 */
+    BT?: string;
+    /** 公告内容 */
+    NR?: string;
+    /** 公告状态 */
+    ZT?: string;
+    /** 公告类型 */
+    LX?: string;
+  };
+
   type XXJBPZ = {
     id?: string;
     /** 年级是否自动增长 */
@@ -4464,42 +4503,6 @@ declare namespace API {
     ZSBJ?: string;
     /** 包含学段 */
     XD?: string;
-  };
-
-  type XXGG = {
-    id: string;
-    /** 公告标题 */
-    BT?: string;
-    /** 公告内容 */
-    NR?: string;
-    /** 公告状态 */
-    ZT?: string;
-    /** 公告类型 */
-    LX?: string;
-    /** 修改时间 */
-    updatedAt?: string;
-  };
-
-  type CreateXXGG = {
-    /** 公告标题 */
-    BT?: string;
-    /** 公告内容 */
-    NR?: string;
-    /** 公告状态 */
-    ZT?: string;
-    /** 公告类型 */
-    LX?: string;
-  };
-
-  type UpdateXXGG = {
-    /** 公告标题 */
-    BT?: string;
-    /** 公告内容 */
-    NR?: string;
-    /** 公告状态 */
-    ZT?: string;
-    /** 公告类型 */
-    LX?: string;
   };
 
   type XXPZ = {

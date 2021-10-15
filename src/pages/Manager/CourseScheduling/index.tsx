@@ -1,11 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable array-callback-return */
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Radio, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-
 import PageContainer from '@/components/PageContainer';
 import type { DataSourceType } from '@/components/ExcelTable';
 import ExcelTable from '@/components/ExcelTable';
@@ -20,14 +15,12 @@ import { getQueryString } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 
 import AddArranging from './components/AddArranging';
-// import { NJData, XQData } from './mock';
 import styles from './index.less';
-import { getAllCourses, getAllKHKCSJ } from '@/services/after-class/khkcsj';
-import { getAllFJLX } from '@/services/after-class/fjlx';
+import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { useModel } from 'umi';
 import { getAllGrades } from '@/services/after-class/khjyjg';
-import { getAllClasses, getAllKHBJSJ, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
 
 const { Option } = Select;
 const { Search } = Input;
@@ -98,7 +91,7 @@ const ClassManagement = () => {
         const optNJ: any[] = [];
         const nj = ['幼儿园', '小学', '初中', '高中'];
         nj.forEach((itemNJ) => {
-          resNJ.data?.forEach((item: { XD: string; NJMC: any; id: any }) => {
+          resNJ.data?.forEach((item: any) => {
             if (item.XD === itemNJ) {
               optNJ.push({
                 label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
@@ -321,7 +314,6 @@ const ClassManagement = () => {
         const params = {
           page: 0,
           pageSize: 0,
-          name: '',
           XNXQId: curXNXQId,
           XXJBSJId: currentUser?.xxId,
         };
@@ -528,7 +520,7 @@ const ClassManagement = () => {
                     <Search
                       allowClear
                       style={{ width: 200 }}
-                      onChange={(value) => setTeacher(value)}
+                      onSearch={(value) => setTeacher(value)}
                     />
                   </div>
                 </div>

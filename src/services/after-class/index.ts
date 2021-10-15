@@ -52,8 +52,8 @@ import * as reports from './reports';
 import * as sso from './sso';
 import * as upload from './upload';
 import * as wechat from './wechat';
-import * as xl from './xl';
 import * as xksj from './xksj';
+import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
@@ -62,9 +62,9 @@ import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
 import * as xsjtcy from './xsjtcy';
 import * as xsxxjl from './xsxxjl';
+import * as xxgg from './xxgg';
 import * as xxjbpz from './xxjbpz';
 import * as xxjbsj from './xxjbsj';
-import * as xxgg from './xxgg';
 import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
 import * as xxtzgg from './xxtzgg';
@@ -121,8 +121,8 @@ export default {
   sso,
   upload,
   wechat,
-  xl,
   xksj,
+  xl,
   xnjgsj,
   xnxq,
   xqsj,
@@ -131,9 +131,9 @@ export default {
   xsjlsj,
   xsjtcy,
   xsxxjl,
+  xxgg,
   xxjbpz,
   xxjbsj,
-  xxgg,
   xxpz,
   xxsjpz,
   xxtzgg,
