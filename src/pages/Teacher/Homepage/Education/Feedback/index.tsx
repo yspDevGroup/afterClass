@@ -3,7 +3,7 @@ import {Rate } from "antd";
 import styles from './index.less'
 import { Link } from "umi";
 import { RightOutlined } from "@ant-design/icons";
-import noOrder from '@/assets1.png';
+import noOrder from '@/assets/noOrder1.png';
 
 const Feedback = (props: any) => {
   const { state } = props.location;
