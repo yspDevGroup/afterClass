@@ -2,11 +2,11 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-25 11:33:48
- * @LastEditors: zpl
+ * @LastEditTime: 2021-10-18 17:21:15
+ * @LastEditors: Please set LastEditors
  */
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row,message } from 'antd';
 import { Link, useModel } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
 import Topbar from './Topbar';
@@ -24,6 +24,9 @@ import { homePage } from '@/services/after-class/xxjbsj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 // import { KHJYJG } from '@/services/after-class/khjyjg';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import PromptInformation from '@/components/PromptInformation';
+
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
@@ -31,47 +34,73 @@ const Index = () => {
   const [homeData, setHomeData] = useState<any>();
   const [policyData, setPolicyData] = useState<any>();
   const [annoceData, setAnnoceData] = useState<any>();
-
+   // 学期学年没有数据时提示的开关
+   const [kai, setkai] = useState<boolean>(false);
+    // 控制学期学年数据提示框的函数
+  const kaiguan = () => {
+    setkai(false);
+  };
   useEffect(() => {
-    async function fetchData() {
-      const res = await homePage({
-        XXJBSJId: currentUser?.xxId,
-      });
-      if (res.status === 'ok') {
-        const { xxbm, kcbm, ...rest } = res.data;
-        // 配置头部统计栏目数据
-        setHomeData({ ...rest });
+    // 获取学年学期数据的获取
+    (async () => {
+      const res = await queryXNXQList(currentUser?.xxId);
+      // 获取到的整个列表的信息
+      const newData = res.xnxqList;
+      const curTerm = res.current;
+      if (newData?.length) {
+        if (curTerm) {
+          fetchData(curTerm.id)
+          }
+      } else {
+        setkai(true);
+      
       }
-      // 校内通知
-      const result = await getXXTZGG({
-        XXJBSJId: currentUser?.xxId,
-        BT: '',
-        LX: ['0'],
-        ZT: ['已发布'],
-        page: 1,
-        pageSize: 3,
-      });
-      if (result.status === 'ok') {
-        setAnnoceData(result.data?.rows);
-      }
-      // 配置政策公告数据
-      const resgetXXTZGG = await getJYJGTZGG({
-        BT: '',
-        LX: 1,
-        ZT: ['已发布'],
-        XZQHM: currentUser?.XZQHM,
-        page: 1,
-        pageSize: 3,
-      });
-      if (resgetXXTZGG.status === 'ok') {
-        setPolicyData(resgetXXTZGG.data?.rows);
-      }
-    }
-    fetchData();
+    })();
   }, []);
+  const fetchData=async (XNXQId:any)=>{
+    const res = await homePage({
+      XXJBSJId: currentUser?.xxId,
+      XNXQId
+    });
+    if (res.status === 'ok') {
+     // 配置头部统计栏目数据
+      setHomeData({ ...res.data});
+    }
+    // 校内通知
+    const result = await getXXTZGG({
+      XXJBSJId: currentUser?.xxId,
+      BT: '',
+      LX: ['0'],
+      ZT: ['已发布'],
+      page: 1,
+      pageSize: 3,
+    });
+    if (result.status === 'ok') {
+      setAnnoceData(result.data?.rows);
+    }
+    // 配置政策公告数据
+    const resgetXXTZGG = await getJYJGTZGG({
+      BT: '',
+      LX: 1,
+      ZT: ['已发布'],
+      XZQHM: currentUser?.XZQHM,
+      page: 1,
+      pageSize: 3,
+    });
+    if (resgetXXTZGG.status === 'ok') {
+      setPolicyData(resgetXXTZGG.data?.rows);
+    }
 
+
+  }
   return (
     <div className={styles.pageWrapper}>
+         <PromptInformation
+          text="未查询到学年学期数据，请设置学年学期后再来"
+          link="/basicalSettings/termManagement"
+          open={kai}
+          colse={kaiguan}
+        />
       <Topbar data={homeData} />
       <Row className={`${styles.listWrapper} ${styles.rowWrapper}`}>
         <Col span={12}>
@@ -85,7 +114,7 @@ const Index = () => {
               </a>
             }
           >
-            <List type="notice" data={annoceData} noDataImg={noAnnoce} noDataText="暂无信息" />
+            <List type="policy" data={annoceData} noDataImg={noAnnoce} noDataText="暂无信息" />
           </Card>
         </Col>
         <Col span={12}>

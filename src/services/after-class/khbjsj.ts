@@ -11,10 +11,10 @@ export async function getKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<any>(`/khbjsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -28,10 +28,10 @@ export async function deleteKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -132,13 +132,13 @@ export async function updateKHBJSJ(
   body: API.UpdateKHBJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -153,10 +153,10 @@ export async function getEnrolled(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<any>(`/khbjsj/enrolled/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -252,10 +252,61 @@ export async function getClassDetail(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<any>(`/khbjsjdetail/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 获取班级与教师信息 POST /khbjsj/getClasses */
+export async function getClasses(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 课程ID */
+    KHKCSJId?: string;
+    /** 年级ID */
+    NJSJId?: string;
+    /** 校区ID */
+    XQSJId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getClasses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取课程班的学生信息 POST /khbjsj/getClassStudents */
+export async function getClassStudents(
+  body: {
+    /** 班级ID */
+    KHBJSJId?: string;
+    ZT?: number[];
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getClassStudents', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }

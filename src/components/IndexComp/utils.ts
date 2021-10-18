@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-08-24 19:59:45
- * @LastEditTime: 2021-09-06 15:30:47
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-10-18 17:34:16
+ * @LastEditors: Please set LastEditors
  */
 export const bgColor = [
   {
@@ -33,28 +33,28 @@ export const bgColor = [
 ];
 export const topNum = [
   {
-    title: '开设课程',
-    type: 'kskcNum'
-  },
-  {
-    title: '引入课程',
-    type: 'yrkcNum'
-  },
-  {
     title: '本校课程班',
-    type: 'xxbjNum'
+    type: 'bj_count'
   },
   {
     title: '机构课程班',
-    type: 'jgbjNum',
+    type: 'jg_count',
+  },
+  {
+    title: '开设课程',
+    type: 'kc_count'
+  },
+  {
+    title: '引入课程',
+    type: 'jgkc_count'
   },
   {
     title: '学校教师',
-    type: 'jsNum'
+    type: 'js_count'
   },
   {
     title: '报名学生',
-    type: 'xsNum'
+    type: 'xs_count'
   }
 ];
 export const chartConfig: any = {
