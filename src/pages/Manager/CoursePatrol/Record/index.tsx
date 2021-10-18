@@ -1,5 +1,5 @@
 import { useModel, } from 'umi';
-import { Select, } from 'antd';
+import { Select,DatePicker } from 'antd';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import PageContainer from '@/components/PageContainer';
@@ -14,6 +14,8 @@ const CoursePatrol = () => {
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [termList, setTermList] = useState<any>();
   const [dataSource, setDataSource] = useState<any>([]);
+  const [PatrolData, setPatrolData] = useState<any>();
+
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -44,6 +46,15 @@ const CoursePatrol = () => {
       align: 'center',
       render: (text: any) => text?.XM,
       width: 120
+    },
+    {
+      title: '课程班级名称',
+      dataIndex: 'KHBJSJ',
+      key: 'KHBJSJ',
+      align: 'center',
+      render: (text: any) => text?.BJMC,
+      width: 120
+
     },
     {
       title: '是否准时上课',
@@ -137,12 +148,15 @@ const CoursePatrol = () => {
   }, []);
   useEffect(() => {
     (async () => {
-      const res = await getKHXKJL({ XNXQId: curXNXQId })
+      const res = await getKHXKJL({ 
+        XNXQId: curXNXQId,
+        RQ: PatrolData,
+      })
       if (res.status === 'ok') {
         setDataSource(res.data?.rows)
       }
     })()
-  }, [curXNXQId])
+  }, [curXNXQId,PatrolData])
   return (
     <PageContainer>
       <div style={{ padding: '0 0 24px' }}>
@@ -164,6 +178,15 @@ const CoursePatrol = () => {
               );
             })}
           </Select>
+        </span>
+        <span style={{marginLeft:'24px'}}>
+          巡课日期：<DatePicker
+            style={{ width: 150 }}
+            onChange={(value) => {
+              setPatrolData(value)
+
+            }}
+          />
         </span>
       </div>
       <ProTable

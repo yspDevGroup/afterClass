@@ -107,8 +107,8 @@ const OrderInquiry = (props: any) => {
       align: 'center',
       width: 160,
       ellipsis: true,
-      render: (text: any) => {
-        return <div>{text?.FWMC}</div>;
+      render: (_text: any, record: any) => {
+        return <div>{record?.KHXXZZFW.FWMC}</div>;
       },
     },
     {
