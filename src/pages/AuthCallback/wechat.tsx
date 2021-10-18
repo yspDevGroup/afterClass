@@ -2,7 +2,7 @@
  * @description: 微信认证回调，本页面接收code后，通知后台获取登录信息
  * @author: zpl
  * @Date: 2021-09-04 09:00:38
- * @LastEditTime: 2021-10-10 17:12:04
+ * @LastEditTime: 2021-10-18 17:18:21
  * @LastEditors: zpl
  */
 import React, { useEffect } from 'react';
@@ -12,7 +12,7 @@ import { getPageQuery } from '@/utils/utils';
 import { creatTokenForWechat } from '@/utils/wx';
 
 const WechatAuth = () => {
-  const { loading, refresh } = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
 
   const goto = async () => {
     // 通知后台产生token
@@ -22,14 +22,20 @@ const WechatAuth = () => {
       plat: 'school',
     };
     params.suiteID = params.SuiteID || params.suiteID || '';
+    debugger;
     const tokenRes = await creatTokenForWechat(params);
     if (tokenRes) {
       // 刷新全局属性后向首页跳转
-      if (!loading) {
-        refresh().then(() => {
-          history.replace('/' + location.search);
-        });
+      if (initialState) {
+        const userInfo = await initialState.fetchUserInfo?.();
+        setInitialState({ ...initialState, currentUser: userInfo });
+        history.replace('/' + location.search);
       }
+      // if (!loading) {
+      //   refresh().then(() => {
+      //     history.replace('/' + location.search);
+      //   });
+      // }
     } else {
       message.warn('认证信息无效');
       history.replace('/403');

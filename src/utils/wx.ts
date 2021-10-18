@@ -4,7 +4,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-09 08:57:20
- * @LastEditTime: 2021-10-14 17:35:55
+ * @LastEditTime: 2021-10-18 14:02:48
  * @LastEditors: zpl
  */
 import {
@@ -83,6 +83,9 @@ export const needGetWechatUserInfo = (suiteID?: string): boolean => {
   if (authType !== 'wechat') {
     return true;
   }
+  // 认证回调页不发起
+  if (window.location.pathname.startsWith('/auth_callback')) return false;
+
   const wechatInfo = getWechatInfo();
   return wechatInfo.suiteID !== suiteID || !wechatInfo.userInfo;
 };
@@ -112,7 +115,7 @@ export const creatTokenForWechat = async (params: Record<string, string>): Promi
  *
  * @param {*} jsApiList 需要使用的JS接口列表，凡是要调用的接口都需要传进来
  */
-export const initWXConfig = async (jsApiList: string[]) => {
+export const initWXConfig = async (jsApiList: string[], num = 1) => {
   const res = await getQYJsSignature({ url: window.location.href.split('#')[0] });
   if (res.status === 'ok') {
     const { appId, timestamp = 0, nonceStr, signature = '' } = res.data || {};
@@ -135,6 +138,13 @@ export const initWXConfig = async (jsApiList: string[]) => {
       wx.error((err: any) => {
         console.log('wx.error', err);
         reject(`注入权限验证配置失败： ${JSON.stringify(err)}`);
+        if (num <= 3) {
+          // eslint-disable-next-line no-param-reassign
+          num += 1;
+          setTimeout(async () => {
+            await initWXConfig(jsApiList, num);
+          }, 100);
+        }
       });
     });
   }
@@ -146,7 +156,7 @@ export const initWXConfig = async (jsApiList: string[]) => {
  *
  * @param {string[]} jsApiList 需要使用的接口名称
  */
-export const initWXAgentConfig = async (jsApiList: string[]) => {
+export const initWXAgentConfig = async (jsApiList: string[], num = 1) => {
   const res = await getYYJsSignature({ url: window.location.href.split('#')[0] });
   if (res.status === 'ok') {
     const { corpid, agentid, timestamp = 0, nonceStr, signature = '' } = res.data || {};
@@ -173,6 +183,13 @@ export const initWXAgentConfig = async (jsApiList: string[]) => {
             console.log('版本过低请升级');
           }
           reject(`注入应用权限失败： ${r}`);
+          if (num <= 3) {
+            // eslint-disable-next-line no-param-reassign
+            num += 1;
+            setTimeout(async () => {
+              await initWXAgentConfig(jsApiList, num);
+            }, 100);
+          }
         },
       });
     });
