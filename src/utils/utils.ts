@@ -169,7 +169,7 @@ export const getLoginPath = (suiteID: string, isAdmin: string) => {
   switch (authType) {
     case 'wechat':
       // 前提是本应该已经注册为微信认证，且正确配置认证回调地址为 ${ENV_host}/auth_callback/wechat
-      loginPath = `${ssoHost}/oauth2/Wechat?client_id=${suiteID}&isAdmin=${isAdmin}`;
+      loginPath = `${ssoHost}/wechat/authorizeUrl?suiteID=${suiteID}&isAdmin=${isAdmin}`;
       break;
     case 'password':
     default:
@@ -368,11 +368,11 @@ export const getData = async (bjid: string, xsId?: string) => {
       const start = res.data.KKRQ ? res.data.KKRQ : res.data.KHKCSJ!.KKRQ;
       const end = res.data.JKRQ ? res.data.JKRQ : res.data.KHKCSJ!.JKRQ;
       let ZJS: any;
-      res.data.KHBJJs.forEach((item: any)=>{
-          if(item.JSLX === '主教师') {
-            ZJS =  item.JZGJBSJ?.XM
-          }
-        });
+      res.data.KHBJJs.forEach((item: any) => {
+        if (item.JSLX === '主教师') {
+          ZJS = item.JZGJBSJ?.XM;
+        }
+      });
       return {
         title: res.data.BJMC,
         start,

@@ -10,7 +10,7 @@ export default defineConfig({
     ENV_host: 'http://afterclass.test.xianyunshipei.com',
     // ENV_backUrl: 'http://api.test.xianyunshipei.com',
     ENV_backUrl: 'http://192.168.0.113:3000',
-    ssoHost: 'http://platform.test.xianyunshipei.com',
+    ssoHost: 'http://sso.test.xianyunshipei.com',
     authType: 'wechat',
     clientId: 'ww20993d96d6755f55',
     clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
