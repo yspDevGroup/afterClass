@@ -1,10 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Link, useModel } from 'umi';
-import { Button, message, Modal, Popconfirm, Space, Tag, Tooltip,Form,Input,Select } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
+import { Link, useModel } from 'umi';
+import {
+  Button,
+  message,
+  Modal,
+  Popconfirm,
+  Space,
+  Tag,
+  Tooltip,
+  Form,
+  Input,
+  Select,
+  Row,
+  Col,
+} from 'antd';
 
 import ProTable from '@ant-design/pro-table';
-import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import type { ProCoreActionType } from '@ant-design/pro-utils';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 
@@ -22,9 +35,7 @@ import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
 import { deleteKHKCSJ, getAllCourses, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
-import { createKHKCPJ,updateKHKCPJ } from '@/services/after-class/khkcpj';
-
-
+import { createKHKCPJ, updateKHKCPJ } from '@/services/after-class/khkcpj';
 
 const { Option } = Select;
 const CourseList = () => {
@@ -32,7 +43,6 @@ const CourseList = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
 
-  
   const [current, setCurrent] = useState<classType>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -50,15 +60,13 @@ const CourseList = () => {
   // 学年学期没有时的提示框控制
   const [kai, setkai] = useState<boolean>(false);
   const [form] = Form.useForm();
-    // 学校与培训机构合作的列表
-    const [courseList,setcourseList] = useState<any[]>([]);
-    //要评价课程的信息
-  const [courseInfo,setcourseInfo ] = useState<any>({});
-  
+  // 学校与培训机构合作的列表
+  const [courseList, setcourseList] = useState<any[]>([]);
+  //要评价课程的信息
+  const [courseInfo, setcourseInfo] = useState<any>({});
+
   // 已评价未评价
-  const [Isfinish,setIsfinish] = useState<any>();
-
-
+  const [Isfinish, setIsfinish] = useState<any>();
 
   // 关闭学期学年提示框
   const kaiguan = () => {
@@ -122,8 +130,8 @@ const CourseList = () => {
     setOpen(false);
   };
   const handleOk = () => {
-  form.submit();
- };
+    form.submit();
+  };
   const handleJgxq = async (id: string) => {
     const res = await KHJYJG({ id });
     if (res.status === 'ok') {
@@ -132,47 +140,37 @@ const CourseList = () => {
     } else {
       message.warning(res.message);
     }
-  }
-  const submit=async (value:any)=>{
+  };
+  const submit = async (value: any) => {
     //判断
     console.log(Isfinish);
-    
-    if(Isfinish>0){
-      const data={
+
+    if (Isfinish > 0) {
+      const data = {
         ...value,
-        XXJBSJId:currentUser.xxId,
-      }
-     const res =await updateKHKCPJ({ id:'' },data)
+        XXJBSJId: currentUser.xxId,
+      };
+      const res = await updateKHKCPJ({ id: '' }, data);
       console.log(res);
-      if(res.status==='ok'){
+      if (res.status === 'ok') {
         message.success('修改成功');
         setIsModalVisible(false);
         //刷新页面
       }
-   
- 
-
-    }else{
-           const res =await createKHKCPJ({
-          ...value,
-          XXJBSJId:currentUser.xxId,
-        })
-        if(res.status==='ok'){
-          message.success('保存成功');
-          setIsModalVisible(false);
-          //刷新页面
-        }
-     
- 
+    } else {
+      const res = await createKHKCPJ({
+        ...value,
+        XXJBSJId: currentUser.xxId,
+      });
+      if (res.status === 'ok') {
+        message.success('保存成功');
+        setIsModalVisible(false);
+        //刷新页面
+      }
     }
-    
-  
-    
-    setIsModalVisible(false);
 
-  }
- 
- 
+    setIsModalVisible(false);
+  };
 
   /** 操作 */
   const funOption = (record: any, action: ProCoreActionType<{}>) => {
@@ -272,7 +270,7 @@ const CourseList = () => {
       valueType: 'index',
       align: 'center',
       width: 58,
-      fixed:'left'
+      fixed: 'left',
     },
     {
       title: '课程名称',
@@ -281,7 +279,7 @@ const CourseList = () => {
       align: 'center',
       width: 150,
       ellipsis: true,
-      fixed:'left'
+      fixed: 'left',
     },
     {
       title: '课程来源',
@@ -358,17 +356,44 @@ const CourseList = () => {
               state: record,
             }}
           >
-            <Tooltip
-              title={`累计已开设${record.bj_count}个课程班。`}
-            >
-              {record.bj_count}
-            </Tooltip>
+            <Tooltip title={`累计已开设${record.bj_count}个课程班。`}>{record.bj_count}</Tooltip>
           </Link>
         );
       },
     },
     {
-      title: '状态',
+      title: (
+        <span>
+          状态&nbsp;
+          <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title={
+              <>
+                <Row>
+                  <Col flex="4em" style={{ fontWeight: 'bold' }}>
+                    未发布：
+                  </Col>
+                  <Col flex="auto">仅后台管理员可见</Col>
+                </Row>
+                <Row>
+                  <Col flex="4em" style={{ fontWeight: 'bold' }}>
+                    已发布：
+                  </Col>
+                  <Col flex="auto">该课程下已开班课程班，家长、教育局端可见</Col>
+                </Row>
+                <Row>
+                  <Col flex="4em" style={{ fontWeight: 'bold' }}>
+                    已引入：
+                  </Col>
+                  <Col flex="auto">引入课程下已开班课程班，家长、教育局端可见</Col>
+                </Row>
+              </>
+            }
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       align: 'center',
       ellipsis: true,
       dataIndex: 'KCZT',
@@ -377,9 +402,13 @@ const CourseList = () => {
       width: 100,
       render: (_, record) => {
         if (record?.SSJGLX === '机构课程') {
-          return '已引入';
+          return <span style={{ color: 'green' }}>已引入</span>;
         }
-        return record?.KCZT === 0 ? '未发布' : '已发布';
+        return record?.KCZT === 0 ? (
+          <span style={{ color: '#666' }}>未发布</span>
+        ) : (
+          <span style={{ color: 'green' }}>已发布</span>
+        );
       },
     },
     {
@@ -388,29 +417,24 @@ const CourseList = () => {
       search: false,
       width: 110,
       render: (_, record) => {
-        console.log();
-        
-    
-        return (
-          record?.KHJYJG?.QYMC?<a
-          onClick={() => {
-          setIsModalVisible(true)
-            const obj={KHKCSJId:'',KCMC:''}
-            obj.KHKCSJId=record?.id,
-            obj.KCMC=record?.KCMC
-           setcourseInfo(obj)
-           setIsfinish(record.KHKCPJs.length)
-         
-          }}
-        >
-         {record.KHKCPJs.length?'已评价':'未评价'}   
-        </a>:'-'
-      
-     
-
-        )
-      }
-
+        return record?.KHJYJG?.QYMC ? (
+          <a
+            onClick={() => {
+              setIsModalVisible(true);
+              const obj = {
+                KHKCSJId: record?.id,
+                KCMC: record?.KCMC,
+              };
+              setcourseInfo(obj);
+              setIsfinish(record.KHKCPJs.length);
+            }}
+          >
+            {record.KHKCPJs.length ? '已评价' : '未评价'}
+          </a>
+        ) : (
+          '-'
+        );
+      },
     },
     {
       title: '操作',
@@ -418,9 +442,9 @@ const CourseList = () => {
       search: false,
       key: 'option',
       width: 230,
-      fixed:'right',
+      fixed: 'right',
       align: 'center',
-      render: (_, record,) => (
+      render: (_, record) => (
         <Space size="middle">
           <a
             onClick={() => {
@@ -461,7 +485,7 @@ const CourseList = () => {
             };
             const resAll = await getAllCourses(opts);
             if (resAll.status === 'ok') {
-              setcourseList(resAll.data.rows)
+              setcourseList(resAll.data.rows);
               return {
                 data: resAll.data.rows,
                 success: true,
@@ -543,26 +567,26 @@ const CourseList = () => {
           <Sitclass />
         </Modal>
         {/* 课程评价的弹出框 */}
-        <Modal visible={isModalVisible}  onOk={handleOk} onCancel={handleCancel}title='课程评价'
-        >
-         <Form  form={form} onFinish={submit} >
-         <Form.Item
-            label="课程名称"
-            name="KHKCSJId"
-            key="KHKCSJId"
-            initialValue={courseInfo.KHKCSJId}
-          >
-          {
-            courseInfo.KCMC
-          }
-          </Form.Item>
-          <Form.Item label="评价内容" name="PY" key="PY"  rules={[{ required: true, message: '请输入评价内容' }]}>
-            <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4}  />
-          </Form.Item>
-
-         </Form>
+        <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} title="课程评价">
+          <Form form={form} onFinish={submit}>
+            <Form.Item
+              label="课程名称"
+              name="KHKCSJId"
+              key="KHKCSJId"
+              initialValue={courseInfo.KHKCSJId}
+            >
+              {courseInfo.KCMC}
+            </Form.Item>
+            <Form.Item
+              label="评价内容"
+              name="PY"
+              key="PY"
+              rules={[{ required: true, message: '请输入评价内容' }]}
+            >
+              <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4} />
+            </Form.Item>
+          </Form>
         </Modal>
-
       </div>
     </>
   );
