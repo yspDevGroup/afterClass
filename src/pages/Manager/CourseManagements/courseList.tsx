@@ -22,11 +22,17 @@ import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
 import { deleteKHKCSJ, getAllCourses, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
+import { createKHKCPJ,updateKHKCPJ } from '@/services/after-class/khkcpj';
+
+
+
 const { Option } = Select;
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+
+  
   const [current, setCurrent] = useState<classType>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -46,6 +52,13 @@ const CourseList = () => {
   const [form] = Form.useForm();
     // 学校与培训机构合作的列表
     const [courseList,setcourseList] = useState<any[]>([]);
+    //要评价课程的信息
+  const [courseInfo,setcourseInfo ] = useState<any>({});
+  
+  // 已评价未评价
+  const [Isfinish,setIsfinish] = useState<any>();
+
+
 
   // 关闭学期学年提示框
   const kaiguan = () => {
@@ -109,8 +122,8 @@ const CourseList = () => {
     setOpen(false);
   };
   const handleOk = () => {
-    form.submit();
-  };
+  form.submit();
+ };
   const handleJgxq = async (id: string) => {
     const res = await KHJYJG({ id });
     if (res.status === 'ok') {
@@ -120,10 +133,45 @@ const CourseList = () => {
       message.warning(res.message);
     }
   }
-  const submit=()=>{
+  const submit=async (value:any)=>{
+    //判断
+    console.log(Isfinish);
+    
+    if(Isfinish>0){
+      const data={
+        ...value,
+        XXJBSJId:currentUser.xxId,
+      }
+     const res =await updateKHKCPJ({ id:'' },data)
+      console.log(res);
+      if(res.status==='ok'){
+        message.success('修改成功');
+        setIsModalVisible(false);
+        //刷新页面
+      }
+   
+ 
+
+    }else{
+           const res =await createKHKCPJ({
+          ...value,
+          XXJBSJId:currentUser.xxId,
+        })
+        if(res.status==='ok'){
+          message.success('保存成功');
+          setIsModalVisible(false);
+          //刷新页面
+        }
+     
+ 
+    }
+    
+  
+    
     setIsModalVisible(false);
 
   }
+ 
  
 
   /** 操作 */
@@ -335,19 +383,27 @@ const CourseList = () => {
       },
     },
     {
-      title: '评价状态',
+      title: '课程评价',
       align: 'center',
       search: false,
       width: 110,
       render: (_, record) => {
+        console.log();
+        
     
         return (
-          record?.KHJYJG?.QYMC?    <a
+          record?.KHJYJG?.QYMC?<a
           onClick={() => {
           setIsModalVisible(true)
+            const obj={KHKCSJId:'',KCMC:''}
+            obj.KHKCSJId=record?.id,
+            obj.KCMC=record?.KCMC
+           setcourseInfo(obj)
+           setIsfinish(record.KHKCPJs.length)
+         
           }}
         >
-          否
+         {record.KHKCPJs.length?'已评价':'未评价'}   
         </a>:'-'
       
      
@@ -364,7 +420,7 @@ const CourseList = () => {
       width: 230,
       fixed:'right',
       align: 'center',
-      render: (text, record, index, action) => (
+      render: (_, record,) => (
         <Space size="middle">
           <a
             onClick={() => {
@@ -374,7 +430,7 @@ const CourseList = () => {
           >
             课程详情
           </a>
-          {funOption(record, action)}
+          {/* {funOption(record, action)} */}
         </Space>
       ),
     },
@@ -405,6 +461,7 @@ const CourseList = () => {
             };
             const resAll = await getAllCourses(opts);
             if (resAll.status === 'ok') {
+              setcourseList(resAll.data.rows)
               return {
                 data: resAll.data.rows,
                 success: true,
@@ -488,31 +545,18 @@ const CourseList = () => {
         {/* 课程评价的弹出框 */}
         <Modal visible={isModalVisible}  onOk={handleOk} onCancel={handleCancel}title='课程评价'
         >
-         <Form  form={form} onFinish={submit}>
+         <Form  form={form} onFinish={submit} >
          <Form.Item
             label="课程名称"
-            name=""
-            key=""
-            rules={[{ required: true, message: '请输入课程名称' }]}
+            name="KHKCSJId"
+            key="KHKCSJId"
+            initialValue={courseInfo.KHKCSJId}
           >
-             <Select
-              mode="multiple"
-              style={{ width: '100%' }}
-              placeholder="请选择"
-              // onChange={handleChange}
-            >
-              {courseList?.length
-                ? courseList?.map((item: any) => {
-                    return (
-                      <Option value={item?.id} key={item?.id}>
-                        {item?.KCMC}
-                      </Option>
-                    );
-                  })
-                : ''}
-            </Select>
+          {
+            courseInfo.KCMC
+          }
           </Form.Item>
-          <Form.Item label="评价内容" name="FWNR" key="FWNR"  rules={[{ required: true, message: '请输入评价内容' }]}>
+          <Form.Item label="评价内容" name="PY" key="PY"  rules={[{ required: true, message: '请输入评价内容' }]}>
             <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4}  />
           </Form.Item>
 
