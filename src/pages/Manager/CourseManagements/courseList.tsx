@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Link, useModel } from 'umi';
-import { Button, message, Modal, Popconfirm, Space, Tag, Tooltip } from 'antd';
+import { Button, message, Modal, Popconfirm, Space, Tag, Tooltip,Form,Input,Select } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 
 import ProTable from '@ant-design/pro-table';
@@ -22,7 +22,7 @@ import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
 import { deleteKHKCSJ, getAllCourses, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
-
+const { Option } = Select;
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
@@ -43,10 +43,16 @@ const CourseList = () => {
   const [readonly, setReadonly] = useState<boolean>(false);
   // 学年学期没有时的提示框控制
   const [kai, setkai] = useState<boolean>(false);
+  const [form] = Form.useForm();
+    // 学校与培训机构合作的列表
+    const [courseList,setcourseList] = useState<any[]>([]);
+
   // 关闭学期学年提示框
   const kaiguan = () => {
     setkai(false);
   };
+  // 弹出框显示隐藏
+  const [isModalVisible, setIsModalVisible] = useState(false);
   useEffect(() => {
     // 课程类型
     const res = getAllKHKCLX({ name: '' });
@@ -95,18 +101,30 @@ const CourseList = () => {
       setCurrent(undefined);
     }
   };
+  //课程评价弹框的显示隐藏
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   const onClose = () => {
     setOpen(false);
+  };
+  const handleOk = () => {
+    form.submit();
   };
   const handleJgxq = async (id: string) => {
     const res = await KHJYJG({ id });
     if (res.status === 'ok') {
       setInfo(res.data);
       setVisibleMechanismInfo(true);
-    }else{
+    } else {
       message.warning(res.message);
     }
   }
+  const submit=()=>{
+    setIsModalVisible(false);
+
+  }
+ 
 
   /** 操作 */
   const funOption = (record: any, action: ProCoreActionType<{}>) => {
@@ -317,6 +335,28 @@ const CourseList = () => {
       },
     },
     {
+      title: '评价状态',
+      align: 'center',
+      search: false,
+      width: 110,
+      render: (_, record) => {
+    
+        return (
+          record?.KHJYJG?.QYMC?    <a
+          onClick={() => {
+          setIsModalVisible(true)
+          }}
+        >
+          否
+        </a>:'-'
+      
+     
+
+        )
+      }
+
+    },
+    {
       title: '操作',
       valueType: 'option',
       search: false,
@@ -445,6 +485,40 @@ const CourseList = () => {
         >
           <Sitclass />
         </Modal>
+        {/* 课程评价的弹出框 */}
+        <Modal visible={isModalVisible}  onOk={handleOk} onCancel={handleCancel}title='课程评价'
+        >
+         <Form  form={form} onFinish={submit}>
+         <Form.Item
+            label="课程名称"
+            name=""
+            key=""
+            rules={[{ required: true, message: '请输入课程名称' }]}
+          >
+             <Select
+              mode="multiple"
+              style={{ width: '100%' }}
+              placeholder="请选择"
+              // onChange={handleChange}
+            >
+              {courseList?.length
+                ? courseList?.map((item: any) => {
+                    return (
+                      <Option value={item?.id} key={item?.id}>
+                        {item?.KCMC}
+                      </Option>
+                    );
+                  })
+                : ''}
+            </Select>
+          </Form.Item>
+          <Form.Item label="评价内容" name="FWNR" key="FWNR"  rules={[{ required: true, message: '请输入评价内容' }]}>
+            <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4}  />
+          </Form.Item>
+
+         </Form>
+        </Modal>
+
       </div>
     </>
   );
