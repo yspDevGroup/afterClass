@@ -1,0 +1,201 @@
+.leaveList {
+  background-color: #F5F5F5;
+  height: auto;
+  min-height: 100vh;
+
+  button {
+    outline: none;
+  }
+
+  :global {
+    .ant-tabs-nav {
+      &:before {
+        display: none !important;
+      }
+
+      margin: 0;
+
+      .ant-tabs-nav-list {
+        width: 100vw;
+        height: 54px;
+
+        .ant-tabs-tab {
+          width: 50%;
+          font-size: 16px;
+          margin: 0;
+          padding: 0;
+          border: none !important;
+          background: none !important;
+
+          .ant-tabs-tab-btn {
+            margin: auto;
+          }
+        }
+
+        .ant-tabs-tab-active {
+          .ant-tabs-tab-btn {
+            font-weight: bold;
+            color: #333;
+          }
+        }
+
+        .ant-tabs-ink-bar {
+          display: none;
+        }
+      }
+
+      .ant-tabs-tab:hover {
+        color: #333;
+      }
+
+      .ant-tabs-tab-btn:focus,
+      .ant-tabs-tab-remove:focus,
+      .ant-tabs-tab-btn:active,
+      .ant-tabs-tab-remove:active {
+        color: #333;
+      }
+    }
+  }
+
+  .leaveForm {
+    .type {
+      background: linear-gradient(180deg, #FFFFFF 52.6%, rgba(255, 255, 255, 0) 100%);
+      padding: 14px 10px;
+
+      p {
+        margin: 0;
+        line-height: 22px;
+        font-size: 12px;
+        color: #999;
+
+        &:nth-child(1) {
+          margin-bottom: 14px;
+          color: #333;
+          font-size: 14px;
+
+          span {
+            border-bottom: 2px solid #45c977;
+          }
+        }
+      }
+    }
+
+    .wrapper {
+      padding: 0 10px;
+
+      :global {
+
+        .ant-checkbox-wrapper,
+        .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+        .ant-checkbox:hover .ant-checkbox-inner,
+        .ant-checkbox-input:focus+.ant-checkbox-inner,
+        .ant-input:focus {
+          border-color: #45c977 !important;
+        }
+
+        .ant-checkbox-checked {
+          .ant-checkbox-inner {
+            background-color: #45c977;
+            border-color: #45c977;
+          }
+        }
+      }
+    }
+
+    form {
+      margin-top: 14px;
+      background: #fff;
+      padding: 10px 10px 60px;
+
+      >div[class*='ant-form-item'] {
+        margin-bottom: 0;
+
+        textarea {
+          border-radius: 4px;
+        }
+      }
+    }
+
+    .fixedBtn {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #FFFFFF;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      padding: 8px 14px;
+
+      button {
+        width: 100%;
+        background: #3874c5;
+        border-radius: 22px;
+        color: #fff;
+        border: none;
+      }
+    }
+  }
+
+  .listWrapper {
+    padding: 0 10px;
+
+    .Information {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+
+      &::after {
+        display: block;
+        content: '';
+        clear: both;
+      }
+
+      >div {
+        display: flex;
+        justify-content: flex-end;
+
+        h4 {
+          flex: 1;
+          font-weight: bold;
+
+          >span {
+            font-weight: normal;
+            border-radius: 4px;
+            border: 1px solid #dadada;
+            font-size: 12px;
+            padding: 2px 8px;
+            margin-left: 8px;
+          }
+        }
+
+        span {
+          color: #999;
+        }
+      }
+
+      p {
+        line-height: 22px;
+        margin-bottom: 0;
+        color: #666;
+      }
+
+      button {
+        border: 1px solid #DDDDDD;
+        border-radius: 22px;
+        float: right;
+        border: 1px solid #45c977;
+        padding: 0 24px;
+        height: 30px;
+        color: #45c977;
+      }
+    }
+  }
+
+  .noData {
+    img {
+      width: 60%;
+      margin: 50px auto;
+      display: block;
+    }
+  }
+}

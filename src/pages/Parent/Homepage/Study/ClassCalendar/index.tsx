@@ -210,9 +210,10 @@ const ClassCalendar = (props: propstype) => {
       )}
       {type && type === 'edit' ? (
         <List
-          style={{ background: '#fff' }}
+          style={{ background: '#fff'}}
           itemLayout="horizontal"
           dataSource={course?.list?.length ? course?.list : []}
+          className={styles.jsqj}
           renderItem={(item: any) => {
             return (
               <List.Item

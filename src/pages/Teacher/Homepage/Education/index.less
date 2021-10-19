@@ -12,9 +12,43 @@
       display: flex;
       align-items: center;
       font-size: 12px;
+      justify-content: space-around;
+      .Leave {
+        color: #333333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .LeaveP1 {
+          width: 29.28px;
+          height: 29.28px;
+          background: rgba(125, 206, 129, 0.3);
+          margin-bottom: 0px;
+          border-radius: 10px;
+          transform: rotate(30deg);
+          .LeaveP2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 29.28px;
+            height: 29.28px;
+            background: linear-gradient(136.81deg, #4be651 10.81%, #00bd08 90.05%);
+            border-radius: 10px;
+            transform: rotate(330deg);
+            margin-bottom: 0px;
+            img {
+              display: block;
+              width: 15px;
+              height: 16px;
+            }
+          }
+        }
+        .LeaveP3 {
+          margin-top: 8px;
+          margin-bottom: 0px;
+        }
+      }
       .stuEvaluat {
         color: #333333;
-        margin-left: 36px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -49,7 +83,6 @@
       }
       .courseBack {
         color: #333333;
-        margin-left: 21%;
         display: flex;
         flex-direction: column;
         align-items: center;

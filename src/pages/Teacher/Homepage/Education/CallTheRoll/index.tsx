@@ -291,6 +291,10 @@ const CallTheRoll = (props: any) => {
       key: 'XSXM',
       align: 'center',
       render: (test: any, record: any) => {
+        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
+        }
         return record?.XSJBSJ?.XM;
       },
     },

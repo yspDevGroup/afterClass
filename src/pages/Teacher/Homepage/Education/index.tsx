@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styles from './index.less';
 import 'antd/es/modal/style';
 import ClassCalendar from './ClassCalendar';
@@ -6,6 +6,7 @@ import { Link } from 'umi';
 import icon_stuEvaluate from '@/assets/icon_stuEvaluate.png';
 import icon_courseBack from '@/assets/icon_courseBack.png';
 import myContext from '@/utils/MyContext';
+import icon_leave from '@/assets/icon-teacherLeave.png';
 
 const Study = () => {
 
@@ -15,6 +16,20 @@ const Study = () => {
     <div className={styles.studyPage}>
       <div className={styles.funWrapper}>
         <div className={styles.headBox}>
+        <Link
+            key="qj"
+            to={{
+              pathname: '/teacher/education/askForLeave',
+              state: yxkc
+            }}
+            className={styles.Leave}>
+            <p className={styles.LeaveP1}>
+              <p className={styles.LeaveP2}>
+              <img src={icon_leave} alt="" />
+              </p>
+            </p>
+            <p className={styles.LeaveP3}>请假</p>
+          </Link>
           <Link
             key="xxpj"
             to={{

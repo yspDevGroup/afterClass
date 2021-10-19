@@ -205,3 +205,22 @@ export async function homePage(
     ...(options || {}),
   });
 }
+
+/** 学校查看考勤趋势 POST /xxjbsj/getAttendanceTrend */
+export async function getAttendanceTrend(
+  body: {
+    XXJBSJId?: string;
+    startDate?: string;
+    endDate?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/xxjbsj/getAttendanceTrend', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
