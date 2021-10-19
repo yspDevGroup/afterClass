@@ -4,7 +4,7 @@ import type { RequestConfig } from 'umi';
 import { history, Link } from 'umi';
 import type { ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import { getAuthorization, getOauthToken, getPageQuery } from './utils/utils';
+import { getAuthorization, getOauthToken, getPageQuery, removeOAuthToken } from './utils/utils';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { currentWechatUser } from './services/after-class/wechat';
 import Footer from '@/components/Footer';
@@ -65,10 +65,10 @@ export async function getInitialState(): Promise<InitialState> {
         }
         return info as API.CurrentUser;
       }
+      removeOAuthToken();
       // const indexPage = encodeU(`/${window.location.search}`);
       history.push(`/403?title=您还未登录或登录信息已过期&btnTXT=重新登录&goto=${indexPage}`);
       // history.push(`/403?message=${currentUserRes.message}`);
-      // removeOAuthToken();
       // autoLogin();
       return undefined;
     } catch (error) {
