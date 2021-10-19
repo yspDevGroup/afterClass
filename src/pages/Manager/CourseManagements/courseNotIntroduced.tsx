@@ -53,6 +53,7 @@ const courseNotIntroduced = () => {
       valueType: 'index',
       align: 'center',
       width: 58,
+      fixed:'left',
     },
     {
       title: '课程名称',
@@ -61,6 +62,7 @@ const courseNotIntroduced = () => {
       align: 'center',
       width: 150,
       ellipsis: true,
+      fixed:'left',
     },
     {
       title: '机构名称',
@@ -136,7 +138,8 @@ const courseNotIntroduced = () => {
       valueType: 'option',
       search: false,
       key: 'option',
-      width: 300,
+      width: 220,
+      fixed:'right',
       align: 'center',
       render: (text, record, index, action) => {
         return (
@@ -151,7 +154,7 @@ const courseNotIntroduced = () => {
             </a>
             <a
               onClick={() => {
-                setInfo(record);
+                setInfo(record?.KHJYJG);
                 setVisibleMechanismInfo(true);
               }}
             >
@@ -204,6 +207,12 @@ const courseNotIntroduced = () => {
         actionRef={actionRef}
         columns={columns}
         rowKey="id"
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 1300 }}
         request={async (params, sorter, filter) => {
           // 表单搜索项会从 params 传入，传递给后端接口。
           const opts: TableListParams = {

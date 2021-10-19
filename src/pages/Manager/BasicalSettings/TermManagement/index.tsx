@@ -119,23 +119,26 @@ const TermManagement = () => {
       dataIndex: 'XN',
       key: 'XN',
       align: 'center',
-      width: 100,
+      width: 150,
       fixed: 'left'
     },
     {
       title: '学期',
       dataIndex: 'XQ',
       key: 'XQ',
+      width: 150,
       align: 'center',
     },
     {
       title: '开始日期',
+      width: 160,
       key: 'KSRQ',
       dataIndex: 'KSRQ',
       align: 'center',
     },
     {
       title: '结束日期',
+      width: 160,
       key: 'JSRQ',
       dataIndex: 'JSRQ',
       align: 'center',
@@ -144,6 +147,7 @@ const TermManagement = () => {
       title: '操作',
       valueType: 'option',
       width: 100,
+      fixed: 'right',
       render: (_, record) => (
         <>
           <a onClick={() => handleEdit(record)}>编辑</a>
@@ -188,6 +192,12 @@ const TermManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 900 }}
         options={{
           setting: false,
           fullScreen: false,

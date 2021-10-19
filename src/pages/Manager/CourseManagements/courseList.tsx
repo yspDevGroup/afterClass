@@ -206,6 +206,7 @@ const CourseList = () => {
       valueType: 'index',
       align: 'center',
       width: 58,
+      fixed:'left'
     },
     {
       title: '课程名称',
@@ -214,6 +215,7 @@ const CourseList = () => {
       align: 'center',
       width: 150,
       ellipsis: true,
+      fixed:'left'
     },
     {
       title: '课程来源',
@@ -306,7 +308,7 @@ const CourseList = () => {
       dataIndex: 'KCZT',
       key: 'KCZT',
       search: false,
-      width: 110,
+      width: 100,
       render: (_, record) => {
         if (record?.SSJGLX === '机构课程') {
           return '已引入';
@@ -319,7 +321,8 @@ const CourseList = () => {
       valueType: 'option',
       search: false,
       key: 'option',
-      width: 300,
+      width: 230,
+      fixed:'right',
       align: 'center',
       render: (text, record, index, action) => (
         <Space size="middle">
@@ -343,6 +346,12 @@ const CourseList = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: 1300 }}
           request={async (params, sorter, filter) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
             const opts: TableListParams = {

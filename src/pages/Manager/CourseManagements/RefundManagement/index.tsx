@@ -51,14 +51,7 @@ const RefundManagement = () => {
       valueType: 'index',
       align: 'center',
       width: 58,
-    },
-    {
-      title: '订单编号',
-      dataIndex: 'TKBH',
-      key: 'TKBH',
-      align: 'center',
-      ellipsis: true,
-      width: 150,
+      fixed:'left',
     },
     {
       title: '学生姓名',
@@ -66,16 +59,25 @@ const RefundManagement = () => {
       key: 'XSXM',
       align: 'center',
       width: 100,
+      fixed:'left',
       render: (_text: any, record: any) => {
         return record?.XSJBSJ?.XM
       },
+    },
+    {
+      title: '订单编号',
+      dataIndex: 'TKBH',
+      key: 'TKBH',
+      align: 'center',
+      ellipsis: true,
+      width: 180,
     },
     {
       title: '行政班名称',
       dataIndex: 'XZBJSJ',
       key: 'XZBJSJ',
       align: 'center',
-      width: 100,
+      width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
         return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
@@ -90,7 +92,7 @@ const RefundManagement = () => {
         return record?.KHBJSJ?.KHKCSJ?.KCMC;
       },
       ellipsis: true,
-      width: 100,
+      width: 150,
     },
     {
       title: '课程班名称',
@@ -187,11 +189,12 @@ const RefundManagement = () => {
     },
     {
       title: '操作',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'operation',
+      key: 'operation',
       align: 'center',
       width: 80,
-      render: (record: any) =>
+      fixed:'right',
+      render: (_,record: any) =>
         record.TKZT === 0 ? (
           <a onClick={() => {
             setCurrent(record);
@@ -257,6 +260,12 @@ const RefundManagement = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: 1500 }}
           request={async () => {
             const resAll = await getAllKHXSTK({
               XXJBSJId: currentUser?.xxId,

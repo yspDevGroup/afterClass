@@ -111,24 +111,33 @@ const RoomManagement = () => {
   };
   const columns: ProColumns<RoomItem>[] = [
     {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 58,
+      align: 'center',
+      fixed:'left'
+    },
+    {
       title: '名称',
       dataIndex: 'FJMC',
       align: 'center',
       width: 200,
       ellipsis: true,
+      fixed:'left'
     },
     {
       title: '编号',
       dataIndex: 'FJBH',
       align: 'center',
-      width: 150,
+      width: 100,
       ellipsis: true,
     },
     {
       title: '类型',
       dataIndex: 'FJLX',
       align: 'center',
-      width: 150,
+      width: 120,
       ellipsis: true,
       render: (_, record) => {
         return (
@@ -163,7 +172,8 @@ const RoomManagement = () => {
     {
       title: '操作',
       valueType: 'option',
-      width: 300,
+      width: 150,
+      fixed:'right',
       align: 'center',
       render: (_, record) => (
         <>
@@ -208,6 +218,12 @@ const RoomManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 900 }}
         request={async (
           params: RoomItem & {
             pageSize?: number;

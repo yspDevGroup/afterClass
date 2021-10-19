@@ -52,6 +52,7 @@ const ReimbursementClass = () => {
       valueType: 'index',
       align: 'center',
       width: 58,
+      fixed:'left',
     },
     {
       title: '学生姓名',
@@ -59,6 +60,7 @@ const ReimbursementClass = () => {
       key: 'XSXM',
       align: 'center',
       width: 100,
+      fixed:'left',
       render: (_text: any, record: any) => {
         return record?.XSJBSJ?.XM
       },
@@ -68,7 +70,7 @@ const ReimbursementClass = () => {
       dataIndex: 'XZBJSJ',
       key: 'XZBJSJ',
       align: 'center',
-      width: 100,
+      width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
         return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
@@ -156,9 +158,10 @@ const ReimbursementClass = () => {
     },
     {
       title: '操作',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'operation',
+      key: 'operation',
       align: 'center',
+      fixed:'right',
       render: (record: any) =>
         record.ZT === 0 ? (
           <a onClick={() => {
@@ -247,6 +250,12 @@ const ReimbursementClass = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: 1300 }}
           request={async () => {
             const resAll = await getKHTKSJ({
               XXJBSJId: currentUser?.xxId,

@@ -102,11 +102,20 @@ const PeriodMaintenance = () => {
 
   const columns: ProColumns<Maintenance>[] = [
     {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 58,
+      align: 'center',
+      fixed:'left'
+    },
+    {
       title: '时段名称',
       dataIndex: 'TITLE',
       align: 'center',
       width: 200,
       ellipsis: true,
+      fixed:'left'
     },
     {
       title: '所属学期',
@@ -152,8 +161,9 @@ const PeriodMaintenance = () => {
     {
       title: '操作',
       valueType: 'option',
-      width: 300,
+      width: 150,
       align: 'center',
+      fixed: 'right',
       render: (_, record) => (
         <>
           <a onClick={() => handleEdit(record)}>编辑</a>
@@ -220,6 +230,12 @@ const PeriodMaintenance = () => {
             },
           }}
           search={false}
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: 900 }}
           options={{
             setting: false,
             fullScreen: false,
