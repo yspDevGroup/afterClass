@@ -590,6 +590,38 @@
     ],
   },
   /*** 家长路由 end ***/
+  /*** 移动端数据看板路由 start ***/
+  {
+    path: '/information',
+    name: 'information',
+    layout: false,
+    icon: 'smile',
+    hideInMenu: 'true',
+    routes: [
+      {
+        path: '/information/home',
+        name: 'home',
+        icon: 'smile',
+        component: './Information/HomePage',
+        hideInMenu: 'true',
+      },
+      {
+        path: '/information/noticeDetails',
+        name: 'noticeDetails',
+        icon: 'smile',
+        component: './Information/HomePage/Home/NoticeDetails',
+        hideInMenu: 'true',
+      },
+      {
+        path: '/information/allNotice',
+        name: 'noticeDetails',
+        icon: 'smile',
+        component: './Information/HomePage/Home/AllNotice',
+        hideInMenu: 'true',
+      },
+    ]
+  },
+   /*** 移动端数据看板路由 end ***/
   {
     path: '/',
     layout: false,

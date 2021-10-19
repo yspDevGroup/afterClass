@@ -91,7 +91,7 @@ const TeacherManagement = () => {
           return <WWOpenDataCom type="userName" openid={record?.WechatUserId} />;
         }
         return record?.XM;
-      }
+      },
       fixed:'left'
     },
     {
