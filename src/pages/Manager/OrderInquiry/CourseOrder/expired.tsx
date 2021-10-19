@@ -19,6 +19,7 @@ import styles from './index.less';
 import { useModel } from 'umi';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const { Option } = Select;
 
@@ -139,7 +140,11 @@ const OrderInquiry = (props: any) => {
       align: 'center',
       width: 100,
       render:(_text: any, record: any)=>{
-        return record?.XSJBSJ?.XM
+        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
+        }
+        return record?.XSJBSJ?.XM;
       }
     },
     {

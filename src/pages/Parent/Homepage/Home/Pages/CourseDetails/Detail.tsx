@@ -102,13 +102,13 @@ const Detail: React.FC = () => {
             班主任：
             {classDetail?.KHBJJs.map((item: any) => {
               if (item.JSLX.indexOf('副') === -1) {
-                const showWXName = item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
+                const showWXName = item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
                 return (
                   <span style={{ marginRight: '1em' }}>
                     {showWXName ? (
-                      <WWOpenDataCom type="userName" openid={item.JZGJBSJ.WechatUserId} />
+                      <WWOpenDataCom type="userName" openid={item?.JZGJBSJ?.WechatUserId} />
                     ) : (
-                      item.JZGJBSJ?.XM
+                      item?.JZGJBSJ?.XM
                     )}
                   </span>
                 );
@@ -120,13 +120,13 @@ const Detail: React.FC = () => {
             副班：
             {classDetail?.KHBJJs.map((item: any) => {
               if (item.JSLX.indexOf('主') === -1) {
-                const showWXName = item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
+                const showWXName = item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
                 return (
                   <span style={{ marginRight: '1em' }}>
                     {showWXName ? (
-                      <WWOpenDataCom type="userName" openid={item.JZGJBSJ.WechatUserId} />
+                      <WWOpenDataCom type="userName" openid={item?.JZGJBSJ.WechatUserId} />
                     ) : (
-                      item.JZGJBSJ?.XM
+                      item?.JZGJBSJ?.XM
                     )}
                   </span>
                 );

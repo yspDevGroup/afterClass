@@ -9,6 +9,7 @@ import { getAllKHXSPJ } from '@/services/after-class/khxspj';
 import { useModel } from 'umi';
 import {Rate,Popover}from 'antd'
 import { Modal} from 'antd';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const TabList=(props: any)=>{
     const {ListName,ListState}=props.ListData;
@@ -76,7 +77,11 @@ const TabList=(props: any)=>{
       key: 'XSXM',
       align: 'center',
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.XM
+        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
+        }
+        return record?.XSJBSJ?.XM;
       },
     },
     {

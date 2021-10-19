@@ -57,7 +57,7 @@ const MechanismCourse = () => {
           <EllipsisHint
             width="100%"
             text={text?.map((item: any) => {
-              return <Tag key={item.JZGJBSJ.id}>{item.JZGJBSJ.XM}</Tag>;
+              return <Tag key={item?.JZGJBSJ.id}>{item?.JZGJBSJ?.XM}</Tag>;
             })}
           />
         );

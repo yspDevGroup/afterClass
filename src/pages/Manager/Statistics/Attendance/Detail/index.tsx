@@ -5,6 +5,7 @@ import PageContainer from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import { Button } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const AttendanceDetail = (props: any) => {
   const { data, XNXQId, position } = props.location.state;
@@ -89,7 +90,13 @@ const AttendanceDetail = (props: any) => {
       dataIndex: '',
       key: '',
       align: 'center',
-      render: () => <div>{data?.XSJBSJ?.XM}</div>
+      render: () => {
+        const showWXName = data?.XSJBSJ?.XM === '未知' && data?.XSJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={data?.XSJBSJ.WechatUserId} />;
+        }
+        return <div>{data?.XSJBSJ?.XM}</div>
+      },
     },
     {
       title: '课程班名称',

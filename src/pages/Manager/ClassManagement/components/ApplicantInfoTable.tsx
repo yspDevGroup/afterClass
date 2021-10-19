@@ -43,7 +43,11 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       align: 'center',
       width: 100,
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.XM
+        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
+        }
+        return record?.XSJBSJ?.XM;
       },
     },
     {

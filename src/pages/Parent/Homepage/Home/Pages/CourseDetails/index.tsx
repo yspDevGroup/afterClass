@@ -227,16 +227,16 @@ const CourseDetails: React.FC = () => {
                         {value?.KHBJJs?.map((item: any) => {
                           if (item.JSLX.indexOf('副') === -1) {
                             const showWXName =
-                              item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
+                              item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
                             return (
                               <span style={{ marginRight: '1em' }}>
                                 {showWXName ? (
                                   <WWOpenDataCom
                                     type="userName"
-                                    openid={item.JZGJBSJ.WechatUserId}
+                                    openid={item?.JZGJBSJ?.WechatUserId}
                                   />
                                 ) : (
-                                  item.JZGJBSJ?.XM
+                                  item?.JZGJBSJ?.XM
                                 )}
                               </span>
                             );
@@ -249,13 +249,13 @@ const CourseDetails: React.FC = () => {
                         {value?.KHBJJs?.map((item: any) => {
                           if (item.JSLX.indexOf('主') === -1) {
                             const showWXName =
-                              item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
+                              item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
                             return (
                               <span style={{ marginRight: '1em' }}>
                                 {showWXName ? (
                                   <WWOpenDataCom
                                     type="userName"
-                                    openid={item.JZGJBSJ.WechatUserId}
+                                    openid={item?.JZGJBSJ?.WechatUserId}
                                   />
                                 ) : (
                                   item.JZGJBSJ?.XM

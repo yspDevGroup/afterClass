@@ -8,6 +8,7 @@ import { Button } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import { history } from 'umi';
 import styles from './index.less';
+import WWOpenDataCom from "@/components/WWOpenDataCom";
 
 const SignUp = (props: any) => {
   const { state } = props.location;
@@ -56,7 +57,11 @@ const SignUp = (props: any) => {
       ellipsis: true,
       width: 100,
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.XM
+        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
+        }
+        return record?.XSJBSJ?.XM;
       },
     },
     {

@@ -7,6 +7,7 @@ import CustomForm from '@/components/CustomForm';
 import moment from 'moment';
 import { defImg } from '@/constant';
 import { getJZGJBSJ } from '@/services/after-class/jzgjbsj';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 /**
  * 课程详情
@@ -30,6 +31,10 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
       key: 'XM',
       align: 'center',
       render: (text: any, record: any) => {
+        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ.WechatUserId} />;
+        }
         return record?.JZGJBSJ?.XM;
       },
     },

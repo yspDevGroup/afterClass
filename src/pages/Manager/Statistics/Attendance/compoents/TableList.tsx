@@ -63,11 +63,11 @@ const Table = (props: any) => {
       key: 'XM',
       align: 'center',
       render: (_, record) => {
-        const showWXName = record.JZGJBSJ?.XM === '未知' && record.JZGJBSJ?.WechatUserId;
+        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
         if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record.JZGJBSJ.WechatUserId} />;
+          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ.WechatUserId} />;
         }
-        return record.JZGJBSJ?.XM;
+        return record?.JZGJBSJ?.XM;
       },
     },
     {
@@ -137,6 +137,10 @@ const Table = (props: any) => {
       key: 'XM',
       align: 'center',
       render: (_text: any, record: any) => {
+        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
+        }
         return record?.XSJBSJ?.XM;
       },
     },
