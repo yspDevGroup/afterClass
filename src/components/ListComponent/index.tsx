@@ -87,7 +87,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                           return (
                             <div className={styles.descRow} key={`${v.title}${index.toString()}`}>
                               <div className={styles.descleft}>
-                                {item.left.map((t, i) => {
+                                {item?.left?.map((t, i) => {
                                   return (
                                     <span key={t} className={styles.descleftspan}>
                                       {i === 0 ? (

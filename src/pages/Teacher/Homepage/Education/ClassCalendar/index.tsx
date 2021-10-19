@@ -136,10 +136,8 @@ const ClassCalendar = (props: propstype) => {
           {
             left: [`${item.FJSJ.FJMC}`],
           },
-          {
-            left: item.XXSJPZ.id,
-          },
         ],
+        jcId:item.XXSJPZ.id,
       };
       const res = DateRange(
         moment(startDate).format('YYYY/MM/DD'),
@@ -264,12 +262,12 @@ const ClassCalendar = (props: propstype) => {
     let newChoosen = [...choosenCourses];
     setReloadList?.(false);
     if (e?.target?.checked) {
-      const { desc, bjid, title } = item;
+      const { desc, bjid, title,jcId } = item;
       newChoosen.push({
         day,
         start:desc?.[0].left?.[0].substring(0,5),
         end:desc?.[0].left?.[0].substring(6,11),
-        jcId:desc?.[2].left,
+        jcId,
         bjid,
         title,
       });

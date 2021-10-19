@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /*
  * @description:
  * @author: Sissle Lynn
@@ -24,7 +25,7 @@ type propsType = {
 const LeaveHistory = (props: propsType) => {
   const { leaveInfo, getData } = props;
   const handleCancle = async (d: any) => {
-    const res = await updateKHJSQJ({ id: d.id }, { QJZT: 1 });
+    const res = await updateKHJSQJ({ id: d.id }, { QJZT: 3 });
     if (res.status === 'ok') {
       message.success(`请假申请已撤销`);
       getData();
@@ -48,7 +49,10 @@ const LeaveHistory = (props: propsType) => {
                   {
                     showWXName ? <WWOpenDataCom type="userName" openid={item?.JZGJBSJ?.WechatUserId} /> : item.JZGJBSJ?.XM
                   }
-                  的请假{item.QJZT === 1 ? <span>已撤销</span> : ''}</h4>
+                  的请假{item.QJZT === 3 ? <span>已撤销</span> :
+                    item.QJZT === 0 ? <span style={{ color: '#FFB257', borderColor: '#FFB257' }}>申请中</span> :
+                      item.QJZT === 1 ? <span style={{ color: '#45c977', borderColor: '#45c977' }}>已同意</span> :
+                        item.QJZT === 2 ? <span style={{ color: '#FF4B4B', borderColor: '#FF4B4B' }}>已驳回</span> : ''}</h4>
                 <span>
                   {moment(item.updatedAt || item.createdAt).format('YYYY.MM.DD')}
                 </span>
