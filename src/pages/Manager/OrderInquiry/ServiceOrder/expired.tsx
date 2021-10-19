@@ -69,7 +69,7 @@ const OrderInquiry = (props: any) => {
       dataIndex: 'index',
       valueType: 'index',
       align: 'center',
-      width: 60,
+      width: 58,
     },
     {
       title: '订单编号',

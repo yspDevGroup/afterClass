@@ -106,7 +106,7 @@ const LeaveManagement: React.FC = () => {
       dataIndex: 'index',
       valueType: 'index',
       align: 'center',
-      width: 60,
+      width: 58,
     },
     {
       title: '学生姓名',

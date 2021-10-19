@@ -107,10 +107,20 @@ const TermManagement = () => {
   };
   const columns: ProColumns<TermItem>[] = [
     {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      align: 'center',
+      width: 58,
+      fixed: 'left'
+    },
+    {
       title: '学年',
       dataIndex: 'XN',
       key: 'XN',
       align: 'center',
+      width: 100,
+      fixed: 'left'
     },
     {
       title: '学期',

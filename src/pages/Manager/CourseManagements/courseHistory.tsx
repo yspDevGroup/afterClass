@@ -38,7 +38,7 @@ const CourseHistory = () => {
       dataIndex: 'index',
       valueType: 'index',
       align: 'center',
-      width: 60,
+      width: 58,
     },
     {
       title: '课程名称',
