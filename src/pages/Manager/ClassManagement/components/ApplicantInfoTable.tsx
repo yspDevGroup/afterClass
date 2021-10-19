@@ -5,6 +5,7 @@ import type { ColumnsType } from 'antd/lib/table';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { paginationConfig } from '@/constant';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 /**
  *

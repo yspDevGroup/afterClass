@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-10-19 11:27:51
+ * @LastEditTime: 2021-10-12 17:40:13
  * @LastEditors: Sissle Lynn
  */
 import React, { useRef, useState } from 'react';
@@ -18,6 +18,7 @@ import PageContain from '@/components/PageContainer';
 import styles from './index.less';
 import { getAuthorization } from '@/utils/utils';
 import { deleteJZGJBSJ, getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const TeacherManagement = () => {
   const { initialState } = useModel('@@initialState');
@@ -75,23 +76,29 @@ const TeacherManagement = () => {
       valueType: 'index',
       width: 58,
       align: 'center',
-      fixed:'left'
     },
     {
       title: '姓名',
       dataIndex: 'XM',
       key: 'XM',
       align: 'center',
-      width: 100,
+      width: 120,
       ellipsis: true,
-      fixed:'left'
+      render: (_, record)=>{
+        const showWXName = record?.XM === '未知' && record?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.WechatUserId} />;
+        }
+        return record?.XM;
+      }
+
     },
     {
       title: '性别',
       dataIndex: 'XBM',
       key: 'XBM',
       align: 'center',
-      width: 80,
+      width: 90,
       render: (_, record) => record?.XBM?.substring(0, 1),
     },
     {
@@ -99,21 +106,19 @@ const TeacherManagement = () => {
       key: 'LXDH',
       dataIndex: 'LXDH',
       align: 'center',
-      width: 150,
+      width: 200,
     },
     {
       title: '教授科目',
       key: 'JSKM',
       dataIndex: 'JSKM',
       align: 'center',
-      ellipsis: true,
       width: 200,
     },
     {
       title: '操作',
       valueType: 'option',
-      width: 200,
-      fixed: 'right',
+      width: 220,
       align: 'center',
       render: (_, record) => (
         <>
@@ -147,12 +152,6 @@ const TeacherManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
-        pagination={{
-          showQuickJumper: true,
-          pageSize: 10,
-          defaultCurrent: 1,
-        }}
-        scroll={{ x: 800 }}
         request={async (
           params: any & {
             pageSize?: number;
