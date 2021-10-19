@@ -7,6 +7,8 @@
     "analyze": "cross-env ANALYZE=1 umi build",
     "build": "umi build",
     "build:dev": "cross-env UMI_ENV=dev umi build",
+    "build:wuyu": "cross-env UMI_ENV=wuyu umi build",
+    "build:9dy": "cross-env UMI_ENV=9dy umi build",
     "deploy": "npm run site && npm run gh-pages",
     "dev": "npm run start:dev",
     "gh-pages": "gh-pages -d dist",
