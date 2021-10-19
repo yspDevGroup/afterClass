@@ -28,13 +28,15 @@ const school = (props: any) => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed:'left',
       align: 'center'
     },
     {
       title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
-      width: 180,
+      width: 120,
+      fixed:'left',
       ellipsis: true,
       align: 'center',
     },
@@ -55,7 +57,7 @@ const school = (props: any) => {
       dataIndex: 'pj_count',
       key: 'pj_count',
       align: 'center',
-      width: 150,
+      width: 120,
       render: (text: any) => text
     },
     {
@@ -63,7 +65,7 @@ const school = (props: any) => {
       dataIndex: 'pj_count',
       key: ' pj_count',
       align: 'center',
-      width: 150,
+      width: 100,
       render: (text: any) => text
     },
     {
@@ -71,7 +73,7 @@ const school = (props: any) => {
       dataIndex: 'pj_avg',
       key: 'pj_avg',
       align: 'center',
-      width: 200,
+      width: 180,
       render: (text: any) => <Rate count={5} defaultValue={text} disabled={true} />,
     },
     {
@@ -79,7 +81,8 @@ const school = (props: any) => {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 150,
+      width: 100,
+      fixed:'right',
       render: (_, record) => (
         <>
           <Link
@@ -120,6 +123,12 @@ const school = (props: any) => {
         columns={columns}
         dataSource={dataSource}
         rowKey="id"
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 1000 }}
         search={false}
         options={{
           setting: false,

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
-import { Select,Rate} from 'antd';
+import { Select, Rate } from 'antd';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
@@ -31,6 +31,7 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed:'left',
       align: 'center'
     },
     {
@@ -38,6 +39,8 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'KCMC',
       key: 'KCMC',
       align: 'center',
+      width:120,
+      fixed:'left',
       render: (text: any) => {
         return text
       },
@@ -47,6 +50,7 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'KHKCLX',
       key: 'KHKCLX',
       align: 'center',
+      width:120,
       render: (test: any) => {
         return test.KCTAG
       },
@@ -57,6 +61,7 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'SSJGLX',
       key: 'SSJGLX',
       align: 'center',
+      width:100,
       render: (test: any) => {
         return test
       },
@@ -67,6 +72,8 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'KHJYJG',
       key: 'KHJYJG',
       align: 'center',
+      width:120,
+      ellipsis: true,
       render: (test: any) => {
         return test?.QYMC || '-'
       },
@@ -76,6 +83,7 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'bj_count',
       key: 'bj_count',
       align: 'center',
+      width:100,
       render: (test: any) => {
         return test
       },
@@ -85,10 +93,11 @@ const MutualEvaluation: React.FC = () => {
       title: '课程评分',
       dataIndex: 'PJFS',
       key: 'PJFS',
+      width: 180,
       align: 'center',
       render: (test: any) => {
-        return( <Rate count={5} defaultValue={test} disabled={true} />)
-    }
+        return (<Rate count={5} defaultValue={test} disabled={true} />)
+      }
 
     },
     {
@@ -96,6 +105,8 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
+      width: 100,
+      fixed: 'right',
       render: (_, record) => (
         <>
           <Link
@@ -103,7 +114,7 @@ const MutualEvaluation: React.FC = () => {
               pathname: '/statistics/mutualEvaluation/class',
               state: {
                 type: 'detail',
-                data: {XNXQ:curXNXQId,record},
+                data: { XNXQ: curXNXQId, record },
               },
             }}
           >
@@ -149,7 +160,7 @@ const MutualEvaluation: React.FC = () => {
   }, [curXNXQId]);
 
 
-  return(
+  return (
     <PageContainer>
       <div className={Style.TopSearchss}>
         <span>
@@ -178,6 +189,12 @@ const MutualEvaluation: React.FC = () => {
           dataSource={dataSource}
           rowKey="id"
           search={false}
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: 1200 }}
           options={{
             setting: false,
             fullScreen: false,

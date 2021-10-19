@@ -45,7 +45,7 @@ const AdministrativeClass = () => {
       dataIndex: 'NJMC',
       key: 'NJMC',
       align: 'center',
-      width: 180,
+      width: 160,
       render: (test: any, record: any) => {
         return `${record.NJSJ.XD}${record.NJSJ.NJMC}`;
       },
@@ -55,14 +55,14 @@ const AdministrativeClass = () => {
       dataIndex: 'BJ',
       key: 'BJ',
       align: 'center',
-      width: 180,
+      width: 160,
     },
     {
       title: '班主任',
       dataIndex: 'BZR',
       key: 'BZR',
       align: 'center',
-      width: 180,
+      width: 100,
       hideInTable: true,
     },
     {
@@ -70,14 +70,14 @@ const AdministrativeClass = () => {
       dataIndex: 'xs_count',
       key: 'xs_count',
       align: 'center',
-      width: 180,
+      width: 80,
     },
     {
       title: '课后服务报名人数',
       dataIndex: 'xsbm_count',
       key: 'xsbm_count',
       align: 'center',
-      width: 180,
+      width: 150,
     },
     // {
     //   title: '班主任',
@@ -91,7 +91,7 @@ const AdministrativeClass = () => {
       valueType: 'option',
       key: 'option',
       align: 'center',
-      width: 150,
+      width: 100,
       render: (_, record) => {
         return (
           <Link
@@ -114,6 +114,11 @@ const AdministrativeClass = () => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
           request={async (param) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
             const result = await queryXNXQList(currentUser?.xxId);

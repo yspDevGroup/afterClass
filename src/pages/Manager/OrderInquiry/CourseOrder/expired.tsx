@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-15 14:04:54
+ * @LastEditTime: 2021-10-19 15:35:27
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -10,8 +10,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Select } from 'antd';
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
-import { getAllKHKCSJ } from '@/services/after-class/khkcsj';
-import { getAllKHBJSJ } from '@/services/after-class/khbjsj';
+import { getAllCourses, getAllKHKCSJ } from '@/services/after-class/khkcsj';
+import { getAllClasses, getAllKHBJSJ } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import PromptInformation from '@/components/PromptInformation';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
@@ -71,52 +71,6 @@ const OrderInquiry = (props: any) => {
       }
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      if (curXNXQId) {
-        // 获取订单查询的表格数据
-        const resl = await getAllKHXSDD({
-          XNXQId: curXNXQId,
-          // 父传子判断要请求的状态
-          DDZT,
-          DDLX: 0
-        });
-        if (resl.status === 'ok') {
-          setTableLoading(false);
-          setDataSource(resl.data);
-          setKcmcValue(undefined);
-          setBjmcValue(undefined);
-        }
-
-        // 通过课程数据接口拿到所有的课程
-        const khkcResl = await getAllKHKCSJ({
-          isRequired: false,
-          XNXQId: curXNXQId,
-          XXJBSJId: currentUser?.xxId,
-          page: 0,
-          pageSize: 0,
-        });
-        if (khkcResl.status === 'ok') {
-          const KCMC = khkcResl.data.rows?.map((item: any) => ({
-            label: item.KCMC,
-            value: item.id,
-          }));
-          setKcmcData(KCMC);
-        }
-
-        // 通过班级数据接口拿到所有的班级
-        const bjmcResl = await getAllKHBJSJ({ XNXQId: curXNXQId, page: 0, pageSize: 0, name: '' });
-        if (bjmcResl.status === 'ok') {
-          const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
-            label: item.BJMC,
-            value: item.BJMC,
-          }));
-          setBjmcData(BJMC);
-        }
-      }
-    })();
-  }, [curXNXQId]);
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -124,14 +78,7 @@ const OrderInquiry = (props: any) => {
       valueType: 'index',
       align: 'center',
       width: 58,
-    },
-    {
-      title: '订单编号',
-      dataIndex: 'DDBH',
-      key: 'DDBH',
-      align: 'center',
-      ellipsis: true,
-      width: 160,
+      fixed: 'left',
     },
     {
       title: '学生姓名',
@@ -139,13 +86,22 @@ const OrderInquiry = (props: any) => {
       key: 'XSXM',
       align: 'center',
       width: 100,
-      render:(_text: any, record: any)=>{
+      fixed: 'left',
+      render: (_text: any, record: any) => {
         const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
         if (showWXName) {
           return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
         }
         return record?.XSJBSJ?.XM;
       }
+    },
+    {
+      title: '订单编号',
+      dataIndex: 'DDBH',
+      key: 'DDBH',
+      align: 'center',
+      ellipsis: true,
+      width: 180,
     },
     {
       title: '行政班名称',
@@ -215,7 +171,7 @@ const OrderInquiry = (props: any) => {
       ellipsis: true,
       width: 150,
       render: (_text: any, record: any) => {
-        return record.XDSJ?.substring(0,16);
+        return record.XDSJ?.substring(0, 16);
       },
     },
     {
@@ -225,9 +181,9 @@ const OrderInquiry = (props: any) => {
       align: 'center',
       ellipsis: true,
       width: 150,
-      hideInTable: DDZT!=='已付款',
+      hideInTable: DDZT !== '已付款',
       render: (_text: any, record: any) => {
-        return record.ZFSJ?.substring(0,16);
+        return record.ZFSJ?.substring(0, 16);
       },
     },
     {
@@ -237,16 +193,10 @@ const OrderInquiry = (props: any) => {
       align: 'center',
       ellipsis: true,
       width: 150,
+      hideInTable: DDZT !== '已付款',
       render: (_text: any, record: any) => {
-        return record.ZFFS?.substring(0,16);
+        return record.ZFFS?.substring(0, 16);
       },
-    },
-    {
-      title: '订单状态',
-      dataIndex: 'DDZT',
-      key: 'DDZT',
-      align: 'center',
-      width: 100,
     },
   ];
 
@@ -254,123 +204,134 @@ const OrderInquiry = (props: any) => {
   const kaiguan = () => {
     setkai(false);
   };
-  const onKcmcChange = async (value: any, key: any) => {
-    setTableLoading(true);
-    setBjmcValue('');
-    setKcmcValue(value);
-    const bjmcResl = await getAllKHBJSJ({
+  const params = {
+    page: 0,
+    pageSize: 0,
+    KHKCSJId: kcmcValue,
+    XNXQId: curXNXQId,
+    XXJBSJId: currentUser?.xxId,
+  };
+  const getData = async () => {
+    const resAll = await getAllKHXSDD({
       XNXQId: curXNXQId,
-      kcId: key?.key || '',
-      page: 0,
-      pageSize: 0,
-      name: '',
+      DDZT,
+      DDLX: 0,
+      kcmc:kcmcValue,
+      bjmc:bjmcValue
     });
+    if (resAll.status === 'ok') {
+      setDataSource(resAll?.data);
+    } else {
+      setDataSource([]);
+    }
+  };
+  const getBjData = async () => {
+    const bjmcResl = await getAllClasses(params);
     if (bjmcResl.status === 'ok') {
-      const BJMC = bjmcResl.data?.rows?.map((item: any) => ({
+      const BJMC = bjmcResl.data.rows?.map((item: any) => ({
         label: item.BJMC,
-        value: item.BJMC,
+        value: item.id,
       }));
       setBjmcData(BJMC);
     }
-
-    // 获取订单查询的表格数据
-    const resl = await getAllKHXSDD({
-      XNXQId: curXNXQId,
-      kcmc: value,
-      DDZT
-    });
-    if (resl.status === 'ok') {
-      console.log(resl.data);
-
-      setTableLoading(false);
-      setDataSource(resl.data);
-    }
   };
-
-  const onBjmcChange = async (value: any) => {
-    setTableLoading(true);
-    setBjmcValue(value);
-
-    // 获取订单查询的表格数据
-    const resl = await getAllKHXSDD({
-      XNXQId: curXNXQId,
-      bjmc: value,
-      DDZT
-    });
-    if (resl.status === 'ok') {
-      setTableLoading(false);
-      setDataSource(resl.data);
-    }
-  };
+  useEffect(() => {
+    (async () => {
+      if (curXNXQId) {
+        // 通过课程数据接口拿到所有的课程
+        const khkcResl = await getAllCourses(params);
+        if (khkcResl.status === 'ok') {
+          const KCMC = khkcResl.data.rows?.map((item: any) => ({
+            label: item.KCMC,
+            value: item.id,
+          }));
+          setKcmcData(KCMC);
+          getBjData();
+        }
+      }
+    })()
+  }, [curXNXQId]);
+  useEffect(() => {
+    getBjData();
+  }, [kcmcValue]);
+  useEffect(() => {
+    getData();
+  }, [curXNXQId, kcmcValue, bjmcValue])
   return (
     <>
       <div className={styles.searchs}>
-        <div>
-          <span>
-            所属学年学期：
-            <Select
-              value={curXNXQId}
-              style={{ width: 200 }}
-              onChange={(value: string) => {
-                setCurXNXQId(value);
-              }}
-            >
-              {termList?.map((item: any) => {
-                return (
-                  <Option key={item.value} value={item.value}>
-                    {item.text}
-                  </Option>
-                );
-              })}
-            </Select>
-          </span>
-        </div>
-        <div>
-          <span>课程名称：</span>
-          <div>
-            <Select
-              style={{ width: 200 }}
-              value={kcmcValue}
-              allowClear
-              placeholder="请选择"
-              onChange={onKcmcChange}
-            >
-              {kcmcData?.map((item: selectType) => {
-                return (
-                  <Option value={item.label} key={item.value}>
-                    {item.label}
-                  </Option>
-                );
-              })}
-            </Select>
-          </div>
-        </div>
-        <div>
-          <span>课程班名称：</span>
-          <div>
-            <Select
-              style={{ width: 200 }}
-              value={bjmcValue}
-              allowClear
-              placeholder="请选择"
-              onChange={onBjmcChange}
-            >
-              {bjmcData?.map((item: selectType) => {
-                return (
-                  <Option value={item.label} key={item.label}>
-                    {item.label}
-                  </Option>
-                );
-              })}
-            </Select>
-          </div>
-        </div>
+        <span>
+          所属学年学期：
+          <Select
+            value={curXNXQId}
+            style={{ width: 200 }}
+            onChange={(value: string) => {
+              // 选择不同学期从新更新页面的数据
+              setCurXNXQId(value);
+              setKcmcValue('');
+              setBjmcValue('');
+            }}
+          >
+            {termList?.map((item: any) => {
+              return (
+                <Option key={item.value} value={item.value}>
+                  {item.text}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
+        <span style={{ marginLeft: 16 }}>
+          所属课程：
+          <Select
+            style={{ width: 200 }}
+            allowClear
+            value={kcmcValue}
+            onChange={(value: string) => {
+              setKcmcValue(value);
+              setBjmcValue('');
+            }}
+          >
+            {kcmcData?.map((item: selectType) => {
+              return (
+                <Option value={item.value} key={item.value}>
+                  {item.label}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
+        <span style={{ marginLeft: 16 }}>
+          所属课程班：
+          <Select
+            style={{ width: 200 }}
+            allowClear
+            value={bjmcValue}
+            onChange={(value: string) => {
+              setBjmcValue(value);
+            }}
+          >
+            {bjmcData?.map((item: selectType) => {
+              return (
+                <Option value={item.value} key={item.value}>
+                  {item.label}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
       </div>
       <div className={styles.tableStyle}>
         <ProTable<any>
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: DDZT !== '已付款' ? 1300 : 1500 }}
           dataSource={dataSource}
           options={{
             setting: false,

@@ -7,21 +7,21 @@ import type { ProColumns } from '@ant-design/pro-table';
 import { getAllKHXSPJ } from '@/services/after-class/khxspj';
 // khxspj
 import { useModel } from 'umi';
-import {Rate,Popover}from 'antd'
-import { Modal} from 'antd';
+import { Rate, Popover } from 'antd'
+import { Modal } from 'antd';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
-const TabList=(props: any)=>{
-    const {ListName,ListState}=props.ListData;
-    const {id,KHBJJs}=ListState.record;
+const TabList = (props: any) => {
+  const { ListName, ListState } = props.ListData;
+  const { id, KHBJJs } = ListState.record;
 
-    const handleOk = () => {
-        setIsModalVisible(false);
-      };
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
 
-      const handleCancel = () => {
-        setIsModalVisible(false);
-      };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const teacher: ProColumns<any>[] = [
     {
@@ -29,38 +29,40 @@ const TabList=(props: any)=>{
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed:'left',
       align: 'center'
     },
     {
-      title: '评价时间',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      title: '评价人',
+      dataIndex: 'PJR',
+      key: 'PJR',
+      width: 120,
+      fixed:'left',
       align: 'center',
-      width: 200,
     },
     {
       title: '课程评分',
       dataIndex: '',
       key: '',
       align: 'center',
-      width: 200,
+      width: 180,
       render: (_, record) => <Rate count={5} defaultValue={record?.PJFS} disabled={true} />,
     },
-     {
-        title:'评价人',
-        dataIndex:'PJR',
-        key:'',
-        align: 'center',
-
+    {
+      title: '评价时间',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      align: 'center',
+      width: 160,
     },
     {
-      title:'评价内容',
+      title: '评价内容',
       dataIndex: 'PY',
       key: 'PY',
       align: 'center',
-      ellipsis:true
+      width: 180,
+      ellipsis: true
     },
-
   ];
 
   const student: ProColumns<any>[] = [
@@ -69,6 +71,7 @@ const TabList=(props: any)=>{
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed: 'left',
       align: 'center'
     },
     {
@@ -76,6 +79,8 @@ const TabList=(props: any)=>{
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
+      width: 100,
+      fixed: 'left',
       render: (_text: any, record: any) => {
         const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
         if (showWXName) {
@@ -89,7 +94,7 @@ const TabList=(props: any)=>{
       dataIndex: 'XZBJSJ',
       key: 'XZBJSJ',
       align: 'center',
-      width: 100,
+      width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
         return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
@@ -100,8 +105,10 @@ const TabList=(props: any)=>{
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
-      render: (test) => {
-        return <span>{test?.BJMC}</span> ;
+      width: 120,
+      ellipsis: true,
+      render: (_, record: any) => {
+        return <span>{record?.KHBJSJ?.BJMC}</span>;
       },
     },
     {
@@ -109,118 +116,105 @@ const TabList=(props: any)=>{
       dataIndex: 'createdAt',
       key: 'createdAt',
       align: 'center',
-      width: 200,
+      width: 160,
     },
     {
       title: '课程评分',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'PJFS',
+      key: 'PJFS',
       align: 'center',
-      width: 200,
+      width: 180,
       render: (_, record) => <Rate count={5} defaultValue={record?.PJFS} disabled={true} />,
     },
     {
-      title:'该学生课堂表现',
+      title: '该学生课堂表现',
       dataIndex: 'PY',
       key: 'PY',
       align: 'center',
+      width: 140,
       render: (text: any) => {
-            return (
-                <a
-                  onClick={() => {
-                    setDetailsValue(text)
-                    setIsModalVisible(true)
-                  }}
-                >
-                  课堂表现
-                </a>
-            );
+        return (
+          <a
+            onClick={() => {
+              setDetailsValue(text)
+              setIsModalVisible(true)
+            }}
+          >
+            课堂表现
+          </a>
+        );
       },
     },
   ];
-   // 弹出框显示隐藏
+  // 弹出框显示隐藏
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [DetailsValue, setDetailsValue] = useState('');
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-
- // 学生评价的详情
-//  const[StudentDetails,setStudentDetails]=useState('')
-   //   学生详情评价列表
-   const [StuList, setStuList] = useState<API.KHXSDD[] | undefined>([]);
-   // 老师列表
-   const [teacherList, setTeacherList] = useState<API.KHXSDD[] | undefined>([]);
+  // 学生详情评价列表
+  const [StuList, setStuList] = useState<API.KHXSDD[] | undefined>([]);
+  // 老师列表
+  const [teacherList, setTeacherList] = useState<API.KHXSDD[] | undefined>([]);
   useEffect(() => {
-    if(ListName==='学生评价'){
-      (async()=>{
+    if (ListName === '学生评价') {
+      (async () => {
         const res2 = await getAllKHXSPJ({
-          KHBJSJId:id,
-          JSId:KHBJJs?.[0]?.JZGJBSJ?.id,
-          XNXQId:ListState.XNXQId,
+          KHBJSJId: id,
+          // JSId: KHBJJs?.[0]?.JZGJBSJ?.id,
+          XNXQId: ListState.XNXQId,
           page: 0,
           pageSize: 0,
         });
-        if(res2.status==='ok'){
+        if (res2.status === 'ok') {
           // 老师给学生的评语
           setStuList(res2.data?.rows)
         }
-        })()
+      })()
 
-    }else{
+    } else {
       (async () => {
         const res = await getKHBJPJ({
           // 课后班级数据
-          KHBJSJId:id,
-          XNXQId:ListState.XNXQId,
-          XXJBSJId:currentUser.xxId,
+          KHBJSJId: id,
+          XNXQId: ListState.XNXQId,
+          XXJBSJId: currentUser.xxId,
           page: 0,
           pageSize: 0,
         });
         if (res?.data?.rows) {
-       // 家长给老师的评价
+          // 家长给老师的评价
           setTeacherList(res.data.rows);
-
         }
       })();
     }
-
-
   }, []);
-  // const getTeacherRemark=(data:any)=>{
-  //   (async()=>{
-  //     const res2 = await getAllKHXSPJ({
-  //       KHBJSJId:ListState.id,
-  //       JSId: '',
-  //       XNXQId:data.id,
-  //       page: 0,
-  //       pageSize: 0,
-  //     });
-  //     if(res2.status==='ok'){
-  //       console.log(res2.data?.rows);
-  //     }
-  //     })()
-  // }
-    return(
-            <div>
-          <ProTable
-            columns={ListName==='学生评价'?student:teacher}
-            dataSource={ListName==='学生评价'?StuList:teacherList}
-            rowKey="id"
-            search={false}
-            options={{
-              setting: false,
-              fullScreen: false,
-              density: false,
-              reload: false,
-            }}
-          />
-           <Modal visible={isModalVisible} onCancel={handleCancel} title='表现详情'
+  return (
+    <div>
+      <ProTable
+        columns={ListName === '学生评价' ? student : teacher}
+        dataSource={ListName === '学生评价' ? StuList : teacherList}
+        rowKey="id"
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 900 }}
+        search={false}
+        options={{
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
+        }}
+      />
+      <Modal visible={isModalVisible} onCancel={handleCancel} title='表现详情'
         footer={null}
-        >
-             <span>{DetailsValue}</span>
-        </Modal>
-        </div>
+      >
+        <span>{DetailsValue}</span>
+      </Modal>
+    </div>
 
-    )
+  )
 }
 export default TabList

@@ -56,12 +56,16 @@ const Table = (props: any) => {
       dataIndex: 'index',
       valueType: 'index',
       align: 'center',
+      width: 58,
+      fixed: 'left',
     },
     {
       title: '姓名',
       dataIndex: 'XM',
       key: 'XM',
       align: 'center',
+      fixed: 'left',
+      width: 100,
       render: (_, record) => {
         const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
         if (showWXName) {
@@ -75,11 +79,13 @@ const Table = (props: any) => {
       dataIndex: 'BJS',
       key: 'BJS',
       align: 'center',
+      width: 110,
     },
     {
       title: '授课总课时数',
       dataIndex: 'KSS',
       key: 'KSS',
+      width: 120,
       align: 'center',
     },
     {
@@ -87,24 +93,29 @@ const Table = (props: any) => {
       dataIndex: 'CQS',
       key: 'CQS',
       align: 'center',
+      width: 100,
     },
     {
       title: '缺勤次数',
       dataIndex: 'QQS',
       key: 'QQS',
       align: 'center',
+      width: 100,
     },
     {
       title: '出勤总时长(小时)',
       dataIndex: 'KSSC',
       key: 'KSSC',
       align: 'center',
+      width: 120,
     },
     {
       title: '操作',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'operation',
+      key: 'operation',
       align: 'center',
+      width: 100,
+      fixed: 'right',
       render: (_, record) => (
         <>
           <Link
@@ -130,12 +141,16 @@ const Table = (props: any) => {
       dataIndex: 'index',
       valueType: 'index',
       align: 'center',
+      width: 58,
+      fixed: 'left'
     },
     {
       title: '姓名',
       dataIndex: 'XM',
       key: 'XM',
       align: 'center',
+      fixed: 'left',
+      width: 100,
       render: (_text: any, record: any) => {
         const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
         if (showWXName) {
@@ -149,7 +164,7 @@ const Table = (props: any) => {
       dataIndex: 'XZBJSJ',
       key: 'XZBJSJ',
       align: 'center',
-      width: 100,
+      width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
         return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
@@ -160,30 +175,36 @@ const Table = (props: any) => {
       dataIndex: 'BJS',
       key: 'BJS',
       align: 'center',
+      width: 120,
     },
     {
       title: '出勤次数',
       dataIndex: 'CQS',
       key: 'CQS',
       align: 'center',
+      width: 100,
     },
     {
       title: '缺勤次数',
       dataIndex: 'QQS',
       key: 'QQS',
       align: 'center',
+      width: 100,
     },
     {
       title: '课时总时长(小时)',
       dataIndex: 'KSSC',
       key: 'KSSC',
       align: 'center',
+      width: 120,
     },
     {
       title: '操作',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'operation',
+      key: 'operation',
+      fixed: 'right',
       align: 'center',
+      width: 100,
       render: (_, record) => (
         <>
           <Link
@@ -228,6 +249,12 @@ const Table = (props: any) => {
         </span>
       </div>
       <ProTable
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 1000 }}
         columns={TableList.position === '老师' ? teacher : student}
         options={{
           setting: false,

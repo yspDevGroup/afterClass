@@ -110,16 +110,18 @@ const ServiceManagement = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed:'left',
       align: 'center'
     },
     {
       title: '服务名称',
       dataIndex: 'FWMC',
       key: 'FWMC',
+      fixed:'left',
       align: 'center',
       search: false,
       ellipsis: true,
-      width: 100,
+      width: 120,
     },
     {
       title: '服务类别',
@@ -192,6 +194,7 @@ const ServiceManagement = () => {
       key: 'option',
       valueType: 'option',
       align: 'center',
+      fixed:'right',
       width: 210,
       render: (text, record,) => {
         return (
@@ -406,8 +409,11 @@ const ServiceManagement = () => {
           rowKey="key"
           actionRef={actionRef}
           pagination={{
-            showQuickJumper: true
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
           }}
+          scroll={{ x: 1200 }}
           search={false}
           dataSource={DataSource}
           dateFormatter="string"
@@ -420,6 +426,8 @@ const ServiceManagement = () => {
                   style={{ width: 165 }}
                   onChange={(value: string) => {
                     setCurXNXQId(value);
+                    setLbState('');
+                    setFbState('');
                   }}
                 >
                   {termList?.map((item: any) => {
@@ -440,6 +448,7 @@ const ServiceManagement = () => {
                   placeholder="请选择"
                   onChange={(value: string) => {
                     setLbState(value);
+                    setFbState('');
                   }}>
                   <Option value='' key=''>全部</Option>
                   {
@@ -470,10 +479,6 @@ const ServiceManagement = () => {
                   </Option>
                 </Select>
               </span>
-              {/* <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
-                服务名称：
-                <Search placeholder="请输入服务名称" onSearch={onSearch} style={{ width: 200 }} />
-              </span> */}
             </div>
           }
           toolBarRender={() => [

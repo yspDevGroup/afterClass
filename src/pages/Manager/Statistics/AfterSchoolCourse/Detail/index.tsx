@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import type { ProColumns } from '@ant-design/pro-table';
 
 import { useModel, Link } from 'umi';
-import { Select, Tag,Button } from 'antd';
+import { Select, Tag, Button } from 'antd';
 import moment from 'moment';
 import { getClasses } from '@/services/after-class/reports';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -35,24 +35,30 @@ const AfterSchoolClass: React.FC = (props: any) => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed:'left',
       align: 'center'
-    },
-    {
-      title: '上课时段',
-      dataIndex: 'SKSD',
-      key: 'SKSD',
-      align: 'center',
-      render: (test: any, record: any) => {
-        return moment(record?.KKSJ).format('YYYY.MM.DD') + '~' + moment(record?.JKSJ).format('YYYY.MM.DD');
-      },
     },
     {
       title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
+      ellipsis: true,
+      width: 140,
+      fixed:'left',
       render: (test: any,) => {
         return test;
+      },
+    },
+    {
+      title: '上课时段',
+      dataIndex: 'SKSD',
+      key: 'SKSD',
+      align: 'center',
+      width: 120,
+      ellipsis: true,
+      render: (test: any, record: any) => {
+        return moment(record?.KKSJ).format('YYYY.MM.DD') + '~' + moment(record?.JKSJ).format('YYYY.MM.DD');
       },
     },
     {
@@ -60,6 +66,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
       dataIndex: 'KKFW',
       key: 'KKFW',
       align: 'center',
+      width: 150,
       render: (text: any) => {
         return (
           <EllipsisHint
@@ -80,55 +87,47 @@ const AfterSchoolClass: React.FC = (props: any) => {
       dataIndex: 'RKJS',
       key: 'RKJS',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 100
     },
     {
       title: '课时数',
       dataIndex: 'KSS',
       key: 'KSS',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 90,
+      ellipsis: true
     },
     {
       title: '报名人数',
       dataIndex: 'BMRS',
       key: 'BMRS',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 90,
+      ellipsis: true
     },
     {
       title: '退课人数',
       dataIndex: 'TKRS',
       key: 'TKRS',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 100,
+      ellipsis: true
     },
     {
-      title: '收款总额',
+      title: '收款金额',
       dataIndex: 'SKJE',
       key: 'SKJE',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 100,
+      ellipsis: true
     },
     {
-      title: '退款总额',
+      title: '退款金额',
       dataIndex: 'TKJE',
       key: 'TKJE',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
-
+      width: 100,
+      ellipsis: true
     }
   ];
   useEffect(() => {
@@ -151,7 +150,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
   // 学年学期变化
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    if(curXNXQId){
+    if (curXNXQId) {
       ChoseSelect(curXNXQId);
     }
   }, [curXNXQId]);
@@ -170,7 +169,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
   return (
     /// PageContainer组件是顶部的信息
     <PageContainer>
-       <Button
+      <Button
         type="primary"
         onClick={() => {
           history.go(-1);
@@ -205,6 +204,12 @@ const AfterSchoolClass: React.FC = (props: any) => {
       </div>
       <div>
         <ProTable
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: 1300 }}
           columns={columns}
           dataSource={dataSource}
           rowKey="id"

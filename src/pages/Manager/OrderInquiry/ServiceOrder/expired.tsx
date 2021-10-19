@@ -2,13 +2,13 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-15 09:55:56
+ * @LastEditTime: 2021-10-19 16:18:59
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
-import { Select } from 'antd';
+import { Input, Select } from 'antd';
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
@@ -26,6 +26,7 @@ type selectType = { label: string; value: string };
  * 订单查询页面
  * @return
  */
+const { Search } = Input;
 const OrderInquiry = (props: any) => {
   const DDZT = props.TabState;
   const { initialState } = useModel('@@initialState');
@@ -34,6 +35,7 @@ const OrderInquiry = (props: any) => {
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [termList, setTermList] = useState<any>();
+  const [name, setName] = useState<string>();
   useEffect(() => {
     (async () => {
       // 学年学期数据的获取
@@ -55,6 +57,7 @@ const OrderInquiry = (props: any) => {
     (async () => {
       const res = await getAllKHXSDD({
         XNXQId: curXNXQId,
+        XSXM: name,
         // 父传子判断要请求的状态
         DDZT,
         DDLX: 1
@@ -63,7 +66,7 @@ const OrderInquiry = (props: any) => {
         setDataSource(res.data)
       }
     })()
-  }, [curXNXQId])
+  }, [curXNXQId,name])
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -71,14 +74,7 @@ const OrderInquiry = (props: any) => {
       valueType: 'index',
       align: 'center',
       width: 58,
-    },
-    {
-      title: '订单编号',
-      dataIndex: 'DDBH',
-      key: 'DDBH',
-      align: 'center',
-      ellipsis: true,
-      width: 160,
+      fixed: 'left',
     },
     {
       title: '学生姓名',
@@ -86,13 +82,22 @@ const OrderInquiry = (props: any) => {
       key: 'XSXM',
       align: 'center',
       width: 100,
-      render:(_text: any, record: any)=>{
+      fixed: 'left',
+      render: (_text: any, record: any) => {
         const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
         if (showWXName) {
           return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
         }
         return record?.XSJBSJ?.XM;
       }
+    },
+    {
+      title: '订单编号',
+      dataIndex: 'DDBH',
+      key: 'DDBH',
+      align: 'center',
+      ellipsis: true,
+      width: 180,
     },
     {
       title: '行政班名称',
@@ -121,7 +126,7 @@ const OrderInquiry = (props: any) => {
       dataIndex: 'DDFY',
       key: 'DDFY',
       align: 'center',
-      width: 100,
+      width: 110,
     },
     {
       title: '下单时间',
@@ -131,7 +136,7 @@ const OrderInquiry = (props: any) => {
       ellipsis: true,
       width: 150,
       render: (_text: any, record: any) => {
-        return record.XDSJ?.substring(0,16);
+        return record.XDSJ?.substring(0, 16);
       },
     },
     {
@@ -139,11 +144,11 @@ const OrderInquiry = (props: any) => {
       dataIndex: 'ZFSJ',
       key: 'ZFSJ',
       align: 'center',
-      hideInTable: DDZT!=='已付款',
+      hideInTable: DDZT !== '已付款',
       ellipsis: true,
       width: 150,
       render: (_text: any, record: any) => {
-        return record.ZFSJ?.substring(0,16);
+        return record.ZFSJ?.substring(0, 16);
       },
     },
     {
@@ -154,7 +159,7 @@ const OrderInquiry = (props: any) => {
       ellipsis: true,
       width: 150,
       render: (_text: any, record: any) => {
-        return record.ZFFS?.substring(0,16);
+        return record.ZFFS?.substring(0, 16);
       },
     },
   ];
@@ -181,32 +186,30 @@ const OrderInquiry = (props: any) => {
             </Select>
           </span>
         </div>
-        {/* <div>
-          <span>服务名称：</span>
+        <div>
+          <span>学生名称：</span>
           <div>
-            <Select
-              style={{ width: 200 }}
-              value={SeverData}
+            <Search
               allowClear
-              placeholder="请选择"
-              onChange={onKcmcChange}
-            >
-              {SeverData?.map((item: selectType) => {
-                return (
-                  <Option value={item.label} key={item.value}>
-                    {item.label}
-                  </Option>
-                );
-              })}
-            </Select>
+              style={{ width: 200 }}
+              onSearch={(val) => {
+                setName(val)
+              }}
+            />
           </div>
-        </div> */}
+        </div>
       </div>
       <div className={styles.tableStyle}>
         <ProTable<any>
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: DDZT !== '已付款' ? 1000 : 1300 }}
           dataSource={dataSource}
           options={{
             setting: false,

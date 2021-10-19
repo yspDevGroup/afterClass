@@ -2,8 +2,8 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-31 10:08:34
- * @LastEditTime: 2021-10-11 12:06:42
- * @LastEditors: zpl
+ * @LastEditTime: 2021-10-19 16:39:55
+ * @LastEditors: Sissle Lynn
  */
 import { useState, useRef } from 'react';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -26,6 +26,7 @@ const TableList = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed: 'left',
       align: 'center',
     },
     {
@@ -34,6 +35,8 @@ const TableList = () => {
       key: 'BT',
       ellipsis: true,
       align: 'center',
+      fixed: 'left',
+      width: 180,
     },
     {
       title: '副标题',
@@ -42,22 +45,23 @@ const TableList = () => {
       ellipsis: true,
       align: 'center',
       search: false,
+      width: 120,
     },
-
     {
       title: '作者',
       dataIndex: 'ZZ',
       key: 'ZZ',
-      width: '9em',
+      ellipsis: true,
       align: 'center',
-      search: false,
+      width: 100,
+      search: false
     },
     {
       title: '来源',
       dataIndex: 'LY',
       key: 'LY',
-      width: '12em',
       align: 'center',
+      width: 120,
       search: false,
       render: (text, record) => {
         return <>{record.JYJGSJ?.BMMC || ''}</>;
@@ -67,7 +71,7 @@ const TableList = () => {
       title: '关键词',
       dataIndex: 'GJC',
       key: 'GJC',
-      width: '9em',
+      width: 120,
       align: 'center',
       ellipsis: true,
       search: false,
@@ -76,7 +80,7 @@ const TableList = () => {
       title: '发布时间',
       dataIndex: 'RQ',
       key: 'RQ',
-      width: '12em',
+      width: 160,
       valueType: 'dateTime',
       hideInForm: true,
       align: 'center',
@@ -87,7 +91,8 @@ const TableList = () => {
       dataIndex: 'option',
       valueType: 'option',
       key: 'option',
-      width: '6em',
+      width: 120,
+      fixed:'right',
       align: 'center',
       render: (text, record) => {
         return (
@@ -112,6 +117,12 @@ const TableList = () => {
         actionRef={actionRef}
         className={styles.proTableStyles}
         rowKey="id"
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 1000 }}
         request={async (params) => {
           if (params.ZT || params.BT) {
             const resgetXXTZGG = await getJYJGTZGG({

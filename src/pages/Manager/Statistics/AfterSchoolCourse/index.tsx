@@ -31,95 +31,105 @@ const AfterSchoolCourse: React.FC = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed: 'left',
       align: 'center'
     },
     {
       title: '课程名称',
       dataIndex: 'KCMC',
       key: 'KCMC',
+      fixed: 'left',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 120,
+      ellipsis: true,
     },
     {
       title: '课程来源',
       dataIndex: 'KCLY',
       key: 'KCLY',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 100,
+      ellipsis: true,
     },
     {
       title: '课程类型',
       dataIndex: 'KCLX',
       key: 'KCLX',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 120,
+      ellipsis: true,
+    },
+    {
+      title: '所属机构/学校',
+      dataIndex: 'JGMC',
+      key: 'JGMC',
+      align: 'center',
+      width: 120,
+      ellipsis: true,
+      render: (_, record: any) => {
+        return record?.KCLY === '校内课程' ? record?.XXMC : record?.JGMC
+      }
     },
     {
       title: '课程班数量',
       dataIndex: 'BJS',
       key: 'BJS',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 130,
+      ellipsis: true,
     },
     {
       title: '报名人数',
       dataIndex: 'BMRS',
       key: 'BMRS',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 100,
+      ellipsis: true,
     },
     {
       title: '退课人数',
       dataIndex: 'TKRS',
       key: 'TKRS',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 100,
+      ellipsis: true,
     },
     {
       title: '退课比例',
       dataIndex: 'TKBL',
       key: 'TKBL',
       align: 'center',
-      render:(test: any,record)=>{
-        return (record?.TKRS/record?.BMRS).toFixed(2)*100 + '%';
-      }   
+      width: 100,
+      ellipsis: true,
+      render: (test: any, record: any) => {
+        const num = record.TKRS != 0 ? (Number((record.TKRS / record.BMRS)) * 100).toFixed(1) + '%' : 0;
+        return num;
+      },
     },
     {
-      title: '收款总额',
+      title: '收款金额',
       dataIndex: 'SKJE',
       key: 'SKJE',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
+      width: 100,
+      ellipsis: true,
     },
     {
-      title: '退款总额',
+      title: '退款金额',
       dataIndex: 'TKJE',
       key: 'TKJE',
       align: 'center',
-      render: (test: any,) => {
-        return test;
-      },
-
+      width: 100,
+      ellipsis: true,
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
+      width: 90,
+      ellipsis: true,
+      fixed: 'right',
       render: (_, record) => (
         <>
           <Link
@@ -156,7 +166,7 @@ const AfterSchoolCourse: React.FC = () => {
   // 学年学期变化
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    if(curXNXQId){
+    if (curXNXQId) {
       ChoseSelect(curXNXQId);
     }
   }, [curXNXQId]);
@@ -201,6 +211,12 @@ const AfterSchoolCourse: React.FC = () => {
           dataSource={dataSource}
           rowKey="id"
           search={false}
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: 1300 }}
           options={{
             setting: false,
             fullScreen: false,

@@ -3,8 +3,8 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-09 17:41:43
- * @LastEditTime: 2021-09-08 17:08:19
- * @LastEditors: wsl
+ * @LastEditTime: 2021-10-19 16:39:19
+ * @LastEditors: Sissle Lynn
  */
 import { useState, useRef } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
@@ -31,6 +31,7 @@ const Notice = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed: 'left',
       align: 'center'
     },
     {
@@ -39,7 +40,8 @@ const Notice = () => {
       key: 'BT',
       ellipsis: true,
       align: 'center',
-      width:'12rem'
+      fixed: 'left',
+      width: 180,
     },
     {
       title: '作者',
@@ -47,8 +49,8 @@ const Notice = () => {
       key: 'ZZ',
       ellipsis: true,
       align: 'center',
-      width:'8rem',
-      search: false,
+      width: 120,
+      search: false
     },
     {
       title: '发布时间',
@@ -57,14 +59,14 @@ const Notice = () => {
       valueType: 'dateTime',
       hideInForm: true,
       align: 'center',
-      search: false,
-      width:'10rem'
+      width: 160,
+      search: false
     },
     {
       title: '发布状态',
       dataIndex: 'ZT',
       key: 'ZT',
-      width: '8em',
+      width: 120,
       align: 'center',
       valueEnum: {
         草稿: { text: '草稿', status: 'Default' },
@@ -78,7 +80,7 @@ const Notice = () => {
       defaultSortOrder: 'descend',
       search: false,
       align: 'center',
-      width: '6em',
+      width: 120,
       render: (text, record) => {
         return (
           <Switch
@@ -113,7 +115,8 @@ const Notice = () => {
       dataIndex: 'option',
       valueType: 'option',
       key: 'option',
-      width: '10rem',
+      width: 150,
+      fixed: 'right',
       render: (_, record) => (
         <div className={styles.optionCol}>
           <Option
@@ -139,6 +142,12 @@ const Notice = () => {
         actionRef={actionRef}
         className={styles.proTableStyles}
         rowKey="id"
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 1000 }}
         toolBarRender={() => [
           <Button
             key="xinjian"

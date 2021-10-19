@@ -22,12 +22,14 @@ const CoursePatrol = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed: 'left',
       align: 'center'
     },
     {
       title: '巡课日期',
       dataIndex: 'RQ',
       key: 'RQ',
+      fixed: 'left',
       align: 'center',
       width: 120
     },
@@ -53,8 +55,8 @@ const CoursePatrol = () => {
       key: 'KHBJSJ',
       align: 'center',
       render: (text: any) => text?.BJMC,
+      ellipsis: true,
       width: 120
-
     },
     {
       title: '是否准时上课',
@@ -148,7 +150,7 @@ const CoursePatrol = () => {
   }, []);
   useEffect(() => {
     (async () => {
-      const res = await getKHXKJL({ 
+      const res = await getKHXKJL({
         XNXQId: curXNXQId,
         RQ: PatrolData,
       })
@@ -192,6 +194,12 @@ const CoursePatrol = () => {
       <ProTable
         dataSource={dataSource}
         columns={columns}
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 1500 }}
         options={{
           setting: false,
           fullScreen: false,

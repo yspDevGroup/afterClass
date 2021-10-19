@@ -188,15 +188,16 @@ const CourseManagement = (props: { location: { state: any } }) => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed:'left',
       align: 'center',
     },
-
     {
       title: '课程名称',
       dataIndex: 'KCMC',
       key: 'KCMC',
       align: 'center',
       width: 150,
+      fixed:'left',
       ellipsis: true,
       render: (_: any, record: any) => {
         return (
@@ -211,7 +212,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
-      width: 180,
+      width: 160,
     },
     {
       title: '课程来源',
@@ -229,7 +230,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       dataIndex: 'FY',
       key: 'FY',
       align: 'center',
-      width: 100,
+      width: 80,
     },
     {
       title: '报名人数',
@@ -252,7 +253,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     {
       title: '排课',
       align: 'center',
-      width: 100,
+      width: 80,
       render: (_, record) => {
         const Url = `/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}`;
         if (record.BJZT === '待开班') {
@@ -276,7 +277,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
       valueType: 'option',
       key: 'option',
       align: 'center',
-      width: 150,
+      width: 120,
+      fixed:'right',
       render: (_, record) => {
         return (
           <>
@@ -297,6 +299,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: 1200 }}
           request={async (param) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
             if (curXNXQId) {

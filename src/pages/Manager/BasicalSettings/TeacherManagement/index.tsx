@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-10-12 17:40:13
+ * @LastEditTime: 2021-10-19 11:27:51
  * @LastEditors: Sissle Lynn
  */
 import React, { useRef, useState } from 'react';
@@ -76,13 +76,14 @@ const TeacherManagement = () => {
       valueType: 'index',
       width: 58,
       align: 'center',
+      fixed:'left'
     },
     {
       title: '姓名',
       dataIndex: 'XM',
       key: 'XM',
       align: 'center',
-      width: 120,
+      width: 100,
       ellipsis: true,
       render: (_, record)=>{
         const showWXName = record?.XM === '未知' && record?.WechatUserId;
@@ -91,14 +92,14 @@ const TeacherManagement = () => {
         }
         return record?.XM;
       }
-
+      fixed:'left'
     },
     {
       title: '性别',
       dataIndex: 'XBM',
       key: 'XBM',
       align: 'center',
-      width: 90,
+      width: 80,
       render: (_, record) => record?.XBM?.substring(0, 1),
     },
     {
@@ -106,19 +107,21 @@ const TeacherManagement = () => {
       key: 'LXDH',
       dataIndex: 'LXDH',
       align: 'center',
-      width: 200,
+      width: 150,
     },
     {
       title: '教授科目',
       key: 'JSKM',
       dataIndex: 'JSKM',
       align: 'center',
+      ellipsis: true,
       width: 200,
     },
     {
       title: '操作',
       valueType: 'option',
-      width: 220,
+      width: 200,
+      fixed: 'right',
       align: 'center',
       render: (_, record) => (
         <>
@@ -152,6 +155,12 @@ const TeacherManagement = () => {
         columns={columns}
         actionRef={actionRef}
         search={false}
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: 800 }}
         request={async (
           params: any & {
             pageSize?: number;

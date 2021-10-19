@@ -125,6 +125,7 @@ const MutualEvaluation = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
+      fixed: 'left',
       align: 'center',
     },
     {
@@ -132,6 +133,7 @@ const MutualEvaluation = () => {
       dataIndex: 'FWMC',
       key: 'FWMC',
       width: 100,
+      fixed: 'left',
       align: 'center',
       search: false,
       ellipsis: true,
@@ -202,7 +204,8 @@ const MutualEvaluation = () => {
       key: 'option',
       valueType: 'option',
       align: 'center',
-      width: 130,
+      width: 100,
+      fixed:'right',
       render: (text, record) => {
         return (
           <div className={styles.operation}>
@@ -333,12 +336,15 @@ const MutualEvaluation = () => {
           actionRef={actionRef}
           pagination={{
             showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
           }}
+          scroll={{ x: 1200}}
           search={false}
           dataSource={DataSource}
           dateFormatter="string"
           headerTitle={
-            <Search placeholder="请输入类别名称" onSearch={onSearch} style={{ width: 200 }} />
+            <Search placeholder="请输入类别名称" allowClear onSearch={onSearch} style={{ width: 200 }} />
           }
           toolBarRender={() => [
             <Button type="primary" key="primary" onClick={showModal}>

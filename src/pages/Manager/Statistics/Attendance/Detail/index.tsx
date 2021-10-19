@@ -31,19 +31,24 @@ const AttendanceDetail = (props: any) => {
       title: '序号',
       dataIndex: 'index',
       valueType: 'index',
-      align: 'center'
+      align: 'center',
+      width: 58,
+      fixed: 'left',
     },
     {
       title: '姓名',
       dataIndex: 'XM',
       key: 'XM',
       align: 'center',
+      width: 100,
+      fixed: 'left',
       render: () => <div>{data.XM}</div>
     },
     {
       title: '课程名称',
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
+      width: 120,
       align: 'center',
       render: (text: any) => <div>{text?.KCMC}</div>
     },
@@ -51,30 +56,35 @@ const AttendanceDetail = (props: any) => {
       title: '课程班名称',
       dataIndex: 'BJMC',
       key: 'BJMC',
+      width: 120,
       align: 'center',
     },
     {
       title: '授课总课时数',
       dataIndex: 'KSS',
       key: 'KSS',
+      width: 130,
       align: 'center',
     },
     {
       title: '出勤次数',
       dataIndex: 'cq_count',
       key: 'cq_count',
+      width: 100,
       align: 'center',
     },
     {
       title: '缺勤次数',
       dataIndex: 'qq_count',
       key: 'qq_count',
+      width: 100,
       align: 'center',
     },
     {
       title: '课时总时长(小时)',
       dataIndex: 'KSSC',
       key: 'KSSC',
+      width: 120,
       align: 'center',
     },
   ]
@@ -83,12 +93,16 @@ const AttendanceDetail = (props: any) => {
       title: '序号',
       dataIndex: 'index',
       valueType: 'index',
-      align: 'center'
+      align: 'center',
+      width: 58,
+      fixed: 'left',
     },
     {
       title: '姓名',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'XM',
+      key: 'XM',
+      width: 100,
+      fixed: 'left',
       align: 'center',
       render: () => {
         const showWXName = data?.XSJBSJ?.XM === '未知' && data?.XSJBSJ?.WechatUserId;
@@ -103,12 +117,14 @@ const AttendanceDetail = (props: any) => {
       dataIndex: 'BJMC',
       key: 'BJMC',
       align: 'center',
+      width: 120,
     },
     {
       title: '课程名称',
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
       align: 'center',
+      width: 120,
       render: (text: any) => <div>{text?.KCMC}</div>
     },
     {
@@ -116,18 +132,21 @@ const AttendanceDetail = (props: any) => {
       dataIndex: 'cq_count',
       key: 'cq_count',
       align: 'center',
+      width: 100,
     },
     {
       title: '缺勤次数',
       dataIndex: 'qq_count',
       key: 'qq_count',
       align: 'center',
+      width: 100,
     },
     {
       title: '课时总时长(小时)',
       dataIndex: 'KSSC',
       key: 'KSSC',
       align: 'center',
+      width: 150,
     },
   ]
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
@@ -149,13 +168,18 @@ const AttendanceDetail = (props: any) => {
         <ProTable
           columns={position === '老师' ? teacher : student}
           dataSource={dataSource}
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: 1000 }}
           search={false}
           options={{
             setting: false,
             fullScreen: false,
             density: false,
             reload: false,
-
           }}
         />
       </PageContainer>
