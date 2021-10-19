@@ -276,7 +276,6 @@ const AddArranging: FC<PropsType> = (props) => {
     return true;
   };
   const onReset = (prop: any) => {
-    console.log(prop);
     const bjID = getQueryString('courseId');
     if (bjID) {
       history.goBack();
