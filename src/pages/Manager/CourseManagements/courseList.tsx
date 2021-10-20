@@ -35,7 +35,9 @@ import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
 import { deleteKHKCSJ, getAllCourses, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
-import { createKHKCPJ, updateKHKCPJ } from '@/services/after-class/khkcpj';
+import { createKHKCPJ, updateKHKCPJ, deleteKHKCPJ } from '@/services/after-class/khkcpj';
+
+
 
 const { Option } = Select;
 const CourseList = () => {
@@ -64,11 +66,9 @@ const CourseList = () => {
   const [courseList, setcourseList] = useState<any[]>([]);
   //要评价课程的信息
   const [courseInfo, setcourseInfo] = useState<any>({});
-
   // 已评价未评价
   const [Isfinish, setIsfinish] = useState<any>();
-
-  // 关闭学期学年提示框
+// 关闭学期学年提示框
   const kaiguan = () => {
     setkai(false);
   };
@@ -140,18 +140,14 @@ const CourseList = () => {
     } else {
       message.warning(res.message);
     }
-  };
+  }
   const submit = async (value: any) => {
-    //判断
-    console.log(Isfinish);
-
-    if (Isfinish > 0) {
+    if (Isfinish > 0 && courseInfo.id) {
       const data = {
         ...value,
         XXJBSJId: currentUser.xxId,
-      };
-      const res = await updateKHKCPJ({ id: '' }, data);
-      console.log(res);
+      }
+      const res = await updateKHKCPJ({ id: courseInfo.id }, data)
       if (res.status === 'ok') {
         message.success('修改成功');
         setIsModalVisible(false);
@@ -417,24 +413,23 @@ const CourseList = () => {
       search: false,
       width: 110,
       render: (_, record) => {
-        return record?.KHJYJG?.QYMC ? (
-          <a
+        return (
+          record?.KHJYJG?.QYMC ? <a
             onClick={() => {
-              setIsModalVisible(true);
-              const obj = {
-                KHKCSJId: record?.id,
-                KCMC: record?.KCMC,
-              };
-              setcourseInfo(obj);
-              setIsfinish(record.KHKCPJs.length);
+              setIsModalVisible(true)
+              const obj = { KHKCSJId: '', KCMC: '', id: '' }
+              obj.KHKCSJId = record?.id,
+                obj.KCMC = record?.KCMC,
+                obj.id = record?.KHKCPJs[0].id
+              setcourseInfo(obj)
+              setIsfinish(record.KHKCPJs.length)
+
             }}
           >
             {record.KHKCPJs.length ? '已评价' : '未评价'}
-          </a>
-        ) : (
-          '-'
-        );
-      },
+          </a> : '-'
+        )
+      }
     },
     {
       title: '操作',
@@ -444,7 +439,7 @@ const CourseList = () => {
       width: 230,
       fixed: 'right',
       align: 'center',
-      render: (_, record) => (
+      render: (_, record,) => (
         <Space size="middle">
           <a
             onClick={() => {
@@ -567,8 +562,14 @@ const CourseList = () => {
           <Sitclass />
         </Modal>
         {/* 课程评价的弹出框 */}
-        <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} title="课程评价">
-          <Form form={form} onFinish={submit}>
+        <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} title='课程评价'
+        >
+          <Form.Item name="id" hidden
+            initialValue={courseInfo.id}
+          >
+            <Input disabled />
+          </Form.Item>
+          <Form form={form} onFinish={submit} >
             <Form.Item
               label="课程名称"
               name="KHKCSJId"
@@ -577,12 +578,7 @@ const CourseList = () => {
             >
               {courseInfo.KCMC}
             </Form.Item>
-            <Form.Item
-              label="评价内容"
-              name="PY"
-              key="PY"
-              rules={[{ required: true, message: '请输入评价内容' }]}
-            >
+            <Form.Item label="评价内容" name="PY" key="PY" rules={[{ required: true, message: '请输入评价内容' }]}>
               <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4} />
             </Form.Item>
           </Form>
