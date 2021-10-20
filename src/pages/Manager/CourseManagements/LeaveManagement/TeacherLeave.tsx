@@ -2,12 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 // import { message } from 'antd';
 import { useModel } from 'umi';
-import { Form, Modal, Radio, Select, Tag,Input, message } from 'antd';
+import { Form, Modal, Radio, Select, Tag, Input, message } from 'antd';
 import Style from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { getAllClasses } from '@/services/after-class/khbjsj';
-import { getAllCourses } from '@/services/after-class/khkcsj';
 import EllipsisHint from '@/components/EllipsisHint';
 import { getAllKHJSQJ, updateKHJSQJ } from '@/services/after-class/khjsqj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
@@ -24,8 +22,6 @@ const StudentsLeave: React.FC = () => {
   const [curXNXQId, setCurXNXQId] = useState<string>();
   // 请假状态
   const [QJZT, setQJZT] = useState<number[]>([-1]);
-  // 数据
-  const [dataSource, setDataSourse] = useState<any>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
@@ -45,28 +41,12 @@ const StudentsLeave: React.FC = () => {
       }
     })();
   }, []);
-  const getData = async () => {
-    const resAll = await getAllKHJSQJ({
-      XXJBSJId:currentUser?.xxId,
-      XNXQId: curXNXQId,
-      QJZT: QJZT?.[0] === -1 ? [0, 1,2] : QJZT,
-      // KHBJSJId: bjmcId,
-    });
-    if (resAll.status === 'ok') {
-      setDataSourse(resAll?.data?.rows);
-    } else {
-      setDataSourse([]);
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, [curXNXQId, QJZT])
 
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateKHJSQJ({ id: current?.id }, { QJZT: ZT ,QJYY:BZ});
-      if(res.status === 'ok'){
+      const res = await updateKHJSQJ({ id: current?.id }, { QJZT: ZT, QJYY: BZ });
+      if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);
         setCurrent(undefined);
@@ -84,7 +64,7 @@ const StudentsLeave: React.FC = () => {
       valueType: 'index',
       align: 'center',
       width: 58,
-      fixed:'left',
+      fixed: 'left',
     },
     {
       title: '教师姓名',
@@ -92,7 +72,7 @@ const StudentsLeave: React.FC = () => {
       key: 'XSXM',
       align: 'center',
       width: 80,
-      fixed:'left',
+      fixed: 'left',
       render: (_text: any, record: any) => {
         const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
         if (showWXName) {
@@ -158,7 +138,7 @@ const StudentsLeave: React.FC = () => {
       dataIndex: 'QJZT',
       key: 'QJZT',
       valueType: 'select',
-      width:80,
+      width: 80,
       align: 'center',
       valueEnum: {
         0: { text: '申请中', status: 'Processing' },
@@ -194,20 +174,20 @@ const StudentsLeave: React.FC = () => {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      fixed:'right',
+      fixed: 'right',
       width: 80,
-      render: (_,record: any) =>{
-      return<>
-        {record.QJZT === 0 ? (
-          <a onClick={() => {
-            setCurrent(record);
-            setVisible(true);
-          }}>
-            审批
-          </a>
-        ) : (
-          ''
-        )}
+      render: (_, record: any) => {
+        return <>
+          {record.QJZT === 0 ? (
+            <a onClick={() => {
+              setCurrent(record);
+              setVisible(true);
+            }}>
+              审批
+            </a>
+          ) : (
+            ''
+          )}
         </>
       }
     },
@@ -248,10 +228,13 @@ const StudentsLeave: React.FC = () => {
             <Option key='全部' value={-1}>
               全部
             </Option>
-            <Option key='已通过' value={0}>
+            <Option key='申请中' value={0}>
+              申请中
+            </Option>
+            <Option key='已通过' value={1}>
               已通过
             </Option>
-            <Option key='已驳回' value={1}>
+            <Option key='已驳回' value={2}>
               已取销
             </Option>
           </Select>
@@ -266,9 +249,9 @@ const StudentsLeave: React.FC = () => {
             // 表单搜索项会从 params 传入，传递给后端接口。
             if (curXNXQId) {
               const obj = {
-                XXJBSJId:currentUser?.xxId,
-                XNXQId:curXNXQId,
-                QJZT: QJZT?.[0] === -1 ? [0, 1,2] : QJZT,
+                XXJBSJId: currentUser?.xxId,
+                XNXQId: curXNXQId,
+                QJZT: QJZT?.[0] === -1 ? [0, 1, 2] : QJZT,
                 page: param.current,
                 pageSize: param.pageSize,
               };
@@ -289,7 +272,6 @@ const StudentsLeave: React.FC = () => {
             defaultCurrent: 1,
           }}
           scroll={{ x: 1300 }}
-          dataSource={dataSource}
           options={{
             setting: false,
             fullScreen: false,
@@ -300,37 +282,37 @@ const StudentsLeave: React.FC = () => {
         />
       </div>
       <Modal
-          title="请假审核"
-          visible={visible}
-          onOk={() => {
-            form.submit();
-          }}
-          onCancel={() => {
-            setVisible(false);
-            setCurrent(undefined);
-          }}
-          okText="确认"
-          cancelText="取消"
+        title="请假审核"
+        visible={visible}
+        onOk={() => {
+          form.submit();
+        }}
+        onCancel={() => {
+          setVisible(false);
+          setCurrent(undefined);
+        }}
+        okText="确认"
+        cancelText="取消"
+      >
+        <Form
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 15 }}
+          form={form}
+          initialValues={{ ZT: 1 }}
+          onFinish={handleSubmit}
+          layout="horizontal"
         >
-          <Form
-            labelCol={{ span: 6 }}
-            wrapperCol={{ span: 15 }}
-            form={form}
-            initialValues={{ ZT: 1 }}
-            onFinish={handleSubmit}
-            layout="horizontal"
-          >
-            <Form.Item label="审核意见" name="ZT">
-              <Radio.Group>
-                <Radio value={1}>同意</Radio>
-                <Radio value={2}>不同意</Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item label="审核说明" name='BZ'>
-              <TextArea rows={4} maxLength={100} />
-            </Form.Item>
-          </Form>
-        </Modal>
+          <Form.Item label="审核意见" name="ZT">
+            <Radio.Group>
+              <Radio value={1}>同意</Radio>
+              <Radio value={2}>不同意</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item label="审核说明" name='BZ'>
+            <TextArea rows={4} maxLength={100} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 };
