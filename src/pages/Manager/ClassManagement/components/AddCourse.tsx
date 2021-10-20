@@ -133,9 +133,9 @@ const AddCourse: FC<AddCourseProps> = ({
               dataSource.filter((item) => {
                 if (item.id) {
                   return item.id !== record.id;
-                } else {
-                  return item.index !== record.index;
                 }
+                  return item.index !== record.index;
+
               }),
             );
             action?.reload();
@@ -300,12 +300,12 @@ const AddCourse: FC<AddCourseProps> = ({
   // 获取标题
   const getTitle = () => {
     if (formValues && names === 'chakan') {
-      return '查看信息';
+      return '查看课程班';
     }
     if (formValues) {
-      return '编辑信息';
+      return '编辑课程班';
     }
-    return '新增信息';
+    return '新增课程班';
   };
   const handleClose = () => {
     setKaike(false);
