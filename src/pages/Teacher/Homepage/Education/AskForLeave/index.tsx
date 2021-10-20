@@ -9,12 +9,10 @@ import React, { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
 import { useModel } from 'umi';
 import GoBack from '@/components/GoBack';
-
 import styles from './index.less';
 import LeaveForm from './Components/LeaveForm';
 import LeaveHistory from './Components/LeaveHistory';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import { enHenceMsg } from '@/utils/utils';
 import { getAllKHJSQJ } from '@/services/after-class/khjsqj';
 
@@ -23,7 +21,6 @@ const { TabPane } = Tabs;
 const AskForLeave: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { student } = currentUser || {};
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [activeKey, setActiveKey] = useState<string>('apply');
   const [leaveInfo, setLeaveInfo] = useState<API.KHXSQJ[]>([]);
@@ -59,7 +56,7 @@ const AskForLeave: React.FC = () => {
   }, [activeKey, reload]);
   return (
     <>
-      <GoBack title={'请假'} onclick="/teacher/home?index=education" />
+      <GoBack title={'请假'} teacher onclick="/teacher/home?index=education" />
       <div className={styles.leaveList}>
         <Tabs
           activeKey={activeKey}

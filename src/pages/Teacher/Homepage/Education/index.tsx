@@ -7,6 +7,7 @@ import icon_stuEvaluate from '@/assets/icon_stuEvaluate.png';
 import icon_courseBack from '@/assets/icon_courseBack.png';
 import myContext from '@/utils/MyContext';
 import icon_leave from '@/assets/icon-teacherLeave.png';
+import icon_CourseAdjustment from '@/assets/icon-CourseAdjustment.png';
 
 const Study = () => {
 
@@ -29,6 +30,20 @@ const Study = () => {
               </p>
             </p>
             <p className={styles.LeaveP3}>请假</p>
+          </Link>
+          <Link
+            key="qj"
+            to={{
+              pathname: '/teacher/education/courseAdjustment',
+              state: yxkc
+            }}
+            className={styles.Leave}>
+            <p className={styles.LeaveP1s}>
+              <p className={styles.LeaveP2s}>
+              <img src={icon_CourseAdjustment} alt="" />
+              </p>
+            </p>
+            <p className={styles.LeaveP3}>调/代课</p>
           </Link>
           <Link
             key="xxpj"

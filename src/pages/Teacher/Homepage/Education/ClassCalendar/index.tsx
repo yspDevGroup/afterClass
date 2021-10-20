@@ -1,5 +1,6 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
-import {List, Modal, message, Form, Input, Checkbox, Divider } from 'antd';
+import { List, Modal, message, Form, Input, Checkbox, Divider, Radio, Space } from 'antd';
 import type { FormInstance } from 'antd';
 import { useModel } from 'umi';
 import React, { useState, useEffect } from 'react';
@@ -14,6 +15,7 @@ import { msgLeaveSchool } from '@/services/after-class/wechat';
 import type { DisplayColumnItem } from '@/components/data';
 import { getData } from '@/utils/utils';
 import { ParentHomeData } from '@/services/local-services/teacherHome';
+import noOrder from '@/assets/noOrder1.png';
 
 
 type propstype = {
@@ -31,7 +33,7 @@ const defaultMsg = {
 };
 
 const ClassCalendar = (props: propstype) => {
-  const { setDatedata,type,form ,setReloadList} = props;
+  const { setDatedata, type, form, setReloadList } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { xxId } = currentUser || {};
@@ -41,16 +43,16 @@ const ClassCalendar = (props: propstype) => {
   const [dates, setDates] = useState<any[]>([]);
   const [courseArr, setCourseArr] = useState<any>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [bjid,setBjid] =  useState<string>();
-  const [modalContent,setModalContent] =  useState<string>();
-  const formRef =  React.createRef<any>();
+  const [bjid, setBjid] = useState<string>();
+  const [modalContent, setModalContent] = useState<string>();
+  const formRef = React.createRef<any>();
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
   const children = currentUser?.subscriber_info?.children || [{
     student_userid: currentUser?.UserId,
     njId: '1'
   }];
 
-  const iconTextData: DisplayColumnItem[] = day === dayjs().format('YYYY-MM-DD')?[
+  const iconTextData: DisplayColumnItem[] = day === dayjs().format('YYYY-MM-DD') ? [
     {
       text: '签到点名',
       icon: 'icon-dianming',
@@ -60,7 +62,7 @@ const ClassCalendar = (props: propstype) => {
       text: '下课通知',
       icon: 'icon-lixiao',
       background: '#7DCE81',
-      handleClick:async (bjid: string)=>{
+      handleClick: async (bjid: string) => {
         setIsModalVisible(true);
         const schedule = await getData(bjid, children[0].student_userid!);
         const { ...rest } = schedule;
@@ -74,7 +76,7 @@ const ClassCalendar = (props: propstype) => {
     //   img: classroomStyle,
     //   background: '#FF8863',
     // },
-  ]:[
+  ] : [
     {
       text: '签到点名',
       icon: 'icon-dianming',
@@ -137,7 +139,7 @@ const ClassCalendar = (props: propstype) => {
             left: [`${item.FJSJ.FJMC}`],
           },
         ],
-        jcId:item.XXSJPZ.id,
+        jcId: item.XXSJPZ.id,
       };
       const res = DateRange(
         moment(startDate).format('YYYY/MM/DD'),
@@ -169,7 +171,7 @@ const ClassCalendar = (props: propstype) => {
           const curInfo = [
             {
               enrollLink,
-              bjid:item.KHBJSJ.id,
+              bjid: item.KHBJSJ.id,
               // recordLink,
               ...kcxxInfo,
             },
@@ -245,7 +247,7 @@ const ClassCalendar = (props: propstype) => {
         });
         if (res.status === 'ok' && res.data) {
           message.success('通知已成功发送');
-        }else{
+        } else {
           message.error(res.message);
         };
         formRef.current.validateFields()
@@ -262,26 +264,37 @@ const ClassCalendar = (props: propstype) => {
     let newChoosen = [...choosenCourses];
     setReloadList?.(false);
     if (e?.target?.checked) {
-      const { desc, bjid, title,jcId } = item;
+      const { desc, bjid, title, jcId } = item;
       newChoosen.push({
         day,
-        start:desc?.[0].left?.[0].substring(0,5),
-        end:desc?.[0].left?.[0].substring(6,11),
+        start: desc?.[0].left?.[0].substring(0, 5),
+        end: desc?.[0].left?.[0].substring(6, 11),
         jcId,
         bjid,
         title,
       });
     } else {
-      newChoosen = newChoosen.filter((val) => val.bjId !== item.bjId);
+      newChoosen = newChoosen.filter((val) => val.bjId !== item.bjid);
     }
     setChoosenCourses(newChoosen);
   };
+  const onChanges = (e: any) => {
+    const { desc, bjid, title, jcId } = e.target.value;
+    setDatedata?.({
+      day,
+      start: desc?.[0].left?.[0].substring(0, 5),
+      end: desc?.[0].left?.[0].substring(6, 11),
+      jcId,
+      bjid,
+      title,
+    })
+  }
   return (
     <div className={styles.schedule}>
       <span
         className={styles.today}
         onClick={() => {
-          if (type && type === 'edit') {
+          if (type && type === 'edit' || type === 'dksq' || type === 'tksq') {
             form?.resetFields();
             setChoosenCourses([]);
           }
@@ -302,7 +315,7 @@ const ClassCalendar = (props: propstype) => {
         showType={'week'}
         markDates={dates}
         onDateClick={(date: { format: (arg: string) => any }) => {
-          if (type && type === 'edit') {
+          if (type && type === 'edit' || type === 'dksq' || type === 'tksq') {
             if (!compareNow(date.format('YYYY-MM-DD'))) {
               message.warning('不可选择今天之前的课程');
               return;
@@ -314,33 +327,44 @@ const ClassCalendar = (props: propstype) => {
           }
           setDay(date.format('YYYY-MM-DD'));
           setCDay(date.format('M月D日'));
-          const curCourse = {
+          let curCourse: any = {};
+          curCourse = {
             type: 'picList',
             cls: 'picList',
-            list: courseArr[date.format('YYYY-MM-DD')] || [],
+            list: [],
             noDataText: '当天无课',
             noDataImg: noData,
           };
+          setTimeout(() => {
+            curCourse = {
+              type: 'picList',
+              cls: 'picList',
+              list: courseArr[date.format('YYYY-MM-DD')] || [],
+              noDataText: '当天无课',
+              noDataImg: noData,
+            };
+            setCourse(curCourse);
+          }, 50);
           setCourse(curCourse);
         }}
         markType="dot"
         transitionDuration={0.1}
         currentDate={day}
       />
-       {type && type === 'edit' ? (
+      {type && type === 'edit' ? (
         <p style={{ lineHeight: '35px', margin: 0, color: '#888' }}>请选择课程</p>
-      ) : (
-        <div className={styles.subTitle}>{cDay}</div>
-      )}
+      ) : (type && type === 'dksq' || type === 'tksq' ?
+        <p style={{ lineHeight: '35px', margin: 0, color: '#999', fontSize: '12px' }}>{type === 'dksq' ? '代课课程' :  type === 'tksq' ? '调课课程':''} </p> :
+        <div className={styles.subTitle}>{cDay}</div>)}
       {type && type === 'edit' ? (
         <List
-          style={{ background: '#fff',paddingLeft:'10px' }}
+          style={{ background: '#fff', paddingLeft: '10px' }}
           itemLayout="horizontal"
           dataSource={course?.list?.length ? course?.list : []}
           renderItem={(item: any) => {
             return (
               <List.Item
-                key={`${day}+${item?.bjId}`}
+                key={`${day}+${item?.bjid}`}
                 actions={[<Checkbox onChange={(e) => onChange(e, item)} />]}
               >
                 <List.Item.Meta
@@ -356,18 +380,37 @@ const ClassCalendar = (props: propstype) => {
             );
           }}
         />
-      ) : (
-        <ListComponent listData={course} operation={iconTextData} />
-      )}
+      ) : (type === 'dksq' || type === 'tksq' ? <div className={styles.dksq}>
+        {
+          course?.list?.length === 0 ? <div className={styles.ZWSJ}>
+          <img src={noOrder} alt="" />
+          <p>暂无数据</p>
+          </div> :
+          <Radio.Group onChange={onChanges}>
+          <Space direction="vertical">
+            {
+              course?.list?.map((item: any) => {
+                return <Radio value={item}>
+                  <p> {item?.title}</p>
+                  <p> {item.desc?.[0].left}</p>
+                </Radio>
+              })
+            }
+          </Space>
+        </Radio.Group>
+        }
+
+      </div> :
+      <ListComponent listData={course} operation={iconTextData} />)}
       <Modal className={styles.leaveSchool} title="下课通知" forceRender={true} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
         <Form ref={formRef}>
-            <Form.Item
-              name="info"
-              initialValue={modalContent}
-            >
-              <Input.TextArea defaultValue={modalContent} />
-            </Form.Item>
-          </Form>
+          <Form.Item
+            name="info"
+            initialValue={modalContent}
+          >
+            <Input.TextArea defaultValue={modalContent} />
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );

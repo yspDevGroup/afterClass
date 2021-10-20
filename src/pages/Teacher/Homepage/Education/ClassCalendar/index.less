@@ -3,6 +3,52 @@
 .schedule {
   position: relative;
 
+  .dksq {
+    .ZWSJ{
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+      background-color: #fff;
+      padding: 10px;
+      img{
+        width: 180px;
+        display: block;
+        margin: 0 auto;
+      }
+    }
+    :global {
+      .ant-radio-group {
+        width: 100%;
+        .ant-space {
+          width: 100%;
+          .ant-space-item {
+            background: #fff;
+            border-radius: 8px;
+          }
+          .ant-radio-wrapper {
+            width: 100%;
+            .ant-radio {
+              position: absolute;
+              top: 20px;
+              right: 20px;
+            }
+            >span{
+              p{
+                margin: 5px;
+              }
+              p:nth-child(1){
+                font-weight: bold;
+              }
+              p:nth-child(2){
+                color: #999;
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   .today {
     position: absolute;
     right: 0;
@@ -24,25 +70,25 @@
       display: inline-block;
       width: 3px;
       height: 12px;
+      margin-right: 4px;
       color: @text-color;
       vertical-align: baseline;
       background-color: @GreenColor;
       content: '';
-      margin-right: 4px;
     }
   }
 
   :global {
     div.ui-listItemWrapper {
+      margin-bottom: 12px;
       padding: 10px;
       background: #ffffff;
       border-radius: 8px;
-      margin-bottom: 12px;
 
-      >div.ui-listItemContent {
+      > div.ui-listItemContent {
         display: flex;
 
-        >a {
+        > a {
           flex: 1 auto;
 
           .ant-list-item-meta {
@@ -51,38 +97,37 @@
         }
 
         .anticon {
-          width: 40px;
           position: relative;
+          width: 40px;
 
           svg {
             position: absolute;
             bottom: -3px;
             height: 20px;
-            transform: rotate(90deg);
             -ms-transform: rotate(90deg);
+            -webkit-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            transform: rotate(90deg);
             /* IE 9 */
             -moz-transform: rotate(90deg);
             /* Firefox */
-            -webkit-transform: rotate(90deg);
             /* Safari 和 Chrome */
-            -o-transform: rotate(90deg);
           }
 
           &.ui-revert {
             svg {
               bottom: 0;
-              transform: rotate(-90deg);
               -ms-transform: rotate(-90deg);
-              /* IE 9 */
               -moz-transform: rotate(-90deg);
-              /* Firefox */
               -webkit-transform: rotate(-90deg);
-              /* Safari 和 Chrome */
               -o-transform: rotate(-90deg);
+              transform: rotate(-90deg);
+              /* IE 9 */
+              /* Firefox */
+              /* Safari 和 Chrome */
             }
           }
         }
-
       }
     }
 
@@ -112,8 +157,8 @@
       }
 
       .calendar-body {
-        background-color: #fff;
         position: relative;
+        background-color: #fff;
         &.week-mode {
           height: 60px;
         }
@@ -127,9 +172,9 @@
             }
 
             .dot-mark {
-              background-color: @text-color  !important;
               position: absolute;
               top: 40px;
+              background-color: @text-color !important;
             }
           }
         }
@@ -144,7 +189,7 @@
 
 .leaveSchool {
   :global {
-    .ant-modal-header{
+    .ant-modal-header {
       padding: 16px;
       text-align: center !important;
     }
@@ -169,19 +214,19 @@
         }
       }
     }
-    .ant-modal-content{
+    .ant-modal-content {
       min-width: auto !important;
-      .ant-input{
+      .ant-input {
         min-height: 116px;
+        color: #999999;
         font-size: 14px;
         line-height: 24px;
-        color: #999999;
       }
     }
-    .ant-modal-footer{
+    .ant-modal-footer {
       margin-top: 20px;
       text-align: center !important;
-      .ant-btn{
+      .ant-btn {
         width: 45% !important;
         border-radius: 22px !important;
       }

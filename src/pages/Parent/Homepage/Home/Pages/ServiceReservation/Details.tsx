@@ -91,8 +91,7 @@ const Details = () => {
       ZFFS: '线上支付',
       DDZT: '待付款',
       DDFY: Data?.FY,
-      XSJBSJId:
-        localStorage.getItem('studentId') || currentUser?.student[0].XSJBSJId || testStudentId,
+      XSJBSJId:localStorage.getItem('studentId') || currentUser?.student[0].XSJBSJId || testStudentId,
       DDLX: 1,
       KHXXZZFWId: Data?.id,
     };
