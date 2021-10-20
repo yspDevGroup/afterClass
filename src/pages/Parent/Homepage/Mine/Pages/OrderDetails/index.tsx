@@ -19,10 +19,6 @@ const OrderDetails: React.FC = (props: any) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { title, detail, payOrder, user, KKRQ, JKRQ, fwdetail } = props.location.state;
-  const currentChildren = currentUser?.student || [];
-  const childId =
-    localStorage.getItem('studentId') ||
-    (currentChildren.length ? currentChildren[0].XSJBSJId : '');
   const name = user?.subscriber_info?.remark || user?.username;
   useEffect(() => {
     setOrderInfo(payOrder);
@@ -35,7 +31,7 @@ const OrderDetails: React.FC = (props: any) => {
     const res = await payKHXSDD({
       ddIds: [orderInfo.id],
       bjId: detail.id,
-      xsId: childId,
+      xsId: localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
       kcmc: title,
       amount: orderInfo.DDFY,
       XXJBSJId: currentUser?.xxId,
@@ -52,7 +48,7 @@ const OrderDetails: React.FC = (props: any) => {
       returnUrl:`${window.location.origin}/parent/home?index=index`,
       kcmc: fwdetail?.FWMC,
       ddIds: [orderInfo.id],
-      xsId: childId,
+      xsId: localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
       amount: orderInfo?.DDFY,
       XXJBSJId: currentUser?.xxId,
     });
