@@ -37,8 +37,6 @@ import { deleteKHKCSJ, getAllCourses, updateKHKCSJ } from '@/services/after-clas
 import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
 import { createKHKCPJ, updateKHKCPJ, deleteKHKCPJ } from '@/services/after-class/khkcpj';
 
-
-
 const { Option } = Select;
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
@@ -68,7 +66,7 @@ const CourseList = () => {
   const [courseInfo, setcourseInfo] = useState<any>({});
   // 已评价未评价
   const [Isfinish, setIsfinish] = useState<any>();
-// 关闭学期学年提示框
+  // 关闭学期学年提示框
   const kaiguan = () => {
     setkai(false);
   };
@@ -140,14 +138,14 @@ const CourseList = () => {
     } else {
       message.warning(res.message);
     }
-  }
+  };
   const submit = async (value: any) => {
     if (Isfinish > 0 && courseInfo.id) {
       const data = {
         ...value,
         XXJBSJId: currentUser.xxId,
-      }
-      const res = await updateKHKCPJ({ id: courseInfo.id }, data)
+      };
+      const res = await updateKHKCPJ({ id: courseInfo.id }, data);
       if (res.status === 'ok') {
         message.success('修改成功');
         setIsModalVisible(false);
@@ -169,7 +167,7 @@ const CourseList = () => {
   };
 
   /** 操作 */
-  const funOption = (record: any, action: ProCoreActionType<{}>) => {
+  const funOption = (record: any, action: ProCoreActionType) => {
     if (record.SSJGLX === '机构课程') {
       return (
         <>
@@ -398,12 +396,12 @@ const CourseList = () => {
       width: 100,
       render: (_, record) => {
         if (record?.SSJGLX === '机构课程') {
-          return <span style={{ color: 'green' }}>已引入</span>;
+          return <span style={{ color: '#45C977' }}>已引入</span>;
         }
         return record?.KCZT === 0 ? (
           <span style={{ color: '#666' }}>未发布</span>
         ) : (
-          <span style={{ color: 'green' }}>已发布</span>
+          <span style={{ color: '#45C977' }}>已发布</span>
         );
       },
     },
@@ -413,23 +411,24 @@ const CourseList = () => {
       search: false,
       width: 110,
       render: (_, record) => {
-        return (
-          record?.KHJYJG?.QYMC ? <a
+        return record?.KHJYJG?.QYMC ? (
+          <a
             onClick={() => {
-              setIsModalVisible(true)
-              const obj = { KHKCSJId: '', KCMC: '', id: '' }
-              obj.KHKCSJId = record?.id,
-                obj.KCMC = record?.KCMC,
-                obj.id = record?.KHKCPJs[0].id
-              setcourseInfo(obj)
-              setIsfinish(record.KHKCPJs.length)
-
+              setIsModalVisible(true);
+              const obj = { KHKCSJId: '', KCMC: '', id: '' };
+              obj.KHKCSJId = record?.id;
+              obj.KCMC = record?.KCMC;
+              obj.id = record?.KHKCPJs[0].id;
+              setcourseInfo(obj);
+              setIsfinish(record.KHKCPJs.length);
             }}
           >
             {record.KHKCPJs.length ? '已评价' : '未评价'}
-          </a> : '-'
-        )
-      }
+          </a>
+        ) : (
+          '-'
+        );
+      },
     },
     {
       title: '操作',
@@ -439,7 +438,7 @@ const CourseList = () => {
       width: 230,
       fixed: 'right',
       align: 'center',
-      render: (_, record,) => (
+      render: (_, record, index, action) => (
         <Space size="middle">
           <a
             onClick={() => {
@@ -449,7 +448,7 @@ const CourseList = () => {
           >
             课程详情
           </a>
-          {/* {funOption(record, action)} */}
+          {funOption(record, action!)}
         </Space>
       ),
     },
@@ -562,14 +561,11 @@ const CourseList = () => {
           <Sitclass />
         </Modal>
         {/* 课程评价的弹出框 */}
-        <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} title='课程评价'
-        >
-          <Form.Item name="id" hidden
-            initialValue={courseInfo.id}
-          >
+        <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} title="课程评价">
+          <Form.Item name="id" hidden initialValue={courseInfo.id}>
             <Input disabled />
           </Form.Item>
-          <Form form={form} onFinish={submit} >
+          <Form form={form} onFinish={submit}>
             <Form.Item
               label="课程名称"
               name="KHKCSJId"
@@ -578,7 +574,12 @@ const CourseList = () => {
             >
               {courseInfo.KCMC}
             </Form.Item>
-            <Form.Item label="评价内容" name="PY" key="PY" rules={[{ required: true, message: '请输入评价内容' }]}>
+            <Form.Item
+              label="评价内容"
+              name="PY"
+              key="PY"
+              rules={[{ required: true, message: '请输入评价内容' }]}
+            >
               <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4} />
             </Form.Item>
           </Form>
