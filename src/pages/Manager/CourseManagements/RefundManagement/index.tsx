@@ -51,7 +51,7 @@ const RefundManagement = () => {
       valueType: 'index',
       align: 'center',
       width: 58,
-      fixed:'left',
+      fixed: 'left',
     },
     {
       title: '学生姓名',
@@ -59,7 +59,7 @@ const RefundManagement = () => {
       key: 'XSXM',
       align: 'center',
       width: 100,
-      fixed:'left',
+      fixed: 'left',
       render: (_text: any, record: any) => {
         return record?.XSJBSJ?.XM
       },
@@ -88,7 +88,7 @@ const RefundManagement = () => {
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
-      render: (text: any,record: any) => {
+      render: (text: any, record: any) => {
         return record?.KHBJSJ?.KHKCSJ?.KCMC;
       },
       ellipsis: true,
@@ -99,7 +99,7 @@ const RefundManagement = () => {
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
-      render: (text: any,record: any) => {
+      render: (text: any, record: any) => {
         return record?.KHBJSJ?.BJMC;
       },
       ellipsis: true,
@@ -131,7 +131,7 @@ const RefundManagement = () => {
       align: 'center',
       ellipsis: true,
       width: 100,
-      render:(_, record)=>{
+      render: (_, record) => {
         return record?.JZGJBSJ?.XM
       }
     },
@@ -142,7 +142,7 @@ const RefundManagement = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.SPSJ?.replace(/T/,' ').substring(0, 16)
+        return record?.SPSJ?.replace(/T/, ' ').substring(0, 16)
       },
       width: 150,
     },
@@ -193,8 +193,8 @@ const RefundManagement = () => {
       key: 'operation',
       align: 'center',
       width: 80,
-      fixed:'right',
-      render: (_,record: any) =>
+      fixed: 'right',
+      render: (_: any, record: any) =>
         record.TKZT === 0 ? (
           <a onClick={() => {
             setCurrent(record);
@@ -208,11 +208,11 @@ const RefundManagement = () => {
     },
   ];
   const handleSubmit = async (params: any) => {
-    const { TKJE, TKZT,BZ } = params;
+    const { TKJE, TKZT, BZ } = params;
     try {
       if (current.id) {
         const params = { id: current.id };
-        const body = { TKJE, TKZT,BZ, deviceIp: '117.36.118.42', SPSJ: new Date().toISOString()};
+        const body = { TKJE, TKZT, BZ, deviceIp: '117.36.118.42', SPSJ: new Date().toISOString() };
         const res = await updateKHXSTK(params, body);
         if (res.status === 'ok') {
           if (TKZT === 2) {
@@ -268,6 +268,7 @@ const RefundManagement = () => {
           scroll={{ x: 1500 }}
           request={async () => {
             const resAll = await getAllKHXSTK({
+              LX: 0,
               XXJBSJId: currentUser?.xxId,
               XNXQId: curXNXQId,
               page: 0,

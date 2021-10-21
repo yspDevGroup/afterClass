@@ -12,7 +12,7 @@ import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
-import { getKHKCSJ } from '@/services/after-class/khkcsj';
+import { getKHKCSJ, getTeacherByClassId } from '@/services/after-class/khkcsj';
 import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 import styles from './AddCourse.less';
@@ -134,7 +134,7 @@ const AddCourse: FC<AddCourseProps> = ({
                 if (item.id) {
                   return item.id !== record.id;
                 }
-                  return item.index !== record.index;
+                return item.index !== record.index;
 
               }),
             );
@@ -172,16 +172,16 @@ const AddCourse: FC<AddCourseProps> = ({
     );
   };
   const getJgTeacher = async (kcId: string) => {
-    const res = await getKHKCSJ({
-      kcId,
-      XXJBSJId: currentUser?.xxId,
-      XNXQId: curXNXQId,
+    const res = await getTeacherByClassId({
+      KHKCSJId: kcId,
+      pageSize: 0,
+      page: 0
     });
-    if (res?.status === 'ok') {
-      const { KHKCJs } = res?.data;
+    if (res.status === 'ok') {
+      const { rows } = res?.data;
       const teacherOption: { label: string | JSX.Element; value: string; WechatUserId?: string }[] =
         [];
-      KHKCJs?.forEach((item: { XM: string; WechatUserId: string; JZGJBSJId: any }) => {
+      rows?.forEach((item: { XM: string; WechatUserId: string; id: any }) => {
         // 兼顾企微
         const label =
           item.XM === '未知' && item.WechatUserId ? (
@@ -191,7 +191,7 @@ const AddCourse: FC<AddCourseProps> = ({
           );
         teacherOption.push({
           label,
-          value: item.JZGJBSJId,
+          value: item.id,
           WechatUserId: item.WechatUserId,
         });
       });
@@ -356,7 +356,7 @@ const AddCourse: FC<AddCourseProps> = ({
         const params = {
           id: formValues?.id,
         };
-        res = updateKHBJSJ(params, { ...options, KHBJJSs: FJS ? [...ZJS, ...FJS]:[...ZJS] });
+        res = updateKHBJSJ(params, { ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
       } else {
         const ZJS = [
           {
@@ -369,8 +369,8 @@ const AddCourse: FC<AddCourseProps> = ({
             JSLX: '副教师',
             JZGJBSJId: item,
           };
-        }):undefined;
-        res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS]:[...ZJS] });
+        }) : undefined;
+        res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
       }
       resolve(res);
       reject(res);
@@ -610,19 +610,19 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-          type: 'custom',
-          text: '教辅材料',
-          name: 'KHKCJCs',
-          key: 'KHKCJCs',
-          children: getChildren(),
-        }
+        type: 'custom',
+        text: '教辅材料',
+        name: 'KHKCJCs',
+        key: 'KHKCJCs',
+        children: getChildren(),
+      }
       : '',
     BMData?.id
       ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -665,10 +665,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',

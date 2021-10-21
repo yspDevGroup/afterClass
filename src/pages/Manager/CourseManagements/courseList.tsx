@@ -33,7 +33,7 @@ import type { classType, TableListParams } from './data';
 
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
-import { deleteKHKCSJ, getAllCourses, updateKHKCSJ } from '@/services/after-class/khkcsj';
+import { deleteKHKCSJ, getAllCourses, getTeacherByClassId, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
 import { createKHKCPJ, updateKHKCPJ, deleteKHKCPJ } from '@/services/after-class/khkcpj';
 
@@ -60,8 +60,6 @@ const CourseList = () => {
   // 学年学期没有时的提示框控制
   const [kai, setkai] = useState<boolean>(false);
   const [form] = Form.useForm();
-  // 学校与培训机构合作的列表
-  const [courseList, setcourseList] = useState<any[]>([]);
   //要评价课程的信息
   const [courseInfo, setcourseInfo] = useState<any>({});
   // 已评价未评价
@@ -97,7 +95,7 @@ const CourseList = () => {
           data.data?.forEach((item: any) => {
             if (item.XD === itemNJ) {
               optNJ.push({
-                label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
+                label: `${item.XD}${item.NJMC}`,
                 value: item.id,
               });
             }
@@ -107,7 +105,7 @@ const CourseList = () => {
       }
     });
   }, []);
-  const handleOperation = (type: string, data?: any) => {
+  const handleOperation = async (type: string, data?: any) => {
     if (type !== 'chakan') {
       setReadonly(false);
       setOpen(true);
@@ -115,7 +113,23 @@ const CourseList = () => {
     if (data) {
       const list = { ...data, njIds: data.NJSJs.map((item: any) => item.id) };
       setCurrent(list);
-      setInfo(data);
+      if (data.SSJGLX === '机构课程') {
+        const res = await getTeacherByClassId({
+          KHKCSJId: data.id,
+          pageSize: 0,
+          page: 0
+        });
+        if(res.status === 'ok'){
+          setInfo({
+            ...data,
+            KHKCJs: res?.data?.rows
+          });
+        }else{
+          setInfo(data);
+        }
+      }else{
+        setInfo(data);
+      }
     } else {
       setCurrent(undefined);
     }
@@ -162,7 +176,6 @@ const CourseList = () => {
         //刷新页面
       }
     }
-
     setIsModalVisible(false);
   };
 
@@ -479,7 +492,6 @@ const CourseList = () => {
             };
             const resAll = await getAllCourses(opts);
             if (resAll.status === 'ok') {
-              setcourseList(resAll.data.rows);
               return {
                 data: resAll.data.rows,
                 success: true,

@@ -162,8 +162,8 @@ const ReimbursementClass = () => {
       key: 'operation',
       align: 'center',
       fixed:'right',
-      render: (record: any) =>
-        record.ZT === 0 ? (
+      render: (_: any,record: any) =>{
+        return record.ZT === 0 ? (
           <a onClick={() => {
             setCurrent(record);
             setVisible(true);
@@ -172,7 +172,8 @@ const ReimbursementClass = () => {
           </a>
         ) : (
           ''
-        ),
+        )
+      },
       width: 90,
     },
   ];
@@ -260,6 +261,7 @@ const ReimbursementClass = () => {
             const resAll = await getKHTKSJ({
               XXJBSJId: currentUser?.xxId,
               XNXQId: curXNXQId,
+              LX: 0
             });
             if (resAll.status === 'ok') {
               return {

@@ -305,6 +305,8 @@ export async function getAllCourses(
 export async function homePage(
   body: {
     KHJYJGId?: string;
+    XN?: string;
+    XQ?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -386,6 +388,55 @@ export async function cooperateSchoolOrder(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khjyjg/cooperateSchoolOrder', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取机构的合作学校订单列表 POST /khjyjg/cooperateSchoolOrderList */
+export async function cooperateSchoolOrderList(
+  body: {
+    /** 机构id */
+    KHJYJGId?: string;
+    /** 学校id */
+    XXId?: string;
+    /** 学期id */
+    XQId?: string;
+    /** 课程id */
+    KCId?: string;
+    /** 学生名称 */
+    XSMC?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjyjg/cooperateSchoolOrderList', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 培训机构查看考勤趋势 POST /khjyjg/getAttendanceTrend */
+export async function getAttendanceTrend(
+  body: {
+    KHJYJGId?: string;
+    startDate?: string;
+    endDate?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjyjg/getAttendanceTrend', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

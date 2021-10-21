@@ -31,23 +31,23 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
       key: 'XM',
       align: 'center',
       render: (text: any, record: any) => {
-        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
+        const showWXName = record?.XM === '未知' && record?.WechatUserId;
         if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ.WechatUserId} />;
+          return <WWOpenDataCom type="userName" openid={record?.WechatUserId} />;
         }
-        return record?.JZGJBSJ?.XM;
+        return record?.XM;
       },
     },
     {
       title: '操作',
-      dataIndex: 'opthion',
-      key: 'opthion',
+      dataIndex: 'option',
+      key: 'option',
       align: 'center',
       render: (text: any, record: any) => {
         return (
           <a
             onClick={async () => {
-              const jsId = record?.JZGJBSJ?.id;
+              const jsId = record?.id;
               const res = await getJZGJBSJ({
                 id: jsId,
               });
@@ -138,8 +138,8 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           type: 'input',
           label: '性别',
           span: 12,
-          name: 'XB',
-          key: 'XB',
+          name: 'XBM',
+          key: 'XBM',
         },
         {
           type: 'input',
@@ -158,8 +158,8 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         {
           type: 'input',
           label: '民族',
-          name: 'MZ',
-          key: 'MZ',
+          name: 'MZM',
+          key: 'MZM',
           placeholder: '-',
         },
         {
@@ -220,8 +220,8 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
       groupItems: [
         {
           type: 'input',
-          key: 'SFZJLX',
-          name: 'SFZJLX',
+          key: 'SFZJLXM',
+          name: 'SFZJLXM',
           placeholder: '-',
           label: '证件类型',
         },
@@ -318,10 +318,10 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           <CustomForm
             values={(() => {
               if (teacher) {
-                const { CSRQ, XB, ...rest } = teacher;
+                const { CSRQ, XBM, ...rest } = teacher;
                 return {
                   CSRQ: CSRQ ? moment(CSRQ) : '',
-                  XB: XB?.substring(0, 1),
+                  XBM: XBM?.substring(0, 1),
                   ...rest,
                 };
               }
