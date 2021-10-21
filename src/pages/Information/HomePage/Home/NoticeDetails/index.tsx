@@ -8,7 +8,7 @@ import TopNav from './../components/TopNav'
 import { XXTZGG } from '@/services/after-class/xxtzgg';
 
 const NoticeDetails = (props: any) => {
-  const { allDataSource, index, type } = props.location.state
+  const { allDataSource, index, infoType } = props.location.state
   const [nrInfo, setNrInfo] = useState<any>();
 
   useEffect(() => {
@@ -16,11 +16,12 @@ const NoticeDetails = (props: any) => {
   }, [allDataSource[index].id])
 
   const getData = async () => {
-    if(type === 'zc'){
+    if(infoType === 'zc'){
       const result = await JYJGTZGG({ id: allDataSource[index].id });
       setNrInfo(result.data.NR);
     }else{
       const result = await XXTZGG({ id: allDataSource[index].id });
+      console.log('result: ', result);
       setNrInfo(result.data.NR);
     }
 
@@ -38,7 +39,7 @@ const NoticeDetails = (props: any) => {
         </Row>
         <Row gutter={[0, 32]}>
           <Col span={10} offset={7}>
-            {allDataSource[index].RQ}
+            {allDataSource[index].RQ || allDataSource[index].createdAt}
           </Col>
         </Row>
         <Row gutter={[0, 32]}>

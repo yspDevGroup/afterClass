@@ -5,8 +5,8 @@ import moment from 'moment';
 import styles from './index.less';
 import IconFont from '@/components/CustomIcon';
 
-const NewsList = (props: { data: ListItem[]; type: any; operation: any }) => {
-  const { data, type, operation } = props;
+const NewsList = (props: { data: ListItem[]; type: any; operation: any; infoType: any }) => {
+  const { data, type, operation, infoType } = props;
   const teacher = history.location.pathname.indexOf('teacher') > -1;
 
   return (
@@ -17,7 +17,7 @@ const NewsList = (props: { data: ListItem[]; type: any; operation: any }) => {
           return (
             <div className={operation ? 'ui-listItemWrapper' : ''}>
               <div className={operation ? 'ui-listItemContent' : ''}>
-                <Link to={{pathname: '/mobile/homepage/home/noticeDetails', state: { allDataSource: data, index }}}>
+                <Link to={{pathname: '/information/noticeDetails', state: { allDataSource: data, index, infoType }}}>
                   <List.Item.Meta
                     title={
                       <div className={styles.TitleRow}>
@@ -40,7 +40,7 @@ const NewsList = (props: { data: ListItem[]; type: any; operation: any }) => {
                         <div className={styles.descRow} key={`${v.title}`}>
                           <div className={styles.descleft}>
                             {
-                              type === 'azeList' ? <span style={{fontSize: '12px'}}>{moment(v.createdAt).format('YYYY.MM.DD h:mm:ss')}</span> : <span>{'类型：'}{v.KCMC ? '课程引入申请' : '机构准入申请'}</span>
+                              type === 'azeList' ? <span style={{fontSize: '12px'}}>{moment(v.RQ).format('YYYY.MM.DD h:mm:ss')}</span> : <span>{'类型：'}{v.KCMC ? '课程引入申请' : '机构准入申请'}</span>
                             }
                           </div>
                           <div className={styles.descright}>
@@ -80,7 +80,7 @@ const NewsList = (props: { data: ListItem[]; type: any; operation: any }) => {
   );
 };
 
-const ListComp = (props: { listData?: ListData; cls?: string; operation?: any }) => {
+const ListComp = (props: { listData?: ListData; cls?: string; operation?: any; type?: any }) => {
   if (props.listData) {
     const { header, list, type, noDataImg, noDataText, noDataIcon } = props.listData;
     const { cls, operation } = props;
@@ -98,7 +98,7 @@ const ListComp = (props: { listData?: ListData; cls?: string; operation?: any })
           ''
         )}
         {list && list.length ? (
-          <NewsList data={list} type={type} operation={operation} />
+          <NewsList data={list} type={type} operation={operation} infoType = {props.type}/>
         ) : (
           <>
             {noDataIcon ? (
