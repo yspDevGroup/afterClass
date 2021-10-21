@@ -108,6 +108,25 @@ export const barConfig: any = {
     ],
   }
 };
+export const tollBarConfig: any = {
+  appendPadding: 20,
+  isGroup: true,
+  xField: 'value',
+  yField: 'label',
+  seriesField: 'type',
+  marginRatio: 0,
+  legend: {
+    position: 'bottom',
+  },
+  label: {
+    position: 'middle',
+    layout: [
+      { type: 'interval-adjust-position' },
+      { type: 'interval-hide-overlap' },
+      { type: 'adjust-color' },
+    ],
+  }
+};
 export const conditionConfig: any = {
   appendPadding: 20,
   isGroup: true,

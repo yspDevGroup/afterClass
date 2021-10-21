@@ -514,6 +514,13 @@
         hideInMenu: 'true',
       },
       {
+        path: '/parent/study/classroomStyle',
+        name: 'classroomStyle',
+        icon: 'smile',
+        component: './Parent/Homepage/Study/ClassroomStyle',
+        hideInMenu: 'true',
+      },
+      {
         path: '/parent/mine/orderDetails',
         name: 'orderDetails',
         icon: 'smile',

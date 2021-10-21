@@ -39,11 +39,11 @@ const course = () => {
       const sum = xxkc_count + jgkc_count;
       defaultData.proportionNum.push({
         type: '学校课程',
-        value: xxkc_count / sum * 100,
+        value: parseFloat((xxkc_count / sum * 100).toFixed(2)),
       });
       defaultData.proportionNum.push({
         type: '机构课程',
-        value: jgkc_count / sum * 100,
+        value: parseFloat((jgkc_count / sum * 100).toFixed(2)),
       });
       proportionConfig.data = defaultData.proportionNum;
     };
@@ -57,7 +57,7 @@ const course = () => {
 
   return (
   <div className={styles.course}>
-    <div className={styles.container} style={{height: '282px'}}>
+    <div className={styles.container} style={{height: '290px'}}>
       <ModuleTitle data='课程类型分布'/>
       <div className={styles.chartsContainer}>
       {

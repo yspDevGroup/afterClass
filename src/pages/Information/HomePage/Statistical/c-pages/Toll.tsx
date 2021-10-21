@@ -5,8 +5,7 @@ import locale from 'antd/lib/locale/zh_CN';
 import { Bar } from '@ant-design/charts';
 import moment from 'moment';
 
-import { getTerm, barConfig } from '../utils';
-import { getScreenInfo , getTotalCost } from '@/services/after-class/jyjgsj';
+import { getTerm, tollBarConfig } from '../utils';
 import { homePage, getRefund } from '@/services/after-class/xxjbsj';
 
 import noData from '@/assets/noData.png';
@@ -20,6 +19,7 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 const Toll = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  console.log('currentUser: ', currentUser);
   const [startTime, setStartTime] = useState<any>(moment().subtract(30, "days").format("YYYY-MM-DD"));
   const [endTime, setEndTime] = useState<any>(moment().format("YYYY-MM-DD"));
   const [currentData, setCurrentData] = useState<any>([
@@ -50,7 +50,6 @@ const handleEndTime = async (date: any) => {
 
 useEffect(()=>{
     const res = getTerm();
-  console.log('res: ', res);
     getData(res);
 },[endTime])
 
@@ -64,28 +63,11 @@ useEffect(()=>{
     };
 
     const xnxqResult = await queryXNXQList(currentUser?.xxId);
-
-    const fundRes = await getRefund({
-      XXJBSJId: currentUser?.xxId,
-      startDate: startTime,
-      endDate: endTime,
-    });
-    if(fundRes.status === 'ok'){
-      setIntervalData([
-        {
-          num: fundRes.data.sk_amount,
-          title: '收款金额（元）'
-        }, {
-          num: fundRes.data.tk_amount,
-          title: '退款金额（元）'
-        }
-      ]);
-    }
     const tollRes = await homePage({
       XXJBSJId: currentUser?.xxId,
       XNXQId: xnxqResult.current?.id
     });
-    console.log('applyRes: ', tollRes);
+    console.log('图表数据: ', tollRes);
     if(tollRes.status === 'ok'){
       defaultData.serviceNum = [
       {
@@ -97,20 +79,38 @@ useEffect(()=>{
         num: tollRes.data?.tk_amount || 0
       }];
       tollRes.data.kcbm.forEach((item: any)=>{
-        console.log('item: ', item);
         defaultData.courseNum.push({
           type: '收款',
           label: item.KCMC,
-          value: item.dd_amount,
+          value: parseFloat(item.dd_amount) || 0,
         });
         defaultData.courseNum.push({
           type: '退款',
           label: item.KCMC,
-          value: item.tk_amount,
+          value: parseFloat(item.tk_amount) || 0,
         })
-        barConfig.data = defaultData.courseNum;
+        tollBarConfig.data = defaultData.courseNum;
       })
     }
+
+    const fundRes = await getRefund({
+      XXJBSJId: currentUser?.xxId,
+      startDate: startTime,
+      endDate: endTime,
+    });
+    console.log('时间区间查询收退款: ', fundRes);
+    if(fundRes.status === 'ok'){
+      setIntervalData([
+        {
+          num: fundRes.data.sk_amount,
+          title: '收款金额（元）'
+        }, {
+          num: fundRes.data.tk_amount,
+          title: '退款金额（元）'
+        }
+      ]);
+    }
+
 
 
     // const result = await getScreenInfo({
@@ -141,7 +141,7 @@ useEffect(()=>{
         <ModuleTitle data='各课程收退款情况' />
         <div className={styles.chartsContainer}>
           {
-            (barConfig.data && barConfig.data?.length!==0) ? <Bar {...barConfig} /> : <Empty
+            (tollBarConfig.data && tollBarConfig.data?.length!==0) ? <Bar {...tollBarConfig} /> : <Empty
             image={noData}
             imageStyle={{
               minHeight: 200

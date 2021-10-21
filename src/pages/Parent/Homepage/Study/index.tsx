@@ -7,7 +7,7 @@ import myContext from '@/utils/MyContext';
 import type { ListData } from '@/components/ListComponent/data';
 import noData from '@/assets/noCourses.png';
 import icon_curriculum from '@/assets/icon_curriculum.png';
-// import icon_classroomStyle from '@/assets/classroomStyle.png';
+import icon_classroomStyle from '@/assets/classroomStyle.png';
 import icon_leave from '@/assets/icon_leave.png';
 import { Link } from 'umi';
 
@@ -98,14 +98,14 @@ const Study = () => {
           </p>
           <p className={styles.text}>教师寄语</p>
         </Link>
-        {/* <Link to="" className={styles.linkItem}>
+        <Link to="/parent/study/classroomStyle" className={styles.linkItem}>
             <p className={styles.top}>
               <p className={styles.wrapper}>
                 <img src={icon_classroomStyle} alt="" />
               </p>
             </p>
             <p className={styles.text}>课堂风采</p>
-          </Link> */}
+          </Link>
       </div>
       <div className={styles.funWrapper}>
         <div className={styles.titleBar}>孩子课表</div>

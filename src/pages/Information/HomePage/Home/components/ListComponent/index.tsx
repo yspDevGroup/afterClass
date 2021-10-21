@@ -5,32 +5,32 @@ import moment from 'moment';
 import styles from './index.less';
 import IconFont from '@/components/CustomIcon';
 
-const NewsList = (props: { data: ListItem[]; type: ListType; operation: any; contentType: any}) => {
-  const { data, type, operation, contentType } = props;
+const NewsList = (props: { data: ListItem[]; type: any; operation: any }) => {
+  const { data, type, operation } = props;
   const teacher = history.location.pathname.indexOf('teacher') > -1;
 
   return (
     <div className={styles[type]}>
       <List
         dataSource={data}
-        renderItem={(v,index) => {
+        renderItem={(v: any,index) => {
           return (
             <div className={operation ? 'ui-listItemWrapper' : ''}>
               <div className={operation ? 'ui-listItemContent' : ''}>
-                <Link to={{pathname: '/information/noticeDetails', state: { allDataSource: data, index ,type: contentType }}}>
+                <Link to={{pathname: '/mobile/homepage/home/noticeDetails', state: { allDataSource: data, index }}}>
                   <List.Item.Meta
                     title={
                       <div className={styles.TitleRow}>
                         <div className={styles.Title}>
                           {v.SFTT === 1 ? <div className={styles.Headlines}>头条</div> : <></>}
                           {
-                             <span style={{fontSize: '14px', fontWeight: 'bold'}}>{v.BT}</span>
+                            <span style={{fontSize: '14px', fontWeight: 'bold'}}>{v.BT || v.KCMC}</span>
                           }
 
                         </div>
                         <div className={styles.TitleRight}>
                          {
-                            <span>{moment(v.createdAt).format('YYYY.MM.DD')}</span>
+                           type === 'azeList' ? '' : <span>{moment(v.createdAt).format('YYYY.MM.DD')}</span>
                          }
                         </div>
                       </div>
@@ -40,12 +40,12 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any; con
                         <div className={styles.descRow} key={`${v.title}`}>
                           <div className={styles.descleft}>
                             {
-                              <span style={{fontSize: '12px'}}>{moment(v.createdAt).format('YYYY.MM.DD h:mm:ss')}</span>
+                              type === 'azeList' ? <span style={{fontSize: '12px'}}>{moment(v.createdAt).format('YYYY.MM.DD h:mm:ss')}</span> : <span>{'类型：'}{v.KCMC ? '课程引入申请' : '机构准入申请'}</span>
                             }
                           </div>
                           <div className={styles.descright}>
                             {
-                               ''
+                               type === 'azeList' ? <IconFont type="icon-gengduo" className={styles.gengduo} /> : ''
                             }
                           </div>
                         </div>
@@ -80,7 +80,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any; con
   );
 };
 
-const ListComp = (props: { listData?: ListData; cls?: string; operation?: any; type?: any }) => {
+const ListComp = (props: { listData?: ListData; cls?: string; operation?: any }) => {
   if (props.listData) {
     const { header, list, type, noDataImg, noDataText, noDataIcon } = props.listData;
     const { cls, operation } = props;
@@ -98,7 +98,7 @@ const ListComp = (props: { listData?: ListData; cls?: string; operation?: any; t
           ''
         )}
         {list && list.length ? (
-          <NewsList data={list} type={type} operation={operation} contentType={props.type}/>
+          <NewsList data={list} type={type} operation={operation} />
         ) : (
           <>
             {noDataIcon ? (

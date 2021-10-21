@@ -65,16 +65,16 @@ const attendance = () => {
 
         attendanceRes.data.jscq.forEach((item: any)=>{
           jscqData.push(
-            { date: "实际出勤人数", time: item.CQRQ, count: item.normal},
-            { date: "请假人数", time: item.CQRQ, count: item.abnormal},
+            { date: "实际出勤人数", time: item.CQRQ, count: parseInt(item.normal)},
+            { date: "请假人数", time: item.CQRQ, count: parseInt(item.abnormal)},
           );
         })
         setJskqConfig({...jskqConfig, data: [...jscqData]});
         const xscqData: { date: string; time: any; count: any; }[] = [];
         attendanceRes.data.xscq.forEach((item: any)=>{
           xscqData.push(
-            { date: "实际出勤人数", time: item.CQRQ, count: item.normal},
-            { date: "请假人数", time: item.CQRQ, count: item.abnormal},
+            { date: "实际出勤人数", time: item.CQRQ, count: parseInt(item.normal)},
+            { date: "请假人数", time: item.CQRQ, count: parseInt(item.abnormal)},
           );
         })
         setXskqConfig({...xskqConfig, data: [...xscqData]});

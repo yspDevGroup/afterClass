@@ -45,17 +45,17 @@ const apply = () => {
       XXJBSJId: currentUser?.xxId,
       XNXQId: xnxqResult.current?.id
     });
-    console.log('applyRes: ', applyRes);
     if(applyRes.status === 'ok'){
+      console.log('applyRes: ', applyRes);
       applyRes.data.kcbm?.length && applyRes.data.kcbm.forEach((item: any) => {
         defaultData.conditionNum.push({
           label: item.KCMC,
-          type: '报名数',
-          value: item.xs_count,
+          type: '报名人次',
+          value: parseInt(item.xsbj_count) || 0,
         });
       });
       defaultData.applyNum = [{
-        num: applyRes.data.bj_count,
+        num: applyRes.data.xsbj_count,
         title: '报名人次'
       }, {
         num: applyRes.data.xs_count,
