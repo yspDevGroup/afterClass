@@ -140,6 +140,7 @@ const ClassCalendar = (props: propstype) => {
           },
         ],
         jcId: item.XXSJPZ.id,
+        FJId: item.FJSJ.id,
       };
       const res = DateRange(
         moment(startDate).format('YYYY/MM/DD'),
@@ -279,13 +280,14 @@ const ClassCalendar = (props: propstype) => {
     setChoosenCourses(newChoosen);
   };
   const onChanges = (e: any) => {
-    const { desc, bjid, title, jcId } = e.target.value;
+    const { desc, bjid, title, jcId,FJId } = e.target.value;
     setDatedata?.({
       day,
       start: desc?.[0].left?.[0].substring(0, 5),
       end: desc?.[0].left?.[0].substring(6, 11),
       jcId,
       bjid,
+      FJId,
       title,
     })
   }

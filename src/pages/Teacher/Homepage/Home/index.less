@@ -155,7 +155,35 @@
         border-radius: 20px 0 20px 20px;
       }
     }
-
+    .patrols{
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      >div{
+        width: calc(~'50% - 5px');
+        height: 80px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        p{
+          margin-top: 12px;
+          margin-left: 12px;
+          position: relative;
+          color: #333;
+        }
+        :global {
+          .ant-badge-not-a-wrapper:not(.ant-badge-status) {
+            position: absolute;
+            right: 20px;
+            top: 2px;
+          }
+          .ant-badge-count {
+            background: #ff6b17;
+            box-shadow: 0 0 0 1px rgba(0, 102, 255, 0);
+          }
+        }
+      }
+    }
     .patrol {
       display: flex;
       justify-content: space-between;
@@ -164,6 +192,7 @@
       padding: 0 12px;
       background: linear-gradient(270deg, #17e3ff 0%, #06f 100%);
       border-radius: 23px;
+
 
       & > span {
         position: relative;
@@ -233,16 +262,16 @@
       margin-top: 20px;
       margin-bottom: 20px;
       background: linear-gradient(87.38deg, #47b5fb 0%, #6a45fd 100%);
-      border-radius: 8px;
+      border-radius: 25px;
       .resources {
         display: flex;
         align-items: center;
         width: 100%;
-        height: 76px;
+        height: 50px;
         background-repeat: no-repeat;
         background-position: center;
         background-size: 100% 100%;
-
+        border-radius: 25px;
         > p {
           margin-bottom: 0;
           margin-left: 20px;
@@ -344,13 +373,13 @@
 
 .modalStyle {
   :global {
-    .ant-modal-header{
+    .ant-modal-header {
       padding: 16px;
       text-align: center !important;
     }
-    .ant-modal-content{
-      margin: 0 7%;
+    .ant-modal-content {
       min-width: auto !important;
+      margin: 0 7%;
       .ant-modal-body {
         // width: 100% !important;
         padding: 16px;
@@ -372,16 +401,16 @@
           }
         }
       }
-      .ant-input{
+      .ant-input {
+        color: #999999;
         font-size: 14px;
         line-height: 24px;
-        color: #999999;
       }
     }
-    .ant-modal-footer{
+    .ant-modal-footer {
       margin-top: 20px;
       text-align: center !important;
-      .ant-btn{
+      .ant-btn {
         width: 45% !important;
         border-radius: 22px !important;
       }

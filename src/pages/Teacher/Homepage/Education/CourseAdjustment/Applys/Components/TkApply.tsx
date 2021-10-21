@@ -6,30 +6,30 @@
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
-import { Button, Form, Input, message, Select } from 'antd';
+import { Button, DatePicker, Form, Input, message, Select, TimePicker } from 'antd';
 import { useModel, history } from 'umi';
 import ClassCalendar from '../../../ClassCalendar';
 import styles from '../index.less';
-import { compareTime } from '@/utils/Timefunction';
-import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import moment from 'moment';
+import { createKHJSTDK } from '@/services/after-class/khjstdk';
+import { freeSpace } from '@/services/after-class/fjsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const { TextArea } = Input;
 const { Option } = Select;
-const TkApply = (props: {
-  setActiveKey: React.Dispatch<React.SetStateAction<string>>;
-}) => {
+const TkApply = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { setActiveKey } = props;
-  const [JsData, setJsData] = useState<API.JZGJBSJ[]>();
-  const [JsId, setJsId] = useState();
+  const [FjData, setFjData] = useState<any>();
+  const [FieldId, setFieldId] = useState();
+  const [NewRQ, setNewRQ] = useState();
+  const [NewKSSJ, setNewKSSJ] = useState();
+  const [NewJSSJ, setNewJSSJ] = useState();
   const [form] = Form.useForm();
   // 课表中选择课程后的数据回显
   const [dateData, setDateData] = useState<any>([]);
-  console.log(dateData, '=========')
   const onSubmit = async () => {
-    if (dateData?.length) {
+    if (dateData?.day) {
       form.submit();
     } else {
       message.warning('请选择调课课程');
@@ -38,61 +38,76 @@ const TkApply = (props: {
   useEffect(() => {
     (
       async()=>{
-        const res = await getAllJZGJBSJ({
-          XXJBSJId:currentUser?.xxId,
-          page:0,
-          pageSize:0
-        })
-        if(res.status === 'ok'){
-          setJsData(res.data?.rows)
+        if(NewRQ && NewKSSJ && NewJSSJ){
+          const resXNXQ = await queryXNXQList(currentUser?.xxId);
+          if (resXNXQ?.current) {
+            const result = await freeSpace({
+              XXJBSJId: currentUser?.xxId,
+              XNXQId:resXNXQ?.current?.id,
+              RQ:moment(NewRQ).format('YYYY-MM-DD') || '',
+              KSSJ:moment(NewKSSJ).format('HH:mm') || '',
+              JSSJ:moment(NewJSSJ).format('HH:mm') || '',
+              page: 0,
+              pageSize: 0
+            })
+            if (result.status === 'ok') {
+              setFjData(result.data?.rows)
+            }
+          }
+        }else{
+          setFjData([])
         }
       }
-    )()
-  }, [])
+    )();
+  }, [NewRQ,NewKSSJ,NewJSSJ])
+  const onchange = (value: any,type: any)=>{
+    if(type === 'TKRQ'){
+      setNewRQ(value)
+    }else if(type === 'KSSJ'){
+      setNewKSSJ(value)
+    }else if(type === 'JSSJ'){
+      setNewJSSJ(value)
+    }
+  }
   const onFinish = async (values: any) => {
-    let KSSJ = '23:59';
-    let JSSJ = '00:00';
-    const bjIds: any[] = [];
-    dateData.forEach((ele: any) => {
-      KSSJ = compareTime(KSSJ, ele.start, 'small');
-      JSSJ = compareTime(JSSJ, ele.end, 'large');
-      bjIds.push({
-        KCMC: ele.title,
-        QJRQ: ele.day,
-        KHBJSJId: ele.bjid,
-        XXSJPZId: ele.jcId,
-      });
-    });
-    // const res = await createKHJSQJ({
-    //   ...values,
-    //   QJZT: 0,
-    //   KSSJ,
-    //   JSSJ,
-    //   JZGJBSJId: currentUser.JSId || testTeacherId,
-    //   bjIds,
-    // });
-    // console.log(res, '========')
-    // if (res.status === 'ok') {
-    //   message.success('提交成功');
-    //   setDateData([]);
-    //   form.resetFields();
-    //   setActiveKey('history');
-    // } else {
-    //   const msg = res.message;
-    //   message.error(msg);
-    // }
+    const newData = {
+      LX: 0,
+      ZT: 0,
+      KSSJ:moment(values.KSSJ).format('HH:mm'),
+      JSSJ:moment(values.JSSJ).format('HH:mm'),
+      SKRQ:dateData?.day,
+      TKRQ:moment(values.TKRQ).format('YYYY-MM-DD') ,
+      BZ: values.BZ,
+      SKJSId: currentUser.JSId || testTeacherId,
+      SKFJId:dateData?.FJId,
+      TKFJId:FieldId,
+      KHBJSJId: dateData?.bjid,
+      XXSJPZId: dateData?.jcId
+    }
+    const res = await createKHJSTDK(newData);
+    if (res.status === 'ok') {
+      message.success('申请成功');
+      setDateData([]);
+      form.resetFields();
+      history.push('/teacher/education/courseAdjustment')
+    } else {
+      message.error(res.message)
+    }
   };
-  const onGenderChange = (value: any,key: any) =>{
-    setJsId(key?.key)
+  const onGenderChange = (value: any, key: any) => {
+    setFieldId(key?.key)
   }
   return (
-    <div className={styles.leaveForm}>
-
+    <div className={styles.leaveForms}>
       <div className={styles.wrapper}>
         <p className={styles.title}>
           <span>调课时间</span>
         </p>
         <ClassCalendar setDatedata={setDateData} type="dksq" form={form} />
+        <div className={styles.Divider}> <span>调课后</span></div>
+        {
+          dateData?.day ? <p className={styles.YxCourse}>已选课程：{moment(dateData?.day).format('MM月DD日')} ，{dateData?.title}</p> : <></>
+        }
         <Form
           name="basic"
           labelCol={{ span: 8 }}
@@ -101,8 +116,31 @@ const TkApply = (props: {
           form={form}
           onFinish={onFinish}
         >
+          <p className={styles.tkhsj}>调课后时间</p>
+          <Form.Item name='TKRQ' label="日期">
+            <DatePicker onChange={(value)=>{
+             onchange(value,'TKRQ')
+            }} />
+          </Form.Item>
+          <div className={styles.TimeInterval}>
+          <Form.Item  name='KSSJ' label="时段">
+            <TimePicker format="HH:mm" onChange={(value)=>{
+             onchange(value,'KSSJ')
+            }} />
+          </Form.Item>
+          <div className={styles.right}>
+          <span>-</span>
+          <Form.Item  name='JSSJ' >
+            <TimePicker format="HH:mm" onChange={(value)=>{
+             onchange(value,'JSSJ')
+            }} />
+          </Form.Item>
+          </div>
+
+          </div>
+
           <Form.Item
-            label="调课后场地"
+            label="调课后场地（请先选择时间）"
             name="TKCD"
             rules={[{ required: true, message: '请选择调课后场地' }]}
           >
@@ -113,13 +151,9 @@ const TkApply = (props: {
               showSearch
             >
               {
-                JsData?.map((value)=>{
-                  const showWXName = value?.XM === '未知' && value?.WechatUserId;
-                  return  <Option value={value.XM} key={value.id}>
-                    {
-                      showWXName ? <WWOpenDataCom type="userName" openid={value!.WechatUserId!} />:
-                      <>{value.XM}</>
-                    }
+                FjData?.map((value: any) => {
+                  return <Option value={value.FJMC} key={value.id}>
+                    {value?.FJMC}
                   </Option>
                 })
               }
@@ -127,10 +161,10 @@ const TkApply = (props: {
           </Form.Item>
           <Form.Item
             label="调课原因"
-            name="QJYY"
-            rules={[{ required: true, message: '请输入代课原因!' }]}
+            name="BZ"
+            rules={[{ required: true, message: '请输入调课原因!' }]}
           >
-            <TextArea rows={4}  maxLength={100} placeholder="请输入" />
+            <TextArea rows={4} maxLength={100} placeholder="请输入" />
           </Form.Item>
         </Form>
       </div>

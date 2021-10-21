@@ -400,6 +400,32 @@
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/CallTheRoll',
       },
+       // 教师请假
+       {
+        path: '/teacher/education/askForLeave',
+        name: 'askForLeave',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/AskForLeave',
+      },
+      // 教师调代课
+      {
+        path: '/teacher/education/courseAdjustment',
+        name: 'courseAdjustment',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/CourseAdjustment',
+      },
+      {
+        path: '/teacher/education/courseAdjustment/applys',
+        name: 'applys',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/CourseAdjustment/Applys',
+      },
+      {
+        path: '/teacher/education/courseAdjustment/details',
+        name: 'courseAdjustmentDetails',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/CourseAdjustment/Details',
+      },
       {
         path: '/teacher/education/rollcallrecord',
         name: 'callTheRoll',

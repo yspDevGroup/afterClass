@@ -15,10 +15,10 @@ const Applys = () => {
     <GoBack title={'发起申请'} teacher />
     <Tabs type="card" activeKey={state} onChange={onchange}>
       <TabPane tab="代课申请" key="dksq">
-        <DkApply setActiveKey={setstate} />
+        <DkApply />
       </TabPane>
       <TabPane tab="调课申请" key="tksq">
-        <TkApply setActiveKey={setstate} />
+        <TkApply />
       </TabPane>
     </Tabs>
   </div>

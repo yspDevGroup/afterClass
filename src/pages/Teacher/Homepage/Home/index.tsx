@@ -13,6 +13,8 @@ import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import resourcesBg from '@/assets/resourcesBg.png';
 import resourcesRgo from '@/assets/resourcesRgo.png';
+import XunKe from '@/assets/XunKe.png';
+import DaiKe from '@/assets/DaiKe.png';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
@@ -163,16 +165,33 @@ const Home = () => {
         <div className={styles.enrollArea}>
           <EnrollClassTime teacher={true} />
         </div>
-        <div className={styles.patrol}>
+        <div className={styles.patrols}>
+          <div style={{ backgroundImage: `url(${DaiKe})` }}>
+          <Link to="/teacher/patrolArrange">
+            <p>
+              <span>代课申请</span>
+              <Badge count={dateData?.length} showZero={true} offset={[5, 0]} />
+            </p>
+            </Link>
+          </div>
+          <div style={{ backgroundImage: `url(${XunKe})` }}>
+            <Link to="/teacher/patrolArrange">
+              <p>
+                <span>今日待巡课程</span>
+                <Badge count={dateData?.length} showZero={true} offset={[5, 0]} />
+              </p>
+            </Link>
+          </div>
+        </div>
+        {/* <div className={styles.patrol}>
           <span>
             今日待巡课程
-            <Badge count={dateData?.length} showZero={true} offset={[5, 0]} />
           </span>
           <Link to="/teacher/patrolArrange">
             <span>去巡课</span>
             <IconFont type="icon-gengduo" className={styles.gengduo} />
           </Link>
-        </div>
+        </div> */}
         <div className={styles.teachCourses}>
           <TeachCourses />
         </div>
