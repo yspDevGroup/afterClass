@@ -4,7 +4,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-09 08:57:20
- * @LastEditTime: 2021-10-18 14:02:48
+ * @LastEditTime: 2021-10-19 15:09:38
  * @LastEditors: zpl
  */
 import {
@@ -116,7 +116,9 @@ export const creatTokenForWechat = async (params: Record<string, string>): Promi
  * @param {*} jsApiList 需要使用的JS接口列表，凡是要调用的接口都需要传进来
  */
 export const initWXConfig = async (jsApiList: string[], num = 1) => {
-  const res = await getQYJsSignature({ url: window.location.href.split('#')[0] });
+  const res = await getQYJsSignature({
+    url: encodeURIComponent(window.location.href.split('#')[0]),
+  });
   if (res.status === 'ok') {
     const { appId, timestamp = 0, nonceStr, signature = '' } = res.data || {};
     const currentConf = {
@@ -157,7 +159,9 @@ export const initWXConfig = async (jsApiList: string[], num = 1) => {
  * @param {string[]} jsApiList 需要使用的接口名称
  */
 export const initWXAgentConfig = async (jsApiList: string[], num = 1) => {
-  const res = await getYYJsSignature({ url: window.location.href.split('#')[0] });
+  const res = await getYYJsSignature({
+    url: encodeURIComponent(window.location.href.split('#')[0]),
+  });
   if (res.status === 'ok') {
     const { corpid, agentid, timestamp = 0, nonceStr, signature = '' } = res.data || {};
     const currentConf = {
