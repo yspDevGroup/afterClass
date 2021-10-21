@@ -2,12 +2,12 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-10-12 23:42:20
+ * @LastEditTime: 2021-10-21 10:36:38
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
-import { getLoginPath, getOauthToken, getPageQuery } from '@/utils/utils';
+import { envjudge, getLoginPath, getOauthToken, getPageQuery } from '@/utils/utils';
 import loadImg from '@/assets/loading.gif';
 import { removeWechatInfo } from '@/utils/wx';
 
@@ -24,6 +24,7 @@ const Index = () => {
   };
 
   useEffect(() => {
+    const ej = envjudge();
     // 判断应用id和用户类型
     const query = getPageQuery();
     const params: Record<string, string> = {
@@ -37,16 +38,27 @@ const Index = () => {
         const { ysp_access_token } = getOauthToken();
         if (!ysp_access_token || !initialState?.currentUser) {
           gotoLogin(params.suiteID, params.isAdmin);
+          return;
         }
 
         // 检查登录状态
         switch (initialState!.currentUser.type) {
           case '管理员':
-            history.replace('/homepage');
+            {
+              if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
+                history.replace('/information/home');
+              } else {
+                history.replace('/homepage');
+              }
+            }
             break;
           case '老师':
             if (params.isAdmin === '1') {
-              history.replace('/homepage');
+              if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
+                history.replace('/information/home');
+              } else {
+                history.replace('/homepage');
+              }
             } else {
               history.replace('/teacher/home');
             }
@@ -65,7 +77,13 @@ const Index = () => {
     } else {
       switch (initialState?.currentUser?.type) {
         case '管理员':
-          history.replace('/homepage');
+          {
+            if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
+              history.replace('/information/home');
+            } else {
+              history.replace('/homepage');
+            }
+          }
           break;
         case '老师':
           history.replace('/teacher/home');
