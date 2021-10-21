@@ -3,18 +3,17 @@
  * @description: 退课
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-10-15 10:45:51
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-10-21 15:01:43
+ * @LastEditors: zpl
  */
 import GoBack from '@/components/GoBack';
 import { getKHTKSJ } from '@/services/after-class/khtksj';
-import { message, } from 'antd';
+import { message } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
 import noOrder from '@/assets/noOrder.png';
 import { createKHXSTK, getAllKHXSTK } from '@/services/after-class/khxstk';
-
 
 const DropClass = () => {
   const { initialState } = useModel('@@initialState');
@@ -25,7 +24,7 @@ const DropClass = () => {
   const XSId = StorageXSId || (student && student[0].XSJBSJId) || testStudentId;
   const getKHTKSJData = async () => {
     const res = await getKHTKSJ({
-      XSJBSJId:XSId,
+      XSJBSJId: XSId,
       KHBJSJId: '',
       XXJBSJId: currentUser?.xxId,
       ZT: [0, 1, 2],
@@ -34,11 +33,11 @@ const DropClass = () => {
     });
     const resAll = await getAllKHXSTK({
       XXJBSJId: currentUser?.xxId,
-      XSJBSJId:XSId,
+      XSJBSJId: XSId,
       page: 0,
       pageSize: 0,
     });
-    if (resAll.data?.count) {
+    if (resAll.data?.count && res.data?.rows?.length) {
       const oriList = res.data?.rows;
       const newList = resAll.data?.rows;
       const curList = [].map.call(oriList, (item: API.KHTKSJ) => {
@@ -59,6 +58,8 @@ const DropClass = () => {
               item.ZT = 6;
               item.BZ = TKinfo.BZ;
               break;
+            default:
+              break;
           }
         }
         return item;
@@ -77,7 +78,7 @@ const DropClass = () => {
       <div className={styles.appBtn}>
         <Link to="/parent/mine/dropClass/apply">我要退课</Link>
       </div>
-      {Record?.length === 0 ? (
+      {!Record?.length ? (
         <div className={styles.ZWSJ}>
           <img src={noOrder} alt="" />
           <p>暂无数据</p>
@@ -85,7 +86,7 @@ const DropClass = () => {
       ) : (
         <div className={styles.Record}>
           <div>
-            {Record.map((value: any) => {
+            {Record?.map((value: any) => {
               const num = value!.KHBJSJ!.KSS! - value?.KSS;
               const color = value.ZT !== 2 ? '#FF6600' : '#FF0000';
               return (
@@ -102,37 +103,42 @@ const DropClass = () => {
                   <p>
                     未学课时：{value.KSS}节 ｜ 可退课时：{value.KSS}节
                   </p>
-                  <p
-                    className={styles.state}
-                    style={{ color }}
-                  >
+                  <p className={styles.state} style={{ color }}>
                     {value.ZT === 0 ? '申请中' : ''}
                     {value.ZT === 2 ? '退课失败' : ''}
-                    {(value.ZT === 1||value.ZT === 3) ? '退款中' : ''}
-                    {(value.ZT === 4) ? '退款被驳回' : ''}
-                    {(value.ZT === 5) ? '退款成功' : ''}
-                    {(value.ZT === 6) ? '退款失败' : ''}
+                    {value.ZT === 1 || value.ZT === 3 ? '退款中' : ''}
+                    {value.ZT === 4 ? '退款被驳回' : ''}
+                    {value.ZT === 5 ? '退款成功' : ''}
+                    {value.ZT === 6 ? '退款失败' : ''}
                   </p>
-                  {value.ZT === 2 ? <p>退课说明：{value.BZ}</p>:''}
-                  {value.ZT === 4 ? <p>退款说明：{value.BZ}</p>:''}
-                  {value.ZT === 4 ? <button onClick={async ()=>{
-                    const result = await createKHXSTK({
-                      /** 退款金额 */
-                      TKJE: 0.01 || value?.TKJE,
-                      /** 退款状态 */
-                      TKZT: 0,
-                      /** 学生ID */
-                      XSJBSJId: testStudentId || XSId,
-                      /** 班级ID */
-                      KHBJSJId: '135a04d7-ac43-464b-80b2-42c5d58ff470' || value?.KHBJSJId,
-                      /** 学校ID */
-                      XXJBSJId: currentUser?.xxId,
-                    });
-                    if (result.status === 'ok') {
-                      message.success('退款申请成功');
-                      getKHTKSJData();
-                    }
-                  }}>申请退款</button>:''}
+                  {value.ZT === 2 ? <p>退课说明：{value.BZ}</p> : ''}
+                  {value.ZT === 4 ? <p>退款说明：{value.BZ}</p> : ''}
+                  {value.ZT === 4 ? (
+                    <button
+                      onClick={async () => {
+                        const result = await createKHXSTK({
+                          /** 退款金额 */
+                          TKJE: value?.TKJE || 0,
+                          /** 退款状态 */
+                          TKZT: 0,
+                          /** 学生ID */
+                          XSJBSJId: XSId,
+                          /** 班级ID */
+                          KHBJSJId: value?.KHBJSJId,
+                          /** 学校ID */
+                          XXJBSJId: currentUser?.xxId,
+                        });
+                        if (result.status === 'ok') {
+                          message.success('退款申请成功');
+                          getKHTKSJData();
+                        }
+                      }}
+                    >
+                      申请退款
+                    </button>
+                  ) : (
+                    ''
+                  )}
                 </div>
               );
             })}
