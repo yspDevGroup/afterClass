@@ -11,7 +11,7 @@ export async function getXXJBSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -59,7 +59,7 @@ export async function getXXJBSJ(
     message?: string;
   }>(`/xxjbsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -73,10 +73,10 @@ export async function deleteXXJBSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxjbsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -176,13 +176,13 @@ export async function updateXXJBSJ(
   body: API.UpdateXXJBSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxjbsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -216,6 +216,25 @@ export async function getAttendanceTrend(
   options?: { [key: string]: any },
 ) {
   return request<any>('/xxjbsj/getAttendanceTrend', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 学校按日期统计收款，退款信息 POST /xxjbsj/getRefund */
+export async function getRefund(
+  body: {
+    XXJBSJId?: string;
+    startDate?: string;
+    endDate?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/xxjbsj/getRefund', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

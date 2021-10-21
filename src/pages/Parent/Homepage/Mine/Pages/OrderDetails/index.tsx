@@ -31,7 +31,7 @@ const OrderDetails: React.FC = (props: any) => {
     const res = await payKHXSDD({
       ddIds: [orderInfo.id],
       bjId: detail.id,
-      xsId: localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
+      xsId: localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
       kcmc: title,
       amount: orderInfo.DDFY,
       XXJBSJId: currentUser?.xxId,
@@ -48,7 +48,7 @@ const OrderDetails: React.FC = (props: any) => {
       returnUrl:`${window.location.origin}/parent/home?index=index`,
       kcmc: fwdetail?.FWMC,
       ddIds: [orderInfo.id],
-      xsId: localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
+      xsId: localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
       amount: orderInfo?.DDFY,
       XXJBSJId: currentUser?.xxId,
     });

@@ -153,7 +153,6 @@
     icon: 'Build',
     component: './Manager/CourseScheduling',
   },
-
   {
     path: '/coursePatrol',
     icon: 'SolutionOutlined',
@@ -220,19 +219,19 @@
       },
     ],
   },
-    // 行政班管理
-    {
-      path: '/administrativeClass',
-      name: 'administrativeClass',
-      icon: 'CodepenOutlined',
-      component: './Manager/AdministrativeClass',
-    },
-    {
-      path: '/administrativeClass/administrativeClassDetail',
-      name: 'administrativeClassDetail',
-      component: './Manager/AdministrativeClass/Detail',
-      hideInMenu: 'true',
-    },
+  // 行政班管理
+  {
+    path: '/administrativeClass',
+    name: 'administrativeClass',
+    icon: 'CodepenOutlined',
+    component: './Manager/AdministrativeClass',
+  },
+  {
+    path: '/administrativeClass/administrativeClassDetail',
+    name: 'administrativeClassDetail',
+    component: './Manager/AdministrativeClass/Detail',
+    hideInMenu: 'true',
+  },
   // 通知公告
   {
     path: '/announcements',
@@ -284,13 +283,19 @@
     ],
   },
   // 统计管理
-  //66
   {
     path: '/statistics',
     name: 'statistics',
     icon: 'BarChartOutlined',
     routes: [
-      //课后课程统计
+      // 数据大屏
+      {
+        path: '/statistics/graphic',
+        layout: false,
+        name: 'graphic',
+        component: './Manager/Statistics/Graphic',
+      },
+      // 课后课程统计
       {
         path: '/statistics/afterSchoolCourse',
         name: 'afterschoolcoursen',
@@ -621,7 +626,7 @@
       },
     ]
   },
-   /*** 移动端数据看板路由 end ***/
+  /*** 移动端数据看板路由 end ***/
   {
     path: '/',
     layout: false,

@@ -63,6 +63,7 @@ const TableList = () => {
       align: 'center',
       width: 120,
       search: false,
+      ellipsis: true,
       render: (text, record) => {
         return <>{record.JYJGSJ?.BMMC || ''}</>;
       },

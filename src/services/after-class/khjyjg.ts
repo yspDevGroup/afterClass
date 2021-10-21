@@ -11,7 +11,7 @@ export async function KHJYJG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -51,7 +51,7 @@ export async function KHJYJG(
     message?: string;
   }>(`/khjyjg/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -65,10 +65,10 @@ export async function deleteKHJYJG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjyjg/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -156,13 +156,13 @@ export async function updateKHJYJG(
   body: API.UpdateKHJYJG,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjyjg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -352,10 +352,40 @@ export async function getCourseSchools(
     status?: 'ok' | 'error';
     data?: {
       count?: number;
-      rows?: { id?: string; XXMC?: string; XD?: string; LXR?: string; LXDH?: string }[];
+      rows?: {
+        id?: string;
+        XXMC?: string;
+        XD?: string;
+        LXR?: string;
+        LXDH?: string;
+        PJFS?: number;
+      }[];
     };
     message?: string;
   }>('/khjyjg/getCourseSchools', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取机构的合作学校订单 POST /khjyjg/cooperateSchoolOrder */
+export async function cooperateSchoolOrder(
+  body: {
+    /** 学校名称 */
+    name?: string;
+    JGId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjyjg/cooperateSchoolOrder', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
