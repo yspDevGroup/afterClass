@@ -427,6 +427,12 @@
         component: './Teacher/Homepage/Education/CourseAdjustment/Details',
       },
       {
+        path: '/teacher/home/substituteList',
+        name: 'substituteList',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Home/Pages/SubstituteList',
+      },
+      {
         path: '/teacher/education/rollcallrecord',
         name: 'callTheRoll',
         hideInMenu: 'true',

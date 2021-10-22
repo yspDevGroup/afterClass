@@ -52,6 +52,7 @@ const DkApply = () => {
       DKJSId: DKJsId,
       BZ: values.QJYY,
       SKJSId: currentUser.JSId || testTeacherId,
+      SKFJId:dateData?.FJId,
       SKRQ: dateData?.day,
       KHBJSJId: dateData?.bjid,
       XXSJPZId: dateData?.jcId

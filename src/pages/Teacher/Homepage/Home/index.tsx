@@ -19,6 +19,7 @@ import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
 
 // import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 
@@ -34,6 +35,7 @@ const Home = () => {
   const today = dayjs().format('YYYY/MM/DD');
   // 巡课中课程安排数据
   const [dateData, setDateData] = useState<any>([]);
+  const [DkData, setDkData] = useState<any>([]);
   const getData = async (day: string) => {
     const res = await getScheduleByDate({
       JZGJBSJId: currentUser.JSId || testTeacherId,
@@ -64,6 +66,25 @@ const Home = () => {
     getData(today);
   }, [currentUserInfo]);
 
+  useEffect(() => {
+    (
+      async()=>{
+        const res = await getAllKHJSTDK({
+          LX: [1],
+          ZT: [0],
+          XXJBSJId: currentUser?.xxId,
+          DKJSId: currentUser.JSId || testTeacherId,
+        })
+        if (res.status === 'ok') {
+          setDkData(res.data?.rows)
+        } else {
+          setDkData([])
+        }
+
+      }
+    )()
+
+  }, [])
   useEffect(() => {
     async function announcements() {
       const res = await getXXTZGG({
@@ -167,10 +188,10 @@ const Home = () => {
         </div>
         <div className={styles.patrols}>
           <div style={{ backgroundImage: `url(${DaiKe})` }}>
-          <Link to="/teacher/patrolArrange">
+          <Link to="/teacher/home/substituteList">
             <p>
               <span>代课申请</span>
-              <Badge count={dateData?.length} showZero={true} offset={[5, 0]} />
+              <Badge count={DkData?.length} showZero={true} offset={[5, 0]} />
             </p>
             </Link>
           </div>

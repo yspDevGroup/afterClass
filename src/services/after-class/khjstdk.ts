@@ -11,7 +11,7 @@ export async function getKHJSTDK(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -19,6 +19,7 @@ export async function getKHJSTDK(
       LX?: number;
       ZT?: number;
       BZ?: string;
+      DKBZ?: string;
       KSSJ?: string;
       JSSJ?: string;
       SKRQ?: string | any;
@@ -28,12 +29,14 @@ export async function getKHJSTDK(
       SKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
       TKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
       XXSJPZ?: { id?: string; KSSJ?: string; JSSJ?: string; TITLE?: string };
-      KHBJSJ?: { id?: string; BJMC?: string };
+      KHBJSJ?: { id?: string; BJMC?: string; KHKCSJ?: { id?: string; KCMC?: string } };
+      createdAt?: string;
+      updatedAt?: string;
     };
     message?: string;
   }>(`/khjstdk/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -47,10 +50,10 @@ export async function deleteKHJSTDK(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjstdk/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -98,6 +101,7 @@ export async function createKHJSTDK(body: API.CreateKHJSTDK, options?: { [key: s
       LX?: number;
       ZT?: number;
       BZ?: string;
+      DKBZ?: string;
       KSSJ?: string;
       JSSJ?: string;
       SKRQ?: string | any;
@@ -107,7 +111,9 @@ export async function createKHJSTDK(body: API.CreateKHJSTDK, options?: { [key: s
       SKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
       TKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
       XXSJPZ?: { id?: string; KSSJ?: string; JSSJ?: string; TITLE?: string };
-      KHBJSJ?: { id?: string; BJMC?: string };
+      KHBJSJ?: { id?: string; BJMC?: string; KHKCSJ?: { id?: string; KCMC?: string } };
+      createdAt?: string;
+      updatedAt?: string;
     };
     message?: string;
   }>('/khjstdk/create', {
@@ -130,13 +136,13 @@ export async function updateKHJSTDK(
   body: API.UpdateKHJSTDK,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjstdk/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

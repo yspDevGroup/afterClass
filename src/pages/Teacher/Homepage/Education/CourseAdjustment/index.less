@@ -1,7 +1,6 @@
 .CourseAdjustment {
-  background:#F5F5F5;
   height: 100%;
-
+  background: #f5f5f5;
   .Selected {
     padding-top: 20px;
   }
@@ -44,7 +43,7 @@
   .apply {
     position: fixed;
     right: 20px;
-    bottom: 20px;
+    bottom: 15px;
     width: 80px;
     color: #3e88f8;
     text-align: center;
@@ -61,10 +60,12 @@
       box-shadow: 0 0 30px rgba(0, 102, 255, 0.4);
     }
   }
-  .wrap{
-    padding: 10px;
+  .wrap {
+    height: calc(~'100% - 150px');
+    padding: 0 10px;
+    overflow: auto;
     .Information {
-      margin-bottom: 10px;
+      margin-top: 10px;
       padding: 10px;
       background-color: #fff;
       border-radius: 8px;
@@ -108,20 +109,26 @@
         float: right;
         height: 30px;
         padding: 0 24px;
-        color: #0066ff;
+        color: #ff4b4b;
         border: 1px solid #dddddd;
-        border: 1px solid #0066ff;
+        border: 1px solid #ff4b4b;
         border-radius: 22px;
       }
     }
   }
-
+  .wrap::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .Details {
   height: 100%;
-  padding: 0 10px 70px;
+  padding: 0 0 70px;
+  overflow: auto;
   background-color: #f5f5f5;
+  .wraps {
+    padding: 0 10px;
+  }
   .apply {
     margin-top: 20px;
     padding: 10px;
@@ -153,7 +160,7 @@
     }
     .processLine {
       position: absolute;
-      top: 60px;
+      top: 66px;
       left: 20px;
       .circular {
         width: 10px;
@@ -185,13 +192,14 @@
         }
       }
       > div:nth-child(2) {
-        width: 32px;
+        min-width: 62px;
+        padding: 0 10px;
         height: 32px;
-        color: #fff;
+        color: #0066FF;
         line-height: 32px;
         text-align: center;
-        background-color: #0066ff;
-        border-radius: 50%;
+        background: rgba(0, 102, 255, 0.1);
+        border-radius: 4px;
       }
     }
     .roles {
@@ -207,6 +215,15 @@
           background-color: #0066ff;
         }
       }
+    }
+    :global {
+      .ant-input-textarea {
+        margin-bottom: 20px;
+      }
+    }
+    textarea {
+      height: 100px !important;
+      resize: none;
     }
   }
   .fixedBtn {
@@ -234,4 +251,7 @@
       border-radius: 22px;
     }
   }
+}
+.Details::-webkit-scrollbar {
+  display: none;
 }
