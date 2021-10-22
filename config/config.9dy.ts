@@ -2,7 +2,7 @@
  * @description: 九朵云环境配置
  * @author: zpl
  * @Date: 2021-10-19 14:54:09
- * @LastEditTime: 2021-10-22 12:29:10
+ * @LastEditTime: 2021-10-22 12:40:28
  * @LastEditors: zpl
  */
 // https://umijs.org/config/
@@ -31,6 +31,7 @@ export default defineConfig({
     ENV_backUrl: 'http://api.9cloudstech.com',
     ssoHost: 'http://sso.9cloudstech.com',
     authType: 'wechat',
+    // FIXME: 下面两个参数必须调整为9朵云提供的值
     clientId: 'wwe2dfbe3747b6e69f',
     clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
   },

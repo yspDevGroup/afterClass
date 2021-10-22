@@ -1,5 +1,5 @@
 /*
- * @description: 五育环境配置
+ * @description: 蝉鸣环境配置
  * @author: zpl
  * @Date: 2021-10-19 14:53:43
  * @LastEditTime: 2021-10-22 11:47:37
