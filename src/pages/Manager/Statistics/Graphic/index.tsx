@@ -80,7 +80,7 @@ const ChartsPage = (props: any) => {
           num: data.bj_count || 0
         }, {
           title: '学校教师数',
-          num: Number((data.js_count || 0) - (data.jgjs_count || 0)).toFixed(2)
+          num: Number((data.js_count || 0) - (data.jgjs_count || 0))
         }, {
           title: '合作机构数',
           num: data.jg_count || 0,
