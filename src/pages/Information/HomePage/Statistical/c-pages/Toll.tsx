@@ -21,7 +21,7 @@ const Toll = () => {
   const { currentUser } = initialState || {};
   console.log('currentUser: ', currentUser);
   const [startTime, setStartTime] = useState<any>(moment().subtract(30, "days").format("YYYY-MM-DD"));
-  const [endTime, setEndTime] = useState<any>(moment().format("YYYY-MM-DD"));
+  const [endTime, setEndTime] = useState<any>(moment().subtract(-1, "days").format("YYYY-MM-DD"));
   const [currentData, setCurrentData] = useState<any>([
     {
       title: '收款金额（元）',
@@ -71,7 +71,7 @@ useEffect(()=>{
       defaultData.serviceNum = [
       {
         title: '收款金额（元）',
-        num: (tollRes.data?.bjdd_amount || 0) + (tollRes.data?.zzfw_amount || 0)
+        num:((tollRes.data?.bjdd_amount || 0) + (tollRes.data?.zzfw_amount || 0)).toFixed(2)
       },
       {
         title: '退款金额（元）',
@@ -102,7 +102,7 @@ useEffect(()=>{
       console.log('fundRes: ', fundRes);
       setIntervalData([
         {
-          num: fundRes.data.sk_amount,
+          num: ((fundRes.data.sk_amount || 0) + (fundRes.data?.zzfw_amount || 0)).toFixed(2),
           title: '收款金额（元）'
         }, {
           num: fundRes.data.tk_amount,
@@ -161,7 +161,7 @@ useEffect(()=>{
               </Col>
               <Col span={2}>-</Col>
               <Col span={11}>
-                <DatePicker placeholder='请选择结束日期' defaultValue={moment(moment(), 'YYYY-MM-DD')} onChange={handleEndTime} format="YYYY-MM-DD"/>
+                <DatePicker placeholder='请选择结束日期' defaultValue={moment(moment().subtract(-1, "days"), 'YYYY-MM-DD')} onChange={handleEndTime} format="YYYY-MM-DD"/>
               </Col>
             </ConfigProvider>
           </Row>
