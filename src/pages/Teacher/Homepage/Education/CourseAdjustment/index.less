@@ -75,28 +75,30 @@
         clear: both;
         content: '';
       }
+      a{
+        > div {
+          display: flex;
+          justify-content: flex-end;
 
-      > div {
-        display: flex;
-        justify-content: flex-end;
+          h4 {
+            flex: 1;
+            font-weight: bold;
 
-        h4 {
-          flex: 1;
-          font-weight: bold;
+            > span {
+              margin-left: 8px;
+              padding: 2px 8px;
+              font-weight: normal;
+              font-size: 12px;
+              border: 1px solid #dadada;
+              border-radius: 4px;
+            }
+          }
 
-          > span {
-            margin-left: 8px;
-            padding: 2px 8px;
-            font-weight: normal;
-            font-size: 12px;
-            border: 1px solid #dadada;
-            border-radius: 4px;
+          span {
+            color: #999;
           }
         }
 
-        span {
-          color: #999;
-        }
       }
 
       p {

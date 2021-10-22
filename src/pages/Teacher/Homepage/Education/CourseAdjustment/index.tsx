@@ -38,6 +38,7 @@ const CourseAdjustment = () => {
     } else {
       enHenceMsg(res.message);
     }
+
   };
   return <div className={styles.CourseAdjustment}>
     <GoBack title={'教师调代课'} teacher onclick='/teacher/home?index=education' />
@@ -55,12 +56,13 @@ const CourseAdjustment = () => {
             Datas.map((item: any) => {
               const showWXName = item?.SKJS?.XM === '未知' && item?.SKJS?.WechatUserId;
               return (
-                <Link
-                  to={{
-                    pathname: '/teacher/education/courseAdjustment/details',
-                    state: { id: item.id ,type:'view'}
-                  }}>
-                  <div className={styles.Information}>
+
+                <div className={styles.Information}>
+                  <Link
+                    to={{
+                      pathname: '/teacher/education/courseAdjustment/details',
+                      state: { id: item.id, type: 'view' }
+                    }}>
                     <div>
                       <h4>
                         {
@@ -76,13 +78,14 @@ const CourseAdjustment = () => {
                     <p>时间：{moment(item?.SKRQ).format('MM月DD日')}， {item.XXSJPZ?.KSSJ.substring(0, 5)}-{item.XXSJPZ?.JSSJ.substring(0, 5)}</p>
                     <p>课程：{item.KHBJSJ?.KHKCSJ?.KCMC}</p>
                     <p>原因：{item.BZ}</p>
-                    {item.ZT === 0 ? (
-                      <Button onClick={() => handleCancle(item)}>
-                        撤销
-                      </Button>
-                    ) : ('')}
-                  </div>
-                </Link>
+                  </Link>
+                  {item.ZT === 0 ? (
+                    <Button onClick={() => handleCancle(item)}>
+                      撤销
+                    </Button>
+                  ) : ('')}
+                </div>
+
 
               );
             })
