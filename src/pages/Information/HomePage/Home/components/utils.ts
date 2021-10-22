@@ -21,6 +21,12 @@ export const topNum = [
 
   },
   {
+    title: '课程班总数',
+    type: 'bj_count',
+    bgImg: courseSum,
+
+  },
+  {
     title: '学校课程',
     type: 'xxkc_count',
     bgImg: schoolCourse,

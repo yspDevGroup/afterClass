@@ -90,6 +90,7 @@ export const proportionConfig: any = {
   },
 };
 export const barConfig: any = {
+  scrollbar: { type: 'vertical' },
   appendPadding: 20,
   isGroup: true,
   xField: 'value',
@@ -109,6 +110,7 @@ export const barConfig: any = {
   }
 };
 export const tollBarConfig: any = {
+  scrollbar: { type: 'vertical' },
   appendPadding: 20,
   isGroup: true,
   xField: 'value',

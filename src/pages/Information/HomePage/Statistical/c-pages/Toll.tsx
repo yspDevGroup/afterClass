@@ -67,12 +67,11 @@ useEffect(()=>{
       XXJBSJId: currentUser?.xxId,
       XNXQId: xnxqResult.current?.id
     });
-    console.log('图表数据: ', tollRes);
     if(tollRes.status === 'ok'){
       defaultData.serviceNum = [
       {
         title: '收款金额（元）',
-        num: tollRes.data?.bjdd_amount || 0
+        num: (tollRes.data?.bjdd_amount || 0) + (tollRes.data?.zzfw_amount || 0)
       },
       {
         title: '退款金额（元）',
@@ -100,6 +99,7 @@ useEffect(()=>{
     });
     console.log('时间区间查询收退款: ', fundRes);
     if(fundRes.status === 'ok'){
+      console.log('fundRes: ', fundRes);
       setIntervalData([
         {
           num: fundRes.data.sk_amount,
@@ -137,7 +137,7 @@ useEffect(()=>{
         <ModuleTitle data='本学期收费总计' />
         <NumberCollect data={currentData} col={currentData?.length} />
       </div>
-      <div className={styles.container} style={{ height: '374px' }}>
+      <div className={styles.container} style={{ height: '700px' }}>
         <ModuleTitle data='各课程收退款情况' />
         <div className={styles.chartsContainer}>
           {
