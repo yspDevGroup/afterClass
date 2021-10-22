@@ -42,7 +42,13 @@ const AttendanceDetail = (props: any) => {
       align: 'center',
       width: 100,
       fixed: 'left',
-      render: () => <div>{data.XM}</div>
+      render: (_, record) => {
+        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
+        }
+        return record?.JZGJBSJ?.XM;
+      },
     },
     {
       title: '课程名称',
