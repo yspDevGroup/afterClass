@@ -21,8 +21,6 @@ import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
 
-// import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
-
 const Home = () => {
   const { currentUserInfo } = useContext(myContext);
   const userRef = useRef(null);

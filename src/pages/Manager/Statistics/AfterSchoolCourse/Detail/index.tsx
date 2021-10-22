@@ -55,7 +55,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
       dataIndex: 'SKSD',
       key: 'SKSD',
       align: 'center',
-      width: 120,
+      width: 150,
       ellipsis: true,
       render: (test: any, record: any) => {
         return moment(record?.KKSJ).format('YYYY.MM.DD') + '~' + moment(record?.JKSJ).format('YYYY.MM.DD');

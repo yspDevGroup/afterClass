@@ -130,6 +130,11 @@ const Detail = (props: any) => {
       actionRef={actionRef}
       columns={columns}
       rowKey="id"
+      pagination={{
+        showQuickJumper: true,
+        pageSize: 10,
+        defaultCurrent: 1,
+      }}
       request={async (param) => {
         // 表单搜索项会从 params 传入，传递给后端接口。
         if (XNXQId) {
