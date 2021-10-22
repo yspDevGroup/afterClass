@@ -1,11 +1,13 @@
 import { useModel, } from 'umi';
 import { Select,DatePicker } from 'antd';
-import ProTable, { ProColumns } from '@ant-design/pro-table';
+import type { ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import PageContainer from '@/components/PageContainer';
 import { getKHXKJL } from '@/services/after-class/khxkjl'
 import { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
+
 const { Option } = Select;
 
 const CoursePatrol = () => {
@@ -54,7 +56,9 @@ const CoursePatrol = () => {
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
-      render: (text: any) => text?.BJMC,
+      render: (text: any,record: any) => {
+        return record?.KHBJSJ?.BJMC
+      },
       ellipsis: true,
       width: 120
     },
@@ -134,7 +138,7 @@ const CoursePatrol = () => {
     },
   ]
   useEffect(() => {
-    //获取学年学期数据的获取
+    // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
       // 获取到的整个列表的信息
@@ -168,7 +172,7 @@ const CoursePatrol = () => {
             value={curXNXQId}
             style={{ width: 200 }}
             onChange={(value: string) => {
-              //选择不同学期从新更新页面的数据
+              // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);
             }}
           >

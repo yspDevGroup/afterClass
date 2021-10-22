@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { message, Space, Tag } from 'antd';
+import { message, Popconfirm, Space, Tag } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 
@@ -54,7 +54,7 @@ const courseNotIntroduced = () => {
       valueType: 'index',
       align: 'center',
       width: 58,
-      fixed:'left',
+      fixed: 'left',
     },
     {
       title: '课程名称',
@@ -63,7 +63,7 @@ const courseNotIntroduced = () => {
       align: 'center',
       width: 150,
       ellipsis: true,
-      fixed:'left',
+      fixed: 'left',
     },
     {
       title: '机构名称',
@@ -140,7 +140,7 @@ const courseNotIntroduced = () => {
       search: false,
       key: 'option',
       width: 220,
-      fixed:'right',
+      fixed: 'right',
       align: 'center',
       render: (text, record, index, action) => {
         return (
@@ -152,12 +152,12 @@ const courseNotIntroduced = () => {
                   pageSize: 0,
                   page: 0
                 });
-                if(res.status === 'ok'){
+                if (res.status === 'ok') {
                   setInfo({
                     ...record,
                     KHKCJs: res?.data?.rows
                   });
-                }else{
+                } else {
                   setInfo(record);
                 }
                 setVisibleSchoolInfo(true);
@@ -174,40 +174,57 @@ const courseNotIntroduced = () => {
               机构详情
             </a>
             {record.KHKCSQs?.length === 0 ? (
-              <a
-                onClick={async () => {
-                  const params = {
-                    KHKCSJId: record?.id || '',
-                    SQR: currentUser?.username || '',
-                    SQRId: currentUser?.userId || '',
-                    XXJBSJId: currentUser?.xxId || '',
-                    KHJYJGId: record?.KHJYJG?.id || '',
-                  };
-                  const res = await createKHKCSQ({ ...params, ZT: 0 });
-                  if (res.status === 'ok') {
-                    message.success('操作成功');
-                    action?.reload();
-                  } else {
-                    message.error(res.message);
+              <Popconfirm
+                title="确定引入该课程？"
+                onConfirm={async () => {
+                  try {
+                    const params = {
+                      KHKCSJId: record?.id || '',
+                      SQR: currentUser?.username || '',
+                      SQRId: currentUser?.userId || '',
+                      XXJBSJId: currentUser?.xxId || '',
+                      KHJYJGId: record?.KHJYJG?.id || '',
+                    };
+                    const res = await createKHKCSQ({ ...params, ZT: 0 });
+                    if (res.status === 'ok') {
+                      message.success('操作成功');
+                      action?.reload();
+                    } else {
+                      message.error(res.message);
+                    }
+                  } catch (err) {
+                    message.error('引入失败，请联系管理员或稍后重试。');
                   }
                 }}
+                okText="确定"
+                cancelText="取消"
+                placement="topRight"
               >
-                引入
-              </a>
+                <a>引入</a>
+              </Popconfirm>
             ) : (
-              <a
-                onClick={async () => {
-                  const res = await updateKHKCSQ({id:record?.KHKCSQs?.[0]?.id}, {ZT: 3 });
-                  if (res.status === 'ok') {
-                    message.success('操作成功');
-                    action?.reload();
-                  } else {
-                    message.error(res.message);
+              <Popconfirm
+                title="确定取消引入该课程？"
+                onConfirm={async () => {
+                  try {
+                    const res = await updateKHKCSQ({ id: record?.KHKCSQs?.[0]?.id }, { ZT: 3 });
+                    if (res.status === 'ok') {
+                      message.success('操作成功');
+                      action?.reload();
+                    } else {
+                      message.error(res.message);
+                    }
+                  } catch (err) {
+                    message.error('取消引入失败，请联系管理员或稍后重试。');
                   }
                 }}
+                okText="确定"
+                cancelText="取消"
+                placement="topRight"
               >
-                取消引入
-              </a>
+                <a>取消引入</a>
+              </Popconfirm>
+
             )}
           </Space>
         );
