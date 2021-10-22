@@ -107,7 +107,8 @@ export const barConfig: any = {
       { type: 'interval-hide-overlap' },
       { type: 'adjust-color' },
     ],
-  }
+  },
+  maxBarWidth: 30
 };
 export const tollBarConfig: any = {
   scrollbar: { type: 'vertical' },
@@ -127,7 +128,8 @@ export const tollBarConfig: any = {
       { type: 'interval-hide-overlap' },
       { type: 'adjust-color' },
     ],
-  }
+  },
+  maxBarWidth: 30
 };
 export const conditionConfig: any = {
   appendPadding: 20,

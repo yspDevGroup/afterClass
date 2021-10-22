@@ -10,7 +10,6 @@ const { TabPane } = Tabs;
 const Overview = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  console.log('currentUser: ', currentUser);
   const [homeData, setHomeData] = useState<any>();
   useEffect(() => {
     async function fetchData() {
@@ -19,9 +18,7 @@ const Overview = () => {
         XXJBSJId: currentUser?.xxId,
         XNXQId: result.current?.id
       });
-      console.log('res: ', res);
       if (res.status === 'ok') {
-        console.log('res: ', res);
         setHomeData({ ...res.data});
       };
     }
@@ -30,11 +27,11 @@ const Overview = () => {
 
 
   const ItemCard = (props: any) => {
-    const {title,count,bgImg} = props;
+    const {title,count,bgImg,zzfw} = props;
     return (
       <Card className={styles.card} bordered={false} bodyStyle={{paddingTop: 8.8, paddingLeft: 8.8, minHeight: '101.7px'}}>
         <p style={{whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{title}</p>
-        <p>{title.indexOf("元") !== -1 ? parseFloat(count).toFixed(2) : count}</p>
+        <p>{title.indexOf("元") !== -1 ? (title.indexOf("收费") !== -1 ? ((count || 0) + (zzfw || 0)).toFixed(2) :parseFloat(count).toFixed(2)) : count}</p>
         <img className={styles.bgImg} src={bgImg} alt="" />
       </Card>
     )
@@ -49,7 +46,7 @@ const Overview = () => {
           <Row gutter={[8, 8]}>
             {topNum.map((item,index)=>{
               return <Col className="gutter-row" span={8}>
-                      <ItemCard title={item.title} count={homeData ? homeData[item.type] : 0} bgImg={item.bgImg} key={index}/>
+                      <ItemCard title={item.title} count={homeData ? homeData[item.type] : 0} bgImg={item.bgImg} key={index} zzfw={homeData['zzfw_amount']}/>
                     </Col>
             })}
           </Row>
