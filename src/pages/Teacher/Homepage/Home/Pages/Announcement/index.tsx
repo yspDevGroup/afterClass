@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import styles from './index.less';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
-import { data } from './mock';
 import GoBack from '@/components/GoBack';
 import imgPop from '@/assets/mobileBg.png';
 import { XXTZGG } from '@/services/after-class/xxtzgg';
+import Footer from '@/components/Footer';
+import { data } from './mock';
+import styles from './index.less';
 
 const Announcement = () => {
   const [content, setContent] = useState<any>();
@@ -68,13 +69,17 @@ const Announcement = () => {
             </p>
           </div>
           <div className={styles.xb}>
-            <p>版本号：V1.0.0</p>
-            <p>© 2021 版权所有：陕西五育汇智信息技术有限公司 </p>
+            <Footer />
           </div>
         </div>
       ) : (
         // <textarea className={styles.text} value={content?.NR} readOnly></textarea>
-        <div dangerouslySetInnerHTML={{ __html: content?.NR }} className={styles.contents} />
+        <>
+          <div dangerouslySetInnerHTML={{ __html: content?.NR }} className={styles.contents} />
+          <div className={styles.xb}>
+            <Footer />
+          </div>
+        </>
       )}
     </div>
   );

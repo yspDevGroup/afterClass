@@ -64,7 +64,7 @@ body,
     justify-content: center;
     margin-top: 46px !important;
   }
-  .ant-pro-field-index-column{
+  .ant-pro-field-index-column {
     width: auto;
   }
 
@@ -121,7 +121,7 @@ body,
         // }
       }
 
-      div[id="logo"]+div::-webkit-scrollbar {
+      div[id='logo'] + div::-webkit-scrollbar {
         display: none;
       }
 
@@ -134,7 +134,6 @@ body,
 
         .ant-menu-item,
         .ant-menu-submenu {
-
           .ant-pro-menu-item-title,
           .anticon,
           .ant-menu-submenu-arrow {
@@ -159,32 +158,28 @@ body,
     }
 
     // 调整按钮与icon间距
-    .ant-btn>.anticon+span,
-    .ant-btn>span+.anticon {
+    .ant-btn > .anticon + span,
+    .ant-btn > span + .anticon {
       margin-left: 5px;
-    }
-
-    //调整头部样式
-    .ant-pro-table-list-toolbar-container {
-      padding: 16px 24px;
     }
 
     .ant-pro-field-index-column {
       width: auto;
     }
-    .ant-tabs-top > .ant-tabs-nav{
+    .ant-tabs-top > .ant-tabs-nav {
       margin-bottom: 24px;
     }
     //  调整表格操作栏样式
     .ant-pro-table-list-toolbar-container {
+      padding: 16px 24px;
       padding: 0 !important;
-      .ant-pro-table-list-toolbar-left{
-        .ant-pro-table-list-toolbar-title{
+      .ant-pro-table-list-toolbar-left {
+        .ant-pro-table-list-toolbar-title {
           padding: 0 0 24px;
         }
       }
-      .ant-pro-table-list-toolbar-right{
-        >.ant-space-item {
+      .ant-pro-table-list-toolbar-right {
+        > .ant-space-item {
           padding: 0 0 24px;
         }
       }
@@ -205,7 +200,7 @@ body,
       .ant-table-wrapper .ant-table-pagination-right {
         justify-content: center;
 
-        >li {
+        > li {
           // width: 26px;
           height: 26px;
           margin: @padding-sm;
@@ -233,16 +228,15 @@ body,
     .ant-pro-basicLayout-content {
       margin-bottom: 0;
     }
+  }
+  // 取消footer的链接信息
+  .ant-pro-global-footer {
+    margin: 0;
+    //底部样式
+    padding: 10px 0;
 
-    // 取消footer的链接信息
-    .ant-pro-global-footer {
-      margin: 0;
-      //底部样式
-      padding: 10px 0;
-
-      .ant-pro-global-footer-links {
-        display: none;
-      }
+    .ant-pro-global-footer-links {
+      display: none;
     }
   }
 
@@ -297,16 +291,16 @@ body,
   }
 
   .ant-table-thead {
-    >tr {
-      >th {
+    > tr {
+      > th {
         padding: 12px;
       }
     }
   }
 
   .ant-table-tbody {
-    >tr {
-      >td {
+    > tr {
+      > td {
         padding: 12px;
       }
     }
@@ -328,14 +322,13 @@ body,
     width: 100%;
     overflow-x: auto;
 
-    &-thead>tr,
-    &-tbody>tr {
-
-      >th,
-      >td {
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
         white-space: pre;
 
-        >span {
+        > span {
           display: block;
         }
       }
@@ -344,9 +337,8 @@ body,
 }
 
 // 兼容IE11
-@media screen and(-ms-high-contrast: active),
-(-ms-high-contrast: none) {
-  body .ant-design-pro>.ant-layout {
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
     min-height: 100vh;
   }
 }

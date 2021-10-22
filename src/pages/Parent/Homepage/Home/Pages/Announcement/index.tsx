@@ -1,10 +1,19 @@
+/*
+ * @description: 公告详情
+ * @author: zpl
+ * @Date: 2021-06-29 17:14:51
+ * @LastEditTime: 2021-10-22 12:25:39
+ * @LastEditors: zpl
+ */
 import React, { useEffect, useState } from 'react';
-import styles from './index.less';
-import { enHenceMsg, getQueryString } from '@/utils/utils';
-import { data } from './mock';
 import GoBack from '@/components/GoBack';
-import imgPop from '@/assets/mobileBg.png';
+import Footer from '@/components/Footer';
 import { XXTZGG } from '@/services/after-class/xxtzgg';
+import { enHenceMsg, getQueryString } from '@/utils/utils';
+import imgPop from '@/assets/mobileBg.png';
+import styles from './index.less';
+
+import { data } from './mock';
 
 const Announcement = () => {
   const [content, setContent] = useState<any>();
@@ -47,11 +56,11 @@ const Announcement = () => {
       )}
       {content?.BT ? <div className={styles.title}>{content?.BT}</div> : ''}
       {content?.RQ ? <div className={styles.time}>发布时间：{content?.RQ}</div> : ''}
-      {content?.BT || content?.updatedAt ? <div className={styles.line}></div> : ''}
+      {content?.BT || content?.updatedAt ? <div className={styles.line} /> : ''}
       {articlepage === 'about' ? (
         <div className={styles.guanyu}>
           <header className={styles.cusHeader}>
-            <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div>
+            <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
           </header>
           <div className={styles.tp}>
             <img src={content?.NR} alt="" />
@@ -63,13 +72,17 @@ const Announcement = () => {
             </p>
           </div>
           <div className={styles.xb}>
-            <p>版本号：V1.0.0</p>
-            <p>© 2021 版权所有：陕西五育汇智信息技术有限公司 </p>
+            <Footer />
           </div>
         </div>
       ) : (
         // <textarea className={styles.text} value={content?.NR} readOnly></textarea>
-        <div dangerouslySetInnerHTML={{ __html: content?.NR }} className={styles.contents} />
+        <>
+          <div dangerouslySetInnerHTML={{ __html: content?.NR }} className={styles.contents} />
+          <div className={styles.xb}>
+            <Footer />
+          </div>
+        </>
       )}
     </div>
   );

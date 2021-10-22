@@ -2,7 +2,7 @@
  * @description: 九朵云环境配置
  * @author: zpl
  * @Date: 2021-10-19 14:54:09
- * @LastEditTime: 2021-10-19 14:55:22
+ * @LastEditTime: 2021-10-22 12:29:10
  * @LastEditors: zpl
  */
 // https://umijs.org/config/
@@ -26,7 +26,7 @@ export default defineConfig({
   define: {
     ENV_title: '课后服务平台',
     ENV_subTitle: '课后服务平台',
-    ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
+    ENV_copyRight: '2021 版权所有：广东九朵云科技有限公司',
     ENV_host: 'http://afterclass.9cloudstech.com',
     ENV_backUrl: 'http://api.9cloudstech.com',
     ssoHost: 'http://sso.9cloudstech.com',
