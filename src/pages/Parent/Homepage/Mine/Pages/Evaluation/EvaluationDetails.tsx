@@ -38,7 +38,7 @@ const EvaluationDetails = (props: any) => {
   return <div className={styles.EvaluationDetails}>
     <GoBack title={'课程评价'} />
     <div className={styles.header}>
-      <img src={state?.KHBJSJ?.KCTP} alt="" />
+      <img src={state?.KHBJSJ?.KHKCSJ?.KCTP} alt="" />
       <div>
         <p>{state?.KHBJSJ?.KHKCSJ?.KCMC}</p>
         <p>班级：{state?.KHBJSJ?.BJMC}</p>
