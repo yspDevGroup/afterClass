@@ -94,7 +94,7 @@ const ClassManagement = () => {
           resNJ.data?.forEach((item: any) => {
             if (item.XD === itemNJ) {
               optNJ.push({
-                label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
+                label: `${item.XD}${item.NJMC}`,
                 value: item.id,
               });
             }

@@ -12,7 +12,7 @@ import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
-import { getKHKCSJ, getTeacherByClassId } from '@/services/after-class/khkcsj';
+import { getTeacherByClassId } from '@/services/after-class/khkcsj';
 import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 import styles from './AddCourse.less';

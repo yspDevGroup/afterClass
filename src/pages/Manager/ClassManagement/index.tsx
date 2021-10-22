@@ -311,8 +311,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
               const obj = {
                 XNXQId: curXNXQId,
                 KHKCSJId: kcId || state?.id,
-                page: param.current,
-                pageSize: param.pageSize,
+                page: 0,
+                pageSize: 0,
               };
               const res = await getAllClasses(obj);
               if (res.status === 'ok') {

@@ -93,11 +93,11 @@ const Edit = (props: any) => {
         nj.forEach((items: any) => {
           resNJ.data?.forEach((item: any) => {
             if (items === item.XD) {
-              if (item.XD === '初中') {
-                dataNJ.push({ text: item.NJMC, value: item.id });
-              } else {
+              // if (item.XD === '初中') {
+              //   dataNJ.push({ text: item.NJMC, value: item.id });
+              // } else {
                 dataNJ.push({ text: `${item.XD}${item.NJMC}`, value: item.id });
-              }
+              // }
             }
           });
         });

@@ -287,7 +287,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
             {info?.NJSJs?.map((item: any) => {
               return (
                 <Tag key={item.id}>
-                  {item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}
+                  {`${item.XD}${item.NJMC}`}
                 </Tag>
               );
             })}

@@ -54,7 +54,7 @@ const MutualEvaluation = () => {
           resNJ.data?.forEach((item) => {
             if (item.XD === itemNJ) {
               optNJ.push({
-                label: item.XD === '初中' ? item.NJMC : `${item.XD}${item.NJMC}`,
+                label: `${item.XD}${item.NJMC}`,
                 value: item.id,
               });
             }
@@ -161,7 +161,7 @@ const MutualEvaluation = () => {
             text={text?.map((item: any) => {
               return (
                 <Tag key={item.id}>
-                  {item.XD === '初中' ? `${item.NJMC}` : `${item.XD}${item.NJMC}`}
+                  {`${item.XD}${item.NJMC}`}
                 </Tag>
               );
             })}
