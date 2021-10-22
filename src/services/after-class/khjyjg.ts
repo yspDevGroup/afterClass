@@ -11,7 +11,7 @@ export async function KHJYJG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -51,7 +51,7 @@ export async function KHJYJG(
     message?: string;
   }>(`/khjyjg/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -65,10 +65,10 @@ export async function deleteKHJYJG(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjyjg/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -156,13 +156,13 @@ export async function updateKHJYJG(
   body: API.UpdateKHJYJG,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjyjg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -437,6 +437,25 @@ export async function getAttendanceTrend(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khjyjg/getAttendanceTrend', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 培训机构按日期统计收款，退款信息 POST /khjyjg/getRefund */
+export async function getRefund(
+  body: {
+    KHJYJGId?: string;
+    startDate?: string;
+    endDate?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjyjg/getRefund', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'antd';
 import type { FC } from 'react';
-// import WWOpenDataCom from '@/pages/Manager/ClassManagement/components/WWOpenDataCom';
 import styles from './index.less';
 import EllipsisHint from '../EllipsisHint';
 import WWOpenDataCom from '../WWOpenDataCom';

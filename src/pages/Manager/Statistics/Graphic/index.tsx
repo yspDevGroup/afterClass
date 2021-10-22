@@ -42,7 +42,6 @@ const ChartsPage = (props: any) => {
     });
     if (result?.status === 'ok') {
       const { data } = result;
-      console.log(data);
       if (data) {
         defaultData.serviceNum = [{
           title: '教师总数',
@@ -54,7 +53,7 @@ const ChartsPage = (props: any) => {
         },
         {
           title: '收款总额',
-          num: (data?.bjdd_amount || 0) + (data?.zzfw_amount || 0)
+          num: Number((data?.bjdd_amount || 0) + (data?.zzfw_amount || 0)).toFixed(2)
         },
         {
           title: '退款总额',
@@ -71,7 +70,7 @@ const ChartsPage = (props: any) => {
         }, {
           icon: leave,
           title: '请假人数',
-          num: (data.ydxs_count || 0) - (data.sdxs_count || 0)
+          num: (data.qjxs_count || 0)
         }];
         defaultData.numCollect = [{
           title: '课程总数',
@@ -81,7 +80,7 @@ const ChartsPage = (props: any) => {
           num: data.bj_count || 0
         }, {
           title: '学校教师数',
-          num: (data.js_count || 0) - (data.jgjs_count || 0)
+          num: Number((data.js_count || 0) - (data.jgjs_count || 0)).toFixed(2)
         }, {
           title: '合作机构数',
           num: data.jg_count || 0,
@@ -93,7 +92,7 @@ const ChartsPage = (props: any) => {
           num: data.jgjs_count || 0
         }];
         data.lxs?.length && data.lxs.forEach((item: { KCTAG: any; xxkc_count: number; jgkc_count: number }) => {
-          const counts = (item.xxkc_count || 0) + (item.jgkc_count || 0);
+          const counts = Number((item.xxkc_count || 0) + (item.jgkc_count || 0));
           if (counts !== 0) {
             defaultData.courseCollect.push({
               type: item.KCTAG,
@@ -125,15 +124,15 @@ const ChartsPage = (props: any) => {
         defaultData.checkOutTeacher = [{
           icon: should,
           title: '应到人数',
-          num: data.ydxs_count || 0
+          num: data.ydjs_count || 0
         }, {
           icon: real,
           title: '实到人数',
-          num: data.sdxs_count || 0
+          num: data.sdjs_count || 0
         }, {
           icon: leave,
           title: '请假人数',
-          num: (data.ydxs_count || 0) - (data.sdxs_count || 0)
+          num: (data.qjjs_count || 0)
         }];
       }
     }

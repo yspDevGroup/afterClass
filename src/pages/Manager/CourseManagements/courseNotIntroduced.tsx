@@ -13,6 +13,7 @@ import type { classType, TableListParams } from './data';
 
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { createKHKCSQ, getToIntroduceBySchool, updateKHKCSQ } from '@/services/after-class/khkcsq';
+import { getTeacherByClassId } from '@/services/after-class/khkcsj';
 /**
  * 未引入课程
  * @returns
@@ -145,8 +146,20 @@ const courseNotIntroduced = () => {
         return (
           <Space size="middle">
             <a
-              onClick={() => {
-                setInfo(record);
+              onClick={async () => {
+                const res = await getTeacherByClassId({
+                  KHKCSJId: record.id,
+                  pageSize: 0,
+                  page: 0
+                });
+                if(res.status === 'ok'){
+                  setInfo({
+                    ...record,
+                    KHKCJs: res?.data?.rows
+                  });
+                }else{
+                  setInfo(record);
+                }
                 setVisibleSchoolInfo(true);
               }}
             >
