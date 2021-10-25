@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-10-18 17:21:15
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-10-22 14:49:15
+ * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row,message } from 'antd';
@@ -53,7 +53,7 @@ const Index = () => {
           }
       } else {
         setkai(true);
-      
+
       }
     })();
   }, []);
@@ -170,7 +170,7 @@ const Index = () => {
                     <Link to="/courseManagements/CourseManagements">课程管理</Link>
                   </li>
                   <li>
-                    <Link to="/classManagement">课程班管理</Link>
+                    <Link to="/courseManagements/classManagement">课程班管理</Link>
                   </li>
                 </ul>
               </Col>
@@ -185,7 +185,7 @@ const Index = () => {
                 <img src={home3} alt="" />
                 <ul>
                   <li>
-                    <Link to="/courseScheduling">排课管理</Link>
+                    <Link to="/courseManagements/courseScheduling">排课管理</Link>
                   </li>
                 </ul>
               </Col>
@@ -203,7 +203,7 @@ const Index = () => {
                     <Link to="/courseManagements/CourseManagements">课程发布</Link>
                   </li>
                   <li>
-                    <Link to="/classManagement">开班</Link>
+                    <Link to="/courseManagements/classManagement">开班</Link>
                   </li>
                 </ul>
               </Col>

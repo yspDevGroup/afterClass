@@ -255,7 +255,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       align: 'center',
       width: 80,
       render: (_, record) => {
-        const Url = `/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}`;
+        const Url = `/courseManagements/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}`;
         if (record.BJZT === '待开班') {
           if (record.pk_count === 0) {
             return <Link to={Url}>未排课</Link>;

@@ -97,7 +97,7 @@ const AdministrativeClass = () => {
           <Link
             key="details"
             to={{
-              pathname: '/administrativeClass/administrativeClassDetail',
+              pathname: '/statistics/administrativeClass/administrativeClassDetail',
               state: record,
             }}
           >
