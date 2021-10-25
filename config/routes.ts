@@ -132,6 +132,12 @@
         icon: 'Build',
         component: './Manager/CourseScheduling',
       },
+      // 教师调代课管理
+      {
+        path: '/courseManagements/substituteCourse',
+        name: 'substituteCourse',
+        component: './Manager/CourseManagements/SubstituteCourse',
+      },
       {
         path: '/courseManagements/mechanismCourse/edit',
         name: 'mechanismCourseInfo',

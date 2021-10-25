@@ -69,6 +69,7 @@ const TkApply = () => {
       setNewJSSJ(value)
     }
   }
+
   const onFinish = async (values: any) => {
     const newData = {
       LX: 0,
