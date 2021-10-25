@@ -1,12 +1,12 @@
-import joinSchool from '@/assets/icons/join-school.png'
-import openOrganization from '@/assets/icons/open-Organization.png'
-import courseSum from '@/assets/icons/course-sum.png'
-import joinStudent from '@/assets/icons/join-student.png'
-import joinTeacher from '@/assets/icons/join-teacher.png'
-import totalSum from '@/assets/icons/total-sum.png'
-import refundSum from '@/assets/icons/refund-sum.png'
-import organizationCourse from '@/assets/icons/organization-course.png'
-import schoolCourse from '@/assets/icons/school-course.png'
+// import joinSchool from '@/assets/icons/join-schools.png'
+import openOrganization from '@/assets/icons/open-organization.png';
+import courseSum from '@/assets/icons/course-sum.png';
+import joinStudent from '@/assets/icons/join-student.png';
+import joinTeacher from '@/assets/icons/join-teacher.png';
+import totalSum from '@/assets/icons/total-sum.png';
+import refundSum from '@/assets/icons/refund-sum.png';
+import organizationCourse from '@/assets/icons/organization-course.png';
+import schoolCourse from '@/assets/icons/school-course.png';
 
 export const topNum = [
   {
@@ -18,13 +18,11 @@ export const topNum = [
     title: '课程总数',
     type: 'kc_count',
     bgImg: courseSum,
-
   },
   {
     title: '课程班总数',
     type: 'bj_count',
     bgImg: courseSum,
-
   },
   {
     title: '学校课程',
@@ -55,5 +53,5 @@ export const topNum = [
     title: '退费总额(元)',
     type: 'tk_amount',
     bgImg: refundSum,
-  }
+  },
 ];
