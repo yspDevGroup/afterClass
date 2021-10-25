@@ -355,7 +355,7 @@ const CourseList = () => {
       dataIndex: 'NJSJs',
       width: 100,
       render: (_, record) => {
-        const Url = `/classManagement`;
+        const Url = `/courseManagements/classManagement`;
         return (
           <Link
             to={{

@@ -44,11 +44,13 @@
     component: './Manager/Homepage',
   },
   {
+    // 基本信息管理
     path: '/basicalSettings',
     name: 'basicalSettings',
     icon: 'fileText',
     routes: [
       {
+        // 学校信息维护
         path: '/basicalSettings/schoolInfo',
         name: 'schoolInfo',
         component: './Manager/BasicalSettings/SchoolInfo',
@@ -60,6 +62,7 @@
         component: './Manager/BasicalSettings/SchoolInfo/SchoolEditor',
       },
       {
+        // 服务协议配置
         path: '/basicalSettings/service',
         name: 'service',
         component: './Manager/Announcements/Service',
@@ -71,13 +74,13 @@
         component: './Manager/Announcements/Service/EditArticle',
       },
       {
+        // 学期学年维护
         path: '/basicalSettings/termManagement',
         name: 'termManagement',
         component: './Manager/BasicalSettings/TermManagement',
       },
-
-      // 教师管理
       {
+        // 教师管理
         path: '/basicalSettings/teacherManagement',
         name: 'teacherManagement',
         icon: 'Team',
@@ -90,36 +93,44 @@
         component: './Manager/BasicalSettings/TeacherManagement/Detail',
       },
       {
+        // 时段维护
         path: '/basicalSettings/periodMaintenance',
         name: 'periodMaintenance',
         component: './Manager/BasicalSettings/PeriodMaintenance',
       },
       {
+        // 场地维护
         path: '/basicalSettings/roomManagement',
         name: 'roomManagement',
         component: './Manager/BasicalSettings/RoomManagement',
       },
-      {
-        path: '/basicalSettings/',
-        redirect: '/basicalSettings/termManagement',
-      },
     ],
   },
   {
-    // 课程管理
+    // 课程服务
     path: '/courseManagements',
     name: 'courseManagements',
     icon: 'AppstoreAdd',
     routes: [
       {
+        // 课程管理
         path: '/courseManagements/CourseManagements',
         name: 'courseManagements',
         component: './Manager/CourseManagements',
       },
       {
-        path: '/courseManagements/leaveManagement',
-        name: 'leaveManagement',
-        component: './Manager/CourseManagements/LeaveManagement',
+        // 课程班管理
+        path: '/courseManagements/classManagement',
+        name: 'classManagement',
+        icon: 'InsertRowAbove',
+        component: './Manager/ClassManagement',
+      },
+      {
+        // 排课管理
+        path: '/courseManagements/courseScheduling',
+        name: 'courseScheduling',
+        icon: 'Build',
+        component: './Manager/CourseScheduling',
       },
       {
         path: '/courseManagements/mechanismCourse/edit',
@@ -127,79 +138,22 @@
         component: './Manager/Mechanisms/edit',
         hideInMenu: 'true',
       },
-      //退课管理
-      {
-        path: '/courseManagements/reimbursementClass',
-        name: 'reimbursementClass',
-        component: './Manager/CourseManagements/ReimbursementClass',
-      },
-      //退款管理
-      {
-        path: '/courseManagements/refundManagement',
-        name: 'refundManagement',
-        component: './Manager/CourseManagements/RefundManagement',
-      },
     ],
   },
   {
-    path: '/classManagement',
-    name: 'classManagement',
-    icon: 'InsertRowAbove',
-    component: './Manager/ClassManagement',
-  },
-  {
-    path: '/courseScheduling',
-    name: 'courseScheduling',
-    icon: 'Build',
-    component: './Manager/CourseScheduling',
-  },
-  {
-    path: '/coursePatrol',
-    icon: 'SolutionOutlined',
-    name: 'coursePatrol',
-    routes: [
-      {
-        path: '/coursePatrol/Management',
-        name: 'Management',
-        component: './Manager/CoursePatrol',
-      },
-      //巡课记录
-      {
-        path: '/coursePatrol/Record',
-        name: 'Record',
-        component: './Manager/CoursePatrol/Record',
-      },
-    ],
-  },
-  {
-    path: '/orderInquiry',
-    name: 'orderInquiry',
-    icon: 'Profile',
-    routes: [
-      {
-        path: '/orderInquiry/courseorder',
-        component: './Manager/OrderInquiry/CourseOrder',
-        name: 'courseorder',
-      },
-      {
-        path: '/orderInquiry/serviceorder',
-        component: './Manager/OrderInquiry/ServiceOrder',
-        name: 'serviceorder',
-      },
-    ],
-  },
-  // 服务管理
-  {
+    // 增值服务
     path: '/valueAddedServices',
     name: 'valueAddedServices',
     icon: 'SmileOutlined',
     routes: [
       {
+        // 服务类别配置
         path: '/valueAddedServices/cateringService',
         component: './Manager/ValueAddedServices/CateringService',
         name: 'cateringService',
       },
       {
+        // 服务管理
         path: '/valueAddedServices/serviceManagement',
         name: 'serviceManagement',
         routes: [
@@ -219,26 +173,80 @@
       },
     ],
   },
-  // 行政班管理
   {
-    path: '/administrativeClass',
-    name: 'administrativeClass',
-    icon: 'CodepenOutlined',
-    component: './Manager/AdministrativeClass',
+    // 巡课管理
+    path: '/coursePatrol',
+    icon: 'SolutionOutlined',
+    name: 'coursePatrol',
+    routes: [
+      {
+        // 值班安排
+        path: '/coursePatrol/Management',
+        name: 'Management',
+        component: './Manager/CoursePatrol',
+      },
+      {
+        // 巡课记录
+        path: '/coursePatrol/Record',
+        name: 'Record',
+        component: './Manager/CoursePatrol/Record',
+      },
+    ],
   },
   {
-    path: '/administrativeClass/administrativeClassDetail',
-    name: 'administrativeClassDetail',
-    component: './Manager/AdministrativeClass/Detail',
-    hideInMenu: 'true',
+    // 行政审批
+    path: '/audit',
+    name: 'audit',
+    icon: 'Profile',
+    routes: [
+      {
+        // 请假管理
+        path: '/audit/leaveManagement',
+        name: 'leaveManagement',
+        component: './Manager/CourseManagements/LeaveManagement',
+      },
+    ]
   },
-  // 通知公告
   {
+    // 订单管理
+    path: '/orderInquiry',
+    name: 'orderInquiry',
+    icon: 'Profile',
+    routes: [
+      {
+        // 课程订单
+        path: '/orderInquiry/courseorder',
+        component: './Manager/OrderInquiry/CourseOrder',
+        name: 'courseorder',
+      },
+      {
+        // 服务订单
+        path: '/orderInquiry/serviceorder',
+        component: './Manager/OrderInquiry/ServiceOrder',
+        name: 'serviceorder',
+      },
+      {
+        // 课程退订
+        path: '/orderInquiry/reimbursementClass',
+        name: 'reimbursementClass',
+        component: './Manager/CourseManagements/ReimbursementClass',
+      },
+      {
+        // 退款管理
+        path: '/orderInquiry/refundManagement',
+        name: 'refundManagement',
+        component: './Manager/CourseManagements/RefundManagement',
+      },
+    ],
+  },
+  {
+    // 通知公告
     path: '/announcements',
     name: 'announcements',
     icon: 'Notification',
     routes: [
       {
+        // 校内通知
         name: 'notice',
         path: '/announcements/notice',
         routes: [
@@ -263,6 +271,7 @@
         ],
       },
       {
+        // 政策公告
         path: '/announcements/policy',
         name: 'policy',
         routes: [
@@ -282,47 +291,40 @@
       },
     ],
   },
-  // 统计管理
   {
+    // 统计报表
     path: '/statistics',
     name: 'statistics',
     icon: 'BarChartOutlined',
     routes: [
-      // 数据大屏
       {
-        path: '/statistics/graphic',
-        layout: false,
-        name: 'graphic',
-        component: './Manager/Statistics/Graphic',
-      },
-      // 课后课程统计
-      {
+        // 课程统计
         path: '/statistics/afterSchoolCourse',
         name: 'afterschoolcoursen',
         component: './Manager/Statistics/AfterSchoolCourse',
       },
-      //课后课程详情
       {
+        // 课后课程详情
         path: '/statistics/afterSchoolCourse/detail',
         hideInMenu: 'true',
         name: 'afterschoolclass',
         component: './Manager/Statistics/AfterSchoolCourse/Detail',
       },
-      //请假管理
       {
+        // 考勤统计
         path: '/statistics/Attendance',
-        name: 'Attendancet',
+        name: 'attendancet',
         component: './Manager/Statistics/Attendance',
       },
-      //考勤统计详情
       {
+        // 考勤统计详情
         path: '/statistics/Attendance/Detail',
         hideInMenu: 'true',
-        name: 'AttendanceDetail',
+        name: 'attendanceDetail',
         component: './Manager/Statistics/Attendance/Detail',
       },
-      //课程班互评统计
       {
+        // 互评统计
         path: '/statistics/mutualEvaluation',
         name: 'mutualEvaluation',
         component: './Manager/Statistics/MutualEvaluation',
@@ -333,18 +335,36 @@
         hideInMenu: 'true',
         component: './Manager/Statistics/MutualEvaluation/Class',
       },
-
-      //互评统计详情
       {
         path: '/statistics/mutualEvaluation/detail',
         hideInMenu: 'true',
         name: 'mutualEvaluationInfo',
         component: './Manager/Statistics/MutualEvaluation/Detail',
       },
+      {
+        // 行政班统计
+        path: '/statistics/administrativeClass',
+        name: 'administrativeClass',
+        component: './Manager/AdministrativeClass',
+      },
+      {
+        path: '/statistics/administrativeClass/administrativeClassDetail',
+        name: 'administrativeClassDetail',
+        component: './Manager/AdministrativeClass/Detail',
+        hideInMenu: 'true',
+      },
     ],
   },
-  // 素质教育资源
   {
+    // 数据大屏
+    path: '/graphic',
+    layout: false,
+    icon: 'PieChartOutlined',
+    name: 'graphic',
+    component: './Manager/Statistics/Graphic',
+  },
+  {
+    // 素质教育资源
     path: '/educational',
     icon: 'RadarChartOutlined',
     name: 'educational',
@@ -354,6 +374,7 @@
   {
     path: '/teacher',
     layout: false,
+    name: 'teacher',
     hideInMenu: 'true',
     routes: [
       {
@@ -400,8 +421,8 @@
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/CallTheRoll',
       },
-       // 教师请假
-       {
+      // 教师请假
+      {
         path: '/teacher/education/askForLeave',
         name: 'askForLeave',
         hideInMenu: 'true',
