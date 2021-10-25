@@ -131,7 +131,7 @@ const EditArticle = () => {
       <Button
         type="primary"
         onClick={() => {
-          history.goBack();
+           history.go(-1);
         }}
       >
         <LeftOutlined />
@@ -274,7 +274,7 @@ const EditArticle = () => {
                   <Button
                     htmlType="button"
                     onClick={() => {
-                      history.goBack();
+                       history.go(-1);
                     }}
                   >
                     取消

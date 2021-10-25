@@ -264,7 +264,7 @@ const AddArranging: FC<PropsType> = (props) => {
   const onReset = (prop: any) => {
     const bjID = getQueryString('courseId');
     if (bjID) {
-      history.goBack();
+       history.go(-1);
     } else {
       tableServers();
       setState(true);

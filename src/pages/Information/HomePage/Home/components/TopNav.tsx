@@ -12,7 +12,7 @@ const TopNav = (props: any) => {
         <Row className={styles.topContainer}>
           <Col span={4}>
           <div onClick={() => {
-          history.goBack();
+          history.go(-1);
         }}
         style={{
           marginBottom: '24px'
@@ -24,7 +24,7 @@ const TopNav = (props: any) => {
           <Col span={16}>
             {title}
           </Col>
-          <Col span={4}></Col>
+          <Col span={4} />
         </Row>
 
     </div>

@@ -280,7 +280,7 @@ const Edit = (props: any) => {
             <Button
               style={{ marginRight: 16 }}
               onClick={() => {
-                history.goBack();
+                 history.go(-1);
               }}
             >
               取消
