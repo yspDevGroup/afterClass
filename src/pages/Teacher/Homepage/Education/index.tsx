@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styles from './index.less';
 import 'antd/es/modal/style';
 import ClassCalendar from './ClassCalendar';
+import ImagesUpload from '@/components/ImagesUpload';
 import { Link } from 'umi';
 import icon_stuEvaluate from '@/assets/icon_stuEvaluate.png';
 import icon_courseBack from '@/assets/icon_courseBack.png';
@@ -62,7 +63,7 @@ const Study = () => {
           <Link
             key="kcfk"
             to={{
-              pathname: '/teacher/education/feedback',
+              pathname: '/teacher/education/record',
               state: yxkc
             }}
             className={styles.courseBack}>
@@ -73,11 +74,30 @@ const Study = () => {
             </p>
             <p className={styles.courseBackP3}>课程反馈</p>
           </Link>
+          <Link
+            key="ktfc"
+            to={{
+              pathname: '/teacher/education/record',
+              state: yxkc
+            }}
+            className={styles.record}>
+            <p className={styles.recordP1}>
+              <p className={styles.recordP2}>
+                <img src={icon_courseBack} alt="" />
+              </p>
+            </p>
+            <p className={styles.recordP3}>课堂风采</p>
+          </Link>
 
         </div>
         <div className={styles.titleBar}>我的课表</div>
         <ClassCalendar />
       </div>
+      {/* <ImagesUpload
+              onValueChange={(value: string) => {
+
+              }}
+            /> */}
     </div>
   );
 };
