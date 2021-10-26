@@ -17,7 +17,7 @@ const List = (props: { data: any, col?: number, }) => {
       {data?.map((item: any, index: number) => {
         if (index < col*5) {
           return <Col span={24 / col} key={item.title} style={{ marginTop: index >= col ? 24 : 0 }}>
-            <p>{item}</p>
+            <p style={{textIndent:'16px'}}>{item}</p>
           </Col>
         }
         return ''
