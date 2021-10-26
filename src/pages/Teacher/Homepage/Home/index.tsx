@@ -65,24 +65,20 @@ const Home = () => {
   }, [currentUserInfo]);
 
   useEffect(() => {
-    (
-      async()=>{
-        const res = await getAllKHJSTDK({
-          LX: [1],
-          ZT: [0],
-          XXJBSJId: currentUser?.xxId,
-          DKJSId: currentUser.JSId || testTeacherId,
-        })
-        if (res.status === 'ok') {
-          setDkData(res.data?.rows)
-        } else {
-          setDkData([])
-        }
-
+    (async () => {
+      const res = await getAllKHJSTDK({
+        LX: [1],
+        ZT: [0],
+        XXJBSJId: currentUser?.xxId,
+        DKJSId: currentUser.JSId || testTeacherId,
+      });
+      if (res.status === 'ok') {
+        setDkData(res.data?.rows);
+      } else {
+        setDkData([]);
       }
-    )()
-
-  }, [])
+    })();
+  }, []);
   useEffect(() => {
     async function announcements() {
       const res = await getXXTZGG({
@@ -186,11 +182,11 @@ const Home = () => {
         </div>
         <div className={styles.patrols}>
           <div style={{ backgroundImage: `url(${DaiKe})` }}>
-          <Link to="/teacher/home/substituteList">
-            <p>
-              <span>代课申请</span>
-              <Badge count={DkData?.length || 0} showZero={true} offset={[5, 0]} />
-            </p>
+            <Link to="/teacher/home/substituteList">
+              <p>
+                <span>代课申请</span>
+                <Badge count={DkData?.length || 0} showZero={true} offset={[5, 0]} />
+              </p>
             </Link>
           </div>
           <div style={{ backgroundImage: `url(${XunKe})` }}>
