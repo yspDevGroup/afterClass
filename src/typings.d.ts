@@ -180,10 +180,19 @@ declare const WWOpenData: any;
 declare const wxInfo: {
   xqList: (WXDepType & { njList?: WXDepType[] })[];
 };
+// 学年学期全局配置信息
 declare const xnxqInfo: {
   xnxqList: any;
   current: any;
   data: any;
+};
+// 家长端首页全局配置信息
+declare let parentHomeInfo: {
+  data: any
+};
+// 教师端首页全局配置信息
+declare let teacherHomeInfo: {
+  data: any
 };
 
 type InitialState = {

@@ -1,22 +1,22 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { List, Modal, message, Form, Input, Checkbox, Divider, Radio, Space } from 'antd';
-import type { FormInstance } from 'antd';
-import { useModel } from 'umi';
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import { Calendar } from 'react-h5-calendar';
-import styles from './index.less';
-import ListComponent from '@/components/ListComponent';
 import moment from 'moment';
-import { compareNow, DateRange, Week } from '@/utils/Timefunction';
-import noData from '@/assets/noCourses1.png';
-import { msgLeaveSchool } from '@/services/after-class/wechat';
+import { useModel } from 'umi';
+import type { FormInstance } from 'antd';
+import { Calendar } from 'react-h5-calendar';
+import { List, Modal, message, Form, Input, Checkbox, Divider, Radio, Space } from 'antd';
 import type { DisplayColumnItem } from '@/components/data';
+import ListComponent from '@/components/ListComponent';
 import { getData } from '@/utils/utils';
-import { ParentHomeData } from '@/services/local-services/teacherHome';
-import noOrder from '@/assets/noOrder1.png';
+import { compareNow, DateRange, Week } from '@/utils/Timefunction';
+import { msgLeaveSchool } from '@/services/after-class/wechat';
+import { ParentHomeData } from '@/services/local-services/mobileHome';
 
+import styles from './index.less';
+import noData from '@/assets/noCourses1.png';
+import noOrder from '@/assets/noOrder1.png';
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -214,7 +214,7 @@ const ClassCalendar = (props: propstype) => {
   useEffect(() => {
     (async () => {
       const JSId = currentUser.JSId || testTeacherId;
-      const res = await ParentHomeData(xxId, JSId);
+      const res = await ParentHomeData(xxId, JSId, 'teacher');
       const { weekSchedule } = res;
       const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
       setDatedata?.(learnData);
@@ -254,7 +254,7 @@ const ClassCalendar = (props: propstype) => {
         formRef.current.validateFields()
       })
       .catch((info: { errorFields: any; }) => {
-        const error = info.errorFields
+        console.log(info.errorFields);
       });
   };
 
@@ -280,7 +280,7 @@ const ClassCalendar = (props: propstype) => {
     setChoosenCourses(newChoosen);
   };
   const onChanges = (e: any) => {
-    const { desc, bjid, title, jcId,FJId } = e.target.value;
+    const { desc, bjid, title, jcId, FJId } = e.target.value;
     setDatedata?.({
       day,
       start: desc?.[0].left?.[0].substring(0, 5),
@@ -356,7 +356,7 @@ const ClassCalendar = (props: propstype) => {
       {type && type === 'edit' ? (
         <p style={{ lineHeight: '35px', margin: 0, color: '#888' }}>请选择课程</p>
       ) : (type && type === 'dksq' || type === 'tksq' ?
-        <p style={{ lineHeight: '35px', margin: 0, color: '#999', fontSize: '12px' }}>{type === 'dksq' ? '代课课程' :  type === 'tksq' ? '调课课程':''} </p> :
+        <p style={{ lineHeight: '35px', margin: 0, color: '#999', fontSize: '12px' }}>{type === 'dksq' ? '代课课程' : type === 'tksq' ? '调课课程' : ''} </p> :
         <div className={styles.subTitle}>{cDay}</div>)}
       {type && type === 'edit' ? (
         <List
@@ -385,25 +385,25 @@ const ClassCalendar = (props: propstype) => {
       ) : (type === 'dksq' || type === 'tksq' ? <div className={styles.dksq}>
         {
           course?.list?.length === 0 ? <div className={styles.ZWSJ}>
-          <img src={noOrder} alt="" />
-          <p>暂无数据</p>
+            <img src={noOrder} alt="" />
+            <p>暂无数据</p>
           </div> :
-          <Radio.Group onChange={onChanges}>
-          <Space direction="vertical">
-            {
-              course?.list?.map((item: any) => {
-                return <Radio value={item}>
-                  <p> {item?.title}</p>
-                  <p> {item.desc?.[0].left}</p>
-                </Radio>
-              })
-            }
-          </Space>
-        </Radio.Group>
+            <Radio.Group onChange={onChanges}>
+              <Space direction="vertical">
+                {
+                  course?.list?.map((item: any) => {
+                    return <Radio value={item}>
+                      <p> {item?.title}</p>
+                      <p> {item.desc?.[0].left}</p>
+                    </Radio>
+                  })
+                }
+              </Space>
+            </Radio.Group>
         }
 
       </div> :
-      <ListComponent listData={course} operation={iconTextData} />)}
+        <ListComponent listData={course} operation={iconTextData} />)}
       <Modal className={styles.leaveSchool} title="下课通知" forceRender={true} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
         <Form ref={formRef}>
           <Form.Item

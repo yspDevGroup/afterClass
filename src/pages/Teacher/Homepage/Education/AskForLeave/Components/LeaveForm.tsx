@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-10-15 10:18:19
+ * @LastEditTime: 2021-10-26 16:01:09
  * @LastEditors: Sissle Lynn
  */
 import { useState } from 'react';
@@ -53,7 +53,6 @@ const LeaveForm = (props: {
       JZGJBSJId: currentUser.JSId || testTeacherId,
       bjIds,
     });
-    console.log(res,'========')
     if (res.status === 'ok') {
       message.success('提交成功');
       setReload(true);

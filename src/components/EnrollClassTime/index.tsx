@@ -1,17 +1,16 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './index.less';
 import ListComp from '../ListComponent';
 import type { ListData } from '../ListComponent/data';
-import myContext from '@/utils/MyContext';
 import TimeRight from './TimeRight';
 import noData from '@/assets/today.png';
 import noData1 from '@/assets/today1.png';
 import moment from 'moment';
 
-const EnrollClassTime = (props: { teacher?: boolean }) => {
-  const { teacher = false } = props;
-  // 获取首页数据
-  const { courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj } = useContext(myContext);
+const EnrollClassTime = (props: { dataResource: any; teacher?: boolean }) => {
+  const { dataResource, teacher = false } = props;
+  const { courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj } = dataResource;
+
   const [datasourse, setDatasourse] = useState<ListData>(); // 今日课程中的数据
   const getTodayData = (data: any) => {
     const day = new Date(); // 获取现在的时间  eg:day Thu Jun 24 2021 18:54:38 GMT+0800 (中国标准时间)

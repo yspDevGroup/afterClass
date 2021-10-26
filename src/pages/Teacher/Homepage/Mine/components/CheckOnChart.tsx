@@ -2,8 +2,8 @@
  * @description:
  * @author: lyy
  * @Date: 2021-06-11 14:33:28
- * @LastEditTime: 2021-09-30 15:57:38
- * @LastEditors: zpl
+ * @LastEditTime: 2021-10-26 16:51:07
+ * @LastEditors: Sissle Lynn
  */
 import React from 'react';
 import { Pie } from '@ant-design/charts';
@@ -18,7 +18,6 @@ type ItemType = {
 
 const CheckOnChart = (props: { data: ItemType[]; title?: string; cls?: string }) => {
   const { data, title, cls } = props;
-
   const pieConfig = {
     appendPadding: 10,
     height: 150,

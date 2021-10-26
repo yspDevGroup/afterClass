@@ -10,8 +10,8 @@ const StudentEvaluation = (props: any) => {
     <GoBack title={'学生评价'} teacher onclick='/teacher/home?index=education' />
     {
       state?.length === 0 ? <div className={styles.ZWSJ}>
-      <img src={noOrder} alt="" />
-      <p>暂无数据</p>
+        <img src={noOrder} alt="" />
+        <p>暂无数据</p>
       </div> :
         <div className={styles.wrap}>
           {
@@ -19,11 +19,11 @@ const StudentEvaluation = (props: any) => {
               return <div className={styles.cards}>
                 <p>{value?.KHKCSJ?.KCMC}</p>
                 <p>{value?.BJMC}</p>
-                  <Link key="xq"
-                    to={{
-                      pathname: '/teacher/education/studentEvaluation/details',
-                      state: value
-                    }}><Button>去评价</Button> </Link>
+                <Link key="xq"
+                  to={{
+                    pathname: '/teacher/education/studentEvaluation/details',
+                    state: value
+                  }}><Button>去评价</Button> </Link>
               </div>
             })
           }

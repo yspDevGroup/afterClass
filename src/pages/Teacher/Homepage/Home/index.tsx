@@ -1,40 +1,41 @@
-import React, { useEffect, useContext, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import imgPop from '@/assets/teacherBg.png';
-import styles from './index.less';
-import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
-import IconFont from '@/components/CustomIcon';
-import EnrollClassTime from '@/components/EnrollClassTime';
-import myContext from '@/utils/MyContext';
-import TeachCourses from './components/TeachCourses';
-import Details from './Pages/Details';
 import { useModel, Link } from 'umi';
+import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
+import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
+import { getScheduleByDate } from '@/services/after-class/khxksj';
+import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
+import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
+
+import WWOpenDataCom from '@/components/WWOpenDataCom';
+import IconFont from '@/components/CustomIcon';
+import TeachCourses from './components/TeachCourses';
+import EnrollClassTime from '@/components/EnrollClassTime';
+import Details from './Pages/Details';
+
+import styles from './index.less';
+import imgPop from '@/assets/teacherBg.png';
 import resourcesBg from '@/assets/resourcesBg.png';
 import resourcesRgo from '@/assets/resourcesRgo.png';
 import XunKe from '@/assets/XunKe.png';
 import DaiKe from '@/assets/DaiKe.png';
-import { getScheduleByDate } from '@/services/after-class/khxksj';
-import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
-import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
-import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
+import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 const Home = () => {
-  const { currentUserInfo } = useContext(myContext);
-  const userRef = useRef(null);
-  const [notification, setNotification] = useState<any[]>();
   const { initialState, refresh } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const userRef = useRef(null);
   const formRef = React.createRef<any>();
-
-  const today = dayjs().format('YYYY/MM/DD');
+  const [notification, setNotification] = useState<any[]>();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [totalData, setTotalData] = useState<any>({});
   // 巡课中课程安排数据
   const [dateData, setDateData] = useState<any>([]);
   const [DkData, setDkData] = useState<any>([]);
-  const getData = async (day: string) => {
+  const today = dayjs().format('YYYY/MM/DD');
+  const getTodayData = async (day: string) => {
     const res = await getScheduleByDate({
       JZGJBSJId: currentUser.JSId || testTeacherId,
       RQ: day,
@@ -50,62 +51,60 @@ const Home = () => {
       }
     }
   };
+  const getTDKData = async () => {
+    const res = await getAllKHJSTDK({
+      LX: [1],
+      ZT: [0],
+      XXJBSJId: currentUser?.xxId,
+      DKJSId: currentUser.JSId || testTeacherId,
+    });
+    if (res.status === 'ok') {
+      setDkData(res.data?.rows);
+    } else {
+      setDkData([]);
+    }
+  };
+  const getAnnoceData = async () => {
+    const res = await getXXTZGG({
+      ZT: ['已发布'],
+      XXJBSJId: currentUser?.xxId,
+      LX: ['0'],
+      page: 0,
+      pageSize: 0,
+    });
+    if (res.status === 'ok') {
+      if (!(res.data?.rows?.length === 0)) {
+        setNotification(res.data?.rows);
+      }
+    } else {
+      enHenceMsg(res.message);
+    }
+  };
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
         await initWXConfig(['checkJsApi']);
       }
       if (await initWXAgentConfig(['checkJsApi'])) {
-        showUserName(userRef?.current, currentUserInfo?.UserId);
+        showUserName(userRef?.current, currentUser?.UserId);
         // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
         WWOpenData?.bindAll(document.querySelectorAll('ww-open-data'));
       }
     })();
-    getData(today);
-  }, [currentUserInfo]);
-
-  useEffect(() => {
-    (async () => {
-      const res = await getAllKHJSTDK({
-        LX: [1],
-        ZT: [0],
-        XXJBSJId: currentUser?.xxId,
-        DKJSId: currentUser.JSId || testTeacherId,
-      });
-      if (res.status === 'ok') {
-        setDkData(res.data?.rows);
-      } else {
-        setDkData([]);
-      }
-    })();
-  }, []);
-  useEffect(() => {
-    async function announcements() {
-      const res = await getXXTZGG({
-        ZT: ['已发布'],
-        XXJBSJId: currentUser?.xxId,
-        LX: ['0'],
-        page: 0,
-        pageSize: 0,
-      });
-      if (res.status === 'ok') {
-        if (!(res.data?.rows?.length === 0)) {
-          setNotification(res.data?.rows);
-        }
-      } else {
-        enHenceMsg(res.message);
-      }
-    }
-    announcements();
     if (authType === 'wechat' && (!currentUser.XM || currentUser.XM === '未知')) {
       setIsModalVisible(true);
     }
+    getTodayData(today);
+    getTDKData();
+    getAnnoceData();
+  }, [currentUser]);
+  useEffect(() => {
+    (async () => {
+      const oriData = await ParentHomeData(currentUser?.xxId, currentUser.JSId || testTeacherId,'teacher');
+      setTotalData(oriData);
+    })()
   }, []);
-
   const onFinish = async (values: { name: string; phone: string }) => {
-    // formRef.current.validateFields()
-    //   .then(async (values: any) => {
-    console.log('values: ', values);
     const res = await updateJZGJBSJ(
       { id: currentUser.JSId },
       { XM: values.name, LXDH: values.phone },
@@ -118,11 +117,6 @@ const Home = () => {
       console.warn(res.message);
     }
     setIsModalVisible(false);
-    // }).catch(e){
-    //   message.error('提交失败，请联系管理员');
-    //   let error = info.errorFields
-    //   console.log(error);
-    // });
   };
 
   return (
@@ -144,6 +138,7 @@ const Home = () => {
         </div>
       </header>
       <div className={styles.pageContent}>
+        {/* 学校公告 */}
         <div className={styles.noticeArea}>
           <IconFont type="icon-gonggao" className={styles.noticeImg} />
           <div className={styles.noticeText}>
@@ -177,9 +172,11 @@ const Home = () => {
             <IconFont type="icon-gengduo" className={styles.gengduo} />
           </Link>
         </div>
+        {/* 今日课程 */}
         <div className={styles.enrollArea}>
-          <EnrollClassTime teacher={true} />
+          <EnrollClassTime dataResource={totalData} teacher={true} />
         </div>
+        {/* 代课与待巡课程 */}
         <div className={styles.patrols}>
           <div style={{ backgroundImage: `url(${DaiKe})` }}>
             <Link to="/teacher/home/substituteList">
@@ -198,18 +195,11 @@ const Home = () => {
             </Link>
           </div>
         </div>
-        {/* <div className={styles.patrol}>
-          <span>
-            今日待巡课程
-          </span>
-          <Link to="/teacher/patrolArrange">
-            <span>去巡课</span>
-            <IconFont type="icon-gengduo" className={styles.gengduo} />
-          </Link>
-        </div> */}
+        {/* 任教课程 */}
         <div className={styles.teachCourses}>
-          <TeachCourses />
+          <TeachCourses  dataResource={totalData} />
         </div>
+        {/* 素质教育资源 */}
         <div className={styles.resourcesBox}>
           <a
             href="http://moodle.xianyunshipei.com/course/view.php?id=12"
@@ -222,10 +212,12 @@ const Home = () => {
             <img src={resourcesRgo} alt="" />
           </a>
         </div>
+        {/* 公示栏 */}
         <div className={styles.announceArea}>
           <Details data={notification} />
         </div>
       </div>
+      {/* 完善个人信息页面 */}
       <Modal
         className={styles.modalStyle}
         title="首次使用，请完善您的个人信息"

@@ -1,29 +1,33 @@
-import React, { useContext } from 'react';
-import styles from './index.less';
+import React, { useEffect, useState } from 'react';
 import 'antd/es/modal/style';
+import { Link, useModel } from 'umi';
 import ClassCalendar from './ClassCalendar';
-import ImagesUpload from '@/components/ImagesUpload';
-import { Link } from 'umi';
+import { ParentHomeData } from '@/services/local-services/mobileHome';
+
+import styles from './index.less';
 import icon_stuEvaluate from '@/assets/icon_stuEvaluate.png';
 import icon_courseBack from '@/assets/icon_courseBack.png';
-import myContext from '@/utils/MyContext';
 import icon_leave from '@/assets/icon-teacherLeave.png';
 import icon_CourseAdjustment from '@/assets/icon-CourseAdjustment.png';
 
 const Study = () => {
-
-  const { yxkc } = useContext(myContext);
-
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const [courseData, setCourseData] = useState<any>([]);
+  useEffect(() => {
+    (async () => {
+      const oriData = await ParentHomeData(currentUser?.xxId, currentUser.JSId || testTeacherId,'teacher');
+      const { yxkc } = oriData;
+      setCourseData(yxkc);
+    })()
+  }, []);
   return (
     <div className={styles.studyPage}>
       <div className={styles.funWrapper}>
         <div className={styles.headBox}>
         <Link
             key="qj"
-            to={{
-              pathname: '/teacher/education/askForLeave',
-              state: yxkc
-            }}
+            to='/teacher/education/askForLeave'
             className={styles.Leave}>
             <p className={styles.LeaveP1}>
               <p className={styles.LeaveP2}>
@@ -33,11 +37,8 @@ const Study = () => {
             <p className={styles.LeaveP3}>请假</p>
           </Link>
           <Link
-            key="qj"
-            to={{
-              pathname: '/teacher/education/courseAdjustment',
-              state: yxkc
-            }}
+            key="tdk"
+            to='/teacher/education/courseAdjustment'
             className={styles.Leave}>
             <p className={styles.LeaveP1s}>
               <p className={styles.LeaveP2s}>
@@ -50,7 +51,7 @@ const Study = () => {
             key="xxpj"
             to={{
               pathname: '/teacher/education/studentEvaluation',
-              state: yxkc
+              state: courseData
             }}
             className={styles.stuEvaluat}>
             <p className={styles.stuEvaluatP1}>
@@ -63,8 +64,8 @@ const Study = () => {
           <Link
             key="kcfk"
             to={{
-              pathname: '/teacher/education/record',
-              state: yxkc
+              pathname: '/teacher/education/feedback',
+              state: courseData
             }}
             className={styles.courseBack}>
             <p className={styles.courseBackP1}>
@@ -78,7 +79,7 @@ const Study = () => {
             key="ktfc"
             to={{
               pathname: '/teacher/education/record',
-              state: yxkc
+              state: courseData
             }}
             className={styles.record}>
             <p className={styles.recordP1}>
@@ -93,11 +94,6 @@ const Study = () => {
         <div className={styles.titleBar}>我的课表</div>
         <ClassCalendar />
       </div>
-      {/* <ImagesUpload
-              onValueChange={(value: string) => {
-
-              }}
-            /> */}
     </div>
   );
 };
