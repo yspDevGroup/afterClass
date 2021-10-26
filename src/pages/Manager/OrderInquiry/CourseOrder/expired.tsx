@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-19 15:35:27
+ * @LastEditTime: 2021-10-25 12:02:08
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -195,7 +195,7 @@ const OrderInquiry = (props: any) => {
       width: 150,
       hideInTable: DDZT !== '已付款',
       render: (_text: any, record: any) => {
-        return record.ZFFS?.substring(0, 16);
+        return record.ZFFS;
       },
     },
   ];

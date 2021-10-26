@@ -30,7 +30,7 @@ export default {
   'menu.coursePatrol.Record':'巡课记录',
   'menu.audit': '行政审批',
   'menu.audit.leaveManagement': '请假管理',
-  'menu.orderInquiry': '订单查询',
+  'menu.orderInquiry': '订单管理',
   'menu.orderInquiry.courseorder': '课程订单',
   'menu.orderInquiry.serviceorder': '服务订单',
   'menu.orderInquiry.reimbursementClass': '课程退订',
