@@ -189,7 +189,7 @@ const Home = () => {
           <Link to="/teacher/home/substituteList">
             <p>
               <span>代课申请</span>
-              <Badge count={DkData?.length} showZero={true} offset={[5, 0]} />
+              <Badge count={DkData?.length || 0} showZero={true} offset={[5, 0]} />
             </p>
             </Link>
           </div>
@@ -197,7 +197,7 @@ const Home = () => {
             <Link to="/teacher/patrolArrange">
               <p>
                 <span>今日待巡课程</span>
-                <Badge count={dateData?.length} showZero={true} offset={[5, 0]} />
+                <Badge count={dateData?.length || 0} showZero={true} offset={[5, 0]} />
               </p>
             </Link>
           </div>
