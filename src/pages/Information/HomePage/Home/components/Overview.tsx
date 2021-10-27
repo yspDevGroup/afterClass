@@ -32,7 +32,7 @@ const Overview = () => {
     return (
       <Card className={styles.card} bordered={false} bodyStyle={{paddingTop: 8.8, paddingLeft: 8.8, minHeight: '101.7px'}}>
         <p style={{whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{title}</p>
-        <p>{title.indexOf("元") !== -1 ? (title.indexOf("收费") !== -1 ? ((count || 0) + (zzfw || 0)).toFixed(2) :parseFloat(count).toFixed(2)) : count}</p>
+        <p>{title.indexOf("元") !== -1 ? (title.indexOf("收费") !== -1 ? ((count || 0) + (zzfw || 0)).toFixed(2) :parseFloat((count || 0)).toFixed(2)) : (count || 0)}</p>
         <img className={styles.bgImg} src={bgImg} alt="" />
       </Card>
     )
