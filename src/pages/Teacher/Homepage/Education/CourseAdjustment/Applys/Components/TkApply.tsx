@@ -104,7 +104,7 @@ const TkApply = () => {
         <p className={styles.title}>
           <span>调课时间</span>
         </p>
-        <ClassCalendar setDatedata={setDateData} type="dksq" form={form} />
+        <ClassCalendar setDatedata={setDateData} type="tksq" form={form} />
         <div className={styles.Divider}> <span>调课后</span></div>
         {
           dateData?.day ? <p className={styles.YxCourse}>已选课程：{moment(dateData?.day).format('MM月DD日')} ，{dateData?.title}</p> : <></>

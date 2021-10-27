@@ -1,0 +1,165 @@
+.BmModel {
+  width: 700px !important;
+  :global {
+    .ant-modal-body {
+      height: 422px;
+      .ant-steps {
+        padding: 0 40px;
+      }
+    }
+  }
+  .JF {
+    padding: 40px 130px;
+    color: #333;
+    label {
+      margin-bottom: 20px;
+    }
+    .checkbox {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px 10px;
+      background-color: #fff;
+      div {
+        > span {
+          font-weight: bold;
+        }
+      }
+    }
+    > div {
+      padding: 0 20px;
+      background-color: #eee;
+      border-radius: 8px;
+      > div {
+        display: flex;
+        justify-content: space-between;
+        height: 36px;
+        line-height: 36px;
+      }
+    }
+  }
+  .PaymentCode {
+    padding: 40px 0;
+    text-align: center;
+    :global {
+      .ant-statistic {
+        display: inline-block;
+        .ant-statistic-content-value {
+          color: #333;
+          font-weight: bold;
+        }
+      }
+      .ant-result-title {
+        font-size: 18px;
+      }
+    }
+    .wraps {
+      width: 160px;
+      height: 160px;
+      margin: 20px auto;
+      overflow: hidden;
+      box-shadow: 0px 0px 10px rgb(0 0 0 / 20%);
+      button {
+        width: 160px;
+      }
+    }
+    canvas {
+      margin: 10px;
+    }
+    .ZFWC {
+      background-color: #ff7527;
+      border: none;
+    }
+    .ZFCG {
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+    }
+  }
+  .stepsContent {
+    padding: 30px 0;
+    :global {
+      .ant-select {
+        width: 300px !important;
+      }
+    }
+  }
+  .stepsAction {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    display: flex;
+    justify-content: end;
+  }
+
+  .select {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    > span {
+      display: inline-block;
+      width: 90px;
+      line-height: 30px;
+      text-align: right;
+    }
+    :global {
+      .ant-select {
+        width: 200px;
+      }
+    }
+  }
+  .details {
+    height: 350px;
+    padding: 40px 0 20px 0;
+    :global {
+      .ant-result-title {
+        font-size: 18px;
+      }
+      .ant-result-extra {
+        button {
+          position: absolute;
+          right: 24px;
+          bottom: 24px;
+        }
+      }
+    }
+    .wraps {
+      display: flex;
+      justify-content: space-around;
+      > div {
+        width: 300px;
+        padding: 14px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        p {
+          display: flex;
+          justify-content: space-between;
+          margin: 0;
+          line-height: 28px;
+          span:nth-of-type(1) {
+            color: #999;
+          }
+          span:nth-of-type(2) {
+            color: #333;
+          }
+        }
+        .line {
+          margin: 10px 0;
+          border: 1px dashed #dddddd;
+        }
+      }
+      > div:nth-of-type(2) {
+        p:last-child {
+          justify-content: end;
+          span:nth-of-type(2) {
+            font-weight: bold;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+    button {
+      float: right;
+      margin-top: 24px;
+    }
+  }
+}

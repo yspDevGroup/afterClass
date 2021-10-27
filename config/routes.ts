@@ -132,12 +132,7 @@
         icon: 'Build',
         component: './Manager/CourseScheduling',
       },
-      // 教师调代课管理
-      {
-        path: '/courseManagements/substituteCourse',
-        name: 'substituteCourse',
-        component: './Manager/CourseManagements/SubstituteCourse',
-      },
+
       {
         path: '/courseManagements/mechanismCourse/edit',
         name: 'mechanismCourseInfo',
@@ -210,6 +205,12 @@
         path: '/audit/leaveManagement',
         name: 'leaveManagement',
         component: './Manager/CourseManagements/LeaveManagement',
+      },
+      // 教师调代课管理
+      {
+        path: '/audit/substituteCourse',
+        name: 'substituteCourse',
+        component: './Manager/CourseManagements/SubstituteCourse',
       },
     ]
   },

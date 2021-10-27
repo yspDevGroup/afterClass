@@ -6,7 +6,7 @@
 import React from 'react';
 import { Link, useModel } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tooltip, Select, message } from 'antd';
+import { Button, Modal, Tooltip, Select, message, Divider } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -22,10 +22,11 @@ import { getAllClasses, getEnrolled, getKHBJSJ } from '@/services/after-class/kh
 
 import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
-import type { CourseItem } from './data';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 import styles from './index.less';
+import AgentRegistration from './components/AgentRegistration';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -60,6 +61,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [KHKCAllData, setKHKCAllData] = useState<any>([]);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const [ModalVisible, setModalVisible] = useState(false);
+  const [BjDetails, setBjDetails] = useState<any>();
+  const [JFTotalost, setJFTotalost] = useState<any>(0);
   // useEffect(() => {
   //   (async () => {
   //     if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -143,6 +147,23 @@ const CourseManagement = (props: { location: { state: any } }) => {
     setCurrent(undefined);
     stereadonly(false);
   };
+  const showModalBM = async (value: any) => {
+    const res = await getKHBJSJ({
+      id: value?.id
+    })
+    if (res.status === 'ok') {
+      setBjDetails(res.data);
+      if (res.data?.KHKCJCs?.length !== 0) {
+        let num: number = 0;
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < res.data?.KHKCJCs.length; i++) {
+          num += Number(res.data?.KHKCJCs[i].JCFY);
+        }
+        setJFTotalost(Number(num).toFixed(2));
+      }
+    }
+    setModalVisible(true);
+  }
 
   const handleEdit = async (data: any) => {
     const FJS: any[] = [];
@@ -162,7 +183,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         current.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
         undefined,
       FJS,
-      BMSD: [current.BMKSSJ, current.KHKCSJ.BMJSSJ],
+      BMSD: [current.BMKSSJ, current.BMJSSJ],
       SKSD: [current.KKRQ, current.JKRQ],
       SSJGLX: current?.KHKCSJ?.SSJGLX,
       KHKCSJId: current?.KHKCSJ?.id,
@@ -178,6 +199,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     }
   };
 
+
   const onClose = () => {
     setVisible(false);
   };
@@ -188,7 +210,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
-      fixed:'left',
+      fixed: 'left',
       align: 'center',
     },
     {
@@ -197,7 +219,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       key: 'KCMC',
       align: 'center',
       width: 150,
-      fixed:'left',
+      fixed: 'left',
       ellipsis: true,
       render: (_: any, record: any) => {
         return (
@@ -277,12 +299,29 @@ const CourseManagement = (props: { location: { state: any } }) => {
       valueType: 'option',
       key: 'option',
       align: 'center',
-      width: 120,
-      fixed:'right',
+      width: 190,
+      fixed: 'right',
       render: (_, record) => {
+        const BMJSSJ = new Date(record?.BMJSSJ).getTime();
+        const newDate = new Date().getTime();
+        // console.log(new Date(record?.BMJSSJ).getTime())
+        // console.log(new Date().getTime())
+        console.log(newDate>=BMJSSJ)
+
         return (
           <>
             <ActionBar record={record} handleEdit={handleEdit} actionRef={actionRef} />
+            <Divider type="vertical" />
+            {
+              record?.BJZT === '已开班' ? <a onClick={() => {
+                if(newDate<=BMJSSJ ){
+                  showModalBM(record)
+                }else{
+                  message.warning('当前课程已开课，无法报名')
+                }
+               }}>代报名</a> : <></>
+            }
+
           </>
         );
       },
@@ -421,10 +460,18 @@ const CourseManagement = (props: { location: { state: any } }) => {
           onOk={handleOk}
           onCancel={handleCancel}
           footer={null}
-          style={{minWidth: '750px'}}
+          style={{ minWidth: '750px' }}
         >
           <ApplicantInfoTable dataSource={applicantData} />
         </Modal>
+        <AgentRegistration
+          curXNXQId={curXNXQId}
+          JFTotalost={JFTotalost}
+          BjDetails={BjDetails}
+          ModalVisible={ModalVisible}
+          setModalVisible={setModalVisible}
+          actionRef={actionRef} />
+
       </PageContainer>
     </>
   );
