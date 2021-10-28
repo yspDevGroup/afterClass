@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Tabs } from 'antd';
+import { Result, Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
 import { getQueryString } from '@/utils/utils';
 import Home from './Home';
 import Education from './Education';
 import Mine from './Mine';
-
 
 import styles from './index.less';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
@@ -24,16 +23,30 @@ const PersonalHomepage = () => {
   const index = getQueryString('index');
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData(currentUser?.xxId, currentUser.JSId || testTeacherId,'teacher');
-      const { courseStatus } = oriData;
-      setCourseStatus(courseStatus);
-    })()
+      const oriData = await ParentHomeData(
+        currentUser?.xxId,
+        currentUser.JSId || testTeacherId,
+        'teacher',
+      );
+      setCourseStatus(oriData.courseStatus);
+    })();
   }, []);
   useEffect(() => {
     if (index) {
       setActiveKey(index);
     }
   }, [index]);
+
+  if (!currentUser.JSId && !testTeacherId) {
+    // 如果用户不在老师表里
+    return (
+      <Result
+        status="500"
+        title="身份验证不通过"
+        subTitle="您不是老师，或您的身份信息未同步，请联系管理员。"
+      />
+    );
+  }
 
   return (
     <div className={styles.mobilePageHeader}>
