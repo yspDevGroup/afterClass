@@ -2,7 +2,7 @@
  * @description: 企业微信通讯录展示组件
  * @author: zpl
  * @Date: 2021-09-17 14:41:57
- * @LastEditTime: 2021-10-27 18:23:19
+ * @LastEditTime: 2021-10-28 17:49:00
  * @LastEditors: zpl
  */
 import React, { useRef, useLayoutEffect, useState } from 'react';
@@ -38,6 +38,7 @@ export default function WWOpenDataCom({ type, openid, style = {} }: PropsType) {
         maxWidth: '5em',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
         ...style,
       }}
     >
