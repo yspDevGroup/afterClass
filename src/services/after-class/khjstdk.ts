@@ -24,7 +24,7 @@ export async function getKHJSTDK(
       JSSJ?: string;
       SKRQ?: string | any;
       TKRQ?: string | any;
-      DKSPSJ?: string | any;
+      DKSPSJ?: string;
       SKJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       DKJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       SKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
@@ -112,7 +112,7 @@ export async function createKHJSTDK(body: API.CreateKHJSTDK, options?: { [key: s
       JSSJ?: string;
       SKRQ?: string | any;
       TKRQ?: string | any;
-      DKSPSJ?: string | any;
+      DKSPSJ?: string;
       SKJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       DKJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       SKFJ?: { id?: string; BH?: string; FJMC?: string } | any;

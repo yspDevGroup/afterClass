@@ -123,3 +123,33 @@ export async function updateKHKTFC(
     ...(options || {}),
   });
 }
+
+/** 筛选所有课堂风采记录 POST /khktfc/getAllpresence */
+export async function getAllpresence(
+  body: {
+    /** 学年学期id */
+    XNXQId?: string;
+    /** 课程id */
+    KHKCId?: string;
+    /** 课后班级id */
+    KHBJId?: string;
+    /** 课后课程来源 */
+    KHKCLY?: string;
+    /** 课后课程教师姓名 */
+    KHKCJSXM?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khktfc/getAllpresence', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

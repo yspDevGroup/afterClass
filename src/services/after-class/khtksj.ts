@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 创建课后服务退课记录 PUT /khtksj/create */
 export async function createKHTKSJ(body: API.CreateKHTKSJ[], options?: { [key: string]: any }) {
-  return request<{ status?: 'ok' | 'error'; message?: string }>('/khtksj/create', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
+  return request<{ status?: 'ok' | 'error'; data?: API.KHTKSJ[]; message?: string }>(
+    '/khtksj/create',
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
     },
-    data: body,
-    ...(options || {}),
-  });
+  );
 }
 
 /** 获取课后服务退课记录 POST /khtksj/getAll */
