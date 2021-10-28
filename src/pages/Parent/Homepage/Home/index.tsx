@@ -19,7 +19,8 @@ import Catering from '@/assets/Catering.png';
 import resources from '@/assets/resources.png';
 
 const Home = () => {
-  const { currentUserInfo, courseStatus } = useContext(myContext);
+  const { currentUserInfo, courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj } =
+    useContext(myContext);
   const [notification, setNotification] = useState<any>([]);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -114,7 +115,9 @@ const Home = () => {
             </Link>
           </div>
           <div className={styles.enrollArea}>
-            <EnrollClassTime />
+            <EnrollClassTime
+              dataResource={{ courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj }}
+            />
           </div>
           <div className={styles.courseArea}>
             <CourseTab />
