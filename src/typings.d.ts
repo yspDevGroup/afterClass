@@ -157,6 +157,7 @@ declare module 'react-h5-calendar';
 
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 
+declare const ENV_type: string;
 declare const ENV_title: string;
 declare const ENV_subTitle: string;
 declare const ENV_copyRight: string;
@@ -188,11 +189,11 @@ declare const xnxqInfo: {
 };
 // 家长端首页全局配置信息
 declare let parentHomeInfo: {
-  data: any
+  data: any;
 };
 // 教师端首页全局配置信息
 declare let teacherHomeInfo: {
-  data: any
+  data: any;
 };
 
 type InitialState = {

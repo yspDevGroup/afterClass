@@ -2,7 +2,7 @@
  * @description: 九朵云环境配置
  * @author: zpl
  * @Date: 2021-10-19 14:54:09
- * @LastEditTime: 2021-10-26 14:50:32
+ * @LastEditTime: 2021-10-27 17:39:49
  * @LastEditors: zpl
  */
 // https://umijs.org/config/
@@ -24,6 +24,7 @@ export default defineConfig({
     hmr: true,
   },
   define: {
+    ENV_type: '9dy',
     ENV_title: '课后服务平台',
     ENV_subTitle: '课后服务平台',
     ENV_copyRight: '2021 版权所有：广东九朵云科技有限公司',
@@ -33,6 +34,8 @@ export default defineConfig({
     authType: 'wechat',
     clientId: 'ww73cd866f2c4dc83f',
     clientSecret: 'IfPhfMfVtX-y-BG-CrGlZIJw-m-GoCnJwxffigZDGLA',
+    testStudentId: '',
+    testTeacherId: '',
   },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
