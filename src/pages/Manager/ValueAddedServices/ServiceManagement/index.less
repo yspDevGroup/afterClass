@@ -37,11 +37,17 @@
       display: none;
     }
   }
+  .Forms::-webkit-scrollbar {
+    display: none;
+  }
 }
 .modals{
   .Forms{
     max-height: 65vh;
     overflow: auto;
+  }
+  .Forms::-webkit-scrollbar {
+    display: none;
   }
   :global{
     .ant-modal-body{

@@ -18,7 +18,7 @@ import PromptInformation from '@/components/PromptInformation';
 
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllClasses, getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
 
 import ActionBar from './components/ActionBar';
 import AddCourse from './components/AddCourse';
@@ -26,6 +26,7 @@ import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 import styles from './index.less';
 import AgentRegistration from './components/AgentRegistration';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -74,15 +75,15 @@ const CourseManagement = (props: { location: { state: any } }) => {
 
   const showModal = async (record: any) => {
     const { BJMC, id } = record;
-    const res = await getEnrolled({
-      id,
-    });
-    if (res.status === 'ok') {
-      setIsModalVisible(true);
-      setApplicantData({ BJMC, KHXSBJs: res.data || [] });
-    } else {
-      message.warning(res.message);
-    }
+    const result = await getKHBJSJ({
+      id
+    })
+    if (result.status === 'ok') {
+        setIsModalVisible(true);
+        setApplicantData({ BJMC ,KCBDatas:result?.data});
+      }else{
+        message.warning(result.message);
+      }
   };
 
   const handleOk = () => {
@@ -148,8 +149,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
   };
   const showModalBM = async (value: any) => {
     const res = await getKHBJSJ({
-      id: value?.id,
-    });
+      id: value?.id
+    })
     if (res.status === 'ok') {
       setBjDetails(res.data);
       if (res.data?.KHKCJCs?.length !== 0) {
@@ -162,12 +163,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
       }
     }
     setModalVisible(true);
-  };
+  }
 
   const handleEdit = async (data: any) => {
     const FJS: any[] = [];
     const res = await getKHBJSJ({
-      id: data?.id,
+      id: data?.id
     });
     const currentData = res.data;
     currentData.KHBJJs?.map((item: any) => {
@@ -196,6 +197,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       setnames('add');
     }
   };
+
 
   const onClose = () => {
     setVisible(false);
@@ -461,7 +463,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           footer={null}
           style={{ minWidth: '750px' }}
         >
-          <ApplicantInfoTable dataSource={applicantData} />
+          <ApplicantInfoTable dataSource={applicantData} actionRefs={actionRef}  />
         </Modal>
         <AgentRegistration
           curXNXQId={curXNXQId}
@@ -469,8 +471,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
           BjDetails={BjDetails}
           ModalVisible={ModalVisible}
           setModalVisible={setModalVisible}
-          actionRef={actionRef}
-        />
+          actionRef={actionRef} />
+
       </PageContainer>
     </>
   );
