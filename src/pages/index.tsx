@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-10-21 10:36:38
+ * @LastEditTime: 2021-10-28 17:05:22
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -68,11 +68,11 @@ const Index = () => {
             break;
           default:
             removeWechatInfo();
-            history.replace('/403?message=未获取到合法的用户身份');
+            history.replace('/403?title=未获取到合法的用户身份');
             break;
         }
       } else {
-        history.replace('/403?message=未指定应用ID');
+        history.replace('/403?title=未指定应用ID');
       }
     } else {
       switch (initialState?.currentUser?.type) {
