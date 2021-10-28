@@ -26,7 +26,6 @@ import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 import styles from './index.less';
 import AgentRegistration from './components/AgentRegistration';
-import moment from 'moment';
 
 const { Option } = Select;
 
@@ -76,12 +75,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const showModal = async (record: any) => {
     const { BJMC, id } = record;
     const res = await getEnrolled({
-      id
+      id,
     });
     if (res.status === 'ok') {
       setIsModalVisible(true);
-      setApplicantData({ BJMC, KHXSBJs: res.data||[] });
-    }else{
+      setApplicantData({ BJMC, KHXSBJs: res.data || [] });
+    } else {
       message.warning(res.message);
     }
   };
@@ -149,8 +148,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
   };
   const showModalBM = async (value: any) => {
     const res = await getKHBJSJ({
-      id: value?.id
-    })
+      id: value?.id,
+    });
     if (res.status === 'ok') {
       setBjDetails(res.data);
       if (res.data?.KHKCJCs?.length !== 0) {
@@ -163,30 +162,29 @@ const CourseManagement = (props: { location: { state: any } }) => {
       }
     }
     setModalVisible(true);
-  }
+  };
 
   const handleEdit = async (data: any) => {
     const FJS: any[] = [];
     const res = await getKHBJSJ({
-      id: data?.id
+      id: data?.id,
     });
-    const current = res.data;
-
-    current.KHBJJs?.map((item: any) => {
+    const currentData = res.data;
+    currentData.KHBJJs?.map((item: any) => {
       if (item.JSLX === '副教师') {
         FJS.push(item?.JZGJBSJId);
       }
     });
     const list = {
-      ...current,
+      ...currentData,
       ZJS:
-        current.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
+        currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
         undefined,
       FJS,
-      BMSD: [current.BMKSSJ, current.BMJSSJ],
-      SKSD: [current.KKRQ, current.JKRQ],
-      SSJGLX: current?.KHKCSJ?.SSJGLX,
-      KHKCSJId: current?.KHKCSJ?.id,
+      BMSD: [currentData.BMKSSJ, currentData.BMJSSJ],
+      SKSD: [currentData.KKRQ, currentData.JKRQ],
+      SSJGLX: currentData?.KHKCSJ?.SSJGLX,
+      KHKCSJId: currentData?.KHKCSJ?.id,
     };
     setVisible(true);
     setCurrent(list);
@@ -198,7 +196,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
       setnames('add');
     }
   };
-
 
   const onClose = () => {
     setVisible(false);
@@ -304,24 +301,26 @@ const CourseManagement = (props: { location: { state: any } }) => {
       render: (_, record) => {
         const BMJSSJ = new Date(record?.BMJSSJ).getTime();
         const newDate = new Date().getTime();
-        // console.log(new Date(record?.BMJSSJ).getTime())
-        // console.log(new Date().getTime())
-        console.log(newDate>=BMJSSJ)
 
         return (
           <>
             <ActionBar record={record} handleEdit={handleEdit} actionRef={actionRef} />
             <Divider type="vertical" />
-            {
-              record?.BJZT === '已开班' ? <a onClick={() => {
-                if(newDate<=BMJSSJ ){
-                  showModalBM(record)
-                }else{
-                  message.warning('当前课程已开课，无法报名')
-                }
-               }}>代报名</a> : <></>
-            }
-
+            {record?.BJZT === '已开班' ? (
+              <a
+                onClick={() => {
+                  if (newDate <= BMJSSJ) {
+                    showModalBM(record);
+                  } else {
+                    message.warning('当前课程已开课，无法报名');
+                  }
+                }}
+              >
+                代报名
+              </a>
+            ) : (
+              <></>
+            )}
           </>
         );
       },
@@ -470,8 +469,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
           BjDetails={BjDetails}
           ModalVisible={ModalVisible}
           setModalVisible={setModalVisible}
-          actionRef={actionRef} />
-
+          actionRef={actionRef}
+        />
       </PageContainer>
     </>
   );
