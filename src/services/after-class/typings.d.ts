@@ -2690,7 +2690,7 @@ declare namespace API {
           KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
         }
       | any;
-    KHXSTKs?: any | { id?: string; BZ?: string; TKZT?: string }[];
+    KHXSTKs?: { id?: string; BZ?: string; TKZT?: string; TKJE?: number }[];
   };
 
   type CreateKHTKSJ = {
