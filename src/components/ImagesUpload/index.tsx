@@ -102,7 +102,7 @@ const ImagesUpload = (props: {
         beforeUpload={handleBeforeUpload}
         onChange={handleChange}
       >
-        {fileList.length >= 8 ? null : uploadButton}
+        {fileList.length >= 9 ? null : uploadButton}
       </Upload>
       <Modal
         visible={previewVisible}
