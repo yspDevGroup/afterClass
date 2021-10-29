@@ -2,22 +2,25 @@
 import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { history } from 'umi';
-import { Button, Form, message, Spin, Modal, Tooltip, Empty } from 'antd';
+import { Button, Form, message, Spin, Modal, Tooltip, Empty, Select } from 'antd';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
 import { getQueryString } from '@/utils/utils';
 import ExcelTable from '@/components/ExcelTable';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
-
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { createKHPKSJ } from '@/services/after-class/khpksj';
-import { getFJPlan } from '@/services/after-class/fjsj';
+import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
 import { getAllClasses } from '@/services/after-class/khbjsj';
+import type { DataSourceType } from '@/components/ExcelTable';
+
+const { Option } = Select;
 
 import styles from '../index.less';
 
 const { confirm } = Modal;
+type selectType = { label: string; value: string };
 
 type PropsType = {
   setState?: any;
@@ -42,7 +45,7 @@ const AddArranging: FC<PropsType> = (props) => {
     setState,
     sameClass,
     curXNXQId,
-    tableDataSource,
+    // tableDataSource,
     processingData,
     setTableDataSource,
     formValues,
@@ -50,7 +53,7 @@ const AddArranging: FC<PropsType> = (props) => {
     campus,
     grade,
     setBJIDData,
-    cdmcData,
+    // cdmcData,
     kcmcData,
     currentUser,
   } = props;
@@ -59,30 +62,38 @@ const AddArranging: FC<PropsType> = (props) => {
   const [Bj, setBj] = useState<any>(undefined);
   const [index, setIndex] = useState(formValues?.BJId);
   const [kcType, setKcType] = useState<any>(kcmcData);
+  const [oriSource, setOriSource] = useState<any>();
   const [bjData, setBjData] = useState<any>([]);
   const [form] = Form.useForm();
-  const [excelTableValue] = useState<any[]>([]);
+  const [excelTableValue, setExcelTableValue] = useState<any[]>([]);
   const sameClassDatas = [...sameClass];
-  const [loading, setLoading] = useState(true);
+  const [loading] = useState(false);
   const [CDLoading, setCDLoading] = useState(false);
   const [XQID, setXQID] = useState<any>('');
   const [NJID, setNJID] = useState<any>(undefined);
   const [tearchId, setTearchId] = useState(undefined);
-  const [basicData, setBasicData] = useState<any>([]);
+  // const [basicData, setBasicData] = useState<any>([]);
+  const [cdmcData, setCdmcData] = useState<selectType[] | undefined>([]);
+  const [cdmcValue, setCdmcValue] = useState<any>();
+  const [newTableDataSource, setNewTableDataSource] = useState<DataSourceType>([]);
+
+  // console.log('oriSource',oriSource);
 
   // 获取排课的接口
   const tableServers = () => {
-    const Fjplan = getFJPlan({
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-      isPk: false,
-    });
-    Promise.resolve(Fjplan).then((FjplanData) => {
-      if (FjplanData.status === 'ok') {
-        const datad = processingData(FjplanData.data, xXSJPZData);
-        setTableDataSource(datad);
-      }
-    });
+    // const Fjplan = getFJPlan({
+    //   XNXQId: curXNXQId,
+    //   XXJBSJId: currentUser?.xxId,
+    //   isPk: false,
+    // });
+    // Promise.resolve(Fjplan).then((FjplanData) => {
+    //   if (FjplanData.status === 'ok') {
+
+    //     // setTableDataSource(datad);
+    //   }
+    // });
+    const datad: any = processingData(oriSource, xXSJPZData);
+    setTableDataSource(datad);
   };
   const columns: {
     title: string;
@@ -158,6 +169,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 将排好的课程再次点击可以取消
   const getSelectdata = (value: any) => {
+    console.log('getSelectdata', value);
     sameClassDatas.map((item: any, key: number) => {
       if (
         item.FJSJId === value.FJSJId && // 教室ID
@@ -166,13 +178,12 @@ const AddArranging: FC<PropsType> = (props) => {
       ) {
         sameClassDatas.splice(key, 1);
       }
-      console.log('sameClassDatas', sameClassDatas);
       return item;
     });
   };
 
   const onExcelTableClick = (value: any, record: any, pkData: any) => {
-    // console.log('onExcelTableClick', value);
+    console.log('onExcelTableClick', value);
     if (value === null) {
       excelTableValue.forEach((item: any, key) => {
         if (
@@ -197,27 +208,78 @@ const AddArranging: FC<PropsType> = (props) => {
     }
   };
   // 班级选择
-  const BjClick = (value: any) => {
-    // console.log('班级点击',value)
-    const ZJSID = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJId;
-    const ZJSName = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM;
-    setTearchId(ZJSID);
-    const chosenData = {
-      cla: value.BJMC || '',
-      teacher: ZJSName || '',
-      teacherID: ZJSID || '',
-      XNXQId: curXNXQId || '',
-      KHBJSJId: value.id || '',
-      color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
-    };
-    setBj(chosenData);
-    setIndex(value.id);
-    setBJIDData(value.id);
-    setCDLoading(true);
-    setTimeout(() => {
-      setCDLoading(false);
-    }, 500);
+  const BjClick = (value: any, flag: boolean = false) => {
+    // console.log('sameClassDatas',sameClassDatas);
+    if (flag) {
+      const ZJSID = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJId;
+      const ZJSName = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM;
+      setTearchId(ZJSID);
+      const chosenData = {
+        cla: value.BJMC || '',
+        teacher: ZJSName || '',
+        teacherID: ZJSID || '',
+        XNXQId: curXNXQId || '',
+        KHBJSJId: value.id || '',
+        color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
+      };
+      setBj(chosenData);
+      setIndex(value.id);
+      setBJIDData(value.id);
+      setCDLoading(true);
+      setTimeout(() => {
+        setCDLoading(false);
+      }, 500);
+    } else {
+      console.log('formValues', formValues);
+      if (formValues?.BJId) {
+        return;
+      }
+      if (excelTableValue.length > 0) {
+        confirm({
+          title: '温馨提示',
+          icon: <QuestionCircleOutlined style={{ color: 'red' }} />,
+          content: '当前班级选择的排课数据请先保存',
+          onOk() {},
+        });
+      } else {
+        const ZJSID = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJId;
+        const ZJSName = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM;
+        setTearchId(ZJSID);
+        const chosenData = {
+          cla: value.BJMC || '',
+          teacher: ZJSName || '',
+          teacherID: ZJSID || '',
+          XNXQId: curXNXQId || '',
+          KHBJSJId: value.id || '',
+          color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
+        };
+        setBj(chosenData);
+        setIndex(value.id);
+        setBJIDData(value.id);
+        setCDLoading(true);
+        setTimeout(() => {
+          setCDLoading(false);
+        }, 500);
+      }
+    }
   };
+
+  const getPKData = async () => {
+    const res = await getFJPlan({
+      // kcId: kcmcValue,
+      // bjId: bjmcValue,
+      fjId: cdmcValue,
+      // JSXM: teacher,
+      isPk: false,
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+    });
+    if (res.status === 'ok') {
+      setCDLoading(false);
+      setOriSource(res.data);
+    }
+  };
+
   // 保存
   const submit = async () => {
     if (Bj || index) {
@@ -239,6 +301,8 @@ const AddArranging: FC<PropsType> = (props) => {
           if (result.status === 'ok') {
             message.success('保存成功');
             tableServers();
+            //保存成功之后获取排课信息
+            getPKData();
             setState(true);
             setBJIDData('');
             return true;
@@ -287,14 +351,17 @@ const AddArranging: FC<PropsType> = (props) => {
       const bjRows = bjmcResl.data.rows;
       setBjData(bjmcResl.data.rows);
       // 获取课程班老师 是否存在
-      if (getQueryString('courseId') && !Bj && index) {
+      if (!Bj && index) {
         const value = bjRows?.find((item: { id: string }) => item.id === index);
+        console.log('value', value);
         if (value) {
-          BjClick(value);
+          BjClick(value, true);
         }
       }
       // 判断获取的新课程和当前选中的bj 不匹配时 清掉 bj
       if (Bj && index) {
+        console.log('--------');
+
         const value = bjRows?.find((item: { id: string }) => item.id === index);
         if (!value) {
           setTearchId(undefined);
@@ -306,6 +373,46 @@ const AddArranging: FC<PropsType> = (props) => {
       }
     }
   };
+  // 获取场地信息
+  const getCDMCList = async () => {
+    console.log('获取场地信息');
+
+    const fjList = await getAllFJSJ({
+      page: 1,
+      pageSize: 0,
+      name: '',
+      XXJBSJId: currentUser?.xxId,
+    });
+    if (fjList.status === 'ok') {
+      if (fjList.data?.rows && fjList.data?.rows?.length > 0) {
+        const data: any = [].map.call(fjList.data.rows, (item: any) => {
+          return { label: item.FJMC, value: item.id };
+        });
+        // console.log('场地信息',data);
+
+        setCdmcData(data);
+      }
+    }
+  };
+
+  //查询房间占用 情况
+
+  useEffect(() => {
+    if (xXSJPZData?.length) {
+      if (oriSource) {
+        const tableData: any = processingData(oriSource, xXSJPZData);
+        console.log('tableData', tableData);
+
+        setNewTableDataSource(tableData);
+        // setTableDataSource(tableData);
+      }
+    }
+  }, [oriSource]);
+
+  useEffect(() => {
+    getPKData();
+  }, [cdmcValue]);
+
   // 通过课程数据接口拿到所有的课程
   const getKcData = async () => {
     const khkcResl = await getAllCourses({
@@ -324,33 +431,34 @@ const AddArranging: FC<PropsType> = (props) => {
     }
   };
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const Fjplan = await getFJPlan({
-          XNXQId: curXNXQId,
-          XXJBSJId: currentUser?.xxId,
-          isPk: false,
-        });
-        if (Fjplan.status === 'ok') {
-          setBasicData(Fjplan.data);
-        }
-      } catch (error) {
-        message.error('error');
-      }
-      setLoading(false);
-    }
-    fetchData();
+    // async function fetchData() {
+    //   try {
+    //     const Fjplan = await getFJPlan({
+    //       XNXQId: curXNXQId,
+    //       XXJBSJId: currentUser?.xxId,
+    //       isPk: false,
+    //     });
+    //     if (Fjplan.status === 'ok') {
+    //       setBasicData(Fjplan.data);
+    //     }
+    //   } catch (error) {
+    //     message.error('error');
+    //   }
+    //   setLoading(false);
+    // }
+    // fetchData();
+    getCDMCList();
   }, []);
   useEffect(() => {
     if (formValues) {
       // 如果后查询的课程列表不存在此记录，则加到第一个
-      if (!kcmcData?.find((n) => n.value === formValues.KHKCSJId)) {
-        kcmcData?.unshift({
-          label: formValues.KCMC,
-          value: formValues.KC,
-        });
-      }
-      setKcType(kcmcData);
+      // if (!kcmcData?.find((n) => n.value === formValues.KHKCSJId)) {
+      //   kcmcData?.unshift({
+      //     label: formValues.KCMC,
+      //     value: formValues.KC,
+      //   });
+      // }
+      // setKcType(kcmcData);
       // const selected = bjData?.find((item: { id: string }) => item.id === formValues.BJId);
       // const ZJSID = selected?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.id;
       // const ZJSName = selected?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM;
@@ -387,7 +495,10 @@ const AddArranging: FC<PropsType> = (props) => {
           data: [],
         };
         const result = createKHPKSJ(parameter);
-        setCDLoading(true);
+        // setCDLoading(true);
+        // getPKData();
+        // setExcelTableValue([]);
+
         Promise.resolve(result).then((data) => {
           if (data.status === 'ok') {
             setCDLoading(false);
@@ -398,8 +509,12 @@ const AddArranging: FC<PropsType> = (props) => {
             });
             Promise.resolve(Fjplan).then((FjplanData) => {
               if (FjplanData.status === 'ok') {
-                const datad = processingData(FjplanData.data, xXSJPZData);
-                setTableDataSource(datad);
+                // const datad:any = processingData(FjplanData.data, xXSJPZData);
+                setExcelTableValue([]);
+                // setTableDataSource(datad);
+                // setNewTableDataSource(datad)
+                getPKData();
+
                 message.success('清除成功');
               }
             });
@@ -449,7 +564,7 @@ const AddArranging: FC<PropsType> = (props) => {
                   <Button
                     key="rest"
                     style={{ border: '1px solid #EAEDEE ', background: '#EAEDEE', color: '#999' }}
-                    onClick={() => onReset(Props)}
+                    onClick={() => onReset()}
                   >
                     取消
                   </Button>,
@@ -462,6 +577,7 @@ const AddArranging: FC<PropsType> = (props) => {
                 label="校区"
                 width="md"
                 name="XQ"
+                disabled={formValues?.BJId}
                 options={campus || []}
                 fieldProps={{
                   async onChange(value: any) {
@@ -471,9 +587,10 @@ const AddArranging: FC<PropsType> = (props) => {
                 }}
               />
               <ProFormSelect
+                label="年级"
                 width="md"
                 name="NJ"
-                label="年级"
+                disabled={formValues?.BJId}
                 options={grade || []}
                 fieldProps={{
                   async onChange(value) {
@@ -484,10 +601,11 @@ const AddArranging: FC<PropsType> = (props) => {
                 }}
               />
               <ProFormSelect
+                label="课程"
                 width="md"
                 options={kcType || []}
                 name="KC"
-                label="课程"
+                disabled={formValues?.BJId}
                 showSearch
                 fieldProps={{
                   async onChange(value) {
@@ -496,6 +614,29 @@ const AddArranging: FC<PropsType> = (props) => {
                 }}
               />
             </div>
+            <Form.Item label="场地名称">
+              <Select
+                style={{ width: 200 }}
+                value={cdmcValue}
+                allowClear
+                placeholder="请选择"
+                onChange={(value) => setCdmcValue(value)}
+              >
+                {cdmcData?.map((item: selectType) => {
+                  return (
+                    <Option value={item.value} key={item.value}>
+                      {item.label}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+            {/* <div>
+              <span>场地名称：</span>
+                <div>
+                 
+                </div>
+            </div> */}
             <div className="banji">
               <span>课程班：</span>
               {bjData && bjData.length === 0 ? (
@@ -617,13 +758,13 @@ const AddArranging: FC<PropsType> = (props) => {
                   <ExcelTable
                     className={styles.borderTable}
                     columns={columns}
-                    dataSource={tableDataSource}
+                    dataSource={newTableDataSource}
                     chosenData={Bj}
                     onExcelTableClick={onExcelTableClick}
                     type="edit"
                     getSelectdata={getSelectdata}
                     tearchId={tearchId}
-                    basicData={basicData}
+                    basicData={oriSource}
                   />
                 </Spin>
               ) : (

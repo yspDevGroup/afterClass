@@ -41,7 +41,7 @@ const ClassManagement = () => {
   // 校区
   const [campus, setCampus] = useState<any>([]);
   // 年级
-  const [grade, setGrade] = useState<any>({});
+  const [grade, setGrade] = useState<any>([]);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 排课时段的提示开关
@@ -237,11 +237,11 @@ const ClassManagement = () => {
       const timeSlot = resultTime.data;
       setXXSJPZData(timeSlot);
       // 查询排课数据
-      const resultPlan = await getFJPlan({
-        XNXQId: curXNXQId,
-        XXJBSJId: currentUser?.xxId,
-        isPk: radioValue,
-      });
+      // const resultPlan = await getFJPlan({
+      //   XNXQId: curXNXQId,
+      //   XXJBSJId: currentUser?.xxId,
+      //   isPk: radioValue,
+      // });
     }
   };
   // 获取排课数据信息
@@ -594,7 +594,7 @@ const ClassManagement = () => {
             setTableDataSource={setTableDataSource}
             sameClass={sameClass}
             setBJIDData={setBJIDData}
-            cdmcData={cdmcData}
+            // cdmcData={cdmcData}
             kcmcData={kcmcData}
             currentUser={currentUser}
           />

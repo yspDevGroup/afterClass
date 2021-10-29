@@ -1,7 +1,7 @@
 :global {
   .classCard {
-    text-align: left;
     height: 100%;
+    text-align: left;
 
     .cardTop {
       height: 6px;
@@ -32,7 +32,7 @@
         }
       }
 
-      &+div {
+      & + div {
         border: none;
       }
     }
@@ -41,8 +41,8 @@
   .ArrangingFrom {
     padding: 30px 0 50px 0;
 
-    >div {
-      margin-bottom: 35px;
+    > div {
+      // margin-bottom: 35px;
       min-width: 900px;
 
       .ant-form-item-label {
@@ -62,7 +62,6 @@
         }
       }
     }
-
 
     .ant-space-align-center {
       position: fixed;
@@ -87,7 +86,7 @@
       display: flex;
       margin-bottom: 20px;
 
-      >span {
+      > span {
         width: 75px;
         text-align: right;
       }
@@ -134,7 +133,7 @@
             border-radius: 2px;
             cursor: pointer;
 
-            >div {
+            > div {
               display: block;
               padding: 10px;
               line-height: 24px;
@@ -154,7 +153,7 @@
           }
 
           .unFold {
-            >div {
+            > div {
               color: #4884ff;
               line-height: 40px;
               text-align: center;
@@ -169,13 +168,13 @@
       // min-width: 1022px;
       margin-bottom: 20px;
 
-      >span {
+      > span {
         width: 75px;
         min-width: 75px;
         text-align: right;
       }
 
-      >div {
+      > div {
         margin-top: 0;
       }
     }
@@ -203,21 +202,20 @@
   }
 }
 
-
 .searchWrapper {
   position: relative;
-  box-shadow: 0px 1px 0px #E4E4E4;
-  >div:nth-child(1) {
+  box-shadow: 0 1px 0 #e4e4e4;
+  > div:nth-child(1) {
     display: flex;
     flex-wrap: wrap;
     align-content: space-between;
-    width:calc(~'100% - 133px');
-    >span,
-    >div {
+    width: calc(~'100% - 133px');
+    > span,
+    > div {
       display: flex;
-      line-height: 30px;
       margin-right: 16px;
       margin-bottom: 24px;
+      line-height: 30px;
     }
   }
 }
