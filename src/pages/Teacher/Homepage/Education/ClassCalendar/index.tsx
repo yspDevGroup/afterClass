@@ -78,7 +78,14 @@ const ClassCalendar = (props: propstype) => {
       // img: union,
       background: '#FF8863',
       isRecord: true,
-      handleClick: async (bjid: string, data: any) => {
+      handleClick: async (bjid: string, callbackData: any) => {
+        const data = {
+          type: "picList",
+          cls: "picList",
+          list: [callbackData],
+          noDataText: "暂无课堂风采记录",
+          noDataImg: noData
+        };
         history.push(`/teacher/education/putRecord`,{
           bjid,
           jsid: currentUser.JSId || "1a510d94-8980-4b8b-8150-f4c0ce5e7025",
@@ -98,7 +105,14 @@ const ClassCalendar = (props: propstype) => {
       icon: 'icon-fengcaifabu-copy',
       // img: union,
       background: '#FF8863',
-      handleClick: async (bjid: string, data: any) => {
+      handleClick: async (bjid: string, callbackData: any) => {
+        const data = {
+          type: "picList",
+          cls: "picList",
+          list: [callbackData],
+          noDataText: "暂无课堂风采记录",
+          noDataImg: noData
+        };
         history.push(`/teacher/education/putRecord`,{
           bjid,
           jsid: currentUser.JSId || "1a510d94-8980-4b8b-8150-f4c0ce5e7025",

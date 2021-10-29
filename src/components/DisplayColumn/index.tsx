@@ -37,15 +37,8 @@ const DisplayColumn: FC<IiconTextData> = ({
           if (parentLink) {
             curLink = parentLink[index];
           }
-          const data = {
-            type: "picList",
-            cls: "picList",
-            list: [callbackData],
-            noDataText: "µ±ÌìÎÞ¿Î",
-            noDataImg: "/static/noCourses1.53a59598.png"
-          };
           return (
-            <List.Item onClick={()=>item.handleClick?.(bjid,data)}>
+            <List.Item onClick={()=>item.handleClick?.(bjid,callbackData)}>
               <Link to={curLink}>
                 <div className={styles.Box}>
                   {type === 'img' || itemType === 'img' ? (
