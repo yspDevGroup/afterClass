@@ -308,12 +308,10 @@ const AddArranging: FC<PropsType> = (props) => {
             return true;
           }
           if (result.status === 'error') {
-            if (result.message === 'Validation error') {
-              Modal.error({
-                title: '保存失败',
-                content: '在同一天的同一时间段内不能排同一个班',
-              });
-            }
+            Modal.error({
+              title: '保存失败',
+              content: result.message,
+            });
           }
         } catch (err) {
           message.error('保存失败');
