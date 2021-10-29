@@ -34,7 +34,7 @@ export default {
   'menu.orderInquiry': '订单管理',
   'menu.orderInquiry.courseorder': '课程订单',
   'menu.orderInquiry.serviceorder': '服务订单',
-  'menu.orderInquiry.reimbursementClass': '课程退订',
+  'menu.orderInquiry.reimbursementClass': '退订管理',
   'menu.orderInquiry.refundManagement': '退款管理',
   'menu.announcements': '通知公告',
   'menu.announcements.notice': '校内通知',
