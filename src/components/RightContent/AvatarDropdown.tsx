@@ -95,7 +95,6 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
 
   const menuHeaderDropdown = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-
       <Menu.Item key="logout">
         <LogoutOutlined />
         退出登录
@@ -129,13 +128,13 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
               src={currentUser.avatar || defaultAvatar}
               alt="avatar"
             />
+            <span className={`${styles.name} anticon`} ref={userRef}>
+              <WWOpenDataCom type="userName" openid={currentUser?.UserId || ''} />
+
+              {/* {currentUser.username} */}
+            </span>
           </span>
         </HeaderDropdown>
-        <span className={`${styles.name} anticon`} ref={userRef}>
-          <WWOpenDataCom type="userName" openid={currentUser?.UserId || ''} />
-
-          {/* {currentUser.username} */}
-        </span>
       </span>
     </>
   );
