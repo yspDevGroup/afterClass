@@ -1,0 +1,43 @@
+.container{
+  min-height: 480px;
+  ul{
+    padding: 0;
+    li{
+      width: 100%;
+      min-height: 170px;
+      padding: 16px;
+      margin: 20px 0;
+      background: #F8F8F8;
+      border-radius: 8px;
+      .time{
+        .date{
+          font-weight: bold;
+          font-size: 18px;
+          line-height: 24px;
+          color: #333333;
+          margin: 0;
+        }
+        .hour{
+          font-size: 14px;
+          line-height: 24px;
+          color: #666666;
+        }
+      }
+      .content{
+        font-size: 14px;
+        line-height: 24px;
+        min-height: 50px;
+        color: #666666;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+      :global{
+        .ant-image{
+          margin: 0 12px;
+        }
+      }
+    }
+  }
+}

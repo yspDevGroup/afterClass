@@ -7,6 +7,8 @@ import { ParentHomeData } from '@/services/local-services/mobileHome';
 import styles from './index.less';
 import icon_stuEvaluate from '@/assets/icon_stuEvaluate.png';
 import icon_courseBack from '@/assets/icon_courseBack.png';
+import icon_classroomStyle from '@/assets/classroomStyle.png';
+import myContext from '@/utils/MyContext';
 import icon_leave from '@/assets/icon-teacherLeave.png';
 import icon_CourseAdjustment from '@/assets/icon-CourseAdjustment.png';
 
@@ -84,7 +86,7 @@ const Study = () => {
             className={styles.record}>
             <p className={styles.recordP1}>
               <p className={styles.recordP2}>
-                <img src={icon_courseBack} alt="" />
+                <img src={icon_classroomStyle} alt="" />
               </p>
             </p>
             <p className={styles.recordP3}>课堂风采</p>

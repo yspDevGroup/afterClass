@@ -33,8 +33,8 @@ export async function getKHXSTK(
         WechatUserId?: string;
         BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
       };
-      JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
-      KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } };
+      JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string } | any;
+      KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } } | any;
       KHXXZZFW?:
         | { id?: string; FWMC?: string; KHZZFW?: { id?: string; FWMC?: string; FWJGMC?: string } }
         | any;
@@ -123,8 +123,8 @@ export async function createKHXSTK(body: API.CreateKHXSTK, options?: { [key: str
         WechatUserId?: string;
         BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
       };
-      JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
-      KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } };
+      JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string } | any;
+      KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } } | any;
       KHXXZZFW?:
         | { id?: string; FWMC?: string; KHZZFW?: { id?: string; FWMC?: string; FWJGMC?: string } }
         | any;

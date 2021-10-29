@@ -116,3 +116,55 @@ export async function updateKHJSCQ(
     ...(options || {}),
   });
 }
+
+/** 教师出勤记录统计 POST /khjscq/statistical */
+export async function countKHJSCQ(
+  body: {
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: {
+      KHBJSJId?: string;
+      KCMC?: string;
+      BJMC?: string;
+      attendance?: number;
+      absenteeism?: number;
+      leave?: number;
+      substitute?: number;
+    }[];
+    message?: string;
+  }>('/khjscq/statistical', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 教师代课统计 POST /khjscq/statisSubstitute */
+export async function statisSubstitute(
+  body: {
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjscq/statisSubstitute', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

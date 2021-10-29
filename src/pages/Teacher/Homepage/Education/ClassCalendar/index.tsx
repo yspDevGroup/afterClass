@@ -1,12 +1,12 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
+import { List, Modal, message, Form, Input, Checkbox, Divider, Radio, Space } from 'antd';
+import type { FormInstance } from 'antd';
+import { history, useModel } from 'umi';
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import moment from 'moment';
-import { useModel } from 'umi';
-import type { FormInstance } from 'antd';
 import { Calendar } from 'react-h5-calendar';
-import { List, Modal, message, Form, Input, Checkbox, Divider, Radio, Space } from 'antd';
 import type { DisplayColumnItem } from '@/components/data';
 import ListComponent from '@/components/ListComponent';
 import { getData } from '@/utils/utils';
@@ -17,6 +17,8 @@ import { ParentHomeData } from '@/services/local-services/mobileHome';
 import styles from './index.less';
 import noData from '@/assets/noCourses1.png';
 import noOrder from '@/assets/noOrder1.png';
+
+
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -51,7 +53,6 @@ const ClassCalendar = (props: propstype) => {
     student_userid: currentUser?.UserId,
     njId: '1'
   }];
-
   const iconTextData: DisplayColumnItem[] = day === dayjs().format('YYYY-MM-DD') ? [
     {
       text: '签到点名',
@@ -70,24 +71,41 @@ const ClassCalendar = (props: propstype) => {
         setBjid(bjid);
       },
     },
-    // {
-    //   text: '课堂风采',
-    //   itemType: 'img',
-    //   img: classroomStyle,
-    //   background: '#FF8863',
-    // },
+    {
+      text: '课堂风采',
+      // itemType: 'img',
+      icon: 'icon-fengcaifabu-copy',
+      // img: union,
+      background: '#FF8863',
+      isRecord: true,
+      handleClick: async (bjid: string, data: any) => {
+        history.push(`/teacher/education/putRecord`,{
+          bjid,
+          jsid: currentUser.JSId || "1a510d94-8980-4b8b-8150-f4c0ce5e7025",
+          data
+        })
+      },
+    },
   ] : [
     {
       text: '签到点名',
       icon: 'icon-dianming',
       background: '#FFC700',
     },
-    // {
-    //   text: '课堂风采',
-    //   itemType: 'img',
-    //   img: classroomStyle,
-    //   background: '#FF8863',
-    // },
+    {
+      text: '课堂风采',
+      // itemType: 'img',
+      icon: 'icon-fengcaifabu-copy',
+      // img: union,
+      background: '#FF8863',
+      handleClick: async (bjid: string, data: any) => {
+        history.push(`/teacher/education/putRecord`,{
+          bjid,
+          jsid: currentUser.JSId || "1a510d94-8980-4b8b-8150-f4c0ce5e7025",
+          data
+        })
+      },
+    },
   ];
   // 后台返回的周数据的遍历
   const getCalendarData = (data: any) => {
