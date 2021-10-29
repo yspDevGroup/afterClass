@@ -152,6 +152,11 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
             </Link>
           </li>
         </ul>
+        <div className={styles.signOut}>
+          <Link to="/auth_callback/overDue">
+            退出登录
+          </Link>
+        </div>
       </div>
     </div>
   );
