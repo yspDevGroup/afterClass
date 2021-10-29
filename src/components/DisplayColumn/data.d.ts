@@ -22,4 +22,5 @@ export type IiconTextData = {
    exteraLink?: any;
    parentLink?: any[];
    bjid?: string;
+   callbackData?: any;
 }

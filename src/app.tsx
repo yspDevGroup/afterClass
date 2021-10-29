@@ -250,7 +250,7 @@ export const request: RequestConfig = {
         (ctx.res.message?.includes('Authorization token is invalid') ||
           ctx.res.message?.includes('Invalid Token'))
       ) {
-        history.replace('/auth_callback/overDue');
+        history.replace('/403?title=认证信息已失效，请重新登录');
       }
     },
   ],

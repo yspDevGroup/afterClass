@@ -340,3 +340,21 @@ export async function cancleClass(
     ...(options || {}),
   });
 }
+
+/** 根据课后班级Id查询授课教师 POST /khbjsj/getTeachersByBJId */
+export async function getTeachersByBJId(
+  body: {
+    /** 班级ID */
+    KHBJSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getTeachersByBJId', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

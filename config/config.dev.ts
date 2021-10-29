@@ -4,6 +4,7 @@ import proxy from './proxy';
 
 export default defineConfig({
   define: {
+    ENV_type: 'dev',
     ENV_title: '课后服务平台',
     ENV_subTitle: '课后服务平台',
     ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
@@ -14,6 +15,8 @@ export default defineConfig({
     authType: 'wechat',
     clientId: 'ww20993d96d6755f55',
     clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
+    testStudentId: '',
+    testTeacherId: '',
   },
   proxy: proxy['dev'],
 });

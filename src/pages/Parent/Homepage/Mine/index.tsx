@@ -124,7 +124,7 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
       <div className={styles.operation}>
         <Link to="/parent/mine/dropClass" className={styles.drop}>
           <img src={drop} alt="" />
-          <span className={styles.dropSpan}>退课退款</span>
+          <span className={styles.dropSpan}>我要退订</span>
           <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
         </Link>
         <Link to="/parent/mine/evaluation" className={styles.evaluation}>
@@ -152,6 +152,11 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
             </Link>
           </li>
         </ul>
+        <div className={styles.signOut}>
+          <Link to="/auth_callback/overDue">
+            退出登录
+          </Link>
+        </div>
       </div>
     </div>
   );

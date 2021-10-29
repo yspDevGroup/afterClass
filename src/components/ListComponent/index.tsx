@@ -23,7 +23,7 @@ import noPic1 from '@/assets/noPic1.png';
 //   }
 //   return findSpan(dom.parentElement);
 // };
-const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) => {
+const NewsList = (props: { data: ListItem[]; type: ListType; operation: any}) => {
   const { data, type, operation } = props;
   const teacher = history.location.pathname.indexOf('teacher') > -1;
 
@@ -31,10 +31,10 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
     <div className={styles[type]}>
       <List
         dataSource={data}
-        renderItem={(v) => {
+        renderItem={(v,index) => {
           return (
-            <div className={operation ? 'ui-listItemWrapper' : ''}>
-              <div className={operation ? 'ui-listItemContent' : ''}>
+            <div className={operation ? 'ui-listItemWrapper' : 'itemWrapper'}>
+              <div className={operation ? 'ui-listItemContent' : 'itemContent'}>
                 <Link to={v.link!}>
                   <List.Item.Meta
                     style={
@@ -129,7 +129,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
               </div>
               {operation ? (
                 <div className="ui-operation" style={{ display: 'block', paddingTop: '10px' }}>
-                  <DisplayColumn type="icon" grid={{ column: operation.length }} dataSource={operation} parentLink={[v.enrollLink]} bjid={v.bjid}/>
+                  <DisplayColumn type="icon" grid={{ column: operation.length }} dataSource={operation} parentLink={[v.enrollLink]} bjid={v.bjid} callbackData={data[index]}/>
                 </div>
               ) : (
                 ''

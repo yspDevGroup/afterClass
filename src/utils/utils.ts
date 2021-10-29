@@ -294,7 +294,7 @@ export const enHenceMsg = (msg?: string) => {
   if (msg && msg.indexOf('Cannot') > -1) {
     message.error(`操作失败，该项存在关联数据,请清除关联数据后再试`);
   } else if ((msg && msg.indexOf('token') > -1) || (msg && msg.indexOf('Token') > -1)) {
-    history.replace('/auth_callback/overDue');
+    history.replace('/403?title=认证信息已失效，请重新登录');
   } else if (msg && msg.indexOf('Validation') > -1) {
     message.error('操作失败，该项未通过校验，请检查数据是否重复后再试');
   } else {

@@ -6,7 +6,7 @@ import ProTable from '@ant-design/pro-table';
 import PageContainer from '@/components/PageContainer';
 import styles from './index.less';
 import type { FormInstance } from 'antd';
-import { history, useModel } from 'umi';
+import { useModel } from 'umi';
 import { Modal, message, Popconfirm, Button, Divider } from 'antd';
 import type { TableListParams } from '@/constant';
 import { PlusOutlined } from '@ant-design/icons';
@@ -74,10 +74,10 @@ const TermManagement = () => {
           const params = {
             id: current?.id,
           };
-          const data ={
+          const data = {
             ...values,
-            XXJBSJId:currentUser?.xxId
-          }
+            XXJBSJId: currentUser?.xxId,
+          };
           res = updateXNXQ(params, data);
         } else {
           res = createXNXQ(values);
@@ -92,8 +92,6 @@ const TermManagement = () => {
             actionRef?.current?.reload();
           } else if (data.message!.indexOf('Validation') > -1) {
             message.error('已存在该学年学期，请勿重复添加');
-          } else if (data.message!.indexOf('token') > -1 || data.message!.indexOf('Token') > -1) {
-            history.replace('/auth_callback/overDue');
           } else {
             message.error(data.message);
           }
@@ -112,7 +110,7 @@ const TermManagement = () => {
       valueType: 'index',
       align: 'center',
       width: 58,
-      fixed: 'left'
+      fixed: 'left',
     },
     {
       title: '学年',
@@ -120,7 +118,7 @@ const TermManagement = () => {
       key: 'XN',
       align: 'center',
       width: 150,
-      fixed: 'left'
+      fixed: 'left',
     },
     {
       title: '学期',
@@ -235,8 +233,8 @@ const TermManagement = () => {
         onCancel={() => setModalVisible(false)}
         footer={[
           <Button key="submit" type="primary" onClick={handleSubmit}>
-          确定
-        </Button>,
+            确定
+          </Button>,
           <Button key="back" onClick={() => setModalVisible(false)}>
             取消
           </Button>,

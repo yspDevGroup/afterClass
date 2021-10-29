@@ -139,6 +139,18 @@
         component: './Manager/Mechanisms/edit',
         hideInMenu: 'true',
       },
+      //管理端课程风采
+      {
+        path: '/courseManagements/courseRecord',
+        name: 'courseRecord',
+        component: './Manager/CourseRecord',
+      },
+      {
+        path: '/courseManagements/courseRecord/detail',
+        name: 'courseRecord',
+        component: './Manager/CourseRecord/Detail',
+        hideInMenu: 'true',
+      },
     ],
   },
   {
@@ -477,6 +489,18 @@
         name: 'details',
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/Feedback/Details',
+      },
+      {
+        path: '/teacher/education/record',
+        name: 'record',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/Record',
+      },
+      {
+        path: '/teacher/education/putRecord',
+        name: 'feedback',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/PutRecord',
       },
       {
         path: '/teacher/education/studentEvaluation',

@@ -26,4 +26,5 @@ export type DisplayColumnItem = {
   key?: string;
   itemType?: 'img' | 'icon';
   handleClick?: any;
+  isRecord?: boolean;
 }

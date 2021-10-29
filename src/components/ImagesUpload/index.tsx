@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { Upload, message, Modal } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { getAuthorization } from '@/utils/utils';
+import upload from '@/assets/upload.png';
 
 
 const ImagesUpload = (props: {
   img?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange: (value: string) => void;
   readonly?: boolean;
 }) => {
   const { img, onValueChange, readonly = false } = props;
@@ -15,44 +16,7 @@ const ImagesUpload = (props: {
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<any>('');
   const [previewTitle, setPreviewTitle] = useState<any>('');
-  const [fileList, setFileList] = useState<any>([
-    {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-2',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-3',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-4',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-xxx',
-      percent: 50,
-      name: 'image.png',
-      status: 'uploading',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-5',
-      name: 'image.png',
-      status: 'error',
-    },
-  ]);
+  const [fileList, setFileList] = useState<any>([]);
 
   useEffect(() => {
     // setImgUrl(true);
@@ -79,7 +43,31 @@ const ImagesUpload = (props: {
   const handleCancel = () => setPreviewVisible(false);
 
   const handleChange = (info: any) => {
-    console.log('info: ', info);
+    if (info.file.status === 'uploading') {
+      // setLoading(true);
+      // return;
+    }
+    if (info.file.status === 'done') {
+      console.log('info: ', info);
+      const code = info.file.response;
+      if (code.status === 'ok') {
+        message.success('上传成功');
+        // setLoading(false);
+        let urlStr = '';
+        info.fileList.forEach((item: any)=>{
+          urlStr = urlStr + item.response.data +';';
+        })
+        onValueChange(urlStr);
+      } else {
+        message.success('上传失败');
+        // setLoading(false);
+      }
+      // getBase64(info.file.originFileObj, (imageUrl: string) => {
+      //   setImgUrl(imageUrl);
+      //   setLoading(false);
+      //   onValueChange?.(imageUrl);
+      // });
+    }
     setFileList(info.fileList);
   };
 
@@ -94,15 +82,21 @@ const ImagesUpload = (props: {
 
   const uploadButton = (
     <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>上传</div>
+      {/* {loading ? <LoadingOutlined /> : <PlusOutlined />} */}
+      <div style={{ marginTop: 8 }}>
+        <img src={upload} alt="avatar" style={{ width: '100%' }} />
+      </div>
     </div>
   );
   return (
     <>
       <Upload
-        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        name="image"
         listType="picture-card"
+        action="/api/upload/uploadFile?type=badge&plat=school"
+        headers={{
+          authorization: getAuthorization()
+        }}
         fileList={fileList}
         onPreview={handlePreview}
         beforeUpload={handleBeforeUpload}

@@ -152,3 +152,41 @@ export async function getAllTKByAgency(
     ...(options || {}),
   });
 }
+
+/** 根据学期查询所有退课，退餐信息 POST /khtksj/getAllRefunds */
+export async function getAllRefunds(
+  body: {
+    /** 退课状态 */
+    ZT?: number[];
+    /** 学生ID */
+    XSJBSJId?: string;
+    /** 学生姓名 */
+    XSXM?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 课后服务班级ID */
+    KHBJSJId?: string;
+    /** 课后增值服务ID */
+    KHXXZZFWId?: string;
+    /** 退课类型，0:退课;1:停餐 */
+    LX?: number;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.KHTKSJ[] };
+    message?: string;
+  }>('/khtksj/getAllRefunds', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

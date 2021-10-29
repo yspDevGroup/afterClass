@@ -1090,6 +1090,8 @@ declare namespace API {
     GWZYM?: string;
     /** 主要任课学段 */
     ZYRKXD?: string;
+    /** 企业微信用户ID */
+    WechatUserId?: string;
     /** 职称 */
     ZC?: string;
     /** 职务 */
@@ -1772,6 +1774,8 @@ declare namespace API {
     CQZT?: '出勤' | '请假' | '缺席' | '代课';
     /** 出勤日期 */
     CQRQ?: string;
+    /** 节次信息ID */
+    XXSJPZId?: string;
     /** 教师ID */
     JZGJBSJId?: string;
     /** 班级ID */
@@ -1783,6 +1787,8 @@ declare namespace API {
     CQZT?: '出勤' | '请假' | '缺席' | '代课';
     /** 出勤日期 */
     CQRQ?: string;
+    /** 节次信息ID */
+    XXSJPZId?: string;
     /** 教师ID */
     JZGJBSJId?: string;
     /** 班级ID */
@@ -2658,25 +2664,33 @@ declare namespace API {
       WechatUserId?: string;
       BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
     };
-    KHBJSJ?: {
-      id?: string;
-      BJMC?: string;
-      BJMS?: string;
-      BJZT?: '待开班' | '已开班' | '已结课';
-      BJRS?: number;
-      KSS?: number;
-      FY?: number;
-      KKRQ?: string | any;
-      JKRQ?: string | any;
-      BMKSSJ?: string;
-      BMJSSJ?: string;
-      KCTP?: string;
-      KHKCSJ?: { id?: string; KCMC?: string };
-      XQSJ?: { id?: any; XXJBSJ?: { XXMC?: any } };
-    };
-    KHXXZZFW?:
-      | { id?: string; FWMC?: string; KHZZFW?: { id?: string; FWMC?: string; FWJGMC?: string } }
+    KHBJSJ?:
+      | {
+          id?: string;
+          BJMC?: string;
+          KSS?: number;
+          FY?: string;
+          KKRQ?: string;
+          JKRQ?: string;
+          KHKCSJ?: { id?: string; KCMC?: string };
+        }
       | any;
+    KHXXZZFW?:
+      | {
+          id?: string;
+          FWMC?: string;
+          FWNR?: string;
+          FWZT?: number;
+          FY?: string;
+          KSRQ?: string;
+          JSRQ?: string;
+          BMKSSJ?: string;
+          BMJSSJ?: string;
+          FWTP?: string;
+          KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
+        }
+      | any;
+    KHXSTKs?: any | { id?: string; BZ?: string; TKZT?: string }[];
   };
 
   type CreateKHTKSJ = {
@@ -3131,8 +3145,8 @@ declare namespace API {
       WechatUserId?: string;
       BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
     };
-    JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
-    KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } };
+    JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string } | any;
+    KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } } | any;
     KHXXZZFW?:
       | { id?: string; FWMC?: string; KHZZFW?: { id?: string; FWMC?: string; FWJGMC?: string } }
       | any;

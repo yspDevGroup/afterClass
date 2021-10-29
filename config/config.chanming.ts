@@ -2,7 +2,7 @@
  * @description: 蝉鸣环境配置
  * @author: zpl
  * @Date: 2021-10-19 14:53:43
- * @LastEditTime: 2021-10-22 11:47:37
+ * @LastEditTime: 2021-10-27 17:39:41
  * @LastEditors: zpl
  */
 // https://umijs.org/config/
@@ -24,6 +24,7 @@ export default defineConfig({
     hmr: true,
   },
   define: {
+    ENV_type: 'chanming',
     ENV_title: '课后服务平台',
     ENV_subTitle: '课后服务平台',
     ENV_copyRight: '2021 版权所有：蝉鸣科技（西安）有限公司',
@@ -33,6 +34,8 @@ export default defineConfig({
     authType: 'wechat',
     clientId: 'wwe2dfbe3747b6e69f',
     clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
+    testStudentId: '',
+    testTeacherId: '',
   },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout

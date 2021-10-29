@@ -32,8 +32,6 @@
       }
       .content {
         margin-left: 50px;
-        max-height: 300px;
-        overflow: auto;
         color: #999999;
         margin-top: 8px;
         > p {
@@ -49,15 +47,33 @@
         }
         .imgContainer{
           display: flex;
+          flex-wrap: wrap;
+          width: 100%;
           margin: 10px 0;
-          .img{
-            width: 86px;
-            margin: 0 3px;
+          .oneImg{
+          }
+          .pairImg{
+          }
+          .nineImg{
             height: 86px;
-            background-color: red;
+          }
+          :global{
+            .ant-image{
+              // flex-basis: 30%;
+              height: 100%;
+              img{
+                object-fit: cover;
+              }
+            }
           }
         }
       }
     }
+  }
+}
+
+:global{
+  .ant-scrolling-effect{
+    width: 100% !important;
   }
 }

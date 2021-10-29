@@ -4,14 +4,14 @@ import Notice from './components/Notice';
 
 const Home = () => {
   return (
-  <div className={styles.indexPage}>
-    <div className={styles.pageContent}>
-        <div className={styles.noticeArea}></div>
-        <Overview/>
-        <Notice/>
+    <div className={styles.indexPage}>
+      <div className={styles.pageContent}>
+        <div className={`${styles.noticeArea} ${styles[ENV_type]}`} />
+        <Overview />
+        <Notice />
+      </div>
     </div>
-  </div>
-  )
-}
+  );
+};
 
 export default Home;
