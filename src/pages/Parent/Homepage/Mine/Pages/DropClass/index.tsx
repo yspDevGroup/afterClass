@@ -91,7 +91,7 @@ const DropClass = () => {
                     {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <span style={{ color: '#FF0000' }}>退课失败</span> : ''}
                     {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '0' ? <span style={{ color: '#FF6600' }}>退款中</span> : ''}
                     {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? <span style={{ color: '#FF0000' }}>退款被驳回</span> : ''}
-                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '3' ? <span style={{ color: '#45c977' }}>退款成功</span> : ''}
+                    {(value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '3') || value?.KHXSTKs?.length === 0 && value?.ZT === 1 ? <span style={{ color: '#45c977' }}>退款成功</span> : ''}
                     {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '4' ? <span style={{ color: '#FF0000' }}>退款失败</span> : ''}
                   </p>
                   {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <p>退课说明：{value?.BZ}</p> : ''}

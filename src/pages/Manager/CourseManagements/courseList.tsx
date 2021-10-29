@@ -291,7 +291,7 @@ const CourseList = () => {
     {
       title: '课程来源',
       align: 'center',
-      width: 110,
+      width: 180,
       key: 'SSJGLX',
       dataIndex: 'SSJGLX',
       valueType: 'select',
@@ -299,14 +299,17 @@ const CourseList = () => {
         校内课程: { text: '校内课程' },
         机构课程: { text: '机构课程' },
       },
+      render: (_, record) => {
+        return <>{record?.KHJYJG?.QYMC || '校内课程'}</>;
+      },
     },
     {
       title: '机构名称',
       align: 'center',
-      width: 200,
+      width: 0,
       key: 'JGMC',
       dataIndex: 'JGMC',
-      // search: false,
+      hideInTable:true, // 列表中不显示此列
       render: (_, record) => {
         return <>{record?.KHJYJG?.QYMC || '-'}</>;
       },

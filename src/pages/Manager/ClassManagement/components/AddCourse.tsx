@@ -583,7 +583,9 @@ const AddCourse: FC<AddCourseProps> = ({
           name: 'FY',
           key: 'FY',
           disabled: readonly,
-          rules: [{ required: true, message: '请填写费用' }],
+          rules: [
+            { required: true, message: '请填写费用' },
+            { message: '请输入正确的费用', pattern: /^([1-9]\d{0,3}|0)(\.\d{1,2})?$/ },],
           fieldProps: {
             autocomplete: 'off',
           },
