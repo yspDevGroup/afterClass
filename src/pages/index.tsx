@@ -2,14 +2,13 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-10-28 17:05:22
+ * @LastEditTime: 2021-10-29 16:39:42
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
 import { envjudge, getLoginPath, getOauthToken, getPageQuery } from '@/utils/utils';
 import loadImg from '@/assets/loading.gif';
-import { removeWechatInfo } from '@/utils/wx';
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
@@ -67,7 +66,6 @@ const Index = () => {
             history.replace('/parent/home');
             break;
           default:
-            removeWechatInfo();
             history.replace('/403?title=未获取到合法的用户身份');
             break;
         }

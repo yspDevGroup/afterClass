@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tabs } from 'antd';
-import { useModel,history } from 'umi';
+import { useModel, history } from 'umi';
 import Home from './Home';
 import Study from './Study';
 import Mine from './Mine';
@@ -10,8 +10,6 @@ import myContext from '@/utils/MyContext';
 import styles from './index.less';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { homePageInfo } from '@/services/after-class/user';
-import moment from 'moment';
-import { getAllCourses } from '@/services/after-class/khkcsj';
 
 const { TabPane } = Tabs;
 const PersonalHomepage = () => {
@@ -26,12 +24,14 @@ const PersonalHomepage = () => {
   const index = getQueryString('index');
   const StorageXSId = localStorage.getItem('studentId');
   const StorageNjId = localStorage.getItem('studentNjId');
+
   // 未获取到孩子时跳转到403
-  // useEffect(() => {
-  //   if(currentUser?.student?.length === 0 || typeof currentUser?.student === 'undefined'){
-  //     history.replace('/403?message=系统未读取到您的孩子信息，请与学校相关负责人联系');
-  //   }
-  // }, [])
+  useEffect(() => {
+    if (currentUser?.student?.length === 0 || typeof currentUser?.student === 'undefined') {
+      history.replace('/403?message=系统未读取到您的孩子信息，请与学校相关负责人联系');
+    }
+  }, []);
+
   useEffect(() => {
     async function fetchData() {
       // 获取后台学年学期数据
@@ -39,10 +39,10 @@ const PersonalHomepage = () => {
       if (result.current) {
         const { student } = currentUser || {};
         const res = await homePageInfo({
-          XSId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId ,
+          XSId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
           XNXQId: result.current.id,
           XXJBSJId: currentUser!.xxId,
-          njId:StorageNjId || (student && student[0].NJSJId)
+          njId: StorageNjId || (student && student[0].NJSJId),
         });
         if (res.status === 'ok') {
           if (res.data) {

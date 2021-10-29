@@ -32,7 +32,7 @@ const AfterSchoolCourse: React.FC = () => {
       valueType: 'index',
       width: 58,
       fixed: 'left',
-      align: 'center'
+      align: 'center',
     },
     {
       title: '课程名称',
@@ -67,8 +67,8 @@ const AfterSchoolCourse: React.FC = () => {
       width: 120,
       ellipsis: true,
       render: (_, record: any) => {
-        return record?.KCLY === '校内课程' ? record?.XXMC : record?.JGMC
-      }
+        return record?.KCLY === '校内课程' ? record?.XXMC : record?.JGMC;
+      },
     },
     {
       title: '课程班数量',
@@ -102,7 +102,8 @@ const AfterSchoolCourse: React.FC = () => {
       width: 100,
       ellipsis: true,
       render: (test: any, record: any) => {
-        const num = record.TKRS != 0 ? (Number((record.TKRS / record.BMRS)) * 100).toFixed(1) + '%' : 0;
+        const num =
+          record.TKRS != 0 ? (Number(record.TKRS / record.BMRS) * 100).toFixed(1) + '%' : 0;
         return num;
       },
     },
@@ -147,6 +148,18 @@ const AfterSchoolCourse: React.FC = () => {
       ),
     },
   ];
+
+  // 学年学期选相框触发的函数
+  const ChoseSelect = async (SelectData: string) => {
+    const res3 = await getCourses({
+      XNXQId: SelectData,
+      XXJBSJId: currentUser?.xxId,
+    });
+    if (res3.status === 'ok') {
+      setDataSource(res3?.data?.rows);
+    }
+  };
+
   useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
@@ -170,16 +183,6 @@ const AfterSchoolCourse: React.FC = () => {
       ChoseSelect(curXNXQId);
     }
   }, [curXNXQId]);
-  // 学年学期选相框触发的函数
-  const ChoseSelect = async (SelectData: string) => {
-    const res3 = await getCourses({
-      XNXQId: SelectData,
-      XXJBSJId: currentUser?.xxId
-    });
-    if (res3.status === 'ok') {
-      setDataSource(res3?.data?.rows);
-    }
-  };
 
   return (
     /// PageContainer组件是顶部的信息

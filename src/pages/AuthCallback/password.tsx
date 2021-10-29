@@ -2,41 +2,39 @@
  * @description: OAuth认证回调页面，password模式，本页面会先写入本地token缓存并触发身份信息获取，然后跳转向权限对应的页面
  * @author: zpl
  * @Date: 2021-07-14 16:54:06
- * @LastEditTime: 2021-09-06 18:46:21
+ * @LastEditTime: 2021-10-29 16:17:49
  * @LastEditors: zpl
  */
 import React, { useEffect } from 'react';
 import type { FC } from 'react';
 import { history, useModel } from 'umi';
 import { message } from 'antd';
-import { getQueryString, removeOAuthToken, saveOAuthToken } from '@/utils/utils';
+import { getPageQuery, removeOAuthToken, saveOAuthToken } from '@/utils/utils';
 import { createSSOToken } from '@/services/after-class/sso';
 
 const AuthCallback: FC = () => {
-  const { loading, refresh } = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
 
-  const ysp_access_token = getQueryString('ysp_access_token');
-  const ysp_expires_in = getQueryString('ysp_expires_in');
-  const ysp_refresh_token = getQueryString('ysp_refresh_token');
-  const ysp_token_type = getQueryString('ysp_token_type');
+  const query = getPageQuery();
 
   const goto = async () => {
     // 通知后台产生token
     const tokenRes = await createSSOToken({
-      access_token: ysp_access_token!,
-      expires_in: parseInt(ysp_expires_in || '0', 10),
-      refresh_token: ysp_refresh_token || undefined,
-      token_type: ysp_token_type || undefined,
+      access_token: query.ysp_access_token as string | undefined,
+      expires_in: parseInt((query.ysp_expires_in as string | undefined) || '0', 10),
+      refresh_token: (query.ysp_refresh_token as string | undefined) || undefined,
+      token_type: (query.ysp_token_type as string | undefined) || undefined,
     });
+
     if (tokenRes.status === 'ok') {
       saveOAuthToken({
         access_token: tokenRes.data,
       });
       // 刷新全局属性后向首页跳转
-      if (!loading) {
-        refresh().then(() => {
-          history.replace('/');
-        });
+      if (initialState) {
+        const userInfo = await initialState.fetchUserInfo?.();
+        setInitialState({ ...initialState, currentUser: userInfo });
+        history.replace('/' + location.search);
       }
     } else {
       message.warn('认证信息无效');
@@ -46,7 +44,7 @@ const AuthCallback: FC = () => {
   };
 
   useEffect(() => {
-    if (ysp_access_token) {
+    if (query.ysp_access_token) {
       goto();
     } else {
       removeOAuthToken();

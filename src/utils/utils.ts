@@ -112,6 +112,36 @@ export const removeOAuthToken = () => {
 };
 
 /**
+ * 获取用户信息缓存
+ *
+ * @return {*}
+ */
+export const getUserCache = (): any => {
+  const user = localStorage.getItem('currentUser');
+  if (user) {
+    return JSON.parse(user);
+  }
+  return null;
+};
+
+/**
+ * 保存用户缓存
+ *
+ * @param {unknown} userInfo
+ */
+export const saveUserInfoCache = (userInfo: unknown) => {
+  localStorage.setItem('currentUser', JSON.stringify(userInfo));
+};
+
+/**
+ * 清除用户缓存
+ *
+ */
+export const removeUserInfoCache = () => {
+  localStorage.removeItem('currentUser');
+};
+
+/**
  * 组装请求头部token信息
  *
  * @return {*}  {string}

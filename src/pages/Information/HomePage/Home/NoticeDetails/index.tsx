@@ -1,9 +1,6 @@
-import styles from '../index.less';
-import { Button, Col, Row, Tabs } from 'antd';
+import { Col, Row } from 'antd';
 import { JYJGTZGG } from '@/services/after-class/jyjgtzgg';
-import { LeftOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-import { history } from 'umi';
 import TopNav from './../components/TopNav'
 import { XXTZGG } from '@/services/after-class/xxtzgg';
 
@@ -21,7 +18,6 @@ const NoticeDetails = (props: any) => {
       setNrInfo(result.data.NR);
     }else{
       const result = await XXTZGG({ id: allDataSource[index].id });
-      console.log('result: ', result);
       setNrInfo(result.data.NR);
     }
 

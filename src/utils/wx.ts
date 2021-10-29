@@ -4,7 +4,7 @@
  * @description:
  * @author: zpl
  * @Date: 2021-06-09 08:57:20
- * @LastEditTime: 2021-10-19 15:09:38
+ * @LastEditTime: 2021-10-29 16:28:54
  * @LastEditors: zpl
  */
 import {
@@ -15,82 +15,6 @@ import {
 import { removeOAuthToken, saveOAuthToken } from './utils';
 
 /**
- * 保存微信缓存
- *
- * @param {{
- *   suiteID?: string;
- *   CorpId?: string;
- *   userInfo?: Record<string, unknown>;
- * }} param
- */
-export const saveWechatInfo = (param: {
-  suiteID?: string;
-  CorpId?: string;
-  userInfo?: Record<string, unknown>;
-}) => {
-  const { suiteID, CorpId, userInfo } = param;
-  if (suiteID) localStorage.setItem('suiteID', suiteID);
-  if (CorpId) localStorage.setItem('CorpId', CorpId);
-  if (userInfo) localStorage.setItem('userInfo', JSON.stringify(userInfo));
-};
-
-/**
- * 读取微信缓存
- *
- * @return {*}  {Promise<{
- *   suiteID: string;
- *   CorpId: string;
- * }>}
- */
-export const getWechatInfo = (): {
-  /** 应用ID */
-  suiteID: string;
-  /** 企业ID */
-  CorpId: string;
-  /** 用户信息 */
-  userInfo: Record<string, unknown>;
-} => {
-  let userInfo;
-  try {
-    userInfo = JSON.parse(localStorage.getItem('userInfo') || '');
-  } catch (error) {
-    // do nothing
-  }
-  return {
-    suiteID: localStorage.getItem('suiteID') || '',
-    CorpId: localStorage.getItem('CorpId') || '',
-    userInfo,
-  };
-};
-
-/**
- * 清除微信缓存
- *
- */
-export const removeWechatInfo = () => {
-  localStorage.removeItem('suiteID');
-  localStorage.removeItem('CorpId');
-  localStorage.removeItem('userInfo');
-};
-
-/**
- * 查看缓存，判断是否需要发送请求来获取微信用户信息
- *
- * @param {string} [suiteID] 应用ID
- * @return {*}  {boolean}
- */
-export const needGetWechatUserInfo = (suiteID?: string): boolean => {
-  if (authType !== 'wechat') {
-    return true;
-  }
-  // 认证回调页不发起
-  if (window.location.pathname.startsWith('/auth_callback')) return false;
-
-  const wechatInfo = getWechatInfo();
-  return wechatInfo.suiteID !== suiteID || !wechatInfo.userInfo;
-};
-
-/**
  * 通知后台创建微信认证token并在前端进行缓存
  *
  * @param {Record<string, string>} params
@@ -99,14 +23,12 @@ export const needGetWechatUserInfo = (suiteID?: string): boolean => {
 export const creatTokenForWechat = async (params: Record<string, string>): Promise<boolean> => {
   const tokenRes = await createWechatToken({ params });
   if (tokenRes.status === 'ok') {
-    saveWechatInfo(params);
     await saveOAuthToken({
       access_token: tokenRes.data,
     });
     return true;
   }
   removeOAuthToken();
-  removeWechatInfo();
   return false;
 };
 
@@ -201,6 +123,11 @@ export const initWXAgentConfig = async (jsApiList: string[], num = 1) => {
   return Promise.reject(`获取签名失败： ${res.message}`);
 };
 
+/**
+ * 注册微信前端API
+ *
+ * @param {string[]} [apiList]
+ */
 export const regWechatAPI = async (apiList?: string[]) => {
   const jsApiList = apiList || ['checkJsApi'];
   if (/MicroMessenger/i.test(navigator.userAgent)) {
