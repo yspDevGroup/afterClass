@@ -67,7 +67,7 @@ export async function getAllKHKTFC(
 ) {
   return request<{
     status?: 'ok' | 'error';
-    data?: { count?: number; rows?: API.KHKTFC[] };
+    data?: { count?: number; rows?: any[] };
     message?: string;
   }>('/khktfc/', {
     method: 'POST',

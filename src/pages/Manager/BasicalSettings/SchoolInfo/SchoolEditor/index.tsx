@@ -318,7 +318,7 @@ const SchoolEditor = (props: any) => {
                 placeholder="请选择"
                 labelInValue
                 value={provinceVal}
-                style={{ width: 105, marginRight: 10 }}
+                style={{ marginRight: 9 }}
                 onChange={(value: any) => {
                   handleChange('cities', value);
                 }}
@@ -334,7 +334,7 @@ const SchoolEditor = (props: any) => {
               {showCity ? <>
                 <Select
                   placeholder="请选择"
-                  style={{ width: 105, marginRight: 10 }}
+                  style={{ marginRight: 9 }}
                   labelInValue
                   value={cityVal}
                   onChange={(value: any) => {
@@ -350,7 +350,6 @@ const SchoolEditor = (props: any) => {
                   })}
                 </Select>
                 <Select
-                  style={{ width: 105 }}
                   placeholder="请选择"
                   labelInValue
                   value={countyVal}

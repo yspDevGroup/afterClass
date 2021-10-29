@@ -5,6 +5,7 @@ import { useModel } from 'umi';
 import { useEffect, useState } from 'react';
 import { getAllKHXSPJ } from '@/services/after-class/khxspj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import noOrder from '@/assets/noOrder.png';
 
 const TeacherEvaluation = () => {
   const { initialState } = useModel('@@initialState');
@@ -31,7 +32,10 @@ const TeacherEvaluation = () => {
       <GoBack title={'教师寄语'} />
 
       {Datas?.length === 0 ? (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <div className={styles.noData}>
+          <img src={noOrder} alt="" />
+          <p>暂无数据</p>
+        </div>
       ) : (
         <div className={styles.wrap}>
           {Datas?.map((value: any) => {

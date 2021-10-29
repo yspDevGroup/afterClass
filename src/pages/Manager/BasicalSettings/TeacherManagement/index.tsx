@@ -2,7 +2,7 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-10-29 08:23:19
+ * @LastEditTime: 2021-10-29 17:57:48
  * @LastEditors: zpl
  */
 import React, { useRef, useState } from 'react';
@@ -17,7 +17,7 @@ import PageContain from '@/components/PageContainer';
 
 import { getAuthorization } from '@/utils/utils';
 import { deleteJZGJBSJ, getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
-import { syncWechatTeachers } from '@/services/after-class/upload';
+import { syncWechatStudents, syncWechatTeachers } from '@/services/after-class/upload';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 import styles from './index.less';
@@ -73,7 +73,14 @@ const TeacherManagement = () => {
   };
 
   const syncTeachers = async () => {
-    const res = await syncWechatTeachers();
+    const params = {
+      suiteID: currentUser.suiteID,
+      CorpId: currentUser.CorpId,
+      xxId: currentUser.xxId,
+    };
+
+    syncWechatStudents(params);
+    const res = await syncWechatTeachers(params);
     if (res.status === 'ok') {
       message.success('同步完成');
       actionRef.current?.reload();

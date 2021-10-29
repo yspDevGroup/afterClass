@@ -18,6 +18,7 @@ export async function getKHJSCQ(
       id?: string;
       CQZT?: '出勤' | '请假' | '缺席' | '代课';
       CQRQ?: string;
+      XXSJPZId?: string;
       JZGJBSJId?: string;
       KHBJSJId?: string;
     };
@@ -81,6 +82,7 @@ export async function createKHJSCQ(body: API.CreateKHJSCQ[], options?: { [key: s
       id?: string;
       CQZT?: '出勤' | '请假' | '缺席' | '代课';
       CQRQ?: string;
+      XXSJPZId?: string;
       JZGJBSJId?: string;
       KHBJSJId?: string;
     };
