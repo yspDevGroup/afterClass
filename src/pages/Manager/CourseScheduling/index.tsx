@@ -213,6 +213,7 @@ const ClassManagement = () => {
   };
   const onRadioChange = (e: any) => {
     setRadioValue(e.target.value);
+    console.log('+++++++++++');
     const res = getFJPlan({
       isPk: e.target.value,
       XNXQId: curXNXQId,
@@ -246,17 +247,21 @@ const ClassManagement = () => {
   };
   // 获取排课数据信息
   const getPKData = async () => {
-    const res = await getFJPlan({
-      kcId: kcmcValue,
-      bjId: bjmcValue,
-      fjId: cdmcValue,
-      JSXM: teacher,
-      isPk: radioValue,
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok') {
-      setOriSource(res.data);
+    if (getQueryString('courseId') === null) {
+      // console.log("+++++++++++");
+      // console.log("getQueryString('courseId')",getQueryString('courseId'));
+      const res = await getFJPlan({
+        kcId: kcmcValue,
+        bjId: bjmcValue,
+        fjId: cdmcValue,
+        JSXM: teacher,
+        isPk: radioValue,
+        XNXQId: curXNXQId,
+        XXJBSJId: currentUser?.xxId,
+      });
+      if (res.status === 'ok') {
+        setOriSource(res.data);
+      }
     }
   };
   // 获取课程对应课程班数据信息
@@ -318,13 +323,18 @@ const ClassManagement = () => {
           XXJBSJId: currentUser?.xxId,
         };
         // 通过课程数据接口拿到所有的课程
-        const khkcResl = await getAllCourses(params);
-        if (khkcResl.status === 'ok') {
-          const KCMC = khkcResl.data.rows?.map((item: any) => ({
-            label: item.KCMC,
-            value: item.id,
-          }));
-          setKcmcData(KCMC);
+        const bjID = getQueryString('courseId');
+        if (!bjID) {
+          const khkcResl = await getAllCourses(params);
+          console.log('+++++++++');
+
+          if (khkcResl.status === 'ok') {
+            const KCMC = khkcResl.data.rows?.map((item: any) => ({
+              label: item.KCMC,
+              value: item.id,
+            }));
+            setKcmcData(KCMC);
+          }
         }
         getSysTime();
         getPKData();
