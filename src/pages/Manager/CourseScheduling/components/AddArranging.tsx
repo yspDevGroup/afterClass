@@ -483,6 +483,15 @@ const AddArranging: FC<PropsType> = (props) => {
     getBjData();
   }, [XQID, NJID]);
 
+  const getKCStyle = (id: string) => {
+    if (id === index) {
+      return { borderColor: 'rgba(62,136,248,1)' };
+    } else if (formValues?.BJId) {
+      return { cursor: 'not-allowed' };
+    }
+    return {};
+  };
+
   // 清除
   const showDeleteConfirm = () => {
     confirm({
@@ -653,7 +662,7 @@ const AddArranging: FC<PropsType> = (props) => {
                         layout="center"
                         bordered
                         onClick={() => BjClick(value)}
-                        style={{ borderColor: index === value.id ? 'rgba(62,136,248,1)' : '' }}
+                        style={getKCStyle(value.id)}
                       >
                         <Tooltip title={value.BJMC}>
                           <p>{value.BJMC}</p>
@@ -686,9 +695,7 @@ const AddArranging: FC<PropsType> = (props) => {
                                 bordered
                                 className="banjiItem"
                                 onClick={() => BjClick(value)}
-                                style={{
-                                  borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                                }}
+                                style={getKCStyle(value.id)}
                               >
                                 <p>{value.BJMC}</p>
                                 <span>
@@ -721,9 +728,7 @@ const AddArranging: FC<PropsType> = (props) => {
                                 bordered
                                 className="banjiItem"
                                 onClick={() => BjClick(value)}
-                                style={{
-                                  borderColor: index === value.id ? 'rgba(62,136,248,1)' : '',
-                                }}
+                                style={getKCStyle(value.id)}
                               >
                                 <p>{value.BJMC}</p>
                                 <span>
