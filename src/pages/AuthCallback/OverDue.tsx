@@ -6,12 +6,12 @@
  * @LastEditors: zpl
  */
 import Nodata from '@/components/Nodata';
-import { removeWechatInfo } from '@/utils/wx';
+// import { removeWechatInfo } from '@/utils/wx';
 import { removeOAuthToken } from '@/utils/utils';
 import overImg from '@/assets/loading.png';
 
 const OverDue = () => {
-  removeWechatInfo();
+  // removeWechatInfo();
   removeOAuthToken();
   return (
     <div
