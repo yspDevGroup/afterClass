@@ -67,7 +67,7 @@ const Record = () => {
 
   return (
     <div className={styles.ClassroomStyle}>
-      <GoBack title={'课堂风采'} />
+      <GoBack title="课堂风采" teacher onclick="/teacher/home?index=education" />
       <div className={styles.wrap}>
         {
           listData ? listData.map((item: any) => {

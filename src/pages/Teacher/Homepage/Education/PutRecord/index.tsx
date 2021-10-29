@@ -45,7 +45,7 @@ const PutRecord = (props: any) => {
 
   return (
     <div className={styles.classroomStyle}>
-      <GoBack title={'发布'} />
+      <GoBack title="发布" teacher onclick="/teacher/home?index=education" />
       <div className={styles.wrap}>
         <ListComponent listData={data} />
         <Form form={form} onFinish={onFinish}>
