@@ -17,6 +17,9 @@ declare module 'mockjs';
 declare module 'react-fittext';
 declare module 'bizcharts-plugin-slider';
 
+declare module 'react-h5-calendar';
+declare module 'qrcode.react';
+
 /**
  * 学校基本数据字段
  * XXDM: 学校代码;
@@ -152,8 +155,6 @@ type Window = {
 };
 
 declare let ga: () => void;
-
-declare module 'react-h5-calendar';
 
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 

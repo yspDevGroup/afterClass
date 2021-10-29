@@ -1,3 +1,10 @@
+/*
+ * @description: 认证失效界面，主要用于失效后不能跳转到登录页的情况，例如微信端
+ * @author: zpl
+ * @Date: 2021-07-14 17:40:53
+ * @LastEditTime: 2021-10-29 14:40:48
+ * @LastEditors: zpl
+ */
 import Nodata from '@/components/Nodata';
 import { removeWechatInfo } from '@/utils/wx';
 import { removeOAuthToken } from '@/utils/utils';

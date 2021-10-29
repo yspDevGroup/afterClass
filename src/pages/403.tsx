@@ -2,13 +2,13 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2021-10-12 22:09:05
+ * @LastEditTime: 2021-10-29 16:35:45
  * @LastEditors: zpl
  */
 import React from 'react';
 import { history } from 'umi';
 import { Button, Result } from 'antd';
-import { getPageQuery } from '@/utils/utils';
+import { getPageQuery, removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
 
 const NotFind = () => {
   const query = getPageQuery();
@@ -37,6 +37,17 @@ const NotFind = () => {
             }}
           >
             {btnTXT}
+          </Button>
+        ) : authType !== 'wechat' ? (
+          <Button
+            type="primary"
+            onClick={() => {
+              removeOAuthToken();
+              removeUserInfoCache();
+              history.push('/');
+            }}
+          >
+            返回首页
           </Button>
         ) : (
           ''
