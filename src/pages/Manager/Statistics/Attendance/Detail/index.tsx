@@ -9,6 +9,7 @@ import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const AttendanceDetail = (props: any) => {
   const { data, XNXQId, position } = props.location.state;
+  const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   useEffect(() => {
     if (position === '老师') {
       (async () => {
@@ -43,11 +44,11 @@ const AttendanceDetail = (props: any) => {
       width: 100,
       fixed: 'left',
       render: (_, record) => {
-        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
+        const showWXName = data?.JZGJBSJ?.XM === '未知' && data?.JZGJBSJ?.WechatUserId;
         if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
+          return <WWOpenDataCom type="userName" openid={data?.JZGJBSJ?.WechatUserId} />;
         }
-        return record?.JZGJBSJ?.XM;
+        return data?.JZGJBSJ?.XM;
       },
     },
     {
@@ -155,7 +156,7 @@ const AttendanceDetail = (props: any) => {
       width: 150,
     },
   ]
-  const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
+
   return (
     <div>
       <PageContainer>
