@@ -1,29 +1,27 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Link, useModel } from 'umi';
+import { Select } from 'antd';
+import { Link, useModel, history } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
 import IconFont from '@/components/CustomIcon';
 import myContext from '@/utils/MyContext';
+import { enHenceMsg, removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
+
 import imgPop from '@/assets/mobileBg.png';
-import styles from './index.less';
-import { iconTextData } from './mock';
-import { enHenceMsg } from '@/utils/utils';
 import evaluation from '@/assets/evaluation.png';
 import drop from '@/assets/drop.png';
 import icon_Rgo from '@/assets/icon_Rgo.png';
-import { Select } from 'antd';
-// import { Col, Row } from 'antd';
-// import evaluation from '@/assets/evaluation.png';
-// import drop from '@/assets/drop.png';
-// import { RightOutlined } from '@ant-design/icons';
+
+import { iconTextData } from './mock';
+import styles from './index.less';
 
 const { Option } = Select;
 const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>> }) => {
   const { setActiveKey } = props;
   const { currentUserInfo, courseStatus } = useContext(myContext);
   const [totail, setTotail] = useState<boolean>(false);
-  const { initialState } = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
   const StorageXSId = localStorage.getItem('studentId');
@@ -38,8 +36,9 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
       localStorage.setItem('studentName', currentUser?.student?.[0].name || '');
       localStorage.setItem('studentId', currentUser?.student?.[0].XSJBSJId || '');
     }
-    const ParentalIdentitys = `${StorageXSName}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-      }`;
+    const ParentalIdentitys = `${StorageXSName}${
+      currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
+    }`;
     setParentalIdentity(ParentalIdentitys);
   }, []);
 
@@ -48,17 +47,16 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
     localStorage.setItem('studentName', key.value);
     localStorage.setItem('studentId', key.key?.split('+')[0]);
     localStorage.setItem('studentNjId', key.key?.split('+')[1]);
-    const ParentalIdentitys = `${key.value}${currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-      }`;
+    const ParentalIdentitys = `${key.value}${
+      currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
+    }`;
     setParentalIdentity(ParentalIdentitys);
     // 切换到首页
     setActiveKey('index');
   };
   useEffect(() => {
-
     async function fetch() {
-      const studentId: string =
-        StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId;
+      const studentId: string = StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId;
       const res = await getAllKHXSDD({
         XSJBSJId: studentId,
         // njId: currentUser.njId,
@@ -153,9 +151,16 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
           </li>
         </ul>
         <div className={styles.signOut}>
-          <Link to="/auth_callback/overDue">
+          <a
+            onClick={() => {
+              setInitialState({ ...initialState, currentUser: undefined });
+              removeOAuthToken();
+              removeUserInfoCache();
+              history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
+            }}
+          >
             退出登录
-          </Link>
+          </a>
         </div>
       </div>
     </div>

@@ -1,18 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useModel, history } from 'umi';
 import { Image } from 'antd';
 import { defUserImg } from '@/constant';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
+import { removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
 import IconFont from '@/components/CustomIcon';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
-import styles from './index.less';
 import imgPop from '@/assets/teacherBg.png';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import CheckOnStatic from './components/CheckOnStatic';
 
+import styles from './index.less';
+
 const Mine = () => {
-  const { initialState } = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [courseData, setCourseData] = useState<any>([]);
   const [scheduleData, setScheduleData] = useState<any>([]);
@@ -31,11 +33,15 @@ const Mine = () => {
   }, [currentUser]);
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData(currentUser?.xxId, currentUser.JSId || testTeacherId, 'teacher');
+      const oriData = await ParentHomeData(
+        currentUser?.xxId,
+        currentUser.JSId || testTeacherId,
+        'teacher',
+      );
       const { yxkc, weekSchedule } = oriData;
       setCourseData(yxkc);
       setScheduleData(weekSchedule);
-    })()
+    })();
   }, []);
 
   return (
@@ -51,7 +57,8 @@ const Mine = () => {
                   <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
                 ) : (
                   currentUser?.UserId
-                )}</span>
+                )}
+              </span>
               老师
             </h4>
           </div>
@@ -76,9 +83,16 @@ const Mine = () => {
           </li>
         </ul>
         <div className={styles.signOut}>
-          <Link to="/auth_callback/overDue">
+          <a
+            onClick={() => {
+              setInitialState({ ...initialState, currentUser: undefined });
+              removeOAuthToken();
+              removeUserInfoCache();
+              history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
+            }}
+          >
             退出登录
-          </Link>
+          </a>
         </div>
       </div>
     </div>
