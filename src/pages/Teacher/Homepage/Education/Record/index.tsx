@@ -2,11 +2,7 @@ import { Empty, Avatar, Image, Row, Col, Popconfirm, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import GoBack from '@/components/GoBack';
-import { getJZGJBSJ } from '@/services/after-class/jzgjbsj';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllKHKTFC, deleteKHKTFC } from '@/services/after-class/khktfc';
-import { getData } from '@/utils/utils';
-import { UserOutlined } from '@ant-design/icons';
 import noData from '@/assets/noData.png';
 import styles from './index.less';
 
@@ -24,16 +20,21 @@ const Record = () => {
   }, listData);
 
   const getData = async () => {
+
     const resKHKTFC = await getAllKHKTFC({});
-    console.log('resKHKTFC: ', resKHKTFC);
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
       resKHKTFC.data?.rows?.forEach((item: any, index: number) => {
-        // const resJZGJBSJ = await getJZGJBSJ({ id: item.JZGJBSJId });
-        // console.log('resJZGJBSJ: ', resJZGJBSJ);
         const imgsArr = item.TP.split(';');
         imgsArr.pop();
-        const data =  getClassInfo(item,imgsArr);
+        const data =  {
+          id: item.id,
+          className: item.KHBJSJ.KHKCSJ.KCMC,
+          classNum: item.KHBJSJ.BJMC,
+          content: item.NR,
+          imgs: imgsArr,
+          time: item.createdAt
+        };
         allData.push(data);
       });
       Promise.all(allData).then((results)=>{
@@ -43,21 +44,6 @@ const Record = () => {
 
   }
 
-  const getClassInfo = async (item: any, imgsArr: any) => {
-    const resKHBJSJ = await getKHBJSJ({ id: item.KHBJSJId });
-    if(resKHBJSJ.status === 'ok'){
-      return {
-        id: item.id,
-        className: resKHBJSJ.data.KHKCSJ.KCMC,
-        classNum: resKHBJSJ.data.BJMC,
-        content: item.NR,
-        imgs: imgsArr,
-        time: item.createdAt
-      };
-    }
-    return '';
-
-  }
 
 
   function cancel(e: any) {

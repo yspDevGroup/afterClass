@@ -28,7 +28,16 @@ const ClassroomStyle = () => {
       resKHKTFC.data?.rows?.forEach((item: any, index: number) => {
         const imgsArr = item.TP.split(';');
         imgsArr.pop();
-        const data = getClassInfo(item, imgsArr);
+        const data = {
+          id: item.id,
+          className: item.KHBJSJ.KHKCSJ.KCMC,
+          classNum: item.KHBJSJ.BJMC,
+          content: item.NR,
+          imgs: imgsArr,
+          time: item.createdAt,
+          teacherName:  item.JZGJBSJ.XM,
+          schoolName:  item.JZGJBSJ.XXJBSJ.XXMC
+        };
         allData.push(data);
       });
       Promise.all(allData).then((results) => {
@@ -38,66 +47,10 @@ const ClassroomStyle = () => {
 
   }
 
-  const getClassInfo = async (item: any, imgsArr: any) => {
-    const resKHBJSJ = await getKHBJSJ({ id: item.KHBJSJId });
-    const resJZGJBSJ = await getJZGJBSJ({ id: item.JZGJBSJId });
-    console.log('resJZGJBSJ: ', resJZGJBSJ);
-    if (resKHBJSJ.status === 'ok' && resJZGJBSJ.status ==='ok') {
-      return {
-        id: item.id,
-        className: resKHBJSJ.data.KHKCSJ.KCMC,
-        classNum: resKHBJSJ.data.BJMC,
-        content: item.NR,
-        imgs: imgsArr,
-        time: item.createdAt,
-        teacherName: resJZGJBSJ.data.XM,
-        schoolName: resJZGJBSJ.data.XXM
-      };
-    }
-    return '';
-
-  }
-
-
-  function cancel(e: any) {
-    // console.log(e);
-    // message.error('Click on No');
-  }
-
   useEffect(() => {
     getData();
   }, []);
 
-  // return (
-  //   <div className={styles.ClassroomStyle}>
-  //     <GoBack title={'课堂风采'} />
-  //     <div className={styles.wrap}>
-  //         <div className={styles.cards}>
-  //           <p>
-  //             <Avatar size="large" icon={<UserOutlined />} />
-  //             <p className={styles.name}>
-  //               <p>{'某'}老师</p>
-  //               <p>鸿浩国学堂</p>
-  //             </p>
-  //           </p>
-  //           <div className={styles.content}>
-  //             <p>孩子们在本次课上的表现都很不错，积极活跃，学习氛围很好。</p>
-  //             <div className={styles.imgContainer}>
-  //               <Image className={styles.img} width={200} src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
-  //               <Image className={styles.img} width={200} src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
-  //               <Image className={styles.img} width={200} src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
-  //             </div>
-  //             <p>
-  //               <span>{'5月26日 18:30'}</span>
-  //               <span>
-  //                 {'少儿书法'} ｜{'入门班'}
-  //               </span>{' '}
-  //             </p>
-  //           </div>
-  //           </div>
-  //       </div>
-  //   </div>
-  // );
   return (
     <div className={styles.ClassroomStyle}>
       <GoBack title={'课堂风采'} onclick="/parent/home?index=study" />
