@@ -108,11 +108,7 @@ const courseNotIntroduced = () => {
           <EllipsisHint
             width="100%"
             text={text?.map((item: any) => {
-              return (
-                <Tag key={item.id}>
-                  {`${item.XD}${item.NJMC}`}
-                </Tag>
-              );
+              return <Tag key={item.id}>{`${item.XD}${item.NJMC}`}</Tag>;
             })}
           />
         );
@@ -150,12 +146,12 @@ const courseNotIntroduced = () => {
                 const res = await getTeacherByClassId({
                   KHKCSJId: record.id,
                   pageSize: 0,
-                  page: 0
+                  page: 0,
                 });
                 if (res.status === 'ok') {
                   setInfo({
                     ...record,
-                    KHKCJs: res?.data?.rows
+                    KHKCJs: res?.data?.rows,
                   });
                 } else {
                   setInfo(record);
@@ -187,7 +183,7 @@ const courseNotIntroduced = () => {
                     };
                     const res = await createKHKCSQ({ ...params, ZT: 0 });
                     if (res.status === 'ok') {
-                      message.success('操作成功');
+                      message.success('引入成功，机构确认中...确认后方可建班排课');
                       action?.reload();
                     } else {
                       message.error(res.message);
@@ -224,7 +220,6 @@ const courseNotIntroduced = () => {
               >
                 <a>取消引入</a>
               </Popconfirm>
-
             )}
           </Space>
         );
@@ -277,7 +272,7 @@ const courseNotIntroduced = () => {
           density: false,
           reload: false,
         }}
-      // search={false}
+        // search={false}
       />
       <MechanismInfo // 机构详情页
         onMechanismInfoClose={() => {

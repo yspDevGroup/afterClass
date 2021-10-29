@@ -5,17 +5,21 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import { Button, Modal, Select, DatePicker, message, Form, Input, Popconfirm, Divider } from 'antd';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import styles from './index.less'
+import styles from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import type { TableListItem } from './data';
 import ProTable from '@ant-design/pro-table';
 import { getKHZZFW } from '@/services/after-class/khzzfw';
 import { PlusOutlined } from '@ant-design/icons';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
-import { createKHXXZZFW, deleteKHXXZZFW, getKHXXZZFW, updateKHXXZZFW } from '@/services/after-class/khxxzzfw';
+import {
+  createKHXXZZFW,
+  deleteKHXXZZFW,
+  getKHXXZZFW,
+  updateKHXXZZFW,
+} from '@/services/after-class/khxxzzfw';
 import moment from 'moment';
 import UploadImage from '@/components/CustomForm/components/UploadImage';
-
 
 const { Option } = Select;
 // const { Search } = Input;
@@ -55,7 +59,7 @@ const ServiceManagement = () => {
         }
       }
     })();
-  }, [])
+  }, []);
   const ongetKHXXZZFW = async () => {
     let data: any = {};
     if (typeof FbState === 'undefined' || FbState === '') {
@@ -63,24 +67,24 @@ const ServiceManagement = () => {
         XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId || '',
         // FWMC: ServiceName || '',
-        KHZZFWId: LbState || ''
-      }
+        KHZZFWId: LbState || '',
+      };
     } else {
       data = {
         XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId || '',
         // FWMC: ServiceName || '',
         FWZT: Number(FbState),
-        KHZZFWId: LbState || ''
-      }
+        KHZZFWId: LbState || '',
+      };
     }
-    const res = await getKHXXZZFW(data)
+    const res = await getKHXXZZFW(data);
     if (res.status === 'ok') {
-      setDataSource(res?.data?.rows)
+      setDataSource(res?.data?.rows);
     }
-  }
+  };
   useEffect(() => {
-    ongetKHXXZZFW()
+    ongetKHXXZZFW();
   }, [curXNXQId, FbState, LbState]);
   useEffect(() => {
     // 获取校区数据
@@ -88,21 +92,20 @@ const ServiceManagement = () => {
       const res = await getAllXQSJ({ XXJBSJId: currentUser?.xxId });
       // 获取到的整个列表的信息
       if (res.status === 'ok') {
-        setCampusData(res.data)
+        setCampusData(res.data);
       }
       const result = await getKHZZFW({
         XXJBSJId: currentUser?.xxId,
         FWMC: '',
         FWZT: 1,
         page: 0,
-        pageSize: 0
-      })
+        pageSize: 0,
+      });
       if (result.status === 'ok') {
-        setLBData(result!.data!.rows!)
+        setLBData(result!.data!.rows!);
       }
     })();
-  }, [])
-
+  }, []);
 
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -110,14 +113,14 @@ const ServiceManagement = () => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
-      fixed:'left',
-      align: 'center'
+      fixed: 'left',
+      align: 'center',
     },
     {
       title: '服务名称',
       dataIndex: 'FWMC',
       key: 'FWMC',
-      fixed:'left',
+      fixed: 'left',
       align: 'center',
       search: false,
       ellipsis: true,
@@ -131,9 +134,9 @@ const ServiceManagement = () => {
       search: false,
       ellipsis: true,
       width: 100,
-      render: (text, record,) => {
-        return record.KHZZFW?.FWMC
-      }
+      render: (text, record) => {
+        return record.KHZZFW?.FWMC;
+      },
     },
     {
       title: '报名时段',
@@ -143,9 +146,11 @@ const ServiceManagement = () => {
       search: false,
       ellipsis: true,
       width: 190,
-      render: (text, record,) => {
-        return `${moment(record.BMKSSJ).format('YYYY-MM-DD')} 至 ${moment(record.BMJSSJ).format('YYYY-MM-DD')}`
-      }
+      render: (text, record) => {
+        return `${moment(record.BMKSSJ).format('YYYY-MM-DD')} 至 ${moment(record.BMJSSJ).format(
+          'YYYY-MM-DD',
+        )}`;
+      },
     },
     {
       title: '服务时段',
@@ -155,9 +160,9 @@ const ServiceManagement = () => {
       search: false,
       ellipsis: true,
       width: 190,
-      render: (text, record,) => {
-        return `${record.KSRQ} 至 ${record.JSRQ}`
-      }
+      render: (text, record) => {
+        return `${record.KSRQ} 至 ${record.JSRQ}`;
+      },
     },
     {
       title: '服务费用',
@@ -194,35 +199,37 @@ const ServiceManagement = () => {
       key: 'option',
       valueType: 'option',
       align: 'center',
-      fixed:'right',
+      fixed: 'right',
       width: 210,
-      render: (text, record,) => {
+      render: (text, record) => {
         return (
           <div className={styles.operation}>
-            {
-              record.FWZT === 0 ? <> <Popconfirm
-                title="确定发布该服务?"
-                onConfirm={async () => {
-                  try {
-                    if (record.id) {
-                      const result = await updateKHXXZZFW({ id: record.id }, { FWZT: 1 });
-                      if (result.status === 'ok') {
-                        message.success('发布成功');
-                        ongetKHXXZZFW();
-                      } else {
-                        message.error(result.message);
+            {record.FWZT === 0 ? (
+              <>
+                {' '}
+                <Popconfirm
+                  title="确定发布该服务?"
+                  onConfirm={async () => {
+                    try {
+                      if (record.id) {
+                        const result = await updateKHXXZZFW({ id: record.id }, { FWZT: 1 });
+                        if (result.status === 'ok') {
+                          message.success('发布成功');
+                          ongetKHXXZZFW();
+                        } else {
+                          message.error(result.message);
+                        }
                       }
+                    } catch (err) {
+                      message.error('发布失败，请联系管理员或稍后重试。');
                     }
-                  } catch (err) {
-                    message.error('发布失败，请联系管理员或稍后重试。');
-                  }
-                }}
-                okText="确定"
-                cancelText="取消"
-                placement="topRight"
-              >
-                <a key='delete'>发布</a>
-              </Popconfirm>
+                  }}
+                  okText="确定"
+                  cancelText="取消"
+                  placement="topRight"
+                >
+                  <a key="delete">发布</a>
+                </Popconfirm>
                 <Divider type="vertical" />
                 <a
                   key="editable"
@@ -234,12 +241,12 @@ const ServiceManagement = () => {
                       FWSD: [moment(KSRQ), moment(JSRQ)],
                       XNXQId: XNXQ?.id,
                       KHZZFWId: KHZZFW?.id,
-                      XQSJId: XQSJ?.id
-                    }
-                    form.setFieldsValue(data)
+                      XQSJId: XQSJ?.id,
+                    };
+                    form.setFieldsValue(data);
                     setIsModalVisible(true);
-                    setImageUrl(record?.FWTP)
-                    setDisabled('编辑')
+                    setImageUrl(record?.FWTP);
+                    setDisabled('编辑');
                   }}
                 >
                   编辑
@@ -266,72 +273,74 @@ const ServiceManagement = () => {
                   cancelText="取消"
                   placement="topRight"
                 >
-                  <a key='delete'>删除</a>
+                  <a key="delete">删除</a>
                 </Popconfirm>
-              </> :
-                <>
-                  <Popconfirm
-                    title="确定撤销发布该服务?"
-                    onConfirm={async () => {
-
-                      try {
-                        if (record.id) {
-                          const result = await updateKHXXZZFW({ id: record.id }, { FWZT: 0 });
-                          if (result.status === 'ok') {
-                            message.success('撤销成功');
-                            ongetKHXXZZFW();
-                          } else {
-                            message.error(result.message);
-                          }
+              </>
+            ) : (
+              <>
+                <Popconfirm
+                  title="确定撤销发布该服务?"
+                  onConfirm={async () => {
+                    try {
+                      if (record.id) {
+                        const result = await updateKHXXZZFW({ id: record.id }, { FWZT: 0 });
+                        if (result.status === 'ok') {
+                          message.success('撤销成功');
+                          ongetKHXXZZFW();
+                        } else {
+                          message.error(result.message);
                         }
-                      } catch (err) {
-                        message.error('撤销发布失败，请联系管理员或稍后重试。');
                       }
-                    }}
-                    okText="确定"
-                    cancelText="取消"
-                    placement="topRight"
-                  >
-                    <a key='delete'>撤销发布</a>
-                  </Popconfirm>
-                  <Divider type="vertical" />
-                  <a
-                    key="editable"
-                    onClick={() => {
-                      const { BMJSSJ, BMKSSJ, KSRQ, JSRQ, XNXQ, KHZZFW, XQSJ, ...info } = record;
-                      const data = {
-                        ...info,
-                        BMSD: [moment(BMKSSJ), moment(BMJSSJ)],
-                        FWSD: [moment(KSRQ), moment(JSRQ)],
-                        XNXQId: XNXQ?.id,
-                        KHZZFWId: KHZZFW?.id,
-                        XQSJId: XQSJ?.id
-                      }
-                      form.setFieldsValue(data)
-                      setIsModalVisible(true);
-                      setDisabled('查看')
-                    }}
-                  >
-                    查看
-                  </a>
-                  <Divider type="vertical" />
-                  <Link
-                    to={{
-                      pathname: '/valueAddedServices/serviceManagement/signUp',
-                      state: record
-                    }}
-                  >报名信息</Link>
-                </>
-            }
+                    } catch (err) {
+                      message.error('撤销发布失败，请联系管理员或稍后重试。');
+                    }
+                  }}
+                  okText="确定"
+                  cancelText="取消"
+                  placement="topRight"
+                >
+                  <a key="delete">撤销发布</a>
+                </Popconfirm>
+                <Divider type="vertical" />
+                <a
+                  key="editable"
+                  onClick={() => {
+                    const { BMJSSJ, BMKSSJ, KSRQ, JSRQ, XNXQ, KHZZFW, XQSJ, ...info } = record;
+                    const data = {
+                      ...info,
+                      BMSD: [moment(BMKSSJ), moment(BMJSSJ)],
+                      FWSD: [moment(KSRQ), moment(JSRQ)],
+                      XNXQId: XNXQ?.id,
+                      KHZZFWId: KHZZFW?.id,
+                      XQSJId: XQSJ?.id,
+                    };
+                    form.setFieldsValue(data);
+                    setIsModalVisible(true);
+                    setDisabled('查看');
+                  }}
+                >
+                  查看
+                </a>
+                <Divider type="vertical" />
+                <Link
+                  to={{
+                    pathname: '/valueAddedServices/serviceManagement/signUp',
+                    state: record,
+                  }}
+                >
+                  报名信息
+                </Link>
+              </>
+            )}
           </div>
         );
-      }
-    }
+      },
+    },
   ];
   const submit = async (value: any) => {
     const { BMSD, FWSD, ...info } = value;
     if (ImageUrl === '') {
-      message.info('请上传图片')
+      message.info('请上传图片');
     } else {
       const data = {
         ...info,
@@ -339,45 +348,46 @@ const ServiceManagement = () => {
         BMJSSJ: moment(BMSD[1]).format(),
         KSRQ: moment(FWSD[0]).format('YYYY-MM-DD'),
         JSRQ: moment(FWSD[1]).format('YYYY-MM-DD'),
-        FWTP: ImageUrl || ''
-      }
+        FWTP: ImageUrl || '',
+      };
       if (typeof value.id === 'undefined') {
-        const res = await createKHXXZZFW(data)
+        const res = await createKHXXZZFW(data);
         if (res.status === 'ok') {
-          message.success('保存成功')
+          message.success('保存成功');
           setIsModalVisible(false);
-          setImageUrl('')
+          setImageUrl('');
           form.resetFields();
           ongetKHXXZZFW();
+        } else {
+          message.error('保存失败，请联系管理员或稍后再试');
         }
       } else {
-        const res = await updateKHXXZZFW({ id: value?.id }, data)
+        const res = await updateKHXXZZFW({ id: value?.id }, data);
         if (res.status === 'ok') {
-          message.success('修改成功')
+          message.success('修改成功');
           setIsModalVisible(false);
-          setImageUrl('')
+          setImageUrl('');
           form.resetFields();
           ongetKHXXZZFW();
         }
       }
     }
-
-  }
+  };
   const showModal = () => {
     setIsModalVisible(true);
-    setDisabled('新增')
+    setDisabled('新增');
     form.setFieldsValue({
       XNXQId: curXNXQId,
-    })
+    });
   };
 
   const handleOk = () => {
-    form.submit()
+    form.submit();
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    setImageUrl('')
+    setImageUrl('');
     form.resetFields();
   };
   // const onSearch = (value: any) => {
@@ -393,7 +403,7 @@ const ServiceManagement = () => {
         const res = e.file.response;
         if (res.status === 'ok') {
           message.success('上传成功');
-          setImageUrl(res.data)
+          setImageUrl(res.data);
         }
       }
     } else if (e.file.status === 'error') {
@@ -449,13 +459,20 @@ const ServiceManagement = () => {
                   onChange={(value: string) => {
                     setLbState(value);
                     setFbState('');
-                  }}>
-                  <Option value='' key=''>全部</Option>
-                  {
-                    LBData?.length ? LBData?.map((item: any) => {
-                      return <Option value={item?.id} key={item?.id}>{item?.FWMC}</Option>
-                    }) : ''
-                  }
+                  }}
+                >
+                  <Option value="" key="">
+                    全部
+                  </Option>
+                  {LBData?.length
+                    ? LBData?.map((item: any) => {
+                        return (
+                          <Option value={item?.id} key={item?.id}>
+                            {item?.FWMC}
+                          </Option>
+                        );
+                      })
+                    : ''}
                 </Select>
               </span>
               <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
@@ -468,13 +485,13 @@ const ServiceManagement = () => {
                     setFbState(value);
                   }}
                 >
-                  <Option key='' value=''>
+                  <Option key="" value="">
                     全部
                   </Option>
-                  <Option key='0' value='0'>
+                  <Option key="0" value="0">
                     未发布
                   </Option>
-                  <Option key='1' value='1'>
+                  <Option key="1" value="1">
                     已发布
                   </Option>
                 </Select>
@@ -484,20 +501,22 @@ const ServiceManagement = () => {
           toolBarRender={() => [
             <Button type="primary" key="primary" onClick={showModal}>
               <PlusOutlined /> 新增服务
-            </Button>
+            </Button>,
           ]}
         />
       </div>
-      <Modal title={Disabled === '新增' ? "新增服务" : Disabled === '编辑' ? '编辑服务' : '服务详情'} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} className={Disabled === '查看' ? styles.modal : styles.modals}>
+      <Modal
+        title={Disabled === '新增' ? '新增服务' : Disabled === '编辑' ? '编辑服务' : '服务详情'}
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        className={Disabled === '查看' ? styles.modal : styles.modals}
+      >
         <Form name="basic" form={form} onFinish={submit} className={styles.Forms}>
           <Form.Item name="id" hidden>
             <Input disabled />
           </Form.Item>
-          <Form.Item
-            label="服务图片"
-            name="FWTP"
-            key="FWTP"
-          >
+          <Form.Item label="服务图片" name="FWTP" key="FWTP">
             <UploadImage
               key="FWTP"
               disabled={Disabled === '查看'}
@@ -515,11 +534,15 @@ const ServiceManagement = () => {
             rules={[{ required: true, message: '请选择服务类别' }]}
           >
             <Select style={{ width: '100%' }} placeholder="请选择" disabled={Disabled === '查看'}>
-              {
-                LBData?.length ? LBData?.map((item: any) => {
-                  return <Option value={item?.id} key={item?.id}>{item?.FWMC}</Option>
-                }) : ''
-              }
+              {LBData?.length
+                ? LBData?.map((item: any) => {
+                    return (
+                      <Option value={item?.id} key={item?.id}>
+                        {item?.FWMC}
+                      </Option>
+                    );
+                  })
+                : ''}
             </Select>
           </Form.Item>
           <Form.Item
@@ -528,19 +551,18 @@ const ServiceManagement = () => {
             key="FWMC"
             rules={[{ required: true, message: '请输入服务名称' }]}
           >
-            <Input placeholder='建议以月份开头命名' disabled={Disabled === '查看'} />
+            <Input placeholder="建议以月份开头命名" disabled={Disabled === '查看'} />
           </Form.Item>
           <Form.Item
             label="服务费用"
             name="FY"
             key="FY"
-            rules={[{ required: true, message: '请输入服务费用' }]}
+            rules={[
+              { required: true, message: '请输入服务费用' },
+              { message: '请输入正确的服务费用', pattern: /^([1-9]\d{0,3}|0)(\.\d{1,2})?$/ },
+            ]}
           >
-            <Input
-              type="text"
-              placeholder='请输入'
-              disabled={Disabled === '查看'}
-            />
+            <Input type="text" placeholder="请输入" disabled={Disabled === '查看'} />
           </Form.Item>
           <Form.Item
             label="学年学期"
@@ -549,14 +571,11 @@ const ServiceManagement = () => {
             rules={[
               {
                 required: true,
-                message: '请选择学年学期'
-              }
+                message: '请选择学年学期',
+              },
             ]}
           >
-            <Select
-              placeholder='请选择'
-              disabled={Disabled === '查看'}
-            >
+            <Select placeholder="请选择" disabled={Disabled === '查看'}>
               {termList?.map((item: any) => {
                 return (
                   <Option key={item.value} value={item.value}>
@@ -573,14 +592,11 @@ const ServiceManagement = () => {
             rules={[
               {
                 required: true,
-                message: '请选择所属校区'
-              }
+                message: '请选择所属校区',
+              },
             ]}
           >
-            <Select
-              placeholder='请选择'
-              disabled={Disabled === '查看'}
-            >
+            <Select placeholder="请选择" disabled={Disabled === '查看'}>
               {CampusData?.map((item: any) => {
                 return (
                   <Option key={item.id} value={item.id}>
@@ -598,8 +614,8 @@ const ServiceManagement = () => {
             rules={[
               {
                 required: true,
-                message: '请选择报名时间'
-              }
+                message: '请选择报名时间',
+              },
             ]}
           >
             <RangePicker disabled={Disabled === '查看'} />
@@ -611,8 +627,8 @@ const ServiceManagement = () => {
             rules={[
               {
                 required: true,
-                message: '请选择服务时间'
-              }
+                message: '请选择服务时间',
+              },
             ]}
           >
             <RangePicker disabled={Disabled === '查看'} />
@@ -624,16 +640,21 @@ const ServiceManagement = () => {
             rules={[
               {
                 required: true,
-                message: '请输入服务内容'
-              }
+                message: '请输入服务内容',
+              },
             ]}
           >
-            <Input.TextArea placeholder='请输入' showCount maxLength={200} disabled={Disabled === '查看'} rows={4} />
+            <Input.TextArea
+              placeholder="请输入"
+              showCount
+              maxLength={200}
+              disabled={Disabled === '查看'}
+              rows={4}
+            />
           </Form.Item>
         </Form>
       </Modal>
     </PageContainer>
-
-  )
-}
-export default ServiceManagement
+  );
+};
+export default ServiceManagement;

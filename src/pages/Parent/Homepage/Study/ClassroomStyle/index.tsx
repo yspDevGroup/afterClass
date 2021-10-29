@@ -100,7 +100,7 @@ const ClassroomStyle = () => {
   // );
   return (
     <div className={styles.ClassroomStyle}>
-      <GoBack title={'课堂风采'} />
+      <GoBack title={'课堂风采'} onclick="/parent/home?index=study" />
       <div className={styles.wrap}>
         {
           listData ? listData.map((item: any) => {
