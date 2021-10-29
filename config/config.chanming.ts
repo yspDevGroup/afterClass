@@ -2,7 +2,7 @@
  * @description: 蝉鸣环境配置
  * @author: zpl
  * @Date: 2021-10-19 14:53:43
- * @LastEditTime: 2021-10-27 17:39:41
+ * @LastEditTime: 2021-10-29 17:55:21
  * @LastEditors: zpl
  */
 // https://umijs.org/config/
@@ -87,13 +87,4 @@ export default defineConfig({
       );
     }
   },
-  openAPI: [
-    {
-      requestLibPath: "import { request } from 'umi'",
-      schemaPath: 'http://api.test.xianyunshipei.com/documentation/json',
-      // schemaPath: 'http://192.168.0.113:3000/documentation/json',
-      // schemaPath: join(__dirname, 'oneapi.json'),
-      mock: false,
-    },
-  ],
 });

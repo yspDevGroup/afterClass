@@ -1,10 +1,11 @@
+import { getOauthToken } from '@/utils/utils';
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable no-console */
 /*
  * @description:
  * @author: zpl
  * @Date: 2021-06-09 08:57:20
- * @LastEditTime: 2021-10-29 16:28:54
+ * @LastEditTime: 2021-10-29 18:04:24
  * @LastEditors: zpl
  */
 import {
@@ -129,6 +130,8 @@ export const initWXAgentConfig = async (jsApiList: string[], num = 1) => {
  * @param {string[]} [apiList]
  */
 export const regWechatAPI = async (apiList?: string[]) => {
+  const { ysp_access_token } = getOauthToken();
+  if (!ysp_access_token) return;
   const jsApiList = apiList || ['checkJsApi'];
   if (/MicroMessenger/i.test(navigator.userAgent)) {
     await initWXConfig(jsApiList);
