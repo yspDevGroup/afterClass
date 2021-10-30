@@ -100,7 +100,7 @@ const ChartsPage = () => {
             num: data.jgkc_count || 0,
           },
           {
-            title: '参与机构教师数',
+            title: '参与服务机构教师数',
             num: data.jgjs_count || 0,
           },
         ];
