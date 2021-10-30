@@ -203,6 +203,9 @@ export const request: RequestConfig = {
       await next();
       if (
         ctx.res.status !== 'ok' &&
+        window.location.pathname !== '/' &&
+        !window.location.pathname.startsWith(authCallbackPath) &&
+        !window.location.pathname.startsWith('/40') &&
         (ctx.res.message?.includes('Authorization token is invalid') ||
           ctx.res.message?.includes('Invalid Token'))
       ) {
