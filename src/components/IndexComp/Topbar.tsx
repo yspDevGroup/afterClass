@@ -19,7 +19,7 @@ const Topbar = (props: { data: any }) => {
         return <Col span={4} key={item.title}>
           <div className={styles.headerItem} style={{ background: `linear-gradient(180deg, ${bgColor[index].begin} 0%, ${bgColor[index].end} 100%)` }}>
             <h3>{data?.[item.type]||0}</h3>
-            <p>{item.title}</p>
+            <p title={item.title}>{item.title}</p>
           </div>
         </Col>
       })}
