@@ -7,6 +7,7 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 
 import Style from './index.less';
 import { getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -124,6 +125,21 @@ const CourseRefund = () => {
       width: 150,
     },
     {
+      title: '审批人',
+      dataIndex: 'JZGJBSJ',
+      key: 'JZGJBSJ',
+      align: 'center',
+      ellipsis: true,
+      width: 120,
+      render: (_, record) => {
+        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
+        }
+        return record?.JZGJBSJ?.XM;
+      },
+    },
+    {
       title: '审批时间',
       dataIndex: 'SPSJ',
       key: 'SPSJ',
@@ -175,6 +191,7 @@ const CourseRefund = () => {
       ellipsis: true,
       width: 120,
     },
+
     {
       title: '操作',
       dataIndex: 'operation',

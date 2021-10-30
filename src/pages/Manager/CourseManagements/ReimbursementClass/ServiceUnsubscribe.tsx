@@ -201,7 +201,7 @@ const ServiceUnsubscribe = () => {
     try {
       if (current.id) {
         const ids = { id: current.id };
-        const body = { ZT, BZ, JZGJBSJId: currentUser.JSId };
+        const body = { ZT, BZ, JZGJBSJId: currentUser?.JSId || testTeacherId};
         const res = await updateKHTKSJ(ids, body);
         if (res.status === 'ok') {
           if (ZT === 2) {
@@ -221,7 +221,7 @@ const ServiceUnsubscribe = () => {
                 XSJBSJId: current?.XSJBSJId,
                 /** 学校ID */
                 XXJBSJId: currentUser?.xxId,
-                JZGJBSJId: currentUser.JSId
+                JZGJBSJId: currentUser?.JSId || testTeacherId
               });
               if (result.status === 'ok') {
                 message.success('服务退订成功,已自动申请退款流程');
