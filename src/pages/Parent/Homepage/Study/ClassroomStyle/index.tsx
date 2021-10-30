@@ -75,8 +75,8 @@ const ClassroomStyle = () => {
                     <Row gutter={[6, 6]} style={{width: '100%',height: item.imgs.length === (2 || 4) ? '100px': (item.imgs.length === 1? 'auto' : '280px')}}>
                     {
                       item.imgs.map((url: string)=> {
-                        return <Col span={item.imgs.length === (2 || 4) ? 12 : (item.imgs.length === 1 ? 24 : 8)}>
-                          <Image className={item.imgs.length === (2 || 4) ? styles.pairImg: (item.imgs.length === 1 ? styles.oneImg : styles.nineImg)} src={url} />
+                        return <Col span={(item.imgs.length === 2 || item.imgs.length === 4) ? 12 : (item.imgs.length === 1 ? 24 : 8)} className={(item.imgs.length === 2 || item.imgs.length === 4) ? styles.pairImg: (item.imgs.length === 1 ? styles.oneImg : styles.nineImg)}>
+                          <Image src={url} />
                         </Col>
                       })
                     }

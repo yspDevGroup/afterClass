@@ -3,6 +3,7 @@ import { Upload, message, Modal } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { getAuthorization } from '@/utils/utils';
 import upload from '@/assets/upload.png';
+import styles from './index.less';
 
 
 const ImagesUpload = (props: {
@@ -93,6 +94,7 @@ const ImagesUpload = (props: {
     <>
       <Upload
         name="image"
+        className={styles.upload}
         listType="picture-card"
         action="/api/upload/uploadFile?type=badge&plat=school"
         headers={{
@@ -104,6 +106,9 @@ const ImagesUpload = (props: {
         onChange={handleChange}
         maxCount={9}
         multiple
+        isImageUrl={()=>{
+          return true
+        }}
       >
         {fileList.length >= 9 ? null : uploadButton}
       </Upload>

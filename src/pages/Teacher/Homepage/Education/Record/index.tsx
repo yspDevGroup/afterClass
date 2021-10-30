@@ -51,6 +51,10 @@ const Record = () => {
     // message.error('Click on No');
   }
 
+  const ImgContainer = () => {
+    return
+  }
+
   return (
     <div className={styles.ClassroomStyle}>
       <GoBack title="课堂风采" teacher onclick="/teacher/home?index=education" />
@@ -72,11 +76,11 @@ const Record = () => {
                   <p>{item.content}</p>
                   <div className={styles.imgContainer}>
                   <Image.PreviewGroup>
-                    <Row gutter={[6, 6]} style={{width: '100%',height: item.imgs.length === (2 || 4) ? '100px': (item.imgs.length === 1? 'auto' : '280px')}}>
+                    <Row gutter={[6, 6]} style={{width: '100%'}}>
                     {
                       item.imgs.map((url: string)=> {
-                        return <Col span={item.imgs.length === (2 || 4) ? 12 : (item.imgs.length === 1 ? 24 : 8)}>
-                          <Image className={item.imgs.length === (2 || 4) ? styles.pairImg: (item.imgs.length === 1 ? styles.oneImg : styles.nineImg)} src={url} />
+                        return <Col span={(item.imgs.length === 2 || item.imgs.length === 4) ? 12 : (item.imgs.length === 1 ? 24 : 8)} className={(item.imgs.length === 2 || item.imgs.length === 4) ? styles.pairImg: (item.imgs.length === 1 ? styles.oneImg : styles.nineImg)}>
+                          <Image src={url} />
                         </Col>
                       })
                     }
