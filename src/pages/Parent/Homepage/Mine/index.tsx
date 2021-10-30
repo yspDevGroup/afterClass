@@ -152,10 +152,12 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
         <div className={styles.signOut}>
           <a
             onClick={() => {
-              setInitialState({ ...initialState, currentUser: undefined });
+              setInitialState({ ...initialState!, currentUser: undefined });
               removeOAuthToken();
               removeUserInfoCache();
-              history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
+              history.replace(
+                initialState?.buildOptions.authType === 'wechat' ? '/auth_callback/overDue' : '/',
+              );
             }}
           >
             退出登录

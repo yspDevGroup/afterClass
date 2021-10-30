@@ -17,10 +17,6 @@ export type GlobalHeaderRightProps = {
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  // const [wechatReded, setWechatReded] = useState(false);
-  // const [wechatInfo, setWechatInfo] = useState({
-  //   openId: '',
-  // });
 
   const [xxData, setXxData] = useState<any>();
   const userRef = useRef(null);
@@ -33,29 +29,6 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
     }
     fetchData();
   }, []);
-  // useEffect(() => {
-  //   (async () => {
-  //     if (/MicroMessenger/i.test(navigator.userAgent)) {
-  //       await initWXConfig(['checkJsApi']);
-  //     }
-  //     if (await initWXAgentConfig(['checkJsApi'])) {
-  //       // showUserName(userRef?.current, currentUser?.userId);
-  //       // // 注意: 只有 agentConfig 成功回调后，WWOpenData 才会注入到 window 对象上面
-  //       // WWOpenData.bindAll(document.querySelectorAll('ww-open-data'));
-  //       setWechatReded(true);
-  //     } else {
-  //       console.warn('微信登录过期，请重新授权');
-  //       message.warn('微信登录过期，请重新授权');
-  //     }
-  //   })();
-  // }, [currentUser]);
-  // useEffect(() => {
-  //   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  //   wechatReded &&
-  //     setWechatInfo({
-  //       openId: currentUser?.UserId || '',
-  //     });
-  // }, [wechatReded]);
 
   const onMenuClick = useCallback(
     (event: {
@@ -69,7 +42,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
         setInitialState({ ...initialState, currentUser: undefined });
         removeOAuthToken();
         removeUserInfoCache();
-        history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
+        history.replace(
+          initialState.buildOptions.authType === 'wechat' ? '/auth_callback/overDue' : '/',
+        );
         return;
       }
     },

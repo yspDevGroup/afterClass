@@ -158,22 +158,8 @@ declare let ga: () => void;
 
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 
-declare const ENV_type: string;
 declare const ENV_title: string;
 declare const ENV_subTitle: string;
-declare const ENV_copyRight: string;
-/** 访问域名 */
-declare const ENV_host: string;
-/** 后台地址 */
-declare const ENV_backUrl: string;
-/** 统一认证地址 */
-declare const ssoHost: string;
-/** 认证类型 */
-declare const authType: 'wechat' | 'password' | 'authorization_code';
-/** 认证客户端id */
-declare const clientId: string;
-/** 认证客户端密钥 */
-declare const clientSecret: string;
 declare const testStudentId: string;
 declare const testTeacherId: string;
 
@@ -197,10 +183,30 @@ declare let teacherHomeInfo: {
   data: any;
 };
 
+type AuthType = 'wechat' | 'password' | 'authorization_code';
+
+type BuildOptions = {
+  /** 部署环境标记，如chanming、9dy等 */
+  ENV_type: string;
+  /** 版权信息 */
+  ENV_copyRight: string;
+  /** 部署地址，sso认证回调需要使用 */
+  ENV_host: string;
+  /** sso认证地址 */
+  ssoHost: string;
+  /** 认证方式 */
+  authType: AuthType;
+  /** 注册的应用id */
+  clientId: string;
+  /** 注册的应用密钥 */
+  clientSecret: string;
+};
+
 type InitialState = {
   settings?: Partial<LayoutSettings>;
   currentUser?: any; // API.CurrentUser;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  buildOptions: BuildOptions;
 };
 
 /** oAuth认证token */

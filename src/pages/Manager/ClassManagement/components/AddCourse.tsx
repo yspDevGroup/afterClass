@@ -16,6 +16,7 @@ import { getTeacherByClassId } from '@/services/after-class/khkcsj';
 import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 import styles from './AddCourse.less';
+import { useModel } from 'umi';
 
 type AddCourseProps = {
   visible: boolean;
@@ -47,6 +48,7 @@ const AddCourse: FC<AddCourseProps> = ({
   currentUser,
   kCID,
 }) => {
+  const { initialState } = useModel('@@initialState');
   const userRef = useRef(null);
   const [form, setForm] = useState<any>();
   const tableRef = useRef<ActionType>();
@@ -135,7 +137,6 @@ const AddCourse: FC<AddCourseProps> = ({
                   return item.id !== record.id;
                 }
                 return item.index !== record.index;
-
               }),
             );
             action?.reload();
@@ -175,7 +176,7 @@ const AddCourse: FC<AddCourseProps> = ({
     const res = await getTeacherByClassId({
       KHKCSJId: kcId,
       pageSize: 0,
-      page: 0
+      page: 0,
     });
     if (res.status === 'ok') {
       const { rows } = res?.data;
@@ -345,13 +346,16 @@ const AddCourse: FC<AddCourseProps> = ({
             KHBJSJId: formValues?.id,
           },
         ];
-        const FJS = values?.FJS && values?.FJS?.length ? values.FJS.map((item: any) => {
-          return {
-            JSLX: '副教师',
-            JZGJBSJId: item,
-            KHBJSJId: formValues?.id,
-          };
-        }) : undefined;
+        const FJS =
+          values?.FJS && values?.FJS?.length
+            ? values.FJS.map((item: any) => {
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
+            : undefined;
         delete options.BJZT;
         const params = {
           id: formValues?.id,
@@ -364,12 +368,15 @@ const AddCourse: FC<AddCourseProps> = ({
             JZGJBSJId: values.ZJS,
           },
         ];
-        const FJS = values?.FJS && values?.FJS?.length ? values.FJS.map((item: any) => {
-          return {
-            JSLX: '副教师',
-            JZGJBSJId: item,
-          };
-        }) : undefined;
+        const FJS =
+          values?.FJS && values?.FJS?.length
+            ? values.FJS.map((item: any) => {
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
+            : undefined;
         res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
       }
       resolve(res);
@@ -553,7 +560,11 @@ const AddCourse: FC<AddCourseProps> = ({
             optionFilterProp: 'label',
             allowClear: true,
             optionItemRender(item: { label: string; value: string; WechatUserId?: string }) {
-              if (authType === 'wechat' && item.label === '未知' && item.WechatUserId) {
+              if (
+                initialState?.buildOptions.authType === 'wechat' &&
+                item.label === '未知' &&
+                item.WechatUserId
+              ) {
                 return <WWOpenDataCom type="userName" openid={item.WechatUserId} />;
               }
               return item.label;
@@ -585,7 +596,8 @@ const AddCourse: FC<AddCourseProps> = ({
           disabled: readonly,
           rules: [
             { required: true, message: '请填写费用' },
-            { message: '请输入正确的费用', pattern: /^([1-9]\d{0,3}|0)(\.\d{1,2})?$/ },],
+            { message: '请输入正确的费用', pattern: /^([1-9]\d{0,3}|0)(\.\d{1,2})?$/ },
+          ],
           fieldProps: {
             autocomplete: 'off',
           },
@@ -612,19 +624,19 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-        type: 'custom',
-        text: '教辅材料',
-        name: 'KHKCJCs',
-        key: 'KHKCJCs',
-        children: getChildren(),
-      }
+          type: 'custom',
+          text: '教辅材料',
+          name: 'KHKCJCs',
+          key: 'KHKCJCs',
+          children: getChildren(),
+        }
       : '',
     BMData?.id
       ? {
-        type: 'divTab',
-        text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -667,10 +679,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-        type: 'divTab',
-        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',

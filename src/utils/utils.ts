@@ -1,13 +1,84 @@
 /* eslint-disable no-param-reassign */
 import { parse } from 'querystring';
-import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
 import { message } from 'antd';
 import { history } from 'umi';
 import moment from 'moment';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getEnv } from '@/services/after-class/other';
 import { DateRange, Week } from './Timefunction';
+import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
+
+/**
+ * 实时获取部署环境信息
+ *
+ * @return {*}  {Promise<BuildOptions>}
+ */
+export const getBuildOptions = async (): Promise<BuildOptions> => {
+  const { data = {} } = await getEnv();
+  const { yspAppEnv = 'dev', nodeEnv } = data;
+  console.log('nodeEnv: ', nodeEnv);
+  console.log('yspAppEnv: ', yspAppEnv);
+  console.log('yspAppEnv: ', testStudentId);
+  switch (yspAppEnv) {
+    case 'production':
+      // 生产环境
+      return {
+        ENV_type: 'prod',
+        ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
+        ENV_host: 'http://afterclass.prod.xianyunshipei.com',
+        ssoHost: 'http://sso.prod.xianyunshipei.com',
+        authType: 'wechat',
+        clientId: 'wwe2dfbe3747b6e69f',
+        clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
+      };
+    case 'chanming':
+      // 禅鸣环境
+      return {
+        ENV_type: 'chanming',
+        ENV_copyRight: '2021 版权所有：蝉鸣科技（西安）有限公司',
+        ENV_host: 'http://afterclass.wuyu.imzhiliao.com',
+        ssoHost: 'http://sso.wuyu.imzhiliao.com',
+        authType: 'wechat',
+        clientId: 'wwe2dfbe3747b6e69f',
+        clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
+      };
+    case '9dy':
+      // 9朵云环境
+      return {
+        ENV_type: '9dy',
+        ENV_copyRight: '2021 版权所有：广东九朵云科技有限公司',
+        ENV_host: 'http://afterclass.9cloudstech.com',
+        ssoHost: 'http://sso.9cloudstech.com',
+        authType: 'wechat',
+        clientId: 'ww73cd866f2c4dc83f',
+        clientSecret: 'IfPhfMfVtX-y-BG-CrGlZIJw-m-GoCnJwxffigZDGLA',
+      };
+    case 'development':
+      // 为测试环境
+      return {
+        ENV_type: 'dev',
+        ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
+        ENV_host: 'http://afterclass.test.xianyunshipei.com',
+        ssoHost: 'http://sso.test.xianyunshipei.com',
+        authType: 'wechat',
+        clientId: 'ww20993d96d6755f55',
+        clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
+      };
+    default:
+      // 默认为local，开发模式下请在此处修改配置
+      return {
+        ENV_type: 'dev',
+        ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
+        ENV_host: 'http://localhost:8000',
+        ssoHost: 'http://platform.test.xianyunshipei.com',
+        authType: 'password',
+        clientId: 'ww20993d96d6755f55',
+        clientSecret: 'wy83uVM6xgfDtE2XS5WQ',
+      };
+  }
+};
 
 const reg =
   /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -194,9 +265,13 @@ export const envjudge = () => {
   return 'pc'; // PC
 };
 
-export const getLoginPath = (suiteID: string, isAdmin: string) => {
+export const getLoginPath = (suiteID: string, isAdmin: string, buildOptions?: BuildOptions) => {
+  const { authType = 'none', ssoHost, ENV_host, clientId, clientSecret } = buildOptions || {};
   let loginPath: string;
   switch (authType) {
+    case 'none':
+      // 获取不到配置时，直接跳转到403
+      loginPath = '/403?title=未获取到应用信息，请联系管理员';
     case 'wechat':
       // 前提是本应该已经注册为微信认证，且正确配置认证回调地址为 ${ENV_host}/auth_callback/wechat
       loginPath = `${ssoHost}/wechat/authorizeUrl?suiteID=${suiteID}&isAdmin=${isAdmin}`;

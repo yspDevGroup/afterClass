@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useModel } from 'umi';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
 import imgPop from '@/assets/mobileBg.png';
@@ -8,6 +9,7 @@ import { data } from './mock';
 import styles from './index.less';
 
 const Announcement = () => {
+  const { initialState } = useModel('@@initialState');
   const [content, setContent] = useState<any>();
   const pageId = getQueryString('listid');
   const articlepage = getQueryString('articlepage');
@@ -69,7 +71,7 @@ const Announcement = () => {
             </p>
           </div>
           <div className={styles.xb}>
-            <Footer />
+            <Footer copyRight={initialState?.buildOptions.ENV_copyRight} />
           </div>
         </div>
       ) : (
@@ -77,7 +79,7 @@ const Announcement = () => {
         <>
           <div dangerouslySetInnerHTML={{ __html: content?.NR }} className={styles.contents} />
           <div className={styles.xb}>
-            <Footer />
+            <Footer copyRight={initialState?.buildOptions.ENV_copyRight} />
           </div>
         </>
       )}

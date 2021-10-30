@@ -91,7 +91,10 @@ const Home = () => {
         WWOpenData?.bindAll(document.querySelectorAll('ww-open-data'));
       }
     })();
-    if (authType === 'wechat' && (!currentUser.XM || currentUser.XM === '未知')) {
+    if (
+      initialState?.buildOptions.authType === 'wechat' &&
+      (!currentUser.XM || currentUser.XM === '未知')
+    ) {
       setIsModalVisible(true);
     }
     getTodayData(today);
@@ -100,9 +103,13 @@ const Home = () => {
   }, [currentUser]);
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData(currentUser?.xxId, currentUser.JSId || testTeacherId,'teacher');
+      const oriData = await ParentHomeData(
+        currentUser?.xxId,
+        currentUser.JSId || testTeacherId,
+        'teacher',
+      );
       setTotalData(oriData);
-    })()
+    })();
   }, []);
   const onFinish = async (values: { name: string; phone: string }) => {
     const res = await updateJZGJBSJ(
@@ -197,7 +204,7 @@ const Home = () => {
         </div>
         {/* 任教课程 */}
         <div className={styles.teachCourses}>
-          <TeachCourses  dataResource={totalData} />
+          <TeachCourses dataResource={totalData} />
         </div>
         {/* 素质教育资源 */}
         <div className={styles.resourcesBox}>

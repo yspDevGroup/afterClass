@@ -38,10 +38,12 @@ const Home = () => {
           <Col span={2}>
             <a
               onClick={() => {
-                setInitialState({ ...initialState, currentUser: undefined });
+                setInitialState({ ...initialState!, currentUser: undefined });
                 removeOAuthToken();
                 removeUserInfoCache();
-                history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
+                history.replace(
+                  initialState?.buildOptions.authType === 'wechat' ? '/auth_callback/overDue' : '/',
+                );
               }}
             >
               <IconFont type="icon-tuichu" className={styles.signOut} />
@@ -50,7 +52,9 @@ const Home = () => {
         </Row>
       </div>
       <div className={styles.pageContent}>
-        <div className={`${styles.noticeArea} ${styles[ENV_type]}`} />
+        <div
+          className={`${styles.noticeArea} ${styles[initialState?.buildOptions.ENV_type || 'dev']}`}
+        />
         <Overview />
         <Notice />
       </div>

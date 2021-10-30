@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-10-29 16:39:42
+ * @LastEditTime: 2021-10-30 11:38:10
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -14,7 +14,7 @@ const Index = () => {
   const { initialState } = useModel('@@initialState');
 
   const gotoLogin = (suiteID: string, isAdmin: string) => {
-    const loginPath = getLoginPath(suiteID, isAdmin);
+    const loginPath = getLoginPath(suiteID, isAdmin, initialState?.buildOptions);
     if (loginPath.startsWith('http')) {
       window.location.href = loginPath;
     } else {
@@ -32,7 +32,7 @@ const Index = () => {
     };
     params.suiteID = params.SuiteID || params.suiteID || '';
 
-    if (authType === 'wechat') {
+    if (initialState?.buildOptions.authType === 'wechat') {
       if (params.suiteID) {
         const { ysp_access_token } = getOauthToken();
         if (!ysp_access_token || !initialState?.currentUser) {

@@ -137,10 +137,10 @@ const Login: React.FC = () => {
           </ProForm>
           <Space className={styles.other}>
             <FormattedMessage id="pages.login.loginWith" defaultMessage="其他登录方式" />
-            <a href={`${ENV_backUrl}/auth/wechat`}>
+            <a href={`${initialState?.buildOptions.ssoHost}/auth/wechat`}>
               <WechatOutlined className={styles.icon} />
             </a>
-            <a href={`${ENV_backUrl}/auth/github`}>
+            <a href={`${initialState?.buildOptions.ssoHost}/auth/github`}>
               <GithubOutlined className={styles.icon} />
             </a>
           </Space>

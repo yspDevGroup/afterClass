@@ -2,10 +2,11 @@
  * @description: 公告详情
  * @author: zpl
  * @Date: 2021-06-29 17:14:51
- * @LastEditTime: 2021-10-22 12:25:39
+ * @LastEditTime: 2021-10-30 11:51:29
  * @LastEditors: zpl
  */
 import React, { useEffect, useState } from 'react';
+import { useModel } from 'umi';
 import GoBack from '@/components/GoBack';
 import Footer from '@/components/Footer';
 import { XXTZGG } from '@/services/after-class/xxtzgg';
@@ -16,6 +17,7 @@ import styles from './index.less';
 import { data } from './mock';
 
 const Announcement = () => {
+  const { initialState } = useModel('@@initialState');
   const [content, setContent] = useState<any>();
   const pageId = getQueryString('listid');
   const articlepage = getQueryString('articlepage');
@@ -72,7 +74,7 @@ const Announcement = () => {
             </p>
           </div>
           <div className={styles.xb}>
-            <Footer />
+            <Footer copyRight={initialState?.buildOptions.ENV_copyRight} />
           </div>
         </div>
       ) : (
@@ -80,7 +82,7 @@ const Announcement = () => {
         <>
           <div dangerouslySetInnerHTML={{ __html: content?.NR }} className={styles.contents} />
           <div className={styles.xb}>
-            <Footer />
+            <Footer copyRight={initialState?.buildOptions.ENV_copyRight} />
           </div>
         </>
       )}

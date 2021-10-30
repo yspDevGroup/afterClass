@@ -5,7 +5,13 @@ import { history, Link } from 'umi';
 import type { ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 
-import { getAuthorization, getUserCache, removeOAuthToken, saveUserInfoCache } from './utils/utils';
+import {
+  getAuthorization,
+  getBuildOptions,
+  getUserCache,
+  removeOAuthToken,
+  saveUserInfoCache,
+} from './utils/utils';
 import { regWechatAPI } from './utils/wx';
 import PageLoading from '@/components/PageLoading';
 import Footer from '@/components/Footer';
@@ -27,10 +33,13 @@ export const initialStateConfig = {
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 export async function getInitialState(): Promise<InitialState> {
+  console.log('process.env.REACT_APP_ENV: ', process.env.REACT_APP_ENV);
+  const buildOptions = await getBuildOptions();
+  debugger;
   const fetchUserInfo = async () => {
     try {
       const currentUserRes =
-        authType === 'wechat'
+        buildOptions.authType === 'wechat'
           ? await currentWechatUser({ plat: 'school' })
           : await queryCurrentUser({ plat: 'school' });
       if (currentUserRes.status === 'ok') {
@@ -53,11 +62,13 @@ export async function getInitialState(): Promise<InitialState> {
       fetchUserInfo,
       currentUser: userInfoCache,
       settings: {},
+      buildOptions,
     };
   }
   return {
     fetchUserInfo,
     settings: {},
+    buildOptions,
   };
 }
 
@@ -72,7 +83,7 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
     pageTitleRender: () => {
       return `${ENV_subTitle}`;
     },
-    footerRender: () => <Footer />,
+    footerRender: () => <Footer copyRight={initialState.buildOptions.ENV_copyRight} />,
     onPageChange: () => {
       const path = window.location.pathname.toLowerCase();
 
