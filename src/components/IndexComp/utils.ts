@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-08-24 19:59:45
- * @LastEditTime: 2021-10-30 11:44:22
+ * @LastEditTime: 2021-10-30 18:34:00
  * @LastEditors: Please set LastEditors
  */
 export const bgColor = [
@@ -49,8 +49,8 @@ export const topNum = [
     type: 'jgkc_count',
   },
   {
-    title: '学校教师',
-    type: 'xxjs_count',
+    title: '参与服务教师数',
+    type: 'js_count',
   },
   {
     title: '报名学生',

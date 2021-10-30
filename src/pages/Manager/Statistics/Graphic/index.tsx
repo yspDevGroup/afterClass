@@ -88,7 +88,7 @@ const ChartsPage = () => {
             num: data.bj_count || 0,
           },
           {
-            title: '学校教师数',
+            title: '参与服务学校教师数',
             num: Number((data.js_count || 0) - (data.jgjs_count || 0)),
           },
           {
@@ -100,7 +100,7 @@ const ChartsPage = () => {
             num: data.jgkc_count || 0,
           },
           {
-            title: '机构教师数',
+            title: '参与机构教师数',
             num: data.jgjs_count || 0,
           },
         ];
