@@ -70,7 +70,7 @@ const Home = () => {
               {/* {currentUserInfo?.external_contact?.subscriber_info.remark ||
                 currentUserInfo?.username ||
                 '家长'} */}
-              {ParentalIdentity || '家长'}
+              {ParentalIdentity?.split('/')[0] || '家长'}
             </span>
             ，你好！
           </h4>

@@ -72,7 +72,6 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
     }
     fetch();
   }, [StorageXSId]);
-
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader}>
@@ -84,7 +83,7 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
               {/* {currentUserInfo?.external_contact?.subscriber_info.remark ||
                 currentUserInfo?.username ||
                 '家长'} */}
-              {ParentalIdentity || '家长'}
+              {ParentalIdentity?.split('/')[0] || '家长'}
             </h4>
             {/* <h4>{currentUser?.student?.name || currentUserInfo?.username || '家长'}</h4> */}
             <span>微信名：{currentUserInfo?.username || currentUserInfo?.name}</span>
