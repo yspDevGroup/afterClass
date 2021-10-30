@@ -48,6 +48,8 @@ const SchoolEditor = (props: any) => {
   const [countyVal, setCountyVal] = useState<any>();
   const [showCity, setShowCity] = useState<boolean>(true);
   const currentValue = props.location.state;
+  // 上传成功后返回的图片地址
+  const [imageUrl, setImageUrl] = useState('');
 
   const onSubmit = () => {
     editForm?.submit();
@@ -71,7 +73,7 @@ const SchoolEditor = (props: any) => {
     requestData();
   }, []);
   const onFinish = async (values: any) => {
-    values.XH = xhimg || values.XH;
+    values.XH = imageUrl || values.XH;
     values.XD = values?.XD?.toString();
     values.XZQHM = cityAdcode||values.XZQHM;
     values.XZQ = `${provinceVal?.label}${cityVal?.label ? `/${cityVal?.label}` : ''}${countyVal?.label ? `/${countyVal?.label}` : ''}`;
@@ -195,6 +197,7 @@ const SchoolEditor = (props: any) => {
   useEffect(() => {
     if (currentValue && currentValue.schoolInfo) {
       const current = currentValue.schoolInfo;
+      setImageUrl(current.XH);
       const { XD, XZQHM, XZQ} = current;
       if (XZQHM === '810000' || XZQHM === '820000' || XZQHM === '710000') {
         setShowCity(false);
@@ -224,6 +227,24 @@ const SchoolEditor = (props: any) => {
       });
     }
   }, [currentValue]);
+  // 文件状态改变的回调
+  const imageChange = (type: string, e?: any) => {
+    if (e.file.status === 'done') {
+      const mas = e.file.response.message;
+      if (typeof e.file.response === 'object' && e.file.response.status === 'error') {
+        message.error(`上传失败，${mas}`);
+      } else {
+        const res = e.file.response;
+        if (res.status === 'ok') {
+          message.success(`上传成功`);
+         setImageUrl(res.data)
+        }
+      }
+    } else if (e.file.status === 'error') {
+      const mass = e.file.response.message;
+      message.error(`上传失败，${mass}`);
+    }
+  };
   // 表单元素
   const EditItems: FormItemType[] = [
     {
@@ -247,21 +268,20 @@ const SchoolEditor = (props: any) => {
           span: 12
         },
         {
-          type: 'custom',
+          type: 'uploadImage',
           label: '校徽',
           name: 'XH',
           key: 'XH',
-          span: 12,
-          cls: 'ui-schoolLogo',
-          valuePropName: 'img',
-          children: (
-            <AvatarUpload
-              onValueChange={(value: string) => {
-                setXhimg(value === '' ? null : value);
-              }}
-            />
-          )
-        }
+          imgWidth: 90,
+          imgHeight: 90,
+          imageurl: imageUrl,
+          upurl: '/api/upload/uploadFile?type=badge&plat=agency',
+          accept: '.jpg, .jpeg, .png',
+          imagename: 'image',
+          handleImageChange: (value: any) => {
+            imageChange('ZP', value);
+          }
+        },
       ]
     },
     {

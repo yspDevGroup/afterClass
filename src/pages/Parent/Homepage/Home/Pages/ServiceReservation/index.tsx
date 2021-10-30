@@ -5,7 +5,7 @@ import { Tabs } from 'antd';
 import noPic from '@/assets/noPic.png';
 import noOrder from '@/assets/noOrder.png';
 import GoBack from '@/components/GoBack';
-import { getKHZZFW } from '@/services/after-class/khzzfw';
+import { getAllFWByschooId } from '@/services/after-class/khzzfw';
 import { Link, useModel } from 'umi';
 import { getKHXXZZFW, getStudent } from '@/services/after-class/khxxzzfw';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -23,7 +23,7 @@ const ServiceReservation = () => {
   useEffect(() => {
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
-      const result = await getKHZZFW({
+      const result = await getAllFWByschooId({
         XXJBSJId: currentUser?.xxId,
         FWMC: '',
         FWZT: 1,

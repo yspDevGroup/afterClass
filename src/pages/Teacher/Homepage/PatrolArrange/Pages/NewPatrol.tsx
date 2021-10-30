@@ -14,6 +14,7 @@ import GoBack from '@/components/GoBack';
 
 import styles from '../index.less';
 import moment from 'moment';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const NewPatrol = (props: any) => {
   const { kcid, kcmc, xkrq, bjxx, check } = props?.location?.state;
@@ -104,6 +105,7 @@ const NewPatrol = (props: any) => {
       message.error(res.message);
     }
   };
+  const showWXName = bjxx?.KHBJJs?.[0]?.JZGJBSJ?.XM === '未知' && bjxx?.KHBJJs?.[0]?.JZGJBSJ?.WechatUserId;
   return (
     <>
       <GoBack title={'巡课记录'} teacher />
@@ -115,7 +117,11 @@ const NewPatrol = (props: any) => {
               <h4>教师出勤情况</h4>
               <ul>
                 <li><label>课程班名称</label><span>{bjxx?.BJMC}</span></li>
-                <li><label>任课教师</label><span>{bjxx?.KHBJJs?.[0]?.JZGJBSJ?.XM}</span></li>
+                <li><label>任课教师</label><span>
+                  {
+                    showWXName ? <WWOpenDataCom type="userName" openid={bjxx?.KHBJJs?.[0]?.JZGJBSJ?.WechatUserId} /> : bjxx?.KHBJJs?.[0]?.JZGJBSJ?.XM
+                  }
+                </span></li>
                 <li><label>上课教室</label><span>{bjxx?.KHPKSJs?.[0]?.FJSJ?.FJMC}</span></li>
                 <li>
                   <label>是否准时上课</label>

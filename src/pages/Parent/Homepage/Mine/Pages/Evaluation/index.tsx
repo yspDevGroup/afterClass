@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { useModel, Link } from 'umi';
 import styles from './index.less';
 import noOrder from '@/assets/noOrder.png';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const { TabPane } = Tabs;
 
@@ -71,13 +72,17 @@ const Evaluation = () => {
               <div className={styles.Application}>
                 <div>
                   {KcData?.map((value: any) => {
+                     const showWXName = value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM === '未知' && value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.WechatUserId;
                     return (
                       <>
                         <div className={styles.cards}>
                           <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                           <p>
                             班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：
-                            {value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM}{' '}
+                            {value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM}
+                           {
+                             showWXName ? <WWOpenDataCom type="userName" openid={value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.WechatUserId} />: value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM
+                           }
                           </p>
                           <Link
                             key="pj"
