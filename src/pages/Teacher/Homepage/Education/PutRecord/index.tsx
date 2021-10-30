@@ -45,6 +45,7 @@ const PutRecord = (props: any) => {
         <Form form={form} onFinish={onFinish}>
           <Form.Item
             name="nr"
+            rules={[{ required: true, message: '请输入要发布的内容！' }]}
           >
             <TextArea placeholder={'快来分享课堂精彩瞬间~'} rows={4} bordered={false} />
           </Form.Item>

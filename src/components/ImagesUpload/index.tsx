@@ -55,7 +55,7 @@ const ImagesUpload = (props: {
         // setLoading(false);
         let urlStr = '';
         info.fileList.forEach((item: any)=>{
-          if(item.status === 'ok'){
+          if(item.response?.status === 'ok'){
             urlStr = urlStr + item.response.data +';';
           }
         })

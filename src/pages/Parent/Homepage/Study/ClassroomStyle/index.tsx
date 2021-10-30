@@ -12,6 +12,8 @@ import noData from '@/assets/noData.png';
 const ClassroomStyle = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { student } = currentUser || {};
+  const StorageXSId = localStorage.getItem('studentId');
   const [listData, setListData] = useState<any>();
 
   useEffect(() => {
@@ -22,7 +24,9 @@ const ClassroomStyle = () => {
   }, listData);
 
   const getData = async () => {
-    const resKHKTFC = await getAllKHKTFC({});
+    const resKHKTFC = await getAllKHKTFC({
+      XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
+    });
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
       resKHKTFC.data?.rows?.forEach((item: any, index: number) => {
