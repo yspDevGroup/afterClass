@@ -61,7 +61,7 @@ const ServiceRefund = () => {
       width: 100,
       fixed: 'left',
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.XM
+        return record?.XSJBSJ?.XM;
       },
     },
     {
@@ -80,7 +80,7 @@ const ServiceRefund = () => {
       width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
       },
     },
     {
@@ -120,7 +120,7 @@ const ServiceRefund = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.createdAt?.substring(0, 16)
+        return record?.createdAt?.substring(0, 16);
       },
       width: 150,
     },
@@ -146,7 +146,7 @@ const ServiceRefund = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.SPSJ?.replace(/T/, ' ').substring(0, 16)
+        return record?.SPSJ?.replace(/T/, ' ').substring(0, 16);
       },
       width: 150,
     },
@@ -157,7 +157,7 @@ const ServiceRefund = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.TKSJ?.substring(0, 16)
+        return record?.TKSJ?.substring(0, 16);
       },
       width: 150,
     },
@@ -200,10 +200,12 @@ const ServiceRefund = () => {
       fixed: 'right',
       render: (_: any, record: any) =>
         record.TKZT === 0 ? (
-          <a onClick={() => {
-            setCurrent(record);
-            setVisible(true);
-          }}>
+          <a
+            onClick={() => {
+              setCurrent(record);
+              setVisible(true);
+            }}
+          >
             确认
           </a>
         ) : (
@@ -216,7 +218,14 @@ const ServiceRefund = () => {
     try {
       if (current.id) {
         const ids = { id: current.id };
-        const body = { TKJE, TKZT, BZ, deviceIp: '117.36.118.42', SPSJ: new Date().toISOString() };
+        const body = {
+          TKJE,
+          TKZT,
+          BZ,
+          deviceIp: '117.36.118.42',
+          SPSJ: new Date().toISOString(),
+          JZGJBSJId: currentUser?.JSId || testTeacherId,
+        };
         const res = await updateKHXSTK(ids, body);
         if (res.status === 'ok') {
           if (TKZT === 2) {
@@ -234,7 +243,7 @@ const ServiceRefund = () => {
     } catch (err) {
       message.error('退款流程出现错误，请联系管理员或稍后重试。');
     }
-  }
+  };
   return (
     <>
       <div className={Style.TopSearchs}>
@@ -319,10 +328,10 @@ const ServiceRefund = () => {
             onFinish={handleSubmit}
             layout="horizontal"
           >
-            <Form.Item label="退款金额" name='TKJE'>
+            <Form.Item label="退款金额" name="TKJE">
               <InputNumber
-                formatter={value => `￥ ${value}`}
-                parser={value => Number(value?.replace(/\￥\s?/g, ''))}
+                formatter={(value) => `￥ ${value}`}
+                parser={(value) => Number(value?.replace(/\￥\s?/g, ''))}
               />
             </Form.Item>
             <Form.Item label="审核意见" name="TKZT">
@@ -331,14 +340,15 @@ const ServiceRefund = () => {
                 <Radio value={2}>不同意</Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item label="退款说明" name='BZ'>
+            <Form.Item label="退款说明" name="BZ">
               <TextArea rows={4} maxLength={100} />
             </Form.Item>
           </Form>
           <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>
             注：退款金额 = (服务费用/服务天数)*服务剩余天数
             <br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如若退款金额有调整，请填写退款说明。</p>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如若退款金额有调整，请填写退款说明。
+          </p>
         </Modal>
       </div>
     </>
