@@ -20,7 +20,6 @@ const Record = () => {
   }, listData);
 
   const getData = async () => {
-
     const resKHKTFC = await getAllKHKTFC({});
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
@@ -44,15 +43,9 @@ const Record = () => {
 
   }
 
-
-
   function cancel(e: any) {
     // console.log(e);
     // message.error('Click on No');
-  }
-
-  const ImgContainer = () => {
-    return
   }
 
   return (

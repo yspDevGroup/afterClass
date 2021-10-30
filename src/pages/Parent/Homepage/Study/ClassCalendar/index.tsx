@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { List, Divider, Checkbox, message } from 'antd';
+import { List, Checkbox, message } from 'antd';
 import type { FormInstance } from 'antd';
-import moment from 'moment';
 import dayjs from 'dayjs';
 import { Calendar } from 'react-h5-calendar';
 import ListComponent from '@/components/ListComponent';
-import { compareNow, DateRange, Week } from '@/utils/Timefunction';
+import { compareNow } from '@/utils/Timefunction';
 import noData from '@/assets/noCourse.png';
-import { ParentHomeData } from '@/services/local-services/xsHome';
 
 import styles from './index.less';
+import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -34,103 +33,77 @@ const ClassCalendar = (props: propstype) => {
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
+  const [editCourses, setEditCourses] = useState<any>([]);
   const [dates, setDates] = useState<any[]>([]);
-  const [courseArr, setCourseArr] = useState<any>({});
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
+  const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
 
-  // 后台返回的周数据的遍历
-  const getCalendarData = (data: any) => {
-    const courseData = {};
-    const markDays = [];
-    const learnData = {};
-    for (let k = 0; k < data?.length; k += 1) {
-      const item = data[k];
-      const courseDays = [];
-      const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
-      const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
-      const kcxxInfo = [
-        {
-          title: item.KHBJSJ.KHKCSJ.KCMC,
-          img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
-          link: `/parent/home/courseTable?classid=${item.KHBJSJ.id}`,
-          start: item.XXSJPZ?.KSSJ?.substring(0, 5),
-          end: item.XXSJPZ?.JSSJ?.substring(0, 5),
-          jcId: item.XXSJPZ?.id,
-          xq: `本校`,
-          bjId: item.KHBJSJ.id,
-          desc: [
-            {
-              left: [
-                `课程时段：${item.XXSJPZ.KSSJ.substring(0, 5)}-${item.XXSJPZ.JSSJ.substring(0, 5)}`,
-              ],
-            },
-            {
-              left: [`上课地点：${item.FJSJ.FJMC}`],
-            },
-          ],
-        },
-      ];
-      const res = DateRange(
-        moment(startDate).format('YYYY/MM/DD'),
-        moment(endDate).format('YYYY/MM/DD'),
-      );
-      for (let i = 0; i < res.length; i += 1) {
-        const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
-        if (weekDay === item.WEEKDAY) {
-          if (courseData[res[i]]) {
-            courseData[res[i]] = courseData[res[i]].concat(kcxxInfo);
-          } else {
-            courseData[res[i]] = kcxxInfo;
-          }
-          markDays.push({
-            date: res[i],
-          });
-          courseDays.push(res[i]);
-        }
-      }
-      if (learnData[item.KHBJSJ.id]) {
-        const val = learnData[item.KHBJSJ.id];
-        learnData[item.KHBJSJ.id] = {
-          dates: val.dates.concat(courseDays),
-          weekDay: `${val.weekDay},${item.WEEKDAY}`,
-          courseInfo: item,
-        };
-      } else {
-        learnData[item.KHBJSJ.id] = {
-          dates: courseDays,
-          weekDay: item.WEEKDAY,
-          courseInfo: item,
-        };
-      }
-    }
-
-    return {
-      markDays,
-      courseData,
-      learnData,
-    };
+  const convertCourse = (course: any[], day: string) => {
+    const data = course?.length && course.map((item) => {
+      return {
+        title: item.title,
+        BJMC: item.BJMC,
+        img: item.img,
+        link: `/parent/home/courseTable?classid=${item.bjId}&path=study`,
+        desc: [
+          {
+            left: [
+              `${item.start}-${item.end}  |  ${item.BJMC} `,
+            ],
+          },
+          {
+            left: [`${item.address}`],
+          },
+        ],
+        start: item.start,
+        end: item.end,
+        bjId: item.bjId,
+        bjid: item.bjId,
+        jcId: item.jcId,
+        FJId: item.fjId,
+      };
+    });
+    return data;
   };
-  useEffect(() => {
-    (async () => {
-      const studentId =
-        localStorage.getItem('studentId') ||
-        (student && student[0].XSJBSJId) ||
-        testStudentId;
-      const res = await ParentHomeData(xxId, studentId);
-      const { weekSchedule } = res;
-      const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
-      setDatedata?.(learnData);
-      setDates(markDays);
+  // 根据日期修改展示数据
+  const changeDateList = (date?: any) => {
+    const curDay = date ? date : dayjs();
+    const dayFormat = curDay.format('YYYY-MM-DD');
+    setDay(dayFormat);
+    setCDay(curDay.format('M月D日'));
+    const course = dates?.length && dates?.find((it) => it.date === dayFormat);
+    if (type) {
+      setEditCourses(course?.courses ? convertCourse(course?.courses, day) : []);
+    } else {
       setCourse({
         type: 'picList',
         cls: 'picList',
-        list: courseData[day] || [],
+        list: course?.courses ? convertCourse(course?.courses, day) : [],
         noDataText: '当天无课',
         noDataImg: noData,
       });
-      setCourseArr(courseData);
-    })();
-  }, []);
+    }
+  }
+  useEffect(() => {
+    (async () => {
+      const oriData = await ParentHomeData('student', xxId, StorageXSId, StorageNjId);
+      const { markDays } = oriData;
+      const course = markDays?.length && markDays?.find((it) => it.date === day);
+      if (type) {
+        setEditCourses(course?.courses ? convertCourse(course?.courses, day) : []);
+      } else {
+        setCourse({
+          type: 'picList',
+          cls: 'picList',
+          list: course?.courses ? convertCourse(course?.courses, day) : [],
+          noDataText: '当天无课',
+          noDataImg: noData,
+        });
+      }
+      setDates(markDays);
+    })()
+  }, [StorageXSId]);
   useEffect(() => {
     setDatedata?.(choosenCourses);
   }, [choosenCourses]);
@@ -161,15 +134,7 @@ const ClassCalendar = (props: propstype) => {
             form?.resetFields();
             setChoosenCourses([]);
           }
-          setDay(dayjs().format('YYYY-MM-DD'));
-          setCDay(dayjs().format('M月D日'));
-          setCourse({
-            type: 'picList',
-            cls: 'picList',
-            list: courseArr[dayjs().format('YYYY-MM-DD')] || [],
-            noDataText: '当天无课',
-            noDataImg: noData,
-          });
+          changeDateList();
         }}
       >
         今
@@ -188,16 +153,7 @@ const ClassCalendar = (props: propstype) => {
               setChoosenCourses([]);
             }
           }
-          setDay(date.format('YYYY-MM-DD'));
-          setCDay(date.format('M月D日'));
-          const curCourse = {
-            type: 'picList',
-            cls: 'picList',
-            list: courseArr[date.format('YYYY-MM-DD')] || [],
-            noDataText: '当天无课',
-            noDataImg: noData,
-          };
-          setCourse(curCourse);
+          changeDateList(date);
         }}
         markType="dot"
         transitionDuration={0.1}
@@ -210,25 +166,19 @@ const ClassCalendar = (props: propstype) => {
       )}
       {type && type === 'edit' ? (
         <List
-          style={{ background: '#fff'}}
+          style={{ background: '#fff' }}
           itemLayout="horizontal"
-          dataSource={course?.list?.length ? course?.list : []}
+          dataSource={editCourses}
           className={styles.jsqj}
           renderItem={(item: any) => {
             return (
               <List.Item
-                key={`${day}+${item?.bjId}`}
+                key={`${day}+${item?.bjid}+${item.jcId}`}
                 actions={[<Checkbox onChange={(e) => onChange(e, item)} />]}
               >
                 <List.Item.Meta
                   title={item?.title}
-                  description={
-                    <>
-                      {item.start}—{item.end}
-                      <Divider type="vertical" />
-                      {item.xq}
-                    </>
-                  }
+                  description={item.desc?.[0].left}
                 />
               </List.Item>
             );

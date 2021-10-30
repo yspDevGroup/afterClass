@@ -220,11 +220,30 @@
       font-size: 16px;
       line-height: 28px;
       color: @text-color;
+      margin-bottom: 8px;
     }
 
     ul {
       padding: 0;
       color: @text-color-secondary;
+      li{
+        display: flex;
+        line-height: 30px;
+        span:nth-child(1){
+          width: 80px;
+          text-align: right;
+          color:#888;
+        }
+        .teacherName{
+          padding-right: 8px;
+          text-align: left;
+          width: auto;
+          span{
+            text-align: left;
+            width: auto;
+          }
+        }
+      }
     }
   }
 

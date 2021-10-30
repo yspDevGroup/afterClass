@@ -8,7 +8,6 @@ import IconFont from '@/components/CustomIcon';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 import imgPop from '@/assets/teacherBg.png';
-import { ParentHomeData } from '@/services/local-services/mobileHome';
 import CheckOnStatic from './components/CheckOnStatic';
 
 import styles from './index.less';
@@ -16,8 +15,6 @@ import styles from './index.less';
 const Mine = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [courseData, setCourseData] = useState<any>([]);
-  const [scheduleData, setScheduleData] = useState<any>([]);
   const userRef = useRef(null);
   useEffect(() => {
     (async () => {
@@ -31,18 +28,6 @@ const Mine = () => {
       }
     })();
   }, [currentUser]);
-  useEffect(() => {
-    (async () => {
-      const oriData = await ParentHomeData(
-        currentUser?.xxId,
-        currentUser.JSId || testTeacherId,
-        'teacher',
-      );
-      const { yxkc, weekSchedule } = oriData;
-      setCourseData(yxkc);
-      setScheduleData(weekSchedule);
-    })();
-  }, []);
 
   return (
     <div className={styles.minePage}>
@@ -57,14 +42,13 @@ const Mine = () => {
                   <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
                 ) : (
                   currentUser?.UserId
-                )}
-              </span>
+                )}</span>
               老师
             </h4>
           </div>
         </div>
       </header>
-      <CheckOnStatic courseData={courseData} scheduleData={scheduleData} />
+      <CheckOnStatic />
       <div className={styles.linkWrapper}>
         <ul>
           <li>

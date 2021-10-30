@@ -4,9 +4,9 @@ import { Link, useModel, history } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
 import IconFont from '@/components/CustomIcon';
-import myContext from '@/utils/MyContext';
 import { enHenceMsg, removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
+import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 import imgPop from '@/assets/mobileBg.png';
 import evaluation from '@/assets/evaluation.png';
@@ -17,46 +17,45 @@ import { iconTextData } from './mock';
 import styles from './index.less';
 
 const { Option } = Select;
-const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>> }) => {
-  const { setActiveKey } = props;
-  const { currentUserInfo, courseStatus } = useContext(myContext);
-  const [totail, setTotail] = useState<boolean>(false);
+const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetStateAction<string>> }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { student, external_contact } = currentUser || {};
+  const { status, setActiveKey } = props;
+  const [totail, setTotail] = useState<boolean>(false);
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
   const StorageXSId = localStorage.getItem('studentId');
   const StorageXSName = localStorage.getItem('studentName');
 
   useEffect(() => {
     // 存入孩子姓名和id
-    if (localStorage.getItem('studentName') && localStorage.getItem('studentId')) {
-      localStorage.getItem('studentName');
-      localStorage.getItem('studentId');
-    } else {
-      localStorage.setItem('studentName', currentUser?.student?.[0].name || '');
-      localStorage.setItem('studentId', currentUser?.student?.[0].XSJBSJId || '');
+    if (localStorage.getItem('studentName') === null && localStorage.getItem('studentId') === null) {
+      localStorage.setItem('studentName', student?.[0].name || '');
+      localStorage.setItem('studentId', student?.[0].XSJBSJId || '');
+      localStorage.setItem('studentNjId', student[0].NJSJId || '');
     }
-    const ParentalIdentitys = `${StorageXSName}${
-      currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-    }`;
+    const ParentalIdentitys = `${StorageXSName}${external_contact?.subscriber_info?.remark?.split('-')[1] || ''
+      }`;
     setParentalIdentity(ParentalIdentitys);
   }, []);
 
   // 切换孩子
-  const handleChange = (value: any, key: any) => {
+  const handleChange = async (value: any, key: any) => {
     localStorage.setItem('studentName', key.value);
     localStorage.setItem('studentId', key.key?.split('+')[0]);
     localStorage.setItem('studentNjId', key.key?.split('+')[1]);
-    const ParentalIdentitys = `${key.value}${
-      currentUser?.external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-    }`;
+    const ParentalIdentitys = `${key.value}${external_contact?.subscriber_info?.remark?.split('-')[1] || ''
+      }`;
     setParentalIdentity(ParentalIdentitys);
-    // 切换到首页
-    setActiveKey('index');
+    // 数据信息重新更新获取
+    await ParentHomeData('student', currentUser?.xxId, key.key?.split('+')[0], key.key?.split('+')[1], true);
+    // setActiveKey('index');
   };
   useEffect(() => {
     async function fetch() {
-      const studentId: string = StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId;
+      const studentId: string =
+        StorageXSId || student?.[0].XSJBSJId || testStudentId;
+
       const res = await getAllKHXSDD({
         XSJBSJId: studentId,
         // njId: currentUser.njId,
@@ -72,31 +71,28 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
     }
     fetch();
   }, [StorageXSId]);
+
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader}>
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.header}>
-          {currentUserInfo?.avatar ? <img src={currentUserInfo?.avatar} /> : ''}
+          {currentUser?.avatar ? <img src={currentUser?.avatar} /> : ''}
           <div className={styles.headerName}>
             <h4>
-              {/* {currentUserInfo?.external_contact?.subscriber_info.remark ||
-                currentUserInfo?.username ||
-                '家长'} */}
-              {ParentalIdentity?.split('/')[0] || '家长'}
+              {ParentalIdentity || '家长'}
             </h4>
-            {/* <h4>{currentUser?.student?.name || currentUserInfo?.username || '家长'}</h4> */}
-            <span>微信名：{currentUserInfo?.username || currentUserInfo?.name}</span>
+            <span>微信名：{currentUser?.username || currentUser?.name}</span>
           </div>
         </div>
-        {currentUser?.student?.length > 1 ? (
+        {student?.length > 1 ? (
           <Select
             style={{ minWidth: '5em' }}
-            defaultValue={StorageXSName || currentUser?.student?.[0].studentName}
+            defaultValue={StorageXSName || student?.[0].studentName}
             className={styles.XsName}
             onChange={handleChange}
           >
-            {currentUser?.student?.map((value: any) => {
+            {student?.map((value: any) => {
               return (
                 <Option value={value.name} key={`${value.XSJBSJId}+${value.NJSJId}`}>
                   {value.name}
@@ -131,7 +127,7 @@ const Mine = (props: { setActiveKey: React.Dispatch<React.SetStateAction<string>
         </Link>
       </div>
 
-      {courseStatus === 'empty' ? '' : <Statistical />}
+      {status === 'empty' ? '' : <Statistical />}
       <div className={styles.linkWrapper}>
         <ul>
           <li>

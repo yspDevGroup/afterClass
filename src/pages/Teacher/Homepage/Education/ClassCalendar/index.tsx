@@ -1,24 +1,20 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { List, Modal, message, Form, Input, Checkbox, Divider, Radio, Space } from 'antd';
-import type { FormInstance } from 'antd';
-import { history, useModel } from 'umi';
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import moment from 'moment';
+import { history, useModel } from 'umi';
+import type { FormInstance } from 'antd';
 import { Calendar } from 'react-h5-calendar';
+import { List, Modal, message, Form, Input, Checkbox, Divider, Radio, Space } from 'antd';
 import type { DisplayColumnItem } from '@/components/data';
 import ListComponent from '@/components/ListComponent';
-import { getData } from '@/utils/utils';
-import { compareNow, DateRange, Week } from '@/utils/Timefunction';
+import { compareNow } from '@/utils/Timefunction';
 import { msgLeaveSchool } from '@/services/after-class/wechat';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 import styles from './index.less';
 import noData from '@/assets/noCourses1.png';
 import noOrder from '@/assets/noOrder1.png';
-
-
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -38,22 +34,18 @@ const ClassCalendar = (props: propstype) => {
   const { setDatedata, type, form, setReloadList } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { xxId } = currentUser || {};
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
   const [dates, setDates] = useState<any[]>([]);
-  const [courseArr, setCourseArr] = useState<any>({});
+  const [editCourses, setEditCourses] = useState<any>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [bjid, setBjid] = useState<string>();
   const [modalContent, setModalContent] = useState<string>();
   const formRef = React.createRef<any>();
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
-  const children = currentUser?.subscriber_info?.children || [{
-    student_userid: currentUser?.UserId,
-    njId: '1'
-  }];
-  const iconTextData: DisplayColumnItem[] = day === dayjs().format('YYYY-MM-DD') ? [
+
+  const iconTextData: DisplayColumnItem[] = (day === dayjs().format('YYYY-MM-DD')) ? [
     {
       text: '签到点名',
       icon: 'icon-dianming',
@@ -65,9 +57,8 @@ const ClassCalendar = (props: propstype) => {
       background: '#7DCE81',
       handleClick: async (bjid: string) => {
         setIsModalVisible(true);
-        const schedule = await getData(bjid, children[0].student_userid!);
-        const { ...rest } = schedule;
-        setModalContent(`今日${rest.kcmc}-${rest.title}已下课，请知悉。`);
+        const res = course?.list?.find((item: { bjid: string; }) => item.bjid === bjid);
+        setModalContent(`今日${res?.title}-${res?.BJMC}已下课，请知悉。`);
         setBjid(bjid);
       },
     },
@@ -121,145 +112,82 @@ const ClassCalendar = (props: propstype) => {
       },
     },
   ];
-  // 后台返回的周数据的遍历
-  const getCalendarData = (data: any) => {
-    const courseData = {};
-    const markDays = [];
-    const learnData = {};
-    const newData = {};
-    data?.forEach((item: any) => {
-      if (Object.keys(newData).indexOf(`${item.KHBJSJ.id}`) === -1) {
-        newData[item.KHBJSJ.id] = [];
-      }
-      newData[item.KHBJSJ.id].push(item);
-    });
 
-    for (let k = 0; k < data?.length; k += 1) {
-      const item = data[k];
-      const weeked: any[] = [];
-      const dates: any[] = [];
-      newData[item.KHBJSJ.id].forEach((rea: any) => {
-        if (dates.length === 0) {
-          dates.push(DateRange(rea.KHBJSJ.KKRQ, rea.KHBJSJ.JKRQ));
-        }
-        if (weeked.indexOf(rea.WEEKDAY) === -1) {
-          weeked.push(rea.WEEKDAY);
-        }
-      });
-      const sj: any[] = [];
-      dates[0].forEach((as: any) => {
-        weeked.forEach((ds: any) => {
-          if (Week(as) === ds) {
-            sj.push(as);
-          }
-        });
-      });
-      const courseDays = [];
-      const startDate = item.KHBJSJ.KKRQ ? item.KHBJSJ.KKRQ : item.KHBJSJ.KHKCSJ.KKRQ;
-      const endDate = item.KHBJSJ.JKRQ ? item.KHBJSJ.JKRQ : item.KHBJSJ.KHKCSJ.JKRQ;
-      const kcxxInfo = {
-        title: item.KHBJSJ.KHKCSJ.KCMC,
-        img: item.KHBJSJ.KCTP ? item.KHBJSJ.KCTP : item.KHBJSJ.KHKCSJ.KCTP,
-        link: `/teacher/home/courseDetails?classid=${item.KHBJSJ.id}&courseid=${item.KHBJSJ.KHKCSJ.id}&index=all`,
+  const convertCourse = (course: any[], day: string) => {
+    const data = course?.length && course.map((item) => {
+      const enrollLink = {
+        pathname: '/teacher/education/callTheRoll',
+        state: {
+          pkId: item.pkId,
+          bjId: item.bjId,
+          jcId: item.jcId,
+          date: day
+        },
+      };
+      return {
+        title: item.title,
+        BJMC: item.BJMC,
+        img: item.img,
+        link: `/teacher/home/courseDetails?classid=${item.bjId}&path=education`,
+        enrollLink,
+        start: item.start,
+        end: item.end,
+        bjId: item.bjId,
         desc: [
           {
             left: [
-              `${item.XXSJPZ.KSSJ.substring(0, 5)}-${item.XXSJPZ.JSSJ.substring(0, 5)}  |  ${item.KHBJSJ.BJMC} `,
+              `${item.start}-${item.end}  |  ${item.BJMC} `,
             ],
           },
           {
-            left: [`${item.FJSJ.FJMC}`],
+            left: [`${item.address}`],
           },
         ],
-        jcId: item.XXSJPZ.id,
-        FJId: item.FJSJ.id,
+        bjid: item.bjId,
+        jcId: item.jcId,
+        FJId: item.fjId,
       };
-      const res = DateRange(
-        moment(startDate).format('YYYY/MM/DD'),
-        moment(endDate).format('YYYY/MM/DD'),
-      );
-      for (let i = 0; i < res.length; i += 1) {
-        const weekDay = Week(moment(res[i]).format('YYYY/MM/DD'));
-        if (weekDay === item.WEEKDAY) {
-          const enrollLink = {
-            pathname: '/teacher/education/callTheRoll',
-            state: {
-              pkid: item.id,
-              bjids: item.KHBJSJ.id,
-              date: moment(res[i]).format('YYYY/MM/DD'),
-              kjs: sj.length,
-              sj,
-            },
-          };
-          // const recordLink = {
-          //   pathname: '/teacher/education/rollcallrecord',
-          //   state: {
-          //     pkid: item.id,
-          //     bjids: item.KHBJSJ.id,
-          //     date: moment(res[i]).format('YYYY/MM/DD'),
-          //     kjs: sj.length,
-          //     sj,
-          //   },
-          // };
-          const curInfo = [
-            {
-              enrollLink,
-              bjid: item.KHBJSJ.id,
-              // recordLink,
-              ...kcxxInfo,
-            },
-          ];
-          if (courseData[res[i]]) {
-            courseData[res[i]] = courseData[res[i]].concat(curInfo);
-          } else {
-            courseData[res[i]] = curInfo;
-          }
-          markDays.push({
-            date: res[i],
-          });
-          courseDays.push(res[i]);
-        }
-      }
-      if (learnData[item.KHBJSJ.id]) {
-        const val = learnData[item.KHBJSJ.id];
-        learnData[item.KHBJSJ.id] = {
-          dates: val.dates.concat(courseDays),
-          weekDay: `${val.weekDay},${item.WEEKDAY}`,
-          courseInfo: item,
-        };
-      } else {
-        learnData[item.KHBJSJ.id] = {
-          dates: courseDays,
-          weekDay: item.WEEKDAY,
-          courseInfo: item,
-        };
-      }
-    }
-
-    return {
-      markDays,
-      courseData,
-      learnData,
-    };
+    });
+    return data;
   };
 
-  useEffect(() => {
-    (async () => {
-      const JSId = currentUser.JSId || testTeacherId;
-      const res = await ParentHomeData(xxId, JSId, 'teacher');
-      const { weekSchedule } = res;
-      const { markDays, courseData, learnData } = getCalendarData(weekSchedule);
-      setDatedata?.(learnData);
-      setDates(markDays);
+  // 根据日期修改展示数据
+  const changeDateList = (date?: any) => {
+    const curDay = date ? date : dayjs();
+    const dayFormat = curDay.format('YYYY-MM-DD');
+    setDay(dayFormat);
+    setCDay(curDay.format('M月D日'));
+    const course = dates?.length && dates?.find((it) => it.date === dayFormat);
+    if (type) {
+      setEditCourses(course?.courses ? convertCourse(course?.courses, day) : []);
+    } else {
       setCourse({
         type: 'picList',
         cls: 'picList',
-        list: courseData[day] || [],
+        list: course?.courses ? convertCourse(course?.courses, day) : [],
         noDataText: '当天无课',
         noDataImg: noData,
       });
-      setCourseArr(courseData);
-    })();
+    }
+  }
+  useEffect(() => {
+    (async () => {
+      const oriData = await ParentHomeData( 'teacher',currentUser?.xxId, currentUser.JSId || testTeacherId);
+      const { markDays } = oriData;
+      const course = markDays?.length && markDays?.find((it) => it.date === day);
+      if (type) {
+        setEditCourses(course?.courses ? convertCourse(course?.courses, day) : []);
+      } else {
+        setCourse({
+          type: 'picList',
+          cls: 'picList',
+          list: course?.courses ? convertCourse(course?.courses, day) : [],
+          noDataText: '当天无课',
+          noDataImg: noData,
+        });
+      }
+      setDates(markDays);
+    })()
   }, []);
   useEffect(() => {
     setDatedata?.(choosenCourses);
@@ -293,15 +221,16 @@ const ClassCalendar = (props: propstype) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+  // 请假多选事件
   const onChange = (e: any, item: any) => {
     let newChoosen = [...choosenCourses];
     setReloadList?.(false);
     if (e?.target?.checked) {
-      const { desc, bjid, title, jcId } = item;
+      const { start, end, bjid, title, jcId } = item;
       newChoosen.push({
         day,
-        start: desc?.[0].left?.[0].substring(0, 5),
-        end: desc?.[0].left?.[0].substring(6, 11),
+        start,
+        end,
         jcId,
         bjid,
         title,
@@ -311,6 +240,7 @@ const ClassCalendar = (props: propstype) => {
     }
     setChoosenCourses(newChoosen);
   };
+  // 调代课单选事件
   const onChanges = (e: any) => {
     const { desc, bjid, title, jcId, FJId } = e.target.value;
     setDatedata?.({
@@ -322,7 +252,7 @@ const ClassCalendar = (props: propstype) => {
       FJId,
       title,
     })
-  }
+  };
   return (
     <div className={styles.schedule}>
       <span
@@ -332,15 +262,7 @@ const ClassCalendar = (props: propstype) => {
             form?.resetFields();
             setChoosenCourses([]);
           }
-          setDay(dayjs().format('YYYY-MM-DD'));
-          setCDay(dayjs().format('M月D日'));
-          setCourse({
-            type: 'picList',
-            cls: 'picList',
-            list: courseArr[dayjs().format('YYYY-MM-DD')] || [],
-            noDataText: '当天无课',
-            noDataImg: noData,
-          });
+          changeDateList();
         }}
       >
         今
@@ -359,56 +281,34 @@ const ClassCalendar = (props: propstype) => {
               setChoosenCourses([]);
             }
           }
-          setDay(date.format('YYYY-MM-DD'));
-          setCDay(date.format('M月D日'));
-          let curCourse: any = {};
-          curCourse = {
-            type: 'picList',
-            cls: 'picList',
-            list: [],
-            noDataText: '当天无课',
-            noDataImg: noData,
-          };
-          setTimeout(() => {
-            curCourse = {
-              type: 'picList',
-              cls: 'picList',
-              list: courseArr[date.format('YYYY-MM-DD')] || [],
-              noDataText: '当天无课',
-              noDataImg: noData,
-            };
-            setCourse(curCourse);
-          }, 50);
-          setCourse(curCourse);
+          changeDateList(date);
         }}
         markType="dot"
         transitionDuration={0.1}
         currentDate={day}
       />
+      {/* 根据特殊情况显示列表上方操作信息 */}
       {type && type === 'edit' ? (
         <p style={{ lineHeight: '35px', margin: 0, color: '#888' }}>请选择课程</p>
       ) : (type && type === 'dksq' || type === 'tksq' ?
         <p style={{ lineHeight: '35px', margin: 0, color: '#999', fontSize: '12px' }}>{type === 'dksq' ? '代课课程' : type === 'tksq' ? '调课课程' : ''} </p> :
         <div className={styles.subTitle}>{cDay}</div>)}
+
+      {/* 根据特殊情况显示列表展示样式 */}
       {type && type === 'edit' ? (
         <List
           style={{ background: '#fff', paddingLeft: '10px' }}
           itemLayout="horizontal"
-          dataSource={course?.list?.length ? course?.list : []}
+          dataSource={editCourses}
           renderItem={(item: any) => {
             return (
               <List.Item
-                key={`${day}+${item?.bjid}`}
+                key={`${day}+${item?.bjid}+${item.jcId}`}
                 actions={[<Checkbox onChange={(e) => onChange(e, item)} />]}
               >
                 <List.Item.Meta
-                  title={item?.title}
-                  description={
-                    <>
-                      {item.desc?.[0].left}
-                      <Divider type="vertical" />
-                    </>
-                  }
+                  title={`${item?.title}`}
+                  description={item.desc?.[0].left}
                 />
               </List.Item>
             );
@@ -416,14 +316,14 @@ const ClassCalendar = (props: propstype) => {
         />
       ) : (type === 'dksq' || type === 'tksq' ? <div className={styles.dksq}>
         {
-          course?.list?.length === 0 ? <div className={styles.ZWSJ}>
+          editCourses?.length === 0 ? <div className={styles.ZWSJ}>
             <img src={noOrder} alt="" />
             <p>暂无数据</p>
           </div> :
             <Radio.Group onChange={onChanges}>
               <Space direction="vertical">
                 {
-                  course?.list?.map((item: any) => {
+                  editCourses?.map((item: any) => {
                     return <Radio value={item}>
                       <p> {item?.title}</p>
                       <p> {item.desc?.[0].left}</p>

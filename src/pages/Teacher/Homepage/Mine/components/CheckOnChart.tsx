@@ -2,7 +2,7 @@
  * @description:
  * @author: lyy
  * @Date: 2021-06-11 14:33:28
- * @LastEditTime: 2021-10-26 16:51:07
+ * @LastEditTime: 2021-10-30 11:33:21
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
@@ -57,7 +57,6 @@ const CheckOnChart = (props: { data: ItemType[]; title?: string; cls?: string })
   return (
     <div className={`${styles.chartWrapper} ${cls}`}>
       {title ? <div className="title">{title}</div> : ''}
-      {/* <Bar  {...config} /> */}
       <Pie {...pieConfig} />
     </div>
   );

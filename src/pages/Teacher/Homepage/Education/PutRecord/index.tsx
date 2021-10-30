@@ -23,12 +23,7 @@ const PutRecord = (props: any) => {
     getData();
   }, []);
 
-  const getData = async () => {
-
-  }
-
   const onFinish = async (values: any) => {
-    console.log('values: ', values);
     const resKHKTFC = await createKHKTFC({
       NR: values.nr,
       TP: imgUrl,
@@ -36,7 +31,6 @@ const PutRecord = (props: any) => {
       JZGJBSJId: jsid,
       XXJBSJId: currentUser?.xxId,
     });
-    console.log('resKHKTFC: ', resKHKTFC);
     if(resKHKTFC.status === 'ok'){
       message.success('发布成功！');
       history.go(-1);

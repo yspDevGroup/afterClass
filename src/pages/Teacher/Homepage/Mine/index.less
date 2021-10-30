@@ -170,7 +170,8 @@
       margin-bottom: 10px;
       font-weight: 600;
       font-size: @font-size-lg;
-      line-height: 22px;
+      line-height: 50px;
+      height: 50px;
 
       > div {
         position: absolute;
@@ -179,6 +180,8 @@
         color: @normal-color;
         font-weight: normal;
         font-size: @font-size-sm;
+        line-height: 22px;
+        text-align: right;
 
         span {
           display: inline-block;
@@ -188,8 +191,8 @@
           vertical-align: sub;
           background: linear-gradient(
             270deg,
-            rgba(49, 217, 159, 1) 0%,
-            rgba(49, 217, 159, 0.2) 100%
+            rgba(137, 218, 140, 1) 0%,
+            rgba(137, 218, 140, 0.2) 100%
           );
           border-radius: 14px;
 
@@ -200,16 +203,29 @@
           &:nth-child(2) {
             background: linear-gradient(
               270deg,
-              rgba(255, 113, 113, 1) 0%,
-              rgba(255, 113, 113, 0.2) 100%
+              rgba(221, 221, 221, 1) 0%,
+              rgba(221, 221, 221, 0.2) 100%
             );
           }
-
-          &:nth-child(3) {
+          &:nth-child(4) {
             background: linear-gradient(
               270deg,
-              rgba(0, 102, 255, 1) 0%,
-              rgba(0, 102, 255, 0.2) 100%
+              rgba(242, 200, 98, 1) 0%,
+              rgba(242, 200, 98, 0.2) 100%
+            );
+          }
+          &:nth-child(5) {
+            background: linear-gradient(
+              270deg,
+              rgba(172, 144, 251, 1) 0%,
+              rgba(172, 144, 251, 0.2) 100%
+            );
+          }
+          &:nth-child(6) {
+            background: linear-gradient(
+              270deg,
+              rgba(255, 113, 113, 1) 0%,
+              rgba(255, 113, 113, 0.2) 100%
             );
           }
         }

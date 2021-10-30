@@ -174,13 +174,12 @@ declare const xnxqInfo: {
   current: any;
   data: any;
 };
-// 家长端首页全局配置信息
-declare let parentHomeInfo: {
+// 移动端端首页全局配置信息
+declare let homeInfo: {
   data: any;
-};
-// 教师端首页全局配置信息
-declare let teacherHomeInfo: {
-  data: any;
+  special: any;
+  courseSchedule: any;
+  markDays: any[];
 };
 
 type AuthType = 'wechat' | 'password' | 'authorization_code';

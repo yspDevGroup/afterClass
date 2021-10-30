@@ -12,24 +12,24 @@ import Details from './Pages/Details';
 import EmptyArticle from './Pages/EmptyArticle';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
-// import bannerIcon from '@/assets/szjyzyIcon.png';
-// import resourcesRgo from '@/assets/resourcesRgo.png';
-// import resourcesBg from '@/assets/resourcesBg.png';
 import Catering from '@/assets/Catering.png';
 import resources from '@/assets/resources.png';
+import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 const Home = () => {
-  const { currentUserInfo, courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj } =
-    useContext(myContext);
-  const [notification, setNotification] = useState<any>([]);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { external_contact } = currentUser;
+  const { student,external_contact } = currentUser || {};
+  const [notification, setNotification] = useState<any>([]);
+  const [totalData, setTotalData] = useState<any>({});
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
+  const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
+  const StorageXSName = localStorage.getItem('studentName');
   useEffect(() => {
     async function announcements() {
       const res = await getXXTZGG({
-        XXJBSJId: currentUserInfo?.xxId,
+        XXJBSJId: currentUser?.xxId,
         BT: '',
         LX: ['0'],
         ZT: ['已发布'],
@@ -43,23 +43,26 @@ const Home = () => {
       }
     }
     announcements();
-  }, []);
-  const StorageXSName = localStorage.getItem('studentName');
-  useEffect(() => {
-    if (localStorage.getItem('studentName') && localStorage.getItem('studentId')) {
-      localStorage.getItem('studentName');
-      localStorage.getItem('studentId');
-    } else {
+    if (localStorage.getItem('studentName') === null && localStorage.getItem('studentId') === null) {
       localStorage.setItem('studentName', currentUser?.student?.[0].name || '');
       localStorage.setItem('studentId', currentUser?.student?.[0].XSJBSJId || '');
     }
-  }, []);
+  }, [currentUser]);
   useEffect(() => {
-    const ParentalIdentitys = `${StorageXSName}${
-      (external_contact && external_contact?.subscriber_info?.remark?.split('-')[1]) || ''
-    }`;
+    const ParentalIdentitys = `${StorageXSName}${(external_contact && external_contact?.subscriber_info?.remark?.split('-')[1]) || ''
+      }`;
     setParentalIdentity(ParentalIdentitys);
   }, [StorageXSName]);
+
+  useEffect(() => {
+    (async () => {
+      if(StorageXSId){
+        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId);
+        const { data } = oriData;
+        setTotalData(data);
+      }
+    })()
+  }, [StorageXSId]);
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader}>
@@ -67,17 +70,14 @@ const Home = () => {
         <div className={styles.headerText}>
           <h4>
             <span>
-              {/* {currentUserInfo?.external_contact?.subscriber_info.remark ||
-                currentUserInfo?.username ||
-                '家长'} */}
-              {ParentalIdentity?.split('/')[0] || '家长'}
+              {ParentalIdentity || '家长'}
             </span>
             ，你好！
           </h4>
           <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
         </div>
       </header>
-      {courseStatus === 'empty' ? (
+      {totalData?.courseStatus === 'empty' ? (
         <EmptyArticle />
       ) : (
         <div className={styles.pageContent}>
@@ -115,39 +115,12 @@ const Home = () => {
             </Link>
           </div>
           <div className={styles.enrollArea}>
-            <EnrollClassTime
-              dataResource={{ courseStatus, weekSchedule, bmkssj, bmjssj, skkssj, skjssj }}
-            />
+            <EnrollClassTime type='student' xxId={currentUser.xxId} userId={StorageXSId} njId={StorageNjId} />
           </div>
           <div className={styles.courseArea}>
-            <CourseTab />
+            <CourseTab dataResource={totalData} />
           </div>
-          {/* <a
-            className={styles.banner}
-            href="http://moodle.xianyunshipei.com/course/view.php?id=12"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span>素质教育资源{` >`}</span>
-            <img src={bannerIcon} />
-          </a> */}
-          {/* <div className={styles.resourcesBox}>
-         <a
-            href="http://moodle.xianyunshipei.com/course/view.php?id=12"
-            target="_blank"
-            rel="noreferrer"
-            className={styles.resources}
-            style={{ backgroundImage:`url(${resourcesBg})` }}
-          >
-              <p>素质教育资源</p>
-              <img src={resourcesRgo} alt="" />
-            </a>
-        </div> */}
           <div className={styles.container}>
-            {/* <Link to='/parent/home/serviceReservation' className={styles.Catering} >
-              <p>更多服务</p>
-              <img src={Catering} alt="" className={styles.CateringImg}/>
-            </Link> */}
             <Link to="/parent/home/serviceReservation" className={styles.Catering}>
               <p>更多服务</p>
               <img src={Catering} alt="" className={styles.CateringImg} />

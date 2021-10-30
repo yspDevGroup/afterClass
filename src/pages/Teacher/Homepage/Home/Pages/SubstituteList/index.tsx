@@ -90,7 +90,6 @@ const SubstituteList = () => {
           {
             LsDatas.map((item: any) => {
               const showWXName = item?.SKJS?.XM === '未知' && item?.SKJS?.WechatUserId;
-              console.log(item,'======')
               return (
                 <Link
                   to={{

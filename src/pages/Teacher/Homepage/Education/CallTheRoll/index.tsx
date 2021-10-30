@@ -13,6 +13,7 @@ import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { theme } from '@/theme-default';
 import styles from './index.less';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 /**
  * 课堂点名
@@ -61,6 +62,8 @@ const CallTheRoll = (props: any) => {
   const userRef = useRef(null);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  // 当前课节数
+  const [curNum, setCurNum] = useState<number>(0);
   // '缺席'
   const [absent, setAbsent] = useState<number>(0);
   const [leaveData, setLeaveData] = useState<number>(0);
@@ -76,14 +79,8 @@ const CallTheRoll = (props: any) => {
   const [butDis, setButDis] = useState<string>('todo');
   // 获取当前日期
   const nowDate = new Date();
-  const { pkid, bjids, date, kjs, sj } = props.location.state;
+  const { pkId, bjId, jcId, date } = props.location.state;
   const pkDate = date?.replace(/\//g, '-'); // 日期
-  const wxad: any = [];
-  sj.forEach((item: any) => {
-    if (new Date(pkDate) > new Date(item)) {
-      wxad.push(item);
-    }
-  });
 
   const showConfirm = (tm?: boolean, title?: string, content?: string) => {
     let secondsToGo = 3;
@@ -116,7 +113,7 @@ const CallTheRoll = (props: any) => {
     const futureSta = nowDate.getTime() - new Date(pkDate).getTime() < 0;
     // 查询教师出勤记录
     const resCheck = await getAllKHJSCQ({
-      KHBJSJId: bjids,
+      KHBJSJId: bjId,
       JZGJBSJId: currentUser.JSId || testTeacherId,
       CQRQ: pkDate,
     });
@@ -135,9 +132,9 @@ const CallTheRoll = (props: any) => {
 
     // 查询学生所有课后服务出勤记录
     const resAll = await getAllKHXSCQ({
-      bjId: bjids || undefined, // 班级ID
+      bjId: bjId || undefined, // 班级ID
       CQRQ: pkDate, // 日期
-      pkId: pkid || undefined, // 排课ID
+      pkId: pkId || undefined, // 排课ID
     });
     if (resAll.status === 'ok') {
       const allData = resAll.data;
@@ -160,11 +157,11 @@ const CallTheRoll = (props: any) => {
         }
         const resLeave = await getAllKHXSQJ({
           XNXQId: '',
-          KHBJSJId: bjids,
+          KHBJSJId: bjId,
           QJRQ: pkDate,
         });
         // 获取班级已报名人数
-        const resStudent = await getEnrolled({ id: bjids || '' });
+        const resStudent = await getEnrolled({ id: bjId || '' });
         if (resStudent.status === 'ok') {
           const studentData = resStudent.data;
           const leaveInfo = resLeave?.data?.rows || [];
@@ -207,19 +204,25 @@ const CallTheRoll = (props: any) => {
     })();
   }, [currentUser]);
   useEffect(() => {
-    getData();
-    // 获取课后班级数据
-    const resClass = getKHBJSJ({ id: bjids || '' });
-    Promise.resolve(resClass).then((data) => {
-      if (data.status === 'ok') {
+    (async () => {
+      const oriData = await ParentHomeData( 'teacher',currentUser?.xxId, currentUser.JSId || testTeacherId);
+      const { courseSchedule } = oriData;
+      const detail = courseSchedule.find((item: { courseInfo: { bjId: string; }[]; }) => {
+        return item.courseInfo?.[0].bjId === bjId
+      });
+      if (detail) {
+        const { days, courseInfo } = detail;
+        const curDate = days?.find((it: { day: any; }) => it.day === date);
+        setCurNum(curDate?.index + 1);
         const name: claNameType = {
-          BJMC: data.data?.BJMC || '',
-          KSS: data.data?.KSS || 0,
-          KCMC: data.data?.KHKCSJ?.KCMC || '',
+          BJMC: courseInfo?.[0]?.BJMC || '',
+          KSS: courseInfo?.[0]?.KSS || 0,
+          KCMC: courseInfo?.[0].title || '',
         };
         setClaName(name);
       }
-    });
+      getData();
+    })()
   }, []);
   useEffect(() => {
     const absentData = dataSource.filter((item: any) => item.isRealTo === '缺席');
@@ -256,8 +259,8 @@ const CallTheRoll = (props: any) => {
         CQZT: item.isLeave ? '请假' : item.isRealTo, // 出勤 / 缺席
         CQRQ: pkDate, // 日期
         XSJBSJId: item.XSJBSJId, // 学生ID
-        KHBJSJId: bjids, // 班级ID
-        KHPKSJId: pkid, // 排课ID
+        KHBJSJId: bjId, // 班级ID
+        KHPKSJId: pkId, // 排课ID
       });
     });
     const res = await createKHXSCQ(value);
@@ -274,7 +277,7 @@ const CallTheRoll = (props: any) => {
         JZGJBSJId: currentUser.JSId || testTeacherId,
         CQZT: '出勤',
         CQRQ: pkDate,
-        KHBJSJId: bjids,
+        KHBJSJId: bjId,
       },
     ]);
     if (res.status === 'ok') {
@@ -348,7 +351,7 @@ const CallTheRoll = (props: any) => {
         <div>
           <b>
             <span ref={userRef}>
-            {currentUser?.UserId === '未知' && currentUser.wechatUserId ? (
+              {currentUser?.UserId === '未知' && currentUser.wechatUserId ? (
                 <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
               ) : (
                 currentUser?.UserId
@@ -364,7 +367,7 @@ const CallTheRoll = (props: any) => {
       </div>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
-        {claName?.BJMC} ｜ 第 {wxad.length}/{kjs} 课时
+        {claName?.BJMC} ｜第 {curNum}/{claName?.KSS} 课时
       </div>
       <div className={styles.checkWorkAttendance}>
         {checkWorkInfo.map((item) => {

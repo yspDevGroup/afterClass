@@ -7,108 +7,81 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
-import moment from 'moment';
-import { DateRange, Week } from '@/utils/Timefunction';
 import CheckOnChart from './CheckOnChart';
 import Nodata from '@/components/Nodata';
 
 import styles from '../index.less';
 import noChart from '@/assets/noChart1.png';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { useModel } from 'umi';
+import { countKHJSCQ } from '@/services/after-class/khjscq';
 
-const CheckOnStatic = (props: { courseData: any[]; scheduleData: any[] }) => {
-  const { courseData, scheduleData } = props;
-  const [checkIn, setCheckIn] = useState<any[]>();
-  const [wekDay, setWekDay] = useState<any>();
-
-  // 当前时间
-  const nowdate = moment(new Date().toLocaleDateString()).format('YYYY-MM-DD');
-  const getChechIn = (data?: any[]) => {
-    const classData: any = [];
-    const newskrq = {};
-    // 教授的课程有几门，每门下有几个班
-    data?.forEach((item: any) => {
-      const newkec = {
-        KCMC: (
-          <div>
-            <div>{item.KHKCSJ.KCMC}</div>
-            <div style={{ color: '#aaa', fontSize: '.9em' }}>{item.BJMC}</div>
-          </div>
-        ),
-        class: [item],
-      };
-      classData.push(newkec);
-    });
-    // 周几上课
-    scheduleData?.forEach((item: any) => {
-      if (Object.keys(newskrq).indexOf(`${item.KHBJSJ.id}`) === -1) {
-        newskrq[item.KHBJSJ.id] = [];
+const CheckOnStatic = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const [satistics, setStatistics] = useState<any[]>();
+  const convertData = (data: any) => {
+    if (data) {
+      const toDo = data.KSS - data.attendance - data.leave - data.substitute - data.absenteeism;
+      return {
+        title: `${data.KCMC}/${data.BJMC}`,
+        zc: data.normal,
+        yc: data.abnormal,
+        ds: data.remain,
+        data: [
+          {
+            label: `${data.KCMC}/${data.BJMC}`,
+            type: '正常',
+            value: data.attendance,
+            color: 'l(180) 0:rgba(137, 218, 140, 1) 1:rgba(137, 218, 140, 0.2)',
+          },
+          {
+            label: `${data.KCMC}/${data.BJMC}`,
+            type: '请假',
+            value:  data.leave,
+            color: 'l(180) 0:rgba(242, 200, 98, 0.2) 1:rgba(242, 200, 98, 1)',
+          },
+          {
+            label: `${data.KCMC}/${data.BJMC}`,
+            type: '代课',
+            value: data.substitute,
+            color: 'l(180) 0:rgba(172, 144, 251, 0.2) 1:rgba(172, 144, 251, 1)',
+          },
+          {
+            label: `${data.KCMC}/${data.BJMC}`,
+            type: '异常',
+            value: data.absenteeism,
+            color: 'l(180) 0:rgba(244, 138, 130, 0.2) 1:rgba(244, 138, 130, 1)',
+          },
+          {
+            label: `${data.KCMC}/${data.BJMC}`,
+            type: '待上',
+            value: toDo > 0 ? toDo : 0,
+            color: 'l(180) 0:rgba(221, 221, 221, 0.2) 1:rgba(221, 221, 221, 1)',
+          },
+        ]
       }
-      newskrq[item.KHBJSJ.id].push(item.WEEKDAY);
-    });
-    return {
-      classData,
-      newskrq,
-    };
-  };
-  const getKcData = (item: any) => {
-    const kcData: { label: string; type?: string | undefined; value: number; color: string }[] = [];
-    for (let i = 0; i < item.class.length; i += 1) {
-      const record = item.class[i];
-      // 获取上课区间
-      const datelist = DateRange(record.KKRQ, record.JKRQ);
-      // 上课日期数组
-      const Classdate: any = [];
-      datelist?.forEach((list: any) => {
-        // 获取周几上课，在上课区间拿出上课日期
-        wekDay[record.id]?.forEach((ite: any) => {
-          if (Week(list) === ite) {
-            Classdate.push(list);
-          }
-        });
-      });
-      const courseDates = Classdate?.slice(0, record.KSS);
-      // 已上课程
-      const oldclass = [];
-      // 未上课程
-      const newclass = [];
-      courseDates.forEach((it: any) => {
-        if (new Date(nowdate) > new Date(it)) {
-          oldclass.push(it);
-        } else {
-          newclass.push(it);
-        }
-      });
-      // 出勤数据
-      kcData.push(
-        {
-          label: record.BJMC,
-          type: '正常',
-          value: oldclass.length,
-          color: 'l(180) 0:rgba(49, 217, 159, 1) 1:rgba(49, 217, 159, 0.2)',
-        },
-        {
-          label: record.BJMC,
-          type: '异常',
-          value: 0,
-          color: 'l(180) 0:rgba(255, 113, 113, 0.2) 1:rgba(255, 113, 113, 1)',
-        },
-        {
-          label: record.BJMC,
-          type: '待上',
-          value: newclass.length,
-          color: 'l(180) 0:rgba(0, 102, 255, 1) 1:rgba(0, 102, 255, 0.2)',
-        },
-      );
     }
-    return kcData;
+    return {}
   };
+
   useEffect(() => {
-    if (courseData?.length && scheduleData?.length) {
-      const { classData, newskrq } = getChechIn(courseData);
-      setCheckIn(classData);
-      setWekDay(newskrq);
-    }
-  }, [courseData,scheduleData]);
+    (async () => {
+      const result = await queryXNXQList(currentUser?.xxId);
+      if (result.current) {
+        const res = await countKHJSCQ({
+          XNXQId: result.current.id,
+          JZGJBSJId: currentUser.JSId || testTeacherId
+        });
+        if (res.status === 'ok') {
+          const arr = [].map.call(res.data, (item) => {
+            return convertData(item);
+          })
+          setStatistics(arr || []);
+        }
+      }
+    })()
+  }, [])
   return (
     <div className={styles.funWrapper}>
       <div className={styles.titleBar}>
@@ -117,18 +90,22 @@ const CheckOnStatic = (props: { courseData: any[]; scheduleData: any[] }) => {
           <span />
           正常
           <span />
-          异常
-          <span />
           待上
+          <br />
+          <span />
+          请假
+          <span />
+          代课
+          <span />
+          异常
         </div>
       </div>
-      {checkIn && checkIn.length ? (
+      {satistics && satistics.length ? (
         <Row gutter={8}>
-          {checkIn.map((item: any) => {
-            const kcData = getKcData(item);
+          {satistics.map((item: any) => {
             return (
               <Col span={12}>
-                <CheckOnChart data={kcData} title={item.KCMC} key={item.KCMC} />
+                <CheckOnChart data={item.data} title={item.title} key={item.title} />
               </Col>
             );
           })}

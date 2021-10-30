@@ -8,7 +8,6 @@ import styles from './index.less';
 import icon_stuEvaluate from '@/assets/icon_stuEvaluate.png';
 import icon_courseBack from '@/assets/icon_courseBack.png';
 import icon_classroomStyle from '@/assets/classroomStyle.png';
-import myContext from '@/utils/MyContext';
 import icon_leave from '@/assets/icon-teacherLeave.png';
 import icon_CourseAdjustment from '@/assets/icon-CourseAdjustment.png';
 
@@ -18,8 +17,8 @@ const Study = () => {
   const [courseData, setCourseData] = useState<any>([]);
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData(currentUser?.xxId, currentUser.JSId || testTeacherId,'teacher');
-      const { yxkc } = oriData;
+      const oriData = await ParentHomeData( 'teacher',currentUser?.xxId, currentUser.JSId || testTeacherId);
+      const { yxkc } = oriData.data;
       setCourseData(yxkc);
     })()
   }, []);

@@ -1,8 +1,7 @@
 /* eslint-disable no-param-reassign */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
 import styles from '../index.less';
-import myContext from '@/utils/MyContext';
 import ListComponent from '@/components/ListComponent';
 import noData from '@/assets/noCourses.png';
 import { Link } from 'umi';
@@ -18,9 +17,10 @@ const defaultMsg: ListData = {
   noDataText: '暂无课程',
   noDataImg: noData,
 };
-const CourseTab = () => {
+const CourseTab = (props: { dataResource: any; }) => {
+  const { dataResource } = props;
   // 获取首页数据
-  const { courseStatus, kskc, yxkc } = useContext(myContext);
+  const { courseStatus, kskc, yxkc } = dataResource;
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
   const [yxkcAllData, setYxkcAllData] = useState<ListData>(defaultMsg);
   const centered = false;

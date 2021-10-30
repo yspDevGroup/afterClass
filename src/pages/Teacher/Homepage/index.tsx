@@ -23,13 +23,10 @@ const PersonalHomepage = () => {
   const index = getQueryString('index');
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData(
-        currentUser?.xxId,
-        currentUser.JSId || testTeacherId,
-        'teacher',
-      );
-      setCourseStatus(oriData.courseStatus);
-    })();
+      const oriData = await ParentHomeData('teacher', currentUser?.xxId, currentUser.JSId || testTeacherId);
+      const { courseStatus } = oriData.data;
+      setCourseStatus(courseStatus);
+    })()
   }, []);
   useEffect(() => {
     if (index) {

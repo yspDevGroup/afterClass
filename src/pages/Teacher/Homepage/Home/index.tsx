@@ -103,14 +103,12 @@ const Home = () => {
   }, [currentUser]);
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData(
-        currentUser?.xxId,
-        currentUser.JSId || testTeacherId,
-        'teacher',
-      );
-      setTotalData(oriData);
-    })();
+      const oriData = await ParentHomeData( 'teacher',currentUser?.xxId, currentUser.JSId || testTeacherId);
+      const { data } = oriData;
+      setTotalData(data);
+    })()
   }, []);
+
   const onFinish = async (values: { name: string; phone: string }) => {
     const res = await updateJZGJBSJ(
       { id: currentUser.JSId },
@@ -181,13 +179,13 @@ const Home = () => {
         </div>
         {/* 今日课程 */}
         <div className={styles.enrollArea}>
-          <EnrollClassTime dataResource={totalData} teacher={true} />
+          <EnrollClassTime type='teacher' xxId = {currentUser.xxId} userId = {currentUser.JSId || testTeacherId} />
         </div>
         {/* 代课与待巡课程 */}
         <div className={styles.patrols}>
           <div style={{ backgroundImage: `url(${DaiKe})` }}>
             <Link to="/teacher/home/substituteList">
-              <p>
+              <p className={styles.titles}>
                 <span>代课申请</span>
                 <Badge count={DkData?.length || 0} showZero={true} offset={[5, 0]} />
               </p>
@@ -195,7 +193,7 @@ const Home = () => {
           </div>
           <div style={{ backgroundImage: `url(${XunKe})` }}>
             <Link to="/teacher/patrolArrange">
-              <p>
+              <p className={styles.titles}>
                 <span>今日待巡课程</span>
                 <Badge count={dateData?.length || 0} showZero={true} offset={[5, 0]} />
               </p>

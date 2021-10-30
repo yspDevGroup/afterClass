@@ -1,69 +1,63 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pie } from '@ant-design/charts';
 import styles from '../index.less';
 import { Badge } from 'antd';
-import myContext from '@/utils/MyContext';
 import noChart from '@/assets/noChart.png';
 import Nodata from '@/components/Nodata';
-import { getData } from '@/utils/utils';
+import { countKHXSCQ } from '@/services/after-class/khxscq';
+import { useModel } from 'umi';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const Statistical: React.FC = () => {
-  const { currentUserInfo, yxkc } = useContext(myContext);
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  const { xxId,student } = currentUser || {};
+  const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
   const [satistics, setStatistics] = useState<any[]>();
-  const children = currentUserInfo?.subscriber_info?.children || [
-    {
-      student_userid: currentUserInfo?.UserId || currentUserInfo?.id,
-      njId: '1',
-    },
-  ];
-  const convertData = (title: string, dataArr: any) => {
-    if (dataArr && dataArr.length) {
-      const nor = dataArr.filter((item: any) => item.status === '出勤');
-      const abnor = dataArr.filter((item: any) => item.status === '缺席');
-      const toDo = dataArr.filter((item: any) => item.status === '待上');
+
+  const convertData = (data: any) => {
+    if (data) {
       return {
-        title,
-        zc: nor && nor.length,
-        yc: abnor && abnor.length,
-        ds: toDo && toDo.length,
+        title: `${data.KCMC}/${data.BJMC}`,
+        zc: data.normal,
+        yc: data.abnormal,
+        ds: data.remain,
         data: [
           {
             type: '正常',
-            value: nor && nor.length,
+            value: data.normal,
           },
           {
             type: '异常',
-            value: abnor && abnor.length,
+            value: data.abnormal,
           },
           {
             type: '待上',
-            value: toDo && toDo.length,
+            value: data.remain,
           },
         ]
       }
     }
     return {}
   };
-  useEffect(() => {
-    async function fetchData() {
-      if (yxkc&&yxkc.length>0) {
-        const arr = [].map.call(yxkc, async (item: any) => {
-          const { title, data } = await getData(item.id, children[0].student_userid!);
-          if(data && title){
-            return convertData(title, data);
-          }
-          return {status:'nothing'};
-        });
-        const result = await Promise.all(arr);
-        const realResult = result.filter((item: any) => item.status !== 'nothing');
-        setStatistics(realResult);
-      }else{
-        setStatistics([])
-      }
-    }
-    fetchData();
-  }, [yxkc]);
 
+  useEffect(() => {
+    (async () => {
+      const result = await queryXNXQList(xxId);
+      if (result.current) {
+        const res = await countKHXSCQ({
+          XNXQId: result.current.id,
+          XSJBSJId: StorageXSId
+        });
+        if(res.status === 'ok'){
+          const arr = [].map.call(res.data,(item)=>{
+            return convertData(item);
+          })
+          setStatistics(arr || []);
+        }
+      }
+    })()
+  }, [StorageXSId]);
   const config: any = {
     data: '',
     angleField: 'value',
