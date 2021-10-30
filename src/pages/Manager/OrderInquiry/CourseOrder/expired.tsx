@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-25 12:02:08
+ * @LastEditTime: 2021-10-30 18:41:56
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -36,7 +36,6 @@ const OrderInquiry = (props: any) => {
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
-  const [tableLoading, setTableLoading] = useState(true);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   const [curXNXQId, setCurXNXQId] = useState<any>();
@@ -45,7 +44,9 @@ const OrderInquiry = (props: any) => {
   const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
   // 班级名称选择框的数据
   const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
+  const [kcmc, setKcmc] = useState<any>();
   const [kcmcValue, setKcmcValue] = useState<any>();
+  const [bjmc, setBjmc] = useState<any>();
   const [bjmcValue, setBjmcValue] = useState<any>();
   useEffect(() => {
     (async () => {
@@ -120,7 +121,7 @@ const OrderInquiry = (props: any) => {
       key: 'BJMC',
       align: 'center',
       ellipsis: true,
-      width: 120,
+      width: 140,
       render: (_text: any, record: any) => {
         return <div>{record?.KHBJSJ?.BJMC}</div>;
       },
@@ -216,8 +217,8 @@ const OrderInquiry = (props: any) => {
       XNXQId: curXNXQId,
       DDZT,
       DDLX: 0,
-      kcmc:kcmcValue,
-      bjmc:bjmcValue
+      kcmc: kcmc,
+      bjmc: bjmc
     });
     if (resAll.status === 'ok') {
       setDataSource(resAll?.data);
@@ -268,6 +269,7 @@ const OrderInquiry = (props: any) => {
             onChange={(value: string) => {
               // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);
+              setKcmc('');
               setKcmcValue('');
               setBjmcValue('');
             }}
@@ -287,7 +289,8 @@ const OrderInquiry = (props: any) => {
             style={{ width: 200 }}
             allowClear
             value={kcmcValue}
-            onChange={(value: string) => {
+            onChange={(value: string, option: any) => {
+              setKcmc(option?.children);
               setKcmcValue(value);
               setBjmcValue('');
             }}
@@ -307,7 +310,8 @@ const OrderInquiry = (props: any) => {
             style={{ width: 200 }}
             allowClear
             value={bjmcValue}
-            onChange={(value: string) => {
+            onChange={(value: string, option: any) => {
+              setBjmc(option?.children)
               setBjmcValue(value);
             }}
           >
