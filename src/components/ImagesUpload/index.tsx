@@ -48,14 +48,15 @@ const ImagesUpload = (props: {
       // return;
     }
     if (info.file.status === 'done') {
-      console.log('info: ', info);
       const code = info.file.response;
       if (code.status === 'ok') {
         message.success('上传成功');
         // setLoading(false);
         let urlStr = '';
         info.fileList.forEach((item: any)=>{
-          urlStr = urlStr + item.response.data +';';
+          if(item.status === 'ok'){
+            urlStr = urlStr + item.response.data +';';
+          }
         })
         onValueChange(urlStr);
       } else {
@@ -101,6 +102,8 @@ const ImagesUpload = (props: {
         onPreview={handlePreview}
         beforeUpload={handleBeforeUpload}
         onChange={handleChange}
+        maxCount={9}
+        multiple
       >
         {fileList.length >= 9 ? null : uploadButton}
       </Upload>
