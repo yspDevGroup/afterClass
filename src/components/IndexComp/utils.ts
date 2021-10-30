@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-08-24 19:59:45
- * @LastEditTime: 2021-10-18 17:34:16
+ * @LastEditTime: 2021-10-30 10:54:09
  * @LastEditors: Please set LastEditors
  */
 export const bgColor = [
@@ -34,28 +34,28 @@ export const bgColor = [
 export const topNum = [
   {
     title: '本校课程班',
-    type: 'bj_count'
+    type: 'bj_count',
   },
   {
-    title: '机构课程班',
+    title: '合作机构数',
     type: 'jg_count',
   },
   {
-    title: '开设课程',
-    type: 'kc_count'
+    title: '课程总数',
+    type: 'kc_count',
   },
   {
     title: '引入课程',
-    type: 'jgkc_count'
+    type: 'jgkc_count',
   },
   {
     title: '学校教师',
-    type: 'js_count'
+    type: 'js_count',
   },
   {
     title: '报名学生',
-    type: 'xs_count'
-  }
+    type: 'xs_count',
+  },
 ];
 export const chartConfig: any = {
   data: [],
@@ -64,14 +64,14 @@ export const chartConfig: any = {
   xAxis: {
     label: {
       autoHide: true,
-      autoRotate: false
-    }
+      autoRotate: false,
+    },
   },
   yAxis: { minInterval: 1 },
   columnStyle: {},
   maxColumnWidth: 30,
   meta: {
     type: { alias: '课程名称' },
-    number: { alias: '总数' }
-  }
+    number: { alias: '总数' },
+  },
 };
