@@ -64,10 +64,10 @@ export async function deleteKHZZFW(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khzzfw/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -82,13 +82,39 @@ export async function updateKHZZFW(
   body: API.UpdateKHZZFW,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khzzfw/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 通过学校id筛选课后增值服务 POST /khzzfw/getAllFWByschooId */
+export async function getAllFWByschooId(
+  body: {
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 状态 */
+    FWZT?: number;
+    /** 服务名称 */
+    FWMC?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khzzfw/getAllFWByschooId', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     data: body,
     ...(options || {}),
   });
