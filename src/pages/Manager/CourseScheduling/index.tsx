@@ -282,21 +282,21 @@ const ClassManagement = () => {
   };
   useEffect(() => {
     const bjID = getQueryString('courseId');
-    if (!bjID) {
-      (async () => {
-        // 学年学期数据的获取
-        const res = await queryXNXQList(currentUser?.xxId);
-        const newData = res.xnxqList;
-        const curTerm = res.current;
-        if (newData?.length) {
-          if (curTerm) {
-            setCurXNXQId(curTerm.id);
-            setTermList(newData);
-          }
-        } else {
-          setkai(true);
+    (async () => {
+      // 学年学期数据的获取
+      const res = await queryXNXQList(currentUser?.xxId);
+      const newData = res.xnxqList;
+      const curTerm = res.current;
+      if (newData?.length) {
+        if (curTerm) {
+          setCurXNXQId(curTerm.id);
+          setTermList(newData);
         }
-      })();
+      } else {
+        setkai(true);
+      }
+    })();
+    if (!bjID) {
     } else {
       (async () => {
         const njInfo = await getKHBJSJ({ id: bjID });
