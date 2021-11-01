@@ -88,7 +88,7 @@ const ActionBar = (props: propstype) => {
           {record.pk_count ? (
             <>
               <Popconfirm
-                title="确定开班吗?"
+                title="开班后该课程班家长可见，确定开班?"
                 onConfirm={() => release(record)}
                 okText="确定"
                 cancelText="取消"
@@ -219,7 +219,7 @@ const ActionBar = (props: propstype) => {
             </>
           ) : (
             <Popconfirm
-              title="确定取消开班吗?"
+              title="取消后该课程班家长不可见，确定取消开班?"
               onConfirm={() => shelf(record)}
               okText="确定"
               cancelText="取消"
