@@ -94,7 +94,7 @@ const OrderInquiry = (props: any) => {
           return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
         }
         return record?.XSJBSJ?.XM;
-      }
+      },
     },
     {
       title: '订单编号',
@@ -112,7 +112,7 @@ const OrderInquiry = (props: any) => {
       width: 100,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
       },
     },
     {
@@ -154,7 +154,7 @@ const OrderInquiry = (props: any) => {
       align: 'center',
       width: 110,
       render: (_text: any, record: any) => {
-        return <div>{record.DDFY - record?.KHBJSJ?.FY}</div>;
+        return <div>{(Number(record.DDFY) - Number(record?.KHBJSJ?.FY)).toFixed(2)}</div>;
       },
     },
     {
@@ -217,8 +217,8 @@ const OrderInquiry = (props: any) => {
       XNXQId: curXNXQId,
       DDZT,
       DDLX: 0,
-      kcmc: kcmc,
-      bjmc: bjmc
+      kcmc,
+      bjmc,
     });
     if (resAll.status === 'ok') {
       setDataSource(resAll?.data);
@@ -250,14 +250,14 @@ const OrderInquiry = (props: any) => {
           getBjData();
         }
       }
-    })()
+    })();
   }, [curXNXQId]);
   useEffect(() => {
     getBjData();
   }, [kcmcValue]);
   useEffect(() => {
     getData();
-  }, [curXNXQId, kcmcValue, bjmcValue])
+  }, [curXNXQId, kcmcValue, bjmcValue]);
   return (
     <>
       <div className={styles.searchs}>
@@ -312,7 +312,7 @@ const OrderInquiry = (props: any) => {
             allowClear
             value={bjmcValue}
             onChange={(value: string, option: any) => {
-              setBjmc(option?.children)
+              setBjmc(option?.children);
               setBjmcValue(value);
             }}
           >
