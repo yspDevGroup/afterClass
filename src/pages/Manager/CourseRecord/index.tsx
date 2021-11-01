@@ -76,17 +76,17 @@ const CourseRecord: React.FC = () => {
         return record?.KHKCSJ?.SSJGLX
       }
     },
-    {
-      title: '授课教师',
-      dataIndex: 'SKJS',
-      key: 'SKJS',
-      align: 'center',
-      width: 120,
-      ellipsis: true,
-      render: (_, record: any) => {
-        return record?.KHKTFCs[0]?.JZGJBSJ?.XM
-      }
-    },
+    // {
+    //   title: '授课教师',
+    //   dataIndex: 'SKJS',
+    //   key: 'SKJS',
+    //   align: 'center',
+    //   width: 120,
+    //   ellipsis: true,
+    //   render: (_, record: any) => {
+    //     return record?.KHBJJs[0]?.JZGJBSJ?.XM
+    //   }
+    // },
     {
       title: '发布次数',
       dataIndex: 'count',
