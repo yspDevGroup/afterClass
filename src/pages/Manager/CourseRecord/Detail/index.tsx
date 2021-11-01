@@ -13,7 +13,6 @@ import { getJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 const AfterSchoolClass: React.FC = (props: any) => {
   const { state } = props.location;
-  console.log('state: ', state);
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [listData, setListData] = useState<any>([]);
@@ -29,39 +28,26 @@ const AfterSchoolClass: React.FC = (props: any) => {
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
       resKHKTFC.data?.rows?.forEach((item: any, index: number) => {
-        // const resJZGJBSJ = await getJZGJBSJ({ id: item.JZGJBSJId });
-        // console.log('resJZGJBSJ: ', resJZGJBSJ);
         const imgsArr = item.TP.split(';');
         imgsArr.pop();
-        const data = getClassInfo(item, imgsArr);
+        const data = {
+          id: item.id,
+          className: item.KHBJSJ.KHKCSJ.KCMC,
+          classNum: item.KHBJSJ.BJMC,
+          content: item.NR,
+          imgs: imgsArr,
+          time: item.createdAt,
+          teacherName: item.JZGJBSJ.XM,
+          schoolName: item.JZGJBSJ.XXJBSJ.XXMC
+        };
         allData.push(data);
       });
-      Promise.all(allData).then((results) => {
-        setListData(results);
-      });
+      console.log('allData: ', allData);
+      setListData(allData);
     }
 
   }
 
-  const getClassInfo = async (item: any, imgsArr: any) => {
-    const resKHBJSJ = await getKHBJSJ({ id: item.KHBJSJId });
-    const resJZGJBSJ = await getJZGJBSJ({ id: item.JZGJBSJId });
-    console.log('resJZGJBSJ: ', resJZGJBSJ);
-    if (resKHBJSJ.status === 'ok' && resJZGJBSJ.status ==='ok') {
-      return {
-        id: item.id,
-        className: resKHBJSJ.data.KHKCSJ.KCMC,
-        classNum: resKHBJSJ.data.BJMC,
-        content: item.NR,
-        imgs: imgsArr,
-        time: item.createdAt,
-        teacherName: resJZGJBSJ.data.XM,
-        schoolName: resJZGJBSJ.data.XXM
-      };
-    }
-    return '';
-
-  }
 
   return (
     /// PageContainer组件是顶部的信息
@@ -76,7 +62,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
         返回上一页
       </Button>
       <Divider />
-      <h3 style={{ fontWeight: 'bold' }}>{`${listData[0]?.className || '--'}/${listData[0]?.classNum || '--'}/${listData[0]?.teacherName || '--'}`}</h3>
+      <h3 style={{ fontWeight: 'bold' }}>{`${listData[0]?.className || '--'}/${listData[0]?.classNum || '--'}`}</h3>
       <div className={Style.container}>
         <ul>
           {
@@ -86,8 +72,9 @@ const AfterSchoolClass: React.FC = (props: any) => {
                 <li>
                   <Row>
                     <Col span={2} className={Style.time}>
-                      <p className={Style.date}>{moment(item.time).format('MM-DD')}</p>
-                      <p className={Style.hour}>{moment(item.time).format('HH:mm:ss')}</p>
+                      <p className={Style.teacherName}>{listData[0]?.teacherName}</p>
+                      <p className={Style.date} style={{marginBottom: 24}}>{moment(item.time).format('MM-DD')}</p>
+                      <p className={Style.date}>{moment(item.time).format('HH:mm:ss')}</p>
                     </Col>
                     <Col span={22}>
                       <p className={Style.content}>{item.content}</p>
@@ -95,7 +82,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
                         {
                           item.imgs.map((url: string) => {
                             return <Image width={106}
-                              height={78} style={{marginRight: 12}} src={url} />
+                              height={78} src={url} />
                           })
                         }
                       </Image.PreviewGroup>

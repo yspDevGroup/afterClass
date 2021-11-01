@@ -10,17 +10,20 @@
       background: #F8F8F8;
       border-radius: 8px;
       .time{
-        .date{
+        .teacherName{
           font-weight: bold;
           font-size: 18px;
           line-height: 24px;
           color: #333333;
           margin: 0;
         }
-        .hour{
+        .date{
+          position: absolute;
+          bottom: 0;
           font-size: 14px;
           line-height: 24px;
           color: #666666;
+          margin: 0;
         }
       }
       .content{
@@ -35,7 +38,10 @@
       }
       :global{
         .ant-image{
-          margin: 0 12px;
+          margin-right: 12px;
+        }
+        .ant-image:nth-last-child(1){
+          margin-right: 0;
         }
       }
     }
