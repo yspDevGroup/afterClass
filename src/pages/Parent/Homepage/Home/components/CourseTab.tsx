@@ -4,10 +4,15 @@ import { Tabs } from 'antd';
 import styles from '../index.less';
 import ListComponent from '@/components/ListComponent';
 import noData from '@/assets/noCourses.png';
-import { Link } from 'umi';
+import { Link, useModel } from 'umi';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import IconFont from '@/components/CustomIcon';
 import moment from 'moment';
+import noOrder from '@/assets/noOrder.png';
+import noPic from '@/assets/noPic.png';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getAllFWByschooId } from '@/services/after-class/khzzfw';
+import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 
 const { TabPane } = Tabs;
 const defaultMsg: ListData = {
@@ -25,6 +30,10 @@ const CourseTab = (props: { dataResource: any; }) => {
   const [yxkcAllData, setYxkcAllData] = useState<ListData>(defaultMsg);
   const centered = false;
   const [keys, setKeys] = useState('setup');
+  const [LBData, setLBData] = useState<any>([]);
+  const [DataSource, setDataSource] = useState<any>();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
 
   useEffect(() => {
     if (yxkc) {
@@ -66,6 +75,53 @@ const CourseTab = (props: { dataResource: any; }) => {
   }, [yxkc]);
   const oncuechange = (key: string) => {
     setKeys(key);
+  };
+  useEffect(() => {
+    (async () => {
+      const res = await queryXNXQList(currentUser?.xxId);
+      const result = await getAllFWByschooId({
+        XXJBSJId: currentUser?.xxId,
+        FWMC: '',
+        FWZT: 1,
+        page: 0,
+        pageSize: 0,
+      });
+      if (result.status === 'ok') {
+        setLBData(result!.data!.rows!);
+        if (res.current) {
+          const resGetKHXXZZFW = await getKHXXZZFW({
+            XXJBSJId: currentUser?.xxId,
+            XNXQId: res?.current?.id || '',
+            FWZT: 1,
+            KHZZFWId: result!.data!.rows![0].id,
+          });
+          if (resGetKHXXZZFW.status === 'ok') {
+            const NewData = resGetKHXXZZFW?.data?.rows?.filter((value: any) => {
+              return new Date(value?.BMJSSJ).getTime() > new Date().getTime()
+            });
+            setDataSource(NewData);
+          }
+        }
+      }
+    })();
+  }, []);
+
+  const callback = async (key: any) => {
+    const res = await queryXNXQList(currentUser?.xxId);
+    if (res.current) {
+      const result = await getKHXXZZFW({
+        XXJBSJId: currentUser?.xxId,
+        XNXQId: res?.current?.id || '',
+        FWZT: 1,
+        KHZZFWId: key,
+      });
+      if (result.status === 'ok') {
+        const NewData = result?.data?.rows?.filter((value: any) => {
+          return new Date(value?.BMJSSJ).getTime() > new Date().getTime();
+        });
+        setDataSource(NewData);
+      }
+    }
   };
 
   return (
@@ -143,8 +199,58 @@ const CourseTab = (props: { dataResource: any; }) => {
         ) : (
           ''
         )}
-        <TabPane tab="已选课程" key="elective">
-          <ListComponent listData={yxkcData} />
+         <TabPane tab="开设服务" key="ksfw">
+          <div className={styles.category}>
+            {LBData && LBData.length === 0 ? (
+              <div className={styles.Selected}>
+                <div className={styles.noOrder}>
+                  <div>
+                    <p>当前暂未开设服务</p>
+                  </div>
+                  <img src={noOrder} alt="" />
+                </div>
+              </div>
+            ) : (
+              <Tabs type="card" onChange={callback}>
+                {LBData?.map((value: any) => {
+                  return (
+                    <TabPane tab={value.FWMC} key={value?.id}>
+                      <div className={styles.wrap}>
+                        {DataSource &&
+                          DataSource?.map((item: any) => {
+                            const hrefs = `/parent/home/serviceReservation/details?type=KS&id=${item.id}`;
+                            return (
+                              <Link to={hrefs} key={item?.id}>
+                                <div className={styles.box}>
+                                  <div>
+                                    <img
+                                      src={item?.FWTP || noPic}
+                                      style={{ width: item?.FWTP ? '110px' : '70px' }}
+                                      alt=""
+                                    />
+                                  </div>
+                                  <div>
+                                    <p className={styles.title}> {item?.FWMC} </p>
+                                    <p>
+                                      预定时段：{moment(item?.BMKSSJ).format('YYYY.MM.DD')}~
+                                      {moment(item?.BMJSSJ).format('YYYY.MM.DD')}
+                                    </p>
+                                    <p>
+                                      服务时段：{moment(item?.KSRQ).format('YYYY.MM.DD')}~
+                                      {moment(item?.JSRQ).format('YYYY.MM.DD')}
+                                    </p>
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                      </div>
+                    </TabPane>
+                  );
+                })}
+              </Tabs>
+            )}
+          </div>
         </TabPane>
       </Tabs>
     </div>

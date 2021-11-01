@@ -3,7 +3,7 @@
 .indexPage {
   .cusHeader {
     position: relative;
-    height: 126px;
+    height: 150px;
     background: -o-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
     background: -moz-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
     background: -webkit-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
@@ -26,6 +26,19 @@
           font-size: @font-size-sm;
         }
       }
+      .NjBj{
+        display: flex;
+        margin-top: 8px;
+        div{
+          height: 24px;
+          background: linear-gradient(180deg, #42E88E 0%, rgba(66, 232, 142, 0) 100%);
+          border-radius: 6px;
+          margin-right: 6px;
+          padding: 4px 6px;
+          font-size: 12px;
+          line-height: 14px;
+        }
+      }
     }
 
     .headerPop {
@@ -33,7 +46,7 @@
       right: 0;
       width: 40%;
       max-width: 300px;
-      height: 100%;
+      height: 85%;
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
@@ -65,7 +78,9 @@
     background-size: contain;
     opacity: 0.3;
   }
-
+  .courseArea{
+    margin-bottom: 10px;
+  }
   .pageContent {
     position: relative;
     top: -30px;
@@ -223,6 +238,18 @@
         }
       }
     }
+    .containers{
+      display: block;
+      width: 100%;
+      height: 50px;
+      background-size: contain;
+      >span{
+        color: #fff;
+        font-size: 16px;
+        margin-left: 20px;
+        line-height: 50px;
+      }
+    }
 
     .banner {
       display: block;
@@ -340,6 +367,70 @@
 
       .ant-tabs-tab-btn {
         font-size: 14px;
+      }
+    }
+  }
+}
+
+
+
+.tabHeader{
+  .category {
+    :global {
+      .ant-tabs-content-holder {
+        padding: 8px 0 0;
+      }
+      .ant-tabs-nav::before {
+        border: none;
+      }
+      .ant-tabs-nav-list {
+        width: auto !important;
+        .ant-tabs-tab {
+          color: #666666 !important;
+          border: 1px solid #fff !important;
+          margin-left: 28px !important;
+          padding: 8px 0;
+          .ant-tabs-tab-btn {
+            font-size: 14px !important;
+          }
+        }
+        .ant-tabs-tab:nth-of-type(1){
+          margin-left: 0 !important;
+        }
+      }
+    }
+    .wrap {
+      .box {
+        display: flex;
+        margin-bottom: 16px;
+
+        > div:nth-child(1) {
+          width: 110px;
+          height: 70px;
+          margin-right: 10px;
+          text-align: center;
+          img {
+            margin: 0 auto;
+            border-radius: 8px;
+          }
+        }
+        > div:nth-child(2) {
+          width: calc(~'100% - 120px');
+          p {
+            margin: 5px 0;
+            overflow: hidden;
+            color: #999999;
+            font-size: 12px;
+            line-height: 16px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          .title {
+            color: #333333;
+            font-size: 14px;
+            line-height: 18px;
+          }
+        }
       }
     }
   }

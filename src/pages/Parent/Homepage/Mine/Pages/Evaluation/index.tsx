@@ -79,7 +79,6 @@ const Evaluation = () => {
                           <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                           <p>
                             班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：
-                            {value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM}
                            {
                              showWXName ? <WWOpenDataCom type="userName" openid={value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.WechatUserId} />: value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM
                            }
