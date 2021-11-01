@@ -2,8 +2,8 @@
  * @description: 企业微信通讯录展示组件
  * @author: zpl
  * @Date: 2021-09-17 14:41:57
- * @LastEditTime: 2021-10-28 17:49:00
- * @LastEditors: zpl
+ * @LastEditTime: 2021-11-01 10:42:42
+ * @LastEditors: Sissle Lynn
  */
 import React, { useRef, useLayoutEffect, useState } from 'react';
 import type { CSSProperties } from '@umijs/renderer-react/node_modules/@types/react';
@@ -34,7 +34,7 @@ export default function WWOpenDataCom({ type, openid, style = {} }: PropsType) {
     <span
       style={{
         color: '#333',
-        display: 'inherit',
+        display: 'inline-block',
         maxWidth: '5em',
         overflow: 'hidden',
         textOverflow: 'ellipsis',

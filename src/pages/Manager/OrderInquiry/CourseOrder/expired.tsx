@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-30 18:41:56
+ * @LastEditTime: 2021-11-01 10:55:33
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -292,6 +292,7 @@ const OrderInquiry = (props: any) => {
             onChange={(value: string, option: any) => {
               setKcmc(option?.children);
               setKcmcValue(value);
+              setBjmc('');
               setBjmcValue('');
             }}
           >

@@ -42,7 +42,6 @@ const AfterSchoolClass: React.FC = (props: any) => {
         };
         allData.push(data);
       });
-      console.log('allData: ', allData);
       setListData(allData);
     }
 
