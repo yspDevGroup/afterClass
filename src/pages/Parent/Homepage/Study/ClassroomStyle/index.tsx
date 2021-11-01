@@ -1,12 +1,9 @@
 import GoBack from '@/components/GoBack';
 import styles from './index.less';
-import { Empty, Avatar, Image, Row, Col, Popconfirm, message } from 'antd';
+import { Empty, Avatar, Image, Row, Col } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { getJZGJBSJ } from '@/services/after-class/jzgjbsj';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
-import { getAllKHKTFC, deleteKHKTFC } from '@/services/after-class/khktfc';
-import { UserOutlined } from '@ant-design/icons';
+import { getAllKHKTFC } from '@/services/after-class/khktfc';
 import noData from '@/assets/noData.png';
 
 const ClassroomStyle = () => {
@@ -40,7 +37,8 @@ const ClassroomStyle = () => {
           imgs: imgsArr,
           time: item.createdAt,
           teacherName:  item.JZGJBSJ.XM,
-          schoolName:  item.JZGJBSJ.XXJBSJ.XXMC
+          //班级所属于学校或机构的名称
+          schoolName:  item.JZGJBSJ.XXJBSJ.XXMC || item.JZGJBSJ.KHJYJG.QYMC
         };
         allData.push(data);
       });

@@ -131,7 +131,6 @@ const CourseRecord: React.FC = () => {
           setCurXNXQId(curTerm.id);
           setTermList(newData);
         }
-      } else {
       }
     })();
   }, []);
@@ -217,13 +216,13 @@ const CourseRecord: React.FC = () => {
     /// PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.searchWrapper}>
-        <div>
+        <div style={{width: '100%'}}>
           <div>
             <span>
               所属学年学期：
               <Select
                 value={curXNXQId}
-                style={{ width: 200 }}
+                style={{ width: 160 }}
                 onChange={(value: string) => {
                   // 选择不同学期从新更新页面的数据
                   setCurXNXQId(value);
@@ -243,7 +242,7 @@ const CourseRecord: React.FC = () => {
             <span>课程名称：</span>
             <div>
               <Select
-                style={{ width: 200 }}
+                style={{ width: 160 }}
                 value={kcmcValue}
                 allowClear
                 placeholder="请选择"
@@ -270,7 +269,7 @@ const CourseRecord: React.FC = () => {
             <span>课程班名称：</span>
             <div>
               <Select
-                style={{ width: 200 }}
+                style={{ width: 160 }}
                 value={bjmcValue}
                 allowClear
                 placeholder="请选择"
@@ -291,7 +290,7 @@ const CourseRecord: React.FC = () => {
             <div>
               <Search
                 allowClear
-                style={{ width: 200 }}
+                style={{ width: 160 }}
                 onSearch={(value) => setTeacher(value)}
               />
             </div>
@@ -300,7 +299,7 @@ const CourseRecord: React.FC = () => {
             <span>课程班来源：</span>
             <div>
               <Select
-                style={{ width: 200 }}
+                style={{ width: 160 }}
                 value={kclyValue}
                 allowClear
                 placeholder="请选择"
