@@ -167,6 +167,13 @@ const AddArranging: FC<PropsType> = (props) => {
     },
   ];
 
+  // const onClickBjChangeNewTableData=()=>{
+  //   //
+  //   console.log('BJ',Bj);
+
+  //     newTableDataSource.map()
+  // }
+
   // 将排好的课程再次点击可以取消
   const getSelectdata = (value: any) => {
     console.log('getSelectdata', value);
@@ -264,10 +271,11 @@ const AddArranging: FC<PropsType> = (props) => {
     }
   };
 
+  //获取场地排课情况
   const getPKData = async () => {
     const res = await getFJPlan({
       // kcId: kcmcValue,
-      // bjId: bjmcValue,
+      // bjId: index,
       fjId: cdmcValue,
       // JSXM: teacher,
       isPk: false,
@@ -413,6 +421,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 通过课程数据接口拿到所有的课程
   const getKcData = async () => {
+    console.log('--------------');
     const khkcResl = await getAllCourses({
       page: 0,
       pageSize: 0,
@@ -509,6 +518,7 @@ const AddArranging: FC<PropsType> = (props) => {
         Promise.resolve(result).then((data) => {
           if (data.status === 'ok') {
             setCDLoading(false);
+            console.log('------------');
             const Fjplan = getFJPlan({
               XNXQId: curXNXQId,
               XXJBSJId: currentUser?.xxId,
@@ -558,6 +568,13 @@ const AddArranging: FC<PropsType> = (props) => {
                     保存
                   </Button>,
                   <Button
+                    key="rest"
+                    style={{ border: '1px solid #EAEDEE ', background: '#EAEDEE', color: '#999' }}
+                    onClick={() => onReset()}
+                  >
+                    取消
+                  </Button>,
+                  <Button
                     style={{
                       border: '1px solid #F04D4D ',
                       marginRight: 8,
@@ -567,13 +584,6 @@ const AddArranging: FC<PropsType> = (props) => {
                     onClick={showDeleteConfirm}
                   >
                     清除
-                  </Button>,
-                  <Button
-                    key="rest"
-                    style={{ border: '1px solid #EAEDEE ', background: '#EAEDEE', color: '#999' }}
-                    onClick={() => onReset()}
-                  >
-                    取消
                   </Button>,
                 ];
               },
@@ -755,7 +765,6 @@ const AddArranging: FC<PropsType> = (props) => {
             </div>
             <div className="site">
               <span>场地：</span>
-
               {Bj || index ? (
                 <Spin spinning={CDLoading}>
                   <ExcelTable
