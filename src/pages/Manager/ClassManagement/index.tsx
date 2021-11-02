@@ -6,9 +6,9 @@
 import React from 'react';
 import { Link, useModel } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tooltip, Select, message, Divider } from 'antd';
+import { Button, Modal, Tooltip, Select, message, Divider, Row, Col } from 'antd';
 import ProTable from '@ant-design/pro-table';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
 // import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
@@ -181,7 +181,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     const list = {
       ...info,
       BJMC:type === 'copy' ? `${BJMC}-复制` : BJMC,
-      BJZT:type === 'copy' ? '待开班' : BJZT,
+      BJZT:type === 'copy' ? '未开班' : BJZT,
       ZJS:
         currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
         undefined,
@@ -198,7 +198,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       setnames('copy');
     }else{
       setCopyType('undefined');
-      if (!(data.BJZT === '待开班') && !(data.BJZT === '未排课') && !(data.BJZT === '已排课')) {
+      if (!(data.BJZT === '未开班') && !(data.BJZT === '未排课') && !(data.BJZT === '已排课')) {
         stereadonly(true);
         setnames('chakan');
       } else {
@@ -287,7 +287,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       width: 80,
       render: (_, record) => {
         const Url = `/courseManagements/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}`;
-        if (record.BJZT === '待开班') {
+        if (record.BJZT === '未开班') {
           if (record.pk_count === 0) {
             return <Link to={Url}>未排课</Link>;
           }
@@ -297,7 +297,32 @@ const CourseManagement = (props: { location: { state: any } }) => {
       },
     },
     {
-      title: '班级状态',
+      title: (
+        <span>
+          状态&nbsp;
+          <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title={
+              <>
+                <Row>
+                  <Col flex="4em" style={{ fontWeight: 'bold' }}>
+                    未开班
+                  </Col>
+                  <Col flex="auto">仅后台管理员可见</Col>
+                </Row>
+                <Row>
+                  <Col flex="4em" style={{ fontWeight: 'bold' }}>
+                    已开班：
+                  </Col>
+                  <Col flex="auto">家长、教育局端可见</Col>
+                </Row>
+              </>
+            }
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       dataIndex: 'BJZT',
       key: 'BJZT',
       align: 'center',

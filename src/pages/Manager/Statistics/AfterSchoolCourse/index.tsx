@@ -1,14 +1,14 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
-import { Form } from 'antd';
+import { Button, Form, message } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
 import { useModel, Link } from 'umi';
 import { Select } from 'antd';
-import { getCourses } from '@/services/after-class/reports';
+import { getCourses, statisCourses } from '@/services/after-class/reports';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 import Style from './index.less';
-import { TableItem } from './data';
+import type { TableItem } from './data';
 import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 
@@ -261,7 +261,14 @@ const AfterSchoolCourse: React.FC = () => {
     setKCLY(undefined);
   },[curXNXQId])
 
-
+  const submit = async()=>{
+    const res = await statisCourses({
+        XNXQId: curXNXQId
+    })
+    if(res.status === 'ok'){
+      message.success('刷新完成')
+    }
+  }
 
   return (
     /// PageContainer组件是顶部的信息
@@ -354,7 +361,9 @@ const AfterSchoolCourse: React.FC = () => {
         </Form>
 
       </div>
-      <div>
+      <div className={Style.AfterSchoolCourse}>
+        <p className={Style.title}><span>系统每天凌晨自动更新一次，如需立即更新，请点击【刷新】按钮</span>
+         <Button type="primary" onClick={submit}>刷新</Button></p>
         <ProTable
           columns={columns}
           dataSource={dataSource}

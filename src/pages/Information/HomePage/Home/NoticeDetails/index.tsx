@@ -26,7 +26,7 @@ const NoticeDetails = (props: any) => {
 
   return (
     <div>
-      <TopNav />
+      <TopNav title="¹«¸æÏêÇé" state={true} />
       <div style={{padding: '65px 10px' }}>
         <Row gutter={[0, 32]}>
           <Col span={20} offset={2}>

@@ -13,11 +13,11 @@ const LeaveManagement = () => {
   return (
     <PageContainer>
       <Tabs>
-        <TabPane tab="学生请假" key="1">
-          <StudentsLeave />
-        </TabPane>
-        <TabPane tab="教师请假" key="2">
+        <TabPane tab="教师请假" key="1">
           <TeacherLeave />
+        </TabPane>
+        <TabPane tab="学生请假" key="2">
+          <StudentsLeave />
         </TabPane>
       </Tabs>
     </PageContainer>

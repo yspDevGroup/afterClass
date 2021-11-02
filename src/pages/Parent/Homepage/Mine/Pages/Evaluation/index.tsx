@@ -35,8 +35,8 @@ const Evaluation = () => {
     if (res.status === 'ok') {
       const newArr: any[] = [];
       res.data.forEach((value: any) => {
-        if (value.KHBJSJ?.KHBJPJs?.length === 0) {
-          newArr.push(value);
+        if (value?.KHBJSJ?.KHXSCQs?.find((item: any) =>  item.CQZT === '出勤') && value.KHBJSJ?.KHBJPJs?.length === 0) {
+            newArr.push(value);
         }
       });
       setKcData(newArr);
