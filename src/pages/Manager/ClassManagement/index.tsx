@@ -47,6 +47,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [kai, setkai] = useState<boolean>(false);
   // 报名列表数据
   const [applicantData, setApplicantData] = useState<any>({});
+  const [CopyType, setCopyType] = useState<string>();
 
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
@@ -79,11 +80,11 @@ const CourseManagement = (props: { location: { state: any } }) => {
       id
     })
     if (result.status === 'ok') {
-        setIsModalVisible(true);
-        setApplicantData({ BJMC ,KCBDatas:result?.data});
-      }else{
-        message.warning(result.message);
-      }
+      setIsModalVisible(true);
+      setApplicantData({ BJMC, KCBDatas: result?.data });
+    } else {
+      message.warning(result.message);
+    }
   };
 
   const handleOk = () => {
@@ -165,7 +166,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     setModalVisible(true);
   }
 
-  const handleEdit = async (data: any) => {
+  const handleEdit = async (data: any,type?: any) => {
     const FJS: any[] = [];
     const res = await getKHBJSJ({
       id: data?.id
@@ -176,8 +177,11 @@ const CourseManagement = (props: { location: { state: any } }) => {
         FJS.push(item?.JZGJBSJId);
       }
     });
+    const {BJMC,BJZT,...info} = currentData;
     const list = {
-      ...currentData,
+      ...info,
+      BJMC:type === 'copy' ? `${BJMC}-复制` : BJMC,
+      BJZT:type === 'copy' ? '待开班' : BJZT,
       ZJS:
         currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
         undefined,
@@ -189,12 +193,18 @@ const CourseManagement = (props: { location: { state: any } }) => {
     };
     setVisible(true);
     setCurrent(list);
-    if (!(data.BJZT === '待开班') && !(data.BJZT === '未排课') && !(data.BJZT === '已排课')) {
-      stereadonly(true);
-      setnames('chakan');
-    } else {
-      stereadonly(false);
-      setnames('add');
+    if(type === 'copy'){
+      setCopyType('copy');
+      setnames('copy');
+    }else{
+      setCopyType('undefined');
+      if (!(data.BJZT === '待开班') && !(data.BJZT === '未排课') && !(data.BJZT === '已排课')) {
+        stereadonly(true);
+        setnames('chakan');
+      } else {
+        stereadonly(false);
+        setnames('add');
+      }
     }
   };
 
@@ -298,7 +308,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       valueType: 'option',
       key: 'option',
       align: 'center',
-      width: 190,
+      width: 230,
       fixed: 'right',
       render: (_, record) => {
         const BMJSSJ = new Date(record?.BMJSSJ).getTime();
@@ -316,11 +326,15 @@ const CourseManagement = (props: { location: { state: any } }) => {
                 代报名
               </a>
             ) : (
-              <Tooltip title="该班级已开班，无法报名">
-              <span style={{ color: '#999' }}>代报名</span>
-            </Tooltip>
+              <></>
             )}
-
+            {
+              record?.BJZT === '已开班' && newDate > BMJSSJ ?
+                <Tooltip title="该班级已开班，无法报名">
+                  <span style={{ color: '#999' }}>代报名</span>
+                </Tooltip>
+                : <></>
+            }
           </>
         );
       },
@@ -440,6 +454,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           KHKCAllData={KHKCAllData}
           curXNXQId={curXNXQId}
           currentUser={currentUser}
+          CopyType={CopyType}
         />
         <PromptInformation
           text="未查询到学年学期数据，请先设置学年学期"
@@ -461,7 +476,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           footer={null}
           style={{ minWidth: '750px' }}
         >
-          <ApplicantInfoTable dataSource={applicantData} actionRefs={actionRef}  />
+          <ApplicantInfoTable dataSource={applicantData} actionRefs={actionRef} />
         </Modal>
         <AgentRegistration
           curXNXQId={curXNXQId}

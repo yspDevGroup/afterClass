@@ -7,9 +7,10 @@
  */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { FormInstance, message } from 'antd';
+import type { FormInstance } from 'antd';
+import { message } from 'antd';
 import CustomForm from '@/components/CustomForm';
-import { FormItemType } from '@/components/CustomForm/interfice';
+import type { FormItemType } from '@/components/CustomForm/interfice';
 
 import 'antd/es/modal/style';
 import styles from './components.less';
@@ -109,8 +110,8 @@ const SchoolInfo = (props: PropsType) => {
           label: '资格证书',
           name: 'ZGZS',
           key: 'ZGZS',
-          imgWidth: 100,
-          imgHeight: 100,
+          imgWidth: 250,
+          imgHeight: 150,
           imageurl: zgzsUrl,
           upurl: '/api/upload/uploadFile?type=badge&plat=agency',
           accept: '.jpg, .jpeg, .png',
@@ -133,13 +134,7 @@ const SchoolInfo = (props: PropsType) => {
           rules: [{ required: true, message: '请输入姓名' }, { type: 'string', max: 60 },],
           placeholder: readonly ? '-' : ''
         },
-        {
-          type: 'input',
-          label: '资格证书编号',
-          name: 'ZGZSBH',
-          key: 'ZGZSBH',
-          placeholder: readonly ? '-' : ''
-        }
+        {}
       ]
     },
     {
@@ -165,22 +160,22 @@ const SchoolInfo = (props: PropsType) => {
           ]
         },
         {
-          type: 'input',
-          label: '性别',
-          span: 12,
-          name: 'XBM',
-          key: 'XBM2',
-          hidden: !readonly,
+          type: 'time',
+          subtype: 'date',
+          label: '出生日期',
+          name: 'CSRQ',
+          key: 'CSRQ',
           placeholder: readonly ? '-' : ''
         },
-        {
-          type: 'select',
-          label: '学历',
-          span: 12,
-          key: 'XLM',
-          name: 'XLM',
-          items: xllist
-        },
+        // {
+        //   type: 'input',
+        //   label: '性别',
+        //   span: 12,
+        //   name: 'XBM',
+        //   key: 'XBM2',
+        //   hidden: !readonly,
+        //   placeholder: readonly ? '-' : ''
+        // },
       ]
     },
     {
@@ -195,13 +190,13 @@ const SchoolInfo = (props: PropsType) => {
           items: mzlist
         },
         {
-          type: 'input',
-          label: '毕业院校',
-          name: 'BYYX',
-          key: 'BYYX',
-          rules: [{ type: 'string', max: 255 },],
-          placeholder: readonly ? '-' : ''
-        }
+          type: 'select',
+          label: '学历',
+          span: 12,
+          key: 'XLM',
+          name: 'XLM',
+          items: xllist
+        },
       ]
     },
     {
@@ -209,11 +204,11 @@ const SchoolInfo = (props: PropsType) => {
       key: 'group6',
       groupItems: [
         {
-          type: 'time',
-          subtype: 'date',
-          label: '出生日期',
-          name: 'CSRQ',
-          key: 'CSRQ',
+          type: 'input',
+          label: '毕业院校',
+          name: 'BYYX',
+          key: 'BYYX',
+          rules: [{ type: 'string', max: 255 },],
           placeholder: readonly ? '-' : ''
         },
         {
@@ -223,13 +218,20 @@ const SchoolInfo = (props: PropsType) => {
           key: 'ZY',
           rules: [{ type: 'string', max: 255 },],
           placeholder: readonly ? '-' : ''
-        }
+        },
       ]
     },
     {
       type: 'group',
       key: 'group7',
       groupItems: [
+        {
+          type: 'input',
+          label: '资格证书编号',
+          name: 'ZGZSBH',
+          key: 'ZGZSBH',
+          placeholder: readonly ? '-' : ''
+        },
         {
           type: 'input',
           label: '联系电话',
@@ -245,6 +247,12 @@ const SchoolInfo = (props: PropsType) => {
             },
           ]
         },
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group8',
+      groupItems: [
         {
           type: 'inputNumber',
           label: '教龄（年）',
@@ -255,12 +263,20 @@ const SchoolInfo = (props: PropsType) => {
           placeholder: readonly ? '-' : '',
           formatter: (value) => `${Math.round(value)}`,
           tooltip: '注意：教龄四舍五入，只能填写整数'
-        }
+        },
+        {
+          type: 'input',
+          label: '教授科目',
+          name: 'JSKM',
+          key: 'JSKM',
+          rules: [{ type: 'string', max: 255 },],
+          placeholder: readonly ? '-' : ''
+        },
       ]
     },
     {
       type: 'group',
-      key: 'group8',
+      key: 'group9',
       groupItems: [
         {
           type: 'select',
@@ -289,26 +305,18 @@ const SchoolInfo = (props: PropsType) => {
         },
         {
           type: 'input',
-          label: '教授科目',
-          name: 'JSKM',
-          key: 'JSKM',
-          rules: [{ type: 'string', max: 255 },],
-          placeholder: readonly ? '-' : ''
-        }
-      ]
-    },
-    {
-      type: 'group',
-      key: 'group9',
-      groupItems: [
-        {
-          type: 'input',
           key: 'SFZJH',
           name: 'SFZJH',
           label: '证件号码',
           rules: [{ type: 'string', max: 20 },],
           placeholder: readonly ? '-' : ''
         },
+      ]
+    },
+    {
+      type: 'group',
+      key: 'group10',
+      groupItems: [
         {
           type: 'input',
           label: '电子邮箱',
@@ -320,16 +328,15 @@ const SchoolInfo = (props: PropsType) => {
               type: 'email',
               message: '填写的邮箱格式有误',
             },
-            { type: 'string', max: 32 },
-          ]
-        }
+            { type: 'string', max: 32 }],
+        },
+        {}
       ]
     },
     {
       type: 'group',
-      key: 'group10',
+      key: 'group11',
       groupItems: [
-        {},
         {
           type: 'textArea',
           label: '个人简介',
@@ -337,7 +344,7 @@ const SchoolInfo = (props: PropsType) => {
           key: 'BZ',
           rules: [{ type: 'string', max: 255 },],
           placeholder: readonly ? '-' : ''
-        }
+        },
       ]
     }
   ];

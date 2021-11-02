@@ -45,7 +45,7 @@ const StudentsLeave: React.FC = () => {
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateKHJSQJ({ id: current?.id }, { QJZT: ZT, QJYY: BZ });
+      const res = await updateKHJSQJ({ id: current?.id }, { QJZT: ZT, BZ });
       if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);

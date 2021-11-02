@@ -30,6 +30,7 @@ type AddCourseProps = {
   curXNXQId?: string;
   currentUser?: API.CurrentUser | undefined;
   kCID?: string;
+  CopyType?: string;
 };
 const formLayout = {
   labelCol: { flex: '7em' },
@@ -47,6 +48,7 @@ const AddCourse: FC<AddCourseProps> = ({
   KHKCAllData,
   currentUser,
   kCID,
+  CopyType
 }) => {
   const { initialState } = useModel('@@initialState');
   const userRef = useRef(null);
@@ -299,9 +301,13 @@ const AddCourse: FC<AddCourseProps> = ({
     if (formValues && names === 'chakan') {
       return '查看课程班';
     }
+    if (formValues && names === 'copy') {
+      return '新增课程班';
+    }
     if (formValues) {
       return '编辑课程班';
     }
+
     return '新增课程班';
   };
   const handleClose = () => {
@@ -334,47 +340,65 @@ const AddCourse: FC<AddCourseProps> = ({
         XNXQId: curXNXQId,
         KHKCJCs: mertial,
       };
-      if (formValues?.id) {
+      if (CopyType === 'copy') {
         const ZJS = [
           {
             JSLX: '主教师',
             JZGJBSJId: values.ZJS,
-            KHBJSJId: formValues?.id,
           },
         ];
         const FJS =
           values?.FJS && values?.FJS?.length
             ? values.FJS.map((item: any) => {
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+              };
+            })
+            : undefined;
+        res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
+      } else if (formValues?.id) {
+          const ZJS = [
+            {
+              JSLX: '主教师',
+              JZGJBSJId: values.ZJS,
+              KHBJSJId: formValues?.id,
+            },
+          ];
+          const FJS =
+            values?.FJS && values?.FJS?.length
+              ? values.FJS.map((item: any) => {
                 return {
                   JSLX: '副教师',
                   JZGJBSJId: item,
                   KHBJSJId: formValues?.id,
                 };
               })
-            : undefined;
-        delete options.BJZT;
-        const params = {
-          id: formValues?.id,
-        };
-        res = updateKHBJSJ(params, { ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
-      } else {
-        const ZJS = [
-          {
-            JSLX: '主教师',
-            JZGJBSJId: values.ZJS,
-          },
-        ];
-        const FJS =
-          values?.FJS && values?.FJS?.length
-            ? values.FJS.map((item: any) => {
+              : undefined;
+          delete options.BJZT;
+          const params = {
+            id: formValues?.id,
+          };
+          res = updateKHBJSJ(params, { ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
+        } else {
+          const ZJS = [
+            {
+              JSLX: '主教师',
+              JZGJBSJId: values.ZJS,
+            },
+          ];
+          const FJS =
+            values?.FJS && values?.FJS?.length
+              ? values.FJS.map((item: any) => {
                 return {
                   JSLX: '副教师',
                   JZGJBSJId: item,
                 };
               })
-            : undefined;
-        res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
-      }
+              : undefined;
+          res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
+        }
+
       resolve(res);
       reject(res);
     })

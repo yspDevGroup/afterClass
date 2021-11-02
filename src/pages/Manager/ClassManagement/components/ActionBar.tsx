@@ -99,6 +99,8 @@ const ActionBar = (props: propstype) => {
               <Divider type="vertical" />
               <a onClick={() => handleEdit(record)}>编辑</a>
               <Divider type="vertical" />
+              <a onClick={() => handleEdit(record, 'copy')}>复制</a>
+              <Divider type="vertical" />
               <Popconfirm
                 title="删除之后，数据不可恢复，确定要删除吗?"
                 onConfirm={async () => {
@@ -131,6 +133,8 @@ const ActionBar = (props: propstype) => {
           ) : (
             <>
               <a onClick={() => handleEdit(record)}>编辑</a>
+              <Divider type="vertical" />
+              <a onClick={() => handleEdit(record, 'copy')}>复制</a>
               <Divider type="vertical" />
               <Popconfirm
                 title="删除之后，数据不可恢复，确定要删除吗?"
@@ -230,6 +234,8 @@ const ActionBar = (props: propstype) => {
           )}
           <Divider type="vertical" />
           <a onClick={() => handleEdit(record)}>查看</a>
+          <Divider type="vertical" />
+          <a onClick={() => handleEdit(record, 'copy')}>复制</a>
         </>
       );
       break;
