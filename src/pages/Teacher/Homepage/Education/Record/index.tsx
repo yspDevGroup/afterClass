@@ -1,15 +1,13 @@
-import { Empty, Avatar, Image, Row, Col, Popconfirm, message } from 'antd';
+import { Avatar, Image, Row, Col, Popconfirm, message, Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import GoBack from '@/components/GoBack';
 import { getAllKHKTFC, deleteKHKTFC } from '@/services/after-class/khktfc';
-import noData from '@/assets/noData.png';
 import styles from './index.less';
 
 const Record = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
   const [listData, setListData] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getData();
@@ -26,7 +24,7 @@ const Record = () => {
       resKHKTFC.data?.rows?.forEach((item: any, index: number) => {
         const imgsArr = item.TP.split(';');
         imgsArr.pop();
-        const data =  {
+        const data = {
           id: item.id,
           className: item.KHBJSJ.KHKCSJ.KCMC,
           classNum: item.KHBJSJ.BJMC,
@@ -36,9 +34,8 @@ const Record = () => {
         };
         allData.push(data);
       });
-      Promise.all(allData).then((results)=>{
-        setListData(results);
-      });
+      setListData(allData);
+      setLoading(false);
     }
 
   }
@@ -53,12 +50,12 @@ const Record = () => {
       <GoBack title="课堂风采" teacher onclick="/teacher/home?index=education" />
       <div className={styles.wrap}>
         {
-          listData ? listData.map((item: any) => {
+          !loading ? listData.map((item: any) => {
             return (
               <div className={styles.cards}>
                 <p>
-                <Avatar style={{ backgroundColor: '#0066FF', verticalAlign: 'middle' }} size="large">
-                  {item.className.slice(0,1)}
+                  <Avatar style={{ backgroundColor: '#0066FF', verticalAlign: 'middle' }} size="large">
+                    {item.className.slice(0, 1)}
                   </Avatar>
                   <div className={styles.name}>
                     <p>{item.className}</p>
@@ -68,17 +65,17 @@ const Record = () => {
                 <div className={styles.content}>
                   <p>{item.content}</p>
                   <div className={styles.imgContainer}>
-                  <Image.PreviewGroup>
-                    <Row gutter={[6, 6]} style={{width: '100%'}}>
-                    {
-                      item.imgs.map((url: string)=> {
-                        return <Col span={(item.imgs.length === 2 || item.imgs.length === 4) ? 12 : (item.imgs.length === 1 ? 24 : 8)} className={(item.imgs.length === 2 || item.imgs.length === 4) ? styles.pairImg: (item.imgs.length === 1 ? styles.oneImg : styles.nineImg)}>
-                          <Image src={url} />
-                        </Col>
-                      })
-                    }
-                    </Row>
-                  </Image.PreviewGroup>
+                    <Image.PreviewGroup>
+                      <Row gutter={[6, 6]} style={{ width: '100%' }}>
+                        {
+                          item.imgs.map((url: string) => {
+                            return <Col span={(item.imgs.length === 2 || item.imgs.length === 4) ? 12 : (item.imgs.length === 1 ? 24 : 8)} className={(item.imgs.length === 2 || item.imgs.length === 4) ? styles.pairImg : (item.imgs.length === 1 ? styles.oneImg : styles.nineImg)}>
+                              <Image src={url} />
+                            </Col>
+                          })
+                        }
+                      </Row>
+                    </Image.PreviewGroup>
                   </div>
                   <p>
                     <span>{item.time}</span>
@@ -101,7 +98,8 @@ const Record = () => {
                           }
                         } catch (err) {
                           message.error('删除失败，请联系管理员或稍后重试。');
-                        }}
+                        }
+                      }
                       }
                       onCancel={cancel}
                       okText="确定"
@@ -115,13 +113,15 @@ const Record = () => {
               </div>
             )
 
-          }) : <Empty
-          image={noData}
-          style={{marginTop: '20px', borderRadius: '8px', minHeight: '300px',backgroundColor: '#fff',}}
-          imageStyle={{
-            height: 200,
-          }}
-          description={'暂无课堂风采记录'} />
+          }) : <div>
+            {
+              [1, 2, 3].map(() => {
+                return <div className={styles.cards}>
+                  <Skeleton avatar active loading={loading} />
+                </div>
+              })
+            }
+          </div>
         }
       </div>
     </div>

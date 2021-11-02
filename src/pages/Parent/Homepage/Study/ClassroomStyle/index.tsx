@@ -1,10 +1,9 @@
 import GoBack from '@/components/GoBack';
 import styles from './index.less';
-import { Empty, Avatar, Image, Row, Col } from 'antd';
+import { Avatar, Image, Row, Col, Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { getAllKHKTFC } from '@/services/after-class/khktfc';
-import noData from '@/assets/noData.png';
 
 const ClassroomStyle = () => {
   const { initialState } = useModel('@@initialState');
@@ -12,6 +11,7 @@ const ClassroomStyle = () => {
   const { student } = currentUser || {};
   const StorageXSId = localStorage.getItem('studentId');
   const [listData, setListData] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getData();
@@ -36,15 +36,14 @@ const ClassroomStyle = () => {
           content: item.NR,
           imgs: imgsArr,
           time: item.createdAt,
-          teacherName:  item.JZGJBSJ.XM,
+          teacherName: item.JZGJBSJ.XM,
           //班级所属于学校或机构的名称
-          schoolName:  item.JZGJBSJ.XXJBSJ.XXMC || item.JZGJBSJ.KHJYJG.QYMC
+          schoolName: item.JZGJBSJ.XXJBSJ.XXMC || item.JZGJBSJ.KHJYJG.QYMC
         };
         allData.push(data);
       });
-      Promise.all(allData).then((results) => {
-        setListData(results);
-      });
+      setListData(allData);
+      setLoading(false);
     }
 
   }
@@ -58,12 +57,13 @@ const ClassroomStyle = () => {
       <GoBack title={'课堂风采'} onclick="/parent/home?index=study" />
       <div className={styles.wrap}>
         {
-          listData ? listData.map((item: any) => {
+          !loading ? listData.map((item: any) => {
             return (
+
               <div className={styles.cards}>
                 <p>
                   <Avatar style={{ backgroundColor: '#45C977', verticalAlign: 'middle' }} size="large">
-                  {item.teacherName.slice(0,1)}
+                    {item.teacherName.slice(0, 1)}
                   </Avatar>
                   <p className={styles.name}>
                     <p>{item.teacherName}</p>
@@ -73,17 +73,17 @@ const ClassroomStyle = () => {
                 <div className={styles.content}>
                   <p>{item.content}</p>
                   <div className={styles.imgContainer}>
-                  <Image.PreviewGroup>
-                    <Row gutter={[6, 6]} style={{width: '100%'}}>
-                    {
-                      item.imgs.map((url: string)=> {
-                        return <Col span={(item.imgs.length === 2 || item.imgs.length === 4) ? 12 : (item.imgs.length === 1 ? 24 : 8)} className={(item.imgs.length === 2 || item.imgs.length === 4) ? styles.pairImg: (item.imgs.length === 1 ? styles.oneImg : styles.nineImg)}>
-                          <Image src={url} />
-                        </Col>
-                      })
-                    }
-                    </Row>
-                  </Image.PreviewGroup>
+                    <Image.PreviewGroup>
+                      <Row gutter={[6, 6]} style={{ width: '100%' }}>
+                        {
+                          item.imgs.map((url: string) => {
+                            return <Col span={(item.imgs.length === 2 || item.imgs.length === 4) ? 12 : (item.imgs.length === 1 ? 24 : 8)} className={(item.imgs.length === 2 || item.imgs.length === 4) ? styles.pairImg : (item.imgs.length === 1 ? styles.oneImg : styles.nineImg)}>
+                              <Image src={url} />
+                            </Col>
+                          })
+                        }
+                      </Row>
+                    </Image.PreviewGroup>
                   </div>
                   <p>
                     <span>{item.time}</span>
@@ -93,15 +93,18 @@ const ClassroomStyle = () => {
                   </p>
                 </div>
               </div>
+
             )
 
-          }) : <Empty
-            image={noData}
-            style={{ marginTop: '20px', borderRadius: '8px', minHeight: '300px', backgroundColor: '#fff', }}
-            imageStyle={{
-              height: 200,
-            }}
-            description={'暂无课堂风采记录'} />
+          }) : <div>
+            {
+              [1, 2, 3].map(() => {
+                return <div className={styles.cards}>
+                  <Skeleton avatar active loading={loading} />
+                </div>
+              })
+            }
+          </div>
         }
       </div>
     </div>
