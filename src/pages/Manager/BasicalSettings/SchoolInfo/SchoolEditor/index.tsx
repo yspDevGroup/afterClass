@@ -393,7 +393,14 @@ const SchoolEditor = (props: any) => {
           type: 'input',
           label: '联系电话',
           name: 'LXDH',
-          rules: [{ required: true, message: '该项不能为空，请输入' }],
+          rules: [
+            { required: true, message: '请输入联系电话' },
+            { type: 'string', max: 32 },
+            {
+              pattern: new RegExp(/^(((\d{3,4}-)?[0-9]{7,8})|(1(3|4|5|6|7|8|9)\d{9}))$/),
+              message: '填写的电话格式有误',
+            },
+          ],
           key: 'LXDH'
         },
       ]

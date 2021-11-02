@@ -1,13 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { history, useModel } from "umi";
-import { getData } from '@/utils/utils';
-import { EditOutlined, UserOutlined } from '@ant-design/icons';
-import { Empty, Row, Button, Form, Input, message } from 'antd';
+import { Row, Button, Form, Input, message } from 'antd';
 import ListComponent from '@/components/ListComponent';
 import ImagesUpload from '@/components/ImagesUpload';
 import GoBack from '@/components/GoBack';
 import { createKHKTFC } from '@/services/after-class/khktfc';
-import noData from '@/assets/noCourses1.png';
 import styles from './index.less';
 
 const PutRecord = (props: any) => {
@@ -18,10 +15,6 @@ const PutRecord = (props: any) => {
 
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const onFinish = async (values: any) => {
     const resKHKTFC = await createKHKTFC({
