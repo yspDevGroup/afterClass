@@ -6,15 +6,11 @@ import moment from 'moment';
 import { LeftOutlined } from '@ant-design/icons';
 import Style from './index.less';
 import noData from '@/assets/noData.png';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllKHKTFC } from '@/services/after-class/khktfc';
-import { getJZGJBSJ } from '@/services/after-class/jzgjbsj';
-
 
 const AfterSchoolClass: React.FC = (props: any) => {
   const { state } = props.location;
   const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
   const [listData, setListData] = useState<any>([]);
 
   useEffect(() => {
@@ -66,12 +62,11 @@ const AfterSchoolClass: React.FC = (props: any) => {
         <ul>
           {
             listData.length ? listData.map((item: any) => {
-              console.log('item: ', item);
               return (
                 <li>
-                  <Row>
+                  <Row style={{minHeight: '148px'}}>
                     <Col span={2} className={Style.time}>
-                      <p className={Style.teacherName}>{listData[0]?.teacherName}</p>
+                      <p className={Style.teacherName}>{item.teacherName}</p>
                       <p className={Style.date} style={{marginBottom: 24}}>{moment(item.time).format('MM-DD')}</p>
                       <p className={Style.date}>{moment(item.time).format('HH:mm:ss')}</p>
                     </Col>
@@ -80,7 +75,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
                       <Image.PreviewGroup>
                         {
                           item.imgs.map((url: string) => {
-                            return <Image width={106}
+                            return <Image width={'10%'}
                               height={78} src={url} />
                           })
                         }
