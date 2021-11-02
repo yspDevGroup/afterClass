@@ -2,12 +2,13 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-10-30 11:52:57
+ * @LastEditTime: 2021-11-01 17:07:42
  * @LastEditors: Sissle Lynn
  */
 
 import { enHenceMsg, getCurrentStatus } from '@/utils/utils';
 import moment from 'moment';
+import dayjs from 'dayjs';
 import { getTeachersApplication } from '../after-class/jzgjbsj';
 import { homePageInfo } from '../after-class/user';
 import { queryXNXQList } from './xnxq';
@@ -252,4 +253,40 @@ export const AttendanceTable = async (date: string, userId?: string) => {
     switchData,
     leaveData
   }
+};
+/**
+ * 计算课程已学课时，
+ * @param data 课程安排信息
+ * @returns
+ */
+export const CountCourses = (data: any) => {
+  const myDate = dayjs().format('YYYY/MM/DD');
+  const courseData = data.length && data.map((item: { courseInfo: any; days: any; }) => {
+    const { courseInfo, days } = item;
+    const learned = days.filter((ele: { day: string; }) => {
+      const time = new Date(ele.day.replace(/-/g, '/')).getTime() - new Date(myDate).getTime();
+      return time < 0
+    });
+    return {
+      id: courseInfo?.[0]?.bjId,
+      title: courseInfo?.[0]?.title,
+      BJMC: courseInfo?.[0]?.BJMC,
+      YXKS: learned?.length || 0,
+      ZKS: courseInfo?.[0]?.KSS,
+      link: `/parent/home/courseTable?classid=${courseInfo?.[0]?.bjId}`,
+      desc: [
+        {
+          left: [
+            `${courseInfo.map((item: any, index: number) => {
+              return `每周${'日一二三四五六'.charAt(item.wkd)} ${item.start}-${item.end}`;
+            })}`
+          ]
+        },
+        {
+          left: [`共${courseInfo?.[0]?.KSS}课时`, `已学${learned?.length || 0}课时`],
+        },
+      ],
+    }
+  });
+  return courseData;
 };

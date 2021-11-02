@@ -60,9 +60,6 @@ const AddCourse: FC<AddCourseProps> = ({
   const [teacherData, setTeacherData] = useState<any[]>([]);
   // 选中机构课程的任课老师
   const [JGKCTeacherData, setJGKCTeacherData] = useState<any>([]);
-
-  // 上传成功后返回的图片地址
-  const [imageUrl, setImageUrl] = useState('');
   const [KCDate, setKCDate] = useState<any>([]);
   // 报名时间
   const [BMData, setBMData] = useState<any>();
@@ -130,7 +127,6 @@ const AddCourse: FC<AddCourseProps> = ({
         <a
           key="delete"
           onClick={() => {
-            console.log(record.id);
             setDataSource(
               dataSource.filter((item) => {
                 if (item.id) {
@@ -330,7 +326,7 @@ const AddCourse: FC<AddCourseProps> = ({
       let res = null;
       const options = {
         ...values,
-        KCTP: imageUrl || formValues?.KCTP,
+        KCTP: '',
         BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : BMData?.KSSJ),
         BMJSSJ: new Date(values?.BMSD?.[1] ? values?.BMSD[1] : BMData?.JSSJ),
         KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
@@ -387,7 +383,6 @@ const AddCourse: FC<AddCourseProps> = ({
           message.success('保存成功');
           handleClose();
           actionRef?.current?.reload();
-          setImageUrl('');
         } else {
           enHenceMsg(data.message);
         }
@@ -398,24 +393,6 @@ const AddCourse: FC<AddCourseProps> = ({
   };
   const handleSubmit = () => {
     form.submit();
-  };
-  const handleImageChange = (e: any) => {
-    if (e.file.status === 'done') {
-      const mas = e.file.response.message;
-      if (typeof e.file.response === 'object' && e.file.response.status === 'error') {
-        message.error(`上传失败，${mas}`);
-      } else {
-        const res = e.file.response;
-        if (res.status === 'ok') {
-          message.success(`上传成功`);
-          setImageUrl(res.data);
-        }
-      }
-    } else if (e.file.status === 'error') {
-      const mass = e.file.response.message;
-
-      message.error(`上传失败，${mass}`);
-    }
   };
   const formItems: any[] = [
     {
@@ -724,18 +701,6 @@ const AddCourse: FC<AddCourseProps> = ({
       },
     },
     {
-      type: 'uploadImage',
-      label: '封面：',
-      name: 'KCTP',
-      key: 'KCTP',
-      disabled: readonly,
-      imagename: 'image',
-      upurl: '/api/upload/uploadFile?type=badge&plat=school',
-      imageurl: imageUrl || formValues?.KCTP,
-      handleImageChange,
-      accept: '.jpg, .jpeg, .png',
-    },
-    {
       type: 'textArea',
       disabled: readonly,
       label: '简介：',
@@ -769,7 +734,6 @@ const AddCourse: FC<AddCourseProps> = ({
               <Button
                 onClick={() => {
                   handleClose();
-                  setImageUrl('');
                 }}
               >
                 取消

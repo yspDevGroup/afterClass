@@ -15,6 +15,10 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import Catering from '@/assets/Catering.png';
 import resources from '@/assets/resources.png';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
+import Selected from './components/Selected';
+import JiaoYu from '@/assets/jiaoyuziyuan.png'
+import { RightOutlined } from '@ant-design/icons';
+import { getBJSJ } from '@/services/after-class/bjsj';
 
 const Home = () => {
   const { initialState } = useModel('@@initialState');
@@ -26,6 +30,7 @@ const Home = () => {
   const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
   const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
   const StorageXSName = localStorage.getItem('studentName');
+  const [BJMC, setBJMC] = useState<any>();
   useEffect(() => {
     async function announcements() {
       const res = await getXXTZGG({
@@ -56,10 +61,16 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
-      if(StorageXSId){
+      if (StorageXSId) {
         const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId);
         const { data } = oriData;
         setTotalData(data);
+      }
+      const res = await getBJSJ({
+        id:localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId
+      })
+      if(res.status === 'ok'){
+        setBJMC(`${res.data?.NJSJ?.XD}${res.data?.NJSJ?.NJMC}${res.data?.BJ}`)
       }
     })()
   }, [StorageXSId]);
@@ -74,7 +85,11 @@ const Home = () => {
             </span>
             ，你好！
           </h4>
-          <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
+          <div>欢迎使用课后服务平台，课后服务选我就对了！</div>
+          <div className={styles.NjBj}>
+            <div>{currentUser?.QYMC}</div>
+            <div>{BJMC || ''}</div>
+          </div>
         </div>
       </header>
       {totalData?.courseStatus === 'empty' ? (
@@ -120,7 +135,10 @@ const Home = () => {
           <div className={styles.courseArea}>
             <CourseTab dataResource={totalData} />
           </div>
-          <div className={styles.container}>
+          <div className={styles.courseArea}>
+            <Selected dataResource={totalData} />
+          </div>
+          {/* <div className={styles.container}>
             <Link to="/parent/home/serviceReservation" className={styles.Catering}>
               <p>更多服务</p>
               <img src={Catering} alt="" className={styles.CateringImg} />
@@ -134,7 +152,15 @@ const Home = () => {
               <p>素质教育资源</p>
               <img src={resources} alt="" />
             </a>
-          </div>
+          </div> */}
+          <a
+            className={styles.containers}
+            style={{ backgroundImage: `url(${JiaoYu})` }}
+            href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+          >
+            <span>素质教育资源<RightOutlined/></span>
+
+          </a>
           <div className={styles.announceArea}>
             <Details data={notification} />
           </div>

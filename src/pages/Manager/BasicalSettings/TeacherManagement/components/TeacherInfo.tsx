@@ -2,11 +2,10 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-08-26 16:24:39
- * @LastEditTime: 2021-10-12 17:40:09
+ * @LastEditTime: 2021-11-01 16:24:53
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
 import moment from 'moment';
 import { FormInstance, message } from 'antd';
 import CustomForm from '@/components/CustomForm';
@@ -15,28 +14,49 @@ import { FormItemType } from '@/components/CustomForm/interfice';
 import 'antd/es/modal/style';
 import styles from './components.less';
 import { createJZG, updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
+import { getHashData } from './util';
 
 const formItemLayout = {
   labelCol: { flex: '8em' },
-  wrapperCol: { flex: 'auto' },
+  wrapperCol: { flex: 'auto' }
 };
 type PropsType = {
   values: any;
   setForm: React.Dispatch<React.SetStateAction<FormInstance<any> | undefined>>;
   readonly?: boolean;
 };
+type itemType = {
+  text: string;
+  value: string;
+}[];
 const SchoolInfo = (props: PropsType) => {
   const { values, setForm, readonly = false } = props;
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
   const [info, setInfo] = useState<any>();
   const [zpUrl, setZPUrl] = useState('');
   const [zgzsUrl, setZGZSUrl] = useState('');
+  const [mzlist, setMzlist] = useState<itemType>([]);
+  const [xllist, setXllist] = useState<itemType>([]);
+  useEffect(() => {
+    async function fetchData() {
+      const mz = await getHashData('B.9');
+      const xl = await getHashData('B.12');
+      setMzlist(mz);
+      setXllist(xl)
+    };
+    fetchData();
+  }, []);
   useEffect(() => {
     if (values) {
-      setZPUrl(values.ZP ? values.ZP : '');
-      setZGZSUrl(values.ZGZS ? values.ZGZS : '');
-      setInfo(values);
+      const { ZP, ZGZS, CSRQ, XBM, ...rest } = values;
+      setZPUrl(ZP || '');
+      setZGZSUrl(ZGZS || '');
+      const XBLX = XBM ? XBM : '男性';
+      const newData =  {
+        CSRQ: CSRQ ? moment(CSRQ) : '',
+        XBM: readonly ? XBLX?.substring(0, 1) : XBLX,
+        ...rest
+      };
+      setInfo(newData);
     }
   }, [values]);
   // 文件状态改变的回调
@@ -63,13 +83,6 @@ const SchoolInfo = (props: PropsType) => {
       label: 'id',
       name: 'id',
       key: 'id',
-      hidden: true
-    },
-    {
-      type: 'input',
-      label: 'KHJYJGId',
-      name: 'KHJYJGId',
-      key: 'KHJYJGId',
       hidden: true
     },
     {
@@ -117,7 +130,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '姓名',
           name: 'XM',
           key: 'XM',
-          rules: [{ required: true, message: '请输入姓名' }],
+          rules: [{ required: true, message: '请输入姓名' }, { type: 'string', max: 60 },],
           placeholder: readonly ? '-' : ''
         },
         {
@@ -139,7 +152,7 @@ const SchoolInfo = (props: PropsType) => {
           key: 'XBM',
           label: '性别',
           hidden: readonly,
-          span:12,
+          span: 12,
           items: [
             {
               text: '男',
@@ -154,20 +167,20 @@ const SchoolInfo = (props: PropsType) => {
         {
           type: 'input',
           label: '性别',
-          span:12,
+          span: 12,
           name: 'XBM',
-          key: 'XBM',
+          key: 'XBM2',
           hidden: !readonly,
-          placeholder: readonly ? '-' : '',
+          placeholder: readonly ? '-' : ''
         },
         {
-          type: 'input',
+          type: 'select',
           label: '学历',
-          span:12,
-          name: 'XL',
-          key: 'XL',
-          placeholder: readonly ? '-' : ''
-        }
+          span: 12,
+          key: 'XLM',
+          name: 'XLM',
+          items: xllist
+        },
       ]
     },
     {
@@ -175,17 +188,18 @@ const SchoolInfo = (props: PropsType) => {
       key: 'group4',
       groupItems: [
         {
-          type: 'input',
+          type: 'select',
+          key: 'MZM',
+          name: 'MZM',
           label: '民族',
-          name: 'MZ',
-          key: 'MZ',
-          placeholder: readonly ? '-' : ''
+          items: mzlist
         },
         {
           type: 'input',
           label: '毕业院校',
           name: 'BYYX',
           key: 'BYYX',
+          rules: [{ type: 'string', max: 255 },],
           placeholder: readonly ? '-' : ''
         }
       ]
@@ -207,6 +221,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '专业',
           name: 'SXZY',
           key: 'ZY',
+          rules: [{ type: 'string', max: 255 },],
           placeholder: readonly ? '-' : ''
         }
       ]
@@ -221,7 +236,14 @@ const SchoolInfo = (props: PropsType) => {
           name: 'LXDH',
           key: 'LXDH',
           placeholder: readonly ? '-' : '',
-          rules: [{ required: true, message: '请输入联系电话' }]
+          rules: [
+            { required: true, message: '请输入联系电话' },
+            { type: 'string', max: 32 },
+            {
+              pattern: new RegExp(/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/),
+              message: '填写的电话格式有误',
+            },
+          ]
         },
         {
           type: 'inputNumber',
@@ -231,7 +253,7 @@ const SchoolInfo = (props: PropsType) => {
           max: 100,
           min: 1,
           placeholder: readonly ? '-' : '',
-          formatter: (value: number) => `${Math.round(value)}`,
+          formatter: (value) => `${Math.round(value)}`,
           tooltip: '注意：教龄四舍五入，只能填写整数'
         }
       ]
@@ -242,8 +264,8 @@ const SchoolInfo = (props: PropsType) => {
       groupItems: [
         {
           type: 'select',
-          key: 'SFZJLX',
-          name: 'SFZJLX',
+          key: 'SFZJLXM',
+          name: 'SFZJLXM',
           label: '证件类型',
           placeholder: readonly ? '-' : '',
           items: [
@@ -270,6 +292,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '教授科目',
           name: 'JSKM',
           key: 'JSKM',
+          rules: [{ type: 'string', max: 255 },],
           placeholder: readonly ? '-' : ''
         }
       ]
@@ -283,6 +306,7 @@ const SchoolInfo = (props: PropsType) => {
           key: 'SFZJH',
           name: 'SFZJH',
           label: '证件号码',
+          rules: [{ type: 'string', max: 20 },],
           placeholder: readonly ? '-' : ''
         },
         {
@@ -290,7 +314,14 @@ const SchoolInfo = (props: PropsType) => {
           label: '电子邮箱',
           name: 'DZXX',
           key: 'DZXX',
-          placeholder: readonly ? '-' : ''
+          placeholder: readonly ? '-' : '',
+          rules: [
+            {
+              type: 'email',
+              message: '填写的邮箱格式有误',
+            },
+            { type: 'string', max: 32 },
+          ]
         }
       ]
     },
@@ -304,6 +335,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '个人简介',
           name: 'BZ',
           key: 'BZ',
+          rules: [{ type: 'string', max: 255 },],
           placeholder: readonly ? '-' : ''
         }
       ]
@@ -336,20 +368,7 @@ const SchoolInfo = (props: PropsType) => {
     <div className={styles.teacherWrapper}>
       <div className={styles.teacherInfoBody}>
         <CustomForm
-          values={(() => {
-            if (info) {
-              const { CSRQ, XBM,...rest } = info;
-              return {
-                CSRQ: CSRQ ? moment(CSRQ) : '',
-                XBM: readonly ? XBM?.substring(0, 1):XBM,
-                ...rest
-              };
-            }
-            return {
-              XBM: '男性',
-              KHJYJGId: currentUser?.jgId
-            };
-          })()}
+          values={info}
           formDisabled={readonly}
           setForm={setForm}
           formItems={basicForm}

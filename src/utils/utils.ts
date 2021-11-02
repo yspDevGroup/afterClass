@@ -16,11 +16,10 @@ import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
  * @return {*}  {Promise<BuildOptions>}
  */
 export const getBuildOptions = async (): Promise<BuildOptions> => {
-  const { data = {} } = await getEnv();
-  const { yspAppEnv = 'dev', nodeEnv } = data;
+  const { data = {} } = ENV_debug ? {} : await getEnv();
+  const { yspAppEnv = 'local', nodeEnv } = data;
   console.log('nodeEnv: ', nodeEnv);
-  console.log('yspAppEnv: ', yspAppEnv);
-  console.log('yspAppEnv: ', testStudentId);
+
   switch (yspAppEnv) {
     case 'production':
       // 生产环境
@@ -56,7 +55,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         clientSecret: 'IfPhfMfVtX-y-BG-CrGlZIJw-m-GoCnJwxffigZDGLA',
       };
     case 'development':
-      // 为测试环境
+      // 开发测试环境
       return {
         ENV_type: 'dev',
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
@@ -67,7 +66,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
       };
     default:
-      // 默认为local，开发模式下请在此处修改配置
+      // 默认为local，本地开发模式下请在此处修改配置，但不要提交此处修改
       return {
         ENV_type: 'dev',
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',

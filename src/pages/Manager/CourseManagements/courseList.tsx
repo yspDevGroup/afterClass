@@ -223,8 +223,9 @@ const CourseList = () => {
       <>
         {record.KCZT === 0 ? (
           <>
-            <a
-              onClick={async () => {
+            <Popconfirm
+              title='课程发布后，可创建相应课程班，确定发布？'
+              onConfirm={async () => {
                 const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 1 });
                 if (res.status === 'ok') {
                   message.success('操作成功');
@@ -234,8 +235,8 @@ const CourseList = () => {
                 }
               }}
             >
-              发布
-            </a>
+              <a>发布</a>
+            </Popconfirm>
             <a onClick={() => handleOperation('add', record)}>编辑</a>
             <Popconfirm
               title={`确定要删除 “${record?.KCMC}” 吗?`}
@@ -253,19 +254,21 @@ const CourseList = () => {
             </Popconfirm>
           </>
         ) : (
-          <a
-            onClick={async () => {
-              const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 0 });
-              if (res.status === 'ok') {
-                message.success('操作成功');
-                action?.reload();
-              } else {
-                message.error(res.message || '操作失败');
-              }
-            }}
-          >
-            取消发布
-          </a>
+          <Popconfirm
+          title='取消发布后，相关课程及课程班均不可见？'
+          onConfirm={async () => {
+            const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 0 });
+            if (res.status === 'ok') {
+              message.success('操作成功');
+              action?.reload();
+            } else {
+              message.error(res.message || '操作失败');
+            }
+          }}
+        >
+          <a>取消发布</a>
+        </Popconfirm>
+
         )}
       </>
     );

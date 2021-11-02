@@ -283,28 +283,33 @@ const CourseRefund = () => {
         ),
     },
   ];
+
   const handleSubmit = async (params: any) => {
     const { TKJE, TKZT, BZ } = params;
-    try {
-      if (current.id) {
-        const params = { id: current.id };
-        const body = { TKJE, TKZT, BZ, deviceIp: '117.36.118.42', SPSJ: new Date().toISOString() };
-        const res = await updateKHXSTK(params, body);
-        if (res.status === 'ok') {
-          if (TKZT === 2) {
-            message.success('退款申请已驳回');
+    if (TKJE === 0 || TKJE === 0.00) {
+      message.warning('退款金额为0，无需发起退款');
+    } else {
+      try {
+        if (current.id) {
+          const params = { id: current.id };
+          const body = { TKJE, TKZT, BZ, deviceIp: '117.36.118.42', SPSJ: new Date().toISOString() };
+          const res = await updateKHXSTK(params, body);
+          if (res.status === 'ok') {
+            if (TKZT === 2) {
+              message.success('退款申请已驳回');
+            } else {
+              message.success('退款审核通过，已发起退款');
+            }
+            setVisible(false);
+            setCurrent(undefined);
+            actionRef.current?.reload();
           } else {
-            message.success('退款审核通过，已发起退款');
+            message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');
           }
-          setVisible(false);
-          setCurrent(undefined);
-          actionRef.current?.reload();
-        } else {
-          message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');
         }
+      } catch (err) {
+        message.error('退款流程出现错误，请联系管理员或稍后重试。');
       }
-    } catch (err) {
-      message.error('退款流程出现错误，请联系管理员或稍后重试。');
     }
   }
   return (
@@ -435,8 +440,14 @@ const CourseRefund = () => {
           >
             <Form.Item label="退款金额" name='TKJE'>
               <InputNumber
+                min={Number(0)}
                 formatter={value => `￥ ${value}`}
                 parser={value => Number(value?.replace(/\￥\s?/g, ''))}
+                onChange={(value) => {
+                  if (value === 0) {
+                    message.warning('退款金额为0，无需发起退款');
+                  }
+                }}
               />
             </Form.Item>
             <Form.Item label="审核意见" name="TKZT">
