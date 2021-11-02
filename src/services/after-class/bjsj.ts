@@ -246,6 +246,8 @@ export async function getSchoolClasses(
     XXJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 班级ID */
+    BJSJId?: string;
     /** 年级ID */
     njId?: string;
     /** 页数 */
@@ -276,6 +278,8 @@ export async function getClassStudents(
     XM?: string;
     /** 课程名称 */
     KCMC?: string;
+    /** 服务名称 */
+    FWMC?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */

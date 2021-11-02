@@ -75,6 +75,8 @@ export async function getAllKHXSTK(
     XSJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 课程数据Id */
+    KHKCSJId?: string;
     /** 班级ID */
     KHBJSJId?: string;
     /** 学校ID */

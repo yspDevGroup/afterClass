@@ -238,6 +238,8 @@ export async function getAllCourses(
     XXJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 课程类型ID */
+    KHKCLXId?: string;
     /** 年级ID */
     NJId?: string;
     /** 课程来源 */

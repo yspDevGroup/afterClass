@@ -1851,6 +1851,8 @@ declare namespace API {
     QJYY?: string;
     /** 请假状态 */
     QJZT?: number;
+    /** 备注信息 */
+    BZ?: string;
     JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
     KHJSQJKCs?: {
       QJRQ?: string;
@@ -1871,6 +1873,8 @@ declare namespace API {
     QJYY: string;
     /** 请假状态 */
     QJZT: number;
+    /** 备注信息 */
+    BZ?: string;
     /** 教师ID */
     JZGJBSJId: string;
     /** 班级ID */
@@ -1882,6 +1886,8 @@ declare namespace API {
     QJYY?: string;
     /** 请假状态 */
     QJZT?: number;
+    /** 备注信息 */
+    BZ?: string;
   };
 
   type KHJSSJ = {
@@ -3188,6 +3194,8 @@ declare namespace API {
     TKSJ?: string;
     /** 审批时间 */
     SPSJ?: string;
+    /** 审批人ID */
+    JZGJBSJId?: string;
     /** 设备IP */
     deviceIp?: string;
   };

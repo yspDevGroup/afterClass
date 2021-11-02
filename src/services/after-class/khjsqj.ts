@@ -21,6 +21,7 @@ export async function getKHJSQJ(
       QJSC?: number;
       QJYY?: string;
       QJZT?: number;
+      BZ?: string;
       JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
       KHJSQJKCs?: {
         QJRQ?: string;
@@ -99,6 +100,7 @@ export async function createKHJSQJ(body: API.CreateKHJSQJ, options?: { [key: str
       QJSC?: number;
       QJYY?: string;
       QJZT?: number;
+      BZ?: string;
       JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
       KHJSQJKCs?: {
         QJRQ?: string;

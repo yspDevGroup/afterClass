@@ -13,7 +13,6 @@ import { getAllKHKCLX } from '@/services/after-class/khkclx';
 
 type selectType = { label: string; value: string };
 
-
 const { Option } = Select;
 
 const MutualEvaluation: React.FC = () => {
@@ -33,7 +32,10 @@ const MutualEvaluation: React.FC = () => {
   const [kcmcValue, setKcmcValue] = useState<any>();
   //课程来源
   const [KCLY, setKCLY] = useState<string>();
-  const KCLYData: selectType[] = [{ label: '校内课程', value: '校内课程' }, { label: '机构课程', value: '机构课程' }];
+  const KCLYData: selectType[] = [
+    { label: '校内课程', value: '校内课程' },
+    { label: '机构课程', value: '机构课程' },
+  ];
   // //课程类型
   const [KCLXId, setKCLXId] = useState<string | undefined>();
   const [KCLXData, setKCLXData] = useState<selectType[] | undefined>();
@@ -47,7 +49,7 @@ const MutualEvaluation: React.FC = () => {
       valueType: 'index',
       width: 58,
       fixed: 'left',
-      align: 'center'
+      align: 'center',
     },
     {
       title: '课程名称',
@@ -57,7 +59,7 @@ const MutualEvaluation: React.FC = () => {
       width: 120,
       fixed: 'left',
       render: (text: any) => {
-        return text
+        return text;
       },
     },
     {
@@ -67,9 +69,8 @@ const MutualEvaluation: React.FC = () => {
       align: 'center',
       width: 120,
       render: (test: any) => {
-        return test.KCTAG
+        return test.KCTAG;
       },
-
     },
     {
       title: '课程来源',
@@ -78,9 +79,8 @@ const MutualEvaluation: React.FC = () => {
       align: 'center',
       width: 100,
       render: (test: any) => {
-        return test
+        return test;
       },
-
     },
     {
       title: '机构名称',
@@ -90,7 +90,7 @@ const MutualEvaluation: React.FC = () => {
       width: 120,
       ellipsis: true,
       render: (test: any) => {
-        return test?.QYMC || '-'
+        return test?.QYMC || '-';
       },
     },
     {
@@ -100,9 +100,8 @@ const MutualEvaluation: React.FC = () => {
       align: 'center',
       width: 100,
       render: (test: any) => {
-        return test
+        return test;
       },
-
     },
     {
       title: '课程评分',
@@ -111,9 +110,8 @@ const MutualEvaluation: React.FC = () => {
       width: 180,
       align: 'center',
       render: (test: any) => {
-        return (<Rate count={5} defaultValue={test} disabled={true} />)
-      }
-
+        return <Rate count={5} defaultValue={test} disabled={true} />;
+      },
     },
     {
       title: '操作',
@@ -144,18 +142,17 @@ const MutualEvaluation: React.FC = () => {
       setLoading(true);
       const res3 = await getAllCourses({
         XXJBSJId: currentUser.xxId,
+        KHKCLXId: KCLXId,
         XNXQId,
         KCMC: kcmcValue,
         SSJGLX: KCLY,
       });
       if (res3.status === 'ok') {
-        setLoading(false)
+        setLoading(false);
         setDataSource(res3?.data?.rows);
       }
-      
-    })()
-
-  }
+    })();
+  };
   //获取课程
   const getKCData = async () => {
     if (curXNXQId) {
@@ -178,7 +175,7 @@ const MutualEvaluation: React.FC = () => {
         setKcmcData(KCMC);
       }
     }
-  }
+  };
   /**
    * 获取课程类型数据
    */
@@ -187,12 +184,12 @@ const MutualEvaluation: React.FC = () => {
     if (res.status === 'ok') {
       const KCLXItem: any = res.data?.map((item: any) => ({
         value: item.id,
-        label: item.KCTAG
+        label: item.KCTAG,
       }));
       setKCLXData(KCLXItem);
       // setKcmcValue(undefined);
     }
-  }
+  };
 
   useEffect(() => {
     // 获取学年学期数据的获取
@@ -226,7 +223,7 @@ const MutualEvaluation: React.FC = () => {
     //重新请求课程名称
     if (curXNXQId) {
       getKCData();
-      setKcmcValue(undefined)
+      setKcmcValue(undefined);
     }
     // 清空选择
   }, [KCLXId, KCLY]);
@@ -239,10 +236,8 @@ const MutualEvaluation: React.FC = () => {
     setKCLY(undefined);
   }, [curXNXQId]);
 
-
   return (
     <PageContainer>
-
       <Form layout="inline" style={{ padding: '0 0 24px' }}>
         <Form.Item label=" 所属学年学期：">
           <Select
@@ -262,28 +257,26 @@ const MutualEvaluation: React.FC = () => {
             })}
           </Select>
         </Form.Item>
-        <Form.Item label='课程类型: '>
+        <Form.Item label="课程类型: ">
           <Select
             value={KCLXId}
             style={{ width: 200 }}
             placeholder="请选择"
             allowClear
             onChange={(value: string) => {
-              setKCLXId(value)
+              setKCLXId(value);
             }}
           >
             {KCLXData?.map((item: any) => {
               return (
-                <Option key={item.value} value={item.value} >
-                  {
-                    item.label
-                  }
+                <Option key={item.value} value={item.value}>
+                  {item.label}
                 </Option>
               );
             })}
           </Select>
         </Form.Item>
-        <Form.Item label='课程来源: '>
+        <Form.Item label="课程来源: ">
           <Select
             style={{ width: 200 }}
             value={KCLY}
@@ -305,7 +298,7 @@ const MutualEvaluation: React.FC = () => {
             })}
           </Select>
         </Form.Item>
-        <Form.Item label='课程名称:'>
+        <Form.Item label="课程名称:">
           <Select
             style={{ width: 200 }}
             value={kcmcValue}

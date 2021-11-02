@@ -147,6 +147,8 @@ export async function updateKHXSCQ(
 /** 学生出勤记录统计 POST /khxscq/statistical */
 export async function countKHXSCQ(
   body: {
+    /** 班级ID */
+    KHBJSJId?: string;
     /** 学生ID */
     XSJBSJId?: string;
     /** 学年学期ID */
@@ -157,7 +159,8 @@ export async function countKHXSCQ(
   return request<{
     status?: 'ok' | 'error';
     data?: {
-      KHBJSJId?: string;
+      id?: string;
+      KSS?: number;
       KCMC?: string;
       BJMC?: string;
       normal?: number;
