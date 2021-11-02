@@ -8,6 +8,7 @@ import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 
 import Style from './index.less';
 import { createKHXSTK } from '@/services/after-class/khxstk';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -120,7 +121,11 @@ const CourseUnsubscribe = () => {
       ellipsis: true,
       width: 100,
       render: (_, record) => {
-        return record?.JZGJBSJ?.XM
+        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
+        }
+        return record?.JZGJBSJ?.XM;
       }
     },
     {
@@ -187,25 +192,29 @@ const CourseUnsubscribe = () => {
           if (ZT === 2) {
             message.success('退课申请已驳回');
           } else if (current?.KHBJSJ?.FY !== 0) {
-            const money = (current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS || current?.KHBJSJ?.FY;
-            const result = await createKHXSTK({
-              KHTKSJId: current?.id,
-              /** 退款金额 */
-              TKJE: money,
-              /** 退款状态 */
-              TKZT: 0,
-              /** 学生ID */
-              XSJBSJId: current?.XSJBSJId,
-              /** 班级ID */
-              KHBJSJId: current?.KHBJSJId,
-              /** 学校ID */
-              XXJBSJId: currentUser?.xxId,
-              JZGJBSJId: currentUser.JSId
-            });
-            if (result.status === 'ok') {
-              message.success('退课成功,已自动申请退款流程');
-            } else {
-              message.warning(`退课成功,退款流程由于${result.message}申请失败`);
+            const money = Number(((current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS).toFixed(2));
+            if(money !== 0.00){
+              const result = await createKHXSTK({
+                KHTKSJId: current?.id,
+                /** 退款金额 */
+                TKJE: money,
+                /** 退款状态 */
+                TKZT: 0,
+                /** 学生ID */
+                XSJBSJId: current?.XSJBSJId,
+                /** 班级ID */
+                KHBJSJId: current?.KHBJSJId,
+                /** 学校ID */
+                XXJBSJId: currentUser?.xxId,
+                JZGJBSJId: currentUser.JSId
+              });
+              if (result.status === 'ok') {
+                message.success('退课成功,已自动申请退款流程');
+              } else {
+                message.warning(`退课成功,退款流程由于${result.message}申请失败`);
+              }
+            }else{
+              message.success('退课成功,退款余额为0，无需退款');
             }
           } else {
             message.success('退课成功');

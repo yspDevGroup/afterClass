@@ -76,25 +76,25 @@ const SiteMaintenance = () => {
   ];
 
   return (
-    <>
-      <Button
-        type="primary"
-        onClick={() => {
-          actionRef.current?.addEditRecord?.({
-            id: (Math.random() * 1000000).toFixed(0),
-            title: '新的一行',
-          });
-        }}
-        icon={<PlusOutlined />}
-        style={{ marginBottom: '16px' }}
-      >
-        新建
-      </Button>
+    <div style={{position:'relative',paddingTop:'40px'}}>
       <EditableProTable<DataSourceType>
         rowKey="id"
         actionRef={actionRef}
         columns={columns}
         value={dataSource}
+        recordCreatorProps={{
+          position: 'top',
+          record: {
+            id: (Math.random() * 1000000).toFixed(0),
+            title: '新的一行',
+          },
+          creatorButtonText: '新增',
+          style: {
+            'position': 'absolute',
+            'right': '0',
+            'top': '-45px'
+          },
+        }}
         request={(params, sorter, filter) => {
           // 表单搜索项会从 params 传入，传递给后端接口。
           const opts: TableListParams = {
@@ -104,7 +104,6 @@ const SiteMaintenance = () => {
           };
           return getAllFJLX({ name: '', XXJBSJId: currentUser?.xxId }, opts);
         }}
-        recordCreatorProps={false}
         onChange={setDataSource}
         editable={{
           type: 'multiple',
@@ -115,18 +114,17 @@ const SiteMaintenance = () => {
               // 更新或新增场地信息
               const result = row.title
                 ? await createFJLX({
-                    FJLX: row.FJLX!,
-                    XXJBSJId: currentUser?.xxId,
-                  })
+                  FJLX: row.FJLX!,
+                  XXJBSJId: currentUser?.xxId,
+                })
                 : await updateFJLX(
-                    {
-                      id: row.id!,
-                    },
-                    {
-                      FJLX: row.FJLX!,
-                      XXJBSJId: currentUser?.xxId,
-                    },
-                  );
+                  {
+                    id: row.id!,
+                  },
+                  {
+                    FJLX: row.FJLX!,
+                  },
+                );
               if (result.status === 'ok') {
                 message.success(row.title ? '信息新增成功' : '信息更新成功');
                 actionRef.current?.reload();
@@ -142,7 +140,7 @@ const SiteMaintenance = () => {
           bodyStyle: { padding: 0 },
         }}
       />
-    </>
+    </div>
   );
 };
 export default SiteMaintenance;
