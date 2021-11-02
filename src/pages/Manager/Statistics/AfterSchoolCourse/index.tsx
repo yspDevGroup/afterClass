@@ -1,16 +1,18 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
-// import { message } from 'antd';
+import { Form } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
-
 import { useModel, Link } from 'umi';
 import { Select } from 'antd';
 import { getCourses } from '@/services/after-class/reports';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
-
 import Style from './index.less';
 import { TableItem } from './data';
+import { getAllCourses2 } from '@/services/after-class/jyjgsj';
+import { getAllKHKCLX } from '@/services/after-class/khkclx';
+
+type selectType = { label: string; value: string };
 
 const { Option } = Select;
 
@@ -24,6 +26,19 @@ const AfterSchoolCourse: React.FC = () => {
   // 学期学年没有数据时提示的开关
   // 表格数据源
   const [dataSource, setDataSource] = useState<any>([]);
+
+  // 课程选择框的数据
+  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
+  const [kcmcValue, setKcmcValue] = useState<any>();
+  //课程来源
+  const [KCLY, setKCLY] = useState<string>();
+  const KCLYData: selectType[] = [{ label: '校内课程', value: '校内课程' }, { label: '机构课程', value: '机构课程' }];
+  // //课程类型
+  const [KCLXId, setKCLXId] = useState<string | undefined>();
+  const [KCLXData, setKCLXData] = useState<selectType[] | undefined>();
+
+
+
   /// table表格数据
   const columns: ProColumns<TableItem>[] = [
     {
@@ -35,20 +50,20 @@ const AfterSchoolCourse: React.FC = () => {
       align: 'center',
     },
     {
+      title: '课程来源',
+      dataIndex: 'KCLY',
+      key: 'KCLY',
+      align: 'center',
+      width: 100,
+      ellipsis: true,
+    },
+    {
       title: '课程名称',
       dataIndex: 'KCMC',
       key: 'KCMC',
       fixed: 'left',
       align: 'center',
       width: 120,
-      ellipsis: true,
-    },
-    {
-      title: '课程来源',
-      dataIndex: 'KCLY',
-      key: 'KCLY',
-      align: 'center',
-      width: 100,
       ellipsis: true,
     },
     {
@@ -151,14 +166,56 @@ const AfterSchoolCourse: React.FC = () => {
 
   // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
+    const kclxItem=KCLXData?.find((item:any)=>item.value===KCLXId)?.label;
     const res3 = await getCourses({
       XNXQId: SelectData,
       XXJBSJId: currentUser?.xxId,
+      KCLX: kclxItem,
+      KCLY: KCLY,
+      KHKCSJId: kcmcValue,
     });
     if (res3.status === 'ok') {
       setDataSource(res3?.data?.rows);
     }
   };
+
+  //获取课程
+  const getKCData = async () => {
+    if (curXNXQId) {      
+      const params = {
+        page: 0,
+        pageSize: 0,
+        XNXQId: curXNXQId,
+        XXJBSJId: currentUser?.xxId,
+        XZQHM: currentUser?.XZQHM,
+        KCLY,
+        KHKCLXId:KCLXId,
+      };      
+      const khkcResl = await getAllCourses2(params);
+
+      if (khkcResl.status === 'ok') {
+        const KCMC = khkcResl.data.rows?.map((item: any) => ({
+          label: item.KCMC,
+          value: item.id,
+        }));
+        setKcmcData(KCMC);
+      }
+    }
+  }
+  /**
+   * 获取课程类型数据
+   */
+  const getKCLXData = async () => {
+    const res = await getAllKHKCLX({});
+    if (res.status === 'ok') {
+      const KCLXItem: any = res.data?.map((item: any) => ({
+        value: item.id,
+        label: item.KCTAG
+      }));
+      setKCLXData(KCLXItem);
+      // setKcmcValue(undefined);
+    }
+  }
 
   useEffect(() => {
     // 获取学年学期数据的获取
@@ -175,38 +232,127 @@ const AfterSchoolCourse: React.FC = () => {
       } else {
       }
     })();
+    getKCLXData();
   }, []);
   // 学年学期变化
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    if (curXNXQId) {
+  useEffect(() => { 
+    if(curXNXQId){
       ChoseSelect(curXNXQId);
-    }
-  }, [curXNXQId]);
+    }      
+  }, [curXNXQId,kcmcValue,KCLXId,KCLY]);
+  
+  /**
+   * 切换学年学期时 清空课程类型 清空课程名称
+   */
+  useEffect(()=>{
+    //重新请求课程名称
+    if(curXNXQId){
+      getKCData();
+      setKcmcValue(null)
+    }    
+    // 清空选择
+  },[KCLXId,KCLY]);
+
+  useEffect(()=>{
+    //重新请求课程名称
+    getKCData();
+    // 清空选择
+    setKCLXId(undefined);
+    setKCLY(undefined);
+  },[curXNXQId])
+
+
 
   return (
     /// PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.TopSearchss}>
-        <span>
-          所属学年学期：
-          <Select
-            value={curXNXQId}
-            style={{ width: 200 }}
-            onChange={(value: string) => {
-              // 选择不同学期从新更新页面的数据
-              setCurXNXQId(value);
-            }}
-          >
-            {termList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
+        <Form layout='inline' style={{ padding: '0 0 24px' }}>
+          <Form.Item label='所属学年学期: '>
+            <Select
+              value={curXNXQId}
+              style={{ width: 200 }}
+              onChange={(value: string) => {
+                // 选择不同学期从新更新页面的数据
+                setCurXNXQId(value);
+              }}
+            >
+              {termList?.map((item: any) => {
+                return (
+                  <Option key={item.value} value={item.value}>
+                    {item.text}
+                  </Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item label='课程类型: '>
+            <Select
+              value={KCLXId}
+              style={{ width: 200 }}
+              placeholder="请选择"
+              allowClear
+              onChange={(value: string) => {
+                setKCLXId(value)
+              }}
+            >
+              {KCLXData?.map((item: any) => {
+                return (
+                  <Option key={item.value} value={item.value} >
+                    {
+                      item.label
+                    }
+                  </Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item label='课程来源: '>
+            <Select
+              style={{ width: 200 }}
+              value={KCLY}
+              allowClear
+              placeholder="请选择"
+              onChange={(value) => {
+                setKCLY(value);
+              }}
+            >
+              {KCLYData?.map((item: selectType) => {
+                if (item.value) {
+                  return (
+                    <Option value={item.value} key={item.value}>
+                      {item.label}
+                    </Option>
+                  );
+                }
+                return '';
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item label='课程名称:'>
+            <Select
+              style={{ width: 200 }}
+              value={kcmcValue}
+              allowClear
+              placeholder="请选择"
+              onChange={(value) => {
+                setKcmcValue(value);
+              }}
+            >
+              {kcmcData?.map((item: selectType) => {
+                if (item.value) {
+                  return (
+                    <Option value={item.value} key={item.value}>
+                      {item.label}
+                    </Option>
+                  );
+                }
+                return '';
+              })}
+            </Select>
+          </Form.Item>
+        </Form>
+
       </div>
       <div>
         <ProTable

@@ -4,10 +4,13 @@ import { Select, message, Modal, Radio, Input, Form, InputNumber } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-
 import Style from './index.less';
 import { getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { getAllClasses } from '@/services/after-class/khbjsj';
+import { getAllCourses2 } from '@/services/after-class/jyjgsj';
+
+type selectType = { label: string; value: string };
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -24,6 +27,15 @@ const CourseRefund = () => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
+
+  // 课程选择框的数据
+  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
+  const [kcmcValue, setKcmcValue] = useState<any>();
+  // 班级名称选择框的数据
+  const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
+  const [bjmcValue, setBjmcValue] = useState<any>();
+
+
   useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
@@ -40,9 +52,68 @@ const CourseRefund = () => {
       }
     })();
   }, []);
+
+
+
+  //获取课程
+ const getKCData = async()=>{
+    if (curXNXQId) {
+      const params = {
+        page: 0,
+        pageSize: 0,
+        XNXQId: curXNXQId,
+        XXJBSJId: currentUser?.xxId,
+        XZQHM:currentUser?.XZQHM
+      };
+      const khkcResl = await getAllCourses2(params);
+
+      if (khkcResl.status === 'ok') {
+        const KCMC = khkcResl.data.rows?.map((item: any) => ({
+          label: item.KCMC,
+          value: item.id,
+        }));
+        setKcmcData(KCMC);
+      }
+    }
+  }
+
+
+  /**
+   * 获取课程班集数据
+   */
+  const getClassesData=async()=>{
+    if(kcmcValue&&curXNXQId){
+      const bjmcResl = await getAllClasses({
+        page: 0,
+        pageSize: 0,
+        KHKCSJId: kcmcValue,
+        XNXQId: curXNXQId,
+      });
+      if (bjmcResl.status === 'ok') {
+        const BJMC = bjmcResl.data.rows?.map((item: any) => ({
+          label: item.BJMC,
+          value: item.id,
+        }));
+        setBjmcData(BJMC);
+      }
+    }
+  }
+
   useEffect(() => {
     actionRef.current?.reload();
+    getKCData();
   }, [curXNXQId]);
+
+  useEffect(() => {
+    actionRef.current?.reload();
+    setBjmcValue(undefined);
+    getClassesData();
+  }, [kcmcValue]);
+
+  useEffect(() => {
+    actionRef.current?.reload();
+  }, [bjmcValue]);
+
   /// table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -258,6 +329,46 @@ const CourseRefund = () => {
             })}
           </Select>
         </span>
+        <span> 课程名称:
+          <Select
+            style={{ width: 200 }}
+            value={kcmcValue}
+            allowClear
+            placeholder="请选择"
+            onChange={(value) => {
+              setKcmcValue(value);
+            }}
+          >
+            {kcmcData?.map((item: selectType) => {
+              if (item.value) {
+                return (
+                  <Option value={item.value} key={item.value}>
+                    {item.label}
+                  </Option>
+                );
+              }
+              return '';
+            })}
+          </Select>
+        </span>
+        <span>
+          课程班名称:
+          <Select
+            style={{ width: 200 }}
+            value={bjmcValue}
+            allowClear
+            placeholder="请选择"
+            onChange={(value) => setBjmcValue(value)}
+          >
+            {bjmcData?.map((item: selectType) => {
+              return (
+                <Option value={item.value} key={item.value}>
+                  {item.label}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
       </div>
       <div>
         <ProTable<any>
@@ -275,6 +386,8 @@ const CourseRefund = () => {
               LX: 0,
               XXJBSJId: currentUser?.xxId,
               XNXQId: curXNXQId,
+              KHKCSJId: kcmcValue,
+              KHBJSJId:bjmcValue,
               page: 0,
               pageSize: 0,
             });
