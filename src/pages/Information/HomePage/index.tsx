@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { useModel } from 'umi';
 import { Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
 import Home from './Home';
@@ -17,7 +16,7 @@ const Homepage = () => {
 
   return (
     <div className={styles.mobilePageHeader}>
-        <TopNav title={title}></TopNav>
+        <TopNav title={title} state={false} />
           <Tabs
             tabPosition="bottom"
             className={styles.menuTab}

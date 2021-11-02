@@ -773,7 +773,7 @@ const AddCourse: FC<AddCourseProps> = ({
           formItemLayout={formLayout}
           values={
             formValues || {
-              BJZT: '待开班',
+              BJZT: '未开班',
             }
           }
         />

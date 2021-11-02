@@ -351,7 +351,7 @@ const AddArranging: FC<PropsType> = (props) => {
       NJSJId: NJID,
       KHKCSJId: kcName,
       XNXQId: curXNXQId,
-      BJZT: '待开班',
+      BJZT: '未开班',
     });
     if (bjmcResl.status === 'ok') {
       const bjRows = bjmcResl.data.rows;
