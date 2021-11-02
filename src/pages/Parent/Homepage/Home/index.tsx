@@ -67,7 +67,7 @@ const Home = () => {
         setTotalData(data);
       }
       const res = await getBJSJ({
-        id: currentUser?.BJId
+        id:localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId
       })
       if(res.status === 'ok'){
         setBJMC(`${res.data?.NJSJ?.XD}${res.data?.NJSJ?.NJMC}${res.data?.BJ}`)

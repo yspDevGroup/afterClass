@@ -33,6 +33,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
       localStorage.setItem('studentName', student?.[0].name || '');
       localStorage.setItem('studentId', student?.[0].XSJBSJId || '');
       localStorage.setItem('studentNjId', student[0].NJSJId || '');
+      localStorage.setItem('studentNjId', student[0].BJSJId || '');
     }
     const ParentalIdentitys = `${StorageXSName}${external_contact?.subscriber_info?.remark?.split('-')[1] || ''
       }`;
@@ -44,6 +45,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     localStorage.setItem('studentName', key.value);
     localStorage.setItem('studentId', key.key?.split('+')[0]);
     localStorage.setItem('studentNjId', key.key?.split('+')[1]);
+    localStorage.setItem('studentBJId', key.key?.split('+')[2]);
     const ParentalIdentitys = `${key.value}${external_contact?.subscriber_info?.remark?.split('-')[1] || ''
       }`;
     setParentalIdentity(ParentalIdentitys);
@@ -94,7 +96,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
           >
             {student?.map((value: any) => {
               return (
-                <Option value={value.name} key={`${value.XSJBSJId}+${value.NJSJId}`}>
+                <Option value={value.name} key={`${value.XSJBSJId}+${value.NJSJId}+${value.BJSJId}`}>
                   {value.name}
                 </Option>
               );

@@ -303,26 +303,24 @@ const CourseManagement = (props: { location: { state: any } }) => {
       render: (_, record) => {
         const BMJSSJ = new Date(record?.BMJSSJ).getTime();
         const newDate = new Date().getTime();
-
         return (
           <>
             <ActionBar record={record} handleEdit={handleEdit} actionRef={actionRef} />
             <Divider type="vertical" />
-            {record?.BJZT === '已开班' ? (
+            {record?.BJZT === '已开班' && newDate <= BMJSSJ ? (
               <a
                 onClick={() => {
-                  if (newDate <= BMJSSJ) {
-                    showModalBM(record);
-                  } else {
-                    message.warning('当前课程已开课，无法报名');
-                  }
+                  showModalBM(record);
                 }}
               >
                 代报名
               </a>
             ) : (
-              <></>
+              <Tooltip title="该班级已开班，无法报名">
+              <span style={{ color: '#999' }}>代报名</span>
+            </Tooltip>
             )}
+
           </>
         );
       },
