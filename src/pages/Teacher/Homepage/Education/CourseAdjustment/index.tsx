@@ -95,7 +95,7 @@ const CourseAdjustment = () => {
 
     <div className={styles.apply} onClick={() => {
       history.push('/teacher/education/courseAdjustment/applys')
-    }}><div>+</div>发起申请</div>
+    }}><div><span>+</span></div>发起申请</div>
   </div>
 }
 
