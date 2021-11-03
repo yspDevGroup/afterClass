@@ -41,16 +41,18 @@ export const studentConfig: any = {
 
 export const pieConfig: any = {
   appendPadding: 20,
+  autoFit: false,
+  height: 264,
   legend: {
     flipPage: false,
     position: 'bottom',
-    itemWidth: 100,
+    itemWidth: 80,
   },
   data: [],
   angleField: 'value',
   colorField: 'type',
   color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
-  radius: 0.8,
+  radius: 1,
   innerRadius: 0.6,
   pieStyle: {
     stroke: '#fff',
@@ -66,10 +68,12 @@ export const pieConfig: any = {
 };
 export const proportionConfig: any = {
   appendPadding: 20,
+  autoFit: false,
+  height: 264,
   legend: {
     flipPage: false,
     position: 'bottom',
-    itemWidth: 100,
+    itemWidth: 80,
   },
   data: [],
   angleField: 'value',
