@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
 /*
- * @description: 退课
+ * @description: 退订
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
  * @LastEditTime: 2021-10-25 11:26:56
@@ -10,7 +10,7 @@
 import GoBack from '@/components/GoBack';
 import { Button, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel, history } from 'umi';
+import { useModel, history, Link } from 'umi';
 import styles from './index.less';
 import noOrder from '@/assets/noOrder.png';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -55,6 +55,13 @@ const DropClass = () => {
             {Record?.map((value: any) => {
               const num = value?.KHBJSJ?.KSS - value?.KSS;
               return (
+                <Link
+                key="ck"
+                to={{
+                  pathname: '/parent/mine/dropClass/details',
+                  state: value,
+                }}
+              >
                 <div className={styles.cards}>
                   <p className={styles.title}>
                     {
@@ -88,13 +95,13 @@ const DropClass = () => {
 
                   <p className={styles.state}>
                     {value.ZT === 0 ? <span style={{ color: '#FF6600' }}>申请中</span> : ''}
-                    {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <span style={{ color: '#FF0000' }}>退课失败</span> : ''}
+                    {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <span style={{ color: '#FF0000' }}>退订失败</span> : ''}
                     {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '0' ? <span style={{ color: '#FF6600' }}>退款中</span> : ''}
                     {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? <span style={{ color: '#FF0000' }}>退款被驳回</span> : ''}
                     {(value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '3') || value?.KHXSTKs?.length === 0 && value?.ZT === 1 ? <span style={{ color: '#45c977' }}>退款成功</span> : ''}
                     {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '4' ? <span style={{ color: '#FF0000' }}>退款失败</span> : ''}
                   </p>
-                  {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <p>退课说明：{value?.BZ}</p> : ''}
+                  {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <p>退订说明：{value?.BZ}</p> : ''}
                   {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? <p>退款说明：{value?.KHXSTKs?.[0].BZ}</p> : ''}
                   {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? (
                     <button
@@ -132,6 +139,8 @@ const DropClass = () => {
                     ''
                   )}
                 </div>
+              </Link>
+
               );
             })}
           </div>

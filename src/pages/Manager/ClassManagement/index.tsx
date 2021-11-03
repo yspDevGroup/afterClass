@@ -306,7 +306,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
               <>
                 <Row>
                   <Col flex="4em" style={{ fontWeight: 'bold' }}>
-                    未开班
+                    未开班：
                   </Col>
                   <Col flex="auto">仅后台管理员可见</Col>
                 </Row>
@@ -355,7 +355,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
             )}
             {
               record?.BJZT === '已开班' && newDate > BMJSSJ ?
-                <Tooltip title="该班级已开班，无法报名">
+                <Tooltip title="该班级已开课，无法报名">
                   <span style={{ color: '#999' }}>代报名</span>
                 </Tooltip>
                 : <></>

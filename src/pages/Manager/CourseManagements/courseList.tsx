@@ -255,7 +255,7 @@ const CourseList = () => {
           </>
         ) : (
           <Popconfirm
-          title='取消发布后，相关课程及课程班均不可见？'
+          title='取消发布后，该课程及课程班家长不可见，确定取消？'
           onConfirm={async () => {
             const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 0 });
             if (res.status === 'ok') {

@@ -633,6 +633,13 @@
         hideInMenu: 'true',
       },
       {
+        path: '/parent/mine/dropClass/details',
+        name: 'details',
+        icon: 'smile',
+        component: './Parent/Homepage/Mine/Pages/DropClass/Details',
+        hideInMenu: 'true',
+      },
+      {
         path: '/parent/mine/evaluation',
         name: 'evaluation',
         icon: 'smile',
