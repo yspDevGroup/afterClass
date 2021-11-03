@@ -135,16 +135,6 @@ const CourseRecord: React.FC = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    if (kcmcValue) {
-      getBjData();
-    }
-  }, [kcmcValue]);
-
-  useEffect(() => {
-    getData();
-  }, [kcmcValue, bjmcValue, teacher, kclyValue, teacher]);
-
   const getData = async () => {
     const res3 = await getAllpresence({
       XNXQId: curXNXQId,
@@ -157,6 +147,16 @@ const CourseRecord: React.FC = () => {
       setDataSource(res3?.data);
     }
   }
+  useEffect(() => {
+    if (kcmcValue) {
+      getBjData();
+    }
+  }, [kcmcValue]);
+
+  useEffect(() => {
+    getData();
+  }, [kcmcValue, bjmcValue, teacher, kclyValue, teacher]);
+
 
   // 学年学期变化
   useEffect(() => {
@@ -213,10 +213,10 @@ const CourseRecord: React.FC = () => {
   };
 
   return (
-    /// PageContainer组件是顶部的信息
+    // PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.searchWrapper}>
-        <div style={{width: '100%'}}>
+        <div style={{ width: '100%' }}>
           <div>
             <span>
               所属学年学期：

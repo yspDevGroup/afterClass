@@ -36,7 +36,6 @@ const course = () => {
       });
       pieConfig.data = defaultData.courseCollect;
       const { xxkc_count, jgkc_count} = resProportion.data;
-      console.log('xxkc_count, jgkc_count: ', xxkc_count, jgkc_count);
       const sum = xxkc_count + jgkc_count;
       defaultData.proportionNum.push({
         type: '学校课程',

@@ -2,38 +2,32 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-09 10:48:20
- * @LastEditTime: 2021-10-12 13:41:32
+ * @LastEditTime: 2021-11-02 16:13:51
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable no-nested-ternary */
-/*
- * @description:
- * @author: wsl
- * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-10-09 10:44:27
- * @LastEditors: Sissle Lynn
- */
-import GoBack from '@/components/GoBack';
-import { getStudentClasses } from '@/services/after-class/khbjsj';
+import { useEffect, useState } from 'react';
+import { useModel } from 'umi';
+import { Button, Checkbox, message, Modal } from 'antd';
 import { createKHTKSJ } from '@/services/after-class/khtksj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { Button, Checkbox, message, Modal } from 'antd';
-import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { countKHXSCQ } from '@/services/after-class/khxscq';
+
 import styles from '../index.less';
 import noOrder from '@/assets/noOrder.png';
-import { getCqDay } from '@/utils/utils';
-import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 
 const DropOut = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { student } = currentUser || {};
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [ModalVisible, setModalVisible] = useState(false);
   const [KHFUXY, setKHFUXY] = useState<any>();
   const [KcData, setKcData] = useState<any>();
   const [Datasourse, setDatasourse] = useState<any>();
+  const StorageXSId = localStorage.getItem('studentId') || (student && student.XSJBSJId) || testStudentId;
+
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
@@ -49,45 +43,16 @@ const DropOut = () => {
       }
     })();
   }, []);
-  const StorageXSId = localStorage.getItem('studentId');
-  const convertData = (dataArr: any) => {
-    if (dataArr && dataArr.length) {
-      const nor = dataArr.filter((item: any) => item.status === '出勤');
-      const abnor = dataArr.filter((item: any) => item.status === '缺席');
-      return {
-        zc: nor && nor.length,
-        yc: abnor && abnor.length,
-      }
-    }
-    return {}
-  };
   const getKcData = async () => {
-    const result = await queryXNXQList(currentUser?.xxId, undefined);
-    const { student } = currentUser || {};
-    const XSId = StorageXSId || (student && student[0].XSJBSJId) || testStudentId;
-    const res = await getStudentClasses({
-      XSJBSJId: XSId,
-      XNXQId: result.current.id,
-      ZT: [0],
-    });
-    if (res.status === 'ok') {
-      const arr = [].map.call(res.data, async (item: any) => {
-        const res1 = await getKHPKSJByBJID({ id: item.KHBJSJId });
-        if (res1.status === 'ok' && res1.data) {
-          const attend = [...new Set(res1.data.map((n: { WEEKDAY?: any }) => n.WEEKDAY))];
-          const data = await getCqDay(attend, item?.KHBJSJ?.KKRQ, item?.KHBJSJ?.JKRQ, item.KHBJSJId, XSId);
-          return {
-            KCMC: item?.KHBJSJ?.KHKCSJ?.KCMC,
-            BJMC: item?.KHBJSJ?.BJMC,
-            KHBJSJId: item.KHBJSJId,
-            KSS: item?.KHBJSJ?.KSS,
-            ...convertData(data)
-          };
-        }
-        return {}
+    const result = await queryXNXQList(currentUser?.xxId);
+    if (result.current) {
+      const res = await countKHXSCQ({
+        XNXQId: result.current.id,
+        XSJBSJId: StorageXSId
       });
-      const results = await Promise.all(arr);
-      setKcData(results);
+      if (res.status === 'ok') {
+        setKcData(res.data);
+      }
     }
   };
   useEffect(() => {
@@ -124,11 +89,9 @@ const DropOut = () => {
 
   const onChange = (checkedValues: any) => {
     const NewArr: any[] = [];
-    const { student } = currentUser || {};
     checkedValues.forEach((value: string) => {
       const data = {
-        XSJBSJId:
-          localStorage.getItem('studentId') || (student && student.XSJBSJId) || testStudentId,
+        XSJBSJId:StorageXSId,
         XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
         KHBJSJId: value.split('+')[0],
         KSS: value.split('+')[1],
@@ -151,11 +114,9 @@ const DropOut = () => {
             <div>
               <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
                 {KcData?.map((value: any) => {
-                  const arrs = value.KHBJSJ?.KHXSCQs.filter((val: any) => {
-                    return val.CQZT === '出勤';
-                  });
                   const JKRQ = new Date(value.KHBJSJ?.JKRQ).getTime();
                   const newDate = new Date().getTime();
+                  const ZKS = value.abnormal + value.normal+value.remain;
                   return (
                     <>
                       <div className={styles.cards}>
@@ -163,12 +124,12 @@ const DropOut = () => {
                           {value.KCMC}
                           <span style={{ color: '#009688', fontWeight: 'normal' }}>【{value.BJMC}】</span>
                         </p>
-                        <p>总课时：{value.KSS}节 ｜ 已学课时：{value.zc}节</p>
+                        <p>总课时：{ZKS}节 ｜ 已学课时：{value.normal}节</p>
                         <p>
-                          未学课时：{value.KSS - value.zc - value.yc}节｜可退课时：{value.KSS - value.zc}节
+                          未学课时：{value.remain}节｜缺勤课时：{value.abnormal}节｜可退课时：{value.abnormal +value.remain}节
                         </p>
                         <Checkbox
-                          value={`${value.KHBJSJId}+${value.KSS - value.zc}+${value.KCMC}`}
+                          value={`${value.id}+${value.abnormal +value.remain}+${value.KCMC}`}
                           disabled={newDate - JKRQ > 2592000000}
                         >
                           {' '}
@@ -245,7 +206,9 @@ const DropOut = () => {
             );
           })}
           <p style={{ fontSize: 12, color: '#999', marginTop: 40, marginBottom: 0 }}>
-            注：退课成功后，系统将自动进行退款，退款将原路返回您的支付账户。
+            注：
+            <br/>1.退课课时由系统根据申请日期进行计算统计，仅供参考。
+            <br/>2.退课成功后，系统将自动进行退款，退款将原路返回您的支付账户。
           </p>
         </div>
       </Modal>
