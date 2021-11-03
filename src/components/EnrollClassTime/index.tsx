@@ -36,7 +36,7 @@ const EnrollClassTime = (props: { type: string; xxId?: string; userId?: string; 
                   `${ele.address}`,
                 ],
                 right: ClassStatus(ele.start, ele.end) === '待上课' ?
-                  <TimeRight startTimeHour={ele.start.substring(0, 2)} startTimeMin={ele.end.substring(3, 5)} /> : ''
+                  <TimeRight startTime={ele.start}/> : ''
                 ,
               },
             ],
