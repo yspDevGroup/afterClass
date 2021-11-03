@@ -63,7 +63,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
           {
             listData.length ? listData.map((item: any) => {
               return (
-                <li>
+                <li key={item.id}>
                   <Row style={{minHeight: '148px'}}>
                     <Col span={2} className={Style.time}>
                       <p className={Style.teacherName}>{item.teacherName}</p>

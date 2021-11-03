@@ -38,7 +38,7 @@ const ClassroomStyle = () => {
           time: item.createdAt,
           teacherName: item.JZGJBSJ.XM,
           //班级所属于学校或机构的名称
-          schoolName: item.JZGJBSJ.XXJBSJ.XXMC || item.JZGJBSJ.KHJYJG.QYMC
+          schoolName: item.KHBJSJ.KHKCSJ.KHJYJG?.QYMC || item.KHBJSJ.KHKCSJ.XXJBSJ?.XXMC
         };
         allData.push(data);
       });
