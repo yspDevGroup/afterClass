@@ -9,6 +9,7 @@ import WWOpenDataCom from "@/components/WWOpenDataCom";
 import { Button, message } from "antd";
 import moment from "moment";
 import { enHenceMsg } from "@/utils/utils";
+import { PlusOutlined } from "@ant-design/icons";
 
 const CourseAdjustment = () => {
   const { initialState } = useModel('@@initialState');
@@ -95,7 +96,7 @@ const CourseAdjustment = () => {
 
     <div className={styles.apply} onClick={() => {
       history.push('/teacher/education/courseAdjustment/applys')
-    }}><div><span>+</span></div>发起申请</div>
+    }}><div><PlusOutlined /></div>发起申请</div>
   </div>
 }
 

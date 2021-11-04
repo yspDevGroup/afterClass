@@ -61,7 +61,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
       const res = await getAllKHXSDD({
         XSJBSJId: studentId,
         // njId: currentUser.njId,
-        DDZT: '待付款',
+        DDZT: ['待付款'],
       });
       if (res.status === 'ok') {
         if (res.data && res.data.length) {
