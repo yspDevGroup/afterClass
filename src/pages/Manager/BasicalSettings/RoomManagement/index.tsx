@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import type { FormInstance } from 'antd';
 import { Tooltip } from 'antd';
-import { message, Popconfirm } from 'antd';
-import { Button, Divider, Modal } from 'antd';
+import { message, Popconfirm, Button, Divider, Modal, Select } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType, RequestData } from '@ant-design/pro-table';
 import type { SearchDataType } from '@/components/Search/data';
@@ -20,6 +19,7 @@ import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
 import PromptInformation from '@/components/PromptInformation';
 import { enHenceMsg } from '@/utils/utils';
 import { useModel } from 'umi';
+import { getAllFJLX } from '@/services/after-class/fjlx';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -35,6 +35,9 @@ const RoomManagement = () => {
   // 设置表单的查询更新
   const [name, setName] = useState<string>('');
 
+  const [CDLXId, setCDLXId] = useState<string>('');
+  const [dataLX, setDataLX] = useState<any>([]);
+
   const [dataSource] = useState<SearchDataType>(searchData);
   const [opens, setopens] = useState<boolean>(false);
   const [xQLabelItem, setXQLabelItem] = useState('');
@@ -46,8 +49,13 @@ const RoomManagement = () => {
   };
 
   // 头部input事件
-  const handlerSearch = (type: string, value: string) => {
-    setName(value);
+  const handlerSearch = (type: string, value: string, flag: boolean) => {
+    console.log('type', type);
+    if (flag) {
+      setName(value);
+    } else {
+      setCDLXId(value);
+    }
     actionRef.current?.reload();
   };
   /**
@@ -116,7 +124,7 @@ const RoomManagement = () => {
       valueType: 'index',
       width: 58,
       align: 'center',
-      fixed:'left'
+      fixed: 'left',
     },
     {
       title: '名称',
@@ -124,7 +132,7 @@ const RoomManagement = () => {
       align: 'center',
       width: 200,
       ellipsis: true,
-      fixed:'left'
+      fixed: 'left',
     },
     {
       title: '编号',
@@ -173,7 +181,7 @@ const RoomManagement = () => {
       title: '操作',
       valueType: 'option',
       width: 150,
-      fixed:'right',
+      fixed: 'right',
       align: 'center',
       render: (_, record) => (
         <>
@@ -206,6 +214,27 @@ const RoomManagement = () => {
       ),
     },
   ];
+
+  useEffect(() => {
+    (async () => {
+      const response = await getAllFJLX({
+        name: '',
+        XXJBSJId: currentUser?.xxId,
+      });
+      if (response.status === 'ok') {
+        if (response.data && response.data.length > 0) {
+          const newData: any = [].map.call(response.data, (item: RoomType) => {
+            return {
+              label: item.FJLX,
+              value: item.id,
+            };
+          });
+          setDataLX(newData);
+        }
+      }
+    })();
+  }, []);
+
   return (
     <PageContainer cls={styles.roomWrapper}>
       <PromptInformation
@@ -240,7 +269,7 @@ const RoomManagement = () => {
             filter,
           };
           const res = await getAllFJSJ(
-            { page: 0, pageSize: 0, name, XXJBSJId: currentUser?.xxId },
+            { page: 0, pageSize: 0, name, XXJBSJId: currentUser?.xxId, lxId: CDLXId },
             opts,
           );
           if (res.status === 'ok') {
@@ -253,10 +282,36 @@ const RoomManagement = () => {
           return {};
         }}
         headerTitle={
-          <SearchComponent
-            dataSource={dataSource}
-            onChange={(type: string, value: string) => handlerSearch(type, value)}
-          />
+          <>
+            <SearchComponent
+              dataSource={[dataSource[0]]}
+              onChange={(type: string, value: string) => handlerSearch(type, value, true)}
+            />
+            <div style={{ marginLeft: '20px' }}>
+              <div className="ant-col ant-form-item-label">
+                <label title="场地类型: ">场地类型</label>
+              </div>
+              <Select
+                allowClear
+                placeholder="场地类型"
+                onChange={(value) => {
+                  console.log('value', value);
+
+                  handlerSearch('', value, false);
+                }}
+                value={CDLXId}
+                style={{ width: '120px' }}
+              >
+                {dataLX &&
+                  dataLX.length &&
+                  dataLX?.map((op: any) => (
+                    <Select.Option value={op.value} key={op.value}>
+                      {op.label}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </div>
+          </>
         }
         options={{
           setting: false,
