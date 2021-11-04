@@ -86,7 +86,8 @@ const ImagesUpload = (props: {
     <div>
       {/* {loading ? <LoadingOutlined /> : <PlusOutlined />} */}
       <div style={{ marginTop: 8 }}>
-        <img src={upload} alt="avatar" style={{ width: '100%' }} />
+        <img src={upload} alt="avatar" style={{ width: '35%',marginBottom: 5 }} />
+        <p style={{color: '#999999',fontSize: 10}}>添加图片</p>
       </div>
     </div>
   );
@@ -94,6 +95,7 @@ const ImagesUpload = (props: {
     <>
       <Upload
         name="image"
+        accept = 'image/*'
         className={styles.upload}
         listType="picture-card"
         action="/api/upload/uploadFile?type=badge&plat=school"

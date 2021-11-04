@@ -1,6 +1,6 @@
 import { Avatar, Image, Row, Col, Popconfirm, message, Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import moment from 'moment';
 import GoBack from '@/components/GoBack';
 import { getAllKHKTFC, deleteKHKTFC } from '@/services/after-class/khktfc';
 import styles from './index.less';
@@ -30,7 +30,8 @@ const Record = () => {
           classNum: item.KHBJSJ.BJMC,
           content: item.NR,
           imgs: imgsArr,
-          time: item.createdAt
+          time: item.createdAt,
+          teacherName: item.JZGJBSJ.XM,
         };
         allData.push(data);
       });
@@ -55,11 +56,12 @@ const Record = () => {
               <div className={styles.cards}>
                 <p>
                   <Avatar style={{ backgroundColor: '#0066FF', verticalAlign: 'middle' }} size="large">
-                    {item.className.slice(0, 1)}
+                    <p style={{fontSize: '14px', lineHeight: '21px', height: '21px'}}>{moment(item.time).format('DD')}</p>
+                    <p style={{fontSize: '12px', lineHeight: '12px', height: '12px', fontWeight: 300}}>{moment(item.time).format('MM')+'月'}</p>
                   </Avatar>
                   <div className={styles.name}>
                     <p>{item.className}</p>
-                    <p>{item.classNum}</p>
+                    <p>{item.classNum + '\u00A0\u00A0' + item.teacherName}</p>
                   </div>
                 </p>
                 <div className={styles.content}>
@@ -78,7 +80,7 @@ const Record = () => {
                     </Image.PreviewGroup>
                   </div>
                   <p>
-                    <span>{item.time}</span>
+                    <span>{moment(item.time).format('H:mm:ss')}</span>
                     <Popconfirm
                       title="您确定要删除此条内容吗？"
                       placement="topRight"

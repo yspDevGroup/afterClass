@@ -1,7 +1,6 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
-import { Select, Button, Divider, Row, Col, Image, Empty } from 'antd';
+import { Button, Divider, Row, Col, Image, Empty } from 'antd';
 import moment from 'moment';
 import { LeftOutlined } from '@ant-design/icons';
 import Style from './index.less';
@@ -10,7 +9,6 @@ import { getAllKHKTFC } from '@/services/after-class/khktfc';
 
 const AfterSchoolClass: React.FC = (props: any) => {
   const { state } = props.location;
-  const { initialState } = useModel('@@initialState');
   const [listData, setListData] = useState<any>([]);
 
   useEffect(() => {

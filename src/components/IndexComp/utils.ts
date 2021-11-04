@@ -33,11 +33,11 @@ export const bgColor = [
 ];
 export const topNum = [
   {
-    title: '本校课程班',
+    title: '课程班总数',
     type: 'bj_count',
   },
   {
-    title: '合作机构数',
+    title: '合作机构',
     type: 'jg_count',
   },
   {
@@ -45,15 +45,15 @@ export const topNum = [
     type: 'kc_count',
   },
   {
-    title: '引入课程',
+    title: '机构课程',
     type: 'jgkc_count',
   },
   {
-    title: '参与服务教师数',
+    title: '参与教师数',
     type: 'js_count',
   },
   {
-    title: '报名学生',
+    title: '参与学生数',
     type: 'xs_count',
   },
 ];
