@@ -155,3 +155,29 @@ export async function updateKHJSTDK(
     ...(options || {}),
   });
 }
+
+/** 根据班级查找当天的调代课记录 POST /khjstdk/getTodaySubstitute */
+export async function getTodaySubstitute(
+  body: {
+    /** 班级ID */
+    KHBJSJIds?: string[];
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.KHJSTDK[] };
+    message?: string;
+  }>('/khjstdk/getTodaySubstitute', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

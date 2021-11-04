@@ -81,7 +81,7 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
         id?: string;
         BJMC?: string;
         BJMS?: string;
-        BJZT?: '待开班' | '已开班' | '已结课';
+        BJZT?: '未开班' | '已开班' | '已结课';
         ZJS?: string;
         FJS?: string;
         BJRS?: number;

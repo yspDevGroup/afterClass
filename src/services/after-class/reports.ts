@@ -301,3 +301,227 @@ export async function exportTeachers(
     ...(options || {}),
   });
 }
+
+/** 获取课后服务教师考勤统计报表 POST /reports/getTeachersAttendanceByDate */
+export async function getTeachersAttendanceByDate(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 教师姓名 */
+    JSXM?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getTeachersAttendanceByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 导出课后服务教师考勤统计报表 POST /reports/exportTeachersAttendanceByDate */
+export async function exportTeachersAttendanceByDate(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 教师姓名 */
+    JSXM?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/exportTeachersAttendanceByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取课后服务教师考勤统计详情 POST /reports/getTeacherAttendanceDetailByDate */
+export async function getTeacherAttendanceDetailByDate(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getTeacherAttendanceDetailByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 导出课后服务教师考勤统计详情 POST /reports/exportTeacherAttendanceDetailByDate */
+export async function exportTeacherAttendanceDetailByDate(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/exportTeacherAttendanceDetailByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取课后服务学生考勤统计报表 POST /reports/getStudentsAttendanceByDate */
+export async function getStudentsAttendanceByDate(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 学生姓名 */
+    XSXM?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getStudentsAttendanceByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 导出课后服务学生考勤统计报表 POST /reports/exportStudentsAttendanceByDate */
+export async function exportStudentsAttendanceByDate(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 学生姓名 */
+    XSXM?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/exportStudentsAttendanceByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取课后服务学生考勤统计详情 POST /reports/getStudentAttendanceDetailByDate */
+export async function getStudentAttendanceDetailByDate(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学生ID */
+    XSJBSJId?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getStudentAttendanceDetailByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 导出课后服务学生考勤统计详情 POST /reports/exportStudentAttendanceDetailByDate */
+export async function exportStudentAttendanceDetailByDate(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学生ID */
+    XSJBSJId?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/exportStudentAttendanceDetailByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

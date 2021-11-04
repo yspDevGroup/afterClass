@@ -55,9 +55,13 @@ export async function getAllKHJSCQ(
     /** 班级ID */
     KHBJSJId?: string;
     /** 出勤状态 */
-    CQZT?: string;
+    CQZT?: string[];
     /** 出勤日期 */
     CQRQ?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
   },
   options?: { [key: string]: any },
 ) {

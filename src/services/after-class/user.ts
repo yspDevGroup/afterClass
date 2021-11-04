@@ -234,7 +234,7 @@ export async function homePageInfo(
           id?: string;
           BJMC?: string;
           BJMS?: string;
-          BJZT?: '待开班' | '已开班' | '已结课';
+          BJZT?: '未开班' | '已开班' | '已结课';
           ZJS?: string;
           FJS?: string;
           BJRS?: number;
@@ -301,7 +301,7 @@ export async function homePageInfo(
         id?: string;
         BJMC?: string;
         BJMS?: string;
-        BJZT?: '待开班' | '已开班' | '已结课';
+        BJZT?: '未开班' | '已开班' | '已结课';
         ZJS?: string;
         FJS?: string;
         BJRS?: number;

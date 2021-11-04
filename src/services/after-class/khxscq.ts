@@ -24,7 +24,7 @@ export async function getKHXSCQ(
         id?: string;
         BJMC?: string;
         BJMS?: string;
-        BJZT?: '待开班' | '已开班' | '已结课';
+        BJZT?: '未开班' | '已开班' | '已结课';
         BJRS?: number;
         KSS?: number;
         FY?: number;
@@ -68,11 +68,15 @@ export async function getAllKHXSCQ(
     /** 班级ID */
     bjId?: string;
     /** 出勤状态 */
-    CQZT?: string;
+    CQZT?: string[];
     /** 出勤日期 */
     CQRQ?: string;
     /** 课程排课ID */
     pkId?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -100,7 +104,7 @@ export async function createKHXSCQ(body: API.CreateKHXSCQ[], options?: { [key: s
         id?: string;
         BJMC?: string;
         BJMS?: string;
-        BJZT?: '待开班' | '已开班' | '已结课';
+        BJZT?: '未开班' | '已开班' | '已结课';
         BJRS?: number;
         KSS?: number;
         FY?: number;

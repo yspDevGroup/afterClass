@@ -76,7 +76,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待开班' | '已开班' | '已结课';
+      BJZT?: '未开班' | '已开班' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -194,6 +194,8 @@ export async function getAllClasses(
     NJSJId?: string;
     /** 班级状态 */
     BJZT?: string;
+    /** 班级名称 */
+    BJMC?: string;
     /** 学年 */
     XN?: string;
     /** 学期 */

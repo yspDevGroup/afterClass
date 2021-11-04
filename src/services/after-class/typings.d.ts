@@ -1571,7 +1571,7 @@ declare namespace API {
     /** 班级描述 */
     BJMS?: string;
     /** 班级状态 */
-    BJZT: '待开班' | '已开班' | '已结课';
+    BJZT: '未开班' | '已开班' | '已结课';
     /** 主教ID */
     ZJS?: string;
     /** 副教ID */
@@ -1630,7 +1630,7 @@ declare namespace API {
     /** 班级描述 */
     BJMS?: string;
     /** 班级状态 */
-    BJZT: '待开班' | '已开班' | '已结课';
+    BJZT: '未开班' | '已开班' | '已结课';
     /** 班级人数 */
     BJRS?: number;
     /** 课时数 */
@@ -1666,7 +1666,7 @@ declare namespace API {
     /** 班级描述 */
     BJMS?: string;
     /** 班级状态 */
-    BJZT?: '待开班' | '已开班' | '已结课';
+    BJZT?: '未开班' | '已开班' | '已结课';
     /** 班级人数 */
     BJRS?: number;
     /** 课时数 */
@@ -2396,7 +2396,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待开班' | '已开班' | '已结课';
+      BJZT?: '未开班' | '已开班' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -2565,7 +2565,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待开班' | '已开班' | '已结课';
+      BJZT?: '未开班' | '已开班' | '已结课';
       ZJS?: string;
       FJS?: string;
       BJRS?: number;
@@ -2696,7 +2696,7 @@ declare namespace API {
           KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
         }
       | any;
-    KHXSTKs?: { id?: string; BZ?: string; TKZT?: string; TKJE?: number }[];
+    KHXSTKs?: { id?: string; BZ?: string; TKZT?: string; TKSJ?: string; TKJE?: number }[];
   };
 
   type CreateKHTKSJ = {
@@ -2861,7 +2861,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待开班' | '已开班' | '已结课';
+      BJZT?: '未开班' | '已开班' | '已结课';
       BJRS?: number;
       KSS?: number;
       FY?: number;
@@ -3008,7 +3008,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       BJMS?: string;
-      BJZT?: '待开班' | '已开班' | '已结课';
+      BJZT?: '未开班' | '已开班' | '已结课';
       BJRS?: number;
       KSS?: number;
       FY?: number;
@@ -3073,7 +3073,7 @@ declare namespace API {
         id?: string;
         BJMC?: string;
         BJMS?: string;
-        BJZT?: '待开班' | '已开班' | '已结课';
+        BJZT?: '未开班' | '已开班' | '已结课';
         BJRS?: number;
         KSS?: number;
         FY?: number;

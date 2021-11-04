@@ -38,7 +38,7 @@ export async function getKHXSQJ(
           id?: string;
           BJMC?: string;
           BJMS?: string;
-          BJZT?: '待开班' | '已开班' | '已结课';
+          BJZT?: '未开班' | '已开班' | '已结课';
           BJRS?: number;
           KSS?: number;
           FY?: number;
@@ -143,7 +143,7 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
           id?: string;
           BJMC?: string;
           BJMS?: string;
-          BJZT?: '待开班' | '已开班' | '已结课';
+          BJZT?: '未开班' | '已开班' | '已结课';
           BJRS?: number;
           KSS?: number;
           FY?: number;

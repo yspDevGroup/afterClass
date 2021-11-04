@@ -408,6 +408,8 @@ export async function cooperateSchoolOrderList(
     XQId?: string;
     /** 课程id */
     KCId?: string;
+    /** 课程类型Id */
+    KCTAGId?: string;
     /** 学生名称 */
     XSMC?: string;
     /** 页数 */
