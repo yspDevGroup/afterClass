@@ -10,7 +10,7 @@ import { Button, Form, Input, message, Select } from 'antd';
 import { useModel, history } from 'umi';
 import ClassCalendar from '../../../ClassCalendar';
 import styles from '../index.less';
-import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
+import { getIgnoreTeacherByClassesId } from '@/services/after-class/jzgjbsj';
 import { createKHJSTDK } from '@/services/after-class/khjstdk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
@@ -34,17 +34,22 @@ const DkApply = () => {
   useEffect(() => {
     (
       async () => {
-        const res = await getAllJZGJBSJ({
-          XXJBSJId: currentUser?.xxId,
-          page: 0,
-          pageSize: 0
-        })
-        if (res.status === 'ok') {
-          setJsData(res.data?.rows)
+        if(dateData){
+          const res = await getIgnoreTeacherByClassesId({
+            KHBJSJId:dateData?.bjid,
+            XXJBSJId: currentUser?.xxId,
+            page: 0,
+            pageSize: 0
+          })
+          if (res.status === 'ok') {
+            setJsData(res.data?.rows)
+          }
+        }else{
+          setJsData([])
         }
       }
     )()
-  }, [])
+  }, [dateData])
   const onFinish = async (values: any) => {
     const newData = {
       LX: 1,
@@ -87,7 +92,7 @@ const DkApply = () => {
           onFinish={onFinish}
         >
           <Form.Item
-            label="代课教师"
+            label="代课教师（请先选择代课课程）"
             name="DKJS"
             rules={[{ required: true, message: '请选择代课教师' }]}
           >
