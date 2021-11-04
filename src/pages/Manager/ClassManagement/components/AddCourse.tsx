@@ -327,6 +327,14 @@ const AddCourse: FC<AddCourseProps> = ({
           JCMC: item.JCMC,
         };
       });
+    } else {
+      mertial = [].map.call(dataSource, (item: any) => {
+        return {
+          KHBJSJId: formValues?.id,
+          JCFY: item.JCFY,
+          JCMC: item.JCMC,
+        };
+      });
     }
     new Promise((resolve, reject) => {
       let res = null;
