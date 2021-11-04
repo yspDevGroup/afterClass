@@ -64,6 +64,7 @@ import * as xscfsj from './xscfsj';
 import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
 import * as xsjtcy from './xsjtcy';
+import * as xsjzxx from './xsjzxx';
 import * as xsxxjl from './xsxxjl';
 import * as xxgg from './xxgg';
 import * as xxjbpz from './xxjbpz';
@@ -136,6 +137,7 @@ export default {
   xsjbsj,
   xsjlsj,
   xsjtcy,
+  xsjzxx,
   xsxxjl,
   xxgg,
   xxjbpz,

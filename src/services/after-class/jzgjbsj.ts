@@ -391,3 +391,27 @@ export async function getTeachersApplication(
     ...(options || {}),
   });
 }
+
+/** 获取除对应课程以外的其他老师 POST /jzgjbsj/getIgnoreTeacherByClassesId */
+export async function getIgnoreTeacherByClassesId(
+  body: {
+    /** 课后班级数据id */
+    KHBJSJId?: string;
+    /** 学校基本数据id */
+    XXJBSJId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/jzgjbsj/getIgnoreTeacherByClassesId', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

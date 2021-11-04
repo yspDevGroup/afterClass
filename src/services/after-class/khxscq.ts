@@ -181,3 +181,25 @@ export async function countKHXSCQ(
     ...(options || {}),
   });
 }
+
+/** 获取排课信息 POST /khxscq/getArrangement */
+export async function getArrangement(
+  body: {
+    /** 出勤日期 */
+    DATE?: string;
+    /** 班级ID */
+    KHBJSJId?: string;
+    /** 节次ID */
+    XXSJPZId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khxscq/getArrangement', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

@@ -306,7 +306,7 @@ export async function getOrders(
     /** 课程名称 */
     kcmc?: string;
     /** 课后服务订单状态 */
-    DDZT?: string;
+    DDZT?: string[];
   },
   options?: { [key: string]: any },
 ) {

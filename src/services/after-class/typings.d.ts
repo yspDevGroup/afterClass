@@ -2035,7 +2035,12 @@ declare namespace API {
     SKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
     TKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
     XXSJPZ?: { id?: string; KSSJ?: string; JSSJ?: string; TITLE?: string };
-    KHBJSJ?: { id?: string; BJMC?: string; KHKCSJ?: { id?: string; KCMC?: string } };
+    KHBJSJ?: {
+      id?: string;
+      BJMC?: string;
+      KCTP?: string;
+      KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
+    };
     SPJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
     createdAt?: string;
     updatedAt?: string;
@@ -4333,6 +4338,34 @@ declare namespace API {
     SJHM?: string;
     /** 学生ID */
     XSJBSJId?: string;
+  };
+
+  type XSJZXX = {
+    id: string;
+    /** 姓名 */
+    XM?: string;
+    /** 联系电话 */
+    LXDH?: string;
+    /** 性别 */
+    XB?: string;
+  };
+
+  type CreateXSJZXX = {
+    /** 姓名 */
+    XM: string;
+    /** 联系电话 */
+    LXDH: string;
+    /** 性别 */
+    XB?: string;
+  };
+
+  type UpdateXSJZXX = {
+    /** 姓名 */
+    XM?: string;
+    /** 联系电话 */
+    LXDH?: string;
+    /** 性别 */
+    XB?: string;
   };
 
   type XSXXJL = {

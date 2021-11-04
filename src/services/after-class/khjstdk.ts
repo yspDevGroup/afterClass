@@ -30,7 +30,12 @@ export async function getKHJSTDK(
       SKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
       TKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
       XXSJPZ?: { id?: string; KSSJ?: string; JSSJ?: string; TITLE?: string };
-      KHBJSJ?: { id?: string; BJMC?: string; KHKCSJ?: { id?: string; KCMC?: string } };
+      KHBJSJ?: {
+        id?: string;
+        BJMC?: string;
+        KCTP?: string;
+        KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
+      };
       SPJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       createdAt?: string;
       updatedAt?: string;
@@ -118,7 +123,12 @@ export async function createKHJSTDK(body: API.CreateKHJSTDK, options?: { [key: s
       SKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
       TKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
       XXSJPZ?: { id?: string; KSSJ?: string; JSSJ?: string; TITLE?: string };
-      KHBJSJ?: { id?: string; BJMC?: string; KHKCSJ?: { id?: string; KCMC?: string } };
+      KHBJSJ?: {
+        id?: string;
+        BJMC?: string;
+        KCTP?: string;
+        KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
+      };
       SPJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       createdAt?: string;
       updatedAt?: string;
