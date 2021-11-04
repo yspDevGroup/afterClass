@@ -3,13 +3,11 @@ import React, { useEffect, useState } from 'react';
 import styles from './index.less';
 import { Tabs } from 'antd';
 import noPic from '@/assets/noPic.png';
-import noOrder from '@/assets/noOrder.png';
 import GoBack from '@/components/GoBack';
 import { Link, useModel } from 'umi';
 import { getStudent } from '@/services/after-class/khxxzzfw';
 import moment from 'moment';
 import ListComponent from '@/components/ListComponent';
-import Nodata from '@/components/Nodata';
 import noData from '@/assets/noCourses.png';
 import type { ListData } from '@/components/ListComponent/data';
 
@@ -17,6 +15,15 @@ const defaultMsg: ListData = {
   type: 'picList',
   cls: 'picList',
   list: [],
+  noDataText: '暂无课程',
+  noDataImg: noData,
+};
+const defaultMsgs: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [],
+  noDataText: '暂无服务',
+  noDataImg: noData,
 };
 
 const { TabPane } = Tabs;
@@ -59,34 +66,17 @@ const ServiceReservation = (props: any) => {
     <div className={styles.ServiceReservation}>
       <GoBack title={'我的服务'} onclick="/parent/home?index=index" />
       <Tabs type="card" activeKey={state} onChange={onchange}>
-      <TabPane tab="已选课程" key="elective">
+        <TabPane tab="已选课程" key="elective">
           {yxkcAllData && yxkcAllData.length ? (
             <ListComponent listData={yxkcData} />
           ) : (
-            <Nodata imgSrc={noData} desc="暂无课程" />
+            <ListComponent listData={defaultMsg} />
           )}
         </TabPane>
         <TabPane tab="已选服务" key="yxfu">
           <>
             {YxserviceData && YxserviceData?.length === 0 ? (
-              <div className={styles.Selected}>
-                <div className={styles.noOrder}>
-                  <div>
-                    <p>您当前未选择任何服务</p>
-                    <a
-                      style={{
-                        color: '1.1em',
-                      }}
-                      onClick={() => {
-                        setstate('ksfw');
-                      }}
-                    >
-                      去挑选
-                    </a>
-                  </div>
-                  <img src={noOrder} alt="" />
-                </div>
-              </div>
+              <ListComponent listData={defaultMsgs} />
             ) : (
               <div className={styles.Selected}>
                 <div className={styles.wrap}>

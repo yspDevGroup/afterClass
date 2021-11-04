@@ -18,6 +18,13 @@ const defaultMsg: ListData = {
   noDataText: '暂无课程',
   noDataImg: noData,
 };
+const defaultMsgs: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [],
+  noDataText: '暂无服务',
+  noDataImg: noData,
+};
 const CourseTab = (props: { dataResource: any; }) => {
   const { dataResource } = props;
   // 获取首页数据
@@ -25,7 +32,6 @@ const CourseTab = (props: { dataResource: any; }) => {
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
   const [yxkcAllData, setYxkcAllData] = useState<ListData>(defaultMsg);
   const [yxfwData, setYxfwData] = useState<ListData>(defaultMsg);
-  const [yxfwAllData, setYxfwAllData] = useState<ListData>(defaultMsg);
   const centered = false;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -50,7 +56,7 @@ const CourseTab = (props: { dataResource: any; }) => {
         const nodeData: ListItem = {
           id: record.KHXXZZFWId,
           title: record.KHXXZZFW.FWMC,
-          img: record.KHXXZZFW?.FWTP ,
+          img: record.KHXXZZFW?.FWTP,
           link: `/parent/home/serviceReservation/details?type=YX&id=${record?.KHXXZZFW?.id}`,
           desc: [
             {
@@ -67,7 +73,6 @@ const CourseTab = (props: { dataResource: any; }) => {
         return nodeData;
       });
       const { list, ...rest } = { ...defaultMsg };
-      setYxfwAllData(listData);
       setYxfwData({
         list: listData.slice(0, 3),
         ...rest,
@@ -138,10 +143,14 @@ const CourseTab = (props: { dataResource: any; }) => {
         className={styles.courseTab}
       >
         <TabPane tab="已选课程" key="elective">
-          <ListComponent listData={yxkcData} />
+          {
+            yxkc && yxkc?.length ? <ListComponent listData={yxkcData} /> : <ListComponent listData={defaultMsg} />
+          }
         </TabPane>
         <TabPane tab="已选服务" key="setup">
-          <ListComponent listData={yxfwData} />
+          {
+            YxserviceData && YxserviceData?.length ? <ListComponent listData={yxfwData} /> : <ListComponent listData={defaultMsgs} />
+          }
         </TabPane>
       </Tabs>
     </div>

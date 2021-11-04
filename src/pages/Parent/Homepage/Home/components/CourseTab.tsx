@@ -8,7 +8,6 @@ import { Link, useModel } from 'umi';
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import IconFont from '@/components/CustomIcon';
 import moment from 'moment';
-import noOrder from '@/assets/noOrder.png';
 import noPic from '@/assets/noPic.png';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllFWByschooId } from '@/services/after-class/khzzfw';
@@ -20,6 +19,13 @@ const defaultMsg: ListData = {
   cls: 'picList',
   list: [],
   noDataText: '暂无课程',
+  noDataImg: noData,
+};
+const defaultMsgs: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [],
+  noDataText: '暂无服务',
   noDataImg: noData,
 };
 const CourseTab = (props: { dataResource: any; }) => {
@@ -86,14 +92,14 @@ const CourseTab = (props: { dataResource: any; }) => {
         page: 0,
         pageSize: 0,
       });
-      if (result.status === 'ok') {
+      if (result.status === 'ok' && result.data.rows.length !== 0) {
         setLBData(result!.data!.rows!);
         if (res.current) {
           const resGetKHXXZZFW = await getKHXXZZFW({
             XXJBSJId: currentUser?.xxId,
             XNXQId: res?.current?.id || '',
             FWZT: 1,
-            KHZZFWId: result!.data!.rows![0].id,
+            KHZZFWId: result?.data?.rows?.[0].id,
           });
           if (resGetKHXXZZFW.status === 'ok') {
             const NewData = resGetKHXXZZFW?.data?.rows?.filter((value: any) => {
@@ -103,6 +109,8 @@ const CourseTab = (props: { dataResource: any; }) => {
             setDataSource(NewData);
           }
         }
+      }else{
+        setLBData([]);
       }
     })();
   }, []);
@@ -203,14 +211,7 @@ const CourseTab = (props: { dataResource: any; }) => {
          <TabPane tab="开设服务" key="ksfw">
           <div className={styles.category}>
             {LBData && LBData.length === 0 ? (
-              <div className={styles.Selected}>
-                <div className={styles.noOrder}>
-                  <div>
-                    <p>当前暂未开设服务</p>
-                  </div>
-                  <img src={noOrder} alt="" />
-                </div>
-              </div>
+              <ListComponent listData={defaultMsgs} />
             ) : (
               <Tabs type="card" onChange={callback}>
                 {LBData?.map((value: any) => {

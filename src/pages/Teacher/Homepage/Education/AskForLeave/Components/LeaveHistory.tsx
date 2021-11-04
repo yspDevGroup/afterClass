@@ -7,7 +7,7 @@
  * @LastEditors: Sissle Lynn
  */
 import { useEffect } from 'react';
-import { Button, message } from 'antd';
+import { Button, Divider, message } from 'antd';
 import moment from 'moment';
 import Nodata from '@/components/Nodata';
 import { enHenceMsg } from '@/utils/utils';
@@ -57,9 +57,13 @@ const LeaveHistory = (props: propsType) => {
                   {moment(item.updatedAt || item.createdAt).format('YYYY.MM.DD')}
                 </span>
               </div>
-              <p>时间：{moment(item.KHJSQJKCs?.[0].QJRQ).format('MM月DD日')} {item.KSSJ}-{item.JSSJ}</p>
-              <p>课程：{item.KHJSQJKCs?.map((it: any) => <>{it.KCMC}  &nbsp; </>)}</p>
-              <p>原因：{item.QJYY}</p>
+              <p>时间：{moment(item?.KHJSQJKCs?.[0].QJRQ).format('MM月DD日')} {item.KSSJ}-{item.JSSJ}</p>
+              <p>课程：{item?.KHJSQJKCs?.map((it: any) => <>{it.KCMC}  &nbsp; </>)}</p>
+              <p>原因：{item?.QJYY}</p>
+              {
+                item?.BZ ? <> <Divider />
+                <p>审批说明：{item?.BZ}</p></>:<></>
+              }
               {item.QJZT === 0 && con1 ? (
                 <Button onClick={() => handleCancle(item)}>
                   撤销

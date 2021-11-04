@@ -10,12 +10,21 @@ import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getAllFWByschooId } from '@/services/after-class/khzzfw';
 import { Link, useModel } from 'umi';
 import noPic from '@/assets/noPic.png';
-import noOrder from '@/assets/noOrder.png';
+import noData from '@/assets/noCourses.png';
 
 const defaultMsg: ListData = {
   type: 'picList',
   cls: 'picList',
   list: [],
+  noDataText: '暂无课程',
+  noDataImg: noData,
+};
+const defaultMsgs: ListData = {
+  type: 'picList',
+  cls: 'picList',
+  list: [],
+  noDataText: '暂无服务',
+  noDataImg: noData,
 };
 
 const Course = (props: any) => {
@@ -48,7 +57,7 @@ const Course = (props: any) => {
         page: 0,
         pageSize: 0,
       });
-      if (result.status === 'ok') {
+      if (result.status === 'ok' && result.data.rows.length !== 0) {
         setLBData(result!.data!.rows!);
         if (res.current) {
           const resGetKHXXZZFW = await getKHXXZZFW({
@@ -64,6 +73,8 @@ const Course = (props: any) => {
             setDataSource(NewData);
           }
         }
+      }else{
+        setLBData([])
       }
     })();
   }, []);
@@ -137,14 +148,7 @@ const Course = (props: any) => {
           <TabPane tab="开设服务" key="ksfw">
           <div className={styles.category}>
             {LBData && LBData.length === 0 ? (
-              <div className={styles.Selected}>
-                <div className={styles.noOrder}>
-                  <div>
-                    <p>当前暂未开设服务</p>
-                  </div>
-                  <img src={noOrder} alt="" />
-                </div>
-              </div>
+              <ListComponent listData={defaultMsgs} />
             ) : (
               <Tabs type="card" onChange={callback}>
                 {LBData?.map((value: any) => {

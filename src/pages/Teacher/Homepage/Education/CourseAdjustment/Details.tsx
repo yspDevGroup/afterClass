@@ -117,9 +117,11 @@ const Details = (props: any) => {
                 <Switch defaultChecked={Datas?.ZT === 4 || Datas?.ZT === 1 ||  Datas?.ZT === 0} onChange={onChange} disabled={state.type === 'view' || Datas.ZT === 4} />
               </p>
           }
-
           {
-            Datas?.ZT === 5 ? <p >原因：{Datas?.DKBZ}</p> : <> {
+            Datas?.DKBZ ? <p style={{fontSize:'16px'}}>说明：{Datas?.DKBZ}</p>:<></>
+          }
+          {
+            Datas?.ZT === 5 ? <></> : <> {
               Opinion === true || (state.type === 'view' && Datas?.ZT === 0) ? <></> :
                 <TextArea placeholder="请说明原因" showCount maxLength={100} onChange={onChanges} />
             }</>
