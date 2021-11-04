@@ -36,7 +36,6 @@ const course = () => {
       });
       pieConfig.data = defaultData.courseCollect;
       const { xxkc_count, jgkc_count} = resProportion.data;
-      console.log('xxkc_count, jgkc_count: ', xxkc_count, jgkc_count);
       const sum = xxkc_count + jgkc_count;
       defaultData.proportionNum.push({
         type: '学校课程',
@@ -58,7 +57,7 @@ const course = () => {
 
   return (
   <div className={styles.course}>
-    <div className={styles.container} style={{height: '290px'}}>
+    <div className={styles.container} style={{height: '340px'}}>
       <ModuleTitle data='课程类型分布'/>
       <div className={styles.chartsContainer}>
       {
@@ -72,7 +71,7 @@ const course = () => {
         }
       </div>
     </div>
-    <div className={styles.container} style={{height: '355px'}}>
+    <div className={styles.container} style={{height: '340px'}}>
       <ModuleTitle data='学校、机构课程对比'/>
       <div className={styles.chartsContainer}>
       {

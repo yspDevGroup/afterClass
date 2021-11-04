@@ -60,7 +60,7 @@ const SubstituteList = () => {
                     showWXName ? <WWOpenDataCom type="userName" openid={item?.SKJS?.WechatUserId} /> : item.SKJS?.XM
                   }教师的代课申请{item.ZT === 3 ? <span>已撤销</span> :
                     item.ZT === 4 ? <span style={{ color: '#FFB257', borderColor: '#FFB257' }}>审批中</span> :
-                      item.ZT === 0 ? <span style={{ color: '#fff', backgroundColor: '#FF7527' }}>待处理</span> :
+                      item.ZT === 0 ? <span style={{ color: '#fff', backgroundColor: '#FF7527',border:'none' }}>待处理</span> :
                         item.ZT === 1 ? <span style={{ color: '#45c977', borderColor: '#45c977' }}>已通过</span> :
                           item.ZT === 2 || item.ZT === 5 ? <span style={{ color: '#FF4B4B', borderColor: '#FF4B4B' }}>已驳回</span> : ''}</h4>
                 <span>

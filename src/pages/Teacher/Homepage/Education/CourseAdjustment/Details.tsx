@@ -24,7 +24,7 @@ const Details = (props: any) => {
           if (res.data.ZT === 5) {
             setOpinion(false)
           } else if (res.data.ZT === 0) {
-            setOpinion(false)
+            setOpinion(true)
           }
         } else {
           message.error(res.message)
@@ -113,8 +113,8 @@ const Details = (props: any) => {
           {
             (Datas?.ZT === 0 && state.type === 'view') || Datas.ZT === 3 ? <></> :
               <p className={styles.switch}>
-                <span>是否同意调课</span>
-                <Switch defaultChecked={Datas?.ZT === 4 || Datas?.ZT === 1} onChange={onChange} disabled={state.type === 'view' || Datas.ZT === 4} />
+                <span>是否同意代课</span>
+                <Switch defaultChecked={Datas?.ZT === 4 || Datas?.ZT === 1 ||  Datas?.ZT === 0} onChange={onChange} disabled={state.type === 'view' || Datas.ZT === 4} />
               </p>
           }
 

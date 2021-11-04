@@ -295,7 +295,7 @@ const Adjustment: React.FC = () => {
         />
       </div>
       <Modal
-        title="代课审批"
+        title="调课审批"
         visible={visible}
         onOk={() => {
           form.submit();

@@ -173,7 +173,7 @@ const MutualEvaluation = () => {
       title: '类别描述',
       dataIndex: 'FWNR',
       key: 'FWNR',
-      width: 180,
+      width: 160,
       align: 'center',
       search: false,
       ellipsis: true,
@@ -204,7 +204,7 @@ const MutualEvaluation = () => {
       key: 'option',
       valueType: 'option',
       align: 'center',
-      width: 100,
+      width: 120,
       fixed:'right',
       render: (text, record) => {
         return (
