@@ -215,7 +215,7 @@ const OrderInquiry = (props: any) => {
   const getData = async () => {
     const resAll = await getAllKHXSDD({
       XNXQId: curXNXQId,
-      DDZT,
+      DDZT:DDZT === '已付款' ? ['已付款','已退款']:[DDZT],
       DDLX: 0,
       kcmc,
       bjmc,

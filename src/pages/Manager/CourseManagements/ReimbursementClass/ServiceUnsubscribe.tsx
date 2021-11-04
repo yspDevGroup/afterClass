@@ -9,6 +9,7 @@ import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 import Style from './index.less';
 import { createKHXSTK } from '@/services/after-class/khxstk';
 import moment from 'moment';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -62,6 +63,10 @@ const ServiceUnsubscribe = () => {
       width: 100,
       fixed: 'left',
       render: (_text: any, record: any) => {
+        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ?.WechatUserId} />;
+        }
         return record?.XSJBSJ?.XM
       },
     },
@@ -134,6 +139,10 @@ const ServiceUnsubscribe = () => {
       ellipsis: true,
       width: 100,
       render: (_, record) => {
+        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
+        }
         return record?.JZGJBSJ?.XM
       }
     },
@@ -192,12 +201,18 @@ const ServiceUnsubscribe = () => {
   ];
   const handleSubmit = async (params: any) => {
     const { ZT, BZ } = params;
+
+    let DKFY: any;
     const a1 = new Date(current?.KHXXZZFW?.KSRQ).getTime();
     const a2 = new Date(current?.KHXXZZFW?.JSRQ).getTime();
     const a3 = new Date(current?.createdAt).getTime();
-    const days = Math.ceil((a3 - a1) / (1000 * 60 * 60 * 24));
-    const FWTS = Math.ceil((a2 - a1) / (1000 * 60 * 60 * 24));
-    const DKFY = (Number(current?.KHXXZZFW?.FY) - ((days / FWTS) * current?.KHXXZZFW?.FY)).toFixed(2);
+    if (a3 > a1) {
+      DKFY = Number(current?.KHXXZZFW?.FY)
+    } else {
+      const days = Math.ceil((a3 - a1) / (1000 * 60 * 60 * 24));
+      const FWTS = Math.ceil((a2 - a1) / (1000 * 60 * 60 * 24));
+      DKFY = (Number(current?.KHXXZZFW?.FY) - ((days / FWTS) * current?.KHXXZZFW?.FY)).toFixed(2);
+    }
     try {
       if (current.id) {
         const ids = { id: current.id };

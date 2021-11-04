@@ -136,7 +136,7 @@ const SubstituteFor: React.FC = () => {
       },
     },
     {
-      title: '审批意见',
+      title: '代课教师意见',
       dataIndex: 'YJ',
       key: 'YJ',
       align: 'center',

@@ -59,7 +59,7 @@ const OrderInquiry = (props: any) => {
         XNXQId: curXNXQId,
         XSXM: name,
         // 父传子判断要请求的状态
-        DDZT,
+        DDZT:DDZT === '已付款' ? ['已付款','已退款']:[DDZT],
         DDLX: 1
       })
       if (res.status === 'ok') {
