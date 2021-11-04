@@ -45,7 +45,12 @@ const StudentsLeave: React.FC = () => {
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateKHJSQJ({ id: current?.id }, { QJZT: ZT, BZ });
+      const res = await updateKHJSQJ({ id: current?.id },
+        {
+          QJZT: ZT,
+          BZ,
+          SPJSId: currentUser?.JSId || testTeacherId,
+        });
       if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);
@@ -134,7 +139,7 @@ const StudentsLeave: React.FC = () => {
       width: 180,
     },
     {
-      title: '请假状态',
+      title: '状态',
       dataIndex: 'QJZT',
       key: 'QJZT',
       valueType: 'select',
@@ -168,6 +173,37 @@ const StudentsLeave: React.FC = () => {
       align: 'center',
       width: 160,
       render: (text: any, record: any) => `${text.KHJSQJKCs[0].QJRQ}  ${record.JSSJ}`,
+    },
+    {
+      title: '审批人',
+      dataIndex: 'SPJS',
+      key: 'SPJS',
+      align: 'center',
+      ellipsis: true,
+      width: 100,
+      render: (_text: any, record: any) => {
+        const showWXName = record?.SPJS?.XM === '未知' && record?.SPJS?.WechatUserId;
+        if (showWXName) {
+          return <WWOpenDataCom type="userName" openid={record?.SPJS?.WechatUserId} />;
+        }
+        return record?.SPJS?.XM;
+      },
+    },
+    {
+      title: '审批说明',
+      dataIndex: 'BZ',
+      key: 'BZ',
+      align: 'center',
+      ellipsis: true,
+      width: 180,
+    },
+    {
+      title: '审批时间',
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
+      align: 'center',
+      ellipsis: true,
+      width: 160,
     },
     {
       title: '操作',
@@ -282,7 +318,7 @@ const StudentsLeave: React.FC = () => {
         />
       </div>
       <Modal
-        title="请假审核"
+        title="请假审批"
         visible={visible}
         onOk={() => {
           form.submit();
@@ -302,13 +338,13 @@ const StudentsLeave: React.FC = () => {
           onFinish={handleSubmit}
           layout="horizontal"
         >
-          <Form.Item label="审核意见" name="ZT">
+          <Form.Item label="审批意见" name="ZT">
             <Radio.Group>
               <Radio value={1}>同意</Radio>
               <Radio value={2}>不同意</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item label="审核说明" name='BZ'>
+          <Form.Item label="审批说明" name='BZ'>
             <TextArea rows={4} maxLength={100} />
           </Form.Item>
         </Form>

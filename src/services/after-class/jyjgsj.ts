@@ -301,6 +301,9 @@ export async function getOrders(
     /** 学年学期ID */
     XNXQId?: string;
     KCMC?: string;
+    KHZZFWId?: string;
+    KHXXZZFWId?: string;
+    KHKCLXId?: string;
     /** 班级名称 */
     bjmc?: string;
     /** 课程名称 */

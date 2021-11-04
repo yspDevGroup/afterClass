@@ -23,6 +23,7 @@ export async function getKHJSQJ(
       QJZT?: number;
       BZ?: string;
       JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
+      SPJS?: { id?: string; XM?: string; WechatUserId?: string };
       KHJSQJKCs?: {
         QJRQ?: string;
         KCMC?: string;
@@ -102,6 +103,7 @@ export async function createKHJSQJ(body: API.CreateKHJSQJ, options?: { [key: str
       QJZT?: number;
       BZ?: string;
       JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
+      SPJS?: { id?: string; XM?: string; WechatUserId?: string };
       KHJSQJKCs?: {
         QJRQ?: string;
         KCMC?: string;

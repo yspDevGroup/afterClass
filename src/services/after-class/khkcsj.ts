@@ -286,3 +286,23 @@ export async function getTeacherByClassId(
     ...(options || {}),
   });
 }
+
+/** 获取学校课程基础信息 POST /khkcsj/getClassesByCourse */
+export async function getClassesByCourse(
+  body: {
+    /** 课程ID */
+    KHKCSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khkcsj/getClassesByCourse', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

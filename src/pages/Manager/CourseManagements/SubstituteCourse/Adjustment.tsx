@@ -338,6 +338,7 @@ const Adjustment: React.FC = () => {
           Datas ? <div className={styles.TkDetails}>
             <p>申请教师：{showWXName ? <WWOpenDataCom type="userName" openid={Datas?.SKJS?.WechatUserId} /> : Datas?.SKJS?.XM}</p>
             <p>申请时间：{Datas?.createdAt}</p>
+            <p>申请原因：{Datas?.BZ}</p>
             <p>课程名称：{Datas?.KHBJSJ?.KHKCSJ?.KCMC}</p>
             <p>课程班名称：{Datas?.KHBJSJ?.BJMC}</p>
             <div className={styles.TkAfter}>

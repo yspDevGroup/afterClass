@@ -1854,6 +1854,7 @@ declare namespace API {
     /** 备注信息 */
     BZ?: string;
     JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string };
+    SPJS?: { id?: string; XM?: string; WechatUserId?: string };
     KHJSQJKCs?: {
       QJRQ?: string;
       KCMC?: string;
@@ -1888,6 +1889,8 @@ declare namespace API {
     QJZT?: number;
     /** 备注信息 */
     BZ?: string;
+    /** 审批教师ID */
+    SPJSId?: string;
   };
 
   type KHJSSJ = {
