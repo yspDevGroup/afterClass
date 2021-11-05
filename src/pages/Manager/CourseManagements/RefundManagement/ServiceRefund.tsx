@@ -8,6 +8,9 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import Style from './index.less';
 import { getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { getKHZZFW } from '@/services/after-class/khzzfw';
+import moment from 'moment';
+import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -24,6 +27,11 @@ const ServiceRefund = () => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
+  const [LBData, setLBData] = useState<any>([]);
+  const [LbId, setLbId] = useState<string>();
+  const [FWMCData, setFWMCData] = useState<any>([]);
+  const [FWMC, setFWMC] = useState<string>();
+
   useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
@@ -40,9 +48,49 @@ const ServiceRefund = () => {
       }
     })();
   }, []);
+
+  const getLBData = async () => {
+    const result = await getKHZZFW({
+      XXJBSJId: currentUser?.xxId,
+      FWMC: '',
+      FWZT: 1,
+      page: 0,
+      pageSize: 0,
+    });
+    if (result.status === 'ok') {
+      setLBData(result!.data!.rows!);
+    }
+  };
+  // 获取服务名称数据
+  const getFWMCData = async () => {
+    const res = await getKHXXZZFW({
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId || '',
+      KHZZFWId: LbId || '',
+    });
+    if (res.status === 'ok') {
+      // 服务名称置空
+      setFWMC(undefined);
+      setFWMCData(res?.data?.rows);
+    }
+  };
+
   useEffect(() => {
-    actionRef.current?.reload();
-  }, [curXNXQId]);
+    getLBData();
+  }, []);
+
+  useEffect(() => {
+    if (curXNXQId) {
+      actionRef.current?.reload();
+      getFWMCData();
+    }
+  }, [LbId, curXNXQId]);
+  useEffect(() => {
+    if (curXNXQId) {
+      actionRef.current?.reload();
+    }
+  }, [FWMC]);
+
   /// table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -244,6 +292,8 @@ const ServiceRefund = () => {
       message.error('退款流程出现错误，请联系管理员或稍后重试。');
     }
   };
+
+  console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
   return (
     <>
       <div className={Style.TopSearchs}>
@@ -266,6 +316,56 @@ const ServiceRefund = () => {
             })}
           </Select>
         </span>
+        <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
+          服务类别：
+          <Select
+            allowClear
+            value={LbId || ''}
+            style={{ width: 165 }}
+            placeholder="请选择"
+            onChange={(value: string) => {
+              setLbId(value);
+            }}
+          >
+            {/* <Option value="" key="">
+                    全部
+                  </Option> */}
+            {LBData?.length
+              ? LBData?.map((item: any) => {
+                  return (
+                    <Option value={item?.id} key={item?.id}>
+                      {item?.FWMC}
+                    </Option>
+                  );
+                })
+              : ''}
+          </Select>
+        </span>
+        <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
+          服务名称：
+          <Select
+            allowClear
+            value={FWMC || ''}
+            style={{ width: 165 }}
+            placeholder="请选择"
+            onChange={(value: string) => {
+              setFWMC(value);
+            }}
+          >
+            {/* <Option value="" key="">
+                    全部
+                  </Option> */}
+            {FWMCData?.length
+              ? FWMCData?.map((item: any) => {
+                  return (
+                    <Option value={item?.FWMC} key={item?.FWMC}>
+                      {item?.FWMC}
+                    </Option>
+                  );
+                })
+              : ''}
+          </Select>
+        </span>
       </div>
       <div>
         <ProTable<any>
@@ -283,6 +383,8 @@ const ServiceRefund = () => {
               LX: 1,
               XXJBSJId: currentUser?.xxId,
               XNXQId: curXNXQId,
+              KHFWLXId: LbId,
+              KHFWMC: FWMC,
               page: 0,
               pageSize: 0,
             });
