@@ -6,6 +6,7 @@ import Notice from './components/Notice';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import IconFont from '@/components/CustomIcon';
 import { removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
+import TopBgImg from '@/assets/topInfoBG.png';
 
 import styles from './index.less';
 
@@ -15,7 +16,7 @@ const Home = () => {
 
   return (
     <div className={styles.indexPage}>
-      <div className={styles.topInfo}>
+      <div className={styles.topInfo} style={{backgroundImage : "url(" + TopBgImg + ")"}}>
         <Row style={{ height: '74px' }} className={styles.teacherInfo}>
           <Col span={22}>
             <p>
