@@ -14,6 +14,7 @@ import moment from 'moment';
 import { createKHJSTDK } from '@/services/after-class/khjstdk';
 import { freeSpace } from '@/services/after-class/fjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getKHBJSJ } from '@/services/after-class/khbjsj';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -25,6 +26,7 @@ const TkApply = () => {
   const [NewRQ, setNewRQ] = useState();
   const [NewKSSJ, setNewKSSJ] = useState();
   const [NewJSSJ, setNewJSSJ] = useState();
+  const [state, setstate] = useState(true);
   const [form] = Form.useForm();
   // 课表中选择课程后的数据回显
   const [dateData, setDateData] = useState<any>([]);
@@ -60,6 +62,27 @@ const TkApply = () => {
       }
     )();
   }, [NewRQ,NewKSSJ,NewJSSJ])
+
+  useEffect(() => {
+    (
+      async () => {
+        if(dateData){
+          const result = await getKHBJSJ({
+            id:dateData?.bjid
+          })
+          if(result.status === 'ok'){
+            const JSId = result.data.KHBJJs.find((item: any) => item.JSLX === '主教师').JZGJBSJ.id;
+            if(testTeacherId === JSId){
+              setstate(false)
+            }else{
+              message.warning('您不是该班级主班教师')
+              setstate(true)
+            }
+          }
+        }
+      }
+    )()
+  }, [dateData])
   const onchange = (value: any,type: any)=>{
     if(type === 'TKRQ'){
       setNewRQ(value)
@@ -173,7 +196,7 @@ const TkApply = () => {
         <Button onClick={() => {
           history.push('/teacher/education/courseAdjustment')
         }}>取消</Button>
-        <Button onClick={onSubmit}>提交</Button>
+        <Button onClick={onSubmit} disabled={state}>提交</Button>
       </div>
     </div>
   );
