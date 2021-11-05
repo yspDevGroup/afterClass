@@ -80,7 +80,7 @@ const Record = () => {
                     </Image.PreviewGroup>
                   </div>
                   <p>
-                    <span>{moment(item.time).format('H:mm:ss')}</span>
+                    <span>{moment(item.time).format('HH:mm:ss')}</span>
                     <Popconfirm
                       title="您确定要删除此条内容吗？"
                       placement="topRight"
