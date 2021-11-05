@@ -65,6 +65,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [BjDetails, setBjDetails] = useState<any>();
   const [JFTotalost, setJFTotalost] = useState<any>(0);
   const [dataSource, setDataSource] = useState([]);
+  const [tableDateSource, setTableDateSource] = useState([]);
   // useEffect(() => {
   //   (async () => {
   //     if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -83,8 +84,10 @@ const CourseManagement = (props: { location: { state: any } }) => {
       };
       const res = await getAllClasses(obj);
       if (res.status === 'ok') {
+        // return res.data.rows,
         // return {
-        setDataSource(res.data.rows);
+        // setDataSource(res.data.rows);
+        // setTableDateSource(res.data.rows)
         //   data: res.data.rows,
         //   success: true,
         //   total: res.data.count,
@@ -92,6 +95,10 @@ const CourseManagement = (props: { location: { state: any } }) => {
       }
     }
   };
+
+  // const actionRef={
+  //   current: {onload:getDateSource}
+  // };
 
   const showModal = async (record: any) => {
     const { BJMC, id } = record;
@@ -156,7 +163,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // 监听学年学期更新
   useEffect(() => {
     if (curXNXQId) {
-      getDateSource();
+      actionRef.current?.reload();
     }
   }, [curXNXQId, kcId]);
 
@@ -372,10 +379,10 @@ const CourseManagement = (props: { location: { state: any } }) => {
       filters: true,
       onFilter: false,
       valueEnum: {
-        '0': {
+        未开班: {
           text: '未开班',
         },
-        '1': {
+        已开班: {
           text: '已开班',
         },
       },
@@ -392,7 +399,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
         const newDate = new Date().getTime();
         return (
           <>
-            <ActionBar record={record} handleEdit={handleEdit} actionRef={actionRef} />
+            <ActionBar
+              record={record}
+              handleEdit={handleEdit}
+              actionRef={actionRef}
+              getDataSource={getDateSource}
+            />
             <Divider type="vertical" />
             {record?.BJZT === '已开班' && newDate <= BMJSSJ ? (
               <a
@@ -412,7 +424,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
             ) : (
               <></>
             )}
-
           </>
         );
       },
@@ -420,7 +431,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
   ];
   const onBjmcChange = async (value: any) => {
     setkcId(value);
-    actionRef.current?.reload();
+    // actionRef.current?.reload();
   };
   return (
     <>
@@ -429,7 +440,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          dataSource={dataSource}
+          // dataSource={dataSource}
           pagination={{
             showQuickJumper: true,
             pageSize: 10,
@@ -437,25 +448,41 @@ const CourseManagement = (props: { location: { state: any } }) => {
           }}
           scroll={{ x: 1200 }}
           request={async (param, sort, filter) => {
-            console.log('filter', filter);
+            if (curXNXQId) {
+              const obj = {
+                XNXQId: curXNXQId,
+                KHKCSJId: kcId || state?.id,
+                page: 0,
+                pageSize: 0,
+              };
+              const res = await getAllClasses(obj);
+              if (res.status === 'ok') {
+                // return res.data.rows,
 
-            // 表单搜索项会从 params 传入，传递给后端接口。
-            // if (curXNXQId) {
-            //   const obj = {
-            //     XNXQId: curXNXQId,
-            //     KHKCSJId: kcId || state?.id,
-            //     page: 0,
-            //     pageSize: 0,
-            //   };
-            //   const res = await getAllClasses(obj);
-            //   if (res.status === 'ok') {
-            //     return {
-            //       data: res.data.rows,
-            //       success: true,
-            //       total: res.data.count,
-            //     };
-            //   }
-            // }
+                let newTableDateSource = res.data.rows;
+
+                if (filter?.KHKCSJ) {
+                  newTableDateSource = newTableDateSource.filter((item: any) => {
+                    return filter?.KHKCSJ?.some((v: any) => v === item.KHKCSJ?.SSJGLX);
+                  });
+                }
+                if (filter?.BJZT) {
+                  newTableDateSource = newTableDateSource.filter((item: any) => {
+                    return filter?.BJZT?.some((v: any) => v === item.BJZT);
+                  });
+                }
+                if (filter?.PK) {
+                  newTableDateSource = newTableDateSource.filter((item: any) => {
+                    return filter?.PK?.some((v: any) => v == item.pk_count);
+                  });
+                }
+                return {
+                  data: newTableDateSource,
+                  success: true,
+                  total: newTableDateSource.length,
+                };
+              }
+            }
             return [];
           }}
           options={{
