@@ -77,25 +77,6 @@ const SiteMaintenance = () => {
 
   return (
     <div style={{ position: 'relative' }}>
-      <Button
-        type="primary"
-        onClick={() => {
-          console.log('actionRef.current?', actionRef.current);
-
-          actionRef.current?.addEditRecord?.(
-            {
-              id: (Math.random() * 1000000).toFixed(0),
-              title: '新的一行',
-            },
-            {
-              position: 'top',
-            },
-          );
-        }}
-        icon={<PlusOutlined />}
-      >
-        新增
-      </Button>
       <EditableProTable<DataSourceType>
         rowKey="id"
         actionRef={actionRef}
@@ -146,6 +127,28 @@ const SiteMaintenance = () => {
         cardProps={{
           bodyStyle: { padding: 0 },
         }}
+        toolBarRender={() => [
+          <Button
+            type="dashed"
+            ghost
+            onClick={() => {
+              console.log('actionRef.current?', actionRef.current);
+
+              actionRef.current?.addEditRecord?.(
+                {
+                  id: (Math.random() * 1000000).toFixed(0),
+                  title: '新的一行',
+                },
+                {
+                  position: 'top',
+                },
+              );
+            }}
+            icon={<PlusOutlined />}
+          >
+            新增
+          </Button>,
+        ]}
       />
     </div>
   );
