@@ -102,7 +102,7 @@ const Course = (props: any) => {
       <div className={`${styles.tabHeader}`}>
         <Tabs centered={true} className={styles.courseTab} defaultActiveKey={keys}>
           {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
-            <TabPane tab="开设课程" key="setup">
+            <TabPane tab="开设课程" key="kskc">
               {kskc && kskc.length ? (
                 <Tabs className={styles.courseType}>
                   {kskc.map((item: any) => {

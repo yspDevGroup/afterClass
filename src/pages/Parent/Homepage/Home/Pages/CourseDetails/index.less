@@ -39,6 +39,33 @@
 
   .wrap {
     padding: 10px 10px 56px;
+    :global {
+      .ant-collapse {
+        margin-bottom: 12px;
+        .ant-collapse-item {
+          margin-bottom: 10px;
+          background: #f5f5f5;
+          border-radius: 8px;
+          .ant-collapse-header {
+            padding: 10px;
+            font-weight: bold;
+            .ant-collapse-arrow{
+              color:#45C977;
+              >span{
+                margin-left: 2px;
+              }
+            }
+          }
+        }
+        .ant-collapse-content-box {
+          padding:0 10px 10px;
+          > p {
+            margin: 0;
+            line-height: 26px;
+          }
+        }
+      }
+    }
 
     p {
       margin-bottom: 6px;
@@ -70,8 +97,10 @@
     .classInformation {
       table {
         width: 100%;
-        margin-bottom: 10px;
-
+        margin-top: 10px;
+        > thead {
+          height: 30px;
+        }
         > tbody,
         > thead {
           > tr {
@@ -84,7 +113,8 @@
 
               > p {
                 margin: 0;
-                padding: 0 2px;
+                padding: 0;
+                line-height: 30px;
                 border-bottom: 1px solid #dadada;
 
                 &:nth-last-child(1) {
@@ -255,8 +285,8 @@
       }
       .tables {
         max-height: 70px;
-      overflow: auto;
         padding: 0 10px;
+        overflow: auto;
         line-height: 40px;
         background-color: #f5f5f5;
         border-radius: 0 0 8px 8px;
@@ -264,7 +294,7 @@
           display: flex;
           justify-content: space-between;
           height: 40px;
-           color: #666;
+          color: #666;
         }
       }
 
@@ -340,21 +370,21 @@
     ul {
       padding: 0;
       color: @text-color-secondary;
-      li{
+      li {
         display: flex;
         line-height: 30px;
-        span:nth-child(1){
+        span:nth-child(1) {
           width: 80px;
+          color: #888;
           text-align: right;
-          color:#888;
         }
-        .teacherName{
+        .teacherName {
+          width: auto;
           padding-right: 8px;
           text-align: left;
-          width: auto;
-          span{
-            text-align: left;
+          span {
             width: auto;
+            text-align: left;
           }
         }
       }
@@ -406,7 +436,7 @@
         text-align: center;
         background: rgba(69, 201, 119, 0.1);
         border-radius: 8px;
-        &:nth-child(5n+5){
+        &:nth-child(5n + 5) {
           margin-right: 0;
         }
 

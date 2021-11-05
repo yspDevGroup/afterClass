@@ -109,7 +109,7 @@ const StudentsLeave: React.FC = () => {
       width: 150,
     },
     {
-      title: '课程班名称',
+      title: '课程班',
       dataIndex: 'KHQJKCs',
       key: 'KHQJKCs_BJMC',
       align: 'center',
@@ -131,6 +131,22 @@ const StudentsLeave: React.FC = () => {
       width: 120,
     },
     {
+      title: '开始时间',
+      dataIndex: '',
+      key: '',
+      align: 'center',
+      width: 160,
+      render: (text: any, record: any) => `${text.KHJSQJKCs[0].QJRQ}  ${record.KSSJ}`,
+    },
+    {
+      title: '结束时间',
+      dataIndex: '',
+      key: '',
+      align: 'center',
+      width: 160,
+      render: (text: any, record: any) => `${text.KHJSQJKCs[0].QJRQ}  ${record.JSSJ}`,
+    },
+    {
       title: '请假原因',
       dataIndex: 'QJYY',
       key: 'QJYY',
@@ -139,14 +155,14 @@ const StudentsLeave: React.FC = () => {
       width: 180,
     },
     {
-      title: '状态',
+      title: '审批状态',
       dataIndex: 'QJZT',
       key: 'QJZT',
       valueType: 'select',
       width: 80,
       align: 'center',
       valueEnum: {
-        0: { text: '申请中', status: 'Processing' },
+        0: { text: '待审批', status: 'Processing' },
         1: {
           text: '已通过',
           status: 'Success',
@@ -157,22 +173,6 @@ const StudentsLeave: React.FC = () => {
           disabled: true,
         },
       },
-    },
-    {
-      title: '请假开始时间',
-      dataIndex: '',
-      key: '',
-      align: 'center',
-      width: 160,
-      render: (text: any, record: any) => `${text.KHJSQJKCs[0].QJRQ}  ${record.KSSJ}`,
-    },
-    {
-      title: '请假结束时间',
-      dataIndex: '',
-      key: '',
-      align: 'center',
-      width: 160,
-      render: (text: any, record: any) => `${text.KHJSQJKCs[0].QJRQ}  ${record.JSSJ}`,
     },
     {
       title: '审批人',

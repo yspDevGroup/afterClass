@@ -1,9 +1,9 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Checkbox, Divider, message, Modal, Popconfirm, Radio } from 'antd';
+import { Button, Checkbox, Collapse, Divider, message, Modal, Popconfirm, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, history } from 'umi';
-import { getKHKCSJ } from '@/services/after-class/khkcsj';
+import { getClassesByCourse, getKHKCSJ } from '@/services/after-class/khkcsj';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
@@ -15,6 +15,10 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 import styles from './index.less';
+import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { RightOutlined } from '@ant-design/icons';
+
+const { Panel } = Collapse;
 
 const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -39,6 +43,7 @@ const CourseDetails: React.FC = () => {
   const [JFTotalost, setJFTotalost] = useState<number>(0);
   const [KHFUXY, setKHFUXY] = useState<any>();
   const [ByTime, setByTime] = useState(false);
+  const [BjDetails, setBjDetails] = useState<any>();
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
@@ -66,34 +71,31 @@ const CourseDetails: React.FC = () => {
       (async () => {
         const res = await queryXNXQList(currentUser?.xxId);
         if (res.current) {
-          const result = await getKHKCSJ({
-            kcId: courseid,
-            XXJBSJId: currentUser?.xxId,
+          const results = await getClassesByCourse({
+            KHKCSJId: courseid,
             XNXQId: res.current.id,
           });
-          if (result.status === 'ok') {
-            if (result.data) {
-              setKcDetail(result.data);
-              changeStatus(0, result.data);
-              const kcstart = moment(result.data.BMKSSJ).format('YYYY/MM/DD');
-              const kcend = moment(result.data.BMJSSJ).format('YYYY/MM/DD');
+          if (results.status === 'ok') {
+            if (results.data) {
+              setKcDetail(results.data);
+              changeStatus(0, results.data);
+              const kcstart = moment(results.data.BMKSSJ).format('YYYY/MM/DD');
+              const kcend = moment(results.data.BMJSSJ).format('YYYY/MM/DD');
               const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
               setKaiguan(btnEnable);
-              const NewArr: any[] = [];
-              result.data.KHBJSJs.forEach((value: any) => {
-                if (value.BJZT === '已开班') {
-                  NewArr.push(value);
+              const resgetKHBJSJ = await getKHBJSJ({ id: results.data?.KHBJSJs?.[0].id })
+              if (resgetKHBJSJ.status === 'ok') {
+                setBjDetails(resgetKHBJSJ.data)
+                let num = 0;
+                for (let i = 0; i < resgetKHBJSJ.data?.KHKCJCs?.length; i++) {
+                  num += Number(resgetKHBJSJ.data?.KHKCJCs[i].JCFY);
                 }
-              });
-              let num = 0;
-              for (let i = 0; i < NewArr?.[0].KHKCJCs.length; i++) {
-                num += Number(NewArr?.[0].KHKCJCs[i].JCFY);
+                setJFData(resgetKHBJSJ.data?.KHKCJCs);
+                setJFTotalost(num);
               }
-              setJFTotalost(num);
-              setJFData(NewArr[0].KHKCJCs);
+            } else {
+              enHenceMsg(results.message);
             }
-          } else {
-            enHenceMsg(result.message);
           }
         }
       })();
@@ -154,14 +156,17 @@ const CourseDetails: React.FC = () => {
       enHenceMsg(res.message);
     }
   };
-  const butonclick = (value: any, ind: number) => {
-    setJFData(value.KHKCJCs);
-    let num = 0;
-    for (let i = 0; i < value.KHKCJCs.length; i++) {
-      num += Number(value.KHKCJCs[i].JCFY);
+  const butonclick = async (value: any, ind: number) => {
+    const res = await getKHBJSJ({ id: value?.id })
+    if (res.status === 'ok') {
+      let num = 0;
+      for (let i = 0; i < res.data?.KHKCJCs?.length; i++) {
+        num += Number(res.data?.KHKCJCs[i].JCFY);
+      }
+      setJFData(res.data?.KHKCJCs);
+      setJFTotalost(num);
+      changeStatus(ind);
     }
-    setJFTotalost(num);
-    changeStatus(ind);
   };
 
   /** 课后帮服务协议弹出框 */
@@ -181,6 +186,13 @@ const CourseDetails: React.FC = () => {
   const onJFChange = (e: { target: { checked: any } }) => {
     setJFstate(e.target.checked);
   };
+  const callback = async (key: any) => {
+    if (key) {
+      const res = await getKHBJSJ({ id: key })
+      setBjDetails(res.data)
+    }
+  }
+
   return (
     <div className={styles.CourseDetails}>
       {index === 'all' ? (
@@ -211,88 +223,80 @@ const CourseDetails: React.FC = () => {
         <p className={styles.title}>课程简介</p>
         <p className={styles.content}>{KcDetail?.KCMS}</p>
         <Divider />
-        <p className={styles.content}>开设班级：</p>
-        <ul className={styles.classInformation}>
-          {KcDetail?.KHBJSJs &&
-            KcDetail?.KHBJSJs.map((value: any) => {
-              if (value.BJZT === '已开班') {
-                return (
-                  <li>
-                    <div style={{ paddingBottom: '10px' }}>
-                      <p className={styles.bjname}>
-                        <span>{value.BJMC}</span>
-                      </p>
-                      <p className={styles.bzrname}>
-                        班主任：
-                        {value?.KHBJJs?.map((item: any) => {
-                          if (item.JSLX.indexOf('副') === -1) {
-                            const showWXName =
-                              item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
-                            return (
-                              <span style={{ marginRight: '1em' }}>
-                                {showWXName ? (
-                                  <WWOpenDataCom
-                                    type="userName"
-                                    openid={item?.JZGJBSJ?.WechatUserId}
-                                  />
-                                ) : (
-                                  item?.JZGJBSJ?.XM
-                                )}
-                              </span>
-                            );
-                          }
-                          return '';
-                        })}
-                      </p>
-                      <p className={styles.bzrname}>
-                        副班：
-                        {value?.KHBJJs?.map((item: any) => {
-                          if (item.JSLX.indexOf('主') === -1) {
-                            const showWXName =
-                              item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
-                            return (
-                              <span style={{ marginRight: '1em' }}>
-                                {showWXName ? (
-                                  <WWOpenDataCom
-                                    type="userName"
-                                    openid={item?.JZGJBSJ?.WechatUserId}
-                                  />
-                                ) : (
-                                  item.JZGJBSJ?.XM
-                                )}
-                              </span>
-                            );
-                          }
-                          return '';
-                        })}
-                      </p>
-                      <p>
-                        {' '}
-                        报名时段：{moment(value.BMKSSJ).format('YYYY.MM.DD')}-
-                        {moment(value.BMJSSJ).format('YYYY.MM.DD')}
-                      </p>
-                      <p>
-                        {' '}
-                        上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
-                        {moment(value.JKRQ).format('YYYY.MM.DD')}
+        <p className={styles.title}>开设班级</p>
+        {
+          KcDetail ? <Collapse
+            defaultActiveKey={KcDetail?.KHBJSJs?.[0].id}
+            onChange={callback}
+            ghost
+
+            className={styles.classInformation}
+            accordion
+            expandIcon={({ isActive }) => <span>{isActive ? "收起":"展开"}<RightOutlined rotate={isActive ? 90 : 0} /></span>}
+             expandIconPosition='right'
+          >
+            {
+              KcDetail?.KHBJSJs?.map((value: any) => {
+                if (value?.BJZT === '已开班') {
+                  return (
+                    <Panel header={value?.BJMC} key={value?.id}>
+                      <p>报名时段：{moment(value.BMKSSJ).format('YYYY.MM.DD')}-
+                        {moment(value.BMJSSJ).format('YYYY.MM.DD')}</p>
+                      <p>上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
+                        {moment(value.JKRQ).format('YYYY.MM.DD')}</p>
+                      <p>总人数：{value?.BJRS}</p>
+                      <p>班主任： {BjDetails?.KHBJJs?.map((item: any) => {
+                        if (item.JSLX.indexOf('副') === -1) {
+                          const showWXName =
+                            item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
+                          return (
+                            <span style={{ marginRight: '1em' }}>
+                              {showWXName ? (
+                                <WWOpenDataCom
+                                  type="userName"
+                                  openid={item?.JZGJBSJ?.WechatUserId}
+                                />
+                              ) : (
+                                item?.JZGJBSJ?.XM
+                              )}
+                            </span>
+                          );
+                        }
+                        return '';
+                      })}</p>
+                      <p>副班： {BjDetails?.KHBJJs?.map((item: any) => {
+                        if (item.JSLX.indexOf('主') === -1) {
+                          const showWXName =
+                            item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
+                          return (
+                            <span style={{ marginRight: '1em' }}>
+                              {showWXName ? (
+                                <WWOpenDataCom
+                                  type="userName"
+                                  openid={item?.JZGJBSJ?.WechatUserId}
+                                />
+                              ) : (
+                                item.JZGJBSJ?.XM
+                              )}
+                            </span>
+                          );
+                        }
+                        return '';
+                      })}
                       </p>
                       <table>
                         <thead>
                           <tr>
-                            <th>课时数</th>
-                            <th>总人数</th>
-                            <th>报名费</th>
                             <th>上课时间</th>
                             <th>上课地点</th>
+                            <th>总课时</th>
+                            <th>报名费</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td>{value.KSS}课时</td>
-                            <td>{value.BJRS}人</td>
-                            <td>{value.FY}元</td>
                             <td style={{ padding: '2px 0' }}>
-                              {value?.KHPKSJs?.map(
+                              {BjDetails?.KHPKSJs?.map(
                                 (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
                                   const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
                                   return (
@@ -306,22 +310,27 @@ const CourseDetails: React.FC = () => {
                               )}
                             </td>
                             <td style={{ padding: '2px 0' }}>
-                              {value?.KHPKSJs?.map(
+                              {BjDetails?.KHPKSJs?.map(
                                 (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
                                   return <p>{val.FJSJ.FJMC}</p>;
                                 },
                               )}
                             </td>
+                            <td>{value.KSS}课时</td>
+                            <td>{value.FY}元</td>
+
                           </tr>
                         </tbody>
                       </table>
-                    </div>
-                  </li>
-                );
-              }
-              return '';
-            })}
-        </ul>
+                    </Panel>
+                  )
+                }
+                return <></>
+
+              })
+            }
+          </Collapse> : <></>
+        }
       </div>
       <div className={styles.footer}>
         {kaiguan ? (
@@ -355,17 +364,18 @@ const CourseDetails: React.FC = () => {
                   value: {
                     BJMC: string;
                     id: string;
-                    FJS: string;
+                    // FJS: string;
                     FY: string;
                     BMKSSJ: Date;
                     BMJSSJ: Date;
                     BJRS: number;
                     KHXSBJs: any[];
                     BJZT: string;
+                    xs_count: number;
                   },
                   ind: number,
                 ) => {
-                  const text = `${value.BJMC}已有${value.KHXSBJs.length}人报名，共${value.BJRS}个名额`;
+                  const text = `${value.BJMC}已有${value?.xs_count}人报名，共${value.BJRS}个名额`;
                   const valueName = `${value.id}+${value.FY}`;
                   const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
                   const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;

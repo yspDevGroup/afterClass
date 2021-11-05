@@ -35,7 +35,7 @@ const CourseTab = (props: { dataResource: any; }) => {
   const centered = false;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [keys, setKeys] = useState('setup');
+  const [keys, setKeys] = useState('yxkc');
   const [YxserviceData, setYxserviceData] = useState<any>();
 
   const StorageXSId = localStorage.getItem('studentId');
@@ -142,12 +142,12 @@ const CourseTab = (props: { dataResource: any; }) => {
         }
         className={styles.courseTab}
       >
-        <TabPane tab="已选课程" key="elective">
+        <TabPane tab="已选课程" key="yxkc">
           {
             yxkc && yxkc?.length ? <ListComponent listData={yxkcData} /> : <ListComponent listData={defaultMsg} />
           }
         </TabPane>
-        <TabPane tab="已选服务" key="setup">
+        <TabPane tab="已选服务" key="yxfw">
           {
             YxserviceData && YxserviceData?.length ? <ListComponent listData={yxfwData} /> : <ListComponent listData={defaultMsgs} />
           }

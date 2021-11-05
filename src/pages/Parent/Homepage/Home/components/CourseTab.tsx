@@ -35,7 +35,7 @@ const CourseTab = (props: { dataResource: any; }) => {
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
   const [yxkcAllData, setYxkcAllData] = useState<ListData>(defaultMsg);
   const centered = false;
-  const [keys, setKeys] = useState('setup');
+  const [keys, setKeys] = useState('kskc');
   const [LBData, setLBData] = useState<any>([]);
   const [DataSource, setDataSource] = useState<any>();
   const { initialState } = useModel('@@initialState');
@@ -52,14 +52,12 @@ const CourseTab = (props: { dataResource: any; }) => {
           desc: [
             {
               left: [
-                `课程时段：${
-                  record.KKRQ
-                    ? moment(record.KKRQ).format('YYYY.MM.DD')
-                    : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
-                }-${
-                  record.JKRQ
-                    ? moment(record.JKRQ).format('YYYY.MM.DD')
-                    : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
+                `课程时段：${record.KKRQ
+                  ? moment(record.KKRQ).format('YYYY.MM.DD')
+                  : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
+                }-${record.JKRQ
+                  ? moment(record.JKRQ).format('YYYY.MM.DD')
+                  : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
                 }`,
               ],
             },
@@ -109,7 +107,7 @@ const CourseTab = (props: { dataResource: any; }) => {
             setDataSource(NewData);
           }
         }
-      }else{
+      } else {
         setLBData([]);
       }
     })();
@@ -138,26 +136,28 @@ const CourseTab = (props: { dataResource: any; }) => {
       <Tabs
         centered={centered}
         onTabClick={(key: string) => oncuechange(key)}
+        defaultActiveKey='kskc'
         tabBarExtraContent={
           !centered
             ? {
-                right: (
-                  <Link
-                    to={{
-                      pathname: '/parent/home/course',
-                      state: { courseStatus, kskc, yxkcAllData, keys },
-                    }}
-                  >
-                    全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
-                  </Link>
-                ),
-              }
+              right: (
+                <Link
+                  to={{
+                    pathname: '/parent/home/course',
+                    state: { courseStatus, kskc, yxkcAllData, keys },
+                  }}
+                >
+                  全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
+                </Link>
+              ),
+            }
             : ''
         }
         className={styles.courseTab}
       >
+
         {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
-          <TabPane tab="开设课程" key="setup">
+          <TabPane tab="开设课程" key="kskc">
             {kskc && kskc.length ? (
               <Tabs className={styles.courseType}>
                 {kskc.map((item: any) => {
@@ -173,7 +173,7 @@ const CourseTab = (props: { dataResource: any; }) => {
                           desc: [
                             {
                               left: [
-                                record.KCMS ? `简介：${record.KCMS}` :"",
+                                record.KCMS ? `简介：${record.KCMS}` : "",
 
                               ],
                             },
@@ -208,7 +208,8 @@ const CourseTab = (props: { dataResource: any; }) => {
         ) : (
           ''
         )}
-         <TabPane tab="开设服务" key="ksfw">
+
+        <TabPane tab="开设服务" key="ksfw">
           <div className={styles.category}>
             {LBData && LBData.length === 0 ? (
               <ListComponent listData={defaultMsgs} />
