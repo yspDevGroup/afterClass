@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Upload, message, Modal } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import IconFont from '@/components/CustomIcon';
 import { getAuthorization } from '@/utils/utils';
 import upload from '@/assets/upload.png';
 import styles from './index.less';
@@ -54,9 +55,9 @@ const ImagesUpload = (props: {
         message.success('上传成功');
         // setLoading(false);
         let urlStr = '';
-        info.fileList.forEach((item: any)=>{
-          if(item.response?.status === 'ok'){
-            urlStr = urlStr + item.response.data +';';
+        info.fileList.forEach((item: any) => {
+          if (item.response?.status === 'ok') {
+            urlStr = urlStr + item.response.data + ';';
           }
         })
         onValueChange(urlStr);
@@ -75,7 +76,7 @@ const ImagesUpload = (props: {
 
   const handlePreview = async (file: any) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj,()=>{});
+      file.preview = await getBase64(file.originFileObj, () => { });
     }
     setPreviewImage(file.url || file.preview);
     setPreviewVisible(true);
@@ -86,16 +87,16 @@ const ImagesUpload = (props: {
     <div>
       {/* {loading ? <LoadingOutlined /> : <PlusOutlined />} */}
       <div style={{ marginTop: 8 }}>
-        <img src={upload} alt="avatar" style={{ width: '35%',marginBottom: 5 }} />
-        <p style={{color: '#999999',fontSize: 10}}>添加图片</p>
+        <IconFont className={styles.iconStyle} type={'icon-Union'} style={{ fontSize: 30, color: '#999999' }} />
+        < p style={{ color: '#999999', fontSize: 10 }}>添加图片</p>
       </div>
-    </div>
+    </div >
   );
   return (
     <>
       <Upload
         name="image"
-        accept = 'image/*'
+        accept='image/*'
         className={styles.upload}
         listType="picture-card"
         action="/api/upload/uploadFile?type=badge&plat=school"
@@ -108,7 +109,7 @@ const ImagesUpload = (props: {
         onChange={handleChange}
         maxCount={9}
         multiple
-        isImageUrl={()=>{
+        isImageUrl={() => {
           return true
         }}
       >
