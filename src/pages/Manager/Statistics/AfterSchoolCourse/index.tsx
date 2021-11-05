@@ -274,8 +274,8 @@ const AfterSchoolCourse: React.FC = () => {
     /// PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.TopSearchss}>
-        <Form layout='inline' style={{ padding: '0 0 24px' }}>
-          <Form.Item label='所属学年学期: '>
+        <Form layout='inline' labelCol={{ span: 8 }}>
+          <Form.Item label='所属学年学期: ' style={{ padding: '0 0 24px' }}>
             <Select
               value={curXNXQId}
               style={{ width: 200 }}
@@ -293,7 +293,7 @@ const AfterSchoolCourse: React.FC = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label='课程类型: '>
+          <Form.Item label='课程类型: ' style={{ padding: '0 0 24px' }}>
             <Select
               value={KCLXId}
               style={{ width: 200 }}
@@ -314,7 +314,7 @@ const AfterSchoolCourse: React.FC = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label='课程来源: '>
+          <Form.Item label='课程来源: ' style={{ padding: '0 0 24px' }}>
             <Select
               style={{ width: 200 }}
               value={KCLY}
@@ -336,7 +336,7 @@ const AfterSchoolCourse: React.FC = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label='课程名称:'>
+          <Form.Item label='课程名称:' style={{ padding: '0 0 24px' }}>
             <Select
               style={{ width: 200 }}
               value={kcmcValue}

@@ -56,14 +56,14 @@ const CourseRefund = () => {
 
 
   //获取课程
- const getKCData = async()=>{
+  const getKCData = async () => {
     if (curXNXQId) {
       const params = {
         page: 0,
         pageSize: 0,
         XNXQId: curXNXQId,
         XXJBSJId: currentUser?.xxId,
-        XZQHM:currentUser?.XZQHM
+        XZQHM: currentUser?.XZQHM
       };
       const khkcResl = await getAllCourses2(params);
 
@@ -81,8 +81,8 @@ const CourseRefund = () => {
   /**
    * 获取课程班集数据
    */
-  const getClassesData=async()=>{
-    if(kcmcValue&&curXNXQId){
+  const getClassesData = async () => {
+    if (kcmcValue && curXNXQId) {
       const bjmcResl = await getAllClasses({
         page: 0,
         pageSize: 0,
@@ -284,8 +284,8 @@ const CourseRefund = () => {
     },
   ];
 
-  const handleSubmit = async (params: any) => {
-    const { TKJE, TKZT, BZ } = params;
+  const handleSubmit = async (paramsItem: any) => {
+    const { TKJE, TKZT, BZ } = paramsItem;
     if (TKJE === 0 || TKJE === 0.00) {
       message.warning('退款金额为0，无需发起退款');
     } else {
@@ -315,65 +315,65 @@ const CourseRefund = () => {
   return (
     <>
       <div className={Style.TopSearchs}>
-        <span>
-          所属学年学期：
-          <Select
-            value={curXNXQId}
-            style={{ width: 200 }}
-            onChange={(value: string) => {
-              // 更新多选框的值
-              setCurXNXQId(value);
-            }}
-          >
-            {termList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span> 课程名称:
-          <Select
-            style={{ width: 200 }}
-            value={kcmcValue}
-            allowClear
-            placeholder="请选择"
-            onChange={(value) => {
-              setKcmcValue(value);
-            }}
-          >
-            {kcmcData?.map((item: selectType) => {
-              if (item.value) {
+        <Form layout='inline' labelCol={{ span: 8 }}>
+          <Form.Item label=' 所属学年学期：' style={{ padding: '0 0 24px' }}>
+            <Select
+              value={curXNXQId}
+              style={{ width: 200 }}
+              onChange={(value: string) => {
+                // 更新多选框的值
+                setCurXNXQId(value);
+              }}
+            >
+              {termList?.map((item: any) => {
+                return (
+                  <Option key={item.value} value={item.value}>
+                    {item.text}
+                  </Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item label=' 课程名称:' style={{ padding: '0 0 24px' }}>
+            <Select
+              style={{ width: 200 }}
+              value={kcmcValue}
+              allowClear
+              placeholder="请选择"
+              onChange={(value) => {
+                setKcmcValue(value);
+              }}
+            >
+              {kcmcData?.map((item: selectType) => {
+                if (item.value) {
+                  return (
+                    <Option value={item.value} key={item.value}>
+                      {item.label}
+                    </Option>
+                  );
+                }
+                return '';
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item label=' 课程班名称:'  style={{ padding: '0 0 24px' }}>
+            <Select
+              style={{ width: 200 }}
+              value={bjmcValue}
+              allowClear
+              placeholder="请选择"
+              onChange={(value) => setBjmcValue(value)}
+            >
+              {bjmcData?.map((item: selectType) => {
                 return (
                   <Option value={item.value} key={item.value}>
                     {item.label}
                   </Option>
                 );
-              }
-              return '';
-            })}
-          </Select>
-        </span>
-        <span>
-          课程班名称:
-          <Select
-            style={{ width: 200 }}
-            value={bjmcValue}
-            allowClear
-            placeholder="请选择"
-            onChange={(value) => setBjmcValue(value)}
-          >
-            {bjmcData?.map((item: selectType) => {
-              return (
-                <Option value={item.value} key={item.value}>
-                  {item.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
+              })}
+            </Select>
+          </Form.Item>
+        </Form>
       </div>
       <div>
         <ProTable<any>
@@ -392,7 +392,7 @@ const CourseRefund = () => {
               XXJBSJId: currentUser?.xxId,
               XNXQId: curXNXQId,
               KHKCSJId: kcmcValue,
-              KHBJSJId:bjmcValue,
+              KHBJSJId: bjmcValue,
               page: 0,
               pageSize: 0,
             });
