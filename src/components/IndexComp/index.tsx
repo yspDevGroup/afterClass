@@ -2,11 +2,11 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-10-22 14:49:15
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-11-05 16:24:42
+ * @LastEditors: Please set LastEditors
  */
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Row,message } from 'antd';
+import { Card, Col, Row } from 'antd';
 import { Link, useModel } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
 import Topbar from './Topbar';
@@ -27,44 +27,26 @@ import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import PromptInformation from '@/components/PromptInformation';
 
-
 const Index = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [homeData, setHomeData] = useState<any>();
   const [policyData, setPolicyData] = useState<any>();
   const [annoceData, setAnnoceData] = useState<any>();
-   // 学期学年没有数据时提示的开关
-   const [kai, setkai] = useState<boolean>(false);
-    // 控制学期学年数据提示框的函数
+  // 学期学年没有数据时提示的开关
+  const [kai, setkai] = useState<boolean>(false);
+  // 控制学期学年数据提示框的函数
   const kaiguan = () => {
     setkai(false);
   };
-  useEffect(() => {
-    // 获取学年学期数据的获取
-    (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      // 获取到的整个列表的信息
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          fetchData(curTerm.id)
-          }
-      } else {
-        setkai(true);
-
-      }
-    })();
-  }, []);
-  const fetchData=async (XNXQId:any)=>{
+  const fetchData = async (XNXQId: any) => {
     const res = await homePage({
       XXJBSJId: currentUser?.xxId,
-      XNXQId
+      XNXQId,
     });
     if (res.status === 'ok') {
-     // 配置头部统计栏目数据
-      setHomeData({ ...res.data});
+      // 配置头部统计栏目数据
+      setHomeData({ ...res.data });
     }
     // 校内通知
     const result = await getXXTZGG({
@@ -90,15 +72,32 @@ const Index = () => {
     if (resgetXXTZGG.status === 'ok') {
       setPolicyData(resgetXXTZGG.data?.rows);
     }
-  }
+  };
+  useEffect(() => {
+    // 获取学年学期数据的获取
+    (async () => {
+      const res = await queryXNXQList(currentUser?.xxId);
+      // 获取到的整个列表的信息
+      const newData = res.xnxqList;
+      const curTerm = res.current;
+      if (newData?.length) {
+        if (curTerm) {
+          fetchData(curTerm.id);
+        }
+      } else {
+        setkai(true);
+      }
+    })();
+  }, []);
+
   return (
     <div className={styles.pageWrapper}>
-         <PromptInformation
-          text="未查询到学年学期数据，请设置学年学期后再来"
-          link="/basicalSettings/termManagement"
-          open={kai}
-          colse={kaiguan}
-        />
+      <PromptInformation
+        text="未查询到学年学期数据，请设置学年学期后再来"
+        link="/basicalSettings/termManagement"
+        open={kai}
+        colse={kaiguan}
+      />
       <Topbar data={homeData} />
       <Row className={`${styles.listWrapper} ${styles.rowWrapper}`}>
         <Col span={12}>
@@ -143,10 +142,31 @@ const Index = () => {
                 <img src={home1} alt="" />
                 <ul>
                   <li>
+                    <Link to="/basicalSettings/schoolInfo">学校信息维护</Link>
+                  </li>
+                  <li>
                     <Link to="/basicalSettings/service">服务协议配置</Link>
                   </li>
                   <li>
-                    <Link to="/basicalSettings/termManagement">学期学年维护</Link>
+                    <Link to="/basicalSettings/teacherManagement">教师管理</Link>
+                  </li>
+                  {/* <li>
+                    <Link to="/basicalSettings/roomManagement">场地维护</Link>
+                  </li> */}
+                </ul>
+              </Col>
+              <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
+                <img src={arrow} alt="" />
+              </Col>
+              <Col span={5}>
+                <p>
+                  <h1>02</h1>
+                  时间、场地维护
+                </p>
+                <img src={home2} alt="" />
+                <ul>
+                  <li>
+                    <Link to="/basicalSettings/termManagement">学年学期维护</Link>
                   </li>
                   <li>
                     <Link to="/basicalSettings/periodMaintenance">时段维护</Link>
@@ -161,10 +181,10 @@ const Index = () => {
               </Col>
               <Col span={5}>
                 <p>
-                  <h1>02</h1>
-                  课程、课程班管理
+                  <h1>03</h1>
+                  课程管理
                 </p>
-                <img src={home2} alt="" />
+                <img src={home3} alt="" />
                 <ul>
                   <li>
                     <Link to="/courseManagements/CourseManagements">课程管理</Link>
@@ -172,18 +192,6 @@ const Index = () => {
                   <li>
                     <Link to="/courseManagements/classManagement">课程班管理</Link>
                   </li>
-                </ul>
-              </Col>
-              <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={arrow} alt="" />
-              </Col>
-              <Col span={5}>
-                <p>
-                  <h1>03</h1>
-                  排课管理
-                </p>
-                <img src={home3} alt="" />
-                <ul>
                   <li>
                     <Link to="/courseManagements/courseScheduling">排课管理</Link>
                   </li>
@@ -203,7 +211,7 @@ const Index = () => {
                     <Link to="/courseManagements/CourseManagements">课程发布</Link>
                   </li>
                   <li>
-                    <Link to="/courseManagements/classManagement">开班</Link>
+                    <Link to="/courseManagements/classManagement">课程班开班</Link>
                   </li>
                 </ul>
               </Col>
