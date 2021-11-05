@@ -5,9 +5,11 @@ import { Select } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
-import { getSchoolClasses } from '@/services/after-class/bjsj';
+import { getAllBJSJ, getSchoolClasses } from '@/services/after-class/bjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllGrades } from '@/services/after-class/khjyjg';
+
+type selectType = { label: string; value: string };
 
 const { Option } = Select;
 const AdministrativeClass = () => {
@@ -16,7 +18,9 @@ const AdministrativeClass = () => {
   const [NjData, setNjData] = useState<any>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-
+  const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
+  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
+  const [BJId, setBJId] = useState<string | undefined>(undefined);
   useEffect(() => {
     (async () => {
       const res = await getAllGrades({
@@ -26,12 +30,43 @@ const AdministrativeClass = () => {
         setNjData(res.data);
       }
     })();
+    (async () => {
+      const result = await queryXNXQList(currentUser?.xxId);
+      setCurXNXQId(result?.current?.id);
+    })();
   }, []);
 
+  useEffect(() => {
+    if (curXNXQId) {
+      actionRef.current?.reload();
+    }
+  }, [curXNXQId]);
+
   const onBjChange = async (value: any) => {
+    setBJId(value);
+    actionRef.current?.reload();
+  };
+  const onNjChange = async (value: any) => {
     setNjId(value);
     actionRef.current?.reload();
   };
+
+  const getBJSJ = async () => {
+    const res = await getAllBJSJ({ njId: NjId, page: 0, pageSize: 0 });
+    console.log('res', res);
+    if (res.status === 'ok') {
+      const data = res.data?.rows?.map((item: any) => {
+        return { label: item.BJ, value: item.id };
+      });
+      setBJData(data);
+    }
+  };
+
+  useEffect(() => {
+    if (NjId) {
+      getBJSJ();
+    }
+  }, [NjId]);
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -121,12 +156,15 @@ const AdministrativeClass = () => {
           }}
           request={async (param) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
-            const result = await queryXNXQList(currentUser?.xxId);
-            if (result.current?.id) {
+            // const result = await queryXNXQList(currentUser?.xxId);
+            // console.log('123');
+            console.log('curXNXQId', curXNXQId);
+            if (curXNXQId) {
               const obj = {
                 XXJBSJId: currentUser?.xxId,
                 njId: NjId || '',
-                XNXQId: result.current?.id,
+                BJSJId: BJId,
+                XNXQId: curXNXQId,
                 page: param.current,
                 pageSize: param.pageSize,
               };
@@ -157,10 +195,28 @@ const AdministrativeClass = () => {
                   value={NjId}
                   allowClear
                   placeholder="请选择"
-                  onChange={onBjChange}
+                  onChange={onNjChange}
                 >
                   {NjData?.map((item: any) => {
                     return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                  })}
+                </Select>
+              </span>
+              <span style={{ marginLeft: 20, fontSize: 14, color: '#666' }}>
+                班级选择：
+                <Select
+                  style={{ width: 200 }}
+                  value={BJId}
+                  allowClear
+                  placeholder="请选择"
+                  onChange={onBjChange}
+                >
+                  {bjData?.map((item: any) => {
+                    return (
+                      <Option value={item.value} key={item.value}>
+                        {item.label}
+                      </Option>
+                    );
                   })}
                 </Select>
               </span>
