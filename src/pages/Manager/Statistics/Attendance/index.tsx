@@ -209,7 +209,7 @@ const LeaveManagement = () => {
       align: 'center',
       width: 100,
       render: (_: any, record: any) => {
-        return Number(record.absenteeism) + Number(record.leave) + Number(record.substitute);
+        return Number(record.absenteeism) + Number(record.leave);
       },
     },
     {

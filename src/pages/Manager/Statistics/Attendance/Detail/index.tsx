@@ -216,15 +216,12 @@ const AttendanceDetail = (props: any) => {
         <Button
           type="link"
           onClick={() => {
-            if (
-              Number(record.absenteeism) + Number(record.leave) + Number(record.substitute) !==
-              0
-            ) {
+            if (Number(record?.absenteeism) + Number(record?.leave) !== 0) {
               getAbsenteeismData(record.id);
             }
           }}
         >
-          {Number(record.absenteeism) + Number(record.leave) + Number(record.substitute)}
+          {Number(record.absenteeism) + Number(record.leave)}
         </Button>
       ),
     },
