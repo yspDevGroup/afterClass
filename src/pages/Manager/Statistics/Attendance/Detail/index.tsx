@@ -138,10 +138,11 @@ const AttendanceDetail = (props: any) => {
         <Button
           type="link"
           onClick={() => {
-            if (text !== '0') getAbsenteeismData(record.id);
+            if (Number(record.absenteeism) + Number(record.leave) + Number(record.substitute) !== 0)
+              getAbsenteeismData(record.id);
           }}
         >
-          {text}
+          {Number(record.absenteeism) + Number(record.leave) + Number(record.substitute)}
         </Button>
       ),
     },
@@ -215,12 +216,15 @@ const AttendanceDetail = (props: any) => {
         <Button
           type="link"
           onClick={() => {
-            if (text !== '0') {
+            if (
+              Number(record.absenteeism) + Number(record.leave) + Number(record.substitute) !==
+              0
+            ) {
               getAbsenteeismData(record.id);
             }
           }}
         >
-          {text}
+          {Number(record.absenteeism) + Number(record.leave) + Number(record.substitute)}
         </Button>
       ),
     },

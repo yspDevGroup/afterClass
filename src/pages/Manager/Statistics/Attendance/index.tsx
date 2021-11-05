@@ -106,7 +106,9 @@ const LeaveManagement = () => {
       key: 'QQS',
       align: 'center',
       width: 100,
-      render: (text, record) => record['absenteeism'],
+      render: (_: any, record: any) => {
+        return Number(record.absenteeism) + Number(record.leave) + Number(record.substitute);
+      },
     },
     {
       title: '出勤总时长(小时)',
@@ -206,6 +208,9 @@ const LeaveManagement = () => {
       key: 'absenteeism',
       align: 'center',
       width: 100,
+      render: (_: any, record: any) => {
+        return Number(record.absenteeism) + Number(record.leave) + Number(record.substitute);
+      },
     },
     {
       title: '课时总时长(小时)',
