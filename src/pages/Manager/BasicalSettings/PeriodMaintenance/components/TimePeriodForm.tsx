@@ -87,9 +87,6 @@ const TimePeriodForm = (props: PropsType) => {
         minuteStep: 5,
         rules: [{ required: true, message: '请填写开始时间' }],
         hideDisabledOptions: true,
-        disabledHours: () => {
-          return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 21, 22, 23, 24];
-        },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
     },
@@ -104,9 +101,6 @@ const TimePeriodForm = (props: PropsType) => {
         format: currentStatus === 'schedule' ? 'HH:mm' : 'YYYY-MM-DD',
         minuteStep: 5,
         hideDisabledOptions: true,
-        disabledHours: () => {
-          return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 21, 22, 23, 24];
-        },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
     },
