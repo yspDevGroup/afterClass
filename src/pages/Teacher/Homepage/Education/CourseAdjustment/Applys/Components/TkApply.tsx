@@ -72,7 +72,7 @@ const TkApply = () => {
           })
           if(result.status === 'ok'){
             const JSId = result.data.KHBJJs.find((item: any) => item.JSLX === '主教师').JZGJBSJ.id;
-            if(testTeacherId === JSId){
+            if(currentUser?.JSId === JSId){
               setstate(false)
             }else{
               message.warning('您不是该班级主班教师')
