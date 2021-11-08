@@ -19,7 +19,6 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 const Toll = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  console.log('currentUser: ', currentUser);
   const [startTime, setStartTime] = useState<any>(moment().subtract(30, "days").format("YYYY-MM-DD"));
   const [endTime, setEndTime] = useState<any>(moment().subtract(-1, "days").format("YYYY-MM-DD"));
   const [currentData, setCurrentData] = useState<any>([

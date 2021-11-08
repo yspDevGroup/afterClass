@@ -7,15 +7,15 @@ import styles from './index.less';
 
 const Record = () => {
   const [listData, setListData] = useState<any>();
+  const [showData, setShowData] = useState<any>();
+  const [showIndex, setShowIndex] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(true);
+  const [startY, setStartY] = useState<number>(0);
+  const [endY, setEndY] = useState<number>(0);
 
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    console.log('listData:', listData);
-  }, listData);
 
   const getData = async () => {
     const resKHKTFC = await getAllKHKTFC({});
@@ -35,6 +35,7 @@ const Record = () => {
         };
         allData.push(data);
       });
+      setShowData(allData.slice(0, 3));
       setListData(allData);
       setLoading(false);
     }
@@ -43,21 +44,47 @@ const Record = () => {
 
   function cancel(e: any) {
     // console.log(e);
-    // message.error('Click on No');
   }
 
+  const handleTouchStart = (e: any) => {
+    setStartY(e.touches[0].clientY);
+  };
+  const handleTouchMove = (e: any) => {
+    setEndY(e.touches[0].clientY);
+  };
+
+  const handleTouchEnd = (e: any) => {
+    if (startY > -1 && endY > -1) {
+      let distance = Math.abs(startY - endY);
+      if (distance > 50) {
+        if (startY > endY) {
+          //上滑
+          setShowData([...showData, ...listData.slice(showIndex, showIndex + 3)])
+          setShowIndex(showIndex + 3);
+        } else {
+          //下拉
+        }
+      }
+    }
+
+    setStartY(-1);
+    setEndY(-1);
+  };
+
   return (
-    <div className={styles.ClassroomStyle}>
+    <div className={styles.ClassroomStyle} onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}>
       <GoBack title="课堂风采" teacher onclick="/teacher/home?index=education" />
       <div className={styles.wrap}>
         {
-          !loading ? listData.map((item: any) => {
+          !loading ? showData.map((item: any) => {
             return (
               <div className={styles.cards}>
                 <p>
                   <Avatar style={{ backgroundColor: '#0066FF', verticalAlign: 'middle' }} size="large">
-                    <p style={{fontSize: '14px', lineHeight: '21px', height: '21px'}}>{moment(item.time).format('DD')}</p>
-                    <p style={{fontSize: '12px', lineHeight: '12px', height: '12px', fontWeight: 300}}>{moment(item.time).format('MM')+'月'}</p>
+                    <p style={{ fontSize: '14px', lineHeight: '21px', height: '21px' }}>{moment(item.time).format('DD')}</p>
+                    <p style={{ fontSize: '12px', lineHeight: '12px', height: '12px', fontWeight: 300 }}>{moment(item.time).format('MM') + '月'}</p>
                   </Avatar>
                   <div className={styles.name}>
                     <p>{item.className}</p>

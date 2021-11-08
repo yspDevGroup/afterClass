@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
+import zhCN from 'antd/es/locale/zh_CN';
+import { ConfigProvider } from 'antd';
 import { Result, Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
 import { getQueryString } from '@/utils/utils';
 import Home from './Home';
 import Education from './Education';
 import Mine from './Mine';
-
 import styles from './index.less';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 
@@ -46,6 +47,7 @@ const PersonalHomepage = () => {
   }
 
   return (
+    <ConfigProvider locale={zhCN}>
     <div className={styles.mobilePageHeader}>
       {courseStatus === '' ? (
         ''
@@ -132,6 +134,7 @@ const PersonalHomepage = () => {
         </Tabs>
       )}
     </div>
+    </ConfigProvider>
   );
 };
 

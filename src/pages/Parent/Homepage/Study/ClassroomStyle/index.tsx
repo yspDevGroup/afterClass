@@ -11,14 +11,19 @@ const ClassroomStyle = () => {
   const { student } = currentUser || {};
   const StorageXSId = localStorage.getItem('studentId');
   const [listData, setListData] = useState<any>();
+  const [showData, setShowData] = useState<any>();
+  const [showIndex, setShowIndex] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(true);
+  const [startY, setStartY] = useState<number>(0);
+  const [endY, setEndY] = useState<number>(0);
 
   useEffect(() => {
     getData();
   }, []);
 
   useEffect(() => {
-  }, listData);
+    getData();
+  }, []);
 
   const getData = async () => {
     const resKHKTFC = await getAllKHKTFC({
@@ -42,22 +47,46 @@ const ClassroomStyle = () => {
         };
         allData.push(data);
       });
+      setShowData(allData.slice(0, 3));
       setListData(allData);
       setLoading(false);
     }
 
   }
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const handleTouchStart = (e: any) => {
+    setStartY(e.touches[0].clientY);
+  };
+  const handleTouchMove = (e: any) => {
+    setEndY(e.touches[0].clientY);
+  };
+
+  const handleTouchEnd = (e: any) => {
+    if (startY > -1 && endY > -1) {
+      let distance = Math.abs(startY - endY);
+      if (distance > 50) {
+        if (startY > endY) {
+          //上滑
+          setShowData([...showData, ...listData.slice(showIndex, showIndex + 3)])
+          setShowIndex(showIndex + 3);
+        } else {
+          //下拉
+        }
+      }
+    }
+
+    setStartY(-1);
+    setEndY(-1);
+  };
 
   return (
-    <div className={styles.ClassroomStyle}>
+    <div className={styles.ClassroomStyle} onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}>
       <GoBack title={'课堂风采'} onclick="/parent/home?index=study" />
       <div className={styles.wrap}>
         {
-          !loading ? listData.map((item: any) => {
+          !loading ? showData.map((item: any) => {
             return (
 
               <div className={styles.cards}>

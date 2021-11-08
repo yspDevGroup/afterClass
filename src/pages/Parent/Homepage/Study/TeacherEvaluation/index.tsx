@@ -29,7 +29,7 @@ const TeacherEvaluation = () => {
   }, [StorageXSId]);
   return (
     <div className={styles.TeacherEvaluation}>
-      <GoBack title={'教师寄语'} />
+      <GoBack title={'教师寄语'} onclick="/parent/home?index=study" />
 
       {Datas?.length === 0 ? (
         <div className={styles.noData}>

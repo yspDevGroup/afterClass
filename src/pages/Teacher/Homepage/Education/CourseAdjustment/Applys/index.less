@@ -148,6 +148,15 @@
       margin: 0;
       color: #999999;
     }
+    form{
+      :global{
+        .ant-form-item-control{
+          #basic_TKRQ{
+            font-size: 12px;
+          }
+        }
+      }
+    }
   }
   form {
     .tkhsj {
@@ -170,6 +179,13 @@
       padding: 6px 10px;
       background-color: #fff;
       justify-content: space-between;
+      :global{
+        .ant-form-item-control{
+          #basic_KSSJ,#basic_JSSJ{
+            font-size: 12px;
+          }
+        }
+      }
       .right{
         display: flex;
         > span {
@@ -194,7 +210,7 @@
           width: calc(~' 100% - 126px');
           height: 32px;
           .ant-form-item-label {
-            max-width: 30px;
+            max-width: 40px;
             label {
               color: #333333;
               font-size: 14px;
@@ -219,7 +235,7 @@
           max-width: 40px;
         }
         .ant-form-item-control {
-          max-width: 140px;
+          max-width: 130px;
         }
       }
 
