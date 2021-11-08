@@ -319,7 +319,7 @@ const AttendanceDetail = (props: any) => {
 
           <ProTable
             columns={position === '老师' ? teacher : student}
-            headerTitle={`${startDate}-----${endDate}`}
+            headerTitle={`${startDate} ~ ${endDate}`}
             dataSource={dataSource}
             pagination={{
               showQuickJumper: true,
