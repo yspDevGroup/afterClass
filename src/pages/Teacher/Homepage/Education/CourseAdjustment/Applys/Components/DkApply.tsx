@@ -25,7 +25,6 @@ const DkApply = () => {
   const [form] = Form.useForm();
   // 课表中选择课程后的数据回显
   const [dateData, setDateData] = useState<any>([]);
-  const [state, setstate] = useState(true);
   const onSubmit = async () => {
     if (dateData?.day) {
       form.submit();
@@ -49,15 +48,6 @@ const DkApply = () => {
           const result = await getKHBJSJ({
             id:dateData?.bjid
           })
-          if(result.status === 'ok'){
-            const JSId = result.data.KHBJJs.find((item: any) => item.JSLX === '主教师').JZGJBSJ.id;
-            if(currentUser?.JSId === JSId){
-              setstate(false)
-            }else{
-              message.warning('您不是该班级主班教师')
-              setstate(true)
-            }
-          }
         }else{
           setJsData([])
         }
@@ -142,7 +132,7 @@ const DkApply = () => {
         <Button onClick={() => {
           history.push('/teacher/education/courseAdjustment')
         }}>取消</Button>
-        <Button onClick={onSubmit} disabled={state}>提交</Button>
+        <Button onClick={onSubmit} >提交</Button>
       </div>
     </div>
   );
