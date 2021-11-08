@@ -142,20 +142,20 @@ const TkApply = () => {
         >
           <p className={styles.tkhsj}>调课后时间</p>
           <Form.Item name='TKRQ' label="日期">
-            <DatePicker onChange={(value)=>{
+            <DatePicker inputReadOnly={true} onChange={(value)=>{
              onchange(value,'TKRQ')
             }} />
           </Form.Item>
           <div className={styles.TimeInterval}>
           <Form.Item  name='KSSJ' label="时段">
-            <TimePicker format="HH:mm" onChange={(value)=>{
+            <TimePicker inputReadOnly={true} format="HH:mm" onChange={(value)=>{
              onchange(value,'KSSJ')
             }} />
           </Form.Item>
           <div className={styles.right}>
           <span>-</span>
           <Form.Item  name='JSSJ' >
-            <TimePicker format="HH:mm" onChange={(value)=>{
+            <TimePicker inputReadOnly={true} format="HH:mm" onChange={(value)=>{
              onchange(value,'JSSJ')
             }} />
           </Form.Item>

@@ -372,8 +372,10 @@ const SubstituteFor: React.FC = () => {
                 <p className={styles.title}>代课后</p>
                 <p>代课教师： {DkshowWXName ? <WWOpenDataCom type="userName" openid={Datas?.DKJS?.WechatUserId} /> : Datas?.DKJS?.XM}</p>
                 <p>审批时间：{Datas?.DKSPSJ || '-'}</p>
-                <p>代课意见：{Datas.ZT === 4 || Datas.ZT === 1 ||  Datas.ZT === 2 ? '同意' : <>{Datas.ZT === 5 ? '不同意' : '-'}</>}</p>
-                <p>代课原因：{Datas?.ZT === 5 ? Datas?.DKBZ : '-'}</p>
+                <p>代课意见：{Datas.ZT === 4 || Datas.ZT === 1 || Datas.ZT === 2 ? '同意' : <>{Datas.ZT === 5 ? '不同意' : '-'}</>}</p>
+                {
+                  Datas.ZT === 4 || Datas.ZT === 1 || Datas.ZT === 2 ? <></> : <p>代课原因：{Datas?.ZT === 5 ? Datas?.DKBZ : '-'}</p>
+                }
               </div>
             </div>
             <div className={styles.Line} />
