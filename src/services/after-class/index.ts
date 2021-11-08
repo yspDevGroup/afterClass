@@ -31,6 +31,7 @@ import * as khjsqj from './khjsqj';
 import * as khjssj from './khjssj';
 import * as khjstdk from './khjstdk';
 import * as khjyjg from './khjyjg';
+import * as khjyjspjl from './khjyjspjl';
 import * as khjytzgg from './khjytzgg';
 import * as khkclx from './khkclx';
 import * as khkcpj from './khkcpj';
@@ -104,6 +105,7 @@ export default {
   khjssj,
   khjstdk,
   khjyjg,
+  khjyjspjl,
   khjytzgg,
   khkclx,
   khkcpj,

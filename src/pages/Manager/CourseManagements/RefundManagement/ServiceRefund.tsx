@@ -199,6 +199,14 @@ const ServiceRefund = () => {
       width: 150,
     },
     {
+      title: '审批说明',
+      dataIndex: 'BZ',
+      key: 'BZ',
+      align: 'center',
+      ellipsis: true,
+      width: 180,
+    },
+    {
       title: '退款时间',
       dataIndex: 'TKSJ',
       key: 'TKSJ',

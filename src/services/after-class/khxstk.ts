@@ -79,6 +79,10 @@ export async function getAllKHXSTK(
     KHKCSJId?: string;
     /** 班级ID */
     KHBJSJId?: string;
+    /** 课后服务类型Id */
+    KHFWLXId?: string;
+    /** 课后服务名称 */
+    KHFWMC?: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 页数 */

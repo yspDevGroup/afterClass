@@ -203,3 +203,25 @@ export async function getArrangement(
     ...(options || {}),
   });
 }
+
+/** 根据日期获取学生上课信息 POST /khxscq/getStudentArrangement */
+export async function getStudentArrangement(
+  body: {
+    /** 出勤日期 */
+    DATE?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学生ID */
+    XSJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khxscq/getStudentArrangement', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
