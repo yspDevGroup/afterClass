@@ -31,8 +31,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
           content: item.NR,
           imgs: imgsArr,
           time: item.createdAt,
-          teacherName: item.JZGJBSJ.XM,
-          schoolName: item.JZGJBSJ.XXJBSJ.XXMC
+          teacherName: item.JZGJBSJ.XM
         };
         allData.push(data);
       });
