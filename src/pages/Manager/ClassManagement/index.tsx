@@ -206,7 +206,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       ...info,
 
       BJMC: type === 'copy' ? `${BJMC}-复制` : BJMC,
-      BJZT: type === 'copy' ? '待开班' : BJZT,
+      BJZT: type === 'copy' ? '未开班' : BJZT,
 
       ZJS:
         currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
@@ -473,7 +473,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                 }
                 if (filter?.PK) {
                   newTableDateSource = newTableDateSource.filter((item: any) => {
-                    return filter?.PK?.some((v: any) => v == item.pk_count);
+                    return filter?.PK?.some((v: any) => v === item.pk_count);
                   });
                 }
                 return {
