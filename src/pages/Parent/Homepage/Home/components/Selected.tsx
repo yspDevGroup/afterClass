@@ -84,7 +84,7 @@ const CourseTab = (props: { dataResource: any; }) => {
       const listData: any = [].map.call(yxkc, (record: any) => {
         const nodeData: ListItem = {
           id: record.id,
-          title: record.KHKCSJ.KCMC,
+          title:` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
           img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
           link: `/parent/home/courseIntro?classid=${record.id}`,
           desc: [
