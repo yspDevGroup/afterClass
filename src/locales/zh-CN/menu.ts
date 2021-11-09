@@ -7,7 +7,7 @@ export default {
   'menu.basicalSettings.schoolEditor': '学校信息修改',
   'menu.basicalSettings.roomManagement': '场地维护',
   'menu.basicalSettings.periodMaintenance': '时段维护',
-  'menu.basicalSettings.termManagement': '学期学年维护',
+  'menu.basicalSettings.termManagement': '学年学期维护',
   'menu.basicalSettings.gradeClass': '年级班级维护',
   'menu.basicalSettings.studentManagement': '学生管理',
   'menu.basicalSettings.service': '服务协议配置',

@@ -8,7 +8,7 @@ import { Link, useModel } from 'umi';
 import { useRef, useState, useEffect } from 'react';
 import { Button, Modal, Tooltip, Select, message, Divider, Row, Col } from 'antd';
 import ProTable from '@ant-design/pro-table';
-import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
 // import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
@@ -26,6 +26,7 @@ import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 import styles from './index.less';
 import AgentRegistration from './components/AgentRegistration';
+import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 
 const { Option } = Select;
 
@@ -66,6 +67,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [JFTotalost, setJFTotalost] = useState<any>(0);
   const [dataSource, setDataSource] = useState([]);
   const [tableDateSource, setTableDateSource] = useState([]);
+  const [BMJSSJTime, setBMJSSJTime] = useState<any>();
   // useEffect(() => {
   //   (async () => {
   //     if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -127,6 +129,20 @@ const CourseManagement = (props: { location: { state: any } }) => {
     return setTips(false);
   }, [mcData]);
 
+  useEffect(() => {
+    (
+      async () => {
+        const res = await getAllXXSJPZ({
+          XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
+          type: ['1']
+        })
+        if (res.status === 'ok') {
+          setBMJSSJTime(res.data?.[0].JSSJ)
+        }
+      }
+    )()
+  }, [curXNXQId])
   useEffect(() => {
     async function fetchData() {
       const res = await queryXNXQList(currentUser?.xxId);
@@ -378,14 +394,22 @@ const CourseManagement = (props: { location: { state: any } }) => {
       ellipsis: true,
       filters: true,
       onFilter: false,
-      valueEnum: {
-        未开班: {
-          text: '未开班',
-        },
-        已开班: {
-          text: '已开班',
-        },
-      },
+      render: (_, record) => {
+        return <>{record?.BJZT}
+          {
+            new Date(record.BMJSSJ) > new Date(BMJSSJTime) ? <Tooltip
+              overlayStyle={{ maxWidth: '30em' }}
+              title={
+                <>
+                  该课程班报名时段已超出总报名时段，家长、教育局端不可见，请调整
+                </>
+              }
+            >
+              <ExclamationCircleOutlined style={{ color: '#F04D4D',marginLeft:4}} />
+            </Tooltip> : <></>
+          }
+        </>
+      }
     },
     {
       title: '操作',
