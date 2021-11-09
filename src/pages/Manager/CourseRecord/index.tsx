@@ -1,21 +1,16 @@
-import PageContainer from '@/components/PageContainer';
+import React from 'react';
 import { useEffect, useState } from 'react';
-// import { message } from 'antd';
-import type { ProColumns } from '@ant-design/pro-table';
-
 import { useModel, Link } from 'umi';
 import { Input, Select } from 'antd';
+import type { ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
 import { getAllpresence } from '@/services/after-class/khktfc';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import ProTable from '@ant-design/pro-table';
-
+import { getAllCourses } from '@/services/after-class/khkcsj';
+import { getAllClasses } from '@/services/after-class/khbjsj';
 import Style from './index.less';
 import { TableItem } from './data';
-import { getAllCourses } from '@/services/after-class/khkcsj';
-import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
-import { getAllFJSJ, getFJPlan } from '@/services/after-class/fjsj';
-import React from 'react';
-import { getAllClasses } from '@/services/after-class/khbjsj';
+import PageContainer from '@/components/PageContainer';
 
 const { Option } = Select;
 const { Search } = Input;
