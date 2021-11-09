@@ -35,11 +35,7 @@ const ImagesUpload = (props: {
     if (!isJpgOrPng) {
       message.error('上传的文件类型有误');
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('文件大小超过2MB');
-    }
-    return isJpgOrPng && isLt2M;
+    return isJpgOrPng;
   };
 
   const handleCancel = () => setPreviewVisible(false);
