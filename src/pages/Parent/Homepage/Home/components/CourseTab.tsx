@@ -40,7 +40,6 @@ const CourseTab = (props: { dataResource: any; }) => {
   const [DataSource, setDataSource] = useState<any>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-
   useEffect(() => {
     if (yxkc) {
       const listData: any = [].map.call(yxkc, (record: any) => {
@@ -133,129 +132,131 @@ const CourseTab = (props: { dataResource: any; }) => {
 
   return (
     <div className={`${styles.tabHeader}`}>
-      <Tabs
-        centered={centered}
-        onTabClick={(key: string) => oncuechange(key)}
-        defaultActiveKey='kskc'
-        tabBarExtraContent={
-          !centered
-            ? {
-              right: (
-                <Link
-                  to={{
-                    pathname: '/parent/home/course',
-                    state: { courseStatus, kskc, yxkcAllData, keys },
-                  }}
-                >
-                  全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
-                </Link>
-              ),
-            }
-            : ''
-        }
-        className={styles.courseTab}
-      >
+      {
+        courseStatus ? <Tabs
+          centered={centered}
+          onTabClick={(key: string) => oncuechange(key)}
+          defaultActiveKey='kskc'
+          tabBarExtraContent={
+            !centered
+              ? {
+                right: (
+                  <Link
+                    to={{
+                      pathname: '/parent/home/course',
+                      state: { courseStatus, kskc, yxkcAllData, keys },
+                    }}
+                  >
+                    全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
+                  </Link>
+                ),
+              }
+              : ''
+          }
+          className={styles.courseTab}
+        >
 
-        {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
-          <TabPane tab="开设课程" key="kskc">
-            {kskc && kskc.length ? (
-              <Tabs className={styles.courseType}>
-                {kskc.map((item: any) => {
-                  const courseData: any = [].map.call(
-                    item.KHKCSJs,
-                    (record: any, index: number) => {
-                      if (index < 3) {
-                        const nodeData: ListItem = {
-                          id: record.id,
-                          title: record.KCMC,
-                          img: record.KCTP,
-                          link: `/parent/home/courseDetails?courseid=${record.id}`,
-                          desc: [
-                            {
-                              left: [
-                                record.KCMS ? `简介：${record.KCMS}` : "",
+          {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
+            <TabPane tab="开设课程" key="kskc">
+              {kskc && kskc.length ? (
+                <Tabs className={styles.courseType}>
+                  {kskc.map((item: any) => {
+                    const courseData: any = [].map.call(
+                      item.KHKCSJs,
+                      (record: any, index: number) => {
+                        if (index < 3) {
+                          const nodeData: ListItem = {
+                            id: record.id,
+                            title: record.KCMC,
+                            img: record.KCTP,
+                            link: `/parent/home/courseDetails?courseid=${record.id}`,
+                            desc: [
+                              {
+                                left: [
+                                  record.KCMS ? `简介：${record.KCMS}` : "",
 
-                              ],
-                            },
-                          ],
-                          introduction: record.KCMS,
+                                ],
+                              },
+                            ],
+                            introduction: record.KCMS,
+                          };
+                          return nodeData;
+                        }
+                        return {
+                          title: 'null',
                         };
-                        return nodeData;
-                      }
-                      return {
-                        title: 'null',
-                      };
-                    },
-                  );
+                      },
+                    );
 
-                  const { list, ...rest } = { ...defaultMsg };
-                  return (
-                    <TabPane tab={item.KCTAG} key={item.KCTAG} style={{ margin: '8px 0' }}>
-                      <ListComponent
-                        listData={{
-                          list: courseData.filter((it: ListItem) => it.title !== 'null'),
-                          ...rest,
-                        }}
-                      />
-                    </TabPane>
-                  );
-                })}
-              </Tabs>
-            ) : (
-              <ListComponent listData={defaultMsg} />
-            )}
+                    const { list, ...rest } = { ...defaultMsg };
+                    return (
+                      <TabPane tab={item.KCTAG} key={item.KCTAG} style={{ margin: '8px 0' }}>
+                        <ListComponent
+                          listData={{
+                            list: courseData.filter((it: ListItem) => it.title !== 'null'),
+                            ...rest,
+                          }}
+                        />
+                      </TabPane>
+                    );
+                  })}
+                </Tabs>
+              ) : (
+                <ListComponent listData={defaultMsg} />
+              )}
+            </TabPane>
+          ) : (
+            ''
+          )}
+
+          <TabPane tab="开设服务" key="ksfw">
+            <div className={styles.category}>
+              {LBData && LBData.length === 0 ? (
+                <ListComponent listData={defaultMsgs} />
+              ) : (
+                <Tabs type="card" onChange={callback}>
+                  {LBData?.map((value: any) => {
+                    return (
+                      <TabPane tab={value.FWMC} key={value?.id}>
+                        <div className={styles.wrap}>
+                          {DataSource &&
+                            DataSource?.map((item: any) => {
+                              const hrefs = `/parent/home/serviceReservation/details?type=KS&id=${item.id}`;
+                              return (
+                                <Link to={hrefs} key={item?.id}>
+                                  <div className={styles.box}>
+                                    <div>
+                                      <img
+                                        src={item?.FWTP || noPic}
+                                        style={{ width: item?.FWTP ? '110px' : '70px' }}
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div>
+                                      <p className={styles.title}> {item?.FWMC} </p>
+                                      <p>
+                                        预定时段：{moment(item?.BMKSSJ).format('YYYY.MM.DD')}~
+                                        {moment(item?.BMJSSJ).format('YYYY.MM.DD')}
+                                      </p>
+                                      <p>
+                                        服务时段：{moment(item?.KSRQ).format('YYYY.MM.DD')}~
+                                        {moment(item?.JSRQ).format('YYYY.MM.DD')}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                        </div>
+                      </TabPane>
+                    );
+                  })}
+                </Tabs>
+              )}
+            </div>
           </TabPane>
-        ) : (
-          ''
-        )}
-
-        <TabPane tab="开设服务" key="ksfw">
-          <div className={styles.category}>
-            {LBData && LBData.length === 0 ? (
-              <ListComponent listData={defaultMsgs} />
-            ) : (
-              <Tabs type="card" onChange={callback}>
-                {LBData?.map((value: any) => {
-                  return (
-                    <TabPane tab={value.FWMC} key={value?.id}>
-                      <div className={styles.wrap}>
-                        {DataSource &&
-                          DataSource?.map((item: any) => {
-                            const hrefs = `/parent/home/serviceReservation/details?type=KS&id=${item.id}`;
-                            return (
-                              <Link to={hrefs} key={item?.id}>
-                                <div className={styles.box}>
-                                  <div>
-                                    <img
-                                      src={item?.FWTP || noPic}
-                                      style={{ width: item?.FWTP ? '110px' : '70px' }}
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div>
-                                    <p className={styles.title}> {item?.FWMC} </p>
-                                    <p>
-                                      预定时段：{moment(item?.BMKSSJ).format('YYYY.MM.DD')}~
-                                      {moment(item?.BMJSSJ).format('YYYY.MM.DD')}
-                                    </p>
-                                    <p>
-                                      服务时段：{moment(item?.KSRQ).format('YYYY.MM.DD')}~
-                                      {moment(item?.JSRQ).format('YYYY.MM.DD')}
-                                    </p>
-                                  </div>
-                                </div>
-                              </Link>
-                            );
-                          })}
-                      </div>
-                    </TabPane>
-                  );
-                })}
-              </Tabs>
-            )}
-          </div>
-        </TabPane>
-      </Tabs>
+        </Tabs> : <></>
+      }
     </div>
   );
 };
