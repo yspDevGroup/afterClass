@@ -31,6 +31,7 @@ const StudentsLeave: React.FC = () => {
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
       // 获取到的整个列表的信息
+      console.log(res, 'res');
       const newData = res.xnxqList;
       const curTerm = res.current;
       if (newData?.length) {
@@ -41,16 +42,19 @@ const StudentsLeave: React.FC = () => {
       }
     })();
   }, []);
+  console.log(curXNXQId);
 
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateKHJSQJ({ id: current?.id },
+      const res = await updateKHJSQJ(
+        { id: current?.id },
         {
           QJZT: ZT,
           BZ,
           SPJSId: currentUser?.JSId || testTeacherId,
-        });
+        },
+      );
       if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);
@@ -60,7 +64,7 @@ const StudentsLeave: React.FC = () => {
     } catch (err) {
       message.error('退课流程出现错误，请联系管理员或稍后重试。');
     }
-  }
+  };
   // table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -97,14 +101,10 @@ const StudentsLeave: React.FC = () => {
           <EllipsisHint
             width="100%"
             text={record.KHJSQJKCs?.map((item: any) => {
-              return (
-                <Tag key={item.KCMC}>
-                  {item.KCMC}
-                </Tag>
-              );
+              return <Tag key={item.KCMC}>{item.KCMC}</Tag>;
             })}
           />
-        )
+        );
       },
       width: 150,
     },
@@ -119,14 +119,10 @@ const StudentsLeave: React.FC = () => {
           <EllipsisHint
             width="100%"
             text={record.KHJSQJKCs?.map((item: any) => {
-              return (
-                <Tag key={item.KHBJSJ?.id}>
-                  {item.KHBJSJ?.BJMC}
-                </Tag>
-              );
+              return <Tag key={item.KHBJSJ?.id}>{item.KHBJSJ?.BJMC}</Tag>;
             })}
           />
-        )
+        );
       },
       width: 120,
     },
@@ -213,19 +209,23 @@ const StudentsLeave: React.FC = () => {
       fixed: 'right',
       width: 80,
       render: (_, record: any) => {
-        return <>
-          {record.QJZT === 0 ? (
-            <a onClick={() => {
-              setCurrent(record);
-              setVisible(true);
-            }}>
-              审批
-            </a>
-          ) : (
-            ''
-          )}
-        </>
-      }
+        return (
+          <>
+            {record.QJZT === 0 ? (
+              <a
+                onClick={() => {
+                  setCurrent(record);
+                  setVisible(true);
+                }}
+              >
+                审批
+              </a>
+            ) : (
+              ''
+            )}
+          </>
+        );
+      },
     },
   ];
   return (
@@ -261,16 +261,16 @@ const StudentsLeave: React.FC = () => {
               setQJZT([value]);
             }}
           >
-            <Option key='全部' value={-1}>
+            <Option key="全部" value={-1}>
               全部
             </Option>
-            <Option key='申请中' value={0}>
+            <Option key="申请中" value={0}>
               申请中
             </Option>
-            <Option key='已通过' value={1}>
+            <Option key="已通过" value={1}>
               已通过
             </Option>
-            <Option key='已驳回' value={2}>
+            <Option key="已驳回" value={2}>
               已取销
             </Option>
           </Select>
@@ -283,23 +283,22 @@ const StudentsLeave: React.FC = () => {
           rowKey="id"
           request={async (param) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
-            if (curXNXQId) {
-              const obj = {
-                XXJBSJId: currentUser?.xxId,
-                XNXQId: curXNXQId,
-                QJZT: QJZT?.[0] === -1 ? [0, 1, 2] : QJZT,
-                page: param.current,
-                pageSize: param.pageSize,
+            const obj = {
+              XXJBSJId: currentUser?.xxId,
+              XNXQId: curXNXQId,
+              QJZT: QJZT?.[0] === -1 ? [0, 1, 2] : QJZT,
+              page: param.current,
+              pageSize: param.pageSize,
+            };
+            const res = await getAllKHJSQJ(obj);
+            if (res.status === 'ok') {
+              return {
+                data: res.data?.rows,
+                success: true,
+                total: res.data?.count,
               };
-              const res = await getAllKHJSQJ(obj);
-              if (res.status === 'ok') {
-                return {
-                  data: res.data?.rows,
-                  success: true,
-                  total: res.data?.count,
-                };
-              }
             }
+
             return [];
           }}
           pagination={{
@@ -344,7 +343,7 @@ const StudentsLeave: React.FC = () => {
               <Radio value={2}>不同意</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item label="审批说明" name='BZ'>
+          <Form.Item label="审批说明" name="BZ">
             <TextArea rows={4} maxLength={100} />
           </Form.Item>
         </Form>
