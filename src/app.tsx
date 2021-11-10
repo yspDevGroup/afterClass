@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { notification } from 'antd';
+import { message, notification } from 'antd';
 import type { RequestConfig } from 'umi';
 import { history, Link } from 'umi';
 import type { ResponseError } from 'umi-request';
@@ -110,16 +110,19 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
             <BookOutlined />
             <span>业务组件文档</span>
           </Link>,
+          <>版本号：V2.2.0</>,
         ]
-      : [],
+      : [
+          <div style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}>
+            版本号：V2.2.0
+          </div>,
+        ],
     collapsedButtonRender: false,
     menuHeaderRender: (logo: any, title: any, props: any) => {
       if (props?.collapsed) {
         return (
           <div className="cusHeaderLogoSmall">
-            <Link to="/">
-              <img src={headerTopSmall} />
-            </Link>
+            <img src={headerTopSmall} />
             <span>
               学校
               <br />端
@@ -169,11 +172,13 @@ const errorHandler = (error: ResponseError) => {
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
+    console.error(errorText);
+    message.error(`请求错误 ${status}: ${url}`);
 
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
+    // notification.error({
+    //   message: `请求错误 ${status}: ${url}`,
+    //   description: errorText,
+    // });
   }
 
   if (!response) {
