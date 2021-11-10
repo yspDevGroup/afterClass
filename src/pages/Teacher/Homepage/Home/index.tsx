@@ -92,8 +92,9 @@ const Home = () => {
       }
     })();
     if (
-      initialState?.buildOptions.authType === 'wechat' &&
-      (!currentUser.XM || currentUser.XM === '未知')
+      // initialState?.buildOptions.authType === 'wechat' &&
+      !currentUser.XM ||
+      currentUser.XM === '未知'
     ) {
       setIsModalVisible(true);
     }
@@ -103,10 +104,14 @@ const Home = () => {
   }, [currentUser]);
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData( 'teacher',currentUser?.xxId, currentUser.JSId || testTeacherId);
+      const oriData = await ParentHomeData(
+        'teacher',
+        currentUser?.xxId,
+        currentUser.JSId || testTeacherId,
+      );
       const { data } = oriData;
       setTotalData(data);
-    })()
+    })();
   }, []);
 
   const onFinish = async (values: { name: string; phone: string }) => {
@@ -116,7 +121,7 @@ const Home = () => {
     );
     if (res.status === 'ok') {
       message.success('提交成功');
-      refresh();
+      await refresh();
     } else {
       message.error('提交失败，请联系管理');
       console.warn(res.message);
@@ -179,7 +184,11 @@ const Home = () => {
         </div>
         {/* 今日课程 */}
         <div className={styles.enrollArea}>
-          <EnrollClassTime type='teacher' xxId = {currentUser.xxId} userId = {currentUser.JSId || testTeacherId} />
+          <EnrollClassTime
+            type="teacher"
+            xxId={currentUser.xxId}
+            userId={currentUser.JSId || testTeacherId}
+          />
         </div>
         {/* 代课与待巡课程 */}
         <div className={styles.patrols}>
