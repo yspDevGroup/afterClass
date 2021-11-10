@@ -78,7 +78,7 @@ const MechanismInfo = (props: {
         <Form.Item
           name="ZZJGDM"
           key="ZZJGDM"
-          label="组织机构代码："
+          label="统一社会信用代码："
         >
           <Input placeholder={'——'} disabled={disabled} />
         </Form.Item>
