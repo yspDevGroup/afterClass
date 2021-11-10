@@ -3128,6 +3128,7 @@ declare namespace API {
     KHQJKCs?: {
       QJRQ?: string;
       KCMC?: string;
+      XXSJPZId?: string;
       KHBJSJ?: {
         id?: string;
         BJMC?: string;

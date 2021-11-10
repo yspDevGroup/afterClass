@@ -397,6 +397,7 @@
     .title {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       color: @text-color;
       font-weight: 600;
       font-size: 16px;
@@ -487,5 +488,10 @@
         border: none;
       }
     }
+  }
+}
+:global{
+  .ant-modal-confirm .ant-modal-content{
+    min-width: auto !important;
   }
 }

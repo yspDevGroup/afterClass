@@ -3,27 +3,20 @@
  * @description:
  * @author: txx
  * @Date: 2021-05-31 10:24:05
- * @LastEditTime: 2021-10-29 17:57:39
+ * @LastEditTime: 2021-11-10 10:03:44
  * @LastEditors: Sissle Lynn
  */
 
 import type { ListData, ListItem, ListType } from './data';
 import { List } from 'antd';
-import { Link, history } from 'umi';
+import { history } from 'umi';
 import styles from './index.less';
-// import IconFont from '../CustomIcon';
 import DisplayColumn from '../DisplayColumn';
 import Nodata from '../Nodata';
 import noPic from '@/assets/noPic.png';
 import noPic1 from '@/assets/noPic1.png';
 
-// const findSpan: (dom: any) => any = (dom: any) => {
-//   if (dom.tagName === 'SPAN') {
-//     return dom;
-//   }
-//   return findSpan(dom.parentElement);
-// };
-const NewsList = (props: { data: ListItem[]; type: ListType; operation: any}) => {
+const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) => {
   const { data, type, operation } = props;
   const teacher = history.location.pathname.indexOf('teacher') > -1;
 
@@ -31,20 +24,28 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any}) =>
     <div className={styles[type]}>
       <List
         dataSource={data}
-        renderItem={(v,index) => {
+        renderItem={(v, index) => {
+          const { status } = v;
           return (
             <div className={operation ? 'ui-listItemWrapper' : 'itemWrapper'}>
               <div className={operation ? 'ui-listItemContent' : 'itemContent'}>
-                <Link to={v.link!}>
+                {status ? <span className={styles.specialPart} style={{background: status === '已请假' ? '#F48A82' : '#7dce81'}}>{status}</span>:''}
+                <a onClick={()=>{
+                  if(v.link){
+                    history.push(v.link);
+                  }
+                }}>
                   <List.Item.Meta
                     style={
                       type === 'descList'
                         ? {
-                            background:
-                              v.titleRight?.text === '待上课'
-                                ? 'rgba(69, 201, 119, 0.05)'
-                                : 'rgba(102, 102, 102, 0.05)',
-                          }
+                          background:
+                            v.titleRight?.text === '待上课'
+                              ? 'rgba(69, 201, 119, 0.05)'
+                              :
+                              (v.titleRight?.text === '代上课'
+                                ? 'rgba(255, 199, 0, 0.05)' : 'rgba(102, 102, 102, 0.05)'),
+                        }
                         : {}
                     }
                     // eslint-disable-next-line no-nested-ternary
@@ -83,9 +84,9 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any}) =>
                     }
                     description={
                       <>
-                        {v.desc?.map((item, index) => {
+                        {v.desc?.map((item, ind) => {
                           return (
-                            <div className={styles.descRow} key={`${v.title}${index.toString()}`}>
+                            <div className={styles.descRow} key={`${v.title}${ind.toString()}`}>
                               <div className={styles.descleft}>
                                 {item?.left?.map((t, i) => {
                                   return (
@@ -107,33 +108,14 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any}) =>
                       </>
                     }
                   />
-                </Link>
-                {/* {operation ? (
-                  <IconFont
-                    type="icon-arrow"
-                    onClick={(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-                      const tar = findSpan(e.target);
-                      const next = tar.closest('.ui-listItemContent').nextElementSibling;
-                      if (tar?.className === 'anticon') {
-                        tar.className = 'anticon ui-revert';
-                        next.style.display = 'block';
-                      } else {
-                        tar!.className = 'anticon';
-                        next.style.display = 'none';
-                      }
-                    }}
-                  />
-                ) : (
-                  ''
-                )} */}
+                </a>
               </div>
-              {operation ? (
-                <div className="ui-operation" style={{ display: 'block', paddingTop: '10px' }}>
-                  <DisplayColumn type="icon" grid={{ column: operation.length }} dataSource={operation} parentLink={[v.enrollLink]} bjid={v.bjid} callbackData={data[index]}/>
-                </div>
-              ) : (
-                ''
-              )}
+              {
+                status !== '已请假' && status !== '已调课' && status !== '代课' && operation ? (
+                  <div className="ui-operation" style={{ display: 'block', paddingTop: '10px' }}>
+                    <DisplayColumn type="icon" grid={{ column: operation.length }} dataSource={operation} parentLink={[v.enrollLink]} bjid={v.bjid} callbackData={data[index]} />
+                  </div>) : ''
+              }
             </div>
           );
         }}

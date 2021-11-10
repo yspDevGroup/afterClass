@@ -11,10 +11,10 @@ export async function getKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<any>(`/khbjsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -28,10 +28,10 @@ export async function deleteKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -132,13 +132,13 @@ export async function updateKHBJSJ(
   body: API.UpdateKHBJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -153,10 +153,10 @@ export async function getEnrolled(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<any>(`/khbjsj/enrolled/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -258,10 +258,10 @@ export async function getClassDetail(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<any>(`/khbjsjdetail/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -352,6 +352,70 @@ export async function getTeachersByBJId(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khbjsj/getTeachersByBJId', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 更新或创建课程班课程安排记录 PUT /khbjsj/upsert */
+export async function upsertKHBJKSSJ(
+  body: {
+    /** 班级ID */
+    KHBJSJId?: string;
+    /** 课程安排信息 */
+    DATA?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/upsert', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取课程班课程安排记录 POST /khbjsj/getAllKHBJKSSJ */
+export async function getAllKHBJKSSJ(
+  body: {
+    /** 班级列表 */
+    KHBJSJIds?: string[];
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getAllKHBJKSSJ', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取为主教师的班级列表 POST /khbjsj/getMainTeacher */
+export async function getMainTeacher(
+  body: {
+    /** 班级列表 */
+    KHBJSJIds?: string[];
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 教师类型 */
+    JSLX?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getMainTeacher', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

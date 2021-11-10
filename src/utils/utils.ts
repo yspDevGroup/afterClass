@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-param-reassign */
 import { parse } from 'querystring';
 import { message } from 'antd';
@@ -271,6 +272,7 @@ export const getLoginPath = (suiteID: string, isAdmin: string, buildOptions?: Bu
     case 'none':
       // 获取不到配置时，直接跳转到403
       loginPath = '/403?title=未获取到应用信息，请联系管理员';
+      break;
     case 'wechat':
       // 前提是本应该已经注册为微信认证，且正确配置认证回调地址为 ${ENV_host}/auth_callback/wechat
       loginPath = `${ssoHost}/wechat/authorizeUrl?suiteID=${suiteID}&isAdmin=${isAdmin}`;

@@ -1,8 +1,8 @@
 /* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { Badge } from 'antd';
-import { getData, getQueryString } from '@/utils/utils';
+import { Badge, Modal } from 'antd';
+import { getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import styles from './index.less';
 import noData from '@/assets/noCourse.png';
@@ -33,8 +33,8 @@ const CourseTable: React.FC = () => {
       if (classid) {
         const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId);
         const { courseSchedule } = oriData;
-        const detail = courseSchedule.find((item: { courseInfo: { bjId: string; }[]; }) => {
-          return item.courseInfo?.[0].bjId === classid
+        const classInfo = courseSchedule.find((item: { KHBJSJId: string; }) => {
+          return item.KHBJSJId === classid
         });
         const result = await getTeachersByBJId({ KHBJSJId: classid });
         if (result.status === 'ok') {
@@ -45,24 +45,30 @@ const CourseTable: React.FC = () => {
           bjId: classid,
           xsId: StorageXSId
         });
-        if (detail) {
-          setKcDetail(detail.courseInfo[0]);
+        if (classInfo) {
+          setKcDetail(classInfo.detail[0]);
         }
         if (res.status === 'ok' && res.data) {
-
-          const dataTable = detail?.days && detail?.days.map((ele: { index: number; day: string; }) => {
-            const { index, day } = ele;
-            let status: string = '';
+          const dataTable = classInfo?.days && classInfo?.days.map((ele: any) => {
+            const { day, status, ...rest } = ele;
+            let stuStatus: string = '';
             let style: any = {};
             if (new Date(day).getTime() > new Date(currentDate).getTime()) {
-              status = '待上';
+              stuStatus = '待上';
               style = {
                 background: 'rgba(137, 218, 140, 0.4)',
                 color: '#333333'
               };
             }
+            if (new Date(day).getTime() === new Date(currentDate).getTime()) {
+              stuStatus = '今日';
+              style = {
+                background: '#2196F3',
+                color: '#FFFFFF',
+              };
+            }
             if (new Date(day).getTime() < new Date(currentDate).getTime()) {
-              status = '出勤';
+              stuStatus = '出勤';
               style = {
                 background: '#FFFFFF',
                 color: '#999999',
@@ -70,7 +76,7 @@ const CourseTable: React.FC = () => {
               };
             }
             if (res.data?.length) {
-              let curCQ = res.data.find((item) => item.CQRQ === day);
+              const curCQ = res.data.find((item) => item.CQRQ === day);
               if (curCQ) {
                 switch (curCQ?.CQZT) {
                   case '请假':
@@ -88,22 +94,26 @@ const CourseTable: React.FC = () => {
                   default:
                     break;
                 }
-                status = curCQ?.CQZT || '出勤';
+                stuStatus = curCQ?.CQZT || '出勤';
               }
             }
-            // 处理今日已点名情况，故后更新今日状态
-            if (new Date(day).getTime() === new Date(currentDate).getTime()) {
-              status = '今日';
+            if (status === '已请假') {
               style = {
-                background: '#2196F3',
-                color: '#FFFFFF',
+                background: 'rgba(122, 137, 144, 0.2)',
+                color: '#666'
+              };
+            }
+            if (status === '调课') {
+              style = {
+                background: 'rgba(172, 144, 251, 0.2)',
+                color: '#666'
               };
             }
             return {
-              num: index + 1,
               day: moment(day).format('MM/DD'),
-              status,
-              style
+              status: status || stuStatus,
+              style,
+              ...rest
             }
           })
           setTimetableList(dataTable);
@@ -112,8 +122,29 @@ const CourseTable: React.FC = () => {
     };
     fetchData();
   }, [classid]);
+  const handleModal = (val: any) => {
+    let content = {};
+    if (val.tag) {
+      if (val.tag === '假') {
+        content = {
+          title: '请假说明',
+          content: ` ${val.reason ? `由于${val.reason},` : ''}本节课程安排取消，之后课程顺延,请知悉.`
+        }
+      } else {
+        content = {
+          title: '调课说明',
+          content: `由于${val.reason},本节课临时调整到${val.realDate}日${val.start}-${val.end}上课,请知悉.`
+        }
+      }
+      Modal.info({
+        width: '90vw',
+        ...content
+      });
+    }
+  };
+
   return <div className={styles.CourseDetails2}>
-    <GoBack title={'课程详情'} onclick={`/parent/home?index=${path ? path : 'index'}`} />
+    <GoBack title={'课程详情'} onclick={`/parent/home?index=${path || 'index'}`} />
     <div className={styles.KCXX}>
       {/* 上课时段 */}
       <p className={styles.title}>{KcDetail?.title}</p>
@@ -136,22 +167,22 @@ const CourseTable: React.FC = () => {
     <div className={styles.Timetable}>
       <p className={styles.title}>
         <span>课程表</span>
-        <span>
+        <span style={{ textAlign: 'right' }}>
+          <Badge className={styles.legend} color="#AC90FB" text="教师调课" />
+          <Badge className={styles.legend} color="#7A8990" text="教师请假" />
+          <br />
           <Badge className={`${styles.legend} ${styles.legend1}`} color="#FFF" text="出勤" />
           <Badge className={styles.legend} color="#F48A82" text="缺勤" />
           <Badge className={styles.legend} color="#F2C862" text="请假" />
           <Badge className={styles.legend} color="#2196F3" text="今日" />
           <Badge className={styles.legend} color="#89DA8C" text="待上" />
-          {/* <br />
-          <Badge className={styles.legend} color="#fd8b8b" text="调课" />
-          <Badge className={styles.legend} color="#45C977" text="代课" /> */}
         </span>
       </p>
       <div className={styles.cards}>
         {
           !(timetableList?.length === 0) ? timetableList?.map((value) => {
-            return <div className={styles.card} style={value?.style} >
-              <p>第{value.num}节</p>
+            return <div className={styles.card} style={value?.style} onClick={() => handleModal(value)}>
+              <p>{value.tag && value.tag === '假' ? `【${value.tag}】` : `第${value.index + 1}节`}</p>
               <p>{value.day}</p>
             </div>
           }) : <Nodata imgSrc={noData} desc='暂无课表' />

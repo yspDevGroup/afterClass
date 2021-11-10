@@ -2,26 +2,32 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-26 16:18:21
- * @LastEditTime: 2021-10-26 17:40:17
+ * @LastEditTime: 2021-11-05 10:18:26
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
-import CheckOnChart from './CheckOnChart';
-import Nodata from '@/components/Nodata';
+import { useModel } from 'umi';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { countKHJSCQ, statisSubstitute } from '@/services/after-class/khjscq';
+import BarChart from './BarChart';
+import PieChart from './PieChart';
 
+import Nodata from '@/components/Nodata';
 import styles from '../index.less';
 import noChart from '@/assets/noChart1.png';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { useModel } from 'umi';
-import { countKHJSCQ } from '@/services/after-class/khjscq';
+
 
 const CheckOnStatic = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  // 考勤数据
   const [satistics, setStatistics] = useState<any[]>();
-  const convertData = (data: any) => {
-    if (data) {
+  // 代课数据
+  const [replace, setReplace] = useState<any[]>([]);
+  // 转换考勤数据格式
+  const convertData = (data: any, type: string) => {
+    if (data && type === 'attendance') {
       const toDo = data.KSS - data.attendance - data.leave - data.substitute - data.absenteeism;
       return {
         title: `${data.KCMC}/${data.BJMC}`,
@@ -38,7 +44,7 @@ const CheckOnStatic = () => {
           {
             label: `${data.KCMC}/${data.BJMC}`,
             type: '请假',
-            value:  data.leave,
+            value: data.leave,
             color: 'l(180) 0:rgba(242, 200, 98, 0.2) 1:rgba(242, 200, 98, 1)',
           },
           {
@@ -62,6 +68,22 @@ const CheckOnStatic = () => {
         ]
       }
     }
+    if (data && type === 'replace') {
+      const { count, cq_count } = data;
+      const num = Number(count) - Number(cq_count);
+      return [
+        {
+          label: `${data.XM}`,
+          type: '考勤正常',
+          value: num < 0 ? count : cq_count,
+        },
+        {
+          label: `${data.XM}`,
+          type: '考勤异常',
+          value: num < 0 ? 0 : num,
+        }
+      ]
+    }
     return {}
   };
 
@@ -75,45 +97,68 @@ const CheckOnStatic = () => {
         });
         if (res.status === 'ok') {
           const arr = [].map.call(res.data, (item) => {
-            return convertData(item);
+            return convertData(item, 'attendance');
           })
           setStatistics(arr || []);
         }
+        const response = await statisSubstitute({
+          XNXQId: result.current.id,
+          JZGJBSJId: currentUser.JSId || testTeacherId
+        });
+        if (response.status === 'ok') {
+          let newArr: any[] = [];
+          response.data?.forEach((item: any) => {
+            newArr = newArr.concat(convertData(item, 'replace'));
+          });
+          setReplace(newArr);
+        }
       }
     })()
-  }, [])
+  }, []);
   return (
-    <div className={styles.funWrapper}>
-      <div className={styles.titleBar}>
-        出勤统计
-        <div>
-          <span />
-          正常
-          <span />
-          待上
-          <br />
-          <span />
-          请假
-          <span />
-          代课
-          <span />
-          异常
+    <>
+      <div className={styles.funWrapper}>
+        <div className={styles.titleBar}>
+          出勤统计
+          <div>
+            <span />
+            正常
+            <span />
+            待上
+            <br />
+            <span />
+            请假
+            <span />
+            代课
+            <span />
+            异常
+          </div>
         </div>
+        {satistics && satistics.length ? (
+          <Row gutter={8}>
+            {satistics.map((item: any) => {
+              return (
+                <Col span={12}>
+                  <PieChart data={item.data} title={item.title} key={item.title} />
+                </Col>
+              );
+            })}
+          </Row>
+        ) : (
+          <Nodata imgSrc={noChart} desc="暂无数据" />
+        )}
       </div>
-      {satistics && satistics.length ? (
-        <Row gutter={8}>
-          {satistics.map((item: any) => {
-            return (
-              <Col span={12}>
-                <CheckOnChart data={item.data} title={item.title} key={item.title} />
-              </Col>
-            );
-          })}
-        </Row>
-      ) : (
-        <Nodata imgSrc={noChart} desc="暂无数据" />
-      )}
-    </div>
+      <div className={styles.funWrapper}>
+        <div className={styles.titleBar}>
+          代课统计
+        </div>
+        {replace && replace.length ? (
+          <BarChart data={replace} />
+        ) : (
+          <Nodata imgSrc={noChart} desc="暂无数据" />
+        )}
+      </div>
+    </>
   );
 };
 

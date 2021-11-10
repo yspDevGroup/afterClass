@@ -9,6 +9,8 @@ import ProTable from '@ant-design/pro-table';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
 import { updateKHJSTDK } from '@/services/after-class/khjstdk';
+import { getMainTeacher } from '@/services/after-class/khbjsj';
+import { getClassDays } from '@/utils/TimeTable';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -53,6 +55,20 @@ const Adjustment: React.FC = () => {
         setVisible(false);
         setCurrent(undefined);
         actionRef.current?.reload();
+        // 处理主班调课后课时状态变更的情况，触发课时重新计算
+        if (ZT === 1) {
+          const result = await getMainTeacher({
+            KHBJSJIds: [current.KHBJSJ.id],
+            JZGJBSJId: current.SKJS.id,
+            JSLX: '主教师'
+          });
+          if (result.status === 'ok') {
+            const { data } = result;
+            data?.forEach(async (ele: { KHBJSJId: string; }) => {
+              await getClassDays(ele.KHBJSJId, current.SKJS.id, currentUser?.xxId);
+            });
+          };
+        }
       }
     } catch (err) {
       message.error('代课审批流程出现错误，请联系管理员或稍后重试。');
@@ -354,21 +370,21 @@ const Adjustment: React.FC = () => {
                 <p>时段：{Datas?.KSSJ} ~ {Datas?.JSSJ}</p>
                 <p>场地：{Datas?.TKFJ?.FJMC}</p>
               </div>
-              </div>
-              <div className={styles.Line} />
-              {
-                Datas?.ZT === 1 || Datas?.ZT === 2 ?  <div className={styles.reason}>
+            </div>
+            <div className={styles.Line} />
+            {
+              Datas?.ZT === 1 || Datas?.ZT === 2 ? <div className={styles.reason}>
                 <p className={styles.title}>审批人：{SPshowWXName ? <WWOpenDataCom type="userName" openid={Datas?.SPJS?.WechatUserId} /> : Datas?.SPJS?.XM}</p>
                 <p>审批时间：{Datas?.updatedAt}</p>
-                <p>审批意见：{Datas?.ZT === 1 ? '同意':'不同意'}</p>
+                <p>审批意见：{Datas?.ZT === 1 ? '同意' : '不同意'}</p>
                 <p>审批原因：{Datas?.DKBZ || '-'}</p>
-              </div>:<></>
-              }
+              </div> : <></>
+            }
 
-            </div> : <></>
+          </div> : <></>
         }
-          </Modal>
+      </Modal>
     </>
-      );
+  );
 };
-      export default Adjustment;
+export default Adjustment;

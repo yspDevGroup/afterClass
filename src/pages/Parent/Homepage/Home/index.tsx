@@ -1,19 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 import imgPop from '@/assets/mobileBg.png';
 import IconFont from '@/components/CustomIcon';
 import EnrollClassTime from '@/components/EnrollClassTime';
-import myContext from '@/utils/MyContext';
 import CourseTab from './components/CourseTab';
 import styles from './index.less';
 import Details from './Pages/Details';
 import EmptyArticle from './Pages/EmptyArticle';
 import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
-import Catering from '@/assets/Catering.png';
-import resources from '@/assets/resources.png';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import Selected from './components/Selected';
 import JiaoYu from '@/assets/jiaoyuziyuan.png'
@@ -23,7 +20,7 @@ import { getBJSJ } from '@/services/after-class/bjsj';
 const Home = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { student,external_contact } = currentUser || {};
+  const { student, external_contact } = currentUser || {};
   const [notification, setNotification] = useState<any>([]);
   const [totalData, setTotalData] = useState<any>({});
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
@@ -67,9 +64,9 @@ const Home = () => {
         setTotalData(data);
       }
       const res = await getBJSJ({
-        id:localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId
+        id: localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId
       })
-      if(res.status === 'ok'){
+      if (res.status === 'ok') {
         setBJMC(`${res.data?.NJSJ?.XD}${res.data?.NJSJ?.NJMC}${res.data?.BJ}`)
       }
     })()
@@ -158,7 +155,7 @@ const Home = () => {
             style={{ backgroundImage: `url(${JiaoYu})` }}
             href="http://moodle.xianyunshipei.com/course/view.php?id=12"
           >
-            <span>素质教育资源<RightOutlined/></span>
+            <span>素质教育资源<RightOutlined /></span>
 
           </a>
           <div className={styles.announceArea}>

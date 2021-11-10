@@ -11,7 +11,7 @@ export async function JYJGSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -30,7 +30,7 @@ export async function JYJGSJ(
     message?: string;
   }>(`/jyjgsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -44,10 +44,10 @@ export async function deleteJYJGSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jyjgsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -83,6 +83,9 @@ export async function createJYJGSJ(body: API.CreateJYJGSJ, options?: { [key: str
 /** 获取教育机构数据 POST /jyjgsj/getAll */
 export async function getJYJGSJ(
   body: {
+    XZQHM?: string;
+    /** 是否为市教育局 */
+    isCity?: boolean;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -114,13 +117,13 @@ export async function updateJYJGSJ(
   body: API.UpdateJYJGSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jyjgsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -131,6 +134,10 @@ export async function getAllSchools(
   body: {
     /** 行政区划码 */
     XZQHM?: string;
+    /** 市行政区划码 */
+    SXZQHM?: string;
+    /** 市行政区名称 */
+    SXZQMC?: string;
     /** 学校名称 */
     XXMC?: string;
     /** 页数 */
@@ -155,6 +162,10 @@ export async function getAllInstitutions(
   body: {
     /** 行政区划码 */
     XZQHM?: string;
+    /** 市行政区划码 */
+    SXZQHM?: string;
+    /** 市行政区名称 */
+    SXZQMC?: string;
     /** 类型 */
     LX?: number;
     /** 状态 */
@@ -604,6 +615,8 @@ export async function getAllCourses2(
     KHKCLXId?: string;
     /** 行政区划码 */
     XZQHM?: string;
+    /** 市行政区划码 */
+    SXZQHM?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -612,6 +625,32 @@ export async function getAllCourses2(
   options?: { [key: string]: any },
 ) {
   return request<any>('/jyjgsj/getAllCourses2', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 市教育局查看区县教育局统计数据 POST /jyjgsj/getEducationStatistic */
+export async function getEducationStatistic(
+  body: {
+    /** 行政区划码 */
+    XZQHM?: string;
+    /** 学年 */
+    XN?: string;
+    /** 学期 */
+    XQ?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/jyjgsj/getEducationStatistic', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

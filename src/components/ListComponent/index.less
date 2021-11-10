@@ -46,6 +46,18 @@
 
   // type = 'picList'
   .picList {
+    .specialPart {
+      position: absolute;
+      right: 0;
+      background-color: #7dce81;
+      color: #fff;
+      padding: 0 8px;
+      line-height: 20px;
+      font-size: 12px;
+      border-radius: 20px 0 0 20px;
+      display: inline-block;
+    }
+
     .TitleRow {
       height: 21px;
       margin-bottom: 7px;
@@ -191,7 +203,7 @@
       line-height: 17px;
 
       .descleft {
-        width: calc(~'100% - 100px');
+        width: calc(~'100% - 120px');
         overflow: hidden;
         color: #999999;
         white-space: nowrap;
@@ -199,6 +211,14 @@
 
         .descleftInspan {
           padding: 0 8px;
+        }
+
+        &+div {
+          text-align: right;
+          width: 120px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
     }

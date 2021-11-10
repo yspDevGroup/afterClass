@@ -5,12 +5,12 @@ import dayjs from 'dayjs';
 import { history, useModel } from 'umi';
 import type { FormInstance } from 'antd';
 import { Calendar } from 'react-h5-calendar';
-import { List, Modal, message, Form, Input, Checkbox, Divider, Radio, Space } from 'antd';
+import { List, Modal, message, Form, Input, Checkbox, Radio, Space } from 'antd';
 import type { DisplayColumnItem } from '@/components/data';
 import ListComponent from '@/components/ListComponent';
 import { compareNow } from '@/utils/Timefunction';
 import { msgLeaveSchool } from '@/services/after-class/wechat';
-import { ParentHomeData } from '@/services/local-services/mobileHome';
+import { convertCourse, CurdayCourse, ParentHomeData } from '@/services/local-services/mobileHome';
 
 import styles from './index.less';
 import noData from '@/assets/noCourses1.png';
@@ -44,6 +44,7 @@ const ClassCalendar = (props: propstype) => {
   const [modalContent, setModalContent] = useState<string>();
   const formRef = React.createRef<any>();
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
+  const userId = currentUser.JSId || testTeacherId;
 
   const iconTextData: DisplayColumnItem[] = (day === dayjs().format('YYYY-MM-DD')) ? [
     {
@@ -77,9 +78,9 @@ const ClassCalendar = (props: propstype) => {
           noDataText: "暂无课堂风采记录",
           noDataImg: noData
         };
-        history.push(`/teacher/education/putRecord`,{
+        history.push(`/teacher/education/putRecord`, {
           bjid,
-          jsid: currentUser.JSId || "1a510d94-8980-4b8b-8150-f4c0ce5e7025",
+          jsid: userId,
           data
         })
       },
@@ -104,7 +105,7 @@ const ClassCalendar = (props: propstype) => {
           noDataText: "暂无课堂风采记录",
           noDataImg: noData
         };
-        history.push(`/teacher/education/putRecord`,{
+        history.push(`/teacher/education/putRecord`, {
           bjid,
           jsid: currentUser.JSId || "1a510d94-8980-4b8b-8150-f4c0ce5e7025",
           data
@@ -112,59 +113,20 @@ const ClassCalendar = (props: propstype) => {
       },
     },
   ];
-
-  const convertCourse = (course: any[], day: string) => {
-    const data = course?.length && course.map((item) => {
-      const enrollLink = {
-        pathname: '/teacher/education/callTheRoll',
-        state: {
-          pkId: item.pkId,
-          bjId: item.bjId,
-          jcId: item.jcId,
-          date: day
-        },
-      };
-      return {
-        title: item.title,
-        BJMC: item.BJMC,
-        img: item.img,
-        link: `/teacher/home/courseDetails?classid=${item.bjId}&path=education`,
-        enrollLink,
-        start: item.start,
-        end: item.end,
-        bjId: item.bjId,
-        desc: [
-          {
-            left: [
-              `${item.start}-${item.end}  |  ${item.BJMC} `,
-            ],
-          },
-          {
-            left: [`${item.address}`],
-          },
-        ],
-        bjid: item.bjId,
-        jcId: item.jcId,
-        FJId: item.fjId,
-      };
-    });
-    return data;
-  };
-
   // 根据日期修改展示数据
-  const changeDateList = (date?: any) => {
-    const curDay = date ? date : dayjs();
+  const changeDateList = async (date?: any) => {
+    const curDay = date || dayjs();
     const dayFormat = curDay.format('YYYY-MM-DD');
     setDay(dayFormat);
     setCDay(curDay.format('M月D日'));
-    const course = dates?.length && dates?.find((it) => it.date === dayFormat);
+    const { courseList } = await CurdayCourse('teacher', currentUser?.xxId, userId, dayFormat);
     if (type) {
-      setEditCourses(course?.courses ? convertCourse(course?.courses, day) : []);
+      setEditCourses(convertCourse(dayFormat, courseList, 'filter'));
     } else {
       setCourse({
         type: 'picList',
         cls: 'picList',
-        list: course?.courses ? convertCourse(course?.courses, day) : [],
+        list: convertCourse(dayFormat, courseList),
         noDataText: '当天无课',
         noDataImg: noData,
       });
@@ -172,16 +134,16 @@ const ClassCalendar = (props: propstype) => {
   }
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData( 'teacher',currentUser?.xxId, currentUser.JSId || testTeacherId);
+      const oriData = await ParentHomeData('teacher', currentUser?.xxId, userId);
       const { markDays } = oriData;
-      const course = markDays?.length && markDays?.find((it) => it.date === day);
+      const { courseList } = await CurdayCourse('teacher', currentUser?.xxId, userId, day);
       if (type) {
-        setEditCourses(course?.courses ? convertCourse(course?.courses, day) : []);
+        setEditCourses(convertCourse(day, courseList, 'filter'));
       } else {
         setCourse({
           type: 'picList',
           cls: 'picList',
-          list: course?.courses ? convertCourse(course?.courses, day) : [],
+          list: convertCourse(day, courseList,),
           noDataText: '当天无课',
           noDataImg: noData,
         });
@@ -191,13 +153,13 @@ const ClassCalendar = (props: propstype) => {
   }, []);
   useEffect(() => {
     setDatedata?.(choosenCourses);
-  }, [choosenCourses]);
+  }, [choosenCourses, setDatedata]);
   useEffect(() => {
     formRef.current.setFieldsValue({
       info: modalContent,
     });
-  }, [modalContent]);
-
+  }, [formRef, modalContent]);
+  //  发送离校通知
   const handleOk = async () => {
     setIsModalVisible(false);
     formRef.current.validateFields()

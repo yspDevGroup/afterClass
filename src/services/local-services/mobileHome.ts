@@ -1,8 +1,9 @@
+/* eslint-disable no-param-reassign */
 /*
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-11-01 17:07:42
+ * @LastEditTime: 2021-11-10 17:20:26
  * @LastEditors: Sissle Lynn
  */
 
@@ -12,104 +13,57 @@ import dayjs from 'dayjs';
 import { getTeachersApplication } from '../after-class/jzgjbsj';
 import { homePageInfo } from '../after-class/user';
 import { queryXNXQList } from './xnxq';
+import { getAllKHJSTDK } from '../after-class/khjstdk';
+import { getAllKHBJKSSJ } from '../after-class/khbjsj';
+import { getAllKHXSQJ } from '../after-class/khxsqj';
 
-/**
- * 组装课程班信息
- * @param data 每天课程安排
- * @returns {}
- */
-
-const schoolCourse = (data: any) => {
-  const courseData = {};
-  const courseId = [];
+const converClassInfo = (data: any) => {
+  const classData = [];
   for (let k = 0; k < data?.length; k += 1) {
     const { id, FJSJ, KHBJSJ, WEEKDAY, XXSJPZ } = data[k];
     const wkd = Number(WEEKDAY);
-    const kcxxInfo = [
-      {
-        title: KHBJSJ?.KHKCSJ?.KCMC,
-        BJMC: KHBJSJ?.BJMC,
-        KKRQ: KHBJSJ?.KKRQ,
-        JKRQ: KHBJSJ?.JKRQ,
-        KSS: KHBJSJ?.KSS,
-        BJRS: KHBJSJ?.BJRS,
-        wkd,
-        img: KHBJSJ?.KHKCSJ?.KCTP,
-        start: XXSJPZ?.KSSJ?.substring?.(0, 5),
-        end: XXSJPZ?.JSSJ?.substring?.(0, 5),
-        xq: `本校`,
-        address: FJSJ?.FJMC,
-        bjId: KHBJSJ?.id,
-        kcId: KHBJSJ?.KHKCSJ?.id,
-        pkId: id,
-        jcId: XXSJPZ?.id,
-        fjId: FJSJ?.id,
-      },
-    ];
-    if (courseData[KHBJSJ?.id]) {
-      const { weekDay, courseInfo } = courseData[KHBJSJ?.id];
-      const curWkd = weekDay[0][0] === wkd ? [[wkd, (weekDay[0][1] + 1)]] : weekDay.concat([[wkd, 1]]);
-      courseData[KHBJSJ?.id].weekDay = curWkd;
-      courseData[KHBJSJ?.id].courseInfo = courseInfo.concat(kcxxInfo);
-    } else {
-      courseData[KHBJSJ?.id] = {
-        startDate: KHBJSJ?.KKRQ,
-        sum: KHBJSJ.KSS,
-        weekDay: [[wkd, 1]],
-        courseInfo: kcxxInfo,
-      };
-      courseId.push(KHBJSJ?.id);
-    }
+    classData.push({
+      title: KHBJSJ?.KHKCSJ?.KCMC,
+      BJMC: KHBJSJ?.BJMC,
+      KKRQ: KHBJSJ?.KKRQ,
+      JKRQ: KHBJSJ?.JKRQ,
+      KSS: KHBJSJ?.KSS,
+      BJRS: KHBJSJ?.BJRS,
+      wkd,
+      img: KHBJSJ?.KHKCSJ?.KCTP,
+      start: XXSJPZ?.KSSJ?.substring?.(0, 5),
+      end: XXSJPZ?.JSSJ?.substring?.(0, 5),
+      xq: `本校`,
+      address: FJSJ?.FJMC,
+      bjId: KHBJSJ?.id,
+      kcId: KHBJSJ?.KHKCSJ?.id,
+      pkId: id,
+      jcId: XXSJPZ?.id,
+      fjId: FJSJ?.id,
+    })
   }
-  return {
-    courseId,
-    courseData
-  };
+  return classData;
 }
+const uniqueArr = (arr: any) => {
+  const days: any[] = [];
+  arr.forEach((ele: { day: any; }) => {
+    const findDay = days?.find((it) => it.date === ele.day);
+    if (!findDay) {
+      days.push({
+        date: ele.day
+      })
+    }
+  });
+  return days;
+}
+
 /**
- * 组装课程班课时信息
- * @param sum 课程班总课时
- * @param weekDay 课程班周次安排
- * @param start 课程班总开始上课时间
- * @returns {}
+ * 获取移动端首页信息
+ * @param type 身份类型（教师还是学生）
+ * @param xxId 学校ID
+ * @param userId 用户ID
+ * @param njId 学生的年级ID
  */
-const schoolHours = (sum: number, weekDay: any[], start: string, courseInfo: any[]) => {
-  const startDay = new Date(start);
-  const days = [];
-  const nowDay = moment(new Date()).format('YYYY-MM-DD');
-  let today = false;
-  while (days.length < sum) {
-    const day = new Date(startDay.getTime());
-    const curDay = moment(day).format('YYYY-MM-DD');
-    const w = weekDay.find(wd => wd[0] === day.getDay());
-    if (w) {
-      const findDay = homeInfo.markDays?.length && homeInfo.markDays?.find((it) => it.date === curDay);
-      if (findDay) {
-        if (curDay === '2021-10-29') {
-        }
-        findDay.courses = findDay.courses.concat(courseInfo.filter(item => item.wkd === w[0]));
-      } else {
-        homeInfo.markDays.push({
-          date: curDay,
-          courses: courseInfo.filter(item => item.wkd === w[0])
-        })
-      }
-      for (let i = 0; i < w[1] && days.length < sum; i++) {
-        nowDay == (curDay) ? today = true : '';
-        days.push({
-          index: days.length,
-          day: curDay,
-          courses: courseInfo.filter(item => item.wkd === w[0])?.[i]
-        });
-      }
-    }
-    startDay.setTime(startDay.getTime() + 1000 * 3600 * 24);
-  }
-  return {
-    days,
-    today
-  };
-}
 const getHomeData = async (type: string, xxId: string, userId: string, njId?: string) => {
   let courseStatus = 'empty';
   const result = await queryXNXQList(xxId);
@@ -120,14 +74,6 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
     };
     if (type === 'teacher') {
       params.JSId = userId;
-      const response = await getTeachersApplication({
-        JZGJBSJId: userId,
-        startDate: result.current.KSRQ,
-        endDate: result.current.JSRQ,
-      });
-      if (response?.status === 'ok') {
-        homeInfo.special = response.data;
-      }
     } else {
       params.XSId = userId;
       params.njId = njId;
@@ -136,38 +82,52 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
     if (res?.status === 'ok') {
       courseStatus = 'empty';
       if (res.data) {
-        const { bmkssj, bmjssj, skkssj, skjssj, weekSchedule } = res.data;
+        const { bmkssj, bmjssj, skkssj, skjssj, yxkc, weekSchedule, ...rest } = res.data;
         if (bmkssj && bmjssj && skkssj && skjssj) {
           const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
           courseStatus = cStatus;
         }
-        const { courseId, courseData } = schoolCourse(weekSchedule);
-        const courseSche: { courseInfo: any[]; days: any[]; today: boolean; }[] = [];
-        homeInfo.markDays = [];
-        courseId?.forEach(item => {
-          const { sum, weekDay, startDate, courseInfo } = courseData[item];
-          const { days, today } = schoolHours(sum, weekDay, startDate, courseInfo);
-          courseSche.push({
-            courseInfo,
-            days,
-            today
-          });
+        const bjIds = [].map.call(yxkc, (v: { id: string }) => {
+          return v.id
         });
-        homeInfo.markDays?.sort((a, b) => new Date(a.date.replace(/-/g, '/')).getTime() - new Date(b.date.replace(/-/g, '/')).getTime())
-        homeInfo.markDays?.forEach(day => {
-          const { courses } = day;
-          courses?.sort((a: { start: string; }, b: { start: string; }) => {
-            const aT = Number(a.start.replace(/:/g, ''));
-            const bT = Number(b.start.replace(/:/g, ''));
-            return aT - bT;
+        homeInfo.markDays = [];
+        if (yxkc?.length) {
+          const clsRes = await getAllKHBJKSSJ({
+            KHBJSJIds: bjIds as string[],
+            page: 0,
+            pageSize: 0
           });
-        })
-        homeInfo.courseSchedule = courseSche;
+          if (clsRes.status === 'ok' && clsRes.data) {
+            const { rows } = clsRes.data;
+            let allDates: any[] = [];
+            if (rows?.length) {
+              homeInfo.courseSchedule = [].map.call(rows, (val: {
+                KHBJSJId: string,
+                DATA: string
+              }) => {
+                const { KHBJSJId, DATA } = val;
+                const days = JSON.parse(DATA);
+                const clsArr = weekSchedule?.filter((value: any) => value.KHBJSJ.id === KHBJSJId);
+                allDates = allDates.concat(days);
+                return {
+                  KHBJSJId,
+                  days,
+                  detail: converClassInfo(clsArr),
+                }
+              })
+            }
+            homeInfo.markDays = uniqueArr(allDates);
+            homeInfo.markDays?.sort((a, b) => new Date(a.date.replace(/-/g, '/')).getTime() - new Date(b.date.replace(/-/g, '/')).getTime());
+          }
+        }
         homeInfo.data = {
+          xnxqId: result.current.id,
           courseStatus,
+          yxkc,
           weekSchedule,
-          ...res?.data,
+          ...rest,
         };
+
       }
     } else {
       enHenceMsg(res.message);
@@ -202,8 +162,46 @@ export const ParentHomeData = async (type: string, xxId: string, userId: string,
     await getHomeData(type, xxId, userId, njId);
     return homeInfo;
   }
+
   return homeInfo;
 };
+/**
+ * 根据每天的调代课，请假等特殊情况处理今日课程数据
+ * @param newData
+ * @param oriData
+ * @param type
+ */
+const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
+  newData.forEach((ele: any) => {
+    // 通过bjId,jcId确认原有数据中是否与已代课数据重合
+    const oriInd = oriData.findIndex((v: { bjId: any; jcId: any; }) => {
+      return ele.KHBJSJId === v.bjId && ele.XXSJPZId === v.jcId
+    });
+    // 如果数据重合则增加原有数据的相关代课状态,否则在数组中追加相关已代课数据
+    if (oriInd !== -1) {
+      if (oriData?.[oriInd]?.status && oriData[oriInd].status === '已请假') {
+        oriData[oriInd].status = `班主任已请假`;
+      } else {
+        oriData[oriInd].status = status;
+        oriData[oriInd].otherInfo = ele;
+      }
+    } else if (status !== '已请假' && status !== '申请代课' && status !== '申请调课') {
+      oriData.push({
+        title: ele.KHBJSJ.KHKCSJ.KCMC,
+        bjId: ele.KHBJSJId,
+        jcId: ele.XXSJPZId,
+        fjId: ele.TKFJId,
+        BJMC: ele.KHBJSJ.BJMC,
+        img: ele.KHBJSJ.KHKCSJ.KCTP,
+        address: ele.SKFJ.FJMC,
+        date: ele.SKRQ,
+        start: ele.KSSJ || ele.XXSJPZ.KSSJ.substring(0, 5),
+        end: ele.JSSJ || ele.XXSJPZ.JSSJ.substring(0, 5),
+        status
+      })
+    }
+  });
+}
 /**
  * 针对首页中今日课程做部分处理
  * @param type 类属教师还是学生 'teacher'|'student'
@@ -211,49 +209,111 @@ export const ParentHomeData = async (type: string, xxId: string, userId: string,
  * @param userId 用户ID
  * @returns
  */
-export const TodayCourse = async (type?: string, xxId?: string, userId?: string, njId?: string) => {
+export const CurdayCourse = async (type?: string, xxId?: string, userId?: string, curDay?: string, njId?: string) => {
   let data = [];
-  let total = '';
+  let total: any = {};
+  const day = curDay ? new Date(curDay.replace(/-/g, '/')) : new Date(); // 获取当前的时间
+  const myDate = curDay || dayjs().format('YYYY-MM-DD');
   // 获取已经处理过的课程安排数据
   if (typeof homeInfo === 'undefined' && type && xxId && userId) {
-    const res = await ParentHomeData(type, xxId, userId);
+    const res = await ParentHomeData(type, xxId, userId, njId);
     data = res.courseSchedule;
     total = res.data;
   } else if (homeInfo && homeInfo?.courseSchedule) {
     data = homeInfo.courseSchedule;
     total = homeInfo.data;
   }
-  // 通过today属性找出今日课程
-  const courseList = data?.filter((item: { today: boolean; }) => item.today === true);
+  // 找出今日课程
+  const totalList = data?.filter((item: { days: any[] }) => {
+    return item.days.find((v: { day: string }) => v.day === myDate)
+  });
+
+  let courseList: any[] = [];
+  totalList?.forEach((item: { detail: any[]; days?: any[] }) => {
+    const { detail, days } = item;
+    // 获取今日上课课程
+    const list = detail.filter((val) => val.wkd === day.getDay());
+    const dayList = days?.filter((v: { day: string }) => v.day === myDate);
+    if (list?.length) {
+      const newArr = [].map.call(list, (val: { jcId: string }) => {
+        const currentDay = dayList?.find((v: { jcId: string }) => v.jcId === val.jcId);
+        if (currentDay) {
+          const { jcId, ...rest } = currentDay;
+          return {
+            ...val,
+            ...rest,
+          }
+        }
+        return {
+          ...val
+        }
+      })
+      courseList = [...courseList, ...newArr];
+    }
+  })
+
+  // 查询今日是否存在调代课，请假的课程
+  if (type === 'teacher') {
+    // 教师端接口
+    const response = await getTeachersApplication({
+      JZGJBSJId: userId,
+      startDate: myDate
+    });
+
+    if (response?.status === 'ok' && response.data) {
+      const { nowDks, nowTks, qjs, srcDks, srcTks } = response.data;
+      if (nowDks?.length) {
+        CountCurdayCourse(nowDks, courseList, '代上课');
+      }
+      if (nowTks?.length) {
+        CountCurdayCourse(nowTks, courseList, '调课');
+      }
+      if (qjs?.length) {
+        CountCurdayCourse(qjs, courseList, '已请假');
+      }
+      if (srcDks?.length) {
+        CountCurdayCourse(srcDks, courseList, '代课');
+      }
+      if (srcTks?.length) {
+        CountCurdayCourse(srcTks, courseList, '已调课');
+      }
+    }
+  }
+  if (type === 'student') {
+    // 家长端接口获取学生请假信息
+    const res = await getAllKHXSQJ({
+      QJRQ: myDate,
+      QJZT: [0],
+      XSJBSJId: userId,
+      XNXQId: total.xnxqId,
+      page: 0,
+      pageSize: 0
+    })
+    if (res?.status === 'ok' && res.data) {
+      const todayQjs: { KHBJSJId?: string, XXSJPZId?: string }[] = [];
+      res.data.rows?.forEach((val: API.KHXSQJ) => {
+        val.KHQJKCs?.forEach((v) => {
+          todayQjs.push({
+            KHBJSJId: v.KHBJSJ?.id,
+            XXSJPZId: v.XXSJPZId
+          })
+        })
+      })
+      if (todayQjs?.length) {
+        CountCurdayCourse(todayQjs, courseList, '已请假');
+      }
+    }
+  }
+  courseList?.sort((a: { start: string; }, b: { start: string; }) => {
+    const aT = Number(a.start.replace(/:/g, ''));
+    const bT = Number(b.start.replace(/:/g, ''));
+    return aT - bT;
+  });
   return {
     total,
     courseList
   };
 }
-export const AttendanceTable = async (date: string, userId?: string) => {
-  let data: any = {};
-  if (homeInfo.courseSchedule) {
-    data = homeInfo.courseSchedule;
-  } else {
-    const response = await getTeachersApplication({
-      JZGJBSJId: userId,
-      startDate: date,
-    });
-    if (response?.status === 'ok') {
-      data = response.data;
-    }
-  }
-  const { nowDks, nowTks, qjs } = data;
-  const supplyData = nowDks?.filter((item: any) => item.SKRQ === date);
-  const switchData = nowTks?.filter((item: any) => item.SKRQ === date);
-  const leaveData = qjs?.filter((item: any) => item.SKRQ === date);
-  return {
-    date,
-    supplyData,
-    switchData,
-    leaveData
-  }
-};
 /**
  * 计算课程已学课时，
  * @param data 课程安排信息
@@ -261,32 +321,229 @@ export const AttendanceTable = async (date: string, userId?: string) => {
  */
 export const CountCourses = (data: any) => {
   const myDate = dayjs().format('YYYY/MM/DD');
-  const courseData = data.length && data.map((item: { courseInfo: any; days: any; }) => {
-    const { courseInfo, days } = item;
+  const courseData = data.length && data.map((item: { detail: any; days: any; }) => {
+    const { detail, days } = item;
     const learned = days.filter((ele: { day: string; }) => {
       const time = new Date(ele.day.replace(/-/g, '/')).getTime() - new Date(myDate).getTime();
       return time < 0
     });
     return {
-      id: courseInfo?.[0]?.bjId,
-      title: courseInfo?.[0]?.title,
-      BJMC: courseInfo?.[0]?.BJMC,
+      id: detail?.[0]?.bjId,
+      title: `${detail?.[0]?.title} 【${detail?.[0]?.BJMC}】`,
+      BJMC: detail?.[0]?.BJMC,
       YXKS: learned?.length || 0,
-      ZKS: courseInfo?.[0]?.KSS,
-      link: `/parent/home/courseTable?classid=${courseInfo?.[0]?.bjId}`,
+      ZKS: detail?.[0]?.KSS,
+      link: `/parent/home/courseTable?classid=${detail?.[0]?.bjId}&path=study`,
       desc: [
         {
           left: [
-            `${courseInfo.map((item: any, index: number) => {
-              return `每周${'日一二三四五六'.charAt(item.wkd)} ${item.start}-${item.end}`;
+            `${detail.map((v: any) => {
+              return `每周${'日一二三四五六'.charAt(v.wkd)} ${v.start}-${v.end}`;
             })}`
           ]
         },
         {
-          left: [`共${courseInfo?.[0]?.KSS}课时`, `已学${learned?.length || 0}课时`],
+          left: [`共${detail?.[0]?.KSS}课时`, `已学${learned?.length || 0}课时`],
         },
       ],
     }
   });
   return courseData;
 };
+/**
+ * 教师课表中组装今日课程的数据
+ * @param day
+ * @param course
+ * @returns
+ */
+export const convertCourse = (day: string, course: any[] = [], type?: string) => {
+  const data: any[] = [];
+  course?.forEach((item: any) => {
+    if (type && type === 'filter') {
+      if (!item.status) {
+        data.push({
+          status: item.status,
+          title: item.title,
+          BJMC: item.BJMC,
+          img: item.img,
+          link: `/teacher/home/courseDetails?classid=${item.bjId}&path=education`,
+          start: item.start,
+          end: item.end,
+          bjId: item.bjId,
+          desc: [
+            {
+              left: [
+                `${item.start}-${item.end}  |  ${item.BJMC} `,
+              ],
+            },
+            {
+              left: [`${item.address}`],
+            },
+          ],
+          bjid: item.bjId,
+          jcId: item.jcId,
+          FJId: item.fjId,
+        })
+      }
+    } else {
+      const enrollLink = {
+        pathname: `/teacher/education/callTheRoll`,
+        state: {
+          pkId: item.pkId,
+          bjId: item.bjId,
+          jcId: item.jcId,
+          date: item.date || day
+        },
+      };
+      data.push({
+        status: item.status,
+        title: item.title,
+        BJMC: item.BJMC,
+        img: item.img,
+        link: item.status === '代上课' ? null : `/teacher/home/courseDetails?classid=${item.bjId}&path=education`,
+        enrollLink,
+        start: item.start,
+        end: item.end,
+        bjId: item.bjId,
+        desc: [
+          {
+            left: [
+              `${item.start}-${item.end}  |  ${item.BJMC} `,
+            ],
+          },
+          {
+            left: [`${item.address}`],
+          },
+        ],
+        bjid: item.bjId,
+        jcId: item.jcId,
+        FJId: item.fjId,
+      })
+    }
+  })
+  return data;
+};
+/**
+ * 学生课表中组装今日课程的数据
+ * @param userId
+ * @param day
+ * @param course
+ * @returns
+ */
+export const convertStuCourse = (course: any[] = [], type?: string) => {
+  const data: any[] = [];
+  course?.forEach((item: any) => {
+    if (type && type === 'filter') {
+      if (!item.status) {
+        data.push({
+          status: item.status,
+          title: item.title,
+          BJMC: item.BJMC,
+          img: item.img,
+          link: `/parent/home/courseTable?classid=${item.bjId}&path=study`,
+          start: item.start,
+          end: item.end,
+          bjId: item.bjId,
+          desc: [
+            {
+              left: [
+                `${item.start}-${item.end}  |  ${item.BJMC} `,
+              ],
+            },
+            {
+              left: [`${item.address}`],
+            },
+          ],
+          bjid: item.bjId,
+          jcId: item.jcId,
+          FJId: item.fjId,
+        })
+      }
+    } else {
+      data.push({
+        status: item.status,
+        title: item.title,
+        BJMC: item.BJMC,
+        img: item.img,
+        link: `/parent/home/courseTable?classid=${item.bjId}&path=study`,
+        start: item.start,
+        end: item.end,
+        bjId: item.bjId,
+        desc: [
+          {
+            left: [
+              `${item.start}-${item.end}  |  ${item.BJMC} `,
+            ],
+          },
+          {
+            left: [`${item.address}`],
+          },
+        ],
+        bjid: item.bjId,
+        jcId: item.jcId,
+        FJId: item.fjId,
+      })
+    }
+  })
+  return data;
+};
+/**
+ * 转换课程表，处理特殊情况
+ * @param userId
+ * @param bjId
+ * @param attendance
+ * @param days
+ * @returns
+ */
+export const convertTimeTable = async (userId: string, bjId: string, attendance: any[], days: any[]) => {
+  const myDate: Date = new Date();
+  const currentDate = moment(myDate).format('YYYY-MM-DD');
+  const res = await getAllKHJSTDK({
+    SKJSId: userId,
+    KHBJSJId: bjId,
+    ZT: [1]
+  });
+  const specialData = res?.data?.rows;
+  const dataTable: any[] = [];
+  if (days) {
+    for (let i = 0; i < days.length; i += 1) {
+      const ele = days[i];
+      const { day, jcId } = ele;
+      let status: string = '';
+      let otherInfo: any;
+      if (attendance?.length) {
+        const curCQ = attendance.find((item) => item.CQRQ === day && item.XXSJPZId === jcId);
+        if (curCQ) {
+          status = curCQ?.CQZT;
+        }
+      }
+      if (specialData?.length) {
+        const curCQ = specialData.find((item: any) => item.SKRQ === day && item.XXSJPZ?.id === jcId);
+        if (curCQ) {
+          status = curCQ?.LX === 1 ? '代课' : '调课';
+          otherInfo = curCQ;
+        }
+      }
+      if (!status) {
+        if (new Date(day).getTime() > new Date(currentDate).getTime()) {
+          status = '待上';
+        }
+        if (new Date(day).getTime() < new Date(currentDate).getTime()) {
+          status = '缺席';
+        }
+        // 更新今日状态
+        if (new Date(day).getTime() === new Date(currentDate).getTime()) {
+          status = '今日';
+        }
+      }
+      dataTable.push({
+        ...ele,
+        status,
+        otherInfo
+      });
+    }
+  }
+  return dataTable;
+}
+
+

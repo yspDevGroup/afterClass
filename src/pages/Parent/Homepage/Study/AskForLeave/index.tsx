@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 09:57:23
- * @LastEditTime: 2021-09-18 18:49:00
+ * @LastEditTime: 2021-11-10 17:23:09
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -14,8 +14,8 @@ import styles from './index.less';
 import LeaveForm from './Components/LeaveForm';
 import LeaveHistory from './Components/LeaveHistory';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import { enHenceMsg } from '@/utils/utils';
+import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 
 const { TabPane } = Tabs;
 

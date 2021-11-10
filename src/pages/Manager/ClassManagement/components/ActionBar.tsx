@@ -6,10 +6,12 @@ import type { ActionType } from '@ant-design/pro-table';
 import { cancleClass, deleteKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import type { CourseItem } from '../data';
 import { enHenceMsg } from '@/utils/utils';
+import { getClassDays } from '@/utils/TimeTable';
+import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 // import EllipsisHint from '@/components/EllipsisHint';
 
 type propstype = {
-  handleEdit: (data: CourseItem) => void;
+  handleEdit: (data: CourseItem, type?: string) => void;
   record: any;
   actionRef: React.MutableRefObject<ActionType | undefined>;
 };
@@ -44,10 +46,14 @@ const ActionBar = (props: propstype) => {
     const res = updateKHBJSJ({ id: records.id }, { BJZT: '已开班' });
     new Promise((resolve) => {
       resolve(res);
-    }).then((data: any) => {
+    }).then(async (data: any) => {
       if (data.status === 'ok') {
         message.success('开班成功');
         actionRef.current?.reload();
+        const result = await getKHPKSJByBJID({ id: records.id });
+        if (result.status === 'ok' && result.data) {
+          await getClassDays(records.id);
+        }
       } else {
         message.error('开班失败，请联系管理员或稍后重试');
         actionRef.current?.reload();
@@ -173,8 +179,8 @@ const ActionBar = (props: propstype) => {
       return (
         <>
           {new Date(record?.BMJSSJ).getTime() >= new Date().getTime() &&
-          record?.xs_count > 0 &&
-          record?.xs_count < record?.BJRS ? (
+            record?.xs_count > 0 &&
+            record?.xs_count < record?.BJRS ? (
             <>
               {' '}
               <a

@@ -11,7 +11,7 @@ export async function getKHXSQJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -34,6 +34,7 @@ export async function getKHXSQJ(
       KHQJKCs?: {
         QJRQ?: string;
         KCMC?: string;
+        XXSJPZId?: string;
         KHBJSJ?: {
           id?: string;
           BJMC?: string;
@@ -55,7 +56,7 @@ export async function getKHXSQJ(
     message?: string;
   }>(`/khxsqj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -69,10 +70,10 @@ export async function deleteKHXSQJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsqj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -139,6 +140,7 @@ export async function createKHXSQJ(body: API.CreateKHXSQJ, options?: { [key: str
       KHQJKCs?: {
         QJRQ?: string;
         KCMC?: string;
+        XXSJPZId?: string;
         KHBJSJ?: {
           id?: string;
           BJMC?: string;
@@ -206,13 +208,13 @@ export async function updateKHXSQJ(
   body: API.UpdateKHXSQJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxsqj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

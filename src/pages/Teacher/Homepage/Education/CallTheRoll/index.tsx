@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useRef, useState } from 'react';
 import { history, useModel } from 'umi';
@@ -6,9 +7,9 @@ import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
-import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getEnrolled, } from '@/services/after-class/khbjsj';
 import { createKHJSCQ, getAllKHJSCQ } from '@/services/after-class/khjscq';
-import { createKHXSCQ, getAllKHXSCQ } from '@/services/after-class/khxscq';
+import { createKHXSCQ, getAllKHXSCQ, getArrangement } from '@/services/after-class/khxscq';
 
 import { theme } from '@/theme-default';
 import styles from './index.less';
@@ -73,13 +74,15 @@ const CallTheRoll = (props: any) => {
   const [claName, setClaName] = useState<claNameType>();
   // 表格数据
   const [dataSource, setDataScouse] = useState<any>([]);
+  // 当前课堂的排课ID
+  const [pkId, setPkId] = useState<string>(props.location.state?.pkId);
   // 教师签到(undone,done,doing,todo,)
   const [btnDis, setBtnDis] = useState<string>('doing');
   // 学生点名(undone,done,doing,todo,)
   const [butDis, setButDis] = useState<string>('todo');
   // 获取当前日期
   const nowDate = new Date();
-  const { pkId, bjId, jcId, date } = props.location.state;
+  const { bjId, jcId, date } = props.location.state;
   const pkDate = date?.replace(/\//g, '-'); // 日期
 
   const showConfirm = (tm?: boolean, title?: string, content?: string) => {
@@ -167,7 +170,7 @@ const CallTheRoll = (props: any) => {
           const leaveInfo = resLeave?.data?.rows || [];
           studentData?.forEach((item: any) => {
             const leaveItem = leaveInfo?.find((val: API.KHXSQJ) => val.XSJBSJ?.id === item.XSJBSJId);
-            const leaveJudge = leaveItem && leaveItem?.QJZT != 1;
+            const leaveJudge = leaveItem && leaveItem?.QJZT !== 1;
             item.isRealTo = leaveJudge ? '缺席' : '出勤';
             item.isLeave = !!leaveJudge;
             item.leaveYY = leaveItem?.QJYY;
@@ -205,19 +208,33 @@ const CallTheRoll = (props: any) => {
   }, [currentUser]);
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData( 'teacher',currentUser?.xxId, currentUser.JSId || testTeacherId);
+      if (pkId === undefined) {
+        const res = await getArrangement({
+          DATE: pkDate,
+          KHBJSJId: bjId,
+          XXSJPZId: jcId
+        });
+        if (res.status === 'ok') {
+          setPkId(res.data?.id);
+        }
+      }
+    })()
+  }, [pkId]);
+  useEffect(() => {
+    (async () => {
+      const oriData = await ParentHomeData('teacher', currentUser?.xxId, currentUser.JSId || testTeacherId);
       const { courseSchedule } = oriData;
-      const detail = courseSchedule.find((item: { courseInfo: { bjId: string; }[]; }) => {
-        return item.courseInfo?.[0].bjId === bjId
+      const classInfo = courseSchedule.find((item: { KHBJSJId: string; }) => {
+        return item.KHBJSJId === bjId
       });
-      if (detail) {
-        const { days, courseInfo } = detail;
+      if (classInfo) {
+        const { days, detail } = classInfo;
         const curDate = days?.find((it: { day: any; }) => it.day === date);
         setCurNum(curDate?.index + 1);
         const name: claNameType = {
-          BJMC: courseInfo?.[0]?.BJMC || '',
-          KSS: courseInfo?.[0]?.KSS || 0,
-          KCMC: courseInfo?.[0].title || '',
+          BJMC: detail?.[0]?.BJMC || '',
+          KSS: detail?.[0]?.KSS || 0,
+          KCMC: detail?.[0].title || '',
         };
         setClaName(name);
       }
@@ -274,6 +291,7 @@ const CallTheRoll = (props: any) => {
   const teacherCheckIn = async () => {
     const res = await createKHJSCQ([
       {
+        XXSJPZId: jcId,
         JZGJBSJId: currentUser.JSId || testTeacherId,
         CQZT: '出勤',
         CQRQ: pkDate,
@@ -385,7 +403,7 @@ const CallTheRoll = (props: any) => {
           columns={columns}
           rowKey="id"
           pagination={false}
-          scroll={{ y: 'calc(100vh - 239px)' }}
+          scroll={{ y: 'calc(100vh - 345px)' }}
         />
       </div>
       <div className={styles.footerButton}>

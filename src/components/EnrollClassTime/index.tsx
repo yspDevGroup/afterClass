@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import styles from './index.less';
 import ListComp from '../ListComponent';
@@ -5,52 +6,71 @@ import type { ListData } from '../ListComponent/data';
 import noData from '@/assets/today.png';
 import noData1 from '@/assets/today1.png';
 import moment from 'moment';
-import { TodayCourse } from '@/services/local-services/mobileHome';
+import { CurdayCourse } from '@/services/local-services/mobileHome';
 import { ClassStatus } from '@/utils/Timefunction';
 import TimeRight from './TimeRight';
+import WWOpenDataCom from '../WWOpenDataCom';
 
 const EnrollClassTime = (props: { type: string; xxId?: string; userId?: string; njId?: string; }) => {
   const { type, xxId, userId, njId, } = props;
   const [resource, setResource] = useState<any>(); // 当日课程状态
   const [datasourse, setDatasourse] = useState<ListData>(); // 今日课程中的数据
   /**
-   * 针对今日课程安排，筛选出今日节次的课程，并进行数据梳理
+   * 针对今日课程安排进行数据梳理
    */
-  const getTodayData = (data: any) => {
-    const day = new Date(); // 获取现在的时间  eg:day Thu Jun 24 2021 18:54:38 GMT+0800 (中国标准时间)
+  const resetList = (data: any) => {
     const curCourse: any[] = []; // list中的数据
-    data?.forEach((item: { courseInfo: any[]; }) => {
-      const list = item.courseInfo.filter((val) => val.wkd === day.getDay());
-      if (list?.length) {
-        list.forEach(ele => {
-          curCourse.push({
-            title: ele.title,
-            titleRight: {
-              text: ClassStatus(ele.start, ele.end),
-            },
-            link: `${(type === 'teacher' ? '/teacher/home/courseDetails' : '/parent/home/courseTable')}` + `?classid=${ele.bjId}`,
-            desc: [
-              {
-                left: [
-                  `${ele.start}-${ele.end}`,
-                  `${ele.address}`,
-                ],
-                right: ClassStatus(ele.start, ele.end) === '待上课' ?
-                  <TimeRight startTime={ele.start}/> : ''
-                ,
-              },
-            ],
-          });
-        });
+    data?.forEach((ele: any) => {
+      const { status, otherInfo } = ele;
+      let domRight: string | JSX.Element = '';
+      if (otherInfo) {
+        if (status === '代课') {
+          domRight = (otherInfo?.DKJS?.XM as string) === '未知' && otherInfo?.DKJS?.wechatUserId ? (
+            <WWOpenDataCom type="userName" openid={otherInfo?.DKJS?.wechatUserId} />
+          ) : (
+            otherInfo?.DKJS?.XM
+          )
+        }
+        if (status === '已调课') {
+          domRight = ` ${otherInfo.TKRQ} ${otherInfo.KSSJ}`
+        }
+        if (status === '已请假') {
+          domRight = ''
+        }
+        if (status === '代上课') {
+          domRight = <TimeRight startTime={ele.start} />
+        }
+      } else if (ClassStatus(ele.start, ele.end) === '待上课') {
+        domRight = <TimeRight startTime={ele.start} />
       }
+      curCourse.push({
+        title: `${ele.title} 【${ele.BJMC}】`,
+        titleRight: {
+          text: status || ClassStatus(ele.start, ele.end),
+        },
+        link: status !== '代上课' ?
+          (`${(type === 'teacher' ? '/teacher/home/courseDetails' : '/parent/home/courseTable')}?classid=${ele.bjId}`)
+          : null,
+        desc: [
+          {
+            left: [
+              `${ele.start}-${ele.end}`,
+              `${ele.address}`,
+            ],
+            right: domRight
+            ,
+          },
+        ],
+      });
     })
     return { curCourse };
   };
+
   useEffect(() => {
     (async () => {
       // 获取处理后的今日课程数据
-      const { total, courseList } = await TodayCourse(type, xxId, userId, njId);
-      const { curCourse } = getTodayData(courseList);
+      const { total, courseList } = await CurdayCourse(type, xxId, userId, njId);
+      const { curCourse } = resetList(courseList);
       setResource(total);
       const todayList: ListData = {
         type: 'descList',

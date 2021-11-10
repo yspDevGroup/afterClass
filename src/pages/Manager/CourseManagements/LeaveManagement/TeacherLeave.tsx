@@ -8,7 +8,9 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import EllipsisHint from '@/components/EllipsisHint';
 import { getAllKHJSQJ, updateKHJSQJ } from '@/services/after-class/khjsqj';
+import { getMainTeacher } from '@/services/after-class/khbjsj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { getClassDays } from '@/utils/TimeTable';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -31,7 +33,6 @@ const StudentsLeave: React.FC = () => {
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
       // 获取到的整个列表的信息
-      console.log(res, 'res');
       const newData = res.xnxqList;
       const curTerm = res.current;
       if (newData?.length) {
@@ -42,29 +43,43 @@ const StudentsLeave: React.FC = () => {
       }
     })();
   }, []);
-  console.log(curXNXQId);
 
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateKHJSQJ(
-        { id: current?.id },
+      const res = await updateKHJSQJ({ id: current?.id },
         {
           QJZT: ZT,
           BZ,
           SPJSId: currentUser?.JSId || testTeacherId,
-        },
-      );
+        });
       if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);
         setCurrent(undefined);
         actionRef.current?.reload();
+        // 处理主班请假后课时数发生变更的情况，触发课时重新计算
+        if (ZT === 1) {
+          const bjIds = [].map.call(current.KHJSQJKCs, (item: { KHBJSJId: string }) => {
+            return item.KHBJSJId;
+          });
+          const result = await getMainTeacher({
+            KHBJSJIds: bjIds as string[],
+            JZGJBSJId: current.JZGJBSJId,
+            JSLX: '主教师'
+          });
+          if (result.status === 'ok') {
+            const { data } = result;
+            data?.forEach(async (ele: { KHBJSJId: string; }) => {
+              await getClassDays(ele.KHBJSJId, current.JZGJBSJId, currentUser?.xxId);
+            });
+          };
+        }
       }
     } catch (err) {
       message.error('退课流程出现错误，请联系管理员或稍后重试。');
     }
-  };
+  }
   // table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -101,10 +116,14 @@ const StudentsLeave: React.FC = () => {
           <EllipsisHint
             width="100%"
             text={record.KHJSQJKCs?.map((item: any) => {
-              return <Tag key={item.KCMC}>{item.KCMC}</Tag>;
+              return (
+                <Tag key={item.KCMC}>
+                  {item.KCMC}
+                </Tag>
+              );
             })}
           />
-        );
+        )
       },
       width: 150,
     },
@@ -119,10 +138,14 @@ const StudentsLeave: React.FC = () => {
           <EllipsisHint
             width="100%"
             text={record.KHJSQJKCs?.map((item: any) => {
-              return <Tag key={item.KHBJSJ?.id}>{item.KHBJSJ?.BJMC}</Tag>;
+              return (
+                <Tag key={item.KHBJSJ?.id}>
+                  {item.KHBJSJ?.BJMC}
+                </Tag>
+              );
             })}
           />
-        );
+        )
       },
       width: 120,
     },
@@ -261,16 +284,16 @@ const StudentsLeave: React.FC = () => {
               setQJZT([value]);
             }}
           >
-            <Option key="全部" value={-1}>
+            <Option key='全部' value={-1}>
               全部
             </Option>
-            <Option key="申请中" value={0}>
+            <Option key='申请中' value={0}>
               申请中
             </Option>
-            <Option key="已通过" value={1}>
+            <Option key='已通过' value={1}>
               已通过
             </Option>
-            <Option key="已驳回" value={2}>
+            <Option key='已驳回' value={2}>
               已取销
             </Option>
           </Select>
@@ -298,7 +321,6 @@ const StudentsLeave: React.FC = () => {
                 total: res.data?.count,
               };
             }
-
             return [];
           }}
           pagination={{

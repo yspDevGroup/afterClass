@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, } from 'react';
 import { Link, useModel, history } from 'umi';
 import { Image } from 'antd';
 import { defUserImg } from '@/constant';

@@ -9,7 +9,7 @@ import { compareNow } from '@/utils/Timefunction';
 import noData from '@/assets/noCourse.png';
 
 import styles from './index.less';
-import { ParentHomeData } from '@/services/local-services/mobileHome';
+import { convertStuCourse, CurdayCourse, ParentHomeData } from '@/services/local-services/mobileHome';
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -38,48 +38,20 @@ const ClassCalendar = (props: propstype) => {
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
   const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
   const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
-
-  const convertCourse = (course: any[], day: string) => {
-    const data = course?.length && course.map((item) => {
-      return {
-        title: item.title,
-        BJMC: item.BJMC,
-        img: item.img,
-        link: `/parent/home/courseTable?classid=${item.bjId}&path=study`,
-        desc: [
-          {
-            left: [
-              `${item.start}-${item.end}  |  ${item.BJMC} `,
-            ],
-          },
-          {
-            left: [`${item.address}`],
-          },
-        ],
-        start: item.start,
-        end: item.end,
-        bjId: item.bjId,
-        bjid: item.bjId,
-        jcId: item.jcId,
-        FJId: item.fjId,
-      };
-    });
-    return data;
-  };
   // 根据日期修改展示数据
-  const changeDateList = (date?: any) => {
-    const curDay = date ? date : dayjs();
+  const changeDateList = async (date?: any) => {
+    const curDay = date || dayjs();
     const dayFormat = curDay.format('YYYY-MM-DD');
     setDay(dayFormat);
     setCDay(curDay.format('M月D日'));
-    const course = dates?.length && dates?.find((it) => it.date === dayFormat);
+    const { courseList } = await CurdayCourse('student', currentUser?.xxId, StorageXSId, dayFormat,StorageNjId);
     if (type) {
-      setEditCourses(course?.courses ? convertCourse(course?.courses, day) : []);
+      setEditCourses(convertStuCourse(courseList, 'filter'));
     } else {
       setCourse({
         type: 'picList',
         cls: 'picList',
-        list: course?.courses ? convertCourse(course?.courses, day) : [],
+        list: convertStuCourse(courseList),
         noDataText: '当天无课',
         noDataImg: noData,
       });
@@ -89,14 +61,14 @@ const ClassCalendar = (props: propstype) => {
     (async () => {
       const oriData = await ParentHomeData('student', xxId, StorageXSId, StorageNjId);
       const { markDays } = oriData;
-      const course = markDays?.length && markDays?.find((it) => it.date === day);
+      const { courseList } = await CurdayCourse('student', currentUser?.xxId, StorageXSId, day,StorageNjId);
       if (type) {
-        setEditCourses(course?.courses ? convertCourse(course?.courses, day) : []);
+        setEditCourses(convertStuCourse(courseList, 'filter'));
       } else {
         setCourse({
           type: 'picList',
           cls: 'picList',
-          list: course?.courses ? convertCourse(course?.courses, day) : [],
+          list: convertStuCourse(courseList,),
           noDataText: '当天无课',
           noDataImg: noData,
         });
@@ -106,7 +78,7 @@ const ClassCalendar = (props: propstype) => {
   }, [StorageXSId]);
   useEffect(() => {
     setDatedata?.(choosenCourses);
-  }, [choosenCourses]);
+  }, [choosenCourses, setDatedata]);
   const onChange = (e: any, item: any) => {
     let newChoosen = [...choosenCourses];
     setReloadList?.(false);

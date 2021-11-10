@@ -1,8 +1,3 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable consistent-return */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 import React from 'react';
 import { Link, useModel } from 'umi';
 import { useRef, useState, useEffect } from 'react';
@@ -11,8 +6,6 @@ import ProTable from '@ant-design/pro-table';
 import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
-// import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-// import { paginationConfig } from '@/constant';
 import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
 
@@ -32,103 +25,46 @@ const { Option } = Select;
 
 const CourseManagement = (props: { location: { state: any } }) => {
   const { state } = props.location;
-  const [visible, setVisible] = useState(false);
-  const [current, setCurrent] = useState<any>();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
-  const [readonly, stereadonly] = useState<boolean>(false);
+  // 当前学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
+  // 学年学期数据列表
   const [termList, setTermList] = useState<any>();
-  const [kcId, setkcId] = useState<string>('');
-  // 查询课程名称
-  const [mcData, setmcData] = useState<{ label: string; value: string }[]>([]);
+  // 当前选中课程班
+  const [current, setCurrent] = useState<any>();
+  // 控制新增课程班信息弹框
+  const [visible, setVisible] = useState(false);
+  // 设置选中课程班详情是否可读属性
+  const [readonly, setReadonly] = useState<boolean>(false);
+  // 当前查询课程ID
+  const [kcId, setKcId] = useState<string>('');
+  // 课程列表数据
+  const [mcData, setMcData] = useState<{ label: string; value: string }[]>([]);
   // 控制提示开关
   const [tips, setTips] = useState<boolean>(false);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
   // 报名列表数据
   const [applicantData, setApplicantData] = useState<any>({});
+  // 课程班复制功能
   const [CopyType, setCopyType] = useState<string>();
-
-  // 控制学期学年数据提示框的函数
-  const kaiguan = () => {
-    setkai(false);
-  };
-  const clstips = () => {
-    setTips(false);
-  };
   // 弹框名称设定
   const [names, setnames] = useState<string>('bianji');
+  // 控制提示开关
   const [isModalVisible, setIsModalVisible] = useState(false);
+  // 课程数据
   const [KHKCAllData, setKHKCAllData] = useState<any>([]);
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  const [ModalVisible, setModalVisible] = useState(false);
+  // 控制代报名中弹框
+  const [modalVisible, setModalVisible] = useState(false);
+  // 代报名中班级信息
   const [BjDetails, setBjDetails] = useState<any>();
-  const [JFTotalost, setJFTotalost] = useState<any>(0);
-  const [dataSource, setDataSource] = useState([]);
-  const [tableDateSource, setTableDateSource] = useState([]);
+  // 针对报名时段维护后的提示信息
   const [BMJSSJTime, setBMJSSJTime] = useState<any>();
-  // useEffect(() => {
-  //   (async () => {
-  //     if (/MicroMessenger/i.test(navigator.userAgent)) {
-  //       await initWXConfig(['checkJsApi']);
-  //     }
-  //     await initWXAgentConfig(['checkJsApi']);
-  //   })();
-  // }, []);
-  const getDateSource = async () => {
-    if (curXNXQId) {
-      const obj = {
-        XNXQId: curXNXQId,
-        KHKCSJId: kcId || state?.id,
-        page: 0,
-        pageSize: 0,
-      };
-      const res = await getAllClasses(obj);
-      if (res.status === 'ok') {
-        // return res.data.rows,
-        // return {
-        // setDataSource(res.data.rows);
-        // setTableDateSource(res.data.rows)
-        //   data: res.data.rows,
-        //   success: true,
-        //   total: res.data.count,
-        // };
-      }
-    }
-  };
-
-  // const actionRef={
-  //   current: {onload:getDateSource}
-  // };
-
-  const showModal = async (record: any) => {
-    const { BJMC, id } = record;
-    const result = await getKHBJSJ({
-      id,
-    });
-    if (result.status === 'ok') {
-      setIsModalVisible(true);
-      setApplicantData({ BJMC, KCBDatas: result?.data });
-    } else {
-      message.warning(result.message);
-    }
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-  useEffect(() => {
-    if (mcData === []) {
-      return setTips(true);
-    }
-    return setTips(false);
-  }, [mcData]);
-
+  // 代报名中教辅费用
+  const [JFAmount, setJFAmount] = useState<any>(0);
+  // 获取学年学期信息，同时获取相关课程信息与年级信息
   useEffect(() => {
     (
       async () => {
@@ -159,14 +95,14 @@ const CourseManagement = (props: { location: { state: any } }) => {
             XXJBSJId: currentUser?.xxId,
           });
           if (ress?.status === 'ok') {
-            const njArry: { label: string; value: string }[] = [];
+            const courseArry: { label: string; value: string }[] = [];
             ress?.data?.rows?.forEach((item: any) => {
-              njArry.push({
+              courseArry.push({
                 label: item.KCMC,
                 value: item.id,
               });
             });
-            setmcData(njArry);
+            setMcData(courseArry);
             setKHKCAllData(ress.data.rows);
           }
         }
@@ -176,18 +112,29 @@ const CourseManagement = (props: { location: { state: any } }) => {
     }
     fetchData();
   }, []);
-  // 监听学年学期更新
+  // 通过课程信息是否存在判断提示是否应该展示
+  useEffect(() => {
+    if (mcData === []) {
+      return setTips(true);
+    }
+    return setTips(false);
+  }, [mcData]);
+  // 监听学年学期，课程名称的变更刷新列表
   useEffect(() => {
     if (curXNXQId) {
       actionRef.current?.reload();
     }
   }, [curXNXQId, kcId]);
 
-  const showDrawer = () => {
-    setVisible(true);
-    setCurrent(undefined);
-    stereadonly(false);
+  // 控制学期学年数据提示框
+  const kaiguan = () => {
+    setkai(false);
   };
+  // 控制课程名称数据提示框
+  const clstips = () => {
+    setTips(false);
+  };
+  // 课程班学生代报名
   const showModalBM = async (value: any) => {
     const res = await getKHBJSJ({
       id: value?.id,
@@ -196,25 +143,41 @@ const CourseManagement = (props: { location: { state: any } }) => {
       setBjDetails(res.data);
       if (res.data?.KHKCJCs?.length !== 0) {
         let num: number = 0;
-        // eslint-disable-next-line no-plusplus
-        for (let i = 0; i < res.data?.KHKCJCs.length; i++) {
+        for (let i = 0; i < res.data?.KHKCJCs.length; i += 1) {
           num += Number(res.data?.KHKCJCs[i].JCFY);
         }
-        setJFTotalost(Number(num).toFixed(2));
+        setJFAmount(Number(num).toFixed(2));
       }
     }
     setModalVisible(true);
   };
-
+  // 获取当前课程班报名学生信息，并以弹框展示
+  const showModal = async (record: any) => {
+    const { BJMC, id } = record;
+    const result = await getKHBJSJ({
+      id,
+    });
+    if (result.status === 'ok') {
+      setIsModalVisible(true);
+      setApplicantData({ BJMC, KCBDatas: result?.data });
+    } else {
+      message.warning(result.message);
+    }
+  };
+  // 关闭报名列表弹框
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  // 查看、编辑、复制课程班操作
   const handleEdit = async (data: any, type?: any) => {
     const FJS: any[] = [];
     const res = await getKHBJSJ({
       id: data?.id,
     });
     const currentData = res.data;
-    currentData.KHBJJs?.map((item: any) => {
-      if (item.JSLX === '副教师') {
-        FJS.push(item?.JZGJBSJId);
+    currentData.KHBJJs?.forEach((element: { JSLX: string; JZGJBSJId: any; }) => {
+      if (element.JSLX === '副教师') {
+        FJS.push(element?.JZGJBSJId);
       }
     });
     const { BJMC, BJZT, ...info } = currentData;
@@ -241,19 +204,28 @@ const CourseManagement = (props: { location: { state: any } }) => {
     } else {
       setCopyType('undefined');
       if (!(data.BJZT === '未开班') && !(data.BJZT === '未排课') && !(data.BJZT === '已排课')) {
-        stereadonly(true);
+        setReadonly(true);
         setnames('chakan');
       } else {
-        stereadonly(false);
+        setReadonly(false);
         setnames('add');
       }
     }
   };
-
+  // 显示右侧新增课程班信息弹框
+  const showDrawer = () => {
+    setVisible(true);
+    setCurrent(undefined);
+    setReadonly(false);
+  };
+  // 关闭新增、编辑课程班信息弹框
   const onClose = () => {
     setVisible(false);
   };
-  // const toDay = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+  // 课程名称筛选事件
+  const onKcmcChange = (value: any) => {
+    setKcId(value);
+  };
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -427,7 +399,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
               record={record}
               handleEdit={handleEdit}
               actionRef={actionRef}
-              getDataSource={getDateSource}
             />
             <Divider type="vertical" />
             {record?.BJZT === '已开班' && newDate <= BMJSSJ ? (
@@ -453,10 +424,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
       },
     },
   ];
-  const onBjmcChange = async (value: any) => {
-    setkcId(value);
-    // actionRef.current?.reload();
-  };
   return (
     <>
       <PageContainer cls={styles.roomWrapper}>
@@ -464,7 +431,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          // dataSource={dataSource}
           pagination={{
             showQuickJumper: true,
             pageSize: 10,
@@ -481,8 +447,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
               };
               const res = await getAllClasses(obj);
               if (res.status === 'ok') {
-                // return res.data.rows,
-
                 let newTableDateSource = res.data.rows;
 
                 if (filter?.KHKCSJ) {
@@ -546,7 +510,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     value={kcId || state?.id}
                     allowClear
                     placeholder="请选择"
-                    onChange={onBjmcChange}
+                    onChange={onKcmcChange}
                   >
                     {mcData?.map((item: any) => {
                       return (
@@ -603,7 +567,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
         <Modal
           title="报名列表"
           visible={isModalVisible}
-          onOk={handleOk}
           onCancel={handleCancel}
           footer={null}
           style={{ minWidth: '750px' }}
@@ -612,9 +575,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
         </Modal>
         <AgentRegistration
           curXNXQId={curXNXQId}
-          JFTotalost={JFTotalost}
+          JFTotalost={JFAmount}
           BjDetails={BjDetails}
-          ModalVisible={ModalVisible}
+          ModalVisible={modalVisible}
           setModalVisible={setModalVisible}
           actionRef={actionRef}
         />

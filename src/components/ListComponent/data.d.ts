@@ -2,12 +2,13 @@
  * @description:
  * @author: txx
  * @Date: 2021-06-01 17:45:37
- * @LastEditTime: 2021-06-08 17:37:02
- * @LastEditors: txx
+ * @LastEditTime: 2021-11-04 11:41:10
+ * @LastEditors: Sissle Lynn
  */
 
 export type ListItem = {
   id?: string; // udid
+  status?: string; // 课程特殊状态
   title: string; // 标题
   link?: string; // 链接
   titleRight?: {
