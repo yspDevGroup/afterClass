@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-11-10 17:20:26
+ * @LastEditTime: 2021-11-11 14:51:01
  * @LastEditors: Sissle Lynn
  */
 
@@ -238,10 +238,22 @@ export const CurdayCourse = async (type?: string, xxId?: string, userId?: string
       const newArr = [].map.call(list, (val: { jcId: string }) => {
         const currentDay = dayList?.find((v: { jcId: string }) => v.jcId === val.jcId);
         if (currentDay) {
-          const { jcId, ...rest } = currentDay;
+          const { jcId, status, tag, reason, realDate } = currentDay;
           return {
             ...val,
-            ...rest,
+            status: status === '已请假' ? '班主任已请假' : status,
+            tag,
+            otherInfo: {
+              BZ: reason,
+              TKRQ: realDate,
+              XXSJPZId: jcId,
+              JSSJ: currentDay?.end,
+              KSSJ: currentDay?.start,
+              TKFJ: {
+                id: currentDay.room?.id,
+                FJMC: currentDay.room?.name,
+              }
+            },
           }
         }
         return {

@@ -3,7 +3,7 @@
  * @description:
  * @author: txx
  * @Date: 2021-05-31 10:24:05
- * @LastEditTime: 2021-11-10 10:03:44
+ * @LastEditTime: 2021-11-11 15:02:27
  * @LastEditors: Sissle Lynn
  */
 
@@ -16,6 +16,7 @@ import Nodata from '../Nodata';
 import noPic from '@/assets/noPic.png';
 import noPic1 from '@/assets/noPic1.png';
 
+const statusText = ['已请假','班主任已请假','已调课','代课'];
 const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) => {
   const { data, type, operation } = props;
   const teacher = history.location.pathname.indexOf('teacher') > -1;
@@ -29,7 +30,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
           return (
             <div className={operation ? 'ui-listItemWrapper' : 'itemWrapper'}>
               <div className={operation ? 'ui-listItemContent' : 'itemContent'}>
-                {status ? <span className={styles.specialPart} style={{background: status === '已请假' ? '#F48A82' : '#7dce81'}}>{status}</span>:''}
+                {status ? <span className={styles.specialPart} style={{background: status.indexOf('已请假')>-1 ? '#F48A82' : '#7dce81'}}>{status}</span>:''}
                 <a onClick={()=>{
                   if(v.link){
                     history.push(v.link);
@@ -111,7 +112,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                 </a>
               </div>
               {
-                status !== '已请假' && status !== '已调课' && status !== '代课' && operation ? (
+                (!statusText.includes(status || '')&& operation) ? (
                   <div className="ui-operation" style={{ display: 'block', paddingTop: '10px' }}>
                     <DisplayColumn type="icon" grid={{ column: operation.length }} dataSource={operation} parentLink={[v.enrollLink]} bjid={v.bjid} callbackData={data[index]} />
                   </div>) : ''

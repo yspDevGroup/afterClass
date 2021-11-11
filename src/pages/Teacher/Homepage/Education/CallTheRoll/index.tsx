@@ -7,7 +7,7 @@ import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
-import { getEnrolled, } from '@/services/after-class/khbjsj';
+import { getEnrolled, getKHBJSJ, } from '@/services/after-class/khbjsj';
 import { createKHJSCQ, getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { createKHXSCQ, getAllKHXSCQ, getArrangement } from '@/services/after-class/khxscq';
 
@@ -237,6 +237,18 @@ const CallTheRoll = (props: any) => {
           KCMC: detail?.[0].title || '',
         };
         setClaName(name);
+      } else {
+        const res = await getKHBJSJ({
+          id: bjId
+        });
+        if (res.status === 'ok') {
+          const { data } = res;
+          setClaName({
+            KCMC: data.KHKCSJ.KCMC,
+            BJMC: data.BJMC,
+            KSS: data.KSS,
+          })
+        }
       }
       getData();
     })()
@@ -385,7 +397,7 @@ const CallTheRoll = (props: any) => {
       </div>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
-        {claName?.BJMC} ｜第 {curNum}/{claName?.KSS} 课时
+        {claName?.BJMC} {curNum ? `｜第 ${curNum}/${claName?.KSS} 课时` : ''}
       </div>
       <div className={styles.checkWorkAttendance}>
         {checkWorkInfo.map((item) => {

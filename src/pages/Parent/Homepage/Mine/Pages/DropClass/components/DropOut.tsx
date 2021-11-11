@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-09 10:48:20
- * @LastEditTime: 2021-11-02 16:13:51
+ * @LastEditTime: 2021-11-11 10:22:20
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable no-nested-ternary */
@@ -16,6 +16,7 @@ import { countKHXSCQ } from '@/services/after-class/khxscq';
 
 import styles from '../index.less';
 import noOrder from '@/assets/noOrder.png';
+import { CountCourses, ParentHomeData } from '@/services/local-services/mobileHome';
 
 const DropOut = () => {
   const { initialState } = useModel('@@initialState');
@@ -24,9 +25,11 @@ const DropOut = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [ModalVisible, setModalVisible] = useState(false);
   const [KHFUXY, setKHFUXY] = useState<any>();
-  const [KcData, setKcData] = useState<any>();
-  const [Datasourse, setDatasourse] = useState<any>();
+  const [kcData, setKcData] = useState<any>();
+  const [kcList, setKcList] = useState<any>();
+  const [datasourse, setDatasourse] = useState<any>();
   const StorageXSId = localStorage.getItem('studentId') || (student && student.XSJBSJId) || testStudentId;
+  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
 
   useEffect(() => {
     (async () => {
@@ -43,20 +46,36 @@ const DropOut = () => {
       }
     })();
   }, []);
-  const getKcData = async () => {
+  const getKcData = async (data: any) => {
     const result = await queryXNXQList(currentUser?.xxId);
     if (result.current) {
       const res = await countKHXSCQ({
         XNXQId: result.current.id,
         XSJBSJId: StorageXSId
       });
-      if (res.status === 'ok') {
-        setKcData(res.data);
+      if (res.status === 'ok' && res.data) {
+        const finnalList = [].map.call(res.data, (val: any) => {
+          const curCourse = data.find((v: any) => v.id === val.id);
+          return {
+            YXKS: curCourse.YXKS,
+            KSS: curCourse.KSS,
+            ...val,
+          }
+        })
+        setKcData(finnalList);
       }
     }
   };
   useEffect(() => {
-    getKcData();
+    (async () => {
+      if (StorageXSId) {
+        const oriData = await ParentHomeData('student', currentUser.xxId, StorageXSId, StorageNjId);
+        const { courseSchedule } = oriData;
+        const courseData = CountCourses(courseSchedule);
+        setKcList(courseData);
+        getKcData(courseData);
+      }
+    })()
   }, [StorageXSId]);
 
   /** 课后帮服务协议弹出框 */
@@ -74,10 +93,10 @@ const DropOut = () => {
     setModalVisible(true);
   };
   const handleOks = async () => {
-    const res = await createKHTKSJ(Datasourse!);
+    const res = await createKHTKSJ(datasourse!);
     if (res.status === 'ok') {
       message.success('申请已提交，请等待审核');
-      getKcData();
+      getKcData(kcList);
       setModalVisible(false);
     } else {
       message.error(res.message);
@@ -91,7 +110,7 @@ const DropOut = () => {
     const NewArr: any[] = [];
     checkedValues.forEach((value: string) => {
       const data = {
-        XSJBSJId:StorageXSId,
+        XSJBSJId: StorageXSId,
         XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
         KHBJSJId: value.split('+')[0],
         KSS: value.split('+')[1],
@@ -106,17 +125,17 @@ const DropOut = () => {
   };
   return (
     <div className={styles.DropClass}>
-      {KcData?.length !== 0 ? (
+      {kcData?.length !== 0 ? (
         <>
           {' '}
           <div className={styles.Application}>
             <p className={styles.choice}>请选择课程</p>
             <div>
               <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                {KcData?.map((value: any) => {
+                {kcData?.map((value: any) => {
                   const JKRQ = new Date(value.KHBJSJ?.JKRQ).getTime();
                   const newDate = new Date().getTime();
-                  const ZKS = value.abnormal + value.normal+value.remain;
+                  const last = value.KSS && value.YXKS ? (value.KSS - value.YXKS) : value.remain;
                   return (
                     <>
                       <div className={styles.cards}>
@@ -124,12 +143,12 @@ const DropOut = () => {
                           {value.KCMC}
                           <span style={{ color: '#009688', fontWeight: 'normal' }}>【{value.BJMC}】</span>
                         </p>
-                        <p>总课时：{ZKS}节 ｜ 已学课时：{value.normal}节</p>
+                        <p>总课时：{value.KSS}节 ｜ 已学课时：{value.YXKS || value.normal}节</p>
                         <p>
-                          未学课时：{value.remain}节｜缺勤课时：{value.abnormal}节｜可退课时：{value.abnormal +value.remain}节
+                          未学课时：{last}节｜缺勤课时：{value.abnormal}节｜可退课时：{value.abnormal + last}节
                         </p>
                         <Checkbox
-                          value={`${value.id}+${value.abnormal +value.remain}+${value.KCMC}`}
+                          value={`${value.id}+${value.abnormal + last}+${value.KCMC}`}
                           disabled={newDate - JKRQ > 2592000000}
                         >
                           {' '}
@@ -148,7 +167,7 @@ const DropOut = () => {
             <div className={styles.btn}>
               <Button
                 onClick={showModals}
-                disabled={typeof Datasourse === 'undefined' || Datasourse.length === 0}
+                disabled={typeof datasourse === 'undefined' || datasourse.length === 0}
               >
                 提交
               </Button>
@@ -196,7 +215,7 @@ const DropOut = () => {
         cancelText="取消"
       >
         <div>
-          {Datasourse?.map((value: any) => {
+          {datasourse?.map((value: any) => {
             return (
               <>
                 <p>
@@ -207,8 +226,8 @@ const DropOut = () => {
           })}
           <p style={{ fontSize: 12, color: '#999', marginTop: 40, marginBottom: 0 }}>
             注：
-            <br/>1.退课课时由系统根据申请日期进行计算统计，仅供参考。
-            <br/>2.退课成功后，系统将自动进行退款，退款将原路返回您的支付账户。
+            <br />1.退课课时由系统根据申请日期进行计算统计，仅供参考。
+            <br />2.退课成功后，系统将自动进行退款，退款将原路返回您的支付账户。
           </p>
         </div>
       </Modal>
