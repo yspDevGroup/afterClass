@@ -92,8 +92,7 @@ const Home = () => {
       }
     })();
     if (
-      // initialState?.buildOptions.authType === 'wechat' &&
-      !currentUser.XM ||
+      (initialState?.buildOptions.authType === 'wechat' && !currentUser.XM) ||
       currentUser.XM === '未知'
     ) {
       setIsModalVisible(true);
