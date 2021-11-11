@@ -35,8 +35,8 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
       localStorage.setItem('studentNjId', student[0].NJSJId || '');
       localStorage.setItem('studentNjId', student[0].BJSJId || '');
     }
-    const ParentalIdentitys = `${StorageXSName}${external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-      }`;
+    const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
+    const ParentalIdentitys = `${StorageXSName}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
   }, []);
 
@@ -46,8 +46,8 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     localStorage.setItem('studentId', key.key?.split('+')[0]);
     localStorage.setItem('studentNjId', key.key?.split('+')[1]);
     localStorage.setItem('studentBJId', key.key?.split('+')[2]);
-    const ParentalIdentitys = `${key.value}${external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-      }`;
+    const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
+    const ParentalIdentitys = `${key.value}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
     // 数据信息重新更新获取
     await ParentHomeData('student', currentUser?.xxId, key.key?.split('+')[0], key.key?.split('+')[1], true);

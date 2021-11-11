@@ -317,6 +317,7 @@ const ServiceManagement = () => {
                     form.setFieldsValue(data);
                     setIsModalVisible(true);
                     setDisabled('查看');
+                    setImageUrl(record?.FWTP);
                   }}
                 >
                   查看
