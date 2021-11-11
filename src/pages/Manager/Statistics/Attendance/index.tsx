@@ -16,6 +16,7 @@ import { Link } from 'umi';
 import moment, { isMoment } from 'moment';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import FormSelect from './compoents/FormSelect';
+import { DownloadOutlined } from '@ant-design/icons';
 // const { RangePicker } = DatePicker;
 // const { Option } = Select;
 // const { Search } = Input;
@@ -330,7 +331,7 @@ const LeaveManagement = () => {
     if (res?.status === 'ok') {
       console.log('ok', res);
       setLoading(false);
-      window.open(res.data);
+       window.location.href= res.data;
     } else {
       setLoading(false);
       message.error(res.message);
@@ -361,7 +362,7 @@ const LeaveManagement = () => {
     if (res?.status === 'ok') {
       setLoading(false);
       console.log('ok', res);
-      window.open(res.data);
+      window.location.href= res.data;
     } else {
       setLoading(false);
       message.error(res.message);
@@ -380,7 +381,7 @@ const LeaveManagement = () => {
             <FormSelect
               getDataSource={getDataSource}
               exportButton={
-                <Button type="primary" onClick={onExportJSClick}>
+                <Button type="primary" icon={<DownloadOutlined />} style={{float: 'right'}} onClick={onExportJSClick}>
                   导出
                 </Button>
               }
@@ -393,7 +394,7 @@ const LeaveManagement = () => {
             <FormSelect
               getDataSource={getDataSource}
               exportButton={
-                <Button type="primary" onClick={onExportXSClick}>
+                <Button type="primary" icon={<DownloadOutlined />} style={{float: 'right'}} onClick={onExportXSClick}>
                   导出
                 </Button>
               }

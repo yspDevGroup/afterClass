@@ -9,7 +9,7 @@ import type { ProColumns } from '@ant-design/pro-table';
 import PageContainer from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import { Button, message, Modal, Spin } from 'antd';
-import { LeftOutlined } from '@ant-design/icons';
+import { DownloadOutlined, LeftOutlined } from '@ant-design/icons';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
@@ -272,7 +272,7 @@ const AttendanceDetail = (props: any) => {
           endDate,
         });
         if (res.status === 'ok') {
-          window.open(res.data);
+          window.location.href= res.data;
           setLoading(false);
         } else {
           message.error(res.message);
@@ -288,6 +288,7 @@ const AttendanceDetail = (props: any) => {
           endDate,
         });
         if (res.status === 'ok') {
+          window.location.href= res.data;
           setLoading(false);
         } else {
           message.error(res.message);
@@ -313,7 +314,7 @@ const AttendanceDetail = (props: any) => {
             <LeftOutlined />
             返回上一页
           </Button>
-          <Button style={{ marginLeft: '20px' }} type="primary" onClick={onExportClick}>
+          <Button style={{float: 'right'}}  icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
             导出
           </Button>
 

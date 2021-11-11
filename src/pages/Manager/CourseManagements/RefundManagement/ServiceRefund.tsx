@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Select, message, Modal, Radio, Input, Form, InputNumber } from 'antd';
+import { Select, message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
 import Style from './index.less';
-import { getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
+import { exportTKJL, getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getKHZZFW } from '@/services/after-class/khzzfw';
 import moment from 'moment';
 import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
+import { DownloadOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -31,6 +32,7 @@ const ServiceRefund = () => {
   const [LbId, setLbId] = useState<string>();
   const [FWMCData, setFWMCData] = useState<any>([]);
   const [FWMC, setFWMC] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // 获取学年学期数据的获取
@@ -302,6 +304,29 @@ const ServiceRefund = () => {
   };
 
   console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
+
+  const onExportClick = () => {
+    setLoading(true);
+    (async () => {
+      const res = await exportTKJL({
+        LX: 1,
+        XXJBSJId: currentUser?.xxId,
+        XNXQId: curXNXQId,
+        // KHFWLXId: LbId,
+        // KHFWMC: FWMC,
+        page: 0,
+        pageSize: 0,
+      });
+      if (res.status === 'ok') {
+        window.location.href = res.data;
+        setLoading(false);
+      } else {
+        message.error(res.message);
+        setLoading(false);
+      }
+    })();
+  };
+
   return (
     <>
       <div className={Style.TopSearchs}>
@@ -340,12 +365,12 @@ const ServiceRefund = () => {
                   </Option> */}
             {LBData?.length
               ? LBData?.map((item: any) => {
-                  return (
-                    <Option value={item?.id} key={item?.id}>
-                      {item?.FWMC}
-                    </Option>
-                  );
-                })
+                return (
+                  <Option value={item?.id} key={item?.id}>
+                    {item?.FWMC}
+                  </Option>
+                );
+              })
               : ''}
           </Select>
         </span>
@@ -365,58 +390,63 @@ const ServiceRefund = () => {
                   </Option> */}
             {FWMCData?.length
               ? FWMCData?.map((item: any) => {
-                  return (
-                    <Option value={item?.FWMC} key={item?.FWMC}>
-                      {item?.FWMC}
-                    </Option>
-                  );
-                })
+                return (
+                  <Option value={item?.FWMC} key={item?.FWMC}>
+                    {item?.FWMC}
+                  </Option>
+                );
+              })
               : ''}
           </Select>
         </span>
+        <Button style={{ float: 'right' }} icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+          导出
+        </Button>
       </div>
       <div>
-        <ProTable<any>
-          actionRef={actionRef}
-          columns={columns}
-          rowKey="id"
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: 1500 }}
-          request={async () => {
-            const resAll = await getAllKHXSTK({
-              LX: 1,
-              XXJBSJId: currentUser?.xxId,
-              XNXQId: curXNXQId,
-              KHFWLXId: LbId,
-              KHFWMC: FWMC,
-              page: 0,
-              pageSize: 0,
-            });
-            if (resAll.status === 'ok') {
+        <Spin spinning={loading}>
+          <ProTable<any>
+            actionRef={actionRef}
+            columns={columns}
+            rowKey="id"
+            pagination={{
+              showQuickJumper: true,
+              pageSize: 10,
+              defaultCurrent: 1,
+            }}
+            scroll={{ x: 1500 }}
+            request={async () => {
+              const resAll = await getAllKHXSTK({
+                LX: 1,
+                XXJBSJId: currentUser?.xxId,
+                XNXQId: curXNXQId,
+                KHFWLXId: LbId,
+                KHFWMC: FWMC,
+                page: 0,
+                pageSize: 0,
+              });
+              if (resAll.status === 'ok') {
+                return {
+                  data: resAll?.data?.rows,
+                  success: true,
+                  total: resAll?.data?.count,
+                };
+              }
               return {
-                data: resAll?.data?.rows,
-                success: true,
-                total: resAll?.data?.count,
+                data: [],
+                success: false,
+                total: 0,
               };
-            }
-            return {
-              data: [],
-              success: false,
-              total: 0,
-            };
-          }}
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          search={false}
-        />
+            }}
+            options={{
+              setting: false,
+              fullScreen: false,
+              density: false,
+              reload: false,
+            }}
+            search={false}
+          />
+        </Spin>
         <Modal
           title="退款确认"
           visible={visible}

@@ -8,8 +8,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, Select } from 'antd';
-import { getAllKHXSDD } from '@/services/after-class/khxsdd';
+import { Button, Input, message, Select, Spin } from 'antd';
+import { exportStudentOrders, getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
 import styles from './index.less';
@@ -17,6 +17,7 @@ import { useModel } from 'umi';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { DownloadOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -36,6 +37,7 @@ const OrderInquiry = (props: any) => {
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [termList, setTermList] = useState<any>();
   const [name, setName] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
       // 学年学期数据的获取
@@ -59,14 +61,14 @@ const OrderInquiry = (props: any) => {
         XNXQId: curXNXQId,
         XSXM: name,
         // 父传子判断要请求的状态
-        DDZT:DDZT === '已付款' ? ['已付款','已退款']:[DDZT],
+        DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
         DDLX: 1
       })
       if (res.status === 'ok') {
         setDataSource(res.data)
       }
     })()
-  }, [curXNXQId,name])
+  }, [curXNXQId, name])
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -163,6 +165,25 @@ const OrderInquiry = (props: any) => {
       },
     },
   ];
+  const onExportClick = () => {
+    setLoading(true);
+    (async () => {
+      const res = await exportStudentOrders({
+        XNXQId: curXNXQId,
+        XSXM: name,
+        // 父传子判断要请求的状态
+        DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
+        DDLX: 1
+      });
+      if (res.status === 'ok') {
+        window.location.href = res.data;
+        setLoading(false);
+      } else {
+        message.error(res.message);
+        setLoading(false);
+      }
+    })();
+  };
   return (
     <>
       <div className={styles.searchs}>
@@ -198,27 +219,34 @@ const OrderInquiry = (props: any) => {
             />
           </div>
         </div>
+        <span style={{ marginLeft: 'auto' }}>
+          <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+            导出
+          </Button>
+        </span>
       </div>
       <div className={styles.tableStyle}>
-        <ProTable<any>
-          actionRef={actionRef}
-          columns={columns}
-          rowKey="id"
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: DDZT !== '已付款' ? 1000 : 1300 }}
-          dataSource={dataSource}
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          search={false}
-        />
+        <Spin spinning={loading}>
+          <ProTable<any>
+            actionRef={actionRef}
+            columns={columns}
+            rowKey="id"
+            pagination={{
+              showQuickJumper: true,
+              pageSize: 10,
+              defaultCurrent: 1,
+            }}
+            scroll={{ x: DDZT !== '已付款' ? 1000 : 1300 }}
+            dataSource={dataSource}
+            options={{
+              setting: false,
+              fullScreen: false,
+              density: false,
+              reload: false,
+            }}
+            search={false}
+          />
+        </Spin>
       </div>
     </>
   );

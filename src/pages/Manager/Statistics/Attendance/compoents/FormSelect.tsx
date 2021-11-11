@@ -120,7 +120,7 @@ const FormSelect = (props: formSelectProps) => {
           }}
         />
       </Form.Item>
-      <Form.Item>{exportButton}</Form.Item>
+      <Form.Item style={{flex: 'auto'}}>{exportButton}</Form.Item>
     </Form>
   );
 };
