@@ -90,7 +90,7 @@ const EnrollClassTime = (props: { type: string; xxId?: string; userId?: string; 
       };
       setDatasourse(todayList);
     })()
-  }, []);
+  }, [userId]);
 
   switch (resource?.courseStatus) {
     case 'unstart':

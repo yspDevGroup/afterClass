@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Pie } from '@ant-design/charts';
-import styles from '../index.less';
 import { Badge } from 'antd';
+import { Pie } from '@ant-design/charts';
+import { countKHXSCQ } from '@/services/after-class/khxscq';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 import noChart from '@/assets/noChart.png';
 import Nodata from '@/components/Nodata';
-import { countKHXSCQ } from '@/services/after-class/khxscq';
-import { useModel } from 'umi';
-import { queryXNXQList } from '@/services/local-services/xnxq';
 
-const Statistical: React.FC = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  const { xxId,student } = currentUser || {};
-  const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+import styles from '../index.less';
+
+const Statistical = (props: { userId?: string; xxId?: string; }) => {
+  const { userId, xxId, } = props;
   const [satistics, setStatistics] = useState<any[]>();
 
   const convertData = (data: any) => {
@@ -47,17 +44,18 @@ const Statistical: React.FC = () => {
       if (result.current) {
         const res = await countKHXSCQ({
           XNXQId: result.current.id,
-          XSJBSJId: StorageXSId
+          XSJBSJId: userId
         });
-        if(res.status === 'ok'){
-          const arr = [].map.call(res.data,(item)=>{
+        if (res.status === 'ok') {
+          const arr = [].map.call(res.data, (item) => {
             return convertData(item);
           })
           setStatistics(arr || []);
         }
       }
     })()
-  }, [StorageXSId]);
+  }, [userId]);
+
   const config: any = {
     data: '',
     angleField: 'value',

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { Link, useModel, history } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
@@ -21,10 +21,11 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { student, external_contact } = currentUser || {};
-  const { status, setActiveKey } = props;
+  const { status } = props;
   const [totail, setTotail] = useState<boolean>(false);
+  const [reload, setReload] = useState<boolean>(false);
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
-  const StorageXSId = localStorage.getItem('studentId');
+  const StorageXSId = localStorage.getItem('studentId') || testStudentId;
   const StorageXSName = localStorage.getItem('studentName');
 
   useEffect(() => {
@@ -51,29 +52,34 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     setParentalIdentity(ParentalIdentitys);
     // 数据信息重新更新获取
     await ParentHomeData('student', currentUser?.xxId, key.key?.split('+')[0], key.key?.split('+')[1], true);
-    // setActiveKey('index');
+    setReload(true);
   };
-  useEffect(() => {
-    async function fetch() {
-      const studentId: string =
-        StorageXSId || student?.[0].XSJBSJId || testStudentId;
-
-      const res = await getAllKHXSDD({
-        XSJBSJId: studentId,
-        // njId: currentUser.njId,
-        DDZT: ['待付款'],
-      });
-      if (res.status === 'ok') {
-        if (res.data && res.data.length) {
-          setTotail(true);
-        }
-      } else {
-        enHenceMsg(res.message);
+  const fetchData = async () => {
+    const studentId: string =
+      StorageXSId || student?.[0].XSJBSJId || testStudentId;
+    const res = await getAllKHXSDD({
+      XSJBSJId: studentId,
+      // njId: currentUser.njId,
+      DDZT: ['待付款'],
+    });
+    if (res.status === 'ok') {
+      if (res.data && res.data.length) {
+        setTotail(true);
       }
+    } else {
+      enHenceMsg(res.message);
     }
-    fetch();
+  }
+  useEffect(() => {
+    fetchData();
   }, [StorageXSId]);
 
+  useEffect(() => {
+    if (reload) {
+      fetchData();
+      setReload(false);
+    }
+  }, [reload])
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader}>
@@ -129,7 +135,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
         </Link>
       </div>
 
-      {status === 'empty' ? '' : <Statistical />}
+      {status === 'empty' ? '' : <Statistical userId={StorageXSId} xxId={currentUser?.xxId} />}
       <div className={styles.linkWrapper}>
         <ul>
           <li>
