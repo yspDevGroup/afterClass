@@ -8,6 +8,7 @@
 import should from '@/assets/should.png';
 import real from '@/assets/real.png';
 import leave from '@/assets/leave.png';
+
 export const textColor1 = ['#FF715C', '#60DD95', '#4FC4E7', '#FFA729'];
 export const textColor2 = ['#FFA729', '#60DD95', '#FF715C'];
 
@@ -20,11 +21,13 @@ export const columnConfig: any = {
   isStack: true,
   color: ['#ff6e76', '#fddd60'],
   legend: {
+    layout: 'horizontal',
+    position: 'top-right',
     itemName: {
       style: {
-        fill: '#fff'
-      }
-    }
+        fill: '#fff',
+      },
+    },
   },
   xAxis: {
     label: {
@@ -33,13 +36,13 @@ export const columnConfig: any = {
       style: {
         fill: 'white',
         fontSize: 14,
-      }
-    }
+      },
+    },
   },
   yAxis: { minInterval: 1 },
   grid: {
     containLabel: true,
-    bottom: 40
+    bottom: 40,
   },
   columnStyle: {},
   maxColumnWidth: 30,
@@ -58,7 +61,17 @@ export const pieConfig: any = {
   data: [],
   angleField: 'value',
   colorField: 'type',
-  color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
+  color: [
+    '#5470c6',
+    '#91cc75',
+    '#fac858',
+    '#ee6666',
+    '#73c0de',
+    '#3ba272',
+    '#fc8452',
+    '#9a60b4',
+    '#ea7ccc',
+  ],
   radius: 0.8,
   innerRadius: 0.6,
   pieStyle: {
@@ -73,7 +86,7 @@ export const pieConfig: any = {
     style: {
       fill: 'white',
       fontSize: 15,
-    }
+    },
   },
   interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
   statistic: {
@@ -91,8 +104,8 @@ export const barConfig: any = {
       style: {
         fill: 'white',
         fontSize: 14,
-      }
-    }
+      },
+    },
   },
   maxBarWidth: 30,
   meta: {
@@ -108,7 +121,7 @@ export const defaultData: any = {
   schoolNum: [],
   courseNum: [],
   enrollNum: [],
-  checkOutTeacher: []
+  checkOutTeacher: [],
 };
 export const getTerm = () => {
   const now = new Date();
@@ -117,86 +130,106 @@ export const getTerm = () => {
   if (month < 8) {
     return {
       XN: `${year - 1}-${year}`,
-      XQ: '第二学期'
-    }
-  } else {
-    return {
-      XN: `${year}-${year + 1}`,
-      XQ: '第一学期'
-    }
+      XQ: '第二学期',
+    };
   }
-}
+  return {
+    XN: `${year}-${year + 1}`,
+    XQ: '第一学期',
+  };
+};
 export const mock: any = {
-  serviceNum: [{
-    title: '教师总数',
-    num: '45236'
-  },
-  {
-    title: '学生总数',
-    num: '45736'
-  },
-  {
-    title: '收款总额',
-    num: '70789'
-  },
-  {
-    title: '退款总额',
-    num: '4455'
-  }],
-  courseCollect: [{
-    type: '艺术类',
-    value: 34
-  }, {
-    type: '人文社科类',
-    value: 54
-  }, {
-    type: '体育类',
-    value: 23
-  }, {
-    type: '自然科学类',
-    value: 31
-  }, {
-    type: '社会实践类',
-    value: 13
-  }, {
-    type: '托管服务',
-    value: 37
-  }, {
-    type: '其他',
-    value: 12
-  }],
-  checkOut: [{
-    icon: should,
-    title: '应到人数',
-    num: 2100
-  }, {
-    icon: real,
-    title: '实到人数',
-    num: 1842
-  }, {
-    icon: leave,
-    title: '请假人数',
-    num: 258
-  }],
-  numCollect: [{
-    title: '课程总数',
-    num: 21
-  }, {
-    title: '课程班总数',
-    num: 28
-  }, {
-    title: '学校教师数',
-    num: 123
-  }, {
-    title: '合作机构数',
-    num: 234
-  }, {
-    title: '合作课程数',
-    num: 45
-  }, {
-    title: '机构教师数',
-    num: 23
-  }],
+  serviceNum: [
+    {
+      title: '教师总数',
+      num: '45236',
+    },
+    {
+      title: '学生总数',
+      num: '45736',
+    },
+    {
+      title: '收款总额',
+      num: '70789',
+    },
+    {
+      title: '退款总额',
+      num: '4455',
+    },
+  ],
+  courseCollect: [
+    {
+      type: '艺术类',
+      value: 34,
+    },
+    {
+      type: '人文社科类',
+      value: 54,
+    },
+    {
+      type: '体育类',
+      value: 23,
+    },
+    {
+      type: '自然科学类',
+      value: 31,
+    },
+    {
+      type: '社会实践类',
+      value: 13,
+    },
+    {
+      type: '托管服务',
+      value: 37,
+    },
+    {
+      type: '其他',
+      value: 12,
+    },
+  ],
+  checkOut: [
+    {
+      icon: should,
+      title: '应到人数',
+      num: 2100,
+    },
+    {
+      icon: real,
+      title: '实到人数',
+      num: 1842,
+    },
+    {
+      icon: leave,
+      title: '请假人数',
+      num: 258,
+    },
+  ],
+  numCollect: [
+    {
+      title: '课程总数',
+      num: 21,
+    },
+    {
+      title: '课程班总数',
+      num: 28,
+    },
+    {
+      title: '学校教师数',
+      num: 123,
+    },
+    {
+      title: '合作机构数',
+      num: 234,
+    },
+    {
+      title: '合作课程数',
+      num: 45,
+    },
+    {
+      title: '机构教师数',
+      num: 23,
+    },
+  ],
   schoolNum: [
     '西安市高新区第七高级中学',
     '西安高新区第五高级中学',
@@ -207,7 +240,7 @@ export const mock: any = {
     '西安高新区第一高级中学',
     '西安市高新区第二高级中学',
     '西安市高新区第三高级中学',
-    '西安市高新区第六高级中学'
+    '西安市高新区第六高级中学',
   ],
   courseNum: [
     {
@@ -317,17 +350,21 @@ export const mock: any = {
       value: 23,
     },
   ],
-  checkOutTeacher: [{
-    icon: should,
-    title: '应到人数',
-    num: 2100
-  }, {
-    icon: real,
-    title: '实到人数',
-    num: 1842
-  }, {
-    icon: leave,
-    title: '请假人数',
-    num: 258
-  }]
+  checkOutTeacher: [
+    {
+      icon: should,
+      title: '应到人数',
+      num: 2100,
+    },
+    {
+      icon: real,
+      title: '实到人数',
+      num: 1842,
+    },
+    {
+      icon: leave,
+      title: '请假人数',
+      num: 258,
+    },
+  ],
 };
