@@ -1,11 +1,12 @@
 import { Select, Input, Form, DatePicker } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-const { Search } = Input;
-const { Option } = Select;
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import moment from 'moment';
-import { ReactNode } from '@umijs/renderer-react/node_modules/@types/react';
+import type { ReactNode } from '@umijs/renderer-react/node_modules/@types/react';
+
+const { Search } = Input;
+const { Option } = Select;
 
 const { RangePicker } = DatePicker;
 type formSelectProps = {
@@ -81,7 +82,7 @@ const FormSelect = (props: formSelectProps) => {
       <Form.Item label="所属学年学期:">
         <Select
           value={curXNXQId}
-          style={{ width: 200 }}
+          style={{ width: 160 }}
           onChange={(value: string) => {
             setCurXNXQId(value);
           }}

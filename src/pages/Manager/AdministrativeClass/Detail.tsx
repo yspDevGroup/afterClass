@@ -181,7 +181,7 @@ const Detail = (props: any) => {
               <span style={{ fontSize: 14, color: '#666' }}>
                 课程名称：
                 <Select
-                  style={{ width: 200 }}
+                  style={{ width: 160 }}
                   value={KcId}
                   allowClear
                   placeholder="请选择"
@@ -196,7 +196,7 @@ const Detail = (props: any) => {
               <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
                 服务名称：
                 <Select
-                  style={{ width: 200 }}
+                  style={{ width: 160 }}
                   value={FwId}
                   allowClear
                   placeholder="请选择"

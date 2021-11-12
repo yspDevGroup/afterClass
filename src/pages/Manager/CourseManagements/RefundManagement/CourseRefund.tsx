@@ -352,7 +352,7 @@ const CourseRefund = () => {
           <Form.Item label=' 所属学年学期：' style={{ padding: '0 0 24px' }}>
             <Select
               value={curXNXQId}
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               onChange={(value: string) => {
                 // 更新多选框的值
                 setCurXNXQId(value);
@@ -369,7 +369,7 @@ const CourseRefund = () => {
           </Form.Item>
           <Form.Item label=' 课程名称:' style={{ padding: '0 0 24px' }}>
             <Select
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               value={kcmcValue}
               allowClear
               placeholder="请选择"
@@ -391,7 +391,7 @@ const CourseRefund = () => {
           </Form.Item>
           <Form.Item label=' 课程班名称:' style={{ padding: '0 0 24px' }}>
             <Select
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               value={bjmcValue}
               allowClear
               placeholder="请选择"

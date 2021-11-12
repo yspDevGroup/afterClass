@@ -463,7 +463,7 @@ const ClassManagement = () => {
                   所属学年学期：
                   <Select
                     value={curXNXQId}
-                    style={{ width: 200 }}
+                    style={{ width: 160 }}
                     onChange={(value: string) => {
                       setCurXNXQId(value);
                     }}
@@ -481,7 +481,7 @@ const ClassManagement = () => {
                   <span>课程名称：</span>
                   <div>
                     <Select
-                      style={{ width: 200 }}
+                      style={{ width: 160 }}
                       value={kcmcValue}
                       allowClear
                       placeholder="请选择"
@@ -508,7 +508,7 @@ const ClassManagement = () => {
                   <span>课程班名称：</span>
                   <div>
                     <Select
-                      style={{ width: 200 }}
+                      style={{ width: 160 }}
                       value={bjmcValue}
                       allowClear
                       placeholder="请选择"
@@ -529,7 +529,7 @@ const ClassManagement = () => {
                   <div>
                     <Search
                       allowClear
-                      style={{ width: 200 }}
+                      style={{ width: 160 }}
                       onSearch={(value) => setTeacher(value)}
                     />
                   </div>
@@ -538,7 +538,7 @@ const ClassManagement = () => {
                   <span>场地名称：</span>
                   <div>
                     <Select
-                      style={{ width: 200 }}
+                      style={{ width: 160 }}
                       value={cdmcValue}
                       allowClear
                       placeholder="请选择"
@@ -555,7 +555,7 @@ const ClassManagement = () => {
                   </div>
                 </div>
               </div>
-              {/*  添加新的课程 路由跳转*/}
+              {/*  添加新的课程 路由跳转 */}
               <div style={{ position: 'absolute', right: 0, top: 0 }}>
                 <Button
                   style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
@@ -579,7 +579,7 @@ const ClassManagement = () => {
                 </Radio.Group>
               </span>
             </div>
-            {/* 课程表组件*/}
+            {/* 课程表组件 */}
             <ExcelTable
               className={''}
               columns={columns}

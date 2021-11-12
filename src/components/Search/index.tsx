@@ -1,5 +1,5 @@
 /*
- * @description: 
+ * @description:
  * @author: txx
  * @Date: 2021-05-24 16:33:45
  * @LastEditTime: 2021-06-02 08:49:21
@@ -25,7 +25,7 @@ const { Option } = Select;
 const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
   const [chainData, setchainData] = useState<ChainDataType>();// 联动数据
   const [currentXN, setCurrentXN] = useState<string>();// 学年默认值
-  const [terms, setTerms] = useState<{ label: string; value: string }[]>();// 联动数据中的学期数据   
+  const [terms, setTerms] = useState<{ label: string; value: string }[]>();// 联动数据中的学期数据
   const [curTerm, setCurTerm] = useState<string>();// 学期默认值
   const [curGride, setCurGride] = useState<string>();// 年级数据
 
@@ -115,7 +115,7 @@ const SearchComponent: FC<ISearchComponent> = ({ dataSource, onChange }) => {
                   placeholder={placeHolder}
                   onSearch={onSearch}
                   onPressEnter={(val) => { onChange("customSearch", (val.target as unknown as HTMLInputElement).value) }}
-                  style={{ width: 200 }}
+                  style={{ width: 160 }}
                 />
               </div>
             </div>;

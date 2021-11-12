@@ -486,7 +486,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                 所属学年学期：
                 <Select
                   value={curXNXQId}
-                  style={{ width: 200 }}
+                  style={{ width: 160 }}
                   onChange={(value: string) => {
                     setCurXNXQId(value);
                   }}
@@ -506,7 +506,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                 <span style={{ fontSize: 14, color: '#666' }}>课程名称：</span>
                 <div>
                   <Select
-                    style={{ width: 200 }}
+                    style={{ width: 160 }}
                     value={kcId || state?.id}
                     allowClear
                     placeholder="请选择"

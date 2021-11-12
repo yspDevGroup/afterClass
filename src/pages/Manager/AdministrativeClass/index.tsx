@@ -191,7 +191,7 @@ const AdministrativeClass = () => {
               <span style={{ fontSize: 14, color: '#666' }}>
                 年级名称：
                 <Select
-                  style={{ width: 200 }}
+                  style={{ width: 160 }}
                   value={NjId}
                   allowClear
                   placeholder="请选择"
@@ -205,7 +205,7 @@ const AdministrativeClass = () => {
               <span style={{ marginLeft: 20, fontSize: 14, color: '#666' }}>
                 班级选择：
                 <Select
-                  style={{ width: 200 }}
+                  style={{ width: 160 }}
                   value={BJId}
                   allowClear
                   placeholder="请选择"

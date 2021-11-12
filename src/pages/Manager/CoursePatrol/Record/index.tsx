@@ -170,7 +170,7 @@ const CoursePatrol = () => {
           所属学年学期：
           <Select
             value={curXNXQId}
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             onChange={(value: string) => {
               // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);

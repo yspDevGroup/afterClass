@@ -179,8 +179,14 @@ export async function exportTKJL(
     XSJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 课程数据Id */
+    KHKCSJId?: string;
     /** 班级ID */
     KHBJSJId?: string;
+    /** 课后服务类型Id */
+    KHFWLXId?: string;
+    /** 课后服务名称 */
+    KHFWMC?: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 页数 */

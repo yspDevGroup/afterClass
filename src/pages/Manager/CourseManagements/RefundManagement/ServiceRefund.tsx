@@ -334,7 +334,7 @@ const ServiceRefund = () => {
           所属学年学期：
           <Select
             value={curXNXQId}
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             onChange={(value: string) => {
               // 更新多选框的值
               setCurXNXQId(value);

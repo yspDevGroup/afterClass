@@ -1,11 +1,13 @@
 import { useModel, } from 'umi';
 import { Select, } from 'antd';
-import ProTable, { ProColumns } from '@ant-design/pro-table';
+import type { ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import PageContainer from '@/components/PageContainer';
 import { getKHXKJL } from '@/services/after-class/khxkjl'
 import { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
+
 const { Option } = Select;
 
 const CoursePatrol = () => {
@@ -14,8 +16,6 @@ const CoursePatrol = () => {
     const [curXNXQId, setCurXNXQId] = useState<any>();
     const [termList, setTermList] = useState<any>();
     const [dataSource, setDataSource] = useState<any>([]);
-
-
     const columns: ProColumns<API.KHXSDD>[] | undefined = [
         {
             title: '序号',
@@ -23,7 +23,6 @@ const CoursePatrol = () => {
             valueType: 'index',
             width: 58,
             align: 'center'
-
         },
         {
             title: '巡课日期',
@@ -36,14 +35,12 @@ const CoursePatrol = () => {
             dataIndex: '',
             key: '',
             align: 'center',
-
         },
         {
             title: '授课教师',
             dataIndex: '',
             key: '',
             align: 'center',
-
         },
         {
             title: '准时上课',
@@ -58,7 +55,6 @@ const CoursePatrol = () => {
             key: ' SFYDJS',
             align: 'center',
             render: (text) => text ? '是' : '否'
-
         },
         {
             title: '是否点名',
@@ -66,7 +62,6 @@ const CoursePatrol = () => {
             key: ' SFDM',
             align: 'center',
             render: (text) => text ? '是' : '否'
-
         },
         {
             title: '实到人数准确',
@@ -74,7 +69,6 @@ const CoursePatrol = () => {
             key: ' RSSFZQ',
             align: 'center',
             render: (text) => text ? '是' : '否'
-
         },
         {
             title: '学生应到人数',
@@ -111,17 +105,12 @@ const CoursePatrol = () => {
                             margin: '0 auto',
                         }}>{text}</div>
                     </Tooltip>
-
                 )
             }
         },
-
-
-
-
     ]
     useEffect(() => {
-        //获取学年学期数据的获取
+        // 获取学年学期数据的获取
         (async () => {
             const res = await queryXNXQList(currentUser?.xxId);
             // 获取到的整个列表的信息
@@ -142,10 +131,8 @@ const CoursePatrol = () => {
                 console.log(res.data?.rows);
 
                 setDataSource(res.data?.rows)
-
             }
         })()
-
     }, [curXNXQId])
     return (
         <PageContainer>
@@ -154,9 +141,9 @@ const CoursePatrol = () => {
                     所属学年学期：
                     <Select
                         value={curXNXQId}
-                        style={{ width: 200 }}
+                        style={{ width: 160 }}
                         onChange={(value: string) => {
-                            //选择不同学期从新更新页面的数据
+                            // 选择不同学期重新更新页面的数据
                             setCurXNXQId(value);
                         }}
                     >
@@ -179,12 +166,8 @@ const CoursePatrol = () => {
                     density: false,
                     reload: false,
                 }}
-
                 search={false}
-
             />
-
-
         </PageContainer>
     )
 }

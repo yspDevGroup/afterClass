@@ -58,7 +58,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
       width: 150,
       ellipsis: true,
       render: (test: any, record: any) => {
-        return moment(record?.KKSJ).format('YYYY.MM.DD') + '~' + moment(record?.JKSJ).format('YYYY.MM.DD');
+        return `${moment(record?.KKSJ).format('YYYY.MM.DD')  }~${  moment(record?.JKSJ).format('YYYY.MM.DD')}`;
       },
     },
     {
@@ -158,7 +158,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
   const ChoseSelect = async (SelectData: string) => {
     const res3 = await getClasses({
       XNXQId: SelectData,
-      KHKCSJId: KHKCSJId
+      KHKCSJId
     });
     console.log('res3: ', res3);
     if (res3.status === 'ok') {
@@ -186,7 +186,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
           所属学年学期：
           <Select
             value={curXNXQId}
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             onChange={(value: string) => {
               // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);

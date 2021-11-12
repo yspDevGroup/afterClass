@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-19 16:18:59
+ * @LastEditTime: 2021-11-12 13:32:39
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -29,7 +29,7 @@ type selectType = { label: string; value: string };
  */
 const { Search } = Input;
 const OrderInquiry = (props: any) => {
-  const DDZT = props.TabState;
+  const DDZT: string = props.TabState;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
@@ -51,7 +51,6 @@ const OrderInquiry = (props: any) => {
           // 学期列表
           setTermList(newData);
         }
-      } else {
       }
     })();
   }, []);
@@ -124,6 +123,17 @@ const OrderInquiry = (props: any) => {
       },
     },
     {
+      title: '服务类型',
+      dataIndex: 'KHZZFW',
+      key: 'KHZZFW',
+      align: 'center',
+      width: 120,
+      ellipsis: true,
+      render: (_text: any, record: any) => {
+        return <div>{record?.KHXXZZFW.KHZZFW.FWMC}</div>;
+      },
+    },
+    {
       title: '订单费用(元)',
       dataIndex: 'DDFY',
       key: 'DDFY',
@@ -175,7 +185,7 @@ const OrderInquiry = (props: any) => {
         DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
         DDLX: 1
       });
-      if (res.status === 'ok') {
+      if (res.status === 'ok' && res.data) {
         window.location.href = res.data;
         setLoading(false);
       } else {
@@ -192,7 +202,7 @@ const OrderInquiry = (props: any) => {
             所属学年学期：
             <Select
               value={curXNXQId}
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               onChange={(value: string) => {
                 setCurXNXQId(value);
               }}
@@ -212,7 +222,7 @@ const OrderInquiry = (props: any) => {
           <div>
             <Search
               allowClear
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               onSearch={(val) => {
                 setName(val)
               }}
