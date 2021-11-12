@@ -264,10 +264,7 @@ const SchoolEditor = (props: any) => {
           label: '学校名称',
           name: 'XXMC',
           key: 'XXMC',
-          rules: [{ required: true, message: '该项不能为空，请输入' }, {
-            pattern: new RegExp(/^[^_IOZSVa-z\W]{2}\d{6}[^_IOZSVa-z\W]{10}$/g),
-            message: '请输入正确的统一社会信用代码'
-          }],
+          rules: [{ required: true, message: '该项不能为空，请输入' }],
           span: 12
         },
         {

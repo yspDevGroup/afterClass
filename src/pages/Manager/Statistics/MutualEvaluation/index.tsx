@@ -110,7 +110,8 @@ const MutualEvaluation: React.FC = () => {
       width: 180,
       align: 'center',
       render: (test: any) => {
-        return <Rate count={5} defaultValue={test} disabled={true} />;
+        const fs = Number(Number(test).toFixed(1)) || 0;
+        return <Rate allowHalf defaultValue={fs} disabled={true} />;
       },
     },
     {
