@@ -11,7 +11,7 @@ export async function JYJGSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -30,7 +30,7 @@ export async function JYJGSJ(
     message?: string;
   }>(`/jyjgsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -44,10 +44,10 @@ export async function deleteJYJGSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jyjgsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -117,13 +117,13 @@ export async function updateJYJGSJ(
   body: API.UpdateJYJGSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jyjgsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -359,6 +359,7 @@ export async function getScreenInfo(
 export async function getCoursesEvaluation(
   body: {
     XZQHM?: string;
+    SXZQHM?: string;
     /** 课程名称 */
     KCMC?: string;
     /** 课程类型 */
@@ -456,6 +457,7 @@ export async function getCoursesInfo(
 export async function getAllCoursesInfo(
   body: {
     XZQHM?: string;
+    SXZQHM?: string;
     /** 课程名称 */
     KCMC?: string;
     /** 课程类型 */
@@ -651,6 +653,58 @@ export async function getEducationStatistic(
   options?: { [key: string]: any },
 ) {
   return request<any>('/jyjgsj/getEducationStatistic', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 市教育局查看区县教育局热门课程 POST /jyjgsj/getHotclass */
+export async function getHotclass(
+  body: {
+    /** 行政区划码 */
+    XZQHM?: string;
+    /** 学年 */
+    XN?: string;
+    /** 学期 */
+    XQ?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/jyjgsj/getHotclass', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 市教育局查看区县教育局好评课程 POST /jyjgsj/getGoodClass */
+export async function getGoodClass(
+  body: {
+    /** 行政区划码 */
+    XZQHM?: string;
+    /** 学年 */
+    XN?: string;
+    /** 学期 */
+    XQ?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/jyjgsj/getGoodClass', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

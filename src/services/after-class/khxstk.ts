@@ -11,7 +11,7 @@ export async function getKHXSTK(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -42,7 +42,7 @@ export async function getKHXSTK(
     message?: string;
   }>(`/khxstk/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -56,10 +56,10 @@ export async function deleteKHXSTK(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxstk/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -156,13 +156,13 @@ export async function updateKHXSTK(
   body: API.UpdateKHXSTK,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxstk/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -179,8 +179,14 @@ export async function exportTKJL(
     XSJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 课程数据Id */
+    KHKCSJId?: string;
     /** 班级ID */
     KHBJSJId?: string;
+    /** 课后服务类型Id */
+    KHFWLXId?: string;
+    /** 课后服务名称 */
+    KHFWMC?: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 页数 */
