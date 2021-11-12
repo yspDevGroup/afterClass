@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-11-11 14:51:01
+ * @LastEditTime: 2021-11-12 10:20:04
  * @LastEditors: Sissle Lynn
  */
 
@@ -227,7 +227,6 @@ export const CurdayCourse = async (type?: string, xxId?: string, userId?: string
   const totalList = data?.filter((item: { days: any[] }) => {
     return item.days.find((v: { day: string }) => v.day === myDate)
   });
-
   let courseList: any[] = [];
   totalList?.forEach((item: { detail: any[]; days?: any[] }) => {
     const { detail, days } = item;
@@ -263,7 +262,6 @@ export const CurdayCourse = async (type?: string, xxId?: string, userId?: string
       courseList = [...courseList, ...newArr];
     }
   })
-
   // 查询今日是否存在调代课，请假的课程
   if (type === 'teacher') {
     // 教师端接口

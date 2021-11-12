@@ -50,8 +50,6 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
     const ParentalIdentitys = `${key.value}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
-    // 数据信息重新更新获取
-    await ParentHomeData('student', currentUser?.xxId, key.key?.split('+')[0], key.key?.split('+')[1], true);
     setReload(true);
   };
   const fetchData = async () => {
@@ -75,10 +73,17 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
   }, [StorageXSId]);
 
   useEffect(() => {
-    if (reload) {
-      fetchData();
-      setReload(false);
-    }
+    (async () => {
+      if (reload) {
+        // 数据信息重新更新获取
+        const studentId: string =
+          StorageXSId || student?.[0].XSJBSJId || testStudentId;
+        const studentNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
+        await ParentHomeData('student', currentUser?.xxId, studentId, studentNjId, true);
+        fetchData();
+        setReload(false);
+      }
+    })()
   }, [reload])
   return (
     <div className={styles.minePage}>

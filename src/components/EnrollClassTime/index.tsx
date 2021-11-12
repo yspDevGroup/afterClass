@@ -1,20 +1,23 @@
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
-import styles from './index.less';
+import moment from 'moment';
+import dayjs from 'dayjs';
+import TimeRight from './TimeRight';
 import ListComp from '../ListComponent';
+import WWOpenDataCom from '../WWOpenDataCom';
 import type { ListData } from '../ListComponent/data';
+import { ClassStatus } from '@/utils/Timefunction';
+import { CurdayCourse } from '@/services/local-services/mobileHome';
+
+import styles from './index.less';
 import noData from '@/assets/today.png';
 import noData1 from '@/assets/today1.png';
-import moment from 'moment';
-import { CurdayCourse } from '@/services/local-services/mobileHome';
-import { ClassStatus } from '@/utils/Timefunction';
-import TimeRight from './TimeRight';
-import WWOpenDataCom from '../WWOpenDataCom';
 
 const EnrollClassTime = (props: { type: string; xxId?: string; userId?: string; njId?: string; }) => {
   const { type, xxId, userId, njId, } = props;
   const [resource, setResource] = useState<any>(); // 当日课程状态
   const [datasourse, setDatasourse] = useState<ListData>(); // 今日课程中的数据
+  const myDate = dayjs().format('YYYY-MM-DD');
   /**
    * 针对今日课程安排进行数据梳理
    */
@@ -74,7 +77,7 @@ const EnrollClassTime = (props: { type: string; xxId?: string; userId?: string; 
   useEffect(() => {
     (async () => {
       // 获取处理后的今日课程数据
-      const { total, courseList } = await CurdayCourse(type, xxId, userId, njId);
+      const { total, courseList } = await CurdayCourse(type, xxId, userId, myDate, njId);
       const { curCourse } = resetList(courseList);
       setResource(total);
       const todayList: ListData = {
