@@ -24,13 +24,15 @@ const MechanismInfo = (props: {
       onClose={onMechanismInfoClose}
       visible={visibleMechanismInfo}
     >
-      <Form initialValues={info} className={classes.forms} labelCol={{ span: 6, offset: 0 }}>
+      <Form initialValues={info} className={classes.forms} labelCol={{ span: 7, offset: 0 }}>
         <Form.Item name="id" hidden>
           <Input disabled />
         </Form.Item>
         <Form.Item name="QYTB" key="QYTB" label="企业LOGO：">
           <UploadImage
             key="QYTBTP"
+            imgWidth={80}
+            imgHeight={80}
             imageurl={info?.QYTB}
             disabled={disabled}
             upurl="/api/upload/uploadFile?type=badge&plat=agency"
