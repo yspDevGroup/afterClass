@@ -406,7 +406,7 @@ const CourseRefund = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item style={{ flex: 'auto' }}>
+          <Form.Item style={{ flex: 'auto', margin: 0}}>
             <Button style={{ float: 'right' }} icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
               导出
             </Button>
