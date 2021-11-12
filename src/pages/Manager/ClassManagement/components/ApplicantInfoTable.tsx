@@ -131,7 +131,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                           XXJBSJId: currentUser?.xxId,
                           XSJBSJId: record?.XSJBSJ?.id,
                           DDLX: 0,
-                          bjmc: KCBDatas?.BJMC
+                          KHBJSJId:KCBDatas?.id,
                         })
                         if (resgetAllKHXSDD.status === 'ok') {
                           // 创建退款
