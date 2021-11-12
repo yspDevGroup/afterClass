@@ -20,6 +20,7 @@ import PromptInformation from '@/components/PromptInformation';
 import { enHenceMsg } from '@/utils/utils';
 import { useModel } from 'umi';
 import { getAllFJLX } from '@/services/after-class/fjlx';
+import { getAllXXJBSJ } from '@/services/after-class/xxjbsj';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -34,15 +35,19 @@ const RoomManagement = () => {
   const [current, setCurrent] = useState<RoomItem>();
   // 设置表单的查询更新
   const [name, setName] = useState<string>('');
-
+  // 设置场地信息
   const [CDLXId, setCDLXId] = useState<string>('');
   const [dataLX, setDataLX] = useState<any>([]);
+  // 设置学校信息
+  const [SSXQId, setSSXQId] = useState<string>('');
+  const [SSXQData, setSSXQData] = useState<any>([]);
 
   const [dataSource] = useState<SearchDataType>(searchData);
   const [opens, setopens] = useState<boolean>(false);
   const [xQLabelItem, setXQLabelItem] = useState('');
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+
   const guanbi = () => {
     setopens(false);
     setModalVisible(true);
@@ -217,6 +222,24 @@ const RoomManagement = () => {
 
   useEffect(() => {
     (async () => {
+      // 获取校区列表
+      const res1: any = await getAllXXJBSJ({
+        xxId: currentUser?.xxId,
+        page: 0,
+        pageSize: 0,
+      });
+      if (res1.status === 'ok') {
+        // console.log('res1', res1);
+
+        const v = res1?.data?.rows.map((item: any) => {
+          return { label: item.XXMC, value: item.id };
+        });
+        if (v?.length > 0) {
+          setSSXQId(v[0].value);
+          setSSXQData(v);
+        }
+      }
+
       const response = await getAllFJLX({
         name: '',
         XXJBSJId: currentUser?.xxId,
@@ -283,10 +306,34 @@ const RoomManagement = () => {
         }}
         headerTitle={
           <>
-            <SearchComponent
-              dataSource={[dataSource[0]]}
-              onChange={(type: string, value: string) => handlerSearch(type, value, true)}
-            />
+            <div style={{ marginLeft: '20px' }}>
+              <div className="ant-col ant-form-item-label">
+                <label title="所属校区: ">所属校区</label>
+              </div>
+              <Select
+                placeholder="所属校区"
+                onChange={(value) => {
+                  console.log('value', value);
+                  setSSXQId(value);
+                }}
+                value={SSXQId}
+                style={{ width: '120px' }}
+              >
+                {SSXQData &&
+                  SSXQData.length &&
+                  SSXQData?.map((op: any) => (
+                    <Select.Option value={op.value} key={op.value}>
+                      {op.label}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </div>
+            <div style={{ marginLeft: '20px' }}>
+              <SearchComponent
+                dataSource={[dataSource[0]]}
+                onChange={(type: string, value: string) => handlerSearch(type, value, true)}
+              />
+            </div>
             <div style={{ marginLeft: '20px' }}>
               <div className="ant-col ant-form-item-label">
                 <label title="场地类型: ">场地类型</label>
