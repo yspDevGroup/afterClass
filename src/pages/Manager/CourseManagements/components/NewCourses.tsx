@@ -126,7 +126,7 @@ const NewCourses = (props: PropsType) => {
     },
     {
       type: 'input',
-      label: '名称:',
+      label: '课程名称：',
       name: 'KCMC',
       key: 'KCMC',
       width: '100%',
@@ -141,7 +141,7 @@ const NewCourses = (props: PropsType) => {
     },
     {
       type: 'select',
-      label: '课程类型',
+      label: '课程类型：',
       name: 'KHKCLXId',
       key: 'KHKCLXId',
       rules: [{ required: true, message: '请填选择课程类型' }],
@@ -150,7 +150,7 @@ const NewCourses = (props: PropsType) => {
     },
     {
       type: 'select',
-      label: '适用年级',
+      label: '适用年级：',
       name: 'njIds',
       key: 'njIds',
       rules: [{ required: true, message: '请填选择适用年级' }],
@@ -160,7 +160,7 @@ const NewCourses = (props: PropsType) => {
     },
     {
       type: 'select',
-      label: '课程颜色',
+      label: '课程颜色：',
       name: 'KBYS',
       key: 'KBYS',
       disabled: readonly,
@@ -177,7 +177,7 @@ const NewCourses = (props: PropsType) => {
     },
     {
       type: 'uploadImage',
-      label: '封面：',
+      label: '课程封面：',
       name: 'KCTP',
       key: 'KCTP',
       disabled: readonly,
@@ -190,7 +190,7 @@ const NewCourses = (props: PropsType) => {
     },
     {
       type: 'textArea',
-      label: '简 介:',
+      label: '课程简介：',
       name: 'KCMS',
       disabled: readonly,
       key: 'KCMS',
