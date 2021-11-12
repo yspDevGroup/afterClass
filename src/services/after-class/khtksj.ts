@@ -28,8 +28,14 @@ export async function getKHTKSJ(
     XSXM?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 课后服务类型 */
+    KHFWLX?: string;
+    /** 课后服务名称 */
+    KHFWMC?: string;
     /** 课后服务班级ID */
     KHBJSJId?: string;
+    /** 课后课程ID */
+    KHKCSJId?: string;
     /** 退课类型，0:退课;1:停餐 */
     LX?: number;
     /** 学校ID */

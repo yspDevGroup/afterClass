@@ -229,7 +229,7 @@ const SubstituteFor: React.FC = () => {
             value={curXNXQId}
             style={{ width: 160 }}
             onChange={(value: string) => {
-              // 选择不同学期从新更新页面的数据
+              // 选择不同学期重新更新页面的数据
               setCurXNXQId(value);
             }}
           >

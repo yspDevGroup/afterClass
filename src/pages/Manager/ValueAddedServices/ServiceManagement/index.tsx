@@ -102,7 +102,7 @@ const ServiceManagement = () => {
         pageSize: 0,
       });
       if (result.status === 'ok') {
-        setLBData(result!.data!.rows!);
+        setLBData(result?.data?.rows);
       }
     })();
   }, []);

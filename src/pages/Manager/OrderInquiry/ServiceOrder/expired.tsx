@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-11-12 13:32:39
+ * @LastEditTime: 2021-11-12 15:22:26
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -18,6 +18,8 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { DownloadOutlined } from '@ant-design/icons';
+import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
+import { getKHZZFW } from '@/services/after-class/khzzfw';
 
 const { Option } = Select;
 
@@ -37,6 +39,11 @@ const OrderInquiry = (props: any) => {
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [termList, setTermList] = useState<any>();
   const [name, setName] = useState<string>();
+  const [fwlxList, setFwlxList] = useState<API.KHZZFW[]>();
+  const [FWLX, setFWLX] = useState<string>();
+  const [FWLXId, setFWLXId] = useState<string>();
+  const [fwList, setFwList] = useState<API.KHXXZZFW[]>();
+  const [FWMC, setFWMC] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
@@ -46,19 +53,46 @@ const OrderInquiry = (props: any) => {
       const curTerm = res.current;
       if (newData?.length) {
         if (curTerm) {
-          // 默认续期
+          // 默认学期
           setCurXNXQId(curTerm.id);
           // 学期列表
           setTermList(newData);
         }
       }
+      // 服务类别的获取
+      const result = await getKHZZFW({
+        XXJBSJId: currentUser?.xxId,
+        page: 0,
+        pageSize: 0,
+      });
+      if (result.status === 'ok') {
+        setFwlxList(result?.data?.rows);
+      }
     })();
   }, []);
+  useEffect(() => {
+    (async () => {
+      const data = {
+        XXJBSJId: currentUser?.xxId,
+        XNXQId: curXNXQId || '',
+        KHZZFWId: FWLXId,
+        FWZT: 1,
+        page: 0,
+        pageSize: 0,
+      };
+      const res = await getKHXXZZFW(data);
+      if (res.status === 'ok') {
+        setFwList(res?.data?.rows);
+      }
+    })()
+  }, [curXNXQId, FWLXId])
   useEffect(() => {
     (async () => {
       const res = await getAllKHXSDD({
         XNXQId: curXNXQId,
         XSXM: name,
+        FWMC,
+        FWLX,
         // 父传子判断要请求的状态
         DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
         DDLX: 1
@@ -67,7 +101,7 @@ const OrderInquiry = (props: any) => {
         setDataSource(res.data)
       }
     })()
-  }, [curXNXQId, name])
+  }, [curXNXQId, name, FWMC, FWLX])
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -205,12 +239,59 @@ const OrderInquiry = (props: any) => {
               style={{ width: 160 }}
               onChange={(value: string) => {
                 setCurXNXQId(value);
+                setFWLX(undefined);
+                setFWLXId(undefined);
+                setFWMC(undefined);
               }}
             >
               {termList?.map((item: any) => {
                 return (
                   <Option key={item.value} value={item.value}>
                     {item.text}
+                  </Option>
+                );
+              })}
+            </Select>
+          </span>
+        </div>
+        <div>
+          <span>
+            服务类别：
+            <Select
+              style={{ width: 160 }}
+              allowClear
+              value={FWLX}
+              onChange={(value: string, option: any) => {
+                setFWLX(value);
+                setFWLXId(option.key);
+                setFWMC(undefined);
+              }}
+            >
+              {fwlxList?.map((item: API.KHZZFW) => {
+                return (
+                  <Option key={item.id} value={item.FWMC!}>
+                    {item.FWMC}
+                  </Option>
+                );
+              })}
+            </Select>
+          </span>
+        </div>
+        <div>
+          <span>
+            服务名称：
+            <Select
+              value={FWMC}
+              style={{ width: 160 }}
+              allowClear
+              onChange={(value: string) => {
+                setFWMC(value);
+              }}
+            >
+              {fwList?.map((item: API.KHXXZZFW) => {
+                return (
+                  <Option key={item.FWMC} value={item.FWMC!}>
+                    {item.FWMC}
                   </Option>
                 );
               })}

@@ -8,24 +8,49 @@ import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 
 import Style from './index.less';
 import { createKHXSTK } from '@/services/after-class/khxstk';
-import moment from 'moment';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { getKHZZFW } from '@/services/after-class/khzzfw';
+import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 
 const { Option } = Select;
-const { TextArea } = Input;
-// 退课
+const { TextArea, Search } = Input;
+
 const ServiceUnsubscribe = () => {
   // 获取到当前学校的一些信息
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
+  const [dataSource, setDataSource] = useState<API.KHTKSJ[] | undefined>();
   // 学年学期列表数据
   const [termList, setTermList] = useState<any>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
+  // 学生姓名选择
+  const [name, setName] = useState<string>();
+  const [fwlxList, setFwlxList] = useState<API.KHZZFW[]>();
+  const [FWLX, setFWLX] = useState<string>();
+  const [FWLXId, setFWLXId] = useState<string>();
+  const [fwList, setFwList] = useState<API.KHXXZZFW[]>();
+  const [FWMC, setFWMC] = useState<string>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
+
+  const getData = async () => {
+    const resAll = await getKHTKSJ({
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId,
+      XSXM: name,
+      KHFWMC: FWMC,
+      KHFWLX: FWLX,
+      LX: 1
+    });
+    if (resAll.status === 'ok') {
+      setDataSource(resAll?.data?.rows);
+    } else {
+      setDataSource([]);
+    }
+  };
   useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
@@ -37,14 +62,38 @@ const ServiceUnsubscribe = () => {
         if (curTerm) {
           setCurXNXQId(curTerm.id);
           setTermList(newData);
-          //  拿到默认值 发送请求
         }
+      }
+      // 服务类别的获取
+      const result = await getKHZZFW({
+        XXJBSJId: currentUser?.xxId,
+        page: 0,
+        pageSize: 0,
+      });
+      if (result.status === 'ok') {
+        setFwlxList(result?.data?.rows);
       }
     })();
   }, []);
   useEffect(() => {
-    actionRef.current?.reload();
-  }, [curXNXQId]);
+    (async () => {
+      const data = {
+        XXJBSJId: currentUser?.xxId,
+        XNXQId: curXNXQId || '',
+        KHZZFWId: FWLXId,
+        FWZT: 1,
+        page: 0,
+        pageSize: 0,
+      };
+      const res = await getKHXXZZFW(data);
+      if (res.status === 'ok') {
+        setFwList(res?.data?.rows);
+      }
+    })()
+  }, [curXNXQId, FWLXId])
+  useEffect(() => {
+    getData();
+  }, [curXNXQId, name, FWMC, FWLX]);
   /// table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -207,8 +256,8 @@ const ServiceUnsubscribe = () => {
       width: 90,
     },
   ];
-  const handleSubmit = async (params: any) => {
-    const { ZT, BZ } = params;
+  const handleSubmit = async (param: any) => {
+    const { ZT, BZ } = param;
 
     let DKFY: any;
     const a1 = new Date(current?.KHXXZZFW?.KSRQ).getTime();
@@ -224,15 +273,15 @@ const ServiceUnsubscribe = () => {
     try {
       if (current.id) {
         const ids = { id: current.id };
-        const body = { ZT, BZ, JZGJBSJId: currentUser?.JSId || testTeacherId};
+        const body = { ZT, BZ, JZGJBSJId: currentUser?.JSId || testTeacherId };
         const res = await updateKHTKSJ(ids, body);
         if (res.status === 'ok') {
           if (ZT === 2) {
             message.success('服务退订申请已驳回');
           } else if (current?.KHBJSJ?.FY !== 0) {
-            if(Number(DKFY) <=0){
+            if (Number(DKFY) <= 0) {
               message.success('服务退订成功,退款金额为0元，无需退款')
-            }else{
+            } else {
               const result = await createKHXSTK({
                 KHTKSJId: current?.id,
                 KHXXZZFWId: current?.KHXXZZFW?.id,
@@ -277,6 +326,9 @@ const ServiceUnsubscribe = () => {
             onChange={(value: string) => {
               // 更新多选框的值
               setCurXNXQId(value);
+              setFWLX(undefined);
+              setFWLXId(undefined);
+              setFWMC(undefined);
             }}
           >
             {termList?.map((item: any) => {
@@ -288,37 +340,69 @@ const ServiceUnsubscribe = () => {
             })}
           </Select>
         </span>
+        <span style={{ marginLeft: 16 }}>
+          服务类别：
+          <Select
+            style={{ width: 160 }}
+            allowClear
+            value={FWLX}
+            onChange={(value: string, option: any) => {
+              setFWLX(value);
+              setFWLXId(option?.key);
+              setFWMC(undefined);
+            }}
+          >
+            {fwlxList?.map((item: API.KHZZFW) => {
+              return (
+                <Option key={item.id} value={item.FWMC!}>
+                  {item.FWMC}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
+        <span style={{ marginLeft: 16 }}>
+          服务名称：
+          <Select
+            value={FWMC}
+            style={{ width: 160 }}
+            allowClear
+            onChange={(value: string) => {
+              setFWMC(value);
+            }}
+          >
+            {fwList?.map((item: API.KHXXZZFW) => {
+              return (
+                <Option key={item.FWMC} value={item.FWMC!}>
+                  {item.FWMC}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
+        <span style={{ marginLeft: 16 }}>
+          学生名称：
+          <Search
+            allowClear
+            style={{ width: 160 }}
+            onSearch={(val) => {
+              setName(val)
+            }}
+          />
+        </span>
       </div>
       <div>
         <ProTable<any>
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
+          dataSource={dataSource}
           pagination={{
             showQuickJumper: true,
             pageSize: 10,
             defaultCurrent: 1,
           }}
           scroll={{ x: 1300 }}
-          request={async () => {
-            const resAll = await getKHTKSJ({
-              XXJBSJId: currentUser?.xxId,
-              XNXQId: curXNXQId,
-              LX: 1
-            });
-            if (resAll.status === 'ok') {
-              return {
-                data: resAll?.data?.rows,
-                success: true,
-                total: resAll?.data?.count,
-              };
-            }
-            return {
-              data: [],
-              success: false,
-              total: 0,
-            };
-          }}
           options={{
             setting: false,
             fullScreen: false,
