@@ -24,7 +24,7 @@ const PutRecord = (props: any) => {
       JZGJBSJId: jsid,
       XXJBSJId: currentUser?.xxId,
     });
-    if(resKHKTFC.status === 'ok'){
+    if (resKHKTFC.status === 'ok') {
       message.success('发布成功！');
       history.go(-1);
     }
@@ -47,21 +47,21 @@ const PutRecord = (props: any) => {
               setImgUrl(value);
             }}
           />
-          <div className={styles.footer}>
-            <Row justify="center" >
-              <Button
-                type="primary"
-                ghost
-                style={{ border: 'none', boxShadow: 'none' }}
-                onClick={() => {
-                  if (form) form.submit();
-                }}
-              >
-                提交
-              </Button>
-            </Row>
-          </div>
         </Form>
+      </div>
+      <div className={styles.footer}>
+        <Row justify="center" >
+          <Button
+            type="primary"
+            ghost
+            style={{ border: 'none', boxShadow: 'none' }}
+            onClick={() => {
+              if (form) form.submit();
+            }}
+          >
+            提交
+          </Button>
+        </Row>
       </div>
     </div>
   );
