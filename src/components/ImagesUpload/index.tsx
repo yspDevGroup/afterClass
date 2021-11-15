@@ -45,6 +45,7 @@ const ImagesUpload = (props: {
   const handleCancel = () => setPreviewVisible(false);
 
   const handleChange = (info: any) => {
+    console.log('info: ', info);
     if (info.file.status === 'uploading') {
       // setLoading(true);
       // return;
@@ -61,6 +62,7 @@ const ImagesUpload = (props: {
           }
         })
         onValueChange(urlStr);
+        console.log('urlStr: ', urlStr);
       } else {
         message.success('上传失败');
         // setLoading(false);
