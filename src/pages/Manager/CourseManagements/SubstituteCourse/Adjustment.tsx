@@ -231,7 +231,7 @@ const Adjustment: React.FC = () => {
           所属学年学期：
           <Select
             value={curXNXQId}
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             onChange={(value: string) => {
               // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);
@@ -250,7 +250,7 @@ const Adjustment: React.FC = () => {
         <span style={{ marginLeft: 16 }}>
           状态：
           <Select
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             allowClear
             onChange={(value: any) => {
               setSPZT([value]);

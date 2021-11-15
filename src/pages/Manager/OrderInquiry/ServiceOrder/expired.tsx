@@ -2,14 +2,14 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-10-19 16:18:59
+ * @LastEditTime: 2021-11-12 15:22:26
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, Select } from 'antd';
-import { getAllKHXSDD } from '@/services/after-class/khxsdd';
+import { Button, Input, message, Select, Spin } from 'antd';
+import { exportStudentOrders, getAllKHXSDD } from '@/services/after-class/khxsdd';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 
 import styles from './index.less';
@@ -17,6 +17,9 @@ import { useModel } from 'umi';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { DownloadOutlined } from '@ant-design/icons';
+import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
+import { getKHZZFW } from '@/services/after-class/khzzfw';
 
 const { Option } = Select;
 
@@ -28,7 +31,7 @@ type selectType = { label: string; value: string };
  */
 const { Search } = Input;
 const OrderInquiry = (props: any) => {
-  const DDZT = props.TabState;
+  const DDZT: string = props.TabState;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
@@ -36,6 +39,12 @@ const OrderInquiry = (props: any) => {
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [termList, setTermList] = useState<any>();
   const [name, setName] = useState<string>();
+  const [fwlxList, setFwlxList] = useState<API.KHZZFW[]>();
+  const [FWLX, setFWLX] = useState<string>();
+  const [FWLXId, setFWLXId] = useState<string>();
+  const [fwList, setFwList] = useState<API.KHXXZZFW[]>();
+  const [FWMC, setFWMC] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
       // 学年学期数据的获取
@@ -44,29 +53,55 @@ const OrderInquiry = (props: any) => {
       const curTerm = res.current;
       if (newData?.length) {
         if (curTerm) {
-          // 默认续期
+          // 默认学期
           setCurXNXQId(curTerm.id);
           // 学期列表
           setTermList(newData);
         }
-      } else {
+      }
+      // 服务类别的获取
+      const result = await getKHZZFW({
+        XXJBSJId: currentUser?.xxId,
+        page: 0,
+        pageSize: 0,
+      });
+      if (result.status === 'ok') {
+        setFwlxList(result?.data?.rows);
       }
     })();
   }, []);
   useEffect(() => {
     (async () => {
+      const data = {
+        XXJBSJId: currentUser?.xxId,
+        XNXQId: curXNXQId || '',
+        KHZZFWId: FWLXId,
+        FWZT: 1,
+        page: 0,
+        pageSize: 0,
+      };
+      const res = await getKHXXZZFW(data);
+      if (res.status === 'ok') {
+        setFwList(res?.data?.rows);
+      }
+    })()
+  }, [curXNXQId, FWLXId])
+  useEffect(() => {
+    (async () => {
       const res = await getAllKHXSDD({
         XNXQId: curXNXQId,
         XSXM: name,
+        FWMC,
+        FWLX,
         // 父传子判断要请求的状态
-        DDZT:DDZT === '已付款' ? ['已付款','已退款']:[DDZT],
+        DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
         DDLX: 1
       })
       if (res.status === 'ok') {
         setDataSource(res.data)
       }
     })()
-  }, [curXNXQId,name])
+  }, [curXNXQId, name, FWMC, FWLX])
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -122,6 +157,17 @@ const OrderInquiry = (props: any) => {
       },
     },
     {
+      title: '服务类型',
+      dataIndex: 'KHZZFW',
+      key: 'KHZZFW',
+      align: 'center',
+      width: 120,
+      ellipsis: true,
+      render: (_text: any, record: any) => {
+        return <div>{record?.KHXXZZFW.KHZZFW.FWMC}</div>;
+      },
+    },
+    {
       title: '订单费用(元)',
       dataIndex: 'DDFY',
       key: 'DDFY',
@@ -163,6 +209,25 @@ const OrderInquiry = (props: any) => {
       },
     },
   ];
+  const onExportClick = () => {
+    setLoading(true);
+    (async () => {
+      const res = await exportStudentOrders({
+        XNXQId: curXNXQId,
+        XSXM: name,
+        // 父传子判断要请求的状态
+        DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
+        DDLX: 1
+      });
+      if (res.status === 'ok' && res.data) {
+        window.location.href = res.data;
+        setLoading(false);
+      } else {
+        message.error(res.message);
+        setLoading(false);
+      }
+    })();
+  };
   return (
     <>
       <div className={styles.searchs}>
@@ -171,9 +236,12 @@ const OrderInquiry = (props: any) => {
             所属学年学期：
             <Select
               value={curXNXQId}
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               onChange={(value: string) => {
                 setCurXNXQId(value);
+                setFWLX(undefined);
+                setFWLXId(undefined);
+                setFWMC(undefined);
               }}
             >
               {termList?.map((item: any) => {
@@ -187,38 +255,89 @@ const OrderInquiry = (props: any) => {
           </span>
         </div>
         <div>
+          <span>
+            服务类别：
+            <Select
+              style={{ width: 160 }}
+              allowClear
+              value={FWLX}
+              onChange={(value: string, option: any) => {
+                setFWLX(value);
+                setFWLXId(option.key);
+                setFWMC(undefined);
+              }}
+            >
+              {fwlxList?.map((item: API.KHZZFW) => {
+                return (
+                  <Option key={item.id} value={item.FWMC!}>
+                    {item.FWMC}
+                  </Option>
+                );
+              })}
+            </Select>
+          </span>
+        </div>
+        <div>
+          <span>
+            服务名称：
+            <Select
+              value={FWMC}
+              style={{ width: 160 }}
+              allowClear
+              onChange={(value: string) => {
+                setFWMC(value);
+              }}
+            >
+              {fwList?.map((item: API.KHXXZZFW) => {
+                return (
+                  <Option key={item.FWMC} value={item.FWMC!}>
+                    {item.FWMC}
+                  </Option>
+                );
+              })}
+            </Select>
+          </span>
+        </div>
+        <div>
           <span>学生名称：</span>
           <div>
             <Search
               allowClear
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               onSearch={(val) => {
                 setName(val)
               }}
             />
           </div>
         </div>
+        <span style={{ marginLeft: 'auto' }}>
+          <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+            导出
+          </Button>
+        </span>
       </div>
       <div className={styles.tableStyle}>
-        <ProTable<any>
-          actionRef={actionRef}
-          columns={columns}
-          rowKey="id"
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: DDZT !== '已付款' ? 1000 : 1300 }}
-          dataSource={dataSource}
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          search={false}
-        />
+        <Spin spinning={loading}>
+          <ProTable<any>
+            actionRef={actionRef}
+            columns={columns}
+            rowKey="id"
+            pagination={{
+              showQuickJumper: true,
+              pageSize: 10,
+              defaultCurrent: 1,
+            }}
+            scroll={{ x: DDZT !== '已付款' ? 1000 : 1300 }}
+            dataSource={dataSource}
+            options={{
+              setting: false,
+              fullScreen: false,
+              density: false,
+              reload: false,
+            }}
+            search={false}
+          />
+        </Spin>
       </div>
     </>
   );

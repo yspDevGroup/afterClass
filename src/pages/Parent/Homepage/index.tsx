@@ -34,8 +34,8 @@ const PersonalHomepage = () => {
   useEffect(() => {
     (async () => {
       const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId);
-      const { courseStatus } = oriData.data;
-      setCourseStatus(courseStatus);
+      const { courseStatus: newStatus } = oriData.data;
+      setCourseStatus(newStatus);
     })()
   }, [StorageXSId]);
   useEffect(() => {

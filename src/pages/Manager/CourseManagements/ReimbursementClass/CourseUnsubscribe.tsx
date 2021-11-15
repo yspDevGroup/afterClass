@@ -9,22 +9,66 @@ import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 import Style from './index.less';
 import { createKHXSTK } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { getAllClasses } from '@/services/after-class/khbjsj';
+import { getAllCourses } from '@/services/after-class/khkcsj';
 
 const { Option } = Select;
-const { TextArea } = Input;
-// 退课
+const { TextArea, Search } = Input;
+
+type selectType = { label: string; value: string };
 const CourseUnsubscribe = () => {
   // 获取到当前学校的一些信息
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
+  const [dataSource, setDataSource] = useState<API.KHTKSJ[] | undefined>();
   // 学年学期列表数据
   const [termList, setTermList] = useState<any>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
+  // 课程选择框的数据
+  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
+  const [kcmcValue, setKcmcValue] = useState<any>();
+  // 班级名称选择框的数据
+  const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
+  const [bjmcValue, setBjmcValue] = useState<any>();
+  // 学生姓名选择
+  const [name, setName] = useState<string>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
+  const getData = async () => {
+    const resAll = await getKHTKSJ({
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId,
+      KHBJSJId: bjmcValue,
+      KHKCSJId: kcmcValue,
+      XSXM: name,
+      LX: 0
+    });
+    if (resAll.status === 'ok') {
+      setDataSource(resAll?.data?.rows);
+    } else {
+      setDataSource([]);
+    }
+  };
+  const params = {
+    page: 0,
+    pageSize: 0,
+    KHKCSJId: kcmcValue,
+    XNXQId: curXNXQId,
+    XXJBSJId: currentUser?.xxId,
+  };
+  const getBjData = async () => {
+    const bjmcResl = await getAllClasses(params);
+    if (bjmcResl.status === 'ok') {
+      const BJMC = bjmcResl.data.rows?.map((item: any) => ({
+        label: item.BJMC,
+        value: item.id,
+      }));
+      setBjmcData(BJMC);
+    }
+  };
   useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
@@ -36,15 +80,33 @@ const CourseUnsubscribe = () => {
         if (curTerm) {
           setCurXNXQId(curTerm.id);
           setTermList(newData);
-          //  拿到默认值 发送请求
         }
       }
     })();
   }, []);
   useEffect(() => {
-    actionRef.current?.reload();
+    (async () => {
+      if (curXNXQId) {
+        // 通过课程数据接口拿到所有的课程
+        const khkcResl = await getAllCourses(params);
+        if (khkcResl.status === 'ok') {
+          const KCMC = khkcResl.data.rows?.map((item: any) => ({
+            label: item.KCMC,
+            value: item.id,
+          }));
+          setKcmcData(KCMC);
+          getBjData();
+        }
+      }
+    })();
   }, [curXNXQId]);
-  /// table表格数据
+  useEffect(() => {
+    getBjData();
+  }, [kcmcValue]);
+  useEffect(() => {
+    getData();
+  }, [curXNXQId, kcmcValue, bjmcValue, name]);
+  // table表格数据
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -189,8 +251,8 @@ const CourseUnsubscribe = () => {
       width: 90,
     },
   ];
-  const handleSubmit = async (params: any) => {
-    const { ZT, BZ } = params;
+  const handleSubmit = async (param: any) => {
+    const { ZT, BZ } = param;
     try {
       if (current.id) {
         const ids = { id: current.id };
@@ -201,7 +263,7 @@ const CourseUnsubscribe = () => {
             message.success('退课申请已驳回');
           } else if (current?.KHBJSJ?.FY !== 0) {
             const money = Number(((current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS).toFixed(2));
-            if(money !== 0.00){
+            if (money !== 0.00) {
               const result = await createKHXSTK({
                 KHTKSJId: current?.id,
                 /** 退款金额 */
@@ -221,7 +283,7 @@ const CourseUnsubscribe = () => {
               } else {
                 message.warning(`退课成功,退款流程由于${result.message}申请失败`);
               }
-            }else{
+            } else {
               message.success('退课成功,退款余额为0，无需退款');
             }
           } else {
@@ -246,10 +308,13 @@ const CourseUnsubscribe = () => {
           所属学年学期：
           <Select
             value={curXNXQId}
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             onChange={(value: string) => {
               // 更新多选框的值
               setCurXNXQId(value);
+              setKcmcValue(undefined);
+              setBjmcValue(undefined);
+              setName(undefined);
             }}
           >
             {termList?.map((item: any) => {
@@ -260,6 +325,57 @@ const CourseUnsubscribe = () => {
               );
             })}
           </Select>
+        </span>
+        <span style={{ marginLeft: 16 }}>
+          所属课程：
+          <Select
+            style={{ width: 160 }}
+            allowClear
+            value={kcmcValue}
+            onChange={(value: string) => {
+              setKcmcValue(value);
+              setBjmcValue(undefined);
+              setName(undefined);
+            }}
+          >
+            {kcmcData?.map((item: selectType) => {
+              return (
+                <Option value={item.value} key={item.value}>
+                  {item.label}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
+        <span style={{ marginLeft: 16 }}>
+          所属课程班：
+          <Select
+            style={{ width: 160 }}
+            allowClear
+            value={bjmcValue}
+            onChange={(value: string) => {
+              setBjmcValue(value);
+              setName(undefined);
+            }}
+          >
+            {bjmcData?.map((item: selectType) => {
+              return (
+                <Option value={item.value} key={item.value}>
+                  {item.label}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
+        <span style={{ marginLeft: 16 }}>
+          学生名称：
+          <Search
+            allowClear
+            style={{ width: 160 }}
+            onSearch={(val) => {
+              setName(val)
+            }}
+          />
         </span>
       </div>
       <div>
@@ -273,25 +389,7 @@ const CourseUnsubscribe = () => {
             defaultCurrent: 1,
           }}
           scroll={{ x: 1300 }}
-          request={async () => {
-            const resAll = await getKHTKSJ({
-              XXJBSJId: currentUser?.xxId,
-              XNXQId: curXNXQId,
-              LX: 0
-            });
-            if (resAll.status === 'ok') {
-              return {
-                data: resAll?.data?.rows,
-                success: true,
-                total: resAll?.data?.count,
-              };
-            }
-            return {
-              data: [],
-              success: false,
-              total: 0,
-            };
-          }}
+          dataSource={dataSource}
           options={{
             setting: false,
             fullScreen: false,

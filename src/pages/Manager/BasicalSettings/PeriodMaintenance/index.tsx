@@ -5,7 +5,7 @@ import { theme } from '@/theme-default';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import type { FormInstance } from 'antd';
+import type { Form, FormInstance, Input } from 'antd';
 import { Popconfirm } from 'antd';
 import { Divider } from 'antd';
 import { Button } from 'antd';
@@ -24,15 +24,18 @@ import AsyncTimePeriodForm from './components/AsyncTimePeriodForm';
 import type { ReactNode } from 'react';
 import { enHenceMsg } from '@/utils/utils';
 import { useModel } from 'umi';
+import { sendMessageToParent } from '@/services/after-class/wechat';
 
 const PeriodMaintenance = () => {
   const [currentStatus, setCurrentStatus] = useState<string | undefined>('enroll');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [amVisible, setAMVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<Maintenance>();
   const [form, setForm] = useState<FormInstance<any>>();
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const formRef = React.createRef<any>();
   let requestType = ['1'];
   let formatType = 'YYYY-MM-DD';
   if (currentStatus === 'education') {
@@ -100,6 +103,27 @@ const PeriodMaintenance = () => {
     }
   };
 
+  const handleAMSubmit = async () => {
+    formRef.current.validateFields()
+      .then(async (values: any) => {
+        const res = await sendMessageToParent({
+          to: 'toall',
+          text: values.info,
+          ids: []
+        });
+        setAMVisible(false);
+        if (res.status === 'ok') {
+          message.success('通知已成功发送');
+        } else {
+          message.error(res.message);
+        };
+        formRef.current.validateFields()
+      })
+      .catch((info: { errorFields: any; }) => {
+        console.log(info.errorFields);
+      });
+  };
+
   const columns: ProColumns<Maintenance>[] = [
     {
       title: '序号',
@@ -107,7 +131,7 @@ const PeriodMaintenance = () => {
       valueType: 'index',
       width: 58,
       align: 'center',
-      fixed:'left'
+      fixed: 'left'
     },
     {
       title: '时段名称',
@@ -115,7 +139,7 @@ const PeriodMaintenance = () => {
       align: 'center',
       width: 200,
       ellipsis: true,
-      fixed:'left'
+      fixed: 'left'
     },
     {
       title: '所属学期',
@@ -135,7 +159,7 @@ const PeriodMaintenance = () => {
       title: '开始时间',
       dataIndex: 'KSSJ',
       align: 'center',
-      width: 200,
+      width: 160,
       ellipsis: true,
       render: (_, record: any) => {
         return currentStatus === 'schedule' ? record.KSSJ.slice(0, 5) : record.KSSJ;
@@ -145,7 +169,7 @@ const PeriodMaintenance = () => {
       title: '结束时间',
       dataIndex: 'JSSJ',
       align: 'center',
-      width: 200,
+      width: 160,
       ellipsis: true,
       render: (_, record: any) => {
         return currentStatus === 'schedule' ? record.JSSJ.slice(0, 5) : record.JSSJ;
@@ -161,7 +185,7 @@ const PeriodMaintenance = () => {
     {
       title: '操作',
       valueType: 'option',
-      width: 150,
+      width: 230,
       align: 'center',
       fixed: 'right',
       render: (_, record) => (
@@ -196,6 +220,8 @@ const PeriodMaintenance = () => {
           >
             <a>删除</a>
           </Popconfirm>
+          <Divider type="vertical" />
+          <a onClick={() => setAMVisible(true)}>开学通知</a>
         </>
       ),
     },
@@ -273,8 +299,8 @@ const PeriodMaintenance = () => {
           onCancel={() => setModalVisible(false)}
           footer={[
             <Button key="submit" type="primary" onClick={handleSubmit}>
-            确定
-          </Button>,
+              确定
+            </Button>,
             <Button key="back" onClick={() => setModalVisible(false)}>
               取消
             </Button>,
@@ -287,6 +313,36 @@ const PeriodMaintenance = () => {
           }}
         >
           <AsyncTimePeriodForm currentStatus={currentStatus} current={current} setForm={setForm} />
+        </Modal>
+        <Modal
+          title={'报名通知'}
+          destroyOnClose
+          width="35vw"
+          visible={amVisible}
+          onCancel={() => setAMVisible(false)}
+          footer={[
+            <Button key="submit" type="primary" onClick={handleAMSubmit}>
+              确定
+            </Button>,
+            <Button key="back" onClick={() => setAMVisible(false)}>
+              取消
+            </Button>,
+          ]}
+          centered
+          maskClosable={false}
+          bodyStyle={{
+            maxHeight: '65vh',
+            overflowY: 'auto',
+          }}
+        >
+          <Form ref={formRef}>
+            <Form.Item
+              name="info"
+              initialValue={'课后服务报名开始啦！'}
+            >
+              <Input.TextArea defaultValue={'课后服务报名开始啦！'} />
+            </Form.Item>
+          </Form>
         </Modal>
       </PageContainer>
     </>

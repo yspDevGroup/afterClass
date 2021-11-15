@@ -102,7 +102,7 @@ const ServiceManagement = () => {
         pageSize: 0,
       });
       if (result.status === 'ok') {
-        setLBData(result!.data!.rows!);
+        setLBData(result?.data?.rows);
       }
     })();
   }, []);
@@ -317,6 +317,7 @@ const ServiceManagement = () => {
                     form.setFieldsValue(data);
                     setIsModalVisible(true);
                     setDisabled('查看');
+                    setImageUrl(record?.FWTP);
                   }}
                 >
                   查看

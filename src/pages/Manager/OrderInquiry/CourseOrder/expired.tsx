@@ -1,17 +1,17 @@
 /*
- * @description:
+ * @description:订单查询页面
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-11-01 10:55:33
+ * @LastEditTime: 2021-11-12 13:39:12
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
-import { Select } from 'antd';
-import { getAllKHXSDD } from '@/services/after-class/khxsdd';
-import { getAllCourses, getAllKHKCSJ } from '@/services/after-class/khkcsj';
-import { getAllClasses, getAllKHBJSJ } from '@/services/after-class/khbjsj';
+import { Button, Input, message, Select, Spin } from 'antd';
+import { exportStudentOrders, getAllKHXSDD } from '@/services/after-class/khxsdd';
+import { getAllCourses } from '@/services/after-class/khkcsj';
+import { getAllClasses } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import PromptInformation from '@/components/PromptInformation';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
@@ -20,15 +20,13 @@ import { useModel } from 'umi';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { DownloadOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
+const { Search } = Input;
 
 type selectType = { label: string; value: string };
-/**
- *
- * 订单查询页面
- * @return
- */
+
 const OrderInquiry = (props: any) => {
   const DDZT = props.TabState;
 
@@ -48,6 +46,9 @@ const OrderInquiry = (props: any) => {
   const [kcmcValue, setKcmcValue] = useState<any>();
   const [bjmc, setBjmc] = useState<any>();
   const [bjmcValue, setBjmcValue] = useState<any>();
+  // 学生姓名选择
+  const [name, setName] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -215,7 +216,8 @@ const OrderInquiry = (props: any) => {
   const getData = async () => {
     const resAll = await getAllKHXSDD({
       XNXQId: curXNXQId,
-      DDZT:DDZT === '已付款' ? ['已付款','已退款']:[DDZT],
+      DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
+      XSXM: name,
       DDLX: 0,
       kcmc,
       bjmc,
@@ -257,7 +259,27 @@ const OrderInquiry = (props: any) => {
   }, [kcmcValue]);
   useEffect(() => {
     getData();
-  }, [curXNXQId, kcmcValue, bjmcValue]);
+  }, [curXNXQId, kcmcValue, bjmcValue,name]);
+  const onExportClick = () => {
+    setLoading(true);
+    (async () => {
+      const res = await exportStudentOrders({
+        XNXQId: curXNXQId,
+        DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
+        DDLX: 0,
+        kcmc,
+        bjmc,
+      });
+      if (res.status === 'ok' && res.data) {
+        window.location.href = res.data;
+        setLoading(false);
+      } else {
+        message.error(res.message);
+        setLoading(false);
+      }
+    })();
+  };
+
   return (
     <>
       <div className={styles.searchs}>
@@ -265,7 +287,7 @@ const OrderInquiry = (props: any) => {
           所属学年学期：
           <Select
             value={curXNXQId}
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             onChange={(value: string) => {
               // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);
@@ -286,7 +308,7 @@ const OrderInquiry = (props: any) => {
         <span style={{ marginLeft: 16 }}>
           所属课程：
           <Select
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             allowClear
             value={kcmcValue}
             onChange={(value: string, option: any) => {
@@ -308,7 +330,7 @@ const OrderInquiry = (props: any) => {
         <span style={{ marginLeft: 16 }}>
           所属课程班：
           <Select
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             allowClear
             value={bjmcValue}
             onChange={(value: string, option: any) => {
@@ -325,27 +347,46 @@ const OrderInquiry = (props: any) => {
             })}
           </Select>
         </span>
+        <div style={{ marginLeft: 16 }}>
+          <span>学生名称：</span>
+          <div>
+            <Search
+              allowClear
+              style={{ width: 160 }}
+              onSearch={(val) => {
+                setName(val)
+              }}
+            />
+          </div>
+        </div>
+        <span style={{ marginLeft: 'auto' }}>
+          <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+            导出
+          </Button>
+        </span>
       </div>
       <div className={styles.tableStyle}>
-        <ProTable<any>
-          actionRef={actionRef}
-          columns={columns}
-          rowKey="id"
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: DDZT !== '已付款' ? 1300 : 1500 }}
-          dataSource={dataSource}
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          search={false}
-        />
+        <Spin spinning={loading}>
+          <ProTable<any>
+            actionRef={actionRef}
+            columns={columns}
+            rowKey="id"
+            pagination={{
+              showQuickJumper: true,
+              pageSize: 10,
+              defaultCurrent: 1,
+            }}
+            scroll={{ x: DDZT !== '已付款' ? 1300 : 1500 }}
+            dataSource={dataSource}
+            options={{
+              setting: false,
+              fullScreen: false,
+              density: false,
+              reload: false,
+            }}
+            search={false}
+          />
+        </Spin>
       </div>
       <PromptInformation
         text="未查询到学年学期数据，请先设置学年学期"

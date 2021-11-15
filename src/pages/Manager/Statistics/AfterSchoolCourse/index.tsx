@@ -30,7 +30,7 @@ const AfterSchoolCourse: React.FC = () => {
   // 课程选择框的数据
   const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
   const [kcmcValue, setKcmcValue] = useState<any>();
-  //课程来源
+  // 课程来源
   const [KCLY, setKCLY] = useState<string>();
   const KCLYData: selectType[] = [{ label: '校内课程', value: '校内课程' }, { label: '机构课程', value: '机构课程' }];
   // //课程类型
@@ -118,7 +118,7 @@ const AfterSchoolCourse: React.FC = () => {
       ellipsis: true,
       render: (test: any, record: any) => {
         const num =
-          record.TKRS != 0 ? (Number(record.TKRS / record.BMRS) * 100).toFixed(1) + '%' : 0;
+          record.TKRS != 0 ? `${(Number(record.TKRS / record.BMRS) * 100).toFixed(1)  }%` : 0;
         return num;
       },
     },
@@ -166,12 +166,12 @@ const AfterSchoolCourse: React.FC = () => {
 
   // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
-    const kclxItem=KCLXData?.find((item:any)=>item.value===KCLXId)?.label;
+    const kclxItem=KCLXData?.find((item: any)=>item.value===KCLXId)?.label;
     const res3 = await getCourses({
       XNXQId: SelectData,
       XXJBSJId: currentUser?.xxId,
       KCLX: kclxItem,
-      KCLY: KCLY,
+      KCLY,
       KHKCSJId: kcmcValue,
     });
     if (res3.status === 'ok') {
@@ -179,9 +179,9 @@ const AfterSchoolCourse: React.FC = () => {
     }
   };
 
-  //获取课程
+  // 获取课程
   const getKCData = async () => {
-    if (curXNXQId) {      
+    if (curXNXQId) {
       const params = {
         page: 0,
         pageSize: 0,
@@ -190,7 +190,7 @@ const AfterSchoolCourse: React.FC = () => {
         XZQHM: currentUser?.XZQHM,
         KCLY,
         KHKCLXId:KCLXId,
-      };      
+      };
       const khkcResl = await getAllCourses2(params);
 
       if (khkcResl.status === 'ok') {
@@ -235,26 +235,26 @@ const AfterSchoolCourse: React.FC = () => {
     getKCLXData();
   }, []);
   // 学年学期变化
-  useEffect(() => { 
+  useEffect(() => {
     if(curXNXQId){
       ChoseSelect(curXNXQId);
-    }      
+    }
   }, [curXNXQId,kcmcValue,KCLXId,KCLY]);
-  
+
   /**
    * 切换学年学期时 清空课程类型 清空课程名称
    */
   useEffect(()=>{
-    //重新请求课程名称
+    // 重新请求课程名称
     if(curXNXQId){
       getKCData();
       setKcmcValue(null)
-    }    
+    }
     // 清空选择
   },[KCLXId,KCLY]);
 
   useEffect(()=>{
-    //重新请求课程名称
+    // 重新请求课程名称
     getKCData();
     // 清空选择
     setKCLXId(undefined);
@@ -278,7 +278,7 @@ const AfterSchoolCourse: React.FC = () => {
           <Form.Item label='所属学年学期: ' style={{ padding: '0 0 24px' }}>
             <Select
               value={curXNXQId}
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               onChange={(value: string) => {
                 // 选择不同学期从新更新页面的数据
                 setCurXNXQId(value);
@@ -296,7 +296,7 @@ const AfterSchoolCourse: React.FC = () => {
           <Form.Item label='课程类型: ' style={{ padding: '0 0 24px' }}>
             <Select
               value={KCLXId}
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               placeholder="请选择"
               allowClear
               onChange={(value: string) => {
@@ -316,7 +316,7 @@ const AfterSchoolCourse: React.FC = () => {
           </Form.Item>
           <Form.Item label='课程来源: ' style={{ padding: '0 0 24px' }}>
             <Select
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               value={KCLY}
               allowClear
               placeholder="请选择"
@@ -338,7 +338,7 @@ const AfterSchoolCourse: React.FC = () => {
           </Form.Item>
           <Form.Item label='课程名称:' style={{ padding: '0 0 24px' }}>
             <Select
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               value={kcmcValue}
               allowClear
               placeholder="请选择"

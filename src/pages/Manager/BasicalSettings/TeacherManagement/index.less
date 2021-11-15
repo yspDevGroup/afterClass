@@ -25,8 +25,15 @@
   background-color: #fff;
   padding-bottom: @padding-lg;
 }
-:global{
-  .ant-pro-field-index-column{
-    width:100% !important;
+.pageContain{
+  :global{
+    .ant-pro-field-index-column{
+      width:100% !important;
+    }
+    .ant-pro-table-list-toolbar-right {
+      > .ant-space-item {
+        padding: 0 0 0px !important;
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { Link, useModel, history } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
@@ -21,10 +21,11 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { student, external_contact } = currentUser || {};
-  const { status, setActiveKey } = props;
+  const { status } = props;
   const [totail, setTotail] = useState<boolean>(false);
+  const [reload, setReload] = useState<boolean>(false);
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
-  const StorageXSId = localStorage.getItem('studentId');
+  const StorageXSId = localStorage.getItem('studentId') || testStudentId;
   const StorageXSName = localStorage.getItem('studentName');
 
   useEffect(() => {
@@ -35,8 +36,8 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
       localStorage.setItem('studentNjId', student[0].NJSJId || '');
       localStorage.setItem('studentNjId', student[0].BJSJId || '');
     }
-    const ParentalIdentitys = `${StorageXSName}${external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-      }`;
+    const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
+    const ParentalIdentitys = `${StorageXSName}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
   }, []);
 
@@ -46,34 +47,44 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     localStorage.setItem('studentId', key.key?.split('+')[0]);
     localStorage.setItem('studentNjId', key.key?.split('+')[1]);
     localStorage.setItem('studentBJId', key.key?.split('+')[2]);
-    const ParentalIdentitys = `${key.value}${external_contact?.subscriber_info?.remark?.split('-')[1] || ''
-      }`;
+    const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
+    const ParentalIdentitys = `${key.value}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
-    // 数据信息重新更新获取
-    await ParentHomeData('student', currentUser?.xxId, key.key?.split('+')[0], key.key?.split('+')[1], true);
-    // setActiveKey('index');
+    setReload(true);
   };
-  useEffect(() => {
-    async function fetch() {
-      const studentId: string =
-        StorageXSId || student?.[0].XSJBSJId || testStudentId;
-
-      const res = await getAllKHXSDD({
-        XSJBSJId: studentId,
-        // njId: currentUser.njId,
-        DDZT: ['待付款'],
-      });
-      if (res.status === 'ok') {
-        if (res.data && res.data.length) {
-          setTotail(true);
-        }
-      } else {
-        enHenceMsg(res.message);
+  const fetchData = async () => {
+    const studentId: string =
+      StorageXSId || student?.[0].XSJBSJId || testStudentId;
+    const res = await getAllKHXSDD({
+      XSJBSJId: studentId,
+      // njId: currentUser.njId,
+      DDZT: ['待付款'],
+    });
+    if (res.status === 'ok') {
+      if (res.data && res.data.length) {
+        setTotail(true);
       }
+    } else {
+      enHenceMsg(res.message);
     }
-    fetch();
+  }
+  useEffect(() => {
+    fetchData();
   }, [StorageXSId]);
 
+  useEffect(() => {
+    (async () => {
+      if (reload) {
+        // 数据信息重新更新获取
+        const studentId: string =
+          StorageXSId || student?.[0].XSJBSJId || testStudentId;
+        const studentNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
+        await ParentHomeData('student', currentUser?.xxId, studentId, studentNjId, true);
+        fetchData();
+        setReload(false);
+      }
+    })()
+  }, [reload])
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader}>
@@ -129,7 +140,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
         </Link>
       </div>
 
-      {status === 'empty' ? '' : <Statistical />}
+      {status === 'empty' ? '' : <Statistical userId={StorageXSId} xxId={currentUser?.xxId} />}
       <div className={styles.linkWrapper}>
         <ul>
           <li>

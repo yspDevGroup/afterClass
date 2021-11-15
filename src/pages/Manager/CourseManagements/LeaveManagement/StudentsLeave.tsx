@@ -242,7 +242,7 @@ const StudentsLeave: React.FC = () => {
           所属学年学期：
           <Select
             value={curXNXQId}
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             onChange={(value: string) => {
               // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);
@@ -263,7 +263,7 @@ const StudentsLeave: React.FC = () => {
         <span style={{ marginLeft: 16 }}>
           所属课程：
           <Select
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             allowClear
             value={kcmcId}
             onChange={(value: string) => {
@@ -284,7 +284,7 @@ const StudentsLeave: React.FC = () => {
         <span style={{ marginLeft: 16 }}>
           所属课程班：
           <Select
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             allowClear
             value={bjmcId}
             onChange={(value: string) => {
@@ -304,7 +304,7 @@ const StudentsLeave: React.FC = () => {
         <span style={{ marginLeft: 16 }}>
           请假状态：
           <Select
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             allowClear
             value={QJZT?.[0]}
             onChange={(value: number) => {

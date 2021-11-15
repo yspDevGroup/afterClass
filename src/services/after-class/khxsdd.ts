@@ -101,6 +101,8 @@ export async function getAllKHXSDD(
     XNXQId?: string;
     /** 学校ID */
     XXJBSJId?: string;
+    /** 班级ID */
+    KHBJSJId?: string;
     /** 班级名称 */
     bjmc?: string;
     /** 课程名称 */

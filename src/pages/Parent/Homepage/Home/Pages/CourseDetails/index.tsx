@@ -3,7 +3,7 @@
 import { Button, Checkbox, Collapse, Divider, message, Modal, Popconfirm, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, history } from 'umi';
-import { getClassesByCourse, getKHKCSJ } from '@/services/after-class/khkcsj';
+import { getClassesByCourse } from '@/services/after-class/khkcsj';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
@@ -17,12 +17,17 @@ import WWOpenDataCom from '@/components/WWOpenDataCom';
 import styles from './index.less';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { RightOutlined } from '@ant-design/icons';
+import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 const { Panel } = Collapse;
 
 const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { student } = currentUser || {};
+  const linkRef = useRef<HTMLAnchorElement | null>(null);
+  const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
   const [BJ, setBJ] = useState<string>();
   const [FY, setFY] = useState<number>(0);
   const [state, setstate] = useState(false);
@@ -31,11 +36,6 @@ const CourseDetails: React.FC = () => {
   const [classDetail, setClassDetail] = useState<any>();
   const [kaiguan, setKaiguan] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
-  const linkRef = useRef<HTMLAnchorElement | null>(null);
-  const courseid = getQueryString('courseid');
-  const index = getQueryString('index');
-  const curDate: Date = new Date();
-  const myDate: Date = new Date(moment(curDate).format('YYYY/MM/DD'));
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
   const [JFstate, setJFstate] = useState(false);
@@ -44,6 +44,10 @@ const CourseDetails: React.FC = () => {
   const [KHFUXY, setKHFUXY] = useState<any>();
   const [ByTime, setByTime] = useState(false);
   const [BjDetails, setBjDetails] = useState<any>();
+  const courseid = getQueryString('courseid');
+  const index = getQueryString('index');
+  const curDate: Date = new Date();
+  const myDate: Date = new Date(moment(curDate).format('YYYY/MM/DD'));
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KcDetail;
@@ -149,8 +153,13 @@ const CourseDetails: React.FC = () => {
       if (data.DDFY > 0) {
         setOrderInfo(res.data);
       } else {
-        message.success('报名成功');
-        history.push('/parent/home?index=index');
+        await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, true);
+        setTimeout(()=>{
+          message.success('报名成功');
+        },500);
+        setTimeout(()=>{
+          history.push('/parent/home?index=index&reload=true');
+        },1000);
       }
     } else {
       enHenceMsg(res.message);

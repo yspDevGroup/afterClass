@@ -30,7 +30,7 @@ const MutualEvaluation: React.FC = () => {
   // 课程选择框的数据
   const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
   const [kcmcValue, setKcmcValue] = useState<any>();
-  //课程来源
+  // 课程来源
   const [KCLY, setKCLY] = useState<string>();
   const KCLYData: selectType[] = [
     { label: '校内课程', value: '校内课程' },
@@ -110,7 +110,8 @@ const MutualEvaluation: React.FC = () => {
       width: 180,
       align: 'center',
       render: (test: any) => {
-        return <Rate count={5} defaultValue={test} disabled={true} />;
+        const fs = Number(Number(test).toFixed(1)) || 0;
+        return <Rate allowHalf defaultValue={fs} disabled={true} />;
       },
     },
     {
@@ -153,7 +154,7 @@ const MutualEvaluation: React.FC = () => {
       }
     })();
   };
-  //获取课程
+  // 获取课程
   const getKCData = async () => {
     if (curXNXQId) {
       const params = {
@@ -220,7 +221,7 @@ const MutualEvaluation: React.FC = () => {
    * 切换学年学期时 清空课程类型 清空课程名称
    */
   useEffect(() => {
-    //重新请求课程名称
+    // 重新请求课程名称
     if (curXNXQId) {
       getKCData();
       setKcmcValue(undefined);
@@ -229,7 +230,7 @@ const MutualEvaluation: React.FC = () => {
   }, [KCLXId, KCLY]);
 
   useEffect(() => {
-    //重新请求课程名称
+    // 重新请求课程名称
     getKCData();
     // 清空选择
     setKCLXId(undefined);
@@ -241,9 +242,8 @@ const MutualEvaluation: React.FC = () => {
       <Form layout="inline" labelCol={{ span: 8 }}>
         <Form.Item label=" 所属学年学期：" style={{ padding: '0 0 24px' }}>
           <Select
-      
             value={curXNXQId}
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             onChange={(value: string) => {
               // 选择不同学期从新更新页面的数据
               setCurXNXQId(value);
@@ -261,7 +261,7 @@ const MutualEvaluation: React.FC = () => {
         <Form.Item label="课程类型: " style={{ padding: '0 0 24px' }}>
           <Select
             value={KCLXId}
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             placeholder="请选择"
             allowClear
             onChange={(value: string) => {
@@ -279,7 +279,7 @@ const MutualEvaluation: React.FC = () => {
         </Form.Item>
         <Form.Item label="课程来源: " style={{ padding: '0 0 24px' }}>
           <Select
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             value={KCLY}
             allowClear
             placeholder="请选择"
@@ -301,7 +301,7 @@ const MutualEvaluation: React.FC = () => {
         </Form.Item>
         <Form.Item label="课程名称:" style={{ padding: '0 0 24px' }}>
           <Select
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             value={kcmcValue}
             allowClear
             placeholder="请选择"
@@ -325,7 +325,6 @@ const MutualEvaluation: React.FC = () => {
       {/* <div className={Style.TopSearchss}>
         <span>
           所属学年学期：
-          
         </span>
       </div> */}
       <Spin spinning={loading}>

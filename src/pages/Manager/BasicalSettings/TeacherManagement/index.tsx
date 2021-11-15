@@ -181,6 +181,7 @@ const TeacherManagement = () => {
   return (
     <PageContain>
       <ProTable<any>
+        className={styles.pageContain}
         title={() => (
           <div style={{ color: '#4884ff' }}>
             <div>

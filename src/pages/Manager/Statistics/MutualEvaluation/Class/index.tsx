@@ -74,7 +74,10 @@ const school = (props: any) => {
       key: 'pj_avg',
       align: 'center',
       width: 180,
-      render: (text: any) => <Rate count={5} defaultValue={text} disabled={true} />,
+      render: (test: any) => {
+        const fs = Number(Number(test).toFixed(1)) || 0;
+        return <Rate allowHalf defaultValue={fs} disabled={true} />;
+      },
     },
     {
       title: '操作',

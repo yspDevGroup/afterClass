@@ -344,7 +344,7 @@ const MutualEvaluation = () => {
           dataSource={DataSource}
           dateFormatter="string"
           headerTitle={
-            <Search placeholder="请输入类别名称" allowClear onSearch={onSearch} style={{ width: 200 }} />
+            <Search placeholder="请输入类别名称" allowClear onSearch={onSearch} style={{ width: 160 }} />
           }
           toolBarRender={() => [
             <Button type="primary" key="primary" onClick={showModal}>

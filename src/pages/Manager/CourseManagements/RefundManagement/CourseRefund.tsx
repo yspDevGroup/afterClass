@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Select, message, Modal, Radio, Input, Form, InputNumber } from 'antd';
+import { Select, message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import Style from './index.less';
-import { getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
+import { getAllKHXSTK, updateKHXSTK, exportTKJL } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllClasses } from '@/services/after-class/khbjsj';
 import { getAllCourses2 } from '@/services/after-class/jyjgsj';
+import { DownloadOutlined } from '@ant-design/icons';
 
 type selectType = { label: string; value: string };
 
@@ -34,6 +35,7 @@ const CourseRefund = () => {
   // 班级名称选择框的数据
   const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
   const [bjmcValue, setBjmcValue] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -320,6 +322,29 @@ const CourseRefund = () => {
       }
     }
   }
+
+  const onExportClick = () => {
+    setLoading(true);
+    (async () => {
+      const res = await exportTKJL({
+        LX: 0,
+        XXJBSJId: currentUser?.xxId,
+        XNXQId: curXNXQId,
+        KHBJSJId: bjmcValue,
+        // KHKCSJId: kcmcValue,
+        page: 0,
+        pageSize: 0,
+      });
+      if (res.status === 'ok') {
+        window.location.href = res.data;
+        setLoading(false);
+      } else {
+        message.error(res.message);
+        setLoading(false);
+      }
+    })();
+  };
+
   return (
     <>
       <div className={Style.TopSearchs}>
@@ -327,7 +352,7 @@ const CourseRefund = () => {
           <Form.Item label=' 所属学年学期：' style={{ padding: '0 0 24px' }}>
             <Select
               value={curXNXQId}
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               onChange={(value: string) => {
                 // 更新多选框的值
                 setCurXNXQId(value);
@@ -344,7 +369,7 @@ const CourseRefund = () => {
           </Form.Item>
           <Form.Item label=' 课程名称:' style={{ padding: '0 0 24px' }}>
             <Select
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               value={kcmcValue}
               allowClear
               placeholder="请选择"
@@ -364,9 +389,9 @@ const CourseRefund = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label=' 课程班名称:'  style={{ padding: '0 0 24px' }}>
+          <Form.Item label=' 课程班名称:' style={{ padding: '0 0 24px' }}>
             <Select
-              style={{ width: 200 }}
+              style={{ width: 160 }}
               value={bjmcValue}
               allowClear
               placeholder="请选择"
@@ -381,50 +406,57 @@ const CourseRefund = () => {
               })}
             </Select>
           </Form.Item>
+          <Form.Item style={{ flex: 'auto', margin: 0}}>
+            <Button style={{ float: 'right' }} icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+              导出
+            </Button>
+          </Form.Item>
         </Form>
       </div>
       <div>
-        <ProTable<any>
-          actionRef={actionRef}
-          columns={columns}
-          rowKey="id"
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: 1500 }}
-          request={async () => {
-            const resAll = await getAllKHXSTK({
-              LX: 0,
-              XXJBSJId: currentUser?.xxId,
-              XNXQId: curXNXQId,
-              KHKCSJId: kcmcValue,
-              KHBJSJId: bjmcValue,
-              page: 0,
-              pageSize: 0,
-            });
-            if (resAll.status === 'ok') {
+        <Spin spinning={loading}>
+          <ProTable<any>
+            actionRef={actionRef}
+            columns={columns}
+            rowKey="id"
+            pagination={{
+              showQuickJumper: true,
+              pageSize: 10,
+              defaultCurrent: 1,
+            }}
+            scroll={{ x: 1500 }}
+            request={async () => {
+              const resAll = await getAllKHXSTK({
+                LX: 0,
+                XXJBSJId: currentUser?.xxId,
+                XNXQId: curXNXQId,
+                KHKCSJId: kcmcValue,
+                KHBJSJId: bjmcValue,
+                page: 0,
+                pageSize: 0,
+              });
+              if (resAll.status === 'ok') {
+                return {
+                  data: resAll?.data?.rows,
+                  success: true,
+                  total: resAll?.data?.count,
+                };
+              }
               return {
-                data: resAll?.data?.rows,
-                success: true,
-                total: resAll?.data?.count,
+                data: [],
+                success: false,
+                total: 0,
               };
-            }
-            return {
-              data: [],
-              success: false,
-              total: 0,
-            };
-          }}
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          search={false}
-        />
+            }}
+            options={{
+              setting: false,
+              fullScreen: false,
+              density: false,
+              reload: false,
+            }}
+            search={false}
+          />
+        </Spin>
         <Modal
           title="退款确认"
           visible={visible}
