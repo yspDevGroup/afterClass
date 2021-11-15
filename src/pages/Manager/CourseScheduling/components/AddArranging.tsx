@@ -2,21 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { history } from 'umi';
-import { Button, Form, message, Spin, Modal, Tooltip, Empty, Select } from 'antd';
+import { Button, Form, message, Spin, Modal, Tooltip, Empty, Select, Card, Row, Col } from 'antd';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
-import { DownOutlined, QuestionCircleOutlined, UpOutlined } from '@ant-design/icons';
+import { DownOutlined, QuestionCircleOutlined, UpOutlined, LeftOutlined } from '@ant-design/icons';
 import { getQueryString } from '@/utils/utils';
 import ExcelTable from '@/components/ExcelTable';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
-import { getAllCourses } from '@/services/after-class/khkcsj';
-import { createKHPKSJ } from '@/services/after-class/khpksj';
-import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
+import { createKHPKSJ, deleteKHPKSJ, addKHPKSJ } from '@/services/after-class/khpksj';
+// import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
 import { getAllClasses } from '@/services/after-class/khbjsj';
 import type { DataSourceType } from '@/components/ExcelTable';
+import { getAllGrades } from '@/services/after-class/khjyjg';
+import { getAllCourses } from '@/services/after-class/khkcsj';
 
 const { Option } = Select;
-
 import styles from '../index.less';
 
 const { confirm } = Modal;
@@ -25,76 +25,60 @@ type selectType = { label: string; value: string };
 type PropsType = {
   setState?: any;
   curXNXQId?: string;
-  tableDataSource: any[];
-  processingData: (value: any, timeSlot: any) => void;
-  setTableDataSource: (value: any) => void;
+  processingData: (value: any, timeSlot: any, bjId: string | undefined) => void;
   formValues?: Record<string, any>;
   xXSJPZData?: any;
   campus?: any;
-  grade?: any;
-  setCampus: (value: any) => void;
-  sameClass?: any;
-  setBJIDData?: any;
+  // setBJIDData?: any;
   cdmcData?: any[];
   kcmcData?: any[];
   currentUser?: API.CurrentUser | undefined;
+  screenOriSource: any;
+  setLoading: any;
+  // setCampus: (value: any) => void;
+  // grade?: any;
+  // tableDataSource: any[];
+  // setTableDataSource: (value: any) => void;
+  // sameClass?: any;
 };
 
 const AddArranging: FC<PropsType> = (props) => {
   const {
-    setState,
-    sameClass,
+    screenOriSource,
     curXNXQId,
-    // tableDataSource,
-    processingData,
-    setTableDataSource,
-    formValues,
-    xXSJPZData,
     campus,
-    grade,
-    setBJIDData,
-    // cdmcData,
-    kcmcData,
+    xXSJPZData,
     currentUser,
+    setState,
+    processingData,
+    formValues,
+    setLoading,
+    // setBJIDData,
+    cdmcData,
+    kcmcData,
+    // setTableDataSource,
+    // sameClass,
+    // tableDataSource,
   } = props;
 
   const [packUp, setPackUp] = useState(false);
-  const [Bj, setBj] = useState<any>(undefined);
-  const [index, setIndex] = useState(formValues?.BJId);
-  const [kcType, setKcType] = useState<any>(kcmcData);
-  const [oriSource, setOriSource] = useState<any>();
-  const [bjData, setBjData] = useState<any>([]);
   const [form] = Form.useForm();
-  const [excelTableValue, setExcelTableValue] = useState<any[]>([]);
-  const sameClassDatas = [...sameClass];
   const [loading] = useState(false);
   const [CDLoading, setCDLoading] = useState(false);
   const [XQID, setXQID] = useState<any>('');
   const [NJID, setNJID] = useState<any>(undefined);
-  const [tearchId, setTearchId] = useState(undefined);
-  // const [basicData, setBasicData] = useState<any>([]);
-  const [cdmcData, setCdmcData] = useState<selectType[] | undefined>([]);
   const [cdmcValue, setCdmcValue] = useState<any>();
   const [newTableDataSource, setNewTableDataSource] = useState<DataSourceType>([]);
 
-  // console.log('oriSource',oriSource);
+  //选择的班级的数据
+  const [Bj, setBj] = useState<any>(undefined);
+  // 请求的班级列表数据
+  const [bjData, setBjData] = useState<any>([]);
+  const [tearchId, setTearchId] = useState(undefined);
+  const [kcType, setKcType] = useState<any>(kcmcData);
+  //年级
+  const [grade, setGrade] = useState<any>([]);
 
-  // 获取排课的接口
-  const tableServers = () => {
-    // const Fjplan = getFJPlan({
-    //   XNXQId: curXNXQId,
-    //   XXJBSJId: currentUser?.xxId,
-    //   isPk: false,
-    // });
-    // Promise.resolve(Fjplan).then((FjplanData) => {
-    //   if (FjplanData.status === 'ok') {
-
-    //     // setTableDataSource(datad);
-    //   }
-    // });
-    const datad: any = processingData(oriSource, xXSJPZData);
-    setTableDataSource(datad);
-  };
   const columns: {
     title: string;
     dataIndex: string;
@@ -167,43 +151,108 @@ const AddArranging: FC<PropsType> = (props) => {
     },
   ];
 
-  // const onClickBjChangeNewTableData=()=>{
-  //   //
-  //   console.log('BJ',Bj);
-
-  //     newTableDataSource.map()
-  // }
-
   // 将排好的课程再次点击可以取消
-  const getSelectdata = (value: any) => {
-    console.log('getSelectdata', value);
-    sameClassDatas.map((item: any, key: number) => {
-      if (
-        item.FJSJId === value.FJSJId && // 教室ID
-        item.XXSJPZId === value.XXSJPZId && // 时间ID
-        item.WEEKDAY === value.WEEKDAY // 周
-      ) {
-        sameClassDatas.splice(key, 1);
-      }
-      return item;
-    });
+  const getSelectdata = () => {
+    // console.log('getSelectdata', value);
+    // sameClassDatas.map((item: any, key: number) => {
+    //   if (
+    //     item.FJSJId === value.FJSJId && // 教室ID
+    //     item.XXSJPZId === value.XXSJPZId && // 时间ID
+    //     item.WEEKDAY === value.WEEKDAY // 周
+    //   ) {
+    //     sameClassDatas.splice(key, 1);
+    //   }
+    //   return item;
+    // });
   };
 
-  const onExcelTableClick = (value: any, record: any, pkData: any) => {
-    console.log('onExcelTableClick', value);
-    if (value === null) {
-      excelTableValue.forEach((item: any, key) => {
-        if (
-          item.FJSJId === pkData.FJSJId && // 场地ID
-          item.KHBJSJId === pkData.KHBJSJId && // 班级ID
-          item.XXSJPZId === pkData.XXSJPZId && // 时间ID
-          item.WEEKDAY === pkData.WEEKDAY // 周
-        ) {
-          excelTableValue.splice(key, 1);
+  // 刷新Table
+  const refreshTable = () => {
+    // console.log('screenOriSource', screenOriSource);
+    if (screenOriSource?.length > 0) {
+      const screenCD = (dataSource1: any) => {
+        const newDataSource = [...dataSource1];
+        if (cdmcValue) {
+          return newDataSource.filter((item: any) => item.id === cdmcValue);
+        }
+        return newDataSource;
+      };
+      //根据场地名称筛选出来 场地数据
+      const newCDData = screenCD(screenOriSource);
+      const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
+      setNewTableDataSource(newTableData);
+      console.log('刷新add table');
+      setLoading(false);
+    }
+  };
+
+  const onExcelTableClick = async (value: any, record: any, pkData: any) => {
+    // FJSJId 房间Id KHBJSJId: 课后班级数据
+    // 如果value ===null 移除
+    // xuyao改变的原始数据 screenOriSource
+    setLoading(true);
+    if (value) {
+      // 添加 根据房间id
+
+      // console.log('添加')
+      const KHPKSJ: any = {
+        FJSJId: value.FJSJId,
+        WEEKDAY: value.WEEKDAY,
+        XNXQId: curXNXQId,
+        KHBJSJId: value.KHBJSJId,
+        XXSJPZId: value.XXSJPZId,
+      };
+
+      const addRes = await addKHPKSJ({
+        ...KHPKSJ,
+      });
+      // 添加班级数据
+      KHPKSJ.KHBJSJ = bjData.find((bjItem: any) => {
+        return bjItem.id === value.KHBJSJId;
+      });
+      if (addRes.status === 'ok') {
+        screenOriSource.forEach((item: any) => {
+          if (item.id === value.FJSJId) {
+            KHPKSJ.id = addRes?.data?.id;
+            item.KHPKSJs.push(KHPKSJ);
+            // console.log('添加的位置', item.KHPKSJs)
+          }
+        });
+        setLoading(false);
+      } else {
+        message.error(addRes.message);
+        refreshTable();
+        setLoading(false);
+      }
+    } else {
+      // 移除 根据房间Id移除数据
+      // console.log('移除')
+      let id: string | undefined = undefined;
+      screenOriSource.forEach((item: any) => {
+        const { KHPKSJs } = item;
+        if (KHPKSJs.length > 0) {
+          item.KHPKSJs = KHPKSJs.filter((KHPKSJ: any) => {
+            if (
+              KHPKSJ.FJSJId === pkData.FJSJId && // 教室ID
+              KHPKSJ.XXSJPZId === pkData.XXSJPZId && // 时间ID
+              KHPKSJ.WEEKDAY === pkData.WEEKDAY // 周
+            ) {
+              id = KHPKSJ.id;
+              return false;
+            }
+            return true;
+          });
         }
       });
-    } else {
-      excelTableValue.push(value);
+      if (id) {
+        const res = await deleteKHPKSJ({
+          id,
+        });
+        if (res?.status === 'error') {
+          message.error(res?.message);
+        }
+        setLoading(false);
+      }
     }
   };
   // 班级展开收起
@@ -215,213 +264,49 @@ const AddArranging: FC<PropsType> = (props) => {
     }
   };
   // 班级选择
-  const BjClick = (value: any, flag: boolean = false) => {
-    // console.log('sameClassDatas',sameClassDatas);
-    if (flag) {
-      const ZJSID = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJId;
-      const ZJSName = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM;
-      setTearchId(ZJSID);
-      const chosenData = {
-        cla: value.BJMC || '',
-        teacher: ZJSName || '',
-        teacherID: ZJSID || '',
-        XNXQId: curXNXQId || '',
-        KHBJSJId: value.id || '',
-        color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
-      };
-      setBj(chosenData);
-      setIndex(value.id);
-      setBJIDData(value.id);
-      setCDLoading(true);
-      setTimeout(() => {
-        setCDLoading(false);
-      }, 500);
-    } else {
-      console.log('formValues', formValues);
-      if (formValues?.BJId) {
-        return;
-      }
-      if (excelTableValue.length > 0) {
-        confirm({
-          title: '温馨提示',
-          icon: <QuestionCircleOutlined style={{ color: 'red' }} />,
-          content: '当前班级选择的排课数据请先保存',
-          onOk() {},
-        });
-      } else {
-        const ZJSID = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJId;
-        const ZJSName = value.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM;
-        setTearchId(ZJSID);
-        const chosenData = {
-          cla: value.BJMC || '',
-          teacher: ZJSName || '',
-          teacherID: ZJSID || '',
-          XNXQId: curXNXQId || '',
-          KHBJSJId: value.id || '',
-          color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
-        };
-        setBj(chosenData);
-        setIndex(value.id);
-        setBJIDData(value.id);
-        setCDLoading(true);
-        setTimeout(() => {
-          setCDLoading(false);
-        }, 500);
-      }
-    }
-  };
 
-  //获取场地排课情况
-  const getPKData = async () => {
-    const res = await getFJPlan({
-      // kcId: kcmcValue,
-      // bjId: index,
-      fjId: cdmcValue,
-      // JSXM: teacher,
-      isPk: false,
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok') {
-      setCDLoading(false);
-      setOriSource(res.data);
-    }
-  };
-
-  // 保存
-  const submit = async () => {
-    if (Bj || index) {
-      if (cdmcData && cdmcData?.length > 0) {
-        try {
-          const data = [...excelTableValue].concat(sameClassDatas);
-          const bjIdData: any[] = [index];
-          data.forEach((item: any) => {
-            bjIdData.push(item.KHBJSJId);
-          });
-          // 所选班级ID
-          const bj = Array.from(new Set(bjIdData));
-          const parameter = {
-            bjIds: bj,
-            data,
-          };
-
-          const result = await createKHPKSJ(parameter);
-          if (result.status === 'ok') {
-            message.success('保存成功');
-            tableServers();
-            //保存成功之后获取排课信息
-            getPKData();
-            setState(true);
-            setBJIDData('');
-            return true;
-          }
-          if (result.status === 'error') {
-            Modal.error({
-              title: '保存失败',
-              content: result.message,
-            });
-          }
-        } catch (err) {
-          message.error('保存失败');
-          return true;
-        }
-      } else {
-        message.warning('请先添加场地在进行排课');
-      }
-    } else {
-      message.warning('请先选择班级后再进行排课');
-    }
-    return true;
-  };
   const onReset = () => {
     const bjID = getQueryString('courseId');
     if (bjID) {
       history.go(-1);
     } else {
-      tableServers();
+      // tableServers();
       setState(true);
-      setBJIDData('');
-    }
-  };
-  // 获取课程对应课程班数据信息
-  const getBjData = async (kcName?: string) => {
-    const bjmcResl = await getAllClasses({
-      page: 0,
-      pageSize: 0,
-      NJSJId: NJID,
-      KHKCSJId: kcName,
-      XNXQId: curXNXQId,
-      BJZT: '未开班',
-    });
-    if (bjmcResl.status === 'ok') {
-      const bjRows = bjmcResl.data.rows;
-      setBjData(bjmcResl.data.rows);
-      // 获取课程班老师 是否存在
-      if (!Bj && index) {
-        const value = bjRows?.find((item: { id: string }) => item.id === index);
-        console.log('value', value);
-        if (value) {
-          BjClick(value, true);
-        }
-      }
-      // 判断获取的新课程和当前选中的bj 不匹配时 清掉 bj
-      if (Bj && index) {
-        console.log('--------');
-
-        const value = bjRows?.find((item: { id: string }) => item.id === index);
-        if (!value) {
-          setTearchId(undefined);
-          setBj(undefined);
-          setIndex(undefined);
-          setBJIDData(undefined);
-          setCDLoading(false);
-        }
-      }
-    }
-  };
-  // 获取场地信息
-  const getCDMCList = async () => {
-    console.log('获取场地信息');
-
-    const fjList = await getAllFJSJ({
-      page: 1,
-      pageSize: 0,
-      name: '',
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (fjList.status === 'ok') {
-      if (fjList.data?.rows && fjList.data?.rows?.length > 0) {
-        const data: any = [].map.call(fjList.data.rows, (item: any) => {
-          return { label: item.FJMC, value: item.id };
-        });
-        // console.log('场地信息',data);
-
-        setCdmcData(data);
-      }
+      // setBJIDData('');
     }
   };
 
-  //查询房间占用 情况
-
-  useEffect(() => {
-    if (xXSJPZData?.length) {
-      if (oriSource) {
-        const tableData: any = processingData(oriSource, xXSJPZData);
-        console.log('tableData', tableData);
-
-        setNewTableDataSource(tableData);
-        // setTableDataSource(tableData);
-      }
+  const getKCStyle = (id: string) => {
+    if (id === Bj?.id) {
+      return { borderColor: 'rgba(62,136,248,1)' };
+    } else if (formValues?.BJId) {
+      return {};
     }
-  }, [oriSource]);
+    return {};
+  };
 
-  useEffect(() => {
-    getPKData();
-  }, [cdmcValue]);
+  // 班级选择
+  const BjClick = (value: any) => {
+    // 选择班级教师
+    const JS: any = value.KHBJJs?.find((items: any) => items.JSLX === '主教师');
+    const { JZGJBSJId, XM } = JS;
+    setTearchId(JZGJBSJId);
+    const chosenData = {
+      id: value.id,
+      cla: value.BJMC || '',
+      teacher: XM || '',
+      teacherID: JZGJBSJId || '',
+      XNXQId: curXNXQId || '',
+      KHBJSJId: value.id || '',
+      color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
+    };
+    setBj(chosenData);
+    // setIndex(value.id);
+    // setBJIDData(value.id);
+  };
 
-  // 通过课程数据接口拿到所有的课程
+  //获取课程数据
   const getKcData = async () => {
-    console.log('--------------');
     const khkcResl = await getAllCourses({
       page: 0,
       pageSize: 0,
@@ -437,358 +322,383 @@ const AddArranging: FC<PropsType> = (props) => {
       setKcType(KCMC);
     }
   };
-  useEffect(() => {
-    // async function fetchData() {
-    //   try {
-    //     const Fjplan = await getFJPlan({
-    //       XNXQId: curXNXQId,
-    //       XXJBSJId: currentUser?.xxId,
-    //       isPk: false,
-    //     });
-    //     if (Fjplan.status === 'ok') {
-    //       setBasicData(Fjplan.data);
-    //     }
-    //   } catch (error) {
-    //     message.error('error');
-    //   }
-    //   setLoading(false);
-    // }
-    // fetchData();
-    getCDMCList();
-  }, []);
-  useEffect(() => {
-    if (formValues) {
-      // 如果后查询的课程列表不存在此记录，则加到第一个
-      // if (!kcmcData?.find((n) => n.value === formValues.KHKCSJId)) {
-      //   kcmcData?.unshift({
-      //     label: formValues.KCMC,
-      //     value: formValues.KC,
-      //   });
-      // }
-      // setKcType(kcmcData);
-      // const selected = bjData?.find((item: { id: string }) => item.id === formValues.BJId);
-      // const ZJSID = selected?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.id;
-      // const ZJSName = selected?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ?.XM;
-      // setTearchId(ZJSID);
-      // const chosenData = {
-      //   cla: selected?.BJMC || '',
-      //   teacher: ZJSName || '',
-      //   teacherID: ZJSID || '',
-      //   XNXQId: curXNXQId || '',
-      //   KHBJSJId: selected?.id || '',
-      //   color: selected?.KHKCSJ?.KBYS || 'rgba(62, 136, 248, 1)',
-      // };
-      // console.log('chosenData',chosenData);
 
-      // setBj(chosenData);
-      form.setFieldsValue(formValues);
+  // 获取课程对应课程班数据信息
+  const getBjData = async (kcName?: string) => {
+    const bjmcResl = await getAllClasses({
+      page: 0,
+      pageSize: 0,
+      NJSJId: NJID,
+      KHKCSJId: kcName,
+      XNXQId: curXNXQId,
+      BJZT: '未开班',
+    });
+    if (bjmcResl.status === 'ok') {
+      const bjRows = bjmcResl.data.rows;
+      setBjData(bjRows);
+      // 获取课程班老师 是否存在
+
+      if (!Bj && formValues?.BJId) {
+        const value = bjRows?.find((item: { id: string }) => item.id === formValues?.BJId);
+        // console.log('value', value);
+        if (value) {
+          BjClick(value);
+        }
+      }
+      // 判断获取的新课程和当前选中的bj 不匹配时 清掉 bj
+      if (Bj?.id) {
+        console.log('--------');
+
+        const value = bjRows?.find((item: { id: string }) => item.id === Bj?.id);
+        if (!value) {
+          setTearchId(undefined);
+          setBj(undefined);
+          // setIndex(undefined);
+          // setBJIDData(undefined);
+          setCDLoading(false);
+        }
+      }
     }
-  }, [kcmcData, formValues]);
+  };
 
   useEffect(() => {
     getKcData();
     getBjData();
   }, [XQID, NJID]);
 
-  const getKCStyle = (id: string) => {
-    if (id === index) {
-      return { borderColor: 'rgba(62,136,248,1)' };
-    } else if (formValues?.BJId) {
-      return { cursor: 'not-allowed' };
-    }
-    return {};
+  // 默认选择本校
+  useEffect(() => {
+    form.setFieldsValue({ XQ: campus[0].value });
+  }, [props.campus]);
+
+  //获取年级信息
+  const getGradeData = () => {
+    const response = getAllGrades({ XD: currentUser?.XD?.split(',') });
+    Promise.resolve(response).then((res: any) => {
+      if (res.status === 'ok') {
+        const optNJ: any[] = [];
+        const nj = ['幼儿园', '小学', '初中', '高中'];
+        nj.forEach((itemNJ) => {
+          res.data?.forEach((item: any) => {
+            if (item.XD === itemNJ) {
+              optNJ.push({
+                label: `${item.XD}${item.NJMC}`,
+                value: item.id,
+              });
+            }
+          });
+        });
+        setGrade(optNJ);
+      }
+    });
   };
+  // 初始化请求获取年级信息
+  useEffect(() => {
+    getGradeData();
+  }, []);
 
   // 清除
   const showDeleteConfirm = () => {
     confirm({
-      title: '温馨提示',
+      title: '提示',
       icon: <QuestionCircleOutlined style={{ color: 'red' }} />,
-      content: '将会清除当前班级已排好的所有课程，您确定要继续吗？',
+      content: '确定要清除当前所选课程班的排课信息吗？',
       onOk() {
-        const parameter = {
-          bjIds: [index],
-          data: [],
-        };
-        const result = createKHPKSJ(parameter);
-        // setCDLoading(true);
-        // getPKData();
-        // setExcelTableValue([]);
-
-        Promise.resolve(result).then((data) => {
-          if (data.status === 'ok') {
-            setCDLoading(false);
-            console.log('------------');
-            const Fjplan = getFJPlan({
-              XNXQId: curXNXQId,
-              XXJBSJId: currentUser?.xxId,
-              isPk: false,
-            });
-            Promise.resolve(Fjplan).then((FjplanData) => {
-              if (FjplanData.status === 'ok') {
-                // const datad:any = processingData(FjplanData.data, xXSJPZData);
-                setExcelTableValue([]);
-                // setTableDataSource(datad);
-                // setNewTableDataSource(datad)
-                getPKData();
-
-                message.success('清除成功');
-              }
-            });
-          }
-        });
+        if (Bj?.id) {
+          const parameter = {
+            bjIds: [Bj?.id],
+            data: [],
+          };
+          const result = createKHPKSJ(parameter);
+          Promise.resolve(result).then((data) => {
+            if (data.status === 'ok') {
+              setCDLoading(false);
+              // 移除当前班级 所有排课
+              screenOriSource.forEach((item: any) => {
+                const { KHPKSJs } = item;
+                if (KHPKSJs.length > 0) {
+                  item.KHPKSJs = KHPKSJs.filter((KHPKSJ: any) => KHPKSJ.KHBJSJId !== Bj.id);
+                }
+              });
+              refreshTable();
+            }
+          });
+        }
       },
     });
   };
 
+  // 场地改变重新筛选表格
+  useEffect(() => {
+    if (Bj?.id) {
+      console.log('监听场地和班级');
+      setLoading(true);
+      refreshTable();
+    }
+  }, [cdmcValue, Bj]);
+
+  useEffect(() => {
+    if (formValues) {
+      form.setFieldsValue(formValues);
+    }
+  }, [formValues]);
+
   return (
-    <div style={{ background: '#FFFFFF' }}>
-      <p className="xinzen"> {formValues && formValues.BJId ? '编辑排课' : '新增排课'}</p>
-      <Spin spinning={loading} style={{ height: '100vh' }} size="large">
-        {!loading ? (
-          <ProForm
-            className="ArrangingFrom"
-            name="validate_other"
-            layout="horizontal"
-            form={form}
-            onFinish={submit}
-            submitter={{
-              render: (Props) => {
-                return [
-                  <Button
-                    key="submit"
-                    style={{
-                      border: '1px solid #3E88F8 ',
-                      marginRight: 8,
-                      background: '#3E88F8',
-                      color: '#fff',
-                    }}
-                    onClick={() => Props.form?.submit?.()}
-                  >
-                    保存
-                  </Button>,
-                  <Button
-                    key="rest"
-                    style={{ border: '1px solid #EAEDEE ', background: '#EAEDEE', color: '#999' }}
-                    onClick={() => onReset()}
-                  >
-                    取消
-                  </Button>,
-                  <Button
-                    style={{
-                      border: '1px solid #F04D4D ',
-                      marginRight: 8,
-                      background: '#F04D4D',
-                      color: '#fff',
-                    }}
-                    onClick={showDeleteConfirm}
-                  >
-                    清除
-                  </Button>,
-                ];
-              },
+    <>
+      <Button
+        type="primary"
+        onClick={onReset}
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <LeftOutlined />
+        返回上一页
+      </Button>
+      <Card
+        size="small"
+        bordered={false}
+        headStyle={{
+          fontSize: 16,
+          fontWeight: 700,
+        }}
+        bodyStyle={{
+          background: '#FFFFFF',
+        }}
+        title={`${formValues && formValues.BJId ? '编辑排课' : '新增排课'}`}
+        extra={
+          <Button
+            style={{
+              border: '1px solid #F04D4D ',
+              marginRight: 8,
+              background: '#F04D4D',
+              color: '#fff',
             }}
+            danger
+            onClick={showDeleteConfirm}
           >
-            <div className={styles.screen} style={{ display: 'flex' }}>
-              <ProFormSelect
-                label="校区"
-                width="md"
-                name="XQ"
-                disabled={formValues?.BJId}
-                options={campus || []}
-                fieldProps={{
-                  async onChange(value: any) {
-                    form.setFieldsValue({ NJ: undefined, KC: undefined });
-                    setXQID(value);
-                  },
-                }}
-              />
-              <ProFormSelect
-                label="年级"
-                width="md"
-                name="NJ"
-                disabled={formValues?.BJId}
-                options={grade || []}
-                fieldProps={{
-                  async onChange(value) {
-                    // 年级选择时将选中的课程清空
-                    form.setFieldsValue({ KC: undefined });
-                    setNJID(value);
-                  },
-                }}
-              />
-              <ProFormSelect
-                label="课程"
-                width="md"
-                options={kcType || []}
-                name="KC"
-                disabled={formValues?.BJId}
-                showSearch
-                fieldProps={{
-                  async onChange(value) {
-                    getBjData(value);
-                  },
-                }}
-              />
-            </div>
-            <Form.Item label="场地名称">
-              <Select
-                style={{ width: 200 }}
-                value={cdmcValue}
-                allowClear
-                placeholder="请选择"
-                onChange={(value) => setCdmcValue(value)}
-              >
-                {cdmcData?.map((item: selectType) => {
-                  return (
-                    <Option value={item.value} key={item.value}>
-                      {item.label}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-            {/* <div>
-              <span>场地名称：</span>
-                <div>
-                 
-                </div>
-            </div> */}
-            <div className="banji">
-              <span>课程班：</span>
-              {bjData && bjData.length === 0 ? (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-              ) : bjData && bjData.length < 15 ? (
-                <ProCard ghost className="banjiCard">
-                  {bjData.map((value: any) => {
-                    const teacher =
-                      value?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ ||
-                      value?.KHBJJs?.[0]?.JZGJBSJ;
-                    return (
-                      <ProCard
-                        className="banjiItem"
-                        layout="center"
-                        bordered
-                        onClick={() => BjClick(value)}
-                        style={getKCStyle(value.id)}
-                      >
-                        <Tooltip title={value.BJMC}>
-                          <p>{value.BJMC}</p>
-                        </Tooltip>
-                        <span>
-                          {teacher?.XM === '未知' && teacher?.WechatUserId ? (
-                            <WWOpenDataCom
-                              style={{ color: '#666' }}
-                              type="userName"
-                              openid={teacher.WechatUserId}
-                            />
-                          ) : (
-                            teacher?.XM
-                          )}
-                        </span>
-                        {index === value.id ? <span className="douhao">√</span> : ''}
-                      </ProCard>
-                    );
-                  })}
-                </ProCard>
-              ) : (
-                <div>
-                  {packUp === false ? (
-                    <ProCard ghost className="banjiCard">
-                      {bjData && bjData.length > 0
-                        ? bjData.slice(0, 13).map((value: any) => {
-                            return (
-                              <ProCard
-                                layout="center"
-                                bordered
-                                className="banjiItem"
-                                onClick={() => BjClick(value)}
-                                style={getKCStyle(value.id)}
-                              >
-                                <p>{value.BJMC}</p>
-                                <span>
-                                  {
-                                    value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                      ?.JZGJBSJ?.XM
-                                  }
-                                  {/* <WWOpenDataCom
+            清除排课
+          </Button>
+        }
+      >
+        <Spin spinning={loading} style={{ height: '100vh' }} size="large">
+          {!loading ? (
+            <ProForm
+              className="ArrangingFrom"
+              name="validate_other"
+              layout="horizontal"
+              form={form}
+              // onFinish={submit}
+              submitter={false}
+            >
+              {/* <div className={styles.screen} style={{ display: 'flex', justifyContent:'center', background:'red' }}> */}
+              <Row justify="start" align="middle" style={{ background: ' #F5F5F5' }}>
+                <Col span={6}>
+                  <ProFormSelect
+                    label="校区"
+                    width="md"
+                    name="XQ"
+                    style={{
+                      margin: '12px 0',
+                    }}
+                    disabled={formValues?.BJId}
+                    options={campus || []}
+                    fieldProps={{
+                      async onChange(value: any) {
+                        form.setFieldsValue({ NJ: undefined, KC: undefined });
+                        setXQID(value);
+                      },
+                    }}
+                  />
+                </Col>
+                <Col span={6}>
+                  <ProFormSelect
+                    label="年级"
+                    width="md"
+                    name="NJ"
+                    options={grade || []}
+                    fieldProps={{
+                      async onChange(value) {
+                        // 年级选择时将选中的课程清空
+                        form.setFieldsValue({ KC: undefined });
+                        setNJID(value);
+                      },
+                    }}
+                  />
+                </Col>
+                <Col span={6}>
+                  <ProFormSelect
+                    label="课程"
+                    width="md"
+                    options={kcType || []}
+                    name="KC"
+                    showSearch
+                    fieldProps={{
+                      async onChange(value) {
+                        getBjData(value);
+                      },
+                    }}
+                  />
+                </Col>
+                <Col span={6}>
+                  <Form.Item label="场地名称">
+                    <Select
+                      style={{ width: 200 }}
+                      value={cdmcValue}
+                      allowClear
+                      placeholder="请选择"
+                      onChange={(value) => setCdmcValue(value)}
+                    >
+                      {cdmcData?.map((item: selectType) => {
+                        return (
+                          <Option value={item.value} key={item.value}>
+                            {item.label}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              {/* </div> */}
+
+              <div className="banji">
+                <span style={{ width: '120px' }}>课程班：</span>
+                {bjData && bjData.length === 0 ? (
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                ) : bjData && bjData.length < 15 ? (
+                  <ProCard ghost className="banjiCard">
+                    {bjData.map((value: any) => {
+                      const teacher =
+                        value?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ ||
+                        value?.KHBJJs?.[0]?.JZGJBSJ;
+                      return (
+                        <ProCard
+                          className="banjiItem"
+                          layout="center"
+                          bordered
+                          onClick={() => BjClick(value)}
+                          style={getKCStyle(value.id)}
+                        >
+                          <Tooltip title={value.BJMC}>
+                            <p>{value.BJMC}</p>
+                          </Tooltip>
+                          <span>
+                            {teacher?.XM === '未知' && teacher?.WechatUserId ? (
+                              <WWOpenDataCom
+                                style={{ color: '#666' }}
+                                type="userName"
+                                openid={teacher.WechatUserId}
+                              />
+                            ) : (
+                              teacher?.XM
+                            )}
+                          </span>
+                          {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                        </ProCard>
+                      );
+                    })}
+                  </ProCard>
+                ) : (
+                  <div>
+                    {packUp === false ? (
+                      <ProCard ghost className="banjiCard">
+                        {bjData && bjData.length > 0
+                          ? bjData.slice(0, 13).map((value: any) => {
+                              return (
+                                <ProCard
+                                  layout="center"
+                                  bordered
+                                  className="banjiItem"
+                                  onClick={() => BjClick(value)}
+                                  style={getKCStyle(value.id)}
+                                >
+                                  <p>{value.BJMC}</p>
+                                  <span>
+                                    {
+                                      value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                        ?.JZGJBSJ?.XM
+                                    }
+                                    {/* <WWOpenDataCom
                                         style={{ color: '#666' }}
                                         type="userName"
                                         openid={value.ZJS}
                                       /> */}
-                                </span>
-                                {index === value.id ? <span className="douhao">√</span> : ''}
-                              </ProCard>
-                            );
-                          })
-                        : ''}
-                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                        展开 <DownOutlined style={{ color: '#4884FF' }} />
+                                  </span>
+                                  {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                                </ProCard>
+                              );
+                            })
+                          : ''}
+                        <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                          展开 <DownOutlined style={{ color: '#4884FF' }} />
+                        </ProCard>
                       </ProCard>
-                    </ProCard>
-                  ) : (
-                    <ProCard ghost className="banjiCard">
-                      {bjData && bjData.length > 0
-                        ? bjData.map((value: any) => {
-                            return (
-                              <ProCard
-                                layout="center"
-                                bordered
-                                className="banjiItem"
-                                onClick={() => BjClick(value)}
-                                style={getKCStyle(value.id)}
-                              >
-                                <p>{value.BJMC}</p>
-                                <span>
-                                  {
-                                    value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                      ?.JZGJBSJ?.XM
-                                  }
-                                  {/* <WWOpenDataCom
+                    ) : (
+                      <ProCard ghost className="banjiCard">
+                        {bjData && bjData.length > 0
+                          ? bjData.map((value: any) => {
+                              return (
+                                <ProCard
+                                  layout="center"
+                                  bordered
+                                  className="banjiItem"
+                                  onClick={() => BjClick(value)}
+                                  style={getKCStyle(value.id)}
+                                >
+                                  <p>{value.BJMC}</p>
+                                  <span>
+                                    {
+                                      value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                        ?.JZGJBSJ?.XM
+                                    }
+                                    {/* <WWOpenDataCom
                                       style={{ color: '#666' }}
                                       type="userName"
                                       openid={value.ZJS}
                                     /> */}
-                                </span>
-                                {index === value.id ? <span className="douhao">√</span> : ''}
-                              </ProCard>
-                            );
-                          })
-                        : ''}
-                      <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                        收起 <UpOutlined style={{ color: '#4884FF' }} />
+                                  </span>
+                                  {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                                </ProCard>
+                              );
+                            })
+                          : ''}
+                        <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                          收起 <UpOutlined style={{ color: '#4884FF' }} />
+                        </ProCard>
                       </ProCard>
-                    </ProCard>
-                  )}
-                </div>
-              )}
-            </div>
-            <div className="site">
-              <span>场地：</span>
-              {Bj || index ? (
-                <Spin spinning={CDLoading}>
-                  <ExcelTable
-                    className={styles.borderTable}
-                    columns={columns}
-                    dataSource={newTableDataSource}
-                    chosenData={Bj}
-                    onExcelTableClick={onExcelTableClick}
-                    type="edit"
-                    getSelectdata={getSelectdata}
-                    tearchId={tearchId}
-                    basicData={oriSource}
-                  />
-                </Spin>
-              ) : (
-                <div className={styles.noContent}>请先选择班级后再进行排课</div>
-              )}
-            </div>
-          </ProForm>
-        ) : (
-          ''
-        )}
-      </Spin>
-    </div>
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="site">
+                <span>场地：</span>
+                {Bj ? (
+                  <Spin spinning={CDLoading}>
+                    <ExcelTable
+                      className={styles.borderTable}
+                      columns={columns}
+                      dataSource={newTableDataSource}
+                      chosenData={Bj}
+                      onExcelTableClick={onExcelTableClick}
+                      type="edit"
+                      getSelectdata={getSelectdata}
+                      tearchId={tearchId}
+                      // basicData={oriSource}
+                    />
+                  </Spin>
+                ) : (
+                  <div className={styles.noContent}>请先选择班级后再进行排课</div>
+                )}
+              </div>
+            </ProForm>
+          ) : (
+            ''
+          )}
+        </Spin>
+      </Card>
+    </>
   );
 };
 
