@@ -258,7 +258,9 @@ const OrderInquiry = (props: any) => {
     getBjData();
   }, [kcmcValue]);
   useEffect(() => {
-    getData();
+    if(curXNXQId){
+      getData();
+    }
   }, [curXNXQId, kcmcValue, bjmcValue,name]);
   const onExportClick = () => {
     setLoading(true);

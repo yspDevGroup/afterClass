@@ -407,7 +407,6 @@ const RoomManagement = () => {
         bodyStyle={{
           maxHeight: '50vh',
           overflowY: 'auto',
-          paddingTop: 0,
         }}
       >
         {modalType === 'uphold' ? (
