@@ -35,8 +35,8 @@ const ImagesUpload = (props: {
     if (!isJpgOrPng) {
       message.error('上传的文件类型有误');
     }
-    const isLt2M = file.size / 1024 / 1024 < 5;
-    if (!isLt2M) {
+    const isLt5M = file.size / 1024 / 1024 < 5;
+    if (!isLt5M) {
       message.error('文件大小超过5MB');
     }
     return isJpgOrPng && isLt5M;
@@ -105,7 +105,7 @@ const ImagesUpload = (props: {
         }}
         fileList={fileList}
         onPreview={handlePreview}
-        beforeUpload={handleBeforeUpload}
+        // beforeUpload={handleBeforeUpload}
         onChange={handleChange}
         maxCount={9}
         multiple

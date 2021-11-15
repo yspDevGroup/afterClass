@@ -748,6 +748,7 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'textArea',
       disabled: readonly,
       label: '简介：',
+      rules: [{ required: true, message: '请输入班级课程安排' }],
       name: 'BJMS',
       key: 'BJMS',
     },
