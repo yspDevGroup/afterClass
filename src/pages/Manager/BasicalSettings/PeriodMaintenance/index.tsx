@@ -5,9 +5,9 @@ import { theme } from '@/theme-default';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import type { Form, FormInstance, Input } from 'antd';
+import type { FormInstance } from 'antd';
 import { Popconfirm } from 'antd';
-import { Divider } from 'antd';
+import { Divider, Form, Input } from 'antd';
 import { Button } from 'antd';
 import type { Maintenance } from './data';
 import styles from './index.less';
@@ -104,22 +104,23 @@ const PeriodMaintenance = () => {
   };
 
   const handleAMSubmit = async () => {
-    formRef.current.validateFields()
+    formRef.current
+      .validateFields()
       .then(async (values: any) => {
         const res = await sendMessageToParent({
           to: 'toall',
           text: values.info,
-          ids: []
+          ids: [],
         });
         setAMVisible(false);
         if (res.status === 'ok') {
           message.success('通知已成功发送');
         } else {
           message.error(res.message);
-        };
-        formRef.current.validateFields()
+        }
+        formRef.current.validateFields();
       })
-      .catch((info: { errorFields: any; }) => {
+      .catch((info: { errorFields: any }) => {
         console.log(info.errorFields);
       });
   };
@@ -131,7 +132,7 @@ const PeriodMaintenance = () => {
       valueType: 'index',
       width: 58,
       align: 'center',
-      fixed: 'left'
+      fixed: 'left',
     },
     {
       title: '时段名称',
@@ -139,7 +140,7 @@ const PeriodMaintenance = () => {
       align: 'center',
       width: 200,
       ellipsis: true,
-      fixed: 'left'
+      fixed: 'left',
     },
     {
       title: '所属学期',
@@ -279,7 +280,9 @@ const PeriodMaintenance = () => {
           rowKey="id"
           dateFormatter="string"
           toolBarRender={() => [
-            <span style={{color:'#4884ff',marginRight:10}}>该页面所有时间维护，皆与本校课后服务密切相关，请谨慎操作</span>,
+            <span style={{ color: '#4884ff', marginRight: 10 }}>
+              该页面所有时间维护，皆与本校课后服务密切相关，请谨慎操作
+            </span>,
             <Button
               style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
               type="primary"
@@ -336,10 +339,7 @@ const PeriodMaintenance = () => {
           }}
         >
           <Form ref={formRef}>
-            <Form.Item
-              name="info"
-              initialValue={'课后服务报名开始啦！'}
-            >
+            <Form.Item name="info" initialValue={'课后服务报名开始啦！'}>
               <Input.TextArea defaultValue={'课后服务报名开始啦！'} />
             </Form.Item>
           </Form>
