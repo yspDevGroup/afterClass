@@ -86,6 +86,8 @@ export async function getJZGJBSJ(
       XL?: string;
       BYYX?: string;
       SXZY?: string;
+      QYMC?: string;
+      XXMC?: string;
       JSKM?: string;
       WechatUserId?: string;
       XNJGSJs?: { id?: string; LSJGH?: string; LSJGMC?: string; JGMC?: string; JGJC?: string }[];
@@ -203,6 +205,8 @@ export async function createJZG(body: API.CreateJZGJBSJ, options?: { [key: strin
       XL?: string;
       BYYX?: string;
       SXZY?: string;
+      QYMC?: string;
+      XXMC?: string;
       JSKM?: string;
       WechatUserId?: string;
       XNJGSJs?: { id?: string; LSJGH?: string; LSJGMC?: string; JGMC?: string; JGJC?: string }[];
