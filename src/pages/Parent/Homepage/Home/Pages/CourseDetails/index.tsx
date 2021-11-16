@@ -241,8 +241,8 @@ const CourseDetails: React.FC = () => {
 
             className={styles.classInformation}
             accordion
-            expandIcon={({ isActive }) => <span>{isActive ? "收起":"展开"}<RightOutlined rotate={isActive ? 90 : 0} /></span>}
-             expandIconPosition='right'
+            expandIcon={({ isActive }) => <span>{isActive ? "收起" : "展开"}<RightOutlined rotate={isActive ? 90 : 0} /></span>}
+            expandIconPosition='right'
           >
             {
               KcDetail?.KHBJSJs?.map((value: any) => {
@@ -331,6 +331,8 @@ const CourseDetails: React.FC = () => {
                           </tr>
                         </tbody>
                       </table>
+                      <p style={{fontWeight: 'bold'}}>班级简介</p>
+                      <p className={styles.content}>{BjDetails?.BJMS}</p>
                     </Panel>
                   )
                 }
