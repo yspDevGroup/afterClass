@@ -33,10 +33,15 @@ import type { classType, TableListParams } from './data';
 
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
-import { deleteKHKCSJ, getAllCourses, getTeacherByClassId, updateKHKCSJ } from '@/services/after-class/khkcsj';
+import {
+  deleteKHKCSJ,
+  getAllCourses,
+  getTeacherByClassId,
+  updateKHKCSJ,
+} from '@/services/after-class/khkcsj';
 import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
 import { createKHKCPJ, updateKHKCPJ, deleteKHKCPJ } from '@/services/after-class/khkcpj';
-
+import styles from './index.less';
 const { Option } = Select;
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
@@ -117,17 +122,17 @@ const CourseList = () => {
         const res = await getTeacherByClassId({
           KHKCSJId: data.id,
           pageSize: 0,
-          page: 0
+          page: 0,
         });
-        if(res.status === 'ok'){
+        if (res.status === 'ok') {
           setInfo({
             ...data,
-            KHKCJs: res?.data?.rows
+            KHKCJs: res?.data?.rows,
           });
-        }else{
+        } else {
           setInfo(data);
         }
-      }else{
+      } else {
         setInfo(data);
       }
     } else {
@@ -224,7 +229,7 @@ const CourseList = () => {
         {record.KCZT === 0 ? (
           <>
             <Popconfirm
-              title='课程发布后，可创建相应课程班，确定发布？'
+              title="课程发布后，可创建相应课程班，确定发布？"
               onConfirm={async () => {
                 const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 1 });
                 if (res.status === 'ok') {
@@ -255,20 +260,19 @@ const CourseList = () => {
           </>
         ) : (
           <Popconfirm
-          title='取消发布后，该课程及课程班家长不可见，确定取消？'
-          onConfirm={async () => {
-            const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 0 });
-            if (res.status === 'ok') {
-              message.success('操作成功');
-              action?.reload();
-            } else {
-              message.error(res.message || '操作失败');
-            }
-          }}
-        >
-          <a>取消发布</a>
-        </Popconfirm>
-
+            title="取消发布后，该课程及课程班家长不可见，确定取消？"
+            onConfirm={async () => {
+              const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 0 });
+              if (res.status === 'ok') {
+                message.success('操作成功');
+                action?.reload();
+              } else {
+                message.error(res.message || '操作失败');
+              }
+            }}
+          >
+            <a>取消发布</a>
+          </Popconfirm>
         )}
       </>
     );
@@ -294,7 +298,7 @@ const CourseList = () => {
     {
       title: '课程来源',
       align: 'center',
-      width: 180,
+      width: 150,
       key: 'SSJGLX',
       dataIndex: 'SSJGLX',
       valueType: 'select',
@@ -312,7 +316,7 @@ const CourseList = () => {
       width: 0,
       key: 'JGMC',
       dataIndex: 'JGMC',
-      hideInTable:true, // 列表中不显示此列
+      hideInTable: true, // 列表中不显示此列
       render: (_, record) => {
         return <>{record?.KHJYJG?.QYMC || '-'}</>;
       },
@@ -343,11 +347,7 @@ const CourseList = () => {
           <EllipsisHint
             width="100%"
             text={text?.map((item: any) => {
-              return (
-                <Tag key={item?.id}>
-                  {`${item?.XD}${item?.NJMC}`}
-                </Tag>
-              );
+              return <Tag key={item?.id}>{`${item?.XD}${item?.NJMC}`}</Tag>;
             })}
           />
         );
@@ -474,7 +474,7 @@ const CourseList = () => {
   ];
   return (
     <>
-      <div>
+      <div className={styles.main}>
         <ProTable<classType>
           actionRef={actionRef}
           columns={columns}
@@ -484,7 +484,7 @@ const CourseList = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1300 }}
+          // scroll={{ x: 1300 }}
           request={async (params, sorter, filter) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
             const opts: TableListParams = {
