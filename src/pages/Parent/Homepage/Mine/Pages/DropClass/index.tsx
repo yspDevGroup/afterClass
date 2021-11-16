@@ -102,8 +102,8 @@ const DropClass = () => {
                     {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '4' ? <span style={{ color: '#FF0000' }}>退款失败</span> : ''}
                     <RightOutlined />
                   </p>
-                  {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <p>退订说明：{value?.BZ}</p> : ''}
-                  {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? <p>退款说明：{value?.KHXSTKs?.[0].BZ}</p> : ''}
+                  {value.ZT === 2 && value?.KHXSTKs?.length === 0 && value?.BZ ? <p>退订说明：{value?.BZ}</p> : ''}
+                  {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' && value?.KHXSTKs?.[0].BZ ? <p>退款说明：{value?.KHXSTKs?.[0].BZ}</p> : ''}
 
                   {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? (
                     <button
