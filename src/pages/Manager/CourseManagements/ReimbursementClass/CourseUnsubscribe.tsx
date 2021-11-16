@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Select, message, Modal, Radio, Input, Form, } from 'antd';
+import { Select, message, Modal, Radio, Input, Form, Space, Table, Tooltip, } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -37,6 +37,8 @@ const CourseUnsubscribe = () => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
+  // 批量审批
+  const [Examine, setExamine] = useState<any>()
   const getData = async () => {
     const resAll = await getKHTKSJ({
       XXJBSJId: currentUser?.xxId,
@@ -214,6 +216,9 @@ const CourseUnsubscribe = () => {
       dataIndex: 'ZT',
       key: 'ZT',
       align: 'center',
+      filters: true,
+      onFilter: true,
+      valueType: 'select',
       valueEnum: {
         0: {
           text: '申请中',
@@ -237,13 +242,17 @@ const CourseUnsubscribe = () => {
       align: 'center',
       fixed: 'right',
       render: (_: any, record: any) => {
-        return record.ZT === 0 ? (
-          <a onClick={() => {
-            setCurrent(record);
-            setVisible(true);
-          }}>
-            审批
-          </a>
+        return record.ZT === 0 ? (<>
+          {
+            Examine && Examine?.length ? <span style={{ color: '#666' }}>审批</span> :
+              <a onClick={() => {
+                setCurrent(record);
+                setVisible(true);
+              }}>
+                审批
+              </a>
+          }
+        </>
         ) : (
           ''
         )
@@ -251,6 +260,59 @@ const CourseUnsubscribe = () => {
       width: 90,
     },
   ];
+  // 批量退课
+  const handleSubmitPL = async (param: any) => {
+    const { ZT, BZ } = param;
+    try {
+      if (Examine && Examine?.length) {
+        Examine.forEach(async (value: any) => {
+          const ids = { id: value.id };
+          const body = { ZT, BZ, JZGJBSJId: currentUser.JSId };
+          const res = await updateKHTKSJ(ids, body);
+          if (res.status === 'ok') {
+            if (ZT === 2) {
+              message.success('退课申请已驳回');
+            } else if (value?.KHBJSJ?.FY !== 0) {
+              const money = Number(((value?.KHBJSJ?.FY / value?.KHBJSJ?.KSS) * value?.KSS).toFixed(2));
+              if (money !== 0.00) {
+                const result = await createKHXSTK({
+                  KHTKSJId: value?.id,
+                  /** 退款金额 */
+                  TKJE: money,
+                  /** 退款状态 */
+                  TKZT: 0,
+                  /** 学生ID */
+                  XSJBSJId: value?.XSJBSJId,
+                  /** 班级ID */
+                  KHBJSJId: value?.KHBJSJId,
+                  /** 学校ID */
+                  XXJBSJId: currentUser?.xxId,
+                  JZGJBSJId: currentUser.JSId
+                });
+                if (result.status === 'ok') {
+                  message.success('退课成功,已自动申请退款流程');
+                } else {
+                  message.warning(`退课成功,退款流程由于${result.message}申请失败`);
+                }
+              } else {
+                message.success('退课成功,退款余额为0，无需退款');
+              }
+            } else {
+              message.success('退课成功');
+            }
+            setVisible(false);
+            setCurrent(undefined);
+            getData();
+            actionRef?.current?.clearSelected();
+          } else {
+            message.error(res.message || '退课流程出现错误，请联系管理员或稍后重试。');
+          }
+        })
+      }
+    } catch (err) {
+      message.error('退课流程出现错误，请联系管理员或稍后重试。');
+    }
+  }
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
@@ -291,7 +353,8 @@ const CourseUnsubscribe = () => {
           }
           setVisible(false);
           setCurrent(undefined);
-          actionRef.current?.reload();
+          actionRef?.current?.clearSelected();
+          getData();
         } else {
           message.error(res.message || '退课流程出现错误，请联系管理员或稍后重试。');
         }
@@ -388,6 +451,38 @@ const CourseUnsubscribe = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
+          rowSelection={{
+            selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
+          }}
+          tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+            <Space size={24}>
+              <span>
+                已选 {selectedRowKeys.length} 项
+                <a style={{ marginLeft: 8 }} onClick={onCleanSelected}>
+                  取消选择
+                </a>
+              </span>
+            </Space>
+          )}
+          tableAlertOptionRender={({ selectedRowKeys, selectedRows }) => {
+            setExamine(selectedRows);
+            const newArr = selectedRows.filter((value: { ZT: number; }) => {
+              return value.ZT !== 0
+            })
+            return (
+              <Space size={16}>
+                {
+                  newArr.length === 0 ? <a onClick={() => {
+                    setExamine(selectedRows);
+                    setVisible(true);
+                  }}>批量审批</a> :
+                    <Tooltip title="所选数据中包含已审批数据，不可再次审批">
+                      <span style={{ color: '#666' }}>批量审批</span>
+                    </Tooltip>
+                }
+              </Space>
+            );
+          }}
           scroll={{ x: 1300 }}
           dataSource={dataSource}
           options={{
@@ -416,7 +511,7 @@ const CourseUnsubscribe = () => {
             wrapperCol={{ span: 15 }}
             form={form}
             initialValues={{ ZT: 1 }}
-            onFinish={handleSubmit}
+            onFinish={Examine && Examine?.length ? handleSubmitPL:handleSubmit}
             layout="horizontal"
           >
             <Form.Item label="审核意见" name="ZT">
