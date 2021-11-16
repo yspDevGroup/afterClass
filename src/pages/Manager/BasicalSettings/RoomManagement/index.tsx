@@ -39,8 +39,8 @@ const RoomManagement = () => {
   const [CDLXId, setCDLXId] = useState<string>('');
   const [dataLX, setDataLX] = useState<any>([]);
   // 设置学校信息
-  const [SSXQId, setSSXQId] = useState<string>('');
-  const [SSXQData, setSSXQData] = useState<any>([]);
+  // const [SSXQId, setSSXQId] = useState<string>('');
+  // const [SSXQData, setSSXQData] = useState<any>([]);
 
   const [dataSource] = useState<SearchDataType>(searchData);
   const [opens, setopens] = useState<boolean>(false);
@@ -235,8 +235,8 @@ const RoomManagement = () => {
           return { label: item.XXMC, value: item.id };
         });
         if (v?.length > 0) {
-          setSSXQId(v[0].value);
-          setSSXQData(v);
+          // setSSXQId(v[0].value);
+          // setSSXQData(v);
         }
       }
 
@@ -285,7 +285,7 @@ const RoomManagement = () => {
           sort,
           filter,
         ): Promise<Partial<RequestData<RoomItem>>> => {
-          // 表单搜索项会从 params 传入，传递给后端接口。
+          // 表单搜索项会从 params 传入，传递给后端接口。.
           const opts: TableListParams = {
             ...params,
             sorter: sort && Object.keys(sort).length ? sort : undefined,
@@ -306,7 +306,7 @@ const RoomManagement = () => {
         }}
         headerTitle={
           <>
-            <div style={{ marginLeft: '20px' }}>
+            {/* <div style={{ marginLeft: '20px' }}>
               <div className="ant-col ant-form-item-label">
                 <label title="所属校区: ">所属校区</label>
               </div>
@@ -327,7 +327,7 @@ const RoomManagement = () => {
                     </Select.Option>
                   ))}
               </Select>
-            </div>
+            </div> */}
             <div style={{ marginLeft: '20px' }}>
               <SearchComponent
                 dataSource={[dataSource[0]]}

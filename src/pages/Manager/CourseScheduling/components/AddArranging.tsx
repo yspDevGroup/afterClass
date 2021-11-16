@@ -65,7 +65,7 @@ const AddArranging: FC<PropsType> = (props) => {
   const [form] = Form.useForm();
   const [loading] = useState(false);
   const [CDLoading, setCDLoading] = useState(false);
-  const [XQID, setXQID] = useState<any>('');
+  // const [XQID, setXQID] = useState<any>('');
   const [NJID, setNJID] = useState<any>(undefined);
   const [cdmcValue, setCdmcValue] = useState<any>();
   const [newTableDataSource, setNewTableDataSource] = useState<DataSourceType>([]);
@@ -168,7 +168,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 刷新Table
   const refreshTable = () => {
-    // console.log('screenOriSource', screenOriSource);
+    console.log('screenOriSource', screenOriSource);
     if (screenOriSource?.length > 0) {
       const screenCD = (dataSource1: any) => {
         const newDataSource = [...dataSource1];
@@ -364,7 +364,7 @@ const AddArranging: FC<PropsType> = (props) => {
   useEffect(() => {
     getKcData();
     getBjData();
-  }, [XQID, NJID]);
+  }, [NJID]);
 
   // 默认选择本校
   useEffect(() => {
@@ -431,7 +431,7 @@ const AddArranging: FC<PropsType> = (props) => {
   // 场地改变重新筛选表格
   useEffect(() => {
     if (Bj?.id) {
-      console.log('监听场地和班级');
+      // console.log('监听场地和班级');
       setLoading(true);
       refreshTable();
     }
@@ -493,7 +493,7 @@ const AddArranging: FC<PropsType> = (props) => {
             >
               {/* <div className={styles.screen} style={{ display: 'flex', justifyContent:'center', background:'red' }}> */}
               <Row justify="start" align="middle" style={{ background: ' #F5F5F5' }}>
-                <Col span={6}>
+                {/* <Col span={6}>
                   <ProFormSelect
                     label="校区"
                     width="md"
@@ -510,7 +510,7 @@ const AddArranging: FC<PropsType> = (props) => {
                       },
                     }}
                   />
-                </Col>
+                </Col> */}
                 <Col span={6}>
                   <ProFormSelect
                     label="年级"

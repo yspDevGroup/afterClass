@@ -76,7 +76,7 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
       case 'div':
         return (
           <div style={{ display: 'flex', height: 40 }} key={key}>
-            <div >{formItem.label}</div>
+            <div>{formItem.label}</div>
             <div style={{ marginTop: -6 }}>
               {lineItem?.map((item: any) => {
                 return renderFormItems([item]);
@@ -85,7 +85,7 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
           </div>
         );
       case 'divTab':
-        return <div style={formItem.style}>{formItem.text}</div>
+        return <div style={formItem.style}>{formItem.text}</div>;
       case 'group': {
         const colW = 24 / (groupItems ? groupItems.length : 1);
         return (
@@ -119,12 +119,17 @@ const renderFormItems = (formItems: FormItemsProps[]) => {
         );
       }
       case 'custom':
-        return <ProForm.Item
-          label={formItem.text}
-          name="dataSource"
-        >
-          {formItem.children}
-        </ProForm.Item>;
+        return (
+          <ProForm.Item label={formItem.text} name="dataSource">
+            {formItem.children}
+          </ProForm.Item>
+        );
+      case 'reactnode':
+        return (
+          <ProForm.Item label={formItem.label} key={key} {...currentProps}>
+            {formItem.children}
+          </ProForm.Item>
+        );
       case 'empty':
       default:
         return '';

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-15 13:41:03
- * @LastEditTime: 2021-11-16 11:32:28
+ * @LastEditTime: 2021-11-16 12:38:03
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\components\TeacherSelect\index.tsx
@@ -30,6 +30,14 @@ const TeacherSelect = (props: TeacherSelectProps) => {
   const [JGTeacher, setJGTeacher] = useState<any>();
   const [treeData, setTreeData] = useState<any[]>([]);
 
+  const getLable = (GH: string) => {
+    if (GH !== null && GH.length > 4) {
+      return `~${GH.substring(GH.length - 4)}`;
+    } else {
+      return `~ ${GH}`;
+    }
+  };
+
   const getTeacherList = async () => {
     const response = await getAllJZGJBSJ({
       XXJBSJId: xxId,
@@ -50,15 +58,25 @@ const TeacherSelect = (props: TeacherSelectProps) => {
       response.data?.rows?.forEach((item: any, index: number) => {
         if (index === 0) {
           data.title = item.XXMC;
+          item.XM = '未知';
         }
         const label =
           item.XM === '未知' && item.WechatUserId ? (
-            <WWOpenDataCom type="userName" openid={item.WechatUserId} />
+            <WWOpenDataCom
+              type="userName"
+              openid={item.WechatUserId}
+              style={{ display: 'inline' }}
+            />
           ) : (
             item.XM
           );
         data.children.push({
-          title: label,
+          title: (
+            <>
+              <>{label}</>
+              <>{getLable(item.GH)}</>
+            </>
+          ),
           value: item.id,
           key: item.id,
           WechatUserId: item.WechatUserId,
@@ -66,7 +84,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
       });
 
       setXXTeacher(data);
-      console.log('学校', data);
+      // console.log('学校', data);
     }
   };
   const getJgTeacher = async () => {
@@ -88,7 +106,10 @@ const TeacherSelect = (props: TeacherSelectProps) => {
         children: [],
       };
       rows?.forEach(
-        (item: { XM: string; WechatUserId: string; id: any; KHJYJG: any }, index: number) => {
+        (
+          item: { XM: string; WechatUserId: string; id: any; KHJYJG: any; GH: string },
+          index: number,
+        ) => {
           if (index === 0) {
             data.title = item.KHJYJG?.QYMC;
           }
@@ -100,7 +121,12 @@ const TeacherSelect = (props: TeacherSelectProps) => {
               item.XM
             );
           data.children.push({
-            label,
+            title: (
+              <>
+                <>{label}</>
+                <>{getLable(item.GH)}</>
+              </>
+            ),
             value: item.id,
             key: item.id,
             WechatUserId: item.WechatUserId,

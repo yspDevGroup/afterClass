@@ -393,6 +393,7 @@ const ClassManagement = () => {
     });
     if (res.status === 'ok') {
       // 设置初始排课数据
+      // console.log('设置',);
       setScreenOriSource(res.data);
       //设置table展示的排课数据
       if (bjId === null) {
@@ -514,6 +515,8 @@ const ClassManagement = () => {
       // 获取系统时间配置信息
       getSysTime();
 
+      // console.log('12123',curXNXQId);
+
       if (bjId === null) {
         // 课程名称数据
         getBjData();
@@ -597,7 +600,7 @@ const ClassManagement = () => {
               {/* 渲染的是四个选项框组件 */}
               <div className={styles.searchWrapper}>
                 <div>
-                  <span>
+                  {/* <span>
                     校区：
                     <Select
                       value={campusId}
@@ -614,7 +617,7 @@ const ClassManagement = () => {
                         );
                       })}
                     </Select>
-                  </span>
+                  </span> */}
                   <span>
                     所属学年学期：
                     <Select

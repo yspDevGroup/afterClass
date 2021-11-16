@@ -7,16 +7,17 @@ import { EditableProTable } from '@ant-design/pro-table';
 import moment from 'moment';
 import { enHenceMsg } from '@/utils/utils';
 import ProFormFields from '@/components/ProFormFields';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+// import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
-import { getTeacherByClassId } from '@/services/after-class/khkcsj';
-import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
+// import { getTeacherByClassId } from '@/services/after-class/khkcsj';
+// import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 import styles from './AddCourse.less';
 import { useModel } from 'umi';
+import TeacherSelect from '@/components/TeacherSelect';
 
 type AddCourseProps = {
   visible: boolean;
@@ -48,7 +49,7 @@ const AddCourse: FC<AddCourseProps> = ({
   KHKCAllData,
   currentUser,
   kCID,
-  CopyType
+  CopyType,
 }) => {
   const { initialState } = useModel('@@initialState');
   const userRef = useRef(null);
@@ -59,10 +60,11 @@ const AddCourse: FC<AddCourseProps> = ({
   const [baoming, setBaoming] = useState<boolean>(false);
   const [kaike, setKaike] = useState<boolean>(false);
   // 教师
-  const [teacherData, setTeacherData] = useState<any[]>([]);
+  // const [teacherData, setTeacherData] = useState<any[]>([]);
   // 选中机构课程的任课老师
-  const [JGKCTeacherData, setJGKCTeacherData] = useState<any>([]);
+  // const [JGKCTeacherData, setJGKCTeacherData] = useState<any>([]);
   const [KCDate, setKCDate] = useState<any>([]);
+  const [kcId, setKcId] = useState<string | undefined>(undefined);
   // 报名时间
   const [BMData, setBMData] = useState<any>();
   // 开课时间
@@ -170,33 +172,33 @@ const AddCourse: FC<AddCourseProps> = ({
       />
     );
   };
-  const getJgTeacher = async (kcId: string) => {
-    const res = await getTeacherByClassId({
-      KHKCSJId: kcId,
-      pageSize: 0,
-      page: 0,
-    });
-    if (res.status === 'ok') {
-      const { rows } = res?.data;
-      const teacherOption: { label: string | JSX.Element; value: string; WechatUserId?: string }[] =
-        [];
-      rows?.forEach((item: { XM: string; WechatUserId: string; id: any }) => {
-        // 兼顾企微
-        const label =
-          item.XM === '未知' && item.WechatUserId ? (
-            <WWOpenDataCom type="userName" openid={item.WechatUserId} />
-          ) : (
-            item.XM
-          );
-        teacherOption.push({
-          label,
-          value: item.id,
-          WechatUserId: item.WechatUserId,
-        });
-      });
-      setJGKCTeacherData(teacherOption);
-    }
-  };
+  // const getJgTeacher = async (kcIdvalue: string) => {
+  //   const res = await getTeacherByClassId({
+  //     KHKCSJId: kcIdvalue,
+  //     pageSize: 0,
+  //     page: 0,
+  //   });
+  //   if (res.status === 'ok') {
+  //     const { rows } = res?.data;
+  //     const teacherOption: { label: string | JSX.Element; value: string; WechatUserId?: string }[] =
+  //       [];
+  //     rows?.forEach((item: { XM: string; WechatUserId: string; id: any }) => {
+  //       // 兼顾企微
+  //       const label =
+  //         item.XM === '未知' && item.WechatUserId ? (
+  //           <WWOpenDataCom type="userName" openid={item.WechatUserId} />
+  //         ) : (
+  //           item.XM
+  //         );
+  //       teacherOption.push({
+  //         label,
+  //         value: item.id,
+  //         WechatUserId: item.WechatUserId,
+  //       });
+  //     });
+  //     setJGKCTeacherData(teacherOption);
+  //   }
+  // };
   useEffect(() => {
     (async () => {
       if (curXNXQId) {
@@ -249,7 +251,7 @@ const AddCourse: FC<AddCourseProps> = ({
         setKaike(true);
       }
       if (formValues.SSJGLX === '机构课程') {
-        getJgTeacher(formValues.KHKCSJId);
+        // getJgTeacher(formValues.KHKCSJId);
       }
       if (formValues?.KHKCJCs?.length) {
         setChoosenJf(true);
@@ -273,27 +275,27 @@ const AddCourse: FC<AddCourseProps> = ({
       }
 
       // 获取教师
-      const res = await getAllJZGJBSJ({ XXJBSJId: currentUser?.xxId, page: 0, pageSize: 0 });
-      if (res.status === 'ok') {
-        const data = res.data?.rows;
-        const teachOption: { label: string | JSX.Element; value: string; WechatUserId?: string }[] =
-          [];
-        data?.forEach((item: any) => {
-          // 兼顾企微
-          const label =
-            item.XM === '未知' && item.WechatUserId ? (
-              <WWOpenDataCom type="userName" openid={item.WechatUserId} />
-            ) : (
-              item.XM
-            );
-          teachOption.push({
-            label,
-            value: item.id,
-            WechatUserId: item.WechatUserId,
-          });
-        });
-        setTeacherData(teachOption);
-      }
+      // const res = await getAllJZGJBSJ({ XXJBSJId: currentUser?.xxId, page: 0, pageSize: 0 });
+      // if (res.status === 'ok') {
+      //   const data = res.data?.rows;
+      //   const teachOption: { label: string | JSX.Element; value: string; WechatUserId?: string }[] =
+      //     [];
+      //   data?.forEach((item: any) => {
+      //     // 兼顾企微
+      //     const label =
+      //       item.XM === '未知' && item.WechatUserId ? (
+      //         <WWOpenDataCom type="userName" openid={item.WechatUserId} />
+      //       ) : (
+      //         item.XM
+      //       );
+      //     teachOption.push({
+      //       label,
+      //       value: item.id,
+      //       WechatUserId: item.WechatUserId,
+      //     });
+      //   });
+      //   setTeacherData(teachOption);
+      // }
     })();
   }, []);
   // 获取标题
@@ -318,6 +320,7 @@ const AddCourse: FC<AddCourseProps> = ({
     onClose();
   };
   const onFinish = (values: any) => {
+    console.log('保存,', values);
     let mertial: any[] = [];
     if (values?.dataSource?.length && choosenJf) {
       mertial = [].map.call(values?.dataSource, (item: any) => {
@@ -358,54 +361,54 @@ const AddCourse: FC<AddCourseProps> = ({
         const FJS =
           values?.FJS && values?.FJS?.length
             ? values.FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
             : undefined;
         res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
       } else if (formValues?.id) {
-          const ZJS = [
-            {
-              JSLX: '主教师',
-              JZGJBSJId: values.ZJS,
-              KHBJSJId: formValues?.id,
-            },
-          ];
-          const FJS =
-            values?.FJS && values?.FJS?.length
-              ? values.FJS.map((item: any) => {
+        const ZJS = [
+          {
+            JSLX: '主教师',
+            JZGJBSJId: values.ZJS,
+            KHBJSJId: formValues?.id,
+          },
+        ];
+        const FJS =
+          values?.FJS && values?.FJS?.length
+            ? values.FJS.map((item: any) => {
                 return {
                   JSLX: '副教师',
                   JZGJBSJId: item,
                   KHBJSJId: formValues?.id,
                 };
               })
-              : undefined;
-          delete options.BJZT;
-          const params = {
-            id: formValues?.id,
-          };
-          res = updateKHBJSJ(params, { ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
-        } else {
-          const ZJS = [
-            {
-              JSLX: '主教师',
-              JZGJBSJId: values.ZJS,
-            },
-          ];
-          const FJS =
-            values?.FJS && values?.FJS?.length
-              ? values.FJS.map((item: any) => {
+            : undefined;
+        delete options.BJZT;
+        const params = {
+          id: formValues?.id,
+        };
+        res = updateKHBJSJ(params, { ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
+      } else {
+        const ZJS = [
+          {
+            JSLX: '主教师',
+            JZGJBSJId: values.ZJS,
+          },
+        ];
+        const FJS =
+          values?.FJS && values?.FJS?.length
+            ? values.FJS.map((item: any) => {
                 return {
                   JSLX: '副教师',
                   JZGJBSJId: item,
                 };
               })
-              : undefined;
-          res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
-        }
+            : undefined;
+        res = createKHBJSJ({ ...options, KHBJJSs: FJS ? [...ZJS, ...FJS] : [...ZJS] });
+      }
 
       resolve(res);
       reject(res);
@@ -449,7 +452,7 @@ const AddCourse: FC<AddCourseProps> = ({
           const { value } = values.target;
           const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === value);
           setKCDate(kcDate);
-          setJGKCTeacherData([]);
+          // setJGKCTeacherData([]);
           setIsJg(value === '机构课程');
         },
       },
@@ -468,7 +471,8 @@ const AddCourse: FC<AddCourseProps> = ({
         }),
         onChange: (values: any) => {
           if (isJg) {
-            getJgTeacher(values);
+            setKcId(values);
+            // getJgTeacher(values);
           }
         },
       },
@@ -525,63 +529,128 @@ const AddCourse: FC<AddCourseProps> = ({
         },
       ],
     },
+    // {
+    //   type: 'group',
+    //   key: 'group2',
+    //   disabled: readonly,
+    //   groupItems: [
+    //     {
+    //       type: 'select',
+    //       label: '主班：',
+    //       name: 'ZJS',
+    //       key: 'ZJS',
+    //       disabled: readonly,
+    //       rules: [{ required: true, message: '请选择班主任' }],
+    //       fieldProps: {
+    //         showSearch: true,
+    //         // 创建机构课程的时 主班选择的是机构分配的任课老师
+    //         options: isJg ? JGKCTeacherData : teacherData,
+    //         optionFilterProp: 'label',
+    //         allowClear: true,
+    //         // optionItemRender(item: {label: string; value: string; WechatUserId?: string;}) {
+    //         //   console.log('item==========1');
+    //         //   console.log(item);
+    //         //   console.log(authType);
+    //         //   console.log('item==========2');
+    //         //   if(authType === 'wechat' && item.label === '未知' && item.WechatUserId) {
+    //         //     return <WWOpenDataCom type='userName' openid={item.WechatUserId} />
+    //         //   }
+    //         //   return item.label;
+    //         // }
+    //       },
+    //     },
+    //     {
+    //       type: 'select',
+    //       label: '副班：(多选)',
+    //       name: 'FJS',
+    //       key: 'FJS',
+    //       disabled: readonly,
+    //       fieldProps: {
+    //         mode: 'multiple',
+    //         showSearch: true,
+    //         // 创建机构课程的时 副班选择的是机构分配和学校一起的任课老师
+    //         options: [...teacherData, ...JGKCTeacherData],
+    //         optionFilterProp: 'label',
+    //         allowClear: true,
+    //         optionItemRender(item: { label: string; value: string; WechatUserId?: string }) {
+    //           if (
+    //             initialState?.buildOptions.authType === 'wechat' &&
+    //             item.label === '未知' &&
+    //             item.WechatUserId
+    //           ) {
+    //             return <WWOpenDataCom type="userName" openid={item.WechatUserId} />;
+    //           }
+    //           return item.label;
+    //         },
+    //       },
+    //     },
+    //   ],
+    // },
+
     {
-      type: 'group',
-      key: 'group2',
+      type: 'reactnode',
+      label: '主班：',
+      name: 'ZJS',
+      key: 'ZJS',
       disabled: readonly,
-      groupItems: [
-        {
-          type: 'select',
-          label: '主班：',
-          name: 'ZJS',
-          key: 'ZJS',
-          disabled: readonly,
-          rules: [{ required: true, message: '请选择班主任' }],
-          fieldProps: {
-            showSearch: true,
-            // 创建机构课程的时 主班选择的是机构分配的任课老师
-            options: isJg ? JGKCTeacherData : teacherData,
-            optionFilterProp: 'label',
-            allowClear: true,
-            // optionItemRender(item: {label: string; value: string; WechatUserId?: string;}) {
-            //   console.log('item==========1');
-            //   console.log(item);
-            //   console.log(authType);
-            //   console.log('item==========2');
-            //   if(authType === 'wechat' && item.label === '未知' && item.WechatUserId) {
-            //     return <WWOpenDataCom type='userName' openid={item.WechatUserId} />
-            //   }
-            //   return item.label;
-            // }
-          },
-        },
-        {
-          type: 'select',
-          label: '副班：(多选)',
-          name: 'FJS',
-          key: 'FJS',
-          disabled: readonly,
-          fieldProps: {
-            mode: 'multiple',
-            showSearch: true,
-            // 创建机构课程的时 副班选择的是机构分配和学校一起的任课老师
-            options: [...teacherData, ...JGKCTeacherData],
-            optionFilterProp: 'label',
-            allowClear: true,
-            optionItemRender(item: { label: string; value: string; WechatUserId?: string }) {
-              if (
-                initialState?.buildOptions.authType === 'wechat' &&
-                item.label === '未知' &&
-                item.WechatUserId
-              ) {
-                return <WWOpenDataCom type="userName" openid={item.WechatUserId} />;
-              }
-              return item.label;
-            },
-          },
-        },
-      ],
+      rules: [{ required: true, message: '请选择班主任' }],
+      children: (
+        <TeacherSelect
+          // value={ }
+          // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
+          type={isJg ? 2 : 1}
+          multiple={false}
+          xxId={currentUser?.xxId}
+          kcId={isJg ? kcId : undefined}
+          onChange={(value: any) => {
+            console.log('change', value);
+            return value;
+          }}
+          disabled={readonly}
+        />
+      ),
     },
+    {
+      type: 'reactnode',
+      label: '副班：(多选)',
+      name: 'FJS',
+      key: 'FJS',
+      disabled: readonly,
+      children: (
+        <TeacherSelect
+          // value={ }
+          // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
+          type={isJg ? 3 : 1}
+          multiple={true}
+          xxId={currentUser?.xxId}
+          kcId={isJg ? kcId : undefined}
+          onChange={(value: any) => {
+            console.log('change', value);
+            return value;
+          }}
+          disabled={readonly}
+        />
+      ),
+    },
+
+    //   fieldProps: {
+    //     showSearch: true,
+    //     // 创建机构课程的时 主班选择的是机构分配的任课老师
+    //     options: isJg ? JGKCTeacherData : teacherData,
+    //     optionFilterProp: 'label',
+    //     allowClear: true,
+    //     // optionItemRender(item: {label: string; value: string; WechatUserId?: string;}) {
+    //     //   console.log('item==========1');
+    //     //   console.log(item);
+    //     //   console.log(authType);
+    //     //   console.log('item==========2');
+    //     //   if(authType === 'wechat' && item.label === '未知' && item.WechatUserId) {
+    //     //     return <WWOpenDataCom type='userName' openid={item.WechatUserId} />
+    //     //   }
+    //     //   return item.label;
+    //     // }
+    //   },
+    // },
     {
       type: 'group',
       key: 'group3',
@@ -741,6 +810,8 @@ const AddCourse: FC<AddCourseProps> = ({
     },
   ];
 
+  console.log('readonly', readonly);
+
   return (
     <div>
       <div ref={userRef} />
@@ -774,6 +845,15 @@ const AddCourse: FC<AddCourseProps> = ({
           )
         }
       >
+        {/* <TeacherSelect
+          type={3}
+          multiple={false}
+          xxId={currentUser?.xxId}
+          kcId='8f15fa61-74a2-48cf-bb15-46d346ea3028'
+          onChange={(value: any) => {
+            console.log('change', value);
+          }}
+        /> */}
         <ProFormFields
           onFinish={onFinish}
           setForm={setForm}
