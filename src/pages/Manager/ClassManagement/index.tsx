@@ -64,21 +64,21 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [BMJSSJTime, setBMJSSJTime] = useState<any>();
   // 代报名中教辅费用
   const [JFAmount, setJFAmount] = useState<any>(0);
+  // 班级状态
+  const [BJZTMC, setBJZTMC] = useState<string | undefined>(undefined);
   // 获取学年学期信息，同时获取相关课程信息与年级信息
   useEffect(() => {
-    (
-      async () => {
-        const res = await getAllXXSJPZ({
-          XNXQId: curXNXQId,
-          XXJBSJId: currentUser?.xxId,
-          type: ['1']
-        })
-        if (res.status === 'ok') {
-          setBMJSSJTime(res.data?.[0].JSSJ)
-        }
+    (async () => {
+      const res = await getAllXXSJPZ({
+        XNXQId: curXNXQId,
+        XXJBSJId: currentUser?.xxId,
+        type: ['1'],
+      });
+      if (res.status === 'ok') {
+        setBMJSSJTime(res.data?.[0].JSSJ);
       }
-    )()
-  }, [curXNXQId])
+    })();
+  }, [curXNXQId]);
   useEffect(() => {
     async function fetchData() {
       const res = await queryXNXQList(currentUser?.xxId);
@@ -124,7 +124,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     if (curXNXQId) {
       actionRef.current?.reload();
     }
-  }, [curXNXQId, kcId]);
+  }, [curXNXQId, kcId, BJZTMC]);
 
   // 控制学期学年数据提示框
   const kaiguan = () => {
@@ -175,7 +175,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       id: data?.id,
     });
     const currentData = res.data;
-    currentData.KHBJJs?.forEach((element: { JSLX: string; JZGJBSJId: any; }) => {
+    currentData.KHBJJs?.forEach((element: { JSLX: string; JZGJBSJId: any }) => {
       if (element.JSLX === '副教师') {
         FJS.push(element?.JZGJBSJId);
       }
@@ -366,22 +366,24 @@ const CourseManagement = (props: { location: { state: any } }) => {
       ellipsis: true,
       filters: true,
       onFilter: false,
+
       render: (_, record) => {
-        return <>{record?.BJZT}
-          {
-            new Date(record.BMJSSJ) > new Date(BMJSSJTime) ? <Tooltip
-              overlayStyle={{ maxWidth: '30em' }}
-              title={
-                <>
-                  该课程班报名时段已超出总报名时段，家长、教育局端不可见，请调整
-                </>
-              }
-            >
-              <ExclamationCircleOutlined style={{ color: '#F04D4D',marginLeft:4}} />
-            </Tooltip> : <></>
-          }
-        </>
-      }
+        return (
+          <>
+            {record?.BJZT}
+            {new Date(record.BMJSSJ) > new Date(BMJSSJTime) ? (
+              <Tooltip
+                overlayStyle={{ maxWidth: '30em' }}
+                title={<>该课程班报名时段已超出总报名时段，家长、教育局端不可见，请调整</>}
+              >
+                <ExclamationCircleOutlined style={{ color: '#F04D4D', marginLeft: 4 }} />
+              </Tooltip>
+            ) : (
+              <></>
+            )}
+          </>
+        );
+      },
     },
     {
       title: '操作',
@@ -390,16 +392,13 @@ const CourseManagement = (props: { location: { state: any } }) => {
       align: 'center',
       width: 230,
       fixed: 'right',
+
       render: (_, record) => {
         const BMJSSJ = new Date(record?.BMJSSJ).getTime();
         const newDate = new Date().getTime();
         return (
           <>
-            <ActionBar
-              record={record}
-              handleEdit={handleEdit}
-              actionRef={actionRef}
-            />
+            <ActionBar record={record} handleEdit={handleEdit} actionRef={actionRef} />
             <Divider type="vertical" />
             {record?.BJZT === '已开班' && newDate <= BMJSSJ ? (
               <a
@@ -442,6 +441,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
               const obj = {
                 XNXQId: curXNXQId,
                 KHKCSJId: kcId || state?.id,
+                BJZT: BJZTMC,
                 page: 0,
                 pageSize: 0,
               };
@@ -454,16 +454,18 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     return filter?.KHKCSJ?.some((v: any) => v === item.KHKCSJ?.SSJGLX);
                   });
                 }
-                if (filter?.BJZT) {
-                  newTableDateSource = newTableDateSource.filter((item: any) => {
-                    return filter?.BJZT?.some((v: any) => v === item.BJZT);
-                  });
-                }
+
                 if (filter?.PK) {
                   newTableDateSource = newTableDateSource.filter((item: any) => {
-                    return filter?.PK?.some((v: any) => v === item.pk_count);
+                    return filter?.PK?.some((v: any) => Number(v) === item.pk_count);
                   });
                 }
+                // console.log('filter?.BJZT', filter?.BJZT);
+                // if (filter?.BJZT) {
+                //   newTableDateSource = newTableDateSource.filter((item: any) => {
+                //     return filter?.BJZT?.some((v: any) => v === item.BJZT);
+                //   });
+                // }
                 return {
                   data: newTableDateSource,
                   success: true,
@@ -522,6 +524,24 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   </Select>
                 </div>
               </div>
+              <span style={{ fontSize: 14, color: '#666', marginLeft: 15, flexWrap: 'wrap' }}>
+                班级状态：
+                <Select
+                  allowClear
+                  value={BJZTMC}
+                  style={{ width: 160 }}
+                  onChange={(value: string) => {
+                    setBJZTMC(value);
+                  }}
+                >
+                  <Option key="已开班" value="已开班">
+                    已开班
+                  </Option>
+                  <Option key="未开班" value="未开班">
+                    未开班
+                  </Option>
+                </Select>
+              </span>
             </div>
           }
           toolBarRender={() => [

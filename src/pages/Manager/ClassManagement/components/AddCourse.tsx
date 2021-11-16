@@ -320,7 +320,7 @@ const AddCourse: FC<AddCourseProps> = ({
     onClose();
   };
   const onFinish = (values: any) => {
-    console.log('保存,', values);
+    // console.log('保存,', values);
     let mertial: any[] = [];
     if (values?.dataSource?.length && choosenJf) {
       mertial = [].map.call(values?.dataSource, (item: any) => {
@@ -391,12 +391,12 @@ const AddCourse: FC<AddCourseProps> = ({
         const FJS =
           values?.FJS && values?.FJS?.length
             ? values.FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-                KHBJSJId: formValues?.id,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
             : undefined;
         delete options.BJZT;
         const params = {
@@ -615,7 +615,7 @@ const AddCourse: FC<AddCourseProps> = ({
           xxId={currentUser?.xxId}
           kcId={isJg ? kcId : undefined}
           onChange={(value: any) => {
-            console.log('change', value);
+            // console.log('change', value);
             return value;
           }}
           disabled={readonly}
@@ -637,7 +637,7 @@ const AddCourse: FC<AddCourseProps> = ({
           xxId={currentUser?.xxId}
           kcId={isJg ? kcId : undefined}
           onChange={(value: any) => {
-            console.log('change', value);
+            // console.log('change', value);
             return value;
           }}
           disabled={readonly}
@@ -714,19 +714,19 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-        type: 'custom',
-        text: '教辅材料',
-        name: 'KHKCJCs',
-        key: 'KHKCJCs',
-        children: getChildren(),
-      }
+          type: 'custom',
+          text: '教辅材料',
+          name: 'KHKCJCs',
+          key: 'KHKCJCs',
+          children: getChildren(),
+        }
       : '',
     BMData?.id
       ? {
-        type: 'divTab',
-        text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -769,10 +769,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-        type: 'divTab',
-        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -823,7 +823,7 @@ const AddCourse: FC<AddCourseProps> = ({
     },
   ];
 
-  console.log('readonly', readonly);
+  // console.log('readonly', readonly);
 
   return (
     <div>
