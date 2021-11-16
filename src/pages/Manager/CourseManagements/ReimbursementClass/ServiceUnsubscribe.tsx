@@ -219,6 +219,9 @@ const ServiceUnsubscribe = () => {
       dataIndex: 'ZT',
       key: 'ZT',
       align: 'center',
+      filters: true,
+      onFilter: true,
+      valueType: 'select',
       valueEnum: {
         0: {
           text: '申请中',
@@ -258,7 +261,6 @@ const ServiceUnsubscribe = () => {
   ];
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
-
     let DKFY: any;
     const a1 = new Date(current?.KHXXZZFW?.KSRQ).getTime();
     const a2 = new Date(current?.KHXXZZFW?.JSRQ).getTime();
