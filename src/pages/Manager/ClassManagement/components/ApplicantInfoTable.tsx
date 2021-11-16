@@ -131,33 +131,38 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                           XXJBSJId: currentUser?.xxId,
                           XSJBSJId: record?.XSJBSJ?.id,
                           DDLX: 0,
-                          KHBJSJId:KCBDatas?.id,
+                          KHBJSJId: KCBDatas?.id,
                         })
                         if (resgetAllKHXSDD.status === 'ok') {
-                          // 创建退款
-                          const rescreateKHXSTK = await createKHXSTK({
-                            KHBJSJId: record?.KHBJSJId,
-                            KHTKSJId: res.data[0].id,
-                            XXJBSJId: currentUser?.xxId,
-                            XSJBSJId: record?.XSJBSJ?.id,
-                            TKJE: resgetAllKHXSDD!.data![0].DDFY!,
-                            JZGJBSJId: currentUser?.JSId || testTeacherId,
-                            TKZT: 0,
-                            SPSJ: moment(new Date()).format()
-                          })
-                          if (rescreateKHXSTK.status === 'ok') {
-                            // 更新退款状态
-                            const resupdateKHXSTK = await updateKHXSTK({ id: rescreateKHXSTK!.data!.id! }, {
-                              TKZT: 1,
-                              TKSJ: moment(new Date()).format(),
-                              deviceIp: '117.36.118.42'
+                          if (resgetAllKHXSDD!.data![0].DDFY! <= 0) {
+                            onsetKHXSBJs();
+                            message.success('取消成功')
+                          } else {
+                            // 创建退款
+                            const rescreateKHXSTK = await createKHXSTK({
+                              KHBJSJId: record?.KHBJSJId,
+                              KHTKSJId: res.data[0].id,
+                              XXJBSJId: currentUser?.xxId,
+                              XSJBSJId: record?.XSJBSJ?.id,
+                              TKJE: resgetAllKHXSDD!.data![0].DDFY!,
+                              JZGJBSJId: currentUser?.JSId || testTeacherId,
+                              TKZT: 0,
+                              SPSJ: moment(new Date()).format()
                             })
-                            if (resupdateKHXSTK.status === 'ok') {
-                              message.success('课程费用已原路返还');
-                              onsetKHXSBJs();
-                              actionRefs.current?.reload();
-                            } else {
-                              message.error('取消失败，请联系管理员或稍后重试。');
+                            if (rescreateKHXSTK.status === 'ok') {
+                              // 更新退款状态
+                              const resupdateKHXSTK = await updateKHXSTK({ id: rescreateKHXSTK!.data!.id! }, {
+                                TKZT: 1,
+                                TKSJ: moment(new Date()).format(),
+                                deviceIp: '117.36.118.42'
+                              })
+                              if (resupdateKHXSTK.status === 'ok') {
+                                message.success('课程费用已原路返还');
+                                onsetKHXSBJs();
+                                actionRefs.current?.reload();
+                              } else {
+                                message.error('取消失败，请联系管理员或稍后重试。');
+                              }
                             }
                           }
                         }

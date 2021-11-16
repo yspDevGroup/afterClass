@@ -184,42 +184,22 @@ const AgentRegistration = (props: {
   const prev = () => {
     setBmCurrent(BmCurrent - 1);
   };
-  const handleCancel = async () => {
+  const onOkChange = async() => {
     setBJMC('');
     setXSMC('');
     setXGJF(false);
     setXZBXSId(undefined);
     setXZBXSDatas([]);
-    setPaymentCG('待支付');
-    setBmCurrent(0);
-    setModalVisible(false);
-    await deleteKHXSDD({ id: OrderId! });
-    actionRef.current?.reload();
-  };
-  const onOkChange = () => {
-    setBJMC('');
-    setXSMC('');
-    setXGJF(false);
-    setXZBXSId(undefined);
-    setXZBXSDatas([]);
-    setPaymentCG('待支付');
     setBmCurrent(0);
     setModalVisible(false);
     actionRef.current?.reload();
+    if(PaymentCG !== '待付款'){
+      await deleteKHXSDD({ id: OrderId! });
+    }
   };
-
   const handleFinish = async () => {
     setPaymentCG('已过期');
-    const res = await overdueKHXSDD({ id: OrderId! });
-    if (res.status === 'ok') {
-      // const { DDZT, ...rest } = orderInfo;
-      // setOrderInfo({
-      //   DDZT: '已过期',
-      //   ...rest,
-      // });
-    } else {
-      enHenceMsg(res.message);
-    }
+    await overdueKHXSDD({ id: OrderId! });
   };
   return (
     <>
@@ -231,7 +211,7 @@ const AgentRegistration = (props: {
           setModalVisible(false);
         }}
         footer={null}
-        onCancel={handleCancel}
+        onCancel={onOkChange}
         maskClosable={false}
       >
         <>
@@ -343,7 +323,7 @@ const AgentRegistration = (props: {
                         <Button
                           type="primary"
                           key="console"
-                          onClick={handleCancel}
+                          onClick={onOkChange}
                           className={styles.ZFCG}
                         >
                           关闭
@@ -399,7 +379,7 @@ const AgentRegistration = (props: {
                           <Button
                             type="primary"
                             key="console"
-                            onClick={handleCancel}
+                            onClick={onOkChange}
                             className={styles.ZFCG}
                           >
                             关闭
@@ -428,7 +408,7 @@ const AgentRegistration = (props: {
                     <Button
                       type="primary"
                       key="console"
-                      onClick={handleCancel}
+                      onClick={onOkChange}
                       className={styles.ZFCG}
                     >
                       关闭

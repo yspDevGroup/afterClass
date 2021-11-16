@@ -324,6 +324,12 @@ const AddCourse: FC<AddCourseProps> = ({
     let mertial: any[] = [];
     if (values?.dataSource?.length && choosenJf) {
       mertial = [].map.call(values?.dataSource, (item: any) => {
+        if (CopyType === 'copy') {
+          return {
+            JCFY: item.JCFY,
+            JCMC: item.JCMC,
+          };
+        }
         return {
           KHBJSJId: formValues?.id,
           JCFY: item.JCFY,
@@ -332,6 +338,12 @@ const AddCourse: FC<AddCourseProps> = ({
       });
     } else {
       mertial = [].map.call(dataSource, (item: any) => {
+        if (CopyType === 'copy') {
+          return {
+            JCFY: item.JCFY,
+            JCMC: item.JCMC,
+          };
+        }
         return {
           KHBJSJId: formValues?.id,
           JCFY: item.JCFY,
@@ -379,12 +391,12 @@ const AddCourse: FC<AddCourseProps> = ({
         const FJS =
           values?.FJS && values?.FJS?.length
             ? values.FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+                KHBJSJId: formValues?.id,
+              };
+            })
             : undefined;
         delete options.BJZT;
         const params = {
@@ -702,19 +714,19 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-          type: 'custom',
-          text: '教辅材料',
-          name: 'KHKCJCs',
-          key: 'KHKCJCs',
-          children: getChildren(),
-        }
+        type: 'custom',
+        text: '教辅材料',
+        name: 'KHKCJCs',
+        key: 'KHKCJCs',
+        children: getChildren(),
+      }
       : '',
     BMData?.id
       ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认报名时间段)：${BMData?.KSSJ} — ${BMData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -757,10 +769,10 @@ const AddCourse: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -805,6 +817,7 @@ const AddCourse: FC<AddCourseProps> = ({
       type: 'textArea',
       disabled: readonly,
       label: '简介：',
+      rules: [{ required: true, message: '请输入班级课程安排' }],
       name: 'BJMS',
       key: 'BJMS',
     },

@@ -7,7 +7,7 @@
  */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useModel,history } from 'umi';
 import { Button, Checkbox, message, Modal } from 'antd';
 import { createKHTKSJ } from '@/services/after-class/khtksj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
@@ -98,6 +98,7 @@ const DropOut = () => {
       message.success('申请已提交，请等待审核');
       getKcData(kcList);
       setModalVisible(false);
+      history.push('/parent/mine/dropClass/apply')
     } else {
       message.error(res.message);
     }
