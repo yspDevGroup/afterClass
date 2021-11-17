@@ -20,6 +20,7 @@ import headerTopSmall from '@/assets/headerTopSmall.png';
 
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { currentWechatUser } from './services/after-class/wechat';
+import Version from './components/Version';
 
 const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
 const authCallbackPath = '/auth_callback';
@@ -110,12 +111,12 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
             <BookOutlined />
             <span>业务组件文档</span>
           </Link>,
-          <>版本号：V2.2.0</>,
+          <Version />,
         ]
       : [
-          <div style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}>
-            版本号：V2.2.0
-          </div>,
+          <Version
+            style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}
+          />,
         ],
     collapsedButtonRender: false,
     menuHeaderRender: (logo: any, title: any, props: any) => {
