@@ -820,7 +820,7 @@ const AddCourse: FC<AddCourseProps> = ({
       rules: [{ required: true, message: '请输入班级课程安排' }],
       name: 'BJMS',
       key: 'BJMS',
-      placeholder: '-'
+      placeholder: '请输入班级课程安排'
     },
   ];
 
