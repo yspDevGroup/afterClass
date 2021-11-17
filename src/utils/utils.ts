@@ -71,7 +71,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
       return {
         ENV_type: 'dev',
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
-        ENV_host: 'http://localhost:8001',
+        ENV_host: 'http://localhost:8000',
         ssoHost: 'http://platform.test.xianyunshipei.com',
         authType: 'password',
         clientId: 'ww20993d96d6755f55',
