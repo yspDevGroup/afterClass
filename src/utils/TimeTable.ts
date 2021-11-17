@@ -2,15 +2,15 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-08 14:56:18
- * @LastEditTime: 2021-11-11 12:23:13
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-11-17 15:34:44
+ * @LastEditors: zpl
  */
 
-import { upsertKHBJKSSJ } from "@/services/after-class/khbjsj";
-import { getAllKHJSQJ } from "@/services/after-class/khjsqj";
-import { getAllKHJSTDK } from "@/services/after-class/khjstdk";
-import { getKHPKSJByBJID } from "@/services/after-class/khpksj";
-import moment from "moment";
+import { upsertKHBJKSSJ } from '@/services/after-class/khbjsj';
+import { getAllKHJSQJ } from '@/services/after-class/khjsqj';
+import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
+import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
+import moment from 'moment';
 
 // 定义调课，请假的特殊状态数据结构
 type SpecialType = {
@@ -26,7 +26,7 @@ type SpecialType = {
   };
   reason: string;
   jcId: string;
-}
+};
 /**
  * 组装课程班信息
  * @param data 每天课程安排
@@ -41,28 +41,35 @@ const arrangeClass = (data: API.KHPKSJ[]) => {
     if (KHBJSJ && KHBJSJ.id && courseData[KHBJSJ.id]) {
       const { weekDay } = courseData[KHBJSJ.id];
       const nowWkd = weekDay[0];
-      const curWkd = nowWkd.wkd === wkd
-        ? [{ wkd, count: (nowWkd.count + 1), XXSJPZId: nowWkd.XXSJPZId.concat([XXSJPZ?.id]) }]
-        : weekDay.concat([{
-          wkd,
-          count: 1,
-          XXSJPZId: [XXSJPZ?.id]
-        }]);
+      const curWkd =
+        nowWkd.wkd === wkd
+          ? [{ wkd, count: nowWkd.count + 1, XXSJPZId: nowWkd.XXSJPZId.concat([XXSJPZ?.id]) }]
+          : weekDay.concat([
+              {
+                wkd,
+                count: 1,
+                XXSJPZId: [XXSJPZ?.id],
+              },
+            ]);
       courseData[KHBJSJ?.id].weekDay = curWkd;
     } else if (KHBJSJ && KHBJSJ.id) {
       courseData[KHBJSJ?.id] = {
         startDate: KHBJSJ?.KKRQ,
         sum: KHBJSJ.KSS,
-        weekDay: [{
-          wkd,
-          count: 1,
-          XXSJPZId: [XXSJPZ?.id]
-        }],
+        weekDay: [
+          {
+            wkd,
+            count: 1,
+            XXSJPZId: [XXSJPZ?.id],
+          },
+        ],
       };
+    } else {
+      console.log('KHBJSJ', KHBJSJ);
     }
   }
   return courseData;
-}
+};
 /**
  * 组装课程班课时信息
  * @param sum 课程班总课时
@@ -70,7 +77,13 @@ const arrangeClass = (data: API.KHPKSJ[]) => {
  * @param start 课程班总开始上课时间
  * @returns {}
  */
-export const classTime = (sum: number, weekDay: any[], start: string, leaveData?: SpecialType[], switchData?: SpecialType[]) => {
+export const classTime = (
+  sum: number,
+  weekDay: any[],
+  start: string,
+  leaveData?: SpecialType[],
+  switchData?: SpecialType[],
+) => {
   const startDay = new Date(start);
   const days = [];
   let newSum = sum;
@@ -78,7 +91,7 @@ export const classTime = (sum: number, weekDay: any[], start: string, leaveData?
   while (days.length < newSum) {
     const day = new Date(startDay.getTime());
     const curDay = moment(day).format('YYYY-MM-DD');
-    const w = weekDay.find(val => val.wkd === day.getDay());
+    const w = weekDay.find((val) => val.wkd === day.getDay());
     if (w) {
       for (let i = 0; i < w.count && days.length < newSum; i += 1) {
         const jcId = w.XXSJPZId[i];
@@ -88,12 +101,12 @@ export const classTime = (sum: number, weekDay: any[], start: string, leaveData?
           leaveNum += 1;
           newSum += 1;
           days.push({
-            ...leaveInfo
+            ...leaveInfo,
           });
         } else if (switchInfo) {
           days.push({
             index: days.length - leaveNum,
-            ...switchInfo
+            ...switchInfo,
           });
         } else {
           days.push({
@@ -107,7 +120,7 @@ export const classTime = (sum: number, weekDay: any[], start: string, leaveData?
     startDay.setTime(startDay.getTime() + 1000 * 3600 * 24);
   }
   return days;
-}
+};
 /**
  * 根据课程班ID与课程班排课信息计算课程班节次表
  * @param classId
@@ -132,7 +145,7 @@ export const getClassDays = async (classId: string, teacherId?: string, xxId?: s
           ZT: [1],
           XXJBSJId: xxId,
           KHBJSJId: classId,
-          SKJSId: teacherId
+          SKJSId: teacherId,
         });
         if (response.status === 'ok' && response.data) {
           const switchList = response.data.rows;
@@ -147,11 +160,11 @@ export const getClassDays = async (classId: string, teacherId?: string, xxId?: s
                 end: v.JSSJ,
                 room: {
                   id: v.TKFJ?.id,
-                  name: v.TKFJ?.FJMC
+                  name: v.TKFJ?.FJMC,
                 },
                 reason: v.BZ,
-                jcId: v.XXSJPZ?.id
-              })
+                jcId: v.XXSJPZ?.id,
+              });
             });
           }
           if (res.data) {
@@ -164,18 +177,21 @@ export const getClassDays = async (classId: string, teacherId?: string, xxId?: s
                   tag: '假',
                   day: leaveInfo?.QJRQ,
                   reason: v.QJYY,
-                  jcId: leaveInfo?.XXSJPZ?.id
-                })
+                  jcId: leaveInfo?.XXSJPZ?.id,
+                });
               });
             }
           }
-
         }
       }
     }
     const courseData = arrangeClass(result.data);
-    const { sum, weekDay, startDate } = courseData[classId];
-    const days = classTime(sum, weekDay, startDate, leaveData, switchData);
-    await upsertKHBJKSSJ({ KHBJSJId: classId, DATA: JSON.stringify(days) });
+    if (courseData?.[classId]) {
+      const { sum, weekDay, startDate } = courseData[classId];
+      const days = classTime(sum, weekDay, startDate, leaveData, switchData);
+      await upsertKHBJKSSJ({ KHBJSJId: classId, DATA: JSON.stringify(days) });
+    } else {
+      console.log('errorId', classId);
+    }
   }
-}
+};

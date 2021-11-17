@@ -20,6 +20,7 @@ import ApplicantInfoTable from './components/ApplicantInfoTable';
 import styles from './index.less';
 import AgentRegistration from './components/AgentRegistration';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
+import { getClassDays } from '@/utils/TimeTable';
 
 const { Option } = Select;
 
@@ -66,6 +67,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [JFAmount, setJFAmount] = useState<any>(0);
   // 班级状态
   const [BJZTMC, setBJZTMC] = useState<string | undefined>(undefined);
+  // 班级同步数据存储
+  const [BJCC, setBJCC] = useState<[]>();
   // 获取学年学期信息，同时获取相关课程信息与年级信息
   useEffect(() => {
     (async () => {
@@ -225,6 +228,14 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // 课程名称筛选事件
   const onKcmcChange = (value: any) => {
     setKcId(value);
+  };
+  // 课程班排课信息同步事件
+  const syncDays = () => {
+    if (BJCC?.length) {
+      BJCC.forEach(async (v: { id: string }) => {
+        await getClassDays(v.id);
+      });
+    }
   };
   const columns: ProColumns<any>[] = [
     {
@@ -448,7 +459,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
               const res = await getAllClasses(obj);
               if (res.status === 'ok') {
                 let newTableDateSource = res.data.rows;
-
+                if (BJZTMC === '已开班') {
+                  setBJCC(newTableDateSource);
+                }
                 if (filter?.KHKCSJ) {
                   newTableDateSource = newTableDateSource.filter((item: any) => {
                     return filter?.KHKCSJ?.some((v: any) => v === item.KHKCSJ?.SSJGLX);
@@ -460,12 +473,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     return filter?.PK?.some((v: any) => Number(v) === item.pk_count);
                   });
                 }
-                // console.log('filter?.BJZT', filter?.BJZT);
-                // if (filter?.BJZT) {
-                //   newTableDateSource = newTableDateSource.filter((item: any) => {
-                //     return filter?.BJZT?.some((v: any) => v === item.BJZT);
-                //   });
-                // }
                 return {
                   data: newTableDateSource,
                   success: true,
@@ -545,6 +552,16 @@ const CourseManagement = (props: { location: { state: any } }) => {
             </div>
           }
           toolBarRender={() => [
+            <Button
+              style={{ display: 'none' }}
+              type="ghost"
+              key="send"
+              onClick={() => {
+                syncDays();
+              }}
+            >
+              班级排课信息同步
+            </Button>,
             <Button
               style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
               type="primary"
