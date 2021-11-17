@@ -258,7 +258,6 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
       type: 'group',
       key: 'group10',
       groupItems: [
-        {},
         {
           type: 'textArea',
           label: '个人简介',

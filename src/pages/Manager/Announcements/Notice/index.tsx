@@ -8,22 +8,28 @@
  */
 import { useState, useRef } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Switch, message } from 'antd';
+import { Button, Switch, message, Modal, Form, Select, Input, Popconfirm } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { history, useModel } from 'umi';
-import Option from '../components/Option';
+import Options from '../components/Option';
 import type { TableListItem } from '../data';
 import styles from '../index.module.less';
 import moment from 'moment';
 import PageContainer from '@/components/PageContainer';
 import { getXXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
+import { sendMessageToParent, sendMessageToTeacher } from '@/services/after-class/wechat';
 
+const { TextArea } = Input;
+const { Option } = Select;
 const Notice = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [dataSource, setDataSource] = useState<API.XXTZGG[]>();
   const actionRef = useRef<ActionType>();
+  const [form] = Form.useForm();
+  const [visible, setVisible] = useState<boolean>(false);
+  const [current, setCurrent] = useState<any>();
 
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -117,7 +123,7 @@ const Notice = () => {
       fixed: 'right',
       render: (_, record) => (
         <div className={styles.optionCol}>
-          <Option
+          <Options
             id={record.id}
             ZT={record.ZT}
             record={record}
@@ -132,6 +138,42 @@ const Notice = () => {
       align: 'center',
     },
   ];
+  const handleSubmit = async (params: any) => {
+    const { RQ, XXNR } = params;
+    let res: any;
+    if (RQ === '家长') {
+      res = await sendMessageToParent({
+        to: 'toall',
+        text: XXNR,
+        ids: []
+      })
+    } else if (RQ === '教师') {
+      res = await sendMessageToTeacher({
+        to: 'touser',
+        text: XXNR,
+        ids: '@all'
+      })
+    } else {
+      res = await sendMessageToParent({
+        to: 'toall',
+        text: XXNR,
+        ids: []
+      })
+      res = await sendMessageToTeacher({
+        to: 'touser',
+        text: XXNR,
+        ids: '@all'
+      })
+    }
+    if (res.status === 'ok') {
+      message.success('发送成功')
+      setVisible(false)
+      setCurrent(undefined)
+      form.resetFields();
+    } else {
+      message.error('发送失败，请稍后再试')
+    }
+  }
 
   return (
     <PageContainer>
@@ -151,11 +193,20 @@ const Notice = () => {
             key="xinjian"
             type="primary"
             onClick={() => {
+              setVisible(true);
+            }}
+          >
+            发送实时消息
+          </Button>,
+          <Button
+            key="xinjian"
+            type="primary"
+            onClick={() => {
               history.push('/announcements/notice/editArticle');
             }}
           >
             <PlusOutlined /> 新建
-          </Button>,
+          </Button>
         ]}
         request={async (params) => {
           if (params.ZT || params.BT) {
@@ -163,7 +214,7 @@ const Notice = () => {
               XXJBSJId: currentUser?.xxId,
               BT: params.BT,
               ZT: params.ZT ? [params.ZT] : ['已发布', '草稿'],
-              LX: ['0','1'],
+              LX: ['0', '1'],
               page: 0,
               pageSize: 0,
             });
@@ -174,7 +225,7 @@ const Notice = () => {
             const resgetXXTZGG = await getXXTZGG({
               XXJBSJId: currentUser?.xxId,
               BT: '',
-              LX: ['0','1'],
+              LX: ['0', '1'],
               ZT: ['已发布', '草稿'],
               page: 0,
               pageSize: 0,
@@ -183,12 +234,69 @@ const Notice = () => {
               setDataSource(resgetXXTZGG.data?.rows);
             }
           }
-
           return '';
         }}
         dataSource={dataSource}
         columns={columns}
       />
+      <Modal
+        title="发送消息"
+        visible={visible}
+
+        footer={[
+          <Button
+            key="back"
+            style={{ borderRadius: 4 }}
+            onClick={() => {
+              setVisible(false);
+              setCurrent(undefined);
+              form.resetFields();
+            }}>
+            取消
+          </Button>,
+          <Popconfirm
+            title="消息发送之后不可更改或撤销，确定发布吗？"
+            onConfirm={() => {
+              form.submit();
+            }}
+            okText="确定"
+            cancelText="取消"
+            placement="topRight"
+          >
+            <Button key="submit" type="primary" style={{ borderRadius: 4 }} >
+              确定
+            </Button>
+          </Popconfirm>
+
+        ]}
+      >
+        <Form
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 15 }}
+          form={form}
+          onFinish={handleSubmit}
+          layout="horizontal"
+        >
+          <Form.Item label="发送人群" name="RQ">
+            <Select defaultValue="全部">
+              <Option value="全部">全部</Option>
+              <Option value="教师">教师</Option>
+              <Option value="家长">家长</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="消息内容"
+            name="XXNR"
+            rules={[
+              {
+                required: true,
+                message: '请输入消息内容',
+              },
+            ]} >
+            <TextArea rows={4} maxLength={100} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </PageContainer>
   );
 };
