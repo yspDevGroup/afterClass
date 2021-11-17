@@ -14,6 +14,7 @@ import type { classType, TableListParams } from './data';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { createKHKCSQ, getToIntroduceBySchool, updateKHKCSQ } from '@/services/after-class/khkcsq';
 import { getTeacherByClassId } from '@/services/after-class/khkcsj';
+import { getTableWidth } from '@/utils/utils';
 /**
  * 未引入课程
  * @returns
@@ -237,7 +238,7 @@ const courseNotIntroduced = () => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 1300 }}
+        scroll={{ x: getTableWidth(columns) }}
         request={async (params, sorter, filter) => {
           // 表单搜索项会从 params 传入，传递给后端接口。
           const opts: TableListParams = {

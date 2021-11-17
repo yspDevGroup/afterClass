@@ -11,7 +11,6 @@ import {
   Tooltip,
   Form,
   Input,
-  Select,
   Row,
   Col,
 } from 'antd';
@@ -20,17 +19,14 @@ import ProTable from '@ant-design/pro-table';
 import { ExclamationCircleOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import type { ProCoreActionType } from '@ant-design/pro-utils';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-
 import { theme } from '@/theme-default';
 import EllipsisHint from '@/components/EllipsisHint';
 import PromptInformation from '@/components/PromptInformation';
-
 import MechanismInfo from './components/MechanismInfo';
 import CourseInfo from './components/CourseInfo';
 import Sitclass from './components/Sitclass';
 import NewCourses from './components/NewCourses';
 import type { classType, TableListParams } from './data';
-
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { updateKHKCSQ } from '@/services/after-class/khkcsq';
 import {
@@ -40,9 +36,10 @@ import {
   updateKHKCSJ,
 } from '@/services/after-class/khkcsj';
 import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
-import { createKHKCPJ, updateKHKCPJ, deleteKHKCPJ } from '@/services/after-class/khkcpj';
+import { createKHKCPJ, updateKHKCPJ } from '@/services/after-class/khkcpj';
 import styles from './index.less';
-const { Option } = Select;
+import { getTableWidth } from '@/utils/utils';
+
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
@@ -484,7 +481,7 @@ const CourseList = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          // scroll={{ x: 1300 }}
+          scroll={{ x: getTableWidth(columns) }}
           request={async (params, sorter, filter) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
             const opts: TableListParams = {
