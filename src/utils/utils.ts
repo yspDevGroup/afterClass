@@ -71,7 +71,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
       return {
         ENV_type: 'dev',
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
-        ENV_host: 'http://localhost:8000',
+        ENV_host: 'http://localhost:8001',
         ssoHost: 'http://platform.test.xianyunshipei.com',
         authType: 'password',
         clientId: 'ww20993d96d6755f55',
@@ -494,4 +494,21 @@ export const getData = async (bjid: string, xsId?: string) => {
   return {
     status: 'nothing',
   };
+};
+
+export const getTableWidth = (columns: any[]) => {
+  if (columns.length > 0) {
+    let sum: number = 0;
+    columns.forEach(({ width }) => {
+      if (Number.isFinite(width)) {
+        sum += width;
+      } else {
+        // 如果width 不是number类型默认家100
+        sum += 100;
+      }
+    });
+    // console.log('列表宽度',sum);
+    return sum;
+  }
+  return 1300;
 };
