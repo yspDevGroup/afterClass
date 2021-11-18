@@ -353,6 +353,12 @@ const MutualEvaluation = () => {
               </div>
             </SearchLayout>
           }
+          options={{
+            setting: false,
+            fullScreen: false,
+            density: false,
+            reload: false,
+          }}
           toolBarRender={() => [
             <Button type="primary" key="primary" onClick={showModal}>
               <PlusOutlined />

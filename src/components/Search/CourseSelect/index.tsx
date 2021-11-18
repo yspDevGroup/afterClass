@@ -1,7 +1,7 @@
 /*
  * @Author: Sissle Lynn
  * @Date: 2021-11-17 10:04:45
- * @LastEditTime: 2021-11-18 11:42:01
+ * @LastEditTime: 2021-11-18 15:21:37
  * @LastEditors: Sissle Lynn
  * @Description: 课程查询
  */
@@ -14,7 +14,7 @@ const { Option } = Select;
 
 type CourseSecectProps = {
   XXJBSJId?: string;
-  onChange?: (val: string) => void;
+  onChange?: (val: string,data?: any) => void;
 };
 const CourseSecect: FC<CourseSecectProps> = ({ onChange, XXJBSJId }) => {
   const [courseList, setCourseList] = useState<any>();
@@ -46,8 +46,8 @@ const CourseSecect: FC<CourseSecectProps> = ({ onChange, XXJBSJId }) => {
       <label htmlFor='course'>课程名称：</label>
       <Select
         allowClear
-        onChange={(value: string) => {
-          onChange?.(value);
+        onChange={(value: string, option: any) => {
+          onChange?.(value, option);
         }}
       >
         {courseList?.map((item: any) => {

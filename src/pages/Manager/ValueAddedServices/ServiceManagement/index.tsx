@@ -428,7 +428,6 @@ const ServiceManagement = () => {
                 <label htmlFor='term'>所属学年学期：</label>
                 <Select
                   value={curXNXQId}
-                  style={{ width: 165 }}
                   onChange={(value: string) => {
                     setCurXNXQId(value);
                     setLbState('');
@@ -449,7 +448,6 @@ const ServiceManagement = () => {
                 <Select
                   allowClear
                   value={LbState || ''}
-                  style={{ width: 165 }}
                   placeholder="请选择"
                   onChange={(value: string) => {
                     setLbState(value);
@@ -472,7 +470,6 @@ const ServiceManagement = () => {
                 <Select
                   allowClear
                   value={FbState || ''}
-                  style={{ width: 165 }}
                   onChange={(value: string) => {
                     setFbState(value);
                   }}
@@ -490,6 +487,12 @@ const ServiceManagement = () => {
               </div>
             </SearchLayout>
           }
+          options={{
+            setting: false,
+            fullScreen: false,
+            density: false,
+            reload: false,
+          }}
           toolBarRender={() => [
             <Button type="primary" key="primary" onClick={showModal}>
               <PlusOutlined /> 新增服务

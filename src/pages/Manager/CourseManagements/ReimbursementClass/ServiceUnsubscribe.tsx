@@ -3,15 +3,14 @@ import { useModel } from 'umi';
 import { Select, message, Modal, Radio, Input, Form, } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
-
-import Style from './index.less';
 import { createKHXSTK } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getKHZZFW } from '@/services/after-class/khzzfw';
 import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getTableWidth } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
+import SemesterSelect from '@/components/Search/SemesterSelect';
 
 const { Option } = Select;
 const { TextArea, Search } = Input;
@@ -22,8 +21,6 @@ const ServiceUnsubscribe = () => {
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<API.KHTKSJ[] | undefined>();
-  // 学年学期列表数据
-  const [termList, setTermList] = useState<any>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 学生姓名选择
@@ -36,7 +33,10 @@ const ServiceUnsubscribe = () => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
-
+  // 学年学期筛选
+  const termChange = (val: string) => {
+    setCurXNXQId(val);
+  }
   const getData = async () => {
     const resAll = await getKHTKSJ({
       XXJBSJId: currentUser?.xxId,
@@ -55,16 +55,6 @@ const ServiceUnsubscribe = () => {
   useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      // 获取到的整个列表的信息
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          setCurXNXQId(curTerm.id);
-          setTermList(newData);
-        }
-      }
       // 服务类别的获取
       const result = await getKHZZFW({
         XXJBSJId: currentUser?.xxId,
@@ -78,17 +68,19 @@ const ServiceUnsubscribe = () => {
   }, []);
   useEffect(() => {
     (async () => {
-      const data = {
-        XXJBSJId: currentUser?.xxId,
-        XNXQId: curXNXQId || '',
-        KHZZFWId: FWLXId,
-        FWZT: 1,
-        page: 0,
-        pageSize: 0,
-      };
-      const res = await getKHXXZZFW(data);
-      if (res.status === 'ok') {
-        setFwList(res?.data?.rows);
+      if (curXNXQId) {
+        const data = {
+          XXJBSJId: currentUser?.xxId,
+          XNXQId: curXNXQId || '',
+          KHZZFWId: FWLXId,
+          FWZT: 1,
+          page: 0,
+          pageSize: 0,
+        };
+        const res = await getKHXXZZFW(data);
+        if (res.status === 'ok') {
+          setFwList(res?.data?.rows);
+        }
       }
     })()
   }, [curXNXQId, FWLXId])
@@ -320,80 +312,6 @@ const ServiceUnsubscribe = () => {
   }
   return (
     <>
-      <div className={Style.TopSearchs}>
-        <span>
-          所属学年学期：
-          <Select
-            value={curXNXQId}
-            style={{ width: 160 }}
-            onChange={(value: string) => {
-              // 更新多选框的值
-              setCurXNXQId(value);
-              setFWLX(undefined);
-              setFWLXId(undefined);
-              setFWMC(undefined);
-            }}
-          >
-            {termList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{ marginLeft: 16 }}>
-          服务类别：
-          <Select
-            style={{ width: 160 }}
-            allowClear
-            value={FWLX}
-            onChange={(value: string, option: any) => {
-              setFWLX(value);
-              setFWLXId(option?.key);
-              setFWMC(undefined);
-            }}
-          >
-            {fwlxList?.map((item: API.KHZZFW) => {
-              return (
-                <Option key={item.id} value={item.FWMC!}>
-                  {item.FWMC}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{ marginLeft: 16 }}>
-          服务名称：
-          <Select
-            value={FWMC}
-            style={{ width: 160 }}
-            allowClear
-            onChange={(value: string) => {
-              setFWMC(value);
-            }}
-          >
-            {fwList?.map((item: API.KHXXZZFW) => {
-              return (
-                <Option key={item.FWMC} value={item.FWMC!}>
-                  {item.FWMC}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{ marginLeft: 16 }}>
-          学生名称：
-          <Search
-            allowClear
-            style={{ width: 160 }}
-            onSearch={(val) => {
-              setName(val)
-            }}
-          />
-        </span>
-      </div>
       <div>
         <ProTable<any>
           actionRef={actionRef}
@@ -412,6 +330,63 @@ const ServiceUnsubscribe = () => {
             density: false,
             reload: false,
           }}
+          headerTitle={
+            <>
+              <SearchLayout>
+                <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+                <div>
+                  <label htmlFor='type'>服务类别：</label>
+                  <Select
+                    style={{ width: 160 }}
+                    allowClear
+                    value={FWLX}
+                    onChange={(value: string, option: any) => {
+                      setFWLX(value);
+                      setFWLXId(option?.key);
+                      setFWMC(undefined);
+                    }}
+                  >
+                    {fwlxList?.map((item: API.KHZZFW) => {
+                      return (
+                        <Option key={item.id} value={item.FWMC!}>
+                          {item.FWMC}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor='name'>服务名称：</label>
+                  <Select
+                    value={FWMC}
+                    style={{ width: 160 }}
+                    allowClear
+                    onChange={(value: string) => {
+                      setFWMC(value);
+                    }}
+                  >
+                    {fwList?.map((item: API.KHXXZZFW) => {
+                      return (
+                        <Option key={item.FWMC} value={item.FWMC!}>
+                          {item.FWMC}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor='student'>学生名称：</label>
+                  <Search
+                    allowClear
+                    style={{ width: 160 }}
+                    onSearch={(val) => {
+                      setName(val)
+                    }}
+                  />
+                </div>
+              </SearchLayout>
+            </>
+          }
           search={false}
         />
         <Modal

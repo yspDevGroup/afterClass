@@ -2,7 +2,7 @@
  * @description:订单查询页面
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-11-12 13:39:12
+ * @LastEditTime: 2021-11-18 15:31:24
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -10,9 +10,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Input, message, Select, Spin } from 'antd';
 import { exportStudentOrders, getAllKHXSDD } from '@/services/after-class/khxsdd';
-import { getAllCourses } from '@/services/after-class/khkcsj';
-import { getAllClasses } from '@/services/after-class/khbjsj';
-import { queryXNXQList } from '@/services/local-services/xnxq';
 import PromptInformation from '@/components/PromptInformation';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import styles from './index.less';
@@ -21,34 +18,49 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { DownloadOutlined } from '@ant-design/icons';
+import SearchLayout from '@/components/Search/Layout';
+import SemesterSelect from '@/components/Search/SemesterSelect';
+import CourseSelect from '@/components/Search/CourseSelect';
+import ClassSelect from '@/components/Search/ClassSelect';
 
-const { Option } = Select;
 const { Search } = Input;
-
-type selectType = { label: string; value: string };
-
 const OrderInquiry = (props: any) => {
   const DDZT = props.TabState;
-
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
-  const [curXNXQId, setCurXNXQId] = useState<any>();
-  const [termList, setTermList] = useState<any>();
-  // 课程选择框的数据
-  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
-  // 班级名称选择框的数据
-  const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
-  const [kcmc, setKcmc] = useState<any>();
-  const [kcmcValue, setKcmcValue] = useState<any>();
-  const [bjmc, setBjmc] = useState<any>();
-  const [bjmcValue, setBjmcValue] = useState<any>();
   // 学生姓名选择
   const [name, setName] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
+  // 当前学年学期
+  const [curXNXQId, setCurXNXQId] = useState<any>();
+  // 当前课程
+  const [curKCId, setCurKCId] = useState<any>();
+  const [kcmc, setKcmc] = useState<any>();
+  // 当前课程班
+  const [curBJId, setBJId] = useState<any>();
+  const [bjmc, setBjmc] = useState<any>();
+  // 控制学期学年数据提示框的函数
+  const kaiguan = () => {
+    setkai(false);
+  };
+  // 学年学期筛选
+  const termChange = (val: string) => {
+    setCurXNXQId(val);
+  }
+  // 课程筛选
+  const courseChange = (val: string, data?: any) => {
+    setKcmc(data?.children);
+    setCurKCId(val);
+  }
+  // 课程班筛选
+  const classChange = (val: string, data?: any) => {
+    setBjmc(data?.children);
+    setBJId(val);
+  }
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -57,22 +69,46 @@ const OrderInquiry = (props: any) => {
       await initWXAgentConfig(['checkJsApi']);
     })();
   }, []);
+  const getData = async () => {
+    const resAll = await getAllKHXSDD({
+      XNXQId: curXNXQId,
+      DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
+      XSXM: name,
+      DDLX: 0,
+      kcmc,
+      KHBJSJId: curBJId,
+    });
+    if (resAll.status === 'ok') {
+      setDataSource(resAll?.data);
+    } else {
+      setDataSource([]);
+    }
+  };
   useEffect(() => {
+    if (curXNXQId) {
+      getData();
+    }
+  }, [curXNXQId, kcmc, curBJId, name]);
+  const onExportClick = () => {
+    setLoading(true);
     (async () => {
-      // 学年学期数据的获取
-      const res = await queryXNXQList(currentUser?.xxId);
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          setCurXNXQId(curTerm.id);
-          setTermList(newData);
-        }
+      const res = await exportStudentOrders({
+        XNXQId: curXNXQId,
+        DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
+        DDLX: 0,
+        kcmc,
+        bjmc,
+      });
+      if (res.status === 'ok' && res.data) {
+        window.location.href = res.data;
+        setLoading(false);
       } else {
-        setkai(true);
+        message.error(res.message);
+        setLoading(false);
       }
     })();
-  }, []);
+  };
+
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -201,172 +237,8 @@ const OrderInquiry = (props: any) => {
       },
     },
   ];
-
-  // 控制学期学年数据提示框的函数
-  const kaiguan = () => {
-    setkai(false);
-  };
-  const params = {
-    page: 0,
-    pageSize: 0,
-    KHKCSJId: kcmcValue,
-    XNXQId: curXNXQId,
-    XXJBSJId: currentUser?.xxId,
-  };
-  const getData = async () => {
-    const resAll = await getAllKHXSDD({
-      XNXQId: curXNXQId,
-      DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
-      XSXM: name,
-      DDLX: 0,
-      kcmc,
-      bjmc,
-    });
-    if (resAll.status === 'ok') {
-      setDataSource(resAll?.data);
-    } else {
-      setDataSource([]);
-    }
-  };
-  const getBjData = async () => {
-    const bjmcResl = await getAllClasses(params);
-    if (bjmcResl.status === 'ok') {
-      const BJMC = bjmcResl.data.rows?.map((item: any) => ({
-        label: item.BJMC,
-        value: item.id,
-      }));
-      setBjmcData(BJMC);
-    }
-  };
-  useEffect(() => {
-    (async () => {
-      if (curXNXQId) {
-        // 通过课程数据接口拿到所有的课程
-        const khkcResl = await getAllCourses(params);
-        if (khkcResl.status === 'ok') {
-          const KCMC = khkcResl.data.rows?.map((item: any) => ({
-            label: item.KCMC,
-            value: item.id,
-          }));
-          setKcmcData(KCMC);
-          getBjData();
-        }
-      }
-    })();
-  }, [curXNXQId]);
-  useEffect(() => {
-    getBjData();
-  }, [kcmcValue]);
-  useEffect(() => {
-    if(curXNXQId){
-      getData();
-    }
-  }, [curXNXQId, kcmcValue, bjmcValue,name]);
-  const onExportClick = () => {
-    setLoading(true);
-    (async () => {
-      const res = await exportStudentOrders({
-        XNXQId: curXNXQId,
-        DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
-        DDLX: 0,
-        kcmc,
-        bjmc,
-      });
-      if (res.status === 'ok' && res.data) {
-        window.location.href = res.data;
-        setLoading(false);
-      } else {
-        message.error(res.message);
-        setLoading(false);
-      }
-    })();
-  };
-
   return (
     <>
-      <div className={styles.searchs}>
-        <span>
-          所属学年学期：
-          <Select
-            value={curXNXQId}
-            style={{ width: 160 }}
-            onChange={(value: string) => {
-              // 选择不同学期从新更新页面的数据
-              setCurXNXQId(value);
-              setKcmc('');
-              setKcmcValue('');
-              setBjmcValue('');
-            }}
-          >
-            {termList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{ marginLeft: 16 }}>
-          所属课程：
-          <Select
-            style={{ width: 160 }}
-            allowClear
-            value={kcmcValue}
-            onChange={(value: string, option: any) => {
-              setKcmc(option?.children);
-              setKcmcValue(value);
-              setBjmc('');
-              setBjmcValue('');
-            }}
-          >
-            {kcmcData?.map((item: selectType) => {
-              return (
-                <Option value={item.value} key={item.value}>
-                  {item.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{ marginLeft: 16 }}>
-          所属课程班：
-          <Select
-            style={{ width: 160 }}
-            allowClear
-            value={bjmcValue}
-            onChange={(value: string, option: any) => {
-              setBjmc(option?.children);
-              setBjmcValue(value);
-            }}
-          >
-            {bjmcData?.map((item: selectType) => {
-              return (
-                <Option value={item.value} key={item.value}>
-                  {item.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <div style={{ marginLeft: 16 }}>
-          <span>学生名称：</span>
-          <div>
-            <Search
-              allowClear
-              style={{ width: 160 }}
-              onSearch={(val) => {
-                setName(val)
-              }}
-            />
-          </div>
-        </div>
-        <span style={{ marginLeft: 'auto' }}>
-          <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
-            导出
-          </Button>
-        </span>
-      </div>
       <div className={styles.tableStyle}>
         <Spin spinning={loading}>
           <ProTable<any>
@@ -380,6 +252,24 @@ const OrderInquiry = (props: any) => {
             }}
             scroll={{ x: DDZT !== '已付款' ? 1300 : 1500 }}
             dataSource={dataSource}
+            headerTitle={
+              <>
+                <SearchLayout>
+                  <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+                  <CourseSelect XXJBSJId={currentUser?.xxId} onChange={courseChange} />
+                  <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
+                  <div>
+                    <label htmlFor='student'>学生名称：</label>
+                    <Search
+                      allowClear
+                      onSearch={(val) => {
+                        setName(val)
+                      }}
+                    />
+                  </div>
+                </SearchLayout>
+              </>
+            }
             options={{
               setting: false,
               fullScreen: false,
@@ -387,6 +277,11 @@ const OrderInquiry = (props: any) => {
               reload: false,
             }}
             search={false}
+            toolBarRender={() => [
+              <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+                导出
+              </Button>
+            ]}
           />
         </Spin>
       </div>

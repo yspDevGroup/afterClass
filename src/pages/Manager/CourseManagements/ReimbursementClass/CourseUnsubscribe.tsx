@@ -1,51 +1,56 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Select, message, Modal, Radio, Input, Form, Space, Table, Tooltip, } from 'antd';
+import { message, Modal, Radio, Input, Form, Space, Table, Tooltip, } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
-
-import Style from './index.less';
 import { createKHXSTK } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
-import { getAllClasses } from '@/services/after-class/khbjsj';
-import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getTableWidth } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
+import SemesterSelect from '@/components/Search/SemesterSelect';
+import CourseSelect from '@/components/Search/CourseSelect';
+import ClassSelect from '@/components/Search/ClassSelect';
 
-const { Option } = Select;
 const { TextArea, Search } = Input;
-
-type selectType = { label: string; value: string };
 const CourseUnsubscribe = () => {
   // 获取到当前学校的一些信息
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<API.KHTKSJ[] | undefined>();
-  // 学年学期列表数据
-  const [termList, setTermList] = useState<any>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
-  // 课程选择框的数据
-  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
-  const [kcmcValue, setKcmcValue] = useState<any>();
-  // 班级名称选择框的数据
-  const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
-  const [bjmcValue, setBjmcValue] = useState<any>();
+  // 当前课程
+  const [curKCId, setCurKCId] = useState<any>();
+  // 当前课程班
+  const [curBJId, setBJId] = useState<any>();
   // 学生姓名选择
   const [name, setName] = useState<string>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
   // 批量审批
-  const [Examine, setExamine] = useState<any>()
+  const [Examine, setExamine] = useState<any>();
+  // 学年学期筛选
+  const termChange = (val: string) => {
+    setCurXNXQId(val);
+  }
+  // 课程筛选
+  const courseChange = (val: string, data?: any) => {
+    setCurKCId(val);
+  }
+  // 课程班筛选
+  const classChange = (val: string, data?: any) => {
+    setBJId(val);
+  }
   const getData = async () => {
     const resAll = await getKHTKSJ({
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId,
-      KHBJSJId: bjmcValue,
-      KHKCSJId: kcmcValue,
+      KHBJSJId: curBJId,
+      KHKCSJId: curKCId,
       XSXM: name,
       LX: 0
     });
@@ -55,60 +60,9 @@ const CourseUnsubscribe = () => {
       setDataSource([]);
     }
   };
-  const params = {
-    page: 0,
-    pageSize: 0,
-    KHKCSJId: kcmcValue,
-    XNXQId: curXNXQId,
-    XXJBSJId: currentUser?.xxId,
-  };
-  const getBjData = async () => {
-    const bjmcResl = await getAllClasses(params);
-    if (bjmcResl.status === 'ok') {
-      const BJMC = bjmcResl.data.rows?.map((item: any) => ({
-        label: item.BJMC,
-        value: item.id,
-      }));
-      setBjmcData(BJMC);
-    }
-  };
-  useEffect(() => {
-    // 获取学年学期数据的获取
-    (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      // 获取到的整个列表的信息
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          setCurXNXQId(curTerm.id);
-          setTermList(newData);
-        }
-      }
-    })();
-  }, []);
-  useEffect(() => {
-    (async () => {
-      if (curXNXQId) {
-        // 通过课程数据接口拿到所有的课程
-        const khkcResl = await getAllCourses(params);
-        if (khkcResl.status === 'ok') {
-          const KCMC = khkcResl.data.rows?.map((item: any) => ({
-            label: item.KCMC,
-            value: item.id,
-          }));
-          setKcmcData(KCMC);
-          getBjData();
-        }
-      }
-    })();
-  }, [curXNXQId]);
-  useEffect(() => {
-    getBjData();
-  }, [kcmcValue]);
   useEffect(() => {
     getData();
-  }, [curXNXQId, kcmcValue, bjmcValue, name]);
+  }, [curXNXQId, curKCId, curBJId, name]);
   // table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -304,7 +258,7 @@ const CourseUnsubscribe = () => {
             setVisible(false);
             setCurrent(undefined);
             getData();
-            actionRef?.current?.clearSelected();
+            actionRef?.current?.clearSelected?.();
           } else {
             message.error(res.message || '退课流程出现错误，请联系管理员或稍后重试。');
           }
@@ -354,7 +308,7 @@ const CourseUnsubscribe = () => {
           }
           setVisible(false);
           setCurrent(undefined);
-          actionRef?.current?.clearSelected();
+          actionRef?.current?.clearSelected?.();
           getData();
         } else {
           message.error(res.message || '退课流程出现错误，请联系管理员或稍后重试。');
@@ -365,83 +319,7 @@ const CourseUnsubscribe = () => {
     }
   }
   return (
-    // PageContainer组件是顶部的信息
     <>
-      <div className={Style.TopSearchs}>
-        <span>
-          所属学年学期：
-          <Select
-            value={curXNXQId}
-            style={{ width: 160 }}
-            onChange={(value: string) => {
-              // 更新多选框的值
-              setCurXNXQId(value);
-              setKcmcValue(undefined);
-              setBjmcValue(undefined);
-              setName(undefined);
-            }}
-          >
-            {termList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{ marginLeft: 16 }}>
-          所属课程：
-          <Select
-            style={{ width: 160 }}
-            allowClear
-            value={kcmcValue}
-            onChange={(value: string) => {
-              setKcmcValue(value);
-              setBjmcValue(undefined);
-              setName(undefined);
-            }}
-          >
-            {kcmcData?.map((item: selectType) => {
-              return (
-                <Option value={item.value} key={item.value}>
-                  {item.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{ marginLeft: 16 }}>
-          所属课程班：
-          <Select
-            style={{ width: 160 }}
-            allowClear
-            value={bjmcValue}
-            onChange={(value: string) => {
-              setBjmcValue(value);
-              setName(undefined);
-            }}
-          >
-            {bjmcData?.map((item: selectType) => {
-              return (
-                <Option value={item.value} key={item.value}>
-                  {item.label}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{ marginLeft: 16 }}>
-          学生名称：
-          <Search
-            allowClear
-            style={{ width: 160 }}
-            onSearch={(val) => {
-              setName(val)
-            }}
-          />
-        </span>
-      </div>
       <div>
         <ProTable<any>
           actionRef={actionRef}
@@ -486,6 +364,24 @@ const CourseUnsubscribe = () => {
           }}
           scroll={{ x: getTableWidth(columns) }}
           dataSource={dataSource}
+          headerTitle={
+            <>
+              <SearchLayout>
+                <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+                <CourseSelect XXJBSJId={currentUser?.xxId} onChange={courseChange} />
+                <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
+                <div>
+                  <label htmlFor='student'>学生名称：</label>
+                  <Search
+                    allowClear
+                    onSearch={(val) => {
+                      setName(val)
+                    }}
+                  />
+                </div>
+              </SearchLayout>
+            </>
+          }
           options={{
             setting: false,
             fullScreen: false,
@@ -512,7 +408,7 @@ const CourseUnsubscribe = () => {
             wrapperCol={{ span: 15 }}
             form={form}
             initialValues={{ ZT: 1 }}
-            onFinish={Examine && Examine?.length ? handleSubmitPL:handleSubmit}
+            onFinish={Examine && Examine?.length ? handleSubmitPL : handleSubmit}
             layout="horizontal"
           >
             <Form.Item label="审核意见" name="ZT">

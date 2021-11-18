@@ -571,6 +571,7 @@ export async function getSchoolsQJ(
 export async function getSchoolsTK(
   body: {
     XZQHM?: string;
+    isTK?: boolean;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
