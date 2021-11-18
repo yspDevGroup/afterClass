@@ -33,7 +33,7 @@ const ServiceRefund = () => {
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
-  }
+  };
   const getLBData = async () => {
     const result = await getKHZZFW({
       XXJBSJId: currentUser?.xxId,
@@ -343,50 +343,51 @@ const ServiceRefund = () => {
                 total: 0,
               };
             }}
-
             headerTitle={
               <>
                 <SearchLayout>
                   <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
                   <div>
-                    <label htmlFor='type'>服务类别：</label>
+                    <label htmlFor="type">服务类别：</label>
                     <Select
                       allowClear
                       value={LbId || ''}
                       placeholder="请选择"
                       onChange={(value: string) => {
                         setLbId(value);
+                        setFWMC('');
                       }}
                     >
                       {LBData?.length
                         ? LBData?.map((item: any) => {
-                          return (
-                            <Option value={item?.id} key={item?.id}>
-                              {item?.FWMC}
-                            </Option>
-                          );
-                        })
+                            return (
+                              <Option value={item?.id} key={item?.id}>
+                                {item?.FWMC}
+                              </Option>
+                            );
+                          })
                         : ''}
                     </Select>
                   </div>
                   <div>
-                    <label htmlFor='name'>服务名称：</label>
+                    <label htmlFor="name">服务名称：</label>
                     <Select
                       allowClear
                       value={FWMC || ''}
                       placeholder="请选择"
                       onChange={(value: string) => {
                         setFWMC(value);
+                        console.log(value, '--------------------');
                       }}
                     >
                       {FWMCData?.length
                         ? FWMCData?.map((item: any) => {
-                          return (
-                            <Option value={item?.FWMC} key={item?.FWMC}>
-                              {item?.FWMC}
-                            </Option>
-                          );
-                        })
+                            return (
+                              <Option value={item?.FWMC} key={item?.FWMC}>
+                                {item?.FWMC}
+                              </Option>
+                            );
+                          })
                         : ''}
                     </Select>
                   </div>
@@ -403,7 +404,7 @@ const ServiceRefund = () => {
             toolBarRender={() => [
               <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
                 导出
-              </Button>
+              </Button>,
             ]}
           />
         </Spin>
