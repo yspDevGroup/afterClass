@@ -204,6 +204,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     if (type === 'copy') {
       setCopyType('copy');
       setnames('copy');
+      setReadonly(false);
     } else {
       setCopyType('undefined');
       if (!(data.BJZT === '未开班') && !(data.BJZT === '未排课') && !(data.BJZT === '已排课')) {
