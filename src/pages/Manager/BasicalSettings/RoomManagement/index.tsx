@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-console */
 import React, { useRef, useState, useEffect } from 'react';
 import { useModel } from 'umi';
@@ -8,15 +9,18 @@ import type { ProColumns, ActionType, RequestData } from '@ant-design/pro-table'
 import { PlusOutlined, UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 import type { TableListParams } from './data';
 import { theme } from '@/theme-default';
-import { enHenceMsg, getAuthorization } from '@/utils/utils';
-import { getAllFJLX } from '@/services/after-class/fjlx';
-import { getAllXXJBSJ } from '@/services/after-class/xxjbsj';
 import { createFJSJ, deleteFJSJ, getAllFJSJ, updateFJSJ } from '@/services/after-class/fjsj';
 import PageContainer from '@/components/PageContainer';
 import AsyncAddRoom from './components/AsyncAddRoom';
 import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
 import PromptInformation from '@/components/PromptInformation';
+import { enHenceMsg, getTableWidth } from '@/utils/utils';
+import { getAllFJLX } from '@/services/after-class/fjlx';
+import { getAllXXJBSJ } from '@/services/after-class/xxjbsj';
+import { getAuthorization } from '@/utils/utils';
+
 import SearchLayout from '@/components/Search/Layout';
+
 
 import styles from './index.less';
 
@@ -277,7 +281,7 @@ const RoomManagement = () => {
         } else {
           message.error(`${code.message}`);
           console.log('event', event);
-          event.currentTarget.onerror(code);
+          event?.currentTarget?.onerror(code);
         }
       } else if (info.file.status === 'error') {
         console.log('info.file.response', info.file);
@@ -308,7 +312,7 @@ const RoomManagement = () => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 900 }}
+        scroll={{ x: getTableWidth(columns) }}
         request={async (
           params: RoomItem & {
             pageSize?: number;

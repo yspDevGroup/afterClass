@@ -11,6 +11,7 @@ import { createKHXSTK } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllClasses } from '@/services/after-class/khbjsj';
 import { getAllCourses } from '@/services/after-class/khkcsj';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
 const { TextArea, Search } = Input;
@@ -483,7 +484,7 @@ const CourseUnsubscribe = () => {
               </Space>
             );
           }}
-          scroll={{ x: 1300 }}
+          scroll={{ x: getTableWidth(columns) }}
           dataSource={dataSource}
           options={{
             setting: false,

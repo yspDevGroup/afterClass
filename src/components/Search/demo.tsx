@@ -2,7 +2,7 @@
  * @description:
  * @author: txx
  * @Date: 2021-05-24 16:33:45
- * @LastEditTime: 2021-11-17 14:41:27
+ * @LastEditTime: 2021-11-18 11:27:26
  * @LastEditors: Sissle Lynn
  */
 
@@ -35,7 +35,6 @@ const SearchComponent = () => {
   // 课程班筛选
   const classChange = (val: string) => {
     console.log(val);
-    // setBJId(val);
   }
 
   return (

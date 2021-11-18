@@ -20,9 +20,10 @@ import {
 } from '@/services/after-class/khxxzzfw';
 import moment from 'moment';
 import UploadImage from '@/components/CustomForm/components/UploadImage';
+import SearchLayout from '@/components/Search/Layout';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
-// const { Search } = Input;
 const { RangePicker } = DatePicker;
 
 const ServiceManagement = () => {
@@ -42,8 +43,6 @@ const ServiceManagement = () => {
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 学年学期列表数据
   const [termList, setTermList] = useState<any>();
-  // 课程名称查询
-  // const [ServiceName, setServiceName] = useState();
 
   useEffect(() => {
     // 获取学年学期数据的获取
@@ -66,14 +65,12 @@ const ServiceManagement = () => {
       data = {
         XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId || '',
-        // FWMC: ServiceName || '',
         KHZZFWId: LbState || '',
       };
     } else {
       data = {
         XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId || '',
-        // FWMC: ServiceName || '',
         FWZT: Number(FbState),
         KHZZFWId: LbState || '',
       };
@@ -391,9 +388,6 @@ const ServiceManagement = () => {
     setImageUrl('');
     form.resetFields();
   };
-  // const onSearch = (value: any) => {
-  //   setServiceName(value)
-  // };
   // 文件状态改变的回调
   const imageChange = (e?: any) => {
     if (e.file.status === 'done') {
@@ -424,14 +418,14 @@ const ServiceManagement = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1200 }}
+          scroll={{ x: getTableWidth(columns) }}
           search={false}
           dataSource={DataSource}
           dateFormatter="string"
           headerTitle={
-            <div className={styles.TopSearchss}>
-              <span style={{ fontSize: 14, color: '#666' }}>
-                所属学年学期：
+            <SearchLayout>
+              <div>
+                <label htmlFor='term'>所属学年学期：</label>
                 <Select
                   value={curXNXQId}
                   style={{ width: 165 }}
@@ -449,9 +443,9 @@ const ServiceManagement = () => {
                     );
                   })}
                 </Select>
-              </span>
-              <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
-                服务类别：
+              </div>
+              <div>
+                <label htmlFor='type'>服务类别：</label>
                 <Select
                   allowClear
                   value={LbState || ''}
@@ -462,22 +456,19 @@ const ServiceManagement = () => {
                     setFbState('');
                   }}
                 >
-                  <Option value="" key="">
-                    全部
-                  </Option>
                   {LBData?.length
                     ? LBData?.map((item: any) => {
-                        return (
-                          <Option value={item?.id} key={item?.id}>
-                            {item?.FWMC}
-                          </Option>
-                        );
-                      })
+                      return (
+                        <Option value={item?.id} key={item?.id}>
+                          {item?.FWMC}
+                        </Option>
+                      );
+                    })
                     : ''}
                 </Select>
-              </span>
-              <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
-                发布状态：
+              </div>
+              <div>
+                <label htmlFor='status'>发布状态：</label>
                 <Select
                   allowClear
                   value={FbState || ''}
@@ -496,8 +487,8 @@ const ServiceManagement = () => {
                     已发布
                   </Option>
                 </Select>
-              </span>
-            </div>
+              </div>
+            </SearchLayout>
           }
           toolBarRender={() => [
             <Button type="primary" key="primary" onClick={showModal}>
@@ -537,12 +528,12 @@ const ServiceManagement = () => {
             <Select style={{ width: '100%' }} placeholder="请选择" disabled={Disabled === '查看'}>
               {LBData?.length
                 ? LBData?.map((item: any) => {
-                    return (
-                      <Option value={item?.id} key={item?.id}>
-                        {item?.FWMC}
-                      </Option>
-                    );
-                  })
+                  return (
+                    <Option value={item?.id} key={item?.id}>
+                      {item?.FWMC}
+                    </Option>
+                  );
+                })
                 : ''}
             </Select>
           </Form.Item>

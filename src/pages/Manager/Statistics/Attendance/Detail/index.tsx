@@ -13,6 +13,7 @@ import { DownloadOutlined, LeftOutlined } from '@ant-design/icons';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
+import { getTableWidth } from '@/utils/utils';
 
 const AttendanceDetail = (props: any) => {
   const { data, XNXQId, position, startDate, endDate, duration } = props.location.state;
@@ -327,7 +328,7 @@ const AttendanceDetail = (props: any) => {
               pageSize: 10,
               defaultCurrent: 1,
             }}
-            scroll={{ x: 1000 }}
+            scroll={{ x: getTableWidth(position === '老师' ? teacher : student) }}
             search={false}
             options={{
               setting: false,

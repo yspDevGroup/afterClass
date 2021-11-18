@@ -10,6 +10,7 @@ import ProTable from '@ant-design/pro-table';
 import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import styles from './index.less'
+import { getTableWidth } from '@/utils/utils';
 
 type selectType = { label: string; value: string };
 
@@ -339,7 +340,7 @@ const MutualEvaluation: React.FC = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1200 }}
+          scroll={{ x: getTableWidth(columns) }}
           options={{
             setting: false,
             fullScreen: false,

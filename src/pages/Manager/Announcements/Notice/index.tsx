@@ -3,8 +3,8 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-09 17:41:43
- * @LastEditTime: 2021-10-19 16:39:19
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-11-18 08:50:38
+ * @LastEditors: Please set LastEditors
  */
 import { useState, useRef } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
@@ -19,6 +19,7 @@ import moment from 'moment';
 import PageContainer from '@/components/PageContainer';
 import { getXXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
 import { sendMessageToParent, sendMessageToTeacher } from '@/services/after-class/wechat';
+import { getTableWidth } from '@/utils/utils';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -187,7 +188,7 @@ const Notice = () => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 1000 }}
+        scroll={{ x: getTableWidth(columns) }}
         toolBarRender={() => [
           <Button
             key="xinjian"

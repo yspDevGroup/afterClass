@@ -22,7 +22,7 @@ import { message } from 'antd';
 import moment from 'moment';
 import AsyncTimePeriodForm from './components/AsyncTimePeriodForm';
 import type { ReactNode } from 'react';
-import { enHenceMsg } from '@/utils/utils';
+import { enHenceMsg, getTableWidth } from '@/utils/utils';
 import { useModel } from 'umi';
 import { sendMessageToParent } from '@/services/after-class/wechat';
 
@@ -262,7 +262,7 @@ const PeriodMaintenance = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 900 }}
+          scroll={{ x: getTableWidth(columns) }}
           options={{
             setting: false,
             fullScreen: false,

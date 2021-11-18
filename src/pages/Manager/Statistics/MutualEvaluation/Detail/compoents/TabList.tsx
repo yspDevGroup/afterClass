@@ -10,6 +10,7 @@ import { useModel } from 'umi';
 import { Rate, Popover } from 'antd'
 import { Modal } from 'antd';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { getTableWidth } from '@/utils/utils';
 
 const TabList = (props: any) => {
   const { ListName, ListState } = props.ListData;
@@ -199,7 +200,7 @@ const TabList = (props: any) => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 900 }}
+        scroll={{ x: getTableWidth(ListName === '学生评价' ? student : teacher) }}
         search={false}
         options={{
           setting: false,

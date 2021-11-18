@@ -11,6 +11,7 @@ import { getAllKHJSQJ, updateKHJSQJ } from '@/services/after-class/khjsqj';
 import { getMainTeacher } from '@/services/after-class/khbjsj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getClassDays } from '@/utils/TimeTable';
+import { getTableWidth } from '@/utils/utils';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -328,7 +329,7 @@ const StudentsLeave: React.FC = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1300 }}
+          scroll={{ x: getTableWidth(columns) }}
           options={{
             setting: false,
             fullScreen: false,

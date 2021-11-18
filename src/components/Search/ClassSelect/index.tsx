@@ -1,7 +1,7 @@
 /*
  * @Author: Sissle Lynn
  * @Date: 2021-11-17 12:21:39
- * @LastEditTime: 2021-11-17 14:05:34
+ * @LastEditTime: 2021-11-18 11:42:05
  * @LastEditors: Sissle Lynn
  * @Description: 课程班查询
  */
@@ -44,6 +44,7 @@ const ClassSecect: FC<ClassSecectProps> = ({ onChange, XNXQId, KHKCSJId }) => {
     <div>
       <label htmlFor='course'>课程班名称：</label>
       <Select
+        allowClear
         onChange={(value: string) => {
           onChange?.(value);
         }}

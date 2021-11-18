@@ -10,6 +10,7 @@ import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllClasses } from '@/services/after-class/khbjsj';
 import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 import { DownloadOutlined } from '@ant-design/icons';
+import { getTableWidth } from '@/utils/utils';
 
 type selectType = { label: string; value: string };
 
@@ -419,7 +420,7 @@ const CourseRefund = () => {
               pageSize: 10,
               defaultCurrent: 1,
             }}
-            scroll={{ x: 1500 }}
+            scroll={{ x: getTableWidth(columns) }}
             request={async () => {
               const resAll = await getAllKHXSTK({
                 LX: 0,

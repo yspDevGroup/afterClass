@@ -9,6 +9,7 @@ import ProTable from '@ant-design/pro-table';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
 import { updateKHJSTDK } from '@/services/after-class/khjstdk';
+import { getTableWidth } from '@/utils/utils';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -304,7 +305,7 @@ const SubstituteFor: React.FC = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1300 }}
+          scroll={{ x: getTableWidth(columns) }}
           options={{
             setting: false,
             fullScreen: false,

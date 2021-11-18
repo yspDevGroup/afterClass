@@ -8,6 +8,7 @@ import { useModel, Link, history } from 'umi';
 import styles from '../index.less'
 import { Button } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
+import { getTableWidth } from '@/utils/utils';
 
 const school = (props: any) => {
   const {XNXQ,record} = props.location.state.data;
@@ -131,7 +132,7 @@ const school = (props: any) => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 1000 }}
+        scroll={{ x: getTableWidth(columns) }}
         search={false}
         options={{
           setting: false,

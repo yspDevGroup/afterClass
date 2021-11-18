@@ -134,7 +134,7 @@ const CourseList = () => {
   }, []);
   useEffect(() => {
     getData();
-  }, [KCLXId, KCName, JGName, KCLY])
+  }, [KCLXId, KCName, JGName, KCLY]);
   const handleOperation = async (type: string, data?: any) => {
     if (type !== 'chakan') {
       setReadonly(false);

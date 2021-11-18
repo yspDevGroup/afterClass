@@ -11,6 +11,7 @@ import Style from './index.less';
 import type { TableItem } from './data';
 import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
+import { getTableWidth } from '@/utils/utils';
 
 type selectType = { label: string; value: string };
 
@@ -374,7 +375,7 @@ const AfterSchoolCourse: React.FC = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1300 }}
+          scroll={{ x: getTableWidth(columns) }}
           options={{
             setting: false,
             fullScreen: false,
