@@ -222,6 +222,7 @@ const AddCourse: FC<AddCourseProps> = ({
   }, [curXNXQId]);
   useEffect(() => {
     if (formValues) {
+      console.log('formValues', formValues);
       const kcDate = KHKCAllData?.filter(
         (item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX || formValues.SSJGLX,
       );
@@ -251,7 +252,8 @@ const AddCourse: FC<AddCourseProps> = ({
         setKaike(true);
       }
       if (formValues.SSJGLX === '机构课程') {
-        // getJgTeacher(formValues.KHKCSJId);
+        setKcId(formValues.KHKCSJId);
+        // getJgTeacher();
       }
       if (formValues?.KHKCJCs?.length) {
         setChoosenJf(true);
@@ -820,7 +822,7 @@ const AddCourse: FC<AddCourseProps> = ({
       rules: [{ required: true, message: '请输入班级课程安排' }],
       name: 'BJMS',
       key: 'BJMS',
-      placeholder: '请输入班级课程安排'
+      placeholder: '请输入班级课程安排',
     },
   ];
 

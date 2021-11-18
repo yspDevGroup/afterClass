@@ -564,10 +564,10 @@ const AddArranging: FC<PropsType> = (props) => {
               {/* </div> */}
 
               <div className="banji">
-                <span style={{ width: '120px' }}>课程班：</span>
+                <span>课程班：</span>
                 {bjData && bjData.length === 0 ? (
                   <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                ) : bjData && bjData.length < 15 ? (
+                ) : bjData && bjData.length < 17 ? (
                   <ProCard ghost className="banjiCard">
                     {bjData.map((value: any) => {
                       const teacher =
@@ -601,11 +601,11 @@ const AddArranging: FC<PropsType> = (props) => {
                     })}
                   </ProCard>
                 ) : (
-                  <div>
+                  <>
                     {packUp === false ? (
                       <ProCard ghost className="banjiCard">
                         {bjData && bjData.length > 0
-                          ? bjData.slice(0, 13).map((value: any) => {
+                          ? bjData.slice(0, 15).map((value: any) => {
                               return (
                                 <ProCard
                                   layout="center"
@@ -669,7 +669,7 @@ const AddArranging: FC<PropsType> = (props) => {
                         </ProCard>
                       </ProCard>
                     )}
-                  </div>
+                  </>
                 )}
               </div>
               <div className="site">

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-15 13:41:03
- * @LastEditTime: 2021-11-16 12:38:03
+ * @LastEditTime: 2021-11-17 18:20:17
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\components\TeacherSelect\index.tsx
@@ -28,7 +28,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
 
   const [xxTeacher, setXXTeacher] = useState<any>();
   const [JGTeacher, setJGTeacher] = useState<any>();
-  const [treeData, setTreeData] = useState<any[]>([]);
+  const [treeData, setTreeData] = useState<any>();
 
   const getLable = (GH: string) => {
     if (GH !== null && GH.length > 4) {
@@ -147,29 +147,31 @@ const TeacherSelect = (props: TeacherSelectProps) => {
   useEffect(() => {
     if (kcId) {
       getJgTeacher();
-    } else setJGTeacher({});
+    } else {
+      setJGTeacher(undefined);
+    }
   }, [kcId]);
 
   useEffect(() => {
     if (type === 1 && xxTeacher) {
+      console.log('type', type);
       setTreeData([xxTeacher]);
     } else if (type === 2) {
-      if (kcId) {
+      if (kcId && JGTeacher) {
         setTreeData([JGTeacher]);
       } else {
         setTreeData([]);
       }
-    } else if (type === 3 && kcId) {
+    } else if (type === 3 && kcId && xxTeacher) {
       console.log('JGTeacher', JGTeacher);
-      if (JGTeacher === undefined) {
+      console.log('xxTeacher', xxTeacher);
+      if (!JGTeacher) {
         setTreeData([xxTeacher]);
       } else {
         setTreeData([JGTeacher, xxTeacher]);
       }
     }
   }, [xxTeacher, JGTeacher, type]);
-
-  console.log('disabled', disabled);
 
   return (
     <div>

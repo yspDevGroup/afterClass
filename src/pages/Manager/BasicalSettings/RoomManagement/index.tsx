@@ -2,9 +2,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import type { FormInstance } from 'antd';
 import { Tooltip } from 'antd';
-import { message, Popconfirm, Button, Divider, Modal, Select } from 'antd';
+import { message, Popconfirm, Button, Divider, Modal, Select, Upload } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType, RequestData } from '@ant-design/pro-table';
+import { UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 import type { SearchDataType } from '@/components/Search/data';
 import type { TableListParams } from './data';
 import { theme } from '@/theme-default';
@@ -21,6 +22,7 @@ import { enHenceMsg } from '@/utils/utils';
 import { useModel } from 'umi';
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllXXJBSJ } from '@/services/after-class/xxjbsj';
+import { getAuthorization } from '@/utils/utils';
 
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
@@ -47,6 +49,7 @@ const RoomManagement = () => {
   const [xQLabelItem, setXQLabelItem] = useState('');
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const [uploadVisible, setUploadVisible] = useState<boolean>(false);
 
   const guanbi = () => {
     setopens(false);
@@ -258,6 +261,52 @@ const RoomManagement = () => {
     })();
   }, []);
 
+  const UploadProps: any = {
+    name: 'xlsx',
+    action: '/api/upload/importSites?xxId=53091f16-e723-4910-aca9-9741cd75a14f',
+    headers: {
+      authorization: getAuthorization(),
+      // 'Content-Type':'multipart/form-data;',
+    },
+    data: {
+      xxId: '53091f16-e723-4910-aca9-9741cd75a14f',
+    },
+    // accept={''}
+    beforeUpload(file: any) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      console.log('isLt2M', isLt2M);
+      if (!isLt2M) {
+        message.error('文件大小不能超过2M');
+      }
+      return isLt2M;
+    },
+    onChange(info: {
+      file: { status: string; name: any; response: any };
+      fileList: any;
+      event: any;
+    }) {
+      if (info.file.status === 'done') {
+        const code = info.file.response;
+        if (code.status === 'ok') {
+          message.success(`上传成功`);
+          setUploadVisible(false);
+        } else {
+          message.error(`${code.message}`);
+          console.log('event', event);
+          event.currentTarget.onerror(code);
+        }
+      } else if (info.file.status === 'error') {
+        console.log('info.file.response', info.file);
+        // const code = info.file.response;
+        // message.error(`${code.message}`);
+      }
+    },
+  };
+  const onClose = () => {
+    setUploadVisible(false);
+    actionRef.current?.reload();
+  };
+
   return (
     <PageContainer cls={styles.roomWrapper}>
       <PromptInformation
@@ -381,6 +430,9 @@ const RoomManagement = () => {
             <PlusOutlined />
             新增场地
           </Button>,
+          <Button key="button" type="primary" onClick={() => setUploadVisible(true)}>
+            <VerticalAlignBottomOutlined /> 导入
+          </Button>,
         ]}
       />
       <Modal
@@ -420,6 +472,36 @@ const RoomManagement = () => {
             setXQLabelItem={setXQLabelItem}
           />
         )}
+      </Modal>
+
+      <Modal
+        title="批量导入"
+        destroyOnClose
+        width="35vw"
+        visible={uploadVisible}
+        onCancel={() => setUploadVisible(false)}
+        footer={[
+          <Button key="back" onClick={() => setUploadVisible(false)}>
+            取消
+          </Button>,
+          <Button key="submit" type="primary" onClick={onClose}>
+            确定
+          </Button>,
+        ]}
+        centered
+        maskClosable={false}
+        bodyStyle={{
+          maxHeight: '65vh',
+          overflowY: 'auto',
+        }}
+      >
+        <p
+        // className={styles.uploadBtn}
+        >
+          <Upload {...UploadProps}>
+            <Button icon={<UploadOutlined />}>上传文件</Button>
+          </Upload>
+        </p>
       </Modal>
     </PageContainer>
   );
