@@ -650,7 +650,7 @@ const CourseList = () => {
           <Form.Item name="id" hidden initialValue={courseInfo.id}>
             <Input disabled />
           </Form.Item>
-          <Form form={form} onFinish={submit}>
+          <Form form={form} onFinish={submit} labelCol = {{ span: 6 }}>
             <Form.Item
               label="课程名称"
               name="KHKCSJId"
