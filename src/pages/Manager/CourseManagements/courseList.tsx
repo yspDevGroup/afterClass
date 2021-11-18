@@ -37,7 +37,7 @@ import {
   updateKHKCSJ,
 } from '@/services/after-class/khkcsj';
 import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
-import { createKHKCPJ, updateKHKCPJ } from '@/services/after-class/khkcpj';
+import { getKHKCPJ, createKHKCPJ, updateKHKCPJ } from '@/services/after-class/khkcpj';
 import styles from './index.less';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
@@ -75,6 +75,7 @@ const CourseList = () => {
   const [courseInfo, setcourseInfo] = useState<any>({});
   // 已评价未评价
   const [Isfinish, setIsfinish] = useState<any>();
+  const [PY, setPY] = useState<string>();
   // 关闭学期学年提示框
   const kaiguan = () => {
     setkai(false);
@@ -210,6 +211,18 @@ const CourseList = () => {
     }
     setIsModalVisible(false);
   };
+
+  const getEvaluate = async (id: any) => {
+    const res = await getKHKCPJ({ id: id });
+    if (res.status === 'ok') {
+      setPY(res.data.PY);
+      form.setFieldsValue({PY: res.data.PY})
+    } else {
+      setPY('');
+      form.setFieldsValue({PY: ''})
+    }
+    setIsModalVisible(true);
+  }
 
   /** 操作 */
   const funOption = (record: any, action: ProCoreActionType) => {
@@ -460,11 +473,11 @@ const CourseList = () => {
         return record?.KHJYJG?.QYMC ? (
           <a
             onClick={() => {
-              setIsModalVisible(true);
               const obj = { KHKCSJId: '', KCMC: '', id: '' };
               obj.KHKCSJId = record?.id;
               obj.KCMC = record?.KCMC;
               obj.id = record?.KHKCPJs?.[0]?.id;
+              getEvaluate(obj.id);
               setcourseInfo(obj);
               setIsfinish(record?.KHKCPJs?.length);
             }}
@@ -632,7 +645,8 @@ const CourseList = () => {
           <Sitclass />
         </Modal>
         {/* 课程评价的弹出框 */}
-        <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} title="课程评价">
+        {
+          isModalVisible&&<Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} title="课程评价">
           <Form.Item name="id" hidden initialValue={courseInfo.id}>
             <Input disabled />
           </Form.Item>
@@ -649,12 +663,14 @@ const CourseList = () => {
               label="评价内容"
               name="PY"
               key="PY"
-              rules={[{ required: true, message: '请输入评价内容' }]}
+              rules={PY ? undefined : [{ required: true, message: '请输入评价内容' }]}
             >
-              <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4} />
+              {
+                <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4} />
+              }
             </Form.Item>
           </Form>
-        </Modal>
+        </Modal>}
       </div>
     </>
   );
