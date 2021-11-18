@@ -47,7 +47,7 @@ const LeaveManagement = () => {
       if (value) {
         const date1 = moment(value[0]?.KSSJ, 'HH:mm:ss');
         const date2 = moment(value[0]?.JSSJ, 'HH:mm:ss');
-        const date3 = date2.diff(date1, 'minute'); //计算相差的分钟数
+        const date3 = date2.diff(date1, 'minute'); // 计算相差的分钟数
         setDuration(date3);
       }
     }
@@ -83,7 +83,7 @@ const LeaveManagement = () => {
       key: 'BJS',
       align: 'center',
       width: 110,
-      render: (text, record) => record['bj_count'],
+      render: (text, record) => record.bj_count,
     },
     {
       title: '授课总课时数',
@@ -91,7 +91,7 @@ const LeaveManagement = () => {
       key: 'KSS',
       width: 120,
       align: 'center',
-      render: (text, record) => record['all_KSS'],
+      render: (text, record) => record.all_KSS,
     },
     {
       title: '出勤次数',
@@ -99,7 +99,7 @@ const LeaveManagement = () => {
       key: 'CQS',
       align: 'center',
       width: 100,
-      render: (text, record) => record['attendance'],
+      render: (text, record) => record.attendance,
     },
     {
       title: '缺勤次数',
@@ -300,10 +300,8 @@ const LeaveManagement = () => {
       if (curXNXQIdJS) {
         getDataSource(curXNXQIdJS, newDateJS, JSXM);
       }
-    } else {
-      if (curXNXQIdXS) {
-        getDataSource(curXNXQIdXS, newDateXS, XSXM);
-      }
+    } else if (curXNXQIdXS) {
+      getDataSource(curXNXQIdXS, newDateXS, XSXM);
     }
   }, [key]);
   // 教师导出
@@ -329,15 +327,14 @@ const LeaveManagement = () => {
     setLoading(true);
     const res = await exportTeachersAttendanceByDate(params);
     if (res?.status === 'ok') {
-      console.log('ok', res);
       setLoading(false);
-       window.location.href= res.data;
+      window.location.href = res.data;
     } else {
       setLoading(false);
       message.error(res.message);
     }
   };
-  //学生导出
+  // 学生导出
   const onExportXSClick = async () => {
     setLoading(true);
     let startDate;
@@ -345,11 +342,9 @@ const LeaveManagement = () => {
     if (newDateXS.length > 0) {
       if (isMoment(newDateXS[0])) {
         startDate = newDateXS[0].format('YYYY-MM-DD');
-        // console.log('startDate',startDate);
       }
       if (isMoment(newDateXS[1])) {
         endDate = newDateXS[1].format('YYYY-MM-DD');
-        // console.log('endDate',endDate);
       }
     }
     const params = {
@@ -361,8 +356,7 @@ const LeaveManagement = () => {
     const res = await exportStudentsAttendanceByDate(params);
     if (res?.status === 'ok') {
       setLoading(false);
-      console.log('ok', res);
-      window.location.href= res.data;
+      window.location.href = res.data;
     } else {
       setLoading(false);
       message.error(res.message);
@@ -381,7 +375,7 @@ const LeaveManagement = () => {
             <FormSelect
               getDataSource={getDataSource}
               exportButton={
-                <Button type="primary" icon={<DownloadOutlined />} style={{float: 'right'}} onClick={onExportJSClick}>
+                <Button type="primary" icon={<DownloadOutlined />} style={{ float: 'right' }} onClick={onExportJSClick}>
                   导出
                 </Button>
               }
@@ -394,7 +388,7 @@ const LeaveManagement = () => {
             <FormSelect
               getDataSource={getDataSource}
               exportButton={
-                <Button type="primary" icon={<DownloadOutlined />} style={{float: 'right'}} onClick={onExportXSClick}>
+                <Button type="primary" icon={<DownloadOutlined />} style={{ float: 'right' }} onClick={onExportXSClick}>
                   导出
                 </Button>
               }

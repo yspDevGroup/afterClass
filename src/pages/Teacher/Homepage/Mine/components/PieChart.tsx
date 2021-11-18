@@ -56,7 +56,7 @@ const CheckOnChart = (props: { data: ItemType[]; title?: string; cls?: string })
   };
   return (
     <div className={`${styles.chartWrapper} ${cls}`}>
-      {title ? <div className="title">{title}</div> : ''}
+      {title ? <div className="title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</div> : ''}
       <Pie {...pieConfig} />
     </div>
   );

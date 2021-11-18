@@ -22,6 +22,9 @@ import AgentRegistration from './components/AgentRegistration';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
+import type { TableListParams } from '@/constant';
+import SearchLayout from '@/components/Search/Layout';
+
 
 const { Option } = Select;
 
@@ -30,6 +33,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
+  // 列表数据源
+  const [dataSource, setDataSource] = useState<any[]>([]);
   // 当前学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 学年学期数据列表
@@ -41,7 +46,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // 设置选中课程班详情是否可读属性
   const [readonly, setReadonly] = useState<boolean>(false);
   // 当前查询课程ID
-  const [kcId, setKcId] = useState<string>('');
+  const [kcId, setKcId] = useState<string>();
+  // 课程来源
+  const [KCLY, setKCLY] = useState<string>();
   // 课程列表数据
   const [mcData, setMcData] = useState<{ label: string; value: string }[]>([]);
   // 控制提示开关
@@ -70,6 +77,29 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [BJZTMC, setBJZTMC] = useState<string | undefined>(undefined);
   // 班级同步数据存储
   const [BJCC, setBJCC] = useState<[]>();
+  const getData = async (origin?: string) => {
+    const opts: TableListParams = {
+      XNXQId: curXNXQId,
+      KHKCSJId: kcId || state?.id,
+      BJZT: BJZTMC,
+      page: 0,
+      pageSize: 0,
+    };
+    const resAll = await getAllClasses(opts);
+    if (resAll.status === 'ok' && resAll.data) {
+      let newTableDateSource = resAll.data.rows;
+      if (BJZTMC === '已开班') {
+        setBJCC(newTableDateSource);
+      }
+      if (origin) {
+        newTableDateSource = newTableDateSource.filter((item: any) => {
+          return item.KHKCSJ?.SSJGLX === origin;
+        });
+      }
+      setDataSource(newTableDateSource);
+
+    }
+  };
   // 获取学年学期信息，同时获取相关课程信息与年级信息
   useEffect(() => {
     (async () => {
@@ -126,9 +156,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // 监听学年学期，课程名称的变更刷新列表
   useEffect(() => {
     if (curXNXQId) {
-      actionRef.current?.reload();
+      getData(KCLY);
     }
-  }, [curXNXQId, kcId, BJZTMC]);
+  }, [curXNXQId, kcId, BJZTMC, KCLY]);
 
   // 控制学期学年数据提示框
   const kaiguan = () => {
@@ -278,16 +308,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
       align: 'center',
       width: 150,
       ellipsis: true,
-      filters: true,
-      onFilter: false,
-      valueEnum: {
-        校内课程: {
-          text: '校内课程',
-        },
-        机构课程: {
-          text: '机构课程',
-        },
-      },
       render: (_: any, record: any) => {
         return record?.KHKCSJ?.SSJGLX;
       },
@@ -324,16 +344,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
       dataIndex: 'PK',
       key: 'PK',
       ellipsis: true,
-      filters: true,
-      onFilter: false,
-      valueEnum: {
-        '0': {
-          text: '未排课',
-        },
-        '1': {
-          text: '已排课',
-        },
-      },
       render: (_, record) => {
         const Url = `/courseManagements/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}`;
         if (record.BJZT === '未开班') {
@@ -448,6 +458,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
+<<<<<<< HEAD
           scroll={{ x: getTableWidth(columns) }}
           request={async (param, sort, filter) => {
             if (curXNXQId) {
@@ -484,6 +495,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
             }
             return [];
           }}
+=======
+          scroll={{ x: 1200 }}
+>>>>>>> 1edd2b50b8dfa110c73e7e675c9d5c6a97f397e2
           options={{
             setting: false,
             fullScreen: false,
@@ -491,33 +505,30 @@ const CourseManagement = (props: { location: { state: any } }) => {
             reload: false,
           }}
           search={false}
+          dataSource={dataSource}
           headerTitle={
-            <div style={{ display: 'flex' }}>
-              <span style={{ fontSize: 14, color: '#666' }}>
-                所属学年学期：
-                <Select
-                  value={curXNXQId}
-                  style={{ width: 160 }}
-                  onChange={(value: string) => {
-                    setCurXNXQId(value);
-                  }}
-                >
-                  {termList?.map((item: any) => {
-                    return (
-                      <Option key={item.value} value={item.value}>
-                        {item.text}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </span>
-              <div
-                style={{ display: 'flex', lineHeight: '32px', marginLeft: 15, flexWrap: 'wrap' }}
-              >
-                <span style={{ fontSize: 14, color: '#666' }}>课程名称：</span>
+            <>
+              <SearchLayout>
                 <div>
+                  <label htmlFor='term'>所属学年学期：</label>
                   <Select
-                    style={{ width: 160 }}
+                    value={curXNXQId}
+                    onChange={(value: string) => {
+                      setCurXNXQId(value);
+                    }}
+                  >
+                    {termList?.map((item: any) => {
+                      return (
+                        <Option key={item.value} value={item.value}>
+                          {item.text}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor='kcname'>课程名称：</label>
+                  <Select
                     value={kcId || state?.id}
                     allowClear
                     placeholder="请选择"
@@ -532,26 +543,43 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     })}
                   </Select>
                 </div>
-              </div>
-              <span style={{ fontSize: 14, color: '#666', marginLeft: 15, flexWrap: 'wrap' }}>
-                班级状态：
-                <Select
-                  allowClear
-                  value={BJZTMC}
-                  style={{ width: 160 }}
-                  onChange={(value: string) => {
-                    setBJZTMC(value);
-                  }}
-                >
-                  <Option key="已开班" value="已开班">
-                    已开班
-                  </Option>
-                  <Option key="未开班" value="未开班">
-                    未开班
-                  </Option>
-                </Select>
-              </span>
-            </div>
+                <div>
+                  <label htmlFor='kcly'>课程来源：</label>
+                  <Select
+                    allowClear
+                    placeholder="课程来源"
+                    onChange={(value) => {
+                      setKCLY(value);
+                    }}
+                    value={KCLY}
+                  >
+                    <Option value='校内课程' key='校内课程'>
+                      校内课程
+                    </Option>
+                    <Option value='机构课程' key='机构课程'>
+                      机构课程
+                    </Option>
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor='status'>班级状态：</label>
+                  <Select
+                    allowClear
+                    value={BJZTMC}
+                    onChange={(value: string) => {
+                      setBJZTMC(value);
+                    }}
+                  >
+                    <Option key="已开班" value="已开班">
+                      已开班
+                    </Option>
+                    <Option key="未开班" value="未开班">
+                      未开班
+                    </Option>
+                  </Select>
+                </div>
+              </SearchLayout>
+            </>
           }
           toolBarRender={() => [
             <Button

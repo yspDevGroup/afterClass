@@ -154,7 +154,6 @@ const TeacherSelect = (props: TeacherSelectProps) => {
 
   useEffect(() => {
     if (type === 1 && xxTeacher) {
-      console.log('type', type);
       setTreeData([xxTeacher]);
     } else if (type === 2) {
       if (kcId && JGTeacher) {
@@ -163,8 +162,6 @@ const TeacherSelect = (props: TeacherSelectProps) => {
         setTreeData([]);
       }
     } else if (type === 3 && kcId && xxTeacher) {
-      console.log('JGTeacher', JGTeacher);
-      console.log('xxTeacher', xxTeacher);
       if (!JGTeacher) {
         setTreeData([xxTeacher]);
       } else {

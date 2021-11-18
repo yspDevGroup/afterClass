@@ -8,8 +8,8 @@
 export default {
   dev: {
     '/api/': {
-      target: 'http://192.168.0.113:3000',
-      // target: 'http://api.test.xianyunshipei.com',
+      // target: 'http://192.168.0.113:3000',
+      target: 'http://api.test.xianyunshipei.com',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
