@@ -62,7 +62,6 @@ const ImagesUpload = (props: {
           }
         })
         onValueChange(urlStr);
-        console.log('urlStr: ', urlStr);
       } else {
         message.success('上传失败');
         // setLoading(false);
