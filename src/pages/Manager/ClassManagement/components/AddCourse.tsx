@@ -222,7 +222,6 @@ const AddCourse: FC<AddCourseProps> = ({
   }, [curXNXQId]);
   useEffect(() => {
     if (formValues) {
-      console.log('formValues', formValues);
       const kcDate = KHKCAllData?.filter(
         (item: any) => item.SSJGLX === formValues?.KHKCSJ?.SSJGLX || formValues.SSJGLX,
       );

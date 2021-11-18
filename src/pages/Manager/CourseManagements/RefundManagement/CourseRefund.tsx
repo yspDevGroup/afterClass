@@ -54,10 +54,7 @@ const CourseRefund = () => {
       }
     })();
   }, []);
-
-
-
-  //获取课程
+  // 获取课程
   const getKCData = async () => {
     if (curXNXQId) {
       const params = {
@@ -68,7 +65,6 @@ const CourseRefund = () => {
         XZQHM: currentUser?.XZQHM
       };
       const khkcResl = await getAllCourses2(params);
-
       if (khkcResl.status === 'ok') {
         const KCMC = khkcResl.data.rows?.map((item: any) => ({
           label: item.KCMC,
@@ -78,7 +74,6 @@ const CourseRefund = () => {
       }
     }
   }
-
 
   /**
    * 获取课程班集数据
@@ -482,7 +477,7 @@ const CourseRefund = () => {
               <InputNumber
                 min={Number(0)}
                 formatter={value => `￥ ${value}`}
-                parser={value => Number(value?.replace(/\￥\s?/g, ''))}
+                parser={value => Number(value?.replace(/￥\s?/g, ''))}
                 onChange={(value) => {
                   if (value === 0) {
                     message.warning('退款金额为0，无需发起退款');

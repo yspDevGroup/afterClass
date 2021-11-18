@@ -11,6 +11,7 @@ import {
   Tooltip,
   Form,
   Input,
+  Select,
   Row,
   Col,
 } from 'antd';
@@ -39,17 +40,25 @@ import { getAllGrades, KHJYJG } from '@/services/after-class/khjyjg';
 import { createKHKCPJ, updateKHKCPJ } from '@/services/after-class/khkcpj';
 import styles from './index.less';
 import { getTableWidth } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
 
+const { Option } = Select;
+const { Search } = Input;
 const CourseList = () => {
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-
   const [current, setCurrent] = useState<classType>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const [dataSource, setDataSource] = useState<any[]>([]);
   // 课程类型
   const [kclxOptions, setOptions] = useState<any[]>([]);
+  // 设置表单的查询更新
+  const [KCName, setKCName] = useState<string>();
+  const [JGName, setJGName] = useState<string>();
+  const [KCLXId, setKCLXId] = useState<string>();
+  const [KCLY, setKCLY] = useState<string>();
   // 适用年级
   const [optionsNJ, setOptionsNJ] = useState<any[]>([]);
   // 机构详情抽屉
@@ -62,7 +71,7 @@ const CourseList = () => {
   // 学年学期没有时的提示框控制
   const [kai, setkai] = useState<boolean>(false);
   const [form] = Form.useForm();
-  //要评价课程的信息
+  // 要评价课程的信息
   const [courseInfo, setcourseInfo] = useState<any>({});
   // 已评价未评价
   const [Isfinish, setIsfinish] = useState<any>();
@@ -72,6 +81,21 @@ const CourseList = () => {
   };
   // 弹出框显示隐藏
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const getData = async () => {
+    const opts: TableListParams = {
+      KCMC: KCName,
+      JGMC: JGName,
+      KHKCLXId: KCLXId,
+      SSJGLX: KCLY,
+      pageSize: 0,
+      page: 0,
+      XXJBSJId: currentUser?.xxId,
+    };
+    const resAll = await getAllCourses(opts);
+    if (resAll.status === 'ok' && resAll.data) {
+      setDataSource(resAll.data.rows)
+    }
+  };
   useEffect(() => {
     // 课程类型
     const res = getAllKHKCLX({ name: '' });
@@ -107,6 +131,9 @@ const CourseList = () => {
       }
     });
   }, []);
+  useEffect(() => {
+    getData();
+  }, [KCLXId, KCName, JGName, KCLY])
   const handleOperation = async (type: string, data?: any) => {
     if (type !== 'chakan') {
       setReadonly(false);
@@ -136,7 +163,7 @@ const CourseList = () => {
       setCurrent(undefined);
     }
   };
-  //课程评价弹框的显示隐藏
+  // 课程评价弹框的显示隐藏
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -146,6 +173,7 @@ const CourseList = () => {
   const handleOk = () => {
     form.submit();
   };
+  // 获取机构详情
   const handleJgxq = async (id: string) => {
     const res = await KHJYJG({ id });
     if (res.status === 'ok') {
@@ -165,7 +193,8 @@ const CourseList = () => {
       if (res.status === 'ok') {
         message.success('修改成功');
         setIsModalVisible(false);
-        //刷新页面
+        // 刷新页面
+        actionRef.current?.reload();
       }
     } else {
       const res = await createKHKCPJ({
@@ -175,7 +204,8 @@ const CourseList = () => {
       if (res.status === 'ok') {
         message.success('保存成功');
         setIsModalVisible(false);
-        //刷新页面
+        // 刷新页面
+        actionRef.current?.reload();
       }
     }
     setIsModalVisible(false);
@@ -434,12 +464,12 @@ const CourseList = () => {
               const obj = { KHKCSJId: '', KCMC: '', id: '' };
               obj.KHKCSJId = record?.id;
               obj.KCMC = record?.KCMC;
-              obj.id = record?.KHKCPJs[0].id;
+              obj.id = record?.KHKCPJs?.[0]?.id;
               setcourseInfo(obj);
-              setIsfinish(record.KHKCPJs.length);
+              setIsfinish(record?.KHKCPJs?.length);
             }}
           >
-            {record.KHKCPJs.length ? '已评价' : '未评价'}
+            {record?.KHKCPJs?.length ? '已评价' : '未评价'}
           </a>
         ) : (
           '-'
@@ -482,42 +512,68 @@ const CourseList = () => {
             defaultCurrent: 1,
           }}
           scroll={{ x: getTableWidth(columns) }}
-          request={async (params, sorter, filter) => {
-            // 表单搜索项会从 params 传入，传递给后端接口。
-            const opts: TableListParams = {
-              ...params,
-              sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-              filter,
-              name: params.keyword,
-              pageSize: params.pageSize,
-              page: params.current,
-              XXJBSJId: currentUser?.xxId,
-            };
-            const resAll = await getAllCourses(opts);
-            if (resAll.status === 'ok') {
-              return {
-                data: resAll.data.rows,
-                success: true,
-                total: resAll.data.count,
-              };
-            }
-            return {
-              data: [],
-              success: false,
-              total: 0,
-            };
-          }}
+          dataSource={dataSource}
           options={{
             setting: false,
             fullScreen: false,
             density: false,
             reload: false,
           }}
-          // search={false}
+          search={false}
+          headerTitle={
+            <>
+              <SearchLayout>
+                <div>
+                  <label htmlFor='kcname'>课程名称：</label>
+                  <Search placeholder="课程名称" allowClear onSearch={(value: string) => {
+                    setKCName(value);
+                  }} />
+                </div>
+                <div>
+                  <label htmlFor='jgname'>机构名称：</label>
+                  <Search placeholder="机构名称" allowClear onSearch={(value: string) => {
+                    setJGName(value);
+                  }} />
+                </div>
+                <div>
+                  <label htmlFor='kcly'>课程来源：</label>
+                  <Select
+                    allowClear
+                    placeholder="课程来源"
+                    onChange={(value) => {
+                      setKCLY(value);
+                    }}
+                    value={KCLY}
+                  >
+                    <Option value='校内课程' key='校内课程'>
+                      校内课程
+                    </Option>
+                    <Option value='机构课程' key='机构课程'>
+                      机构课程
+                    </Option>
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor='kctype'>课程类型：</label>
+                  <Select
+                    allowClear
+                    placeholder="课程类型"
+                    onChange={(value) => {
+                      setKCLXId(value);
+                    }}
+                    value={KCLXId}
+                  >
+                    {kclxOptions?.map((op: any) => (
+                      <Select.Option value={op.value} key={op.value}>
+                        {op.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </div>
+              </SearchLayout>
+            </>
+          }
           toolBarRender={() => [
-            // <Button key="wh" onClick={() => setModalVisible(true)}>
-            //   课程类型维护
-            // </Button>,
             <Button
               style={{ background: theme.primaryColor, borderColor: theme.primaryColor }}
               type="primary"

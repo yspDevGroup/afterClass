@@ -36,7 +36,6 @@ export const initialStateConfig = {
 export async function getInitialState(): Promise<InitialState> {
   console.log('process.env.REACT_APP_ENV: ', process.env.REACT_APP_ENV);
   const buildOptions = await getBuildOptions();
-  debugger;
   const fetchUserInfo = async () => {
     try {
       const currentUserRes =

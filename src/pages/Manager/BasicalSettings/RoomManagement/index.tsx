@@ -1,29 +1,26 @@
 /* eslint-disable no-console */
 import React, { useRef, useState, useEffect } from 'react';
+import { useModel } from 'umi';
 import type { FormInstance } from 'antd';
-import { Tooltip } from 'antd';
-import { message, Popconfirm, Button, Divider, Modal, Select, Upload } from 'antd';
+import { Input, Tooltip, message, Popconfirm, Button, Divider, Modal, Select, Upload } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType, RequestData } from '@ant-design/pro-table';
-import { UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
-import type { SearchDataType } from '@/components/Search/data';
+import { PlusOutlined, UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 import type { TableListParams } from './data';
 import { theme } from '@/theme-default';
-import PageContainer from '@/components/PageContainer';
-import { PlusOutlined } from '@ant-design/icons';
-import SearchComponent from '@/components/Search';
+import { enHenceMsg, getAuthorization } from '@/utils/utils';
+import { getAllFJLX } from '@/services/after-class/fjlx';
+import { getAllXXJBSJ } from '@/services/after-class/xxjbsj';
 import { createFJSJ, deleteFJSJ, getAllFJSJ, updateFJSJ } from '@/services/after-class/fjsj';
-import styles from './index.less';
-import { searchData } from './serarchConfig';
+import PageContainer from '@/components/PageContainer';
 import AsyncAddRoom from './components/AsyncAddRoom';
 import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
 import PromptInformation from '@/components/PromptInformation';
-import { enHenceMsg } from '@/utils/utils';
-import { useModel } from 'umi';
-import { getAllFJLX } from '@/services/after-class/fjlx';
-import { getAllXXJBSJ } from '@/services/after-class/xxjbsj';
-import { getAuthorization } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
 
+import styles from './index.less';
+
+const { Search } = Input;
 const RoomManagement = () => {
   // 列表对象引用，可主动执行刷新等操作
   const actionRef = useRef<ActionType>();
@@ -40,32 +37,12 @@ const RoomManagement = () => {
   // 设置场地信息
   const [CDLXId, setCDLXId] = useState<string>('');
   const [dataLX, setDataLX] = useState<any>([]);
-  // 设置学校信息
-  // const [SSXQId, setSSXQId] = useState<string>('');
-  // const [SSXQData, setSSXQData] = useState<any>([]);
-
-  const [dataSource] = useState<SearchDataType>(searchData);
   const [opens, setopens] = useState<boolean>(false);
   const [xQLabelItem, setXQLabelItem] = useState('');
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [uploadVisible, setUploadVisible] = useState<boolean>(false);
 
-  const guanbi = () => {
-    setopens(false);
-    setModalVisible(true);
-  };
-
-  // 头部input事件
-  const handlerSearch = (type: string, value: string, flag: boolean) => {
-    console.log('type', type);
-    if (flag) {
-      setName(value);
-    } else {
-      setCDLXId(value);
-    }
-    actionRef.current?.reload();
-  };
   /**
    * 实时设置模态框标题
    *
@@ -95,12 +72,6 @@ const RoomManagement = () => {
     getModelTitle();
     setModalVisible(true);
   };
-
-  const eventclose = () => {
-    setopens(false);
-    setModalVisible(false);
-    handleOperation('uphold');
-  };
   /**
    * 更新或新增场地信息
    *
@@ -124,6 +95,19 @@ const RoomManagement = () => {
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
+  };
+  /**
+ * 控制场地类型未配置时提示框的展示与隐藏
+ */
+  const closePromt = () => {
+    setopens(false);
+    setModalVisible(true);
+  };
+
+  const eventclose = () => {
+    setopens(false);
+    setModalVisible(false);
+    handleOperation('uphold');
   };
   const columns: ProColumns<RoomItem>[] = [
     {
@@ -312,7 +296,7 @@ const RoomManagement = () => {
       <PromptInformation
         text="还没有设置场地类型，请先维护场地类型"
         open={opens}
-        colse={guanbi}
+        colse={closePromt}
         event={eventclose}
       />
       <ProTable<RoomItem>
@@ -355,58 +339,36 @@ const RoomManagement = () => {
         }}
         headerTitle={
           <>
-            {/* <div style={{ marginLeft: '20px' }}>
-              <div className="ant-col ant-form-item-label">
-                <label title="所属校区: ">所属校区</label>
+            <SearchLayout>
+              <div>
+                <label htmlFor='type'>场地名称：</label>
+                <Search placeholder="场地名称" allowClear onSearch={(value: string) => {
+                  setName(value);
+                  actionRef.current?.reload();
+                }} />
               </div>
-              <Select
-                placeholder="所属校区"
-                onChange={(value) => {
-                  console.log('value', value);
-                  setSSXQId(value);
-                }}
-                value={SSXQId}
-                style={{ width: '120px' }}
-              >
-                {SSXQData &&
-                  SSXQData.length &&
-                  SSXQData?.map((op: any) => (
-                    <Select.Option value={op.value} key={op.value}>
-                      {op.label}
-                    </Select.Option>
-                  ))}
-              </Select>
-            </div> */}
-            <div style={{ marginLeft: '20px' }}>
-              <SearchComponent
-                dataSource={[dataSource[0]]}
-                onChange={(type: string, value: string) => handlerSearch(type, value, true)}
-              />
-            </div>
-            <div style={{ marginLeft: '20px' }}>
-              <div className="ant-col ant-form-item-label">
-                <label title="场地类型: ">场地类型</label>
+              <div>
+                <label htmlFor='type'>场地类型：</label>
+                <Select
+                  allowClear
+                  placeholder="场地类型"
+                  onChange={(value) => {
+                    setCDLXId(value);
+                    actionRef.current?.reload();
+                  }}
+                  value={CDLXId}
+                  style={{ width: '120px' }}
+                >
+                  {dataLX &&
+                    dataLX.length &&
+                    dataLX?.map((op: any) => (
+                      <Select.Option value={op.value} key={op.value}>
+                        {op.label}
+                      </Select.Option>
+                    ))}
+                </Select>
               </div>
-              <Select
-                allowClear
-                placeholder="场地类型"
-                onChange={(value) => {
-                  console.log('value', value);
-
-                  handlerSearch('', value, false);
-                }}
-                value={CDLXId}
-                style={{ width: '120px' }}
-              >
-                {dataLX &&
-                  dataLX.length &&
-                  dataLX?.map((op: any) => (
-                    <Select.Option value={op.value} key={op.value}>
-                      {op.label}
-                    </Select.Option>
-                  ))}
-              </Select>
-            </div>
+            </SearchLayout>
           </>
         }
         options={{
