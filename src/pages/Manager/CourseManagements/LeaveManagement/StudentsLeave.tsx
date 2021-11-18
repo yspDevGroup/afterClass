@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import { Select, Tag } from 'antd';
-import Style from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
@@ -42,7 +41,7 @@ const StudentsLeave: React.FC = () => {
     }
   };
   useEffect(() => {
-    if(curXNXQId){
+    if (curXNXQId) {
       getData();
     }
   }, [curXNXQId, QJZT, curKCId, curBJId])
@@ -193,55 +192,53 @@ const StudentsLeave: React.FC = () => {
   ];
   return (
     <>
-      <div className={Style.leaveWrapper}>
-        <ProTable<any>
-          actionRef={actionRef}
-          columns={columns}
-          rowKey="id"
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: getTableWidth(columns) }}
-          dataSource={dataSource}
-          headerTitle={
-            <SearchLayout>
-              <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-              <CourseSelect XXJBSJId={currentUser?.xxId} onChange={courseChange} />
-              <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
-              <div>
-                <label htmlFor='status'>请假状态：</label>
-                <Select
-                  style={{ width: 160 }}
-                  allowClear
-                  value={QJZT?.[0]}
-                  onChange={(value: number) => {
-                    setQJZT([value]);
-                  }}
-                >
-                  <Option key='全部' value={-1}>
-                    全部
-                  </Option>
-                  <Option key='已通过' value={0}>
-                    已通过
-                  </Option>
-                  <Option key='已取销' value={1}>
-                    已取销
-                  </Option>
-                </Select>
-              </div>
-            </SearchLayout>
-          }
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          search={false}
-        />
-      </div>
+      <ProTable<any>
+        actionRef={actionRef}
+        columns={columns}
+        rowKey="id"
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: getTableWidth(columns) }}
+        dataSource={dataSource}
+        headerTitle={
+          <SearchLayout>
+            <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+            <CourseSelect XXJBSJId={currentUser?.xxId} onChange={courseChange} />
+            <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
+            <div>
+              <label htmlFor='status'>请假状态：</label>
+              <Select
+                style={{ width: 160 }}
+                allowClear
+                value={QJZT?.[0]}
+                onChange={(value: number) => {
+                  setQJZT([value]);
+                }}
+              >
+                <Option key='全部' value={-1}>
+                  全部
+                </Option>
+                <Option key='已通过' value={0}>
+                  已通过
+                </Option>
+                <Option key='已取销' value={1}>
+                  已取销
+                </Option>
+              </Select>
+            </div>
+          </SearchLayout>
+        }
+        options={{
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
+        }}
+        search={false}
+      />
     </>
   );
 };

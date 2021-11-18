@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import { Form, Modal, Radio, Select, Tag, Input, message } from 'antd';
-import Style from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import EllipsisHint from '@/components/EllipsisHint';
@@ -80,7 +79,7 @@ const StudentsLeave: React.FC = () => {
     }
   };
   useEffect(() => {
-    if(curXNXQId){
+    if (curXNXQId) {
       getData();
     }
   }, [curXNXQId, QJZT]);
@@ -257,55 +256,53 @@ const StudentsLeave: React.FC = () => {
   ];
   return (
     <>
-      <div className={Style.leaveWrapper}>
-        <ProTable<any>
-          actionRef={actionRef}
-          columns={columns}
-          rowKey="id"
-          dataSource={dataSource}
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: getTableWidth(columns) }}
-          headerTitle={
-            <SearchLayout>
-              <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-              <div>
-                <label htmlFor='status'>请假状态：</label>
-                <Select
-                  allowClear
-                  value={QJZT?.[0]}
-                  onChange={(value: number) => {
-                    setQJZT([value]);
-                  }}
-                >
-                  <Option key='全部' value={-1}>
-                    全部
-                  </Option>
-                  <Option key='申请中' value={0}>
-                    申请中
-                  </Option>
-                  <Option key='已通过' value={1}>
-                    已通过
-                  </Option>
-                  <Option key='已驳回' value={2}>
-                    已取销
-                  </Option>
-                </Select>
-              </div>
-            </SearchLayout>
-          }
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          search={false}
-        />
-      </div>
+      <ProTable<any>
+        actionRef={actionRef}
+        columns={columns}
+        rowKey="id"
+        dataSource={dataSource}
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: getTableWidth(columns) }}
+        headerTitle={
+          <SearchLayout>
+            <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+            <div>
+              <label htmlFor='status'>请假状态：</label>
+              <Select
+                allowClear
+                value={QJZT?.[0]}
+                onChange={(value: number) => {
+                  setQJZT([value]);
+                }}
+              >
+                <Option key='全部' value={-1}>
+                  全部
+                </Option>
+                <Option key='申请中' value={0}>
+                  申请中
+                </Option>
+                <Option key='已通过' value={1}>
+                  已通过
+                </Option>
+                <Option key='已驳回' value={2}>
+                  已取销
+                </Option>
+              </Select>
+            </div>
+          </SearchLayout>
+        }
+        options={{
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
+        }}
+        search={false}
+      />
       <Modal
         title="请假审批"
         visible={visible}

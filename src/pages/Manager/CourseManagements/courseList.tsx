@@ -213,7 +213,7 @@ const CourseList = () => {
   };
 
   const getEvaluate = async (id: any) => {
-    const res = await getKHKCPJ({ id: id });
+    const res = await getKHKCPJ({ id });
     if (res.status === 'ok') {
       setPY(res.data.PY);
       form.setFieldsValue({PY: res.data.PY})

@@ -377,7 +377,6 @@ const ServiceRefund = () => {
                       placeholder="请选择"
                       onChange={(value: string) => {
                         setFWMC(value);
-                        console.log(value, '--------------------');
                       }}
                     >
                       {FWMCData?.length
