@@ -25,7 +25,6 @@ import { getTableWidth } from '@/utils/utils';
 import type { TableListParams } from '@/constant';
 import SearchLayout from '@/components/Search/Layout';
 
-
 const { Option } = Select;
 
 const CourseManagement = (props: { location: { state: any } }) => {
@@ -97,7 +96,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
         });
       }
       setDataSource(newTableDateSource);
-
     }
   };
   // 获取学年学期信息，同时获取相关课程信息与年级信息
@@ -458,7 +456,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-<<<<<<< HEAD
           scroll={{ x: getTableWidth(columns) }}
           request={async (param, sort, filter) => {
             if (curXNXQId) {
@@ -495,9 +492,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
             }
             return [];
           }}
-=======
-          scroll={{ x: 1200 }}
->>>>>>> 1edd2b50b8dfa110c73e7e675c9d5c6a97f397e2
           options={{
             setting: false,
             fullScreen: false,
@@ -510,7 +504,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
             <>
               <SearchLayout>
                 <div>
-                  <label htmlFor='term'>所属学年学期：</label>
+                  <label htmlFor="term">所属学年学期：</label>
                   <Select
                     value={curXNXQId}
                     onChange={(value: string) => {
@@ -527,7 +521,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor='kcname'>课程名称：</label>
+                  <label htmlFor="kcname">课程名称：</label>
                   <Select
                     value={kcId || state?.id}
                     allowClear
@@ -544,7 +538,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor='kcly'>课程来源：</label>
+                  <label htmlFor="kcly">课程来源：</label>
                   <Select
                     allowClear
                     placeholder="课程来源"
@@ -553,16 +547,16 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     }}
                     value={KCLY}
                   >
-                    <Option value='校内课程' key='校内课程'>
+                    <Option value="校内课程" key="校内课程">
                       校内课程
                     </Option>
-                    <Option value='机构课程' key='机构课程'>
+                    <Option value="机构课程" key="机构课程">
                       机构课程
                     </Option>
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor='status'>班级状态：</label>
+                  <label htmlFor="status">班级状态：</label>
                   <Select
                     allowClear
                     value={BJZTMC}
