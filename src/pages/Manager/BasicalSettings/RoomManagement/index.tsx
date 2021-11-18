@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-console */
 import React, { useRef, useState, useEffect } from 'react';
 import { useModel } from 'umi';
@@ -277,7 +278,7 @@ const RoomManagement = () => {
         } else {
           message.error(`${code.message}`);
           console.log('event', event);
-          event.currentTarget.onerror(code);
+          event?.currentTarget?.onerror(code);
         }
       } else if (info.file.status === 'error') {
         console.log('info.file.response', info.file);
