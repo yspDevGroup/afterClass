@@ -1,7 +1,7 @@
 /*
  * @Author: wuzhan
  * @Date: 2021-10-27 09:00:26
- * @LastEditTime: 2021-11-17 14:02:02
+ * @LastEditTime: 2021-11-18 11:41:55
  * @LastEditors: Sissle Lynn
  * @Description: 学年学期
  */
@@ -42,6 +42,7 @@ const SemesterSelect: FC<SemesterSelectProps> = ({ onChange, XXJBSJId }) => {
       <label htmlFor='term'>所属学年学期：</label>
       <Select
         value={term}
+        allowClear
         onChange={(value: string) => {
           setTerm(value);
           onChange?.(value);
