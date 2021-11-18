@@ -12,6 +12,7 @@ import ProTable from '@ant-design/pro-table';
 import { LeftOutlined } from '@ant-design/icons';
 import Style from './index.less';
 import EllipsisHint from '@/components/EllipsisHint';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
 
@@ -209,7 +210,7 @@ const AfterSchoolClass: React.FC = (props: any) => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1300 }}
+          scroll={{ x: getTableWidth(columns) }}
           columns={columns}
           dataSource={dataSource}
           rowKey="id"

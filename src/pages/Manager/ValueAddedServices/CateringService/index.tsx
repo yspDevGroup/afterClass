@@ -12,6 +12,7 @@ import ProTable from '@ant-design/pro-table';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { createKHZZFW, deleteKHZZFW, getKHZZFW, updateKHZZFW } from '@/services/after-class/khzzfw';
 import { PlusOutlined } from '@ant-design/icons';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
 const { Search } = Input;
@@ -339,7 +340,7 @@ const MutualEvaluation = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1200}}
+          scroll={{ x: getTableWidth(columns)}}
           search={false}
           dataSource={DataSource}
           dateFormatter="string"

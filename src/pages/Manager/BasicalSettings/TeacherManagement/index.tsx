@@ -2,8 +2,8 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-10-30 11:28:38
- * @LastEditors: zpl
+ * @LastEditTime: 2021-11-18 09:16:07
+ * @LastEditors: Please set LastEditors
  */
 import React, { useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -15,7 +15,7 @@ import { UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 import type { TableListParams } from '@/constant';
 import PageContain from '@/components/PageContainer';
 
-import { getAuthorization } from '@/utils/utils';
+import { getAuthorization, getTableWidth } from '@/utils/utils';
 import { deleteJZGJBSJ, getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { syncWechatStudents, syncWechatTeachers } from '@/services/after-class/upload';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
@@ -202,7 +202,7 @@ const TeacherManagement = () => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 800 }}
+        scroll={{ x: getTableWidth(columns) }}
         request={async (
           params: any & {
             pageSize?: number;

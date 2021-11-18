@@ -2,8 +2,8 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-31 10:08:34
- * @LastEditTime: 2021-10-19 16:39:55
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-11-18 08:53:54
+ * @LastEditors: Please set LastEditors
  */
 import { useState, useRef } from 'react';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -13,6 +13,7 @@ import type { TableListItem } from '../data';
 import styles from '../index.module.less';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 import PageContainer from '@/components/PageContainer';
+import { getTableWidth } from '@/utils/utils';
 
 const TableList = () => {
   const [dataSource, setDataSource] = useState<API.JYJGTZGG[]>();
@@ -123,7 +124,7 @@ const TableList = () => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 1000 }}
+        scroll={{ x: getTableWidth(columns)}}
         request={async (params) => {
           if (params.ZT || params.BT) {
             const resgetXXTZGG = await getJYJGTZGG({

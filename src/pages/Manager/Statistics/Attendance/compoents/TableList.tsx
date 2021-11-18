@@ -1,3 +1,4 @@
+import { getTableWidth } from '@/utils/utils';
 import ProTable from '@ant-design/pro-table';
 // import type { ProColumns } from '@ant-design/pro-table';
 // import { useEffect, useState } from 'react';
@@ -257,7 +258,7 @@ const Table = (props: any) => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 1000 }}
+        scroll={{ x: getTableWidth(columns) }}
         columns={ columns}
         options={{
           setting: false,

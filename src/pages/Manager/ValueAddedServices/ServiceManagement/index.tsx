@@ -20,6 +20,7 @@ import {
 } from '@/services/after-class/khxxzzfw';
 import moment from 'moment';
 import UploadImage from '@/components/CustomForm/components/UploadImage';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
 // const { Search } = Input;
@@ -424,7 +425,7 @@ const ServiceManagement = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1200 }}
+          scroll={{ x: getTableWidth(columns) }}
           search={false}
           dataSource={DataSource}
           dateFormatter="string"

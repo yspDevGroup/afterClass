@@ -18,7 +18,7 @@ import { searchData } from './serarchConfig';
 import AsyncAddRoom from './components/AsyncAddRoom';
 import AsyncSiteMaintenance from './components/AsyncSiteMaintenance';
 import PromptInformation from '@/components/PromptInformation';
-import { enHenceMsg } from '@/utils/utils';
+import { enHenceMsg, getTableWidth } from '@/utils/utils';
 import { useModel } from 'umi';
 import { getAllFJLX } from '@/services/after-class/fjlx';
 import { getAllXXJBSJ } from '@/services/after-class/xxjbsj';
@@ -324,7 +324,7 @@ const RoomManagement = () => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 900 }}
+        scroll={{ x: getTableWidth(columns) }}
         request={async (
           params: RoomItem & {
             pageSize?: number;

@@ -21,6 +21,7 @@ import styles from './index.less';
 import AgentRegistration from './components/AgentRegistration';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getClassDays } from '@/utils/TimeTable';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
 
@@ -447,7 +448,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1200 }}
+          scroll={{ x: getTableWidth(columns) }}
           request={async (param, sort, filter) => {
             if (curXNXQId) {
               const obj = {

@@ -11,6 +11,7 @@ import { createKHXSTK } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getKHZZFW } from '@/services/after-class/khzzfw';
 import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
 const { TextArea, Search } = Input;
@@ -404,7 +405,7 @@ const ServiceUnsubscribe = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1300 }}
+          scroll={{ x: getTableWidth(columns) }}
           options={{
             setting: false,
             fullScreen: false,

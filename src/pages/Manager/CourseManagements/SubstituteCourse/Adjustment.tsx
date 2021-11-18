@@ -11,6 +11,7 @@ import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
 import { updateKHJSTDK } from '@/services/after-class/khjstdk';
 import { getMainTeacher } from '@/services/after-class/khbjsj';
 import { getClassDays } from '@/utils/TimeTable';
+import { getTableWidth } from '@/utils/utils';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -300,7 +301,7 @@ const Adjustment: React.FC = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1300 }}
+          scroll={{ x: getTableWidth(columns) }}
           options={{
             setting: false,
             fullScreen: false,

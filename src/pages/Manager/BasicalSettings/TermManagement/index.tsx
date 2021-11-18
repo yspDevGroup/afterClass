@@ -15,6 +15,7 @@ import { createXNXQ, deleteXNXQ, updateXNXQ } from '@/services/after-class/xnxq'
 import moment from 'moment';
 import ManagementTable from './components/ManagementTable';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getTableWidth } from '@/utils/utils';
 
 const TermManagement = () => {
   const { initialState } = useModel('@@initialState');
@@ -195,7 +196,7 @@ const TermManagement = () => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 900 }}
+        scroll={{ x: getTableWidth(columns) }}
         options={{
           setting: false,
           fullScreen: false,

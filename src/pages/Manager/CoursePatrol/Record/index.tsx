@@ -7,6 +7,7 @@ import PageContainer from '@/components/PageContainer';
 import { getKHXKJL } from '@/services/after-class/khxkjl'
 import { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
 
@@ -203,7 +204,7 @@ const CoursePatrol = () => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: 1500 }}
+        scroll={{ x: getTableWidth(columns) }}
         options={{
           setting: false,
           fullScreen: false,

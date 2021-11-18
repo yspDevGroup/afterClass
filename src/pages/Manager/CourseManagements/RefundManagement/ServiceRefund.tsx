@@ -12,6 +12,7 @@ import { getKHZZFW } from '@/services/after-class/khzzfw';
 import moment from 'moment';
 import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { DownloadOutlined } from '@ant-design/icons';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -414,7 +415,7 @@ const ServiceRefund = () => {
               pageSize: 10,
               defaultCurrent: 1,
             }}
-            scroll={{ x: 1500 }}
+            scroll={{ x: getTableWidth(columns) }}
             request={async () => {
               const resAll = await getAllKHXSTK({
                 LX: 1,

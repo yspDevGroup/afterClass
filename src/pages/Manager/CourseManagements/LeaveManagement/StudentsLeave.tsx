@@ -12,6 +12,7 @@ import { getAllClasses } from '@/services/after-class/khbjsj';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import EllipsisHint from '@/components/EllipsisHint';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
@@ -333,7 +334,7 @@ const StudentsLeave: React.FC = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: 1300 }}
+          scroll={{ x: getTableWidth(columns) }}
           dataSource={dataSource}
           options={{
             setting: false,
