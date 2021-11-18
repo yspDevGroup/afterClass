@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { message, Popconfirm, Space, Tag } from 'antd';
+import { Input, message, Popconfirm, Select, Space, Tag } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 
@@ -15,23 +15,47 @@ import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { createKHKCSQ, getToIntroduceBySchool, updateKHKCSQ } from '@/services/after-class/khkcsq';
 import { getTeacherByClassId } from '@/services/after-class/khkcsj';
 import { getTableWidth } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
 /**
  * 未引入课程
  * @returns
  */
+
+const { Option } = Select;
+const { Search } = Input;
 const courseNotIntroduced = () => {
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const [dataSource, setDataSource] = useState<any[]>([]);
   // 课程类型
   const [kclxOptions, setOptions] = useState<any[]>([]);
+  // 设置表单的查询更新
+  const [KCName, setKCName] = useState<string>();
+  const [JGName, setJGName] = useState<string>();
+  const [KCLXId, setKCLXId] = useState<string>();
   // 机构详情抽屉
   const [visibleMechanismInfo, setVisibleMechanismInfo] = useState(false);
   // 课程详情抽屉
   const [visibleSchoolInfo, setVisibleSchoolInfo] = useState(false);
   // 机构详情
   const [info, setInfo] = useState({});
-
+  const getData = async () => {
+    const opts: TableListParams = {
+      KCMC: KCName,
+      KHJYJG: JGName,
+      KHKCLXId: KCLXId,
+      XD: currentUser?.XD?.split(/,/g),
+      XXJBSJId: currentUser?.xxId,
+      XZQHM: currentUser?.XZQHM,
+      pageSize: 0,
+      page: 0,
+    };
+    const resAll = await getToIntroduceBySchool(opts);
+    if (resAll.status === 'ok' && resAll.data) {
+      setDataSource(resAll.data.rows)
+    }
+  };
   useEffect(() => {
     // 课程类型
     const res = getAllKHKCLX({ name: '' });
@@ -48,6 +72,10 @@ const courseNotIntroduced = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    getData();
+  }, [KCLXId, KCName, JGName])
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -239,41 +267,49 @@ const courseNotIntroduced = () => {
           defaultCurrent: 1,
         }}
         scroll={{ x: getTableWidth(columns) }}
-        request={async (params, sorter, filter) => {
-          // 表单搜索项会从 params 传入，传递给后端接口。
-          const opts: TableListParams = {
-            ...params,
-            sorter: sorter && Object.keys(sorter).length ? sorter : undefined,
-            filter,
-            name: params.keyword,
-            pageSize: 0,
-            page: 0,
-            isRequired: false,
-            XD: currentUser?.XD?.split(/,/g),
-            XXJBSJId: currentUser?.xxId,
-            XZQHM: currentUser?.XZQHM,
-          };
-          const resAll = await getToIntroduceBySchool(opts);
-          if (resAll.status === 'ok') {
-            return {
-              data: resAll.data.rows,
-              success: true,
-              total: resAll.data.count,
-            };
-          }
-          return {
-            data: [],
-            success: false,
-            total: 0,
-          };
-        }}
+        dataSource={dataSource}
         options={{
           setting: false,
           fullScreen: false,
           density: false,
           reload: false,
         }}
-        // search={false}
+        search={false}
+        headerTitle={
+          <>
+            <SearchLayout>
+              <div>
+                <label htmlFor='kcname'>课程名称：</label>
+                <Search placeholder="课程名称" allowClear onSearch={(value: string) => {
+                  setKCName(value);
+                }} />
+              </div>
+              <div>
+                <label htmlFor='jgname'>机构名称：</label>
+                <Search placeholder="机构名称" allowClear onSearch={(value: string) => {
+                  setJGName(value);
+                }} />
+              </div>
+              <div>
+                <label htmlFor='kctype'>课程类型：</label>
+                <Select
+                  allowClear
+                  placeholder="课程类型"
+                  onChange={(value) => {
+                    setKCLXId(value);
+                  }}
+                  value={KCLXId}
+                >
+                  {kclxOptions?.map((op: any) => (
+                    <Select.Option value={op.value} key={op.value}>
+                      {op.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </div>
+            </SearchLayout>
+          </>
+        }
       />
       <MechanismInfo // 机构详情页
         onMechanismInfoClose={() => {
