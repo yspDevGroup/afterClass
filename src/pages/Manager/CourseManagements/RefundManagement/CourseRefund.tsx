@@ -8,9 +8,9 @@ import Style from './index.less';
 import { getAllKHXSTK, updateKHXSTK, exportTKJL } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getAllClasses } from '@/services/after-class/khbjsj';
-import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 import { DownloadOutlined } from '@ant-design/icons';
 import { getTableWidth } from '@/utils/utils';
+import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 
 type selectType = { label: string; value: string };
 
@@ -38,7 +38,6 @@ const CourseRefund = () => {
   const [bjmcValue, setBjmcValue] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
 
-
   useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
@@ -63,7 +62,7 @@ const CourseRefund = () => {
         pageSize: 0,
         XNXQId: curXNXQId,
         XXJBSJId: currentUser?.xxId,
-        XZQHM: currentUser?.XZQHM
+        XZQHM: currentUser?.XZQHM,
       };
       const khkcResl = await getAllCourses2(params);
       if (khkcResl.status === 'ok') {
@@ -74,7 +73,7 @@ const CourseRefund = () => {
         setKcmcData(KCMC);
       }
     }
-  }
+  };
 
   /**
    * 获取课程班集数据
@@ -95,7 +94,7 @@ const CourseRefund = () => {
         setBjmcData(BJMC);
       }
     }
-  }
+  };
 
   useEffect(() => {
     actionRef.current?.reload();
@@ -130,7 +129,7 @@ const CourseRefund = () => {
       width: 100,
       fixed: 'left',
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.XM
+        return record?.XSJBSJ?.XM;
       },
     },
     {
@@ -149,7 +148,7 @@ const CourseRefund = () => {
       width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
       },
     },
     {
@@ -189,7 +188,7 @@ const CourseRefund = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.createdAt?.substring(0, 16)
+        return record?.createdAt?.substring(0, 16);
       },
       width: 150,
     },
@@ -215,7 +214,7 @@ const CourseRefund = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.SPSJ?.replace(/T/, ' ').substring(0, 16)
+        return record?.SPSJ?.replace(/T/, ' ').substring(0, 16);
       },
       width: 150,
     },
@@ -226,7 +225,7 @@ const CourseRefund = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.TKSJ?.substring(0, 16)
+        return record?.TKSJ?.substring(0, 16);
       },
       width: 150,
     },
@@ -278,10 +277,12 @@ const CourseRefund = () => {
       fixed: 'right',
       render: (_: any, record: any) =>
         record.TKZT === 0 ? (
-          <a onClick={() => {
-            setCurrent(record);
-            setVisible(true);
-          }}>
+          <a
+            onClick={() => {
+              setCurrent(record);
+              setVisible(true);
+            }}
+          >
             确认
           </a>
         ) : (
@@ -292,13 +293,19 @@ const CourseRefund = () => {
 
   const handleSubmit = async (paramsItem: any) => {
     const { TKJE, TKZT, BZ } = paramsItem;
-    if (TKJE === 0 || TKJE === 0.00) {
+    if (TKJE === 0 || TKJE === 0.0) {
       message.warning('退款金额为0，无需发起退款');
     } else {
       try {
         if (current.id) {
           const params = { id: current.id };
-          const body = { TKJE, TKZT, BZ, deviceIp: '117.36.118.42', SPSJ: new Date().toISOString() };
+          const body = {
+            TKJE,
+            TKZT,
+            BZ,
+            deviceIp: '117.36.118.42',
+            SPSJ: new Date().toISOString(),
+          };
           const res = await updateKHXSTK(params, body);
           if (res.status === 'ok') {
             if (TKZT === 2) {
@@ -317,7 +324,7 @@ const CourseRefund = () => {
         message.error('退款流程出现错误，请联系管理员或稍后重试。');
       }
     }
-  }
+  };
 
   const onExportClick = () => {
     setLoading(true);
@@ -344,8 +351,8 @@ const CourseRefund = () => {
   return (
     <>
       <div className={Style.TopSearchs}>
-        <Form layout='inline' labelCol={{ span: 8 }}>
-          <Form.Item label=' 所属学年学期：' style={{ padding: '0 0 24px' }}>
+        <Form layout="inline" labelCol={{ span: 8 }}>
+          <Form.Item label=" 所属学年学期：" style={{ padding: '0 0 24px' }}>
             <Select
               value={curXNXQId}
               style={{ width: 160 }}
@@ -363,7 +370,7 @@ const CourseRefund = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label=' 课程名称:' style={{ padding: '0 0 24px' }}>
+          <Form.Item label=" 课程名称:" style={{ padding: '0 0 24px' }}>
             <Select
               style={{ width: 160 }}
               value={kcmcValue}
@@ -385,7 +392,7 @@ const CourseRefund = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label=' 课程班名称:' style={{ padding: '0 0 24px' }}>
+          <Form.Item label=" 课程班名称:" style={{ padding: '0 0 24px' }}>
             <Select
               style={{ width: 160 }}
               value={bjmcValue}
@@ -402,8 +409,13 @@ const CourseRefund = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item style={{ flex: 'auto', margin: 0}}>
-            <Button style={{ float: 'right' }} icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+          <Form.Item style={{ flex: 'auto', margin: 0 }}>
+            <Button
+              style={{ float: 'right' }}
+              icon={<DownloadOutlined />}
+              type="primary"
+              onClick={onExportClick}
+            >
               导出
             </Button>
           </Form.Item>
@@ -474,11 +486,11 @@ const CourseRefund = () => {
             onFinish={handleSubmit}
             layout="horizontal"
           >
-            <Form.Item label="退款金额" name='TKJE'>
+            <Form.Item label="退款金额" name="TKJE">
               <InputNumber
                 min={Number(0)}
-                formatter={value => `￥ ${value}`}
-                parser={value => Number(value?.replace(/￥\s?/g, ''))}
+                formatter={(value) => `￥ ${value}`}
+                parser={(value) => Number(value?.replace(/￥\s?/g, ''))}
                 onChange={(value) => {
                   if (value === 0) {
                     message.warning('退款金额为0，无需发起退款');
@@ -492,14 +504,15 @@ const CourseRefund = () => {
                 <Radio value={2}>不同意</Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item label="退款说明" name='BZ'>
+            <Form.Item label="退款说明" name="BZ">
               <TextArea rows={4} maxLength={100} />
             </Form.Item>
           </Form>
           <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>
             注：退款金额 = (课程费用/课程课时总数)*退课课时数
             <br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如若退款金额有调整，请填写退款说明。</p>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如若退款金额有调整，请填写退款说明。
+          </p>
         </Modal>
       </div>
     </>

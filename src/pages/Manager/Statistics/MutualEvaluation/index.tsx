@@ -7,10 +7,10 @@ import { Select, Rate, Form, Spin } from 'antd';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
-import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
-import styles from './index.less'
+import styles from './index.less';
 import { getTableWidth } from '@/utils/utils';
+import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 
 type selectType = { label: string; value: string };
 
@@ -241,8 +241,7 @@ const MutualEvaluation: React.FC = () => {
   return (
     <PageContainer>
       <Form layout="inline" labelCol={{ span: 8 }}>
-        <Form.Item label=" 所属学年学期：" style={{ padding: '0 0 24px' }}
-            className={styles.XNXQ}>
+        <Form.Item label=" 所属学年学期：" style={{ padding: '0 0 24px' }} className={styles.XNXQ}>
           <Select
             value={curXNXQId}
             style={{ width: 160 }}

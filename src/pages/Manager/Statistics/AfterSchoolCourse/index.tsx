@@ -9,9 +9,9 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 import Style from './index.less';
 import type { TableItem } from './data';
-import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { getTableWidth } from '@/utils/utils';
+import { getAllCourses2 } from '@/services/after-class/jyjgsj';
 
 type selectType = { label: string; value: string };
 
@@ -33,12 +33,13 @@ const AfterSchoolCourse: React.FC = () => {
   const [kcmcValue, setKcmcValue] = useState<any>();
   // 课程来源
   const [KCLY, setKCLY] = useState<string>();
-  const KCLYData: selectType[] = [{ label: '校内课程', value: '校内课程' }, { label: '机构课程', value: '机构课程' }];
+  const KCLYData: selectType[] = [
+    { label: '校内课程', value: '校内课程' },
+    { label: '机构课程', value: '机构课程' },
+  ];
   // //课程类型
   const [KCLXId, setKCLXId] = useState<string | undefined>();
   const [KCLXData, setKCLXData] = useState<selectType[] | undefined>();
-
-
 
   /// table表格数据
   const columns: ProColumns<TableItem>[] = [
@@ -119,7 +120,7 @@ const AfterSchoolCourse: React.FC = () => {
       ellipsis: true,
       render: (test: any, record: any) => {
         const num =
-          record.TKRS != 0 ? `${(Number(record.TKRS / record.BMRS) * 100).toFixed(1)  }%` : 0;
+          record.TKRS != 0 ? `${(Number(record.TKRS / record.BMRS) * 100).toFixed(1)}%` : 0;
         return num;
       },
     },
@@ -167,7 +168,7 @@ const AfterSchoolCourse: React.FC = () => {
 
   // 学年学期选相框触发的函数
   const ChoseSelect = async (SelectData: string) => {
-    const kclxItem=KCLXData?.find((item: any)=>item.value===KCLXId)?.label;
+    const kclxItem = KCLXData?.find((item: any) => item.value === KCLXId)?.label;
     const res3 = await getCourses({
       XNXQId: SelectData,
       XXJBSJId: currentUser?.xxId,
@@ -190,7 +191,7 @@ const AfterSchoolCourse: React.FC = () => {
         XXJBSJId: currentUser?.xxId,
         XZQHM: currentUser?.XZQHM,
         KCLY,
-        KHKCLXId:KCLXId,
+        KHKCLXId: KCLXId,
       };
       const khkcResl = await getAllCourses2(params);
 
@@ -202,7 +203,7 @@ const AfterSchoolCourse: React.FC = () => {
         setKcmcData(KCMC);
       }
     }
-  }
+  };
   /**
    * 获取课程类型数据
    */
@@ -211,12 +212,12 @@ const AfterSchoolCourse: React.FC = () => {
     if (res.status === 'ok') {
       const KCLXItem: any = res.data?.map((item: any) => ({
         value: item.id,
-        label: item.KCTAG
+        label: item.KCTAG,
       }));
       setKCLXData(KCLXItem);
       // setKcmcValue(undefined);
     }
-  }
+  };
 
   useEffect(() => {
     // 获取学年学期数据的获取
@@ -237,46 +238,46 @@ const AfterSchoolCourse: React.FC = () => {
   }, []);
   // 学年学期变化
   useEffect(() => {
-    if(curXNXQId){
+    if (curXNXQId) {
       ChoseSelect(curXNXQId);
     }
-  }, [curXNXQId,kcmcValue,KCLXId,KCLY]);
+  }, [curXNXQId, kcmcValue, KCLXId, KCLY]);
 
   /**
    * 切换学年学期时 清空课程类型 清空课程名称
    */
-  useEffect(()=>{
+  useEffect(() => {
     // 重新请求课程名称
-    if(curXNXQId){
+    if (curXNXQId) {
       getKCData();
-      setKcmcValue(null)
+      setKcmcValue(null);
     }
     // 清空选择
-  },[KCLXId,KCLY]);
+  }, [KCLXId, KCLY]);
 
-  useEffect(()=>{
+  useEffect(() => {
     // 重新请求课程名称
     getKCData();
     // 清空选择
     setKCLXId(undefined);
     setKCLY(undefined);
-  },[curXNXQId])
+  }, [curXNXQId]);
 
-  const submit = async()=>{
+  const submit = async () => {
     const res = await statisCourses({
-        XNXQId: curXNXQId
-    })
-    if(res.status === 'ok'){
-      message.success('刷新完成')
+      XNXQId: curXNXQId,
+    });
+    if (res.status === 'ok') {
+      message.success('刷新完成');
     }
-  }
+  };
 
   return (
     /// PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.TopSearchss}>
-        <Form layout='inline' labelCol={{ span: 8 }}>
-          <Form.Item label='所属学年学期: ' style={{ padding: '0 0 24px' }}>
+        <Form layout="inline" labelCol={{ span: 8 }}>
+          <Form.Item label="所属学年学期: " style={{ padding: '0 0 24px' }}>
             <Select
               value={curXNXQId}
               style={{ width: 160 }}
@@ -294,28 +295,26 @@ const AfterSchoolCourse: React.FC = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label='课程类型: ' style={{ padding: '0 0 24px' }}>
+          <Form.Item label="课程类型: " style={{ padding: '0 0 24px' }}>
             <Select
               value={KCLXId}
               style={{ width: 160 }}
               placeholder="请选择"
               allowClear
               onChange={(value: string) => {
-                setKCLXId(value)
+                setKCLXId(value);
               }}
             >
               {KCLXData?.map((item: any) => {
                 return (
-                  <Option key={item.value} value={item.value} >
-                    {
-                      item.label
-                    }
+                  <Option key={item.value} value={item.value}>
+                    {item.label}
                   </Option>
                 );
               })}
             </Select>
           </Form.Item>
-          <Form.Item label='课程来源: ' style={{ padding: '0 0 24px' }}>
+          <Form.Item label="课程来源: " style={{ padding: '0 0 24px' }}>
             <Select
               style={{ width: 160 }}
               value={KCLY}
@@ -337,7 +336,7 @@ const AfterSchoolCourse: React.FC = () => {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label='课程名称:' style={{ padding: '0 0 24px' }}>
+          <Form.Item label="课程名称:" style={{ padding: '0 0 24px' }}>
             <Select
               style={{ width: 160 }}
               value={kcmcValue}
@@ -360,11 +359,14 @@ const AfterSchoolCourse: React.FC = () => {
             </Select>
           </Form.Item>
         </Form>
-
       </div>
       <div className={Style.AfterSchoolCourse}>
-        <p className={Style.title}><span>系统每天凌晨自动更新一次，如需立即更新，请点击【刷新】按钮</span>
-         <Button type="primary" onClick={submit}>刷新</Button></p>
+        <p className={Style.title}>
+          <span>系统每天凌晨自动更新一次，如需立即更新，请点击【刷新】按钮</span>
+          <Button type="primary" onClick={submit}>
+            刷新
+          </Button>
+        </p>
         <ProTable
           columns={columns}
           dataSource={dataSource}

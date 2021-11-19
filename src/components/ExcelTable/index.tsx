@@ -203,9 +203,9 @@ const Index: FC<IndexPropsType> = ({
   type = 'see',
   switchPages,
   getSelectdata,
-  radioValue,
+  // radioValue,
   // basicData,
-  tearchId,
+  // tearchId,
 }) => {
   let [stateTableData, setStateTableData] = useState<DataSourceType>();
   const weekDay = {
@@ -263,32 +263,32 @@ const Index: FC<IndexPropsType> = ({
       }
     } else if (type === 'edit') {
       if (chosenData && !rowData[colItem.dataIndex]) {
-        let connst = -1;
-        newData?.forEach((item: any, key: any) => {
-          if (
-            item[colItem.dataIndex] &&
-            item.course.hjId === rowData.course?.hjId &&
-            item[colItem.dataIndex]?.teacherID === tearchId
-          ) {
-            connst = key;
-          }
-        });
-        if (connst === -1) {
-          rowData[colItem.dataIndex] = {
-            cla: chosenData?.cla,
-            teacher: chosenData?.teacher,
-            teacherID: chosenData?.teacherID,
-            dis: false,
-            color: chosenData.color,
-          };
-        } else if (connst !== -1) {
-          Modal.warning({
-            title: '不能将同一个老师安排在同一天的同一时段内上课',
-            onOk() {
-              rowData[colItem.dataIndex] = '';
-            },
-          });
-        }
+        // let connst = -1;
+        // newData?.forEach((item: any, key: any) => {
+        //   if (
+        //     item[colItem.dataIndex] &&
+        //     item.course.hjId === rowData.course?.hjId &&
+        //     item[colItem.dataIndex]?.teacherID === tearchId
+        //   ) {
+        //     connst = key;
+        //   }
+        // });
+        // if (connst === -1) {
+        rowData[colItem.dataIndex] = {
+          cla: chosenData?.cla,
+          teacher: chosenData?.teacher,
+          teacherID: chosenData?.teacherID,
+          dis: false,
+          color: chosenData.color,
+        };
+        // } else if (connst !== -1) {
+        //   Modal.warning({
+        //     title: '不能将同一个老师安排在同一天的同一时段内上课',
+        //     onOk() {
+        //       rowData[colItem.dataIndex] = '';
+        //     },
+        //   });
+        // }
       } else {
         rowData[colItem.dataIndex] = '';
       }
@@ -429,9 +429,7 @@ const Index: FC<IndexPropsType> = ({
           </table>
         </div>
       ) : (
-        <div className={styles.noContent}>
-          暂无排课信息
-        </div>
+        <div className={styles.noContent}>暂无排课信息</div>
       )}
     </div>
   );
