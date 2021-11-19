@@ -97,8 +97,7 @@
       }
 
       .banjiCard {
-        min-width: 950px;
-
+        min-width: calc(~'100% - 130px');
         .banjiItem {
           position: relative;
 
@@ -206,6 +205,7 @@
 
 .searchWrapper {
   position: relative;
+  padding-bottom: 24px;
   box-shadow: 0 1px 0 #e4e4e4;
   > div:nth-child(1) {
     display: flex;
@@ -216,7 +216,7 @@
     > div {
       display: flex;
       margin-right: 16px;
-      margin-bottom: 24px;
+      // margin-bottom: 24px;
       line-height: 30px;
     }
   }

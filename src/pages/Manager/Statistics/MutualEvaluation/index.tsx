@@ -10,7 +10,7 @@ import ProTable from '@ant-design/pro-table';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import styles from './index.less';
 import { getTableWidth } from '@/utils/utils';
-import { getAllCourses2 } from '@/services/after-class/jyjgsj';
+import { getAllCourses2 } from '@/services/after-class/khkcsj';
 
 type selectType = { label: string; value: string };
 

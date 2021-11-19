@@ -2,10 +2,11 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-29 12:21:42
- * @LastEditTime: 2021-11-19 09:06:09
+ * @LastEditTime: 2021-11-19 09:07:11
  * @LastEditors: Please set LastEditors
  */
 import { useEffect, useRef, useState } from 'react';
+import { useModel } from 'umi';
 import { message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -17,7 +18,6 @@ import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import CourseSelect from '@/components/Search/CourseSelect';
 import ClassSelect from '@/components/Search/ClassSelect';
-
 
 const { TextArea } = Input;
 // 退款
@@ -41,15 +41,15 @@ const CourseRefund = () => {
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
-  }
+  };
   // 课程筛选
   const courseChange = (val: string) => {
     setCurKCId(val);
-  }
+  };
   // 课程班筛选
   const classChange = (val: string) => {
     setBJId(val);
-  }
+  };
   const getData = async () => {
     const resAll = await getAllKHXSTK({
       LX: 0,
@@ -342,7 +342,7 @@ const CourseRefund = () => {
             toolBarRender={() => [
               <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
                 导出
-              </Button>
+              </Button>,
             ]}
           />
         </Spin>

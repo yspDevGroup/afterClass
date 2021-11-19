@@ -11,7 +11,7 @@ import Style from './index.less';
 import type { TableItem } from './data';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { getTableWidth } from '@/utils/utils';
-import { getAllCourses2 } from '@/services/after-class/jyjgsj';
+import { getAllCourses2 } from '@/services/after-class/khkcsj';
 
 type selectType = { label: string; value: string };
 
