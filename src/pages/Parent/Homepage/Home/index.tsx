@@ -51,7 +51,7 @@ const Home = () => {
     }
   }, [currentUser]);
   useEffect(() => {
-      const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
+    const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
     const ParentalIdentitys = `${StorageXSName}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
   }, [StorageXSName]);

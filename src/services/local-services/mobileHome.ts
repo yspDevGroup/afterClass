@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-11-12 10:20:04
+ * @LastEditTime: 2021-11-19 14:49:55
  * @LastEditors: Sissle Lynn
  */
 
@@ -67,6 +67,8 @@ const uniqueArr = (arr: any) => {
 const getHomeData = async (type: string, xxId: string, userId: string, njId?: string) => {
   let courseStatus = 'empty';
   const result = await queryXNXQList(xxId);
+  homeInfo.markDays = [];
+  homeInfo.courseSchedule = [];
   if (result.current) {
     const params: any = {
       XNXQId: result.current.id,
@@ -90,7 +92,6 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
         const bjIds = [].map.call(yxkc, (v: { id: string }) => {
           return v.id
         });
-        homeInfo.markDays = [];
         if (yxkc?.length) {
           const clsRes = await getAllKHBJKSSJ({
             KHBJSJIds: bjIds as string[],
