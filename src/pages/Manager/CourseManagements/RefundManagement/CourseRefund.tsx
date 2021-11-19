@@ -37,7 +37,6 @@ const CourseRefund = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
-
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
@@ -66,7 +65,6 @@ const CourseRefund = () => {
       setDataSource([]);
     }
   };
-
   useEffect(() => {
     if (curXNXQId) {
       getData();

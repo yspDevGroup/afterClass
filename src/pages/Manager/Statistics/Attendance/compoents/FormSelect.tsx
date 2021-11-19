@@ -1,9 +1,11 @@
-import { Select, Input, Form, DatePicker } from 'antd';
+import { Select, Input, DatePicker } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import type { Moment } from 'moment';
 import moment from 'moment';
 import type { ReactNode } from '@umijs/renderer-react/node_modules/@types/react';
+import SearchLayout from '@/components/Search/Layout';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -23,7 +25,7 @@ const FormSelect = (props: formSelectProps) => {
   const { getDataSource, exportButton, getDuration } = props;
 
   const [curXNXQId, setCurXNXQId] = useState<any>();
-  const [newDate, setNewDate] = useState<any[]>([]);
+  const [newDate, setNewDate] = useState<Moment[]>([]);
   const [XM, setXM] = useState<string | undefined>(undefined);
 
   // 学年学期列表数据
@@ -67,7 +69,6 @@ const FormSelect = (props: formSelectProps) => {
   useEffect(() => {
     if (curXNXQId) {
       getNewDate();
-      // setXM(undefined)
     }
   }, [curXNXQId]);
 
@@ -78,51 +79,54 @@ const FormSelect = (props: formSelectProps) => {
   };
 
   return (
-    <Form layout="inline" style={{ padding: '0 0 24px' }}>
-      <Form.Item label="所属学年学期:">
-        <Select
-          value={curXNXQId}
-          style={{ width: 160 }}
-          onChange={(value: string) => {
-            setCurXNXQId(value);
-          }}
-        >
-          {termList?.map((item: any) => {
-            return (
-              <Option key={item.value} value={item.value}>
-                {item.text}
-              </Option>
-            );
-          })}
-        </Select>
-      </Form.Item>
-      <Form.Item>
-        <RangePicker
-          allowClear={false}
-          format="YYYY-MM-DD"
-          value={newDate}
-          onChange={(value: any) => {
-            setNewDate(value);
-          }}
-          disabledDate={onDisabledTime}
-        />
-      </Form.Item>
-      <Form.Item>
-        <Search
-          allowClear
-          value={XM}
-          onChange={(value) => {
-            setXM(value.target.value);
-          }}
-          placeholder="姓名"
-          onSearch={(value) => {
-            // setXM(value);
-            getDataSource(curXNXQId, newDate, value);
-          }}
-        />
-      </Form.Item>
-      <Form.Item style={{flex: 'auto'}}>{exportButton}</Form.Item>
-    </Form>
+    <div style={{ marginBottom: 24 }}>
+      <SearchLayout>
+        <div>
+          <label htmlFor="term">所属学年学期：</label>
+          <Select
+            value={curXNXQId}
+            onChange={(value: string) => {
+              setCurXNXQId(value);
+            }}
+          >
+            {termList?.map((item: any) => {
+              return (
+                <Option key={item.value} value={item.value}>
+                  {item.text}
+                </Option>
+              );
+            })}
+          </Select>
+        </div>
+        <div>
+          <label htmlFor="date">考勤日期：</label>
+          <RangePicker
+            style={{ width: '250px' }}
+            allowClear={false}
+            format="YYYY-MM-DD"
+            value={newDate}
+            onChange={(value: any) => {
+              setNewDate(value);
+            }}
+            disabledDate={onDisabledTime}
+          />
+        </div>
+        <div>
+          <label htmlFor="name">考勤人员：</label>
+          <Search
+            allowClear
+            value={XM}
+            onChange={(value) => {
+              setXM(value.target.value);
+            }}
+            onSearch={(value) => {
+              getDataSource(curXNXQId, newDate, value);
+            }}
+          />
+        </div>
+      </SearchLayout>
+      {exportButton}
+    </div>
   );
 };
 export default FormSelect;

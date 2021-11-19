@@ -20,9 +20,6 @@ import { useModel } from 'umi';
 
 import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
 import SearchLayout from '@/components/Search/Layout';
-// import ClassSelect from '@/components/Search/ClassSelect';
-// import SemesterSelect from '@/components/Search/SemesterSelect';
-// import CourseSelect from '@/components/Search/CourseSelect';
 
 const { Option } = Select;
 const { Search } = Input;
@@ -657,30 +654,12 @@ const ClassManagement = () => {
                       })}
                     </Select>
                   </div>
-                  {/* <SemesterSelect
-                    XXJBSJId={currentUser?.xxId}
-                    onChange={(value: string) => {
-                      setCurXNXQId(value);
-                      setKcmcValue(undefined);
-                      setCdmcValue(undefined);
-                      setKcmcValue(undefined);
-                    }} />
-                  <CourseSelect
-                    XXJBSJId={currentUser?.xxId}
-                    onChange={(value) => {
-                      setKcmcValue(value);
-                      // 已经选择的内容清除
-                      setBjmcValue(undefined);
-                    }} />
-                  <ClassSelect XNXQId={curXNXQId} KHKCSJId={kcmcValue} onChange={(value: string) => setBjmcValue(value)} /> */}
                   <div>
                     <label>教师名称：</label>
-
                     <Search
                       allowClear
                       style={{ width: 160 }}
                       onSearch={(value) => {
-                        // console.log('value',value);
                         setTeacher(value);
                       }}
                     />
@@ -704,61 +683,6 @@ const ClassManagement = () => {
                     </Select>
                   </div>
                 </SearchLayout>
-                {/* <span>
-                    校区：
-                    <Select
-                      value={campusId}
-                      style={{ width: 160 }}
-                      onChange={(value: string) => {
-                        setCampusId(value);
-                      }}
-                    >
-                      {campus?.map((item: any) => {
-                        return (
-                          <Option key={item.value} value={item.value}>
-                            {item.label}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </span> 
-                  
-                  
-                 
-                  <div>
-                    <span>教师名称：</span>
-                    <div>
-                      <Search
-                        allowClear
-                        style={{ width: 160 }}
-                        onSearch={(value) => {
-                          // console.log('value',value);
-                          setTeacher(value);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <span>场地名称：</span>
-                    <div>
-                      <Select
-                        style={{ width: 160 }}
-                        value={cdmcValue}
-                        allowClear
-                        placeholder="请选择"
-                        onChange={(value) => setCdmcValue(value)}
-                      >
-                        {cdmcData?.map((item: selectType) => {
-                          return (
-                            <Option value={item.value} key={item.value}>
-                              {item.label}
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </div>
-                  </div>
-                </div>*/}
                 {/*  添加新的课程 路由跳转*/}
                 <div style={{ position: 'absolute', right: 0, top: 0 }}>
                   <Button
