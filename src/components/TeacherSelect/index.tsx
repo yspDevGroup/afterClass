@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-15 13:41:03
- * @LastEditTime: 2021-11-17 18:20:17
+ * @LastEditTime: 2021-11-19 12:08:22
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\components\TeacherSelect\index.tsx
@@ -173,6 +173,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
   return (
     <div>
       <TreeSelect
+        treeDefaultExpandedKeys={['0-0', '0-1']}
         disabled={disabled}
         treeData={treeData}
         multiple={multiple}
