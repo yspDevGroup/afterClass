@@ -21,7 +21,6 @@ import { getAuthorization } from '@/utils/utils';
 
 import SearchLayout from '@/components/Search/Layout';
 
-
 import styles from './index.less';
 
 const { Search } = Input;
@@ -101,8 +100,8 @@ const RoomManagement = () => {
     }
   };
   /**
- * 控制场地类型未配置时提示框的展示与隐藏
- */
+   * 控制场地类型未配置时提示框的展示与隐藏
+   */
   const closePromt = () => {
     setopens(false);
     setModalVisible(true);
@@ -276,8 +275,9 @@ const RoomManagement = () => {
       if (info.file.status === 'done') {
         const code = info.file.response;
         if (code.status === 'ok') {
-          message.success(`上传成功`);
+          // message.success(`上传成功`);
           setUploadVisible(false);
+          actionRef?.current?.reload();
         } else {
           message.error(`${code.message}`);
           console.log('event', event);
@@ -285,15 +285,13 @@ const RoomManagement = () => {
         }
       } else if (info.file.status === 'error') {
         console.log('info.file.response', info.file);
-        // const code = info.file.response;
-        // message.error(`${code.message}`);
       }
     },
   };
-  const onClose = () => {
-    setUploadVisible(false);
-    actionRef.current?.reload();
-  };
+  // const onClose = () => {
+  //   setUploadVisible(false);
+  //   actionRef.current?.reload();
+  // };
 
   return (
     <PageContainer cls={styles.roomWrapper}>
@@ -345,14 +343,18 @@ const RoomManagement = () => {
           <>
             <SearchLayout>
               <div>
-                <label htmlFor='type'>场地名称：</label>
-                <Search placeholder="场地名称" allowClear onSearch={(value: string) => {
-                  setName(value);
-                  actionRef.current?.reload();
-                }} />
+                <label htmlFor="type">场地名称：</label>
+                <Search
+                  placeholder="场地名称"
+                  allowClear
+                  onSearch={(value: string) => {
+                    setName(value);
+                    actionRef.current?.reload();
+                  }}
+                />
               </div>
               <div>
-                <label htmlFor='type'>场地类型：</label>
+                <label htmlFor="type">场地类型：</label>
                 <Select
                   allowClear
                   placeholder="场地类型"
@@ -441,19 +443,12 @@ const RoomManagement = () => {
       </Modal>
 
       <Modal
-        title="批量导入"
+        title="导入场地"
         destroyOnClose
         width="35vw"
         visible={uploadVisible}
         onCancel={() => setUploadVisible(false)}
-        footer={[
-          <Button key="back" onClick={() => setUploadVisible(false)}>
-            取消
-          </Button>,
-          <Button key="submit" type="primary" onClick={onClose}>
-            确定
-          </Button>,
-        ]}
+        footer={null}
         centered
         maskClosable={false}
         bodyStyle={{
