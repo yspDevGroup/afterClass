@@ -18,6 +18,7 @@ import refundImg from '@/assets/refund.png';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import CourseSelect from '@/components/Search/CourseSelect';
+import { getSchoolCoursesTJ } from '@/services/after-class/khkcsj';
 
 type selectType = { label: string; value: string };
 
@@ -30,6 +31,8 @@ const AfterSchoolCourse: React.FC = () => {
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 表格数据源
   const [dataSource, setDataSource] = useState<any>([]);
+  const [collectData, setCollectData] = useState<any>();
+  const [kcmc, setKcmc] = useState<any>();
   const [kcmcValue, setKcmcValue] = useState<any>();
   // 课程来源
   const [KCLY, setKCLY] = useState<string>();
@@ -174,6 +177,19 @@ const AfterSchoolCourse: React.FC = () => {
       setDataSource(res3?.data?.rows);
     }
   };
+  const getCollect = async () => {
+    const kclxItem = KCLXData?.find((item: any) => item.value === KCLXId)?.label;
+    const res = await getSchoolCoursesTJ({
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+      KCLX: kclxItem,
+      KCLY,
+      KCMC: kcmc,
+    });
+    if (res.status === 'ok') {
+      setCollectData(res?.data?.[0]);
+    }
+  }
   /**
    * 获取课程类型数据
    */
@@ -194,26 +210,30 @@ const AfterSchoolCourse: React.FC = () => {
   useEffect(() => {
     if (curXNXQId) {
       getData();
+      getCollect();
     }
-  }, [curXNXQId, kcmcValue, KCLXId, KCLY]);
+  }, [curXNXQId, kcmcValue, kcmc, KCLXId, KCLY]);
   const submit = async () => {
     const res = await statisCourses({
       XNXQId: curXNXQId,
     });
     if (res.status === 'ok') {
+      getData();
+      getCollect();
       message.success('刷新完成');
     }
   };
   return (
     // PageContainer组件是顶部的信息
     <PageContainer>
-      <div className={Style.TopSearchss}>
+      <div style={{ marginBottom: 24 }}>
         <SearchLayout>
           <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={(value: string) => {
             // 选择不同学期从新更新页面的数据
             setCurXNXQId(value);
           }} />
-          <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={(value) => {
+          <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={(value, data) => {
+            setKcmc(data?.children);
             setKcmcValue(value);
           }} />
           <div>
@@ -263,7 +283,7 @@ const AfterSchoolCourse: React.FC = () => {
               <img src={courseImg} />
             </span>
             <div>
-              <h3>24</h3>
+              <h3>{collectData?.kc_count || 0}</h3>
               <p>课程累计数</p>
             </div>
           </div>
@@ -274,7 +294,7 @@ const AfterSchoolCourse: React.FC = () => {
               <img src={classImg} />
             </span>
             <div>
-              <h3>24</h3>
+              <h3>{collectData?.bj_amount || 0}</h3>
               <p>课程班累计数</p>
             </div>
           </div>
@@ -285,7 +305,7 @@ const AfterSchoolCourse: React.FC = () => {
               <img src={personImg} />
             </span>
             <div>
-              <h3>24</h3>
+              <h3>{collectData?.bmrs_amount || 0}</h3>
               <p>报名累计人数</p>
             </div>
           </div>
@@ -296,7 +316,7 @@ const AfterSchoolCourse: React.FC = () => {
               <img src={personImg} />
             </span>
             <div>
-              <h3>24</h3>
+              <h3>{collectData?.tkrs_amount || 0}</h3>
               <p>退课累计人数</p>
             </div>
           </div>
@@ -307,7 +327,7 @@ const AfterSchoolCourse: React.FC = () => {
               <img src={amountImg} />
             </span>
             <div>
-              <h3>24</h3>
+              <h3>{collectData?.skje_amount || 0}</h3>
               <p>收款累计金额</p>
             </div>
           </div>
@@ -318,7 +338,7 @@ const AfterSchoolCourse: React.FC = () => {
               <img src={refundImg} />
             </span>
             <div>
-              <h3>24</h3>
+              <h3>{collectData?.tkje_amount || 0}</h3>
               <p>退款累计金额</p>
             </div>
           </div>

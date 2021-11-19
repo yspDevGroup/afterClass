@@ -10,7 +10,6 @@ import { message, Button, Drawer } from 'antd';
 import type { classType } from '../data';
 import styles from './index.less';
 import { courseColorType } from '@/theme-default';
-import { getData } from '@/utils/utils';
 
 type PropsType = {
   current?: classType;

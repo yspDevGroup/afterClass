@@ -19,7 +19,7 @@ const StudentsLeave: React.FC = () => {
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();;
   // 请假状态
-  const [QJZT, setQJZT] = useState<number[]>([-1]);
+  const [QJZT, setQJZT] = useState<number[]>();
   const [name, setName] = useState<string>();
   // 数据
   const [dataSource, setDataSourse] = useState<any>();
@@ -27,7 +27,7 @@ const StudentsLeave: React.FC = () => {
     const resAll = await getAllKHXSQJ({
       XNXQId: curXNXQId,
       XSXM: name,
-      QJZT: QJZT?.[0] === -1 ? [0, 1] : QJZT,
+      QJZT: QJZT || [0, 1],
     });
     if (resAll.status === 'ok') {
       setDataSourse(resAll?.data?.rows);
@@ -207,12 +207,9 @@ const StudentsLeave: React.FC = () => {
                 allowClear
                 value={QJZT?.[0]}
                 onChange={(value: number) => {
-                  setQJZT([value]);
+                  setQJZT(value !== undefined ? [value] : value);
                 }}
               >
-                <Option key='全部' value={-1}>
-                  全部
-                </Option>
                 <Option key='已通过' value={0}>
                   已通过
                 </Option>

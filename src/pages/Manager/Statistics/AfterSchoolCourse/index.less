@@ -1,6 +1,6 @@
 .TopCards {
-  display: none;
-  // display: flex;
+  // display: none;
+  display: flex;
   margin-bottom: 24px;
   > div {
     flex: 1;
@@ -10,16 +10,19 @@
     > div {
       display: flex;
       align-items: center;
-      padding: 8px;
+      padding: 10px;
       background-color: #ebf4ff;
       border-radius: 8px;
       img {
-        width: 80px;
-        margin: 0;
+        width: 50px;
+        margin: 0 10px 0 0;
       }
       h3,
       p {
         margin: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
     }
   }

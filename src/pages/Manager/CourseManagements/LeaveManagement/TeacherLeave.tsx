@@ -22,7 +22,7 @@ const StudentsLeave: React.FC = () => {
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();
   // 请假状态
-  const [QJZT, setQJZT] = useState<number[]>([-1]);
+  const [QJZT, setQJZT] = useState<number[]>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
@@ -72,7 +72,7 @@ const StudentsLeave: React.FC = () => {
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId,
       JSXM: name,
-      QJZT: QJZT?.[0] === -1 ? [0, 1, 2] : QJZT,
+      QJZT: QJZT || [0, 1, 2],
       page: 0,
       pageSize: 0,
     };
@@ -280,25 +280,22 @@ const StudentsLeave: React.FC = () => {
               }} />
             </div>
             <div>
-              <label htmlFor='status'>请假状态：</label>
+              <label htmlFor='status'>审批状态：</label>
               <Select
                 allowClear
                 value={QJZT?.[0]}
                 onChange={(value: number) => {
-                  setQJZT([value]);
+                  setQJZT(value !== undefined ? [value] : value);
                 }}
               >
-                <Option key='全部' value={-1}>
-                  全部
-                </Option>
-                <Option key='申请中' value={0}>
-                  申请中
+                <Option key='待审批' value={0}>
+                  待审批
                 </Option>
                 <Option key='已通过' value={1}>
                   已通过
                 </Option>
                 <Option key='已驳回' value={2}>
-                  已取销
+                  已驳回
                 </Option>
               </Select>
             </div>
