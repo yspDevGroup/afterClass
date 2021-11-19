@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { message, Modal, Radio, Input, Form, Space, Table, Tooltip, } from 'antd';
+import { message, Modal, Radio, Input, Form, Space, Table, Tooltip } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
@@ -36,15 +36,15 @@ const CourseUnsubscribe = () => {
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
-  }
+  };
   // 课程筛选
   const courseChange = (val: string, data?: any) => {
     setCurKCId(val);
-  }
+  };
   // 课程班筛选
   const classChange = (val: string, data?: any) => {
     setBJId(val);
-  }
+  };
   const getData = async () => {
     const resAll = await getKHTKSJ({
       XXJBSJId: currentUser?.xxId,
@@ -52,7 +52,7 @@ const CourseUnsubscribe = () => {
       KHBJSJId: curBJId,
       KHKCSJId: curKCId,
       XSXM: name,
-      LX: 0
+      LX: 0,
     });
     if (resAll.status === 'ok') {
       setDataSource(resAll?.data?.rows);
@@ -81,7 +81,7 @@ const CourseUnsubscribe = () => {
       width: 100,
       fixed: 'left',
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.XM
+        return record?.XSJBSJ?.XM;
       },
     },
     {
@@ -92,7 +92,7 @@ const CourseUnsubscribe = () => {
       width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
       },
     },
     {
@@ -128,7 +128,7 @@ const CourseUnsubscribe = () => {
       key: 'createdAt',
       align: 'center',
       render: (_, record) => {
-        return record?.createdAt?.substring(0, 16)
+        return record?.createdAt?.substring(0, 16);
       },
       width: 150,
     },
@@ -145,7 +145,7 @@ const CourseUnsubscribe = () => {
           return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
         }
         return record?.JZGJBSJ?.XM;
-      }
+      },
     },
     {
       title: '审批时间',
@@ -154,7 +154,7 @@ const CourseUnsubscribe = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.updatedAt?.replace(/T/, ' ').substring(0, 16)
+        return record?.updatedAt?.replace(/T/, ' ').substring(0, 16);
       },
       width: 150,
     },
@@ -197,77 +197,87 @@ const CourseUnsubscribe = () => {
       align: 'center',
       fixed: 'right',
       render: (_: any, record: any) => {
-        return record.ZT === 0 ? (<>
-          {
-            Examine && Examine?.length ? <span style={{ color: '#666' }}>审批</span> :
-              <a onClick={() => {
-                setCurrent(record);
-                setVisible(true);
-              }}>
+        return record.ZT === 0 ? (
+          <>
+            {Examine && Examine?.length ? (
+              <span style={{ color: '#666' }}>审批</span>
+            ) : (
+              <a
+                onClick={() => {
+                  setCurrent(record);
+                  setVisible(true);
+                }}
+              >
                 审批
               </a>
-          }
-        </>
+            )}
+          </>
         ) : (
           ''
-        )
+        );
       },
       width: 90,
     },
   ];
+
+  const updateTK = async (value: any, ZT: number, BZ: string) => {
+    const ids = { id: value.id };
+    const body = { ZT, BZ, JZGJBSJId: currentUser.JSId };
+    const res = await updateKHTKSJ(ids, body);
+    if (res.status === 'ok') {
+      if (ZT === 2) {
+        return '退课申请已驳回';
+      }
+      if (value?.KHBJSJ?.FY !== 0) {
+        const money = Number(((value?.KHBJSJ?.FY / value?.KHBJSJ?.KSS) * value?.KSS).toFixed(2));
+        if (money !== 0.0) {
+          const result = await createKHXSTK({
+            KHTKSJId: value?.id,
+            /** 退款金额 */
+            TKJE: money,
+            /** 退款状态 */
+            TKZT: 0,
+            /** 学生ID */
+            XSJBSJId: value?.XSJBSJId,
+            /** 班级ID */
+            KHBJSJId: value?.KHBJSJId,
+            /** 学校ID */
+            XXJBSJId: currentUser?.xxId,
+            JZGJBSJId: currentUser.JSId,
+          });
+          if (result.status === 'ok') {
+            return '退课成功';
+          }
+          return `退课成功,退款流程由于${result.message}申请失败`;
+        }
+      } else {
+        message.success('退课成功');
+      }
+      setVisible(false);
+      setCurrent(undefined);
+      getData();
+      actionRef?.current?.clearSelected?.();
+      return '退课成功';
+    }
+    message.error(res.message || '退课流程出现错误，请联系管理员或稍后重试。');
+    return '退课失败';
+  };
+
   // 批量退课
   const handleSubmitPL = async (param: any) => {
     const { ZT, BZ } = param;
     try {
       if (Examine && Examine?.length) {
-        Examine.forEach(async (value: any) => {
-          const ids = { id: value.id };
-          const body = { ZT, BZ, JZGJBSJId: currentUser.JSId };
-          const res = await updateKHTKSJ(ids, body);
-          if (res.status === 'ok') {
-            if (ZT === 2) {
-              message.success('退课申请已驳回');
-            } else if (value?.KHBJSJ?.FY !== 0) {
-              const money = Number(((value?.KHBJSJ?.FY / value?.KHBJSJ?.KSS) * value?.KSS).toFixed(2));
-              if (money !== 0.00) {
-                const result = await createKHXSTK({
-                  KHTKSJId: value?.id,
-                  /** 退款金额 */
-                  TKJE: money,
-                  /** 退款状态 */
-                  TKZT: 0,
-                  /** 学生ID */
-                  XSJBSJId: value?.XSJBSJId,
-                  /** 班级ID */
-                  KHBJSJId: value?.KHBJSJId,
-                  /** 学校ID */
-                  XXJBSJId: currentUser?.xxId,
-                  JZGJBSJId: currentUser.JSId
-                });
-                if (result.status === 'ok') {
-                  message.success('退课成功,已自动申请退款流程');
-                } else {
-                  message.warning(`退课成功,退款流程由于${result.message}申请失败`);
-                }
-              } else {
-                message.success('退课成功,退款余额为0，无需退款');
-              }
-            } else {
-              message.success('退课成功');
-            }
-            setVisible(false);
-            setCurrent(undefined);
-            getData();
-            actionRef?.current?.clearSelected?.();
-          } else {
-            message.error(res.message || '退课流程出现错误，请联系管理员或稍后重试。');
-          }
-        })
+        Promise.all(Examine.map(async (exa: any) => updateTK(exa, ZT, BZ))).then((values) => {
+          message.success(values);
+        });
+      } else {
+        message.error('退课流程出现错误，请联系管理员或稍后重试');
       }
     } catch (err) {
       message.error('退课流程出现错误，请联系管理员或稍后重试。');
     }
-  }
+  };
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
@@ -279,8 +289,10 @@ const CourseUnsubscribe = () => {
           if (ZT === 2) {
             message.success('退课申请已驳回');
           } else if (current?.KHBJSJ?.FY !== 0) {
-            const money = Number(((current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS).toFixed(2));
-            if (money !== 0.00) {
+            const money = Number(
+              ((current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS).toFixed(2),
+            );
+            if (money !== 0.0) {
               const result = await createKHXSTK({
                 KHTKSJId: current?.id,
                 /** 退款金额 */
@@ -293,7 +305,7 @@ const CourseUnsubscribe = () => {
                 KHBJSJId: current?.KHBJSJId,
                 /** 学校ID */
                 XXJBSJId: currentUser?.xxId,
-                JZGJBSJId: currentUser.JSId
+                JZGJBSJId: currentUser.JSId,
               });
               if (result.status === 'ok') {
                 message.success('退课成功,已自动申请退款流程');
@@ -317,7 +329,7 @@ const CourseUnsubscribe = () => {
     } catch (err) {
       message.error('退课流程出现错误，请联系管理员或稍后重试。');
     }
-  }
+  };
   return (
     <>
       <div>
@@ -345,20 +357,25 @@ const CourseUnsubscribe = () => {
           )}
           tableAlertOptionRender={({ selectedRowKeys, selectedRows }) => {
             setExamine(selectedRows);
-            const newArr = selectedRows.filter((value: { ZT: number; }) => {
-              return value.ZT !== 0
-            })
+            const newArr = selectedRows.filter((value: { ZT: number }) => {
+              return value.ZT !== 0;
+            });
             return (
               <Space size={16}>
-                {
-                  newArr.length === 0 ? <a onClick={() => {
-                    setExamine(selectedRows);
-                    setVisible(true);
-                  }}>批量审批</a> :
-                    <Tooltip title="所选数据中包含已审批数据，不可再次审批">
-                      <span style={{ color: '#666' }}>批量审批</span>
-                    </Tooltip>
-                }
+                {newArr.length === 0 ? (
+                  <a
+                    onClick={() => {
+                      setExamine(selectedRows);
+                      setVisible(true);
+                    }}
+                  >
+                    批量审批
+                  </a>
+                ) : (
+                  <Tooltip title="所选数据中包含已审批数据，不可再次审批">
+                    <span style={{ color: '#666' }}>批量审批</span>
+                  </Tooltip>
+                )}
               </Space>
             );
           }}
@@ -368,14 +385,18 @@ const CourseUnsubscribe = () => {
             <>
               <SearchLayout>
                 <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-                <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={courseChange} />
+                <CourseSelect
+                  XXJBSJId={currentUser?.xxId}
+                  XNXQId={curXNXQId}
+                  onChange={courseChange}
+                />
                 <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
                 <div>
-                  <label htmlFor='student'>学生名称：</label>
+                  <label htmlFor="student">学生名称：</label>
                   <Search
                     allowClear
                     onSearch={(val) => {
-                      setName(val)
+                      setName(val);
                     }}
                   />
                 </div>
@@ -417,11 +438,13 @@ const CourseUnsubscribe = () => {
                 <Radio value={2}>不同意</Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item label="审核说明" name='BZ'>
+            <Form.Item label="审核说明" name="BZ">
               <TextArea rows={4} maxLength={100} />
             </Form.Item>
           </Form>
-          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>注：同意退课后，如涉及退款，系统将自动发起退款申请。</p>
+          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>
+            注：同意退课后，如涉及退款，系统将自动发起退款申请。
+          </p>
         </Modal>
       </div>
     </>
