@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Select, Tag } from 'antd';
+import { Input, Select, Tag } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import EllipsisHint from '@/components/EllipsisHint';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
-import CourseSelect from '@/components/Search/CourseSelect';
-import ClassSelect from '@/components/Search/ClassSelect';
+import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 
+const { Search } = Input;
 const { Option } = Select;
 const StudentsLeave: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -19,20 +18,16 @@ const StudentsLeave: React.FC = () => {
   const actionRef = useRef<ActionType>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();;
-  // 当前课程
-  const [curKCId, setCurKCId] = useState<any>();
-  // 当前课程班
-  const [curBJId, setBJId] = useState<any>();
   // 请假状态
   const [QJZT, setQJZT] = useState<number[]>([-1]);
+  const [name, setName] = useState<string>();
   // 数据
   const [dataSource, setDataSourse] = useState<any>();
   const getData = async () => {
     const resAll = await getAllKHXSQJ({
       XNXQId: curXNXQId,
+      XSXM: name,
       QJZT: QJZT?.[0] === -1 ? [0, 1] : QJZT,
-      KHBJSJId: curBJId,
-      KHKCSJId: curKCId,
     });
     if (resAll.status === 'ok') {
       setDataSourse(resAll?.data?.rows);
@@ -44,17 +39,10 @@ const StudentsLeave: React.FC = () => {
     if (curXNXQId) {
       getData();
     }
-  }, [curXNXQId, QJZT, curKCId, curBJId])
+  }, [curXNXQId, QJZT, name,])
   const termChange = (val: string) => {
+    setName(undefined);
     setCurXNXQId(val);
-  }
-  // 课程筛选
-  const courseChange = (val: string) => {
-    setCurKCId(val);
-  }
-  // 课程班筛选
-  const classChange = (val: string) => {
-    setBJId(val);
   }
   // table表格数据
   const columns: ProColumns<any>[] = [
@@ -206,8 +194,12 @@ const StudentsLeave: React.FC = () => {
         headerTitle={
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-            <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={courseChange} />
-            <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
+            <div>
+              <label htmlFor='type'>学生名称：</label>
+              <Search placeholder="学生名称" allowClear onSearch={(value: string) => {
+                setName(value);
+              }} />
+            </div>
             <div>
               <label htmlFor='status'>请假状态：</label>
               <Select

@@ -89,6 +89,8 @@ export async function getAllKHXSQJ(
     KHKCSJId?: string;
     /** 教师ID */
     JSId?: string;
+    /** 学生姓名 */
+    XSXM?: string;
     /** 请假状态 */
     QJZT?: number[];
     /** 请假类型 */

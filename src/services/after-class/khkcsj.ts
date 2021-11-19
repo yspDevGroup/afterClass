@@ -336,3 +336,33 @@ export async function getAllCourses2(
     ...(options || {}),
   });
 }
+
+/** 获取学校课后课程统计数据 POST /khkcsj/getSchoolCoursesTJ */
+export async function getSchoolCoursesTJ(
+  body: {
+    /** 课程名称 */
+    KCMC?: string;
+    /** 课程类型 */
+    KCLX?: string;
+    /** 课程来源 */
+    KCLY?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 学年学期 */
+    XNXQ?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khkcsj/getSchoolCoursesTJ', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

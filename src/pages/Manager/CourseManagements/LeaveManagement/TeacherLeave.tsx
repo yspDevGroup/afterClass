@@ -28,6 +28,7 @@ const StudentsLeave: React.FC = () => {
   const [current, setCurrent] = useState<any>();
   const [name, setName] = useState<string>();
   const termChange = (val: string) => {
+    setName(undefined);
     setCurXNXQId(val);
   };
   const handleSubmit = async (param: any) => {
