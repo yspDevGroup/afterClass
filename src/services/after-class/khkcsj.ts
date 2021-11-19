@@ -121,10 +121,10 @@ export async function deleteKHKCSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -139,13 +139,13 @@ export async function updateKHKCSJ(
   body: API.UpdateKHKCSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -160,14 +160,14 @@ export async function allNJs(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: { NJS?: string[]; NJSName?: string[] };
     message?: string;
   }>(`/khkcsj/njs/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -298,6 +298,36 @@ export async function getClassesByCourse(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khkcsj/getClassesByCourse', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取教育机构下的所有本区课程信息(已备案课程) POST /khkcsj/getAllCourses2 */
+export async function getAllCourses2(
+  body: {
+    /** 课程名称 */
+    KCMC?: string;
+    /** 课程来源 */
+    KCLY?: string;
+    /** 课程类型ID */
+    KHKCLXId?: string;
+    /** 行政区划码 */
+    XZQHM?: string;
+    /** 市行政区划码 */
+    SXZQHM?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khkcsj/getAllCourses2', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
