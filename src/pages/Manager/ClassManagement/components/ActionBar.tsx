@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useModel } from 'umi';
 import { Popconfirm, message, Divider, Modal, Form, Input } from 'antd';
-import type { ActionType } from '@ant-design/pro-table';
 import { cancleClass, deleteKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import type { CourseItem } from '../data';
 import { enHenceMsg } from '@/utils/utils';
@@ -13,12 +12,12 @@ import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 type propstype = {
   handleEdit: (data: CourseItem, type?: string) => void;
   record: any;
-  actionRef: React.MutableRefObject<ActionType | undefined>;
+  getData: (origin?: string | undefined) => Promise<void>
 };
 
 const { TextArea } = Input;
 const ActionBar = (props: propstype) => {
-  const { handleEdit, record, actionRef } = props;
+  const { handleEdit, record, getData } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [form] = Form.useForm();
@@ -32,10 +31,9 @@ const ActionBar = (props: propstype) => {
       }).then((data: any) => {
         if (data.status === 'ok') {
           message.success('取消成功');
-          actionRef.current?.reload();
+          getData();
         } else {
           message.error('取消失败，请联系管理员或稍后重试');
-          actionRef.current?.reload();
         }
       });
     } else {
@@ -49,14 +47,14 @@ const ActionBar = (props: propstype) => {
     }).then(async (data: any) => {
       if (data.status === 'ok') {
         message.success('开班成功');
-        actionRef.current?.reload();
+        getData();
         const result = await getKHPKSJByBJID({ id: records.id });
         if (result.status === 'ok' && result.data) {
           await getClassDays(records.id);
         }
       } else {
         message.error('开班失败，请联系管理员或稍后重试');
-        actionRef.current?.reload();
+        getData();
       }
     });
   };
@@ -75,7 +73,7 @@ const ActionBar = (props: propstype) => {
         const result = updateKHBJSJ({ id: record.id }, { BJZT: '未开班' });
         if ((await result).status === 'ok') {
           message.success('取消班级成功，课程费用已原路返还');
-          actionRef.current?.reload();
+          getData();
           setVisible(false);
         }
       } else {
@@ -119,7 +117,7 @@ const ActionBar = (props: propstype) => {
                       }).then((data: any) => {
                         if (data.status === 'ok') {
                           message.success('删除成功');
-                          actionRef.current?.reload();
+                          getData();
                         } else {
                           enHenceMsg(data.message);
                         }
@@ -154,7 +152,7 @@ const ActionBar = (props: propstype) => {
                       }).then((data: any) => {
                         if (data.status === 'ok') {
                           message.success('删除成功');
-                          actionRef.current?.reload();
+                          getData();
                         } else {
                           enHenceMsg(data.message);
                         }

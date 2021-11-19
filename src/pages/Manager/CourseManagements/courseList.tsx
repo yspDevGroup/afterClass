@@ -195,7 +195,7 @@ const CourseList = () => {
         message.success('修改成功');
         setIsModalVisible(false);
         // 刷新页面
-        actionRef.current?.reload();
+        getData();
       }
     } else {
       const res = await createKHKCPJ({
@@ -206,7 +206,7 @@ const CourseList = () => {
         message.success('保存成功');
         setIsModalVisible(false);
         // 刷新页面
-        actionRef.current?.reload();
+        getData();
       }
     }
     setIsModalVisible(false);
@@ -249,7 +249,7 @@ const CourseList = () => {
                   Promise.resolve(res).then((data) => {
                     if (data.status === 'ok') {
                       message.success('操作成功');
-                      action?.reload();
+                      getData();
                     } else {
                       message.error(data.message);
                     }
@@ -274,7 +274,7 @@ const CourseList = () => {
                 const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 1 });
                 if (res.status === 'ok') {
                   message.success('操作成功');
-                  action?.reload();
+                  getData();
                 } else {
                   message.error(res.message || '操作失败');
                 }
@@ -289,7 +289,7 @@ const CourseList = () => {
                 const res = await deleteKHKCSJ({ id: record?.id });
                 if (res.status === 'ok') {
                   message.success('操作成功');
-                  action?.reload();
+                  getData();
                 } else {
                   message.error(res.message);
                 }
@@ -305,7 +305,7 @@ const CourseList = () => {
               const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 0 });
               if (res.status === 'ok') {
                 message.success('操作成功');
-                action?.reload();
+                getData();
               } else {
                 message.error(res.message || '操作失败');
               }
@@ -613,7 +613,7 @@ const CourseList = () => {
           info={info}
         />
         <NewCourses
-          actionRef={actionRef}
+          getData={getData}
           visible={open}
           onClose={onClose}
           current={current}

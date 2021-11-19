@@ -301,7 +301,7 @@ const ServiceUnsubscribe = () => {
           }
           setVisible(false);
           setCurrent(undefined);
-          actionRef.current?.reload();
+          getData();
         } else {
           message.error(res.message || '服务退订流程出现错误，请联系管理员或稍后重试。');
         }

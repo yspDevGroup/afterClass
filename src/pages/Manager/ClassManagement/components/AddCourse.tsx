@@ -24,7 +24,6 @@ type AddCourseProps = {
   onClose: () => void;
   readonly?: boolean;
   formValues?: Record<string, any>;
-  actionRef?: React.MutableRefObject<ActionType | undefined>;
   mcData?: { label: string; value: string }[];
   names?: string;
   KHKCAllData?: any[];
@@ -32,6 +31,7 @@ type AddCourseProps = {
   currentUser?: API.CurrentUser | undefined;
   kCID?: string;
   CopyType?: string;
+  getData: (origin?: string | undefined) => Promise<void>
 };
 const formLayout = {
   labelCol: { flex: '7em' },
@@ -43,13 +43,13 @@ const AddCourse: FC<AddCourseProps> = ({
   onClose,
   readonly,
   formValues,
-  actionRef,
   curXNXQId,
   names,
   KHKCAllData,
   currentUser,
   kCID,
   CopyType,
+  getData
 }) => {
   const { initialState } = useModel('@@initialState');
   const userRef = useRef(null);
@@ -430,7 +430,7 @@ const AddCourse: FC<AddCourseProps> = ({
         if (data.status === 'ok') {
           message.success('保存成功');
           handleClose();
-          actionRef?.current?.reload();
+          getData();
         } else {
           enHenceMsg(data.message);
         }

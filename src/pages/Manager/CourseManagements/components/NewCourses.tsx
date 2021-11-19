@@ -10,16 +10,17 @@ import { message, Button, Drawer } from 'antd';
 import type { classType } from '../data';
 import styles from './index.less';
 import { courseColorType } from '@/theme-default';
+import { getData } from '@/utils/utils';
 
 type PropsType = {
   current?: classType;
   onClose?: () => void;
   readonly?: boolean;
   visible?: boolean;
-  actionRef?: React.MutableRefObject<ActionType | undefined>;
   kclxOptions?: any[];
   optionsNJ?: any[];
   currentUser?: API.CurrentUser;
+  getData: () => Promise<void>
 };
 const formLayout = {
   labelCol: {},
@@ -27,7 +28,7 @@ const formLayout = {
 };
 
 const NewCourses = (props: PropsType) => {
-  const { current, onClose, visible, actionRef, readonly, kclxOptions, optionsNJ, currentUser } =
+  const { current, onClose, visible, readonly, kclxOptions, optionsNJ, currentUser,getData} =
     props;
   const [form, setForm] = useState<any>();
   // 上传成功后返回的图片地址
@@ -102,7 +103,7 @@ const NewCourses = (props: PropsType) => {
         if (data.status === 'ok') {
           message.success('保存成功');
           Close?.();
-          actionRef?.current?.reload();
+          getData();
         } else if (data.message === 'Validation error') {
           message.error(`保存失败，课程名称重复`);
         } else {

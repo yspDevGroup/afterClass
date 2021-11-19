@@ -241,6 +241,11 @@ const CourseRefund = () => {
             onClick={() => {
               setCurrent(record);
               setVisible(true);
+              form.setFieldsValue({
+                TKJE: record?.TKJE,
+                TKZT:1,
+                BZ:''
+              });
             }}
           >
             确认
@@ -275,7 +280,7 @@ const CourseRefund = () => {
             }
             setVisible(false);
             setCurrent(undefined);
-            actionRef.current?.reload();
+            getData();
           } else {
             message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');
           }
