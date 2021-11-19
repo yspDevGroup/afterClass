@@ -1,17 +1,23 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
-import { Button, Form, message } from 'antd';
+import { Button, message } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
 import { useModel, Link } from 'umi';
 import { Select } from 'antd';
 import { getCourses, statisCourses } from '@/services/after-class/reports';
-import { queryXNXQList } from '@/services/local-services/xnxq';
 import ProTable from '@ant-design/pro-table';
 import Style from './index.less';
 import type { TableItem } from './data';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { getTableWidth } from '@/utils/utils';
-import { getAllCourses2 } from '@/services/after-class/jyjgsj';
+import amountImg from '@/assets/amount.png';
+import personImg from '@/assets/person.png';
+import classImg from '@/assets/class.png';
+import courseImg from '@/assets/course.png';
+import refundImg from '@/assets/refund.png';
+import SearchLayout from '@/components/Search/Layout';
+import SemesterSelect from '@/components/Search/SemesterSelect';
+import CourseSelect from '@/components/Search/CourseSelect';
 
 type selectType = { label: string; value: string };
 
@@ -22,26 +28,15 @@ const AfterSchoolCourse: React.FC = () => {
   const { currentUser } = initialState || {};
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
-  // 学年学期列表数据
-  const [termList, setTermList] = useState<any>();
-  // 学期学年没有数据时提示的开关
   // 表格数据源
   const [dataSource, setDataSource] = useState<any>([]);
-
-  // 课程选择框的数据
-  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
   const [kcmcValue, setKcmcValue] = useState<any>();
   // 课程来源
   const [KCLY, setKCLY] = useState<string>();
-  const KCLYData: selectType[] = [
-    { label: '校内课程', value: '校内课程' },
-    { label: '机构课程', value: '机构课程' },
-  ];
-  // //课程类型
+  // 课程类型
   const [KCLXId, setKCLXId] = useState<string | undefined>();
   const [KCLXData, setKCLXData] = useState<selectType[] | undefined>();
-
-  /// table表格数据
+  // table表格数据
   const columns: ProColumns<TableItem>[] = [
     {
       title: '序号',
@@ -120,7 +115,7 @@ const AfterSchoolCourse: React.FC = () => {
       ellipsis: true,
       render: (test: any, record: any) => {
         const num =
-          record.TKRS != 0 ? `${(Number(record.TKRS / record.BMRS) * 100).toFixed(1)}%` : 0;
+          record.TKRS !== 0 ? `${(Number(record.TKRS / record.BMRS) * 100).toFixed(1)}%` : 0;
         return num;
       },
     },
@@ -165,12 +160,11 @@ const AfterSchoolCourse: React.FC = () => {
       ),
     },
   ];
-
   // 学年学期选相框触发的函数
-  const ChoseSelect = async (SelectData: string) => {
+  const getData = async () => {
     const kclxItem = KCLXData?.find((item: any) => item.value === KCLXId)?.label;
     const res3 = await getCourses({
-      XNXQId: SelectData,
+      XNXQId: curXNXQId,
       XXJBSJId: currentUser?.xxId,
       KCLX: kclxItem,
       KCLY,
@@ -178,30 +172,6 @@ const AfterSchoolCourse: React.FC = () => {
     });
     if (res3.status === 'ok') {
       setDataSource(res3?.data?.rows);
-    }
-  };
-
-  // 获取课程
-  const getKCData = async () => {
-    if (curXNXQId) {
-      const params = {
-        page: 0,
-        pageSize: 0,
-        XNXQId: curXNXQId,
-        XXJBSJId: currentUser?.xxId,
-        XZQHM: currentUser?.XZQHM,
-        KCLY,
-        KHKCLXId: KCLXId,
-      };
-      const khkcResl = await getAllCourses2(params);
-
-      if (khkcResl.status === 'ok') {
-        const KCMC = khkcResl.data.rows?.map((item: any) => ({
-          label: item.KCMC,
-          value: item.id,
-        }));
-        setKcmcData(KCMC);
-      }
     }
   };
   /**
@@ -212,161 +182,141 @@ const AfterSchoolCourse: React.FC = () => {
     if (res.status === 'ok') {
       const KCLXItem: any = res.data?.map((item: any) => ({
         value: item.id,
-        label: item.KCTAG,
+        label: item.KCTAG
       }));
       setKCLXData(KCLXItem);
-      // setKcmcValue(undefined);
     }
-  };
-
+  }
   useEffect(() => {
-    // 获取学年学期数据的获取
-    (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      // 获取到的整个列表的信息
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          setCurXNXQId(curTerm.id);
-          setTermList(newData);
-        }
-      } else {
-      }
-    })();
     getKCLXData();
   }, []);
   // 学年学期变化
   useEffect(() => {
     if (curXNXQId) {
-      ChoseSelect(curXNXQId);
+      getData();
     }
   }, [curXNXQId, kcmcValue, KCLXId, KCLY]);
-
-  /**
-   * 切换学年学期时 清空课程类型 清空课程名称
-   */
-  useEffect(() => {
-    // 重新请求课程名称
-    if (curXNXQId) {
-      getKCData();
-      setKcmcValue(null);
-    }
-    // 清空选择
-  }, [KCLXId, KCLY]);
-
-  useEffect(() => {
-    // 重新请求课程名称
-    getKCData();
-    // 清空选择
-    setKCLXId(undefined);
-    setKCLY(undefined);
-  }, [curXNXQId]);
-
   const submit = async () => {
     const res = await statisCourses({
-      XNXQId: curXNXQId,
+      XNXQId: curXNXQId
     });
     if (res.status === 'ok') {
       message.success('刷新完成');
     }
   };
-
   return (
-    /// PageContainer组件是顶部的信息
+    // PageContainer组件是顶部的信息
     <PageContainer>
       <div className={Style.TopSearchss}>
-        <Form layout="inline" labelCol={{ span: 8 }}>
-          <Form.Item label="所属学年学期: " style={{ padding: '0 0 24px' }}>
-            <Select
-              value={curXNXQId}
-              style={{ width: 160 }}
-              onChange={(value: string) => {
-                // 选择不同学期从新更新页面的数据
-                setCurXNXQId(value);
-              }}
-            >
-              {termList?.map((item: any) => {
-                return (
-                  <Option key={item.value} value={item.value}>
-                    {item.text}
-                  </Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-          <Form.Item label="课程类型: " style={{ padding: '0 0 24px' }}>
+        <SearchLayout>
+          <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={(value: string) => {
+            // 选择不同学期从新更新页面的数据
+            setCurXNXQId(value);
+          }} />
+          <CourseSelect XXJBSJId={currentUser?.xxId} onChange={(value) => {
+            setKcmcValue(value);
+          }} />
+          <div>
+            <label htmlFor="school">课程类型：</label>
             <Select
               value={KCLXId}
               style={{ width: 160 }}
-              placeholder="请选择"
+              placeholder="课程类型"
               allowClear
               onChange={(value: string) => {
-                setKCLXId(value);
+                setKCLXId(value)
               }}
             >
               {KCLXData?.map((item: any) => {
                 return (
-                  <Option key={item.value} value={item.value}>
-                    {item.label}
+                  <Option key={item.value} value={item.value} >
+                    {
+                      item.label
+                    }
                   </Option>
                 );
               })}
             </Select>
-          </Form.Item>
-          <Form.Item label="课程来源: " style={{ padding: '0 0 24px' }}>
+          </div>
+          <div>
+            <label htmlFor='kcly'>课程来源：</label>
             <Select
-              style={{ width: 160 }}
-              value={KCLY}
               allowClear
-              placeholder="请选择"
+              placeholder="课程来源"
               onChange={(value) => {
                 setKCLY(value);
               }}
+              value={KCLY}
             >
-              {KCLYData?.map((item: selectType) => {
-                if (item.value) {
-                  return (
-                    <Option value={item.value} key={item.value}>
-                      {item.label}
-                    </Option>
-                  );
-                }
-                return '';
-              })}
+              <Option value='校内课程' key='校内课程'>
+                校内课程
+              </Option>
+              <Option value='机构课程' key='机构课程'>
+                机构课程
+              </Option>
             </Select>
-          </Form.Item>
-          <Form.Item label="课程名称:" style={{ padding: '0 0 24px' }}>
-            <Select
-              style={{ width: 160 }}
-              value={kcmcValue}
-              allowClear
-              placeholder="请选择"
-              onChange={(value) => {
-                setKcmcValue(value);
-              }}
-            >
-              {kcmcData?.map((item: selectType) => {
-                if (item.value) {
-                  return (
-                    <Option value={item.value} key={item.value}>
-                      {item.label}
-                    </Option>
-                  );
-                }
-                return '';
-              })}
-            </Select>
-          </Form.Item>
-        </Form>
+          </div>
+        </SearchLayout>
+      </div>
+      <div className={Style.TopCards}>
+        <div>
+          <div>
+            <span><img src={courseImg} /></span>
+            <div>
+              <h3>24</h3>
+              <p>课程累计数</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>
+            <span><img src={classImg} /></span>
+            <div>
+              <h3>24</h3>
+              <p>课程班累计数</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>
+            <span><img src={personImg} /></span>
+            <div>
+              <h3>24</h3>
+              <p>报名累计人数</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>
+            <span><img src={personImg} /></span>
+            <div>
+              <h3>24</h3>
+              <p>退课累计人数</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>
+            <span><img src={amountImg} /></span>
+            <div>
+              <h3>24</h3>
+              <p>收款累计金额</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>
+            <span><img src={refundImg} /></span>
+            <div>
+              <h3>24</h3>
+              <p>退款累计金额</p>
+            </div>
+          </div>
+        </div>
       </div>
       <div className={Style.AfterSchoolCourse}>
-        <p className={Style.title}>
-          <span>系统每天凌晨自动更新一次，如需立即更新，请点击【刷新】按钮</span>
-          <Button type="primary" onClick={submit}>
-            刷新
-          </Button>
-        </p>
+        <p className={Style.title}><span>系统每天凌晨自动更新一次，如需立即更新，请点击【刷新】按钮</span>
+          <Button type="primary" onClick={submit}>刷新</Button></p>
         <ProTable
           columns={columns}
           dataSource={dataSource}

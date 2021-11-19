@@ -11,6 +11,7 @@ import { LeftOutlined } from '@ant-design/icons';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
+import SearchLayout from '@/components/Search/Layout';
 
 const { Option } = Select;
 const Detail = (props: any) => {
@@ -177,9 +178,9 @@ const Detail = (props: any) => {
           }}
           search={false}
           headerTitle={
-            <div style={{ display: 'flex' }}>
-              <span style={{ fontSize: 14, color: '#666' }}>
-                课程名称：
+            <SearchLayout>
+              <div>
+                <label htmlFor="course">课程名称：</label>
                 <Select
                   style={{ width: 160 }}
                   value={KcId}
@@ -192,9 +193,9 @@ const Detail = (props: any) => {
                     return <Option value={item.KCMC}>{item.KCMC}</Option>;
                   })}
                 </Select>
-              </span>
-              <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
-                服务名称：
+              </div>
+              <div>
+                <label htmlFor='service'>服务名称：</label>
                 <Select
                   style={{ width: 160 }}
                   value={FwId}
@@ -207,8 +208,8 @@ const Detail = (props: any) => {
                     return <Option value={item.FWMC}>{item.FWMC}</Option>;
                   })}
                 </Select>
-              </span>
-            </div>
+              </div>
+            </SearchLayout>
           }
         />
       </PageContain>

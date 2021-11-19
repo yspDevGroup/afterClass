@@ -1,21 +1,42 @@
-.TopSearchss{
-  > span {
-    margin-bottom: 24px;
-    display: inline-block;
-}
+.TopCards{
+  display: none;
+  // display: flex;
+  margin-bottom: 24px;
+  >div{
+    flex:1;
+    &+div{
+      padding-left: 24px;
+    }
+    >div{
+      background-color: #ebf4ff;
+      display: flex;
+      border-radius: 8px;
+      padding: 8px;
+      align-items: center;
+      img{
+        width: 80px;
+        margin: 0;
+      }
+      h3,p{
+        margin: 0;
+      }
+    }
+  }
 }
 
-.AfterSchoolCourse{
-  .title{
+.AfterSchoolCourse {
+  .title {
     display: flex;
     justify-content: flex-end;
-    >span{
-      line-height:30px;
-      color:#4884ff;
+
+    >span {
+      line-height: 30px;
+      color: #4884ff;
     }
-    button{
+
+    button {
       margin-left: 20px;
-      width: 80px;;
+      width: 80px;
     }
   }
 }

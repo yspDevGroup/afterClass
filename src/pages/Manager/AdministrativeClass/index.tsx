@@ -8,6 +8,7 @@ import styles from './index.less';
 import { getAllBJSJ, getSchoolClasses } from '@/services/after-class/bjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllGrades } from '@/services/after-class/khjyjg';
+import SearchLayout from '@/components/Search/Layout';
 
 type selectType = { label: string; value: string };
 
@@ -53,7 +54,6 @@ const AdministrativeClass = () => {
 
   const getBJSJ = async () => {
     const res = await getAllBJSJ({ njId: NjId, page: 0, pageSize: 0 });
-    console.log('res', res);
     if (res.status === 'ok') {
       const data = res.data?.rows?.map((item: any) => {
         return { label: item.BJ, value: item.id };
@@ -156,9 +156,6 @@ const AdministrativeClass = () => {
           }}
           request={async (param) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
-            // const result = await queryXNXQList(currentUser?.xxId);
-            // console.log('123');
-            console.log('curXNXQId', curXNXQId);
             if (curXNXQId) {
               const obj = {
                 XXJBSJId: currentUser?.xxId,
@@ -187,11 +184,10 @@ const AdministrativeClass = () => {
           }}
           search={false}
           headerTitle={
-            <div style={{ display: 'flex' }}>
-              <span style={{ fontSize: 14, color: '#666' }}>
-                年级名称：
+            <SearchLayout>
+              <div>
+                <label htmlFor="grade">年级名称：</label>
                 <Select
-                  style={{ width: 160 }}
                   value={NjId}
                   allowClear
                   placeholder="请选择"
@@ -201,14 +197,13 @@ const AdministrativeClass = () => {
                     return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
                   })}
                 </Select>
-              </span>
-              <span style={{ marginLeft: 20, fontSize: 14, color: '#666' }}>
-                班级选择：
+              </div>
+              <div>
+                <label htmlFor='kcly'>班级名称：</label>
                 <Select
-                  style={{ width: 160 }}
                   value={BJId}
                   allowClear
-                  placeholder="请选择"
+                  placeholder="班级名称"
                   onChange={onBjChange}
                 >
                   {bjData?.map((item: any) => {
@@ -219,8 +214,8 @@ const AdministrativeClass = () => {
                     );
                   })}
                 </Select>
-              </span>
-            </div>
+              </div>
+            </SearchLayout>
           }
         />
       </PageContain>

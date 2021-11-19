@@ -6,6 +6,7 @@
  * @LastEditors: Please set LastEditors
  */
 import { useEffect, useRef, useState } from 'react';
+import { useModel } from 'umi';
 import { message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -17,7 +18,6 @@ import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import CourseSelect from '@/components/Search/CourseSelect';
 import ClassSelect from '@/components/Search/ClassSelect';
-
 
 const { TextArea } = Input;
 // 退款
@@ -37,7 +37,6 @@ const CourseRefund = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
-
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
@@ -66,7 +65,6 @@ const CourseRefund = () => {
       setDataSource([]);
     }
   };
-
   useEffect(() => {
     if (curXNXQId) {
       getData();
