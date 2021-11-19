@@ -12,7 +12,7 @@ import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 
-const { TextArea } = Input;
+const { TextArea, Search } = Input;
 const { Option } = Select;
 const StudentsLeave: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -26,6 +26,7 @@ const StudentsLeave: React.FC = () => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
+  const [name, setName] = useState<string>();
   const termChange = (val: string) => {
     setCurXNXQId(val);
   };
@@ -69,6 +70,7 @@ const StudentsLeave: React.FC = () => {
     const obj = {
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId,
+      JSXM: name,
       QJZT: QJZT?.[0] === -1 ? [0, 1, 2] : QJZT,
       page: 0,
       pageSize: 0,
@@ -82,7 +84,7 @@ const StudentsLeave: React.FC = () => {
     if (curXNXQId) {
       getData();
     }
-  }, [curXNXQId, QJZT]);
+  }, [curXNXQId, QJZT, name]);
   // table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -270,6 +272,12 @@ const StudentsLeave: React.FC = () => {
         headerTitle={
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+            <div>
+              <label htmlFor='type'>教师名称：</label>
+              <Search placeholder="教师名称" allowClear onSearch={(value: string) => {
+                setName(value);
+              }} />
+            </div>
             <div>
               <label htmlFor='status'>请假状态：</label>
               <Select
