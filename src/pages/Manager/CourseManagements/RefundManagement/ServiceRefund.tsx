@@ -3,16 +3,14 @@ import { useModel } from 'umi';
 import { Select, message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-
-import Style from './index.less';
 import { exportTKJL, getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getKHZZFW } from '@/services/after-class/khzzfw';
-import moment from 'moment';
 import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { DownloadOutlined } from '@ant-design/icons';
 import { getTableWidth } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
+import SemesterSelect from '@/components/Search/SemesterSelect';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -22,8 +20,6 @@ const ServiceRefund = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
-  // 学年学期列表数据
-  const [termList, setTermList] = useState<any>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [form] = Form.useForm();
@@ -34,24 +30,10 @@ const ServiceRefund = () => {
   const [FWMCData, setFWMCData] = useState<any>([]);
   const [FWMC, setFWMC] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    // 获取学年学期数据的获取
-    (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      // 获取到的整个列表的信息
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          setCurXNXQId(curTerm.id);
-          setTermList(newData);
-          //  拿到默认值 发送请求
-        }
-      }
-    })();
-  }, []);
-
+  // 学年学期筛选
+  const termChange = (val: string) => {
+    setCurXNXQId(val);
+  };
   const getLBData = async () => {
     const result = await getKHZZFW({
       XXJBSJId: currentUser?.xxId,
@@ -303,9 +285,6 @@ const ServiceRefund = () => {
       message.error('退款流程出现错误，请联系管理员或稍后重试。');
     }
   };
-
-  console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
-
   const onExportClick = () => {
     setLoading(true);
     (async () => {
@@ -327,83 +306,8 @@ const ServiceRefund = () => {
       }
     })();
   };
-
   return (
     <>
-      <div className={Style.TopSearchs}>
-        <span>
-          所属学年学期：
-          <Select
-            value={curXNXQId}
-            style={{ width: 160 }}
-            onChange={(value: string) => {
-              // 更新多选框的值
-              setCurXNXQId(value);
-            }}
-          >
-            {termList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
-          服务类别：
-          <Select
-            allowClear
-            value={LbId || ''}
-            style={{ width: 165 }}
-            placeholder="请选择"
-            onChange={(value: string) => {
-              setLbId(value);
-            }}
-          >
-            {/* <Option value="" key="">
-                    全部
-                  </Option> */}
-            {LBData?.length
-              ? LBData?.map((item: any) => {
-                return (
-                  <Option value={item?.id} key={item?.id}>
-                    {item?.FWMC}
-                  </Option>
-                );
-              })
-              : ''}
-          </Select>
-        </span>
-        <span style={{ fontSize: 14, color: '#666', marginLeft: 20 }}>
-          服务名称：
-          <Select
-            allowClear
-            value={FWMC || ''}
-            style={{ width: 165 }}
-            placeholder="请选择"
-            onChange={(value: string) => {
-              setFWMC(value);
-            }}
-          >
-            {/* <Option value="" key="">
-                    全部
-                  </Option> */}
-            {FWMCData?.length
-              ? FWMCData?.map((item: any) => {
-                return (
-                  <Option value={item?.FWMC} key={item?.FWMC}>
-                    {item?.FWMC}
-                  </Option>
-                );
-              })
-              : ''}
-          </Select>
-        </span>
-        <Button style={{ float: 'right' }} icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
-          导出
-        </Button>
-      </div>
       <div>
         <Spin spinning={loading}>
           <ProTable<any>
@@ -439,6 +343,56 @@ const ServiceRefund = () => {
                 total: 0,
               };
             }}
+            headerTitle={
+              <>
+                <SearchLayout>
+                  <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+                  <div>
+                    <label htmlFor="type">服务类别：</label>
+                    <Select
+                      allowClear
+                      value={LbId || ''}
+                      placeholder="请选择"
+                      onChange={(value: string) => {
+                        setLbId(value);
+                        setFWMC('');
+                      }}
+                    >
+                      {LBData?.length
+                        ? LBData?.map((item: any) => {
+                            return (
+                              <Option value={item?.id} key={item?.id}>
+                                {item?.FWMC}
+                              </Option>
+                            );
+                          })
+                        : ''}
+                    </Select>
+                  </div>
+                  <div>
+                    <label htmlFor="name">服务名称：</label>
+                    <Select
+                      allowClear
+                      value={FWMC || ''}
+                      placeholder="请选择"
+                      onChange={(value: string) => {
+                        setFWMC(value);
+                      }}
+                    >
+                      {FWMCData?.length
+                        ? FWMCData?.map((item: any) => {
+                            return (
+                              <Option value={item?.FWMC} key={item?.FWMC}>
+                                {item?.FWMC}
+                              </Option>
+                            );
+                          })
+                        : ''}
+                    </Select>
+                  </div>
+                </SearchLayout>
+              </>
+            }
             options={{
               setting: false,
               fullScreen: false,
@@ -446,6 +400,11 @@ const ServiceRefund = () => {
               reload: false,
             }}
             search={false}
+            toolBarRender={() => [
+              <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+                导出
+              </Button>,
+            ]}
           />
         </Spin>
         <Modal
@@ -472,7 +431,7 @@ const ServiceRefund = () => {
             <Form.Item label="退款金额" name="TKJE">
               <InputNumber
                 formatter={(value) => `￥ ${value}`}
-                parser={(value) => Number(value?.replace(/\￥\s?/g, ''))}
+                parser={(value) => Number(value?.replace(/￥\s?/g, ''))}
               />
             </Form.Item>
             <Form.Item label="审核意见" name="TKZT">

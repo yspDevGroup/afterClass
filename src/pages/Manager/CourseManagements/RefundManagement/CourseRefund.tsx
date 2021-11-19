@@ -1,20 +1,24 @@
+/*
+ * @description:
+ * @author: Sissle Lynn
+ * @Date: 2021-10-29 12:21:42
+ * @LastEditTime: 2021-11-19 09:06:09
+ * @LastEditors: Please set LastEditors
+ */
 import { useEffect, useRef, useState } from 'react';
-import { useModel } from 'umi';
-import { Select, message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
+import { message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import Style from './index.less';
 import { getAllKHXSTK, updateKHXSTK, exportTKJL } from '@/services/after-class/khxstk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
-import { getAllClasses } from '@/services/after-class/khbjsj';
 import { DownloadOutlined } from '@ant-design/icons';
 import { getTableWidth } from '@/utils/utils';
-import { getAllCourses2 } from '@/services/after-class/jyjgsj';
+import SearchLayout from '@/components/Search/Layout';
+import SemesterSelect from '@/components/Search/SemesterSelect';
+import CourseSelect from '@/components/Search/CourseSelect';
+import ClassSelect from '@/components/Search/ClassSelect';
 
-type selectType = { label: string; value: string };
 
-const { Option } = Select;
 const { TextArea } = Input;
 // 退款
 const CourseRefund = () => {
@@ -22,96 +26,54 @@ const CourseRefund = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
-  // 学年学期列表数据
-  const [termList, setTermList] = useState<any>();
+  const [dataSource, setDataSource] = useState<API.KHXSTK[] | undefined>([]);
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
+  // 当前课程
+  const [curKCId, setCurKCId] = useState<any>();
+  // 当前课程班
+  const [curBJId, setBJId] = useState<any>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
-
-  // 课程选择框的数据
-  const [kcmcData, setKcmcData] = useState<selectType[] | undefined>([]);
-  const [kcmcValue, setKcmcValue] = useState<any>();
-  // 班级名称选择框的数据
-  const [bjmcData, setBjmcData] = useState<selectType[] | undefined>([]);
-  const [bjmcValue, setBjmcValue] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
 
+  // 学年学期筛选
+  const termChange = (val: string) => {
+    setCurXNXQId(val);
+  }
+  // 课程筛选
+  const courseChange = (val: string) => {
+    setCurKCId(val);
+  }
+  // 课程班筛选
+  const classChange = (val: string) => {
+    setBJId(val);
+  }
+  const getData = async () => {
+    const resAll = await getAllKHXSTK({
+      LX: 0,
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId,
+      KHKCSJId: curKCId,
+      KHBJSJId: curBJId,
+      page: 0,
+      pageSize: 0,
+    });
+    if (resAll.status === 'ok' && resAll?.data) {
+      setDataSource(resAll.data?.rows);
+    } else {
+      setDataSource([]);
+    }
+  };
+
   useEffect(() => {
-    // 获取学年学期数据的获取
-    (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      // 获取到的整个列表的信息
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          setCurXNXQId(curTerm.id);
-          setTermList(newData);
-          //  拿到默认值 发送请求
-        }
-      }
-    })();
-  }, []);
-  // 获取课程
-  const getKCData = async () => {
     if (curXNXQId) {
-      const params = {
-        page: 0,
-        pageSize: 0,
-        XNXQId: curXNXQId,
-        XXJBSJId: currentUser?.xxId,
-        XZQHM: currentUser?.XZQHM,
-      };
-      const khkcResl = await getAllCourses2(params);
-      if (khkcResl.status === 'ok') {
-        const KCMC = khkcResl.data.rows?.map((item: any) => ({
-          label: item.KCMC,
-          value: item.id,
-        }));
-        setKcmcData(KCMC);
-      }
+      getData();
     }
-  };
+  }, [curXNXQId, curKCId, curBJId]);
 
-  /**
-   * 获取课程班集数据
-   */
-  const getClassesData = async () => {
-    if (kcmcValue && curXNXQId) {
-      const bjmcResl = await getAllClasses({
-        page: 0,
-        pageSize: 0,
-        KHKCSJId: kcmcValue,
-        XNXQId: curXNXQId,
-      });
-      if (bjmcResl.status === 'ok') {
-        const BJMC = bjmcResl.data.rows?.map((item: any) => ({
-          label: item.BJMC,
-          value: item.id,
-        }));
-        setBjmcData(BJMC);
-      }
-    }
-  };
-
-  useEffect(() => {
-    actionRef.current?.reload();
-    getKCData();
-  }, [curXNXQId]);
-
-  useEffect(() => {
-    actionRef.current?.reload();
-    setBjmcValue(undefined);
-    getClassesData();
-  }, [kcmcValue]);
-
-  useEffect(() => {
-    actionRef.current?.reload();
-  }, [bjmcValue]);
-
-  /// table表格数据
+  // table表格数据
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -333,8 +295,7 @@ const CourseRefund = () => {
         LX: 0,
         XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId,
-        KHBJSJId: bjmcValue,
-        // KHKCSJId: kcmcValue,
+        KHBJSJId: curBJId,
         page: 0,
         pageSize: 0,
       });
@@ -347,80 +308,8 @@ const CourseRefund = () => {
       }
     })();
   };
-
   return (
     <>
-      <div className={Style.TopSearchs}>
-        <Form layout="inline" labelCol={{ span: 8 }}>
-          <Form.Item label=" 所属学年学期：" style={{ padding: '0 0 24px' }}>
-            <Select
-              value={curXNXQId}
-              style={{ width: 160 }}
-              onChange={(value: string) => {
-                // 更新多选框的值
-                setCurXNXQId(value);
-              }}
-            >
-              {termList?.map((item: any) => {
-                return (
-                  <Option key={item.value} value={item.value}>
-                    {item.text}
-                  </Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-          <Form.Item label=" 课程名称:" style={{ padding: '0 0 24px' }}>
-            <Select
-              style={{ width: 160 }}
-              value={kcmcValue}
-              allowClear
-              placeholder="请选择"
-              onChange={(value) => {
-                setKcmcValue(value);
-              }}
-            >
-              {kcmcData?.map((item: selectType) => {
-                if (item.value) {
-                  return (
-                    <Option value={item.value} key={item.value}>
-                      {item.label}
-                    </Option>
-                  );
-                }
-                return '';
-              })}
-            </Select>
-          </Form.Item>
-          <Form.Item label=" 课程班名称:" style={{ padding: '0 0 24px' }}>
-            <Select
-              style={{ width: 160 }}
-              value={bjmcValue}
-              allowClear
-              placeholder="请选择"
-              onChange={(value) => setBjmcValue(value)}
-            >
-              {bjmcData?.map((item: selectType) => {
-                return (
-                  <Option value={item.value} key={item.value}>
-                    {item.label}
-                  </Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-          <Form.Item style={{ flex: 'auto', margin: 0 }}>
-            <Button
-              style={{ float: 'right' }}
-              icon={<DownloadOutlined />}
-              type="primary"
-              onClick={onExportClick}
-            >
-              导出
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
       <div>
         <Spin spinning={loading}>
           <ProTable<any>
@@ -433,29 +322,16 @@ const CourseRefund = () => {
               defaultCurrent: 1,
             }}
             scroll={{ x: getTableWidth(columns) }}
-            request={async () => {
-              const resAll = await getAllKHXSTK({
-                LX: 0,
-                XXJBSJId: currentUser?.xxId,
-                XNXQId: curXNXQId,
-                KHKCSJId: kcmcValue,
-                KHBJSJId: bjmcValue,
-                page: 0,
-                pageSize: 0,
-              });
-              if (resAll.status === 'ok') {
-                return {
-                  data: resAll?.data?.rows,
-                  success: true,
-                  total: resAll?.data?.count,
-                };
-              }
-              return {
-                data: [],
-                success: false,
-                total: 0,
-              };
-            }}
+            dataSource={dataSource}
+            headerTitle={
+              <>
+                <SearchLayout>
+                  <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+                  <CourseSelect XXJBSJId={currentUser?.xxId} onChange={courseChange} />
+                  <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
+                </SearchLayout>
+              </>
+            }
             options={{
               setting: false,
               fullScreen: false,
@@ -463,6 +339,11 @@ const CourseRefund = () => {
               reload: false,
             }}
             search={false}
+            toolBarRender={() => [
+              <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+                导出
+              </Button>
+            ]}
           />
         </Spin>
         <Modal

@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-// import { message } from 'antd';
 import { useModel } from 'umi';
 import { Form, Modal, Radio, Select, Tag, Input, message } from 'antd';
-import Style from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import EllipsisHint from '@/components/EllipsisHint';
@@ -12,6 +9,8 @@ import { getMainTeacher } from '@/services/after-class/khbjsj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
+import SemesterSelect from '@/components/Search/SemesterSelect';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -19,8 +18,7 @@ const StudentsLeave: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
-  // 学年学期列表数据
-  const [termList, setTermList] = useState<any>();
+  const [dataSource, setDataSource] = useState<any[]>([]);
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();
   // 请假状态
@@ -28,23 +26,9 @@ const StudentsLeave: React.FC = () => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
-
-  useEffect(() => {
-    // 获取学年学期数据的获取
-    (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      // 获取到的整个列表的信息
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          setCurXNXQId(curTerm.id);
-          setTermList(newData);
-        }
-      }
-    })();
-  }, []);
-
+  const termChange = (val: string) => {
+    setCurXNXQId(val);
+  };
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
@@ -80,7 +64,25 @@ const StudentsLeave: React.FC = () => {
     } catch (err) {
       message.error('退课流程出现错误，请联系管理员或稍后重试。');
     }
-  }
+  };
+  const getData = async () => {
+    const obj = {
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId,
+      QJZT: QJZT?.[0] === -1 ? [0, 1, 2] : QJZT,
+      page: 0,
+      pageSize: 0,
+    };
+    const resAll = await getAllKHJSQJ(obj);
+    if (resAll.status === 'ok' && resAll.data) {
+      setDataSource(resAll.data.rows)
+    }
+  };
+  useEffect(() => {
+    if (curXNXQId) {
+      getData();
+    }
+  }, [curXNXQId, QJZT]);
   // table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -254,91 +256,53 @@ const StudentsLeave: React.FC = () => {
   ];
   return (
     <>
-      <div className={Style.TopSearchs}>
-        <span>
-          所属学年学期：
-          <Select
-            value={curXNXQId}
-            style={{ width: 160 }}
-            onChange={(value: string) => {
-              // 选择不同学期从新更新页面的数据
-              setCurXNXQId(value);
-            }}
-          >
-            {termList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
+      <ProTable<any>
+        actionRef={actionRef}
+        columns={columns}
+        rowKey="id"
+        dataSource={dataSource}
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: getTableWidth(columns) }}
+        headerTitle={
+          <SearchLayout>
+            <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+            <div>
+              <label htmlFor='status'>请假状态：</label>
+              <Select
+                allowClear
+                value={QJZT?.[0]}
+                onChange={(value: number) => {
+                  setQJZT([value]);
+                }}
+              >
+                <Option key='全部' value={-1}>
+                  全部
                 </Option>
-              );
-            })}
-          </Select>
-        </span>
-
-        <span style={{ marginLeft: 16 }}>
-          请假状态：
-          <Select
-            style={{ width: 160 }}
-            allowClear
-            value={QJZT?.[0]}
-            onChange={(value: number) => {
-              setQJZT([value]);
-            }}
-          >
-            <Option key='全部' value={-1}>
-              全部
-            </Option>
-            <Option key='申请中' value={0}>
-              申请中
-            </Option>
-            <Option key='已通过' value={1}>
-              已通过
-            </Option>
-            <Option key='已驳回' value={2}>
-              已取销
-            </Option>
-          </Select>
-        </span>
-      </div>
-      <div className={Style.leaveWrapper}>
-        <ProTable<any>
-          actionRef={actionRef}
-          columns={columns}
-          rowKey="id"
-          request={async (param) => {
-            // 表单搜索项会从 params 传入，传递给后端接口。
-            const obj = {
-              XXJBSJId: currentUser?.xxId,
-              XNXQId: curXNXQId,
-              QJZT: QJZT?.[0] === -1 ? [0, 1, 2] : QJZT,
-              page: param.current,
-              pageSize: param.pageSize,
-            };
-            const res = await getAllKHJSQJ(obj);
-            if (res.status === 'ok') {
-              return {
-                data: res.data?.rows,
-                success: true,
-                total: res.data?.count,
-              };
-            }
-            return [];
-          }}
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: getTableWidth(columns) }}
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          search={false}
-        />
-      </div>
+                <Option key='申请中' value={0}>
+                  申请中
+                </Option>
+                <Option key='已通过' value={1}>
+                  已通过
+                </Option>
+                <Option key='已驳回' value={2}>
+                  已取销
+                </Option>
+              </Select>
+            </div>
+          </SearchLayout>
+        }
+        options={{
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
+        }}
+        search={false}
+      />
       <Modal
         title="请假审批"
         visible={visible}

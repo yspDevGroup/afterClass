@@ -1,7 +1,7 @@
 /*
  * @Author: Sissle Lynn
  * @Date: 2021-11-17 12:21:39
- * @LastEditTime: 2021-11-17 14:05:34
+ * @LastEditTime: 2021-11-18 15:22:02
  * @LastEditors: Sissle Lynn
  * @Description: 课程班查询
  */
@@ -13,9 +13,9 @@ import { getAllClasses } from '@/services/after-class/khbjsj';
 const { Option } = Select;
 
 type ClassSecectProps = {
-  XNXQId: string;
+  XNXQId?: string;
   KHKCSJId?: string;
-  onChange?: (val: string) => void;
+  onChange?: (val: string,data?: any) => void;
 };
 const ClassSecect: FC<ClassSecectProps> = ({ onChange, XNXQId, KHKCSJId }) => {
   const [classList, setClassList] = useState<any>();
@@ -44,8 +44,9 @@ const ClassSecect: FC<ClassSecectProps> = ({ onChange, XNXQId, KHKCSJId }) => {
     <div>
       <label htmlFor='course'>课程班名称：</label>
       <Select
-        onChange={(value: string) => {
-          onChange?.(value);
+        allowClear
+        onChange={(value: string, option: any) => {
+          onChange?.(value, option);
         }}
       >
         {classList?.map((item: any) => {

@@ -89,7 +89,7 @@ const Statistical = (props: { userId?: string; xxId?: string; }) => {
           satistics && satistics.length ? satistics.map((value: any) => {
             config.data = value.data;
             return <>{value.data ? <div className={styles.cards}>
-              <p>{value.title}</p>
+              <p style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value.title}</p>
               <Pie className={styles.pies} {...config} />
               <div>
                 <span>正常:{value.zc}课时</span>

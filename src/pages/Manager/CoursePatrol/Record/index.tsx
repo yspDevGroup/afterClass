@@ -1,21 +1,19 @@
 import { useModel, } from 'umi';
-import { Select,DatePicker } from 'antd';
+import { DatePicker } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { queryXNXQList } from '@/services/local-services/xnxq';
 import PageContainer from '@/components/PageContainer';
 import { getKHXKJL } from '@/services/after-class/khxkjl'
 import { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
 import { getTableWidth } from '@/utils/utils';
-
-const { Option } = Select;
+import SearchLayout from '@/components/Search/Layout';
+import SemesterSelect from '@/components/Search/SemesterSelect';
 
 const CoursePatrol = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [curXNXQId, setCurXNXQId] = useState<any>();
-  const [termList, setTermList] = useState<any>();
   const [dataSource, setDataSource] = useState<any>([]);
   const [PatrolData, setPatrolData] = useState<any>();
 
@@ -57,7 +55,7 @@ const CoursePatrol = () => {
       dataIndex: 'KHBJSJ',
       key: 'KHBJSJ',
       align: 'center',
-      render: (text: any,record: any) => {
+      render: (text: any, record: any) => {
         return record?.KHBJSJ?.BJMC
       },
       ellipsis: true,
@@ -137,22 +135,10 @@ const CoursePatrol = () => {
         )
       }
     },
-  ]
-  useEffect(() => {
-    // 获取学年学期数据的获取
-    (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      // 获取到的整个列表的信息
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          setCurXNXQId(curTerm.id)
-          setTermList(newData);
-        }
-      }
-    })();
-  }, []);
+  ];
+  const termChange = (val: string) => {
+    setCurXNXQId(val);
+  };
   useEffect(() => {
     (async () => {
       const res = await getKHXKJL({
@@ -163,39 +149,9 @@ const CoursePatrol = () => {
         setDataSource(res.data?.rows)
       }
     })()
-  }, [curXNXQId,PatrolData])
+  }, [curXNXQId, PatrolData])
   return (
     <PageContainer>
-      <div style={{ padding: '0 0 24px' }}>
-        <span  >
-          所属学年学期：
-          <Select
-            value={curXNXQId}
-            style={{ width: 160 }}
-            onChange={(value: string) => {
-              // 选择不同学期从新更新页面的数据
-              setCurXNXQId(value);
-            }}
-          >
-            {termList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-        <span style={{marginLeft:'24px'}}>
-          巡课日期：<DatePicker
-            style={{ width: 150 }}
-            onChange={(value) => {
-              setPatrolData(value)
-
-            }}
-          />
-        </span>
-      </div>
       <ProTable
         dataSource={dataSource}
         columns={columns}
@@ -205,6 +161,20 @@ const CoursePatrol = () => {
           defaultCurrent: 1,
         }}
         scroll={{ x: getTableWidth(columns) }}
+        headerTitle={
+          <SearchLayout>
+            <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+            <div>
+              <label htmlFor='date'>巡课日期：</label>
+              <DatePicker
+                style={{ width: 150 }}
+                onChange={(value) => {
+                  setPatrolData(value)
+                }}
+              />
+            </div>
+          </SearchLayout>
+        }
         options={{
           setting: false,
           fullScreen: false,

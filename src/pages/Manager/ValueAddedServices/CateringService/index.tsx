@@ -12,6 +12,7 @@ import ProTable from '@ant-design/pro-table';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { createKHZZFW, deleteKHZZFW, getKHZZFW, updateKHZZFW } from '@/services/after-class/khzzfw';
 import { PlusOutlined } from '@ant-design/icons';
+import SearchLayout from '@/components/Search/Layout';
 import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
@@ -345,8 +346,19 @@ const MutualEvaluation = () => {
           dataSource={DataSource}
           dateFormatter="string"
           headerTitle={
-            <Search placeholder="请输入类别名称" allowClear onSearch={onSearch} style={{ width: 160 }} />
+            <SearchLayout>
+              <div>
+                <label htmlFor='kcname'>类别名称：</label>
+                <Search placeholder="类别名称" allowClear onSearch={onSearch} />
+              </div>
+            </SearchLayout>
           }
+          options={{
+            setting: false,
+            fullScreen: false,
+            density: false,
+            reload: false,
+          }}
           toolBarRender={() => [
             <Button type="primary" key="primary" onClick={showModal}>
               <PlusOutlined />

@@ -1,8 +1,9 @@
-import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
 import { Button, Divider, Row, Col, Image, Empty } from 'antd';
 import moment from 'moment';
+import { history } from 'umi';
 import { LeftOutlined } from '@ant-design/icons';
+import PageContainer from '@/components/PageContainer';
 import Style from './index.less';
 import noData from '@/assets/noData.png';
 import { getAllKHKTFC } from '@/services/after-class/khktfc';
@@ -10,18 +11,13 @@ import { getAllKHKTFC } from '@/services/after-class/khktfc';
 const AfterSchoolClass: React.FC = (props: any) => {
   const { state } = props.location;
   const [listData, setListData] = useState<any>([]);
-
-  useEffect(() => {
-    getData();
-  }, []);
-
   const getData = async () => {
     const resKHKTFC = await getAllKHKTFC({
       KHBJSJId: state.data.id,
     });
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
-      resKHKTFC.data?.rows?.forEach((item: any, index: number) => {
+      resKHKTFC.data?.rows?.forEach((item: any) => {
         const imgsArr = item.TP.split(';');
         imgsArr.pop();
         const data = {
@@ -39,7 +35,9 @@ const AfterSchoolClass: React.FC = (props: any) => {
     }
 
   }
-
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     /// PageContainer组件是顶部的信息
@@ -61,10 +59,10 @@ const AfterSchoolClass: React.FC = (props: any) => {
             listData.length ? listData.map((item: any) => {
               return (
                 <li key={item.id}>
-                  <Row style={{minHeight: '148px'}}>
+                  <Row style={{ minHeight: '148px' }}>
                     <Col span={2} className={Style.time}>
                       <p className={Style.teacherName}>{item.teacherName}</p>
-                      <p className={Style.date} style={{marginBottom: 24}}>{moment(item.time).format('MM-DD')}</p>
+                      <p className={Style.date} style={{ marginBottom: 24 }}>{moment(item.time).format('MM-DD')}</p>
                       <p className={Style.date}>{moment(item.time).format('HH:mm:ss')}</p>
                     </Col>
                     <Col span={22}>

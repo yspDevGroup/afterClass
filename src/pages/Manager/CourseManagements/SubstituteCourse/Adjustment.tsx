@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-// import { message } from 'antd';
 import { useModel } from 'umi';
 import { Form, Modal, Radio, Select, Input, message, Divider } from 'antd';
 import styles from './index.less';
@@ -12,6 +10,8 @@ import { updateKHJSTDK } from '@/services/after-class/khjstdk';
 import { getMainTeacher } from '@/services/after-class/khbjsj';
 import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
+import SemesterSelect from '@/components/Search/SemesterSelect';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -19,8 +19,6 @@ const Adjustment: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
-  // 学年学期列表数据
-  const [termList, setTermList] = useState<any>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();
   // 审批状态
@@ -30,22 +28,33 @@ const Adjustment: React.FC = () => {
   const [current, setCurrent] = useState<any>();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Datas, setDatas] = useState<any>();
+  // 数据
+  const [dataSource, setDataSourse] = useState<any>();
 
+  const getData = async () => {
+    const obj = {
+      LX: [0],
+      ZT: typeof SPZT?.[0] === 'undefined' ? [0, 1, 2] : SPZT,
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId,
+      page: 0,
+      pageSize: 0,
+    };
+    const resAll = await getAllKHJSTDK(obj);
+    if (resAll.status === 'ok') {
+      setDataSourse(resAll?.data?.rows);
+    } else {
+      setDataSourse([]);
+    }
+  };
+  const termChange = (val: string) => {
+    setCurXNXQId(val);
+  }
   useEffect(() => {
-    // 获取学年学期数据的获取
-    (async () => {
-      const res = await queryXNXQList(currentUser?.xxId);
-      // 获取到的整个列表的信息
-      const newData = res.xnxqList;
-      const curTerm = res.current;
-      if (newData?.length) {
-        if (curTerm) {
-          setCurXNXQId(curTerm.id);
-          setTermList(newData);
-        }
-      }
-    })();
-  }, []);
+    if(curXNXQId){
+      getData();
+    }
+  }, [SPZT, curXNXQId]);
 
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
@@ -220,87 +229,46 @@ const Adjustment: React.FC = () => {
       }
     },
   ];
-  useEffect(() => {
-    actionRef.current?.reload();
-  }, [SPZT, curXNXQId])
   const showWXName = Datas?.SKJS?.XM === '未知' && Datas?.SKJS?.WechatUserId;
   const SPshowWXName = Datas?.SPJS?.XM === '未知' && Datas?.SPJS?.WechatUserId;
   return (
     <>
-      <div className={styles.TopSearchs}>
-        <span>
-          所属学年学期：
-          <Select
-            value={curXNXQId}
-            style={{ width: 160 }}
-            onChange={(value: string) => {
-              // 选择不同学期从新更新页面的数据
-              setCurXNXQId(value);
-            }}
-          >
-            {termList?.map((item: any) => {
-              return (
-                <Option key={item.value} value={item.value}>
-                  {item.text}
-                </Option>
-              );
-            })}
-          </Select>
-        </span>
-
-        <span style={{ marginLeft: 16 }}>
-          状态：
-          <Select
-            style={{ width: 160 }}
-            allowClear
-            onChange={(value: any) => {
-              setSPZT([value]);
-            }}
-          >
-            <Option key='待审批' value={0}>
-              待审批
-            </Option>
-            <Option key='已通过' value={1}>
-              已通过
-            </Option>
-            <Option key='已驳回' value={2}>
-              已驳回
-            </Option>
-          </Select>
-        </span>
-      </div>
       <div className={styles.leaveWrapper}>
         <ProTable<any>
           actionRef={actionRef}
           columns={columns}
           rowKey="id"
-          request={async (param) => {
-            // 表单搜索项会从 params 传入，传递给后端接口。
-            if (curXNXQId) {
-              const obj = {
-                LX: [0],
-                ZT: typeof SPZT?.[0] === 'undefined' ? [0, 1, 2] : SPZT,
-                XXJBSJId: currentUser?.xxId,
-                XNXQId: curXNXQId,
-                page: param.current,
-                pageSize: param.pageSize,
-              };
-              const res = await getAllKHJSTDK(obj);
-              if (res.status === 'ok') {
-                return {
-                  data: res.data?.rows,
-                  success: true,
-                  total: res.data?.count,
-                };
-              }
-            }
-            return [];
-          }}
           pagination={{
             showQuickJumper: true,
             pageSize: 10,
             defaultCurrent: 1,
           }}
+          dataSource={dataSource}
+          headerTitle={
+            <SearchLayout>
+              <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+              <div>
+                <label htmlFor='status'>状态：</label>
+                <Select
+                  style={{ width: 160 }}
+                  allowClear
+                  onChange={(value: any) => {
+                    setSPZT([value]);
+                  }}
+                >
+                  <Option key='待审批' value={0}>
+                    待审批
+                  </Option>
+                  <Option key='已通过' value={1}>
+                    已通过
+                  </Option>
+                  <Option key='已驳回' value={2}>
+                    已驳回
+                  </Option>
+                </Select>
+              </div>
+            </SearchLayout>
+          }
           scroll={{ x: getTableWidth(columns) }}
           options={{
             setting: false,

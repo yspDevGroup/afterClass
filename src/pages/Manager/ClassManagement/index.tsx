@@ -107,7 +107,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         type: ['1'],
       });
       if (res.status === 'ok') {
-        setBMJSSJTime(res.data?.[0].JSSJ);
+        setBMJSSJTime(res.data?.[0]?.JSSJ);
       }
     })();
   }, [curXNXQId]);
@@ -258,6 +258,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // 课程名称筛选事件
   const onKcmcChange = (value: any) => {
     setKcId(value);
+    setKCLY(undefined);
+    setBJZTMC(undefined);
   };
   // 课程班排课信息同步事件
   const syncDays = () => {
@@ -457,41 +459,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
             defaultCurrent: 1,
           }}
           scroll={{ x: getTableWidth(columns) }}
-          request={async (param, sort, filter) => {
-            if (curXNXQId) {
-              const obj = {
-                XNXQId: curXNXQId,
-                KHKCSJId: kcId || state?.id,
-                BJZT: BJZTMC,
-                page: 0,
-                pageSize: 0,
-              };
-              const res = await getAllClasses(obj);
-              if (res.status === 'ok') {
-                let newTableDateSource = res.data.rows;
-                if (BJZTMC === '已开班') {
-                  setBJCC(newTableDateSource);
-                }
-                if (filter?.KHKCSJ) {
-                  newTableDateSource = newTableDateSource.filter((item: any) => {
-                    return filter?.KHKCSJ?.some((v: any) => v === item.KHKCSJ?.SSJGLX);
-                  });
-                }
-
-                if (filter?.PK) {
-                  newTableDateSource = newTableDateSource.filter((item: any) => {
-                    return filter?.PK?.some((v: any) => Number(v) === item.pk_count);
-                  });
-                }
-                return {
-                  data: newTableDateSource,
-                  success: true,
-                  total: newTableDateSource.length,
-                };
-              }
-            }
-            return [];
-          }}
           options={{
             setting: false,
             fullScreen: false,
@@ -504,11 +471,14 @@ const CourseManagement = (props: { location: { state: any } }) => {
             <>
               <SearchLayout>
                 <div>
-                  <label htmlFor="term">所属学年学期：</label>
+                  <label htmlFor='term'>所属学年学期：</label>
                   <Select
                     value={curXNXQId}
                     onChange={(value: string) => {
                       setCurXNXQId(value);
+                      setKcId(undefined);
+                      setKCLY(undefined);
+                      setBJZTMC(undefined);
                     }}
                   >
                     {termList?.map((item: any) => {
@@ -521,7 +491,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor="kcname">课程名称：</label>
+                  <label htmlFor='kcname'>课程名称：</label>
                   <Select
                     value={kcId || state?.id}
                     allowClear
@@ -538,25 +508,26 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor="kcly">课程来源：</label>
+                  <label htmlFor='kcly'>课程来源：</label>
                   <Select
                     allowClear
                     placeholder="课程来源"
                     onChange={(value) => {
                       setKCLY(value);
+                      setBJZTMC(undefined);
                     }}
                     value={KCLY}
                   >
-                    <Option value="校内课程" key="校内课程">
+                    <Option value='校内课程' key='校内课程'>
                       校内课程
                     </Option>
-                    <Option value="机构课程" key="机构课程">
+                    <Option value='机构课程' key='机构课程'>
                       机构课程
                     </Option>
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor="status">班级状态：</label>
+                  <label htmlFor='status'>班级状态：</label>
                   <Select
                     allowClear
                     value={BJZTMC}

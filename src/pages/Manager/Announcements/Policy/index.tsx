@@ -2,10 +2,10 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-31 10:08:34
- * @LastEditTime: 2021-11-18 08:53:54
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-11-18 17:30:51
+ * @LastEditors: Sissle Lynn
  */
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Link, useModel } from 'umi';
@@ -14,13 +14,32 @@ import styles from '../index.module.less';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 import PageContainer from '@/components/PageContainer';
 import { getTableWidth } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
+import { Input } from 'antd';
 
+const { Search } = Input;
 const TableList = () => {
   const [dataSource, setDataSource] = useState<API.JYJGTZGG[]>();
   const actionRef = useRef<ActionType>();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-
+  const [title, setTitle] = useState<string>();
+  const getData = async () => {
+    const resgetXXTZGG = await getJYJGTZGG({
+      BT: title,
+      LX: 1,
+      ZT: ['已发布'],
+      XZQHM: currentUser?.XZQHM,
+      page: 0,
+      pageSize: 0,
+    });
+    if (resgetXXTZGG.status === 'ok') {
+      setDataSource(resgetXXTZGG.data?.rows);
+    }
+  };
+  useEffect(() => {
+    getData()
+  }, [title]);
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '序号',
@@ -94,7 +113,7 @@ const TableList = () => {
       valueType: 'option',
       key: 'option',
       width: 120,
-      fixed:'right',
+      fixed: 'right',
       align: 'center',
       render: (text, record) => {
         return (
@@ -115,7 +134,6 @@ const TableList = () => {
   return (
     <PageContainer>
       <ProTable<any>
-        headerTitle={<div style={{ fontWeight: 'bold' }}>政策列表</div>}
         actionRef={actionRef}
         className={styles.proTableStyles}
         rowKey="id"
@@ -124,38 +142,27 @@ const TableList = () => {
           pageSize: 10,
           defaultCurrent: 1,
         }}
-        scroll={{ x: getTableWidth(columns)}}
-        request={async (params) => {
-          if (params.ZT || params.BT) {
-            const resgetXXTZGG = await getJYJGTZGG({
-              BT: params.BT,
-              LX: 1,
-              XZQHM: currentUser?.XZQHM,
-              ZT: params.ZT ? [params.ZT] : ['已发布'],
-              page: 0,
-              pageSize: 0,
-            });
-            if (resgetXXTZGG.status === 'ok') {
-              setDataSource(resgetXXTZGG.data?.rows);
-            }
-          } else {
-            const resgetXXTZGG = await getJYJGTZGG({
-              BT: '',
-              LX: 1,
-              ZT: ['已发布'],
-              XZQHM: currentUser?.XZQHM,
-              page: 0,
-              pageSize: 0,
-            });
-            if (resgetXXTZGG.status === 'ok') {
-              setDataSource(resgetXXTZGG.data?.rows);
-            }
-          }
-
-          return '';
-        }}
+        scroll={{ x: getTableWidth(columns) }}
         dataSource={dataSource}
         columns={columns}
+        search={false}
+        options={{
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
+        }}
+        headerTitle={<SearchLayout>
+          <div>
+            <label htmlFor='title'>标题：</label>
+            <Search
+              allowClear
+              onSearch={(val) => {
+                setTitle(val)
+              }}
+            />
+          </div>
+        </SearchLayout>}
       />
     </PageContainer>
   );

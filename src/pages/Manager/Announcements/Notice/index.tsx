@@ -3,10 +3,10 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-09 17:41:43
- * @LastEditTime: 2021-11-18 08:50:38
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-11-18 17:31:24
+ * @LastEditors: Sissle Lynn
  */
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Switch, message, Modal, Form, Select, Input, Popconfirm } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -20,18 +20,70 @@ import PageContainer from '@/components/PageContainer';
 import { getXXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
 import { sendMessageToParent, sendMessageToTeacher } from '@/services/after-class/wechat';
 import { getTableWidth } from '@/utils/utils';
+import SearchLayout from '@/components/Search/Layout';
 
-const { TextArea } = Input;
+const { TextArea, Search } = Input;
 const { Option } = Select;
 const Notice = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [dataSource, setDataSource] = useState<API.XXTZGG[]>();
   const actionRef = useRef<ActionType>();
   const [form] = Form.useForm();
+  const [dataSource, setDataSource] = useState<API.XXTZGG[]>();
+  const [title, setTitle] = useState<string>();
+  const [status, setStatus] = useState<string>();
   const [visible, setVisible] = useState<boolean>(false);
-  const [current, setCurrent] = useState<any>();
-
+  const getData = async () => {
+    const resgetXXTZGG = await getXXTZGG({
+      XXJBSJId: currentUser?.xxId,
+      BT: title,
+      LX: ['0', '1'],
+      ZT: status ? [status] : ['已发布', '草稿'],
+      page: 0,
+      pageSize: 0,
+    });
+    if (resgetXXTZGG.status === 'ok') {
+      setDataSource(resgetXXTZGG.data?.rows);
+    }
+  };
+  useEffect(() => {
+    getData()
+  }, [title, status]);
+  const handleSubmit = async (params: any) => {
+    const { RQ, XXNR } = params;
+    let res: any;
+    if (RQ === '家长') {
+      res = await sendMessageToParent({
+        to: 'toall',
+        text: XXNR,
+        ids: []
+      })
+    } else if (RQ === '教师') {
+      res = await sendMessageToTeacher({
+        to: 'touser',
+        text: XXNR,
+        ids: '@all'
+      })
+    } else {
+      res = await sendMessageToParent({
+        to: 'toall',
+        text: XXNR,
+        ids: []
+      })
+      res = await sendMessageToTeacher({
+        to: 'touser',
+        text: XXNR,
+        ids: '@all'
+      })
+    }
+    if (res.status === 'ok') {
+      message.success('发送成功')
+      setVisible(false)
+      form.resetFields();
+    } else {
+      message.error('发送失败，请稍后再试')
+    }
+  }
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '序号',
@@ -139,47 +191,9 @@ const Notice = () => {
       align: 'center',
     },
   ];
-  const handleSubmit = async (params: any) => {
-    const { RQ, XXNR } = params;
-    let res: any;
-    if (RQ === '家长') {
-      res = await sendMessageToParent({
-        to: 'toall',
-        text: XXNR,
-        ids: []
-      })
-    } else if (RQ === '教师') {
-      res = await sendMessageToTeacher({
-        to: 'touser',
-        text: XXNR,
-        ids: '@all'
-      })
-    } else {
-      res = await sendMessageToParent({
-        to: 'toall',
-        text: XXNR,
-        ids: []
-      })
-      res = await sendMessageToTeacher({
-        to: 'touser',
-        text: XXNR,
-        ids: '@all'
-      })
-    }
-    if (res.status === 'ok') {
-      message.success('发送成功')
-      setVisible(false)
-      setCurrent(undefined)
-      form.resetFields();
-    } else {
-      message.error('发送失败，请稍后再试')
-    }
-  }
-
   return (
     <PageContainer>
       <ProTable<any>
-        headerTitle={<div style={{ fontWeight: 'bold' }}>通知列表</div>}
         actionRef={actionRef}
         className={styles.proTableStyles}
         rowKey="id"
@@ -209,48 +223,54 @@ const Notice = () => {
             <PlusOutlined /> 新建
           </Button>
         ]}
-        request={async (params) => {
-          if (params.ZT || params.BT) {
-            const resgetXXTZGG = await getXXTZGG({
-              XXJBSJId: currentUser?.xxId,
-              BT: params.BT,
-              ZT: params.ZT ? [params.ZT] : ['已发布', '草稿'],
-              LX: ['0', '1'],
-              page: 0,
-              pageSize: 0,
-            });
-            if (resgetXXTZGG.status === 'ok') {
-              setDataSource(resgetXXTZGG.data?.rows);
-            }
-          } else {
-            const resgetXXTZGG = await getXXTZGG({
-              XXJBSJId: currentUser?.xxId,
-              BT: '',
-              LX: ['0', '1'],
-              ZT: ['已发布', '草稿'],
-              page: 0,
-              pageSize: 0,
-            });
-            if (resgetXXTZGG.status === 'ok') {
-              setDataSource(resgetXXTZGG.data?.rows);
-            }
-          }
-          return '';
-        }}
         dataSource={dataSource}
         columns={columns}
+        search={false}
+        options={{
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
+        }}
+        headerTitle={<SearchLayout>
+          <div>
+            <label htmlFor='title'>标题：</label>
+            <Search
+              allowClear
+              onSearch={(val) => {
+                setTitle(val)
+              }}
+            />
+          </div>
+          <div>
+            <label htmlFor='status'>发布状态：</label>
+            <Select
+              style={{ width: 160 }}
+              allowClear
+              value={status}
+              onChange={(value: string) => {
+                setStatus(value);
+              }}
+            >
+              <Option key='草稿' value='草稿'>
+                草稿
+              </Option>
+              <Option key='已发布' value='已发布'>
+                已发布
+              </Option>
+            </Select>
+          </div>
+        </SearchLayout>}
       />
       <Modal
         title="发送消息"
         visible={visible}
-
         footer={[
           <Button
             key="back"
             style={{ borderRadius: 4 }}
             onClick={() => {
               setVisible(false);
-              setCurrent(undefined);
               form.resetFields();
             }}>
             取消
