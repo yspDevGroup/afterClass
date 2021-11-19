@@ -687,33 +687,3 @@ export async function getGoodClass(
     ...(options || {}),
   });
 }
-
-/** 获取教育机构下的所有本区课程信息(已备案课程) POST /khkcsj/getAllCourses2 */
-export async function getAllCourses2(
-  body: {
-    /** 课程名称 */
-    KCMC?: string;
-    /** 课程来源 */
-    KCLY?: string;
-    /** 课程类型ID */
-    KHKCLXId?: string;
-    /** 行政区划码 */
-    XZQHM?: string;
-    /** 市行政区划码 */
-    SXZQHM?: string;
-    /** 页数 */
-    page?: number;
-    /** 每页记录数 */
-    pageSize?: number;
-  },
-  options?: { [key: string]: any },
-) {
-  return request<any>('/khkcsj/getAllCourses2', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
