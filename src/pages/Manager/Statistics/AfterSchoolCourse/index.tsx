@@ -10,7 +10,6 @@ import Style from './index.less';
 import type { TableItem } from './data';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { getTableWidth } from '@/utils/utils';
-
 import amountImg from '@/assets/amount.png';
 import personImg from '@/assets/person.png';
 import classImg from '@/assets/class.png';
@@ -210,19 +209,13 @@ const AfterSchoolCourse: React.FC = () => {
     <PageContainer>
       <div className={Style.TopSearchss}>
         <SearchLayout>
-          <SemesterSelect
-            XXJBSJId={currentUser?.xxId}
-            onChange={(value: string) => {
-              // 选择不同学期从新更新页面的数据
-              setCurXNXQId(value);
-            }}
-          />
-          <CourseSelect
-            XXJBSJId={currentUser?.xxId}
-            onChange={(value) => {
-              setKcmcValue(value);
-            }}
-          />
+          <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={(value: string) => {
+            // 选择不同学期从新更新页面的数据
+            setCurXNXQId(value);
+          }} />
+          <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={(value) => {
+            setKcmcValue(value);
+          }} />
           <div>
             <label htmlFor="school">课程类型：</label>
             <Select

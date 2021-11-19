@@ -2,7 +2,7 @@
  * @description:
  * @author: txx
  * @Date: 2021-05-24 16:33:45
- * @LastEditTime: 2021-11-18 11:27:26
+ * @LastEditTime: 2021-11-19 12:02:41
  * @LastEditors: Sissle Lynn
  */
 
@@ -40,7 +40,7 @@ const SearchComponent = () => {
   return (
     <SearchLayout>
       <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-      <CourseSelect XXJBSJId={currentUser?.xxId} onChange={courseChange} />
+      <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={courseChange} />
       <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
       <div>
         <label htmlFor="school">学校名称：</label>

@@ -206,7 +206,7 @@ const StudentsLeave: React.FC = () => {
         headerTitle={
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-            <CourseSelect XXJBSJId={currentUser?.xxId} onChange={courseChange} />
+            <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={courseChange} />
             <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
             <div>
               <label htmlFor='status'>请假状态：</label>

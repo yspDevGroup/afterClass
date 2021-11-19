@@ -2,7 +2,7 @@ import { getTableWidth } from '@/utils/utils';
 import ProTable from '@ant-design/pro-table';
 
 const Table = (props: any) => {
-  const { dataSource, columns } = props;
+  const {dataSource, columns } = props;
 
   return (
     <>
@@ -13,14 +13,14 @@ const Table = (props: any) => {
           defaultCurrent: 1,
         }}
         scroll={{ x: getTableWidth(columns) }}
-        columns={columns}
+        columns={ columns}
         options={{
           setting: false,
           fullScreen: false,
           density: false,
           reload: false,
         }}
-        dataSource={dataSource}
+        dataSource={dataSource }
         search={false}
       />
     </>

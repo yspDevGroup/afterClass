@@ -19,7 +19,6 @@ const AfterSchoolClass: React.FC = (props: any) => {
   const { currentUser } = initialState || {};
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
-  // 学年学期列表数据
   // 表格数据源
   const [dataSource, setDataSource] = useState<any>([]);
   const { state } = props.location;

@@ -682,7 +682,7 @@ const ClassManagement = () => {
                       })}
                     </Select>
                   </div>
-                </SearchLayout>
+                </SearchLayout>            
                 {/*  添加新的课程 路由跳转*/}
                 <div style={{ position: 'absolute', right: 0, top: 0 }}>
                   <Button

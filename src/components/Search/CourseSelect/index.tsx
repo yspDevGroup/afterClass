@@ -1,7 +1,7 @@
 /*
  * @Author: Sissle Lynn
  * @Date: 2021-11-17 10:04:45
- * @LastEditTime: 2021-11-18 15:21:37
+ * @LastEditTime: 2021-11-19 12:06:35
  * @LastEditors: Sissle Lynn
  * @Description: 课程查询
  */
@@ -14,10 +14,12 @@ const { Option } = Select;
 
 type CourseSecectProps = {
   XXJBSJId?: string;
-  onChange?: (val: string,data?: any) => void;
+  XNXQId?: string;
+  onChange?: (val: any, data?: any) => void;
 };
-const CourseSecect: FC<CourseSecectProps> = ({ onChange, XXJBSJId }) => {
+const CourseSelect: FC<CourseSecectProps> = ({ onChange, XXJBSJId, XNXQId }) => {
   const [courseList, setCourseList] = useState<any>();
+  const [courseValue, setCourseValue] = useState<string>();
   const getCourse = async (xxdm: string) => {
     const res = await getAllCourses({
       page: 0,
@@ -40,13 +42,19 @@ const CourseSecect: FC<CourseSecectProps> = ({ onChange, XXJBSJId }) => {
       getCourse(XXJBSJId);
     }
   }, [XXJBSJId]);
+  useEffect(() => {
+    setCourseValue(undefined);
+    onChange?.(undefined, undefined);
+  }, [XNXQId])
 
   return (
     <div>
       <label htmlFor='course'>课程名称：</label>
       <Select
+        value={courseValue}
         allowClear
         onChange={(value: string, option: any) => {
+          setCourseValue(value);
           onChange?.(value, option);
         }}
       >
@@ -60,4 +68,4 @@ const CourseSecect: FC<CourseSecectProps> = ({ onChange, XXJBSJId }) => {
       </Select></div>
   );
 };
-export default CourseSecect;
+export default CourseSelect;

@@ -368,7 +368,7 @@ const CourseUnsubscribe = () => {
             <>
               <SearchLayout>
                 <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-                <CourseSelect XXJBSJId={currentUser?.xxId} onChange={courseChange} />
+                <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={courseChange} />
                 <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
                 <div>
                   <label htmlFor='student'>学生名称：</label>

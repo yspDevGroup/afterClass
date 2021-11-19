@@ -2,7 +2,7 @@
  * @description:订单查询页面
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-11-18 15:31:24
+ * @LastEditTime: 2021-11-19 12:03:19
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -256,7 +256,7 @@ const OrderInquiry = (props: any) => {
               <>
                 <SearchLayout>
                   <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-                  <CourseSelect XXJBSJId={currentUser?.xxId} onChange={courseChange} />
+                  <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={courseChange} />
                   <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
                   <div>
                     <label htmlFor='student'>学生名称：</label>

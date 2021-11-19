@@ -7,7 +7,6 @@ import { getAllCourses } from '@/services/after-class/khkcsj';
 import ProTable from '@ant-design/pro-table';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import { getTableWidth } from '@/utils/utils';
-
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import CourseSelect from '@/components/Search/CourseSelect';
@@ -180,19 +179,13 @@ const MutualEvaluation: React.FC = () => {
           }}
           headerTitle={
             <SearchLayout>
-              <SemesterSelect
-                XXJBSJId={currentUser?.xxId}
-                onChange={(value: string) => {
-                  // 选择不同学期从新更新页面的数据
-                  setCurXNXQId(value);
-                }}
-              />
-              <CourseSelect
-                XXJBSJId={currentUser?.xxId}
-                onChange={(value, data) => {
-                  setKcmcValue(data?.children);
-                }}
-              />
+              <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={(value: string) => {
+                // 选择不同学期从新更新页面的数据
+                setCurXNXQId(value);
+              }} />
+              <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={(value, data) => {
+                setKcmcValue(data?.children);
+              }} />
               <div>
                 <label htmlFor="school">课程类型：</label>
                 <Select
@@ -201,7 +194,7 @@ const MutualEvaluation: React.FC = () => {
                   placeholder="课程类型"
                   allowClear
                   onChange={(value: string) => {
-                    setKCLXId(value);
+                    setKCLXId(value)
                   }}
                 >
                   {KCLXData?.map((item: any) => {
