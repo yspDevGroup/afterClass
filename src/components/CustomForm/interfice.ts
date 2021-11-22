@@ -90,6 +90,7 @@ export type FormRadioProps = {
 export type FormTimeProps = {
   disabled?: boolean;
   subtype?: string;
+  placeholder?: string;
   onChange?: (value: any, dateString: string) => void;
 } & FormItemProps;
 
