@@ -221,8 +221,7 @@ const PeriodMaintenance = () => {
           >
             <a>删除</a>
           </Popconfirm>
-          <Divider type="vertical" />
-          <a onClick={() => setAMVisible(true)}>开学通知</a>
+          {currentStatus === 'enroll' ? <><Divider type="vertical" /><a onClick={() => setAMVisible(true)}>报名通知</a></> : ''}
         </>
       ),
     },
