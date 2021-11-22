@@ -168,7 +168,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 刷新Table
   const refreshTable = () => {
-    console.log('screenOriSource', screenOriSource);
+    // console.log('screenOriSource', screenOriSource);
     if (screenOriSource?.length > 0) {
       const screenCD = (dataSource1: any) => {
         const newDataSource = [...dataSource1];
@@ -685,6 +685,9 @@ const AddArranging: FC<PropsType> = (props) => {
                       type="edit"
                       getSelectdata={getSelectdata}
                       tearchId={tearchId}
+                      style={{
+                        height: 'calc(100vh - 500px)',
+                      }}
                       // basicData={oriSource}
                     />
                   </Spin>

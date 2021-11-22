@@ -192,6 +192,7 @@ type IndexPropsType = {
   tearchId?: string;
   /** 表格接口没有处理的数据 */
   basicData?: any[];
+  style: any;
 };
 
 const Index: FC<IndexPropsType> = ({
@@ -203,6 +204,7 @@ const Index: FC<IndexPropsType> = ({
   type = 'see',
   switchPages,
   getSelectdata,
+  style,
   // radioValue,
   // basicData,
   // tearchId,
@@ -338,6 +340,7 @@ const Index: FC<IndexPropsType> = ({
     }
   };
   const datas = stateTableData ? [...stateTableData] : [...dataSource];
+  console.log('style', style);
   return (
     <div className={`${styles.excelTable} ${className}`}>
       <table>
@@ -354,7 +357,7 @@ const Index: FC<IndexPropsType> = ({
         </thead>
       </table>
       {datas && datas.length ? (
-        <div className={styles.tableContent}>
+        <div className={styles.tableContent} style={style}>
           <table>
             <tbody>
               {datas.map((data, dataKey: any) => {
