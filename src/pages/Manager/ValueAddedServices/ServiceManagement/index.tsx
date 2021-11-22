@@ -24,6 +24,7 @@ import SearchLayout from '@/components/Search/Layout';
 import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
+const { Search } = Input;
 const { RangePicker } = DatePicker;
 
 const ServiceManagement = () => {
@@ -38,6 +39,7 @@ const ServiceManagement = () => {
   const [Disabled, setDisabled] = useState<string>();
   const [FbState, setFbState] = useState<string>();
   const [LbState, setLbState] = useState<string>();
+  const [name, setName] = useState<string>();
   const [ImageUrl, setImageUrl] = useState<string>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
@@ -60,21 +62,13 @@ const ServiceManagement = () => {
     })();
   }, []);
   const ongetKHXXZZFW = async () => {
-    let data: any = {};
-    if (typeof FbState === 'undefined' || FbState === '') {
-      data = {
+    const data: any = {
         XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId || '',
+        FWMC: name,
+        FWZT: FbState ? Number(FbState): undefined,
         KHZZFWId: LbState || '',
       };
-    } else {
-      data = {
-        XXJBSJId: currentUser?.xxId,
-        XNXQId: curXNXQId || '',
-        FWZT: Number(FbState),
-        KHZZFWId: LbState || '',
-      };
-    }
     const res = await getKHXXZZFW(data);
     if (res.status === 'ok') {
       setDataSource(res?.data?.rows);
@@ -82,7 +76,7 @@ const ServiceManagement = () => {
   };
   useEffect(() => {
     ongetKHXXZZFW();
-  }, [curXNXQId, FbState, LbState]);
+  }, [curXNXQId, name,FbState, LbState]);
   useEffect(() => {
     // 获取校区数据
     (async () => {
@@ -427,11 +421,12 @@ const ServiceManagement = () => {
               <div>
                 <label htmlFor='term'>所属学年学期：</label>
                 <Select
+                  allowClear
                   value={curXNXQId}
                   onChange={(value: string) => {
                     setCurXNXQId(value);
-                    setLbState('');
-                    setFbState('');
+                    setLbState(undefined);
+                    setFbState(undefined);
                   }}
                 >
                   {termList?.map((item: any) => {
@@ -444,6 +439,17 @@ const ServiceManagement = () => {
                 </Select>
               </div>
               <div>
+                <label htmlFor="name">服务名称：</label>
+                <Search
+                  placeholder="服务名称"
+                  allowClear
+                  onSearch={(value: string) => {
+                    setName(value);
+                    actionRef.current?.reload();
+                  }}
+                />
+              </div>
+              <div>
                 <label htmlFor='type'>服务类别：</label>
                 <Select
                   allowClear
@@ -451,7 +457,7 @@ const ServiceManagement = () => {
                   placeholder="请选择"
                   onChange={(value: string) => {
                     setLbState(value);
-                    setFbState('');
+                    setFbState(undefined);
                   }}
                 >
                   {LBData?.length
