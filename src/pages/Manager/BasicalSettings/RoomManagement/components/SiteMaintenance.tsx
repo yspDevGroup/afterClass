@@ -8,6 +8,7 @@ import React, { useRef, useState } from 'react';
 import type { TableListParams } from '../../RoomManagement/data';
 import type { DataSourceType } from '../data';
 import { useModel } from 'umi';
+import styles from '../index.less';
 
 const SiteMaintenance = () => {
   const actionRef = useRef<ActionType>();
@@ -125,14 +126,14 @@ const SiteMaintenance = () => {
           },
         }}
         cardProps={{
-          bodyStyle: { padding: 0 },
+          className: styles.add,
         }}
         toolBarRender={() => [
           <Button
             type="dashed"
             ghost
             onClick={() => {
-              console.log('actionRef.current?', actionRef.current);
+              // console.log('actionRef.current?', actionRef.current);
 
               actionRef.current?.addEditRecord?.(
                 {
