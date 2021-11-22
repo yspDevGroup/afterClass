@@ -53,7 +53,7 @@ const courseNotIntroduced = () => {
     };
     const resAll = await getToIntroduceBySchool(opts);
     if (resAll.status === 'ok' && resAll.data) {
-      setDataSource(resAll.data.rows)
+      setDataSource(resAll.data.rows);
     }
   };
   useEffect(() => {
@@ -75,7 +75,7 @@ const courseNotIntroduced = () => {
 
   useEffect(() => {
     getData();
-  }, [KCLXId, KCName, JGName])
+  }, [KCLXId, KCName, JGName]);
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -213,7 +213,8 @@ const courseNotIntroduced = () => {
                     const res = await createKHKCSQ({ ...params, ZT: 0 });
                     if (res.status === 'ok') {
                       message.success('引入成功，机构确认中...确认后方可建班排课');
-                      action?.reload();
+                      getData();
+                      // action?.reload();
                     } else {
                       message.error(res.message);
                     }
@@ -235,7 +236,8 @@ const courseNotIntroduced = () => {
                     const res = await updateKHKCSQ({ id: record?.KHKCSQs?.[0]?.id }, { ZT: 3 });
                     if (res.status === 'ok') {
                       message.success('操作成功');
-                      action?.reload();
+                      getData();
+                      // action?.reload();
                     } else {
                       message.error(res.message);
                     }
@@ -279,19 +281,27 @@ const courseNotIntroduced = () => {
           <>
             <SearchLayout>
               <div>
-                <label htmlFor='kcname'>课程名称：</label>
-                <Search placeholder="课程名称" allowClear onSearch={(value: string) => {
-                  setKCName(value);
-                }} />
+                <label htmlFor="kcname">课程名称：</label>
+                <Search
+                  placeholder="课程名称"
+                  allowClear
+                  onSearch={(value: string) => {
+                    setKCName(value);
+                  }}
+                />
               </div>
               <div>
-                <label htmlFor='jgname'>机构名称：</label>
-                <Search placeholder="机构名称" allowClear onSearch={(value: string) => {
-                  setJGName(value);
-                }} />
+                <label htmlFor="jgname">机构名称：</label>
+                <Search
+                  placeholder="机构名称"
+                  allowClear
+                  onSearch={(value: string) => {
+                    setJGName(value);
+                  }}
+                />
               </div>
               <div>
-                <label htmlFor='kctype'>课程类型：</label>
+                <label htmlFor="kctype">课程类型：</label>
                 <Select
                   allowClear
                   placeholder="课程类型"
