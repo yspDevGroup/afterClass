@@ -415,13 +415,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
       align: 'center',
       width: 230,
       fixed: 'right',
-
       render: (_, record) => {
         const BMJSSJ = new Date(record?.BMJSSJ).getTime();
         const newDate = new Date().getTime();
         return (
           <>
-            <ActionBar record={record} handleEdit={handleEdit} actionRef={actionRef} />
+            <ActionBar record={record} handleEdit={handleEdit} getData={getData} />
             <Divider type="vertical" />
             {record?.BJZT === '已开班' && newDate <= BMJSSJ ? (
               <a
@@ -474,6 +473,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   <label htmlFor='term'>所属学年学期：</label>
                   <Select
                     value={curXNXQId}
+                    allowClear
                     onChange={(value: string) => {
                       setCurXNXQId(value);
                       setKcId(undefined);
@@ -572,7 +572,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
           ]}
         />
         <AddCourse
-          actionRef={actionRef}
           visible={visible}
           onClose={onClose}
           formValues={current}
@@ -583,6 +582,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           curXNXQId={curXNXQId}
           currentUser={currentUser}
           CopyType={CopyType}
+          getData={getData}
         />
         <PromptInformation
           text="未查询到学年学期数据，请先设置学年学期"

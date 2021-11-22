@@ -745,7 +745,7 @@ const AddCourse: FC<AddCourseProps> = ({
               }
               // 将按钮关闭的时候 传成默认时间段
               form.setFieldsValue({ BMSD: [BMData?.KSSJ, BMData?.JSSJ] });
-              setBaoming(false);
+              return setBaoming(false);
             },
             checked: baoming,
           },

@@ -15,14 +15,16 @@ import SemesterSelect from '@/components/Search/SemesterSelect';
 
 const { TextArea } = Input;
 const { Option } = Select;
-const Adjustment: React.FC = () => {
+const Adjustment = (props: { teacherData?: any }) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { teacherData } = props;
   const actionRef = useRef<ActionType>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();
   // 审批状态
   const [SPZT, setSPZT] = useState<any[]>([0, 1, 2]);
+  const [TKJS, setTKJS] = useState<string>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
@@ -37,6 +39,7 @@ const Adjustment: React.FC = () => {
       ZT: typeof SPZT?.[0] === 'undefined' ? [0, 1, 2] : SPZT,
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId,
+      SKJSId: TKJS,
       page: 0,
       pageSize: 0,
     };
@@ -51,10 +54,10 @@ const Adjustment: React.FC = () => {
     setCurXNXQId(val);
   }
   useEffect(() => {
-    if(curXNXQId){
+    if (curXNXQId) {
       getData();
     }
-  }, [SPZT, curXNXQId]);
+  }, [SPZT, curXNXQId, TKJS]);
 
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
@@ -248,9 +251,30 @@ const Adjustment: React.FC = () => {
             <SearchLayout>
               <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
               <div>
+                <label htmlFor='status'>调课教师：</label>
+                <Select
+                  allowClear
+                  showSearch
+                  value={TKJS}
+                  onChange={(value: string) => {
+                    setTKJS(value);
+                  }}
+                  filterOption={(input, option) =>
+                    option?.children?.toLowerCase()?.indexOf(input?.toLowerCase()) >= 0
+                  }
+                >
+                  {teacherData?.map((item: any) => {
+                    return (
+                      <Option key={item.value} value={item.value}>
+                        {item.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+              <div>
                 <label htmlFor='status'>状态：</label>
                 <Select
-                  style={{ width: 160 }}
                   allowClear
                   onChange={(value: any) => {
                     setSPZT([value]);

@@ -3,17 +3,17 @@ import { useModel } from 'umi';
 import { Select, message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { exportTKJL, getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
-import { getKHZZFW } from '@/services/after-class/khzzfw';
-import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { DownloadOutlined } from '@ant-design/icons';
 import { getTableWidth } from '@/utils/utils';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
+import { getKHZZFW } from '@/services/after-class/khzzfw';
+import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
+import { exportTKJL, getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
 
 const { Option } = Select;
-const { TextArea } = Input;
+const { TextArea, Search } = Input;
 // 退款
 const ServiceRefund = () => {
   // 获取到当前学校的一些信息
@@ -29,6 +29,7 @@ const ServiceRefund = () => {
   const [LbId, setLbId] = useState<string>();
   const [FWMCData, setFWMCData] = useState<any>([]);
   const [FWMC, setFWMC] = useState<string>();
+  const [XM, setXM] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   // 学年学期筛选
   const termChange = (val: string) => {
@@ -74,7 +75,7 @@ const ServiceRefund = () => {
     if (curXNXQId) {
       actionRef.current?.reload();
     }
-  }, [FWMC]);
+  }, [FWMC, XM]);
 
   /// table表格数据
   const columns: ProColumns<any>[] = [
@@ -247,8 +248,8 @@ const ServiceRefund = () => {
               setVisible(true);
               form.setFieldsValue({
                 TKJE: record?.TKJE,
-                TKZT:1,
-                BZ:''
+                TKZT: 1,
+                BZ: ''
               });
             }}
           >
@@ -281,7 +282,7 @@ const ServiceRefund = () => {
           }
           setVisible(false);
           setCurrent(undefined);
-          getData();
+          actionRef.current?.reload();
         } else {
           message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');
         }
@@ -332,6 +333,7 @@ const ServiceRefund = () => {
                 XNXQId: curXNXQId,
                 KHFWLXId: LbId,
                 KHFWMC: FWMC,
+                XSXM: XM,
                 page: 0,
                 pageSize: 0,
               });
@@ -365,12 +367,12 @@ const ServiceRefund = () => {
                     >
                       {LBData?.length
                         ? LBData?.map((item: any) => {
-                            return (
-                              <Option value={item?.id} key={item?.id}>
-                                {item?.FWMC}
-                              </Option>
-                            );
-                          })
+                          return (
+                            <Option value={item?.id} key={item?.id}>
+                              {item?.FWMC}
+                            </Option>
+                          );
+                        })
                         : ''}
                     </Select>
                   </div>
@@ -386,14 +388,23 @@ const ServiceRefund = () => {
                     >
                       {FWMCData?.length
                         ? FWMCData?.map((item: any) => {
-                            return (
-                              <Option value={item?.FWMC} key={item?.FWMC}>
-                                {item?.FWMC}
-                              </Option>
-                            );
-                          })
+                          return (
+                            <Option value={item?.FWMC} key={item?.FWMC}>
+                              {item?.FWMC}
+                            </Option>
+                          );
+                        })
                         : ''}
                     </Select>
+                  </div>
+                  <div>
+                    <label htmlFor="name">学生姓名：</label>
+                    <Search
+                      allowClear
+                      onSearch={(value) => {
+                        setXM(value);
+                      }}
+                    />
                   </div>
                 </SearchLayout>
               </>

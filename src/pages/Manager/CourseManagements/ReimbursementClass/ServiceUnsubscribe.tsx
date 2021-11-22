@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Select, message, Modal, Radio, Input, Form, } from 'antd';
+import { Select, message, Modal, Radio, Input, Form } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
@@ -36,7 +36,7 @@ const ServiceUnsubscribe = () => {
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
-  }
+  };
   const getData = async () => {
     const resAll = await getKHTKSJ({
       XXJBSJId: currentUser?.xxId,
@@ -44,7 +44,7 @@ const ServiceUnsubscribe = () => {
       XSXM: name,
       KHFWMC: FWMC,
       KHFWLX: FWLX,
-      LX: 1
+      LX: 1,
     });
     if (resAll.status === 'ok') {
       setDataSource(resAll?.data?.rows);
@@ -82,8 +82,8 @@ const ServiceUnsubscribe = () => {
           setFwList(res?.data?.rows);
         }
       }
-    })()
-  }, [curXNXQId, FWLXId])
+    })();
+  }, [curXNXQId, FWLXId]);
   useEffect(() => {
     getData();
   }, [curXNXQId, name, FWMC, FWLX]);
@@ -109,7 +109,7 @@ const ServiceUnsubscribe = () => {
         if (showWXName) {
           return <WWOpenDataCom type="userName" openid={record?.XSJBSJ?.WechatUserId} />;
         }
-        return record?.XSJBSJ?.XM
+        return record?.XSJBSJ?.XM;
       },
     },
     {
@@ -120,7 +120,7 @@ const ServiceUnsubscribe = () => {
       width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
       },
     },
     {
@@ -149,7 +149,7 @@ const ServiceUnsubscribe = () => {
       key: 'KSRQ',
       align: 'center',
       render: (_, record) => {
-        return record?.KHXXZZFW?.KSRQ
+        return record?.KHXXZZFW?.KSRQ;
       },
       width: 150,
     },
@@ -159,7 +159,7 @@ const ServiceUnsubscribe = () => {
       key: 'JSRQ',
       align: 'center',
       render: (_, record) => {
-        return record?.KHXXZZFW?.JSRQ
+        return record?.KHXXZZFW?.JSRQ;
       },
       width: 150,
     },
@@ -169,7 +169,7 @@ const ServiceUnsubscribe = () => {
       key: 'createdAt',
       align: 'center',
       render: (_, record) => {
-        return record?.createdAt?.substring(0, 16)
+        return record?.createdAt?.substring(0, 16);
       },
       width: 150,
     },
@@ -185,8 +185,8 @@ const ServiceUnsubscribe = () => {
         if (showWXName) {
           return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
         }
-        return record?.JZGJBSJ?.XM
-      }
+        return record?.JZGJBSJ?.XM;
+      },
     },
     {
       title: '审批时间',
@@ -195,7 +195,7 @@ const ServiceUnsubscribe = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.updatedAt?.replace(/T/, ' ').substring(0, 16)
+        return record?.updatedAt?.replace(/T/, ' ').substring(0, 16);
       },
       width: 150,
     },
@@ -239,15 +239,17 @@ const ServiceUnsubscribe = () => {
       fixed: 'right',
       render: (_: any, record: any) => {
         return record.ZT === 0 ? (
-          <a onClick={() => {
-            setCurrent(record);
-            setVisible(true);
-          }}>
+          <a
+            onClick={() => {
+              setCurrent(record);
+              setVisible(true);
+            }}
+          >
             审批
           </a>
         ) : (
           ''
-        )
+        );
       },
       width: 90,
     },
@@ -258,12 +260,12 @@ const ServiceUnsubscribe = () => {
     const a1 = new Date(current?.KHXXZZFW?.KSRQ).getTime();
     const a2 = new Date(current?.KHXXZZFW?.JSRQ).getTime();
     const a3 = new Date(current?.createdAt).getTime();
-    if (a3 > a1) {
-      DKFY = Number(current?.KHXXZZFW?.FY)
+    if (a3 < a1) {
+      DKFY = Number(current?.KHXXZZFW?.FY);
     } else {
       const days = Math.ceil((a3 - a1) / (1000 * 60 * 60 * 24));
       const FWTS = Math.ceil((a2 - a1) / (1000 * 60 * 60 * 24));
-      DKFY = (Number(current?.KHXXZZFW?.FY) - ((days / FWTS) * current?.KHXXZZFW?.FY)).toFixed(2);
+      DKFY = (Number(current?.KHXXZZFW?.FY) - (days / FWTS) * current?.KHXXZZFW?.FY).toFixed(2);
     }
     try {
       if (current.id) {
@@ -275,7 +277,7 @@ const ServiceUnsubscribe = () => {
             message.success('服务退订申请已驳回');
           } else if (current?.KHBJSJ?.FY !== 0) {
             if (Number(DKFY) <= 0) {
-              message.success('服务退订成功,退款金额为0元，无需退款')
+              message.success('服务退订成功,退款金额为0元，无需退款');
             } else {
               const result = await createKHXSTK({
                 KHTKSJId: current?.id,
@@ -288,7 +290,7 @@ const ServiceUnsubscribe = () => {
                 XSJBSJId: current?.XSJBSJId,
                 /** 学校ID */
                 XXJBSJId: currentUser?.xxId,
-                JZGJBSJId: currentUser?.JSId || testTeacherId
+                JZGJBSJId: currentUser?.JSId || testTeacherId,
               });
               if (result.status === 'ok') {
                 message.success('服务退订成功,已自动申请退款流程');
@@ -309,7 +311,7 @@ const ServiceUnsubscribe = () => {
     } catch (err) {
       message.error('服务退订流程出现错误，请联系管理员或稍后重试。');
     }
-  }
+  };
   return (
     <>
       <div>
@@ -335,7 +337,7 @@ const ServiceUnsubscribe = () => {
               <SearchLayout>
                 <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
                 <div>
-                  <label htmlFor='type'>服务类别：</label>
+                  <label htmlFor="type">服务类别：</label>
                   <Select
                     style={{ width: 160 }}
                     allowClear
@@ -356,7 +358,7 @@ const ServiceUnsubscribe = () => {
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor='name'>服务名称：</label>
+                  <label htmlFor="name">服务名称：</label>
                   <Select
                     value={FWMC}
                     style={{ width: 160 }}
@@ -375,12 +377,12 @@ const ServiceUnsubscribe = () => {
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor='student'>学生名称：</label>
+                  <label htmlFor="student">学生名称：</label>
                   <Search
                     allowClear
                     style={{ width: 160 }}
                     onSearch={(val) => {
-                      setName(val)
+                      setName(val);
                     }}
                   />
                 </div>
@@ -416,11 +418,13 @@ const ServiceUnsubscribe = () => {
                 <Radio value={2}>不同意</Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item label="审核说明" name='BZ'>
+            <Form.Item label="审核说明" name="BZ">
               <TextArea rows={4} maxLength={100} />
             </Form.Item>
           </Form>
-          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>注：同意退订后，如涉及退款，系统将自动发起退款申请。</p>
+          <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>
+            注：同意退订后，如涉及退款，系统将自动发起退款申请。
+          </p>
         </Modal>
       </div>
     </>
