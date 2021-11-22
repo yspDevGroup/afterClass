@@ -6,7 +6,7 @@
  * @LastEditors: Please set LastEditors
  */
 import { Col, Row } from 'antd';
-import { bgColor, centerNum } from './utils';
+import { centerNum } from './utils';
 
 import styles from './index.less';
 import { Link } from 'umi';
@@ -14,7 +14,6 @@ import { RightOutlined } from '@ant-design/icons';
 
 const CenterBar = (props: { data: any }) => {
   const { data } = props;
-  console.log('dataX: ', data);
   return (
     <Row gutter={[24, 24]} className={styles.topHeader}>
       {centerNum.map((item, index) => {
