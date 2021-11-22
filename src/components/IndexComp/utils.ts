@@ -57,6 +57,44 @@ export const topNum = [
     type: 'xs_count',
   },
 ];
+export const centerNum = [
+  {
+    title: '教师请假',
+    type: 'jsqj_count',
+    color: '#00E9E4',
+    path: '/audit/leaveManagement'
+  },
+  {
+    title: '教师调/代课',
+    type: 'jstdk_count',
+    color: '#FF5959',
+    path: '/audit/substituteCourse'
+  },
+  {
+    title: '课程退订',
+    type: 'kctd_count',
+    color: '#898FD7',
+    path: '/orderInquiry/reimbursementClass'
+  },
+  {
+    title: '服务退订',
+    type: 'fwtd_count',
+    color: '#EED600',
+    path: '/orderInquiry/reimbursementClass'
+  },
+  {
+    title: '课程退款',
+    type: 'kctk_count',
+    color: '#98D32D',
+    path: '/orderInquiry/refundManagement'
+  },
+  {
+    title: '服务退款',
+    type: 'fwtk_count',
+    color: '#FFA238',
+    path: '/orderInquiry/refundManagement'
+  },
+];
 export const chartConfig: any = {
   data: [],
   xField: 'type',

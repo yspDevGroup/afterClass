@@ -10,6 +10,7 @@ import { Card, Col, Row } from 'antd';
 import { Link, useModel } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
 import Topbar from './Topbar';
+import CenterBar from './CenterBar';
 import List from './List';
 import noAnnoce from '@/assets/noAnnoce.png';
 import noData from '@/assets/noData.png';
@@ -20,7 +21,7 @@ import home4 from '@/assets/home4.png';
 import arrow from '@/assets/arrow.png';
 
 import styles from './index.less';
-import { homePage } from '@/services/after-class/xxjbsj';
+import { homePage, getAllUnfinish } from '@/services/after-class/xxjbsj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 // import { KHJYJG } from '@/services/after-class/khjyjg';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
@@ -31,6 +32,7 @@ const Index = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [homeData, setHomeData] = useState<any>();
+  const [thingData, setThingData] = useState<any>();
   const [policyData, setPolicyData] = useState<any>();
   const [annoceData, setAnnoceData] = useState<any>();
   // 学期学年没有数据时提示的开关
@@ -47,6 +49,13 @@ const Index = () => {
     if (res.status === 'ok') {
       // 配置头部统计栏目数据
       setHomeData({ ...res.data });
+    }
+    const resThings = await getAllUnfinish({
+      XXJBSJId: currentUser?.xxId,
+      XNXQId,
+    });
+    if(resThings.status ==='ok'){
+      setThingData(resThings.data);
     }
     // 校内通知
     const result = await getXXTZGG({
@@ -126,6 +135,14 @@ const Index = () => {
             }
           >
             <List type="policy" data={policyData} noDataImg={noData} noDataText="暂无信息" />
+          </Card>
+        </Col>
+      </Row>
+      <Row className={styles.chartWrapper}>
+        <Col span={24}>
+          {/* extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>} */}
+          <Card title="待办事项" bordered={false}>
+              <CenterBar data={thingData} />
           </Card>
         </Col>
       </Row>
