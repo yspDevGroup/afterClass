@@ -13,14 +13,17 @@ import SemesterSelect from '@/components/Search/SemesterSelect';
 
 const { TextArea } = Input;
 const { Option } = Select;
-const SubstituteFor: React.FC = () => {
+const SubstituteFor = (props: { teacherData?: any }) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { teacherData } = props;
   const actionRef = useRef<ActionType>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();
   // 审批状态
   const [SPZT, setSPZT] = useState<any[]>([0, 1, 2, 4, 5]);
+  const [SQJS, setSQJS] = useState<string>();
+  const [DKJS, setDKJS] = useState<string>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
@@ -35,6 +38,8 @@ const SubstituteFor: React.FC = () => {
       ZT: typeof SPZT?.[0] === 'undefined' ? [0, 1, 2, 4, 5] : SPZT,
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId,
+      DKJSId: DKJS,
+      SKJSId: SQJS,
       page: 0,
       pageSize: 0,
     };
@@ -52,7 +57,7 @@ const SubstituteFor: React.FC = () => {
     if (curXNXQId) {
       getData();
     }
-  }, [SPZT, curXNXQId]);
+  }, [SPZT, SQJS, DKJS, curXNXQId]);
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
@@ -246,6 +251,50 @@ const SubstituteFor: React.FC = () => {
           headerTitle={
             <SearchLayout>
               <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
+              <div>
+                <label htmlFor='status'>申请教师：</label>
+                <Select
+                  allowClear
+                  showSearch
+                  value={SQJS}
+                  onChange={(value: string) => {
+                    setSQJS(value);
+                  }}
+                  filterOption={(input, option) =>
+                    option?.children?.toLowerCase()?.indexOf(input?.toLowerCase()) >= 0
+                  }
+                >
+                  {teacherData?.map((item: any) => {
+                    return (
+                      <Option key={item.value} value={item.value}>
+                        {item.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+              <div>
+                <label htmlFor='status'>代课教师：</label>
+                <Select
+                  allowClear
+                  showSearch
+                  value={DKJS}
+                  onChange={(value: string) => {
+                    setDKJS(value);
+                  }}
+                  filterOption={(input, option) =>
+                    option?.children?.toLowerCase()?.indexOf(input?.toLowerCase()) >= 0
+                  }
+                >
+                  {teacherData?.map((item: any) => {
+                    return (
+                      <Option key={item.value} value={item.value}>
+                        {item.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
               <div>
                 <label htmlFor='status'>状态：</label>
                 <Select

@@ -76,6 +76,7 @@ export async function createKHKCSJ(body: API.CreateKHKCSJ, options?: { [key: str
       KCMS?: string;
       SSJGLX?: string;
       KBYS?: string;
+      KCFW?: boolean;
       KHKCLX?: { id?: string; KCLX?: string };
       KHBJSJs?: {
         id?: string;

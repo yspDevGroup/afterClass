@@ -168,7 +168,6 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 刷新Table
   const refreshTable = () => {
-    // console.log('screenOriSource', screenOriSource);
     if (screenOriSource?.length > 0) {
       const screenCD = (dataSource1: any) => {
         const newDataSource = [...dataSource1];

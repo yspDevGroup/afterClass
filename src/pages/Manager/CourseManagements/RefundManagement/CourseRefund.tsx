@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-29 12:21:42
- * @LastEditTime: 2021-11-19 09:07:11
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-11-22 12:12:32
+ * @LastEditors: Sissle Lynn
  */
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
@@ -19,7 +19,7 @@ import SemesterSelect from '@/components/Search/SemesterSelect';
 import CourseSelect from '@/components/Search/CourseSelect';
 import ClassSelect from '@/components/Search/ClassSelect';
 
-const { TextArea } = Input;
+const { TextArea, Search } = Input;
 // 退款
 const CourseRefund = () => {
   // 获取到当前学校的一些信息
@@ -33,6 +33,7 @@ const CourseRefund = () => {
   const [curKCId, setCurKCId] = useState<any>();
   // 当前课程班
   const [curBJId, setBJId] = useState<any>();
+  const [XM, setXM] = useState<string>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
@@ -56,6 +57,7 @@ const CourseRefund = () => {
       XNXQId: curXNXQId,
       KHKCSJId: curKCId,
       KHBJSJId: curBJId,
+      XSXM: XM,
       page: 0,
       pageSize: 0,
     });
@@ -69,7 +71,7 @@ const CourseRefund = () => {
     if (curXNXQId) {
       getData();
     }
-  }, [curXNXQId, curKCId, curBJId]);
+  }, [curXNXQId, XM, curKCId, curBJId]);
 
   // table表格数据
   const columns: ProColumns<any>[] = [
@@ -243,8 +245,8 @@ const CourseRefund = () => {
               setVisible(true);
               form.setFieldsValue({
                 TKJE: record?.TKJE,
-                TKZT:1,
-                BZ:''
+                TKZT: 1,
+                BZ: ''
               });
             }}
           >
@@ -332,6 +334,15 @@ const CourseRefund = () => {
                   <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
                   <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={courseChange} />
                   <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
+                  <div>
+                    <label htmlFor="name">学生姓名：</label>
+                    <Search
+                      allowClear
+                      onSearch={(value) => {
+                        setXM(value);
+                      }}
+                    />
+                  </div>
                 </SearchLayout>
               </>
             }
