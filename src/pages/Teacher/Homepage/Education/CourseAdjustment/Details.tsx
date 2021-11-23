@@ -1,7 +1,7 @@
 import GoBack from "@/components/GoBack";
 import { Button, Input, message, Switch } from "antd";
 import styles from './index.less'
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import { useEffect, useState } from "react";
 import { getKHJSTDK, updateKHJSTDK } from "@/services/after-class/khjstdk";
 import WWOpenDataCom from "@/components/WWOpenDataCom";
@@ -10,6 +10,8 @@ import moment from "moment";
 const { TextArea } = Input;
 const Details = (props: any) => {
   const { state } = props.location;
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [Opinion, setOpinion] = useState(true);
   const [Reason, setReason] = useState();
   const [Datas, setDatas] = useState<any>();
@@ -42,6 +44,7 @@ const Details = (props: any) => {
   const onSubmit = async () => {
     const res = await updateKHJSTDK({ id: state?.id }, {
       ZT: Opinion === true ? 4 : 5,
+      XXJBSJId: currentUser.xxId,
       DKBZ: Reason,
       DKSPSJ: moment(new Date).format()
     })

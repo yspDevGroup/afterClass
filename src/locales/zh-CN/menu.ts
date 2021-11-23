@@ -57,6 +57,8 @@ export default {
   'menu.statistics.administrativeClassDetail': '行政班统计详情',
   'menu.graphic': '数据大屏',
   'menu.educational': '素质教育资源',
+  'menu.sysSettings':'系统配置',
+  'menu.sysSettings.auditSettings':'审批配置',
   'menu.parent': '家长端',
   'menu.parent.home': '家长首页',
   'menu.parent.listComponent': '列表组件',

@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-10-15 10:18:19
+ * @LastEditTime: 2021-11-23 11:48:19
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -13,7 +13,6 @@ import styles from '../index.less';
 import { getIgnoreTeacherByClassesId } from '@/services/after-class/jzgjbsj';
 import { createKHJSTDK } from '@/services/after-class/khjstdk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -45,9 +44,6 @@ const DkApply = () => {
           if (res.status === 'ok') {
             setJsData(res.data?.rows)
           }
-          const result = await getKHBJSJ({
-            id:dateData?.bjid
-          })
         }else{
           setJsData([])
         }
@@ -60,6 +56,7 @@ const DkApply = () => {
       ZT: 0,
       DKJSId: DKJsId,
       BZ: values.QJYY,
+      XXJBSJId: currentUser.xxId,
       SKJSId: currentUser.JSId || testTeacherId,
       SKFJId:dateData?.FJId,
       SKRQ: dateData?.day,

@@ -32,7 +32,7 @@ const CourseAdjustment = () => {
     getData();
   }, [])
   const handleCancle = async (item: any) => {
-    const res = await updateKHJSTDK({ id: item.id }, { ZT: 3 });
+    const res = await updateKHJSTDK({ id: item.id }, { ZT: 3, XXJBSJId: currentUser.xxId, });
     if (res.status === 'ok') {
       message.success(`申请已撤销`);
       getData();
