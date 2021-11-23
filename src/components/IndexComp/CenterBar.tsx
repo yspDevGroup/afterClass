@@ -20,7 +20,8 @@ const CenterBar = (props: { data: any }) => {
         return <Col span={4} key={item.title}>
           <Link to={item.path}>
             <div className={styles.centerItem}>
-              <div className={styles.borderWrap} style={{ borderLeft: `3px solid ${item.color}`}}>
+              <div className={styles.borderWrap}>
+                <div className={styles.lb} style={{ backgroundColor: `${item.color}` }}></div>
                 <p title={item.title}>{item.title} <span><RightOutlined /></span></p>
                 <h3>{data?.[item.type] || 0}</h3>
               </div>
