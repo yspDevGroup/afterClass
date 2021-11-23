@@ -161,11 +161,7 @@ const MutualEvaluation = () => {
           <EllipsisHint
             width="100%"
             text={text?.map((item: any) => {
-              return (
-                <Tag key={item.id}>
-                  {`${item.XD}${item.NJMC}`}
-                </Tag>
-              );
+              return <Tag key={item.id}>{`${item.XD}${item.NJMC}`}</Tag>;
             })}
           />
         );
@@ -207,7 +203,7 @@ const MutualEvaluation = () => {
       valueType: 'option',
       align: 'center',
       width: 120,
-      fixed:'right',
+      fixed: 'right',
       render: (text, record) => {
         return (
           <div className={styles.operation}>
@@ -250,9 +246,12 @@ const MutualEvaluation = () => {
                   key="editable"
                   onClick={() => {
                     const NewArr: any[] = [];
+                    const NewIdArr: any[] = [];
                     record?.NJSJs?.forEach((item: any) => {
-                      NewArr.push(item.NJMC);
+                      NewArr.push(`${item.XD}${item.NJMC}`);
+                      NewIdArr.push(item.id);
                     });
+                    setNjId(NewIdArr);
                     const data = {
                       ...record,
                       SYNJ: NewArr,
@@ -341,14 +340,14 @@ const MutualEvaluation = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          scroll={{ x: getTableWidth(columns)}}
+          scroll={{ x: getTableWidth(columns) }}
           search={false}
           dataSource={DataSource}
           dateFormatter="string"
           headerTitle={
             <SearchLayout>
               <div>
-                <label htmlFor='kcname'>类别名称：</label>
+                <label htmlFor="kcname">类别名称：</label>
                 <Search placeholder="类别名称" allowClear onSearch={onSearch} />
               </div>
             </SearchLayout>
@@ -419,7 +418,7 @@ const MutualEvaluation = () => {
           </Form.Item>
 
           <Form.Item label="类别描述" name="FWNR" key="FWNR">
-            <Input.TextArea placeholder="请输入" showCount maxLength={200} rows={4}  />
+            <Input.TextArea placeholder="请输入" showCount maxLength={200} rows={4} />
           </Form.Item>
         </Form>
       </Modal>

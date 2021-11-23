@@ -62,7 +62,7 @@ const Adjustment = (props: { teacherData?: any }) => {
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateKHJSTDK({ id: current?.id }, { ZT, SPJSId: currentUser?.JSId || testTeacherId, DKBZ: BZ });
+      const res = await updateKHJSTDK({ id: current?.id }, { ZT, XXJBSJId: currentUser.xxId, SPJSId: currentUser?.JSId || testTeacherId, DKBZ: BZ });
       if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);

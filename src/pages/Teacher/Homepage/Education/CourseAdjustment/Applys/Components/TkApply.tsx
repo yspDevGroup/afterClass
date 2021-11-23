@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-10-15 10:18:19
+ * @LastEditTime: 2021-11-23 11:48:48
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -102,6 +102,7 @@ const TkApply = () => {
       SKRQ:dateData?.day,
       TKRQ:moment(values.TKRQ).format('YYYY-MM-DD') ,
       BZ: values.BZ,
+      XXJBSJId: currentUser.xxId,
       SKJSId: currentUser.JSId || testTeacherId,
       SKFJId:dateData?.FJId,
       TKFJId:FieldId,

@@ -389,6 +389,19 @@
     name: 'educational',
     component: './Manager/Educational',
   },
+  {
+    // 系统配置
+    path: '/sysSettings',
+    icon: 'SlidersOutlined',
+    name: 'sysSettings',
+    routes:[
+      {
+        path: '/sysSettings/auditSettings',
+        name: 'auditSettings',
+        component: './Manager/SysSettings/AuditSettings',
+      }
+    ]
+  },
   /*** 老师路由 start ***/
   {
     path: '/teacher',

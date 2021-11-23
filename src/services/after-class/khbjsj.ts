@@ -429,7 +429,11 @@ export async function getMainTeacher(
 
 /** 课程班-学生报名 POST /khbjsj/studentRegistration */
 export async function studentRegistration(
-  body: { ZT?: number; XSJBSJId?: string; KHBJSJId?: string }[],
+  body: {
+    ZT?: number;
+    XSJBSJIds?: string[];
+    KHBJSJId?: string;
+  },
   options?: { [key: string]: any },
 ) {
   return request<any>('/khbjsj/studentRegistration', {

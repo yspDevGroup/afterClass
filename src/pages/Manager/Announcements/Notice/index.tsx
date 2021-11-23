@@ -47,7 +47,7 @@ const Notice = () => {
     }
   };
   useEffect(() => {
-    getData()
+    getData();
   }, [title, status]);
   const handleSubmit = async (params: any) => {
     const { RQ, XXNR } = params;
@@ -56,34 +56,34 @@ const Notice = () => {
       res = await sendMessageToParent({
         to: 'toall',
         text: XXNR,
-        ids: []
-      })
+        ids: [],
+      });
     } else if (RQ === '教师') {
       res = await sendMessageToTeacher({
         to: 'touser',
         text: XXNR,
-        ids: '@all'
-      })
+        ids: '@all',
+      });
     } else {
       res = await sendMessageToParent({
         to: 'toall',
         text: XXNR,
-        ids: []
-      })
+        ids: [],
+      });
       res = await sendMessageToTeacher({
         to: 'touser',
         text: XXNR,
-        ids: '@all'
-      })
+        ids: '@all',
+      });
     }
     if (res.status === 'ok') {
-      message.success('发送成功')
-      setVisible(false)
+      message.success('发送成功');
+      setVisible(false);
       form.resetFields();
     } else {
-      message.error('发送失败，请稍后再试')
+      message.error('发送失败，请稍后再试');
     }
-  }
+  };
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '序号',
@@ -91,7 +91,7 @@ const Notice = () => {
       valueType: 'index',
       width: 58,
       fixed: 'left',
-      align: 'center'
+      align: 'center',
     },
     {
       title: '标题',
@@ -109,7 +109,7 @@ const Notice = () => {
       ellipsis: true,
       align: 'center',
       width: 120,
-      search: false
+      search: false,
     },
     {
       title: '发布时间',
@@ -119,7 +119,7 @@ const Notice = () => {
       hideInForm: true,
       align: 'center',
       width: 160,
-      search: false
+      search: false,
     },
     {
       title: '发布状态',
@@ -181,9 +181,7 @@ const Notice = () => {
             ZT={record.ZT}
             record={record}
             refreshHandler={() => {
-              if (actionRef.current) {
-                actionRef?.current?.reload();
-              }
+              getData();
             }}
           />
         </div>
@@ -221,7 +219,7 @@ const Notice = () => {
             }}
           >
             <PlusOutlined /> 新建
-          </Button>
+          </Button>,
         ]}
         dataSource={dataSource}
         columns={columns}
@@ -232,35 +230,37 @@ const Notice = () => {
           density: false,
           reload: false,
         }}
-        headerTitle={<SearchLayout>
-          <div>
-            <label htmlFor='title'>标题：</label>
-            <Search
-              allowClear
-              onSearch={(val) => {
-                setTitle(val)
-              }}
-            />
-          </div>
-          <div>
-            <label htmlFor='status'>发布状态：</label>
-            <Select
-              style={{ width: 160 }}
-              allowClear
-              value={status}
-              onChange={(value: string) => {
-                setStatus(value);
-              }}
-            >
-              <Option key='草稿' value='草稿'>
-                草稿
-              </Option>
-              <Option key='已发布' value='已发布'>
-                已发布
-              </Option>
-            </Select>
-          </div>
-        </SearchLayout>}
+        headerTitle={
+          <SearchLayout>
+            <div>
+              <label htmlFor="title">标题：</label>
+              <Search
+                allowClear
+                onSearch={(val) => {
+                  setTitle(val);
+                }}
+              />
+            </div>
+            <div>
+              <label htmlFor="status">发布状态：</label>
+              <Select
+                style={{ width: 160 }}
+                allowClear
+                value={status}
+                onChange={(value: string) => {
+                  setStatus(value);
+                }}
+              >
+                <Option key="草稿" value="草稿">
+                  草稿
+                </Option>
+                <Option key="已发布" value="已发布">
+                  已发布
+                </Option>
+              </Select>
+            </div>
+          </SearchLayout>
+        }
       />
       <Modal
         title="发送消息"
@@ -272,7 +272,8 @@ const Notice = () => {
             onClick={() => {
               setVisible(false);
               form.resetFields();
-            }}>
+            }}
+          >
             取消
           </Button>,
           <Popconfirm
@@ -284,11 +285,10 @@ const Notice = () => {
             cancelText="取消"
             placement="topRight"
           >
-            <Button key="submit" type="primary" style={{ borderRadius: 4 }} >
+            <Button key="submit" type="primary" style={{ borderRadius: 4 }}>
               确定
             </Button>
-          </Popconfirm>
-
+          </Popconfirm>,
         ]}
       >
         <Form
@@ -313,7 +313,8 @@ const Notice = () => {
                 required: true,
                 message: '请输入消息内容',
               },
-            ]} >
+            ]}
+          >
             <TextArea rows={4} maxLength={100} />
           </Form.Item>
         </Form>

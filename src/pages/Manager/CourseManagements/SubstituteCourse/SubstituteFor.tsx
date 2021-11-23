@@ -64,6 +64,7 @@ const SubstituteFor = (props: { teacherData?: any }) => {
       const res = await updateKHJSTDK({ id: current?.id },
         {
           ZT,
+          XXJBSJId: currentUser.xxId,
           SPJSId: currentUser?.JSId || testTeacherId,
           DKBZ: BZ
         });
