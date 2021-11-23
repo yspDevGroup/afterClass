@@ -7,6 +7,7 @@ import type { CourseItem } from '../data';
 import { enHenceMsg } from '@/utils/utils';
 import { getClassDays } from '@/utils/TimeTable';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
+import { updateKHKCSJ } from '@/services/after-class/khkcsj';
 // import EllipsisHint from '@/components/EllipsisHint';
 
 type propstype = {
@@ -28,10 +29,13 @@ const ActionBar = (props: propstype) => {
       const res = updateKHBJSJ({ id: recorde.id }, { BJZT: '未开班' });
       new Promise((resolve) => {
         resolve(res);
-      }).then((data: any) => {
+      }).then(async (data: any) => {
         if (data.status === 'ok') {
           message.success('取消成功');
           getData();
+          // 取消课程发布
+          const { KHKCSJ } = recorde;
+          await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 0 });
         } else {
           message.error('取消失败，请联系管理员或稍后重试');
         }
@@ -48,10 +52,14 @@ const ActionBar = (props: propstype) => {
       if (data.status === 'ok') {
         message.success('开班成功');
         getData();
+        // 开班成功后获取班级排课信息计算课时安排
         const result = await getKHPKSJByBJID({ id: records.id });
         if (result.status === 'ok' && result.data) {
           await getClassDays(records.id);
         }
+        // 开班成功后发布课程
+        const { KHKCSJ } = records;
+        await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 1 });
       } else {
         message.error('开班失败，请联系管理员或稍后重试');
         getData();

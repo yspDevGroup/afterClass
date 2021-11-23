@@ -41,6 +41,7 @@ import { getKHKCPJ, createKHKCPJ, updateKHKCPJ } from '@/services/after-class/kh
 import styles from './index.less';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const { Option } = Select;
 const { Search } = Input;
@@ -52,6 +53,8 @@ const CourseList = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [dataSource, setDataSource] = useState<any[]>([]);
+  // 当前学年学期
+  const [curXNXQId, setCurXNXQId] = useState<any>();
   // 课程类型
   const [kclxOptions, setOptions] = useState<any[]>([]);
   // 设置表单的查询更新
@@ -68,22 +71,13 @@ const CourseList = () => {
   // 机构详情
   const [info, setInfo] = useState({});
   const [readonly, setReadonly] = useState<boolean>(false);
-  // 学年学期没有时的提示框控制
-  const [kai, setkai] = useState<boolean>(false);
   const [form] = Form.useForm();
-  // 要评价课程的信息
-  const [courseInfo, setcourseInfo] = useState<any>({});
-  // 已评价未评价
-  const [Isfinish, setIsfinish] = useState<any>();
-  const [PY, setPY] = useState<string>();
-  // 关闭学期学年提示框
-  const kaiguan = () => {
-    setkai(false);
-  };
+  const [pjFooter, setPjFooter] = useState<boolean>(true);
   // 弹出框显示隐藏
   const [isModalVisible, setIsModalVisible] = useState(false);
   const getData = async () => {
     const opts: TableListParams = {
+      XNXQId: curXNXQId,
       KCMC: KCName,
       JGMC: JGName,
       KHKCLXId: KCLXId,
@@ -131,10 +125,21 @@ const CourseList = () => {
         setOptionsNJ(optNJ);
       }
     });
+    // 获取当前学年学期
+    async function fetchData() {
+      const resTerm = await queryXNXQList(currentUser?.xxId);
+      const curTerm = resTerm.current;
+      if (curTerm) {
+        setCurXNXQId(curTerm.id);
+      }
+    }
+    fetchData();
   }, []);
   useEffect(() => {
-    getData();
-  }, [KCLXId, KCName, JGName, KCLY]);
+    if(curXNXQId){
+      getData();
+    }
+  }, [curXNXQId, KCLXId, KCName, JGName, KCLY]);
   const handleOperation = async (type: string, data?: any) => {
     if (type !== 'chakan') {
       setReadonly(false);
@@ -185,12 +190,13 @@ const CourseList = () => {
     }
   };
   const submit = async (value: any) => {
-    if (Isfinish > 0 && courseInfo.id) {
+    if (value.id) {
+      const { id, ...rest } = value;
       const data = {
-        ...value,
+        ...rest,
         XXJBSJId: currentUser.xxId,
       };
-      const res = await updateKHKCPJ({ id: courseInfo.id }, data);
+      const res = await updateKHKCPJ({ id }, data);
       if (res.status === 'ok') {
         message.success('修改成功');
         setIsModalVisible(false);
@@ -211,19 +217,20 @@ const CourseList = () => {
     }
     setIsModalVisible(false);
   };
-
-  const getEvaluate = async (id: any) => {
-    const res = await getKHKCPJ({ id });
-    if (res.status === 'ok') {
-      setPY(res.data.PY);
-      form.setFieldsValue({PY: res.data.PY})
-    } else {
-      setPY('');
-      form.setFieldsValue({PY: ''})
+  const getEvaluate = async (obj: any) => {
+    if (obj.id) {
+      const res = await getKHKCPJ({ id: obj.id });
+      if (res.status === 'ok') {
+        setPjFooter(false);
+        form.setFieldsValue({ PY: res.data.PY, ...obj })
+      }
+    }
+    else {
+      setPjFooter(true);
+      form.setFieldsValue({ PY: '', ...obj })
     }
     setIsModalVisible(true);
   }
-
   /** 操作 */
   const funOption = (record: any, action: ProCoreActionType) => {
     if (record.SSJGLX === '机构课程') {
@@ -263,12 +270,11 @@ const CourseList = () => {
         </>
       );
     }
-
     return (
       <>
         {record.KCZT === 0 ? (
           <>
-            <Popconfirm
+            {/* <Popconfirm
               title="课程发布后，可创建相应课程班，确定发布？"
               onConfirm={async () => {
                 const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 1 });
@@ -281,7 +287,7 @@ const CourseList = () => {
               }}
             >
               <a>发布</a>
-            </Popconfirm>
+            </Popconfirm> */}
             <a onClick={() => handleOperation('add', record)}>编辑</a>
             <Popconfirm
               title={`确定要删除 “${record?.KCMC}” 吗?`}
@@ -299,20 +305,21 @@ const CourseList = () => {
             </Popconfirm>
           </>
         ) : (
-          <Popconfirm
-            title="取消发布后，该课程及课程班家长不可见，确定取消？"
-            onConfirm={async () => {
-              const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 0 });
-              if (res.status === 'ok') {
-                message.success('操作成功');
-                getData();
-              } else {
-                message.error(res.message || '操作失败');
-              }
-            }}
-          >
-            <a>取消发布</a>
-          </Popconfirm>
+          ''
+          //   <Popconfirm
+          //     title="取消发布后，该课程及课程班家长不可见，确定取消？"
+          //     onConfirm={async () => {
+          //       const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 0 });
+          //       if (res.status === 'ok') {
+          //         message.success('操作成功');
+          //         getData();
+          //       } else {
+          //         message.error(res.message || '操作失败');
+          //       }
+          //     }}
+          //   >
+          //     <a>取消发布</a>
+          //   </Popconfirm>
         )}
       </>
     );
@@ -409,7 +416,7 @@ const CourseList = () => {
               state: record,
             }}
           >
-            <Tooltip title={`累计已开设${record.bj_count}个课程班。`}>{record.bj_count}</Tooltip>
+            <Tooltip title={`已开设${record.bj_count}个课程班。`}>{record.bj_count}/{record.allBJ_count}</Tooltip>
           </Link>
         );
       },
@@ -453,6 +460,7 @@ const CourseList = () => {
       key: 'KCZT',
       search: false,
       width: 100,
+      hideInTable: true, // 列表中不显示此列
       render: (_, record) => {
         if (record?.SSJGLX === '机构课程') {
           return <span style={{ color: '#45C977' }}>已引入</span>;
@@ -465,36 +473,11 @@ const CourseList = () => {
       },
     },
     {
-      title: '课程评价',
-      align: 'center',
-      search: false,
-      width: 110,
-      render: (_, record) => {
-        return record?.KHJYJG?.QYMC ? (
-          <a
-            onClick={() => {
-              const obj = { KHKCSJId: '', KCMC: '', id: '' };
-              obj.KHKCSJId = record?.id;
-              obj.KCMC = record?.KCMC;
-              obj.id = record?.KHKCPJs?.[0]?.id;
-              getEvaluate(obj.id);
-              setcourseInfo(obj);
-              setIsfinish(record?.KHKCPJs?.length);
-            }}
-          >
-            {record?.KHKCPJs?.length ? '已评价' : '未评价'}
-          </a>
-        ) : (
-          '-'
-        );
-      },
-    },
-    {
       title: '操作',
       valueType: 'option',
       search: false,
       key: 'option',
-      width: 230,
+      width: 280,
       fixed: 'right',
       align: 'center',
       render: (_, record, index, action) => (
@@ -507,6 +490,20 @@ const CourseList = () => {
           >
             课程详情
           </a>
+          {record?.SSJGLX === '机构课程' ?
+            <a
+              onClick={() => {
+                const obj = { KHKCSJId: '', KCMC: '', id: '' };
+                obj.KHKCSJId = record?.id;
+                obj.KCMC = record?.KCMC;
+                obj.id = record?.KHKCPJs?.[0]?.id;
+                getEvaluate(obj);
+              }}
+            >
+              课程评价
+            </a>
+            : ''}
+
           {funOption(record, action!)}
         </Space>
       ),
@@ -622,12 +619,6 @@ const CourseList = () => {
           optionsNJ={optionsNJ}
           currentUser={currentUser}
         />
-        <PromptInformation
-          text="未查询到学年学期数据，请先设置学年学期"
-          link="/basicalSettings/termManagement"
-          open={kai}
-          colse={kaiguan}
-        />
         <Modal
           title="课程类型维护"
           destroyOnClose
@@ -646,31 +637,64 @@ const CourseList = () => {
         </Modal>
         {/* 课程评价的弹出框 */}
         {
-          isModalVisible&&<Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} title="课程评价">
-          <Form.Item name="id" hidden initialValue={courseInfo.id}>
-            <Input disabled />
-          </Form.Item>
-          <Form form={form} onFinish={submit} labelCol = {{ span: 6 }}>
-            <Form.Item
-              label="课程名称"
-              name="KHKCSJId"
-              key="KHKCSJId"
-              initialValue={courseInfo.KHKCSJId}
-            >
-              {courseInfo.KCMC}
-            </Form.Item>
-            <Form.Item
-              label="评价内容"
-              name="PY"
-              key="PY"
-              rules={PY ? undefined : [{ required: true, message: '请输入评价内容' }]}
-            >
-              {
-                <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4} />
+          isModalVisible && <Modal
+            footer={pjFooter ? [<Button key="cancel" onClick={handleCancel}>
+              取消
+            </Button>,
+            <Button key="submit" type="primary" onClick={handleOk}>
+              确定
+            </Button>] : [
+              <Button key="edit" onClick={() => {
+                setPjFooter(true);
+              }}>
+                编辑
+              </Button>,
+              <Button key="cancel" type="primary" onClick={handleCancel}>
+                确定
+              </Button>
+            ]}
+            visible={isModalVisible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            title="课程评价"
+          >
+            <Form form={form} onFinish={submit} labelCol={{ span: 6 }}>
+              <Form.Item name="id" hidden>
+                <Input disabled />
+              </Form.Item>
+              <Form.Item
+                hidden
+                name="KHKCSJId"
+                key="KHKCSJId"
+              >
+                <Input disabled />
+              </Form.Item>
+              <Form.Item
+                label="课程名称"
+                name="KCMC"
+                key="KCMC"
+              >
+                <Input disabled bordered={false} />
+              </Form.Item>
+              {pjFooter ? (
+                <Form.Item
+                  label="评价内容"
+                  name="PY"
+                  key="PY"
+                  rules={[{ required: true, message: '请输入评价内容' }]}
+                >
+                  <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4} />
+                </Form.Item>
+              ) : (<Form.Item
+                label="评价内容"
+                name="PY"
+                key="PY"
+              >
+                <Input.TextArea disabled bordered={false} />
+              </Form.Item>)
               }
-            </Form.Item>
-          </Form>
-        </Modal>}
+            </Form>
+          </Modal>}
       </div>
     </>
   );

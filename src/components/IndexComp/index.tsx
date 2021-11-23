@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-11-05 16:24:42
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-11-23 16:27:57
+ * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'antd';
@@ -153,7 +153,7 @@ const Index = () => {
             <Row gutter={[24, 0]} className={styles.viewWrapper}>
               <Col span={5}>
                 <p>
-                  <h1>01</h1>
+                  <span>01</span>
                   基本信息管理
                 </p>
                 <img src={home1} alt="" />
@@ -177,7 +177,7 @@ const Index = () => {
               </Col>
               <Col span={5}>
                 <p>
-                  <h1>02</h1>
+                  <span>02</span>
                   时间、场地维护
                 </p>
                 <img src={home2} alt="" />
@@ -198,7 +198,7 @@ const Index = () => {
               </Col>
               <Col span={5}>
                 <p>
-                  <h1>03</h1>
+                  <span>03</span>
                   课程管理
                 </p>
                 <img src={home3} alt="" />
@@ -219,7 +219,7 @@ const Index = () => {
               </Col>
               <Col span={5}>
                 <p>
-                  <h1>04</h1>
+                  <span>04</span>
                   班级、课程发布
                 </p>
                 <img src={home4} alt="" />
