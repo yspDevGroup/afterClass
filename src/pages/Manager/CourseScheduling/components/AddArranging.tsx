@@ -168,6 +168,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 刷新Table
   const refreshTable = () => {
+    console.log('screenOriSource', screenOriSource);
     if (screenOriSource?.length > 0) {
       const screenCD = (dataSource1: any) => {
         const newDataSource = [...dataSource1];
@@ -269,9 +270,7 @@ const AddArranging: FC<PropsType> = (props) => {
     if (bjID) {
       history.go(-1);
     } else {
-      // tableServers();
       setState(true);
-      // setBJIDData('');
     }
   };
 
@@ -367,7 +366,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 默认选择本校
   useEffect(() => {
-    form.setFieldsValue({ XQ: campus[0].value });
+    form.setFieldsValue({ XQ: campus[0]?.value });
   }, [props.campus]);
 
   //获取年级信息

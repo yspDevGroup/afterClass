@@ -340,10 +340,10 @@ const Index: FC<IndexPropsType> = ({
     }
   };
   const datas = stateTableData ? [...stateTableData] : [...dataSource];
-  console.log('style', style);
+  // console.log('style', style);
   return (
     <div className={`${styles.excelTable} ${className}`}>
-      <table>
+      <table style={{ boxShadow: '0px 5px 6px rgb(136 136 136 / 21%)', marginBottom: '10px' }}>
         <thead>
           <tr>
             {columns.map((item) => {

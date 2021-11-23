@@ -383,7 +383,7 @@ const ClassManagement = () => {
     });
     if (res.status === 'ok') {
       // 设置初始排课数据
-      // console.log('设置',);
+      console.log('设置');
       setScreenOriSource(res.data);
       //设置table展示的排课数据
       if (bjId === null) {
@@ -726,19 +726,21 @@ const ClassManagement = () => {
             </div>
           ) : (
             // AddArranging 组件是新增排课页面
-            <AddArranging
-              campus={campus}
-              curXNXQId={curXNXQId}
-              xXSJPZData={xXSJPZData}
-              cdmcData={cdmcData}
-              screenOriSource={screenOriSource}
-              processingData={processingData}
-              setState={setState}
-              formValues={recordValue}
-              kcmcData={kcmcData}
-              currentUser={currentUser}
-              setLoading={setLoading}
-            />
+            screenOriSource.length > 0 && (
+              <AddArranging
+                campus={campus}
+                curXNXQId={curXNXQId}
+                xXSJPZData={xXSJPZData}
+                cdmcData={cdmcData}
+                screenOriSource={screenOriSource}
+                processingData={processingData}
+                setState={setState}
+                formValues={recordValue}
+                kcmcData={kcmcData}
+                currentUser={currentUser}
+                setLoading={setLoading}
+              />
+            )
           )}
         </Spin>
       </PageContainer>
