@@ -72,7 +72,7 @@ const SubstituteFor = (props: { teacherData?: any }) => {
         message.success('审批成功');
         setVisible(false);
         setCurrent(undefined);
-        actionRef.current?.reload();
+        getData();
       }
     } catch (err) {
       message.error('代课审批流程出现错误，请联系管理员或稍后重试。');
@@ -229,9 +229,6 @@ const SubstituteFor = (props: { teacherData?: any }) => {
       }
     },
   ];
-  useEffect(() => {
-    actionRef.current?.reload();
-  }, [SPZT, curXNXQId])
   const DkshowWXName = Datas?.DKJS?.XM === '未知' && Datas?.DKJS?.WechatUserId;
   const showWXName = Datas?.SKJS?.XM === '未知' && Datas?.SKJS?.WechatUserId;
   const SPshowWXName = Datas?.SPJS?.XM === '未知' && Datas?.SPJS?.WechatUserId;

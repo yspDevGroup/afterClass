@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-11-23 11:43:49
+ * @LastEditTime: 2021-11-24 15:50:55
  * @LastEditors: Sissle Lynn
  */
 import { useState } from 'react';
@@ -12,6 +12,8 @@ import ClassCalendar from '../../ClassCalendar';
 import styles from '../index.less';
 import { compareTime } from '@/utils/Timefunction';
 import { createKHJSQJ } from '@/services/after-class/khjsqj';
+import { getMainTeacher } from '@/services/after-class/khbjsj';
+import { getClassDays } from '@/utils/TimeTable';
 
 const { TextArea } = Input;
 const LeaveForm = (props: {
@@ -60,6 +62,23 @@ const LeaveForm = (props: {
       setDateData([]);
       form.resetFields();
       setActiveKey('history');
+      // 处理自动审批流程时主班请假导致课时变更的问题
+      if (res.message === "isAudit=false") {
+        const bjIdArr = [].map.call(bjIds, (item: { KHBJSJId: string }) => {
+          return item.KHBJSJId;
+        });
+        const result = await getMainTeacher({
+          KHBJSJIds: bjIdArr as string[],
+          JZGJBSJId: currentUser.JSId || testTeacherId,
+          JSLX: '主教师'
+        });
+        if (result.status === 'ok') {
+          const { data } = result;
+          data?.forEach(async (ele: { KHBJSJId: string; }) => {
+            await getClassDays(ele.KHBJSJId, currentUser.JSId || testTeacherId, currentUser?.xxId);
+          });
+        };
+      }
     } else {
       const msg = res.message;
       message.error(msg);

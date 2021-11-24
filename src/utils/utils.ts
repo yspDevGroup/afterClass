@@ -428,7 +428,7 @@ export const getCqDay = async (
   const res = await getAllKHXSCQ({
     xsId: xsId || '',
     bjId: bjid || '',
-    CQZT: '',
+    CQZT: undefined,
     CQRQ: '',
   });
   if (res.status === 'ok') {
