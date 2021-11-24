@@ -95,7 +95,7 @@ const Home = () => {
       (initialState?.buildOptions.authType === 'wechat' && !currentUser.XM) ||
       currentUser.XM === '未知'
     ) {
-      setIsModalVisible(true);
+      // setIsModalVisible(true);
     }
     getTodayData(today);
     getTDKData();
