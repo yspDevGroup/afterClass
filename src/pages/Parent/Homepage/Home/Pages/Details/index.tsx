@@ -28,7 +28,7 @@ const Details = (props: { data?: any[] }) => {
                 <li style={{ lineHeight: '30px', listStyle: 'none' }}>
                   <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
                     <div className={styles.yuan}/>
-                    {record.BT}
+                    {record.SFTT === 1 ? <div className={styles.Headlines}>头条</div> : <></>}{record.BT}
                   </div>
                 </li>
               </Link>
