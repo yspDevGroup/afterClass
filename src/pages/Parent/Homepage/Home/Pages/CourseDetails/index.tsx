@@ -44,20 +44,21 @@ const CourseDetails: React.FC = () => {
   const [KHFUXY, setKHFUXY] = useState<any>();
   const [ByTime, setByTime] = useState(false);
   const [BjDetails, setBjDetails] = useState<any>();
+  const [KBClass, setKBClass] = useState<any>([]);
   const courseid = getQueryString('courseid');
   const index = getQueryString('index');
   const curDate: Date = new Date();
   const myDate: Date = new Date(moment(curDate).format('YYYY/MM/DD'));
 
   const changeStatus = (ind: number, data?: any) => {
-    const detail = data || KcDetail;
-    const current = detail.KHBJSJs![ind];
-    const enAble =
-      myDate >= new Date(moment(current.BMKSSJ).format('YYYY/MM/DD')) &&
-      myDate <= new Date(moment(current.BMJSSJ).format('YYYY/MM/DD'));
-    setByTime(enAble);
-    setFY(current.FY);
-    setBJ(current.id);
+    const detail = data || KBClass;
+      const current = detail[ind];
+      const enAble =
+        myDate >= new Date(moment(current.BMKSSJ).format('YYYY/MM/DD')) &&
+        myDate <= new Date(moment(current.BMJSSJ).format('YYYY/MM/DD'));
+      setByTime(enAble);
+      setFY(current.FY);
+      setBJ(current.id);
   };
   const getWxData = async () => {
     if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -81,13 +82,17 @@ const CourseDetails: React.FC = () => {
           });
           if (results.status === 'ok') {
             if (results.data) {
+             const newArr =  results.data.KHBJSJs.filter((value: any)=>{
+                return value.BJZT === '已开班'
+              })
+              setKBClass(newArr)
               setKcDetail(results.data);
-              changeStatus(0, results.data);
+              changeStatus(0, newArr);
               const kcstart = moment(results.data.BMKSSJ).format('YYYY/MM/DD');
               const kcend = moment(results.data.BMJSSJ).format('YYYY/MM/DD');
               const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
               setKaiguan(btnEnable);
-              const resgetKHBJSJ = await getKHBJSJ({ id: results.data?.KHBJSJs?.[0].id })
+              const resgetKHBJSJ = await getKHBJSJ({ id: newArr?.[0].id })
               if (resgetKHBJSJ.status === 'ok') {
                 setBjDetails(resgetKHBJSJ.data)
                 let num = 0;
@@ -134,7 +139,7 @@ const CourseDetails: React.FC = () => {
     e.stopPropagation();
   };
   const submit = async () => {
-    const bjInfo = KcDetail.KHBJSJs.find((item: any) => {
+    const bjInfo = KBClass.find((item: any) => {
       return item.id === BJ;
     });
     await setClassDetail(bjInfo);
@@ -235,7 +240,7 @@ const CourseDetails: React.FC = () => {
         <p className={styles.title}>开设班级</p>
         {
           KcDetail ? <Collapse
-            defaultActiveKey={KcDetail?.KHBJSJs?.[0].id}
+            defaultActiveKey={KBClass?.[0].id}
             onChange={callback}
             ghost
 
@@ -245,7 +250,7 @@ const CourseDetails: React.FC = () => {
             expandIconPosition='right'
           >
             {
-              KcDetail?.KHBJSJs?.map((value: any) => {
+              KBClass?.map((value: any) => {
                 if (value?.BJZT === '已开班') {
                   return (
                     <Panel header={value?.BJMC} key={value?.id}>
@@ -370,7 +375,7 @@ const CourseDetails: React.FC = () => {
               班级
             </p>
             <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
-              {KcDetail?.KHBJSJs?.map(
+              {KBClass?.map(
                 (
                   value: {
                     BJMC: string;
@@ -446,7 +451,7 @@ const CourseDetails: React.FC = () => {
                       </>
                     ) : (
                       <>
-                        {KcDetail?.KHBJSJs?.[0].KHKCJCs?.map((value: any) => {
+                        {KBClass?.[0].KHKCJCs?.map((value: any) => {
                           return (
                             <div>
                               <div>{value.JCMC}</div>

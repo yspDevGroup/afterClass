@@ -40,7 +40,6 @@ const LeaveHistory = (props: propsType) => {
     <div className={styles.listWrapper}>
       {leaveInfo.length ? (
         leaveInfo.map((item: any) => {
-          const con1 = compareNow(item.KHJSQJKCs?.[0].QJRQ, item.KSSJ);
           const showWXName = item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
           return (
             <div className={styles.Information}>
@@ -64,7 +63,7 @@ const LeaveHistory = (props: propsType) => {
                 item?.BZ ? <> <Divider />
                 <p>审批说明：{item?.BZ}</p></>:<></>
               }
-              {item.QJZT === 0 && con1 ? (
+              {item.QJZT === 0 ? (
                 <Button onClick={() => handleCancle(item)}>
                   撤销
                 </Button>

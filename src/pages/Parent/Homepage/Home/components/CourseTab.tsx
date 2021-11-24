@@ -123,7 +123,8 @@ const CourseTab = (props: { dataResource: any; }) => {
       });
       if (result.status === 'ok') {
         const NewData = result?.data?.rows?.filter((value: any) => {
-          return new Date(value?.BMJSSJ).getTime() > new Date().getTime();
+          const JSSJDate = moment(value?.BMJSSJ).format("YYYY/MM/DD HH:mm:ss")
+          return new Date(JSSJDate).getTime() > new Date().getTime()
         });
         setDataSource(NewData);
       }
