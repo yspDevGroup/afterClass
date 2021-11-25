@@ -7,7 +7,7 @@
  */
 import React, { useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
-import { Button, Divider, message, Modal, Popconfirm, Upload } from 'antd';
+import { Button, Divider, message, Modal, Popconfirm, Spin, Upload } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns, RequestData } from '@ant-design/pro-table';
 import { UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
@@ -29,6 +29,7 @@ const TeacherManagement = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   // 列表对象引用，可主动执行刷新等操作
   const actionRef = useRef<ActionType>();
+  const [state, setstate] = useState<boolean>(false);
   const onClose = () => {
     setModalVisible(false);
     actionRef.current?.reload();
@@ -82,8 +83,12 @@ const TeacherManagement = () => {
     syncWechatStudents(params);
     const res = await syncWechatTeachers(params);
     if (res.status === 'ok') {
-      message.success('同步完成');
-      actionRef.current?.reload();
+      setstate(true)
+      setTimeout(() => {
+        setstate(false)
+        message.success('同步完成');
+        actionRef.current?.reload();
+      }, 1000);
     }
   };
 
@@ -180,108 +185,111 @@ const TeacherManagement = () => {
 
   return (
     <PageContain>
-      <ProTable<any>
-        className={styles.pageContain}
-        title={() => (
-          <div style={{ color: '#4884ff' }}>
-            <div>
-              未同步到本系统中的成员无法使用老师端，系统每天凌晨自动同步一次，如需手动更新，请点击【立即同步】按钮
-            </div>
-            {initialState?.buildOptions.authType === 'wechat' && (
+      <Spin spinning={state} >
+        <ProTable<any>
+          className={styles.pageContain}
+          title={() => (
+            <div style={{ color: '#4884ff' }}>
               <div>
-                由于企业微信对用户敏感信息的限制，未激活的用户仅可显示部分信息，如需显示更多，可通知老师激活账号或使用本界面【导入】功能进行完善。
+                未同步到本系统中的成员无法使用老师端，系统每天凌晨自动同步一次，如需手动更新，请点击【立即同步】按钮
               </div>
-            )}
-          </div>
-        )}
-        columns={columns}
-        actionRef={actionRef}
-        search={false}
-        pagination={{
-          showQuickJumper: true,
-          pageSize: 10,
-          defaultCurrent: 1,
-        }}
-        scroll={{ x: getTableWidth(columns) }}
-        request={async (
-          params: any & {
-            pageSize?: number;
-            current?: number;
-            keyword?: string;
-          },
-          sort,
-          filter,
-        ): Promise<Partial<RequestData<any>>> => {
-          // 表单搜索项会从 params 传入，传递给后端接口。
-          const opts: TableListParams = {
-            ...params,
-            sorter: sort && Object.keys(sort).length ? sort : undefined,
+              {initialState?.buildOptions.authType === 'wechat' && (
+                <div>
+                  由于企业微信对用户敏感信息的限制，未激活的用户仅可显示部分信息，如需显示更多，可通知老师激活账号或使用本界面【导入】功能进行完善。
+                </div>
+              )}
+            </div>
+          )}
+          columns={columns}
+          actionRef={actionRef}
+          search={false}
+          pagination={{
+            showQuickJumper: true,
+            pageSize: 10,
+            defaultCurrent: 1,
+          }}
+          scroll={{ x: getTableWidth(columns) }}
+          request={async (
+            params: any & {
+              pageSize?: number;
+              current?: number;
+              keyword?: string;
+            },
+            sort,
             filter,
-          };
-          const res = await getAllJZGJBSJ(
-            { XXJBSJId: currentUser?.xxId, keyWord: opts.keyword, page: 0, pageSize: 0 },
-            opts,
-          );
-          if (res.status === 'ok') {
-            return {
-              data: res.data?.rows,
-              total: res.data?.count,
-              success: true,
+          ): Promise<Partial<RequestData<any>>> => {
+            // 表单搜索项会从 params 传入，传递给后端接口。
+            const opts: TableListParams = {
+              ...params,
+              sorter: sort && Object.keys(sort).length ? sort : undefined,
+              filter,
             };
-          }
-          return {};
-        }}
-        options={{
-          setting: false,
-          fullScreen: false,
-          density: false,
-          reload: false,
-          search: {
-            placeholder: '教师名称/联系电话',
-            allowClear: true,
-          },
-        }}
-        // eslint-disable-next-line react/no-unstable-nested-components
-        toolBarRender={() => [
-          <Button style={{ color: '#4884ff', borderColor: '#4884ff' }} onClick={syncTeachers}>
-            立即同步
-          </Button>,
-          <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
-            <VerticalAlignBottomOutlined /> 导入
-          </Button>,
-        ]}
-        rowKey="id"
-        dateFormatter="string"
-      />
-      <Modal
-        title="批量导入"
-        destroyOnClose
-        width="35vw"
-        visible={modalVisible}
-        onCancel={() => setModalVisible(false)}
-        footer={[
-          <Button key="back" onClick={() => setModalVisible(false)}>
-            取消
-          </Button>,
-          <Button key="submit" type="primary" onClick={onClose}>
-            确定
-          </Button>,
-        ]}
-        centered
-        maskClosable={false}
-        bodyStyle={{
-          maxHeight: '65vh',
-          overflowY: 'auto',
-        }}
-      >
-        <p className={styles.uploadBtn}>
-          <Upload {...UploadProps}>
-            <Button icon={<UploadOutlined />}>上传文件</Button>
-          </Upload>
-          <span className={styles.uploadText}>进行批量导入用户</span>
-        </p>
-        <p className={styles.uploadDescription}>上传文件需从企业微信管理后台通讯录导出</p>
-      </Modal>
+            const res = await getAllJZGJBSJ(
+              { XXJBSJId: currentUser?.xxId, keyWord: opts.keyword, page: 0, pageSize: 0 },
+              opts,
+            );
+            if (res.status === 'ok') {
+              return {
+                data: res.data?.rows,
+                total: res.data?.count,
+                success: true,
+              };
+            }
+            return {};
+          }}
+          options={{
+            setting: false,
+            fullScreen: false,
+            density: false,
+            reload: false,
+            search: {
+              placeholder: '教师名称/联系电话',
+              allowClear: true,
+            },
+          }}
+          // eslint-disable-next-line react/no-unstable-nested-components
+          toolBarRender={() => [
+            <Button style={{ color: '#4884ff', borderColor: '#4884ff' }} onClick={syncTeachers}>
+              同步企业微信人员信息
+            </Button>,
+            <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
+              <VerticalAlignBottomOutlined /> 导入
+            </Button>,
+          ]}
+          rowKey="id"
+          dateFormatter="string"
+        />
+        <Modal
+          title="批量导入"
+          destroyOnClose
+          width="35vw"
+          visible={modalVisible}
+          onCancel={() => setModalVisible(false)}
+          footer={[
+            <Button key="back" onClick={() => setModalVisible(false)}>
+              取消
+            </Button>,
+            <Button key="submit" type="primary" onClick={onClose}>
+              确定
+            </Button>,
+          ]}
+          centered
+          maskClosable={false}
+          bodyStyle={{
+            maxHeight: '65vh',
+            overflowY: 'auto',
+          }}
+        >
+          <p className={styles.uploadBtn}>
+            <Upload {...UploadProps}>
+              <Button icon={<UploadOutlined />}>上传文件</Button>
+            </Upload>
+            <span className={styles.uploadText}>进行批量导入用户</span>
+          </p>
+          <p className={styles.uploadDescription}>上传文件需从企业微信管理后台通讯录导出</p>
+        </Modal>
+      </Spin>
+
     </PageContain>
   );
 };

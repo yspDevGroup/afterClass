@@ -64,7 +64,7 @@ const uniqueArr = (arr: any) => {
  * @param userId 用户ID
  * @param njId 学生的年级ID
  */
-const getHomeData = async (type: string, xxId: string, userId: string, njId?: string) => {
+const getHomeData = async (type: string, xxId: string, userId: string, njId?: string, bjId?: string) => {
   let courseStatus = 'empty';
   const result = await queryXNXQList(xxId);
   homeInfo.markDays = [];
@@ -79,6 +79,7 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
     } else {
       params.XSId = userId;
       params.njId = njId;
+      params.bjId = bjId;
     }
     const res = await homePageInfo(params);
     if (res?.status === 'ok') {
@@ -131,7 +132,7 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
 
       }
     } else {
-      enHenceMsg(res.message);
+      // enHenceMsg(res.message);
       homeInfo.data = {
         courseStatus,
       };
@@ -148,10 +149,11 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
  * @param xxId 学校ID
  * @param userId 用户ID
  * @param njId 学生用户年级ID
+ * @param bjId 学生用户班级ID
  * @param refresh 是否需要更新接口重新获取数据
  * @returns
  */
-export const ParentHomeData = async (type: string, xxId: string, userId: string, njId?: string, refresh?: boolean) => {
+export const ParentHomeData = async (type: string, xxId: string, userId: string, njId?: string, bjId?: string, refresh?: boolean) => {
   if (typeof homeInfo === 'undefined') {
     ((w) => {
       // eslint-disable-next-line no-param-reassign
@@ -160,7 +162,7 @@ export const ParentHomeData = async (type: string, xxId: string, userId: string,
   }
 
   if (!homeInfo.data || refresh) {
-    await getHomeData(type, xxId, userId, njId);
+    await getHomeData(type, xxId, userId, njId, bjId);
     return homeInfo;
   }
 
@@ -210,14 +212,14 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
  * @param userId 用户ID
  * @returns
  */
-export const CurdayCourse = async (type?: string, xxId?: string, userId?: string, curDay?: string, njId?: string) => {
+export const CurdayCourse = async (type?: string, xxId?: string, userId?: string, curDay?: string, njId?: string, bjId?: string) => {
   let data = [];
   let total: any = {};
   const day = curDay ? new Date(curDay.replace(/-/g, '/')) : new Date(); // 获取当前的时间
   const myDate = curDay || dayjs().format('YYYY-MM-DD');
   // 获取已经处理过的课程安排数据
   if (typeof homeInfo === 'undefined' && type && xxId && userId) {
-    const res = await ParentHomeData(type, xxId, userId, njId);
+    const res = await ParentHomeData(type, xxId, userId, njId, bjId);
     data = res.courseSchedule;
     total = res.data;
   } else if (homeInfo && homeInfo?.courseSchedule) {

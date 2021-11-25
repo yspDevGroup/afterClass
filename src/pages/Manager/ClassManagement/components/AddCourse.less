@@ -6,11 +6,90 @@
     // .ant-form-horizontal .ant-form-item-control{
     //   flex: 1 1 !important;
     // }
-    .ant-input-number{
+    .ant-input-number {
       width: 100%;
     }
-    .ant-drawer-title{
+    .ant-drawer-title {
       font-weight: bold;
+    }
+  }
+}
+
+.AddCourseClass {
+  width: 800px !important;
+  :global {
+    .ant-modal-body {
+      height: auto;
+      padding: 0;
+      .ant-steps {
+        padding: 20px 40px 0;
+      }
+    }
+  }
+  .wrap,
+  .wraps,
+  .wrap3 {
+    padding: 24px 60px;
+  }
+  .wrap3 {
+    table {
+      table-layout: auto !important;
+    }
+    thead {
+      tr {
+        th:nth-child(3) {
+          width: 107px;
+        }
+      }
+    }
+  }
+  .wraps {
+    > p:nth-of-type(1) {
+      margin-bottom: 20px;
+      padding-left: 15px;
+    }
+    form {
+      > div:nth-of-type(1) {
+        > div:nth-of-type(1) {
+          padding-left: 15px;
+        }
+      }
+    }
+    :global {
+      .ant-form-item-control {
+        .ant-input-number {
+          width: auto;
+        }
+      }
+    }
+  }
+  .stepsAction {
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 24px;
+    border-top: 1px solid #eee;
+  }
+
+  .see {
+    padding: 14px 24px;
+    :global {
+      .ant-divider-inner-text {
+        padding-left: 5px;
+        font-weight: bold;
+        font-size: 14px;
+        border-left: 3pxsolid #4884ff;
+      }
+    }
+    P {
+      width: 300px;
+    }
+    .box {
+      display: flex;
+      padding: 0 30px;
+    }
+    .text {
+      width: 100%;
+      padding-left: 30px;
     }
   }
 }

@@ -24,6 +24,7 @@ import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
 import type { TableListParams } from '@/constant';
 import SearchLayout from '@/components/Search/Layout';
+import AddCourseClass from './components/AddCourseClass';
 
 const { Option } = Select;
 
@@ -76,6 +77,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [BJZTMC, setBJZTMC] = useState<string | undefined>(undefined);
   // 班级同步数据存储
   const [BJCC, setBJCC] = useState<[]>();
+  // 课程班班级基本设置数据
+  const [BjLists, setBjLists] = useState<any>();
+  // 课程班报名设置数据
+  const [BmLists, setBmLists] = useState<any>();
+  // 课程班报名设置数据
+  const [JfLists, setJfLists] = useState<any>();
   const getData = async (origin?: string) => {
     const opts: TableListParams = {
       XNXQId: curXNXQId,
@@ -212,21 +219,47 @@ const CourseManagement = (props: { location: { state: any } }) => {
         FJS.push(element?.JZGJBSJId);
       }
     });
-    const { BJMC, BJZT, ...info } = currentData;
-    const list = {
-      ...info,
-
+    const { BJMC, BJZT, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX,BJRS, BMLX, FY,...info } = currentData;
+    const BjList = {
       BJMC: type === 'copy' ? `${BJMC}-复制` : BJMC,
-      BJZT: type === 'copy' ? '未开班' : BJZT,
-
+      KHKCSJId: KHKCSJ?.id,
+      BJMS,
       ZJS:
         currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
         undefined,
       FJS,
-      BMSD: [currentData.BMKSSJ, currentData.BMJSSJ],
-      SKSD: [currentData.KKRQ, currentData.JKRQ],
       SSJGLX: currentData?.KHKCSJ?.SSJGLX,
-      KHKCSJId: currentData?.KHKCSJ?.id,
+      SKSD: [currentData.KKRQ, currentData.JKRQ],
+      KSS,
+      XQSJId
+    }
+    setBjLists(BjList);
+    const BJIdArr: any = [];
+    const BJMCArr: any = [];
+    BJSJs.forEach((value: any)=>{
+      BJIdArr.push(value.id)
+      BJMCArr.push(`${value.NJSJ.XD}${value.NJSJ.NJMC}${value.BJ}`)
+    })
+    const BmList = {
+      BJIds: BJIdArr,
+      XzClassMC: BJMCArr,
+      BMSD: [currentData.BMKSSJ, currentData.BMJSSJ],
+      BJLX,
+      BJRS,
+    }
+    setBmLists(BmList);
+    const JfList = {
+      BMLX,
+      FY
+    }
+    setJfLists(JfList);
+
+    const list = {
+      ...currentData,
+      ZJS:
+      currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJ ||
+      undefined,
+      KHKCSJId: KHKCSJ?.id,
     };
     setVisible(true);
     setCurrent(list);
@@ -318,6 +351,16 @@ const CourseManagement = (props: { location: { state: any } }) => {
       key: 'FY',
       align: 'center',
       width: 80,
+    },
+    {
+      title: '缴费方式',
+      dataIndex: 'BMLX',
+      key: 'BMLX',
+      align: 'center',
+      width: 120,
+      render: (text: any) => {
+        return <>{text === 0 ? '先报名后缴费' : <>{text === 1 ? '缴费即报名' : '免费'}</>}</>
+      }
     },
     {
       title: '报名人数',
@@ -571,11 +614,26 @@ const CourseManagement = (props: { location: { state: any } }) => {
             </Button>,
           ]}
         />
-        <AddCourse
+        {/* <AddCourse
           visible={visible}
           onClose={onClose}
           formValues={current}
           readonly={readonly}
+          mcData={mcData}
+          names={names}
+          KHKCAllData={KHKCAllData}
+          curXNXQId={curXNXQId}
+          currentUser={currentUser}
+          CopyType={CopyType}
+          getData={getData}
+        /> */}
+        <AddCourseClass
+          visible={visible}
+          formValues={current}
+          BjLists={BjLists}
+          BmLists={BmLists}
+          JfLists={JfLists}
+          setVisible={setVisible}
           mcData={mcData}
           names={names}
           KHKCAllData={KHKCAllData}

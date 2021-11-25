@@ -158,7 +158,8 @@ const CourseDetails: React.FC = () => {
       if (data.DDFY > 0) {
         setOrderInfo(res.data);
       } else {
-        await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, true);
+        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+        await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, true);
         setTimeout(()=>{
           message.success('报名成功');
         },500);

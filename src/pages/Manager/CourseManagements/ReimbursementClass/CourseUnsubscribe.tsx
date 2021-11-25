@@ -269,7 +269,7 @@ const CourseUnsubscribe = () => {
     try {
       if (Examine && Examine?.length) {
         Promise.all(Examine.map(async (exa: any) => updateTK(exa, ZT, BZ))).then((values) => {
-          message.success(values);
+          message.success('退课成功');
         });
       } else {
         message.error('退课流程出现错误，请联系管理员或稍后重试');
@@ -315,8 +315,6 @@ const CourseUnsubscribe = () => {
             } else {
               message.success('退课成功,退款余额为0，无需退款');
             }
-          } else {
-            message.success('退课成功');
           }
           setVisible(false);
           setCurrent(undefined);

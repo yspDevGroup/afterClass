@@ -69,7 +69,8 @@ const DropOut = () => {
   useEffect(() => {
     (async () => {
       if (StorageXSId) {
-        const oriData = await ParentHomeData('student', currentUser.xxId, StorageXSId, StorageNjId);
+        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+        const oriData = await ParentHomeData('student', currentUser.xxId, StorageXSId, StorageNjId,bjId);
         const { courseSchedule } = oriData;
         const courseData = CountCourses(courseSchedule);
         setKcList(courseData);

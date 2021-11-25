@@ -23,7 +23,7 @@ const PersonalHomepage = () => {
   const mineRef = useRef(null);
   const index = getQueryString('index');
   const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
+  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
   // 未获取到孩子时跳转到403
   useEffect(() => {
     if (currentUser?.student?.length === 0 || typeof currentUser?.student === 'undefined') {
@@ -33,7 +33,8 @@ const PersonalHomepage = () => {
 
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId);
+      const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+      const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId);
       const { courseStatus: newStatus } = oriData.data;
       setCourseStatus(newStatus);
     })()
