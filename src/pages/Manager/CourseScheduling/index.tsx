@@ -725,7 +725,7 @@ const ClassManagement = () => {
             </div>
           ) : (
             // AddArranging 组件是新增排课页面
-            screenOriSource.length > 0 && (
+            screenOriSource.length && (
               <AddArranging
                 campus={campus}
                 curXNXQId={curXNXQId}
