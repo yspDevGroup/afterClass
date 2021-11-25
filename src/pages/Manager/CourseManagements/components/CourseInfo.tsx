@@ -274,7 +274,6 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         width={480}
         title="课程详情"
         placement="right"
-        closable={false}
         onClose={onSchoolInfoClose}
         visible={visibleSchoolInfo}
       >
