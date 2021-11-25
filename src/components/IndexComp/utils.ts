@@ -80,7 +80,7 @@ export const centerNum = [
     title: '服务退订',
     type: 'fwtd_count',
     color: '#EED600',
-    path: '/orderInquiry/reimbursementClass'
+    path: '/orderInquiry/reimbursementClass?index=2'
   },
   {
     title: '课程退款',
@@ -92,7 +92,7 @@ export const centerNum = [
     title: '服务退款',
     type: 'fwtk_count',
     color: '#FFA238',
-    path: '/orderInquiry/refundManagement'
+    path: '/orderInquiry/refundManagement?index=2'
   },
 ];
 export const chartConfig: any = {
