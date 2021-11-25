@@ -682,7 +682,7 @@ const ClassManagement = () => {
                       })}
                     </Select>
                   </div>
-                </SearchLayout>            
+                </SearchLayout>
                 {/*  添加新的课程 路由跳转*/}
                 <div style={{ position: 'absolute', right: 0, top: 0 }}>
                   <Button
@@ -723,19 +723,21 @@ const ClassManagement = () => {
             </div>
           ) : (
             // AddArranging 组件是新增排课页面
-            <AddArranging
-              campus={campus}
-              curXNXQId={curXNXQId}
-              xXSJPZData={xXSJPZData}
-              cdmcData={cdmcData}
-              screenOriSource={screenOriSource}
-              processingData={processingData}
-              setState={setState}
-              formValues={recordValue}
-              kcmcData={kcmcData}
-              currentUser={currentUser}
-              setLoading={setLoading}
-            />
+            screenOriSource.length && (
+              <AddArranging
+                campus={campus}
+                curXNXQId={curXNXQId}
+                xXSJPZData={xXSJPZData}
+                cdmcData={cdmcData}
+                screenOriSource={screenOriSource}
+                processingData={processingData}
+                setState={setState}
+                formValues={recordValue}
+                kcmcData={kcmcData}
+                currentUser={currentUser}
+                setLoading={setLoading}
+              />
+            )
           )}
         </Spin>
       </PageContainer>
