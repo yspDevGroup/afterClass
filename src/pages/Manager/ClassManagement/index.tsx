@@ -76,6 +76,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [BJZTMC, setBJZTMC] = useState<string | undefined>(undefined);
   // 班级同步数据存储
   const [BJCC, setBJCC] = useState<[]>();
+  const  [clickBjId, setClickBjId] = useState()
   const getData = async (origin?: string) => {
     const opts: TableListParams = {
       XNXQId: curXNXQId,
@@ -185,16 +186,22 @@ const CourseManagement = (props: { location: { state: any } }) => {
   };
   // 获取当前课程班报名学生信息，并以弹框展示
   const showModal = async (record: any) => {
-    const { BJMC, id } = record;
-    const result = await getKHBJSJ({
-      id,
-    });
-    if (result.status === 'ok') {
-      setIsModalVisible(true);
-      setApplicantData({ BJMC, KCBDatas: result?.data });
-    } else {
-      message.warning(result.message);
-    }
+
+    setIsModalVisible(true);
+    console.log('record',record)
+    setClickBjId(record.id);
+
+    // const { BJMC, id } = record;
+    // const result = await getKHBJSJ({
+    //   id,
+    // });
+    // if (result.status === 'ok') {
+    //   setIsModalVisible(true);
+    //   setClickBjData(record);
+    //   setApplicantData({ kcId:id,BJMC, KCBDatas: result?.data });
+    // } else {
+    //   message.warning(result.message);
+    // }
   };
   // 关闭报名列表弹框
   const handleCancel = () => {
@@ -601,9 +608,10 @@ const CourseManagement = (props: { location: { state: any } }) => {
           visible={isModalVisible}
           onCancel={handleCancel}
           footer={null}
-          style={{ minWidth: '750px' }}
+          style={{ minWidth: '950px' }}
+          destroyOnClose
         >
-          <ApplicantInfoTable dataSource={applicantData} actionRefs={actionRef} />
+          <ApplicantInfoTable clickBjId={clickBjId} dataSource={applicantData} actionRefs={actionRef} />
         </Modal>
         <AgentRegistration
           curXNXQId={curXNXQId}
