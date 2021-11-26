@@ -78,6 +78,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
   const [BMDate, setBMDate] = useState<any>();
   // 开课时间
   const [KKData, setKKData] = useState<any>();
+  // 校区数据Id
+  const [XQSJIds, setXQSJIds] = useState();
   const formLayout = {
     labelCol: { flex: '7em' },
     wrapperCol: {},
@@ -97,7 +99,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       } else {
         setXzb(false)
       }
-      if(JfLists.BMLX === 2){
+      if (JfLists.BMLX === 2) {
         setBMLX(true);
       }
       if (formValues?.KHKCJCs?.length) {
@@ -152,7 +154,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
             const result = await getSchoolClasses({
               XXJBSJId: currentUser?.xxId,
               XNXQId: curXNXQId,
-              njId: value?.id
+              njId: value?.id,
+              XQSJId: XQSJIds
             })
             // 获取课程适用班级
             if (result.status === 'ok') {
@@ -194,6 +197,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
         KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
         JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
       }
+      setXQSJIds(values.XQSJId)
       setBJData(newData)
       setBmCurrent(Current + 1);
     } else if (Current === 1) {
@@ -974,7 +978,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
                 <Step key="班级基本设置" title="班级基本设置" />
                 <Step key="报名设置" title="报名设置" />
                 <Step key="缴费设置" title="缴费设置" />
-                <Step key="教辅教材" title="教辅教材" />
+                {
+                  BMLX === false ? <Step key="教辅教材" title="教辅教材" /> : <></>
+                }
+
               </Steps>
               {Current === 0 ? (
                 <div className={styles.wrap}>
@@ -1060,7 +1067,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
                     </Button>
                   )}
                   <Button type="primary" onClick={() => next()}>
-                    {Current < 3 ? '下一步' : '提交'}
+                    {
+                      BMLX === false ? <> {Current < 3 ? '下一步' : '提交'}</> : <> {Current < 2 ? '下一步' : '提交'}</>
+                    }
                   </Button>
                 </div>
               </div>
