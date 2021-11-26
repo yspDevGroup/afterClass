@@ -82,7 +82,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
     labelCol: { flex: '7em' },
     wrapperCol: {},
   };
-
   useEffect(() => {
     if (formValues) {
       const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === BjLists?.SSJGLX);
@@ -97,6 +96,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
         setXzb(true)
       } else {
         setXzb(false)
+      }
+      if(JfLists.BMLX === 2){
+        setBMLX(true);
       }
       if (formValues?.KHKCJCs?.length) {
         setChoosenJf(true);
@@ -208,12 +210,88 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setBmCurrent(Current + 1);
       setBMData(newData)
     } else if (Current === 2) {
-      const newData = {
+      const newDatas = {
         ...BMData,
         ...values
       }
-      setJFData(newData)
-      setBmCurrent(Current + 1);
+      if (values?.BMLX === 2) {
+        const { ZJS, FJS, ...info } = newDatas;
+        let ZTeacher;
+        let FTeacher;
+        if (formValues && CopyType === 'undefined') {
+          ZTeacher = [
+            {
+              JSLX: '主教师',
+              JZGJBSJId: ZJS,
+              KHBJSJId: formValues?.id,
+            },
+          ];
+          FTeacher =
+            FJS && FJS?.length
+              ? FJS.map((item: any) => {
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
+              : undefined;
+        } else {
+          ZTeacher = [
+            {
+              JSLX: '主教师',
+              JZGJBSJId: ZJS,
+            },
+          ];
+          FTeacher =
+            FJS && FJS?.length
+              ? FJS.map((item: any) => {
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
+              : undefined;
+        }
+        const newData = {
+          ...info,
+          KHBJJSs: FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher],
+          KHKCJCs: [],
+          BJZT: '未开班',
+          XNXQId: curXNXQId
+        }
+        let res: any;
+        if (formValues && CopyType === 'undefined') {
+          // 编辑
+          res = await updateKHBJSJ({ id: formValues.id }, newData)
+        } else if (formValues && CopyType === 'copy') {
+          // 复制
+          res = await createKHBJSJ(newData)
+        } else {
+          // 新建
+          res = await createKHBJSJ(newData)
+        }
+        if (res.status === 'ok') {
+          message.success('提交成功');
+          getData();
+          setVisible(false);
+          setBmCurrent(0);
+          form.resetFields();
+          setBJData({});
+          setBMData({});
+          setJFData({});
+          setBaoming(false);
+          setChoosenJf(false);
+          setXzb(false);
+          setKaike(false);
+          setBMLX(false);
+        } else {
+          message.error('提交失败，请联系管理员或稍后重试')
+        }
+      } else {
+        setJFData(newDatas)
+        setBmCurrent(Current + 1);
+      }
     } else if (Current === 3) {
       let mertial: any[] = [];
       if (dataSource?.length && choosenJf) {
@@ -300,6 +378,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
         setChoosenJf(false);
         setXzb(false);
         setKaike(false);
+        setBMLX(false);
       } else {
         message.error('提交失败，请联系管理员或稍后重试')
       }
@@ -346,6 +425,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
     setChoosenJf(false);
     setXzb(false);
     setKaike(false);
+    setBMLX(false);
   };
   const getTitle = () => {
     if (formValues && names === 'chakan') {
