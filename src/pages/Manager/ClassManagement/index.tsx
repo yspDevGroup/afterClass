@@ -219,7 +219,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         FJS.push(element?.JZGJBSJId);
       }
     });
-    const { BJMC, BJZT, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX,BJRS, BMLX, FY,...info } = currentData;
+    const { BJMC, BJZT, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY, ...info } = currentData;
     const BjList = {
       BJMC: type === 'copy' ? `${BJMC}-复制` : BJMC,
       KHKCSJId: KHKCSJ?.id,
@@ -236,7 +236,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     setBjLists(BjList);
     const BJIdArr: any = [];
     const BJMCArr: any = [];
-    BJSJs.forEach((value: any)=>{
+    BJSJs.forEach((value: any) => {
       BJIdArr.push(value.id)
       BJMCArr.push(`${value.NJSJ.XD}${value.NJSJ.NJMC}${value.BJ}`)
     })
@@ -257,8 +257,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
     const list = {
       ...currentData,
       ZJS:
-      currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJ ||
-      undefined,
+        currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJ ||
+        undefined,
       KHKCSJId: KHKCSJ?.id,
     };
     setVisible(true);
@@ -664,12 +664,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
           <ApplicantInfoTable dataSource={applicantData} actionRefs={actionRef} />
         </Modal>
         <AgentRegistration
+          getData={getData}
           curXNXQId={curXNXQId}
           JFTotalost={JFAmount}
           BjDetails={BjDetails}
           ModalVisible={modalVisible}
           setModalVisible={setModalVisible}
-          actionRef={actionRef}
         />
       </PageContainer>
     </>

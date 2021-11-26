@@ -321,6 +321,13 @@ const AddCourseClass: FC<AddCourseProps> = ({
       )()
     }
   }, [formValues])
+  useEffect(() => {
+    setBJData({
+      SSJGLX: '校内课程'
+    })
+    const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
+    setKCDate(kcDate);
+  }, [KHKCAllData])
 
   const next = () => {
     form.submit();
