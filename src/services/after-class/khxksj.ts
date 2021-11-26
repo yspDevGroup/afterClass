@@ -100,6 +100,30 @@ export async function getScheduleByDate(
   });
 }
 
+/** 根据日期区间和教师id查询巡课记录 POST /khxksj/getXKrecordBydate */
+export async function getXKrecordBydate(
+  body: {
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 开始日期 */
+    StarDate?: string;
+    /** 结束日期 */
+    EndDate?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khxksj/getXKrecordBydate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 根据课程ID查询当天的排课数据 POST /khxksj/getCourseSchedule */
 export async function getCourseSchedule(
   body: {
