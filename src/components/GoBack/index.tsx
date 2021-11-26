@@ -8,7 +8,7 @@ type backtye = {
     title: string;
     onclick?: string;
     teacher?: boolean;
-    showReFund: boolean;
+    showReFund?: boolean;
 }
 
 
