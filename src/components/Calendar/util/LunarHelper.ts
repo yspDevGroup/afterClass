@@ -111,8 +111,7 @@ export class LunarHelp {
   // 中文日期
   cDay(d: number) {
     let s;
-
-    switch (d) {
+    switch (Math.floor(d)) {
       case 10:
         s = '初十';
         break;
@@ -127,7 +126,7 @@ export class LunarHelp {
       default:
         s = this.nStr2[Math.floor(d / 10)];
         s += this.nStr1[Math.floor(d % 10)];
-        
+
     }
     return (s);
   }

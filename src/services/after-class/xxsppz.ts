@@ -11,7 +11,7 @@ export async function getXXSPPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { xxId: param0, ...queryParams } = params;
+  const { xxId: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -26,7 +26,7 @@ export async function getXXSPPZ(
     message?: string;
   }>(`/xxsppz/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -64,10 +64,10 @@ export async function deleteXXSPPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxsppz/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
