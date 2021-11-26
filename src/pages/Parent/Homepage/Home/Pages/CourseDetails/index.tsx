@@ -52,13 +52,13 @@ const CourseDetails: React.FC = () => {
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KBClass;
-      const current = detail[ind];
-      const enAble =
-        myDate >= new Date(moment(current.BMKSSJ).format('YYYY/MM/DD')) &&
-        myDate <= new Date(moment(current.BMJSSJ).format('YYYY/MM/DD'));
-      setByTime(enAble);
-      setFY(current.FY);
-      setBJ(current.id);
+    const current = detail[ind];
+    const enAble =
+      myDate >= new Date(moment(current.BMKSSJ).format('YYYY/MM/DD')) &&
+      myDate <= new Date(moment(current.BMJSSJ).format('YYYY/MM/DD'));
+    setByTime(enAble);
+    setFY(current.FY);
+    setBJ(current.id);
   };
   const getWxData = async () => {
     if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -288,7 +288,6 @@ const CourseDetails: React.FC = () => {
                         {moment(value.BMJSSJ).format('YYYY.MM.DD')}</p>
                       <p>上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
                         {moment(value.JKRQ).format('YYYY.MM.DD')}</p>
-                      <p>总人数：{value?.BJRS}</p>
                       <p>班主任： {BjDetails?.KHBJJs?.map((item: any) => {
                         if (item.JSLX.indexOf('副') === -1) {
                           const showWXName =
@@ -328,7 +327,8 @@ const CourseDetails: React.FC = () => {
                         return '';
                       })}
                       </p>
-                      <p>缴费方式：{
+                      <p>报名费：{value.FY}元</p>
+                      <p>报名方式：{
                         BjDetails?.BMLX === 0 ? '先报名后缴费' : <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
                       }
                       </p>
@@ -338,7 +338,7 @@ const CourseDetails: React.FC = () => {
                             <th>上课时间</th>
                             <th>上课地点</th>
                             <th>总课时</th>
-                            <th>报名费</th>
+                            <th>总人数</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -364,13 +364,13 @@ const CourseDetails: React.FC = () => {
                                 },
                               )}
                             </td>
-                            <td>{value.KSS}课时</td>
-                            <td>{value.FY}元</td>
+                            <td>{value.KSS}</td>
+                            <td>{value.BJRS}</td>
 
                           </tr>
                         </tbody>
                       </table>
-                      <p style={{fontWeight: 'bold'}}>班级简介</p>
+                      <p style={{ fontWeight: 'bold' }}>班级简介</p>
                       <p className={styles.content}>{BjDetails?.BJMS}</p>
                     </Panel>
                   )
@@ -394,52 +394,41 @@ const CourseDetails: React.FC = () => {
       {state === true ? (
         <div className={styles.payment} onClick={() => setstate(false)}>
           <div onClick={onchanges}>
-            <p className={styles.title}>{KcDetail?.KCMC}</p>
-            <p className={styles.price}>
-              {FY <= 0 ? (
-                <span>免费</span>
-              ) : (
-                <>
-                  <span>￥{FY}</span>
-                  <span>/学期</span>
-                </>
-              )}
-            </p>
-            <p className={styles.title} style={{ fontSize: '14px' }}>
-              班级
-            </p>
-            <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
-              {KBClass?.map(
-                (
-                  value: {
-                    BJMC: string;
-                    id: string;
-                    // FJS: string;
-                    FY: string;
-                    BMKSSJ: Date;
-                    BMJSSJ: Date;
-                    BJRS: number;
-                    KHXSBJs: any[];
-                    BJZT: string;
-                    xs_count: number;
-                  },
-                  ind: number,
-                ) => {
-                  const text = `${value.BJMC}已有${BjDetails?.KHXSBJs?.length}人报名，共${value.BJRS}个名额`;
-                  const valueName = `${value.id}+${value.FY}`;
-                  const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
-                  const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
-                  const enAble =
-                    myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
-                    myDate <= new Date(moment(end).format('YYYY/MM/DD'));
-                  if (value.BJZT === '已开班') {
-                    return (
-                      <Popconfirm
-                        overlayClassName={styles.confirmStyles}
-                        placement="bottom"
-                        title={text}
-                        defaultVisible={BJ === value.id}
-                      >
+            <div className={styles.wraps} >
+              <p className={styles.title} style={{ fontSize: 18, marginBottom: 12 }}>{KcDetail?.KCMC}</p>
+              <p className={styles.title} >
+                选择班级
+              </p>
+              <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
+                {KBClass?.map(
+                  (
+                    value: {
+                      BJMC: string;
+                      id: string;
+                      FY: string;
+                      BMKSSJ: Date;
+                      BMJSSJ: Date;
+                      BJRS: number;
+                      KHXSBJs: any[];
+                      BJZT: string;
+                      xs_count: number;
+                    },
+                    ind: number,
+                  ) => {
+                    const valueName = `${value.id}+${value.FY}`;
+                    const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
+                    const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
+                    const enAble =
+                      myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
+                      myDate <= new Date(moment(end).format('YYYY/MM/DD'));
+                    if (value.BJZT === '已开班') {
+                      return (
+                        // <Popconfirm
+                        //   overlayClassName={styles.confirmStyles}
+                        //   placement="bottom"
+                        //   title={text}
+                        //   defaultVisible={BJ === value.id}
+                        // >
                         <Radio.Button
                           value={valueName}
                           style={{ marginRight: '14px' }}
@@ -448,59 +437,90 @@ const CourseDetails: React.FC = () => {
                         >
                           {value.BJMC}
                         </Radio.Button>
-                      </Popconfirm>
-                    );
-                  }
-                  return '';
-                },
-              )}
-            </Radio.Group>
-            <div className={styles.Teachingaterial}>
-              {!JFData?.length ? (
-                <></>
-              ) : (
-                <div
-                  className={styles.box}
-                  style={{ borderRadius: JFstate === true ? '8px 8px 0 0' : '8px' }}
-                >
-                  <Checkbox onChange={onJFChange} checked={JFstate}>
-                    <span>选购教辅</span>
-                  </Checkbox>
-                  {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
-                </div>
-              )}
-              <div className={styles.tables}>
-                {JFstate === true ? (
+                        // </Popconfirm>
+                      );
+                    }
+                    return '';
+                  },
+                )}
+              </Radio.Group>
+              <p className={styles.title}>
+                课程费用
+              </p>
+              <p className={styles.price}>
+                {FY <= 0 ? (
                   <>
-                    {JFData ? (
-                      <>
-                        {JFData?.map((value: any) => {
-                          return (
-                            <div>
-                              <div>{value.JCMC}</div>
-                              {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
-                            </div>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <>
-                        {KBClass?.[0].KHKCJCs?.map((value: any) => {
-                          return (
-                            <div>
-                              <div>{value.JCMC}</div>
-                              {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
-                            </div>
-                          );
-                        })}
-                      </>
-                    )}
+                    <span>免费</span>
+                    <span style={{ color: '#666666', marginLeft: 10 }}>余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额</span>
                   </>
                 ) : (
-                  <></>
+                  <>
+                    <span style={{ fontWeight: 'bold', fontSize: '22px' }}>￥{FY}</span>
+                    <span>/学期</span>
+                    <span style={{ color: '#666666', marginLeft: 10 }}>余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额</span>
+                  </>
                 )}
+              </p>
+              <p className={styles.title}>
+                缴费方式
+              </p>
+              <span style={{ color: '#666666' }}>
+                {
+                  BjDetails?.BMLX === 0 ? '先报名后缴费' : <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+                }</span>
+              <div className={styles.Teachingaterial}>
+                {!JFData?.length ? (
+                  <></>
+                ) : (
+                  <>
+                    <p className={styles.title}>
+                      教辅教材
+                    </p>
+                    <div
+                      className={styles.box}
+                      style={{ borderRadius: JFstate === true ? '8px 8px 0 0' : '8px' }}
+                    >
+                      <Checkbox onChange={onJFChange} checked={JFstate}>
+                        <span>选购教辅</span>
+                      </Checkbox>
+                      {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
+                    </div>
+                  </>
+                )}
+                <div className={styles.tables}>
+                  {JFstate === true ? (
+                    <>
+                      {JFData ? (
+                        <>
+                          {JFData?.map((value: any) => {
+                            return (
+                              <div>
+                                <div>{value.JCMC}</div>
+                                {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
+                              </div>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <>
+                          {KBClass?.[0].KHKCJCs?.map((value: any) => {
+                            return (
+                              <div>
+                                <div>{value.JCMC}</div>
+                                {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
+                              </div>
+                            );
+                          })}
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             </div>
+
             <div className={styles.agreement}>
               <Checkbox onChange={onFxChange} checked={Xystate}>
                 <span>我已阅读并同意</span>
