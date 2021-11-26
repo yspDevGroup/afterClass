@@ -125,6 +125,42 @@
           }
         }
       }
+      .Teachingaterial {
+        .box {
+          display: flex;
+          justify-content: space-between;
+          height: 40px;
+          padding: 0 10px;
+          line-height: 40px;
+          background-color: #f5f5f5;
+        }
+        .tables {
+          max-height: 70px;
+          padding: 0 10px;
+          overflow: auto;
+          line-height: 40px;
+          background-color: #f5f5f5;
+          border-radius: 0 0 8px 8px;
+          > div {
+            display: flex;
+            justify-content: space-between;
+            height: 40px;
+            color: #666;
+          }
+        }
+
+        :global {
+          .ant-checkbox-wrapper {
+            border-color: #45c977;
+          }
+          .ant-checkbox-wrapper-checked {
+            .ant-checkbox-inner {
+              background-color: #45c977;
+              border-color: #45c977;
+            }
+          }
+        }
+      }
 
       .bjname {
         position: relative;

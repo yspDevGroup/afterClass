@@ -15,7 +15,7 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 import styles from './index.less';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getKHBJSJ, studentRegistration } from '@/services/after-class/khbjsj';
 import { RightOutlined } from '@ant-design/icons';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 
@@ -70,6 +70,7 @@ const CourseDetails: React.FC = () => {
   useEffect(() => {
     getWxData();
   }, [isLoading]);
+  const XSbjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
   useEffect(() => {
     if (courseid) {
       getWxData();
@@ -82,8 +83,16 @@ const CourseDetails: React.FC = () => {
           });
           if (results.status === 'ok') {
             if (results.data) {
-             const newArr =  results.data.KHBJSJs.filter((value: any)=>{
-                return value.BJZT === '已开班'
+              const newArr = results.data.KHBJSJs.filter((value: any) => {
+                if (value.BJZT === '已开班' && value.BJLX === 1) {
+                  const newBjIds = value.BJSJs.filter((items: any) => {
+                    return items.id === XSbjId
+                  })
+                  if (newBjIds.length) {
+                    return value
+                  }
+                }
+                return value.BJZT === '已开班' && value.BJLX === 0
               })
               setKBClass(newArr)
               setKcDetail(results.data);
@@ -139,41 +148,61 @@ const CourseDetails: React.FC = () => {
     e.stopPropagation();
   };
   const submit = async () => {
-    const bjInfo = KBClass.find((item: any) => {
-      return item.id === BJ;
-    });
-    await setClassDetail(bjInfo);
-    const data: API.CreateKHXSDD = {
-      XDSJ: new Date().toISOString(),
-      ZFFS: '线上支付',
-      DDZT: '待付款',
-      DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
-      XSJBSJId:
-        localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
-      KHBJSJId: BJ!,
-      DDLX: 0,
-    };
-    const res = await createKHXSDD(data);
-    if (res.status === 'ok') {
-      if (data.DDFY > 0) {
-        setOrderInfo(res.data);
-      } else {
+    if (BjDetails?.BMLX === 0) {
+      const res = await studentRegistration({
+        ZT: 3,
+        XSJBSJIds: [StorageXSId],
+        KHBJSJId: BjDetails?.id
+      })
+      if (res.status === 'ok') {
         const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
         await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, true);
-        setTimeout(()=>{
-          message.success('报名成功');
-        },500);
-        setTimeout(()=>{
-          history.push('/parent/home?index=index&reload=true');
-        },1000);
+        setTimeout(() => {
+          message.success('报名成功，请及时缴费');
+        }, 500);
+        setTimeout(() => {
+          history.push('/parent/home?index=index');
+        }, 1000);
       }
     } else {
-      enHenceMsg(res.message);
+      const bjInfo = KBClass.find((item: any) => {
+        return item.id === BJ;
+      });
+      await setClassDetail(bjInfo);
+      const data: API.CreateKHXSDD = {
+        XDSJ: new Date().toISOString(),
+        ZFFS: '线上支付',
+        DDZT: '待付款',
+        DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
+        XSJBSJId:
+          localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
+        KHBJSJId: BJ!,
+        DDLX: 0,
+      };
+      const res = await createKHXSDD(data);
+      if (res.status === 'ok') {
+        if (data.DDFY > 0) {
+          setOrderInfo(res.data);
+        } else {
+          const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+          await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, true);
+          setTimeout(() => {
+            message.success('报名成功');
+          }, 500);
+          setTimeout(() => {
+            history.push('/parent/home?index=index&reload=true');
+          }, 1000);
+        }
+      } else {
+        enHenceMsg(res.message);
+      }
     }
+
   };
   const butonclick = async (value: any, ind: number) => {
     const res = await getKHBJSJ({ id: value?.id })
     if (res.status === 'ok') {
+      setBjDetails(res.data);
       let num = 0;
       for (let i = 0; i < res.data?.KHKCJCs?.length; i++) {
         num += Number(res.data?.KHKCJCs[i].JCFY);
@@ -299,6 +328,10 @@ const CourseDetails: React.FC = () => {
                         return '';
                       })}
                       </p>
+                      <p>缴费方式：{
+                        BjDetails?.BMLX === 0 ? '先报名后缴费' : <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+                      }
+                      </p>
                       <table>
                         <thead>
                           <tr>
@@ -392,7 +425,7 @@ const CourseDetails: React.FC = () => {
                   },
                   ind: number,
                 ) => {
-                  const text = `${value.BJMC}已有${value?.xs_count}人报名，共${value.BJRS}个名额`;
+                  const text = `${value.BJMC}已有${BjDetails?.KHXSBJs?.length}人报名，共${value.BJRS}个名额`;
                   const valueName = `${value.id}+${value.FY}`;
                   const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
                   const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
@@ -476,11 +509,11 @@ const CourseDetails: React.FC = () => {
             </div>
             {ByTime === true ? (
               <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
-                {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
+                {JFTotalost! + Number(FY) <= 0 || BjDetails?.BMLX !== 1 ? '提交' : '提交并付款'}
               </Button>
             ) : (
               <Button className={styles.submit} disabled={true} onClick={submit}>
-                {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
+                {JFTotalost! + Number(FY) <= 0 || BjDetails?.BMLX !== 1 ? '提交' : '提交并付款'}
               </Button>
             )}
 
