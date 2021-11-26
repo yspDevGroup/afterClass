@@ -1,32 +1,62 @@
 import PageContainer from "@/components/PageContainer";
 import { getStudent } from "@/services/after-class/khxxzzfw";
 import ProTable from "@ant-design/pro-table";
-import type { ProColumns , ActionType } from '@ant-design/pro-table';
+import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import { useEffect, useRef, useState } from "react";
 import type { SignUpItem } from "./data";
-import { Button } from "antd";
+import { Button, Select } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import styles from './index.less';
 import WWOpenDataCom from "@/components/WWOpenDataCom";
+import { getAllGrades } from "@/services/after-class/khjyjg";
+import { getAllBJSJ } from "@/services/after-class/bjsj";
+import SearchLayout from "@/components/Search/Layout";
 
+type selectType = { label: string; value: string };
+
+const { Option } = Select;
 const SignUp = (props: any) => {
-  const { state } = props.location;
-  const [DataSource, setDataSource] = useState<any>();
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
+  const { state } = props.location;
+  const [NjId, setNjId] = useState<any>();
+  const [NjData, setNjData] = useState<any>();
+  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
+  const [BJId, setBJId] = useState<string | undefined>(undefined);
   useEffect(() => {
-    (
-      async () => {
-        const res = await getStudent({
-          KHXXZZFWId: state?.id,
-          XNXQId: state?.XNXQ?.id
-        })
-        if(res.status === 'ok'){
-          setDataSource(res.data?.rows)
-        }
+    (async () => {
+      const res = await getAllGrades({
+        XD: currentUser?.XD?.split(','),
+      });
+      if (res.status === 'ok') {
+        setNjData(res.data);
       }
-    )()
+    })();
   }, []);
+  const onBjChange = async (value: any) => {
+    setBJId(value);
+    actionRef.current?.reload();
+  };
+  const onNjChange = async (value: any) => {
+    setNjId(value);
+    actionRef.current?.reload();
+  };
+  const getBJSJ = async () => {
+    const res = await getAllBJSJ({ njId: NjId, page: 0, pageSize: 0 });
+    if (res.status === 'ok') {
+      const data = res.data?.rows?.map((item: any) => {
+        return { label: item.BJ, value: item.id };
+      });
+      setBJData(data);
+    }
+  };
+  useEffect(() => {
+    if (NjId) {
+      getBJSJ();
+    }
+  }, [NjId]);
 
   const columns: ProColumns<SignUpItem>[] = [
     {
@@ -65,6 +95,30 @@ const SignUp = (props: any) => {
       },
     },
     {
+      title: '年级名称',
+      dataIndex: 'NJSJ',
+      key: 'NJSJ',
+      align: 'center',
+      search: false,
+      ellipsis: true,
+      width: 100,
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC
+      },
+    },
+    {
+      title: '行政班名称',
+      dataIndex: 'BJSJ',
+      key: 'BJSJ',
+      align: 'center',
+      search: false,
+      ellipsis: true,
+      width: 100,
+      render: (_text: any, record: any) => {
+        return record?.XSJBSJ?.BJSJ?.BJ
+      },
+    },
+    {
       title: '报名时间',
       dataIndex: 'createdAt',
       key: 'createdAt',
@@ -76,28 +130,76 @@ const SignUp = (props: any) => {
   ];
   return <PageContainer>
     <div className={styles.SignUp}>
-     <Button
+      <Button
         type="primary"
         onClick={() => {
-           history.go(-1);
+          history.go(-1);
         }}
-        style={{marginBottom:'20px'}}
+        style={{ marginBottom: '20px' }}
       >
         <LeftOutlined />
         返回上一页
-        </Button>
+      </Button>
       <ProTable<any>
-          columns={columns}
-          rowKey="key"
-          actionRef={actionRef}
-          pagination={{
-            showQuickJumper: true
-          }}
-          search={false}
-          dataSource={DataSource}
-          dateFormatter="string"
-        />
-      </div>
-    </PageContainer>
+        columns={columns}
+        rowKey="key"
+        actionRef={actionRef}
+        pagination={{
+          showQuickJumper: true
+        }}
+        headerTitle={
+          <>
+            <h3 style={{ fontWeight: 'bold', fontSize: 16, marginRight: 24 }}>{state?.FWMC}</h3>
+            <SearchLayout>
+              <div>
+                <label htmlFor="grade">年级名称：</label>
+                <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
+                  {NjData?.map((item: any) => {
+                    return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                  })}
+                </Select>
+              </div>
+              <div>
+                <label htmlFor="kcly">班级名称：</label>
+                <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
+                  {bjData?.map((item: any) => {
+                    return (
+                      <Option value={item.value} key={item.value}>
+                        {item.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+            </SearchLayout>
+          </>
+        }
+        search={false}
+        options={{
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
+        }}
+        request={async () => {
+          const res = await getStudent({
+            KHXXZZFWId: state?.id,
+            XNXQId: state?.XNXQ?.id,
+            NJId: NjId,
+            BJId,
+          })
+          if (res.status === 'ok' && res.data) {
+            return {
+              data: res.data.rows,
+              success: true,
+              total: res.data.count,
+            };
+          }
+          return [];
+        }}
+        dateFormatter="string"
+      />
+    </div>
+  </PageContainer>
 }
 export default SignUp;
