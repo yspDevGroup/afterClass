@@ -1,5 +1,5 @@
 import React from "react";
-import { history } from "umi";
+import { history, Link } from "umi";
 import IconFont from "../CustomIcon";
 import styles from './index.less'
 
@@ -8,11 +8,12 @@ type backtye = {
     title: string;
     onclick?: string;
     teacher?: boolean;
+    showReFund: boolean;
 }
 
 
 const GoBack = (props: backtye) => {
-    const { title, onclick, teacher } = props;
+    const { title, onclick, teacher, showReFund } = props;
     const toback = (url?: string) => {
         if (url) {
             history.replace(url);
@@ -26,6 +27,7 @@ const GoBack = (props: backtye) => {
                 <IconFont type="icon-gengduo" />
             </div>
             <div className={styles.wz}>{title}</div>
+            {showReFund ?  <Link to={'/parent/mine/dropClass'}><span className={styles.td}>退订<IconFont type="icon-gengduo" /></span></Link> : ''}
         </div>
     )
 }

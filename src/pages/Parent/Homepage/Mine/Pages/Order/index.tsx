@@ -131,7 +131,7 @@ const Order: React.FC = () => {
   }, []);
   return (
     <>
-      <GoBack title={'订单'} onclick="/parent/home?index=mine" />
+      <GoBack title={'订单'} onclick="/parent/home?index=mine" showReFund/>
       <div className={styles.orderList}>
         <Tabs type="card" defaultActiveKey={type}>
           <TabPane tab="全部" key="total">
