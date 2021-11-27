@@ -63,12 +63,12 @@ const ServiceManagement = () => {
   }, []);
   const ongetKHXXZZFW = async () => {
     const data: any = {
-        XXJBSJId: currentUser?.xxId,
-        XNXQId: curXNXQId || '',
-        FWMC: name,
-        FWZT: FbState ? Number(FbState): undefined,
-        KHZZFWId: LbState || '',
-      };
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId || '',
+      FWMC: name,
+      FWZT: FbState ? Number(FbState) : undefined,
+      KHZZFWId: LbState || '',
+    };
     const res = await getKHXXZZFW(data);
     if (res.status === 'ok') {
       setDataSource(res?.data?.rows);
@@ -76,7 +76,7 @@ const ServiceManagement = () => {
   };
   useEffect(() => {
     ongetKHXXZZFW();
-  }, [curXNXQId, name,FbState, LbState]);
+  }, [curXNXQId, name, FbState, LbState]);
   useEffect(() => {
     // 获取校区数据
     (async () => {
@@ -419,7 +419,7 @@ const ServiceManagement = () => {
           headerTitle={
             <SearchLayout>
               <div>
-                <label htmlFor='term'>所属学年学期：</label>
+                <label htmlFor="term">所属学年学期：</label>
                 <Select
                   allowClear
                   value={curXNXQId}
@@ -450,7 +450,7 @@ const ServiceManagement = () => {
                 />
               </div>
               <div>
-                <label htmlFor='type'>服务类别：</label>
+                <label htmlFor="type">服务类别：</label>
                 <Select
                   allowClear
                   value={LbState || ''}
@@ -462,17 +462,17 @@ const ServiceManagement = () => {
                 >
                   {LBData?.length
                     ? LBData?.map((item: any) => {
-                      return (
-                        <Option value={item?.id} key={item?.id}>
-                          {item?.FWMC}
-                        </Option>
-                      );
-                    })
+                        return (
+                          <Option value={item?.id} key={item?.id}>
+                            {item?.FWMC}
+                          </Option>
+                        );
+                      })
                     : ''}
                 </Select>
               </div>
               <div>
-                <label htmlFor='status'>发布状态：</label>
+                <label htmlFor="status">发布状态：</label>
                 <Select
                   allowClear
                   value={FbState || ''}
@@ -510,6 +510,7 @@ const ServiceManagement = () => {
         title={Disabled === '新增' ? '新增服务' : Disabled === '编辑' ? '编辑服务' : '服务详情'}
         visible={isModalVisible}
         className={Disabled === '查看' ? styles.modal : styles.modals}
+        onCancel={handleCancel}
         footer={[
           <Button key="submit" type="primary" onClick={handleOk}>
             确定
@@ -543,12 +544,12 @@ const ServiceManagement = () => {
             <Select style={{ width: '100%' }} placeholder="请选择" disabled={Disabled === '查看'}>
               {LBData?.length
                 ? LBData?.map((item: any) => {
-                  return (
-                    <Option value={item?.id} key={item?.id}>
-                      {item?.FWMC}
-                    </Option>
-                  );
-                })
+                    return (
+                      <Option value={item?.id} key={item?.id}>
+                        {item?.FWMC}
+                      </Option>
+                    );
+                  })
                 : ''}
             </Select>
           </Form.Item>
