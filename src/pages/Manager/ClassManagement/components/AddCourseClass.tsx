@@ -142,6 +142,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
     })();
   }, []);
   // 获取课程适用年级和班级
+
   useEffect(() => {
     (async () => {
       if (BJData?.KHKCSJId) {
@@ -164,12 +165,16 @@ const AddCourseClass: FC<AddCourseProps> = ({
                 newArr.push(item);
               });
             }
+            const compare = (val1: any, val2: any) => {
+              return val1?.NJSJ?.NJ - val2?.NJSJ?.NJ;
+            };
+            newArr.sort(compare);
             setClassData(newArr);
           });
         }
       }
     })();
-  }, [BJData]);
+  }, [BJData, XQSJIds]);
   useEffect(() => {
     (async () => {
       if (curXNXQId) {
