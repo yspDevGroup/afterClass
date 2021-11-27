@@ -28,6 +28,7 @@ const ClassroomStyle = () => {
   const getData = async () => {
     const resKHKTFC = await getAllKHKTFC({
       XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
+      XXJBSJId:  currentUser?.xxId
     });
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
