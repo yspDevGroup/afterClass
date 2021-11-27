@@ -4,8 +4,11 @@ import moment from 'moment';
 import GoBack from '@/components/GoBack';
 import { getAllKHKTFC, deleteKHKTFC } from '@/services/after-class/khktfc';
 import styles from './index.less';
+import { useModel } from 'umi';
 
 const Record = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [listData, setListData] = useState<any>();
   const [showData, setShowData] = useState<any>();
   const [showIndex, setShowIndex] = useState<number>(3);
@@ -18,7 +21,7 @@ const Record = () => {
   }, []);
 
   const getData = async () => {
-    const resKHKTFC = await getAllKHKTFC({});
+    const resKHKTFC = await getAllKHKTFC({ XXJBSJId: currentUser?.xxId });
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
       resKHKTFC.data?.rows?.forEach((item: any, index: number) => {
