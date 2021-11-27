@@ -34,8 +34,6 @@ const NoticeDetails = (props: any) => {
       {allDataSource[index]?.BT ? <div className={styles.title}>{allDataSource[index]?.BT}</div> : ''}
       {allDataSource[index]?.RQ ? <div className={styles.time}>发布时间：{allDataSource[index]?.RQ}</div> : ''}
       {allDataSource[index].createdAt || allDataSource[index].createdAt ? <div className={styles.line} /> : ''}
-
-      <textarea className={styles.text} value={nrInfo} readOnly></textarea>
       <>
         <div dangerouslySetInnerHTML={{ __html: nrInfo }} className={styles.contents} />
         <div className={styles.xb}>
