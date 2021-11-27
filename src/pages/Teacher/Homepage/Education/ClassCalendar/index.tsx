@@ -15,6 +15,7 @@ import { convertCourse, CurdayCourse, ParentHomeData } from '@/services/local-se
 import styles from './index.less';
 import noData from '@/assets/noCourses1.png';
 import noOrder from '@/assets/noOrder1.png';
+import { getQueryString } from '@/utils/utils';
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -34,8 +35,9 @@ const ClassCalendar = (props: propstype) => {
   const { setDatedata, type, form, setReloadList } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
-  const [cDay, setCDay] = useState<string>(dayjs().format('M月D日'));
+  const prevDay = getQueryString('date');
+  const [day, setDay] = useState<string>(prevDay || dayjs().format('YYYY-MM-DD'));
+  const [cDay, setCDay] = useState<string>(prevDay ? dayjs(prevDay).format('M月D日') : dayjs().format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
   const [dates, setDates] = useState<any[]>([]);
   const [editCourses, setEditCourses] = useState<any>([]);
@@ -45,7 +47,6 @@ const ClassCalendar = (props: propstype) => {
   const formRef = React.createRef<any>();
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
   const userId = currentUser.JSId || testTeacherId;
-
   const iconTextData: DisplayColumnItem[] = (day === dayjs().format('YYYY-MM-DD')) ? [
     {
       text: '签到点名',
@@ -179,7 +180,6 @@ const ClassCalendar = (props: propstype) => {
         console.log(info.errorFields);
       });
   };
-
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -295,7 +295,6 @@ const ClassCalendar = (props: propstype) => {
               </Space>
             </Radio.Group>
         }
-
       </div> :
         <ListComponent listData={course} operation={iconTextData} />)}
       <Modal className={styles.leaveSchool} title="下课通知" forceRender={true} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>

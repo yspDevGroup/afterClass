@@ -520,7 +520,6 @@ const CourseDetails: React.FC = () => {
                 </div>
               </div>
             </div>
-
             <div className={styles.agreement}>
               <Checkbox onChange={onFxChange} checked={Xystate}>
                 <span>我已阅读并同意</span>

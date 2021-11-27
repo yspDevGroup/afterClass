@@ -122,10 +122,13 @@ const ActionBar = (props: propstype) => {
                       const res = deleteKHBJSJ(params);
                       new Promise((resolve) => {
                         resolve(res);
-                      }).then((data: any) => {
+                      }).then(async (data: any) => {
                         if (data.status === 'ok') {
                           message.success('删除成功');
                           getData();
+                          // 取消课程发布
+                          const { KHKCSJ } = record;
+                          await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 0 });
                         } else {
                           enHenceMsg(data.message);
                         }

@@ -14,7 +14,6 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
 
 import ActionBar from './components/ActionBar';
-import AddCourse from './components/AddCourse';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 import styles from './index.less';
@@ -43,8 +42,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [current, setCurrent] = useState<any>();
   // 控制新增课程班信息弹框
   const [visible, setVisible] = useState(false);
-  // 设置选中课程班详情是否可读属性
-  const [readonly, setReadonly] = useState<boolean>(false);
   // 当前查询课程ID
   const [kcId, setKcId] = useState<string>();
   // 课程来源
@@ -219,7 +216,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         FJS.push(element?.JZGJBSJId);
       }
     });
-    const { BJMC, BJZT, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY, ...info } = currentData;
+    const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY } = currentData;
     const BjList = {
       BJMC: type === 'copy' ? `${BJMC}-复制` : BJMC,
       KHKCSJId: KHKCSJ?.id,
@@ -253,7 +250,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
       FY
     }
     setJfLists(JfList);
-
     const list = {
       ...currentData,
       ZJS:
@@ -266,27 +262,19 @@ const CourseManagement = (props: { location: { state: any } }) => {
     if (type === 'copy') {
       setCopyType('copy');
       setnames('copy');
-      setReadonly(false);
     } else {
       setCopyType('undefined');
       if (!(data.BJZT === '未开班') && !(data.BJZT === '未排课') && !(data.BJZT === '已排课')) {
-        setReadonly(true);
         setnames('chakan');
       } else {
-        setReadonly(false);
         setnames('add');
       }
     }
   };
-  // 显示右侧新增课程班信息弹框
+  // 显示新增课程班信息弹框
   const showDrawer = () => {
     setVisible(true);
     setCurrent(undefined);
-    setReadonly(false);
-  };
-  // 关闭新增、编辑课程班信息弹框
-  const onClose = () => {
-    setVisible(false);
   };
   // 课程名称筛选事件
   const onKcmcChange = (value: any) => {
