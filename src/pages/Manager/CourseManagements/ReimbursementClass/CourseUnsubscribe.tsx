@@ -309,8 +309,8 @@ const CourseUnsubscribe = () => {
               });
               if (result.status === 'ok') {
                 message.success('退课成功,已自动申请退款流程');
-              } else {
-                message.warning(`退课成功,退款流程由于${result.message}申请失败`);
+              }else if(result.message === '未找到该学生在当前班级的订单记录'){
+                message.success('退课成功');
               }
             } else {
               message.success('退课成功,退款余额为0，无需退款');

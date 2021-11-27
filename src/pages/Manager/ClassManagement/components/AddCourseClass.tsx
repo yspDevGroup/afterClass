@@ -88,6 +88,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
     if (formValues) {
       const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === BjLists?.SSJGLX);
       setKCDate(kcDate);
+      setKcId(BjLists?.KHKCSJId)
       setIsJg(BjLists?.SSJGLX === '机构课程');
       setBJData(BjLists);
       setBMData(BmLists)
@@ -279,16 +280,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
           message.success('提交成功');
           getData();
           setVisible(false);
-          setBmCurrent(0);
-          form.resetFields();
-          setBJData({});
-          setBMData({});
-          setJFData({});
-          setBaoming(false);
-          setChoosenJf(false);
-          setXzb(false);
-          setKaike(false);
-          setBMLX(false);
         } else {
           message.error('提交失败，请联系管理员或稍后重试')
         }
@@ -373,16 +364,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
         message.success('提交成功');
         getData();
         setVisible(false);
-        setBmCurrent(0);
-        form.resetFields();
-        setBJData({});
-        setBMData({});
-        setJFData({});
-        setBaoming(false);
-        setChoosenJf(false);
-        setXzb(false);
-        setKaike(false);
-        setBMLX(false);
       } else {
         message.error('提交失败，请联系管理员或稍后重试')
       }
@@ -405,31 +386,31 @@ const AddCourseClass: FC<AddCourseProps> = ({
     }
   }, [formValues])
   useEffect(() => {
-    setBJData({
-      SSJGLX: '校内课程'
-    })
     const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
     setKCDate(kcDate);
   }, [KHKCAllData])
+  useEffect(() => {
+    setBJData({
+      SSJGLX: '校内课程'
+    })
+    if(visible === false && form){
+      setBmCurrent(0);
+      form.resetFields();
+      setBMData({});
+      setJFData({});
+      setBaoming(false);
+      setChoosenJf(false);
+      setXzb(false);
+      setKaike(false);
+      setBMLX(false);
+    }
+  }, [visible])
 
   const next = () => {
     form.submit();
   };
   const prev = () => {
     setBmCurrent(Current - 1);
-  };
-  const onOkChange = async () => {
-    setBmCurrent(0);
-    form.resetFields();
-    setVisible(false);
-    setBJData({});
-    setBMData({});
-    setJFData({});
-    setBaoming(false);
-    setChoosenJf(false);
-    setXzb(false);
-    setKaike(false);
-    setBMLX(false);
   };
   const getTitle = () => {
     if (formValues && names === 'chakan') {

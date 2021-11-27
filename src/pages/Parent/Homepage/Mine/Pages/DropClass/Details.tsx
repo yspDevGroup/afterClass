@@ -18,11 +18,13 @@ const Details = (props: any) => {
       setType('申请中')
     } else if (state.ZT === 2 && state?.KHXSTKs?.length === 0) {
       setType('退订失败')
-    } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === '0') {
+    } else if (state?.KHXSTKs?.length === 0 && state?.ZT === 1) {
+      setType('退订成功')
+    } else if (state?.KHXSTKs?.length !== 0 && (state?.KHXSTKs?.[0].TKZT === '0' || state?.KHXSTKs?.[0].TKZT === '1')) {
       setType('退款中')
     } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === '2') {
       setType('退款被驳回')
-    } else if ((state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === '3') || state?.KHXSTKs?.length === 0 && state?.ZT === 1) {
+    } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === '3') {
       setType('退款成功')
     } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === '4') {
       setType('退款失败')
@@ -33,7 +35,7 @@ const Details = (props: any) => {
       <GoBack title={'退款详情'} />
       <div className={styles.OrderDetails}>
         <div className={styles.hender}>
-          {Type === '退款成功' ? (
+          {Type === '退款成功' || Type === '退订成功' ? (
             <CheckCircleOutlined />
           ) : (
             <ExclamationCircleOutlined />

@@ -78,7 +78,7 @@ const ReturnService = () => {
       message.success('申请已提交，请等待审核');
       getFwData();
       setModalVisible(false);
-      history.push('/parent/mine/dropClass/apply')
+      history.push('/parent/mine/dropClass')
     } else {
       message.error(res.message);
     }
