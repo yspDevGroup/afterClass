@@ -14,6 +14,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import noJF from '@/assets/noJF.png'
 
 type AddCourseProps = {
   visible: boolean;
@@ -239,12 +240,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                    KHBJSJId: formValues?.id,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
               : undefined;
         } else {
           ZTeacher = [
@@ -256,11 +257,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
               : undefined;
         }
         const newData = {
@@ -323,12 +324,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+                KHBJSJId: formValues?.id,
+              };
+            })
             : undefined;
       } else {
         ZTeacher = [
@@ -340,11 +341,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+              };
+            })
             : undefined;
       }
       const newData = {
@@ -666,10 +667,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -1100,6 +1101,14 @@ const AddCourseClass: FC<AddCourseProps> = ({
                     }
                   }
                 />
+                {
+                  choosenJf === false ?
+                    <div className={styles.noJF}>
+                      <img src={noJF} alt="" />
+                      <p>该课程暂无教辅</p>
+                    </div> : <></>
+                }
+
               </div>
             ) : (
               <></>
