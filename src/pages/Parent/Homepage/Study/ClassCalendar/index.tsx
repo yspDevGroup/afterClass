@@ -37,14 +37,16 @@ const ClassCalendar = (props: propstype) => {
   const [dates, setDates] = useState<any[]>([]);
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
   const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
+  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+  const StorageBJId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+  const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   // 根据日期修改展示数据
   const changeDateList = async (date?: any) => {
     const curDay = date || dayjs();
     const dayFormat = curDay.format('YYYY-MM-DD');
     setDay(dayFormat);
     setCDay(curDay.format('M月D日'));
-    const { courseList } = await CurdayCourse('student', currentUser?.xxId, StorageXSId, dayFormat,StorageNjId);
+    const { courseList } = await CurdayCourse('student', currentUser?.xxId, StorageXSId, dayFormat, StorageNjId, StorageBJId, StorageXQSJId);
     if (type) {
       setEditCourses(convertStuCourse(courseList, 'filter'));
     } else {
@@ -59,10 +61,9 @@ const ClassCalendar = (props: propstype) => {
   }
   useEffect(() => {
     (async () => {
-      const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-      const oriData = await ParentHomeData('student', xxId, StorageXSId, StorageNjId,bjId);
+      const oriData = await ParentHomeData('student', xxId, StorageXSId, StorageNjId, StorageBJId, StorageXQSJId);
       const { markDays } = oriData;
-      const { courseList } = await CurdayCourse('student', currentUser?.xxId, StorageXSId, day,StorageNjId);
+      const { courseList } = await CurdayCourse('student', currentUser?.xxId, StorageXSId, day, StorageNjId, StorageBJId, StorageXQSJId);
       if (type) {
         setEditCourses(convertStuCourse(courseList, 'filter'));
       } else {

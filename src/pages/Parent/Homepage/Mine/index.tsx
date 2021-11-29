@@ -47,6 +47,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     localStorage.setItem('studentId', key.key?.split('+')[0]);
     localStorage.setItem('studentNjId', key.key?.split('+')[1]);
     localStorage.setItem('studentBJId', key.key?.split('+')[2]);
+    localStorage.setItem('studentXQSJId', key.key?.split('+')[3]);
     const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
     const ParentalIdentitys = `${key.value}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
@@ -81,7 +82,8 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
           StorageXSId || student?.[0].XSJBSJId || testStudentId;
         const studentNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
         const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        await ParentHomeData('student', currentUser?.xxId, studentId, studentNjId, bjId, true);
+        const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
+        await ParentHomeData('student', currentUser?.xxId, studentId, studentNjId, bjId,StorageXQSJId, true);
         fetchData();
         setReload(false);
       }
@@ -109,7 +111,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
           >
             {student?.map((value: any) => {
               return (
-                <Option value={value.name} key={`${value.XSJBSJId}+${value.NJSJId}+${value.BJSJId}`}>
+                <Option value={value.name} key={`${value.XSJBSJId}+${value.NJSJId}+${value.BJSJId}+${value.XQSJId}`}>
                   {value.name}
                 </Option>
               );

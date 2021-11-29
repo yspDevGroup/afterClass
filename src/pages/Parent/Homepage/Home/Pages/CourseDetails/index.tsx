@@ -27,7 +27,8 @@ const CourseDetails: React.FC = () => {
   const { student } = currentUser || {};
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
+  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+  const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   const [BJ, setBJ] = useState<string>();
   const [FY, setFY] = useState<number>(0);
   const [state, setstate] = useState(false);
@@ -156,7 +157,7 @@ const CourseDetails: React.FC = () => {
       })
       if (res.status === 'ok') {
         const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, true);
+        await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, StorageXQSJId, true);
         setTimeout(() => {
           message.success('报名成功，请及时缴费');
         }, 500);
@@ -185,7 +186,7 @@ const CourseDetails: React.FC = () => {
           setOrderInfo(res.data);
         } else {
           const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-          await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, true);
+          await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, StorageXQSJId, true);
           setTimeout(() => {
             message.success('报名成功');
           }, 500);

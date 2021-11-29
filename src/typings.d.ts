@@ -164,6 +164,7 @@ declare const ENV_debug: boolean;
 declare const testStudentId: string;
 declare const testStudentNJId: string;
 declare const testStudentBJId: string;
+declare const testStudentXQSJId: string;
 declare const testTeacherId: string;
 
 declare const wx: any;

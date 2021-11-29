@@ -29,8 +29,8 @@ const DropOut = () => {
   const [kcList, setKcList] = useState<any>();
   const [datasourse, setDatasourse] = useState<any>();
   const StorageXSId = localStorage.getItem('studentId') || (student && student.XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
-
+  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+  const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
@@ -70,7 +70,7 @@ const DropOut = () => {
     (async () => {
       if (StorageXSId) {
         const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        const oriData = await ParentHomeData('student', currentUser.xxId, StorageXSId, StorageNjId,bjId);
+        const oriData = await ParentHomeData('student', currentUser.xxId, StorageXSId, StorageNjId, StorageXQSJId, bjId);
         const { courseSchedule } = oriData;
         const courseData = CountCourses(courseSchedule);
         setKcList(courseData);

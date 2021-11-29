@@ -70,6 +70,7 @@ const getHomeData = async (
   userId: string,
   njId?: string,
   bjId?: string,
+  XQSJId?: string,
 ) => {
   let courseStatus = 'empty';
   const result = await queryXNXQList(xxId);
@@ -86,6 +87,7 @@ const getHomeData = async (
       params.XSId = userId;
       params.njId = njId;
       params.bjId = bjId;
+      params.XQSJId = XQSJId;
     }
     const res = await homePageInfo(params);
     if (res?.status === 'ok') {
@@ -172,6 +174,7 @@ export const ParentHomeData = async (
   userId: string,
   njId?: string,
   bjId?: string,
+  XQSJId?: string,
   refresh?: boolean,
 ) => {
   if (typeof homeInfo === 'undefined') {
@@ -182,7 +185,7 @@ export const ParentHomeData = async (
   }
 
   if (!homeInfo.data || refresh) {
-    await getHomeData(type, xxId, userId, njId, bjId);
+    await getHomeData(type, xxId, userId, njId, bjId,XQSJId);
     return homeInfo;
   }
 
@@ -239,6 +242,7 @@ export const CurdayCourse = async (
   curDay?: string,
   njId?: string,
   bjId?: string,
+  XQSJId?: string,
 ) => {
   let data = [];
   let total: any = {};
@@ -246,7 +250,7 @@ export const CurdayCourse = async (
   const myDate = curDay || dayjs().format('YYYY-MM-DD');
   // 获取已经处理过的课程安排数据
   if (typeof homeInfo === 'undefined' && type && xxId && userId) {
-    const res = await ParentHomeData(type, xxId, userId, njId, bjId);
+    const res = await ParentHomeData(type, xxId, userId, njId, bjId,XQSJId);
     data = res.courseSchedule;
     total = res.data;
   } else if (homeInfo && homeInfo?.courseSchedule) {

@@ -23,6 +23,7 @@ export default defineConfig({
     testStudentId: '',
     testStudentBJId: '',
     testStudentNJId: '',
+    testStudentXQSJId: '',
     testTeacherId: '',
   },
   layout: {

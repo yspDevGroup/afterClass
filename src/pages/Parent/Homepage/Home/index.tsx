@@ -26,6 +26,8 @@ const Home = () => {
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
   const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
   const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+  const StorageBjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+  const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   const StorageXSName = localStorage.getItem('studentName');
   const [BJMC, setBJMC] = useState<any>();
   useEffect(() => {
@@ -59,8 +61,8 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       if (StorageXSId) {
-        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId);
+
+        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, StorageBjId,StorageXQSJId);
         const { data } = oriData;
         setTotalData(data);
       }
@@ -128,7 +130,7 @@ const Home = () => {
             </Link>
           </div>
           <div className={styles.enrollArea}>
-            <EnrollClassTime type='student' xxId={currentUser.xxId} userId={StorageXSId} njId={StorageNjId} />
+            <EnrollClassTime type='student' xxId={currentUser.xxId} userId={StorageXSId} njId={StorageNjId} bjId={StorageBjId} XQSJId={StorageXQSJId}  />
           </div>
           <div className={styles.courseArea}>
             <CourseTab dataResource={totalData} />

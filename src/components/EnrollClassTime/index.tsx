@@ -13,8 +13,8 @@ import styles from './index.less';
 import noData from '@/assets/today.png';
 import noData1 from '@/assets/today1.png';
 
-const EnrollClassTime = (props: { type: string; xxId?: string; userId?: string; njId?: string; }) => {
-  const { type, xxId, userId, njId, } = props;
+const EnrollClassTime = (props: { type: string; xxId?: string; userId?: string; njId?: string; bjId?: string; XQSJId?: string; }) => {
+  const { type, xxId, userId, njId, bjId, XQSJId } = props;
   const [resource, setResource] = useState<any>(); // 当日课程状态
   const [datasourse, setDatasourse] = useState<ListData>(); // 今日课程中的数据
   const myDate = dayjs().format('YYYY-MM-DD');
@@ -77,7 +77,7 @@ const EnrollClassTime = (props: { type: string; xxId?: string; userId?: string; 
   useEffect(() => {
     (async () => {
       // 获取处理后的今日课程数据
-      const { total, courseList } = await CurdayCourse(type, xxId, userId, myDate, njId);
+      const { total, courseList } = await CurdayCourse(type, xxId, userId, myDate, njId, bjId, XQSJId);
       const { curCourse } = resetList(courseList);
       setResource(total);
       const todayList: ListData = {

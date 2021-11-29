@@ -153,25 +153,17 @@ const AddCourseClass: FC<AddCourseProps> = ({
         if (res.status === 'ok') {
           setSYNJ(res.data?.NJSJs);
           const newArr: any = [];
-          res.data?.NJSJs.forEach(async (value: any) => {
-            const result = await getSchoolClasses({
-              XXJBSJId: currentUser?.xxId,
-              XNXQId: curXNXQId,
-              njId: value?.id,
-              XQSJId: XQSJIds,
-            });
-            // 获取课程适用班级
-            if (result.status === 'ok') {
-              result.data.rows.forEach((item: any) => {
-                newArr.push(item);
-              });
-            }
-            const compare = (val1: any, val2: any) => {
-              return val1?.NJSJ?.NJ - val2?.NJSJ?.NJ;
-            };
-            newArr.sort(compare);
-            setClassData(newArr);
+          res.data?.NJSJs.forEach((value: any) => {
+            newArr.push(value.id)
+          })
+
+          const result = await getSchoolClasses({
+            XXJBSJId: currentUser?.xxId,
+            XNXQId: curXNXQId,
+            njId: newArr,
+            XQSJId: XQSJIds,
           });
+          setClassData(result.data.rows)
         }
       }
     })();
@@ -1121,7 +1113,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
                     上一步
                   </Button>
                 )}
-                <Button type="primary" onClick={() => next()}>
+                <Button type="primary" onClick={() => next()} style={{width:72}}>
                   {BMLX === false ? (
                     <> {Current < 3 ? '下一步' : '提交'}</>
                   ) : (
