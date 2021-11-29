@@ -15,7 +15,6 @@ import { getClassStudents, getSchoolClasses } from '@/services/after-class/bjsj'
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import Countdown from 'antd/lib/statistic/Countdown';
 import moment from 'moment';
-import type { ActionType } from '@ant-design/pro-table';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -25,9 +24,10 @@ const AgentRegistration = (props: {
   JFTotalost: any;
   ModalVisible: any;
   setModalVisible: any;
-  actionRef: React.MutableRefObject<ActionType | undefined>;
+
+  onsetKHXSBJs: any;
 }) => {
-  const { curXNXQId, BjDetails, JFTotalost, setModalVisible, ModalVisible, actionRef } = props;
+  const { curXNXQId, BjDetails, JFTotalost, setModalVisible, ModalVisible, onsetKHXSBJs } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [BmCurrent, setBmCurrent] = useState(0);
@@ -51,6 +51,7 @@ const AgentRegistration = (props: {
         const res = await getSchoolClasses({
           XXJBSJId: currentUser?.xxId,
           XNXQId: curXNXQId,
+          XQSJId: BjDetails?.XQSJId,
           njId: '',
           page: 0,
           pageSize: 0,
@@ -63,6 +64,7 @@ const AgentRegistration = (props: {
       }
     })();
   }, [curXNXQId]);
+
   useEffect(() => {
     if (OrderId) {
       (async () => {
@@ -184,7 +186,7 @@ const AgentRegistration = (props: {
   const prev = () => {
     setBmCurrent(BmCurrent - 1);
   };
-  const onOkChange = async() => {
+  const onOkChange = async () => {
     setBJMC('');
     setXSMC('');
     setXGJF(false);
@@ -192,8 +194,8 @@ const AgentRegistration = (props: {
     setXZBXSDatas([]);
     setBmCurrent(0);
     setModalVisible(false);
-    actionRef.current?.reload();
-    if(PaymentCG !== '待付款'){
+    onsetKHXSBJs();
+    if (PaymentCG !== '待付款') {
       await deleteKHXSDD({ id: OrderId! });
     }
   };
