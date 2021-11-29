@@ -1,10 +1,10 @@
 /*
-* @description:
-* @author: Sissle Lynn
-* @Date: 2021-09-15 11:50:45
+ * @description:
+ * @author: Sissle Lynn
+ * @Date: 2021-09-15 11:50:45
  * @LastEditTime: 2021-11-26 17:16:57
  * @LastEditors: Sissle Lynn
-*/
+ */
 /* eslint-disable no-param-reassign */
 
 import moment from 'moment';
@@ -40,22 +40,22 @@ const converClassInfo = (data: any) => {
       pkId: id,
       jcId: XXSJPZ?.id,
       fjId: FJSJ?.id,
-    })
+    });
   }
   return classData;
-}
+};
 const uniqueArr = (arr: any) => {
   const days: any[] = [];
-  arr.forEach((ele: { day: any; }) => {
+  arr.forEach((ele: { day: any }) => {
     const findDay = days?.find((it) => it.date === ele.day);
     if (!findDay) {
       days.push({
-        date: ele.day
-      })
+        date: ele.day,
+      });
     }
   });
   return days;
-}
+};
 
 /**
  * 获取移动端首页信息
@@ -64,7 +64,13 @@ const uniqueArr = (arr: any) => {
  * @param userId 用户ID
  * @param njId 学生的年级ID
  */
-const getHomeData = async (type: string, xxId: string, userId: string, njId?: string, bjId?: string) => {
+const getHomeData = async (
+  type: string,
+  xxId: string,
+  userId: string,
+  njId?: string,
+  bjId?: string,
+) => {
   let courseStatus = 'empty';
   const result = await queryXNXQList(xxId);
   homeInfo.markDays = [];
@@ -91,35 +97,39 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
           courseStatus = cStatus;
         }
         const bjIds = [].map.call(yxkc, (v: { id: string }) => {
-          return v.id
+          return v.id;
         });
         if (yxkc?.length) {
           const clsRes = await getAllKHBJKSSJ({
             KHBJSJIds: bjIds as string[],
             page: 0,
-            pageSize: 0
+            pageSize: 0,
           });
           if (clsRes.status === 'ok' && clsRes.data) {
             const { rows } = clsRes.data;
             let allDates: any[] = [];
             if (rows?.length) {
-              homeInfo.courseSchedule = [].map.call(rows, (val: {
-                KHBJSJId: string,
-                DATA: string
-              }) => {
-                const { KHBJSJId, DATA } = val;
-                const days = JSON.parse(DATA);
-                const clsArr = weekSchedule?.filter((value: any) => value.KHBJSJ.id === KHBJSJId);
-                allDates = allDates.concat(days);
-                return {
-                  KHBJSJId,
-                  days,
-                  detail: converClassInfo(clsArr),
-                }
-              })
+              homeInfo.courseSchedule = [].map.call(
+                rows,
+                (val: { KHBJSJId: string; DATA: string }) => {
+                  const { KHBJSJId, DATA } = val;
+                  const days = JSON.parse(DATA);
+                  const clsArr = weekSchedule?.filter((value: any) => value.KHBJSJ.id === KHBJSJId);
+                  allDates = allDates.concat(days);
+                  return {
+                    KHBJSJId,
+                    days,
+                    detail: converClassInfo(clsArr),
+                  };
+                },
+              );
             }
             homeInfo.markDays = uniqueArr(allDates);
-            homeInfo.markDays?.sort((a, b) => new Date(a.date.replace(/-/g, '/')).getTime() - new Date(b.date.replace(/-/g, '/')).getTime());
+            homeInfo.markDays?.sort(
+              (a, b) =>
+                new Date(a.date.replace(/-/g, '/')).getTime() -
+                new Date(b.date.replace(/-/g, '/')).getTime(),
+            );
           }
         }
         homeInfo.data = {
@@ -127,9 +137,12 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
           courseStatus,
           yxkc,
           weekSchedule,
+          bmkssj,
+          bmjssj,
+          skkssj,
+          skjssj,
           ...rest,
         };
-
       }
     } else {
       // enHenceMsg(res.message);
@@ -142,7 +155,7 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
       courseStatus,
     };
   }
-}
+};
 /**
  * 移动端首页获取数据处理
  * @param type 类属教师还是学生 'teacher'|'student'
@@ -153,7 +166,14 @@ const getHomeData = async (type: string, xxId: string, userId: string, njId?: st
  * @param refresh 是否需要更新接口重新获取数据
  * @returns
  */
-export const ParentHomeData = async (type: string, xxId: string, userId: string, njId?: string, bjId?: string, refresh?: boolean) => {
+export const ParentHomeData = async (
+  type: string,
+  xxId: string,
+  userId: string,
+  njId?: string,
+  bjId?: string,
+  refresh?: boolean,
+) => {
   if (typeof homeInfo === 'undefined') {
     ((w) => {
       // eslint-disable-next-line no-param-reassign
@@ -177,8 +197,8 @@ export const ParentHomeData = async (type: string, xxId: string, userId: string,
 const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
   newData.forEach((ele: any) => {
     // 通过bjId,jcId确认原有数据中是否与已代课数据重合
-    const oriInd = oriData.findIndex((v: { bjId: any; jcId: any; }) => {
-      return ele.KHBJSJId === v.bjId && ele.XXSJPZId === v.jcId
+    const oriInd = oriData.findIndex((v: { bjId: any; jcId: any }) => {
+      return ele.KHBJSJId === v.bjId && ele.XXSJPZId === v.jcId;
     });
     // 如果数据重合则增加原有数据的相关代课状态,否则在数组中追加相关已代课数据
     if (oriInd !== -1) {
@@ -200,11 +220,11 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
         date: ele.SKRQ,
         start: ele.KSSJ || ele.XXSJPZ.KSSJ.substring(0, 5),
         end: ele.JSSJ || ele.XXSJPZ.JSSJ.substring(0, 5),
-        status
-      })
+        status,
+      });
     }
   });
-}
+};
 /**
  * 针对首页中今日课程做部分处理
  * @param type 类属教师还是学生 'teacher'|'student'
@@ -212,7 +232,14 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
  * @param userId 用户ID
  * @returns
  */
-export const CurdayCourse = async (type?: string, xxId?: string, userId?: string, curDay?: string, njId?: string, bjId?: string) => {
+export const CurdayCourse = async (
+  type?: string,
+  xxId?: string,
+  userId?: string,
+  curDay?: string,
+  njId?: string,
+  bjId?: string,
+) => {
   let data = [];
   let total: any = {};
   const day = curDay ? new Date(curDay.replace(/-/g, '/')) : new Date(); // 获取当前的时间
@@ -228,7 +255,7 @@ export const CurdayCourse = async (type?: string, xxId?: string, userId?: string
   }
   // 找出今日课程
   const totalList = data?.filter((item: { days: any[] }) => {
-    return item.days.find((v: { day: string }) => v.day === myDate)
+    return item.days.find((v: { day: string }) => v.day === myDate);
   });
   let courseList: any[] = [];
   totalList?.forEach((item: { detail: any[]; days?: any[] }) => {
@@ -254,23 +281,23 @@ export const CurdayCourse = async (type?: string, xxId?: string, userId?: string
               TKFJ: {
                 id: currentDay.room?.id,
                 FJMC: currentDay.room?.name,
-              }
+              },
             },
-          }
+          };
         }
         return {
-          ...val
-        }
-      })
+          ...val,
+        };
+      });
       courseList = [...courseList, ...newArr];
     }
-  })
+  });
   // 查询今日是否存在调代课，请假的课程
   if (type === 'teacher') {
     // 教师端接口
     const response = await getTeachersApplication({
       JZGJBSJId: userId,
-      startDate: myDate
+      startDate: myDate,
     });
 
     if (response?.status === 'ok' && response.data) {
@@ -300,33 +327,33 @@ export const CurdayCourse = async (type?: string, xxId?: string, userId?: string
       XSJBSJId: userId,
       XNXQId: total.xnxqId,
       page: 0,
-      pageSize: 0
-    })
+      pageSize: 0,
+    });
     if (res?.status === 'ok' && res.data) {
-      const todayQjs: { KHBJSJId?: string, XXSJPZId?: string }[] = [];
+      const todayQjs: { KHBJSJId?: string; XXSJPZId?: string }[] = [];
       res.data.rows?.forEach((val: API.KHXSQJ) => {
         val.KHQJKCs?.forEach((v) => {
           todayQjs.push({
             KHBJSJId: v.KHBJSJ?.id,
-            XXSJPZId: v.XXSJPZId
-          })
-        })
-      })
+            XXSJPZId: v.XXSJPZId,
+          });
+        });
+      });
       if (todayQjs?.length) {
         CountCurdayCourse(todayQjs, courseList, '已请假');
       }
     }
   }
-  courseList?.sort((a: { start: string; }, b: { start: string; }) => {
+  courseList?.sort((a: { start: string }, b: { start: string }) => {
     const aT = Number(a.start.replace(/:/g, ''));
     const bT = Number(b.start.replace(/:/g, ''));
     return aT - bT;
   });
   return {
     total,
-    courseList
+    courseList,
   };
-}
+};
 /**
  * 计算课程已学课时，
  * @param data 课程安排信息
@@ -334,33 +361,35 @@ export const CurdayCourse = async (type?: string, xxId?: string, userId?: string
  */
 export const CountCourses = (data: any) => {
   const myDate = dayjs().format('YYYY/MM/DD');
-  const courseData = data.length && data.map((item: { detail: any; days: any; }) => {
-    const { detail, days } = item;
-    const learned = days.filter((ele: { day: string; }) => {
-      const time = new Date(ele.day.replace(/-/g, '/')).getTime() - new Date(myDate).getTime();
-      return time < 0
+  const courseData =
+    data.length &&
+    data.map((item: { detail: any; days: any }) => {
+      const { detail, days } = item;
+      const learned = days.filter((ele: { day: string }) => {
+        const time = new Date(ele.day.replace(/-/g, '/')).getTime() - new Date(myDate).getTime();
+        return time < 0;
+      });
+      return {
+        id: detail?.[0]?.bjId,
+        title: `${detail?.[0]?.title} 【${detail?.[0]?.BJMC}】`,
+        BJMC: detail?.[0]?.BJMC,
+        YXKS: learned?.length || 0,
+        ZKS: detail?.[0]?.KSS,
+        link: `/parent/home/courseTable?classid=${detail?.[0]?.bjId}&path=study`,
+        desc: [
+          {
+            left: [
+              `${detail.map((v: any) => {
+                return `每周${'日一二三四五六'.charAt(v.wkd)} ${v.start}-${v.end}`;
+              })}`,
+            ],
+          },
+          {
+            left: [`共${detail?.[0]?.KSS}课时`, `已学${learned?.length || 0}课时`],
+          },
+        ],
+      };
     });
-    return {
-      id: detail?.[0]?.bjId,
-      title: `${detail?.[0]?.title} 【${detail?.[0]?.BJMC}】`,
-      BJMC: detail?.[0]?.BJMC,
-      YXKS: learned?.length || 0,
-      ZKS: detail?.[0]?.KSS,
-      link: `/parent/home/courseTable?classid=${detail?.[0]?.bjId}&path=study`,
-      desc: [
-        {
-          left: [
-            `${detail.map((v: any) => {
-              return `每周${'日一二三四五六'.charAt(v.wkd)} ${v.start}-${v.end}`;
-            })}`
-          ]
-        },
-        {
-          left: [`共${detail?.[0]?.KSS}课时`, `已学${learned?.length || 0}课时`],
-        },
-      ],
-    }
-  });
   return courseData;
 };
 /**
@@ -385,9 +414,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           bjId: item.bjId,
           desc: [
             {
-              left: [
-                `${item.start}-${item.end}  |  ${item.BJMC} `,
-              ],
+              left: [`${item.start}-${item.end}  |  ${item.BJMC} `],
             },
             {
               left: [`${item.address}`],
@@ -396,7 +423,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           bjid: item.bjId,
           jcId: item.jcId,
           FJId: item.fjId,
-        })
+        });
       }
     } else {
       const enrollLink = {
@@ -405,7 +432,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           pkId: item.pkId,
           bjId: item.bjId,
           jcId: item.jcId,
-          date: item.date || day
+          date: item.date || day,
         },
       };
       data.push({
@@ -413,16 +440,17 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
         title: item.title,
         BJMC: item.BJMC,
         img: item.img,
-        link: item.status === '代上课' ? null : `/teacher/home/courseDetails?classid=${item.bjId}&path=education&date=${day}`,
+        link:
+          item.status === '代上课'
+            ? null
+            : `/teacher/home/courseDetails?classid=${item.bjId}&path=education&date=${day}`,
         enrollLink,
         start: item.start,
         end: item.end,
         bjId: item.bjId,
         desc: [
           {
-            left: [
-              `${item.start}-${item.end}  |  ${item.BJMC} `,
-            ],
+            left: [`${item.start}-${item.end}  |  ${item.BJMC} `],
           },
           {
             left: [`${item.address}`],
@@ -431,9 +459,9 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
         bjid: item.bjId,
         jcId: item.jcId,
         FJId: item.fjId,
-      })
+      });
     }
-  })
+  });
   return data;
 };
 /**
@@ -459,9 +487,7 @@ export const convertStuCourse = (course: any[] = [], type?: string) => {
           bjId: item.bjId,
           desc: [
             {
-              left: [
-                `${item.start}-${item.end}  |  ${item.BJMC} `,
-              ],
+              left: [`${item.start}-${item.end}  |  ${item.BJMC} `],
             },
             {
               left: [`${item.address}`],
@@ -470,7 +496,7 @@ export const convertStuCourse = (course: any[] = [], type?: string) => {
           bjid: item.bjId,
           jcId: item.jcId,
           FJId: item.fjId,
-        })
+        });
       }
     } else {
       data.push({
@@ -484,9 +510,7 @@ export const convertStuCourse = (course: any[] = [], type?: string) => {
         bjId: item.bjId,
         desc: [
           {
-            left: [
-              `${item.start}-${item.end}  |  ${item.BJMC} `,
-            ],
+            left: [`${item.start}-${item.end}  |  ${item.BJMC} `],
           },
           {
             left: [`${item.address}`],
@@ -495,9 +519,9 @@ export const convertStuCourse = (course: any[] = [], type?: string) => {
         bjid: item.bjId,
         jcId: item.jcId,
         FJId: item.fjId,
-      })
+      });
     }
-  })
+  });
   return data;
 };
 /**
@@ -508,13 +532,18 @@ export const convertStuCourse = (course: any[] = [], type?: string) => {
  * @param days
  * @returns
  */
-export const convertTimeTable = async (userId: string, bjId: string, attendance: any[], days: any[]) => {
+export const convertTimeTable = async (
+  userId: string,
+  bjId: string,
+  attendance: any[],
+  days: any[],
+) => {
   const myDate: Date = new Date();
   const currentDate = moment(myDate).format('YYYY-MM-DD');
   const res = await getAllKHJSTDK({
     SKJSId: userId,
     KHBJSJId: bjId,
-    ZT: [1]
+    ZT: [1],
   });
   const specialData = res?.data?.rows;
   const dataTable: any[] = [];
@@ -531,7 +560,9 @@ export const convertTimeTable = async (userId: string, bjId: string, attendance:
         }
       }
       if (specialData?.length) {
-        const curCQ = specialData.find((item: any) => item.SKRQ === day && item.XXSJPZ?.id === jcId);
+        const curCQ = specialData.find(
+          (item: any) => item.SKRQ === day && item.XXSJPZ?.id === jcId,
+        );
         if (curCQ) {
           status = curCQ?.LX === 1 ? '代课' : '调课';
           otherInfo = curCQ;
@@ -552,11 +583,9 @@ export const convertTimeTable = async (userId: string, bjId: string, attendance:
       dataTable.push({
         ...ele,
         status,
-        otherInfo
+        otherInfo,
       });
     }
   }
   return dataTable;
-}
-
-
+};
