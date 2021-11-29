@@ -1,9 +1,9 @@
-import { useModel, } from 'umi';
+import { useModel } from 'umi';
 import { DatePicker } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import PageContainer from '@/components/PageContainer';
-import { getKHXKJL } from '@/services/after-class/khxkjl'
+import { getKHXKJL } from '@/services/after-class/khxkjl';
 import { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
 import { getTableWidth } from '@/utils/utils';
@@ -24,7 +24,7 @@ const CoursePatrol = () => {
       valueType: 'index',
       width: 58,
       fixed: 'left',
-      align: 'center'
+      align: 'center',
     },
     {
       title: '巡课日期',
@@ -32,7 +32,7 @@ const CoursePatrol = () => {
       key: 'RQ',
       fixed: 'left',
       align: 'center',
-      width: 120
+      width: 120,
     },
     {
       title: '巡课教师',
@@ -40,7 +40,7 @@ const CoursePatrol = () => {
       key: 'XKJS',
       align: 'center',
       render: (text: any) => text?.XM,
-      width: 120
+      width: 120,
     },
     {
       title: '授课教师',
@@ -48,7 +48,7 @@ const CoursePatrol = () => {
       key: 'SKJS',
       align: 'center',
       render: (text: any) => text?.XM,
-      width: 120
+      width: 120,
     },
     {
       title: '课程班级名称',
@@ -56,42 +56,42 @@ const CoursePatrol = () => {
       key: 'KHBJSJ',
       align: 'center',
       render: (text: any, record: any) => {
-        return record?.KHBJSJ?.BJMC
+        return record?.KHBJSJ?.BJMC;
       },
       ellipsis: true,
-      width: 120
+      width: 120,
     },
     {
       title: '是否准时上课',
       dataIndex: 'SFZSSK',
       key: 'SFZSSK',
       align: 'center',
-      render: (text) => text ? '是' : '否',
-      width: 120
+      render: (text) => (text ? '是' : '否'),
+      width: 120,
     },
     {
       title: '是否为原定教师',
       dataIndex: 'SFYDJS',
       key: ' SFYDJS',
       align: 'center',
-      render: (text) => text ? '是' : '否',
-      width: 150
+      render: (text) => (text ? '是' : '否'),
+      width: 150,
     },
     {
       title: '课堂点名',
       dataIndex: 'SFDM',
       key: ' SFDM',
       align: 'center',
-      render: (text) => text ? '是' : '否',
-      width: 120
+      render: (text) => (text ? '是' : '否'),
+      width: 120,
     },
     {
       title: '实到人数是否准确',
       dataIndex: 'RSSFZQ',
       key: ' RSSFZQ',
       align: 'center',
-      render: (text) => text ? '是' : '否',
-      width: 150
+      render: (text) => (text ? '是' : '否'),
+      width: 150,
     },
     {
       title: '应到人数',
@@ -123,17 +123,21 @@ const CoursePatrol = () => {
       render: (text) => {
         return (
           <Tooltip title={text}>
-            <div style={{
-              textOverflow: 'ellipsis',
-              width: '100px',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textAlign: 'center',
-              margin: '0 auto',
-            }}>{text}</div>
+            <div
+              style={{
+                textOverflow: 'ellipsis',
+                width: '100px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textAlign: 'center',
+                margin: '0 auto',
+              }}
+            >
+              {text}
+            </div>
           </Tooltip>
-        )
-      }
+        );
+      },
     },
   ];
   const termChange = (val: string) => {
@@ -142,14 +146,15 @@ const CoursePatrol = () => {
   useEffect(() => {
     (async () => {
       const res = await getKHXKJL({
+        XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId,
         RQ: PatrolData,
-      })
+      });
       if (res.status === 'ok') {
-        setDataSource(res.data?.rows)
+        setDataSource(res.data?.rows);
       }
-    })()
-  }, [curXNXQId, PatrolData])
+    })();
+  }, [curXNXQId, PatrolData]);
   return (
     <PageContainer>
       <ProTable
@@ -165,11 +170,11 @@ const CoursePatrol = () => {
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
             <div>
-              <label htmlFor='date'>巡课日期：</label>
+              <label htmlFor="date">巡课日期：</label>
               <DatePicker
                 style={{ width: 150 }}
                 onChange={(value) => {
-                  setPatrolData(value)
+                  setPatrolData(value);
                 }}
               />
             </div>
@@ -183,9 +188,7 @@ const CoursePatrol = () => {
         }}
         search={false}
       />
-
-
     </PageContainer>
-  )
-}
-export default CoursePatrol
+  );
+};
+export default CoursePatrol;
