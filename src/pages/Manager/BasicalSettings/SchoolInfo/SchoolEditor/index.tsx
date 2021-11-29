@@ -1,44 +1,42 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './index.less';
-import type { FormInstance} from 'antd';
+import type { FormInstance } from 'antd';
 import { Button, message, Select } from 'antd';
 import { history, useModel } from 'umi';
 import PageContainer from '@/components/PageContainer';
 import CustomForm from '@/components/CustomForm';
-import AvatarUpload from '@/components/AvatarUpload';
 import type { FormItemType } from '@/components/CustomForm/interfice';
 import { updateXXJBSJ } from '@/services/after-class/xxjbsj';
 
 const { Option } = Select;
 const formItemLayout = {
   labelCol: { flex: '7em' },
-  wrapperCol: { flex: 'auto' }
+  wrapperCol: { flex: 'auto' },
 };
 
 const schoolLevel = [
   {
     value: '幼儿园',
-    text: '幼儿园'
+    text: '幼儿园',
   },
   {
     value: '小学',
-    text: '小学'
+    text: '小学',
   },
   {
     value: '初中',
-    text: '初中'
+    text: '初中',
   },
   {
     value: '高中',
-    text: '高中'
+    text: '高中',
   },
 ];
 
 const SchoolEditor = (props: any) => {
-  const { refresh} = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
   const [editForm, setEditForm] = useState<FormInstance<any>>();
   const [info, setInfo] = useState<any>();
-  const [xhimg, setXhimg] = useState<any>();
   const [cities, setCities] = useState<any>();
   const [cityAdcode, setCityAdcode] = useState<string>();
   const [secondCity, setSecondCity] = useState<any>();
@@ -72,24 +70,35 @@ const SchoolEditor = (props: any) => {
   useEffect(() => {
     requestData();
   }, []);
+  const fetchUserInfo = useCallback(async () => {
+    const userInfo = await initialState?.fetchUserInfo?.();
+    if (userInfo) {
+      setInitialState(initialState ? { ...initialState, currentUser: userInfo } : undefined);
+    }
+  }, []);
   const onFinish = async (values: any) => {
     values.XH = imageUrl || values.XH;
     values.XD = values?.XD?.toString();
-    values.XZQHM = cityAdcode||values.XZQHM;
-    values.XZQ = `${provinceVal?.label}${cityVal?.label ? `/${cityVal?.label}` : ''}${countyVal?.label ? `/${countyVal?.label}` : ''}`;
-    if(values.XZQHM){
-      const res = await updateXXJBSJ({
-        id: values.id!,
-      }, values);
+    values.XZQHM = cityAdcode || values.XZQHM;
+    values.XZQ = `${provinceVal?.label}${cityVal?.label ? `/${cityVal?.label}` : ''}${
+      countyVal?.label ? `/${countyVal?.label}` : ''
+    }`;
+    if (values.XZQHM) {
+      const res = await updateXXJBSJ(
+        {
+          id: values.id!,
+        },
+        values,
+      );
       if (res.status === 'ok') {
         message.success('保存成功');
-        refresh();
+        await fetchUserInfo();
         history.push('/basicalSettings/schoolInfo');
       } else {
         const msg = res.message;
         message.error(msg);
       }
-    }else{
+    } else {
       message.error('请选择政区域');
     }
   };
@@ -118,7 +127,7 @@ const SchoolEditor = (props: any) => {
           setProvinceVal({
             value: value.value,
             label: value.label,
-            key: value.value
+            key: value.value,
           });
           setCityVal({});
           setCountyVal({});
@@ -145,7 +154,7 @@ const SchoolEditor = (props: any) => {
           setCityVal({
             value: value.value,
             label: value.label,
-            key: value.value
+            key: value.value,
           });
           setCountyVal({});
           setCityAdcode(undefined);
@@ -156,7 +165,7 @@ const SchoolEditor = (props: any) => {
       setCountyVal({
         value: value.value,
         label: value.label,
-        key: value.value
+        key: value.value,
       });
     }
   };
@@ -164,7 +173,10 @@ const SchoolEditor = (props: any) => {
     const ajax = new XMLHttpRequest();
     ajax.open(
       'get',
-      `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(0, 2)}0000_city.json`
+      `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(
+        0,
+        2,
+      )}0000_city.json`,
     );
     ajax.send();
     ajax.onreadystatechange = function () {
@@ -178,7 +190,10 @@ const SchoolEditor = (props: any) => {
     const ajax = new XMLHttpRequest();
     ajax.open(
       'get',
-      `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(0, 4)}00_district.json`
+      `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(
+        0,
+        4,
+      )}00_district.json`,
     );
     ajax.send();
     ajax.onreadystatechange = function () {
@@ -198,32 +213,32 @@ const SchoolEditor = (props: any) => {
     if (currentValue && currentValue.schoolInfo) {
       const current = currentValue.schoolInfo;
       setImageUrl(current.XH);
-      const { XD, XZQHM, XZQ} = current;
+      const { XD, XZQHM, XZQ } = current;
       if (XZQHM === '810000' || XZQHM === '820000' || XZQHM === '710000') {
         setShowCity(false);
       }
-      if(XZQHM){
+      if (XZQHM) {
         requestData1(XZQHM);
         requestData2(XZQHM);
       }
       setProvinceVal({
         value: `${XZQHM?.substring(0, 2)}0000`,
         label: XZQ?.split('/')[0],
-        key: `${XZQHM?.substring(0, 2)}0000`
+        key: `${XZQHM?.substring(0, 2)}0000`,
       });
       setCityVal({
         value: `${XZQHM?.substring(0, 4)}00`,
         label: XZQ?.split('/')[1],
-        key: `${XZQHM?.substring(0, 4)}00`
+        key: `${XZQHM?.substring(0, 4)}00`,
       });
       setCountyVal({
         value: XZQHM,
         label: XZQ?.split('/')[2],
-        key: XZQHM
+        key: XZQHM,
       });
       setInfo({
         ...current,
-        XD: XD ? XD.split(',') : undefined
+        XD: XD ? XD.split(',') : undefined,
       });
     }
   }, [currentValue]);
@@ -237,7 +252,7 @@ const SchoolEditor = (props: any) => {
         const res = e.file.response;
         if (res.status === 'ok') {
           message.success(`上传成功`);
-         setImageUrl(res.data)
+          setImageUrl(res.data);
         }
       }
     } else if (e.file.status === 'error') {
@@ -265,7 +280,7 @@ const SchoolEditor = (props: any) => {
           name: 'XXMC',
           key: 'XXMC',
           rules: [{ required: true, message: '该项不能为空，请输入' }],
-          span: 12
+          span: 12,
         },
         {
           type: 'uploadImage',
@@ -280,9 +295,9 @@ const SchoolEditor = (props: any) => {
           imagename: 'image',
           handleImageChange: (value: any) => {
             imageChange('ZP', value);
-          }
+          },
         },
-      ]
+      ],
     },
     {
       type: 'group',
@@ -293,9 +308,9 @@ const SchoolEditor = (props: any) => {
           label: '英文名称',
           name: 'XXYWMC',
           key: 'XXYWMC',
-          span: 12
-        }
-      ]
+          span: 12,
+        },
+      ],
     },
     {
       type: 'group',
@@ -309,16 +324,16 @@ const SchoolEditor = (props: any) => {
           items: schoolLevel,
           mode: 'multiple',
           rules: [{ required: true, message: '该项不能为空，请选择' }],
-          span: 12
+          span: 12,
         },
         {
           type: 'input',
           label: '联系人',
           name: 'LXR',
           rules: [{ required: true, message: '该项不能为空，请输入' }],
-          key: 'LXR'
+          key: 'LXR',
         },
-      ]
+      ],
     },
     {
       type: 'group',
@@ -330,7 +345,7 @@ const SchoolEditor = (props: any) => {
           name: 'XZQHM',
           key: 'XZQHM',
           span: 12,
-          className:'ui-form-required',
+          className: 'ui-form-required',
           valuePropName: 'XZQHM',
           children: (
             <>
@@ -351,43 +366,47 @@ const SchoolEditor = (props: any) => {
                   );
                 })}
               </Select>
-              {showCity ? <>
-                <Select
-                  placeholder="请选择"
-                  style={{ marginRight: 9 }}
-                  labelInValue
-                  value={cityVal}
-                  onChange={(value: any) => {
-                    handleChange('secondCity', value);
-                  }}
-                >
-                  {secondCity?.map((item: any) => {
-                    return (
-                      <Option value={item.adcode} key={item.name}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
-                <Select
-                  placeholder="请选择"
-                  labelInValue
-                  value={countyVal}
-                  onChange={(value: any) => {
-                    handleChange('county', value);
-                  }}
-                >
-                  {county?.map((item: any) => {
-                    return (
-                      <Option value={item.adcode} key={item.adcode}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </> : ''}
+              {showCity ? (
+                <>
+                  <Select
+                    placeholder="请选择"
+                    style={{ marginRight: 9 }}
+                    labelInValue
+                    value={cityVal}
+                    onChange={(value: any) => {
+                      handleChange('secondCity', value);
+                    }}
+                  >
+                    {secondCity?.map((item: any) => {
+                      return (
+                        <Option value={item.adcode} key={item.name}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                  <Select
+                    placeholder="请选择"
+                    labelInValue
+                    value={countyVal}
+                    onChange={(value: any) => {
+                      handleChange('county', value);
+                    }}
+                  >
+                    {county?.map((item: any) => {
+                      return (
+                        <Option value={item.adcode} key={item.adcode}>
+                          {item.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </>
+              ) : (
+                ''
+              )}
             </>
-          )
+          ),
         },
         {
           type: 'input',
@@ -401,9 +420,9 @@ const SchoolEditor = (props: any) => {
               message: '填写的电话格式有误',
             },
           ],
-          key: 'LXDH'
+          key: 'LXDH',
         },
-      ]
+      ],
     },
     {
       type: 'group',
@@ -414,15 +433,15 @@ const SchoolEditor = (props: any) => {
           label: '学校地址',
           name: 'XXDZ',
           rules: [{ required: true, message: '该项不能为空，请输入' }],
-          key: 'XXDZ'
+          key: 'XXDZ',
         },
         {
           type: 'input',
           label: '电子邮箱',
           name: 'DZXX',
-          key: 'DZXX'
+          key: 'DZXX',
         },
-      ]
+      ],
     },
     {
       type: 'group',
@@ -438,9 +457,9 @@ const SchoolEditor = (props: any) => {
           type: 'input',
           label: '邮政编码',
           name: 'XXYZBM',
-          key: 'XXYZBM'
+          key: 'XXYZBM',
         },
-      ]
+      ],
     },
     {
       type: 'group',
@@ -451,15 +470,18 @@ const SchoolEditor = (props: any) => {
           label: '学校简介',
           showCount: true,
           maxLength: 255,
-          rules: [{ required: true, message: '该项不能为空，请输入' }, {
-            max: 255,
-            message: '学校简介不应超过255个字符'
-          }],
+          rules: [
+            { required: true, message: '该项不能为空，请输入' },
+            {
+              max: 255,
+              message: '学校简介不应超过255个字符',
+            },
+          ],
           name: 'LSYG',
-          key: 'LSYG'
-        }
-      ]
-    }
+          key: 'LSYG',
+        },
+      ],
+    },
   ];
   return (
     <PageContainer>
