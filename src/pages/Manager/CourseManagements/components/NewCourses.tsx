@@ -19,7 +19,7 @@ type PropsType = {
   kclxOptions?: any[];
   optionsNJ?: any[];
   currentUser?: API.CurrentUser;
-  getData: () => Promise<void>
+  getData: () => Promise<void>;
 };
 const formLayout = {
   labelCol: {},
@@ -27,7 +27,7 @@ const formLayout = {
 };
 
 const NewCourses = (props: PropsType) => {
-  const { current, onClose, visible, readonly, kclxOptions, optionsNJ, currentUser,getData} =
+  const { current, onClose, visible, readonly, kclxOptions, optionsNJ, currentUser, getData } =
     props;
   const [form, setForm] = useState<any>();
   // 上传成功后返回的图片地址
@@ -186,7 +186,7 @@ const NewCourses = (props: PropsType) => {
       imageurl: imageUrl || current?.KCTP, // 回显地址
       handleImageChange,
       accept: '.jpg, .jpeg, .png', // 接受上传的文件类型
-      rules: [{ required: isTrue, message: '请上传封面图片' }],
+      // rules: [{ required: isTrue, message: '请上传封面图片' }],
     },
     {
       type: 'textArea',
