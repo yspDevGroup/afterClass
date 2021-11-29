@@ -18,6 +18,7 @@ import styles from '../index.less';
 import AgentRegistration from '../components/AgentRegistration';
 import { sendMessageToParent } from '@/services/after-class/wechat';
 import ReplacePay from './replacePay';
+
 const { TextArea } = Input;
 
 /**
@@ -118,7 +119,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       setTimeFalg(false);
     }
   };
-  //开课时间是否在范围内
+  // 开课时间是否在范围内
   const getISKKTimeRange = () => {
     if (applicantData?.KKRQ && applicantData?.JKRQ) {
       const nowTime = moment().valueOf();
@@ -134,7 +135,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       setkkTimeFalg(false);
     }
   };
-  //取消报名
+  // 取消报名
   const batchCancel = async (XSList: { XSJBSJId: string; ZT: number }[]) => {
     if (XSList.length > 0) {
       const result = await cancleClass({
@@ -147,7 +148,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       });
       if (result.status === 'ok') {
         message.success('取消报名成功');
-        actionRef?.current?.clearSelected();
+        actionRef?.current?.clearSelected?.();
         onsetKHXSBJs();
       } else {
         message.error(result.message);
@@ -206,7 +207,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       if (res?.status === 'ok') {
         message.success('已催缴');
         setJFVisible(false);
-        actionRef?.current?.clearSelected();
+        actionRef?.current?.clearSelected?.();
       } else {
         setJFVisible(false);
         message.error(res.message);
@@ -228,8 +229,8 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     // 判断人数是否超出范围
     if (BJRS - KHXSBJs?.length < selectNumber) {
       message.error('报名人数超出课程班限定人数');
-    } else {
-      singUpRef?.current?.onSubmit();
+    } else if(singUpRef?.current){
+      singUpRef.current.onSubmit?.();
     }
   };
 
@@ -301,9 +302,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       render: (_text: any) => {
         if (_text === 3) {
           return <span style={{ color: '#4884ff' }}>未缴费</span>;
-        } else {
-          return <span style={{ color: '#36970c' }}>已缴费</span>;
         }
+        return <span style={{ color: '#36970c' }}>已缴费</span>;
+
       },
     },
     {
@@ -319,9 +320,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             {
               //  如果报名时间内 开课时间外 报名类型属于先报名后缴费 或者缴费即报名 并且付款的的情况 实现退款退费
               !kkTimeFalg &&
-              applicantData?.BJZT === '已开班' &&
-              applicantData.BMLX !== 2 &&
-              record?.ZT === 0 ? (
+                applicantData?.BJZT === '已开班' &&
+                applicantData.BMLX !== 2 &&
+                record?.ZT === 0 ? (
                 <Popconfirm
                   title="确定取消该学生的报名吗?"
                   onConfirm={async () => {
@@ -336,52 +337,54 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                           KHBJSJId: record?.KHBJSJId,
                         },
                       ]);
-                      if (res.status === 'ok') {
+                      if (res?.status === 'ok' && res?.data) {
                         // 更新退课状态
-                        const resupdateKHTKSJ = await updateKHTKSJ(
-                          { id: res?.data?.[0]?.id },
-                          { ZT: 1 },
-                        );
-                        // 查询该订单费用
-                        if (resupdateKHTKSJ.status === 'ok') {
-                          const resgetAllKHXSDD = await getAllKHXSDD({
-                            XXJBSJId: currentUser?.xxId,
-                            XSJBSJId: record?.XSJBSJ?.id,
-                            DDLX: 0,
-                            KHBJSJId: applicantData?.id,
-                          });
-                          if (resgetAllKHXSDD.status === 'ok') {
-                            if (resgetAllKHXSDD!.data![0].DDFY! <= 0) {
-                              onsetKHXSBJs();
-                              message.success('取消成功');
-                            } else {
-                              // 创建退款
-                              const rescreateKHXSTK = await createKHXSTK({
-                                KHBJSJId: record?.KHBJSJId,
-                                KHTKSJId: res?.data?.[0]?.id,
-                                XXJBSJId: currentUser?.xxId,
-                                XSJBSJId: record?.XSJBSJ?.id,
-                                TKJE: resgetAllKHXSDD!.data![0].DDFY!,
-                                JZGJBSJId: currentUser?.JSId || testTeacherId,
-                                TKZT: 0,
-                                SPSJ: moment(new Date()).format(),
-                              });
-                              if (rescreateKHXSTK.status === 'ok') {
-                                // 更新退款状态
-                                const resupdateKHXSTK = await updateKHXSTK(
-                                  { id: rescreateKHXSTK!.data!.id! },
-                                  {
-                                    TKZT: 1,
-                                    TKSJ: moment(new Date()).format(),
-                                    deviceIp: '117.36.118.42',
-                                  },
-                                );
-                                if (resupdateKHXSTK.status === 'ok') {
-                                  message.success('课程费用已原路返还');
-                                  onsetKHXSBJs();
-                                  actionRefs.current?.reload();
-                                } else {
-                                  message.error('取消失败，请联系管理员或稍后重试。');
+                        if (res?.data?.[0]?.id) {
+                          const resupdateKHTKSJ = await updateKHTKSJ(
+                            { id: res?.data?.[0]?.id },
+                            { ZT: 1 },
+                          );
+                          // 查询该订单费用
+                          if (resupdateKHTKSJ.status === 'ok') {
+                            const resgetAllKHXSDD = await getAllKHXSDD({
+                              XXJBSJId: currentUser?.xxId,
+                              XSJBSJId: record?.XSJBSJ?.id,
+                              DDLX: 0,
+                              KHBJSJId: applicantData?.id,
+                            });
+                            if (resgetAllKHXSDD.status === 'ok') {
+                              if (resgetAllKHXSDD!.data![0].DDFY! <= 0) {
+                                onsetKHXSBJs();
+                                message.success('取消成功');
+                              } else {
+                                // 创建退款
+                                const rescreateKHXSTK = await createKHXSTK({
+                                  KHBJSJId: record?.KHBJSJId,
+                                  KHTKSJId: res?.data?.[0]?.id,
+                                  XXJBSJId: currentUser?.xxId,
+                                  XSJBSJId: record?.XSJBSJ?.id,
+                                  TKJE: resgetAllKHXSDD!.data![0].DDFY!,
+                                  JZGJBSJId: currentUser?.JSId || testTeacherId,
+                                  TKZT: 0,
+                                  SPSJ: moment(new Date()).format(),
+                                });
+                                if (rescreateKHXSTK.status === 'ok') {
+                                  // 更新退款状态
+                                  const resupdateKHXSTK = await updateKHXSTK(
+                                    { id: rescreateKHXSTK!.data!.id! },
+                                    {
+                                      TKZT: 1,
+                                      TKSJ: moment(new Date()).format(),
+                                      deviceIp: '117.36.118.42',
+                                    },
+                                  );
+                                  if (resupdateKHXSTK.status === 'ok') {
+                                    message.success('课程费用已原路返还');
+                                    onsetKHXSBJs();
+                                    actionRefs.current?.reload();
+                                  } else {
+                                    message.error('取消失败，请联系管理员或稍后重试。');
+                                  }
                                 }
                               }
                             }
@@ -423,7 +426,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
 
             {/* { applicantData?.BMLX!==1&&record?.ZT===0&&<>{onCancelSignUp(record.id)} <Divider type="vertical" /></>} */}
 
-            {/* 催缴  先缴费后报名*/}
+            {/* 催缴  先缴费后报名 */}
             {applicantData?.BMLX === 0 && record.ZT === 3 && (
               <>
                 <a
@@ -454,7 +457,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
               </>
             )}
             {/* 代报名 报名类型属于BMLX=2 并且开始时间 */}
-            {}
+            { }
           </>
         );
       },
@@ -520,7 +523,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           return (
             <>
               {
-                //免费课程    // 先报名后缴费
+                // 免费课程    // 先报名后缴费
                 applicantData?.BJZT === '已开班' && applicantData.BMLX !== 1 && (
                   <Tooltip title="批量取消报名,免费课程可以取消，先报名后缴费：未开课: 可以取消 开课只能取消未缴费的，缴费即报名: 只能退未开课的">
                     <Button
@@ -534,10 +537,10 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                               // 如果已开课 只能取消未付款的
                               if (kkTimeFalg) {
                                 return value.ZT === 3;
-                              } else {
-                                // 未开课退全款
-                                return value.ZT === 0;
                               }
+                              // 未开课退全款
+                              return value.ZT === 0;
+
                             }
                             return value.ZT === 0;
                           })
@@ -663,7 +666,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
               </Button>,
             ];
           }
-          return false;
+          return [];
         }}
       />
 

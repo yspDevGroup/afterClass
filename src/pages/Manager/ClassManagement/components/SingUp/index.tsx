@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 15:41:26
- * @LastEditTime: 2021-11-27 11:05:08
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-11-29 10:12:33
+ * @LastEditors: Sissle Lynn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\pages\Manager\ClassManagement\components\SingUp\index.tsx
  */
@@ -57,7 +57,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
 
   useEffect(() => {
     if (applicantData) {
-      //根据报名类型和班级类型进行判断是否是批量操作
+      // 根据报名类型和班级类型进行判断是否是批量操作
       // 1. BMLX 0先报名后缴费 1 缴费后自动报名 2免费
       // 2. BJLX 0 按年级 1 按行政班
       // console.log('applicantData', applicantData);
@@ -169,7 +169,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
       if (node.key === key) {
         return {
           ...node,
-          //判断是否请求过
+          // 判断是否请求过
           isRequest: true,
           children,
         };
@@ -210,7 +210,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
         });
         resolve(resStudents);
       }
-      return;
+
     }).then((result: any) => {
       if (result?.status === 'ok') {
         const { rows } = result?.data;
@@ -224,7 +224,8 @@ const SignUp = (props: SignUpProps, ref: any) => {
                 type: 'BJ',
                 icon: <InsertRowAboveOutlined style={{ color: '#666' }} />,
               };
-            } else if (type === 'BJ') {
+            }
+            if (type === 'BJ') {
               return {
                 title: item.XM,
                 key: item.id,
@@ -233,17 +234,19 @@ const SignUp = (props: SignUpProps, ref: any) => {
                 icon: <UserOutlined style={{ color: '#999' }} />,
               };
             }
+            return {}
           });
         }
-        const newTreeData = updateTreeData(treeData, key, arr);
-        setTreeData(newTreeData);
+        if (treeData) {
+          const newTreeData = updateTreeData(treeData, key, arr);
+          setTreeData(newTreeData);
+        }
       }
     });
   };
-
   const onSelect = (
     selectedKeys: any[],
-    e: { selected: boolean; selectedNodes: DataNode; node: DataNode },
+    e: { event: "select"; selected: boolean; selectedNodes: any; node: any ;nativeEvent: MouseEvent; },
   ) => {
     // console.log('selectedNodes',e.selected, e.selectedNodes);
 
@@ -254,7 +257,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
     if (e?.selected) {
       // 判断是否请求过数据 没有请求过数据需要请求数据 然后进行选中操作
       if (!e?.node?.isRequest) {
-        //班级选择
+        // 班级选择
         if (e?.node?.type === 'BJ') {
           const resStudents = getClassStudents({
             XXJBSJId: currentUser?.xxId,
@@ -282,10 +285,11 @@ const SignUp = (props: SignUpProps, ref: any) => {
                   };
                 });
               }
-              const newTreeData = updateTreeData(treeData, e?.node?.key, arr);
-
-              setTreeData(newTreeData);
-              setSelectedKey(Array.from(newSelectedKeys));
+              if (treeData) {
+                const newTreeData = updateTreeData(treeData, e?.node?.key, arr);
+                setTreeData(newTreeData);
+                setSelectedKey(Array.from(newSelectedKeys));
+              }
             }
           });
         }
@@ -300,15 +304,12 @@ const SignUp = (props: SignUpProps, ref: any) => {
             newSelectedKeys.add(item.key);
           });
         }
-        // 学生选择
-        if (e?.node?.isLeaf) {
-        }
         setSelectedKey(Array.from(newSelectedKeys));
       }
     } else {
-      //移除判断是否是班级如果是班级移除班级内的学生
+      // 移除判断是否是班级如果是班级移除班级内的学生
       if (e?.node?.type === 'BJ') {
-        //移除班级学生
+        // 移除班级学生
         const newArr = [...newSelectedKeys].filter((key: string) => {
           return !e?.node?.children?.some((item: DataNode) => item?.key === key);
         });
@@ -322,9 +323,9 @@ const SignUp = (props: SignUpProps, ref: any) => {
   };
 
   useEffect(() => {
-    if (treeData?.length > 0) {
-      const _obj = JSON.stringify(treeData);
-      const newArr: DataNode[] = JSON.parse(_obj);
+    if (treeData?.length) {
+      const obj = JSON.stringify(treeData);
+      const newArr: DataNode[] = JSON.parse(obj);
       const arr: DataNode[] = [];
       const copySelectedKey = [...selectedKey];
       let selectNumber = 0;
@@ -346,8 +347,8 @@ const SignUp = (props: SignUpProps, ref: any) => {
                 const XXData = { ...XXItem, selectable: false };
                 if (copySelectedKey.some((v: string) => v === XXItem.key)) {
                   children.push(XXData);
-                  selectNumber = ++selectNumber;
-                  //移除 copySelectedKey 数组中班级下选择的学生
+                  selectNumber += selectNumber;
+                  // 移除 copySelectedKey 数组中班级下选择的学生
                   const findIndex = copySelectedKey.findIndex((v: string) => v === XXItem.key);
                   if (findIndex >= 0) {
                     copySelectedKey.splice(findIndex, 1);
@@ -357,7 +358,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
               if (children.length > 0) {
                 BJData.children = children;
               }
-              //移除 copySelectedKey 数组中班级
+              // 移除 copySelectedKey 数组中班级
               const findIndex = copySelectedKey.findIndex((v: string) => v === BJItem.key);
               if (findIndex >= 0) {
                 copySelectedKey.splice(findIndex, 1);
@@ -368,12 +369,12 @@ const SignUp = (props: SignUpProps, ref: any) => {
               BJItem?.children?.forEach((XXItem: DataNode) => {
                 const XXData = { ...XXItem, selectable: false };
                 if (copySelectedKey.some((v: string) => v === XXItem.key)) {
-                  //移除 copySelectedKey 数组中班级下选择的学生
+                  // 移除 copySelectedKey 数组中班级下选择的学生
                   const findIndex = copySelectedKey.findIndex((v: string) => v === XXItem.key);
                   if (findIndex >= 0) {
                     copySelectedKey.splice(findIndex, 1);
                   }
-                  selectNumber = ++selectNumber;
+                  selectNumber += selectNumber;
                   arr.push(XXData);
                 }
               });
@@ -429,20 +430,17 @@ const SignUp = (props: SignUpProps, ref: any) => {
                 // 判断是否选中改变title选中状态
                 if (node.type === 'NJ') {
                   return node.title;
-                } else {
-                  const selectItem = selectedKey?.find((v: string) => v === node?.key);
-
-                  if (selectItem) {
-                    return (
-                      <span>
-                        {node.title}
-                        <CheckOutlined style={{ marginLeft: '1em', color: '#4884ff' }} />
-                      </span>
-                    );
-                  } else {
-                    return node?.title;
-                  }
                 }
+                const selectItem = selectedKey?.find((v: string) => v === node?.key);
+                if (selectItem) {
+                  return (
+                    <span>
+                      {node.title}
+                      <CheckOutlined style={{ marginLeft: '1em', color: '#4884ff' }} />
+                    </span>
+                  );
+                }
+                return node?.title;
               }}
             />
           </div>

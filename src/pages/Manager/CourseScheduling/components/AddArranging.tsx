@@ -286,7 +286,6 @@ const AddArranging: FC<PropsType> = (props) => {
   const BjClick = (value: any) => {
     // 选择班级教师
     const JS: any = value.KHBJJs?.find((items: any) => items.JSLX === '主教师');
-    console.log('JZGJBSJId', JS);
     if (JS) {
       const { JZGJBSJId, XM } = JS;
       setTearchId(JZGJBSJId);
