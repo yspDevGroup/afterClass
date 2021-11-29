@@ -3300,6 +3300,8 @@ declare namespace API {
     FWZT?: number;
     /** 费用 */
     FY?: number;
+    /** 报名学生人数 */
+    xs_count?: number;
     /** 开始日期 */
     KSRQ?: string | any;
     /** 结束日期 */
