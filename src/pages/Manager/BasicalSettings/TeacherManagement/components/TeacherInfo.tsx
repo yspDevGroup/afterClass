@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-08-26 16:24:39
- * @LastEditTime: 2021-11-01 16:24:53
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-11-29 09:27:14
+ * @LastEditors: zpl
  */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
@@ -19,7 +19,7 @@ import { getHashData } from './util';
 
 const formItemLayout = {
   labelCol: { flex: '8em' },
-  wrapperCol: { flex: 'auto' }
+  wrapperCol: { flex: 'auto' },
 };
 type PropsType = {
   values: any;
@@ -45,14 +45,14 @@ const SchoolInfo = (props: PropsType) => {
       const mz = await getHashData('B.9');
       const xl = await getHashData('B.12');
       setMzlist(mz);
-      setXllist(xl)
-    };
+      setXllist(xl);
+    }
     fetchData();
   }, []);
   useEffect(() => {
     if (birthDate) {
       setInfo({
-        CSRQ: moment(birthDate)
+        CSRQ: moment(birthDate),
       });
     }
   }, [birthDate]);
@@ -62,10 +62,10 @@ const SchoolInfo = (props: PropsType) => {
       setZPUrl(ZP || '');
       setZGZSUrl(ZGZS || '');
       const XBLX = XBM || '男性';
-      const newData =  {
+      const newData = {
         CSRQ: CSRQ ? moment(CSRQ) : '',
         XBM: readonly ? XBLX?.substring(0, 1) : XBLX,
-        ...rest
+        ...rest,
       };
       setInfo(newData);
     }
@@ -80,7 +80,11 @@ const SchoolInfo = (props: PropsType) => {
         const res = e.file.response;
         if (res.status === 'ok') {
           message.success(`上传成功`);
-          type === 'ZP' ? setZPUrl(res.data) : setZGZSUrl(res.data);
+          if (type === 'ZP') {
+            setZPUrl(res.data);
+          } else {
+            setZGZSUrl(res.data);
+          }
         }
       }
     } else if (e.file.status === 'error') {
@@ -94,14 +98,14 @@ const SchoolInfo = (props: PropsType) => {
       label: 'id',
       name: 'id',
       key: 'id',
-      hidden: true
+      hidden: true,
     },
     {
       type: 'input',
       label: 'KHJYJGId',
       name: 'KHJYJGId',
       key: 'KHJYJGId',
-      hidden: true
+      hidden: true,
     },
     {
       type: 'group',
@@ -120,7 +124,7 @@ const SchoolInfo = (props: PropsType) => {
           imagename: 'image',
           handleImageChange: (value: any) => {
             imageChange('ZP', value);
-          }
+          },
         },
         {
           type: 'uploadImage',
@@ -135,9 +139,9 @@ const SchoolInfo = (props: PropsType) => {
           imagename: 'image',
           handleImageChange: (value: any) => {
             imageChange('ZGZS', value);
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       type: 'group',
@@ -150,12 +154,12 @@ const SchoolInfo = (props: PropsType) => {
           key: 'XM',
           rules: [
             { required: true, message: '请输入姓名' },
-            { type: 'string', max: 60 }
+            { type: 'string', max: 60 },
           ],
-          placeholder: readonly ? '-' : ''
+          placeholder: readonly ? '-' : '',
         },
-        {}
-      ]
+        {},
+      ],
     },
     {
       type: 'group',
@@ -171,13 +175,13 @@ const SchoolInfo = (props: PropsType) => {
           items: [
             {
               text: '男',
-              value: '男性'
+              value: '男性',
             },
             {
               text: '女',
-              value: '女性'
-            }
-          ]
+              value: '女性',
+            },
+          ],
         },
         {
           type: 'input',
@@ -186,7 +190,7 @@ const SchoolInfo = (props: PropsType) => {
           name: 'XBM',
           key: 'XBM',
           hidden: !readonly,
-          placeholder: readonly ? '-' : ''
+          placeholder: readonly ? '-' : '',
         },
         {
           type: 'input',
@@ -194,9 +198,9 @@ const SchoolInfo = (props: PropsType) => {
           span: 12,
           name: 'ZGZSBH',
           key: 'ZGZSBH',
-          placeholder: readonly ? '-' : ''
-        }
-      ]
+          placeholder: readonly ? '-' : '',
+        },
+      ],
     },
     {
       type: 'group',
@@ -207,16 +211,16 @@ const SchoolInfo = (props: PropsType) => {
           key: 'MZM',
           name: 'MZM',
           label: '民族',
-          items: mzlist
+          items: mzlist,
         },
         {
           type: 'select',
           label: '学历',
           key: 'XLM',
           name: 'XLM',
-          items: xllist
-        }
-      ]
+          items: xllist,
+        },
+      ],
     },
     {
       type: 'group',
@@ -228,7 +232,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '出生日期',
           name: 'CSRQ',
           key: 'CSRQ',
-          placeholder: readonly ? '-' : ''
+          placeholder: readonly ? '-' : '',
         },
         {
           type: 'input',
@@ -236,9 +240,9 @@ const SchoolInfo = (props: PropsType) => {
           name: 'BYYX',
           key: 'BYYX',
           rules: [{ type: 'string', max: 255 }],
-          placeholder: readonly ? '-' : ''
-        }
-      ]
+          placeholder: readonly ? '-' : '',
+        },
+      ],
     },
     {
       type: 'group',
@@ -254,10 +258,12 @@ const SchoolInfo = (props: PropsType) => {
             { required: true, message: '请输入联系电话' },
             { type: 'string', max: 32 },
             {
-              pattern: new RegExp(/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/),
-              message: '填写的电话格式有误'
-            }
-          ]
+              pattern: new RegExp(
+                /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+              ),
+              message: '填写的电话格式有误',
+            },
+          ],
         },
         {
           type: 'input',
@@ -265,9 +271,9 @@ const SchoolInfo = (props: PropsType) => {
           name: 'SXZY',
           key: 'ZY',
           rules: [{ type: 'string', max: 255 }],
-          placeholder: readonly ? '-' : ''
-        }
-      ]
+          placeholder: readonly ? '-' : '',
+        },
+      ],
     },
     {
       type: 'group',
@@ -282,25 +288,25 @@ const SchoolInfo = (props: PropsType) => {
           items: [
             {
               value: '居民身份证',
-              text: '居民身份证'
+              text: '居民身份证',
             },
             {
               value: '护照',
-              text: '护照'
+              text: '护照',
             },
             {
               value: '户口簿',
-              text: '户口簿'
+              text: '户口簿',
             },
             {
               value: '其他',
-              text: '其他'
-            }
+              text: '其他',
+            },
           ],
           normalize: (value) => {
             setIdType(value);
             setInfo({
-              SFZJH: ''
+              SFZJH: '',
             });
             switch (value) {
               case '居民身份证':
@@ -316,7 +322,7 @@ const SchoolInfo = (props: PropsType) => {
                 setIdReg(/\S/);
             }
             return value;
-          }
+          },
         },
         {
           type: 'inputNumber',
@@ -327,9 +333,9 @@ const SchoolInfo = (props: PropsType) => {
           min: 1,
           placeholder: readonly ? '-' : '',
           formatter: (value) => `${Math.round(value)}`,
-          tooltip: '注意：教龄四舍五入，只能填写整数'
-        }
-      ]
+          tooltip: '注意：教龄四舍五入，只能填写整数',
+        },
+      ],
     },
     {
       type: 'group',
@@ -346,8 +352,8 @@ const SchoolInfo = (props: PropsType) => {
             { type: 'string', max: 20 },
             {
               pattern: new RegExp(idReg),
-              message: '填写的证件格式有误'
-            }
+              message: '填写的证件格式有误',
+            },
           ],
           normalize: (num) => {
             // eslint-disable-next-line no-param-reassign
@@ -359,17 +365,8 @@ const SchoolInfo = (props: PropsType) => {
               }
               const arrSplit = num.match(idReg);
               // 检查生日日期是否正确
-              const dtmBirth = new Date(`${arrSplit[2]  }-${  arrSplit[3]  }-${  arrSplit[4]}`);
+              const dtmBirth = new Date(`${arrSplit[2]}-${arrSplit[3]}-${arrSplit[4]}`);
               setBirthDate(dtmBirth);
-              let bCorrectDay;
-              // eslint-disable-next-line prefer-const
-              bCorrectDay =
-                dtmBirth.getFullYear() === Number(arrSplit[2]) &&
-                dtmBirth.getMonth() + 1 === Number(arrSplit[3]) &&
-                dtmBirth.getDate() === Number(arrSplit[4]);
-              if (!bCorrectDay) {
-                return '（出生日期有误）';
-              }
             } else if (idType === '护照' && len >= 9) {
               if (idReg.test(num) === false) {
                 return '（护照号码有误）';
@@ -380,7 +377,7 @@ const SchoolInfo = (props: PropsType) => {
               }
             }
             return num;
-          }
+          },
         },
         {
           type: 'input',
@@ -388,9 +385,9 @@ const SchoolInfo = (props: PropsType) => {
           name: 'JSKM',
           key: 'JSKM',
           rules: [{ type: 'string', max: 255 }],
-          placeholder: readonly ? '-' : ''
-        }
-      ]
+          placeholder: readonly ? '-' : '',
+        },
+      ],
     },
     {
       type: 'group',
@@ -405,13 +402,13 @@ const SchoolInfo = (props: PropsType) => {
           rules: [
             {
               type: 'email',
-              message: '填写的邮箱格式有误'
+              message: '填写的邮箱格式有误',
             },
-            { type: 'string', max: 32 }
-          ]
+            { type: 'string', max: 32 },
+          ],
         },
-        {}
-      ]
+        {},
+      ],
     },
     {
       type: 'group',
@@ -423,25 +420,25 @@ const SchoolInfo = (props: PropsType) => {
           name: 'BZ',
           key: 'BZ',
           rules: [{ type: 'string', max: 255 }],
-          placeholder: readonly ? '-' : ''
-        }
-      ]
-    }
+          placeholder: readonly ? '-' : '',
+        },
+      ],
+    },
   ];
-  const onFinish = async (values: any) => {
+  const onFinish = async (vals: any) => {
     let res;
-    values.CSRQ = values.CSRQ ? moment(values.CSRQ).format('YYYY-MM-DD') : undefined;
-    values.ZGZS = zgzsUrl || values.ZGZS;
-    values.ZP = zpUrl || values.ZP;
-    if (values.id) {
+    vals.CSRQ = vals.CSRQ ? moment(vals.CSRQ).format('YYYY-MM-DD') : undefined;
+    vals.ZGZS = zgzsUrl || vals.ZGZS;
+    vals.ZP = zpUrl || vals.ZP;
+    if (vals.id) {
       res = await updateJZGJBSJ(
         {
-          id: values.id
+          id: vals.id,
         },
-        values
+        vals,
       );
     } else {
-      res = await createJZG(values);
+      res = await createJZG(vals);
     }
     if (res.status === 'ok') {
       message.success('保存成功');
