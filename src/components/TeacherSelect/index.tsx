@@ -185,14 +185,6 @@ const TeacherSelect = (props: TeacherSelectProps) => {
           width: '100%',
         }}
         treeNodeFilterProp="key"
-        // filterTreeNode={
-        //   (value,treeNode)=>{
-        //     console.log('value',value);
-        //     console.log('treeNode',treeNode);
-        //     // treeNode
-        //     return true;
-        //   }
-        // }
       />
     </div>
   );

@@ -64,6 +64,7 @@ const SignUp = (props: any) => {
   const getBJSJ = async () => {
     const res = await getAllBJSJ({
       XXJBSJId: currentUser?.xxId,
+      XQSJId: XQId,
       njId: NjId,
       page: 0,
       pageSize: 0
@@ -126,7 +127,8 @@ const SignUp = (props: any) => {
       ellipsis: true,
       width: 100,
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC
+        const {NJMC,XD} = record?.XSJBSJ?.BJSJ?.NJSJ;
+        return `${XD} ${NJMC}`
       },
     },
     {
@@ -175,18 +177,18 @@ const SignUp = (props: any) => {
             <h3 style={{ fontWeight: 'bold', fontSize: 16, marginRight: 24 }}>{state?.FWMC}</h3>
             <SearchLayout>
               <div>
-                <label htmlFor="grade">校区名称：</label>
-                <Select value={XQId} allowClear placeholder="请选择" onChange={onXQChange}>
-                  {XQData?.map((item: any) => {
-                    return <Option value={item.value}>{item.label}</Option>;
-                  })}
-                </Select>
-              </div>
-              <div>
                 <label htmlFor="grade">年级名称：</label>
                 <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
                   {NjData && NjData?.map((item: any) => {
                     return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                  })}
+                </Select>
+              </div>
+              <div>
+                <label htmlFor="grade">校区名称：</label>
+                <Select value={XQId} allowClear placeholder="请选择" onChange={onXQChange}>
+                  {XQData?.map((item: any) => {
+                    return <Option value={item.value}>{item.label}</Option>;
                   })}
                 </Select>
               </div>
