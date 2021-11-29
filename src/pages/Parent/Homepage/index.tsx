@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tabs } from 'antd';
-import { useModel,history } from 'umi';
+import { useModel, history } from 'umi';
 import { getQueryString } from '@/utils/utils';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 
@@ -22,22 +22,31 @@ const PersonalHomepage = () => {
   const studyRef = useRef(null);
   const mineRef = useRef(null);
   const index = getQueryString('index');
-  const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+  const StorageXSId =
+    localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+  const StorageNjId =
+    localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
   // 未获取到孩子时跳转到403
   useEffect(() => {
-    if (currentUser?.student?.length === 0 || typeof currentUser?.student === 'undefined') {
+    if (typeof student === 'undefined' || student?.length === 0 || !student?.[0]?.XSJBSJId) {
       history.replace('/403?message=系统未读取到您的孩子信息，请与学校相关负责人联系');
     }
   }, []);
 
   useEffect(() => {
     (async () => {
-      const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-      const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId);
+      const bjId =
+        localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+      const oriData = await ParentHomeData(
+        'student',
+        currentUser?.xxId,
+        StorageXSId,
+        StorageNjId,
+        bjId,
+      );
       const { courseStatus: newStatus } = oriData.data;
       setCourseStatus(newStatus);
-    })()
+    })();
   }, [StorageXSId]);
   useEffect(() => {
     if (index) {
