@@ -537,10 +537,12 @@ export const convertTimeTable = async (
   bjId: string,
   attendance: any[],
   days: any[],
+  xxId: string
 ) => {
   const myDate: Date = new Date();
   const currentDate = moment(myDate).format('YYYY-MM-DD');
   const res = await getAllKHJSTDK({
+    XXJBSJId: xxId,
     SKJSId: userId,
     KHBJSJId: bjId,
     ZT: [1],

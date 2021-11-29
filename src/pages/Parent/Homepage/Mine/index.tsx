@@ -56,6 +56,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     const studentId: string =
       StorageXSId || student?.[0].XSJBSJId || testStudentId;
     const res = await getAllKHXSDD({
+      XXJBSJId: currentUser?.xxId,
       XSJBSJId: studentId,
       // njId: currentUser.njId,
       DDZT: ['待付款'],

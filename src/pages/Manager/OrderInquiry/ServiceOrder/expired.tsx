@@ -84,6 +84,7 @@ const OrderInquiry = (props: any) => {
   useEffect(() => {
     (async () => {
       const res = await getAllKHXSDD({
+        XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId,
         XSXM: name,
         FWMC,
