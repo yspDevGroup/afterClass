@@ -49,16 +49,16 @@
           .ant-collapse-header {
             padding: 10px;
             font-weight: bold;
-            .ant-collapse-arrow{
-              color:#45C977;
-              >span{
+            .ant-collapse-arrow {
+              color: #45c977;
+              > span {
                 margin-left: 2px;
               }
             }
           }
         }
         .ant-collapse-content-box {
-          padding:0 10px 10px;
+          padding: 0 10px 10px;
           > p {
             margin: 0;
             line-height: 26px;
@@ -121,6 +121,42 @@
                   border: none;
                 }
               }
+            }
+          }
+        }
+      }
+      .Teachingaterial {
+        .box {
+          display: flex;
+          justify-content: space-between;
+          height: 40px;
+          padding: 0 10px;
+          line-height: 40px;
+          background-color: #f5f5f5;
+        }
+        .tables {
+          max-height: 70px;
+          padding: 0 10px;
+          overflow: auto;
+          line-height: 40px;
+          background-color: #f5f5f5;
+          border-radius: 0 0 8px 8px;
+          > div {
+            display: flex;
+            justify-content: space-between;
+            height: 40px;
+            color: #666;
+          }
+        }
+
+        :global {
+          .ant-checkbox-wrapper {
+            border-color: #45c977;
+          }
+          .ant-checkbox-wrapper-checked {
+            .ant-checkbox-inner {
+              background-color: #45c977;
+              border-color: #45c977;
             }
           }
         }
@@ -205,12 +241,12 @@
       position: fixed;
       bottom: 0;
       width: 100vw;
-      height: 480px;
-      padding: 14px;
+      height: 550px;
+      padding: 5px 14px 14px;
       background-color: #fff;
 
       .title {
-        margin-top: 8px;
+        margin: 8px 0;
         color: #333;
         font-weight: 600;
         font-size: 16px;
@@ -228,6 +264,14 @@
         }
       }
     }
+    .wraps {
+      height: 440px;
+      padding-bottom: 5px;
+      overflow: auto;
+    }
+    .wraps::-webkit-scrollbar {
+      display: none;
+    }
 
     :global {
       .anticon svg {
@@ -238,13 +282,17 @@
         display: none;
       }
 
+      .ant-radio-group::-webkit-scrollbar {
+        display: none;
+      }
       .ant-radio-group {
         display: flex;
         flex-wrap: wrap;
-        height: 100px;
+        max-height: 120px;
         overflow: auto;
 
         label.ant-radio-button-wrapper {
+          margin-bottom: 6px;
           overflow: hidden;
           color: #333;
           background-color: #f5f5f5;
@@ -284,9 +332,7 @@
         background-color: #f5f5f5;
       }
       .tables {
-        max-height: 70px;
         padding: 0 10px;
-        overflow: auto;
         line-height: 40px;
         background-color: #f5f5f5;
         border-radius: 0 0 8px 8px;
@@ -312,7 +358,7 @@
     }
     .agreement {
       position: fixed;
-      bottom: 70px;
+      bottom: 65px;
       :global {
         .ant-checkbox-wrapper {
           border-color: #45c977;
@@ -396,8 +442,8 @@
 
     .title {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       color: @text-color;
       font-weight: 600;
       font-size: 16px;
@@ -490,8 +536,8 @@
     }
   }
 }
-:global{
-  .ant-modal-confirm .ant-modal-content{
+:global {
+  .ant-modal-confirm .ant-modal-content {
     min-width: auto !important;
   }
 }

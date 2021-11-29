@@ -103,6 +103,7 @@ const CourseTab = (props: { dataResource: any; }) => {
               left: [`共${record.KSS}课时`],
             },
           ],
+          fkzt:record.KHXSBJs?.[0]?.ZT,
           introduction: record.KHKCSJ.KCMS,
         };
         return nodeData;

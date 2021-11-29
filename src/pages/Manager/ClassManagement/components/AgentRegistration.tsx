@@ -24,10 +24,10 @@ const AgentRegistration = (props: {
   JFTotalost: any;
   ModalVisible: any;
   setModalVisible: any;
-
   onsetKHXSBJs: any;
 }) => {
   const { curXNXQId, BjDetails, JFTotalost, setModalVisible, ModalVisible, onsetKHXSBJs } = props;
+
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [BmCurrent, setBmCurrent] = useState(0);

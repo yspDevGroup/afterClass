@@ -3,7 +3,7 @@
  * @description:
  * @author: txx
  * @Date: 2021-05-31 10:24:05
- * @LastEditTime: 2021-11-11 15:02:27
+ * @LastEditTime: 2021-11-26 17:09:26
  * @LastEditors: Sissle Lynn
  */
 
@@ -16,7 +16,7 @@ import Nodata from '../Nodata';
 import noPic from '@/assets/noPic.png';
 import noPic1 from '@/assets/noPic1.png';
 
-const statusText = ['已请假','班主任已请假','已调课','代课'];
+const statusText = ['已请假', '班主任已请假', '已调课', '代课'];
 const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) => {
   const { data, type, operation } = props;
   const teacher = history.location.pathname.indexOf('teacher') > -1;
@@ -30,9 +30,9 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
           return (
             <div className={operation ? 'ui-listItemWrapper' : 'itemWrapper'}>
               <div className={operation ? 'ui-listItemContent' : 'itemContent'}>
-                {status ? <span className={styles.specialPart} style={{background: status.indexOf('已请假')>-1 ? '#F48A82' : '#7dce81'}}>{status}</span>:''}
-                <a onClick={()=>{
-                  if(v.link){
+                {status ? <span className={styles.specialPart} style={{ background: status.indexOf('已请假') > -1 ? '#F48A82' : '#7dce81' }}>{status}</span> : ''}
+                <a onClick={() => {
+                  if (v.link) {
                     history.push(v.link);
                   }
                 }}>
@@ -73,7 +73,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                     }
                     title={
                       <div className={styles.TitleRow}>
-                        <div className={styles.Title}>{v.title}</div>
+                        <div className={styles.Title} > <span className={styles.titles} style={{width:'calc(100% - 50px)'}}>{v.title}</span>{v.fkzt === 3 ? <span className={styles.types}>待缴费</span> : <></>}</div>
                         <div className={styles.TitleRight}>
                           {v.titleRight?.text === '待上课' ? (
                             <span style={{ color: '#45C977' }}>{v.titleRight?.text}</span>

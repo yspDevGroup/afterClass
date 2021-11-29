@@ -1,15 +1,15 @@
-/* eslint-disable no-param-reassign */
 /*
- * @description:
- * @author: Sissle Lynn
- * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-11-19 14:49:55
+* @description:
+* @author: Sissle Lynn
+* @Date: 2021-09-15 11:50:45
+ * @LastEditTime: 2021-11-26 17:16:57
  * @LastEditors: Sissle Lynn
- */
+*/
+/* eslint-disable no-param-reassign */
 
-import { enHenceMsg, getCurrentStatus } from '@/utils/utils';
 import moment from 'moment';
 import dayjs from 'dayjs';
+import { getCurrentStatus } from '@/utils/utils';
 import { getTeachersApplication } from '../after-class/jzgjbsj';
 import { homePageInfo } from '../after-class/user';
 import { queryXNXQList } from './xnxq';
@@ -379,7 +379,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           title: item.title,
           BJMC: item.BJMC,
           img: item.img,
-          link: `/teacher/home/courseDetails?classid=${item.bjId}&path=education`,
+          link: `/teacher/home/courseDetails?classid=${item.bjId}&path=education&date=${day}`,
           start: item.start,
           end: item.end,
           bjId: item.bjId,
@@ -413,7 +413,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
         title: item.title,
         BJMC: item.BJMC,
         img: item.img,
-        link: item.status === '代上课' ? null : `/teacher/home/courseDetails?classid=${item.bjId}&path=education`,
+        link: item.status === '代上课' ? null : `/teacher/home/courseDetails?classid=${item.bjId}&path=education&date=${day}`,
         enrollLink,
         start: item.start,
         end: item.end,

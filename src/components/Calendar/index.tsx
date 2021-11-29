@@ -1,5 +1,5 @@
 /* eslint-disable max-params */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { defaultConfig } from './util/DefaultSetting';
 import { addData, getNearbyMonth, splitDate } from './util/CalendarUtil';
 import styles from './index.less';
@@ -8,7 +8,7 @@ import { DatePicker } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import DateEvent from './components/DateEvent';
-import { Config, Day, SchoolEvent } from './data';
+import type { Config, Day, SchoolEvent } from './data';
 
 let inter: NodeJS.Timeout;
 
@@ -53,14 +53,14 @@ const Calendar = ({ chosenDay, terms, config, events, handleEvents, handleOver }
   const [thisEvents, setThisEvents] = useState<[]>([]);
   const [curValue, setCurValue] = useState<moment.Moment | undefined>(updateVal(type, nowYear, nowMonth, nowDay));
   const [classInfoShow, setClassInfoShow] = useState<boolean>(false);
-  const showClassInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, date: string) => {
+  const showClassInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, dateval: string) => {
     if (inter) {
       clearInterval(inter)
     }
     inter = setInterval(async () => {
       if (!classInfoShow) {
         setClassInfoShow(true);
-        const result = await handleOver?.(date);
+        const result = await handleOver?.(dateval);
         if (!result) {
           const dom = findWrapper(e.target);
           dom.id = 'yspNoArrange';
@@ -216,8 +216,8 @@ const Calendar = ({ chosenDay, terms, config, events, handleEvents, handleOver }
                       if (item.cls !== 'yspOthermonth') {
                         e.stopPropagation();
                         if (handleEvents) {
-                          const type = item?.events?.length ? 'check' : 'new';
-                          handleEvents(type, `${moment(curValue).format('YYYY-MM')}-${item.text}`,item?.events);
+                          const curType = item?.events?.length ? 'check' : 'new';
+                          handleEvents(curType, `${moment(curValue).format('YYYY-MM')}-${item.text}`,item?.events);
                         }
                       }
                     }}

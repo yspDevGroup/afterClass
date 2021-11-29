@@ -5,6 +5,7 @@ import {
   exportStudentAttendanceDetailByDate,
 } from '@/services/after-class/reports';
 import { useEffect, useState } from 'react';
+import { history } from 'umi';
 import type { ProColumns } from '@ant-design/pro-table';
 import PageContainer from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
@@ -37,8 +38,8 @@ const AttendanceDetail = (props: any) => {
         xsId: data?.id,
         bjId: id,
         CQZT: ['请假', '缺席'],
-        startDate: startDate,
-        endDate: endDate,
+        startDate,
+        endDate,
       });
     }
     if (res?.status === 'ok') {
@@ -273,7 +274,7 @@ const AttendanceDetail = (props: any) => {
           endDate,
         });
         if (res.status === 'ok') {
-          window.location.href= res.data;
+          window.location.href = res.data;
           setLoading(false);
         } else {
           message.error(res.message);
@@ -289,7 +290,7 @@ const AttendanceDetail = (props: any) => {
           endDate,
         });
         if (res.status === 'ok') {
-          window.location.href= res.data;
+          window.location.href = res.data;
           setLoading(false);
         } else {
           message.error(res.message);
@@ -315,7 +316,7 @@ const AttendanceDetail = (props: any) => {
             <LeftOutlined />
             返回上一页
           </Button>
-          <Button style={{float: 'right'}}  icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+          <Button style={{ float: 'right' }} icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
             导出
           </Button>
 
@@ -347,17 +348,21 @@ const AttendanceDetail = (props: any) => {
           footer={null}
         >
           <ProTable
-            pagination={false}
             options={{
               setting: false,
               fullScreen: false,
               density: false,
               reload: false,
             }}
+            pagination={{
+              showQuickJumper: false,
+              pageSize: 5,
+              defaultCurrent: 1,
+            }}
             search={false}
             columns={colomns}
             dataSource={absenteeismData}
-          ></ProTable>
+           />
         </Modal>
       </PageContainer>
     </div>

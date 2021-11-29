@@ -344,13 +344,13 @@ const findAllData = (
   if (nextYear === finishYear && nextMonth === finishMonth) {
     const curDates = getMonthData('end', year, month, finishDay);
     data.push({
-      month: month,
+      month,
       date: curDates,
     });
   } else {
     const curDates = getMonthData(type, year, month, day);
     data.push({
-      month: month,
+      month,
       date: curDates,
     });
     findAllData('middle', data, finishYear, finishMonth, finishDay, nextYear, nextMonth);

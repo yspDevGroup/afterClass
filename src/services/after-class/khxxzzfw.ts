@@ -77,7 +77,7 @@ export async function KHXXZZFW(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -98,7 +98,7 @@ export async function KHXXZZFW(
     message?: string;
   }>(`/khxxzzfw/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -112,10 +112,10 @@ export async function deleteKHXXZZFW(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxxzzfw/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -130,13 +130,13 @@ export async function updateKHXXZZFW(
   body: API.UpdateKHXXZZFW,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxxzzfw/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -153,6 +153,10 @@ export async function getStudent(
     XSXM?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 班级ID */
+    BJId?: string;
+    /** 年级ID */
+    NJId?: string;
     /** 课后学校增值服务ID */
     KHXXZZFWId?: string;
     /** 页数 */
@@ -168,7 +172,13 @@ export async function getStudent(
       count?: number;
       rows?: {
         createdAt?: string;
-        XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
+        XSJBSJ?: {
+          id?: string;
+          XH?: string;
+          XM?: string;
+          WechatUserId?: string;
+          BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string } };
+        };
         KHXXZZFWId?: string;
         KHXXZZFW: {
           id?: string;

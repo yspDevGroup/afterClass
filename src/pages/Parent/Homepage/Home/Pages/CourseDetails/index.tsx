@@ -15,7 +15,7 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 import styles from './index.less';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getKHBJSJ, studentRegistration } from '@/services/after-class/khbjsj';
 import { RightOutlined } from '@ant-design/icons';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 
@@ -52,13 +52,13 @@ const CourseDetails: React.FC = () => {
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KBClass;
-      const current = detail[ind];
-      const enAble =
-        myDate >= new Date(moment(current.BMKSSJ).format('YYYY/MM/DD')) &&
-        myDate <= new Date(moment(current.BMJSSJ).format('YYYY/MM/DD'));
-      setByTime(enAble);
-      setFY(current.FY);
-      setBJ(current.id);
+    const current = detail[ind];
+    const enAble =
+      myDate >= new Date(moment(current.BMKSSJ).format('YYYY/MM/DD')) &&
+      myDate <= new Date(moment(current.BMJSSJ).format('YYYY/MM/DD'));
+    setByTime(enAble);
+    setFY(current.FY);
+    setBJ(current.id);
   };
   const getWxData = async () => {
     if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -70,6 +70,7 @@ const CourseDetails: React.FC = () => {
   useEffect(() => {
     getWxData();
   }, [isLoading]);
+  const XSbjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
   useEffect(() => {
     if (courseid) {
       getWxData();
@@ -82,8 +83,16 @@ const CourseDetails: React.FC = () => {
           });
           if (results.status === 'ok') {
             if (results.data) {
-             const newArr =  results.data.KHBJSJs.filter((value: any)=>{
-                return value.BJZT === '已开班'
+              const newArr = results.data.KHBJSJs.filter((value: any) => {
+                if (value.BJZT === '已开班' && value.BJLX === 1) {
+                  const newBjIds = value.BJSJs.filter((items: any) => {
+                    return items.id === XSbjId
+                  })
+                  if (newBjIds.length) {
+                    return value
+                  }
+                }
+                return value.BJZT === '已开班' && value.BJLX === 0
               })
               setKBClass(newArr)
               setKcDetail(results.data);
@@ -139,41 +148,61 @@ const CourseDetails: React.FC = () => {
     e.stopPropagation();
   };
   const submit = async () => {
-    const bjInfo = KBClass.find((item: any) => {
-      return item.id === BJ;
-    });
-    await setClassDetail(bjInfo);
-    const data: API.CreateKHXSDD = {
-      XDSJ: new Date().toISOString(),
-      ZFFS: '线上支付',
-      DDZT: '待付款',
-      DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
-      XSJBSJId:
-        localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
-      KHBJSJId: BJ!,
-      DDLX: 0,
-    };
-    const res = await createKHXSDD(data);
-    if (res.status === 'ok') {
-      if (data.DDFY > 0) {
-        setOrderInfo(res.data);
-      } else {
+    if (BjDetails?.BMLX === 0) {
+      const res = await studentRegistration({
+        ZT: 3,
+        XSJBSJIds: [StorageXSId],
+        KHBJSJId: BjDetails?.id
+      })
+      if (res.status === 'ok') {
         const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
         await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, true);
-        setTimeout(()=>{
-          message.success('报名成功');
-        },500);
-        setTimeout(()=>{
-          history.push('/parent/home?index=index&reload=true');
-        },1000);
+        setTimeout(() => {
+          message.success('报名成功，请及时缴费');
+        }, 500);
+        setTimeout(() => {
+          history.push('/parent/home?index=index');
+        }, 1000);
       }
     } else {
-      enHenceMsg(res.message);
+      const bjInfo = KBClass.find((item: any) => {
+        return item.id === BJ;
+      });
+      await setClassDetail(bjInfo);
+      const data: API.CreateKHXSDD = {
+        XDSJ: new Date().toISOString(),
+        ZFFS: '线上支付',
+        DDZT: '待付款',
+        DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
+        XSJBSJId:
+          localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
+        KHBJSJId: BJ!,
+        DDLX: 0,
+      };
+      const res = await createKHXSDD(data);
+      if (res.status === 'ok') {
+        if (data.DDFY > 0) {
+          setOrderInfo(res.data);
+        } else {
+          const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+          await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, true);
+          setTimeout(() => {
+            message.success('报名成功');
+          }, 500);
+          setTimeout(() => {
+            history.push('/parent/home?index=index&reload=true');
+          }, 1000);
+        }
+      } else {
+        enHenceMsg(res.message);
+      }
     }
+
   };
   const butonclick = async (value: any, ind: number) => {
     const res = await getKHBJSJ({ id: value?.id })
     if (res.status === 'ok') {
+      setBjDetails(res.data);
       let num = 0;
       for (let i = 0; i < res.data?.KHKCJCs?.length; i++) {
         num += Number(res.data?.KHKCJCs[i].JCFY);
@@ -259,7 +288,6 @@ const CourseDetails: React.FC = () => {
                         {moment(value.BMJSSJ).format('YYYY.MM.DD')}</p>
                       <p>上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
                         {moment(value.JKRQ).format('YYYY.MM.DD')}</p>
-                      <p>总人数：{value?.BJRS}</p>
                       <p>班主任： {BjDetails?.KHBJJs?.map((item: any) => {
                         if (item.JSLX.indexOf('副') === -1) {
                           const showWXName =
@@ -299,13 +327,18 @@ const CourseDetails: React.FC = () => {
                         return '';
                       })}
                       </p>
+                      <p>报名费：{value.FY}元</p>
+                      <p>报名方式：{
+                        BjDetails?.BMLX === 0 ? '先报名后缴费' : <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+                      }
+                      </p>
                       <table>
                         <thead>
                           <tr>
                             <th>上课时间</th>
                             <th>上课地点</th>
                             <th>总课时</th>
-                            <th>报名费</th>
+                            <th>总人数</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -331,13 +364,13 @@ const CourseDetails: React.FC = () => {
                                 },
                               )}
                             </td>
-                            <td>{value.KSS}课时</td>
-                            <td>{value.FY}元</td>
+                            <td>{value.KSS}</td>
+                            <td>{value.BJRS}</td>
 
                           </tr>
                         </tbody>
                       </table>
-                      <p style={{fontWeight: 'bold'}}>班级简介</p>
+                      <p style={{ fontWeight: 'bold' }}>班级简介</p>
                       <p className={styles.content}>{BjDetails?.BJMS}</p>
                     </Panel>
                   )
@@ -361,52 +394,41 @@ const CourseDetails: React.FC = () => {
       {state === true ? (
         <div className={styles.payment} onClick={() => setstate(false)}>
           <div onClick={onchanges}>
-            <p className={styles.title}>{KcDetail?.KCMC}</p>
-            <p className={styles.price}>
-              {FY <= 0 ? (
-                <span>免费</span>
-              ) : (
-                <>
-                  <span>￥{FY}</span>
-                  <span>/学期</span>
-                </>
-              )}
-            </p>
-            <p className={styles.title} style={{ fontSize: '14px' }}>
-              班级
-            </p>
-            <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
-              {KBClass?.map(
-                (
-                  value: {
-                    BJMC: string;
-                    id: string;
-                    // FJS: string;
-                    FY: string;
-                    BMKSSJ: Date;
-                    BMJSSJ: Date;
-                    BJRS: number;
-                    KHXSBJs: any[];
-                    BJZT: string;
-                    xs_count: number;
-                  },
-                  ind: number,
-                ) => {
-                  const text = `${value.BJMC}已有${value?.xs_count}人报名，共${value.BJRS}个名额`;
-                  const valueName = `${value.id}+${value.FY}`;
-                  const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
-                  const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
-                  const enAble =
-                    myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
-                    myDate <= new Date(moment(end).format('YYYY/MM/DD'));
-                  if (value.BJZT === '已开班') {
-                    return (
-                      <Popconfirm
-                        overlayClassName={styles.confirmStyles}
-                        placement="bottom"
-                        title={text}
-                        defaultVisible={BJ === value.id}
-                      >
+            <div className={styles.wraps} >
+              <p className={styles.title} style={{ fontSize: 18, marginBottom: 12 }}>{KcDetail?.KCMC}</p>
+              <p className={styles.title} >
+                选择班级
+              </p>
+              <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
+                {KBClass?.map(
+                  (
+                    value: {
+                      BJMC: string;
+                      id: string;
+                      FY: string;
+                      BMKSSJ: Date;
+                      BMJSSJ: Date;
+                      BJRS: number;
+                      KHXSBJs: any[];
+                      BJZT: string;
+                      xs_count: number;
+                    },
+                    ind: number,
+                  ) => {
+                    const valueName = `${value.id}+${value.FY}`;
+                    const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
+                    const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
+                    const enAble =
+                      myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
+                      myDate <= new Date(moment(end).format('YYYY/MM/DD'));
+                    if (value.BJZT === '已开班') {
+                      return (
+                        // <Popconfirm
+                        //   overlayClassName={styles.confirmStyles}
+                        //   placement="bottom"
+                        //   title={text}
+                        //   defaultVisible={BJ === value.id}
+                        // >
                         <Radio.Button
                           value={valueName}
                           style={{ marginRight: '14px' }}
@@ -415,57 +437,87 @@ const CourseDetails: React.FC = () => {
                         >
                           {value.BJMC}
                         </Radio.Button>
-                      </Popconfirm>
-                    );
-                  }
-                  return '';
-                },
-              )}
-            </Radio.Group>
-            <div className={styles.Teachingaterial}>
-              {!JFData?.length ? (
-                <></>
-              ) : (
-                <div
-                  className={styles.box}
-                  style={{ borderRadius: JFstate === true ? '8px 8px 0 0' : '8px' }}
-                >
-                  <Checkbox onChange={onJFChange} checked={JFstate}>
-                    <span>选购教辅</span>
-                  </Checkbox>
-                  {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
-                </div>
-              )}
-              <div className={styles.tables}>
-                {JFstate === true ? (
+                        // </Popconfirm>
+                      );
+                    }
+                    return '';
+                  },
+                )}
+              </Radio.Group>
+              <p className={styles.title}>
+                课程费用
+              </p>
+              <p className={styles.price}>
+                {FY <= 0 ? (
                   <>
-                    {JFData ? (
-                      <>
-                        {JFData?.map((value: any) => {
-                          return (
-                            <div>
-                              <div>{value.JCMC}</div>
-                              {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
-                            </div>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <>
-                        {KBClass?.[0].KHKCJCs?.map((value: any) => {
-                          return (
-                            <div>
-                              <div>{value.JCMC}</div>
-                              {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
-                            </div>
-                          );
-                        })}
-                      </>
-                    )}
+                    <span>免费</span>
+                    <span style={{ color: '#666666', marginLeft: 10 }}>余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额</span>
                   </>
                 ) : (
-                  <></>
+                  <>
+                    <span style={{ fontWeight: 'bold', fontSize: '22px' }}>￥{FY}</span>
+                    <span>/学期</span>
+                    <span style={{ color: '#666666', marginLeft: 10 }}>余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额</span>
+                  </>
                 )}
+              </p>
+              <p className={styles.title}>
+                缴费方式
+              </p>
+              <span style={{ color: '#666666' }}>
+                {
+                  BjDetails?.BMLX === 0 ? '先报名后缴费' : <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+                }</span>
+              <div className={styles.Teachingaterial}>
+                {!JFData?.length ? (
+                  <></>
+                ) : (
+                  <>
+                    <p className={styles.title}>
+                      教辅教材
+                    </p>
+                    <div
+                      className={styles.box}
+                      style={{ borderRadius: JFstate === true ? '8px 8px 0 0' : '8px' }}
+                    >
+                      <Checkbox onChange={onJFChange} checked={JFstate}>
+                        <span>选购教辅</span>
+                      </Checkbox>
+                      {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
+                    </div>
+                  </>
+                )}
+                <div className={styles.tables}>
+                  {JFstate === true ? (
+                    <>
+                      {JFData ? (
+                        <>
+                          {JFData?.map((value: any) => {
+                            return (
+                              <div>
+                                <div>{value.JCMC}</div>
+                                {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
+                              </div>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <>
+                          {KBClass?.[0].KHKCJCs?.map((value: any) => {
+                            return (
+                              <div>
+                                <div>{value.JCMC}</div>
+                                {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
+                              </div>
+                            );
+                          })}
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             </div>
             <div className={styles.agreement}>
@@ -476,11 +528,11 @@ const CourseDetails: React.FC = () => {
             </div>
             {ByTime === true ? (
               <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
-                {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
+                {JFTotalost! + Number(FY) <= 0 || BjDetails?.BMLX !== 1 ? '提交' : '提交并付款'}
               </Button>
             ) : (
               <Button className={styles.submit} disabled={true} onClick={submit}>
-                {JFTotalost! + Number(FY) <= 0 ? '提交' : '提交并付款'}
+                {JFTotalost! + Number(FY) <= 0 || BjDetails?.BMLX !== 1 ? '提交' : '提交并付款'}
               </Button>
             )}
 

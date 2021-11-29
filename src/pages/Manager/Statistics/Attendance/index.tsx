@@ -10,6 +10,11 @@ import {
   exportStudentsAttendanceByDate,
 } from '@/services/after-class/reports';
 
+import personImg from '@/assets/person.png';
+import classImg from '@/assets/class.png';
+import normalImg from '@/assets/normal.png';
+import abnormalImg from '@/assets/abnormal.png';
+import allHoursImg from '@/assets/allHours.png';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 import { Link } from 'umi';
@@ -17,14 +22,12 @@ import moment, { isMoment } from 'moment';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import FormSelect from './compoents/FormSelect';
 import { DownloadOutlined } from '@ant-design/icons';
-// const { RangePicker } = DatePicker;
-// const { Option } = Select;
-// const { Search } = Input;
+
+import Style from './index.less';
 
 const { TabPane } = Tabs;
 const LeaveManagement = () => {
   const [key, setKey] = useState<string>('1');
-
   const [curXNXQIdJS, setCurXNXQIdJS] = useState<any>();
   const [newDateJS, setNewDateJS] = useState<any[]>([]);
   const [JSXM, setJSXM] = useState<string>();
@@ -33,12 +36,10 @@ const LeaveManagement = () => {
   const [XSXM, setXSXM] = useState<string>();
   // 学年学期列表数据
   const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
-
-  // const [newDate, setNewDate] = useState<any[]>([]);
+  // 统计数据源
+  const [collectData, setCollectData] = useState<any>();
   const [duration, setDuration] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-
-  // const inputVal = useRef<Input | null>(null);
 
   const getDuration = async (id: string) => {
     const res = await getAllXXSJPZ({ XNXQId: id, type: ['0'] });
@@ -52,7 +53,6 @@ const LeaveManagement = () => {
       }
     }
   };
-
   const teacher: ProColumns<any>[] = [
     {
       title: '序号',
@@ -91,7 +91,7 @@ const LeaveManagement = () => {
       key: 'KSS',
       width: 120,
       align: 'center',
-      render: (text, record) => record.all_KSS,
+      render: (text, record) => record.all_KSS || 0,
     },
     {
       title: '出勤次数',
@@ -99,7 +99,7 @@ const LeaveManagement = () => {
       key: 'CQS',
       align: 'center',
       width: 100,
-      render: (text, record) => record.attendance,
+      render: (text, record) => record.attendance || 0,
     },
     {
       title: '缺勤次数',
@@ -108,7 +108,7 @@ const LeaveManagement = () => {
       align: 'center',
       width: 100,
       render: (_: any, record: any) => {
-        return Number(record.absenteeism) + Number(record.leave) + Number(record.substitute);
+        return (Number(record.absenteeism) + Number(record.leave) + Number(record.substitute)) || 0;
       },
     },
     {
@@ -255,19 +255,15 @@ const LeaveManagement = () => {
       ),
     },
   ];
-
   const getDataSource = async (curXNXQId: string, newDate: any, name?: string) => {
     let startDate;
     let endDate;
-    // console.log('newDate',newDate);
     if (newDate.length > 0) {
       if (isMoment(newDate[0])) {
         startDate = newDate[0].format('YYYY-MM-DD');
-        // console.log('startDate',startDate);
       }
       if (isMoment(newDate[1])) {
         endDate = newDate[1].format('YYYY-MM-DD');
-        // console.log('endDate',endDate);
       }
     }
     const params = {
@@ -275,7 +271,6 @@ const LeaveManagement = () => {
       startDate,
       endDate,
     };
-
     let res;
     setLoading(true);
     if (key === '1') {
@@ -289,12 +284,13 @@ const LeaveManagement = () => {
       setXSXM(name);
       res = await getStudentsAttendanceByDate({ ...params, XSXM: name });
     }
-    if (res?.status === 'ok') {
+    if (res?.status === 'ok' && res.data) {
+      const { rows, ...rest } = res.data;
       setLoading(false);
-      setDataSource(res?.data?.rows);
+      setCollectData({ ...rest });
+      setDataSource(rows);
     }
   };
-
   useEffect(() => {
     if (key === '1') {
       if (curXNXQIdJS) {
@@ -381,9 +377,65 @@ const LeaveManagement = () => {
               }
               getDuration={getDuration}
             />
+            <div className={Style.TopCards}>
+              <div>
+                <div>
+                  <span>
+                    <img src={personImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.js_count || 0}</h3>
+                    <p>考勤教师总数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={classImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.allJS_bj_count || 0}</h3>
+                    <p>授课班级总数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={allHoursImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.allJS_KSS || 0}</h3>
+                    <p>授课课时总数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={normalImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.allJS_attendance || 0}</h3>
+                    <p>出勤总次数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={abnormalImg} />
+                  </span>
+                  <div>
+                    <h3>{(collectData?.allJS_absenteeism + collectData?.allJS_leave + collectData?.allJS_substitute) || 0}</h3>
+                    <p>缺勤总次数</p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <Table TableList={{ position: '老师' }} dataSource={dataSource} columns={teacher} />
           </TabPane>
-
           <TabPane tab="学生考勤统计" key="2">
             <FormSelect
               getDataSource={getDataSource}
@@ -394,6 +446,52 @@ const LeaveManagement = () => {
               }
               getDuration={getDuration}
             />
+            <div className={Style.TopCards}>
+              <div>
+                <div>
+                  <span>
+                    <img src={personImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.AllXS_count || 0}</h3>
+                    <p>考勤学生总数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={classImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.AllXSBJ_count || 0}</h3>
+                    <p>课程班总数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={normalImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.AllXSCQ_count || 0}</h3>
+                    <p>出勤总次数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={abnormalImg} />
+                  </span>
+                  <div>
+                    <h3>{(collectData?.AllXSQQ_count) || 0}</h3>
+                    <p>缺勤总次数</p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <Table TableList={{ position: '学生' }} dataSource={dataSource} columns={student} />
           </TabPane>
         </Tabs>

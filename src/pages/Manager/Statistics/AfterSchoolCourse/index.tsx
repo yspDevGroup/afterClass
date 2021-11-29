@@ -94,7 +94,7 @@ const AfterSchoolCourse: React.FC = () => {
       ellipsis: true,
     },
     {
-      title: '报名人数',
+      title: '报名人次',
       dataIndex: 'BMRS',
       key: 'BMRS',
       align: 'center',
@@ -102,7 +102,7 @@ const AfterSchoolCourse: React.FC = () => {
       ellipsis: true,
     },
     {
-      title: '退课人数',
+      title: '退课人次',
       dataIndex: 'TKRS',
       key: 'TKRS',
       align: 'center',
@@ -306,7 +306,7 @@ const AfterSchoolCourse: React.FC = () => {
             </span>
             <div>
               <h3>{collectData?.bmrs_amount || 0}</h3>
-              <p>报名累计人数</p>
+              <p>报名累计人次</p>
             </div>
           </div>
         </div>
@@ -317,7 +317,7 @@ const AfterSchoolCourse: React.FC = () => {
             </span>
             <div>
               <h3>{collectData?.tkrs_amount || 0}</h3>
-              <p>退课累计人数</p>
+              <p>退课累计人次</p>
             </div>
           </div>
         </div>

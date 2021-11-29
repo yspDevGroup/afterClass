@@ -22,6 +22,7 @@ const CourseDetails: React.FC = () => {
   const [teacherList, setTeacherList] = useState<any[]>([]);
   const classid = getQueryString('classid');
   const path = getQueryString('path');
+  const date = getQueryString('date');
   const userId = currentUser.JSId || testTeacherId;
   useEffect(() => {
     async function fetchData() {
@@ -107,9 +108,8 @@ const CourseDetails: React.FC = () => {
       });
     }
   };
-
   return <div className={styles.CourseDetails2}>
-    <GoBack title={'课程详情'} onclick={`/teacher/home?index=${path || 'index'}`} teacher />
+    <GoBack title={'课程详情'} onclick={`/teacher/home?index=${path || 'index'}&date=${date}`} teacher />
     <div className={styles.KCXX}>
       {/* 上课时段 */}
       <p className={styles.title}>{KcDetail?.title}</p>

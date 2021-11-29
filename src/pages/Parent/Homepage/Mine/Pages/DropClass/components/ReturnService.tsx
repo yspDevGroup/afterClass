@@ -8,7 +8,7 @@
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import { Button, Checkbox, message, Modal } from 'antd';
-import { useModel } from 'umi';
+import { useModel,history } from 'umi';
 import noOrder from '@/assets/noOrder.png';
 import { getStudent } from '@/services/after-class/khxxzzfw';
 import { createKHTKSJ } from '@/services/after-class/khtksj';
@@ -78,7 +78,7 @@ const ReturnService = () => {
       message.success('申请已提交，请等待审核');
       getFwData();
       setModalVisible(false);
-      console.log(res,'========')
+      history.push('/parent/mine/dropClass')
     } else {
       message.error(res.message);
     }

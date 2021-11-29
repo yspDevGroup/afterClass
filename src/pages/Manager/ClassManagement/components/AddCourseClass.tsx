@@ -14,10 +14,11 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import noJF from '@/assets/noJF.png'
 
 type AddCourseProps = {
   visible: boolean;
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>,
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   formValues?: Record<string, any>;
   mcData?: { label: string; value: string }[];
   names?: string;
@@ -26,10 +27,10 @@ type AddCourseProps = {
   currentUser?: API.CurrentUser | undefined;
   kCID?: string;
   CopyType?: string;
-  getData: (origin?: string | undefined) => Promise<void>,
-  BjLists: any,
-  BmLists: any,
-  JfLists: any,
+  getData: (origin?: string | undefined) => Promise<void>;
+  BjLists: any;
+  BmLists: any;
+  JfLists: any;
 };
 const { Option } = Select;
 const { Step } = Steps;
@@ -45,7 +46,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
   BjLists,
   BmLists,
   JfLists,
-  names
+  names,
 }) => {
   const [form, setForm] = useState<any>();
   const [Current, setBmCurrent] = useState(0);
@@ -78,25 +79,30 @@ const AddCourseClass: FC<AddCourseProps> = ({
   const [BMDate, setBMDate] = useState<any>();
   // 开课时间
   const [KKData, setKKData] = useState<any>();
+  // 校区数据Id
+  const [XQSJIds, setXQSJIds] = useState();
   const formLayout = {
     labelCol: { flex: '7em' },
     wrapperCol: {},
   };
-
   useEffect(() => {
     if (formValues) {
       const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === BjLists?.SSJGLX);
       setKCDate(kcDate);
+      setKcId(BjLists?.KHKCSJId);
       setIsJg(BjLists?.SSJGLX === '机构课程');
       setBJData(BjLists);
-      setBMData(BmLists)
-      setXzClassMC(BmLists?.XzClassMC)
+      setBMData(BmLists);
+      setXzClassMC(BmLists?.XzClassMC);
       setJFData(JfLists);
       setXzClass(BmLists?.BJIds);
       if (BmLists.BJLX === 1) {
-        setXzb(true)
+        setXzb(true);
       } else {
-        setXzb(false)
+        setXzb(false);
+      }
+      if (JfLists.BMLX === 2) {
+        setBMLX(true);
       }
       if (formValues?.KHKCJCs?.length) {
         setChoosenJf(true);
@@ -119,7 +125,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
         setKaike(true);
       }
     }
-  }, [formValues])
+  }, [formValues]);
   // 获取校区数据
   useEffect(() => {
     (async () => {
@@ -137,33 +143,39 @@ const AddCourseClass: FC<AddCourseProps> = ({
     })();
   }, []);
   // 获取课程适用年级和班级
+
   useEffect(() => {
     (async () => {
       if (BJData?.KHKCSJId) {
         const res = await getKHKCSJ({
           kcId: BJData?.KHKCSJId,
-        })
+        });
         if (res.status === 'ok') {
-          setSYNJ(res.data?.NJSJs)
+          setSYNJ(res.data?.NJSJs);
           const newArr: any = [];
           res.data?.NJSJs.forEach(async (value: any) => {
             const result = await getSchoolClasses({
               XXJBSJId: currentUser?.xxId,
               XNXQId: curXNXQId,
-              njId: value?.id
-            })
+              njId: value?.id,
+              XQSJId: XQSJIds,
+            });
             // 获取课程适用班级
             if (result.status === 'ok') {
               result.data.rows.forEach((item: any) => {
-                newArr.push(item)
-              })
+                newArr.push(item);
+              });
             }
-            setClassData(newArr)
-          })
+            const compare = (val1: any, val2: any) => {
+              return val1?.NJSJ?.NJ - val2?.NJSJ?.NJ;
+            };
+            newArr.sort(compare);
+            setClassData(newArr);
+          });
         }
       }
     })();
-  }, [BJData]);
+  }, [BJData, XQSJIds]);
   useEffect(() => {
     (async () => {
       if (curXNXQId) {
@@ -191,8 +203,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
         ...values,
         KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
         JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
-      }
-      setBJData(newData)
+      };
+      setXQSJIds(values.XQSJId);
+      setBJData(newData);
       setBmCurrent(Current + 1);
     } else if (Current === 1) {
       const newData = {
@@ -203,17 +216,83 @@ const AddCourseClass: FC<AddCourseProps> = ({
         BJLX: xzb ? 1 : 0,
         BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : BMDate?.KSSJ),
         BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : BMDate?.JSSJ),
-      }
+      };
 
       setBmCurrent(Current + 1);
-      setBMData(newData)
+      setBMData(newData);
     } else if (Current === 2) {
-      const newData = {
+      const newDatas = {
         ...BMData,
-        ...values
+        ...values,
+      };
+      if (values?.BMLX === 2) {
+        const { ZJS, FJS, ...info } = newDatas;
+        let ZTeacher;
+        let FTeacher;
+        if (formValues && CopyType === 'undefined') {
+          ZTeacher = [
+            {
+              JSLX: '主教师',
+              JZGJBSJId: ZJS,
+              KHBJSJId: formValues?.id,
+            },
+          ];
+          FTeacher =
+            FJS && FJS?.length
+              ? FJS.map((item: any) => {
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
+              : undefined;
+        } else {
+          ZTeacher = [
+            {
+              JSLX: '主教师',
+              JZGJBSJId: ZJS,
+            },
+          ];
+          FTeacher =
+            FJS && FJS?.length
+              ? FJS.map((item: any) => {
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
+              : undefined;
+        }
+        const newData = {
+          ...info,
+          KHBJJSs: FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher],
+          KHKCJCs: [],
+          BJZT: '未开班',
+          XNXQId: curXNXQId,
+        };
+        let res: any;
+        if (formValues && CopyType === 'undefined') {
+          // 编辑
+          res = await updateKHBJSJ({ id: formValues.id }, newData);
+        } else if (formValues && CopyType === 'copy') {
+          // 复制
+          res = await createKHBJSJ(newData);
+        } else {
+          // 新建
+          res = await createKHBJSJ(newData);
+        }
+        if (res.status === 'ok') {
+          message.success('提交成功');
+          getData();
+          setVisible(false);
+        } else {
+          message.error('提交失败，请联系管理员或稍后重试');
+        }
+      } else {
+        setJFData(newDatas);
+        setBmCurrent(Current + 1);
       }
-      setJFData(newData)
-      setBmCurrent(Current + 1);
     } else if (Current === 3) {
       let mertial: any[] = [];
       if (dataSource?.length && choosenJf) {
@@ -274,71 +353,66 @@ const AddCourseClass: FC<AddCourseProps> = ({
         KHBJJSs: FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher],
         KHKCJCs: choosenJf ? mertial : [],
         BJZT: '未开班',
-        XNXQId: curXNXQId
-      }
+        XNXQId: curXNXQId,
+      };
       let res: any;
       if (formValues && CopyType === 'undefined') {
         // 编辑
-        res = await updateKHBJSJ({ id: formValues.id }, newData)
+        res = await updateKHBJSJ({ id: formValues.id }, newData);
       } else if (formValues && CopyType === 'copy') {
         // 复制
-        res = await createKHBJSJ(newData)
+        res = await createKHBJSJ(newData);
       } else {
         // 新建
-        res = await createKHBJSJ(newData)
+        res = await createKHBJSJ(newData);
       }
       if (res.status === 'ok') {
         message.success('提交成功');
         getData();
         setVisible(false);
-        setBmCurrent(0);
-        form.resetFields();
-        setBJData({});
-        setBMData({});
-        setJFData({});
-        setBaoming(false);
-        setChoosenJf(false);
-        setXzb(false);
-        setKaike(false);
       } else {
-        message.error('提交失败，请联系管理员或稍后重试')
+        message.error('提交失败，请联系管理员或稍后重试');
       }
     }
   };
   useEffect(() => {
     if (formValues && names === 'chakan') {
-      (
-        async () => {
-          const res = await getXQSJ({
-            id: formValues?.XQSJId
-          })
-          if (res.status === 'ok') {
-            setXQMC(res.data.XQMC)
-
-          }
-
+      (async () => {
+        const res = await getXQSJ({
+          id: formValues?.XQSJId,
+        });
+        if (res.status === 'ok') {
+          setXQMC(res.data.XQMC);
         }
-      )()
+      })();
     }
-  }, [formValues])
+  }, [formValues]);
+  useEffect(() => {
+    const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
+    setKCDate(kcDate);
+  }, [KHKCAllData]);
+  useEffect(() => {
+    setBJData({
+      SSJGLX: '校内课程',
+    });
+    if (visible === false && form) {
+      setBmCurrent(0);
+      form.resetFields();
+      setBMData({});
+      setJFData({});
+      setBaoming(false);
+      setChoosenJf(false);
+      setXzb(false);
+      setKaike(false);
+      setBMLX(false);
+    }
+  }, [visible]);
 
   const next = () => {
     form.submit();
   };
   const prev = () => {
     setBmCurrent(Current - 1);
-  };
-  const onOkChange = async () => {
-    setBmCurrent(0);
-    form.resetFields();
-    setVisible(false);
-    setBJData({});
-    setBMData({});
-    setJFData({});
-    setBaoming(false);
-    setChoosenJf(false);
-    setXzb(false);
-    setKaike(false);
   };
   const getTitle = () => {
     if (formValues && names === 'chakan') {
@@ -357,12 +431,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
     const newArr: any = [];
     const XZBMCArr: any = [];
     key.forEach((item: any) => {
-      newArr.push(item.key)
-      XZBMCArr.push(item.value)
-    })
+      newArr.push(item.key);
+      XZBMCArr.push(item.value);
+    });
     setXzClass(newArr);
     setXzClassMC(XZBMCArr);
-  }
+  };
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -462,7 +536,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
       />
     );
   };
-
 
   const formItems: any[] = [
     {
@@ -681,11 +754,14 @@ const AddCourseClass: FC<AddCourseProps> = ({
           placeholder="请选择适用行政班："
           onChange={handleChange}
         >
-          {
-            ClassData.map((item: any) => {
-              return <Option key={item.id} value={`${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`}>{`${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`}</Option>
-            })
-          }
+          {ClassData.map((item: any) => {
+            return (
+              <Option
+                key={item.id}
+                value={`${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`}
+              >{`${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`}</Option>
+            );
+          })}
         </Select>
       ),
     },
@@ -698,10 +774,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     BMDate?.id
       ? {
-        type: 'divTab',
-        text: `(默认报名时间段)：${BMDate?.KSSJ} — ${BMDate?.JSSJ}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认报名时间段)：${BMDate?.KSSJ} — ${BMDate?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -755,12 +831,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         onChange: (e: any) => {
           if (e.target.value === 2) {
             form.setFieldsValue({ FY: 0 });
-            setBMLX(true)
+            setBMLX(true);
           } else {
-            setBMLX(false)
+            setBMLX(false);
             form.setFieldsValue({ FY: '' });
           }
-        }
+        },
       },
       rules: [{ required: true, message: '请选择缴费模式' }],
     },
@@ -799,12 +875,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-        type: 'custom',
-        text: '教辅材料',
-        name: 'KHKCJCs',
-        key: 'KHKCJCs',
-        children: getChildren(),
-      }
+          type: 'custom',
+          text: '教辅材料',
+          name: 'KHKCJCs',
+          key: 'KHKCJCs',
+          children: getChildren(),
+        }
       : '',
   ];
   const showWXName = formValues?.ZJS?.XM === '未知' && formValues?.ZJS?.WechatUserId;
@@ -818,168 +894,244 @@ const AddCourseClass: FC<AddCourseProps> = ({
           setVisible(false);
         }}
         footer={null}
-        onCancel={onOkChange}
+        onCancel={() => {
+          setVisible(false);
+        }}
         maskClosable={false}
       >
-        {
-          formValues && names === 'chakan' ?
-            <div className={styles.see}>
-              <Divider orientation="left">班级基本设置</Divider>
-              <div className={styles.box}>
-                <p>课程来源：{formValues?.KHKCSJ?.SSJGLX}</p>
-                <p>课程名称：{formValues?.KHKCSJ?.KCMC}</p>
-              </div>
-              <div className={styles.box}>
-                <p>班级名称：{formValues?.BJMC}</p>
-                <p>所属校区：{XQMC || '本校'} </p>
-              </div>
-              <div className={styles.box}>
-                <p>主班：{showWXName ? <WWOpenDataCom type="userName" openid={formValues?.ZJS?.WechatUserId} /> : formValues?.ZJS?.XM}</p>
-                <p>副班：{formValues?.KHBJJs.length ? <>
-                  {
-                    formValues?.KHBJJs.map((value: any) => {
-                      const FJSWXName = value?.JZGJBSJ?.XM === '未知' && value?.JZGJBSJ?.WechatUserId;
+        {formValues && names === 'chakan' ? (
+          <div className={styles.see}>
+            <Divider orientation="left">班级基本设置</Divider>
+            <div className={styles.box}>
+              <p>课程来源：{formValues?.KHKCSJ?.SSJGLX}</p>
+              <p>课程名称：{formValues?.KHKCSJ?.KCMC}</p>
+            </div>
+            <div className={styles.box}>
+              <p>班级名称：{formValues?.BJMC}</p>
+              <p>所属校区：{XQMC || '本校'} </p>
+            </div>
+            <div className={styles.box}>
+              <p>
+                主班：
+                {showWXName ? (
+                  <WWOpenDataCom type="userName" openid={formValues?.ZJS?.WechatUserId} />
+                ) : (
+                  formValues?.ZJS?.XM
+                )}
+              </p>
+              <p>
+                副班：
+                {formValues?.KHBJJs.length ? (
+                  <>
+                    {formValues?.KHBJJs.map((value: any) => {
+                      const FJSWXName =
+                        value?.JZGJBSJ?.XM === '未知' && value?.JZGJBSJ?.WechatUserId;
                       if (value.JSLX === '副教师') {
-                        return <span style={{ marginRight: 5 }}>{FJSWXName ? <WWOpenDataCom type="userName" openid={value?.JZGJBSJ?.WechatUserId} /> : value?.JZGJBSJ?.XM}</span>
+                        return (
+                          <span style={{ marginRight: 5 }}>
+                            {FJSWXName ? (
+                              <WWOpenDataCom
+                                type="userName"
+                                openid={value?.JZGJBSJ?.WechatUserId}
+                              />
+                            ) : (
+                              value?.JZGJBSJ?.XM
+                            )}
+                          </span>
+                        );
                       }
-                      return ''
-                    })
-                  }</> : <>——</>}</p>
-              </div>
-              <div className={styles.box}>
-                <p>课时数：{formValues?.KSS}</p>
-                <p>报名时段：{moment(formValues?.BMKSSJ).format('YYYY-MM-DD')} ~ {moment(formValues?.BMJSSJ).format('YYYY-MM-DD')}</p>
-              </div>
-              <p className={styles.text}>班级简介：{formValues?.BJMS}</p>
-              <Divider orientation="left">报名设置</Divider>
-              {
-                formValues?.BJLX === 1 ? <p className={styles.text}>适用行政班：{
-                  formValues?.BJSJs.map((value: any) => {
-                    return <span style={{ marginRight: 5 }}>{value?.NJSJ?.XD}{value?.NJSJ?.NJMC}{value?.BJ}</span>
-                  })
-                }</p> : <p className={styles.text}>适用年级：{
-                  formValues?.KHKCSJ?.NJSJs.map((value: any) => {
-                    return <span style={{ marginRight: 5 }}>{value?.XD}{value?.NJMC}</span>
-                  })
-                }</p>
-              }
-              <p className={styles.text}>课程班人数：{formValues?.BJRS}</p>
-              <p className={styles.text}>开课时段：{moment(formValues?.KKRQ).format('YYYY-MM-DD')} ~ {moment(formValues?.JKRQ).format('YYYY-MM-DD')}</p>
-              <Divider orientation="left">缴费设置</Divider>
-              <p className={styles.text}>缴费模式：{formValues?.BMLX === 0 ? '先报名后缴费' : <>{formValues?.BMLX === 1 ? '缴费即报名' : '免费'}</>}</p>
-              <p className={styles.text}>费用：{formValues?.FY}元</p>
-              {
-                formValues?.KHKCJCs.length ? <>
-                  <Divider orientation="left">教辅教材</Divider>
-                  {
-                    formValues?.KHKCJCs.map((value: any) => {
-                      return <div className={styles.box}>
-                        <p>{value?.JCMC}</p>
-                        <p>{value?.JCFY}元</p>
-                      </div>
-                    })
+                      return '';
+                    })}
+                  </>
+                ) : (
+                  <>——</>
+                )}
+              </p>
+            </div>
+            <div className={styles.box}>
+              <p>课时数：{formValues?.KSS}</p>
+              <p>
+                报名时段：{moment(formValues?.BMKSSJ).format('YYYY-MM-DD')} ~{' '}
+                {moment(formValues?.BMJSSJ).format('YYYY-MM-DD')}
+              </p>
+            </div>
+            <p className={styles.text}>班级简介：{formValues?.BJMS}</p>
+            <Divider orientation="left">报名设置</Divider>
+            {formValues?.BJLX === 1 ? (
+              <p className={styles.text}>
+                适用行政班：
+                {formValues?.BJSJs.map((value: any) => {
+                  return (
+                    <span style={{ marginRight: 5 }}>
+                      {value?.NJSJ?.XD}
+                      {value?.NJSJ?.NJMC}
+                      {value?.BJ}
+                    </span>
+                  );
+                })}
+              </p>
+            ) : (
+              <p className={styles.text}>
+                适用年级：
+                {formValues?.KHKCSJ?.NJSJs.map((value: any) => {
+                  return (
+                    <span style={{ marginRight: 5 }}>
+                      {value?.XD}
+                      {value?.NJMC}
+                    </span>
+                  );
+                })}
+              </p>
+            )}
+            <p className={styles.text}>课程班人数：{formValues?.BJRS}</p>
+            <p className={styles.text}>
+              开课时段：{moment(formValues?.KKRQ).format('YYYY-MM-DD')} ~{' '}
+              {moment(formValues?.JKRQ).format('YYYY-MM-DD')}
+            </p>
+            <Divider orientation="left">缴费设置</Divider>
+            <p className={styles.text}>
+              缴费模式：
+              {formValues?.BMLX === 0 ? (
+                '先报名后缴费'
+              ) : (
+                <>{formValues?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+              )}
+            </p>
+            <p className={styles.text}>费用：{formValues?.FY}元</p>
+            {formValues?.KHKCJCs.length ? (
+              <>
+                <Divider orientation="left">教辅教材</Divider>
+                {formValues?.KHKCJCs.map((value: any) => {
+                  return (
+                    <div className={styles.box}>
+                      <p>{value?.JCMC}</p>
+                      <p>{value?.JCFY}元</p>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+        ) : (
+          <>
+            <Steps current={Current}>
+              <Step key="班级基本设置" title="班级基本设置" />
+              <Step key="报名设置" title="报名设置" />
+              <Step key="缴费设置" title="缴费设置" />
+              {BMLX === false ? <Step key="教辅教材" title="教辅教材" /> : <></>}
+            </Steps>
+            {Current === 0 ? (
+              <div className={styles.wrap}>
+                <ProFormFields
+                  onFinish={onFinish}
+                  setForm={setForm}
+                  formItems={formItems}
+                  formItemLayout={formLayout}
+                  values={
+                    BJData || {
+                      BJZT: '未开班',
+                    }
                   }
-                </> : <></>
-              }
-            </div> :
-            <>
-              <Steps current={Current}>
-                <Step key="班级基本设置" title="班级基本设置" />
-                <Step key="报名设置" title="报名设置" />
-                <Step key="缴费设置" title="缴费设置" />
-                <Step key="教辅教材" title="教辅教材" />
-              </Steps>
-              {Current === 0 ? (
-                <div className={styles.wrap}>
-                  <ProFormFields
-                    onFinish={onFinish}
-                    setForm={setForm}
-                    formItems={formItems}
-                    formItemLayout={formLayout}
-                    values={
-                      BJData || {
-                        BJZT: '未开班',
-                      }
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+            {Current === 1 ? (
+              <div className={styles.wraps}>
+                {SYNJ ? (
+                  <p>
+                    (默认招生范围)：
+                    {SYNJ?.map((value: any) => {
+                      return (
+                        <span style={{ marginRight: 5 }}>
+                          {value?.XD}
+                          {value?.NJMC}
+                        </span>
+                      );
+                    })}
+                  </p>
+                ) : (
+                  <></>
+                )}
+                <ProFormFields
+                  onFinish={onFinish}
+                  setForm={setForm}
+                  formItems={BMformItems}
+                  formItemLayout={formLayout}
+                  values={
+                    BMData || {
+                      BJZT: '未开班',
                     }
-                  /></div>
-              ) : (
-                <></>
-              )}
-              {Current === 1 ? (
-                <div className={styles.wraps}>
-                  {
-                    SYNJ ? <p>(默认招生范围)：
-                      {
-                        SYNJ?.map((value: any) => {
-                          return <span style={{ marginRight: 5 }}>{value?.XD}{value?.NJMC}</span>
-                        })
-                      }
-                    </p> : <></>
                   }
-                  <ProFormFields
-                    onFinish={onFinish}
-                    setForm={setForm}
-                    formItems={BMformItems}
-                    formItemLayout={formLayout}
-                    values={
-                      BMData || {
-                        BJZT: '未开班',
-                      }
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+            {Current === 2 ? (
+              <div className={styles.wraps}>
+                <ProFormFields
+                  onFinish={onFinish}
+                  setForm={setForm}
+                  formItems={JFformItems}
+                  formItemLayout={formLayout}
+                  values={
+                    JFData || {
+                      BJZT: '未开班',
                     }
-                  /></div>
-              ) : (
-                <></>
-              )}
-              {Current === 2 ? (
-                <div className={styles.wraps}>
-                  <ProFormFields
-                    onFinish={onFinish}
-                    setForm={setForm}
-                    formItems={JFformItems}
-                    formItemLayout={formLayout}
-                    values={
-                      JFData || {
-                        BJZT: '未开班',
-                      }
+                  }
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+            {Current === 3 ? (
+              <div className={styles.wrap3}>
+                <ProFormFields
+                  onFinish={onFinish}
+                  setForm={setForm}
+                  formItems={JCformItems}
+                  formItemLayout={formLayout}
+                  values={
+                    formValues || {
+                      BJZT: '未开班',
                     }
-                  />
-                </div>
-              ) : (
-                <></>
-              )}
-              {Current === 3 ? (
-                <div className={styles.wrap3}>
-                  <ProFormFields
-                    onFinish={onFinish}
-                    setForm={setForm}
-                    formItems={JCformItems}
-                    formItemLayout={formLayout}
-                    values={
-                      formValues || {
-                        BJZT: '未开班',
-                      }
-                    }
-                  />
-                </div>
-              ) : (
-                <></>
-              )}
+                  }
+                />
+                {
+                  choosenJf === false ?
+                    <div className={styles.noJF}>
+                      <img src={noJF} alt="" />
+                      <p>该课程暂无教辅</p>
+                    </div> : <></>
+                }
 
-              <div className={styles.stepsAction}>
-                <div className="steps-action">
-                  {Current > 0 && (
-                    <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                      上一步
-                    </Button>
-                  )}
-                  <Button type="primary" onClick={() => next()}>
-                    {Current < 3 ? '下一步' : '提交'}
+              </div>
+            ) : (
+              <></>
+            )}
+
+            <div className={styles.stepsAction}>
+              <div className="steps-action">
+                {Current > 0 && (
+                  <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                    上一步
                   </Button>
-                </div>
+                )}
+                <Button type="primary" onClick={() => next()}>
+                  {BMLX === false ? (
+                    <> {Current < 3 ? '下一步' : '提交'}</>
+                  ) : (
+                    <> {Current < 2 ? '下一步' : '提交'}</>
+                  )}
+                </Button>
               </div>
-            </>
-        }
-
+            </div>
+          </>
+        )}
       </Modal>
     </>
   );
