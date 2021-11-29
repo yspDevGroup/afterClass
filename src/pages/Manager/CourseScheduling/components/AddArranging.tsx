@@ -286,18 +286,21 @@ const AddArranging: FC<PropsType> = (props) => {
   const BjClick = (value: any) => {
     // 选择班级教师
     const JS: any = value.KHBJJs?.find((items: any) => items.JSLX === '主教师');
-    const { JZGJBSJId, XM } = JS;
-    setTearchId(JZGJBSJId);
-    const chosenData = {
-      id: value.id,
-      cla: value.BJMC || '',
-      teacher: XM || '',
-      teacherID: JZGJBSJId || '',
-      XNXQId: curXNXQId || '',
-      KHBJSJId: value.id || '',
-      color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
-    };
-    setBj(chosenData);
+    console.log('JZGJBSJId', JS);
+    if (JS) {
+      const { JZGJBSJId, XM } = JS;
+      setTearchId(JZGJBSJId);
+      const chosenData = {
+        id: value.id,
+        cla: value.BJMC || '',
+        teacher: XM || '',
+        teacherID: JZGJBSJId || '',
+        XNXQId: curXNXQId || '',
+        KHBJSJId: value.id || '',
+        color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
+      };
+      setBj(chosenData);
+    }
     // setIndex(value.id);
     // setBJIDData(value.id);
   };
