@@ -165,6 +165,15 @@ const ServiceManagement = () => {
       width: 80,
     },
     {
+      title: '报名人数',
+      dataIndex: 'xs_count',
+      key: 'xs_count',
+      align: 'center',
+      search: false,
+      ellipsis: true,
+      width: 80,
+    },
+    {
       title: '发布状态',
       dataIndex: 'FWZT',
       key: 'FWZT',
