@@ -39,17 +39,17 @@ const ReplacePay = (props: {
   const [OrderDetails, setOrderDetails] = useState<any>();
   const [BJMC, setBJMC] = useState<any>();
   const [XSMC, setXSMC] = useState<any>();
-  // const [DDZFY, setDDZFY] = useState<any>();
-  // const [Message, setMessage] = useState<any>();
+  //   const [DDZFY, setDDZFY] = useState<any>();
+  //   const [Message, setMessage] = useState<any>();
 
   const getOrder = async () => {
     let newDDFY;
     if (XGJF) {
       newDDFY = Number(JFTotalost) + Number(BjDetails?.FY);
-      setDDZFY(newDDFY);
+      //   setDDZFY(newDDFY);
     } else {
       newDDFY = Number(BjDetails?.FY);
-      setDDZFY(newDDFY);
+      //   setDDZFY(newDDFY);
     }
 
     // 付费
@@ -85,7 +85,7 @@ const ReplacePay = (props: {
         }
       }
     } else {
-      setMessage(res.message);
+      message.error(res.message);
     }
   };
 

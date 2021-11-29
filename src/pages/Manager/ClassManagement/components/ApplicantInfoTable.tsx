@@ -331,7 +331,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                         {
                           ZT: 0,
                           LX: 0,
-                          KSS: KCBDatas?.KSS,
+                          KSS: applicantData?.KSS,
                           XSJBSJId: record?.XSJBSJ?.id,
                           KHBJSJId: record?.KHBJSJId,
                         },
@@ -339,7 +339,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                       if (res.status === 'ok') {
                         // 更新退课状态
                         const resupdateKHTKSJ = await updateKHTKSJ(
-                          { id: res?.data[0].id },
+                          { id: res?.data?.[0]?.id },
                           { ZT: 1 },
                         );
                         // 查询该订单费用
@@ -348,7 +348,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                             XXJBSJId: currentUser?.xxId,
                             XSJBSJId: record?.XSJBSJ?.id,
                             DDLX: 0,
-                            KHBJSJId: KCBDatas?.id,
+                            KHBJSJId: applicantData?.id,
                           });
                           if (resgetAllKHXSDD.status === 'ok') {
                             if (resgetAllKHXSDD!.data![0].DDFY! <= 0) {
@@ -358,7 +358,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                               // 创建退款
                               const rescreateKHXSTK = await createKHXSTK({
                                 KHBJSJId: record?.KHBJSJId,
-                                KHTKSJId: res?.data[0].id,
+                                KHTKSJId: res?.data?.[0]?.id,
                                 XXJBSJId: currentUser?.xxId,
                                 XSJBSJId: record?.XSJBSJ?.id,
                                 TKJE: resgetAllKHXSDD!.data![0].DDFY!,
