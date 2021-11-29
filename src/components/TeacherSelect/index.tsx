@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-11-15 13:41:03
- * @LastEditTime: 2021-11-19 12:08:22
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-11-29 11:39:19
+ * @LastEditors: Sissle Lynn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\components\TeacherSelect\index.tsx
  */
@@ -78,7 +78,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
             </>
           ),
           value: item.id,
-          key: item.id,
+          key: item?.XM + item?.WechatUserId,
           WechatUserId: item.WechatUserId,
         });
       });
@@ -127,14 +127,13 @@ const TeacherSelect = (props: TeacherSelectProps) => {
                 <>{getLable(item.GH)}</>
               </>
             ),
-            value: item.id,
-            key: item.id,
-            WechatUserId: item.WechatUserId,
+            value: item?.id,
+            key: item?.XM + item?.WechatUserId,
+            WechatUserId: item?.WechatUserId,
           });
         },
       );
 
-      console.log('机构', data);
       setJGTeacher(data);
     }
   };
@@ -185,6 +184,15 @@ const TeacherSelect = (props: TeacherSelectProps) => {
         style={{
           width: '100%',
         }}
+        treeNodeFilterProp="key"
+        // filterTreeNode={
+        //   (value,treeNode)=>{
+        //     console.log('value',value);
+        //     console.log('treeNode',treeNode);
+        //     // treeNode
+        //     return true;
+        //   }
+        // }
       />
     </div>
   );
