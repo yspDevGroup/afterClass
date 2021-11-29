@@ -64,7 +64,8 @@ const CourseDetails: React.FC = () => {
           JZGJBSJId: userId
         });
         if (res.status === 'ok' && res.data) {
-          const newTime = await convertTimeTable(userId, classid, res.data, classInfo?.days);
+          const xxId = currentUser?.xxId;
+          const newTime = await convertTimeTable(userId, classid, res.data, classInfo?.days,xxId);
           setTimetableList(newTime);
         }
       }
