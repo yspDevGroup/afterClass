@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Divider, Row, Col, Image, Empty } from 'antd';
 import moment from 'moment';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import { LeftOutlined } from '@ant-design/icons';
 import PageContainer from '@/components/PageContainer';
 import Style from './index.less';
@@ -10,10 +10,13 @@ import { getAllKHKTFC } from '@/services/after-class/khktfc';
 
 const AfterSchoolClass: React.FC = (props: any) => {
   const { state } = props.location;
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [listData, setListData] = useState<any>([]);
   const getData = async () => {
     const resKHKTFC = await getAllKHKTFC({
       KHBJSJId: state.data.id,
+      XXJBSJId: currentUser?.xxId,
     });
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
@@ -27,14 +30,13 @@ const AfterSchoolClass: React.FC = (props: any) => {
           content: item.NR,
           imgs: imgsArr,
           time: item.createdAt,
-          teacherName: item.JZGJBSJ.XM
+          teacherName: item.JZGJBSJ.XM,
         };
         allData.push(data);
       });
       setListData(allData);
     }
-
-  }
+  };
   useEffect(() => {
     getData();
   }, []);
@@ -52,41 +54,50 @@ const AfterSchoolClass: React.FC = (props: any) => {
         返回上一页
       </Button>
       <Divider />
-      <h3 style={{ fontWeight: 'bold' }}>{`${listData[0]?.className || '--'}/${listData[0]?.classNum || '--'}`}</h3>
+      <h3 style={{ fontWeight: 'bold' }}>{`${listData[0]?.className || '--'}/${
+        listData[0]?.classNum || '--'
+      }`}</h3>
       <div className={Style.container}>
         <ul>
-          {
-            listData.length ? listData.map((item: any) => {
+          {listData.length ? (
+            listData.map((item: any) => {
               return (
                 <li key={item.id}>
                   <Row style={{ minHeight: '148px' }}>
                     <Col span={2} className={Style.time}>
                       <p className={Style.teacherName}>{item.teacherName}</p>
-                      <p className={Style.date} style={{ marginBottom: 24 }}>{moment(item.time).format('MM-DD')}</p>
+                      <p className={Style.date} style={{ marginBottom: 24 }}>
+                        {moment(item.time).format('MM-DD')}
+                      </p>
                       <p className={Style.date}>{moment(item.time).format('HH:mm:ss')}</p>
                     </Col>
                     <Col span={22}>
                       <p className={Style.content}>{item.content}</p>
                       <Image.PreviewGroup>
-                        {
-                          item.imgs.map((url: string) => {
-                            return <Image width={'10%'}
-                              height={78} src={url} />
-                          })
-                        }
+                        {item.imgs.map((url: string) => {
+                          return <Image width={'10%'} height={78} src={url} />;
+                        })}
                       </Image.PreviewGroup>
                     </Col>
                   </Row>
                 </li>
-              )
-            }) : <Empty
+              );
+            })
+          ) : (
+            <Empty
               image={noData}
-              style={{ marginTop: '20px', borderRadius: '8px', minHeight: '300px', backgroundColor: '#fff', }}
+              style={{
+                marginTop: '20px',
+                borderRadius: '8px',
+                minHeight: '300px',
+                backgroundColor: '#fff',
+              }}
               imageStyle={{
                 height: 200,
               }}
-              description={'暂无课堂风采记录'} />
-          }
+              description={'暂无课堂风采记录'}
+            />
+          )}
         </ul>
       </div>
     </PageContainer>

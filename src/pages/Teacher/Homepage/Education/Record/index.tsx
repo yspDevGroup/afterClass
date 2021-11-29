@@ -16,15 +16,11 @@ const Record = () => {
   const [startY, setStartY] = useState<number>(0);
   const [endY, setEndY] = useState<number>(0);
 
-  useEffect(() => {
-    getData();
-  }, []);
-
   const getData = async () => {
     const resKHKTFC = await getAllKHKTFC({ XXJBSJId: currentUser?.xxId });
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
-      resKHKTFC.data?.rows?.forEach((item: any, index: number) => {
+      resKHKTFC.data?.rows?.forEach((item: any) => {
         const imgsArr = item.TP.split(';');
         imgsArr.pop();
         const data = {
@@ -42,11 +38,14 @@ const Record = () => {
       setListData(allData);
       setLoading(false);
     }
+  };
 
-  }
+  useEffect(() => {
+    getData();
+  }, []);
 
   function cancel(e: any) {
-    // console.log(e);
+    console.log(e);
   }
 
   const handleTouchStart = (e: any) => {
@@ -56,13 +55,13 @@ const Record = () => {
     setEndY(e.touches[0].clientY);
   };
 
-  const handleTouchEnd = (e: any) => {
+  const handleTouchEnd = () => {
     if (startY > -1 && endY > -1) {
-      let distance = Math.abs(startY - endY);
+      const distance = Math.abs(startY - endY);
       if (distance > 50) {
         if (startY > endY) {
           //上滑
-          setShowData([...showData, ...listData.slice(showIndex, showIndex + 3)])
+          setShowData([...showData, ...listData.slice(showIndex, showIndex + 3)]);
           setShowIndex(showIndex + 3);
         } else {
           //下拉
@@ -75,19 +74,36 @@ const Record = () => {
   };
 
   return (
-    <div className={styles.ClassroomStyle} onTouchStart={handleTouchStart}
+    <div
+      className={styles.ClassroomStyle}
+      onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}>
+      onTouchEnd={handleTouchEnd}
+    >
       <GoBack title="课堂风采" teacher onclick="/teacher/home?index=education" />
       <div className={styles.wrap}>
-        {
-          !loading ? showData.map((item: any) => {
+        {!loading ? (
+          showData.map((item: any) => {
             return (
               <div className={styles.cards}>
                 <p>
-                  <Avatar style={{ backgroundColor: '#0066FF', verticalAlign: 'middle' }} size="large">
-                    <p style={{ fontSize: '14px', lineHeight: '21px', height: '21px' }}>{moment(item.time).format('DD')}</p>
-                    <p style={{ fontSize: '12px', lineHeight: '12px', height: '12px', fontWeight: 300 }}>{moment(item.time).format('MM') + '月'}</p>
+                  <Avatar
+                    style={{ backgroundColor: '#0066FF', verticalAlign: 'middle' }}
+                    size="large"
+                  >
+                    <p style={{ fontSize: '14px', lineHeight: '21px', height: '21px' }}>
+                      {moment(item.time).format('DD')}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: '12px',
+                        lineHeight: '12px',
+                        height: '12px',
+                        fontWeight: 300,
+                      }}
+                    >
+                      {moment(item.time).format('MM') + '月'}
+                    </p>
                   </Avatar>
                   <div className={styles.name}>
                     <p>{item.className}</p>
@@ -99,13 +115,28 @@ const Record = () => {
                   <div className={styles.imgContainer}>
                     <Image.PreviewGroup>
                       <Row gutter={[6, 6]} style={{ width: '100%' }}>
-                        {
-                          item.imgs.map((url: string) => {
-                            return <Col span={(item.imgs.length === 2 || item.imgs.length === 4) ? 12 : (item.imgs.length === 1 ? 24 : 8)} className={(item.imgs.length === 2 || item.imgs.length === 4) ? styles.pairImg : (item.imgs.length === 1 ? styles.oneImg : styles.nineImg)}>
+                        {item.imgs.map((url: string) => {
+                          return (
+                            <Col
+                              span={
+                                item.imgs.length === 2 || item.imgs.length === 4
+                                  ? 12
+                                  : item.imgs.length === 1
+                                  ? 24
+                                  : 8
+                              }
+                              className={
+                                item.imgs.length === 2 || item.imgs.length === 4
+                                  ? styles.pairImg
+                                  : item.imgs.length === 1
+                                  ? styles.oneImg
+                                  : styles.nineImg
+                              }
+                            >
                               <Image src={url} />
                             </Col>
-                          })
-                        }
+                          );
+                        })}
                       </Row>
                     </Image.PreviewGroup>
                   </div>
@@ -131,8 +162,7 @@ const Record = () => {
                         } catch (err) {
                           message.error('删除失败，请联系管理员或稍后重试。');
                         }
-                      }
-                      }
+                      }}
                       onCancel={cancel}
                       okText="确定"
                       cancelText="取消"
@@ -143,18 +173,19 @@ const Record = () => {
                   </p>
                 </div>
               </div>
-            )
-
-          }) : <div>
-            {
-              [1, 2, 3].map(() => {
-                return <div className={styles.cards}>
+            );
+          })
+        ) : (
+          <div>
+            {[1, 2, 3].map(() => {
+              return (
+                <div className={styles.cards}>
                   <Skeleton avatar active loading={loading} />
                 </div>
-              })
-            }
+              );
+            })}
           </div>
-        }
+        )}
       </div>
     </div>
   );
