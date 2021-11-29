@@ -31,7 +31,8 @@ const CourseTable: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       if (classid) {
-        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId);
+        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId,bjId);
         const { courseSchedule } = oriData;
         const classInfo = courseSchedule.find((item: { KHBJSJId: string; }) => {
           return item.KHBJSJId === classid

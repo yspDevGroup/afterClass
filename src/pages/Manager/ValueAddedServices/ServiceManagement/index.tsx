@@ -509,9 +509,15 @@ const ServiceManagement = () => {
       <Modal
         title={Disabled === '新增' ? '新增服务' : Disabled === '编辑' ? '编辑服务' : '服务详情'}
         visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
         className={Disabled === '查看' ? styles.modal : styles.modals}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleOk}>
+            确定
+          </Button>,
+          <Button key="back" onClick={handleCancel}>
+            取消
+          </Button>,
+        ]}
       >
         <Form name="basic" form={form} onFinish={submit} className={styles.Forms}>
           <Form.Item name="id" hidden>

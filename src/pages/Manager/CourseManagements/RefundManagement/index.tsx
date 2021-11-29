@@ -4,10 +4,11 @@ import CourseRefund from './CourseRefund';
 import ServiceRefund from './ServiceRefund';
 
 const { TabPane } = Tabs;
-const Index = () => {
+const Index = (props: any) => {
+  const { index } = props.history.location.query;
   return (
     <PageContainer>
-      <Tabs>
+      <Tabs defaultActiveKey={index ? index : "1"}>
         <TabPane tab="课程退款" key="1">
           <CourseRefund />
         </TabPane>

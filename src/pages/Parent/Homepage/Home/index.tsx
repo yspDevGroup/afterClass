@@ -25,7 +25,7 @@ const Home = () => {
   const [totalData, setTotalData] = useState<any>({});
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
   const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
+  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
   const StorageXSName = localStorage.getItem('studentName');
   const [BJMC, setBJMC] = useState<any>();
   useEffect(() => {
@@ -59,7 +59,8 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       if (StorageXSId) {
-        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId);
+        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId);
         const { data } = oriData;
         setTotalData(data);
       }

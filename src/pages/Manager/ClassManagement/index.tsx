@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useModel } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tooltip, Select, message, Divider, Row, Col } from 'antd';
+import { Button, Modal, Tooltip, Select, Divider, Row, Col } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -14,16 +14,17 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
 
 import ActionBar from './components/ActionBar';
-import AddCourse from './components/AddCourse';
+// import AddCourse from './components/AddCourse';
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 import styles from './index.less';
-import AgentRegistration from './components/AgentRegistration';
+// import AgentRegistration from './components/AgentRegistration';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
 import type { TableListParams } from '@/constant';
 import SearchLayout from '@/components/Search/Layout';
+import AddCourseClass from './components/AddCourseClass';
 
 const { Option } = Select;
 
@@ -54,8 +55,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [tips, setTips] = useState<boolean>(false);
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
-  // 报名列表数据
-  const [applicantData, setApplicantData] = useState<any>({});
+  // // 报名列表数据
+  // const [applicantData, setApplicantData] = useState<any>({});
   // 课程班复制功能
   const [CopyType, setCopyType] = useState<string>();
   // 弹框名称设定
@@ -65,18 +66,25 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // 课程数据
   const [KHKCAllData, setKHKCAllData] = useState<any>([]);
   // 控制代报名中弹框
-  const [modalVisible, setModalVisible] = useState(false);
-  // 代报名中班级信息
-  const [BjDetails, setBjDetails] = useState<any>();
+  // const [modalVisible, setModalVisible] = useState(false);
+  // // 代报名中班级信息
+  // const [BjDetails, setBjDetails] = useState<any>();
   // 针对报名时段维护后的提示信息
   const [BMJSSJTime, setBMJSSJTime] = useState<any>();
   // 代报名中教辅费用
-  const [JFAmount, setJFAmount] = useState<any>(0);
+  // const [JFAmount, setJFAmount] = useState<any>(0);
   // 班级状态
   const [BJZTMC, setBJZTMC] = useState<string | undefined>(undefined);
   // 班级同步数据存储
   const [BJCC, setBJCC] = useState<[]>();
   const  [clickBjId, setClickBjId] = useState()
+  // 课程班班级基本设置数据
+  const [BjLists, setBjLists] = useState<any>();
+  // 课程班报名设置数据
+  const [BmLists, setBmLists] = useState<any>();
+  // 课程班报名设置数据
+  const [JfLists, setJfLists] = useState<any>();
+
   const getData = async (origin?: string) => {
     const opts: TableListParams = {
       XNXQId: curXNXQId,
@@ -168,22 +176,22 @@ const CourseManagement = (props: { location: { state: any } }) => {
     setTips(false);
   };
   // 课程班学生代报名
-  const showModalBM = async (value: any) => {
-    const res = await getKHBJSJ({
-      id: value?.id,
-    });
-    if (res.status === 'ok') {
-      setBjDetails(res.data);
-      if (res.data?.KHKCJCs?.length !== 0) {
-        let num: number = 0;
-        for (let i = 0; i < res.data?.KHKCJCs.length; i += 1) {
-          num += Number(res.data?.KHKCJCs[i].JCFY);
-        }
-        setJFAmount(Number(num).toFixed(2));
-      }
-    }
-    setModalVisible(true);
-  };
+  // const showModalBM = async (value: any) => {
+  //   const res = await getKHBJSJ({
+  //     id: value?.id,
+  //   });
+  //   if (res.status === 'ok') {
+  //     setBjDetails(res.data);
+  //     if (res.data?.KHKCJCs?.length !== 0) {
+  //       let num: number = 0;
+  //       for (let i = 0; i < res.data?.KHKCJCs.length; i += 1) {
+  //         num += Number(res.data?.KHKCJCs[i].JCFY);
+  //       }
+  //       setJFAmount(Number(num).toFixed(2));
+  //     }
+  //   }
+  //   setModalVisible(true);
+  // };
   // 获取当前课程班报名学生信息，并以弹框展示
   const showModal = async (record: any) => {
 
@@ -206,6 +214,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // 关闭报名列表弹框
   const handleCancel = () => {
     setIsModalVisible(false);
+    getData();
   };
   // 查看、编辑、复制课程班操作
   const handleEdit = async (data: any, type?: any) => {
@@ -219,21 +228,47 @@ const CourseManagement = (props: { location: { state: any } }) => {
         FJS.push(element?.JZGJBSJId);
       }
     });
-    const { BJMC, BJZT, ...info } = currentData;
-    const list = {
-      ...info,
-
+    const { BJMC, BJZT, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX,BJRS, BMLX, FY,...info } = currentData;
+    const BjList = {
       BJMC: type === 'copy' ? `${BJMC}-复制` : BJMC,
-      BJZT: type === 'copy' ? '未开班' : BJZT,
-
+      KHKCSJId: KHKCSJ?.id,
+      BJMS,
       ZJS:
         currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJId ||
         undefined,
       FJS,
-      BMSD: [currentData.BMKSSJ, currentData.BMJSSJ],
-      SKSD: [currentData.KKRQ, currentData.JKRQ],
       SSJGLX: currentData?.KHKCSJ?.SSJGLX,
-      KHKCSJId: currentData?.KHKCSJ?.id,
+      SKSD: [currentData.KKRQ, currentData.JKRQ],
+      KSS,
+      XQSJId
+    }
+    setBjLists(BjList);
+    const BJIdArr: any = [];
+    const BJMCArr: any = [];
+    BJSJs.forEach((value: any)=>{
+      BJIdArr.push(value.id)
+      BJMCArr.push(`${value.NJSJ.XD}${value.NJSJ.NJMC}${value.BJ}`)
+    })
+    const BmList = {
+      BJIds: BJIdArr,
+      XzClassMC: BJMCArr,
+      BMSD: [currentData.BMKSSJ, currentData.BMJSSJ],
+      BJLX,
+      BJRS,
+    }
+    setBmLists(BmList);
+    const JfList = {
+      BMLX,
+      FY
+    }
+    setJfLists(JfList);
+
+    const list = {
+      ...currentData,
+      ZJS:
+      currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJ ||
+      undefined,
+      KHKCSJId: KHKCSJ?.id,
     };
     setVisible(true);
     setCurrent(list);
@@ -259,9 +294,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
     setReadonly(false);
   };
   // 关闭新增、编辑课程班信息弹框
-  const onClose = () => {
-    setVisible(false);
-  };
+  // const onClose = () => {
+  //   setVisible(false);
+  // };
   // 课程名称筛选事件
   const onKcmcChange = (value: any) => {
     setKcId(value);
@@ -327,6 +362,16 @@ const CourseManagement = (props: { location: { state: any } }) => {
       width: 80,
     },
     {
+      title: '缴费方式',
+      dataIndex: 'BMLX',
+      key: 'BMLX',
+      align: 'center',
+      width: 120,
+      render: (text: any) => {
+        return <>{text === 0 ? '先报名后缴费' : <>{text === 1 ? '缴费即报名' : '免费'}</>}</>
+      }
+    },
+    {
       title: '报名人数',
       dataIndex: 'BMRS',
       key: 'BMRS',
@@ -338,7 +383,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
             <Tooltip
               title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count || 0}人。`}
             >
-              {record?.xs_count}/{record?.BJRS}
+              {record?.xs_count+record?.noPayXS_count}/{record?.BJRS}
             </Tooltip>
           </a>
         );
@@ -396,7 +441,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
       ellipsis: true,
       filters: true,
       onFilter: false,
-
       render: (_, record) => {
         return (
           <>
@@ -423,13 +467,13 @@ const CourseManagement = (props: { location: { state: any } }) => {
       width: 230,
       fixed: 'right',
       render: (_, record) => {
-        const BMJSSJ = new Date(record?.BMJSSJ).getTime();
-        const newDate = new Date().getTime();
+        // const BMJSSJ = new Date(record?.BMJSSJ).getTime();
+        // const newDate = new Date().getTime();
         return (
           <>
             <ActionBar record={record} handleEdit={handleEdit} getData={getData} />
             <Divider type="vertical" />
-            {record?.BJZT === '已开班' && newDate <= BMJSSJ ? (
+            {/* {record?.BJZT === '已开班' && newDate <= BMJSSJ ? (
               <a
                 onClick={() => {
                   showModalBM(record);
@@ -446,7 +490,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
               </Tooltip>
             ) : (
               <></>
-            )}
+            )} */}
           </>
         );
       },
@@ -548,6 +592,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     <Option key="未开班" value="未开班">
                       未开班
                     </Option>
+                    <Option key="已结课" value="已结课">
+                      已结课
+                    </Option>
                   </Select>
                 </div>
               </SearchLayout>
@@ -578,11 +625,26 @@ const CourseManagement = (props: { location: { state: any } }) => {
             </Button>,
           ]}
         />
-        <AddCourse
+        {/* <AddCourse
           visible={visible}
           onClose={onClose}
           formValues={current}
           readonly={readonly}
+          mcData={mcData}
+          names={names}
+          KHKCAllData={KHKCAllData}
+          curXNXQId={curXNXQId}
+          currentUser={currentUser}
+          CopyType={CopyType}
+          getData={getData}
+        /> */}
+        <AddCourseClass
+          visible={visible}
+          formValues={current}
+          BjLists={BjLists}
+          BmLists={BmLists}
+          JfLists={JfLists}
+          setVisible={setVisible}
           mcData={mcData}
           names={names}
           KHKCAllData={KHKCAllData}
@@ -608,19 +670,19 @@ const CourseManagement = (props: { location: { state: any } }) => {
           visible={isModalVisible}
           onCancel={handleCancel}
           footer={null}
-          style={{ minWidth: '950px' }}
+          style={{ minWidth: '1000px' }}
           destroyOnClose
         >
-          <ApplicantInfoTable clickBjId={clickBjId} dataSource={applicantData} actionRefs={actionRef} />
+          <ApplicantInfoTable clickBjId={clickBjId} actionRefs={actionRef} />
         </Modal>
-        <AgentRegistration
+        {/* <AgentRegistration
           curXNXQId={curXNXQId}
           JFTotalost={JFAmount}
           BjDetails={BjDetails}
           ModalVisible={modalVisible}
           setModalVisible={setModalVisible}
-          actionRef={actionRef}
-        />
+          
+        /> */}
       </PageContainer>
     </>
   );

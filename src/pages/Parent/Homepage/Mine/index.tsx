@@ -78,8 +78,9 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
         // 数据信息重新更新获取
         const studentId: string =
           StorageXSId || student?.[0].XSJBSJId || testStudentId;
-        const studentNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId);
-        await ParentHomeData('student', currentUser?.xxId, studentId, studentNjId, true);
+        const studentNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+        await ParentHomeData('student', currentUser?.xxId, studentId, studentNjId, bjId, true);
         fetchData();
         setReload(false);
       }

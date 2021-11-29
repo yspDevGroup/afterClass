@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-11-23 11:48:48
+ * @LastEditTime: 2021-11-24 17:06:35
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -15,6 +15,7 @@ import { createKHJSTDK } from '@/services/after-class/khjstdk';
 import { freeSpace } from '@/services/after-class/fjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getClassDays } from '@/utils/TimeTable';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -39,16 +40,16 @@ const TkApply = () => {
   };
   useEffect(() => {
     (
-      async()=>{
-        if(NewRQ && NewKSSJ && NewJSSJ){
+      async () => {
+        if (NewRQ && NewKSSJ && NewJSSJ) {
           const resXNXQ = await queryXNXQList(currentUser?.xxId);
           if (resXNXQ?.current) {
             const result = await freeSpace({
               XXJBSJId: currentUser?.xxId,
-              XNXQId:resXNXQ?.current?.id,
-              RQ:moment(NewRQ).format('YYYY-MM-DD') || '',
-              KSSJ:moment(NewKSSJ).format('HH:mm') || '',
-              JSSJ:moment(NewJSSJ).format('HH:mm') || '',
+              XNXQId: resXNXQ?.current?.id,
+              RQ: moment(NewRQ).format('YYYY-MM-DD') || '',
+              KSSJ: moment(NewKSSJ).format('HH:mm') || '',
+              JSSJ: moment(NewJSSJ).format('HH:mm') || '',
               page: 0,
               pageSize: 0
             })
@@ -56,39 +57,39 @@ const TkApply = () => {
               setFjData(result.data?.rows)
             }
           }
-        }else{
+        } else {
           setFjData([])
         }
       }
     )();
-  }, [NewRQ,NewKSSJ,NewJSSJ])
+  }, [NewRQ, NewKSSJ, NewJSSJ])
 
   useEffect(() => {
     (
       async () => {
-        if(dateData){
+        if (dateData) {
           const result = await getKHBJSJ({
-            id:dateData?.bjid
+            id: dateData?.bjid
           })
-          if(result.status === 'ok'){
+          if (result.status === 'ok') {
             const JSId = result.data.KHBJJs.find((item: any) => item.JSLX === '主教师').JZGJBSJ.id;
-            if(currentUser?.JSId === JSId){
-              setstate(false)
-            }else{
+            if ((currentUser?.JSId || testTeacherId) === JSId) {
+              setstate(false);
+            } else {
               message.warning('您不是该班级主班教师')
-              setstate(true)
+              setstate(true);
             }
           }
         }
       }
     )()
   }, [dateData])
-  const onchange = (value: any,type: any)=>{
-    if(type === 'TKRQ'){
+  const onchange = (value: any, type: any) => {
+    if (type === 'TKRQ') {
       setNewRQ(value)
-    }else if(type === 'KSSJ'){
+    } else if (type === 'KSSJ') {
       setNewKSSJ(value)
-    }else if(type === 'JSSJ'){
+    } else if (type === 'JSSJ') {
       setNewJSSJ(value)
     }
   }
@@ -97,15 +98,15 @@ const TkApply = () => {
     const newData = {
       LX: 0,
       ZT: 0,
-      KSSJ:moment(values.KSSJ).format('HH:mm'),
-      JSSJ:moment(values.JSSJ).format('HH:mm'),
-      SKRQ:dateData?.day,
-      TKRQ:moment(values.TKRQ).format('YYYY-MM-DD') ,
+      KSSJ: moment(values.KSSJ).format('HH:mm'),
+      JSSJ: moment(values.JSSJ).format('HH:mm'),
+      SKRQ: dateData?.day,
+      TKRQ: moment(values.TKRQ).format('YYYY-MM-DD'),
       BZ: values.BZ,
       XXJBSJId: currentUser.xxId,
       SKJSId: currentUser.JSId || testTeacherId,
-      SKFJId:dateData?.FJId,
-      TKFJId:FieldId,
+      SKFJId: dateData?.FJId,
+      TKFJId: FieldId,
       KHBJSJId: dateData?.bjid,
       XXSJPZId: dateData?.jcId
     }
@@ -114,7 +115,11 @@ const TkApply = () => {
       message.success('申请成功');
       setDateData([]);
       form.resetFields();
-      history.push('/teacher/education/courseAdjustment')
+      // 处理主班调课后课时状态变更的情况，触发课时重新计算
+      if (res.message === "isAudit=false") {
+        await getClassDays(dateData?.bjid, currentUser.JSId || testTeacherId, currentUser?.xxId);
+      }
+      history.push('/teacher/education/courseAdjustment');
     } else {
       message.error(res.message)
     }
@@ -143,24 +148,24 @@ const TkApply = () => {
         >
           <p className={styles.tkhsj}>调课后时间</p>
           <Form.Item name='TKRQ' label="日期">
-            <DatePicker inputReadOnly={true} onChange={(value)=>{
-             onchange(value,'TKRQ')
+            <DatePicker inputReadOnly={true} onChange={(value) => {
+              onchange(value, 'TKRQ')
             }} />
           </Form.Item>
           <div className={styles.TimeInterval}>
-          <Form.Item  name='KSSJ' label="时段">
-            <TimePicker inputReadOnly={true} format="HH:mm" onChange={(value)=>{
-             onchange(value,'KSSJ')
-            }} />
-          </Form.Item>
-          <div className={styles.right}>
-          <span>-</span>
-          <Form.Item  name='JSSJ' >
-            <TimePicker inputReadOnly={true} format="HH:mm" onChange={(value)=>{
-             onchange(value,'JSSJ')
-            }} />
-          </Form.Item>
-          </div>
+            <Form.Item name='KSSJ' label="时段">
+              <TimePicker inputReadOnly={true} format="HH:mm" onChange={(value) => {
+                onchange(value, 'KSSJ')
+              }} />
+            </Form.Item>
+            <div className={styles.right}>
+              <span>-</span>
+              <Form.Item name='JSSJ' >
+                <TimePicker inputReadOnly={true} format="HH:mm" onChange={(value) => {
+                  onchange(value, 'JSSJ')
+                }} />
+              </Form.Item>
+            </div>
 
           </div>
 

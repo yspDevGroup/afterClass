@@ -366,7 +366,14 @@ const MutualEvaluation = () => {
           ]}
         />
       </div>
-      <Modal title="增值服务类别" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="增值服务类别" visible={isModalVisible} footer={[
+        <Button key="submit" type="primary" onClick={handleOk}>
+          确定
+        </Button>,
+        <Button key="back" onClick={handleCancel}>
+          取消
+        </Button>,
+      ]}>
         <Form name="basic" form={form} onFinish={submit} className={styles.Forms}>
           <Form.Item name="id" hidden>
             <Input disabled />
@@ -399,12 +406,12 @@ const MutualEvaluation = () => {
             >
               {optionsNJ?.length
                 ? optionsNJ?.map((item: any) => {
-                    return (
-                      <Option value={item?.label} key={item?.value}>
-                        {item?.label}
-                      </Option>
-                    );
-                  })
+                  return (
+                    <Option value={item?.label} key={item?.value}>
+                      {item?.label}
+                    </Option>
+                  );
+                })
                 : ''}
             </Select>
           </Form.Item>

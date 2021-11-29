@@ -21,6 +21,8 @@ const EmptyArticle = () => {
         const res = await homePageInfo({
           XSId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
           XNXQId: result.current.id,
+          njId: localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId,
+          bjId: localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId,
           XXJBSJId: currentUser!.xxId,
         });
         if (res.status === 'ok') {

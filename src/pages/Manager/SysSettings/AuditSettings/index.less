@@ -1,31 +1,42 @@
 .wrapperCard{
   div{
     h3{
-      &:before{
-        display: inline-block;
-        content: '';
-        width: 5px;
-        height: 16px;
-        border-radius: 5px;
-        background-color: #3e88f8;
-        vertical-align: text-bottom;
-        margin-right: 8px;
-      }
       font-weight: bold;
       line-height: 22px;
       font-size: 16px;
+      color: #333333;
       margin: 0;
-    }
-    >div{
-      ul{
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        li{
-          line-height: 45px;
-          padding-left: 16px;
-          >span{
-            padding-right: 80px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #E4E4E4;
+      &+div{
+        margin: 16px 0;
+        :global{
+          .ant-card{
+            height: 175px;
+            border-radius: 8px;
+            background: #F4F6F9;
+            .ant-card-head{
+              min-height: auto;
+              height: 40px;
+              .ant-card-head-title,.ant-card-extra{
+                padding: 0;
+                line-height: 40px;
+                font-size: 14px;
+              }
+            }
+            .ant-card-body{
+              padding: 16px 24px;
+              p{
+                line-height: 28px;
+                margin: 0;
+                max-height: 56px;
+                overflow-y: auto;
+                color: #999999;
+                &.active{
+                  color: #666666;
+                }
+              }
+            }
           }
         }
       }

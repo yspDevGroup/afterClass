@@ -4,19 +4,26 @@ import Apply from './c-pages/Apply'
 import Attendance from './c-pages/Attendance'
 import Course from './c-pages/Course'
 import Toll from './c-pages/Toll'
+import { getTerm } from './utils';
 
 const { TabPane } = Tabs;
 import styles from './index.less';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Statistical = () => {
   const [activeKey, setActiveKey] = useState<string>('1');
+  const [term, setTerm] = useState<string>();
+  useEffect(() => {
+    const { XN, XQ } = getTerm();
+    setTerm(`${XN} ${XQ}`);
+  }, [])
+
 
   return (
   <div className={styles.statisticalPage}>
     <div className={styles.topText}>
       <span>
-        2021-2022学年 第一学期
+      {term}
       </span>
       <Tabs className={styles.theTabs} destroyInactiveTabPane={true} onTabClick={(key: string) => {
               setActiveKey(key)}} type="card" centered>
