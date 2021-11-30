@@ -102,22 +102,25 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
     },
     links: isDev
       ? [
-          <Link to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>openAPI 文档</span>
-          </Link>,
-          <Link to="/~docs" target="_blank">
-            <BookOutlined />
-            <span>业务组件文档</span>
-          </Link>,
-          <Version />,
-        ]
+        <Link to="/umi/plugin/openapi" target="_blank">
+          <LinkOutlined />
+          <span>openAPI 文档</span>
+        </Link>,
+        <Link to="/~docs" target="_blank">
+          <BookOutlined />
+          <span>业务组件文档</span>
+        </Link>,
+        <Version />,
+      ]
       : [
-          <Version
-            style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}
-          />,
-        ],
+        <Version
+          style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}
+        />,
+      ],
     collapsedButtonRender: false,
+    onMenuHeaderClick: (e: React.MouseEvent<HTMLDivElement>) => {
+      console.log(e.target);
+    },
     menuHeaderRender: (logo: any, title: any, props: any) => {
       if (props?.collapsed) {
         return (
@@ -132,9 +135,7 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
       }
       return (
         <div className="cusHeaderLogo">
-          <Link to="/">
-            <img src={headerTop} />
-          </Link>
+          <img src={headerTop} />
           <h1>— 学校端 —</h1>
         </div>
       );
