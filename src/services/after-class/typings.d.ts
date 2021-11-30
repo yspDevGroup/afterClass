@@ -2,22 +2,6 @@
 /* eslint-disable */
 
 declare namespace API {
-  type LoginParams = {
-    /** 登录名 */
-    username: string;
-    /** 密码 */
-    password: string;
-    /** 自动登录 */
-    autoLogin: boolean;
-    type: 'account' | 'mobile';
-  };
-
-  type LoginResult = {
-    currentAuthority: string[];
-    token: string;
-    type: 'account' | 'mobile' | 'github';
-  };
-
   type BJSJ = {
     id: string;
     /** 班号 */
@@ -136,6 +120,22 @@ declare namespace API {
   type UpdateFJLX = {
     /** 房间类型 */
     FJLX?: string;
+  };
+
+  type LoginParams = {
+    /** 登录名 */
+    username: string;
+    /** 密码 */
+    password: string;
+    /** 自动登录 */
+    autoLogin: boolean;
+    type: 'account' | 'mobile';
+  };
+
+  type LoginResult = {
+    currentAuthority: string[];
+    token: string;
+    type: 'account' | 'mobile' | 'github';
   };
 
   type FJSJ = {
@@ -4427,34 +4427,6 @@ declare namespace API {
     XSJBSJId?: string;
   };
 
-  type XSJZXX = {
-    id: string;
-    /** 姓名 */
-    XM?: string;
-    /** 联系电话 */
-    LXDH?: string;
-    /** 性别 */
-    XB?: string;
-  };
-
-  type CreateXSJZXX = {
-    /** 姓名 */
-    XM: string;
-    /** 联系电话 */
-    LXDH: string;
-    /** 性别 */
-    XB?: string;
-  };
-
-  type UpdateXSJZXX = {
-    /** 姓名 */
-    XM?: string;
-    /** 联系电话 */
-    LXDH?: string;
-    /** 性别 */
-    XB?: string;
-  };
-
   type XSXXJL = {
     id: string;
     /** 学习起始日期 */
@@ -5159,5 +5131,33 @@ declare namespace API {
     /** 时长 */
     SC?: number;
     ZXFAId?: string;
+  };
+
+  type XSJZXX = {
+    id: string;
+    /** 姓名 */
+    XM?: string;
+    /** 联系电话 */
+    LXDH?: string;
+    /** 性别 */
+    XB?: string;
+  };
+
+  type CreateXSJZXX = {
+    /** 姓名 */
+    XM: string;
+    /** 联系电话 */
+    LXDH: string;
+    /** 性别 */
+    XB?: string;
+  };
+
+  type UpdateXSJZXX = {
+    /** 姓名 */
+    XM?: string;
+    /** 联系电话 */
+    LXDH?: string;
+    /** 性别 */
+    XB?: string;
   };
 }

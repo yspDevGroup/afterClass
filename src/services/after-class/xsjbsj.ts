@@ -91,6 +91,8 @@ export async function getAllXSJBSJ(
   body: {
     /** 学号,姓名模糊匹配 */
     keyWord?: string;
+    /** 校区Id */
+    XQId?: string;
     /** 班级ID */
     bjId?: string;
     /** 页数 */
