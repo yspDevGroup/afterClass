@@ -366,14 +366,19 @@ const MutualEvaluation = () => {
           ]}
         />
       </div>
-      <Modal title="增值服务类别" visible={isModalVisible} footer={[
-        <Button key="submit" type="primary" onClick={handleOk}>
-          确定
-        </Button>,
-        <Button key="back" onClick={handleCancel}>
-          取消
-        </Button>,
-      ]}>
+      <Modal title="增值服务类别"
+        visible={isModalVisible}
+        onCancel={() => {
+          handleCancel()
+        }}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleOk}>
+            确定
+          </Button>,
+          <Button key="back" onClick={handleCancel}>
+            取消
+          </Button>,
+        ]}>
         <Form name="basic" form={form} onFinish={submit} className={styles.Forms}>
           <Form.Item name="id" hidden>
             <Input disabled />
