@@ -85,7 +85,7 @@ const CourseDetails: React.FC = () => {
           if (results.status === 'ok') {
             if (results.data) {
               const newArr = results.data.KHBJSJs.filter((value: any) => {
-                if (value.BJZT === '已开班' && value.BJLX === 1) {
+                if (value.BJZT === '已开班' && value.BJLX === 1 && value.XQSJId === StorageXQSJId) {
                   const newBjIds = value.BJSJs.filter((items: any) => {
                     return items.id === XSbjId
                   })
@@ -93,7 +93,7 @@ const CourseDetails: React.FC = () => {
                     return value
                   }
                 }
-                return value.BJZT === '已开班' && value.BJLX === 0
+                return value.BJZT === '已开班' && value.BJLX === 0 && value.XQSJId === StorageXQSJId
               })
               setKBClass(newArr)
               setKcDetail(results.data);
