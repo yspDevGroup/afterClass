@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { Descriptions, Drawer, Tag, Image, Table, message, Space, Button } from 'antd';
+import { Descriptions, Drawer, Tag, Image, Table, message } from 'antd';
 import classes from './index.less';
 import type { FormItemType } from '@/components/CustomForm/interfice';
 import CustomForm from '@/components/CustomForm';
@@ -119,14 +119,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '姓名',
           name: 'XM',
           key: 'XM',
-          placeholder: '-',
+          placeholder: '—'
         },
         {
           type: 'input',
           label: '资格证书编号',
           name: 'ZGZSBH',
           key: 'ZGZSBH',
-          placeholder: '-',
+          placeholder: '—',
         },
       ],
     },
@@ -147,7 +147,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           span: 12,
           name: 'XL',
           key: 'XL',
-          placeholder: '-',
+          placeholder: '—'
         },
       ],
     },
@@ -160,14 +160,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '民族',
           name: 'MZM',
           key: 'MZM',
-          placeholder: '-',
+          placeholder: '—'
         },
         {
           type: 'input',
           label: '毕业院校',
           name: 'BYYX',
           key: 'BYYX',
-          placeholder: '-',
+          placeholder: '—'
         },
       ],
     },
@@ -181,14 +181,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '出生日期',
           name: 'CSRQ',
           key: 'CSRQ',
-          placeholder: '-',
+          placeholder: '—'
         },
         {
           type: 'input',
           label: '专业',
           name: 'SXZY',
           key: 'ZY',
-          placeholder: '-',
+          placeholder: '—'
         },
       ],
     },
@@ -201,7 +201,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '联系电话',
           name: 'LXDH',
           key: 'LXDH',
-          placeholder: '-',
+          placeholder: '—'
         },
         {
           type: 'inputNumber',
@@ -222,7 +222,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           type: 'input',
           key: 'SFZJLXM',
           name: 'SFZJLXM',
-          placeholder: '-',
+          placeholder: '—',
           label: '证件类型',
         },
         {
@@ -230,7 +230,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '教授科目',
           name: 'JSKM',
           key: 'JSKM',
-          placeholder: '-',
+          placeholder: '—'
         },
       ],
     },
@@ -243,14 +243,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           key: 'SFZJH',
           name: 'SFZJH',
           label: '证件号码',
-          placeholder: '-',
+          placeholder: '—'
         },
         {
           type: 'input',
           label: '电子邮箱',
           name: 'DZXX',
           key: 'DZXX',
-          placeholder: '-',
+          placeholder: '—'
         },
       ],
     },
@@ -263,7 +263,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '个人简介',
           name: 'BZ',
           key: 'BZ',
-          placeholder: '-',
+          placeholder: '—'
         },
       ],
     },
@@ -308,7 +308,6 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         width={680}
         title="教师详情"
         placement="right"
-        closable={false}
         onClose={onTeacherClose}
         visible={visibleTeacher}
       >
@@ -330,11 +329,6 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
             hideBtn={true}
           />
         </div>
-        <Space align="center" style={{ width: '100%', justifyContent: 'center' }}>
-          <Button type="primary" onClick={onTeacherClose}>
-            关闭
-          </Button>
-        </Space>
       </Drawer>
     </div>
   );

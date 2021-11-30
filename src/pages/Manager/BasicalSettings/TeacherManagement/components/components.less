@@ -21,8 +21,8 @@
     .ant-picker-disabled,
     .ant-input-number-disabled,
     .ant-select-disabled .ant-select-selector {
-      color: @text-color  !important;
-      background-color: inherit;
+      color: #333 !important;
+      text-overflow: ellipsis;
       background: none !important;
       border: none;
       cursor: default;
@@ -32,6 +32,14 @@
       .ant-picker-suffix {
         display: none;
       }
+    }
+    .ant-picker-input,.ant-input-number-input-wrap {
+      input[disabled] {
+        color: #333 !important;
+      }
+    }
+    input[disabled]::-webkit-input-placeholder,textarea[disabled]::-webkit-input-placeholder {
+      color: #333;
     }
 
     .ant-select-disabled .ant-select-arrow {
