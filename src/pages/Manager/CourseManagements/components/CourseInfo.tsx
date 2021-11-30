@@ -293,7 +293,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           <Descriptions.Item label="课程封面">
             <Image width={110} height={72} src={info?.KCTP} fallback={defImg} />
           </Descriptions.Item>
-          <Descriptions.Item label="课程简介">{info?.KCMS}</Descriptions.Item>
+          <Descriptions.Item label="课程简介">{info?.KCMS || '——'}</Descriptions.Item>
         </Descriptions>
         <Table
           style={{ display: info?.SSJGLX === '机构课程' ? 'initial' : 'none' }}

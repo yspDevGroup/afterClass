@@ -71,6 +71,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
   // 适用行政班
   const [XzClass, setXzClass] = useState<any>([]);
   const [XzClassMC, setXzClassMC] = useState<any>([]);
+  // 指定教师
+  const [TeacherType, setTeacherType] = useState<any>([]);
   // 课程适用年级
   const [SYNJ, setSYNJ] = useState<any>([]);
   // 校区
@@ -123,6 +125,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
         setKaike(false);
       } else {
         setKaike(true);
+      }
+      if (BjLists.ZJS) {
+        setTeacherType(true);
+      } else {
+        setTeacherType(false);
       }
     }
   }, [formValues]);
@@ -258,7 +265,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
         }
         const newData = {
           ...info,
-          KHBJJSs: FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher],
+          // eslint-disable-next-line no-nested-ternary
+          KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KHKCJCs: [],
           BJZT: '未开班',
           XNXQId: curXNXQId,
@@ -342,7 +350,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
       }
       const newData = {
         ...info,
-        KHBJJSs: FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher],
+        // eslint-disable-next-line no-nested-ternary
+        KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
         KHKCJCs: choosenJf ? mertial : [],
         BJZT: '未开班',
         XNXQId: curXNXQId,
@@ -382,6 +391,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
   useEffect(() => {
     const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
     setKCDate(kcDate);
+    setTeacherType(true)
   }, [KHKCAllData]);
   useEffect(() => {
     setBJData({
@@ -397,6 +407,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setXzb(false);
       setKaike(false);
       setBMLX(false);
+      setTeacherType(true);
     }
   }, [visible]);
 
@@ -621,11 +632,32 @@ const AddCourseClass: FC<AddCourseProps> = ({
       ],
     },
     {
+      type: 'div',
+      key: 'div1',
+      label: `指定教师：`,
+      lineItem: [
+        {
+          type: 'switch',
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item) {
+                return setTeacherType(true);
+              }
+              form.setFieldsValue({ ZJS: '', FJS: [] });
+              return setTeacherType(false);
+            },
+            checked: TeacherType,
+          },
+        },
+      ],
+    },
+    {
       type: 'reactnode',
       label: '主班：',
       name: 'ZJS',
       key: 'ZJS',
-      rules: [{ required: true, message: '请选择班主任' }],
+      hidden: !TeacherType,
+      rules: [{ required: TeacherType, message: '请选择主班教师' }],
       children: (
         <TeacherSelect
           // value={ }
@@ -645,6 +677,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       label: '副班：(多选)',
       name: 'FJS',
       key: 'FJS',
+      hidden: !TeacherType,
       children: (
         <TeacherSelect
           type={isJg ? 3 : 1}
