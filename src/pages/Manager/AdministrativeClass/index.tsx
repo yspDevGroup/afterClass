@@ -159,7 +159,7 @@ const AdministrativeClass = () => {
             if (curXNXQId) {
               const obj = {
                 XXJBSJId: currentUser?.xxId,
-                njId: NjId || '',
+                njId: NjId ? [NjId] : undefined,
                 BJSJId: BJId,
                 XNXQId: curXNXQId,
                 page: param.current,
