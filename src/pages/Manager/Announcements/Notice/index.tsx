@@ -265,6 +265,10 @@ const Notice = () => {
       <Modal
         title="发送消息"
         visible={visible}
+        onCancel={() => {
+          setVisible(false);
+          form.resetFields();
+        }}
         footer={[
           <Button
             key="back"
