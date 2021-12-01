@@ -447,3 +447,25 @@ export async function studentRegistration(
     ...(options || {}),
   });
 }
+
+/** 查询未指定教师的课程班 POST /khbjsj/getNoTeacherClasses */
+export async function getNoTeacherClasses(
+  body: {
+    BJZT?: string;
+    RQ?: string;
+    XNXQId?: string;
+    XQSJId?: string;
+    NJSJId?: string;
+    KHKCLXId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getNoTeacherClasses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

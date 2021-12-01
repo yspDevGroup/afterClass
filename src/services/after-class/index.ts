@@ -3,11 +3,11 @@
 // API 更新时间：
 // API 唯一标识：
 import * as other from './other';
+import * as auth from './auth';
+import * as user from './user';
 import * as bjsj from './bjsj';
 import * as jzgjbsj from './jzgjbsj';
 import * as fjlx from './fjlx';
-import * as auth from './auth';
-import * as user from './user';
 import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
@@ -22,6 +22,7 @@ import * as jzglwsj from './jzglwsj';
 import * as jzgrysj from './jzgrysj';
 import * as jzgxxjl from './jzgxxjl';
 import * as kcsj from './kcsj';
+import * as khbjjsrl from './khbjjsrl';
 import * as khbjpj from './khbjpj';
 import * as khbjsj from './khbjsj';
 import * as khjgrzsq from './khjgrzsq';
@@ -66,6 +67,7 @@ import * as xscfsj from './xscfsj';
 import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
 import * as xsjtcy from './xsjtcy';
+import * as xsjzxx from './xsjzxx';
 import * as xsxxjl from './xsxxjl';
 import * as xxgg from './xxgg';
 import * as xxjbpz from './xxjbpz';
@@ -76,14 +78,13 @@ import * as xxsppz from './xxsppz';
 import * as xxtzgg from './xxtzgg';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
-import * as xsjzxx from './xsjzxx';
 export default {
   other,
+  auth,
+  user,
   bjsj,
   jzgjbsj,
   fjlx,
-  auth,
-  user,
   fjsj,
   jcsj,
   jcxx,
@@ -98,6 +99,7 @@ export default {
   jzgrysj,
   jzgxxjl,
   kcsj,
+  khbjjsrl,
   khbjpj,
   khbjsj,
   khjgrzsq,
@@ -142,6 +144,7 @@ export default {
   xsjbsj,
   xsjlsj,
   xsjtcy,
+  xsjzxx,
   xsxxjl,
   xxgg,
   xxjbpz,
@@ -152,5 +155,4 @@ export default {
   xxtzgg,
   zxfa,
   zxsj,
-  xsjzxx,
 };
