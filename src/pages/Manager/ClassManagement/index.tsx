@@ -17,7 +17,6 @@ import ActionBar from './components/ActionBar';
 
 // import AddCourse from './components/AddCourse';
 
-
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 import styles from './index.less';
@@ -78,7 +77,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [BJZTMC, setBJZTMC] = useState<string | undefined>(undefined);
   // 班级同步数据存储
   const [BJCC, setBJCC] = useState<[]>();
-  const  [clickBjId, setClickBjId] = useState()
+  const [clickBjId, setClickBjId] = useState();
   // 课程班班级基本设置数据
   const [BjLists, setBjLists] = useState<any>();
   // 课程班报名设置数据
@@ -195,9 +194,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // };
   // 获取当前课程班报名学生信息，并以弹框展示
   const showModal = async (record: any) => {
-
     setIsModalVisible(true);
-    console.log('record',record)
+    // console.log('record',record)
     setClickBjId(record.id);
 
     // const { BJMC, id } = record;
@@ -241,27 +239,27 @@ const CourseManagement = (props: { location: { state: any } }) => {
       SSJGLX: currentData?.KHKCSJ?.SSJGLX,
       SKSD: [currentData.KKRQ, currentData.JKRQ],
       KSS,
-      XQSJId
-    }
+      XQSJId,
+    };
     setBjLists(BjList);
     const BJIdArr: any = [];
     const BJMCArr: any = [];
     BJSJs.forEach((value: any) => {
-      BJIdArr.push(value.id)
-      BJMCArr.push(`${value.NJSJ.XD}${value.NJSJ.NJMC}${value.BJ}`)
-    })
+      BJIdArr.push(value.id);
+      BJMCArr.push(`${value.NJSJ.XD}${value.NJSJ.NJMC}${value.BJ}`);
+    });
     const BmList = {
       BJIds: BJIdArr,
       XzClassMC: BJMCArr,
       BMSD: [currentData.BMKSSJ, currentData.BMJSSJ],
       BJLX,
       BJRS,
-    }
+    };
     setBmLists(BmList);
     const JfList = {
       BMLX,
-      FY
-    }
+      FY,
+    };
     setJfLists(JfList);
     const list = {
       ...currentData,
@@ -366,8 +364,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
       align: 'center',
       width: 120,
       render: (text: any) => {
-        return <>{text === 0 ? '先报名后缴费' : <>{text === 1 ? '缴费即报名' : '免费'}</>}</>
-      }
+        return <>{text === 0 ? '先报名后缴费' : <>{text === 1 ? '缴费即报名' : '免费'}</>}</>;
+      },
     },
     {
       title: '报名人数',
@@ -381,7 +379,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
             <Tooltip
               title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count || 0}人。`}
             >
-              {record?.xs_count+record?.noPayXS_count}/{record?.BJRS}
+              {record?.xs_count + record?.noPayXS_count}/{record?.BJRS}
             </Tooltip>
           </a>
         );
@@ -519,7 +517,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
             <>
               <SearchLayout>
                 <div>
-                  <label htmlFor='term'>所属学年学期：</label>
+                  <label htmlFor="term">所属学年学期：</label>
                   <Select
                     value={curXNXQId}
                     allowClear
@@ -540,7 +538,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor='kcname'>课程名称：</label>
+                  <label htmlFor="kcname">课程名称：</label>
                   <Select
                     value={kcId || state?.id}
                     allowClear
@@ -557,7 +555,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor='kcly'>课程来源：</label>
+                  <label htmlFor="kcly">课程来源：</label>
                   <Select
                     allowClear
                     placeholder="课程来源"
@@ -567,16 +565,16 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     }}
                     value={KCLY}
                   >
-                    <Option value='校内课程' key='校内课程'>
+                    <Option value="校内课程" key="校内课程">
                       校内课程
                     </Option>
-                    <Option value='机构课程' key='机构课程'>
+                    <Option value="机构课程" key="机构课程">
                       机构课程
                     </Option>
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor='status'>班级状态：</label>
+                  <label htmlFor="status">班级状态：</label>
                   <Select
                     allowClear
                     value={BJZTMC}
@@ -668,7 +666,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           visible={isModalVisible}
           onCancel={handleCancel}
           footer={null}
-          style={{ minWidth: '1000px' }}
+          style={{ minWidth: '1100px' }}
           destroyOnClose
         >
           <ApplicantInfoTable clickBjId={clickBjId} actionRefs={actionRef} />
@@ -685,11 +683,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
           ModalVisible={modalVisible}
           setModalVisible={setModalVisible}
 
-          
+
         /> */}
-
-    
-
       </PageContainer>
     </>
   );

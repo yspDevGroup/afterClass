@@ -1,15 +1,15 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 15:41:26
- * @LastEditTime: 2021-11-29 10:12:33
+ * @LastEditTime: 2021-12-01 10:45:40
  * @LastEditors: Sissle Lynn
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\pages\Manager\ClassManagement\components\SingUp\index.tsx
  */
 
 import { getClassStudents, getSchoolClasses } from '@/services/after-class/bjsj';
-import { Tree, Input, Row, Col, message, Spin } from 'antd';
-
+import { Tree, Input, Row, Col, message, Spin, Empty } from 'antd';
+import { getAllXSJBSJ } from '@/services/after-class/xsjbsj';
 import { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { useModel } from 'umi';
 import {
@@ -41,6 +41,7 @@ type DataNode = {
   children?: DataNode[];
   isRequest?: boolean;
   selectable?: boolean;
+  icon?: any;
 };
 // 学生报名
 const SignUp = (props: SignUpProps, ref: any) => {
@@ -51,20 +52,31 @@ const SignUp = (props: SignUpProps, ref: any) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [treeData, setTreeData] = useState<DataNode[]>();
+
   const [selectTreeData, setSelectTreeData] = useState<DataNode[]>();
   const [selectedKey, setSelectedKey] = useState<string[]>([]);
-  // const [selectedNode,setSelectedNodes]=useState<DataNode[]>([]);
+  const [searchValue, setSearchValue] = useState<string | undefined>();
+
+  // 搜索所用到的树以及 班级和年级
+  const [searchTreeData, setSearchTreeData] = useState<DataNode[] | undefined>();
+  const [searchFalg, setSearchFalg] = useState<boolean>(false);
+  const [searchNJ, setSearchNJ] = useState<string[] | undefined>(undefined);
+  const [searchBJ, setSearchBJ] = useState<string[] | undefined>(undefined);
+
+  // 搜索缓存
+  const [localSearchCache, setLocalSearchCache] = useState<any[]>([]);
 
   useEffect(() => {
     if (applicantData) {
       // 根据报名类型和班级类型进行判断是否是批量操作
       // 1. BMLX 0先报名后缴费 1 缴费后自动报名 2免费
       // 2. BJLX 0 按年级 1 按行政班
-      // console.log('applicantData', applicantData);
+
       if (applicantData?.BJLX === 0) {
         const { NJSJs } = applicantData?.KHKCSJ;
         if (NJSJs.length > 0) {
           const newTreeData: DataNode[] = [];
+          const NJArr: string[] = [];
           NJSJs.forEach((item: any) => {
             const NJData = {
               title: `${item.XD}${item.NJMC}`,
@@ -73,15 +85,21 @@ const SignUp = (props: SignUpProps, ref: any) => {
               selectable: false,
             };
             newTreeData.push(NJData);
+            NJArr.push(item.id);
           });
           setTreeData(newTreeData);
+          if (NJArr.length) {
+            setSearchNJ(NJArr);
+          }
         }
       } else if (applicantData?.BJLX === 1) {
         const { BJSJs } = applicantData;
 
         if (BJSJs?.length > 0) {
           const arr: DataNode[] = [];
+          const BJArr: string[] = [];
           BJSJs.forEach((item: any) => {
+            BJArr.push(item.id);
             if (item?.NJSJ) {
               const NJData = {
                 title: `${item?.NJSJ?.XD}${item?.NJSJ?.NJMC}`,
@@ -106,7 +124,9 @@ const SignUp = (props: SignUpProps, ref: any) => {
               });
             }
           });
-          // console.log('arr', arr);
+          if (BJArr?.length) {
+            setSearchBJ(BJArr);
+          }
           setTreeData(arr);
         }
       }
@@ -114,7 +134,6 @@ const SignUp = (props: SignUpProps, ref: any) => {
   }, [applicantData]);
 
   const onSignUpSubmit = async () => {
-    setLoading(true);
     const XSJBSJIds: string[] = [];
     selectTreeData?.forEach((BJItem: DataNode) => {
       if (BJItem?.type === 'BJ') {
@@ -130,6 +149,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
     });
 
     if (XSJBSJIds.length) {
+      setLoading(true);
       const res = await studentRegistration({
         // 0 正常 1退课申请 2 已退款 3未付款 如果报名时免费 0 先报名后缴费 3
         ZT: applicantData.BMLX === 2 ? 0 : 3,
@@ -150,10 +170,15 @@ const SignUp = (props: SignUpProps, ref: any) => {
           onsetKHXSBJs();
         }
       } else {
+        if (setVisible) {
+          setVisible(false);
+        }
         message.error(res.message);
       }
 
       setLoading(false);
+    } else {
+      message.error('请选择学生');
     }
   };
 
@@ -184,6 +209,14 @@ const SignUp = (props: SignUpProps, ref: any) => {
     });
   };
 
+  const getXH = (XH: string) => {
+    if (XH !== null && XH.length > 4) {
+      return `~${XH.substring(XH.length - 4)}`;
+    } else {
+      return `~ ${XH}`;
+    }
+  };
+
   const onLoadData = ({ key, children, type }: any) => {
     return new Promise<any>((resolve) => {
       if (children) {
@@ -195,6 +228,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
           njId: key,
           XXJBSJId: currentUser?.xxId,
           XNXQId: applicantData?.XNXQId,
+          XQSJId: applicantData?.XQSJId,
         });
         resolve(res);
         return;
@@ -210,7 +244,6 @@ const SignUp = (props: SignUpProps, ref: any) => {
         });
         resolve(resStudents);
       }
-
     }).then((result: any) => {
       if (result?.status === 'ok') {
         const { rows } = result?.data;
@@ -227,14 +260,14 @@ const SignUp = (props: SignUpProps, ref: any) => {
             }
             if (type === 'BJ') {
               return {
-                title: item.XM,
+                title: `${item.XM}${getXH(item.XH)}`,
                 key: item.id,
                 isLeaf: true,
                 record: item,
                 icon: <UserOutlined style={{ color: '#999' }} />,
               };
             }
-            return {}
+            return {};
           });
         }
         if (treeData) {
@@ -244,11 +277,19 @@ const SignUp = (props: SignUpProps, ref: any) => {
       }
     });
   };
+
   const onSelect = (
     selectedKeys: any[],
-    e: { event: "select"; selected: boolean; selectedNodes: any; node: any ;nativeEvent: MouseEvent; },
+    e: {
+      event: 'select';
+      selected: boolean;
+      selectedNodes: any;
+      node: any;
+      nativeEvent: MouseEvent;
+    },
   ) => {
     // console.log('selectedNodes',e.selected, e.selectedNodes);
+    console.log('selectedKeys', selectedKeys);
 
     // 判断选中还是移除 true 添加 false移除
     const newSelectedKeys = new Set(selectedKeys);
@@ -277,7 +318,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
                 arr = rows.map((item: any) => {
                   newSelectedKeys.add(item.id);
                   return {
-                    title: item.XM,
+                    title: `${item.XM}${getXH(item.XH)}`,
                     key: item.id,
                     isLeaf: true,
                     record: item,
@@ -324,8 +365,9 @@ const SignUp = (props: SignUpProps, ref: any) => {
 
   useEffect(() => {
     if (treeData?.length) {
+      let newArr: DataNode[] = [];
       const obj = JSON.stringify(treeData);
-      const newArr: DataNode[] = JSON.parse(obj);
+      newArr = JSON.parse(obj);
       const arr: DataNode[] = [];
       const copySelectedKey = [...selectedKey];
       let selectNumber = 0;
@@ -347,7 +389,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
                 const XXData = { ...XXItem, selectable: false };
                 if (copySelectedKey.some((v: string) => v === XXItem.key)) {
                   children.push(XXData);
-                  selectNumber += selectNumber;
+                  selectNumber = selectNumber + 1;
                   // 移除 copySelectedKey 数组中班级下选择的学生
                   const findIndex = copySelectedKey.findIndex((v: string) => v === XXItem.key);
                   if (findIndex >= 0) {
@@ -374,7 +416,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
                   if (findIndex >= 0) {
                     copySelectedKey.splice(findIndex, 1);
                   }
-                  selectNumber += selectNumber;
+                  selectNumber = selectNumber + 1;
                   arr.push(XXData);
                 }
               });
@@ -382,10 +424,33 @@ const SignUp = (props: SignUpProps, ref: any) => {
           });
         }
       });
-      console.log('=++++++', selectNumber);
+      console.log('copySelectedKey', copySelectedKey);
+      //如果还存在未选择的key 则这个值肯定是搜索出来剩下的 所以需要添加setSelectTreeData到上面去
+      if (copySelectedKey.length) {
+        copySelectedKey.forEach((item: any) => {
+          localSearchCache?.forEach((searchItem: any) => {
+            if (item === searchItem.id) {
+              selectNumber += 1;
+              arr.push({
+                title: `${searchItem.XM}${getXH(searchItem.XH)}`,
+                key: searchItem.id,
+                isLeaf: true,
+                icon: <UserOutlined style={{ color: '#999' }} />,
+              });
+            }
+          });
+        });
+      }
       if (setSelectNumber) {
         setSelectNumber(selectNumber);
       }
+      // 移除搜索后的内容
+      if (searchFalg) {
+        setSearchFalg(false);
+        setSearchValue(undefined);
+        // setSearchTreeData([]);
+      }
+
       setSelectTreeData(arr);
     }
   }, [selectedKey]);
@@ -410,41 +475,110 @@ const SignUp = (props: SignUpProps, ref: any) => {
     setSelectedKey(Array.from(arr));
   };
 
+  // 搜索改变
+  const onSearchChange = async (value: string) => {
+    // console.log('value',value);
+    if (value) {
+      const data: {
+        XQId: string;
+        page: number;
+        pageSize: number;
+        keyWord: string;
+        NJId?: string[];
+        BJId?: string[];
+      } = {
+        XQId: applicantData?.XQSJId,
+        page: 0,
+        pageSize: 0,
+        keyWord: value,
+      };
+
+      // 根据课程班范围
+      if (applicantData?.BJLX === 0) {
+        data.NJId = searchNJ;
+      } else {
+        data.BJId = searchBJ;
+      }
+      const res: any = await getAllXSJBSJ(data);
+      if (res?.status === 'ok') {
+        console.log('res', res);
+        setSearchFalg(true);
+        const { rows } = res?.data;
+        if (rows.length) {
+          const newArr = rows.map((item: any) => {
+            return {
+              title: `${item.XM}${getXH(item.XH)}`,
+              key: item.id,
+              isLeaf: true,
+              record: item,
+              icon: <UserOutlined style={{ color: '#999' }} />,
+            };
+          });
+
+          setSearchTreeData(newArr);
+          // 缓存搜索过来的数据进行缓存
+          // 首先去重
+          const arr = rows?.filter(
+            (row: any) => !localSearchCache.some((item: any) => item.id === row.id),
+          );
+          if (arr?.length) {
+            setLocalSearchCache([...localSearchCache, ...arr]);
+          }
+        } else {
+          setSearchTreeData([]);
+        }
+      }
+    } else {
+      setSearchFalg(false);
+      setSearchTreeData([]);
+    }
+  };
+  console.log(' SearchFalg', searchFalg);
+
   return (
     <Spin spinning={loading}>
-      <Row>
-        <Col span={12}>
-          <div style={{ height: '380px', paddingRight: '5px', borderRight: '1px solid #999' }}>
-            <Search style={{ marginBottom: 8 }} placeholder="Search" />
-            <Tree
-              height={333}
-              selectable
-              multiple
-              loadData={onLoadData}
-              treeData={treeData}
-              onSelect={onSelect}
-              showIcon
-              selectedKeys={selectedKey}
-              // eslint-disable-next-line @typescript-eslint/no-shadow
-              titleRender={(node: any) => {
-                // 判断是否选中改变title选中状态
-                if (node.type === 'NJ') {
-                  return node.title;
-                }
-                const selectItem = selectedKey?.find((v: string) => v === node?.key);
-                if (selectItem) {
-                  return (
-                    <span>
-                      {node.title}
-                      <CheckOutlined style={{ marginLeft: '1em', color: '#4884ff' }} />
-                    </span>
-                  );
-                }
-                return node?.title;
-              }}
-            />
-          </div>
+      <Row gutter={12} justify="space-between">
+        <Col span={11} style={{ height: '380px' }}>
+          <Search
+            style={{ marginBottom: 8 }}
+            value={searchValue}
+            onChange={(e: any) => {
+              setSearchValue(e?.target?.value);
+            }}
+            placeholder="Search"
+            allowClear
+            onSearch={onSearchChange}
+          />
+          <Tree
+            height={333}
+            selectable
+            multiple
+            loadData={onLoadData}
+            treeData={searchFalg ? searchTreeData : treeData}
+            onSelect={onSelect}
+            showIcon
+            selectedKeys={selectedKey}
+            // eslint-disable-next-line @typescript-eslint/no-shadow
+            titleRender={(node: any) => {
+              // 判断是否选中改变title选中状态
+              if (node.type === 'NJ') {
+                return node.title;
+              }
+              const selectItem = selectedKey?.find((v: string) => v === node?.key);
+              if (selectItem) {
+                return (
+                  <span>
+                    {node.title}
+                    <CheckOutlined style={{ marginLeft: '1em', color: '#4884ff' }} />
+                  </span>
+                );
+              }
+              return node?.title;
+            }}
+          />
+          {searchFalg && searchTreeData?.length === 0 && <Empty />}
         </Col>
+        <div style={{ borderRight: '1px solid #999' }} />
         <Col span={12}>
           <Tree
             height={333}

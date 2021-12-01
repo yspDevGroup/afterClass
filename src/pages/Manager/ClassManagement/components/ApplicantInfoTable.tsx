@@ -1,10 +1,21 @@
 import type { FC } from 'react';
 import { useEffect, useState, useRef } from 'react';
 import React from 'react';
-import { message, Popconfirm, Tooltip, Button, Modal, Space, Divider, Form, Input } from 'antd';
+import {
+  message,
+  Popconfirm,
+  Tooltip,
+  Button,
+  Modal,
+  Space,
+  Divider,
+  Form,
+  Input,
+  Upload,
+} from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-
+import { UploadOutlined } from '@ant-design/icons';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { createKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 import { useModel } from 'umi';
@@ -18,6 +29,7 @@ import styles from '../index.less';
 import AgentRegistration from '../components/AgentRegistration';
 import { sendMessageToParent } from '@/services/after-class/wechat';
 import ReplacePay from './replacePay';
+import { getAuthorization } from '@/utils/utils';
 
 const { TextArea } = Input;
 
@@ -46,7 +58,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
   const [kkTimeFalg, setkkTimeFalg] = useState<boolean>(true);
   // 报名列表数据
   const [applicantData, setApplicantData] = useState<any>({});
-  // 报名类型
+  // 报名人数
   const [selectNumber, setSelectNumber] = useState<number>(0);
 
   // 代报名中教辅费用
@@ -65,13 +77,16 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
   const [DJFXS, setDJFXS] = useState<string | undefined>();
   const [DJFVisible, setDJFVisible] = useState<boolean>(false);
 
+  // 导入
+  const [uploadVisible, setUploadVisible] = useState<boolean>(false);
+
   // 获取报名学生数据
   const onsetKHXSBJs = async () => {
     const res = await getEnrolled({
       id: clickBjId,
     });
     if (res.status === 'ok') {
-      console.log('已经报名的学生');
+      // console.log('已经报名的学生');
       setKHXSBJs(res.data);
     }
   };
@@ -229,7 +244,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     // 判断人数是否超出范围
     if (BJRS - KHXSBJs?.length < selectNumber) {
       message.error('报名人数超出课程班限定人数');
-    } else if(singUpRef?.current){
+    } else if (singUpRef?.current) {
       singUpRef.current.onSubmit?.();
     }
   };
@@ -298,13 +313,12 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       dataIndex: 'ZT',
       key: 'ZT',
       align: 'center',
-      width: 150,
+      width: 100,
       render: (_text: any) => {
         if (_text === 3) {
           return <span style={{ color: '#4884ff' }}>未缴费</span>;
         }
         return <span style={{ color: '#36970c' }}>已缴费</span>;
-
       },
     },
     {
@@ -320,9 +334,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             {
               //  如果报名时间内 开课时间外 报名类型属于先报名后缴费 或者缴费即报名 并且付款的的情况 实现退款退费
               !kkTimeFalg &&
-                applicantData?.BJZT === '已开班' &&
-                applicantData.BMLX !== 2 &&
-                record?.ZT === 0 ? (
+              applicantData?.BJZT === '已开班' &&
+              applicantData.BMLX !== 2 &&
+              record?.ZT === 0 ? (
                 <Popconfirm
                   title="确定取消该学生的报名吗?"
                   onConfirm={async () => {
@@ -413,14 +427,14 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
               applicantData.BMLX === 0 &&
               record?.ZT === 3 && (
                 <>
-                  +++{onCancelSignUp(record)}
+                  {onCancelSignUp(record)}
                   <Divider type="vertical" />
                 </>
               )}
             {/* 免费情况下已开班 已缴费  进行退课处理 */}
             {applicantData?.BJZT === '已开班' && applicantData.BMLX === 2 && record.ZT === 0 && (
               <>
-                ---{onCancelSignUp(record)} <Divider type="vertical" />
+                {onCancelSignUp(record)} <Divider type="vertical" />
               </>
             )}
 
@@ -436,9 +450,8 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                     }
                   }}
                 >
-                  催缴费{' '}
+                  催缴费 <Divider type="vertical" />
                 </a>
-                <Divider type="vertical" />
               </>
             )}
 
@@ -453,11 +466,10 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                 >
                   代缴费
                 </a>
-                <Divider type="vertical" />
               </>
             )}
             {/* 代报名 报名类型属于BMLX=2 并且开始时间 */}
-            { }
+            {}
           </>
         );
       },
@@ -471,8 +483,49 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     }
   }, [DJFVisible]);
 
+  const UploadProps: any = {
+    name: 'xlsx',
+    action: `/api/upload/importStudentSignUp?KHBJSJId=${applicantData?.id}`,
+    headers: {
+      authorization: getAuthorization(),
+    },
+    data: {
+      KHBJSJId: applicantData?.id,
+    },
+    // accept={''}
+    beforeUpload(file: any) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      // console.log('isLt2M', isLt2M);
+      if (!isLt2M) {
+        message.error('文件大小不能超过2M');
+      }
+      return isLt2M;
+    },
+    onChange(info: {
+      file: { status: string; name: any; response: any };
+      fileList: any;
+      event: any;
+    }) {
+      if (info.file.status === 'done') {
+        const code = info.file.response;
+        if (code.status === 'ok') {
+          message.success('导入成功');
+          setUploadVisible(false);
+
+          onsetKHXSBJs();
+        } else {
+          message.error(`${code.message}`);
+
+          event?.currentTarget?.onerror(code);
+        }
+      } else if (info.file.status === 'error') {
+        console.log('info.file.response', info.file);
+      }
+    },
+  };
+
   return (
-    <div>
+    <div className={styles.BMdiv}>
       <Modal
         title="批量报名"
         visible={visible}
@@ -481,9 +534,17 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         footer={
           <div className={styles.modelFooter}>
             <span className={styles.modelTips}>
-              <span>{`课程班人数 ${applicantData?.BJRS || 0}`}</span>
-              <span>{`已报人数 ${KHXSBJs?.length || 0}`}</span>
-              <span>{`已选人数 ${selectNumber}`}</span>
+              <span>{`总人数 ${applicantData?.BJRS || 0}`}</span>
+              <span>{`已报 ${KHXSBJs?.length || 0}`}</span>
+              <span
+                style={
+                  applicantData?.BJRS - KHXSBJs?.length < selectNumber
+                    ? { color: '#FF4646', fontWeight: 'bold' }
+                    : {}
+                }
+              >
+                {`已选 ${selectNumber}`}
+              </span>
             </span>
             <div>
               <Button type="primary" onClick={onsubmit}>
@@ -513,9 +574,11 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         />
       </Modal>
       <ProTable
-        rowSelection={{
-          selections: true,
-        }}
+        rowSelection={
+          {
+            // selections: true,
+          }
+        }
         rowKey="id"
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tableAlertOptionRender={({ selectedRowKeys, selectedRows }) => {
@@ -540,7 +603,6 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                               }
                               // 未开课退全款
                               return value.ZT === 0;
-
                             }
                             return value.ZT === 0;
                           })
@@ -652,19 +714,28 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           if (applicantData?.BMLX !== 1 && applicantData?.BJZT === '已开班' && timeFalg) {
             return [
               <Button
+                type="link"
+                onClick={() => {
+                  setUploadVisible(true);
+                }}
+              >
+                报名导入
+              </Button>,
+              <Button
                 type="primary"
                 onClick={() => {
                   setVisible(true);
                 }}
               >
-                <Tooltip title="不受课程、课程班设置限定，导入学生名单经进行报名">批量报名</Tooltip>
+                批量报名
               </Button>,
-              <Button type="primary">
-                <Tooltip title="受限于课程、课程班限定的年级或行政班，可选择多个学生进行报名">
-                  报名导入
-                </Tooltip>
-              </Button>,
+              ,
             ];
+          }
+          if (applicantData.BJZT === '未开班') {
+            return [<Button type="link">未开班, 不能报名</Button>];
+          } else if (!timeFalg) {
+            return [<Button type="link">报名已结束</Button>];
           }
           return [];
         }}
@@ -718,6 +789,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           </Form.Item>
         </Form>
       </Modal>
+      {/* 先报名后缴费 缴费 */}
       <ReplacePay
         DJFXS={DJFXS}
         JFTotalost={JFAmount}
@@ -726,6 +798,26 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         setModalVisible={setDJFVisible}
         onsetKHXSBJs={onsetKHXSBJs}
       />
+      <Modal
+        title="导入场地"
+        destroyOnClose
+        width="35vw"
+        visible={uploadVisible}
+        onCancel={() => setUploadVisible(false)}
+        footer={null}
+        centered
+        maskClosable={false}
+        bodyStyle={{
+          maxHeight: '65vh',
+          overflowY: 'auto',
+        }}
+      >
+        <p>
+          <Upload {...UploadProps}>
+            <Button icon={<UploadOutlined />}>上传文件</Button>
+          </Upload>
+        </p>
+      </Modal>
     </div>
   );
 };

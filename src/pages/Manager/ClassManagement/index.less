@@ -58,7 +58,7 @@
       height: 160px;
       margin: 20px auto;
       overflow: hidden;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       button {
         width: 160px;
       }
@@ -130,7 +130,7 @@
         width: 300px;
         padding: 14px;
         border-radius: 8px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         p {
           display: flex;
           justify-content: space-between;
@@ -145,7 +145,7 @@
         }
         .line {
           margin: 10px 0;
-          border: 1px dashed #dddddd;
+          border: 1px dashed #ddd;
         }
       }
       > div:nth-of-type(2) {
@@ -164,15 +164,19 @@
     }
   }
 }
-.modelFooter{
+.modelFooter {
   display: flex;
-    justify-content: space-between;
-    .modelTips{
-      color: #FF6F6F;
-      font-size: 16px;
-      span{
-         margin-right: 8px;
-      }
+  justify-content: space-between;
+  .modelTips {
+    color: #4884ff;
+    font-size: 14px;
+    span {
+      margin-right: 8px;
     }
+  }
 }
-
+.BMdiv {
+  :global .ant-card-body {
+    padding: 0 !important;
+  }
+}

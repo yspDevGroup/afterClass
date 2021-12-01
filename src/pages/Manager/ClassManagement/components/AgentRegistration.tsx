@@ -52,7 +52,6 @@ const AgentRegistration = (props: {
           XXJBSJId: currentUser?.xxId,
           XNXQId: curXNXQId,
           XQSJId: BjDetails?.XQSJId,
-          njId: '',
           page: 0,
           pageSize: 0,
         });
