@@ -7,6 +7,7 @@ import { Link, useModel } from 'umi';
 import styles from './index.less';
 import { getAllBJSJ, getSchoolClasses } from '@/services/after-class/bjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import SearchLayout from '@/components/Search/Layout';
 
@@ -17,11 +18,35 @@ const AdministrativeClass = () => {
   const actionRef = useRef<ActionType>();
   const [NjId, setNjId] = useState<any>();
   const [NjData, setNjData] = useState<any>();
+  // 校区
+  const [campusId, setCampusId] = useState<string>();
+  const [campusData, setCampusData] = useState<any[]>();
+
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
   const [bjData, setBJData] = useState<selectType[] | undefined>([]);
   const [BJId, setBJId] = useState<string | undefined>(undefined);
+
+  const getCampusData = async () => {
+    const res = await getAllXQSJ({
+      XXJBSJId: currentUser?.xxId,
+    });
+    if (res?.status === 'ok') {
+      console.log('res', res.data);
+      const arr = res?.data?.map((item) => {
+        return {
+          label: item.XQMC,
+          value: item.id,
+        };
+      });
+      if (arr?.length) {
+        setCampusId(arr?.[0].value);
+      }
+      setCampusData(arr);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const res = await getAllGrades({
@@ -35,6 +60,7 @@ const AdministrativeClass = () => {
       const result = await queryXNXQList(currentUser?.xxId);
       setCurXNXQId(result?.current?.id);
     })();
+    getCampusData();
   }, []);
 
   useEffect(() => {
@@ -53,7 +79,7 @@ const AdministrativeClass = () => {
   };
 
   const getBJSJ = async () => {
-    const res = await getAllBJSJ({ njId: NjId, page: 0, pageSize: 0 });
+    const res = await getAllBJSJ({ XQSJId: campusId, njId: NjId, page: 0, pageSize: 0 });
     if (res.status === 'ok') {
       const data = res.data?.rows?.map((item: any) => {
         return { label: item.BJ, value: item.id };
@@ -64,9 +90,10 @@ const AdministrativeClass = () => {
 
   useEffect(() => {
     if (NjId) {
+      setBJId(undefined);
       getBJSJ();
     }
-  }, [NjId]);
+  }, [NjId, campusId]);
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -142,6 +169,11 @@ const AdministrativeClass = () => {
       },
     },
   ];
+
+  const onCampusChange = (value: any) => {
+    setCampusId(value);
+    actionRef.current?.reload();
+  };
   return (
     <div className={styles.AdministrativeClass}>
       <PageContain>
@@ -164,6 +196,7 @@ const AdministrativeClass = () => {
                 XNXQId: curXNXQId,
                 page: param.current,
                 pageSize: param.pageSize,
+                XQSJId: campusId,
               };
               const res = await getSchoolClasses(obj);
               if (res.status === 'ok') {
@@ -185,6 +218,14 @@ const AdministrativeClass = () => {
           search={false}
           headerTitle={
             <SearchLayout>
+              <div>
+                <label htmlFor="grade">校区名称：</label>
+                <Select value={campusId} allowClear placeholder="请选择" onChange={onCampusChange}>
+                  {campusData?.map((item: any) => {
+                    return <Option value={item.value}>{item.label}</Option>;
+                  })}
+                </Select>
+              </div>
               <div>
                 <label htmlFor="grade">年级名称：</label>
                 <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>

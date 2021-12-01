@@ -127,6 +127,13 @@ const TkApply = () => {
   const onGenderChange = (value: any, key: any) => {
     setFieldId(key?.key)
   }
+
+  const disabledDate = (current: any) => {
+    const day1 = new Date();
+    day1.setDate(day1.getDate() - 1);
+    return current && moment(current) < moment(day1)
+  }
+
   return (
     <div className={styles.leaveForms}>
       <div className={styles.wrapper}>
@@ -148,9 +155,12 @@ const TkApply = () => {
         >
           <p className={styles.tkhsj}>调课后时间</p>
           <Form.Item name='TKRQ' label="日期">
-            <DatePicker inputReadOnly={true} onChange={(value) => {
-              onchange(value, 'TKRQ')
-            }} />
+            <DatePicker
+              disabledDate={disabledDate}
+              inputReadOnly={true}
+              onChange={(value) => {
+                onchange(value, 'TKRQ')
+              }} />
           </Form.Item>
           <div className={styles.TimeInterval}>
             <Form.Item name='KSSJ' label="时段">

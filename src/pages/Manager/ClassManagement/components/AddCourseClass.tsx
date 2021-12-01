@@ -14,7 +14,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
-import noJF from '@/assets/noJF.png'
+import noJF from '@/assets/noJF.png';
 
 type AddCourseProps = {
   visible: boolean;
@@ -161,8 +161,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
           setSYNJ(res.data?.NJSJs);
           const newArr: any = [];
           res.data?.NJSJs.forEach((value: any) => {
-            newArr.push(value.id)
-          })
+            newArr.push(value.id);
+          });
 
           const result = await getSchoolClasses({
             XXJBSJId: currentUser?.xxId,
@@ -170,7 +170,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
             njId: newArr,
             XQSJId: XQSJIds,
           });
-          setClassData(result.data.rows)
+          setClassData(result.data.rows);
         }
       }
     })();
@@ -239,12 +239,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+                  return {
+                    JSLX: '副教师',
+                    JZGJBSJId: item,
+                    KHBJSJId: formValues?.id,
+                  };
+                })
               : undefined;
         } else {
           ZTeacher = [
@@ -256,11 +256,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                };
-              })
+                  return {
+                    JSLX: '副教师',
+                    JZGJBSJId: item,
+                  };
+                })
               : undefined;
         }
         const newData = {
@@ -324,12 +324,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-                KHBJSJId: formValues?.id,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
             : undefined;
       } else {
         ZTeacher = [
@@ -341,11 +341,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
             : undefined;
       }
       const newData = {
@@ -391,7 +391,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
   useEffect(() => {
     const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
     setKCDate(kcDate);
-    setTeacherType(true)
+    setTeacherType(true);
   }, [KHKCAllData]);
   useEffect(() => {
     setBJData({
@@ -623,7 +623,13 @@ const AddCourseClass: FC<AddCourseProps> = ({
           label: '课时数：',
           name: 'KSS',
           key: 'KSS',
-          rules: [{ required: true, message: '请填写课时数' }],
+          rules: [
+            { required: true, message: '请填写课时数' },
+            {
+              pattern: new RegExp('^[0-9]*[1-9][0-9]*$'),
+              message: '请填写正确的课时数',
+            },
+          ],
           fieldProps: {
             min: 0,
             max: 100,
@@ -692,10 +698,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-        type: 'divTab',
-        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -795,7 +801,13 @@ const AddCourseClass: FC<AddCourseProps> = ({
       label: '课程班人数：',
       name: 'BJRS',
       key: 'BJRS',
-      rules: [{ required: true, message: '请填写课程班人数' }],
+      rules: [
+        { required: true, message: '请填写课程班人数' },
+        {
+          pattern: new RegExp('^[0-9]*[1-9][0-9]*$'),
+          message: '请填写正确的人数',
+        },
+      ],
     },
     BMDate?.id
       ? {
@@ -1126,14 +1138,14 @@ const AddCourseClass: FC<AddCourseProps> = ({
                     }
                   }
                 />
-                {
-                  choosenJf === false ?
-                    <div className={styles.noJF}>
-                      <img src={noJF} alt="" />
-                      <p>该课程暂无教辅</p>
-                    </div> : <></>
-                }
-
+                {choosenJf === false ? (
+                  <div className={styles.noJF}>
+                    <img src={noJF} alt="" />
+                    <p>该课程暂无教辅</p>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             ) : (
               <></>
@@ -1146,7 +1158,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
                     上一步
                   </Button>
                 )}
-                <Button type="primary" onClick={() => next()} style={{width:72}}>
+                <Button type="primary" onClick={() => next()} style={{ width: 72 }}>
                   {BMLX === false ? (
                     <> {Current < 3 ? '下一步' : '提交'}</>
                   ) : (

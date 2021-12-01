@@ -1,38 +1,44 @@
-.wrapperCard{
-  div{
-    h3{
-      font-weight: bold;
-      line-height: 22px;
-      font-size: 16px;
-      color: #333333;
+.wrapperCard {
+  > div {
+    > div {
+      margin-bottom: 8px;
+    }
+  }
+  div {
+    h3 {
       margin: 0;
       padding-bottom: 16px;
-      border-bottom: 1px solid #E4E4E4;
-      &+div{
+      color: #333333;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 22px;
+      border-bottom: 1px solid #e4e4e4;
+      & + div {
         margin: 16px 0;
-        :global{
-          .ant-card{
+        :global {
+          .ant-card {
             height: 175px;
+            background: #f4f6f9;
             border-radius: 8px;
-            background: #F4F6F9;
-            .ant-card-head{
-              min-height: auto;
+            .ant-card-head {
               height: 40px;
-              .ant-card-head-title,.ant-card-extra{
+              min-height: auto;
+              .ant-card-head-title,
+              .ant-card-extra {
                 padding: 0;
-                line-height: 40px;
                 font-size: 14px;
+                line-height: 40px;
               }
             }
-            .ant-card-body{
+            .ant-card-body {
               padding: 16px 24px;
-              p{
-                line-height: 28px;
-                margin: 0;
+              p {
                 max-height: 56px;
+                margin: 0;
                 overflow-y: auto;
                 color: #999999;
-                &.active{
+                line-height: 28px;
+                &.active {
                   color: #666666;
                 }
               }

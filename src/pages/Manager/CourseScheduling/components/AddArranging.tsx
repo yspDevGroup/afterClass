@@ -35,11 +35,6 @@ type PropsType = {
   currentUser?: API.CurrentUser | undefined;
   screenOriSource: any;
   setLoading: any;
-  // setCampus: (value: any) => void;
-  // grade?: any;
-  // tableDataSource: any[];
-  // setTableDataSource: (value: any) => void;
-  // sameClass?: any;
 };
 
 const AddArranging: FC<PropsType> = (props) => {
@@ -192,7 +187,6 @@ const AddArranging: FC<PropsType> = (props) => {
     setLoading(true);
     if (value) {
       // 添加 根据房间id
-
       // console.log('添加')
       const KHPKSJ: any = {
         FJSJId: value.FJSJId,
@@ -299,6 +293,15 @@ const AddArranging: FC<PropsType> = (props) => {
         color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
       };
       setBj(chosenData);
+    } else {
+      const chosenData = {
+        id: value.id,
+        cla: value.BJMC || '',
+        XNXQId: curXNXQId || '',
+        KHBJSJId: value.id || '',
+        color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
+      };
+      setBj(chosenData);
     }
     // setIndex(value.id);
     // setBJIDData(value.id);
@@ -352,8 +355,6 @@ const AddArranging: FC<PropsType> = (props) => {
         if (!value) {
           setTearchId(undefined);
           setBj(undefined);
-          // setIndex(undefined);
-          // setBJIDData(undefined);
           setCDLoading(false);
         }
       }
@@ -444,16 +445,6 @@ const AddArranging: FC<PropsType> = (props) => {
 
   return (
     <>
-      <Button
-        type="primary"
-        onClick={onReset}
-        style={{
-          marginBottom: '24px',
-        }}
-      >
-        <LeftOutlined />
-        返回上一页
-      </Button>
       <Card
         size="small"
         bordered={false}
@@ -464,7 +455,21 @@ const AddArranging: FC<PropsType> = (props) => {
         bodyStyle={{
           background: '#FFFFFF',
         }}
-        title={`${formValues && formValues.BJId ? '编辑排课' : '新增排课'}`}
+        title={
+          <>
+            <Button
+              type="primary"
+              onClick={onReset}
+              style={{
+                marginRight: '24px',
+              }}
+            >
+              <LeftOutlined />
+              返回上一页
+            </Button>
+            {`${formValues && formValues.BJId ? '编辑排课' : '新增排课'}`}
+          </>
+        }
         extra={
           <Button
             style={{
@@ -613,7 +618,9 @@ const AddArranging: FC<PropsType> = (props) => {
                                   onClick={() => BjClick(value)}
                                   style={getKCStyle(value.id)}
                                 >
-                                  <p>{value.BJMC}</p>
+                                  <Tooltip title={value.BJMC}>
+                                    <p>{value.BJMC}</p>
+                                  </Tooltip>
                                   <span>
                                     {
                                       value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
@@ -646,7 +653,9 @@ const AddArranging: FC<PropsType> = (props) => {
                                   onClick={() => BjClick(value)}
                                   style={getKCStyle(value.id)}
                                 >
-                                  <p>{value.BJMC}</p>
+                                  <Tooltip title={value.BJMC}>
+                                    <p>{value.BJMC}</p>
+                                  </Tooltip>
                                   <span>
                                     {
                                       value?.KHBJJs.find((item: any) => item.JSLX === '主教师')

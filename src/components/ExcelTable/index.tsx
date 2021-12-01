@@ -132,7 +132,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
               {/* {data?.cla} */}
             </div>
             {mode === 'see' ? (
-              <div className="teacher">
+              <div className="teacher" style={{ height: 22 }}>
                 {data.teacher === '未知' && data.teacherWechatId ? (
                   <WWOpenDataCom type="userName" openid={data.teacherWechatId} />
                 ) : (
@@ -145,7 +145,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
                 /> */}
               </div>
             ) : (
-              ''
+              <span />
             )}
             {mode === 'see' && data?.bjzt === '已开班' ? (
               <div className={styles.duihao}>√</div>

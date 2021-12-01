@@ -299,7 +299,7 @@ const ClassManagement = () => {
     const screenRadio = (dataSource0: any) => {
       const newDataSource = [...dataSource0];
       if (radioValue) {
-        return newDataSource.filter((item: any) => item.KHPKSJs?.length > 0);
+        return newDataSource?.filter((item: any) => item?.KHPKSJs?.length > 0);
       }
       return newDataSource;
     };
@@ -317,8 +317,10 @@ const ClassManagement = () => {
       if (kcmcValue) {
         newDataSource.forEach((item: any) => {
           const { KHPKSJs } = item;
-          if (KHPKSJs.length > 0) {
-            item.KHPKSJs = KHPKSJs.filter((KHPKSJ: any) => KHPKSJ.KHBJSJ.KHKCSJ.id === kcmcValue);
+          if (KHPKSJs?.length > 0) {
+            item.KHPKSJs = KHPKSJs?.filter(
+              (KHPKSJ: any) => KHPKSJ?.KHBJSJ?.KHKCSJ?.id === kcmcValue,
+            );
           }
         });
         return newDataSource;
@@ -331,8 +333,8 @@ const ClassManagement = () => {
       if (bjmcValue) {
         newDataSource.forEach((item: any) => {
           const { KHPKSJs } = item;
-          if (KHPKSJs.length > 0) {
-            item.KHPKSJs = KHPKSJs.filter((KHPKSJ: any) => KHPKSJ.KHBJSJId === bjmcValue);
+          if (KHPKSJs?.length > 0) {
+            item.KHPKSJs = KHPKSJs?.filter((KHPKSJ: any) => KHPKSJ?.KHBJSJId === bjmcValue);
           }
         });
         return newDataSource;
@@ -347,13 +349,16 @@ const ClassManagement = () => {
         newDataSource.forEach((item: any) => {
           const { KHPKSJs } = item;
           // console.log('KHPKSJs',KHPKSJs)
-          if (KHPKSJs.length > 0) {
-            item.KHPKSJs = KHPKSJs.filter((KHPKSJ: any) => {
+          if (KHPKSJs?.length > 0) {
+            item.KHPKSJs = KHPKSJs?.filter((KHPKSJ: any) => {
               // console.log('KHPKSJ',KHPKSJ)
               //主教名称
-              const jsxm = KHPKSJ.KHBJSJ.KHBJJs[0].JZGJBSJ.XM;
-              // console.log('教师姓名',jsxm)
-              return jsxm.indexOf(teacher) != -1;
+              const jsxm = KHPKSJ?.KHBJSJ?.KHBJJs?.[0]?.JZGJBSJ?.XM;
+              console.log('教师姓名', jsxm);
+              if (jsxm) {
+                return jsxm.indexOf(teacher) != -1;
+              }
+              return false;
             });
           }
         });
@@ -373,7 +378,6 @@ const ClassManagement = () => {
   // 获取排课数据信息
   const getPKData = async () => {
     const bjId = getQueryString('courseId');
-
     // console.log('获取排课true',);
     setLoading(true);
     const res = await getFJPlan({
@@ -719,7 +723,7 @@ const ClassManagement = () => {
                 onExcelTableClick={onExcelTableClick}
                 radioValue={radioValue}
                 style={{
-                  height: 'calc(100vh - 410px)',
+                  height: 'calc(100vh - 360px)',
                 }}
               />
             </div>
