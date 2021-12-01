@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Divider } from 'antd';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import noPic from '@/assets/noPic.png';
+import noPic from '@/assets/noPic1.png';
 import GoBack from '@/components/GoBack';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';

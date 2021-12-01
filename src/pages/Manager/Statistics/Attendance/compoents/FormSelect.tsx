@@ -15,6 +15,7 @@ type formSelectProps = {
   getDataSource: any;
   exportButton: ReactNode;
   getDuration: any;
+  type: string;
 };
 
 const FormSelect = (props: formSelectProps) => {
@@ -22,7 +23,7 @@ const FormSelect = (props: formSelectProps) => {
   const { currentUser } = initialState || {};
   const [JSRQ, setJSRQ] = useState<string>();
   const [KSRQ, setKSRQ] = useState<string>();
-  const { getDataSource, exportButton, getDuration } = props;
+  const { getDataSource, exportButton, getDuration, type } = props;
 
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [newDate, setNewDate] = useState<Moment[]>([]);
@@ -112,7 +113,7 @@ const FormSelect = (props: formSelectProps) => {
           />
         </div>
         <div>
-          <label htmlFor="name">考勤人员：</label>
+          <label htmlFor="name">{type === 'student' ? '学生姓名：' : '教师姓名：'} </label>
           <Search
             allowClear
             value={XM}

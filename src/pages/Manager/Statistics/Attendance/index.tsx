@@ -370,6 +370,7 @@ const LeaveManagement = () => {
           <TabPane tab="教师考勤统计" key="1">
             <FormSelect
               getDataSource={getDataSource}
+              type='teacher'
               exportButton={
                 <Button type="primary" icon={<DownloadOutlined />} style={{ float: 'right' }} onClick={onExportJSClick}>
                   导出
@@ -439,6 +440,7 @@ const LeaveManagement = () => {
           <TabPane tab="学生考勤统计" key="2">
             <FormSelect
               getDataSource={getDataSource}
+              type='student'
               exportButton={
                 <Button type="primary" icon={<DownloadOutlined />} style={{ float: 'right' }} onClick={onExportXSClick}>
                   导出
