@@ -161,6 +161,40 @@ export async function getAllTKByAgency(
   });
 }
 
+/** 机构端获取学生退款信息 POST /khtksj/getAllTK_ByJGid */
+export async function getAllTKByJGid(
+  body: {
+    /** 退课状态 */
+    ZT?: number[];
+    /** 学生姓名 */
+    XSXM?: string;
+    /** 课程名称 */
+    KCMC?: string;
+    /** 班级ID */
+    KHBJSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 机构ID */
+    KHJYJGId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khtksj/getAllTK_ByJGid', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 根据学期查询所有退课，退餐信息 POST /khtksj/getAllRefunds */
 export async function getAllRefunds(
   body: {

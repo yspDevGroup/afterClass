@@ -36,8 +36,8 @@ const ClassCalendar = (props: propstype) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const prevDay = getQueryString('date');
-  const [day, setDay] = useState<string>(!prevDay ? dayjs().format('YYYY-MM-DD') : prevDay);
-  const [cDay, setCDay] = useState<string>(!prevDay ? dayjs().format('M月D日') : dayjs(prevDay).format('M月D日'));
+  const [day, setDay] = useState<string>(!prevDay || prevDay === 'null' ? dayjs().format('YYYY-MM-DD') : prevDay);
+  const [cDay, setCDay] = useState<string>(!prevDay || prevDay === 'null' ? dayjs().format('M月D日') : dayjs(prevDay).format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
   const [dates, setDates] = useState<any[]>([]);
   const [editCourses, setEditCourses] = useState<any>([]);
@@ -114,6 +114,7 @@ const ClassCalendar = (props: propstype) => {
       },
     },
   ];
+
   // 根据日期修改展示数据
   const changeDateList = async (date?: any) => {
     const curDay = date || dayjs();

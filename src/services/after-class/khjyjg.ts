@@ -265,6 +265,9 @@ export async function computedDataOfSchool(
       rows?: {
         id?: string;
         XXMC?: string;
+        XD?: string;
+        LXR?: string;
+        LXDH?: string;
         tk_count?: string;
         tk_all_Price?: string;
         td_count?: string;

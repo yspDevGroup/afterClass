@@ -203,7 +203,8 @@ const Notice = () => {
         scroll={{ x: getTableWidth(columns) }}
         toolBarRender={() => [
           <Button
-            key="xinjian"
+            key="xiaoxi"
+            className={styles.xiaoxi}
             type="primary"
             onClick={() => {
               setVisible(true);
