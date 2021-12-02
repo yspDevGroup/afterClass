@@ -168,3 +168,20 @@ export async function allXD(
     ...(options || {}),
   });
 }
+
+/** 根据校区获取校区年级信息 POST /njsj/getGradesByCampus */
+export async function getGradesByCampus(
+  body: {
+    XQSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/njsj/getGradesByCampus', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

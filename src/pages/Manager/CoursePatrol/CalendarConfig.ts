@@ -1,4 +1,4 @@
-import { Config } from '@/components/Calendar/data';
+import type { Config } from '@/components/Calendar/data';
 
 export const customConfig: Partial<Config> = {
   className: 'ui-cusCalendar',
@@ -10,7 +10,7 @@ export const customConfig: Partial<Config> = {
     showMark: false,
     showEvent: true,
     showSchoolWeek: false,
-    displayOtherMonthDate: true,
+    displayOtherMonthDate: false,
   },
   header: {
     type: 'month',

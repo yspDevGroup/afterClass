@@ -4,7 +4,7 @@ import { Button, message } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
 import { useModel, Link } from 'umi';
 import { Select } from 'antd';
-import { getCourses, statisCourses } from '@/services/after-class/reports';
+import { getCourses, statisClasses, statisCourses } from '@/services/after-class/reports';
 import ProTable from '@ant-design/pro-table';
 import Style from './index.less';
 import type { TableItem } from './data';
@@ -189,7 +189,7 @@ const AfterSchoolCourse: React.FC = () => {
     if (res.status === 'ok') {
       setCollectData(res?.data?.[0]);
     }
-  }
+  };
   /**
    * 获取课程类型数据
    */
@@ -216,6 +216,11 @@ const AfterSchoolCourse: React.FC = () => {
   const submit = async () => {
     const res = await statisCourses({
       XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+    });
+    await statisClasses({
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
     });
     if (res.status === 'ok') {
       getData();
@@ -228,14 +233,21 @@ const AfterSchoolCourse: React.FC = () => {
     <PageContainer>
       <div style={{ marginBottom: 24 }}>
         <SearchLayout>
-          <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={(value: string) => {
-            // 选择不同学期从新更新页面的数据
-            setCurXNXQId(value);
-          }} />
-          <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={(value, data) => {
-            setKcmc(data?.children);
-            setKcmcValue(value);
-          }} />
+          <SemesterSelect
+            XXJBSJId={currentUser?.xxId}
+            onChange={(value: string) => {
+              // 选择不同学期从新更新页面的数据
+              setCurXNXQId(value);
+            }}
+          />
+          <CourseSelect
+            XXJBSJId={currentUser?.xxId}
+            XNXQId={curXNXQId}
+            onChange={(value, data) => {
+              setKcmc(data?.children);
+              setKcmcValue(value);
+            }}
+          />
           <div>
             <label htmlFor="school">课程类型：</label>
             <Select

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React, { useContext, useEffect, useState } from 'react';
 import myContext from '@/utils/MyContext';
 import noData from '@/assets/noData.png';
@@ -51,7 +52,7 @@ const Notice = () => {
         pageSize: 0,
       });
       if (resgetXXTZGG.status === 'ok') {
-        let newData = {
+        const newData = {
           type: 'azeList',
           cls: 'azeList',
           list: resgetXXTZGG.data?.rows?.slice(0, 3) || [],
@@ -59,9 +60,14 @@ const Notice = () => {
           noDataImg: noData,
         };
         setZCGGData(newData);
-        newData.list = resgetXXTZGG.data?.rows || [];
-        console.log('TZnewData: ', newData);
-        setAllZCDataSource(newData)
+        const newAllData = {
+          type: 'azeList',
+          cls: 'azeList',
+          list: resgetXXTZGG.data?.rows || [],
+          noDataText: '暂无待办',
+          noDataImg: noData,
+        }
+        setAllZCDataSource(newAllData)
       }
 
       //政策公告
@@ -75,7 +81,7 @@ const Notice = () => {
       });
       if (resgetXXZCGG.status === 'ok') {
         console.log('resgetXXZCGG: ', resgetXXZCGG);
-        let newData = {
+        const newData = {
           type: 'azeList',
           cls: 'azeList',
           list: resgetXXZCGG.data?.rows?.slice(0, 3) || [],
@@ -83,9 +89,14 @@ const Notice = () => {
           noDataImg: noData,
         };
         setTZGGData(newData);
-        newData.list = resgetXXZCGG.data?.rows || [];
-        console.log('ZCnewData: ', newData);
-        setAllTZDataSource(newData);
+        const newAllData = {
+          type: 'azeList',
+          cls: 'azeList',
+          list: resgetXXZCGG.data?.rows || [],
+          noDataText: '暂无待办',
+          noDataImg: noData,
+        }
+        setAllTZDataSource(newAllData);
       }
     }
 
