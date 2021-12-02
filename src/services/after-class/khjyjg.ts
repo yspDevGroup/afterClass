@@ -243,6 +243,45 @@ export async function cooperateCourse(
   });
 }
 
+/** 计算机构与学校的合作数据 POST /khjyjg/computedDataOfSchool */
+export async function computedDataOfSchool(
+  body: {
+    /** 学段信息 */
+    XD?: string[];
+    /** 学校名称 */
+    name?: string;
+    JGId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: {
+      count?: number;
+      rows?: {
+        id?: string;
+        XXMC?: string;
+        tk_count?: string;
+        tk_all_Price?: string;
+        td_count?: string;
+        td_all_KSS?: string;
+      }[];
+    };
+    message?: string;
+  }>('/khjyjg/computedDataOfSchool', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 获取机构的年级信息 POST /khjyjg/getAllGrades */
 export async function getAllGrades(
   body: {

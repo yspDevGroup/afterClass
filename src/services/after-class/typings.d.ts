@@ -2467,30 +2467,6 @@ declare namespace API {
     KCTAG?: string;
   };
 
-  type KHKCPJ = {
-    id: string;
-    /** 评语 */
-    PY?: string;
-    /** 课后课程ID */
-    KHKCSJId?: string;
-    /** 学校ID */
-    XXJBSJId?: string;
-  };
-
-  type CreateKHKCPJ = {
-    /** 评语 */
-    PY?: string;
-    /** 课后课程ID */
-    KHKCSJId?: string;
-    /** 学校ID */
-    XXJBSJId?: string;
-  };
-
-  type UpdateKHKCPJ = {
-    /** 评语 */
-    PY?: string;
-  };
-
   type KHKCSJ = {
     id: string;
     /** 课程名称 */
@@ -5190,5 +5166,29 @@ declare namespace API {
     /** 时长 */
     SC?: number;
     ZXFAId?: string;
+  };
+
+  type KHKCPJ = {
+    id: string;
+    /** 评语 */
+    PY?: string;
+    /** 课后课程ID */
+    KHKCSJId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+  };
+
+  type CreateKHKCPJ = {
+    /** 评语 */
+    PY?: string;
+    /** 课后课程ID */
+    KHKCSJId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+  };
+
+  type UpdateKHKCPJ = {
+    /** 评语 */
+    PY?: string;
   };
 }

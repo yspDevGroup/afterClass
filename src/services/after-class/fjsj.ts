@@ -69,6 +69,8 @@ export async function getAllFJSJ(
     XXJBSJId?: string;
     /** 场地类型ID */
     lxId?: string;
+    /** 校区ID */
+    xqId?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -165,6 +167,8 @@ export async function getFJPlan(
     bjId?: string;
     /** 课程ID */
     kcId?: string;
+    /** 校区ID */
+    xqId?: string;
     /** 教师姓名 */
     JSXM?: string;
     /** 是否有排课 */

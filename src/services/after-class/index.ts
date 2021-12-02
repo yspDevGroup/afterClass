@@ -35,7 +35,6 @@ import * as khjyjg from './khjyjg';
 import * as khjyjspjl from './khjyjspjl';
 import * as khjytzgg from './khjytzgg';
 import * as khkclx from './khkclx';
-import * as khkcpj from './khkcpj';
 import * as khkcsj from './khkcsj';
 import * as khkcsq from './khkcsq';
 import * as khktfc from './khktfc';
@@ -78,6 +77,7 @@ import * as xxsppz from './xxsppz';
 import * as xxtzgg from './xxtzgg';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
+import * as khkcpj from './khkcpj';
 export default {
   other,
   auth,
@@ -112,7 +112,6 @@ export default {
   khjyjspjl,
   khjytzgg,
   khkclx,
-  khkcpj,
   khkcsj,
   khkcsq,
   khktfc,
@@ -155,4 +154,5 @@ export default {
   xxtzgg,
   zxfa,
   zxsj,
+  khkcpj,
 };

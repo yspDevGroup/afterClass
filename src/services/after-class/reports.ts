@@ -243,6 +243,8 @@ export async function statisCourses(
   body: {
     /** 学年学期ID */
     XNXQId?: string;
+    /** 学年学期ID */
+    XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {

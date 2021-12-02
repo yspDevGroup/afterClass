@@ -47,25 +47,35 @@ const AgentRegistration = (props: {
 
   useEffect(() => {
     (async () => {
-      if (curXNXQId) {
-        const res = await getSchoolClasses({
-          XXJBSJId: currentUser?.xxId,
-          XNXQId: curXNXQId,
-          XQSJId: BjDetails?.XQSJId,
-          page: 0,
-          pageSize: 0,
-        });
-        if (res.status === 'ok') {
-          setXZBDatas(res.data.rows);
-        } else {
-          message.error(res.message);
+      if (BjDetails && BjDetails) {
+        // 按年级
+        if (BjDetails?.BJLX === 0 && BjDetails?.KHKCSJ?.NJSJs?.length > 0) {
+          console.log('----------');
+          const res = await getSchoolClasses({
+            XXJBSJId: currentUser?.xxId,
+            XNXQId: curXNXQId,
+            XQSJId: BjDetails?.XQSJId,
+            njId: BjDetails?.KHKCSJ?.NJSJs?.map((item: any) => item?.id),
+            page: 0,
+            pageSize: 0,
+          });
+          if (res.status === 'ok') {
+            setXZBDatas(res.data.rows);
+          } else {
+            message.error(res.message);
+          }
+        }
+        // 按行政班
+        else if (BjDetails?.BJLX === 1) {
+          setXZBDatas(BjDetails?.BJSJs);
         }
       }
     })();
-  }, [curXNXQId]);
+  }, [curXNXQId, BjDetails]);
 
   useEffect(() => {
     if (OrderId) {
+      console.log('1', OrderId);
       (async () => {
         if (
           (BmCurrent === 3 && BjDetails?.KHKCJCs?.length !== 0) ||
@@ -105,6 +115,7 @@ const AgentRegistration = (props: {
   };
   // 付款完成接口
   const onClickFK = async () => {
+    console.log('2', OrderId);
     const res = await getKHXSDD({
       id: OrderId!,
     });
@@ -194,7 +205,7 @@ const AgentRegistration = (props: {
     setBmCurrent(0);
     setModalVisible(false);
     onsetKHXSBJs();
-    if (PaymentCG !== '待付款') {
+    if (PaymentCG !== '待付款' && OrderId) {
       await deleteKHXSDD({ id: OrderId! });
     }
   };
@@ -202,6 +213,8 @@ const AgentRegistration = (props: {
     setPaymentCG('已过期');
     await overdueKHXSDD({ id: OrderId! });
   };
+  console.log('BjDetails', BjDetails);
+
   return (
     <>
       <Modal
@@ -238,8 +251,8 @@ const AgentRegistration = (props: {
                       <Option
                         value={`${value?.id}`}
                         key={value?.id}
-                        data-value={`${value?.NJSJ?.NJMC}${value?.BJ}`}
-                      >{`${value?.NJSJ?.NJMC}${value?.BJ}`}</Option>
+                        data-value={`${value?.NJSJ?.XD}${value?.NJSJ?.NJMC}${value?.BJ}`}
+                      >{`${value?.NJSJ?.XD}${value?.NJSJ?.NJMC}${value?.BJ}`}</Option>
                     );
                   })}
                 </Select>
