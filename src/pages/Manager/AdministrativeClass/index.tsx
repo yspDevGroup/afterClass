@@ -8,8 +8,9 @@ import styles from './index.less';
 import { getAllBJSJ, getSchoolClasses } from '@/services/after-class/bjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
-import { getAllGrades } from '@/services/after-class/khjyjg';
+// import { getAllGrades } from '@/services/after-class/khjyjg';
 import SearchLayout from '@/components/Search/Layout';
+import { getGradesByCampus } from '@/services/after-class/njsj';
 
 type selectType = { label: string; value: string };
 
@@ -49,25 +50,32 @@ const AdministrativeClass = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await getAllGrades({
-        XD: currentUser?.XD?.split(','),
-      });
-      if (res.status === 'ok') {
-        setNjData(res.data);
-      }
-    })();
-    (async () => {
       const result = await queryXNXQList(currentUser?.xxId);
       setCurXNXQId(result?.current?.id);
     })();
     getCampusData();
   }, []);
 
+  const getNJSJ = async () => {
+    if (campusId) {
+      const res = await getGradesByCampus({
+        XQSJId: campusId,
+      });
+      if (res.status === 'ok') {
+        console.log('res', res);
+        setNjData(res.data);
+      }
+    }
+  };
+
   useEffect(() => {
-    if (curXNXQId) {
+    if (campusId) {
+      getNJSJ();
+      setBJId(undefined);
+      setNjId(undefined);
       actionRef.current?.reload();
     }
-  }, [curXNXQId]);
+  }, [campusId]);
 
   const onBjChange = async (value: any) => {
     setBJId(value);
