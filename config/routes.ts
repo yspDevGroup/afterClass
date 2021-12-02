@@ -453,6 +453,12 @@
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/CallTheRoll',
       },
+      {
+        path: '/teacher/education/selectCourse',
+        name: 'selectCourse',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/SelectCourse',
+      },
       // 教师请假
       {
         path: '/teacher/education/askForLeave',

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { Avatar, Image, Row, Col, Popconfirm, message, Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
@@ -60,11 +61,11 @@ const Record = () => {
       const distance = Math.abs(startY - endY);
       if (distance > 50) {
         if (startY > endY) {
-          //上滑
+          // 上滑
           setShowData([...showData, ...listData.slice(showIndex, showIndex + 3)]);
           setShowIndex(showIndex + 3);
         } else {
-          //下拉
+          // 下拉
         }
       }
     }
@@ -102,12 +103,12 @@ const Record = () => {
                         fontWeight: 300,
                       }}
                     >
-                      {moment(item.time).format('MM') + '月'}
+                      {`${moment(item.time).format('MM')  }月`}
                     </p>
                   </Avatar>
                   <div className={styles.name}>
                     <p>{item.className}</p>
-                    <p>{item.classNum + '\u00A0\u00A0' + item.teacherName}</p>
+                    <p>{`${item.classNum  }\u00A0\u00A0${  item.teacherName}`}</p>
                   </div>
                 </p>
                 <div className={styles.content}>

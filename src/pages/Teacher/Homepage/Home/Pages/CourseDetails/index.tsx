@@ -10,7 +10,7 @@ import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { convertTimeTable, ParentHomeData } from '@/services/local-services/mobileHome';
-import { getKHBJSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
+import { getAllKHBJKSSJ, getKHBJSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const CourseDetails: React.FC = () => {
@@ -21,6 +21,7 @@ const CourseDetails: React.FC = () => {
   const [mainTeacher, setMainTeacher] = useState<any>();
   const [teacherList, setTeacherList] = useState<any[]>([]);
   const classid = getQueryString('classid');
+  const claim = getQueryString('status');
   const path = getQueryString('path');
   const date = getQueryString('date');
   const userId = currentUser.JSId || testTeacherId;
@@ -58,20 +59,44 @@ const CourseDetails: React.FC = () => {
             setTeacherList(otherTeacher);
           }
         }
-        // 获取课程班教师出勤数据
-        const res = await getAllKHJSCQ({
-          KHBJSJId: classid,
-          JZGJBSJId: userId
-        });
-        if (res.status === 'ok' && res.data) {
-          const xxId = currentUser?.xxId;
-          const newTime = await convertTimeTable(userId, classid, res.data, classInfo?.days,xxId);
-          setTimetableList(newTime);
+
+        if (claim && claim === '自选课' && classid) {
+          const clsRes = await getAllKHBJKSSJ({
+            KHBJSJIds: [classid],
+            page: 0,
+            pageSize: 0,
+          });
+          if (clsRes.status === 'ok' && clsRes.data) {
+            const { rows } = clsRes.data;
+            if (rows?.length) {
+              const { DATA } = rows[0];
+              const days = JSON.parse(DATA);
+              // 获取课程班教师出勤数据
+              const res = await getAllKHJSCQ({
+                KHBJSJId: classid,
+              });
+              if (res.status === 'ok' && res.data) {
+                const newTime = await convertTimeTable(userId, classid, res.data, days, currentUser?.xxId);
+                setTimetableList(newTime);
+              }
+            }
+          }
+        } else {
+          // 获取课程班教师出勤数据
+          const res = await getAllKHJSCQ({
+            KHBJSJId: classid,
+            JZGJBSJId: userId
+          });
+          if (res.status === 'ok' && res.data) {
+            const xxId = currentUser?.xxId;
+            const newTime = await convertTimeTable(userId, classid, res.data, classInfo?.days, xxId);
+            setTimetableList(newTime);
+          }
         }
       }
     };
     fetchData();
-  }, [classid]);
+  }, [classid, claim]);
   const handleModal = (val: any) => {
     let content = {};
     if (val.otherInfo) {
@@ -132,24 +157,24 @@ const CourseDetails: React.FC = () => {
             <span>授课班级：</span>
             {KcDetail?.BJMC}
           </li>
-          <li>
+          {mainTeacher ? <li>
             <span>班主任：</span>
             <span className={styles.teacherName}>{mainTeacher?.JZGJBSJ?.XM === '未知' && mainTeacher?.JZGJBSJ?.WechatUserId ? (
               <WWOpenDataCom type="userName" openid={mainTeacher?.JZGJBSJ?.WechatUserId} />
             ) : (
               mainTeacher?.JZGJBSJ?.XM
             )}</span>
-          </li>
-          <li>
+          </li> : ''}
+          {teacherList && teacherList?.length ? <li>
             <span>副班：</span>
-            {teacherList && teacherList?.length && teacherList.map((ele) => {
+            {teacherList.map((ele) => {
               return <span className={styles.teacherName}>{ele?.JZGJBSJ?.XM === '未知' && ele?.JZGJBSJ?.WechatUserId ? (
                 <WWOpenDataCom type="userName" openid={ele?.JZGJBSJ?.WechatUserId} />
               ) : (
                 ele?.JZGJBSJ?.XM
               )}</span>
             })}
-          </li>
+          </li> : ''}
         </ul>
       </ul>
     </div>

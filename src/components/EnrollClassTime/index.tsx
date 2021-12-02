@@ -57,13 +57,13 @@ const EnrollClassTime = (props: { type: string; xxId?: string; userId?: string; 
           text: status || ClassStatus(ele.start, ele.end),
         },
         link: status !== '代上课' ?
-          (`${(type === 'teacher' ? '/teacher/home/courseDetails' : '/parent/home/courseTable')}?classid=${ele.bjId}`)
+          (`${(type === 'teacher' ? '/teacher/home/courseDetails' : '/parent/home/courseTable')}?classid=${ele.bjId}&status=${status}`)
           : null,
         desc: [
           {
             left: [
               `${ele.start}-${ele.end}`,
-              `${ele.address}`,
+              `${ele.address ? ele.address : ''}`,
             ],
             right: domRight
             ,

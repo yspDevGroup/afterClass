@@ -80,6 +80,7 @@ export default {
   'menu.parent.serviceReservation':'其他服务',
   'menu.teacher':'教师端',
   'menu.teacher.home':'教师首页',
+  'menu.teacher.selectCourse':'教师选课',
   'menu.teacher.askForLeave':'教师请假',
   'menu.teacher.courseAdjustment':'教师调课',
   'menu.teacher.courseAdjustmentDetails':'教师调课',
