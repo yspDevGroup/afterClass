@@ -70,7 +70,7 @@ const DropOut = () => {
     (async () => {
       if (StorageXSId) {
         const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        const oriData = await ParentHomeData('student', currentUser.xxId, StorageXSId, StorageNjId, StorageXQSJId, bjId);
+        const oriData = await ParentHomeData('student', currentUser.xxId, StorageXSId, StorageNjId, bjId,StorageXQSJId);
         const { courseSchedule } = oriData;
         const courseData = CountCourses(courseSchedule);
         setKcList(courseData);

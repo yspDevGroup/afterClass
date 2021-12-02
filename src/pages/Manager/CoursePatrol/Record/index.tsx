@@ -144,16 +144,18 @@ const CoursePatrol = () => {
     setCurXNXQId(val);
   };
   useEffect(() => {
-    (async () => {
-      const res = await getKHXKJL({
-        XXJBSJId: currentUser?.xxId,
-        XNXQId: curXNXQId,
-        RQ: PatrolData,
-      });
-      if (res.status === 'ok') {
-        setDataSource(res.data?.rows);
-      }
-    })();
+    if (curXNXQId) {
+      (async () => {
+        const res = await getKHXKJL({
+          XXJBSJId: currentUser?.xxId,
+          XNXQId: curXNXQId,
+          RQ: PatrolData,
+        });
+        if (res.status === 'ok') {
+          setDataSource(res.data?.rows);
+        }
+      })();
+    }
   }, [curXNXQId, PatrolData]);
   return (
     <PageContainer>
