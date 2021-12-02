@@ -6,9 +6,9 @@ import { Modal, Table, Button, Switch, message, notification, Tooltip } from 'an
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
-import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import { getEnrolled, getKHBJSJ, } from '@/services/after-class/khbjsj';
 import { createKHJSCQ, getAllKHJSCQ } from '@/services/after-class/khjscq';
+import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import { createKHXSCQ, getAllKHXSCQ, getArrangement } from '@/services/after-class/khxscq';
 
 import { theme } from '@/theme-default';
@@ -137,7 +137,7 @@ const CallTheRoll = (props: any) => {
     const resAll = await getAllKHXSCQ({
       bjId: bjId || undefined, // 班级ID
       CQRQ: pkDate, // 日期
-      pkId: pkId || undefined, // 排课ID
+      XXSJPZId: jcId
     });
     if (resAll.status === 'ok') {
       const allData = resAll.data;
@@ -289,7 +289,7 @@ const CallTheRoll = (props: any) => {
         CQRQ: pkDate, // 日期
         XSJBSJId: item.XSJBSJId, // 学生ID
         KHBJSJId: bjId, // 班级ID
-        KHPKSJId: pkId, // 排课ID
+        XXSJPZId: jcId, // 节次ID
       });
     });
     const res = await createKHXSCQ(value);
