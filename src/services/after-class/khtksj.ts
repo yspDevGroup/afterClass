@@ -70,10 +70,10 @@ export async function deleteKHTKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khtksj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -88,13 +88,13 @@ export async function updateKHTKSJ(
   body: API.UpdateKHTKSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khtksj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -130,6 +130,38 @@ export async function getAllTK(
 /** 机构端获取学生退课信息 POST /khtksj/getAllTKByAgency */
 export async function getAllTKByAgency(
   body: {
+    /** 学生姓名 */
+    XSXM?: string;
+    /** 课程名称 */
+    KCMC?: string;
+    /** 班级ID */
+    KHBJSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 机构ID */
+    KHJYJGId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khtksj/getAllTKByAgency', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 机构端获取学生退款信息 POST /khtksj/getAllTK_ByJGid */
+export async function getAllTKByJGid(
+  body: {
     /** 退课状态 */
     ZT?: number[];
     /** 学生姓名 */
@@ -151,7 +183,7 @@ export async function getAllTKByAgency(
   },
   options?: { [key: string]: any },
 ) {
-  return request<any>('/khtksj/getAllTKByAgency', {
+  return request<any>('/khtksj/getAllTK_ByJGid', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

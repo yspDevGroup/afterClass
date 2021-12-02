@@ -27,14 +27,14 @@ export async function getXSJZXX(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: { id?: string; XM?: string; LXDH?: string; XB?: string };
     message?: string;
   }>(`/xsjzxx/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -48,10 +48,10 @@ export async function deleteXSJZXX(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xsjzxx/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -66,13 +66,13 @@ export async function updateXSJZXX(
   body: API.UpdateXSJZXX,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xsjzxx/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -125,7 +125,7 @@ export async function updateRelation(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(
     `/xsjzxx/updateRelation/${param0}`,
     {
@@ -133,7 +133,7 @@ export async function updateRelation(
       headers: {
         'Content-Type': 'application/json',
       },
-      params: { ...queryParams },
+      params: { ...params },
       data: body,
       ...(options || {}),
     },

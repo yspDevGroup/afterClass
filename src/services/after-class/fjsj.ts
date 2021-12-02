@@ -11,7 +11,7 @@ export async function getFJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -40,7 +40,7 @@ export async function getFJSJ(
     message?: string;
   }>(`/fjsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -54,10 +54,10 @@ export async function deleteFJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -69,6 +69,8 @@ export async function getAllFJSJ(
     XXJBSJId?: string;
     /** 场地类型ID */
     lxId?: string;
+    /** 校区ID */
+    xqId?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -140,13 +142,13 @@ export async function updateFJSJ(
   body: API.UpdateFJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -165,6 +167,8 @@ export async function getFJPlan(
     bjId?: string;
     /** 课程ID */
     kcId?: string;
+    /** 校区ID */
+    xqId?: string;
     /** 教师姓名 */
     JSXM?: string;
     /** 是否有排课 */

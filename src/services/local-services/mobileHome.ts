@@ -212,19 +212,35 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
         oriData[oriInd].otherInfo = ele;
       }
     } else if (status !== '已请假' && status !== '申请代课' && status !== '申请调课') {
-      oriData.push({
-        title: ele.KHBJSJ.KHKCSJ.KCMC,
-        bjId: ele.KHBJSJId,
-        jcId: ele.XXSJPZId,
-        fjId: ele.TKFJId,
-        BJMC: ele.KHBJSJ.BJMC,
-        img: ele.KHBJSJ.KHKCSJ.KCTP,
-        address: ele.SKFJ.FJMC,
-        date: ele.SKRQ,
-        start: ele.KSSJ || ele.XXSJPZ.KSSJ.substring(0, 5),
-        end: ele.JSSJ || ele.XXSJPZ.JSSJ.substring(0, 5),
-        status,
-      });
+      if (status === '自选课') {
+        oriData.push({
+          title: ele.KHBJSJ?.KHKCSJ?.KCMC,
+          bjId: ele.KHBJSJId,
+          jcId: ele.XXSJPZId,
+          fjId: ele.TKFJId,
+          BJMC: ele.KHBJSJ?.BJMC,
+          img: ele.KHBJSJ?.KHKCSJ?.KCTP,
+          address: ele?.SKFJ?.FJMC,
+          date: ele.RQ,
+          start: ele.KSSJ || ele.XXSJPZ?.KSSJ?.substring?.(0, 5),
+          end: ele.JSSJ || ele.XXSJPZ?.JSSJ?.substring?.(0, 5),
+          status,
+        });
+      } else {
+        oriData.push({
+          title: ele.KHBJSJ.KHKCSJ.KCMC,
+          bjId: ele.KHBJSJId,
+          jcId: ele.XXSJPZId,
+          fjId: ele.TKFJId,
+          BJMC: ele.KHBJSJ.BJMC,
+          img: ele.KHBJSJ.KHKCSJ.KCTP,
+          address: ele.SKFJ.FJMC,
+          date: ele.SKRQ,
+          start: ele.KSSJ || ele.XXSJPZ.KSSJ.substring(0, 5),
+          end: ele.JSSJ || ele.XXSJPZ.JSSJ.substring(0, 5),
+          status,
+        });
+      }
     }
   });
 };
@@ -305,7 +321,7 @@ export const CurdayCourse = async (
     });
 
     if (response?.status === 'ok' && response.data) {
-      const { nowDks, nowTks, qjs, srcDks, srcTks } = response.data;
+      const { nowDks, nowTks, qjs, srcDks, srcTks, rls } = response.data;
       if (nowDks?.length) {
         CountCurdayCourse(nowDks, courseList, '代上课');
       }
@@ -320,6 +336,9 @@ export const CurdayCourse = async (
       }
       if (srcTks?.length) {
         CountCurdayCourse(srcTks, courseList, '已调课');
+      }
+      if (rls?.length) {
+        CountCurdayCourse(rls, courseList, '自选课');
       }
     }
   }
@@ -447,7 +466,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
         link:
           item.status === '代上课'
             ? null
-            : `/teacher/home/courseDetails?classid=${item.bjId}&path=education&date=${day}`,
+            : `/teacher/home/courseDetails?classid=${item.bjId}&path=education&date=${day}&status=${item.status}`,
         enrollLink,
         start: item.start,
         end: item.end,
@@ -457,7 +476,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
             left: [`${item.start}-${item.end}  |  ${item.BJMC} `],
           },
           {
-            left: [`${item.address}`],
+            left: [`${item.address ? item.address : ''}`],
           },
         ],
         bjid: item.bjId,
