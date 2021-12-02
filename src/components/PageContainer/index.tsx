@@ -65,7 +65,7 @@ const PageContain = ({ children, cls, type }: pageProp) => {
       }}
       fixedHeader
     >
-      <div style={type === 'homepage' ? {} : { padding: '0 24px 24px 24px', background: '#fff' }}>{children}</div>
+      <div style={type === 'homepage' ? {} : { padding: 24, background: '#fff' }}>{children}</div>
     </PageContainer>
   );
 };
