@@ -2,7 +2,7 @@
  * @description:
  * @author: lyy
  * @Date: 2021-06-11 14:33:28
- * @LastEditTime: 2021-11-05 10:30:51
+ * @LastEditTime: 2021-12-03 17:29:33
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
@@ -25,7 +25,11 @@ const BarChart = (props: { data: any[] | undefined, title?: string, cls?: string
     barStyle: {
       radius: [10, 10, 0, 0],
     },
-    color: ['l(180) 0:rgba(244, 138, 130, 0.2) 1:rgba(244, 138, 130, 1)', 'l(180) 0:rgba(137, 218, 140, 1) 1:rgba(137, 218, 140, 0.2)',],
+    color: [
+      'l(180) 0:rgba(221, 221, 221, 0.2) 1:rgba(221, 221, 221, 1)',
+      'l(180) 0:rgba(244, 138, 130, 0.2) 1:rgba(244, 138, 130, 1)',
+      'l(180) 0:rgba(137, 218, 140, 1) 1:rgba(137, 218, 140, 0.2)',
+    ],
   };
   return (
     <div className={`${styles.chartWrapper} ${cls}`}>

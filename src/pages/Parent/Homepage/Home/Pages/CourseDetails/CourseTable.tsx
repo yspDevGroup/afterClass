@@ -19,6 +19,7 @@ const CourseTable: React.FC = () => {
   const { currentUser } = initialState || {};
   const { student } = currentUser || {};
   const [KcDetail, setKcDetail] = useState<any>();
+  const [mainTeacher, setMainTeacher] = useState<any>();
   const [teacherList, setTeacherList] = useState<any[]>([]);
   const [timetableList, setTimetableList] = useState<any[]>();
   const classid = getQueryString('classid');
@@ -33,14 +34,20 @@ const CourseTable: React.FC = () => {
     async function fetchData() {
       if (classid) {
         const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId,bjId,StorageXQSJId);
+        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, StorageXQSJId);
         const { courseSchedule } = oriData;
         const classInfo = courseSchedule.find((item: { KHBJSJId: string; }) => {
           return item.KHBJSJId === classid
         });
         const result = await getTeachersByBJId({ KHBJSJId: classid });
         if (result.status === 'ok') {
-          setTeacherList(result.data?.rows);
+          const list = result.data?.rows;
+          if (list?.length) {
+            const main = list?.find((item: { JSLX: string; }) => item.JSLX === '主教师');
+            setMainTeacher(main);
+            const otherTeacher = list?.filter((item: { JSLX: string; }) => item.JSLX === '副教师');
+            setTeacherList(otherTeacher);
+          }
         }
         // 获取课程班学生出勤数据
         const res = await getAllKHXSCQ({
@@ -156,13 +163,24 @@ const CourseTable: React.FC = () => {
           <li><span>上课地点：</span>{KcDetail?.xq} | {KcDetail?.address}</li>
           <li><span>总课时：</span>{KcDetail?.KSS}课时</li>
           <li><span>授课班级：</span>{KcDetail?.BJMC}</li>
-          <li><span>授课教师：</span>{teacherList && teacherList?.length && teacherList.map((ele) => {
-            return <span className={styles.teacherName}>{ele?.JZGJBSJ?.XM === '未知' && ele?.JZGJBSJ?.WechatUserId ? (
-              <WWOpenDataCom type="userName" openid={ele?.JZGJBSJ?.WechatUserId} />
+          {mainTeacher ? <li>
+            <span>班主任：</span>
+            <span className={styles.teacherName}>{mainTeacher?.JZGJBSJ?.XM === '未知' && mainTeacher?.JZGJBSJ?.WechatUserId ? (
+              <WWOpenDataCom type="userName" openid={mainTeacher?.JZGJBSJ?.WechatUserId} />
             ) : (
-              ele?.JZGJBSJ?.XM
+              mainTeacher?.JZGJBSJ?.XM
             )}</span>
-          })}</li>
+          </li> : ''}
+          {teacherList && teacherList?.length ? <li>
+            <span>副班：</span>
+            {teacherList.map((ele) => {
+              return <span className={styles.teacherName}>{ele?.JZGJBSJ?.XM === '未知' && ele?.JZGJBSJ?.WechatUserId ? (
+                <WWOpenDataCom type="userName" openid={ele?.JZGJBSJ?.WechatUserId} />
+              ) : (
+                ele?.JZGJBSJ?.XM
+              )}</span>
+            })}
+          </li> : ''}
         </ul>
       </ul>
     </div>

@@ -61,7 +61,6 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       if (StorageXSId) {
-
         const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, StorageBjId,StorageXQSJId);
         const { data } = oriData;
         setTotalData(data);

@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-26 16:18:21
- * @LastEditTime: 2021-11-05 10:18:26
+ * @LastEditTime: 2021-12-03 17:27:33
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -69,8 +69,8 @@ const CheckOnStatic = () => {
       }
     }
     if (data && type === 'replace') {
-      const { count, cq_count } = data;
-      const num = Number(count) - Number(cq_count);
+      const { count, cq_count,qq_count } = data;
+      const num = Number(count) - Number(cq_count) - Number(qq_count);
       return [
         {
           label: `${data.XM}`,
@@ -80,6 +80,11 @@ const CheckOnStatic = () => {
         {
           label: `${data.XM}`,
           type: '考勤异常',
+          value: qq_count < 0 ? 0 : qq_count,
+        },
+        {
+          label: `${data.XM}`,
+          type: '待上课',
           value: num < 0 ? 0 : num,
         }
       ]
