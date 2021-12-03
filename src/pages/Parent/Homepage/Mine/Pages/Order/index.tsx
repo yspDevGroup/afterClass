@@ -71,7 +71,7 @@ const OrderList = (props: {
                 </p>
                 {item.DDZT === '已付款' ? (
                   <p className={styles.price}>
-                    实付: <span>￥{item.DDFY}</span>
+                    实付: <span>￥{Number(item.DDFY).toFixed(2)}</span>
                   </p>
                 ) : (
                   ''
