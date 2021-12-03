@@ -85,6 +85,10 @@ const Detail: React.FC = () => {
       getWxData();
       fetchData(classid);
     }
+    if (FKstate?.ZT !== 3) {
+      setJFstate(true)
+    }
+
   }, [classid]);
   const submit = async () => {
     const data: API.CreateKHXSDD = {
@@ -225,16 +229,24 @@ const Detail: React.FC = () => {
               ) : (
                 <div
                   className={styles.box}
-                  style={{ borderRadius: JFstate === true ? '8px 8px 0 0' : '8px' }}
+                  style={{
+                    borderRadius: JFstate === true ? '8px 8px 0 0' : '8px',
+                  }}
                 >
-                  <Checkbox onChange={onJFChange} checked={JFstate}>
-                    <span>选购教辅</span>
-                  </Checkbox>
+                  {
+                    FKstate?.ZT === 3 ? <Checkbox onChange={onJFChange} checked={JFstate}>
+                      <span>选购教辅</span>
+                    </Checkbox> : <span style={{ fontWeight: 'bold', fontSize: 16 }}>教辅材料</span>
+                  }
                   {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
 
                 </div>
               )}
-              <div className={styles.tables}>
+              <div
+                className={styles.tables}
+                style={{
+                  maxHeight: FKstate?.ZT !== 3 ? 'initial' : '70px',
+                }}>
                 {JFstate === true ? (
                   <>
                     {JFData ? (
@@ -242,7 +254,7 @@ const Detail: React.FC = () => {
                         {JFData?.map((value: any) => {
                           return (
                             <div>
-                              <div>{value.JCMC}</div>
+                              <div className={styles.JCMC}>{value.JCMC}</div>
                               {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
                             </div>
                           );

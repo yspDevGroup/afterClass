@@ -220,7 +220,7 @@ const OrderDetails: React.FC = (props: any) => {
           {orderInfo.DDZT === '待付款' ? (
             <div className={styles.footer}>
               <span>实付:</span>
-              <span>￥{orderInfo.DDFY}</span>
+              <span>￥{Number(orderInfo.DDFY).toFixed(2)}</span>
               {detail ? (
                 <button className={styles.btn} onClick={handlePay}>
                   去支付

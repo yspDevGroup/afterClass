@@ -27,6 +27,7 @@ import { getTableWidth } from '@/utils/utils';
 import type { TableListParams } from '@/constant';
 import SearchLayout from '@/components/Search/Layout';
 import AddCourseClass from './components/AddCourseClass';
+import AppSKXQTable from './components/AppSKXQTable';
 
 const { Option } = Select;
 
@@ -84,6 +85,10 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [BmLists, setBmLists] = useState<any>();
   // 课程班报名设置数据
   const [JfLists, setJfLists] = useState<any>();
+  // 授课详情弹框
+  const [ModalSKXQ, setModalSKXQ] = useState(false);
+  // 授课班级数据
+  const [SKXQData, setSKXQData] = useState({});
 
   const getData = async (origin?: string) => {
     const opts: TableListParams = {
@@ -210,9 +215,17 @@ const CourseManagement = (props: { location: { state: any } }) => {
     //   message.warning(result.message);
     // }
   };
-  // 关闭报名列表弹框
+  const showModalSKXQ = (record: any) => {
+    setModalSKXQ(true)
+    setSKXQData({
+      id: record.id,
+      BJMC: record.BJMC
+    })
+  }
+  // 关闭报名列表弹框/授课详情弹框
   const handleCancel = () => {
     setIsModalVisible(false);
+    setModalSKXQ(false);
     getData();
   };
   // 查看、编辑、复制课程班操作
@@ -401,6 +414,26 @@ const CourseManagement = (props: { location: { state: any } }) => {
           return <Link to={Url}>已排课</Link>;
         }
         return <>已排课</>;
+      },
+    },
+    {
+      title: '授课详情',
+      dataIndex: 'SKXQ',
+      key: 'SKXQ',
+      align: 'center',
+      width: 100,
+      render: (text: any, record: any) => {
+        return (
+          <a onClick={() => {
+            showModalSKXQ(record)
+          }}>
+            <Tooltip
+              title={`班级总课时为${record?.KSS || 0}课时，已授${record?.ks_count || 0}课时。`}
+            >
+              {record?.ks_count}/{record?.KSS}
+            </Tooltip>
+          </a>
+        );
       },
     },
     {
@@ -670,6 +703,16 @@ const CourseManagement = (props: { location: { state: any } }) => {
           destroyOnClose
         >
           <ApplicantInfoTable clickBjId={clickBjId} actionRefs={actionRef} />
+        </Modal>
+        <Modal
+          title="授课详情列表"
+          visible={ModalSKXQ}
+          onCancel={handleCancel}
+          footer={null}
+          style={{ minWidth: '700px' }}
+          destroyOnClose
+        >
+          <AppSKXQTable SKXQData={SKXQData} />
         </Modal>
 
         {/* <AgentRegistration
