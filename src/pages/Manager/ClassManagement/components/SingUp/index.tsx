@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 15:41:26
- * @LastEditTime: 2021-12-01 10:45:40
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-03 16:35:38
+ * @LastEditors: Wu Zhan
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\pages\Manager\ClassManagement\components\SingUp\index.tsx
  */
@@ -545,7 +545,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
             onChange={(e: any) => {
               setSearchValue(e?.target?.value);
             }}
-            placeholder="Search"
+            placeholder="姓名/学号"
             allowClear
             onSearch={onSearchChange}
           />
