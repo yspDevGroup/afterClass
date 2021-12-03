@@ -1829,6 +1829,18 @@ declare namespace API {
     JZGJBSJId?: string;
     /** 班级ID */
     KHBJSJId?: string;
+    JZGJBSJ?: { id?: string; XM?: string; GH?: string; LXDH?: string; WechatUserId?: string } | any;
+    XXSJPZ?:
+      | {
+          id?: string;
+          KSSJ?: string;
+          JSSJ?: string;
+          KJS?: string | any;
+          TITLE?: string;
+          BZXX?: string;
+        }
+      | any;
+    KHBJSJ?: { id?: string; BJMC?: string } | any;
   };
 
   type CreateKHJSCQ = {
