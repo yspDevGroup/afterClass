@@ -2467,6 +2467,30 @@ declare namespace API {
     KCTAG?: string;
   };
 
+  type KHKCPJ = {
+    id: string;
+    /** 评语 */
+    PY?: string;
+    /** 课后课程ID */
+    KHKCSJId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+  };
+
+  type CreateKHKCPJ = {
+    /** 评语 */
+    PY?: string;
+    /** 课后课程ID */
+    KHKCSJId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+  };
+
+  type UpdateKHKCPJ = {
+    /** 评语 */
+    PY?: string;
+  };
+
   type KHKCSJ = {
     id: string;
     /** 课程名称 */
@@ -2950,8 +2974,8 @@ declare namespace API {
     CQZT?: '出勤' | '请假' | '缺席';
     /** 出勤日期 */
     CQRQ?: string | any;
-    /** 排课ID */
-    KHPKSJId?: string;
+    /** 节次ID */
+    XXSJPZId?: string;
     XSJBSJ?: { id?: string; XH?: string; XM?: string; WechatUserId?: string };
     KHBJSJ?: {
       id?: string;
@@ -2978,8 +3002,8 @@ declare namespace API {
     XSJBSJId?: string;
     /** 班级ID */
     KHBJSJId?: string;
-    /** 排课ID */
-    KHPKSJId?: string;
+    /** 节次ID */
+    XXSJPZId?: string;
   };
 
   type UpdateKHXSCQ = {
@@ -5166,29 +5190,5 @@ declare namespace API {
     /** 时长 */
     SC?: number;
     ZXFAId?: string;
-  };
-
-  type KHKCPJ = {
-    id: string;
-    /** 评语 */
-    PY?: string;
-    /** 课后课程ID */
-    KHKCSJId?: string;
-    /** 学校ID */
-    XXJBSJId?: string;
-  };
-
-  type CreateKHKCPJ = {
-    /** 评语 */
-    PY?: string;
-    /** 课后课程ID */
-    KHKCSJId?: string;
-    /** 学校ID */
-    XXJBSJId?: string;
-  };
-
-  type UpdateKHKCPJ = {
-    /** 评语 */
-    PY?: string;
   };
 }

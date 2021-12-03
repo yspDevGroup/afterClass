@@ -70,10 +70,10 @@ export async function deleteKHTKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khtksj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -88,13 +88,13 @@ export async function updateKHTKSJ(
   body: API.UpdateKHTKSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khtksj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -130,8 +130,6 @@ export async function getAllTK(
 /** 机构端获取学生退课信息 POST /khtksj/getAllTKByAgency */
 export async function getAllTKByAgency(
   body: {
-    /** 退课状态 */
-    ZT?: number[];
     /** 学生姓名 */
     XSXM?: string;
     /** 课程名称 */
