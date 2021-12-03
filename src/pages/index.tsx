@@ -2,12 +2,12 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-10-30 11:38:10
- * @LastEditors: zpl
+ * @LastEditTime: 2021-12-03 10:29:23
+ * @LastEditors: Sissle Lynn
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
-import { envjudge, getLoginPath, getOauthToken, getPageQuery } from '@/utils/utils';
+import { envjudge, getLoginPath, getOauthToken, getPageQuery, gotoLink } from '@/utils/utils';
 import loadImg from '@/assets/loading.gif';
 
 const Index = () => {
@@ -15,11 +15,7 @@ const Index = () => {
 
   const gotoLogin = (suiteID: string, isAdmin: string) => {
     const loginPath = getLoginPath(suiteID, isAdmin, initialState?.buildOptions);
-    if (loginPath.startsWith('http')) {
-      window.location.href = loginPath;
-    } else {
-      history.replace(loginPath);
-    }
+    gotoLink(loginPath);
   };
 
   useEffect(() => {

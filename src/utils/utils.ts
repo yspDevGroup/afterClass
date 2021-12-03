@@ -264,8 +264,20 @@ export const envjudge = () => {
   }
   return 'pc'; // PC
 };
-
-export const getLoginPath = (suiteID: string, isAdmin: string, buildOptions?: BuildOptions) => {
+/**
+ *
+ * @param suiteID
+ * @param isAdmin  是否管理员
+ * @param buildOptions 环境配置信息
+ * @param reLogin 是否强制重登录
+ * @returns
+ */
+export const getLoginPath = (
+  suiteID: string,
+  isAdmin: string,
+  buildOptions?: BuildOptions,
+  reLogin?: boolean,
+) => {
   const { authType = 'none', ssoHost, ENV_host, clientId, clientSecret } = buildOptions || {};
   let loginPath: string;
   switch (authType) {
@@ -282,11 +294,30 @@ export const getLoginPath = (suiteID: string, isAdmin: string, buildOptions?: Bu
       {
         // 为方便本地调试登录，认证回调地址通过参数传递给后台
         const callback = encodeURIComponent(`${ENV_host}/auth_callback/password`);
-        loginPath = `${ssoHost}/oauth2/password?response_type=${authType}&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${callback}`;
+        loginPath = `${ssoHost}/oauth2/password?response_type=${authType}&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${callback}&reLogin=${
+          reLogin || 'false'
+        }`;
       }
       break;
   }
   return loginPath;
+};
+
+/**
+ * 跳转到指定URL连接
+ *
+ * @param {string} url 跳转链接
+ * @param {boolean} onTop 是否在top上跳转
+ */
+export const gotoLink = (url: string, onTop?: boolean) => {
+  if (url.startsWith('http')) {
+    // 外部连接
+    const win = onTop ? window.top || window : window;
+    win.location.href = url;
+  } else {
+    // 本系统内跳转
+    history.push(url);
+  }
 };
 
 /**

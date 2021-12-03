@@ -2,13 +2,13 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2021-10-30 11:24:30
- * @LastEditors: zpl
+ * @LastEditTime: 2021-12-03 11:10:41
+ * @LastEditors: Sissle Lynn
  */
 import React from 'react';
 import { history, useModel } from 'umi';
 import { Button, Result } from 'antd';
-import { getPageQuery, removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
+import { getLoginPath, getPageQuery, gotoLink } from '@/utils/utils';
 
 const NotFind = () => {
   const { initialState } = useModel('@@initialState');
@@ -43,9 +43,13 @@ const NotFind = () => {
           <Button
             type="primary"
             onClick={() => {
-              removeOAuthToken();
-              removeUserInfoCache();
-              history.push('/');
+              const loginPath = getLoginPath(
+                initialState?.buildOptions?.clientId || '',
+                'true',
+                initialState?.buildOptions,
+                true,
+              );
+              gotoLink(loginPath, true);
             }}
           >
             返回首页
