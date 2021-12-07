@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Upload, message, Modal } from 'antd';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import IconFont from '@/components/CustomIcon';
 import { getAuthorization } from '@/utils/utils';
-import upload from '@/assets/upload.png';
 import styles from './index.less';
-
 
 const ImagesUpload = (props: {
   img?: string;
@@ -13,11 +10,11 @@ const ImagesUpload = (props: {
   readonly?: boolean;
 }) => {
   const { img, onValueChange, readonly = false } = props;
-  const [loading, setLoading] = useState<boolean>(false);
-  const [imgUrl, setImgUrl] = useState<string | undefined>(img);
-  const [previewVisible, setPreviewVisible] = useState<boolean>(false);
-  const [previewImage, setPreviewImage] = useState<any>('');
-  const [previewTitle, setPreviewTitle] = useState<any>('');
+  // const [loading, setLoading] = useState<boolean>(false);
+  // const [imgUrl, setImgUrl] = useState<string | undefined>(img);
+  // const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+  // const [previewImage, setPreviewImage] = useState<any>('');
+  // const [previewTitle, setPreviewTitle] = useState<any>('');
   const [fileList, setFileList] = useState<any>([]);
 
   useEffect(() => {
@@ -42,7 +39,10 @@ const ImagesUpload = (props: {
     return isJpgOrPng && isLt5M;
   };
 
-  const handleCancel = () => setPreviewVisible(false);
+  // const handleCancel = () => {
+  //   setPreviewVisible(false);
+  //   setPreviewImage('')
+  // };
 
   const handleChange = (info: any) => {
     console.log('info: ', info);
@@ -58,7 +58,7 @@ const ImagesUpload = (props: {
         let urlStr = '';
         info.fileList.forEach((item: any) => {
           if (item.response?.status === 'ok') {
-            urlStr = urlStr + item.response.data + ';';
+            urlStr = `${urlStr + item.response.data};`;
           }
         })
         onValueChange(urlStr);
@@ -75,20 +75,20 @@ const ImagesUpload = (props: {
     setFileList(info.fileList);
   };
 
-  const handlePreview = async (file: any) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj, () => { });
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-  };
+  // const handlePreview = async (file: any) => {
+  //   if (!file.url && !file.preview) {
+  //     file.preview = await getBase64(file.originFileObj, () => { });
+  //   }
+  //   setPreviewImage(file.response.data);
+  //   setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  //   setPreviewVisible(true);
+  // };
 
   const uploadButton = (
     <div>
       {/* {loading ? <LoadingOutlined /> : <PlusOutlined />} */}
       <div style={{ marginTop: 8 }}>
-        <IconFont className={styles.iconStyle} type={'icon-Union'} style={{ fontSize: 30, color: '#999999' }} />
+        <IconFont className={styles.iconStyle} type={'icon-xiangji'} style={{ fontSize: 30, color: '#999999' }} />
         < p style={{ color: '#999999', fontSize: 10 }}>添加图片</p>
       </div>
     </div >
@@ -105,25 +105,28 @@ const ImagesUpload = (props: {
           authorization: getAuthorization()
         }}
         fileList={fileList}
-        onPreview={handlePreview}
+        // onPreview={handlePreview}
         beforeUpload={handleBeforeUpload}
         onChange={handleChange}
         maxCount={9}
         multiple
+        showUploadList={{ showPreviewIcon: false }}
         isImageUrl={() => {
           return true
         }}
       >
         {fileList.length >= 9 ? null : uploadButton}
       </Upload>
-      <Modal
+      {/* <Modal
         visible={previewVisible}
         title={previewTitle}
         footer={null}
         onCancel={handleCancel}
+        closable={false}
+        className={styles.modal}
       >
-        <img alt="example" style={{ width: '100%' }} src={previewImage} />
-      </Modal>
+        <img style={{ width: '100%' }} src={previewImage || noData} />
+      </Modal> */}
     </>
   );
 };

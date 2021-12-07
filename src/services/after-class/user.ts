@@ -196,10 +196,10 @@ export async function deleteUser(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/user/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -319,10 +319,8 @@ export async function homePageInfo(
         KCTP?: string;
         NJS?: string;
         XQ?: string;
-        NJSName?: string;
-        XQName?: string;
-        ZJSName?: string;
-        FJSName?: string;
+        BMLX?: number;
+        BJLX?: number;
         KHKCSJId?: string;
         KHXSBJs?: { id?: string; ZT?: number }[];
         KHKCSJ?: {
