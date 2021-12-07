@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 15:41:26
- * @LastEditTime: 2021-12-03 16:35:38
+ * @LastEditTime: 2021-12-07 09:14:04
  * @LastEditors: Wu Zhan
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\pages\Manager\ClassManagement\components\SingUp\index.tsx
@@ -225,7 +225,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
       }
       if (type === 'NJ') {
         const res = getSchoolClasses({
-          njId: key,
+          njId: [key],
           XXJBSJId: currentUser?.xxId,
           XNXQId: applicantData?.XNXQId,
           XQSJId: applicantData?.XQSJId,
