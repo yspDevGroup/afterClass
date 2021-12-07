@@ -2,8 +2,8 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-11-18 09:16:07
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-07 11:30:44
+ * @LastEditors: Wu Zhan
  */
 import React, { useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -83,9 +83,9 @@ const TeacherManagement = () => {
     syncWechatStudents(params);
     const res = await syncWechatTeachers(params);
     if (res.status === 'ok') {
-      setstate(true)
+      setstate(true);
       setTimeout(() => {
-        setstate(false)
+        setstate(false);
         message.success('同步完成');
         actionRef.current?.reload();
       }, 1000);
@@ -185,7 +185,7 @@ const TeacherManagement = () => {
 
   return (
     <PageContain>
-      <Spin spinning={state} >
+      <Spin spinning={state}>
         <ProTable<any>
           className={styles.pageContain}
           title={() => (
@@ -249,7 +249,10 @@ const TeacherManagement = () => {
           }}
           // eslint-disable-next-line react/no-unstable-nested-components
           toolBarRender={() => [
-            <Button style={{ color: '#4884ff', borderColor: '#4884ff' }} onClick={syncTeachers}>
+            <Button
+              style={{ color: '#4884ff', borderColor: '#4884ff', marginRight: '8px' }}
+              onClick={syncTeachers}
+            >
               同步企业微信人员信息
             </Button>,
             <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
@@ -289,7 +292,6 @@ const TeacherManagement = () => {
           <p className={styles.uploadDescription}>上传文件需从企业微信管理后台通讯录导出</p>
         </Modal>
       </Spin>
-
     </PageContain>
   );
 };
