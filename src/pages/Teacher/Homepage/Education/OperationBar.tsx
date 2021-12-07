@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-29 15:20:16
- * @LastEditTime: 2021-12-02 11:33:04
+ * @LastEditTime: 2021-12-06 13:52:29
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
@@ -52,11 +52,10 @@ const OperationBar = (props: { courseData: any }) => {
         </p>
         <p className={styles.text}>调/代课</p>
       </Link>
-      {/* <Link
+      <Link
         key="bqd"
         to={{
-          pathname: '/teacher/education/studentEvaluation',
-          state: courseData
+          pathname: '/teacher/education/resign',
         }}
         className={styles.wrapper}>
         <p className={styles.container}>
@@ -65,7 +64,7 @@ const OperationBar = (props: { courseData: any }) => {
           </p>
         </p>
         <p className={styles.text}>补签到</p>
-      </Link> */}
+      </Link>
       <Link
         key="ktfc"
         to={{

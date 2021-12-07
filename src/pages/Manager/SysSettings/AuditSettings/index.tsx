@@ -2,12 +2,12 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-22 15:12:11
- * @LastEditTime: 2021-11-24 15:10:29
+ * @LastEditTime: 2021-12-06 12:27:33
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { Card, Col, Row, Switch } from 'antd';
+import { Card, Col, InputNumber, Row, Switch } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import { createXXSPPZ, getXXSPPZ } from '@/services/after-class/xxsppz';
 
@@ -22,6 +22,12 @@ const AuditSettings = () => {
   const [supply, setSupply] = useState<boolean>(true);
   /** 教师调课是否审批 */
   const [adjust, setAdjust] = useState<boolean>(true);
+  /** 教师补签是否审批 */
+  const [resign, setResign] = useState<boolean>(true);
+  /** 教师补签日期是否可编辑 */
+  const [edit, setEdit] = useState<boolean>(false);
+  const [start, setStart] = useState<number>(20);
+  const [end, setEnd] = useState<number>(29);
   /**
    * 新增或者更新系统审批配置
    * type: 更新参数类型
@@ -116,6 +122,49 @@ const AuditSettings = () => {
                 <Col span={12}>
                   <Card title="学生退款" bordered={false} extra={<Switch checked disabled />} >
                     <p className='active'>学生退款，管理员必须审批，此设置项不可更改</p>
+                  </Card>
+                </Col>
+              </Row>
+            </div>
+          </Col>
+          <Col span={12}>
+            <div>
+              <h3>教师补签流程</h3>
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Card title="教师补签" bordered={false} extra={<Switch checked={resign} onChange={(checked) => {
+                    setResign(checked);
+                  }} />}>
+                    <p className={resign ? 'active' : ''}>开启时：教师补签需管理员审批</p>
+                    <p className={!resign ? 'active' : ''}>关闭时：教师发起补签，系统自动审批，无需管理员操作</p>
+                  </Card>
+                </Col>
+                <Col span={12}>
+                  <Card title="补签时段设置" bordered={false} extra={<Switch checked={edit} onChange={(checked) => {
+                    setEdit(checked);
+                  }} />}>
+                    <p className={edit ? 'active' : ''}>
+                      每月
+                      <InputNumber
+                        disabled={!edit}
+                        size='small'
+                        min={1}
+                        max={31}
+                        value={start}
+                        bordered={false}
+                        onChange={(value) => setStart(value)}
+                      />日到
+                      <InputNumber
+                        disabled={!edit}
+                        size='small'
+                        min={1}
+                        max={31}
+                        value={end}
+                        bordered={false}
+                        onChange={(value) => setEnd(value)}
+                      />日
+                    </p>
+                    {end > 28 ? <p>如果当前月不足{end}天，则补签结束时间为当前月最后一天</p> : ''}
                   </Card>
                 </Col>
               </Row>

@@ -224,6 +224,12 @@
         name: 'substituteCourse',
         component: './Manager/CourseManagements/SubstituteCourse',
       },
+      // 教师补签管理
+      {
+        path: '/audit/resignManagement',
+        name: 'resignManagement',
+        component: './Manager/ResignManagement',
+      },
     ]
   },
   {
@@ -490,6 +496,18 @@
         name: 'substituteList',
         hideInMenu: 'true',
         component: './Teacher/Homepage/Home/Pages/SubstituteList',
+      },
+      {
+        path: '/teacher/education/resign',
+        name: 'resign',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/Resign',
+      },
+      {
+        path: '/teacher/education/dealAbnormal',
+        name: 'dealAbnormal',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/Resign/DealAbnormal',
       },
       {
         path: '/teacher/education/rollcallrecord',

@@ -163,19 +163,19 @@ const StudentsLeave: React.FC = () => {
     },
     {
       title: '请假开始时间',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'KSSJ',
+      key: 'KSSJ',
       align: 'center',
       width: 160,
-      render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.KSSJ}`,
+      render: (_: any, record: any) => `${record.KHJSQJKCs[0].QJRQ}  ${record.KSSJ}`,
     },
     {
       title: '请假结束时间',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'JSSJ',
+      key: 'JSSJ',
       align: 'center',
       width: 160,
-      render: (text: any, record: any) => `${text.KHQJKCs[0].QJRQ}  ${record.JSSJ}`,
+      render: (_: any, record: any) => `${record.KHJSQJKCs[0].QJRQ}  ${record.JSSJ}`,
     },
   ];
   return (
