@@ -17,7 +17,7 @@ const StudentsLeave: React.FC = () => {
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   // 选择学年学期
-  const [curXNXQId, setCurXNXQId] = useState<string>();;
+  const [curXNXQId, setCurXNXQId] = useState<string>();
   // 请假状态
   const [QJZT, setQJZT] = useState<number[]>();
   const [name, setName] = useState<string>();
@@ -39,11 +39,11 @@ const StudentsLeave: React.FC = () => {
     if (curXNXQId) {
       getData();
     }
-  }, [curXNXQId, QJZT, name,])
+  }, [curXNXQId, QJZT, name]);
   const termChange = (val: string) => {
     setName(undefined);
     setCurXNXQId(val);
-  }
+  };
   // table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -77,7 +77,7 @@ const StudentsLeave: React.FC = () => {
       width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
       },
     },
     {
@@ -91,14 +91,10 @@ const StudentsLeave: React.FC = () => {
           <EllipsisHint
             width="100%"
             text={record.KHQJKCs?.map((item: any) => {
-              return (
-                <Tag key={item.KCMC}>
-                  {item.KCMC}
-                </Tag>
-              );
+              return <Tag key={item.KCMC}>{item.KCMC}</Tag>;
             })}
           />
-        )
+        );
       },
       width: 150,
     },
@@ -113,14 +109,10 @@ const StudentsLeave: React.FC = () => {
           <EllipsisHint
             width="100%"
             text={record.KHQJKCs?.map((item: any) => {
-              return (
-                <Tag key={item.KHBJSJ?.id}>
-                  {item.KHBJSJ?.BJMC}
-                </Tag>
-              );
+              return <Tag key={item.KHBJSJ?.id}>{item.KHBJSJ?.BJMC}</Tag>;
             })}
           />
-        )
+        );
       },
       width: 120,
     },
@@ -134,14 +126,10 @@ const StudentsLeave: React.FC = () => {
           <EllipsisHint
             width="100%"
             text={text[0]?.KHBJSJ?.KHBJJs?.map((item: any) => {
-              return (
-                <Tag key={item.JZGJBSJ?.id}>
-                  {item.JZGJBSJ?.XM}
-                </Tag>
-              );
+              return <Tag key={item.JZGJBSJ?.id}>{item.JZGJBSJ?.XM}</Tag>;
             })}
           />
-        )
+        );
       },
       width: 100,
     },
@@ -167,7 +155,7 @@ const StudentsLeave: React.FC = () => {
       key: 'KSSJ',
       align: 'center',
       width: 160,
-      render: (_: any, record: any) => `${record.KHJSQJKCs[0].QJRQ}  ${record.KSSJ}`,
+      render: (_: any, record: any) => `${record.KHQJKCs?.[0]?.QJRQ}  ${record?.KSSJ}`,
     },
     {
       title: '请假结束时间',
@@ -175,7 +163,7 @@ const StudentsLeave: React.FC = () => {
       key: 'JSSJ',
       align: 'center',
       width: 160,
-      render: (_: any, record: any) => `${record.KHJSQJKCs[0].QJRQ}  ${record.JSSJ}`,
+      render: (_: any, record: any) => `${record.KHQJKCs?.[0]?.QJRQ}  ${record.JSSJ}`,
     },
   ];
   return (
@@ -195,13 +183,17 @@ const StudentsLeave: React.FC = () => {
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
             <div>
-              <label htmlFor='type'>学生名称：</label>
-              <Search placeholder="学生名称" allowClear onSearch={(value: string) => {
-                setName(value);
-              }} />
+              <label htmlFor="type">学生名称：</label>
+              <Search
+                placeholder="学生名称"
+                allowClear
+                onSearch={(value: string) => {
+                  setName(value);
+                }}
+              />
             </div>
             <div>
-              <label htmlFor='status'>请假状态：</label>
+              <label htmlFor="status">请假状态：</label>
               <Select
                 style={{ width: 160 }}
                 allowClear
@@ -210,10 +202,10 @@ const StudentsLeave: React.FC = () => {
                   setQJZT(value !== undefined ? [value] : value);
                 }}
               >
-                <Option key='已通过' value={0}>
+                <Option key="已通过" value={0}>
                   已通过
                 </Option>
-                <Option key='已取销' value={1}>
+                <Option key="已取销" value={1}>
                   已取销
                 </Option>
               </Select>
