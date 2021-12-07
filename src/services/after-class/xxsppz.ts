@@ -11,7 +11,7 @@ export async function getXXSPPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { xxId: param0 } = params;
+  const { xxId: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -21,12 +21,14 @@ export async function getXXSPPZ(
       JSTK?: boolean;
       JSDK?: boolean;
       XSTK?: boolean;
-      XSTF?: boolean;
+      JSBQ?: boolean;
+      JSBQ_KSRQ?: string;
+      JSBQ_JSRQ?: string;
     };
     message?: string;
   }>(`/xxsppz/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -42,7 +44,9 @@ export async function createXXSPPZ(body: API.CreateXXSPPZ, options?: { [key: str
       JSTK?: boolean;
       JSDK?: boolean;
       XSTK?: boolean;
-      XSTF?: boolean;
+      JSBQ?: boolean;
+      JSBQ_KSRQ?: string;
+      JSBQ_JSRQ?: string;
     };
     message?: string;
   }>('/xxsppz/create', {
@@ -64,10 +68,10 @@ export async function deleteXXSPPZ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxsppz/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }

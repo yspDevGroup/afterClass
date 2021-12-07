@@ -11,7 +11,7 @@ export async function JYJGSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -21,6 +21,7 @@ export async function JYJGSJ(
       SJBMBM?: string;
       BMJB?: number;
       XZQH?: string;
+      XZQ?: string;
       JGLX?: number;
       BMIPFW?: string;
       BZ?: string;
@@ -30,7 +31,7 @@ export async function JYJGSJ(
     message?: string;
   }>(`/jyjgsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -44,10 +45,10 @@ export async function deleteJYJGSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jyjgsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -63,6 +64,7 @@ export async function createJYJGSJ(body: API.CreateJYJGSJ, options?: { [key: str
       SJBMBM?: string;
       BMJB?: number;
       XZQH?: string;
+      XZQ?: string;
       JGLX?: number;
       BMIPFW?: string;
       BZ?: string;
@@ -117,13 +119,13 @@ export async function updateJYJGSJ(
   body: API.UpdateJYJGSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jyjgsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });

@@ -32,6 +32,7 @@ const Record = () => {
           imgs: imgsArr,
           time: item.createdAt,
           teacherName: item.JZGJBSJ.XM,
+          JSId:item.JZGJBSJId
         };
         allData.push(data);
       });
@@ -73,7 +74,6 @@ const Record = () => {
     setStartY(-1);
     setEndY(-1);
   };
-
   return (
     <div
       className={styles.ClassroomStyle}
@@ -143,7 +143,8 @@ const Record = () => {
                   </div>
                   <p>
                     <span>{moment(item.time).format('HH:mm:ss')}</span>
-                    <Popconfirm
+                    {
+                      currentUser?.JSId === item.JSId ?    <Popconfirm
                       title="您确定要删除此条内容吗？"
                       placement="topRight"
                       onConfirm={async () => {
@@ -170,7 +171,9 @@ const Record = () => {
                       key={item.id}
                     >
                       <a href="#">删除</a>
-                    </Popconfirm>
+                    </Popconfirm>:<></>
+                    }
+
                   </p>
                 </div>
               </div>
