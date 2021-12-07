@@ -104,6 +104,12 @@
         name: 'roomManagement',
         component: './Manager/BasicalSettings/RoomManagement',
       },
+      {
+        // 基本信息维护模块
+        path: '/basicalSettings/basical',
+        name: 'basical',
+        component: './ThirdParty',
+      },
     ],
   },
   {
@@ -230,7 +236,7 @@
         name: 'resignManagement',
         component: './Manager/ResignManagement',
       },
-    ]
+    ],
   },
   {
     // 订单管理
@@ -400,13 +406,13 @@
     path: '/sysSettings',
     icon: 'SlidersOutlined',
     name: 'sysSettings',
-    routes:[
+    routes: [
       {
         path: '/sysSettings/auditSettings',
         name: 'auditSettings',
         component: './Manager/SysSettings/AuditSettings',
-      }
-    ]
+      },
+    ],
   },
   /*** 老师路由 start ***/
   {
@@ -759,7 +765,7 @@
         component: './Information/HomePage/Home/AllNotice',
         hideInMenu: 'true',
       },
-    ]
+    ],
   },
   /*** 移动端数据看板路由 end ***/
   {
