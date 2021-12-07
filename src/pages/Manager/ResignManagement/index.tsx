@@ -1,3 +1,12 @@
+/*
+ * @description:
+ * @author: Sissle Lynn
+ * @Date: 2021-12-06 11:15:21
+ * @LastEditTime: 2021-12-06 12:14:08
+ * @LastEditors: Sissle Lynn
+ */
+import React from 'react';
+import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import { Form, Modal, Radio, Select, Tag, Input, message } from 'antd';
@@ -5,16 +14,19 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import EllipsisHint from '@/components/EllipsisHint';
 import { getAllKHJSQJ, updateKHJSQJ } from '@/services/after-class/khjsqj';
-import { getMainTeacher } from '@/services/after-class/khbjsj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
-import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 
 const { TextArea, Search } = Input;
 const { Option } = Select;
-const TeacherLeave: React.FC = () => {
+
+/**
+ * 补签管理
+ * @returns
+ */
+const ResignManagement = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
@@ -22,7 +34,7 @@ const TeacherLeave: React.FC = () => {
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();
   // 请假状态
-  const [QJZT, setQJZT] = useState<number[]>();
+  const [BQZT, setBQZT] = useState<number[]>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
@@ -45,23 +57,6 @@ const TeacherLeave: React.FC = () => {
         setVisible(false);
         setCurrent(undefined);
         actionRef.current?.reload();
-        // 处理主班请假后课时数发生变更的情况，触发课时重新计算
-        if (ZT === 1) {
-          const bjIds = [].map.call(current.KHJSQJKCs, (item: { KHBJSJId: string }) => {
-            return item.KHBJSJId;
-          });
-          const result = await getMainTeacher({
-            KHBJSJIds: bjIds as string[],
-            JZGJBSJId: current.JZGJBSJId,
-            JSLX: '主教师'
-          });
-          if (result.status === 'ok') {
-            const { data } = result;
-            data?.forEach(async (ele: { KHBJSJId: string; }) => {
-              await getClassDays(ele.KHBJSJId, current.JZGJBSJId, currentUser?.xxId);
-            });
-          };
-        }
       }
     } catch (err) {
       message.error('退课流程出现错误，请联系管理员或稍后重试。');
@@ -72,7 +67,7 @@ const TeacherLeave: React.FC = () => {
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId,
       JSXM: name,
-      QJZT: QJZT || [0, 1, 2],
+      QJZT: BQZT || [0, 1, 2],
       page: 0,
       pageSize: 0,
     };
@@ -85,7 +80,7 @@ const TeacherLeave: React.FC = () => {
     if (curXNXQId) {
       getData();
     }
-  }, [curXNXQId, QJZT, name]);
+  }, [curXNXQId, BQZT, name]);
   // table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -110,6 +105,14 @@ const TeacherLeave: React.FC = () => {
         }
         return record?.JZGJBSJ?.XM;
       },
+    },
+    {
+      title: '补签日期',
+      dataIndex: 'QJRQ',
+      key: 'QJRQ',
+      align: 'center',
+      width: 160,
+      render: (_: any, record: any) => `${record.KHJSQJKCs[0].QJRQ}`,
     },
     {
       title: '课程名称',
@@ -156,23 +159,15 @@ const TeacherLeave: React.FC = () => {
       width: 120,
     },
     {
-      title: '开始时间',
+      title: '补签时间',
       dataIndex: 'KSSJ',
       key: 'KSSJ',
       align: 'center',
       width: 160,
-      render: (_: any, record: any) => `${record.KHJSQJKCs[0].QJRQ}  ${record.KSSJ}`,
+      render: (_: any, record: any) => `${record.KSSJ} - ${record.JSSJ}`,
     },
     {
-      title: '结束时间',
-      dataIndex: 'QJRQ',
-      key: 'QJRQ',
-      align: 'center',
-      width: 160,
-      render: (_: any, record: any) => `${record.KHJSQJKCs[0].QJRQ}  ${record.JSSJ}`,
-    },
-    {
-      title: '请假原因',
+      title: '缺卡原因',
       dataIndex: 'QJYY',
       key: 'QJYY',
       align: 'center',
@@ -258,7 +253,7 @@ const TeacherLeave: React.FC = () => {
     },
   ];
   return (
-    <>
+    <PageContainer>
       <ProTable<any>
         actionRef={actionRef}
         columns={columns}
@@ -283,9 +278,9 @@ const TeacherLeave: React.FC = () => {
               <label htmlFor='status'>审批状态：</label>
               <Select
                 allowClear
-                value={QJZT?.[0]}
+                value={BQZT?.[0]}
                 onChange={(value: number) => {
-                  setQJZT(value !== undefined ? [value] : value);
+                  setBQZT(value !== undefined ? [value] : value);
                 }}
               >
                 <Option key='待审批' value={0}>
@@ -310,7 +305,7 @@ const TeacherLeave: React.FC = () => {
         search={false}
       />
       <Modal
-        title="请假审批"
+        title="补签审批"
         visible={visible}
         onOk={() => {
           form.submit();
@@ -341,7 +336,9 @@ const TeacherLeave: React.FC = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </>
+
+    </PageContainer>
   );
 };
-export default TeacherLeave;
+
+export default ResignManagement;
