@@ -207,6 +207,7 @@ const errorHandler = (error: ResponseError) => {
           const path = location.pathname.toLowerCase();
           const isAuthPage = path.startsWith('/authcallback');
           if (!isAuthPage) {
+            console.log('401');
             history.push(`/403`);
             return;
           }
@@ -252,6 +253,7 @@ export const request: RequestConfig = {
         (ctx.res.message?.includes('Authorization token is invalid') ||
           ctx.res.message?.includes('Invalid Token'))
       ) {
+        removeOAuthToken();
         history.replace('/403?title=认证信息已失效，请重新登录');
       }
     },
