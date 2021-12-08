@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 15:46:41
- * @LastEditTime: 2021-12-08 10:34:40
+ * @LastEditTime: 2021-12-08 17:13:25
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ import { ParentHomeData } from '@/services/local-services/mobileHome';
 import GoBack from '@/components/GoBack';
 import styles from './index.less';
 import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
+import { getAllJSCQBQ } from '@/services/after-class/jscqbq';
 
 const { TextArea } = Input;
 const getCountDays = (curMonth: number) => {
@@ -30,6 +31,7 @@ const DealAbnormal = (props: any) => {
   const userId = currentUser.JSId || testTeacherId;
   const { data } = props.location.state;
   const [dataSource, setDataSource] = useState<any>();
+  const [dealData, setDealData] = useState<any>();
   const [total, setTotal] = useState<number>();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
@@ -41,7 +43,22 @@ const DealAbnormal = (props: any) => {
       setVisible(true);
     }
   };
-  const getData = async ()=>{
+  const getCQData = async () => {
+    const obj = {
+      XXJBSJId: currentUser?.xxId,
+      BQRId: userId,
+      startDate: `${data.year}-${data.month}-01`,
+      endDate: `${data.year}-${data.month}-${getCountDays(data.month)}`,
+      SPZT: [0],
+      page: 0,
+      pageSize: 0,
+    };
+    const resAll = await getAllJSCQBQ(obj);
+    if (resAll.status === 'ok' && resAll.data) {
+      setDealData(resAll.data);
+    }
+  };
+  const getData = async () => {
     const res = await getAllKHJSCQ({
       JZGJBSJId: userId,
       startDate: `${data.year}-${data.month}-01`,
@@ -49,7 +66,7 @@ const DealAbnormal = (props: any) => {
     })
     if (res.status === 'ok' && res.data) {
       setTotal(res.data.length);
-      const newData = res.data.filter((val: { CQZT: string; }) => val.CQZT === '缺席')
+      const newData = res.data.filter((val) => val.CQZT === '缺席');
       const list = [].map.call(newData, ((v: any) => {
         const { KHBJSJ, XXSJPZ, CQRQ } = v;
         return {
@@ -62,7 +79,7 @@ const DealAbnormal = (props: any) => {
       }));
       setDataSource(list);
     }
-  }
+  };
   const handleResign = async () => {
     const res = await CreateJSCQBQ({
       XXJBSJId: currentUser.xxId,
@@ -73,11 +90,11 @@ const DealAbnormal = (props: any) => {
       KHBJSJId: current.id,
       XXSJPZId: current.XXSJPZId
     });
-    if(res.status === 'ok'){
-      getData();
+    if (res.status === 'ok') {
+      getCQData();
       setVisible(false);
       message.success('补签成功');
-    }else{
+    } else {
       message.warning(res.message)
     }
   };
@@ -87,6 +104,7 @@ const DealAbnormal = (props: any) => {
         const oriData = await ParentHomeData('teacher', currentUser?.xxId, currentUser.JSId || testTeacherId);
         const { skkssj } = oriData.data;
         if (skkssj) {
+          getCQData();
           getData();
         }
       }
@@ -113,10 +131,10 @@ const DealAbnormal = (props: any) => {
           className={styles.dealList}
           itemLayout="horizontal"
           dataSource={dataSource}
-          renderItem={(item: any) =>
-          (
-            <List.Item
-              actions={[<a key="list-more" onClick={() => {
+          renderItem={(item: any) => {
+            const curItem = dealData?.find((v: { BQRQ: string; XXSJPZId: string; }) => v.BQRQ === item.date && v.XXSJPZId === item.XXSJPZId);
+            return <List.Item
+              actions={curItem ? [<span key={item.id} style={{color:'#666'}}>处理中</span>] : [<a key={item.id} onClick={() => {
                 setCurrent(item);
                 showModal('option');
               }}>去处理</a>]}
@@ -126,8 +144,7 @@ const DealAbnormal = (props: any) => {
                 description={<p>{item.date} {item.time}</p>}
               />
             </List.Item>
-          )
-          }
+          }}
         />
         <Modal
           title={modalContent === 'option' ? '请选择你要提交的申请单' : '我要补签'}

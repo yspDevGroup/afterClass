@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 11:15:21
- * @LastEditTime: 2021-12-08 14:40:57
+ * @LastEditTime: 2021-12-08 17:21:18
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
@@ -106,34 +106,14 @@ const ResignManagement = () => {
       },
     },
     {
-      title: '补签日期',
-      dataIndex: 'BQRQ',
-      key: 'BQRQ',
+      title: '课程名称',
+      dataIndex: 'KHQJKCs',
+      key: 'KHQJKCs',
       align: 'center',
-      width: 160,
+      ellipsis: true,
+      render: (text: any, record: any) => record.KHBJSJ?.KHKCSJ?.KCMC,
+      width: 150,
     },
-    // {
-    //   title: '课程名称',
-    //   dataIndex: 'KHQJKCs',
-    //   key: 'KHQJKCs',
-    //   align: 'center',
-    //   ellipsis: true,
-    //   render: (text: any, record: any) => {
-    //     return (
-    //       <EllipsisHint
-    //         width="100%"
-    //         text={record.KHJSQJKCs?.map((item: any) => {
-    //           return (
-    //             <Tag key={item.KCMC}>
-    //               {item.KCMC}
-    //             </Tag>
-    //           );
-    //         })}
-    //       />
-    //     )
-    //   },
-    //   width: 150,
-    // },
     {
       title: '课程班',
       dataIndex: 'KHQJKCs',
@@ -141,6 +121,20 @@ const ResignManagement = () => {
       align: 'center',
       ellipsis: true,
       render: (text: any, record: any) => record.KHBJSJ?.BJMC,
+      width: 120,
+    },
+    {
+      title: '补签类型',
+      dataIndex: 'SQNR',
+      key: 'SQNR',
+      align: 'center',
+      width: 90,
+    },
+    {
+      title: '补签日期',
+      dataIndex: 'BQRQ',
+      key: 'BQRQ',
+      align: 'center',
       width: 120,
     },
     {
@@ -195,12 +189,21 @@ const ResignManagement = () => {
       width: 180,
     },
     {
+      title: '申请时间',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      align: 'center',
+      ellipsis: true,
+      width: 160,
+    },
+    {
       title: '审批时间',
       dataIndex: 'updatedAt',
       key: 'updatedAt',
       align: 'center',
       ellipsis: true,
       width: 160,
+      render: (text: any, record: any) => record.SPZT === 0 ? '' : record.updatedAt
     },
     {
       title: '操作',

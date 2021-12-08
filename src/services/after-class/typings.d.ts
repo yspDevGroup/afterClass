@@ -410,22 +410,10 @@ declare namespace API {
   type UpdateJSCQBQ = {
     /** 审批状态 */
     SPZT?: number;
-    /** 被补签日期 */
-    BQRQ?: string;
-    /** 缺卡原因 */
-    QKYY?: string;
-    /** 申请内容 */
-    SQNR?: '出勤' | '请假' | '代课';
     /** 审批说明 */
     SPSM?: string;
     /** 审批教师ID */
     SPRId?: string;
-    /** 补签教师ID */
-    BQRId?: string;
-    /** 课程班id */
-    KHBJSJId?: string;
-    /** 学校时间配置Id */
-    XXSJPZId?: string;
   };
 
   type JXJHSJ = {
