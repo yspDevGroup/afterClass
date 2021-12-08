@@ -24,7 +24,7 @@ import DaiKe from '@/assets/DaiKe.png';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 const Home = () => {
-  const { initialState, refresh } = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const userRef = useRef(null);
   const formRef = React.createRef<any>();
@@ -91,26 +91,29 @@ const Home = () => {
         WWOpenData?.bindAll(document.querySelectorAll('ww-open-data'));
       }
     })();
+    console.log('initialState', initialState);
     if (
-      (initialState?.buildOptions.authType === 'wechat' && !currentUser.XM) ||
+      (initialState?.buildOptions?.authType === 'wechat' && !currentUser.XM) ||
       currentUser.XM === '未知'
     ) {
-      // setIsModalVisible(true);
+      setIsModalVisible(true);
     }
     getTodayData(today);
     getTDKData();
     getAnnoceData();
+    //
   }, [currentUser]);
+  const getParentHomeData = async () => {
+    const oriData = await ParentHomeData(
+      'teacher',
+      currentUser?.xxId,
+      currentUser.JSId || testTeacherId,
+    );
+    const { data } = oriData;
+    setTotalData(data);
+  };
   useEffect(() => {
-    (async () => {
-      const oriData = await ParentHomeData(
-        'teacher',
-        currentUser?.xxId,
-        currentUser.JSId || testTeacherId,
-      );
-      const { data } = oriData;
-      setTotalData(data);
-    })();
+    getParentHomeData();
   }, []);
 
   const onFinish = async (values: { name: string; phone: string }) => {
@@ -120,7 +123,8 @@ const Home = () => {
     );
     if (res.status === 'ok') {
       message.success('提交成功');
-      await refresh();
+      const userInfo = await initialState.fetchUserInfo?.();
+      setInitialState({ ...initialState, currentUser: userInfo });
     } else {
       message.error('提交失败，请联系管理');
       console.warn(res.message);
@@ -233,7 +237,7 @@ const Home = () => {
       {/* 完善个人信息页面 */}
       <Modal
         className={styles.modalStyle}
-        title="首次使用，请完善您的个人信息"
+        title="请激活您的账号"
         forceRender={true}
         visible={isModalVisible}
         centered={true}
@@ -260,7 +264,7 @@ const Home = () => {
             label="手机号"
             rules={[
               {
-                required: true,
+                required: false,
                 pattern: /^1[3|4|5|7|8][0-9]\d{8}$/,
                 message: '请输入您的手机号！',
               },
