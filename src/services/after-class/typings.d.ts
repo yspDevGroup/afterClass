@@ -2186,10 +2186,6 @@ declare namespace API {
     BZ?: string;
     /** 代课备注信息 */
     DKBZ?: string;
-    /** 调课后的上课开始时间 */
-    KSSJ?: string;
-    /** 调课后的上课结束时间 */
-    JSSJ?: string;
     /** 原定上课日期 */
     SKRQ?: string | any;
     /** 调课后的上课日期 */
@@ -2224,10 +2220,6 @@ declare namespace API {
     BZ?: string;
     /** 代课备注信息 */
     DKBZ?: string;
-    /** 调课后的上课开始时间 */
-    KSSJ?: string;
-    /** 调课后的上课结束时间 */
-    JSSJ?: string;
     /** 原定上课日期 */
     SKRQ?: string | any;
     /** 调课后的上课日期 */

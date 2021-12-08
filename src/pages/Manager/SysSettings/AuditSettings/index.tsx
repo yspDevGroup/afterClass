@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /*
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-22 15:12:11
- * @LastEditTime: 2021-12-06 12:27:33
+ * @LastEditTime: 2021-12-07 13:35:34
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -27,21 +28,24 @@ const AuditSettings = () => {
   /** 教师补签日期是否可编辑 */
   const [edit, setEdit] = useState<boolean>(false);
   const [start, setStart] = useState<number>(20);
-  const [end, setEnd] = useState<number>(29);
+  const [end, setEnd] = useState<number>(25);
   /**
    * 新增或者更新系统审批配置
    * type: 更新参数类型
    * val: 更新参数值
    */
-  const updateSettings = async (type?: string, val?: boolean) => {
+  const updateSettings = async (type?: string, val?: any) => {
     await createXXSPPZ({
-      JSQJ: type === 'TLeave' ? val! : tLeave,
+      JSQJ: type === 'TLeave' && val ? val : tLeave,
       XSQJ: false,
-      JSDK: type === 'Supply' ? val! : supply,
-      JSTK: type === 'Adjust' ? val! : adjust,
+      JSDK: type === 'Supply' && val ? val : supply,
+      JSTK: type === 'Adjust' && val ? val : adjust,
       XSTK: true,
       XSTF: true,
-      XXJBSJId: currentUser.xxId
+      XXJBSJId: currentUser.xxId,
+      JSBQ: type === 'Resign' && val ? val : resign,
+      JSBQ_KSRQ: type === 'start' && val ? val.toString() : start.toString(),
+      JSBQ_JSRQ: type === 'end' && val ? val.toString() : end.toString(),
     });
   };
   useEffect(() => {
@@ -50,10 +54,13 @@ const AuditSettings = () => {
         xxId: currentUser.xxId
       });
       if (res.status === 'ok' && res.data) {
-        const { JSQJ, JSDK, JSTK } = res.data;
+        const { JSQJ, JSDK, JSTK, JSBQ, JSBQ_KSRQ, JSBQ_JSRQ, } = res.data;
         setTLeave(JSQJ!);
         setSupply(JSDK!);
         setAdjust(JSTK!);
+        setResign(JSBQ!);
+        JSBQ_KSRQ ? setStart(Number(JSBQ_KSRQ)) : '';
+        JSBQ_JSRQ ? setEnd(Number(JSBQ_JSRQ)) : '';
       } else {
         updateSettings();
       }
@@ -134,6 +141,7 @@ const AuditSettings = () => {
                 <Col span={12}>
                   <Card title="教师补签" bordered={false} extra={<Switch checked={resign} onChange={(checked) => {
                     setResign(checked);
+                    updateSettings('Resign', checked);
                   }} />}>
                     <p className={resign ? 'active' : ''}>开启时：教师补签需管理员审批</p>
                     <p className={!resign ? 'active' : ''}>关闭时：教师发起补签，系统自动审批，无需管理员操作</p>
@@ -152,7 +160,10 @@ const AuditSettings = () => {
                         max={31}
                         value={start}
                         bordered={false}
-                        onChange={(value) => setStart(value)}
+                        onChange={(value) => {
+                          setStart(value);
+                          updateSettings('start', value);
+                        }}
                       />日到
                       <InputNumber
                         disabled={!edit}
@@ -161,7 +172,10 @@ const AuditSettings = () => {
                         max={31}
                         value={end}
                         bordered={false}
-                        onChange={(value) => setEnd(value)}
+                        onChange={(value) => {
+                          setEnd(value);
+                          updateSettings('end', value);
+                        }}
                       />日
                     </p>
                     {end > 28 ? <p>如果当前月不足{end}天，则补签结束时间为当前月最后一天</p> : ''}

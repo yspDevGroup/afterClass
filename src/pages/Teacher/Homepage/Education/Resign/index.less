@@ -75,7 +75,8 @@
       justify-content: space-around;
       align-items: center;
       padding-bottom: 10px;
-      h3{
+
+      h3 {
         text-align: center;
         text-indent: 0;
       }
@@ -98,7 +99,8 @@
       .ant-list-item-action {
         li {
           padding: 0;
-          a{
+
+          a {
             font-size: 14px;
           }
         }
@@ -107,17 +109,64 @@
   }
 }
 
-:global{
-  .ant-modal-title{
-    text-align: center;
-  }
-  .ant-modal-footer{
-    .ant-divider{
-      border-left: 1px solid #666;
+.resignModal {
+  :global {
+    .ant-modal-title {
+      text-align: center;
+      line-height: 16px !important;
     }
-    button{
-      border: none;
-      padding: 0;
+
+    .ant-modal-footer {
+      display: flex;
+      align-items: center;
+      vertical-align: middle;
+      justify-content: space-around;
+
+      .ant-divider {
+        border-left: 1px solid #dde2e8;
+      }
+
+      button {
+        border: none;
+        padding: 0;
+      }
+    }
+  }
+}
+
+.operationModal {
+  width: 70vw !important;
+
+  :global {
+
+    .ant-modal-title {
+      text-align: left;
+      line-height: 16px !important;
+      font-weight: normal !important;
+    }
+
+    .ant-modal-body {
+      padding: 16px 24px;
+
+      li {
+        line-height: 35px;
+
+        a {
+          color: #666;
+        }
+      }
+    }
+
+    .ant-modal-footer {
+      display: flex;
+      align-items: center;
+      vertical-align: middle;
+      justify-content: end;
+
+      button {
+        border: none;
+        padding: 0;
+      }
     }
   }
 }

@@ -2,11 +2,11 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-11-24 17:06:35
+ * @LastEditTime: 2021-12-08 15:52:16
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
-import { Button, DatePicker, Form, Input, message, Select, TimePicker } from 'antd';
+import { Button, DatePicker, Form, Input, message, Select } from 'antd';
 import { useModel, history } from 'umi';
 import ClassCalendar from '../../../ClassCalendar';
 import styles from '../index.less';
@@ -16,6 +16,7 @@ import { freeSpace } from '@/services/after-class/fjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getClassDays } from '@/utils/TimeTable';
+import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -24,9 +25,11 @@ const TkApply = () => {
   const { currentUser } = initialState || {};
   const [FjData, setFjData] = useState<any>();
   const [FieldId, setFieldId] = useState();
-  const [NewRQ, setNewRQ] = useState();
-  const [NewKSSJ, setNewKSSJ] = useState();
-  const [NewJSSJ, setNewJSSJ] = useState();
+  const [NewRQ, setNewRQ] = useState<any>();
+  const [NewKSSJ, setNewKSSJ] = useState<string>();
+  const [NewJSSJ, setNewJSSJ] = useState<string>();
+  const [NewJCId, setNewJCId] = useState<string>();
+  const [jcxx, setJcxx] = useState<any[]>();
   const [state, setstate] = useState(true);
   const [form] = Form.useForm();
   // 课表中选择课程后的数据回显
@@ -48,8 +51,8 @@ const TkApply = () => {
               XXJBSJId: currentUser?.xxId,
               XNXQId: resXNXQ?.current?.id,
               RQ: moment(NewRQ).format('YYYY-MM-DD') || '',
-              KSSJ: moment(NewKSSJ).format('HH:mm') || '',
-              JSSJ: moment(NewJSSJ).format('HH:mm') || '',
+              KSSJ: NewKSSJ || '',
+              JSSJ: NewJSSJ || '',
               page: 0,
               pageSize: 0
             })
@@ -63,7 +66,18 @@ const TkApply = () => {
       }
     )();
   }, [NewRQ, NewKSSJ, NewJSSJ])
-
+  useEffect(() => {
+    (async () => {
+      const opt = {
+        XXJBSJId: currentUser.xxId,
+        type: ["0"],
+      };
+      const res = await getAllXXSJPZ(opt);
+      if (res.status === 'ok' && res.data) {
+        setJcxx(res.data);
+      }
+    })()
+  }, [])
   useEffect(() => {
     (
       async () => {
@@ -83,23 +97,12 @@ const TkApply = () => {
         }
       }
     )()
-  }, [dateData])
-  const onchange = (value: any, type: any) => {
-    if (type === 'TKRQ') {
-      setNewRQ(value)
-    } else if (type === 'KSSJ') {
-      setNewKSSJ(value)
-    } else if (type === 'JSSJ') {
-      setNewJSSJ(value)
-    }
-  }
+  }, [dateData]);
 
   const onFinish = async (values: any) => {
     const newData = {
       LX: 0,
       ZT: 0,
-      KSSJ: moment(values.KSSJ).format('HH:mm'),
-      JSSJ: moment(values.JSSJ).format('HH:mm'),
       SKRQ: dateData?.day,
       TKRQ: moment(values.TKRQ).format('YYYY-MM-DD'),
       BZ: values.BZ,
@@ -108,7 +111,8 @@ const TkApply = () => {
       SKFJId: dateData?.FJId,
       TKFJId: FieldId,
       KHBJSJId: dateData?.bjid,
-      XXSJPZId: dateData?.jcId
+      SKJCId: dateData?.jcId,
+      TKJCId: NewJCId
     }
     const res = await createKHJSTDK(newData);
     if (res.status === 'ok') {
@@ -135,7 +139,7 @@ const TkApply = () => {
   }
 
   return (
-    <div className={styles.leaveForms}>
+    <div className={styles.leaveForm}>
       <div className={styles.wrapper}>
         <p className={styles.title}>
           <span>调课时间</span>
@@ -154,6 +158,84 @@ const TkApply = () => {
           onFinish={onFinish}
         >
           <p className={styles.tkhsj}>调课后时间</p>
+          <div className={styles.kcbjTk}>
+            <Form.Item name='TKRQ' label="日期">
+              <DatePicker
+                disabledDate={disabledDate}
+                inputReadOnly={true}
+                onChange={(value) => {
+                  if (value) {
+                    setNewRQ(value);
+                  }
+                }} />
+            </Form.Item>
+          </div>
+          <div className={styles.kcbjTk}>
+            <Form.Item name='KSSJ' label="节次">
+              <Select
+                onChange={(value: string) => {
+                  if (value) {
+                    setNewJCId(value);
+                    const curJc = jcxx?.find((v) => v.id === value);
+                    if (curJc) {
+                      setNewKSSJ(curJc.KSSJ?.substring(0, 5));
+                      setNewJSSJ(curJc.JSSJ?.substring(0, 5));
+                    }
+                  }
+                }}
+              >
+                {jcxx?.map((value: any) => {
+                  return <Option value={value.id} key={value.id}>
+                    {value?.TITLE}
+                  </Option>
+                })}
+              </Select>
+            </Form.Item>
+          </div>
+          {NewKSSJ ? <div className={styles.kcbjTk}>
+            <Form.Item name='KSSJ' label="上课时间">
+              <div>{NewKSSJ} — {NewJSSJ}</div>
+            </Form.Item>
+          </div> : ''}
+          <div className={styles.verticalTk}>
+            <Form.Item
+              label="调课后场地（请先选择调课日期与节次）"
+              name="TKCD"
+              rules={[{ required: true, message: '请选择调课后场地' }]}
+            >
+              <Select
+                placeholder="请选择调课后场地"
+                onChange={onGenderChange}
+                allowClear
+                showSearch
+              >
+                {
+                  FjData?.map((value: any) => {
+                    return <Option value={value.FJMC} key={value.id}>
+                      {value?.FJMC}
+                    </Option>
+                  })
+                }
+              </Select>
+            </Form.Item>
+          </div>
+          <div className={styles.reasonTk}>
+            <Form.Item
+              label="调课原因"
+              name="BZ"
+              rules={[{ required: true, message: '请输入调课原因!' }]}
+            >
+              <TextArea rows={4} maxLength={100} placeholder="请输入" />
+            </Form.Item>
+          </div>
+        </Form>
+        {/* <Form
+          name="administrative"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          autoComplete="off"
+        >
+          <p className={styles.tkhsj}>调课后时间</p>
           <Form.Item name='TKRQ' label="日期">
             <DatePicker
               disabledDate={disabledDate}
@@ -162,42 +244,32 @@ const TkApply = () => {
                 onchange(value, 'TKRQ')
               }} />
           </Form.Item>
-          <div className={styles.TimeInterval}>
-            <Form.Item name='KSSJ' label="时段">
-              <TimePicker inputReadOnly={true} format="HH:mm" onChange={(value) => {
-                onchange(value, 'KSSJ')
-              }} />
+          <div className={styles.kcbjTk}>
+            <Form.Item name='BJMC' label="课程">
+              <Select
+                placeholder="请选择调课课程"
+                allowClear
+                showSearch
+              >
+                {
+                  FjData?.map((value: any) => {
+                    return <Option value={value.FJMC} key={value.id}>
+                      {value?.FJMC}
+                    </Option>
+                  })
+                }
+              </Select>
             </Form.Item>
-            <div className={styles.right}>
-              <span>-</span>
-              <Form.Item name='JSSJ' >
-                <TimePicker inputReadOnly={true} format="HH:mm" onChange={(value) => {
-                  onchange(value, 'JSSJ')
-                }} />
-              </Form.Item>
-            </div>
-
           </div>
-
           <Form.Item
-            label="调课后场地（请先选择时间）"
+            label="调课后课程安排"
             name="TKCD"
-            rules={[{ required: true, message: '请选择调课后场地' }]}
           >
-            <Select
-              placeholder="请选择调课后场地"
-              onChange={onGenderChange}
-              allowClear
-              showSearch
-            >
-              {
-                FjData?.map((value: any) => {
-                  return <Option value={value.FJMC} key={value.id}>
-                    {value?.FJMC}
-                  </Option>
-                })
-              }
-            </Select>
+            <div className={styles.kcapTk}>
+              <span>上课时间：第二节（16：00-17：00）</span>
+              <br />
+              <span>上课地点：1号教学楼301教室</span>
+            </div>
           </Form.Item>
           <Form.Item
             label="调课原因"
@@ -206,7 +278,7 @@ const TkApply = () => {
           >
             <TextArea rows={4} maxLength={100} placeholder="请输入" />
           </Form.Item>
-        </Form>
+        </Form> */}
       </div>
       <div className={styles.fixedBtn}>
         <Button onClick={() => {

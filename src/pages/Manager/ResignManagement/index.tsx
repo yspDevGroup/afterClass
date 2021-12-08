@@ -2,22 +2,21 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 11:15:21
- * @LastEditTime: 2021-12-06 12:14:08
+ * @LastEditTime: 2021-12-08 14:40:57
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Form, Modal, Radio, Select, Tag, Input, message } from 'antd';
+import { Form, Modal, Radio, Select, Input, message } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import EllipsisHint from '@/components/EllipsisHint';
-import { getAllKHJSQJ, updateKHJSQJ } from '@/services/after-class/khjsqj';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
+import { getAllJSCQBQ, updateJSCQBQ } from '@/services/after-class/jscqbq';
 
 const { TextArea, Search } = Input;
 const { Option } = Select;
@@ -33,7 +32,7 @@ const ResignManagement = () => {
   const [dataSource, setDataSource] = useState<any[]>([]);
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();
-  // 请假状态
+  // 状态
   const [BQZT, setBQZT] = useState<number[]>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
@@ -43,37 +42,37 @@ const ResignManagement = () => {
     setName(undefined);
     setCurXNXQId(val);
   };
+  const getData = async () => {
+    const obj = {
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId,
+      BQRXM: name,
+      SPZT: BQZT,
+      page: 0,
+      pageSize: 0,
+    };
+    const resAll = await getAllJSCQBQ(obj);
+    if (resAll.status === 'ok' && resAll.data) {
+      setDataSource(resAll.data);
+    }
+  };
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateKHJSQJ({ id: current?.id },
+      const res = await updateJSCQBQ({ id: current?.id },
         {
-          QJZT: ZT,
-          BZ,
-          SPJSId: currentUser?.JSId || testTeacherId,
+          SPZT: ZT,
+          SPSM: BZ,
+          SPRId: currentUser?.JSId || testTeacherId,
         });
       if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);
         setCurrent(undefined);
-        actionRef.current?.reload();
+        getData();
       }
     } catch (err) {
-      message.error('退课流程出现错误，请联系管理员或稍后重试。');
-    }
-  };
-  const getData = async () => {
-    const obj = {
-      XXJBSJId: currentUser?.xxId,
-      XNXQId: curXNXQId,
-      JSXM: name,
-      QJZT: BQZT || [0, 1, 2],
-      page: 0,
-      pageSize: 0,
-    };
-    const resAll = await getAllKHJSQJ(obj);
-    if (resAll.status === 'ok' && resAll.data) {
-      setDataSource(resAll.data.rows)
+      message.error('补签流程出现错误，请联系管理员或稍后重试。');
     }
   };
   useEffect(() => {
@@ -99,85 +98,63 @@ const ResignManagement = () => {
       width: 80,
       fixed: 'left',
       render: (_text: any, record: any) => {
-        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
+        const showWXName = record?.BQR?.XM === '未知' && record?.BQR?.WechatUserId;
         if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
+          return <WWOpenDataCom type="userName" openid={record?.BQR?.WechatUserId} />;
         }
-        return record?.JZGJBSJ?.XM;
+        return record?.BQR?.XM;
       },
     },
     {
       title: '补签日期',
-      dataIndex: 'QJRQ',
-      key: 'QJRQ',
+      dataIndex: 'BQRQ',
+      key: 'BQRQ',
       align: 'center',
       width: 160,
-      render: (_: any, record: any) => `${record.KHJSQJKCs[0].QJRQ}`,
     },
-    {
-      title: '课程名称',
-      dataIndex: 'KHQJKCs',
-      key: 'KHQJKCs',
-      align: 'center',
-      ellipsis: true,
-      render: (text: any, record: any) => {
-        return (
-          <EllipsisHint
-            width="100%"
-            text={record.KHJSQJKCs?.map((item: any) => {
-              return (
-                <Tag key={item.KCMC}>
-                  {item.KCMC}
-                </Tag>
-              );
-            })}
-          />
-        )
-      },
-      width: 150,
-    },
+    // {
+    //   title: '课程名称',
+    //   dataIndex: 'KHQJKCs',
+    //   key: 'KHQJKCs',
+    //   align: 'center',
+    //   ellipsis: true,
+    //   render: (text: any, record: any) => {
+    //     return (
+    //       <EllipsisHint
+    //         width="100%"
+    //         text={record.KHJSQJKCs?.map((item: any) => {
+    //           return (
+    //             <Tag key={item.KCMC}>
+    //               {item.KCMC}
+    //             </Tag>
+    //           );
+    //         })}
+    //       />
+    //     )
+    //   },
+    //   width: 150,
+    // },
     {
       title: '课程班',
       dataIndex: 'KHQJKCs',
       key: 'KHQJKCs_BJMC',
       align: 'center',
       ellipsis: true,
-      render: (text: any, record: any) => {
-        return (
-          <EllipsisHint
-            width="100%"
-            text={record.KHJSQJKCs?.map((item: any) => {
-              return (
-                <Tag key={item.KHBJSJ?.id}>
-                  {item.KHBJSJ?.BJMC}
-                </Tag>
-              );
-            })}
-          />
-        )
-      },
+      render: (text: any, record: any) => record.KHBJSJ?.BJMC,
       width: 120,
     },
     {
-      title: '补签时间',
-      dataIndex: 'KSSJ',
-      key: 'KSSJ',
-      align: 'center',
-      width: 160,
-      render: (_: any, record: any) => `${record.KSSJ} - ${record.JSSJ}`,
-    },
-    {
       title: '缺卡原因',
-      dataIndex: 'QJYY',
-      key: 'QJYY',
+      dataIndex: 'QKYY',
+      key: 'QKYY',
       align: 'center',
       ellipsis: true,
       width: 180,
     },
     {
       title: '审批状态',
-      dataIndex: 'QJZT',
-      key: 'QJZT',
+      dataIndex: 'SPZT',
+      key: 'SPZT',
       valueType: 'select',
       width: 80,
       align: 'center',
@@ -196,23 +173,23 @@ const ResignManagement = () => {
     },
     {
       title: '审批人',
-      dataIndex: 'SPJS',
-      key: 'SPJS',
+      dataIndex: 'SPR',
+      key: 'SPR',
       align: 'center',
       ellipsis: true,
       width: 100,
       render: (_text: any, record: any) => {
-        const showWXName = record?.SPJS?.XM === '未知' && record?.SPJS?.WechatUserId;
+        const showWXName = record?.SPR?.XM === '未知' && record?.SPR?.WechatUserId;
         if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.SPJS?.WechatUserId} />;
+          return <WWOpenDataCom type="userName" openid={record?.SPR?.WechatUserId} />;
         }
-        return record?.SPJS?.XM;
+        return record?.SPR?.XM;
       },
     },
     {
       title: '审批说明',
-      dataIndex: 'BZ',
-      key: 'BZ',
+      dataIndex: 'SPSM',
+      key: 'SPSM',
       align: 'center',
       ellipsis: true,
       width: 180,
@@ -235,7 +212,7 @@ const ResignManagement = () => {
       render: (_, record: any) => {
         return (
           <>
-            {record.QJZT === 0 ? (
+            {record.SPZT === 0 ? (
               <a
                 onClick={() => {
                   setCurrent(record);
@@ -312,6 +289,7 @@ const ResignManagement = () => {
         }}
         onCancel={() => {
           setVisible(false);
+          form.resetFields();
           setCurrent(undefined);
         }}
         okText="确认"

@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-11-23 11:48:19
+ * @LastEditTime: 2021-12-08 15:49:12
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -34,9 +34,9 @@ const DkApply = () => {
   useEffect(() => {
     (
       async () => {
-        if(dateData){
+        if (dateData) {
           const res = await getIgnoreTeacherByClassesId({
-            KHBJSJId:dateData?.bjid,
+            KHBJSJId: dateData?.bjid,
             XXJBSJId: currentUser?.xxId,
             page: 0,
             pageSize: 0
@@ -44,7 +44,7 @@ const DkApply = () => {
           if (res.status === 'ok') {
             setJsData(res.data?.rows)
           }
-        }else{
+        } else {
           setJsData([])
         }
       }
@@ -58,10 +58,10 @@ const DkApply = () => {
       BZ: values.QJYY,
       XXJBSJId: currentUser.xxId,
       SKJSId: currentUser.JSId || testTeacherId,
-      SKFJId:dateData?.FJId,
+      SKFJId: dateData?.FJId,
       SKRQ: dateData?.day,
       KHBJSJId: dateData?.bjid,
-      XXSJPZId: dateData?.jcId
+      SKJCId: dateData?.jcId
     }
     const res = await createKHJSTDK(newData);
     if (res.status === 'ok') {
@@ -92,37 +92,41 @@ const DkApply = () => {
           form={form}
           onFinish={onFinish}
         >
-          <Form.Item
-            label="代课教师（请先选择代课课程）"
-            name="DKJS"
-            rules={[{ required: true, message: '请选择代课教师' }]}
-          >
-            <Select
-              placeholder="请选择代课教师"
-              onChange={onGenderChange}
-              allowClear
-              showSearch
+          <div className={styles.verticalTk}>
+            <Form.Item
+              label="代课教师（请先选择代课课程）"
+              name="DKJS"
+              rules={[{ required: true, message: '请选择代课教师' }]}
             >
-              {
-                JsData?.map((value) => {
-                  const showWXName = value?.XM === '未知' && value?.WechatUserId;
-                  return <Option value={value.XM} key={value.id}>
-                    {
-                      showWXName ? <WWOpenDataCom type="userName" openid={value!.WechatUserId!} /> :
-                        <>{value.XM}</>
-                    }
-                  </Option>
-                })
-              }
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label="代课原因"
-            name="QJYY"
-            rules={[{ required: true, message: '请输入代课原因!' }]}
-          >
-            <TextArea rows={4} maxLength={100} placeholder="请输入" />
-          </Form.Item>
+              <Select
+                placeholder="请选择代课教师"
+                onChange={onGenderChange}
+                allowClear
+                showSearch
+              >
+                {
+                  JsData?.map((value) => {
+                    const showWXName = value?.XM === '未知' && value?.WechatUserId;
+                    return <Option value={value.XM} key={value.id}>
+                      {
+                        showWXName ? <WWOpenDataCom type="userName" openid={value!.WechatUserId!} /> :
+                          <>{value.XM}</>
+                      }
+                    </Option>
+                  })
+                }
+              </Select>
+            </Form.Item>
+          </div>
+          <div className={styles.reasonTk}>
+            <Form.Item
+              label="代课原因"
+              name="QJYY"
+              rules={[{ required: true, message: '请输入代课原因!' }]}
+            >
+              <TextArea rows={4} maxLength={100} placeholder="请输入" />
+            </Form.Item>
+          </div>
         </Form>
       </div>
       <div className={styles.fixedBtn}>

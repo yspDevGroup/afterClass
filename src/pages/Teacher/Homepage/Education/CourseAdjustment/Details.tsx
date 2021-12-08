@@ -1,5 +1,5 @@
 import GoBack from '@/components/GoBack';
-import { Button, Input, message, Switch } from 'antd';
+import { Button, Divider, Input, message, Switch } from 'antd';
 import styles from './index.less';
 import { history, useModel } from 'umi';
 import { useEffect, useState } from 'react';
@@ -71,13 +71,22 @@ const Details = (props: any) => {
               )}
               教师的{Datas?.LX === 0 ? '调课' : '代课'}申请
             </p>
+            <p>课程：{Datas.KHBJSJ?.KHKCSJ?.KCMC} — {Datas.KHBJSJ?.BJMC}</p>
             <p>
-              时间：{moment(Datas?.SKRQ).format('MM月DD日')}， {Datas.XXSJPZ?.KSSJ.substring(0, 5)}-
-              {Datas.XXSJPZ?.JSSJ.substring(0, 5)}
+              {`${Datas?.LX === 0 ? '原上课' : ''}时间：${moment(Datas?.SKRQ).format('MM月DD日')}，${Datas.SKJC?.TITLE}【${Datas.SKJC?.KSSJ.substring(0, 5)}-
+              ${Datas.SKJC?.JSSJ.substring(0, 5)}】`}
             </p>
-            <p>地点：{Datas?.SKFJ?.FJMC} </p>
-            <p>课程：{Datas.KHBJSJ?.KHKCSJ?.KCMC}</p>
-            <p>原因：{Datas.BZ}</p>
+            <p>{Datas?.LX === 0 ? '原上课' : ''}地点：{Datas?.SKFJ?.FJMC} </p>
+            {Datas?.LX === 0 ? <>
+            <Divider />
+              <p>
+                调课后时间：{moment(Datas?.TKRQ).format('MM月DD日')}，{Datas.TKJC?.TITLE}【{Datas.TKJC?.KSSJ.substring(0, 5)}-
+                {Datas.TKJC?.JSSJ.substring(0, 5)}】
+              </p>
+            <p>{Datas?.LX === 0 ? '调课后' : ''}地点：{Datas?.TKFJ?.FJMC} </p>
+              </>
+              : ''}
+            <p>{Datas?.LX === 0 ? '调课' : '代课'}原因：{Datas.BZ}</p>
           </div>
           <div className={styles.process}>
             <p className={styles.title}>流程</p>

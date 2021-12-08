@@ -183,3 +183,45 @@ export async function bulkCreateAgency(
     ...(options || {}),
   });
 }
+
+/** 学校新建教师 POST /sso/createTeacher */
+export async function createTeacher(
+  body: {
+    /** 学校代码 */
+    corpID?: string;
+    /** 企微用户ID */
+    UserId?: string;
+    sign?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/sso/createTeacher', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 学校删除教师 POST /sso/deleteTeacher */
+export async function deleteTeacher(
+  body: {
+    /** 学校代码 */
+    corpID?: string;
+    /** 企微用户ID */
+    UserId?: string;
+    sign?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/sso/deleteTeacher', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

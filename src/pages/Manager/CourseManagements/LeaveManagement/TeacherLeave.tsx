@@ -317,6 +317,7 @@ const TeacherLeave: React.FC = () => {
         }}
         onCancel={() => {
           setVisible(false);
+          form.resetFields();
           setCurrent(undefined);
         }}
         okText="确认"

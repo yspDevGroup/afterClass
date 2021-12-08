@@ -11,12 +11,12 @@ export async function getClasses(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; data?: API.BJSJ[]; message?: string }>(
     `/bjsj/classesByTeacher/${param0}`,
     {
       method: 'GET',
-      params: { ...queryParams },
+      params: { ...params },
       ...(options || {}),
     },
   );
@@ -31,7 +31,7 @@ export async function getJZGJBSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -95,7 +95,7 @@ export async function getJZGJBSJ(
     message?: string;
   }>(`/jzgjbsj/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -109,10 +109,10 @@ export async function deleteJZGJBSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jzgjbsj/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -232,13 +232,13 @@ export async function updateJZGJBSJ(
   body: API.UpdateJZGJBSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/jzgjbsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });
@@ -253,7 +253,7 @@ export async function getPortrait(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -372,7 +372,7 @@ export async function getPortrait(
     message?: string;
   }>(`/jzgjbsj/portrait/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
