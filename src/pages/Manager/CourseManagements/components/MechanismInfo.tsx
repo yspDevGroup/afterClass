@@ -19,7 +19,7 @@ const MechanismInfo = (props: {
     <Drawer
       title="机构详情"
       placement="right"
-      closable={false}
+      // closable={false}
       width={480}
       onClose={onMechanismInfoClose}
       visible={visibleMechanismInfo}

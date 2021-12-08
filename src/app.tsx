@@ -57,16 +57,17 @@ export async function getInitialState(): Promise<InitialState> {
     return undefined;
   };
   const userInfoCache = getUserCache();
-  if (window.location.pathname !== '/' && userInfoCache) {
-    return {
-      fetchUserInfo,
-      currentUser: userInfoCache,
-      settings: {},
-      buildOptions,
-    };
-  }
+  // if (window.location.pathname !== '/' && userInfoCache) {
+  //   return {
+  //     fetchUserInfo,
+  //     currentUser: userInfoCache,
+  //     settings: {},
+  //     buildOptions,
+  //   };
+  // }
   return {
     fetchUserInfo,
+    currentUser: userInfoCache,
     settings: {},
     buildOptions,
   };
@@ -94,6 +95,7 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
         !path.startsWith(authCallbackPath) &&
         !path.startsWith('/40')
       ) {
+        console.log('initialState', initialState.currentUser);
         history.push('/403');
       }
       (async () => {
@@ -102,21 +104,21 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
     },
     links: isDev
       ? [
-        <Link to="/umi/plugin/openapi" target="_blank">
-          <LinkOutlined />
-          <span>openAPI 文档</span>
-        </Link>,
-        <Link to="/~docs" target="_blank">
-          <BookOutlined />
-          <span>业务组件文档</span>
-        </Link>,
-        <Version />,
-      ]
+          <Link to="/umi/plugin/openapi" target="_blank">
+            <LinkOutlined />
+            <span>openAPI 文档</span>
+          </Link>,
+          <Link to="/~docs" target="_blank">
+            <BookOutlined />
+            <span>业务组件文档</span>
+          </Link>,
+          <Version />,
+        ]
       : [
-        <Version
-          style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}
-        />,
-      ],
+          <Version
+            style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}
+          />,
+        ],
     collapsedButtonRender: false,
     onMenuHeaderClick: (e: React.MouseEvent<HTMLDivElement>) => {
       console.log(e.target);
@@ -169,7 +171,7 @@ const codeMessage = {
  * @see https://beta-pro.ant.design/docs/request-cn
  */
 const errorHandler = (error: ResponseError) => {
-  const { response } = error;
+  const { response, data } = error;
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
@@ -180,6 +182,40 @@ const errorHandler = (error: ResponseError) => {
     //   message: `请求错误 ${status}: ${url}`,
     //   description: errorText,
     // });
+  }
+  if (response?.status) {
+    const errorText = codeMessage[response.status] || response.statusText;
+    switch (response.status) {
+      // 单独处理400分支
+      case 400:
+        if (data.error && data.error_description) {
+          switch (data.error) {
+            case 'invalid_grant':
+              message.error('用户名或密码错误');
+              break;
+            default:
+              message.error(data.error_description);
+              break;
+          }
+        } else {
+          message.error(errorText);
+        }
+        break;
+      case 401:
+        {
+          removeOAuthToken();
+          const path = location.pathname.toLowerCase();
+          const isAuthPage = path.startsWith('/authcallback');
+          if (!isAuthPage) {
+            history.push(`/403`);
+            return;
+          }
+        }
+        break;
+      default:
+        message.error(errorText);
+        break;
+    }
   }
 
   if (!response) {
