@@ -2,13 +2,13 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2021-12-03 11:10:41
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-08 15:04:27
+ * @LastEditors: Wu Zhan
  */
 import React from 'react';
 import { history, useModel } from 'umi';
 import { Button, Result } from 'antd';
-import { getLoginPath, getPageQuery, gotoLink } from '@/utils/utils';
+import { getLoginPath, getOauthToken, getPageQuery, gotoLink } from '@/utils/utils';
 
 const NotFind = () => {
   const { initialState } = useModel('@@initialState');
@@ -43,13 +43,19 @@ const NotFind = () => {
           <Button
             type="primary"
             onClick={() => {
-              const loginPath = getLoginPath(
-                initialState?.buildOptions?.clientId || '',
-                'true',
-                initialState?.buildOptions,
-                true,
-              );
-              gotoLink(loginPath, true);
+              const { ysp_access_token } = getOauthToken();
+              console.log('ysp_access_token ', ysp_access_token);
+              if (!ysp_access_token || !initialState?.currentUser) {
+                const loginPath = getLoginPath(
+                  initialState?.buildOptions?.clientId || '',
+                  'true',
+                  initialState?.buildOptions,
+                  true,
+                );
+                gotoLink(loginPath, true);
+              } else {
+                history.push('/');
+              }
             }}
           >
             返回首页
