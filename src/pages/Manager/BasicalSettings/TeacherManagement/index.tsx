@@ -2,7 +2,7 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-12-07 11:30:44
+ * @LastEditTime: 2021-12-08 10:52:19
  * @LastEditors: Wu Zhan
  */
 import React, { useRef, useState } from 'react';
@@ -17,7 +17,7 @@ import PageContain from '@/components/PageContainer';
 
 import { getAuthorization, getTableWidth } from '@/utils/utils';
 import { deleteJZGJBSJ, getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
-import { syncWechatStudents, syncWechatTeachers } from '@/services/after-class/upload';
+// import { syncWechatStudents, syncWechatTeachers } from '@/services/after-class/upload';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 import styles from './index.less';
@@ -73,24 +73,24 @@ const TeacherManagement = () => {
     }
   };
 
-  const syncTeachers = async () => {
-    const params = {
-      suiteID: currentUser.suiteID,
-      CorpId: currentUser.CorpId,
-      xxId: currentUser.xxId,
-    };
+  // const syncTeachers = async () => {
+  //   const params = {
+  //     suiteID: currentUser.suiteID,
+  //     CorpId: currentUser.CorpId,
+  //     xxId: currentUser.xxId,
+  //   };
 
-    syncWechatStudents(params);
-    const res = await syncWechatTeachers(params);
-    if (res.status === 'ok') {
-      setstate(true);
-      setTimeout(() => {
-        setstate(false);
-        message.success('同步完成');
-        actionRef.current?.reload();
-      }, 1000);
-    }
-  };
+  //   syncWechatStudents(params);
+  //   const res = await syncWechatTeachers(params);
+  //   if (res.status === 'ok') {
+  //     setstate(true);
+  //     setTimeout(() => {
+  //       setstate(false);
+  //       message.success('同步完成');
+  //       actionRef.current?.reload();
+  //     }, 1000);
+  //   }
+  // };
 
   const columns: ProColumns<any>[] = [
     {
@@ -219,6 +219,7 @@ const TeacherManagement = () => {
             filter,
           ): Promise<Partial<RequestData<any>>> => {
             // 表单搜索项会从 params 传入，传递给后端接口。
+            setstate(true);
             const opts: TableListParams = {
               ...params,
               sorter: sort && Object.keys(sort).length ? sort : undefined,
@@ -229,12 +230,14 @@ const TeacherManagement = () => {
               opts,
             );
             if (res.status === 'ok') {
+              setstate(false);
               return {
                 data: res.data?.rows,
                 total: res.data?.count,
                 success: true,
               };
             }
+            setstate(false);
             return {};
           }}
           options={{
@@ -249,12 +252,12 @@ const TeacherManagement = () => {
           }}
           // eslint-disable-next-line react/no-unstable-nested-components
           toolBarRender={() => [
-            <Button
-              style={{ color: '#4884ff', borderColor: '#4884ff', marginRight: '8px' }}
-              onClick={syncTeachers}
-            >
-              同步企业微信人员信息
-            </Button>,
+            // <Button
+            //   style={{ color: '#4884ff', borderColor: '#4884ff', marginRight: '8px' }}
+            //   onClick={syncTeachers}
+            // >
+            //   同步企业微信人员信息
+            // </Button>,
             <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
               <VerticalAlignBottomOutlined /> 导入
             </Button>,
