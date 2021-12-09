@@ -719,7 +719,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                   setUploadVisible(true);
                 }}
               >
-                报名导入
+                导入报名
               </Button>,
               <Button
                 type="primary"
@@ -799,7 +799,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         onsetKHXSBJs={onsetKHXSBJs}
       />
       <Modal
-        title="导入场地"
+        title="导入报名"
         destroyOnClose
         width="35vw"
         visible={uploadVisible}
