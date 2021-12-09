@@ -225,3 +225,27 @@ export async function deleteTeacher(
     ...(options || {}),
   });
 }
+
+/** 查询行政区信息 POST /sso/getAdministrative */
+export async function getAdministrative(
+  body: {
+    /** 查询类型,省市区 */
+    type?: 'province' | 'city' | 'region';
+    /** 行政区划码 */
+    code?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: { id?: string; lx?: string; dm?: string; mc?: string }[] };
+    message?: string;
+  }>('/sso/getAdministrative', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

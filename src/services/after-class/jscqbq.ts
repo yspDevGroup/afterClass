@@ -67,9 +67,11 @@ export async function getAllJSCQBQ(
     /** 学校基本数据id */
     XXJBSJId?: string;
     /** 审批状态 */
-    SPZT?: any[];
+    SPZT?: number[];
     /** 补签人id */
     BQRId?: string;
+    /** 补签人姓名 */
+    BQRXM?: string;
     /** 审批人id */
     SPRId?: string;
     /** 学年学期id */
