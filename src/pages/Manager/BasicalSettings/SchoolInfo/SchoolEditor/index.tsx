@@ -7,6 +7,7 @@ import PageContainer from '@/components/PageContainer';
 import CustomForm from '@/components/CustomForm';
 import type { FormItemType } from '@/components/CustomForm/interfice';
 import { updateXXJBSJ } from '@/services/after-class/xxjbsj';
+import { getAdministrative } from '@/services/after-class/sso';
 
 const { Option } = Select;
 const formItemLayout = {
@@ -52,21 +53,27 @@ const SchoolEditor = (props: any) => {
   const onSubmit = () => {
     editForm?.submit();
   };
-  const requestData = () => {
-    const ajax = new XMLHttpRequest();
-    ajax.open(
-      'get',
-      '//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/100000_province.json',
-    );
-    ajax.send();
-    // eslint-disable-next-line func-names
-    ajax.onreadystatechange = function () {
-      if (ajax.readyState === 4 && ajax.status === 200) {
-        const data = JSON.parse(ajax.responseText);
-        setCities(data.rows);
-      }
-    };
+
+  //获取区域内容
+  const getRegion = async (type: 'province' | 'city' | 'region', code: string) => {
+    const response = await getAdministrative({
+      type,
+      code,
+    });
+    if (response?.status === 'ok') {
+      console.log('response', response);
+      return response?.data?.rows;
+    } else {
+      message.error(response.message);
+    }
+    return [];
   };
+
+  const requestData = async () => {
+    const list = await getRegion('province', '');
+    setCities(list);
+  };
+
   useEffect(() => {
     requestData();
   }, []);
@@ -105,61 +112,39 @@ const SchoolEditor = (props: any) => {
   const onCancelClick = () => {
     history.go(-1);
   };
-  const handleChange = (type: string, value: any) => {
+
+  //城市
+  const handleChange = async (type: string, value: any) => {
+    console.log('value', value);
+
     if (type === 'cities') {
-      const ajax = new XMLHttpRequest();
-      ajax.open(
-        'get',
-        `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${value.value}_city.json`,
-      );
-      ajax.send();
-      ajax.onreadystatechange = function () {
-        if (ajax.readyState === 4 && ajax.status === 200) {
-          if (value.value === '810000' || value.value === '820000' || value.value === '710000') {
-            setShowCity(false);
-            setCityAdcode(value.value);
-          } else {
-            setCityAdcode(undefined);
-            setShowCity(true);
-          }
-          const data = JSON.parse(ajax.responseText);
-          setSecondCity(data.rows);
-          setProvinceVal({
-            value: value.value,
-            label: value.label,
-            key: value.value,
-          });
-          setCityVal({});
-          setCountyVal({});
-          setCounty([]);
-        }
-      };
+      const list = await getRegion('city', value.value);
+      if (value.value === '810000' || value.value === '820000' || value.value === '710000') {
+        setShowCity(false);
+        setCityAdcode(value.value);
+      } else {
+        setCityAdcode(undefined);
+        setShowCity(true);
+      }
+      setSecondCity(list);
+      setProvinceVal({
+        value: value.value,
+        label: value.label,
+        key: value.value,
+      });
+      setCityVal({});
+      setCountyVal({});
+      setCounty([]);
     } else if (type === 'secondCity') {
-      const ajax = new XMLHttpRequest();
-      ajax.open(
-        'get',
-        `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${value.value}_district.json`,
-      );
-      ajax.send();
-      ajax.onreadystatechange = function () {
-        if (ajax.readyState === 4 && ajax.status === 200) {
-          const newArr: any[] = [];
-          const data = JSON.parse(ajax.responseText);
-          data.rows.forEach((item: any) => {
-            if (item.adcode.substring(0, 4) === value.value.substring(0, 4)) {
-              newArr.push(item);
-            }
-          });
-          setCounty(newArr);
-          setCityVal({
-            value: value.value,
-            label: value.label,
-            key: value.value,
-          });
-          setCountyVal({});
-          setCityAdcode(undefined);
-        }
-      };
+      const list = await getRegion('region', value.value);
+      setCounty(list);
+      setCityVal({
+        value: value.value,
+        label: value.label,
+        key: value.value,
+      });
+      setCountyVal({});
+      setCityAdcode(undefined);
     } else if (type === 'county') {
       setCityAdcode(value.value);
       setCountyVal({
@@ -169,45 +154,13 @@ const SchoolEditor = (props: any) => {
       });
     }
   };
-  const requestData1 = (XZQHM: string) => {
-    const ajax = new XMLHttpRequest();
-    ajax.open(
-      'get',
-      `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(
-        0,
-        2,
-      )}0000_city.json`,
-    );
-    ajax.send();
-    ajax.onreadystatechange = function () {
-      if (ajax.readyState === 4 && ajax.status === 200) {
-        const data = JSON.parse(ajax.responseText);
-        setSecondCity(data.rows);
-      }
-    };
+  const requestData1 = async (XZQHM: string) => {
+    const list = await getRegion('city', XZQHM);
+    setSecondCity(list);
   };
-  const requestData2 = (XZQHM: string) => {
-    const ajax = new XMLHttpRequest();
-    ajax.open(
-      'get',
-      `//datavmap-public.oss-cn-hangzhou.aliyuncs.com/areas/csv/${XZQHM?.substring(
-        0,
-        4,
-      )}00_district.json`,
-    );
-    ajax.send();
-    ajax.onreadystatechange = function () {
-      if (ajax.readyState === 4 && ajax.status === 200) {
-        const data = JSON.parse(ajax.responseText);
-        const newArr: any[] = [];
-        data.rows.forEach((item: any) => {
-          if (item.adcode.substring(0, 4) === XZQHM?.substring(0, 4)) {
-            newArr.push(item);
-          }
-        });
-        setCounty(newArr);
-      }
-    };
+  const requestData2 = async (XZQHM: string) => {
+    const list = await getRegion('region', XZQHM);
+    setCounty(list);
   };
   useEffect(() => {
     if (currentValue && currentValue.schoolInfo) {
@@ -360,8 +313,8 @@ const SchoolEditor = (props: any) => {
               >
                 {cities?.map((item: any) => {
                   return (
-                    <Option value={item.adcode} key={item.name}>
-                      {item.name}
+                    <Option value={item.dm} key={item.mc}>
+                      {item.mc}
                     </Option>
                   );
                 })}
@@ -379,8 +332,8 @@ const SchoolEditor = (props: any) => {
                   >
                     {secondCity?.map((item: any) => {
                       return (
-                        <Option value={item.adcode} key={item.name}>
-                          {item.name}
+                        <Option value={item.dm} key={item.mc}>
+                          {item.mc}
                         </Option>
                       );
                     })}
@@ -395,8 +348,8 @@ const SchoolEditor = (props: any) => {
                   >
                     {county?.map((item: any) => {
                       return (
-                        <Option value={item.adcode} key={item.adcode}>
-                          {item.name}
+                        <Option value={item.dm} key={item.mc}>
+                          {item.mc}
                         </Option>
                       );
                     })}
