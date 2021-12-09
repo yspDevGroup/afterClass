@@ -155,28 +155,28 @@
         border-radius: 20px 0 20px 20px;
       }
     }
-    .patrols{
+    .patrols {
       display: flex;
       justify-content: space-between;
       margin-bottom: 20px;
-      >div{
+      > div {
         width: calc(~'50% - 5px');
         height: 80px;
-        border-radius: 8px;
-        font-size: 16px;
         font-weight: bold;
+        font-size: 16px;
         background-size: 100% 100%;
-        .titles{
+        border-radius: 8px;
+        .titles {
+          position: relative;
           margin-top: 12px;
           margin-left: 12px;
-          position: relative;
           color: #333;
         }
         :global {
           .ant-badge-not-a-wrapper:not(.ant-badge-status) {
             position: absolute;
-            right: 20px;
             top: 2px;
+            right: 20px;
           }
           .ant-badge-count {
             background: #ff6b17;
@@ -193,7 +193,6 @@
       padding: 0 12px;
       background: linear-gradient(270deg, #17e3ff 0%, #06f 100%);
       border-radius: 23px;
-
 
       & > span {
         position: relative;
@@ -374,6 +373,9 @@
 
 .modalStyle {
   :global {
+    .ant-modal-title {
+      font-size: 16px !important;
+    }
     .ant-modal-header {
       padding: 16px;
       text-align: center !important;
@@ -403,7 +405,7 @@
         }
       }
       .ant-input {
-        color: #999999;
+        color: #999;
         font-size: 14px;
         line-height: 24px;
       }

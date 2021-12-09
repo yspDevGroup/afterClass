@@ -91,7 +91,7 @@ const Home = () => {
         WWOpenData?.bindAll(document.querySelectorAll('ww-open-data'));
       }
     })();
-    console.log('initialState', initialState);
+
     if (
       (initialState?.buildOptions?.authType === 'wechat' && !currentUser.XM) ||
       currentUser.XM === '未知'
@@ -244,15 +244,16 @@ const Home = () => {
         closable={false}
         cancelText="取消"
         okText="确认"
-        footer={false}
+        footer={null}
       >
         <Form
           ref={formRef}
-          labelCol={{ flex: '5em' }}
+          labelCol={{ flex: '4em' }}
           wrapperCol={{ flex: 'auto' }}
           onFinish={onFinish}
         >
           <Form.Item
+            style={{ marginTop: '12px' }}
             name="name"
             label="姓名"
             rules={[{ required: true, message: '请输入您的真实姓名！' }]}
@@ -272,9 +273,9 @@ const Home = () => {
           >
             <Input />
           </Form.Item>
-          <Divider />
-          <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+          <Divider style={{ marginTop: 0 }} />
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Button type="primary" htmlType="submit" block>
               提交
             </Button>
           </Form.Item>
