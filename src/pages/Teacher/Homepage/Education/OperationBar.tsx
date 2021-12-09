@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /*
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-29 15:20:16
- * @LastEditTime: 2021-12-06 13:52:29
+ * @LastEditTime: 2021-12-09 12:12:32
  * @LastEditors: Sissle Lynn
  */
-import React from 'react';
-import { Link } from 'umi';
+import React, { useEffect, useState } from 'react';
+import { Link, useModel } from 'umi';
 
 import styles from './index.less';
 import icon_stuEvaluate from '@/assets/icon_stuEvaluate.png';
@@ -14,9 +15,40 @@ import icon_courseBack from '@/assets/icon_courseBack.png';
 import icon_classroomStyle from '@/assets/classroomStyle.png';
 import icon_leave from '@/assets/icon-teacherLeave.png';
 import icon_CourseAdjustment from '@/assets/icon-CourseAdjustment.png';
+import { getXXSPPZ } from '@/services/after-class/xxsppz';
+import { Modal } from 'antd';
 
 const OperationBar = (props: { courseData: any }) => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const { courseData } = props;
+  const day = new Date().getDate();
+  /** 教师补签日期 */
+  const [start, setStart] = useState<number>(20);
+  const [end, setEnd] = useState<number>(25);
+  const [disabled, setDisabled] = useState<boolean>(true);
+  useEffect(() => {
+    (async () => {
+      const res = await getXXSPPZ({
+        xxId: currentUser.xxId
+      });
+      if (res.status === 'ok' && res.data) {
+        const { JSBQ_KSRQ, JSBQ_JSRQ, } = res.data;
+        JSBQ_KSRQ ? setStart(Number(JSBQ_KSRQ)) : '';
+        JSBQ_JSRQ ? setEnd(Number(JSBQ_JSRQ)) : '';
+      }
+    })()
+  }, []);
+  useEffect(() => {
+    if (start && end && day) {
+      if (start <= day && day <= end) {
+        setDisabled(false);
+      } else {
+        setDisabled(true);
+      }
+    }
+  }, [start, end, day]);
+
   return (
     <div className={styles.headBox}>
       <Link
@@ -52,19 +84,36 @@ const OperationBar = (props: { courseData: any }) => {
         </p>
         <p className={styles.text}>调/代课</p>
       </Link>
-      <Link
-        key="bqd"
-        to={{
-          pathname: '/teacher/education/resign',
-        }}
-        className={styles.wrapper}>
-        <p className={styles.container}>
-          <p className={styles.content}>
-            <img src={icon_stuEvaluate} alt="" />
+      <>
+        {disabled ? <a className={styles.wrapper} onClick={() => {
+          Modal.info({
+            title: `教师补签时段为每月${start}日到${end}日`,
+            width: '70vw',
+            className: styles.modalSign,
+            centered: true,
+            okText: '知道了'
+          });
+        }}>
+          <p className={styles.container}>
+            <p className={styles.content}>
+              <img src={icon_stuEvaluate} alt="" />
+            </p>
           </p>
-        </p>
-        <p className={styles.text}>补签到</p>
-      </Link>
+          <p className={styles.text}>补签到</p>
+        </a> : <Link
+          key="bqd"
+          to={{
+            pathname: '/teacher/education/resign',
+          }}
+          className={styles.wrapper}>
+          <p className={styles.container}>
+            <p className={styles.content}>
+              <img src={icon_stuEvaluate} alt="" />
+            </p>
+          </p>
+          <p className={styles.text}>补签到</p>
+        </Link>}
+      </>
       <Link
         key="ktfc"
         to={{

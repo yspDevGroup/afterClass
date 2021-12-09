@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 15:46:41
- * @LastEditTime: 2021-12-08 17:13:25
+ * @LastEditTime: 2021-12-09 10:49:58
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -134,7 +134,7 @@ const DealAbnormal = (props: any) => {
           renderItem={(item: any) => {
             const curItem = dealData?.find((v: { BQRQ: string; XXSJPZId: string; }) => v.BQRQ === item.date && v.XXSJPZId === item.XXSJPZId);
             return <List.Item
-              actions={curItem ? [<span key={item.id} style={{color:'#666'}}>处理中</span>] : [<a key={item.id} onClick={() => {
+              actions={curItem ? [<span key={item.id} style={{ color: '#666' }}>处理中</span>] : [<a key={item.id} onClick={() => {
                 setCurrent(item);
                 showModal('option');
               }}>去处理</a>]}
@@ -169,8 +169,8 @@ const DealAbnormal = (props: any) => {
           ]}
         >
           {modalContent === 'option' ? <>
-            <li><Link to={{ pathname: '/teacher/education/askForLeave' }}>请假申请</Link></li>
-            <li><Link to={{ pathname: '/teacher/education/courseAdjustment/applys' }}>代课申请</Link></li>
+            <li><Link to={`/teacher/education/askForLeave?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}>请假申请</Link></li>
+            <li><Link to={`/teacher/education/courseAdjustment/applys?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}>代课申请</Link></li>
             <li onClick={() => {
               showModal('resign');
             }} >补签申请</li>

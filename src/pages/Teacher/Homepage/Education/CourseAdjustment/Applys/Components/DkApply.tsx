@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-12-08 15:49:12
+ * @LastEditTime: 2021-12-09 11:28:53
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -13,12 +13,16 @@ import styles from '../index.less';
 import { getIgnoreTeacherByClassesId } from '@/services/after-class/jzgjbsj';
 import { createKHJSTDK } from '@/services/after-class/khjstdk';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
+import { getQueryString } from '@/utils/utils';
 
 const { TextArea } = Input;
 const { Option } = Select;
 const DkApply = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const prevDay = getQueryString('date');
+  const dealClassId = getQueryString('classId');
   const [JsData, setJsData] = useState<API.JZGJBSJ[]>();
   const [DKJsId, setDKJsId] = useState();
   const [form] = Form.useForm();
@@ -50,6 +54,18 @@ const DkApply = () => {
       }
     )()
   }, [dateData])
+  /** 代课补签 */
+  const handleResign = async () => {
+    await CreateJSCQBQ({
+      XXJBSJId: currentUser.xxId,
+      BQRQ: dateData?.day,
+      QKYY: '',
+      SQNR: '代课',
+      BQRId: currentUser.JSId || testTeacherId,
+      KHBJSJId: dateData?.bjid,
+      XXSJPZId: dateData?.jcId
+    });
+  };
   const onFinish = async (values: any) => {
     const newData = {
       LX: 1,
@@ -66,9 +82,15 @@ const DkApply = () => {
     const res = await createKHJSTDK(newData);
     if (res.status === 'ok') {
       message.success('申请成功');
-      setDateData([]);
-      form.resetFields();
-      history.push('/teacher/education/courseAdjustment')
+      // 处理补签流程问题
+      if (prevDay && dealClassId) {
+        handleResign();
+        history.push('/teacher/education/resign');
+      } else {
+        setDateData([]);
+        form.resetFields();
+        history.push('/teacher/education/courseAdjustment');
+      }
     } else {
       message.error(res.message)
     }

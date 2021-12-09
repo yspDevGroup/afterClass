@@ -36,6 +36,8 @@ const ClassCalendar = (props: propstype) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const prevDay = getQueryString('date');
+  const dealClassId = getQueryString('classId');
+  const dealJcId = getQueryString('XXSJPZId');
   const [day, setDay] = useState<string>(!prevDay || prevDay === 'null' ? dayjs().format('YYYY-MM-DD') : prevDay);
   const [cDay, setCDay] = useState<string>(!prevDay || prevDay === 'null' ? dayjs().format('M月D日') : dayjs(prevDay).format('M月D日'));
   const [course, setCourse] = useState<any>(defaultMsg);
@@ -157,6 +159,34 @@ const ClassCalendar = (props: propstype) => {
     setDatedata?.(choosenCourses);
   }, [choosenCourses, setDatedata]);
   useEffect(() => {
+    if (dealClassId && editCourses) {
+      const curItems = editCourses.find((v: { bjid: string; }) => v.bjid === dealClassId);
+      if (curItems) {
+        const { desc, start, end, bjid, title, jcId, FJId } = curItems;
+        if (type === 'dksq') {
+          setDatedata?.({
+            day,
+            start: desc?.[0].left?.[0].substring(0, 5),
+            end: desc?.[0].left?.[0].substring(6, 11),
+            jcId,
+            bjid,
+            FJId,
+            title,
+          })
+        } else {
+          setChoosenCourses([{
+            day,
+            start,
+            end,
+            jcId,
+            bjid,
+            title,
+          }])
+        }
+      }
+    }
+  }, [type, editCourses, dealClassId]);
+  useEffect(() => {
     formRef.current.setFieldsValue({
       info: modalContent,
     });
@@ -267,7 +297,7 @@ const ClassCalendar = (props: propstype) => {
             return (
               <List.Item
                 key={`${day}+${item?.bjid}+${item.jcId}`}
-                actions={[<Checkbox onChange={(e) => onChange(e, item)} />]}
+                actions={[<Checkbox disabled={!!dealClassId} defaultChecked={dealClassId ? item?.bjid === dealClassId && item.jcId === dealJcId : false} onChange={(e) => onChange(e, item)} />]}
               >
                 <List.Item.Meta
                   title={`${item?.title}`}
@@ -279,22 +309,21 @@ const ClassCalendar = (props: propstype) => {
         />
       ) : (type === 'dksq' || type === 'tksq' ? <div className={styles.dksq}>
         {
-          editCourses?.length === 0 ? <div className={styles.ZWSJ}>
+          editCourses?.length ? <Radio.Group onChange={onChanges} disabled={!!dealClassId} defaultValue={editCourses.find((item: { bjid: string; jcId: string }) => item?.bjid === dealClassId && item.jcId === dealJcId)}>
+            <Space direction="vertical">
+              {
+                editCourses?.map((item: any) => {
+                  return <Radio value={item} >
+                    <p> {item?.title}</p>
+                    <p> {item.desc?.[0].left}</p>
+                  </Radio>
+                })
+              }
+            </Space>
+          </Radio.Group> : <div className={styles.ZWSJ}>
             <img src={noOrder} alt="" />
             <p>暂无数据</p>
-          </div> :
-            <Radio.Group onChange={onChanges}>
-              <Space direction="vertical">
-                {
-                  editCourses?.map((item: any) => {
-                    return <Radio value={item}>
-                      <p> {item?.title}</p>
-                      <p> {item.desc?.[0].left}</p>
-                    </Radio>
-                  })
-                }
-              </Space>
-            </Radio.Group>
+          </div>
         }
       </div> :
         <ListComponent listData={course} operation={iconTextData} />)}

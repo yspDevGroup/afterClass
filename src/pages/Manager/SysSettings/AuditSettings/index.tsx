@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-22 15:12:11
- * @LastEditTime: 2021-12-07 13:35:34
+ * @LastEditTime: 2021-12-09 13:49:33
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -36,16 +36,16 @@ const AuditSettings = () => {
    */
   const updateSettings = async (type?: string, val?: any) => {
     await createXXSPPZ({
-      JSQJ: type === 'TLeave' && val ? val : tLeave,
+      JSQJ: type === 'TLeave' ? val! : tLeave,
       XSQJ: false,
-      JSDK: type === 'Supply' && val ? val : supply,
-      JSTK: type === 'Adjust' && val ? val : adjust,
+      JSDK: type === 'Supply' ? val! : supply,
+      JSTK: type === 'Adjust' ? val! : adjust,
       XSTK: true,
       XSTF: true,
       XXJBSJId: currentUser.xxId,
-      JSBQ: type === 'Resign' && val ? val : resign,
-      JSBQ_KSRQ: type === 'start' && val ? val.toString() : start.toString(),
-      JSBQ_JSRQ: type === 'end' && val ? val.toString() : end.toString(),
+      JSBQ: type === 'Resign' ? val! : resign,
+      JSBQ_KSRQ: type === 'start' ? val.toString() : start.toString(),
+      JSBQ_JSRQ: type === 'end' ? val.toString() : end.toString(),
     });
   };
   useEffect(() => {

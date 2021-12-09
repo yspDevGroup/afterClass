@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 09:57:23
- * @LastEditTime: 2021-09-18 18:49:00
+ * @LastEditTime: 2021-12-08 17:47:58
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -18,13 +18,14 @@ import { getAllKHJSQJ } from '@/services/after-class/khjsqj';
 
 const { TabPane } = Tabs;
 
-const AskForLeave: React.FC = () => {
+const AskForLeave =() => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [activeKey, setActiveKey] = useState<string>('apply');
   const [leaveInfo, setLeaveInfo] = useState<API.KHXSQJ[]>([]);
   const [reload, setReload] = useState<boolean>(false);
+
   const fetch = async () => {
     // 获取后台学年学期数据
     const result = await queryXNXQList(currentUser?.xxId, undefined);
