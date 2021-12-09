@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-plusplus */
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
-import type {  ProColumns } from '@ant-design/pro-table';
+import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import WWOpenDataCom from '@/components/WWOpenDataCom';
 import styles from '../index.less';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
+import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
+import { Badge } from 'antd';
 
 
 type ApplicantPropsType = {
@@ -22,57 +26,165 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           KHBJSJId: SKXQData.id
         })
         if (res.status === 'ok') {
-          setDataSource(res.data)
+          const CQData = res?.data || [];
+          const result = await getKCBSKSJ({
+            KHBJSJId: SKXQData?.id,
+          })
+          if (result.status === 'ok') {
+            const AllSKData = result.data!.rows!;
+            const NoSignInArr: any[] = [];
+            for (let i = 0; i < CQData.length; i++) {
+              const obj = CQData[i];
+              const TimeId = obj.XXSJPZId;
+              const SKRQ = obj.CQRQ;
+              const JsId = obj.JZGJBSJId;
+              const CQZTs = obj.CQZT;
+              for (let j = 0; j < result.data!.rows!.length; j++) {
+                const aj = result.data!.rows![j];
+                const TimeIds = aj.XXSJPZId;
+                const SKRQs = aj.SKRQ;
+
+                aj.KCBSKJSSJs.forEach((value: any) => {
+                  if (TimeId === TimeIds && SKRQ === SKRQs && JsId === value.JZGJBSJ.id) {
+                    aj.KCBSKJSSJs.find((item: any) => {
+                      if (item.JZGJBSJ.id === JsId) {
+                        // eslint-disable-next-line no-param-reassign
+                        item.JZGJBSJ.type = CQZTs
+                        NoSignInArr.push(aj)
+                        return NoSignInArr;
+                      }
+                      return ''
+                    })
+                  }
+                })
+              }
+            }
+            NoSignInArr.forEach((value) => {
+              AllSKData.push(value)
+            })
+            const unique = (arr: any) => {
+              const arr1: any[] = [];
+              for (let i = 0, len = arr.length; i < len; i++) {
+                if (!arr1.includes(arr[i])) {      // 检索arr1中是否含有arr中的值
+                  arr1.push(arr[i]);
+                }
+              }
+              return arr1;
+            }
+            setDataSource(unique(AllSKData));
+          }
         }
       }
     )()
   }, [])
 
-
   const columns: ProColumns<any>[] = [
     {
-      title: '序号',
+      title: '节次',
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
       align: 'center',
-    },
-    {
-      title: '教师名称',
-      dataIndex: 'JZGJBSJ',
-      key: 'JZGJBSJ',
-      align: 'center',
-      width: 160,
-      ellipsis: true,
       render: (_text: any, record: any) => {
-        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
-        }
-        return record?.JZGJBSJ?.XM;
-      },
+        return DataSource.indexOf(record) + 1
+      }
     },
     {
       title: '上课日期',
-      dataIndex: 'CQRQ',
-      key: 'CQRQ',
+      dataIndex: 'SKRQ',
+      key: 'SKRQ',
       align: 'center',
-      width: 100,
+      width: 170,
+      render: (_text: any, record: any) => {
+        return `${record.SKRQ} ${record.XXSJPZ.KSSJ.substring(0, 5)}~${record.XXSJPZ.JSSJ.substring(0, 5)}`
+      }
     },
     {
-      title: '出勤状态',
-      dataIndex: 'CQZT',
-      key: 'CQZT',
+      title: '主教师',
+      dataIndex: 'ZJS',
+      key: 'ZJS',
       align: 'center',
       width: 100,
       ellipsis: true,
+      render: (_text: any, record: any) => {
+        return <>{
+          record?.KCBSKJSSJs.length === 0 ? <>—</> : <>
+            {
+              record?.KCBSKJSSJs.map((value: any) => {
+                if (value.JSLX === 1) {
+                  let colors: any = '';
+                  if (new Date(record.SKRQ) > new Date()) {
+                    colors = '#dddddd'
+                  } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '出勤') {
+                    colors = '#89da8c'
+                  } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '请假') {
+                    colors = '#f2c862'
+                  } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '代课') {
+                    colors = '#ac90fb'
+                  } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '缺席') {
+                    colors = '#ff7171'
+                  } else {
+                    colors = '#ff7171'
+                  }
+                  const showWXName = value?.JZGJBSJ?.XM === '未知' && value?.JZGJBSJ?.WechatUserId;
+                  if (showWXName) {
+                    return <span className={styles.TeacherName} style={{ border: `1px solid ${colors}` }}><Badge color={colors} /><WWOpenDataCom type="userName" openid={value?.JZGJBSJ?.WechatUserId} /></span>
+                  }
+                  return <span className={styles.TeacherName} style={{ border: `1px solid ${colors}` }}><Badge color={colors} />{value.JZGJBSJ?.XM}</span>;
+                }
+                return '';
+              })
+            }
+          </>
+        }</>
+
+      },
     },
+    {
+      title: '副教师',
+      dataIndex: 'FJS',
+      key: 'FJS',
+      align: 'center',
+      width: 230,
+      ellipsis: true,
+      render: (_text: any, record: any) => {
+        return <>{
+           record?.KCBSKJSSJs.find((items: any) => items.JSLX === 0) ? <>
+              {
+              record?.KCBSKJSSJs.map((value: any) => {
+                if (value.JSLX === 0) {
+                  let colors: any = '';
+                  if (new Date(record.SKRQ) > new Date()) {
+                    colors = '#dddddd'
+                  } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '出勤') {
+                    colors = '#89da8c'
+                  } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '请假') {
+                    colors = '#f2c862'
+                  } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '代课') {
+                    colors = '#ac90fb'
+                  } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '缺席') {
+                    colors = '#ff7171'
+                  } else {
+                    colors = '#ff7171'
+                  }
+                  const showWXName = value?.JZGJBSJ?.XM === '未知' && value?.JZGJBSJ?.WechatUserId;
+                  if (showWXName) {
+                    return <span className={styles.TeacherName} style={{ border: `1px solid ${colors}` }}><Badge color={colors} /><WWOpenDataCom type="userName" openid={value?.JZGJBSJ?.WechatUserId} /></span>
+                  }
+                  return <span className={styles.TeacherName} style={{ border: `1px solid ${colors}` }}><Badge color={colors} />{value.JZGJBSJ?.XM}</span>;
+                }
+                return '';
+              })
+            }</> : <>—</>
+
+        }</>
+      },
+    },
+
   ];
 
-
-
   return (
-    <div className={styles.BMdiv}>
+    <div className={styles.BMdivs}>
       <ProTable
         rowKey="id"
         search={false}
@@ -93,9 +205,14 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           reload: false,
         }}
         headerTitle={`课程班名称：${SKXQData?.BJMC}`}
+        toolBarRender={() => [
+          <Badge color="#89da8c" text="出勤" />,
+          <Badge color="#f2c862" text="请假" />,
+          <Badge color="#ac90fb" text="代课" />,
+          <Badge color="#dddddd" text="待上" />,
+          <Badge color="#ff7171" text="缺勤" />,
+        ]}
       />
-
-
     </div>
   );
 };

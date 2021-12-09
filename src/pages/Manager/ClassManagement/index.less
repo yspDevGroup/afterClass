@@ -180,3 +180,30 @@
     padding: 0 !important;
   }
 }
+
+.BMdivs{
+  :global{
+      .ant-card-body{
+        padding: 0 !important;
+        .ant-pro-table-list-toolbar-container{
+          padding: 0 0 24px 0;
+        }
+      }
+  }
+  .TeacherName{
+    margin:0 10px;
+    border-radius: 4px;
+    padding: 2px 6px;
+    >span:nth-of-type(2){
+      display: inherit !important;
+    }
+    :global{
+      .ant-badge-status-dot{
+        margin-bottom: 2px;
+      }
+      .ant-badge-status-text{
+        margin-left: 5px;
+      }
+    }
+  }
+}

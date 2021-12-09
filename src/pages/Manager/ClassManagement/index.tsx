@@ -448,7 +448,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       },
     },
     {
-      title: '授课详情',
+      title: '授课安排',
       dataIndex: 'SKXQ',
       key: 'SKXQ',
       align: 'center',
@@ -738,7 +738,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           <ApplicantInfoTable clickBjId={clickBjId} actionRefs={actionRef} />
         </Modal>
         <Modal
-          title="授课详情列表"
+          title="授课安排列表"
           visible={ModalSKXQ}
           onCancel={handleCancel}
           footer={null}

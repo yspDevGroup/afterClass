@@ -165,6 +165,16 @@ const Adjustment = (props: { teacherData?: any }) => {
       width: 160,
     },
     {
+      title: '调课后节次',
+      dataIndex: 'TKJC',
+      key: 'TKJC',
+      align: 'center',
+      width: 160,
+      render: (text: any, record: any) => {
+        return record?.TKJC.TITLE
+      },
+    },
+    {
       title: '调课后时段',
       dataIndex: 'TKRQ',
       key: 'TKRQ',
@@ -172,11 +182,10 @@ const Adjustment = (props: { teacherData?: any }) => {
       width: 160,
       render: (text: any, record: any) => {
         return (
-          `${record?.KSSJ} ~ ${record?.JSSJ}`
+          `${record?.TKJC.KSSJ.substring(0,5)} ~ ${record?.TKJC.JSSJ.substring(0,5)}`
         )
       },
     },
-
     {
       title: '状态',
       dataIndex: 'ZT',
