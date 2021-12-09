@@ -6,6 +6,7 @@ import GoBack from '@/components/GoBack';
 import { getAllKHKTFC, deleteKHKTFC } from '@/services/after-class/khktfc';
 import styles from './index.less';
 import { useModel } from 'umi';
+import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const Record = () => {
   const { initialState } = useModel('@@initialState');
@@ -31,8 +32,8 @@ const Record = () => {
           content: item.NR,
           imgs: imgsArr,
           time: item.createdAt,
-          teacherName: item.JZGJBSJ.XM,
-          JSId:item.JZGJBSJId
+          teacher: item.JZGJBSJ,
+          JSId: item.JZGJBSJId
         };
         allData.push(data);
       });
@@ -103,12 +104,16 @@ const Record = () => {
                         fontWeight: 300,
                       }}
                     >
-                      {`${moment(item.time).format('MM')  }月`}
+                      {`${moment(item.time).format('MM')}月`}
                     </p>
                   </Avatar>
                   <div className={styles.name}>
                     <p>{item.className}</p>
-                    <p>{`${item.classNum  }\u00A0\u00A0${  item.teacherName}`}</p>
+                    <p>{`${item.classNum}\u00A0\u00A0`} {item?.teacher?.XM === '未知' && item?.teacher?.WechatUserId ? (
+                      <WWOpenDataCom type="userName" openid={item?.teacher?.WechatUserId} />
+                    ) : (
+                      item?.teacher?.XM
+                    )}</p>
                   </div>
                 </p>
                 <div className={styles.content}>
@@ -123,15 +128,15 @@ const Record = () => {
                                 item.imgs.length === 2 || item.imgs.length === 4
                                   ? 12
                                   : item.imgs.length === 1
-                                  ? 24
-                                  : 8
+                                    ? 24
+                                    : 8
                               }
                               className={
                                 item.imgs.length === 2 || item.imgs.length === 4
                                   ? styles.pairImg
                                   : item.imgs.length === 1
-                                  ? styles.oneImg
-                                  : styles.nineImg
+                                    ? styles.oneImg
+                                    : styles.nineImg
                               }
                             >
                               <Image src={url} />
@@ -144,34 +149,34 @@ const Record = () => {
                   <p>
                     <span>{moment(item.time).format('HH:mm:ss')}</span>
                     {
-                      currentUser?.JSId === item.JSId ?    <Popconfirm
-                      title="您确定要删除此条内容吗？"
-                      placement="topRight"
-                      onConfirm={async () => {
-                        try {
-                          if (item.id) {
-                            const params = { id: item.id };
-                            const res = deleteKHKTFC(params);
-                            new Promise((resolve) => {
-                              resolve(res);
-                            }).then((data: any) => {
-                              if (data.status === 'ok') {
-                                message.success('删除成功');
-                                getData();
-                              }
-                            });
+                      currentUser?.JSId === item.JSId ? <Popconfirm
+                        title="您确定要删除此条内容吗？"
+                        placement="topRight"
+                        onConfirm={async () => {
+                          try {
+                            if (item.id) {
+                              const params = { id: item.id };
+                              const res = deleteKHKTFC(params);
+                              new Promise((resolve) => {
+                                resolve(res);
+                              }).then((data: any) => {
+                                if (data.status === 'ok') {
+                                  message.success('删除成功');
+                                  getData();
+                                }
+                              });
+                            }
+                          } catch (err) {
+                            message.error('删除失败，请联系管理员或稍后重试。');
                           }
-                        } catch (err) {
-                          message.error('删除失败，请联系管理员或稍后重试。');
-                        }
-                      }}
-                      onCancel={cancel}
-                      okText="确定"
-                      cancelText="取消"
-                      key={item.id}
-                    >
-                      <a href="#">删除</a>
-                    </Popconfirm>:<></>
+                        }}
+                        onCancel={cancel}
+                        okText="确定"
+                        cancelText="取消"
+                        key={item.id}
+                      >
+                        <a href="#">删除</a>
+                      </Popconfirm> : <></>
                     }
 
                   </p>
