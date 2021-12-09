@@ -2,7 +2,7 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2021-12-08 15:04:27
+ * @LastEditTime: 2021-12-09 09:50:38
  * @LastEditors: Wu Zhan
  */
 import React from 'react';
@@ -14,6 +14,7 @@ const NotFind = () => {
   const { initialState } = useModel('@@initialState');
   const query = getPageQuery();
   const { title, message, btnTXT, goto } = query;
+  const { ysp_access_token } = getOauthToken();
   return (
     <Result
       status="403"
@@ -43,8 +44,6 @@ const NotFind = () => {
           <Button
             type="primary"
             onClick={() => {
-              const { ysp_access_token } = getOauthToken();
-              console.log('ysp_access_token ', ysp_access_token);
               if (!ysp_access_token || !initialState?.currentUser) {
                 const loginPath = getLoginPath(
                   initialState?.buildOptions?.clientId || '',
@@ -58,7 +57,7 @@ const NotFind = () => {
               }
             }}
           >
-            返回首页
+            {!ysp_access_token || !initialState?.currentUser ? '去登陆' : '返回首页'}
           </Button>
         ) : (
           ''
