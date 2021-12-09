@@ -3,6 +3,7 @@ import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
 import { getAllByDate } from '@/services/after-class/khjscq';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import { message } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -25,7 +26,7 @@ const SignInDetails = () => {
       const newArrs: any = [];
       const JCIdArr: any = [];
       const BJIdArr: any = [];
-      const newArr = res.data?.rows?.filter((item: any) => new Date(`${item.SKRQ} ${item.XXSJPZ.KSSJ}`) < new Date());
+      const newArr = res.data?.rows?.filter((item: any) => new Date(`${moment(item.SKRQ).format('YYYY/MM/DD')} ${item.XXSJPZ.KSSJ}`) < new Date());
 
       newArr?.forEach((value: any) => {
         JCIdArr.push(value.XXSJPZId)
@@ -77,6 +78,7 @@ const SignInDetails = () => {
   }, [])
   const onclick=()=>{
     getData();
+    message.success('刷新完成')
   }
   return (
     <div className={styles.DetailsBox}>
