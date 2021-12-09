@@ -9,6 +9,7 @@ import { removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
 import TopBgImg from '@/assets/topInfoBG.png';
 
 import styles from './index.less';
+import SignIn from './components/SignIn';
 
 const Home = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -16,7 +17,7 @@ const Home = () => {
 
   return (
     <div className={styles.indexPage}>
-      <div className={styles.topInfo} style={{backgroundImage : "url(" + TopBgImg + ")"}}>
+      <div className={styles.topInfo} style={{ backgroundImage: `url(${TopBgImg})` }}>
         <Row style={{ height: '74px' }} className={styles.teacherInfo}>
           <Col span={22}>
             <p>
@@ -28,11 +29,11 @@ const Home = () => {
               老师，您好！
             </p>
             <div>
-              <Avatar
+              {/* <Avatar
                 size={18}
                 style={{ height: 0 }}
                 src={<Image src={currentUser?.avatar} fallback={defUserImg} />}
-              />
+              /> */}
               <span className={styles.school}>{currentUser?.QYMC ? currentUser?.QYMC : ''}</span>
             </div>
           </Col>
@@ -57,6 +58,7 @@ const Home = () => {
           className={`${styles.noticeArea} ${styles[initialState?.buildOptions.ENV_type || 'dev']}`}
         />
         <Overview />
+        <SignIn />
         <Notice />
       </div>
     </div>

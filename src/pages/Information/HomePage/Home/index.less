@@ -39,7 +39,6 @@
         line-height: 22px;
       }
       .school {
-        margin-left: 6px;
         font-size: 14px;
         line-height: 20px;
       }
@@ -194,4 +193,65 @@
   min-height: 900px;
   padding: 10px;
   background-color: @pageBgColor;
+}
+
+.SignIn {
+  margin-bottom: 20px;
+  .title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .wrap {
+    padding: 0 10px 10px;
+    background: #ffffff;
+    border-radius: 8px;
+    p {
+      margin: 0;
+      line-height: 46px;
+      > span:nth-of-type(2) {
+        float: right;
+        color: #999;
+        font-size: 12px;
+        span {
+          color: #0066ff;
+          font-weight: bold;
+          font-size: 14px;
+        }
+      }
+    }
+    p:nth-of-type(1) {
+      border-bottom: 1px solid #eee;
+    }
+    p:nth-of-type(2) {
+      > span:nth-of-type(2) {
+        span {
+          color: #ef4923;
+        }
+      }
+    }
+    .more {
+      margin-top: 14px;
+      color: #0066ff;
+      line-height: inherit;
+      text-align: center;
+    }
+    :global {
+      .ant-row {
+        .ant-col {
+          max-width: 22% !important;
+          height: 24px;
+          margin: 0 1.5%;
+          padding: 0 2px !important;
+          overflow: hidden;
+          color: #666;
+          line-height: 24px;
+          white-space: nowrap;
+          text-align: center;
+          text-overflow: ellipsis;
+          background: #f5f5f5;
+          border-radius: 6px;
+        }
+      }
+    }
+  }
 }

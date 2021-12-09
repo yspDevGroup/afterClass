@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useModel, history } from 'umi';
 import { useRef, useState, useEffect } from 'react';
 import { Button, Modal, Tooltip, Select, Divider, Row, Col } from 'antd';
 import ProTable from '@ant-design/pro-table';
@@ -320,6 +320,38 @@ const CourseManagement = (props: { location: { state: any } }) => {
       });
     }
   };
+
+
+  const infos = () => {
+    Modal.info({
+      title: '未设置报名时段或开课时段，请先进行时段维护',
+      width:'450px',
+      okText:'去设置',
+      onOk() {
+        history.push('/basicalSettings/periodMaintenance')
+      },
+    });
+  }
+  useEffect(() => {
+    (
+      async()=>{
+        const resBM = await getAllXXSJPZ({
+          XXJBSJId:currentUser?.xxId,
+          type:['1']
+        })
+        const resKK = await getAllXXSJPZ({
+          XXJBSJId:currentUser?.xxId,
+          type:['2']
+        })
+        if(resBM.status === 'ok' && resKK.status === 'ok'){
+          if(resBM.data?.length !== 0 || resKK.data?.length === 0){
+            infos();
+          }
+        }
+      }
+    )()
+  }, [])
+
   const columns: ProColumns<any>[] = [
     {
       title: '序号',

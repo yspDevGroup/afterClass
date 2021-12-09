@@ -1,15 +1,15 @@
 import { history } from 'umi';
 import { Col, Row } from 'antd';
-import { LeftOutlined } from '@ant-design/icons';
+import { LeftOutlined, SyncOutlined } from '@ant-design/icons';
 import styles from '../index.less';
 
 const TopNav = (props: any) => {
-  const { title,state } = props;
+  const { title, state, Refresh,onclick } = props;
 
 
   return (
     <div className={styles.mobilePageHeader}>
-        <Row className={styles.topContainer}>
+      <Row className={styles.topContainer}>
         <Col span={4}>
           {state === true ? (
             <div
@@ -26,11 +26,16 @@ const TopNav = (props: any) => {
             <></>
           )}
         </Col>
-          <Col span={16}>
-            {title}
-          </Col>
-          <Col span={4} />
-        </Row>
+        <Col span={16}>
+          {title}
+
+
+        </Col>
+        <Col span={4} >
+          {
+            Refresh === true ? <SyncOutlined onClick={onclick} /> : <></>
+          }</Col>
+      </Row>
 
     </div>
   )

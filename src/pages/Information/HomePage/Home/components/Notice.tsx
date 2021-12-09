@@ -21,7 +21,7 @@ const Notice = () => {
   const [dataTZGG, setTZGGData] = useState<any>();
   const [dataZCGG, setZCGGData] = useState<any>();
   const [tabSelect, setTabSelect] = useState<any>('policy');
-  const [loadings, setLoadings] = useState<Array<any>>([]);
+  const [loadings, setLoadings] = useState<any[]>([]);
   const [allTZDataSource, setAllTZDataSource] = useState<any>();
   const [allZCDataSource, setAllZCDataSource] = useState<any>();
 
@@ -42,7 +42,7 @@ const Notice = () => {
 
   useEffect(() => {
     async function fetchData() {
-      //通知公告
+      // 通知公告
       const resgetXXTZGG = await getJYJGTZGG({
         BT: '',
         LX: 1,
@@ -70,7 +70,7 @@ const Notice = () => {
         setAllZCDataSource(newAllData)
       }
 
-      //政策公告
+      // 政策公告
       const resgetXXZCGG = await getXXTZGG({
         XXJBSJId: currentUser?.xxId,
         BT: '',
@@ -80,7 +80,6 @@ const Notice = () => {
         pageSize: 0,
       });
       if (resgetXXZCGG.status === 'ok') {
-        console.log('resgetXXZCGG: ', resgetXXZCGG);
         const newData = {
           type: 'azeList',
           cls: 'azeList',

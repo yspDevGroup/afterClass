@@ -77,9 +77,9 @@ import * as xxjbsj from './xxjbsj';
 import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
 import * as xxsppz from './xxsppz';
-import * as xxtzgg from './xxtzgg';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
+import * as xxtzgg from './xxtzgg';
 export default {
   other,
   auth,
@@ -156,7 +156,7 @@ export default {
   xxpz,
   xxsjpz,
   xxsppz,
-  xxtzgg,
   zxfa,
   zxsj,
+  xxtzgg,
 };

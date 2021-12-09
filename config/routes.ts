@@ -765,6 +765,13 @@
         component: './Information/HomePage/Home/AllNotice',
         hideInMenu: 'true',
       },
+      // 教室实时签到详情
+      {
+        path: '/information/signInDetails',
+        name: 'signInDetails',
+        component: './Information/HomePage/Home/SignInDetails',
+        hideInMenu: 'true',
+      },
     ],
   },
   /*** 移动端数据看板路由 end ***/
