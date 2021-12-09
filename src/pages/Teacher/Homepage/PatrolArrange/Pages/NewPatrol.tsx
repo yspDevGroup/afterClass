@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-12-09 15:19:51
+ * @LastEditTime: 2021-12-09 16:56:45
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -105,6 +105,9 @@ const NewPatrol = (props: any) => {
       message.error(res.message);
     }
   };
+  const limitDecimals = (value?: any) => {
+    return value?.replace(/[^\d]+/g, '');
+  }
   const showWXName = bjxx?.KHBJJs?.[0]?.JZGJBSJ?.XM === '未知' && bjxx?.KHBJJs?.[0]?.JZGJBSJ?.WechatUserId;
   return (
     <>
@@ -144,16 +147,23 @@ const NewPatrol = (props: any) => {
             <div className={styles.card}>
               <h4>学生出勤情况</h4>
               <ul>
-                <li><label>授课教师是否已点名</label><span>{checkIn ? '已点名':'未点名'}</span></li>
+                <li><label>授课教师是否已点名</label><span>{checkIn ? '已点名' : '未点名'}</span></li>
                 <li>
                   <label>应到人数</label>
                   <span><InputNumber value={bjxx?.xs_count} disabled />人</span>
                 </li>
                 <li>
                   <label>实到人数</label>
-                  <span>{(checkIn || check) ? <InputNumber value={checkNum} disabled /> : <InputNumber placeholder='请输入' min={0} max={bjxx?.xs_count} onBlur={(e) => {
-                    recordDetail.SDRS = Number(e.target.value);
-                  }} />}人</span>
+                  <span>{(checkIn || check) ? <InputNumber value={checkNum} disabled /> : <InputNumber
+                    placeholder='请输入'
+                    min={0}
+                    max={bjxx?.xs_count}
+                    formatter={limitDecimals}
+                    parser={limitDecimals}
+                    onBlur={(e) => {
+                      recordDetail.SDRS = Number(e.target.value);
+                    }}
+                  />}人</span>
                 </li>
                 {checkIn ? <li>
                   <label>实到人数准确</label>
@@ -162,9 +172,16 @@ const NewPatrol = (props: any) => {
                 {!accurate ? <li>
                   <label>巡课确认人数</label>
                   <span>
-                    {check ? <InputNumber value={realNum} disabled /> : <InputNumber disabled={check} placeholder='请输入' min={0} max={bjxx?.xs_count} onBlur={(e) => {
-                      recordDetail.QRRS = Number(e.target.value);
-                    }} />}人
+                    {check ? <InputNumber value={realNum} disabled /> : <InputNumber
+                      disabled={check}
+                      placeholder='请输入'
+                      min={0}
+                      max={bjxx?.xs_count}
+                      formatter={limitDecimals}
+                      parser={limitDecimals}
+                      onBlur={(e) => {
+                        recordDetail.QRRS = Number(e.target.value);
+                      }} />}人
                   </span>
                 </li> : ''}
               </ul>
