@@ -38,3 +38,14 @@ export async function calcAllPeriod(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+/** 获取所有已开班的班级ID GET /kcbsksj/getAllClassIds */
+export async function getAllClassIds(options?: { [key: string]: any }) {
+  return request<{ status?: 'ok' | 'error'; data?: string[]; message?: string }>(
+    '/kcbsksj/getAllClassIds',
+    {
+      method: 'GET',
+      ...(options || {}),
+    },
+  );
+}

@@ -28,6 +28,7 @@ import type { TableListParams } from '@/constant';
 import SearchLayout from '@/components/Search/Layout';
 import AddCourseClass from './components/AddCourseClass';
 import AppSKXQTable from './components/AppSKXQTable';
+import { calcAllPeriod, getAllClassIds } from '@/services/after-class/kcbsksj';
 
 const { Option } = Select;
 
@@ -76,8 +77,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // const [JFAmount, setJFAmount] = useState<any>(0);
   // 班级状态
   const [BJZTMC, setBJZTMC] = useState<string | undefined>(undefined);
-  // 班级同步数据存储
-  const [BJCC, setBJCC] = useState<[]>();
   const [clickBjId, setClickBjId] = useState();
   // 课程班班级基本设置数据
   const [BjLists, setBjLists] = useState<any>();
@@ -101,9 +100,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
     const resAll = await getAllClasses(opts);
     if (resAll.status === 'ok' && resAll.data) {
       let newTableDateSource = resAll.data.rows;
-      if (BJZTMC === '已开班') {
-        setBJCC(newTableDateSource);
-      }
       if (origin) {
         newTableDateSource = newTableDateSource.filter((item: any) => {
           return item.KHKCSJ?.SSJGLX === origin;
@@ -313,11 +309,17 @@ const CourseManagement = (props: { location: { state: any } }) => {
     setBJZTMC(undefined);
   };
   // 课程班排课信息同步事件
-  const syncDays = () => {
-    if (BJCC?.length) {
-      BJCC.forEach(async (v: { id: string }) => {
-        await getClassDays(v.id);
-      });
+  const syncDays = async () => {
+    /** 重新计算已有数据 */
+    await calcAllPeriod();
+    /** 获取所有已开班的班级ID 重新计算课程班课时 */
+    const res = await getAllClassIds();
+    if (res.status === 'ok' && res.data) {
+      if (res.data?.length) {
+        res.data.forEach(async (v: string) => {
+          await getClassDays(v);
+        });
+      }
     }
   };
 

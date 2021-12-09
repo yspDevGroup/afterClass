@@ -11,7 +11,7 @@ export async function getKHJSCQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{
     status?: 'ok' | 'error';
     data?: {
@@ -22,7 +22,7 @@ export async function getKHJSCQ(
       JZGJBSJId?: string;
       KHBJSJId?: string;
       JZGJBSJ?:
-        | { id?: string; XM?: string; GH?: string; LXDH?: string; WechatUserId?: string }
+        | { id?: string; XM?: string; GH?: string; LXDH?: string | any; WechatUserId?: string }
         | any;
       XXSJPZ?:
         | {
@@ -39,7 +39,7 @@ export async function getKHJSCQ(
     message?: string;
   }>(`/khjscq/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -53,10 +53,10 @@ export async function deleteKHJSCQ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjscq/${param0}`, {
     method: 'DELETE',
-    params: { ...queryParams },
+    params: { ...params },
     ...(options || {}),
   });
 }
@@ -140,13 +140,13 @@ export async function updateKHJSCQ(
   body: API.UpdateKHJSCQ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0, ...queryParams } = params;
+  const { id: param0 } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjscq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...queryParams },
+    params: { ...params },
     data: body,
     ...(options || {}),
   });

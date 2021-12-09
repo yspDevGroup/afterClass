@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-09-30 19:56:18
+ * @LastEditTime: 2021-12-09 15:19:51
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -64,7 +64,7 @@ const NewPatrol = (props: any) => {
     const resAll = await getAllKHXSCQ({
       bjId: bjxx?.id, // 班级ID
       CQRQ: xkrq, // 日期
-      pkId: bjxx?.KHPKSJs?.[0]?.id || undefined, // 排课ID
+      XXSJPZId: bjxx?.KHPKSJs?.[0]?.XXSJPZ?.id || undefined, // 排课ID
     });
     if (resAll.status === 'ok') {
       const allData = resAll.data;
@@ -78,7 +78,7 @@ const NewPatrol = (props: any) => {
   };
   const getDetail = async (id: string) => {
     const res = await KHXKJL({
-      id: id
+      id
     });
     if (res.status === 'ok' && res.data) {
       const { data } = res;
@@ -100,7 +100,7 @@ const NewPatrol = (props: any) => {
     const res = await createKHXKJL(recordDetail);
     if (res.status === 'ok') {
       message.success('巡课记录已提交');
-      history.push('/teacher/patrolArrange/classes', { id: kcid, day: xkrq, xxId: currentUser?.xxId, kcmc: kcmc, });
+      history.push('/teacher/patrolArrange/classes', { id: kcid, day: xkrq, xxId: currentUser?.xxId, kcmc, });
     } else {
       message.error(res.message);
     }
@@ -144,7 +144,7 @@ const NewPatrol = (props: any) => {
             <div className={styles.card}>
               <h4>学生出勤情况</h4>
               <ul>
-                <li><label>是否已点名</label><span>{checkIn ? '已点名':'未点名'}</span></li>
+                <li><label>授课教师是否已点名</label><span>{checkIn ? '已点名':'未点名'}</span></li>
                 <li>
                   <label>应到人数</label>
                   <span><InputNumber value={bjxx?.xs_count} disabled />人</span>
@@ -175,7 +175,7 @@ const NewPatrol = (props: any) => {
                 {bzDetail}
               </div> : <textarea name="" id="" rows={5} onBlur={(e) => {
                 recordDetail.BZXX = e.target.value;
-              }}></textarea>}
+              }} />}
             </div>
             <div className={styles.footer}>
               <button className={styles.btn} onClick={() => history.go(-1)} >

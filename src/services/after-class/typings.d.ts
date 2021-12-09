@@ -1917,7 +1917,9 @@ declare namespace API {
     JZGJBSJId?: string;
     /** 班级ID */
     KHBJSJId?: string;
-    JZGJBSJ?: { id?: string; XM?: string; GH?: string; LXDH?: string; WechatUserId?: string } | any;
+    JZGJBSJ?:
+      | { id?: string; XM?: string; GH?: string; LXDH?: string | any; WechatUserId?: string }
+      | any;
     XXSJPZ?:
       | {
           id?: string;

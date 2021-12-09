@@ -27,6 +27,8 @@ const PutRecord = (props: any) => {
     if (resKHKTFC.status === 'ok') {
       message.success('发布成功！');
       history.go(-1);
+    }else{
+      message.error(resKHKTFC.message);
     }
   };
 
@@ -40,7 +42,13 @@ const PutRecord = (props: any) => {
             name="nr"
             rules={[{ required: true, message: '请输入要发布的内容！' }]}
           >
-            <TextArea placeholder={'快来分享课堂精彩瞬间~'} rows={4} bordered={false} />
+            <TextArea
+              showCount
+              maxLength={255}
+              placeholder={'快来分享课堂精彩瞬间~'}
+              rows={6}
+              bordered={false}
+            />
           </Form.Item>
           <ImagesUpload
             onValueChange={(value: any) => {
