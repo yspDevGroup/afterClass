@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-12-08 15:52:16
+ * @LastEditTime: 2021-12-09 14:08:31
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -163,6 +163,7 @@ const TkApply = () => {
               <DatePicker
                 disabledDate={disabledDate}
                 inputReadOnly={true}
+                placeholder='请选择'
                 onChange={(value) => {
                   if (value) {
                     setNewRQ(value);
@@ -173,6 +174,8 @@ const TkApply = () => {
           <div className={styles.kcbjTk}>
             <Form.Item name='KSSJ' label="节次">
               <Select
+                placeholder='请选择'
+                allowClear
                 onChange={(value: string) => {
                   if (value) {
                     setNewJCId(value);
