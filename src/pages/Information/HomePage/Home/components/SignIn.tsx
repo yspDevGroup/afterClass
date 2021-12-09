@@ -12,7 +12,7 @@ import styles from '../index.less';
 const SignIn = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [JsName, setJsName] = useState([]);
+  const [AllJs, setAllJs] = useState<any>();
   const [NoSignInTeacher, setNoSignInTeacher] = useState<any>([]);
   useEffect(() => {
     (
@@ -26,9 +26,9 @@ const SignIn = () => {
           const newArrs: any = [];
           const JCIdArr: any = [];
           const BJIdArr: any = [];
-          const newArr = res.data?.rows?.filter((item: any) => new Date(`${item.SKRQ} ${item.XXSJPZ.KSSJ}`) < new Date());
-
-          newArr.forEach((value: any) => {
+          const newArr = res.data?.rows?.filter((item: any) => new Date(`${moment(item.SKRQ).format('YYYY/MM/DD')} ${item.XXSJPZ.KSSJ}`) < new Date());
+          setAllJs(res.data?.rows)
+          newArr?.forEach((value: any) => {
             JCIdArr.push(value.XXSJPZId)
             BJIdArr.push(value.KHBJSJId)
             value.KCBSKJSSJs.forEach((items: any) => {
@@ -41,7 +41,7 @@ const SignIn = () => {
               newArrs.push(newData)
             })
           })
-          setJsName(newArrs)
+
           const resgetAllByDate = await getAllByDate({
             XXSJPZIds: JCIdArr,
             KHBJSJIds: BJIdArr,
@@ -79,7 +79,7 @@ const SignIn = () => {
   return <div className={styles.SignIn}>
     <p className={styles.title}>教师实时签到</p>
     <div className={styles.wrap}>
-      <p><span>应到教师数</span><span><span>{JsName?.length || '0'}</span>人</span></p>
+      <p><span>应到教师数</span><span><span>{AllJs?.length || '0'}</span>人</span></p>
       <p><span>未签到教师数</span><span><span>{NoSignInTeacher?.length || '0'}</span>人</span></p>
       <Row gutter={[8, 16]}>
         {

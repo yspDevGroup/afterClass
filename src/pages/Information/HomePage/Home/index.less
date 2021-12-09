@@ -209,7 +209,6 @@
       margin: 0;
       line-height: 46px;
       > span:nth-of-type(2) {
-        float: right;
         color: #999;
         font-size: 12px;
         span {
@@ -220,9 +219,13 @@
       }
     }
     p:nth-of-type(1) {
+      display: flex;
+      justify-content: space-between;
       border-bottom: 1px solid #eee;
     }
     p:nth-of-type(2) {
+      display: flex;
+      justify-content: space-between;
       > span:nth-of-type(2) {
         span {
           color: #ef4923;
@@ -237,6 +240,7 @@
     }
     :global {
       .ant-row {
+        margin-top: 10px;
         .ant-col {
           max-width: 22% !important;
           height: 24px;
