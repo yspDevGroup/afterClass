@@ -80,7 +80,7 @@ const ActionBar = (props: propstype) => {
       if (res.status === 'ok') {
         const result = updateKHBJSJ({ id: record.id }, { BJZT: '未开班' });
         if ((await result).status === 'ok') {
-          message.success('取消班级成功，课程费用已原路返还');
+          message.success('取消开班成功，课程费用已原路返还');
           getData();
           setVisible(false);
         }
