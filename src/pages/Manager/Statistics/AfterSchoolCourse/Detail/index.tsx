@@ -1,4 +1,5 @@
 import PageContainer from '@/components/PageContainer';
+import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 // import { message } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
@@ -13,6 +14,7 @@ import EllipsisHint from '@/components/EllipsisHint';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
+import ShowName from '@/components/ShowName';
 
 const AfterSchoolClass: React.FC = (props: any) => {
   const { initialState } = useModel('@@initialState');
@@ -81,6 +83,15 @@ const AfterSchoolClass: React.FC = (props: any) => {
       key: 'RKJS',
       align: 'center',
       width: 100,
+      render: (dom: ReactNode, entity: any) => {
+        return (
+          <ShowName
+            type="userName"
+            openid={entity?.KHBJSJ?.KHBJJs?.[0]?.JZGJBSJ?.WechatUserId}
+            XM={dom as string}
+          />
+        );
+      },
     },
     {
       title: '课时数',
