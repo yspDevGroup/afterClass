@@ -161,8 +161,10 @@ const SubstituteList = () => {
                     <span>{moment(item.updatedAt || item.createdAt).format('YYYY.MM.DD')}</span>
                   </div>
                   <p>
-                    时间：{moment(item?.SKRQ).format('MM月DD日')}，{' '}
-                    {item.XXSJPZ?.KSSJ.substring(0, 5)}-{item.XXSJPZ?.JSSJ.substring(0, 5)}
+                    {`时间：${moment(item?.SKRQ).format('MM月DD日')}，${
+                      item.SKJC?.TITLE
+                    }【${item.SKJC?.KSSJ.substring(0, 5)}-
+              ${item.SKJC?.JSSJ.substring(0, 5)}】`}
                   </p>
                   <p>课程：{item.KHBJSJ?.KHKCSJ?.KCMC}</p>
                   <p>原因：{item.BZ}</p>
