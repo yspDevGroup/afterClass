@@ -630,14 +630,15 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                               if (kkTimeFalg) {
                                 return value.ZT === 3;
                               }
-                              // 未开课退全款
-                              return value.ZT === 0;
+                              // 未开课退全款 则当前状态时报名时间段 则可退已缴费和 未缴费
+                              return value.ZT === 0 || value.ZT === 3;
                             }
                             return value.ZT === 0;
                           })
                           .map((item: any) => {
                             return { XSJBSJId: item.XSJBSJId, ZT: item.ZT };
                           });
+                        // console.log('newArr',newArr)
                         batchCancel(newArr);
                       }}
                     >
