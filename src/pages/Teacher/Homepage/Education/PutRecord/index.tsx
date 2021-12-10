@@ -26,7 +26,7 @@ const PutRecord = (props: any) => {
     });
     if (resKHKTFC.status === 'ok') {
       message.success('发布成功！');
-      history.go(-1);
+      history.push('/teacher/home?index=education');
     }else{
       message.error(resKHKTFC.message);
     }
