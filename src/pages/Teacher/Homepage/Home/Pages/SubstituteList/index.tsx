@@ -103,22 +103,12 @@ const SubstituteList = () => {
                   课程：{item.KHBJSJ?.KHKCSJ?.KCMC} — {item.KHBJSJ?.BJMC}
                 </p>
                 <p>
-                  {`${item?.LX === 0 ? '原上课' : ''}时间：${moment(item?.SKRQ).format(
-                    'MM月DD日',
-                  )}，${item.SKJC?.TITLE}【${item.SKJC?.KSSJ.substring(0, 5)}-
+                  {`时间：${moment(item?.SKRQ).format('MM月DD日')}，${
+                    item.SKJC?.TITLE
+                  }【${item.SKJC?.KSSJ.substring(0, 5)}-
               ${item.SKJC?.JSSJ.substring(0, 5)}】`}
                 </p>
-                <p>
-                  {item?.LX === 0
-                    ? `调课后时间：${moment(item?.TKRQ).format('MM月DD日')}，${
-                        item.TKJC?.TITLE
-                      }【${item.TKJC?.KSSJ.substring(0, 5)}-
-              ${item.TKJC?.JSSJ.substring(0, 5)}】`
-                    : ''}
-                </p>
-                <p>
-                  {item?.LX === 1 ? '代课' : '调课'}原因：{item.BZ}
-                </p>
+                <p>代课原因：{item.BZ}</p>
               </div>
             </Link>
           );
@@ -138,7 +128,6 @@ const SubstituteList = () => {
       ) : (
         <div className={styles.wrap}>
           {LsDatas.map((item: any) => {
-            const showWXName = item?.SKJS?.XM === '未知' && item?.SKJS?.WechatUserId;
             return (
               <Link
                 to={{
@@ -149,11 +138,11 @@ const SubstituteList = () => {
                 <div className={styles.Information}>
                   <div>
                     <h4>
-                      {showWXName ? (
-                        <WWOpenDataCom type="userName" openid={item?.SKJS?.WechatUserId} />
-                      ) : (
-                        item.SKJS?.XM
-                      )}
+                      <ShowName
+                        type="userName"
+                        openid={item?.SKJS?.WechatUserId}
+                        XM={item.SKJS?.XM}
+                      />
                       教师的代课申请
                       {item.ZT === 3 ? (
                         <span>已撤销</span>
