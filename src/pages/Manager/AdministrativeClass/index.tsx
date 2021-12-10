@@ -228,7 +228,7 @@ const AdministrativeClass = () => {
             <SearchLayout>
               <div>
                 <label htmlFor="grade">校区名称：</label>
-                <Select value={campusId} allowClear placeholder="请选择" onChange={onCampusChange}>
+                <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
                   {campusData?.map((item: any) => {
                     return <Option value={item.value}>{item.label}</Option>;
                   })}

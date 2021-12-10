@@ -422,7 +422,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                   placement="topRight"
                 >
                   <Tooltip title="本课程暂未开始上课，退课后，系统将自动发起全额退款">
-                    <a>退费取消报名</a>
+                    <a>取消报名</a>
                   </Tooltip>
                 </Popconfirm>
               ) : (
@@ -724,14 +724,14 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           }
           if (applicantData?.BMLX !== 1 && applicantData?.BJZT === '已开班' && timeFalg) {
             return [
-              <Button
-                type="link"
-                onClick={() => {
-                  setUploadVisible(true);
-                }}
-              >
-                导入报名
-              </Button>,
+              // <Button
+              //   type="link"
+              //   onClick={() => {
+              //     setUploadVisible(true);
+              //   }}
+              // >
+              //   导入报名
+              // </Button>,
               <Button
                 type="primary"
                 onClick={() => {

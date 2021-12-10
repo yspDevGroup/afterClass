@@ -398,9 +398,9 @@ const RoomManagement = () => {
             <PlusOutlined />
             新增场地
           </Button>,
-          <Button key="button" type="primary" onClick={() => setUploadVisible(true)}>
-            <VerticalAlignBottomOutlined /> 导入
-          </Button>,
+          // <Button key="button" type="primary" onClick={() => setUploadVisible(true)}>
+          //   <VerticalAlignBottomOutlined /> 导入
+          // </Button>,
         ]}
       />
       <Modal

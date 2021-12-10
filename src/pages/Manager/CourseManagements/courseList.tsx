@@ -591,7 +591,7 @@ const CourseList = () => {
               onClick={() => handleOperation('add')}
             >
               <PlusOutlined />
-              新增本校课程
+              新增校内课程
             </Button>,
           ]}
         />
