@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-12-10 16:00:09
+ * @LastEditTime: 2021-12-10 16:17:37
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable no-param-reassign */
@@ -586,7 +586,7 @@ export const convertTimeTable = async (
       }
       if (specialData?.length) {
         const curCQ = specialData.find(
-          (item: any) => item.SKRQ === day && item.XXSJPZ?.id === jcId,
+          (item: any) => item.SKRQ === day && item.SKJC?.id === jcId,
         );
         if (curCQ) {
           status = curCQ?.LX === 1 ? '代课' : '调课';
