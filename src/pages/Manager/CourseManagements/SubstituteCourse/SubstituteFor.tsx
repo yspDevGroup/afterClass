@@ -156,7 +156,7 @@ const SubstituteFor = (props: { teacherData?: any }) => {
       key: 'YJ',
       align: 'center',
       ellipsis: true,
-      width: 100,
+      width: 150,
       render: (text: any, record: any) => {
         return <>{record.ZT === 4 || record.ZT === 1 ? '同意' : <>{record.ZT === 5 ? '不同意' : '-'}</>}</>
       }
@@ -376,7 +376,7 @@ const SubstituteFor = (props: { teacherData?: any }) => {
             <p>课程名称：{Datas?.KHBJSJ?.KHKCSJ?.KCMC}</p>
             <p>课程班名称：{Datas?.KHBJSJ?.BJMC}</p>
             <p>代课日期：{Datas?.SKRQ}</p>
-            <p>代课时段：{Datas?.XXSJPZ?.KSSJ.substring(0, 5)}~{Datas?.XXSJPZ?.JSSJ.substring(0, 5)}</p>
+            <p>代课时段：{Datas?.SKJC?.KSSJ.substring(0, 5)}~{Datas?.SKJC?.JSSJ.substring(0, 5)}</p>
             <p>代课场地：{Datas?.SKFJ?.FJMC}</p>
             <div className={styles.TkAfter}>
               <div>

@@ -239,12 +239,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                    KHBJSJId: formValues?.id,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
               : undefined;
         } else {
           ZTeacher = [
@@ -256,11 +256,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
               : undefined;
         }
         const newData = {
@@ -324,12 +324,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+                KHBJSJId: formValues?.id,
+              };
+            })
             : undefined;
       } else {
         ZTeacher = [
@@ -341,11 +341,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+              };
+            })
             : undefined;
       }
       const newData = {
@@ -698,7 +698,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-          type: 'divTab',
+        type: 'divTab',
           text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
           style: { marginBottom: 8, color: '#bbbbbb' },
         }
@@ -912,12 +912,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-          type: 'custom',
-          text: '教辅材料',
-          name: 'KHKCJCs',
-          key: 'KHKCJCs',
-          children: getChildren(),
-        }
+        type: 'custom',
+        text: '教辅材料',
+        name: 'KHKCJCs',
+        key: 'KHKCJCs',
+        children: getChildren(),
+      }
       : '',
   ];
   const showWXName = formValues?.ZJS?.XM === '未知' && formValues?.ZJS?.WechatUserId;
@@ -950,15 +950,18 @@ const AddCourseClass: FC<AddCourseProps> = ({
             <div className={styles.box}>
               <p>
                 主班：
-                {showWXName ? (
-                  <WWOpenDataCom type="userName" openid={formValues?.ZJS?.WechatUserId} />
-                ) : (
-                  formValues?.ZJS?.XM
-                )}
+                {
+                  formValues?.ZJS ? <>
+                    {showWXName ? (
+                      <WWOpenDataCom type="userName" openid={formValues?.ZJS?.WechatUserId} />
+                    ) : (
+                      formValues?.ZJS?.XM
+                    )}</> : <>—</>
+                }
               </p>
               <p>
                 副班：
-                {formValues?.KHBJJs.length ? (
+                {formValues?.FJS.length !== 0 ? (
                   <>
                     {formValues?.KHBJJs.map((value: any) => {
                       const FJSWXName =
@@ -981,7 +984,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
                     })}
                   </>
                 ) : (
-                  <>——</>
+                  <>—</>
                 )}
               </p>
             </div>
