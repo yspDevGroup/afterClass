@@ -1,4 +1,4 @@
-import { Button, Divider, InputNumber, message, Modal, Select, Steps } from 'antd';
+import { Button, Divider, InputNumber, message, Modal, Select, Steps, Input } from 'antd';
 import type { FC } from 'react';
 import { useRef } from 'react';
 import styles from './AddCourse.less';
@@ -34,6 +34,7 @@ type AddCourseProps = {
 };
 const { Option } = Select;
 const { Step } = Steps;
+const { TextArea } = Input;
 const AddCourseClass: FC<AddCourseProps> = ({
   visible,
   setVisible,
@@ -747,6 +748,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
       name: 'BJMS',
       key: 'BJMS',
       placeholder: '请输入班级课程安排',
+      children: (
+        <TextArea showCount maxLength={200}  autoSize={{ minRows: 3, maxRows: 5 }} />
+      ),
     },
   ];
   const BMformItems: any[] = [
