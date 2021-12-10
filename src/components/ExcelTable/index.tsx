@@ -134,7 +134,14 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             </div>
             {mode === 'see' ? (
               <div className="teacher" style={{ height: 22 }}>
-                <ShowName XM={data.teacher} type="userName" openid={data.teacherWechatId} />
+                <ShowName
+                  XM={data.teacher}
+                  type="userName"
+                  openid={data.teacherWechatId}
+                  style={{
+                    color: data?.color,
+                  }}
+                />
               </div>
             ) : (
               <span />
