@@ -743,7 +743,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           visible={ModalSKXQ}
           onCancel={handleCancel}
           footer={null}
-          style={{ minWidth: '700px' }}
+          style={{ minWidth: '750px' }}
           destroyOnClose
         >
           <AppSKXQTable SKXQData={SKXQData} />
