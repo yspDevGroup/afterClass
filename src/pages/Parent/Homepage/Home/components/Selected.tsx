@@ -25,7 +25,7 @@ const defaultMsgs: ListData = {
   noDataText: '暂无服务',
   noDataImg: noData,
 };
-const CourseTab = (props: { dataResource: any; }) => {
+const CourseTab = (props: { dataResource: any }) => {
   const { dataResource } = props;
   // 获取首页数据
   const { courseStatus, kskc, yxkc } = dataResource;
@@ -43,6 +43,7 @@ const CourseTab = (props: { dataResource: any; }) => {
     (async () => {
       const res = await getStudent({
         XSJBSJId: StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId,
+        ZT: [0, 1],
       });
       if (res.status === 'ok') {
         setYxserviceData(res.data?.rows);
@@ -61,11 +62,17 @@ const CourseTab = (props: { dataResource: any; }) => {
           desc: [
             {
               left: [
-                `预定时段：${moment(record?.KHXXZZFW?.BMKSSJ).format('YYYY.MM.DD')}~${moment(record?.KHXXZZFW?.BMJSSJ).format('YYYY.MM.DD')}`,
+                `预定时段：${moment(record?.KHXXZZFW?.BMKSSJ).format('YYYY.MM.DD')}~${moment(
+                  record?.KHXXZZFW?.BMJSSJ,
+                ).format('YYYY.MM.DD')}`,
               ],
             },
             {
-              left: [`服务时段：${moment(record?.KSRQ).format('YYYY.MM.DD')}~${moment(record?.JSRQ).format('YYYY.MM.DD')}`],
+              left: [
+                `服务时段：${moment(record?.KHXXZZFW?.KSRQ).format('YYYY.MM.DD')}~${moment(
+                  record?.KHXXZZFW?.JSRQ,
+                ).format('YYYY.MM.DD')}`,
+              ],
             },
           ],
           // introduction: record.KHKCSJ.KCMS,
@@ -84,18 +91,20 @@ const CourseTab = (props: { dataResource: any; }) => {
       const listData: any = [].map.call(yxkc, (record: any) => {
         const nodeData: ListItem = {
           id: record.id,
-          title:` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
+          title: ` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
           img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
           link: `/parent/home/courseIntro?classid=${record.id}`,
           desc: [
             {
               left: [
-                `课程时段：${record.KKRQ
-                  ? moment(record.KKRQ).format('YYYY.MM.DD')
-                  : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
-                }-${record.JKRQ
-                  ? moment(record.JKRQ).format('YYYY.MM.DD')
-                  : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
+                `课程时段：${
+                  record.KKRQ
+                    ? moment(record.KKRQ).format('YYYY.MM.DD')
+                    : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
+                }-${
+                  record.JKRQ
+                    ? moment(record.JKRQ).format('YYYY.MM.DD')
+                    : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
                 }`,
               ],
             },
@@ -103,7 +112,7 @@ const CourseTab = (props: { dataResource: any; }) => {
               left: [`共${record.KSS}课时`],
             },
           ],
-          fkzt:record.KHXSBJs?.[0]?.ZT,
+          fkzt: record.KHXSBJs?.[0]?.ZT,
           introduction: record.KHKCSJ.KCMS,
         };
         return nodeData;
@@ -128,30 +137,34 @@ const CourseTab = (props: { dataResource: any; }) => {
         tabBarExtraContent={
           !centered
             ? {
-              right: (
-                <Link
-                  to={{
-                    pathname: '/parent/home/serviceReservation',
-                    state: { courseStatus, kskc, yxkcAllData, keys },
-                  }}
-                >
-                  全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
-                </Link>
-              ),
-            }
+                right: (
+                  <Link
+                    to={{
+                      pathname: '/parent/home/serviceReservation',
+                      state: { courseStatus, kskc, yxkcAllData, keys },
+                    }}
+                  >
+                    全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
+                  </Link>
+                ),
+              }
             : ''
         }
         className={styles.courseTab}
       >
         <TabPane tab="已选课程" key="yxkc">
-          {
-            yxkc && yxkc?.length ? <ListComponent listData={yxkcData} /> : <ListComponent listData={defaultMsg} />
-          }
+          {yxkc && yxkc?.length ? (
+            <ListComponent listData={yxkcData} />
+          ) : (
+            <ListComponent listData={defaultMsg} />
+          )}
         </TabPane>
         <TabPane tab="已选服务" key="yxfw">
-          {
-            YxserviceData && YxserviceData?.length ? <ListComponent listData={yxfwData} /> : <ListComponent listData={defaultMsgs} />
-          }
+          {YxserviceData && YxserviceData?.length ? (
+            <ListComponent listData={yxfwData} />
+          ) : (
+            <ListComponent listData={defaultMsgs} />
+          )}
         </TabPane>
       </Tabs>
     </div>
