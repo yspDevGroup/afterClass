@@ -100,7 +100,12 @@ const SignInDetails = () => {
               <div className={styles.box}>
                 <p>
                   <span className={styles.name}>
-                    <ShowName XM={value?.XM} type="userName" openid={value?.WechatUserId} />
+                    <ShowName
+                      XM={value?.XM}
+                      type="userName"
+                      openid={value?.WechatUserId}
+                      style={{ color: '#666' }}
+                    />
                   </span>
                   <span className={styles.time}>
                     {value?.XXSJPZ.KSSJ.substring(0, 5)}~{value?.XXSJPZ.JSSJ.substring(0, 5)}
