@@ -600,9 +600,10 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                 // 免费课程    // 先报名后缴费
                 applicantData?.BJZT === '已开班' && applicantData.BMLX !== 1 && (
                   <Tooltip
-                    defaultVisible
+                    // defaultVisible
+                    overlayClassName={styles.tooltipdiv}
                     title={
-                      <ul style={{ padding: 0, listStyleType: 'none', width: '250px' }}>
+                      <ul style={{ padding: 0, listStyleType: 'none', width: '260px' }}>
                         <li className={styles.liDiv}>
                           <div className={styles.circle} />
                           <span className={styles.spanDiv}>免费：可随时取消</span>
@@ -653,8 +654,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                 // 报名即缴费
                 applicantData?.BJZT === '已开班' && applicantData.BMLX === 1 && !kkTimeFalg && (
                   <Tooltip
+                    overlayClassName={styles.tooltipdiv}
                     title={
-                      <ul style={{ padding: 0, listStyleType: 'none', width: '250px' }}>
+                      <ul style={{ padding: 0, listStyleType: 'none', width: '260px' }}>
                         <li className={styles.liDiv}>
                           <div className={styles.circle} />
                           <span className={styles.spanDiv}>免费：可随时取消</span>
