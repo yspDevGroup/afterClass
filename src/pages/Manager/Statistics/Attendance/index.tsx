@@ -15,7 +15,7 @@ import classImg from '@/assets/class.png';
 import normalImg from '@/assets/normal.png';
 import abnormalImg from '@/assets/abnormal.png';
 import allHoursImg from '@/assets/allHours.png';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 
 import { Link } from 'umi';
 import moment, { isMoment } from 'moment';
@@ -69,13 +69,9 @@ const LeaveManagement = () => {
       align: 'center',
       fixed: 'left',
       width: 100,
-      render: (_, record) => {
-        const showWXName = record?.XM === '未知' && record?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record.WechatUserId} />;
-        }
-        return record?.XM;
-      },
+      render: (_, record) => (
+        <ShowName type="userName" openid={record.WechatUserId} XM={record?.XM} />
+      ),
     },
     {
       title: '授课班级数',
@@ -108,7 +104,7 @@ const LeaveManagement = () => {
       align: 'center',
       width: 100,
       render: (_: any, record: any) => {
-        return (Number(record.absenteeism) + Number(record.leave) + Number(record.substitute)) || 0;
+        return Number(record.absenteeism) + Number(record.leave) + Number(record.substitute) || 0;
       },
     },
     {
@@ -169,13 +165,9 @@ const LeaveManagement = () => {
       align: 'center',
       fixed: 'left',
       width: 100,
-      render: (_text: any, record: any) => {
-        const showWXName = record.XM === '未知' && record?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.WechatUserId} />;
-        }
-        return record?.XM;
-      },
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.WechatUserId} XM={record?.XM} />
+      ),
     },
     {
       title: '行政班名称',
@@ -370,9 +362,14 @@ const LeaveManagement = () => {
           <TabPane tab="教师考勤统计" key="1">
             <FormSelect
               getDataSource={getDataSource}
-              type='teacher'
+              type="teacher"
               exportButton={
-                <Button type="primary" icon={<DownloadOutlined />} style={{ float: 'right' }} onClick={onExportJSClick}>
+                <Button
+                  type="primary"
+                  icon={<DownloadOutlined />}
+                  style={{ float: 'right' }}
+                  onClick={onExportJSClick}
+                >
                   导出
                 </Button>
               }
@@ -429,7 +426,11 @@ const LeaveManagement = () => {
                     <img src={abnormalImg} />
                   </span>
                   <div>
-                    <h3>{(collectData?.allJS_absenteeism + collectData?.allJS_leave + collectData?.allJS_substitute) || 0}</h3>
+                    <h3>
+                      {collectData?.allJS_absenteeism +
+                        collectData?.allJS_leave +
+                        collectData?.allJS_substitute || 0}
+                    </h3>
                     <p>缺勤总次数</p>
                   </div>
                 </div>
@@ -440,9 +441,14 @@ const LeaveManagement = () => {
           <TabPane tab="学生考勤统计" key="2">
             <FormSelect
               getDataSource={getDataSource}
-              type='student'
+              type="student"
               exportButton={
-                <Button type="primary" icon={<DownloadOutlined />} style={{ float: 'right' }} onClick={onExportXSClick}>
+                <Button
+                  type="primary"
+                  icon={<DownloadOutlined />}
+                  style={{ float: 'right' }}
+                  onClick={onExportXSClick}
+                >
                   导出
                 </Button>
               }
@@ -488,7 +494,7 @@ const LeaveManagement = () => {
                     <img src={abnormalImg} />
                   </span>
                   <div>
-                    <h3>{(collectData?.AllXSQQ_count) || 0}</h3>
+                    <h3>{collectData?.AllXSQQ_count || 0}</h3>
                     <p>缺勤总次数</p>
                   </div>
                 </div>

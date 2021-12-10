@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-29 12:21:42
- * @LastEditTime: 2021-11-22 12:12:32
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-10 14:43:01
+ * @LastEditors: zpl
  */
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
@@ -11,7 +11,7 @@ import { message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'a
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { getAllKHXSTK, updateKHXSTK, exportTKJL } from '@/services/after-class/khxstk';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { DownloadOutlined } from '@ant-design/icons';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
@@ -161,13 +161,9 @@ const CourseRefund = () => {
       align: 'center',
       ellipsis: true,
       width: 120,
-      render: (_, record) => {
-        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
-        }
-        return record?.JZGJBSJ?.XM;
-      },
+      render: (_, record) => (
+        <ShowName type="userName" openid={record?.JZGJBSJ?.WechatUserId} XM={record?.JZGJBSJ?.XM} />
+      ),
     },
     {
       title: '审批时间',
@@ -246,7 +242,7 @@ const CourseRefund = () => {
               form.setFieldsValue({
                 TKJE: record?.TKJE,
                 TKZT: 1,
-                BZ: ''
+                BZ: '',
               });
             }}
           >
@@ -332,7 +328,11 @@ const CourseRefund = () => {
               <>
                 <SearchLayout>
                   <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-                  <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={courseChange} />
+                  <CourseSelect
+                    XXJBSJId={currentUser?.xxId}
+                    XNXQId={curXNXQId}
+                    onChange={courseChange}
+                  />
                   <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
                   <div>
                     <label htmlFor="name">学生姓名：</label>

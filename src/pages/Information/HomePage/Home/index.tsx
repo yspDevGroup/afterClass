@@ -1,15 +1,15 @@
 import { useModel, history } from 'umi';
-import { Col, Row, Image, Avatar } from 'antd';
-import { defUserImg } from '@/constant';
+import { Col, Row } from 'antd';
+// import { defUserImg } from '@/constant';
 import Overview from './components/Overview';
 import Notice from './components/Notice';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
 import IconFont from '@/components/CustomIcon';
+import ShowName from '@/components/ShowName';
 import { removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
 import TopBgImg from '@/assets/topInfoBG.png';
+import SignIn from './components/SignIn';
 
 import styles from './index.less';
-import SignIn from './components/SignIn';
 
 const Home = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -21,11 +21,7 @@ const Home = () => {
         <Row style={{ height: '74px' }} className={styles.teacherInfo}>
           <Col span={22}>
             <p>
-              {currentUser?.UserId === '未知' && currentUser.wechatUserId ? (
-                <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
-              ) : (
-                currentUser?.UserId
-              )}
+              <ShowName XM={currentUser?.XM} type="userName" openid={currentUser?.WechatUserId} />
               老师，您好！
             </p>
             <div>

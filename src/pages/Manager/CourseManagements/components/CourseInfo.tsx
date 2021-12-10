@@ -7,7 +7,7 @@ import CustomForm from '@/components/CustomForm';
 import moment from 'moment';
 import { defImg } from '@/constant';
 import { getJZGJBSJ } from '@/services/after-class/jzgjbsj';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 
 /**
  * 课程详情
@@ -30,13 +30,9 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
       dataIndex: 'XM',
       key: 'XM',
       align: 'center',
-      render: (text: any, record: any) => {
-        const showWXName = record?.XM === '未知' && record?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.WechatUserId} />;
-        }
-        return record?.XM;
-      },
+      render: (text: any, record: any) => (
+        <ShowName type="userName" openid={record?.WechatUserId} XM={record?.XM} />
+      ),
     },
     {
       title: '操作',
@@ -119,7 +115,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '姓名',
           name: 'XM',
           key: 'XM',
-          placeholder: '—'
+          placeholder: '—',
         },
         {
           type: 'input',
@@ -147,7 +143,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           span: 12,
           name: 'XL',
           key: 'XL',
-          placeholder: '—'
+          placeholder: '—',
         },
       ],
     },
@@ -160,14 +156,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '民族',
           name: 'MZM',
           key: 'MZM',
-          placeholder: '—'
+          placeholder: '—',
         },
         {
           type: 'input',
           label: '毕业院校',
           name: 'BYYX',
           key: 'BYYX',
-          placeholder: '—'
+          placeholder: '—',
         },
       ],
     },
@@ -181,14 +177,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '出生日期',
           name: 'CSRQ',
           key: 'CSRQ',
-          placeholder: '—'
+          placeholder: '—',
         },
         {
           type: 'input',
           label: '专业',
           name: 'SXZY',
           key: 'ZY',
-          placeholder: '—'
+          placeholder: '—',
         },
       ],
     },
@@ -201,7 +197,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '联系电话',
           name: 'LXDH',
           key: 'LXDH',
-          placeholder: '—'
+          placeholder: '—',
         },
         {
           type: 'inputNumber',
@@ -230,7 +226,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '教授科目',
           name: 'JSKM',
           key: 'JSKM',
-          placeholder: '—'
+          placeholder: '—',
         },
       ],
     },
@@ -243,14 +239,14 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           key: 'SFZJH',
           name: 'SFZJH',
           label: '证件号码',
-          placeholder: '—'
+          placeholder: '—',
         },
         {
           type: 'input',
           label: '电子邮箱',
           name: 'DZXX',
           key: 'DZXX',
-          placeholder: '—'
+          placeholder: '—',
         },
       ],
     },
@@ -263,7 +259,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           label: '个人简介',
           name: 'BZ',
           key: 'BZ',
-          placeholder: '—'
+          placeholder: '—',
         },
       ],
     },
@@ -283,11 +279,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           <Descriptions.Item label="课程来源">{info.SSJGLX}</Descriptions.Item>
           <Descriptions.Item label="适用年级">
             {info?.NJSJs?.map((item: any) => {
-              return (
-                <Tag key={item.id}>
-                  {`${item.XD}${item.NJMC}`}
-                </Tag>
-              );
+              return <Tag key={item.id}>{`${item.XD}${item.NJMC}`}</Tag>;
             })}
           </Descriptions.Item>
           <Descriptions.Item label="课程封面">

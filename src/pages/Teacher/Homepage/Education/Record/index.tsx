@@ -6,7 +6,7 @@ import GoBack from '@/components/GoBack';
 import { getAllKHKTFC, deleteKHKTFC } from '@/services/after-class/khktfc';
 import styles from './index.less';
 import { useModel } from 'umi';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 
 const Record = () => {
   const { initialState } = useModel('@@initialState');
@@ -33,7 +33,7 @@ const Record = () => {
           imgs: imgsArr,
           time: item.createdAt,
           teacher: item.JZGJBSJ,
-          JSId: item.JZGJBSJId
+          JSId: item.JZGJBSJId,
         };
         allData.push(data);
       });
@@ -109,11 +109,14 @@ const Record = () => {
                   </Avatar>
                   <div className={styles.name}>
                     <p>{item.className}</p>
-                    <p>{`${item.classNum}\u00A0\u00A0`} {item?.teacher?.XM === '未知' && item?.teacher?.WechatUserId ? (
-                      <WWOpenDataCom type="userName" openid={item?.teacher?.WechatUserId} />
-                    ) : (
-                      item?.teacher?.XM
-                    )}</p>
+                    <p>
+                      {`${item.classNum}\u00A0\u00A0`}{' '}
+                      <ShowName
+                        type="userName"
+                        openid={item?.teacher?.WechatUserId}
+                        XM={item?.teacher?.XM}
+                      />
+                    </p>
                   </div>
                 </p>
                 <div className={styles.content}>
@@ -128,15 +131,15 @@ const Record = () => {
                                 item.imgs.length === 2 || item.imgs.length === 4
                                   ? 12
                                   : item.imgs.length === 1
-                                    ? 24
-                                    : 8
+                                  ? 24
+                                  : 8
                               }
                               className={
                                 item.imgs.length === 2 || item.imgs.length === 4
                                   ? styles.pairImg
                                   : item.imgs.length === 1
-                                    ? styles.oneImg
-                                    : styles.nineImg
+                                  ? styles.oneImg
+                                  : styles.nineImg
                               }
                             >
                               <Image src={url} />
@@ -148,8 +151,8 @@ const Record = () => {
                   </div>
                   <p>
                     <span>{moment(item.time).format('HH:mm:ss')}</span>
-                    {
-                      currentUser?.JSId === item.JSId ? <Popconfirm
+                    {currentUser?.JSId === item.JSId ? (
+                      <Popconfirm
                         title="您确定要删除此条内容吗？"
                         placement="topRight"
                         onConfirm={async () => {
@@ -176,9 +179,10 @@ const Record = () => {
                         key={item.id}
                       >
                         <a href="#">删除</a>
-                      </Popconfirm> : <></>
-                    }
-
+                      </Popconfirm>
+                    ) : (
+                      <></>
+                    )}
                   </p>
                 </div>
               </div>

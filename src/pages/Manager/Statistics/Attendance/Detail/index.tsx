@@ -11,7 +11,7 @@ import PageContainer from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import { Button, message, Modal, Spin } from 'antd';
 import { DownloadOutlined, LeftOutlined } from '@ant-design/icons';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getTableWidth } from '@/utils/utils';
@@ -93,13 +93,7 @@ const AttendanceDetail = (props: any) => {
       align: 'center',
       width: 100,
       fixed: 'left',
-      render: () => {
-        const showWXName = data?.XM === '未知' && data?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={data?.WechatUserId} />;
-        }
-        return data?.XM;
-      },
+      render: () => <ShowName type="userName" openid={data?.WechatUserId} XM={data?.XM} />,
     },
     {
       title: '课程名称',
@@ -178,13 +172,7 @@ const AttendanceDetail = (props: any) => {
       width: 100,
       fixed: 'left',
       align: 'center',
-      render: () => {
-        const showWXName = data?.XM === '未知' && data?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={data?.WechatUserId} />;
-        }
-        return <div>{data?.XM}</div>;
-      },
+      render: () => <ShowName type="userName" openid={data?.WechatUserId} XM={data?.XM} />,
     },
     {
       title: '课程班名称',
@@ -316,7 +304,12 @@ const AttendanceDetail = (props: any) => {
             <LeftOutlined />
             返回上一页
           </Button>
-          <Button style={{ float: 'right' }} icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+          <Button
+            style={{ float: 'right' }}
+            icon={<DownloadOutlined />}
+            type="primary"
+            onClick={onExportClick}
+          >
             导出
           </Button>
 
@@ -362,7 +355,7 @@ const AttendanceDetail = (props: any) => {
             search={false}
             columns={colomns}
             dataSource={absenteeismData}
-           />
+          />
         </Modal>
       </PageContainer>
     </div>

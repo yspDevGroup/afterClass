@@ -1,11 +1,12 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
-import { Button, Modal } from 'antd';
 import type { FC } from 'react';
-import styles from './index.less';
+import { Button, Modal } from 'antd';
+import ShowName from '@/components/ShowName';
 import EllipsisHint from '../EllipsisHint';
-import WWOpenDataCom from '../WWOpenDataCom';
+
+import styles from './index.less';
 
 type KBItemProps = {
   mode: 'see' | 'edit';
@@ -133,16 +134,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
             </div>
             {mode === 'see' ? (
               <div className="teacher" style={{ height: 22 }}>
-                {data.teacher === '未知' && data.teacherWechatId ? (
-                  <WWOpenDataCom type="userName" openid={data.teacherWechatId} />
-                ) : (
-                  data.teacher
-                )}
-                {/* <WWOpenDataCom
-                  type="userName"
-                  style={{ color: data?.color }}
-                  openid={data?.teacher}
-                /> */}
+                <ShowName XM={data.teacher} type="userName" openid={data.teacherWechatId} />
               </div>
             ) : (
               <span />

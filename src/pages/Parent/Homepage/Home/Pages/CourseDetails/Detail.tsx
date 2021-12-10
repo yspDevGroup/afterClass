@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
-import { Button, Checkbox, Divider, message } from 'antd';
+import { Checkbox } from 'antd';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import styles from './index.less';
-import { useModel, history, Link } from 'umi';
-import { ParentHomeData } from '@/services/local-services/mobileHome';
+import { useModel, Link } from 'umi';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 
 const Detail: React.FC = () => {
@@ -28,7 +27,8 @@ const Detail: React.FC = () => {
   const [JFstate, setJFstate] = useState(false);
   const classid = getQueryString('classid');
   const index = getQueryString('index');
-  const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+  const StorageXSId =
+    localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
   const fetchData = async (bjid: string) => {
     const res = await getKHBJSJ({ id: bjid });
     if (res.status === 'ok') {
@@ -43,9 +43,9 @@ const Detail: React.FC = () => {
         setJFData(res.data?.KHKCJCs);
         setJFTotalost(num);
         const FKZT = res.data.KHXSBJs.find((value: any) => {
-          return value.XSJBSJId === StorageXSId
-        })
-        setFKstate(FKZT)
+          return value.XSJBSJId === StorageXSId;
+        });
+        setFKstate(FKZT);
       }
     } else {
       enHenceMsg(res.message);
@@ -86,9 +86,8 @@ const Detail: React.FC = () => {
       fetchData(classid);
     }
     if (FKstate?.ZT !== 3) {
-      setJFstate(true)
+      setJFstate(true);
     }
-
   }, [classid]);
   const submit = async () => {
     const data: API.CreateKHXSDD = {
@@ -155,14 +154,13 @@ const Detail: React.FC = () => {
             班主任：
             {classDetail?.KHBJJs.map((item: any) => {
               if (item.JSLX.indexOf('副') === -1) {
-                const showWXName = item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
                 return (
                   <span style={{ marginRight: '1em' }}>
-                    {showWXName ? (
-                      <WWOpenDataCom type="userName" openid={item?.JZGJBSJ?.WechatUserId} />
-                    ) : (
-                      item?.JZGJBSJ?.XM
-                    )}
+                    <ShowName
+                      type="userName"
+                      openid={item?.JZGJBSJ?.WechatUserId}
+                      XM={item?.JZGJBSJ?.XM}
+                    />
                   </span>
                 );
               }
@@ -173,25 +171,24 @@ const Detail: React.FC = () => {
             副班：
             {classDetail?.KHBJJs.map((item: any) => {
               if (item.JSLX.indexOf('主') === -1) {
-                const showWXName = item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
                 return (
                   <span style={{ marginRight: '1em' }}>
-                    {showWXName ? (
-                      <WWOpenDataCom type="userName" openid={item?.JZGJBSJ.WechatUserId} />
-                    ) : (
-                      item?.JZGJBSJ?.XM
-                    )}
+                    <ShowName
+                      type="userName"
+                      openid={item?.JZGJBSJ.WechatUserId}
+                      XM={item?.JZGJBSJ?.XM}
+                    />
                   </span>
                 );
               }
               return '';
             })}
           </li>
-          {
-            FKstate?.ZT === 3 ? <li className={styles.bzrname}>
-              报名费：{classDetail?.FY}元
-            </li> : <></>
-          }
+          {FKstate?.ZT === 3 ? (
+            <li className={styles.bzrname}>报名费：{classDetail?.FY}元</li>
+          ) : (
+            <></>
+          )}
           <li>
             上课安排：
             <table width="100%">
@@ -233,20 +230,22 @@ const Detail: React.FC = () => {
                     borderRadius: JFstate === true ? '8px 8px 0 0' : '8px',
                   }}
                 >
-                  {
-                    FKstate?.ZT === 3 ? <Checkbox onChange={onJFChange} checked={JFstate}>
+                  {FKstate?.ZT === 3 ? (
+                    <Checkbox onChange={onJFChange} checked={JFstate}>
                       <span>选购教辅</span>
-                    </Checkbox> : <span style={{ fontWeight: 'bold', fontSize: 16 }}>教辅材料</span>
-                  }
+                    </Checkbox>
+                  ) : (
+                    <span style={{ fontWeight: 'bold', fontSize: 16 }}>教辅材料</span>
+                  )}
                   {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
-
                 </div>
               )}
               <div
                 className={styles.tables}
                 style={{
                   maxHeight: FKstate?.ZT !== 3 ? 'initial' : '70px',
-                }}>
+                }}
+              >
                 {JFstate === true ? (
                   <>
                     {JFData ? (
@@ -272,13 +271,15 @@ const Detail: React.FC = () => {
           </li>
         </ul>
       </div>
-      {
-        FKstate?.ZT === 3 ? <div className={styles.footer}>
+      {FKstate?.ZT === 3 ? (
+        <div className={styles.footer}>
           <button className={styles.btn} onClick={submit}>
             付款
           </button>
-        </div> : <></>
-      }
+        </div>
+      ) : (
+        <></>
+      )}
       <Link
         style={{ visibility: 'hidden' }}
         ref={linkRef}
@@ -294,7 +295,6 @@ const Detail: React.FC = () => {
           },
         }}
       />
-
     </div>
   );
 };

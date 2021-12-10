@@ -13,7 +13,7 @@ import { getSchoolClasses } from '@/services/after-class/bjsj';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import noJF from '@/assets/noJF.png';
 
 type AddCourseProps = {
@@ -240,12 +240,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+                  return {
+                    JSLX: '副教师',
+                    JZGJBSJId: item,
+                    KHBJSJId: formValues?.id,
+                  };
+                })
               : undefined;
         } else {
           ZTeacher = [
@@ -257,11 +257,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                };
-              })
+                  return {
+                    JSLX: '副教师',
+                    JZGJBSJId: item,
+                  };
+                })
               : undefined;
         }
         const newData = {
@@ -325,12 +325,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-                KHBJSJId: formValues?.id,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
             : undefined;
       } else {
         ZTeacher = [
@@ -342,11 +342,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
             : undefined;
       }
       const newData = {
@@ -699,7 +699,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-        type: 'divTab',
+          type: 'divTab',
           text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
           style: { marginBottom: 8, color: '#bbbbbb' },
         }
@@ -748,9 +748,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       name: 'BJMS',
       key: 'BJMS',
       placeholder: '请输入班级课程安排',
-      children: (
-        <TextArea showCount maxLength={200}  autoSize={{ minRows: 3, maxRows: 5 }} />
-      ),
+      children: <TextArea showCount maxLength={200} autoSize={{ minRows: 3, maxRows: 5 }} />,
     },
   ];
   const BMformItems: any[] = [
@@ -916,15 +914,14 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-        type: 'custom',
-        text: '教辅材料',
-        name: 'KHKCJCs',
-        key: 'KHKCJCs',
-        children: getChildren(),
-      }
+          type: 'custom',
+          text: '教辅材料',
+          name: 'KHKCJCs',
+          key: 'KHKCJCs',
+          children: getChildren(),
+        }
       : '',
   ];
-  const showWXName = formValues?.ZJS?.XM === '未知' && formValues?.ZJS?.WechatUserId;
   return (
     <>
       <Modal
@@ -954,33 +951,29 @@ const AddCourseClass: FC<AddCourseProps> = ({
             <div className={styles.box}>
               <p>
                 主班：
-                {
-                  formValues?.ZJS ? <>
-                    {showWXName ? (
-                      <WWOpenDataCom type="userName" openid={formValues?.ZJS?.WechatUserId} />
-                    ) : (
-                      formValues?.ZJS?.XM
-                    )}</> : <>—</>
-                }
+                {formValues?.ZJS ? (
+                  <ShowName
+                    type="userName"
+                    openid={formValues?.ZJS?.WechatUserId}
+                    XM={formValues?.ZJS?.XM}
+                  />
+                ) : (
+                  <>—</>
+                )}
               </p>
               <p>
                 副班：
                 {formValues?.FJS.length !== 0 ? (
                   <>
                     {formValues?.KHBJJs.map((value: any) => {
-                      const FJSWXName =
-                        value?.JZGJBSJ?.XM === '未知' && value?.JZGJBSJ?.WechatUserId;
                       if (value.JSLX === '副教师') {
                         return (
                           <span style={{ marginRight: 5 }}>
-                            {FJSWXName ? (
-                              <WWOpenDataCom
-                                type="userName"
-                                openid={value?.JZGJBSJ?.WechatUserId}
-                              />
-                            ) : (
-                              value?.JZGJBSJ?.XM
-                            )}
+                            <ShowName
+                              type="userName"
+                              openid={value?.JZGJBSJ?.WechatUserId}
+                              XM={value?.JZGJBSJ?.XM}
+                            />
                           </span>
                         );
                       }

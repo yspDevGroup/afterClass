@@ -6,14 +6,14 @@ import { Modal, Table, Button, Switch, message, notification, Tooltip } from 'an
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
-import { getEnrolled, getKHBJSJ, } from '@/services/after-class/khbjsj';
+import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { createKHJSCQ, getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import { createKHXSCQ, getAllKHXSCQ, getArrangement } from '@/services/after-class/khxscq';
 
 import { theme } from '@/theme-default';
 import styles from './index.less';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 /**
@@ -137,7 +137,7 @@ const CallTheRoll = (props: any) => {
     const resAll = await getAllKHXSCQ({
       bjId: bjId || undefined, // 班级ID
       CQRQ: pkDate, // 日期
-      XXSJPZId: jcId
+      XXSJPZId: jcId,
     });
     if (resAll.status === 'ok') {
       const allData = resAll.data;
@@ -169,7 +169,9 @@ const CallTheRoll = (props: any) => {
           const studentData = resStudent.data;
           const leaveInfo = resLeave?.data?.rows || [];
           studentData?.forEach((item: any) => {
-            const leaveItem = leaveInfo?.find((val: API.KHXSQJ) => val.XSJBSJ?.id === item.XSJBSJId);
+            const leaveItem = leaveInfo?.find(
+              (val: API.KHXSQJ) => val.XSJBSJ?.id === item.XSJBSJId,
+            );
             const leaveJudge = leaveItem && leaveItem?.QJZT !== 1;
             item.isRealTo = leaveJudge ? '缺席' : '出勤';
             item.isLeave = !!leaveJudge;
@@ -212,24 +214,28 @@ const CallTheRoll = (props: any) => {
         const res = await getArrangement({
           DATE: pkDate,
           KHBJSJId: bjId,
-          XXSJPZId: jcId
+          XXSJPZId: jcId,
         });
         if (res.status === 'ok') {
           setPkId(res.data?.id);
         }
       }
-    })()
+    })();
   }, [pkId]);
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData('teacher', currentUser?.xxId, currentUser.JSId || testTeacherId);
+      const oriData = await ParentHomeData(
+        'teacher',
+        currentUser?.xxId,
+        currentUser.JSId || testTeacherId,
+      );
       const { courseSchedule } = oriData;
-      const classInfo = courseSchedule.find((item: { KHBJSJId: string; }) => {
-        return item.KHBJSJId === bjId
+      const classInfo = courseSchedule.find((item: { KHBJSJId: string }) => {
+        return item.KHBJSJId === bjId;
       });
       if (classInfo) {
         const { days, detail } = classInfo;
-        const curDate = days?.find((it: { day: any; }) => it.day === date);
+        const curDate = days?.find((it: { day: any }) => it.day === date);
         setCurNum(curDate?.index + 1);
         const name: claNameType = {
           BJMC: detail?.[0]?.BJMC || '',
@@ -239,7 +245,7 @@ const CallTheRoll = (props: any) => {
         setClaName(name);
       } else {
         const res = await getKHBJSJ({
-          id: bjId
+          id: bjId,
         });
         if (res.status === 'ok') {
           const { data } = res;
@@ -247,11 +253,11 @@ const CallTheRoll = (props: any) => {
             KCMC: data.KHKCSJ.KCMC,
             BJMC: data.BJMC,
             KSS: data.KSS,
-          })
+          });
         }
       }
       getData();
-    })()
+    })();
   }, []);
   useEffect(() => {
     const absentData = dataSource.filter((item: any) => item.isRealTo === '缺席');
@@ -324,11 +330,9 @@ const CallTheRoll = (props: any) => {
       key: 'XSXM',
       align: 'center',
       render: (test: any, record: any) => {
-        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
-        }
-        return record?.XSJBSJ?.XM;
+        return (
+          <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+        );
       },
     },
     {
@@ -381,11 +385,12 @@ const CallTheRoll = (props: any) => {
         <div>
           <b>
             <span ref={userRef}>
-              {currentUser?.UserId === '未知' && currentUser.wechatUserId ? (
-                <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
-              ) : (
-                currentUser?.UserId
-              )}</span>
+              <ShowName
+                type="userName"
+                openid={currentUser.wechatUserId}
+                XM={currentUser?.UserId}
+              />
+            </span>
             老师
           </b>
           <span>

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import moment from 'moment';
 import { Divider } from 'antd';
+import moment from 'moment';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
-import noPic from '@/assets/noPic1.png';
 import GoBack from '@/components/GoBack';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
+import noPic from '@/assets/noPic1.png';
+
 import styles from './index.less';
 
 const Detail: React.FC = () => {
@@ -102,14 +103,13 @@ const Detail: React.FC = () => {
             班主任：
             {classDetail?.KHBJJs.map((item: any) => {
               if (item.JSLX.indexOf('副') === -1) {
-                const showWXName = item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
                 return (
                   <span style={{ marginRight: '1em' }}>
-                    {showWXName ? (
-                      <WWOpenDataCom type="userName" openid={item.JZGJBSJ.WechatUserId} />
-                    ) : (
-                      item.JZGJBSJ?.XM
-                    )}
+                    <ShowName
+                      XM={item.JZGJBSJ.XM}
+                      type="userName"
+                      openid={item.JZGJBSJ.WechatUserId}
+                    />
                   </span>
                 );
               }
@@ -120,14 +120,13 @@ const Detail: React.FC = () => {
             副班：
             {classDetail?.KHBJJs.map((item: any) => {
               if (item.JSLX.indexOf('主') === -1) {
-                const showWXName = item.JZGJBSJ?.XM === '未知' && item.JZGJBSJ?.WechatUserId;
                 return (
                   <span style={{ marginRight: '1em' }}>
-                    {showWXName ? (
-                      <WWOpenDataCom type="userName" openid={item.JZGJBSJ.WechatUserId} />
-                    ) : (
-                      item.JZGJBSJ?.XM
-                    )}
+                    <ShowName
+                      type="userName"
+                      openid={item.JZGJBSJ.WechatUserId}
+                      XM={item.JZGJBSJ.XM}
+                    />
                   </span>
                 );
               }

@@ -4,7 +4,7 @@ import styles from './index.less';
 import { history, useModel } from 'umi';
 import { useEffect, useState } from 'react';
 import { getKHJSTDK, updateKHJSTDK } from '@/services/after-class/khjstdk';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import moment from 'moment';
 
 const { TextArea } = Input;
@@ -54,9 +54,6 @@ const Details = (props: any) => {
       history.push('/teacher/home/substituteList');
     }
   };
-  const showWXName = Datas?.SKJS?.XM === '未知' && Datas?.SKJS?.WechatUserId;
-  const DkshowWXName = Datas?.DKJS?.XM === '未知' && Datas?.DKJS?.WechatUserId;
-  const SPshowWXName = Datas?.SPJS?.XM === '未知' && Datas?.SPJS?.WechatUserId;
   return (
     <div className={styles.Details}>
       <GoBack title={'详情'} teacher />
@@ -64,29 +61,38 @@ const Details = (props: any) => {
         <div className={styles.wraps}>
           <div className={styles.apply}>
             <p className={styles.title}>
-              {showWXName ? (
-                <WWOpenDataCom type="userName" openid={Datas?.SKJS?.WechatUserId} />
-              ) : (
-                Datas.SKJS?.XM
-              )}
+              <ShowName type="userName" openid={Datas?.SKJS?.WechatUserId} XM={Datas.SKJS?.XM} />
               教师的{Datas?.LX === 0 ? '调课' : '代课'}申请
             </p>
-            <p>课程：{Datas.KHBJSJ?.KHKCSJ?.KCMC} — {Datas.KHBJSJ?.BJMC}</p>
             <p>
-              {`${Datas?.LX === 0 ? '原上课' : ''}时间：${moment(Datas?.SKRQ).format('MM月DD日')}，${Datas.SKJC?.TITLE}【${Datas.SKJC?.KSSJ.substring(0, 5)}-
+              课程：{Datas.KHBJSJ?.KHKCSJ?.KCMC} — {Datas.KHBJSJ?.BJMC}
+            </p>
+            <p>
+              {`${Datas?.LX === 0 ? '原上课' : ''}时间：${moment(Datas?.SKRQ).format(
+                'MM月DD日',
+              )}，${Datas.SKJC?.TITLE}【${Datas.SKJC?.KSSJ.substring(0, 5)}-
               ${Datas.SKJC?.JSSJ.substring(0, 5)}】`}
             </p>
-            <p>{Datas?.LX === 0 ? '原上课' : ''}地点：{Datas?.SKFJ?.FJMC} </p>
-            {Datas?.LX === 0 ? <>
-            <Divider />
-              <p>
-                调课后时间：{moment(Datas?.TKRQ).format('MM月DD日')}，{Datas.TKJC?.TITLE}【{Datas.TKJC?.KSSJ.substring(0, 5)}-
-                {Datas.TKJC?.JSSJ.substring(0, 5)}】
-              </p>
-            <p>{Datas?.LX === 0 ? '调课后' : ''}地点：{Datas?.TKFJ?.FJMC} </p>
+            <p>
+              {Datas?.LX === 0 ? '原上课' : ''}地点：{Datas?.SKFJ?.FJMC}{' '}
+            </p>
+            {Datas?.LX === 0 ? (
+              <>
+                <Divider />
+                <p>
+                  调课后时间：{moment(Datas?.TKRQ).format('MM月DD日')}，{Datas.TKJC?.TITLE}【
+                  {Datas.TKJC?.KSSJ.substring(0, 5)}-{Datas.TKJC?.JSSJ.substring(0, 5)}】
+                </p>
+                <p>
+                  {Datas?.LX === 0 ? '调课后' : ''}地点：{Datas?.TKFJ?.FJMC}{' '}
+                </p>
               </>
-              : ''}
-            <p>{Datas?.LX === 0 ? '调课' : '代课'}原因：{Datas.BZ}</p>
+            ) : (
+              ''
+            )}
+            <p>
+              {Datas?.LX === 0 ? '调课' : '代课'}原因：{Datas.BZ}
+            </p>
           </div>
           <div className={styles.process}>
             <p className={styles.title}>流程</p>
@@ -111,11 +117,7 @@ const Details = (props: any) => {
               </div>
               <div>
                 {' '}
-                {showWXName ? (
-                  <WWOpenDataCom type="userName" openid={Datas?.SKJS?.WechatUserId} />
-                ) : (
-                  Datas.SKJS?.XM
-                )}
+                <ShowName type="userName" openid={Datas?.SKJS?.WechatUserId} XM={Datas.SKJS?.XM} />
               </div>
             </div>
             {Datas?.LX === 0 ? (
@@ -128,11 +130,11 @@ const Details = (props: any) => {
                 </div>
                 <div>
                   {' '}
-                  {DkshowWXName ? (
-                    <WWOpenDataCom type="userName" openid={Datas?.DKJS?.WechatUserId} />
-                  ) : (
-                    Datas.DKJS?.XM
-                  )}
+                  <ShowName
+                    type="userName"
+                    openid={Datas?.DKJS?.WechatUserId}
+                    XM={Datas.DKJS?.XM}
+                  />
                 </div>
               </div>
             )}
@@ -144,11 +146,11 @@ const Details = (props: any) => {
               </div>
               {Datas?.SPJS ? (
                 <div>
-                  {SPshowWXName ? (
-                    <WWOpenDataCom type="userName" openid={Datas?.SPJS?.WechatUserId} />
-                  ) : (
-                    Datas.SPJS?.XM
-                  )}
+                  <ShowName
+                    type="userName"
+                    openid={Datas?.SPJS?.WechatUserId}
+                    XM={Datas.SPJS?.XM}
+                  />
                 </div>
               ) : (
                 <></>

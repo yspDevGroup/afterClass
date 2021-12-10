@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Avatar, Menu, Spin } from 'antd';
 import { useModel, history } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
-import styles from './index.less';
 // import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import defaultAvatar from '@/assets/avatar.png';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
 import { LogoutOutlined } from '@ant-design/icons';
 import { removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
+import ShowName from '@/components/ShowName';
+
+import styles from './index.less';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -31,13 +32,13 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   }, []);
 
   const onMenuClick = useCallback(
-    (event: {
-      key: React.Key;
-      keyPath: React.Key[];
+    (info: {
+      key: string;
+      keyPath: string[];
       item: React.ReactInstance;
-      domEvent: React.MouseEvent<HTMLElement>;
+      domEvent: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>;
     }) => {
-      const { key } = event;
+      const { key } = info;
       if (key === 'logout' && initialState) {
         setInitialState({ ...initialState, currentUser: undefined });
         removeOAuthToken();
@@ -107,9 +108,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
               alt="avatar"
             />
             <span className={`${styles.name} anticon`} ref={userRef}>
-              <WWOpenDataCom type="userName" openid={currentUser?.UserId || ''} />
-
-              {/* {currentUser.username} */}
+              <ShowName XM={currentUser.XM} type="userName" openid={currentUser?.UserId} />
             </span>
           </span>
         </HeaderDropdown>

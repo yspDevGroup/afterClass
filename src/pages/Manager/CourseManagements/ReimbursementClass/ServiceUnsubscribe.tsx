@@ -5,7 +5,7 @@ import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 import { createKHXSTK } from '@/services/after-class/khxstk';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getKHZZFW } from '@/services/after-class/khzzfw';
 import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getTableWidth } from '@/utils/utils';
@@ -104,13 +104,9 @@ const ServiceUnsubscribe = () => {
       align: 'center',
       width: 100,
       fixed: 'left',
-      render: (_text: any, record: any) => {
-        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ?.WechatUserId} />;
-        }
-        return record?.XSJBSJ?.XM;
-      },
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.XSJBSJ?.WechatUserId} XM={record?.XSJBSJ?.XM} />
+      ),
     },
     {
       title: '行政班名称',
@@ -180,13 +176,9 @@ const ServiceUnsubscribe = () => {
       align: 'center',
       ellipsis: true,
       width: 100,
-      render: (_, record) => {
-        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
-        }
-        return record?.JZGJBSJ?.XM;
-      },
+      render: (_, record) => (
+        <ShowName type="userName" openid={record?.JZGJBSJ?.WechatUserId} XM={record?.JZGJBSJ?.XM} />
+      ),
     },
     {
       title: '审批时间',

@@ -1,13 +1,13 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 15:57:02
- * @LastEditTime: 2021-11-04 16:41:17
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-10 12:05:24
+ * @LastEditors: zpl
  * @Description: In User Settings Edit
  * @FilePath: \afterClass\src\components\Calendar\components\DateEvent.tsx
  */
 import React, { useEffect, useState } from 'react';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import type { SchoolEvent } from '../data';
 
 import styles from '../index.less';
@@ -37,11 +37,7 @@ const DateEvent = ({ colors, events }: DateEventProps) => {
                   }}
                 />
                 <span className={styles.textCut}>
-                  {event.title === '未知' && event.wechatUserId ? (
-                    <WWOpenDataCom type="userName" openid={event.wechatUserId} />
-                  ) : (
-                    event.title
-                  )}
+                  <ShowName XM={event.title} type="userName" openid={event.wechatUserId} />
                 </span>
               </li>
             );
@@ -77,11 +73,7 @@ const DateEvent = ({ colors, events }: DateEventProps) => {
                         }}
                       />
                       <span className={styles.textCut}>
-                        {event.title === '未知' && event.wechatUserId ? (
-                          <WWOpenDataCom type="userName" openid={event.wechatUserId} />
-                        ) : (
-                          event.title
-                        )}
+                        <ShowName XM={event.title} type="userName" openid={event.wechatUserId} />
                       </span>
                     </li>
                   );

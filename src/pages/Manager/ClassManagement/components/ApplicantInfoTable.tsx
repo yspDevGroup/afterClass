@@ -16,7 +16,7 @@ import {
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { UploadOutlined } from '@ant-design/icons';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { createKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 import { useModel } from 'umi';
 import { createKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
@@ -49,7 +49,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
 
-  const singUpRef = useRef();
+  const singUpRef = useRef<any>();
   const [KHXSBJs, setKHXSBJs] = useState<any>();
   const [visible, setVisible] = useState<boolean>(false);
   // 当前时间范围是否在报名时间范围内
@@ -287,13 +287,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       key: 'XSXM',
       align: 'center',
       width: 100,
-      render: (_text: any, record: any) => {
-        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
-        }
-        return record?.XSJBSJ?.XM;
-      },
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+      ),
     },
     {
       title: '行政班名称',

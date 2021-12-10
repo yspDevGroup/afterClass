@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-12-09 11:28:53
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-10 13:23:32
+ * @LastEditors: zpl
  */
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, message, Select } from 'antd';
@@ -12,7 +12,7 @@ import ClassCalendar from '../../../ClassCalendar';
 import styles from '../index.less';
 import { getIgnoreTeacherByClassesId } from '@/services/after-class/jzgjbsj';
 import { createKHJSTDK } from '@/services/after-class/khjstdk';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
 import { getQueryString } from '@/utils/utils';
 
@@ -36,24 +36,22 @@ const DkApply = () => {
     }
   };
   useEffect(() => {
-    (
-      async () => {
-        if (dateData) {
-          const res = await getIgnoreTeacherByClassesId({
-            KHBJSJId: dateData?.bjid,
-            XXJBSJId: currentUser?.xxId,
-            page: 0,
-            pageSize: 0
-          })
-          if (res.status === 'ok') {
-            setJsData(res.data?.rows)
-          }
-        } else {
-          setJsData([])
+    (async () => {
+      if (dateData) {
+        const res = await getIgnoreTeacherByClassesId({
+          KHBJSJId: dateData?.bjid,
+          XXJBSJId: currentUser?.xxId,
+          page: 0,
+          pageSize: 0,
+        });
+        if (res.status === 'ok') {
+          setJsData(res.data?.rows);
         }
+      } else {
+        setJsData([]);
       }
-    )()
-  }, [dateData])
+    })();
+  }, [dateData]);
   /** 代课补签 */
   const handleResign = async () => {
     await CreateJSCQBQ({
@@ -63,7 +61,7 @@ const DkApply = () => {
       SQNR: '代课',
       BQRId: currentUser.JSId || testTeacherId,
       KHBJSJId: dateData?.bjid,
-      XXSJPZId: dateData?.jcId
+      XXSJPZId: dateData?.jcId,
     });
   };
   const onFinish = async (values: any) => {
@@ -77,8 +75,8 @@ const DkApply = () => {
       SKFJId: dateData?.FJId,
       SKRQ: dateData?.day,
       KHBJSJId: dateData?.bjid,
-      SKJCId: dateData?.jcId
-    }
+      SKJCId: dateData?.jcId,
+    };
     const res = await createKHJSTDK(newData);
     if (res.status === 'ok') {
       message.success('申请成功');
@@ -92,15 +90,14 @@ const DkApply = () => {
         history.push('/teacher/education/courseAdjustment');
       }
     } else {
-      message.error(res.message)
+      message.error(res.message);
     }
   };
   const onGenderChange = (value: any, key: any) => {
-    setDKJsId(key?.key)
-  }
+    setDKJsId(key?.key);
+  };
   return (
     <div className={styles.leaveForm}>
-
       <div className={styles.wrapper}>
         <p className={styles.title}>
           <span>代课时间</span>
@@ -120,23 +117,14 @@ const DkApply = () => {
               name="DKJS"
               rules={[{ required: true, message: '请选择代课教师' }]}
             >
-              <Select
-                placeholder="请选择代课教师"
-                onChange={onGenderChange}
-                allowClear
-                showSearch
-              >
-                {
-                  JsData?.map((value) => {
-                    const showWXName = value?.XM === '未知' && value?.WechatUserId;
-                    return <Option value={value.XM} key={value.id}>
-                      {
-                        showWXName ? <WWOpenDataCom type="userName" openid={value!.WechatUserId!} /> :
-                          <>{value.XM}</>
-                      }
+              <Select placeholder="请选择代课教师" onChange={onGenderChange} allowClear showSearch>
+                {JsData?.map((value) => {
+                  return (
+                    <Option value={value.XM} key={value.id}>
+                      <ShowName type="userName" openid={value!.WechatUserId!} XM={value.XM} />
                     </Option>
-                  })
-                }
+                  );
+                })}
               </Select>
             </Form.Item>
           </div>
@@ -152,14 +140,17 @@ const DkApply = () => {
         </Form>
       </div>
       <div className={styles.fixedBtn}>
-        <Button onClick={() => {
-          history.push('/teacher/education/courseAdjustment')
-        }}>取消</Button>
-        <Button onClick={onSubmit} >提交</Button>
+        <Button
+          onClick={() => {
+            history.push('/teacher/education/courseAdjustment');
+          }}
+        >
+          取消
+        </Button>
+        <Button onClick={onSubmit}>提交</Button>
       </div>
     </div>
   );
 };
 
 export default DkApply;
-

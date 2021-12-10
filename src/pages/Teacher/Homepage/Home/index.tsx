@@ -9,7 +9,7 @@ import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
 
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import IconFont from '@/components/CustomIcon';
 import TeachCourses from './components/TeachCourses';
 import EnrollClassTime from '@/components/EnrollClassTime';
@@ -141,11 +141,11 @@ const Home = () => {
         <div className={styles.headerText}>
           <h4>
             <span ref={userRef}>
-              {currentUser?.UserId === '未知' && currentUser.wechatUserId ? (
-                <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
-              ) : (
-                currentUser?.UserId
-              )}
+              <ShowName
+                type="userName"
+                openid={currentUser.wechatUserId}
+                XM={currentUser?.UserId}
+              />
             </span>
             老师，你好！
           </h4>

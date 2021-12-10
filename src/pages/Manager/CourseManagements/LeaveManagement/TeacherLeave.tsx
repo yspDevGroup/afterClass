@@ -6,7 +6,7 @@ import ProTable from '@ant-design/pro-table';
 import EllipsisHint from '@/components/EllipsisHint';
 import { getAllKHJSQJ, updateKHJSQJ } from '@/services/after-class/khjsqj';
 import { getMainTeacher } from '@/services/after-class/khbjsj';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
@@ -34,12 +34,14 @@ const TeacherLeave: React.FC = () => {
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateKHJSQJ({ id: current?.id },
+      const res = await updateKHJSQJ(
+        { id: current?.id },
         {
           QJZT: ZT,
           BZ,
           SPJSId: currentUser?.JSId || testTeacherId,
-        });
+        },
+      );
       if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);
@@ -53,14 +55,14 @@ const TeacherLeave: React.FC = () => {
           const result = await getMainTeacher({
             KHBJSJIds: bjIds as string[],
             JZGJBSJId: current.JZGJBSJId,
-            JSLX: '主教师'
+            JSLX: '主教师',
           });
           if (result.status === 'ok') {
             const { data } = result;
-            data?.forEach(async (ele: { KHBJSJId: string; }) => {
+            data?.forEach(async (ele: { KHBJSJId: string }) => {
               await getClassDays(ele.KHBJSJId, current.JZGJBSJId, currentUser?.xxId);
             });
-          };
+          }
         }
       }
     } catch (err) {
@@ -78,7 +80,7 @@ const TeacherLeave: React.FC = () => {
     };
     const resAll = await getAllKHJSQJ(obj);
     if (resAll.status === 'ok' && resAll.data) {
-      setDataSource(resAll.data.rows)
+      setDataSource(resAll.data.rows);
     }
   };
   useEffect(() => {
@@ -103,13 +105,9 @@ const TeacherLeave: React.FC = () => {
       align: 'center',
       width: 80,
       fixed: 'left',
-      render: (_text: any, record: any) => {
-        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
-        }
-        return record?.JZGJBSJ?.XM;
-      },
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.JZGJBSJ?.WechatUserId} XM={record?.JZGJBSJ?.XM} />
+      ),
     },
     {
       title: '课程名称',
@@ -122,14 +120,10 @@ const TeacherLeave: React.FC = () => {
           <EllipsisHint
             width="100%"
             text={record.KHJSQJKCs?.map((item: any) => {
-              return (
-                <Tag key={item.KCMC}>
-                  {item.KCMC}
-                </Tag>
-              );
+              return <Tag key={item.KCMC}>{item.KCMC}</Tag>;
             })}
           />
-        )
+        );
       },
       width: 150,
     },
@@ -144,14 +138,10 @@ const TeacherLeave: React.FC = () => {
           <EllipsisHint
             width="100%"
             text={record.KHJSQJKCs?.map((item: any) => {
-              return (
-                <Tag key={item.KHBJSJ?.id}>
-                  {item.KHBJSJ?.BJMC}
-                </Tag>
-              );
+              return <Tag key={item.KHBJSJ?.id}>{item.KHBJSJ?.BJMC}</Tag>;
             })}
           />
-        )
+        );
       },
       width: 120,
     },
@@ -206,13 +196,9 @@ const TeacherLeave: React.FC = () => {
       align: 'center',
       ellipsis: true,
       width: 100,
-      render: (_text: any, record: any) => {
-        const showWXName = record?.SPJS?.XM === '未知' && record?.SPJS?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.SPJS?.WechatUserId} />;
-        }
-        return record?.SPJS?.XM;
-      },
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.SPJS?.WechatUserId} XM={record?.SPJS?.XM} />
+      ),
     },
     {
       title: '审批说明',
@@ -274,13 +260,17 @@ const TeacherLeave: React.FC = () => {
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
             <div>
-              <label htmlFor='type'>教师名称：</label>
-              <Search placeholder="教师名称" allowClear onSearch={(value: string) => {
-                setName(value);
-              }} />
+              <label htmlFor="type">教师名称：</label>
+              <Search
+                placeholder="教师名称"
+                allowClear
+                onSearch={(value: string) => {
+                  setName(value);
+                }}
+              />
             </div>
             <div>
-              <label htmlFor='status'>审批状态：</label>
+              <label htmlFor="status">审批状态：</label>
               <Select
                 allowClear
                 value={QJZT?.[0]}
@@ -288,13 +278,13 @@ const TeacherLeave: React.FC = () => {
                   setQJZT(value !== undefined ? [value] : value);
                 }}
               >
-                <Option key='待审批' value={0}>
+                <Option key="待审批" value={0}>
                   待审批
                 </Option>
-                <Option key='已通过' value={1}>
+                <Option key="已通过" value={1}>
                   已通过
                 </Option>
-                <Option key='已驳回' value={2}>
+                <Option key="已驳回" value={2}>
                   已驳回
                 </Option>
               </Select>

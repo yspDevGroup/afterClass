@@ -1,18 +1,18 @@
-import PageContainer from "@/components/PageContainer";
-import { getStudent } from "@/services/after-class/khxxzzfw";
-import ProTable from "@ant-design/pro-table";
+import PageContainer from '@/components/PageContainer';
+import { getStudent } from '@/services/after-class/khxxzzfw';
+import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import { useEffect, useRef, useState } from "react";
-import type { SignUpItem } from "./data";
-import { Button, Select } from "antd";
-import { LeftOutlined } from "@ant-design/icons";
+import { useEffect, useRef, useState } from 'react';
+import type { SignUpItem } from './data';
+import { Button, Select } from 'antd';
+import { LeftOutlined } from '@ant-design/icons';
 import { history, useModel } from 'umi';
 import styles from './index.less';
-import WWOpenDataCom from "@/components/WWOpenDataCom";
-import { getAllBJSJ } from "@/services/after-class/bjsj";
-import SearchLayout from "@/components/Search/Layout";
-import { getAllXQSJ } from "@/services/after-class/xqsj";
-import { getAllNJSJ } from "@/services/after-class/njsj";
+import ShowName from '@/components/ShowName';
+import { getAllBJSJ } from '@/services/after-class/bjsj';
+import SearchLayout from '@/components/Search/Layout';
+import { getAllXQSJ } from '@/services/after-class/xqsj';
+import { getAllNJSJ } from '@/services/after-class/njsj';
 
 type selectType = { label: string; value: string };
 
@@ -67,7 +67,7 @@ const SignUp = (props: any) => {
       XQSJId: XQId,
       njId: NjId,
       page: 0,
-      pageSize: 0
+      pageSize: 0,
     });
     if (res.status === 'ok') {
       const data = res.data?.rows?.map((item: any) => {
@@ -80,7 +80,7 @@ const SignUp = (props: any) => {
     if (NjId) {
       getBJSJ();
     }
-  }, [NjId,XQId]);
+  }, [NjId, XQId]);
 
   const columns: ProColumns<SignUpItem>[] = [
     {
@@ -88,7 +88,7 @@ const SignUp = (props: any) => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
-      align: 'center'
+      align: 'center',
     },
     {
       title: '学号',
@@ -99,7 +99,7 @@ const SignUp = (props: any) => {
       ellipsis: true,
       width: 100,
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.XH
+        return record?.XSJBSJ?.XH;
       },
     },
     {
@@ -111,11 +111,9 @@ const SignUp = (props: any) => {
       ellipsis: true,
       width: 100,
       render: (_text: any, record: any) => {
-        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
-        }
-        return record?.XSJBSJ?.XM;
+        return (
+          <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+        );
       },
     },
     {
@@ -127,8 +125,8 @@ const SignUp = (props: any) => {
       ellipsis: true,
       width: 100,
       render: (_text: any, record: any) => {
-        const {NJMC,XD} = record?.XSJBSJ?.BJSJ?.NJSJ;
-        return `${XD} ${NJMC}`
+        const { NJMC, XD } = record?.XSJBSJ?.BJSJ?.NJSJ;
+        return `${XD} ${NJMC}`;
       },
     },
     {
@@ -140,7 +138,7 @@ const SignUp = (props: any) => {
       ellipsis: true,
       width: 100,
       render: (_text: any, record: any) => {
-        return record?.XSJBSJ?.BJSJ?.BJ
+        return record?.XSJBSJ?.BJSJ?.BJ;
       },
     },
     {
@@ -153,88 +151,91 @@ const SignUp = (props: any) => {
       width: 100,
     },
   ];
-  return <PageContainer>
-    <div className={styles.SignUp}>
-      <Button
-        type="primary"
-        onClick={() => {
-          history.go(-1);
-        }}
-        style={{ marginBottom: '20px' }}
-      >
-        <LeftOutlined />
-        返回上一页
-      </Button>
-      <ProTable<any>
-        columns={columns}
-        rowKey="key"
-        actionRef={actionRef}
-        pagination={{
-          showQuickJumper: true
-        }}
-        headerTitle={
-          <>
-            <h3 style={{ fontWeight: 'bold', fontSize: 16, marginRight: 24 }}>{state?.FWMC}</h3>
-            <SearchLayout>
-              <div>
-                <label htmlFor="grade">年级名称：</label>
-                <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
-                  {NjData && NjData?.map((item: any) => {
-                    return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
-                  })}
-                </Select>
-              </div>
-              <div>
-                <label htmlFor="grade">校区名称：</label>
-                <Select value={XQId} allowClear placeholder="请选择" onChange={onXQChange}>
-                  {XQData?.map((item: any) => {
-                    return <Option value={item.value}>{item.label}</Option>;
-                  })}
-                </Select>
-              </div>
-              <div>
-                <label htmlFor="kcly">班级名称：</label>
-                <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
-                  {bjData?.map((item: any) => {
-                    return (
-                      <Option value={item.value} key={item.value}>
-                        {item.label}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </div>
-            </SearchLayout>
-          </>
-        }
-        search={false}
-        options={{
-          setting: false,
-          fullScreen: false,
-          density: false,
-          reload: false,
-        }}
-        request={async () => {
-          const res = await getStudent({
-              ZT: [0, 1],
-            KHXXZZFWId: state?.id,
-            XNXQId: state?.XNXQ?.id,
-            XQId,
-            NJId: NjId,
-            BJId,
-          })
-          if (res.status === 'ok' && res.data) {
-            return {
-              data: res.data.rows,
-              success: true,
-              total: res.data.count,
-            };
+  return (
+    <PageContainer>
+      <div className={styles.SignUp}>
+        <Button
+          type="primary"
+          onClick={() => {
+            history.go(-1);
+          }}
+          style={{ marginBottom: '20px' }}
+        >
+          <LeftOutlined />
+          返回上一页
+        </Button>
+        <ProTable<any>
+          columns={columns}
+          rowKey="key"
+          actionRef={actionRef}
+          pagination={{
+            showQuickJumper: true,
+          }}
+          headerTitle={
+            <>
+              <h3 style={{ fontWeight: 'bold', fontSize: 16, marginRight: 24 }}>{state?.FWMC}</h3>
+              <SearchLayout>
+                <div>
+                  <label htmlFor="grade">年级名称：</label>
+                  <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
+                    {NjData &&
+                      NjData?.map((item: any) => {
+                        return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                      })}
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor="grade">校区名称：</label>
+                  <Select value={XQId} allowClear placeholder="请选择" onChange={onXQChange}>
+                    {XQData?.map((item: any) => {
+                      return <Option value={item.value}>{item.label}</Option>;
+                    })}
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor="kcly">班级名称：</label>
+                  <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
+                    {bjData?.map((item: any) => {
+                      return (
+                        <Option value={item.value} key={item.value}>
+                          {item.label}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+              </SearchLayout>
+            </>
           }
-          return [];
-        }}
-        dateFormatter="string"
-      />
-    </div>
-  </PageContainer>
-}
+          search={false}
+          options={{
+            setting: false,
+            fullScreen: false,
+            density: false,
+            reload: false,
+          }}
+          request={async () => {
+            const res = await getStudent({
+              ZT: [0, 1],
+              KHXXZZFWId: state?.id,
+              XNXQId: state?.XNXQ?.id,
+              XQId,
+              NJId: NjId,
+              BJId,
+            });
+            if (res.status === 'ok' && res.data) {
+              return {
+                data: res.data.rows,
+                success: true,
+                total: res.data.count,
+              };
+            }
+            return [];
+          }}
+          dateFormatter="string"
+        />
+      </div>
+    </PageContainer>
+  );
+};
 export default SignUp;
