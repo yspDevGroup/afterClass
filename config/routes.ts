@@ -412,6 +412,11 @@
         name: 'auditSettings',
         component: './Manager/SysSettings/AuditSettings',
       },
+      {
+        path: '/sysSettings/asyncSettings',
+        name: 'asyncSettings',
+        component: './Manager/SysSettings/AsyncSettings',
+      },
     ],
   },
   /*** 老师路由 start ***/

@@ -61,6 +61,7 @@ export default {
   'menu.educational': '素质教育资源',
   'menu.sysSettings': '系统配置',
   'menu.sysSettings.auditSettings': '审批配置',
+  'menu.sysSettings.asyncSettings': '同步配置',
   'menu.parent': '家长端',
   'menu.parent.home': '家长首页',
   'menu.parent.listComponent': '列表组件',

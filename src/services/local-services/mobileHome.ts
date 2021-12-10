@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-11-26 17:16:57
+ * @LastEditTime: 2021-12-10 16:00:09
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable no-param-reassign */
@@ -222,8 +222,8 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
           img: ele.KHBJSJ?.KHKCSJ?.KCTP,
           address: ele?.SKFJ?.FJMC,
           date: ele.RQ,
-          start: ele.KSSJ || ele.XXSJPZ?.KSSJ?.substring?.(0, 5),
-          end: ele.JSSJ || ele.XXSJPZ?.JSSJ?.substring?.(0, 5),
+          start: ele.KSSJ || ele.SKJC?.KSSJ?.substring?.(0, 5),
+          end: ele.JSSJ || ele.SKJC?.JSSJ?.substring?.(0, 5),
           status,
         });
       } else {
@@ -236,8 +236,8 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
           img: ele.KHBJSJ.KHKCSJ.KCTP,
           address: ele.SKFJ.FJMC,
           date: ele.SKRQ,
-          start: ele.KSSJ || ele.XXSJPZ.KSSJ.substring(0, 5),
-          end: ele.JSSJ || ele.XXSJPZ.JSSJ.substring(0, 5),
+          start: ele.KSSJ || ele.SKJC?.KSSJ?.substring(0, 5),
+          end: ele.JSSJ || ele.SKJC?.JSSJ?.substring(0, 5),
           status,
         });
       }
