@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-12-10 10:45:41
+ * @LastEditTime: 2021-12-10 15:24:44
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -59,6 +59,7 @@ const Index = () => {
             }
             break;
           case '家长':
+            localStorage.removeItem('studentId');
             history.replace('/parent/home');
             break;
           default:
