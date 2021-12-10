@@ -109,6 +109,7 @@
         path: '/basicalSettings/basical',
         name: 'basical',
         component: './ThirdParty',
+        hideInMenu: 'true',
       },
     ],
   },
