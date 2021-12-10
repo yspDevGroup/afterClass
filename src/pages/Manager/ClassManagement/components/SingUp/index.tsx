@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 15:41:26
- * @LastEditTime: 2021-12-07 09:14:04
+ * @LastEditTime: 2021-12-09 12:22:20
  * @LastEditors: Wu Zhan
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\pages\Manager\ClassManagement\components\SingUp\index.tsx
@@ -155,6 +155,7 @@ const SignUp = (props: SignUpProps, ref: any) => {
         ZT: applicantData.BMLX === 2 ? 0 : 3,
         XSJBSJIds,
         KHBJSJId: applicantData.id,
+        JZGJBSJId: currentUser?.JSId || testTeacherId,
         // XXId:applicantData?.KHKCSJ?.XXJBSJId,
         // XNXQIId: applicantData?.XNXQId,
       });

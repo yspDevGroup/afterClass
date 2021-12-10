@@ -485,12 +485,15 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
 
   const UploadProps: any = {
     name: 'xlsx',
-    action: `/api/upload/importStudentSignUp?KHBJSJId=${applicantData?.id}`,
+    action: `/api/upload/importStudentSignUp?KHBJSJId=${applicantData?.id}&JZGJBSJId=${
+      currentUser?.JSId || testTeacherId
+    }`,
     headers: {
       authorization: getAuthorization(),
     },
     data: {
       KHBJSJId: applicantData?.id,
+      JZGJBSJId: currentUser?.JSId || testTeacherId,
     },
     // accept={''}
     beforeUpload(file: any) {
