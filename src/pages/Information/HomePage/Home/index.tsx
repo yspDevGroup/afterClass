@@ -50,9 +50,9 @@ const Home = () => {
         </Row>
       </div>
       <div className={styles.pageContent}>
-        <div
+        {/* <div
           className={`${styles.noticeArea} ${styles[initialState?.buildOptions.ENV_type || 'dev']}`}
-        />
+        /> */}
         <Overview />
         <SignIn />
         <Notice />

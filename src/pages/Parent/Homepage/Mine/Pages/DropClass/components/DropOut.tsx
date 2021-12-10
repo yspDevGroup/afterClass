@@ -28,7 +28,7 @@ const DropOut = () => {
   const [kcData, setKcData] = useState<any>();
   const [kcList, setKcList] = useState<any>();
   const [datasourse, setDatasourse] = useState<any>();
-  const StorageXSId = localStorage.getItem('studentId') || (student && student.XSJBSJId) || testStudentId;
+  const StorageXSId = localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId;
   const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
   const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   useEffect(() => {

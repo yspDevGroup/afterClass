@@ -103,7 +103,7 @@ const SignIn = () => {
             <span>{NoSignInTeacher?.length || '0'}</span>人
           </span>
         </p>
-        <Row gutter={[8, 16]}>
+        <Row gutter={[8, 0]}>
           {NoSignInTeacher?.map((values: any, index: number) => {
             if (index < 12) {
               return (
