@@ -4,7 +4,7 @@ import { Form, Modal, Radio, Select, Input, message, Divider } from 'antd';
 import styles from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
 import { updateKHJSTDK } from '@/services/after-class/khjstdk';
 import { getMainTeacher } from '@/services/after-class/khbjsj';
@@ -52,7 +52,7 @@ const Adjustment = (props: { teacherData?: any }) => {
   };
   const termChange = (val: string) => {
     setCurXNXQId(val);
-  }
+  };
   useEffect(() => {
     if (curXNXQId) {
       getData();
@@ -62,7 +62,10 @@ const Adjustment = (props: { teacherData?: any }) => {
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateKHJSTDK({ id: current?.id }, { ZT, XXJBSJId: currentUser.xxId, SPJSId: currentUser?.JSId || testTeacherId, DKBZ: BZ });
+      const res = await updateKHJSTDK(
+        { id: current?.id },
+        { ZT, XXJBSJId: currentUser.xxId, SPJSId: currentUser?.JSId || testTeacherId, DKBZ: BZ },
+      );
       if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);
@@ -73,20 +76,20 @@ const Adjustment = (props: { teacherData?: any }) => {
           const result = await getMainTeacher({
             KHBJSJIds: [current.KHBJSJ.id],
             JZGJBSJId: current.SKJS.id,
-            JSLX: '主教师'
+            JSLX: '主教师',
           });
           if (result.status === 'ok') {
             const { data } = result;
-            data?.forEach(async (ele: { KHBJSJId: string; }) => {
+            data?.forEach(async (ele: { KHBJSJId: string }) => {
               await getClassDays(ele.KHBJSJId, current.SKJS.id, currentUser?.xxId);
             });
-          };
+          }
         }
       }
     } catch (err) {
       message.error('代课审批流程出现错误，请联系管理员或稍后重试。');
     }
-  }
+  };
   // table表格数据
   const columns: ProColumns<any>[] = [
     {
@@ -104,13 +107,9 @@ const Adjustment = (props: { teacherData?: any }) => {
       align: 'center',
       width: 80,
       fixed: 'left',
-      render: (_text: any, record: any) => {
-        const showWXName = record?.SKJS?.XM === '未知' && record?.SKJS?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.SKJS?.WechatUserId} />;
-        }
-        return record?.SKJS?.XM;
-      },
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.SKJS?.WechatUserId} XM={record?.SKJS?.XM} />
+      ),
     },
     {
       title: '课程名称',
@@ -119,9 +118,7 @@ const Adjustment = (props: { teacherData?: any }) => {
       align: 'center',
       ellipsis: true,
       render: (text: any, record: any) => {
-        return (
-          record?.KHBJSJ?.KHKCSJ?.KCMC
-        )
+        return record?.KHBJSJ?.KHKCSJ?.KCMC;
       },
       width: 120,
     },
@@ -132,9 +129,7 @@ const Adjustment = (props: { teacherData?: any }) => {
       align: 'center',
       ellipsis: true,
       render: (text: any, record: any) => {
-        return (
-          record?.KHBJSJ?.BJMC
-        )
+        return record?.KHBJSJ?.BJMC;
       },
       width: 120,
     },
@@ -152,9 +147,7 @@ const Adjustment = (props: { teacherData?: any }) => {
       align: 'center',
       width: 160,
       render: (text: any, record: any) => {
-        return (
-          record?.TKFJ?.FJMC
-        )
+        return record?.TKFJ?.FJMC;
       },
     },
     {
@@ -171,7 +164,7 @@ const Adjustment = (props: { teacherData?: any }) => {
       align: 'center',
       width: 160,
       render: (text: any, record: any) => {
-        return record?.TKJC.TITLE
+        return record?.TKJC.TITLE;
       },
     },
     {
@@ -181,9 +174,7 @@ const Adjustment = (props: { teacherData?: any }) => {
       align: 'center',
       width: 160,
       render: (text: any, record: any) => {
-        return (
-          `${record?.TKJC.KSSJ.substring(0,5)} ~ ${record?.TKJC.JSSJ.substring(0,5)}`
-        )
+        return `${record?.TKJC.KSSJ.substring(0, 5)} ~ ${record?.TKJC.JSSJ.substring(0, 5)}`;
       },
     },
     {
@@ -218,31 +209,37 @@ const Adjustment = (props: { teacherData?: any }) => {
       fixed: 'right',
       width: 100,
       render: (_, record: any) => {
-        return <>
-          {record.ZT === 0 ? (
-            <>
-              <a onClick={() => {
-                setCurrent(record);
-                setVisible(true);
-              }}>
-                审批
-              </a>
-              <Divider type="vertical" />
-            </>
-          ) : (
-            ''
-          )}
+        return (
+          <>
+            {record.ZT === 0 ? (
+              <>
+                <a
+                  onClick={() => {
+                    setCurrent(record);
+                    setVisible(true);
+                  }}
+                >
+                  审批
+                </a>
+                <Divider type="vertical" />
+              </>
+            ) : (
+              ''
+            )}
 
-          <a onClick={() => {
-            setIsModalVisible(true);
-            setDatas(record);
-          }}>查看</a>
-        </>
-      }
+            <a
+              onClick={() => {
+                setIsModalVisible(true);
+                setDatas(record);
+              }}
+            >
+              查看
+            </a>
+          </>
+        );
+      },
     },
   ];
-  const showWXName = Datas?.SKJS?.XM === '未知' && Datas?.SKJS?.WechatUserId;
-  const SPshowWXName = Datas?.SPJS?.XM === '未知' && Datas?.SPJS?.WechatUserId;
   return (
     <>
       <div className={styles.leaveWrapper}>
@@ -260,7 +257,7 @@ const Adjustment = (props: { teacherData?: any }) => {
             <SearchLayout>
               <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
               <div>
-                <label htmlFor='status'>调课教师：</label>
+                <label htmlFor="status">调课教师：</label>
                 <Select
                   allowClear
                   showSearch
@@ -282,20 +279,20 @@ const Adjustment = (props: { teacherData?: any }) => {
                 </Select>
               </div>
               <div>
-                <label htmlFor='status'>状态：</label>
+                <label htmlFor="status">状态：</label>
                 <Select
                   allowClear
                   onChange={(value: any) => {
                     setSPZT([value]);
                   }}
                 >
-                  <Option key='待审批' value={0}>
+                  <Option key="待审批" value={0}>
                     待审批
                   </Option>
-                  <Option key='已通过' value={1}>
+                  <Option key="已通过" value={1}>
                     已通过
                   </Option>
-                  <Option key='已驳回' value={2}>
+                  <Option key="已驳回" value={2}>
                     已驳回
                   </Option>
                 </Select>
@@ -339,12 +336,13 @@ const Adjustment = (props: { teacherData?: any }) => {
               <Radio value={2}>不同意</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item label="审批说明" name='BZ'>
+          <Form.Item label="审批说明" name="BZ">
             <TextArea rows={4} maxLength={100} />
           </Form.Item>
         </Form>
       </Modal>
-      <Modal title='查看详情'
+      <Modal
+        title="查看详情"
         className={styles.modals}
         visible={isModalVisible}
         footer={null}
@@ -352,9 +350,12 @@ const Adjustment = (props: { teacherData?: any }) => {
           setIsModalVisible(false);
         }}
       >
-        {
-          Datas ? <div className={styles.TkDetails}>
-            <p>申请教师：{showWXName ? <WWOpenDataCom type="userName" openid={Datas?.SKJS?.WechatUserId} /> : Datas?.SKJS?.XM}</p>
+        {Datas ? (
+          <div className={styles.TkDetails}>
+            <p>
+              申请教师：
+              <ShowName type="userName" openid={Datas?.SKJS?.WechatUserId} XM={Datas?.SKJS?.XM} />
+            </p>
             <p>申请时间：{Datas?.createdAt}</p>
             <p>申请原因：{Datas?.BZ}</p>
             <p>课程名称：{Datas?.KHBJSJ?.KHKCSJ?.KCMC}</p>
@@ -363,28 +364,42 @@ const Adjustment = (props: { teacherData?: any }) => {
               <div>
                 <p className={styles.title}>调课前</p>
                 <p>日期：{Datas?.SKRQ}</p>
-                <p>时段：{Datas?.SKJC.KSSJ.substring(0,5)} ~ {Datas?.SKJC.JSSJ.substring(0,5)}</p>
+                <p>
+                  时段：{Datas?.SKJC.KSSJ.substring(0, 5)} ~ {Datas?.SKJC.JSSJ.substring(0, 5)}
+                </p>
                 <p>场地：{Datas?.SKFJ?.FJMC}</p>
               </div>
               <div>
                 <p className={styles.title}>调课后</p>
                 <p>日期：{Datas?.TKRQ}</p>
-                <p>时段：{Datas?.TKJC.KSSJ.substring(0,5)} ~ {Datas?.TKJC.JSSJ.substring(0,5)}</p>
+                <p>
+                  时段：{Datas?.TKJC.KSSJ.substring(0, 5)} ~ {Datas?.TKJC.JSSJ.substring(0, 5)}
+                </p>
                 <p>场地：{Datas?.TKFJ?.FJMC}</p>
               </div>
             </div>
             <div className={styles.Line} />
-            {
-              Datas?.ZT === 1 || Datas?.ZT === 2 ? <div className={styles.reason}>
-                <p className={styles.title}>审批人：{SPshowWXName ? <WWOpenDataCom type="userName" openid={Datas?.SPJS?.WechatUserId} /> : Datas?.SPJS?.XM}</p>
+            {Datas?.ZT === 1 || Datas?.ZT === 2 ? (
+              <div className={styles.reason}>
+                <p className={styles.title}>
+                  审批人：
+                  <ShowName
+                    type="userName"
+                    openid={Datas?.SPJS?.WechatUserId}
+                    XM={Datas?.SPJS?.XM}
+                  />
+                </p>
                 <p>审批时间：{Datas?.updatedAt}</p>
                 <p>审批意见：{Datas?.ZT === 1 ? '同意' : '不同意'}</p>
                 <p>审批原因：{Datas?.DKBZ || '-'}</p>
-              </div> : <></>
-            }
-
-          </div> : <></>
-        }
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+        ) : (
+          <></>
+        )}
       </Modal>
     </>
   );

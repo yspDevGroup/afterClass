@@ -4,7 +4,7 @@ import { useModel } from 'umi';
 import SubstituteFor from './SubstituteFor';
 import Adjustment from './Adjustment';
 import PageContainer from '@/components/PageContainer';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 
 const { TabPane } = Tabs;
@@ -27,12 +27,7 @@ const LeaveManagement = () => {
           [];
         data?.forEach((item: any) => {
           // 兼顾企微
-          const label =
-            item.XM === '未知' && item.WechatUserId ? (
-              <WWOpenDataCom type="userName" openid={item.WechatUserId} />
-            ) : (
-              item.XM
-            );
+          const label = <ShowName type="userName" openid={item.WechatUserId} XM={item.XM} />;
           teachOption.push({
             label,
             value: item.id,
@@ -41,8 +36,8 @@ const LeaveManagement = () => {
         });
         setTeacherData(teachOption);
       }
-    })()
-  }, [])
+    })();
+  }, []);
   return (
     <PageContainer>
       <Tabs>

@@ -7,22 +7,24 @@ import type { ProColumns } from '@ant-design/pro-table';
 import { getAllKHXSPJ } from '@/services/after-class/khxspj';
 // khxspj
 import { useModel } from 'umi';
-import { Rate, Popover } from 'antd'
+import { Rate } from 'antd';
 import { Modal } from 'antd';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getTableWidth } from '@/utils/utils';
 
 const TabList = (props: any) => {
   const { ListName, ListState } = props.ListData;
-  const { id, KHBJJs } = ListState.record;
+  const { id } = ListState.record;
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+  // 弹出框显示隐藏
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [DetailsValue, setDetailsValue] = useState('');
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  // 学生详情评价列表
+  const [StuList, setStuList] = useState<API.KHXSDD[] | undefined>([]);
+  // 老师列表
+  const [teacherList, setTeacherList] = useState<API.KHXSDD[] | undefined>([]);
 
   const teacher: ProColumns<any>[] = [
     {
@@ -30,15 +32,15 @@ const TabList = (props: any) => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
-      fixed:'left',
-      align: 'center'
+      fixed: 'left',
+      align: 'center',
     },
     {
       title: '评价人',
       dataIndex: 'PJR',
       key: 'PJR',
       width: 120,
-      fixed:'left',
+      fixed: 'left',
       align: 'center',
     },
     {
@@ -62,7 +64,7 @@ const TabList = (props: any) => {
       key: 'PY',
       align: 'center',
       width: 180,
-      ellipsis: true
+      ellipsis: true,
     },
   ];
 
@@ -73,7 +75,7 @@ const TabList = (props: any) => {
       valueType: 'index',
       width: 58,
       fixed: 'left',
-      align: 'center'
+      align: 'center',
     },
     {
       title: '学生姓名',
@@ -83,11 +85,9 @@ const TabList = (props: any) => {
       width: 100,
       fixed: 'left',
       render: (_text: any, record: any) => {
-        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
-        }
-        return record?.XSJBSJ?.XM;
+        return (
+          <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+        );
       },
     },
     {
@@ -98,7 +98,7 @@ const TabList = (props: any) => {
       width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
       },
     },
     {
@@ -137,8 +137,8 @@ const TabList = (props: any) => {
         return (
           <a
             onClick={() => {
-              setDetailsValue(text)
-              setIsModalVisible(true)
+              setDetailsValue(text);
+              setIsModalVisible(true);
             }}
           >
             课堂表现
@@ -147,15 +147,15 @@ const TabList = (props: any) => {
       },
     },
   ];
-  // 弹出框显示隐藏
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [DetailsValue, setDetailsValue] = useState('');
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  // 学生详情评价列表
-  const [StuList, setStuList] = useState<API.KHXSDD[] | undefined>([]);
-  // 老师列表
-  const [teacherList, setTeacherList] = useState<API.KHXSDD[] | undefined>([]);
+
+  // const handleOk = () => {
+  //   setIsModalVisible(false);
+  // };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   useEffect(() => {
     if (ListName === '学生评价') {
       (async () => {
@@ -168,10 +168,9 @@ const TabList = (props: any) => {
         });
         if (res2.status === 'ok') {
           // 老师给学生的评语
-          setStuList(res2.data?.rows)
+          setStuList(res2.data?.rows);
         }
-      })()
-
+      })();
     } else {
       (async () => {
         const res = await getKHBJPJ({
@@ -209,13 +208,10 @@ const TabList = (props: any) => {
           reload: false,
         }}
       />
-      <Modal visible={isModalVisible} onCancel={handleCancel} title='表现详情'
-        footer={null}
-      >
+      <Modal visible={isModalVisible} onCancel={handleCancel} title="表现详情" footer={null}>
         <span>{DetailsValue}</span>
       </Modal>
     </div>
-
-  )
-}
-export default TabList
+  );
+};
+export default TabList;

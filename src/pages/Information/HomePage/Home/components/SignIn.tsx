@@ -1,12 +1,13 @@
 /* eslint-disable no-plusplus */
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import { useEffect, useState } from 'react';
+import { Col, Row } from 'antd';
+import { Link, useModel } from 'umi';
+import moment from 'moment';
+import ShowName from '@/components/ShowName';
 import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
 import { getAllByDate } from '@/services/after-class/khjscq';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { Col, Row } from 'antd';
-import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { Link, useModel } from 'umi';
+
 import styles from '../index.less';
 
 const SignIn = () => {
@@ -104,15 +105,10 @@ const SignIn = () => {
         </p>
         <Row gutter={[8, 16]}>
           {NoSignInTeacher?.map((values: any, index: number) => {
-            const showWXName = values?.XM === '未知' && values?.WechatUserId;
             if (index < 12) {
               return (
                 <Col span={6}>
-                  {showWXName ? (
-                    <WWOpenDataCom type="userName" openid={values?.WechatUserId} />
-                  ) : (
-                    <>{values?.XM}</>
-                  )}
+                  <ShowName type="userName" openid={values?.WechatUserId} XM={values?.XM} />
                 </Col>
               );
             }

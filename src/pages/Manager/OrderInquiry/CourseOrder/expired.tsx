@@ -2,13 +2,13 @@
  * @description:订单查询页面
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-11-19 12:03:19
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-10 13:49:04
+ * @LastEditors: zpl
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Input, message, Select, Spin } from 'antd';
+import { Button, Input, message, Spin } from 'antd';
 import { exportStudentOrders, getAllKHXSDD } from '@/services/after-class/khxsdd';
 import PromptInformation from '@/components/PromptInformation';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
@@ -16,7 +16,7 @@ import styles from './index.less';
 import { useModel } from 'umi';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { DownloadOutlined } from '@ant-design/icons';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
@@ -50,17 +50,17 @@ const OrderInquiry = (props: any) => {
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
-  }
+  };
   // 课程筛选
   const courseChange = (val: string, data?: any) => {
     setKcmc(data?.children);
     setCurKCId(val);
-  }
+  };
   // 课程班筛选
   const classChange = (val: string, data?: any) => {
     setBjmc(data?.children);
     setBJId(val);
-  }
+  };
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -129,7 +129,7 @@ const OrderInquiry = (props: any) => {
       render: (_text: any, record: any) => {
         const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
         if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
+          return <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} />;
         }
         return record?.XSJBSJ?.XM;
       },
@@ -257,14 +257,18 @@ const OrderInquiry = (props: any) => {
               <>
                 <SearchLayout>
                   <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-                  <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={courseChange} />
+                  <CourseSelect
+                    XXJBSJId={currentUser?.xxId}
+                    XNXQId={curXNXQId}
+                    onChange={courseChange}
+                  />
                   <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
                   <div>
-                    <label htmlFor='student'>学生名称：</label>
+                    <label htmlFor="student">学生名称：</label>
                     <Search
                       allowClear
                       onSearch={(val) => {
-                        setName(val)
+                        setName(val);
                       }}
                     />
                   </div>
@@ -281,7 +285,7 @@ const OrderInquiry = (props: any) => {
             toolBarRender={() => [
               <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
                 导出
-              </Button>
+              </Button>,
             ]}
           />
         </Spin>

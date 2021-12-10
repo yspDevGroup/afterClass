@@ -6,7 +6,7 @@ import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
 import { createKHXSTK } from '@/services/after-class/khxstk';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
@@ -139,13 +139,9 @@ const CourseUnsubscribe = () => {
       align: 'center',
       ellipsis: true,
       width: 100,
-      render: (_, record) => {
-        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
-        }
-        return record?.JZGJBSJ?.XM;
-      },
+      render: (_, record) => (
+        <ShowName type="userName" openid={record?.JZGJBSJ?.WechatUserId} XM={record?.JZGJBSJ?.XM} />
+      ),
     },
     {
       title: '审批时间',
@@ -309,7 +305,7 @@ const CourseUnsubscribe = () => {
               });
               if (result.status === 'ok') {
                 message.success('退课成功,已自动申请退款流程');
-              }else if(result.message === '未找到该学生在当前班级的订单记录'){
+              } else if (result.message === '未找到该学生在当前班级的订单记录') {
                 message.success('退课成功');
               }
             } else {

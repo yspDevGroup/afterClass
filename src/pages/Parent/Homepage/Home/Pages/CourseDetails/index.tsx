@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Checkbox, Collapse, Divider, message, Modal, Popconfirm, Radio } from 'antd';
+import { Button, Checkbox, Collapse, Divider, message, Modal, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, history } from 'umi';
 import { getClassesByCourse } from '@/services/after-class/khkcsj';
@@ -12,7 +12,7 @@ import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 
 import styles from './index.less';
 import { getKHBJSJ, studentRegistration } from '@/services/after-class/khbjsj';
@@ -26,9 +26,12 @@ const CourseDetails: React.FC = () => {
   const { currentUser } = initialState || {};
   const { student } = currentUser || {};
   const linkRef = useRef<HTMLAnchorElement | null>(null);
-  const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
-  const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
+  const StorageXSId =
+    localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+  const StorageNjId =
+    localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+  const StorageXQSJId =
+    localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   const [BJ, setBJ] = useState<string>();
   const [FY, setFY] = useState<number>(0);
   const [state, setstate] = useState(false);
@@ -71,7 +74,8 @@ const CourseDetails: React.FC = () => {
   useEffect(() => {
     getWxData();
   }, [isLoading]);
-  const XSbjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+  const XSbjId =
+    localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
   useEffect(() => {
     if (courseid) {
       getWxData();
@@ -87,24 +91,26 @@ const CourseDetails: React.FC = () => {
               const newArr = results.data.KHBJSJs.filter((value: any) => {
                 if (value.BJZT === '已开班' && value.BJLX === 1 && value.XQSJId === StorageXQSJId) {
                   const newBjIds = value.BJSJs.filter((items: any) => {
-                    return items.id === XSbjId
-                  })
+                    return items.id === XSbjId;
+                  });
                   if (newBjIds.length) {
-                    return value
+                    return value;
                   }
                 }
-                return value.BJZT === '已开班' && value.BJLX === 0 && value.XQSJId === StorageXQSJId
-              })
-              setKBClass(newArr)
+                return (
+                  value.BJZT === '已开班' && value.BJLX === 0 && value.XQSJId === StorageXQSJId
+                );
+              });
+              setKBClass(newArr);
               setKcDetail(results.data);
               changeStatus(0, newArr);
               const kcstart = moment(results.data.BMKSSJ).format('YYYY/MM/DD');
               const kcend = moment(results.data.BMJSSJ).format('YYYY/MM/DD');
               const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
               setKaiguan(btnEnable);
-              const resgetKHBJSJ = await getKHBJSJ({ id: newArr?.[0].id })
+              const resgetKHBJSJ = await getKHBJSJ({ id: newArr?.[0].id });
               if (resgetKHBJSJ.status === 'ok') {
-                setBjDetails(resgetKHBJSJ.data)
+                setBjDetails(resgetKHBJSJ.data);
                 let num = 0;
                 for (let i = 0; i < resgetKHBJSJ.data?.KHKCJCs?.length; i++) {
                   num += Number(resgetKHBJSJ.data?.KHKCJCs[i].JCFY);
@@ -153,11 +159,22 @@ const CourseDetails: React.FC = () => {
       const res = await studentRegistration({
         ZT: 3,
         XSJBSJIds: [StorageXSId],
-        KHBJSJId: BjDetails?.id
-      })
+        KHBJSJId: BjDetails?.id,
+      });
       if (res.status === 'ok') {
-        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, StorageXQSJId, true);
+        const bjId =
+          localStorage.getItem('studentBJId') ||
+          currentUser?.student?.[0].BJSJId ||
+          testStudentBJId;
+        await ParentHomeData(
+          'student',
+          currentUser?.xxId,
+          StorageXSId,
+          StorageNjId,
+          bjId,
+          StorageXQSJId,
+          true,
+        );
         setTimeout(() => {
           message.success('报名成功，请及时缴费');
         }, 500);
@@ -185,8 +202,19 @@ const CourseDetails: React.FC = () => {
         if (data.DDFY > 0) {
           setOrderInfo(res.data);
         } else {
-          const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-          await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, bjId, StorageXQSJId, true);
+          const bjId =
+            localStorage.getItem('studentBJId') ||
+            currentUser?.student?.[0].BJSJId ||
+            testStudentBJId;
+          await ParentHomeData(
+            'student',
+            currentUser?.xxId,
+            StorageXSId,
+            StorageNjId,
+            bjId,
+            StorageXQSJId,
+            true,
+          );
           setTimeout(() => {
             message.success('报名成功');
           }, 500);
@@ -198,10 +226,9 @@ const CourseDetails: React.FC = () => {
         enHenceMsg(res.message);
       }
     }
-
   };
   const butonclick = async (value: any, ind: number) => {
-    const res = await getKHBJSJ({ id: value?.id })
+    const res = await getKHBJSJ({ id: value?.id });
     if (res.status === 'ok') {
       setBjDetails(res.data);
       let num = 0;
@@ -233,10 +260,10 @@ const CourseDetails: React.FC = () => {
   };
   const callback = async (key: any) => {
     if (key) {
-      const res = await getKHBJSJ({ id: key })
-      setBjDetails(res.data)
+      const res = await getKHBJSJ({ id: key });
+      setBjDetails(res.data);
     }
-  }
+  };
 
   return (
     <div className={styles.CourseDetails}>
@@ -269,119 +296,124 @@ const CourseDetails: React.FC = () => {
         <p className={styles.content}>{KcDetail?.KCMS}</p>
         <Divider />
         <p className={styles.title}>开设班级</p>
-        {
-          KcDetail ? <Collapse
+        {KcDetail ? (
+          <Collapse
             defaultActiveKey={KBClass?.[0].id}
             onChange={callback}
             ghost
-
             className={styles.classInformation}
             accordion
-            expandIcon={({ isActive }) => <span>{isActive ? "收起" : "展开"}<RightOutlined rotate={isActive ? 90 : 0} /></span>}
-            expandIconPosition='right'
+            expandIcon={({ isActive }) => (
+              <span>
+                {isActive ? '收起' : '展开'}
+                <RightOutlined rotate={isActive ? 90 : 0} />
+              </span>
+            )}
+            expandIconPosition="right"
           >
-            {
-              KBClass?.map((value: any) => {
-                if (value?.BJZT === '已开班') {
-                  return (
-                    <Panel header={value?.BJMC} key={value?.id}>
-                      <p>报名时段：{moment(value.BMKSSJ).format('YYYY.MM.DD')}-
-                        {moment(value.BMJSSJ).format('YYYY.MM.DD')}</p>
-                      <p>上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
-                        {moment(value.JKRQ).format('YYYY.MM.DD')}</p>
-                      <p>班主任： {BjDetails?.KHBJJs?.map((item: any) => {
+            {KBClass?.map((value: any) => {
+              if (value?.BJZT === '已开班') {
+                return (
+                  <Panel header={value?.BJMC} key={value?.id}>
+                    <p>
+                      报名时段：{moment(value.BMKSSJ).format('YYYY.MM.DD')}-
+                      {moment(value.BMJSSJ).format('YYYY.MM.DD')}
+                    </p>
+                    <p>
+                      上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
+                      {moment(value.JKRQ).format('YYYY.MM.DD')}
+                    </p>
+                    <p>
+                      班主任：{' '}
+                      {BjDetails?.KHBJJs?.map((item: any) => {
                         if (item.JSLX.indexOf('副') === -1) {
-                          const showWXName =
-                            item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
                           return (
                             <span style={{ marginRight: '1em' }}>
-                              {showWXName ? (
-                                <WWOpenDataCom
-                                  type="userName"
-                                  openid={item?.JZGJBSJ?.WechatUserId}
-                                />
-                              ) : (
-                                item?.JZGJBSJ?.XM
-                              )}
-                            </span>
-                          );
-                        }
-                        return '';
-                      })}</p>
-                      <p>副班： {BjDetails?.KHBJJs?.map((item: any) => {
-                        if (item.JSLX.indexOf('主') === -1) {
-                          const showWXName =
-                            item?.JZGJBSJ?.XM === '未知' && item?.JZGJBSJ?.WechatUserId;
-                          return (
-                            <span style={{ marginRight: '1em' }}>
-                              {showWXName ? (
-                                <WWOpenDataCom
-                                  type="userName"
-                                  openid={item?.JZGJBSJ?.WechatUserId}
-                                />
-                              ) : (
-                                item.JZGJBSJ?.XM
-                              )}
+                              <ShowName
+                                type="userName"
+                                openid={item?.JZGJBSJ?.WechatUserId}
+                                XM={item?.JZGJBSJ?.XM}
+                              />
                             </span>
                           );
                         }
                         return '';
                       })}
-                      </p>
-                      <p>报名费：{value.FY}元</p>
-                      <p>报名方式：{
-                        BjDetails?.BMLX === 0 ? '先报名后缴费' : <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
-                      }
-                      </p>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>上课时间</th>
-                            <th>上课地点</th>
-                            <th>总课时</th>
-                            <th>总人数</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td style={{ padding: '2px 0' }}>
-                              {BjDetails?.KHPKSJs?.map(
-                                (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                                  const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
-                                  return (
-                                    <p>
-                                      {weeks}
-                                      {val.XXSJPZ.KSSJ.substring(0, 5)}-
-                                      {val.XXSJPZ.JSSJ.substring(0, 5)}
-                                    </p>
-                                  );
-                                },
-                              )}
-                            </td>
-                            <td style={{ padding: '2px 0' }}>
-                              {BjDetails?.KHPKSJs?.map(
-                                (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                                  return <p>{val.FJSJ.FJMC}</p>;
-                                },
-                              )}
-                            </td>
-                            <td>{value.KSS}</td>
-                            <td>{value.BJRS}</td>
-
-                          </tr>
-                        </tbody>
-                      </table>
-                      <p style={{ fontWeight: 'bold' }}>班级简介</p>
-                      <p className={styles.content}>{BjDetails?.BJMS}</p>
-                    </Panel>
-                  )
-                }
-                return <></>
-
-              })
-            }
-          </Collapse> : <></>
-        }
+                    </p>
+                    <p>
+                      副班：{' '}
+                      {BjDetails?.KHBJJs?.map((item: any) => {
+                        if (item.JSLX.indexOf('主') === -1) {
+                          return (
+                            <span style={{ marginRight: '1em' }}>
+                              <ShowName
+                                type="userName"
+                                openid={item?.JZGJBSJ?.WechatUserId}
+                                XM={item.JZGJBSJ?.XM}
+                              />
+                            </span>
+                          );
+                        }
+                        return '';
+                      })}
+                    </p>
+                    <p>报名费：{value.FY}元</p>
+                    <p>
+                      报名方式：
+                      {BjDetails?.BMLX === 0 ? (
+                        '先报名后缴费'
+                      ) : (
+                        <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+                      )}
+                    </p>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>上课时间</th>
+                          <th>上课地点</th>
+                          <th>总课时</th>
+                          <th>总人数</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style={{ padding: '2px 0' }}>
+                            {BjDetails?.KHPKSJs?.map(
+                              (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                                const weeks = `每周${'日一二三四五六'.charAt(val.WEEKDAY)}`;
+                                return (
+                                  <p>
+                                    {weeks}
+                                    {val.XXSJPZ.KSSJ.substring(0, 5)}-
+                                    {val.XXSJPZ.JSSJ.substring(0, 5)}
+                                  </p>
+                                );
+                              },
+                            )}
+                          </td>
+                          <td style={{ padding: '2px 0' }}>
+                            {BjDetails?.KHPKSJs?.map(
+                              (val: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
+                                return <p>{val.FJSJ.FJMC}</p>;
+                              },
+                            )}
+                          </td>
+                          <td>{value.KSS}</td>
+                          <td>{value.BJRS}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <p style={{ fontWeight: 'bold' }}>班级简介</p>
+                    <p className={styles.content}>{BjDetails?.BJMS}</p>
+                  </Panel>
+                );
+              }
+              return <></>;
+            })}
+          </Collapse>
+        ) : (
+          <></>
+        )}
       </div>
       <div className={styles.footer}>
         {kaiguan ? (
@@ -395,11 +427,11 @@ const CourseDetails: React.FC = () => {
       {state === true ? (
         <div className={styles.payment} onClick={() => setstate(false)}>
           <div onClick={onchanges}>
-            <div className={styles.wraps} >
-              <p className={styles.title} style={{ fontSize: 18, marginBottom: 12 }}>{KcDetail?.KCMC}</p>
-              <p className={styles.title} >
-                选择班级
+            <div className={styles.wraps}>
+              <p className={styles.title} style={{ fontSize: 18, marginBottom: 12 }}>
+                {KcDetail?.KCMC}
               </p>
+              <p className={styles.title}>选择班级</p>
               <Radio.Group onChange={onBJChange} value={`${BJ}+${FY}`}>
                 {KBClass?.map(
                   (
@@ -445,38 +477,39 @@ const CourseDetails: React.FC = () => {
                   },
                 )}
               </Radio.Group>
-              <p className={styles.title}>
-                课程费用
-              </p>
+              <p className={styles.title}>课程费用</p>
               <p className={styles.price}>
                 {FY <= 0 ? (
                   <>
                     <span>免费</span>
-                    <span style={{ color: '#666666', marginLeft: 10 }}>余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额</span>
+                    <span style={{ color: '#666666', marginLeft: 10 }}>
+                      余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额
+                    </span>
                   </>
                 ) : (
                   <>
                     <span style={{ fontWeight: 'bold', fontSize: '22px' }}>￥{FY}</span>
                     <span>/学期</span>
-                    <span style={{ color: '#666666', marginLeft: 10 }}>余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额</span>
+                    <span style={{ color: '#666666', marginLeft: 10 }}>
+                      余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额
+                    </span>
                   </>
                 )}
               </p>
-              <p className={styles.title}>
-                缴费方式
-              </p>
+              <p className={styles.title}>缴费方式</p>
               <span style={{ color: '#666666' }}>
-                {
-                  BjDetails?.BMLX === 0 ? '先报名后缴费' : <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
-                }</span>
+                {BjDetails?.BMLX === 0 ? (
+                  '先报名后缴费'
+                ) : (
+                  <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
+                )}
+              </span>
               <div className={styles.Teachingaterial}>
                 {!JFData?.length ? (
                   <></>
                 ) : (
                   <>
-                    <p className={styles.title}>
-                      教辅教材
-                    </p>
+                    <p className={styles.title}>教辅教材</p>
                     <div
                       className={styles.box}
                       style={{ borderRadius: JFstate === true ? '8px 8px 0 0' : '8px' }}

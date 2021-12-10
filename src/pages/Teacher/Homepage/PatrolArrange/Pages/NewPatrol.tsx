@@ -2,19 +2,19 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-12-09 16:56:45
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-10 13:04:11
+ * @LastEditors: zpl
  */
 import { useEffect, useState } from 'react';
-import { useModel, history } from 'umi';
 import { InputNumber, message, Switch } from 'antd';
+import { useModel, history } from 'umi';
+import GoBack from '@/components/GoBack';
+import ShowName from '@/components/ShowName';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
-import GoBack from '@/components/GoBack';
 
 import styles from '../index.less';
 import moment from 'moment';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 const NewPatrol = (props: any) => {
   const { kcid, kcmc, xkrq, bjxx, check } = props?.location?.state;
@@ -78,7 +78,7 @@ const NewPatrol = (props: any) => {
   };
   const getDetail = async (id: string) => {
     const res = await KHXKJL({
-      id
+      id,
     });
     if (res.status === 'ok' && res.data) {
       const { data } = res;
@@ -100,15 +100,19 @@ const NewPatrol = (props: any) => {
     const res = await createKHXKJL(recordDetail);
     if (res.status === 'ok') {
       message.success('巡课记录已提交');
-      history.push('/teacher/patrolArrange/classes', { id: kcid, day: xkrq, xxId: currentUser?.xxId, kcmc, });
+      history.push('/teacher/patrolArrange/classes', {
+        id: kcid,
+        day: xkrq,
+        xxId: currentUser?.xxId,
+        kcmc,
+      });
     } else {
       message.error(res.message);
     }
   };
   const limitDecimals = (value?: any) => {
     return value?.replace(/[^\d]+/g, '');
-  }
-  const showWXName = bjxx?.KHBJJs?.[0]?.JZGJBSJ?.XM === '未知' && bjxx?.KHBJJs?.[0]?.JZGJBSJ?.WechatUserId;
+  };
   return (
     <>
       <GoBack title={'巡课记录'} teacher />
@@ -119,27 +123,46 @@ const NewPatrol = (props: any) => {
             <div className={styles.card}>
               <h4>教师出勤情况</h4>
               <ul>
-                <li><label>课程班名称</label><span>{bjxx?.BJMC}</span></li>
-                <li><label>任课教师</label><span>
-                  {
-                    showWXName ? <WWOpenDataCom type="userName" openid={bjxx?.KHBJJs?.[0]?.JZGJBSJ?.WechatUserId} /> : bjxx?.KHBJJs?.[0]?.JZGJBSJ?.XM
-                  }
-                </span></li>
-                <li><label>上课教室</label><span>{bjxx?.KHPKSJs?.[0]?.FJSJ?.FJMC}</span></li>
+                <li>
+                  <label>课程班名称</label>
+                  <span>{bjxx?.BJMC}</span>
+                </li>
+                <li>
+                  <label>任课教师</label>
+                  <span>
+                    <ShowName
+                      XM={bjxx?.KHBJJs?.[0]?.JZGJBSJ?.XM}
+                      type="userName"
+                      openid={bjxx?.KHBJJs?.[0]?.JZGJBSJ?.WechatUserId}
+                    />
+                  </span>
+                </li>
+                <li>
+                  <label>上课教室</label>
+                  <span>{bjxx?.KHPKSJs?.[0]?.FJSJ?.FJMC}</span>
+                </li>
                 <li>
                   <label>是否准时上课</label>
                   <span>
-                    <Switch disabled={check} checked={onTime} onChange={(checked) => {
-                      setOnTime(checked);
-                    }} />
+                    <Switch
+                      disabled={check}
+                      checked={onTime}
+                      onChange={(checked) => {
+                        setOnTime(checked);
+                      }}
+                    />
                   </span>
                 </li>
                 <li>
                   <label>是否原定教师</label>
                   <span>
-                    <Switch disabled={check} checked={oriTeacher} onChange={(checked) => {
-                      setOriTeacher(checked);
-                    }} />
+                    <Switch
+                      disabled={check}
+                      checked={oriTeacher}
+                      onChange={(checked) => {
+                        setOriTeacher(checked);
+                      }}
+                    />
                   </span>
                 </li>
               </ul>
@@ -147,58 +170,103 @@ const NewPatrol = (props: any) => {
             <div className={styles.card}>
               <h4>学生出勤情况</h4>
               <ul>
-                <li><label>授课教师是否已点名</label><span>{checkIn ? '已点名' : '未点名'}</span></li>
+                <li>
+                  <label>授课教师是否已点名</label>
+                  <span>{checkIn ? '已点名' : '未点名'}</span>
+                </li>
                 <li>
                   <label>应到人数</label>
-                  <span><InputNumber value={bjxx?.xs_count} disabled />人</span>
+                  <span>
+                    <InputNumber value={bjxx?.xs_count} disabled />人
+                  </span>
                 </li>
                 <li>
                   <label>实到人数</label>
-                  <span>{(checkIn || check) ? <InputNumber value={checkNum} disabled /> : <InputNumber
-                    placeholder='请输入'
-                    min={0}
-                    max={bjxx?.xs_count}
-                    formatter={limitDecimals}
-                    parser={limitDecimals}
-                    onBlur={(e) => {
-                      recordDetail.SDRS = Number(e.target.value);
-                    }}
-                  />}人</span>
-                </li>
-                {checkIn ? <li>
-                  <label>实到人数准确</label>
-                  <span><Switch disabled={check} checked={accurate} onChange={(checked) => setAccurate(checked)} /></span>
-                </li> : ''}
-                {!accurate ? <li>
-                  <label>巡课确认人数</label>
                   <span>
-                    {check ? <InputNumber value={realNum} disabled /> : <InputNumber
-                      disabled={check}
-                      placeholder='请输入'
-                      min={0}
-                      max={bjxx?.xs_count}
-                      formatter={limitDecimals}
-                      parser={limitDecimals}
-                      onBlur={(e) => {
-                        recordDetail.QRRS = Number(e.target.value);
-                      }} />}人
+                    {checkIn || check ? (
+                      <InputNumber value={checkNum} disabled />
+                    ) : (
+                      <InputNumber
+                        placeholder="请输入"
+                        min={0}
+                        max={bjxx?.xs_count}
+                        formatter={limitDecimals}
+                        parser={limitDecimals}
+                        onBlur={(e) => {
+                          recordDetail.SDRS = Number(e.target.value);
+                        }}
+                      />
+                    )}
+                    人
                   </span>
-                </li> : ''}
+                </li>
+                {checkIn ? (
+                  <li>
+                    <label>实到人数准确</label>
+                    <span>
+                      <Switch
+                        disabled={check}
+                        checked={accurate}
+                        onChange={(checked) => setAccurate(checked)}
+                      />
+                    </span>
+                  </li>
+                ) : (
+                  ''
+                )}
+                {!accurate ? (
+                  <li>
+                    <label>巡课确认人数</label>
+                    <span>
+                      {check ? (
+                        <InputNumber value={realNum} disabled />
+                      ) : (
+                        <InputNumber
+                          disabled={check}
+                          placeholder="请输入"
+                          min={0}
+                          max={bjxx?.xs_count}
+                          formatter={limitDecimals}
+                          parser={limitDecimals}
+                          onBlur={(e) => {
+                            recordDetail.QRRS = Number(e.target.value);
+                          }}
+                        />
+                      )}
+                      人
+                    </span>
+                  </li>
+                ) : (
+                  ''
+                )}
               </ul>
             </div>
             <div className={styles.card} style={{ marginBottom: 60 }}>
               <h4>其他说明</h4>
-              {check ? <div style={{ padding: '10px 10px 24px', color: '#666' }}>
-                {bzDetail}
-              </div> : <textarea name="" id="" rows={5} onBlur={(e) => {
-                recordDetail.BZXX = e.target.value;
-              }} />}
+              {check ? (
+                <div style={{ padding: '10px 10px 24px', color: '#666' }}>{bzDetail}</div>
+              ) : (
+                <textarea
+                  name=""
+                  id=""
+                  rows={5}
+                  onBlur={(e) => {
+                    recordDetail.BZXX = e.target.value;
+                  }}
+                />
+              )}
             </div>
             <div className={styles.footer}>
-              <button className={styles.btn} onClick={() => history.go(-1)} >
+              <button className={styles.btn} onClick={() => history.go(-1)}>
                 {check ? '返回' : '取消'}
               </button>
-              {check ? '' : <button className={styles.btnes} onClick={handleSubmit}>提交</button>}
+              {check ? (
+                ''
+              ) : (
+                <button className={styles.btnes} onClick={handleSubmit}>
+                  提交
+                </button>
+              )}
             </div>
           </div>
         </div>

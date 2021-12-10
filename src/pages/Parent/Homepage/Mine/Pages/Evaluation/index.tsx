@@ -2,8 +2,8 @@
  * @description:
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-09-04 14:37:32
- * @LastEditors: wsl
+ * @LastEditTime: 2021-12-10 13:31:55
+ * @LastEditors: zpl
  */
 import GoBack from '@/components/GoBack';
 import { deleteKHBJPJ, getKHBJPJ } from '@/services/after-class/khbjpj';
@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { useModel, Link } from 'umi';
 import styles from './index.less';
 import noOrder from '@/assets/noOrder.png';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 
 const { TabPane } = Tabs;
 
@@ -35,8 +35,11 @@ const Evaluation = () => {
     if (res.status === 'ok') {
       const newArr: any[] = [];
       res.data.forEach((value: any) => {
-        if (value?.KHBJSJ?.KHXSCQs?.find((item: any) =>  item.CQZT === '出勤') && value.KHBJSJ?.KHBJPJs?.length === 0) {
-            newArr.push(value);
+        if (
+          value?.KHBJSJ?.KHXSCQs?.find((item: any) => item.CQZT === '出勤') &&
+          value.KHBJSJ?.KHBJPJs?.length === 0
+        ) {
+          newArr.push(value);
         }
       });
       setKcData(newArr);
@@ -72,16 +75,17 @@ const Evaluation = () => {
               <div className={styles.Application}>
                 <div>
                   {KcData?.map((value: any) => {
-                     const showWXName = value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM === '未知' && value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.WechatUserId;
                     return (
                       <>
                         <div className={styles.cards}>
                           <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
                           <p>
                             班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：
-                           {
-                             showWXName ? <WWOpenDataCom type="userName" openid={value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.WechatUserId} />: value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM
-                           }
+                            <ShowName
+                              type="userName"
+                              openid={value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.WechatUserId}
+                              XM={value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM}
+                            />
                           </p>
                           <Link
                             key="pj"

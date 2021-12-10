@@ -5,7 +5,7 @@ import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { DownloadOutlined } from '@ant-design/icons';
 import { getTableWidth } from '@/utils/utils';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import { getKHZZFW } from '@/services/after-class/khzzfw';
@@ -165,13 +165,9 @@ const ServiceRefund = () => {
       align: 'center',
       ellipsis: true,
       width: 120,
-      render: (_, record) => {
-        const showWXName = record?.JZGJBSJ?.XM === '未知' && record?.JZGJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.JZGJBSJ?.WechatUserId} />;
-        }
-        return record?.JZGJBSJ?.XM;
-      },
+      render: (_, record) => (
+        <ShowName type="userName" openid={record?.JZGJBSJ?.WechatUserId} XM={record?.JZGJBSJ?.XM} />
+      ),
     },
     {
       title: '审批时间',
@@ -249,7 +245,7 @@ const ServiceRefund = () => {
               form.setFieldsValue({
                 TKJE: record?.TKJE,
                 TKZT: 1,
-                BZ: ''
+                BZ: '',
               });
             }}
           >
@@ -367,12 +363,12 @@ const ServiceRefund = () => {
                     >
                       {LBData?.length
                         ? LBData?.map((item: any) => {
-                          return (
-                            <Option value={item?.id} key={item?.id}>
-                              {item?.FWMC}
-                            </Option>
-                          );
-                        })
+                            return (
+                              <Option value={item?.id} key={item?.id}>
+                                {item?.FWMC}
+                              </Option>
+                            );
+                          })
                         : ''}
                     </Select>
                   </div>
@@ -388,12 +384,12 @@ const ServiceRefund = () => {
                     >
                       {FWMCData?.length
                         ? FWMCData?.map((item: any) => {
-                          return (
-                            <Option value={item?.FWMC} key={item?.FWMC}>
-                              {item?.FWMC}
-                            </Option>
-                          );
-                        })
+                            return (
+                              <Option value={item?.FWMC} key={item?.FWMC}>
+                                {item?.FWMC}
+                              </Option>
+                            );
+                          })
                         : ''}
                     </Select>
                   </div>

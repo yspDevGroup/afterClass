@@ -12,7 +12,7 @@ import { useModel } from 'umi';
 import { useEffect, useState } from 'react';
 import { enHenceMsg } from '@/utils/utils';
 import { getClassStudents, getSchoolClasses } from '@/services/after-class/bjsj';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import Countdown from 'antd/lib/statistic/Countdown';
 import moment from 'moment';
 
@@ -266,7 +266,6 @@ const AgentRegistration = (props: {
                   value={XSMC || ''}
                 >
                   {XZBXSDatas?.map((value: any) => {
-                    const showWXName = value?.XM === '未知' && value?.WechatUserId;
                     return (
                       <Option value={value?.XM + value?.XH} key={value?.id}>
                         <div
@@ -276,11 +275,7 @@ const AgentRegistration = (props: {
                           }}
                         >
                           <span>
-                            {showWXName ? (
-                              <WWOpenDataCom type="userName" openid={value?.WechatUserId} />
-                            ) : (
-                              value?.XM
-                            )}
+                            <ShowName type="userName" openid={value?.WechatUserId} XM={value?.XM} />
                           </span>
                           <span>{value?.XH}</span>
                         </div>

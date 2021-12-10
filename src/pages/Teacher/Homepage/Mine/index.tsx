@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link, useModel, history } from 'umi';
 import { Image } from 'antd';
 import { defUserImg } from '@/constant';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
 import IconFont from '@/components/CustomIcon';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 
 import imgPop from '@/assets/teacherBg.png';
 import CheckOnStatic from './components/CheckOnStatic';
@@ -38,11 +38,12 @@ const Mine = () => {
           <div className={styles.headerName}>
             <h4>
               <span ref={userRef}>
-                {currentUser?.UserId === '未知' && currentUser.wechatUserId ? (
-                  <WWOpenDataCom type="userName" openid={currentUser.wechatUserId} />
-                ) : (
-                  currentUser?.UserId
-                )}</span>
+                <ShowName
+                  type="userName"
+                  openid={currentUser.wechatUserId}
+                  XM={currentUser?.UserId}
+                />
+              </span>
               老师
             </h4>
           </div>

@@ -2,8 +2,8 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-12-10 12:01:36
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2021-12-10 15:04:01
+ * @LastEditors: zpl
  */
 import React, { useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -14,11 +14,11 @@ import { UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 
 import type { TableListParams } from '@/constant';
 import PageContain from '@/components/PageContainer';
+import ShowName from '@/components/ShowName';
 
 import { getAuthorization, getTableWidth } from '@/utils/utils';
 import { deleteJZGJBSJ, getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 // import { syncWechatStudents, syncWechatTeachers } from '@/services/after-class/upload';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 import styles from './index.less';
 
@@ -111,7 +111,7 @@ const TeacherManagement = () => {
       render: (_, record) => {
         const showWXName = record?.XM === '未知' && record?.WechatUserId;
         if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.WechatUserId} />;
+          return <ShowName XM={record?.XM} type="userName" openid={record?.WechatUserId} />;
         }
         return record?.XM;
       },

@@ -8,7 +8,7 @@ import ProCard from '@ant-design/pro-card';
 import { DownOutlined, QuestionCircleOutlined, UpOutlined, LeftOutlined } from '@ant-design/icons';
 import { getQueryString } from '@/utils/utils';
 import ExcelTable from '@/components/ExcelTable';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { createKHPKSJ, deleteKHPKSJ, addKHPKSJ } from '@/services/after-class/khpksj';
 // import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
 import { getAllClasses } from '@/services/after-class/khbjsj';
@@ -589,15 +589,12 @@ const AddArranging: FC<PropsType> = (props) => {
                             <p>{value.BJMC}</p>
                           </Tooltip>
                           <span>
-                            {teacher?.XM === '未知' && teacher?.WechatUserId ? (
-                              <WWOpenDataCom
-                                style={{ color: '#666' }}
-                                type="userName"
-                                openid={teacher.WechatUserId}
-                              />
-                            ) : (
-                              teacher?.XM
-                            )}
+                            <ShowName
+                              style={{ color: '#666' }}
+                              type="userName"
+                              openid={teacher.WechatUserId}
+                              XM={teacher?.XM}
+                            />
                           </span>
                           {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
                         </ProCard>
@@ -610,6 +607,7 @@ const AddArranging: FC<PropsType> = (props) => {
                       <ProCard ghost className="banjiCard">
                         {bjData && bjData.length > 0
                           ? bjData.slice(0, 15).map((value: any) => {
+                              const zb = value?.KHBJJs.find((item: any) => item.JSLX === '主教师');
                               return (
                                 <ProCard
                                   layout="center"
@@ -622,15 +620,16 @@ const AddArranging: FC<PropsType> = (props) => {
                                     <p>{value.BJMC}</p>
                                   </Tooltip>
                                   <span>
-                                    {
+                                    {/* {
                                       value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
                                         ?.JZGJBSJ?.XM
-                                    }
-                                    {/* <WWOpenDataCom
-                                        style={{ color: '#666' }}
-                                        type="userName"
-                                        openid={value.ZJS}
-                                      /> */}
+                                    } */}
+                                    <ShowName
+                                      style={{ color: '#666' }}
+                                      type="userName"
+                                      openid={zb?.WechatUserId}
+                                      XM={zb?.JZGJBSJ?.XM}
+                                    />
                                   </span>
                                   {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
                                 </ProCard>
@@ -645,6 +644,7 @@ const AddArranging: FC<PropsType> = (props) => {
                       <ProCard ghost className="banjiCard">
                         {bjData && bjData.length > 0
                           ? bjData.map((value: any) => {
+                              const zb = value?.KHBJJs.find((item: any) => item.JSLX === '主教师');
                               return (
                                 <ProCard
                                   layout="center"
@@ -657,15 +657,16 @@ const AddArranging: FC<PropsType> = (props) => {
                                     <p>{value.BJMC}</p>
                                   </Tooltip>
                                   <span>
-                                    {
+                                    {/* {
                                       value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
                                         ?.JZGJBSJ?.XM
-                                    }
-                                    {/* <WWOpenDataCom
+                                    } */}
+                                    <ShowName
                                       style={{ color: '#666' }}
                                       type="userName"
-                                      openid={value.ZJS}
-                                    /> */}
+                                      openid={value.WechatUserId}
+                                      XM={zb?.JZGJBSJ?.XM}
+                                    />
                                   </span>
                                   {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
                                 </ProCard>

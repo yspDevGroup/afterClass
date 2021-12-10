@@ -1,17 +1,17 @@
 /*
  * @Author: your name
  * @Date: 2021-11-15 13:41:03
- * @LastEditTime: 2021-11-29 11:39:19
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-10 12:31:08
+ * @LastEditors: zpl
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\components\TeacherSelect\index.tsx
  */
 
-import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
-import { TreeSelect } from 'antd';
 import React, { useState, useEffect } from 'react';
+import { TreeSelect } from 'antd';
+import ShowName from '@/components/ShowName';
+import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { getTeacherByClassId } from '@/services/after-class/khkcsj';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
 
 type TeacherSelectProps = {
   xxId: string;
@@ -60,16 +60,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
           data.title = item.XXMC;
           item.XM = '未知';
         }
-        const label =
-          item.XM === '未知' && item.WechatUserId ? (
-            <WWOpenDataCom
-              type="userName"
-              openid={item.WechatUserId}
-              style={{ display: 'inline' }}
-            />
-          ) : (
-            item.XM
-          );
+        const label = <ShowName XM={item.XM} type="userName" openid={item.WechatUserId} />;
         data.children.push({
           title: (
             <>
@@ -114,12 +105,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
             data.title = item.KHJYJG?.QYMC;
           }
           // 兼顾企微
-          const label =
-            item.XM === '未知' && item.WechatUserId ? (
-              <WWOpenDataCom type="userName" openid={item.WechatUserId} />
-            ) : (
-              item.XM
-            );
+          const label = <ShowName XM={item.XM} type="userName" openid={item.WechatUserId} />;
           data.children.push({
             title: (
               <>

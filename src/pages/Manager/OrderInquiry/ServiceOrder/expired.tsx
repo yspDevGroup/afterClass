@@ -2,21 +2,21 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-11-18 15:35:47
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-10 13:47:49
+ * @LastEditors: zpl
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Input, message, Select, Spin } from 'antd';
 import { exportStudentOrders, getAllKHXSDD } from '@/services/after-class/khxsdd';
-import { queryXNXQList } from '@/services/local-services/xnxq';
+// import { queryXNXQList } from '@/services/local-services/xnxq';
 
 import styles from './index.less';
 import { useModel } from 'umi';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { DownloadOutlined } from '@ant-design/icons';
 import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getKHZZFW } from '@/services/after-class/khzzfw';
@@ -49,7 +49,7 @@ const OrderInquiry = (props: any) => {
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
-  }
+  };
   useEffect(() => {
     (async () => {
       // 服务类别的获取
@@ -79,8 +79,8 @@ const OrderInquiry = (props: any) => {
           setFwList(res?.data?.rows);
         }
       }
-    })()
-  }, [curXNXQId, FWLXId])
+    })();
+  }, [curXNXQId, FWLXId]);
   useEffect(() => {
     (async () => {
       const res = await getAllKHXSDD({
@@ -91,13 +91,13 @@ const OrderInquiry = (props: any) => {
         FWLX,
         // 父传子判断要请求的状态
         DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
-        DDLX: 1
-      })
+        DDLX: 1,
+      });
       if (res.status === 'ok') {
-        setDataSource(res.data)
+        setDataSource(res.data);
       }
-    })()
-  }, [curXNXQId, name, FWMC, FWLX])
+    })();
+  }, [curXNXQId, name, FWMC, FWLX]);
   const columns: ProColumns<API.KHXSDD>[] | undefined = [
     {
       title: '序号',
@@ -114,13 +114,9 @@ const OrderInquiry = (props: any) => {
       align: 'center',
       width: 100,
       fixed: 'left',
-      render: (_text: any, record: any) => {
-        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ.WechatUserId} />;
-        }
-        return record?.XSJBSJ?.XM;
-      }
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+      ),
     },
     {
       title: '订单编号',
@@ -138,7 +134,7 @@ const OrderInquiry = (props: any) => {
       width: 100,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`
+        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
       },
     },
     {
@@ -213,7 +209,7 @@ const OrderInquiry = (props: any) => {
         XSXM: name,
         // 父传子判断要请求的状态
         DDZT: DDZT === '已付款' ? ['已付款', '已退款'] : [DDZT],
-        DDLX: 1
+        DDLX: 1,
       });
       if (res.status === 'ok' && res.data) {
         window.location.href = res.data;
@@ -244,7 +240,7 @@ const OrderInquiry = (props: any) => {
                 <SearchLayout>
                   <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
                   <div>
-                    <label htmlFor='type'>服务类别：</label>
+                    <label htmlFor="type">服务类别：</label>
                     <Select
                       style={{ width: 160 }}
                       allowClear
@@ -265,7 +261,7 @@ const OrderInquiry = (props: any) => {
                     </Select>
                   </div>
                   <div>
-                    <label htmlFor='name'>服务名称：</label>
+                    <label htmlFor="name">服务名称：</label>
                     <Select
                       value={FWMC}
                       style={{ width: 160 }}
@@ -284,12 +280,12 @@ const OrderInquiry = (props: any) => {
                     </Select>
                   </div>
                   <div>
-                    <label htmlFor='student'>学生名称：</label>
+                    <label htmlFor="student">学生名称：</label>
                     <Search
                       allowClear
                       style={{ width: 160 }}
                       onSearch={(val) => {
-                        setName(val)
+                        setName(val);
                       }}
                     />
                   </div>
@@ -306,7 +302,7 @@ const OrderInquiry = (props: any) => {
             toolBarRender={() => [
               <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
                 导出
-              </Button>
+              </Button>,
             ]}
           />
         </Spin>

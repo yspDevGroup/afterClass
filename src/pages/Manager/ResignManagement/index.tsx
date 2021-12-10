@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 11:15:21
- * @LastEditTime: 2021-12-08 17:21:18
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-10 13:46:11
+ * @LastEditors: zpl
  */
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
@@ -12,7 +12,7 @@ import { useModel } from 'umi';
 import { Form, Modal, Radio, Select, Input, message } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
@@ -59,12 +59,14 @@ const ResignManagement = () => {
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
-      const res = await updateJSCQBQ({ id: current?.id },
+      const res = await updateJSCQBQ(
+        { id: current?.id },
         {
           SPZT: ZT,
           SPSM: BZ,
           SPRId: currentUser?.JSId || testTeacherId,
-        });
+        },
+      );
       if (res.status === 'ok') {
         message.success('审批成功');
         setVisible(false);
@@ -97,13 +99,9 @@ const ResignManagement = () => {
       align: 'center',
       width: 80,
       fixed: 'left',
-      render: (_text: any, record: any) => {
-        const showWXName = record?.BQR?.XM === '未知' && record?.BQR?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.BQR?.WechatUserId} />;
-        }
-        return record?.BQR?.XM;
-      },
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.BQR?.WechatUserId} XM={record?.BQR?.XM} />
+      ),
     },
     {
       title: '课程名称',
@@ -172,13 +170,9 @@ const ResignManagement = () => {
       align: 'center',
       ellipsis: true,
       width: 100,
-      render: (_text: any, record: any) => {
-        const showWXName = record?.SPR?.XM === '未知' && record?.SPR?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.SPR?.WechatUserId} />;
-        }
-        return record?.SPR?.XM;
-      },
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.SPR?.WechatUserId} XM={record?.SPR?.XM} />
+      ),
     },
     {
       title: '审批说明',
@@ -203,7 +197,7 @@ const ResignManagement = () => {
       align: 'center',
       ellipsis: true,
       width: 160,
-      render: (text: any, record: any) => record.SPZT === 0 ? '' : record.updatedAt
+      render: (text: any, record: any) => (record.SPZT === 0 ? '' : record.updatedAt),
     },
     {
       title: '操作',
@@ -249,13 +243,17 @@ const ResignManagement = () => {
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
             <div>
-              <label htmlFor='type'>教师名称：</label>
-              <Search placeholder="教师名称" allowClear onSearch={(value: string) => {
-                setName(value);
-              }} />
+              <label htmlFor="type">教师名称：</label>
+              <Search
+                placeholder="教师名称"
+                allowClear
+                onSearch={(value: string) => {
+                  setName(value);
+                }}
+              />
             </div>
             <div>
-              <label htmlFor='status'>审批状态：</label>
+              <label htmlFor="status">审批状态：</label>
               <Select
                 allowClear
                 value={BQZT?.[0]}
@@ -263,13 +261,13 @@ const ResignManagement = () => {
                   setBQZT(value !== undefined ? [value] : value);
                 }}
               >
-                <Option key='待审批' value={0}>
+                <Option key="待审批" value={0}>
                   待审批
                 </Option>
-                <Option key='已通过' value={1}>
+                <Option key="已通过" value={1}>
                   已通过
                 </Option>
-                <Option key='已驳回' value={2}>
+                <Option key="已驳回" value={2}>
                   已驳回
                 </Option>
               </Select>
@@ -317,7 +315,6 @@ const ResignManagement = () => {
           </Form.Item>
         </Form>
       </Modal>
-
     </PageContainer>
   );
 };

@@ -4,7 +4,7 @@ import { Input, Select, Tag } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import EllipsisHint from '@/components/EllipsisHint';
-import WWOpenDataCom from '@/components/WWOpenDataCom';
+import ShowName from '@/components/ShowName';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
@@ -61,13 +61,9 @@ const StudentsLeave: React.FC = () => {
       align: 'center',
       width: 100,
       fixed: 'left',
-      render: (_text: any, record: any) => {
-        const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
-        if (showWXName) {
-          return <WWOpenDataCom type="userName" openid={record?.XSJBSJ?.WechatUserId} />;
-        }
-        return record?.XSJBSJ?.XM;
-      },
+      render: (_text: any, record: any) => (
+        <ShowName type="userName" openid={record?.XSJBSJ?.WechatUserId} XM={record?.XSJBSJ?.XM} />
+      ),
     },
     {
       title: '行政班名称',
