@@ -13,7 +13,7 @@ import { updateKHKCSJ } from '@/services/after-class/khkcsj';
 type propstype = {
   handleEdit: (data: CourseItem, type?: string) => void;
   record: any;
-  getData: (origin?: string | undefined) => Promise<void>
+  getData: (origin?: string | undefined) => Promise<void>;
 };
 
 const { TextArea } = Input;
@@ -187,9 +187,10 @@ const ActionBar = (props: propstype) => {
     case '已开班':
       return (
         <>
-          {new Date(record?.BMJSSJ).getTime() >= new Date().getTime() &&
+          {(new Date(record?.BMJSSJ).getTime() >= new Date().getTime() &&
             record?.xs_count > 0 &&
-            record?.xs_count < record?.BJRS ? (
+            record?.xs_count < record?.BJRS) ||
+          (record.noPayXS_count > 0 && record?.noPayXS_count < record?.BJRS) ? (
             <>
               {' '}
               <a
