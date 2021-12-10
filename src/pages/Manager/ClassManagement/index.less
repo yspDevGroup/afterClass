@@ -210,3 +210,40 @@
     }
   }
 }
+.circle {
+  // position: absolute;
+  margin-right: 5px;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  // border: 1px solid #2090ff;
+  display: inline-block;
+  margin-top: 7px;
+  }
+  circle:after {
+  content: '';
+  margin: 3px;
+  display: table;
+  width: 6px;
+  height: 6px;
+  background: #2090ff;
+  border-radius: 50%;
+  }
+  .liDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .spanDiv{
+    width: 240px;
+  }
+  .tooltipdiv{
+    :global{
+      .ant-tooltip-content{
+        width: 260px;
+      }
+    }
+  }
+
