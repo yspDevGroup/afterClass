@@ -70,7 +70,9 @@ const Details = (props: any) => {
         PY: Evaluation,
       })
       if (res.status === 'ok') {
-        message.success('修改成功')
+        message.success('修改成功');
+        setEvaluation('');
+        setFraction(0);
         ongetEnrolled();
       }
     }

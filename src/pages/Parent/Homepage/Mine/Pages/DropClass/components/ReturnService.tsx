@@ -93,7 +93,7 @@ const ReturnService = () => {
     checkedValues.forEach((value: string) => {
       const data = {
         XSJBSJId:
-          localStorage.getItem('studentId') || (student && student.XSJBSJId) || testStudentId,
+          localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId,
         KHXXZZFWId: value.split('+')[0],
         FWMC:value.split('+')[1],
         ZT: 0,

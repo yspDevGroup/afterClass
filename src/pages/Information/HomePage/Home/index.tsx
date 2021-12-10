@@ -21,7 +21,7 @@ const Home = () => {
         <Row style={{ height: '74px' }} className={styles.teacherInfo}>
           <Col span={22}>
             <p>
-              <ShowName XM={currentUser?.XM} type="userName" openid={currentUser?.WechatUserId} />
+              <ShowName XM={currentUser?.XM} type="userName" openid={currentUser?.UserId} />
               老师，您好！
             </p>
             <div>

@@ -108,7 +108,7 @@ const SignIn = () => {
             if (index < 12) {
               return (
                 <Col span={6}>
-                  <ShowName type="userName" openid={values?.WechatUserId} XM={values?.XM} />
+                  <ShowName type="userName" openid={values?.WechatUserId} XM={values?.XM} style={{color:'#666'}} />
                 </Col>
               );
             }

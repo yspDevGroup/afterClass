@@ -104,7 +104,6 @@ const SignInDetails = () => {
                       XM={value?.XM}
                       type="userName"
                       openid={value?.WechatUserId}
-                      style={{ color: '#666' }}
                     />
                   </span>
                   <span className={styles.time}>
