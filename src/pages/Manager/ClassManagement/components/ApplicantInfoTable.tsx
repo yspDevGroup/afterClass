@@ -121,9 +121,13 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
   // 报名时间是否在范围内
   const getISTimeRange = () => {
     if (applicantData?.BMKSSJ && applicantData?.BMJSSJ) {
+      console.log(
+        'applicantData?.BMJSSJ',
+        moment(applicantData?.BMJSSJ, 'YYYY-MM-DD ').add(1, 'days').format('YYYY-MM-DD HH:mm:ss'),
+      );
       const nowTime = moment().valueOf();
-      const beginTime = moment(applicantData?.BMKSSJ, 'YYYY-MM-DD HH:mm:ss').valueOf();
-      const endTime = moment(applicantData?.BMJSSJ, 'YYYY-MM-DD HH:mm:ss').valueOf();
+      const beginTime = moment(applicantData?.BMKSSJ, 'YYYY-MM-DD').valueOf();
+      const endTime = moment(applicantData?.BMJSSJ, 'YYYY-MM-DD').add(1, 'days').valueOf();
 
       if (nowTime >= beginTime && nowTime <= endTime) {
         setTimeFalg(true);
@@ -137,9 +141,13 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
   // 开课时间是否在范围内
   const getISKKTimeRange = () => {
     if (applicantData?.KKRQ && applicantData?.JKRQ) {
+      console.log(
+        'applicantData?.JKRQ',
+        moment(applicantData?.JKRQ, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD HH:mm:ss'),
+      );
       const nowTime = moment().valueOf();
-      const beginTime = moment(applicantData?.KKRQ, 'YYYY-MM-DD HH:mm:ss').valueOf();
-      const endTime = moment(applicantData?.JKRQ, 'YYYY-MM-DD HH:mm:ss').valueOf();
+      const beginTime = moment(applicantData?.KKRQ, 'YYYY-MM-DD').valueOf();
+      const endTime = moment(applicantData?.JKRQ, 'YYYY-MM-DD').add(1, 'days').valueOf();
 
       if (nowTime >= beginTime && nowTime <= endTime) {
         setkkTimeFalg(true);
