@@ -363,13 +363,13 @@ const Adjustment = (props: { teacherData?: any }) => {
               <div>
                 <p className={styles.title}>调课前</p>
                 <p>日期：{Datas?.SKRQ}</p>
-                <p>时段：{Datas?.XXSJPZ?.KSSJ.substring(0, 5)}~{Datas?.XXSJPZ?.JSSJ.substring(0, 5)}</p>
+                <p>时段：{Datas?.SKJC.KSSJ.substring(0,5)} ~ {Datas?.SKJC.JSSJ.substring(0,5)}</p>
                 <p>场地：{Datas?.SKFJ?.FJMC}</p>
               </div>
               <div>
                 <p className={styles.title}>调课后</p>
                 <p>日期：{Datas?.TKRQ}</p>
-                <p>时段：{Datas?.KSSJ} ~ {Datas?.JSSJ}</p>
+                <p>时段：{Datas?.TKJC.KSSJ.substring(0,5)} ~ {Datas?.TKJC.JSSJ.substring(0,5)}</p>
                 <p>场地：{Datas?.TKFJ?.FJMC}</p>
               </div>
             </div>

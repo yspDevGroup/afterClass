@@ -275,6 +275,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       ZJS:
         currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJ ||
         undefined,
+      FJS,
       KHKCSJId: KHKCSJ?.id,
     };
     setVisible(true);

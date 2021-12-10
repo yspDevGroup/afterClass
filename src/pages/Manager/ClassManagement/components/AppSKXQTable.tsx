@@ -104,7 +104,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       dataIndex: 'ZJS',
       key: 'ZJS',
       align: 'center',
-      width: 100,
+      width: 120,
       ellipsis: true,
       render: (_text: any, record: any) => {
         return <>{

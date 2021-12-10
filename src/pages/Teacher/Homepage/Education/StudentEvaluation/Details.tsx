@@ -26,7 +26,7 @@ const Details = (props: any) => {
     setStudentData(res.data)
     const newArr: any[] = [];
     res.data?.forEach((value: any) => {
-      if (value.KHXSPJId === '') {
+      if (value.KHXSPJId === null || value.KHXSPJId === '') {
         newArr.push(value)
       }
     })
