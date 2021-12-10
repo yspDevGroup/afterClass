@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-08 14:56:18
- * @LastEditTime: 2021-11-17 15:34:44
- * @LastEditors: zpl
+ * @LastEditTime: 2021-12-10 17:32:27
+ * @LastEditors: Sissle Lynn
  */
 
 import { upsertKHBJKSSJ } from '@/services/after-class/khbjsj';
@@ -45,12 +45,12 @@ const arrangeClass = (data: API.KHPKSJ[]) => {
         nowWkd.wkd === wkd
           ? [{ wkd, count: nowWkd.count + 1, XXSJPZId: nowWkd.XXSJPZId.concat([XXSJPZ?.id]) }]
           : weekDay.concat([
-              {
-                wkd,
-                count: 1,
-                XXSJPZId: [XXSJPZ?.id],
-              },
-            ]);
+            {
+              wkd,
+              count: 1,
+              XXSJPZId: [XXSJPZ?.id],
+            },
+          ]);
       courseData[KHBJSJ?.id].weekDay = curWkd;
     } else if (KHBJSJ && KHBJSJ.id) {
       courseData[KHBJSJ?.id] = {
@@ -156,14 +156,14 @@ export const getClassDays = async (classId: string, teacherId?: string, xxId?: s
                 tag: '调',
                 day: v.SKRQ,
                 realDate: v.TKRQ,
-                start: v.KSSJ,
-                end: v.JSSJ,
+                start: v.TKJC?.KSSJ,
+                end: v.TKJC?.JSSJ,
                 room: {
                   id: v.TKFJ?.id,
                   name: v.TKFJ?.FJMC,
                 },
                 reason: v.BZ,
-                jcId: v.XXSJPZ?.id,
+                jcId: v.SKJC?.id,
               });
             });
           }
