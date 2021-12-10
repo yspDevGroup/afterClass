@@ -1,12 +1,14 @@
+/* eslint-disable no-param-reassign */
 /*
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-08-26 16:24:39
- * @LastEditTime: 2021-11-29 09:27:14
- * @LastEditors: zpl
+ * @LastEditTime: 2021-12-10 11:44:03
+ * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import { history } from 'umi';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import CustomForm from '@/components/CustomForm';
@@ -72,7 +74,7 @@ const SchoolInfo = (props: PropsType) => {
           XBM: readonly ? XBLX?.substring(0, 1) : XBLX,
           ...rest,
         };
-      }else{
+      } else {
         newData = {
           CSRQ: CSRQ ? moment(CSRQ) : '',
           MZM: MZM || '',
@@ -167,7 +169,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '姓名',
           name: 'XM',
           key: 'XM',
-          rules: [
+          rules: readonly ? [] : [
             { required: true, message: '请输入姓名' },
             { type: 'string', max: 60 },
           ],
@@ -255,7 +257,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '毕业院校',
           name: 'BYYX',
           key: 'BYYX',
-          rules: [{ type: 'string', max: 255 }],
+          rules: readonly ? [] : [{ type: 'string', max: 255 }],
           placeholder: readonly ? '—' : '',
         },
       ],
@@ -270,7 +272,7 @@ const SchoolInfo = (props: PropsType) => {
           name: 'LXDH',
           key: 'LXDH',
           placeholder: readonly ? '—' : '',
-          rules: [
+          rules: readonly ? [] : [
             { required: true, message: '请输入联系电话' },
             { type: 'string', max: 32 },
             {
@@ -286,7 +288,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '专业',
           name: 'SXZY',
           key: 'ZY',
-          rules: [{ type: 'string', max: 255 }],
+          rules: readonly ? [] : [{ type: 'string', max: 255 }],
           placeholder: readonly ? '—' : '',
         },
       ],
@@ -363,7 +365,7 @@ const SchoolInfo = (props: PropsType) => {
           name: 'SFZJH',
           label: '证件号码',
           placeholder: readonly ? '—' : '',
-          rules: [
+          rules: readonly ? [] : [
             { required: true, message: '请输入证件号码' },
             { type: 'string', max: 20 },
             {
@@ -400,7 +402,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '教授科目',
           name: 'JSKM',
           key: 'JSKM',
-          rules: [{ type: 'string', max: 255 }],
+          rules: readonly ? [] : [{ type: 'string', max: 255 }],
           placeholder: readonly ? '—' : '',
         },
       ],
@@ -415,7 +417,7 @@ const SchoolInfo = (props: PropsType) => {
           name: 'DZXX',
           key: 'DZXX',
           placeholder: readonly ? '—' : '',
-          rules: [
+          rules: readonly ? [] : [
             {
               type: 'email',
               message: '填写的邮箱格式有误',
@@ -435,7 +437,7 @@ const SchoolInfo = (props: PropsType) => {
           label: '个人简介',
           name: 'BZ',
           key: 'BZ',
-          rules: [{ type: 'string', max: 255 }],
+          rules: readonly ? [] : [{ type: 'string', max: 255 }],
           placeholder: readonly ? '—' : '',
         },
       ],

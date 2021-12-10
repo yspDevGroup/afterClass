@@ -123,10 +123,12 @@ const Home = () => {
     );
     if (res.status === 'ok') {
       message.success('提交成功');
-      const userInfo = await initialState.fetchUserInfo?.();
-      setInitialState({ ...initialState, currentUser: userInfo });
+      if (initialState) {
+        const userInfo = await initialState.fetchUserInfo?.();
+        setInitialState({ ...initialState, currentUser: userInfo });
+      }
     } else {
-      message.error('提交失败，请联系管理');
+      message.error('提交失败，请联系管理员');
       console.warn(res.message);
     }
     setIsModalVisible(false);
