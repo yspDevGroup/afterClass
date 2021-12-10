@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 17:55:59
- * @LastEditTime: 2021-09-27 17:28:32
+ * @LastEditTime: 2021-12-10 16:19:35
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -62,7 +62,7 @@ const PatrolArrange = (props: any) => {
                       pathname: '/teacher/patrolArrange/newPatrol',
                       state: {
                         kcid: id,
-                        kcmc: kcmc,
+                        kcmc,
                         xkrq: day,
                         bjxx: item,
                         check: isXk
