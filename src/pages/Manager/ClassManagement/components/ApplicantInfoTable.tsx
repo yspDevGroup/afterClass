@@ -599,7 +599,28 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
               {
                 // 免费课程    // 先报名后缴费
                 applicantData?.BJZT === '已开班' && applicantData.BMLX !== 1 && (
-                  <Tooltip title="批量取消报名,免费课程可以取消，先报名后缴费：未开课: 可以取消 开课只能取消未缴费的，缴费即报名: 只能退未开课的">
+                  <Tooltip
+                    defaultVisible
+                    title={
+                      <ul style={{ padding: 0, listStyleType: 'none', width: '250px' }}>
+                        <li className={styles.liDiv}>
+                          <div className={styles.circle} />
+                          <span className={styles.spanDiv}>免费：可随时取消</span>
+                        </li>
+                        <li className={styles.liDiv}>
+                          <div className={styles.circle} />
+                          <span className={styles.spanDiv}>
+                            {' '}
+                            先报名后缴费：报名时段内可以取消，正式上课时段内仅可取消未缴费学生
+                          </span>
+                        </li>
+                        <li className={styles.liDiv}>
+                          <div className={styles.circle} />{' '}
+                          <span className={styles.spanDiv}>缴费即报名：仅可在报名时段内取消;</span>
+                        </li>
+                      </ul>
+                    }
+                  >
                     <Button
                       type="primary"
                       ghost
@@ -631,7 +652,27 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
               {
                 // 报名即缴费
                 applicantData?.BJZT === '已开班' && applicantData.BMLX === 1 && !kkTimeFalg && (
-                  <Tooltip title="批量取消报名,免费课程可以取消，先报名后缴费：未开课: 可以取消 开课只能取消未缴费的，缴费即报名: 只能退未开课的">
+                  <Tooltip
+                    title={
+                      <ul style={{ padding: 0, listStyleType: 'none', width: '250px' }}>
+                        <li className={styles.liDiv}>
+                          <div className={styles.circle} />
+                          <span className={styles.spanDiv}>免费：可随时取消</span>
+                        </li>
+                        <li className={styles.liDiv}>
+                          <div className={styles.circle} />
+                          <span className={styles.spanDiv}>
+                            {' '}
+                            先报名后缴费：报名时段内可以取消，正式上课时段内仅可取消未缴费学生
+                          </span>
+                        </li>
+                        <li className={styles.liDiv}>
+                          <div className={styles.circle} />{' '}
+                          <span className={styles.spanDiv}>缴费即报名：仅可在报名时段内取消;</span>
+                        </li>
+                      </ul>
+                    }
+                  >
                     <Button
                       type="primary"
                       ghost
@@ -682,7 +723,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           <Space size={24}>
             <span>
               已选 {selectedRowKeys.length} 项
-              <a style={{ marginLeft: 8 }} onClick={onCleanSelected}>
+              <a style={{ marginLeft: 8, width: '30px' }} onClick={onCleanSelected}>
                 取消选择
               </a>
             </span>
