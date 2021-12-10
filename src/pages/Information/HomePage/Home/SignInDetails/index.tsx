@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import TopNav from './../components/TopNav'
 import styles from './index.less';
+import noOrder1 from '@/assets/noOrder1.png';
 
 
 const SignInDetails = () => {
@@ -16,7 +17,7 @@ const SignInDetails = () => {
   const { currentUser } = initialState || {};
   const [NoSignInTeacher, setNoSignInTeacher] = useState<any>([]);
 
-  const getData = async()=>{
+  const getData = async () => {
     const result = await queryXNXQList(currentUser?.xxId);
     const res = await getKCBSKSJ({
       XNXQId: result.current?.id,
@@ -76,7 +77,7 @@ const SignInDetails = () => {
   useEffect(() => {
     getData();
   }, [])
-  const onclick=()=>{
+  const onclick = () => {
     getData();
     message.success('刷新完成')
   }
@@ -84,34 +85,40 @@ const SignInDetails = () => {
     <div className={styles.DetailsBox}>
       <TopNav title="未签到教师" state={true} Refresh={true} onclick={onclick} />
       {
-        NoSignInTeacher.length === 0 ? <></>:
-        <div className={styles.wrap}>
-        {
-          NoSignInTeacher.map((value: any) => {
-            const showWXName = value?.XM === '未知' && value?.WechatUserId;
-            return <div className={styles.box}>
-              <p><span className={styles.name}>
-                {
-                  showWXName ? <WWOpenDataCom type="userName" openid={value?.WechatUserId} /> : <>{value?.XM}</>
-                }</span>
-                <span className={styles.time}>{value?.XXSJPZ.KSSJ.substring(0, 5)}~{value?.XXSJPZ.JSSJ.substring(0, 5)}</span>
-              </p>
-              <p>
-                <span>
-                  {
-                    value?.KHBJSJ?.BJMC
-                  }
-                </span>
-                <span>
-                  {
-                    value?.KHBJSJ?.KHKCSJ?.KCMC
-                  }
-                </span>
-              </p>
+        NoSignInTeacher.length === 0 ?
+          <div className={styles.Selected}>
+            <div className={styles.noOrder}>
+              <img src={noOrder1} alt="" />
+              <p>暂无数据</p>
             </div>
-          })
-        }
-      </div>
+          </div> :
+          <div className={styles.wrap}>
+            {
+              NoSignInTeacher.map((value: any) => {
+                const showWXName = value?.XM === '未知' && value?.WechatUserId;
+                return <div className={styles.box}>
+                  <p><span className={styles.name}>
+                    {
+                      showWXName ? <WWOpenDataCom type="userName" openid={value?.WechatUserId} /> : <>{value?.XM}</>
+                    }</span>
+                    <span className={styles.time}>{value?.XXSJPZ.KSSJ.substring(0, 5)}~{value?.XXSJPZ.JSSJ.substring(0, 5)}</span>
+                  </p>
+                  <p>
+                    <span>
+                      {
+                        value?.KHBJSJ?.BJMC
+                      }
+                    </span>
+                    <span>
+                      {
+                        value?.KHBJSJ?.KHKCSJ?.KCMC
+                      }
+                    </span>
+                  </p>
+                </div>
+              })
+            }
+          </div>
       }
 
     </div>
