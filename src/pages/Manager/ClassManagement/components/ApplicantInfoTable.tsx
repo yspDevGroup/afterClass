@@ -8,7 +8,7 @@ import {
   Button,
   Modal,
   Space,
-  Divider,
+  // Divider,
   Form,
   Input,
   Upload,
@@ -334,7 +334,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       fixed: 'right',
       render: (_: any, record: any) => {
         return (
-          <>
+          <Space size="middle">
             {
               //  如果报名时间内 开课时间外 报名类型属于先报名后缴费 或者缴费即报名 并且付款的的情况 实现退款退费
               !kkTimeFalg &&
@@ -429,17 +429,10 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             {kkTimeFalg &&
               applicantData?.BJZT === '已开班' &&
               applicantData.BMLX === 0 &&
-              record?.ZT === 3 && (
-                <>
-                  {onCancelSignUp(record)}
-                  <Divider type="vertical" />
-                </>
-              )}
+              record?.ZT === 3 && <>{onCancelSignUp(record)}</>}
             {/* 免费情况下已开班 已缴费  进行退课处理 */}
             {applicantData?.BJZT === '已开班' && applicantData.BMLX === 2 && record.ZT === 0 && (
-              <>
-                {onCancelSignUp(record)} <Divider type="vertical" />
-              </>
+              <>{onCancelSignUp(record)}</>
             )}
 
             {/* { applicantData?.BMLX!==1&&record?.ZT===0&&<>{onCancelSignUp(record.id)} <Divider type="vertical" /></>} */}
@@ -454,7 +447,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                     }
                   }}
                 >
-                  催缴费 <Divider type="vertical" />
+                  催缴费
                 </a>
               </>
             )}
@@ -474,7 +467,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             )}
             {/* 代报名 报名类型属于BMLX=2 并且开始时间 */}
             {}
-          </>
+          </Space>
         );
       },
     },

@@ -155,11 +155,11 @@ const SchoolEditor = (props: any) => {
     }
   };
   const requestData1 = async (XZQHM: string) => {
-    const list = await getRegion('city', XZQHM);
+    const list = await getRegion('city', `${XZQHM?.substring(0, 2)}0000`);
     setSecondCity(list);
   };
   const requestData2 = async (XZQHM: string) => {
-    const list = await getRegion('region', XZQHM);
+    const list = await getRegion('region', `${XZQHM?.substring(0, 4)}00`);
     setCounty(list);
   };
   useEffect(() => {
