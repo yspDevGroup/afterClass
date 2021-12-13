@@ -663,10 +663,10 @@ const ServiceManagement = () => {
           >
             <Input.TextArea
               placeholder="请输入"
-              showCount
+              showCount={Disabled !== '查看'}
               maxLength={200}
               disabled={Disabled === '查看'}
-              rows={4}
+              autoSize={{ minRows: 3, maxRows: 5 }}
             />
           </Form.Item>
         </Form>

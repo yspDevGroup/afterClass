@@ -99,6 +99,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setXzClassMC(BmLists?.XzClassMC);
       setJFData(JfLists);
       setXzClass(BmLists?.BJIds);
+      setSYNJ(formValues?.KHKCSJ?.NJSJs.sort((a: any, b: any)=> {
+        return a.NJ - b.NJ
+      }))
+
       if (BmLists.BJLX === 1) {
         setXzb(true);
       } else {
@@ -561,7 +565,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
             FJS: undefined,
           });
           const { value } = values.target;
-          const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === value);
+              const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === value && item.KHKCSQs?.[0].ZT === 1);
           setKCDate(kcDate);
           // setJGKCTeacherData([]);
           setIsJg(value === '机构课程');
@@ -1010,7 +1014,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
             ) : (
               <p className={styles.text}>
                 适用年级：
-                {formValues?.KHKCSJ?.NJSJs.map((value: any) => {
+                {SYNJ?.map((value: any) => {
                   return (
                     <span style={{ marginRight: 5 }}>
                       {value?.XD}
