@@ -70,7 +70,7 @@ const LeaveManagement = () => {
       fixed: 'left',
       width: 100,
       render: (_, record) => (
-        <ShowName type="userName" openid={record.WechatUserId} XM={record?.XM} />
+        <ShowName type="userName" openid={record.WechatUserId} XM={record.XM} />
       ),
     },
     {
@@ -166,7 +166,7 @@ const LeaveManagement = () => {
       fixed: 'left',
       width: 100,
       render: (_text: any, record: any) => (
-        <ShowName type="userName" openid={record?.WechatUserId} XM={record?.XM} />
+        <ShowName type="userName" openid={record.WechatUserId} XM={record.XM} />
       ),
     },
     {

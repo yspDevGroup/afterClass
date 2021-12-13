@@ -31,6 +31,20 @@ const TeacherLeave: React.FC = () => {
     setName(undefined);
     setCurXNXQId(val);
   };
+  const getData = async () => {
+    const obj = {
+      XXJBSJId: currentUser?.xxId,
+      XNXQId: curXNXQId,
+      JSXM: name,
+      QJZT: QJZT || [0, 1, 2],
+      page: 0,
+      pageSize: 0,
+    };
+    const resAll = await getAllKHJSQJ(obj);
+    if (resAll.status === 'ok' && resAll.data) {
+      setDataSource(resAll.data.rows);
+    }
+  };
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
     try {
@@ -46,7 +60,7 @@ const TeacherLeave: React.FC = () => {
         message.success('审批成功');
         setVisible(false);
         setCurrent(undefined);
-        actionRef.current?.reload();
+        getData();
         // 处理主班请假后课时数发生变更的情况，触发课时重新计算
         if (ZT === 1) {
           const bjIds = [].map.call(current.KHJSQJKCs, (item: { KHBJSJId: string }) => {
@@ -69,20 +83,7 @@ const TeacherLeave: React.FC = () => {
       message.error('退课流程出现错误，请联系管理员或稍后重试。');
     }
   };
-  const getData = async () => {
-    const obj = {
-      XXJBSJId: currentUser?.xxId,
-      XNXQId: curXNXQId,
-      JSXM: name,
-      QJZT: QJZT || [0, 1, 2],
-      page: 0,
-      pageSize: 0,
-    };
-    const resAll = await getAllKHJSQJ(obj);
-    if (resAll.status === 'ok' && resAll.data) {
-      setDataSource(resAll.data.rows);
-    }
-  };
+
   useEffect(() => {
     if (curXNXQId) {
       getData();

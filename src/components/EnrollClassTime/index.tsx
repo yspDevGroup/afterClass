@@ -44,7 +44,7 @@ const EnrollClassTime = (props: {
           );
         }
         if (status === '已调课') {
-          domRight = ` ${otherInfo.TKRQ} ${otherInfo.KSSJ}`;
+          domRight = ` ${otherInfo.TKRQ} ${otherInfo.KSSJ || otherInfo.TKJC?.KSSJ?.substring(0, 5)}`;
         }
         if (status === '已请假') {
           domRight = '';
@@ -67,9 +67,8 @@ const EnrollClassTime = (props: {
         },
         link:
           status !== '代上课'
-            ? `${
-                type === 'teacher' ? '/teacher/home/courseDetails' : '/parent/home/courseTable'
-              }?classid=${ele.bjId}&status=${status}`
+            ? `${type === 'teacher' ? '/teacher/home/courseDetails' : '/parent/home/courseTable'
+            }?classid=${ele.bjId}&status=${status}`
             : null,
         desc: [
           {

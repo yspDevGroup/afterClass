@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-12-10 13:04:11
- * @LastEditors: zpl
+ * @LastEditTime: 2021-12-10 18:21:21
+ * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
 import { InputNumber, message, Switch } from 'antd';
@@ -46,7 +46,7 @@ const NewPatrol = (props: any) => {
     /** 是否点名 */
     SFDM: checkIn,
     /** 实到人数是否准确 */
-    RSSFZQ: accurate,
+    RSSFZQ: checkIn ? accurate : false,
     /** 备注信息 */
     BZXX: '',
     YDRS: bjxx?.xs_count,
@@ -180,26 +180,12 @@ const NewPatrol = (props: any) => {
                     <InputNumber value={bjxx?.xs_count} disabled />人
                   </span>
                 </li>
-                <li>
+                {checkIn ? <li>
                   <label>实到人数</label>
                   <span>
-                    {checkIn || check ? (
-                      <InputNumber value={checkNum} disabled />
-                    ) : (
-                      <InputNumber
-                        placeholder="请输入"
-                        min={0}
-                        max={bjxx?.xs_count}
-                        formatter={limitDecimals}
-                        parser={limitDecimals}
-                        onBlur={(e) => {
-                          recordDetail.SDRS = Number(e.target.value);
-                        }}
-                      />
-                    )}
-                    人
+                    <InputNumber value={checkNum} disabled /> 人
                   </span>
-                </li>
+                </li> : ''}
                 {checkIn ? (
                   <li>
                     <label>实到人数准确</label>
@@ -214,7 +200,7 @@ const NewPatrol = (props: any) => {
                 ) : (
                   ''
                 )}
-                {!accurate ? (
+                {!accurate || !checkIn ? (
                   <li>
                     <label>巡课确认人数</label>
                     <span>

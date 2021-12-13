@@ -28,7 +28,7 @@ const defaultMsgs: ListData = {
 
 const { TabPane } = Tabs;
 const ServiceReservation = (props: any) => {
-  const { yxkcAllData, keys} = props.location.state;
+  const { yxkcAllData, keys } = props.location.state;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [YxserviceData, setYxserviceData] = useState<any>();
@@ -51,6 +51,7 @@ const ServiceReservation = (props: any) => {
     (async () => {
       const res = await getStudent({
         XSJBSJId: StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId,
+        ZT: [0, 1],
       });
       if (res.status === 'ok') {
         setYxserviceData(res.data?.rows);
@@ -97,8 +98,8 @@ const ServiceReservation = (props: any) => {
                                 {moment(item?.KHXXZZFW?.BMJSSJ).format('YYYY.MM.DD')}
                               </p>
                               <p>
-                                服务时段：{moment(item?.KSRQ).format('YYYY.MM.DD')}~
-                                {moment(item?.JSRQ).format('YYYY.MM.DD')}
+                                服务时段：{moment(item?.KHXXZZFW?.KSRQ).format('YYYY.MM.DD')}~
+                                {moment(item?.KHXXZZFW?.JSRQ).format('YYYY.MM.DD')}
                               </p>
                             </div>
                           </div>
@@ -110,7 +111,6 @@ const ServiceReservation = (props: any) => {
             )}
           </>
         </TabPane>
-
       </Tabs>
     </div>
   );

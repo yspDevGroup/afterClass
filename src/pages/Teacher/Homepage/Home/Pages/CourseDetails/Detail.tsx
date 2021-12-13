@@ -108,7 +108,7 @@ const Detail: React.FC = () => {
                     <ShowName
                       XM={item.JZGJBSJ.XM}
                       type="userName"
-                      openid={item.JZGJBSJ.WechatUserId}
+                      openid={item.JZGJBSJ?.WechatUserId}
                     />
                   </span>
                 );
@@ -124,7 +124,7 @@ const Detail: React.FC = () => {
                   <span style={{ marginRight: '1em' }}>
                     <ShowName
                       type="userName"
-                      openid={item.JZGJBSJ.WechatUserId}
+                      openid={item.JZGJBSJ?.WechatUserId}
                       XM={item.JZGJBSJ.XM}
                     />
                   </span>

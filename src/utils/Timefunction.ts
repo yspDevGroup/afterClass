@@ -26,7 +26,7 @@ export const DateRange = (startDate: string, endDate: string) => {
 export const Week = (time: any) => {
   return "0123456".charAt(new Date(time).getDay())
 }
-//将时分转为时间戳
+// 将时分转为时间戳
 const time_to_sec = (time: any) => {
   if (time !== null) {
     const hour = time.split(":")[0];
@@ -53,19 +53,19 @@ export const compareNow = (day: string, time?: string) => {
 }
 
 
-export const ClassStatus = (startTime?: number, endTime?: number) =>{
-    const newDay = moment(new Date()).format('YYYY-MM-DD')
-    const NowTime = new Date().getTime(); // 当前时间
-    const startTimes = new Date(`${newDay} ${startTime}`).getTime();  // 上课开始时间
-    const endTimes = new Date(`${newDay} ${endTime}`).getTime(); // 下课结束时间
-    if (NowTime < startTimes) {
-      return '待上课'
-    }
-    if(startTimes < NowTime &&  NowTime < endTimes){
-      return '上课中';
-    }
-    if(NowTime > endTimes){
-      return '已下课';
-    }
-    return ''
+export const ClassStatus = (startTime?: number, endTime?: number) => {
+  const newDay = moment(new Date()).format('YYYY-MM-DD')
+  const NowTime = new Date().getTime(); // 当前时间
+  const startTimes = new Date(`${newDay} ${startTime}`).getTime(); // 上课开始时间
+  const endTimes = new Date(`${newDay} ${endTime}`).getTime(); // 下课结束时间
+  if (NowTime < startTimes) {
+    return '待上课'
   }
+  if (startTimes < NowTime && NowTime < endTimes) {
+    return '上课中';
+  }
+  if (NowTime > endTimes) {
+    return '已下课';
+  }
+  return ''
+}

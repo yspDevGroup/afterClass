@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-12-10 16:17:37
+ * @LastEditTime: 2021-12-10 17:57:23
  * @LastEditors: Sissle Lynn
  */
 /* eslint-disable no-param-reassign */
@@ -201,8 +201,10 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
   newData.forEach((ele: any) => {
     // 通过bjId,jcId确认原有数据中是否与已代课数据重合
     const oriInd = oriData.findIndex((v: { bjId: any; jcId: any }) => {
-      return ele.KHBJSJId === v.bjId && ele.XXSJPZId === v.jcId;
+      const con1 = ele.SKJC?.id === v.jcId || ele.TKJC?.id === v.jcId;
+      return ele.KHBJSJId === v.bjId && con1;
     });
+
     // 如果数据重合则增加原有数据的相关代课状态,否则在数组中追加相关已代课数据
     if (oriInd !== -1) {
       if (oriData?.[oriInd]?.status && oriData[oriInd].status === '已请假') {
@@ -227,6 +229,8 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
           status,
         });
       } else {
+        const kssj = ele.LX === 0 ? ele.TKJC?.KSSJ?.substring(0, 5) : ele.SKJC?.KSSJ?.substring(0, 5);
+        const jssj = ele.LX === 0 ? ele.TKJC?.JSSJ?.substring(0, 5) : ele.SKJC?.JSSJ?.substring(0, 5);
         oriData.push({
           title: ele.KHBJSJ.KHKCSJ.KCMC,
           bjId: ele.KHBJSJId,
@@ -234,10 +238,10 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
           fjId: ele.TKFJId,
           BJMC: ele.KHBJSJ.BJMC,
           img: ele.KHBJSJ.KHKCSJ.KCTP,
-          address: ele.SKFJ.FJMC,
+          address: ele.LX === 0 ? ele.TKFJ.FJMC : ele.SKFJ.FJMC,
           date: ele.SKRQ,
-          start: ele.KSSJ || ele.SKJC?.KSSJ?.substring(0, 5),
-          end: ele.JSSJ || ele.SKJC?.JSSJ?.substring(0, 5),
+          start: ele.KSSJ || kssj,
+          end: ele.JSSJ || jssj,
           status,
         });
       }
@@ -266,7 +270,7 @@ export const CurdayCourse = async (
   const myDate = curDay || dayjs().format('YYYY-MM-DD');
   // 获取已经处理过的课程安排数据
   if (typeof homeInfo === 'undefined' && type && xxId && userId) {
-    const res = await ParentHomeData(type, xxId, userId, njId, bjId,XQSJId);
+    const res = await ParentHomeData(type, xxId, userId, njId, bjId, XQSJId);
     data = res.courseSchedule;
     total = res.data;
   } else if (homeInfo && homeInfo?.courseSchedule) {
@@ -296,8 +300,8 @@ export const CurdayCourse = async (
               BZ: reason,
               TKRQ: realDate,
               XXSJPZId: jcId,
-              JSSJ: currentDay?.end,
-              KSSJ: currentDay?.start,
+              JSSJ: currentDay?.end?.substring(0, 5),
+              KSSJ: currentDay?.start?.substring(0, 5),
               TKFJ: {
                 id: currentDay.room?.id,
                 FJMC: currentDay.room?.name,
@@ -312,6 +316,7 @@ export const CurdayCourse = async (
       courseList = [...courseList, ...newArr];
     }
   });
+
   // 查询今日是否存在调代课，请假的课程
   if (type === 'teacher') {
     // 教师端接口
@@ -322,6 +327,7 @@ export const CurdayCourse = async (
 
     if (response?.status === 'ok' && response.data) {
       const { nowDks, nowTks, qjs, srcDks, srcTks, rls } = response.data;
+
       if (nowDks?.length) {
         CountCurdayCourse(nowDks, courseList, '代上课');
       }

@@ -41,7 +41,7 @@ const Mine = () => {
                 <ShowName
                   type="userName"
                   openid={currentUser.wechatUserId}
-                  XM={currentUser?.UserId}
+                  XM={currentUser.UserId}
                 />
               </span>
               老师

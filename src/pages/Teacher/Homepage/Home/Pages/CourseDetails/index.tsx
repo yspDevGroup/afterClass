@@ -117,7 +117,7 @@ const CourseDetails: React.FC = () => {
   const handleModal = (val: any) => {
     let content = {};
     if (val.otherInfo) {
-      const { LX, SKJC, TKRQ, SKJS, DKJS, BZ } = val.otherInfo;
+      const { LX, TKJC, TKRQ, SKJS, DKJS, BZ } = val.otherInfo;
       if (LX === 1) {
         content = {
           title: '代课说明',
@@ -126,7 +126,7 @@ const CourseDetails: React.FC = () => {
       } else {
         content = {
           title: '调课说明',
-          content: `由于${BZ},本节课临时调整到${TKRQ}日${SKJC?.KSSJ?.substring(0,5)}-${SKJC?.JSSJ?.substring(0,5)}上课,请知悉.`,
+          content: `由于${BZ},本节课临时调整到${TKRQ}日${TKJC?.KSSJ?.substring(0,5)}-${TKJC?.JSSJ?.substring(0,5)}上课,请知悉.`,
         };
       }
       Modal.info({
