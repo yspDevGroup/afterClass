@@ -865,17 +865,21 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             </Upload>
           </p>
           <div className={styles.messageDiv}>
-            <Badge status="default" /> 上传文件仅支持模板格式{' '}
+            <Badge color="#aaa" size="small" />
+            上传文件仅支持模板格式
             <a
+              style={{ marginLeft: '16px' }}
               type="download"
               href="http://acuploads.test.xianyunshipei.com//importTemplate/bjBM.xlsx"
             >
               下载模板
             </a>
             <br />
-            <Badge status="default" /> 确保报个内只有一个工作簿，如果有多个只有第一个会被处理，
+            <Badge color="#aaa" size="small" />
+            确保报个内只有一个工作簿，如果有多个只有第一个会被处理
             <br />
-            <Badge status="default" /> 单次报名最大不得超出班级最大人数。
+            <Badge color="#aaa" size="small" />
+            单次报名最大不得超出班级最大人数
           </div>
         </>
       </Modal>
