@@ -592,7 +592,7 @@ const AddArranging: FC<PropsType> = (props) => {
                             <ShowName
                               style={{ color: '#666' }}
                               type="userName"
-                              openid={teacher.WechatUserId}
+                              openid={teacher?.WechatUserId}
                               XM={teacher?.XM}
                             />
                           </span>

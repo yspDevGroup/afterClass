@@ -2,7 +2,7 @@
  * @description:
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-12-10 13:47:49
+ * @LastEditTime: 2021-12-13 09:28:40
  * @LastEditors: zpl
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -115,7 +115,7 @@ const OrderInquiry = (props: any) => {
       width: 100,
       fixed: 'left',
       render: (_text: any, record: any) => (
-        <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+        <ShowName type="userName" openid={record?.XSJBSJ?.WechatUserId} XM={record?.XSJBSJ?.XM} />
       ),
     },
     {

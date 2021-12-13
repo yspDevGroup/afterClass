@@ -2,7 +2,7 @@
  * @description:订单查询页面
  * @author: gxh
  * @Date: 2021-09-23 09:09:58
- * @LastEditTime: 2021-12-10 13:49:04
+ * @LastEditTime: 2021-12-13 09:28:28
  * @LastEditors: zpl
  */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -129,7 +129,7 @@ const OrderInquiry = (props: any) => {
       render: (_text: any, record: any) => {
         const showWXName = record?.XSJBSJ?.XM === '未知' && record?.XSJBSJ?.WechatUserId;
         if (showWXName) {
-          return <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} />;
+          return <ShowName type="userName" openid={record?.XSJBSJ?.WechatUserId} />;
         }
         return record?.XSJBSJ?.XM;
       },

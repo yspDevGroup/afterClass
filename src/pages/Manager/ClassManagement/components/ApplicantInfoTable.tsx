@@ -288,7 +288,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       align: 'center',
       width: 100,
       render: (_text: any, record: any) => (
-        <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+        <ShowName type="userName" openid={record?.XSJBSJ?.WechatUserId} XM={record?.XSJBSJ?.XM} />
       ),
     },
     {

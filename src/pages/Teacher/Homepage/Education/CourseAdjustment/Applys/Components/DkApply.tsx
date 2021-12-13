@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-12-10 13:23:32
+ * @LastEditTime: 2021-12-13 09:31:47
  * @LastEditors: zpl
  */
 import { useEffect, useState } from 'react';
@@ -121,7 +121,7 @@ const DkApply = () => {
                 {JsData?.map((value) => {
                   return (
                     <Option value={value.XM} key={value.id}>
-                      <ShowName type="userName" openid={value!.WechatUserId!} XM={value.XM} />
+                      <ShowName type="userName" openid={value.WechatUserId} XM={value.XM} />
                     </Option>
                   );
                 })}

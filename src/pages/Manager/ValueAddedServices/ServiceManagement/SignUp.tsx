@@ -112,7 +112,7 @@ const SignUp = (props: any) => {
       width: 100,
       render: (_text: any, record: any) => {
         return (
-          <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+          <ShowName type="userName" openid={record?.XSJBSJ?.WechatUserId} XM={record?.XSJBSJ?.XM} />
         );
       },
     },

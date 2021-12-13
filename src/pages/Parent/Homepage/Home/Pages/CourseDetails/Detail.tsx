@@ -175,7 +175,7 @@ const Detail: React.FC = () => {
                   <span style={{ marginRight: '1em' }}>
                     <ShowName
                       type="userName"
-                      openid={item?.JZGJBSJ.WechatUserId}
+                      openid={item?.JZGJBSJ?.WechatUserId}
                       XM={item?.JZGJBSJ?.XM}
                     />
                   </span>

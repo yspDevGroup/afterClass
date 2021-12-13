@@ -86,7 +86,7 @@ const TabList = (props: any) => {
       fixed: 'left',
       render: (_text: any, record: any) => {
         return (
-          <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+          <ShowName type="userName" openid={record?.XSJBSJ?.WechatUserId} XM={record?.XSJBSJ?.XM} />
         );
       },
     },

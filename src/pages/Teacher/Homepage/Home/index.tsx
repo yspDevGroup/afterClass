@@ -141,11 +141,7 @@ const Home = () => {
         <div className={styles.headerText}>
           <h4>
             <span ref={userRef}>
-              <ShowName
-                type="userName"
-                openid={currentUser.wechatUserId}
-                XM={currentUser?.UserId}
-              />
+              <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.UserId} />
             </span>
             老师，你好！
           </h4>

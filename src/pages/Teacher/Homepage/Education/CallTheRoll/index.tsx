@@ -331,7 +331,7 @@ const CallTheRoll = (props: any) => {
       align: 'center',
       render: (test: any, record: any) => {
         return (
-          <ShowName type="userName" openid={record?.XSJBSJ.WechatUserId} XM={record?.XSJBSJ?.XM} />
+          <ShowName type="userName" openid={record?.XSJBSJ?.WechatUserId} XM={record?.XSJBSJ?.XM} />
         );
       },
     },
@@ -385,11 +385,7 @@ const CallTheRoll = (props: any) => {
         <div>
           <b>
             <span ref={userRef}>
-              <ShowName
-                type="userName"
-                openid={currentUser.wechatUserId}
-                XM={currentUser?.UserId}
-              />
+              <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.UserId} />
             </span>
             老师
           </b>
