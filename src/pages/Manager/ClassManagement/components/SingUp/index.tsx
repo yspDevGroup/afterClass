@@ -1,14 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 15:41:26
- * @LastEditTime: 2021-12-09 12:22:20
+ * @LastEditTime: 2021-12-13 14:08:10
  * @LastEditors: Wu Zhan
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \afterClass\src\pages\Manager\ClassManagement\components\SingUp\index.tsx
  */
 
 import { getClassStudents, getSchoolClasses } from '@/services/after-class/bjsj';
-import { Tree, Input, Row, Col, message, Spin, Empty } from 'antd';
+import { Tree, Input, Row, Col, message, Spin, Empty, Modal, Space } from 'antd';
 import { getAllXSJBSJ } from '@/services/after-class/xsjbsj';
 import { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { useModel } from 'umi';
@@ -133,6 +133,38 @@ const SignUp = (props: SignUpProps, ref: any) => {
     }
   }, [applicantData]);
 
+  const getModel = (list: any[], len: number) => {
+    // 已报名
+    let alreadyLen: number = 0;
+    // 报名那个失败
+    let failLen: number = 0;
+    let noneLet: number = 0;
+
+    list.forEach((item: any) => {
+      if (item.flag === 0) {
+        alreadyLen += 1;
+      }
+      if (item.flag === 1) {
+        failLen += 1;
+      }
+      if (item.falg === 2) {
+        noneLet += 1;
+      }
+    });
+
+    Modal.warning({
+      title: '报名结果',
+      content: (
+        <Space size="middle">
+          {len - list.length > 0 ? <span>{`${len - list.length}报名成功`}</span> : ''}
+          {alreadyLen > 0 ? <span>{`${alreadyLen}已报名`}</span> : ''}
+          {failLen > 0 ? <span>{`${failLen}报名失败`}</span> : ''}
+          {noneLet > 0 ? <span>{`${noneLet}学生不存在`}</span> : ''}
+        </Space>
+      ),
+    });
+  };
+
   const onSignUpSubmit = async () => {
     const XSJBSJIds: string[] = [];
     selectTreeData?.forEach((BJItem: DataNode) => {
@@ -160,7 +192,12 @@ const SignUp = (props: SignUpProps, ref: any) => {
         // XNXQIId: applicantData?.XNXQId,
       });
       if (res.status === 'ok') {
-        message.success('报名成功');
+        if (!res.data.length) {
+          message.success('报名成功');
+        } else {
+          getModel(res.data, XSJBSJIds.length);
+        }
+
         if (setVisible) {
           setVisible(false);
         }

@@ -12,6 +12,7 @@ import {
   Form,
   Input,
   Upload,
+  Badge,
 } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -757,14 +758,14 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           }
           if (applicantData?.BMLX !== 1 && applicantData?.BJZT === '已开班' && timeFalg) {
             return [
-              // <Button
-              //   type="link"
-              //   onClick={() => {
-              //     setUploadVisible(true);
-              //   }}
-              // >
-              //   导入报名
-              // </Button>,
+              <Button
+                type="link"
+                onClick={() => {
+                  setUploadVisible(true);
+                }}
+              >
+                导入报名
+              </Button>,
               <Button
                 type="primary"
                 onClick={() => {
@@ -856,11 +857,27 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           overflowY: 'auto',
         }}
       >
-        <p>
-          <Upload {...UploadProps}>
-            <Button icon={<UploadOutlined />}>上传文件</Button>
-          </Upload>
-        </p>
+        <>
+          <p>
+            <Upload {...UploadProps}>
+              <Button icon={<UploadOutlined />}>上传文件</Button>{' '}
+              <span className={styles.messageSpan}>进行批量导入报名学生</span>
+            </Upload>
+          </p>
+          <div className={styles.messageDiv}>
+            <Badge status="default" /> 上传文件仅支持模板格式{' '}
+            <a
+              type="download"
+              href="http://acuploads.test.xianyunshipei.com//importTemplate/bjBM.xlsx"
+            >
+              下载模板
+            </a>
+            <br />
+            <Badge status="default" /> 确保报个内只有一个工作簿，如果有多个只有第一个会被处理，
+            <br />
+            <Badge status="default" /> 单次报名最大不得超出班级最大人数。
+          </div>
+        </>
       </Modal>
     </div>
   );

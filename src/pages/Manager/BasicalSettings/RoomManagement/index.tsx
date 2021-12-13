@@ -3,7 +3,18 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useModel } from 'umi';
 import type { FormInstance } from 'antd';
-import { Input, Tooltip, message, Popconfirm, Button, Divider, Modal, Select, Upload } from 'antd';
+import {
+  Input,
+  Tooltip,
+  message,
+  Popconfirm,
+  Button,
+  Divider,
+  Modal,
+  Select,
+  Upload,
+  Badge,
+} from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType, RequestData } from '@ant-design/pro-table';
 import { PlusOutlined, UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
@@ -398,9 +409,9 @@ const RoomManagement = () => {
             <PlusOutlined />
             新增场地
           </Button>,
-          // <Button key="button" type="primary" onClick={() => setUploadVisible(true)}>
-          //   <VerticalAlignBottomOutlined /> 导入
-          // </Button>,
+          <Button key="button" type="primary" onClick={() => setUploadVisible(true)}>
+            <VerticalAlignBottomOutlined /> 导入
+          </Button>,
         ]}
       />
       <Modal
@@ -456,13 +467,27 @@ const RoomManagement = () => {
           overflowY: 'auto',
         }}
       >
-        <p
-        // className={styles.uploadBtn}
-        >
-          <Upload {...UploadProps}>
-            <Button icon={<UploadOutlined />}>上传文件</Button>
-          </Upload>
-        </p>
+        <>
+          <p>
+            <Upload {...UploadProps}>
+              <Button icon={<UploadOutlined />}>上传文件</Button>{' '}
+              <span className={styles.messageSpan}>进行批量导入的场地</span>
+            </Upload>
+          </p>
+          <div className={styles.messageDiv}>
+            <Badge status="default" /> 上传文件仅支持模板格式{' '}
+            <a
+              type="download"
+              href="http://acuploads.test.xianyunshipei.com//importTemplate/importFJSJ.xlsx"
+            >
+              下载模板
+            </a>
+            <br />
+            <Badge status="default" /> 确保报个内只有一个工作簿，如果有多个只有第一个会被处理，
+            <br />
+            <Badge status="default" /> 场地最大支持500条数据。
+          </div>
+        </>
       </Modal>
     </PageContainer>
   );
