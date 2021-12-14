@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-12-10 17:57:23
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-14 16:42:27
+ * @LastEditors: zpl
  */
 /* eslint-disable no-param-reassign */
 
@@ -185,7 +185,7 @@ export const ParentHomeData = async (
   }
 
   if (!homeInfo.data || refresh) {
-    await getHomeData(type, xxId, userId, njId, bjId,XQSJId);
+    await getHomeData(type, xxId, userId, njId, bjId, XQSJId);
     return homeInfo;
   }
 
@@ -224,13 +224,15 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
           img: ele.KHBJSJ?.KHKCSJ?.KCTP,
           address: ele?.SKFJ?.FJMC,
           date: ele.RQ,
-          start: ele.KSSJ || ele.SKJC?.KSSJ?.substring?.(0, 5),
-          end: ele.JSSJ || ele.SKJC?.JSSJ?.substring?.(0, 5),
+          start: ele.KSSJ || ele.XXSJPZ?.KSSJ?.substring?.(0, 5),
+          end: ele.JSSJ || ele.XXSJPZ?.JSSJ?.substring?.(0, 5),
           status,
         });
       } else {
-        const kssj = ele.LX === 0 ? ele.TKJC?.KSSJ?.substring(0, 5) : ele.SKJC?.KSSJ?.substring(0, 5);
-        const jssj = ele.LX === 0 ? ele.TKJC?.JSSJ?.substring(0, 5) : ele.SKJC?.JSSJ?.substring(0, 5);
+        const kssj =
+          ele.LX === 0 ? ele.TKJC?.KSSJ?.substring(0, 5) : ele.SKJC?.KSSJ?.substring(0, 5);
+        const jssj =
+          ele.LX === 0 ? ele.TKJC?.JSSJ?.substring(0, 5) : ele.SKJC?.JSSJ?.substring(0, 5);
         oriData.push({
           title: ele.KHBJSJ.KHKCSJ.KCMC,
           bjId: ele.KHBJSJId,
@@ -374,8 +376,8 @@ export const CurdayCourse = async (
     }
   }
   courseList?.sort((a: { start: string }, b: { start: string }) => {
-    const aT = Number(a.start.replace(/:/g, ''));
-    const bT = Number(b.start.replace(/:/g, ''));
+    const aT = Number(a.start?.replace(/:/g, ''));
+    const bT = Number(b.start?.replace(/:/g, ''));
     return aT - bT;
   });
   return {
@@ -566,7 +568,7 @@ export const convertTimeTable = async (
   bjId: string,
   attendance: any[],
   days: any[],
-  xxId: string
+  xxId: string,
 ) => {
   const myDate: Date = new Date();
   const currentDate = moment(myDate).format('YYYY-MM-DD');
@@ -591,9 +593,7 @@ export const convertTimeTable = async (
         }
       }
       if (specialData?.length) {
-        const curCQ = specialData.find(
-          (item: any) => item.SKRQ === day && item.SKJC?.id === jcId,
-        );
+        const curCQ = specialData.find((item: any) => item.SKRQ === day && item.SKJC?.id === jcId);
         if (curCQ) {
           status = curCQ?.LX === 1 ? '代课' : '调课';
           otherInfo = curCQ;
