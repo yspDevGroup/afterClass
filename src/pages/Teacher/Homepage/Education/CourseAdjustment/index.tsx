@@ -17,7 +17,7 @@ const CourseAdjustment = () => {
   const [Datas, setDatas] = useState<any>([]);
   const getData = async () => {
     const res = await getAllKHJSTDK({
-      LX: [0, 1],
+      LX: [0, 1, 2, 3],
       ZT: [0, 1, 2, 3, 4, 5],
       XXJBSJId: currentUser?.xxId,
       SKJSId: currentUser.JSId || testTeacherId,
@@ -112,9 +112,8 @@ const CourseAdjustment = () => {
                   </p>
                   <p>
                     {item?.LX === 0
-                      ? `调课后时间：${moment(item?.TKRQ).format('MM月DD日')}，${
-                          item.TKJC?.TITLE
-                        }【${item.TKJC?.KSSJ.substring(0, 5)}-
+                      ? `调课后时间：${moment(item?.TKRQ).format('MM月DD日')}，${item.TKJC?.TITLE
+                      }【${item.TKJC?.KSSJ.substring(0, 5)}-
               ${item.TKJC?.JSSJ.substring(0, 5)}】`
                       : ''}
                   </p>

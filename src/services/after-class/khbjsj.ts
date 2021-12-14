@@ -435,6 +435,7 @@ export async function studentRegistration(
     ZT?: number;
     XSJBSJIds?: string[];
     KHBJSJId?: string;
+    JZGJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -475,6 +476,7 @@ export async function getExchengeableClasses(
   body: {
     XNXQId?: string;
     KHBJSJId?: string;
+    RQ?: string;
   },
   options?: { [key: string]: any },
 ) {

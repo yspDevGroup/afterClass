@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 09:20:56
- * @LastEditTime: 2021-11-26 16:19:23
+ * @LastEditTime: 2021-12-13 10:06:53
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -20,6 +20,7 @@ import GoBack from '@/components/GoBack';
 import Nodata from '@/components/Nodata';
 import noData from '@/assets/noCourses1.png';
 import { getScheduleByDate, getXKrecordBydate } from '@/services/after-class/khxksj';
+import { getWeekday } from '@/services/local-services/mobileHome';
 
 const PatrolArrange = () => {
   const { initialState } = useModel('@@initialState');
@@ -44,24 +45,6 @@ const PatrolArrange = () => {
       }
     }
   };
-  /**
-   * 获取当前日期的指定本周日期
-   * @param dd 日期
-   * @param type 'Saturday'获取周六的日期，默认获取上周日日期
-   * @returns
-   */
-  const getWeekday = (dd: Date, type?: string) => {
-    const week = dd.getDay(); // 获取时间的星期数
-    if (type === 'Saturday') {
-      dd.setDate(dd.getDate() + (6 - week));
-    } else {
-      dd.setDate(dd.getDate() - week);
-    }
-    const y = dd.getFullYear();
-    const m = dd.getMonth() + 1; // 获取月份
-    const d = dd.getDate();
-    return `${y}-${m}-${d}`;
-  }
   const getDateData = async (start?: string, end?: string) => {
     const res = await getXKrecordBydate({
       JZGJBSJId: currentUser.JSId || testTeacherId,

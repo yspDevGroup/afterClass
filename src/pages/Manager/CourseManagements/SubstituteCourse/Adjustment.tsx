@@ -35,7 +35,7 @@ const Adjustment = (props: { teacherData?: any }) => {
 
   const getData = async () => {
     const obj = {
-      LX: [0],
+      LX: [0,2],
       ZT: typeof SPZT?.[0] === 'undefined' ? [0, 1, 2] : SPZT,
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId,

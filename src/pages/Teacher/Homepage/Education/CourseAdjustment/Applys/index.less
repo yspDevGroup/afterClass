@@ -70,6 +70,69 @@
       color: #999999;
     }
 
+    .arrangeTab {
+      width: 100vw;
+      margin-left: -10px;
+      margin-top: 10px;
+      :global{
+        .ant-tabs-nav{
+          background: linear-gradient(180deg, #FFFFFF 65%, rgba(255, 255, 255, 0) 100%);
+          padding: 0 10px 24px;
+          &::before{
+            border-bottom: none;
+          }
+          .ant-tabs-nav-wrap{
+            display: inline-block !important;
+            flex: none;
+            width: 100%;
+            .ant-tabs-tab{
+              background: inherit;
+              width: auto;
+              padding: 10px 0;
+              margin-right: 24px;
+              &.ant-tabs-tab-active {
+                position: relative;
+                &::after{
+                  display: block;
+                  content: '';
+                  width: 20px;
+                  height: 2px;
+                  background: #4884ff;
+                  position: absolute;
+                  bottom: 5px;
+                  left: calc(~'50% - 10px')
+                }
+                .ant-tabs-tab-btn{
+                  color: #4884ff;
+                  font-size: 14px;
+                }
+              }
+              &.ant-tabs-tab-disabled{
+                .ant-tabs-tab-btn{
+                  color: #bbb;
+                }
+              }
+              .ant-tabs-tab-btn{
+                font-size: 14px;
+              }
+            }
+          }
+          .ant-tabs-ink-bar{
+            display: none;
+          }
+        }
+        .ant-tabs-content-holder{
+          padding: 0 10px;
+          margin-top: -24px;
+          z-index: 1;
+          div[role="tabpanel"] > p{
+            color: #999999;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+
     form {
       padding: 10px 0 70px 0;
 
@@ -115,12 +178,13 @@
             }
 
             .ant-form-item-control {
-              max-width: 140px;
+              max-width: 180px;
 
               .ant-picker {
                 display: block;
                 border: none;
-                input{
+
+                input {
                   text-align: right;
                 }
               }
@@ -178,63 +242,83 @@
       }
 
       .kcapTk {
-        padding: 6px 10px;
+        padding: 6px 0;
         border-radius: 10px;
         background-color: #fff;
         line-height: 26px;
         color: #666;
-      }
-    }
 
-    :global {
+        :global {
+          .ant-radio-wrapper {
+            width: 100%;
 
-      .ant-checkbox-wrapper,
-      .ant-checkbox-wrapper:hover .ant-checkbox-inner,
-      .ant-checkbox:hover .ant-checkbox-inner,
-      .ant-checkbox-input:focus+.ant-checkbox-inner,
-      .ant-input:focus {
-        border-color: #0066ff !important;
-      }
+            .ant-radio {
+              position: absolute;
+              top: 20px;
+              right: 20px;
+            }
 
-      .ant-checkbox-checked {
-        .ant-checkbox-inner {
-          background-color: #0066ff;
-          border-color: #0066ff;
+            >span {
+              p {
+                margin: 5px;
+                color: #999;
+              }
+            }
+          }
         }
       }
     }
   }
 
-  .fixedBtn {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    justify-content: space-around;
-    padding: 8px 14px;
-    background: #ffffff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  :global {
 
-    button {
-      width: 40%;
-      color: #0066ff;
-      background: #fff;
-      border: 1px solid #0066ff;
-      border-radius: 22px;
+    .ant-checkbox-wrapper,
+    .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+    .ant-checkbox:hover .ant-checkbox-inner,
+    .ant-checkbox-input:focus+.ant-checkbox-inner,
+    .ant-input:focus {
+      border-color: #0066ff !important;
     }
 
-    button:nth-child(2) {
-      width: 40%;
-      color: #fff;
-      background: #0066ff;
-      border: none;
-      border-radius: 22px;
+    .ant-checkbox-checked {
+      .ant-checkbox-inner {
+        background-color: #0066ff;
+        border-color: #0066ff;
+      }
     }
+  }
+}
 
-    button[disabled] {
-      background: #eee;
-      color: #999;
-    }
+.fixedBtn {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  z-index: 2;
+  justify-content: space-around;
+  padding: 8px 14px;
+  background: #ffffff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+
+  button {
+    width: 40%;
+    color: #0066ff;
+    background: #fff;
+    border: 1px solid #0066ff;
+    border-radius: 22px;
+  }
+
+  button:nth-child(2) {
+    width: 40%;
+    color: #fff;
+    background: #0066ff;
+    border: none;
+    border-radius: 22px;
+  }
+
+  button[disabled] {
+    background: #eee;
+    color: #999;
   }
 }
