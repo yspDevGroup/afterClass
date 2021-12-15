@@ -37,6 +37,10 @@
       },
     ],
   },
+
+  //   菜单调整：课程服务、增值服务、课后服务、排课管理(从课程服务中来)、巡课管理...
+  // 课后服务子菜单：服务管理、班级管理
+  // 排课管理：增加按行政班排课功能。
   {
     path: '/homepage',
     name: 'homepage',
@@ -132,13 +136,13 @@
         icon: 'InsertRowAbove',
         component: './Manager/ClassManagement',
       },
-      {
-        // 排课管理
-        path: '/courseManagements/courseScheduling',
-        name: 'courseScheduling',
-        icon: 'Build',
-        component: './Manager/CourseScheduling',
-      },
+      // {
+      //   // 排课管理
+      //   path: '/courseManagements/courseScheduling',
+      //   name: 'courseScheduling',
+      //   icon: 'Build',
+      //   component: './Manager/CourseScheduling',
+      // },
 
       {
         path: '/courseManagements/mechanismCourse/edit',
@@ -193,6 +197,35 @@
       },
     ],
   },
+  {
+    // 课后服务
+    path: '/afterClassManagement',
+    name: 'afterClassManagement',
+    icon: 'DeploymentUnitOutlined',
+    routes: [
+      // 行政班管理
+      {
+        path: '/afterClassManagement/class_management',
+        name: 'administrationClassManagement',
+        component: './Manager/AfterClassManagement/AdministrationClassManagement',
+      },
+      // 服务配置
+      {
+        path: '/afterClassManagement/service_configuration',
+        name: 'serviceConfiguration',
+        component: './Manager/AfterClassManagement/ServiceConfiguration',
+      },
+    ],
+  },
+  {
+    // 排课管理
+    // path: '/courseManagements/courseScheduling',
+    path: '/courseScheduling',
+    name: 'courseScheduling',
+    icon: 'InsertRowBelowOutlined',
+    component: './Manager/CourseScheduling',
+  },
+
   {
     // 巡课管理
     path: '/coursePatrol',
