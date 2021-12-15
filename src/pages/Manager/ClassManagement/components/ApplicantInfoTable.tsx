@@ -483,7 +483,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
 
   const UploadProps: any = {
     name: 'xlsx',
-    action: `/api/upload/importStudentSignUp?KHBJSJId=${applicantData?.id}&JZGJBSJId=${
+    action: `/api/upload/importStudentSignUp?KHBJSJId=${applicantData?.id}&XQSJId=${applicantData?.XQSJId}&JZGJBSJId=${
       currentUser?.JSId || testTeacherId
     }`,
     headers: {

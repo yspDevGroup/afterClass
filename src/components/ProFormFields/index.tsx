@@ -18,7 +18,7 @@ import type { FormItemsProps, ProFormFieldsPropsType } from './indexType';
 import { Col, Form, Row, Space } from 'antd';
 import UploadImage from './components/UploadImage';
 
-const renderFormItems = (formItems: FormItemsProps[]) => {
+ export const renderFormItems = (formItems: FormItemsProps[]) => {
   return formItems.map((formItem: FormItemsProps) => {
     const { type, key, groupItems, span, flex, cascaderItem, lineItem, ...currentProps } = formItem;
 
