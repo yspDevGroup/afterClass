@@ -209,6 +209,13 @@
         name: 'administrationClassManagement',
         component: './Manager/AfterClassManagement/AdministrationClassManagement',
       },
+      // 班级详情
+      {
+        path: '/afterClassManagement/class_management/detail',
+        hideInMenu: 'true',
+        name: 'clasDetail',
+        component: './Manager/AfterClassManagement/AdministrationClassManagement/Detail',
+      },
       // 服务配置
       {
         path: '/afterClassManagement/service_configuration',

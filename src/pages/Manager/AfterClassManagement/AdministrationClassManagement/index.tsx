@@ -149,6 +149,19 @@ const AdministrationClassManagement = () => {
       key: 'xsbm_count',
       align: 'center',
       width: 150,
+      render: (_, record) => {
+        return (
+          <Link
+            key="details"
+            to={{
+              pathname: '/afterClassManagement/class_management/detail',
+              state: record,
+            }}
+          >
+            {record?.xsbm_count}
+          </Link>
+        );
+      },
     },
     // {
     //   title: '班主任',

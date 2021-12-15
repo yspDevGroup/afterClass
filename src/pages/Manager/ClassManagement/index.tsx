@@ -326,6 +326,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     }
   };
 
+  /** 未设置报名时段时弹窗 */
   const infos = () => {
     Modal.info({
       title: '未设置报名时段或开课时段，请先进行时段维护',
