@@ -249,3 +249,24 @@ export async function getAdministrative(
     ...(options || {}),
   });
 }
+
+/** 学校新建/修改学生信息 POST /sso/createStudent */
+export async function createStudent(
+  body: {
+    /** 学校代码 */
+    corpID?: string;
+    /** 学生ID */
+    UserId?: string;
+    sign?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/sso/createStudent', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

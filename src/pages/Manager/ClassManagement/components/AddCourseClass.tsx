@@ -15,6 +15,7 @@ import { EditableProTable } from '@ant-design/pro-table';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import ShowName from '@/components/ShowName';
 import noJF from '@/assets/noJF.png';
+import { getAllFJSJ } from '@/services/after-class/fjsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -84,6 +85,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
   const [KKData, setKKData] = useState<any>();
   // 校区数据Id
   const [XQSJIds, setXQSJIds] = useState();
+  // 场地信息
+  const [FJData, setFJData] = useState<any>();
+  // 场地Id
+  const [FJSJIds, setFJSJIds] = useState<any>();
+
   const formLayout = {
     labelCol: { flex: '7em' },
     wrapperCol: {},
@@ -91,6 +97,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
   useEffect(() => {
     if (formValues) {
       const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === BjLists?.SSJGLX);
+      setFJSJIds(BjLists?.CDMCId)
       setKCDate(kcDate);
       setKcId(BjLists?.KHKCSJId);
       setIsJg(BjLists?.SSJGLX === '机构课程');
@@ -99,7 +106,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setXzClassMC(BmLists?.XzClassMC);
       setJFData(JfLists);
       setXzClass(BmLists?.BJIds);
-      setSYNJ(formValues?.KHKCSJ?.NJSJs.sort((a: any, b: any)=> {
+      setSYNJ(formValues?.KHKCSJ?.NJSJs.sort((a: any, b: any) => {
         return a.NJ - b.NJ
       }))
 
@@ -155,7 +162,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
     })();
   }, []);
   // 获取课程适用年级和班级
-
   useEffect(() => {
     (async () => {
       if (BJData?.KHKCSJId) {
@@ -180,6 +186,19 @@ const AddCourseClass: FC<AddCourseProps> = ({
       }
     })();
   }, [BJData, XQSJIds]);
+  // 获取场地信息
+  useEffect(() => {
+    (
+      async () => {
+        const res = await getAllFJSJ({
+          XXJBSJId: currentUser?.xxId
+        })
+        if (res.status === 'ok') {
+          setFJData(res.data?.rows)
+        }
+      }
+    )()
+  }, [])
   useEffect(() => {
     (async () => {
       if (curXNXQId) {
@@ -207,6 +226,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
         ...values,
         KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
         JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
+        FJSJId: FJSJIds
       };
       setXQSJIds(values.XQSJId);
       setBJData(newData);
@@ -244,12 +264,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                    KHBJSJId: formValues?.id,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
               : undefined;
         } else {
           ZTeacher = [
@@ -261,11 +281,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
               : undefined;
         }
         const newData = {
@@ -329,12 +349,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+                KHBJSJId: formValues?.id,
+              };
+            })
             : undefined;
       } else {
         ZTeacher = [
@@ -346,11 +366,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+              };
+            })
             : undefined;
       }
       const newData = {
@@ -547,32 +567,49 @@ const AddCourseClass: FC<AddCourseProps> = ({
 
   const formItems: any[] = [
     {
-      type: 'radio',
-      label: '课程来源：',
-      name: 'SSJGLX',
-      key: 'SSJGLX',
-      fieldProps: {
-        options: [
-          { value: '校内课程', label: '校内课程' },
-          { value: '机构课程', label: '机构课程' },
-        ],
-        // 按照课程来源筛选课程
-        onChange: (values: any) => {
-          // 在切换的时候把选中的课程、主教师、副教师清空
-          form.setFieldsValue({
-            KHKCSJId: undefined,
-            ZJS: undefined,
-            FJS: undefined,
-          });
-          const { value } = values.target;
+      type: 'group',
+      key: 'group0',
+      groupItems: [
+        {
+          type: 'radio',
+          label: '课程来源：',
+          name: 'SSJGLX',
+          key: 'SSJGLX',
+          fieldProps: {
+            options: [
+              { value: '校内课程', label: '校内课程' },
+              { value: '机构课程', label: '机构课程' },
+            ],
+            // 按照课程来源筛选课程
+            onChange: (values: any) => {
+              // 在切换的时候把选中的课程、主教师、副教师清空
+              form.setFieldsValue({
+                KHKCSJId: undefined,
+                ZJS: undefined,
+                FJS: undefined,
+              });
+              const { value } = values.target;
               const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === value && item.KHKCSQs?.[0].ZT === 1);
-          setKCDate(kcDate);
-          // setJGKCTeacherData([]);
-          setIsJg(value === '机构课程');
+              setKCDate(kcDate);
+              // setJGKCTeacherData([]);
+              setIsJg(value === '机构课程');
+            },
+          },
+          rules: [{ required: true, message: '请选择课程来源' }],
         },
-      },
-      rules: [{ required: true, message: '请选择课程来源' }],
+        {
+          type: 'select',
+          name: 'XQSJId',
+          key: 'XQSJId',
+          label: '所属校区：',
+          rules: [{ required: true, message: '请填写所属校区' }],
+          fieldProps: {
+            options: campus,
+          },
+        },
+      ],
     },
+
     {
       type: 'group',
       key: 'group1',
@@ -614,16 +651,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
       key: 'group2',
       groupItems: [
         {
-          type: 'select',
-          name: 'XQSJId',
-          key: 'XQSJId',
-          label: '所属校区:',
-          rules: [{ required: true, message: '请填写所属校区' }],
-          fieldProps: {
-            options: campus,
-          },
-        },
-        {
           type: 'inputNumber',
           label: '课时数：',
           name: 'KSS',
@@ -639,6 +666,29 @@ const AddCourseClass: FC<AddCourseProps> = ({
             min: 0,
             max: 100,
           },
+        },
+        {
+          type: 'reactnode',
+          label: '场地名称：',
+          name: 'CDMC',
+          key: 'CDMC',
+          // rules: [{ required: TeacherType, message: '请选择场地名称' }],
+          children: (
+            <Select
+              showSearch
+              placeholder="请选择"
+              optionFilterProp="children"
+              onChange={(value, key: any) => {
+                setFJSJIds(key?.key)
+              }}
+            >
+              {
+                FJData?.map((value: any) => {
+                  return <Option value={value?.FJMC} key={value?.id}>{value?.FJMC}</Option>
+                })
+              }
+            </Select>
+          ),
         },
       ],
     },
@@ -703,10 +753,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -817,10 +867,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     BMDate?.id
       ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${BMDate?.KSSJ} — ${BMDate?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认报名时间段)：${BMDate?.KSSJ} — ${BMDate?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -918,12 +968,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-          type: 'custom',
-          text: '教辅材料',
-          name: 'KHKCJCs',
-          key: 'KHKCJCs',
-          children: getChildren(),
-        }
+        type: 'custom',
+        text: '教辅材料',
+        name: 'KHKCJCs',
+        key: 'KHKCJCs',
+        children: getChildren(),
+      }
       : '',
   ];
   return (
@@ -946,11 +996,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
             <Divider orientation="left">班级基本设置</Divider>
             <div className={styles.box}>
               <p>课程来源：{formValues?.KHKCSJ?.SSJGLX}</p>
-              <p>课程名称：{formValues?.KHKCSJ?.KCMC}</p>
+              <p>所属校区：{XQMC || '本校'} </p>
             </div>
             <div className={styles.box}>
+              <p>课程名称：{formValues?.KHKCSJ?.KCMC}</p>
               <p>班级名称：{formValues?.BJMC}</p>
-              <p>所属校区：{XQMC || '本校'} </p>
             </div>
             <div className={styles.box}>
               <p>
@@ -991,6 +1041,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
             </div>
             <div className={styles.box}>
               <p>课时数：{formValues?.KSS}</p>
+              <p>场地名称：{formValues?.FJSJ?.FJMC || '—'}</p>
+            </div>
+            <div className={styles.box}>
               <p>
                 报名时段：{moment(formValues?.BMKSSJ).format('YYYY-MM-DD')} ~{' '}
                 {moment(formValues?.BMJSSJ).format('YYYY-MM-DD')}

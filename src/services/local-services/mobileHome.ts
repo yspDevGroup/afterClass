@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2021-12-10 17:57:23
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-14 17:16:22
+ * @LastEditors: zpl
  */
 /* eslint-disable no-param-reassign */
 
@@ -118,8 +118,10 @@ const getHomeData = async (
                   const days = JSON.parse(DATA);
                   const clsArr = weekSchedule?.filter((value: any) => value.KHBJSJ.id === KHBJSJId);
                   allDates = allDates.concat(days);
+                  const classType = yxkc.find((v) => v.id === KHBJSJId)?.BJLX;
                   return {
                     KHBJSJId,
+                    classType,
                     days,
                     detail: converClassInfo(clsArr),
                   };
@@ -185,7 +187,7 @@ export const ParentHomeData = async (
   }
 
   if (!homeInfo.data || refresh) {
-    await getHomeData(type, xxId, userId, njId, bjId,XQSJId);
+    await getHomeData(type, xxId, userId, njId, bjId, XQSJId);
     return homeInfo;
   }
 
@@ -224,13 +226,15 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
           img: ele.KHBJSJ?.KHKCSJ?.KCTP,
           address: ele?.SKFJ?.FJMC,
           date: ele.RQ,
-          start: ele.KSSJ || ele.SKJC?.KSSJ?.substring?.(0, 5),
-          end: ele.JSSJ || ele.SKJC?.JSSJ?.substring?.(0, 5),
+          start: ele.KSSJ || ele.XXSJPZ?.KSSJ?.substring?.(0, 5),
+          end: ele.JSSJ || ele.XXSJPZ?.JSSJ?.substring?.(0, 5),
           status,
         });
       } else {
-        const kssj = ele.LX === 0 ? ele.TKJC?.KSSJ?.substring(0, 5) : ele.SKJC?.KSSJ?.substring(0, 5);
-        const jssj = ele.LX === 0 ? ele.TKJC?.JSSJ?.substring(0, 5) : ele.SKJC?.JSSJ?.substring(0, 5);
+        const kssj =
+          ele.LX === 0 ? ele.TKJC?.KSSJ?.substring(0, 5) : ele.SKJC?.KSSJ?.substring(0, 5);
+        const jssj =
+          ele.LX === 0 ? ele.TKJC?.JSSJ?.substring(0, 5) : ele.SKJC?.JSSJ?.substring(0, 5);
         oriData.push({
           title: ele.KHBJSJ.KHKCSJ.KCMC,
           bjId: ele.KHBJSJId,
@@ -282,8 +286,8 @@ export const CurdayCourse = async (
     return item.days.find((v: { day: string }) => v.day === myDate);
   });
   let courseList: any[] = [];
-  totalList?.forEach((item: { detail: any[]; days?: any[] }) => {
-    const { detail, days } = item;
+  totalList?.forEach((item: { detail: any[]; classType: number; days?: any[] }) => {
+    const { detail, classType, days } = item;
     // 获取今日上课课程
     const list = detail.filter((val) => val.wkd === day.getDay());
     const dayList = days?.filter((v: { day: string }) => v.day === myDate);
@@ -296,6 +300,7 @@ export const CurdayCourse = async (
             ...val,
             status: status === '已请假' ? '班主任已请假' : status,
             tag,
+            classType,
             otherInfo: {
               BZ: reason,
               TKRQ: realDate,
@@ -373,9 +378,10 @@ export const CurdayCourse = async (
       }
     }
   }
+
   courseList?.sort((a: { start: string }, b: { start: string }) => {
-    const aT = Number(a.start.replace(/:/g, ''));
-    const bT = Number(b.start.replace(/:/g, ''));
+    const aT = Number(a.start?.replace(/:/g, ''));
+    const bT = Number(b.start?.replace(/:/g, ''));
     return aT - bT;
   });
   return {
@@ -436,6 +442,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           status: item.status,
           title: item.title,
           BJMC: item.BJMC,
+          classType: item.classType,
           img: item.img,
           link: `/teacher/home/courseDetails?classid=${item.bjId}&path=education&date=${day}`,
           start: item.start,
@@ -566,7 +573,7 @@ export const convertTimeTable = async (
   bjId: string,
   attendance: any[],
   days: any[],
-  xxId: string
+  xxId: string,
 ) => {
   const myDate: Date = new Date();
   const currentDate = moment(myDate).format('YYYY-MM-DD');
@@ -591,9 +598,7 @@ export const convertTimeTable = async (
         }
       }
       if (specialData?.length) {
-        const curCQ = specialData.find(
-          (item: any) => item.SKRQ === day && item.SKJC?.id === jcId,
-        );
+        const curCQ = specialData.find((item: any) => item.SKRQ === day && item.SKJC?.id === jcId);
         if (curCQ) {
           status = curCQ?.LX === 1 ? '代课' : '调课';
           otherInfo = curCQ;
@@ -619,4 +624,22 @@ export const convertTimeTable = async (
     }
   }
   return dataTable;
+};
+/**
+ * 获取当前日期的指定本周日期
+ * @param dd 日期
+ * @param type 'Saturday'获取周六的日期，默认获取上周日日期
+ * @returns
+ */
+export const getWeekday = (dd: Date, type?: string) => {
+  const week = dd.getDay(); // 获取时间的星期数
+  if (type === 'Saturday') {
+    dd.setDate(dd.getDate() + (6 - week));
+  } else {
+    dd.setDate(dd.getDate() - week);
+  }
+  const y = dd.getFullYear();
+  const m = dd.getMonth() + 1; // 获取月份
+  const d = dd.getDate();
+  return `${y}-${m}-${d}`;
 };

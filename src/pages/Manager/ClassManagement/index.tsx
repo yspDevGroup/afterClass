@@ -236,7 +236,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         FJS.push(element?.JZGJBSJId);
       }
     });
-    const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY } = currentData;
+    const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY, FJSJ,FJSJId } = currentData;
     const BjList = {
       BJMC: type === 'copy' ? `${BJMC}-复制` : BJMC,
       KHKCSJId: KHKCSJ?.id,
@@ -249,6 +249,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
       SKSD: [currentData.KKRQ, currentData.JKRQ],
       KSS,
       XQSJId,
+      CDMC: FJSJ?.FJMC,
+      CDMCId:FJSJId
     };
     setBjLists(BjList);
     const BJIdArr: any = [];

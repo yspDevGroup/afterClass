@@ -125,6 +125,8 @@ export async function importStudentSignUp(
     // query
     /** 课后班级id */
     KHBJSJId: string;
+    /** 教师id */
+    JZGJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {

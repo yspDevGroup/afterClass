@@ -7,6 +7,7 @@ import ShowName from '@/components/ShowName';
 import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
 import { getAllByDate } from '@/services/after-class/khjscq';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import TeacherQD from '@/assets/TeacherQD.png'
 
 import styles from '../index.less';
 
@@ -90,19 +91,20 @@ const SignIn = () => {
   return (
     <div className={styles.SignIn}>
       <p className={styles.title}>教师实时签到</p>
-      <div className={styles.wrap}>
+      <div className={styles.wrap}  style={{backgroundImage:`url(${TeacherQD})`}}>
         <p>
-          <span>应到教师数</span>
+          <span className={styles.titles}>应到教师数</span>
           <span>
             <span>{AllJs?.length || '0'}</span>人
           </span>
         </p>
         <p>
-          <span>未签到教师数</span>
+          <span className={styles.titles}>未签到教师数</span>
           <span>
             <span>{NoSignInTeacher?.length || '0'}</span>人
           </span>
         </p>
+        <div className={styles.AllTeacher}>
         <Row gutter={[8, 0]}>
           {NoSignInTeacher?.map((values: any, index: number) => {
             if (index < 12) {
@@ -125,6 +127,8 @@ const SignIn = () => {
             查看更多
           </Link>
         </p>
+        </div>
+
       </div>
     </div>
   );

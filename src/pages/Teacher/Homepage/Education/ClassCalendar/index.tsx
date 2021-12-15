@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { history, useModel } from 'umi';
 import type { FormInstance } from 'antd';
-import { Calendar } from 'react-h5-calendar';
 import { List, Modal, message, Form, Input, Checkbox, Radio, Space } from 'antd';
 import type { DisplayColumnItem } from '@/components/data';
+import MobileCalendar from '@/components/MobileCalendar/calendar';
 import ListComponent from '@/components/ListComponent';
 import { compareNow } from '@/utils/Timefunction';
 import { msgLeaveSchool } from '@/services/after-class/wechat';
@@ -235,9 +235,10 @@ const ClassCalendar = (props: propstype) => {
   };
   // 调代课单选事件
   const onChanges = (e: any) => {
-    const { desc, bjid, title, jcId, FJId } = e.target.value;
+    const { desc, bjid, title, jcId, FJId,classType } = e.target.value;
     setDatedata?.({
       day,
+      classType,
       start: desc?.[0].left?.[0].substring(0, 5),
       end: desc?.[0].left?.[0].substring(6, 11),
       jcId,
@@ -260,7 +261,7 @@ const ClassCalendar = (props: propstype) => {
       >
         今
       </span>
-      <Calendar
+      <MobileCalendar
         showType={'week'}
         markDates={dates}
         onDateClick={(date: { format: (arg: string) => any }) => {
