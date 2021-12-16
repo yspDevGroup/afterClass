@@ -1,11 +1,13 @@
 .CourseAdjustment {
-  background:#F5F5F5;
+  background: #F5F5F5;
   min-height: 100%;
   padding-bottom: 20px;
+
   .Divider {
     position: relative;
     margin: 30px 10px 20px;
     border-bottom: 1px solid rgba(0, 102, 255, 0.3);
+
     span {
       position: absolute;
       top: -13px;
@@ -17,18 +19,22 @@
       background-color: #f5f5f5;
     }
   }
+
   .Selected {
     .noOrder {
       text-align: center;
-      p{
+
+      p {
         color: #666666;
       }
+
       img {
         width: 175px;
         height: 175px;
       }
     }
   }
+
   .apply {
     position: fixed;
     right: 20px;
@@ -36,7 +42,8 @@
     width: 80px;
     color: #3e88f8;
     text-align: center;
-    > div {
+
+    >div {
       width: 48px;
       height: 48px;
       margin: auto;
@@ -49,9 +56,11 @@
       box-shadow: 0 0 30px rgba(0, 102, 255, 0.4);
     }
   }
-  .wrap{
+
+  .wrap {
     padding: 0 10px;
     overflow: auto;
+
     .Information {
       margin-top: 10px;
       padding: 10px;
@@ -64,16 +73,18 @@
         content: '';
       }
 
-      > div {
+      >div {
         display: flex;
         justify-content: flex-end;
 
         h4 {
           flex: 1;
           font-weight: bold;
-          >span:nth-of-type(1){
+
+          >span:nth-of-type(1) {
             display: initial !important;
           }
+
           .cards {
             margin-left: 8px;
             padding: 2px 8px;
@@ -106,8 +117,9 @@
       }
     }
   }
+
   .wrap::-webkit-scrollbar {
     display: none;
-}
+  }
 
 }

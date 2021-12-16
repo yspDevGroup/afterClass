@@ -89,13 +89,9 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       KCTP?: string;
       BMLX?: number;
       BJLX?: number;
-      NJS?: string;
-      XQ?: string;
-      NJSName?: string;
-      XQName?: string;
-      ZJSName?: string;
-      FJSName?: string;
+      ISFW?: number;
       KHKCSJId?: string;
+      FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
       KHKCSJ?: {
         id?: string;
         KCMC?: string;

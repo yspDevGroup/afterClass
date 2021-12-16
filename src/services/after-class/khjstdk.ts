@@ -35,6 +35,14 @@ export async function getKHJSTDK(
         KCTP?: string;
         KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
       };
+      desKHBJSJ?:
+        | {
+            id?: string;
+            BJMC?: string;
+            KCTP?: string;
+            KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
+          }
+        | any;
       SPJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       createdAt?: string;
       updatedAt?: string;
@@ -127,6 +135,14 @@ export async function createKHJSTDK(body: API.CreateKHJSTDK, options?: { [key: s
         KCTP?: string;
         KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
       };
+      desKHBJSJ?:
+        | {
+            id?: string;
+            BJMC?: string;
+            KCTP?: string;
+            KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
+          }
+        | any;
       SPJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       createdAt?: string;
       updatedAt?: string;

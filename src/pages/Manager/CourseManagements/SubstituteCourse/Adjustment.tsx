@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Form, Modal, Radio, Select, Input, message, Divider } from 'antd';
+import { Form, Modal, Radio, Select, Input, message, Divider, Row, Col } from 'antd';
 import styles from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ShowName from '@/components/ShowName';
-import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
+import { getAllKHJSTDK, getKHJSTDK } from '@/services/after-class/khjstdk';
 import { updateKHJSTDK } from '@/services/after-class/khjstdk';
 import { getMainTeacher } from '@/services/after-class/khbjsj';
 import { getClassDays } from '@/utils/TimeTable';
@@ -23,7 +23,7 @@ const Adjustment = (props: { teacherData?: any }) => {
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<string>();
   // 审批状态
-  const [SPZT, setSPZT] = useState<any[]>([0, 1, 2]);
+  const [SPZT, setSPZT] = useState<any[]>([0, 1, 2, 4, 5]);
   const [TKJS, setTKJS] = useState<string>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
@@ -35,8 +35,8 @@ const Adjustment = (props: { teacherData?: any }) => {
 
   const getData = async () => {
     const obj = {
-      LX: [0,2],
-      ZT: typeof SPZT?.[0] === 'undefined' ? [0, 1, 2] : SPZT,
+      LX: [0, 2],
+      ZT: typeof SPZT?.[0] === 'undefined' ? [0, 1, 2, 4, 5] : SPZT,
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId,
       SKJSId: TKJS,
@@ -198,9 +198,14 @@ const Adjustment = (props: { teacherData?: any }) => {
           status: 'Error',
           disabled: true,
         },
+        4: { text: '待审批', status: 'Processing' },
+        5: {
+          text: '已驳回',
+          status: 'Error',
+          disabled: true,
+        },
       },
     },
-
     {
       title: '操作',
       dataIndex: 'operation',
@@ -211,7 +216,7 @@ const Adjustment = (props: { teacherData?: any }) => {
       render: (_, record: any) => {
         return (
           <>
-            {record.ZT === 0 ? (
+            {(record.LX === 0 && record.ZT === 0) || (record.LX === 2 && record.ZT === 4) ? (
               <>
                 <a
                   onClick={() => {
@@ -228,9 +233,16 @@ const Adjustment = (props: { teacherData?: any }) => {
             )}
 
             <a
-              onClick={() => {
-                setIsModalVisible(true);
-                setDatas(record);
+              onClick={async () => {
+                const res = await getKHJSTDK({
+                  id: record?.id,
+                });
+                if (res.status === 'ok') {
+                  setDatas(res.data);
+                  setIsModalVisible(true);
+                } else {
+                  message.error(res.message);
+                }
               }}
             >
               查看
@@ -352,30 +364,78 @@ const Adjustment = (props: { teacherData?: any }) => {
       >
         {Datas ? (
           <div className={styles.TkDetails}>
-            <p>
-              申请教师：
-              <ShowName type="userName" openid={Datas?.SKJS?.WechatUserId} XM={Datas?.SKJS?.XM} />
-            </p>
-            <p>申请时间：{Datas?.createdAt}</p>
-            <p>申请原因：{Datas?.BZ}</p>
-            <p>课程名称：{Datas?.KHBJSJ?.KHKCSJ?.KCMC}</p>
-            <p>课程班名称：{Datas?.KHBJSJ?.BJMC}</p>
+            {(Datas.ZT !== 4 && Datas.ZT !== 1) ? <>
+              <p>
+                申请教师：
+                <ShowName type="userName" openid={Datas?.SKJS?.WechatUserId} XM={Datas?.SKJS?.XM} /></p>
+              <p> 申请时间：{Datas?.createdAt}
+              </p>
+              <p>
+                申请原因：{Datas?.BZ}
+              </p>
+              <p>课程名称：{Datas?.KHBJSJ?.KHKCSJ?.KCMC}</p>
+              <p>课程班名称：{Datas?.KHBJSJ?.BJMC}</p>
+            </> : ''}
             <div className={styles.TkAfter}>
               <div>
-                <p className={styles.title}>调课前</p>
-                <p>日期：{Datas?.SKRQ}</p>
-                <p>
-                  时段：{Datas?.SKJC.KSSJ.substring(0, 5)} ~ {Datas?.SKJC.JSSJ.substring(0, 5)}
+                <p className={styles.title}>{Datas?.LX === 2 ? '申请信息' : '调课前'}</p>
+                {Datas?.LX === 2 && (Datas.ZT === 4 || Datas.ZT === 1) ? <><p>
+                  {Datas?.LX === 2 ? '授课' : '申请'}教师：
+                  <ShowName type="userName" openid={Datas?.SKJS?.WechatUserId} XM={Datas?.SKJS?.XM} />
                 </p>
-                <p>场地：{Datas?.SKFJ?.FJMC}</p>
+                  <p>
+                    课程名称：{Datas?.KHBJSJ?.KHKCSJ?.KCMC}
+                  </p>
+                  <p>
+                    课程班名称：{Datas?.KHBJSJ?.BJMC}
+                  </p></> : ''}
+                <p>
+                  上课日期：{Datas?.SKRQ}
+                </p>
+                <p>
+                  上课时段：{Datas?.SKJC.KSSJ.substring(0, 5)} ~ {Datas?.SKJC.JSSJ.substring(0, 5)}
+                </p>
+                <p>
+                  上课地点：{Datas?.SKFJ?.FJMC}
+                </p>
+                {Datas?.LX === 2 && (Datas.ZT === 4 || Datas.ZT === 1) ? <><p>
+                  申请时间：{Datas?.createdAt}
+                </p>
+                  <p>
+                    申请原因：{Datas?.BZ}
+                  </p></> : ''}
               </div>
               <div>
-                <p className={styles.title}>调课后</p>
-                <p>日期：{Datas?.TKRQ}</p>
-                <p>
-                  时段：{Datas?.TKJC.KSSJ.substring(0, 5)} ~ {Datas?.TKJC.JSSJ.substring(0, 5)}
+                <p className={styles.title}>{Datas?.LX === 2 ? '对调信息' : '调课后'}</p>
+                {Datas?.LX === 2 && (Datas.ZT === 4 || Datas.ZT === 1) ? <><p>
+                  授课教师：
+                  <ShowName type="userName" openid={Datas?.DKJS?.WechatUserId} XM={Datas?.DKJS?.XM} />
                 </p>
-                <p>场地：{Datas?.TKFJ?.FJMC}</p>
+                  <p>
+                    课程名称：{Datas?.desKHBJSJ?.KHKCSJ?.KCMC}
+                  </p>
+                  <p>
+                    课程班名称：{Datas?.desKHBJSJ?.BJMC}
+                  </p></> : ''}
+                <p>
+                  上课日期：{Datas?.TKRQ}
+                </p>
+                <p>
+                  上课时段：{Datas?.TKJC.KSSJ.substring(0, 5)} ~ {Datas?.TKJC.JSSJ.substring(0, 5)}
+                </p>
+                <p>
+                  上课地点：{Datas?.TKFJ?.FJMC}
+                </p>
+                {Datas?.LX === 2 && (Datas.ZT === 4 || Datas.ZT === 1) ? <><p>
+                  处理时间：{Datas?.DKSPSJ}
+                </p>
+                  <p>
+                    处理意见：{Datas.ZT === 4 || Datas.ZT === 1 || Datas.ZT === 2 ? (
+                      '同意'
+                    ) : (
+                      <>{Datas.ZT === 5 ? '不同意' : '-'}</>
+                    )}
+                  </p></> : ''}
               </div>
             </div>
             <div className={styles.Line} />
