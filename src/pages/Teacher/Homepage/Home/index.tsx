@@ -53,7 +53,7 @@ const Home = () => {
   };
   const getTDKData = async () => {
     const res = await getAllKHJSTDK({
-      LX: [1],
+      LX: [1,2],
       ZT: [0],
       XXJBSJId: currentUser?.xxId,
       DKJSId: currentUser.JSId || testTeacherId,
@@ -196,7 +196,7 @@ const Home = () => {
           <div style={{ backgroundImage: `url(${DaiKe})` }}>
             <Link to="/teacher/home/substituteList">
               <p className={styles.titles}>
-                <span>代课申请</span>
+                <span>调代课申请</span>
                 <Badge count={DkData?.length || 0} showZero={true} offset={[5, 0]} />
               </p>
             </Link>

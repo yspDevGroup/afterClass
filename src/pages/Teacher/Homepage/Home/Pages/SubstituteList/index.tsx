@@ -16,7 +16,7 @@ const SubstituteList = () => {
   const [LsDatas, setLsDatas] = useState<any>([]);
   const getData = async () => {
     const res = await getAllKHJSTDK({
-      LX: [1],
+      LX: [1, 2],
       ZT: [0, 4],
       XXJBSJId: currentUser?.xxId,
       DKJSId: currentUser.JSId || testTeacherId,
@@ -28,7 +28,7 @@ const SubstituteList = () => {
     }
     // 历史记录
     const result = await getAllKHJSTDK({
-      LX: [1],
+      LX: [1, 2],
       ZT: [1, 2, 3, 5],
       XXJBSJId: currentUser?.xxId,
       DKJSId: currentUser.JSId || testTeacherId,
@@ -44,7 +44,7 @@ const SubstituteList = () => {
   }, []);
   return (
     <div className={styles.CourseAdjustment}>
-      <GoBack title={'代课申请'} teacher onclick="/teacher/home?index=index" />
+      <GoBack title={'调代课申请'} teacher onclick="/teacher/home?index=index" />
       <div className={styles.wrap}>
         {Datas.map((item: any) => {
           return (
@@ -57,12 +57,13 @@ const SubstituteList = () => {
               <div className={styles.Information}>
                 <div>
                   <h4>
+                    <span>{item.LX === 1 ? '【代】' : '【调】'}</span>
                     <ShowName
                       XM={item?.SKJS?.XM}
                       type="userName"
                       openid={item?.SKJS?.WechatUserId}
                     />
-                    教师的代课申请
+                    教师发起申请
                     {item.ZT === 3 ? (
                       <span className={styles.cards}>已撤销</span>
                     ) : item.ZT === 4 ? (
@@ -103,12 +104,11 @@ const SubstituteList = () => {
                   课程：{item.KHBJSJ?.KHKCSJ?.KCMC} — {item.KHBJSJ?.BJMC}
                 </p>
                 <p>
-                  {`时间：${moment(item?.SKRQ).format('MM月DD日')}，${
-                    item.SKJC?.TITLE
-                  }【${item.SKJC?.KSSJ.substring(0, 5)}-
+                  {`时间：${moment(item?.SKRQ).format('MM月DD日')}，${item.SKJC?.TITLE
+                    }【${item.SKJC?.KSSJ.substring(0, 5)}-
               ${item.SKJC?.JSSJ.substring(0, 5)}】`}
                 </p>
-                <p>代课原因：{item.BZ}</p>
+                <p>{item.LX === 1 ? '代' : '调'}课原因：{item.BZ}</p>
               </div>
             </Link>
           );
@@ -138,22 +138,25 @@ const SubstituteList = () => {
                 <div className={styles.Information}>
                   <div>
                     <h4>
+                      <span>
+                      {item.LX === 1 ? '【代】' : '【调】'}
+                      </span>
                       <ShowName
                         type="userName"
                         openid={item?.SKJS?.WechatUserId}
                         XM={item.SKJS?.XM}
                       />
-                      教师的代课申请
+                      教师发起申请
                       {item.ZT === 3 ? (
-                        <span>已撤销</span>
+                        <span className={styles.cards}>已撤销</span>
                       ) : item.ZT === 4 ? (
-                        <span style={{ color: '#FFB257', borderColor: '#FFB257' }}>审批中</span>
+                        <span className={styles.cards} style={{ color: '#FFB257', borderColor: '#FFB257' }}>审批中</span>
                       ) : item.ZT === 0 ? (
-                        <span style={{ color: '#fff', backgroundColor: '#FF7527' }}>待处理</span>
+                        <span className={styles.cards} style={{ color: '#fff', backgroundColor: '#FF7527' }}>待处理</span>
                       ) : item.ZT === 1 ? (
-                        <span style={{ color: '#45c977', borderColor: '#45c977' }}>已通过</span>
+                        <span className={styles.cards} style={{ color: '#45c977', borderColor: '#45c977' }}>已通过</span>
                       ) : item.ZT === 2 || item.ZT === 5 ? (
-                        <span style={{ color: '#FF4B4B', borderColor: '#FF4B4B' }}>已驳回</span>
+                        <span className={styles.cards} style={{ color: '#FF4B4B', borderColor: '#FF4B4B' }}>已驳回</span>
                       ) : (
                         ''
                       )}
@@ -161,9 +164,8 @@ const SubstituteList = () => {
                     <span>{moment(item.updatedAt || item.createdAt).format('YYYY.MM.DD')}</span>
                   </div>
                   <p>
-                    {`时间：${moment(item?.SKRQ).format('MM月DD日')}，${
-                      item.SKJC?.TITLE
-                    }【${item.SKJC?.KSSJ.substring(0, 5)}-
+                    {`时间：${moment(item?.SKRQ).format('MM月DD日')}，${item.SKJC?.TITLE
+                      }【${item.SKJC?.KSSJ.substring(0, 5)}-
               ${item.SKJC?.JSSJ.substring(0, 5)}】`}
                   </p>
                   <p>课程：{item.KHBJSJ?.KHKCSJ?.KCMC}</p>

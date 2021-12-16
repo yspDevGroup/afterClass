@@ -17,7 +17,7 @@ const CourseAdjustment = () => {
   const [Datas, setDatas] = useState<any>([]);
   const getData = async () => {
     const res = await getAllKHJSTDK({
-      LX: [0, 1, 2, 3],
+      LX: [0, 1, 2],
       ZT: [0, 1, 2, 3, 4, 5],
       XXJBSJId: currentUser?.xxId,
       SKJSId: currentUser.JSId || testTeacherId,

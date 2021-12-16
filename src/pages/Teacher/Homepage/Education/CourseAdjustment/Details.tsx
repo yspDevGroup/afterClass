@@ -54,6 +54,7 @@ const Details = (props: any) => {
       history.push('/teacher/home/substituteList');
     }
   };
+
   return (
     <div className={styles.Details}>
       <GoBack title={'详情'} teacher />
@@ -62,36 +63,48 @@ const Details = (props: any) => {
           <div className={styles.apply}>
             <p className={styles.title}>
               <ShowName type="userName" openid={Datas?.SKJS?.WechatUserId} XM={Datas.SKJS?.XM} />
-              教师的{Datas?.LX === 0 ? '调课' : '代课'}申请
+              教师的{Datas?.LX !== 1 ? '调课' : '代课'}申请
             </p>
             <p>
               课程：{Datas.KHBJSJ?.KHKCSJ?.KCMC} — {Datas.KHBJSJ?.BJMC}
             </p>
             <p>
-              {`${Datas?.LX === 0 ? '原上课' : ''}时间：${moment(Datas?.SKRQ).format(
+              {`${Datas?.LX !== 1 ? '原上课' : ''}时间：${moment(Datas?.SKRQ).format(
                 'MM月DD日',
               )}，${Datas.SKJC?.TITLE}【${Datas.SKJC?.KSSJ.substring(0, 5)}-
               ${Datas.SKJC?.JSSJ.substring(0, 5)}】`}
             </p>
             <p>
-              {Datas?.LX === 0 ? '原上课' : ''}地点：{Datas?.SKFJ?.FJMC}{' '}
+              {Datas?.LX !== 1 ? '原上课' : ''}地点：{Datas?.SKFJ?.FJMC}{' '}
             </p>
-            {Datas?.LX === 0 ? (
+            {Datas?.LX !== 1 ? (
               <>
                 <Divider />
+                {Datas?.LX === 2 ? <>
+                  <p>
+                    对调课程：{Datas?.desKHBJSJ?.KHKCSJ?.KCMC} — {Datas.desKHBJSJ?.BJMC}
+                  </p>
+                  <p>
+                    对调课程授课教师：<ShowName
+                      type="userName"
+                      openid={Datas?.DKJS?.WechatUserId}
+                      XM={Datas.DKJS?.XM}
+                    />
+                  </p>
+                </> : ''}
                 <p>
                   调课后时间：{moment(Datas?.TKRQ).format('MM月DD日')}，{Datas.TKJC?.TITLE}【
                   {Datas.TKJC?.KSSJ.substring(0, 5)}-{Datas.TKJC?.JSSJ.substring(0, 5)}】
                 </p>
                 <p>
-                  {Datas?.LX === 0 ? '调课后' : ''}地点：{Datas?.TKFJ?.FJMC}{' '}
+                  {Datas?.LX !== 1 ? '调课后' : ''}地点：{Datas?.TKFJ?.FJMC}{' '}
                 </p>
               </>
             ) : (
               ''
             )}
             <p>
-              {Datas?.LX === 0 ? '调课' : '代课'}原因：{Datas.BZ}
+              {Datas?.LX !== 1 ? '调课' : '代课'}原因：{Datas.BZ}
             </p>
           </div>
           <div className={styles.process}>
@@ -113,7 +126,7 @@ const Details = (props: any) => {
             <div className={styles.role}>
               <div>
                 <p>发起人</p>
-                <p>申请{Datas?.LX === 0 ? '调课' : '代课'}的老师</p>
+                <p>申请{Datas?.LX !== 1 ? '调课' : '代课'}的老师</p>
               </div>
               <div>
                 {' '}
@@ -125,8 +138,8 @@ const Details = (props: any) => {
             ) : (
               <div className={styles.role}>
                 <div>
-                  <p>代课人</p>
-                  <p>代替授课的老师</p>
+                  <p>{Datas?.LX === 2 ? '调' : '代'}课人</p>
+                  <p>{Datas?.LX === 2 ? '对调课程' : '代替'}授课的老师</p>
                 </div>
                 <div>
                   {' '}
@@ -160,7 +173,7 @@ const Details = (props: any) => {
               <></>
             ) : (
               <p className={styles.switch}>
-                <span>是否同意代课</span>
+                <span>是否同意{Datas?.LX === 2 ? '调' : '代'}课</span>
                 <Switch
                   defaultChecked={Datas?.ZT === 4 || Datas?.ZT === 1 || Datas?.ZT === 0}
                   onChange={onChange}
