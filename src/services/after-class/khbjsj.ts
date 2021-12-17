@@ -11,10 +11,10 @@ export async function getKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<any>(`/khbjsj/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -28,10 +28,10 @@ export async function deleteKHBJSJ(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -89,13 +89,9 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       KCTP?: string;
       BMLX?: number;
       BJLX?: number;
-      NJS?: string;
-      XQ?: string;
-      NJSName?: string;
-      XQName?: string;
-      ZJSName?: string;
-      FJSName?: string;
+      ISFW?: number;
       KHKCSJId?: string;
+      FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
       KHKCSJ?: {
         id?: string;
         KCMC?: string;
@@ -134,13 +130,13 @@ export async function updateKHBJSJ(
   body: API.UpdateKHBJSJ,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
@@ -155,10 +151,10 @@ export async function getEnrolled(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<any>(`/khbjsj/enrolled/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -260,10 +256,10 @@ export async function getClassDetail(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<any>(`/khbjsjdetail/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -481,6 +477,40 @@ export async function getExchengeableClasses(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khbjsj/getExchengeableClasses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 筛选适用年级的班级基础信息 POST /khbjsj/getAllClassesByNJ */
+export async function getAllClassesByNJ(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 课程ID */
+    KHKCSJId?: string;
+    /** 年级IDs */
+    NJSJIds?: string[];
+    /** 班级状态 */
+    BJZT?: string;
+    /** 课后课程类型ids */
+    KHKCLXIds?: string[];
+    /** 班级名称 */
+    BJMC?: string;
+    /** 报名类型，0:先报名后缴费,1:缴费后自动报名,2:免费课程 */
+    BMLX?: number;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getAllClassesByNJ', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

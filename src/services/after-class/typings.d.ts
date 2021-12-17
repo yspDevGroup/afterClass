@@ -1531,6 +1531,7 @@ declare namespace API {
       JSLX?: number;
       JZGJBSJ?: { id?: string; GH?: string; XM?: string; LXDH?: string; WechatUserId?: string };
     }[];
+    FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
   };
 
   type KCSJ = {
@@ -1719,20 +1720,11 @@ declare namespace API {
     BMLX?: number;
     /** 班级类型 */
     BJLX?: number;
-    /** 年级ID */
-    NJS?: string;
-    /** 校区ID */
-    XQ?: string;
-    /** 年级名称 */
-    NJSName?: string;
-    /** 校区名称 */
-    XQName?: string;
-    /** 主教名称 */
-    ZJSName?: string;
-    /** 副教名称 */
-    FJSName?: string;
+    /** 是否被课后服务使用 */
+    ISFW?: number;
     /** 课后课程ID */
     KHKCSJId?: string;
+    FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
     KHKCSJ?: {
       id?: string;
       KCMC?: string;
@@ -1778,6 +1770,8 @@ declare namespace API {
     BMLX?: number;
     /** 班级类型 */
     BJLX?: number;
+    /** 是否被课后服务使用 */
+    ISFW?: number;
     /** 试用年级 */
     NJIds?: string[];
     /** 适用行政班 */
@@ -1788,6 +1782,8 @@ declare namespace API {
     XQSJId: string;
     /** 学年学期ID */
     XNXQId: string;
+    /** 场地ID */
+    FJSJId?: string;
     KHKCJMs?: { FYJM?: string; JMDX?: string; JFBL?: number; ZJFY?: number }[];
     KHKCJCs?: { JCMC?: string; JCFY?: number }[];
     KHBJJSs?: { JSLX?: string; JSXM?: string; JZGJBSJId?: string }[];
@@ -1820,15 +1816,83 @@ declare namespace API {
     BMLX?: number;
     /** 班级类型 */
     BJLX?: number;
+    /** 是否被课后服务使用 */
+    ISFW?: number;
     /** 试用年级 */
     NJIds?: string[];
     /** 课后课程ID */
     KHKCSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 场地ID */
+    FJSJId?: string;
     KHKCJMs?: { FYJM?: string; JMDX?: string; JFBL?: number; ZJFY?: number; KHBJSJId?: string }[];
     KHKCJCs?: { JCMC?: string; JCFY?: number; KHBJSJId?: string }[];
     KHBJJSs?: { JSLX?: string; JSXM?: string; JZGJBSJId?: string; KHBJSJId?: string }[];
+  };
+
+  type KHFWSJ = {
+    id: string;
+    /** 服务名称 */
+    FWMC: string;
+    /** 服务描述 */
+    FWMS?: string;
+    /** 服务图片 */
+    FWTP?: string;
+    /** 服务状态 */
+    FWZT: number;
+    /** 服务费用 */
+    FWFY: number;
+    /** 最多课时数 */
+    ZDKCS?: number;
+    /** 校区id */
+    XQSJId: string;
+    XQSJ?: { id?: string; XQMC?: string; XQH?: string; XQDZ?: string };
+    /** 学年学期id */
+    XNXQId: string;
+    XNXQ?: { id?: string; XN?: string; XQ?: string };
+  };
+
+  type CreateKHFWSJ = {
+    /** 校区Id */
+    XQSJId: string;
+    /** 学年学期Id */
+    XNXQId: string;
+    /** 课后班级数据Id */
+    KHBJSJIds: string[];
+    /** 行政年级Id */
+    NJIds: string[];
+    /** 服务名称 */
+    FWMC?: string;
+    /** 服务图片 */
+    FWTP?: string;
+    /** 服务描述 */
+    FWMS?: string;
+    /** 最多课时数 */
+    ZDKCS?: number;
+    /** 服务费用 */
+    FWFY?: number;
+  };
+
+  type UpdateKHFWSJ = {
+    /** 校区Id */
+    XQSJId?: string;
+    /** 学年学期Id */
+    XNXQId?: string;
+    /** 课程班级数据Id */
+    KHBJSJIds?: string[];
+    /** 行政年级Id */
+    NJIds?: string[];
+    /** 服务名称 */
+    FWMC?: string;
+    /** 服务图片 */
+    FWTP?: string;
+    /** 服务描述 */
+    FWMS?: string;
+    /** 最多课时数 */
+    ZDKCS?: number;
+    /** 服务费用 */
+    FWFY?: number;
   };
 
   type KHJGRZSQ = {
@@ -2196,6 +2260,14 @@ declare namespace API {
       KCTP?: string;
       KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
     };
+    desKHBJSJ?:
+      | {
+          id?: string;
+          BJMC?: string;
+          KCTP?: string;
+          KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
+        }
+      | any;
     SPJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
     createdAt?: string;
     updatedAt?: string;
@@ -2224,6 +2296,8 @@ declare namespace API {
     TKFJId?: string | any;
     /** 班级ID */
     KHBJSJId: string;
+    /** 换课班级ID */
+    DESKHBJSJId?: string | any;
     /** 原定节次ID */
     SKJCId?: string | any;
     /** 调课后节次ID */
@@ -2263,6 +2337,8 @@ declare namespace API {
     SKJCId?: string | any;
     /** 调课后节次ID */
     TKJCId?: string | any;
+    /** 换课班级ID */
+    DESKHBJSJId?: string | any;
     /** 学校ID */
     XXJBSJId: string;
   };

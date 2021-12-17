@@ -11,7 +11,7 @@ export async function getKHJSTDK(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{
     status?: 'ok' | 'error';
     data: {
@@ -35,6 +35,14 @@ export async function getKHJSTDK(
         KCTP?: string;
         KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
       };
+      desKHBJSJ?:
+        | {
+            id?: string;
+            BJMC?: string;
+            KCTP?: string;
+            KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
+          }
+        | any;
       SPJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       createdAt?: string;
       updatedAt?: string;
@@ -42,7 +50,7 @@ export async function getKHJSTDK(
     message?: string;
   }>(`/khjstdk/${param0}`, {
     method: 'GET',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -56,10 +64,10 @@ export async function deleteKHJSTDK(
   },
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjstdk/${param0}`, {
     method: 'DELETE',
-    params: { ...params },
+    params: { ...queryParams },
     ...(options || {}),
   });
 }
@@ -79,6 +87,8 @@ export async function getAllKHJSTDK(
     DKJSId?: string;
     /** 班级ID */
     KHBJSJId?: string;
+    /** 换课班级ID */
+    DESKHBJSJId?: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 页数 */
@@ -127,6 +137,14 @@ export async function createKHJSTDK(body: API.CreateKHJSTDK, options?: { [key: s
         KCTP?: string;
         KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
       };
+      desKHBJSJ?:
+        | {
+            id?: string;
+            BJMC?: string;
+            KCTP?: string;
+            KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
+          }
+        | any;
       SPJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
       createdAt?: string;
       updatedAt?: string;
@@ -152,13 +170,13 @@ export async function updateKHJSTDK(
   body: API.UpdateKHJSTDK,
   options?: { [key: string]: any },
 ) {
-  const { id: param0 } = params;
+  const { id: param0, ...queryParams } = params;
   return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjstdk/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    params: { ...params },
+    params: { ...queryParams },
     data: body,
     ...(options || {}),
   });
