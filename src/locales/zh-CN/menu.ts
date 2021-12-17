@@ -26,8 +26,7 @@ export default {
   'menu.afterClassManagement': '课后服务',
   'menu.afterClassManagement.serviceConfiguration': '服务配置',
   'menu.afterClassManagement.administrationClassManagement': '行政班管理',
-
-
+  'menu.afterClassManagement.clasDetail': '班级详情',
   'menu.valueAddedServices': '增值服务',
   'menu.valueAddedServices.cateringService': '服务配置',
   'menu.valueAddedServices.serviceManagement': '服务管理',
