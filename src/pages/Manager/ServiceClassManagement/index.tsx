@@ -8,19 +8,13 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
 import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
-
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
-
 import ActionBar from './components/ActionBar';
-
-// import AddCourse from './components/AddCourse';
-
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 import styles from './index.less';
-// import AgentRegistration from './components/AgentRegistration';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
@@ -94,8 +88,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
       XNXQId: curXNXQId,
       KHKCSJId: kcId || state?.id,
       BJZT: BJZTMC,
-      ISFW:0,
       page: 0,
+      ISFW:1,
       pageSize: 0,
     };
     const resAll = await getAllClasses(opts);
@@ -399,41 +393,41 @@ const CourseManagement = (props: { location: { state: any } }) => {
         return record?.KHKCSJ?.SSJGLX;
       },
     },
-    {
-      title: '费用(元)',
-      dataIndex: 'FY',
-      key: 'FY',
-      align: 'center',
-      width: 80,
-    },
-    {
-      title: '缴费方式',
-      dataIndex: 'BMLX',
-      key: 'BMLX',
-      align: 'center',
-      width: 120,
-      render: (text: any) => {
-        return <>{text === 0 ? '先报名后缴费' : <>{text === 1 ? '缴费即报名' : '免费'}</>}</>;
-      },
-    },
-    {
-      title: '报名人数',
-      dataIndex: 'BMRS',
-      key: 'BMRS',
-      align: 'center',
-      width: 100,
-      render: (text: any, record: any) => {
-        return (
-          <a onClick={() => showModal(record)}>
-            <Tooltip
-              title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count || 0}人。`}
-            >
-              {record?.xs_count + record?.noPayXS_count}/{record?.BJRS}
-            </Tooltip>
-          </a>
-        );
-      },
-    },
+    // {
+    //   title: '费用(元)',
+    //   dataIndex: 'FY',
+    //   key: 'FY',
+    //   align: 'center',
+    //   width: 80,
+    // },
+    // {
+    //   title: '缴费方式',
+    //   dataIndex: 'BMLX',
+    //   key: 'BMLX',
+    //   align: 'center',
+    //   width: 120,
+    //   render: (text: any) => {
+    //     return <>{text === 0 ? '先报名后缴费' : <>{text === 1 ? '缴费即报名' : '免费'}</>}</>;
+    //   },
+    // },
+    // {
+    //   title: '报名人数',
+    //   dataIndex: 'BMRS',
+    //   key: 'BMRS',
+    //   align: 'center',
+    //   width: 100,
+    //   render: (text: any, record: any) => {
+    //     return (
+    //       <a onClick={() => showModal(record)}>
+    //         <Tooltip
+    //           title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count || 0}人。`}
+    //         >
+    //           {record?.xs_count + record?.noPayXS_count}/{record?.BJRS}
+    //         </Tooltip>
+    //       </a>
+    //     );
+    //   },
+    // },
     {
       title: '排课',
       align: 'center',
@@ -692,19 +686,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
             </Button>,
           ]}
         />
-        {/* <AddCourse
-          visible={visible}
-          onClose={onClose}
-          formValues={current}
-          readonly={readonly}
-          mcData={mcData}
-          names={names}
-          KHKCAllData={KHKCAllData}
-          curXNXQId={curXNXQId}
-          currentUser={currentUser}
-          CopyType={CopyType}
-          getData={getData}
-        /> */}
         <AddCourseClass
           visible={visible}
           formValues={current}
@@ -752,20 +733,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
         >
           <AppSKXQTable SKXQData={SKXQData} />
         </Modal>
-
-        {/* <AgentRegistration
-
-        <AgentRegistration
-          getData={getData}
-
-          curXNXQId={curXNXQId}
-          JFTotalost={JFAmount}
-          BjDetails={BjDetails}
-          ModalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-
-
-        /> */}
       </PageContainer>
     </>
   );

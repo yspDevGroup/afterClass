@@ -1,0 +1,639 @@
+import { Button, Divider, message, Modal, Select, Input } from 'antd';
+import type { FC } from 'react';
+import styles from './AddCourse.less';
+import { useEffect, useState } from 'react';
+import ProFormFields from '@/components/ProFormFields';
+import TeacherSelect from '@/components/TeacherSelect';
+import moment from 'moment';
+import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
+import { getAllXQSJ, getXQSJ } from '@/services/after-class/xqsj';
+import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
+import ShowName from '@/components/ShowName';
+import { getAllFJSJ } from '@/services/after-class/fjsj';
+
+type AddCourseProps = {
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  formValues?: Record<string, any>;
+  mcData?: { label: string; value: string }[];
+  names?: string;
+  KHKCAllData?: any[];
+  curXNXQId?: string;
+  currentUser?: API.CurrentUser | undefined;
+  kCID?: string;
+  CopyType?: string;
+  getData: (origin?: string | undefined) => Promise<void>;
+  BjLists: any;
+  BmLists: any;
+  JfLists: any;
+};
+const { Option } = Select;
+const { TextArea } = Input;
+const AddCourseClass: FC<AddCourseProps> = ({
+  visible,
+  setVisible,
+  formValues,
+  curXNXQId,
+  KHKCAllData,
+  currentUser,
+  CopyType,
+  getData,
+  BjLists,
+  BmLists,
+  JfLists,
+  names,
+}) => {
+  const [form, setForm] = useState<any>();
+  const [Current, setBmCurrent] = useState(0);
+  const [KCDate, setKCDate] = useState<any>([]);
+  const [isJg, setIsJg] = useState<boolean>(false);
+  const [kcId, setKcId] = useState<string | undefined>(undefined);
+  const [kaike, setKaike] = useState<boolean>(false);
+  const [BJData, setBJData] = useState<any>();
+  const [XQMC, setXQMC] = useState<string>();
+  // 指定教师
+  const [TeacherType, setTeacherType] = useState<any>([]);
+  // 课程适用年级
+  const [SYNJ, setSYNJ] = useState<any>([]);
+  // 校区
+  const [campus, setCampus] = useState<any>([]);
+  // 开课时间
+  const [KKData, setKKData] = useState<any>();
+  // 场地信息
+  const [FJData, setFJData] = useState<any>();
+  // 场地Id
+  const [FJSJIds, setFJSJIds] = useState<any>();
+
+  const formLayout = {
+    labelCol: { flex: '7em' },
+    wrapperCol: {},
+  };
+  useEffect(() => {
+    if (formValues) {
+      const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === BjLists?.SSJGLX);
+      setFJSJIds(BjLists?.CDMCId);
+      setKCDate(kcDate);
+      setKcId(BjLists?.KHKCSJId);
+      setIsJg(BjLists?.SSJGLX === '机构课程');
+      setBJData(BjLists);
+      setSYNJ(formValues?.KHKCSJ?.NJSJs.sort((a: any, b: any) => {
+        return a.NJ - b.NJ
+      }));
+      if (
+        new Date(BjLists?.SKSD[0]).getTime() === new Date(KKData?.KSSJ || '').getTime() &&
+        new Date(BjLists?.SKSD[1]).getTime() === new Date(KKData?.JSSJ || '').getTime()
+      ) {
+        setKaike(false);
+      } else {
+        setKaike(true);
+      }
+      if (BjLists.ZJS) {
+        setTeacherType(true);
+      } else {
+        setTeacherType(false);
+      }
+    }
+  }, [formValues]);
+  // 获取校区数据
+  useEffect(() => {
+    (async () => {
+      const XQ: { label: any; value: any }[] = [];
+      const resXQ = await getAllXQSJ({ XXJBSJId: currentUser?.xxId });
+      if (resXQ.status === 'ok') {
+        resXQ.data?.forEach((item: any) => {
+          XQ.push({
+            label: item.XQMC,
+            value: item.id,
+          });
+        });
+        setCampus(XQ);
+      }
+    })();
+  }, []);
+  // 获取场地信息
+  useEffect(() => {
+    (
+      async () => {
+        const res = await getAllFJSJ({
+          XXJBSJId: currentUser?.xxId
+        })
+        if (res.status === 'ok') {
+          setFJData(res.data?.rows)
+        }
+      }
+    )()
+  }, [])
+  useEffect(() => {
+    (async () => {
+      if (curXNXQId) {
+        // 获取时间配置
+        const resSJ = await getAllXXSJPZ({
+          XNXQId: curXNXQId,
+          XXJBSJId: currentUser?.xxId,
+          type: ['1', '2'],
+        });
+
+        if (resSJ.status === 'ok') {
+          // 上课时间 [2]
+          const KK = resSJ.data?.find((item: any) => item.TYPE === '2');
+          setKKData(KK);
+        }
+      }
+    })();
+  }, [curXNXQId]);
+  const onFinish = async (values: any) => {
+    console.log(values, 'values')
+    if (Current === 0) {
+      const { ZJS, FJS, ...info } = values;
+      let ZTeacher;
+      let FTeacher;
+      if (formValues && CopyType === 'undefined') {
+        ZTeacher = [
+          {
+            JSLX: '主教师',
+            JZGJBSJId: ZJS,
+            KHBJSJId: formValues?.id,
+          },
+        ];
+        FTeacher =
+          FJS && FJS?.length
+            ? FJS.map((item: any) => {
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+                KHBJSJId: formValues?.id,
+              };
+            })
+            : undefined;
+      } else {
+        ZTeacher = [
+          {
+            JSLX: '主教师',
+            JZGJBSJId: ZJS,
+          },
+        ];
+        FTeacher =
+          FJS && FJS?.length
+            ? FJS.map((item: any) => {
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+              };
+            })
+            : undefined;
+      }
+      let newData: any = {};
+      if (FJSJIds) {
+        newData = {
+          ...info,
+          // eslint-disable-next-line no-nested-ternary
+          KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
+          KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
+          JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
+          BJZT: '未开班',
+          ISFW: 1,
+          FJSJId: FJSJIds,
+          XNXQId: curXNXQId,
+        };
+      } else {
+        newData = {
+          ...info,
+          // eslint-disable-next-line no-nested-ternary
+          KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
+          KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
+          JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
+          BJZT: '未开班',
+          ISFW: 1,
+          XNXQId: curXNXQId,
+        };
+      };
+      console.log(newData, 'newData')
+      let res: any;
+      if (formValues && CopyType === 'undefined') {
+        // 编辑
+        res = await updateKHBJSJ({ id: formValues.id }, newData);
+      } else if (formValues && CopyType === 'copy') {
+        // 复制
+        res = await createKHBJSJ(newData);
+      } else {
+        // 新建
+        res = await createKHBJSJ(newData);
+      }
+      if (res.status === 'ok') {
+        message.success('提交成功');
+        getData();
+        setVisible(false);
+      } else {
+        message.error('提交失败，请联系管理员或稍后重试');
+      }
+    }
+  };
+  useEffect(() => {
+    if (formValues && names === 'chakan') {
+      (async () => {
+        const res = await getXQSJ({
+          id: formValues?.XQSJId,
+        });
+        if (res.status === 'ok') {
+          setXQMC(res.data.XQMC);
+        }
+      })();
+    }
+  }, [formValues]);
+  useEffect(() => {
+    const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
+    setKCDate(kcDate);
+    setTeacherType(true);
+  }, [KHKCAllData]);
+  useEffect(() => {
+    setBJData({
+      SSJGLX: '校内课程',
+    });
+    if (visible === false && form) {
+      setBmCurrent(0);
+      form.resetFields();
+      setKaike(false);
+      setTeacherType(true);
+    }
+  }, [visible]);
+
+  const getTitle = () => {
+    if (formValues && names === 'chakan') {
+      return '查看课程班';
+    }
+    if (formValues && names === 'copy') {
+      return '复制课程班';
+    }
+    if (formValues) {
+      return '编辑课程班';
+    }
+    return '新增课程班';
+  };
+
+  const formItems: any[] = [
+    {
+      type: 'group',
+      key: 'group0',
+      groupItems: [
+        {
+          type: 'radio',
+          label: '课程来源：',
+          name: 'SSJGLX',
+          key: 'SSJGLX',
+          fieldProps: {
+            options: [
+              { value: '校内课程', label: '校内课程' },
+              { value: '机构课程', label: '机构课程' },
+            ],
+            // 按照课程来源筛选课程
+            onChange: (values: any) => {
+              // 在切换的时候把选中的课程、主教师、副教师清空
+              form.setFieldsValue({
+                KHKCSJId: undefined,
+                ZJS: undefined,
+                FJS: undefined,
+              });
+              const { value } = values.target;
+              let kcDate: any;
+              if(value === '机构课程'){
+                kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '机构课程' && item.KHKCSQs?.[0].ZT === 1);
+              }else{
+                kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
+              }
+              setKCDate(kcDate);
+              setIsJg(value === '机构课程');
+            },
+          },
+          rules: [{ required: true, message: '请选择课程来源' }],
+        },
+        {
+          type: 'select',
+          name: 'XQSJId',
+          key: 'XQSJId',
+          label: '所属校区：',
+          rules: [{ required: true, message: '请填写所属校区' }],
+          fieldProps: {
+            options: campus,
+          },
+        },
+      ],
+    },
+    {
+      type: 'group',
+      key: 'group1',
+      groupItems: [
+        {
+          type: 'select',
+          label: '课程名称：',
+          name: 'KHKCSJId',
+          key: 'KHKCSJId',
+          rules: [{ required: true, message: '请填写课程名称' }],
+          fieldProps: {
+            options: KCDate.map((item: any) => {
+              return { label: item.KCMC, value: item.id };
+            }),
+            onChange: (values: any) => {
+              if (isJg) {
+                setKcId(values);
+              }
+            },
+          },
+        },
+        {
+          type: 'input',
+          label: '课程班名称',
+          name: 'BJMC',
+          key: 'BJMC',
+          rules: [
+            { required: true, message: '请填写课程班名称' },
+            { max: 18, message: '最长为 18 位' },
+          ],
+          fieldProps: {
+            autocomplete: 'off',
+          },
+        },
+      ],
+    },
+    {
+      type: 'group',
+      key: 'group2',
+      groupItems: [
+        {
+          type: 'inputNumber',
+          label: '课时数：',
+          name: 'KSS',
+          key: 'KSS',
+          rules: [
+            { required: true, message: '请填写课时数' },
+            {
+              pattern: new RegExp('^[0-9]*[1-9][0-9]*$'),
+              message: '请填写正确的课时数',
+            },
+          ],
+          fieldProps: {
+            min: 0,
+            max: 100,
+          },
+        },
+        {
+          type: 'reactnode',
+          label: '场地名称：',
+          name: 'CDMC',
+          key: 'CDMC',
+          // rules: [{ required: TeacherType, message: '请选择场地名称' }],
+          children: (
+            <Select
+              showSearch
+              placeholder="请选择"
+              optionFilterProp="children"
+              onChange={(value, key: any) => {
+                setFJSJIds(key?.key)
+              }}
+            >
+              {
+                FJData?.map((value: any) => {
+                  return <Option value={value?.FJMC} key={value?.id}>{value?.FJMC}</Option>
+                })
+              }
+            </Select>
+          ),
+        },
+      ],
+    },
+    {
+      type: 'div',
+      key: 'div1',
+      label: `指定教师：`,
+      lineItem: [
+        {
+          type: 'switch',
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item) {
+                return setTeacherType(true);
+              }
+              form.setFieldsValue({ ZJS: '', FJS: [] });
+              return setTeacherType(false);
+            },
+            checked: TeacherType,
+          },
+        },
+      ],
+    },
+    {
+      type: 'reactnode',
+      label: '主班：',
+      name: 'ZJS',
+      key: 'ZJS',
+      hidden: !TeacherType,
+      rules: [{ required: TeacherType, message: '请选择主班教师' }],
+      children: (
+        <TeacherSelect
+          // value={ }
+          // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
+          type={isJg ? 2 : 1}
+          multiple={false}
+          xxId={currentUser?.xxId}
+          kcId={isJg ? kcId : undefined}
+          onChange={(value: any) => {
+            return value;
+          }}
+        />
+      ),
+    },
+    {
+      type: 'reactnode',
+      label: '副班：(多选)',
+      name: 'FJS',
+      key: 'FJS',
+      hidden: !TeacherType,
+      children: (
+        <TeacherSelect
+          type={isJg ? 3 : 1}
+          multiple={true}
+          xxId={currentUser?.xxId}
+          kcId={isJg ? kcId : undefined}
+          onChange={(value: any) => {
+            return value;
+          }}
+        />
+      ),
+    },
+    KKData?.id
+      ? {
+        type: 'divTab',
+        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
+      : '',
+    {
+      type: 'div',
+      key: 'div1',
+      label: `单独设置上课时段：`,
+      lineItem: [
+        {
+          type: 'switch',
+          fieldProps: {
+            onChange: (item: any) => {
+              if (item) {
+                return setKaike(true);
+              }
+              // 将按钮关闭的时候 传成默认时间段
+              form.setFieldsValue({ SKSD: [KKData?.KSSJ, KKData?.JSSJ] });
+              return setKaike(false);
+            },
+            checked: kaike,
+          },
+        },
+      ],
+    },
+    {
+      type: 'dateRange',
+      label: '上课时段:',
+      name: 'SKSD',
+      key: 'SKSD',
+      width: '100%',
+      hidden: !kaike,
+      rules: [{ required: kaike, message: '请选择上课时间' }],
+
+      fieldProps: {
+        disabledDate: (current: any) => {
+          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
+          return defaults < KKData?.KSSJ || defaults > KKData?.JSSJ;
+        },
+      },
+    },
+    {
+      type: 'textArea',
+      label: '简介：',
+      rules: [{ required: true, message: '请输入班级课程安排' }],
+      name: 'BJMS',
+      key: 'BJMS',
+      placeholder: '请输入班级课程安排',
+      children: <TextArea showCount maxLength={200} autoSize={{ minRows: 3, maxRows: 5 }} />,
+    },
+  ];
+
+  return (
+    <>
+      <Modal
+        title={getTitle()}
+        visible={visible}
+        className={styles.AddCourseClass}
+        onCancel={() => {
+          setVisible(false);
+        }}
+        width='1000'
+        footer={formValues && names === 'chakan' ? null : [
+          <Button key="baocun" type="primary" onClick={() => {
+            form.submit();
+          }}>
+            保存
+          </Button>,
+          <Button
+            key="cancel"
+            onClick={() => {
+              setVisible(false);
+            }}
+          >
+            取消
+          </Button>,
+        ]}
+        maskClosable={false}
+      >
+        {formValues && names === 'chakan' ? (
+          <div className={styles.see}>
+            <div className={styles.box}>
+              <p>课程来源：{formValues?.KHKCSJ?.SSJGLX}</p>
+              <p>所属校区：{XQMC || '本校'} </p>
+            </div>
+            <div className={styles.box}>
+              <p>课程名称：{formValues?.KHKCSJ?.KCMC}</p>
+              <p>班级名称：{formValues?.BJMC}</p>
+            </div>
+            <div className={styles.box}>
+              <p>
+                主班：
+                {formValues?.ZJS ? (
+                  <ShowName
+                    type="userName"
+                    openid={formValues?.ZJS?.WechatUserId}
+                    XM={formValues?.ZJS?.XM}
+                  />
+                ) : (
+                  <>—</>
+                )}
+              </p>
+              <p>
+                副班：
+                {formValues?.FJS.length !== 0 ? (
+                  <>
+                    {formValues?.KHBJJs.map((value: any) => {
+                      if (value.JSLX === '副教师') {
+                        return (
+                          <span style={{ marginRight: 5 }}>
+                            <ShowName
+                              type="userName"
+                              openid={value?.JZGJBSJ?.WechatUserId}
+                              XM={value?.JZGJBSJ?.XM}
+                            />
+                          </span>
+                        );
+                      }
+                      return '';
+                    })}
+                  </>
+                ) : (
+                  <>—</>
+                )}
+              </p>
+            </div>
+            <div className={styles.box}>
+              <p>课时数：{formValues?.KSS}</p>
+              <p>场地名称：{formValues?.FJSJ?.FJMC || '—'}</p>
+            </div>
+            <div className={styles.box}>
+              <p>
+
+                开课时段：{moment(formValues?.KKRQ).format('YYYY-MM-DD')} ~{' '}
+                {moment(formValues?.JKRQ).format('YYYY-MM-DD')}
+              </p>
+            </div>
+            <p className={styles.text}>班级简介：{formValues?.BJMS}</p>
+
+            {formValues?.KHKCJCs.length ? (
+              <>
+                <Divider orientation="left">教辅教材</Divider>
+                {formValues?.KHKCJCs.map((value: any) => {
+                  return (
+                    <div className={styles.box}>
+                      <p>{value?.JCMC}</p>
+                      <p>{value?.JCFY}元</p>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+        ) : (
+          <div className={styles.wrap}>
+            <ProFormFields
+              onFinish={onFinish}
+              setForm={setForm}
+              formItems={formItems}
+              formItemLayout={formLayout}
+              values={
+                BJData || {
+                  BJZT: '未开班',
+                }
+              }
+            />
+          </div>
+        )}
+      </Modal>
+    </>
+  );
+};
+export default AddCourseClass;

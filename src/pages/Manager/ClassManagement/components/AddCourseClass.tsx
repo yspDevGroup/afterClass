@@ -222,12 +222,21 @@ const AddCourseClass: FC<AddCourseProps> = ({
   }, [curXNXQId]);
   const onFinish = async (values: any) => {
     if (Current === 0) {
-      const newData = {
-        ...values,
-        KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
-        JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
-        FJSJId: FJSJIds
-      };
+      let newData = {};
+      if(FJSJIds){
+        newData = {
+          ...values,
+          KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
+          JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
+          FJSJId: FJSJIds
+        };
+      }else{
+        newData = {
+          ...values,
+          KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
+          JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
+        };
+      }
       setXQSJIds(values.XQSJId);
       setBJData(newData);
       setBmCurrent(Current + 1);
@@ -294,6 +303,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
           KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KHKCJCs: [],
           BJZT: '未开班',
+          ISFW:0,
           XNXQId: curXNXQId,
         };
         let res: any;
@@ -378,6 +388,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
         // eslint-disable-next-line no-nested-ternary
         KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
         KHKCJCs: choosenJf ? mertial : [],
+        ISFW:0,
         BJZT: '未开班',
         XNXQId: curXNXQId,
       };
@@ -425,6 +436,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
     if (visible === false && form) {
       setBmCurrent(0);
       form.resetFields();
+      setFJSJIds(undefined);
       setBMData({});
       setJFData({});
       setBaoming(false);
@@ -589,9 +601,13 @@ const AddCourseClass: FC<AddCourseProps> = ({
                 FJS: undefined,
               });
               const { value } = values.target;
-              const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === value && item.KHKCSQs?.[0].ZT === 1);
+              let kcDate: any;
+              if(value === '机构课程'){
+                kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '机构课程' && item.KHKCSQs?.[0].ZT === 1);
+              }else{
+                kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
+              }
               setKCDate(kcDate);
-              // setJGKCTeacherData([]);
               setIsJg(value === '机构课程');
             },
           },
@@ -1045,8 +1061,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
             </div>
             <div className={styles.box}>
               <p>
-                报名时段：{moment(formValues?.BMKSSJ).format('YYYY-MM-DD')} ~{' '}
-                {moment(formValues?.BMJSSJ).format('YYYY-MM-DD')}
+
+                开课时段：{moment(formValues?.KKRQ).format('YYYY-MM-DD')} ~{' '}
+                {moment(formValues?.JKRQ).format('YYYY-MM-DD')}
               </p>
             </div>
             <p className={styles.text}>班级简介：{formValues?.BJMS}</p>
@@ -1079,8 +1096,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
             )}
             <p className={styles.text}>课程班人数：{formValues?.BJRS}</p>
             <p className={styles.text}>
-              开课时段：{moment(formValues?.KKRQ).format('YYYY-MM-DD')} ~{' '}
-              {moment(formValues?.JKRQ).format('YYYY-MM-DD')}
+              报名时段：{moment(formValues?.BMKSSJ).format('YYYY-MM-DD')} ~{' '}
+              {moment(formValues?.BMJSSJ).format('YYYY-MM-DD')}
             </p>
             <Divider orientation="left">缴费设置</Divider>
             <p className={styles.text}>

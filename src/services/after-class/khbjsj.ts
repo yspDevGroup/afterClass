@@ -198,6 +198,8 @@ export async function getAllClasses(
     XN?: string;
     /** 学期 */
     XQ?: string;
+    /** 是否被服务使用:0没有，1有 */
+    ISFW?: number;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -230,6 +232,8 @@ export async function getClassesEvaluation(
     KCMC?: string;
     /** 班级名称 */
     BJMC?: string;
+    /** 是否被服务使用:0没有，1有 */
+    ISFW?: number;
     /** 页数 */
     page?: number;
     /** 每页记录数 */

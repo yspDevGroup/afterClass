@@ -19,6 +19,7 @@ export default {
   'menu.courseManagements': '课程服务',
   'menu.courseManagements.courseManagements': '课程管理',
   'menu.courseManagements.classManagement': '课程班管理',
+  'menu.courseManagements.serviceClassManagement': '服务班管理',
   // 'menu.courseManagements.courseScheduling': '排课管理',
   'menu.courseScheduling': '排课管理',
   'menu.courseManagements.mechanismCourseInfo': '课程详情',
