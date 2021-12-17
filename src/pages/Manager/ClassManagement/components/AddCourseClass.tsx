@@ -456,16 +456,16 @@ const AddCourseClass: FC<AddCourseProps> = ({
   };
   const getTitle = () => {
     if (formValues && names === 'chakan') {
-      return '查看课程班';
+      return '班级详情';
     }
     if (formValues && names === 'copy') {
-      return '复制课程班';
+      return '复制班级';
     }
     if (formValues) {
-      return '编辑课程班';
+      return '编辑班级';
     }
 
-    return '新增课程班';
+    return '新增班级';
   };
   const handleChange = (value: any, key: any) => {
     const newArr: any = [];
@@ -649,7 +649,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
         },
         {
           type: 'input',
-          label: '课程班名称',
+          label: '班级名称',
           name: 'BJMC',
           key: 'BJMC',
           rules: [

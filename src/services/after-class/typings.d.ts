@@ -1722,6 +1722,8 @@ declare namespace API {
     BJLX?: number;
     /** 是否被课后服务使用 */
     ISFW?: number;
+    /** 是否启用 */
+    ISQY?: number;
     /** 课后课程ID */
     KHKCSJId?: string;
     FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
@@ -1772,6 +1774,8 @@ declare namespace API {
     BJLX?: number;
     /** 是否被课后服务使用 */
     ISFW?: number;
+    /** 是否启用 */
+    ISQY?: number;
     /** 试用年级 */
     NJIds?: string[];
     /** 适用行政班 */
@@ -1818,6 +1822,8 @@ declare namespace API {
     BJLX?: number;
     /** 是否被课后服务使用 */
     ISFW?: number;
+    /** 是否启用 */
+    ISQY?: number;
     /** 试用年级 */
     NJIds?: string[];
     /** 课后课程ID */

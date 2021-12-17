@@ -135,12 +135,6 @@
         name: 'classManagement',
         component: './Manager/ClassManagement',
       },
-      {
-        // 服务班管理
-        path: '/courseManagements/serviceClassManagement',
-        name: 'serviceClassManagement',
-        component: './Manager/ServiceClassManagement',
-      },
       // {
       //   // 排课管理
       //   path: '/courseManagements/courseScheduling',

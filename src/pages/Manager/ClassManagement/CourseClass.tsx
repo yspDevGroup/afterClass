@@ -6,15 +6,20 @@ import ProTable from '@ant-design/pro-table';
 import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
-import PageContainer from '@/components/PageContainer';
 import PromptInformation from '@/components/PromptInformation';
+
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
+
 import ActionBar from './components/ActionBar';
+
+// import AddCourse from './components/AddCourse';
+
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 
 import styles from './index.less';
+// import AgentRegistration from './components/AgentRegistration';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
@@ -88,8 +93,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
       XNXQId: curXNXQId,
       KHKCSJId: kcId || state?.id,
       BJZT: BJZTMC,
+      ISFW:0,
       page: 0,
-      ISFW:1,
       pageSize: 0,
     };
     const resAll = await getAllClasses(opts);
@@ -171,40 +176,10 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const clstips = () => {
     setTips(false);
   };
-  // 课程班学生代报名
-  // const showModalBM = async (value: any) => {
-  //   const res = await getKHBJSJ({
-  //     id: value?.id,
-  //   });
-  //   if (res.status === 'ok') {
-  //     setBjDetails(res.data);
-  //     if (res.data?.KHKCJCs?.length !== 0) {
-  //       let num: number = 0;
-  //       for (let i = 0; i < res.data?.KHKCJCs.length; i += 1) {
-  //         num += Number(res.data?.KHKCJCs[i].JCFY);
-  //       }
-  //       setJFAmount(Number(num).toFixed(2));
-  //     }
-  //   }
-  //   setModalVisible(true);
-  // };
   // 获取当前课程班报名学生信息，并以弹框展示
   const showModal = async (record: any) => {
     setIsModalVisible(true);
-    // console.log('record',record)
     setClickBjId(record.id);
-
-    // const { BJMC, id } = record;
-    // const result = await getKHBJSJ({
-    //   id,
-    // });
-    // if (result.status === 'ok') {
-    //   setIsModalVisible(true);
-    //   setClickBjData(record);
-    //   setApplicantData({ kcId:id,BJMC, KCBDatas: result?.data });
-    // } else {
-    //   message.warning(result.message);
-    // }
   };
   const showModalSKXQ = (record: any) => {
     setModalSKXQ(true);
@@ -393,41 +368,41 @@ const CourseManagement = (props: { location: { state: any } }) => {
         return record?.KHKCSJ?.SSJGLX;
       },
     },
-    // {
-    //   title: '费用(元)',
-    //   dataIndex: 'FY',
-    //   key: 'FY',
-    //   align: 'center',
-    //   width: 80,
-    // },
-    // {
-    //   title: '缴费方式',
-    //   dataIndex: 'BMLX',
-    //   key: 'BMLX',
-    //   align: 'center',
-    //   width: 120,
-    //   render: (text: any) => {
-    //     return <>{text === 0 ? '先报名后缴费' : <>{text === 1 ? '缴费即报名' : '免费'}</>}</>;
-    //   },
-    // },
-    // {
-    //   title: '报名人数',
-    //   dataIndex: 'BMRS',
-    //   key: 'BMRS',
-    //   align: 'center',
-    //   width: 100,
-    //   render: (text: any, record: any) => {
-    //     return (
-    //       <a onClick={() => showModal(record)}>
-    //         <Tooltip
-    //           title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count || 0}人。`}
-    //         >
-    //           {record?.xs_count + record?.noPayXS_count}/{record?.BJRS}
-    //         </Tooltip>
-    //       </a>
-    //     );
-    //   },
-    // },
+    {
+      title: '费用(元)',
+      dataIndex: 'FY',
+      key: 'FY',
+      align: 'center',
+      width: 80,
+    },
+    {
+      title: '缴费方式',
+      dataIndex: 'BMLX',
+      key: 'BMLX',
+      align: 'center',
+      width: 120,
+      render: (text: any) => {
+        return <>{text === 0 ? '先报名后缴费' : <>{text === 1 ? '缴费即报名' : '免费'}</>}</>;
+      },
+    },
+    {
+      title: '报名人数',
+      dataIndex: 'BMRS',
+      key: 'BMRS',
+      align: 'center',
+      width: 100,
+      render: (text: any, record: any) => {
+        return (
+          <a onClick={() => showModal(record)}>
+            <Tooltip
+              title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count || 0}人。`}
+            >
+              {record?.xs_count + record?.noPayXS_count}/{record?.BJRS}
+            </Tooltip>
+          </a>
+        );
+      },
+    },
     {
       title: '排课',
       align: 'center',
@@ -559,7 +534,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
   ];
   return (
     <>
-      <PageContainer cls={styles.roomWrapper}>
         <ProTable<any>
           actionRef={actionRef}
           columns={columns}
@@ -733,7 +707,20 @@ const CourseManagement = (props: { location: { state: any } }) => {
         >
           <AppSKXQTable SKXQData={SKXQData} />
         </Modal>
-      </PageContainer>
+
+        {/* <AgentRegistration
+
+        <AgentRegistration
+          getData={getData}
+
+          curXNXQId={curXNXQId}
+          JFTotalost={JFAmount}
+          BjDetails={BjDetails}
+          ModalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+
+
+        /> */}
     </>
   );
 };
