@@ -248,7 +248,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     }
   }, [applicantData]);
 
-  const onsubmit = () => {
+  const onSubmit = () => {
     const { BJRS = 0 } = applicantData;
     // 判断人数是否超出范围
     if (BJRS - KHXSBJs?.length < selectNumber) {
@@ -548,7 +548,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
               </span>
             </span>
             <div>
-              <Button type="primary" onClick={onsubmit}>
+              <Button type="primary" onClick={onSubmit}>
                 提交
               </Button>
               <Button
@@ -876,7 +876,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             </a>
             <br />
             <Badge color="#aaa" size="small" />
-            确保报个内只有一个工作簿，如果有多个只有第一个会被处理
+            确保报表格只有一个工作簿，如果有多个只有第一个会被处理
             <br />
             <Badge color="#aaa" size="small" />
             单次报名最大不得超出班级最大人数

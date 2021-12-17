@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-11-23 16:27:57
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-14 09:17:24
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'antd';
@@ -210,7 +210,7 @@ const Index = () => {
                     <Link to="/courseManagements/classManagement">课程班管理</Link>
                   </li>
                   <li>
-                    <Link to="/courseManagements/courseScheduling">排课管理</Link>
+                    <Link to="/courseScheduling">排课管理</Link>
                   </li>
                 </ul>
               </Col>
