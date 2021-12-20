@@ -43,6 +43,10 @@ export async function getAllKHBJSJ(
     kcId?: string;
     /** 年级ID */
     njId?: string;
+    /** 是否被服务使用:0没有，1有 */
+    ISFW?: number;
+    /** 是否启用 */
+    ISQY?: number;
     /** 学年学期ID */
     XNXQId?: string;
     /** 班级状态 */
@@ -90,6 +94,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       BMLX?: number;
       BJLX?: number;
       ISFW?: number;
+      ISQY?: number;
       KHKCSJId?: string;
       FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
       KHKCSJ?: {
@@ -166,6 +171,10 @@ export async function getStudentClasses(
     XSJBSJId?: string;
     /** 状态 */
     ZT?: number[];
+    /** 是否被服务使用:0没有，1有 */
+    ISFW?: number;
+    /** 是否启用 */
+    ISQY?: number;
     /** 学年学期ID */
     XNXQId?: string;
   },
@@ -198,6 +207,10 @@ export async function getAllClasses(
     XN?: string;
     /** 学期 */
     XQ?: string;
+    /** 是否被服务使用:0没有，1有 */
+    ISFW?: number;
+    /** 是否启用 */
+    ISQY?: number;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -230,6 +243,10 @@ export async function getClassesEvaluation(
     KCMC?: string;
     /** 班级名称 */
     BJMC?: string;
+    /** 是否被服务使用:0没有，1有 */
+    ISFW?: number;
+    /** 是否启用 */
+    ISQY?: number;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -273,6 +290,10 @@ export async function getClasses(
     KHKCSJId?: string;
     /** 年级ID */
     NJSJId?: string;
+    /** 是否被服务使用:0没有，1有 */
+    ISFW?: number;
+    /** 是否启用 */
+    ISQY?: number;
     /** 校区ID */
     XQSJId?: string;
     /** 页数 */
@@ -451,6 +472,10 @@ export async function getNoTeacherClasses(
     BJZT?: string;
     RQ?: string;
     XNXQId?: string;
+    /** 是否启用 */
+    ISQY?: number;
+    /** 是否被服务使用:0没有，1有 */
+    ISFW?: number;
     XQSJId?: string;
     NJSJId?: string;
     KHKCLXId?: string;
@@ -497,6 +522,8 @@ export async function getAllClassesByNJ(
     NJSJIds?: string[];
     /** 班级状态 */
     BJZT?: string;
+    /** 是否启用 */
+    ISQY?: number;
     /** 课后课程类型ids */
     KHKCLXIds?: string[];
     /** 班级名称 */

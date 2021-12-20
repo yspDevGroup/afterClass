@@ -133,7 +133,6 @@
         // 课程班管理
         path: '/courseManagements/classManagement',
         name: 'classManagement',
-        icon: 'InsertRowAbove',
         component: './Manager/ClassManagement',
       },
       // {
