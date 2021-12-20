@@ -483,9 +483,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
 
   const UploadProps: any = {
     name: 'xlsx',
-    action: `/api/upload/importStudentSignUp?KHBJSJId=${applicantData?.id}&XQSJId=${applicantData?.XQSJId}&JZGJBSJId=${
-      currentUser?.JSId || testTeacherId
-    }`,
+    action: `/api/upload/importStudentSignUp?KHBJSJId=${applicantData?.id}&XQSJId=${
+      applicantData?.XQSJId
+    }&JZGJBSJId=${currentUser?.JSId || testTeacherId}`,
     headers: {
       authorization: getAuthorization(),
     },
@@ -861,7 +861,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           <p>
             <Upload {...UploadProps}>
               <Button icon={<UploadOutlined />}>上传文件</Button>{' '}
-              <span className={styles.messageSpan}>进行批量导入报名学生</span>
+              <span className={styles.messageSpan}>导入学生名单进行批量报名</span>
             </Upload>
           </p>
           <div className={styles.messageDiv}>
@@ -876,10 +876,10 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             </a>
             <br />
             <Badge color="#aaa" size="small" />
-            确保报表格只有一个工作簿，如果有多个只有第一个会被处理
+            确保表格内只有一个工作薄，如果有多个只有第一个会被处理
             <br />
             <Badge color="#aaa" size="small" />
-            单次报名最大不得超出班级最大人数
+            单次报名人数不得超出班级最大人数
           </div>
         </>
       </Modal>

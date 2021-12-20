@@ -471,7 +471,7 @@ const RoomManagement = () => {
           <p>
             <Upload {...UploadProps}>
               <Button icon={<UploadOutlined />}>上传文件</Button>{' '}
-              <span className={styles.messageSpan}>进行批量导入的场地</span>
+              <span className={styles.messageSpan}>批量导入场地</span>
             </Upload>
           </p>
           <div className={styles.messageDiv}>
@@ -486,10 +486,10 @@ const RoomManagement = () => {
             </a>
             <br />
             <Badge color="#aaa" />
-            确保表格只有一个工作簿，如果有多个只有第一个会被处理
+            确保表格内只有一个工作薄，如果有多个只有第一个会被处理
             <br />
             <Badge color="#aaa" />
-            场地最大支持500条数据
+            场地单次最大支持导入500条数据
           </div>
         </>
       </Modal>
