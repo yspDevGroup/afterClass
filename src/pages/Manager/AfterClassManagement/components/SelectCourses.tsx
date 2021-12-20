@@ -80,8 +80,9 @@ const SelectCourses = (props: SelectCourseProps) => {
       const res = await getAllClassesByNJ({
         XNXQId,
         NJSJIds: getNJArr(),
-        // BMLX: 2,
-        // KHKCLXIds: KHKCLXData,
+        BMLX: 0,
+        KHKCLXIds: KHKCLXData,
+        ISQY: 0, // 是否启用,
         pageSize: 0,
         page: 0,
         BJMC: BJMC
@@ -91,6 +92,7 @@ const SelectCourses = (props: SelectCourseProps) => {
         if (rows.length) {
           const newDataSource: DataNode[] = []
           rows.forEach((item: any) => {
+            console.log('item',item);
             const KCBData: DataNode = {
               title: item?.BJMC,
               type: 'KCB',
@@ -122,11 +124,12 @@ const SelectCourses = (props: SelectCourseProps) => {
                     }
                   })
                   if (!KCFlag) {
-                    FLItem.children = [KCBData]
+                    FLItem.children?.push (KCData)
                   }
                 }
               })
             } else {
+              console.log('FLData',FLData)
               newDataSource.push(FLData);
             }
           });

@@ -11,6 +11,8 @@ import { getAllXQSJ } from '@/services/after-class/xqsj';
 // import { getAllGrades } from '@/services/after-class/khjyjg';
 import SearchLayout from '@/components/Search/Layout';
 import { getGradesByCampus } from '@/services/after-class/njsj';
+import ConfigureService from './ConfigureService';
+
 
 type selectType = { label: string; value: string };
 
@@ -178,15 +180,7 @@ const AdministrationClassManagement = () => {
       width: 100,
       render: (_, record) => {
         return (
-          <Link
-            key="details"
-            // to={{
-            //   pathname: '/statistics/administrativeClass/administrativeClassDetail',
-            //   state: record,
-            // }}
-          >
-            配置课后服务
-          </Link>
+          <ConfigureService XNXQId={curXNXQId} KHFWBJs={record?.KHFWBJs} BJSJId={record.id} NJSJ={record?.NJSJ} />
         );
       },
     },
