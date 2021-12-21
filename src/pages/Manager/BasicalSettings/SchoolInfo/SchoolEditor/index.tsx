@@ -232,7 +232,7 @@ const SchoolEditor = (props: any) => {
           label: '学校名称',
           name: 'XXMC',
           key: 'XXMC',
-          rules: [{ required: true, message: '该项不能为空，请输入' }],
+          disabled: true,
           span: 12,
         },
         {

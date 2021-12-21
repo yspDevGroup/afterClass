@@ -32,7 +32,14 @@
         font-size: @font-size-base;
         line-height: 26px;
       }
-
+      .ant-input[disabled] {
+        color: @text-color;
+        background-color: inherit;
+        border: none;
+        cursor: default;
+        resize: none;
+        text-overflow: ellipsis;
+      }
       .ui-groupLine {
         position: relative;
 

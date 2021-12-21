@@ -3,8 +3,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-09 13:36:20
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-09 15:51:46
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
@@ -28,7 +28,6 @@ const Register = () => {
     };
     fetchData();
   }, [])
-console.log(schoolInfo);
 
   return (
     <div className={styles.Index}>
