@@ -718,9 +718,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
           fieldProps: {
             onChange: (item: any) => {
               if (item) {
+                form.setFieldsValue({ ZJS: undefined, FJS: undefined });
                 return setTeacherType(true);
               }
-              form.setFieldsValue({ ZJS: '', FJS: [] });
               return setTeacherType(false);
             },
             checked: TeacherType,
