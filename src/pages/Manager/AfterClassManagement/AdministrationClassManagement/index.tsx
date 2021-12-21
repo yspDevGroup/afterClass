@@ -1,7 +1,7 @@
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Select, Space, Button, message } from 'antd';
+import { Select, Space, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
@@ -13,6 +13,7 @@ import SearchLayout from '@/components/Search/Layout';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import ConfigureService from './ConfigureService';
 import { updateKHFWBJ } from '@/services/after-class/khfwbj';
+import ClassSeviveDetail from './ClassSeviveDetail';
 
 type selectType = { label: string; value: string };
 
@@ -115,36 +116,31 @@ const AdministrationClassManagement = () => {
       message.error(res.message);
     }
   };
-  // 查看详情
-  const lookDetailClick = (params: any) => {
-    console.log('params', params);
-  };
 
   // 获取取消发布 发布按钮
   const getSetting = (record: any) => {
     if (record?.KHFWBJs?.length) {
       if (record?.KHFWBJs[0]?.ZT === 0) {
         return (
-          <Button
-            type="link"
+          <a
             onClick={() => {
               onReleaseClick(record?.KHFWBJs[0]?.id, true);
             }}
           >
             {' '}
             发布
-          </Button>
+          </a>
         );
       }
       return (
-        <Button
+        <a
           type="link"
           onClick={() => {
             onReleaseClick(record?.KHFWBJs[0]?.id, false);
           }}
         >
           取消发布
-        </Button>
+        </a>
       );
     }
     return '';
@@ -240,14 +236,7 @@ const AdministrationClassManagement = () => {
         return (
           <Space>
             {f ? (
-              <Button
-                type="link"
-                onClick={() => {
-                  lookDetailClick(record?.KHFWBJs?.[0]);
-                }}
-              >
-                查看
-              </Button>
+              curXNXQId && record?.id && <ClassSeviveDetail XNXQId={curXNXQId} BJSJId={record.id} />
             ) : (
               <ConfigureService
                 XNXQId={curXNXQId}

@@ -15,7 +15,7 @@ type ConfigureSeverType = {
   BJSJId: string;
   NJSJ: any;
 };
-type ModalValue = {
+export type ModalValue = {
   isTemplate: boolean;
   KCFD: any[];
   KHKC: any[];
@@ -24,6 +24,7 @@ type ModalValue = {
   FWFY: number;
   FWMS: string;
   id?: string;
+  FWTP?: string;
 };
 const ConfigureService = (props: ConfigureSeverType) => {
   const { XNXQId, BJSJId, NJSJ, KHFWBJs } = props;
@@ -176,7 +177,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         formRef={formRef}
         title={KHFWBJs?.length ? '编辑' : '配置课后服务'}
         trigger={
-          <Button
+          <a
             type="link"
             onClick={() => {
               if (KHFWBJs.length) {
@@ -185,7 +186,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
             }}
           >
             {KHFWBJs?.length ? '编辑' : '配置课后服务'}
-          </Button>
+          </a>
         }
         submitter={{
           searchConfig: {
