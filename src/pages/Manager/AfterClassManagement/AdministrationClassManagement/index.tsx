@@ -1,7 +1,7 @@
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Select } from 'antd';
+import { Select, Space, Button, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
@@ -12,7 +12,7 @@ import { getAllXQSJ } from '@/services/after-class/xqsj';
 import SearchLayout from '@/components/Search/Layout';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import ConfigureService from './ConfigureService';
-
+import { updateKHFWBJ } from '@/services/after-class/khfwbj';
 
 type selectType = { label: string; value: string };
 
@@ -44,8 +44,7 @@ const AdministrationClassManagement = () => {
         };
       });
       if (arr?.length) {
-
-        setCampusId(arr?.find((item)=>item.label==='本校')?.value);
+        setCampusId(arr?.find((item) => item.label === '本校')?.value);
       }
       setCampusData(arr);
     }
@@ -105,6 +104,51 @@ const AdministrationClassManagement = () => {
       getBJSJ();
     }
   }, [NjId, campusId]);
+
+  //  发布取消发布
+  const onReleaseClick = async (id: string, flag: boolean) => {
+    const res = await updateKHFWBJ({ id }, { ZT: flag ? 1 : 0 });
+    if (res.status === 'ok') {
+      message.success(flag ? '发布成功' : '取消成功');
+      actionRef.current?.reload();
+    } else {
+      message.error(res.message);
+    }
+  };
+  // 查看详情
+  const lookDetailClick = (params: any) => {
+    console.log('params', params);
+  };
+
+  // 获取取消发布 发布按钮
+  const getSetting = (record: any) => {
+    if (record?.KHFWBJs?.length) {
+      if (record?.KHFWBJs[0]?.ZT === 0) {
+        return (
+          <Button
+            type="link"
+            onClick={() => {
+              onReleaseClick(record?.KHFWBJs[0]?.id, true);
+            }}
+          >
+            {' '}
+            发布
+          </Button>
+        );
+      }
+      return (
+        <Button
+          type="link"
+          onClick={() => {
+            onReleaseClick(record?.KHFWBJs[0]?.id, false);
+          }}
+        >
+          取消发布
+        </Button>
+      );
+    }
+    return '';
+  };
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -165,13 +209,22 @@ const AdministrationClassManagement = () => {
         );
       },
     },
-    // {
-    //   title: '班主任',
-    //   dataIndex: 'BZR',
-    //   key: 'BZR',
-    //   align: 'center',
-    //   width: 180,
-    // },
+    {
+      title: '状态',
+      dataIndex: 'ZT',
+      key: 'ZT',
+      align: 'center',
+      width: 100,
+      render: (_, record: any) => {
+        if (record?.KHFWBJs?.length) {
+          if (record?.KHFWBJs[0]?.ZT === 0) {
+            return '未发布';
+          }
+          return '已发布';
+        }
+        return '待配置';
+      },
+    },
     {
       title: '操作',
       valueType: 'option',
@@ -179,8 +232,32 @@ const AdministrationClassManagement = () => {
       align: 'center',
       width: 100,
       render: (_, record) => {
+        let f = false;
+        if (record?.KHFWBJs?.[0]?.ZT === 1) {
+          f = true;
+        }
+
         return (
-          <ConfigureService XNXQId={curXNXQId} KHFWBJs={record?.KHFWBJs} BJSJId={record.id} NJSJ={record?.NJSJ} />
+          <Space>
+            {f ? (
+              <Button
+                type="link"
+                onClick={() => {
+                  lookDetailClick(record?.KHFWBJs?.[0]);
+                }}
+              >
+                查看
+              </Button>
+            ) : (
+              <ConfigureService
+                XNXQId={curXNXQId}
+                KHFWBJs={record?.KHFWBJs}
+                BJSJId={record.id}
+                NJSJ={record?.NJSJ}
+              />
+            )}
+            {getSetting(record)}
+          </Space>
         );
       },
     },
