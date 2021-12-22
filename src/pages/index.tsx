@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-12-10 15:24:44
+ * @LastEditTime: 2021-12-22 12:50:21
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -62,6 +62,9 @@ const Index = () => {
             localStorage.removeItem('studentId');
             history.replace('/parent/home');
             break;
+          case '其他':
+            history.replace('/403?message=抱歉，您的企业暂未通过审核，请联系管理员');
+            break;
           default:
             history.replace('/403?title=未获取到合法的用户身份');
             break;
@@ -85,6 +88,9 @@ const Index = () => {
           break;
         case '家长':
           history.replace('/parent/home');
+          break;
+        case '其他':
+          history.replace('/403?message=抱歉，您的企业暂未通过审核，请联系管理员');
           break;
         default:
           gotoLogin('', '');
