@@ -92,3 +92,26 @@ export async function createKHFWSJ(body: API.CreateKHFWSJ, options?: { [key: str
     ...(options || {}),
   });
 }
+
+/** 获取所有课后服务数据 POST /khfwsj/getAll */
+export async function getAllKHFWSJ(
+  body: {
+    FWMC?: string;
+    XNXQId?: string;
+    XQSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status: 'ok' | 'error';
+    data?: { count?: number; rows?: API.KHFWSJ[] };
+    message?: string;
+  }>('/khfwsj/getAll', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
