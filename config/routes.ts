@@ -52,6 +52,7 @@
     path: '/basicalSettings',
     name: 'basicalSettings',
     icon: 'fileText',
+    access: 'canAdmin',
     routes: [
       {
         // 学校信息维护
@@ -237,6 +238,7 @@
     path: '/coursePatrol',
     icon: 'SolutionOutlined',
     name: 'coursePatrol',
+    access: 'canAdmin',
     routes: [
       {
         // 值班安排
@@ -257,6 +259,7 @@
     path: '/audit',
     name: 'audit',
     icon: 'Profile',
+    access: 'canAdmin',
     routes: [
       {
         // 请假管理
@@ -301,12 +304,14 @@
         path: '/orderInquiry/reimbursementClass',
         name: 'reimbursementClass',
         component: './Manager/CourseManagements/ReimbursementClass',
+        access: 'canAdmin',
       },
       {
         // 退款管理
         path: '/orderInquiry/refundManagement',
         name: 'refundManagement',
         component: './Manager/CourseManagements/RefundManagement',
+        access: 'canAdmin',
       },
     ],
   },
@@ -315,6 +320,7 @@
     path: '/announcements',
     name: 'announcements',
     icon: 'Notification',
+    // access: 'canAdmin',
     routes: [
       {
         // 校内通知
@@ -433,6 +439,7 @@
     icon: 'PieChartOutlined',
     name: 'graphic',
     component: './Manager/Statistics/Graphic',
+    access: 'canAdmin',
   },
   {
     // 素质教育资源
@@ -440,12 +447,14 @@
     icon: 'RadarChartOutlined',
     name: 'educational',
     component: './Manager/Educational',
+    access: 'canAdmin',
   },
   {
     // 系统配置
     path: '/sysSettings',
     icon: 'SlidersOutlined',
     name: 'sysSettings',
+    access: 'canAdmin',
     routes: [
       {
         path: '/sysSettings/auditSettings',

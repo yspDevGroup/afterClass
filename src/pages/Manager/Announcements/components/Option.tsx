@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import { Divider, Popconfirm, message, Tooltip } from 'antd';
-import { history, Link } from 'umi';
+import { Access, history, Link } from 'umi';
 import type { TableListItem } from '../data';
 
 import moment from 'moment';
@@ -188,17 +188,20 @@ type Props = {
   ZT: string;
   refreshHandler: () => void;
   record?: TableListItem;
+  canAdmin?: boolean;
 };
 
 const Option: React.FC<Props> = (props) => {
-  const { id, ZT, refreshHandler, record } = props;
+  const { id, ZT, refreshHandler, record, canAdmin } = props;
   switch (ZT) {
     case '已发布':
       return (
         <>
           <View id={id} refreshHandler={refreshHandler} record={record} />
-          <Divider type="vertical" />
-          <UnPubOpt id={id} refreshHandler={refreshHandler} record={record} />
+          <Access accessible={!!canAdmin}>
+            <Divider type="vertical" />
+            <UnPubOpt id={id} refreshHandler={refreshHandler} record={record} />
+          </Access>
         </>
       );
     case '已删除':

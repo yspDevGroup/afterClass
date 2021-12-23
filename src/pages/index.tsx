@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-12-22 12:50:21
+ * @LastEditTime: 2021-12-22 13:11:30
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -38,26 +38,32 @@ const Index = () => {
 
         // 检查登录状态
         switch (initialState!.currentUser.type) {
-          case '管理员':
-            {
-              if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
-                history.replace('/information/home');
-              } else {
-                history.replace('/homepage');
-              }
+          case '管理员': {
+            if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
+              history.replace('/information/home');
+            } else {
+              history.replace('/homepage');
             }
             break;
-          case '老师':
-            if (params.isAdmin === '1') {
-              if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
-                history.replace('/information/home');
-              } else {
-                history.replace('/homepage');
-              }
+          }
+          case '老师': {
+            if (ej === 'pc' || ej === 'wx-pc' || ej === 'com-wx-pc') {
+              history.replace('/homepage');
             } else {
               history.replace('/teacher/home');
             }
             break;
+          }
+          // if (params.isAdmin === '1') {
+          //   if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
+          //     history.replace('/information/home');
+          //   } else {
+          //     history.replace('/homepage');
+          //   }
+          // } else {
+          //   history.replace('/teacher/home');
+          // }
+          // break;
           case '家长':
             localStorage.removeItem('studentId');
             history.replace('/parent/home');
@@ -74,18 +80,22 @@ const Index = () => {
       }
     } else {
       switch (initialState?.currentUser?.type) {
-        case '管理员':
-          {
-            if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
-              history.replace('/information/home');
-            } else {
-              history.replace('/homepage');
-            }
+        case '管理员': {
+          if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
+            history.replace('/information/home');
+          } else {
+            history.replace('/homepage');
           }
           break;
-        case '老师':
-          history.replace('/teacher/home');
+        }
+        case '老师': {
+          if (ej === 'pc' || ej === 'wx-pc' || ej === 'com-wx-pc') {
+            history.replace('/homepage');
+          } else {
+            history.replace('/teacher/home');
+          }
           break;
+        }
         case '家长':
           history.replace('/parent/home');
           break;
