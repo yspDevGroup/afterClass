@@ -4,17 +4,14 @@ import { request } from 'umi';
 
 /** 获取学生评价记录详情 GET /khxspj/${param0} */
 export async function getKHXSPJ(
-  params: {
-    // path
-    /** 学生评价记录ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getKHXSPJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       PJFS?: number;
       PY?: string;
@@ -55,15 +52,12 @@ export async function getKHXSPJ(
 
 /** 删除学生评价记录 DELETE /khxspj/${param0} */
 export async function deleteKHXSPJ(
-  params: {
-    // path
-    /** 类型ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteKHXSPJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxspj/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khxspj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -89,7 +83,7 @@ export async function getAllKHXSPJ(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHXSPJ[] };
     message?: string;
   }>('/khxspj/', {
@@ -105,8 +99,8 @@ export async function getAllKHXSPJ(
 /** 创建学生评价记录 PUT /khxspj/create */
 export async function createKHXSPJ(body: API.CreateKHXSPJ, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       PJFS?: number;
       PY?: string;
@@ -150,16 +144,13 @@ export async function createKHXSPJ(body: API.CreateKHXSPJ, options?: { [key: str
 
 /** 更新学生评价记录 PUT /khxspj/update/${param0} */
 export async function updateKHXSPJ(
-  params: {
-    // path
-    /** 学生评价记录ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateKHXSPJParams,
   body: API.UpdateKHXSPJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khxspj/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khxspj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

@@ -148,7 +148,7 @@ const AuditSettings = () => {
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="补签时段设置" bordered={false} extra={<Switch checked={edit} onChange={(checked) => {
+                  <Card title="补签时段设置" bordered={false} extra={<Switch checked={edit} checkedChildren="编辑" unCheckedChildren="应用" onChange={(checked) => {
                     setEdit(checked);
                   }} />}>
                     <p className={edit ? 'active' : ''}>

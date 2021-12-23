@@ -12,12 +12,14 @@ type UploadImageProps = {
   disabled?: boolean; // 值为true时，上传按钮不可点击
   accept?: string; // 类型
   imagename?: string; // 发到后台的文件参数名
-  handleImageChange?: () => void;
+  width?: number; // 图片宽度
+  height?: number; // 图片高度
+  handleImageChange?: (value: any) => void;
   data?: object | ((file: any) => object) | Promise<object>; // 上传所需额外参数或返回上传额外参数的方法
 };
 
 const UploadImage = (props: UploadImageProps) => {
-  const { upurl, readonly, disabled, accept, imagename, data, handleImageChange } = props;
+  const { upurl, readonly, disabled, accept, imagename,width = 110,height = 72, data, handleImageChange } = props;
   const [imageUrl, setImageUrl] = useState(props.imageurl);
   useEffect(() => {
     setImageUrl(props.imageurl);
@@ -43,7 +45,7 @@ const UploadImage = (props: UploadImageProps) => {
     <div className={styles.uploadStyles}>
       {imageUrl ? (
         <div style={{ marginRight: 16 }}>
-          <Image width={110} height={72} src={imageUrl} />
+          <Image width={width} height={height} src={imageUrl} />
         </div>
       ) : (
         <div className={styles.defImgStyles}>
@@ -54,7 +56,7 @@ const UploadImage = (props: UploadImageProps) => {
         ''
       ) : (
         <div className={styles.uploadButStyles}>
-          <ImgCrop rotate aspect={110 / 72}>
+          <ImgCrop rotate aspect={width / height}>
             <Upload
               showUploadList={false}
               name={imagename}
