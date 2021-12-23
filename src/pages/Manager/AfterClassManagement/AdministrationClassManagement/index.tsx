@@ -31,6 +31,7 @@ const AdministrationClassManagement = () => {
   const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
   const [bjData, setBJData] = useState<selectType[] | undefined>([]);
   const [BJId, setBJId] = useState<string | undefined>(undefined);
+  const [XQData, setXQData] = useState<any | undefined>();
 
   const getCampusData = async () => {
     const res = await getAllXQSJ({
@@ -54,7 +55,11 @@ const AdministrationClassManagement = () => {
   useEffect(() => {
     (async () => {
       const result = await queryXNXQList(currentUser?.xxId);
-      setCurXNXQId(result?.current?.id);
+      console.log('result', result);
+      if (result?.current) {
+        setXQData(result?.current);
+        setCurXNXQId(result?.current?.id);
+      }
     })();
     getCampusData();
   }, []);
@@ -187,8 +192,8 @@ const AdministrationClassManagement = () => {
     },
     {
       title: '课后服务报名人数',
-      dataIndex: 'xsbm_count',
-      key: 'xsbm_count',
+      dataIndex: 'xsfwbm_count',
+      key: 'xsfwbm_count',
       align: 'center',
       width: 150,
       render: (_, record) => {
@@ -200,7 +205,7 @@ const AdministrationClassManagement = () => {
               state: record,
             }}
           >
-            {record?.xsbm_count}
+            {record?.xsfwbm_count}
           </Link>
         );
       },
@@ -239,6 +244,8 @@ const AdministrationClassManagement = () => {
               curXNXQId && record?.id && <ClassSeviveDetail XNXQId={curXNXQId} BJSJId={record.id} />
             ) : (
               <ConfigureService
+                actionRef={actionRef}
+                XQData={XQData}
                 XNXQId={curXNXQId}
                 KHFWBJs={record?.KHFWBJs}
                 BJSJId={record.id}
@@ -254,7 +261,7 @@ const AdministrationClassManagement = () => {
 
   const onCampusChange = (value: any) => {
     setCampusId(value);
-    actionRef.current?.reload();
+    // actionRef.current?.reload();
   };
   return (
     <div className={styles.AdministrativeClass}>
@@ -270,7 +277,7 @@ const AdministrationClassManagement = () => {
           }}
           request={async (param) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
-            if (curXNXQId) {
+            if (curXNXQId && campusId) {
               const obj = {
                 XXJBSJId: currentUser?.xxId,
                 njId: NjId ? [NjId] : undefined,
