@@ -36,8 +36,6 @@ const Detail = (props: any) => {
   const [title, setTitle] = useState<string>();
   const { KHFWBJs } = state;
   const getDetailValue = async () => {
-   
-
     if (KHFWBJs?.[0]) {
       setLoading(true);
       const res = await getKHFWBJ({
@@ -69,7 +67,6 @@ const Detail = (props: any) => {
       }
       setLoading(false);
     }
-    
   };
 
   const columns: ProColumns<any>[] = [
