@@ -483,11 +483,11 @@ const SignUp = (props: SignUpProps, ref: any) => {
         setSelectNumber(selectNumber);
       }
       // 移除搜索后的内容
-      if (searchFalg) {
-        setSearchFalg(false);
-        setSearchValue(undefined);
-        // setSearchTreeData([]);
-      }
+      // if (searchFalg) {
+      //   setSearchFalg(false);
+      //   setSearchValue(undefined);
+      //   // setSearchTreeData([]);
+      // }
 
       setSelectTreeData(arr);
     }
