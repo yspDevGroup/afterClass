@@ -4,17 +4,14 @@ import { request } from 'umi';
 
 /** 获取学校公告记录 GET /xxgg/${param0} */
 export async function getXXGG(
-  params: {
-    // path
-    /** 学校配置ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getXXGGParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; NR?: string; ZT?: string; LX?: string; updatedAt?: string };
+    status: 'ok' | 'error';
+    data?: { id?: string; BT?: string; NR?: string; ZT?: string; LX?: string; updatedAt?: string };
     message?: string;
   }>(`/xxgg/${param0}`, {
     method: 'GET',
@@ -25,15 +22,12 @@ export async function getXXGG(
 
 /** 删除学校公告记录 DELETE /xxgg/${param0} */
 export async function deleteXXGG(
-  params: {
-    // path
-    /** 学校配置ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteXXGGParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxgg/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xxgg/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -44,13 +38,13 @@ export async function deleteXXGG(
 export async function getAllXXGG(
   body: {
     /** 公告状态 */
-    status?: string[];
+    status: string[];
     /** 学校ID */
-    XXJBSJId?: string;
+    XXJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: API.XXGG[]; message?: string }>('/xxgg/all', {
+  return request<{ status: 'ok' | 'error'; data?: API.XXGG[]; message?: string }>('/xxgg/all', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -63,8 +57,8 @@ export async function getAllXXGG(
 /** 创建学校公告记录 PUT /xxgg/create */
 export async function createXXGG(body: API.CreateXXGG, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: { id?: string; BT?: string; NR?: string; ZT?: string; LX?: string; updatedAt?: string };
+    status: 'ok' | 'error';
+    data?: { id?: string; BT?: string; NR?: string; ZT?: string; LX?: string; updatedAt?: string };
     message?: string;
   }>('/xxgg/create', {
     method: 'PUT',
@@ -78,16 +72,13 @@ export async function createXXGG(body: API.CreateXXGG, options?: { [key: string]
 
 /** 更新学校公告记录 PUT /xxgg/update/${param0} */
 export async function updateXXGG(
-  params: {
-    // path
-    /** 学校配置ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateXXGGParams,
   body: API.UpdateXXGG,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxgg/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xxgg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

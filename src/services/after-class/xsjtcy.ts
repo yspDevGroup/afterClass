@@ -5,8 +5,8 @@ import { request } from 'umi';
 /** 创建学生家庭成员 PUT /xsjtcy/create */
 export async function createXSJTCY(body: API.CreateXSJTCY, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       GXM?: string;
       CYXM?: string;
@@ -43,14 +43,14 @@ export async function getXSJTCY(
     /** 学生ID */
     XSJBSJId?: string;
     /** 页数 */
-    page?: number;
+    page: number;
     /** 每页记录数 */
-    pageSize?: number;
+    pageSize: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.XSJTCY[] };
     message?: string;
   }>('/xsjtcy/getAll', {
@@ -65,15 +65,12 @@ export async function getXSJTCY(
 
 /** 删除学生家庭成员 DELETE /xsjtcy/${param0} */
 export async function deleteXSJTCY(
-  params: {
-    // path
-    /** 学生家庭成员ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteXSJTCYParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xsjtcy/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xsjtcy/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -82,16 +79,13 @@ export async function deleteXSJTCY(
 
 /** 更新学生家庭成员 PUT /xsjtcy/update/${param0} */
 export async function updateXSJTCY(
-  params: {
-    // path
-    /** 学生家庭成员数据ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateXSJTCYParams,
   body: API.UpdateXSJTCY,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xsjtcy/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xsjtcy/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

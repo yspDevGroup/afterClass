@@ -5,14 +5,18 @@ import { request } from 'umi';
 /** 创建课后服务-服务班 PUT /khfwbj/create */
 export async function createKHFWBJ(
   body: {
-    BJSJId?: string;
-    XNXQId?: string;
+    BJSJId: string;
+    XNXQId: string;
     ZT?: number;
-    FWMC?: string;
+    FWMC: string;
     FWTP?: string;
     FWMS?: string;
     FWFY?: number;
     KXSL?: number;
+    /** 缴费类型，0:按月缴费,1:自由缴费 */
+    JFLX?: number;
+    KSRQ?: string;
+    JSRQ?: string;
     KHBJSJIds?: { KHBJSJId?: string; LX?: number }[];
   },
   options?: { [key: string]: any },
@@ -30,8 +34,8 @@ export async function createKHFWBJ(
 /** 获取课后服务-服务班 POST /khfwbj/getDetail */
 export async function getKHFWBJ(
   body: {
-    BJSJId?: string;
-    XNXQId?: string;
+    BJSJId: string;
+    XNXQId: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -47,15 +51,12 @@ export async function getKHFWBJ(
 
 /** 删除课后服务-服务班 DELETE /khfwbj/${param0} */
 export async function deleteKHFWBJ(
-  params: {
-    // path
-    /** 课后服务-服务班ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteKHFWBJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khfwbj/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khfwbj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -64,11 +65,8 @@ export async function deleteKHFWBJ(
 
 /** 更新课后服务-服务班 PUT /khfwbj/update/${param0} */
 export async function updateKHFWBJ(
-  params: {
-    // path
-    /** 课后服务-服务班ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateKHFWBJParams,
   body: {
     BJSJId?: string;
     XNXQId?: string;
@@ -78,12 +76,16 @@ export async function updateKHFWBJ(
     FWMS?: string;
     FWFY?: number;
     KXSL?: number;
+    /** 缴费类型，0:按月缴费,1:自由缴费 */
+    JFLX?: number;
+    KSRQ?: string;
+    JSRQ?: string;
     KHBJSJIds?: { KHBJSJId?: string; LX?: number }[];
   },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khfwbj/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khfwbj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -97,14 +99,15 @@ export async function updateKHFWBJ(
 /** 学生批量报名服务班 PUT /khfwbj/studentRegistration */
 export async function studentRegistration(
   body: {
-    KHFWBJId?: string;
-    ZT?: number;
-    XSJBSJIds?: string[];
+    KHFWBJId: string;
+    ZT: number;
+    KHFWSJPZId: string;
+    XSJBSJIds: string[];
     KHBJSJIds?: string[];
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
     '/khfwbj/studentRegistration',
     {
       method: 'PUT',
@@ -115,4 +118,27 @@ export async function studentRegistration(
       ...(options || {}),
     },
   );
+}
+
+/** 查询学生列表通过行政班级 POST /khfwbj/getStudentListByBjid */
+export async function getStudentListByBjid(
+  body: {
+    BJSJId: string;
+    KHFWSJPZId?: string;
+    XSXMORXH?: string;
+    /** 页数 */
+    page: number;
+    /** 每页记录数 */
+    pageSize: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khfwbj/getStudentListByBjid', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
 }

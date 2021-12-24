@@ -1,12 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ModalForm, ProFormDigit, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import { Button, Col, message, Row, Space, Spin } from 'antd';
+import { Button, Col, message, Row, Space, Spin, DatePicker } from 'antd';
 import SelectCourses from '../components/SelectCourses';
 import ProForm, { ProFormSwitch, ProFormSelect } from '@ant-design/pro-form';
 import styles from './index.less';
 import UploadImage from '@/components/ProFormFields/components/UploadImage';
 import { createKHFWBJ, getKHFWBJ, updateKHFWBJ } from '@/services/after-class/khfwbj';
 import SignUpClass from './SignUpClass';
+import type { Moment } from 'moment';
+import moment from 'moment';
+const { RangePicker } = DatePicker;
 
 type ConfigureSeverType = {
   KHFWBJs: any[];
@@ -14,6 +17,8 @@ type ConfigureSeverType = {
   // campusId: string,
   BJSJId: string;
   NJSJ: any;
+  XQData?: any; //{JSRQ: "2021-12-29" KSRQ: "2021-08-30"}
+  actionRef: any;
 };
 export type ModalValue = {
   isTemplate: boolean;
@@ -25,13 +30,19 @@ export type ModalValue = {
   FWMS: string;
   id?: string;
   FWTP?: string;
+  JFLX?: number;
+  // KSRQ?: string/;
+  // JSRQ?: string;
+  timeFrame?: Moment[];
 };
 const ConfigureService = (props: ConfigureSeverType) => {
-  const { XNXQId, BJSJId, NJSJ, KHFWBJs } = props;
+  const { XNXQId, BJSJId, NJSJ, KHFWBJs, XQData, actionRef } = props;
   const [isTemplate, setIsTemplate] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState('');
   const [detailValue, setDetailValue] = useState<ModalValue>();
+
+  const [JFLX, setJFLX] = useState<number>();
   const formRef = useRef();
   const signUpClassRef = useRef();
 
@@ -39,8 +50,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
   const [saveFalg, setSaveFalg] = useState<boolean>(false);
 
   const formLayout = {
-    labelCol: { span: 3 },
-    wrapperCol: { span: 21 },
+    labelCol: { flex: '7em' },
+    wrapperCol: { flex: 'auto' },
   };
 
   const getDetailValue = async () => {
@@ -56,13 +67,23 @@ const ConfigureService = (props: ConfigureSeverType) => {
       if (data) {
         data?.KCFWBJs?.forEach((item: any) => {
           console.log(item);
-          if (item.LX === 0) {
+          // 1 辅导班
+          if (item.LX === 1) {
             KCFD.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
           }
-          if (item?.LX === 1) {
+          // 0 课程班
+          if (item?.LX === 0) {
             KHKC.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
           }
         });
+        let timeFrame;
+        if (data?.JFLX === 1 && data?.KHFWSJPZs?.[0]?.KSRQ && data?.KHFWSJPZs?.[0]?.JSRQ) {
+          timeFrame = [
+            moment(data?.KHFWSJPZs?.[0]?.KSRQ, 'YYYY-MM-DD'),
+            moment(data?.KHFWSJPZs?.[0]?.JSRQ, 'YYYY-MM-DD'),
+          ];
+        }
+
         setDetailValue({
           isTemplate: false,
           KCFD,
@@ -72,7 +93,13 @@ const ConfigureService = (props: ConfigureSeverType) => {
           FWFY: data?.FWFY,
           FWMS: data?.FWMS,
           id: data?.id,
+          JFLX: data?.JFLX,
+          timeFrame,
         });
+
+        if (data?.JFLX) {
+          setJFLX(data?.JFLX);
+        }
         if (data.FWTP) {
           setImageUrl(data.FWTP);
         }
@@ -105,16 +132,24 @@ const ConfigureService = (props: ConfigureSeverType) => {
     setLoading(true);
     const KHBJSJIds: any[] = [];
     // KHBJSJIds=[ { KHBJSJId: '719ac8f1-192c-4bc4-840c-0f6d065d345e', LX: 1 },{KHBJSJId: 'f0bc43eb-2d6a-40cd-a80a-82d0596443d3', LX: 0}];
+    // 辅导 1
     if (values?.KCFD) {
       values?.KCFD?.forEach((item: any) => {
-        KHBJSJIds.push({ KHBJSJId: item.value, LX: 0 });
-      });
-    }
-    if (values?.KHKC) {
-      values?.KHKC?.forEach((item: any) => {
         KHBJSJIds.push({ KHBJSJId: item.value, LX: 1 });
       });
     }
+    // 课程班 0
+    if (values?.KHKC) {
+      values?.KHKC?.forEach((item: any) => {
+        KHBJSJIds.push({ KHBJSJId: item.value, LX: 0 });
+      });
+    }
+    // /** 缴费类型，0:按月缴费,1:自由缴费 */
+    // JFLX?: number;
+    // KSRQ?: string;
+    // JSRQ?: string;
+    // let KSRQ='';
+    // let JSRQ='';
 
     const params: any = {
       BJSJId,
@@ -125,11 +160,28 @@ const ConfigureService = (props: ConfigureSeverType) => {
       FWMS: values?.FWMS,
       FWFY: values?.FWFY,
       KXSL: values?.KXSL,
+      JFLX: values?.JFLX,
+      KSRQ: undefined,
+      JSRQ: undefined,
       KHBJSJIds,
     };
     //  批量报名并且 发布课程
     if (saveFalg) {
       params.ZT = 1;
+    }
+    //  debugger;
+    // 课程班类型为 按时段
+    if (values?.JFLX === 1 && values?.timeFrame) {
+      const { timeFrame } = values;
+      console.log('timeFrame', timeFrame);
+      if (values?.timeFrame?.length > 0) {
+        if (timeFrame[0]) {
+          params.KSRQ = moment(timeFrame[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
+        }
+        if (timeFrame[1]) {
+          params.JSRQ = moment(timeFrame[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
+        }
+      }
     }
     //编辑
     if (detailValue?.id) {
@@ -164,6 +216,13 @@ const ConfigureService = (props: ConfigureSeverType) => {
     }
   }, [detailValue]);
 
+  const onDisabledTime = (current: any) => {
+    return (
+      (current && current >= moment(XQData.JSRQ, 'YYYY-MM-DD').add(1, 'days')) ||
+      current <= moment(XQData.KSRQ, 'YYYY-MM-DD').add(+1, 'days')
+    );
+  };
+
   // 监听保存并报名
   useEffect(() => {
     if (saveFalg) {
@@ -182,6 +241,26 @@ const ConfigureService = (props: ConfigureSeverType) => {
             onClick={() => {
               if (KHFWBJs.length) {
                 getDetailValue();
+              } else {
+                // 还没有配置课程班 需要填写默认值
+                console.log('需要填写默认值');
+
+                const params: ModalValue = {
+                  FWFY: 140,
+                  JFLX: 0,
+                  KXSL: 2,
+                  timeFrame: [
+                    moment(XQData?.KSRQ, 'YYYY-MM-DD'),
+                    moment(XQData?.JSRQ, 'YYYY-MM-DD'),
+                  ],
+                  isTemplate: false,
+                  KCFD: [],
+                  KHKC: [],
+                  FWMC: '',
+                  FWMS: '',
+                };
+                setDetailValue(params);
+                setJFLX(0);
               }
             }}
           >
@@ -190,7 +269,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         }
         submitter={{
           searchConfig: {
-            submitText: '保存',
+            submitText: '确认',
             resetText: '取消',
           },
           render: (_props, defaultDoms) => {
@@ -219,15 +298,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
         }}
         modalProps={{
           destroyOnClose: true,
-          // onCancel: () => console.log('run'),
-          // footer:<>
-
-          //   <>
-          //   <Button >保存并批量报名</Button>
-          //   <Button type='primary'>保存</Button>
-          //   <Button>取消</Button>
-          //   </>
-          // </>
         }}
         onFinish={onFinish}
         layout="horizontal"
@@ -265,7 +335,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
         <ProFormText
           label="服务名称："
           name="FWMC"
-          labelCol={{ span: 3 }}
           wrapperCol={{ span: 6 }}
           rules={[{ required: true, message: '请选择课程班' }]}
         />
@@ -274,8 +343,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
             <ProFormTextArea
               label="简介："
               rules={[{ required: false, message: '请输入班级课程安排' }]}
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 18 }}
               name="FWMS"
               key="FWMS"
               placeholder="请输入班级课程安排"
@@ -287,13 +354,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
             />
           </Col>
           <Col span={12}>
-            <ProForm.Item
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 18 }}
-              name="FWTP"
-              key="FWTP"
-              label="服务图片"
-            >
+            <ProForm.Item name="FWTP" key="FWTP" label="服务图片">
               <UploadImage
                 imageurl={imageUrl}
                 upurl="/api/upload/uploadFile?type=badge&plat=agency"
@@ -309,7 +370,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
 
         <ProForm.Item
           label="课后辅导："
-          rules={[{ required: true, message: '请选择课后辅导班' }]}
+          rules={[{ required: false, message: '请选择课后辅导班' }]}
           name="KCFD"
           key="KCFD"
         >
@@ -330,7 +391,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         </ProForm.Item>
         <ProForm.Item
           label="课后课程："
-          rules={[{ required: true, message: '请选择课程班' }]}
+          rules={[{ required: false, message: '请选择课程班' }]}
           name="KHKC"
           key="KHKC"
         >
@@ -349,31 +410,99 @@ const ConfigureService = (props: ConfigureSeverType) => {
             flag={0}
           />
         </ProForm.Item>
-        <ProForm.Item label="课程数限制">
-          <ProFormDigit
-            noStyle
-            //  label='课程数限制'
-            name="KXSL"
-            key="KXSL"
-            min={1}
-            max={50}
-            width="xs"
-          />
-          <span style={{ color: '#999' }} className="ant-form-text">
-            {' '}
-            限制每个学生最大可选课后课程班数量
-          </span>
-        </ProForm.Item>
-        <ProForm.Item label="服务费用">
-          <ProFormDigit noStyle width="xs" name="FWFY" key="FWFY" min={1} />
-          <span style={{ color: '#999' }} className="ant-form-text">
-            {' '}
-            课后服务按月收费，家长可随时缴纳截至当前月的服务费用
-          </span>
-        </ProForm.Item>
+        <Row justify="start" align="middle">
+          <Col flex="14em">
+            <ProFormDigit
+              wrapperCol={{ flex: '6em' }}
+              label="课程数限制"
+              rules={[{ required: true, message: '请输入课程数限制' }]}
+              name="KXSL"
+              key="KXSL"
+              min={1}
+              max={50}
+            />
+          </Col>
+          <Col flex="auto">
+            <span style={{ color: '#999' }} className="ant-form-text ant-form-item">
+              {' '}
+              限制每个学生最大可选课后课程班数量
+            </span>
+          </Col>
+        </Row>
+        <Row justify="start" align="middle">
+          <Col flex="16em">
+            <ProFormSelect
+              wrapperCol={{ flex: '5em' }}
+              addonBefore="按"
+              label="收费方式"
+              name="JFLX"
+              disabled={!!detailValue?.id}
+              rules={[{ required: true, message: '请选择收费方式' }]}
+              fieldProps={{
+                allowClear: false,
+                options: [
+                  { label: '月', value: 0 },
+                  { label: '时段', value: 1 },
+                ],
+                onChange: (value) => {
+                  setJFLX(value);
+                },
+              }}
+            />
+          </Col>
+          <Col flex="auto">
+            <span style={{ marginLeft: '8px' }}>
+              缴费
+              <span
+                style={{ color: '#999', marginRight: '8px' }}
+                className="ant-form-text ant-form-item"
+              >
+                {' '}
+                课后服务按月收费，家长可随时缴纳截至当前月的服务费用
+              </span>
+            </span>
+          </Col>
+        </Row>
+        {JFLX === 1 && (
+          <ProForm.Item name="timeFrame" wrapperCol={{ offset: 3 }}>
+            <RangePicker
+              disabled={!!detailValue?.id}
+              style={{ width: '250px' }}
+              allowClear={false}
+              format="YYYY-MM-DD"
+              disabledDate={onDisabledTime}
+            />
+          </ProForm.Item>
+        )}
+
+        <Row justify="start" align="middle">
+          <Col flex="14em">
+            <ProFormDigit
+              wrapperCol={{ flex: '6em' }}
+              label="服务费用"
+              rules={[{ required: true, message: '请收入服务费用' }]}
+              name="FWFY"
+              key="FWFY"
+              min={1}
+            />
+          </Col>
+
+          <Col flex="auto">
+            <span style={{ color: '#999' }} className="ant-form-text ant-form-item">
+              {' '}
+              课后服务按月收费，家长可随时缴纳截至当前月的服务费用
+            </span>
+          </Col>
+        </Row>
       </ModalForm>
       {XNXQId && BJSJId && (
-        <SignUpClass ref={signUpClassRef} type={0} XNXQId={XNXQId} BJSJId={BJSJId} />
+        <SignUpClass
+          ref={signUpClassRef}
+          type={0}
+          XNXQId={XNXQId}
+          BJSJId={BJSJId}
+          actionRef={actionRef}
+        />
       )}
     </Spin>
   );
