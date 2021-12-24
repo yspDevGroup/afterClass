@@ -93,7 +93,7 @@ const DealAbnormal = (props: any) => {
     if (res.status === 'ok') {
       getCQData();
       setVisible(false);
-      message.success('补签成功');
+      message.success('补签申请提交成功');
     } else {
       message.warning(res.message)
     }

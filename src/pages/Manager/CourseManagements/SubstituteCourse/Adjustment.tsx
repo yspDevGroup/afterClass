@@ -70,6 +70,7 @@ const Adjustment = (props: { teacherData?: any }) => {
         message.success('审批成功');
         setVisible(false);
         setCurrent(undefined);
+        form.resetFields();
         getData();
         // 处理主班调课后课时状态变更的情况，触发课时重新计算
         if (ZT === 1) {
@@ -333,6 +334,7 @@ const Adjustment = (props: { teacherData?: any }) => {
         onCancel={() => {
           setVisible(false);
           setCurrent(undefined);
+          form.resetFields();
         }}
         okText="确认"
         cancelText="取消"
