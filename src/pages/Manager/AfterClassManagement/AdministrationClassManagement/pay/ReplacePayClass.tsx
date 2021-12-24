@@ -17,11 +17,11 @@ import moment from 'moment';
 
 const { Step } = Steps;
 const ReplacePayClass = (props: {
-  key: string,
+  key: string;
   XSFWBJ: any;
-  XSJBSJId: string,
-  XM: string,
-  XSFWKHBJs: any
+  XSJBSJId: string;
+  XM: string;
+  XSFWKHBJs: any;
 }) => {
   // const { BjDetails, JFTotalost, setModalVisible, modalVisible, DJFXS } = props;
 
@@ -40,7 +40,7 @@ const ReplacePayClass = (props: {
   const { key, XSFWBJ, XSJBSJId, XM, XSFWKHBJs } = props;
   const newDDFY = XSFWBJ.KHFWBJ.FWFY;
   const XSFWBJId = XSFWBJ.id;
-  const [modalVisible, setModalVisible] = useState<boolean>(false)
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const getOrder = async () => {
     // 付费
@@ -80,7 +80,6 @@ const ReplacePayClass = (props: {
     }
   };
 
-
   useEffect(() => {
     if (OrderId) {
       (async () => {
@@ -111,9 +110,6 @@ const ReplacePayClass = (props: {
     }
   };
 
-
-
-
   const onOkChange = async () => {
     // setBJMC('');
     // setXSMC('');
@@ -131,7 +127,6 @@ const ReplacePayClass = (props: {
     setPaymentCG('已过期');
     await overdueKHXSDD({ id: OrderId! });
   };
-
 
   // 付款
   const FKDIV = () => {
@@ -185,7 +180,7 @@ const ReplacePayClass = (props: {
         </div>
       );
     }
-    return ''
+    return '';
   };
   const WCDIV = () => {
     return (
@@ -199,21 +194,23 @@ const ReplacePayClass = (props: {
               </p>
               <p>
                 <span>课程班</span>
-                <span>{XSFWKHBJs?.filter(
-                  (item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0,
-                ).map((item: any) => {
-                  return <span key={item?.KHBJSJ?.id
-                  }> {item?.KHBJSJ?.BJMC}</span>;
-                })}</span>{' '}
+                <span>
+                  {XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0).map(
+                    (item: any) => {
+                      return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
+                    },
+                  )}
+                </span>{' '}
               </p>
               <p>
                 <span>辅导班</span>
-                <span>{XSFWKHBJs?.filter(
-                  (item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1,
-                ).map((item: any) => {
-                  return <span key={item?.KHBJSJ?.id
-                  }> {item?.KHBJSJ?.BJMC}</span>;
-                })}</span>{' '}
+                <span>
+                  {XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1).map(
+                    (item: any) => {
+                      return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
+                    },
+                  )}
+                </span>{' '}
               </p>
               <p>
                 <span>上课地点</span>
@@ -266,7 +263,6 @@ const ReplacePayClass = (props: {
     );
   };
   const getDiv = () => {
-
     if (BmCurrent === 0) {
       //付费
       return <div className={styles.PaymentCode}>{FKDIV()}</div>;
@@ -275,17 +271,22 @@ const ReplacePayClass = (props: {
       // 完成
       return WCDIV();
     }
-    return ''
-
+    return '';
   };
   useEffect(() => {
     if (modalVisible && XSJBSJId && XSFWBJ) {
-      getOrder()
+      getOrder();
     }
-  }, [modalVisible])
+  }, [modalVisible]);
   return (
     <>
-      <a onClick={() => { setModalVisible(true) }}>代缴费</a>
+      <a
+        onClick={() => {
+          setModalVisible(true);
+        }}
+      >
+        代缴费
+      </a>
       <Modal
         key={key}
         title="代缴费"

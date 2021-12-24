@@ -36,9 +36,10 @@ const Detail = (props: any) => {
   const [title, setTitle] = useState<string>();
   const { KHFWBJs } = state;
   const getDetailValue = async () => {
-    setLoading(true);
+   
 
     if (KHFWBJs?.[0]) {
+      setLoading(true);
       const res = await getKHFWBJ({
         BJSJId: KHFWBJs?.[0].BJSJId,
         XNXQId: KHFWBJs?.[0].XNXQId,
@@ -49,14 +50,14 @@ const Detail = (props: any) => {
         if (data) {
           // 时段数据
           data?.KHFWSJPZs?.forEach((item: any, index: number) => {
-            newKHFWSJPZIdData.push(
-              {
-                label: `${item.KSRQ} ~ ${item.JSRQ}`,
-                value: item.id,
-                data:`${moment(item.KSRQ,'YYYY-MM-DD').format('YYYY年MM月DD日')} 至 ${moment(item.JSRQ,'YYYY-MM-DD').format('YYYY年MM月DD日')}` 
-                
-
-              });
+            newKHFWSJPZIdData.push({
+              label: `${item.KSRQ} ~ ${item.JSRQ}`,
+              value: item.id,
+              data: `${moment(item.KSRQ, 'YYYY-MM-DD').format('YYYY年MM月DD日')} 至 ${moment(
+                item.JSRQ,
+                'YYYY-MM-DD',
+              ).format('YYYY年MM月DD日')}`,
+            });
             if (index === 0) {
               setKHFWSJPZId(item.id);
             }
@@ -68,6 +69,7 @@ const Detail = (props: any) => {
       }
       setLoading(false);
     }
+    
   };
 
   const columns: ProColumns<any>[] = [
@@ -108,8 +110,7 @@ const Detail = (props: any) => {
           // }if(text?.[0]?.ZT===1){
           //   return '退课中'
           // }
-          return '已报名'
-          
+          return '已报名';
         } else {
           return '未报名';
         }
@@ -160,36 +161,36 @@ const Detail = (props: any) => {
     },
   ];
 
-   // 退课
-   const onTKData=(list: any[])=>{
-    if(list?.length){
+  // 退课
+  const onTKData = (list: any[]) => {
+    if (list?.length) {
       Modal.confirm({
         icon: <ExclamationCircleOutlined />,
-        title:'退课',
-        content:'退课提示',
-        onOk:  async()=>{
-          const newlist=list.map((item: any)=>{
-            return{
-              LX:2,
-              XSJBSJId:item?.XSJBSJId,
+        title: '退课',
+        content: '退课提示',
+        onOk: async () => {
+          const newlist = list.map((item: any) => {
+            return {
+              LX: 2,
+              XSJBSJId: item?.XSJBSJId,
               ZT: 0,
               XSFWBJId: item?.XSFWBJId,
-            }
-          })
-          console.log('退了课列表',newlist);
-          const res=await createKHTKSJ(newlist);
-          if(res.status==='ok'){
+            };
+          });
+          console.log('退了课列表', newlist);
+          const res = await createKHTKSJ(newlist);
+          if (res.status === 'ok') {
             message.error('退课成功');
             actionRef?.current?.reload();
-          }else{
+          } else {
             message.error(res.message);
           }
-        }
-      })
-    }else{
+        },
+      });
+    } else {
       message.error('请先选择学生');
     }
-  }
+  };
 
   // 代报名
   const getDBM = (record: any) => {
@@ -210,29 +211,49 @@ const Detail = (props: any) => {
   // 退课
   const getTK = (record: any) => {
     if (record?.XSFWBJs?.length) {
-      return <a onClick={()=>{
-        if(record?.id){
-          onTKData([{XSJBSJId:record?.id,XSFWBJId: record?.XSFWBJs?.[0]?.id}]);
-        }
-      }}>退课</a>;
+      return (
+        <a
+          onClick={() => {
+            if (record?.id) {
+              onTKData([{ XSJBSJId: record?.id, XSFWBJId: record?.XSFWBJs?.[0]?.id }]);
+            }
+          }}
+        >
+          退课
+        </a>
+      );
     }
     return '';
   };
   // 催缴费
   const getCJF = (record: any) => {
     if (record?.XSFWBJs?.[0]?.ZT === 3) {
-      return <a onClick={() => {
-        setXSList([record?.id])
-        setVisible(true);
-        setFlag(true);
-      }}>催缴费</a>;
+      return (
+        <a
+          onClick={() => {
+            setXSList([record?.id]);
+            setVisible(true);
+            setFlag(true);
+          }}
+        >
+          催缴费
+        </a>
+      );
     }
     return '';
   };
   // 代缴费
   const getDJF = (record: any) => {
     if (record?.XSFWBJs?.[0]?.ZT === 3) {
-      return <ReplacePayClass XSFWKHBJs={record?.XSFWKHBJs} XM={record.XM} key={record.id} XSFWBJ={record?.XSFWBJs?.[0]} XSJBSJId={record.id} />;
+      return (
+        <ReplacePayClass
+          XSFWKHBJs={record?.XSFWKHBJs}
+          XM={record.XM}
+          key={record.id}
+          XSFWBJ={record?.XSFWBJs?.[0]}
+          XSJBSJId={record.id}
+        />
+      );
     }
     return '';
   };
@@ -242,11 +263,17 @@ const Detail = (props: any) => {
       if (
         !record?.XSFWBJs?.[0]?.XSFWKHBJs?.some((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)
       ) {
-        return <a onClick={() => {
-          setXSList([record?.id])
-          setVisible(true);
-          setFlag(false);
-        }}>选课提醒</a>;
+        return (
+          <a
+            onClick={() => {
+              setXSList([record?.id]);
+              setVisible(true);
+              setFlag(false);
+            }}
+          >
+            选课提醒
+          </a>
+        );
       }
       return '';
     }
@@ -319,7 +346,7 @@ const Detail = (props: any) => {
         message.error(`${flag ? '催缴' : '通知'}出现错误，请联系管理员或稍后重试。`);
       }
     } else {
-      message.error('请选择学生')
+      message.error('请选择学生');
     }
   };
   useEffect(() => {
@@ -356,8 +383,6 @@ const Detail = (props: any) => {
     }
   }, [XSId]);
 
- 
-
   return (
     <div className={styles.AdministrativeClass}>
       <PageContain>
@@ -383,22 +408,27 @@ const Detail = (props: any) => {
               if (KHFWBJs?.[0]) {
                 return (
                   <Space>
-                    <Button type="primary" onClick={()=>{
-                      // 筛选未交费学生 ZT===3的学生
-                      const list = selectedRows.filter((item: any) => {
-                        // 判断学生是否报名
-                        return item?.XSFWBJs?.length
-                         
-                      }).map((item: any)=>{
-                        return{XSJBSJId:item.id,XSFWBJId: item?.XSFWBJs?.[0]?.id}
-                      });
-                      if (list?.length) {
-                        onTKData(list)
-                      } else {
-                        message.error('没有要退课的学生');
-                      }
-                     
-                    }}>批量退课</Button>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        // 筛选未交费学生 ZT===3的学生
+                        const list = selectedRows
+                          .filter((item: any) => {
+                            // 判断学生是否报名
+                            return item?.XSFWBJs?.length;
+                          })
+                          .map((item: any) => {
+                            return { XSJBSJId: item.id, XSFWBJId: item?.XSFWBJs?.[0]?.id };
+                          });
+                        if (list?.length) {
+                          onTKData(list);
+                        } else {
+                          message.error('没有要退课的学生');
+                        }
+                      }}
+                    >
+                      批量退课
+                    </Button>
                     <Button
                       type="primary"
                       onClick={() => {
@@ -504,24 +534,25 @@ const Detail = (props: any) => {
             }}
             search={false}
             headerTitle={
-              <SearchLayout>{
-                KHFWBJs?.[0] &&
-                <div>
-                  <label htmlFor="course">报名时段：</label>
-                  <Select
-                    style={{ width: 200 }}
-                    value={KHFWSJPZId}
-                    placeholder="请选择"
-                    onChange={(value: string) => {
-                      setKHFWSJPZId(value);
-                    }}
-                    showSearch
-                  >
-                    {KHFWSJPZIdData?.map((item: any) => {
-                      return <Option value={item.value}>{item.label}</Option>;
-                    })}
-                  </Select>
-                </div>}
+              <SearchLayout>
+                {KHFWBJs?.[0] && (
+                  <div>
+                    <label htmlFor="course">报名时段：</label>
+                    <Select
+                      style={{ width: 200 }}
+                      value={KHFWSJPZId}
+                      placeholder="请选择"
+                      onChange={(value: string) => {
+                        setKHFWSJPZId(value);
+                      }}
+                      showSearch
+                    >
+                      {KHFWSJPZIdData?.map((item: any) => {
+                        return <Option value={item.value}>{item.label}</Option>;
+                      })}
+                    </Select>
+                  </div>
+                )}
                 {/* <div>
                   <label htmlFor="service">服务名称：</label>
                   <Select
@@ -601,7 +632,6 @@ const Detail = (props: any) => {
         type={2}
         BJSJId={KHFWBJs?.[0]?.BJSJId}
         XNXQId={KHFWBJs?.[0]?.XNXQId}
-
       />
     </div>
   );
