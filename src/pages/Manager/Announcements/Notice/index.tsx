@@ -3,15 +3,15 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-09 17:41:43
- * @LastEditTime: 2021-11-18 17:31:24
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-23 14:54:13
+ * @LastEditors: zpl
  */
 import { useState, useRef, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Switch, message, Modal, Form, Select, Input, Popconfirm } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { history, useModel } from 'umi';
+import { Access, history, useAccess, useModel } from 'umi';
 import Options from '../components/Option';
 import type { TableListItem } from '../data';
 import styles from '../index.module.less';
@@ -26,6 +26,7 @@ const { TextArea, Search } = Input;
 const { Option } = Select;
 const Notice = () => {
   const { initialState } = useModel('@@initialState');
+  const { canAdmin } = useAccess();
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   const [form] = Form.useForm();
@@ -34,11 +35,12 @@ const Notice = () => {
   const [status, setStatus] = useState<string>();
   const [visible, setVisible] = useState<boolean>(false);
   const getData = async () => {
+    const ZT = canAdmin ? (status ? [status] : ['已发布', '草稿']) : ['已发布'];
     const resgetXXTZGG = await getXXTZGG({
       XXJBSJId: currentUser?.xxId,
       BT: title,
       LX: ['0', '1'],
-      ZT: status ? [status] : ['已发布', '草稿'],
+      ZT,
       page: 0,
       pageSize: 0,
     });
@@ -131,6 +133,7 @@ const Notice = () => {
         草稿: { text: '草稿', status: 'Default' },
         已发布: { text: '已发布', status: 'Success' },
       },
+      hideInTable: !canAdmin,
     },
     {
       title: '头条',
@@ -146,6 +149,7 @@ const Notice = () => {
             key="SFTT"
             defaultChecked={!!text}
             size="small"
+            disabled={!canAdmin}
             onChange={async (checked: boolean) => {
               const data = {
                 RQ: moment(record.RQ).format(),
@@ -183,6 +187,7 @@ const Notice = () => {
             refreshHandler={() => {
               getData();
             }}
+            canAdmin={canAdmin}
           />
         </div>
       ),
@@ -212,15 +217,17 @@ const Notice = () => {
           >
             发送实时消息
           </Button>,
-          <Button
-            key="xinjian"
-            type="primary"
-            onClick={() => {
-              history.push('/announcements/notice/editArticle');
-            }}
-          >
-            <PlusOutlined /> 新建
-          </Button>,
+          <Access accessible={!!canAdmin} fallback={<></>}>
+            <Button
+              key="xinjian"
+              type="primary"
+              onClick={() => {
+                history.push('/announcements/notice/editArticle');
+              }}
+            >
+              <PlusOutlined /> 新建
+            </Button>
+          </Access>,
         ]}
         dataSource={dataSource}
         columns={columns}
@@ -243,22 +250,24 @@ const Notice = () => {
               />
             </div>
             <div>
-              <label htmlFor="status">发布状态：</label>
-              <Select
-                style={{ width: 160 }}
-                allowClear
-                value={status}
-                onChange={(value: string) => {
-                  setStatus(value);
-                }}
-              >
-                <Option key="草稿" value="草稿">
-                  草稿
-                </Option>
-                <Option key="已发布" value="已发布">
-                  已发布
-                </Option>
-              </Select>
+              <Access accessible={!!canAdmin}>
+                <label htmlFor="status">发布状态：</label>
+                <Select
+                  style={{ width: 160 }}
+                  allowClear
+                  value={status}
+                  onChange={(value: string) => {
+                    setStatus(value);
+                  }}
+                >
+                  <Option key="草稿" value="草稿">
+                    草稿
+                  </Option>
+                  <Option key="已发布" value="已发布">
+                    已发布
+                  </Option>
+                </Select>
+              </Access>
             </div>
           </SearchLayout>
         }

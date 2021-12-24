@@ -74,6 +74,7 @@ const SubstituteFor = (props: { teacherData?: any }) => {
         message.success('审批成功');
         setVisible(false);
         setCurrent(undefined);
+        form.resetFields();
         getData();
       }
     } catch (err) {
@@ -337,6 +338,7 @@ const SubstituteFor = (props: { teacherData?: any }) => {
         }}
         onCancel={() => {
           setVisible(false);
+          form.resetFields();
           setCurrent(undefined);
         }}
         okText="确认"

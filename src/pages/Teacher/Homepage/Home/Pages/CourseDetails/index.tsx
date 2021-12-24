@@ -88,6 +88,7 @@ const CourseDetails: React.FC = () => {
                   days,
                   currentUser?.xxId,
                 );
+
                 setTimetableList(newTime);
               }
             }
@@ -126,7 +127,7 @@ const CourseDetails: React.FC = () => {
       } else {
         content = {
           title: '调课说明',
-          content: `由于${BZ},本节课临时调整到${TKRQ}日${TKJC?.KSSJ?.substring(0,5)}-${TKJC?.JSSJ?.substring(0,5)}上课,请知悉.`,
+          content: `由于${BZ},本节课临时调整到${TKRQ}日${TKJC?.KSSJ?.substring(0, 5)}-${TKJC?.JSSJ?.substring(0, 5)}上课,请知悉.`,
         };
       }
       Modal.info({
@@ -137,9 +138,8 @@ const CourseDetails: React.FC = () => {
       if (val.tag === '假') {
         content = {
           title: '请假说明',
-          content: ` ${
-            val.reason ? `由于${val.reason},` : ''
-          }本节课程安排取消，之后课程顺延,请知悉.`,
+          content: ` ${val.reason ? `由于${val.reason},` : ''
+            }本节课程安排取消，之后课程顺延,请知悉.`,
         };
       } else {
         content = {
@@ -243,6 +243,7 @@ const CourseDetails: React.FC = () => {
                   };
                   break;
                 case '调课':
+                case '已调课':
                   style = {
                     background: 'rgba(172, 144, 251, 0.2)',
                     color: '#666',

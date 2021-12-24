@@ -67,7 +67,7 @@ const Resign: React.FC = () => {
               <div>
                 <span className={styles.light}>统计于：2021-12-16</span>
                 {item.month < month-1 ? <Button type='dashed' disabled>已逾期</Button> : <Button
-                 type='primary'
+                className={styles.dealBtn}
                  onClick={()=>{
                    history.push('/teacher/education/dealAbnormal',{data: item})
                  }}
