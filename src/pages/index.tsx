@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-12-24 11:46:08
+ * @LastEditTime: 2021-12-24 16:53:14
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -80,7 +80,7 @@ const Index = () => {
       }
     } else {
       switch (initialState?.currentUser?.type) {
-        case '管理员': {
+        case '系统管理员': {
           if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
             history.replace('/information/home');
           } else {
