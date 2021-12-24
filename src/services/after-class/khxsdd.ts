@@ -251,22 +251,22 @@ export async function overdueKHXSDD(
 /** 移动端查询学生订单信息 POST /khxsdd/getStudentOrders */
 export async function getStudentOrders(
   body: {
+    DDZT?: string[];
+    /** 订单类型 */
+    DDLX?: number[];
     /** 学生ID */
     XSJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.KHXSDD[]; message?: string }>(
-    '/khxsdd/getStudentOrders',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: body,
-      ...(options || {}),
+  return request<any>('/khxsdd/getStudentOrders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    data: body,
+    ...(options || {}),
+  });
 }
 
 /** 导出课后服务订单记录 POST /khxsdd/exportStudentOrders */

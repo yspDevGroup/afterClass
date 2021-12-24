@@ -1859,6 +1859,8 @@ declare namespace API {
     /** 学年学期id */
     XNXQId: string;
     XNXQ?: { id?: string; XN?: string; XQ?: string };
+    NJSJs?: { id?: string; NJ?: number; NJMC?: string; XD?: string }[];
+    KHBJSJs?: { id?: string; BJMC?: string; KCTP?: string }[];
   };
 
   type CreateKHFWSJ = {

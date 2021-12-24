@@ -101,7 +101,7 @@ export async function studentRegistration(
   body: {
     KHFWBJId: string;
     ZT: number;
-    KHFWSJPZId: string;
+    KHFWSJPZIds: string[];
     XSJBSJIds: string[];
     KHBJSJIds?: string[];
   },
@@ -134,6 +134,28 @@ export async function getStudentListByBjid(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khfwbj/getStudentListByBjid', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 对未选课的学生选课 POST /khfwbj/chooseKCByXSId */
+export async function chooseKCByXSId(
+  body: {
+    XSJBSJId: string;
+    KHFWBJId?: string;
+    KHFWSJPZId?: string;
+    /** 学生报名服务班对应的课程班状态，0:正常;1:退课中;2:已退课;3:报名未缴费 */
+    ZT?: number;
+    KHBJSJIds?: string[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khfwbj/chooseKCByXSId', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
