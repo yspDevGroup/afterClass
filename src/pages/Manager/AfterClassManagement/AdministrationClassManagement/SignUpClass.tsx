@@ -30,7 +30,7 @@ type SignUpClassProps = {
 export type SelectType = {
   label: string;
   value: string;
-  data?:string;
+  data?: string;
 };
 //  服务班课程批量学生报名
 const SignUpClass = (props: SignUpClassProps, ref: any) => {
@@ -184,7 +184,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         }else{
           message.success('报名成功');
         }
-        actionRef.current?.reload();
+        actionRef.current?.reloadAndRest();
       } else {
         message.error(res.message);
       }

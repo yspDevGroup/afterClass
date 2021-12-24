@@ -81,17 +81,17 @@ const AdministrationClassManagement = () => {
       getNJSJ();
       setBJId(undefined);
       setNjId(undefined);
-      actionRef.current?.reload();
+      actionRef.current?.reloadAndRest();
     }
   }, [campusId]);
 
   const onBjChange = async (value: any) => {
     setBJId(value);
-    actionRef.current?.reload();
+    actionRef.current?.reloadAndRest();
   };
   const onNjChange = async (value: any) => {
     setNjId(value);
-    actionRef.current?.reload();
+    actionRef.current?.reloadAndRest();
   };
 
   const getBJSJ = async () => {
@@ -116,7 +116,7 @@ const AdministrationClassManagement = () => {
     const res = await updateKHFWBJ({ id }, { ZT: flag ? 1 : 0 });
     if (res.status === 'ok') {
       message.success(flag ? '发布成功' : '取消成功');
-      actionRef.current?.reload();
+      actionRef.current?.reloadAndRest();
     } else {
       message.error(res.message);
     }

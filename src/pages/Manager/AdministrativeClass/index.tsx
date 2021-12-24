@@ -73,17 +73,17 @@ const AdministrativeClass = () => {
       getNJSJ();
       setBJId(undefined);
       setNjId(undefined);
-      actionRef.current?.reload();
+      actionRef.current?.reloadAndRest();
     }
   }, [campusId]);
 
   const onBjChange = async (value: any) => {
     setBJId(value);
-    actionRef.current?.reload();
+    actionRef.current?.reloadAndRest();
   };
   const onNjChange = async (value: any) => {
     setNjId(value);
-    actionRef.current?.reload();
+    actionRef.current?.reloadAndRest();
   };
 
   const getBJSJ = async () => {
@@ -180,7 +180,7 @@ const AdministrativeClass = () => {
 
   const onCampusChange = (value: any) => {
     setCampusId(value);
-    actionRef.current?.reload();
+    // actionRef.current?.reload();
   };
   return (
     <div className={styles.AdministrativeClass}>

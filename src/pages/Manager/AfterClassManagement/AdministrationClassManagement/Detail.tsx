@@ -352,7 +352,7 @@ const Detail = (props: any) => {
 
   useEffect(() => {
     if (KHFWSJPZId) {
-      actionRef?.current?.reload();
+      actionRef?.current?.reloadAndRest();
     }
   }, [KHFWSJPZId]);
 
