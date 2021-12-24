@@ -180,7 +180,7 @@ const Detail = (props: any) => {
           console.log('退了课列表', newlist);
           const res = await createKHTKSJ(newlist);
           if (res.status === 'ok') {
-            message.error('退课成功');
+            message.success('退课成功');
             actionRef?.current?.reload();
           } else {
             message.error(res.message);
