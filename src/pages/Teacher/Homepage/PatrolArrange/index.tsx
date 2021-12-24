@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 09:20:56
- * @LastEditTime: 2021-12-13 10:06:53
+ * @LastEditTime: 2021-12-16 14:41:47
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -13,11 +13,11 @@ import dayjs from 'dayjs';
 // 默认语言为 en-US，如果你需要设置其他语言，推荐在入口文件全局设置 locale
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-import { Calendar } from 'react-h5-calendar';
 
 import styles from './index.less';
 import GoBack from '@/components/GoBack';
 import Nodata from '@/components/Nodata';
+import MobileCalendar from '@/components/MobileCalendar/calendar';
 import noData from '@/assets/noCourses1.png';
 import { getScheduleByDate, getXKrecordBydate } from '@/services/after-class/khxksj';
 import { getWeekday } from '@/services/local-services/mobileHome';
@@ -70,8 +70,9 @@ const PatrolArrange = () => {
     <>
       <GoBack title={'巡课安排'} onclick='/teacher/home?index=index' teacher />
       <div className={styles.patrolWrapper}>
-        <Calendar
+        <MobileCalendar
           showType={'week'}
+          disableMonthView={true}
           markDates={dates}
           markType="dot"
           onDateClick={(date: { format: (arg: string) => any }) => setDay(date.format('YYYY/MM/DD'))}

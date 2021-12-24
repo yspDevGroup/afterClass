@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:14:11
- * @LastEditTime: 2021-12-14 17:10:53
+ * @LastEditTime: 2021-12-20 15:49:26
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -162,11 +162,12 @@ const TkApply = () => {
       DKJSId: TKXX?.teacherId,
       SKJSId: currentUser.JSId || testTeacherId,
       SKFJId: dateData?.FJId,
-      TKFJId: '',
+      TKFJId: TKXX?.FJSJ?.id,
       KHBJSJId: dateData?.bjid,
       SKJCId: dateData?.jcId,
-      TKJCId: TKXX?.XXSJPZId
-    }
+      TKJCId: TKXX?.XXSJPZId,
+      DESKHBJSJId: BJId
+    };
     const res = await createKHJSTDK(newData);
     if (res.status === 'ok') {
       message.success('申请成功');
@@ -175,39 +176,11 @@ const TkApply = () => {
       // 处理主班调课后课时状态变更的情况，触发课时重新计算
       if (res.message === "isAudit=false") {
         await getClassDays(dateData?.bjid, currentUser.JSId || testTeacherId, currentUser?.xxId);
+        await getClassDays(BJId, TKXX?.teacherId, currentUser?.xxId, 'exchange');
       }
       history.push('/teacher/education/courseAdjustment');
     } else {
       message.error(res.message);
-    }
-    if (TKXX?.teacherId) {
-      const newDataAfter = {
-        LX: 3,
-        ZT: 0,
-        SKRQ: moment(values.TKRQ).format('YYYY-MM-DD'),
-        TKRQ: dateData?.day,
-        BZ: values.BZ,
-        XXJBSJId: currentUser.xxId,
-        SKJSId: TKXX?.teacherId,
-        SKFJId: '',
-        TKFJId: dateData?.FJId,
-        KHBJSJId: BJId,
-        SKJCId: TKXX?.XXSJPZId,
-        TKJCId: dateData?.jcId,
-      }
-      const res1 = await createKHJSTDK(newDataAfter);
-      if (res1.status === 'ok') {
-        // message.success('申请成功');
-        setDateData([]);
-        form.resetFields();
-        // 处理主班调课后课时状态变更的情况，触发课时重新计算
-        if (res.message === "isAudit=false") {
-          await getClassDays(dateData?.bjid, currentUser.JSId || testTeacherId, currentUser?.xxId);
-        }
-        history.push('/teacher/education/courseAdjustment');
-      } else {
-        message.error(res1.message);
-      }
     }
   };
   const onGenderChange = (value: any, key: any) => {
@@ -361,14 +334,18 @@ const TkApply = () => {
                 </Form.Item>
               </div>
               <div className={styles.kcbjTk}>
-                <Form.Item name='BJId' label="课程">
+                <Form.Item
+                  name='BJId'
+                  label="课程"
+                  rules={[{ required: true, message: '请选择调课课程!' }]}
+                >
                   <Select
                     placeholder="请选择调课课程"
                     allowClear
                     onChange={async (e: string) => {
                       if (e) {
                         const res = await getKCBSKSJ({
-                          KHBJSJId: e.toString(),
+                          KHBJSJId: [e.toString()],
                           startDate: moment(NewRQ).format('YYYY-MM-DD')
                         });
                         if (res.status === 'ok' && res.data) {
@@ -400,15 +377,15 @@ const TkApply = () => {
               {timeList?.length ? <Form.Item
                 label="调课后课程安排"
                 name="TKXX"
-                rules={[{ required: true, message: '请选择调课节次!' }]}
+                rules={[{ required: true, message: '请选择调课后课程安排!' }]}
               >
                 <Radio.Group style={{ width: `100%` }} >
                   {timeList?.map((item) => {
-                    const { XXSJPZ } = item;
+                    const { XXSJPZ, FJSJ } = item;
                     return <div className={styles.kcapTk}>
                       <Radio value={item} >
                         <p>上课时间：{XXSJPZ?.TITLE}（{XXSJPZ?.KSSJ?.substring(0, 5)}-{XXSJPZ?.JSSJ?.substring(0, 5)}）</p>
-                        <p>上课地点：1号教学楼301教室</p>
+                        <p>上课地点：{FJSJ.FJMC}</p>
                       </Radio>
                     </div>
                   })}

@@ -292,3 +292,21 @@ export async function getPortrait(
     ...(options || {}),
   });
 }
+
+/** 获取学生待办事项 POST /xsjbsj/studentTodo */
+export async function studentTodo(
+  body: {
+    XSJBSJId?: string;
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/xsjbsj/studentTodo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

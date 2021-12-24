@@ -69,7 +69,7 @@ const CourseTable: React.FC = () => {
         if (classInfo) {
           setKcDetail(classInfo.detail[0]);
         }
-        if (res.status === 'ok' && res.data) {
+        if (res.status === 'ok' && res.data) {    
           const dataTable =
             classInfo?.days &&
             classInfo?.days.map((ele: any) => {
@@ -126,7 +126,7 @@ const CourseTable: React.FC = () => {
                   color: '#666',
                 };
               }
-              if (status === '调课') {
+              if (status === '调课'||status === '已调课') {
                 style = {
                   background: 'rgba(172, 144, 251, 0.2)',
                   color: '#666',

@@ -23,6 +23,8 @@ export async function getKHFWSJ(
       XQSJ?: { id?: string; XQMC?: string; XQH?: string; XQDZ?: string };
       XNXQId?: string;
       XNXQ?: { id?: string; XN?: string; XQ?: string };
+      NJSJs?: { id?: string; NJ?: number; NJMC?: string; XD?: string }[];
+      KHBJSJs?: { id?: string; BJMC?: string; KCTP?: string }[];
     };
     message?: string;
   }>(`/khfwsj/${param0}`, {
@@ -81,6 +83,8 @@ export async function createKHFWSJ(body: API.CreateKHFWSJ, options?: { [key: str
       XQSJ?: { id?: string; XQMC?: string; XQH?: string; XQDZ?: string };
       XNXQId?: string;
       XNXQ?: { id?: string; XN?: string; XQ?: string };
+      NJSJs?: { id?: string; NJ?: number; NJMC?: string; XD?: string }[];
+      KHBJSJs?: { id?: string; BJMC?: string; KCTP?: string }[];
     };
     message?: string;
   }>('/khfwsj/create', {

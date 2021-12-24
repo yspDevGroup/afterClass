@@ -65,6 +65,7 @@ import * as wechat from './wechat';
 import * as xksj from './xksj';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
+import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
 import * as xscfsj from './xscfsj';
 import * as xsjbsj from './xsjbsj';
@@ -73,14 +74,13 @@ import * as xsjtcy from './xsjtcy';
 import * as xsjzxx from './xsjzxx';
 import * as xsxxjl from './xsxxjl';
 import * as xxgg from './xxgg';
-import * as xnxq from './xnxq';
 import * as xxjbpz from './xxjbpz';
-import * as xxpz from './xxpz';
 import * as xxjbsj from './xxjbsj';
+import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
 import * as xxsppz from './xxsppz';
-import * as zxfa from './zxfa';
 import * as xxtzgg from './xxtzgg';
+import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
   other,
@@ -146,6 +146,7 @@ export default {
   xksj,
   xl,
   xnjgsj,
+  xnxq,
   xqsj,
   xscfsj,
   xsjbsj,
@@ -154,13 +155,12 @@ export default {
   xsjzxx,
   xsxxjl,
   xxgg,
-  xnxq,
   xxjbpz,
-  xxpz,
   xxjbsj,
+  xxpz,
   xxsjpz,
   xxsppz,
-  zxfa,
   xxtzgg,
+  zxfa,
   zxsj,
 };

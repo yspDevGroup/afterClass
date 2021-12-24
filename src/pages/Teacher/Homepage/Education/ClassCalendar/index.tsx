@@ -10,12 +10,13 @@ import MobileCalendar from '@/components/MobileCalendar/calendar';
 import ListComponent from '@/components/ListComponent';
 import { compareNow } from '@/utils/Timefunction';
 import { msgLeaveSchool } from '@/services/after-class/wechat';
-import { convertCourse, CurdayCourse, ParentHomeData } from '@/services/local-services/mobileHome';
+import { convertCourse, CurdayCourse, getWeekCalendar, ParentHomeData } from '@/services/local-services/mobileHome';
 
 import styles from './index.less';
 import noData from '@/assets/noCourses1.png';
 import noOrder from '@/assets/noOrder1.png';
 import { getQueryString } from '@/utils/utils';
+import moment from 'moment';
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -135,12 +136,21 @@ const ClassCalendar = (props: propstype) => {
         noDataImg: noData,
       });
     }
-  }
+  };
+  const getMarkDays = async (start?: string) => {
+    const oriData = await ParentHomeData('teacher', currentUser?.xxId, userId);
+    const { markDays } = oriData;
+    if (!type) {
+      const weekDys = await getWeekCalendar('teacher', userId, start || day);
+      setDates(markDays.concat(weekDys));
+    } else {
+      setDates(markDays);
+    }
+  };
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData('teacher', currentUser?.xxId, userId);
-      const { markDays } = oriData;
       const { courseList } = await CurdayCourse('teacher', currentUser?.xxId, userId, day);
+      getMarkDays();
       if (type) {
         setEditCourses(convertCourse(day, courseList, 'filter'));
       } else {
@@ -152,7 +162,6 @@ const ClassCalendar = (props: propstype) => {
           noDataImg: noData,
         });
       }
-      setDates(markDays);
     })()
   }, []);
   useEffect(() => {
@@ -235,7 +244,7 @@ const ClassCalendar = (props: propstype) => {
   };
   // 调代课单选事件
   const onChanges = (e: any) => {
-    const { desc, bjid, title, jcId, FJId,classType } = e.target.value;
+    const { desc, bjid, title, jcId, FJId, classType } = e.target.value;
     setDatedata?.({
       day,
       classType,
@@ -263,6 +272,7 @@ const ClassCalendar = (props: propstype) => {
       </span>
       <MobileCalendar
         showType={'week'}
+        disableMonthView={true}
         markDates={dates}
         onDateClick={(date: { format: (arg: string) => any }) => {
           if (type && type === 'edit' || type === 'dksq' || type === 'tksq') {
@@ -280,6 +290,10 @@ const ClassCalendar = (props: propstype) => {
         markType="dot"
         transitionDuration={0.1}
         currentDate={day}
+        onTouchEnd={(a: number) => {
+          const start = moment(new Date(a)).format('YYYY-MM-DD');
+          getMarkDays(start);
+        }}
       />
       {/* 根据特殊情况显示列表上方操作信息 */}
       {type && type === 'edit' ? (

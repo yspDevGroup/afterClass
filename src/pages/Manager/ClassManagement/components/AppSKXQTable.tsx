@@ -26,7 +26,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       if (res.status === 'ok') {
         const CQData = res?.data || [];
         const result = await getKCBSKSJ({
-          KHBJSJId: SKXQData?.id,
+          KHBJSJId: [SKXQData?.id],
         });
         if (result.status === 'ok') {
           const AllSKData = result.data!.rows!;

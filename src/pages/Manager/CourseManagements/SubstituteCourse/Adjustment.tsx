@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Form, Modal, Radio, Select, Input, message, Divider, Row, Col } from 'antd';
+import { Form, Modal, Radio, Select, Input, message, Divider } from 'antd';
 import styles from './index.less';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -84,6 +84,9 @@ const Adjustment = (props: { teacherData?: any }) => {
               await getClassDays(ele.KHBJSJId, current.SKJS.id, currentUser?.xxId);
             });
           }
+        }
+        if (current.LX === 2 && current.desKHBJSJ?.id) {
+          await getClassDays(current.desKHBJSJ.id, current.DKJS?.id, currentUser?.xxId, 'exchange');
         }
       }
     } catch (err) {
@@ -364,7 +367,7 @@ const Adjustment = (props: { teacherData?: any }) => {
       >
         {Datas ? (
           <div className={styles.TkDetails}>
-            {(Datas.ZT !== 4 && Datas.ZT !== 1) ? <>
+            {Datas.LX === 0 ? <>
               <p>
                 申请教师：
                 <ShowName type="userName" openid={Datas?.SKJS?.WechatUserId} XM={Datas?.SKJS?.XM} /></p>
@@ -379,8 +382,8 @@ const Adjustment = (props: { teacherData?: any }) => {
             <div className={styles.TkAfter}>
               <div>
                 <p className={styles.title}>{Datas?.LX === 2 ? '申请信息' : '调课前'}</p>
-                {Datas?.LX === 2 && (Datas.ZT === 4 || Datas.ZT === 1) ? <><p>
-                  {Datas?.LX === 2 ? '授课' : '申请'}教师：
+                {Datas?.LX === 2 ? <><p>
+                  授课教师：
                   <ShowName type="userName" openid={Datas?.SKJS?.WechatUserId} XM={Datas?.SKJS?.XM} />
                 </p>
                   <p>
@@ -398,7 +401,7 @@ const Adjustment = (props: { teacherData?: any }) => {
                 <p>
                   上课地点：{Datas?.SKFJ?.FJMC}
                 </p>
-                {Datas?.LX === 2 && (Datas.ZT === 4 || Datas.ZT === 1) ? <><p>
+                {Datas?.LX === 2 ? <><p>
                   申请时间：{Datas?.createdAt}
                 </p>
                   <p>
@@ -407,7 +410,7 @@ const Adjustment = (props: { teacherData?: any }) => {
               </div>
               <div>
                 <p className={styles.title}>{Datas?.LX === 2 ? '对调信息' : '调课后'}</p>
-                {Datas?.LX === 2 && (Datas.ZT === 4 || Datas.ZT === 1) ? <><p>
+                {Datas?.LX === 2 ? <><p>
                   授课教师：
                   <ShowName type="userName" openid={Datas?.DKJS?.WechatUserId} XM={Datas?.DKJS?.XM} />
                 </p>
@@ -426,7 +429,7 @@ const Adjustment = (props: { teacherData?: any }) => {
                 <p>
                   上课地点：{Datas?.TKFJ?.FJMC}
                 </p>
-                {Datas?.LX === 2 && (Datas.ZT === 4 || Datas.ZT === 1) ? <><p>
+                {Datas?.LX === 2 ? <><p>
                   处理时间：{Datas?.DKSPSJ}
                 </p>
                   <p>
