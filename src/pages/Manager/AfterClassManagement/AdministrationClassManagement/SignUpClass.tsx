@@ -11,6 +11,7 @@ import { Button, message, Spin } from 'antd';
 
 import { getClassStudents } from '@/services/after-class/bjsj';
 import { getKHFWBJ, studentRegistration } from '@/services/after-class/khfwbj';
+import moment from 'moment';
 
 type SignUpClassProps = {
   BJSJId: string;
@@ -20,7 +21,7 @@ type SignUpClassProps = {
   // 课后课程
   SelectKHKC?: any[];
   type: number; // 0 保存并批量报名 1 批量报名 2, 代报名 代选课
-  KHFWSJPZId?: string;
+  // KHFWSJPZId?: string;
   actionRef: any;
   XSJBSJId?: string;
   title?: string;
@@ -29,6 +30,7 @@ type SignUpClassProps = {
 export type SelectType = {
   label: string;
   value: string;
+  data?:string;
 };
 //  服务班课程批量学生报名
 const SignUpClass = (props: SignUpClassProps, ref: any) => {
@@ -49,7 +51,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
   }));
 
   const formRef = useRef();
-  const { type, XNXQId, BJSJId, KHFWSJPZId, actionRef, XSJBSJId, title, setXSId } = props;
+  const { type, XNXQId, BJSJId, actionRef, XSJBSJId, title, setXSId } = props;
 
   const formLayout = {
     labelCol: { span: 3 },
@@ -72,7 +74,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         console.log('res', res);
         const { rows } = res.data;
         const students: SelectType[] = rows.map((item: any) => {
-          return { label: `${item.XM}${getXH(item.XH)}`, value: item?.id };
+          return { label: `${item.XM}${getXH(item.XH)}`, value: item?.id,  };
         });
         setStudentsData(students);
       }
@@ -106,20 +108,28 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         if (KHKC.length) {
           setKHKCData(KHKC);
         }
+        // 时段数据
+        data?.KHFWSJPZs?.forEach((item: any) => {
+          newKHFWSJPZIdData.push({ label: `${item.KSRQ} ~ ${item.JSRQ}`,
+          value: item.id});
+        });
+        if (newKHFWSJPZIdData.length) {
+          formRef?.current?.setFieldsValue({
+           
+            KHFWSJPZIds:newKHFWSJPZIdData.map((item: SelectType) => item.value)
+          });
+          setKHFWSJPZIdData(newKHFWSJPZIdData);
+
+        }
         // 课后辅导数据
-        if (KCFD.length) {
+        if (KCFD?.length) {
           setKCFDData(KCFD);
           formRef?.current?.setFieldsValue({
             KHFWSJIds: KCFD.map((item: SelectType) => item.value),
+           
           });
         }
-        // 时段数据
-        data?.KHFWSJPZs?.forEach((item: any) => {
-          newKHFWSJPZIdData.push({ label: `${item.KSRQ}-${item.JSRQ}`, value: item.id });
-        });
-        if (newKHFWSJPZIdData.length) {
-          setKHFWSJPZIdData(newKHFWSJPZIdData);
-        }
+
         // 限制数据
         if (data?.KXSL) {
           setKXSL(data.KXSL);
@@ -156,23 +166,27 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
       const params: any = {
         ZT: 3,
         KHFWBJId,
-        KHFWSJPZId: values?.KHFWSJPZId,
+        KHFWSJPZIds: values?.KHFWSJPZIds,
         XSJBSJIds: values?.XSJBSJIds,
         KHBJSJIds,
       };
       // 班级详情下 学生批量报名存在时段
-      if (type !== 0 && KHFWSJPZId) {
-        params.KHFWSJPZId = KHFWSJPZId;
-      }
+      // if (type !== 0 && KHFWSJPZId) {
+      //   params.KHFWSJPZId = KHFWSJPZId;
+      // }
       if (type === 2) {
         params.XSJBSJIds = [XSJBSJId];
       }
       const res = await studentRegistration(params);
       if (res.status === 'ok') {
-        message.success('报名成功');
+        if(title==='代选课'&& type===2){
+          message.success('选课成功')
+        }else{
+          message.success('报名成功');
+        }
         actionRef.current?.reload();
       } else {
-        message.error('报名失败');
+        message.error(res.message);
       }
       setVisible(false);
       setLoading(false);
@@ -221,15 +235,15 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
       >
         {
           // 保存并批量报名需要选择时段
-          type === 0 && (
+         
             <ProFormSelect
               placeholder="选择报名时段"
               label="报名时段"
               rules={[{ required: true, message: '请选择学生报名' }]}
-              name="KHFWSJPZId"
-              fieldProps={{ options: KHFWSJPZIdData }}
+              name="KHFWSJPZIds"
+              fieldProps={{ options: KHFWSJPZIdData,mode:"multiple",disabled: true }}
             />
-          )
+        
         }
         {
           //  保存并批量报名 || 批量报名
