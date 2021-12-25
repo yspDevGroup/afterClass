@@ -161,7 +161,9 @@ const ReplacePayClass = (props: {
       return (
         <div>
           <Result status="success" title="支付成功" />
-          <Button type="primary" className={styles.ZFCG}>
+          <Button type="primary" onClick={()=>{
+            setBmCurrent(1);
+          }} className={styles.ZFCG}>
             下一步
           </Button>
         </div>
@@ -193,9 +195,9 @@ const ReplacePayClass = (props: {
                 <span>{XSFWBJ?.KHFWBJ?.FWMC}</span>{' '}
               </p>
               <p>
-                <span>课程班</span>
+                <span style={{minWidth: '50px'}}>课程班</span>
                 <span>
-                  {XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0).map(
+                  {XSFWBJ?.XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0).map(
                     (item: any) => {
                       return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
                     },
@@ -203,9 +205,14 @@ const ReplacePayClass = (props: {
                 </span>{' '}
               </p>
               <p>
-                <span>辅导班</span>
+                <span style={{minWidth: '50px'}}>辅导班</span>
                 <span>
-                  {XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1).map(
+                  {XSFWBJ?.XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1).map(
+                    (item: any) => {
+                      return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
+                    },
+                  )}
+                   {XSFWBJ?.XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1).map(
                     (item: any) => {
                       return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
                     },
@@ -213,12 +220,8 @@ const ReplacePayClass = (props: {
                 </span>{' '}
               </p>
               <p>
-                <span>上课地点</span>
-                <span>本校</span>{' '}
-              </p>
-              <p>
-                <span>总课时</span>
-                {/* <span>{BjDetails?.KSS}</span>{' '} */}
+                <span>报名时段</span>
+                <span>{XSFWBJ?.KHFWBJ?.KHFWSJPZs?.[0]?.KSRQ}~{XSFWBJ?.KHFWBJ?.KHFWSJPZs?.[0]?.JSRQ}</span>{' '}
               </p>
               <div className={styles.line} />
               {/* <p>
@@ -305,8 +308,9 @@ const ReplacePayClass = (props: {
             <Step key="付款缴费" title="付款缴费" />
             <Step key="完成报名" title="完成报名" />
           </Steps>
-          {getDiv()}
+          {/* {WCDIV()} */}
 
+          {getDiv()}
           {/* <div className={styles.stepsAction}>
             {BjDetails?.KHKCJCs?.length > 0 && BmCurrent === 1 && PaymentCG === '未付款' ? (
               <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
