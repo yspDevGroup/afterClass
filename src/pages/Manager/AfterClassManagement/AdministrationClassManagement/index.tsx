@@ -237,7 +237,6 @@ const AdministrationClassManagement = () => {
         if (record?.KHFWBJs?.[0]?.ZT === 1) {
           f = true;
         }
-
         return (
           <Space>
             {f ? (

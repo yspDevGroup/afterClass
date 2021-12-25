@@ -202,6 +202,9 @@ const ConfigureService = (props: ConfigureSeverType) => {
         if (saveFalg) {
           signUpClassRef?.current?.onSetVisible(true);
         }
+        if(actionRef){
+          actionRef.current?.reload();
+        }
       } else {
         message.error(res.message);
       }
@@ -212,6 +215,9 @@ const ConfigureService = (props: ConfigureSeverType) => {
         message.success('配置成功');
         if (saveFalg) {
           signUpClassRef?.current?.onSetVisible(true);
+        }
+        if(actionRef){
+          actionRef.current?.reload();
         }
       } else {
         message.error(res.message);
