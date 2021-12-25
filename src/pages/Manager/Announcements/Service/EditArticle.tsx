@@ -10,6 +10,7 @@ import { history, useModel } from 'umi';
 import styles from '../index.module.less';
 import PageContainer from '@/components/PageContainer';
 import { createXXTZGG, updateXXTZGG } from '@/services/after-class/xxtzgg';
+import { getQueryString } from '@/utils/utils';
 
 const formItemLayout = {
   labelCol: {
@@ -25,19 +26,20 @@ const formItemLayout = {
  */
 const EditArticle = (props: any) => {
   const { state } = props.location;
+  const type = getQueryString('type');
   const [form] = Form.useForm();
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const initialValues = {
-    LX: '课后服务协议',
+    LX: type === 'normal' ? '课后服务协议' :'缤纷课堂协议',
   };
   const submit = async (params: any) => {
     const { id, NR } = params;
     const data = {
       ...params,
       RQ: new Date(),
-      BT: '课后服务协议',
-      LX: '课后服务协议',
+      BT: type === 'normal' ? '课后服务协议' :'缤纷课堂协议',
+      LX: type === 'normal' ? '课后服务协议' :'缤纷课堂协议',
       SFTJ: 0,
       SFTT: 0,
       NR: NR.toHTML(),
@@ -51,7 +53,7 @@ const EditArticle = (props: any) => {
         });
         if (result.status === 'ok') {
           message.success('保存成功');
-          history.push('/basicalSettings/service');
+          history.push('/basicalSettings/service?type='+type);
         } else {
           message.error(result.message);
         }
@@ -59,7 +61,7 @@ const EditArticle = (props: any) => {
         const resUpdateXXTZGG = await updateXXTZGG({ id }, data);
         if (resUpdateXXTZGG.status === 'ok') {
           message.success('修改成功');
-          history.push('/basicalSettings/service');
+          history.push('/basicalSettings/service?type='+type);
         } else {
           message.error(resUpdateXXTZGG.message);
         }
@@ -108,7 +110,7 @@ const EditArticle = (props: any) => {
                   <Button
                     htmlType="button"
                     onClick={() => {
-                      history.push('/basicalSettings/service');
+                      history.push('/basicalSettings/service?type='+type);
                     }}
                   >
                     取消

@@ -178,7 +178,7 @@ const ServiceConfiguration = () => {
       render: (_, record) => {
         return (
           <>
-            <SeveiceBasics title={'编辑服务模板'} reload={getData} serviceId={record.id} />
+            {record.FWZT === 1 ? '' : <SeveiceBasics title={'编辑服务模板'} reload={getData} serviceId={record.id} />}
             <Popconfirm
               title="彻底删除后数据将不可恢复，是否删除?"
               onConfirm={async () => {
