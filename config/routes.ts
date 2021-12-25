@@ -756,6 +756,26 @@
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/Course',
       },
+      // 课后服务
+      {
+        path: '/parent/home/afterClassCoach',
+        name: 'afterClassCoach',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/AfterClassCoach',
+      },
+      {
+        path: '/parent/home/afterClassCoach/interestClassroom',
+        name: 'interestClassroom',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/AfterClassCoach/InterestClassroom',
+      },
+      // 订餐&托管
+      {
+        path: '/parent/home/trusteeship',
+        name: 'trusteeship',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Trusteeship',
+      },
       // 服务预定
       {
         path: '/parent/home/serviceReservation',

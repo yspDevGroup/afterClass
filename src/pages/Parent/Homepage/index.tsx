@@ -86,7 +86,7 @@ const PersonalHomepage = () => {
           >
             <div
               className={styles.noScrollBar}
-              style={{ height: '100%', overflowY: 'auto' }}
+              style={{ height: '100%', overflowY: 'auto', background: '#F5F5F5' }}
               ref={homeRef}
             >
               <Home />

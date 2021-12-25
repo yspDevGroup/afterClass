@@ -125,6 +125,7 @@ export async function getStudentListByBjid(
   body: {
     BJSJId: string;
     KHFWSJPZId?: string;
+    XSJBSJId?: string;
     XSXMORXH?: string;
     /** 页数 */
     page: number;
@@ -148,7 +149,7 @@ export async function chooseKCByXSId(
   body: {
     XSJBSJId: string;
     KHFWBJId?: string;
-    KHFWSJPZId?: string;
+    KHFWSJPZIds?: string[];
     /** 学生报名服务班对应的课程班状态，0:正常;1:退课中;2:已退课;3:报名未缴费 */
     ZT?: number;
     KHBJSJIds?: string[];

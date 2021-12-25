@@ -46,13 +46,13 @@ const OrderList = (props: {
                 to={{
                   pathname: '/parent/mine/orderDetails',
                   state: {
-                    title: KHBJSJ?.KHKCSJ.KCMC,
+                    title: KHBJSJ?.KHKCSJ.KCMC || item?.XSFWBJ?.KHFWBJ?.FWMC,
                     detail: KHBJSJ,
                     payOrder: { ...rest },
                     user: currentUser,
                     KKRQ: KHBJSJ?.KHKCSJ.KKRQ,
                     JKRQ: KHBJSJ?.KHKCSJ.JKRQ,
-                    fwdetail: KHXXZZFW,
+                    fwdetail: KHXXZZFW || item?.XSFWBJ,
                   },
                 }}
               >
@@ -63,8 +63,8 @@ const OrderList = (props: {
                   </span>
                 </p>
                 <div className={styles.KCMC}>
-                  <p>{item.KHBJSJ?.KHKCSJ?.KCMC || item.KHXXZZFW?.FWMC}</p>
-                  <span>￥{item.KHBJSJ?.FY || item.KHXXZZFW?.FY}</span>
+                  <p>{item.KHBJSJ?.KHKCSJ?.KCMC || item.KHXXZZFW?.FWMC || item?.XSFWBJ?.KHFWBJ?.FWMC}</p>
+                  <span>￥{item.KHBJSJ?.FY || item.KHXXZZFW?.FY || item?.XSFWBJ?.KHFWBJ?.FWFY}</span>
                 </div>
                 <p className={styles.orderNumber}>
                   <span>下单时间：{item.XDSJ}</span>

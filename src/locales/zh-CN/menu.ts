@@ -74,6 +74,8 @@ export default {
   'menu.parent.orderDetails': '订单详情',
   'menu.parent.order': '我的订单',
   'menu.parent.course': '课程列表',
+  'menu.parent.trusteeship': '订单&托管',
+  'menu.parent.afterClassCoach': '课后服务',
   'menu.parent.notice': '通知',
   'menu.parent.details': '在学课程详情',
   'menu.parent.courseIntro': '课程描述',

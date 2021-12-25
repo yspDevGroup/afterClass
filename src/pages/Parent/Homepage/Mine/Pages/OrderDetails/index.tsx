@@ -46,7 +46,7 @@ const OrderDetails: React.FC = (props: any) => {
   const handleFWPay = async () => {
     const result = await payKHXSDD({
       returnUrl:`${window.location.origin}/parent/home?index=index`,
-      kcmc: fwdetail?.FWMC,
+      kcmc: fwdetail?.FWMC || fwdetail?.KHFWBJ.FWMC,
       ddIds: [orderInfo.id],
       xsId: localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
       amount: orderInfo?.DDFY,
@@ -141,7 +141,7 @@ const OrderDetails: React.FC = (props: any) => {
             ) : (
               <div className={styles.FWXX}>
                 <ul>
-                  <p className={styles.title}>{fwdetail?.FWMC}</p>
+                  <p className={styles.title}>{fwdetail?.FWMC || fwdetail?.KHFWBJ?.FWMC}</p>
                   <li>
                     服务时段：{moment(fwdetail?.KSRQ).format('YYYY.MM.DD')}~
                     {moment(fwdetail?.JSRQ).format('YYYY.MM.DD')}
@@ -173,7 +173,7 @@ const OrderDetails: React.FC = (props: any) => {
             ) : (
               <div className={styles.KCZE}>
                 <p>
-                  <span>服务总额</span> <span>￥{Number(fwdetail?.FY).toFixed(2)}</span>
+                  <span>服务总额</span> <span>￥{Number(fwdetail?.FY || fwdetail?.FWFY || fwdetail?.KHFWBJ?.FWFY).toFixed(2)}</span>
                 </p>
                 <p>
                   实付<span>￥{Number(orderInfo.DDFY).toFixed(2)}</span>

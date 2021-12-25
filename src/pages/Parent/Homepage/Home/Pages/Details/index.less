@@ -39,6 +39,7 @@
   .header {
     display: flex;
     justify-content: space-between;
+    line-height: 28px;
 
     .title {
       font-style: normal;
@@ -46,6 +47,23 @@
       font-size: 16px;
       line-height: 22px;
       color: #333333;
+      position: relative;
+      
+      >div:nth-of-type(1) {
+        position: absolute;
+        top: 2px;
+        width: 3px;
+        height: 19px;
+        background: #15b628;
+        border-radius: 3px 0px;
+      }
+
+      span {
+        margin-left: 6px;
+        color: #333333;
+        font-weight: bold;
+        font-size: 18px;
+      }
     }
 
     .all {
