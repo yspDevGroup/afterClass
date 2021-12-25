@@ -37,6 +37,8 @@ const InterestClassroom = () => {
   const [StudentFWBJId, setStudentFWBJId] = useState();
   const [KSRQ, setKSRQ] = useState();
   const [JSRQ, setJSRQ] = useState();
+  //付款状态
+  const [FKType, setFKType] = useState(true)
 
 
   useEffect(() => {
@@ -50,9 +52,9 @@ const InterestClassroom = () => {
             XNXQId: resXNXQ?.current?.id || '',
           })
           if (result.status === 'ok') {
-            console.log(result, '-----')
             setFWKCData(result.data)
             setMouthId(result.data.KHFWSJPZs?.[0].id)
+
             const newArr: any[] = [];
             result.data?.KHFWSJPZs?.forEach((value: any) => {
               newArr.push(value?.id)
@@ -76,13 +78,19 @@ const InterestClassroom = () => {
         if (res.status === 'ok') {
           setBaoMinData(res.data.rows[0])
         }
-        console.log(res, 'res')
       }
     })()
-  }, [StorageXSId]);
+  }, []);
+
 
   useEffect(() => {
-    setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === MouthId).id)
+    if(BaoMinData && FWKCData){
+      setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).id)
+    }
+  
+  }, [FWKCData,BaoMinData])
+  useEffect(() => {
+    setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === MouthId).id)
     setKSRQ(FWKCData?.KHFWSJPZs.find((item: any) => item.id === MouthId).KSRQ)
     setJSRQ(FWKCData?.KHFWSJPZs.find((item: any) => item.id === MouthId).JSRQ)
   }, [MouthId])
@@ -92,7 +100,6 @@ const InterestClassroom = () => {
   }, [orderInfo]);
 
   const onChange = (checkedValues: any) => {
-    console.log(checkedValues, '------')
     setYXKC(checkedValues);
     const newArr: any[] = [];
     checkedValues.forEach((value: any) => {
@@ -108,7 +115,12 @@ const InterestClassroom = () => {
 
   // 月份切换
   const onchangeMonth = (e: any) => {
-    setMouthId(e.target.value)
+    setMouthId(e.target.value);
+    if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === e.target.value).ZT === 3) {
+      setFKType(true)
+    } else {
+      setFKType(false)
+    }
   }
   const onSelect = async () => {
     if (YXKC.length > FWKCData?.KXSL) {
@@ -137,24 +149,25 @@ const InterestClassroom = () => {
       message.error('操作失败，请联系管理员')
     }
   };
-  console.log(StudentFWBJId, 'StudentFWBJId')
 
   // 付款
   const submit = async () => {
-    const data: API.CreateKHXSDD = {
-      XDSJ: new Date().toISOString(),
-      ZFFS: '线上支付',
-      DDZT: '待付款',
-      DDFY: Number(FWKCData?.FWFY),
-      XSJBSJId: localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
-      DDLX: 2,
-      XSFWBJId: StudentFWBJId,
-    };
-    const res = await createKHXSDD(data);
-    if (res.status === 'ok') {
-      setOrderInfo(res.data);
-    } else {
-      enHenceMsg(res.message);
+    if (StudentFWBJId) {
+      const data: API.CreateKHXSDD = {
+        XDSJ: new Date().toISOString(),
+        ZFFS: '线上支付',
+        DDZT: '待付款',
+        DDFY: Number(FWKCData?.FWFY),
+        XSJBSJId: localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
+        DDLX: 2,
+        XSFWBJId: StudentFWBJId,
+      };
+      const res = await createKHXSDD(data);
+      if (res.status === 'ok') {
+        setOrderInfo(res.data);
+      } else {
+        enHenceMsg(res.message);
+      }
     }
   };
 
@@ -251,15 +264,20 @@ const InterestClassroom = () => {
               </div>
             </div>
             {
-              BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 ? <div className={styles.footer}>
-                <button
-                  onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
-                <button
-                  onClick={submit} >确认付款</button>
-              </div> : <div className={styles.footers}>
-                <button
-                  onClick={submit} >去付款</button>
-              </div>
+              BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 && FKType === true ? <div className={styles.footer}>
+                <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
+                <button onClick={submit} >确认付款</button>
+              </div> : <></>
+            }
+            {
+              BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 && FKType === false ? <div className={styles.footers}>
+                <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
+              </div> : <></>
+            }
+            {
+              BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length !== 0 && FKType === true ? <div className={styles.footers}>
+                <button onClick={submit} >去付款</button>
+              </div> : <></>
             }
 
           </> :

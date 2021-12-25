@@ -267,16 +267,14 @@ const Home = () => {
                           <i style={{ color: '#FC7F2B' }}>选课提醒</i> 您于{moment(value?.createdAt).format("YYYY年MM月DD日")}报的{value?.KHFWBJ?.FWMC}还未选课，请及时处理。
                         </div>
                       }
-                      return <Link
-                        to={{
-                          pathname: `/parent/home/courseIntro?classid=${value.id}&index=all`,
-                          state: { totalData },
-                        }}
-                      >
-                        <div className={styles.wrap} style={{ backgroundImage: `url(${remind})` }}>
-                          <i style={{ color: '#15B628' }}>缴费提醒</i> 您于{moment(value?.createdAt).format("YYYY年MM月DD日")}报的{value?.BJMC}还未缴费，请及时处理。
-                        </div>
-                      </Link>
+                      return <div
+                        className={styles.wrap}
+                        style={{ backgroundImage: `url(${remind})` }}
+                        onClick={() => {
+                          history.push(`/parent/home/courseIntro?classid=${value.id}&index=all`)
+                        }}>
+                        <i style={{ color: '#15B628' }}>缴费提醒</i> 您于{moment(value?.createdAt).format("YYYY年MM月DD日")}报的{value?.BJMC}还未缴费，请及时处理。
+                      </div>
                     }
                     return <></>
                   })
