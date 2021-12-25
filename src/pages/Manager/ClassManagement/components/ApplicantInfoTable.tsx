@@ -870,7 +870,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             <a
               style={{ marginLeft: '16px' }}
               type="download"
-              href="http://acuploads.test.xianyunshipei.com//importTemplate/bjBM.xlsx"
+              href="/学生报名模板.xlsx"
             >
               下载模板
             </a>

@@ -480,7 +480,7 @@ const RoomManagement = () => {
             <a
               style={{ marginLeft: '16px' }}
               type="download"
-              href="http://acuploads.test.xianyunshipei.com//importTemplate/importFJSJ.xlsx"
+              href="/场地导入模板.xlsx"
             >
               下载模板
             </a>
