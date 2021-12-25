@@ -555,11 +555,12 @@ const ConfigureService = (props: ConfigureSeverType) => {
           </Col>
         </Row>
         <Row justify="start" align="middle">
-          <Col flex="16em">
+          <Col flex="18em">
             <ProFormSelect
-              wrapperCol={{ flex: '5em' }}
+              wrapperCol={{ flex: '10em' }}
               addonBefore="按"
               label="收费方式"
+              addonAfter='缴费'
               name="JFLX"
               disabled={!!detailValue?.id}
               rules={[{ required: true, message: '请选择收费方式' }]}
@@ -571,13 +572,16 @@ const ConfigureService = (props: ConfigureSeverType) => {
                 ],
                 onChange: (value) => {
                   setJFLX(value);
+                  // if(value){
+                  //   formRef?.current?.setFieldsValue({FWFY: });
+                  // }
                 },
               }}
+              width={80}
             />
           </Col>
           <Col flex="auto">
-            <span style={{ marginLeft: '8px' }}>
-              缴费
+            
               <span
                 style={{ color: '#999', marginRight: '8px' }}
                 className="ant-form-text ant-form-item"
@@ -585,7 +589,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
                 {' '}
                 课后服务按月收费，家长可随时缴纳截至当前月的服务费用
               </span>
-            </span>
+           
           </Col>
         </Row>
         {JFLX === 1 && (
@@ -601,22 +605,16 @@ const ConfigureService = (props: ConfigureSeverType) => {
         )}
 
         <Row justify="start" align="middle">
-          <Col flex="14em">
+          <Col flex="16em">
             <ProFormDigit
-              wrapperCol={{ flex: '6em' }}
+              wrapperCol={{ flex: '8em' }}
               label="服务费用"
               rules={[{ required: true, message: '请收入服务费用' }]}
               name="FWFY"
               key="FWFY"
               min={0}
+              addonAfter={JFLX===1? '元': '元/月'}
             />
-          </Col>
-
-          <Col flex="auto">
-            <span style={{ color: '#999' }} className="ant-form-text ant-form-item">
-              {' '}
-              课后服务按月收费，家长可随时缴纳截至当前月的服务费用
-            </span>
           </Col>
         </Row>
       </ModalForm>
