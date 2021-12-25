@@ -18,13 +18,9 @@ import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
 import { getQueryString } from '@/utils/utils';
 
 const { TextArea } = Input;
-const LeaveForm = (props: {
-  setActiveKey: React.Dispatch<React.SetStateAction<string>>;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const LeaveForm = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { setActiveKey, setReload } = props;
   const prevDay = getQueryString('date');
   const dealClassId = getQueryString('classId');
   const [form] = Form.useForm();
@@ -79,10 +75,9 @@ const LeaveForm = (props: {
         handleResign(bjIds);
         history.push('/teacher/education/resign');
       } else {
-        setReload(true);
         setDateData([]);
         form.resetFields();
-        setActiveKey('history');
+        history.push('/teacher/education/askForLeave');
 
         // 处理自动审批流程时主班请假导致课时变更的问题
         if (res.message === "isAudit=false") {

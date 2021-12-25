@@ -15,7 +15,20 @@ export async function getKHBJJSRL(
       id?: string;
       RQ?: string;
       JSLX?: number;
-      KHBJSJ?: { id?: string; BJMC?: string };
+      KHBJSJ?: {
+        KHKCSJ?: { id?: string; KCMC?: string };
+        id?: string;
+        BJMC?: string;
+        XQSJ?: {
+          id?: string;
+          XQMC?: string;
+          XXJBSJ?: {
+            id?: string;
+            XXMC?: string;
+            FJSJs?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string }[];
+          };
+        };
+      };
       JZGJBSJ?: { id?: string; XM?: string; GH?: string; LXDH?: string; WechatUserId?: string };
       XXSJPZ?: {
         id?: string;
@@ -94,7 +107,20 @@ export async function createKHBJJSRL(body: API.CreateKHBJJSRL, options?: { [key:
       id?: string;
       RQ?: string;
       JSLX?: number;
-      KHBJSJ?: { id?: string; BJMC?: string };
+      KHBJSJ?: {
+        KHKCSJ?: { id?: string; KCMC?: string };
+        id?: string;
+        BJMC?: string;
+        XQSJ?: {
+          id?: string;
+          XQMC?: string;
+          XXJBSJ?: {
+            id?: string;
+            XXMC?: string;
+            FJSJs?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string }[];
+          };
+        };
+      };
       JZGJBSJ?: { id?: string; XM?: string; GH?: string; LXDH?: string; WechatUserId?: string };
       XXSJPZ?: {
         id?: string;

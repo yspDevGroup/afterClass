@@ -525,12 +525,24 @@
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/SelectCourse',
       },
+      {
+        path: '/teacher/education/selectCourse/apply',
+        name: 'applys',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/SelectCourse/Apply',
+      },
       // 教师请假
       {
         path: '/teacher/education/askForLeave',
         name: 'askForLeave',
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/AskForLeave',
+      },
+      {
+        path: '/teacher/education/askForLeave/newLeave',
+        name: 'newLeave',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/AskForLeave/NewLeave',
       },
       // 教师调代课
       {
@@ -562,6 +574,12 @@
         name: 'resign',
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/Resign',
+      },
+      {
+        path: '/teacher/education/resign/dealList',
+        name: 'resign',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/Resign/DealList',
       },
       {
         path: '/teacher/education/dealAbnormal',

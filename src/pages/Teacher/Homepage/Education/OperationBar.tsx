@@ -14,6 +14,7 @@ import icon_stuEvaluate from '@/assets/icon_stuEvaluate.png';
 import icon_courseBack from '@/assets/icon_courseBack.png';
 import icon_classroomStyle from '@/assets/classroomStyle.png';
 import icon_leave from '@/assets/icon-teacherLeave.png';
+import icon_select from '@/assets/icon_classroom.png';
 import icon_CourseAdjustment from '@/assets/icon-CourseAdjustment.png';
 import { getXXSPPZ } from '@/services/after-class/xxsppz';
 import { Modal } from 'antd';
@@ -57,7 +58,7 @@ const OperationBar = (props: { courseData: any }) => {
         className={styles.wrapper}>
         <p className={styles.container}>
           <p className={styles.content}>
-            <img src={icon_leave} alt="" />
+            <img src={icon_select} alt="" />
           </p>
         </p>
         <p className={styles.text}>选课</p>

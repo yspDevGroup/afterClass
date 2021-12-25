@@ -146,7 +146,7 @@
   :global {
 
     .ant-modal-title {
-      text-align: left;
+      text-align: center;
       line-height: 16px !important;
       font-weight: normal !important;
     }
@@ -155,12 +155,14 @@
       padding: 16px 24px;
 
       li {
-        line-height: 35px;
+        line-height: 40px;
         text-align: center;
         color: #3874c5;
+        font-size: 16px;
 
         a {
           color: #3874c5;
+          font-size: 16px;
         }
       }
     }
@@ -174,11 +176,41 @@
       button {
         border: none;
         padding: 0;
-        color:#666;
-        span{
-          color:#666;
+        color: #666;
+        box-shadow: none;
+
+        span {
+          color: #666;
         }
       }
     }
+  }
+}
+
+:global{
+  .ant-scrolling-effect{
+    width: 100% !important;
+  }
+}
+.apply {
+  position: fixed;
+  right: 20px;
+  bottom: 15px;
+  width: 80px;
+  color: #3e88f8;
+  text-align: center;
+  > div {
+    width: 48px;
+    height: 48px;
+    margin: auto;
+    margin-bottom: 10px;
+    color: #fff;
+    background-color: #3e88f8;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0, 102, 255, 0.4);
+    img{
+        margin-top: 10px;
+        width: 28px;
+      }
   }
 }
