@@ -6,10 +6,13 @@ import ProForm, { ProFormSwitch, ProFormSelect } from '@ant-design/pro-form';
 import styles from './index.less';
 import UploadImage from '@/components/ProFormFields/components/UploadImage';
 import { createKHFWBJ, getKHFWBJ, updateKHFWBJ } from '@/services/after-class/khfwbj';
-import SignUpClass from './SignUpClass';
+import SignUpClass, { SelectType } from './SignUpClass';
 import type { Moment } from 'moment';
 import moment from 'moment';
+import { getAllKHFWSJ, updateKHFWSJ, createKHFWSJ } from '@/services/after-class/khfwsj';
 const { RangePicker } = DatePicker;
+import seviceImage from '@/assets/seviceImage.png'
+import Select from 'rc-select';
 
 type ConfigureSeverType = {
   KHFWBJs: any[];
@@ -19,10 +22,12 @@ type ConfigureSeverType = {
   NJSJ: any;
   XQData?: any; //{JSRQ: "2021-12-29" KSRQ: "2021-08-30"}
   actionRef: any;
+  XQSJId?: string;
+  key: string,
 };
 export type ModalValue = {
   isTemplate: boolean;
-  KCFD: any[];
+  KCFD?: any[];
   KHKC: any[];
   KXSL: number;
   FWMC: string;
@@ -36,11 +41,13 @@ export type ModalValue = {
   timeFrame?: Moment[];
 };
 const ConfigureService = (props: ConfigureSeverType) => {
-  const { XNXQId, BJSJId, NJSJ, KHFWBJs, XQData, actionRef } = props;
+  const { XNXQId, BJSJId, NJSJ, KHFWBJs, XQData, actionRef, XQSJId, key } = props;
   const [isTemplate, setIsTemplate] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState('');
   const [detailValue, setDetailValue] = useState<ModalValue>();
+  const [templateData, setTemplateData] = useState<any[]>();
+  const [templateId, setTemplateId] = useState<string>();
 
   const [JFLX, setJFLX] = useState<number>();
   const formRef = useRef();
@@ -55,57 +62,61 @@ const ConfigureService = (props: ConfigureSeverType) => {
   };
 
   const getDetailValue = async () => {
-    setLoading(true);
-    const res = await getKHFWBJ({
-      BJSJId,
-      XNXQId,
-    });
-    if (res.status === 'ok') {
-      const KCFD: any = [];
-      const KHKC: any = [];
-      const { data } = res;
-      if (data) {
-        data?.KCFWBJs?.forEach((item: any) => {
-          console.log(item);
-          // 1 辅导班
-          if (item.LX === 1) {
-            KCFD.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
-          }
-          // 0 课程班
-          if (item?.LX === 0) {
-            KHKC.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
-          }
-        });
-        let timeFrame;
-        if (data?.JFLX === 1 && data?.KHFWSJPZs?.[0]?.KSRQ && data?.KHFWSJPZs?.[0]?.JSRQ) {
-          timeFrame = [
-            moment(data?.KHFWSJPZs?.[0]?.KSRQ, 'YYYY-MM-DD'),
-            moment(data?.KHFWSJPZs?.[0]?.JSRQ, 'YYYY-MM-DD'),
-          ];
-        }
 
-        setDetailValue({
-          isTemplate: false,
-          KCFD,
-          KHKC,
-          KXSL: data?.KXSL,
-          FWMC: data?.FWMC,
-          FWFY: data?.FWFY,
-          FWMS: data?.FWMS,
-          id: data?.id,
-          JFLX: data?.JFLX,
-          timeFrame,
-        });
+    if (BJSJId && XNXQId) {
+      setLoading(true);
+      const res = await getKHFWBJ({
+        BJSJId,
+        XNXQId,
+      });
+      if (res.status === 'ok') {
+        const KCFD: any = [];
+        const KHKC: any = [];
+        const { data } = res;
+        if (data) {
+          data?.KCFWBJs?.forEach((item: any) => {
+            console.log(item);
+            // 1 辅导班
+            if (item.LX === 1) {
+              KCFD.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
+            }
+            // 0 课程班
+            if (item?.LX === 0) {
+              KHKC.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
+            }
+          });
+          let timeFrame;
+          if (data?.JFLX === 1 && data?.KHFWSJPZs?.[0]?.KSRQ && data?.KHFWSJPZs?.[0]?.JSRQ) {
+            timeFrame = [
+              moment(data?.KHFWSJPZs?.[0]?.KSRQ, 'YYYY-MM-DD'),
+              moment(data?.KHFWSJPZs?.[0]?.JSRQ, 'YYYY-MM-DD'),
+            ];
+          }
 
-        if (data?.JFLX) {
-          setJFLX(data?.JFLX);
-        }
-        if (data.FWTP) {
-          setImageUrl(data.FWTP);
+          setDetailValue({
+            isTemplate: false,
+            KCFD,
+            KHKC,
+            KXSL: data?.KXSL,
+            FWMC: data?.FWMC,
+            FWFY: data?.FWFY,
+            FWMS: data?.FWMS,
+            id: data?.id,
+            JFLX: data?.JFLX,
+            timeFrame,
+          });
+
+          if (data?.JFLX) {
+            setJFLX(data?.JFLX);
+          }
+          if (data.FWTP) {
+            setImageUrl(data.FWTP);
+          }
         }
       }
+      setLoading(false);
     }
-    setLoading(false);
+
   };
 
   const imageChange = (type: string, e?: any) => {
@@ -210,6 +221,21 @@ const ConfigureService = (props: ConfigureSeverType) => {
     return true;
   };
 
+  const getData = async () => {
+    if (XQSJId && XNXQId && NJSJ) {
+      const res = await getAllKHFWSJ({
+        XNXQId: XNXQId,
+        XQSJId: XQSJId,
+        NJSJIds: [NJSJ.id],
+        FWZT: [1],
+      });
+
+      if (res.status === 'ok' && res.data) {
+        setTemplateData(res.data?.rows);
+      }
+    }
+  };
+
   useEffect(() => {
     if (detailValue) {
       formRef?.current?.setFieldsValue(detailValue);
@@ -230,9 +256,97 @@ const ConfigureService = (props: ConfigureSeverType) => {
     }
   }, [saveFalg]);
 
+  // 模板选择后
+  const onTemplateChange = (value: string) => {
+    setTemplateId(value);
+    if (value) {
+      const data = templateData?.find((item: any) => item.id === value);
+      const v: ModalValue = {
+        isTemplate: true,
+        FWMC: data?.FWMC,
+        FWMS: data?.FWMS,
+        FWFY: data?.FWFY,
+        KXSL: data?.ZDKCS,
+        // KCFD,
+        KHKC: data?.KHBJSJs?.map((item: any) => { return { label: item?.BJMC, value: item?.id } }) || [],
+      }
+      setDetailValue(v)
+      if (data?.FWTP && data.FWTP !== '') {
+        setImageUrl(data.FWTP)
+      }
+    }
+
+  }
+  // v true 更新 false 新建 
+  const onTemplateSave = (v: boolean = false) => {
+    formRef.current?.validateFieldsReturnFormatValue?.().then(async (values: ModalValue) => {
+
+      const params: any = {
+        FWMC: values?.FWMC,
+        XQSJId,
+        XNXQId,
+        KHBJSJIds: values?.KHKC?.map((item: SelectType) => item.value),
+        // NJIds,
+        FWTP: imageUrl,
+        FWMS: values?.FWMS,
+        ZDKCS: values?.KXSL,
+        FWFY: values?.FWFY,
+      }
+      // 更新
+      if (v) {
+        if (templateId) { 
+          const data = templateData?.find((item: any) => item.id === templateId);
+          const { KHBJSJs } = data;
+          let falg = true;
+          // 获取模板课程数据 是否有改变
+          if (KHBJSJs?.length) {
+            const v1 = JSON.stringify(KHBJSJs.map((item: any) => item.id).sort());
+            const v2 = JSON.stringify(params.KHBJSJIds.sort());
+            falg = v1 === v2;
+          }
+
+          // 无改变
+          if (falg) {
+            const result = await updateKHFWSJ({ id: templateId }, params);
+            if (result.status === 'ok') {
+              message.success('更新成功');
+              getData()
+              return true;
+            } else {
+              message.warning(result.message);
+              return false;
+            }
+          } else {
+            message.error('因课程班不匹配当前模板')
+          }
+
+        }else{
+          message.error('未选择服务模板');
+        }
+
+
+      } else {
+        params.NJIds = [NJSJ.id];
+        params.FWZT= 1;
+        const res = await createKHFWSJ(params);
+        if (res.status === 'ok') {
+          message.success('保存成功');
+          getData()
+          return true;
+        } else {
+          message.warning(res.message);
+          return false;
+        }
+      }
+    });
+
+
+  }
+
   return (
     <Spin spinning={loading}>
       <ModalForm<ModalValue>
+        key={key}
         formRef={formRef}
         title={KHFWBJs?.length ? '编辑' : '配置课后服务'}
         trigger={
@@ -262,6 +376,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
                 setDetailValue(params);
                 setJFLX(0);
               }
+              getData();
             }}
           >
             {KHFWBJs?.length ? '编辑' : '配置课后服务'}
@@ -276,7 +391,9 @@ const ConfigureService = (props: ConfigureSeverType) => {
             return [
               <div className={styles.modelFooter}>
                 <span className={styles.modelTips}>
-                  <Button type="primary"> 存为服务模板 </Button>
+                  <Button type="primary" onClick={() => {
+                    onTemplateSave();
+                  }}> 存为服务模板 </Button>
                 </span>
                 <div>
                   <Button
@@ -298,6 +415,9 @@ const ConfigureService = (props: ConfigureSeverType) => {
         }}
         modalProps={{
           destroyOnClose: true,
+          onCancel: () => {
+            setIsTemplate(false);
+          }
         }}
         onFinish={onFinish}
         layout="horizontal"
@@ -310,22 +430,27 @@ const ConfigureService = (props: ConfigureSeverType) => {
           fieldProps={{
             onChange: (checked: boolean) => {
               setIsTemplate(checked);
+
             },
           }}
         />
         {isTemplate && (
-          <ProForm.Item label="服务模板：" wrapperCol={{ span: 20 }}>
+          <ProForm.Item label="模板名称：" wrapperCol={{ span: 20 }}>
             <Row justify="start" gutter={12}>
               <Col span={8}>
-                <ProFormSelect noStyle name="text" placeholder="请选择服务模板" />
+                <ProFormSelect noStyle name="text" placeholder="请选择服务模板"
+                  fieldProps={{
+                    options: templateData?.map((item: any) => { return { value: item?.id, label: item?.FWMC } }),
+                    onChange: onTemplateChange,
+                    allowClear: true,
+                  }}
+
+                />
               </Col>
               <Col span={8} className={styles.ghostButton}>
                 <Space>
-                  <Button type="primary" ghost>
+                  <Button type="primary" ghost onClick={() => { onTemplateSave(true) }}>
                     更新模板
-                  </Button>
-                  <Button type="primary" ghost>
-                    存为模板
                   </Button>
                 </Space>
               </Col>
@@ -356,7 +481,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
           <Col span={12}>
             <ProForm.Item name="FWTP" key="FWTP" label="服务图片">
               <UploadImage
-                imageurl={imageUrl}
+                imageurl={imageUrl || seviceImage}
                 upurl="/api/upload/uploadFile?type=badge&plat=agency"
                 accept=".jpg, .jpeg, .png"
                 imagename="image"
@@ -483,7 +608,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               rules={[{ required: true, message: '请收入服务费用' }]}
               name="FWFY"
               key="FWFY"
-              min={1}
+              min={0}
             />
           </Col>
 

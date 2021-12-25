@@ -156,6 +156,28 @@ const Detail = (props: any) => {
         return '——';
       },
     },
+    {
+      title: '报名状态',
+      dataIndex: 'XSFWBJs',
+      key: 'XSFWBJs',
+      align: 'center',
+      width: 120,
+      render: (text: any) => {
+        if (text?.length) {
+          // if(text?.[0]?.ZT===3){
+          //   return '已报名未交费';
+          // }
+          // if(text?.[0]?.ZT===0){
+          //   return '报名已缴费'
+          // }if(text?.[0]?.ZT===1){
+          //   return '退课中'
+          // }
+          return '已报名';
+        } else {
+          return '未报名';
+        }
+      },
+    },
   ];
 
   // 退课
@@ -228,7 +250,7 @@ const Detail = (props: any) => {
       return (
         <a
           onClick={() => {
-            setXSList([record?.id]);
+            setXSList([record?.WechatUserId]);
             setVisible(true);
             setFlag(true);
           }}
@@ -263,7 +285,7 @@ const Detail = (props: any) => {
         return (
           <a
             onClick={() => {
-              setXSList([record?.id]);
+              setXSList([record?.WechatUserId]);
               setVisible(true);
               setFlag(false);
             }}
@@ -440,7 +462,7 @@ const Detail = (props: any) => {
                           return false;
                         });
                         if (list?.length) {
-                          setXSList(list.filter((item: any) => item.id));
+                          setXSList(list.filter((item: any) => item?.WechatUserId));
                           setVisible(true);
                           setFlag(true);
                         } else {
@@ -467,7 +489,7 @@ const Detail = (props: any) => {
                           return false;
                         });
                         if (list?.length) {
-                          setXSList(list.map((item: any) => item.id));
+                          setXSList(list.map((item: any) => item?.WechatUserId));
                           setVisible(true);
                           setFlag(false);
                         } else {

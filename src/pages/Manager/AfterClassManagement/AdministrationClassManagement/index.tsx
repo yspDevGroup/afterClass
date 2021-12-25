@@ -244,12 +244,14 @@ const AdministrationClassManagement = () => {
               curXNXQId && record?.id && <ClassSeviveDetail XNXQId={curXNXQId} BJSJId={record.id} />
             ) : (
               <ConfigureService
+                key={record.id}
                 actionRef={actionRef}
                 XQData={XQData}
                 XNXQId={curXNXQId}
                 KHFWBJs={record?.KHFWBJs}
                 BJSJId={record.id}
                 NJSJ={record?.NJSJ}
+                XQSJId={campusId}
               />
             )}
             {getSetting(record)}
