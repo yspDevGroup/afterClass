@@ -205,11 +205,11 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         <Row>
           <Col span={12}>
             <ProFormText
-              label="服务名称"
+              label="服务模板"
               name="FWMC"
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
-              rules={[{ required: true, message: '请填写服务名称' }]}
+              rules={[{ required: true, message: '请填写服务模板' }]}
             />
           </Col>
           <Col span={12}>

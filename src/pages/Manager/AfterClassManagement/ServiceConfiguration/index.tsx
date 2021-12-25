@@ -93,7 +93,7 @@ const ServiceConfiguration = () => {
       align: 'center',
     },
     {
-      title: '服务名称',
+      title: '服务模板',
       dataIndex: 'FWMC',
       key: 'FWMC',
       align: 'center',
@@ -234,9 +234,9 @@ const ServiceConfiguration = () => {
           headerTitle={
             <SearchLayout>
               <div>
-                <label htmlFor="grade">服务名称：</label>
+                <label htmlFor="grade">服务模板：</label>
                 <Search
-                  placeholder="服务名称"
+                  placeholder="服务模板"
                   allowClear
                   onSearch={(value: string) => {
                     setCurTitle(value);
