@@ -568,7 +568,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               label="收费方式"
               addonAfter='缴费'
               name="JFLX"
-              disabled={!!detailValue?.id}
+              // disabled={!!detailValue?.id}
               rules={[{ required: true, message: '请选择收费方式' }]}
               fieldProps={{
                 allowClear: false,
