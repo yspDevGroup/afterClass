@@ -28,7 +28,7 @@ const ReturnService = () => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: ['课后服务协议'],
+        LX: ['缤纷课堂协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
@@ -167,7 +167,7 @@ const ReturnService = () => {
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>课后服务协议书</p>
+            <p>缤纷课堂协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (

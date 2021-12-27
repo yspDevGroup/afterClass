@@ -84,11 +84,11 @@ const InterestClassroom = () => {
 
 
   useEffect(() => {
-    if(BaoMinData && FWKCData){
+    if (BaoMinData && FWKCData) {
       setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).id)
     }
-  
-  }, [FWKCData,BaoMinData])
+
+  }, [FWKCData, BaoMinData])
   useEffect(() => {
     setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === MouthId).id)
     setKSRQ(FWKCData?.KHFWSJPZs.find((item: any) => item.id === MouthId).KSRQ)
@@ -173,125 +173,122 @@ const InterestClassroom = () => {
 
   return <>
     <div className={styles.InterestClassroom}>
-      <GoBack title={'选课报名'} />
+      <GoBack title={'选课报名'}  />
+
+      <div className={styles.titles}>
+        <div />
+        <span>{XNXQ?.XN.replace('-', '~')}学年：{XNXQ?.XQ}</span>
+      </div>
+      <div style={{ padding: '0 10px' }}> <Divider dashed={true} /></div>
+      <div className={styles.month}>
+        {
+          FWKCData ? <Radio.Group defaultValue={FWKCData?.KHFWSJPZs?.[0].id} onChange={onchangeMonth}>
+            {
+              FWKCData?.KHFWSJPZs && FWKCData?.KHFWSJPZs?.map((values: any) => {
+                return <Radio.Button value={values?.id}><div className={styles.monthNumber}>{values?.KSRQ.substring(5, 7)}</div><span>月</span></Radio.Button>
+              })
+            }
+          </Radio.Group> : <></>
+        }
+
+      </div>
       {
-        FWKCData?.KCFWBJs.find((item: any) => item.LX === 0) ?
-          <>
-            <div className={styles.titles}>
+        FWKCData?.KCFWBJs.find((item: any) => item.LX === 2) ? <>
+          <div className={styles.Application}>
+            <div className={styles.title}>
               <div />
-              <span>{XNXQ?.XN.replace('-', '~')}学年：{XNXQ?.XQ}</span>
+              <span>趣味课堂</span>
+              <span>最多可选择{FWKCData?.KXSL}门</span>
             </div>
-            <div style={{ padding: '0 10px' }}> <Divider dashed={true} /></div>
-            <div className={styles.month}>
-              {
-                FWKCData ? <Radio.Group defaultValue={FWKCData?.KHFWSJPZs?.[0].id} onChange={onchangeMonth}>
-                  {
-                    FWKCData?.KHFWSJPZs && FWKCData?.KHFWSJPZs?.map((values: any) => {
-                      return <Radio.Button value={values?.id}><div className={styles.monthNumber}>{values?.KSRQ.substring(5, 7)}</div><span>月</span></Radio.Button>
-                    })
-                  }
-                </Radio.Group> : <></>
-              }
-
-            </div>
-            <div className={styles.Application}>
-              <div className={styles.title}>
-                <div />
-                <span>趣味课堂</span>
-                <span>最多可选择{FWKCData?.KXSL}门</span>
-              </div>
-              <div>
-                <Checkbox.Group
-                  style={{ width: '100%' }}
-                  // defaultValue={['a24f9e83-cddb-4dbb-b055-ea858008bef0+4年级2班测试课+测试课1-2']}
-                  onChange={onChange}>
-                  {
-                    BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 ?
-                      <>
-                        {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
-                          if (value?.LX === 0) {
-                            return (
-                              <>
-                                <div className={styles.cards}>
-                                  <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
-                                  <div className={styles.box}>
-                                    <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
-                                    <span onClick={() => {
-                                      onDetails(value)
-                                    }} >查看详情</span>
-                                  </div>
-
-                                  <Checkbox
-                                    value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
-                                    disabled
-                                  />
+            <div>
+              <Checkbox.Group
+                style={{ width: '100%' }}
+                // defaultValue={['a24f9e83-cddb-4dbb-b055-ea858008bef0+4年级2班测试课+测试课1-2']}
+                onChange={onChange}>
+                {
+                  BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 ?
+                    <>
+                      {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
+                        if (value?.LX === 0) {
+                          return (
+                            <>
+                              <div className={styles.cards}>
+                                <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
+                                <div className={styles.box}>
+                                  <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
+                                  <span onClick={() => {
+                                    onDetails(value)
+                                  }} >查看详情</span>
                                 </div>
-                              </>
-                            );
-                          }
-                          return <></>
-                        })}
-                      </> : <> {
-                        BaoMinData && BaoMinData?.XSFWBJs[0].XSFWKHBJs.map((value: any) => {
-                          if (value?.KHBJSJ?.KCFWBJs?.[0].LX === 0) {
-                            return (
-                              <>
-                                <div className={styles.cards}>
-                                  <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
-                                  <div className={styles.box}>
-                                    <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
-                                    <span onClick={() => {
-                                      onDetails(value)
-                                    }} >查看详情</span>
-                                  </div>
 
-                                  <Checkbox
-                                    value={value.KHBJSJId}
-                                    disabled
-                                  />
+                                <Checkbox
+                                  value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
+                                  disabled
+                                />
+                              </div>
+                            </>
+                          );
+                        }
+                        return <></>
+                      })}
+                    </> : <> {
+                      BaoMinData && BaoMinData?.XSFWBJs[0].XSFWKHBJs.map((value: any) => {
+                        if (value?.KHBJSJ?.KCFWBJs?.[0].LX === 0) {
+                          return (
+                            <>
+                              <div className={styles.cards}>
+                                <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
+                                <div className={styles.box}>
+                                  <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
+                                  <span onClick={() => {
+                                    onDetails(value)
+                                  }} >查看详情</span>
                                 </div>
-                              </>
-                            );
-                          }
-                          return <></>
-                        })
-                      }</>
-                  }
+
+                                <Checkbox
+                                  value={value.KHBJSJId}
+                                  disabled
+                                />
+                              </div>
+                            </>
+                          );
+                        }
+                        return <></>
+                      })
+                    }</>
+                }
 
 
-                </Checkbox.Group>
+              </Checkbox.Group>
 
-              </div>
             </div>
-            {
-              BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 && FKType === true ? <div className={styles.footer}>
-                <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
-                <button onClick={submit} >确认付款</button>
-              </div> : <></>
-            }
-            {
-              BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 && FKType === false ? <div className={styles.footers}>
-                <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
-              </div> : <></>
-            }
-            {
-              BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length !== 0 && FKType === true ? <div className={styles.footers}>
-                <button onClick={submit} >去付款</button>
-              </div> : <></>
-            }
-
-          </> :
-          <>
-            <div className={styles.noData}>
-              <img src={noCourses} alt="" />
-              <p>该课后服务暂未配置课程</p>
-              <p>您可以先行缴费﹐随后选课</p>
-            </div>
-            <div className={styles.footers}>
-              <button
-                onClick={submit} >去付款</button>
-            </div>
-          </>
+          </div>
+          {
+            BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 && FKType === true ? <div className={styles.footer}>
+              <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
+              <button onClick={submit} >确认付款</button>
+            </div> : <></>
+          }
+          {
+            BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 && FKType === false ? <div className={styles.footers}>
+              <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
+            </div> : <></>
+          }
+          {
+            BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length !== 0 && FKType === true ? <div className={styles.footers}>
+              <button onClick={submit} >去付款</button>
+            </div> : <></>
+          }
+        </> : <>
+          <div className={styles.noData}>
+            <img src={noCourses} alt="" />
+            <p>该课后服务暂未配置课程</p>
+            <p>您可以先行缴费﹐随后选课</p>
+          </div>
+          <div className={styles.footers}>
+            <button
+              onClick={submit} >去付款</button>
+          </div></>
       }
 
       <Modal

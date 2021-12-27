@@ -130,7 +130,7 @@ const CourseDetails: React.FC = () => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: ['课后服务协议'],
+        LX: ['缤纷课堂协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
@@ -558,7 +558,7 @@ const CourseDetails: React.FC = () => {
               <Checkbox onChange={onFxChange} checked={Xystate}>
                 <span>我已阅读并同意</span>
               </Checkbox>
-              <a onClick={showModal}>《课后服务协议》</a>
+              <a onClick={showModal}>《缤纷课堂协议》</a>
             </div>
             {ByTime === true ? (
               <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
@@ -605,7 +605,7 @@ const CourseDetails: React.FC = () => {
           </Button>,
         ]}
       >
-        <p>课后服务协议书</p>
+        <p>缤纷课堂协议书</p>
         <div dangerouslySetInnerHTML={{ __html: KHFUXY }} />
       </Modal>
     </div>

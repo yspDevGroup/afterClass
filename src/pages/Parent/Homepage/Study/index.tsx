@@ -10,6 +10,7 @@ import noData from '@/assets/noCourses.png';
 import icon_curriculum from '@/assets/icon_curriculum.png';
 import icon_classroomStyle from '@/assets/classroomStyle.png';
 import icon_leave from '@/assets/icon_leave.png';
+import Selected from '../Home/components/Selected';
 
 const Study = () => {
   const { initialState } = useModel('@@initialState');
@@ -17,17 +18,20 @@ const Study = () => {
   const { xxId, student } = currentUser || {};
   const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
   const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+  const StorageBjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
   const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
 
   const [listData, setListData] = useState<ListData>();
+  const [totalData, setTotalData] = useState<any>({});
 
   useEffect(() => {
     (async () => {
       if (StorageXSId) {
         const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        const oriData = await ParentHomeData('student', xxId, StorageXSId, StorageNjId,bjId,StorageXQSJId);
+        const oriData = await ParentHomeData('student', xxId, StorageXSId, StorageNjId, bjId, StorageXQSJId);
         const { courseSchedule } = oriData;
         const courseData = CountCourses(courseSchedule);
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         const Selected: ListData = {
           type: 'list',
           cls: 'list',
@@ -36,6 +40,15 @@ const Study = () => {
           noDataImg: noData,
         };
         setListData(Selected);
+      }
+    })()
+  }, [StorageXSId]);
+  useEffect(() => {
+    (async () => {
+      if (StorageXSId) {
+        const oriData = await ParentHomeData('student', currentUser?.xxId, StorageXSId, StorageNjId, StorageBjId, StorageXQSJId);
+        const { data } = oriData;
+        setTotalData(data);
       }
     })()
   }, [StorageXSId]);
@@ -75,6 +88,9 @@ const Study = () => {
       <div className={styles.funWrapper} style={{ marginTop: '20px' }}>
         <div className={styles.titleBar}>{`在学课程 ${listData?.list.length || 0}`}</div>
         <ListComponent listData={listData} />
+      </div>
+      <div className={styles.courseArea}>
+        <Selected dataResource={totalData} />
       </div>
     </div>
   );
