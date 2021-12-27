@@ -104,9 +104,10 @@ const Detail = (props: any) => {
           // }
           // if(text?.[0]?.ZT===0){
           //   return '报名已缴费'
-          // }if(text?.[0]?.ZT===1){
-          //   return '退课中'
           // }
+          if(text?.[0]?.ZT===1){
+            return '退课中'
+          }
           return '已报名';
         } else {
           return '未报名';
@@ -196,10 +197,10 @@ const Detail = (props: any) => {
               XSFWBJId: item?.XSFWBJId,
             };
           });
-          console.log('退了课列表', newlist);
+          // console.log('退了课列表', newlist);
           const res = await createKHTKSJ(newlist);
           if (res.status === 'ok') {
-            message.success('退课成功');
+            message.success('申请成功');
             actionRef?.current?.reload();
           } else {
             message.error(res.message);
@@ -229,7 +230,7 @@ const Detail = (props: any) => {
   };
   // 退课
   const getTK = (record: any) => {
-    if (record?.XSFWBJs?.length) {
+    if (record?.XSFWBJs?.[0]?.ZT === 3) {
       return (
         <a
           onClick={() => {
@@ -278,7 +279,7 @@ const Detail = (props: any) => {
   };
   // 选课提醒
   const getXKTX = (record: any) => {
-    if (record?.XSFWBJs?.length) {
+    if (record?.XSFWBJs?.[0]?.ZT === 3) {
       if (
         !record?.XSFWBJs?.[0]?.XSFWKHBJs?.some((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)
       ) {
@@ -301,7 +302,7 @@ const Detail = (props: any) => {
   };
   // 代选课
   const getDXK = (record: any) => {
-    if (record?.XSFWBJs?.length) {
+    if (record?.XSFWBJs?.[0]?.ZT === 3) {
       if (
         !record?.XSFWBJs?.[0]?.XSFWKHBJs?.some((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)
       ) {

@@ -162,14 +162,28 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
   // 取消报名
   const batchCancel = async (XSList: { XSJBSJId: string; ZT: number }[]) => {
     if (XSList.length > 0) {
-      const result = await cancleClass({
-        KHBJSJId: applicantData?.id,
-        XSlist: XSList,
-        JZGJBSJId: currentUser?.JSId || testTeacherId,
-        BZ: '',
-        deviceIp: '117.36.118.42',
-        MSG: `您所选的${applicantData?.KHKCSJ?.KCMC}-${applicantData?.BJMC}，取消报名请知悉`,
+
+      const newlist = XSList.map((item: any) => {
+        return {
+          LX: 0,//  1是服务   0是课程班是服务班          
+          XSJBSJId: item?.XSJBSJId,
+          ZT: 0,
+          KHBJSJId: clickBjId,
+        };
       });
+
+      // createKHTKSJ
+     const result= await createKHTKSJ(
+      newlist
+      )
+      // const result = await cancleClass({
+      //   KHBJSJId: applicantData?.id,
+      //   XSlist: XSList,
+      //   JZGJBSJId: currentUser?.JSId || testTeacherId,
+      //   BZ: '',
+      //   deviceIp: '117.36.118.42',
+      //   MSG: `您所选的${applicantData?.KHKCSJ?.KCMC}-${applicantData?.BJMC}，取消报名请知悉`,
+      // });
       if (result.status === 'ok') {
         message.success('取消报名成功');
         actionRef?.current?.clearSelected?.();
@@ -322,6 +336,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       render: (_text: any) => {
         if (_text === 3) {
           return <span style={{ color: '#4884ff' }}>未缴费</span>;
+        }
+        if(_text===1){
+          return <span style={{ color: '#4884ff' }}>退课中</span>
         }
         return <span style={{ color: '#36970c' }}>已缴费</span>;
       },
