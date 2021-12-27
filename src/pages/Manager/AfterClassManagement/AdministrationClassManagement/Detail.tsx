@@ -213,7 +213,7 @@ const Detail = (props: any) => {
   };
   // 退课
   const getTK = (record: any) => {
-    if (record?.XSFWBJs?.[0]?.ZT === 3) {
+    if (record?.XSFWBJs?.[0]?.ZT === 3&&record?.XSFWBJs?.[0]?.ZT === 0) {
       return (
         <a
           onClick={() => {
