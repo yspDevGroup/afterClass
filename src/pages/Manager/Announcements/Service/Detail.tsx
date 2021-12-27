@@ -48,7 +48,7 @@ const ServiceDetails = (props: { type: string }) => {
           key="xinjian"
           type="primary"
           onClick={() => {
-            history.push(`/basicalSettings/service/editArticle?type=${type}`, content);
+            history.push(`/basicalSettings/service/${type === 'service' ? 'editArticle' : 'editServices'}?type=${type}`, content);
           }}
         >
           <EditOutlined /> 编辑

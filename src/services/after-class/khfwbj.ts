@@ -127,6 +127,8 @@ export async function getStudentListByBjid(
     KHFWSJPZId?: string;
     XSJBSJId?: string;
     XSXMORXH?: string;
+    /** 学生在服务班的状态，0:正常;1:退课中;2:已退课;3:报名未缴费, 4:未报名 */
+    ZT?: number[];
     /** 页数 */
     page: number;
     /** 每页记录数 */

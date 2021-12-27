@@ -1636,15 +1636,7 @@ declare namespace API {
       KHKCSJ?: { id?: string; KCMC?: string };
       id?: string;
       BJMC?: string;
-      XQSJ?: {
-        id?: string;
-        XQMC?: string;
-        XXJBSJ?: {
-          id?: string;
-          XXMC?: string;
-          FJSJs?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string }[];
-        };
-      };
+      FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string };
     };
     JZGJBSJ?: { id?: string; XM?: string; GH?: string; LXDH?: string; WechatUserId?: string };
     XXSJPZ?: {
@@ -4602,71 +4594,6 @@ declare namespace API {
     XSJBSJId?: string;
   };
 
-  type XSJTCY = {
-    id: string;
-    GXM: string;
-    CYXM: string;
-    CSNY?: string;
-    MZM?: string;
-    GJDQM?: string;
-    JKZKM?: string;
-    CYGZDW?: string;
-    CYEM?: string;
-    ZYJSZWM?: string;
-    ZWJBM?: string;
-    DH: string;
-    DZXX?: string;
-    SFJHR?: string;
-    XBM?: string;
-    XLM?: string;
-    LXDZ?: string;
-    SJHM?: string;
-  };
-
-  type CreateXSJTCY = {
-    GXM: string;
-    CYXM: string;
-    CSNY?: string;
-    MZM?: string;
-    GJDQM?: string;
-    JKZKM?: string;
-    CYGZDW?: string;
-    CYEM?: string;
-    ZYJSZWM?: string;
-    ZWJBM?: string;
-    DH: string;
-    DZXX?: string;
-    SFJHR?: string;
-    XBM?: string;
-    XLM?: string;
-    LXDZ?: string;
-    SJHM?: string;
-    /** 学生ID */
-    XSJBSJId?: string;
-  };
-
-  type UpdateXSJTCY = {
-    GXM?: string;
-    CYXM?: string;
-    CSNY?: string;
-    MZM?: string;
-    GJDQM?: string;
-    JKZKM?: string;
-    CYGZDW?: string;
-    CYEM?: string;
-    ZYJSZWM?: string;
-    ZWJBM?: string;
-    DH?: string;
-    DZXX?: string;
-    SFJHR?: string;
-    XBM?: string;
-    XLM?: string;
-    LXDZ?: string;
-    SJHM?: string;
-    /** 学生ID */
-    XSJBSJId?: string;
-  };
-
   type XSJZXX = {
     id: string;
     /** 姓名 */
@@ -5409,6 +5336,71 @@ declare namespace API {
     /** 时长 */
     SC?: number;
     ZXFAId?: string;
+  };
+
+  type XSJTCY = {
+    id: string;
+    GXM: string;
+    CYXM: string;
+    CSNY?: string;
+    MZM?: string;
+    GJDQM?: string;
+    JKZKM?: string;
+    CYGZDW?: string;
+    CYEM?: string;
+    ZYJSZWM?: string;
+    ZWJBM?: string;
+    DH: string;
+    DZXX?: string;
+    SFJHR?: string;
+    XBM?: string;
+    XLM?: string;
+    LXDZ?: string;
+    SJHM?: string;
+  };
+
+  type CreateXSJTCY = {
+    GXM: string;
+    CYXM: string;
+    CSNY?: string;
+    MZM?: string;
+    GJDQM?: string;
+    JKZKM?: string;
+    CYGZDW?: string;
+    CYEM?: string;
+    ZYJSZWM?: string;
+    ZWJBM?: string;
+    DH: string;
+    DZXX?: string;
+    SFJHR?: string;
+    XBM?: string;
+    XLM?: string;
+    LXDZ?: string;
+    SJHM?: string;
+    /** 学生ID */
+    XSJBSJId?: string;
+  };
+
+  type UpdateXSJTCY = {
+    GXM?: string;
+    CYXM?: string;
+    CSNY?: string;
+    MZM?: string;
+    GJDQM?: string;
+    JKZKM?: string;
+    CYGZDW?: string;
+    CYEM?: string;
+    ZYJSZWM?: string;
+    ZWJBM?: string;
+    DH?: string;
+    DZXX?: string;
+    SFJHR?: string;
+    XBM?: string;
+    XLM?: string;
+    LXDZ?: string;
+    SJHM?: string;
+    /** 学生ID */
+    XSJBSJId?: string;
   };
 
   type getBJSJParams = {
@@ -6257,16 +6249,6 @@ declare namespace API {
     id: string;
   };
 
-  type deleteXSJTCYParams = {
-    /** 学生家庭成员ID */
-    id: string;
-  };
-
-  type updateXSJTCYParams = {
-    /** 学生家庭成员数据ID */
-    id: string;
-  };
-
   type getXSJZXXParams = {
     /** 学生家长ID */
     id: string;
@@ -6414,6 +6396,16 @@ declare namespace API {
 
   type updateZXSJParams = {
     /** 作息时间ID */
+    id: string;
+  };
+
+  type deleteXSJTCYParams = {
+    /** 学生家庭成员ID */
+    id: string;
+  };
+
+  type updateXSJTCYParams = {
+    /** 学生家庭成员数据ID */
     id: string;
   };
 }

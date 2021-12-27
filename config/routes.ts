@@ -73,6 +73,12 @@
         component: './Manager/Announcements/Service',
       },
       {
+        path: '/basicalSettings/service/editServices',
+        hideInMenu: 'true',
+        name: 'serviceDetails',
+        component: './Manager/Announcements/Service/EditArticle',
+      },
+      {
         path: '/basicalSettings/service/editArticle',
         hideInMenu: 'true',
         name: 'articleDetails',

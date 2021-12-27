@@ -19,15 +19,7 @@ export async function getKHBJJSRL(
         KHKCSJ?: { id?: string; KCMC?: string };
         id?: string;
         BJMC?: string;
-        XQSJ?: {
-          id?: string;
-          XQMC?: string;
-          XXJBSJ?: {
-            id?: string;
-            XXMC?: string;
-            FJSJs?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string }[];
-          };
-        };
+        FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string };
       };
       JZGJBSJ?: { id?: string; XM?: string; GH?: string; LXDH?: string; WechatUserId?: string };
       XXSJPZ?: {
@@ -85,11 +77,7 @@ export async function getAll(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status: 'ok' | 'error';
-    data?: { count?: number; rows?: API.KHBJJSRL[] };
-    message?: string;
-  }>('/khbjjsrl/getAll', {
+  return request<any>('/khbjjsrl/getAll', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -111,15 +99,7 @@ export async function createKHBJJSRL(body: API.CreateKHBJJSRL, options?: { [key:
         KHKCSJ?: { id?: string; KCMC?: string };
         id?: string;
         BJMC?: string;
-        XQSJ?: {
-          id?: string;
-          XQMC?: string;
-          XXJBSJ?: {
-            id?: string;
-            XXMC?: string;
-            FJSJs?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string }[];
-          };
-        };
+        FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string };
       };
       JZGJBSJ?: { id?: string; XM?: string; GH?: string; LXDH?: string; WechatUserId?: string };
       XXSJPZ?: {
