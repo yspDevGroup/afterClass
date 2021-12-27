@@ -347,7 +347,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
           label: '场地名称：',
           name: 'CDMC',
           key: 'CDMC',
-          // rules: [{ required: TeacherType, message: '请选择场地名称' }],
+          rules: [{ required: TeacherType, message: '请选择场地名称' }],
           children: (
             <Select
               showSearch
