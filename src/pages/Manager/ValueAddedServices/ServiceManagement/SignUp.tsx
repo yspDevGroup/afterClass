@@ -1,5 +1,4 @@
 import PageContainer from '@/components/PageContainer';
-import { getStudent } from '@/services/after-class/khxxzzfw';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import { useEffect, useRef, useState } from 'react';
@@ -9,10 +8,11 @@ import { LeftOutlined } from '@ant-design/icons';
 import { history, useModel } from 'umi';
 import styles from './index.less';
 import ShowName from '@/components/ShowName';
-import { getAllBJSJ } from '@/services/after-class/bjsj';
 import SearchLayout from '@/components/Search/Layout';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllNJSJ } from '@/services/after-class/njsj';
+import { getStudent } from '@/services/after-class/khxxzzfw';
+import { getAllBJSJ } from '@/services/after-class/bjsj';
 
 type selectType = { label: string; value: string };
 
@@ -173,7 +173,7 @@ const SignUp = (props: any) => {
           }}
           headerTitle={
             <>
-              <h3 style={{ fontWeight: 'bold', fontSize: 16, marginRight: 24 }}>{state?.FWMC}</h3>
+              <h3 style={{ fontWeight: 'bold', fontSize: 16, margin: '0 24px 0 0' }}>{state?.FWMC}</h3>
               <SearchLayout>
                 <div>
                   <label htmlFor="grade">年级名称：</label>
