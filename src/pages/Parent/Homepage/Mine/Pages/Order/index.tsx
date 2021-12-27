@@ -64,7 +64,7 @@ const OrderList = (props: {
                 </p>
                 <div className={styles.KCMC}>
                   <p>{item.KHBJSJ?.KHKCSJ?.KCMC || item.KHXXZZFW?.FWMC || item?.XSFWBJ?.KHFWBJ?.FWMC}</p>
-                  <span>￥{item.KHBJSJ?.FY || item.KHXXZZFW?.FY || item?.XSFWBJ?.KHFWBJ?.FWFY}</span>
+                  <span>￥{item?.DDFY || item.KHXXZZFW?.FY}</span>
                 </div>
                 <p className={styles.orderNumber}>
                   <span>下单时间：{item.XDSJ}</span>

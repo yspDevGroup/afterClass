@@ -50,6 +50,7 @@ const InterestClassroom = () => {
           const result = await getKHFWBJ({
             BJSJId: StorageBjId,
             XNXQId: resXNXQ?.current?.id || '',
+            ZT:[1]
           })
           if (result.status === 'ok') {
             setFWKCData(result.data)
@@ -185,7 +186,7 @@ const InterestClassroom = () => {
           FWKCData ? <Radio.Group defaultValue={FWKCData?.KHFWSJPZs?.[0].id} onChange={onchangeMonth}>
             {
               FWKCData?.KHFWSJPZs && FWKCData?.KHFWSJPZs?.map((values: any) => {
-                return <Radio.Button value={values?.id}><div className={styles.monthNumber}>{values?.KSRQ.substring(5, 7)}</div><span>月</span></Radio.Button>
+                return <div><Radio.Button value={values?.id}><div className={styles.monthNumber}>{values?.KSRQ.substring(5, 7)}</div><span>月</span></Radio.Button></div> 
               })
             }
           </Radio.Group> : <></>
@@ -203,7 +204,6 @@ const InterestClassroom = () => {
             <div>
               <Checkbox.Group
                 style={{ width: '100%' }}
-                // defaultValue={['a24f9e83-cddb-4dbb-b055-ea858008bef0+4年级2班测试课+测试课1-2']}
                 onChange={onChange}>
                 {
                   BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 ?

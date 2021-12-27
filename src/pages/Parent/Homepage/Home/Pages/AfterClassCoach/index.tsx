@@ -33,6 +33,7 @@ const EmptyArticle = (props: any) => {
         const result = await getKHFWBJ({
           BJSJId: StorageBjId,
           XNXQId: resXNXQ?.current?.id || '',
+          ZT:[1]
         })
         if (result.status === 'ok') {
           console.log(result.data)
@@ -43,7 +44,6 @@ const EmptyArticle = (props: any) => {
           })
           setTimes(newArr)
         }
-     
       }
     )()
   }, [StorageXSId])
@@ -109,9 +109,9 @@ const EmptyArticle = (props: any) => {
           FWKCData ? <div className={styles.text}>
             <p>课后服务协议书</p>
             <Divider />
-            <div className={styles.box} style={{ backgroundImage: `url(${EmptyBGC})` }} />
-            <div dangerouslySetInnerHTML={{ __html: KHFUXY }} className={styles.content} />
-          
+           
+            <div dangerouslySetInnerHTML={{ __html: KHFUXY }} className={styles.content}  />
+            {/* <div className={styles.box} style={{ backgroundImage: `url(${EmptyBGC})` }} /> */}
           </div> :
             <div className={styles.noData}>
               <img src={noCourses} alt="" />
@@ -120,7 +120,7 @@ const EmptyArticle = (props: any) => {
         }
       </div>
       {
-        FWKCData ? <button onClick={() => {
+        FWKCData  ? <button onClick={() => {
           setModalVisible(true);
         }}>去报名</button> : <></>
       }
