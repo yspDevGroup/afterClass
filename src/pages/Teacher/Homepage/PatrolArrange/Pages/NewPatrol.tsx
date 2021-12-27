@@ -215,7 +215,9 @@ const NewPatrol = (props: any) => {
                           formatter={limitDecimals}
                           parser={limitDecimals}
                           onBlur={(e) => {
-                            recordDetail.QRRS = Number(e.target.value);
+                            const val = Number(e.target.value);
+                            const num = val > bjxx?.xs_count ? bjxx?.xs_count : (val < 0 ? 0 : val);
+                            recordDetail.QRRS = num;
                           }}
                         />
                       )}
