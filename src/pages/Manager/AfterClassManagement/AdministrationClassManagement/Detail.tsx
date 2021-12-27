@@ -38,6 +38,8 @@ const Detail = (props: any) => {
   const { KHFWBJs } = state;
   const [searchValue,setSearchValue]=useState<string>('');
   const [ZT,setZT]=useState<string|undefined>(undefined);
+  const [detailZT,setDetailZT]=useState<string|undefined>(undefined);
+
 
   const getDetailValue = async () => {
     if (KHFWBJs?.[0]) {
@@ -67,6 +69,7 @@ const Detail = (props: any) => {
           if (newKHFWSJPZIdData.length) {
             setKHFWSJPZIdData(newKHFWSJPZIdData);
           }
+          setDetailZT(data?.ZT);
         }
       }
       setLoading(false);
@@ -377,7 +380,7 @@ const Detail = (props: any) => {
   }, [flag]);
 
   const getColumns = () => {
-    if (KHFWBJs?.[0]) {
+    if (KHFWBJs?.[0] && detailZT) {
       return [...columns, ...option];
     } else {
       return columns;
@@ -417,7 +420,7 @@ const Detail = (props: any) => {
             scroll={{ x: getTableWidth(getColumns()) }}
             tableAlertOptionRender={({ selectedRows }) => {
               // console.log('selectedRows23', selectedRows, selectedRowKeys);
-              if (KHFWBJs?.[0]) {
+              if (KHFWBJs?.[0]&& detailZT) {
                 return (
                   <Space>
                     <Button
