@@ -116,7 +116,7 @@ const AddRoom = (props: PropsType) => {
       label: '类型',
       name: 'FJLXId',
       key: 'FJLXId',
-      rules: [{ required: true, message: '请填写类型' }],
+      rules: [{ required: true, message: '请选择场地类型' }],
       options: roomType,
     },
     {
@@ -125,6 +125,7 @@ const AddRoom = (props: PropsType) => {
       label: '所属校区',
       name: 'XQ',
       key: 'XQ',
+      rules: [{ required: true, message: '请选择所属校区' }],
       fieldProps: {
         options: campus,
         onChange(value: any, option: any) {
