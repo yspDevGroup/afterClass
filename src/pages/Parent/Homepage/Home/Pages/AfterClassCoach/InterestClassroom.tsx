@@ -193,7 +193,7 @@ const InterestClassroom = () => {
 
       </div>
       {
-        FWKCData?.KCFWBJs.find((item: any) => item.LX === 2) ? <>
+        FWKCData?.KCFWBJs.find((item: any) => item.LX === 1) ? <>
           <div className={styles.Application}>
             <div className={styles.title}>
               <div />
