@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { useModel } from 'umi';
 import { Popconfirm, message, Divider, Modal, Form, Input } from 'antd';
-import { cancleClass, deleteKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import type { CourseItem } from '../data';
 import { enHenceMsg } from '@/utils/utils';
 import { getClassDays } from '@/utils/TimeTable';
+import { cancleClass, deleteKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import { updateKHKCSJ } from '@/services/after-class/khkcsj';
 // import EllipsisHint from '@/components/EllipsisHint';
@@ -100,7 +100,7 @@ const ActionBar = (props: propstype) => {
           {record.pk_count ? (
             <>
               <Popconfirm
-                title="开班后该课程班家长可见，确定开班?"
+                title="开班后该课程班可用于课后服务配置，确定开班?"
                 onConfirm={() => release(record)}
                 okText="确定"
                 cancelText="取消"
