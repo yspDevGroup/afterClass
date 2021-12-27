@@ -157,28 +157,7 @@ const Detail = (props: any) => {
         return '——';
       },
     },
-    {
-      title: '报名状态',
-      dataIndex: 'XSFWBJs',
-      key: 'XSFWBJs',
-      align: 'center',
-      width: 120,
-      render: (text: any) => {
-        if (text?.length) {
-          // if(text?.[0]?.ZT===3){
-          //   return '已报名未交费';
-          // }
-          // if(text?.[0]?.ZT===0){
-          //   return '报名已缴费'
-          // }if(text?.[0]?.ZT===1){
-          //   return '退课中'
-          // }
-          return '已报名';
-        } else {
-          return '未报名';
-        }
-      },
-    },
+   
   ];
 
   // 退课
