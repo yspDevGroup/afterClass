@@ -22,6 +22,7 @@ const ReplacePayClass = (props: {
   XSJBSJId: string;
   XM: string;
   XSFWKHBJs: any;
+  onload: any;
 }) => {
   // const { BjDetails, JFTotalost, setModalVisible, modalVisible, DJFXS } = props;
 
@@ -37,7 +38,7 @@ const ReplacePayClass = (props: {
   // const [BJMC, setBJMC] = useState<any>();
   // const [XSMC, setXSMC] = useState<any>();
 
-  const { key, XSFWBJ, XSJBSJId, XM, XSFWKHBJs } = props;
+  const { key, XSFWBJ, XSJBSJId, XM, XSFWKHBJs,onload } = props;
   const newDDFY = XSFWBJ.KHFWBJ.FWFY;
   const XSFWBJId = XSFWBJ.id;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -121,6 +122,9 @@ const ReplacePayClass = (props: {
 
     if (PaymentCG !== '待付款') {
       await deleteKHXSDD({ id: OrderId! });
+    }
+    if(onload){
+      onload();
     }
   };
   const handleFinish = async () => {

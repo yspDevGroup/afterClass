@@ -255,6 +255,9 @@ const Detail = (props: any) => {
           key={record.id}
           XSFWBJ={record?.XSFWBJs?.[0]}
           XSJBSJId={record.id}
+          onload={()=>{
+            actionRef?.current?.reloadAndRest();
+          }}
         />
       );
     }
