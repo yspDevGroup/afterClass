@@ -601,7 +601,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         {JFLX === 1 && (
           <ProForm.Item name="timeFrame" wrapperCol={{ offset: 3 }}>
             <RangePicker
-              disabled={!!detailValue?.id}
+              // disabled={!!detailValue?.id}
               style={{ width: '250px' }}
               allowClear={false}
               format="YYYY-MM-DD"
