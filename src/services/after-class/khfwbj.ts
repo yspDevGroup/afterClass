@@ -35,6 +35,8 @@ export async function createKHFWBJ(
 export async function getKHFWBJ(
   body: {
     BJSJId: string;
+    /** 服务班状态，0:未发布;1:已发布 */
+    ZT?: number[];
     XNXQId: string;
   },
   options?: { [key: string]: any },

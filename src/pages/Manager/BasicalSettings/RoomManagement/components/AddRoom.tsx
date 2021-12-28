@@ -21,7 +21,7 @@ type PropsType = {
   readonly?: boolean;
   setopens: (value: boolean) => void;
   setModalVisible: (value: boolean) => void;
-  setXQLabelItem: (value: string) => void;
+  setXQLabelItem: (value: { label: string, value: string }) => void;
 };
 
 const AddRoom = (props: PropsType) => {
@@ -129,7 +129,10 @@ const AddRoom = (props: PropsType) => {
       fieldProps: {
         options: campus,
         onChange(value: any, option: any) {
-          setXQLabelItem(option.label);
+          setXQLabelItem({
+            label: option.label,
+            value
+          });
         },
       },
     },
@@ -139,7 +142,7 @@ const AddRoom = (props: PropsType) => {
       label: '容纳人数',
       name: 'FJRS',
       key: 'FJRS',
-      max:10000,
+      max: 10000,
       rules: [
         { message: '最大人数不得超过一万', pattern: /^([1-9]\d{0,3}|0)?$/ }],
     },

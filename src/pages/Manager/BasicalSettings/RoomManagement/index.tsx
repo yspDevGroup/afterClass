@@ -52,7 +52,7 @@ const RoomManagement = () => {
   const [CDLXId, setCDLXId] = useState<string>('');
   const [dataLX, setDataLX] = useState<any>([]);
   const [opens, setopens] = useState<boolean>(false);
-  const [xQLabelItem, setXQLabelItem] = useState('');
+  const [xQLabelItem, setXQLabelItem] = useState<{ label?: string, value?: string }>({});
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [uploadVisible, setUploadVisible] = useState<boolean>(false);
@@ -97,8 +97,8 @@ const RoomManagement = () => {
       const { id, ...rest } = values;
       // 更新或新增场地信息
       const result = id
-        ? await updateFJSJ({ id }, { ...rest, XQName: xQLabelItem, XXJBSJId: currentUser?.xxId })
-        : await createFJSJ({ ...rest, XQName: xQLabelItem, XXJBSJId: currentUser?.xxId });
+        ? await updateFJSJ({ id }, { ...rest, XQName: xQLabelItem?.label, XQSJId: xQLabelItem.value, XXJBSJId: currentUser?.xxId })
+        : await createFJSJ({ ...rest, XQName: xQLabelItem?.label, XQSJId: xQLabelItem.value, XXJBSJId: currentUser?.xxId });
       if (result.status === 'ok') {
         message.success(id ? '场地信息更新成功' : '场地信息新增成功');
         setModalVisible(false);
@@ -169,6 +169,9 @@ const RoomManagement = () => {
       align: 'center',
       width: 200,
       ellipsis: true,
+      render: (_, record) => {
+        return record?.XQSJ?.XQMC
+      }
     },
     {
       title: '容纳人数',
@@ -424,13 +427,13 @@ const RoomManagement = () => {
           modalType === 'uphold'
             ? null
             : [
-                <Button key="submit" type="primary" onClick={handleSubmit}>
-                  确定
-                </Button>,
-                <Button key="back" onClick={() => setModalVisible(false)}>
-                  取消
-                </Button>,
-              ]
+              <Button key="submit" type="primary" onClick={handleSubmit}>
+                确定
+              </Button>,
+              <Button key="back" onClick={() => setModalVisible(false)}>
+                取消
+              </Button>,
+            ]
         }
         style={{ maxHeight: '430px' }}
         centered
