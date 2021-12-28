@@ -2,7 +2,7 @@
  * @description: 
  * @author: wsl
  * @Date: 2021-12-23 14:26:31
- * @LastEditTime: 2021-12-25 16:20:15
+ * @LastEditTime: 2021-12-28 11:46:30
  * @LastEditors: wsl
  */
 
@@ -50,7 +50,7 @@ const InterestClassroom = () => {
           const result = await getKHFWBJ({
             BJSJId: StorageBjId,
             XNXQId: resXNXQ?.current?.id || '',
-            ZT:[1]
+            ZT: [1]
           })
           if (result.status === 'ok') {
             setFWKCData(result.data)
@@ -67,20 +67,21 @@ const InterestClassroom = () => {
     )()
   }, [StorageXSId])
 
-  useEffect(() => {
-    (async () => {
-      if (StorageXSId) {
-        const res = await getStudentListByBjid({
-          BJSJId: StorageBjId,
-          XSJBSJId: StorageXSId,
-          page: 0,
-          pageSize: 0
-        })
-        if (res.status === 'ok') {
-          setBaoMinData(res.data.rows[0])
-        }
+  const xuankeState = async () => {
+    if (StorageXSId) {
+      const res = await getStudentListByBjid({
+        BJSJId: StorageBjId,
+        XSJBSJId: StorageXSId,
+        page: 0,
+        pageSize: 0
+      })
+      if (res.status === 'ok') {
+        setBaoMinData(res.data.rows[0])
       }
-    })()
+    }
+  }
+  useEffect(() => {
+    xuankeState();
   }, []);
 
 
@@ -88,7 +89,6 @@ const InterestClassroom = () => {
     if (BaoMinData && FWKCData) {
       setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).id)
     }
-
   }, [FWKCData, BaoMinData])
   useEffect(() => {
     setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === MouthId).id)
@@ -135,7 +135,6 @@ const InterestClassroom = () => {
   }
   // 选课确认弹框
   const handleOks = async () => {
-    setModalVisible(false);
     const res = await chooseKCByXSId({
       XSJBSJId: StorageXSId,
       KHFWBJId: FWKCData?.id,
@@ -144,7 +143,9 @@ const InterestClassroom = () => {
       KHBJSJIds: YXKCId
     })
     if (res.status === 'ok') {
-      message.success('选课成功')
+      message.success('选课成功');
+      setModalVisible(false);
+      xuankeState();
       // history.push('/parent/home/afterClassCoach/interestClassroom')
     } else {
       message.error('操作失败，请联系管理员')
@@ -174,7 +175,7 @@ const InterestClassroom = () => {
 
   return <>
     <div className={styles.InterestClassroom}>
-      <GoBack title={'选课报名'}  />
+      <GoBack title={'选课报名'} onclick="/parent/home?index=index" />
 
       <div className={styles.titles}>
         <div />
@@ -186,12 +187,11 @@ const InterestClassroom = () => {
           FWKCData ? <Radio.Group defaultValue={FWKCData?.KHFWSJPZs?.[0].id} onChange={onchangeMonth}>
             {
               FWKCData?.KHFWSJPZs && FWKCData?.KHFWSJPZs?.map((values: any) => {
-                return <div><Radio.Button value={values?.id}><div className={styles.monthNumber}>{values?.KSRQ.substring(5, 7)}</div><span>月</span></Radio.Button></div> 
+                return <div><Radio.Button value={values?.id}><div className={styles.monthNumber}>{values?.KSRQ.substring(5, 7)}</div><span>月</span></Radio.Button></div>
               })
             }
           </Radio.Group> : <></>
         }
-
       </div>
       {
         FWKCData?.KCFWBJs.find((item: any) => item.LX === 0) ? <>
@@ -199,7 +199,7 @@ const InterestClassroom = () => {
             <div className={styles.title}>
               <div />
               <span>趣味课堂</span>
-              <span>最多可选择{FWKCData?.KXSL}门</span>
+              {BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 ? <span>最多可选择{FWKCData?.KXSL}门</span> : <></>}
             </div>
             <div>
               <Checkbox.Group
@@ -223,7 +223,6 @@ const InterestClassroom = () => {
 
                                 <Checkbox
                                   value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
-                                  disabled
                                 />
                               </div>
                             </>
