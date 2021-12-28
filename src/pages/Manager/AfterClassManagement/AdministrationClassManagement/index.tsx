@@ -14,6 +14,7 @@ import { getGradesByCampus } from '@/services/after-class/njsj';
 import ConfigureService from './ConfigureService';
 import { updateKHFWBJ } from '@/services/after-class/khfwbj';
 import ClassSeviveDetail from './ClassSeviveDetail';
+import UpdateCourses from './UpdateCourses';
 
 type selectType = { label: string; value: string };
 
@@ -150,6 +151,19 @@ const AdministrationClassManagement = () => {
     }
     return '';
   };
+  const getSelctCourse=(record: any)=>{
+    if (record?.KHFWBJs[0]?.ZT === 1 && curXNXQId && campusId) {
+      return <UpdateCourses 
+          key={record.id}
+          actionRef={actionRef}
+          XNXQId={curXNXQId}
+          BJSJId={record.id}
+          NJSJ={record?.NJSJ}
+          XQSJId={campusId} 
+      />
+    }
+    return ''
+  }
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -231,7 +245,7 @@ const AdministrationClassManagement = () => {
       valueType: 'option',
       key: 'option',
       align: 'center',
-      width: 100,
+      width: 150,
       render: (_, record) => {
         let f = false;
         if (record?.KHFWBJs?.[0]?.ZT === 1) {
@@ -254,6 +268,7 @@ const AdministrationClassManagement = () => {
               />
             )}
             {getSetting(record)}
+            {getSelctCourse(record)}
           </Space>
         );
       },
