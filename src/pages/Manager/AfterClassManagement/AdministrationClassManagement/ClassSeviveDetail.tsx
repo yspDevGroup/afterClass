@@ -25,10 +25,10 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
       const { data } = res;
       if (data) {
         data?.KCFWBJs?.forEach((item: any) => {
-          if (item.LX === 0) {
+          if (item.LX === 1) {
             KCFD.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
           }
-          if (item?.LX === 1) {
+          if (item?.LX === 0) {
             KHKC.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
           }
         });
@@ -129,7 +129,7 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
 
         <ProForm.Item
           label="课后辅导："
-          rules={[{ required: true, message: '请选择课后辅导班' }]}
+          // rules={[{ required: true, message: '请选择课后辅导班' }]}
           name="KCFD"
           key="KCFD"
         >
@@ -139,7 +139,7 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
         </ProForm.Item>
         <ProForm.Item
           label="课后课程："
-          rules={[{ required: true, message: '请选择课程班' }]}
+          // rules={[{ required: true, message: '请选择课程班' }]}
           name="KHKC"
           key="KHKC"
         >
