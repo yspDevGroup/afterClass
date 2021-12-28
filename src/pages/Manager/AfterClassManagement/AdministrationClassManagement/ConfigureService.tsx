@@ -11,7 +11,7 @@ import type { Moment } from 'moment';
 import moment from 'moment';
 import { getAllKHFWSJ, updateKHFWSJ, createKHFWSJ } from '@/services/after-class/khfwsj';
 const { RangePicker } = DatePicker;
-import seviceImage from '@/assets/seviceImage.png'
+import seviceImage from '@/assets/seviceImage.png';
 
 type ConfigureSeverType = {
   KHFWBJs: any[];
@@ -22,7 +22,7 @@ type ConfigureSeverType = {
   XQData?: any; //{JSRQ: "2021-12-29" KSRQ: "2021-08-30"}
   actionRef: any;
   XQSJId?: string;
-  key: string,
+  key: string;
 };
 export type ModalValue = {
   isTemplate: boolean;
@@ -61,7 +61,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
   };
 
   const getDetailValue = async () => {
-
     if (BJSJId && XNXQId) {
       setLoading(true);
       const res = await getKHFWBJ({
@@ -115,7 +114,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
       }
       setLoading(false);
     }
-
   };
 
   const imageChange = (type: string, e?: any) => {
@@ -201,8 +199,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
         if (saveFalg) {
           signUpClassRef?.current?.onSetVisible(true);
         }
-        if(actionRef){
-          actionRef.current?.reload();
+        if (actionRef&& !saveFalg) {
+          actionRef.current?.reloadAndRest();
         }
       } else {
         message.error(res.message);
@@ -215,8 +213,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
         if (saveFalg) {
           signUpClassRef?.current?.onSetVisible(true);
         }
-        if(actionRef){
-          actionRef.current?.reload();
+        if (actionRef&& !saveFalg) {
+          actionRef.current?.reloadAndRest();
         }
       } else {
         message.error(res.message);
@@ -273,19 +271,20 @@ const ConfigureService = (props: ConfigureSeverType) => {
         FWFY: data?.FWFY,
         KXSL: data?.ZDKCS,
         // KCFD,
-        KHKC: data?.KHBJSJs?.map((item: any) => { return { label: item?.BJMC, value: item?.id } }) || [],
-      }
-      setDetailValue(v)
+        KHKC:
+          data?.KHBJSJs?.map((item: any) => {
+            return { label: item?.BJMC, value: item?.id };
+          }) || [],
+      };
+      setDetailValue(v);
       if (data?.FWTP && data.FWTP !== '') {
-        setImageUrl(data.FWTP)
+        setImageUrl(data.FWTP);
       }
     }
-
-  }
-  // v true 更新 false 新建 
+  };
+  // v true 更新 false 新建
   const onTemplateSave = (v: boolean = false) => {
     formRef.current?.validateFieldsReturnFormatValue?.().then(async (values: ModalValue) => {
-
       const params: any = {
         FWMC: values?.FWMC,
         XQSJId,
@@ -296,10 +295,10 @@ const ConfigureService = (props: ConfigureSeverType) => {
         FWMS: values?.FWMS,
         ZDKCS: values?.KXSL,
         FWFY: values?.FWFY,
-      }
+      };
       // 更新
       if (v) {
-        if (templateId) { 
+        if (templateId) {
           const data = templateData?.find((item: any) => item.id === templateId);
           const { KHBJSJs } = data;
           let falg = true;
@@ -315,28 +314,25 @@ const ConfigureService = (props: ConfigureSeverType) => {
             const result = await updateKHFWSJ({ id: templateId }, params);
             if (result.status === 'ok') {
               message.success('更新成功');
-              getData()
+              getData();
               return true;
             } else {
               message.warning(result.message);
               return false;
             }
           } else {
-            message.error('因课程班不匹配当前模板')
+            message.warning('因课程班不匹配当前模板');
           }
-
-        }else{
+        } else {
           message.error('未选择服务模板');
         }
-
-
       } else {
         params.NJIds = [NJSJ.id];
-        params.FWZT= 1;
+        params.FWZT = 1;
         const res = await createKHFWSJ(params);
         if (res.status === 'ok') {
           message.success('保存成功');
-          getData()
+          getData();
           return true;
         } else {
           message.warning(res.message);
@@ -344,9 +340,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         }
       }
     });
-
-
-  }
+  };
 
   return (
     <Spin spinning={loading}>
@@ -396,9 +390,15 @@ const ConfigureService = (props: ConfigureSeverType) => {
             return [
               <div className={styles.modelFooter}>
                 <span className={styles.modelTips}>
-                  <Button type="primary" onClick={() => {
-                    onTemplateSave();
-                  }}> 存为服务模板 </Button>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      onTemplateSave();
+                    }}
+                  >
+                    {' '}
+                    存为服务模板{' '}
+                  </Button>
                 </span>
                 <div>
                   <Button
@@ -422,7 +422,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
           destroyOnClose: true,
           onCancel: () => {
             setIsTemplate(false);
-          }
+          },
         }}
         onFinish={onFinish}
         layout="horizontal"
@@ -435,7 +435,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
           fieldProps={{
             onChange: (checked: boolean) => {
               setIsTemplate(checked);
-
             },
           }}
         />
@@ -443,18 +442,28 @@ const ConfigureService = (props: ConfigureSeverType) => {
           <ProForm.Item label="模板名称：" wrapperCol={{ span: 20 }}>
             <Row justify="start" gutter={12}>
               <Col span={8}>
-                <ProFormSelect noStyle name="text" placeholder="请选择服务模板"
+                <ProFormSelect
+                  noStyle
+                  name="text"
+                  placeholder="请选择服务模板"
                   fieldProps={{
-                    options: templateData?.map((item: any) => { return { value: item?.id, label: item?.FWMC } }),
+                    options: templateData?.map((item: any) => {
+                      return { value: item?.id, label: item?.FWMC };
+                    }),
                     onChange: onTemplateChange,
                     allowClear: true,
                   }}
-
                 />
               </Col>
               <Col span={8} className={styles.ghostButton}>
                 <Space>
-                  <Button type="primary" ghost onClick={() => { onTemplateSave(true) }}>
+                  <Button
+                    type="primary"
+                    ghost
+                    onClick={() => {
+                      onTemplateSave(true);
+                    }}
+                  >
                     更新模板
                   </Button>
                 </Space>
@@ -565,7 +574,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               wrapperCol={{ flex: '10em' }}
               addonBefore="按"
               label="收费方式"
-              addonAfter='缴费'
+              addonAfter="缴费"
               name="JFLX"
               // disabled={!!detailValue?.id}
               rules={[{ required: true, message: '请选择收费方式' }]}
@@ -586,15 +595,13 @@ const ConfigureService = (props: ConfigureSeverType) => {
             />
           </Col>
           <Col flex="auto">
-            
-              <span
-                style={{ color: '#999', marginRight: '8px' }}
-                className="ant-form-text ant-form-item"
-              >
-                {' '}
-                课后服务按月收费，家长可随时缴纳截至当前月的服务费用
-              </span>
-           
+            <span
+              style={{ color: '#999', marginRight: '8px' }}
+              className="ant-form-text ant-form-item"
+            >
+              {' '}
+              课后服务按月收费，家长可随时缴纳截至当前月的服务费用
+            </span>
           </Col>
         </Row>
         {JFLX === 1 && (
@@ -618,7 +625,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               name="FWFY"
               key="FWFY"
               min={0}
-              addonAfter={JFLX===1? '元': '元/月'}
+              addonAfter={JFLX === 1 ? '元' : '元/月'}
             />
           </Col>
         </Row>

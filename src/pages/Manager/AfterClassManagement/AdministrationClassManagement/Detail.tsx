@@ -1,7 +1,7 @@
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Space, Tag, Form, Input, Modal, message, Select, Spin, } from 'antd';
+import { Button, Space, Tag, Form, Input, Modal, message, Select, Spin } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.less';
 import EllipsisHint from '@/components/EllipsisHint';
@@ -19,7 +19,7 @@ import ReplacePayClass from './pay/ReplacePayClass';
 
 const { TextArea } = Input;
 const { Option } = Select;
-const {Search}=Input;
+const { Search } = Input;
 
 const Detail = (props: any) => {
   const signUpClassRef = useRef();
@@ -36,10 +36,9 @@ const Detail = (props: any) => {
   const [KHFWSJPZId, setKHFWSJPZId] = useState<string>();
   const [title, setTitle] = useState<string>();
   const { KHFWBJs } = state;
-  const [searchValue,setSearchValue]=useState<string>('');
-  const [ZT,setZT]=useState<string|undefined>(undefined);
-  const [detailZT,setDetailZT]=useState<string|undefined>(undefined);
-
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [ZT, setZT] = useState<string | undefined>(undefined);
+  const [detailZT, setDetailZT] = useState<string | undefined>(undefined);
 
   const getDetailValue = async () => {
     if (KHFWBJs?.[0]) {
@@ -155,8 +154,8 @@ const Detail = (props: any) => {
           // if(text?.[0]?.ZT===0){
           //   return '报名已缴费'
           // }
-          if(text?.[0]?.ZT===1){
-            return '退课中'
+          if (text?.[0]?.ZT === 1) {
+            return '退课中';
           }
           return '已报名';
         } else {
@@ -164,7 +163,6 @@ const Detail = (props: any) => {
         }
       },
     },
-   
   ];
 
   // 退课
@@ -173,7 +171,7 @@ const Detail = (props: any) => {
       Modal.confirm({
         icon: <ExclamationCircleOutlined />,
         title: '退课',
-        content: '退课提示',
+        content: '是否对该学生进行退课？',
         onOk: async () => {
           const newlist = list.map((item: any) => {
             return {
@@ -258,7 +256,7 @@ const Detail = (props: any) => {
           key={record.id}
           XSFWBJ={record?.XSFWBJs?.[0]}
           XSJBSJId={record.id}
-          onload={()=>{
+          onload={() => {
             actionRef?.current?.reloadAndRest();
           }}
         />
@@ -366,7 +364,7 @@ const Detail = (props: any) => {
     if (KHFWSJPZId) {
       actionRef?.current?.reloadAndRest();
     }
-  }, [KHFWSJPZId,ZT]);
+  }, [KHFWSJPZId, ZT]);
 
   useEffect(() => {
     let data;
@@ -392,11 +390,10 @@ const Detail = (props: any) => {
     }
   }, [XSId]);
 
-  const onSearchChange=(value: string)=>{
+  const onSearchChange = (value: string) => {
     setSearchValue(value);
     actionRef?.current?.reloadAndRest();
-  }
- 
+  };
 
   return (
     <div className={styles.AdministrativeClass}>
@@ -420,7 +417,7 @@ const Detail = (props: any) => {
             scroll={{ x: getTableWidth(getColumns()) }}
             tableAlertOptionRender={({ selectedRows }) => {
               // console.log('selectedRows23', selectedRows, selectedRowKeys);
-              if (KHFWBJs?.[0]&& detailZT) {
+              if (KHFWBJs?.[0] && detailZT) {
                 return (
                   <Space>
                     <Button
@@ -430,7 +427,7 @@ const Detail = (props: any) => {
                         const list = selectedRows
                           .filter((item: any) => {
                             // 判断学生是否报名
-                            return item?.XSFWBJs?.[0]?.ZT === 3 || item?.XSFWBJs?.[0]?.ZT === 0
+                            return item?.XSFWBJs?.[0]?.ZT === 3 || item?.XSFWBJs?.[0]?.ZT === 0;
                           })
                           .map((item: any) => {
                             return { XSJBSJId: item.id, XSFWBJId: item?.XSFWBJs?.[0]?.id };
@@ -522,12 +519,12 @@ const Detail = (props: any) => {
             request={async (param) => {
               // 表单搜索项会从 params 传入，传递给后端接口。
               let arrZT: any[] = [];
-              if(ZT){
-                arrZT=[ZT]
+              if (ZT) {
+                arrZT = [ZT];
               }
-            
-              if(ZT === '0'){
-                arrZT=['0', '1','2','3']
+
+              if (ZT === '0') {
+                arrZT = ['0', '1', '2', '3'];
               }
               if (state.id && KHFWSJPZId) {
                 const res = await getStudentListByBjid({
@@ -535,8 +532,8 @@ const Detail = (props: any) => {
                   page: param.current,
                   pageSize: param.pageSize,
                   KHFWSJPZId: KHFWSJPZId,
-                  ZT:arrZT,
-                  XSXMORXH:searchValue,
+                  ZT: arrZT,
+                  XSXMORXH: searchValue,
                 });
 
                 if (res.status === 'ok') {
@@ -579,14 +576,14 @@ const Detail = (props: any) => {
                 )}
                 {
                   <Search
-                  value={searchValue}
-                  onChange={(e: any) => {
-                    setSearchValue(e?.target?.value);
-                  }}
-                  placeholder="姓名/学号"
-                  allowClear
-                  onSearch={onSearchChange}
-                />
+                    value={searchValue}
+                    onChange={(e: any) => {
+                      setSearchValue(e?.target?.value);
+                    }}
+                    placeholder="姓名/学号"
+                    allowClear
+                    onSearch={onSearchChange}
+                  />
                 }
                 <div>
                   <label htmlFor="service">报名类型：</label>
@@ -594,18 +591,14 @@ const Detail = (props: any) => {
                     style={{ width: 160 }}
                     value={ZT}
                     allowClear
-                   placeholder='请选择'
-                    onChange={(value)=>{
+                    placeholder="请选择"
+                    onChange={(value) => {
                       setZT(value);
                     }}
                   >
-                    
-                       <Option value={0}>已报名</Option>;
-                       <Option value={1}>退课中</Option>;
-                       <Option value={2}>已退课</Option>;
-                       <Option value={3}>未缴费</Option>;
-                       <Option value={4}>未报名</Option>;
-               
+                    <Option value={0}>已报名</Option>;<Option value={1}>退课中</Option>;
+                    <Option value={2}>已退课</Option>;<Option value={3}>未缴费</Option>;
+                    <Option value={4}>未报名</Option>;
                   </Select>
                 </div>
               </SearchLayout>

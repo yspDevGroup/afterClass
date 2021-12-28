@@ -184,7 +184,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         }else{
           message.success('报名成功');
         }
-        actionRef.current?.reloadAndRest();
+        actionRef?.current?.reloadAndRest();
       } else {
         message.error(res.message);
       }
@@ -226,6 +226,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         modalProps={{
           destroyOnClose: true,
           onCancel: () => {
+            actionRef?.current?.reloadAndRest();
             setVisible(false);
           },
         }}
