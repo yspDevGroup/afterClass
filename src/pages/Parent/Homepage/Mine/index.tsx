@@ -5,7 +5,7 @@ import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
 import IconFont from '@/components/CustomIcon';
 import { enHenceMsg, removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
-import { getAllKHXSDD } from '@/services/after-class/khxsdd';
+import { getStudentOrders } from '@/services/after-class/khxsdd';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 
 import imgPop from '@/assets/mobileBg.png';
@@ -56,10 +56,8 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
   const fetchData = async () => {
     const studentId: string =
       StorageXSId || student?.[0].XSJBSJId || testStudentId;
-    const res = await getAllKHXSDD({
-      XXJBSJId: currentUser?.xxId,
+    const res = await getStudentOrders({
       XSJBSJId: studentId,
-      // njId: currentUser.njId,
       DDZT: ['待付款'],
     });
     if (res.status === 'ok') {

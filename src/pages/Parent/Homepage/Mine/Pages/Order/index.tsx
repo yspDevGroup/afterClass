@@ -67,6 +67,9 @@ const OrderList = (props: {
                   <span>￥{item?.DDFY || item.KHXXZZFW?.FY}</span>
                 </div>
                 <p className={styles.orderNumber}>
+                  <span>订单类型：{item.DDLX === 0 ? '缤纷课堂' : (item.DDLX === 1 ? '订餐&托管' : '课后服务')}</span>
+                </p>
+                <p className={styles.orderNumber}>
                   <span>下单时间：{item.XDSJ}</span>
                 </p>
                 {item.DDZT === '已付款' ? (
@@ -129,9 +132,10 @@ const Order: React.FC = () => {
   useEffect(() => {
     fetch();
   }, []);
+
   return (
     <>
-      <GoBack title={'订单'} onclick="/parent/home?index=mine" showReFund/>
+      <GoBack title={'订单'} onclick="/parent/home?index=mine" showReFund />
       <div className={styles.orderList}>
         <Tabs type="card" defaultActiveKey={type}>
           <TabPane tab="全部" key="total">
