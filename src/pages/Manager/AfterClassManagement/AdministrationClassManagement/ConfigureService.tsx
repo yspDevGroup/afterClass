@@ -12,7 +12,6 @@ import moment from 'moment';
 import { getAllKHFWSJ, updateKHFWSJ, createKHFWSJ } from '@/services/after-class/khfwsj';
 const { RangePicker } = DatePicker;
 import seviceImage from '@/assets/seviceImage.png'
-import Select from 'rc-select';
 
 type ConfigureSeverType = {
   KHFWBJs: any[];

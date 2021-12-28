@@ -216,7 +216,7 @@ const Detail = (props: any) => {
   };
   // 退课
   const getTK = (record: any) => {
-    if (record?.XSFWBJs?.[0]?.ZT === 3&&record?.XSFWBJs?.[0]?.ZT === 0) {
+    if (record?.XSFWBJs?.[0]?.ZT === 3 || record?.XSFWBJs?.[0]?.ZT === 0) {
       return (
         <a
           onClick={() => {
@@ -426,11 +426,11 @@ const Detail = (props: any) => {
                     <Button
                       type="primary"
                       onClick={() => {
-                        // 筛选未交费学生 ZT===3的学生
+                        // 筛选未交费学生 ZT===3的学生 //已缴费的学生
                         const list = selectedRows
                           .filter((item: any) => {
                             // 判断学生是否报名
-                            return item?.XSFWBJs?.length;
+                            return item?.XSFWBJs?.[0]?.ZT === 3 || item?.XSFWBJs?.[0]?.ZT === 0
                           })
                           .map((item: any) => {
                             return { XSJBSJId: item.id, XSFWBJId: item?.XSFWBJs?.[0]?.id };
