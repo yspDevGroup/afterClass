@@ -7,7 +7,7 @@
  */
 import GoBack from '@/components/GoBack';
 import { deleteKHBJPJ, getKHBJPJ } from '@/services/after-class/khbjpj';
-import { getStudentClasses } from '@/services/after-class/khbjsj';
+import { getStudentEvaluationClasses } from '@/services/after-class/khbjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { Button, message, Rate, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
@@ -27,7 +27,7 @@ const Evaluation = () => {
   const getKcData = async () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const { student } = currentUser || {};
-    const res = await getStudentClasses({
+    const res = await getStudentEvaluationClasses({
       XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
       XNXQId: result.current.id,
       ZT: [0, 1, 2],
@@ -35,10 +35,7 @@ const Evaluation = () => {
     if (res.status === 'ok') {
       const newArr: any[] = [];
       res.data.forEach((value: any) => {
-        if (
-          value?.KHBJSJ?.KHXSCQs?.find((item: any) => item.CQZT === '出勤') &&
-          value.KHBJSJ?.KHBJPJs?.length === 0
-        ) {
+        if (value.KHBJSJ?.KHBJPJs?.length === 0) {
           newArr.push(value);
         }
       });

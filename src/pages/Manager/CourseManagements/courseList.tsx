@@ -401,7 +401,7 @@ const CourseList = () => {
       },
     },
     {
-      title: '课程班信息',
+      title: '服务课程班',
       align: 'center',
       search: false,
       key: 'NJSJs',
@@ -413,10 +413,37 @@ const CourseList = () => {
           <Link
             to={{
               pathname: Url,
-              state: record,
+              state: {
+                type:'1',
+                record
+              },
             }}
           >
-            <Tooltip title={`已开设${record.bj_count}个课程班。`}>{record.bj_count}/{record.allBJ_count}</Tooltip>
+            <Tooltip title={`已开设${record.fwbj_count}个服务课程班。`}>{record.fwbj_count}/{record.allFWBJ_count}</Tooltip>
+          </Link>
+        );
+      },
+    },
+    {
+      title: '缤纷课程',
+      align: 'center',
+      search: false,
+      key: 'NJSJs',
+      dataIndex: 'NJSJs',
+      width: 100,
+      render: (_, record) => {
+        const Url = `/courseManagements/classManagement`;
+        return (
+          <Link
+            to={{
+              pathname: Url,
+              state:  {
+                type:'2',
+                record
+              },
+            }}
+          >
+            <Tooltip title={`已开设${record.bj_count || 0}个缤纷课程。`}>{record.bj_count || 0}/{record.allBJ_count}</Tooltip>
           </Link>
         );
       },

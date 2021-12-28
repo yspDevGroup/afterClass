@@ -6,18 +6,20 @@ import CourseClass from './CourseClass';
 
 const { TabPane } = Tabs;
 
-const index = () => {
+const index = (props: { location: { state: any } }) => {
+  const { state } = props.location;
+
   return (
     <PageContainer>
-      <Tabs>
+      <Tabs defaultActiveKey={state?.type || '1'}>
         <TabPane tab="服务课堂" key="1">
           <ServiceClass location={{
-            state: undefined
+            state: state?.record
           }} />
         </TabPane>
         <TabPane tab="缤纷课堂" key="2">
           <CourseClass location={{
-            state: undefined
+            state: state?.record
           }} />
         </TabPane>
       </Tabs>

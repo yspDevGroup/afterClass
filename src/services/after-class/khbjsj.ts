@@ -178,6 +178,32 @@ export async function getStudentClasses(
   });
 }
 
+/** 获取学生可评价班级信息 POST /khbjsj/getStudentEvaluationClasses */
+export async function getStudentEvaluationClasses(
+  body: {
+    /** 学生ID */
+    XSJBSJId: string;
+    /** 状态 */
+    ZT?: number[];
+    /** 是否被服务使用:0没有，1有 */
+    ISFW?: number;
+    /** 是否启用 */
+    ISQY?: number;
+    /** 学年学期ID */
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getStudentEvaluationClasses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 获取班级基础信息 POST /khbjsj/getAllClasses */
 export async function getAllClasses(
   body: {

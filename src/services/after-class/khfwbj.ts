@@ -98,6 +98,24 @@ export async function updateKHFWBJ(
   });
 }
 
+/** 新增服务班级课程-服务班 POST /khfwbjaddKCtoKCFWBJ */
+export async function addKCtoKCFWBJ(
+  body: {
+    KHFWBJId?: string;
+    KHBJSJIds?: { KHBJSJId?: string; LX?: number }[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status: 'ok' | 'error'; message?: string }>('/khfwbjaddKCtoKCFWBJ', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 学生批量报名服务班 PUT /khfwbj/studentRegistration */
 export async function studentRegistration(
   body: {
