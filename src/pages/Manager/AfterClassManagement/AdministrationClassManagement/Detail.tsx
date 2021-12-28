@@ -289,7 +289,7 @@ const Detail = (props: any) => {
   };
   // 代选课
   const getDXK = (record: any) => {
-    if (record?.XSFWBJs?.[0]?.ZT === 3) {
+    if (record?.XSFWBJs?.[0]?.ZT === 3||record?.XSFWBJs?.[0]?.ZT === 0) {
       if (
         !record?.XSFWBJs?.[0]?.XSFWKHBJs?.some((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)
       ) {
@@ -605,7 +605,7 @@ const Detail = (props: any) => {
             }
             toolBarRender={() => {
               // 未配置
-              if (KHFWBJs?.[0]) {
+              if (KHFWBJs?.[0] && detailZT) {
                 return [
                   <SignUpClass
                     actionRef={actionRef}
