@@ -4,12 +4,14 @@ import styles from './AddCourse.less';
 import { useEffect, useState } from 'react';
 import ProFormFields from '@/components/ProFormFields';
 import TeacherSelect from '@/components/TeacherSelect';
-import moment from 'moment';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getAllXQSJ, getXQSJ } from '@/services/after-class/xqsj';
 import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import ShowName from '@/components/ShowName';
 import { getAllFJSJ } from '@/services/after-class/fjsj';
+import { getAllKHKCLX } from '@/services/after-class/khkclx';
+import { getKHKCSJ } from '@/services/after-class/khkcsj';
+import { getSchoolClasses } from '@/services/after-class/bjsj';
 
 type AddCourseProps = {
   visible: boolean;
@@ -46,40 +48,44 @@ const AddServiceClass: FC<AddCourseProps> = ({
   const [form, setForm] = useState<any>();
   const [Current, setBmCurrent] = useState(0);
   const [KCDate, setKCDate] = useState<any>([]);
+  const [KCLXData, setKCLXData] = useState<any[]>([]);
+  const [KCLXMC, setKCLXMC] = useState<string>();
   const [isJg, setIsJg] = useState<boolean>(false);
   const [kcId, setKcId] = useState<string | undefined>(undefined);
   const [BJData, setBJData] = useState<any>();
   const [XQMC, setXQMC] = useState<string>();
   // 指定教师
-  const [TeacherType, setTeacherType] = useState<any>([]);
+  const [TeacherType, setTeacherType] = useState<boolean>(false);
   // 校区
   const [campus, setCampus] = useState<any>([]);
+  const [campusId, setCampusId] = useState<string>();
   // 开课时间
   const [KKData, setKKData] = useState<any>();
   // 场地信息
   const [FJData, setFJData] = useState<any>();
   // 场地Id
   const [FJSJIds, setFJSJIds] = useState<any>();
+  const [classData, setClassData] = useState<any[]>();
 
   const formLayout = {
     labelCol: { flex: '7em' },
     wrapperCol: {},
   };
-  useEffect(() => {
-    if (formValues) {
-      const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === BjLists?.SSJGLX);
-      setFJSJIds(BjLists?.CDMCId);
-      setKCDate(kcDate);
-      setKcId(BjLists?.KHKCSJId);
-      setIsJg(BjLists?.SSJGLX === '机构课程');
-      setBJData(BjLists);
-      if (BjLists.ZJS) {
-        setTeacherType(true);
-      } else {
-        setTeacherType(false);
-      }
+
+  /**
+   * 获取课程类型数据
+   */
+  const getKCLXData = async () => {
+    const res = await getAllKHKCLX({});
+    if (res.status === 'ok') {
+      const KCLXItem: any = res.data?.map((item: any) => ({
+        value: item.KCTAG,
+        label: item.KCTAG,
+      }));
+      setKCLXData(KCLXItem);
     }
-  }, [formValues]);
+  };
+
   // 获取校区数据
   useEffect(() => {
     (async () => {
@@ -96,6 +102,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       }
     })();
   }, []);
+
   // 获取场地信息
   useEffect(() => {
     (
@@ -107,8 +114,11 @@ const AddServiceClass: FC<AddCourseProps> = ({
           setFJData(res.data?.rows)
         }
       }
-    )()
+    )();
+    // 获取课程类型
+    getKCLXData()
   }, [])
+
   useEffect(() => {
     (async () => {
       if (curXNXQId) {
@@ -127,9 +137,89 @@ const AddServiceClass: FC<AddCourseProps> = ({
       }
     })();
   }, [curXNXQId]);
+
+
+
+  useEffect(() => {
+    if (formValues) {
+       
+     
+      setIsJg(BjLists?.SSJGLX === '机构课程');
+      // if(BmLists?.XzClassMC?.length){
+      //   setClassData(BmLists.XzClassMC)
+      // }
+    
+      // 设置默认值
+      setFJSJIds(BjLists?.CDMCId);
+      setKcId(BjLists?.KHKCSJId);
+      setCampusId(BjLists.XQSJId);
+      
+      console.log('BjLists?.ZJS',BjLists?.ZJS)
+      if (BjLists?.ZJS) {
+        setTeacherType(true);
+      } else {
+        setTeacherType(false);
+      }
+
+      if(BjLists?.KCLX){
+        setKCLXMC(BjLists.KCLX)
+      }
+      setBJData(BjLists);
+      
+      
+    }
+    if (formValues && names === 'chakan') {
+      (async () => {
+        const res = await getXQSJ({
+          id: formValues?.XQSJId,
+        });
+        if (res.status === 'ok') {
+          setXQMC(res.data.XQMC);
+        }
+      })();
+    }
+  }, [formValues]);
+
+  // 获取课程适用年级和班级
+  const getBJData=async()=>{
+    if(kcId && campusId){
+      const res =await getKHKCSJ({
+        kcId,
+        // XXJBSJId:currentUser?.xxId,
+        // XNXQId: curXNXQId,
+      })
+      if(res?.status==='ok'){
+        
+        const newArr: any = [];
+          res.data?.NJSJs.forEach((value: any) => {
+            newArr.push(value.id);
+          });
+          const result = await getSchoolClasses({
+            XXJBSJId: currentUser?.xxId,
+            XNXQId: curXNXQId,
+            njId: newArr,
+            XQSJId: campusId,
+          });
+          if(result.status==='ok'){
+            
+            setClassData(result.data.rows);
+          }
+          
+      }
+    }
+    
+  }
+
+  useEffect(() => {
+    if(KCLXMC==='校内辅导'&& kcId && campusId){
+      getBJData();
+    }
+  }, [kcId,campusId])
+  
+
   const onFinish = async (values: any) => {
     if (Current === 0) {
-      const { ZJS, FJS, ...info } = values;
+      const { ZJS, FJS, BJIds, ...info } = values;
       let ZTeacher;
       let FTeacher;
       if (formValues && CopyType === 'undefined') {
@@ -171,6 +261,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       if (FJSJIds) {
         newData = {
           ...info,
+          BJIds:BJIds?[BJIds] : undefined,
           // eslint-disable-next-line no-nested-ternary
           KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
@@ -183,6 +274,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       } else {
         newData = {
           ...info,
+          BJIds:BJIds?[BJIds] : undefined,
           // eslint-disable-next-line no-nested-ternary
           KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
@@ -212,23 +304,10 @@ const AddServiceClass: FC<AddCourseProps> = ({
       }
     }
   };
-  useEffect(() => {
-    if (formValues && names === 'chakan') {
-      (async () => {
-        const res = await getXQSJ({
-          id: formValues?.XQSJId,
-        });
-        if (res.status === 'ok') {
-          setXQMC(res.data.XQMC);
-        }
-      })();
-    }
-  }, [formValues]);
-  useEffect(() => {
-    const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
-    setKCDate(kcDate);
-    setTeacherType(true);
-  }, [KHKCAllData]);
+
+
+
+
   useEffect(() => {
     setBJData({
       SSJGLX: '校内课程',
@@ -239,6 +318,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       setTeacherType(true);
     }
   }, [visible]);
+
 
   const getTitle = () => {
     if (formValues && names === 'chakan') {
@@ -259,11 +339,40 @@ const AddServiceClass: FC<AddCourseProps> = ({
       key: 'group0',
       groupItems: [
         {
+          type: 'select',
+          label: '课程类型：',
+          name: 'KCLX',
+          key: 'KCLX',
+          fieldProps: {
+            options: KCLXData,
+            onChange: (value: string) => {
+              
+              setKCLXMC(value);
+           
+              if (value === '校内辅导') {
+                setIsJg(false);
+                form?.setFieldsValue({
+                  SSJGLX: '校内课程'
+                })
+              }
+              form?.setFieldsValue({
+                KHKCSJId: undefined,
+                ZJS: undefined,
+                FJS: undefined,
+                BJIds: undefined,
+              })
+            }
+          },
+          rules: [{ required: true, message: '请选择课程类型' }],
+
+        },
+        {
           type: 'radio',
           label: '课程来源：',
           name: 'SSJGLX',
           key: 'SSJGLX',
           fieldProps: {
+            disabled: KCLXMC === '校内辅导',
             options: [
               { value: '校内课程', label: '校内课程' },
               { value: '机构课程', label: '机构课程' },
@@ -277,19 +386,25 @@ const AddServiceClass: FC<AddCourseProps> = ({
                 FJS: undefined,
               });
               const { value } = values.target;
-              let kcDate: any;
-              if (value === '机构课程') {
-                kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '机构课程' && item.KHKCSQs?.[0].ZT === 1);
-              } else {
-                kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
-              }
-              setKCDate(kcDate);
+              
+              // let kcData: any;
+              // if (value === '机构课程') {
+              //   kcData = KHKCAllData?.filter((item: any) => item.SSJGLX === '机构课程' && item.KHKCSQs?.[0].ZT === 1);
+              // } else {
+              //   kcData = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
+              // }
+              // // if(KCLXMC){
+              // //  kcData= kcData.filter((item: any)=>{
+              // //     return item?.KHKCLX?.KCTAG===KCLXMC
+              // //   })
+              // // }
+              // setKCDate(kcData);
               setIsJg(value === '机构课程');
             },
           },
           rules: [{ required: true, message: '请选择课程来源' }],
-        },
-        {}
+        }
+
       ],
     },
     {
@@ -298,18 +413,25 @@ const AddServiceClass: FC<AddCourseProps> = ({
       groupItems: [
         {
           type: 'select',
-          label: '课程名称：',
+          label: '选择课程：',
           name: 'KHKCSJId',
           key: 'KHKCSJId',
-          rules: [{ required: true, message: '请填写课程名称' }],
+          rules: [{ required: true, message: '请选择课程' }],
           fieldProps: {
             options: KCDate.map((item: any) => {
               return { label: item.KCMC, value: item.id };
             }),
             onChange: (values: any) => {
-              if (isJg) {
+              // if (isJg) {
                 setKcId(values);
-              }
+                setClassData([]);
+              // }
+              form?.setFieldsValue({
+                // KHKCSJId: undefined,
+                // ZJS: undefined,
+                // FJS: undefined,
+                BJIds: undefined,
+              })
             },
           },
         },
@@ -340,6 +462,10 @@ const AddServiceClass: FC<AddCourseProps> = ({
           rules: [{ required: true, message: '请填写所属校区' }],
           fieldProps: {
             options: campus,
+            onChange:(value: any)=>{
+              setClassData([]);
+              setCampusId(value);
+            }
           },
         },
         {
@@ -427,6 +553,21 @@ const AddServiceClass: FC<AddCourseProps> = ({
       ),
     },
     {
+      type: 'select',
+      label: '适用行政班：',
+      name: 'BJIds',
+      key: 'BJIds',
+      placeholder: "请选择适用行政班：",
+      hidden: KCLXMC !='校内辅导',
+      rules: [{ required: KCLXMC ==='校内辅导', message: '请选择适用行政班：' }],
+      fieldProps: {
+        options: classData?.map((item: any)=>{return{
+          value:item.id, 
+          label:`${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`
+        }}), 
+      },
+    },
+    {
       type: 'textArea',
       label: '简介：',
       rules: [{ required: true, message: '请输入班级课程安排' }],
@@ -436,6 +577,42 @@ const AddServiceClass: FC<AddCourseProps> = ({
       children: <TextArea showCount maxLength={200} autoSize={{ minRows: 3, maxRows: 5 }} />,
     },
   ];
+  
+
+
+  // 修改 KCData
+  useEffect(() => {
+    if (KHKCAllData?.length) {
+      const kcDate = KHKCAllData?.filter((item: any) => {
+        if (isJg) {
+          if(KCLXMC){
+            return item.SSJGLX === '机构课程'&& item.KHKCLX.KCTAG===KCLXMC
+          }
+          return item.SSJGLX === '机构课程'
+        }else{
+          if(KCLXMC){
+            return item.SSJGLX === '校内课程'&& item.KHKCLX.KCTAG===KCLXMC
+          }
+          return item.SSJGLX === '校内课程'
+        }
+      });
+      console.log('=========',kcDate)
+      setKCDate(kcDate);
+      // setTeacherType(true);
+    }
+
+  }, [KHKCAllData, isJg, KCLXMC])
+
+  // useEffect(() => {
+  //   const kcDate = KHKCAllData?.filter((item: any) =>{
+  //     // if(KCLXMC){
+  //     //   return item.SSJGLX === '校内课程'&&item?.KHKCLX?.KCTAG===KCLXMC;
+  //     // }
+  //      return item.SSJGLX === '校内课程'
+  //   } );
+  //   setKCDate(kcDate);
+  //   setTeacherType(true);
+  // }, [KHKCAllData]);
 
   return (
     <>
@@ -443,8 +620,10 @@ const AddServiceClass: FC<AddCourseProps> = ({
         title={getTitle()}
         visible={visible}
         className={styles.AddServiceClass}
+        destroyOnClose
         onCancel={() => {
           setVisible(false);
+          setTeacherType(false);
         }}
         width={formValues && names === 'chakan' ? 450 : 800}
         footer={formValues && names === 'chakan' ? null : [

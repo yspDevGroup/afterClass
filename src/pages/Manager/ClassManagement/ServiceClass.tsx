@@ -204,7 +204,10 @@ const ServiceClass = (props: { location: { state: any } }) => {
       KSS,
       XQSJId,
       CDMC: FJSJ?.FJMC,
-      CDMCId: FJSJId
+      CDMCId: FJSJId,
+      KCLX:currentData.KHKCSJ.KHKCLX.KCTAG,
+      BJIds:currentData?.KHKCSJ?.KHKCLX?.KCTAG==='校内辅导'? currentData?.BJSJs?.[0]?.id:null,
+      
     };
     setBjLists(BjList);
     const BJIdArr: any = [];
@@ -215,7 +218,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
     });
     const BmList = {
       BJIds: BJIdArr,
-      XzClassMC: BJMCArr,
+      XzClassMC: BJSJs,
       BMSD: [currentData.BMKSSJ, currentData.BMJSSJ],
       BJLX,
       BJRS,
@@ -226,12 +229,16 @@ const ServiceClass = (props: { location: { state: any } }) => {
       FY,
     };
     setJfLists(JfList);
+    if(currentData?.KHKCSJ?.KHKCLX?.KCTAG==='校内辅导'){
+      currentData.BJSJs=currentData.BJSJs?.[0]
+    }
     const list = {
       ...currentData,
       ZJS:
         currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJ ||
         undefined,
       FJS,
+      KCLX:currentData.KHKCSJ.KHKCLX.KCTAG,
       KHKCSJId: KHKCSJ?.id,
     };
     setVisible(true);
