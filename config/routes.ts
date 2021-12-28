@@ -171,39 +171,6 @@
     ],
   },
   {
-    // 增值服务
-    path: '/valueAddedServices',
-    name: 'valueAddedServices',
-    icon: 'SmileOutlined',
-    routes: [
-      {
-        // 服务类别配置
-        path: '/valueAddedServices/cateringService',
-        component: './Manager/ValueAddedServices/CateringService',
-        name: 'cateringService',
-      },
-      {
-        // 服务管理
-        path: '/valueAddedServices/serviceManagement',
-        name: 'serviceManagement',
-        routes: [
-          {
-            path: '/valueAddedServices/serviceManagement',
-            hideInMenu: 'true',
-            name: 'serviceManagement',
-            component: './Manager/ValueAddedServices/ServiceManagement',
-          },
-          {
-            path: '/valueAddedServices/serviceManagement/signUp',
-            hideInMenu: 'true',
-            name: 'signUp',
-            component: './Manager/ValueAddedServices/ServiceManagement/SignUp',
-          },
-        ],
-      },
-    ],
-  },
-  {
     // 课后服务
     path: '/afterClassManagement',
     name: 'afterClassManagement',
@@ -238,7 +205,39 @@
     icon: 'InsertRowBelowOutlined',
     component: './Manager/CourseScheduling',
   },
-
+  {
+    // 增值服务
+    path: '/valueAddedServices',
+    name: 'valueAddedServices',
+    icon: 'SmileOutlined',
+    routes: [
+      {
+        // 服务类别配置
+        path: '/valueAddedServices/cateringService',
+        component: './Manager/ValueAddedServices/CateringService',
+        name: 'cateringService',
+      },
+      {
+        // 服务管理
+        path: '/valueAddedServices/serviceManagement',
+        name: 'serviceManagement',
+        routes: [
+          {
+            path: '/valueAddedServices/serviceManagement',
+            hideInMenu: 'true',
+            name: 'serviceManagement',
+            component: './Manager/ValueAddedServices/ServiceManagement',
+          },
+          {
+            path: '/valueAddedServices/serviceManagement/signUp',
+            hideInMenu: 'true',
+            name: 'signUp',
+            component: './Manager/ValueAddedServices/ServiceManagement/SignUp',
+          },
+        ],
+      },
+    ],
+  },
   {
     // 巡课管理
     path: '/coursePatrol',
