@@ -395,9 +395,11 @@ const Detail = (props: any) => {
     actionRef?.current?.reloadAndRest();
   };
 
+
   return (
     <div className={styles.AdministrativeClass}>
       <PageContain>
+
         <Button
           type="primary"
           onClick={() => {
@@ -410,6 +412,11 @@ const Detail = (props: any) => {
           <LeftOutlined />
           返回上一页
         </Button>
+        <span style={{fontSize: '18px',marginLeft:'24px',}}>{
+          `${state?.NJSJ?.NJMC}${state?.NJSJ?.XD}${state?.BJ}`
+        }
+        </span>
+      
         <Spin spinning={loading}>
           <ProTable<any>
             actionRef={actionRef}

@@ -199,7 +199,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         if (saveFalg) {
           signUpClassRef?.current?.onSetVisible(true);
         }
-        if (actionRef&& !saveFalg) {
+        if (actionRef && !saveFalg) {
           actionRef.current?.reloadAndRest();
         }
       } else {
@@ -213,7 +213,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         if (saveFalg) {
           signUpClassRef?.current?.onSetVisible(true);
         }
-        if (actionRef&& !saveFalg) {
+        if (actionRef && !saveFalg) {
           actionRef.current?.reloadAndRest();
         }
       } else {
@@ -389,17 +389,18 @@ const ConfigureService = (props: ConfigureSeverType) => {
           render: (_props, defaultDoms) => {
             return [
               <div className={styles.modelFooter}>
-                <span className={styles.modelTips}>
+                
                   <Button
                     type="primary"
                     onClick={() => {
                       onTemplateSave();
                     }}
+                    style={{marginLeft: 0}}
                   >
                     {' '}
                     存为服务模板{' '}
                   </Button>
-                </span>
+                
                 <div>
                   <Button
                     onClick={() => {
@@ -439,11 +440,11 @@ const ConfigureService = (props: ConfigureSeverType) => {
           }}
         />
         {isTemplate && (
-          <ProForm.Item label="模板名称：" wrapperCol={{ span: 20 }}>
-            <Row justify="start" gutter={12}>
-              <Col span={8}>
+          
+            <Row justify="start">
+              <Col span={12}>
                 <ProFormSelect
-                  noStyle
+                  label="模板名称："  
                   name="text"
                   placeholder="请选择服务模板"
                   fieldProps={{
@@ -455,7 +456,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
                   }}
                 />
               </Col>
-              <Col span={8} className={styles.ghostButton}>
+              <Col span={12} className={styles.ghostButton}>
                 <Space>
                   <Button
                     type="primary"
@@ -463,20 +464,24 @@ const ConfigureService = (props: ConfigureSeverType) => {
                     onClick={() => {
                       onTemplateSave(true);
                     }}
+                    style={{marginLeft:'8px'}}
                   >
                     更新模板
                   </Button>
                 </Space>
               </Col>
             </Row>
-          </ProForm.Item>
+         
         )}
-        <ProFormText
-          label="服务名称："
-          name="FWMC"
-          wrapperCol={{ span: 6 }}
-          rules={[{ required: true, message: '请选择课程班' }]}
-        />
+        <Row>
+          <Col span={12}>
+            <ProFormText
+              label="服务名称："
+              name="FWMC"
+
+              rules={[{ required: true, message: '请选择课程班' }]}
+            />
+          </Col></Row>
         <Row>
           <Col span={12}>
             <ProFormTextArea
@@ -600,7 +605,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               className="ant-form-text ant-form-item"
             >
               {
-              JFLX === 0? '课后服务按月收费，家长可随时缴纳截至当前月的服务费用':'系统将根据当前所选时段创建一个课后服务班'}
+                JFLX === 0 ? '课后服务按月收费，家长可随时缴纳截至当前月的服务费用' : '系统将根据当前所选时段创建一个课后服务班'}
             </span>
           </Col>
         </Row>

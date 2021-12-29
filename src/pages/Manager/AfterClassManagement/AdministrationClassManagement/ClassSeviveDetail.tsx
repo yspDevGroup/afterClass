@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { getKHFWBJ } from '@/services/after-class/khfwbj';
 import { ModalValue } from './ConfigureService';
 import UploadImage from '@/components/CustomForm/components/UploadImage';
+import seviceImage from '@/assets/seviceImage.png';
 
 type ClassSeviveDetailProps = {
   BJSJId: string;
@@ -100,10 +101,9 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
             >
-              {(detailValue?.FWTP && (
-                <UploadImage imageurl={detailValue.FWTP} readonly={true} imagename="image" />
-              )) ||
-                '-'}
+          
+                <UploadImage imageurl={detailValue?.FWTP||seviceImage} readonly={true} imagename="image" />
+              
             </ProForm.Item>
 
             {/* <ProForm.Item
