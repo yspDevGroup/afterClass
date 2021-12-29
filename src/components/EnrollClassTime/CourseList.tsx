@@ -38,8 +38,8 @@ const CourseList = (props: {
                   <img src={value?.img || noCourses1} alt="" />
                   <div>
                     <p> <HistoryOutlined />{value.start}~{value?.end}</p>
-                    <p> <EnvironmentOutlined />{value?.xq} | {value?.address}</p>
-                    <p> <TeamOutlined />{value?.BJMC} | 共{value?.BJRS}人</p>
+                    <p> <EnvironmentOutlined />{value?.xq || '本校'} {value?.address ?<>| {value?.address}</>:<></>}</p>
+                    <p> <TeamOutlined />{value?.BJMC} {value?.BJRS ? <> | 共{value?.BJRS}人</>:<></>}  </p>
                   </div>
                 </div>
               </div>
