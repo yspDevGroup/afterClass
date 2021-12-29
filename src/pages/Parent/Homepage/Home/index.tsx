@@ -3,18 +3,12 @@
 /* eslint-disable react/self-closing-comp */
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useModel, history } from 'umi';
-import imgPop from '@/assets/mobileBg.png';
 import index_header from '@/assets/index_header.png';
 import notice_icon from '@/assets/notice_icon.png';
 import AfterClass_icon from '@/assets/AfterClass_icon.png';
 import Classroom_icon from '@/assets/Classroom_icon.png';
 import trusteeship_icon from '@/assets/trusteeship_icon.png';
 import remind from '@/assets/remind.png';
-import noPic from '@/assets/noPic.png';
-import news_icon from '@/assets/news_icon.png';
-import IconFont from '@/components/CustomIcon';
-import EnrollClassTime from '@/components/EnrollClassTime';
-import CourseTab from './components/CourseTab';
 import styles from './index.less';
 import Details from './Pages/Details';
 import EmptyArticle from './Pages/EmptyArticle';
@@ -22,8 +16,6 @@ import { enHenceMsg } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import Selected from './components/Selected';
-import JiaoYu from '@/assets/jiaoyuziyuan.png'
-import { RightOutlined } from '@ant-design/icons';
 import { getBJSJ } from '@/services/after-class/bjsj';
 import { studentTodo } from '@/services/after-class/xsjbsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';

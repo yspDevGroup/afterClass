@@ -138,7 +138,7 @@ const EmptyArticle = (props: any) => {
         cancelText="取消"
       >
         <div>
-          您是否确定课后报名服务
+          您确定报名课后服务
         </div>
       </Modal>
     </div>
