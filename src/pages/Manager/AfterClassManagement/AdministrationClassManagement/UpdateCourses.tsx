@@ -111,9 +111,11 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
     )
     if(res.status==='ok'){
       message.success('修改成功');
+      setLoading(false);
       setVisible(false);
     }else{
       message.error(res.message)
+      setLoading(false);
     }
       
     return true;
