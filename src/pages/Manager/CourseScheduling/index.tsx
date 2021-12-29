@@ -26,10 +26,10 @@ const Index = (props: any) => {
         setKey(value)
       }}>
         <TabPane tab="行政班排课" key="1">
-          <ClassScheduling />
+          { key==='1' &&<ClassScheduling />}
         </TabPane>
         <TabPane tab="课程班排课" key="2">
-          <CourseScheduling />
+        { key==='2' &&<CourseScheduling />}
         </TabPane>
       </Tabs>
     </PageContainer>

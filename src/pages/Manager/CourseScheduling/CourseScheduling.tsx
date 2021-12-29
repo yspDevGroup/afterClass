@@ -33,7 +33,7 @@ const CourseScheduling = () => {
   const [campusId, setCampusId] = useState<string>();
 
   const [state, setState] = useState(true);
-  const [curXNXQId, setCurXNXQId] = useState<any>(getQueryString('xnxqid'));
+  const [curXNXQId, setCurXNXQId] = useState<any>();
 
   const [termList, setTermList] = useState<any>();
 
@@ -380,7 +380,7 @@ const CourseScheduling = () => {
   // 获取排课数据信息
   const getPKData = async () => {
     const bjId = getQueryString('courseId');
-    // console.log('获取排课true',);
+    console.log('获取排课true',);
     setLoading(true);
     const res = await getFJPlan({
       isPk: false,
@@ -414,29 +414,40 @@ const CourseScheduling = () => {
         });
       });
       if (resXQ.data?.length) {
-        //设置默认选择第一个校区
-       let id = XQ?.find((item: any) => item.label === '本校')?.value;
-       if (!id) {
-           id = XQ[0].value;
+       const XQSJ= getQueryString('XQSJ');
+       if(XQSJ!==null){
+        setCampusId(XQSJ);
+       }else{
+         //设置默认选择第一个校区
+        let id = XQ?.find((item: any) => item.label === '本校')?.value;
+        if (!id) {
+            id = XQ[0].value;
+        }
+        setCampusId(id);
        }
-       setCampusId(id);
    }
       setCampus(XQ);
     }
   };
   // 选择校区后选择学年学期
   const getXNXQData = async () => {
-    const res = await queryXNXQList(currentUser?.xxId);
-    const newData = res.xnxqList;
-    const curTerm = res.current;
-    if (newData?.length) {
-      if (curTerm) {
-        setCurXNXQId(curTerm.id);
-        setTermList(newData);
+    const xnxq=getQueryString('xnxqid'); 
+      const res = await queryXNXQList(currentUser?.xxId);
+      const newData = res.xnxqList;
+      const curTerm = res.current;
+      if (newData?.length) {
+        if (curTerm) {
+          if(xnxq===null){
+          setCurXNXQId(curTerm.id);
+        } else{
+          setCurXNXQId(xnxq);
+        }
+          setTermList(newData);
+        }
+      } else {
+        setkai(true);
       }
-    } else {
-      setkai(true);
-    }
+    
   };
   // 获取课程信息
   const getKCData = async () => {
@@ -512,7 +523,8 @@ const CourseScheduling = () => {
   // 根据学年学期ID 获取学年课程名称数据，和班级名称数据， 获取当前学校学年的学期的场地排课情况
   useEffect(() => {
     const bjId = getQueryString('courseId');
-    if (curXNXQId&&campusId) {
+    if (curXNXQId && campusId) {
+      console.log('============');
       // 获取系统时间配置信息
       getSysTime();
       if (bjId === null) {
