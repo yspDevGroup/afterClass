@@ -375,7 +375,7 @@ const Detail = (props: any) => {
       ? `【缴费提醒】您的${KHFWBJs?.[0]?.FWMC}（${data?.data}）还未缴费，请及时处理。`
       : `【选课提醒】您报名的${KHFWBJs?.[0]?.FWMC}还未选课，请及时处理。`;
     form.setFieldsValue({ MSG: MSG });
-  }, [flag]);
+  }, [visible]);
 
   const getColumns = () => {
     if (KHFWBJs?.[0] && detailZT) {
