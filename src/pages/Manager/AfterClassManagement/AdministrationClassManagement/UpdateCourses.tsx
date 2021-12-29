@@ -8,7 +8,7 @@
 import ProForm, { ModalForm, ProFormSelect } from '@ant-design/pro-form';
 import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { Button, message, Spin } from 'antd';
-import { addKCtoKCFWBJ, getKHFWBJ, studentRegistration } from '@/services/after-class/khfwbj';
+import { addKCtoKCFWBJ, getKHFWBJ } from '@/services/after-class/khfwbj';
 
 import SelectCourses from '../components/SelectCourses';
 

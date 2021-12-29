@@ -518,13 +518,13 @@ const Detail = (props: any) => {
             }}
             request={async (param) => {
               // 表单搜索项会从 params 传入，传递给后端接口。
-              let arrZT: any[] = [];
+              let arrZT: any[] = [0, 1, 2, 3, 4];
               if (ZT) {
                 arrZT = [ZT];
               }
 
-              if (ZT === '0') {
-                arrZT = ['0', '1', '2', '3'];
+              if (ZT == '0') {
+                arrZT = [0, 1, 2, 3];
               }
               if (state.id && KHFWSJPZId) {
                 const res = await getStudentListByBjid({
