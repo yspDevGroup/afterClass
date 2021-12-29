@@ -120,7 +120,6 @@ const Home = () => {
     if (orderInfo) linkRef.current?.click();
   }, [orderInfo]);
 
-  console.log(BaoMinData, 'BaoMinData')
   // 付款
   const submit = async (value: any) => {
     setFWBData(value)
@@ -131,7 +130,7 @@ const Home = () => {
       DDFY: Number(value?.FWFY),
       XSJBSJId: localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
       DDLX: 2,
-      XSFWBJId: BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === value.XSFWBJs?.[0]?.KHFWSJPZ.id).id,
+      XSFWBJId: BaoMinData?.[0]?.XSFWBJs.find((item: any) => item.KHFWSJPZId === value.XSFWBJs?.[0]?.KHFWSJPZ.id).id,
     };
     const res = await createKHXSDD(data);
     if (res.status === 'ok') {

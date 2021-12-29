@@ -2,7 +2,7 @@
  * @description: 
  * @author: wsl
  * @Date: 2021-12-23 14:26:31
- * @LastEditTime: 2021-12-28 11:46:30
+ * @LastEditTime: 2021-12-29 19:38:35
  * @LastEditors: wsl
  */
 
@@ -207,21 +207,21 @@ const InterestClassroom = () => {
         </> : <>  {
           FWKCData?.KCFWBJs.find((item: any) => item.LX === 0) ?
             <>
+
               <div className={styles.Application}>
-                <div className={styles.title}>
-                  <div />
-                  <span>趣味课堂</span>
-                  {BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs.find((item: any) => item.LX === 0) ? <></> : <span>最多可选择{FWKCData?.KXSL}门</span>}
-                </div>
-                <div>
-                  <Checkbox.Group
-                    style={{ width: '100%' }}
-                    onChange={onChange}>
-                    {
-                      BaoMinData && XKType === false ?
-                        <>
-                          {
-                            BaoMinData && BaoMinData?.XSFWBJs[0].XSFWKHBJs.map((value: any) => {
+                {
+                  BaoMinData && XKType === false ? <>
+                    <div className={styles.title}>
+                      <div />
+                      <span>课业辅导</span>
+                    </div>
+                    <div>
+                      <Checkbox.Group
+                        style={{ width: '100%' }}
+                        onChange={onChange}>
+                        {
+                          BaoMinData && BaoMinData?.XSFWBJs[0].XSFWKHBJs.map((value: any) => {
+                            if (value?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1) {
                               return (
                                 <>
                                   <div className={styles.cards}>
@@ -240,6 +240,50 @@ const InterestClassroom = () => {
                                   </div>
                                 </>
                               );
+                            }
+                            return <></>
+
+                          })
+                        }
+                      </Checkbox.Group>
+
+                    </div></> : <></>
+                }
+                <div className={styles.title}>
+                  <div />
+                  <span>趣味课堂</span>
+                  {BaoMinData && XKType === false ? <></> : <span>最多可选择{FWKCData?.KXSL}门</span>}
+                </div>
+                <div>
+                  <Checkbox.Group
+                    style={{ width: '100%' }}
+                    onChange={onChange}>
+                    {
+                      BaoMinData && XKType === false ?
+                        <>
+                          {
+                            BaoMinData && BaoMinData?.XSFWBJs[0].XSFWKHBJs.map((value: any) => {
+                              if (value?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0) {
+                                return (
+                                  <>
+                                    <div className={styles.cards}>
+                                      <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
+                                      <div className={styles.box}>
+                                        <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
+                                        <span onClick={() => {
+                                          onDetails(value)
+                                        }} >查看详情</span>
+                                      </div>
+
+                                      <Checkbox
+                                        value={value.KHBJSJId}
+                                        disabled
+                                      />
+                                    </div>
+                                  </>
+                                );
+                              }
+                              return <></>
                             })
                           }
                         </> : <>
@@ -323,9 +367,11 @@ const InterestClassroom = () => {
 
                 </div>
               </div>
-              <div className={styles.footers}>
-                <button onClick={submit} >去付款</button>
-              </div>
+              {
+                BaoMinData && XKType === false && FKType === true ? <div className={styles.footers}>
+                  <button onClick={submit} >去付款</button>
+                </div> : <></>
+              }
             </>
         }</>
       }
