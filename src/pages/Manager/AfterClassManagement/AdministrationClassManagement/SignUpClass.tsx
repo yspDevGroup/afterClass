@@ -274,7 +274,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
             label="课后课程"
             rules={[
               { required: title === '代选课', message: '请选择课后课程' },
-              { type: 'array', max: KXSL, message: `课后课程储量不能超过${KXSL}` },
+              { type: 'array', max: KXSL, message: `课后课程数量不能超过${KXSL}` },
             ]}
             name="KHBJSJIds"
             fieldProps={{ options: KHKCData, mode: 'multiple' }}

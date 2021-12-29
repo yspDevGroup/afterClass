@@ -29,6 +29,7 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [KHFWBJId, setKHFWBJId] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [KXSL, setKXSL] = useState<number>();
 
   useImperativeHandle(ref, () => ({
     // changeVal 就是暴露给父组件的方法
@@ -69,7 +70,10 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
               KHKC.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
             }
           });
-  
+          // 限制数据
+          if (data?.KXSL) {
+            setKXSL(data.KXSL);
+          }
           formRef?.current?.setFieldsValue({KCFD,KHKC});
          
           // 服务班id
@@ -183,7 +187,9 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
         </ProForm.Item>
         <ProForm.Item
           label="课后课程："
-          rules={[{ required: false, message: '请选择课程班' }]}
+          rules={[
+            { required: false, message: '请选择课程班' },
+          { type: 'array', max: KXSL, message: `课后课程数量不能超过${KXSL}` },]}
           name="KHKC"
           key="KHKC"
         >
