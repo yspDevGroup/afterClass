@@ -87,9 +87,12 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
           border: 0,
           background: 'transparent',
           width: '100%',
+          lineHeight: '48px',
         }}
       >
-        <div className={styles.disImage}>&nbsp;</div>
+        <div className={styles.disImage}>
+          <EllipsisHint text={data?.cla} width={"100%"} />
+          </div>
       </Button>
     );
   }

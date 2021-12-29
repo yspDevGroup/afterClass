@@ -1,18 +1,30 @@
-// import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import ClassScheduling from './ClassScheduling';
 import CourseScheduling from './CourseScheduling';
+import { getQueryString } from '@/utils/utils';
+
 
 
 const { TabPane } = Tabs;
 
-const index = (props: { location: { state: any } }) => {
-  const { state } = props.location;
+const Index = (props: any) => {
+  const [key, setKey] = useState<string>('1');
+
+  useEffect(() => {
+    const bjId = getQueryString('courseId');
+    if (bjId !== null) {
+      setKey('2')
+    }
+  }, [])
 
   return (
     <PageContainer>
-      <Tabs defaultActiveKey={state?.type || '1'}>
+      <Tabs activeKey={key} onChange={(value: any) => {
+        setKey(value)
+      }}>
         <TabPane tab="行政班排课" key="1">
           <ClassScheduling />
         </TabPane>
@@ -24,4 +36,4 @@ const index = (props: { location: { state: any } }) => {
   );
 };
 
-export default index;
+export default Index;
