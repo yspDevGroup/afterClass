@@ -38,7 +38,8 @@ const InterestClassroom = () => {
   const [KSRQ, setKSRQ] = useState();
   const [JSRQ, setJSRQ] = useState();
   //付款状态
-  const [FKType, setFKType] = useState(true)
+  const [FKType, setFKType] = useState(true);
+  const [XKType, setXKType] = useState(true);
 
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const InterestClassroom = () => {
       async () => {
         const resXNXQ = await queryXNXQList(currentUser?.xxId);
         if (resXNXQ) {
-          setXNXQ(resXNXQ?.data.find((items: any) => items.id === resXNXQ?.current?.id));
+          setXNXQ(resXNXQ?.data?.find((items: any) => items.id === resXNXQ?.current?.id));
           const result = await getKHFWBJ({
             BJSJId: StorageBjId,
             XNXQId: resXNXQ?.current?.id || '',
@@ -77,6 +78,11 @@ const InterestClassroom = () => {
       })
       if (res.status === 'ok') {
         setBaoMinData(res.data.rows[0])
+        if(res.data.rows[0]?.XSFWBJs?.[0].XSFWKHBJs?.find((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)){
+          setXKType(false);
+        }else{
+          setXKType(true);
+        }
       }
     }
   }
@@ -106,12 +112,7 @@ const InterestClassroom = () => {
     checkedValues.forEach((value: any) => {
       newArr.push(value.split('+')[0])
     })
-    FWKCData?.KCFWBJs?.forEach((value: any) => {
-      if (value?.LX === 1) {
-        newArr.push(value?.KHBJSJId)
-      }
-    })
-    setYXKCId(newArr);
+    setYXKCId(newArr)
   };
 
   // 月份切换
@@ -206,7 +207,7 @@ const InterestClassroom = () => {
                 style={{ width: '100%' }}
                 onChange={onChange}>
                 {
-                  BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs.find((item: any) => item.LX === 0) ?
+                  BaoMinData &&  XKType === false ?
                     <>
                       {
                         BaoMinData && BaoMinData?.XSFWBJs[0].XSFWKHBJs.map((value: any) => {
@@ -255,25 +256,24 @@ const InterestClassroom = () => {
                       })}
                     </>
                 }
-
-
               </Checkbox.Group>
 
             </div>
           </div>
           {
-            BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 && FKType === true ? <div className={styles.footer}>
+            BaoMinData && XKType === true && FKType === true ? <div className={styles.footer}>
               <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
               <button onClick={submit} >确认付款</button>
             </div> : <></>
+
           }
           {
-            BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length === 0 && FKType === false ? <div className={styles.footers}>
+            BaoMinData && XKType === true && FKType === false ? <div className={styles.footers}>
               <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
             </div> : <></>
           }
           {
-            BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs?.length !== 0 && FKType === true ? <div className={styles.footers}>
+            BaoMinData && XKType === false && FKType === true ? <div className={styles.footers}>
               <button onClick={submit} >去付款</button>
             </div> : <></>
           }
