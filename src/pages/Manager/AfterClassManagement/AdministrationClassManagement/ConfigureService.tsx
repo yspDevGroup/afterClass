@@ -599,8 +599,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
               style={{ color: '#999', marginRight: '8px' }}
               className="ant-form-text ant-form-item"
             >
-              {' '}
-              课后服务按月收费，家长可随时缴纳截至当前月的服务费用
+              {
+              JFLX === 0? '课后服务按月收费，家长可随时缴纳截至当前月的服务费用':'系统将根据当前所选时段创建一个课后服务班'}
             </span>
           </Col>
         </Row>
