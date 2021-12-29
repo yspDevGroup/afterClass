@@ -574,6 +574,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
           </Col>
         </Row>
         <Row justify="start" align="middle">
+       
           <Col flex="18em">
             <ProFormSelect
               wrapperCol={{ flex: '10em' }}
@@ -599,13 +600,16 @@ const ConfigureService = (props: ConfigureSeverType) => {
               width={80}
             />
           </Col>
+          {/* <Col flex="4em">
+           缴费
+          </Col> */}
           <Col flex="auto">
             <span
               style={{ color: '#999', marginRight: '8px' }}
               className="ant-form-text ant-form-item"
             >
               {
-                JFLX === 0 ? '课后服务按月收费，家长可随时缴纳截至当前月的服务费用' : '系统将根据当前所选时段创建一个课后服务班'}
+                JFLX === 0 ? '系统将根据当前学期内的自然月创建对应课后服务班' : '系统将根据当前所选时段创建一个课后服务班'}
             </span>
           </Col>
         </Row>
