@@ -192,44 +192,48 @@ const Home = () => {
           </Link> */}
         </div>
         <div className={styles.banner} style={{ backgroundImage: `url(${banner})` }} />
-        <div className={styles.needToDo}>
-          <div className={styles.title}>
-            <div />
-            <span>待办提醒</span>
-          </div>
-          {
-            DkData && DkData.map((value: any) => {
-              return <Link
-                to={{
-                  pathname: '/teacher/education/courseAdjustment/details',
-                  state: { id: value.id, type: 'edit' },
-                }}
-              >
-                <div
-                  className={styles.wrap}
-                  style={{ backgroundImage: `url(${TeacherToDo})` }}
-                // onClick={() => { submit(value) }}
-                >
-                  {
-                    value?.LX === 1 ? <i style={{ color: '#15B628' }}>代课提醒</i> : <i style={{ color: '#FC7F2B' }}>换课提醒</i>
-                  }
-                  您的同事 <span>{value?.SKJS?.XM}老师</span> 于{moment(value?.createdAt).format("YYYY年MM月DD日")}发起的 <span>{value?.KHBJSJ?.KHKCSJ?.KCMC}</span> 的{value?.LX === 1 ? '代课' : '换课'}申请，请及时处理。
-                </div>
-              </Link>
-            })
-          }
+        {
+          DkData?.length === 0 ? <></> :
+            <div className={styles.needToDo}>
+              <div className={styles.title}>
+                <div />
+                <span>待办提醒</span>
+              </div>
+              {
+                DkData && DkData.map((value: any) => {
+                  return <Link
+                    to={{
+                      pathname: '/teacher/education/courseAdjustment/details',
+                      state: { id: value.id, type: 'edit' },
+                    }}
+                  >
+                    <div
+                      className={styles.wrap}
+                      style={{ backgroundImage: `url(${TeacherToDo})` }}
+                    // onClick={() => { submit(value) }}
+                    >
+                      {
+                        value?.LX === 1 ? <i style={{ color: '#15B628' }}>代课提醒</i> : <i style={{ color: '#FC7F2B' }}>换课提醒</i>
+                      }
+                      您的同事 <span>{value?.SKJS?.XM}老师</span> 于{moment(value?.createdAt).format("YYYY年MM月DD日")}发起的 <span>{value?.KHBJSJ?.KHKCSJ?.KCMC}</span> 的{value?.LX === 1 ? '代课' : '换课'}申请，请及时处理。
+                    </div>
+                  </Link>
+                })
+              }
 
-          {
-            DkData?.length > 2 && DkData === 2 ? <p onClick={() => {
-              setBacklogNum(999)
-            }}>查看全部</p> : <></>
-          }
-          {
-            DkData?.length > 2 && DkData === 999 ? <p onClick={() => {
-              setBacklogNum(2)
-            }}>收起</p> : <></>
-          }
-        </div>
+              {
+                DkData?.length > 2 && DkData === 2 ? <p onClick={() => {
+                  setBacklogNum(999)
+                }}>查看全部</p> : <></>
+              }
+              {
+                DkData?.length > 2 && DkData === 999 ? <p onClick={() => {
+                  setBacklogNum(2)
+                }}>收起</p> : <></>
+              }
+            </div>
+        }
+
         {/* 待巡课程 */}
         <div className={styles.patrols} style={{ backgroundImage: `url(${PatrolClass})` }}>
           {/* <div style={{ backgroundImage: `url(${DaiKe})` }}>
