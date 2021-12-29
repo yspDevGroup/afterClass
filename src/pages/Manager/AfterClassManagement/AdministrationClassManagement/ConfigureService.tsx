@@ -383,7 +383,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         }
         submitter={{
           searchConfig: {
-            submitText: '确认',
+            submitText: '保存',
             resetText: '取消',
           },
           render: (_props, defaultDoms) => {
