@@ -337,31 +337,34 @@ const InterestClassroom = () => {
               <div className={styles.Application}>
                 <div className={styles.title}>
                   <div />
-                  <span>趣味课堂</span>
+                  <span>课业辅导</span>
                 </div>
                 <div>
                   <Checkbox.Group
                     style={{ width: '100%' }}
                     onChange={onChange}>
                     {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
-                      return (
-                        <>
-                          <div className={styles.cards}>
-                            <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
-                            <div className={styles.box}>
-                              <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
-                              <span onClick={() => {
-                                onDetails(value)
-                              }} >查看详情</span>
-                            </div>
+                      if (value?.LX === 1) {
+                        return (
+                          <>
+                            <div className={styles.cards}>
+                              <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
+                              <div className={styles.box}>
+                                <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
+                                <span onClick={() => {
+                                  onDetails(value)
+                                }} >查看详情</span>
+                              </div>
 
-                            <Checkbox
-                              value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
-                              disabled
-                            />
-                          </div>
-                        </>
-                      );
+                              <Checkbox
+                                value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
+                                disabled
+                              />
+                            </div>
+                          </>
+                        );
+                      }
+                      return <></>
                     })}
                   </Checkbox.Group>
 
