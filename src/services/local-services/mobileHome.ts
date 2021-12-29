@@ -394,7 +394,7 @@ export const CurdayCourse = async (
   if (type === 'student') {
     // 获取今日应上课程接口
     const response = await getKCBSKSJ({
-      KHBJSJId: total.bjIds,
+      KHBJSJId: total?.bjIds,
       startDate: curDay
     });
     if (response.status === 'ok' && response.data) {

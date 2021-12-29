@@ -9,7 +9,9 @@ import GoBack from '@/components/GoBack';
 
 
 const Details = (props: any) => {
+
   const { state } = props.location;
+  console.log(state, 'state')
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [Type, setType] = useState<string>();
@@ -20,13 +22,13 @@ const Details = (props: any) => {
       setType('退订失败')
     } else if (state?.KHXSTKs?.length === 0 && state?.ZT === 1) {
       setType('退订成功')
-    } else if (state?.KHXSTKs?.length !== 0 && (state?.KHXSTKs?.[0].TKZT === '0' || state?.KHXSTKs?.[0].TKZT === '1')) {
+    } else if (state?.KHXSTKs?.length !== 0 && (state?.KHXSTKs?.[0].TKZT === 0 || state?.KHXSTKs?.[0].TKZT === 1)) {
       setType('退款中')
-    } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === '2') {
+    } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === 2) {
       setType('退款被驳回')
-    } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === '3') {
+    } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === 3) {
       setType('退款成功')
-    } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === '4') {
+    } else if (state?.KHXSTKs?.length !== 0 && state?.KHXSTKs?.[0].TKZT === 4) {
       setType('退款失败')
     }
   }, [])
@@ -46,7 +48,41 @@ const Details = (props: any) => {
           className={styles.content}
           style={{ marginTop: Type === '退款成功' ? '-38px' : '-20px' }}
         >
-          {state?.KHXXZZFW ? (
+          {
+            state?.XSFWBJ ? <>
+              <div className={styles.FWXX}>
+                <ul>
+                  <p className={styles.title}>{state?.XSFWBJ?.KHFWBJ?.FWMC}</p>
+                  <li>
+                    服务时段：{state?.XSFWBJ?.KHFWSJPZ?.KSRQ}~{state?.XSFWBJ?.KHFWSJPZ?.JSRQ}
+                  </li>
+                  <li>
+                    学生：<span className={styles.xx}>{localStorage.getItem('studentName') || currentUser?.student?.[0].name}</span>
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.KCZE}>
+                <p>
+                  <span>申请时间</span><span>{state?.createdAt}</span>
+                </p>
+                {
+                  Type === '退款成功' ?
+                    <p>
+                      <span>退款时间</span><span>{state?.KHXSTKs?.[0].TKSJ}</span>
+                    </p> : <></>
+                }
+                <p>
+                  <span>服务总额</span> <span>￥{Number(state?.XSFWBJ?.KHFWBJ?.FWFY).toFixed(2)}</span>
+                </p>
+                {
+                  Type === '退款成功' ?
+                    <p>
+                      <span>退款金额</span><span>￥{Number(state?.KHXSTKs?.[0].TKJE).toFixed(2)}</span>
+                    </p> : <></>
+                }
+              </div></> : <></>
+          }
+          {state?.KHXXZZFW ? (<>
             <div className={styles.FWXX}>
               <ul>
                 <p className={styles.title}>{state?.KHXXZZFW?.FWMC}</p>
@@ -61,23 +97,8 @@ const Details = (props: any) => {
                 </li>
               </ul>
             </div>
-          ) : (
-            <div className={styles.KCXX}>
-              <p className={styles.title}>{state?.KHBJSJ?.KHKCSJ?.KCMC}</p>
-              <ul>
-                <li>班级：{state?.KHBJSJ?.BJMC}</li>
-                <li>
-                  学生：<span className={styles.xx}>{localStorage.getItem('studentName') || currentUser?.student?.[0].name}</span>
-                </li>
-                <li>总课时：{state?.KHBJSJ?.KSS}</li>
-                <li>可退订时：{state?.KSS}</li>
-              </ul>
-            </div>
-          )}
-
-          {state?.KHXXZZFW ? (
             <div className={styles.KCZE}>
-               <p>
+              <p>
                 <span>申请时间</span><span>{state?.createdAt}</span>
               </p>
               {
@@ -95,29 +116,46 @@ const Details = (props: any) => {
                     <span>退款金额</span><span>￥{Number(state?.KHXSTKs?.[0].TKJE).toFixed(2)}</span>
                   </p> : <></>
               }
-            </div>
-          ) : (
-            <div className={styles.KCZE}>
+            </div></>
+
+          ) : (<></>)}
+          {
+            state?.KHBJSJ ? <>
+              <div className={styles.KCXX}>
+                <p className={styles.title}>{state?.KHBJSJ?.KHKCSJ?.KCMC}</p>
+                <ul>
+                  <li>班级：{state?.KHBJSJ?.BJMC}</li>
+                  <li>
+                    学生：<span className={styles.xx}>{localStorage.getItem('studentName') || currentUser?.student?.[0].name}</span>
+                  </li>
+                  <li>总课时：{state?.KHBJSJ?.KSS}</li>
+                  <li>可退订时：{state?.KSS}</li>
+                </ul>
+              </div>
+              <div className={styles.KCZE}>
                 <p>
-                <span>申请时间</span><span>{state?.createdAt}</span>
-              </p>
-              {
-                Type === '退款成功' ?
-                  <p>
-                    <span>退款时间</span><span>{state?.KHXSTKs?.[0].TKSJ}</span>
-                  </p> : <></>
-              }
-              <p>
-                <span>课程总额</span> <span>￥{Number(state?.KHBJSJ?.FY).toFixed(2)}</span>
-              </p>
-              {
-                Type === '退款成功' ?
-                  <p>
-                    <span>退款金额</span><span>￥{Number(state?.KHXSTKs?.[0].TKJE).toFixed(2)}</span>
-                  </p> : <></>
-              }
-            </div>
-          )}
+                  <span>申请时间</span><span>{state?.createdAt}</span>
+                </p>
+                {
+                  Type === '退款成功' ?
+                    <p>
+                      <span>退款时间</span><span>{state?.KHXSTKs?.[0].TKSJ}</span>
+                    </p> : <></>
+                }
+                <p>
+                  <span>课程总额</span> <span>￥{Number(state?.KHBJSJ?.FY).toFixed(2)}</span>
+                </p>
+                {
+                  Type === '退款成功' ?
+                    <p>
+                      <span>退款金额</span><span>￥{Number(state?.KHXSTKs?.[0].TKJE).toFixed(2)}</span>
+                    </p> : <></>
+                }
+              </div>
+            </> : <></>
+          }
+
+
           {
             Type === '退订失败' || Type === '退款被驳回' ? <div className={styles.KCZE}>
               {state.ZT === 2 && state?.KHXSTKs?.length === 0 ? <p>退订说明：{state?.BZ}</p> : ''}

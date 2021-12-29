@@ -9,6 +9,7 @@ import type { ListData, ListItem } from '@/components/ListComponent/data';
 import IconFont from '@/components/CustomIcon';
 import moment from 'moment';
 import { getStudent } from '@/services/after-class/khxxzzfw';
+import { getStudentListByBjid } from '@/services/after-class/khfwbj';
 
 const { TabPane } = Tabs;
 const defaultMsg: ListData = {
@@ -35,10 +36,14 @@ const CourseTab = (props: { dataResource: any }) => {
   const centered = false;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [keys, setKeys] = useState('yxkc');
+  const [keys, setKeys] = useState('yxkcs');
   const [YxserviceData, setYxserviceData] = useState<any>();
-
+  const StorageBjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+  // 获取报名的课后服务
+  const [BaoMinData, setBaoMinData] = useState<any>();
   const StorageXSId = localStorage.getItem('studentId');
+  const [KHFWDatas, setKHFWDatas] = useState<ListData>(defaultMsgs);
+  const [KHFWAllDatas, setKHFWAllDatas] = useState<ListData>(defaultMsgs);
   useEffect(() => {
     (async () => {
       const res = await getStudent({
@@ -93,18 +98,16 @@ const CourseTab = (props: { dataResource: any }) => {
           id: record.id,
           title: ` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
           img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
-          link: `/parent/home/courseIntro?classid=${record.id}`,
+          link: `/parent/home/courseTable?classid=${record.id}&path=study`,
           desc: [
             {
               left: [
-                `课程时段：${
-                  record.KKRQ
-                    ? moment(record.KKRQ).format('YYYY.MM.DD')
-                    : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
-                }-${
-                  record.JKRQ
-                    ? moment(record.JKRQ).format('YYYY.MM.DD')
-                    : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
+                `课程时段：${record.KKRQ
+                  ? moment(record.KKRQ).format('YYYY.MM.DD')
+                  : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
+                }-${record.JKRQ
+                  ? moment(record.JKRQ).format('YYYY.MM.DD')
+                  : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
                 }`,
               ],
             },
@@ -118,6 +121,7 @@ const CourseTab = (props: { dataResource: any }) => {
         return nodeData;
       });
       const { list, ...rest } = { ...defaultMsg };
+      console.log(listData, 'listData')
       setYxkcAllData(listData);
       setYxkcData({
         list: listData.slice(0, 3),
@@ -125,6 +129,53 @@ const CourseTab = (props: { dataResource: any }) => {
       });
     }
   }, [yxkc]);
+  useEffect(() => {
+    if (BaoMinData) {
+      const listData: any = [].map.call(BaoMinData?.[0]?.XSFWBJs, (record: any) => {
+        console.log(record)
+        const nodeData: ListItem = {
+          id: record.id,
+          title: record.KHFWBJ.FWMC,
+          img: record?.KHFWBJ?.FWTP,
+          link: `/parent/home/serviceReservation/afterClassDetails?classid=${record.KHFWSJPZId}&path=study`,
+          desc: [
+            {
+              left: [
+                `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
+              ],
+            },
+          ],
+        };
+        return nodeData;
+      });
+      const { list, ...rest } = { ...defaultMsg };
+      // setKHFWAllDatas(listData);
+      setKHFWAllDatas({
+        list: listData,
+        ...rest,
+      });
+      setKHFWDatas({
+        list: listData.slice(0, 3),
+        ...rest,
+      });
+    }
+  }, [BaoMinData]);
+
+  useEffect(() => {
+    (
+      async () => {
+        const res = await getStudentListByBjid({
+          BJSJId: StorageBjId,
+          XSJBSJId: StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId,
+          page: 0,
+          pageSize: 0
+        })
+        if (res.status === 'ok') {
+          setBaoMinData(res.data.rows)
+        }
+      }
+    )()
+  }, [StorageXSId])
   const oncuechange = (key: string) => {
     setKeys(key);
   };
@@ -134,32 +185,39 @@ const CourseTab = (props: { dataResource: any }) => {
       <Tabs
         centered={centered}
         onTabClick={(key: string) => oncuechange(key)}
-        tabBarExtraContent={
-          !centered
-            ? {
-                right: (
-                  <Link
-                    to={{
-                      pathname: '/parent/home/serviceReservation',
-                      state: { courseStatus, kskc, yxkcAllData, keys },
-                    }}
-                  >
-                    全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
-                  </Link>
-                ),
-              }
-            : ''
-        }
+        // tabBarExtraContent={
+        //   !centered
+        //     ? {
+        //       right: (
+        //         <Link
+        //           to={{
+        //             pathname: '/parent/home/serviceReservation',
+        //             state: { courseStatus, kskc, yxkcAllData, keys },
+        //           }}
+        //         >
+        //           全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
+        //         </Link>
+        //       ),
+        //     }
+        //     : ''
+        // }
         className={styles.courseTab}
       >
-        <TabPane tab="已选课程" key="yxkc">
+        <TabPane tab="已选课后服务" key="yxkcs">
+          {BaoMinData && BaoMinData?.length ? (
+            <ListComponent listData={KHFWDatas} />
+          ) : (
+            <ListComponent listData={defaultMsg} />
+          )}
+        </TabPane>
+        <TabPane tab="已选课程服务" key="yxkc">
           {yxkc && yxkc?.length ? (
             <ListComponent listData={yxkcData} />
           ) : (
             <ListComponent listData={defaultMsg} />
           )}
         </TabPane>
-        <TabPane tab="已选服务" key="yxfw">
+        <TabPane tab="已选增值服务" key="yxfw">
           {YxserviceData && YxserviceData?.length ? (
             <ListComponent listData={yxfwData} />
           ) : (
@@ -167,7 +225,16 @@ const CourseTab = (props: { dataResource: any }) => {
           )}
         </TabPane>
       </Tabs>
-    </div>
+      <Link
+        to={{
+          pathname: '/parent/home/serviceReservation',
+          state: { courseStatus, kskc, yxkcAllData, KHFWAllDatas, keys },
+        }}
+        style={{ textAlign: 'center', display: 'block', color: '#999' }}
+      >
+        查看更多
+      </Link>
+    </div >
   );
 };
 

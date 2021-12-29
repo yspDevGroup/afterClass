@@ -85,10 +85,10 @@ const Study = () => {
         <div className={styles.titleBar}>孩子课表</div>
         <ClassCalendar />
       </div>
-      <div className={styles.funWrapper} style={{ marginTop: '20px' }}>
+      {/* <div className={styles.funWrapper} style={{ marginTop: '20px' }}>
         <div className={styles.titleBar}>{`在学课程 ${listData?.list.length || 0}`}</div>
         <ListComponent listData={listData} />
-      </div>
+      </div> */}
       <div className={styles.courseArea}>
         <Selected dataResource={totalData} />
       </div>

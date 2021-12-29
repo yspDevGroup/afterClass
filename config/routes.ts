@@ -819,6 +819,12 @@
         component: './Parent/Homepage/Home/Pages/ServiceReservation/Details',
       },
       {
+        path: '/parent/home/serviceReservation/afterClassDetails',
+        name: 'afterClassDetails',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/ServiceReservation/AfterClassDetails',
+      },
+      {
         path: '/parent/home/notice',
         name: 'notice',
         hideInMenu: 'true',

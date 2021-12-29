@@ -4,7 +4,7 @@
  * @description: 退订
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-12-29 14:44:02
+ * @LastEditTime: 2021-12-29 23:06:47
  * @LastEditors: wsl
  */
 import GoBack from '@/components/GoBack';
@@ -111,16 +111,16 @@ const DropClass = () => {
                       {value.ZT === 0 ? <span style={{ color: '#FF6600' }}>申请中</span> : ''}
                       {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <span style={{ color: '#FF0000' }}>退订失败</span> : ''}
                       {value.ZT === 1 && value?.KHXSTKs?.length === 0 ? <span style={{ color: '#45c977' }}>退订成功</span> : ''}
-                      {value?.KHXSTKs?.length !== 0 && (value?.KHXSTKs?.[0].TKZT === '0' || value?.KHXSTKs?.[0].TKZT === '1') ? <span style={{ color: '#FF6600' }}>退款中</span> : ''}
-                      {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? <span style={{ color: '#FF0000' }}>退款被驳回</span> : ''}
-                      {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '3' ? <span style={{ color: '#45c977' }}>退款成功</span> : ''}
-                      {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '4' ? <span style={{ color: '#FF0000' }}>退款失败</span> : ''}
+                      {value?.KHXSTKs?.length !== 0 && (value?.KHXSTKs?.[0].TKZT === 0 || value?.KHXSTKs?.[0].TKZT === 1) ? <span style={{ color: '#FF6600' }}>退款中</span> : ''}
+                      {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === 2 ? <span style={{ color: '#FF0000' }}>退款被驳回</span> : ''}
+                      {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === 3 ? <span style={{ color: '#45c977' }}>退款成功</span> : ''}
+                      {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === 4 ? <span style={{ color: '#FF0000' }}>退款失败</span> : ''}
                       <RightOutlined />
                     </p>
                     {value.ZT === 2 && value?.KHXSTKs?.length === 0 && value?.BZ ? <p>退订说明：{value?.BZ}</p> : ''}
-                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' && value?.KHXSTKs?.[0].BZ ? <p>退款说明：{value?.KHXSTKs?.[0].BZ}</p> : ''}
+                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === 2 && value?.KHXSTKs?.[0].BZ ? <p>退款说明：{value?.KHXSTKs?.[0].BZ}</p> : ''}
 
-                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? (
+                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === 2 ? (
                       <button
                         onClick={async () => {
                           let data: any = {};

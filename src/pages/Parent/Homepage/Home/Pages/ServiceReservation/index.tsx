@@ -28,12 +28,13 @@ const defaultMsgs: ListData = {
 
 const { TabPane } = Tabs;
 const ServiceReservation = (props: any) => {
-  const { yxkcAllData, keys } = props.location.state;
+  const { yxkcAllData, KHFWAllDatas, keys } = props.location.state;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [YxserviceData, setYxserviceData] = useState<any>();
   const [yxkcData, setYxkcData] = useState<ListData>(defaultMsg);
 
+  console.log(KHFWAllDatas, 'KHFWDatas')
   useEffect(() => {
     if (yxkcAllData?.length) {
       const newData = { ...defaultMsg };
@@ -60,16 +61,24 @@ const ServiceReservation = (props: any) => {
   }, [StorageXSId]);
   return (
     <div className={styles.ServiceReservation}>
-      <GoBack title={'我的服务'} onclick="/parent/home?index=index" />
+      <GoBack title={'我的服务'} onclick="/parent/home?index=study" />
       <Tabs type="card" defaultActiveKey={keys}>
-        <TabPane tab="已选课程" key="yxkc">
+        <TabPane tab="已选课后服务" key="yxkcs">
+          {KHFWAllDatas && KHFWAllDatas?.list?.length ? (
+            <ListComponent listData={KHFWAllDatas} />
+          ) : (
+            <ListComponent listData={defaultMsgs} />
+          )}
+        </TabPane>
+        <TabPane tab="已选课程服务" key="yxkc">
           {yxkcAllData && yxkcAllData.length ? (
             <ListComponent listData={yxkcData} />
           ) : (
             <ListComponent listData={defaultMsg} />
           )}
         </TabPane>
-        <TabPane tab="已选服务" key="yxfw">
+
+        <TabPane tab="已选增值服务" key="yxfw">
           <>
             {YxserviceData && YxserviceData?.length === 0 ? (
               <ListComponent listData={defaultMsgs} />

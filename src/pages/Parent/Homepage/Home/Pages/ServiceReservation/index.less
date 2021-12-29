@@ -288,3 +288,312 @@
     }
   }
 }
+
+
+
+.InterestClassroom {
+  background: #F5F5F5;
+  min-height: 100vh;
+  padding-bottom: 70px;
+
+
+  .month {
+    width: 100%;
+    height: 66px;
+    background-color: #fff;
+    border-radius: 0px 0px 20px 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 13px 10px;
+    overflow-x: auto;
+
+    .monthNumber {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+    }
+  }
+
+  .month::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  :global {
+    .ant-checkbox-wrapper-disabled {
+      display: none;
+    }
+    .ant-checkbox-disabled{
+      display: none;
+    }
+
+    .ant-radio-group {
+      display: flex;
+      width: 100%;
+      height: 40px;
+      overflow-x: auto;
+      // justify-content: space-between;
+
+      .ant-radio-button-wrapper {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: none !important;
+        margin-right: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+
+        span {
+          div {
+            margin-left: -15px;
+            text-align: center;
+          }
+
+          span {
+            position: absolute;
+            bottom: -5px;
+            left: 34px;
+            font-size: 14px;
+            font-weight: normal;
+            color: #999;
+
+          }
+        }
+      }
+
+      .ant-radio-button-wrapper-checked {
+        border: none !important;
+        color: #999 !important;
+
+        background-color: #15B628 !important;
+        background: #15B628 !important;
+
+        span {
+          div {
+            color: #fff !important;
+            line-height: 34px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-left: -15px;
+            text-align: center;
+          }
+        }
+      }
+
+      .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active {
+        border: none !important;
+      }
+
+      .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active::before {
+        background-color: #fff;
+      }
+
+      .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
+        background-color: #fff;
+      }
+
+      .ant-radio-button-wrapper:not(:first-child)::before {
+        background-color: #fff;
+      }
+
+      .ant-radio-button-wrapper:focus-within {
+        box-shadow: none;
+      }
+    }
+    .ant-radio-group::-webkit-scrollbar {
+      display: none;
+  }
+
+    .ant-divider {
+      margin: 0;
+    }
+  }
+
+  .title,
+  .titles {
+    display: flex;
+    height: 24px;
+    margin-bottom: 10px;
+    line-height: 24px;
+
+    >div:nth-of-type(1) {
+      display: inline-block;
+      width: 3px;
+      height: 19px;
+      margin: 3px 6px 0 0;
+      background: #15b628;
+      border-radius: 3px 0px;
+    }
+
+    span:nth-of-type(1) {
+      color: #333333;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    span:nth-of-type(2) {
+      margin-left: 10px;
+      color: #999;
+      font-size: 12px;
+    }
+  }
+
+  .titles {
+    background-color: #fff;
+    height: 50px;
+    padding: 14px 10px;
+    margin: 0;
+  }
+
+  .Application {
+    margin-top: 20px;
+    padding: 0 10px;
+
+    .choice {
+      color: #999999;
+      font-size: 12px;
+    }
+
+    .cards {
+      display: flex;
+      position: relative;
+      width: 100%;
+      height: 80px;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 8px;
+
+      img {
+        width: 80px;
+        height: 60px;
+        border-radius: 8px;
+      }
+
+      .box {
+        width: calc(~'100% - 80px');
+        padding-left: 10px;
+        
+
+        p {
+          margin-bottom: 10px;
+          color: #333;
+          font-size: 14px;
+          overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        }
+
+        span {
+          padding: 4px 8px;
+          background: #E8FFF1;
+          box-sizing: border-box;
+          border-radius: 4px;
+          font-size: 12px;
+          color: #45C977;
+        }
+      }
+
+      button {
+        float: right;
+        height: 30px;
+        color: #45c977;
+        border: 1px solid #45c977;
+        border-radius: 15px;
+      }
+
+
+      :global {
+        .ant-checkbox-wrapper {
+          padding-top: 20px;
+
+          .ant-checkbox-wrapper {
+            .ant-checkbox-inner {
+              border: #45c977;
+            }
+          }
+
+          .ant-checkbox-checked {
+            .ant-checkbox-inner {
+              background-color: #45c977;
+              color: #45c977;
+              border: #45c977;
+            }
+          }
+        }
+
+        .ant-btn:hover,
+        .ant-btn:focus {
+          color: #45c977;
+          border-color: #45c977;
+        }
+      }
+    }
+  }
+
+  .footer {
+    width: 100%;
+    height: 54px;
+    position: fixed;
+    display: flex;
+    padding: 8px 15px;
+    bottom: 0;
+    background-color: #fff;
+    justify-content: space-between;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+
+    button {
+      color: #fff;
+      width: 165px;
+      height: 38px;
+      background: #15B628;
+      border-radius: 22px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button[disabled] {
+      background: #eee;
+      color: #999;
+    }
+  }
+
+  .footers {
+    width: 100%;
+    height: 54px;
+    position: fixed;
+    display: flex;
+    padding: 8px 15px;
+    bottom: 0;
+    background-color: #fff;
+    justify-content: space-between;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+
+    button {
+      color: #fff;
+      width: 100%;
+      height: 38px;
+      background: #15B628;
+      border-radius: 22px;
+      border: none;
+      font-size: 16px;
+    }
+  }
+
+  .noData {
+    height: 100%;
+
+    img {
+      width: 168px;
+      height: 168px;
+      display: block;
+      margin: auto;
+      margin-top: 20%;
+    }
+
+    p {
+      color: #999;
+      text-align: center;
+    }
+  }
+}
