@@ -592,7 +592,7 @@ const Detail = (props: any) => {
                   />
                 }
                 <div>
-                  <label htmlFor="service">报名类型：</label>
+                  <label htmlFor="service">报名状态：</label>
                   <Select
                     style={{ width: 160 }}
                     value={ZT}
