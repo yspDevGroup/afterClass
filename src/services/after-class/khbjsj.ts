@@ -305,6 +305,8 @@ export async function getClasses(
     ISFW?: number;
     /** 是否启用 */
     ISQY?: number;
+    /** 课程类型 */
+    KCTAG?: string;
     /** 校区ID */
     XQSJId?: string;
     /** 页数 */

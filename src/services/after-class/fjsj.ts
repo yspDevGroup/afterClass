@@ -160,6 +160,10 @@ export async function getFJPlan(
     kcId?: string;
     /** 校区ID */
     xqId?: string;
+    /** 是否被课后服务使用:0:没有,1:有 */
+    ISFW?: number;
+    /** 课程类型 */
+    KCTAG?: string;
     /** 教师姓名 */
     JSXM?: string;
     /** 是否有排课 */
