@@ -90,7 +90,7 @@ const ClassScheduling = () => {
         // 打开编辑页面
         setState(false);
         // 将选中的单元格数据清空 以免新增时数据又回显
-        setRecordValue({});
+        setRecordValue({XQ:campusId});
     };
 
     /**
