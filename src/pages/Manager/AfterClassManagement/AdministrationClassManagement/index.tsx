@@ -39,7 +39,6 @@ const AdministrationClassManagement = () => {
       XXJBSJId: currentUser?.xxId,
     });
     if (res?.status === 'ok') {
-      console.log('res', res.data);
       const arr = res?.data?.map((item) => {
         return {
           label: item.XQMC,
@@ -60,7 +59,6 @@ const AdministrationClassManagement = () => {
   useEffect(() => {
     (async () => {
       const result = await queryXNXQList(currentUser?.xxId);
-      console.log('result', result);
       if (result?.current) {
         setXQData(result?.current);
         setCurXNXQId(result?.current?.id);

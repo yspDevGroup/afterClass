@@ -1,77 +1,128 @@
-/*
- * @description:
- * @author: Sissle Lynn
- * @Date: 2021-10-29 12:21:42
- * @LastEditTime: 2021-12-23 15:17:45
- * @LastEditors: zpl
- */
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
+import { Select, message, Modal, Radio, Input, Form, InputNumber, Button, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { getAllKHXSTK, updateKHXSTK, exportTKJL } from '@/services/after-class/khxstk';
-import ShowName from '@/components/ShowName';
 import { DownloadOutlined } from '@ant-design/icons';
 import { getTableWidth } from '@/utils/utils';
+import ShowName from '@/components/ShowName';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
-import CourseSelect from '@/components/Search/CourseSelect';
-import ClassSelect from '@/components/Search/ClassSelect';
+import { exportTKJL, getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
+import { getAllXQSJ } from '@/services/after-class/xqsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getGradesByCampus } from '@/services/after-class/njsj';
+import { getAllBJSJ } from '@/services/after-class/bjsj';
 
+type selectType = { label: string; value: string };
+const { Option } = Select;
 const { TextArea, Search } = Input;
 // 退款
-const CourseRefund = () => {
+const ServiceRefund = () => {
   // 获取到当前学校的一些信息
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
-  const [dataSource, setDataSource] = useState<API.KHXSTK[] | undefined>([]);
-  // 选择学年学期
-  const [curXNXQId, setCurXNXQId] = useState<any>();
-  // 当前课程
-  const [curKCId, setCurKCId] = useState<any>();
-  // 当前课程班
-  const [curBJId, setBJId] = useState<any>();
-  const [XM, setXM] = useState<string>();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
+  // 选择学年学期
+  const [curXNXQId, setCurXNXQId] = useState<any>();
+  // 学生姓名选择
+  const [XM, setXM] = useState<string>();
+  // 校区
+  const [campusId, setCampusId] = useState<string>();
+  const [campusData, setCampusData] = useState<any[]>();
+  const [NjId, setNjId] = useState<any>();
+  const [NjData, setNjData] = useState<any>();
+  const [BJId, setBJId] = useState<string | undefined>(undefined);
+  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
   };
-  // 课程筛选
-  const courseChange = (val: string) => {
-    setCurKCId(val);
-  };
-  // 课程班筛选
-  const classChange = (val: string) => {
-    setBJId(val);
-  };
-  const getData = async () => {
-    const resAll = await getAllKHXSTK({
-      LX: 0,
+
+  const getCampusData = async () => {
+    const res = await getAllXQSJ({
       XXJBSJId: currentUser?.xxId,
-      XNXQId: curXNXQId,
-      KHKCSJId: curKCId,
-      KHBJSJId: curBJId,
-      XSXM: XM,
-      page: 0,
-      pageSize: 0,
     });
-    if (resAll.status === 'ok' && resAll?.data) {
-      setDataSource(resAll.data?.rows);
-    } else {
-      setDataSource([]);
+    if (res?.status === 'ok') {
+      const arr = res?.data?.map((item) => {
+        return {
+          label: item.XQMC,
+          value: item.id,
+        };
+      });
+      if (arr?.length) {
+        let id = arr?.find((item: any) => item.label === '本校')?.value;
+        if (!id) {
+          id = arr[0].value;
+        }
+        setCampusId(id);
+      }
+      setCampusData(arr);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const result = await queryXNXQList(currentUser?.xxId);
+      if (result?.current) {
+        setCurXNXQId(result?.current?.id);
+      }
+    })();
+    getCampusData();
+  }, []);
+
+  const getNJSJ = async () => {
+    if (campusId) {
+      const res = await getGradesByCampus({
+        XQSJId: campusId,
+      });
+      if (res.status === 'ok') {
+        setNjData(res.data);
+      }
     }
   };
   useEffect(() => {
-    if (curXNXQId) {
-      getData();
+    if (campusId) {
+      getNJSJ();
+      setBJId(undefined);
+      setNjId(undefined);
     }
-  }, [curXNXQId, XM, curKCId, curBJId]);
+  }, [campusId]);
+  const onCampusChange = (value: any) => {
+    setCampusId(value);
+  };
+  const onBjChange = async (value: any) => {
+    setBJId(value);
+  };
+  const onNjChange = async (value: any) => {
+    setNjId(value);
+  };
+
+  const getBJSJ = async () => {
+    const res = await getAllBJSJ({ XQSJId: campusId, njId: NjId, page: 0, pageSize: 0 });
+    if (res.status === 'ok') {
+      const data = res.data?.rows?.map((item: any) => {
+        return { label: item.BJ, value: item.id };
+      });
+      setBJData(data);
+    }
+  };
+
+  useEffect(() => {
+    if (NjId) {
+      setBJId(undefined);
+      getBJSJ();
+    }
+  }, [NjId, campusId]);
+  useEffect(() => {
+    if (curXNXQId) {
+      actionRef.current?.reload();
+    }
+  }, [curXNXQId, XM, campusId, NjId, BJId,]);
 
   // table表格数据
   const columns: ProColumns<any>[] = [
@@ -102,39 +153,7 @@ const CourseRefund = () => {
       ellipsis: true,
       width: 180,
     },
-    {
-      title: '行政班名称',
-      dataIndex: 'XZBJSJ',
-      key: 'XZBJSJ',
-      align: 'center',
-      width: 120,
-      ellipsis: true,
-      render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
-      },
-    },
-    {
-      title: '课程名称',
-      dataIndex: 'KHBJSJ',
-      key: 'KHBJSJ',
-      align: 'center',
-      render: (text: any, record: any) => {
-        return record?.KHBJSJ?.KHKCSJ?.KCMC;
-      },
-      ellipsis: true,
-      width: 150,
-    },
-    {
-      title: '课程班名称',
-      dataIndex: 'KHBJSJ',
-      key: 'KHBJSJ',
-      align: 'center',
-      render: (text: any, record: any) => {
-        return record?.KHBJSJ?.BJMC;
-      },
-      ellipsis: true,
-      width: 120,
-    },
+
     {
       title: '退款金额',
       dataIndex: 'TKJE',
@@ -177,6 +196,14 @@ const CourseRefund = () => {
       width: 150,
     },
     {
+      title: '审批说明',
+      dataIndex: 'BZ',
+      key: 'BZ',
+      align: 'center',
+      ellipsis: true,
+      width: 180,
+    },
+    {
       title: '退款时间',
       dataIndex: 'TKSJ',
       key: 'TKSJ',
@@ -186,14 +213,6 @@ const CourseRefund = () => {
         return record?.TKSJ?.substring(0, 16);
       },
       width: 150,
-    },
-    {
-      title: '审批说明',
-      dataIndex: 'BZ',
-      key: 'BZ',
-      align: 'center',
-      ellipsis: true,
-      width: 180,
     },
     {
       title: '状态',
@@ -225,7 +244,6 @@ const CourseRefund = () => {
       ellipsis: true,
       width: 120,
     },
-
     {
       title: '操作',
       dataIndex: 'operation',
@@ -253,51 +271,45 @@ const CourseRefund = () => {
         ),
     },
   ];
-
-  const handleSubmit = async (paramsItem: any) => {
-    const { TKJE, TKZT, BZ } = paramsItem;
-    if (TKJE === 0 || TKJE === 0.0) {
-      message.warning('退款金额为0，无需发起退款');
-    } else {
-      try {
-        if (current.id) {
-          const params = { id: current.id };
-          const body = {
-            TKJE,
-            TKZT,
-            BZ,
-            deviceIp: '117.36.118.42',
-            SPSJ: new Date().toISOString(),
-          };
-          const res = await updateKHXSTK(params, body);
-          if (res.status === 'ok') {
-            if (TKZT === 2) {
-              message.success('退款申请已驳回');
-            } else {
-              message.success('退款审核通过，已发起退款');
-            }
-            setVisible(false);
-            setCurrent(undefined);
-            form.resetFields();
-            getData();
+  const handleSubmit = async (params: any) => {
+    const { TKJE, TKZT, BZ } = params;
+    try {
+      if (current.id) {
+        const ids = { id: current.id };
+        const body = {
+          TKJE,
+          TKZT,
+          BZ,
+          deviceIp: '117.36.118.42',
+          SPSJ: new Date().toISOString(),
+          JZGJBSJId: currentUser?.JSId || testTeacherId,
+        };
+        const res = await updateKHXSTK(ids, body);
+        if (res.status === 'ok') {
+          if (TKZT === 2) {
+            message.success('退款申请已驳回');
           } else {
-            message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');
+            message.success('退款审核通过，已发起退款');
           }
+          setVisible(false);
+          setCurrent(undefined);
+          form.resetFields();
+          actionRef.current?.reload();
+        } else {
+          message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');
         }
-      } catch (err) {
-        message.error('退款流程出现错误，请联系管理员或稍后重试。');
       }
+    } catch (err) {
+      message.error('退款流程出现错误，请联系管理员或稍后重试。');
     }
   };
-
   const onExportClick = () => {
     setLoading(true);
     (async () => {
       const res = await exportTKJL({
-        LX: 0,
+        LX: 2,
         XXJBSJId: currentUser?.xxId,
         XNXQId: curXNXQId,
-        KHBJSJId: curBJId,
         page: 0,
         pageSize: 0,
       });
@@ -324,17 +336,63 @@ const CourseRefund = () => {
               defaultCurrent: 1,
             }}
             scroll={{ x: getTableWidth(columns) }}
-            dataSource={dataSource}
+            request={async () => {
+              const resAll = await getAllKHXSTK({
+                LX: 2,
+                XXJBSJId: currentUser?.xxId,
+                XNXQId: curXNXQId,
+                XSXM: XM,
+                BJSJId: BJId,
+                NJSJId: NjId,
+                XQSJId: campusId,
+                page: 0,
+                pageSize: 0,
+              });
+              if (resAll.status === 'ok') {
+                return {
+                  data: resAll?.data?.rows,
+                  success: true,
+                  total: resAll?.data?.count,
+                };
+              }
+              return {
+                data: [],
+                success: false,
+                total: 0,
+              };
+            }}
             headerTitle={
               <>
                 <SearchLayout>
                   <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
-                  <CourseSelect
-                    XXJBSJId={currentUser?.xxId}
-                    XNXQId={curXNXQId}
-                    onChange={courseChange}
-                  />
-                  <ClassSelect XNXQId={curXNXQId} KHKCSJId={curKCId} onChange={classChange} />
+                  <div>
+                    <label htmlFor="grade">校区名称：</label>
+                    <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
+                      {campusData?.map((item: any) => {
+                        return <Option value={item.value}>{item.label}</Option>;
+                      })}
+                    </Select>
+                  </div>
+                  <div>
+                    <label htmlFor="grade">年级名称：</label>
+                    <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
+                      {NjData?.map((item: any) => {
+                        return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                      })}
+                    </Select>
+                  </div>
+                  <div>
+                    <label htmlFor="kcly">班级名称：</label>
+                    <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
+                      {bjData?.map((item: any) => {
+                        return (
+                          <Option value={item.value} key={item.value}>
+                            {item.label}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </div>
                   <div>
                     <label htmlFor="name">学生姓名：</label>
                     <Search
@@ -365,8 +423,8 @@ const CourseRefund = () => {
           title="退款确认"
           visible={visible}
           onOk={() => {
-            form.resetFields();
             form.submit();
+            form.resetFields();
           }}
           onCancel={() => {
             setVisible(false);
@@ -380,20 +438,14 @@ const CourseRefund = () => {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 15 }}
             form={form}
-            initialValues={{ TKZT: 1, TKJE: current?.TKJE }}
+            initialValues={{ TKZT: 1}}
             onFinish={handleSubmit}
             layout="horizontal"
           >
             <Form.Item label="退款金额" name="TKJE">
               <InputNumber
-                min={Number(0)}
                 formatter={(value) => `￥ ${value}`}
                 parser={(value) => Number(value?.replace(/￥\s?/g, ''))}
-                onChange={(value) => {
-                  if (value === 0) {
-                    message.warning('退款金额为0，无需发起退款');
-                  }
-                }}
               />
             </Form.Item>
             <Form.Item label="审核意见" name="TKZT">
@@ -407,7 +459,7 @@ const CourseRefund = () => {
             </Form.Item>
           </Form>
           <p style={{ marginTop: 16, fontSize: 12, color: '#999' }}>
-            注：退款金额 = (课程费用/课程课时总数)*退课课时数
+            注：退款金额 = (服务费用/服务天数)*服务剩余天数
             <br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如若退款金额有调整，请填写退款说明。
           </p>
@@ -416,4 +468,4 @@ const CourseRefund = () => {
     </>
   );
 };
-export default CourseRefund;
+export default ServiceRefund;

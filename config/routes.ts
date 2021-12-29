@@ -293,13 +293,19 @@
     icon: 'Profile',
     routes: [
       {
-        // 课程订单
+        // 课程服务订单
         path: '/orderInquiry/courseorder',
         component: './Manager/OrderInquiry/CourseOrder',
         name: 'courseorder',
       },
       {
-        // 服务订单
+        // 课后服务订单
+        path: '/orderInquiry/afterService',
+        component: './Manager/OrderInquiry/AfterService',
+        name: 'afterService',
+      },
+      {
+        // 增值服务订单
         path: '/orderInquiry/serviceorder',
         component: './Manager/OrderInquiry/ServiceOrder',
         name: 'serviceorder',

@@ -314,6 +314,7 @@ const CourseUnsubscribe = () => {
           }
           setVisible(false);
           setCurrent(undefined);
+          form.resetFields();
           actionRef?.current?.clearSelected?.();
           getData();
         } else {
@@ -349,30 +350,30 @@ const CourseUnsubscribe = () => {
               </span>
             </Space>
           )}
-          tableAlertOptionRender={({ selectedRowKeys, selectedRows }) => {
-            setExamine(selectedRows);
-            const newArr = selectedRows.filter((value: { ZT: number }) => {
-              return value.ZT !== 0;
-            });
-            return (
-              <Space size={16}>
-                {newArr.length === 0 ? (
-                  <a
-                    onClick={() => {
-                      setExamine(selectedRows);
-                      setVisible(true);
-                    }}
-                  >
-                    批量审批
-                  </a>
-                ) : (
-                  <Tooltip title="所选数据中包含已审批数据，不可再次审批">
-                    <span style={{ color: '#666' }}>批量审批</span>
-                  </Tooltip>
-                )}
-              </Space>
-            );
-          }}
+          // tableAlertOptionRender={({ selectedRowKeys, selectedRows }) => {
+          //   setExamine(selectedRows);
+          //   const newArr = selectedRows.filter((value: { ZT: number }) => {
+          //     return value.ZT !== 0;
+          //   });
+          //   return (
+          //     <Space size={16}>
+          //       {newArr.length === 0 ? (
+          //         <a
+          //           onClick={() => {
+          //             setExamine(selectedRows);
+          //             setVisible(true);
+          //           }}
+          //         >
+          //           批量审批
+          //         </a>
+          //       ) : (
+          //         <Tooltip title="所选数据中包含已审批数据，不可再次审批">
+          //           <span style={{ color: '#666' }}>批量审批</span>
+          //         </Tooltip>
+          //       )}
+          //     </Space>
+          //   );
+          // }}
           scroll={{ x: getTableWidth(columns) }}
           dataSource={dataSource}
           headerTitle={
@@ -410,10 +411,12 @@ const CourseUnsubscribe = () => {
           visible={visible}
           onOk={() => {
             form.submit();
+            form.resetFields();
           }}
           onCancel={() => {
             setVisible(false);
             setCurrent(undefined);
+            form.resetFields();
           }}
           okText="确认"
           cancelText="取消"

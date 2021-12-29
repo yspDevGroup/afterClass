@@ -5,13 +5,6 @@
  * @LastEditTime: 2021-12-29 14:30:31
  * @LastEditors: wsl
  */
-/*
- * @description:
- * @author: Sissle Lynn
- * @Date: 2021-10-09 10:48:20
- * @LastEditTime: 2021-11-11 10:22:20
- * @LastEditors: Sissle Lynn
- */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import { useModel, history } from 'umi';
@@ -60,9 +53,8 @@ const AfterClassService = () => {
         page: 0,
         pageSize: 0
       })
-      if (res.status === 'ok') {
-        console.log(res)
-        setBaoMinData(res.data.rows[0])
+      if (res.status === 'ok' && res.data) {
+        setBaoMinData(res.data.rows?.[0])
       }
     }
   }
@@ -112,7 +104,6 @@ const AfterClassService = () => {
       NewArr.push(data);
     });
     setDatasourse(NewArr);
-    console.log(checkedValues,'checkedValues')
     setDatas(checkedValues);
   };
   return (

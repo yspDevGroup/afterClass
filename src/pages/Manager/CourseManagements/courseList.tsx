@@ -401,7 +401,7 @@ const CourseList = () => {
       },
     },
     {
-      title: '服务课程班',
+      title: '服务课堂',
       align: 'center',
       search: false,
       key: 'NJSJs',
@@ -419,13 +419,13 @@ const CourseList = () => {
               },
             }}
           >
-            <Tooltip title={`已开设${record.fwbj_count}个服务课程班。`}>{record.fwbj_count}/{record.allFWBJ_count}</Tooltip>
+            <Tooltip title={`已开设${record.fwbj_count}个服务课堂。`}>{record.fwbj_count}/{record.allFWBJ_count}</Tooltip>
           </Link>
         );
       },
     },
     {
-      title: '缤纷课程',
+      title: '缤纷课堂',
       align: 'center',
       search: false,
       key: 'NJSJs',
@@ -443,7 +443,7 @@ const CourseList = () => {
               },
             }}
           >
-            <Tooltip title={`已开设${record.bj_count || 0}个缤纷课程。`}>{record.bj_count || 0}/{record.allBJ_count}</Tooltip>
+            <Tooltip title={`已开设${record.bj_count || 0}个缤纷课堂。`}>{record.bj_count || 0}/{record.allBJ_count}</Tooltip>
           </Link>
         );
       },

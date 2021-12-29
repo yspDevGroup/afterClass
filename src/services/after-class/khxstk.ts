@@ -28,14 +28,33 @@ export async function getKHXSTK(
         XH?: string;
         XM?: string;
         WechatUserId?: string;
-        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+        BJSJ?:
+          | { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } }
+          | any;
       };
       JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string } | any;
       KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } } | any;
       KHXXZZFW?:
         | { id?: string; FWMC?: string; KHZZFW?: { id?: string; FWMC?: string; FWJGMC?: string } }
         | any;
-      XSFWBJ?: { ZT?: number; KHFWBJ?: { FWMC?: string; FWTP?: string; FWMS?: string } } | any;
+      XSFWBJ?:
+        | {
+            id?: string;
+            ZT?: number;
+            KHFWBJ?: {
+              id?: string;
+              FWMC?: string;
+              FWTP?: string | any;
+              FWMS?: string | any;
+              BJSJ?: {
+                id?: string;
+                BJ?: string;
+                NJSJ?: { id?: string; NJMC?: string; XD?: string };
+              };
+            };
+            KHFWSJPZ?: { id?: string; KSRQ?: string; JSRQ?: string };
+          }
+        | any;
     };
     message?: string;
   }>(`/khxstk/${param0}`, {
@@ -82,6 +101,12 @@ export async function getAllKHXSTK(
     KHFWMC?: string;
     /** 学校ID */
     XXJBSJId: string;
+    /** 班级ID */
+    BJSJId?: string;
+    /** 年级ID */
+    NJSJId?: string;
+    /** 校区ID */
+    XQSJId?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -124,14 +149,33 @@ export async function createKHXSTK(body: API.CreateKHXSTK, options?: { [key: str
         XH?: string;
         XM?: string;
         WechatUserId?: string;
-        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+        BJSJ?:
+          | { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } }
+          | any;
       };
       JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string } | any;
       KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } } | any;
       KHXXZZFW?:
         | { id?: string; FWMC?: string; KHZZFW?: { id?: string; FWMC?: string; FWJGMC?: string } }
         | any;
-      XSFWBJ?: { ZT?: number; KHFWBJ?: { FWMC?: string; FWTP?: string; FWMS?: string } } | any;
+      XSFWBJ?:
+        | {
+            id?: string;
+            ZT?: number;
+            KHFWBJ?: {
+              id?: string;
+              FWMC?: string;
+              FWTP?: string | any;
+              FWMS?: string | any;
+              BJSJ?: {
+                id?: string;
+                BJ?: string;
+                NJSJ?: { id?: string; NJMC?: string; XD?: string };
+              };
+            };
+            KHFWSJPZ?: { id?: string; KSRQ?: string; JSRQ?: string };
+          }
+        | any;
     };
     message?: string;
   }>('/khxstk/create', {

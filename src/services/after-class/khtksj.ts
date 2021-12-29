@@ -22,6 +22,12 @@ export async function getKHTKSJ(
   body: {
     /** 退课状态 */
     ZT?: number[];
+    /** 班级ID */
+    BJSJId?: string;
+    /** 年级ID */
+    NJSJId?: string;
+    /** 校区ID */
+    XQSJId?: string;
     /** 学生ID */
     XSJBSJId?: string;
     /** 学生姓名 */

@@ -2976,7 +2976,7 @@ declare namespace API {
       XH?: string;
       XM?: string;
       WechatUserId?: string;
-      BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+      BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } } | any;
     };
     KHBJSJ?:
       | {
@@ -3007,8 +3007,15 @@ declare namespace API {
     KHXSTKs?: { id?: string; BZ?: string; TKZT?: string; TKSJ?: string; TKJE?: number }[];
     XSFWBJ?:
       | {
+          id?: string;
           ZT?: number;
-          KHFWBJ?: { id?: string; FWMC?: string; FWTP?: string; FWMS?: string };
+          KHFWBJ?: {
+            id?: string;
+            FWMC?: string;
+            FWTP?: string | any;
+            FWMS?: string | any;
+            BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+          };
           KHFWSJPZ?: { id?: string; KSRQ?: string; JSRQ?: string };
         }
       | any;
@@ -3235,7 +3242,7 @@ declare namespace API {
       XH?: string;
       XM?: string;
       WechatUserId?: string;
-      BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+      BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } } | any;
     };
     KHBJSJ?:
       | {
@@ -3263,7 +3270,20 @@ declare namespace API {
           KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
         }
       | any;
-    XSFWBJ?: { ZT?: number; KHFWBJ?: { FWMC?: string; FWTP?: string; FWMS?: string } } | any;
+    XSFWBJ?:
+      | {
+          id?: string;
+          ZT?: number;
+          KHFWBJ?: {
+            id?: string;
+            FWMC?: string;
+            FWTP?: string | any;
+            FWMS?: string | any;
+            BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+          };
+          KHFWSJPZ?: { id?: string; KSRQ?: string; JSRQ?: string };
+        }
+      | any;
   };
 
   type CreateKHXSDD = {
@@ -3470,19 +3490,32 @@ declare namespace API {
       XH?: string;
       XM?: string;
       WechatUserId?: string;
-      BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+      BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } } | any;
     };
     JZGJBSJ?: { id?: string; XM?: string; WechatUserId?: string } | any;
     KHBJSJ?: { BJMC?: string; KHKCSJ?: { KCMC?: string } } | any;
     KHXXZZFW?:
       | { id?: string; FWMC?: string; KHZZFW?: { id?: string; FWMC?: string; FWJGMC?: string } }
       | any;
-    XSFWBJ?: { ZT?: number; KHFWBJ?: { FWMC?: string; FWTP?: string; FWMS?: string } } | any;
+    XSFWBJ?:
+      | {
+          id?: string;
+          ZT?: number;
+          KHFWBJ?: {
+            id?: string;
+            FWMC?: string;
+            FWTP?: string | any;
+            FWMS?: string | any;
+            BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+          };
+          KHFWSJPZ?: { id?: string; KSRQ?: string; JSRQ?: string };
+        }
+      | any;
   };
 
   type CreateKHXSTK = {
     /** 退款金额 */
-    TKJE: number;
+    TKJE?: number;
     /** 退款状态 */
     TKZT?: number;
     /** 退款时间 */

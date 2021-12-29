@@ -278,6 +278,7 @@ const ServiceRefund = () => {
           }
           setVisible(false);
           setCurrent(undefined);
+          form.resetFields();
           actionRef.current?.reload();
         } else {
           message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');
@@ -424,10 +425,12 @@ const ServiceRefund = () => {
           visible={visible}
           onOk={() => {
             form.submit();
+            form.resetFields();
           }}
           onCancel={() => {
             setVisible(false);
             setCurrent(undefined);
+            form.resetFields();
           }}
           okText="确认"
           cancelText="取消"

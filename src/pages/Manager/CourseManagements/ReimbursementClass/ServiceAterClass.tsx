@@ -3,48 +3,131 @@ import { useModel } from 'umi';
 import { Select, message, Modal, Radio, Input, Form } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
-import { createKHXSTK } from '@/services/after-class/khxstk';
 import ShowName from '@/components/ShowName';
-import { getKHZZFW } from '@/services/after-class/khzzfw';
-import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
+import { getKHTKSJ, updateKHTKSJ } from '@/services/after-class/khtksj';
+import { getAllBJSJ } from '@/services/after-class/bjsj';
+import { createKHXSTK } from '@/services/after-class/khxstk';
+import { getGradesByCampus } from '@/services/after-class/njsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getAllXQSJ } from '@/services/after-class/xqsj';
+import { getAllKHXSDD } from '@/services/after-class/khxsdd';
+
+type selectType = { label: string; value: string };
 
 const { Option } = Select;
 const { TextArea, Search } = Input;
 
-const ServiceUnsubscribe = () => {
+const ServiceAterClass = () => {
   // 获取到当前学校的一些信息
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   const [dataSource, setDataSource] = useState<API.KHTKSJ[] | undefined>();
+  const [form] = Form.useForm();
+  const [visible, setVisible] = useState<boolean>(false);
+  const [current, setCurrent] = useState<any>();
   // 选择学年学期
   const [curXNXQId, setCurXNXQId] = useState<any>();
   // 学生姓名选择
   const [name, setName] = useState<string>();
-  const [fwlxList, setFwlxList] = useState<API.KHZZFW[]>();
-  const [FWLX, setFWLX] = useState<string>();
-  const [FWLXId, setFWLXId] = useState<string>();
-  const [fwList, setFwList] = useState<API.KHXXZZFW[]>();
-  const [FWMC, setFWMC] = useState<string>();
-  const [form] = Form.useForm();
-  const [visible, setVisible] = useState<boolean>(false);
-  const [current, setCurrent] = useState<any>();
+  // 校区
+  const [campusId, setCampusId] = useState<string>();
+  const [campusData, setCampusData] = useState<any[]>();
+  const [NjId, setNjId] = useState<any>();
+  const [NjData, setNjData] = useState<any>();
+  const [BJId, setBJId] = useState<string | undefined>(undefined);
+  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
   // 学年学期筛选
   const termChange = (val: string) => {
     setCurXNXQId(val);
   };
+  const getCampusData = async () => {
+    const res = await getAllXQSJ({
+      XXJBSJId: currentUser?.xxId,
+    });
+    if (res?.status === 'ok') {
+      const arr = res?.data?.map((item) => {
+        return {
+          label: item.XQMC,
+          value: item.id,
+        };
+      });
+      if (arr?.length) {
+        let id = arr?.find((item: any) => item.label === '本校')?.value;
+        if (!id) {
+          id = arr[0].value;
+        }
+        setCampusId(id);
+      }
+      setCampusData(arr);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const result = await queryXNXQList(currentUser?.xxId);
+      if (result?.current) {
+        setCurXNXQId(result?.current?.id);
+      }
+    })();
+    getCampusData();
+  }, []);
+
+  const getNJSJ = async () => {
+    if (campusId) {
+      const res = await getGradesByCampus({
+        XQSJId: campusId,
+      });
+      if (res.status === 'ok') {
+        setNjData(res.data);
+      }
+    }
+  };
+  useEffect(() => {
+    if (campusId) {
+      getNJSJ();
+      setBJId(undefined);
+      setNjId(undefined);
+    }
+  }, [campusId]);
+  const onCampusChange = (value: any) => {
+    setCampusId(value);
+  };
+  const onBjChange = async (value: any) => {
+    setBJId(value);
+  };
+  const onNjChange = async (value: any) => {
+    setNjId(value);
+  };
+
+  const getBJSJ = async () => {
+    const res = await getAllBJSJ({ XQSJId: campusId, njId: NjId, page: 0, pageSize: 0 });
+    if (res.status === 'ok') {
+      const data = res.data?.rows?.map((item: any) => {
+        return { label: item.BJ, value: item.id };
+      });
+      setBJData(data);
+    }
+  };
+
+  useEffect(() => {
+    if (NjId) {
+      setBJId(undefined);
+      getBJSJ();
+    }
+  }, [NjId, campusId]);
   const getData = async () => {
     const resAll = await getKHTKSJ({
       XXJBSJId: currentUser?.xxId,
       XNXQId: curXNXQId,
       XSXM: name,
-      KHFWMC: FWMC,
-      KHFWLX: FWLX,
-      LX: 1,
+      BJSJId: BJId,
+      NJSJId: NjId,
+      XQSJId: campusId,
+      LX: 2,
     });
     if (resAll.status === 'ok') {
       setDataSource(resAll?.data?.rows);
@@ -53,41 +136,9 @@ const ServiceUnsubscribe = () => {
     }
   };
   useEffect(() => {
-    // 获取学年学期数据的获取
-    (async () => {
-      // 服务类别的获取
-      const result = await getKHZZFW({
-        XXJBSJId: currentUser?.xxId,
-        page: 0,
-        pageSize: 0,
-      });
-      if (result.status === 'ok') {
-        setFwlxList(result?.data?.rows);
-      }
-    })();
-  }, []);
-  useEffect(() => {
-    (async () => {
-      if (curXNXQId) {
-        const data = {
-          XXJBSJId: currentUser?.xxId,
-          XNXQId: curXNXQId || '',
-          KHZZFWId: FWLXId,
-          FWZT: 1,
-          page: 0,
-          pageSize: 0,
-        };
-        const res = await getKHXXZZFW(data);
-        if (res.status === 'ok') {
-          setFwList(res?.data?.rows);
-        }
-      }
-    })();
-  }, [curXNXQId, FWLXId]);
-  useEffect(() => {
     getData();
-  }, [curXNXQId, name, FWMC, FWLX]);
-  /// table表格数据
+  }, [curXNXQId, campusId, NjId, BJId, name]);
+  // table表格数据
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -109,35 +160,26 @@ const ServiceUnsubscribe = () => {
       ),
     },
     {
-      title: '行政班名称',
-      dataIndex: 'XZBJSJ',
-      key: 'XZBJSJ',
+      title: '课后服务名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
       align: 'center',
-      width: 120,
+      width: 200,
       ellipsis: true,
       render: (_text: any, record: any) => {
-        return `${record?.XSJBSJ?.BJSJ?.NJSJ?.NJMC}${record?.XSJBSJ?.BJSJ?.BJ}`;
+        return `${record?.XSFWBJ?.KHFWBJ?.FWMC}`;
       },
     },
     {
-      title: '服务名称',
-      dataIndex: 'KHXXZZFW',
-      key: 'KHXXZZFW',
+      title: '行政班名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
       align: 'center',
-      render: (text: any) => {
-        return text?.FWMC;
+      width: 100,
+      ellipsis: true,
+      render: (_text: any, record: any) => {
+        return `${record?.XSFWBJ?.KHFWBJ?.BJSJ?.NJSJ?.NJMC}${record?.XSFWBJ?.KHFWBJ?.BJSJ?.BJ}`;
       },
-      width: 150,
-    },
-    {
-      title: '服务类型',
-      dataIndex: 'KHXXZZFW',
-      key: 'KHXXZZFW',
-      align: 'center',
-      render: (text: any) => {
-        return text?.KHZZFW?.FWMC;
-      },
-      width: 150,
     },
     {
       title: '服务开始日期',
@@ -145,7 +187,7 @@ const ServiceUnsubscribe = () => {
       key: 'KSRQ',
       align: 'center',
       render: (_, record) => {
-        return record?.KHXXZZFW?.KSRQ;
+        return record?.XSFWBJ?.KHFWSJPZ?.KSRQ;
       },
       width: 150,
     },
@@ -155,7 +197,7 @@ const ServiceUnsubscribe = () => {
       key: 'JSRQ',
       align: 'center',
       render: (_, record) => {
-        return record?.KHXXZZFW?.JSRQ;
+        return record?.XSFWBJ?.KHFWSJPZ?.JSRQ;
       },
       width: 150,
     },
@@ -248,17 +290,6 @@ const ServiceUnsubscribe = () => {
   ];
   const handleSubmit = async (param: any) => {
     const { ZT, BZ } = param;
-    let DKFY: any;
-    const a1 = new Date(current?.KHXXZZFW?.KSRQ).getTime();
-    const a2 = new Date(current?.KHXXZZFW?.JSRQ).getTime();
-    const a3 = new Date(current?.createdAt).getTime();
-    if (a3 < a1) {
-      DKFY = Number(current?.KHXXZZFW?.FY);
-    } else {
-      const days = Math.ceil((a3 - a1) / (1000 * 60 * 60 * 24));
-      const FWTS = Math.ceil((a2 - a1) / (1000 * 60 * 60 * 24));
-      DKFY = (Number(current?.KHXXZZFW?.FY) - (days / FWTS) * current?.KHXXZZFW?.FY).toFixed(2);
-    }
     try {
       if (current.id) {
         const ids = { id: current.id };
@@ -267,31 +298,40 @@ const ServiceUnsubscribe = () => {
         if (res.status === 'ok') {
           if (ZT === 2) {
             message.success('服务退订申请已驳回');
-          } else if (current?.KHBJSJ?.FY !== 0) {
-            if (Number(DKFY) <= 0) {
-              message.success('服务退订成功,退款金额为0元，无需退款');
-            } else {
-              const result = await createKHXSTK({
-                KHTKSJId: current?.id,
-                KHXXZZFWId: current?.KHXXZZFW?.id,
-                /** 退款金额 */
-                TKJE: Number(DKFY),
-                /** 退款状态 */
-                TKZT: 0,
-                /** 学生ID */
-                XSJBSJId: current?.XSJBSJId,
-                /** 学校ID */
-                XXJBSJId: currentUser?.xxId,
-                JZGJBSJId: currentUser?.JSId || testTeacherId,
-              });
-              if (result.status === 'ok') {
-                message.success('服务退订成功,已自动申请退款流程');
+          } else {
+            const response = await getAllKHXSDD({
+              XXJBSJId: currentUser?.xxId,
+              XSFWBJId: current?.XSFWBJ?.id,
+              XSJBSJId: current?.XSJBSJId,
+              DDZT: ['已付款'],
+              DDLX: 2,
+            });
+            if (response.status === 'ok' && response.data) {
+              if (response.data?.length) {
+                const result = await createKHXSTK({
+                  KHTKSJId: current?.id,
+                  KHXXZZFWId: current?.KHXXZZFW?.id,
+                  /** 退款金额 */
+                  // TKJE: 0,
+                  /** 退款状态 */
+                  TKZT: 0,
+                  /** 学生ID */
+                  XSJBSJId: current?.XSJBSJId,
+                  /** 学校ID */
+                  XXJBSJId: currentUser?.xxId,
+                  JZGJBSJId: currentUser?.JSId || testTeacherId,
+                });
+                if (result.status === 'ok') {
+                  message.success('服务退订成功,已自动申请退款流程');
+                } else if (result.message === '零元及以下订单无需退款!') {
+                  message.success('服务退订成功');
+                } else {
+                  message.warning(`服务退订成功,退款流程由于${result.message}申请失败`);
+                }
               } else {
-                message.warning(`服务退订成功,退款流程由于${result.message}申请失败`);
+                message.success('服务退订成功');
               }
             }
-          } else {
-            message.success('服务退订成功');
           }
           setVisible(false);
           setCurrent(undefined);
@@ -330,40 +370,28 @@ const ServiceUnsubscribe = () => {
               <SearchLayout>
                 <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
                 <div>
-                  <label htmlFor="type">服务类别：</label>
-                  <Select
-                    style={{ width: 160 }}
-                    allowClear
-                    value={FWLX}
-                    onChange={(value: string, option: any) => {
-                      setFWLX(value);
-                      setFWLXId(option?.key);
-                      setFWMC(undefined);
-                    }}
-                  >
-                    {fwlxList?.map((item: API.KHZZFW) => {
-                      return (
-                        <Option key={item.id} value={item.FWMC!}>
-                          {item.FWMC}
-                        </Option>
-                      );
+                  <label htmlFor="grade">校区名称：</label>
+                  <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
+                    {campusData?.map((item: any) => {
+                      return <Option value={item.value}>{item.label}</Option>;
                     })}
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor="name">服务名称：</label>
-                  <Select
-                    value={FWMC}
-                    style={{ width: 160 }}
-                    allowClear
-                    onChange={(value: string) => {
-                      setFWMC(value);
-                    }}
-                  >
-                    {fwList?.map((item: API.KHXXZZFW) => {
+                  <label htmlFor="grade">年级名称：</label>
+                  <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
+                    {NjData?.map((item: any) => {
+                      return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                    })}
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor="kcly">班级名称：</label>
+                  <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
+                    {bjData?.map((item: any) => {
                       return (
-                        <Option key={item.FWMC} value={item.FWMC!}>
-                          {item.FWMC}
+                        <Option value={item.value} key={item.value}>
+                          {item.label}
                         </Option>
                       );
                     })}
@@ -393,8 +421,8 @@ const ServiceUnsubscribe = () => {
           }}
           onCancel={() => {
             setVisible(false);
-            setCurrent(undefined);
             form.resetFields();
+            setCurrent(undefined);
           }}
           okText="确认"
           cancelText="取消"
@@ -425,4 +453,4 @@ const ServiceUnsubscribe = () => {
     </>
   );
 };
-export default ServiceUnsubscribe;
+export default ServiceAterClass;

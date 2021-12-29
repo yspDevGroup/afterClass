@@ -7,14 +7,12 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Button, List } from 'antd';
-import moment from 'moment';
 import { useModel, history } from 'umi';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
-import { computedMonth } from '@/services/after-class/khjscq';
 import GoBack from '@/components/GoBack';
 
 import noOrder from '@/assets/noOrder1.png';
-import icon_stuEvaluate from '@/assets/icon_stuEvaluate.png';
+import icon_resign from '@/assets/icon_resign.png';
 import styles from './index.less';
 import { getAllJSCQBQ } from '@/services/after-class/jscqbq';
 
@@ -106,7 +104,7 @@ const Resign: React.FC = () => {
           }}
         >
           <div>
-            <img src={icon_stuEvaluate} />
+            <img src={icon_resign} />
           </div>
           我要补签
         </div>
