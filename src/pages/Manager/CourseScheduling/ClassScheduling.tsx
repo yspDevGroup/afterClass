@@ -401,7 +401,7 @@ const ClassScheduling = () => {
          // 筛选行政班
          const screenXZB = (dataSource6: any) => {
             const newDataSource = [...dataSource6];
-            if(NJId){
+            if(XZBId){
                 newDataSource.forEach((item: any) => {
                     const { KHPKSJs } = item;
                     if (KHPKSJs?.length > 0) {
