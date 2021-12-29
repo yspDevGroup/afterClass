@@ -89,7 +89,7 @@ const CourseDetails: React.FC = () => {
           if (results.status === 'ok') {
             if (results.data) {
               const newArr = results.data.KHBJSJs.filter((value: any) => {
-                if (value.BJZT === '已开班' && value.BJLX === 1 && value.XQSJId === StorageXQSJId) {
+                if (value.BJZT === '已开班' && value.BJLX === 1 && value.XQSJId === StorageXQSJId && value?.ISFW === 0) {
                   const newBjIds = value.BJSJs.filter((items: any) => {
                     return items.id === XSbjId;
                   });
@@ -98,7 +98,7 @@ const CourseDetails: React.FC = () => {
                   }
                 }
                 return (
-                  value.BJZT === '已开班' && value.BJLX === 0 && value.XQSJId === StorageXQSJId
+                  value.BJZT === '已开班' && value.BJLX === 0 && value.XQSJId === StorageXQSJId && value?.ISFW === 0
                 );
               });
               setKBClass(newArr);
@@ -444,7 +444,8 @@ const CourseDetails: React.FC = () => {
                       BJRS: number;
                       KHXSBJs: any[];
                       BJZT: string;
-                      xs_count: number;
+                      xs_count?: number;
+                      ISFW: number;
                     },
                     ind: number,
                   ) => {
@@ -454,7 +455,7 @@ const CourseDetails: React.FC = () => {
                     const enAble =
                       myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
                       myDate <= new Date(moment(end).format('YYYY/MM/DD'));
-                    if (value.BJZT === '已开班') {
+                    if (value.BJZT === '已开班' && value?.ISFW === 0) {
                       return (
                         // <Popconfirm
                         //   overlayClassName={styles.confirmStyles}

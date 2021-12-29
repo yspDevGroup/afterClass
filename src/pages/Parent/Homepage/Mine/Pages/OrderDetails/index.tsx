@@ -143,8 +143,8 @@ const OrderDetails: React.FC = (props: any) => {
                 <ul>
                   <p className={styles.title}>{fwdetail?.FWMC || fwdetail?.KHFWBJ?.FWMC}</p>
                   <li>
-                    服务时段：{moment(fwdetail?.KSRQ).format('YYYY.MM.DD')}~
-                    {moment(fwdetail?.JSRQ).format('YYYY.MM.DD')}
+                    服务时段：{moment(fwdetail?.KSRQ || fwdetail?.KHFWSJPZ?.KSRQ).format('YYYY.MM.DD')}~
+                    {moment(fwdetail?.JSRQ || fwdetail?.KHFWSJPZ?.JSRQ).format('YYYY.MM.DD')}
                   </li>
                   <li>
                     学生：<span className={styles.xx}>{ localStorage.getItem('studentName') || currentUser?.student?.[0].name}</span>

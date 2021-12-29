@@ -34,13 +34,32 @@
   .header{
     display: flex;
     justify-content: space-between;
-    .title{
+    line-height: 28px;
+    .title {
       font-style: normal;
       font-weight: 600;
       font-size: 16px;
       line-height: 22px;
       color: #333333;
+      position: relative;
+      
+      >div:nth-of-type(1) {
+        position: absolute;
+        top: 2px;
+        width: 3px;
+        height: 19px;
+        background: #3D8BF2;
+        border-radius: 3px 0px;
+      }
+
+      span {
+        margin-left: 6px;
+        color: #333333;
+        font-weight: bold;
+        font-size: 18px;
+      }
     }
+
     .all{
       font-style: normal;
       font-weight: normal;

@@ -7,8 +7,7 @@ import IconFont from '@/components/CustomIcon';
 import { enHenceMsg, removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
 import { getStudentOrders } from '@/services/after-class/khxsdd';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
-
-import imgPop from '@/assets/mobileBg.png';
+import index_header from '@/assets/index_header.png';
 import evaluation from '@/assets/evaluation.png';
 import drop from '@/assets/drop.png';
 import icon_Rgo from '@/assets/icon_Rgo.png';
@@ -81,7 +80,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
         const studentNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
         const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
         const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
-        await ParentHomeData('student', currentUser?.xxId, studentId, studentNjId, bjId,StorageXQSJId, true);
+        await ParentHomeData('student', currentUser?.xxId, studentId, studentNjId, bjId, StorageXQSJId, true);
         fetchData();
         setReload(false);
       }
@@ -89,8 +88,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
   }, [reload])
   return (
     <div className={styles.minePage}>
-      <header className={styles.cusHeader}>
-        <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
+      <header className={styles.cusHeader} style={{ backgroundImage: `url(${index_header})` }}>
         <div className={styles.header}>
           {currentUser?.avatar ? <img src={currentUser?.avatar} /> : ''}
           <div className={styles.headerName}>
