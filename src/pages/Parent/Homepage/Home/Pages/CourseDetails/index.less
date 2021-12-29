@@ -195,6 +195,28 @@
         height: 16px !important;
         line-height: 16px !important;
       }
+      :global{
+        .ant-collapse-item{
+          .ant-collapse-header{
+            >div{
+              width: 40px;
+              height: 20px;
+              position: absolute;
+              top: 8px;
+              right: 16px;
+              >span{
+                width: 40px;
+                position: initial;
+                top: 0;
+                right: 0;
+                left: 0;
+                margin: 0;
+                transform: initial;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
