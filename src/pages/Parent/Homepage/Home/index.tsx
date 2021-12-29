@@ -83,7 +83,7 @@ const Home = () => {
           pageSize: 0
         })
         if (res.status === 'ok') {
-          setBaoMinData(res.data.rows[0])
+          setBaoMinData(res.data.rows)
         }
       }
     })()
@@ -198,7 +198,7 @@ const Home = () => {
           <div className={styles.iconBox}>
             <Link
               to={{
-                pathname: BaoMinData && BaoMinData?.XSFWBJs?.length === 0 ? '/parent/home/afterClassCoach' : '/parent/home/afterClassCoach/interestClassroom',
+                pathname: BaoMinData?.length === 0 || BaoMinData?.XSFWBJs?.length === 0 ? '/parent/home/afterClassCoach' : '/parent/home/afterClassCoach/interestClassroom',
                 state: { BJMC, ParentalIdentity },
               }}
             >

@@ -135,7 +135,7 @@ const ReturnService = () => {
           </div>
           <div className={styles.wrap}>
             <p>
-              规则详见 <a onClick={showModal}>《课后服务协议》</a>
+              规则详见 <a onClick={showModal}>《缤纷课堂协议》</a>
             </p>
             <div className={styles.btn}>
               <Button

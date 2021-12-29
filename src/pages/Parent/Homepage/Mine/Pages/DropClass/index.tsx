@@ -4,8 +4,8 @@
  * @description: 退订
  * @author: wsl
  * @Date: 2021-09-04 14:33:06
- * @LastEditTime: 2021-10-25 11:26:56
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-29 14:44:02
+ * @LastEditors: wsl
  */
 import GoBack from '@/components/GoBack';
 import { Button, message } from 'antd';
@@ -30,7 +30,7 @@ const DropClass = () => {
     const result = await queryXNXQList(currentUser?.xxId, undefined);
     const res = await getAllRefunds({
       XSJBSJId: XSId,
-      XNXQId: result.current.id,
+      XNXQId: result?.current?.id,
     })
     if (res.status === 'ok') {
       setRecord(res.data?.rows);
@@ -57,92 +57,106 @@ const DropClass = () => {
               const num = value?.KHBJSJ?.KSS - value?.KSS;
               return (
                 <Link
-                key="ck"
-                to={{
-                  pathname: '/parent/mine/dropClass/details',
-                  state: value,
-                }}
-              >
-                <div className={styles.cards}>
-                  <p className={styles.title}>
+                  key="ck"
+                  to={{
+                    pathname: '/parent/mine/dropClass/details',
+                    state: value,
+                  }}
+                >
+                  <div className={styles.cards}>
+                    <p className={styles.title}>
+                      {
+                        value?.KHXXZZFW ? <>
+                          {value?.KHXXZZFW?.FWMC}
+                          <span style={{ color: '#009688', fontWeight: 'normal' }}>
+                            【{value?.KHXXZZFW?.KHZZFW?.FWMC}】
+                          </span>
+                        </> : <></>
+                      }
+                      {
+                        value?.KHBJSJ ? <> {value.KHBJSJ?.KHKCSJ?.KCMC}
+                          <span style={{ color: '#009688', fontWeight: 'normal' }}>
+                            【{value.KHBJSJ?.BJMC}】
+                          </span></> : <></>
+                      }
+                      {/* 课后服务退课数据 */}
+                      {
+                        value?.XSFWBJ ? <>  {value?.XSFWBJ?.KHFWBJ?.FWMC}</> : <></>
+                      }
+
+                    </p>
                     {
                       value?.KHXXZZFW ? <>
-                        {value?.KHXXZZFW?.FWMC}
-                        <span style={{ color: '#009688', fontWeight: 'normal' }}>
-                          【{value?.KHXXZZFW?.KHZZFW?.FWMC}】
-                        </span>
-                      </> : <>
-                        {value.KHBJSJ?.KHKCSJ?.KCMC}
-                        <span style={{ color: '#009688', fontWeight: 'normal' }}>
-                          【{value.KHBJSJ?.BJMC}】
-                        </span>
-                      </>
+                        <p>服务时段：{value?.KHXXZZFW?.KSRQ} ~ {value?.KHXXZZFW?.JSRQ}</p>
+                        <p>申请日期：{value?.createdAt?.split(' ')[0]}</p>
+                      </> : <></>
                     }
+                    {
+                      value?.KHBJSJ ? <>
+                        <p>
+                          总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{num}节{' '}
+                        </p>
+                        <p>
+                          未学课时：{value.KSS}节 ｜ 可退课时：{value.KSS}节
+                        </p>
+                      </> : <></>
+                    }
+                    {
+                      value?.XSFWBJ ? <>
+                        <p>服务时段：{value?.XSFWBJ?.KHFWSJPZ?.KSRQ} ~ {value?.XSFWBJ?.KHFWSJPZ?.JSRQ}</p>
+                        <p>申请日期：{value?.createdAt?.split(' ')[0]}</p>
+                      </> : <></>
+                    }
+                    <p className={styles.state}>
+                      {value.ZT === 0 ? <span style={{ color: '#FF6600' }}>申请中</span> : ''}
+                      {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <span style={{ color: '#FF0000' }}>退订失败</span> : ''}
+                      {value.ZT === 1 && value?.KHXSTKs?.length === 0 ? <span style={{ color: '#45c977' }}>退订成功</span> : ''}
+                      {value?.KHXSTKs?.length !== 0 && (value?.KHXSTKs?.[0].TKZT === '0' || value?.KHXSTKs?.[0].TKZT === '1') ? <span style={{ color: '#FF6600' }}>退款中</span> : ''}
+                      {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? <span style={{ color: '#FF0000' }}>退款被驳回</span> : ''}
+                      {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '3' ? <span style={{ color: '#45c977' }}>退款成功</span> : ''}
+                      {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '4' ? <span style={{ color: '#FF0000' }}>退款失败</span> : ''}
+                      <RightOutlined />
+                    </p>
+                    {value.ZT === 2 && value?.KHXSTKs?.length === 0 && value?.BZ ? <p>退订说明：{value?.BZ}</p> : ''}
+                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' && value?.KHXSTKs?.[0].BZ ? <p>退款说明：{value?.KHXSTKs?.[0].BZ}</p> : ''}
 
-                  </p>
-                  {
-                    value?.KHXXZZFW ? <>
-                      <p>服务时段：{value?.KHXXZZFW?.KSRQ} ~ {value?.KHXXZZFW?.JSRQ}</p>
-                      <p>申请日期：{value?.createdAt?.split(' ')[0]}</p>
-                    </> : <>
-                      <p>
-                        总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{num}节{' '}
-                      </p>
-                      <p>
-                        未学课时：{value.KSS}节 ｜ 可退课时：{value.KSS}节
-                      </p>
-                    </>
-                  }
-                  <p className={styles.state}>
-                    {value.ZT === 0 ? <span style={{ color: '#FF6600' }}>申请中</span> : ''}
-                    {value.ZT === 2 && value?.KHXSTKs?.length === 0 ? <span style={{ color: '#FF0000' }}>退订失败</span> : ''}
-                    {value.ZT === 1 && value?.KHXSTKs?.length === 0 ? <span style={{ color: '#45c977' }}>退订成功</span> : ''}
-                    {value?.KHXSTKs?.length !== 0 && (value?.KHXSTKs?.[0].TKZT === '0' || value?.KHXSTKs?.[0].TKZT === '1') ? <span style={{ color: '#FF6600' }}>退款中</span> : ''}
-                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? <span style={{ color: '#FF0000' }}>退款被驳回</span> : ''}
-                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '3' ? <span style={{ color: '#45c977' }}>退款成功</span> : ''}
-                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '4' ? <span style={{ color: '#FF0000' }}>退款失败</span> : ''}
-                    <RightOutlined />
-                  </p>
-                  {value.ZT === 2 && value?.KHXSTKs?.length === 0 && value?.BZ ? <p>退订说明：{value?.BZ}</p> : ''}
-                  {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' && value?.KHXSTKs?.[0].BZ ? <p>退款说明：{value?.KHXSTKs?.[0].BZ}</p> : ''}
-
-                  {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? (
-                    <button
-                      onClick={async () => {
-                        let data: any = {};
-                        if (value?.KHXXZZFW === null) {
-                          data = {
-                            TKJE: value?.KHXSTKs?.[0].TKJE || 0,
-                            TKZT: 0,
-                            XSJBSJId: XSId,
-                            KHBJSJId: value?.KHBJSJId,
-                            XXJBSJId: currentUser?.xxId,
-                            KHTKSJId: value?.id
+                    {value?.KHXSTKs?.length !== 0 && value?.KHXSTKs?.[0].TKZT === '2' ? (
+                      <button
+                        onClick={async () => {
+                          let data: any = {};
+                          if (value?.KHXXZZFW === null) {
+                            data = {
+                              TKJE: value?.KHXSTKs?.[0].TKJE || 0,
+                              TKZT: 0,
+                              XSJBSJId: XSId,
+                              KHBJSJId: value?.KHBJSJId,
+                              XXJBSJId: currentUser?.xxId,
+                              KHTKSJId: value?.id
+                            }
+                          } else {
+                            data = {
+                              TKJE: value?.KHXSTKs?.[0].TKJE || 0,
+                              TKZT: 0,
+                              XSJBSJId: XSId,
+                              KHXXZZFWId: value?.KHXXZZFW?.id,
+                              XXJBSJId: currentUser?.xxId,
+                              KHTKSJId: value?.id
+                            }
                           }
-                        } else {
-                          data = {
-                            TKJE: value?.KHXSTKs?.[0].TKJE || 0,
-                            TKZT: 0,
-                            XSJBSJId: XSId,
-                            KHXXZZFWId: value?.KHXXZZFW?.id,
-                            XXJBSJId: currentUser?.xxId,
-                            KHTKSJId: value?.id
+                          const result = await createKHXSTK(data);
+                          if (result.status === 'ok') {
+                            message.success('退款申请成功');
+                            getTD();
                           }
-                        }
-                        const result = await createKHXSTK(data);
-                        if (result.status === 'ok') {
-                          message.success('退款申请成功');
-                          getTD();
-                        }
-                      }}
-                    >
-                      申请退款
-                    </button>
-                  ) : (
-                    ''
-                  )}
-                </div>
-              </Link>
+                        }}
+                      >
+                        申请退款
+                      </button>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </Link>
 
               );
             })}

@@ -1,41 +1,45 @@
 /*
+ * @description: 
+ * @author: wsl
+ * @Date: 2021-12-29 10:59:44
+ * @LastEditTime: 2021-12-29 14:30:31
+ * @LastEditors: wsl
+ */
+/*
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-09 10:48:20
- * @LastEditTime: 2021-12-29 13:34:52
- * @LastEditors: wsl
+ * @LastEditTime: 2021-11-11 10:22:20
+ * @LastEditors: Sissle Lynn
  */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
-import { useModel,history } from 'umi';
+import { useModel, history } from 'umi';
 import { Button, Checkbox, message, Modal } from 'antd';
 import { createKHTKSJ } from '@/services/after-class/khtksj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { countKHXSCQ } from '@/services/after-class/khxscq';
 
 import styles from '../index.less';
 import noOrder from '@/assets/noOrder.png';
-import { CountCourses, ParentHomeData } from '@/services/local-services/mobileHome';
+import { getStudentListByBjid } from '@/services/after-class/khfwbj';
 
-const DropOut = () => {
+const AfterClassService = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { student } = currentUser || {};
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [ModalVisible, setModalVisible] = useState(false);
   const [KHFUXY, setKHFUXY] = useState<any>();
-  const [kcData, setKcData] = useState<any>();
-  const [kcList, setKcList] = useState<any>();
   const [datasourse, setDatasourse] = useState<any>();
+  const [Datas, setDatas] = useState<any>([]);
   const StorageXSId = localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
-  const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
+  const StorageBjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+  const [BaoMinData, setBaoMinData] = useState<any>();
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: ['缤纷课堂协议'],
+        LX: ['课后服务协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
@@ -46,39 +50,25 @@ const DropOut = () => {
       }
     })();
   }, []);
-  const getKcData = async (data: any) => {
-    const result = await queryXNXQList(currentUser?.xxId);
-    if (result.current) {
-      const res = await countKHXSCQ({
-        XNXQId: result.current.id,
-        XSJBSJId: StorageXSId
-      });
-      if (res.status === 'ok' && res.data) {
-        const finnalList = [].map.call(res.data, (val: any) => {
-          const curCourse = data.find((v: any) => v.id === val.id);
-          return {
-            YXKS: curCourse.YXKS,
-            KSS: curCourse.KSS,
-            ...val,
-          }
-        })
-        setKcData(finnalList);
+  //获取报名的服务
+  const xuankeState = async () => {
+    if (StorageXSId) {
+      const res = await getStudentListByBjid({
+        BJSJId: StorageBjId,
+        XSJBSJId: StorageXSId,
+        ZT:[0,3],
+        page: 0,
+        pageSize: 0
+      })
+      if (res.status === 'ok') {
+        console.log(res)
+        setBaoMinData(res.data.rows[0])
       }
     }
-  };
+  }
   useEffect(() => {
-    (async () => {
-      if (StorageXSId) {
-        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        const oriData = await ParentHomeData('student', currentUser.xxId, StorageXSId, StorageNjId, bjId,StorageXQSJId);
-        const { courseSchedule } = oriData;
-        const courseData = CountCourses(courseSchedule);
-        setKcList(courseData);
-        getKcData(courseData);
-      }
-    })()
-  }, [StorageXSId]);
-
+    xuankeState();
+  }, []);
   /** 课后帮服务协议弹出框 */
   const showModal = () => {
     setIsModalVisible(true);
@@ -97,7 +87,6 @@ const DropOut = () => {
     const res = await createKHTKSJ(datasourse!);
     if (res.status === 'ok') {
       message.success('申请已提交，请等待审核');
-      getKcData(kcList);
       setModalVisible(false);
       history.push('/parent/mine/dropClass')
     } else {
@@ -114,47 +103,38 @@ const DropOut = () => {
       const data = {
         XSJBSJId: StorageXSId,
         XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
-        KHBJSJId: value.split('+')[0],
-        KSS: value.split('+')[1],
+        XSFWBJId: value.split('+')[0],
         ZT: 0,
         BZ: '',
-        LX: 0,
-        KCMC: value.split('+')[2],
+        LX: 2,
+        FWMC: value.split('+')[1],
       };
       NewArr.push(data);
     });
     setDatasourse(NewArr);
+    console.log(checkedValues,'checkedValues')
+    setDatas(checkedValues);
   };
   return (
     <div className={styles.DropClass}>
-      {kcData?.length !== 0 ? (
+      {BaoMinData?.XSFWBJs?.length !== 0 ? (
         <>
           {' '}
           <div className={styles.Application}>
-            <p className={styles.choice}>请选择课程</p>
+            <p className={styles.choice}>请选择课后服务</p>
             <div>
               <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                {kcData?.map((value: any) => {
-                  const JKRQ = new Date(value.KHBJSJ?.JKRQ).getTime();
-                  const newDate = new Date().getTime();
-                  const last = value.KSS && value.YXKS ? (value.KSS - value.YXKS) : value.remain;
+                {BaoMinData?.XSFWBJs?.map((value: any) => {
                   return (
                     <>
-                      <div className={styles.cards}>
+                      <div className={styles.cards} style={{height:'80px'}}>
                         <p className={styles.title}>
-                          {value.KCMC}
-                          <span style={{ color: '#009688', fontWeight: 'normal' }}>【{value.BJMC}】</span>
+                          {value?.KHFWBJ?.FWMC}
                         </p>
-                        <p>总课时：{value.KSS}节 ｜ 已学课时：{value.YXKS || value.normal}节</p>
-                        <p>
-                          未学课时：{last}节｜缺勤课时：{value.abnormal}节｜可退课时：{value.abnormal + last}节
-                        </p>
+                        <p>服务时段：{value?.KHFWSJPZ?.KSRQ} ~ {value?.KHFWSJPZ?.JSRQ}</p>
                         <Checkbox
-                          value={`${value.id}+${value.abnormal + last}+${value.KCMC}`}
-                          disabled={newDate - JKRQ > 2592000000}
-                        >
-                          {' '}
-                        </Checkbox>
+                          value={`${value?.id}+${value?.KHFWBJ?.FWMC}+${value?.KHFWSJPZ?.KSRQ}`}
+                         />
                       </div>
                     </>
                   );
@@ -164,7 +144,7 @@ const DropOut = () => {
           </div>
           <div className={styles.wrap}>
             <p>
-              结课1个月后不可退课，规则详见 <a onClick={showModal}>《缤纷课堂协议》</a>
+              规则详见 <a onClick={showModal}>《课后服务协议》</a>
             </p>
             <div className={styles.btn}>
               <Button
@@ -196,7 +176,7 @@ const DropOut = () => {
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>缤纷课堂协议书</p>
+            <p>课后服务协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (
@@ -217,19 +197,17 @@ const DropOut = () => {
         cancelText="取消"
       >
         <div>
-          {datasourse?.map((value: any) => {
+          {Datas?.map((value: any) => {
             return (
               <>
                 <p>
-                  <span>课程名称：{value.KCMC}</span> <span>可退课时：{value.KSS}</span>
+                  <span>服务名称： {value.split('+')[2].substring(5,7)}月{value.split('+')[1]}</span>
                 </p>
               </>
             );
           })}
           <p style={{ fontSize: 12, color: '#999', marginTop: 40, marginBottom: 0 }}>
-            注：
-            <br />1.退课课时由系统根据申请日期进行计算统计，仅供参考。
-            <br />2.退课成功后，系统将自动进行退款，退款将原路返回您的支付账户。
+            注：服务退订成功后，系统将自动进行退款，退款将原路返回您的支付账户。
           </p>
         </div>
       </Modal>
@@ -237,4 +215,4 @@ const DropOut = () => {
   );
 };
 
-export default DropOut;
+export default AfterClassService;
