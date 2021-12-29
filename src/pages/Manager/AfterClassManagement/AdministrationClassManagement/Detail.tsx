@@ -412,7 +412,7 @@ const Detail = (props: any) => {
           <LeftOutlined />
           返回上一页
         </Button>
-        <span style={{fontSize: '18px',marginLeft:'24px',}}>{
+        <span style={{fontSize: '18px',marginLeft:'24px', fontWeight:'bold'}}>{
           `${state?.NJSJ?.XD}${state?.NJSJ?.NJMC}${state?.BJ}`
         }
         </span>
