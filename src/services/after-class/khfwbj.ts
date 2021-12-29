@@ -98,7 +98,7 @@ export async function updateKHFWBJ(
   });
 }
 
-/** 新增服务班级课程-服务班 POST /khfwbjaddKCtoKCFWBJ */
+/** 新增服务班级课程-服务班 POST /khfwbj/addKCtoKCFWBJ */
 export async function addKCtoKCFWBJ(
   body: {
     KHFWBJId?: string;
@@ -106,7 +106,7 @@ export async function addKCtoKCFWBJ(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; message?: string }>('/khfwbjaddKCtoKCFWBJ', {
+  return request<{ status: 'ok' | 'error'; message?: string }>('/khfwbj/addKCtoKCFWBJ', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

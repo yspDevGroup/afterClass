@@ -3005,7 +3005,13 @@ declare namespace API {
         }
       | any;
     KHXSTKs?: { id?: string; BZ?: string; TKZT?: string; TKSJ?: string; TKJE?: number }[];
-    XSFWBJ?: { ZT?: number; KHFWBJ?: { FWMC?: string; FWTP?: string; FWMS?: string } } | any;
+    XSFWBJ?:
+      | {
+          ZT?: number;
+          KHFWBJ?: { id?: string; FWMC?: string; FWTP?: string; FWMS?: string };
+          KHFWSJPZ?: { id?: string; KSRQ?: string; JSRQ?: string };
+        }
+      | any;
   };
 
   type CreateKHTKSJ = {

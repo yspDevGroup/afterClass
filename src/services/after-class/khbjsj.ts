@@ -213,6 +213,8 @@ export async function getAllClasses(
     KHKCSJId?: string;
     /** 年级ID */
     NJSJId?: string;
+    /** 班级ID */
+    BJSJId?: string;
     /** 班级状态 */
     BJZT?: string;
     /** 班级名称 */
@@ -225,6 +227,8 @@ export async function getAllClasses(
     ISFW?: number;
     /** 是否启用 */
     ISQY?: number;
+    /** 课程类型 */
+    KCTAG?: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */

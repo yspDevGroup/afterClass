@@ -202,6 +202,8 @@ export async function getAllRefunds(
     XNXQId: string;
     /** 课后服务班级ID */
     KHBJSJId?: string;
+    /** 学生报名服务班ID */
+    XSFWBJId?: string;
     /** 课后增值服务ID */
     KHXXZZFWId?: string;
     /** 退课类型，0:退课;1:停餐 */

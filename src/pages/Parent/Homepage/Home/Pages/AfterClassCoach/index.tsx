@@ -22,9 +22,10 @@ const EmptyArticle = (props: any) => {
   const [FWKCData, setFWKCData] = useState<any>();
   const [ModalVisible, setModalVisible] = useState(false);
   const [Times, setTimes] = useState<any[]>();
+  const [FDBId, setFDBId] = useState<any[]>([]);
   // 课后服务协议
   const [KHFUXY, setKHFUXY] = useState<any>();
-  
+
 
   useEffect(() => {
     (
@@ -33,16 +34,22 @@ const EmptyArticle = (props: any) => {
         const result = await getKHFWBJ({
           BJSJId: StorageBjId,
           XNXQId: resXNXQ?.current?.id || '',
-          ZT:[1]
+          ZT: [1]
         })
         if (result.status === 'ok') {
-          console.log(result.data)
           setFWKCData(result.data)
           const newArr: any[] = [];
+          const newIdArr: any[] = [];
           result.data?.KHFWSJPZs?.forEach((value: any) => {
             newArr.push(value?.id)
           })
           setTimes(newArr)
+          result.data?.KCFWBJs?.forEach((value: any) => {
+            if (value?.LX === 1) {
+              newIdArr.push(value?.KHBJSJId)
+            }
+          })
+          setFDBId(newIdArr)
         }
       }
     )()
@@ -68,7 +75,7 @@ const EmptyArticle = (props: any) => {
     const res = await studentRegistration({
       KHFWBJId: FWKCData?.id,
       XSJBSJIds: [StorageXSId],
-      KHBJSJIds: [],
+      KHBJSJIds: FDBId || [],
       ZT: 3,
       KHFWSJPZIds: Times || []
     })
@@ -109,8 +116,8 @@ const EmptyArticle = (props: any) => {
           FWKCData ? <div className={styles.text}>
             <p>课后服务协议书</p>
             <Divider />
-           
-            <div dangerouslySetInnerHTML={{ __html: KHFUXY }} className={styles.content}  />
+
+            <div dangerouslySetInnerHTML={{ __html: KHFUXY }} className={styles.content} />
             {/* <div className={styles.box} style={{ backgroundImage: `url(${EmptyBGC})` }} /> */}
           </div> :
             <div className={styles.noData}>
@@ -120,7 +127,7 @@ const EmptyArticle = (props: any) => {
         }
       </div>
       {
-        FWKCData  ? <button onClick={() => {
+        FWKCData ? <button onClick={() => {
           setModalVisible(true);
         }}>去报名</button> : <></>
       }
