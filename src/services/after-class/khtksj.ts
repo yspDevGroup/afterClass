@@ -221,11 +221,7 @@ export async function getAllRefunds(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status: 'ok' | 'error';
-    data?: { count?: number; rows?: API.KHTKSJ[] };
-    message?: string;
-  }>('/khtksj/getAllRefunds', {
+  return request<any>('/khtksj/getAllRefunds', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -43,6 +43,7 @@ export async function getKHXSTK(
             ZT?: number;
             KHFWBJ?: {
               id?: string;
+              FWFY?: string | any;
               FWMC?: string;
               FWTP?: string | any;
               FWMS?: string | any;
@@ -164,6 +165,7 @@ export async function createKHXSTK(body: API.CreateKHXSTK, options?: { [key: str
             ZT?: number;
             KHFWBJ?: {
               id?: string;
+              FWFY?: string | any;
               FWMC?: string;
               FWTP?: string | any;
               FWMS?: string | any;

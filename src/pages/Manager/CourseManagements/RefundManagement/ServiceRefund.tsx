@@ -425,7 +425,6 @@ const ServiceRefund = () => {
           visible={visible}
           onOk={() => {
             form.submit();
-            form.resetFields();
           }}
           onCancel={() => {
             setVisible(false);

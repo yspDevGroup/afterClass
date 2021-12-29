@@ -365,7 +365,6 @@ const CourseRefund = () => {
           title="退款确认"
           visible={visible}
           onOk={() => {
-            form.resetFields();
             form.submit();
           }}
           onCancel={() => {

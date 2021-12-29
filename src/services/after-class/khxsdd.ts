@@ -63,6 +63,7 @@ export async function getKHXSDD(
             ZT?: number;
             KHFWBJ?: {
               id?: string;
+              FWFY?: string | any;
               FWMC?: string;
               FWTP?: string | any;
               FWMS?: string | any;
@@ -200,6 +201,7 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
             ZT?: number;
             KHFWBJ?: {
               id?: string;
+              FWFY?: string | any;
               FWMC?: string;
               FWTP?: string | any;
               FWMS?: string | any;

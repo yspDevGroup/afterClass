@@ -389,7 +389,6 @@ const ServiceUnsubscribe = () => {
           visible={visible}
           onOk={() => {
             form.submit();
-            form.resetFields();
           }}
           onCancel={() => {
             setVisible(false);

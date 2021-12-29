@@ -3011,6 +3011,7 @@ declare namespace API {
           ZT?: number;
           KHFWBJ?: {
             id?: string;
+            FWFY?: string | any;
             FWMC?: string;
             FWTP?: string | any;
             FWMS?: string | any;
@@ -3276,6 +3277,7 @@ declare namespace API {
           ZT?: number;
           KHFWBJ?: {
             id?: string;
+            FWFY?: string | any;
             FWMC?: string;
             FWTP?: string | any;
             FWMS?: string | any;
@@ -3503,6 +3505,7 @@ declare namespace API {
           ZT?: number;
           KHFWBJ?: {
             id?: string;
+            FWFY?: string | any;
             FWMC?: string;
             FWTP?: string | any;
             FWMS?: string | any;

@@ -161,6 +161,9 @@ const ServiceRefund = () => {
       align: 'center',
       ellipsis: true,
       width: 100,
+      render: (_, record) => {
+        return record?.TKZT === 0 ? '' : record?.TKJE;
+      },
     },
     {
       title: '申请时间',
@@ -424,7 +427,6 @@ const ServiceRefund = () => {
           visible={visible}
           onOk={() => {
             form.submit();
-            form.resetFields();
           }}
           onCancel={() => {
             setVisible(false);
@@ -438,7 +440,7 @@ const ServiceRefund = () => {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 15 }}
             form={form}
-            initialValues={{ TKZT: 1}}
+            initialValues={{ TKZT: 1 }}
             onFinish={handleSubmit}
             layout="horizontal"
           >
@@ -446,6 +448,7 @@ const ServiceRefund = () => {
               <InputNumber
                 formatter={(value) => `￥ ${value}`}
                 parser={(value) => Number(value?.replace(/￥\s?/g, ''))}
+                max={current?.XSFWBJ?.KHFWBJ?.FWFY}
               />
             </Form.Item>
             <Form.Item label="审核意见" name="TKZT">

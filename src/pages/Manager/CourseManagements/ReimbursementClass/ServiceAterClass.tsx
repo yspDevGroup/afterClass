@@ -310,7 +310,7 @@ const ServiceAterClass = () => {
               if (response.data?.length) {
                 const result = await createKHXSTK({
                   KHTKSJId: current?.id,
-                  KHXXZZFWId: current?.KHXXZZFW?.id,
+                  XSFWBJId: current?.XSFWBJ?.id,
                   /** 退款金额 */
                   // TKJE: 0,
                   /** 退款状态 */
@@ -417,7 +417,6 @@ const ServiceAterClass = () => {
           visible={visible}
           onOk={() => {
             form.submit();
-            form.resetFields();
           }}
           onCancel={() => {
             setVisible(false);
