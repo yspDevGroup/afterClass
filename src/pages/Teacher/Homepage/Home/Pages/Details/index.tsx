@@ -10,7 +10,10 @@ const Details = (props: { data?: any[] }) => {
   return (
     <div className={styles.bigbox}>
       <div className={styles.header}>
-        <h3 className={styles.title}>公示栏</h3>
+      <div className={styles.title}>
+          <div />
+          <span>公示栏</span>
+        </div>
         <Link to={{
           pathname: '/teacher/home/notice',
           state: {
@@ -19,7 +22,7 @@ const Details = (props: { data?: any[] }) => {
         }}>  <span className={styles.all} >全部 <IconFont type="icon-gengduo" /></span></Link>
       </div>
       {
-        data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '20px' }}>
+        data && data.length ? <ul style={{ listStyle: 'initial', paddingLeft: '0px' }}>
           {data?.map((record: any, index: number) => {
             if (index < 4) {
               return <Link to={`/teacher/home/notice/announcement?listid=${record.id}`} style={{ color: '#333' }} key={record.id}>

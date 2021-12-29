@@ -46,7 +46,7 @@ const InterestClassroom = () => {
       async () => {
         const resXNXQ = await queryXNXQList(currentUser?.xxId);
         if (resXNXQ) {
-          setXNXQ(resXNXQ.data.find((items: any) => items.id === resXNXQ?.current?.id));
+          setXNXQ(resXNXQ?.data.find((items: any) => items.id === resXNXQ?.current?.id));
           const result = await getKHFWBJ({
             BJSJId: StorageBjId,
             XNXQId: resXNXQ?.current?.id || '',
@@ -187,7 +187,7 @@ const InterestClassroom = () => {
           FWKCData ? <Radio.Group defaultValue={FWKCData?.KHFWSJPZs?.[0].id} onChange={onchangeMonth}>
             {
               FWKCData?.KHFWSJPZs && FWKCData?.KHFWSJPZs?.map((values: any) => {
-                return <div><Radio.Button value={values?.id}><div className={styles.monthNumber}>{values?.KSRQ.substring(5, 7)}</div><span>月</span></Radio.Button></div>
+                return <Radio.Button value={values?.id}><div className={styles.monthNumber}>{values?.KSRQ.substring(5, 7)}</div><span>月</span></Radio.Button>
               })
             }
           </Radio.Group> : <></>
@@ -232,27 +232,24 @@ const InterestClassroom = () => {
                       })}
                     </> : <> {
                       BaoMinData && BaoMinData?.XSFWBJs[0].XSFWKHBJs.map((value: any) => {
-                        if (value?.KHBJSJ?.KCFWBJs?.[0].LX === 0) {
-                          return (
-                            <>
-                              <div className={styles.cards}>
-                                <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
-                                <div className={styles.box}>
-                                  <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
-                                  <span onClick={() => {
-                                    onDetails(value)
-                                  }} >查看详情</span>
-                                </div>
-
-                                <Checkbox
-                                  value={value.KHBJSJId}
-                                  disabled
-                                />
+                        return (
+                          <>
+                            <div className={styles.cards}>
+                              <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
+                              <div className={styles.box}>
+                                <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
+                                <span onClick={() => {
+                                  onDetails(value)
+                                }} >查看详情</span>
                               </div>
-                            </>
-                          );
-                        }
-                        return <></>
+
+                              <Checkbox
+                                value={value.KHBJSJId}
+                                disabled
+                              />
+                            </div>
+                          </>
+                        );
                       })
                     }</>
                 }

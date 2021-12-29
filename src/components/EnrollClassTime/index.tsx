@@ -12,6 +12,7 @@ import { CurdayCourse } from '@/services/local-services/mobileHome';
 import styles from './index.less';
 import noData from '@/assets/today.png';
 import noData1 from '@/assets/today1.png';
+import CourseList from './CourseList';
 
 const EnrollClassTime = (props: {
   type: string;
@@ -25,6 +26,8 @@ const EnrollClassTime = (props: {
   const [resource, setResource] = useState<any>(); // 当日课程状态
   const [datasourse, setDatasourse] = useState<ListData>(); // 今日课程中的数据
   const myDate = dayjs().format('YYYY-MM-DD');
+  const [CourseListData, setCourseListData] = useState<any>();
+
   /**
    * 针对今日课程安排进行数据梳理
    */
@@ -93,6 +96,7 @@ const EnrollClassTime = (props: {
         bjId,
         XQSJId,
       );
+      setCourseListData(courseList)
       const { curCourse } = resetList(courseList);
       setResource(total);
       const todayList: ListData = {
@@ -135,9 +139,11 @@ const EnrollClassTime = (props: {
               </div>
             </>
           ) : (
-            <div className={styles.enrollText}>
-              课后服务课程将于{`${moment(resource?.skkssj).format('YYYY.MM.DD')}`}正式开课！
-            </div>
+            <>
+              {/* <div className={styles.enrollText}>
+                课后服务课程将于{`${moment(resource?.skkssj).format('YYYY.MM.DD')}`}正式开课！
+              </div> */}
+            </>
           )}
         </div>
       );
@@ -155,10 +161,10 @@ const EnrollClassTime = (props: {
             <></>
           )}
           <>
-            <div className={styles.enrollText}>
+            {/* <div className={styles.enrollText}>
               课后服务课程{type === 'teacher' ? '已正式开课！' : '开课了！'}
-            </div>
-            {type !== 'teacher' ? '' : <ListComp listData={datasourse} cls={styles.todayImg} />}
+            </div> */}
+            {type !== 'teacher' ? '' : < CourseList data={CourseListData} />}
           </>
         </div>
       );
@@ -181,9 +187,10 @@ const EnrollClassTime = (props: {
             </>
           ) : (
             <>
-              <div className={styles.enrollText}>课后服务课程已正式开课！</div>
+              {/* <div className={styles.enrollText}>课后服务课程已正式开课！</div> */}
               <div>
-                <ListComp listData={datasourse} cls={styles.todayImg} />
+                {/* <ListComp listData={datasourse} cls={styles.todayImg} /> */}
+                < CourseList data={CourseListData} />
               </div>
             </>
           )}
@@ -204,9 +211,11 @@ const EnrollClassTime = (props: {
               </div>
             </>
           ) : (
-            <div className={styles.enrollText}>
-              课后服务课程将于{`${moment(resource?.skkssj).format('YYYY.MM.DD')}`}正式开课！
-            </div>
+            <>
+              {/* <div className={styles.enrollText}>
+                课后服务课程将于{`${moment(resource?.skkssj).format('YYYY.MM.DD')}`}正式开课！
+              </div> */}
+            </>
           )}
         </div>
       );

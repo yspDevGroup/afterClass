@@ -66,6 +66,10 @@ const Index = () => {
           // break;
           case '家长':
             localStorage.removeItem('studentId');
+            localStorage.removeItem('studentName');
+            localStorage.removeItem('studentXQSJId');
+            localStorage.removeItem('studentNjId');
+            localStorage.removeItem('studentBJId');
             history.replace('/parent/home');
             break;
           case '其他':

@@ -303,14 +303,15 @@
       display: flex;
       width: 100%;
       height: 40px;
-      justify-content: space-between;
+      overflow-x: auto;
+      // justify-content: space-between;
 
       .ant-radio-button-wrapper {
         width: 34px;
         height: 34px;
         border-radius: 50%;
         border: none !important;
-        margin-right: 14px;
+        margin-right: 20px;
         font-size: 18px;
         font-weight: bold;
         color: #333;
@@ -372,6 +373,9 @@
         box-shadow: none;
       }
     }
+    .ant-radio-group::-webkit-scrollbar {
+      display: none;
+  }
 
     .ant-divider {
       margin: 0;
@@ -440,13 +444,17 @@
       }
 
       .box {
-        width: calc(~'100% - 110px');
+        width: calc(~'100% - 80px');
         padding-left: 10px;
+        
 
         p {
           margin-bottom: 10px;
           color: #333;
           font-size: 14px;
+          overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         }
 
         span {
