@@ -47,7 +47,11 @@ const AdministrationClassManagement = () => {
         };
       });
       if (arr?.length) {
-        setCampusId(arr?.find((item) => item.label === '本校')?.value);
+        let id=arr?.find((item: any) => item.label === '本校')?.value;
+        if(!id){
+          id=arr[0].value;
+        }
+        setCampusId(id);
       }
       setCampusData(arr);
     }
