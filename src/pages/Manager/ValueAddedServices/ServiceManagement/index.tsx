@@ -340,13 +340,18 @@ const ServiceManagement = () => {
   ];
   const submit = async (value: any) => {
     const { BMSD, FWSD, ...info } = value;
+    const start = moment(BMSD?.[0]).format('YYYY-MM-DD');
+    const end = moment(BMSD?.[1]).format('YYYY-MM-DD');
+    const startTime = start + 'T00:00:00.000Z';
+    const endTime = end + 'T23:59:59.000Z';
+
     if (ImageUrl === '') {
       message.info('请上传图片');
     } else {
       const data = {
         ...info,
-        BMKSSJ: moment(BMSD[0]).format(),
-        BMJSSJ: moment(BMSD[1]).format(),
+        BMKSSJ: startTime,
+        BMJSSJ: endTime,
         KSRQ: moment(FWSD[0]).format('YYYY-MM-DD'),
         JSRQ: moment(FWSD[1]).format('YYYY-MM-DD'),
         FWTP: ImageUrl || '',
@@ -471,12 +476,12 @@ const ServiceManagement = () => {
                 >
                   {LBData?.length
                     ? LBData?.map((item: any) => {
-                        return (
-                          <Option value={item?.id} key={item?.id}>
-                            {item?.FWMC}
-                          </Option>
-                        );
-                      })
+                      return (
+                        <Option value={item?.id} key={item?.id}>
+                          {item?.FWMC}
+                        </Option>
+                      );
+                    })
                     : ''}
                 </Select>
               </div>
@@ -553,12 +558,12 @@ const ServiceManagement = () => {
             <Select style={{ width: '100%' }} placeholder="请选择" disabled={Disabled === '查看'}>
               {LBData?.length
                 ? LBData?.map((item: any) => {
-                    return (
-                      <Option value={item?.id} key={item?.id}>
-                        {item?.FWMC}
-                      </Option>
-                    );
-                  })
+                  return (
+                    <Option value={item?.id} key={item?.id}>
+                      {item?.FWMC}
+                    </Option>
+                  );
+                })
                 : ''}
             </Select>
           </Form.Item>

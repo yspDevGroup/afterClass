@@ -122,10 +122,16 @@ const AddCourseClass: FC<AddCourseProps> = ({
         setChoosenJf(true);
         setDataSource(formValues?.KHKCJCs);
       }
+      // const start = 
+      const startTime1 = moment(BmLists?.BMSD[0], 'YYYY-MM-DD').valueOf();
+      const endTime1 = moment(BmLists?.BMSD[1], 'YYYY-MM-DD').valueOf();
+      const startTime2 = BMDate?.KSSJ ? moment(BMDate?.KSSJ, 'YYYY-MM-DD').valueOf() : new Date().getTime();
+      const endTime2 = BMDate?.JSSJ ? moment(BMDate?.JSSJ, 'YYYY-MM-DD').valueOf() : new Date().getTime();
+      
       if (
-        new Date(BmLists?.BMSD[0]).getTime() === new Date(BMDate?.KSSJ || '').getTime() &&
-        new Date(BmLists?.BMSD[1]).getTime() === new Date(BMDate?.JSSJ || '').getTime()
-      ) {
+        startTime1 === startTime2 &&
+        endTime1 === endTime2
+      ) {   
         setBaoming(false);
       } else {
         setBaoming(true);
@@ -223,14 +229,14 @@ const AddCourseClass: FC<AddCourseProps> = ({
   const onFinish = async (values: any) => {
     if (Current === 0) {
       let newData = {};
-      if(FJSJIds){
+      if (FJSJIds) {
         newData = {
           ...values,
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
           JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
           FJSJId: FJSJIds
         };
-      }else{
+      } else {
         newData = {
           ...values,
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
@@ -241,14 +247,19 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setBJData(newData);
       setBmCurrent(Current + 1);
     } else if (Current === 1) {
+      const start = values?.BMSD ? values?.BMSD[0] : BMDate?.KSSJ;
+      const end = values?.BMSD ? values?.BMSD[1] : BMDate?.JSSJ;
+      const startTime = start?.substring(0, 10) + 'T00:00:00.000Z';
+      const endTime = end?.substring(0, 10) + 'T23:59:59.000Z';
+
       const newData = {
         ...values,
         ...BJData,
         BJIds: xzb ? XzClass : [],
         XzClassMC: xzb ? XzClassMC : [],
         BJLX: xzb ? 1 : 0,
-        BMKSSJ: new Date(values?.BMSD ? values?.BMSD[0] : BMDate?.KSSJ),
-        BMJSSJ: new Date(values?.BMSD ? values?.BMSD[1] : BMDate?.JSSJ),
+        BMKSSJ: startTime,
+        BMJSSJ: endTime,
       };
 
       setBmCurrent(Current + 1);
@@ -303,9 +314,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
           KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KHKCJCs: [],
           BJZT: '未开班',
-          ISFW:0,
+          ISFW: 0,
           XNXQId: curXNXQId,
         };
+
         let res: any;
         if (formValues && CopyType === 'undefined') {
           // 编辑
@@ -388,7 +400,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
         // eslint-disable-next-line no-nested-ternary
         KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
         KHKCJCs: choosenJf ? mertial : [],
-        ISFW:0,
+        ISFW: 0,
         BJZT: '未开班',
         XNXQId: curXNXQId,
       };
@@ -419,7 +431,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
           id: formValues?.XQSJId,
         });
         if (res.status === 'ok') {
-          setXQMC(res.data.XQMC);
+          setXQMC(res.data?.XQMC);
         }
       })();
     }
@@ -438,7 +450,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       form.resetFields();
       setFJSJIds(undefined);
       setBMData({});
-      setJFData({});
+      setJFData({});  
       setBaoming(false);
       setChoosenJf(false);
       setXzb(false);
@@ -602,9 +614,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
               });
               const { value } = values.target;
               let kcDate: any;
-              if(value === '机构课程'){
+              if (value === '机构课程') {
                 kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '机构课程' && item.KHKCSQs?.[0].ZT === 1);
-              }else{
+              } else {
                 kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
               }
               setKCDate(kcDate);
