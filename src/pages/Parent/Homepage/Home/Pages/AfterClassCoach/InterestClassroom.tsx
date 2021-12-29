@@ -78,9 +78,9 @@ const InterestClassroom = () => {
       })
       if (res.status === 'ok') {
         setBaoMinData(res.data.rows[0])
-        if(res.data.rows[0]?.XSFWBJs?.[0].XSFWKHBJs?.find((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)){
+        if (res.data.rows[0]?.XSFWBJs?.[0].XSFWKHBJs?.find((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)) {
           setXKType(false);
-        }else{
+        } else {
           setXKType(true);
         }
       }
@@ -195,128 +195,141 @@ const InterestClassroom = () => {
         }
       </div>
       {
-        FWKCData?.KCFWBJs.find((item: any) => item.LX === 0) ? <>
-          <div className={styles.Application}>
-            <div className={styles.title}>
-              <div />
-              <span>趣味课堂</span>
-              {BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs.find((item: any) => item.LX === 0) ? <></> : <span>最多可选择{FWKCData?.KXSL}门</span>}
-            </div>
-            <div>
-              <Checkbox.Group
-                style={{ width: '100%' }}
-                onChange={onChange}>
-                {
-                  BaoMinData &&  XKType === false ?
-                    <>
-                      {
-                        BaoMinData && BaoMinData?.XSFWBJs[0].XSFWKHBJs.map((value: any) => {
-                          return (
-                            <>
-                              <div className={styles.cards}>
-                                <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
-                                <div className={styles.box}>
-                                  <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
-                                  <span onClick={() => {
-                                    onDetails(value)
-                                  }} >查看详情</span>
-                                </div>
-
-                                <Checkbox
-                                  value={value.KHBJSJId}
-                                  disabled
-                                />
-                              </div>
-                            </>
-                          );
-                        })
-                      }
-                    </> : <>
-                      {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
-                        if (value?.LX === 0) {
-                          return (
-                            <>
-                              <div className={styles.cards}>
-                                <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
-                                <div className={styles.box}>
-                                  <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
-                                  <span onClick={() => {
-                                    onDetails(value)
-                                  }} >查看详情</span>
-                                </div>
-
-                                <Checkbox
-                                  value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
-                                />
-                              </div>
-                            </>
-                          );
-                        }
-                        return <></>
-                      })}
-                    </>
-                }
-              </Checkbox.Group>
-
-            </div>
+        FWKCData?.KCFWBJs?.length === 0 ? <>
+          <div className={styles.noData}>
+            <img src={noCourses} alt="" />
+            <p>该课后服务暂未配置课程</p>
+            <p>您可以先行缴费，随后选课</p>
           </div>
-          {
-            BaoMinData && XKType === true && FKType === true ? <div className={styles.footer}>
-              <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
-              <button onClick={submit} >确认付款</button>
-            </div> : <></>
+          <div className={styles.footers}>
+            <button onClick={submit} >去付款</button>
+          </div>
+        </> : <>  {
+          FWKCData?.KCFWBJs.find((item: any) => item.LX === 0) ?
+            <>
+              <div className={styles.Application}>
+                <div className={styles.title}>
+                  <div />
+                  <span>趣味课堂</span>
+                  {BaoMinData && BaoMinData?.XSFWBJs?.[0].XSFWKHBJs.find((item: any) => item.LX === 0) ? <></> : <span>最多可选择{FWKCData?.KXSL}门</span>}
+                </div>
+                <div>
+                  <Checkbox.Group
+                    style={{ width: '100%' }}
+                    onChange={onChange}>
+                    {
+                      BaoMinData && XKType === false ?
+                        <>
+                          {
+                            BaoMinData && BaoMinData?.XSFWBJs[0].XSFWKHBJs.map((value: any) => {
+                              return (
+                                <>
+                                  <div className={styles.cards}>
+                                    <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
+                                    <div className={styles.box}>
+                                      <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
+                                      <span onClick={() => {
+                                        onDetails(value)
+                                      }} >查看详情</span>
+                                    </div>
 
-          }
-          {
-            BaoMinData && XKType === true && FKType === false ? <div className={styles.footers}>
-              <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
-            </div> : <></>
-          }
-          {
-            BaoMinData && XKType === false && FKType === true ? <div className={styles.footers}>
-              <button onClick={submit} >去付款</button>
-            </div> : <></>
-          }
-        </> :
-          <>
-            <div className={styles.Application}>
-              <div className={styles.title}>
-                <div />
-                <span>趣味课堂</span>
+                                    <Checkbox
+                                      value={value.KHBJSJId}
+                                      disabled
+                                    />
+                                  </div>
+                                </>
+                              );
+                            })
+                          }
+                        </> : <>
+                          {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
+                            if (value?.LX === 0) {
+                              return (
+                                <>
+                                  <div className={styles.cards}>
+                                    <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
+                                    <div className={styles.box}>
+                                      <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
+                                      <span onClick={() => {
+                                        onDetails(value)
+                                      }} >查看详情</span>
+                                    </div>
+
+                                    <Checkbox
+                                      value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
+                                    />
+                                  </div>
+                                </>
+                              );
+                            }
+                            return <></>
+                          })}
+                        </>
+                    }
+                  </Checkbox.Group>
+
+                </div>
               </div>
-              <div>
-                <Checkbox.Group
-                  style={{ width: '100%' }}
-                  onChange={onChange}>
-                  {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
-                    return (
-                      <>
-                        <div className={styles.cards}>
-                          <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
-                          <div className={styles.box}>
-                            <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
-                            <span onClick={() => {
-                              onDetails(value)
-                            }} >查看详情</span>
+              {
+                BaoMinData && XKType === true && FKType === true ? <div className={styles.footer}>
+                  <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
+                  <button onClick={submit} >确认付款</button>
+                </div> : <></>
+
+              }
+              {
+                BaoMinData && XKType === true && FKType === false ? <div className={styles.footers}>
+                  <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
+                </div> : <></>
+              }
+              {
+                BaoMinData && XKType === false && FKType === true ? <div className={styles.footers}>
+                  <button onClick={submit} >去付款</button>
+                </div> : <></>
+              }
+            </> :
+            <>
+              <div className={styles.Application}>
+                <div className={styles.title}>
+                  <div />
+                  <span>趣味课堂</span>
+                </div>
+                <div>
+                  <Checkbox.Group
+                    style={{ width: '100%' }}
+                    onChange={onChange}>
+                    {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
+                      return (
+                        <>
+                          <div className={styles.cards}>
+                            <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
+                            <div className={styles.box}>
+                              <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
+                              <span onClick={() => {
+                                onDetails(value)
+                              }} >查看详情</span>
+                            </div>
+
+                            <Checkbox
+                              value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
+                              disabled
+                            />
                           </div>
+                        </>
+                      );
+                    })}
+                  </Checkbox.Group>
 
-                          <Checkbox
-                            value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
-                            disabled
-                          />
-                        </div>
-                      </>
-                    );
-                  })}
-                </Checkbox.Group>
-
+                </div>
               </div>
-            </div>
-            <div className={styles.footers}>
-              <button onClick={submit} >去付款</button>
-            </div>
-          </>
+              <div className={styles.footers}>
+                <button onClick={submit} >去付款</button>
+              </div>
+            </>
+        }</>
       }
+
 
       <Modal
         title="选课信息确认"
