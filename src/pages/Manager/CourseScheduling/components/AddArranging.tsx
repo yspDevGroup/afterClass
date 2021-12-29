@@ -51,6 +51,7 @@ const AddArranging: FC<PropsType> = (props) => {
     // setBJIDData,
     cdmcData,
     kcmcData,
+
     // setTableDataSource,
     // sameClass,
     // tableDataSource,
@@ -81,70 +82,70 @@ const AddArranging: FC<PropsType> = (props) => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-    {
-      title: '',
-      dataIndex: 'room',
-      key: 'room',
-      align: 'center',
-      width: 66,
-    },
-    {
-      title: '',
-      dataIndex: 'course',
-      key: 'course',
-      align: 'left',
-      width: 100,
-    },
-    {
-      title: '周一',
-      dataIndex: 'monday',
-      key: 'monday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周二',
-      dataIndex: 'tuesday',
-      key: 'tuesday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周三',
-      dataIndex: 'wednesday',
-      key: 'wednesday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周四',
-      dataIndex: 'thursday',
-      key: 'thursday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周五',
-      dataIndex: 'friday',
-      key: 'friday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周六',
-      dataIndex: 'saturday',
-      key: 'saturday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周日',
-      dataIndex: 'sunday',
-      key: 'sunday',
-      align: 'center',
-      width: 100,
-    },
-  ];
+      {
+        title: '',
+        dataIndex: 'room',
+        key: 'room',
+        align: 'center',
+        width: 66,
+      },
+      {
+        title: '',
+        dataIndex: 'course',
+        key: 'course',
+        align: 'left',
+        width: 100,
+      },
+      {
+        title: '周一',
+        dataIndex: 'monday',
+        key: 'monday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周二',
+        dataIndex: 'tuesday',
+        key: 'tuesday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周三',
+        dataIndex: 'wednesday',
+        key: 'wednesday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周四',
+        dataIndex: 'thursday',
+        key: 'thursday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周五',
+        dataIndex: 'friday',
+        key: 'friday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周六',
+        dataIndex: 'saturday',
+        key: 'saturday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周日',
+        dataIndex: 'sunday',
+        key: 'sunday',
+        align: 'center',
+        width: 100,
+      },
+    ];
 
   // 将排好的课程再次点击可以取消
   const getSelectdata = () => {
@@ -292,7 +293,11 @@ const AddArranging: FC<PropsType> = (props) => {
         KHBJSJId: value.id || '',
         color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
       };
+
       setBj(chosenData);
+      if (value?.FJSJ?.id) {
+        setCdmcValue(value?.FJSJ?.id)
+      }
     } else {
       const chosenData = {
         id: value.id,
@@ -302,6 +307,9 @@ const AddArranging: FC<PropsType> = (props) => {
         color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
       };
       setBj(chosenData);
+      if (value?.FJSJ?.id) {
+        setCdmcValue(value?.FJSJ?.id)
+    }
     }
     // setIndex(value.id);
     // setBJIDData(value.id);
@@ -497,7 +505,7 @@ const AddArranging: FC<PropsType> = (props) => {
             >
               {/* <div className={styles.screen} style={{ display: 'flex', justifyContent:'center', background:'red' }}> */}
               <Row justify="start" align="middle" style={{ background: ' #F5F5F5' }}>
-                {/* <Col span={6}>
+                <Col span={6}>
                   <ProFormSelect
                     label="校区"
                     width="md"
@@ -505,16 +513,10 @@ const AddArranging: FC<PropsType> = (props) => {
                     style={{
                       margin: '12px 0',
                     }}
-                    disabled={formValues?.BJId}
+                    disabled={true}
                     options={campus || []}
-                    fieldProps={{
-                      async onChange(value: any) {
-                        form.setFieldsValue({ NJ: undefined, KC: undefined });
-                        setXQID(value);
-                      },
-                    }}
                   />
-                </Col> */}
+                </Col>
                 <Col span={6}>
                   <ProFormSelect
                     label="年级"
@@ -544,25 +546,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     }}
                   />
                 </Col>
-                <Col span={6}>
-                  <Form.Item label="场地名称">
-                    <Select
-                      style={{ width: 200 }}
-                      value={cdmcValue}
-                      allowClear
-                      placeholder="请选择"
-                      onChange={(value) => setCdmcValue(value)}
-                    >
-                      {cdmcData?.map((item: selectType) => {
-                        return (
-                          <Option value={item.value} key={item.value}>
-                            {item.label}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </Form.Item>
-                </Col>
+
               </Row>
 
               {/* </div> */}
@@ -607,34 +591,34 @@ const AddArranging: FC<PropsType> = (props) => {
                       <ProCard ghost className="banjiCard">
                         {bjData && bjData.length > 0
                           ? bjData.slice(0, 15).map((value: any) => {
-                              const zb = value?.KHBJJs.find((item: any) => item.JSLX === '主教师');
-                              return (
-                                <ProCard
-                                  layout="center"
-                                  bordered
-                                  className="banjiItem"
-                                  onClick={() => BjClick(value)}
-                                  style={getKCStyle(value.id)}
-                                >
-                                  <Tooltip title={value.BJMC}>
-                                    <p>{value.BJMC}</p>
-                                  </Tooltip>
-                                  <span>
-                                    {/* {
+                            const zb = value?.KHBJJs.find((item: any) => item.JSLX === '主教师');
+                            return (
+                              <ProCard
+                                layout="center"
+                                bordered
+                                className="banjiItem"
+                                onClick={() => BjClick(value)}
+                                style={getKCStyle(value.id)}
+                              >
+                                <Tooltip title={value.BJMC}>
+                                  <p>{value.BJMC}</p>
+                                </Tooltip>
+                                <span>
+                                  {/* {
                                       value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
                                         ?.JZGJBSJ?.XM
                                     } */}
-                                    <ShowName
-                                      style={{ color: '#666' }}
-                                      type="userName"
-                                      openid={zb?.WechatUserId}
-                                      XM={zb?.JZGJBSJ?.XM}
-                                    />
-                                  </span>
-                                  {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
-                                </ProCard>
-                              );
-                            })
+                                  <ShowName
+                                    style={{ color: '#666' }}
+                                    type="userName"
+                                    openid={zb?.WechatUserId}
+                                    XM={zb?.JZGJBSJ?.XM}
+                                  />
+                                </span>
+                                {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                              </ProCard>
+                            );
+                          })
                           : ''}
                         <ProCard layout="center" bordered onClick={unFold} className="unFold">
                           展开 <DownOutlined style={{ color: '#4884FF' }} />
@@ -644,34 +628,34 @@ const AddArranging: FC<PropsType> = (props) => {
                       <ProCard ghost className="banjiCard">
                         {bjData && bjData.length > 0
                           ? bjData.map((value: any) => {
-                              const zb = value?.KHBJJs.find((item: any) => item.JSLX === '主教师');
-                              return (
-                                <ProCard
-                                  layout="center"
-                                  bordered
-                                  className="banjiItem"
-                                  onClick={() => BjClick(value)}
-                                  style={getKCStyle(value.id)}
-                                >
-                                  <Tooltip title={value.BJMC}>
-                                    <p>{value.BJMC}</p>
-                                  </Tooltip>
-                                  <span>
-                                    {/* {
+                            const zb = value?.KHBJJs.find((item: any) => item.JSLX === '主教师');
+                            return (
+                              <ProCard
+                                layout="center"
+                                bordered
+                                className="banjiItem"
+                                onClick={() => BjClick(value)}
+                                style={getKCStyle(value.id)}
+                              >
+                                <Tooltip title={value.BJMC}>
+                                  <p>{value.BJMC}</p>
+                                </Tooltip>
+                                <span>
+                                  {/* {
                                       value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
                                         ?.JZGJBSJ?.XM
                                     } */}
-                                    <ShowName
-                                      style={{ color: '#666' }}
-                                      type="userName"
-                                      openid={value.WechatUserId}
-                                      XM={zb?.JZGJBSJ?.XM}
-                                    />
-                                  </span>
-                                  {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
-                                </ProCard>
-                              );
-                            })
+                                  <ShowName
+                                    style={{ color: '#666' }}
+                                    type="userName"
+                                    openid={value.WechatUserId}
+                                    XM={zb?.JZGJBSJ?.XM}
+                                  />
+                                </span>
+                                {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                              </ProCard>
+                            );
+                          })
                           : ''}
                         <ProCard layout="center" bordered onClick={unFold} className="unFold">
                           收起 <UpOutlined style={{ color: '#4884FF' }} />
@@ -681,8 +665,24 @@ const AddArranging: FC<PropsType> = (props) => {
                   </>
                 )}
               </div>
+              <Form.Item label="场地：">
+                <Select
+                  style={{ width: 200 }}
+                  value={cdmcValue}
+                  allowClear
+                  placeholder="请选择"
+                  onChange={(value) => setCdmcValue(value)}
+                >
+                  {cdmcData?.map((item: selectType) => {
+                    return (
+                      <Option value={item.value} key={item.value}>
+                        {item.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
               <div className="site">
-                <span>场地：</span>
                 {Bj ? (
                   <Spin spinning={CDLoading}>
                     <ExcelTable
@@ -697,7 +697,7 @@ const AddArranging: FC<PropsType> = (props) => {
                       style={{
                         height: 'calc(100vh - 500px)',
                       }}
-                      // basicData={oriSource}
+                    // basicData={oriSource}
                     />
                   </Spin>
                 ) : (

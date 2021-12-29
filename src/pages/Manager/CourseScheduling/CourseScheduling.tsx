@@ -81,7 +81,7 @@ const CourseScheduling = () => {
     // 打开编辑页面
     setState(false);
     // 将选中的单元格数据清空 以免新增时数据又回显
-    setRecordValue({});
+    setRecordValue({XQ: campusId});
   };
 
   /**
@@ -198,7 +198,7 @@ const CourseScheduling = () => {
             NJ: njInfo.data.KHKCSJ.NJSJs[0].id,
             KC: njInfo.data.KHKCSJId,
             KCMC: njInfo.data.KHKCSJ.KCMC,
-            XQ: njInfo.data.XQSJId,
+            XQ: campusId,
           });
           setState(false);
         }
@@ -283,7 +283,7 @@ const CourseScheduling = () => {
    * @param record 获取点击某个单元格的所有数据
    */
   const onExcelTableClick = (value: any, record: any) => {
-    setRecordValue(record);
+    setRecordValue({...record, XQ:campusId});
   };
 
   /**
@@ -386,6 +386,7 @@ const CourseScheduling = () => {
       isPk: false,
       XNXQId: curXNXQId,
       XXJBSJId: currentUser?.xxId,
+      xqId:campusId
     });
     if (res.status === 'ok') {
       // 设置初始排课数据
@@ -412,10 +413,14 @@ const CourseScheduling = () => {
           value: item.id,
         });
       });
-      if (resXQ.data?.length > 0) {
+      if (resXQ.data?.length) {
         //设置默认选择第一个校区
-        setCampusId(resXQ.data[0].id);
-      }
+       let id = XQ?.find((item: any) => item.label === '本校')?.value;
+       if (!id) {
+           id = XQ[0].value;
+       }
+       setCampusId(id);
+   }
       setCampus(XQ);
     }
   };
@@ -481,6 +486,7 @@ const CourseScheduling = () => {
       pageSize: 0,
       name: '',
       XXJBSJId: currentUser?.xxId,
+      xqId: campusId,
     });
     if (fjList.status === 'ok') {
       if (fjList.data?.rows && fjList.data?.rows?.length > 0) {
@@ -506,26 +512,21 @@ const CourseScheduling = () => {
   // 根据学年学期ID 获取学年课程名称数据，和班级名称数据， 获取当前学校学年的学期的场地排课情况
   useEffect(() => {
     const bjId = getQueryString('courseId');
-    if (curXNXQId) {
+    if (curXNXQId&&campusId) {
       // 获取系统时间配置信息
       getSysTime();
-
-      // console.log('12123',curXNXQId);
-
       if (bjId === null) {
         // 课程名称数据
         getBjData();
         // 课程班数据
         getKCData();
       }
-
       //场地数据
       getCDData();
-
       // 排课数据
       getPKData();
     }
-  }, [curXNXQId]);
+  }, [curXNXQId,campusId]);
 
   //监听课程名称 发生改变时 刷新课程班数据
   useEffect(() => {
@@ -574,7 +575,6 @@ const CourseScheduling = () => {
 
   return (
     <>
-     
         {/* 弹框提示 */}
         <PromptInformation
           text="未查询到学年学期数据，请设置学年学期后再来"
@@ -595,6 +595,27 @@ const CourseScheduling = () => {
               {/* 渲染的是四个选项框组件 */}
               <div className={styles.searchWrapper}>
                 <SearchLayout>
+                  <div>
+                    <label>所属校区：</label>
+                    <Select
+                        value={campusId}
+                        style={{ width: 160 }}
+                        onChange={(value: string) => {
+                            setCampusId(value);
+                            
+                            setCdmcValue(undefined);
+                            setKcmcValue(undefined);
+                        }}
+                    >
+                        {campus?.map((item: any) => {
+                            return (
+                                <Option key={item.value} value={item.value}>
+                                    {item.label}
+                                </Option>
+                            );
+                        })}
+                    </Select>
+                </div>
                   <div>
                     <label>所属学年学期：</label>
                     <Select
