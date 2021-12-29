@@ -433,6 +433,7 @@ const ClassScheduling = () => {
             isPk: false,
             XNXQId: curXNXQId,
             XXJBSJId: currentUser?.xxId,
+						xqId:campusId,
             ISFW: 1,
             KCTAG: '校内辅导',
         });
@@ -697,7 +698,7 @@ const ClassScheduling = () => {
                                         value={campusId}
                                         style={{ width: 160 }}
                                         onChange={(value: string) => {
-                                            setCurXNXQId(value);
+                                            setCampusId(value);
                                             setNJId(undefined);
                                             setXZBId(undefined);
                                             setCdmcValue(undefined);
