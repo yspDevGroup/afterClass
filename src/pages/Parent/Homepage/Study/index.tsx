@@ -82,7 +82,10 @@ const Study = () => {
         </Link>
       </div>
       <div className={styles.funWrapper}>
-        <div className={styles.titleBar}>孩子课表</div>
+        <div className={styles.title}>
+          <div />
+          <span>我的课表</span>
+        </div>
         <ClassCalendar />
       </div>
       {/* <div className={styles.funWrapper} style={{ marginTop: '20px' }}>
@@ -90,6 +93,10 @@ const Study = () => {
         <ListComponent listData={listData} />
       </div> */}
       <div className={styles.courseArea}>
+        <div className={styles.title}>
+          <div />
+          <span>我的课程</span>
+        </div>
         <Selected dataResource={totalData} />
       </div>
     </div>

@@ -170,7 +170,9 @@ const CourseTable: React.FC = () => {
 
   return (
     <div className={styles.CourseDetails2}>
-      <GoBack title={'课程详情'} onclick={`/parent/home?index=${path || 'index'}`} />
+      {
+        path ? <GoBack title={'课程详情'} onclick={`/parent/home?index=${path}`} /> : <GoBack title={'课程详情'} />
+      }
       <div className={styles.KCXX}>
         {/* 上课时段 */}
         <p className={styles.title}>{KcDetail?.title}</p>

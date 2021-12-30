@@ -61,16 +61,16 @@ const ServiceReservation = (props: any) => {
   }, [StorageXSId]);
   return (
     <div className={styles.ServiceReservation}>
-      <GoBack title={'我的服务'} onclick="/parent/home?index=study" />
+      <GoBack title={'我的课程'} onclick="/parent/home?index=study" />
       <Tabs type="card" defaultActiveKey={keys}>
-        <TabPane tab="已选课后服务" key="yxkcs">
+        <TabPane tab="课后服务" key="yxkcs">
           {KHFWAllDatas && KHFWAllDatas?.list?.length ? (
             <ListComponent listData={KHFWAllDatas} />
           ) : (
             <ListComponent listData={defaultMsgs} />
           )}
         </TabPane>
-        <TabPane tab="已选课程服务" key="yxkc">
+        <TabPane tab="课程服务" key="yxkc">
           {yxkcAllData && yxkcAllData.length ? (
             <ListComponent listData={yxkcData} />
           ) : (
@@ -78,7 +78,7 @@ const ServiceReservation = (props: any) => {
           )}
         </TabPane>
 
-        <TabPane tab="已选增值服务" key="yxfw">
+        <TabPane tab="增值服务" key="yxfw">
           <>
             {YxserviceData && YxserviceData?.length === 0 ? (
               <ListComponent listData={defaultMsgs} />

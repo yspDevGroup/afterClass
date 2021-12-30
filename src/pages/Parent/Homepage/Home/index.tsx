@@ -43,6 +43,7 @@ const Home = () => {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const [orderInfo, setOrderInfo] = useState<any>();
   const [FWBData, setFWBData] = useState<any>();
+  const [FWSD, setFWSD] = useState<any>();
 
   const [BJMC, setBJMC] = useState<any>();
   useEffect(() => {
@@ -121,8 +122,9 @@ const Home = () => {
   }, [orderInfo]);
 
   // 付款
-  const submit = async (value: any) => {
+  const submit = async (item: any, value: any) => {
     setFWBData(value)
+    setFWSD(item)
     const data: API.CreateKHXSDD = {
       XDSJ: new Date().toISOString(),
       ZFFS: '线上支付',
@@ -130,7 +132,7 @@ const Home = () => {
       DDFY: Number(value?.FWFY),
       XSJBSJId: localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
       DDLX: 2,
-      XSFWBJId: BaoMinData?.[0]?.XSFWBJs.find((item: any) => item.KHFWSJPZId === value.XSFWBJs?.[0]?.KHFWSJPZ.id).id,
+      XSFWBJId: BaoMinData?.[0]?.XSFWBJs.find((items: any) => items.KHFWSJPZId === value.XSFWBJs?.[0]?.KHFWSJPZ.id).id,
     };
     const res = await createKHXSDD(data);
     if (res.status === 'ok') {
@@ -241,14 +243,21 @@ const Home = () => {
                   Backlog && Backlog?.map((value: any, index: number) => {
                     if (index < BacklogNum) {
                       if (value?.FWFY) {
-                        return <div
-                          className={styles.wrap}
-                          style={{ backgroundImage: `url(${remind})` }}
-                          onClick={() => { submit(value) }}
-                        >
-                          <i style={{ color: '#15B628' }}>缴费提醒</i> 您于{moment(value?.createdAt).format("YYYY年MM月DD日")}报的{value?.FWMC}还未缴费，请及时处理。
-                        </div>
+                        return <>
+                          {
+                            value.XSFWBJs.map((item: any) => {
+                              return <div
+                                className={styles.wrap}
+                                style={{ backgroundImage: `url(${remind})` }}
+                                onClick={() => { submit(item, value) }}
+                              >
+                                <i style={{ color: '#15B628' }}>缴费提醒</i> 您于{moment(value?.createdAt).format("YYYY年MM月DD日")}报的{moment(item?.KHFWSJPZ?.KSRQ).format('MM')}月{value?.FWMC}还未缴费，请及时处理。
+                              </div>
+                            })
+                          }
+                        </>
                       } else if (value?.XSFWKHBJs) {
+
                         return <div
                           className={styles.wrap}
                           style={{ backgroundImage: `url(${remind})` }}
@@ -284,7 +293,7 @@ const Home = () => {
               </div> : <></>
           }
 
-{/* 
+          {/* 
           <div className={styles.enrollArea}>
             <EnrollClassTime type='student' xxId={currentUser.xxId} userId={StorageXSId} njId={StorageNjId} bjId={StorageBjId} XQSJId={StorageXQSJId} />
           </div>
@@ -340,8 +349,9 @@ const Home = () => {
                 JKRQ: '',
                 fwdetail: {
                   ...FWBData,
-                  JSRQ: FWBData?.XSFWBJs?.[0]?.KHFWSJPZ.JSRQ,
-                  KSRQ: FWBData?.XSFWBJs?.[0]?.KHFWSJPZ.KSRQ,
+                  ...FWSD,
+                  JSRQ: FWSD?.KHFWSJPZ.JSRQ,
+                  KSRQ: FWSD?.KHFWSJPZ.KSRQ,
                 },
                 type: '服务班',
               },

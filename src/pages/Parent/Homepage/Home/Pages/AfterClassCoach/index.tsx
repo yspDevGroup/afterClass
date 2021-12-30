@@ -129,7 +129,7 @@ const EmptyArticle = (props: any) => {
       {
         FWKCData ? <button onClick={() => {
           setModalVisible(true);
-        }}>去报名</button> : <></>
+        }}>我要报名</button> : <></>
       }
 
       <Modal

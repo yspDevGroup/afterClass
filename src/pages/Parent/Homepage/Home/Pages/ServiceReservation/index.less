@@ -1,29 +1,36 @@
 .ServiceReservation {
   min-height: 100%;
   background: #fff;
+
   :global {
     .ant-tabs-content-holder {
       padding: 0 10px;
     }
+
     .ant-tabs-nav {
       margin-bottom: 8px;
+
       .ant-tabs-nav-wrap {
         .ant-tabs-nav-list {
           width: 100%;
+
           .ant-tabs-tab {
             width: 50%;
             margin-left: 0;
             background: #fff;
             border: none;
             border-radius: 0%;
+
             .ant-tabs-tab-btn {
               margin: 0 auto;
               font-size: 16px;
             }
           }
+
           .ant-tabs-tab:hover {
             color: #333333;
           }
+
           .ant-tabs-tab-active {
             .ant-tabs-tab-btn {
               color: #45c977;
@@ -34,43 +41,52 @@
       }
     }
   }
+
   .category,
   .Selected {
     :global {
       .ant-tabs-content-holder {
         padding: 0;
       }
+
       .ant-tabs-nav::before {
         border: none;
       }
+
       .ant-tabs-nav-list {
         width: auto !important;
+
         .ant-tabs-tab {
           color: #666666 !important;
           border: 1px solid #fff !important;
+
           .ant-tabs-tab-btn {
             font-size: 14px !important;
           }
         }
       }
     }
+
     .wrap {
       .box {
         display: flex;
         margin-bottom: 16px;
 
-        > div:nth-child(1) {
+        >div:nth-child(1) {
           width: 110px;
           height: 70px;
           margin-right: 10px;
           text-align: center;
+
           img {
             margin: 0 auto;
             border-radius: 8px;
           }
         }
-        > div:nth-child(2) {
+
+        >div:nth-child(2) {
           width: calc(~'100% - 120px');
+
           p {
             margin: 5px 0;
             overflow: hidden;
@@ -80,6 +96,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
           }
+
           .title {
             color: #333333;
             font-size: 14px;
@@ -89,26 +106,28 @@
       }
     }
   }
+
   .Selected {
     .noOrder {
       text-align: center;
-      > div {
+
+      >div {
         width: 230px;
         height: 150px;
         margin: 0 auto;
         margin-top: calc(~'50vh - 220px');
         padding-top: 40px;
-        background: linear-gradient(
-          180deg,
-          rgba(109, 220, 156, 0.1) 0%,
-          rgba(109, 220, 156, 0) 100%
-        );
+        background: linear-gradient(180deg,
+            rgba(109, 220, 156, 0.1) 0%,
+            rgba(109, 220, 156, 0) 100%);
         border-radius: 32px 32px 32px 0px;
+
         p {
           margin-bottom: 6px;
           color: #45c977;
           text-align: center;
         }
+
         a {
           width: 60px;
           height: 20px;
@@ -118,6 +137,7 @@
           border-bottom: 1px solid #45c977;
         }
       }
+
       img {
         width: 175px;
         height: 175px;
@@ -130,17 +150,20 @@
 .Details {
   .wrap {
     padding: 10px 10px 65px 10px;
+
     img {
       width: 100%;
       height: 226px;
       border-radius: 8px;
     }
-    > div {
+
+    >div {
       p {
         margin-bottom: 0;
         color: #666;
         font-size: 14px;
       }
+
       .title {
         margin: 18px 0 10px 0;
         color: #333333;
@@ -148,10 +171,12 @@
         font-size: 16px;
       }
     }
-    > div:nth-of-type(2) {
+
+    >div:nth-of-type(2) {
       margin-top: 20px;
     }
   }
+
   .footer {
     position: fixed;
     bottom: 0;
@@ -162,11 +187,13 @@
     padding: 8px 14px;
     background-color: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    > span {
+
+    >span {
       color: #ff6600;
       font-size: 20px;
       line-height: 36px;
     }
+
     button {
       width: 60%;
       height: 38px;
@@ -177,6 +204,7 @@
       border-radius: 22px;
     }
   }
+
   .box {
     position: fixed;
     top: 0;
@@ -186,34 +214,41 @@
     width: 100%;
     height: 100%;
     background: rgba(51, 51, 51, 0.5);
-    > div {
+
+    >div {
       position: fixed;
       bottom: 0;
       width: 100%;
       height: 220px;
-      padding:20px 14px 14px 14px;
+      padding: 20px 14px 14px 14px;
       background-color: #fff;
+
       p {
         margin-bottom: 10px;
         color: #ff6600;
         font-size: 20px;
       }
+
       .title {
         color: #333333;
         font-size: 16px;
       }
+
       .agreement {
         position: fixed;
         bottom: 70px;
+
         :global {
           .ant-checkbox {
             .ant-checkbox-inner {
               border-color: #45c977;
             }
           }
+
           .ant-checkbox-checked::after {
             border: 1px solid #45c977;
           }
+
           .ant-checkbox-checked {
             .ant-checkbox-inner {
               background-color: #45c977;
@@ -222,6 +257,7 @@
           }
         }
       }
+
       .submit {
         position: fixed;
         bottom: 14px;
@@ -254,33 +290,41 @@
   margin: 0 auto;
   margin-top: calc(50vh - 260px) !important;
   padding: 0 !important;
+
   :global {
     .ant-modal-content {
       min-width: 100% !important;
+
       .ant-modal-footer {
         .ant-btn {
           margin-left: 0 !important;
         }
       }
     }
+
     .ant-modal-body {
       width: 100% !important;
       padding: 16px;
-      > p:nth-child(1) {
+
+      >p:nth-child(1) {
         font-size: 16px;
         text-align: center;
       }
-      > div {
+
+      >div {
         height: 400px;
         overflow: auto;
       }
-      > div::-webkit-scrollbar {
+
+      >div::-webkit-scrollbar {
         display: none;
       }
     }
+
     .ant-modal-footer {
       display: flex;
       justify-content: space-evenly;
+
       .ant-btn-primary {
         background-color: #45c977;
         border: none;
@@ -294,8 +338,33 @@
 .InterestClassroom {
   background: #F5F5F5;
   min-height: 100vh;
-  padding-bottom: 70px;
+  padding-bottom: 30px;
 
+  .FWTP {
+    width: 100%;
+    padding: 10px;
+    height: 220px;
+    text-align: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .FWMC {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 0 10px;
+    margin: 0;
+    margin-top: 10px;
+  }
+  .FWSD {
+    font-size: 14px;
+    padding: 0 10px;
+    margin: 0;
+    margin-top: 5px;
+  }
 
   .month {
     width: 100%;
@@ -322,90 +391,9 @@
     .ant-checkbox-wrapper-disabled {
       display: none;
     }
-    .ant-checkbox-disabled{
+
+    .ant-checkbox-disabled {
       display: none;
-    }
-
-    .ant-radio-group {
-      display: flex;
-      width: 100%;
-      height: 40px;
-      overflow-x: auto;
-      // justify-content: space-between;
-
-      .ant-radio-button-wrapper {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        border: none !important;
-        margin-right: 20px;
-        font-size: 18px;
-        font-weight: bold;
-        color: #333;
-
-        span {
-          div {
-            margin-left: -15px;
-            text-align: center;
-          }
-
-          span {
-            position: absolute;
-            bottom: -5px;
-            left: 34px;
-            font-size: 14px;
-            font-weight: normal;
-            color: #999;
-
-          }
-        }
-      }
-
-      .ant-radio-button-wrapper-checked {
-        border: none !important;
-        color: #999 !important;
-
-        background-color: #15B628 !important;
-        background: #15B628 !important;
-
-        span {
-          div {
-            color: #fff !important;
-            line-height: 34px;
-            font-size: 18px;
-            font-weight: bold;
-            margin-left: -15px;
-            text-align: center;
-          }
-        }
-      }
-
-      .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active {
-        border: none !important;
-      }
-
-      .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):active::before {
-        background-color: #fff;
-      }
-
-      .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
-        background-color: #fff;
-      }
-
-      .ant-radio-button-wrapper:not(:first-child)::before {
-        background-color: #fff;
-      }
-
-      .ant-radio-button-wrapper:focus-within {
-        box-shadow: none;
-      }
-    }
-    .ant-radio-group::-webkit-scrollbar {
-      display: none;
-  }
-
-    .ant-divider {
-      margin: 0;
     }
   }
 
@@ -446,7 +434,7 @@
   }
 
   .Application {
-    margin-top: 20px;
+    margin-top: 15px;
     padding: 0 10px;
 
     .choice {
@@ -473,15 +461,15 @@
       .box {
         width: calc(~'100% - 80px');
         padding-left: 10px;
-        
+
 
         p {
           margin-bottom: 10px;
           color: #333;
           font-size: 14px;
           overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         span {
@@ -528,55 +516,6 @@
           border-color: #45c977;
         }
       }
-    }
-  }
-
-  .footer {
-    width: 100%;
-    height: 54px;
-    position: fixed;
-    display: flex;
-    padding: 8px 15px;
-    bottom: 0;
-    background-color: #fff;
-    justify-content: space-between;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-
-    button {
-      color: #fff;
-      width: 165px;
-      height: 38px;
-      background: #15B628;
-      border-radius: 22px;
-      border: none;
-      font-size: 16px;
-    }
-
-    button[disabled] {
-      background: #eee;
-      color: #999;
-    }
-  }
-
-  .footers {
-    width: 100%;
-    height: 54px;
-    position: fixed;
-    display: flex;
-    padding: 8px 15px;
-    bottom: 0;
-    background-color: #fff;
-    justify-content: space-between;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-
-    button {
-      color: #fff;
-      width: 100%;
-      height: 38px;
-      background: #15B628;
-      border-radius: 22px;
-      border: none;
-      font-size: 16px;
     }
   }
 

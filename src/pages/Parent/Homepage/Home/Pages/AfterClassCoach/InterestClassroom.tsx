@@ -2,7 +2,7 @@
  * @description: 
  * @author: wsl
  * @Date: 2021-12-23 14:26:31
- * @LastEditTime: 2021-12-29 19:38:35
+ * @LastEditTime: 2021-12-30 15:29:34
  * @LastEditors: wsl
  */
 
@@ -56,7 +56,6 @@ const InterestClassroom = () => {
           if (result.status === 'ok') {
             setFWKCData(result.data)
             setMouthId(result.data.KHFWSJPZs?.[0].id)
-
             const newArr: any[] = [];
             result.data?.KHFWSJPZs?.forEach((value: any) => {
               newArr.push(value?.id)
@@ -93,6 +92,10 @@ const InterestClassroom = () => {
 
   useEffect(() => {
     if (BaoMinData && FWKCData) {
+      const FKZT = BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).ZT;
+      if (FKZT === 0 || FKZT === 1) {
+        setFKType(false)
+      }
       setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).id)
     }
   }, [FWKCData, BaoMinData])
@@ -194,6 +197,7 @@ const InterestClassroom = () => {
           </Radio.Group> : <></>
         }
       </div>
+      <p className={styles.FWMC}>{FWKCData?.FWMC}</p>
       {
         FWKCData?.KCFWBJs?.length === 0 ? <>
           <div className={styles.noData}>
@@ -214,6 +218,7 @@ const InterestClassroom = () => {
                     <div className={styles.title}>
                       <div />
                       <span>课业辅导</span>
+                      <span>此服务默认配置的辅导课</span>
                     </div>
                     <div>
                       <Checkbox.Group
@@ -338,6 +343,7 @@ const InterestClassroom = () => {
                 <div className={styles.title}>
                   <div />
                   <span>课业辅导</span>
+                  <span>此服务默认配置的辅导课</span>
                 </div>
                 <div>
                   <Checkbox.Group

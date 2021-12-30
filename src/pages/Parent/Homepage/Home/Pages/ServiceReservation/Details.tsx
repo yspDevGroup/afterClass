@@ -2,8 +2,8 @@
  * @description: 服务详情
  * @author: wsl
  * @Date: 2021-09-26 17:28:08
- * @LastEditTime: 2021-10-15 15:01:42
- * @LastEditors: zpl
+ * @LastEditTime: 2021-12-30 12:13:55
+ * @LastEditors: wsl
  */
 import GoBack from '@/components/GoBack';
 import { Button, Checkbox, message, Modal } from 'antd';
@@ -14,7 +14,7 @@ import { getStudent, KHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { Link, useModel, history } from 'umi';
-import { enHenceMsg } from '@/utils/utils';
+import { enHenceMsg, getQueryString } from '@/utils/utils';
 
 const Details = () => {
   const { initialState } = useModel('@@initialState');
@@ -26,27 +26,30 @@ const Details = () => {
   const [KHFUXY, setKHFUXY] = useState<any>();
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const [orderInfo, setOrderInfo] = useState<any>();
+  const path = getQueryString('path');
+  const id = getQueryString('id');
+  const type = getQueryString('type');
 
-  const type = window.location.href.split('type=')[1].split('&id=')[0];
   const StorageXSId = localStorage.getItem('studentId');
   useEffect(() => {
-    const id = window.location.href.split('id=')[1];
-    (async () => {
-      if (type === 'YX') {
-        const res = await getStudent({
-          XSJBSJId: StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId,
-          KHXXZZFWId: id,
-        });
-        if (res.status === 'ok') {
-          setData(res.data?.rows?.[0].KHXXZZFW);
+    if (id) {
+      (async () => {
+        if (type === 'YX') {
+          const res = await getStudent({
+            XSJBSJId: StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId,
+            KHXXZZFWId: id,
+          });
+          if (res.status === 'ok') {
+            setData(res.data?.rows?.[0].KHXXZZFW);
+          }
+        } else if (type === 'KS') {
+          const res = await KHXXZZFW({ id });
+          if (res.status === 'ok') {
+            setData(res.data);
+          }
         }
-      } else if (type === 'KS') {
-        const res = await KHXXZZFW({ id });
-        if (res.status === 'ok') {
-          setData(res.data);
-        }
-      }
-    })();
+      })();
+    }
   }, [StorageXSId]);
   useEffect(() => {
     (async () => {
@@ -91,7 +94,7 @@ const Details = () => {
       ZFFS: '线上支付',
       DDZT: '待付款',
       DDFY: Data?.FY,
-      XSJBSJId:localStorage.getItem('studentId') || currentUser?.student[0]?.XSJBSJId || testStudentId,
+      XSJBSJId: localStorage.getItem('studentId') || currentUser?.student[0]?.XSJBSJId || testStudentId,
       DDLX: 1,
       KHXXZZFWId: Data?.id,
     };
@@ -110,7 +113,10 @@ const Details = () => {
 
   return (
     <div className={styles.Details}>
-      <GoBack title={'服务详情'} />
+      {
+        path ? <GoBack title={'服务详情'} onclick={`/parent/home?index=${path}`} /> : <GoBack title={'服务详情'} />
+      }
+
       <div className={styles.wrap}>
         <img src={Data?.FWTP} alt="" />
         <div>

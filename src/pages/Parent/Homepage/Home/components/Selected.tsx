@@ -9,7 +9,7 @@ import type { ListData, ListItem } from '@/components/ListComponent/data';
 import IconFont from '@/components/CustomIcon';
 import moment from 'moment';
 import { getStudent } from '@/services/after-class/khxxzzfw';
-import { getStudentListByBjid } from '@/services/after-class/khfwbj';
+import { getKHFWBJ, getStudentListByBjid } from '@/services/after-class/khfwbj';
 
 const { TabPane } = Tabs;
 const defaultMsg: ListData = {
@@ -63,7 +63,7 @@ const CourseTab = (props: { dataResource: any }) => {
           id: record.KHXXZZFWId,
           title: record.KHXXZZFW.FWMC,
           img: record.KHXXZZFW?.FWTP,
-          link: `/parent/home/serviceReservation/details?type=YX&id=${record?.KHXXZZFW?.id}`,
+          link: `/parent/home/serviceReservation/details?type=YX&id=${record?.KHXXZZFW?.id}&path=study`,
           desc: [
             {
               left: [
@@ -120,9 +120,36 @@ const CourseTab = (props: { dataResource: any }) => {
         };
         return nodeData;
       });
+      const listDatas: any = [].map.call(yxkc, (record: any) => {
+        const nodeData: ListItem = {
+          id: record.id,
+          title: ` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
+          img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
+          link: `/parent/home/courseTable?classid=${record.id}`,
+          desc: [
+            {
+              left: [
+                `课程时段：${record.KKRQ
+                  ? moment(record.KKRQ).format('YYYY.MM.DD')
+                  : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
+                }-${record.JKRQ
+                  ? moment(record.JKRQ).format('YYYY.MM.DD')
+                  : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
+                }`,
+              ],
+            },
+            {
+              left: [`共${record.KSS}课时`],
+            },
+          ],
+          fkzt: record.KHXSBJs?.[0]?.ZT,
+          introduction: record.KHKCSJ.KCMS,
+        };
+        return nodeData;
+      });
       const { list, ...rest } = { ...defaultMsg };
       console.log(listData, 'listData')
-      setYxkcAllData(listData);
+      setYxkcAllData(listDatas);
       setYxkcData({
         list: listData.slice(0, 3),
         ...rest,
@@ -132,7 +159,6 @@ const CourseTab = (props: { dataResource: any }) => {
   useEffect(() => {
     if (BaoMinData) {
       const listData: any = [].map.call(BaoMinData?.[0]?.XSFWBJs, (record: any) => {
-        console.log(record)
         const nodeData: ListItem = {
           id: record.id,
           title: record.KHFWBJ.FWMC,
@@ -148,10 +174,26 @@ const CourseTab = (props: { dataResource: any }) => {
         };
         return nodeData;
       });
+      const listDatas: any = [].map.call(BaoMinData?.[0]?.XSFWBJs, (record: any) => {
+        console.log(record)
+        const nodeData: ListItem = {
+          id: record.id,
+          title: record.KHFWBJ.FWMC,
+          img: record?.KHFWBJ?.FWTP,
+          link: `/parent/home/serviceReservation/afterClassDetails?classid=${record.KHFWSJPZId}`,
+          desc: [
+            {
+              left: [
+                `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
+              ],
+            },
+          ],
+        };
+        return nodeData;
+      });
       const { list, ...rest } = { ...defaultMsg };
-      // setKHFWAllDatas(listData);
       setKHFWAllDatas({
-        list: listData,
+        list: listDatas,
         ...rest,
       });
       setKHFWDatas({
@@ -161,6 +203,7 @@ const CourseTab = (props: { dataResource: any }) => {
     }
   }, [BaoMinData]);
 
+  
   useEffect(() => {
     (
       async () => {
@@ -203,21 +246,21 @@ const CourseTab = (props: { dataResource: any }) => {
         // }
         className={styles.courseTab}
       >
-        <TabPane tab="已选课后服务" key="yxkcs">
+        <TabPane tab="课后服务" key="yxkcs">
           {BaoMinData && BaoMinData?.length ? (
             <ListComponent listData={KHFWDatas} />
           ) : (
             <ListComponent listData={defaultMsg} />
           )}
         </TabPane>
-        <TabPane tab="已选课程服务" key="yxkc">
+        <TabPane tab="课程服务" key="yxkc">
           {yxkc && yxkc?.length ? (
             <ListComponent listData={yxkcData} />
           ) : (
             <ListComponent listData={defaultMsg} />
           )}
         </TabPane>
-        <TabPane tab="已选增值服务" key="yxfw">
+        <TabPane tab="增值服务" key="yxfw">
           {YxserviceData && YxserviceData?.length ? (
             <ListComponent listData={yxfwData} />
           ) : (
