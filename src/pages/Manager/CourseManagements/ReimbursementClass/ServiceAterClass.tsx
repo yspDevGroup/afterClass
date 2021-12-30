@@ -332,6 +332,7 @@ const ServiceAterClass = () => {
                 message.success('服务退订成功');
               }
             }
+            message.success('服务退订成功');
           }
           setVisible(false);
           setCurrent(undefined);

@@ -524,7 +524,29 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       if (info.file.status === 'done') {
         const code = info.file.response;
         if (code.status === 'ok') {
-          message.success('导入成功');
+          const repeat = code.data?.find((v: { errorType: number; })=>{
+            return v.errorType === 0;
+          });
+          const wrong = code.data?.find((v: { errorType: number; })=>{
+            return v.errorType === 1;
+          });
+          const different = code.data?.find((v: { errorType: number; })=>{
+            return v.errorType === 2;
+          });
+          const sqlerr = code.data?.find((v: { errorType: number; })=>{
+            return v.errorType === 3;
+          });
+          if(repeat){
+            message.warning('存在重复数据，部分导入失败');
+          }else if(wrong){
+            message.warning('数据格式有误，部分导入失败');
+          }else if(different){
+            message.warning('部分数据有误，部分导入失败');
+          }else if(sqlerr){
+            message.warning('未知错误，导入失败');
+          }else{
+            message.success('导入成功');
+          }
           setUploadVisible(false);
 
           onsetKHXSBJs();

@@ -407,18 +407,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
             overlayStyle={{ maxWidth: '30em' }}
             title={
               <>
-                <Row>
-                  <Col flex="4em" style={{ fontWeight: 'bold' }}>
-                    未开班：
-                  </Col>
-                  <Col flex="auto">仅后台管理员可见</Col>
-                </Row>
-                <Row>
-                  <Col flex="4em" style={{ fontWeight: 'bold' }}>
-                    已开班：
-                  </Col>
-                  <Col flex="auto">家长、教育局端可见</Col>
-                </Row>
+                开启时可用于课后服务配置
               </>
             }
           >
@@ -436,7 +425,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       render: (_, record) => {
         return (
           <>
-            {record?.BJZT}
+            {record?.BJZT === '未开班' ? '已关闭' : '已开启'}
             {new Date(record.BMJSSJ) > new Date(BMJSSJTime) ? (
               <Tooltip
                 overlayStyle={{ maxWidth: '30em' }}
@@ -461,7 +450,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       render: (_, record) => {
         return (
           <>
-            <ActionBar record={record} handleEdit={handleEdit} getData={getData} />
+            <ActionBar record={record} handleEdit={handleEdit} getData={getData} type='service' />
             <Divider type="vertical" />
           </>
         );

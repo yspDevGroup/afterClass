@@ -12,6 +12,7 @@ import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import CourseSelect from '@/components/Search/CourseSelect';
 import ClassSelect from '@/components/Search/ClassSelect';
+import { getAllKHXSDD } from '@/services/after-class/khxsdd';
 
 const { TextArea, Search } = Input;
 const CourseUnsubscribe = () => {
@@ -289,25 +290,42 @@ const CourseUnsubscribe = () => {
               ((current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS).toFixed(2),
             );
             if (money !== 0.0) {
-              const result = await createKHXSTK({
-                KHTKSJId: current?.id,
-                /** 退款金额 */
-                TKJE: money,
-                /** 退款状态 */
-                TKZT: 0,
+              const response = await getAllKHXSDD({
                 /** 学生ID */
                 XSJBSJId: current?.XSJBSJId,
                 /** 班级ID */
                 KHBJSJId: current?.KHBJSJId,
                 /** 学校ID */
                 XXJBSJId: currentUser?.xxId,
-                JZGJBSJId: currentUser.JSId,
+                DDZT: ['已付款'],
+                DDLX: 0,
               });
-              if (result.status === 'ok') {
-                message.success('退课成功,已自动申请退款流程');
-              } else if (result.message === '未找到该学生在当前班级的订单记录') {
-                message.success('退课成功');
+              if (response.status === 'ok' && response.data) {
+                if (response.data?.length) {
+                  const result = await createKHXSTK({
+                    KHTKSJId: current?.id,
+                    /** 退款金额 */
+                    TKJE: money,
+                    /** 退款状态 */
+                    TKZT: 0,
+                    /** 学生ID */
+                    XSJBSJId: current?.XSJBSJId,
+                    /** 班级ID */
+                    KHBJSJId: current?.KHBJSJId,
+                    /** 学校ID */
+                    XXJBSJId: currentUser?.xxId,
+                    JZGJBSJId: currentUser.JSId,
+                  });
+                  if (result.status === 'ok') {
+                    message.success('退课成功,已自动申请退款流程');
+                  } else if (result.message === '未找到该学生在当前班级的订单记录') {
+                    message.success('退课成功');
+                  }
+                }else{
+                  message.success('退课成功');
+                }
               }
+              message.success('退课成功');
             } else {
               message.success('退课成功,退款余额为0，无需退款');
             }

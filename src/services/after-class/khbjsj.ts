@@ -537,6 +537,8 @@ export async function getAllClassesByNJ(
     XNXQId?: string;
     /** 课程ID */
     KHKCSJId?: string;
+    /** 校区数据ID */
+    XQSJId?: string;
     /** 年级IDs */
     NJSJIds?: string[];
     /** 班级状态 */

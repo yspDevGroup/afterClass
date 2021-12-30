@@ -14,11 +14,12 @@ type propstype = {
   handleEdit: (data: CourseItem, type?: string) => void;
   record: any;
   getData: (origin?: string | undefined) => Promise<void>;
+  type?: string;
 };
 
 const { TextArea } = Input;
 const ActionBar = (props: propstype) => {
-  const { handleEdit, record, getData } = props;
+  const { handleEdit, record, getData, type } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [form] = Form.useForm();
@@ -31,13 +32,13 @@ const ActionBar = (props: propstype) => {
         resolve(res);
       }).then(async (data: any) => {
         if (data.status === 'ok') {
-          message.success('取消成功');
+          message.success(`${type ? '关闭' : '取消'}成功`);
           getData();
           // 取消课程发布
           const { KHKCSJ } = recorde;
           await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 0 });
         } else {
-          message.error('取消失败，请联系管理员或稍后重试');
+          message.error(`${type ? '关闭' : '取消'}失败，请联系管理员或稍后重试`);
         }
       });
     } else {
@@ -50,7 +51,7 @@ const ActionBar = (props: propstype) => {
       resolve(res);
     }).then(async (data: any) => {
       if (data.status === 'ok') {
-        message.success('开班成功');
+        message.success(`${type ? '开启' : '开班'}成功`);
         getData();
         // 开班成功后获取班级排课信息计算课时安排
         const result = await getKHPKSJByBJID({ id: records.id });
@@ -61,7 +62,7 @@ const ActionBar = (props: propstype) => {
         const { KHKCSJ } = records;
         await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 1 });
       } else {
-        message.error('开班失败，请联系管理员或稍后重试');
+        message.error(`${type ? '开启' : '开班'}失败，请联系管理员或稍后重试`);
         getData();
       }
     });
@@ -99,6 +100,10 @@ const ActionBar = (props: propstype) => {
         <>
           {record.pk_count ? (
             <>
+              <a
+                onClick={() => release(record)}
+                style={type ? undefined : { display: 'none' }}
+              >开启</a>
               <Popconfirm
                 title="开班后该课程班可用于课后服务配置，确定开班?"
                 onConfirm={() => release(record)}
@@ -106,7 +111,9 @@ const ActionBar = (props: propstype) => {
                 cancelText="取消"
                 placement="topRight"
               >
-                <a>开班</a>
+                <a
+                  style={type ? { display: 'none' } : undefined}
+                >开班</a>
               </Popconfirm>
               <Divider type="vertical" />
               <a onClick={() => handleEdit(record)}>编辑</a>
@@ -190,7 +197,7 @@ const ActionBar = (props: propstype) => {
           {(new Date(record?.BMJSSJ).getTime() >= new Date().getTime() &&
             record?.xs_count > 0 &&
             record?.xs_count < record?.BJRS) ||
-          (record.noPayXS_count > 0 && record?.noPayXS_count < record?.BJRS) ? (
+            (record.noPayXS_count > 0 && record?.noPayXS_count < record?.BJRS) ? (
             <>
               {' '}
               <a
@@ -238,15 +245,23 @@ const ActionBar = (props: propstype) => {
               </Modal>
             </>
           ) : (
-            <Popconfirm
-              title="取消后该课程班家长不可见，确定取消开班?"
-              onConfirm={() => shelf(record)}
-              okText="确定"
-              cancelText="取消"
-              placement="topRight"
-            >
-              <a>取消开班</a>
-            </Popconfirm>
+            <>
+              <a
+                onClick={() => shelf(record)}
+                style={type ? undefined : { display: 'none' }}
+              >关闭</a>
+              <Popconfirm
+                title="取消后该课程班家长不可见，确定取消开班?"
+                onConfirm={() => shelf(record)}
+                okText="确定"
+                cancelText="取消"
+                placement="topRight"
+              >
+                <a
+                  style={type ? { display: 'none' } : undefined}
+                >取消开班</a>
+              </Popconfirm>
+            </>
           )}
           <Divider type="vertical" />
           <a onClick={() => handleEdit(record)}>查看</a>
