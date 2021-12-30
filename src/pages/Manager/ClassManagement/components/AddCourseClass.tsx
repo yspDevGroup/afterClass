@@ -704,6 +704,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
           children: (
             <Select
               showSearch
+              allowClear
               placeholder="请选择"
               optionFilterProp="children"
               onChange={(value, key: any) => {

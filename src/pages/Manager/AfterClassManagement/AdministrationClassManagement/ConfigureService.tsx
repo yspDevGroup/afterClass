@@ -12,6 +12,7 @@ import moment from 'moment';
 import { getAllKHFWSJ, updateKHFWSJ, createKHFWSJ } from '@/services/after-class/khfwsj';
 const { RangePicker } = DatePicker;
 import seviceImage from '@/assets/seviceImage.png';
+import { getAllClasses } from '@/services/after-class/khbjsj';
 
 type ConfigureSeverType = {
   KHFWBJs: any[];
@@ -342,6 +343,46 @@ const ConfigureService = (props: ConfigureSeverType) => {
     });
   };
 
+  const getKHFD= async ()=>{
+
+    const params: ModalValue = {
+      FWFY: 140,
+      JFLX: 0,
+      KXSL: 2,
+      timeFrame: [
+        moment(XQData?.KSRQ, 'YYYY-MM-DD'),
+        moment(XQData?.JSRQ, 'YYYY-MM-DD'),
+      ],
+      isTemplate: false,
+      KCFD: [],
+      KHKC: [],
+      FWMC: '',
+      FWMS: '',
+    }; 
+    const res= await getAllClasses({
+      XNXQId,
+      ISFW:1,
+      BJZT: '已开班',
+      KCTAG:'校内辅导',
+      NJSJId: NJSJ?.id,
+      BJSJId,// 行政班Id，
+      page: 0,
+      pageSize: 0,
+      XQSJId:XQSJId,
+    })
+    if(res?.status==='ok'&&res?.data?.rows?.length){
+      console.log('res',res);
+      
+      params.KCFD=res.data.rows.map((item: any)=>{return{value:item.id,label:item.BJMC}})
+    }
+    // 初始化表单
+    setDetailValue(params);
+    // 默认先交费类型
+    setJFLX(0);
+    // 请求模板
+    getData();
+  }
+
   return (
     <Spin spinning={loading}>
       <ModalForm<ModalValue>
@@ -354,28 +395,14 @@ const ConfigureService = (props: ConfigureSeverType) => {
             onClick={() => {
               if (KHFWBJs.length) {
                 getDetailValue();
+                getData();
               } else {
                 // 还没有配置课程班 需要填写默认值
                 console.log('需要填写默认值');
-
-                const params: ModalValue = {
-                  FWFY: 140,
-                  JFLX: 0,
-                  KXSL: 2,
-                  timeFrame: [
-                    moment(XQData?.KSRQ, 'YYYY-MM-DD'),
-                    moment(XQData?.JSRQ, 'YYYY-MM-DD'),
-                  ],
-                  isTemplate: false,
-                  KCFD: [],
-                  KHKC: [],
-                  FWMC: '',
-                  FWMS: '',
-                };
-                setDetailValue(params);
-                setJFLX(0);
+                  getKHFD()
+               
               }
-              getData();
+             
             }}
           >
             {KHFWBJs?.length ? '编辑' : '配置课后服务'}
@@ -531,7 +558,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
             XNXQId={XNXQId}
             // 课程班=0 辅导班=1
             flag={1}
-          />
+            XQSJId={XQSJId}
+            />
         </ProForm.Item>
         <ProForm.Item
           label="课后课程："
@@ -552,6 +580,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
             XNXQId={XNXQId}
             // 课程班=0 辅导班=1
             flag={0}
+            XQSJId={XQSJId}
           />
         </ProForm.Item>
         <Row justify="start" align="middle">
