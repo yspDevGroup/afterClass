@@ -187,3 +187,23 @@ export async function chooseKCByXSId(
     ...(options || {}),
   });
 }
+
+/** 修改课后服务班级是否开启付费 POST /khfwbj/updateKHFWBJisPay */
+export async function updateKHFWBJisPay(
+  body: {
+    KHFWBJId: string;
+    KHFWSJPZId: string;
+    /** 是否开启付费，0:关闭;1:开启 */
+    isPay: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khfwbj/updateKHFWBJisPay', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
