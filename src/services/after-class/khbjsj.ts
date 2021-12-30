@@ -215,6 +215,8 @@ export async function getAllClasses(
     NJSJId?: string;
     /** 班级ID */
     BJSJId?: string;
+    /** 校区数据ID */
+    XQSJId?: string;
     /** 班级状态 */
     BJZT?: string;
     /** 班级名称 */
