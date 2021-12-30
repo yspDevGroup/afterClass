@@ -11,13 +11,13 @@ import { getAllFJSJ, getFJPlan } from '@/services/after-class/fjsj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getQueryString } from '@/utils/utils';
-import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
+// import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import styles from './index.less';
 // import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { useModel } from 'umi';
 import { getGradesByCampus } from '@/services/after-class/njsj';
-import { getKHBJSJ } from '@/services/after-class/khbjsj';
+// import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import SearchLayout from '@/components/Search/Layout';
 import { getAllBJSJ } from '@/services/after-class/bjsj';
 import AddArranginClass from './components/AddArranginClass';
@@ -33,7 +33,7 @@ const ClassScheduling = () => {
     const [campusId, setCampusId] = useState<string>();
 
     const [state, setState] = useState(true);
-    const [curXNXQId, setCurXNXQId] = useState<any>(getQueryString('xnxqid'));
+    const [curXNXQId, setCurXNXQId] = useState<any>();
 
     const [termList, setTermList] = useState<any>();
 
@@ -190,31 +190,31 @@ const ClassScheduling = () => {
         }
     };
 
-    useEffect(() => {
-        (async () => {
-            if (/MicroMessenger/i.test(navigator.userAgent)) {
-                await initWXConfig(['checkJsApi']);
-            }
-            await initWXAgentConfig(['checkJsApi']);
-        })();
-        const bjId = getQueryString('courseId');
-        if (bjId !== null) {
-            // console.log('1传参');
-            (async () => {
-                const njInfo = await getKHBJSJ({ id: bjId });
-                if (njInfo.status === 'ok') {
-                    setRecordValue({
-                        BJId: njInfo.data.id,
-                        NJ: njInfo.data.KHKCSJ.NJSJs[0].id,
-                        KC: njInfo.data.KHKCSJId,
-                        KCMC: njInfo.data.KHKCSJ.KCMC,
-                        XQ: njInfo.data.XQSJId,
-                    });
-                    setState(false);
-                }
-            })();
-        }
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         if (/MicroMessenger/i.test(navigator.userAgent)) {
+    //             await initWXConfig(['checkJsApi']);
+    //         }
+    //         await initWXAgentConfig(['checkJsApi']);
+    //     })();
+    //     const bjId = getQueryString('courseId');
+    //     if (bjId !== null) {
+    //         // console.log('1传参');
+    //         (async () => {
+    //             const njInfo = await getKHBJSJ({ id: bjId });
+    //             if (njInfo.status === 'ok') {
+    //                 setRecordValue({
+    //                     BJId: njInfo.data.id,
+    //                     NJ: njInfo.data.KHKCSJ.NJSJs[0].id,
+    //                     KC: njInfo.data.KHKCSJId,
+    //                     KCMC: njInfo.data.KHKCSJ.KCMC,
+    //                     XQ: njInfo.data.XQSJId,
+    //                 });
+    //                 setState(false);
+    //             }
+    //         })();
+    //     }
+    // }, []);
 
     const columns: {
         title: string;

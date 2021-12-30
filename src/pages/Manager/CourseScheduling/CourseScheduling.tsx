@@ -188,6 +188,7 @@ const CourseScheduling = () => {
       await initWXAgentConfig(['checkJsApi']);
     })();
     const bjId = getQueryString('courseId');
+    const XQSJId = getQueryString('XQSJ');
     if (bjId !== null) {
       // console.log('1传参');
       (async () => {
@@ -198,7 +199,7 @@ const CourseScheduling = () => {
             NJ: njInfo.data.KHKCSJ.NJSJs[0].id,
             KC: njInfo.data.KHKCSJId,
             KCMC: njInfo.data.KHKCSJ.KCMC,
-            XQ: campusId,
+            XQ: XQSJId,
           });
           setState(false);
         }

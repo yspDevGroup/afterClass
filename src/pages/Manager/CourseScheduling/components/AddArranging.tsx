@@ -449,6 +449,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   useEffect(() => {
     if (formValues) {
+      console.log('formValues',formValues);
       form.setFieldsValue(formValues);
     }
   }, [formValues]);
