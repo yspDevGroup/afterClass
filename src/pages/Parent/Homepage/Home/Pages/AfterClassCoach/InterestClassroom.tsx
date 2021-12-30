@@ -377,7 +377,7 @@ const InterestClassroom = () => {
                 </div>
               </div>
               {
-                BaoMinData && XKType === false && FKType === true ? <div className={styles.footers}>
+                BaoMinData && FKType === true ? <div className={styles.footers}>
                   <button onClick={submit} >去付款</button>
                 </div> : <></>
               }
