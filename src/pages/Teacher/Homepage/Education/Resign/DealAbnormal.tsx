@@ -93,7 +93,11 @@ const DealAbnormal = (props: any) => {
     if (res.status === 'ok') {
       getCQData();
       setVisible(false);
-      message.success('补签申请提交成功');
+      if(res.message === 'isAudit=false'){
+        message.success('补签成功');
+      }else{
+        message.success('补签申请提交成功');
+      }
     } else {
       message.warning(res.message)
     }
@@ -169,7 +173,7 @@ const DealAbnormal = (props: any) => {
           ]}
         >
           {modalContent === 'option' ? <>
-            <li><Link to={`/teacher/education/askForLeave?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}>请假申请</Link></li>
+            <li><Link to={`/teacher/education/askForLeave/newLeave?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}>请假申请</Link></li>
             <li><Link to={`/teacher/education/courseAdjustment/applys?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}>代课申请</Link></li>
             <li onClick={() => {
               showModal('resign');
