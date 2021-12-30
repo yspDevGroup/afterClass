@@ -23,7 +23,7 @@ import { useModel } from 'umi';
 import { createKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
 import moment from 'moment';
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
-import { cancleClass, getEnrolled } from '@/services/after-class/khbjsj';
+import { getEnrolled } from '@/services/after-class/khbjsj';
 import SignUp from '../components/SingUp';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import styles from '../index.less';
@@ -162,10 +162,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
   // 取消报名
   const batchCancel = async (XSList: { XSJBSJId: string; ZT: number }[]) => {
     if (XSList.length > 0) {
-
       const newlist = XSList.map((item: any) => {
         return {
-          LX: 0,//  1是服务   0是课程班是服务班          
+          LX: 0, //  1是服务   0是课程班是服务班
           XSJBSJId: item?.XSJBSJId,
           ZT: 0,
           KHBJSJId: clickBjId,
@@ -173,9 +172,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       });
 
       // createKHTKSJ
-     const result= await createKHTKSJ(
-      newlist
-      )
+      const result = await createKHTKSJ(newlist);
       // const result = await cancleClass({
       //   KHBJSJId: applicantData?.id,
       //   XSlist: XSList,
@@ -337,8 +334,8 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         if (_text === 3) {
           return <span style={{ color: '#4884ff' }}>未缴费</span>;
         }
-        if(_text===1){
-          return <span style={{ color: '#4884ff' }}>退课中</span>
+        if (_text === 1) {
+          return <span style={{ color: '#4884ff' }}>退课中</span>;
         }
         return <span style={{ color: '#36970c' }}>已缴费</span>;
       },
@@ -884,11 +881,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           <div className={styles.messageDiv}>
             <Badge color="#aaa" size="small" />
             上传文件仅支持模板格式
-            <a
-              style={{ marginLeft: '16px' }}
-              type="download"
-              href="/学生报名模板.xlsx"
-            >
+            <a style={{ marginLeft: '16px' }} type="download" href="/template/studentsImport.xlsx">
               下载模板
             </a>
             <br />
