@@ -148,12 +148,9 @@ const Detail = (props: any) => {
       width: 120,
       render: (text: any) => {
         if (text?.length) {
-          // if(text?.[0]?.ZT===3){
-          //   return '已报名未交费';
-          // }
-          // if(text?.[0]?.ZT===0){
-          //   return '报名已缴费'
-          // }
+          if(text?.[0]?.ZT === 2){
+            return '已退课'
+          }
           if (text?.[0]?.ZT === 1) {
             return '退课中';
           }
@@ -198,7 +195,7 @@ const Detail = (props: any) => {
 
   // 代报名
   const getDBM = (record: any) => {
-    if (!record?.XSFWBJs?.length) {
+    if (!record?.XSFWBJs?.length || record?.XSFWBJs?.[0]?.ZT === 2) {
       return (
         <a
           onClick={() => {
@@ -602,8 +599,10 @@ const Detail = (props: any) => {
                       setZT(value);
                     }}
                   >
-                    <Option value={0}>已报名</Option>;<Option value={1}>退课中</Option>;
-                    <Option value={2}>已退课</Option>;<Option value={3}>未缴费</Option>;
+                    <Option value={0}>已报名</Option>;
+                    {/* <Option value={1}>退课中</Option>;
+                    <Option value={2}>已退课</Option>;
+                    <Option value={3}>未缴费</Option>; */}
                     <Option value={4}>未报名</Option>;
                   </Select>
                 </div>

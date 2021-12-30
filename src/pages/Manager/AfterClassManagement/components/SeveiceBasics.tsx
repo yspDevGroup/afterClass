@@ -28,7 +28,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const { title,reload, serviceId } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  // const [campusId, setCampusId] = useState<string>();
+  const [campusId, setCampusId] = useState<string>();
   const [campusData, setCampusData] = useState<any[]>();
   const [NJData, setNJData] = useState<any[]>();
   const [XNXQData, setXNXQData] = useState<any[]>();
@@ -225,6 +225,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
                 placeholder="请选择校区"
                 options={campusData}
                 onChange={(value: string) => {
+                  setCampusId(value);
                   getNJData(value);
                 }}
               />
@@ -321,6 +322,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             XNXQId={XNXQId}
             // 课程班=0 辅导班=1
             flag={0}
+            XQSJId={campusId}
           />
         </ProForm.Item>
         <ProForm.Item

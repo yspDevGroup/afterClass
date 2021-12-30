@@ -19,12 +19,13 @@ type SelectCourseProps = {
   getNJArr?: any, // 获取课程 function
   flag?: number, // 0 课程班 基础 1 辅导课程表
   XNXQId?: string, // 学年学期id
+  XQSJId: string, //校区ID
 }
 
 const SelectCourses = (props: SelectCourseProps) => {
   const refModal = useRef<any>();
   const [visible, setVisible] = useState<boolean>(false);
-  const { value, onChange, flag, getNJArr, XNXQId, title } = props;
+  const { value, onChange, flag, getNJArr, XNXQId, title,XQSJId } = props;
   const [KHKCLXData, setKHKCLXData] = useState<string[]>();
   const [dataSource, setDataSource] = useState<DataNode[] | undefined>();
   const [selectValue, setSelectValue] = useState<DataNode[] | undefined>();
@@ -76,16 +77,18 @@ const SelectCourses = (props: SelectCourseProps) => {
   // 获取课后课程
   const getKHKCData = async (BJMC: string | undefined = undefined) => {
     const NJSJIds = getNJArr();
-    if (NJSJIds?.length) {
+    if (NJSJIds?.length && XQSJId) {
       const res = await getAllClassesByNJ({
         XNXQId,
         NJSJIds: getNJArr(),
         BMLX: 0,
         KHKCLXIds: KHKCLXData,
         ISQY: 0, // 是否启用,
+        BJZT:'已开班',
         pageSize: 0,
         page: 0,
-        BJMC: BJMC
+        BJMC: BJMC,
+        XQSJId,
       });
       if (res?.status === 'ok') {
         const { rows } = res.data;

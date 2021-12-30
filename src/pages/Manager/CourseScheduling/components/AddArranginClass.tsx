@@ -357,6 +357,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
             ISFW: 1,
             KCTAG: '校内辅导',
             BJSJId: XZBId,
+            XQSJId:campusId,
         });
         if (bjmcResl.status === 'ok') {
             const bjRows = bjmcResl.data.rows;

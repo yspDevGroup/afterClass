@@ -18,6 +18,7 @@ type UpdateCoursesProps = {
   actionRef: any;
   NJSJ?: any;
   key: string;
+  XQSJId: string;
 };
 export type SelectType = {
   label: string;
@@ -39,7 +40,7 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
   }));
 
   const formRef = useRef();
-  const { XNXQId, BJSJId, actionRef,NJSJ, key } = props;
+  const { XNXQId, BJSJId, actionRef,NJSJ, key,XQSJId } = props;
 
   const formLayout = {
     labelCol: { span: 3 },
@@ -182,6 +183,7 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
               return [];
             }}
             XNXQId={XNXQId}
+            XQSJId={XQSJId}
             // 课程班=0 辅导班=1
             flag={1}
           />
@@ -206,6 +208,7 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
               return [];
             }}
             XNXQId={XNXQId}
+            XQSJId={XQSJId}
             // 课程班=0 辅导班=1
             flag={0}
           />

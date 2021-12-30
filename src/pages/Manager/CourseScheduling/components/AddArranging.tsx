@@ -35,6 +35,7 @@ type PropsType = {
   currentUser?: API.CurrentUser | undefined;
   screenOriSource: any;
   setLoading: any;
+  campusId: string,
 };
 
 const AddArranging: FC<PropsType> = (props) => {
@@ -51,7 +52,7 @@ const AddArranging: FC<PropsType> = (props) => {
     // setBJIDData,
     cdmcData,
     kcmcData,
-
+    campusId,
     // setTableDataSource,
     // sameClass,
     // tableDataSource,
@@ -342,6 +343,7 @@ const AddArranging: FC<PropsType> = (props) => {
       KHKCSJId: kcName,
       XNXQId: curXNXQId,
       BJZT: '未开班',
+      XQSJId: campusId
     });
     if (bjmcResl.status === 'ok') {
       const bjRows = bjmcResl.data.rows;

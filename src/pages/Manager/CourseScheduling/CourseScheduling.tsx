@@ -479,6 +479,7 @@ const CourseScheduling = () => {
       pageSize: 0,
       KHKCSJId: kcmcValue,
       XNXQId: curXNXQId,
+      XQSJId:campusId,
     });
     if (bjmcResl.status === 'ok') {
       const BJMC = bjmcResl.data.rows?.map((item: any) => ({
@@ -767,6 +768,7 @@ const CourseScheduling = () => {
             screenOriSource.length && (
               <AddArranging
                 campus={campus}
+                campusId={campusId}
                 curXNXQId={curXNXQId}
                 xXSJPZData={xXSJPZData}
                 cdmcData={cdmcData}
