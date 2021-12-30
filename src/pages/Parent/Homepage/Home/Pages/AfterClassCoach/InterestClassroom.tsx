@@ -40,7 +40,8 @@ const InterestClassroom = () => {
   //付款状态
   const [FKType, setFKType] = useState(true);
   const [XKType, setXKType] = useState(true);
-
+  //是否开启付款
+  const [PayType, setPayType] = useState(true);
 
   useEffect(() => {
     (
@@ -96,6 +97,9 @@ const InterestClassroom = () => {
       if (FKZT === 0 || FKZT === 1) {
         setFKType(false)
       }
+      if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).KHFWSJPZ?.isPay === 0 ) {
+        setPayType(false)
+      }
       setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).id)
     }
   }, [FWKCData, BaoMinData])
@@ -126,6 +130,13 @@ const InterestClassroom = () => {
     } else {
       setFKType(false)
     }
+    if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === e.target.value).KHFWSJPZ?.isPay === 0) {
+      setPayType(false)
+    } else {
+      setPayType(true)
+    }
+    console.log(BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZ?.isPay === 0).KHFWSJPZ?.isPay)
+    
   }
   const onSelect = async () => {
     if (YXKC.length > FWKCData?.KXSL) {
@@ -317,15 +328,13 @@ const InterestClassroom = () => {
                         </>
                     }
                   </Checkbox.Group>
-
                 </div>
               </div>
               {
-                BaoMinData && XKType === true && FKType === true ? <div className={styles.footer}>
+                BaoMinData && XKType === true && FKType === true && PayType === true ? <div className={styles.footer}>
                   <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
                   <button onClick={submit} >确认付款</button>
                 </div> : <></>
-
               }
               {
                 BaoMinData && XKType === true && FKType === false ? <div className={styles.footers}>
@@ -333,7 +342,7 @@ const InterestClassroom = () => {
                 </div> : <></>
               }
               {
-                BaoMinData && XKType === false && FKType === true ? <div className={styles.footers}>
+                BaoMinData && XKType === false && FKType === true && PayType === true ? <div className={styles.footers}>
                   <button onClick={submit} >去付款</button>
                 </div> : <></>
               }
@@ -377,7 +386,7 @@ const InterestClassroom = () => {
                 </div>
               </div>
               {
-                BaoMinData && FKType === true ? <div className={styles.footers}>
+                BaoMinData && FKType === true && PayType === true ? <div className={styles.footers}>
                   <button onClick={submit} >去付款</button>
                 </div> : <></>
               }
