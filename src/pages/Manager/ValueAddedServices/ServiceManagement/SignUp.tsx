@@ -174,37 +174,39 @@ const SignUp = (props: any) => {
           headerTitle={
             <>
               <h3 style={{ fontWeight: 'bold', fontSize: 16, margin: '0 24px 0 0' }}>{state?.FWMC}</h3>
-              <SearchLayout>
-                <div>
-                  <label htmlFor="grade">年级名称：</label>
-                  <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
-                    {NjData &&
-                      NjData?.map((item: any) => {
-                        return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+              <div className={styles.searchSpecial}>
+                <SearchLayout>
+                  <div>
+                    <label htmlFor="grade">年级名称：</label>
+                    <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
+                      {NjData &&
+                        NjData?.map((item: any) => {
+                          return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                        })}
+                    </Select>
+                  </div>
+                  <div>
+                    <label htmlFor="grade">校区名称：</label>
+                    <Select value={XQId} allowClear placeholder="请选择" onChange={onXQChange}>
+                      {XQData?.map((item: any) => {
+                        return <Option value={item.value}>{item.label}</Option>;
                       })}
-                  </Select>
-                </div>
-                <div>
-                  <label htmlFor="grade">校区名称：</label>
-                  <Select value={XQId} allowClear placeholder="请选择" onChange={onXQChange}>
-                    {XQData?.map((item: any) => {
-                      return <Option value={item.value}>{item.label}</Option>;
-                    })}
-                  </Select>
-                </div>
-                <div>
-                  <label htmlFor="kcly">班级名称：</label>
-                  <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
-                    {bjData?.map((item: any) => {
-                      return (
-                        <Option value={item.value} key={item.value}>
-                          {item.label}
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </div>
-              </SearchLayout>
+                    </Select>
+                  </div>
+                  <div>
+                    <label htmlFor="kcly">班级名称：</label>
+                    <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
+                      {bjData?.map((item: any) => {
+                        return (
+                          <Option value={item.value} key={item.value}>
+                            {item.label}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </div>
+                </SearchLayout>
+              </div>
             </>
           }
           search={false}
