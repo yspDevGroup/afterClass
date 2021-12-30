@@ -16,7 +16,7 @@
           .ant-popover-message {
             padding: 0;
 
-            > span {
+            >span {
               display: none;
             }
 
@@ -39,27 +39,36 @@
 
   .wrap {
     padding: 10px 10px 56px;
+
     :global {
       .ant-collapse {
         margin-bottom: 12px;
+
         .ant-collapse-item {
           margin-bottom: 10px;
           background: #f5f5f5;
           border-radius: 8px;
+
           .ant-collapse-header {
             padding: 10px;
             font-weight: bold;
+
             .ant-collapse-arrow {
               color: #45c977;
-              > span {
+              position: absolute;
+              right: 0 !important;
+
+              >span {
                 margin-left: 2px;
               }
             }
           }
         }
+
         .ant-collapse-content-box {
           padding: 0 10px 10px;
-          > p {
+
+          >p {
             margin: 0;
             line-height: 26px;
           }
@@ -98,20 +107,23 @@
       table {
         width: 100%;
         margin: 10px 0;
-        > thead {
+
+        >thead {
           height: 30px;
         }
-        > tbody,
-        > thead {
-          > tr {
-            > td,
-            > th {
+
+        >tbody,
+        >thead {
+          >tr {
+
+            >td,
+            >th {
               padding: 2px;
               font-size: 12px;
               text-align: center;
               border: 1px solid #dadada;
 
-              > p {
+              >p {
                 margin: 0;
                 padding: 0;
                 line-height: 30px;
@@ -125,6 +137,7 @@
           }
         }
       }
+
       .Teachingaterial {
         .box {
           display: flex;
@@ -134,6 +147,7 @@
           line-height: 40px;
           background-color: #f5f5f5;
         }
+
         .tables {
           max-height: 70px;
           padding: 0 10px;
@@ -141,11 +155,13 @@
           line-height: 40px;
           background-color: #f5f5f5;
           border-radius: 0 0 8px 8px;
-          > div {
+
+          >div {
             display: flex;
             justify-content: space-between;
             height: 40px;
             color: #666;
+
             .JCMC {
               max-width: 80%;
               overflow: hidden;
@@ -159,6 +175,7 @@
           .ant-checkbox-wrapper {
             border-color: #45c977;
           }
+
           .ant-checkbox-wrapper-checked {
             .ant-checkbox-inner {
               background-color: #45c977;
@@ -195,16 +212,18 @@
         height: 16px !important;
         line-height: 16px !important;
       }
-      :global{
-        .ant-collapse-item{
-          .ant-collapse-header{
-            >div{
+
+      :global {
+        .ant-collapse-item {
+          .ant-collapse-header {
+            >div {
               width: 40px;
               height: 20px;
               position: absolute;
               top: 8px;
               right: 16px;
-              >span{
+
+              >span {
                 width: 40px;
                 position: initial;
                 top: 0;
@@ -265,7 +284,7 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
 
-    > div {
+    >div {
       position: fixed;
       bottom: 0;
       width: 100vw;
@@ -292,11 +311,13 @@
         }
       }
     }
+
     .wraps {
       height: 440px;
       padding-bottom: 5px;
       overflow: auto;
     }
+
     .wraps::-webkit-scrollbar {
       display: none;
     }
@@ -313,6 +334,7 @@
       .ant-radio-group::-webkit-scrollbar {
         display: none;
       }
+
       .ant-radio-group {
         display: flex;
         flex-wrap: wrap;
@@ -350,6 +372,7 @@
         }
       }
     }
+
     .Teachingaterial {
       .box {
         display: flex;
@@ -359,12 +382,14 @@
         line-height: 40px;
         background-color: #f5f5f5;
       }
+
       .tables {
         padding: 0 10px;
         line-height: 40px;
         background-color: #f5f5f5;
         border-radius: 0 0 8px 8px;
-        > div {
+
+        >div {
           display: flex;
           justify-content: space-between;
           height: 40px;
@@ -376,6 +401,7 @@
         .ant-checkbox-wrapper {
           border-color: #45c977;
         }
+
         .ant-checkbox-wrapper-checked {
           .ant-checkbox-inner {
             background-color: #45c977;
@@ -384,13 +410,16 @@
         }
       }
     }
+
     .agreement {
       position: fixed;
       bottom: 65px;
+
       :global {
         .ant-checkbox-wrapper {
           border-color: #45c977;
         }
+
         .ant-checkbox-wrapper-checked {
           .ant-checkbox-inner {
             background-color: #45c977;
@@ -399,6 +428,7 @@
         }
       }
     }
+
     .submit {
       position: fixed;
       bottom: 14px;
@@ -444,18 +474,22 @@
     ul {
       padding: 0;
       color: @text-color-secondary;
+
       li {
         display: flex;
         line-height: 30px;
+
         span:nth-child(1) {
           width: 80px;
           color: #888;
           text-align: right;
         }
+
         .teacherName {
           width: auto;
           padding-right: 8px;
           text-align: left;
+
           span {
             width: auto;
             text-align: left;
@@ -511,6 +545,7 @@
         text-align: center;
         background: rgba(69, 201, 119, 0.1);
         border-radius: 8px;
+
         &:nth-child(5n + 5) {
           margin-right: 0;
         }
@@ -530,33 +565,41 @@
   margin: 0 auto;
   margin-top: calc(50vh - 260px) !important;
   padding: 0 !important;
+
   :global {
     .ant-modal-content {
       min-width: 100% !important;
+
       .ant-modal-footer {
         .ant-btn {
           margin-left: 0 !important;
         }
       }
     }
+
     .ant-modal-body {
       width: 100% !important;
       padding: 16px;
-      > p:nth-child(1) {
+
+      >p:nth-child(1) {
         font-size: 16px;
         text-align: center;
       }
-      > div {
+
+      >div {
         height: 400px;
         overflow: auto;
       }
-      > div::-webkit-scrollbar {
+
+      >div::-webkit-scrollbar {
         display: none;
       }
     }
+
     .ant-modal-footer {
       display: flex;
       justify-content: space-evenly;
+
       .ant-btn-primary {
         background-color: #45c977;
         border: none;
@@ -564,6 +607,7 @@
     }
   }
 }
+
 :global {
   .ant-modal-confirm .ant-modal-content {
     min-width: auto !important;

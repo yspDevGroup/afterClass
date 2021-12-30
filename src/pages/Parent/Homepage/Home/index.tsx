@@ -199,7 +199,7 @@ const Home = () => {
           <div className={styles.iconBox}>
             <Link
               to={{
-                pathname: BaoMinData?.[0].XSFWBJs?.length === 0 ? '/parent/home/afterClassCoach' : '/parent/home/afterClassCoach/interestClassroom',
+                pathname: BaoMinData?.[0]?.XSFWBJs?.length === 0 ? '/parent/home/afterClassCoach' : '/parent/home/afterClassCoach/interestClassroom',
                 state: { BJMC, ParentalIdentity },
               }}
             >
