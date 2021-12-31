@@ -62,6 +62,10 @@ const Detail = (props: any) => {
                 item.JSRQ,
                 'YYYY-MM-DD',
               ).format('YYYY年MM月DD日')}`,
+              title: `${moment(item.KSRQ, 'YYYY-MM-DD').format('MM.DD')} ~ ${moment(
+                item.JSRQ,
+                'YYYY-MM-DD',
+              ).format('MM.DD')}`,
               isPay: item?.isPay,
             });
           });
@@ -464,7 +468,7 @@ const Detail = (props: any) => {
                 setKHFWSJPZId(value);
               }} >
               {KHFWSJPZIdData?.map((item: any) => {
-                return <Tabs.TabPane key={item.value} tab={item.label} />
+                return <Tabs.TabPane key={item.value} tab={item.title} />
               })}
             </Tabs>
             <Spin spinning={loading}>
