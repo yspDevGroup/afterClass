@@ -593,6 +593,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               key="KXSL"
               min={1}
               max={50}
+              width={80}
             />
           </Col>
           <Col flex="auto">
@@ -604,10 +605,10 @@ const ConfigureService = (props: ConfigureSeverType) => {
         </Row>
         <Row justify="start" align="middle">
        
-          <Col flex="15em">
+          <Col flex="14em">
             <ProFormSelect
-              wrapperCol={{ flex: '8em' }}
-              addonBefore="按"
+              wrapperCol={{ flex: '6em' }}
+              // addonBefore="按"
               label="收费方式"
               // addonAfter="缴费"
               name="JFLX"
@@ -616,8 +617,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
               fieldProps={{
                 allowClear: false,
                 options: [
-                  { label: '月', value: 0 },
-                  { label: '时段', value: 1 },
+                  { label: '按月', value: 0 },
+                  { label: '按时段', value: 1 },
                 ],
                 onChange: (value) => {
                   setJFLX(value);
@@ -666,6 +667,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               name="FWFY"
               key="FWFY"
               min={0}
+              width={80}
               // width='xs'
             />
           </Col>
