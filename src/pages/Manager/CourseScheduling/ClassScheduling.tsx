@@ -188,7 +188,12 @@ const ClassScheduling = () => {
     });
     if (resultTime.status === 'ok') {
       const timeSlot = resultTime.data;
-      setXXSJPZData(timeSlot);
+      // setXXSJPZData(timeSlot);
+			if(timeSlot?.length){
+        setXXSJPZData(timeSlot);
+      }else{
+        setPKiskai(true);
+      }
     }
   };
 

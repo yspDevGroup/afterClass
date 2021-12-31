@@ -176,7 +176,12 @@ const CourseScheduling = () => {
     });
     if (resultTime.status === 'ok') {
       const timeSlot = resultTime.data;
-      setXXSJPZData(timeSlot);
+      if(timeSlot?.length){
+        setXXSJPZData(timeSlot);
+      }else{
+        setPKiskai(true);
+      }
+      
     }
   };
 
@@ -574,18 +579,16 @@ const CourseScheduling = () => {
 
   //筛选之后 table 排课数据信息 刷新table
   useEffect(() => {
+    console.log('oriSource',xXSJPZData);
     if (xXSJPZData.length > 0) {
-      // console.log('oriSource',oriSource);
+      console.log('oriSource',oriSource);
       const tableData = processingData(oriSource, xXSJPZData);
       setTableDataSource(tableData);
       // setLoading(false);
     }
   }, [oriSource]);
 
-  useEffect(() => {
-    // console.log('监听,false')
-    // setLoading(false);
-  }, [tableDataSource]);
+
 
   return (
     <>
