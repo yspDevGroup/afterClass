@@ -1834,7 +1834,7 @@ declare namespace API {
     /** 学年学期ID */
     XNXQId?: string;
     /** 场地ID */
-    FJSJId?: string;
+    FJSJId?: string | any;
     KHKCJMs?: { FYJM?: string; JMDX?: string; JFBL?: number; ZJFY?: number; KHBJSJId?: string }[];
     KHKCJCs?: { JCMC?: string; JCFY?: number; KHBJSJId?: string }[];
     KHBJJSs?: { JSLX?: string; JSXM?: string; JZGJBSJId?: string; KHBJSJId?: string }[];
@@ -5737,6 +5737,11 @@ declare namespace API {
   };
 
   type getEnrolledParams = {
+    /** 课后班级ID */
+    id: string;
+  };
+
+  type getSerEnrolledParams = {
     /** 课后班级ID */
     id: string;
   };

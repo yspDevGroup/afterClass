@@ -152,6 +152,20 @@ export async function getEnrolled(
   });
 }
 
+/** 获取课后服务班级已报名学生信息 GET /khbjsj/serEnrolled/${param0} */
+export async function getSerEnrolled(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getSerEnrolledParams,
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<any>(`/khbjsj/serEnrolled/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
 /** 获取学生的班级信息 POST /khbjsj/getStudentClasses */
 export async function getStudentClasses(
   body: {

@@ -245,6 +245,7 @@ export async function homePageInfo(
           XQName?: string;
           ZJSName?: string;
           FJSName?: string;
+          ISFW?: number;
           KHKCSJ?: {
             id?: string;
             KCMC?: string;
@@ -313,6 +314,7 @@ export async function homePageInfo(
         BMLX?: number;
         BJLX?: number;
         KHKCSJId?: string;
+        ISFW?: number;
         KHXSBJs?: { id?: string; ZT?: number }[];
         KHKCSJ?: {
           id?: string;

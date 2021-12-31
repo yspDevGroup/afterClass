@@ -6,7 +6,7 @@ import { Modal, Table, Button, Switch, message, notification, Tooltip } from 'an
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
-import { getEnrolled, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getEnrolled, getKHBJSJ, getSerEnrolled } from '@/services/after-class/khbjsj';
 import { createKHJSCQ, getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import { createKHXSCQ, getAllKHXSCQ, getArrangement } from '@/services/after-class/khxscq';
@@ -110,7 +110,7 @@ const CallTheRoll = (props: any) => {
       }, secondsToGo * 1000);
     }
   };
-  const getData = async () => {
+  const getData = async (type?: string) => {
     // 计算签到或点名时间与当前时间的间隔（以周为单位）
     const nowSta = (nowDate.getTime() - new Date(pkDate).getTime()) / 7 / 24 / 60 / 60 / 1000;
     const futureSta = nowDate.getTime() - new Date(pkDate).getTime() < 0;
@@ -163,8 +163,14 @@ const CallTheRoll = (props: any) => {
           KHBJSJId: bjId,
           QJRQ: pkDate,
         });
-        // 获取班级已报名人数
-        const resStudent = await getEnrolled({ id: bjId || '' });
+        let resStudent;
+        if (type) {
+          // 获取班级已报名人数
+          resStudent = await getSerEnrolled({ id: bjId || '' });
+        } else {
+          // 获取班级已报名人数
+          resStudent = await getEnrolled({ id: bjId || '' });
+        }
         if (resStudent.status === 'ok') {
           const studentData = resStudent.data;
           const leaveInfo = resLeave?.data?.rows || [];
@@ -178,18 +184,18 @@ const CallTheRoll = (props: any) => {
             item.leaveYY = leaveItem?.QJYY;
           });
           setDataScouse(studentData);
-          if (nowSta >= 1) {
-            setButDis('undone');
-            showConfirm(false, '课堂点名', '本节课因考勤超时已默认点名');
-          }
-          if (futureSta) {
-            setButDis('undo');
-            notification.warning({
-              message: '',
-              description: '本节课尚未开始点名',
-              duration: 4,
-            });
-          }
+        }
+        if (nowSta >= 1) {
+          setButDis('undone');
+          showConfirm(false, '课堂点名', '本节课因考勤超时已默认点名');
+        }
+        if (futureSta) {
+          setButDis('undo');
+          notification.warning({
+            message: '',
+            description: '本节课尚未开始点名',
+            duration: 4,
+          });
         }
       }
     } else {
@@ -233,6 +239,7 @@ const CallTheRoll = (props: any) => {
       const classInfo = courseSchedule.find((item: { KHBJSJId: string }) => {
         return item.KHBJSJId === bjId;
       });
+
       if (classInfo) {
         const { days, detail } = classInfo;
         const curDate = days?.find((it: { day: any }) => it.day === date);
@@ -243,6 +250,7 @@ const CallTheRoll = (props: any) => {
           KCMC: detail?.[0].title || '',
         };
         setClaName(name);
+        getData();
       } else {
         const res = await getKHBJSJ({
           id: bjId,
@@ -254,9 +262,15 @@ const CallTheRoll = (props: any) => {
             BJMC: data.BJMC,
             KSS: data.KSS,
           });
+          if (data.ISFW && data.ISFW === 1) {
+            getData('special');
+          } else {
+            getData();
+          }
+        } else {
+          getData();
         }
       }
-      getData();
     })();
   }, []);
   useEffect(() => {
