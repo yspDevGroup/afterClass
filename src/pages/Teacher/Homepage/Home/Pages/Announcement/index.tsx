@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
-import imgPop from '@/assets/mobileBg.png';
+import imgPop from '@/assets/teacherBg.png';
 import { XXTZGG } from '@/services/after-class/xxtzgg';
 import Footer from '@/components/Footer';
 import { data } from './mock';
