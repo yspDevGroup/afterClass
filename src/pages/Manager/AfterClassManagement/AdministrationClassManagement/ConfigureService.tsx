@@ -604,12 +604,12 @@ const ConfigureService = (props: ConfigureSeverType) => {
         </Row>
         <Row justify="start" align="middle">
        
-          <Col flex="18em">
+          <Col flex="15em">
             <ProFormSelect
-              wrapperCol={{ flex: '10em' }}
+              wrapperCol={{ flex: '8em' }}
               addonBefore="按"
               label="收费方式"
-              addonAfter="缴费"
+              // addonAfter="缴费"
               name="JFLX"
               // disabled={!!detailValue?.id}
               rules={[{ required: true, message: '请选择收费方式' }]}
@@ -629,10 +629,13 @@ const ConfigureService = (props: ConfigureSeverType) => {
               width={80}
             />
           </Col>
+          <Col flex='auto'>
+            <span  className="ant-form-text ant-form-item">缴费</span>
+          </Col>
           {/* <Col flex="4em">
            缴费
           </Col> */}
-          <Col flex="auto">
+          {/* <Col flex="auto">
             <span
               style={{ color: '#999', marginRight: '8px' }}
               className="ant-form-text ant-form-item"
@@ -640,7 +643,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               {
                 JFLX === 0 ? '系统将根据当前学期内的自然月创建对应课后服务班' : '系统将根据当前所选时段创建一个课后服务班'}
             </span>
-          </Col>
+          </Col> */}
         </Row>
         {JFLX === 1 && (
           <ProForm.Item name="timeFrame" wrapperCol={{ offset: 3 }}>
@@ -655,16 +658,19 @@ const ConfigureService = (props: ConfigureSeverType) => {
         )}
 
         <Row justify="start" align="middle">
-          <Col flex="16em">
+          <Col flex="14em">
             <ProFormDigit
-              wrapperCol={{ flex: '8em' }}
+              wrapperCol={{ flex: '6em' }}
               label="服务费用"
               rules={[{ required: true, message: '请收入服务费用' }]}
               name="FWFY"
               key="FWFY"
               min={0}
-              addonAfter={JFLX === 1 ? '元' : '元/月'}
+              // width='xs'
             />
+          </Col>
+          <Col flex='auto'>
+            <span  className="ant-form-text ant-form-item">{JFLX === 1 ? '元' : '元/月'}</span>
           </Col>
         </Row>
       </ModalForm>
