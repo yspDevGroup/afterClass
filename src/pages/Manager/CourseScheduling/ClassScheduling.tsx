@@ -89,7 +89,7 @@ const ClassScheduling = () => {
         // 打开编辑页面
         setState(false);
         // 将选中的单元格数据清空 以免新增时数据又回显
-        setRecordValue({XQ:campusId});
+        setRecordValue({ XQ: campusId });
     };
 
     /**
@@ -143,6 +143,7 @@ const ClassScheduling = () => {
                                     xqId: KHItem?.KHBJSJ?.XQSJ?.id, // 校区ID
                                     color: KHItem?.KHBJSJ?.KHKCSJ?.KBYS || 'rgba(62, 136, 248, 1)',
                                     XZBId: KHItem?.KHBJSJ?.BJSJs?.[0]?.id,
+                                    isXZB: KHItem?.KHBJSJ?.ISFW===1&&KHItem?.KHBJSJ?.KHKCSJ.KHKCLX.KCTAG==='校内辅导',
                                     // dis: BJID
                                     //   ? !(BJID === KHItem?.KHBJSJ?.id)
                                     //   : !(recordValue?.BJId === KHItem?.KHBJSJ?.id),
@@ -159,7 +160,6 @@ const ClassScheduling = () => {
                                         KHBJSJId: KHItem?.KHBJSJ?.id, // 班级ID
                                         FJSJId: item.id, // 教室ID
                                         XNXQId: KHItem?.XNXQId, // 学年学期ID
-                                        
                                     });
                                 }
                             }
@@ -293,8 +293,8 @@ const ClassScheduling = () => {
      * @param record 获取点击某个单元格的所有数据
      */
     const onExcelTableClick = (value: any, record: any) => {
-        
-        setRecordValue({...record,XQ:campusId});
+
+        setRecordValue({ ...record, XQ: campusId });
     };
 
     /**
@@ -310,6 +310,7 @@ const ClassScheduling = () => {
         let newArr = JSON.parse(_obj);
         // 首先对类型加以删选
         const screenRadio = (dataSource0: any) => {
+            
             const newDataSource = [...dataSource0];
             if (radioValue) {
                 return newDataSource?.filter((item: any) => item?.KHPKSJs?.length > 0);
@@ -383,7 +384,7 @@ const ClassScheduling = () => {
         // 筛选年级
         const screenNJ = (dataSource5: any) => {
             const newDataSource = [...dataSource5];
-            if(NJId){
+            if (NJId) {
                 newDataSource.forEach((item: any) => {
                     const { KHPKSJs } = item;
                     if (KHPKSJs?.length > 0) {
@@ -396,11 +397,10 @@ const ClassScheduling = () => {
             }
             return newDataSource;
         }
-
-         // 筛选行政班
-         const screenXZB = (dataSource6: any) => {
+        // 筛选行政班
+        const screenXZB = (dataSource6: any) => {
             const newDataSource = [...dataSource6];
-            if(XZBId){
+            if (XZBId) {
                 newDataSource.forEach((item: any) => {
                     const { KHPKSJs } = item;
                     if (KHPKSJs?.length > 0) {
@@ -413,13 +413,13 @@ const ClassScheduling = () => {
             }
             return newDataSource;
         }
-         newArr = screenRadio(newArr);
+        newArr = screenRadio(newArr);
         newArr = screenCD(newArr);
         // newArr = screenKC(newArr);
         // newArr = screenBJ(newArr);
         // newArr = screenJSMC(newArr);
-        newArr =screenNJ(newArr);
-        newArr =screenXZB(newArr);
+        newArr = screenNJ(newArr);
+        newArr = screenXZB(newArr);
         return newArr;
     };
 
@@ -432,9 +432,9 @@ const ClassScheduling = () => {
             isPk: false,
             XNXQId: curXNXQId,
             XXJBSJId: currentUser?.xxId,
-						xqId:campusId,
-            ISFW: 1,
-            KCTAG: '校内辅导',
+            xqId: campusId,
+            // ISFW: 1,
+            // KCTAG: '校内辅导',
         });
         if (res.status === 'ok') {
             // 设置初始排课数据
@@ -462,7 +462,7 @@ const ClassScheduling = () => {
                 });
             });
             if (resXQ.data?.length) {
-                 //设置默认选择第一个校区
+                //设置默认选择第一个校区
                 let id = XQ?.find((item: any) => item.label === '本校')?.value;
                 if (!id) {
                     id = XQ[0].value;
@@ -640,7 +640,7 @@ const ClassScheduling = () => {
             const screenData = getScreenOriSource(screenOriSource);
             setOriSource(screenData);
         }
-    }, [cdmcValue, XZBId, NJId]);
+    }, [radioValue,cdmcValue, XZBId, NJId]);
 
     // 切换主页 和编辑页时刷新场地排课情况
     useEffect(() => {
