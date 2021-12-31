@@ -132,7 +132,7 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
       <ModalForm
         key={key}
         formRef={formRef}
-        title={"选择课程"}
+        title={"配置课程"}
         visible={visible}
         trigger={
           (
@@ -141,7 +141,7 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
                 setVisible(true);
               }}
             >
-              选择课程
+              配置课程
             </a>
           )
         }
