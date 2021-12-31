@@ -162,59 +162,59 @@ const CourseTab = (props: { dataResource: any }) => {
       const Newarr = BaoMinData?.[0]?.XSFWBJs;
       for (let i = 0; i < Newarr.length; i++) {
         for (let j = i + 1; j < Newarr.length; j++) {
-          if (Newarr[i].KHFWSJPZId === Newarr[j].KHFWSJPZId) {     
+          if (Newarr[i].KHFWSJPZId === Newarr[j].KHFWSJPZId) {
             Newarr.splice(j, 1);
             j--;
           }
         }
       }
-
-
-      const listData: any = [].map.call(Newarr, (record: any) => {
-        const nodeData: ListItem = {
-          id: record.id,
-          title: record.KHFWBJ.FWMC,
-          img: record?.KHFWBJ?.FWTP,
-          link: `/parent/home/serviceReservation/afterClassDetails?classid=${record.KHFWSJPZId}&path=study`,
-          desc: [
-            {
-              left: [
-                `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
-              ],
-            },
-          ],
-        };
-        return nodeData;
-      });
-      const listDatas: any = [].map.call(Newarr, (record: any) => {
-        const nodeData: ListItem = {
-          id: record.id,
-          title: record.KHFWBJ.FWMC,
-          img: record?.KHFWBJ?.FWTP,
-          link: `/parent/home/serviceReservation/afterClassDetails?classid=${record.KHFWSJPZId}`,
-          desc: [
-            {
-              left: [
-                `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
-              ],
-            },
-          ],
-        };
-        return nodeData;
-      });
-      const { list, ...rest } = { ...defaultMsg };
-      setKHFWAllDatas({
-        list: listDatas,
-        ...rest,
-      });
-      setKHFWDatas({
-        list: listData.slice(0, 3),
-        ...rest,
-      });
+      if (Newarr) {
+        const listData: any = [].map.call(Newarr, (record: any) => {
+          const nodeData: ListItem = {
+            id: record.id,
+            title: record.KHFWBJ.FWMC,
+            img: record?.KHFWBJ?.FWTP,
+            link: `/parent/home/serviceReservation/afterClassDetails?classid=${record.KHFWSJPZId}&path=study`,
+            desc: [
+              {
+                left: [
+                  `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
+                ],
+              },
+            ],
+          };
+          return nodeData;
+        });
+        const listDatas: any = [].map.call(Newarr, (record: any) => {
+          const nodeData: ListItem = {
+            id: record.id,
+            title: record.KHFWBJ.FWMC,
+            img: record?.KHFWBJ?.FWTP,
+            link: `/parent/home/serviceReservation/afterClassDetails?classid=${record.KHFWSJPZId}`,
+            desc: [
+              {
+                left: [
+                  `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
+                ],
+              },
+            ],
+          };
+          return nodeData;
+        });
+        const { list, ...rest } = { ...defaultMsg };
+        setKHFWAllDatas({
+          list: listDatas,
+          ...rest,
+        });
+        setKHFWDatas({
+          list: listData.slice(0, 3),
+          ...rest,
+        });
+      }
     }
   }, [BaoMinData]);
 
-  
+
   useEffect(() => {
     (
       async () => {
