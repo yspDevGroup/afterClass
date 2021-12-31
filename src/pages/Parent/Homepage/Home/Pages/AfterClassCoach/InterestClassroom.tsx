@@ -73,7 +73,7 @@ const InterestClassroom = () => {
       const res = await getStudentListByBjid({
         BJSJId: StorageBjId,
         XSJBSJId: StorageXSId,
-        ZT:[0,3],
+        ZT:[0,1,3],
         page: 0,
         pageSize: 0
       })
