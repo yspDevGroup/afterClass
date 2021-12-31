@@ -579,26 +579,38 @@ const Detail = (props: any) => {
                 request={async (param) => {
                   // 表单搜索项会从 params 传入，传递给后端接口。
                   let arrZT: any[] = [];
-                  if (ZT === 1) {
-                    arrZT = [0, 1, 3];
-                  }
-
-                  if (ZT === 2) {
-                    arrZT = [2, 4];
-                  }
+                  
                   if (state.id && KHFWSJPZId) {
                     const res = await getStudentListByBjid({
                       BJSJId: state.id,
                       page: param.current,
                       pageSize: param.pageSize,
                       KHFWSJPZId: KHFWSJPZId,
-                      ZT: arrZT,
+                      ZT: [],
                       XSXMORXH: searchValue,
                     });
+                  
 
-                    if (res.status === 'ok') {
+                    if (res?.status === 'ok') {
+                      const data = res?.data?.rows?.filter((item: any)=>{
+                        // 已报名 已报名 或者 非已退
+                        if (ZT === 1) {
+                         if(item?.XSFWBJs.length&&(item.XSFWBJs?.[0].ZT!==2)){
+                          return true;
+                         }
+                         return false
+                        }
+                        //未报名 未报名 已退课
+                        if (ZT === 2) {
+                          if(!item?.XSFWBJs.length || item.XSFWBJs?.[0].ZT===2){
+                            return true;
+                           }
+                           return false
+                        }
+                        return true;
+                      })
                       return {
-                        data: res.data.rows,
+                        data,
                         success: true,
                         total: res.data.count,
                       };
