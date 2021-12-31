@@ -444,6 +444,9 @@ const ServiceRefund = () => {
             onFinish={handleSubmit}
             layout="horizontal"
           >
+            <Form.Item label="缴费金额" name="JFJE">
+              {current?.XSFWBJ?.KHFWBJ?.FWFY}
+            </Form.Item>
             <Form.Item label="退款金额" name="TKJE">
               <InputNumber
                 formatter={(value) => `￥ ${value}`}
