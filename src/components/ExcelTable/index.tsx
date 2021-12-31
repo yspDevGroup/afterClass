@@ -251,7 +251,7 @@ const Index: FC<IndexPropsType> = ({
         });
       } else if(rowData[colItem.dataIndex]?.isXZB&&rowData[colItem.dataIndex]?.bjzt === '未开班') {
         Modal.warning({
-          title: '行政班排课不可编辑课程班课表 如有需要请在课程班排课中操作',
+          title: '行政班排课不可编辑课程班课表，如有需要请在课程班排课中操作。',
         });
       }else{
         seeChosenItem = {
