@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import ListComponent from '@/components/ListComponent';
 import type { ListData } from '@/components/ListComponent/data';
 import GoBack from '@/components/GoBack';
+import noOrder from '@/assets/noOrder.png';
 import noData from '@/assets/noCourses.png';
 
 const defaultMsg: ListData = {
@@ -30,10 +31,9 @@ const Course = (props: any) => {
   }, [yxkcAllData]);
   useEffect(() => {
     const newArr = kskc.filter((value: any) => {
-      return value?.KHKCSJs.length !== 0
+      return value?.KHKCSJs?.length !== 0
     })
     setKSKCData(newArr);
-    console.log(newArr, 'newArr')
   }, [kskc])
 
   return (
@@ -42,7 +42,7 @@ const Course = (props: any) => {
       <div className={`${styles.tabHeader}`}>
         {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
           <>
-            {KSKCData && KSKCData?.length === 0 ? (
+            {KSKCData?.length === 0 || !KSKCData ? (
               <ListComponent listData={defaultMsg} />
             ) : (
               <Tabs className={styles.courseType}>
@@ -80,7 +80,10 @@ const Course = (props: any) => {
             )}
           </>
         ) : (
-          ''
+          <div className={styles.ZWSJ}>
+            <img src={noOrder} alt="" />
+            <p>暂无数据</p>
+          </div>
         )}
       </div>
     </div>
