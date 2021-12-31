@@ -282,6 +282,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
           BJZT: '未开班',
           ISFW: 1,
           XNXQId: curXNXQId,
+          FJSJId:null,
         };
       };
       let res: any;

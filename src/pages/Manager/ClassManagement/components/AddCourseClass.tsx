@@ -241,6 +241,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
           ...values,
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
           JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
+          FJSJId:null,
         };
       }
       setXQSJIds(values.XQSJId);
