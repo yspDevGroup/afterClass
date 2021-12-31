@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { useModel, history } from "umi";
 import styles from './index.less';
 import noPic from '@/assets/noPic.png';
+import seviceImage from '@/assets/seviceImage.png';
 import GoBack from "@/components/GoBack";
 
 /*
@@ -52,9 +53,10 @@ const AfterClassDetails = () => {
       path ? <GoBack title={'课后服务详情'} onclick={`/parent/home?index=${path}`} /> : <GoBack title={'课后服务详情'} />
     }
     <div className={styles.FWTP}>
-      {
-        BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP ? <img src={BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP} alt="" /> : <img style={{ width: '180px', height: '180px' }} src={noPic} alt="" />
-      }
+      <img src={BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP || seviceImage} alt="" />
+      {/* {
+        BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP ? <img src={BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP || seviceImage} alt="" /> : <img style={{ width: '180px', height: '180px' }} src={seviceImage} alt="" />
+      } */}
     </div>
     <p className={styles.FWMC}>{BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWMC || ''}</p>
     <p className={styles.FWSD}>服务时段：{BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWSJPZ?.KSRQ}~{BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWSJPZ?.JSRQ}</p>

@@ -54,7 +54,7 @@ const AfterClassService = () => {
         pageSize: 0
       })
       if (res.status === 'ok' && res.data) {
-        setBaoMinData(res.data.rows?.[0])
+        setBaoMinData(res.data.rows)
       }
     }
   }
@@ -108,7 +108,7 @@ const AfterClassService = () => {
   };
   return (
     <div className={styles.DropClass}>
-      {BaoMinData?.XSFWBJs?.length === 0 ? (
+      {BaoMinData?.length === 0 ? (
         <>
           <div className={styles.ZWSJ}>
             <img src={noOrder} alt="" />
@@ -121,7 +121,7 @@ const AfterClassService = () => {
             <p className={styles.choice}>请选择课后服务</p>
             <div>
               <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                {BaoMinData?.XSFWBJs?.map((value: any) => {
+                {BaoMinData?.[0]?.XSFWBJs?.map((value: any) => {
                   return (
                     <>
                       <div className={styles.cards} style={{ height: '80px' }}>

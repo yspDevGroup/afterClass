@@ -73,6 +73,7 @@ const InterestClassroom = () => {
       const res = await getStudentListByBjid({
         BJSJId: StorageBjId,
         XSJBSJId: StorageXSId,
+        ZT:[0,3],
         page: 0,
         pageSize: 0
       })
@@ -93,18 +94,18 @@ const InterestClassroom = () => {
 
   useEffect(() => {
     if (BaoMinData && FWKCData) {
-      const FKZT = BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).ZT;
+      const FKZT = BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.ZT;
       if (FKZT === 0 || FKZT === 1) {
         setFKType(false)
       }
-      if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).KHFWSJPZ?.isPay === 0 ) {
+      if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.KHFWSJPZ?.isPay === 0 ) {
         setPayType(false)
       }
-      setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id).id)
+      setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.id)
     }
   }, [FWKCData, BaoMinData])
   useEffect(() => {
-    setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === MouthId).id)
+    setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === MouthId)?.id)
     setKSRQ(FWKCData?.KHFWSJPZs.find((item: any) => item.id === MouthId).KSRQ)
     setJSRQ(FWKCData?.KHFWSJPZs.find((item: any) => item.id === MouthId).JSRQ)
   }, [MouthId])
@@ -125,17 +126,16 @@ const InterestClassroom = () => {
   // 月份切换
   const onchangeMonth = (e: any) => {
     setMouthId(e.target.value);
-    if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === e.target.value).ZT === 3) {
+    if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === e.target.value)?.ZT === 3) {
       setFKType(true)
     } else {
       setFKType(false)
     }
-    if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === e.target.value).KHFWSJPZ?.isPay === 0) {
+    if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === e.target.value)?.KHFWSJPZ?.isPay === 0) {
       setPayType(false)
     } else {
       setPayType(true)
     }
-    console.log(BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZ?.isPay === 0).KHFWSJPZ?.isPay)
     
   }
   const onSelect = async () => {
@@ -337,7 +337,7 @@ const InterestClassroom = () => {
                 </div> : <></>
               }
               {
-                BaoMinData && XKType === true && FKType === false ? <div className={styles.footers}>
+                BaoMinData && XKType === true && FKType === true && PayType === false ? <div className={styles.footers}>
                   <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
                 </div> : <></>
               }

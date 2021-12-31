@@ -44,6 +44,8 @@ const Home = () => {
   const [orderInfo, setOrderInfo] = useState<any>();
   const [FWBData, setFWBData] = useState<any>();
   const [FWSD, setFWSD] = useState<any>();
+  // 课后服务是否可以报名
+  const [BmType, setBmType] = useState(true);
 
   const [BJMC, setBJMC] = useState<any>();
   useEffect(() => {
@@ -85,6 +87,11 @@ const Home = () => {
         })
         if (res.status === 'ok') {
           setBaoMinData(res.data.rows)
+          res.data.rows?.[0]?.XSFWBJs?.find((item: any) => {
+            if (item?.ZT === 0 || item?.ZT === 1 || item?.ZT === 3) {
+              setBmType(false)
+            } 
+          })
         }
       }
     })()
@@ -199,7 +206,7 @@ const Home = () => {
           <div className={styles.iconBox}>
             <Link
               to={{
-                pathname: BaoMinData?.[0]?.XSFWBJs?.length === 0 ? '/parent/home/afterClassCoach' : '/parent/home/afterClassCoach/interestClassroom',
+                pathname: BaoMinData?.[0]?.XSFWBJs?.length === 0 || BmType === true ? '/parent/home/afterClassCoach' : '/parent/home/afterClassCoach/interestClassroom',
                 state: { BJMC, ParentalIdentity },
               }}
             >
@@ -251,7 +258,7 @@ const Home = () => {
                                 style={{ backgroundImage: `url(${remind})` }}
                                 onClick={() => { submit(item, value) }}
                               >
-                                <i style={{ color: '#15B628' }}>缴费提醒</i> 您于{moment(value?.createdAt).format("YYYY年MM月DD日")}报的{moment(item?.KHFWSJPZ?.KSRQ).format('MM')}月{value?.FWMC}还未缴费，请及时处理。
+                                <i style={{ color: '#15B628' }}>缴费提醒</i> 您于{moment(item?.KHFWSJPZ?.createdAt).format("YYYY年MM月DD日")}报的{moment(item?.KHFWSJPZ?.KSRQ).format('MM')}月{value?.FWMC}还未缴费，请及时处理。
                               </div>
                             })
                           }

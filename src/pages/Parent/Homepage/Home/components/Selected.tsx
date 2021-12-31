@@ -93,62 +93,63 @@ const CourseTab = (props: { dataResource: any }) => {
   }, [YxserviceData]);
   useEffect(() => {
     if (yxkc) {
-      const listData: any = [].map.call(yxkc, (record: any) => {
-        const nodeData: ListItem = {
-          id: record.id,
-          title: ` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
-          img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
-          link: `/parent/home/courseTable?classid=${record.id}&path=study`,
-          desc: [
-            {
-              left: [
-                `课程时段：${record.KKRQ
-                  ? moment(record.KKRQ).format('YYYY.MM.DD')
-                  : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
-                }-${record.JKRQ
-                  ? moment(record.JKRQ).format('YYYY.MM.DD')
-                  : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
-                }`,
-              ],
-            },
-            {
-              left: [`共${record.KSS}课时`],
-            },
-          ],
-          fkzt: record.KHXSBJs?.[0]?.ZT,
-          introduction: record.KHKCSJ.KCMS,
-        };
-        return nodeData;
-      });
-      const listDatas: any = [].map.call(yxkc, (record: any) => {
-        const nodeData: ListItem = {
-          id: record.id,
-          title: ` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
-          img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
-          link: `/parent/home/courseTable?classid=${record.id}`,
-          desc: [
-            {
-              left: [
-                `课程时段：${record.KKRQ
-                  ? moment(record.KKRQ).format('YYYY.MM.DD')
-                  : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
-                }-${record.JKRQ
-                  ? moment(record.JKRQ).format('YYYY.MM.DD')
-                  : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
-                }`,
-              ],
-            },
-            {
-              left: [`共${record.KSS}课时`],
-            },
-          ],
-          fkzt: record.KHXSBJs?.[0]?.ZT,
-          introduction: record.KHKCSJ.KCMS,
-        };
-        return nodeData;
-      });
+      const listData: any = [];
+      const listDatas: any = [];
+      yxkc.forEach((record: any)=>{
+        if(record?.ISFW === 0){
+          const nodeData: ListItem = {
+            id: record.id,
+            title: ` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
+            img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
+            link: `/parent/home/courseTable?classid=${record.id}&path=study`,
+            desc: [
+              {
+                left: [
+                  `课程时段：${record.KKRQ
+                    ? moment(record.KKRQ).format('YYYY.MM.DD')
+                    : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
+                  }-${record.JKRQ
+                    ? moment(record.JKRQ).format('YYYY.MM.DD')
+                    : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
+                  }`,
+                ],
+              },
+              {
+                left: [`共${record.KSS}课时`],
+              },
+            ],
+            fkzt: record.KHXSBJs?.[0]?.ZT,
+            introduction: record.KHKCSJ.KCMS,
+          };
+          listData.push(nodeData)
+          const nodeDatas: ListItem = {
+            id: record.id,
+            title: ` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
+            img: record.KCTP ? record.KCTP : record.KHKCSJ.KCTP,
+            link: `/parent/home/courseTable?classid=${record.id}`,
+            desc: [
+              {
+                left: [
+                  `课程时段：${record.KKRQ
+                    ? moment(record.KKRQ).format('YYYY.MM.DD')
+                    : moment(record.KHKCSJ.KKRQ).format('YYYY.MM.DD')
+                  }-${record.JKRQ
+                    ? moment(record.JKRQ).format('YYYY.MM.DD')
+                    : moment(record.KHKCSJ.JKRQ).format('YYYY.MM.DD')
+                  }`,
+                ],
+              },
+              {
+                left: [`共${record.KSS}课时`],
+              },
+            ],
+            fkzt: record.KHXSBJs?.[0]?.ZT,
+            introduction: record.KHKCSJ.KCMS,
+          };
+          listDatas.push(nodeDatas)
+        } 
+      })
       const { list, ...rest } = { ...defaultMsg };
-      console.log(listData, 'listData')
       setYxkcAllData(listDatas);
       setYxkcData({
         list: listData.slice(0, 3),
