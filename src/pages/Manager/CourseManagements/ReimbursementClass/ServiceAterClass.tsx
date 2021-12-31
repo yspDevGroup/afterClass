@@ -331,8 +331,9 @@ const ServiceAterClass = () => {
               } else {
                 message.success('服务退订成功');
               }
+            }else{
+              message.success('服务退订成功');
             }
-            message.success('服务退订成功');
           }
           setVisible(false);
           setCurrent(undefined);
