@@ -142,8 +142,8 @@ const ClassCalendar = (props: propstype) => {
         markType="dot"
         transitionDuration={0.1}
         currentDate={day}
-        onTouchEnd={(a: number) => {
-          const start = moment(new Date(a)).format('YYYY-MM-DD');
+        onTouchEnd={(a: number,b: number) => {
+          const start = moment(new Date(b)).format('YYYY-MM-DD');
           getMarkDays(start);
         }}
       />

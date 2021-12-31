@@ -206,7 +206,7 @@ const ClassCalendar = (props: propstype) => {
     formRef.current.validateFields()
       .then(async (values: any) => {
         const res = await msgLeaveSchool({
-          KHBJSJId: bjid,
+          KHBJSJId: bjid || '',
           text: values.info,
         });
         if (res.status === 'ok' && res.data) {
@@ -290,8 +290,8 @@ const ClassCalendar = (props: propstype) => {
         markType="dot"
         transitionDuration={0.1}
         currentDate={day}
-        onTouchEnd={(a: number) => {
-          const start = moment(new Date(a)).format('YYYY-MM-DD');
+        onTouchEnd={(a: number,b: number) => {
+          const start = moment(new Date(b)).format('YYYY-MM-DD');
           getMarkDays(start);
         }}
       />

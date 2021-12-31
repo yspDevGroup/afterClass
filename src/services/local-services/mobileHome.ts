@@ -308,9 +308,10 @@ export const CurdayCourse = async (
     data = homeInfo.courseSchedule;
     total = homeInfo.data;
   }
+  
   // 找出今日课程
   const totalList = data?.filter((item: { days: any[] }) => {
-    return item.days.find((v: { day: string }) => v.day === myDate);
+    return item.days.find((v: { day: string }) => v.day === myDate)||item.days?.length === 0;
   });
   let courseList: any[] = [];
   totalList?.forEach((item: { detail: any[]; classType: number; days?: any[] }) => {
