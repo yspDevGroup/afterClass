@@ -16,6 +16,7 @@ const defaultMsg: ListData = {
 const Course = (props: any) => {
   const { TabPane } = Tabs;
   const { yxkcAllData, kskc, courseStatus } = props.location.state.totalData;
+  const [KSKCData, setKSKCData] = useState([]);
 
   useEffect(() => {
     if (yxkcAllData?.length) {
@@ -27,6 +28,13 @@ const Course = (props: any) => {
       newData.list = yxkcAllData;
     }
   }, [yxkcAllData]);
+  useEffect(() => {
+    const newArr = kskc.filter((value: any) => {
+      return value?.KHKCSJs.length !== 0
+    })
+    setKSKCData(newArr);
+    console.log(newArr, 'newArr')
+  }, [kskc])
 
   return (
     <div className={styles.CourseBox}>
@@ -34,7 +42,7 @@ const Course = (props: any) => {
       <div className={`${styles.tabHeader}`}>
         {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
           <>
-            {kskc && kskc.length === 0 ? (
+            {KSKCData && KSKCData?.length === 0 ? (
               <ListComponent listData={defaultMsg} />
             ) : (
               <Tabs className={styles.courseType}>
