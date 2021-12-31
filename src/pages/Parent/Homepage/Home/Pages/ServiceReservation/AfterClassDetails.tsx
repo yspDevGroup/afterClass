@@ -54,9 +54,6 @@ const AfterClassDetails = () => {
     }
     <div className={styles.FWTP}>
       <img src={BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP || seviceImage} alt="" />
-      {/* {
-        BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP ? <img src={BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP || seviceImage} alt="" /> : <img style={{ width: '180px', height: '180px' }} src={seviceImage} alt="" />
-      } */}
     </div>
     <p className={styles.FWMC}>{BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWMC || ''}</p>
     <p className={styles.FWSD}>服务时段：{BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWSJPZ?.KSRQ}~{BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWSJPZ?.JSRQ}</p>

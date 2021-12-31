@@ -173,7 +173,7 @@ const Details = (props: any) => {
               <></>
             ) : (
               <p className={styles.switch}>
-                <span>是否同意{Datas?.LX === 2 ? '调' : '代'}课</span>
+                <span>是否同意{Datas?.LX === 2  || Datas?.LX === 0? '调' : '代'}课</span>
                 <Switch
                   defaultChecked={Datas?.ZT === 4 || Datas?.ZT === 1 || Datas?.ZT === 0}
                   onChange={onChange}
