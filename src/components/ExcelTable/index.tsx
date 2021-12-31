@@ -91,8 +91,8 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
         }}
       >
         <div className={styles.disImage}>
-          <EllipsisHint text={data?.cla} width={"100%"} />
-          </div>
+          <EllipsisHint text={data?.cla} width={'100%'} />
+        </div>
       </Button>
     );
   }
@@ -249,17 +249,20 @@ const Index: FC<IndexPropsType> = ({
         Modal.warning({
           title: '此课程班已结课，不能再进行排课操作',
         });
-      } else if(rowData[colItem.dataIndex]?.isXZB&&rowData[colItem.dataIndex]?.bjzt === '未开班') {
+      } else if (
+        rowData[colItem.dataIndex]?.isXZB &&
+        rowData[colItem.dataIndex]?.bjzt === '未开班'
+      ) {
         Modal.warning({
           title: '行政班排课不可编辑课程班课表，如有需要请在课程班排课中操作。',
         });
-      }else{
+      } else {
         seeChosenItem = {
           XQ: rowData[colItem.dataIndex]?.xqId, // 校区ID
           NJ: rowData[colItem.dataIndex]?.njId, // 年级ID
           KC: rowData[colItem.dataIndex]?.kcId, // 课程ID
-          XZBId:rowData[colItem.dataIndex]?.XZBId,// 行政班ID
-          isXZB:rowData[colItem.dataIndex]?.isXZB,// 行政班ID
+          XZBId: rowData[colItem.dataIndex]?.XZBId, // 行政班ID
+          isXZB: rowData[colItem.dataIndex]?.isXZB, // 行政班ID
           BJId: rowData[colItem.dataIndex]?.bjId, //  课程班ID
           CDLX: rowData.room?.FJLXId, // 场地类型ID
           CDMC: rowData.room?.jsId, // 场地名称

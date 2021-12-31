@@ -31,6 +31,7 @@ const AgentRegistration = (props: {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [BmCurrent, setBmCurrent] = useState(0);
+
   const [XZBDatas, setXZBDatas] = useState<any>();
   const [XZBXSId, setXZBXSId] = useState<any>();
   const [XZBXSDatas, setXZBXSDatas] = useState<any>();
@@ -94,6 +95,7 @@ const AgentRegistration = (props: {
       })();
     }
   }, [OrderId, BmCurrent]);
+
   const handleChange = async (value: any, key: any) => {
     setBJMC(key?.children);
     setXSMC('');
@@ -208,6 +210,7 @@ const AgentRegistration = (props: {
     if (PaymentCG !== '待付款' && OrderId) {
       await deleteKHXSDD({ id: OrderId! });
     }
+    setPaymentCG('待支付');
   };
   const handleFinish = async () => {
     setPaymentCG('已过期');
@@ -227,6 +230,7 @@ const AgentRegistration = (props: {
         footer={null}
         onCancel={onOkChange}
         maskClosable={false}
+        destroyOnClose
       >
         <>
           <Steps current={BmCurrent}>
