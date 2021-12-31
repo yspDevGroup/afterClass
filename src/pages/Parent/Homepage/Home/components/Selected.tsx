@@ -95,8 +95,8 @@ const CourseTab = (props: { dataResource: any }) => {
     if (yxkc) {
       const listData: any = [];
       const listDatas: any = [];
-      yxkc.forEach((record: any)=>{
-        if(record?.ISFW === 0){
+      yxkc.forEach((record: any) => {
+        if (record?.ISFW === 0) {
           const nodeData: ListItem = {
             id: record.id,
             title: ` ${record.KHKCSJ.KCMC}【${record.BJMC}】`,
@@ -147,7 +147,7 @@ const CourseTab = (props: { dataResource: any }) => {
             introduction: record.KHKCSJ.KCMS,
           };
           listDatas.push(nodeDatas)
-        } 
+        }
       })
       const { list, ...rest } = { ...defaultMsg };
       setYxkcAllData(listDatas);
@@ -159,7 +159,18 @@ const CourseTab = (props: { dataResource: any }) => {
   }, [yxkc]);
   useEffect(() => {
     if (BaoMinData) {
-      const listData: any = [].map.call(BaoMinData?.[0]?.XSFWBJs, (record: any) => {
+      const Newarr = BaoMinData?.[0]?.XSFWBJs;
+      for (let i = 0; i < Newarr.length; i++) {
+        for (let j = i + 1; j < Newarr.length; j++) {
+          if (Newarr[i].KHFWSJPZId === Newarr[j].KHFWSJPZId) {     
+            Newarr.splice(j, 1);
+            j--;
+          }
+        }
+      }
+
+
+      const listData: any = [].map.call(Newarr, (record: any) => {
         const nodeData: ListItem = {
           id: record.id,
           title: record.KHFWBJ.FWMC,
@@ -175,8 +186,7 @@ const CourseTab = (props: { dataResource: any }) => {
         };
         return nodeData;
       });
-      const listDatas: any = [].map.call(BaoMinData?.[0]?.XSFWBJs, (record: any) => {
-        console.log(record)
+      const listDatas: any = [].map.call(Newarr, (record: any) => {
         const nodeData: ListItem = {
           id: record.id,
           title: record.KHFWBJ.FWMC,
