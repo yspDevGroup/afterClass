@@ -68,7 +68,7 @@ const Index = () => {
                 >
                   <List.Item.Meta
                     title={`${KHBJSJ?.KHKCSJ?.KCMC}【${KHBJSJ?.BJMC}】`}
-                    description={`${XXSJPZ?.KSSJ?.substring?.(0, 5)} - ${XXSJPZ?.JSSJ?.substring?.(
+                    description={`上课时间：${item.RQ} ${XXSJPZ?.KSSJ?.substring?.(0, 5)} - ${XXSJPZ?.JSSJ?.substring?.(
                       0,
                       5,
                     )}`}
