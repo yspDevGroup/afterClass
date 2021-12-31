@@ -75,6 +75,8 @@ const AddArranging: FC<PropsType> = (props) => {
   const [kcType, setKcType] = useState<any>(kcmcData);
   //年级
   const [grade, setGrade] = useState<any>([]);
+  // 场地是否可以编辑
+  const [CdFalg,setCdFalg]=useState<boolean>(false);
 
   const columns: {
     title: string;
@@ -298,6 +300,9 @@ const AddArranging: FC<PropsType> = (props) => {
       setBj(chosenData);
       if (value?.FJSJ?.id) {
         setCdmcValue(value?.FJSJ?.id)
+        setCdFalg(true);
+      }else{
+        setCdFalg(false);
       }
     } else {
       const chosenData = {
@@ -310,7 +315,10 @@ const AddArranging: FC<PropsType> = (props) => {
       setBj(chosenData);
       if (value?.FJSJ?.id) {
         setCdmcValue(value?.FJSJ?.id)
-    }
+        setCdFalg(true);
+      }else{
+        setCdFalg(false);
+      }
     }
     // setIndex(value.id);
     // setBJIDData(value.id);
@@ -674,6 +682,7 @@ const AddArranging: FC<PropsType> = (props) => {
                   value={cdmcValue}
                   allowClear
                   placeholder="请选择"
+                  disabled={CdFalg}
                   onChange={(value) => setCdmcValue(value)}
                 >
                   {cdmcData?.map((item: selectType) => {
