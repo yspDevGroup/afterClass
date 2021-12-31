@@ -13,6 +13,7 @@ import { getAllKHBJKSSJ, getKHBJSJ, getTeachersByBJId } from '@/services/after-c
 import noData from '@/assets/noCourse.png';
 
 import styles from './index.less';
+import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
 
 const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -66,31 +67,35 @@ const CourseDetails: React.FC = () => {
         }
 
         if (claim && claim === '自选课' && classid) {
-          const clsRes = await getAllKHBJKSSJ({
-            KHBJSJIds: [classid],
-            page: 0,
-            pageSize: 0,
+          const result = await getKCBSKSJ({
+            KHBJSJId: [classid],
           });
-          if (clsRes.status === 'ok' && clsRes.data) {
-            const { rows } = clsRes.data;
+          if (result.status === 'ok' && result.data) {
+            const { rows } = result.data;
+            let days: any[] = [];
             if (rows?.length) {
-              const { DATA } = rows[0];
-              const days = JSON.parse(DATA);
-              // 获取课程班教师出勤数据
-              const res = await getAllKHJSCQ({
-                KHBJSJId: classid,
-              });
-              if (res.status === 'ok' && res.data) {
-                const newTime = await convertTimeTable(
-                  userId,
-                  classid,
-                  res.data,
-                  days,
-                  currentUser?.xxId,
-                );
+              days = [].map.call(rows, (v: { XXSJPZId: string, SKRQ: string }, index) => {
+                return {
+                  index: index + 1,
+                  jcId: v.XXSJPZId,
+                  day: v.SKRQ,
+                }
+              })
+            }
+            // 获取课程班教师出勤数据
+            const res = await getAllKHJSCQ({
+              KHBJSJId: classid,
+            });
+            if (res.status === 'ok' && res.data) {
+              const newTime = await convertTimeTable(
+                userId,
+                classid,
+                res.data,
+                days,
+                currentUser?.xxId,
+              );
 
-                setTimetableList(newTime);
-              }
+              setTimetableList(newTime);
             }
           }
         } else {
@@ -144,7 +149,7 @@ const CourseDetails: React.FC = () => {
       } else {
         content = {
           title: '调课说明',
-          content: `由于${val.reason},本节课临时调整到${val.realDate}日${val.start}-${val.end}上课,请知悉.`,
+          content: `由于${val.reason},本节课临时调整到${val.realDate}日${val.start?.substring(0, 5)}-${val.end?.substring(0, 5)}上课,请知悉.`,
         };
       }
       Modal.info({
@@ -174,10 +179,10 @@ const CourseDetails: React.FC = () => {
               <span>上课地点：</span>
               {KcDetail?.xq} | {KcDetail?.address}
             </li>
-            <li>
+            {claim && claim === '自选课' ? '' : <li>
               <span>总课时：</span>
               {KcDetail?.KSS}课时
-            </li>
+            </li>}
             <li>
               <span>授课班级：</span>
               {KcDetail?.BJMC}
