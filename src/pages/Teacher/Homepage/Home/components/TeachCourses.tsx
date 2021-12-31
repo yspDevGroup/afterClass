@@ -54,22 +54,16 @@ const TeachCourses = (props: { dataResource: any; }) => {
   }, [yxkc]);
   return (
     <div className={`${styles.tabHeader}`}>
-      <Tabs
-        centered={false}
-        tabBarExtraContent={{
-          right: (
-            <Link to={{ pathname: '/teacher/home/course', state: { allDataSource } }}>
-              全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
-            </Link>
-          ),
-        }}
-        className={styles.courseTab}
-      >
-        <TabPane tab="任教课程班" key="elective">
-          <ListComponent listData={dataSource} />
-        </TabPane>
-      </Tabs>
-    </div>
+      <div className={styles.title}>
+        <div />
+        <span>任教课程班</span>
+        <Link to={{ pathname: '/teacher/home/course', state: { allDataSource } }}>
+          全部 <IconFont type="icon-gengduo" />
+        </Link>
+      </div>
+
+      <ListComponent listData={dataSource} />
+    </div >
   );
 };
 
