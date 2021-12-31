@@ -265,9 +265,9 @@ const Home = () => {
         </div>
 
         {/* 任教课程 */}
-        {/* <div className={styles.teachCourses}>
+        <div className={styles.teachCourses}>
           <TeachCourses dataResource={totalData} />
-        </div> */}
+        </div>
 
         {/* 素质教育资源 */}
         {/* <div className={styles.resourcesBox}>

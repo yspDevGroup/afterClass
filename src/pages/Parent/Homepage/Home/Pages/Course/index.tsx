@@ -34,7 +34,9 @@ const Course = (props: any) => {
       <div className={`${styles.tabHeader}`}>
         {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
           <>
-            {kskc && kskc.length ? (
+            {kskc && kskc.length === 0 ? (
+              <ListComponent listData={defaultMsg} />
+            ) : (
               <Tabs className={styles.courseType}>
                 {kskc.map((item: any) => {
                   const courseData: any = [].map.call(item.KHKCSJs, (record: any) => {
@@ -67,8 +69,6 @@ const Course = (props: any) => {
                   );
                 })}
               </Tabs>
-            ) : (
-              <ListComponent listData={defaultMsg} />
             )}
           </>
         ) : (

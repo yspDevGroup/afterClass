@@ -49,7 +49,7 @@ const AfterClassService = () => {
       const res = await getStudentListByBjid({
         BJSJId: StorageBjId,
         XSJBSJId: StorageXSId,
-        ZT:[0,3],
+        ZT: [0, 3],
         page: 0,
         pageSize: 0
       })
@@ -108,9 +108,15 @@ const AfterClassService = () => {
   };
   return (
     <div className={styles.DropClass}>
-      {BaoMinData?.XSFWBJs?.length !== 0 ? (
+      {BaoMinData?.XSFWBJs?.length === 0 ? (
         <>
-          {' '}
+          <div className={styles.ZWSJ}>
+            <img src={noOrder} alt="" />
+            <p>暂无数据</p>
+          </div>
+        </>
+      ) : (
+        <>
           <div className={styles.Application}>
             <p className={styles.choice}>请选择课后服务</p>
             <div>
@@ -118,14 +124,14 @@ const AfterClassService = () => {
                 {BaoMinData?.XSFWBJs?.map((value: any) => {
                   return (
                     <>
-                      <div className={styles.cards} style={{height:'80px'}}>
+                      <div className={styles.cards} style={{ height: '80px' }}>
                         <p className={styles.title}>
                           {value?.KHFWBJ?.FWMC}
                         </p>
                         <p>服务时段：{value?.KHFWSJPZ?.KSRQ} ~ {value?.KHFWSJPZ?.JSRQ}</p>
                         <Checkbox
                           value={`${value?.id}+${value?.KHFWBJ?.FWMC}+${value?.KHFWSJPZ?.KSRQ}`}
-                         />
+                        />
                       </div>
                     </>
                   );
@@ -147,11 +153,6 @@ const AfterClassService = () => {
             </div>
           </div>
         </>
-      ) : (
-        <div className={styles.ZWSJ}>
-          <img src={noOrder} alt="" />
-          <p>暂无数据</p>
-        </div>
       )}
       <Modal
         visible={isModalVisible}
@@ -192,7 +193,7 @@ const AfterClassService = () => {
             return (
               <>
                 <p>
-                  <span>服务名称： {value.split('+')[2].substring(5,7)}月{value.split('+')[1]}</span>
+                  <span>服务名称： {value.split('+')[2].substring(5, 7)}月{value.split('+')[1]}</span>
                 </p>
               </>
             );
