@@ -58,6 +58,23 @@ const uniqueArr = (arr: any) => {
   return days;
 };
 
+const getFreeTime = async (KHBJSJId: string) => {
+  const result = await getKCBSKSJ({
+    KHBJSJId: [KHBJSJId],
+  });
+  if (result.status === 'ok' && result.data) {
+    const { rows } = result.data;
+    if (rows?.length) {
+      return [].map.call(rows, (v: { XXSJPZId: string, SKRQ: string }, index) => {
+        return {
+          index: index + 1,
+          jcId: v.XXSJPZId,
+          day: v.SKRQ,
+        }
+      })
+    }
+  }
+}
 /**
  * 获取移动端首页信息
  * @param type 身份类型（教师还是学生）
@@ -111,23 +128,25 @@ const getHomeData = async (
           if (clsRes.status === 'ok' && clsRes.data) {
             const { rows } = clsRes.data;
             let allDates: any[] = [];
+            let newSech: any = [];
             if (rows?.length) {
-              homeInfo.courseSchedule = [].map.call(
-                rows,
-                (val: { KHBJSJId: string; DATA: string }) => {
-                  const { KHBJSJId, DATA } = val;
-                  const days = JSON.parse(DATA);
-                  const clsArr = weekSchedule?.filter((value: any) => value.KHBJSJ.id === KHBJSJId);
-                  allDates = allDates.concat(days);
-                  const classType = yxkc.find((v) => v.id === KHBJSJId)?.BJLX;
-                  return {
-                    KHBJSJId,
-                    classType,
-                    days,
-                    detail: converClassInfo(clsArr),
-                  };
-                },
-              );
+              for (let i = 0; i < rows?.length; i += 1) {
+                const { KHBJSJId, DATA } = rows[i];
+                let days = JSON.parse(DATA);
+                const clsArr = weekSchedule?.filter((value: any) => value.KHBJSJ.id === KHBJSJId);
+                if (days?.length === 0 && clsArr?.[0]?.KHBJSJ?.ISFW === 1) {
+                  days = await getFreeTime(KHBJSJId);
+                }
+                allDates = allDates.concat(days);
+                const classType = yxkc.find((v) => v.id === KHBJSJId)?.BJLX;
+                newSech.push({
+                  KHBJSJId,
+                  classType,
+                  days,
+                  detail: converClassInfo(clsArr),
+                });
+              }
+              homeInfo.courseSchedule = newSech;
             }
             homeInfo.markDays = uniqueArr(allDates);
             homeInfo.markDays?.sort(
@@ -308,10 +327,10 @@ export const CurdayCourse = async (
     data = homeInfo.courseSchedule;
     total = homeInfo.data;
   }
-  
+
   // 找出今日课程
   const totalList = data?.filter((item: { days: any[] }) => {
-    return item.days.find((v: { day: string }) => v.day === myDate)||item.days?.length === 0;
+    return item?.days?.find((v: { day: string }) => v.day === myDate) || item.days?.length === 0;
   });
   let courseList: any[] = [];
   totalList?.forEach((item: { detail: any[]; classType: number; days?: any[] }) => {
@@ -704,9 +723,9 @@ export const convertTimeTable = async (
  */
 export const getWeekday = (now: Date, type?: string) => {
   var nowTime = now.getTime();
-  var day = now.getDay() || 7;  //为周日的时候 day 修改为7  否则当天周天会有问题
+  var day = now.getDay(); 
   var oneDayTime = 24 * 60 * 60 * 1000;
-  var SundayTime = nowTime - (day - 1) * oneDayTime - oneDayTime;//显示上周周日
+  var SundayTime = day == 0 ? nowTime : nowTime - (day - 1) * oneDayTime - oneDayTime;//显示上周周日,如当天为周日显示当天
   var SaturDayTime = nowTime + (7 - day) * oneDayTime - oneDayTime;//显示本周周六
   if (type === 'Saturday') {
     return moment(SaturDayTime).format('YYYY-MM-DD');
@@ -730,7 +749,6 @@ export const getWeekCalendar = async (
   // 查询本周是否存在调代课，请假,自选课的课程
   // 教师端接口
   if (type === 'teacher') {
-
     const response = await getTeachersApplication({
       JZGJBSJId: userId,
       startDate: getWeekday(new Date(curDay)),

@@ -34,7 +34,7 @@ const TeachCourses = (props: { dataResource: any; }) => {
             ],
           },
           {
-            left: [`共${item.KSS}课时`],
+            left: [`${item.ISFW === 1 ? '课后服务课程，课时不限':`共${item.KSS}课时`}`],
           },
         ],
         introduction: item.KHKCSJ.KCMS,

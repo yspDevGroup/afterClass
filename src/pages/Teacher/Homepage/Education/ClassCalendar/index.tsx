@@ -150,7 +150,7 @@ const ClassCalendar = (props: propstype) => {
   useEffect(() => {
     (async () => {
       const { courseList } = await CurdayCourse('teacher', currentUser?.xxId, userId, day);
-      getMarkDays();
+      getMarkDays(day);
       if (type) {
         setEditCourses(convertCourse(day, courseList, 'filter'));
       } else {
