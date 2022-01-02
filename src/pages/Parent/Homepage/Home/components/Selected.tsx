@@ -167,12 +167,38 @@ const CourseTab = (props: { dataResource: any }) => {
       const listData: any = [];
       const listDatas: any = [];
       NewArr?.forEach((record: any) => {
+        let KcState = '';
+        switch (record?.ZT) {
+          case 0:
+            if (new Date() > new Date(record?.KHFWSJPZ?.JSRQ)) {
+              KcState = "已结课";
+            } else if (new Date() < new Date(record?.KHFWSJPZ?.KSRQ)) {
+              KcState = "未开课";
+            } else {
+              KcState = "上课中";
+            }
+            break;
+          case 1:
+            KcState = "退课中";
+            break;
+          case 2:
+            KcState = "已退课";
+            break;
+          case 3:
+            KcState = "待付款";
+            break;
+        }
         const nodeData: ListItem = {
           id: record.id,
           title: record.KHFWBJ.FWMC,
           img: record?.KHFWBJ?.FWTP,
           link: `/parent/home/serviceReservation/afterClassDetails?classid=${record.KHFWSJPZId}&path=study`,
           desc: [
+            {
+              left: [
+                `课程状态： ${KcState}`,
+              ],
+            },
             {
               left: [
                 `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
@@ -189,6 +215,11 @@ const CourseTab = (props: { dataResource: any }) => {
           desc: [
             {
               left: [
+                `课程状态： ${KcState}`,
+              ],
+            },
+            {
+              left: [
                 `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
               ],
             },
@@ -197,7 +228,6 @@ const CourseTab = (props: { dataResource: any }) => {
         listDatas.push(nodeDatas)
       })
       const { list, ...rest } = { ...defaultMsg };
-      console.log(listDatas,'---------------')
       setKHFWAllDatas({
         list: listDatas,
         ...rest,
