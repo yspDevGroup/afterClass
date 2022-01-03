@@ -58,22 +58,41 @@ const uniqueArr = (arr: any) => {
   return days;
 };
 
-const getFreeTime = async (KHBJSJId: string) => {
+const getFreeTime = async (KHBJSJId: string, FWBJ: any) => {
+  let days: any[] = [];
   const result = await getKCBSKSJ({
     KHBJSJId: [KHBJSJId],
   });
   if (result.status === 'ok' && result.data) {
     const { rows } = result.data;
     if (rows?.length) {
-      return [].map.call(rows, (v: { XXSJPZId: string, SKRQ: string }, index) => {
-        return {
-          index: index + 1,
-          jcId: v.XXSJPZId,
-          day: v.SKRQ,
+      for (let i = 0; i < FWBJ.length; i += 1) {
+        const setting = FWBJ[i]?.XSFWBJ?.KHFWSJPZ;
+        if (setting) {
+          const { KSRQ, JSRQ } = setting;
+          let startTime = moment(KSRQ, 'YYYY-MM-DD').valueOf();
+          let endTime = moment(JSRQ, 'YYYY-MM-DD').valueOf();
+          const curDays = rows.filter((v: any) => {
+            const nowTime = moment(v.SKRQ, 'YYYY-MM-DD').valueOf();
+            return startTime <=nowTime && nowTime <= endTime;
+          });
+          if(curDays?.length){
+            const curArr = [].map.call(curDays,(v: any,index)=>{
+              return {
+                index: days.length + index + 1,
+                jcId: v.XXSJPZId,
+                day: v.SKRQ,
+              }
+            });
+            days = days.concat(curArr);
+          } 
         }
-      })
+      };
+      return days;
     }
+    return days;
   }
+  return days;
 }
 /**
  * 获取移动端首页信息
@@ -116,7 +135,7 @@ const getHomeData = async (
           const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
           courseStatus = cStatus;
         }
-        const bjIds = [].map.call(yxkc, (v: { id: string }) => {
+        let bjIds = [].map.call(yxkc, (v: { id: string }) => {
           return v.id;
         });
         if (yxkc?.length) {
@@ -134,11 +153,15 @@ const getHomeData = async (
                 const { KHBJSJId, DATA } = rows[i];
                 let days = JSON.parse(DATA);
                 const clsArr = weekSchedule?.filter((value: any) => value.KHBJSJ.id === KHBJSJId);
+                const yxTar = yxkc.find((value: any) => value.id === KHBJSJId);
                 if (days?.length === 0 && clsArr?.[0]?.KHBJSJ?.ISFW === 1) {
-                  days = await getFreeTime(KHBJSJId);
+                  days = await getFreeTime(KHBJSJId, yxTar?.XSFWKHBJs);
+                  if(type === 'student'){
+                    bjIds = bjIds.filter((v)=>v !== KHBJSJId);
+                  }
                 }
                 allDates = allDates.concat(days);
-                const classType = yxkc.find((v) => v.id === KHBJSJId)?.BJLX;
+                const classType = yxkc.find((v: { id: any; }) => v.id === KHBJSJId)?.BJLX;
                 newSech.push({
                   KHBJSJId,
                   classType,
@@ -151,9 +174,10 @@ const getHomeData = async (
             homeInfo.markDays = uniqueArr(allDates);
             homeInfo.markDays?.sort(
               (a, b) =>
-                new Date(a.date.replace(/-/g, '/')).getTime() -
-                new Date(b.date.replace(/-/g, '/')).getTime(),
+                new Date(a?.date?.replace(/-/g, '/')).getTime() -
+                new Date(b?.date?.replace(/-/g, '/')).getTime(),
             );
+            
           }
         }
         homeInfo.data = {
@@ -334,7 +358,7 @@ export const CurdayCourse = async (
   });
   let courseList: any[] = [];
   totalList?.forEach((item: { detail: any[]; classType: number; days?: any[] }) => {
-    const { detail, classType, days } = item;
+    const { detail, classType, days } = item; 
     // 获取今日上课课程
     const list = detail.filter((val) => val.wkd === day.getDay());
     const dayList = days?.filter((v: { day: string }) => v.day === myDate);
@@ -419,18 +443,42 @@ export const CurdayCourse = async (
     });
     if (response.status === 'ok' && response.data) {
       const { rows } = response.data;
-      const newsList = rows?.filter((ele) => {
-        if (courseList?.length) {
-          return courseList.find((v: { bjId: any; jcId: any }) => {
-            if (ele.KHBJSJId === v.bjId) {
-              return ele.XXSJPZId !== v.jcId
-            }
-            return ele.KHBJSJId !== v.bjId;
+      const newsList = [];
+      for (let i = 0; i < (rows ? rows.length : 0); i += 1) {
+        if (courseList.length > 0) {
+          const same = courseList.find((v: { bjId: any; jcId: any }) => {
+            return rows?.[i]?.KHBJSJId === v.bjId;
           });
+          if (!same) {
+            newsList.push(rows?.[i]);
+          } else if (same.jcId !== rows?.[i]?.XXSJPZId) {
+            newsList.push(rows?.[i]);
+          }
         } else {
-          return ele;
+          newsList.push(rows?.[i]);
         }
-      });
+      }
+      // const newsList = rows?.filter((ele) => {
+      //   if (courseList?.length) {
+      //     console.log(ele.KHBJSJId);
+      //     const result = courseList.find((v: { bjId: any; jcId: any }) => {
+      //       return ele.KHBJSJId !== v.bjId;
+      //     });
+
+      //     return courseList.find((v: { bjId: any; jcId: any }) => {
+      //       console.log('111', ele.KHBJSJId, v.bjId);
+
+      //       if (ele.KHBJSJId === v.bjId) {
+      //         console.log(ele.XXSJPZId, v.jcId, ele.XXSJPZId !== v.jcId);
+
+      //         return ele.XXSJPZId !== v.jcId
+      //       }
+      //       return ele.KHBJSJId !== v.bjId;
+      //     });
+      //   } else {
+      //     return ele;
+      //   }
+      // });
       if (newsList?.length) {
         CountCurdayCourse(newsList, courseList, '调课');
       }
@@ -723,7 +771,7 @@ export const convertTimeTable = async (
  */
 export const getWeekday = (now: Date, type?: string) => {
   var nowTime = now.getTime();
-  var day = now.getDay(); 
+  var day = now.getDay();
   var oneDayTime = 24 * 60 * 60 * 1000;
   var SundayTime = day == 0 ? nowTime : nowTime - (day - 1) * oneDayTime - oneDayTime;//显示上周周日,如当天为周日显示当天
   var SaturDayTime = nowTime + (7 - day) * oneDayTime - oneDayTime;//显示本周周六

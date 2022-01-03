@@ -1512,6 +1512,7 @@ declare namespace API {
       id?: string;
       BJMC?: string;
       KCTP?: string;
+      ISFW?: number;
       KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
     };
     /** 节次ID */
