@@ -16,7 +16,7 @@ export default {
   },
   ssh: {
     '/api/': {
-      target: 'http://api.test.xianyunshipei.com',
+      target: 'http://api.prod.xianyunshipei.com',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
