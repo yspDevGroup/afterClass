@@ -5,11 +5,10 @@ import ServiceRefund from './ServiceRefund';
 import ServiceAterClass from './ServiceAterClass';
 
 const { TabPane } = Tabs;
-const Index = (props: any) => {
-  const { index } = props.history.location.query;
+const Index = () => {
   return (
     <PageContainer>
-      <Tabs defaultActiveKey={index ? index : "3"}>
+      <Tabs>
         <TabPane tab="课后服务退款" key="3">
           <ServiceAterClass />
         </TabPane>
