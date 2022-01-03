@@ -42,6 +42,8 @@ const InterestClassroom = () => {
   const [XKType, setXKType] = useState(true);
   //是否开启付款
   const [PayType, setPayType] = useState(true);
+  //是否退课成功
+  const [DropOutType, setDropOutType] = useState(true);
 
   useEffect(() => {
     (
@@ -73,7 +75,7 @@ const InterestClassroom = () => {
       const res = await getStudentListByBjid({
         BJSJId: StorageBjId,
         XSJBSJId: StorageXSId,
-        ZT:[0,1,3],
+        ZT: [0, 1, 3],
         page: 0,
         pageSize: 0
       })
@@ -98,10 +100,15 @@ const InterestClassroom = () => {
       if (FKZT === 0 || FKZT === 1) {
         setFKType(false)
       }
-      if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.KHFWSJPZ?.isPay === 0 ) {
+      if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.KHFWSJPZ?.isPay === 0) {
         setPayType(false)
       }
       setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.id)
+      if (BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)) {
+        setDropOutType(true)
+      } else {
+        setDropOutType(false)
+      }
     }
   }, [FWKCData, BaoMinData])
   useEffect(() => {
@@ -126,17 +133,25 @@ const InterestClassroom = () => {
   // 月份切换
   const onchangeMonth = (e: any) => {
     setMouthId(e.target.value);
+    // 判断是否已退课
+    if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === e.target.value)) {
+      setDropOutType(true)
+    } else {
+      setDropOutType(false)
+    }
+    // 付款状态
     if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === e.target.value)?.ZT === 3) {
       setFKType(true)
     } else {
       setFKType(false)
     }
+    // 是否开启支付
     if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === e.target.value)?.KHFWSJPZ?.isPay === 0) {
       setPayType(false)
     } else {
       setPayType(true)
     }
-    
+
   }
   const onSelect = async () => {
     if (YXKC.length > FWKCData?.KXSL) {
@@ -154,7 +169,7 @@ const InterestClassroom = () => {
       XSJBSJId: StorageXSId,
       KHFWBJId: FWKCData?.id,
       KHFWSJPZIds: Times,
-      ZT: 3,
+      ZT: Number(FWKCData?.FWFY) === 0 ? 0 : 3,
       KHBJSJIds: YXKCId
     })
     if (res.status === 'ok') {
@@ -331,21 +346,31 @@ const InterestClassroom = () => {
                 </div>
               </div>
               {
-                BaoMinData && XKType === true && FKType === true && PayType === true ? <div className={styles.footer}>
-                  <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
-                  <button onClick={submit} >确认付款</button>
-                </div> : <></>
+                DropOutType === false ? <>
+                  <div className={styles.footers} style={{ padding: 0 }}>
+                    <p>已退课</p>
+                  </div>
+                </> : <>
+                  {
+                    BaoMinData && XKType === true && FKType === true && PayType === true ? <div className={styles.footer}>
+                      <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
+                      <button onClick={submit} >确认付款</button>
+                    </div> : <></>
+                  }
+                  {
+                    BaoMinData && XKType === true && PayType === false ? <div className={styles.footers}>
+                      <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
+                    </div> : <></>
+                  }
+                  {
+                    BaoMinData && XKType === false && FKType === true && PayType === true ? <div className={styles.footers} >
+                      <button onClick={submit} >去付款</button>
+                    </div> : <></>
+                  }
+                </>
               }
-              {
-                BaoMinData && XKType === true && PayType === false ? <div className={styles.footers}>
-                  <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
-                </div> : <></>
-              }
-              {
-                BaoMinData && XKType === false && FKType === true && PayType === true ? <div className={styles.footers}>
-                  <button onClick={submit} >去付款</button>
-                </div> : <></>
-              }
+
+
             </> :
             <>
               <div className={styles.Application}>
@@ -386,8 +411,13 @@ const InterestClassroom = () => {
                 </div>
               </div>
               {
-                BaoMinData && FKType === true && PayType === true ? <div className={styles.footers}>
+                BaoMinData && FKType === true && PayType === true && DropOutType === true ? <div className={styles.footers}>
                   <button onClick={submit} >去付款</button>
+                </div> : <></>
+              }
+              {
+                DropOutType === false ? <div className={styles.footers} style={{ padding: 0 }} >
+                  <p>已退课</p>
                 </div> : <></>
               }
             </>
