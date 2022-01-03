@@ -6,9 +6,8 @@ import { history, useModel } from 'umi';
 import index_header from '@/assets/index_header.png';
 import noCourses from '@/assets/noCourses.png';
 import { Divider, message, Modal } from 'antd';
-import { getKHFWBJ, getStudentListByBjid, studentRegistration } from '@/services/after-class/khfwbj';
+import { getKHFWBJ, studentRegistration } from '@/services/after-class/khfwbj';
 import IconFont from '@/components/CustomIcon';
-import { createKHJGRZSQ } from '@/services/after-class/khjgrzsq';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 
 const EmptyArticle = (props: any) => {
@@ -76,7 +75,7 @@ const EmptyArticle = (props: any) => {
       KHFWBJId: FWKCData?.id,
       XSJBSJIds: [StorageXSId],
       KHBJSJIds: FDBId || [],
-      ZT: 3,
+      ZT: Number(FWKCData?.FWFY) === 0 ? 0 : 3,
       KHFWSJPZIds: Times || []
     })
     if (res.status === 'ok') {

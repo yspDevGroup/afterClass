@@ -337,7 +337,7 @@ const InterestClassroom = () => {
                 </div> : <></>
               }
               {
-                BaoMinData && XKType === true && FKType === true && PayType === false ? <div className={styles.footers}>
+                BaoMinData && XKType === true && PayType === false ? <div className={styles.footers}>
                   <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
                 </div> : <></>
               }
