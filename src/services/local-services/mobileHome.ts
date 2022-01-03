@@ -66,28 +66,38 @@ const getFreeTime = async (KHBJSJId: string, FWBJ: any) => {
   if (result.status === 'ok' && result.data) {
     const { rows } = result.data;
     if (rows?.length) {
-      for (let i = 0; i < FWBJ.length; i += 1) {
-        const setting = FWBJ[i]?.XSFWBJ?.KHFWSJPZ;
-        if (setting) {
-          const { KSRQ, JSRQ } = setting;
-          let startTime = moment(KSRQ, 'YYYY-MM-DD').valueOf();
-          let endTime = moment(JSRQ, 'YYYY-MM-DD').valueOf();
-          const curDays = rows.filter((v: any) => {
-            const nowTime = moment(v.SKRQ, 'YYYY-MM-DD').valueOf();
-            return startTime <=nowTime && nowTime <= endTime;
-          });
-          if(curDays?.length){
-            const curArr = [].map.call(curDays,(v: any,index)=>{
-              return {
-                index: days.length + index + 1,
-                jcId: v.XXSJPZId,
-                day: v.SKRQ,
-              }
+      if (FWBJ && FWBJ?.length) {
+        for (let i = 0; i < FWBJ?.length; i += 1) {
+          const setting = FWBJ[i]?.XSFWBJ?.KHFWSJPZ;
+          if (setting) {
+            const { KSRQ, JSRQ } = setting;
+            let startTime = moment(KSRQ, 'YYYY-MM-DD').valueOf();
+            let endTime = moment(JSRQ, 'YYYY-MM-DD').valueOf();
+            const curDays = rows.filter((v: any) => {
+              const nowTime = moment(v.SKRQ, 'YYYY-MM-DD').valueOf();
+              return startTime <= nowTime && nowTime <= endTime;
             });
-            days = days.concat(curArr);
-          } 
-        }
-      };
+            if (curDays?.length) {
+              const curArr = [].map.call(curDays, (v: any, index) => {
+                return {
+                  index: days.length + index + 1,
+                  jcId: v.XXSJPZId,
+                  day: v.SKRQ,
+                }
+              });
+              days = days.concat(curArr);
+            }
+          }
+        };
+      } else {
+        days = [].map.call(rows, (v: any, index) => {
+          return {
+            index: days.length + index + 1,
+            jcId: v.XXSJPZId,
+            day: v.SKRQ,
+          }
+        });
+      }
       return days;
     }
     return days;
@@ -156,8 +166,8 @@ const getHomeData = async (
                 const yxTar = yxkc.find((value: any) => value.id === KHBJSJId);
                 if (days?.length === 0 && clsArr?.[0]?.KHBJSJ?.ISFW === 1) {
                   days = await getFreeTime(KHBJSJId, yxTar?.XSFWKHBJs);
-                  if(type === 'student'){
-                    bjIds = bjIds.filter((v)=>v !== KHBJSJId);
+                  if (type === 'student') {
+                    bjIds = bjIds.filter((v) => v !== KHBJSJId);
                   }
                 }
                 allDates = allDates.concat(days);
@@ -177,7 +187,7 @@ const getHomeData = async (
                 new Date(a?.date?.replace(/-/g, '/')).getTime() -
                 new Date(b?.date?.replace(/-/g, '/')).getTime(),
             );
-            
+
           }
         }
         homeInfo.data = {
@@ -358,7 +368,7 @@ export const CurdayCourse = async (
   });
   let courseList: any[] = [];
   totalList?.forEach((item: { detail: any[]; classType: number; days?: any[] }) => {
-    const { detail, classType, days } = item; 
+    const { detail, classType, days } = item;
     // 获取今日上课课程
     const list = detail.filter((val) => val.wkd === day.getDay());
     const dayList = days?.filter((v: { day: string }) => v.day === myDate);
