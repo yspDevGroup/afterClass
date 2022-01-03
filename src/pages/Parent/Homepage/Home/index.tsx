@@ -258,7 +258,7 @@ const Home = () => {
                                 style={{ backgroundImage: `url(${remind})` }}
                                 onClick={() => { submit(item, value) }}
                               >
-                                <i style={{ color: '#15B628' }}>缴费提醒</i> 您于{moment(item?.KHFWSJPZ?.createdAt).format("YYYY年MM月DD日")}报的{moment(item?.KHFWSJPZ?.KSRQ).format('MM')}月{value?.FWMC}还未缴费，请及时处理。
+                                <i style={{ color: '#15B628' }}>缴费提醒</i> 您于{moment(item?.createdAt).format("YYYY年MM月DD日")}报的{moment(item?.KHFWSJPZ?.KSRQ).format('MM')}月{value?.FWMC}还未缴费，请及时处理。
                               </div>
                             })
                           }
