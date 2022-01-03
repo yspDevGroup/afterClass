@@ -42,6 +42,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
   const [KHFWBJId, setKHFWBJId] = useState<string>();
   const [KHFWSJPZIdData, setKHFWSJPZIdData] = useState<SelectType[]>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [FWFY,setFWFY]=useState<string>()
 
   useImperativeHandle(ref, () => ({
     // changeVal 就是暴露给父组件的方法
@@ -134,6 +135,10 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         if (data?.KXSL) {
           setKXSL(data.KXSL);
         }
+        // 获取服务费用，
+        if(data?.FWFY){
+          setFWFY(data.FWFY)
+        }
         // 服务班id
         setKHFWBJId(data.id);
         setLoading(false);
@@ -170,6 +175,9 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         XSJBSJIds: values?.XSJBSJIds,
         KHBJSJIds,
       };
+      if(FWFY==='0.00'){
+        params.ZT= 0
+      }
       // 班级详情下 学生批量报名存在时段
       // if (type !== 0 && KHFWSJPZId) {
       //   params.KHFWSJPZId = KHFWSJPZId;
