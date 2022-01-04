@@ -31,6 +31,7 @@ const Detail = (props: any) => {
   const [flag, setFlag] = useState<boolean>(false);
   const [XSList, setXSList] = useState<string[]>();
   const [XSId, setXSId] = useState<string>();
+  const [XSData, setXSData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [KHFWSJPZIdData, setKHFWSJPZIdData] = useState<SelectType[]>();
   const [KHFWSJPZId, setKHFWSJPZId] = useState<string>();
@@ -237,8 +238,9 @@ const Detail = (props: any) => {
       return (
         <a
           onClick={() => {
-            setTitle(`代报名-${record.XM}~${record.XH}`);
+            setTitle(`代报名`);
             setXSId(record?.id);
+            setXSData(record);
           }}
         >
           代报名
@@ -753,6 +755,8 @@ const Detail = (props: any) => {
           title={title}
           ref={signUpClassRef}
           XSJBSJId={XSId}
+          XH={XSData?.XH}
+          XM={XSData?.XM}
           actionRef={actionRef}
           type={2}
           BJSJId={KHFWBJs?.[0]?.BJSJId}

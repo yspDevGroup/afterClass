@@ -7,11 +7,11 @@
  */
 import { ModalForm, ProFormSelect } from '@ant-design/pro-form';
 import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
-import { Button, message, Spin } from 'antd';
+import { Button, message, Spin, Form } from 'antd';
 
 import { getClassStudents } from '@/services/after-class/bjsj';
 import { getKHFWBJ, studentRegistration } from '@/services/after-class/khfwbj';
-import moment from 'moment';
+
 
 type SignUpClassProps = {
   BJSJId: string;
@@ -26,6 +26,8 @@ type SignUpClassProps = {
   XSJBSJId?: string;
   title?: string;
   setXSId?: any;
+  XH?: string;
+  XM?: string;
 };
 export type SelectType = {
   label: string;
@@ -42,7 +44,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
   const [KHFWBJId, setKHFWBJId] = useState<string>();
   const [KHFWSJPZIdData, setKHFWSJPZIdData] = useState<SelectType[]>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [FWFY,setFWFY]=useState<string>()
+  const [FWFY, setFWFY] = useState<string>()
 
   useImperativeHandle(ref, () => ({
     // changeVal 就是暴露给父组件的方法
@@ -52,18 +54,18 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
   }));
 
   const formRef = useRef();
-  const { type, XNXQId, BJSJId, actionRef, XSJBSJId, title, setXSId } = props;
+  const { type, XNXQId, BJSJId, actionRef, XSJBSJId, title, setXSId, XH, XM } = props;
 
   const formLayout = {
     labelCol: { span: 3 },
     wrapperCol: { span: 21 },
   };
 
-  const getXH = (XH: string) => {
-    if (XH !== null && XH.length > 4) {
-      return `~${XH.substring(XH.length - 4)}`;
+  const getXH = (_XH: string) => {
+    if (_XH !== null && _XH.length > 4) {
+      return `~${_XH.substring(_XH.length - 4)}`;
     } else {
-      return `~ ${XH}`;
+      return `~ ${_XH}`;
     }
   };
 
@@ -75,7 +77,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         console.log('res', res);
         const { rows } = res.data;
         const students: SelectType[] = rows.map((item: any) => {
-          return { label: `${item.XM}${getXH(item.XH)}`, value: item?.id,  };
+          return { label: `${item.XM}${getXH(item.XH)}`, value: item?.id, };
         });
         setStudentsData(students);
       }
@@ -111,13 +113,15 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         }
         // 时段数据
         data?.KHFWSJPZs?.forEach((item: any) => {
-          newKHFWSJPZIdData.push({ label: `${item.KSRQ} ~ ${item.JSRQ}`,
-          value: item.id});
+          newKHFWSJPZIdData.push({
+            label: `${item.KSRQ} ~ ${item.JSRQ}`,
+            value: item.id
+          });
         });
         if (newKHFWSJPZIdData.length) {
           formRef?.current?.setFieldsValue({
-           
-            KHFWSJPZIds:newKHFWSJPZIdData.map((item: SelectType) => item.value)
+
+            KHFWSJPZIds: newKHFWSJPZIdData.map((item: SelectType) => item.value)
           });
           setKHFWSJPZIdData(newKHFWSJPZIdData);
 
@@ -127,7 +131,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
           setKCFDData(KCFD);
           formRef?.current?.setFieldsValue({
             KHFWSJIds: KCFD.map((item: SelectType) => item.value),
-           
+
           });
         }
 
@@ -136,7 +140,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
           setKXSL(data.KXSL);
         }
         // 获取服务费用，
-        if(data?.FWFY){
+        if (data?.FWFY) {
           setFWFY(data.FWFY)
         }
         // 服务班id
@@ -175,8 +179,8 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         XSJBSJIds: values?.XSJBSJIds,
         KHBJSJIds,
       };
-      if(FWFY==='0.00'){
-        params.ZT= 0
+      if (FWFY === '0.00') {
+        params.ZT = 0
       }
       // 班级详情下 学生批量报名存在时段
       // if (type !== 0 && KHFWSJPZId) {
@@ -187,9 +191,9 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
       }
       const res = await studentRegistration(params);
       if (res.status === 'ok') {
-        if(title==='代选课'&& type===2){
+        if (title === '代选课' && type === 2) {
           message.success('选课成功')
-        }else{
+        } else {
           message.success('报名成功');
         }
         actionRef?.current?.reloadAndRest();
@@ -242,17 +246,23 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         layout="horizontal"
         {...formLayout}
       >
+        {type === 2 && XM && XH &&
+          <Form.Item label='姓名学号：'>
+            {`${XM}——${XH}`}
+          </Form.Item>
+        }
+
         {
           // 保存并批量报名需要选择时段
-         
-            <ProFormSelect
-              placeholder="选择报名时段"
-              label="报名时段"
-              rules={[{ required: true, message: '请选择学生报名' }]}
-              name="KHFWSJPZIds"
-              fieldProps={{ options: KHFWSJPZIdData,mode:"multiple",disabled: true }}
-            />
-        
+
+          <ProFormSelect
+            placeholder="选择报名时段"
+            label="报名时段"
+            rules={[{ required: true, message: '请选择学生报名' }]}
+            name="KHFWSJPZIds"
+            fieldProps={{ options: KHFWSJPZIdData, mode: "multiple", disabled: true }}
+          />
+
         }
         {
           //  保存并批量报名 || 批量报名

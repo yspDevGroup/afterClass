@@ -314,7 +314,7 @@ const AdministrationClassManagement = () => {
             if (curXNXQId && campusId) {
               const obj = {
                 XXJBSJId: currentUser?.xxId,
-                njId: NjId ? [NjId] : undefined,
+                NJId: NjId ? [NjId] : undefined,
                 BJSJId: BJId,
                 XNXQId: curXNXQId,
                 page: param.current,

@@ -506,7 +506,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               label="服务名称："
               name="FWMC"
 
-              rules={[{ required: true, message: '请选择课程班' }]}
+              rules={[{ required: true, message: '请输入服务名称' }]}
             />
           </Col></Row>
         <Row>
