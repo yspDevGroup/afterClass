@@ -21,6 +21,7 @@ import SearchLayout from '@/components/Search/Layout';
 import AppSKXQTable from './components/AppSKXQTable';
 import { calcAllPeriod, getAllClassIds } from '@/services/after-class/kcbsksj';
 import AddCourse from './components/AddCourse';
+import SeveiceList from './components/SeveiceList';
 
 const { Option } = Select;
 
@@ -357,6 +358,20 @@ const ServiceClass = (props: { location: { state: any } }) => {
       ellipsis: true,
       render: (_: any, record: any) => {
         return record?.KHKCSJ?.SSJGLX;
+      },
+    },
+    {
+      title: '是否被引用',
+      align: 'center',
+      width: 80,
+      dataIndex: 'PK',
+      key: 'PK',
+      ellipsis: true,
+      render: (_, record) => {
+        if (record?.ks_count) {
+            return <SeveiceList title={'课后服务配置班级列表'} />;
+        }
+        return <>未引用</>;
       },
     },
     {

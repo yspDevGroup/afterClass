@@ -135,7 +135,7 @@ export const mergeAuthority = (router: MenuDataItem, ahList: AhType[]): MenuData
     ...router,
     authority: getAuthorityList(router, ahList),
     children: router.children
-      ? router.children.map((item) => mergeAuthority(item, ahList))
+      ? router.children.map((item: MenuDataItem) => mergeAuthority(item, ahList))
       : undefined,
   };
 };
