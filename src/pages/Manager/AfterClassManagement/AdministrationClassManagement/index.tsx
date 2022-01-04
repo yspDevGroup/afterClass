@@ -1,11 +1,11 @@
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Select, Space, message } from 'antd';
+import { Select, Space, message, Tooltip,} from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
-import { getAllBJSJ, getSchoolClasses } from '@/services/after-class/bjsj';
+import { getAllBJSJ, getKHFWBJXSbm } from '@/services/after-class/bjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 // import { getAllGrades } from '@/services/after-class/khjyjg';
@@ -15,6 +15,7 @@ import ConfigureService from './ConfigureService';
 import { updateKHFWBJ } from '@/services/after-class/khfwbj';
 import ClassSeviveDetail from './ClassSeviveDetail';
 import UpdateCourses from './UpdateCourses';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 type selectType = { label: string; value: string };
 
@@ -207,7 +208,21 @@ const AdministrationClassManagement = () => {
       width: 80,
     },
     {
-      title: '课后服务报名人数',
+      title: (
+        <span>
+        状态&nbsp;
+        <Tooltip
+          overlayStyle={{ maxWidth: '30em' }}
+          title={
+            <>
+                当前时段班级报名人数 
+            </>
+          }
+        >
+          <QuestionCircleOutlined />
+        </Tooltip>
+      </span>
+      ),
       dataIndex: 'xsfwbm_count',
       key: 'xsfwbm_count',
       align: 'center',
@@ -295,6 +310,7 @@ const AdministrationClassManagement = () => {
           }}
           request={async (param) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
+            console.log('=============')
             if (curXNXQId && campusId) {
               const obj = {
                 XXJBSJId: currentUser?.xxId,
@@ -304,8 +320,10 @@ const AdministrationClassManagement = () => {
                 page: param.current,
                 pageSize: param.pageSize,
                 XQSJId: campusId,
+     
               };
-              const res = await getSchoolClasses(obj);
+              const res = await getKHFWBJXSbm(obj);
+              console.log('res-------',res);
               if (res.status === 'ok') {
                 return {
                   data: res.data.rows,

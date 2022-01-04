@@ -1790,8 +1790,7 @@ declare namespace API {
     XQSJId: string;
     /** 学年学期ID */
     XNXQId: string;
-    /** 场地ID */
-    FJSJId?: string;
+    FJSJId?: string | any;
     KHKCJMs?: { FYJM?: string; JMDX?: string; JFBL?: number; ZJFY?: number }[];
     KHKCJCs?: { JCMC?: string; JCFY?: number }[];
     KHBJJSs?: { JSLX?: string; JSXM?: string; JZGJBSJId?: string }[];
