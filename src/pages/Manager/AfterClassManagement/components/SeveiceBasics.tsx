@@ -348,11 +348,11 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           labelCol={{ span: 3 }}
           wrapperCol={{ span: 21 }}
         >
-          <ProFormDigit noStyle width="xs" name="FWFY" key="FWFY" min={1} />
-          <span style={{ color: '#999' }} className="ant-form-text">
+          <ProFormDigit noStyle width="xs" name="FWFY" key="FWFY" min={0} />
+          {/* <span style={{ color: '#999' }} className="ant-form-text">
             {' '}
             课后服务按月收费，家长可随时缴纳截至当前月的服务费用
-          </span>
+          </span> */}
         </ProForm.Item>
       </ModalForm>
     </>
