@@ -347,15 +347,15 @@ const AddServiceClass: FC<AddCourseProps> = ({
           fieldProps: {
             options: KCLXData,
             onChange: (value: string) => {
-              
               setKCLXMC(value);
-           
+              
               if (value === '校内辅导') {
                 setIsJg(false);
                 form?.setFieldsValue({
                   SSJGLX: '校内课程'
                 })
               }
+              // setClassData([]);
               form?.setFieldsValue({
                 KHKCSJId: undefined,
                 ZJS: undefined,
@@ -425,7 +425,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
             onChange: (values: any) => {
               // if (isJg) {
                 setKcId(values);
-                setClassData([]);
+                // setClassData([]);
               // }
               form?.setFieldsValue({
                 // KHKCSJId: undefined,
@@ -464,7 +464,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
           fieldProps: {
             options: campus,
             onChange:(value: any)=>{
-              setClassData([]);
+              // setClassData([]);
               setCampusId(value);
             }
           },
