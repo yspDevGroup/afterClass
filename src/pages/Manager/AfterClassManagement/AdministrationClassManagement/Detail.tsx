@@ -41,7 +41,7 @@ const Detail = (props: any) => {
   const [ZT, setZT] = useState<number | undefined>();
   const [detailZT, setDetailZT] = useState<string | undefined>(undefined);
   const [isPay, setIsPay] = useState<boolean>();
-  const [kHFWBJId,setkHFWBJId]=useState<string | undefined>(undefined);
+  const [kHFWBJId, setkHFWBJId] = useState<string | undefined>(undefined);
 
   const getDetailValue = async () => {
     if (KHFWBJs?.[0]) {
@@ -73,7 +73,7 @@ const Detail = (props: any) => {
           if (newKHFWSJPZIdData.length) {
             setKHFWSJPZIdData(newKHFWSJPZIdData);
           }
-          setkHFWBJId(data?.id)
+          setkHFWBJId(data?.id);
 
           setDetailZT(data?.ZT);
         }
@@ -86,20 +86,20 @@ const Detail = (props: any) => {
     // 刷新后 设置isPay
     if (KHFWSJPZId) {
       const KHFWSJPZ: any = KHFWSJPZIdData?.find((item: any) => item.value === KHFWSJPZId);
-    
+
       if (KHFWSJPZ) {
         setIsPay(KHFWSJPZ?.isPay === 1 ? true : false);
       }
     }
-  }, [KHFWSJPZId])
+  }, [KHFWSJPZId]);
 
   useEffect(() => {
     if (KHFWSJPZIdData?.length) {
       if (!KHFWSJPZId) {
-        console.log('KHFWBJs?.[0].KHFWSJPZ',KHFWBJs?.[0]?.KHFWSJPZs[0]?.id);
-        if(KHFWBJs?.[0]?.KHFWSJPZs?.[0]?.id){
+        console.log('KHFWBJs?.[0].KHFWSJPZ', KHFWBJs?.[0]?.KHFWSJPZs?.[0]?.id);
+        if (KHFWBJs?.[0]?.KHFWSJPZs?.[0]?.id) {
           setKHFWSJPZId(KHFWBJs?.[0]?.KHFWSJPZs?.[0]?.id);
-        }else{
+        } else {
           setKHFWSJPZId(KHFWSJPZIdData?.[0]?.value);
         }
       }
@@ -109,9 +109,8 @@ const Detail = (props: any) => {
           setIsPay(KHFWSJPZ?.isPay === 1 ? true : false);
         }
       }
-
     }
-  }, [KHFWSJPZIdData])
+  }, [KHFWSJPZIdData]);
 
   const columns: ProColumns<any>[] = [
     {
@@ -187,7 +186,7 @@ const Detail = (props: any) => {
       render: (text: any) => {
         if (text?.length) {
           if (text?.[0]?.ZT === 2) {
-            return '已退课'
+            return '已退课';
           }
           if (text?.[0]?.ZT === 1) {
             return '退课中';
@@ -293,7 +292,7 @@ const Detail = (props: any) => {
           XSFWBJ={record?.XSFWBJs?.[0]}
           XSJBSJId={record.id}
           onload={() => {
-            actionRef?.current?.reloadAndRest();
+            actionRef?.current?.reloadAndRest?.();
           }}
         />
       );
@@ -398,7 +397,7 @@ const Detail = (props: any) => {
 
   useEffect(() => {
     if (KHFWSJPZId) {
-      actionRef?.current?.reloadAndRest();
+      actionRef?.current?.reloadAndRest?.();
     }
   }, [KHFWSJPZId, ZT]);
 
@@ -428,24 +427,22 @@ const Detail = (props: any) => {
 
   const onSearchChange = (value: string) => {
     setSearchValue(value);
-    actionRef?.current?.reloadAndRest();
+    actionRef?.current?.reloadAndRest?.();
   };
 
   const onIsPayClick = async (bool: boolean) => {
     const res = await updateKHFWBJisPay({
-      KHFWBJId: kHFWBJId,
-      KHFWSJPZId: KHFWSJPZId,
-      isPay: bool ? 1 : 0
-    })
-    if(res.status==='ok'){
-      message.success(bool?'开启成功':'关闭成功'); 
-      getDetailValue(); 
-    }else{
+      KHFWBJId: kHFWBJId || '',
+      KHFWSJPZId: KHFWSJPZId || '',
+      isPay: bool ? 1 : 0,
+    });
+    if (res.status === 'ok') {
+      message.success(bool ? '开启成功' : '关闭成功');
+      getDetailValue();
+    } else {
       message.error(res.message);
     }
-
-  }
-
+  };
 
   return (
     <div className={styles.AdministrativeClass}>
@@ -462,9 +459,8 @@ const Detail = (props: any) => {
           <LeftOutlined />
           返回上一页
         </Button>
-        <span style={{ fontSize: '18px', marginLeft: '24px', fontWeight: 'bold' }}>{
-          `${state?.NJSJ?.XD}${state?.NJSJ?.NJMC}${state?.BJ}`
-        }
+        <span style={{ fontSize: '18px', marginLeft: '24px', fontWeight: 'bold' }}>
+          {`${state?.NJSJ?.XD}${state?.NJSJ?.NJMC}${state?.BJ}`}
         </span>
 
         {KHFWBJs?.[0] && KHFWBJs?.[0]?.ZT === 1 && (
@@ -473,9 +469,10 @@ const Detail = (props: any) => {
               activeKey={KHFWSJPZId}
               onChange={(value: any) => {
                 setKHFWSJPZId(value);
-              }} >
+              }}
+            >
               {KHFWSJPZIdData?.map((item: any) => {
-                return <Tabs.TabPane key={item.value} tab={item.title} />
+                return <Tabs.TabPane key={item.value} tab={item.title} />;
               })}
             </Tabs>
             <Spin spinning={loading}>
@@ -509,33 +506,33 @@ const Detail = (props: any) => {
                         >
                           批量退课
                         </Button>
-                        {
-                          isPay && <Button
-                          type="primary"
-                          onClick={() => {
-                            // 筛选未交费学生 ZT===3的学生
-                            const list = selectedRows.filter((item: any) => {
-                              // 判断学生是否报名
-                              if (item?.XSFWBJs?.length) {
-                                // 下标为0 的数据是报名服务班的详情
-                                const XSFWBJ = item.XSFWBJs[0];
-                                return XSFWBJ.ZT === 3;
+                        {isPay && (
+                          <Button
+                            type="primary"
+                            onClick={() => {
+                              // 筛选未交费学生 ZT===3的学生
+                              const list = selectedRows.filter((item: any) => {
+                                // 判断学生是否报名
+                                if (item?.XSFWBJs?.length) {
+                                  // 下标为0 的数据是报名服务班的详情
+                                  const XSFWBJ = item.XSFWBJs[0];
+                                  return XSFWBJ.ZT === 3;
+                                }
+                                return false;
+                              });
+                              if (list?.length) {
+                                setXSList(list.filter((item: any) => item?.WechatUserId));
+                                setVisible(true);
+                                setFlag(true);
+                              } else {
+                                message.error('没有要催缴的学生');
                               }
-                              return false;
-                            });
-                            if (list?.length) {
-                              setXSList(list.filter((item: any) => item?.WechatUserId));
-                              setVisible(true);
-                              setFlag(true);
-                            } else {
-                              message.error('没有要催缴的学生');
-                            }
-                          }}
-                        >
-                          批量催缴
-                        </Button>
-                        }
-                        
+                            }}
+                          >
+                            批量催缴
+                          </Button>
+                        )}
+
                         <Button
                           type="primary"
                           onClick={() => {
@@ -589,37 +586,36 @@ const Detail = (props: any) => {
                 }}
                 request={async (param) => {
                   // 表单搜索项会从 params 传入，传递给后端接口。
-                  let arrZT: any[] = [];
-                  
+                  // const arrZT: any[] = [];
+
                   if (state.id && KHFWSJPZId) {
                     const res = await getStudentListByBjid({
                       BJSJId: state.id,
-                      page: param.current,
-                      pageSize: param.pageSize,
+                      page: param.current || 1,
+                      pageSize: param.pageSize || 10,
                       KHFWSJPZId: KHFWSJPZId,
                       ZT: [],
                       XSXMORXH: searchValue,
                     });
-                  
 
                     if (res?.status === 'ok') {
-                      const data = res?.data?.rows?.filter((item: any)=>{
+                      const data = res?.data?.rows?.filter((item: any) => {
                         // 已报名 已报名 或者 非已退
                         if (ZT === 1) {
-                         if(item?.XSFWBJs.length&&(item.XSFWBJs?.[0].ZT!==2)){
-                          return true;
-                         }
-                         return false
+                          if (item?.XSFWBJs.length && item.XSFWBJs?.[0].ZT !== 2) {
+                            return true;
+                          }
+                          return false;
                         }
                         //未报名 未报名 已退课
                         if (ZT === 2) {
-                          if(!item?.XSFWBJs.length || item.XSFWBJs?.[0].ZT===2){
+                          if (!item?.XSFWBJs.length || item.XSFWBJs?.[0].ZT === 2) {
                             return true;
-                           }
-                           return false
+                          }
+                          return false;
                         }
                         return true;
-                      })
+                      });
                       return {
                         data,
                         success: true,
@@ -693,10 +689,15 @@ const Detail = (props: any) => {
                   if (KHFWBJs?.[0] && detailZT) {
                     return [
                       <>
-                        开启缴费:<Switch
+                        开启缴费:
+                        <Switch
                           checkedChildren="开启"
                           unCheckedChildren="关闭"
-                          checked={isPay} onChange={(value: boolean) => { onIsPayClick(value) }} />
+                          checked={isPay}
+                          onChange={(value: boolean) => {
+                            onIsPayClick(value);
+                          }}
+                        />
                       </>,
                       <SignUpClass
                         actionRef={actionRef}
@@ -711,7 +712,6 @@ const Detail = (props: any) => {
               />
             </Spin>
           </>
-
         )}
         <Modal
           title={flag ? '催缴费通知' : '选课提醒'}
@@ -762,7 +762,6 @@ const Detail = (props: any) => {
           XNXQId={KHFWBJs?.[0]?.XNXQId}
         />
       </PageContain>
-
     </div>
   );
 };
