@@ -5,6 +5,7 @@ import { useModel } from 'umi';
 import ProFormFields from '@/components/ProFormFields';
 import styles from '../index.less';
 import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
+import moment from 'moment';
 
 const formLayout = {
   labelCol: { flex: '10em' },
@@ -71,7 +72,7 @@ const NewEvent = (props: PropsType) => {
         formItems={formItems}
         formItemLayout={formLayout}
         values={{
-          RQ: date,
+          RQ: moment(date).format('YYYY/MM/DD'),
           ...current
         }}
       />
