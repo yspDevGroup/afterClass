@@ -296,8 +296,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
   };
   // v true 更新 false 新建
   const onTemplateSave = (v: boolean = false) => {
-    // console.log('模板-----')
-    formRef.current?.validateFields?.().then(async (values: ModalValue) => {
+    console.log('模板-----',formRef?.current);
+    formRef?.current?.validateFields?.().then(async (values: ModalValue) => {
       const params: any = {
         FWMC: values?.FWMC,
         XQSJId,
