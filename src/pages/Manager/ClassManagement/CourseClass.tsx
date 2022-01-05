@@ -28,6 +28,7 @@ import SearchLayout from '@/components/Search/Layout';
 import AddCourseClass from './components/AddCourseClass';
 import AppSKXQTable from './components/AppSKXQTable';
 import { calcAllPeriod, getAllClassIds } from '@/services/after-class/kcbsksj';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -117,7 +118,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         type: ['1'],
       });
       if (res.status === 'ok') {
-        setBMJSSJTime(res.data?.[0]?.JSSJ);
+        setBMJSSJTime(moment(res.data?.[0]?.JSSJ).format('YYYY/MM/DD 23:59:59'));
       }
     })();
   }, [curXNXQId]);
