@@ -35,6 +35,7 @@ import * as khjspj from './khjspj';
 import * as khjsqj from './khjsqj';
 import * as khjssj from './khjssj';
 import * as khjstdk from './khjstdk';
+import * as khjyjg from './khjyjg';
 import * as khjyjspjl from './khjyjspjl';
 import * as khjytzgg from './khjytzgg';
 import * as khkclx from './khkclx';
@@ -44,18 +45,17 @@ import * as khkcsq from './khkcsq';
 import * as khktfc from './khktfc';
 import * as khpksj from './khpksj';
 import * as khtksj from './khtksj';
-import * as khjyjg from './khjyjg';
 import * as khxkjl from './khxkjl';
-import * as khxscq from './khxscq';
 import * as khxksj from './khxksj';
+import * as khxscq from './khxscq';
 import * as khxsdd from './khxsdd';
 import * as khxspj from './khxspj';
+import * as khxsqj from './khxsqj';
 import * as khxstk from './khxstk';
 import * as khxxzzfw from './khxxzzfw';
-import * as khxsqj from './khxsqj';
 import * as khzzfw from './khzzfw';
-import * as pksj from './pksj';
 import * as njsj from './njsj';
+import * as pksj from './pksj';
 import * as redis from './redis';
 import * as reports from './reports';
 import * as sso from './sso';
@@ -68,20 +68,20 @@ import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
 import * as xscfsj from './xscfsj';
-import * as xsjbsj from './xsjbsj';
-import * as xsjtcy from './xsjtcy';
 import * as xsjlsj from './xsjlsj';
+import * as xsjtcy from './xsjtcy';
 import * as xsjzxx from './xsjzxx';
 import * as xsxxjl from './xsxxjl';
 import * as xxgg from './xxgg';
 import * as xxjbpz from './xxjbpz';
 import * as xxjbsj from './xxjbsj';
 import * as xxpz from './xxpz';
-import * as xxsjpz from './xxsjpz';
 import * as xxsppz from './xxsppz';
-import * as xxtzgg from './xxtzgg';
 import * as zxfa from './zxfa';
+import * as xxsjpz from './xxsjpz';
 import * as zxsj from './zxsj';
+import * as xxtzgg from './xxtzgg';
+import * as xsjbsj from './xsjbsj';
 export default {
   other,
   auth,
@@ -116,6 +116,7 @@ export default {
   khjsqj,
   khjssj,
   khjstdk,
+  khjyjg,
   khjyjspjl,
   khjytzgg,
   khkclx,
@@ -125,18 +126,17 @@ export default {
   khktfc,
   khpksj,
   khtksj,
-  khjyjg,
   khxkjl,
-  khxscq,
   khxksj,
+  khxscq,
   khxsdd,
   khxspj,
+  khxsqj,
   khxstk,
   khxxzzfw,
-  khxsqj,
   khzzfw,
-  pksj,
   njsj,
+  pksj,
   redis,
   reports,
   sso,
@@ -149,18 +149,18 @@ export default {
   xnxq,
   xqsj,
   xscfsj,
-  xsjbsj,
-  xsjtcy,
   xsjlsj,
+  xsjtcy,
   xsjzxx,
   xsxxjl,
   xxgg,
   xxjbpz,
   xxjbsj,
   xxpz,
-  xxsjpz,
   xxsppz,
-  xxtzgg,
   zxfa,
+  xxsjpz,
   zxsj,
+  xxtzgg,
+  xsjbsj,
 };

@@ -262,6 +262,26 @@ export async function getAllClasses(
   });
 }
 
+/** 获取班级对应的服务班引用班级 POST /khbjsj/getNJbyKHBJSJId */
+export async function getNJbyKHBJSJId(
+  body: {
+    /** 学年学期ID */
+    XNXQId: string;
+    /** 课后班级数据id */
+    KHBJSJId: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getNJbyKHBJSJId', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 获取学校班级的评价信息 POST /khbjsj/getClassesEvaluation */
 export async function getClassesEvaluation(
   body: {
