@@ -179,10 +179,10 @@ const CourseDetails: React.FC = () => {
               <span>上课地点：</span>
               {KcDetail?.xq} | {KcDetail?.address}
             </li>
-            {KcDetail?.KSS ? <li>
+            {KcDetail?.KSS === 0 || KcDetail?.KSS === null ? '' : <li>
               <span>总课时：</span>
               {KcDetail?.KSS}课时
-            </li> : ''}
+            </li>}
             <li>
               <span>授课班级：</span>
               {KcDetail?.BJMC}
