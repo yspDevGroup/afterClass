@@ -22,38 +22,9 @@ const SeveiceList = (props: ServiceBasicsType) => {
 
   const formRef = useRef();
   const [dataSource, setDataSource] = useState<any>();
-  useEffect(() => {
-    const data = [{
-      "id": "fa07dab5-af1d-4652-b9a8-844060cfe4ac",
-      "BH": 401,
-      "BJ": "1班",
-      "createdAt": "2021-10-14 09:08:00",
-      "xsfwbm_count": 0,
-      "xs_count": 22,
-      "KHFWBJs": [{ZT: 0}],
-      "NJSJ": {
-        "id": "af7a2db0-2c87-11ec-a7d0-52540033d8e0",
-        "NJ": 31,
-        "NJMC": "一年级",
-        "XD": "小学"
-      }
-    },{
-      "id": "4d2195c1-df64-4978-971d-41e469a95ebf",
-      "BH": 402,
-      "BJ": "2班",
-      "createdAt": "2021-10-14 09:08:01",
-      "xsfwbm_count": 0,
-      "xs_count": 0,
-      "KHFWBJs": [{ZT: 0}],
-      "NJSJ": {
-        "id": "af7a2db0-2c87-11ec-a7d0-52540033d8e0",
-        "NJ": 31,
-        "NJMC": "一年级",
-        "XD": "小学"
-      }
-    }];
-    setDataSource(data);
-  })
+  // useEffect(() => {
+    
+  // },[])
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -103,6 +74,38 @@ const SeveiceList = (props: ServiceBasicsType) => {
       },
     },
   ];
+  const getDataSource=()=>{
+    const data = [{
+      "id": "fa07dab5-af1d-4652-b9a8-844060cfe4ac",
+      "BH": 401,
+      "BJ": "1班",
+      "createdAt": "2021-10-14 09:08:00",
+      "xsfwbm_count": 0,
+      "xs_count": 22,
+      "KHFWBJs": [{ZT: 0}],
+      "NJSJ": {
+        "id": "af7a2db0-2c87-11ec-a7d0-52540033d8e0",
+        "NJ": 31,
+        "NJMC": "一年级",
+        "XD": "小学"
+      }
+    },{
+      "id": "4d2195c1-df64-4978-971d-41e469a95ebf",
+      "BH": 402,
+      "BJ": "2班",
+      "createdAt": "2021-10-14 09:08:01",
+      "xsfwbm_count": 0,
+      "xs_count": 0,
+      "KHFWBJs": [{ZT: 0}],
+      "NJSJ": {
+        "id": "af7a2db0-2c87-11ec-a7d0-52540033d8e0",
+        "NJ": 31,
+        "NJMC": "一年级",
+        "XD": "小学"
+      }
+    }];
+    setDataSource(data);
+  }
   return (
     <>
       <ModalForm<{
@@ -110,10 +113,15 @@ const SeveiceList = (props: ServiceBasicsType) => {
         company: string;
       }>
 
+
         formRef={formRef}
         title={title}
         trigger={
-          <Button type="link" >
+          <Button type="link" onClick={
+            ()=>{
+              getDataSource();
+            }
+          } >
             已引用
           </Button>
         }
