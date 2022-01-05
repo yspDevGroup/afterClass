@@ -154,48 +154,50 @@
   }
 }
 
-:global {
-  .ant-modal-confirm {
-    .ant-modal-content {
-      min-width: auto !important;
+.modalRoll {
+  :global {
+    .ant-modal-confirm {
+      .ant-modal-content {
+        min-width: auto !important;
 
-      .ant-modal-body {
-        text-align: center;
-        padding: 44px 32px 32px;
+        .ant-modal-body {
+          text-align: center;
+          padding: 44px 32px 32px;
 
-        .ant-modal-confirm-body>.anticon {
-          float: none;
-          margin-right: 0;
-          font-size: 84px;
-          color: rgba(0, 102, 255);
-        }
+          .ant-modal-confirm-body>.anticon {
+            float: none;
+            margin-right: 0;
+            font-size: 84px;
+            color: rgba(0, 102, 255);
+          }
 
-        .ant-modal-confirm-title {
-          font-weight: bold;
-          margin-top: 20px;
-          font-size: 18px;
-        }
+          .ant-modal-confirm-title {
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 18px;
+          }
 
-        .ant-modal-confirm-content {
-          margin-top: 30px;
-          color: #999999;
-        }
+          .ant-modal-confirm-content {
+            margin-top: 30px;
+            color: #999999;
+          }
 
-        .anticon+.ant-modal-confirm-title+.ant-modal-confirm-content {
-          margin-left: 0;
-        }
+          .anticon+.ant-modal-confirm-title+.ant-modal-confirm-content {
+            margin-left: 0;
+          }
 
-        .ant-modal-confirm-btns {
-          display: none;
+          .ant-modal-confirm-btns {
+            display: none;
+          }
         }
       }
     }
-  }
 
-  @media (max-width: 767px) {
-    .ant-modal {
-      max-width: calc(100vw - 66px);
-      margin: 8px auto;
+    @media (max-width: 767px) {
+      .ant-modal {
+        max-width: calc(100vw - 66px);
+        margin: 8px auto;
+      }
     }
   }
 }

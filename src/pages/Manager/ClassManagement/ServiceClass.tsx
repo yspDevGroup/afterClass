@@ -360,20 +360,21 @@ const ServiceClass = (props: { location: { state: any } }) => {
         return record?.KHKCSJ?.SSJGLX;
       },
     },
-    // {
-    //   title: '是否被引用',
-    //   align: 'center',
-    //   width: 80,
-    //   dataIndex: 'PK',
-    //   key: 'PK',
-    //   ellipsis: true,
-    //   render: (_, record) => {
-    //     if (record?.ks_count) {
-    //         return <SeveiceList title={'课后服务配置班级列表'} />;
-    //     }
-    //     return <>未引用</>;
-    //   },
-    // },
+    {
+      title: '是否被引用',
+      align: 'center',
+      width: 80,
+      dataIndex: 'PK',
+      key: 'PK',
+      ellipsis: true,
+      hideInTable: true,
+      render: (_, record) => {
+        if (record?.ks_count) {
+            return <SeveiceList title={'课后服务配置班级列表'} />;
+        }
+        return <>未引用</>;
+      },
+    },
     {
       title: '排课',
       align: 'center',

@@ -81,7 +81,7 @@ const getFreeTime = async (KHBJSJId: string, FWBJ: any) => {
               const { length } = days;
               const curArr = [].map.call(curDays, (v: API.KCBSKSJ, index: number) => {
                 return {
-                  index: length + index + 1,
+                  index: length + index,
                   jcId: v.XXSJPZId,
                   day: v.SKRQ,
                 };
@@ -93,13 +93,17 @@ const getFreeTime = async (KHBJSJId: string, FWBJ: any) => {
       } else {
         days = [].map.call(rows, (v: any, index) => {
           return {
-            index: days.length + index + 1,
+            index: days.length + index,
             jcId: v.XXSJPZId,
             day: v.SKRQ,
           };
         });
       }
-      return days;
+      return days?.sort(
+        (a, b) =>
+          new Date(a?.day?.replace(/-/g, '/')).getTime() -
+          new Date(b?.day?.replace(/-/g, '/')).getTime(),
+      );;
     }
     return days;
   }
@@ -176,6 +180,7 @@ const getHomeData = async (
                 newSech.push({
                   KHBJSJId,
                   classType,
+                  ISFW: clsArr?.[0]?.KHBJSJ?.ISFW === 1 || false,
                   days,
                   detail: converClassInfo(clsArr),
                 });

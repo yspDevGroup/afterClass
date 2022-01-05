@@ -112,8 +112,6 @@ const SeveiceList = (props: ServiceBasicsType) => {
         name: string;
         company: string;
       }>
-
-
         formRef={formRef}
         title={title}
         trigger={

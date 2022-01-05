@@ -88,6 +88,7 @@ const CallTheRoll = (props: any) => {
   const showConfirm = (tm?: boolean, title?: string, content?: string) => {
     let secondsToGo = 3;
     const modal = Modal.success({
+      className: styles.modalRoll,
       centered: true,
       title: tm ? '签到成功' : title,
       content: tm ? ` ${secondsToGo} 秒之后可以开始点名` : content,
@@ -96,6 +97,7 @@ const CallTheRoll = (props: any) => {
       const timer = setInterval(() => {
         secondsToGo -= 1;
         modal.update({
+          className: styles.modalRoll,
           content: `${secondsToGo} 秒之后可以开始点名`,
         });
       }, 1000);
@@ -239,7 +241,6 @@ const CallTheRoll = (props: any) => {
       const classInfo = courseSchedule.find((item: { KHBJSJId: string }) => {
         return item.KHBJSJId === bjId;
       });
-
       if (classInfo) {
         const { days, detail } = classInfo;
         const curDate = days?.find((it: { day: any }) => it.day === date);
@@ -250,7 +251,11 @@ const CallTheRoll = (props: any) => {
           KCMC: detail?.[0].title || '',
         };
         setClaName(name);
-        getData();
+        if(classInfo.ISFW){
+          getData('special');
+        }else{
+          getData();
+        }
       } else {
         const res = await getKHBJSJ({
           id: bjId,
