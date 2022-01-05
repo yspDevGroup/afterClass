@@ -14,6 +14,7 @@ import GoBack from '@/components/GoBack';
 import styles from './index.less';
 import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
 import { getAllJSCQBQ } from '@/services/after-class/jscqbq';
+import moment from 'moment';
 
 const { TextArea } = Input;
 const getCountDays = (curMonth: number) => {
@@ -59,10 +60,12 @@ const DealAbnormal = (props: any) => {
     }
   };
   const getData = async () => {
+    const start = `${data.year}-${data.month}-01`;
+    const end  = `${data.year}-${data.month}-${getCountDays(data.month)}`;
     const res = await getAllKHJSCQ({
       JZGJBSJId: userId,
-      startDate: `${data.year}-${data.month}-01`,
-      endDate: `${data.year}-${data.month}-${getCountDays(data.month)}`,
+      startDate: moment(start).format('YYYY-MM-DD'),
+      endDate: moment(end).format('YYYY-MM-DD'),
     })
     if (res.status === 'ok' && res.data) {
       setTotal(res.data.length);
