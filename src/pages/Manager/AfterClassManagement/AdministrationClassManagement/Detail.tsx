@@ -96,13 +96,12 @@ const Detail = (props: any) => {
   useEffect(() => {
     if (KHFWSJPZIdData?.length) {
       if (!KHFWSJPZId) {
-        console.log('KHFWBJs?.[0].KHFWSJPZ',KHFWBJs?.[0].KHFWSJPZs[0].id);
-        if(KHFWBJs?.[0].KHFWSJPZs[0].id){
-          setKHFWSJPZId(KHFWBJs?.[0].KHFWSJPZs[0].id);
+        console.log('KHFWBJs?.[0].KHFWSJPZ',KHFWBJs?.[0]?.KHFWSJPZs[0]?.id);
+        if(KHFWBJs?.[0]?.KHFWSJPZs?.[0]?.id){
+          setKHFWSJPZId(KHFWBJs?.[0]?.KHFWSJPZs?.[0]?.id);
         }else{
           setKHFWSJPZId(KHFWSJPZIdData?.[0]?.value);
         }
-        
       }
       if (KHFWSJPZId) {
         const KHFWSJPZ: any = KHFWSJPZIdData?.find((item: any) => item.value === KHFWSJPZId);
