@@ -31,6 +31,7 @@ const AdministrationClassManagement = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
+  const [curXNXQData, setCurXNXQData] = useState<any[]>();
   const [bjData, setBJData] = useState<selectType[] | undefined>([]);
   const [BJId, setBJId] = useState<string | undefined>(undefined);
   const [XQData, setXQData] = useState<any | undefined>();
@@ -40,7 +41,7 @@ const AdministrationClassManagement = () => {
       XXJBSJId: currentUser?.xxId,
     });
     if (res?.status === 'ok') {
-      const arr = res?.data?.map((item) => {
+      const arr = res?.data?.map((item: any) => {
         return {
           label: item.XQMC,
           value: item.id,
@@ -61,8 +62,10 @@ const AdministrationClassManagement = () => {
     (async () => {
       const result = await queryXNXQList(currentUser?.xxId);
       if (result?.current) {
+        console.log('result',result)
         setXQData(result?.current);
         setCurXNXQId(result?.current?.id);
+        setCurXNXQData(result?.data)
       }
     })();
     getCampusData();
@@ -113,7 +116,7 @@ const AdministrationClassManagement = () => {
       setBJId(undefined);
       getBJSJ();
     }
-  }, [NjId, campusId]);
+  }, [NjId, campusId, curXNXQId]);
 
   //  发布取消发布
   const onReleaseClick = async (id: string, flag: boolean) => {
@@ -296,6 +299,17 @@ const AdministrationClassManagement = () => {
     setCampusId(value);
     // actionRef.current?.reload();
   };
+
+  // 学年学期筛选
+  const onXNXQChange=(value: string)=>{
+    curXNXQData?.forEach((item: any)=>{
+      if(item.id===value){
+        setCurXNXQId(value);
+        setXQData(item);
+        actionRef.current?.reloadAndRest();
+      }
+    })
+  }
   return (
     <div className={styles.AdministrativeClass}>
       <PageContain>
@@ -320,7 +334,6 @@ const AdministrationClassManagement = () => {
                 page: param.current,
                 pageSize: param.pageSize,
                 XQSJId: campusId,
-     
               };
               const res = await getKHFWBJXSbm(obj);
               console.log('res-------',res);
@@ -351,6 +364,15 @@ const AdministrationClassManagement = () => {
                   })}
                 </Select>
               </div>
+              <div>
+                <label htmlFor="grade">学年学期：</label>
+                <Select value={curXNXQId} placeholder="请选择" onChange={onXNXQChange}>
+                  {curXNXQData?.map((item: any) => {
+                    return <Option value={item.id}>{`${item.XN}-${item.XQ}`}</Option>;
+                  })}
+                </Select>
+              </div>
+              
               <div>
                 <label htmlFor="grade">年级名称：</label>
                 <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
