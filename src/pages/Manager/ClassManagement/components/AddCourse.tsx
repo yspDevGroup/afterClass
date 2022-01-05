@@ -626,7 +626,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
         onCancel={() => {
           setVisible(false);
           setTeacherType(false);
-          // form.resetFields();
+          setClassData([]);
           setKCLXMC('');
         }}
         width={formValues && names === 'chakan' ? 450 : 800}
@@ -640,6 +640,9 @@ const AddServiceClass: FC<AddCourseProps> = ({
             key="cancel"
             onClick={() => {
               setVisible(false);
+              setTeacherType(false);
+              setClassData([]);
+              setKCLXMC('');
             }}
           >
             取消
