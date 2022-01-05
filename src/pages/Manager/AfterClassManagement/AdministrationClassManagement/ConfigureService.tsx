@@ -672,7 +672,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
                   position: 'bottom',
                 }}
               >
-                <ProForm.Item name='timeFrame' rules={[{ required: true, message: '请收入服务费用' }]}>
+                <ProForm.Item name='timeFrame' rules={[{ required: true, message: '请选择时段' }]}>
                   <RangePicker
                     // disabled={!!detailValue?.id}
                     // style={{ width: '250px' }}
