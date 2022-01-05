@@ -210,7 +210,7 @@ const AdministrationClassManagement = () => {
     {
       title: (
         <span>
-        状态&nbsp;
+        报名人数&nbsp;
         <Tooltip
           overlayStyle={{ maxWidth: '30em' }}
           title={
