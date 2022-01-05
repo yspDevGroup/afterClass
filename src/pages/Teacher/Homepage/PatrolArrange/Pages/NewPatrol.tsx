@@ -15,6 +15,7 @@ import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
 
 import styles from '../index.less';
 import moment from 'moment';
+import { getSerEnrolled } from '@/services/after-class/khbjsj';
 
 const NewPatrol = (props: any) => {
   const { kcid, kcmc, xkrq, bjxx, check } = props?.location?.state;
@@ -32,6 +33,8 @@ const NewPatrol = (props: any) => {
   const [checkNum, setCheckNum] = useState<number>(0);
   // 巡课确认人数
   const [realNum, setRealNum] = useState<number>(0);
+  // 班级报名人数
+  const [signNum, setSignNum] = useState<number>(0);
   // 其他说明
   const [bzDetail, setBzDetail] = useState<any>();
   const teacherInfo = bjxx?.KHBJJs?.[0]?.JZGJBSJ;
@@ -49,7 +52,7 @@ const NewPatrol = (props: any) => {
     RSSFZQ: checkIn ? accurate : false,
     /** 备注信息 */
     BZXX: '',
-    YDRS: bjxx?.xs_count,
+    YDRS: signNum || bjxx?.xs_count,
     SDRS: checkNum,
     /** 巡课教师ID */
     XKJSId: currentUser.JSId || testTeacherId,
@@ -95,7 +98,19 @@ const NewPatrol = (props: any) => {
     if (bjxx.KHXKJLs?.length) {
       getDetail(bjxx.KHXKJLs[0].id);
     }
+    if (bjxx.ISFW === 1) {
+      (async () => {
+        const resStudent = await getSerEnrolled({ id: bjxx.id || '' });
+        if (resStudent.status === 'ok') {
+          const studentData = resStudent.data;
+          setSignNum(studentData?.length || 0);
+        }
+      })()
+    }else{
+      setSignNum(bjxx?.xs_count || 0);
+    }
   }, [bjxx]);
+  
   const handleSubmit = async () => {
     const res = await createKHXKJL(recordDetail);
     if (res.status === 'ok') {
@@ -177,7 +192,7 @@ const NewPatrol = (props: any) => {
                 <li>
                   <label>应到人数</label>
                   <span>
-                    <InputNumber value={bjxx?.xs_count} disabled />人
+                    <InputNumber value={signNum} disabled />人
                   </span>
                 </li>
                 {checkIn ? <li>
@@ -211,12 +226,12 @@ const NewPatrol = (props: any) => {
                           disabled={check}
                           placeholder="请输入"
                           min={0}
-                          max={bjxx?.xs_count}
+                          max={signNum}
                           formatter={limitDecimals}
                           parser={limitDecimals}
                           onBlur={(e) => {
                             const val = Number(e.target.value);
-                            const num = val > bjxx?.xs_count ? bjxx?.xs_count : (val < 0 ? 0 : val);
+                            const num = val > signNum ? signNum : (val < 0 ? 0 : val);
                             recordDetail.QRRS = num;
                           }}
                         />

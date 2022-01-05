@@ -69,7 +69,7 @@ const DealAbnormal = (props: any) => {
     })
     if (res.status === 'ok' && res.data) {
       setTotal(res.data.length);
-      const newData = res.data.filter((val) => val.CQZT === '缺席');
+      const newData = res.data.filter((val: { CQZT: string; }) => val.CQZT === '缺席');
       const list = [].map.call(newData, ((v: any) => {
         const { KHBJSJ, XXSJPZ, CQRQ } = v;
         return {
