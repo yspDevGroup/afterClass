@@ -309,9 +309,9 @@ const TkApply = () => {
               </div>
             </Form>
           </TabPane>
-          <TabPane tab="课程对调" disabled={!TKType} key="2">
+          {/* <TabPane tab="课程对调" key="2">
             <p>选择本班其他课程进行对调</p>
-            <Form
+            {TKType ? <Form
               name="administrative"
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
@@ -400,8 +400,9 @@ const TkApply = () => {
                   <TextArea rows={4} maxLength={100} placeholder="请输入" />
                 </Form.Item>
               </div>
-            </Form>
-          </TabPane>
+            </Form> : ''}
+            
+          </TabPane> */}
         </Tabs>
       </div>
       <div className={styles.fixedBtn}>
