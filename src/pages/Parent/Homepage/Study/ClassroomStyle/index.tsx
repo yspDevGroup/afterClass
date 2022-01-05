@@ -3,8 +3,9 @@ import styles from './index.less';
 import { Avatar, Image, Row, Col, Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { getAllKHKTFC } from '@/services/after-class/khktfc';
+import { getAllKHKTFC, getPresenceByStudent } from '@/services/after-class/khktfc';
 import noOrder from '@/assets/noOrder.png';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const ClassroomStyle = () => {
   const { initialState } = useModel('@@initialState');
@@ -19,9 +20,10 @@ const ClassroomStyle = () => {
   const [endY, setEndY] = useState<number>(0);
 
   const getData = async () => {
-    const resKHKTFC = await getAllKHKTFC({
+    const result = await queryXNXQList(currentUser?.xxId);
+    const resKHKTFC = await getPresenceByStudent({
       XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
-      XXJBSJId: currentUser?.xxId,
+      XNXQId: result.current?.id,
     });
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
