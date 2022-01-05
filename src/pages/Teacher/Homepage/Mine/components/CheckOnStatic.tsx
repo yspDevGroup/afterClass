@@ -30,7 +30,8 @@ const CheckOnStatic = () => {
     if (data && type === 'attendance') {
       const toDo = data.KSS - data.attendance - data.leave - data.substitute - data.absenteeism;
       return {
-        title: `${data.KCMC}/${data.BJMC}`,
+        title: `${data.KCMC}`,
+        subTitle:`${data.BJMC}`,
         zc: data.normal,
         yc: data.abnormal,
         ds: data.remain,
@@ -144,7 +145,7 @@ const CheckOnStatic = () => {
             {satistics.map((item: any) => {
               return (
                 <Col span={12}>
-                  <PieChart data={item.data} title={item.title} key={item.title} />
+                  <PieChart data={item.data} title={item.title} subTitle={item.subTitle} key={item.title} />
                 </Col>
               );
             })}

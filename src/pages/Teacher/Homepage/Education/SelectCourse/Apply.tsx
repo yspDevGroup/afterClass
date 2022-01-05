@@ -89,8 +89,8 @@ const Study = () => {
     if (res.status === 'ok' && res.data) {
       const { rows } = res.data;
       if (rows?.length) {
-        const main = rows.find((v) => v.JSLX === 1);
-        const subs = rows.filter((v) => v.JSLX === 0);
+        const main = rows.find((v: { JSLX: number; }) => v.JSLX === 1);
+        const subs = rows.filter((v: { JSLX: number; }) => v.JSLX === 0);
         setMainTeacher(main);
         setSubTeacher(subs);
       } else {
@@ -114,6 +114,16 @@ const Study = () => {
       setCurrent(undefined);
       setMainTeacher(undefined);
       setSubTeacher([]);
+      // 更新首页获取数据信息
+      await ParentHomeData(
+        'teacher',
+        currentUser?.xxId,
+        currentUser.JSId || testTeacherId,
+        undefined,
+        undefined,
+        undefined,
+        true
+      );
     } else {
       message.warning('选课失败');
     }
@@ -147,7 +157,7 @@ const Study = () => {
       const oriData = await ParentHomeData(
         'teacher',
         currentUser?.xxId,
-        currentUser.JSId || testTeacherId,
+        currentUser.JSId || testTeacherId
       );
       const { xnxqId } = oriData.data;
       setXNXQId(xnxqId);

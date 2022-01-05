@@ -18,12 +18,15 @@ import { chooseKCByXSId } from "@/services/after-class/khfwbj";
 import noCourses from '@/assets/noCourses.png';
 import { createKHXSDD } from "@/services/after-class/khxsdd";
 import { enHenceMsg } from '@/utils/utils';
+import { ParentHomeData } from "@/services/local-services/mobileHome";
 
 const InterestClassroom = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const StorageBjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-  const StorageXSId = localStorage.getItem('studentId') || (currentUser?.student && currentUser?.student[0].XSJBSJId) || testStudentId;
+  const StorageBjId = localStorage.getItem('studentBJId') || (currentUser?.student?.[0]?.BJSJId) || testStudentBJId;
+  const StorageXSId = localStorage.getItem('studentId') || (currentUser?.student && currentUser?.student[0]?.XSJBSJId) || testStudentId;
+  const studentNjId = localStorage.getItem('studentNjId') || (currentUser?.student && currentUser?.student[0]?.NJSJId) || testStudentNJId;
+  const StorageXQSJId = localStorage.getItem('studentXQSJId') || (currentUser?.student && currentUser?.student[0]?.XQSJId) || testStudentXQSJId;
   const [FWKCData, setFWKCData] = useState<any>();
   const [YXKC, setYXKC] = useState<any[]>([]);
   const [YXKCId, setYXKCId] = useState<any[]>([]);
@@ -176,6 +179,8 @@ const InterestClassroom = () => {
       message.success('选课成功');
       setModalVisible(false);
       xuankeState();
+      // 数据信息重新更新获取
+      await ParentHomeData('student', currentUser?.xxId, StorageXSId, studentNjId, StorageBjId, StorageXQSJId, true);
       // history.push('/parent/home/afterClassCoach/interestClassroom')
     } else {
       message.error('操作失败，请联系管理员')

@@ -80,6 +80,8 @@ const CallTheRoll = (props: any) => {
   const [btnDis, setBtnDis] = useState<string>('doing');
   // 学生点名(undone,done,doing,todo,)
   const [butDis, setButDis] = useState<string>('todo');
+  // 是否其他教师已经点名
+  const [isSigned, setIsSigned] = useState<boolean>(false);
   // 获取当前日期
   const nowDate = new Date();
   const { bjId, jcId, date } = props.location.state;
@@ -155,6 +157,7 @@ const CallTheRoll = (props: any) => {
           item.isRealTo = item.CQZT;
         });
         setButDis('done');
+        setIsSigned(true);
         setDataScouse(allData);
       } else {
         if (resCheck?.data?.length) {
@@ -251,9 +254,9 @@ const CallTheRoll = (props: any) => {
           KCMC: detail?.[0].title || '',
         };
         setClaName(name);
-        if(classInfo.ISFW){
+        if (classInfo.ISFW) {
           getData('special');
-        }else{
+        } else {
           getData();
         }
       } else {
@@ -312,7 +315,7 @@ const CallTheRoll = (props: any) => {
       value.push({
         CQZT: item.isLeave ? '请假' : item.isRealTo, // 出勤 / 缺席
         CQRQ: pkDate, // 日期
-        XSJBSJId: item.XSJBSJId, // 学生ID
+        XSJBSJId: item.XSJBSJId || item.XSJBSJ?.id, // 学生ID
         KHBJSJId: bjId, // 班级ID
         XXSJPZId: jcId, // 节次ID
       });
@@ -337,7 +340,9 @@ const CallTheRoll = (props: any) => {
     ]);
     if (res.status === 'ok') {
       showConfirm(true);
-      setBtnDis('done');
+      if (!isSigned) {
+        setBtnDis('done');
+      }
     } else {
       message.error(res.message);
     }
@@ -417,7 +422,7 @@ const CallTheRoll = (props: any) => {
       </div>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
-        {claName?.BJMC} {curNum ? `｜第 ${curNum}/${claName?.KSS} 课时` : ''}
+        {claName?.BJMC} {curNum ? `｜第 ${curNum} ${claName?.KSS ? '/ ' + claName?.KSS : ''} 课时` : ''}
       </div>
       <div className={styles.checkWorkAttendance}>
         {checkWorkInfo.map((item) => {

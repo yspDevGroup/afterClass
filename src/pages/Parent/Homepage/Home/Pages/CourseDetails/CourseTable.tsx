@@ -203,7 +203,7 @@ const CourseTable: React.FC = () => {
               <span>上课地点：</span>
               {KcDetail?.xq} | {KcDetail?.address}
             </li>
-            {KcDetail?.KSS === 0 || KcDetail?.KSS === null ? '' : <li>
+            {KcDetail?.KSS === 0 ? '' : <li>
               <span>总课时：</span>
               {KcDetail?.KSS}课时
             </li>}
