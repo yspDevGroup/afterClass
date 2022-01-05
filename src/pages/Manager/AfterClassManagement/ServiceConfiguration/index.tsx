@@ -33,6 +33,7 @@ const ServiceConfiguration = () => {
   const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
   const [curTitle, setCurTitle] = useState<string | undefined>(undefined);
   const [dataSource, setDataSource] = useState<any>([]);
+  const [curXNXQData, setCurXNXQData] = useState<any[]>();
 
   const getCampusData = async () => {
     const res = await getAllXQSJ({
@@ -62,6 +63,7 @@ const ServiceConfiguration = () => {
 
       if (res.status === 'ok' && res.data) {
         setDataSource(res.data?.rows);
+        
       }
     }
   };
@@ -74,6 +76,7 @@ const ServiceConfiguration = () => {
     (async () => {
       const result = await queryXNXQList(currentUser?.xxId);
       setCurXNXQId(result?.current?.id);
+      setCurXNXQData(result?.data);
     })();
     getCampusData();
   }, []);
@@ -210,6 +213,16 @@ const ServiceConfiguration = () => {
     },
   ];
 
+  // 学年学期筛选
+  const onXNXQChange=(value: string)=>{
+    curXNXQData?.forEach((item: any)=>{
+      if(item.id===value){
+        setCurXNXQId(value);
+        actionRef.current?.reloadAndRest();
+      }
+    })
+  }
+
   return (
     <div className={styles.AdministrativeClass}>
       <PageContain>
@@ -232,7 +245,23 @@ const ServiceConfiguration = () => {
           search={false}
           scroll={{ x: getTableWidth(columns) }}
           headerTitle={
-            <SearchLayout>
+            <SearchLayout>  
+              <div>
+                <label htmlFor="grade">校区名称：</label>
+                <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
+                  {campusData?.map((item: any) => {
+                    return <Option value={item.value}>{item.label}</Option>;
+                  })}
+                </Select>
+              </div>
+              <div>
+                <label htmlFor="grade">学年学期：</label>
+                <Select value={curXNXQId} placeholder="请选择" onChange={onXNXQChange}>
+                  {curXNXQData?.map((item: any) => {
+                    return <Option value={item.id}>{`${item.XN}-${item.XQ}`}</Option>;
+                  })}
+                </Select>
+              </div>
               <div>
                 <label htmlFor="grade">服务模板：</label>
                 <Search
@@ -242,14 +271,6 @@ const ServiceConfiguration = () => {
                     setCurTitle(value);
                   }}
                 />
-              </div>
-              <div>
-                <label htmlFor="grade">校区名称：</label>
-                <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
-                  {campusData?.map((item: any) => {
-                    return <Option value={item.value}>{item.label}</Option>;
-                  })}
-                </Select>
               </div>
             </SearchLayout>
           }

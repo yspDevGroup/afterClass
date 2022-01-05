@@ -35,6 +35,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const [XNXQId, setXNXQId] = useState<string>();
   const [imageUrl, setImageUrl] = useState('');
 
+
   const formRef = useRef();
 
   const formLayout = {
@@ -62,8 +63,9 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const getXNXQData = async () => {
     const res = await queryXNXQList(currentUser?.xxId);
     const { current } = res;
+    console.log('res',res)
     if (current) {
-      setXNXQData([{ label: `${current?.XN} ${current?.XQ}`, value: current.id }])
+      setXNXQData(res?.xnxqList.map((item: any)=>{return {value:item.value,label:item.text}}))
       setXNXQId(current?.id);
     }
   }
