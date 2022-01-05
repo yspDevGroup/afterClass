@@ -285,7 +285,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
   };
   // v true 更新 false 新建
   const onTemplateSave = (v: boolean = false) => {
-    formRef.current?.validateFieldsReturnFormatValue?.().then(async (values: ModalValue) => {
+    // console.log('模板-----')
+    formRef.current?.validateFields?.().then(async (values: ModalValue) => {
       const params: any = {
         FWMC: values?.FWMC,
         XQSJId,
@@ -297,6 +298,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         ZDKCS: values?.KXSL,
         FWFY: values?.FWFY,
       };
+  
       // 更新
       if (v) {
         if (templateId) {
@@ -331,6 +333,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         params.NJIds = [NJSJ.id];
         params.FWZT = 1;
         const res = await createKHFWSJ(params);
+        // console.log('==========')
         if (res.status === 'ok') {
           message.success('保存成功');
           getData();
