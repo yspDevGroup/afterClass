@@ -167,6 +167,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             }
           })
         }
+        setCampusId(XQSJId);
         formRef?.current?.setFieldsValue({
           FWMC,
           XQSJId,
@@ -319,6 +320,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             maxLength={50}
             getNJArr={() => {
               // 获取年级
+              // console.log('NJIDS',formRef?.current?.getFieldValue('NJIds'))
               return formRef?.current?.getFieldValue('NJIds')
             }}
             XNXQId={XNXQId}

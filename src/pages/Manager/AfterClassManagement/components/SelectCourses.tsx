@@ -77,6 +77,7 @@ const SelectCourses = (props: SelectCourseProps) => {
   // 获取课后课程
   const getKHKCData = async (BJMC: string | undefined = undefined) => {
     const NJSJIds = getNJArr();
+    // console.log('NJSJIds',NJSJIds);
     if (NJSJIds?.length && XQSJId) {
       const res = await getAllClassesByNJ({
         XNXQId,
