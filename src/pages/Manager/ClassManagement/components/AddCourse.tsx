@@ -505,7 +505,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
           fieldProps: {
             onChange: (item: any) => {
               if (item) {
-                form.setFieldsValue({ ZJS: undefined, FJS: undefined });
+                form?.setFieldsValue({ ZJS: undefined, FJS: undefined });
                 return setTeacherType(true);
               }
               return setTeacherType(false);
