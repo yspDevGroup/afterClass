@@ -214,7 +214,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
     if(KCLXMC==='校内辅导'&& kcId && campusId){
       getBJData();
     }
-  }, [kcId,campusId])
+  }, [KCLXMC,kcId,campusId])
   
 
   const onFinish = async (values: any) => {
@@ -626,6 +626,8 @@ const AddServiceClass: FC<AddCourseProps> = ({
         onCancel={() => {
           setVisible(false);
           setTeacherType(false);
+          // form.resetFields();
+          setKCLXMC('');
         }}
         width={formValues && names === 'chakan' ? 450 : 800}
         footer={formValues && names === 'chakan' ? null : [
