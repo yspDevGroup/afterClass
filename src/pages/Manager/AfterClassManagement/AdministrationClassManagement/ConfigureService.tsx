@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ModalForm, ProFormDigit, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import { ModalForm, ProFormDigit, ProFormList, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { Button, Col, message, Row, Space, Spin, DatePicker } from 'antd';
 import SelectCourses from '../components/SelectCourses';
 import ProForm, { ProFormSwitch, ProFormSelect } from '@ant-design/pro-form';
@@ -38,7 +38,7 @@ export type ModalValue = {
   JFLX?: number;
   // KSRQ?: string/;
   // JSRQ?: string;
-  timeFrame?: Moment[];
+  timeFrames?: any;
 };
 const ConfigureService = (props: ConfigureSeverType) => {
   const { XNXQId, BJSJId, NJSJ, KHFWBJs, XQData, actionRef, XQSJId, key } = props;
@@ -48,10 +48,10 @@ const ConfigureService = (props: ConfigureSeverType) => {
   const [detailValue, setDetailValue] = useState<ModalValue>();
   const [templateData, setTemplateData] = useState<any[]>();
   const [templateId, setTemplateId] = useState<string>();
-
   const [JFLX, setJFLX] = useState<number>();
   const formRef = useRef();
   const signUpClassRef = useRef();
+
 
   // 保存并报名
   const [saveFalg, setSaveFalg] = useState<boolean>(false);
@@ -84,12 +84,16 @@ const ConfigureService = (props: ConfigureSeverType) => {
               KHKC.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
             }
           });
-          let timeFrame;
-          if (data?.JFLX === 1 && data?.KHFWSJPZs?.[0]?.KSRQ && data?.KHFWSJPZs?.[0]?.JSRQ) {
-            timeFrame = [
-              moment(data?.KHFWSJPZs?.[0]?.KSRQ, 'YYYY-MM-DD'),
-              moment(data?.KHFWSJPZs?.[0]?.JSRQ, 'YYYY-MM-DD'),
-            ];
+          let timeFrames: any[]=[];
+          if (data?.JFLX === 1 && data?.KHFWSJPZs?.length) {
+            data?.KHFWSJPZs.forEach((item: any)=>{
+              const timeFrame = [
+                moment(item.KSRQ, 'YYYY-MM-DD'),
+                moment(item.JSRQ, 'YYYY-MM-DD'),
+              ];
+              timeFrames.push({timeFrame});
+            })
+          
           }
 
           setDetailValue({
@@ -102,7 +106,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
             FWMS: data?.FWMS,
             id: data?.id,
             JFLX: data?.JFLX,
-            timeFrame,
+            timeFrames,
           });
 
           if (data?.JFLX) {
@@ -137,7 +141,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
 
   // modal 提交
   const onFinish = async (values: ModalValue) => {
-    // console.log(values);
+
     setLoading(true);
     const KHBJSJIds: any[] = [];
     // KHBJSJIds=[ { KHBJSJId: '719ac8f1-192c-4bc4-840c-0f6d065d345e', LX: 1 },{KHBJSJId: 'f0bc43eb-2d6a-40cd-a80a-82d0596443d3', LX: 0}];
@@ -173,6 +177,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
       KSRQ: undefined,
       JSRQ: undefined,
       KHBJSJIds,
+      RQs: undefined,
     };
     //  批量报名并且 发布课程
     if (saveFalg) {
@@ -180,19 +185,25 @@ const ConfigureService = (props: ConfigureSeverType) => {
     }
     //  debugger;
     // 课程班类型为 按时段
-    if (values?.JFLX === 1 && values?.timeFrame) {
-      const { timeFrame } = values;
-      console.log('timeFrame', timeFrame);
-      if (values?.timeFrame?.length > 0) {
-        if (timeFrame[0]) {
-          params.KSRQ = moment(timeFrame[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
+    if (values?.JFLX === 1 && values?.timeFrames?.length) {
+      const { timeFrames } = values;
+      const RQs: any[] = [];
+      timeFrames.forEach((item: any) => {
+        console.log('item', item)
+        let KSRQ;
+        let JSRQ;
+        if (item.timeFrame[0]) {
+          KSRQ = moment(item.timeFrame[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
         }
-        if (timeFrame[1]) {
-          params.JSRQ = moment(timeFrame[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
+        if (item.timeFrame[1]) {
+          JSRQ = moment(item.timeFrame[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
         }
-      }
+        RQs.push({ KSRQ, JSRQ })
+      });
+      params.RQs = RQs;
     }
-    //编辑
+    console.log('params', params);
+    // 编辑
     if (detailValue?.id) {
       const res = await updateKHFWBJ({ id: detailValue?.id }, { ...params });
       if (res.status === 'ok') {
@@ -298,7 +309,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         ZDKCS: values?.KXSL,
         FWFY: values?.FWFY,
       };
-  
+
       // 更新
       if (v) {
         if (templateId) {
@@ -346,7 +357,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
     });
   };
 
-  const getKHFD= async ()=>{
+  const getKHFD = async () => {
 
     const params: ModalValue = {
       FWFY: 140,
@@ -361,22 +372,22 @@ const ConfigureService = (props: ConfigureSeverType) => {
       KHKC: [],
       FWMC: '',
       FWMS: '',
-    }; 
-    const res= await getAllClasses({
+    };
+    const res = await getAllClasses({
       XNXQId,
-      ISFW:1,
+      ISFW: 1,
       BJZT: '已开班',
-      KCTAG:'校内辅导',
+      KCTAG: '校内辅导',
       NJSJId: NJSJ?.id,
       BJSJId,// 行政班Id，
       page: 0,
       pageSize: 0,
-      XQSJId:XQSJId,
+      XQSJId: XQSJId,
     })
-    if(res?.status==='ok'&&res?.data?.rows?.length){
-      console.log('res',res);
-      
-      params.KCFD=res.data.rows.map((item: any)=>{return{value:item.id,label:item.BJMC}})
+    if (res?.status === 'ok' && res?.data?.rows?.length) {
+      console.log('res', res);
+
+      params.KCFD = res.data.rows.map((item: any) => { return { value: item.id, label: item.BJMC } })
     }
     // 初始化表单
     setDetailValue(params);
@@ -402,10 +413,10 @@ const ConfigureService = (props: ConfigureSeverType) => {
               } else {
                 // 还没有配置课程班 需要填写默认值
                 console.log('需要填写默认值');
-                  getKHFD()
-               
+                getKHFD()
+
               }
-             
+
             }}
           >
             {KHFWBJs?.length ? '编辑' : '配置课后服务'}
@@ -419,18 +430,18 @@ const ConfigureService = (props: ConfigureSeverType) => {
           render: (_props, defaultDoms) => {
             return [
               <div className={styles.modelFooter}>
-                
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      onTemplateSave();
-                    }}
-                    style={{marginLeft: 0}}
-                  >
-                    {' '}
-                    存为服务模板{' '}
-                  </Button>
-                
+
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    onTemplateSave();
+                  }}
+                  style={{ marginLeft: 0 }}
+                >
+                  {' '}
+                  存为服务模板{' '}
+                </Button>
+
                 <div>
                   <Button
                     onClick={() => {
@@ -470,38 +481,38 @@ const ConfigureService = (props: ConfigureSeverType) => {
           }}
         />
         {isTemplate && (
-          
-            <Row justify="start">
-              <Col span={12}>
-                <ProFormSelect
-                  label="模板名称："  
-                  name="text"
-                  placeholder="请选择服务模板"
-                  fieldProps={{
-                    options: templateData?.map((item: any) => {
-                      return { value: item?.id, label: item?.FWMC };
-                    }),
-                    onChange: onTemplateChange,
-                    allowClear: true,
+
+          <Row justify="start">
+            <Col span={12}>
+              <ProFormSelect
+                label="模板名称："
+                name="text"
+                placeholder="请选择服务模板"
+                fieldProps={{
+                  options: templateData?.map((item: any) => {
+                    return { value: item?.id, label: item?.FWMC };
+                  }),
+                  onChange: onTemplateChange,
+                  allowClear: true,
+                }}
+              />
+            </Col>
+            <Col span={12} className={styles.ghostButton}>
+              <Space>
+                <Button
+                  type="primary"
+                  ghost
+                  onClick={() => {
+                    onTemplateSave(true);
                   }}
-                />
-              </Col>
-              <Col span={12} className={styles.ghostButton}>
-                <Space>
-                  <Button
-                    type="primary"
-                    ghost
-                    onClick={() => {
-                      onTemplateSave(true);
-                    }}
-                    style={{marginLeft:'8px'}}
-                  >
-                    更新模板
-                  </Button>
-                </Space>
-              </Col>
-            </Row>
-         
+                  style={{ marginLeft: '8px' }}
+                >
+                  更新模板
+                </Button>
+              </Space>
+            </Col>
+          </Row>
+
         )}
         <Row>
           <Col span={12}>
@@ -562,7 +573,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
             // 课程班=0 辅导班=1
             flag={1}
             XQSJId={XQSJId}
-            />
+          />
         </ProForm.Item>
         <ProForm.Item
           label="课后课程："
@@ -607,7 +618,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
           </Col>
         </Row>
         <Row justify="start" align="middle">
-       
+
           <Col flex="14em">
             <ProFormSelect
               wrapperCol={{ flex: '6em' }}
@@ -625,16 +636,16 @@ const ConfigureService = (props: ConfigureSeverType) => {
                 ],
                 onChange: (value) => {
                   setJFLX(value);
-                  // if(value){
-                  //   formRef?.current?.setFieldsValue({FWFY: });
-                  // }
+                  if (value) {
+                    formRef?.current?.setFieldsValue({ timeFrames: [{ timeFrame: [] }] });
+                  }
                 },
               }}
               width={80}
             />
           </Col>
           <Col flex='auto'>
-            <span  className="ant-form-text ant-form-item">缴费</span>
+            <span className="ant-form-text ant-form-item">缴费</span>
           </Col>
           {/* <Col flex="4em">
            缴费
@@ -650,15 +661,32 @@ const ConfigureService = (props: ConfigureSeverType) => {
           </Col> */}
         </Row>
         {JFLX === 1 && (
-          <ProForm.Item name="timeFrame" wrapperCol={{ offset: 3 }}>
-            <RangePicker
-              // disabled={!!detailValue?.id}
-              style={{ width: '250px' }}
-              allowClear={false}
-              format="YYYY-MM-DD"
-              disabledDate={onDisabledTime}
-            />
-          </ProForm.Item>
+          <Row>
+            <Col flex='7em' />
+            <Col flex='auto'>
+              <ProFormList name='timeFrames'
+                style={{}}
+                creatorButtonProps={{
+                  block: false,
+                  creatorButtonText: '',
+                  position: 'bottom',
+                }}
+              >
+                <ProForm.Item name='timeFrame' rules={[{ required: true, message: '请收入服务费用' }]}>
+                  <RangePicker
+                    // disabled={!!detailValue?.id}
+                    // style={{ width: '250px' }}
+                    allowClear={false}
+                    format="YYYY-MM-DD"
+                    disabledDate={onDisabledTime}
+                  />
+
+                </ProForm.Item>
+
+              </ProFormList></Col>
+          </Row>
+
+
         )}
 
         <Row justify="start" align="middle">
@@ -671,11 +699,11 @@ const ConfigureService = (props: ConfigureSeverType) => {
               key="FWFY"
               min={0}
               width={80}
-              // width='xs'
+            // width='xs'
             />
           </Col>
           <Col flex='auto'>
-            <span  className="ant-form-text ant-form-item">{JFLX === 1 ? '元' : '元/月'}</span>
+            <span className="ant-form-text ant-form-item">{JFLX === 1 ? '元' : '元/月'}</span>
           </Col>
         </Row>
       </ModalForm>
