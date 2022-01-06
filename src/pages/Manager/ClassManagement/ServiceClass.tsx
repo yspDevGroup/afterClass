@@ -10,6 +10,7 @@ import PromptInformation from '@/components/PromptInformation';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { calcAllPeriod, getAllClassIds } from '@/services/after-class/kcbsksj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import ActionBar from './components/ActionBar';
 
@@ -19,7 +20,6 @@ import { getTableWidth } from '@/utils/utils';
 import type { TableListParams } from '@/constant';
 import SearchLayout from '@/components/Search/Layout';
 import AppSKXQTable from './components/AppSKXQTable';
-import { calcAllPeriod, getAllClassIds } from '@/services/after-class/kcbsksj';
 import AddCourse from './components/AddCourse';
 import SeveiceList from './components/SeveiceList';
 
@@ -364,13 +364,13 @@ const ServiceClass = (props: { location: { state: any } }) => {
       title: '是否被引用',
       align: 'center',
       width: 80,
-      dataIndex: 'PK',
-      key: 'PK',
+      dataIndex: 'KCFWBJs',
+      key: 'KCFWBJs',
       ellipsis: true,
-      hideInTable: true,
+      // hideInTable: true,
       render: (_, record) => {
-        if (record?.ks_count) {
-            return <SeveiceList title={'课后服务配置班级列表'} />;
+        if (record?.KCFWBJs?.length) {
+            return <SeveiceList title={'课后服务配置班级列表'} bjId = {record.id} termId = {curXNXQId} />;
         }
         return <>未引用</>;
       },

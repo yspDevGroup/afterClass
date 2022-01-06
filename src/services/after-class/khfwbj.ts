@@ -15,7 +15,7 @@ export async function createKHFWBJ(
     KXSL?: number;
     /** 缴费类型，0:按月缴费,1:自由缴费 */
     JFLX?: number;
-    RQs?: { KSRQ?: string; JSRQ?: string }[];
+    RQs?: { KSRQ?: string; JSRQ?: string; SDBM?: string }[];
     KHBJSJIds?: { KHBJSJId?: string; LX?: number }[];
   },
   options?: { [key: string]: any },
@@ -79,7 +79,7 @@ export async function updateKHFWBJ(
     KXSL?: number;
     /** 缴费类型，0:按月缴费,1:自由缴费 */
     JFLX?: number;
-    RQs?: { KSRQ?: string; JSRQ?: string }[];
+    RQs?: { KSRQ?: string; JSRQ?: string; SDBM?: string }[];
     KHBJSJIds?: { KHBJSJId?: string; LX?: number }[];
   },
   options?: { [key: string]: any },
@@ -197,6 +197,69 @@ export async function updateKHFWBJisPay(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khfwbj/updateKHFWBJisPay', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 根据时间获取课后服务班级 POST /khfwbj/getKHFWBBySJ */
+export async function getKHFWBBySJ(
+  body: {
+    NJSJId?: string;
+    KHFWSJPZId?: string;
+    /** 缴费类型 */
+    JFLX?: number;
+    /** 时段别名 */
+    SDBM?: string;
+    /** 页数 */
+    page: number;
+    /** 每页记录数 */
+    pageSize: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khfwbj/getKHFWBBySJ', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 批量修改服务班对应时间缴费功能 POST /khfwbj/bulkEditIsPay */
+export async function bulkEditIsPay(
+  body: {
+    KHFWBJAndSJPZ?: { KHFWBJId?: string; KHFWSJPZId?: string }[];
+    /** 是否开启付费，0:关闭;1:开启 */
+    isPay: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khfwbj/bulkEditIsPay', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取学生未报名时间 POST /khfwbj/getWBMXS */
+export async function getWBMXS(
+  body: {
+    XSJBSJId: string;
+    KHFWBJId: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khfwbj/getWBMXS', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -6,25 +6,24 @@
  * @LastEditors: Wu Zhan
  */
 
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, Tooltip } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Button } from 'antd';
 import { ModalForm } from '@ant-design/pro-form';
-import { Link } from 'umi';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { getNJbyKHBJSJId } from '@/services/after-class/khbjsj';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 
 type ServiceBasicsType = {
-  title: string
+  title: string,
+  bjId: string,
+  termId: string
 }
 
 const SeveiceList = (props: ServiceBasicsType) => {
-  const { title } = props;
+  const { title, bjId, termId } = props;
 
   const formRef = useRef();
   const [dataSource, setDataSource] = useState<any>();
-  // useEffect(() => {
-    
-  // },[])
+  const [subTitle, setSubTitle] = useState<string>();
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -34,77 +33,59 @@ const SeveiceList = (props: ServiceBasicsType) => {
       align: 'center',
     },
     {
-      title: '年级名称',
+      title: '服务名称',
+      dataIndex: 'FWMC',
+      key: 'FWMC',
+      align: 'center',
+      width: 160,
+      render: (test: any, record: any) => {
+        return `${record.KHFWBJ?.FWMC}`;
+      },
+    },
+    {
+      title: '所属行政班',
       dataIndex: 'NJMC',
       key: 'NJMC',
       align: 'center',
       width: 160,
       render: (test: any, record: any) => {
-        return `${record.NJSJ.XD}${record.NJSJ.NJMC}`;
+        return `${record.KHFWBJ?.BJSJ?.NJSJ?.NJMC} ${record.KHFWBJ?.BJSJ?.BJ}`;
       },
     },
     {
-      title: '行政班名称',
-      dataIndex: 'BJ',
-      key: 'BJ',
-      align: 'center',
-      width: 160,
-    },
-    {
-      title: '班级人数',
-      dataIndex: 'xs_count',
-      key: 'xs_count',
+      title: '服务费用',
+      dataIndex: 'FWFY',
+      key: 'FWFY',
       align: 'center',
       width: 80,
+      render: (test: any, record: any) => {
+        return `${record.KHFWBJ?.FWFY}`;
+      },
     },
     {
-      title: '状态',
+      title: '服务状态',
       dataIndex: 'ZT',
       key: 'ZT',
       align: 'center',
       width: 100,
       render: (_, record: any) => {
-        if (record?.KHFWBJs?.length) {
-          if (record?.KHFWBJs[0]?.ZT === 0) {
-            return '未发布';
-          }
-          return '已发布';
+        if (record.KHFWBJ?.ZT === 0) {
+          return '未发布';
         }
-        return '待配置';
+        return '已发布';
       },
     },
   ];
-  const getDataSource=()=>{
-    const data = [{
-      "id": "fa07dab5-af1d-4652-b9a8-844060cfe4ac",
-      "BH": 401,
-      "BJ": "1班",
-      "createdAt": "2021-10-14 09:08:00",
-      "xsfwbm_count": 0,
-      "xs_count": 22,
-      "KHFWBJs": [{ZT: 0}],
-      "NJSJ": {
-        "id": "af7a2db0-2c87-11ec-a7d0-52540033d8e0",
-        "NJ": 31,
-        "NJMC": "一年级",
-        "XD": "小学"
-      }
-    },{
-      "id": "4d2195c1-df64-4978-971d-41e469a95ebf",
-      "BH": 402,
-      "BJ": "2班",
-      "createdAt": "2021-10-14 09:08:01",
-      "xsfwbm_count": 0,
-      "xs_count": 0,
-      "KHFWBJs": [{ZT: 0}],
-      "NJSJ": {
-        "id": "af7a2db0-2c87-11ec-a7d0-52540033d8e0",
-        "NJ": 31,
-        "NJMC": "一年级",
-        "XD": "小学"
-      }
-    }];
-    setDataSource(data);
+  const getDataSource = async () => {
+    const res = await getNJbyKHBJSJId({
+      XNXQId: termId,
+      KHBJSJId: bjId,
+    })
+    if (res.status === 'ok' && res.data) {
+      const { BJMC, KCFWBJs } = res.data;
+      setSubTitle(BJMC);
+      setDataSource(KCFWBJs);
+    }
   }
   return (
     <>
@@ -115,8 +96,8 @@ const SeveiceList = (props: ServiceBasicsType) => {
         formRef={formRef}
         title={title}
         trigger={
-          <Button type="link" onClick={
-            ()=>{
+          <Button type="link" style={{padding: 0}} onClick={
+            () => {
               getDataSource();
             }
           } >
@@ -131,6 +112,7 @@ const SeveiceList = (props: ServiceBasicsType) => {
         <ProTable<any>
           columns={columns}
           rowKey="id"
+          headerTitle={subTitle}
           pagination={{
             showQuickJumper: true,
             pageSize: 5,

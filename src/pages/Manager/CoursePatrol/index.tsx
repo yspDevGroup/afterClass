@@ -30,7 +30,7 @@ const CoursePatrol = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   // const [modalVisible, setModalVisible] = useState<boolean>(false);
   // 当前选中的日期
-  const [date, setDate] = useState<string>(moment(new Date()).format('YYYY-MM-DD'));
+  const [date, setDate] = useState<string>(moment(new Date()).format('YYYY/MM/DD'));
   // 所选中的值班安排中的详情信息
   const [current, setCurrent] = useState<any>();
   // 所配置的值班安排
@@ -88,10 +88,12 @@ const CoursePatrol = () => {
     });
   };
   const handleOver = async (d: string) => {
+    const newDay = moment(d).format('YYYY/MM/DD');
+    console.log(new Date(newDay));
     const res = await getScheduleByDate({
       XXJBSJId: currentUser.xxId,
       RQ: d,
-      WEEKDAY: new Date(d).getDay().toString(),
+      WEEKDAY: new Date(newDay).getDay().toString(),
     });
     if (res.status === 'ok' && res.data) {
       return res.data?.rows?.length > 0;
