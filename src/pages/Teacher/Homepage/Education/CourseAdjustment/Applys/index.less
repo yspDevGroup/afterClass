@@ -74,25 +74,31 @@
       width: 100vw;
       margin-left: -10px;
       margin-top: 10px;
-      :global{
-        .ant-tabs-nav{
+
+      :global {
+        .ant-tabs-nav {
           background: linear-gradient(180deg, #FFFFFF 65%, rgba(255, 255, 255, 0) 100%);
           padding: 0 10px 24px;
-          &::before{
+
+          &::before {
             border-bottom: none;
           }
-          .ant-tabs-nav-wrap{
+
+          .ant-tabs-nav-wrap {
             display: inline-block !important;
             flex: none;
             width: 100%;
-            .ant-tabs-tab{
+
+            .ant-tabs-tab {
               background: inherit;
               width: auto;
               padding: 10px 0;
               margin-right: 24px;
+
               &.ant-tabs-tab-active {
                 position: relative;
-                &::after{
+
+                &::after {
                   display: block;
                   content: '';
                   width: 20px;
@@ -102,30 +108,36 @@
                   bottom: 5px;
                   left: calc(~'50% - 10px')
                 }
-                .ant-tabs-tab-btn{
+
+                .ant-tabs-tab-btn {
                   color: #4884ff;
                   font-size: 14px;
                 }
               }
-              &.ant-tabs-tab-disabled{
-                .ant-tabs-tab-btn{
+
+              &.ant-tabs-tab-disabled {
+                .ant-tabs-tab-btn {
                   color: #bbb;
                 }
               }
-              .ant-tabs-tab-btn{
+
+              .ant-tabs-tab-btn {
                 font-size: 14px;
               }
             }
           }
-          .ant-tabs-ink-bar{
+
+          .ant-tabs-ink-bar {
             display: none;
           }
         }
-        .ant-tabs-content-holder{
+
+        .ant-tabs-content-holder {
           padding: 0 10px;
           margin-top: -24px;
           z-index: 1;
-          div[role="tabpanel"] > p{
+
+          div[role="tabpanel"]>p {
             color: #999999;
             font-size: 12px;
           }
@@ -266,6 +278,23 @@
             }
           }
         }
+      }
+    }
+
+    .forbitTk {
+      height: 350px;
+
+      img {
+        display: block;
+        margin: -30px auto 0;
+      }
+
+      p {
+        color: #888;
+        width: 80vw;
+        margin: 0 auto;
+        font-size: 12px;
+        line-height: 30px;
       }
     }
   }

@@ -9,7 +9,7 @@ import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { convertTimeTable, ParentHomeData } from '@/services/local-services/mobileHome';
-import { getAllKHBJKSSJ, getKHBJSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
+import { getKHBJSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
 import noData from '@/assets/noCourse.png';
 
 import styles from './index.less';
@@ -94,7 +94,6 @@ const CourseDetails: React.FC = () => {
                 days,
                 currentUser?.xxId,
               );
-
               setTimetableList(newTime);
             }
           }
@@ -179,10 +178,10 @@ const CourseDetails: React.FC = () => {
               <span>上课地点：</span>
               {KcDetail?.xq} | {KcDetail?.address}
             </li>
-            {KcDetail?.KSS === 0 || KcDetail?.KSS === null ? '' : <li>
+            {KcDetail?.KSS ? <li>
               <span>总课时：</span>
               {KcDetail?.KSS}课时
-            </li>}
+            </li> : ''}
             <li>
               <span>授课班级：</span>
               {KcDetail?.BJMC}
@@ -261,6 +260,7 @@ const CourseDetails: React.FC = () => {
                   };
                   break;
                 case '请假':
+                case '已请假':
                   style = {
                     background: 'rgba(242, 200, 98, 0.2)',
                     color: '#666',

@@ -19,6 +19,7 @@ import { getKHBJSJ, getExchengeableClasses } from '@/services/after-class/khbjsj
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
+import forbitImg from '@/assets/403.png';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -51,7 +52,6 @@ const TkApply = () => {
       if (curType === '2') {
         adminForm.submit();
       }
-
     } else {
       message.warning('请选择调课课程');
     }
@@ -194,7 +194,7 @@ const TkApply = () => {
   const getAdminClass = async (value: moment.Moment) => {
     const res = await getExchengeableClasses({
       RQ: moment(value).format('YYYY-MM-DD'),
-      XNXQId: termId,
+      XNXQId: termId || '',
       KHBJSJId: dateData.bjid
     });
     if (res.status === 'ok' && res.data) {
@@ -309,7 +309,7 @@ const TkApply = () => {
               </div>
             </Form>
           </TabPane>
-          {/* <TabPane tab="课程对调" key="2">
+          <TabPane tab="课程对调" key="2">
             <p>选择本班其他课程进行对调</p>
             {TKType ? <Form
               name="administrative"
@@ -400,9 +400,13 @@ const TkApply = () => {
                   <TextArea rows={4} maxLength={100} placeholder="请输入" />
                 </Form.Item>
               </div>
-            </Form> : ''}
-            
-          </TabPane> */}
+            </Form> : <div className={styles.forbitTk}>
+              <img src={forbitImg} />
+              <p>
+                课程对调仅支持已指定行政班级的课程进行调换，有且仅限于同一行政班内的课程班进行调换
+              </p>
+            </div>}
+          </TabPane>
         </Tabs>
       </div>
       <div className={styles.fixedBtn}>
