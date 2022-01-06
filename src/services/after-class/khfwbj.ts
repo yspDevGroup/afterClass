@@ -15,8 +15,7 @@ export async function createKHFWBJ(
     KXSL?: number;
     /** 缴费类型，0:按月缴费,1:自由缴费 */
     JFLX?: number;
-    KSRQ?: string;
-    JSRQ?: string;
+    RQs?: { KSRQ?: string; JSRQ?: string }[];
     KHBJSJIds?: { KHBJSJId?: string; LX?: number }[];
   },
   options?: { [key: string]: any },
@@ -80,8 +79,7 @@ export async function updateKHFWBJ(
     KXSL?: number;
     /** 缴费类型，0:按月缴费,1:自由缴费 */
     JFLX?: number;
-    KSRQ?: string;
-    JSRQ?: string;
+    RQs?: { KSRQ?: string; JSRQ?: string }[];
     KHBJSJIds?: { KHBJSJId?: string; LX?: number }[];
   },
   options?: { [key: string]: any },

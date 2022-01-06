@@ -68,6 +68,7 @@ import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
 import * as xscfsj from './xscfsj';
+import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
 import * as xsjtcy from './xsjtcy';
 import * as xsjzxx from './xsjzxx';
@@ -75,13 +76,13 @@ import * as xsxxjl from './xsxxjl';
 import * as xxgg from './xxgg';
 import * as xxjbpz from './xxjbpz';
 import * as xxjbsj from './xxjbsj';
+import * as xxjtpz from './xxjtpz';
 import * as xxpz from './xxpz';
-import * as xxsppz from './xxsppz';
-import * as zxfa from './zxfa';
 import * as xxsjpz from './xxsjpz';
-import * as zxsj from './zxsj';
+import * as xxsppz from './xxsppz';
 import * as xxtzgg from './xxtzgg';
-import * as xsjbsj from './xsjbsj';
+import * as zxfa from './zxfa';
+import * as zxsj from './zxsj';
 export default {
   other,
   auth,
@@ -149,6 +150,7 @@ export default {
   xnxq,
   xqsj,
   xscfsj,
+  xsjbsj,
   xsjlsj,
   xsjtcy,
   xsjzxx,
@@ -156,11 +158,11 @@ export default {
   xxgg,
   xxjbpz,
   xxjbsj,
+  xxjtpz,
   xxpz,
-  xxsppz,
-  zxfa,
   xxsjpz,
-  zxsj,
+  xxsppz,
   xxtzgg,
-  xsjbsj,
+  zxfa,
+  zxsj,
 };
