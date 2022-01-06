@@ -11,6 +11,7 @@ import { Button, message, Spin, Form } from 'antd';
 
 import { getClassStudents } from '@/services/after-class/bjsj';
 import { getKHFWBJ, studentRegistration } from '@/services/after-class/khfwbj';
+import moment from 'moment';
 
 
 type SignUpClassProps = {
@@ -52,6 +53,22 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
       setVisible(value);
     },
   }));
+
+  // 判断当前时间 是否在 范围内
+  const getFlagTime=(KSQR: any, JSQR: any)=>{
+    if (KSQR && JSQR) {
+      const nowTime =moment().valueOf();
+      // const beginTime = moment(KSQR, 'YYYY-MM-DD').valueOf();
+      const endTime = moment(JSQR, 'YYYY-MM-DD').add(1, 'days').valueOf();
+      if ( nowTime <= endTime) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
   const formRef = useRef();
   const { type, XNXQId, BJSJId, actionRef, XSJBSJId, title, setXSId, XH, XM } = props;
@@ -113,18 +130,22 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         }
         // 时段数据
         data?.KHFWSJPZs?.forEach((item: any) => {
-          newKHFWSJPZIdData.push({
-            label: `${item.KSRQ} ~ ${item.JSRQ}`,
-            value: item.id
-          });
+          if(getFlagTime(item.KSRQ,item.JSRQ)){
+            newKHFWSJPZIdData.push({
+              label: `${item.SDBM} ${moment(item.KSRQ, 'YYYY-MM-DD').format('MM.DD')} ~ ${moment(
+                item.JSRQ,
+                'YYYY-MM-DD',
+              ).format('MM.DD')}`,
+              value: item.id
+            });
+          }
+          
         });
         if (newKHFWSJPZIdData.length) {
           formRef?.current?.setFieldsValue({
-
             KHFWSJPZIds: newKHFWSJPZIdData.map((item: SelectType) => item.value)
           });
           setKHFWSJPZIdData(newKHFWSJPZIdData);
-
         }
         // 课后辅导数据
         if (KCFD?.length) {
@@ -227,7 +248,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         }
         submitter={{
           searchConfig: {
-            submitText: '保存',
+            submitText: title === '代选课'?'选课':'报名',
             resetText: '取消',
           },
 
@@ -251,18 +272,15 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
             {`${XM}——${XH}`}
           </Form.Item>
         }
-
         {
           // 保存并批量报名需要选择时段
-
           <ProFormSelect
             placeholder="选择报名时段"
             label="报名时段"
-            rules={[{ required: true, message: '请选择学生报名' }]}
+            rules={[{ required: true, message: '选择报名时段' }]}
             name="KHFWSJPZIds"
-            fieldProps={{ options: KHFWSJPZIdData, mode: "multiple", disabled: true }}
+            fieldProps={{ options: KHFWSJPZIdData, mode: "multiple",}}
           />
-
         }
         {
           //  保存并批量报名 || 批量报名

@@ -176,6 +176,12 @@
     name: 'afterClassManagement',
     icon: 'DeploymentUnitOutlined',
     routes: [
+      // 报名设置
+      {
+        path: '/afterClassManagement/registration_setting',
+        name: 'registrationSetting',
+        component: './Manager/AfterClassManagement/RegistrationSetting',
+      },
       // 行政班管理
       {
         path: '/afterClassManagement/class_management',

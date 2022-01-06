@@ -1,18 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ModalForm, ProFormDigit, ProFormList, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import { Button, Col, message, Row, Space, Spin, DatePicker } from 'antd';
+import { Button, Col, message, Row, Space, Spin, DatePicker, Tag } from 'antd';
 import SelectCourses from '../components/SelectCourses';
 import ProForm, { ProFormSwitch, ProFormSelect } from '@ant-design/pro-form';
 import styles from './index.less';
 import UploadImage from '@/components/ProFormFields/components/UploadImage';
 import { createKHFWBJ, getKHFWBJ, updateKHFWBJ } from '@/services/after-class/khfwbj';
 import SignUpClass, { SelectType } from './SignUpClass';
-import type { Moment } from 'moment';
+
+import { getAllXXJTPZ } from '@/services/after-class/xxjtpz';
 import moment from 'moment';
 import { getAllKHFWSJ, updateKHFWSJ, createKHFWSJ } from '@/services/after-class/khfwsj';
 const { RangePicker } = DatePicker;
 import seviceImage from '@/assets/seviceImage.png';
 import { getAllClasses } from '@/services/after-class/khbjsj';
+import PromptInformation from '@/components/PromptInformation';
 
 type ConfigureSeverType = {
   KHFWBJs: any[];
@@ -46,11 +48,17 @@ const ConfigureService = (props: ConfigureSeverType) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState('');
   const [detailValue, setDetailValue] = useState<ModalValue>();
+  // 模板
   const [templateData, setTemplateData] = useState<any[]>();
+  // 报名时段 数据
+  const [BMSDData, setBMSDData] = useState<any[]>();
+
   const [templateId, setTemplateId] = useState<string>();
   const [JFLX, setJFLX] = useState<number>();
   const formRef = useRef();
   const signUpClassRef = useRef();
+
+  const [informationOpen,setInformationOpen]=useState<boolean>(false);
 
 
   // 保存并报名
@@ -61,6 +69,29 @@ const ConfigureService = (props: ConfigureSeverType) => {
     wrapperCol: { flex: 'auto' },
   };
 
+  // 获取排课时间配置
+  const getDetailTimePZ = async () => {
+    setLoading(true);
+    const res = await getAllXXJTPZ({
+      XNXQId: XNXQId,
+      XQSJId: XQSJId,
+    });
+    if (res.status === 'ok') {
+      if (res.data?.length === 0) {
+        // message.warning('未配置时段请先配置报名信息')
+        setInformationOpen(true);
+      } else {
+        const { sjpzstr } = res.data?.[0]
+        if (sjpzstr) {
+          const str = JSON.parse(sjpzstr);
+          if (str?.length) {            
+            setBMSDData(str);
+          }
+        }
+        setLoading(false);
+      }
+    }
+  }
   const getDetailValue = async () => {
     if (BJSJId && XNXQId) {
       setLoading(true);
@@ -84,17 +115,17 @@ const ConfigureService = (props: ConfigureSeverType) => {
               KHKC.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
             }
           });
-          let timeFrames: any[]=[];
-          if (data?.JFLX === 1 && data?.KHFWSJPZs?.length) {
-            data?.KHFWSJPZs.forEach((item: any)=>{
-              const timeFrame = [
-                moment(item.KSRQ, 'YYYY-MM-DD'),
-                moment(item.JSRQ, 'YYYY-MM-DD'),
-              ];
-              timeFrames.push({timeFrame});
-            })
-          
-          }
+          // let timeFrames: any[] = [];
+          // if (data?.JFLX === 1 && data?.KHFWSJPZs?.length) {
+          //   data?.KHFWSJPZs.forEach((item: any) => {
+          //     const timeFrame = [
+          //       moment(item.KSRQ, 'YYYY-MM-DD'),
+          //       moment(item.JSRQ, 'YYYY-MM-DD'),
+          //     ];
+          //     timeFrames.push({ timeFrame });
+          //   })
+
+          // }
 
           setDetailValue({
             isTemplate: false,
@@ -106,7 +137,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
             FWMS: data?.FWMS,
             id: data?.id,
             JFLX: data?.JFLX,
-            timeFrames,
+            // timeFrames,
           });
 
           if (data?.JFLX) {
@@ -120,6 +151,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
       setLoading(false);
     }
   };
+
 
   const imageChange = (type: string, e?: any) => {
     if (e.file.status === 'done') {
@@ -185,23 +217,26 @@ const ConfigureService = (props: ConfigureSeverType) => {
     }
     //  debugger;
     // 课程班类型为 按时段
-    if (values?.JFLX === 1 && values?.timeFrames?.length) {
-      const { timeFrames } = values;
-      const RQs: any[] = [];
-      timeFrames.forEach((item: any) => {
-        console.log('item', item)
-        let KSRQ;
-        let JSRQ;
-        if (item.timeFrame[0]) {
-          KSRQ = moment(item.timeFrame[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
-        }
-        if (item.timeFrame[1]) {
-          JSRQ = moment(item.timeFrame[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
-        }
-        RQs.push({ KSRQ, JSRQ })
-      });
-      params.RQs = RQs;
-    }
+    // if (values?.JFLX === 1 && values?.timeFrames?.length) {
+    //   const { timeFrames } = values;
+    //   const RQs: any[] = [];
+    //   timeFrames.forEach((item: any) => {
+    //     console.log('item', item)
+    //     let KSRQ;
+    //     let JSRQ;
+    //     if (item.timeFrame[0]) {
+    //       KSRQ = moment(item.timeFrame[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
+    //     }
+    //     if (item.timeFrame[1]) {
+    //       JSRQ = moment(item.timeFrame[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
+    //     }
+    //     RQs.push({ KSRQ, JSRQ })
+    //   });
+    //   params.RQs = RQs;
+    // }
+    params.RQs = BMSDData?.filter((item: any)=>item.type===JFLX).map((item: any)=>{
+      return { KSRQ:item.KSRQ, JSRQ:item.JSRQ,SDBM:item.name };
+    })
     console.log('params', params);
     // 编辑
     if (detailValue?.id) {
@@ -296,7 +331,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
   };
   // v true 更新 false 新建
   const onTemplateSave = (v: boolean = false) => {
-    console.log('模板-----',formRef?.current);
+    console.log('模板-----', formRef?.current);
     formRef?.current?.validateFields?.().then(async (values: ModalValue) => {
       const params: any = {
         FWMC: values?.FWMC,
@@ -413,9 +448,9 @@ const ConfigureService = (props: ConfigureSeverType) => {
               } else {
                 // 还没有配置课程班 需要填写默认值
                 console.log('需要填写默认值');
-                getKHFD()
-
+                getKHFD();
               }
+              getDetailTimePZ();
 
             }}
           >
@@ -637,7 +672,10 @@ const ConfigureService = (props: ConfigureSeverType) => {
                 onChange: (value) => {
                   setJFLX(value);
                   if (value) {
-                    formRef?.current?.setFieldsValue({ timeFrames: [{ timeFrame: [] }] });
+                    const newstr=BMSDData?.filter((item: any)=>item.type===1)
+                    if(!newstr?.length){
+                      setInformationOpen(true);
+                    }
                   }
                 },
               }}
@@ -660,35 +698,13 @@ const ConfigureService = (props: ConfigureSeverType) => {
             </span>
           </Col> */}
         </Row>
-        {JFLX === 1 && (
-          <Row>
-            <Col flex='7em' />
-            <Col flex='auto'>
-              <ProFormList name='timeFrames'
-                style={{}}
-                creatorButtonProps={{
-                  block: false,
-                  creatorButtonText: '',
-                  position: 'bottom',
-                }}
-              >
-                <ProForm.Item name='timeFrame' rules={[{ required: true, message: '请选择时段' }]}>
-                  <RangePicker
-                    // disabled={!!detailValue?.id}
-                    // style={{ width: '250px' }}
-                    allowClear={false}
-                    format="YYYY-MM-DD"
-                    disabledDate={onDisabledTime}
-                  />
-
-                </ProForm.Item>
-
-              </ProFormList></Col>
-          </Row>
-
-
-        )}
-
+        <ProForm.Item label='报名时段：'>
+              <Space wrap  style={{width:'400px'}}>
+                {BMSDData?.filter((item: any)=>item.type===JFLX).map((item: any)=>{
+                  return <Tag>{`${item.name} ${moment(item.KSRQ).format('MM-DD') }~${moment(item.KSRQ).format('MM-DD')}`}</Tag>
+                })}
+                </Space>
+        </ProForm.Item>
         <Row justify="start" align="middle">
           <Col flex="14em">
             <ProFormDigit
@@ -716,6 +732,14 @@ const ConfigureService = (props: ConfigureSeverType) => {
           actionRef={actionRef}
         />
       )}
+       <PromptInformation
+        text="未查询到报名时段数据，请先设置报名时段"
+        link="/afterClassManagement/registration_setting"
+        open={informationOpen}
+        colse={()=>{
+          setInformationOpen(false);
+        }}
+      />
     </Spin>
   );
 };
