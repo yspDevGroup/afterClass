@@ -273,6 +273,9 @@
             }
           }
         }
+        >div::-webkit-scrollbar {
+          display: none;
+        }
       }
 
       .ant-modal-footer {
@@ -293,6 +296,30 @@
           border: none;
           border: 1px solid #45c977;
           border-radius: 22px !important;
+        }
+      }
+    }
+    .ant-checkbox-wrapper {
+      position: relative;
+      margin-left: 0 !important;
+      width: 100%;
+      margin-bottom: 5px;
+      .ant-checkbox {
+        position: absolute;
+        right: 5px;
+        .ant-checkbox-inner {
+          border-color: #45c977;
+        }
+      }
+
+      .ant-checkbox-checked::after {
+        border: 1px solid #45c977;
+      }
+
+      .ant-checkbox-checked {
+        .ant-checkbox-inner {
+          background-color: #45c977;
+          border-color: #45c977;
         }
       }
     }

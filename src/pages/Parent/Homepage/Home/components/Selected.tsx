@@ -159,49 +159,27 @@ const CourseTab = (props: { dataResource: any }) => {
   }, [yxkc]);
   useEffect(() => {
     if (BaoMinData) {
-      const NewArr = BaoMinData?.[0]?.XSFWBJs?.filter((item: any, index: number) => {
-        const temArr: any[] = []
-        BaoMinData?.[0]?.XSFWBJs?.forEach((item2: { KHFWSJPZId: any; }) => temArr.push(item2?.KHFWSJPZId))
-        return temArr.indexOf(item?.KHFWSJPZId) == index
+
+      const NewArr = BaoMinData?.[0]?.XSFWBJs?.find((item: any) => {
+        return  new Date() > new Date(item?.KHFWSJPZ?.KSRQ) && new Date() < new Date(item?.KHFWSJPZ?.JSRQ)
       })
       const listData: any = [];
       const listDatas: any = [];
-      NewArr?.forEach((record: any) => {
-        let KcState = '';
-        switch (record?.ZT) {
-          case 0:
-            if (new Date() > new Date(record?.KHFWSJPZ?.JSRQ)) {
-              KcState = "已结课";
-            } else if (new Date() < new Date(record?.KHFWSJPZ?.KSRQ)) {
-              KcState = "未开课";
-            } else {
-              KcState = "上课中";
-            }
-            break;
-          case 1:
-            KcState = "退课中";
-            break;
-          case 2:
-            KcState = "已退课";
-            break;
-          case 3:
-            KcState = "待付款";
-            break;
-        }
+      NewArr?.XSFWKHBJs?.forEach((record: any) => {
         const nodeData: ListItem = {
           id: record.id,
-          title: record.KHFWBJ.FWMC,
-          img: record?.KHFWBJ?.FWTP,
-          link: `/parent/home/serviceReservation/afterClassDetails?classid=${record.KHFWSJPZId}&path=study`,
+          title: `${record?.KHBJSJ?.BJMC}【${record.KHBJSJ?.KHKCSJ?.KCMC}】`,
+          img: record.KHBJSJ?.KHKCSJ?.KCTP,
+          link: `/parent/home/courseTable?classid=${record?.KHBJSJ?.id}&path=study`,
           desc: [
             {
               left: [
-                `课程状态： ${KcState}`,
+                `课程类型： ${record?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0 ? '趣味课堂':'课后辅导'}`,
               ],
             },
             {
               left: [
-                `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
+                `服务时段： ${moment(NewArr?.KHFWSJPZ?.KSRQ).format('YYYY.MM.DD')}- ${moment(NewArr?.KHFWSJPZ?.JSRQ).format('YYYY.MM.DD')}`,
               ],
             },
           ],
@@ -209,18 +187,18 @@ const CourseTab = (props: { dataResource: any }) => {
         listData.push(nodeData)
         const nodeDatas: ListItem = {
           id: record.id,
-          title: record.KHFWBJ.FWMC,
-          img: record?.KHFWBJ?.FWTP,
-          link: `/parent/home/serviceReservation/afterClassDetails?classid=${record.KHFWSJPZId}`,
+          title: `${record?.KHBJSJ?.BJMC}【${record.KHBJSJ?.KHKCSJ?.KCMC}】`,
+          img: record.KHBJSJ?.KHKCSJ?.KCTP,
+          link:`/parent/home/courseTable?classid=${record?.KHBJSJ?.id}`,
           desc: [
             {
               left: [
-                `课程状态： ${KcState}`,
+                `课程类型： ${record?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0 ? '趣味课堂':'课后辅导'}`,
               ],
             },
             {
               left: [
-                `服务时段： ${moment(record?.KHFWSJPZ.KSRQ).format('YYYY.MM.DD')}- ${moment(record?.KHFWSJPZ.JSRQ).format('YYYY.MM.DD')}`,
+                `服务时段： ${moment(NewArr?.KHFWSJPZ?.KSRQ).format('YYYY.MM.DD')}- ${moment(NewArr?.KHFWSJPZ?.JSRQ).format('YYYY.MM.DD')}`,
               ],
             },
           ],

@@ -2,13 +2,13 @@
  * @description: 
  * @author: wsl
  * @Date: 2021-12-29 10:59:44
- * @LastEditTime: 2021-12-29 14:30:31
+ * @LastEditTime: 2022-01-06 09:31:04
  * @LastEditors: wsl
  */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import { useModel, history } from 'umi';
-import { Button, Checkbox, message, Modal } from 'antd';
+import { Button, Checkbox, message, Modal, Tag } from 'antd';
 import { createKHTKSJ } from '@/services/after-class/khtksj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 
@@ -28,6 +28,11 @@ const AfterClassService = () => {
   const StorageXSId = localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId;
   const StorageBjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
   const [BaoMinData, setBaoMinData] = useState<any>();
+  const [Type, setType] = useState(false);
+  const [TimeId, setTimeId] = useState([]);
+  const [visible, setvisible] = useState(true);
+  const [FwTimes, setFwTimes] = useState<any>([]);
+
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
@@ -54,13 +59,19 @@ const AfterClassService = () => {
         pageSize: 0
       })
       if (res.status === 'ok' && res.data) {
-        setBaoMinData(res.data.rows)
+        setBaoMinData(res.data.rows);
+        setFwTimes(res.data.rows?.[0]?.XSFWBJs);
+        const NewArr: any = [];
+        res.data.rows?.[0]?.XSFWBJs?.forEach((value: any) => {
+          NewArr.push(`${value?.id}+${value?.KHFWBJ?.FWMC}`)
+        })
+        setTimeId(NewArr)
       }
     }
   }
   useEffect(() => {
     xuankeState();
-  }, []);
+  }, [ModalVisible]);
   /** 课后帮服务协议弹出框 */
   const showModal = () => {
     setIsModalVisible(true);
@@ -76,7 +87,20 @@ const AfterClassService = () => {
     setModalVisible(true);
   };
   const handleOks = async () => {
-    const res = await createKHTKSJ(datasourse!);
+    const NewArr: any[] = [];
+    TimeId?.forEach((value: string) => {
+      const data = {
+        XSJBSJId: StorageXSId,
+        XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
+        XSFWBJId: value.split('+')[0],
+        ZT: 0,
+        BZ: '',
+        LX: 2,
+        FWMC: value.split('+')[1],
+      };
+      NewArr.push(data);
+    });
+    const res = await createKHTKSJ(datasourse || NewArr);
     if (res.status === 'ok') {
       message.success('申请已提交，请等待审核');
       setModalVisible(false);
@@ -120,8 +144,23 @@ const AfterClassService = () => {
           <div className={styles.Application}>
             <p className={styles.choice}>请选择课后服务</p>
             <div>
-              <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                {BaoMinData?.[0]?.XSFWBJs?.map((value: any) => {
+              <Checkbox.Group style={{ width: '100%' }} onChange={(value) => {
+                if (value?.length) {
+                  setType(true)
+                } else {
+                  setType(false)
+                }
+              }}>
+                <div className={styles.cards} style={{ height: '80px' }}>
+                  <p className={styles.title}>
+                    {BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWMC}
+                  </p>
+                  <p>服务时段：{BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[0]?.KSRQ} ~ {BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.length - 1]?.JSRQ}</p>
+                  <Checkbox
+                    value={BaoMinData?.[0]?.id}
+                  />
+                </div>
+                {/* {BaoMinData?.[0]?.XSFWBJs?.map((value: any) => {
                   return (
                     <>
                       <div className={styles.cards} style={{ height: '80px' }}>
@@ -135,7 +174,7 @@ const AfterClassService = () => {
                       </div>
                     </>
                   );
-                })}
+                })} */}
               </Checkbox.Group>
             </div>
           </div>
@@ -146,9 +185,9 @@ const AfterClassService = () => {
             <div className={styles.btn}>
               <Button
                 onClick={showModals}
-                disabled={typeof datasourse === 'undefined' || datasourse.length === 0}
+                disabled={!Type}
               >
-                提交
+                选择退课时段
               </Button>
             </div>
           </div>
@@ -179,7 +218,7 @@ const AfterClassService = () => {
         )}
       </Modal>
       <Modal
-        title="确认退课"
+        title="退课确认"
         visible={ModalVisible}
         onOk={handleOks}
         onCancel={handleCancels}
@@ -189,21 +228,35 @@ const AfterClassService = () => {
         cancelText="取消"
       >
         <div>
-          {Datas?.map((value: any) => {
-            return (
-              <>
-                <p>
-                  <span>服务名称： {value.split('+')[2].substring(5, 7)}月{value.split('+')[1]}</span>
-                </p>
-              </>
-            );
-          })}
-          <p style={{ fontSize: 12, color: '#999', marginTop: 40, marginBottom: 0 }}>
-            注：服务退订成功后，系统将自动进行退款，退款将原路返回您的支付账户。
+          <p  style={{ fontSize: 14, color: '#999',marginBottom: 15 }}>系统将为您退订所有剩余未上课程，您也可以指定部分时段进行退订。</p>
+          <Checkbox.Group style={{ width: '100%' }} defaultValue={TimeId} onChange={onChange} >
+            {
+              BaoMinData?.[0]?.XSFWBJs?.map((value: any) => {
+                return <Checkbox value={`${value?.id}+${value?.KHFWBJ?.FWMC}`} >
+                  {value?.KHFWSJPZ?.KSRQ}~{value?.KHFWSJPZ?.JSRQ}</Checkbox>
+              })
+            }
+          </Checkbox.Group>
+          {/* {
+            FwTimes?.map((value: any) => {
+              return <Tag
+                closable
+                onClose={e => {
+                  e.preventDefault();
+                  handleClose(tag);
+                }}
+              // value={`${value?.id}+${value?.KHFWBJ?.FWMC}`}
+              >
+                {value?.KHFWSJPZ?.KSRQ}~{value?.KHFWSJPZ?.JSRQ}
+              </Tag>
+            })
+          } */}
+          <p style={{ fontSize: 12, color: '#999', marginTop: 20, marginBottom: 0 }}>
+            注：系统将根据您所选时段发起退订申请，退订成功后，将自动进行退款，退款将原路返回您的支付账户。
           </p>
         </div>
-      </Modal>
-    </div>
+      </Modal >
+    </div >
   );
 };
 

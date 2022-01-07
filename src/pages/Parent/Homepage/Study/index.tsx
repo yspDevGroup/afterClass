@@ -7,9 +7,9 @@ import { ParentHomeData, CountCourses } from '@/services/local-services/mobileHo
 
 import styles from './index.less';
 import noData from '@/assets/noCourses.png';
-import icon_curriculum from '@/assets/icon_curriculum.png';
-import icon_classroomStyle from '@/assets/classroomStyle.png';
-import icon_leave from '@/assets/icon_leave.png';
+import XSQJ from '@/assets/XSQJ.png';
+import KTFC from '@/assets/KTFC.png';
+import XSPJ from '@/assets/XSPJ.png';
 import Selected from '../Home/components/Selected';
 
 const Study = () => {
@@ -59,7 +59,7 @@ const Study = () => {
         <Link to="/parent/study/askforLeave" className={styles.linkItem}>
           <p className={styles.top}>
             <p className={styles.wrapper}>
-              <img src={icon_leave} alt="" />
+              <img src={XSQJ} alt="" />
             </p>
           </p>
           <p className={styles.text}>请假</p>
@@ -67,7 +67,7 @@ const Study = () => {
         <Link to="/parent/study/teacherEvaluation" className={styles.linkItem}>
           <p className={styles.top}>
             <p className={styles.wrapper}>
-              <img src={icon_curriculum} alt="" />
+              <img src={XSPJ} alt="" />
             </p>
           </p>
           <p className={styles.text}>教师寄语</p>
@@ -75,7 +75,7 @@ const Study = () => {
         <Link to="/parent/study/classroomStyle" className={styles.linkItem}>
           <p className={styles.top}>
             <p className={styles.wrapper}>
-              <img src={icon_classroomStyle} alt="" />
+              <img src={KTFC} alt="" />
             </p>
           </p>
           <p className={styles.text}>课堂风采</p>

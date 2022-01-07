@@ -5,7 +5,7 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { history, useModel } from 'umi';
 import index_header from '@/assets/index_header.png';
 import noCourses from '@/assets/noCourses.png';
-import { Divider, message, Modal } from 'antd';
+import { Checkbox, Divider, message, Modal } from 'antd';
 import { getKHFWBJ, studentRegistration } from '@/services/after-class/khfwbj';
 import IconFont from '@/components/CustomIcon';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
@@ -86,6 +86,9 @@ const EmptyArticle = (props: any) => {
     }
   };
 
+  const onChanges = (key: any) => {
+    setTimes(key)
+  }
 
   return (
     <div className={styles.AfterClassCoach}>
@@ -144,7 +147,19 @@ const EmptyArticle = (props: any) => {
         cancelText="取消"
       >
         <div>
-          您确定报名课后服务
+          <p>系统将为您报名所有未报名时段，您也可以指定部分时段进行报名。</p>
+
+          <Checkbox.Group
+            style={{ width: '100%' }}
+            value={Times}
+            onChange={onChanges} >
+            {
+              FWKCData?.KHFWSJPZs?.map((value: any) => {
+                return <Checkbox value={value?.id} >
+                  {value?.KSRQ}~{value?.JSRQ}</Checkbox>
+              })
+            }
+          </Checkbox.Group>
         </div>
       </Modal>
     </div>
