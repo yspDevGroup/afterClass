@@ -5,10 +5,11 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { history, useModel } from 'umi';
 import index_header from '@/assets/index_header.png';
 import noCourses from '@/assets/noCourses.png';
-import { Checkbox, Divider, message, Modal } from 'antd';
+import { Checkbox, Divider, message, Modal, Tag } from 'antd';
 import { getKHFWBJ, studentRegistration } from '@/services/after-class/khfwbj';
 import IconFont from '@/components/CustomIcon';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
+import moment from 'moment';
 
 const EmptyArticle = (props: any) => {
   const { BJMC, ParentalIdentity } = props.location.state;
@@ -24,6 +25,7 @@ const EmptyArticle = (props: any) => {
   const [FDBId, setFDBId] = useState<any[]>([]);
   // 课后服务协议
   const [KHFUXY, setKHFUXY] = useState<any>();
+  const [FwTimes, setFwTimes] = useState<any>([]);
 
 
   useEffect(() => {
@@ -36,13 +38,14 @@ const EmptyArticle = (props: any) => {
           ZT: [1]
         })
         if (result.status === 'ok') {
-          setFWKCData(result.data)
-          const newArr: any[] = [];
+          setFWKCData(result.data);
+          setFwTimes(result.data?.KHFWSJPZs);
           const newIdArr: any[] = [];
-          result.data?.KHFWSJPZs?.forEach((value: any) => {
-            newArr.push(value?.id)
+          const newTimeIdArr: any[] = [];
+          result.data?.KHFWSJPZs?.forEach((value: any)=>{
+            newTimeIdArr.push(value?.id)
           })
-          setTimes(newArr)
+          setTimes(newTimeIdArr)
           result.data?.KCFWBJs?.forEach((value: any) => {
             if (value?.LX === 1) {
               newIdArr.push(value?.KHBJSJId)
@@ -52,7 +55,7 @@ const EmptyArticle = (props: any) => {
         }
       }
     )()
-  }, [StorageXSId])
+  }, [StorageXSId,ModalVisible])
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
@@ -86,9 +89,39 @@ const EmptyArticle = (props: any) => {
     }
   };
 
-  const onChanges = (key: any) => {
-    setTimes(key)
-  }
+ 
+  const handleClose = (removedTag: any) => {
+    const newArr: any = [];
+    const newArrId: any = [];
+    FwTimes.forEach((value: any) => {
+      if (value !== removedTag) {
+        newArr.push(value)
+        newArrId.push(value?.id)
+      }
+    })
+    setTimes(newArrId)
+    setFwTimes(newArr);
+  };
+  const forMap = (tag: any) => {
+    const tagElem = (
+      <Tag
+        closable
+        onClose={e => {
+          e.preventDefault();
+          handleClose(tag);
+        }}
+      >
+        <span  className={styles.mouths}>{tag?.SDBM}</span>
+        <span className={styles.times}>{moment(tag?.KSRQ).format('MM.DD')} ~ {moment(tag?.JSRQ).format('MM.DD')}</span>
+      </Tag>
+    );
+    return (
+      <span key={tag?.id} style={{ display: 'inline-block', marginBottom: '10px' }}>
+        {tagElem}
+      </span>
+    );
+  };
+  const tagChild = FwTimes?.map(forMap);
 
   return (
     <div className={styles.AfterClassCoach}>
@@ -148,18 +181,9 @@ const EmptyArticle = (props: any) => {
       >
         <div>
           <p>系统将为您报名所有未报名时段，您也可以指定部分时段进行报名。</p>
-
-          <Checkbox.Group
-            style={{ width: '100%' }}
-            value={Times}
-            onChange={onChanges} >
-            {
-              FWKCData?.KHFWSJPZs?.map((value: any) => {
-                return <Checkbox value={value?.id} >
-                  {value?.KSRQ}~{value?.JSRQ}</Checkbox>
-              })
-            }
-          </Checkbox.Group>
+          <div style={{ marginBottom: 16 }} className={styles?.TimeInterval} >
+            {tagChild}
+          </div>
         </div>
       </Modal>
     </div>

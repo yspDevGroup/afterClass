@@ -2,13 +2,13 @@
  * @description: 
  * @author: wsl
  * @Date: 2021-12-23 14:26:31
- * @LastEditTime: 2022-01-07 09:25:26
+ * @LastEditTime: 2022-01-07 14:22:14
  * @LastEditors: wsl
  */
 
 import { getKHFWBJ, getStudentListByBjid, getWBMXS, studentRegistration } from "@/services/after-class/khfwbj";
 import { queryXNXQList } from "@/services/local-services/xnxq";
-import { Checkbox, Divider, message, Modal, Radio } from "antd";
+import { Checkbox, Divider, message, Modal, Radio, Tag } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useModel, history, Link } from "umi";
 import styles from './index.less'
@@ -19,6 +19,7 @@ import noCourses from '@/assets/noCourses.png';
 import { createKHXSDD } from "@/services/after-class/khxsdd";
 import { enHenceMsg } from '@/utils/utils';
 import { ParentHomeData } from "@/services/local-services/mobileHome";
+import moment from "moment";
 
 const InterestClassroom = () => {
   const { initialState } = useModel('@@initialState');
@@ -57,6 +58,8 @@ const InterestClassroom = () => {
   // 辅导班Id
   const [FDBId, setFDBId] = useState<any[]>([]);
   const [BmCouse, setBmCouse] = useState<any>([]);
+
+  const [FwTimes, setFwTimes] = useState<any>([]);
 
   useEffect(() => {
     (
@@ -251,9 +254,7 @@ const InterestClassroom = () => {
       setBmTimeIds(newArr);
     }
   }
-  const onChanges = (key: any) => {
-    setBmTimeIds(key)
-  }
+ 
   const BmHandleOk = async () => {
     const res = await studentRegistration({
       KHFWBJId: FWKCData?.id,
@@ -271,6 +272,39 @@ const InterestClassroom = () => {
       message.error('操作失败，请联系管理员')
     }
   };
+
+  const handleClose = (removedTag: any) => {
+    const newArr: any = [];
+    const newArrId: any = [];
+    WbmDatas.forEach((value: any) => {
+      if (value !== removedTag) {
+        newArr.push(value)
+        newArrId.push(value?.id)
+      }
+    })
+    setBmTimeIds(newArrId)
+    setWbmDatas(newArr);
+  };
+  const forMap = (tag: any) => {
+    const tagElem = (
+      <Tag
+        closable
+        onClose={e => {
+          e.preventDefault();
+          handleClose(tag);
+        }}
+      >
+        <span  className={styles.mouths}>{tag?.SDBM}</span>
+        <span className={styles.times}>{moment(tag?.KSRQ).format('MM.DD')} ~ {moment(tag?.JSRQ).format('MM.DD')}</span>
+      </Tag>
+    );
+    return (
+      <span key={tag?.id} style={{ display: 'inline-block', marginBottom: '10px' }}>
+        {tagElem}
+      </span>
+    );
+  };
+  const tagChild = WbmDatas?.map(forMap);
 
   return <>
     <div className={styles.InterestClassroom}>
@@ -452,44 +486,48 @@ const InterestClassroom = () => {
                 }
               </> :
               <>
-                <div className={styles.Application}>
-                  <div className={styles.title}>
-                    <div />
-                    <span>课业辅导</span>
-                    <span>此服务默认配置的辅导课</span>
-                  </div>
-                  <div>
-                    <Checkbox.Group
-                      style={{ width: '100%' }}
-                      onChange={onChange}>
-                      {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
-                        if (value?.LX === 1) {
-                          return (
-                            <>
-                              <div className={styles.cards}>
-                                <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
-                                <div className={styles.box}>
-                                  <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
-                                  <span onClick={() => {
-                                    onDetails(value)
-                                  }} >查看详情</span>
+                {
+                  BmCouse ? <div className={styles.Application}>
+                    <div className={styles.title}>
+                      <div />
+                      <span>课业辅导</span>
+                      <span>此服务默认配置的辅导课</span>
+                    </div>
+                    <div>
+                      <Checkbox.Group
+                        style={{ width: '100%' }}
+                        onChange={onChange}>
+                        {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
+                          if (value?.LX === 1) {
+                            return (
+                              <>
+                                <div className={styles.cards}>
+                                  <img src={value?.KHBJSJ?.KHKCSJ?.KCTP || noPic} alt="" />
+                                  <div className={styles.box}>
+                                    <p>{value?.KHBJSJ?.KHKCSJ.KCMC}-{value?.KHBJSJ?.BJMC}</p>
+                                    <span onClick={() => {
+                                      onDetails(value)
+                                    }} >查看详情</span>
+                                  </div>
+
+                                  <Checkbox
+                                    value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
+                                    disabled
+                                  />
                                 </div>
+                              </>
+                            );
+                          }
+                          return <></>
+                        })}
+                      </Checkbox.Group>
 
-                                <Checkbox
-                                  value={`${value.KHBJSJId}+${value?.KHBJSJ?.KHKCSJ?.KCMC}+${value?.KHBJSJ?.BJMC}`}
-                                  disabled
-                                />
-                              </div>
-                            </>
-                          );
-                        }
-                        return <></>
-                      })}
-                    </Checkbox.Group>
-
+                    </div>
+                  </div> : <div className={styles.noData}>
+                    <img src={noCourses} alt="" />
+                    <p>该时段暂未报名，请先报名</p>
                   </div>
-                </div>
-
+                }
                 {
                   DropOutType === false ? <div className={styles.footers}>
                     <button onClick={BmSubmit} >我要报名</button>
@@ -517,18 +555,9 @@ const InterestClassroom = () => {
       >
         <div>
           <p>系统将为您报名所有未报名时段，您也可以指定部分时段进行报名。</p>
-
-          <Checkbox.Group
-            style={{ width: '100%' }}
-            value={BmTimeIds}
-            onChange={onChanges} >
-            {
-              WbmDatas?.map((value: any) => {
-                return <Checkbox value={value?.id} >
-                  {value?.KSRQ}~{value?.JSRQ}</Checkbox>
-              })
-            }
-          </Checkbox.Group>
+          <div style={{ marginBottom: 16 }} className={styles?.TimeInterval} >
+            {tagChild}
+          </div>
         </div>
       </Modal>
 
