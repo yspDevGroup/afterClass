@@ -14,6 +14,7 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 
 import styles from '../index.less';
 import noOrder from '@/assets/noOrder.png';
+import seviceImage from '@/assets/seviceImage.png';
 import { getStudentListByBjid } from '@/services/after-class/khfwbj';
 
 const AfterClassService = () => {
@@ -147,7 +148,7 @@ const AfterClassService = () => {
 
 
   return (
-    <div className={styles.DropClass}>
+    <div className={styles.AfterClassService}>
       {BaoMinData?.length === 0 ? (
         <>
           <div className={styles.ZWSJ}>
@@ -168,10 +169,14 @@ const AfterClassService = () => {
                 }
               }}>
                 <div className={styles.cards} style={{ height: '80px' }}>
-                  <p className={styles.title}>
-                    {BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWMC}
-                  </p>
-                  <p>服务时段：{BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[0]?.KSRQ} ~ {BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.length - 1]?.JSRQ}</p>
+                  <img src={BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP || seviceImage} alt="" />
+                  <div>
+                    <p className={styles.title}>
+                      {BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWMC}
+                    </p>
+                    <p>服务时段：{BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[0]?.KSRQ} ~ {BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.length - 1]?.JSRQ}</p>
+                  </div>
+
                   <Checkbox
                     value={BaoMinData?.[0]?.id}
                   />
