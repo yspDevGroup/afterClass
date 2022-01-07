@@ -17,6 +17,7 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import UploadImage from '@/components/ProFormFields/components/UploadImage';
 import SelectCourses from './SelectCourses';
 import styles from './index.less';
+import { PlusOutlined } from '@ant-design/icons';
 
 type ServiceBasicsType = {
   title: string,
@@ -192,8 +193,8 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         formRef={formRef}
         title={title}
         trigger={
-          <Button type={serviceId ? "link" : "primary"} onClick={handleRefile}>
-            {serviceId ? '编辑' : '新增'}
+          <Button type={serviceId ? "link" : "primary"} onClick={handleRefile} icon={serviceId?'':<PlusOutlined/>}>
+            {serviceId ? '编辑' : '新增模板'}
           </Button>
         }
         modalProps={{

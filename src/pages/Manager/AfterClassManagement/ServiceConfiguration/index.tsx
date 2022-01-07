@@ -155,7 +155,7 @@ const ServiceConfiguration = () => {
       width: 80,
     },
     {
-      title: '服务状态',
+      title: '模板状态',
       dataIndex: 'FWZT',
       key: 'FWZT',
       align: 'center',
