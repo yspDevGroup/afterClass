@@ -183,7 +183,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
 
           const result = await getSchoolClasses({
             XXJBSJId: currentUser?.xxId,
-            XNXQId: curXNXQId,
+            XNXQId: curXNXQId!,
             njId: newArr,
             XQSJId: XQSJIds,
           });
@@ -969,10 +969,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       name: 'FY',
       key: 'FY',
       readonly: BMLX,
-      rules: [
-        { required: true, message: '请填写费用' },
-        { message: '请输入正确的费用', pattern: /^([1-9]\d{0,3}|0)(\.\d{1,2})?$/ },
-      ],
+      rules: !BMLX ? [{ required: true, message: '请填写费用' },{ message: '费用应大于0，且最多支持2位小数', pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/ }] :[],
       fieldProps: {
         autocomplete: 'off',
       },
