@@ -187,18 +187,48 @@
     width: 100%;
     margin-top: -15px;
     padding: 0 10px;
+    .title {
+      display: flex;
+      height: 24px;
+      line-height: 24px;
+
+      >div:nth-of-type(1) {
+        display: inline-block;
+        width: 3px;
+        height: 19px;
+        margin: 3px 6px 0 0;
+        background: #15b628;
+        border-radius: 3px 0px;
+      }
+
+      span {
+        color: #333333;
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
     > p {
       display: flex;
       justify-content: space-between;
       color: #333333;
       font-weight: 600;
+      margin-bottom: 10px;
       span:nth-of-type(2) {
         color: @text-color-secondary;
         font-weight: 400;
-        font-size: 12px;
-        .legend {
-          margin-right: 10px;
+        font-size: 14px;
+       
+      }
+      >span{
+        line-height: 24px;
+      }
+      :global{
+        .ant-badge-status-text{
+          margin-left: 4px;
         }
+      }
+      .legend {
+        margin-left: 10px;
       }
     }
     .diagram {

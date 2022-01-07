@@ -32,7 +32,7 @@ const CourseList = (props: {
               }
               }>
                 <p><span>{value?.title}</span> <span
-                  style={{ color: ClassStatus(value.start, value.end) === '待上课' ? '#45C977' : '#999999' }}>
+                  style={{ color: ClassStatus(value.start, value.end) === '待上课' ? '#15B628' : '#999999' }}>
                   {value?.status || ClassStatus(value.start, value.end)}</span></p>
                 <div className={styles.box}>
                   <img src={value?.img || noCourses1} alt="" />

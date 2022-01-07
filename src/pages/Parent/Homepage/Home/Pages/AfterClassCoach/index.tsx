@@ -116,7 +116,7 @@ const EmptyArticle = (props: any) => {
       </Tag>
     );
     return (
-      <span key={tag?.id} style={{ display: 'inline-block', marginBottom: '10px' }}>
+      <span key={tag?.id} style={{ display: 'inline-block', marginBottom: '5%' }}>
         {tagElem}
       </span>
     );

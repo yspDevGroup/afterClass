@@ -83,7 +83,7 @@ const SubstituteList = () => {
                     ) : item.ZT === 1 ? (
                       <span
                         className={styles.cards}
-                        style={{ color: '#45c977', borderColor: '#45c977' }}
+                        style={{ color: '#15B628', borderColor: '#15B628' }}
                       >
                         已通过
                       </span>
@@ -154,7 +154,7 @@ const SubstituteList = () => {
                       ) : item.ZT === 0 ? (
                         <span className={styles.cards} style={{ color: '#fff', backgroundColor: '#FF7527' }}>待处理</span>
                       ) : item.ZT === 1 ? (
-                        <span className={styles.cards} style={{ color: '#45c977', borderColor: '#45c977' }}>已通过</span>
+                        <span className={styles.cards} style={{ color: '#15B628', borderColor: '#15B628' }}>已通过</span>
                       ) : item.ZT === 2 || item.ZT === 5 ? (
                         <span className={styles.cards} style={{ color: '#FF4B4B', borderColor: '#FF4B4B' }}>已驳回</span>
                       ) : (

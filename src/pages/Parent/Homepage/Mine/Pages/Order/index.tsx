@@ -39,7 +39,7 @@ const OrderList = (props: {
       {data && data.length ? (
         data.map((item) => {
           const { KHBJSJ, KHXXZZFW, ...rest } = item;
-          const color = item.DDZT === '已付款' ? '#45C977' : '#888';
+          const color = item.DDZT === '已付款' ? '#15B628' : '#888';
           return (
             <div className={styles.Information}>
               <Link

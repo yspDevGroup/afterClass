@@ -490,12 +490,12 @@ const CourseList = () => {
       hideInTable: true, // 列表中不显示此列
       render: (_, record) => {
         if (record?.SSJGLX === '机构课程') {
-          return <span style={{ color: '#45C977' }}>已引入</span>;
+          return <span style={{ color: '#15B628' }}>已引入</span>;
         }
         return record?.KCZT === 0 ? (
           <span style={{ color: '#666' }}>未发布</span>
         ) : (
-          <span style={{ color: '#45C977' }}>已发布</span>
+          <span style={{ color: '#15B628' }}>已发布</span>
         );
       },
     },

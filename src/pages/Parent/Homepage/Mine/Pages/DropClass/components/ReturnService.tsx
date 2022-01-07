@@ -135,7 +135,7 @@ const ReturnService = () => {
           </div>
           <div className={styles.wrap}>
             <p>
-              规则详见 <a onClick={showModal}>《缤纷课堂协议》</a>
+              规则详见 <a onClick={showModal}>《增值服务协议》</a>
             </p>
             <div className={styles.btn}>
               <Button
@@ -167,7 +167,7 @@ const ReturnService = () => {
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>缤纷课堂协议书</p>
+            <p>增值服务协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (

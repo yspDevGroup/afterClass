@@ -57,7 +57,7 @@ const PatrolArrange = (props: any) => {
                     <p>本校 <Divider type='vertical' /> {FJSJ?.FJMC}</p>
                   </div>
                   <div className={styles.right}>
-                    <span style={{ color: isXk ? '#45C977' : '#FF6600', fontSize: 12 }}>{isXk ? '已' : '未'}巡课</span>
+                    <span style={{ color: isXk ? '#15B628' : '#FF6600', fontSize: 12 }}>{isXk ? '已' : '未'}巡课</span>
                     {available || isXk ? <Link style={{ borderColor: isXk ? '#DDDDDD' : '#0066FF', color: isXk ? '#666666' : '#0066FF' }} to={{
                       pathname: '/teacher/patrolArrange/newPatrol',
                       state: {
