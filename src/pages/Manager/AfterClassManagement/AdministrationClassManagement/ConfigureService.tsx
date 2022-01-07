@@ -58,7 +58,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
   const formRef = useRef();
   const signUpClassRef = useRef();
 
-  const [informationOpen,setInformationOpen]=useState<boolean>(false);
+  const [informationOpen, setInformationOpen] = useState<boolean>(false);
 
 
   // 保存并报名
@@ -84,8 +84,9 @@ const ConfigureService = (props: ConfigureSeverType) => {
         const { sjpzstr } = res.data?.[0]
         if (sjpzstr) {
           const str = JSON.parse(sjpzstr);
-          if (str?.length) {            
-            setBMSDData(str);
+          if (str) {
+            setJFLX(str.JFLX);
+            setBMSDData(str.list);
           }
         }
         setLoading(false);
@@ -115,17 +116,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
               KHKC.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
             }
           });
-          // let timeFrames: any[] = [];
-          // if (data?.JFLX === 1 && data?.KHFWSJPZs?.length) {
-          //   data?.KHFWSJPZs.forEach((item: any) => {
-          //     const timeFrame = [
-          //       moment(item.KSRQ, 'YYYY-MM-DD'),
-          //       moment(item.JSRQ, 'YYYY-MM-DD'),
-          //     ];
-          //     timeFrames.push({ timeFrame });
-          //   })
-
-          // }
 
           setDetailValue({
             isTemplate: false,
@@ -205,7 +195,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
       FWMS: values?.FWMS,
       FWFY: values?.FWFY,
       KXSL: values?.KXSL,
-      JFLX: values?.JFLX,
+      JFLX,
       KSRQ: undefined,
       JSRQ: undefined,
       KHBJSJIds,
@@ -215,29 +205,19 @@ const ConfigureService = (props: ConfigureSeverType) => {
     if (saveFalg) {
       params.ZT = 1;
     }
-    //  debugger;
-    // 课程班类型为 按时段
-    // if (values?.JFLX === 1 && values?.timeFrames?.length) {
-    //   const { timeFrames } = values;
-    //   const RQs: any[] = [];
-    //   timeFrames.forEach((item: any) => {
-    //     console.log('item', item)
-    //     let KSRQ;
-    //     let JSRQ;
-    //     if (item.timeFrame[0]) {
-    //       KSRQ = moment(item.timeFrame[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
-    //     }
-    //     if (item.timeFrame[1]) {
-    //       JSRQ = moment(item.timeFrame[1], 'YYYY-MM-DD').format('YYYY-MM-DD');
-    //     }
-    //     RQs.push({ KSRQ, JSRQ })
-    //   });
-    //   params.RQs = RQs;
-    // }
-    params.RQs = BMSDData?.filter((item: any)=>item.type===JFLX).map((item: any)=>{
-      return { KSRQ:item.KSRQ, JSRQ:item.JSRQ,SDBM:item.name };
+   
+    params.RQs = BMSDData?.filter((item: any) => {
+      // 缴费方式是月
+      if(JFLX===0&&item.type===JFLX&&item.isEnable===1){
+        return true;
+      }
+      if(JFLX===1){
+        return item.type===JFLX;
+      }
+      return false;
+    }).map((item: any) => {
+      return { KSRQ: item.KSRQ, JSRQ: item.JSRQ, SDBM: item.name };
     })
-    console.log('params', params);
     // 编辑
     if (detailValue?.id) {
       const res = await updateKHFWBJ({ id: detailValue?.id }, { ...params });
@@ -292,12 +272,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
     }
   }, [detailValue]);
 
-  const onDisabledTime = (current: any) => {
-    return (
-      (current && current >= moment(XQData.JSRQ, 'YYYY-MM-DD').add(1, 'days')) ||
-      current <= moment(XQData.KSRQ, 'YYYY-MM-DD').add(+1, 'days')
-    );
-  };
+ 
 
   // 监听保存并报名
   useEffect(() => {
@@ -396,12 +371,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
 
     const params: ModalValue = {
       FWFY: 140,
-      JFLX: 0,
       KXSL: 2,
-      timeFrame: [
-        moment(XQData?.KSRQ, 'YYYY-MM-DD'),
-        moment(XQData?.JSRQ, 'YYYY-MM-DD'),
-      ],
       isTemplate: false,
       KCFD: [],
       KHKC: [],
@@ -420,14 +390,12 @@ const ConfigureService = (props: ConfigureSeverType) => {
       XQSJId: XQSJId,
     })
     if (res?.status === 'ok' && res?.data?.rows?.length) {
-      console.log('res', res);
-
       params.KCFD = res.data.rows.map((item: any) => { return { value: item.id, label: item.BJMC } })
     }
     // 初始化表单
     setDetailValue(params);
-    // 默认先交费类型
-    setJFLX(0);
+    // // 默认先交费类型
+    // setJFLX(0);
     // 请求模板
     getData();
   }
@@ -446,8 +414,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
                 getDetailValue();
                 getData();
               } else {
-                // 还没有配置课程班 需要填写默认值
-                console.log('需要填写默认值');
                 getKHFD();
               }
               getDetailTimePZ();
@@ -654,56 +620,28 @@ const ConfigureService = (props: ConfigureSeverType) => {
         </Row>
         <Row justify="start" align="middle">
 
-          <Col flex="14em">
-            <ProFormSelect
-              wrapperCol={{ flex: '6em' }}
-              // addonBefore="按"
-              label="收费方式"
-              // addonAfter="缴费"
-              name="JFLX"
-              // disabled={!!detailValue?.id}
-              rules={[{ required: true, message: '请选择收费方式' }]}
-              fieldProps={{
-                allowClear: false,
-                options: [
-                  { label: '按月', value: 0 },
-                  { label: '按时段', value: 1 },
-                ],
-                onChange: (value) => {
-                  setJFLX(value);
-                  if (value) {
-                    const newstr=BMSDData?.filter((item: any)=>item.type===1)
-                    if(!newstr?.length){
-                      setInformationOpen(true);
-                    }
-                  }
-                },
-              }}
-              width={80}
-            />
+         <Col flex="18em">
+           <ProForm.Item label='收费方式'>
+             {JFLX===0?'按月缴费':'自定义时段收费'}
+           </ProForm.Item>
           </Col>
-          <Col flex='auto'>
-            <span className="ant-form-text ant-form-item">缴费</span>
-          </Col>
-          {/* <Col flex="4em">
-           缴费
-          </Col> */}
-          {/* <Col flex="auto">
-            <span
-              style={{ color: '#999', marginRight: '8px' }}
-              className="ant-form-text ant-form-item"
-            >
-              {
-                JFLX === 0 ? '系统将根据当前学期内的自然月创建对应课后服务班' : '系统将根据当前所选时段创建一个课后服务班'}
-            </span>
-          </Col> */}
         </Row>
         <ProForm.Item label='报名时段：'>
-              <Space wrap  style={{width:'400px'}}>
-                {BMSDData?.filter((item: any)=>item.type===JFLX).map((item: any)=>{
-                  return <Tag>{`${item.name} ${moment(item.KSRQ).format('MM-DD') }~${moment(item.KSRQ).format('MM-DD')}`}</Tag>
-                })}
-                </Space>
+          <Space wrap style={{ width: '400px' }}>
+            {BMSDData?.filter((item: any) => {
+              console.log('item',item);
+              // 缴费方式是月
+              if(JFLX===0&&item.type===JFLX&&item.isEnable===1){
+                return true;
+              }
+              if(JFLX===1){
+                return item.type===JFLX;
+              }
+              return false;
+            } ).map((item: any) => {
+              return <Tag>{`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</Tag>
+            })}
+          </Space>
         </ProForm.Item>
         <Row justify="start" align="middle">
           <Col flex="14em">
@@ -723,20 +661,20 @@ const ConfigureService = (props: ConfigureSeverType) => {
           </Col>
         </Row>
       </ModalForm>
-      {XNXQId && BJSJId && (
-        <SignUpClass
-          ref={signUpClassRef}
-          type={0}
-          XNXQId={XNXQId}
-          BJSJId={BJSJId}
-          actionRef={actionRef}
-        />
-      )}
-       <PromptInformation
+        {XNXQId && BJSJId && (
+          <SignUpClass
+            ref={signUpClassRef}
+            type={0}
+            XNXQId={XNXQId}
+            BJSJId={BJSJId}
+            actionRef={actionRef}
+          />
+        )}
+      <PromptInformation
         text="未查询到报名时段数据，请先设置报名时段"
         link="/afterClassManagement/registration_setting"
         open={informationOpen}
-        colse={()=>{
+        colse={() => {
           setInformationOpen(false);
         }}
       />

@@ -225,9 +225,10 @@ const RegistrationSetting = () => {
         if (sjpzstr) {
           const str = JSON.parse(sjpzstr); // str:{JFLX:0/1,list:[]}
           if (str) {
+            console.log('str',str);
             setJFLX(str.JFLX);
             if(str.JFLX===1){
-              setDataSource( str.list.filter((item: DataSourceType)=>item.type===JFLX))
+              setDataSource( str.list.filter((item: DataSourceType)=>item.type===1))
             }
             setInitDataSource(str.list);
           }
