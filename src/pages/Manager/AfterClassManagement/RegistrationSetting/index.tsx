@@ -1,7 +1,7 @@
 
 import PageContain from '@/components/PageContainer';
 import ProTable, { EditableProTable } from '@ant-design/pro-table';
-import { Select, Space, Form, Spin, Card, Checkbox, Tag, Radio } from 'antd';
+import { Select, Space, Form, Spin, Card, Checkbox, Tag, Radio, Button, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import { getKHFWBJXSbm } from '@/services/after-class/bjsj';
@@ -11,8 +11,10 @@ import SearchLayout from '@/components/Search/Layout';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import React from 'react';
 import { CreateXXJTPZ, getAllXXJTPZ } from '@/services/after-class/xxjtpz';
+import { bulkEditIsPay, getKHFWBBySJ } from '@/services/after-class/khfwbj';
 import moment from 'moment';
-import { values } from '@antv/util';
+import { getGradesByCampus } from '@/services/after-class/njsj';
+
 
 
 
@@ -43,11 +45,33 @@ const RegistrationSetting = () => {
   const { currentUser } = initialState || {};
   const [JFLX, setJFLX] = useState<number>(0);
   const [dataSource, setDataSource] = useState<DataSourceType[]>();
+  const [dataSourcePay, setDataSourcePay] = useState<any[]>();
+
   const [initDataSource, setInitDataSource] = useState<DataSourceType[]>();
   const [formRef] = Form.useForm();
 
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  // 缴费管理所需的删选 数据
+  const [NjId, setNjId] = useState<string>();
+  const [NjData, setNjData] = useState<any>();
+  const [SDMCValue, setSDMCValue] = useState<string>()
+  const [JFZT, setJFZT] = useState<number>();
+  // 是否可编辑时间配置   true 不可编辑 false可编辑
+  const [disable, setDisable] = useState<boolean>(false);
+
+  // 获取年级数据
+  const getNJSJ = async () => {
+    if (campusId) {
+      const res = await getGradesByCampus({
+        XQSJId: campusId,
+      });
+      if (res.status === 'ok') {
+        setNjData(res.data);
+      }
+    }
+  };
 
   //获取学年学期
   const getXNXQ = async () => {
@@ -86,19 +110,283 @@ const RegistrationSetting = () => {
 
   const onCampusChange = (value: any) => {
     setCampusId(value);
-    // actionRef.current?.reload();
+    setNjId(undefined);
+    setJFZT(undefined);
+    setSDMCValue(undefined);
   };
- 
+
 
   // 学年学期筛选
   const onXNXQChange = (value: string) => {
     curXNXQData?.forEach((item: any) => {
       if (item.id === value) {
         setCurXNXQId(value);
-        // actionRef.current?.reloadAndRest();
+        setNjId(undefined);
+        setJFZT(undefined);
+        setSDMCValue(undefined);
       }
     })
   }
+
+
+  // 获取排课时间配置
+  const getDetail = async () => {
+    setLoading(true);
+    const res = await getAllXXJTPZ({
+      XNXQId: curXNXQId,
+      XQSJId: campusId,
+    });
+    if (res.status === 'ok') {
+      if (res.data?.length === 0) {
+        setinitDetail();
+      } else {
+        const { sjpzstr } = res.data?.[0]
+        if (sjpzstr) {
+          const str = JSON.parse(sjpzstr); // str:{JFLX:0/1,list:[]}
+          if (str) {
+            setJFLX(str.JFLX);
+            if (str.JFLX === 1) {
+              setDataSource(str.list.filter((item: DataSourceType) => item.type === 1))
+            }
+            setInitDataSource(str.list);
+          }
+        }
+        setLoading(false);
+      }
+    }
+  }
+  const getTimeString = (value: any) => {
+    if (value) {
+      return moment(value).format('YYYY-MM-DD');
+    }
+    return '';
+  }
+  const setDetail = async (value: any, JFLXvalue: number) => {
+    if (value) {
+      setLoading(true);
+      const newValue = { JFLX: JFLXvalue, list: value }
+      const str = JSON.stringify(newValue);
+      const res = await CreateXXJTPZ({
+        XQSJId: campusId,
+        XNXQId: curXNXQId,
+        sjpzstr: str,
+      })
+      if (res.status === 'ok') {
+        getDetail();
+        setLoading(false);
+      }
+    }
+  }
+  // 初始化 按月配置 时段数据
+  const setinitDetail = () => {
+    const fwb = curXNXQData?.find((item: any) => item.id === curXNXQId);
+    if (fwb) {
+      const arr: any = [];
+      let KSRQ = new Date(fwb.KSRQ);
+      const JSRQ = new Date(fwb.JSRQ);
+      while (KSRQ < JSRQ) {
+        const tempJSRQ = new Date(KSRQ.getFullYear(), KSRQ.getMonth() + 1, 0);//本月最后一天
+        arr.push({ KSRQ: getTimeString(KSRQ), isEnable: 1, type: 0, JSRQ: getTimeString(tempJSRQ), id: (Math.random() * 1000000).toFixed(0), name: `${(moment(KSRQ).month()) + 1}月` })
+        if (KSRQ.getMonth() < 11) {
+          KSRQ = new Date(KSRQ.setMonth(KSRQ.getMonth() + 1));
+          KSRQ = new Date(KSRQ.setDate(1))
+        } else if (KSRQ.getMonth() === 11) {
+          KSRQ = new Date(KSRQ.setFullYear(KSRQ.getFullYear() + 1))
+          KSRQ = new Date(KSRQ.setMonth(0))
+          KSRQ = new Date(KSRQ.setDate(1))
+        }
+      }
+      if (KSRQ.getMonth() === JSRQ.getMonth() && KSRQ < JSRQ) {
+        //月份相同，补充该月份的记录
+        arr.push({ KSRQ: getTimeString(KSRQ), type: 0, isEnable: 1, JSRQ: getTimeString(JSRQ), id: (Math.random() * 1000000).toFixed(0), name: `${(moment(KSRQ).month()) + 1}月` })
+      }
+
+      setDetail(arr,0);
+    }
+  }
+
+  /**
+    * 获取缴费设置列表详情
+    */
+  const getDataSourcePay = async () => {
+    if (curXNXQId && campusId) {
+      const obj = {
+        XNXQId: curXNXQId,
+        XQSJId: campusId,
+        NJSJId: NjId,
+        isPay: JFZT,
+        SDBM: SDMCValue,
+        /** 页数 */
+        page: 0,
+        /** 每页记录数 */
+        pageSize: 0,
+      };
+      const res = await getKHFWBBySJ(obj);
+      if (res.status === 'ok') {
+        if (res?.data?.rows?.length) {
+          setDataSourcePay(res.data.rows);
+          if (!NjId && !SDMCValue && !JFZT) {
+            setDisable(true);
+          }
+
+        } else {
+          setDataSourcePay([])
+          if (!NjId && !SDMCValue && !JFZT) {
+            setDisable(false);
+          }
+        }
+      }
+    }
+    return [];
+  }
+
+  useEffect(() => {
+    if (campusId && curXNXQId) {
+      getDetail();
+      getNJSJ();
+      getDataSourcePay();
+    }
+  }, [campusId, curXNXQId])
+
+  useEffect(() => {
+    if (campusId && curXNXQId) {
+      actionRef.current.clearSelected();
+      getDataSourcePay();
+    }
+  }, [JFZT, SDMCValue, NjId])
+
+  // useEffect(() => {
+  //   if (initDataSource?.length) {
+  //     const arr = initDataSource.filter((item: any) => item.type === JFLX);
+  //     setDataSource(arr);
+  //   }
+
+  // }, [JFLX]);
+
+
+
+  const onEditTableChange = (editableRows: DataSourceType[]) => {
+    if (editableRows?.length && initDataSource?.length) {
+      const initarr = [...initDataSource];
+      editableRows.forEach((item: DataSourceType) => {
+        if (!initarr.some((v: DataSourceType) => item.id === v.id)) {
+          initarr.push(item);
+        } else {
+          initarr.forEach((v: DataSourceType) => {
+            if (v.id === item.id) {
+              // eslint-disable-next-line no-param-reassign
+              v = item;
+            }
+          })
+        }
+      })
+
+      setDetail(initarr,JFLX);
+    }
+    // initDataSource?.forEach
+  }
+
+  // 按时段配置
+  const getEditFromSetting = () => {
+    return (
+      <EditableProTable<DataSourceType>
+        rowKey="id"
+        actionRef={actionRefEdit}
+        // maxLength={5}
+        recordCreatorProps={
+          !disable ? {
+            position: 'top',
+            record: (value: any) => ({ id: (Math.random() * 1000000).toFixed(0), type: 1, ...value }),
+          } : false
+        }
+        options={{
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
+        }}
+        search={false}
+        headerTitle={
+          false
+        }
+        columns={columns}
+        // request={async () => ({
+        // 	data: defaultData,
+        // 	total: 3,
+        // 	success: true,
+        // })}
+        value={dataSource}
+        onChange={onEditTableChange}
+        editable={{
+          type: 'single',
+          form: formRef,
+          editableKeys: editableKeys,
+          onSave: async (rowKey, data, row) => {
+            console.log(rowKey, data, row);
+            // await waitTime(2000);
+          },
+          // actionRender: (row, config, dom) => [dom.save, dom.cancel]
+          onChange: (value: any) => {
+            setEditableRowKeys(value);
+          }
+        }}
+      />
+    )
+  }
+
+  const onCheckBoxClick = (value: boolean, id: React.Key) => {
+    if (initDataSource?.length) {
+      const newArr = initDataSource?.map((item: DataSourceType) => {
+        const v = { ...item };
+        if (item.id === id) {
+          v.isEnable = value ? 1 : 0
+        } return v;
+      })
+      setDetail(newArr,JFLX);
+    }
+
+  }
+  // 按月配置
+  const getmonthSetting = () => {
+    return (
+      <Space wrap>
+        {
+          initDataSource?.filter((item: DataSourceType) => item.type === JFLX).map((item: DataSourceType) =>
+            <Checkbox disabled={disable} checked={item?.isEnable === 1} onChange={(value: any) => {
+              onCheckBoxClick(value, item.id);
+            }}><Tag>{`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</Tag></Checkbox>
+          )
+        }
+      </Space>
+    )
+  }
+  const getSetting = () => {
+    if (JFLX === 0) {
+      return getmonthSetting()
+    } else {
+      return getEditFromSetting()
+    }
+  }
+
+  const onPayClick = async (arr: any[], falg: boolean) => {
+    if (!arr.length) {
+      message.warning(falg ? '没有可开启缴费的服务' : '没有可关闭缴费的服务');
+      return;
+    }
+    const params = {
+      KHFWSJPZIds: arr.map((item) => item.id),
+      isPay: falg ? 1 : 0,
+    }
+    const res = await bulkEditIsPay(params);
+    if (res?.status === 'ok') {
+      message.success(falg ? '已开启' : '已关闭');
+      getDataSourcePay();
+    } else {
+      message.error(res.message)
+    }
+    actionRef.current.clearSelected();
+  }
+
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -193,223 +481,118 @@ const RegistrationSetting = () => {
       align: 'center',
       width: 150,
       render: (_, record, _v, action) => {
+        if (!disable) {
+          return (<Space>
+            <a
+              key="editable"
+              onClick={() => {
+                action?.startEditable?.(record.id);
+              }}
+
+            >
+              编辑
+            </a>
+            <a
+              key="delete"
+              onClick={() => {
+                const arr = initDataSource?.filter((item: any) => {
+                  return item.id !== record.id;
+                })
+                setDetail(arr,JFLX);
+              }}
+            >
+              删除
+            </a>
+          </Space>);
+        }
+        return ''
+
+      },
+    },
+  ];
+  const columnsPay: ProColumns<any>[] = [
+    {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      width: 58,
+      align: 'center',
+    },
+    {
+      title: '年级',
+      dataIndex: 'KHFWBJ',
+      key: 'KHFWBJ',
+      align: 'center',
+      width: 100,
+      render: (text: any) => {
+        return `${text?.BJSJ?.NJSJ?.NJMC}`
+      }
+    },
+    {
+      title: '班级',
+      dataIndex: 'KHFWBJ',
+      key: 'KHFWBJ2',
+      align: 'center',
+      width: 100,
+      render: (text: any) => {
+        return `${text?.BJSJ?.BJ}`
+      }
+    },
+    {
+      title: '时段名称',
+      dataIndex: 'SDBM',
+      key: 'SDBM',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '开始日期',
+      dataIndex: 'KSRQ',
+      key: 'KSRQ',
+      align: 'center',
+      width: 150,
+    },
+    {
+      title: '结束日期',
+      dataIndex: 'JSRQ',
+      key: 'JSRQ',
+      align: 'center',
+      width: 150,
+
+    },
+    {
+      title: '缴费状态',
+      dataIndex: 'isPay',
+      key: 'isPay',
+      align: 'center',
+      width: 80,
+      render: (text) => text === 1 ? <span style={{ color: '#41BC00' }}>已开启</span> : <span style={{ color: '#999' }}>已关闭</span>
+    },
+
+    {
+      title: '操作',
+      valueType: 'option',
+      align: 'center',
+      width: 150,
+      render: (_text, record) => {
         return (<Space>
           <a
             key="editable"
             onClick={() => {
-              // console.log('action',action);
-              action?.startEditable?.(record.id);
+              onPayClick([record], record?.isPay ? false : true)
             }}
           >
-            编辑
+            {record.isPay ? '关闭缴费' : '开启缴费'}
           </a>
-          <a>删除</a>
+
         </Space>);
       },
     },
   ];
 
 
-  // 获取排课时间配置
-  const getDetail = async () => {
-    setLoading(true);
-    const res = await getAllXXJTPZ({
-      XNXQId: curXNXQId,
-      XQSJId: campusId,
-    });
-    if (res.status === 'ok') {
-      if (res.data?.length === 0) {
-        setinitDetail();
-      } else {
-        const { sjpzstr } = res.data?.[0]
-        if (sjpzstr) {
-          const str = JSON.parse(sjpzstr); // str:{JFLX:0/1,list:[]}
-          if (str) {
-            console.log('str',str);
-            setJFLX(str.JFLX);
-            if(str.JFLX===1){
-              setDataSource( str.list.filter((item: DataSourceType)=>item.type===1))
-            }
-            setInitDataSource(str.list);
-          }
-        }
-        setLoading(false);
-      }
-    }
-  }
-  const getTimeString = (value: any) => {
-    if (value) {
-      return moment(value).format('YYYY-MM-DD');
-    }
-    return '';
-  }
-  const setDetail = async (value: any) => {
-    if (value) {
-      setLoading(true);
-      const newValue={JFLX:JFLX,list:value}
-      const str = JSON.stringify(newValue);
-      const res = await CreateXXJTPZ({
-        XQSJId: campusId,
-        XNXQId: curXNXQId,
-        sjpzstr: str,
-      })
-      if (res.status === 'ok') {
-        getDetail();
-        setLoading(false);
-      }
-    }
-  }
-  // 初始化 按月配置 时段数据
-  const setinitDetail = () => {
-    const fwb = curXNXQData?.find((item: any) => item.id === curXNXQId);
-
-    if (fwb) {
-      const arr: any = [];
-      let KSRQ = new Date(fwb.KSRQ);
-      const JSRQ = new Date(fwb.JSRQ);
-      while (KSRQ < JSRQ) {
-        const tempJSRQ = new Date(KSRQ.getFullYear(), KSRQ.getMonth() + 1, 0);//本月最后一天
-        arr.push({ KSRQ: getTimeString(KSRQ), isEnable: 1, type: 0, JSRQ: getTimeString(tempJSRQ), id: (Math.random() * 1000000).toFixed(0), name: `${(moment(KSRQ).month()) + 1}月` })
-        if (KSRQ.getMonth() < 11) {
-          KSRQ = new Date(KSRQ.setMonth(KSRQ.getMonth() + 1));
-          KSRQ = new Date(KSRQ.setDate(1))
-        } else if (KSRQ.getMonth() === 11) {
-          KSRQ = new Date(KSRQ.setFullYear(KSRQ.getFullYear() + 1))
-          KSRQ = new Date(KSRQ.setMonth(0))
-          KSRQ = new Date(KSRQ.setDate(1))
-        }
-      }
-      if (KSRQ.getMonth() === JSRQ.getMonth() && KSRQ < JSRQ) {
-        //月份相同，补充该月份的记录
-        arr.push({ KSRQ: getTimeString(KSRQ), type: 0, isEnable: 1, JSRQ: getTimeString(JSRQ), id: (Math.random() * 1000000).toFixed(0), name: `${(moment(KSRQ).month()) + 1}月` })
-      }
-      console.log('arr', arr);
-      setDetail(arr);
-    }
-  }
-
-
-
-  useEffect(() => {
-    if (campusId && curXNXQId) {
-      getDetail()
-    }
-  }, [campusId, curXNXQId])
-  useEffect(() => {
-    if (initDataSource?.length) {
-      const arr = initDataSource.filter((item: any) => item.type === JFLX);
-      setDataSource(arr);
-    }
-
-  }, [JFLX]);
-
-  const onEditTableChange = (editableRows: DataSourceType[]) => {
-    if (editableRows?.length && initDataSource?.length) {
-      const initarr = [...initDataSource];
-      editableRows.forEach((item: DataSourceType) => {
-        if (!initarr.some((v: DataSourceType) => item.id === v.id)) {
-          initarr.push(item);
-        } else {
-          initarr.forEach((v: DataSourceType) => {
-            if (v.id === item.id) {
-              // eslint-disable-next-line no-param-reassign
-              v = item;
-            }
-          })
-        }
-      })
-      console.log('initarr', initarr);
-      setDetail(initarr);
-    }
-    // initDataSource?.forEach
-  }
-
-  // 按时段配置
-  const getEditFromSetting = () => {
-    return (
-      <EditableProTable<DataSourceType>
-        rowKey="id"
-        actionRef={actionRefEdit}
-        // maxLength={5}
-        recordCreatorProps={
-          JFLX === 1 ? {
-            position: 'top',
-            record: (value: any) => ({ id: (Math.random() * 1000000).toFixed(0), type: 1, ...value }),
-          } : false
-        }
-        options={{
-          setting: false,
-          fullScreen: false,
-          density: false,
-          reload: false,
-        }}
-        search={false}
-        headerTitle={
-          false
-        }
-        columns={columns}
-        // request={async () => ({
-        // 	data: defaultData,
-        // 	total: 3,
-        // 	success: true,
-        // })}
-        value={dataSource}
-        onChange={onEditTableChange}
-        editable={{
-          type: 'single',
-          form: formRef,
-          editableKeys: editableKeys,
-          onSave: async (rowKey, data, row) => {
-            console.log(rowKey, data, row);
-            // await waitTime(2000);
-          },
-          // actionRender: (row, config, dom) => [dom.save, dom.cancel]
-          onChange: (value: any) => {
-            setEditableRowKeys(value);
-          }
-        }}
-      />
-    )
-  }
-
-  const onCheckBoxClick = (value: boolean, id: React.Key) => {
-    console.log(value, id);
-    if(initDataSource?.length){
-      const newArr=initDataSource?.map((item: DataSourceType)=>{
-        const v={...item};
-        if(item.id===id){
-          v.isEnable= value?1:0
-        } return v; 
-      })
-      setDetail(newArr);
-    }
-    
-  }
-  // 按月配置
-  const getmonthSetting = () => {
-    console.log('initDataSource', initDataSource)
-    return (
-      <Space wrap>
-        {
-          initDataSource?.filter((item: DataSourceType) => item.type === JFLX).map((item: DataSourceType) =>
-            <Checkbox checked={item?.isEnable === 1} onChange={(value: any) => {
-              onCheckBoxClick(value, item.id);
-            }}><Tag>{`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</Tag></Checkbox>
-          )
-        }
-      </Space>
-    )
-  }
-  const getSetting = () => {
-    if (JFLX === 0) {
-      return getmonthSetting()
-    } else {
-      return getEditFromSetting()
-    }
-  }
   return (
     <div>
-
       <PageContain type='homepage'>
         <Card size='small' style={{ marginBottom: '16px' }}>
           <SearchLayout>
@@ -440,16 +623,17 @@ const RegistrationSetting = () => {
           </SearchLayout>
         </Card>
         <Spin spinning={loading}>
-          <Card bordered={false} headStyle={{ fontSize: '16px', fontWeight: 'bold' }} title='报名时间设置' extra={
+          <Card style={{ marginBottom: '16px' }} bordered={false} headStyle={{ fontSize: '16px', fontWeight: 'bold' }} title='报名时间设置' extra={
             <div style={{ color: '#4884ff' }}>缴费模式设置适用于全校课后服务收费</div>
           }>
             <Form>
               <Form.Item label='收费方式'>
                 <Radio.Group
-                  onChange={(value: any)=>{
-                    console.log('收费方式',value);
-                    setJFLX(value.target.value)
+                  onChange={async (value: any) => {
+                    setJFLX(value.target.value);
+                    setDetail(initDataSource,value.target.value);
                   }}
+                  disabled={disable}
                   value={JFLX}
                   style={{ marginLeft: 8 }}
                 >
@@ -463,71 +647,101 @@ const RegistrationSetting = () => {
             }
 
           </Card>
-          {/* <ProTable<any>
-					actionRef={actionRef}
-					columns={columns}
-					rowKey="id"
-					pagination={{
-						showQuickJumper: true,
-						pageSize: 10,
-						defaultCurrent: 1,
-					}}
-					request={async (param) => {
-						// 表单搜索项会从 params 传入，传递给后端接口。
-						console.log('=============')
-						if (curXNXQId && campusId) {
-							const obj = {
-								XXJBSJId: currentUser?.xxId,
-								NJId: NjId ? [NjId] : undefined,
-								BJSJId: BJId,
-								XNXQId: curXNXQId,
-								page: param.current,
-								pageSize: param.pageSize,
-								XQSJId: campusId,
-							};
-							const res = await getKHFWBJXSbm(obj);
-							console.log('res-------', res);
-							if (res.status === 'ok') {
-								return {
-									data: res.data.rows,
-									success: true,
-									total: res.data.count,
-								};
-							}
-						}
-						return [];
-					}}
-					options={{
-						setting: false,
-						fullScreen: false,
-						density: false,
-						reload: false,
-					}}
-					search={false}
-					headerTitle={
-						<SearchLayout>
-							<div>
-								<label htmlFor="grade">校区名称：</label>
-								<Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
-									{campusData?.map((item: any) => {
-										return <Option value={item.value}>{item.label}</Option>;
-									})}
-								</Select>
-							</div>
-							<div>
-								<label htmlFor="grade">学年学期：</label>
-								<Select value={curXNXQId} placeholder="请选择" onChange={onXNXQChange}>
-									{curXNXQData?.map((item: any) => {
-										return <Option value={item.id}>{`${item.XN}-${item.XQ}`}</Option>;
-									})}
-								</Select>
-							</div>
+          {
+            // 未配置课后服务
+            disable && <Card bordered={false} headStyle={{ fontSize: '16px', fontWeight: 'bold' }} title='缴费管理'>
+              <ProTable<any>
+                actionRef={actionRef}
+                columns={columnsPay}
+                rowKey="id"
+                pagination={{
+                  showQuickJumper: true,
+                  pageSize: 10,
+                  defaultCurrent: 1,
+                }}
+                dataSource={dataSourcePay}
+                rowSelection={{}}
+                options={{
+                  setting: false,
+                  fullScreen: false,
+                  density: false,
+                  reload: false,
+                }}
+                search={false}
+                headerTitle={
+                  <SearchLayout>
+                    <div>
+                      <label htmlFor="grade">年级名称：</label>
+                      <Select value={NjId} allowClear placeholder="请选择" onChange={(value: string) => {
+                        setNjId(value)
+                      }}>
+                        {NjData?.map((item: any) => {
+                          return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                        })}
+                      </Select>
+                    </div>
+                    <div>
+                      <label htmlFor="grade">时段名称：</label>
+                      <Select allowClear value={SDMCValue} placeholder="请选择" onChange={(value: string) => {
+                        setSDMCValue(value);
+                      }}>
+                        {initDataSource?.filter((item: DataSourceType) => item?.type === JFLX).map((item: DataSourceType) => {
+                          return <Option value={item.name}>{item.name}</Option>;
+                        })}
+                      </Select>
+                    </div>
+                    <div>
+                      <label htmlFor="grade">缴费状态：</label>
+                      <Select value={JFZT} allowClear placeholder="请选择" onChange={(value: any) => {
+                        setJFZT(value);
+                      }}>
+                        <Option value={1}>已开启</Option>;
+                        <Option value={0}>已关闭</Option>;
+                      </Select>
+                    </div>
+                  </SearchLayout>
+                }
+                tableAlertOptionRender={({ selectedRows }) => {
+                  console.log('selectedRows23', selectedRows);
+                  return (
+                    <Space>
+                      <Button
+                        type="primary"
+                        onClick={() => {
+                          const list = selectedRows.filter((item: any) => item?.isPay === 0)
+                          onPayClick(list, true);
+                        }}>
+                        开启缴费
+                      </Button>
 
+                      <Button
+                        type="primary"
+                        onClick={() => {
+                          const list = selectedRows.filter((item: any) => item?.isPay === 1)
+                          onPayClick(list, false);
+                        }}
+                      >
+                        关闭缴费
+                      </Button>
+                      {/* <ConfigureServiceBatch XNXQId= BJSJId, NJSJ, actionRef, XQSJId, key ></ConfigureServiceBatch>              */}
+                    </Space>
+                  );
 
-						</SearchLayout>
-					}
-				/> */}
-
+                }}
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+                  <Space size={24}>
+                    <span>
+                      已选 {selectedRowKeys.length} 项
+                      <a style={{ marginLeft: 8, width: '30px' }} onClick={onCleanSelected}>
+                        取消选择
+                      </a>
+                    </span>
+                  </Space>
+                )}
+              />
+            </Card>
+          }
 
         </Spin>
       </PageContain>

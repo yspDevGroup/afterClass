@@ -1,7 +1,7 @@
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Select, Space, message, Tooltip,} from 'antd';
+import { Select, Space, message, Tooltip, Button,} from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
@@ -12,10 +12,11 @@ import { getAllXQSJ } from '@/services/after-class/xqsj';
 import SearchLayout from '@/components/Search/Layout';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import ConfigureService from './ConfigureService';
-import { updateKHFWBJ } from '@/services/after-class/khfwbj';
+import { bulkEditKHFWBJZT, updateKHFWBJ } from '@/services/after-class/khfwbj';
 import ClassSeviveDetail from './ClassSeviveDetail';
 import UpdateCourses from './UpdateCourses';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import ConfigureServiceBatch from './ConfigureServicebatch';
 
 type selectType = { label: string; value: string };
 
@@ -310,12 +311,80 @@ const AdministrationClassManagement = () => {
       }
     })
   }
+
+  // 取消发布、发布
+  const onRelease= async (arr: any[],falg: boolean)=>{
+    if(!arr?.length){
+      message.warning(falg? '没有可发布的课后服务课程':'没有可取消发布的课后服务课程')
+      return;
+    }
+    console.log('批量取消发布',arr);
+    const params={
+      KHFWBJIds: arr.map((item: any)=>item?.KHFWBJs?.[0].id),
+      ZT: falg? 1:0, 
+    }
+    const res=await bulkEditKHFWBJZT(params);
+    if(res?.status==='ok'){
+      message.success(falg? '发布成功':'取消成功');
+      actionRef.current?.reloadAndRest();
+      actionRef.current.clearSelected();
+    }else{
+      message.error(res.message);
+      actionRef.current.clearSelected();
+    }
+  }
   return (
     <div className={styles.AdministrativeClass}>
       <PageContain>
         <ProTable<any>
           actionRef={actionRef}
           columns={columns}
+          rowSelection={{}}
+          tableAlertOptionRender={({ selectedRows }) => {
+            console.log('selectedRows23', selectedRows);
+              return (
+                <Space>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      const list = selectedRows.filter((item: any)=>{
+                        const {KHFWBJs}=item;
+                        if(KHFWBJs?.length>0&&KHFWBJs?.[0]?.ZT===0)
+                        return true;
+                       })
+                       onRelease(list,true);
+                    }}>
+                    批量发布
+                  </Button>
+                
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                       const list = selectedRows.filter((item: any)=>{
+                         const {KHFWBJs}=item;
+                         if(KHFWBJs?.length>0&&KHFWBJs?.[0]?.ZT===1)
+                         return true;
+                        })
+                        onRelease(list,false);
+                      }}
+                    >
+                      取消发布
+                    </Button>
+                </Space>
+              );
+           
+          }}
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+            <Space size={24}>
+              <span>
+                已选 {selectedRowKeys.length} 项
+                <a style={{ marginLeft: 8, width: '30px' }} onClick={onCleanSelected}>
+                  取消选择
+                </a>
+              </span>
+            </Space>
+          )}
           rowKey="id"
           pagination={{
             showQuickJumper: true,
@@ -395,6 +464,9 @@ const AdministrationClassManagement = () => {
               </div>
             </SearchLayout>
           }
+          toolBarRender={()=>{
+            return [ <ConfigureServiceBatch actionRef={actionRef} XNXQId={curXNXQId} XQSJId={campusId} />]
+          }}
         />
       </PageContain>
     </div>
