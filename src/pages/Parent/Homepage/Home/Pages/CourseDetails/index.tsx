@@ -18,6 +18,7 @@ import styles from './index.less';
 import { getKHBJSJ, studentRegistration } from '@/services/after-class/khbjsj';
 import { RightOutlined } from '@ant-design/icons';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
+import { signClass } from '@/services/after-class/xsjbsj';
 
 const { Panel } = Collapse;
 
@@ -187,21 +188,54 @@ const CourseDetails: React.FC = () => {
         return item.id === BJ;
       });
       await setClassDetail(bjInfo);
-      const data: API.CreateKHXSDD = {
-        XDSJ: new Date().toISOString(),
-        ZFFS: '线上支付',
-        DDZT: '待付款',
-        DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
-        XSJBSJId:
-          localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
-        KHBJSJId: BJ!,
-        DDLX: 0,
-      };
-      const res = await createKHXSDD(data);
-      if (res.status === 'ok') {
-        if (data.DDFY > 0) {
-          setOrderInfo(res.data);
+      const Money = JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!;
+      if (Money > 0) {
+        const data: API.CreateKHXSDD = {
+          XDSJ: new Date().toISOString(),
+          ZFFS: '线上支付',
+          DDZT: '待付款',
+          DDFY: Money,
+          XSJBSJId:
+            localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
+          KHBJSJId: BJ!,
+          DDLX: 0,
+        };
+        const res = await createKHXSDD(data);
+        if (res.status === 'ok') {
+          if (data.DDFY > 0) {
+            setOrderInfo(res.data);
+          } else {
+            const bjId =
+              localStorage.getItem('studentBJId') ||
+              currentUser?.student?.[0].BJSJId ||
+              testStudentBJId;
+            await ParentHomeData(
+              'student',
+              currentUser?.xxId,
+              StorageXSId,
+              StorageNjId,
+              bjId,
+              StorageXQSJId,
+              true,
+            );
+            setTimeout(() => {
+              message.success('报名成功');
+            }, 500);
+            setTimeout(() => {
+              history.push('/parent/home?index=index&reload=true');
+            }, 1000);
+          }
         } else {
+          enHenceMsg(res.message);
+        }
+      } else {
+        const result = await signClass({
+          XSJBSJId:
+            localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
+          KHBJSJId: BJ!,
+          ZT: 0
+        });
+        if (result.status === 'ok') {
           const bjId =
             localStorage.getItem('studentBJId') ||
             currentUser?.student?.[0].BJSJId ||
@@ -221,9 +255,9 @@ const CourseDetails: React.FC = () => {
           setTimeout(() => {
             history.push('/parent/home?index=index&reload=true');
           }, 1000);
+        } else {
+          enHenceMsg(result.message);
         }
-      } else {
-        enHenceMsg(res.message);
       }
     }
   };

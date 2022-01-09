@@ -1,5 +1,6 @@
 .DropClass,
-.ReturnService {
+.ReturnService,
+.AfterClassService {
   min-height: 100%;
   background: #f5f5f5;
 
@@ -14,7 +15,7 @@
       color: #fff;
       line-height: 30px;
       text-align: right;
-      background-color: #45c977;
+      background-color: #15B628;
       border-radius: 30px 0 0 30px;
     }
   }
@@ -37,6 +38,7 @@
       background: #ffffff;
       background-color: #fff;
       border-radius: 8px;
+
       &::after {
         display: block;
         clear: both;
@@ -47,11 +49,12 @@
         margin-bottom: 5px;
         color: #999999;
         font-size: 12px;
-        & + button {
+
+        &+button {
           float: right;
-          color: #45c977;
+          color: #15B628;
           background: none;
-          border: 1px solid #45c977;
+          border: 1px solid #15B628;
           border-radius: 8px;
           padding: 4px 6px;
         }
@@ -60,7 +63,6 @@
       .title {
         margin-bottom: 10px;
         color: #333333;
-        font-weight: bold;
         font-size: 14px;
       }
 
@@ -72,18 +74,18 @@
 
           .ant-checkbox {
             .ant-checkbox-inner {
-              border-color: #45c977;
+              border-color: #15B628;
             }
           }
 
           .ant-checkbox-checked::after {
-            border: 1px solid #45c977;
+            border: 1px solid #15B628;
           }
 
           .ant-checkbox-checked {
             .ant-checkbox-inner {
-              background-color: #45c977;
-              border-color: #45c977;
+              background-color: #15B628;
+              border-color: #15B628;
             }
           }
         }
@@ -101,14 +103,14 @@
     width: 100%;
     background: #f5f5f5;
 
-    > p {
+    >p {
       margin: 5px 0;
       padding-left: 10px;
       color: #666666;
       font-size: 14px;
 
       a {
-        color: #45c977;
+        color: #15B628;
       }
     }
 
@@ -123,8 +125,8 @@
         color: #fff;
         font-size: 16px;
         line-height: 20px;
-        background-color: #45c977;
-        border-color: #45c977;
+        background-color: #15B628;
+        border-color: #15B628;
         border-radius: 19px;
         box-shadow: 0 2px 0 rgba(11, 241, 126, 0.2);
       }
@@ -143,11 +145,13 @@
       top: 10px;
       right: 14px;
       font-size: 12px;
-      >span:nth-of-type(2){
+
+      >span:nth-of-type(2) {
         margin-left: 2px;
       }
     }
   }
+
   .btns {
     width: 100%;
     height: 54px;
@@ -156,25 +160,57 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     position: fixed;
     bottom: 0;
+
     button {
       width: 100%;
       height: 100%;
       color: #fff;
       font-size: 16px;
       line-height: 20px;
-      background-color: #45c977;
+      background-color: #15B628;
       border-radius: 19px;
-      border:none;
+      border: none;
     }
+
     button[disabled] {
       background-color: #c5c4c4;
     }
   }
 }
-.ReturnService{
-  .cards{
+
+.ReturnService {
+  .cards {
     height: 80px !important;
-    min-height:80px !important;
+    min-height: 80px !important;
+  }
+}
+
+.AfterClassService {
+  .Application {
+    .cards {
+      display: flex;
+
+      img {
+        width: 105px;
+        height: 70px;
+        border-radius: 8px;
+        margin-right: 8px;
+      }
+
+      >div {
+        p {
+          width: calc(~ '100vw - 170px');
+          margin-top: 5px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        p:nth-of-type(2) {
+          margin-top: 15px;
+        }
+      }
+    }
   }
 }
 
@@ -200,17 +236,17 @@
       width: 100% !important;
       padding: 16px;
 
-      > p:nth-child(1) {
+      >p:nth-child(1) {
         font-size: 16px;
         text-align: center;
       }
 
-      > div {
+      >div {
         height: 400px;
         overflow: auto;
       }
 
-      > div::-webkit-scrollbar {
+      >div::-webkit-scrollbar {
         display: none;
       }
     }
@@ -220,7 +256,7 @@
       justify-content: space-evenly;
 
       .ant-btn-primary {
-        background-color: #45c977;
+        background-color: #15B628;
         border: none;
       }
     }
@@ -234,6 +270,26 @@
   margin-top: calc(50vh - 120px) !important;
   padding: 0 !important;
 
+  .TimeInterval {
+    >span {
+      width: 25%;
+
+      >span {
+        width: 90%;
+        height: 26px;
+        font-size: 14px;
+        margin: 0 auto;
+        line-height: 24px;
+        display: block;
+
+        >span {
+          float: right;
+          line-height: 26px;
+        }
+      }
+    }
+  }
+
   :global {
     .ant-modal-content {
       min-width: 100% !important;
@@ -244,6 +300,9 @@
         padding: 16px;
         text-align: center;
         border-bottom: none;
+        height: 54px !important;
+        border-bottom: 1px solid #ddd;
+
         div {
           font-size: 16px !important;
         }
@@ -253,10 +312,7 @@
         width: 100% !important;
         padding: 16px;
 
-        > div {
-          min-height: 100px;
-          max-height: 180px;
-          overflow: auto;
+        >div {
 
           p {
             display: flex;
@@ -272,54 +328,65 @@
               width: 90px;
             }
           }
+
+          .ant-checkbox-group {
+            max-height: 140px;
+            overflow: auto;
+          }
+
+          .ant-checkbox-group::-webkit-scrollbar {
+            display: none;
+          }
         }
-        >div::-webkit-scrollbar {
-          display: none;
-        }
+
       }
 
       .ant-modal-footer {
         display: flex;
         justify-content: space-evenly;
-        height: 60px !important;
+        height: 54px !important;
         border-top: none;
+        padding: 0 16px 16px !important;
 
         .ant-btn-primary {
-          background-color: #45c977;
+          background-color: #15B628;
         }
 
         .ant-btn {
           flex: 1;
           width: auto !important;
           height: 38px !important;
-          color: #45c977;
+          color: #15B628;
           border: none;
-          border: 1px solid #45c977;
+          border: 1px solid #15B628;
           border-radius: 22px !important;
         }
       }
     }
+
     .ant-checkbox-wrapper {
       position: relative;
       margin-left: 0 !important;
       width: 100%;
       margin-bottom: 5px;
+
       .ant-checkbox {
         position: absolute;
         right: 5px;
+
         .ant-checkbox-inner {
-          border-color: #45c977;
+          border-color: #15B628;
         }
       }
 
       .ant-checkbox-checked::after {
-        border: 1px solid #45c977;
+        border: 1px solid #15B628;
       }
 
       .ant-checkbox-checked {
         .ant-checkbox-inner {
-          background-color: #45c977;
-          border-color: #45c977;
+          background-color: #15B628;
+          border-color: #15B628;
         }
       }
     }
@@ -342,34 +409,40 @@
 .Evaluation {
   min-height: 100%;
   background: #f5f5f5;
+
   :global {
     .ant-tabs-nav {
       .ant-tabs-nav-wrap {
         .ant-tabs-nav-list {
           width: 100%;
+
           .ant-tabs-tab {
             width: 50%;
             margin-left: 0;
             background: #f5f5f5;
             border: none;
             border-radius: 0%;
+
             .ant-tabs-tab-btn {
               margin: 0 auto;
               font-size: 16px;
             }
           }
+
           .ant-tabs-tab-active {
             .ant-tabs-tab-btn {
-              color: #45c977;
+              color: #15B628;
               font-weight: bold;
             }
           }
         }
       }
     }
+
     .ant-tabs-content {
       padding-bottom: 90px;
     }
+
     .ant-tabs-tab-btn:focus,
     .ant-tabs-tab-remove:focus,
     .ant-tabs-tab-btn:active,
@@ -377,13 +450,16 @@
       color: #333;
     }
   }
+
   .Application {
     padding: 0 10px;
+
     // height: calc(~"100vh - 85px");
     .choice {
       color: #999999;
       font-size: 12px;
     }
+
     .cards {
       position: relative;
       width: 100%;
@@ -392,36 +468,42 @@
       padding: 10px;
       background-color: #fff;
       border-radius: 8px;
+
       p {
         margin-bottom: 5px;
         color: #999999;
         font-size: 12px;
       }
+
       .title {
         margin-bottom: 10px;
         color: #333333;
-        font-weight: bold;
         font-size: 16px;
       }
+
       button {
         float: right;
         height: 30px;
-        color: #45c977;
-        border: 1px solid #45c977;
+        color: #15B628;
+        border: 1px solid #15B628;
         border-radius: 15px;
       }
+
       :global {
+
         .ant-btn:hover,
         .ant-btn:focus {
-          color: #45c977;
-          border-color: #45c977;
+          color: #15B628;
+          border-color: #15B628;
         }
       }
     }
   }
+
   .History {
     width: 100%;
     padding: 0 10px;
+
     .Pjcards {
       position: relative;
       width: 100%;
@@ -430,23 +512,27 @@
       padding: 5px 10px 10px;
       background-color: #fff;
       border-radius: 8px;
+
       p {
         margin: 0;
       }
+
       .name {
-        > span {
-          color: #000000;
-          font-weight: bold;
+        >span {
+          color: #333;
           line-height: 38px;
         }
+
         ul {
           float: right;
         }
       }
-      > p:nth-child(2) {
+
+      >p:nth-child(2) {
         color: #999999;
         font-size: 12px;
       }
+
       .PY {
         max-height: 70px;
         margin: 5px 0;
@@ -455,6 +541,7 @@
         font-size: 14px;
         word-break: break-all;
       }
+
       .BJXX {
         width: 100%;
         height: 56px;
@@ -464,24 +551,28 @@
         line-height: 22px;
         background: #e9e9e9;
         border-radius: 8px;
-        > p:nth-child(2) {
+
+        >p:nth-child(2) {
           color: #999999;
         }
       }
+
       button {
         width: 88px;
         height: 30px;
         margin-top: 9px;
         margin-left: calc(~'100% - 88px');
-        color: #45c977;
-        border: 1px solid #45c977;
+        color: #15B628;
+        border: 1px solid #15B628;
         border-radius: 15px;
       }
+
       :global {
+
         .ant-btn:hover,
         .ant-btn:focus {
-          color: #45c977;
-          border-color: #45c977;
+          color: #15B628;
+          border-color: #15B628;
         }
       }
     }
@@ -490,11 +581,13 @@
 
 .OrderDetails {
   width: 100%;
-  min-height:calc(~ '100vh - 44px');
+  min-height: calc(~ '100vh - 44px');
   background: #f5f5f5;
+
   button {
     outline: none;
   }
+
   .hender {
     width: 100vw;
     height: 126px;
@@ -504,31 +597,37 @@
     font-size: 18px;
     text-align: center;
     background: linear-gradient(281.09deg, #44ca7a 0%, #0ef2e0 100%);
+
     p {
       display: flex;
       justify-content: center;
       font-weight: 400;
       font-size: 12px;
+
       span {
         margin-right: 0;
         color: #fff;
         font-size: 12px;
       }
+
       .countdown {
         line-height: 10px;
       }
     }
+
     span {
       margin-right: 5px;
       font-size: 20px;
     }
   }
+
   .content {
     width: calc(~'100% - 20px');
     margin: auto;
     padding-bottom: 54px;
     background: #f5f5f5;
     border-radius: 8px 8px 0 0;
+
     .KCXX,
     .FWXX {
       width: 100%;
@@ -536,25 +635,30 @@
       padding: 10px;
       background-color: #ffffff;
       border-radius: 8px;
-      .xx > * {
+
+      .xx>* {
         height: 16px !important;
         font-size: 14px !important;
         line-height: 22px !important;
       }
+
       .title {
         color: @text-color;
         font-weight: 600;
         font-size: 16px;
         line-height: 22px;
       }
+
       ul {
         padding: 0;
         color: @text-color-secondary;
       }
     }
+
     .FWXX {
       height: 124px;
     }
+
     .KCZE {
       width: 100%;
       height: auto;
@@ -562,18 +666,21 @@
       padding: 10px;
       background-color: #ffffff;
       border-radius: 8px;
+
       p {
         margin: 0;
         display: flex;
         justify-content: space-between;
         line-height: 28px;
       }
+
       .JFFY {
         display: flex;
         justify-content: space-between;
         margin-top: 2px;
       }
     }
+
     .DDXX {
       width: 100%;
       height: auto;
@@ -581,10 +688,12 @@
       padding: 10px;
       background-color: #ffffff;
       border-radius: 8px;
+
       ul {
         margin: 0;
         padding: 0;
         color: @text-color-secondary;
+
         li {
           display: flex;
           justify-content: space-between;
@@ -592,10 +701,12 @@
         }
       }
     }
+
     .buttons {
       width: 100%;
       height: 50px;
       margin-top: 14px;
+
       button {
         float: right;
         height: 30px;
@@ -619,13 +730,16 @@
     line-height: 54px;
     background: #ffffff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+
     span:nth-of-type(1) {
       vertical-align: top;
     }
+
     span:nth-of-type(2) {
       color: #ff6600;
       font-size: 18px;
     }
+
     .btn {
       position: absolute;
       top: 8px;
@@ -635,11 +749,12 @@
       color: #fff;
       font-size: 18px;
       line-height: 38px;
-      background-color: #45c977;
+      background-color: #15B628;
       border: none;
       border-radius: 19px;
     }
   }
+
   .payment {
     position: fixed;
     top: 0;
@@ -649,7 +764,8 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
-    > div {
+
+    >div {
       position: fixed;
       top: calc(~'50% - 170px');
       left: 5vw;
@@ -658,23 +774,26 @@
       margin: auto;
       padding: 14px;
       background-color: #fff;
+
       p:nth-of-type(1) {
         font-weight: 600;
         font-size: 18px;
         text-align: center;
       }
+
       p:nth-of-type(2) {
-        color: #45c977;
+        color: #15B628;
         font-size: 80px;
         text-align: center;
       }
+
       button {
         width: 90%;
         height: 38px;
         margin-left: 5%;
         color: #fff;
         font-size: 18px;
-        background-color: #45c977;
+        background-color: #15B628;
         border: none;
         border-radius: 19px;
       }

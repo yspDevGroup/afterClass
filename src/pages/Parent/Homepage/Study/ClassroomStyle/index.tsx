@@ -104,7 +104,7 @@ const ClassroomStyle = () => {
                       <div className={styles.cards}>
                         <p>
                           <Avatar
-                            style={{ backgroundColor: '#45C977', verticalAlign: 'middle', fontSize: 18 }}
+                            style={{ backgroundColor: '#15B628', verticalAlign: 'middle', fontSize: 18 }}
                             size="large"
                           >
                             {item.teacherName.slice(0, 1)}

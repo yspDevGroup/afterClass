@@ -61,7 +61,7 @@ const TDKList = (props: { data: any ,type: string}) => {
                     ) : item.ZT === 1 ? (
                       <span
                         className={styles.cards}
-                        style={{ color: '#45c977', borderColor: '#45c977' }}
+                        style={{ color: '#15B628', borderColor: '#15B628' }}
                       >
                         已通过
                       </span>

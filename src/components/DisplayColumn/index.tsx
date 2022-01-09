@@ -5,7 +5,7 @@ import { List, Badge } from 'antd';
 import type { IiconTextData } from './data';
 import IconFont from '../CustomIcon';
 import styles from './index.less';
-import { DisplayColumnItem } from '../data';
+import type { DisplayColumnItem } from '../data';
 
 const DisplayColumn: FC<IiconTextData> = ({
   hidden = false,
@@ -30,7 +30,10 @@ const DisplayColumn: FC<IiconTextData> = ({
       <List<DisplayColumnItem>
         grid={grid}
         dataSource={dataSource}
-        header={isheader === true ? <div>{title}</div> : ''}
+        header={isheader === true ? <div className={styles.title}>
+          <div />
+          <span>{title}</span>
+        </div> : ''}
         renderItem={(item, index) => {
           const { icon, text, img, link, background, fontSize, count, itemType } = item;
           let curLink = link || '';

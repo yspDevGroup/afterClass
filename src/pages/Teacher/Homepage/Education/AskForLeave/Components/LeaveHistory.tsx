@@ -55,7 +55,7 @@ const LeaveHistory = (props: propsType) => {
                   ) : item.QJZT === 0 ? (
                     <span style={{ color: '#FFB257', borderColor: '#FFB257' }}>申请中</span>
                   ) : item.QJZT === 1 ? (
-                    <span style={{ color: '#45c977', borderColor: '#45c977' }}>已同意</span>
+                    <span style={{ color: '#15B628', borderColor: '#15B628' }}>已同意</span>
                   ) : item.QJZT === 2 ? (
                     <span style={{ color: '#FF4B4B', borderColor: '#FF4B4B' }}>已驳回</span>
                   ) : (

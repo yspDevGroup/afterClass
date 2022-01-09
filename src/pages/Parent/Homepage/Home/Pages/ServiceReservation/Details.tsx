@@ -15,6 +15,7 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { Link, useModel, history } from 'umi';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { signService } from '@/services/after-class/xsjbsj';
 
 const Details = () => {
   const { initialState } = useModel('@@initialState');
@@ -89,25 +90,40 @@ const Details = () => {
     setXystate(e.target.checked);
   };
   const submit = async () => {
-    const data: API.CreateKHXSDD = {
-      XDSJ: new Date().toISOString(),
-      ZFFS: '线上支付',
-      DDZT: '待付款',
-      DDFY: Data?.FY,
-      XSJBSJId: localStorage.getItem('studentId') || currentUser?.student[0]?.XSJBSJId || testStudentId,
-      DDLX: 1,
-      KHXXZZFWId: Data?.id,
-    };
-    const res = await createKHXSDD(data);
-    if (res.status === 'ok') {
-      if (data.DDFY > 0) {
-        setOrderInfo(res.data);
+    if(Data?.FY>0){
+      const data: API.CreateKHXSDD = {
+        XDSJ: new Date().toISOString(),
+        ZFFS: '线上支付',
+        DDZT: '待付款',
+        DDFY: Data?.FY,
+        XSJBSJId: localStorage.getItem('studentId') || currentUser?.student[0]?.XSJBSJId || testStudentId,
+        DDLX: 1,
+        KHXXZZFWId: Data?.id,
+      };
+      const res = await createKHXSDD(data);
+      if (res.status === 'ok') {
+        if (data.DDFY > 0) {
+          setOrderInfo(res.data);
+        } else {
+          message.success('报名成功');
+          history.push('/parent/home/serviceReservation');
+        }
       } else {
+        enHenceMsg(res.message);
+      }
+    }else{
+      const result = await signService({
+        XSJBSJId:
+          localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
+          KHXXZZFWId: Data?.id!,
+        ZT: 0
+      });
+      if (result.status === 'ok') {
         message.success('报名成功');
         history.push('/parent/home/serviceReservation');
+      }else{
+        enHenceMsg(result.message);
       }
-    } else {
-      enHenceMsg(res.message);
     }
   };
 

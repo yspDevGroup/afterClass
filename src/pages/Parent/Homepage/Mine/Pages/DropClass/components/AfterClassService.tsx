@@ -14,6 +14,7 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 
 import styles from '../index.less';
 import noOrder from '@/assets/noOrder.png';
+import seviceImage from '@/assets/seviceImage.png';
 import { getStudentListByBjid } from '@/services/after-class/khfwbj';
 
 const AfterClassService = () => {
@@ -30,7 +31,6 @@ const AfterClassService = () => {
   const [BaoMinData, setBaoMinData] = useState<any>();
   const [Type, setType] = useState(false);
   const [TimeId, setTimeId] = useState([]);
-  const [visible, setvisible] = useState(true);
   const [FwTimes, setFwTimes] = useState<any>([]);
 
   useEffect(() => {
@@ -62,8 +62,10 @@ const AfterClassService = () => {
         setBaoMinData(res.data.rows);
         setFwTimes(res.data.rows?.[0]?.XSFWBJs);
         const NewArr: any = [];
+        const NewIdArr: any = [];
         res.data.rows?.[0]?.XSFWBJs?.forEach((value: any) => {
           NewArr.push(`${value?.id}+${value?.KHFWBJ?.FWMC}`)
+          NewIdArr.push(value?.id)
         })
         setTimeId(NewArr)
       }
@@ -88,15 +90,15 @@ const AfterClassService = () => {
   };
   const handleOks = async () => {
     const NewArr: any[] = [];
-    TimeId?.forEach((value: string) => {
+    FwTimes?.forEach((value: any) => {
       const data = {
         XSJBSJId: StorageXSId,
         XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
-        XSFWBJId: value.split('+')[0],
+        XSFWBJId: value?.id,
         ZT: 0,
         BZ: '',
         LX: 2,
-        FWMC: value.split('+')[1],
+        FWMC: value?.KHFWBJ?.FWMC,
       };
       NewArr.push(data);
     });
@@ -113,25 +115,40 @@ const AfterClassService = () => {
     setModalVisible(false);
   };
 
-  const onChange = (checkedValues: any) => {
-    const NewArr: any[] = [];
-    checkedValues.forEach((value: string) => {
-      const data = {
-        XSJBSJId: StorageXSId,
-        XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
-        XSFWBJId: value.split('+')[0],
-        ZT: 0,
-        BZ: '',
-        LX: 2,
-        FWMC: value.split('+')[1],
-      };
-      NewArr.push(data);
-    });
-    setDatasourse(NewArr);
-    setDatas(checkedValues);
+  const handleClose = (removedTag: any) => {
+    console.log(removedTag, 'removedTag')
+    const newArr: any = [];
+    FwTimes.forEach((value: any) => {
+      if (value !== removedTag) {
+        newArr.push(value)
+      }
+    })
+    console.log(newArr, 'newArr')
+    setFwTimes(newArr);
   };
+  const forMap = (tag: any) => {
+    const tagElem = (
+      <Tag
+        closable
+        onClose={e => {
+          e.preventDefault();
+          handleClose(tag);
+        }}
+      >
+        {tag?.KHFWSJPZ?.SDBM}
+      </Tag>
+    );
+    return (
+      <span key={tag?.id} style={{ display: 'inline-block', marginBottom: '10px' }}>
+        {tagElem}
+      </span>
+    );
+  };
+  const tagChild = FwTimes?.map(forMap);
+
+
   return (
-    <div className={styles.DropClass}>
+    <div className={styles.AfterClassService}>
       {BaoMinData?.length === 0 ? (
         <>
           <div className={styles.ZWSJ}>
@@ -152,29 +169,18 @@ const AfterClassService = () => {
                 }
               }}>
                 <div className={styles.cards} style={{ height: '80px' }}>
-                  <p className={styles.title}>
-                    {BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWMC}
-                  </p>
-                  <p>服务时段：{BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[0]?.KSRQ} ~ {BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.length - 1]?.JSRQ}</p>
+                  <img src={BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWTP || seviceImage} alt="" />
+                  <div>
+                    <p className={styles.title}>
+                      {BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.FWMC}
+                    </p>
+                    <p>服务时段：{BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[0]?.KSRQ} ~ {BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.[BaoMinData?.[0]?.XSFWBJs?.[0].KHFWBJ?.KHFWSJPZs?.length - 1]?.JSRQ}</p>
+                  </div>
+
                   <Checkbox
                     value={BaoMinData?.[0]?.id}
                   />
                 </div>
-                {/* {BaoMinData?.[0]?.XSFWBJs?.map((value: any) => {
-                  return (
-                    <>
-                      <div className={styles.cards} style={{ height: '80px' }}>
-                        <p className={styles.title}>
-                          {value?.KHFWBJ?.FWMC}
-                        </p>
-                        <p>服务时段：{value?.KHFWSJPZ?.KSRQ} ~ {value?.KHFWSJPZ?.JSRQ}</p>
-                        <Checkbox
-                          value={`${value?.id}+${value?.KHFWBJ?.FWMC}+${value?.KHFWSJPZ?.KSRQ}`}
-                        />
-                      </div>
-                    </>
-                  );
-                })} */}
               </Checkbox.Group>
             </div>
           </div>
@@ -228,32 +234,13 @@ const AfterClassService = () => {
         cancelText="取消"
       >
         <div>
-          <p  style={{ fontSize: 14, color: '#999',marginBottom: 15 }}>系统将为您退订所有剩余未上课程，您也可以指定部分时段进行退订。</p>
-          <Checkbox.Group style={{ width: '100%' }} defaultValue={TimeId} onChange={onChange} >
-            {
-              BaoMinData?.[0]?.XSFWBJs?.map((value: any) => {
-                return <Checkbox value={`${value?.id}+${value?.KHFWBJ?.FWMC}`} >
-                  {value?.KHFWSJPZ?.KSRQ}~{value?.KHFWSJPZ?.JSRQ}</Checkbox>
-              })
-            }
-          </Checkbox.Group>
-          {/* {
-            FwTimes?.map((value: any) => {
-              return <Tag
-                closable
-                onClose={e => {
-                  e.preventDefault();
-                  handleClose(tag);
-                }}
-              // value={`${value?.id}+${value?.KHFWBJ?.FWMC}`}
-              >
-                {value?.KHFWSJPZ?.KSRQ}~{value?.KHFWSJPZ?.JSRQ}
-              </Tag>
-            })
-          } */}
-          <p style={{ fontSize: 12, color: '#999', marginTop: 20, marginBottom: 0 }}>
+          <p style={{ fontSize: 14, color: '#999', marginBottom: 20 }}>系统将为您退订所有剩余未上课程，您也可以指定部分时段进行退订。</p>
+          <div style={{ marginBottom: 16 }} className={styles?.TimeInterval} >
+            {tagChild}
+          </div>
+          {/* <p style={{ fontSize: 12, color: '#999', marginTop: 15, marginBottom: 0 }}>
             注：系统将根据您所选时段发起退订申请，退订成功后，将自动进行退款，退款将原路返回您的支付账户。
-          </p>
+          </p> */}
         </div>
       </Modal >
     </div >

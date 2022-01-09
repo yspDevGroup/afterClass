@@ -30,7 +30,7 @@ const Course = (props: any) => {
     }
   }, [yxkcAllData]);
   useEffect(() => {
-    const newArr = kskc.filter((value: any) => {
+    const newArr = kskc?.filter((value: any) => {
       return value?.KHKCSJs?.length !== 0
     })
     setKSKCData(newArr);

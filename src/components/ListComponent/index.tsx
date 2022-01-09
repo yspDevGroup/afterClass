@@ -76,7 +76,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                         <div className={styles.Title} > <span className={styles.titles} style={{ width: 'calc(100% - 50px)' }}>{v.title}</span>{v.fkzt === 3 ? <span className={styles.types}>待缴费</span> : <></>}</div>
                         <div className={styles.TitleRight}>
                           {v.titleRight?.text === '待上课' ? (
-                            <span style={{ color: '#45C977' }}>{v.titleRight?.text}</span>
+                            <span style={{ color: '#15B628' }}>{v.titleRight?.text}</span>
                           ) : (
                             <span style={{ color: '#999999' }}>{v.titleRight?.text}</span>
                           )}

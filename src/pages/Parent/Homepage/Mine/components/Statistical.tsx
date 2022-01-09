@@ -77,7 +77,11 @@ const Statistical = (props: { userId?: string; xxId?: string; }) => {
   };
   return (
     <div className={styles.statistical}>
-      <p><span>出勤统计</span>
+      <p>
+        <div className={styles.title}>
+          <div />
+          <span>出勤统计</span>
+        </div>
         <span>
           <Badge className={styles.legend} color="#31D99F" text="正常" />
           <Badge className={styles.legend} color="#FF7171" text="异常" />

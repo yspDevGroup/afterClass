@@ -101,7 +101,7 @@ const PatrolArrange = () => {
               }}>
                 <List.Item
                   actions={[<span
-                    style={{ color: item.SFXK === 1 ? '#0066FF' : (item.SFXK === 2 ? '#45C977' : '#FF6600'), fontSize: 12 }}
+                    style={{ color: item.SFXK === 1 ? '#0066FF' : (item.SFXK === 2 ? '#15B628' : '#FF6600'), fontSize: 12 }}
                   >
                     {item.SFXK === 1 ? '部分' : (item.SFXK === 2 ? '已' : '未')}巡课
                   </span>]}
