@@ -22,6 +22,8 @@ type PropsType = {
   setopens: (value: boolean) => void;
   setModalVisible: (value: boolean) => void;
   setXQLabelItem: (value: { label: string, value: string }) => void;
+  xQLabelItem: any;
+
 };
 
 const AddRoom = (props: PropsType) => {
