@@ -33,6 +33,7 @@ import { getAuthorization } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 
 import styles from './index.less';
+import { Record } from 'immutable';
 
 const { Search } = Input;
 const RoomManagement = () => {
@@ -79,8 +80,10 @@ const RoomManagement = () => {
   const handleOperation = (type: string, data?: RoomItem) => {
     if (data) {
       setCurrent(data);
+      setXQLabelItem({ label:data?.XQSJ?.XQMC, value: data?.XQSJ?.id})
     } else {
       setCurrent(undefined);
+      setXQLabelItem({});
     }
     setModalType(type);
     getModelTitle();
@@ -465,6 +468,7 @@ const RoomManagement = () => {
             setopens={setopens}
             setModalVisible={setModalVisible}
             setXQLabelItem={setXQLabelItem}
+            xQLabelItem={xQLabelItem}
           />
         )}
       </Modal>

@@ -25,7 +25,7 @@ type PropsType = {
 };
 
 const AddRoom = (props: PropsType) => {
-  const { current, setForm, readonly, setopens, setModalVisible, setXQLabelItem } = props;
+  const { current, setForm, readonly, setopens, setModalVisible, setXQLabelItem, xQLabelItem } = props;
   const [roomType, setRoomType] = useState<Record<string, string>[]>([]);
   // 校区
   const [campus, setCampus] = useState<any>([]);
@@ -164,10 +164,12 @@ const AddRoom = (props: PropsType) => {
         setForm={setForm}
         values={(() => {
           if (current) {
+            console.log('current',current);
+        
             const { FJLX, XQSJ, XQName, ...info } = current;
             return {
               FJLXId: FJLX?.id,
-              XQSJId: XQSJ?.id,
+              XQ: xQLabelItem?.value,
               ...info,
             };
           }
