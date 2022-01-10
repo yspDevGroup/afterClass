@@ -1,10 +1,8 @@
-
 import PageContain from '@/components/PageContainer';
 import ProTable, { EditableProTable } from '@ant-design/pro-table';
 import { Select, Space, Form, Spin, Card, Checkbox, Tag, Radio, Button, message, Modal } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useModel } from 'umi';
-import { getKHFWBJXSbm } from '@/services/after-class/bjsj';
+import { useModel } from 'umi';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import SearchLayout from '@/components/Search/Layout';
@@ -16,12 +14,8 @@ import moment from 'moment';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-
-
-
 type selectType = { label: string; value: string };
 const { Option } = Select;
-
 
 type DataSourceType = {
   id: React.Key;
@@ -266,20 +260,24 @@ const RegistrationSetting = () => {
 
 
   const onEditTableChange = (editableRows: DataSourceType[]) => {
+    // console.log('editableRows',editableRows);
+    // console.log('initDataSource',initDataSource);
     if (editableRows?.length && initDataSource?.length) {
-      const initarr = [...initDataSource];
+      let initarr = [...initDataSource];
       editableRows.forEach((item: DataSourceType) => {
         if (!initarr.some((v: DataSourceType) => item.id === v.id)) {
           initarr.push(item);
         } else {
-          initarr.forEach((v: DataSourceType) => {
+        initarr = initarr.map((v: DataSourceType) => {
             if (v.id === item.id) {
-              // eslint-disable-next-line no-param-reassign
-              v = item;
+              // console.log('id',item.id);
+              return item;
             }
+            return v;
           })
         }
       })
+      // console.log('initarr',initarr);
       if (JFLX === 1) {
         setDataSource(initarr.filter((item: DataSourceType) => item.type === 1))
       }
