@@ -141,9 +141,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
 
 
   useEffect(() => {
-    if (formValues) {
-       
-     
+    if (formValues) {     
       setIsJg(BjLists?.SSJGLX === '机构课程');
       // if(BmLists?.XzClassMC?.length){
       //   setClassData(BmLists.XzClassMC)
@@ -165,8 +163,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
         setKCLXMC(BjLists.KCLX)
       }
       setBJData(BjLists);
-      
-      
     }
     if (formValues && names === 'chakan') {
       (async () => {
@@ -178,6 +174,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
         }
       })();
     }
+    
   }, [formValues]);
 
   // 获取课程适用年级和班级
@@ -310,9 +307,24 @@ const AddServiceClass: FC<AddCourseProps> = ({
 
 
   useEffect(() => {
-    setBJData({
-      SSJGLX: '校内课程',
-    });
+    if(visible){
+      
+        console.log('=====',campus);
+        if (campus?.length) {
+          console.log('=====',campus);
+          let id=campus?.find((item: any) => item.label === '本校')?.value;
+          if(!id){
+            id=campus[0].value;
+          }
+          setCampusId(id);
+          setBJData({
+            SSJGLX: '校内课程',
+            XQSJId:id,
+          });
+        }     
+      
+    }
+   
     if (visible === false && form) {
       setBmCurrent(0);
       form.resetFields();
@@ -331,6 +343,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
     if (formValues) {
       return '编辑班级';
     }
+   
     return '新增班级';
   };
 
@@ -719,6 +732,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
               values={
                 BJData || {
                   BJZT: '未开班',
+                  XQSJId:campusId
                 }
               }
             />
