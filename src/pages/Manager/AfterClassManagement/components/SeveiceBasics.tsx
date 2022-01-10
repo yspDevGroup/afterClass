@@ -314,7 +314,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           name="KHKC"
           key="KHKC"
           label="课后课程"
-          rules={[{ required: true, message: '请选择课后课程' }]}
+          rules={[{ required: false, message: '请选择课后课程' }]}
         >
           <SelectCourses
             title='选择课程班'

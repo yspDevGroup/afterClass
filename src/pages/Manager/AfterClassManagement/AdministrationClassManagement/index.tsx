@@ -63,7 +63,7 @@ const AdministrationClassManagement = () => {
     (async () => {
       const result = await queryXNXQList(currentUser?.xxId);
       if (result?.current) {
-        console.log('result',result)
+        // console.log('result',result)
         setXQData(result?.current);
         setCurXNXQId(result?.current?.id);
         setCurXNXQData(result?.data)
@@ -78,7 +78,7 @@ const AdministrationClassManagement = () => {
         XQSJId: campusId,
       });
       if (res.status === 'ok') {
-        console.log('res', res);
+        // console.log('res', res);
         setNjData(res.data);
       }
     }
@@ -318,7 +318,7 @@ const AdministrationClassManagement = () => {
       message.warning(falg? '没有可发布的课后服务课程':'没有可取消发布的课后服务课程')
       return;
     }
-    console.log('批量取消发布',arr);
+    // console.log('批量取消发布',arr);
     const params={
       KHFWBJIds: arr.map((item: any)=>item?.KHFWBJs?.[0].id),
       ZT: falg? 1:0, 
@@ -341,7 +341,7 @@ const AdministrationClassManagement = () => {
           columns={columns}
           rowSelection={{}}
           tableAlertOptionRender={({ selectedRows }) => {
-            console.log('selectedRows23', selectedRows);
+            // console.log('selectedRows23', selectedRows);
               return (
                 <Space>
                   <Button
@@ -393,7 +393,7 @@ const AdministrationClassManagement = () => {
           }}
           request={async (param) => {
             // 表单搜索项会从 params 传入，传递给后端接口。
-            console.log('=============')
+            // console.log('=============')
             if (curXNXQId && campusId) {
               const obj = {
                 XXJBSJId: currentUser?.xxId,
@@ -405,7 +405,7 @@ const AdministrationClassManagement = () => {
                 XQSJId: campusId,
               };
               const res = await getKHFWBJXSbm(obj);
-              console.log('res-------',res);
+              // console.log('res-------',res);
               if (res.status === 'ok') {
                 return {
                   data: res.data.rows,

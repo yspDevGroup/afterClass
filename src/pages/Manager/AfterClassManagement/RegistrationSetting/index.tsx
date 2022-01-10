@@ -702,7 +702,6 @@ const RegistrationSetting = () => {
                   </SearchLayout>
                 }
                 tableAlertOptionRender={({ selectedRows }) => {
-                  console.log('selectedRows23', selectedRows);
                   return (
                     <Space>
                       <Button

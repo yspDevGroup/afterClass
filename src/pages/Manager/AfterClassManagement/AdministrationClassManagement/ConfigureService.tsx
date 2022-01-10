@@ -571,6 +571,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               return [];
             }}
             XNXQId={XNXQId}
+            BJSJId={BJSJId}
             // 课程班=0 辅导班=1
             flag={1}
             XQSJId={XQSJId}
@@ -619,7 +620,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
           </Col>
         </Row>
         <Row justify="start" align="middle">
-
          <Col flex="18em">
            <ProForm.Item label='收费方式'>
              {JFLX===0?'按月缴费':'自定义时段收费'}

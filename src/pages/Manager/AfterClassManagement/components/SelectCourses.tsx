@@ -19,13 +19,14 @@ type SelectCourseProps = {
   getNJArr?: any, // 获取课程 function
   flag?: number, // 0 课程班 基础 1 辅导课程表
   XNXQId?: string, // 学年学期id
-  XQSJId: string, //校区ID
+  XQSJId?: string, //校区ID
+  BJSJId?: string, //班级id
 }
 
 const SelectCourses = (props: SelectCourseProps) => {
   const refModal = useRef<any>();
   const [visible, setVisible] = useState<boolean>(false);
-  const { value, onChange, flag, getNJArr, XNXQId, title,XQSJId } = props;
+  const { value, onChange, flag, getNJArr, XNXQId, title,XQSJId,BJSJId } = props;
   const [KHKCLXData, setKHKCLXData] = useState<string[]>();
   const [dataSource, setDataSource] = useState<DataNode[] | undefined>();
   const [selectValue, setSelectValue] = useState<DataNode[] | undefined>();
@@ -90,6 +91,7 @@ const SelectCourses = (props: SelectCourseProps) => {
         page: 0,
         BJMC: BJMC,
         XQSJId,
+        BJSJId,
       });
       if (res?.status === 'ok') {
         const { rows } = res.data;
@@ -133,7 +135,6 @@ const SelectCourses = (props: SelectCourseProps) => {
                 }
               })
             } else {
-              console.log('FLData',FLData)
               newDataSource.push(FLData);
             }
           });
