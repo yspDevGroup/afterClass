@@ -22,6 +22,7 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import moment from 'moment';
 import { getStudentListByBjid } from '@/services/after-class/khfwbj';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
+import { Carousel } from 'antd';
 
 
 const Home = () => {
@@ -90,7 +91,7 @@ const Home = () => {
           res.data.rows?.[0]?.XSFWBJs?.find((item: any) => {
             if (item?.ZT === 0 || item?.ZT === 1 || item?.ZT === 3) {
               setBmType(false)
-            } 
+            }
           })
         }
       }
@@ -174,17 +175,26 @@ const Home = () => {
             <i>通知：</i>
             <div className={styles.noticeText}>
               {notification && notification.length ? (
-                <Link
-                  to={`/parent/home/notice/announcement?listid=${notification[0].id}`}
-                  style={{
-                    color: '#666',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {notification[0].BT}
-                </Link>
+                <Carousel autoplay dots={false} autoplaySpeed={2000} vertical={true}>
+                  {
+                    notification?.map((value: any) => {
+                      return <div className={styles.texts}>
+                        <Link
+                          to={`/parent/home/notice/announcement?listid=${value?.id}`}
+                          style={{
+                            color: '#666',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {value?.BT}
+                        </Link>
+                      </div>
+                    })
+                  }
+                </Carousel>
+
               ) : (
                 '暂无公告'
               )}

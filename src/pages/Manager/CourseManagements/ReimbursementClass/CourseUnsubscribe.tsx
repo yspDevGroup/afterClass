@@ -164,7 +164,7 @@ const CourseUnsubscribe = () => {
       width: 180,
     },
     {
-      title: '状态',
+      title: '退订状态',
       dataIndex: 'ZT',
       key: 'ZT',
       align: 'center',
@@ -185,7 +185,37 @@ const CourseUnsubscribe = () => {
           status: 'Error',
         },
       },
-      width: 90,
+      width: 120,
+    },
+    {
+      title: '退款状态',
+      dataIndex: 'TKZT',
+      key: 'TKZT',
+      align: 'center',
+      ellipsis: true,
+      width: 120,
+      render: (_, record) => {
+        let TKZT: any = '';
+        switch (record?.KHXSTKs?.[0]?.TKZT) {
+          case '0':
+            TKZT = '申请中'
+            break;
+          case '1':
+            TKZT = '已通过'
+            break;
+          case '2':
+            TKZT = '已驳回'
+            break;
+          case '3':
+            TKZT = '退款成功'
+            break;
+
+          default:
+            TKZT = '-'
+            break;
+        }
+        return TKZT
+      },
     },
     {
       title: '操作',
