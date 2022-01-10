@@ -55,12 +55,12 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
   }));
 
   // 判断当前时间 是否在 范围内
-  const getFlagTime=(KSQR: any, JSQR: any)=>{
+  const getFlagTime = (KSQR: any, JSQR: any) => {
     if (KSQR && JSQR) {
-      const nowTime =moment().valueOf();
+      const nowTime = moment().valueOf();
       // const beginTime = moment(KSQR, 'YYYY-MM-DD').valueOf();
       const endTime = moment(JSQR, 'YYYY-MM-DD').add(1, 'days').valueOf();
-      if ( nowTime <= endTime) {
+      if (nowTime <= endTime) {
         return true;
       } else {
         return false;
@@ -130,16 +130,16 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         }
         // 时段数据
         data?.KHFWSJPZs?.forEach((item: any) => {
-          if(getFlagTime(item.KSRQ,item.JSRQ)){
+          if (getFlagTime(item.KSRQ, item.JSRQ)) {
             newKHFWSJPZIdData.push({
-              label: `${item.SDBM} ${moment(item.KSRQ, 'YYYY-MM-DD').format('MM.DD')} ~ ${moment(
-                item.JSRQ,
-                'YYYY-MM-DD',
-              ).format('MM.DD')}`,
+              label: <>
+                <span style={{ fontSize: '16px' }}>{item.SDBM}</span>
+                <span style={{ color: '#999' }}>{` ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</span>
+              </>,
               value: item.id
             });
           }
-          
+
         });
         if (newKHFWSJPZIdData.length) {
           formRef?.current?.setFieldsValue({
@@ -248,7 +248,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
         }
         submitter={{
           searchConfig: {
-            submitText: title === '代选课'?'选课':'报名',
+            submitText: title === '代选课' ? '选课' : '报名',
             resetText: '取消',
           },
 
@@ -279,7 +279,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
             label="报名时段"
             rules={[{ required: true, message: '选择报名时段' }]}
             name="KHFWSJPZIds"
-            fieldProps={{ options: KHFWSJPZIdData, mode: "multiple",}}
+            fieldProps={{ options: KHFWSJPZIdData, mode: "multiple", }}
           />
         }
         {

@@ -205,14 +205,14 @@ const ConfigureService = (props: ConfigureSeverType) => {
     if (saveFalg) {
       params.ZT = 1;
     }
-   
+
     params.RQs = BMSDData?.filter((item: any) => {
       // 缴费方式是月
-      if(JFLX===0&&item.type===JFLX&&item.isEnable===1){
+      if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
         return true;
       }
-      if(JFLX===1){
-        return item.type===JFLX;
+      if (JFLX === 1) {
+        return item.type === JFLX;
       }
       return false;
     }).map((item: any) => {
@@ -272,7 +272,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
     }
   }, [detailValue]);
 
- 
+
 
   // 监听保存并报名
   useEffect(() => {
@@ -620,26 +620,37 @@ const ConfigureService = (props: ConfigureSeverType) => {
           </Col>
         </Row>
         <Row justify="start" align="middle">
-         <Col flex="18em">
-           <ProForm.Item label='收费方式'>
-             {JFLX===0?'按月缴费':'自定义时段收费'}
-           </ProForm.Item>
+          <Col flex="400px">
+            <ProForm.Item label='收费方式'>
+              <Space>
+                <span>
+                  {JFLX === 0 ? '按月缴费' : '自定义时段收费'}
+                </span>
+                <span style={{ color: '#3E88F8' }}>
+                  报名模式设置适用于全校课后服务报名
+                </span>
+              </Space>
+            </ProForm.Item>
           </Col>
         </Row>
         <ProForm.Item label='报名时段：'>
           <Space wrap style={{ width: '400px' }}>
             {BMSDData?.filter((item: any) => {
-              console.log('item',item);
+              console.log('item', item);
               // 缴费方式是月
-              if(JFLX===0&&item.type===JFLX&&item.isEnable===1){
+              if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
                 return true;
               }
-              if(JFLX===1){
-                return item.type===JFLX;
+              if (JFLX === 1) {
+                return item.type === JFLX;
               }
               return false;
-            } ).map((item: any) => {
-              return <Tag>{`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</Tag>
+            }).map((item: any) => {
+              return <Tag>
+                <span style={{ fontSize: '16px' }}>{item.name}</span>
+                <span style={{ color: '#999' }}> {`${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</span>
+                {/* {`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`} */}
+              </Tag>
             })}
           </Space>
         </ProForm.Item>
@@ -661,15 +672,15 @@ const ConfigureService = (props: ConfigureSeverType) => {
           </Col>
         </Row>
       </ModalForm>
-        {XNXQId && BJSJId && (
-          <SignUpClass
-            ref={signUpClassRef}
-            type={0}
-            XNXQId={XNXQId}
-            BJSJId={BJSJId}
-            actionRef={actionRef}
-          />
-        )}
+      {XNXQId && BJSJId && (
+        <SignUpClass
+          ref={signUpClassRef}
+          type={0}
+          XNXQId={XNXQId}
+          BJSJId={BJSJId}
+          actionRef={actionRef}
+        />
+      )}
       <PromptInformation
         text="未查询到报名时段数据，请先设置报名时段"
         link="/afterClassManagement/registration_setting"

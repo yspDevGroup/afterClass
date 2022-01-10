@@ -2,8 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ModalForm } from '@ant-design/pro-form';
 import { Button, Col, message, Row, Space, Spin, Tag, Card } from 'antd';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
-import { createKHFWBJ, updateKHFWBJ } from '@/services/after-class/khfwbj';
-import { getAllBJSJ } from '@/services/after-class/bjsj';
+import { getAllBJSJNoKHFW } from '@/services/after-class/bjsj';
 import { getAllXXJTPZ } from '@/services/after-class/xxjtpz';
 import moment from 'moment';
 import { getAllKHFWSJ } from '@/services/after-class/khfwsj';
@@ -28,7 +27,7 @@ export type ModalValue = {
   id?: string;
   FWTP?: string;
   JFLX?: number;
-  BJSJIds: any;
+  BJSJIds?: any;
 };
 const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   const { XNXQId, actionRef, XQSJId, key } = props;
@@ -48,7 +47,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   const [BjData, setBjData] = useState<any>();
 
   const formRef = useRef();
-  const signUpClassRef = useRef();
+
 
   const [informationOpen, setInformationOpen] = useState<boolean>(false);
 
@@ -94,7 +93,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   };
   // 获取班级
   const getBJSJ = async () => {
-    const res = await getAllBJSJ({ XQSJId: XQSJId, njId: NjId, page: 0, pageSize: 0 });
+    const res = await getAllBJSJNoKHFW({ XQSJId: XQSJId, njId: NjId, page: 0, pageSize: 0, XNXQId: XNXQId, });
     if (res.status === 'ok') {
       const data = res.data?.rows?.map((item: any) => {
         return { label: item.BJ, value: item.id };
@@ -336,7 +335,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
                     <ProForm.Item label='服务时段'>
                       <Space wrap style={{ width: '400px' }}>
                         {BMSDData?.filter((item: any) => {
-                          console.log('item', item);
+                          // console.log('item', item);
                           // 缴费方式是月
                           if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
                             return true;

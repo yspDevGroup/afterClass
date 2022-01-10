@@ -80,10 +80,11 @@ const Detail = (props: any) => {
                 item.JSRQ,
                 'YYYY-MM-DD',
               ).format('YYYY年MM月DD日')}`,
-              title: ` ${item.SDBM} ${moment(item.KSRQ, 'YYYY-MM-DD').format('MM.DD')} ~ ${moment(
-                item.JSRQ,
-                'YYYY-MM-DD',
-              ).format('MM.DD')}`,
+              title: <><span style={{ fontSize: '16px' }}>{item.SDBM}</span><span style={{color:'#999'}}>{` ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</span></>,
+              // ` ${item.SDBM} ${moment(item.KSRQ, 'YYYY-MM-DD').format('MM.DD')} ~ ${moment(
+              //   item.JSRQ,
+              //   'YYYY-MM-DD',
+              // ).format('MM.DD')}`,
               KSRQ:item.KSRQ,
               JSRQ:item.JSRQ,
               isPay: item?.isPay,

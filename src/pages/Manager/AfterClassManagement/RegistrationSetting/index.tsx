@@ -1,7 +1,7 @@
 
 import PageContain from '@/components/PageContainer';
 import ProTable, { EditableProTable } from '@ant-design/pro-table';
-import { Select, Space, Form, Spin, Card, Checkbox, Tag, Radio, Button, message } from 'antd';
+import { Select, Space, Form, Spin, Card, Checkbox, Tag, Radio, Button, message, Modal } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import { getKHFWBJXSbm } from '@/services/after-class/bjsj';
@@ -14,6 +14,7 @@ import { CreateXXJTPZ, getAllXXJTPZ } from '@/services/after-class/xxjtpz';
 import { bulkEditIsPay, getKHFWBBySJ } from '@/services/after-class/khfwbj';
 import moment from 'moment';
 import { getGradesByCampus } from '@/services/after-class/njsj';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 
 
@@ -59,7 +60,11 @@ const RegistrationSetting = () => {
   const [SDMCValue, setSDMCValue] = useState<string>()
   const [JFZT, setJFZT] = useState<number>();
   // 是否可编辑时间配置   true 不可编辑 false可编辑
-  const [disable, setDisable] = useState<boolean>(false);
+  const [disable, setDisable] = useState<boolean>(true);
+
+  const [editDisable, setEditDisable] = useState<boolean>();
+
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
   // 获取年级数据
   const getNJSJ = async () => {
@@ -201,7 +206,7 @@ const RegistrationSetting = () => {
         arr.push({ KSRQ: getTimeString(KSRQ), type: 0, isEnable: 1, JSRQ: getTimeString(JSRQ), id: (Math.random() * 1000000).toFixed(0), name: `${(moment(KSRQ).month()) + 1}月` })
       }
 
-      setDetail(arr,0);
+      setDetail(arr, 0);
     }
   }
 
@@ -226,13 +231,15 @@ const RegistrationSetting = () => {
         if (res?.data?.rows?.length) {
           setDataSourcePay(res.data.rows);
           if (!NjId && !SDMCValue && !JFZT) {
-            setDisable(true);
+            setEditDisable(true);
+            // setDisable(true);
           }
 
         } else {
           setDataSourcePay([])
           if (!NjId && !SDMCValue && !JFZT) {
-            setDisable(false);
+            // setDisable(false);
+            setEditDisable(false);
           }
         }
       }
@@ -245,6 +252,8 @@ const RegistrationSetting = () => {
       getDetail();
       getNJSJ();
       getDataSourcePay();
+      setDisable(true);
+      setIsEdit(false);
     }
   }, [campusId, curXNXQId])
 
@@ -254,15 +263,6 @@ const RegistrationSetting = () => {
       getDataSourcePay();
     }
   }, [JFZT, SDMCValue, NjId])
-
-  // useEffect(() => {
-  //   if (initDataSource?.length) {
-  //     const arr = initDataSource.filter((item: any) => item.type === JFLX);
-  //     setDataSource(arr);
-  //   }
-
-  // }, [JFLX]);
-
 
 
   const onEditTableChange = (editableRows: DataSourceType[]) => {
@@ -280,10 +280,12 @@ const RegistrationSetting = () => {
           })
         }
       })
+      if (JFLX === 1) {
+        setDataSource(initarr.filter((item: DataSourceType) => item.type === 1))
+      }
 
-      setDetail(initarr,JFLX);
+      setInitDataSource(initarr);
     }
-    // initDataSource?.forEach
   }
 
   // 按时段配置
@@ -335,14 +337,18 @@ const RegistrationSetting = () => {
   }
 
   const onCheckBoxClick = (value: boolean, id: React.Key) => {
+      console.log('value',value);
     if (initDataSource?.length) {
-      const newArr = initDataSource?.map((item: DataSourceType) => {
+      const newArr: DataSourceType[]=[];
+      initDataSource?.forEach((item: DataSourceType) => {
         const v = { ...item };
         if (item.id === id) {
           v.isEnable = value ? 1 : 0
-        } return v;
+        } 
+        newArr.push(v);
       })
-      setDetail(newArr,JFLX);
+      console.log('newArr',newArr);
+      setInitDataSource(newArr);
     }
 
   }
@@ -353,8 +359,11 @@ const RegistrationSetting = () => {
         {
           initDataSource?.filter((item: DataSourceType) => item.type === JFLX).map((item: DataSourceType) =>
             <Checkbox disabled={disable} checked={item?.isEnable === 1} onChange={(value: any) => {
-              onCheckBoxClick(value, item.id);
-            }}><Tag>{`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</Tag></Checkbox>
+              onCheckBoxClick(value.target.checked, item.id);
+            }}><Tag>
+                <span style={{ fontSize: '16px' }}>{item.name}</span>
+                <span style={{color:'#999'}}>{` ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</span>
+                </Tag></Checkbox>
           )
         }
       </Space>
@@ -498,7 +507,7 @@ const RegistrationSetting = () => {
                 const arr = initDataSource?.filter((item: any) => {
                   return item.id !== record.id;
                 })
-                setDetail(arr,JFLX);
+                setDetail(arr, JFLX);
               }}
             >
               删除
@@ -594,7 +603,7 @@ const RegistrationSetting = () => {
   return (
     <div>
       <PageContain type='homepage'>
-        <Card size='small' style={{ marginBottom: '16px' }}>
+        <Card size='small' style={{ marginBottom: '16px' }} bordered={false}>
           <SearchLayout>
             <div>
               <label htmlFor="grade">校区名称：</label>
@@ -623,15 +632,51 @@ const RegistrationSetting = () => {
           </SearchLayout>
         </Card>
         <Spin spinning={loading}>
-          <Card style={{ marginBottom: '16px' }} bordered={false} headStyle={{ fontSize: '16px', fontWeight: 'bold' }} title='报名时间设置' extra={
-            <div style={{ color: '#4884ff' }}>缴费模式设置适用于全校课后服务收费</div>
-          }>
+          <Card
+            style={{ marginBottom: '16px' }}
+            bordered={false}
+            headStyle={{ fontSize: '16px', fontWeight: 'bold' }}
+            title='收费模式设置'
+            extra={
+              <Space>
+                <div style={{ color: '#4884ff' }}>报名模式设置适用于全校课后服务报名</div>
+                {
+                  isEdit ? <Button type='primary' onClick={() => {
+                    Modal.confirm({
+                      icon: <ExclamationCircleOutlined />,
+                      title: '应用报名设置',
+                      content: '确定将更改后的报名模式设置应用于全校课后服务？',
+                      onOk: async () => {
+                        setDetail(initDataSource, JFLX);
+                        setDisable(true);
+                        setIsEdit(false);
+                        getDetail()
+                      },
+                      onCancel:()=>{
+                        setDisable(true);
+                        setIsEdit(false);
+                        getDetail()
+                      }
+                    });
+
+                  }}>应用</Button> :
+                    <Button
+                      type={editDisable ? 'ghost' : 'primary'}
+                      disabled={editDisable}
+                      onClick={() => {
+                        setDisable(false);
+                        setIsEdit(true);
+                      }}>编辑</Button>
+                }
+
+
+              </Space>
+            }>
             <Form>
-              <Form.Item label='收费方式'>
+              <Form.Item label='报名模式：'>
                 <Radio.Group
                   onChange={async (value: any) => {
                     setJFLX(value.target.value);
-                    setDetail(initDataSource,value.target.value);
                   }}
                   disabled={disable}
                   value={JFLX}
@@ -649,7 +694,7 @@ const RegistrationSetting = () => {
           </Card>
           {
             // 未配置课后服务
-            disable && <Card bordered={false} headStyle={{ fontSize: '16px', fontWeight: 'bold' }} title='缴费管理'>
+            editDisable && <Card bordered={false} headStyle={{ fontSize: '16px', fontWeight: 'bold' }} title='缴费管理'>
               <ProTable<any>
                 actionRef={actionRef}
                 columns={columnsPay}
