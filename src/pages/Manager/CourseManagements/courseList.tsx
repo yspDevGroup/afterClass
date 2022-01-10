@@ -296,6 +296,7 @@ const CourseList = () => {
                 if (res.status === 'ok') {
                   message.success('操作成功');
                   getData();
+                  actionRef?.current?.reloadAndRest?.();
                 } else {
                   message.error(res.message);
                 }

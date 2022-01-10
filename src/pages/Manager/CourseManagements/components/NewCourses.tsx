@@ -33,6 +33,7 @@ const NewCourses = (props: PropsType) => {
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
   const [isTrue, setIsTrue] = useState(true);
+  const actionRef = useRef<ActionType>();
 
   const title = current ? '编辑课程' : '新增课程';
   const values = () => {
@@ -103,6 +104,7 @@ const NewCourses = (props: PropsType) => {
           message.success('保存成功');
           Close?.();
           getData();
+          actionRef?.current?.reload();
         } else if (data.message === 'Validation error') {
           message.error(`保存失败，课程名称重复`);
         } else {
@@ -227,6 +229,7 @@ const NewCourses = (props: PropsType) => {
       >
         <ProFormFields
           layout="vertical"
+          actionRef={actionRef}
           setForm={setForm}
           onFinish={onFinish}
           values={values()}
