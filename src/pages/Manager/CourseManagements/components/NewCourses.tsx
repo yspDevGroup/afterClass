@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable prefer-destructuring */
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ProFormFields from '@/components/ProFormFields';
 import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import type { ActionType } from '@ant-design/pro-table/lib/typing';
