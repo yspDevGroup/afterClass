@@ -223,6 +223,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
         title='配置课后服务'
         trigger={
           <Button
+            type='primary'
             onClick={() => {
               getDetailTimePZ();
               getNJSJ();
@@ -330,7 +331,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
 
                   </Col>
                 </Row>
-                <Row>
+                {/* <Row>
                   <Col span={24}>
                     <ProForm.Item label='服务时段'>
                       <Space wrap style={{ width: '400px' }}>
@@ -363,7 +364,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
                       </Space>
                     </ProForm.Item>
                   </Col>
-                </Row>
+                </Row> */}
                 <Row>
                   <Col span={24}>
                     <ProForm.Item

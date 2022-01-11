@@ -1,6 +1,6 @@
 import PageContain from '@/components/PageContainer';
 import ProTable, { EditableProTable } from '@ant-design/pro-table';
-import { Select, Space, Form, Spin, Card, Checkbox, Tag, Radio, Button, message, Modal } from 'antd';
+import { Select, Space, Form, Spin, Card, Checkbox, Tag, Radio, Button, message, Modal,Tooltip, Popconfirm } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -505,7 +505,8 @@ const RegistrationSetting = () => {
                 const arr = initDataSource?.filter((item: any) => {
                   return item.id !== record.id;
                 })
-                setDetail(arr, JFLX);
+                setInitDataSource(arr);
+                // setDetail(arr, JFLX);
               }}
             >
               删除
@@ -634,30 +635,57 @@ const RegistrationSetting = () => {
             style={{ marginBottom: '16px' }}
             bordered={false}
             headStyle={{ fontSize: '16px', fontWeight: 'bold' }}
-            title='收费模式设置'
+            title={<>报名模式设置 <Tooltip title='报名模式设置适用于全校课后服务报名，配置课后服务后，不再允许更改此配置'>
+              <ExclamationCircleOutlined style={{color:'#FF0000'}} />
+              </Tooltip> </>}
             extra={
               <Space>
                 <div style={{ color: '#4884ff' }}>报名模式设置适用于全校课后服务报名</div>
                 {
-                  isEdit ? <Button type='primary' onClick={() => {
-                    Modal.confirm({
-                      icon: <ExclamationCircleOutlined />,
-                      title: '应用报名设置',
-                      content: '确定将更改后的报名模式设置应用于全校课后服务？',
-                      onOk: async () => {
-                        setDetail(initDataSource, JFLX);
+                  isEdit ?  <Popconfirm
+                  title="确定应用编辑后的报名模式设置？"
+                  onConfirm={() => {
+                    setDetail(initDataSource, JFLX);
                         setDisable(true);
                         setIsEdit(false);
                         getDetail()
-                      },
-                      onCancel:()=>{
-                        setDisable(true);
+                  }}
+                  okText="确定"
+                  cancelText="取消"
+                  placement="topRight"
+                  onCancel={()=>{
+                    setDisable(true);
                         setIsEdit(false);
                         getDetail()
-                      }
-                    });
+                  }}
+                >
+                  <Button type='primary'>应用</Button>
+                </Popconfirm>
+                  
+                  
+                  
+                  // <Button type='primary' className='modal' onClick={() => {
+                  //   Modal.confirm({
+                  //     getContainer:false,
+                  //     icon: <ExclamationCircleOutlined />,
+                  //     title: '应用报名设置',
+                  //     content: '确定将更改后的报名模式设置应用于全校课后服务？',
+                  //     onOk: async () => {
+                  //       setDetail(initDataSource, JFLX);
+                  //       setDisable(true);
+                  //       setIsEdit(false);
+                  //       getDetail()
+                  //     },
+                  //     onCancel:()=>{
+                  //       setDisable(true);
+                  //       setIsEdit(false);
+                  //       getDetail()
+                  //     }
+                  //   });
 
-                  }}>应用</Button> :
+                  // }}>应用</Button>
+                  :
+                  <Tooltip title={editDisable &&'已有行政班配置了课后服务，报名模式不可更改'|| false}>
                     <Button
                       type={editDisable ? 'ghost' : 'primary'}
                       disabled={editDisable}
@@ -665,6 +693,7 @@ const RegistrationSetting = () => {
                         setDisable(false);
                         setIsEdit(true);
                       }}>编辑</Button>
+                      </Tooltip>
                 }
 
 

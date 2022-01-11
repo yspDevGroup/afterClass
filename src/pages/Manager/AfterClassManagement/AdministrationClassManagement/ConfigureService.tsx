@@ -627,8 +627,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
                   {JFLX === 0 ? '按月缴费' : '自定义时段收费'}
                 </span>
                 <span style={{ color: '#3E88F8' }}>
-                  报名模式设置适用于全校课后服务报名
                 </span>
+                    配置生效前可在“课后服务 — 报名设置”中统一维护
               </Space>
             </ProForm.Item>
           </Col>
