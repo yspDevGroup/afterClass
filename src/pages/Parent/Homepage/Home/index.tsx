@@ -183,7 +183,13 @@ const Home = () => {
             <i>通知：</i>
             <div className={styles.noticeText}>
               {Headlines && Headlines.length ? (
-                <Carousel autoplay dots={false} autoplaySpeed={3000} dotPosition='left'>
+                <Carousel
+                  className={Headlines.length === 1 ? styles.lunbo : ''}
+                  autoplay
+                  dots={false}
+                  autoplaySpeed={3000}
+                  dotPosition='left'
+                >
                   {
                     Headlines?.map((value: any) => {
                       return <div className={styles.texts}>
@@ -202,7 +208,6 @@ const Home = () => {
                     })
                   }
                 </Carousel>
-
               ) : (
                 '暂无公告'
               )}
