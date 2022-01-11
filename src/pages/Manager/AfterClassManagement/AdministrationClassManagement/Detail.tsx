@@ -42,15 +42,15 @@ const Detail = (props: any) => {
   const [detailZT, setDetailZT] = useState<string | undefined>(undefined);
   const [isPay, setIsPay] = useState<boolean>();
   const [kHFWBJId, setkHFWBJId] = useState<string | undefined>(undefined);
-  const [isOperation,setIsOperation]= useState<boolean>(true);
+  const [isOperation, setIsOperation] = useState<boolean>(true);
 
   // 判断当前时间 是否在 范围内
-  const getFlagTime=(KSQR: any, JSQR: any)=>{
+  const getFlagTime = (KSQR: any, JSQR: any) => {
     if (KSQR && JSQR) {
-      const nowTime =moment().valueOf();
+      const nowTime = moment().valueOf();
       // const beginTime = moment(KSQR, 'YYYY-MM-DD').valueOf();
       const endTime = moment(JSQR, 'YYYY-MM-DD').add(1, 'days').valueOf();
-      if ( nowTime <= endTime) {
+      if (nowTime <= endTime) {
         return true;
       } else {
         return false;
@@ -58,7 +58,7 @@ const Detail = (props: any) => {
     } else {
       return false;
     }
-  }
+  };
 
   const getDetailValue = async () => {
     if (KHFWBJs?.[0]) {
@@ -80,13 +80,20 @@ const Detail = (props: any) => {
                 item.JSRQ,
                 'YYYY-MM-DD',
               ).format('YYYY年MM月DD日')}`,
-              title: <><span style={{ fontSize: '16px' }}>{item.SDBM}</span><span style={{color:'#999'}}>{` ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</span></>,
+              title: (
+                <>
+                  <span style={{ fontSize: '16px' }}>{item.SDBM}</span>
+                  <span style={{ color: '#999' }}>{` ${moment(item.KSRQ).format('MM-DD')}~${moment(
+                    item.JSRQ,
+                  ).format('MM-DD')}`}</span>
+                </>
+              ),
               // ` ${item.SDBM} ${moment(item.KSRQ, 'YYYY-MM-DD').format('MM.DD')} ~ ${moment(
               //   item.JSRQ,
               //   'YYYY-MM-DD',
               // ).format('MM.DD')}`,
-              KSRQ:item.KSRQ,
-              JSRQ:item.JSRQ,
+              KSRQ: item.KSRQ,
+              JSRQ: item.JSRQ,
               isPay: item?.isPay,
             });
           });
@@ -109,7 +116,7 @@ const Detail = (props: any) => {
 
       if (KHFWSJPZ) {
         setIsPay(KHFWSJPZ?.isPay === 1 ? true : false);
-        setIsOperation(getFlagTime(KHFWSJPZ.KSRQ,KHFWSJPZ.JSRQ))
+        setIsOperation(getFlagTime(KHFWSJPZ.KSRQ, KHFWSJPZ.JSRQ));
       }
     }
   }, [KHFWSJPZId]);
@@ -253,7 +260,7 @@ const Detail = (props: any) => {
 
   // 代报名
   const getDBM = (record: any) => {
-    if (isOperation&&(!record?.XSFWBJs?.length || record?.XSFWBJs?.[0]?.ZT === 2)) {
+    if (isOperation && (!record?.XSFWBJs?.length || record?.XSFWBJs?.[0]?.ZT === 2)) {
       return (
         <a
           onClick={() => {
@@ -322,7 +329,7 @@ const Detail = (props: any) => {
   };
   // 选课提醒
   const getXKTX = (record: any) => {
-    if (isOperation&&record?.XSFWBJs?.[0]?.ZT === 3) {
+    if (isOperation && record?.XSFWBJs?.[0]?.ZT === 3) {
       if (
         !record?.XSFWBJs?.[0]?.XSFWKHBJs?.some((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)
       ) {
@@ -345,7 +352,7 @@ const Detail = (props: any) => {
   };
   // 代选课
   const getDXK = (record: any) => {
-    if (isOperation&&(record?.XSFWBJs?.[0]?.ZT === 3 || record?.XSFWBJs?.[0]?.ZT === 0)){
+    if (isOperation && (record?.XSFWBJs?.[0]?.ZT === 3 || record?.XSFWBJs?.[0]?.ZT === 0)) {
       if (
         !record?.XSFWBJs?.[0]?.XSFWKHBJs?.some((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)
       ) {
@@ -554,35 +561,35 @@ const Detail = (props: any) => {
                           </Button>
                         )}
 
-                        {
-                          isOperation && <Button
-                          type="primary"
-                          onClick={() => {
-                            // 筛选未选课的学生
-                            // 筛选未交费学生 LX===1的学生 选择课程班
-                            const list = selectedRows.filter((item: any) => {
-                              // 判断学生是否报名
-                              if (item?.XSFWBJs?.length) {
-                                // 下标为0 的数据是报名服务班-课程数据
-                                const XSFWKHBJs = item?.XSFWBJs?.[0].XSFWKHBJs;
-                                return !XSFWKHBJs?.some(
-                                  (XSFWKHBJ: any) => XSFWKHBJ.KHBJSJ.KCFWBJs[0].LX === 0,
-                                );
+                        {isOperation && (
+                          <Button
+                            type="primary"
+                            onClick={() => {
+                              // 筛选未选课的学生
+                              // 筛选未交费学生 LX===1的学生 选择课程班
+                              const list = selectedRows.filter((item: any) => {
+                                // 判断学生是否报名
+                                if (item?.XSFWBJs?.length) {
+                                  // 下标为0 的数据是报名服务班-课程数据
+                                  const XSFWKHBJs = item?.XSFWBJs?.[0].XSFWKHBJs;
+                                  return !XSFWKHBJs?.some(
+                                    (XSFWKHBJ: any) => XSFWKHBJ.KHBJSJ.KCFWBJs[0].LX === 0,
+                                  );
+                                }
+                                return false;
+                              });
+                              if (list?.length) {
+                                setXSList(list.map((item: any) => item?.WechatUserId));
+                                setVisible(true);
+                                setFlag(false);
+                              } else {
+                                message.error('没有要选课提醒学生');
                               }
-                              return false;
-                            });
-                            if (list?.length) {
-                              setXSList(list.map((item: any) => item?.WechatUserId));
-                              setVisible(true);
-                              setFlag(false);
-                            } else {
-                              message.error('没有要选课提醒学生');
-                            }
-                          }}
-                        >
-                          选课提醒
-                        </Button>
-                        }
+                            }}
+                          >
+                            选课提醒
+                          </Button>
+                        )}
                       </Space>
                     );
                   } else {
@@ -709,7 +716,7 @@ const Detail = (props: any) => {
                 }
                 toolBarRender={() => {
                   // 未配置
-                  if (KHFWBJs?.[0] && detailZT&&isOperation) {
+                  if (KHFWBJs?.[0] && detailZT && isOperation) {
                     return [
                       <>
                         开启缴费:

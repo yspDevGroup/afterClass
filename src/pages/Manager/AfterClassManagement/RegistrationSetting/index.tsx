@@ -394,7 +394,7 @@ const RegistrationSetting = () => {
               <Tag>
                 <span style={{ fontSize: '16px' }}>{item.name}</span>
                 <span style={{ color: '#999' }}>{` ${moment(item.KSRQ).format('MM-DD')}~${moment(
-                  item.KSRQ,
+                  item.JSRQ,
                 ).format('MM-DD')}`}</span>
               </Tag>
             </Checkbox>
@@ -751,7 +751,7 @@ const RegistrationSetting = () => {
                 <Radio.Group
                   onChange={async (value: any) => {
                     setJFLX(value.target.value);
-                    setEditableRowKeys(undefined);
+                    setEditableRowKeys([]);
                   }}
                   disabled={disable}
                   value={JFLX}

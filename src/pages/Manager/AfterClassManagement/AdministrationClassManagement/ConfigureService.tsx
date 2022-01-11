@@ -653,7 +653,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
                       <span style={{ fontSize: '16px' }}>{item.name}</span>
                       <span style={{ color: '#999' }}>
                         {' '}
-                        {`${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format(
+                        {`${moment(item.KSRQ).format('MM-DD')}~${moment(item.JSRQ).format(
                           'MM-DD',
                         )}`}
                       </span>
