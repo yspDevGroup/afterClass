@@ -77,14 +77,18 @@
 
     .today {
       // visibility: hidden;
-      right: 0 !important;
+      // right: 0 !important;
     }
 
     // .weekInfo,
     .today {
+      // position: absolute;
+      // top: 16px;
+      // right: 380px;
+      width: 120px;
       position: absolute;
-      top: 16px;
-      right: 380px;
+      top: 8px;
+      left: 220px;
       color: #333;
       font-size: 14px;
       line-height: 32px;
@@ -200,9 +204,10 @@
           flex: 1;
 
           :global {
-            #yspNoArrange{
+            #yspNoArrange {
               background-color: #EEEEEE;
-              div[class*='noText']{
+
+              div[class*='noText'] {
                 display: block;
                 text-align: center;
                 font-weight: normal;
@@ -272,6 +277,7 @@
                 >div {
                   position: relative;
                   bottom: 5px;
+
                   p {
                     color: #999;
                     font-size: 12px;

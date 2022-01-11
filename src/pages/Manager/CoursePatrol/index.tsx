@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import type { FormInstance } from 'antd';
+import { Badge, FormInstance, Upload } from 'antd';
 import { Button, message, Modal } from 'antd';
 import moment from 'moment';
 import PageContainer from '@/components/PageContainer';
@@ -11,7 +11,7 @@ import type { SchoolEvent } from '@/components/Calendar/data';
 import { ConvertEvent, RevertEvent } from './util';
 
 import styles from './index.less';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
 import {
   createKHXKSJ,
   deleteKHXKSJ,
@@ -19,8 +19,10 @@ import {
   getScheduleByDate,
   updateKHXKSJ,
 } from '@/services/after-class/khxksj';
+import { getAuthorization } from '@/utils/utils';
 
 const { confirm } = Modal;
+
 const CoursePatrol = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -35,6 +37,8 @@ const CoursePatrol = () => {
   const [current, setCurrent] = useState<any>();
   // 所配置的值班安排
   const [events, setEvents] = useState<SchoolEvent[]>();
+  const [uploadVisible, setUploadVisible] = useState<boolean>(false);
+
   const getZBEvents = async () => {
     const result = await getKHXKSJ({
       XXJBSJId: currentUser.xxId,
@@ -50,6 +54,44 @@ const CoursePatrol = () => {
     } else {
       message.error(result.message);
     }
+  };
+  const UploadProps: any = {
+    name: 'xlsx',
+    action: '/api/upload/importSites?xxId=53091f16-e723-4910-aca9-9741cd75a14f',
+    headers: {
+      authorization: getAuthorization(),
+      // 'Content-Type':'multipart/form-data;',
+    },
+    data: {
+      xxId: '53091f16-e723-4910-aca9-9741cd75a14f',
+    },
+    // accept={''}
+    beforeUpload(file: any) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      console.log('isLt2M', isLt2M);
+      if (!isLt2M) {
+        message.error('文件大小不能超过2M');
+      }
+      return isLt2M;
+    },
+    onChange(info: {
+      file: { status: string; name: any; response: any };
+      fileList: any;
+      event: any;
+    }) {
+      if (info.file.status === 'done') {
+        const code = info.file.response;
+        if (code.status === 'ok') {
+          // message.success(`上传成功`);
+          setUploadVisible(false);
+          getZBEvents();
+        } else {
+          message.error(`${code.message}`);
+        }
+      } else if (info.file.status === 'error') {
+        console.log('info.file.response', info.file);
+      }
+    },
   };
   useEffect(() => {
     getZBEvents();
@@ -89,7 +131,6 @@ const CoursePatrol = () => {
   };
   const handleOver = async (d: string) => {
     const newDay = moment(d).format('YYYY/MM/DD');
-    console.log(new Date(newDay));
     const res = await getScheduleByDate({
       XXJBSJId: currentUser.xxId,
       RQ: d,
@@ -129,6 +170,9 @@ const CoursePatrol = () => {
   };
   return (
     <PageContainer cls={styles.calendarWrapper}>
+      {/* <Button key="button" type="primary" onClick={() => setUploadVisible(true)} style={{ position: 'absolute', right: 48, top: 32, zIndex: 1 }}>
+        <VerticalAlignBottomOutlined /> 导入
+      </Button> */}
       <Calendar
         chosenDay={date}
         config={customConfig}
@@ -183,6 +227,40 @@ const CoursePatrol = () => {
         }}
       >
         <NewEvent setForm={setForm} date={date} current={current} />
+      </Modal>
+      <Modal
+        title="导入巡课安排"
+        destroyOnClose
+        width="35vw"
+        visible={uploadVisible}
+        onCancel={() => setUploadVisible(false)}
+        footer={null}
+        centered
+        maskClosable={false}
+        bodyStyle={{
+          maxHeight: '65vh',
+          overflowY: 'auto',
+        }}
+      >
+        <>
+          <p>
+            <Upload {...UploadProps}>
+              <Button icon={<UploadOutlined />}>上传文件</Button>{' '}
+              <span className={styles.messageSpan}>批量导入巡课安排</span>
+            </Upload>
+          </p>
+          <div className={styles.messageDiv}>
+            <Badge color="#aaa" />
+            上传文件仅支持模板格式
+            <a style={{ marginLeft: '16px' }} type="download" href="/template/sitesImport.xlsx">
+              下载模板
+            </a>
+            <br />
+            <Badge color="#aaa" />
+            确保表格内只有一个工作薄，如果有多个只有第一个会被处理
+            <br />
+          </div>
+        </>
       </Modal>
     </PageContainer>
   );

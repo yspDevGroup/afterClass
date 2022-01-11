@@ -138,6 +138,7 @@ const TeacherManagement = () => {
       dataIndex: 'JSKM',
       align: 'center',
       ellipsis: true,
+      hideInTable: true,
       width: 200,
     },
     {
@@ -145,6 +146,7 @@ const TeacherManagement = () => {
       valueType: 'option',
       width: 200,
       fixed: 'right',
+      hideInTable: true,
       align: 'center',
       render: (_, record) => (
         <>
@@ -171,13 +173,13 @@ const TeacherManagement = () => {
           >
             编辑
           </Link>
-          <Divider type="vertical" />
+          {/* <Divider type="vertical" />
           <Popconfirm
             title={`确定要删除 “${record?.XM}” 数据吗?`}
             onConfirm={() => handleConfirm(record?.id)}
           >
             <a>删除</a>
-          </Popconfirm>
+          </Popconfirm> */}
         </>
       ),
     },
