@@ -38,7 +38,7 @@ const ReplacePayClass = (props: {
   // const [BJMC, setBJMC] = useState<any>();
   // const [XSMC, setXSMC] = useState<any>();
 
-  const { key, XSFWBJ, XSJBSJId, XM, XSFWKHBJs,onload } = props;
+  const { key, XSFWBJ, XSJBSJId, XM, XSFWKHBJs, onload } = props;
   const newDDFY = XSFWBJ.KHFWBJ.FWFY;
   const XSFWBJId = XSFWBJ.id;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -123,7 +123,7 @@ const ReplacePayClass = (props: {
     if (PaymentCG !== '待付款') {
       await deleteKHXSDD({ id: OrderId! });
     }
-    if(onload){
+    if (onload) {
       onload();
     }
   };
@@ -165,9 +165,13 @@ const ReplacePayClass = (props: {
       return (
         <div>
           <Result status="success" title="支付成功" />
-          <Button type="primary" onClick={()=>{
-            setBmCurrent(1);
-          }} className={styles.ZFCG}>
+          <Button
+            type="primary"
+            onClick={() => {
+              setBmCurrent(1);
+            }}
+            className={styles.ZFCG}
+          >
             下一步
           </Button>
         </div>
@@ -199,33 +203,35 @@ const ReplacePayClass = (props: {
                 <span>{XSFWBJ?.KHFWBJ?.FWMC}</span>{' '}
               </p>
               <p>
-                <span style={{minWidth: '50px'}}>课程班</span>
+                <span style={{ minWidth: '50px' }}>课程班</span>
                 <span>
-                  {XSFWBJ?.XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0).map(
-                    (item: any) => {
-                      return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
-                    },
-                  )}
+                  {XSFWBJ?.XSFWKHBJs?.filter(
+                    (item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0,
+                  ).map((item: any) => {
+                    return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
+                  })}
                 </span>{' '}
               </p>
               <p>
-                <span style={{minWidth: '50px'}}>辅导班</span>
+                <span style={{ minWidth: '50px' }}>辅导班</span>
                 <span>
-                  {XSFWBJ?.XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1).map(
-                    (item: any) => {
-                      return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
-                    },
-                  )}
-                   {XSFWBJ?.XSFWKHBJs?.filter((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1).map(
-                    (item: any) => {
-                      return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
-                    },
-                  )}
+                  {XSFWBJ?.XSFWKHBJs?.filter(
+                    (item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1,
+                  ).map((item: any) => {
+                    return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
+                  })}
+                  {XSFWBJ?.XSFWKHBJs?.filter(
+                    (item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1,
+                  ).map((item: any) => {
+                    return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
+                  })}
                 </span>{' '}
               </p>
               <p>
                 <span>报名时段</span>
-                <span>{XSFWBJ?.KHFWBJ?.KHFWSJPZs?.[0]?.KSRQ}~{XSFWBJ?.KHFWBJ?.KHFWSJPZs?.[0]?.JSRQ}</span>{' '}
+                <span>
+                  {XSFWBJ?.KHFWBJ?.KHFWSJPZs?.[0]?.KSRQ}~{XSFWBJ?.KHFWBJ?.KHFWSJPZs?.[0]?.JSRQ}
+                </span>{' '}
               </p>
               <div className={styles.line} />
               {/* <p>
