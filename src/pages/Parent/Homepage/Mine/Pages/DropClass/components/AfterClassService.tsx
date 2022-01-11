@@ -16,6 +16,7 @@ import styles from '../index.less';
 import noOrder from '@/assets/noOrder.png';
 import seviceImage from '@/assets/seviceImage.png';
 import { getStudentListByBjid } from '@/services/after-class/khfwbj';
+import moment from 'moment';
 
 const AfterClassService = () => {
   const { initialState } = useModel('@@initialState');
@@ -24,13 +25,10 @@ const AfterClassService = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [ModalVisible, setModalVisible] = useState(false);
   const [KHFUXY, setKHFUXY] = useState<any>();
-  const [datasourse, setDatasourse] = useState<any>();
-  const [Datas, setDatas] = useState<any>([]);
   const StorageXSId = localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId;
   const StorageBjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
   const [BaoMinData, setBaoMinData] = useState<any>();
   const [Type, setType] = useState(false);
-  const [TimeId, setTimeId] = useState([]);
   const [FwTimes, setFwTimes] = useState<any>([]);
 
   useEffect(() => {
@@ -60,14 +58,10 @@ const AfterClassService = () => {
       })
       if (res.status === 'ok' && res.data) {
         setBaoMinData(res.data.rows);
-        setFwTimes(res.data.rows?.[0]?.XSFWBJs);
-        const NewArr: any = [];
-        const NewIdArr: any = [];
-        res.data.rows?.[0]?.XSFWBJs?.forEach((value: any) => {
-          NewArr.push(`${value?.id}+${value?.KHFWBJ?.FWMC}`)
-          NewIdArr.push(value?.id)
-        })
-        setTimeId(NewArr)
+        // 只可退结束日期大于当前时间的课程
+        setFwTimes(res.data.rows?.[0]?.XSFWBJs.filter((value: any) => {
+          return moment(value?.KHFWSJPZ.JSRQ).format('YYYY/MM/DD') > moment(new Date()).format('YYYY/MM/DD')
+        }))
       }
     }
   }
@@ -116,14 +110,12 @@ const AfterClassService = () => {
   };
 
   const handleClose = (removedTag: any) => {
-    console.log(removedTag, 'removedTag')
     const newArr: any = [];
     FwTimes.forEach((value: any) => {
       if (value !== removedTag) {
         newArr.push(value)
       }
     })
-    console.log(newArr, 'newArr')
     setFwTimes(newArr);
   };
   const forMap = (tag: any) => {

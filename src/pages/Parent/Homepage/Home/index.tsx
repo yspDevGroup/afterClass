@@ -47,6 +47,7 @@ const Home = () => {
   const [FWSD, setFWSD] = useState<any>();
   // 课后服务是否可以报名
   const [BmType, setBmType] = useState(true);
+  const [Headlines, setHeadlines] = useState<any>()
 
   const [BJMC, setBJMC] = useState<any>();
   useEffect(() => {
@@ -61,6 +62,13 @@ const Home = () => {
       });
       if (res.status === 'ok') {
         setNotification(res.data!.rows);
+        const newArr: any = [];
+        res.data?.rows?.forEach((value: any) => {
+          if (value?.SFTT === 1) {
+            newArr.push(value)
+          }
+        })
+        setHeadlines(newArr)
       } else {
         enHenceMsg(res.message);
       }
@@ -174,10 +182,10 @@ const Home = () => {
             <img src={notice_icon} alt="" />
             <i>通知：</i>
             <div className={styles.noticeText}>
-              {notification && notification.length ? (
-                <Carousel autoplay dots={false} autoplaySpeed={2000} vertical={true}>
+              {Headlines && Headlines.length ? (
+                <Carousel autoplay dots={false} autoplaySpeed={3000} dotPosition='left'>
                   {
-                    notification?.map((value: any) => {
+                    Headlines?.map((value: any) => {
                       return <div className={styles.texts}>
                         <Link
                           to={`/parent/home/notice/announcement?listid=${value?.id}`}
