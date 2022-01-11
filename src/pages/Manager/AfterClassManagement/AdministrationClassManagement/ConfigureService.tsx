@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ModalForm, ProFormDigit, ProFormList, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import {
+  ModalForm,
+  ProFormDigit,
+  ProFormList,
+  ProFormText,
+  ProFormTextArea,
+} from '@ant-design/pro-form';
 import { Button, Col, message, Row, Space, Spin, DatePicker, Tag } from 'antd';
 import SelectCourses from '../components/SelectCourses';
 import ProForm, { ProFormSwitch, ProFormSelect } from '@ant-design/pro-form';
@@ -60,7 +66,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
 
   const [informationOpen, setInformationOpen] = useState<boolean>(false);
 
-
   // 保存并报名
   const [saveFalg, setSaveFalg] = useState<boolean>(false);
 
@@ -81,7 +86,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         // message.warning('未配置时段请先配置报名信息')
         setInformationOpen(true);
       } else {
-        const { sjpzstr } = res.data?.[0]
+        const { sjpzstr } = res.data?.[0];
         if (sjpzstr) {
           const str = JSON.parse(sjpzstr);
           if (str) {
@@ -92,7 +97,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         setLoading(false);
       }
     }
-  }
+  };
   const getDetailValue = async () => {
     if (BJSJId && XNXQId) {
       setLoading(true);
@@ -142,7 +147,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
     }
   };
 
-
   const imageChange = (type: string, e?: any) => {
     if (e.file.status === 'done') {
       const mas = e.file.response.message;
@@ -163,7 +167,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
 
   // modal 提交
   const onFinish = async (values: ModalValue) => {
-
     setLoading(true);
     const KHBJSJIds: any[] = [];
     // KHBJSJIds=[ { KHBJSJId: '719ac8f1-192c-4bc4-840c-0f6d065d345e', LX: 1 },{KHBJSJId: 'f0bc43eb-2d6a-40cd-a80a-82d0596443d3', LX: 0}];
@@ -217,7 +220,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
       return false;
     }).map((item: any) => {
       return { KSRQ: item.KSRQ, JSRQ: item.JSRQ, SDBM: item.name };
-    })
+    });
     // 编辑
     if (detailValue?.id) {
       const res = await updateKHFWBJ({ id: detailValue?.id }, { ...params });
@@ -271,8 +274,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
       formRef?.current?.setFieldsValue(detailValue);
     }
   }, [detailValue]);
-
-
 
   // 监听保存并报名
   useEffect(() => {
@@ -368,7 +369,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
   };
 
   const getKHFD = async () => {
-
     const params: ModalValue = {
       FWFY: 140,
       KXSL: 2,
@@ -384,13 +384,15 @@ const ConfigureService = (props: ConfigureSeverType) => {
       BJZT: '已开班',
       KCTAG: '校内辅导',
       NJSJId: NJSJ?.id,
-      BJSJId,// 行政班Id，
+      BJSJId, // 行政班Id，
       page: 0,
       pageSize: 0,
       XQSJId: XQSJId,
-    })
+    });
     if (res?.status === 'ok' && res?.data?.rows?.length) {
-      params.KCFD = res.data.rows.map((item: any) => { return { value: item.id, label: item.BJMC } })
+      params.KCFD = res.data.rows.map((item: any) => {
+        return { value: item.id, label: item.BJMC };
+      });
     }
     // 初始化表单
     setDetailValue(params);
@@ -398,7 +400,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
     // setJFLX(0);
     // 请求模板
     getData();
-  }
+  };
 
   return (
     <Spin spinning={loading}>
@@ -417,7 +419,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
                 getKHFD();
               }
               getDetailTimePZ();
-
             }}
           >
             {KHFWBJs?.length ? '编辑' : '配置课后服务'}
@@ -431,7 +432,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
           render: (_props, defaultDoms) => {
             return [
               <div className={styles.modelFooter}>
-
                 <Button
                   type="primary"
                   onClick={() => {
@@ -482,7 +482,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
           }}
         />
         {isTemplate && (
-
           <Row justify="start">
             <Col span={12}>
               <ProFormSelect
@@ -513,17 +512,16 @@ const ConfigureService = (props: ConfigureSeverType) => {
               </Space>
             </Col>
           </Row>
-
         )}
         <Row>
           <Col span={12}>
             <ProFormText
               label="服务名称："
               name="FWMC"
-
               rules={[{ required: true, message: '请输入服务名称' }]}
             />
-          </Col></Row>
+          </Col>
+        </Row>
         <Row>
           <Col span={12}>
             <ProFormTextArea
@@ -619,41 +617,55 @@ const ConfigureService = (props: ConfigureSeverType) => {
             </span>
           </Col>
         </Row>
-        <Row justify="start" align="middle">
-          <Col flex="400px">
-            <ProForm.Item label='收费方式'>
-              <Space>
-                <span>
-                  {JFLX === 0 ? '按月缴费' : '自定义时段收费'}
-                </span>
+        <div style={{ background: '#EFEFEF', padding: '16px 0', marginBottom: '24px' }}>
+          <Row wrap={false} style={{ paddingBottom: '16px' }}>
+            <Col flex={'7em'} style={{ textAlign: 'end', color: '#222222' }}>
+              收费方式：
+            </Col>
+            <Col flex="auto">
+              <Space style={{ width: '100%' }}>
+                <span>{JFLX === 0 ? '按月缴费' : '自定义时段收费'}</span>
                 <span style={{ color: '#3E88F8' }}>
+                  配置生效前可在“课后服务 — 报名设置”中统一维护
                 </span>
-                    配置生效前可在“课后服务 — 报名设置”中统一维护
               </Space>
-            </ProForm.Item>
-          </Col>
-        </Row>
-        <ProForm.Item label='报名时段：'>
-          <Space wrap style={{ width: '400px' }}>
-            {BMSDData?.filter((item: any) => {
-              console.log('item', item);
-              // 缴费方式是月
-              if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
-                return true;
-              }
-              if (JFLX === 1) {
-                return item.type === JFLX;
-              }
-              return false;
-            }).map((item: any) => {
-              return <Tag>
-                <span style={{ fontSize: '16px' }}>{item.name}</span>
-                <span style={{ color: '#999' }}> {`${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</span>
-                {/* {`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`} */}
-              </Tag>
-            })}
-          </Space>
-        </ProForm.Item>
+            </Col>
+          </Row>
+          <Row wrap={false}>
+            <Col flex={'7em'} style={{ textAlign: 'end', color: '#222222' }}>
+              报名时段：
+            </Col>
+            <Col flex="auto">
+              <Space wrap style={{ width: '100%' }}>
+                {BMSDData?.filter((item: any) => {
+                  console.log('item', item);
+                  // 缴费方式是月
+                  if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
+                    return true;
+                  }
+                  if (JFLX === 1) {
+                    return item.type === JFLX;
+                  }
+                  return false;
+                }).map((item: any) => {
+                  return (
+                    <Tag>
+                      <span style={{ fontSize: '16px' }}>{item.name}</span>
+                      <span style={{ color: '#999' }}>
+                        {' '}
+                        {`${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format(
+                          'MM-DD',
+                        )}`}
+                      </span>
+                      {/* {`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`} */}
+                    </Tag>
+                  );
+                })}
+              </Space>
+            </Col>
+          </Row>
+        </div>
+
         <Row justify="start" align="middle">
           <Col flex="14em">
             <ProFormDigit
@@ -664,10 +676,10 @@ const ConfigureService = (props: ConfigureSeverType) => {
               key="FWFY"
               min={0}
               width={80}
-            // width='xs'
+              // width='xs'
             />
           </Col>
-          <Col flex='auto'>
+          <Col flex="auto">
             <span className="ant-form-text ant-form-item">{JFLX === 1 ? '元' : '元/月'}</span>
           </Col>
         </Row>

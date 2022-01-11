@@ -13,6 +13,7 @@ import { bulkEditIsPay, getKHFWBBySJ } from '@/services/after-class/khfwbj';
 import moment from 'moment';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import styles from './index.less';
 
 type selectType = { label: string; value: string };
 const { Option } = Select;
@@ -635,7 +636,7 @@ const RegistrationSetting = () => {
             style={{ marginBottom: '16px' }}
             bordered={false}
             headStyle={{ fontSize: '16px', fontWeight: 'bold' }}
-            title={<>报名模式设置 <Tooltip title='报名模式设置适用于全校课后服务报名，配置课后服务后，不再允许更改此配置'>
+            title={<>报名模式设置 <Tooltip  overlayClassName={styles.tooltipdiv} title='报名模式设置适用于全校课后服务报名，配置课后服务后，不再允许更改此配置'>
               <ExclamationCircleOutlined style={{color:'#FF0000'}} />
               </Tooltip> </>}
             extra={
