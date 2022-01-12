@@ -911,8 +911,8 @@ const Detail = (props: any) => {
               onChange={(value: any) => {
                 setTKSD(value);
               }}
-              options={TKSDData.map((item: any) => {
-                return { value: item.value, label: item.title };
+              options={TKSDData?.map((item: any) => {
+                return { value: item?.value, label: item?.title };
               })}
             />
 
