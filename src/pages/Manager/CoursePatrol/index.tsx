@@ -60,10 +60,8 @@ const CoursePatrol = () => {
     action: '/api/upload/importTeacherXKAP',
     headers: {
       authorization: getAuthorization(),
-      // 'Content-Type':'multipart/form-data;',
     },
     data: {},
-    // accept={''}
     beforeUpload(file: any) {
       const isLt2M = file.size / 1024 / 1024 < 2;
       console.log('isLt2M', isLt2M);

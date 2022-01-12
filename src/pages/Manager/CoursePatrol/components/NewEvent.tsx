@@ -72,7 +72,7 @@ const NewEvent = (props: PropsType) => {
         formItems={formItems}
         formItemLayout={formLayout}
         values={{
-          RQ: moment(date).format('YYYY年MM月DD日'),
+          RQ: moment(date).format('YYYY-MM-DD'),
           ...current
         }}
       />
