@@ -164,6 +164,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     if (XSList.length > 0) {
       const newlist = XSList.map((item: any) => {
         return {
+          KSS: applicantData.KSS,
           LX: 0, //  1是服务   0是课程班是服务班
           XSJBSJId: item?.XSJBSJId,
           ZT: 0,
@@ -432,7 +433,10 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                   cancelText="取消"
                   placement="topRight"
                 >
-                  <Tooltip placement="bottom" title="本课程暂未开始上课，退课后，系统将自动发起全额退款">
+                  <Tooltip
+                    placement="bottom"
+                    title="本课程暂未开始上课，退课后，系统将自动发起全额退款"
+                  >
                     <a>取消报名</a>
                   </Tooltip>
                 </Popconfirm>
@@ -524,27 +528,27 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       if (info.file.status === 'done') {
         const code = info.file.response;
         if (code.status === 'ok') {
-          const repeat = code.data?.find((v: { errorType: number; })=>{
+          const repeat = code.data?.find((v: { errorType: number }) => {
             return v.errorType === 0;
           });
-          const wrong = code.data?.find((v: { errorType: number; })=>{
+          const wrong = code.data?.find((v: { errorType: number }) => {
             return v.errorType === 1;
           });
-          const different = code.data?.find((v: { errorType: number; })=>{
+          const different = code.data?.find((v: { errorType: number }) => {
             return v.errorType === 2;
           });
-          const sqlerr = code.data?.find((v: { errorType: number; })=>{
+          const sqlerr = code.data?.find((v: { errorType: number }) => {
             return v.errorType === 3;
           });
-          if(repeat){
+          if (repeat) {
             message.warning('存在重复数据，部分导入失败');
-          }else if(wrong){
+          } else if (wrong) {
             message.warning('数据格式有误，部分导入失败');
-          }else if(different){
+          } else if (different) {
             message.warning('部分数据有误，部分导入失败');
-          }else if(sqlerr){
+          } else if (sqlerr) {
             message.warning('未知错误，导入失败');
-          }else{
+          } else {
             message.success('导入成功');
           }
           setUploadVisible(false);
