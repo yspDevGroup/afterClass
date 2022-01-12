@@ -1,7 +1,20 @@
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Space, Tag, Form, Input, Modal, message, Select, Spin, Tabs, Switch } from 'antd';
+import {
+  Button,
+  Space,
+  Tag,
+  Form,
+  Input,
+  Modal,
+  message,
+  Select,
+  Spin,
+  Tabs,
+  Switch,
+  Checkbox,
+} from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.less';
 import EllipsisHint from '@/components/EllipsisHint';
@@ -16,6 +29,7 @@ import moment from 'moment';
 import { sendMessageToParent } from '@/services/after-class/wechat';
 import { createKHTKSJ } from '@/services/after-class/khtksj';
 import ReplacePayClass from './pay/ReplacePayClass';
+import { bulkCreateKHFWTK } from '@/services/after-class/khtksj';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -43,6 +57,12 @@ const Detail = (props: any) => {
   const [isPay, setIsPay] = useState<boolean>();
   const [kHFWBJId, setkHFWBJId] = useState<string | undefined>(undefined);
   const [isOperation, setIsOperation] = useState<boolean>(true);
+
+  // 退课数据
+  const [TKXSList, setTKXSList] = useState<any[]>();
+  const [TKVisible, setTKVisible] = useState<boolean>(false);
+  const [TKSD, setTKSD] = useState<any[]>([]);
+  const [TKSDData, setTKSDData] = useState<any>();
 
   // 判断当前时间 是否在 范围内
   const getFlagTime = (KSQR: any, JSQR: any) => {
@@ -88,10 +108,6 @@ const Detail = (props: any) => {
                   ).format('MM-DD')}`}</span>
                 </>
               ),
-              // ` ${item.SDBM} ${moment(item.KSRQ, 'YYYY-MM-DD').format('MM.DD')} ~ ${moment(
-              //   item.JSRQ,
-              //   'YYYY-MM-DD',
-              // ).format('MM.DD')}`,
               KSRQ: item.KSRQ,
               JSRQ: item.JSRQ,
               isPay: item?.isPay,
@@ -227,32 +243,86 @@ const Detail = (props: any) => {
     },
   ];
 
+  const getXSTKData = async (XSJBSJId: string) => {
+    if (XSJBSJId) {
+      const res = await getStudentListByBjid({
+        XSJBSJId,
+        ZT: [0, 3],
+        BJSJId: state.id,
+        page: 0,
+        pageSize: 0,
+      });
+      if (res.status === 'ok' && res.data) {
+        // 只可退结束日期大于当前时间的课程
+        setTKSDData(
+          res.data.rows?.[0]?.XSFWBJs.filter((value: any) => {
+            return (
+              moment(value?.KHFWSJPZ.JSRQ).format('YYYY/MM/DD') >
+              moment(new Date()).format('YYYY/MM/DD')
+            );
+          }).map((item: any) => {
+            console.log('item', item);
+            return {
+              value: item?.KHFWSJPZ?.id,
+              title: (
+                <>
+                  <span style={{ fontSize: '16px' }}>{item?.KHFWSJPZ?.SDBM}</span>
+                  <span style={{ color: '#999' }}>{` ${moment(item?.KHFWSJPZ?.KSRQ).format(
+                    'MM-DD',
+                  )}~${moment(item?.KHFWSJPZ?.JSRQ).format('MM-DD')}`}</span>
+                </>
+              ),
+            };
+          }),
+        );
+        setTKVisible(true);
+      }
+    }
+  };
+  useEffect(() => {
+    if (TKSDData?.length) {
+      setTKSD(TKSDData.map((item: any) => item.value));
+    }
+  }, [TKSDData]);
   // 退课
   const onTKData = (list: any[]) => {
     if (list?.length) {
-      Modal.confirm({
-        icon: <ExclamationCircleOutlined />,
-        title: '退课',
-        content: '是否对该学生进行退课？',
-        onOk: async () => {
-          const newlist = list.map((item: any) => {
-            return {
-              LX: 2,
-              XSJBSJId: item?.XSJBSJId,
-              ZT: 0,
-              XSFWBJId: item?.XSFWBJId,
-            };
-          });
-          // console.log('退了课列表', newlist);
-          const res = await createKHTKSJ(newlist);
-          if (res.status === 'ok') {
-            message.success('申请成功');
-            actionRef?.current?.reload();
-          } else {
-            message.error(res.message);
-          }
-        },
-      });
+      // 学生只有一人
+      if (list?.length === 1) {
+        getXSTKData(list?.[0]?.XSJBSJId);
+      } else {
+        const arr = KHFWSJPZIdData?.filter((value: any) => {
+          return moment(value.JSRQ).format('YYYY/MM/DD') > moment(new Date()).format('YYYY/MM/DD');
+        });
+        if (arr) {
+          setTKSDData(arr);
+          setTKVisible(true);
+        }
+      }
+      setTKXSList(list);
+      // Modal.confirm({
+      //   // icon: <ExclamationCircleOutlined />,
+      //   title: '退课',
+      //   content: '是否对该学生进行退课？',
+      //   onOk: async () => {
+      //     const newlist = list.map((item: any) => {
+      //       return {
+      //         LX: 2,
+      //         XSJBSJId: item?.XSJBSJId,
+      //         ZT: 0,
+      //         XSFWBJId: item?.XSFWBJId,
+      //       };
+      //     });
+      //     // console.log('退了课列表', newlist);
+      //     const res = await createKHTKSJ(newlist);
+      //     if (res.status === 'ok') {
+      //       message.success('申请成功');
+      //       actionRef?.current?.reload();
+      //     } else {
+      //       message.error(res.message);
+      //     }
+      //   },
+      // });
     } else {
       message.error('请先选择学生');
     }
@@ -469,6 +539,37 @@ const Detail = (props: any) => {
       getDetailValue();
     } else {
       message.error(res.message);
+    }
+  };
+
+  // 退课关闭
+  const onTKCancel = () => {
+    setTKXSList([]);
+    setTKVisible(false);
+    setTKSD([]);
+    setTKSDData([]);
+    actionRef?.current?.reloadAndRest?.();
+  };
+
+  const onTkSubmit = async () => {
+    if (TKSD?.length) {
+      const res = await bulkCreateKHFWTK({
+        XSJBSJIds: TKXSList?.map((item: any) => item?.XSJBSJId),
+        /** 退课状态,0:申请中;1:已退课;2:不同意退课 */
+        ZT: 0,
+        /** 课后服务班级id */
+        KHFWBJId: kHFWBJId,
+        KHFWSJPZIds: TKSD,
+      });
+      if (res.status === 'ok') {
+        message.success('申请成功');
+        onTKCancel();
+      } else {
+        message.error(res.message);
+        onTKCancel();
+      }
+    } else {
+      message.warning('请选择退课时段');
     }
   };
 
@@ -791,6 +892,35 @@ const Detail = (props: any) => {
           BJSJId={KHFWBJs?.[0]?.BJSJId}
           XNXQId={KHFWBJs?.[0]?.XNXQId}
         />
+
+        <Modal
+          title="退课确认"
+          visible={TKVisible}
+          onOk={onTkSubmit}
+          onCancel={onTKCancel}
+          closable={false}
+          okText="确定"
+          cancelText="取消"
+        >
+          <div>
+            <p style={{ fontSize: 14, color: '#999', marginBottom: 20 }}>
+              系统将为您退订所有剩余未上课程，您也可以指定部分时段进行退订。
+            </p>
+            <Checkbox.Group
+              value={TKSD}
+              onChange={(value: any) => {
+                setTKSD(value);
+              }}
+              options={TKSDData.map((item: any) => {
+                return { value: item.value, label: item.title };
+              })}
+            />
+
+            {/* <p style={{ fontSize: 12, color: '#999', marginTop: 15, marginBottom: 0 }}>
+            注：系统将根据您所选时段发起退订申请，退订成功后，将自动进行退款，退款将原路返回您的支付账户。
+          </p> */}
+          </div>
+        </Modal>
       </PageContain>
     </div>
   );
