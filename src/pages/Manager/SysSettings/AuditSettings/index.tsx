@@ -8,7 +8,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { Card, Col, InputNumber, Row, Switch } from 'antd';
+import { Button, Card, Col, InputNumber, Row, Switch } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import { createXXSPPZ, getXXSPPZ } from '@/services/after-class/xxsppz';
 
@@ -148,36 +148,47 @@ const AuditSettings = () => {
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="补签时段设置" bordered={false} extra={<Switch checked={edit} checkedChildren="编辑" unCheckedChildren="应用" onChange={(checked) => {
-                    setEdit(checked);
-                  }} />}>
-                    <p className={edit ? 'active' : ''}>
-                      每月
-                      <InputNumber
-                        disabled={!edit}
-                        size='small'
-                        min={1}
-                        max={31}
-                        value={start}
-                        bordered={false}
-                        onChange={(value) => {
-                          setStart(value);
-                          updateSettings('start', value);
-                        }}
-                      />日到
-                      <InputNumber
-                        disabled={!edit}
-                        size='small'
-                        min={1}
-                        max={31}
-                        value={end}
-                        bordered={false}
-                        onChange={(value) => {
-                          setEnd(value);
-                          updateSettings('end', value);
-                        }}
-                      />日
-                    </p>
+                  <Card title="补签时段设置" bordered={false} extra={
+                    <Button key="button" type="primary"
+                      style={{ height: 28, borderRadius:14, display: 'flex', alignItems: 'center' }}
+                      onClick={() => {
+                        if (edit) {
+                          updateSettings();
+                        };
+                        setEdit(!edit);
+                      }}>
+                      {edit ? '保存' : '编辑'}
+                    </Button>
+                  }>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <p className={edit ? 'active' : ''}>
+                        每月
+                        <InputNumber
+                          disabled={!edit}
+                          size='small'
+                          min={1}
+                          max={31}
+                          value={start}
+                          bordered={false}
+                          onChange={(value) => {
+                            setStart(value);
+                            // updateSettings('start', value);
+                          }}
+                        />日到
+                        <InputNumber
+                          disabled={!edit}
+                          size='small'
+                          min={1}
+                          max={31}
+                          value={end}
+                          bordered={false}
+                          onChange={(value) => {
+                            setEnd(value);
+                            // updateSettings('end', value);
+                          }}
+                        />日
+                      </p>
+                    </div>
                     {end > 28 ? <p>如果当前月不足{end}天，则补签结束时间为当前月最后一天</p> : ''}
                   </Card>
                 </Col>
