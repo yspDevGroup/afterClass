@@ -540,6 +540,10 @@ const RegistrationSetting = () => {
                   const arr = initDataSource?.filter((item: any) => {
                     return item.id !== record.id;
                   });
+                  console.log('arr', arr);
+                  if (JFLX === 1) {
+                    setDataSource(arr?.filter((item: DataSourceType) => item.type === 1));
+                  }
                   setInitDataSource(arr);
                   // setDetail(arr, JFLX);
                 }}
