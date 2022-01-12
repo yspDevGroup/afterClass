@@ -164,7 +164,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     if (XSList.length > 0) {
       const newlist = XSList.map((item: any) => {
         return {
-          KSS: applicantData.KSS,
+          KSS: applicantData?.KSS,
           LX: 0, //  1是服务   0是课程班是服务班
           XSJBSJId: item?.XSJBSJId,
           ZT: 0,
