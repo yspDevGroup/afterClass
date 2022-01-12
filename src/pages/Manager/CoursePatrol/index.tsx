@@ -57,14 +57,12 @@ const CoursePatrol = () => {
   };
   const UploadProps: any = {
     name: 'xlsx',
-    action: '/api/upload/importSites?xxId=53091f16-e723-4910-aca9-9741cd75a14f',
+    action: '/api/upload/importTeacherXKAP',
     headers: {
       authorization: getAuthorization(),
       // 'Content-Type':'multipart/form-data;',
     },
-    data: {
-      xxId: '53091f16-e723-4910-aca9-9741cd75a14f',
-    },
+    data: {},
     // accept={''}
     beforeUpload(file: any) {
       const isLt2M = file.size / 1024 / 1024 < 2;
@@ -82,7 +80,7 @@ const CoursePatrol = () => {
       if (info.file.status === 'done') {
         const code = info.file.response;
         if (code.status === 'ok') {
-          // message.success(`上传成功`);
+          message.success(`上传成功`);
           setUploadVisible(false);
           getZBEvents();
         } else {
@@ -170,9 +168,9 @@ const CoursePatrol = () => {
   };
   return (
     <PageContainer cls={styles.calendarWrapper}>
-      {/* <Button key="button" type="primary" onClick={() => setUploadVisible(true)} style={{ position: 'absolute', right: 48, top: 32, zIndex: 1 }}>
+      <Button key="button" type="primary" onClick={() => setUploadVisible(true)} style={{ position: 'absolute', right: 48, top: 32, zIndex: 1 }}>
         <VerticalAlignBottomOutlined /> 导入
-      </Button> */}
+      </Button>
       <Calendar
         chosenDay={date}
         config={customConfig}
@@ -252,7 +250,7 @@ const CoursePatrol = () => {
           <div className={styles.messageDiv}>
             <Badge color="#aaa" />
             上传文件仅支持模板格式
-            <a style={{ marginLeft: '16px' }} type="download" href="/template/sitesImport.xlsx">
+            <a style={{ marginLeft: '16px' }} type="download" href="/template/importTeacherXKAP.xlsx">
               下载模板
             </a>
             <br />

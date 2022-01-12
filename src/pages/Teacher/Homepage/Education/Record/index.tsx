@@ -7,6 +7,8 @@ import { getAllKHKTFC, deleteKHKTFC } from '@/services/after-class/khktfc';
 import styles from './index.less';
 import { useModel } from 'umi';
 import ShowName from '@/components/ShowName';
+import noData from '@/assets/noData.png';
+import Nodata from '@/components/Nodata';
 
 const Record = () => {
   const { initialState } = useModel('@@initialState');
@@ -23,12 +25,12 @@ const Record = () => {
     if (resKHKTFC.status === 'ok') {
       const allData: any = [];
       resKHKTFC.data?.rows?.forEach((item: any) => {
-        const imgsArr = item.TP.split(';');
+        const imgsArr = item.TP?.split(';');
         imgsArr.pop();
         const data = {
           id: item.id,
-          className: item.KHBJSJ.KHKCSJ.KCMC,
-          classNum: item.KHBJSJ.BJMC,
+          className: item.KHBJSJ?.KHKCSJ?.KCMC,
+          classNum: item.KHBJSJ?.BJMC,
           content: item.NR,
           imgs: imgsArr,
           time: item.createdAt,
@@ -37,12 +39,11 @@ const Record = () => {
         };
         allData.push(data);
       });
-      setShowData(allData.slice(0, 3));
+      setShowData(allData?.slice(0, 3));
       setListData(allData);
       setLoading(false);
     }
   };
-
   useEffect(() => {
     getData();
   }, []);
@@ -85,7 +86,7 @@ const Record = () => {
       <GoBack title="课堂风采" teacher onclick="/teacher/home?index=education" />
       <div className={styles.wrap}>
         {!loading ? (
-          showData.map((item: any) => {
+          showData && showData?.length ? showData.map((item: any) => {
             return (
               <div className={styles.cards}>
                 <p>
@@ -131,15 +132,15 @@ const Record = () => {
                                 item.imgs.length === 2 || item.imgs.length === 4
                                   ? 12
                                   : item.imgs.length === 1
-                                  ? 24
-                                  : 8
+                                    ? 24
+                                    : 8
                               }
                               className={
                                 item.imgs.length === 2 || item.imgs.length === 4
                                   ? styles.pairImg
                                   : item.imgs.length === 1
-                                  ? styles.oneImg
-                                  : styles.nineImg
+                                    ? styles.oneImg
+                                    : styles.nineImg
                               }
                             >
                               <Image src={url} />
@@ -187,7 +188,8 @@ const Record = () => {
                 </div>
               </div>
             );
-          })
+          }) :
+            <Nodata imgSrc={noData} desc="暂无课堂风采" />
         ) : (
           <div>
             {[1, 2, 3].map(() => {

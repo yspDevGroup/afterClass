@@ -133,3 +133,14 @@ export async function importStudentSignUp(
     },
   );
 }
+
+/** 导入教师巡课安排 POST /upload/importTeacherXKAP */
+export async function importTeacherXKAP(options?: { [key: string]: any }) {
+  return request<{ status: 'ok' | 'error'; data?: any[]; message?: string }>(
+    '/upload/importTeacherXKAP',
+    {
+      method: 'POST',
+      ...(options || {}),
+    },
+  );
+}
