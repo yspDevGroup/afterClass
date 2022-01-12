@@ -220,15 +220,10 @@ const ReplacePayClass = (props: {
                   ).map((item: any) => {
                     return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
                   })}
-                  {XSFWBJ?.XSFWKHBJs?.filter(
-                    (item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1,
-                  ).map((item: any) => {
-                    return <span key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</span>;
-                  })}
                 </span>{' '}
               </p>
               <p>
-                <span>报名时段</span>
+                <span>上课时段</span>
                 <span>
                   {XSFWBJ?.KHFWBJ?.KHFWSJPZs?.[0]?.KSRQ}~{XSFWBJ?.KHFWBJ?.KHFWSJPZs?.[0]?.JSRQ}
                 </span>{' '}
