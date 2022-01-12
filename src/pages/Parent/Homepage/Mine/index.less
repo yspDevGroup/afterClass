@@ -30,10 +30,18 @@
           font-size: 20px;
           line-height: 24px;
 
-          & + span {
+          &+span {
             color: #fff;
             font-size: 14px;
           }
+        }
+
+        >span {
+          width: 80vw;
+          display: inline-block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap
         }
       }
     }
@@ -48,6 +56,7 @@
       background-position: center;
       background-size: contain;
     }
+
     .XsName {
       position: absolute;
       top: 33px;
@@ -55,20 +64,24 @@
       height: 30px;
       font-weight: bold;
       padding-left: 2px;
-      :global{
-        .ant-select-selector{
+
+      :global {
+        .ant-select-selector {
           height: auto;
           border-radius: 15px;
-          border:none;
+          border: none;
           padding-left: 10px;
-          .ant-select-selection-search{
+
+          .ant-select-selection-search {
             height: auto;
-            import{
+
+            import {
               height: auto;
             }
           }
         }
-        .ant-select-arrow{
+
+        .ant-select-arrow {
           top: 54%;
         }
       }
@@ -81,6 +94,7 @@
     top: -30px;
     padding: 0 10px;
   }
+
   .operation {
     display: flex;
     height: 44px;
@@ -97,16 +111,19 @@
       color: #333333;
       background-color: rgba(28, 223, 164, 0.1);
       border-radius: 8px;
+
       .dropSpan {
         margin-left: 15px;
         font-weight: bold;
         font-size: 14px;
       }
+
       .icon_Rgo {
         position: absolute;
         right: 19px;
       }
     }
+
     .evaluation {
       position: relative;
       display: flex;
@@ -118,11 +135,13 @@
       font-size: 13px;
       background-color: rgba(255, 209, 154, 0.1);
       border-radius: 8px;
+
       .evaluationSpan {
         margin-left: 15px;
         font-weight: bold;
         font-size: 14px;
       }
+
       .icon_Rgo {
         position: absolute;
         right: 19px;
@@ -133,14 +152,17 @@
   .linkWrapper {
     padding: 10px 0;
     background-color: #f5f5f5;
+
     ul {
       margin: 0;
       padding: 0;
+
       li {
         height: 46px;
         padding-left: 10px;
         line-height: 46px;
         background-color: #ffffff;
+
         span {
           margin-right: 5px;
           vertical-align: middle;
@@ -152,6 +174,7 @@
           width: calc(~'100% - 24px');
           color: @text-color-secondary;
           border-bottom: 1px solid @border-color-base;
+
           span {
             position: absolute;
             top: 16px;
@@ -159,6 +182,7 @@
           }
         }
       }
+
       // li:first-child {
       //   margin-bottom: 10px;
       //   a {
@@ -169,12 +193,14 @@
         padding-bottom: 50px;
       }
     }
-    .signOut{
+
+    .signOut {
       margin-top: 10px;
       width: 100%;
       height: 40px;
       text-align: center;
       background: #FFFFFF;
+
       a {
         line-height: 40px;
         font-size: 16px;
@@ -187,6 +213,7 @@
     width: 100%;
     margin-top: -15px;
     padding: 0 10px;
+
     .title {
       display: flex;
       height: 24px;
@@ -207,35 +234,42 @@
         font-size: 18px;
       }
     }
-    > p {
+
+    >p {
       display: flex;
       justify-content: space-between;
       color: #333333;
       font-weight: 600;
       margin-bottom: 10px;
+
       span:nth-of-type(2) {
         color: @text-color-secondary;
         font-weight: 400;
         font-size: 14px;
-       
+
       }
-      >span{
+
+      >span {
         line-height: 24px;
       }
-      :global{
-        .ant-badge-status-text{
+
+      :global {
+        .ant-badge-status-text {
           margin-left: 4px;
         }
       }
+
       .legend {
         margin-left: 10px;
       }
     }
+
     .diagram {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       width: 100%;
+
       .cards {
         width: 48%;
         margin-bottom: 10px;
@@ -243,11 +277,13 @@
         font-size: 13px;
         background-color: #f5f5f5;
         border-radius: 8px;
-        > div {
+
+        >div {
           display: flex;
           flex-wrap: wrap;
           justify-content: space-between;
           margin-top: 10px;
+
           span {
             display: block;
             color: #666666;
@@ -255,10 +291,12 @@
           }
         }
       }
+
       .pies {
         canvas {
           height: 100px !important;
         }
+
         :global {
           .g2-html-annotation {
             display: none !important;

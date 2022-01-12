@@ -205,7 +205,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         cancelText="取消"
         placement="topRight"
       >
-        <Tooltip title="取消报名">
+        <Tooltip placement="bottom" title="取消报名">
           <a>取消报名</a>
         </Tooltip>
       </Popconfirm>
@@ -432,7 +432,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                   cancelText="取消"
                   placement="topRight"
                 >
-                  <Tooltip title="本课程暂未开始上课，退课后，系统将自动发起全额退款">
+                  <Tooltip placement="bottom" title="本课程暂未开始上课，退课后，系统将自动发起全额退款">
                     <a>取消报名</a>
                   </Tooltip>
                 </Popconfirm>

@@ -254,7 +254,7 @@ const InterestClassroom = () => {
       setBmTimeIds(newArr);
     }
   }
- 
+
   const BmHandleOk = async () => {
     const res = await studentRegistration({
       KHFWBJId: FWKCData?.id,
@@ -294,7 +294,7 @@ const InterestClassroom = () => {
           handleClose(tag);
         }}
       >
-        <span  className={styles.mouths}>{tag?.SDBM}</span>
+        <span className={styles.mouths}>{tag?.SDBM}</span>
         <span className={styles.times}>{moment(tag?.KSRQ).format('MM.DD')} ~ {moment(tag?.JSRQ).format('MM.DD')}</span>
       </Tag>
     );
@@ -330,6 +330,7 @@ const InterestClassroom = () => {
         BmCouse ? <p className={styles.FWMC}>{FWKCData?.FWMC}</p> : <></>
       }
 
+
       {
         FWKCData?.KCFWBJs?.length === 0 ? <>
           <div className={styles.noData}>
@@ -345,6 +346,9 @@ const InterestClassroom = () => {
             FWKCData?.KCFWBJs.find((item: any) => item.LX === 0) ?
               <>
                 <div className={styles.Application}>
+                  {
+                    BmCouse && XKType === true ? <div className={styles.Tips}>本校课后服务包含课业辅导和趣味课堂，请为您的孩子选择趣味课堂课程</div> : <></>
+                  }
                   {
                     BmCouse ? <>
                       {
@@ -458,7 +462,6 @@ const InterestClassroom = () => {
                         <p>该时段暂未报名，请先报名</p>
                       </div>
                   }
-
                 </div>
                 {
                   DropOutType === false ? <>

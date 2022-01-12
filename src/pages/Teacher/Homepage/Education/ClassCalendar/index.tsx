@@ -299,7 +299,7 @@ const ClassCalendar = (props: propstype) => {
       {type && type === 'edit' ? (
         <p style={{ lineHeight: '35px', margin: 0, color: '#888' }}>请选择课程</p>
       ) : (type && type === 'dksq' || type === 'tksq' ?
-        <p style={{ lineHeight: '35px', margin: 0, color: '#999', fontSize: '12px' }}>{type === 'dksq' ? '代课课程（仅主班教师可提交代课申请）' : type === 'tksq' ? '调课课程（仅主班教师可提交调课申请）' : ''} </p> :
+        <p style={{ lineHeight: '35px', margin: 0, color: '#999', fontSize: '12px' }}>{type === 'dksq' ? '代课课程' : type === 'tksq' ? '调课课程（仅主班教师可提交调课申请）' : ''} </p> :
         <div className={styles.subTitle}>{cDay}</div>)}
 
       {/* 根据特殊情况显示列表展示样式 */}
