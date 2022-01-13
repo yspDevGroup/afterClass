@@ -205,6 +205,13 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         onFinish={handleSubmit}
         layout='horizontal'
         className={styles.newModules}
+        submitter = {type ? false : {
+          render: (props, defaultDoms) => {
+            return [
+              ...defaultDoms
+            ];
+          },
+        }}
         {...formLayout}
       >
         <Row>

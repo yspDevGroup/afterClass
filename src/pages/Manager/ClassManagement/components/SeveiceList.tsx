@@ -108,6 +108,7 @@ const SeveiceList = (props: ServiceBasicsType) => {
           destroyOnClose: true,
         }}
         layout='horizontal'
+        submitter={false}
       >
         <ProTable<any>
           columns={columns}
