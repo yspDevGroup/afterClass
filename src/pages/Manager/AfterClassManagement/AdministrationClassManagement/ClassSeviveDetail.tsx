@@ -70,7 +70,7 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
         submitter={false}
         modalProps={{
           destroyOnClose: true,
-          footer: false,
+          footer: null,
         }}
         layout="horizontal"
         {...formLayout}

@@ -156,9 +156,9 @@ const RegistrationSetting = () => {
           const str = JSON.parse(sjpzstr); // str:{JFLX:0/1,list:[]}
           if (str) {
             setJFLX(str.JFLX);
-            if (str.JFLX === 1) {
-              setDataSource(str.list.filter((item: DataSourceType) => item.type === 1));
-            }
+
+            setDataSource(str.list.filter((item: DataSourceType) => item.type === 1));
+
             setInitDataSource(str.list);
           }
         }
@@ -302,9 +302,8 @@ const RegistrationSetting = () => {
         }
       });
       // console.log('initarr',initarr);
-      if (JFLX === 1) {
-        setDataSource(initarr.filter((item: DataSourceType) => item.type === 1));
-      }
+
+      setDataSource(initarr.filter((item: DataSourceType) => item.type === 1));
 
       setInitDataSource(initarr);
     }
@@ -540,10 +539,9 @@ const RegistrationSetting = () => {
                   const arr = initDataSource?.filter((item: any) => {
                     return item.id !== record.id;
                   });
-                  console.log('arr', arr);
-                  if (JFLX === 1) {
-                    setDataSource(arr?.filter((item: DataSourceType) => item.type === 1));
-                  }
+
+                  setDataSource(arr?.filter((item: DataSourceType) => item.type === 1));
+
                   setInitDataSource(arr);
                   // setDetail(arr, JFLX);
                 }}
