@@ -15,6 +15,9 @@ const ServiceSetting = (props: any) => {
         <TabPane tab="缤纷课堂协议" key="service">
           <Detail type='service' />
         </TabPane>
+        <TabPane tab="增值服务协议" key="increment">
+          <Detail type='increment' />
+        </TabPane>
       </Tabs>
     </PageContainer>
   );

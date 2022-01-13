@@ -31,15 +31,15 @@ const EditArticle = (props: any) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const initialValues = {
-    LX: type === 'normal' ? '课后服务协议' :'缤纷课堂协议',
+    LX: type === 'normal' ? '课后服务协议' : type === 'increment' ? '增值服务协议' : '缤纷课堂协议',
   };
   const submit = async (params: any) => {
     const { id, NR } = params;
     const data = {
       ...params,
       RQ: new Date(),
-      BT: type === 'normal' ? '课后服务协议' :'缤纷课堂协议',
-      LX: type === 'normal' ? '课后服务协议' :'缤纷课堂协议',
+      BT: type === 'normal' ? '课后服务协议' : type === 'increment' ? '增值服务协议' : '缤纷课堂协议',
+      LX:type === 'normal' ? '课后服务协议' : type === 'increment' ? '增值服务协议' : '缤纷课堂协议',
       SFTJ: 0,
       SFTT: 0,
       NR: NR.toHTML(),
@@ -53,7 +53,7 @@ const EditArticle = (props: any) => {
         });
         if (result.status === 'ok') {
           message.success('保存成功');
-          history.push('/basicalSettings/service?type='+type);
+          history.push('/basicalSettings/service?type=' + type);
         } else {
           message.error(result.message);
         }
@@ -61,7 +61,7 @@ const EditArticle = (props: any) => {
         const resUpdateXXTZGG = await updateXXTZGG({ id }, data);
         if (resUpdateXXTZGG.status === 'ok') {
           message.success('修改成功');
-          history.push('/basicalSettings/service?type='+type);
+          history.push('/basicalSettings/service?type=' + type);
         } else {
           message.error(resUpdateXXTZGG.message);
         }
@@ -110,7 +110,7 @@ const EditArticle = (props: any) => {
                   <Button
                     htmlType="button"
                     onClick={() => {
-                      history.push('/basicalSettings/service?type='+type);
+                      history.push('/basicalSettings/service?type=' + type);
                     }}
                   >
                     取消

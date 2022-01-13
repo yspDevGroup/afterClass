@@ -202,7 +202,7 @@ const DropOut = () => {
         ) : (
           <div className={styles.ZWSJ}>
             <img src={noOrder} alt="" />
-            <p>暂无数据</p>
+            <p>暂无缤纷课堂协议</p>
           </div>
         )}
       </Modal>

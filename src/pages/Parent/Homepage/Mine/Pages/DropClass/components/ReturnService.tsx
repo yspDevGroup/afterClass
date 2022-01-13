@@ -28,7 +28,7 @@ const ReturnService = () => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: ['缤纷课堂协议'],
+        LX: ['增值服务协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
@@ -173,7 +173,7 @@ const ReturnService = () => {
         ) : (
           <div className={styles.ZWSJ}>
             <img src={noOrder} alt="" />
-            <p>暂无数据</p>
+            <p>暂无增值服务协议</p>
           </div>
         )}
       </Modal>

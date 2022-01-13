@@ -2,7 +2,7 @@
  * @description: 服务详情
  * @author: wsl
  * @Date: 2021-09-26 17:28:08
- * @LastEditTime: 2021-12-30 12:13:55
+ * @LastEditTime: 2022-01-13 16:44:18
  * @LastEditors: wsl
  */
 import GoBack from '@/components/GoBack';
@@ -16,6 +16,7 @@ import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { Link, useModel, history } from 'umi';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import { signService } from '@/services/after-class/xsjbsj';
+import noOrder from '@/assets/noOrder.png';
 
 const Details = () => {
   const { initialState } = useModel('@@initialState');
@@ -24,7 +25,7 @@ const Details = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
   const [state, setstate] = useState(false);
-  const [KHFUXY, setKHFUXY] = useState<any>();
+  const [KHFUXY, setKHFUXY] = useState<any>([]);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const [orderInfo, setOrderInfo] = useState<any>();
   const path = getQueryString('path');
@@ -56,14 +57,14 @@ const Details = () => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: ['缤纷课堂协议'],
+        LX: ['增值服务协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
         pageSize: 0,
       });
       if (res.status === 'ok') {
-        setKHFUXY(res.data?.rows?.[0].NR);
+        setKHFUXY(res.data?.rows);
       }
     })();
   }, []);
@@ -176,7 +177,7 @@ const Details = () => {
               <Checkbox onChange={onFxChange} checked={Xystate}>
                 <span>我已阅读并同意</span>
               </Checkbox>
-              <a onClick={showModal}>缤纷课堂协议</a>
+              <a onClick={showModal}>《增值服务协议》</a>
             </div>
             <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
               {Data?.FY && Data?.FY > 0 ? '提交并付款' : '提交'}
@@ -217,8 +218,17 @@ const Details = () => {
           </Button>,
         ]}
       >
-        <p>缤纷课堂协议书</p>
-        <div dangerouslySetInnerHTML={{ __html: KHFUXY }} />
+         {KHFUXY?.length !== 0 ? (
+          <>
+            <p>增值服务协议书</p>
+            <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
+          </>
+        ) : (
+          <div className={styles.ZWSJ}>
+            <img src={noOrder} alt="" />
+            <p>暂无增值服务协议</p>
+          </div>
+        )}
       </Modal>
     </div>
   );

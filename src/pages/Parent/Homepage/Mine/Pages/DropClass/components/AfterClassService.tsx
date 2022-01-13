@@ -211,7 +211,7 @@ const AfterClassService = () => {
         ) : (
           <div className={styles.ZWSJ}>
             <img src={noOrder} alt="" />
-            <p>暂无数据</p>
+            <p>暂无课后服务协议</p>
           </div>
         )}
       </Modal>

@@ -19,6 +19,7 @@ import { getKHBJSJ, studentRegistration } from '@/services/after-class/khbjsj';
 import { RightOutlined } from '@ant-design/icons';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { signClass } from '@/services/after-class/xsjbsj';
+import noOrder from '@/assets/noOrder.png';
 
 const { Panel } = Collapse;
 
@@ -138,8 +139,7 @@ const CourseDetails: React.FC = () => {
         pageSize: 0,
       });
       if (res.status === 'ok') {
-        const { rows = [] } = res.data || {};
-        setKHFUXY(rows[0]?.NR || '');
+        setKHFUXY(res.data?.rows);
       }
     })();
   }, []);
@@ -640,8 +640,17 @@ const CourseDetails: React.FC = () => {
           </Button>,
         ]}
       >
-        <p>缤纷课堂协议书</p>
-        <div dangerouslySetInnerHTML={{ __html: KHFUXY }} />
+        {KHFUXY?.length !== 0 ? (
+          <>
+            <p>缤纷课堂协议书</p>
+            <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
+          </>
+        ) : (
+          <div className={styles.ZWSJ}>
+            <img src={noOrder} alt="" />
+            <p>暂无缤纷课堂协议</p>
+          </div>
+        )}
       </Modal>
     </div>
   );

@@ -19,7 +19,7 @@ const ServiceDetails = (props: { type: string }) => {
       const res = await getXXTZGG({
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
-        LX: type === 'normal' ? ['课后服务协议'] : ['缤纷课堂协议'],
+        LX: [type === 'normal' ? '课后服务协议' : type === 'increment' ? '增值服务协议' : '缤纷课堂协议'],
         page: 1,
         pageSize: 1,
       });
@@ -42,7 +42,7 @@ const ServiceDetails = (props: { type: string }) => {
         }}
       >
         <span style={{ color: '#4884ff', paddingRight: 14 }}>
-          本协议内容适用于{type === 'service' ? '缤纷课堂协议' : '课后服务协议'}
+          本协议内容适用于{type === 'normal' ? '课后服务协议' : type === 'increment' ? '增值服务协议' : '缤纷课堂协议'}
         </span>
         <Button
           key="xinjian"
@@ -56,7 +56,7 @@ const ServiceDetails = (props: { type: string }) => {
       </div>
       <div className={styles.articleWraper}>
         <div className={styles.ArticleDetails}>
-          <h1>{type === 'service' ? '缤纷课堂协议' : '课后服务协议'}</h1>
+          <h1>{type === 'normal' ? '课后服务协议' : type === 'increment' ? '增值服务协议' : '缤纷课堂协议'}</h1>
           {content?.RQ ? <p className={styles?.RQ}>时间：{content?.RQ}</p> : ''}
           {content?.NR ? (
             <div dangerouslySetInnerHTML={{ __html: content?.NR }} />
@@ -66,7 +66,7 @@ const ServiceDetails = (props: { type: string }) => {
               imageStyle={{
                 height: 150,
               }}
-              description={`尚未编辑${type === 'service' ? '缤纷课堂协议' : '课后服务协议'}，请先点击右上角编辑按钮`}
+              description={`尚未编辑${type === 'normal' ? '课后服务协议' : type === 'increment' ? '增值服务协议' : '缤纷课堂协议'}，请先点击右上角编辑按钮`}
             />
           )}
         </div>
