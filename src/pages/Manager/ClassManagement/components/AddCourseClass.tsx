@@ -97,7 +97,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
   useEffect(() => {
     if (formValues) {
       const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === BjLists?.SSJGLX);
-      setFJSJIds(BjLists?.CDMCId)
+      setFJSJIds(BjLists?.CDMCId);
       setKCDate(kcDate);
       setKcId(BjLists?.KHKCSJId);
       setIsJg(BjLists?.SSJGLX === '机构课程');
@@ -106,9 +106,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setXzClassMC(BmLists?.XzClassMC);
       setJFData(JfLists);
       setXzClass(BmLists?.BJIds);
-      setSYNJ(formValues?.KHKCSJ?.NJSJs.sort((a: any, b: any) => {
-        return a.NJ - b.NJ
-      }))
+      setSYNJ(
+        formValues?.KHKCSJ?.NJSJs.sort((a: any, b: any) => {
+          return a.NJ - b.NJ;
+        }),
+      );
 
       if (BmLists.BJLX === 1) {
         setXzb(true);
@@ -122,16 +124,17 @@ const AddCourseClass: FC<AddCourseProps> = ({
         setChoosenJf(true);
         setDataSource(formValues?.KHKCJCs);
       }
-      // const start = 
+      // const start =
       const startTime1 = moment(BmLists?.BMSD[0], 'YYYY-MM-DD').valueOf();
       const endTime1 = moment(BmLists?.BMSD[1], 'YYYY-MM-DD').valueOf();
-      const startTime2 = BMDate?.KSSJ ? moment(BMDate?.KSSJ, 'YYYY-MM-DD').valueOf() : new Date().getTime();
-      const endTime2 = BMDate?.JSSJ ? moment(BMDate?.JSSJ, 'YYYY-MM-DD').valueOf() : new Date().getTime();
+      const startTime2 = BMDate?.KSSJ
+        ? moment(BMDate?.KSSJ, 'YYYY-MM-DD').valueOf()
+        : new Date().getTime();
+      const endTime2 = BMDate?.JSSJ
+        ? moment(BMDate?.JSSJ, 'YYYY-MM-DD').valueOf()
+        : new Date().getTime();
 
-      if (
-        startTime1 === startTime2 &&
-        endTime1 === endTime2
-      ) {
+      if (startTime1 === startTime2 && endTime1 === endTime2) {
         setBaoming(false);
       } else {
         setBaoming(true);
@@ -188,26 +191,23 @@ const AddCourseClass: FC<AddCourseProps> = ({
             XQSJId: XQSJIds,
           });
           if (result.status === 'ok') {
-            setClassData(result.data.rows);
+            setClassData(result?.data?.rows);
           }
-
         }
       }
     })();
   }, [BJData, XQSJIds]);
   // 获取场地信息
   useEffect(() => {
-    (
-      async () => {
-        const res = await getAllFJSJ({
-          XXJBSJId: currentUser?.xxId
-        })
-        if (res.status === 'ok') {
-          setFJData(res.data?.rows)
-        }
+    (async () => {
+      const res = await getAllFJSJ({
+        XXJBSJId: currentUser?.xxId,
+      });
+      if (res.status === 'ok') {
+        setFJData(res.data?.rows);
       }
-    )()
-  }, [])
+    })();
+  }, []);
   useEffect(() => {
     (async () => {
       if (curXNXQId) {
@@ -237,7 +237,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
           ...values,
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
           JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
-          FJSJId: FJSJIds
+          FJSJId: FJSJIds,
         };
       } else {
         newData = {
@@ -288,12 +288,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+                  return {
+                    JSLX: '副教师',
+                    JZGJBSJId: item,
+                    KHBJSJId: formValues?.id,
+                  };
+                })
               : undefined;
         } else {
           ZTeacher = [
@@ -305,11 +305,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                };
-              })
+                  return {
+                    JSLX: '副教师',
+                    JZGJBSJId: item,
+                  };
+                })
               : undefined;
         }
         const newData = {
@@ -375,12 +375,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-                KHBJSJId: formValues?.id,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
             : undefined;
       } else {
         ZTeacher = [
@@ -392,11 +392,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
             : undefined;
       }
       const newData = {
@@ -619,7 +619,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
               const { value } = values.target;
               let kcDate: any;
               if (value === '机构课程') {
-                kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '机构课程' && item.KHKCSQs?.[0].ZT === 1);
+                kcDate = KHKCAllData?.filter(
+                  (item: any) => item.SSJGLX === '机构课程' && item.KHKCSQs?.[0].ZT === 1,
+                );
               } else {
                 kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
               }
@@ -712,14 +714,16 @@ const AddCourseClass: FC<AddCourseProps> = ({
               placeholder="请选择"
               optionFilterProp="children"
               onChange={(value, key: any) => {
-                setFJSJIds(key?.key)
+                setFJSJIds(key?.key);
               }}
             >
-              {
-                FJData?.map((value: any) => {
-                  return <Option value={value?.FJMC} key={value?.id}>{value?.FJMC}</Option>
-                })
-              }
+              {FJData?.map((value: any) => {
+                return (
+                  <Option value={value?.FJMC} key={value?.id}>
+                    {value?.FJMC}
+                  </Option>
+                );
+              })}
             </Select>
           ),
         },
@@ -786,10 +790,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-        type: 'divTab',
-        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -823,7 +827,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults < moment(KKData?.KSSJ).format('YYYY-MM-DD 00:00:00') || defaults > moment(KKData?.JSSJ).format('YYYY-MM-DD 23:59:59');
+          return (
+            defaults < moment(KKData?.KSSJ).format('YYYY-MM-DD 00:00:00') ||
+            defaults > moment(KKData?.JSSJ).format('YYYY-MM-DD 23:59:59')
+          );
         },
       },
     },
@@ -873,7 +880,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
           placeholder="请选择适用行政班："
           onChange={handleChange}
         >
-          {ClassData.map((item: any) => {
+          {ClassData?.map((item: any) => {
             return (
               <Option
                 key={item.id}
@@ -899,10 +906,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     BMDate?.id
       ? {
-        type: 'divTab',
-        text: `(默认报名时间段)：${moment(BMData?.BMSD?.[0]).format('YYYY-MM-DD')} — ${moment(BMData?.BMSD?.[1]).format('YYYY-MM-DD')}`,
-        style: { marginBottom: 8, color: '#bbbbbb' },
-      }
+          type: 'divTab',
+          text: `(默认报名时间段)：${moment(BMData?.BMSD?.[0]).format('YYYY-MM-DD')} — ${moment(
+            BMData?.BMSD?.[1],
+          ).format('YYYY-MM-DD')}`,
+          style: { marginBottom: 8, color: '#bbbbbb' },
+        }
       : '',
     {
       type: 'div',
@@ -971,7 +980,15 @@ const AddCourseClass: FC<AddCourseProps> = ({
       name: 'FY',
       key: 'FY',
       readonly: BMLX,
-      rules: !BMLX ? [{ required: true, message: '请填写费用' }, { message: '费用应大于0，且最多支持2位小数', pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/ }] : [],
+      rules: !BMLX
+        ? [
+            { required: true, message: '请填写费用' },
+            {
+              message: '费用应大于0，且最多支持2位小数',
+              pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/,
+            },
+          ]
+        : [],
       fieldProps: {
         autocomplete: 'off',
       },
@@ -997,12 +1014,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-        type: 'custom',
-        text: '教辅材料',
-        name: 'KHKCJCs',
-        key: 'KHKCJCs',
-        children: getChildren(),
-      }
+          type: 'custom',
+          text: '教辅材料',
+          name: 'KHKCJCs',
+          key: 'KHKCJCs',
+          children: getChildren(),
+        }
       : '',
   ];
   return (
@@ -1074,7 +1091,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
             </div>
             <div className={styles.box}>
               <p>
-
                 开课时段：{moment(formValues?.KKRQ).format('YYYY-MM-DD')} ~{' '}
                 {moment(formValues?.JKRQ).format('YYYY-MM-DD')}
               </p>
