@@ -70,6 +70,7 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
         submitter={false}
         modalProps={{
           destroyOnClose: true,
+          footer: false,
         }}
         layout="horizontal"
         {...formLayout}
@@ -101,9 +102,11 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
             >
-          
-                <UploadImage imageurl={detailValue?.FWTP||seviceImage} readonly={true} imagename="image" />
-              
+              <UploadImage
+                imageurl={detailValue?.FWTP || seviceImage}
+                readonly={true}
+                imagename="image"
+              />
             </ProForm.Item>
 
             {/* <ProForm.Item
