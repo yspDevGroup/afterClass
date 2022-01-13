@@ -127,11 +127,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
       const endTime1 = moment(BmLists?.BMSD[1], 'YYYY-MM-DD').valueOf();
       const startTime2 = BMDate?.KSSJ ? moment(BMDate?.KSSJ, 'YYYY-MM-DD').valueOf() : new Date().getTime();
       const endTime2 = BMDate?.JSSJ ? moment(BMDate?.JSSJ, 'YYYY-MM-DD').valueOf() : new Date().getTime();
-      
+
       if (
         startTime1 === startTime2 &&
         endTime1 === endTime2
-      ) {   
+      ) {
         setBaoming(false);
       } else {
         setBaoming(true);
@@ -187,7 +187,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
             njId: newArr,
             XQSJId: XQSJIds,
           });
-          setClassData(result.data.rows);
+          if (result.status === 'ok') {
+            setClassData(result.data.rows);
+          }
+
         }
       }
     })();
@@ -241,7 +244,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
           ...values,
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
           JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
-          FJSJId:null,
+          FJSJId: null,
         };
       }
       setXQSJIds(values.XQSJId);
@@ -451,7 +454,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       form.resetFields();
       setFJSJIds(undefined);
       setBMData({});
-      setJFData({});  
+      setJFData({});
       setBaoming(false);
       setChoosenJf(false);
       setXzb(false);
@@ -817,11 +820,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
       width: '100%',
       hidden: !kaike,
       rules: [{ required: kaike, message: '请选择上课时间' }],
-
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults < KKData?.KSSJ || defaults > KKData?.JSSJ;
+          return defaults < moment(KKData?.KSSJ).format('YYYY-MM-DD 00:00:00') || defaults > moment(KKData?.JSSJ).format('YYYY-MM-DD 23:59:59');
         },
       },
     },
@@ -898,7 +900,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
     BMDate?.id
       ? {
         type: 'divTab',
-        text: `(默认报名时间段)：${BMDate?.KSSJ} — ${BMDate?.JSSJ}`,
+        text: `(默认报名时间段)：${moment(BMData?.BMSD?.[0]).format('YYYY-MM-DD')} — ${moment(BMData?.BMSD?.[1]).format('YYYY-MM-DD')}`,
         style: { marginBottom: 8, color: '#bbbbbb' },
       }
       : '',
@@ -915,7 +917,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
                 return setBaoming(true);
               }
               // 将按钮关闭的时候 传成默认时间段
-              form.setFieldsValue({ BMSD: [BMDate?.KSSJ, BMDate?.JSSJ] });
+              form.setFieldsValue({ BMSD: [BMData?.BMSD?.[0], BMData?.BMSD?.[1]] });
               return setBaoming(false);
             },
             checked: baoming,
@@ -934,7 +936,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > BMData?.JSSJ || defaults < BMData?.KSSJ;
+          return defaults < BMData?.BMSD?.[0] || defaults > BMData?.BMSD?.[1];
         },
       },
     },
@@ -969,7 +971,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       name: 'FY',
       key: 'FY',
       readonly: BMLX,
-      rules: !BMLX ? [{ required: true, message: '请填写费用' },{ message: '费用应大于0，且最多支持2位小数', pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/ }] :[],
+      rules: !BMLX ? [{ required: true, message: '请填写费用' }, { message: '费用应大于0，且最多支持2位小数', pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/ }] : [],
       fieldProps: {
         autocomplete: 'off',
       },
