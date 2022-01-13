@@ -59,8 +59,6 @@ const InterestClassroom = () => {
   const [FDBId, setFDBId] = useState<any[]>([]);
   const [BmCouse, setBmCouse] = useState<any>([]);
 
-  const [FwTimes, setFwTimes] = useState<any>([]);
-
   useEffect(() => {
     (
       async () => {
@@ -106,11 +104,32 @@ const InterestClassroom = () => {
           }
         })
         setTimes(newArr)
-        if (res.data.rows[0]?.XSFWBJs?.[0].XSFWKHBJs?.find((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)) {
+        if (res.data.rows[0]?.XSFWBJs?.[res.data.rows[0]?.XSFWBJs.length - 1].XSFWKHBJs?.find((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)) {
           setXKType(false);
         } else {
           setXKType(true);
         }
+      }
+    }
+  }
+  const xuankeStates = async () => {
+    if (StorageXSId) {
+      const res = await getStudentListByBjid({
+        BJSJId: StorageBjId,
+        XSJBSJId: StorageXSId,
+        ZT: [0, 1, 3],
+        page: 0,
+        pageSize: 0
+      })
+      if (res.status === 'ok') {
+        setBaoMinData(res.data.rows[0])
+        const newArr: any[] = [];
+        res.data.rows[0]?.XSFWBJs?.forEach((value: any) => {
+          if ((value?.XSFWKHBJs.find((item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0)) === undefined) {
+            newArr.push(value?.KHFWSJPZId)
+          }
+        })
+        setTimes(newArr)
       }
     }
   }
@@ -266,8 +285,9 @@ const InterestClassroom = () => {
     if (res.status === 'ok') {
       message.success('报名成功')
       setBmModalVisible(false);
-      xuankeState();
-      window.location.reload();
+      xuankeStates();
+
+      // window.location.reload();
     } else {
       message.error('操作失败，请联系管理员')
     }
@@ -294,7 +314,7 @@ const InterestClassroom = () => {
           handleClose(tag);
         }}
       >
-        <span className={styles.mouths}>{tag?.SDBM}</span>
+        <p className={styles.mouths}>{tag?.SDBM}</p>
         <span className={styles.times}>{moment(tag?.KSRQ).format('MM.DD')} ~ {moment(tag?.JSRQ).format('MM.DD')}</span>
       </Tag>
     );
@@ -347,7 +367,11 @@ const InterestClassroom = () => {
               <>
                 <div className={styles.Application}>
                   {
-                    BmCouse && XKType === true ? <div className={styles.Tips}>本校课后服务包含课业辅导和趣味课堂，请为您的孩子选择趣味课堂课程</div> : <></>
+                    BmCouse && XKType === true ? <div className={styles.Tips}>本校课后服务包含课业辅导和趣味课堂，请为您的孩子选择趣味课堂课程
+                      {
+                        BaoMinData && XKType === true && FKType === true && PayType === true ? <>及付款</> : <></>
+                      }
+                    </div> : <></>
                   }
                   {
                     BmCouse ? <>

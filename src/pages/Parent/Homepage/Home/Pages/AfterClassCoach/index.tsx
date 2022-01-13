@@ -26,6 +26,8 @@ const EmptyArticle = (props: any) => {
   // 课后服务协议
   const [KHFUXY, setKHFUXY] = useState<any>();
   const [FwTimes, setFwTimes] = useState<any>([]);
+  // 是否阅读协议
+  const [Xystate, setXystate] = useState(false);
 
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const EmptyArticle = (props: any) => {
           setFwTimes(result.data?.KHFWSJPZs);
           const newIdArr: any[] = [];
           const newTimeIdArr: any[] = [];
-          result.data?.KHFWSJPZs?.forEach((value: any)=>{
+          result.data?.KHFWSJPZs?.forEach((value: any) => {
             newTimeIdArr.push(value?.id)
           })
           setTimes(newTimeIdArr)
@@ -55,7 +57,7 @@ const EmptyArticle = (props: any) => {
         }
       }
     )()
-  }, [StorageXSId,ModalVisible])
+  }, [StorageXSId, ModalVisible])
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
@@ -89,7 +91,7 @@ const EmptyArticle = (props: any) => {
     }
   };
 
- 
+
   const handleClose = (removedTag: any) => {
     const newArr: any = [];
     const newArrId: any = [];
@@ -111,7 +113,7 @@ const EmptyArticle = (props: any) => {
           handleClose(tag);
         }}
       >
-        <span  className={styles.mouths}>{tag?.SDBM}</span>
+        <p className={styles.mouths}>{tag?.SDBM}</p>
         <span className={styles.times}>{moment(tag?.KSRQ).format('MM.DD')} ~ {moment(tag?.JSRQ).format('MM.DD')}</span>
       </Tag>
     );
@@ -122,6 +124,9 @@ const EmptyArticle = (props: any) => {
     );
   };
   const tagChild = FwTimes?.map(forMap);
+  const onFxChange = (e: { target: { checked: any } }) => {
+    setXystate(e.target.checked);
+  };
 
   return (
     <div className={styles.AfterClassCoach}>
@@ -161,10 +166,18 @@ const EmptyArticle = (props: any) => {
             </div>
         }
       </div>
+
       {
-        FWKCData ? <button onClick={() => {
-          setModalVisible(true);
-        }}>我要报名</button> : <></>
+        FWKCData ? <div className={styles.footer}>
+          <div className={styles.agreement}>
+            <Checkbox onChange={onFxChange} checked={Xystate}>
+              <span>我已阅读并同意《课后服务协议书》</span>
+            </Checkbox>
+        
+          </div>
+          <button  disabled={!Xystate}  onClick={() => {
+            setModalVisible(true);
+          }}>我要报名</button></div> : <></>
       }
 
       <Modal
