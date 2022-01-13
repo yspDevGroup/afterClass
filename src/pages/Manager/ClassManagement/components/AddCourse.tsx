@@ -147,8 +147,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
       setFJSJIds(BjLists?.CDMCId);
       setKcId(BjLists?.KHKCSJId);
       setCampusId(BjLists.XQSJId);
-
-      console.log('BjLists?.ZJS', BjLists?.ZJS);
       if (BjLists?.ZJS) {
         setTeacherType(true);
       } else {
@@ -295,9 +293,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
 
   useEffect(() => {
     if (visible) {
-      console.log('=====', campus);
       if (campus?.length) {
-        console.log('=====', campus);
         let id = campus?.find((item: any) => item.label === '本校')?.value;
         if (!id) {
           id = campus[0].value;
@@ -595,7 +591,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
           return item.SSJGLX === '校内课程';
         }
       });
-      console.log('=========', kcDate);
       setKCDate(kcDate);
     }
   }, [KHKCAllData, isJg, KCLXMC]);
