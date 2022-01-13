@@ -21,12 +21,13 @@ type SelectCourseProps = {
   XNXQId?: string, // 学年学期id
   XQSJId?: string, //校区ID
   BJSJId?: string, //班级id
+  disabled?: boolean
 }
 
 const SelectCourses = (props: SelectCourseProps) => {
   const refModal = useRef<any>();
   const [visible, setVisible] = useState<boolean>(false);
-  const { value, onChange, flag, getNJArr, XNXQId, title,XQSJId,BJSJId } = props;
+  const { value, onChange, flag, getNJArr, XNXQId, title,XQSJId,BJSJId,disabled = false } = props;
   const [KHKCLXData, setKHKCLXData] = useState<string[]>();
   const [dataSource, setDataSource] = useState<DataNode[] | undefined>();
   const [selectValue, setSelectValue] = useState<DataNode[] | undefined>();
@@ -72,7 +73,7 @@ const SelectCourses = (props: SelectCourseProps) => {
    * @returns
    */
   const getTags = () => {
-    return value?.map((item: selectType) => <Tag closable onClose={(e) => { e.preventDefault(); onClose(item?.value); }}>{item?.label}</Tag>);
+    return value?.map((item: selectType) => <Tag closable={!disabled} onClose={(e) => { e.preventDefault(); onClose(item?.value); }}>{item?.label}</Tag>);
   }
 
   // 获取课后课程
@@ -164,7 +165,11 @@ const SelectCourses = (props: SelectCourseProps) => {
   }, [visible])
   return (
     <>
-      <div className='ant-input ant-form-item-control-input' onClick={() => { setVisible(!visible) }}>
+      <div className='ant-input ant-form-item-control-input courseSpecialLyn' onClick={() => { 
+        if(!disabled){
+          setVisible(!visible)
+        }
+       }}>
         {getTags()}
       </div>
       <Modal

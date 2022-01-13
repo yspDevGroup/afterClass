@@ -23,10 +23,11 @@ type ServiceBasicsType = {
   title: string,
   reload: () => Promise<void>;
   serviceId?: string;
+  type?: string;
 }
 
 const SeveiceBasics = (props: ServiceBasicsType) => {
-  const { title,reload, serviceId } = props;
+  const { title, reload, serviceId, type } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [campusId, setCampusId] = useState<string>();
@@ -64,9 +65,9 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const getXNXQData = async () => {
     const res = await queryXNXQList(currentUser?.xxId);
     const { current } = res;
-    console.log('res',res)
+    // console.log('res', res)
     if (current) {
-      setXNXQData(res?.xnxqList.map((item: any)=>{return {value:item.value,label:item.text}}))
+      setXNXQData(res?.xnxqList.map((item: any) => { return { value: item.value, label: item.text } }))
       setXNXQId(current?.id);
     }
   }
@@ -193,8 +194,8 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         formRef={formRef}
         title={title}
         trigger={
-          <Button type={serviceId ? "link" : "primary"} onClick={handleRefile} icon={serviceId?'':<PlusOutlined/>}>
-            {serviceId ? '编辑' : '新增模板'}
+          <Button type={serviceId ? "link" : "primary"} onClick={handleRefile} icon={serviceId ? '' : <PlusOutlined />}>
+            {serviceId ? (type ? '查看' : '编辑') : '新增模板'}
           </Button>
         }
         modalProps={{
@@ -211,6 +212,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             <ProFormText
               label="服务模板"
               name="FWMC"
+              readonly={type ? true : false}
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
               rules={[{ required: true, message: '请填写服务模板' }]}
@@ -228,6 +230,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
               <Select
                 placeholder="请选择校区"
                 options={campusData}
+                disabled={type ? true : false}
                 onChange={(value: string) => {
                   setCampusId(value);
                   getNJData(value);
@@ -248,6 +251,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             >
               <Select
                 placeholder="请选择"
+                disabled={type ? true : false}
                 options={XNXQData}
               />
             </ProForm.Item>
@@ -264,6 +268,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
               <Select
                 mode="multiple"
                 placeholder="请选择"
+                disabled={type ? true : false}
                 options={NJData}
               />
             </ProForm.Item>
@@ -276,6 +281,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
               rules={[{ required: false, message: '请输入班级课程安排' }]}
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
+              readonly={type ? true : false}
               name="FWMS"
               key="FWMS"
               placeholder="请输入班级课程安排"
@@ -301,6 +307,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
                 imagename="image"
                 width={160}
                 height={100}
+                readonly={type ? true : false}
                 handleImageChange={(value: any) => {
                   imageChange('ZP', value);
                 }}
@@ -319,6 +326,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           <SelectCourses
             title='选择课程班'
             maxLength={50}
+            disabled={type ? true : false}
             getNJArr={() => {
               // 获取年级
               // console.log('NJIDS',formRef?.current?.getFieldValue('NJIds'))
@@ -341,6 +349,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             key="ZDKCS"
             min={1}
             max={50}
+            disabled={type ? true : false}
             width="xs"
           />
           <span style={{ color: '#999' }} className="ant-form-text">
@@ -353,7 +362,14 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           labelCol={{ span: 3 }}
           wrapperCol={{ span: 21 }}
         >
-          <ProFormDigit noStyle width="xs" name="FWFY" key="FWFY" min={0} />
+          <ProFormDigit
+            noStyle
+            disabled={type ? true : false}
+            width="xs"
+            name="FWFY"
+            key="FWFY"
+            min={0}
+          />
           {/* <span style={{ color: '#999' }} className="ant-form-text">
             {' '}
             课后服务按月收费，家长可随时缴纳截至当前月的服务费用

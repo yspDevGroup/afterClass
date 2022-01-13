@@ -159,7 +159,7 @@ const ServiceConfiguration = () => {
       dataIndex: 'FWZT',
       key: 'FWZT',
       align: 'center',
-      width: 100,
+      width: 130,
       render: (_, record) => {
         return <Switch checkedChildren="开启" unCheckedChildren="停用" checked={record.FWZT === 1} onChange={async () => {
           const result = await updateKHFWSJ({ id: record.id }, {
@@ -181,7 +181,8 @@ const ServiceConfiguration = () => {
       render: (_, record) => {
         return (
           <>
-            {record.FWZT === 1 ? '' : <SeveiceBasics title={'编辑服务模板'} reload={getData} serviceId={record.id} />}
+            {record.FWZT === 1 ? <SeveiceBasics title={'查看服务模板'} reload={getData} serviceId={record.id} type='read' /> :<>
+            <SeveiceBasics title={'编辑服务模板'} reload={getData} serviceId={record.id} />
             <Popconfirm
               title="彻底删除后数据将不可恢复，是否删除?"
               onConfirm={async () => {
@@ -207,6 +208,7 @@ const ServiceConfiguration = () => {
                 </Tooltip>
               </a>
             </Popconfirm>
+            </>}
           </>
         );
       },

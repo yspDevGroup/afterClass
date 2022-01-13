@@ -1,13 +1,35 @@
-.selectDiv{
+.selectDiv {
   width: 100%;
   border: 1px solid #666;
 }
-.selectDiv:hover{
+
+.selectDiv:hover {
   border: 1px solid red;
 }
-.newModules{
-  div[class*='defImgStyles']{
+
+.newModules {
+  div[class*='defImgStyles'] {
     width: 160px;
     height: 100px;
+  }
+
+  :global {
+    .ant-select-disabled {
+      .ant-select-arrow {
+        display: none;
+      }
+    }
+
+    .ant-select-disabled .ant-select-selection-item,
+    .ant-select-disabled .ant-select-selector,
+    .ant-input-number-disabled {
+      color: #333;
+      background: none !important;
+      border: none;
+    }
+
+    .courseSpecialLyn {
+      border: none;
+    }
   }
 }

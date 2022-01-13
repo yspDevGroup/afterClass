@@ -769,7 +769,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         pagination={{
           pageSize: 5,
           defaultCurrent: 1,
-          pageSizeOptions: ['5'],
+          pageSizeOptions: ['5', '10', '20', '50'],
           showQuickJumper: false,
           showSizeChanger: false,
           showTotal: undefined,

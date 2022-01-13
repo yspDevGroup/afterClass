@@ -96,7 +96,7 @@ const SeveiceList = (props: ServiceBasicsType) => {
         formRef={formRef}
         title={title}
         trigger={
-          <Button type="link" style={{padding: 0}} onClick={
+          <Button type="link" style={{ padding: 0 }} onClick={
             () => {
               getDataSource();
             }
@@ -115,6 +115,7 @@ const SeveiceList = (props: ServiceBasicsType) => {
           headerTitle={subTitle}
           pagination={{
             showQuickJumper: true,
+            pageSizeOptions: ['5', '10', '20', '50'],
             pageSize: 5,
             defaultCurrent: 1,
           }}
