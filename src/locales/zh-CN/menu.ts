@@ -59,6 +59,8 @@ export default {
   'menu.statistics': '统计报表',
   'menu.statistics.afterschoolcoursen': '课程服务报名统计',
   'menu.statistics.afterschoolclass': '课程服务报名详情',
+  'menu.statistics.afterservicecourse': '课后服务报名统计',
+  'menu.statistics.afterserviceclass': '课后服务报名详情',
   'menu.statistics.attendancet': '考勤统计',
   'menu.statistics.attendanceDetail': '考勤统计详情',
   'menu.statistics.mutualEvaluation': '互评统计',

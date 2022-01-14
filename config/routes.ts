@@ -405,6 +405,19 @@
         component: './Manager/Statistics/AfterSchoolCourse/Detail',
       },
       {
+        // 课程统计
+        path: '/statistics/afterServiceCourse',
+        name: 'afterservicecourse',
+        component: './Manager/Statistics/AfterServiceCourse',
+      },
+      {
+        // 课后课程详情
+        path: '/statistics/afterServiceCourse/detail',
+        hideInMenu: 'true',
+        name: 'afterservicelclass',
+        component: './Manager/Statistics/AfterServiceCourse/Detail',
+      },
+      {
         // 考勤统计
         path: '/statistics/Attendance',
         name: 'attendancet',

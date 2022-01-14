@@ -65,6 +65,10 @@ const NewEvent = (props: PropsType) => {
       },
     },
   ];
+  console.log(date);
+  console.log(moment(date).format('YYYY-MM-DD'));
+  console.log(moment(date).format('YYYY/MM/DD'));
+  
   return (
     <div style={{ padding: '0 48px' }} className={styles.arrangeForm}>
       <ProFormFields
