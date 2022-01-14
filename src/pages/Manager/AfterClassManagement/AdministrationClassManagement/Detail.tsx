@@ -614,14 +614,14 @@ const Detail = (props: any) => {
                           type="primary"
                           onClick={() => {
                             // 筛选未交费学生 ZT===3的学生 //已缴费的学生
-                            const list = selectedRows
-                              .filter((item: any) => {
-                                // 判断学生是否报名
-                                return item?.XSFWBJs?.[0]?.ZT === 3 || item?.XSFWBJs?.[0]?.ZT === 0;
-                              })
-                              .map((item: any) => {
-                                return { XSJBSJId: item.id, XSFWBJId: item?.XSFWBJs?.[0]?.id };
-                              });
+                            const list = selectedRows?.map((item: any) => {
+                              return { XSJBSJId: item.id, XSFWBJId: item?.XSFWBJs?.[0]?.id };
+                            });
+                            // .filter((item: any) => {
+                            //   // 判断学生是否报名
+                            //   return item?.XSFWBJs?.[0]?.ZT === 3 || item?.XSFWBJs?.[0]?.ZT === 0;
+                            // })
+
                             if (list?.length) {
                               onTKData(list);
                             } else {
@@ -897,20 +897,25 @@ const Detail = (props: any) => {
           closable={false}
           okText="确定"
           cancelText="取消"
+          {...(!TKSDData?.length && { footer: null })}
         >
           <div>
             <p style={{ fontSize: 14, color: '#999', marginBottom: 20 }}>
               系统将为您退订所有剩余未上课程，您也可以指定部分时段进行退订。
             </p>
-            <Checkbox.Group
-              value={TKSD}
-              onChange={(value: any) => {
-                setTKSD(value);
-              }}
-              options={TKSDData?.map((item: any) => {
-                return { value: item?.value, label: item?.title };
-              })}
-            />
+            {TKSDData?.length ? (
+              <Checkbox.Group
+                value={TKSD}
+                onChange={(value: any) => {
+                  setTKSD(value);
+                }}
+                options={TKSDData?.map((item: any) => {
+                  return { value: item?.value, label: item?.title };
+                })}
+              />
+            ) : (
+              <p style={{ fontSize: 14, marginBottom: 20 }}>该学生未报名或已全部退课</p>
+            )}
 
             {/* <p style={{ fontSize: 12, color: '#999', marginTop: 15, marginBottom: 0 }}>
             注：系统将根据您所选时段发起退订申请，退订成功后，将自动进行退款，退款将原路返回您的支付账户。
