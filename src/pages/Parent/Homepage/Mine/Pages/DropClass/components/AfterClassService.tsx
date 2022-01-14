@@ -141,14 +141,7 @@ const AfterClassService = () => {
 
   return (
     <div className={styles.AfterClassService}>
-      {BaoMinData && FwTimes?.length === 0 ? (
-        <>
-          <div className={styles.ZWSJ}>
-            <img src={noOrder} alt="" />
-            <p>暂无数据</p>
-          </div>
-        </>
-      ) : (
+      {BaoMinData?.length !== 0 && FwTimes?.length !== 0 ? (
         <>
           <div className={styles.Application}>
             <p className={styles.choice}>请选择课后服务</p>
@@ -188,6 +181,14 @@ const AfterClassService = () => {
                 选择退课时段
               </Button>
             </div>
+          </div>
+        </>
+
+      ) : (
+        <>
+          <div className={styles.ZWSJ}>
+            <img src={noOrder} alt="" />
+            <p>暂无数据</p>
           </div>
         </>
       )}

@@ -41,11 +41,15 @@ const EmptyArticle = (props: any) => {
         })
         if (result.status === 'ok') {
           setFWKCData(result.data);
-          setFwTimes(result.data?.KHFWSJPZs);
+          setFwTimes(result.data?.KHFWSJPZs?.filter((value: any) => {
+            return moment(value?.JSRQ).format('YYYY/MM/DD') >= moment(new Date()).format('YYYY/MM/DD')
+          }))
           const newIdArr: any[] = [];
           const newTimeIdArr: any[] = [];
           result.data?.KHFWSJPZs?.forEach((value: any) => {
-            newTimeIdArr.push(value?.id)
+            if(moment(value?.JSRQ).format('YYYY/MM/DD') >= moment(new Date()).format('YYYY/MM/DD')){
+              newTimeIdArr.push(value?.id)
+            }
           })
           setTimes(newTimeIdArr)
           result.data?.KCFWBJs?.forEach((value: any) => {
