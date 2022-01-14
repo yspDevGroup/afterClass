@@ -161,7 +161,7 @@ const CourseTab = (props: { dataResource: any }) => {
     if (BaoMinData) {
 
       const NewArr = BaoMinData?.[0]?.XSFWBJs?.find((item: any) => {
-        return  new Date() > new Date(item?.KHFWSJPZ?.KSRQ) && new Date() < new Date(item?.KHFWSJPZ?.JSRQ)
+        return new Date().getMonth() === new Date(item?.KHFWSJPZ?.JSRQ).getMonth() && (item.ZT === 0 || item.ZT === 1 || item.ZT === 3)
       })
       const listData: any = [];
       const listDatas: any = [];
@@ -174,7 +174,7 @@ const CourseTab = (props: { dataResource: any }) => {
           desc: [
             {
               left: [
-                `课程类型： ${record?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0 ? '趣味课堂':'课后辅导'}`,
+                `课程类型： ${record?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0 ? '趣味课堂' : '课后辅导'}`,
               ],
             },
             {
@@ -189,11 +189,11 @@ const CourseTab = (props: { dataResource: any }) => {
           id: record.id,
           title: `${record?.KHBJSJ?.BJMC}【${record.KHBJSJ?.KHKCSJ?.KCMC}】`,
           img: record.KHBJSJ?.KHKCSJ?.KCTP,
-          link:`/parent/home/courseTable?classid=${record?.KHBJSJ?.id}`,
+          link: `/parent/home/courseTable?classid=${record?.KHBJSJ?.id}`,
           desc: [
             {
               left: [
-                `课程类型： ${record?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0 ? '趣味课堂':'课后辅导'}`,
+                `课程类型： ${record?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0 ? '趣味课堂' : '课后辅导'}`,
               ],
             },
             {

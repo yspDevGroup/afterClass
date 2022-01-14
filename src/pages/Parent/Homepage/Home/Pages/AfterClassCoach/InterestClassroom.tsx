@@ -406,7 +406,7 @@ const InterestClassroom = () => {
             {
               FKType === true && PayType === true ? <>
                 <p style={{ marginBottom: 3 }}>课后服务包含课业辅导和趣味课堂</p>
-                <p> 本课后服务暂未配置课程，您可以先进行缴费</p></> : <p>报名成功，后续请留意首页的选课或付费提醒</p>
+                <p> 本课后服务暂未配置课程，您可以先进行缴费</p></> : <p>您已报名成功，后续请留意首页的选课或付费提醒</p>
             }
 
           </div>
@@ -434,7 +434,7 @@ const InterestClassroom = () => {
                     </div> : <></>
                   }
                   {
-                    BmCouse && XKType === false && FKType === true && PayType === true ? <div className={styles.Tips}>您已完成选课，请缴费
+                    BmCouse && XKType === false && FKType === true && PayType === true ? <div className={styles.Tips}>您已报名成功并完成选课，请缴费
                     </div> : <></>
                   }
                   {
@@ -442,7 +442,7 @@ const InterestClassroom = () => {
                     </div> : <></>
                   }
                   {
-                    BmCouse && XKType === false && FKType === true && PayType === false ? <div className={styles.Tips}>选课成功，后续请留意首页的付费提醒 </div> : <></>
+                    BmCouse && XKType === false && FKType === true && PayType === false ? <div className={styles.Tips}>您已报名成功并完成选课，后续请留意首页的付费提醒 </div> : <></>
                   }
 
                   {
@@ -570,12 +570,12 @@ const InterestClassroom = () => {
                       </div> : <></>
                     }
                     {
-                      BaoMinData && XKType === true && FKType === true && PayType === false ? <div className={styles.footers}>
+                      BaoMinData && XKType === true &&  FKType === true && PayType === false ? <div className={styles.footers}>
                         <button onClick={() => { onSelect('XK') }} disabled={YXKC.length === 0}>确认选课</button>
                       </div> : <></>
                     }
                     {
-                      BaoMinData && XKType === true && FKType === false ? <div className={styles.footers}>
+                      BaoMinData && XKType === true &&  FKType === false ? <div className={styles.footers}>
                         <button onClick={() => { onSelect('XK') }} disabled={YXKC.length === 0}>确认选课</button>
                       </div> : <></>
                     }
@@ -595,11 +595,11 @@ const InterestClassroom = () => {
                       </div> : <></>
                     }
                     {
-                      BmCouse && XKType === true && FKType === true && PayType === false ? <div className={styles.Tips}>报名成功，后续请留意首页的选课或付费提醒
+                      BmCouse && XKType === true && FKType === true && PayType === false ? <div className={styles.Tips}>您已报名成功，后续请留意首页的选课或付费提醒
                       </div> : <></>
                     }
                     {
-                      BmCouse && XKType === true && FKType === false ? <div className={styles.Tips}>缴费成功，后续请留意首页的选课提醒
+                      BmCouse && XKType === true && FKType === false ? <div className={styles.Tips}>您已报名成功并完成缴费，后续请留意首页的选课提醒
                       </div> : <></>
                     }
                     <div className={styles.title}>
