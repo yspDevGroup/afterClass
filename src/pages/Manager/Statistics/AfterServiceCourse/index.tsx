@@ -296,6 +296,7 @@ const AfterSchoolCourse: React.FC = () => {
     const newKey = nowKey ? nowKey : key;
     if(nowKey){
       setCampusId(undefined);
+      setNjId(undefined);
     }
     // const kclxItem = KCLXData?.find((item: any) => item.value === KCLXId)?.label;
     const res = await summaryFWBTJ({
