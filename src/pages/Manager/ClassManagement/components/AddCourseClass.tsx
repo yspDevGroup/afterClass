@@ -288,12 +288,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                    KHBJSJId: formValues?.id,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
               : undefined;
         } else {
           ZTeacher = [
@@ -305,11 +305,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
               : undefined;
         }
         const newData = {
@@ -375,12 +375,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+                KHBJSJId: formValues?.id,
+              };
+            })
             : undefined;
       } else {
         ZTeacher = [
@@ -392,11 +392,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+              };
+            })
             : undefined;
       }
       const newData = {
@@ -790,10 +790,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -906,12 +906,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     BMDate?.id
       ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${moment(BMData?.BMSD?.[0]).format('YYYY-MM-DD')} — ${moment(
-            BMData?.BMSD?.[1],
-          ).format('YYYY-MM-DD')}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认报名时间段)：${moment(BMDate?.KSSJ).format('YYYY-MM-DD')} — ${moment(
+          BMDate?.JSSJ,
+        ).format('YYYY-MM-DD')}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -926,7 +926,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
                 return setBaoming(true);
               }
               // 将按钮关闭的时候 传成默认时间段
-              form.setFieldsValue({ BMSD: [BMData?.BMSD?.[0], BMData?.BMSD?.[1]] });
+              form.setFieldsValue({ BMSD: [BMData?.KSSJ, BMData?.JSSJ] });
               return setBaoming(false);
             },
             checked: baoming,
@@ -945,7 +945,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
       fieldProps: {
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return defaults < BMData?.BMSD?.[0] || defaults > BMData?.BMSD?.[1];
+          return defaults < moment(BMDate?.KSSJ).format('YYYY-MM-DD 00:00:00') ||
+            defaults > moment(BMDate?.JSSJ).format('YYYY-MM-DD 23:59:59')
         },
       },
     },
@@ -982,12 +983,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
       readonly: BMLX,
       rules: !BMLX
         ? [
-            { required: true, message: '请填写费用' },
-            {
-              message: '费用应大于0，且最多支持2位小数',
-              pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/,
-            },
-          ]
+          { required: true, message: '请填写费用' },
+          {
+            message: '费用应大于0，且最多支持2位小数',
+            pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/,
+          },
+        ]
         : [],
       fieldProps: {
         autocomplete: 'off',
@@ -1014,12 +1015,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-          type: 'custom',
-          text: '教辅材料',
-          name: 'KHKCJCs',
-          key: 'KHKCJCs',
-          children: getChildren(),
-        }
+        type: 'custom',
+        text: '教辅材料',
+        name: 'KHKCJCs',
+        key: 'KHKCJCs',
+        children: getChildren(),
+      }
       : '',
   ];
   return (
