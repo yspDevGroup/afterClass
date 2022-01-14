@@ -127,7 +127,7 @@ const AfterClassService = () => {
           handleClose(tag);
         }}
       >
-        {tag?.KHFWSJPZ?.SDBM}
+        <span> {tag?.KHFWSJPZ?.SDBM}</span>
       </Tag>
     );
     return (
