@@ -165,7 +165,7 @@ const SelectCourses = (props: SelectCourseProps) => {
   }, [visible])
   return (
     <>
-      <div className='ant-input ant-form-item-control-input courseSpecialLyn' onClick={() => { 
+      <div className={disabled ? 'ant-input ant-form-item-control-input courseSpecialLyn' :'ant-input ant-form-item-control-input'} onClick={() => { 
         if(!disabled){
           setVisible(!visible)
         }

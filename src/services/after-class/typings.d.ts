@@ -6146,13 +6146,6 @@ declare namespace API {
     plat?: string;
   };
 
-  type importStudentSignUpParams = {
-    /** 课后班级id */
-    KHBJSJId: string;
-    /** 教师id */
-    JZGJBSJId: string;
-  };
-
   type currentUserParams = {
     /** 登录平台类型 */
     plat?: string;

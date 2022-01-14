@@ -16,18 +16,17 @@ type selectType = { label: string; value: string };
 
 const { Option } = Select;
 const AdministrativeClass = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
-  const [NjId, setNjId] = useState<any>();
-  const [NjData, setNjData] = useState<any>();
+  const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
   // 校区
   const [campusId, setCampusId] = useState<string>();
   const [campusData, setCampusData] = useState<any[]>();
-
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
-  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
+  const [NjId, setNjId] = useState<any>();
+  const [NjData, setNjData] = useState<any>();
   const [BJId, setBJId] = useState<string | undefined>(undefined);
+  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
 
   const getCampusData = async () => {
     const res = await getAllXQSJ({
@@ -143,9 +142,23 @@ const AdministrativeClass = () => {
       width: 80,
     },
     {
-      title: '课后服务报名人数',
+      title: '课程服务报名人数',
       dataIndex: 'xsbm_count',
       key: 'xsbm_count',
+      align: 'center',
+      width: 150,
+    },
+    {
+      title: '课后服务报名人数',
+      dataIndex: 'xsfwbm_count',
+      key: 'xsfwbm_count',
+      align: 'center',
+      width: 150,
+    },
+    {
+      title: '其他服务报名人数',
+      dataIndex: 'zzfwbm_count',
+      key: 'zzfwbm_count',
       align: 'center',
       width: 150,
     },
