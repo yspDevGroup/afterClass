@@ -1,8 +1,9 @@
+
 /*
  * @description: 
  * @author: wsl
  * @Date: 2021-12-23 14:26:31
- * @LastEditTime: 2022-01-07 14:22:14
+ * @LastEditTime: 2022-01-14 13:28:42
  * @LastEditors: wsl
  */
 
@@ -58,6 +59,8 @@ const InterestClassroom = () => {
   // 辅导班Id
   const [FDBId, setFDBId] = useState<any[]>([]);
   const [BmCouse, setBmCouse] = useState<any>([]);
+  // 选课并付款
+  const [XKFKType, setXKFKType] = useState<boolean>()
 
   useEffect(() => {
     (
@@ -129,7 +132,14 @@ const InterestClassroom = () => {
             newArr.push(value?.KHFWSJPZId)
           }
         })
+        if (res.data.rows[0]?.XSFWBJs.find((item: any) => item.KHFWSJPZId === MouthId)?.KHFWSJPZ?.isPay === 0) {
+          setPayType(false)
+        } else {
+          setPayType(true)
+        }
         setTimes(newArr)
+        setXKType(true);
+        setFKType(true);
       }
     }
   }
@@ -144,9 +154,7 @@ const InterestClassroom = () => {
       if (FKZT === 0 || FKZT === 1) {
         setFKType(false)
       }
-      if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.KHFWSJPZ?.isPay === 0) {
-        setPayType(false)
-      }
+
       setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.id)
       if (BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)) {
         setDropOutType(true)
@@ -154,8 +162,20 @@ const InterestClassroom = () => {
         setDropOutType(false)
       }
       setBmCouse(BaoMinData?.XSFWBJs?.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.XSFWKHBJs);
+
+      if (MouthId && MouthId !== FWKCData?.KHFWSJPZs?.[0].id) {
+
+        if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === MouthId)?.KHFWSJPZ?.isPay === 0) {
+          setPayType(false)
+        }
+      } else {
+        if (BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)?.KHFWSJPZ?.isPay === 0) {
+          setPayType(false)
+        }
+      }
     }
   }, [FWKCData, BaoMinData])
+
   useEffect(() => {
     setStudentFWBJId(BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === MouthId)?.id)
     setKSRQ(FWKCData?.KHFWSJPZs.find((item: any) => item.id === MouthId).KSRQ)
@@ -206,7 +226,12 @@ const InterestClassroom = () => {
     }
 
   }
-  const onSelect = async () => {
+  const onSelect = async (value: any) => {
+    if (value === 'XKFK') {
+      setXKFKType(true)
+    } else {
+      setXKFKType(false)
+    }
     if (YXKC.length > FWKCData?.KXSL) {
       message.info(`最多可选择${FWKCData?.KXSL}门`)
     } else {
@@ -216,26 +241,6 @@ const InterestClassroom = () => {
   const onDetails = (item: any) => {
     history.push(`/parent/home/courseIntro?classid=${item.KHBJSJId}&index=all`)
   }
-  // 选课确认弹框
-  const handleOks = async () => {
-    const res = await chooseKCByXSId({
-      XSJBSJId: StorageXSId,
-      KHFWBJId: FWKCData?.id,
-      KHFWSJPZIds: Times,
-      ZT: Number(FWKCData?.FWFY) === 0 ? 0 : 3,
-      KHBJSJIds: YXKCId
-    })
-    if (res.status === 'ok') {
-      message.success('选课成功');
-      setModalVisible(false);
-      xuankeState();
-      window.location.reload();
-      // 数据信息重新更新获取
-      await ParentHomeData('student', currentUser?.xxId, StorageXSId, studentNjId, StorageBjId, StorageXQSJId, true);
-    } else {
-      message.error('操作失败，请联系管理员')
-    }
-  };
 
   // 付款
   const submit = async () => {
@@ -257,6 +262,32 @@ const InterestClassroom = () => {
       }
     }
   };
+  // 选课确认弹框
+  const handleOks = async () => {
+    const res = await chooseKCByXSId({
+      XSJBSJId: StorageXSId,
+      KHFWBJId: FWKCData?.id,
+      KHFWSJPZIds: Times,
+      ZT: Number(FWKCData?.FWFY) === 0 ? 0 : 3,
+      KHBJSJIds: YXKCId
+    })
+    if (res.status === 'ok') {
+      if (XKFKType === true) {
+        submit()
+      } else {
+        message.success('选课成功');
+        setModalVisible(false);
+        xuankeState();
+        window.location.reload();
+      }
+      // 数据信息重新更新获取
+      await ParentHomeData('student', currentUser?.xxId, StorageXSId, studentNjId, StorageBjId, StorageXQSJId, true);
+    } else {
+      message.error('操作失败，请联系管理员')
+    }
+  };
+
+
   // 我要报名
   const BmSubmit = async () => {
     const res = await getWBMXS({
@@ -326,6 +357,8 @@ const InterestClassroom = () => {
   };
   const tagChild = WbmDatas?.map(forMap);
 
+
+
   return <>
     <div className={styles.InterestClassroom}>
       <GoBack title={'选课报名'} onclick="/parent/home?index=index" />
@@ -349,30 +382,53 @@ const InterestClassroom = () => {
       {
         BmCouse ? <p className={styles.FWMC}>{FWKCData?.FWMC}</p> : <></>
       }
-
-
       {
         FWKCData?.KCFWBJs?.length === 0 ? <>
           <div className={styles.noData}>
             <img src={noCourses} alt="" />
-            <p>该课后服务暂未配置课程</p>
-            <p>您可以先行缴费，随后选课</p>
+
+            {
+              FKType === true && PayType === true ? <>
+                <p style={{ marginBottom: 3 }}>课后服务包含课业辅导和趣味课堂</p>
+                <p> 本课后服务暂未配置课程，您可以先进行缴费</p></> : <p>报名成功，后续请留意首页的选课或付费提醒</p>
+            }
+
           </div>
-          <div className={styles.footers}>
-            <button onClick={submit} >去付款</button>
-          </div>
+          {
+            DropOutType === false ? <div className={styles.footers}>
+              <button onClick={BmSubmit} >我要报名</button>
+            </div> : <>    {
+              BaoMinData && FKType === true && PayType === true && DropOutType === true ? <div className={styles.footers}>
+                <button onClick={submit} >去付款</button>
+              </div> : <></>
+            }</>
+          }
+
         </> :
           <>  {
             FWKCData?.KCFWBJs.find((item: any) => item.LX === 0) ?
               <>
                 <div className={styles.Application}>
                   {
-                    BmCouse && XKType === true ? <div className={styles.Tips}>本校课后服务包含课业辅导和趣味课堂，请为您的孩子选择趣味课堂课程
-                      {
-                        BaoMinData && XKType === true && FKType === true && PayType === true ? <>及付款</> : <></>
-                      }
+                    BmCouse && XKType === true && PayType === false ? <div className={styles.Tips}>课后服务包含课业辅导和趣味课堂，请为您的孩子选择趣味课堂课程
                     </div> : <></>
                   }
+                  {
+                    BaoMinData && XKType === true && FKType === true && PayType === true ? <div className={styles.Tips}>课后服务包含课业辅导和趣味课堂，请为您的孩子选择趣味课堂课程并缴费
+                    </div> : <></>
+                  }
+                  {
+                    BmCouse && XKType === false && FKType === true && PayType === true ? <div className={styles.Tips}>您已完成选课，请缴费
+                    </div> : <></>
+                  }
+                  {
+                    BmCouse && XKType === true && FKType === false && PayType === true ? <div className={styles.Tips}>课后服务包含课业辅导和趣味课堂，请为您的孩子选择趣味课堂课程
+                    </div> : <></>
+                  }
+                  {
+                    BmCouse && XKType === false && FKType === true && PayType === false ? <div className={styles.Tips}>选课成功，后续请留意首页的付费提醒 </div> : <></>
+                  }
+
                   {
                     BmCouse ? <>
                       {
@@ -452,8 +508,6 @@ const InterestClassroom = () => {
                                     return <></>
                                   })
                                 }
-
-
                               </> : <>
                                 {FWKCData && FWKCData?.KCFWBJs?.map((value: any) => {
                                   if (value?.LX === 0) {
@@ -494,14 +548,19 @@ const InterestClassroom = () => {
                     </div>
                   </> : <>
                     {
-                      BaoMinData && XKType === true && FKType === true && PayType === true ? <div className={styles.footer}>
-                        <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
-                        <button onClick={submit} >确认付款</button>
+                      BaoMinData && XKType === true && FKType === true && PayType === true ? <div className={styles.footers}>
+                        <button onClick={() => { onSelect('XKFK') }} disabled={YXKC.length === 0}>确认选课并付款</button>
+                        {/* <button onClick={submit} >确认付款</button> */}
                       </div> : <></>
                     }
                     {
-                      BaoMinData && XKType === true && PayType === false ? <div className={styles.footers}>
-                        <button onClick={onSelect} disabled={YXKC.length === 0}>确认选课</button>
+                      BaoMinData && XKType === true &&  FKType === true && PayType === false ? <div className={styles.footers}>
+                        <button onClick={() => { onSelect('XK') }} disabled={YXKC.length === 0}>确认选课</button>
+                      </div> : <></>
+                    }
+                    {
+                      BaoMinData && XKType === true &&  FKType === false ? <div className={styles.footers}>
+                        <button onClick={() => { onSelect('XK') }} disabled={YXKC.length === 0}>确认选课</button>
                       </div> : <></>
                     }
                     {
@@ -515,6 +574,18 @@ const InterestClassroom = () => {
               <>
                 {
                   BmCouse ? <div className={styles.Application}>
+                    {
+                      BmCouse && XKType === true && FKType === true && PayType === true ? <div className={styles.Tips}>课后服务包含课业辅导和趣味课堂，本课后服务暂未配置趣味课堂课程，您可以先进行缴费
+                      </div> : <></>
+                    }
+                    {
+                      BmCouse && XKType === true && FKType === true && PayType === false ? <div className={styles.Tips}>报名成功，后续请留意首页的选课或付费提醒
+                      </div> : <></>
+                    }
+                    {
+                      BmCouse && XKType === true && FKType === false ? <div className={styles.Tips}>缴费成功，后续请留意首页的选课提醒
+                      </div> : <></>
+                    }
                     <div className={styles.title}>
                       <div />
                       <span>课业辅导</span>

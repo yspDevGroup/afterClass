@@ -31,6 +31,7 @@ const LeaveHistory = (props: propsType) => {
       getData();
     } else {
       enHenceMsg(res.message);
+      getData();
     }
   };
   useEffect(() => {
