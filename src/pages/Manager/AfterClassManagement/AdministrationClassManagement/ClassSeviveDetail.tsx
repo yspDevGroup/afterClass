@@ -5,6 +5,7 @@ import { getKHFWBJ } from '@/services/after-class/khfwbj';
 import { ModalValue } from './ConfigureService';
 import UploadImage from '@/components/CustomForm/components/UploadImage';
 import seviceImage from '@/assets/seviceImage.png';
+import styles from "./index.less";
 
 type ClassSeviveDetailProps = {
   BJSJId: string;
@@ -67,11 +68,7 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
             查看
           </a>
         }
-        submitter={{
-          render: (props, defaultDoms) => {
-            return [defaultDoms[0]];
-          },
-        }}
+        className={styles.noModalFooter}
         modalProps={{
           destroyOnClose: true,
           // footer: null,
