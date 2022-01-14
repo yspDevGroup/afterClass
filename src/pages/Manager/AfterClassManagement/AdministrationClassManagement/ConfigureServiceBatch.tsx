@@ -226,7 +226,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
               getNJSJ();
             }}
           >
-            配置课后服务
+            批量配置课后服务
           </Button>
         }
         submitter={{
