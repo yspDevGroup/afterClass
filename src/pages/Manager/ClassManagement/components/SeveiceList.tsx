@@ -11,7 +11,7 @@ import { Button } from 'antd';
 import { ModalForm } from '@ant-design/pro-form';
 import { getNJbyKHBJSJId } from '@/services/after-class/khbjsj';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
-
+import styles from '../index.less';
 type ServiceBasicsType = {
   title: string,
   bjId: string,
@@ -95,6 +95,7 @@ const SeveiceList = (props: ServiceBasicsType) => {
       }>
         formRef={formRef}
         title={title}
+        className={styles.noModalFooter}
         trigger={
           <Button type="link" style={{ padding: 0 }} onClick={
             () => {
@@ -108,11 +109,6 @@ const SeveiceList = (props: ServiceBasicsType) => {
           destroyOnClose: true,
         }}
         layout='horizontal'
-        submitter={{
-          render: (props, defaultDoms) => {
-            return [defaultDoms[0]];
-          },
-        }}
       >
         <ProTable<any>
           columns={columns}
