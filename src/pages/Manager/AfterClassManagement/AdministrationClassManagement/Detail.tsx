@@ -253,14 +253,9 @@ const Detail = (props: any) => {
         pageSize: 0,
       });
       if (res.status === 'ok' && res.data) {
-        // 只可退结束日期大于当前时间的课程
+        // 可退已经报过名时间的课程
         setTKSDData(
-          res.data.rows?.[0]?.XSFWBJs.filter((value: any) => {
-            return (
-              moment(value?.KHFWSJPZ.JSRQ).format('YYYY/MM/DD') >
-              moment(new Date()).format('YYYY/MM/DD')
-            );
-          }).map((item: any) => {
+          res.data.rows?.[0]?.XSFWBJs.map((item: any) => {
             console.log('item', item);
             return {
               value: item?.KHFWSJPZ?.id,
@@ -291,9 +286,10 @@ const Detail = (props: any) => {
       if (list?.length === 1) {
         getXSTKData(list?.[0]?.XSJBSJId);
       } else {
-        const arr = KHFWSJPZIdData?.filter((value: any) => {
-          return moment(value.JSRQ).format('YYYY/MM/DD') > moment(new Date()).format('YYYY/MM/DD');
-        });
+        const arr = KHFWSJPZIdData;
+        // ?.filter((value: any) => {
+        //   return moment(value.JSRQ).format('YYYY/MM/DD') > moment(new Date()).format('YYYY/MM/DD');
+        // });
         if (arr) {
           setTKSDData(arr);
           setTKVisible(true);
