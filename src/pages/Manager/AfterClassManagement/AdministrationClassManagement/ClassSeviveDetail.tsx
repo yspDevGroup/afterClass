@@ -67,10 +67,14 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
             查看
           </a>
         }
-        submitter={false}
+        submitter={{
+          render: (props, defaultDoms) => {
+            return [defaultDoms[0]];
+          },
+        }}
         modalProps={{
           destroyOnClose: true,
-          footer: null,
+          // footer: null,
         }}
         layout="horizontal"
         {...formLayout}
