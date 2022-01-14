@@ -122,32 +122,36 @@ const TkApply = () => {
     )()
   }, [dateData]);
   const onFinish = async (values: any) => {
-    const newData = {
-      LX: 0,
-      ZT: 0,
-      SKRQ: dateData?.day,
-      TKRQ: moment(values.TKRQ).format('YYYY-MM-DD'),
-      BZ: values.BZ,
-      XXJBSJId: currentUser.xxId,
-      SKJSId: currentUser.JSId || testTeacherId,
-      SKFJId: dateData?.FJId,
-      TKFJId: FieldId,
-      KHBJSJId: dateData?.bjid,
-      SKJCId: dateData?.jcId,
-      TKJCId: NewJCId
-    }
-    const res = await createKHJSTDK(newData);
-    if (res.status === 'ok') {
-      message.success('申请成功');
-      setDateData([]);
-      form.resetFields();
-      // 处理主班调课后课时状态变更的情况，触发课时重新计算
-      if (res.message === "isAudit=false") {
-        await getClassDays(dateData?.bjid, currentUser.JSId || testTeacherId, currentUser?.xxId);
+    if(values.TKRQ && NewJCId){
+      const newData = {
+        LX: 0,
+        ZT: 0,
+        SKRQ: dateData?.day,
+        TKRQ: moment(values.TKRQ).format('YYYY-MM-DD'),
+        BZ: values.BZ,
+        XXJBSJId: currentUser.xxId,
+        SKJSId: currentUser.JSId || testTeacherId,
+        SKFJId: dateData?.FJId,
+        TKFJId: FieldId,
+        KHBJSJId: dateData?.bjid,
+        SKJCId: dateData?.jcId,
+        TKJCId: NewJCId
       }
-      history.push('/teacher/education/courseAdjustment');
-    } else {
-      message.error(res.message)
+      const res = await createKHJSTDK(newData);
+      if (res.status === 'ok') {
+        message.success('申请成功');
+        setDateData([]);
+        form.resetFields();
+        // 处理主班调课后课时状态变更的情况，触发课时重新计算
+        if (res.message === "isAudit=false") {
+          await getClassDays(dateData?.bjid, currentUser.JSId || testTeacherId, currentUser?.xxId);
+        }
+        history.push('/teacher/education/courseAdjustment');
+      } else {
+        message.error(res.message)
+      }
+    }else{
+      message.warning('请选择调课时间');
     }
   };
   const onAdminFinish = async (values: any) => {
@@ -251,7 +255,6 @@ const TkApply = () => {
                 <Form.Item name='KSSJ' label="节次">
                   <Select
                     placeholder='请选择'
-                    allowClear
                     onChange={(value: string) => {
                       if (value) {
                         setNewJCId(value);
