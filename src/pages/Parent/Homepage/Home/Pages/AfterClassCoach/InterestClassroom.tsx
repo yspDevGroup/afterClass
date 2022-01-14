@@ -7,7 +7,6 @@
  * @LastEditors: wsl
  */
 
-import { getKHFWBJ, getStudentListByBjid, getWBMXS, studentRegistration } from "@/services/after-class/khfwbj";
 import { queryXNXQList } from "@/services/local-services/xnxq";
 import { Checkbox, Divider, message, Modal, Radio, Tag } from "antd";
 import { useEffect, useRef, useState } from "react";
@@ -15,11 +14,12 @@ import { useModel, history, Link } from "umi";
 import styles from './index.less'
 import noPic from '@/assets/noPic.png';
 import GoBack from "@/components/GoBack";
-import { chooseKCByXSId } from "@/services/after-class/khfwbj";
 import noCourses from '@/assets/noCourses.png';
-import { createKHXSDD } from "@/services/after-class/khxsdd";
 import { enHenceMsg } from '@/utils/utils';
 import { ParentHomeData } from "@/services/local-services/mobileHome";
+import { chooseKCByXSId } from "@/services/after-class/khfwbj";
+import { createKHXSDD } from "@/services/after-class/khxsdd";
+import { getKHFWBJ, getStudentListByBjid, getWBMXS, studentRegistration } from "@/services/after-class/khfwbj";
 import moment from "moment";
 
 const InterestClassroom = () => {
@@ -314,10 +314,26 @@ const InterestClassroom = () => {
       KHFWSJPZIds: BmTimeIds || []
     })
     if (res.status === 'ok') {
-      message.success('报名成功')
-      setBmModalVisible(false);
-      xuankeStates();
-
+      // const repeat = res.data?.find((v: { flag: number }) => {
+      //   return v.flag === 0;
+      // });
+      // const wrong = res.data?.find((v: { flag: number }) => {
+      //   return v.flag === 1;
+      // });
+      // const different = res.data?.find((v: { flag: number }) => {
+      //   return v.flag === 2;
+      // });
+      // if (repeat) {
+      //   message.warning('该学生已报名，请勿重复报名');
+      // } else if (wrong) {
+      //   message.warning('数据库创建失败，报名失败');
+      // } else if (different) {
+      //   message.warning('学生信息查找失败，报名失败');
+      // } else {
+        message.success('报名成功')
+        setBmModalVisible(false);
+        xuankeStates();
+      // }
       // window.location.reload();
     } else {
       message.error('操作失败，请联系管理员')
@@ -554,12 +570,12 @@ const InterestClassroom = () => {
                       </div> : <></>
                     }
                     {
-                      BaoMinData && XKType === true &&  FKType === true && PayType === false ? <div className={styles.footers}>
+                      BaoMinData && XKType === true && FKType === true && PayType === false ? <div className={styles.footers}>
                         <button onClick={() => { onSelect('XK') }} disabled={YXKC.length === 0}>确认选课</button>
                       </div> : <></>
                     }
                     {
-                      BaoMinData && XKType === true &&  FKType === false ? <div className={styles.footers}>
+                      BaoMinData && XKType === true && FKType === false ? <div className={styles.footers}>
                         <button onClick={() => { onSelect('XK') }} disabled={YXKC.length === 0}>确认选课</button>
                       </div> : <></>
                     }

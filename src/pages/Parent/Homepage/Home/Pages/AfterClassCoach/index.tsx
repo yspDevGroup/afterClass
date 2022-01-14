@@ -84,8 +84,25 @@ const EmptyArticle = (props: any) => {
       KHFWSJPZIds: Times || []
     })
     if (res.status === 'ok') {
-      message.success('报名成功')
-      history.push('/parent/home/afterClassCoach/interestClassroom')
+      // const repeat = res.data?.find((v: { flag: number }) => {
+      //   return v.flag === 0;
+      // });
+      // const wrong = res.data?.find((v: { flag: number }) => {
+      //   return v.flag === 1;
+      // });
+      // const different = res.data?.find((v: { flag: number }) => {
+      //   return v.flag === 2;
+      // });
+      // if (repeat) {
+      //   message.warning('该学生已报名，请勿重复报名');
+      // } else if (wrong) {
+      //   message.warning('数据库创建失败，报名失败');
+      // } else if (different) {
+      //   message.warning('学生信息查找失败，报名失败');
+      // } else {
+        message.success('报名成功')
+        history.push('/parent/home/afterClassCoach/interestClassroom')
+      // }
     } else {
       message.error('操作失败，请联系管理员')
     }
