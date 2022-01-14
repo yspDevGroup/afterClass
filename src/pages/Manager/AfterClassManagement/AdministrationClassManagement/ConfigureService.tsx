@@ -250,6 +250,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         message.error(res.message);
       }
     }
+    setIsTemplate(false);
     setLoading(false);
     return true;
   };

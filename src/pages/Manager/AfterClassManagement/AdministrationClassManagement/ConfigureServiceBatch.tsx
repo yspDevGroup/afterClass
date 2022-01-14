@@ -48,7 +48,6 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
 
   const formRef = useRef();
 
-
   const [informationOpen, setInformationOpen] = useState<boolean>(false);
 
   const formLayout = {
@@ -68,7 +67,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
         // message.warning('未配置时段请先配置报名信息')
         setInformationOpen(true);
       } else {
-        const { sjpzstr } = res.data?.[0]
+        const { sjpzstr } = res.data?.[0];
         if (sjpzstr) {
           const str = JSON.parse(sjpzstr);
           if (str) {
@@ -79,7 +78,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
         setLoading(false);
       }
     }
-  }
+  };
   // 获取年级数据
   const getNJSJ = async () => {
     if (XQSJId) {
@@ -93,7 +92,13 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   };
   // 获取班级
   const getBJSJ = async () => {
-    const res = await getAllBJSJNoKHFW({ XQSJId: XQSJId, njId: NjId, page: 0, pageSize: 0, XNXQId: XNXQId, });
+    const res = await getAllBJSJNoKHFW({
+      XQSJId: XQSJId,
+      njId: NjId,
+      page: 0,
+      pageSize: 0,
+      XNXQId: XNXQId,
+    });
     if (res.status === 'ok') {
       const data = res.data?.rows?.map((item: any) => {
         return { label: item.BJ, value: item.id };
@@ -118,16 +123,13 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   };
   useEffect(() => {
     if (NjId) {
-      getBJSJ()
+      getBJSJ();
       getData();
     }
-  }, [NjId])
-
+  }, [NjId]);
 
   // modal 提交
   const onFinish = async (values: ModalValue) => {
-
-
     if (detailValue) {
       setLoading(true);
 
@@ -140,7 +142,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
       }
 
       const params: any = {
-        XQSJId:XQSJId,
+        XQSJId: XQSJId,
         BJSJIds: values?.BJSJIds,
         XNXQId,
         ZT: 0,
@@ -154,7 +156,6 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
         RQs: undefined,
       };
 
-
       params.RQs = BMSDData?.filter((item: any) => {
         // 缴费方式是月
         if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
@@ -166,7 +167,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
         return false;
       }).map((item: any) => {
         return { KSRQ: item.KSRQ, JSRQ: item.JSRQ, SDBM: item.name };
-      })
+      });
       console.log('params', params);
 
       // 新增
@@ -184,7 +185,6 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
     }
     return true;
   };
-
 
   // 模板选择后
   const onTemplateChange = (value: string) => {
@@ -212,18 +212,15 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
     }
   };
 
-
-
-
   return (
     <Spin spinning={loading}>
       <ModalForm<ModalValue>
         key={key}
         formRef={formRef}
-        title='配置课后服务'
+        title="批量配置课后服务"
         trigger={
           <Button
-            type='primary'
+            type="primary"
             onClick={() => {
               getDetailTimePZ();
               getNJSJ();
@@ -302,33 +299,30 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
             />
           </Col>
         </Row>
-        {
-          detailValue && <Row wrap={false}>
-            <Col flex={'7em'}
-            />
+        {detailValue && (
+          <Row wrap={false}>
+            <Col flex={'7em'} />
             <Col flex={'auto'}>
-              <Card title={'服务模板详情'} size='small' bordered>
+              <Card title={'服务模板详情'} size="small" bordered>
                 <Row wrap={false} style={{ padding: '24px 0' }}>
                   <Col span={12}>
                     <Row wrap={false}>
-                      <Col flex='7em' style={{ textAlign: 'end' }}>
+                      <Col flex="7em" style={{ textAlign: 'end' }}>
                         课程数限制：
                       </Col>
-                      <Col flex='auto'>
-                        {detailValue?.KXSL || '-'}门
-                      </Col>
+                      <Col flex="auto">{detailValue?.KXSL || '-'}门</Col>
                     </Row>
                   </Col>
                   <Col span={12}>
                     <Row wrap={false}>
-                      <Col flex='7em' style={{ textAlign: 'end' }}>
+                      <Col flex="7em" style={{ textAlign: 'end' }}>
                         服务费用：
                       </Col>
-                      <Col flex='auto'>
-                        {detailValue?.FWFY || '-'}{detailValue?.JFLX ? '元/月' : '元/次'}
+                      <Col flex="auto">
+                        {detailValue?.FWFY || '-'}
+                        {detailValue?.JFLX ? '元/月' : '元/次'}
                       </Col>
                     </Row>
-
                   </Col>
                 </Row>
                 {/* <Row>
@@ -367,19 +361,15 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
                 </Row> */}
                 <Row>
                   <Col span={24}>
-                    <ProForm.Item
-                      label="服务简介："
-                      name="FWMC"
-                    >
+                    <ProForm.Item label="服务简介：" name="FWMC">
                       {detailValue?.FWMC || ''}
                     </ProForm.Item>
                   </Col>
                 </Row>
               </Card>
             </Col>
-
           </Row>
-        }
+        )}
       </ModalForm>
 
       <PromptInformation

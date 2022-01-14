@@ -230,6 +230,36 @@ const RegistrationSetting = () => {
     }
   };
 
+  const getEditDisableData = async () => {
+    if (curXNXQId && campusId) {
+      const obj = {
+        XNXQId: curXNXQId,
+        XQSJId: campusId,
+        /** 页数 */
+        page: 1,
+        /** 每页记录数 */
+        pageSize: 1,
+      };
+      const res = await getKHFWBBySJ(obj);
+      if (res.status === 'ok') {
+        if (res?.data?.rows?.length) {
+          // setDataSourcePay(res.data.rows);
+          if (!NjId && !SDMCValue && !JFZT) {
+            setEditDisable(true);
+            // setDisable(true);
+          }
+        } else {
+          // setDataSourcePay([]);
+          if (!NjId && !SDMCValue && !JFZT) {
+            // setDisable(false);
+            setEditDisable(false);
+          }
+        }
+      }
+    }
+    return [];
+  };
+
   /**
    * 获取缴费设置列表详情
    */
@@ -241,6 +271,7 @@ const RegistrationSetting = () => {
         NJSJId: NjId,
         isPay: JFZT,
         SDBM: SDMCValue,
+        ZT: 1,
         /** 页数 */
         page: 0,
         /** 每页记录数 */
@@ -250,16 +281,16 @@ const RegistrationSetting = () => {
       if (res.status === 'ok') {
         if (res?.data?.rows?.length) {
           setDataSourcePay(res.data.rows);
-          if (!NjId && !SDMCValue && !JFZT) {
-            setEditDisable(true);
-            // setDisable(true);
-          }
+          // if (!NjId && !SDMCValue && !JFZT) {
+          //   setEditDisable(true);
+          //   // setDisable(true);
+          // }
         } else {
           setDataSourcePay([]);
-          if (!NjId && !SDMCValue && !JFZT) {
-            // setDisable(false);
-            setEditDisable(false);
-          }
+          // if (!NjId && !SDMCValue && !JFZT) {
+          //   // setDisable(false);
+          //   setEditDisable(false);
+          // }
         }
       }
     }
@@ -270,6 +301,7 @@ const RegistrationSetting = () => {
     if (campusId && curXNXQId) {
       getDetail();
       getNJSJ();
+      getEditDisableData();
       getDataSourcePay();
       setDisable(true);
       setIsEdit(false);
@@ -278,7 +310,7 @@ const RegistrationSetting = () => {
 
   useEffect(() => {
     if (campusId && curXNXQId) {
-      actionRef.current.clearSelected();
+      actionRef?.current?.clearSelected();
       getDataSourcePay();
     }
   }, [JFZT, SDMCValue, NjId]);

@@ -1,7 +1,7 @@
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Select, Space, message, Tooltip, Button,} from 'antd';
+import { Select, Space, message, Tooltip, Button } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
@@ -49,9 +49,9 @@ const AdministrationClassManagement = () => {
         };
       });
       if (arr?.length) {
-        let id=arr?.find((item: any) => item.label === '本校')?.value;
-        if(!id){
-          id=arr[0].value;
+        let id = arr?.find((item: any) => item.label === '本校')?.value;
+        if (!id) {
+          id = arr[0].value;
         }
         setCampusId(id);
       }
@@ -66,7 +66,7 @@ const AdministrationClassManagement = () => {
         // console.log('result',result)
         setXQData(result?.current);
         setCurXNXQId(result?.current?.id);
-        setCurXNXQData(result?.data)
+        setCurXNXQData(result?.data);
       }
     })();
     getCampusData();
@@ -121,7 +121,7 @@ const AdministrationClassManagement = () => {
 
   //  发布取消发布
   const onReleaseClick = async (id: string, flag: boolean) => {
-    const res = await updateKHFWBJ({ id }, { ZT: flag ? 1 : 0 });
+    const res = await updateKHFWBJ({ id }, { ZT: flag ? 1 : 0, XNXQId: curXNXQId });
     if (res.status === 'ok') {
       message.success(flag ? '发布成功' : '取消成功');
       actionRef.current?.reloadAndRest();
@@ -158,19 +158,21 @@ const AdministrationClassManagement = () => {
     }
     return '';
   };
-  const getSelctCourse=(record: any)=>{
+  const getSelctCourse = (record: any) => {
     if (record?.KHFWBJs[0]?.ZT === 1 && curXNXQId && campusId) {
-      return <UpdateCourses 
+      return (
+        <UpdateCourses
           key={record.id}
           actionRef={actionRef}
           XNXQId={curXNXQId}
           BJSJId={record.id}
           NJSJ={record?.NJSJ}
-          XQSJId={campusId} 
-      />
+          XQSJId={campusId}
+        />
+      );
     }
-    return ''
-  }
+    return '';
+  };
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -214,18 +216,11 @@ const AdministrationClassManagement = () => {
     {
       title: (
         <span>
-        报名人数&nbsp;
-        <Tooltip
-          overlayStyle={{ maxWidth: '30em' }}
-          title={
-            <>
-                当前时段班级报名人数 
-            </>
-          }
-        >
-          <QuestionCircleOutlined />
-        </Tooltip>
-      </span>
+          报名人数&nbsp;
+          <Tooltip overlayStyle={{ maxWidth: '30em' }} title={<>当前时段班级报名人数</>}>
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
       ),
       dataIndex: 'xsfwbm_count',
       key: 'xsfwbm_count',
@@ -302,37 +297,37 @@ const AdministrationClassManagement = () => {
   };
 
   // 学年学期筛选
-  const onXNXQChange=(value: string)=>{
-    curXNXQData?.forEach((item: any)=>{
-      if(item.id===value){
+  const onXNXQChange = (value: string) => {
+    curXNXQData?.forEach((item: any) => {
+      if (item.id === value) {
         setCurXNXQId(value);
         setXQData(item);
         actionRef.current?.reloadAndRest();
       }
-    })
-  }
+    });
+  };
 
   // 取消发布、发布
-  const onRelease= async (arr: any[],falg: boolean)=>{
-    if(!arr?.length){
-      message.warning(falg? '没有可发布的课后服务课程':'没有可取消发布的课后服务课程')
+  const onRelease = async (arr: any[], falg: boolean) => {
+    if (!arr?.length) {
+      message.warning(falg ? '没有可发布的课后服务课程' : '没有可取消发布的课后服务课程');
       return;
     }
     // console.log('批量取消发布',arr);
-    const params={
-      KHFWBJIds: arr.map((item: any)=>item?.KHFWBJs?.[0].id),
-      ZT: falg? 1:0, 
-    }
-    const res=await bulkEditKHFWBJZT(params);
-    if(res?.status==='ok'){
-      message.success(falg? '发布成功':'取消成功');
+    const params = {
+      KHFWBJIds: arr.map((item: any) => item?.KHFWBJs?.[0].id),
+      ZT: falg ? 1 : 0,
+    };
+    const res = await bulkEditKHFWBJZT(params);
+    if (res?.status === 'ok') {
+      message.success(falg ? '发布成功' : '取消成功');
       actionRef.current?.reloadAndRest();
       actionRef.current.clearSelected();
-    }else{
+    } else {
       message.error(res.message);
       actionRef.current.clearSelected();
     }
-  }
+  };
   return (
     <div className={styles.AdministrativeClass}>
       <PageContain>
@@ -342,37 +337,35 @@ const AdministrationClassManagement = () => {
           rowSelection={{}}
           tableAlertOptionRender={({ selectedRows }) => {
             // console.log('selectedRows23', selectedRows);
-              return (
-                <Space>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      const list = selectedRows.filter((item: any)=>{
-                        const {KHFWBJs}=item;
-                        if(KHFWBJs?.length>0&&KHFWBJs?.[0]?.ZT===0)
-                        return true;
-                       })
-                       onRelease(list,true);
-                    }}>
-                    批量发布
-                  </Button>
-                
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                       const list = selectedRows.filter((item: any)=>{
-                         const {KHFWBJs}=item;
-                         if(KHFWBJs?.length>0&&KHFWBJs?.[0]?.ZT===1)
-                         return true;
-                        })
-                        onRelease(list,false);
-                      }}
-                    >
-                      取消发布
-                    </Button>
-                </Space>
-              );
-           
+            return (
+              <Space>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    const list = selectedRows.filter((item: any) => {
+                      const { KHFWBJs } = item;
+                      if (KHFWBJs?.length > 0 && KHFWBJs?.[0]?.ZT === 0) return true;
+                    });
+                    onRelease(list, true);
+                  }}
+                >
+                  批量发布
+                </Button>
+
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    const list = selectedRows.filter((item: any) => {
+                      const { KHFWBJs } = item;
+                      if (KHFWBJs?.length > 0 && KHFWBJs?.[0]?.ZT === 1) return true;
+                    });
+                    onRelease(list, false);
+                  }}
+                >
+                  取消发布
+                </Button>
+              </Space>
+            );
           }}
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
@@ -441,7 +434,7 @@ const AdministrationClassManagement = () => {
                   })}
                 </Select>
               </div>
-              
+
               <div>
                 <label htmlFor="grade">年级名称：</label>
                 <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
@@ -464,8 +457,10 @@ const AdministrationClassManagement = () => {
               </div>
             </SearchLayout>
           }
-          toolBarRender={()=>{
-            return [ <ConfigureServiceBatch actionRef={actionRef} XNXQId={curXNXQId} XQSJId={campusId} />]
+          toolBarRender={() => {
+            return [
+              <ConfigureServiceBatch actionRef={actionRef} XNXQId={curXNXQId} XQSJId={campusId} />,
+            ];
           }}
         />
       </PageContain>

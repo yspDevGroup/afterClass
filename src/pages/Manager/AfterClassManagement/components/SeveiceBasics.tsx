@@ -9,7 +9,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useModel } from 'umi';
 import { Button, Col, message, Row, Select } from 'antd';
-import ProForm, { ModalForm, ProFormDigit, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import ProForm, {
+  ModalForm,
+  ProFormDigit,
+  ProFormSelect,
+  ProFormText,
+  ProFormTextArea,
+} from '@ant-design/pro-form';
 import { createKHFWSJ, getKHFWSJ, updateKHFWSJ } from '@/services/after-class/khfwsj';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
@@ -20,11 +26,11 @@ import styles from './index.less';
 import { PlusOutlined } from '@ant-design/icons';
 
 type ServiceBasicsType = {
-  title: string,
+  title: string;
   reload: () => Promise<void>;
   serviceId?: string;
   type?: string;
-}
+};
 
 const SeveiceBasics = (props: ServiceBasicsType) => {
   const { title, reload, serviceId, type } = props;
@@ -36,7 +42,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const [XNXQData, setXNXQData] = useState<any[]>();
   const [XNXQId, setXNXQId] = useState<string>();
   const [imageUrl, setImageUrl] = useState('');
-
 
   const formRef = useRef();
 
@@ -67,10 +72,14 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
     const { current } = res;
     // console.log('res', res)
     if (current) {
-      setXNXQData(res?.xnxqList.map((item: any) => { return { value: item.value, label: item.text } }))
+      setXNXQData(
+        res?.xnxqList.map((item: any) => {
+          return { value: item.value, label: item.text };
+        }),
+      );
       setXNXQId(current?.id);
     }
-  }
+  };
 
   // 获取年级
   /**
@@ -81,12 +90,14 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const getNJData = async (value: string) => {
     const res = await getGradesByCampus({
       XQSJId: value,
-    })
+    });
     if (res?.status === 'ok') {
-      const list = res?.data?.map((item: any) => { return { label: `${item.XD}${item.NJMC}`, value: item.id } })
+      const list = res?.data?.map((item: any) => {
+        return { label: `${item.XD}${item.NJMC}`, value: item.id };
+      });
       setNJData(list);
     }
-  }
+  };
 
   useEffect(() => {
     getCampusData();
@@ -110,9 +121,9 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
     }
   };
   const handleSubmit = async (values: any) => {
-    const { FWMC, XQSJId, XNXQId, KHKC, NJIds, FWMS, ZDKCS, FWFY, } = values;
+    const { FWMC, XQSJId, XNXQId, KHKC, NJIds, FWMS, ZDKCS, FWFY } = values;
     const KHBJSJIds: any[] = [].map.call(KHKC, (val: { value: string }) => {
-      return val.value as string
+      return val.value as string;
     });
     const params = {
       FWMC,
@@ -158,16 +169,16 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         XQSJId ? getNJData(XQSJId) : '';
         if (NJSJs?.length) {
           NJIds = [].map.call(NJSJs, (v: { id: string }) => {
-            return v.id as string
-          })
+            return v.id as string;
+          });
         }
         if (KHBJSJs?.length) {
           KHKC = [].map.call(KHBJSJs, (v: { id: string; BJMC: string }) => {
             return {
               value: v.id,
-              label: v.BJMC
-            }
-          })
+              label: v.BJMC,
+            };
+          });
         }
         setCampusId(XQSJId);
         formRef?.current?.setFieldsValue({
@@ -182,6 +193,10 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           FWFY,
         });
       }
+    } else {
+      formRef?.current?.setFieldsValue({
+        ZDKCS: 2,
+      });
     }
   };
   return (
@@ -190,11 +205,14 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         name: string;
         company: string;
       }>
-
         formRef={formRef}
         title={title}
         trigger={
-          <Button type={serviceId ? "link" : "primary"} onClick={handleRefile} icon={serviceId ? '' : <PlusOutlined />}>
+          <Button
+            type={serviceId ? 'link' : 'primary'}
+            onClick={handleRefile}
+            icon={serviceId ? '' : <PlusOutlined />}
+          >
             {serviceId ? (type ? '查看' : '编辑') : '新增模板'}
           </Button>
         }
@@ -203,15 +221,17 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           // onCancel: () => console.log('run'),
         }}
         onFinish={handleSubmit}
-        layout='horizontal'
+        layout="horizontal"
         className={styles.newModules}
-        submitter = {type ? false : {
-          render: (props, defaultDoms) => {
-            return [
-              ...defaultDoms
-            ];
-          },
-        }}
+        submitter={
+          type
+            ? false
+            : {
+                render: (props, defaultDoms) => {
+                  return [...defaultDoms];
+                },
+              }
+        }
         {...formLayout}
       >
         <Row>
@@ -256,11 +276,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
               label="适用学期"
               rules={[{ required: true, message: '请选择适用学期' }]}
             >
-              <Select
-                placeholder="请选择"
-                disabled={type ? true : false}
-                options={XNXQData}
-              />
+              <Select placeholder="请选择" disabled={type ? true : false} options={XNXQData} />
             </ProForm.Item>
           </Col>
           <Col span={12}>
@@ -331,13 +347,13 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           rules={[{ required: false, message: '请选择课后课程' }]}
         >
           <SelectCourses
-            title='选择课程班'
+            title="选择课程班"
             maxLength={50}
             disabled={type ? true : false}
             getNJArr={() => {
               // 获取年级
               // console.log('NJIDS',formRef?.current?.getFieldValue('NJIds'))
-              return formRef?.current?.getFieldValue('NJIds')
+              return formRef?.current?.getFieldValue('NJIds');
             }}
             XNXQId={XNXQId}
             // 课程班=0 辅导班=1
@@ -345,48 +361,47 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             XQSJId={campusId}
           />
         </ProForm.Item>
-        <ProForm.Item
-          label="课程数限制"
+
+        <Row wrap={false} justify="center" align="top">
+          <Col flex="none">
+            <ProFormDigit
+              labelCol={{ flex: 'none' }}
+              wrapperCol={{ span: 'auto' }}
+              label="课程数限制:"
+              rules={[{ required: true, message: '请输入课程数限制' }]}
+              name="ZDKCS"
+              key="ZDKCS"
+              min={1}
+              max={50}
+              disabled={type ? true : false}
+              width="xs"
+            />
+          </Col>
+          <Col flex="auto">
+            <span
+              style={{ color: '#999', marginLeft: '9px', height: '32px', lineHeight: '32px' }}
+              className="ant-form-text"
+            >
+              {' '}
+              限制每个学生最大可选课后课程班数量
+            </span>
+          </Col>
+        </Row>
+
+        <ProFormDigit
+          label="服务费用:"
           labelCol={{ span: 3 }}
           wrapperCol={{ span: 21 }}
-        >
-          <ProFormDigit
-            noStyle
-            name="ZDKCS"
-            key="ZDKCS"
-            min={1}
-            max={50}
-            disabled={type ? true : false}
-            width="xs"
-          />
-          <span style={{ color: '#999' }} className="ant-form-text">
-            {' '}
-            限制每个学生最大可选课后课程班数量
-          </span>
-        </ProForm.Item>
-        <ProForm.Item
-          label="服务费用"
-          labelCol={{ span: 3 }}
-          wrapperCol={{ span: 21 }}
-        >
-          <ProFormDigit
-            noStyle
-            disabled={type ? true : false}
-            width="xs"
-            name="FWFY"
-            key="FWFY"
-            min={0}
-          />
-          {/* <span style={{ color: '#999' }} className="ant-form-text">
-            {' '}
-            课后服务按月收费，家长可随时缴纳截至当前月的服务费用
-          </span> */}
-        </ProForm.Item>
+          rules={[{ required: true, message: '请输入服务费用' }]}
+          disabled={type ? true : false}
+          width="xs"
+          name="FWFY"
+          key="FWFY"
+          min={0}
+        />
       </ModalForm>
     </>
-  )
-}
+  );
+};
 
-
-
-export default SeveiceBasics
+export default SeveiceBasics;
