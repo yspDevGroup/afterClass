@@ -7,7 +7,6 @@
  * @LastEditors: wsl
  */
 
-import { getKHFWBJ, getStudentListByBjid, getWBMXS, studentRegistration } from "@/services/after-class/khfwbj";
 import { queryXNXQList } from "@/services/local-services/xnxq";
 import { Checkbox, Divider, message, Modal, Radio, Tag } from "antd";
 import { useEffect, useRef, useState } from "react";
@@ -15,11 +14,12 @@ import { useModel, history, Link } from "umi";
 import styles from './index.less'
 import noPic from '@/assets/noPic.png';
 import GoBack from "@/components/GoBack";
-import { chooseKCByXSId } from "@/services/after-class/khfwbj";
 import noCourses from '@/assets/noCourses.png';
-import { createKHXSDD } from "@/services/after-class/khxsdd";
 import { enHenceMsg } from '@/utils/utils';
 import { ParentHomeData } from "@/services/local-services/mobileHome";
+import { chooseKCByXSId } from "@/services/after-class/khfwbj";
+import { createKHXSDD } from "@/services/after-class/khxsdd";
+import { getKHFWBJ, getStudentListByBjid, getWBMXS, studentRegistration } from "@/services/after-class/khfwbj";
 import moment from "moment";
 
 const InterestClassroom = () => {
@@ -314,10 +314,26 @@ const InterestClassroom = () => {
       KHFWSJPZIds: BmTimeIds || []
     })
     if (res.status === 'ok') {
-      message.success('报名成功')
-      setBmModalVisible(false);
-      xuankeStates();
-
+      // const repeat = res.data?.find((v: { flag: number }) => {
+      //   return v.flag === 0;
+      // });
+      // const wrong = res.data?.find((v: { flag: number }) => {
+      //   return v.flag === 1;
+      // });
+      // const different = res.data?.find((v: { flag: number }) => {
+      //   return v.flag === 2;
+      // });
+      // if (repeat) {
+      //   message.warning('该学生已报名，请勿重复报名');
+      // } else if (wrong) {
+      //   message.warning('数据库创建失败，报名失败');
+      // } else if (different) {
+      //   message.warning('学生信息查找失败，报名失败');
+      // } else {
+        message.success('报名成功')
+        setBmModalVisible(false);
+        xuankeStates();
+      // }
       // window.location.reload();
     } else {
       message.error('操作失败，请联系管理员')
@@ -390,7 +406,7 @@ const InterestClassroom = () => {
             {
               FKType === true && PayType === true ? <>
                 <p style={{ marginBottom: 3 }}>课后服务包含课业辅导和趣味课堂</p>
-                <p> 本课后服务暂未配置课程，您可以先进行缴费</p></> : <p>报名成功，后续请留意首页的选课或付费提醒</p>
+                <p> 本课后服务暂未配置课程，您可以先进行缴费</p></> : <p>您已报名成功，后续请留意首页的选课或付费提醒</p>
             }
 
           </div>
@@ -418,7 +434,7 @@ const InterestClassroom = () => {
                     </div> : <></>
                   }
                   {
-                    BmCouse && XKType === false && FKType === true && PayType === true ? <div className={styles.Tips}>您已完成选课，请缴费
+                    BmCouse && XKType === false && FKType === true && PayType === true ? <div className={styles.Tips}>您已报名成功并完成选课，请缴费
                     </div> : <></>
                   }
                   {
@@ -426,7 +442,7 @@ const InterestClassroom = () => {
                     </div> : <></>
                   }
                   {
-                    BmCouse && XKType === false && FKType === true && PayType === false ? <div className={styles.Tips}>选课成功，后续请留意首页的付费提醒 </div> : <></>
+                    BmCouse && XKType === false && FKType === true && PayType === false ? <div className={styles.Tips}>您已报名成功并完成选课，后续请留意首页的付费提醒 </div> : <></>
                   }
 
                   {
@@ -579,11 +595,11 @@ const InterestClassroom = () => {
                       </div> : <></>
                     }
                     {
-                      BmCouse && XKType === true && FKType === true && PayType === false ? <div className={styles.Tips}>报名成功，后续请留意首页的选课或付费提醒
+                      BmCouse && XKType === true && FKType === true && PayType === false ? <div className={styles.Tips}>您已报名成功，后续请留意首页的选课或付费提醒
                       </div> : <></>
                     }
                     {
-                      BmCouse && XKType === true && FKType === false ? <div className={styles.Tips}>缴费成功，后续请留意首页的选课提醒
+                      BmCouse && XKType === true && FKType === false ? <div className={styles.Tips}>您已报名成功并完成缴费，后续请留意首页的选课提醒
                       </div> : <></>
                     }
                     <div className={styles.title}>

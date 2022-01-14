@@ -11,11 +11,11 @@ import { useModel, history } from 'umi';
 import ClassCalendar from '../../ClassCalendar';
 import styles from '../index.less';
 import { compareTime } from '@/utils/Timefunction';
+import { getClassDays } from '@/utils/TimeTable';
+import { getQueryString } from '@/utils/utils';
+import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
 import { createKHJSQJ } from '@/services/after-class/khjsqj';
 import { getMainTeacher } from '@/services/after-class/khbjsj';
-import { getClassDays } from '@/utils/TimeTable';
-import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
-import { getQueryString } from '@/utils/utils';
 
 const { TextArea } = Input;
 const LeaveForm = () => {

@@ -3,22 +3,22 @@
 import { Button, Checkbox, Collapse, Divider, message, Modal, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, history } from 'umi';
-import { getClassesByCourse } from '@/services/after-class/khkcsj';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import moment from 'moment';
-import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import ShowName from '@/components/ShowName';
 
 import styles from './index.less';
+import { signClass } from '@/services/after-class/xsjbsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getXXTZGG } from '@/services/after-class/xxtzgg';
+import { getClassesByCourse } from '@/services/after-class/khkcsj';
 import { getKHBJSJ, studentRegistration } from '@/services/after-class/khbjsj';
+import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { RightOutlined } from '@ant-design/icons';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
-import { signClass } from '@/services/after-class/xsjbsj';
 import noOrder from '@/assets/noOrder.png';
 
 const { Panel } = Collapse;
@@ -163,25 +163,42 @@ const CourseDetails: React.FC = () => {
         KHBJSJId: BjDetails?.id,
       });
       if (res.status === 'ok') {
-        const bjId =
-          localStorage.getItem('studentBJId') ||
-          currentUser?.student?.[0].BJSJId ||
-          testStudentBJId;
-        await ParentHomeData(
-          'student',
-          currentUser?.xxId,
-          StorageXSId,
-          StorageNjId,
-          bjId,
-          StorageXQSJId,
-          true,
-        );
-        setTimeout(() => {
-          message.success('报名成功，请及时缴费');
-        }, 500);
-        setTimeout(() => {
-          history.push('/parent/home?index=index');
-        }, 1000);
+        const repeat = res.data?.find((v: { flag: number }) => {
+          return v.flag === 0;
+        });
+        const wrong = res.data?.find((v: { flag: number }) => {
+          return v.flag === 1;
+        });
+        const different = res.data?.find((v: { flag: number }) => {
+          return v.flag === 2;
+        });
+        if (repeat) {
+          message.warning('该学生已报名，请勿重复报名');
+        } else if (wrong) {
+          message.warning('数据库创建失败，报名失败');
+        } else if (different) {
+          message.warning('学生信息查找失败，报名失败');
+        } else {
+          const bjId =
+            localStorage.getItem('studentBJId') ||
+            currentUser?.student?.[0].BJSJId ||
+            testStudentBJId;
+          await ParentHomeData(
+            'student',
+            currentUser?.xxId,
+            StorageXSId,
+            StorageNjId,
+            bjId,
+            StorageXQSJId,
+            true,
+          );
+          setTimeout(() => {
+            message.success('报名成功，请及时缴费');
+          }, 500);
+          setTimeout(() => {
+            history.push('/parent/home?index=index');
+          }, 1000);
+        }
       }
     } else {
       const bjInfo = KBClass.find((item: any) => {

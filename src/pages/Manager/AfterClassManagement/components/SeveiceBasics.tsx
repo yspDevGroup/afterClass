@@ -12,7 +12,6 @@ import { Button, Col, message, Row, Select } from 'antd';
 import ProForm, {
   ModalForm,
   ProFormDigit,
-  ProFormSelect,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
@@ -122,20 +121,27 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   };
   const handleSubmit = async (values: any) => {
     const { FWMC, XQSJId, XNXQId, KHKC, NJIds, FWMS, ZDKCS, FWFY } = values;
-    const KHBJSJIds: any[] = [].map.call(KHKC, (val: { value: string }) => {
-      return val.value as string;
-    });
+    let KHKCIds: any[];
+    if (KHKC) {
+      KHKCIds = [].map.call(KHKC, (val: { value: string }) => {
+        return val.value as string;
+      });
+    } else {
+      KHKCIds = [];
+    }
+
     const params = {
       FWMC,
       XQSJId,
       XNXQId,
-      KHBJSJIds,
+      KHBJSJIds: KHKCIds,
       NJIds,
       FWTP: imageUrl,
       FWMS,
       ZDKCS,
       FWFY,
     };
+
     if (serviceId) {
       const result = await updateKHFWSJ({ id: serviceId }, params);
       if (result.status === 'ok') {
@@ -223,15 +229,15 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         onFinish={handleSubmit}
         layout="horizontal"
         className={styles.newModules}
-        submitter={
-          type
-            ? false
-            : {
-                render: (props, defaultDoms) => {
-                  return [...defaultDoms];
-                },
-              }
-        }
+        submitter={{
+          render: (props, defaultDoms) => {
+            if (type) {
+              return [defaultDoms[0]];
+            } else {
+              return [...defaultDoms];
+            }
+          },
+        }}
         {...formLayout}
       >
         <Row>

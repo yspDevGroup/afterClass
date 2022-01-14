@@ -6,17 +6,18 @@
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
-import { InputNumber, message, Switch } from 'antd';
+import { Input, InputNumber, message, Switch, } from 'antd';
 import { useModel, history } from 'umi';
 import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
-import { getAllKHXSCQ } from '@/services/after-class/khxscq';
-import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
 
 import styles from '../index.less';
 import moment from 'moment';
+import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getSerEnrolled } from '@/services/after-class/khbjsj';
+import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
 
+const { TextArea } = Input;
 const NewPatrol = (props: any) => {
   const { kcid, kcmc, xkrq, bjxx, check } = props?.location?.state;
   const { initialState } = useModel('@@initialState');
@@ -244,15 +245,17 @@ const NewPatrol = (props: any) => {
                 )}
               </ul>
             </div>
-            <div className={styles.card} style={{ marginBottom: 60 }}>
+            <div className={styles.card} style={{ marginBottom: 60,paddingBottom: 24 }}>
               <h4>其他说明</h4>
               {check ? (
-                <div style={{ padding: '10px 10px 24px', color: '#666' }}>{bzDetail}</div>
+                <div style={{ padding: '10px', color: '#666' }}>{bzDetail}</div>
               ) : (
-                <textarea
+                <TextArea
                   name=""
                   id=""
-                  rows={5}
+                  rows={6}
+                  showCount
+                  maxLength={255}
                   onBlur={(e) => {
                     recordDetail.BZXX = e.target.value;
                   }}
