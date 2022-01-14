@@ -191,7 +191,8 @@ const ServiceClass = (props: { location: { state: any } }) => {
         FJS.push(element?.JZGJBSJId);
       }
     });
-    const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY, FJSJ, FJSJId } = currentData;
+    const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY, FJSJ, FJSJId } =
+      currentData;
     const BjList = {
       BJMC: type === 'copy' ? `${BJMC}-复制` : BJMC,
       KHKCSJId: KHKCSJ?.id,
@@ -206,9 +207,8 @@ const ServiceClass = (props: { location: { state: any } }) => {
       XQSJId,
       CDMC: FJSJ?.FJMC,
       CDMCId: FJSJId,
-      KCLX:currentData.KHKCSJ.KHKCLX.KCTAG,
-      BJIds:currentData?.KHKCSJ?.KHKCLX?.KCTAG==='校内辅导'? currentData?.BJSJs?.[0]?.id:null,
-      
+      KCLX: currentData.KHKCSJ.KHKCLX.KCTAG,
+      BJIds: currentData?.KHKCSJ?.KHKCLX?.KCTAG === '校内辅导' ? currentData?.BJSJs?.[0]?.id : null,
     };
     setBjLists(BjList);
     const BJIdArr: any = [];
@@ -230,8 +230,8 @@ const ServiceClass = (props: { location: { state: any } }) => {
       FY,
     };
     setJfLists(JfList);
-    if(currentData?.KHKCSJ?.KHKCLX?.KCTAG==='校内辅导'){
-      currentData.BJSJs=currentData.BJSJs?.[0]
+    if (currentData?.KHKCSJ?.KHKCLX?.KCTAG === '校内辅导') {
+      currentData.BJSJs = currentData.BJSJs?.[0];
     }
     const list = {
       ...currentData,
@@ -239,7 +239,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
         currentData.KHBJJs?.find((item: { JSLX: string }) => item.JSLX === '主教师')?.JZGJBSJ ||
         undefined,
       FJS,
-      KCLX:currentData.KHKCSJ.KHKCLX.KCTAG,
+      KCLX: currentData.KHKCSJ.KHKCLX.KCTAG,
       KHKCSJId: KHKCSJ?.id,
     };
     setVisible(true);
@@ -360,21 +360,21 @@ const ServiceClass = (props: { location: { state: any } }) => {
         return record?.KHKCSJ?.SSJGLX;
       },
     },
-    {
-      title: '是否被引用',
-      align: 'center',
-      width: 80,
-      dataIndex: 'KCFWBJs',
-      key: 'KCFWBJs',
-      ellipsis: true,
-      // hideInTable: true,
-      render: (_, record) => {
-        if (record?.KCFWBJs?.length) {
-            return <SeveiceList title={'课后服务配置班级列表'} bjId = {record.id} termId = {curXNXQId} />;
-        }
-        return <>未引用</>;
-      },
-    },
+    // {
+    //   title: '是否被引用',
+    //   align: 'center',
+    //   width: 80,
+    //   dataIndex: 'KCFWBJs',
+    //   key: 'KCFWBJs',
+    //   ellipsis: true,
+    //   // hideInTable: true,
+    //   render: (_, record) => {
+    //     if (record?.KCFWBJs?.length) {
+    //         return <SeveiceList title={'课后服务配置班级列表'} bjId = {record.id} termId = {curXNXQId} />;
+    //     }
+    //     return <>未引用</>;
+    //   },
+    // },
     {
       title: '排课',
       align: 'center',
@@ -406,11 +406,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
               showModalSKXQ(record);
             }}
           >
-            <Tooltip
-              title={`已授${record?.ks_count || 0}课时。`}
-            >
-              {record?.ks_count}
-            </Tooltip>
+            <Tooltip title={`已授${record?.ks_count || 0}课时。`}>{record?.ks_count}</Tooltip>
           </a>
         );
       },
@@ -419,14 +415,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       title: (
         <span>
           状态&nbsp;
-          <Tooltip
-            overlayStyle={{ maxWidth: '30em' }}
-            title={
-              <>
-                开启时可用于课后服务配置
-              </>
-            }
-          >
+          <Tooltip overlayStyle={{ maxWidth: '30em' }} title={<>开启时可用于课后服务配置</>}>
             <QuestionCircleOutlined />
           </Tooltip>
         </span>
@@ -466,7 +455,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       render: (_, record) => {
         return (
           <>
-            <ActionBar record={record} handleEdit={handleEdit} getData={getData} type='service' />
+            <ActionBar record={record} handleEdit={handleEdit} getData={getData} type="service" />
             <Divider type="vertical" />
           </>
         );

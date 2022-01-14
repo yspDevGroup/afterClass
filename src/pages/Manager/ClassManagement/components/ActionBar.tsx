@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import { useModel } from 'umi';
-import { Popconfirm, message, Divider, Modal, Form, Input } from 'antd';
+import { Popconfirm, message, Divider, Modal, Form, Input, Space } from 'antd';
 import type { CourseItem } from '../data';
 import { enHenceMsg } from '@/utils/utils';
 import { getClassDays } from '@/utils/TimeTable';
@@ -24,6 +24,7 @@ const ActionBar = (props: propstype) => {
   const { currentUser } = initialState || {};
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
+  const [JKVisible, setJKVisible] = useState<boolean>(false);
 
   const shelf = (recorde: any) => {
     if (recorde.xs_count === 0) {
@@ -44,6 +45,20 @@ const ActionBar = (props: propstype) => {
     } else {
       message.warning('有学生报名时，此课程班不能取消开班');
     }
+  };
+  const JKSubmit = async () => {
+    if (record?.id) {
+      const res = await updateKHBJSJ({ id: record.id }, { BJZT: '已结课' });
+      if (res.status === 'ok') {
+        message.success('已结课');
+        getData();
+      } else {
+        message.error(res.message);
+      }
+    } else {
+      message.warning('操作失败');
+    }
+    setJKVisible(false);
   };
   const release = (records: any) => {
     const res = updateKHBJSJ({ id: records.id }, { BJZT: '已开班' });
@@ -100,10 +115,9 @@ const ActionBar = (props: propstype) => {
         <>
           {record.pk_count ? (
             <>
-              <a
-                onClick={() => release(record)}
-                style={type ? undefined : { display: 'none' }}
-              >开启</a>
+              <a onClick={() => release(record)} style={type ? undefined : { display: 'none' }}>
+                开启
+              </a>
               <Popconfirm
                 title="开班后该课程班可用于课后服务配置，确定开班?"
                 onConfirm={() => release(record)}
@@ -111,9 +125,7 @@ const ActionBar = (props: propstype) => {
                 cancelText="取消"
                 placement="topRight"
               >
-                <a
-                  style={type ? { display: 'none' } : undefined}
-                >开班</a>
+                <a style={type ? { display: 'none' } : undefined}>开班</a>
               </Popconfirm>
               <Divider type="vertical" />
               <a onClick={() => handleEdit(record)}>编辑</a>
@@ -197,7 +209,7 @@ const ActionBar = (props: propstype) => {
           {(new Date(record?.BMJSSJ).getTime() >= new Date().getTime() &&
             record?.xs_count > 0 &&
             record?.xs_count < record?.BJRS) ||
-            (record.noPayXS_count > 0 && record?.noPayXS_count < record?.BJRS) ? (
+          (record.noPayXS_count > 0 && record?.noPayXS_count < record?.BJRS) ? (
             <>
               {' '}
               <a
@@ -246,10 +258,9 @@ const ActionBar = (props: propstype) => {
             </>
           ) : (
             <>
-              <a
-                onClick={() => shelf(record)}
-                style={type ? undefined : { display: 'none' }}
-              >关闭</a>
+              <a onClick={() => shelf(record)} style={type ? undefined : { display: 'none' }}>
+                关闭
+              </a>
               <Popconfirm
                 title="取消后该课程班家长不可见，确定取消开班?"
                 onConfirm={() => shelf(record)}
@@ -257,9 +268,7 @@ const ActionBar = (props: propstype) => {
                 cancelText="取消"
                 placement="topRight"
               >
-                <a
-                  style={type ? { display: 'none' } : undefined}
-                >取消开班</a>
+                <a style={type ? { display: 'none' } : undefined}>取消开班</a>
               </Popconfirm>
             </>
           )}
@@ -267,9 +276,46 @@ const ActionBar = (props: propstype) => {
           <a onClick={() => handleEdit(record)}>查看</a>
           <Divider type="vertical" />
           <a onClick={() => handleEdit(record, 'copy')}>复制</a>
+          {record.ISFW === 0 && (
+            <>
+              <Divider type="vertical" />
+              <a
+                onClick={() => {
+                  setJKVisible(true);
+                }}
+              >
+                结课
+              </a>
+              <Modal
+                title="是否结课"
+                visible={JKVisible}
+                onOk={() => {
+                  JKSubmit();
+                }}
+                onCancel={() => {
+                  setJKVisible(false);
+                }}
+                okText="确认"
+                cancelText="取消"
+              >
+                <Space wrap={false}>
+                  <span style={{ color: '#333', fontSize: '16px' }}>
+                    课程名称：{record?.KHKCSJ?.KCMC}{' '}
+                  </span>
+                  <span style={{ color: '#333', fontSize: '16px' }}>
+                    课程班名称: {record?.BJMC}
+                  </span>
+                  <span style={{ color: '#333', fontSize: '16px' }}>
+                    确定<span style={{ color: '#FF6F6F' }}>结课</span>？
+                  </span>
+                </Space>
+              </Modal>
+            </>
+          )}
         </>
       );
       break;
+    // case'已结课':''
     default:
       return (
         <>
