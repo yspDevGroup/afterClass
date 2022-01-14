@@ -60,7 +60,7 @@ const AfterClassService = () => {
         setBaoMinData(res.data.rows);
         // 只可退结束日期大于当前时间的课程
         setFwTimes(res.data.rows?.[0]?.XSFWBJs?.filter((value: any) => {
-          return moment(value?.KHFWSJPZ.JSRQ).format('YYYY/MM/DD') > moment(new Date()).format('YYYY/MM/DD')
+          return moment(value?.KHFWSJPZ.JSRQ).format('YYYY/MM/DD') >= moment(new Date()).format('YYYY/MM/DD')
         }))
       }
     }
@@ -127,7 +127,7 @@ const AfterClassService = () => {
           handleClose(tag);
         }}
       >
-        <span> {tag?.KHFWSJPZ?.SDBM}</span>
+        <span className={styles.SDBM}> {tag?.KHFWSJPZ?.SDBM}</span>
       </Tag>
     );
     return (
@@ -141,7 +141,14 @@ const AfterClassService = () => {
 
   return (
     <div className={styles.AfterClassService}>
-      {BaoMinData && FwTimes?.length !== 0 ? (
+      {BaoMinData && FwTimes?.length === 0 ? (
+        <>
+          <div className={styles.ZWSJ}>
+            <img src={noOrder} alt="" />
+            <p>暂无数据</p>
+          </div>
+        </>
+      ) : (
         <>
           <div className={styles.Application}>
             <p className={styles.choice}>请选择课后服务</p>
@@ -181,13 +188,6 @@ const AfterClassService = () => {
                 选择退课时段
               </Button>
             </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className={styles.ZWSJ}>
-            <img src={noOrder} alt="" />
-            <p>暂无数据</p>
           </div>
         </>
       )}
