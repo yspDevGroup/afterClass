@@ -58,12 +58,11 @@ const ServiceConfiguration = () => {
       const res = await getAllKHFWSJ({
         XNXQId: curXNXQId,
         XQSJId: campusId,
-        FWMC: curTitle
+        FWMC: curTitle,
       });
 
       if (res.status === 'ok' && res.data) {
         setDataSource(res.data?.rows);
-        
       }
     }
   };
@@ -85,7 +84,7 @@ const ServiceConfiguration = () => {
     if (curXNXQId) {
       getData();
     }
-  }, [campusId, curXNXQId,curTitle]);
+  }, [campusId, curXNXQId, curTitle]);
 
   const columns: ProColumns<any>[] = [
     {
@@ -161,15 +160,25 @@ const ServiceConfiguration = () => {
       align: 'center',
       width: 130,
       render: (_, record) => {
-        return <Switch checkedChildren="开启" unCheckedChildren="停用" checked={record.FWZT === 1} onChange={async () => {
-          const result = await updateKHFWSJ({ id: record.id }, {
-            FWZT: record.FWZT === 1 ? 0 : 1
-          });
-          if (result.status === 'ok') {
-            message.success('服务状态已更新');
-            getData();
-          }
-        }} />;
+        return (
+          <Switch
+            checkedChildren="开启"
+            unCheckedChildren="停用"
+            checked={record.FWZT === 1}
+            onChange={async () => {
+              const result = await updateKHFWSJ(
+                { id: record.id },
+                {
+                  FWZT: record.FWZT === 1 ? 0 : 1,
+                },
+              );
+              if (result.status === 'ok') {
+                message.success('服务状态已更新');
+                getData();
+              }
+            }}
+          />
+        );
       },
     },
     {
@@ -181,34 +190,43 @@ const ServiceConfiguration = () => {
       render: (_, record) => {
         return (
           <>
-            {record.FWZT === 1 ? <SeveiceBasics title={'查看服务模板'} reload={getData} serviceId={record.id} type='read' /> :<>
-            <SeveiceBasics title={'编辑服务模板'} reload={getData} serviceId={record.id} />
-            <Popconfirm
-              title="彻底删除后数据将不可恢复，是否删除?"
-              onConfirm={async () => {
-                try {
-                  const result = await deleteKHFWSJ({ id: record.id });
-                  if (result.status === 'ok') {
-                    message.success('删除成功');
-                    getData();
-                  } else {
-                    message.error('删除失败，请联系管理员或稍后重试。');
-                  }
-                } catch (err) {
-                  message.error('删除失败，请联系管理员或稍后重试。');
-                }
-              }}
-              okText="Yes"
-              cancelText="No"
-              placement="topLeft"
-            >
-              <a href="#" style={{ color: 'red' }}>
-                <Tooltip title="删除">
-                  <a>删除</a>
-                </Tooltip>
-              </a>
-            </Popconfirm>
-            </>}
+            {record.FWZT === 1 ? (
+              <SeveiceBasics
+                title={'查看服务模板'}
+                reload={getData}
+                serviceId={record.id}
+                type="read"
+              />
+            ) : (
+              <>
+                <SeveiceBasics title={'编辑服务模板'} reload={getData} serviceId={record.id} />
+                <Popconfirm
+                  title="彻底删除后数据将不可恢复，是否删除?"
+                  onConfirm={async () => {
+                    try {
+                      const result = await deleteKHFWSJ({ id: record.id });
+                      if (result.status === 'ok') {
+                        message.success('删除成功');
+                        getData();
+                      } else {
+                        message.error('删除失败，请联系管理员或稍后重试。');
+                      }
+                    } catch (err) {
+                      message.error('删除失败，请联系管理员或稍后重试。');
+                    }
+                  }}
+                  okText="Yes"
+                  cancelText="No"
+                  placement="topLeft"
+                >
+                  <a href="#" style={{ color: 'red' }}>
+                    <Tooltip title="删除">
+                      <a>删除</a>
+                    </Tooltip>
+                  </a>
+                </Popconfirm>
+              </>
+            )}
           </>
         );
       },
@@ -216,14 +234,14 @@ const ServiceConfiguration = () => {
   ];
 
   // 学年学期筛选
-  const onXNXQChange=(value: string)=>{
-    curXNXQData?.forEach((item: any)=>{
-      if(item.id===value){
+  const onXNXQChange = (value: string) => {
+    curXNXQData?.forEach((item: any) => {
+      if (item.id === value) {
         setCurXNXQId(value);
         actionRef.current?.reloadAndRest();
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className={styles.AdministrativeClass}>
@@ -247,7 +265,7 @@ const ServiceConfiguration = () => {
           search={false}
           scroll={{ x: getTableWidth(columns) }}
           headerTitle={
-            <SearchLayout>  
+            <SearchLayout>
               <div>
                 <label htmlFor="grade">校区名称：</label>
                 <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
@@ -276,9 +294,7 @@ const ServiceConfiguration = () => {
               </div>
             </SearchLayout>
           }
-          toolBarRender={() => [
-            <SeveiceBasics title={'新增服务模板'} reload={getData} />,
-          ]}
+          toolBarRender={() => [<SeveiceBasics title={'新增服务模板'} reload={getData} />]}
         />
       </PageContain>
     </div>

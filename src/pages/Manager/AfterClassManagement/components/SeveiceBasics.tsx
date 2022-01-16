@@ -187,6 +187,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           });
         }
         setCampusId(XQSJId);
+        console.log('formRef', formRef);
         formRef?.current?.setFieldsValue({
           FWMC,
           XQSJId,
@@ -200,9 +201,17 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         });
       }
     } else {
-      formRef?.current?.setFieldsValue({
-        ZDKCS: 2,
-      });
+      if (campusData?.length) {
+        let id = campusData?.find((item: any) => item.label === '本校')?.value;
+        if (!id) {
+          id = campusData[0].value;
+        }
+        await setCampusId(id);
+        formRef?.current?.setFieldsValue({
+          ZDKCS: 2,
+          XQSJId: id,
+        });
+      }
     }
   };
   return (
@@ -211,6 +220,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         name: string;
         company: string;
       }>
+        key={serviceId}
         formRef={formRef}
         title={title}
         trigger={
@@ -227,8 +237,8 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           // onCancel: () => console.log('run'),
         }}
         onFinish={handleSubmit}
-        layout='horizontal'
-        className={type ? `${styles.newModules} ${styles.noModalFooter}`:`${styles.newModules}`}
+        layout="horizontal"
+        className={type ? `${styles.newModules} ${styles.noModalFooter}` : `${styles.newModules}`}
         {...formLayout}
       >
         <Row>
