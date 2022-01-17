@@ -16,7 +16,10 @@ import { iconTextData } from './mock';
 import styles from './index.less';
 
 const { Option } = Select;
-const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetStateAction<string>> }) => {
+const Mine = (props: {
+  status: string;
+  setActiveKey: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { student, external_contact } = currentUser || {};
@@ -29,13 +32,16 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
 
   useEffect(() => {
     // 存入孩子姓名和id
-    if (localStorage.getItem('studentName') === null && localStorage.getItem('studentId') === null) {
+    if (
+      localStorage.getItem('studentName') === null &&
+      localStorage.getItem('studentId') === null
+    ) {
       localStorage.setItem('studentName', student?.[0].name || '');
       localStorage.setItem('studentId', student?.[0].XSJBSJId || '');
       localStorage.setItem('studentNjId', student[0].NJSJId || '');
       localStorage.setItem('studentNjId', student[0].BJSJId || '');
     }
-    const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
+    const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1];
     const ParentalIdentitys = `${StorageXSName}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
   }, []);
@@ -47,14 +53,13 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     localStorage.setItem('studentNjId', key.key?.split('+')[1]);
     localStorage.setItem('studentBJId', key.key?.split('+')[2]);
     localStorage.setItem('studentXQSJId', key.key?.split('+')[3]);
-    const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1]
+    const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1];
     const ParentalIdentitys = `${key.value}${identity || ''}`;
     setParentalIdentity(ParentalIdentitys);
     setReload(true);
   };
   const fetchData = async () => {
-    const studentId: string =
-      StorageXSId || student?.[0].XSJBSJId || testStudentId;
+    const studentId: string = StorageXSId || student?.[0].XSJBSJId || testStudentId;
     const res = await getStudentOrders({
       XSJBSJId: studentId,
       DDZT: ['待付款'],
@@ -66,7 +71,7 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     } else {
       enHenceMsg(res.message);
     }
-  }
+  };
   useEffect(() => {
     fetchData();
   }, [StorageXSId]);
@@ -75,26 +80,38 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
     (async () => {
       if (reload) {
         // 数据信息重新更新获取
-        const studentId: string =
-          StorageXSId || student?.[0].XSJBSJId || testStudentId;
-        const studentNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
-        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
-        await ParentHomeData('student', currentUser?.xxId, studentId, studentNjId, bjId, StorageXQSJId, true);
+        const studentId: string = StorageXSId || student?.[0].XSJBSJId || testStudentId;
+        const studentNjId =
+          localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+        const bjId =
+          localStorage.getItem('studentBJId') ||
+          currentUser?.student?.[0].BJSJId ||
+          testStudentBJId;
+        const StorageXQSJId =
+          localStorage.getItem('studentXQSJId') ||
+          currentUser?.student?.[0].XQSJId ||
+          testStudentXQSJId;
+        await ParentHomeData(
+          'student',
+          currentUser?.xxId,
+          studentId,
+          studentNjId,
+          bjId,
+          StorageXQSJId,
+          true,
+        );
         fetchData();
         setReload(false);
       }
-    })()
-  }, [reload])
+    })();
+  }, [reload]);
   return (
     <div className={styles.minePage}>
       <header className={styles.cusHeader} style={{ backgroundImage: `url(${index_header})` }}>
         <div className={styles.header}>
           {currentUser?.avatar ? <img src={currentUser?.avatar} /> : ''}
           <div className={styles.headerName}>
-            <h4>
-              {ParentalIdentity || '家长'}
-            </h4>
+            <h4>{ParentalIdentity || '家长'}</h4>
             <span>微信名：{currentUser?.username || currentUser?.name}</span>
           </div>
         </div>
@@ -107,7 +124,10 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
           >
             {student?.map((value: any) => {
               return (
-                <Option value={value.name} key={`${value.XSJBSJId}+${value.NJSJId}+${value.BJSJId}+${value.XQSJId}`}>
+                <Option
+                  value={value.name}
+                  key={`${value.XSJBSJId}+${value.NJSJId}+${value.BJSJId}+${value.XQSJId}`}
+                >
                   {value.name}
                 </Option>
               );
@@ -129,12 +149,12 @@ const Mine = (props: { status: string; setActiveKey: React.Dispatch<React.SetSta
       </div>
       <div className={styles.operation}>
         <Link to="/parent/mine/dropClass" className={styles.drop}>
-          <img src={drop} alt="" />
+          <img src={drop} style={{ width: 28, height: 28 }} alt="" />
           <span className={styles.dropSpan}>我要退订</span>
           <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
         </Link>
         <Link to="/parent/mine/evaluation" className={styles.evaluation}>
-          <img src={evaluation} alt="" />
+          <img src={evaluation} style={{ width: 28, height: 28 }} alt="" />
           <span className={styles.evaluationSpan}>课程评价</span>
           <img src={icon_Rgo} alt="" className={styles.icon_Rgo} />
         </Link>

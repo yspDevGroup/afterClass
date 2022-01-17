@@ -155,13 +155,13 @@ const AdministrativeClass = () => {
       align: 'center',
       width: 150,
     },
-    // {
-    //   title: '其他服务报名人数',
-    //   dataIndex: 'zzfwbm_count',
-    //   key: 'zzfwbm_count',
-    //   align: 'center',
-    //   width: 150,
-    // },
+    {
+      title: '其他服务报名人数',
+      dataIndex: 'xszzfw_count',
+      key: 'xxzzfw_count',
+      align: 'center',
+      width: 150,
+    },
     // {
     //   title: '班主任',
     //   dataIndex: 'BZR',
