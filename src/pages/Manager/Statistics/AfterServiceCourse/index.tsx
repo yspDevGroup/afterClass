@@ -141,7 +141,8 @@ const AfterSchoolCourse: React.FC = () => {
       ellipsis: true,
       render: (test: any, record: any) => {
         const num =
-          record.TKRS !== 0 ? `${(Number(record.TKRS / record.BMRS) * 100).toFixed(1)}%` : 0;
+        Number(record.TKRS) !== 0 ? `${((Number(record.TKRS) / Number(record.BMRS)) * 100).toFixed(1)
+            } % ` : 0;
         return num;
       },
     },
@@ -241,7 +242,8 @@ const AfterSchoolCourse: React.FC = () => {
       ellipsis: true,
       render: (test: any, record: any) => {
         const num =
-          record.TKRS !== 0 ? `${(Number(record.TKRS / record.BMRS) * 100).toFixed(1)}%` : 0;
+          Number(record.TKRS) !== 0 ? `${((Number(record.TKRS) / Number(record.BMRS)) * 100).toFixed(1)
+            } % ` : 0;
         return num;
       },
     },

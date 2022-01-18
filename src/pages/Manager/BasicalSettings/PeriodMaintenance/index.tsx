@@ -314,7 +314,7 @@ const PeriodMaintenance = () => {
             overflowY: 'auto',
           }}
         >
-          <AsyncTimePeriodForm currentStatus={currentStatus} current={current} setForm={setForm} />
+          <AsyncTimePeriodForm currentStatus={currentStatus} current={current} setForm={setForm} form={form}  />
         </Modal>
         <Modal
           title={'报名通知'}

@@ -7,6 +7,8 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import type { Maintenance } from '../data';
 import styles from './index.less';
 import { useModel } from 'umi';
+import moment from 'moment';
+import { getAllXNXQ } from '@/services/after-class/xnxq';
 
 const formLayout = {
   labelCol: { span: 5 },
@@ -21,14 +23,18 @@ type PropsType = {
 };
 
 const TimePeriodForm = (props: PropsType) => {
-  const { currentStatus, current, setForm } = props;
+  const { currentStatus, current, setForm ,form} = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [terms, setTerms] = useState<{ label: string; value: string }[]>(); // 联动数据中的学期数据
+  const [XNXQ, setXNXQ] = useState<API.XNXQ[]>();
+  const [XQJSRQ, setXQJSRQ] = useState<any>('9999-01-01');
+
   useEffect(() => {
     async function fetchData() {
       // 从本地获取学期学年信息
       const res = await queryXNXQList(currentUser?.xxId);
+     
       const newData = res?.xnxqList?.map((item: any) => {
         return {
           label: item.text,
@@ -39,6 +45,20 @@ const TimePeriodForm = (props: PropsType) => {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    (
+      async()=>{
+        const res = await getAllXNXQ({
+          XXJBSJId:currentUser?.xxId
+        })
+        if(res.status === 'ok'){
+          setXNXQ(res.data)
+        }
+      }
+    )()
+  }, [])
+
 
   const formItems: any[] = [
     {
@@ -62,8 +82,8 @@ const TimePeriodForm = (props: PropsType) => {
           currentStatus === 'schedule'
             ? '如：第一节课'
             : currentStatus === 'enroll'
-            ? '如：2020-2021'
-            : '如：2021春季',
+              ? '如：2020-2021'
+              : '如：2021春季',
       },
     },
     {
@@ -75,6 +95,12 @@ const TimePeriodForm = (props: PropsType) => {
       rules: [{ required: true, message: '请选择学期' }],
       placeholder: '请选择学期',
       options: terms,
+      fieldProps: {
+        onChange: (value: any) => {
+          form.setFieldsValue({ KSSJ: undefined ,JSSJ:undefined});
+          setXQJSRQ(XNXQ?.find((item: any) => item?.id === value)?.JSRQ)
+        }
+      }
     },
     {
       type: currentStatus === 'schedule' ? 'time' : 'date',
@@ -87,6 +113,12 @@ const TimePeriodForm = (props: PropsType) => {
         minuteStep: 5,
         rules: [{ required: true, message: '请填写开始时间' }],
         hideDisabledOptions: true,
+        disabledDate: (currents: any) => {
+          const defaults = moment(currents).format('YYYY-MM-DD HH:mm:ss');
+          return (
+            defaults > moment(XQJSRQ).format('YYYY-MM-DD 23:59:59')
+          );
+        },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
     },
@@ -101,6 +133,13 @@ const TimePeriodForm = (props: PropsType) => {
         format: currentStatus === 'schedule' ? 'HH:mm' : 'YYYY-MM-DD',
         minuteStep: 5,
         hideDisabledOptions: true,
+        disabledDate: (currents: any) => {
+          const defaults = moment(currents).format('YYYY-MM-DD HH:mm:ss');
+          return (
+
+            defaults > moment(XQJSRQ).format('YYYY-MM-DD 23:59:59')
+          );
+        },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
     },
