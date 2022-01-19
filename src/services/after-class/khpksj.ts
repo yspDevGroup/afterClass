@@ -14,6 +14,7 @@ export async function getKHPKSJ(
     data?: {
       id?: string;
       WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+      RQ?: string;
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
@@ -149,6 +150,34 @@ export async function createKHPKSJ(
     }[];
     message?: string;
   }>('/khpksj/create', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 批量为某个课程班在部分日期进行排课创建 PUT /khpksj/bulkCreatePK */
+export async function bulkCreatePK(
+  body: {
+    /** 上课日期(周几):0,1,2,3,4,5,6 */
+    WEEKDAY?: string;
+    /** 课后班级数据id */
+    KHBJSJId?: string;
+    /** 学校时间配置id */
+    XXSJPZId?: string;
+    /** 学年学期id */
+    XNXQId?: string;
+    /** 场地id */
+    FJSJId?: string;
+    /** 具体日期 */
+    RQs?: any[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khpksj/bulkCreatePK', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

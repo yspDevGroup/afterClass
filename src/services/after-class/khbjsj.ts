@@ -89,6 +89,7 @@ export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: str
       BJLX?: number;
       ISFW?: number;
       ISQY?: number;
+      ISZB?: number;
       KHKCSJId?: string;
       FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
       KHKCSJ?: {
@@ -175,6 +176,8 @@ export async function getStudentClasses(
     ZT?: number[];
     /** 是否被服务使用:0没有，1有 */
     ISFW?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 是否启用 */
     ISQY?: number;
     /** 学年学期ID */
@@ -201,6 +204,8 @@ export async function getStudentEvaluationClasses(
     ZT?: number[];
     /** 是否被服务使用:0没有，1有 */
     ISFW?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 是否启用 */
     ISQY?: number;
     /** 学年学期ID */
@@ -241,6 +246,8 @@ export async function getAllClasses(
     XQ?: string;
     /** 是否被服务使用:0没有，1有 */
     ISFW?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 是否启用 */
     ISQY?: number;
     /** 课程类型 */
@@ -299,6 +306,8 @@ export async function getClassesEvaluation(
     BJMC?: string;
     /** 是否被服务使用:0没有，1有 */
     ISFW?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 是否启用 */
     ISQY?: number;
     /** 页数 */
@@ -345,6 +354,8 @@ export async function getClasses(
     ISFW?: number;
     /** 是否启用 */
     ISQY?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 课程类型 */
     KCTAG?: string;
     /** 校区ID */
@@ -529,6 +540,8 @@ export async function getNoTeacherClasses(
     ISQY?: number;
     /** 是否被服务使用:0没有，1有 */
     ISFW?: number;
+    /** 是否走班 */
+    ISZB?: number;
     XQSJId?: string;
     NJSJId?: string;
     KHKCLXId?: string;
@@ -581,6 +594,8 @@ export async function getAllClassesByNJ(
     BJZT?: string;
     /** 是否启用 */
     ISQY?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 课后课程类型ids */
     KHKCLXIds?: string[];
     /** 班级名称 */

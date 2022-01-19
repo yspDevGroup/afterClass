@@ -100,7 +100,7 @@ export async function updateKHFWBJ(
   params: API.updateKHFWBJParams,
   body: {
     BJSJId?: string;
-    XNXQId?: string;
+    XNXQId: string;
     ZT?: number;
     FWMC?: string;
     FWTP?: string;
@@ -248,6 +248,8 @@ export async function getKHFWBBySJ(
     JSRQ?: string;
     /** 是否开启付费:0关闭，1开启 */
     isPay?: number;
+    /** 服务班状态，0:未发布;1:已发布 */
+    ZT?: number;
     /** 时段别名 */
     SDBM?: string;
     /** 页数 */

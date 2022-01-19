@@ -44,8 +44,14 @@ const SelectCourses = (props: SelectCourseProps) => {
   const getKHKCLXData = async () => {
     const res = await getAllKHKCLX({ name: '' });
     if (res?.status === 'ok') {
-      const list = res?.data?.filter((item: any) => flag === 0 ? item.KCTAG !== '校内辅导' : item.KCTAG === '校内辅导').map((item: any) => item?.id)
+      // const list = res?.data?.filter((item: any) => flag === 0 ? item.KCTAG !== '校内辅导' : item.KCTAG === '校内辅导').map((item: any) => item?.id)
+
+      const list: any = [];
+      res.data?.forEach((item: any) => {
+        list?.push(item?.id)
+      })
       setKHKCLXData(list)
+      console.log(list, 'list-----')
     }
   }
 
@@ -79,7 +85,6 @@ const SelectCourses = (props: SelectCourseProps) => {
   // 获取课后课程
   const getKHKCData = async (BJMC: string | undefined = undefined) => {
     const NJSJIds = getNJArr();
-    // console.log('NJSJIds',NJSJIds);
     if (NJSJIds?.length && XQSJId) {
       const res = await getAllClassesByNJ({
         XNXQId,
@@ -87,19 +92,20 @@ const SelectCourses = (props: SelectCourseProps) => {
         BMLX: 0,
         KHKCLXIds: KHKCLXData,
         ISQY: 0, // 是否启用,
-        BJZT:'已开班',
+        ISZB: flag === 0 ? 1 : 0,
+        BJZT: '已开班',
         pageSize: 0,
         page: 0,
         BJMC: BJMC,
         XQSJId,
         BJSJId,
       });
+      console.log(res, '----------------------------------')
       if (res?.status === 'ok') {
         const { rows } = res.data;
         if (rows.length) {
           const newDataSource: DataNode[] = []
           rows.forEach((item: any) => {
-            console.log('item',item);
             const KCBData: DataNode = {
               title: item?.BJMC,
               type: 'KCB',

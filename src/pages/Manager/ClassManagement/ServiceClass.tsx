@@ -70,10 +70,6 @@ const ServiceClass = (props: { location: { state: any } }) => {
   const [BJZTMC, setBJZTMC] = useState<string | undefined>(undefined);
   // 课程班班级基本设置数据
   const [BjLists, setBjLists] = useState<any>();
-  // 课程班报名设置数据
-  const [BmLists, setBmLists] = useState<any>();
-  // 课程班报名设置数据
-  const [JfLists, setJfLists] = useState<any>();
   // 授课详情弹框
   const [ModalSKXQ, setModalSKXQ] = useState(false);
   // 授课班级数据
@@ -191,7 +187,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
         FJS.push(element?.JZGJBSJId);
       }
     });
-    const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY, FJSJ, FJSJId } =
+    const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, FJSJ, FJSJId } =
       currentData;
     const BjList = {
       BJMC: type === 'copy' ? `${BJMC}-复制` : BJMC,
@@ -208,28 +204,28 @@ const ServiceClass = (props: { location: { state: any } }) => {
       CDMC: FJSJ?.FJMC,
       CDMCId: FJSJId,
       KCLX: currentData.KHKCSJ.KHKCLX.KCTAG,
-      BJIds: currentData?.KHKCSJ?.KHKCLX?.KCTAG === '校内辅导' ? currentData?.BJSJs?.[0]?.id : null,
+      BJIds: currentData?.BJSJs?.[0]?.id,
+      ISZB: currentData?.ISZB,
     };
-    setBjLists(BjList);
+    let BJRSObj: any = {};
+    if (currentData?.ISZB === 1) {
+      BJRSObj = {
+        BJRS: currentData?.BJRS
+      }
+    } else {
+      BJRSObj = {}
+    }
+    const newObj = {
+      ...BjList,
+      ...BJRSObj
+    }
+    setBjLists(newObj);
     const BJIdArr: any = [];
     const BJMCArr: any = [];
     BJSJs.forEach((value: any) => {
       BJIdArr.push(value.id);
       BJMCArr.push(`${value.NJSJ.XD}${value.NJSJ.NJMC}${value.BJ}`);
     });
-    const BmList = {
-      BJIds: BJIdArr,
-      XzClassMC: BJSJs,
-      BMSD: [currentData.BMKSSJ, currentData.BMJSSJ],
-      BJLX,
-      BJRS,
-    };
-    setBmLists(BmList);
-    const JfList = {
-      BMLX,
-      FY,
-    };
-    setJfLists(JfList);
     if (currentData?.KHKCSJ?.KHKCLX?.KCTAG === '校内辅导') {
       currentData.BJSJs = currentData.BJSJs?.[0];
     }
@@ -594,8 +590,6 @@ const ServiceClass = (props: { location: { state: any } }) => {
         visible={visible}
         formValues={current}
         BjLists={BjLists}
-        BmLists={BmLists}
-        JfLists={JfLists}
         setVisible={setVisible}
         mcData={mcData}
         names={names}

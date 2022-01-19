@@ -162,6 +162,8 @@ export async function getFJPlan(
     xqId?: string;
     /** 是否被课后服务使用:0:没有,1:有 */
     ISFW?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 课程类型 */
     KCTAG?: string;
     /** 教师姓名 */

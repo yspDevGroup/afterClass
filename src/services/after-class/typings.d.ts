@@ -1513,6 +1513,7 @@ declare namespace API {
       BJMC?: string;
       KCTP?: string;
       ISFW?: number;
+      ISZB?: number;
       KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
     };
     /** 节次ID */
@@ -1728,6 +1729,8 @@ declare namespace API {
     ISFW?: number;
     /** 是否启用 */
     ISQY?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 课后课程ID */
     KHKCSJId?: string;
     FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
@@ -1751,7 +1754,7 @@ declare namespace API {
 
   type CreateKHBJSJ = {
     /** 班级名称 */
-    BJMC: string;
+    BJMC?: string;
     /** 班级描述 */
     BJMS?: string;
     /** 班级状态 */
@@ -1780,6 +1783,8 @@ declare namespace API {
     ISFW?: number;
     /** 是否启用 */
     ISQY?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 试用年级 */
     NJIds?: string[];
     /** 适用行政班 */
@@ -1827,6 +1832,8 @@ declare namespace API {
     ISFW?: number;
     /** 是否启用 */
     ISQY?: number;
+    /** 是否走班 */
+    ISZB?: number;
     /** 试用年级 */
     NJIds?: string[];
     /** 课后课程ID */
@@ -2869,6 +2876,8 @@ declare namespace API {
     id: string;
     /** 上课日期(周几) */
     WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+    /** 上课日期 */
+    RQ?: string;
     KHBJSJ?: {
       id?: string;
       BJMC?: string;
