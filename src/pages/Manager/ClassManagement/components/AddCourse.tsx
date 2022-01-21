@@ -471,7 +471,10 @@ const AddServiceClass: FC<AddCourseProps> = ({
         {
           type: 'div',
           key: 'div1',
-          label: <span style={{ marginLeft: 11 }}>走班排课 <Tooltip title="招生范围包含多个班级的学生，用于家长报名时自主选择的兴趣班，应当设置为走班排课课程，例如舞蹈课；招生范围限定在各个班级，家长无需选择默认报名的课程应当视为非走班排课课程，例如作业辅导；">
+          label: <span style={{ marginLeft: 11 }}>走班排课 <Tooltip
+          overlayClassName={styles?.tooltips1}
+          title="非走班排课：招生范围限定于各个行政班内，家长报名课后服务时已默认选择，如辅导课等；
+          走班排课：招生范围面向多个行政班，家长报名课后服务时可自主选择，如手工课、绘画课等">
             <QuestionCircleOutlined />
           </Tooltip>：</span>,
           lineItem: [
@@ -584,9 +587,12 @@ const AddServiceClass: FC<AddCourseProps> = ({
     {
       type: 'div',
       key: 'div1',
-      label: <span style={{ marginLeft: 11 }}>指定教师 <Tooltip title="指定教师适用于授课教师比较固定的情况；不指定教师适用于灵活上课，所有教师可实时领取单节课进行授课；">
-        <QuestionCircleOutlined />
-      </Tooltip>：</span>,
+      label: <span style={{ marginLeft: 11 }}>指定教师 <Tooltip 
+        overlayClassName={styles?.tooltips2}
+          title='不指定教师时，所有教师可通过选课领取单节课进行授课；指定教师时，仅指定的教师可对该课程班进行授课；
+      '>
+          <QuestionCircleOutlined />
+        </Tooltip>：</span>,
       lineItem: [
         {
           type: 'switch',
