@@ -23,6 +23,7 @@ export default {
   'menu.courseManagements.classManagement': '课程班管理',
   // 'menu.courseManagements.courseScheduling': '排课管理',
   'menu.courseScheduling': '排课管理',
+  'menu.courseArrange': '新排课管理',
   'menu.courseManagements.mechanismCourseInfo': '课程详情',
   'menu.courseManagements.courseRecord': '课程风采',
   'menu.afterClassManagement': '课后服务',

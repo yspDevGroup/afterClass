@@ -7,18 +7,19 @@ import ShowName from '@/components/ShowName';
 import EllipsisHint from '../EllipsisHint';
 
 import styles from './index.less';
+import moment from 'moment';
 
 type KBItemProps = {
   mode: 'see' | 'edit';
   data:
-    | {
-        cla: string;
-        teacher: string;
-        teacherWechatId?: string;
-        color: string;
-        bjzt: string;
-      }
-    | '';
+  | {
+    cla: string;
+    teacher: string;
+    teacherWechatId?: string;
+    color: string;
+    bjzt: string;
+  }
+  | '';
   disabled: boolean;
   onClick?: () => void;
 };
@@ -50,6 +51,7 @@ export type DataSourceType = {
     cla: string;
     teacher: string;
     teacherWechatId?: string;
+    keys?: number;
     rowspan?: number;
     // 场地ID
     jsId: string;
@@ -192,6 +194,7 @@ type IndexPropsType = {
   getSelectdata?: (value: any) => void;
   radioValue?: boolean;
   tearchId?: string;
+  TimeData?: any;
   /** 表格接口没有处理的数据 */
   basicData?: any[];
   style: any;
@@ -207,6 +210,7 @@ const Index: FC<IndexPropsType> = ({
   switchPages,
   getSelectdata,
   style,
+  TimeData,
   // radioValue,
   // basicData,
   // tearchId,
@@ -234,6 +238,7 @@ const Index: FC<IndexPropsType> = ({
 
     // 表头数据： 根据在表格上点击获取到的key值来获取此单元格的表头数据
     const colItem = columns[colKey] || {};
+
 
     // 一行的数据：根据在表格上点击获取到的key值来获取此单元格的行数据
     const rowData = newData[rowKey] || {};
@@ -334,6 +339,32 @@ const Index: FC<IndexPropsType> = ({
         getSelectdata(selectdata);
       }
     }
+
+    console.log(rowData, 'rowData');
+    // console.log(colItem, 'colItem');
+    console.log(rowData?.room.keys, '-00-0-0');
+    console.log(Number(rowData?.room.cla), '----------------------');
+    const weekDays = {
+      monday: 1,
+      tuesday: 2,
+      wednesday: 3,
+      thursday: 4,
+      friday: 5,
+      saturday: 6,
+      sunday: 7,
+    };
+    console.log(weekDays[colItem.dataIndex]);
+    const start = new Date('2021-09-05');
+    console.log(start, 'start');
+    // 获取学年学期开始日期为当周的周几
+    const staetWeek = Number(moment(start).format('E'));
+    console.log(moment(start).format('E'), '-----');
+    // const end = new Date(moment(TimeData?.JSRQ).format('YYYY/MM/DD 23:59:59'));
+
+    const Num = Number(rowData?.room.keys) * 7 + weekDays[colItem.dataIndex] - staetWeek;
+    console.log(Num, 'Num--------');
+    //计算点击格子的日期
+    const newDay = moment(start).add(Num, "days").format("YYYY-MM-DD");
     let pkData = null;
     if (type === 'edit') {
       pkData = {
@@ -341,6 +372,9 @@ const Index: FC<IndexPropsType> = ({
         FJSJId: rowData.room?.jsId, // 教室ID
         WEEKDAY: weekDay[colItem.dataIndex], // 周
         XXSJPZId: rowData.course?.hjId, // 时间ID
+        RQ: newDay,
+        IsDSZ: (Number(rowData?.room.cla + 1) % 2 == 0) ? 1 : 0,
+        PKBZ:rowData?.room.cla
       };
     } else if (type === 'see') {
       pkData = rowData[colItem.dataIndex]?.bjId;

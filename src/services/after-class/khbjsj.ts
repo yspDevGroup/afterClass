@@ -68,49 +68,7 @@ export async function getAllKHBJSJ(
 
 /** 创建课后班级数据 PUT /khbjsj/create */
 export async function createKHBJSJ(body: API.CreateKHBJSJ, options?: { [key: string]: any }) {
-  return request<{
-    status: 'ok' | 'error';
-    data?: {
-      id?: string;
-      BJMC?: string;
-      BJMS?: string;
-      BJZT?: '未开班' | '已开班' | '已结课';
-      ZJS?: string;
-      FJS?: string;
-      BJRS?: number;
-      KSS?: number;
-      FY?: number;
-      KKRQ?: string | any;
-      JKRQ?: string | any;
-      BMKSSJ?: string;
-      BMJSSJ?: string;
-      KCTP?: string;
-      BMLX?: number;
-      BJLX?: number;
-      ISFW?: number;
-      ISQY?: number;
-      ISZB?: number;
-      KHKCSJId?: string;
-      FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
-      KHKCSJ?: {
-        id?: string;
-        KCMC?: string;
-        KCLX?: string;
-        KCTP?: string;
-        KCZT?: number;
-        KCMS?: string;
-        KKRQ?: string | any;
-        JKRQ?: string | any;
-        BMKSSJ?: string;
-        BMJSSJ?: string;
-        XNXQId?: string;
-        KHKCLX?: { id?: string; KCLX?: string; KBYS?: string };
-      };
-      KHPKSJs?: { id?: string; WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6' }[];
-      KHXSBJs?: { id?: string; createdAt?: string; XSId?: string; XSXM?: string }[];
-    };
-    message?: string;
-  }>('/khbjsj/create', {
+  return request<any>('/khbjsj/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

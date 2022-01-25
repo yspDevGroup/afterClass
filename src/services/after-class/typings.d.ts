@@ -2878,6 +2878,10 @@ declare namespace API {
     WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
     /** 上课日期 */
     RQ?: string;
+    /** 排课类型:0:按天排课,1:按周排课,2:单周排课,3:双周排课 */
+    PKTYPE?: number;
+    /** 排课备注 */
+    PKBZ?: string;
     KHBJSJ?: {
       id?: string;
       BJMC?: string;
@@ -2944,6 +2948,12 @@ declare namespace API {
     FJSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 排课备注 */
+    PKBZ?: string;
+    /** 日期 */
+    RQ?: string;
+    /** 排课类型:0:按天排课,1:按周排课,2:单周排课,3:双周排课 */
+    PKTYPE: number;
   };
 
   type UpdateKHPKSJ = {
@@ -2957,6 +2967,12 @@ declare namespace API {
     FJSJId?: string;
     /** 学校ID */
     XNXQId?: string;
+    /** 排课备注 */
+    PKBZ?: string;
+    /** 日期 */
+    RQ?: string;
+    /** 排课类型:0:按天排课,1:按周排课,2:单周排课,3:双周排课 */
+    PKTYPE?: string;
   };
 
   type KHTKSJ = {

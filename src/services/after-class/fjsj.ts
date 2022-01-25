@@ -154,6 +154,10 @@ export async function getFJPlan(
     lxId?: string;
     /** 场地ID */
     fjId?: string;
+    /** 行政班ID */
+    xzbjId?: string;
+    /** 行政年级ID */
+    xznjId?: string;
     /** 班级ID */
     bjId?: string;
     /** 课程ID */

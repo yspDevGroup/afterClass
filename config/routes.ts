@@ -212,6 +212,13 @@
     component: './Manager/CourseScheduling',
   },
   {
+    // 排课管理
+    path: '/courseArrange',
+    name: 'courseArrange',
+    icon: 'InsertRowBelowOutlined',
+    component: './Manager/CourseArrange',
+  },
+  {
     // 增值服务
     path: '/valueAddedServices',
     name: 'valueAddedServices',
