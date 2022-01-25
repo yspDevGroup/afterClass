@@ -461,6 +461,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setKaike(false);
       setBMLX(false);
       setTeacherType(true);
+      setDataSource([])
     }
   }, [visible]);
 
@@ -1010,6 +1011,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
           setChoosenJf(true);
         } else {
           setChoosenJf(false);
+          setDataSource([])
         }
       },
     },
