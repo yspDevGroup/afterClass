@@ -155,6 +155,22 @@ const AddArranging: FC<PropsType> = (props) => {
 
 
   console.log(screenOriSource, 'screenOriSource');
+
+  // 将排好的课程再次点击可以取消
+  const getSelectdata = () => {
+    // console.log('getSelectdata', value);
+    // sameClassDatas.map((item: any, key: number) => {
+    //   if (
+    //     item.FJSJId === value.FJSJId && // 教室ID
+    //     item.XXSJPZId === value.XXSJPZId && // 时间ID
+    //     item.WEEKDAY === value.WEEKDAY // 周
+    //   ) {
+    //     sameClassDatas.splice(key, 1);
+    //   }
+    //   return item;
+    // });
+  };
+
   // 刷新Table
   const refreshTable = () => {
     if (screenOriSource?.length > 0) {
@@ -173,10 +189,7 @@ const AddArranging: FC<PropsType> = (props) => {
       setLoading(false);
     }
   };
-  // alert("今天星期" + "天一二三四五六".charAt(new Date().getDay()));
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
-    console.log(value, 'value');
-    console.log(pkData, 'pkData');
     // FJSJId 房间Id KHBJSJId: 课后班级数据
     // 如果value ===null 移除
     // xuyao改变的原始数据 screenOriSource
@@ -203,13 +216,8 @@ const AddArranging: FC<PropsType> = (props) => {
         return bjItem.id === value.KHBJSJId;
       });
       if (addRes.status === 'ok') {
-        screenOriSource.forEach((item: any) => {
-          if (item.FJSJId === cdmcValue) {
-            KHPKSJ.id = addRes?.data?.id;
-            screenOriSource.push(KHPKSJ);
-            // console.log('添加的位置', item.KHPKSJs)
-          }
-        });
+        KHPKSJ.id = addRes?.data?.id;
+        screenOriSource.push(KHPKSJ);
         setLoading(false);
       } else {
         message.error(addRes.message);
@@ -423,14 +431,20 @@ const AddArranging: FC<PropsType> = (props) => {
             if (data.status === 'ok') {
               setCDLoading(false);
               // 移除当前班级 所有排课
-              screenOriSource.filter((KHPKSJ: any) => KHPKSJ.KHBJSJId !== Bj.id);
-              // screenOriSource.forEach((item: any) => {
-              //   const { KHPKSJs } = item;
-              //   if (KHPKSJs.length > 0) {
-              //     item.KHPKSJs = KHPKSJs.filter((KHPKSJ: any) => KHPKSJ.KHBJSJId !== Bj.id);
-              //   }
-              // });
-              refreshTable();
+              if (screenOriSource?.length > 0) {
+                const screenCD = (dataSource1: any) => {
+                  const newDataSource = [...dataSource1];
+                  if (cdmcValue) {
+                    return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
+                  }
+                  return newDataSource;
+                };
+                //根据场地名称筛选出来 场地数据
+                const newCDData = screenCD(screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id));
+                const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
+                setNewTableDataSource(newTableData);
+                setLoading(false);
+              }
             }
           });
         }
