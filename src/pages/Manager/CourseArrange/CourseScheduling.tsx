@@ -171,6 +171,8 @@ const CourseScheduling = () => {
                     //   ? !(BJID === KHItem?.KHBJSJ?.id)
                     //   : !(recordValue?.BJId === KHItem?.KHBJSJ?.id),
                     dis: bjId !== KHItem?.KHBJSJ?.id,
+                    fjmc:KHItem?.FJSJ?.FJMC,
+                    jcmc:KHItem?.XXSJPZ?.TITLE
                   };
                   if (
                     bjId === KHItem?.KHBJSJ?.id
@@ -418,7 +420,6 @@ const CourseScheduling = () => {
     const res = await getAllPK({
       XNXQId: curXNXQId,
       XXJBSJId: currentUser?.xxId,
-      // KHBJSJId: 'bc2d0674-31ea-409d-9754-dcf99a74c85d'
     });
     if (res.status === 'ok') {
       // 设置初始排课数据

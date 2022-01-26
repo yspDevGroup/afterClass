@@ -18,6 +18,8 @@ type KBItemProps = {
     teacherWechatId?: string;
     color: string;
     bjzt: string;
+    jcmc: string;
+    fjmc: string;
   }
   | '';
   disabled: boolean;
@@ -108,7 +110,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
         }
       }}
       style={{
-        height: mode === 'see' ? 78 : 48,
+        height: mode === 'see' ? 98 : 48,
         padding: mode === 'see' ? 4 : 2,
         border: 0,
         background: 'transparent',
@@ -133,12 +135,20 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
               position: 'relative',
             }}
           >
-            <div className="cla">
-              <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
-              {/* {data?.cla} */}
-            </div>
             {mode === 'see' ? (
-              <div className="teacher" style={{ height: 22 }}>
+              <div className="teacher" style={{
+                width: '100%',
+                height: 22,
+                display: 'flex',
+                justifyContent: 'space-between',
+                overflow: 'hidden'
+              }}>
+                <span style={{
+                  width: 'calc(100% - 54px)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>{data?.jcmc}</span>
                 <ShowName
                   XM={data.teacher}
                   type="userName"
@@ -147,6 +157,18 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
                     color: data?.color,
                   }}
                 />
+              </div>
+            ) : (
+              <span />
+            )}
+            <div className="cla">
+              <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
+              {/* {data?.cla} */}
+            </div>
+
+            {mode === 'see' ? (
+              <div className="teacher" style={{ height: 22 }}>
+                <span>{data?.fjmc}</span>
               </div>
             ) : (
               <span />
@@ -340,10 +362,6 @@ const Index: FC<IndexPropsType> = ({
       }
     }
 
-    console.log(rowData, 'rowData');
-    // console.log(colItem, 'colItem');
-    console.log(rowData?.room.keys, '-00-0-0');
-    console.log(Number(rowData?.room.cla), '----------------------');
     const weekDays = {
       monday: 1,
       tuesday: 2,
@@ -353,18 +371,14 @@ const Index: FC<IndexPropsType> = ({
       saturday: 6,
       sunday: 7,
     };
-    console.log(weekDays[colItem.dataIndex]);
-    const start = new Date('2021-09-05');
-    console.log(start, 'start');
+    // 学年学期开始日期
+    const start = new Date(TimeData?.KSRQ);
     // 获取学年学期开始日期为当周的周几
     const staetWeek = Number(moment(start).format('E'));
-    console.log(moment(start).format('E'), '-----');
-    // const end = new Date(moment(TimeData?.JSRQ).format('YYYY/MM/DD 23:59:59'));
-
     const Num = Number(rowData?.room.keys) * 7 + weekDays[colItem.dataIndex] - staetWeek;
-    console.log(Num, 'Num--------');
-    //计算点击格子的日期
+    // 计算点击格子的日期
     const newDay = moment(start).add(Num, "days").format("YYYY-MM-DD");
+
     let pkData = null;
     if (type === 'edit') {
       pkData = {
@@ -374,7 +388,7 @@ const Index: FC<IndexPropsType> = ({
         XXSJPZId: rowData.course?.hjId, // 时间ID
         RQ: newDay,
         IsDSZ: (Number(rowData?.room.cla + 1) % 2 == 0) ? 1 : 0,
-        PKBZ:rowData?.room.cla
+        PKBZ: rowData?.room.cla
       };
     } else if (type === 'see') {
       pkData = rowData[colItem.dataIndex]?.bjId;
