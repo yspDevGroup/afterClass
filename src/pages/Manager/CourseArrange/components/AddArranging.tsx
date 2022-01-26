@@ -18,7 +18,6 @@ import { getAllCourses } from '@/services/after-class/khkcsj';
 
 const { Option } = Select;
 import styles from '../index.less';
-import moment from 'moment';
 
 const { confirm } = Modal;
 type selectType = { label: string; value: string };
@@ -80,8 +79,6 @@ const AddArranging: FC<PropsType> = (props) => {
   const [grade, setGrade] = useState<any>([]);
   // 场地是否可以编辑
   const [CdFalg, setCdFalg] = useState<boolean>(false);
-  // 学期内的周数
-  const [Weeks, setWeeks] = useState<any>([]);
 
   const columns: {
     title: string;
@@ -155,28 +152,16 @@ const AddArranging: FC<PropsType> = (props) => {
       },
     ];
 
-  // 将排好的课程再次点击可以取消
-  const getSelectdata = () => {
-    // console.log('getSelectdata', value);
-    // sameClassDatas.map((item: any, key: number) => {
-    //   if (
-    //     item.FJSJId === value.FJSJId && // 教室ID
-    //     item.XXSJPZId === value.XXSJPZId && // 时间ID
-    //     item.WEEKDAY === value.WEEKDAY // 周
-    //   ) {
-    //     sameClassDatas.splice(key, 1);
-    //   }
-    //   return item;
-    // });
-  };
 
+
+  console.log(screenOriSource, 'screenOriSource');
   // 刷新Table
   const refreshTable = () => {
     if (screenOriSource?.length > 0) {
       const screenCD = (dataSource1: any) => {
         const newDataSource = [...dataSource1];
         if (cdmcValue) {
-          return newDataSource.filter((item: any) => item.id === cdmcValue);
+          return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
         }
         return newDataSource;
       };
@@ -192,14 +177,12 @@ const AddArranging: FC<PropsType> = (props) => {
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
     console.log(value, 'value');
     console.log(pkData, 'pkData');
-
     // FJSJId 房间Id KHBJSJId: 课后班级数据
     // 如果value ===null 移除
     // xuyao改变的原始数据 screenOriSource
     setLoading(true);
     if (value) {
       // 添加 根据房间id
-      // console.log('添加')
       const KHPKSJ: any = {
         FJSJId: cdmcValue,
         WEEKDAY: value.WEEKDAY,
@@ -209,7 +192,7 @@ const AddArranging: FC<PropsType> = (props) => {
         PKTYPE: 0,
         RQ: pkData?.RQ,
         IsDSZ: pkData?.IsDSZ,
-        PKBZ:pkData?.PKBZ
+        PKBZ: pkData?.PKBZ
       };
 
       const addRes = await addKHPKSJ({
@@ -221,9 +204,9 @@ const AddArranging: FC<PropsType> = (props) => {
       });
       if (addRes.status === 'ok') {
         screenOriSource.forEach((item: any) => {
-          if (item.id === value.FJSJId) {
+          if (item.FJSJId === cdmcValue) {
             KHPKSJ.id = addRes?.data?.id;
-            item.KHPKSJs.push(KHPKSJ);
+            screenOriSource.push(KHPKSJ);
             // console.log('添加的位置', item.KHPKSJs)
           }
         });
@@ -235,24 +218,18 @@ const AddArranging: FC<PropsType> = (props) => {
       }
     } else {
       // 移除 根据房间Id移除数据
-      // console.log('移除')
       let id: string | undefined = undefined;
-      screenOriSource.forEach((item: any) => {
-        const { KHPKSJs } = item;
-        if (KHPKSJs.length > 0) {
-          item.KHPKSJs = KHPKSJs.filter((KHPKSJ: any) => {
-            if (
-              KHPKSJ.FJSJId === pkData.FJSJId && // 教室ID
-              KHPKSJ.XXSJPZId === pkData.XXSJPZId && // 时间ID
-              KHPKSJ.WEEKDAY === pkData.WEEKDAY // 周
-            ) {
-              id = KHPKSJ.id;
-              return false;
-            }
-            return true;
-          });
+      screenOriSource.filter((KHPKSJ: any) => {
+        if (
+          KHPKSJ.FJSJId === cdmcValue && // 教室ID
+          KHPKSJ.XXSJPZId === pkData.XXSJPZId && // 时间ID
+          KHPKSJ.WEEKDAY === pkData.WEEKDAY // 周
+        ) {
+          id = KHPKSJ.id;
+          return false;
         }
-      });
+        return true;
+      })
       if (id) {
         const res = await deleteKHPKSJ({
           id,
@@ -263,6 +240,7 @@ const AddArranging: FC<PropsType> = (props) => {
         setLoading(false);
       }
     }
+
   };
   // 班级展开收起
   const unFold = () => {
@@ -372,14 +350,12 @@ const AddArranging: FC<PropsType> = (props) => {
 
       if (!Bj && formValues?.BJId) {
         const value = bjRows?.find((item: { id: string }) => item.id === formValues?.BJId);
-        // console.log('value', value);
         if (value) {
           BjClick(value);
         }
       }
       // 判断获取的新课程和当前选中的bj 不匹配时 清掉 bj
       if (Bj?.id) {
-        console.log('--------');
 
         const value = bjRows?.find((item: { id: string }) => item.id === Bj?.id);
         if (!value) {
@@ -392,23 +368,7 @@ const AddArranging: FC<PropsType> = (props) => {
   };
 
 
-  // ----------------------------计算时间-------------------------------
-  useEffect(() => {
-    const start = new Date(TimeData?.KSRQ);
-    const end = new Date(moment(TimeData?.JSRQ).format('YYYY/MM/DD 23:59:59'));
-    const times = end.getTime() - start.getTime();
-    // 获取指定日期是那周的周几
-    console.log(moment(TimeData?.KSRQ).format('E'), '-----');
-    const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
-    const arr = new Array();
-    let i = 0;
-    while (i < 27) {
-      arr.push(`第${i + 1}周`);
-      i++;
-    }
-    setWeeks(arr)
-    console.log(zhoushu, '-----------===============================');
-  }, []);
+
 
   useEffect(() => {
     getKcData();
@@ -463,12 +423,13 @@ const AddArranging: FC<PropsType> = (props) => {
             if (data.status === 'ok') {
               setCDLoading(false);
               // 移除当前班级 所有排课
-              screenOriSource.forEach((item: any) => {
-                const { KHPKSJs } = item;
-                if (KHPKSJs.length > 0) {
-                  item.KHPKSJs = KHPKSJs.filter((KHPKSJ: any) => KHPKSJ.KHBJSJId !== Bj.id);
-                }
-              });
+              screenOriSource.filter((KHPKSJ: any) => KHPKSJ.KHBJSJId !== Bj.id);
+              // screenOriSource.forEach((item: any) => {
+              //   const { KHPKSJs } = item;
+              //   if (KHPKSJs.length > 0) {
+              //     item.KHPKSJs = KHPKSJs.filter((KHPKSJ: any) => KHPKSJ.KHBJSJId !== Bj.id);
+              //   }
+              // });
               refreshTable();
             }
           });
@@ -480,7 +441,6 @@ const AddArranging: FC<PropsType> = (props) => {
   // 场地改变重新筛选表格
   useEffect(() => {
     if (Bj?.id) {
-      // console.log('监听场地和班级');
       setLoading(true);
       refreshTable();
     }
@@ -728,7 +688,7 @@ const AddArranging: FC<PropsType> = (props) => {
                 </Select>
               </Form.Item>
               <div className="site">
-                {Bj ? (
+                {Bj && cdmcValue ? (
                   <Spin spinning={CDLoading}>
                     <ExcelTable
                       className={styles.borderTable}
@@ -747,7 +707,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     />
                   </Spin>
                 ) : (
-                  <div className={styles.noContent}>请先选择班级后再进行排课</div>
+                  <div className={styles.noContent}>请先选择班级和场地后再进行排课</div>
                 )}
               </div>
             </ProForm>

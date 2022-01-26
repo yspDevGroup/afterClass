@@ -74,25 +74,26 @@ const CourseScheduling = () => {
   // 学期内的周数
   const [Weeks, setWeeks] = useState<any>([]);
 
-  //所有已排课程
-  const [PkDatas, setPkDatas] = useState<any>([]);
-
   // ----------------------------计算时间-------------------------------
   useEffect(() => {
-    const start = new Date(TimeData?.KSRQ);
-    const end = new Date(moment(TimeData?.JSRQ).format('YYYY/MM/DD 23:59:59'));
-    const times = end.getTime() - start.getTime();
-    // 获取指定日期是那周的周几
-    console.log(moment(TimeData?.KSRQ).format('E'), '-----');
+    // 获取开始日期所在周一的日期
+    const getFirstDay = (date: any) => {
+      const day = date.getDay() || 7;
+
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day)
+    }
+    const end = new Date(moment(TimeData?.JSRQ).format('YYYY/MM/DD  23:59:59'));
+    const times = end.getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
+    // 获取开始时间到结束时间中间有多少个自然周
     const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
+
     const arr = new Array();
     let i = 0;
-    while (i < 27) {
+    while (i < zhoushu) {
       arr.push(`第${i + 1}周`);
       i++;
     }
-    setWeeks(arr)
-    console.log(zhoushu, '-----------===============================');
+    setWeeks(arr);
   }, [TimeData]);
 
   // 控制学期学年数据提示框的函数
@@ -122,9 +123,6 @@ const CourseScheduling = () => {
   const processingData = (data: any, timeData: any, bjId: string | undefined = undefined) => {
 
     console.log(data, 'data');
-    console.log(Weeks, 'Weeks');
-    console.log(PkDatas, 'PkDatas===------');
-    // console.log('拼接数据');
     // setLoading(true);
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const tableData: any[] = [];
@@ -150,8 +148,8 @@ const CourseScheduling = () => {
               hjId: timeItem?.id,
             },
           };
-          if (PkDatas?.length) {
-            PkDatas.map((KHItem: any) => {
+          if (data?.length) {
+            data.map((KHItem: any) => {
               if (KHItem?.PKBZ === item) {
                 if (KHItem?.XXSJPZId === timeItem?.id) {
                   const currentTeacher = KHItem?.KHBJSJ?.KHBJJs?.find(
@@ -195,67 +193,6 @@ const CourseScheduling = () => {
           tableData.push(table);
         });
       });
-
-
-      // data.map((item: any) => {
-      //   timeData.map((timeItem: any, timeKey: number) => {
-      //     const table = {
-      //       room: {
-      //         cla: item?.FJMC,
-      //         teacher: '',
-      //         jsId: item.id,
-      //         FJLXId: item?.FJLX?.id, // 场地类型ID
-      //         rowspan: timeKey === 0 ? timeData?.length : 0,
-      //       },
-      //       course: {
-      //         cla: timeItem?.TITLE,
-      //         teacher: `${timeItem?.KSSJ?.slice(0, 5)} — ${timeItem?.JSSJ?.slice(0, 5)}`,
-      //         hjId: timeItem?.id,
-      //       },
-      //     };
-      //     if (item?.KHPKSJs?.length) {
-      //       item.KHPKSJs.map((KHItem: any) => {
-      //         console.log(KHItem,'KHItem-------------------');
-      //         if (KHItem?.XXSJPZId === timeItem?.id) {
-      //           const currentTeacher = KHItem?.KHBJSJ?.KHBJJs?.find(
-      //             (items: any) => items?.JSLX === '主教师',
-      //           );
-      //           table[week[KHItem?.WEEKDAY]] = {
-      //             weekId: KHItem?.id, // 周
-      //             cla: KHItem?.KHBJSJ?.BJMC, // 班级名称
-      //             teacher: currentTeacher?.JZGJBSJ?.XM, // 主教师
-      //             teacherWechatId: currentTeacher?.JZGJBSJ?.WechatUserId, // 主教师微信用户ID
-      //             teacherID: currentTeacher?.JZGJBSJId, // 主教师ID
-      //             bjId: KHItem?.KHBJSJ?.id, // 班级ID
-      //             kcId: KHItem?.KHBJSJ?.KHKCSJ?.id, // 课程ID
-      //             njId: KHItem?.KHBJSJ?.KHKCSJ?.NJSJs?.[0]?.id, // 年级ID
-      //             bjzt: KHItem?.KHBJSJ?.BJZT, // 班级状态
-      //             xqId: KHItem?.KHBJSJ?.XQSJ?.id, // 校区ID
-      //             color: KHItem?.KHBJSJ?.KHKCSJ?.KBYS || 'rgba(62, 136, 248, 1)',
-      //             // dis: BJID
-      //             //   ? !(BJID === KHItem?.KHBJSJ?.id)
-      //             //   : !(recordValue?.BJId === KHItem?.KHBJSJ?.id),
-      //             dis: bjId !== KHItem?.KHBJSJ?.id,
-      //           };
-      //           if (
-      //             bjId === KHItem?.KHBJSJ?.id
-      //             // (!BJID && recordValue?.BJId === KHItem?.KHBJSJ?.id) ||
-      //             // (BJID && BJID === KHItem?.KHBJSJ?.id)
-      //           ) {
-      //             sameClassData.push({
-      //               WEEKDAY: KHItem?.WEEKDAY, // 周
-      //               XXSJPZId: KHItem?.XXSJPZId, // 时间ID
-      //               KHBJSJId: KHItem?.KHBJSJ?.id, // 班级ID
-      //               FJSJId: item.id, // 教室ID
-      //               XNXQId: KHItem?.XNXQId, // 学年学期ID
-      //             });
-      //           }
-      //         }
-      //       });
-      //     }
-      //     tableData.push(table);
-      //   });
-      // });
     }
     console.log(sameClassData, 'sameClassData');
     console.log(tableData, 'tableData----');
@@ -400,6 +337,7 @@ const CourseScheduling = () => {
    * @param valueScreenOriSource  需要筛选的数据
    */
   const getScreenOriSource = (valueScreenOriSource: any) => {
+    console.log(valueScreenOriSource, 'valueScreenOriSource');
     // console.log('筛选，true');
     // 加载中
     // setLoading(true);
@@ -418,7 +356,7 @@ const CourseScheduling = () => {
     const screenCD = (dataSource1: any) => {
       const newDataSource = [...dataSource1];
       if (cdmcValue) {
-        return newDataSource.filter((item: any) => item.id === cdmcValue);
+        return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
       }
       return newDataSource;
     };
@@ -426,15 +364,7 @@ const CourseScheduling = () => {
     const screenKC = (dataSource2: any) => {
       const newDataSource = [...dataSource2];
       if (kcmcValue) {
-        newDataSource.forEach((item: any) => {
-          const { KHPKSJs } = item;
-          if (KHPKSJs?.length > 0) {
-            item.KHPKSJs = KHPKSJs?.filter(
-              (KHPKSJ: any) => KHPKSJ?.KHBJSJ?.KHKCSJ?.id === kcmcValue,
-            );
-          }
-        });
-        return newDataSource;
+        return newDataSource.filter((item: any) => item?.KHBJSJ?.KHKCSJ?.id === kcmcValue);
       }
       return newDataSource;
     };
@@ -442,13 +372,7 @@ const CourseScheduling = () => {
     const screenBJ = (dataSource3: any) => {
       const newDataSource = [...dataSource3];
       if (bjmcValue) {
-        newDataSource.forEach((item: any) => {
-          const { KHPKSJs } = item;
-          if (KHPKSJs?.length > 0) {
-            item.KHPKSJs = KHPKSJs?.filter((KHPKSJ: any) => KHPKSJ?.KHBJSJId === bjmcValue);
-          }
-        });
-        return newDataSource;
+        return newDataSource.filter((item: any) => item.KHBJSJId === bjmcValue);
       }
       return newDataSource;
     };
@@ -491,11 +415,10 @@ const CourseScheduling = () => {
     const bjId = getQueryString('courseId');
     console.log('获取排课true',);
     setLoading(true);
-    const res = await getFJPlan({
-      isPk: false,
+    const res = await getAllPK({
       XNXQId: curXNXQId,
       XXJBSJId: currentUser?.xxId,
-      xqId: campusId
+      // KHBJSJId: 'bc2d0674-31ea-409d-9754-dcf99a74c85d'
     });
     if (res.status === 'ok') {
       // 设置初始排课数据
@@ -504,29 +427,7 @@ const CourseScheduling = () => {
       if (bjId === null) {
         setOriSource(res.data);
       }
-      // console.log('获取排课flase',);
       setLoading(false);
-    }
-  };
-  const getPKDatas = async () => {
-    const bjId = getQueryString('courseId');
-    setLoading(true);
-    const res = await getAllPK({
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-      // KHBJSJId: 'bc2d0674-31ea-409d-9754-dcf99a74c85d'
-    });
-    if (res.status === 'ok') {
-      console.log(res, 'res');
-      setPkDatas(res.data)
-      // 设置初始排课数据
-      // setScreenOriSource(res.data);
-      // //设置table展示的排课数据
-      // if (bjId === null) {
-      //   setOriSource(res.data);
-      // }
-      // // console.log('获取排课flase',);
-      // setLoading(false);
     }
   };
 
@@ -565,7 +466,6 @@ const CourseScheduling = () => {
     const res = await queryXNXQList(currentUser?.xxId);
     const newData = res.xnxqList;
     const curTerm = res.current;
-    console.log(res, '-----------------------');
 
     if (newData?.length) {
       if (curTerm) {
@@ -605,7 +505,6 @@ const CourseScheduling = () => {
 
   // 获取课程对应课程班数据信息
   const getBjData = async () => {
-    // console.log('获取课程true',);
     setLoading(true);
     const bjmcResl = await getAllClasses({
       page: 0,
@@ -620,7 +519,6 @@ const CourseScheduling = () => {
         value: item.id,
       }));
       setBjmcData(BJMC);
-      // console.log('获取课程false',);
       setLoading(false);
     }
   };
@@ -660,7 +558,6 @@ const CourseScheduling = () => {
   useEffect(() => {
     const bjId = getQueryString('courseId');
     if (curXNXQId && campusId) {
-      console.log('============');
       // 获取系统时间配置信息
       getSysTime();
       if (bjId === null) {
@@ -673,7 +570,6 @@ const CourseScheduling = () => {
       getCDData();
       // 排课数据
       getPKData();
-      getPKDatas();
     }
   }, [curXNXQId, campusId]);
 
@@ -743,28 +639,7 @@ const CourseScheduling = () => {
             <div className={styles.searchWrapper}>
               <SearchLayout>
                 <div>
-                  <label>所属校区：</label>
-                  <Select
-                    value={campusId}
-                    style={{ width: 160 }}
-                    onChange={(value: string) => {
-                      setCampusId(value);
-
-                      setCdmcValue(undefined);
-                      setKcmcValue(undefined);
-                    }}
-                  >
-                    {campus?.map((item: any) => {
-                      return (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </div>
-                <div>
-                  <label>所属学年学期：</label>
+                  <label>学年学期：</label>
                   <Select
                     value={curXNXQId}
                     style={{ width: 160 }}
@@ -785,7 +660,28 @@ const CourseScheduling = () => {
                   </Select>
                 </div>
                 <div>
-                  <label>课程名称：</label>
+                  <label>校区：</label>
+                  <Select
+                    value={campusId}
+                    style={{ width: 160 }}
+                    onChange={(value: string) => {
+                      setCampusId(value);
+                      setCdmcValue(undefined);
+                      setKcmcValue(undefined);
+                    }}
+                  >
+                    {campus?.map((item: any) => {
+                      return (
+                        <Option key={item.value} value={item.value}>
+                          {item.label}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+
+                <div>
+                  <label>课程：</label>
                   <Select
                     style={{ width: 160 }}
                     value={kcmcValue}
@@ -810,7 +706,7 @@ const CourseScheduling = () => {
                   </Select>
                 </div>
                 <div>
-                  <label>课程班名称：</label>
+                  <label>课程班：</label>
                   <Select
                     style={{ width: 160 }}
                     value={bjmcValue}
@@ -827,7 +723,7 @@ const CourseScheduling = () => {
                     })}
                   </Select>
                 </div>
-                <div>
+                {/* <div>
                   <label>教师名称：</label>
                   <Search
                     allowClear
@@ -836,8 +732,8 @@ const CourseScheduling = () => {
                       setTeacher(value);
                     }}
                   />
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label>场地名称：</label>
                   <Select
                     style={{ width: 160 }}
@@ -854,7 +750,7 @@ const CourseScheduling = () => {
                       );
                     })}
                   </Select>
-                </div>
+                </div> */}
               </SearchLayout>
               {/*  添加新的课程 路由跳转*/}
               <div style={{ position: 'absolute', right: 0, top: 0 }}>
