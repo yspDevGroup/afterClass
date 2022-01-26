@@ -206,6 +206,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         if (!id) {
           id = campusData[0].value;
         }
+        getNJData(id);
         await setCampusId(id);
         formRef?.current?.setFieldsValue({
           ZDKCS: 2,
