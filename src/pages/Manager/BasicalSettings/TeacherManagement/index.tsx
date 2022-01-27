@@ -126,6 +126,13 @@ const TeacherManagement = () => {
       render: (_, record) => record?.XBM?.substring(0, 1),
     },
     {
+      title: '工号',
+      key: 'GH',
+      dataIndex: 'GH',
+      align: 'center',
+      width: 150,
+    },
+    {
       title: '联系电话',
       key: 'LXDH',
       dataIndex: 'LXDH',

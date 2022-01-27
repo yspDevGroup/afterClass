@@ -15,9 +15,9 @@ import { getAllClasses } from '@/services/after-class/khbjsj';
 import type { DataSourceType } from '@/components/ExcelTable';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { getAllCourses } from '@/services/after-class/khkcsj';
+import styles from '../index.less';
 
 const { Option } = Select;
-import styles from '../index.less';
 
 const { confirm } = Modal;
 type selectType = { label: string; value: string };
@@ -69,13 +69,13 @@ const AddArranging: FC<PropsType> = (props) => {
   const [cdmcValue, setCdmcValue] = useState<any>();
   const [newTableDataSource, setNewTableDataSource] = useState<DataSourceType>([]);
 
-  //选择的班级的数据
+  // 选择的班级的数据
   const [Bj, setBj] = useState<any>(undefined);
   // 请求的班级列表数据
   const [bjData, setBjData] = useState<any>([]);
   const [tearchId, setTearchId] = useState(undefined);
   const [kcType, setKcType] = useState<any>(kcmcData);
-  //年级
+  // 年级
   const [grade, setGrade] = useState<any>([]);
   // 场地是否可以编辑
   const [CdFalg, setCdFalg] = useState<boolean>(false);
@@ -181,7 +181,7 @@ const AddArranging: FC<PropsType> = (props) => {
         }
         return newDataSource;
       };
-      //根据场地名称筛选出来 场地数据
+      // 根据场地名称筛选出来 场地数据
       const newCDData = screenCD(screenOriSource);
       const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
       setNewTableDataSource(newTableData);
@@ -226,7 +226,7 @@ const AddArranging: FC<PropsType> = (props) => {
       }
     } else {
       // 移除 根据房间Id移除数据
-      let id: string | undefined = undefined;
+      let id: string | undefined;
       screenOriSource.filter((KHPKSJ: any) => {
         if (
           KHPKSJ.FJSJId === cdmcValue && // 教室ID
@@ -272,7 +272,7 @@ const AddArranging: FC<PropsType> = (props) => {
   const getKCStyle = (id: string) => {
     if (id === Bj?.id) {
       return { borderColor: 'rgba(62,136,248,1)' };
-    } else if (formValues?.BJId) {
+    } if (formValues?.BJId) {
       return {};
     }
     return {};
@@ -322,7 +322,7 @@ const AddArranging: FC<PropsType> = (props) => {
     // setBJIDData(value.id);
   };
 
-  //获取课程数据
+  // 获取课程数据
   const getKcData = async () => {
     const khkcResl = await getAllCourses({
       page: 0,
@@ -388,7 +388,7 @@ const AddArranging: FC<PropsType> = (props) => {
     form.setFieldsValue({ XQ: campus?.[0]?.value });
   }, [props.campus]);
 
-  //获取年级信息
+  // 获取年级信息
   const getGradeData = () => {
     const response = getAllGrades({ XD: currentUser?.XD?.split(',') });
     Promise.resolve(response).then((res: any) => {
@@ -439,7 +439,7 @@ const AddArranging: FC<PropsType> = (props) => {
                   }
                   return newDataSource;
                 };
-                //根据场地名称筛选出来 场地数据
+                // 根据场地名称筛选出来 场地数据
                 const newCDData = screenCD(screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id));
                 const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
                 setNewTableDataSource(newTableData);
@@ -573,7 +573,7 @@ const AddArranging: FC<PropsType> = (props) => {
                 <span>课程班：</span>
                 {bjData && bjData.length === 0 ? (
                   <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                ) : bjData && bjData.length < 17 ? (
+                ) :<>{ bjData && bjData.length < 17 ? (
                   <ProCard ghost className="banjiCard">
                     {bjData.map((value: any) => {
                       const teacher =
@@ -681,7 +681,7 @@ const AddArranging: FC<PropsType> = (props) => {
                       </ProCard>
                     )}
                   </>
-                )}
+                )}</>}
               </div>
               <Form.Item label="场地：">
                 <Select
