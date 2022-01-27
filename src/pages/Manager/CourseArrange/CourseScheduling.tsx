@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Radio, Select, Spin } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -24,7 +27,6 @@ import moment from 'moment';
 import { getAllPK } from '@/services/after-class/khpksj';
 
 const { Option } = Select;
-const { Search } = Input;
 type selectType = { label: string; value: string };
 
 
@@ -122,7 +124,7 @@ const CourseScheduling = () => {
    */
   const processingData = (data: any, timeData: any, bjId: string | undefined = undefined) => {
 
-    console.log(data, 'data');
+    console.log(data, 'dat------ --------a');
     // setLoading(true);
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const tableData: any[] = [];
@@ -171,8 +173,8 @@ const CourseScheduling = () => {
                     //   ? !(BJID === KHItem?.KHBJSJ?.id)
                     //   : !(recordValue?.BJId === KHItem?.KHBJSJ?.id),
                     dis: bjId !== KHItem?.KHBJSJ?.id,
-                    fjmc:KHItem?.FJSJ?.FJMC,
-                    jcmc:KHItem?.XXSJPZ?.TITLE
+                    fjmc: KHItem?.FJSJ?.FJMC,
+                    jcmc: KHItem?.XXSJPZ?.TITLE
                   };
                   if (
                     bjId === KHItem?.KHBJSJ?.id
@@ -389,11 +391,10 @@ const CourseScheduling = () => {
           if (KHPKSJs?.length > 0) {
             item.KHPKSJs = KHPKSJs?.filter((KHPKSJ: any) => {
               // console.log('KHPKSJ',KHPKSJ)
-              //主教名称
+              // 主教名称
               const jsxm = KHPKSJ?.KHBJSJ?.KHBJJs?.[0]?.JZGJBSJ?.XM;
-              console.log('教师姓名', jsxm);
               if (jsxm) {
-                return jsxm.indexOf(teacher) != -1;
+                return jsxm.indexOf(teacher) !== -1;
               }
               return false;
             });
@@ -424,7 +425,7 @@ const CourseScheduling = () => {
     if (res.status === 'ok') {
       // 设置初始排课数据
       setScreenOriSource(res.data);
-      //设置table展示的排课数据
+      // 设置table展示的排课数据
       if (bjId === null) {
         setOriSource(res.data);
       }
@@ -450,7 +451,7 @@ const CourseScheduling = () => {
         if (XQSJ !== null) {
           setCampusId(XQSJ);
         } else {
-          //设置默认选择第一个校区
+          // 设置默认选择第一个校区
           let id = XQ?.find((item: any) => item.label === '本校')?.value;
           if (!id) {
             id = XQ[0].value;
@@ -488,7 +489,7 @@ const CourseScheduling = () => {
     const khkcResl = await getAllCourses({
       // 学校Id
       XXJBSJId: currentUser?.xxId,
-      //学年学期Id
+      // 学年学期Id
       XNXQId: curXNXQId,
       /** 页数 */
       page: 0,
@@ -567,14 +568,14 @@ const CourseScheduling = () => {
         // 课程班数据
         getKCData();
       }
-      //场地数据
+      // 场地数据
       getCDData();
       // 排课数据
       getPKData();
     }
   }, [curXNXQId, campusId]);
 
-  //监听课程名称 发生改变时 刷新课程班数据
+  // 监听课程名称 发生改变时 刷新课程班数据
   useEffect(() => {
     const bjId = getQueryString('courseId');
     if (curXNXQId) {
@@ -604,9 +605,8 @@ const CourseScheduling = () => {
     }
   }, [state]);
 
-  //筛选之后 table 排课数据信息 刷新table
+  // 筛选之后 table 排课数据信息 刷新table
   useEffect(() => {
-    console.log('xXSJPZData', xXSJPZData);
     if (xXSJPZData.length > 0) {
       console.log(oriSource, 'oriSource');
       const tableData = processingData(oriSource, xXSJPZData);
@@ -753,7 +753,7 @@ const CourseScheduling = () => {
                   </Select>
                 </div> */}
               </SearchLayout>
-              {/*  添加新的课程 路由跳转*/}
+              {/*  添加新的课程 路由跳转 */}
               <div style={{ position: 'absolute', right: 0, top: 0 }}>
                 <Button
                   style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
@@ -781,7 +781,7 @@ const CourseScheduling = () => {
                 </Radio.Group>
               </span>
             </div>
-            {/* 课程表组件*/}
+            {/* 课程表组件 */}
             <ExcelTable
               className={''}
               columns={columns}

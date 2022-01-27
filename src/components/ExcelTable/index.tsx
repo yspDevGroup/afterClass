@@ -387,7 +387,7 @@ const Index: FC<IndexPropsType> = ({
         WEEKDAY: weekDay[colItem.dataIndex], // 周
         XXSJPZId: rowData.course?.hjId, // 时间ID
         RQ: newDay,
-        IsDSZ: (Number(rowData?.room.cla + 1) % 2 == 0) ? 1 : 0,
+        IsDSZ: (Number(rowData?.room.cla + 1) % 2 === 0) ? 1 : 0,
         PKBZ: rowData?.room.cla
       };
     } else if (type === 'see') {

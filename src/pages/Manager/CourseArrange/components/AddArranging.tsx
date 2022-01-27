@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { history } from 'umi';
-import { Button, Form, message, Spin, Modal, Tooltip, Empty, Select, Card, Row, Col } from 'antd';
+import { Button, Form, message, Spin, Modal, Tooltip, Empty, Select, Card, Row, Col, Badge, Upload } from 'antd';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
-import { DownOutlined, QuestionCircleOutlined, UpOutlined, LeftOutlined } from '@ant-design/icons';
-import { getQueryString } from '@/utils/utils';
+import { DownOutlined, QuestionCircleOutlined, UpOutlined, LeftOutlined, VerticalAlignBottomOutlined, UploadOutlined } from '@ant-design/icons';
+import { getQueryString, getAuthorization } from '@/utils/utils';
 import ExcelTable from '@/components/ExcelTable';
 import ShowName from '@/components/ShowName';
 import { createKHPKSJ, deleteKHPKSJ, addKHPKSJ } from '@/services/after-class/khpksj';
@@ -79,6 +79,8 @@ const AddArranging: FC<PropsType> = (props) => {
   const [grade, setGrade] = useState<any>([]);
   // 场地是否可以编辑
   const [CdFalg, setCdFalg] = useState<boolean>(false);
+  // 导入
+  const [uploadVisible, setUploadVisible] = useState<boolean>(false);
 
   const columns: {
     title: string;
@@ -467,10 +469,40 @@ const AddArranging: FC<PropsType> = (props) => {
     }
   }, [formValues]);
 
+  // 上传配置
+  const UploadProps: any = {
+    name: 'xlsx',
+    action: '/api/upload/importWechatTeachers?plat=school',
+    headers: {
+      authorization: getAuthorization(),
+    },
+    beforeUpload(file: any) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error('文件大小不能超过2M');
+      }
+      return isLt2M;
+    },
+    onChange(info: { file: { status: string; name: any; response: any }; fileList: any }) {
+      if (info.file.status === 'done') {
+        const code = info.file.response;
+        if (code.status === 'ok') {
+          message.success(`上传成功`);
+          setUploadVisible(false);
+        } else {
+          message.error(`${code.message}`);
+        }
+      } else if (info.file.status === 'error') {
+        const code = info.file.response;
+        message.error(`${code.message}`);
+      }
+    },
+  };
+
 
   console.log(newTableDataSource, 'newTableDataSource');
   return (
-    <>
+    <div className={styles.AddArranging}>
       <Card
         size="small"
         bordered={false}
@@ -573,7 +605,7 @@ const AddArranging: FC<PropsType> = (props) => {
                 <span>课程班：</span>
                 {bjData && bjData.length === 0 ? (
                   <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                ) :<>{ bjData && bjData.length < 17 ? (
+                ) : <>{bjData && bjData.length < 17 ? (
                   <ProCard ghost className="banjiCard">
                     {bjData.map((value: any) => {
                       const teacher =
@@ -701,6 +733,11 @@ const AddArranging: FC<PropsType> = (props) => {
                   })}
                 </Select>
               </Form.Item>
+                {Bj && cdmcValue ? (
+                  <Button className='ImportBtn' key="button" type="primary" onClick={() => setUploadVisible(true)}>
+                    <VerticalAlignBottomOutlined /> 导入
+                  </Button>
+                ) : ('')}
               <div className="site">
                 {Bj && cdmcValue ? (
                   <Spin spinning={CDLoading}>
@@ -730,7 +767,43 @@ const AddArranging: FC<PropsType> = (props) => {
           )}
         </Spin>
       </Card>
-    </>
+      <Modal
+        title="导入场地"
+        destroyOnClose
+        width="35vw"
+        visible={uploadVisible}
+        onCancel={() => setUploadVisible(false)}
+        footer={null}
+        centered
+        maskClosable={false}
+        bodyStyle={{
+          maxHeight: '65vh',
+          overflowY: 'auto',
+        }}
+      >
+        <>
+          <p>
+            <Upload {...UploadProps}>
+              <Button icon={<UploadOutlined />}>上传文件</Button>{' '}
+              <span className={styles.messageSpan}>批量导入场地</span>
+            </Upload>
+          </p>
+          <div className={styles.messageDiv}>
+            <Badge color="#aaa" />
+            上传文件仅支持模板格式
+            <a style={{ marginLeft: '16px' }} type="download" href="/template/sitesImport.xlsx">
+              下载模板
+            </a>
+            <br />
+            <Badge color="#aaa" />
+            确保表格内只有一个工作薄，如果有多个只有第一个会被处理
+            <br />
+            <Badge color="#aaa" />
+            场地单次最大支持导入500条数据
+          </div>
+        </>
+      </Modal>
+    </div>
   );
 };
 
