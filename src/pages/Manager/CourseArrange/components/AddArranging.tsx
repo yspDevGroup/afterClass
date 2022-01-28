@@ -17,6 +17,7 @@ import { getAllGrades } from '@/services/after-class/khjyjg';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getAllPK } from '@/services/after-class/khpksj';
 import styles from '../index.less';
+import '../index.less';
 
 const { Option } = Select;
 
@@ -84,6 +85,8 @@ const AddArranging: FC<PropsType> = (props) => {
   const [CdFalg, setCdFalg] = useState<boolean>(false);
   // 导入
   const [uploadVisible, setUploadVisible] = useState<boolean>(false);
+  // 导入排课后返回的冲突数据
+  const [ImportData, setImportData] = useState<any>([]);
 
   const columns: {
     title: string;
@@ -159,7 +162,6 @@ const AddArranging: FC<PropsType> = (props) => {
 
 
 
-  console.log(screenOriSource, 'screenOriSource');
 
   // 将排好的课程再次点击可以取消
   const getSelectdata = () => {
@@ -264,7 +266,6 @@ const AddArranging: FC<PropsType> = (props) => {
     }
   };
   // 班级选择
-
   const onReset = () => {
     const bjID = getQueryString('courseId');
     if (bjID) {
@@ -467,21 +468,37 @@ const AddArranging: FC<PropsType> = (props) => {
 
   useEffect(() => {
     if (formValues) {
-      console.log('formValues', formValues);
       form.setFieldsValue(formValues);
     }
   }, [formValues]);
 
+  // 导入冲突后的弹窗提示
+  const error = () => {
+    Modal.error({
+      title: '部分导入失败',
+      className:'imporModel',
+      content: (
+        <div>
+          {
+            ImportData?.map((value: any) => {
+              return <p>{value}</p>
+            })
+          }
+        </div>
+      ),
+      onOk:()=>{
+        setImportData([])
+      }
+    });
+  }
+
   // 获取排课数据信息
   const getPKData = async () => {
-    console.log('获取排课true',);
     setLoading(true);
     const res = await getAllPK({
       XNXQId: curXNXQId,
       XXJBSJId: currentUser?.xxId,
-      // KHBJSJId:'31372b48-142b-41a8-8df9-9ba392fb5d2c'
     });
-    console.log(res,'------res')
     if (res.status === 'ok') {
       setScreenOriSource(res?.data)
       if (res?.data?.length > 0) {
@@ -496,13 +513,20 @@ const AddArranging: FC<PropsType> = (props) => {
         const newCDData = screenCD(res?.data);
         const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
         setNewTableDataSource(newTableData);
-        console.log('刷新add table');
         setLoading(false);
+        // error();
+
       }
     }
   };
 
-  console.log(newTableDataSource,'NewTableDataSource----')
+  useEffect(()=>{
+    console.log(ImportData,'ImportDataImportDataImportDataImportDataImportData');
+    if (ImportData?.length > 0) {
+      error();
+    }
+  },[ImportData])
+
 
   // 上传配置
   const UploadProps: any = {
@@ -530,6 +554,7 @@ const AddArranging: FC<PropsType> = (props) => {
         const code = info.file.response;
         if (code.status === 'ok') {
           console.log(code, 'code-0-0-0-0-0-0-')
+          setImportData(code?.data)
           message.success(`上传成功`);
           setUploadVisible(false);
           getPKData();
@@ -543,8 +568,6 @@ const AddArranging: FC<PropsType> = (props) => {
     },
   };
 
-
-  console.log(newTableDataSource, 'newTableDataSource');
   return (
     <div className={styles.AddArranging}>
       <Card

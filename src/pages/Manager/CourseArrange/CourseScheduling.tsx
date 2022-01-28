@@ -85,7 +85,7 @@ const CourseScheduling = () => {
       return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day)
     }
     const end = new Date(moment(TimeData?.JSRQ).format('YYYY/MM/DD  23:59:59'));
-    const times = end.getTime() - getFirstDay(new Date('2021-09-01')).getTime();
+    const times = end.getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
     // 获取开始时间到结束时间中间有多少个自然周
     const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
 
@@ -124,11 +124,9 @@ const CourseScheduling = () => {
    * @param bjId 班级id
    * @returns
    */
-  const startWeek = Number(moment('2021-09-01').format('E'));
+  const startWeek = Number(moment(TimeData?.KSRQ).format('E'));
   const endWeek = Number(moment(TimeData?.JSRQ).format('E'));
   const processingData = (data: any, timeData: any, bjId: string | undefined = undefined) => {
-
-    console.log(data, 'dat------ --------a');
     // setLoading(true);
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const newWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
