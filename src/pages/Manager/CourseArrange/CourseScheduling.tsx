@@ -804,6 +804,7 @@ const CourseScheduling = () => {
               xXSJPZData={xXSJPZData}
               cdmcData={cdmcData}
               screenOriSource={screenOriSource}
+              setScreenOriSource={setScreenOriSource}
               processingData={processingData}
               setState={setState}
               formValues={recordValue}

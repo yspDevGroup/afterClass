@@ -15,6 +15,7 @@ import { getAllClasses } from '@/services/after-class/khbjsj';
 import type { DataSourceType } from '@/components/ExcelTable';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { getAllCourses } from '@/services/after-class/khkcsj';
+import { getAllPK } from '@/services/after-class/khpksj';
 import styles from '../index.less';
 
 const { Option } = Select;
@@ -34,6 +35,7 @@ type PropsType = {
   kcmcData?: any[];
   currentUser?: API.CurrentUser | undefined;
   screenOriSource: any;
+  setScreenOriSource: React.Dispatch<any>;
   setLoading: any;
   campusId: string,
   TimeData: any,
@@ -42,6 +44,7 @@ type PropsType = {
 const AddArranging: FC<PropsType> = (props) => {
   const {
     screenOriSource,
+    setScreenOriSource,
     curXNXQId,
     campus,
     xXSJPZData,
@@ -469,26 +472,67 @@ const AddArranging: FC<PropsType> = (props) => {
     }
   }, [formValues]);
 
+  // 获取排课数据信息
+  const getPKData = async () => {
+    console.log('获取排课true',);
+    setLoading(true);
+    const res = await getAllPK({
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+      // KHBJSJId:'31372b48-142b-41a8-8df9-9ba392fb5d2c'
+    });
+    console.log(res,'------res')
+    if (res.status === 'ok') {
+      setScreenOriSource(res?.data)
+      if (res?.data?.length > 0) {
+        const screenCD = (dataSource1: any) => {
+          const newDataSource = [...dataSource1];
+          if (cdmcValue) {
+            return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
+          }
+          return newDataSource;
+        };
+        // 根据场地名称筛选出来 场地数据
+        const newCDData = screenCD(res?.data);
+        const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
+        setNewTableDataSource(newTableData);
+        console.log('刷新add table');
+        setLoading(false);
+      }
+    }
+  };
+
+  console.log(newTableDataSource,'NewTableDataSource----')
+
   // 上传配置
   const UploadProps: any = {
     name: 'xlsx',
-    action: '/api/upload/importWechatTeachers?plat=school',
+    action: '/api/upload/importSchedule',
     headers: {
       authorization: getAuthorization(),
     },
     beforeUpload(file: any) {
       const isLt2M = file.size / 1024 / 1024 < 2;
+      console.log('beforeUpload', file)
       if (!isLt2M) {
         message.error('文件大小不能超过2M');
       }
       return isLt2M;
     },
+    data: {
+      XNXQId: curXNXQId,
+      KHBJSJId: Bj?.id,
+      FJSJId: cdmcValue,
+      PKTYPE: 0,
+    },
     onChange(info: { file: { status: string; name: any; response: any }; fileList: any }) {
       if (info.file.status === 'done') {
         const code = info.file.response;
         if (code.status === 'ok') {
+          console.log(code, 'code-0-0-0-0-0-0-')
           message.success(`上传成功`);
           setUploadVisible(false);
+          getPKData();
         } else {
           message.error(`${code.message}`);
         }
@@ -733,11 +777,11 @@ const AddArranging: FC<PropsType> = (props) => {
                   })}
                 </Select>
               </Form.Item>
-                {Bj && cdmcValue ? (
-                  <Button className='ImportBtn' key="button" type="primary" onClick={() => setUploadVisible(true)}>
-                    <VerticalAlignBottomOutlined /> 导入
-                  </Button>
-                ) : ('')}
+              {Bj && cdmcValue ? (
+                <Button className='ImportBtn' key="button" type="primary" onClick={() => setUploadVisible(true)}>
+                  <VerticalAlignBottomOutlined /> 导入
+                </Button>
+              ) : ('')}
               <div className="site">
                 {Bj && cdmcValue ? (
                   <Spin spinning={CDLoading}>
@@ -768,7 +812,7 @@ const AddArranging: FC<PropsType> = (props) => {
         </Spin>
       </Card>
       <Modal
-        title="导入场地"
+        title="导入排课"
         destroyOnClose
         width="35vw"
         visible={uploadVisible}
@@ -785,13 +829,13 @@ const AddArranging: FC<PropsType> = (props) => {
           <p>
             <Upload {...UploadProps}>
               <Button icon={<UploadOutlined />}>上传文件</Button>{' '}
-              <span className={styles.messageSpan}>批量导入场地</span>
+              <span className={styles.messageSpan}>批量导入排课</span>
             </Upload>
           </p>
           <div className={styles.messageDiv}>
             <Badge color="#aaa" />
             上传文件仅支持模板格式
-            <a style={{ marginLeft: '16px' }} type="download" href="/template/sitesImport.xlsx">
+            <a style={{ marginLeft: '16px' }} type="download" href="/template/importSchedule.xlsx">
               下载模板
             </a>
             <br />
@@ -799,7 +843,7 @@ const AddArranging: FC<PropsType> = (props) => {
             确保表格内只有一个工作薄，如果有多个只有第一个会被处理
             <br />
             <Badge color="#aaa" />
-            场地单次最大支持导入500条数据
+            排课单次最大支持导入500条数据
           </div>
         </>
       </Modal>

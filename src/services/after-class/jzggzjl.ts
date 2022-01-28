@@ -5,8 +5,8 @@ import { request } from 'umi';
 /** 创建教师工作简历 PUT /jzggzjl/create */
 export async function createJZGGZJL(body: API.CreateJZGGZJL, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       GZQSRQ?: string;
       GZZZRQ?: string | any;
@@ -34,14 +34,14 @@ export async function getJZGGZJL(
     /** 教师ID */
     JZGJBSJId?: string;
     /** 页数 */
-    page: number;
+    page?: number;
     /** 每页记录数 */
-    pageSize: number;
+    pageSize?: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: { count?: number; rows?: API.JZGGZJL[] };
     message?: string;
   }>('/jzggzjl/getAll', {
@@ -56,12 +56,15 @@ export async function getJZGGZJL(
 
 /** 删除教师工作简历 DELETE /jzggzjl/${param0} */
 export async function deleteJZGGZJL(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteJZGGZJLParams,
+  params: {
+    // path
+    /** 教师工作简历ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/jzggzjl/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jzggzjl/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -70,13 +73,16 @@ export async function deleteJZGGZJL(
 
 /** 更新教师工作简历 PUT /jzggzjl/update/${param0} */
 export async function updateJZGGZJL(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateJZGGZJLParams,
+  params: {
+    // path
+    /** 教师工作简历ID */
+    id: string;
+  },
   body: API.UpdateJZGGZJL,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/jzggzjl/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jzggzjl/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

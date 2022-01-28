@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 获取单个教师出勤补签数据 GET /jscqbq/${param0} */
 export async function getJSCQBQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getJSCQBQParams,
+  params: {
+    // path
+    /** 补签记录ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       SPZT?: number;
       BQRQ?: string;
@@ -43,12 +46,15 @@ export async function getJSCQBQ(
 
 /** 删除单个教师出勤补签数据 DELETE /jscqbq/${param0} */
 export async function deleteJSCQBQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteJSCQBQParams,
+  params: {
+    // path
+    /** 补签记录ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/jscqbq/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jscqbq/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -77,13 +83,13 @@ export async function getAllJSCQBQ(
     /** 补签结束日期 */
     END_DATE?: string;
     /** 页数 */
-    page: number;
+    page?: number;
     /** 每页记录数 */
-    pageSize: number;
+    pageSize?: number;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.JSCQBQ[]; message?: string }>('/jscqbq/', {
+  return request<{ status?: 'ok' | 'error'; data?: API.JSCQBQ[]; message?: string }>('/jscqbq/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -96,8 +102,8 @@ export async function getAllJSCQBQ(
 /** 创建单个教师出勤补签数据 PUT /jscqbq/create */
 export async function CreateJSCQBQ(body: API.CreateJSCQBQ, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       SPZT?: number;
       BQRQ?: string;
@@ -132,13 +138,16 @@ export async function CreateJSCQBQ(body: API.CreateJSCQBQ, options?: { [key: str
 
 /** 更新单个教师出勤补签数据 PUT /jscqbq/update/${param0} */
 export async function updateJSCQBQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateJSCQBQParams,
+  params: {
+    // path
+    /** 补签记录ID */
+    id: string;
+  },
   body: API.UpdateJSCQBQ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/jscqbq/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jscqbq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

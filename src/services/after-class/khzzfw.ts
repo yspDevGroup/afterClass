@@ -5,8 +5,8 @@ import { request } from 'umi';
 /** 创建课后增值服务 PUT /khzzfw/create */
 export async function createKHZZFW(body: API.CreateKHZZFW, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       FWMC?: string;
       FWNR?: string;
@@ -29,7 +29,7 @@ export async function createKHZZFW(body: API.CreateKHZZFW, options?: { [key: str
 export async function getKHZZFW(
   body: {
     /** 学校ID */
-    XXJBSJId: string;
+    XXJBSJId?: string;
     /** 状态 */
     FWZT?: number;
     /** 服务名称 */
@@ -42,7 +42,7 @@ export async function getKHZZFW(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHZZFW[] };
     message?: string;
   }>('/khzzfw/getAll', {
@@ -57,12 +57,15 @@ export async function getKHZZFW(
 
 /** 删除课后增值服务 DELETE /khzzfw/${param0} */
 export async function deleteKHZZFW(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteKHZZFWParams,
+  params: {
+    // path
+    /** 课后增值服务ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khzzfw/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khzzfw/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -71,13 +74,16 @@ export async function deleteKHZZFW(
 
 /** 更新课后增值服务 PUT /khzzfw/update/${param0} */
 export async function updateKHZZFW(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateKHZZFWParams,
+  params: {
+    // path
+    /** 课后增值服务数据ID */
+    id: string;
+  },
   body: API.UpdateKHZZFW,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khzzfw/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khzzfw/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -92,7 +98,7 @@ export async function updateKHZZFW(
 export async function getAllFWByschooId(
   body: {
     /** 学校ID */
-    XXJBSJId: string;
+    XXJBSJId?: string;
     /** 状态 */
     FWZT?: number;
     /** 服务名称 */

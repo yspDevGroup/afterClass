@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 根据ID获取课后课程申请记录 GET /khkcsq/${param0} */
 export async function KHKCSQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.KHKCSQParams,
+  params: {
+    // path
+    /** 课程申请记录ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       ZT?: number;
       BZ?: string;
@@ -33,12 +36,15 @@ export async function KHKCSQ(
 
 /** 删除课后课程申请记录 DELETE /khkcsq/${param0} */
 export async function deleteKHKCSQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteKHKCSQParams,
+  params: {
+    // path
+    /** 课程申请记录ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khkcsq/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsq/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -48,8 +54,8 @@ export async function deleteKHKCSQ(
 /** 创建课后课程申请记录 PUT /khkcsq/create */
 export async function createKHKCSQ(body: API.CreateKHKCSQ, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       ZT?: number;
       BZ?: string;
@@ -106,13 +112,16 @@ export async function getKHKCSQ(
 
 /** 更新课后课程申请记录 PUT /khkcsq/update/${param0} */
 export async function updateKHKCSQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateKHKCSQParams,
+  params: {
+    // path
+    /** 课程申请记录ID */
+    id: string;
+  },
   body: API.UpdateKHKCSQ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khkcsq/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkcsq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
