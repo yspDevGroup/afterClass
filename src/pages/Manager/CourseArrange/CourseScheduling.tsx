@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
@@ -81,11 +82,10 @@ const CourseScheduling = () => {
     // 获取开始日期所在周一的日期
     const getFirstDay = (date: any) => {
       const day = date.getDay() || 7;
-
       return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day)
     }
     const end = new Date(moment(TimeData?.JSRQ).format('YYYY/MM/DD  23:59:59'));
-    const times = end.getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
+    const times = end.getTime() - getFirstDay(new Date('2021-09-01')).getTime();
     // 获取开始时间到结束时间中间有多少个自然周
     const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
 
@@ -93,6 +93,7 @@ const CourseScheduling = () => {
     let i = 0;
     while (i < zhoushu) {
       arr.push(`第${i + 1}周`);
+      // eslint-disable-next-line no-plusplus
       i++;
     }
     setWeeks(arr);
@@ -115,6 +116,7 @@ const CourseScheduling = () => {
     setRecordValue({ XQ: campusId });
   };
 
+
   /**
    * 把接口返回的数据处理成ExcelTable组件所需要的
    * @param data  接口返回的数据
@@ -122,11 +124,14 @@ const CourseScheduling = () => {
    * @param bjId 班级id
    * @returns
    */
+  const startWeek = Number(moment('2021-09-01').format('E'));
+  const endWeek = Number(moment(TimeData?.JSRQ).format('E'));
   const processingData = (data: any, timeData: any, bjId: string | undefined = undefined) => {
 
     console.log(data, 'dat------ --------a');
     // setLoading(true);
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const newWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const tableData: any[] = [];
     const sameClassData: any[] = [];
     console.log(timeData, 'timeData');
@@ -194,6 +199,49 @@ const CourseScheduling = () => {
 
             });
           }
+          if (endWeek < 7 && index === Weeks?.length - 1) {
+            const num = 7 - endWeek;
+            newWeek.slice(-num).forEach((items: any) => {
+              table[items] = {
+                weekId: '', // 周
+                cla: '无法排课', // 班级名称
+                teacher: '', // 主教师
+                teacherWechatId: '', // 主教师微信用户ID
+                teacherID: '', // 主教师ID
+                bjId: '', // 班级ID
+                kcId: '', // 课程ID
+                njId: '', // 年级ID
+                bjzt: '', // 班级状态
+                xqId: '', // 校区ID
+                color: '',
+                dis: true,
+                fjmc: '无法排课',
+                jcmc: '超出当前学年学期'
+              };
+            })
+          }
+          if ( index === 0) {
+            const num = startWeek - 1;
+            newWeek.slice(0, num).forEach((items: any) => {
+              table[items] = {
+                weekId: '', // 周
+                cla: '无法排课', // 班级名称
+                teacher: '', // 主教师
+                teacherWechatId: '', // 主教师微信用户ID
+                teacherID: '', // 主教师ID
+                bjId: '', // 班级ID
+                kcId: '', // 课程ID
+                njId: '', // 年级ID
+                bjzt: '', // 班级状态
+                xqId: '', // 校区ID
+                color: '',
+                dis: true,
+                fjmc: '',
+                jcmc: ''
+              };
+            })
+          }
+
           tableData.push(table);
         });
       });

@@ -119,68 +119,71 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
     >
       {!data ? (
         <>&nbsp;</>
-      ) : (
-        <div className="classCard">
-          <div
-            className={`cardTop`}
-            style={{
-              background: data?.color,
-            }}
-          />
-          <div
-            className={`cardcontent`}
-            style={{
-              color: data?.color,
-              background: data?.color.replace('1)', '0.1)'),
-              position: 'relative',
-            }}
-          >
-            {mode === 'see' ? (
-              <div className="teacher" style={{
-                width: '100%',
-                height: 22,
-                display: 'flex',
-                justifyContent: 'space-between',
-                overflow: 'hidden'
-              }}>
-                <span style={{
-                  width: 'calc(100% - 54px)',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}>{data?.jcmc}</span>
-                <ShowName
-                  XM={data.teacher}
-                  type="userName"
-                  openid={data.teacherWechatId}
-                  style={{
-                    color: data?.color,
-                  }}
-                />
-              </div>
-            ) : (
-              <span />
-            )}
-            <div className="cla">
-              <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
-              {/* {data?.cla} */}
-            </div>
+      ) : <>
+        {
+          data?.cla === '无法排课' ? <div className={styles.NoPk}><p>超出学年学期</p><span>无法排课</span></div> :
+            <div className="classCard">
+              <div
+                className={`cardTop`}
+                style={{
+                  background: data?.color,
+                }}
+              />
+              <div
+                className={`cardcontent`}
+                style={{
+                  color: data?.color,
+                  background: data?.color.replace('1)', '0.1)'),
+                  position: 'relative',
+                }}
+              >
+                {mode === 'see' ? (
+                  <div className="teacher" style={{
+                    width: '100%',
+                    height: 22,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    overflow: 'hidden'
+                  }}>
+                    <span style={{
+                      width: 'calc(100% - 54px)',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
+                    }}>{data?.jcmc}</span>
+                    <ShowName
+                      XM={data.teacher}
+                      type="userName"
+                      openid={data.teacherWechatId}
+                      style={{
+                        color: data?.color,
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <span />
+                )}
+                <div className="cla">
+                  <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
+                  {/* {data?.cla} */}
+                </div>
 
-            {mode === 'see' ? (
-              <div className="teacher" style={{ height: 22 }}>
-                <span>{data?.fjmc}</span>
+                {mode === 'see' ? (
+                  <div className="teacher" style={{ height: 22 }}>
+                    <span>{data?.fjmc}</span>
+                  </div>
+                ) : (
+                  <span />
+                )}
+                {mode === 'see' && data?.bjzt === '已开班' ? (
+                  <div className={styles.duihao}>√</div>
+                ) : (
+                  ''
+                )}
               </div>
-            ) : (
-              <span />
-            )}
-            {mode === 'see' && data?.bjzt === '已开班' ? (
-              <div className={styles.duihao}>√</div>
-            ) : (
-              ''
-            )}
-          </div>
-        </div>
-      )}
+            </div>
+        }
+      </>}
     </Button>
   );
 };
