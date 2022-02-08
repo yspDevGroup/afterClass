@@ -39,7 +39,7 @@ export const colorDisk = [
 // 课程颜色
 export const courseColorType: Record<string, string> = {
   DarkBlue: 'rgba(65, 78, 182, 1)', // 深蓝
-  GrassGreen: 'gba(38, 149, 0, 1)', // 草绿
+  GrassGreen: 'rgba(38, 149, 0, 1)', // 草绿
   BlueGreen: 'rgba(0, 140, 128, 1)', // 蓝绿
   SkyBlue: 'rgba(64, 132, 202, 1)', // 天空蓝
   Crimson: 'rgba(234, 64, 51, 1)', // 深红

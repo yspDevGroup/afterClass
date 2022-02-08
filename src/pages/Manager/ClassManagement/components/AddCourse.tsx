@@ -527,8 +527,8 @@ const AddServiceClass: FC<AddCourseProps> = ({
       label: '指定行政班',
       name: 'BJIds',
       key: 'BJIds',
-      placeholder: '请选择适用行政班：',
-      rules: [{ required: !PKType, message: '请选择适用行政班：' }],
+      placeholder: '请选择适用行政班',
+      rules: [{ required: !PKType, message: '请选择适用行政班' }],
       fieldProps: {
         options: classData?.map((item: any) => {
           return {
@@ -587,7 +587,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
     {
       type: 'div',
       key: 'div1',
-      label: <span style={{ marginLeft: 11 }}>指定教师 <Tooltip 
+      label: <span style={{ marginLeft: 11 }}>指定教师 <Tooltip
         overlayClassName={styles?.tooltips2}
           title='不指定教师时，所有教师可通过选课领取单节课进行授课；指定教师时，仅指定的教师可对该课程班进行授课；
       '>

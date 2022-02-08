@@ -43,7 +43,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
               const SKRQs = aj.SKRQ;
 
               aj.KCBSKJSSJs?.forEach((value: any) => {
-                if (TimeId === TimeIds && SKRQ === SKRQs && JsId === value.JZGJBSJ.id) {
+                if (TimeId === TimeIds && SKRQ === SKRQs && JsId === value?.JZGJBSJ.id) {
                   aj.KCBSKJSSJs?.find((item: any) => {
                     if (item.JZGJBSJ.id === JsId) {
                       // eslint-disable-next-line no-param-reassign
@@ -115,17 +115,17 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             ) : (
               <>
                 {record?.KCBSKJSSJs.map((value: any) => {
-                  if (value.JSLX === 1) {
+                  if (value?.JSLX === 1) {
                     let colors: any = '';
                     if (new Date(record.SKRQ) > new Date()) {
                       colors = '#dddddd';
-                    } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '出勤') {
+                    } else if (value?.JZGJBSJ.type && value?.JZGJBSJ.type === '出勤') {
                       colors = '#89da8c';
-                    } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '请假') {
+                    } else if (value?.JZGJBSJ.type && value?.JZGJBSJ.type === '请假') {
                       colors = '#f2c862';
-                    } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '代课') {
+                    } else if (value?.JZGJBSJ.type && value?.JZGJBSJ.type === '代课') {
                       colors = '#ac90fb';
-                    } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '缺席') {
+                    } else if (value?.JZGJBSJ.type && value?.JZGJBSJ.type === '缺席') {
                       colors = '#ff7171';
                     } else {
                       colors = '#ff7171';
@@ -139,7 +139,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                         <ShowName
                           type="userName"
                           openid={value?.JZGJBSJ?.WechatUserId}
-                          XM={value.JZGJBSJ?.XM}
+                          XM={value?.JZGJBSJ?.XM}
                         />
                       </span>
                     );

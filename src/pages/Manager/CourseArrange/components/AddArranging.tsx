@@ -18,6 +18,7 @@ import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getAllPK } from '@/services/after-class/khpksj';
 import styles from '../index.less';
 import '../index.less';
+import noJF from '@/assets/noJF.png';
 
 const { Option } = Select;
 
@@ -31,14 +32,13 @@ type PropsType = {
   formValues?: Record<string, any>;
   xXSJPZData?: any;
   campus?: any;
-  // setBJIDData?: any;
   cdmcData?: any[];
   kcmcData?: any[];
   currentUser?: API.CurrentUser | undefined;
   screenOriSource: any;
   setScreenOriSource: React.Dispatch<any>;
   setLoading: any;
-  campusId: string,
+  campusId: string | undefined,
   TimeData: any,
 };
 
@@ -165,7 +165,6 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 将排好的课程再次点击可以取消
   const getSelectdata = () => {
-    // console.log('getSelectdata', value);
     // sameClassDatas.map((item: any, key: number) => {
     //   if (
     //     item.FJSJId === value.FJSJId && // 教室ID
@@ -192,7 +191,6 @@ const AddArranging: FC<PropsType> = (props) => {
       const newCDData = screenCD(screenOriSource);
       const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
       setNewTableDataSource(newTableData);
-      console.log('刷新add table');
       setLoading(false);
     }
   };
@@ -222,6 +220,9 @@ const AddArranging: FC<PropsType> = (props) => {
       KHPKSJ.KHBJSJ = bjData.find((bjItem: any) => {
         return bjItem.id === value.KHBJSJId;
       });
+      // 添加场地数据
+      KHPKSJ.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
+
       if (addRes.status === 'ok') {
         KHPKSJ.id = addRes?.data?.id;
         screenOriSource.push(KHPKSJ);
@@ -249,6 +250,11 @@ const AddArranging: FC<PropsType> = (props) => {
         const res = await deleteKHPKSJ({
           id,
         });
+        if (res?.status === 'ok') {
+          setScreenOriSource(screenOriSource.filter((values: any) => {
+            return values?.id !== id
+          }))
+        }
         if (res?.status === 'error') {
           message.error(res?.message);
         }
@@ -324,8 +330,6 @@ const AddArranging: FC<PropsType> = (props) => {
         setCdFalg(false);
       }
     }
-    // setIndex(value.id);
-    // setBJIDData(value.id);
   };
 
   // 获取课程数据
@@ -361,7 +365,6 @@ const AddArranging: FC<PropsType> = (props) => {
       const bjRows = bjmcResl.data.rows;
       setBjData(bjRows);
       // 获取课程班老师 是否存在
-
       if (!Bj && formValues?.BJId) {
         const value = bjRows?.find((item: { id: string }) => item.id === formValues?.BJId);
         if (value) {
@@ -380,9 +383,6 @@ const AddArranging: FC<PropsType> = (props) => {
       }
     }
   };
-
-
-
 
   useEffect(() => {
     getKcData();
@@ -476,7 +476,7 @@ const AddArranging: FC<PropsType> = (props) => {
   const error = () => {
     Modal.error({
       title: '部分导入失败',
-      className:'imporModel',
+      className: 'imporModel',
       content: (
         <div>
           {
@@ -486,11 +486,12 @@ const AddArranging: FC<PropsType> = (props) => {
           }
         </div>
       ),
-      onOk:()=>{
+      onOk: () => {
         setImportData([])
       }
     });
   }
+
 
   // 获取排课数据信息
   const getPKData = async () => {
@@ -514,18 +515,15 @@ const AddArranging: FC<PropsType> = (props) => {
         const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
         setNewTableDataSource(newTableData);
         setLoading(false);
-        // error();
-
       }
     }
   };
 
-  useEffect(()=>{
-    console.log(ImportData,'ImportDataImportDataImportDataImportDataImportData');
+  useEffect(() => {
     if (ImportData?.length > 0) {
       error();
     }
-  },[ImportData])
+  }, [ImportData])
 
 
   // 上传配置
@@ -537,7 +535,6 @@ const AddArranging: FC<PropsType> = (props) => {
     },
     beforeUpload(file: any) {
       const isLt2M = file.size / 1024 / 1024 < 2;
-      console.log('beforeUpload', file)
       if (!isLt2M) {
         message.error('文件大小不能超过2M');
       }
@@ -553,7 +550,6 @@ const AddArranging: FC<PropsType> = (props) => {
       if (info.file.status === 'done') {
         const code = info.file.response;
         if (code.status === 'ok') {
-          console.log(code, 'code-0-0-0-0-0-0-')
           setImportData(code?.data)
           message.success(`上传成功`);
           setUploadVisible(false);
@@ -621,7 +617,7 @@ const AddArranging: FC<PropsType> = (props) => {
               submitter={false}
             >
               {/* <div className={styles.screen} style={{ display: 'flex', justifyContent:'center', background:'red' }}> */}
-              <Row justify="start" align="middle" style={{ background: ' #F5F5F5' }}>
+              <Row justify="start" align="middle" style={{ background: '#F5F5F5' }}>
                 <Col span={6}>
                   <ProFormSelect
                     label="校区"
@@ -663,10 +659,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     }}
                   />
                 </Col>
-
               </Row>
-
-              {/* </div> */}
 
               <div className="banji">
                 <span>课程班：</span>
@@ -825,7 +818,7 @@ const AddArranging: FC<PropsType> = (props) => {
                     />
                   </Spin>
                 ) : (
-                  <div className={styles.noContent}>请先选择班级和场地后再进行排课</div>
+                  <div className={styles.noContent}> <img src={noJF} alt="" /> <p>请先选择班级和场地后再进行排课</p> </div>
                 )}
               </div>
             </ProForm>

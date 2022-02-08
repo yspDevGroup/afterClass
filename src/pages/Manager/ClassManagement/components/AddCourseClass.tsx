@@ -872,13 +872,13 @@ const AddCourseClass: FC<AddCourseProps> = ({
       name: 'XzClassMC',
       key: 'XzClassMC',
       hidden: !xzb,
-      rules: [{ required: xzb, message: '请选择适用行政班：' }],
+      rules: [{ required: xzb, message: '请选择适用行政班' }],
       children: (
         <Select
           mode="multiple"
           allowClear
           style={{ width: '100%' }}
-          placeholder="请选择适用行政班："
+          placeholder="请选择适用行政班"
           onChange={handleChange}
         >
           {ClassData?.map((item: any) => {
