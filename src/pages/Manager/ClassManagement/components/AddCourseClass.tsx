@@ -251,11 +251,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setBJData(newData);
       setBmCurrent(Current + 1);
     } else if (Current === 1) {
-      const start = values?.BMSD ? values?.BMSD[0] : BMDate?.KSSJ;
-      const end = values?.BMSD ? values?.BMSD[1] : BMDate?.JSSJ;
-      const startTime = start?.substring(0, 10) + 'T00:00:00.000Z';
-      const endTime = end?.substring(0, 10) + 'T23:59:59.000Z';
-
+      const start = values?.BMSD && values?.BMSD[0] !== undefined ? values?.BMSD[0] : BMDate?.KSSJ;
+      const end = values?.BMSD && values?.BMSD[1] !== undefined ? values?.BMSD[1] : BMDate?.JSSJ;
+      const startTime = `${start?.substring(0, 10)}T00:00:00.000Z`;
+      const endTime = `${end?.substring(0, 10)}T23:59:59.000Z`;
       const newData = {
         ...values,
         ...BJData,
