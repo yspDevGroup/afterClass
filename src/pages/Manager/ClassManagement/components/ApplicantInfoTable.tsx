@@ -23,7 +23,7 @@ import { useModel } from 'umi';
 import { createKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
 import moment from 'moment';
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
-import { cancleClass, getEnrolled } from '@/services/after-class/khbjsj';
+import { getEnrolled } from '@/services/after-class/khbjsj';
 import SignUp from '../components/SingUp';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import styles from '../index.less';
@@ -162,14 +162,26 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
   // 取消报名
   const batchCancel = async (XSList: { XSJBSJId: string; ZT: number }[]) => {
     if (XSList.length > 0) {
-      const result = await cancleClass({
-        KHBJSJId: applicantData?.id,
-        XSlist: XSList,
-        JZGJBSJId: currentUser?.JSId || testTeacherId,
-        BZ: '',
-        deviceIp: '117.36.118.42',
-        MSG: `您所选的${applicantData?.KHKCSJ?.KCMC}-${applicantData?.BJMC}，取消报名请知悉`,
+      const newlist = XSList.map((item: any) => {
+        return {
+          KSS: applicantData?.KSS,
+          LX: 0, //  1是服务   0是课程班是服务班
+          XSJBSJId: item?.XSJBSJId,
+          ZT: 0,
+          KHBJSJId: clickBjId,
+        };
       });
+
+      // createKHTKSJ
+      const result = await createKHTKSJ(newlist);
+      // const result = await cancleClass({
+      //   KHBJSJId: applicantData?.id,
+      //   XSlist: XSList,
+      //   JZGJBSJId: currentUser?.JSId || testTeacherId,
+      //   BZ: '',
+      //   deviceIp: '117.36.118.42',
+      //   MSG: `您所选的${applicantData?.KHKCSJ?.KCMC}-${applicantData?.BJMC}，取消报名请知悉`,
+      // });
       if (result.status === 'ok') {
         message.success('取消报名成功');
         actionRef?.current?.clearSelected?.();
@@ -194,7 +206,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         cancelText="取消"
         placement="topRight"
       >
-        <Tooltip title="取消报名">
+        <Tooltip placement="bottom" title="取消报名">
           <a>取消报名</a>
         </Tooltip>
       </Popconfirm>
@@ -323,6 +335,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         if (_text === 3) {
           return <span style={{ color: '#4884ff' }}>未缴费</span>;
         }
+        if (_text === 1) {
+          return <span style={{ color: '#4884ff' }}>退课中</span>;
+        }
         return <span style={{ color: '#36970c' }}>已缴费</span>;
       },
     },
@@ -418,7 +433,10 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                   cancelText="取消"
                   placement="topRight"
                 >
-                  <Tooltip title="本课程暂未开始上课，退课后，系统将自动发起全额退款">
+                  <Tooltip
+                    placement="bottom"
+                    title="本课程暂未开始上课，退课后，系统将自动发起全额退款"
+                  >
                     <a>取消报名</a>
                   </Tooltip>
                 </Popconfirm>
@@ -510,7 +528,29 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       if (info.file.status === 'done') {
         const code = info.file.response;
         if (code.status === 'ok') {
-          message.success('导入成功');
+          const repeat = code.data?.find((v: { errorType: number }) => {
+            return v.errorType === 0;
+          });
+          const wrong = code.data?.find((v: { errorType: number }) => {
+            return v.errorType === 1;
+          });
+          const different = code.data?.find((v: { errorType: number }) => {
+            return v.errorType === 2;
+          });
+          const sqlerr = code.data?.find((v: { errorType: number }) => {
+            return v.errorType === 3;
+          });
+          if (repeat) {
+            message.warning('存在重复数据，部分导入失败');
+          } else if (wrong) {
+            message.warning('数据格式有误，部分导入失败');
+          } else if (different) {
+            message.warning('部分数据有误，部分导入失败');
+          } else if (sqlerr) {
+            message.warning('未知错误，导入失败');
+          } else {
+            message.success('导入成功');
+          }
           setUploadVisible(false);
 
           onsetKHXSBJs();
@@ -729,7 +769,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         pagination={{
           pageSize: 5,
           defaultCurrent: 1,
-          pageSizeOptions: ['5'],
+          pageSizeOptions: ['5', '10', '20', '50'],
           showQuickJumper: false,
           showSizeChanger: false,
           showTotal: undefined,
@@ -867,11 +907,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           <div className={styles.messageDiv}>
             <Badge color="#aaa" size="small" />
             上传文件仅支持模板格式
-            <a
-              style={{ marginLeft: '16px' }}
-              type="download"
-              href="http://acuploads.test.xianyunshipei.com//importTemplate/bjBM.xlsx"
-            >
+            <a style={{ marginLeft: '16px' }} type="download" href="/template/studentsImport.xlsx">
               下载模板
             </a>
             <br />

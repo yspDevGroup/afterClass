@@ -21,11 +21,13 @@ type PropsType = {
   readonly?: boolean;
   setopens: (value: boolean) => void;
   setModalVisible: (value: boolean) => void;
-  setXQLabelItem: (value: string) => void;
+  setXQLabelItem: (value: { label: string; value: string }) => void;
+  xQLabelItem: any;
 };
 
 const AddRoom = (props: PropsType) => {
-  const { current, setForm, readonly, setopens, setModalVisible, setXQLabelItem } = props;
+  const { current, setForm, readonly, setopens, setModalVisible, setXQLabelItem, xQLabelItem } =
+    props;
   const [roomType, setRoomType] = useState<Record<string, string>[]>([]);
   // 校区
   const [campus, setCampus] = useState<any>([]);
@@ -116,7 +118,7 @@ const AddRoom = (props: PropsType) => {
       label: '类型',
       name: 'FJLXId',
       key: 'FJLXId',
-      rules: [{ required: true, message: '请填写类型' }],
+      rules: [{ required: true, message: '请选择场地类型' }],
       options: roomType,
     },
     {
@@ -125,10 +127,14 @@ const AddRoom = (props: PropsType) => {
       label: '所属校区',
       name: 'XQ',
       key: 'XQ',
+      rules: [{ required: true, message: '请选择所属校区' }],
       fieldProps: {
         options: campus,
         onChange(value: any, option: any) {
-          setXQLabelItem(option.label);
+          setXQLabelItem({
+            label: option.label,
+            value,
+          });
         },
       },
     },
@@ -138,9 +144,8 @@ const AddRoom = (props: PropsType) => {
       label: '容纳人数',
       name: 'FJRS',
       key: 'FJRS',
-      max:10000,
-      rules: [
-        { message: '最大人数不得超过一万', pattern: /^([1-9]\d{0,3}|0)?$/ }],
+      max: 10000,
+      rules: [{ message: '最大人数不得超过一万', pattern: /^([1-9]\d{0,3}|0)?$/ }],
     },
     {
       type: 'input',
@@ -160,10 +165,12 @@ const AddRoom = (props: PropsType) => {
         setForm={setForm}
         values={(() => {
           if (current) {
+            console.log('current', current);
+
             const { FJLX, XQSJ, XQName, ...info } = current;
             return {
               FJLXId: FJLX?.id,
-              XQSJId: XQSJ?.id,
+              XQ: xQLabelItem?.value,
               ...info,
             };
           }

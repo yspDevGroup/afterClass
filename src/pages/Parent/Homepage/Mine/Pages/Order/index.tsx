@@ -39,20 +39,20 @@ const OrderList = (props: {
       {data && data.length ? (
         data.map((item) => {
           const { KHBJSJ, KHXXZZFW, ...rest } = item;
-          const color = item.DDZT === '已付款' ? '#45C977' : '#888';
+          const color = item.DDZT === '已付款' ? '#15B628' : '#888';
           return (
             <div className={styles.Information}>
               <Link
                 to={{
                   pathname: '/parent/mine/orderDetails',
                   state: {
-                    title: KHBJSJ?.KHKCSJ.KCMC,
+                    title: KHBJSJ?.KHKCSJ.KCMC || item?.XSFWBJ?.KHFWBJ?.FWMC,
                     detail: KHBJSJ,
                     payOrder: { ...rest },
                     user: currentUser,
                     KKRQ: KHBJSJ?.KHKCSJ.KKRQ,
                     JKRQ: KHBJSJ?.KHKCSJ.JKRQ,
-                    fwdetail: KHXXZZFW,
+                    fwdetail: KHXXZZFW || item?.XSFWBJ,
                   },
                 }}
               >
@@ -63,9 +63,17 @@ const OrderList = (props: {
                   </span>
                 </p>
                 <div className={styles.KCMC}>
-                  <p>{item.KHBJSJ?.KHKCSJ?.KCMC || item.KHXXZZFW?.FWMC}</p>
-                  <span>￥{item.KHBJSJ?.FY || item.KHXXZZFW?.FY}</span>
+                  <p>
+                    {item.KHBJSJ?.KHKCSJ?.KCMC || item.KHXXZZFW?.FWMC || item?.XSFWBJ?.KHFWBJ?.FWMC}
+                  </p>
+                  <span>￥{item?.DDFY || item.KHXXZZFW?.FY}</span>
                 </div>
+                <p className={styles.orderNumber}>
+                  <span>
+                    订单类型：
+                    {item.DDLX === 0 ? '缤纷课堂' : item.DDLX === 1 ? '订餐&托管' : '课后服务'}
+                  </span>
+                </p>
                 <p className={styles.orderNumber}>
                   <span>下单时间：{item.XDSJ}</span>
                 </p>
@@ -118,9 +126,7 @@ const Order: React.FC = () => {
   const fetch = async () => {
     const res = await getStudentOrders({
       XSJBSJId:
-        localStorage.getItem('studentId') ||
-        currentUser?.student?.[0].XSJBSJId ||
-        testStudentId,
+        localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
     });
     if (res.status === 'ok') {
       setOrderInfo(res.data);
@@ -129,9 +135,10 @@ const Order: React.FC = () => {
   useEffect(() => {
     fetch();
   }, []);
+
   return (
     <>
-      <GoBack title={'订单'} onclick="/parent/home?index=mine" showReFund/>
+      <GoBack title={'订单'} onclick="/parent/home?index=mine" showReFund />
       <div className={styles.orderList}>
         <Tabs type="card" defaultActiveKey={type}>
           <TabPane tab="全部" key="total">

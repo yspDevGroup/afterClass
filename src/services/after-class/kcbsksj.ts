@@ -5,7 +5,7 @@ import { request } from 'umi';
 /** 获取课后服务-课程班上课时间安排 POST /kcbsksj/getAll */
 export async function getKCBSKSJ(
   body: {
-    KHBJSJId?: string;
+    KHBJSJId?: string[];
     XNXQId?: string;
     JZGJBSJId?: string;
     startDate?: string;

@@ -80,18 +80,23 @@ const Details = (props: any) => {
             {Datas?.LX !== 1 ? (
               <>
                 <Divider />
-                {Datas?.LX === 2 ? <>
-                  <p>
-                    对调课程：{Datas?.desKHBJSJ?.KHKCSJ?.KCMC} — {Datas.desKHBJSJ?.BJMC}
-                  </p>
-                  <p>
-                    对调课程授课教师：<ShowName
-                      type="userName"
-                      openid={Datas?.DKJS?.WechatUserId}
-                      XM={Datas.DKJS?.XM}
-                    />
-                  </p>
-                </> : ''}
+                {Datas?.LX === 2 ? (
+                  <>
+                    <p>
+                      对调课程：{Datas?.desKHBJSJ?.KHKCSJ?.KCMC} — {Datas.desKHBJSJ?.BJMC}
+                    </p>
+                    <p>
+                      对调课程授课教师：
+                      <ShowName
+                        type="userName"
+                        openid={Datas?.DKJS?.WechatUserId}
+                        XM={Datas.DKJS?.XM}
+                      />
+                    </p>
+                  </>
+                ) : (
+                  ''
+                )}
                 <p>
                   调课后时间：{moment(Datas?.TKRQ).format('MM月DD日')}，{Datas.TKJC?.TITLE}【
                   {Datas.TKJC?.KSSJ.substring(0, 5)}-{Datas.TKJC?.JSSJ.substring(0, 5)}】
@@ -173,7 +178,7 @@ const Details = (props: any) => {
               <></>
             ) : (
               <p className={styles.switch}>
-                <span>是否同意{Datas?.LX === 2 ? '调' : '代'}课</span>
+                <span>是否同意{Datas?.LX === 2 || Datas?.LX === 0 ? '调' : '代'}课</span>
                 <Switch
                   defaultChecked={Datas?.ZT === 4 || Datas?.ZT === 1 || Datas?.ZT === 0}
                   onChange={onChange}

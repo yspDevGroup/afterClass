@@ -17,6 +17,9 @@ export async function getKHPKSJ(
     data: {
       id?: string;
       WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+      RQ?: string;
+      PKTYPE?: number;
+      PKBZ?: string;
       KHBJSJ?: {
         id?: string;
         BJMC?: string;
@@ -123,6 +126,12 @@ export async function getAllKHPKSJ(
     njId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 场地id */
+    FJSJId?: string;
+    /** 行政班id */
+    BJSJId?: string;
+    /** 排课类型 */
+    PKTYPE?: string;
     /** 课程名称 */
     name?: string;
   },
@@ -154,6 +163,8 @@ export async function createKHPKSJ(
       XXSJPZId?: string;
       KHBJSJId?: string;
       FJSJId?: string;
+      RQ?: string;
+      PKTYPE?: string;
       XNXQId?: string;
     }[];
     message?: string;
@@ -167,8 +178,60 @@ export async function createKHPKSJ(
   });
 }
 
-/** 添加课后排课数据 PUT /khpksj/addKHPKSJ */
-export async function addKHPKSJ(body: API.CreateKHPKSJ, options?: { [key: string]: any }) {
+/** 批量为某个课程班在部分日期进行排课创建 PUT /khpksj/bulkCreatePK */
+export async function bulkCreatePK(
+  body: {
+    /** 上课日期(周几):0,1,2,3,4,5,6 */
+    WEEKDAY?: string;
+    /** 课后班级数据id */
+    KHBJSJId?: string;
+    /** 学校时间配置id */
+    XXSJPZId?: string;
+    /** 学年学期id */
+    XNXQId?: string;
+    /** 场地id */
+    FJSJId?: string;
+    /** 具体日期 */
+    RQs?: any[];
+    /** 排课类型:0:按天排课,1:按周排课,3:单双周排课 */
+    PKTYPE?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khpksj/bulkCreatePK', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 添加按日排课 PUT /khpksj/addKHPKSJ */
+export async function addKHPKSJ(
+  body: {
+    /** 上课日期(周几) */
+    WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+    /** 学校时间配置ID */
+    XXSJPZId?: string;
+    /** 课后班级ID */
+    KHBJSJId?: string;
+    /** 房间ID */
+    FJSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 日期 */
+    RQ?: string;
+    /** 是否单双周:0:单周,1:双周 */
+    IsDSZ?: number;
+    /** 排课备注 */
+    PKBZ?: string;
+    /** 排课类型:0:按天排课,1:按周排课,2:单周排课,3:双周排课 */
+    PKTYPE?: number;
+  },
+  options?: { [key: string]: any },
+) {
   return request<{ status?: 'ok' | 'error'; data?: { id?: string }; message?: string }>(
     '/khpksj/addKHPKSJ',
     {
@@ -180,6 +243,46 @@ export async function addKHPKSJ(body: API.CreateKHPKSJ, options?: { [key: string
       ...(options || {}),
     },
   );
+}
+
+/** 查看所有排课 POST /khpksj/getAllPK */
+export async function getAllPK(
+  body: {
+    /** 课后班级ID */
+    KHBJSJId?: string;
+    /** 课后课程ID */
+    KHKCSJId?: string;
+    /** 房间ID */
+    FJSJId?: string;
+    /** 场地类型ID */
+    FJLXId?: string;
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学校基本数据id */
+    XXJBSJId?: string;
+    /** 校区数据id */
+    XQSJId?: string;
+    /** 行政班id */
+    BJSJId?: string;
+    /** 年级id */
+    NJSJId?: string;
+    /** 日期 */
+    RQ?: string;
+    /** 排课类型:0:按天排课,1:按周排课,2:单周排课,3:双周排课 */
+    PKTYPE?: number[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khpksj/getAllPK', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
 }
 
 /** 更新课后排课数据 PUT /khpksj/update/${param0} */

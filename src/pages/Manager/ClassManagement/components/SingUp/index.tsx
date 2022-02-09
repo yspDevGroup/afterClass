@@ -156,9 +156,9 @@ const SignUp = (props: SignUpProps, ref: any) => {
       title: '报名结果',
       content: (
         <Space size="middle">
-          {len - list.length > 0 ? <span>{`${len - list.length}报名成功`}</span> : ''}
-          {alreadyLen > 0 ? <span>{`${alreadyLen}已报名`}</span> : ''}
-          {failLen > 0 ? <span>{`${failLen}报名失败`}</span> : ''}
+          {len - list.length > 0 ? <span>{`${len - list.length}名学生报名成功`}</span> : ''}
+          {alreadyLen > 0 ? <span>{`${alreadyLen}名学生已报名`}</span> : ''}
+          {failLen > 0 ? <span>{`${failLen}名学生报名失败`}</span> : ''}
           {noneLet > 0 ? <span>{`${noneLet}学生不存在`}</span> : ''}
         </Space>
       ),
@@ -483,11 +483,11 @@ const SignUp = (props: SignUpProps, ref: any) => {
         setSelectNumber(selectNumber);
       }
       // 移除搜索后的内容
-      if (searchFalg) {
-        setSearchFalg(false);
-        setSearchValue(undefined);
-        // setSearchTreeData([]);
-      }
+      // if (searchFalg) {
+      //   setSearchFalg(false);
+      //   setSearchValue(undefined);
+      //   // setSearchTreeData([]);
+      // }
 
       setSelectTreeData(arr);
     }

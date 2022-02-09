@@ -3,13 +3,19 @@ import { useModel } from 'umi';
 import { List, Checkbox, message } from 'antd';
 import type { FormInstance } from 'antd';
 import dayjs from 'dayjs';
-import { Calendar } from 'react-h5-calendar';
+import MobileCalendar from '@/components/MobileCalendar/calendar';
 import ListComponent from '@/components/ListComponent';
 import { compareNow } from '@/utils/Timefunction';
 import noData from '@/assets/noCourse.png';
 
 import styles from './index.less';
-import { convertStuCourse, CurdayCourse, ParentHomeData } from '@/services/local-services/mobileHome';
+import {
+  convertStuCourse,
+  CurdayCourse,
+  getWeekCalendar,
+  ParentHomeData,
+} from '@/services/local-services/mobileHome';
+import moment from 'moment';
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -36,17 +42,29 @@ const ClassCalendar = (props: propstype) => {
   const [editCourses, setEditCourses] = useState<any>([]);
   const [dates, setDates] = useState<any[]>([]);
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
-  const StorageXSId = localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
-  const StorageBJId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-  const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
+  const StorageXSId =
+    localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+  const StorageNjId =
+    localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+  const StorageBJId =
+    localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+  const StorageXQSJId =
+    localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   // 根据日期修改展示数据
   const changeDateList = async (date?: any) => {
     const curDay = date || dayjs();
     const dayFormat = curDay.format('YYYY-MM-DD');
     setDay(dayFormat);
     setCDay(curDay.format('M月D日'));
-    const { courseList } = await CurdayCourse('student', currentUser?.xxId, StorageXSId, dayFormat, StorageNjId, StorageBJId, StorageXQSJId);
+    const { courseList } = await CurdayCourse(
+      'student',
+      currentUser?.xxId,
+      StorageXSId,
+      dayFormat,
+      StorageNjId,
+      StorageBJId,
+      StorageXQSJId,
+    );
     if (type) {
       setEditCourses(convertStuCourse(courseList, 'filter'));
     } else {
@@ -58,25 +76,48 @@ const ClassCalendar = (props: propstype) => {
         noDataImg: noData,
       });
     }
-  }
+  };
+  const getMarkDays = async (start?: string) => {
+    const oriData = await ParentHomeData(
+      'student',
+      xxId,
+      StorageXSId,
+      StorageNjId,
+      StorageBJId,
+      StorageXQSJId,
+    );
+    const { markDays, data } = oriData;
+    if (!type) {
+      const weekDys = await getWeekCalendar('student', StorageXSId, start || day, data.bjIds);
+      setDates(markDays.concat(weekDys));
+    } else {
+      setDates(markDays);
+    }
+  };
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData('student', xxId, StorageXSId, StorageNjId, StorageBJId, StorageXQSJId);
-      const { markDays } = oriData;
-      const { courseList } = await CurdayCourse('student', currentUser?.xxId, StorageXSId, day, StorageNjId, StorageBJId, StorageXQSJId);
+      const { courseList } = await CurdayCourse(
+        'student',
+        currentUser?.xxId,
+        StorageXSId,
+        day,
+        StorageNjId,
+        StorageBJId,
+        StorageXQSJId,
+      );
       if (type) {
         setEditCourses(convertStuCourse(courseList, 'filter'));
       } else {
         setCourse({
           type: 'picList',
           cls: 'picList',
-          list: convertStuCourse(courseList,),
+          list: convertStuCourse(courseList),
           noDataText: '当天无课',
           noDataImg: noData,
         });
       }
-      setDates(markDays);
-    })()
+      getMarkDays();
+    })();
   }, [StorageXSId]);
   useEffect(() => {
     setDatedata?.(choosenCourses);
@@ -113,8 +154,9 @@ const ClassCalendar = (props: propstype) => {
       >
         今
       </span>
-      <Calendar
+      <MobileCalendar
         showType={'week'}
+        disableMonthView={true}
         markDates={dates}
         onDateClick={(date: { format: (arg: string) => any }) => {
           if (type && type === 'edit') {
@@ -132,6 +174,10 @@ const ClassCalendar = (props: propstype) => {
         markType="dot"
         transitionDuration={0.1}
         currentDate={day}
+        onTouchEnd={(a: number, b: number) => {
+          const start = moment(new Date(b)).format('YYYY-MM-DD');
+          getMarkDays(start);
+        }}
       />
       {type && type === 'edit' ? (
         <p style={{ lineHeight: '35px', margin: 0, color: '#888' }}>请选择课程</p>
@@ -150,10 +196,7 @@ const ClassCalendar = (props: propstype) => {
                 key={`${day}+${item?.bjid}+${item.jcId}`}
                 actions={[<Checkbox onChange={(e) => onChange(e, item)} />]}
               >
-                <List.Item.Meta
-                  title={item?.title}
-                  description={item.desc?.[0].left}
-                />
+                <List.Item.Meta title={item?.title} description={item.desc?.[0].left} />
               </List.Item>
             );
           }}

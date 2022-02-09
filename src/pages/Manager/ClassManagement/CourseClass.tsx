@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useModel, history } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tooltip, Select, Divider, Row, Col } from 'antd';
+import { Button, Modal, Tooltip, Select, Row, Col } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -18,7 +18,7 @@ import ActionBar from './components/ActionBar';
 
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 
-import styles from './index.less';
+// import styles from './index.less';
 // import AgentRegistration from './components/AgentRegistration';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getClassDays } from '@/utils/TimeTable';
@@ -28,6 +28,7 @@ import SearchLayout from '@/components/Search/Layout';
 import AddCourseClass from './components/AddCourseClass';
 import AppSKXQTable from './components/AppSKXQTable';
 import { calcAllPeriod, getAllClassIds } from '@/services/after-class/kcbsksj';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -93,7 +94,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       XNXQId: curXNXQId,
       KHKCSJId: kcId || state?.id,
       BJZT: BJZTMC,
-      ISFW:0,
+      ISFW: 0,
       page: 0,
       pageSize: 0,
     };
@@ -117,7 +118,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         type: ['1'],
       });
       if (res.status === 'ok') {
-        setBMJSSJTime(res.data?.[0]?.JSSJ);
+        setBMJSSJTime(moment(res.data?.[0]?.JSSJ).format('YYYY/MM/DD 23:59:59'));
       }
     })();
   }, [curXNXQId]);
@@ -206,7 +207,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
         FJS.push(element?.JZGJBSJId);
       }
     });
-    const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY, FJSJ,FJSJId } = currentData;
+    const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, BJLX, BJRS, BMLX, FY, FJSJ, FJSJId } =
+      currentData;
     const BjList = {
       BJMC: type === 'copy' ? `${BJMC}-复制` : BJMC,
       KHKCSJId: KHKCSJ?.id,
@@ -220,7 +222,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       KSS,
       XQSJId,
       CDMC: FJSJ?.FJMC,
-      CDMCId:FJSJId
+      CDMCId: FJSJId,
     };
     setBjLists(BjList);
     const BJIdArr: any = [];
@@ -411,7 +413,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       key: 'PK',
       ellipsis: true,
       render: (_, record) => {
-        const Url = `/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}`;
+        const Url = `/courseArrange?courseId=${record.id}&xnxqid=${curXNXQId}&XQSJ=${record.XQSJ.id}`;
         if (record.BJZT === '未开班') {
           if (record.pk_count === 0) {
             return <Link to={Url}>未排课</Link>;
@@ -508,7 +510,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         return (
           <>
             <ActionBar record={record} handleEdit={handleEdit} getData={getData} />
-            <Divider type="vertical" />
+            {/* <Divider type="vertical" /> */}
             {/* {record?.BJZT === '已开班' && newDate <= BMJSSJ ? (
               <a
                 onClick={() => {
@@ -534,181 +536,181 @@ const CourseManagement = (props: { location: { state: any } }) => {
   ];
   return (
     <>
-        <ProTable<any>
-          actionRef={actionRef}
-          columns={columns}
-          rowKey="id"
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: getTableWidth(columns) }}
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-          search={false}
-          dataSource={dataSource}
-          headerTitle={
-            <>
-              <SearchLayout>
-                <div>
-                  <label htmlFor="term">所属学年学期：</label>
-                  <Select
-                    value={curXNXQId}
-                    allowClear
-                    onChange={(value: string) => {
-                      setCurXNXQId(value);
-                      setKcId(undefined);
-                      setKCLY(undefined);
-                      setBJZTMC(undefined);
-                    }}
-                  >
-                    {termList?.map((item: any) => {
-                      return (
-                        <Option key={item.value} value={item.value}>
-                          {item.text}
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </div>
-                <div>
-                  <label htmlFor="kcname">课程名称：</label>
-                  <Select
-                    value={kcId || state?.id}
-                    allowClear
-                    placeholder="请选择"
-                    onChange={onKcmcChange}
-                  >
-                    {mcData?.map((item: any) => {
-                      return (
-                        <Option value={item.value} key={item.value}>
-                          {item.label}
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </div>
-                <div>
-                  <label htmlFor="kcly">课程来源：</label>
-                  <Select
-                    allowClear
-                    placeholder="课程来源"
-                    onChange={(value) => {
-                      setKCLY(value);
-                      setBJZTMC(undefined);
-                    }}
-                    value={KCLY}
-                  >
-                    <Option value="校内课程" key="校内课程">
-                      校内课程
-                    </Option>
-                    <Option value="机构课程" key="机构课程">
-                      机构课程
-                    </Option>
-                  </Select>
-                </div>
-                <div>
-                  <label htmlFor="status">班级状态：</label>
-                  <Select
-                    allowClear
-                    value={BJZTMC}
-                    onChange={(value: string) => {
-                      setBJZTMC(value);
-                    }}
-                  >
-                    <Option key="已开班" value="已开班">
-                      已开班
-                    </Option>
-                    <Option key="未开班" value="未开班">
-                      未开班
-                    </Option>
-                    <Option key="已结课" value="已结课">
-                      已结课
-                    </Option>
-                  </Select>
-                </div>
-              </SearchLayout>
-            </>
-          }
-          toolBarRender={() => [
-            <Button
-              style={{ display: 'none' }}
-              type="ghost"
-              key="send"
-              onClick={() => {
-                syncDays();
-              }}
-            >
-              班级排课信息同步
-            </Button>,
-            <Button
-              style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
-              type="primary"
-              key="add"
-              onClick={() => {
-                showDrawer();
-                setnames('add');
-              }}
-            >
-              <PlusOutlined />
-              新增班级
-            </Button>,
-          ]}
-        />
-        <AddCourseClass
-          visible={visible}
-          formValues={current}
-          BjLists={BjLists}
-          BmLists={BmLists}
-          JfLists={JfLists}
-          setVisible={setVisible}
-          mcData={mcData}
-          names={names}
-          KHKCAllData={KHKCAllData}
-          curXNXQId={curXNXQId}
-          currentUser={currentUser}
-          CopyType={CopyType}
-          getData={getData}
-        />
-        <PromptInformation
-          text="未查询到学年学期数据，请先设置学年学期"
-          link="/basicalSettings/termManagement"
-          open={kai}
-          colse={kaiguan}
-        />
-        <PromptInformation
-          text="未查询到课程名称，请先设置课程"
-          link=""
-          open={tips}
-          colse={clstips}
-        />
-        <Modal
-          title="报名列表"
-          visible={isModalVisible}
-          onCancel={handleCancel}
-          footer={null}
-          style={{ minWidth: '1100px' }}
-          destroyOnClose
-        >
-          <ApplicantInfoTable clickBjId={clickBjId} actionRefs={actionRef} />
-        </Modal>
-        <Modal
-          title="授课安排列表"
-          visible={ModalSKXQ}
-          onCancel={handleCancel}
-          footer={null}
-          style={{ minWidth: '750px' }}
-          destroyOnClose
-        >
-          <AppSKXQTable SKXQData={SKXQData} />
-        </Modal>
+      <ProTable<any>
+        actionRef={actionRef}
+        columns={columns}
+        rowKey="id"
+        pagination={{
+          showQuickJumper: true,
+          pageSize: 10,
+          defaultCurrent: 1,
+        }}
+        scroll={{ x: getTableWidth(columns) }}
+        options={{
+          setting: false,
+          fullScreen: false,
+          density: false,
+          reload: false,
+        }}
+        search={false}
+        dataSource={dataSource}
+        headerTitle={
+          <>
+            <SearchLayout>
+              <div>
+                <label htmlFor="term">所属学年学期：</label>
+                <Select
+                  value={curXNXQId}
+                  allowClear
+                  onChange={(value: string) => {
+                    setCurXNXQId(value);
+                    setKcId(undefined);
+                    setKCLY(undefined);
+                    setBJZTMC(undefined);
+                  }}
+                >
+                  {termList?.map((item: any) => {
+                    return (
+                      <Option key={item.value} value={item.value}>
+                        {item.text}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+              <div>
+                <label htmlFor="kcname">课程名称：</label>
+                <Select
+                  value={kcId || state?.id}
+                  allowClear
+                  placeholder="请选择"
+                  onChange={onKcmcChange}
+                >
+                  {mcData?.map((item: any) => {
+                    return (
+                      <Option value={item.value} key={item.value}>
+                        {item.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+              <div>
+                <label htmlFor="kcly">课程来源：</label>
+                <Select
+                  allowClear
+                  placeholder="课程来源"
+                  onChange={(value) => {
+                    setKCLY(value);
+                    setBJZTMC(undefined);
+                  }}
+                  value={KCLY}
+                >
+                  <Option value="校内课程" key="校内课程">
+                    校内课程
+                  </Option>
+                  <Option value="机构课程" key="机构课程">
+                    机构课程
+                  </Option>
+                </Select>
+              </div>
+              <div>
+                <label htmlFor="status">班级状态：</label>
+                <Select
+                  allowClear
+                  value={BJZTMC}
+                  onChange={(value: string) => {
+                    setBJZTMC(value);
+                  }}
+                >
+                  <Option key="已开班" value="已开班">
+                    已开班
+                  </Option>
+                  <Option key="未开班" value="未开班">
+                    未开班
+                  </Option>
+                  <Option key="已结课" value="已结课">
+                    已结课
+                  </Option>
+                </Select>
+              </div>
+            </SearchLayout>
+          </>
+        }
+        toolBarRender={() => [
+          <Button
+            style={{ display: 'none' }}
+            type="ghost"
+            key="send"
+            onClick={() => {
+              syncDays();
+            }}
+          >
+            班级排课信息同步
+          </Button>,
+          <Button
+            style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
+            type="primary"
+            key="add"
+            onClick={() => {
+              showDrawer();
+              setnames('add');
+            }}
+          >
+            <PlusOutlined />
+            新增班级
+          </Button>,
+        ]}
+      />
+      <AddCourseClass
+        visible={visible}
+        formValues={current}
+        BjLists={BjLists}
+        BmLists={BmLists}
+        JfLists={JfLists}
+        setVisible={setVisible}
+        mcData={mcData}
+        names={names}
+        KHKCAllData={KHKCAllData}
+        curXNXQId={curXNXQId}
+        currentUser={currentUser}
+        CopyType={CopyType}
+        getData={getData}
+      />
+      <PromptInformation
+        text="未查询到学年学期数据，请先设置学年学期"
+        link="/basicalSettings/termManagement"
+        open={kai}
+        colse={kaiguan}
+      />
+      <PromptInformation
+        text="未查询到课程名称，请先设置课程"
+        link=""
+        open={tips}
+        colse={clstips}
+      />
+      <Modal
+        title="报名列表"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        style={{ minWidth: '1100px' }}
+        destroyOnClose
+      >
+        <ApplicantInfoTable clickBjId={clickBjId} actionRefs={actionRef} />
+      </Modal>
+      <Modal
+        title="授课安排列表"
+        visible={ModalSKXQ}
+        onCancel={handleCancel}
+        footer={null}
+        style={{ minWidth: '750px' }}
+        destroyOnClose
+      >
+        <AppSKXQTable SKXQData={SKXQData} />
+      </Modal>
 
-        {/* <AgentRegistration
+      {/* <AgentRegistration
 
         <AgentRegistration
           getData={getData}

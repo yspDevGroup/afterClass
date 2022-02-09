@@ -1,11 +1,10 @@
 .minePage {
   .cusHeader {
     position: relative;
-    height: 126px;
-    background: -o-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
-    background: -moz-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
-    background: -webkit-linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
-    background: linear-gradient(90deg, #1cdfa5 0%, #31ad65 100%);
+    height: 120px;
+    background-size: 100% 100%;
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 4px 10px rgba(102, 102, 102, 0.25);
 
     .header {
       display: flex;
@@ -26,15 +25,23 @@
 
         h4 {
           margin-bottom: 6px;
-          color: #333333;
+          color: #fff;
           font-weight: 600;
-          font-size: @font-size-lg;
+          font-size: 20px;
           line-height: 24px;
 
           & + span {
-            color: @text-color-secondary;
-            font-size: @font-size-sm;
+            color: #fff;
+            font-size: 14px;
           }
+        }
+
+        > span {
+          display: inline-block;
+          width: 80vw;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
     }
@@ -49,31 +56,35 @@
       background-position: center;
       background-size: contain;
     }
+
     .XsName {
       position: absolute;
       top: 33px;
       right: 10px;
       height: 30px;
-      font-weight: bold;
       padding-left: 2px;
-      :global{
-        .ant-select-selector{
+      font-weight: bold;
+
+      :global {
+        .ant-select-selector {
           height: auto;
-          border-radius: 15px;
-          border:none;
           padding-left: 10px;
-          .ant-select-selection-search{
+          border: none;
+          border-radius: 15px;
+
+          .ant-select-selection-search {
             height: auto;
-            import{
+
+            import {
               height: auto;
             }
           }
         }
-        .ant-select-arrow{
+
+        .ant-select-arrow {
           top: 54%;
         }
       }
-
     }
   }
 
@@ -82,6 +93,7 @@
     top: -30px;
     padding: 0 10px;
   }
+
   .operation {
     display: flex;
     height: 44px;
@@ -95,19 +107,22 @@
       height: 44px;
       margin-right: 11px;
       padding-left: 12px;
-      color: #333333;
+      color: #333;
       background-color: rgba(28, 223, 164, 0.1);
       border-radius: 8px;
+
       .dropSpan {
         margin-left: 15px;
         font-weight: bold;
         font-size: 14px;
       }
+
       .icon_Rgo {
         position: absolute;
         right: 19px;
       }
     }
+
     .evaluation {
       position: relative;
       display: flex;
@@ -115,15 +130,17 @@
       width: 50%;
       height: 44px;
       padding-left: 12px;
-      color: #333333;
+      color: #333;
       font-size: 13px;
       background-color: rgba(255, 209, 154, 0.1);
       border-radius: 8px;
+
       .evaluationSpan {
         margin-left: 15px;
         font-weight: bold;
         font-size: 14px;
       }
+
       .icon_Rgo {
         position: absolute;
         right: 19px;
@@ -134,14 +151,17 @@
   .linkWrapper {
     padding: 10px 0;
     background-color: #f5f5f5;
+
     ul {
       margin: 0;
       padding: 0;
+
       li {
         height: 46px;
         padding-left: 10px;
         line-height: 46px;
-        background-color: #ffffff;
+        background-color: #fff;
+
         span {
           margin-right: 5px;
           vertical-align: middle;
@@ -153,6 +173,7 @@
           width: calc(~'100% - 24px');
           color: @text-color-secondary;
           border-bottom: 1px solid @border-color-base;
+
           span {
             position: absolute;
             top: 16px;
@@ -160,6 +181,7 @@
           }
         }
       }
+
       // li:first-child {
       //   margin-bottom: 10px;
       //   a {
@@ -170,16 +192,18 @@
         padding-bottom: 50px;
       }
     }
-    .signOut{
-      margin-top: 10px;
+
+    .signOut {
       width: 100%;
       height: 40px;
+      margin-top: 10px;
       text-align: center;
-      background: #FFFFFF;
+      background: #fff;
+
       a {
-        line-height: 40px;
+        color: #f00;
         font-size: 16px;
-        color: #FF0000;
+        line-height: 40px;
       }
     }
   }
@@ -188,25 +212,62 @@
     width: 100%;
     margin-top: -15px;
     padding: 0 10px;
+
+    .title {
+      display: flex;
+      height: 24px;
+      line-height: 24px;
+
+      > div:nth-of-type(1) {
+        display: inline-block;
+        width: 3px;
+        height: 19px;
+        margin: 3px 6px 0 0;
+        background: #15b628;
+        border-radius: 3px 0;
+      }
+
+      span {
+        color: #333;
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
+
     > p {
       display: flex;
       justify-content: space-between;
-      color: #333333;
+      margin-bottom: 10px;
+      color: #333;
       font-weight: 600;
+
       span:nth-of-type(2) {
         color: @text-color-secondary;
         font-weight: 400;
-        font-size: 12px;
-        .legend {
-          margin-right: 10px;
+        font-size: 14px;
+      }
+
+      > span {
+        line-height: 24px;
+      }
+
+      :global {
+        .ant-badge-status-text {
+          margin-left: 4px;
         }
       }
+
+      .legend {
+        margin-left: 10px;
+      }
     }
+
     .diagram {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       width: 100%;
+
       .cards {
         width: 48%;
         margin-bottom: 10px;
@@ -214,22 +275,26 @@
         font-size: 13px;
         background-color: #f5f5f5;
         border-radius: 8px;
+
         > div {
           display: flex;
           flex-wrap: wrap;
           justify-content: space-between;
           margin-top: 10px;
+
           span {
             display: block;
-            color: #666666;
+            color: #666;
             font-size: 12px;
           }
         }
       }
+
       .pies {
         canvas {
           height: 100px !important;
         }
+
         :global {
           .g2-html-annotation {
             display: none !important;

@@ -221,7 +221,14 @@ const PeriodMaintenance = () => {
           >
             <a>删除</a>
           </Popconfirm>
-          {currentStatus === 'enroll' ? <><Divider type="vertical" /><a onClick={() => setAMVisible(true)}>报名通知</a></> : ''}
+          {currentStatus === 'enroll' ? (
+            <>
+              <Divider type="vertical" />
+              <a onClick={() => setAMVisible(true)}>报名通知</a>
+            </>
+          ) : (
+            ''
+          )}
         </>
       ),
     },
@@ -314,7 +321,12 @@ const PeriodMaintenance = () => {
             overflowY: 'auto',
           }}
         >
-          <AsyncTimePeriodForm currentStatus={currentStatus} current={current} setForm={setForm} />
+          <AsyncTimePeriodForm
+            currentStatus={currentStatus}
+            current={current}
+            setForm={setForm}
+            form={form}
+          />
         </Modal>
         <Modal
           title={'报名通知'}

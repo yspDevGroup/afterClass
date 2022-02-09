@@ -2,31 +2,28 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2021-12-14 14:23:07
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-02-09 15:39:46
+ * @LastEditors: zpl
  */
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Select } from 'antd';
+import { Input, message, Popconfirm, Select, Switch, Tag, Tooltip } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { useModel } from 'umi';
 import styles from './index.less';
-import { getAllBJSJ, getSchoolClasses } from '@/services/after-class/bjsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getAllKHFWSJ, deleteKHFWSJ, updateKHFWSJ } from '@/services/after-class/khfwsj';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
-// import { getAllGrades } from '@/services/after-class/khjyjg';
 import SearchLayout from '@/components/Search/Layout';
-import { getGradesByCampus } from '@/services/after-class/njsj';
 import SeveiceBasics from '../components/SeveiceBasics';
-
-type selectType = { label: string; value: string };
+import EllipsisHint from '@/components/EllipsisHint';
+import { getTableWidth } from '@/utils/utils';
 
 const { Option } = Select;
+const { Search } = Input;
 const ServiceConfiguration = () => {
   const actionRef = useRef<ActionType>();
-  const [NjId, setNjId] = useState<any>();
-  const [NjData, setNjData] = useState<any>();
   // 校区
   const [campusId, setCampusId] = useState<string>();
   const [campusData, setCampusData] = useState<any[]>();
@@ -34,15 +31,15 @@ const ServiceConfiguration = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
-  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
-  const [BJId, setBJId] = useState<string | undefined>(undefined);
+  const [curTitle, setCurTitle] = useState<string | undefined>(undefined);
+  const [dataSource, setDataSource] = useState<any>([]);
+  const [curXNXQData, setCurXNXQData] = useState<any[]>();
 
   const getCampusData = async () => {
     const res = await getAllXQSJ({
       XXJBSJId: currentUser?.xxId,
     });
     if (res?.status === 'ok') {
-      console.log('res', res.data);
       const arr = res?.data?.map((item) => {
         return {
           label: item.XQMC,
@@ -50,67 +47,45 @@ const ServiceConfiguration = () => {
         };
       });
       if (arr?.length) {
-
-        setCampusId(arr?.find((item)=>item.label==='本校')?.value);
+        setCampusId(arr?.find((item) => item.label === '本校')?.value);
       }
       setCampusData(arr);
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      const result = await queryXNXQList(currentUser?.xxId);
-      setCurXNXQId(result?.current?.id);
-    })();
-    getCampusData();
-  }, []);
-
-  const getNJSJ = async () => {
-    if (campusId) {
-      const res = await getGradesByCampus({
+  const getData = async () => {
+    if (curXNXQId) {
+      const res = await getAllKHFWSJ({
+        XNXQId: curXNXQId,
         XQSJId: campusId,
+        FWMC: curTitle,
       });
-      if (res.status === 'ok') {
-        console.log('res', res);
-        setNjData(res.data);
+
+      if (res.status === 'ok' && res.data) {
+        setDataSource(res.data?.rows);
       }
     }
   };
 
+  const onCampusChange = (value: any) => {
+    setCampusId(value);
+    getData();
+  };
   useEffect(() => {
-    if (campusId) {
-      getNJSJ();
-      setBJId(undefined);
-      setNjId(undefined);
-      actionRef.current?.reload();
-    }
-  }, [campusId]);
-
-  const onBjChange = async (value: any) => {
-    setBJId(value);
-    actionRef.current?.reload();
-  };
-  const onNjChange = async (value: any) => {
-    setNjId(value);
-    actionRef.current?.reload();
-  };
-
-  const getBJSJ = async () => {
-    const res = await getAllBJSJ({ XQSJId: campusId, njId: NjId, page: 0, pageSize: 0 });
-    if (res.status === 'ok') {
-      const data = res.data?.rows?.map((item: any) => {
-        return { label: item.BJ, value: item.id };
-      });
-      setBJData(data);
-    }
-  };
+    (async () => {
+      const result = await queryXNXQList(currentUser?.xxId);
+      setCurXNXQId(result?.current?.id);
+      setCurXNXQData(result?.data);
+    })();
+    getCampusData();
+  }, []);
 
   useEffect(() => {
-    if (NjId) {
-      setBJId(undefined);
-      getBJSJ();
+    if (curXNXQId) {
+      getData();
     }
-  }, [NjId, campusId]);
+  }, [campusId, curXNXQId, curTitle]);
+
   const columns: ProColumns<any>[] = [
     {
       title: '序号',
@@ -120,77 +95,154 @@ const ServiceConfiguration = () => {
       align: 'center',
     },
     {
-      title: '年级名称',
-      dataIndex: 'NJMC',
-      key: 'NJMC',
+      title: '服务模板',
+      dataIndex: 'FWMC',
+      key: 'FWMC',
       align: 'center',
       width: 160,
-      render: (test: any, record: any) => {
-        return `${record.NJSJ.XD}${record.NJSJ.NJMC}`;
+    },
+    {
+      title: '所属学期',
+      dataIndex: 'XNXQ',
+      key: 'XNXQ',
+      align: 'center',
+      width: 160,
+      render: (_, record) => {
+        return `${record.XNXQ?.XN} ${record.XNXQ?.XQ}`;
       },
     },
     {
-      title: '行政班名称',
-      dataIndex: 'BJ',
-      key: 'BJ',
-      align: 'center',
-      width: 160,
-    },
-    {
-      title: '班主任',
-      dataIndex: 'BZR',
-      key: 'BZR',
+      title: '所属学区',
+      dataIndex: 'XQSJ',
+      key: 'XQSJ',
       align: 'center',
       width: 100,
-      hideInTable: true,
+      render: (_, record) => {
+        return record.XQSJ?.XQMC;
+      },
     },
     {
-      title: '班级人数',
-      dataIndex: 'xs_count',
-      key: 'xs_count',
+      title: '适用年级',
+      key: 'NJSJs',
+      dataIndex: 'NJSJs',
+      search: false,
+      align: 'center',
+      width: 200,
+      render: (text: any) => {
+        return (
+          <EllipsisHint
+            width="100%"
+            text={text?.map((item: any) => {
+              return <Tag key={item?.id}>{`${item?.XD}${item?.NJMC}`}</Tag>;
+            })}
+          />
+        );
+      },
+    },
+    {
+      title: '已选课程班',
+      dataIndex: 'ZDKCS',
+      key: 'ZDKCS',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '服务费用',
+      dataIndex: 'FWFY',
+      key: 'FWFY',
       align: 'center',
       width: 80,
     },
     {
-      title: '课后服务报名人数',
-      dataIndex: 'xsbm_count',
-      key: 'xsbm_count',
+      title: '模板状态',
+      dataIndex: 'FWZT',
+      key: 'FWZT',
       align: 'center',
-      width: 150,
+      width: 130,
+      render: (_, record) => {
+        return (
+          <Switch
+            checkedChildren="开启"
+            unCheckedChildren="停用"
+            checked={record.FWZT === 1}
+            onChange={async () => {
+              const result = await updateKHFWSJ(
+                { id: record.id },
+                {
+                  FWZT: record.FWZT === 1 ? 0 : 1,
+                },
+              );
+              if (result.status === 'ok') {
+                message.success('服务状态已更新');
+                getData();
+              }
+            }}
+          />
+        );
+      },
     },
-    // {
-    //   title: '班主任',
-    //   dataIndex: 'BZR',
-    //   key: 'BZR',
-    //   align: 'center',
-    //   width: 180,
-    // },
     {
       title: '操作',
       valueType: 'option',
       key: 'option',
       align: 'center',
-      width: 100,
+      width: 150,
       render: (_, record) => {
         return (
-          <Link
-            key="details"
-            // to={{
-            //   pathname: '/statistics/administrativeClass/administrativeClassDetail',
-            //   state: record,
-            // }}
-          >
-            配置课后服务
-          </Link>
+          <>
+            {record.FWZT === 1 ? (
+              <SeveiceBasics
+                title={'查看服务模板'}
+                reload={getData}
+                serviceId={record.id}
+                type="read"
+              />
+            ) : (
+              <>
+                <SeveiceBasics title={'编辑服务模板'} reload={getData} serviceId={record.id} />
+                <Popconfirm
+                  title="彻底删除后数据将不可恢复，是否删除?"
+                  onConfirm={async () => {
+                    try {
+                      const result = await deleteKHFWSJ({ id: record.id });
+                      if (result.status === 'ok') {
+                        message.success('删除成功');
+                        getData();
+                      } else {
+                        message.error('删除失败，请联系管理员或稍后重试。');
+                      }
+                    } catch (err) {
+                      message.error('删除失败，请联系管理员或稍后重试。');
+                    }
+                  }}
+                  okText="Yes"
+                  cancelText="No"
+                  placement="topLeft"
+                >
+                  <a href="#" style={{ color: 'red' }}>
+                    <Tooltip title="删除">
+                      <a>删除</a>
+                    </Tooltip>
+                  </a>
+                </Popconfirm>
+              </>
+            )}
+          </>
         );
       },
     },
   ];
 
-  const onCampusChange = (value: any) => {
-    setCampusId(value);
-    actionRef.current?.reload();
+  // 学年学期筛选
+  const onXNXQChange = (value: string) => {
+    curXNXQData?.forEach((item: any) => {
+      if (item.id === value) {
+        setCurXNXQId(value);
+        actionRef?.current?.reloadAndRest?.();
+      }
+    });
   };
+
   return (
     <div className={styles.AdministrativeClass}>
       <PageContain>
@@ -203,29 +255,7 @@ const ServiceConfiguration = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          request={async (param) => {
-            // 表单搜索项会从 params 传入，传递给后端接口。
-            if (curXNXQId) {
-              const obj = {
-                XXJBSJId: currentUser?.xxId,
-                njId: NjId ? [NjId] : undefined,
-                BJSJId: BJId,
-                XNXQId: curXNXQId,
-                page: param.current,
-                pageSize: param.pageSize,
-                XQSJId: campusId,
-              };
-              const res = await getSchoolClasses(obj);
-              if (res.status === 'ok') {
-                return {
-                  data: res.data.rows,
-                  success: true,
-                  total: res.data.count,
-                };
-              }
-            }
-            return [];
-          }}
+          dataSource={dataSource}
           options={{
             setting: false,
             fullScreen: false,
@@ -233,6 +263,7 @@ const ServiceConfiguration = () => {
             reload: false,
           }}
           search={false}
+          scroll={{ x: getTableWidth(columns) }}
           headerTitle={
             <SearchLayout>
               <div>
@@ -244,30 +275,26 @@ const ServiceConfiguration = () => {
                 </Select>
               </div>
               <div>
-                <label htmlFor="grade">年级名称：</label>
-                <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
-                  {NjData?.map((item: any) => {
-                    return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                <label htmlFor="grade">学年学期：</label>
+                <Select value={curXNXQId} placeholder="请选择" onChange={onXNXQChange}>
+                  {curXNXQData?.map((item: any) => {
+                    return <Option value={item.id}>{`${item.XN}-${item.XQ}`}</Option>;
                   })}
                 </Select>
               </div>
               <div>
-                <label htmlFor="kcly">班级名称：</label>
-                <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
-                  {bjData?.map((item: any) => {
-                    return (
-                      <Option value={item.value} key={item.value}>
-                        {item.label}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                <label htmlFor="grade">服务模板：</label>
+                <Search
+                  placeholder="服务模板"
+                  allowClear
+                  onSearch={(value: string) => {
+                    setCurTitle(value);
+                  }}
+                />
               </div>
             </SearchLayout>
           }
-          toolBarRender={() => [
-            <SeveiceBasics title={'新增服务'}/>,
-          ]}
+          toolBarRender={() => [<SeveiceBasics title={'新增服务模板'} reload={getData} />]}
         />
       </PageContain>
     </div>

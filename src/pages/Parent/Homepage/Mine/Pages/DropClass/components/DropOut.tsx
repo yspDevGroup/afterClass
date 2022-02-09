@@ -2,12 +2,12 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-09 10:48:20
- * @LastEditTime: 2021-11-11 10:22:20
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-29 13:34:52
+ * @LastEditors: wsl
  */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
-import { useModel,history } from 'umi';
+import { useModel, history } from 'umi';
 import { Button, Checkbox, message, Modal } from 'antd';
 import { createKHTKSJ } from '@/services/after-class/khtksj';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
@@ -28,14 +28,17 @@ const DropOut = () => {
   const [kcData, setKcData] = useState<any>();
   const [kcList, setKcList] = useState<any>();
   const [datasourse, setDatasourse] = useState<any>();
-  const StorageXSId = localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId;
-  const StorageNjId = localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
-  const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
+  const StorageXSId =
+    localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId;
+  const StorageNjId =
+    localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+  const StorageXQSJId =
+    localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: ['课后服务协议'],
+        LX: ['缤纷课堂协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
@@ -51,7 +54,7 @@ const DropOut = () => {
     if (result.current) {
       const res = await countKHXSCQ({
         XNXQId: result.current.id,
-        XSJBSJId: StorageXSId
+        XSJBSJId: StorageXSId,
       });
       if (res.status === 'ok' && res.data) {
         const finnalList = [].map.call(res.data, (val: any) => {
@@ -60,8 +63,8 @@ const DropOut = () => {
             YXKS: curCourse.YXKS,
             KSS: curCourse.KSS,
             ...val,
-          }
-        })
+          };
+        });
         setKcData(finnalList);
       }
     }
@@ -69,14 +72,24 @@ const DropOut = () => {
   useEffect(() => {
     (async () => {
       if (StorageXSId) {
-        const bjId = localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
-        const oriData = await ParentHomeData('student', currentUser.xxId, StorageXSId, StorageNjId, bjId,StorageXQSJId);
+        const bjId =
+          localStorage.getItem('studentBJId') ||
+          currentUser?.student?.[0].BJSJId ||
+          testStudentBJId;
+        const oriData = await ParentHomeData(
+          'student',
+          currentUser.xxId,
+          StorageXSId,
+          StorageNjId,
+          bjId,
+          StorageXQSJId,
+        );
         const { courseSchedule } = oriData;
         const courseData = CountCourses(courseSchedule);
         setKcList(courseData);
         getKcData(courseData);
       }
-    })()
+    })();
   }, [StorageXSId]);
 
   /** 课后帮服务协议弹出框 */
@@ -99,7 +112,7 @@ const DropOut = () => {
       message.success('申请已提交，请等待审核');
       getKcData(kcList);
       setModalVisible(false);
-      history.push('/parent/mine/dropClass')
+      history.push('/parent/mine/dropClass');
     } else {
       message.error(res.message);
     }
@@ -137,17 +150,22 @@ const DropOut = () => {
                 {kcData?.map((value: any) => {
                   const JKRQ = new Date(value.KHBJSJ?.JKRQ).getTime();
                   const newDate = new Date().getTime();
-                  const last = value.KSS && value.YXKS ? (value.KSS - value.YXKS) : value.remain;
+                  const last = value.KSS && value.YXKS ? value.KSS - value.YXKS : value.remain;
                   return (
                     <>
                       <div className={styles.cards}>
                         <p className={styles.title}>
                           {value.KCMC}
-                          <span style={{ color: '#009688', fontWeight: 'normal' }}>【{value.BJMC}】</span>
+                          <span style={{ color: '#009688', fontWeight: 'normal' }}>
+                            【{value.BJMC}】
+                          </span>
                         </p>
-                        <p>总课时：{value.KSS}节 ｜ 已学课时：{value.YXKS || value.normal}节</p>
                         <p>
-                          未学课时：{last}节｜缺勤课时：{value.abnormal}节｜可退课时：{value.abnormal + last}节
+                          总课时：{value.KSS}节 ｜ 已学课时：{value.YXKS || value.normal}节
+                        </p>
+                        <p>
+                          未学课时：{last}节｜缺勤课时：{value.abnormal}节｜可退课时：
+                          {value.abnormal + last}节
                         </p>
                         <Checkbox
                           value={`${value.id}+${value.abnormal + last}+${value.KCMC}`}
@@ -164,7 +182,7 @@ const DropOut = () => {
           </div>
           <div className={styles.wrap}>
             <p>
-              结课1个月后不可退课，规则详见 <a onClick={showModal}>《课后服务协议》</a>
+              结课1个月后不可退课，规则详见 <a onClick={showModal}>《缤纷课堂协议》</a>
             </p>
             <div className={styles.btn}>
               <Button
@@ -196,13 +214,13 @@ const DropOut = () => {
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>课后服务协议书</p>
+            <p>缤纷课堂协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (
           <div className={styles.ZWSJ}>
             <img src={noOrder} alt="" />
-            <p>暂无数据</p>
+            <p>暂无缤纷课堂协议</p>
           </div>
         )}
       </Modal>
@@ -228,8 +246,10 @@ const DropOut = () => {
           })}
           <p style={{ fontSize: 12, color: '#999', marginTop: 40, marginBottom: 0 }}>
             注：
-            <br />1.退课课时由系统根据申请日期进行计算统计，仅供参考。
-            <br />2.退课成功后，系统将自动进行退款，退款将原路返回您的支付账户。
+            <br />
+            1.退课课时由系统根据申请日期进行计算统计，仅供参考。
+            <br />
+            2.退课成功后，系统将自动进行退款，退款将原路返回您的支付账户。
           </p>
         </div>
       </Modal>

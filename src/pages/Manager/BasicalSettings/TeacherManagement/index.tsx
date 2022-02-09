@@ -2,12 +2,12 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2021-12-10 15:04:01
+ * @LastEditTime: 2022-02-09 15:42:44
  * @LastEditors: zpl
  */
 import React, { useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
-import { Button, Divider, message, Modal, Popconfirm, Spin, Upload } from 'antd';
+import { Button, Divider, message, Modal, Spin, Upload } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns, RequestData } from '@ant-design/pro-table';
 import { UploadOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons';
@@ -17,7 +17,7 @@ import PageContain from '@/components/PageContainer';
 import ShowName from '@/components/ShowName';
 
 import { getAuthorization, getTableWidth } from '@/utils/utils';
-import { deleteJZGJBSJ, getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
+import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 // import { syncWechatStudents, syncWechatTeachers } from '@/services/after-class/upload';
 
 import styles from './index.less';
@@ -63,15 +63,15 @@ const TeacherManagement = () => {
       }
     },
   };
-  const handleConfirm = async (id: any) => {
-    const res = await deleteJZGJBSJ({ id });
-    if (res.status === 'ok') {
-      message.success('删除成功');
-      actionRef.current?.reload();
-    } else {
-      message.error(res.message);
-    }
-  };
+  // const handleConfirm = async (id: any) => {
+  //   const res = await deleteJZGJBSJ({ id });
+  //   if (res.status === 'ok') {
+  //     message.success('删除成功');
+  //     actionRef.current?.reload();
+  //   } else {
+  //     message.error(res.message);
+  //   }
+  // };
 
   // const syncTeachers = async () => {
   //   const params = {
@@ -126,6 +126,13 @@ const TeacherManagement = () => {
       render: (_, record) => record?.XBM?.substring(0, 1),
     },
     {
+      title: '工号',
+      key: 'GH',
+      dataIndex: 'GH',
+      align: 'center',
+      width: 150,
+    },
+    {
       title: '联系电话',
       key: 'LXDH',
       dataIndex: 'LXDH',
@@ -138,6 +145,7 @@ const TeacherManagement = () => {
       dataIndex: 'JSKM',
       align: 'center',
       ellipsis: true,
+      hideInTable: true,
       width: 200,
     },
     {
@@ -145,6 +153,7 @@ const TeacherManagement = () => {
       valueType: 'option',
       width: 200,
       fixed: 'right',
+      hideInTable: true,
       align: 'center',
       render: (_, record) => (
         <>
@@ -171,13 +180,13 @@ const TeacherManagement = () => {
           >
             编辑
           </Link>
-          <Divider type="vertical" />
+          {/* <Divider type="vertical" />
           <Popconfirm
             title={`确定要删除 “${record?.XM}” 数据吗?`}
             onConfirm={() => handleConfirm(record?.id)}
           >
             <a>删除</a>
-          </Popconfirm>
+          </Popconfirm> */}
         </>
       ),
     },

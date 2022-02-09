@@ -1,0 +1,139 @@
+.CourseBox {
+  .tabHeader {
+    padding: 10px;
+  }
+
+  :global {
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin-left: 28px;
+    }
+
+    .ant-tabs-top > .ant-tabs-nav,
+    .ant-tabs-bottom > .ant-tabs-nav,
+    .ant-tabs-top > div > .ant-tabs-nav,
+    .ant-tabs-bottom > div > .ant-tabs-nav {
+      height: 22px;
+      margin-bottom: 12px;
+      line-height: 22px;
+    }
+
+    .ant-tabs-top > .ant-tabs-nav::before,
+    .ant-tabs-bottom > .ant-tabs-nav::before,
+    .ant-tabs-top > div > .ant-tabs-nav::before,
+    .ant-tabs-bottom > div > .ant-tabs-nav::before {
+      border-bottom: 0;
+    }
+
+    .ant-tabs-tab:hover {
+      color: #15b628;
+      font-weight: 600;
+      font-size: @font-size-lg;
+    }
+
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+      color: #15b628;
+      font-weight: 600;
+      font-size: @font-size-lg;
+    }
+
+    .ant-tabs-tab-btn {
+      font-size: @font-size-lg;
+    }
+
+    .ant-tabs-ink-bar {
+      display: none;
+    }
+    .ant-tabs-content-holder {
+      .ant-tabs-nav {
+        .ant-tabs-tab {
+          .ant-tabs-tab-btn {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .courseCenterTab {
+    div[class*='courseType'] {
+      :global {
+        .ant-tabs-ink-bar {
+          display: block;
+          margin-bottom: 4px;
+          background: #15b628;
+        }
+
+        .ant-tabs-tab:hover {
+          font-size: 14px;
+        }
+
+        .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+          font-size: 14px;
+        }
+
+        .ant-tabs-tab-btn {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+  .category {
+    :global {
+      .ant-tabs-content-holder {
+        padding: 8px 0 0;
+      }
+      .ant-tabs-nav::before {
+        border: none;
+      }
+      .ant-tabs-nav-list {
+        width: auto !important;
+        .ant-tabs-tab {
+          margin-left: 28px !important;
+          padding: 8px 0;
+          color: #666 !important;
+          border: 1px solid #fff !important;
+          .ant-tabs-tab-btn {
+            font-size: 14px !important;
+          }
+        }
+        .ant-tabs-tab:nth-of-type(1) {
+          margin-left: 0 !important;
+        }
+      }
+    }
+    .wrap {
+      .box {
+        display: flex;
+        margin-bottom: 16px;
+
+        > div:nth-child(1) {
+          width: 110px;
+          height: 70px;
+          margin-right: 10px;
+          text-align: center;
+          img {
+            margin: 0 auto;
+            border-radius: 8px;
+          }
+        }
+        > div:nth-child(2) {
+          width: calc(~'100% - 120px');
+          p {
+            margin: 5px 0;
+            overflow: hidden;
+            color: #999;
+            font-size: 12px;
+            line-height: 16px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          .title {
+            color: #333;
+            font-size: 14px;
+            line-height: 18px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,21 +3,23 @@
 import { Button, Checkbox, Collapse, Divider, message, Modal, Radio } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useModel, Link, history } from 'umi';
-import { getClassesByCourse } from '@/services/after-class/khkcsj';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import moment from 'moment';
-import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
-import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import ShowName from '@/components/ShowName';
 
 import styles from './index.less';
+import { signClass } from '@/services/after-class/xsjbsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import { getXXTZGG } from '@/services/after-class/xxtzgg';
+import { getClassesByCourse } from '@/services/after-class/khkcsj';
 import { getKHBJSJ, studentRegistration } from '@/services/after-class/khbjsj';
+import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { RightOutlined } from '@ant-design/icons';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
+import noOrder from '@/assets/noOrder.png';
 
 const { Panel } = Collapse;
 
@@ -89,7 +91,12 @@ const CourseDetails: React.FC = () => {
           if (results.status === 'ok') {
             if (results.data) {
               const newArr = results.data.KHBJSJs.filter((value: any) => {
-                if (value.BJZT === '已开班' && value.BJLX === 1 && value.XQSJId === StorageXQSJId) {
+                if (
+                  value.BJZT === '已开班' &&
+                  value.BJLX === 1 &&
+                  value.XQSJId === StorageXQSJId &&
+                  value?.ISFW === 0
+                ) {
                   const newBjIds = value.BJSJs.filter((items: any) => {
                     return items.id === XSbjId;
                   });
@@ -98,7 +105,10 @@ const CourseDetails: React.FC = () => {
                   }
                 }
                 return (
-                  value.BJZT === '已开班' && value.BJLX === 0 && value.XQSJId === StorageXQSJId
+                  value.BJZT === '已开班' &&
+                  value.BJLX === 0 &&
+                  value.XQSJId === StorageXQSJId &&
+                  value?.ISFW === 0
                 );
               });
               setKBClass(newArr);
@@ -130,15 +140,14 @@ const CourseDetails: React.FC = () => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: ['课后服务协议'],
+        LX: ['缤纷课堂协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
         pageSize: 0,
       });
       if (res.status === 'ok') {
-        const { rows = [] } = res.data || {};
-        setKHFUXY(rows[0]?.NR || '');
+        setKHFUXY(res.data?.rows);
       }
     })();
   }, []);
@@ -162,46 +171,100 @@ const CourseDetails: React.FC = () => {
         KHBJSJId: BjDetails?.id,
       });
       if (res.status === 'ok') {
-        const bjId =
-          localStorage.getItem('studentBJId') ||
-          currentUser?.student?.[0].BJSJId ||
-          testStudentBJId;
-        await ParentHomeData(
-          'student',
-          currentUser?.xxId,
-          StorageXSId,
-          StorageNjId,
-          bjId,
-          StorageXQSJId,
-          true,
-        );
-        setTimeout(() => {
-          message.success('报名成功，请及时缴费');
-        }, 500);
-        setTimeout(() => {
-          history.push('/parent/home?index=index');
-        }, 1000);
+        const repeat = res.data?.find((v: { flag: number }) => {
+          return v.flag === 0;
+        });
+        const wrong = res.data?.find((v: { flag: number }) => {
+          return v.flag === 1;
+        });
+        const different = res.data?.find((v: { flag: number }) => {
+          return v.flag === 2;
+        });
+        if (repeat) {
+          message.warning('该学生已报名，请勿重复报名');
+        } else if (wrong) {
+          message.warning('数据库创建失败，报名失败');
+        } else if (different) {
+          message.warning('学生信息查找失败，报名失败');
+        } else {
+          const bjId =
+            localStorage.getItem('studentBJId') ||
+            currentUser?.student?.[0].BJSJId ||
+            testStudentBJId;
+          await ParentHomeData(
+            'student',
+            currentUser?.xxId,
+            StorageXSId,
+            StorageNjId,
+            bjId,
+            StorageXQSJId,
+            true,
+          );
+          setTimeout(() => {
+            message.success('报名成功，请及时缴费');
+          }, 500);
+          setTimeout(() => {
+            history.push('/parent/home?index=index');
+          }, 1000);
+        }
       }
     } else {
       const bjInfo = KBClass.find((item: any) => {
         return item.id === BJ;
       });
       await setClassDetail(bjInfo);
-      const data: API.CreateKHXSDD = {
-        XDSJ: new Date().toISOString(),
-        ZFFS: '线上支付',
-        DDZT: '待付款',
-        DDFY: JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!,
-        XSJBSJId:
-          localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
-        KHBJSJId: BJ!,
-        DDLX: 0,
-      };
-      const res = await createKHXSDD(data);
-      if (res.status === 'ok') {
-        if (data.DDFY > 0) {
-          setOrderInfo(res.data);
+      const Money = JFstate === true ? JFTotalost! + Number(FY)! : Number(FY)!;
+      if (Money > 0) {
+        const data: API.CreateKHXSDD = {
+          XDSJ: new Date().toISOString(),
+          ZFFS: '线上支付',
+          DDZT: '待付款',
+          DDFY: Money,
+          XSJBSJId:
+            localStorage.getItem('studentId') ||
+            currentUser?.student?.[0].XSJBSJId ||
+            testStudentId,
+          KHBJSJId: BJ!,
+          DDLX: 0,
+        };
+        const res = await createKHXSDD(data);
+        if (res.status === 'ok') {
+          if (data.DDFY > 0) {
+            setOrderInfo(res.data);
+          } else {
+            const bjId =
+              localStorage.getItem('studentBJId') ||
+              currentUser?.student?.[0].BJSJId ||
+              testStudentBJId;
+            await ParentHomeData(
+              'student',
+              currentUser?.xxId,
+              StorageXSId,
+              StorageNjId,
+              bjId,
+              StorageXQSJId,
+              true,
+            );
+            setTimeout(() => {
+              message.success('报名成功');
+            }, 500);
+            setTimeout(() => {
+              history.push('/parent/home?index=index&reload=true');
+            }, 1000);
+          }
         } else {
+          enHenceMsg(res.message);
+        }
+      } else {
+        const result = await signClass({
+          XSJBSJId:
+            localStorage.getItem('studentId') ||
+            currentUser?.student?.[0].XSJBSJId ||
+            testStudentId,
+          KHBJSJId: BJ!,
+          ZT: 0,
+        });
+        if (result.status === 'ok') {
           const bjId =
             localStorage.getItem('studentBJId') ||
             currentUser?.student?.[0].BJSJId ||
@@ -221,9 +284,9 @@ const CourseDetails: React.FC = () => {
           setTimeout(() => {
             history.push('/parent/home?index=index&reload=true');
           }, 1000);
+        } else {
+          enHenceMsg(result.message);
         }
-      } else {
-        enHenceMsg(res.message);
       }
     }
   };
@@ -444,7 +507,8 @@ const CourseDetails: React.FC = () => {
                       BJRS: number;
                       KHXSBJs: any[];
                       BJZT: string;
-                      xs_count: number;
+                      xs_count?: number;
+                      ISFW: number;
                     },
                     ind: number,
                   ) => {
@@ -454,7 +518,7 @@ const CourseDetails: React.FC = () => {
                     const enAble =
                       myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
                       myDate <= new Date(moment(end).format('YYYY/MM/DD'));
-                    if (value.BJZT === '已开班') {
+                    if (value.BJZT === '已开班' && value?.ISFW === 0) {
                       return (
                         // <Popconfirm
                         //   overlayClassName={styles.confirmStyles}
@@ -482,7 +546,7 @@ const CourseDetails: React.FC = () => {
                 {FY <= 0 ? (
                   <>
                     <span>免费</span>
-                    <span style={{ color: '#666666', marginLeft: 10 }}>
+                    <span style={{ color: '#666', marginLeft: 10 }}>
                       余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额
                     </span>
                   </>
@@ -490,14 +554,14 @@ const CourseDetails: React.FC = () => {
                   <>
                     <span style={{ fontWeight: 'bold', fontSize: '22px' }}>￥{FY}</span>
                     <span>/学期</span>
-                    <span style={{ color: '#666666', marginLeft: 10 }}>
+                    <span style={{ color: '#666', marginLeft: 10 }}>
                       余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额
                     </span>
                   </>
                 )}
               </p>
               <p className={styles.title}>缴费方式</p>
-              <span style={{ color: '#666666' }}>
+              <span style={{ color: '#666' }}>
                 {BjDetails?.BMLX === 0 ? (
                   '先报名后缴费'
                 ) : (
@@ -558,7 +622,7 @@ const CourseDetails: React.FC = () => {
               <Checkbox onChange={onFxChange} checked={Xystate}>
                 <span>我已阅读并同意</span>
               </Checkbox>
-              <a onClick={showModal}>《课后服务协议》</a>
+              <a onClick={showModal}>《缤纷课堂协议》</a>
             </div>
             {ByTime === true ? (
               <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
@@ -605,8 +669,17 @@ const CourseDetails: React.FC = () => {
           </Button>,
         ]}
       >
-        <p>课后服务协议书</p>
-        <div dangerouslySetInnerHTML={{ __html: KHFUXY }} />
+        {KHFUXY?.length !== 0 ? (
+          <>
+            <p>缤纷课堂协议书</p>
+            <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
+          </>
+        ) : (
+          <div className={styles.ZWSJ}>
+            <img src={noOrder} alt="" />
+            <p>暂无缤纷课堂协议</p>
+          </div>
+        )}
       </Modal>
     </div>
   );

@@ -72,6 +72,64 @@ export async function getClasses(
   });
 }
 
+/** 获取服务课程班级统计报表 POST /reports/getFWClasses */
+export async function getFWClasses(
+  body: {
+    /** 课后班级ID */
+    KHBJSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 班级名称 */
+    BJMC?: string;
+    /** 课程类型 */
+    KCTAG?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getFWClasses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 通过行政班来统计服务数据 POST /reports/getFWTJByXZB */
+export async function getFWTJByXZB(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 校区ID */
+    XQSJId?: string;
+    /** 年级id */
+    NJSJId?: string;
+    /** 班级数据id */
+    BJSJId?: string;
+    /** 课后服务时间配置id */
+    KHFWSJPZId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/getFWTJByXZB', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 获取课后服务教师考勤统计报表 POST /reports/getTeachers */
 export async function getTeachers(
   body: {
@@ -269,6 +327,72 @@ export async function statisClasses(
   options?: { [key: string]: any },
 ) {
   return request<any>('/reports/statisClasses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 统计学校课后服务报表基本信息 POST /reports/statisticalKHFWBJ */
+export async function statisticalKHFWBJ(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/statisticalKHFWBJ', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 统计学校课后服务报表基本信息 POST /reports/statisticalKHFWXZB */
+export async function statisticalKHFWXZB(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/statisticalKHFWXZB', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 服务班统计数据 POST /reports/summaryFWBTJ */
+export async function summaryFWBTJ(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 校区ID */
+    XQSJId?: string;
+    /** 年级id */
+    NJSJId?: string;
+    /** 班级数据id */
+    BJSJId?: string;
+    /** 课后服务时间配置id */
+    KHFWSJPZId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/summaryFWBTJ', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

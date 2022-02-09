@@ -71,6 +71,7 @@ const ResignManagement = () => {
         message.success('审批成功');
         setVisible(false);
         setCurrent(undefined);
+        form.resetFields();
         getData();
       }
     } catch (err) {

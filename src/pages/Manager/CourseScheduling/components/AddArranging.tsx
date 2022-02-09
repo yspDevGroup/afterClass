@@ -35,6 +35,7 @@ type PropsType = {
   currentUser?: API.CurrentUser | undefined;
   screenOriSource: any;
   setLoading: any;
+  campusId: string;
 };
 
 const AddArranging: FC<PropsType> = (props) => {
@@ -51,6 +52,7 @@ const AddArranging: FC<PropsType> = (props) => {
     // setBJIDData,
     cdmcData,
     kcmcData,
+    campusId,
     // setTableDataSource,
     // sameClass,
     // tableDataSource,
@@ -73,6 +75,8 @@ const AddArranging: FC<PropsType> = (props) => {
   const [kcType, setKcType] = useState<any>(kcmcData);
   //年级
   const [grade, setGrade] = useState<any>([]);
+  // 场地是否可以编辑
+  const [CdFalg, setCdFalg] = useState<boolean>(false);
 
   const columns: {
     title: string;
@@ -292,7 +296,14 @@ const AddArranging: FC<PropsType> = (props) => {
         KHBJSJId: value.id || '',
         color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
       };
+
       setBj(chosenData);
+      if (value?.FJSJ?.id) {
+        setCdmcValue(value?.FJSJ?.id);
+        setCdFalg(true);
+      } else {
+        setCdFalg(false);
+      }
     } else {
       const chosenData = {
         id: value.id,
@@ -302,6 +313,12 @@ const AddArranging: FC<PropsType> = (props) => {
         color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
       };
       setBj(chosenData);
+      if (value?.FJSJ?.id) {
+        setCdmcValue(value?.FJSJ?.id);
+        setCdFalg(true);
+      } else {
+        setCdFalg(false);
+      }
     }
     // setIndex(value.id);
     // setBJIDData(value.id);
@@ -334,6 +351,7 @@ const AddArranging: FC<PropsType> = (props) => {
       KHKCSJId: kcName,
       XNXQId: curXNXQId,
       BJZT: '未开班',
+      XQSJId: campusId,
     });
     if (bjmcResl.status === 'ok') {
       const bjRows = bjmcResl.data.rows;
@@ -439,6 +457,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   useEffect(() => {
     if (formValues) {
+      console.log('formValues', formValues);
       form.setFieldsValue(formValues);
     }
   }, [formValues]);
@@ -453,7 +472,7 @@ const AddArranging: FC<PropsType> = (props) => {
           fontWeight: 700,
         }}
         bodyStyle={{
-          background: '#FFFFFF',
+          background: '#FFF',
         }}
         title={
           <>
@@ -497,7 +516,7 @@ const AddArranging: FC<PropsType> = (props) => {
             >
               {/* <div className={styles.screen} style={{ display: 'flex', justifyContent:'center', background:'red' }}> */}
               <Row justify="start" align="middle" style={{ background: ' #F5F5F5' }}>
-                {/* <Col span={6}>
+                <Col span={6}>
                   <ProFormSelect
                     label="校区"
                     width="md"
@@ -505,16 +524,10 @@ const AddArranging: FC<PropsType> = (props) => {
                     style={{
                       margin: '12px 0',
                     }}
-                    disabled={formValues?.BJId}
+                    disabled={true}
                     options={campus || []}
-                    fieldProps={{
-                      async onChange(value: any) {
-                        form.setFieldsValue({ NJ: undefined, KC: undefined });
-                        setXQID(value);
-                      },
-                    }}
                   />
-                </Col> */}
+                </Col>
                 <Col span={6}>
                   <ProFormSelect
                     label="年级"
@@ -543,25 +556,6 @@ const AddArranging: FC<PropsType> = (props) => {
                       },
                     }}
                   />
-                </Col>
-                <Col span={6}>
-                  <Form.Item label="场地名称">
-                    <Select
-                      style={{ width: 200 }}
-                      value={cdmcValue}
-                      allowClear
-                      placeholder="请选择"
-                      onChange={(value) => setCdmcValue(value)}
-                    >
-                      {cdmcData?.map((item: selectType) => {
-                        return (
-                          <Option value={item.value} key={item.value}>
-                            {item.label}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </Form.Item>
                 </Col>
               </Row>
 
@@ -681,8 +675,25 @@ const AddArranging: FC<PropsType> = (props) => {
                   </>
                 )}
               </div>
+              <Form.Item label="场地：">
+                <Select
+                  style={{ width: 200 }}
+                  value={cdmcValue}
+                  allowClear
+                  placeholder="请选择"
+                  disabled={CdFalg}
+                  onChange={(value) => setCdmcValue(value)}
+                >
+                  {cdmcData?.map((item: selectType) => {
+                    return (
+                      <Option value={item.value} key={item.value}>
+                        {item.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
               <div className="site">
-                <span>场地：</span>
                 {Bj ? (
                   <Spin spinning={CDLoading}>
                     <ExcelTable

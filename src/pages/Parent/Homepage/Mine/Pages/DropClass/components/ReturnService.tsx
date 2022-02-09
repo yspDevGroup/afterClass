@@ -8,7 +8,7 @@
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import { Button, Checkbox, message, Modal } from 'antd';
-import { useModel,history } from 'umi';
+import { useModel, history } from 'umi';
 import noOrder from '@/assets/noOrder.png';
 import { getStudent } from '@/services/after-class/khxxzzfw';
 import { createKHTKSJ } from '@/services/after-class/khtksj';
@@ -28,7 +28,7 @@ const ReturnService = () => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: ['课后服务协议'],
+        LX: ['增值服务协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
@@ -48,12 +48,12 @@ const ReturnService = () => {
     const res = await getStudent({
       XSJBSJId: XSId,
       XNXQId: result.current.id,
-      ZT:[0]
-    })
+      ZT: [0],
+    });
     if (res.status === 'ok') {
-      setFwData(res.data?.rows)
+      setFwData(res.data?.rows);
     }
-  }
+  };
   useEffect(() => {
     getFwData();
   }, [StorageXSId]);
@@ -78,7 +78,7 @@ const ReturnService = () => {
       message.success('申请已提交，请等待审核');
       getFwData();
       setModalVisible(false);
-      history.push('/parent/mine/dropClass')
+      history.push('/parent/mine/dropClass');
     } else {
       message.error(res.message);
     }
@@ -95,10 +95,10 @@ const ReturnService = () => {
         XSJBSJId:
           localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId,
         KHXXZZFWId: value.split('+')[0],
-        FWMC:value.split('+')[1],
+        FWMC: value.split('+')[1],
         ZT: 0,
         BZ: '',
-        LX: 1
+        LX: 1,
       };
       NewArr.push(data);
     });
@@ -118,12 +118,14 @@ const ReturnService = () => {
                       <div className={styles.cards}>
                         <p className={styles.title}>
                           {value?.KHXXZZFW?.FWMC}
-                          <span style={{ color: '#009688', fontWeight: 'normal' }}>【{value?.KHXXZZFW?.KHZZFW?.FWMC}】</span>
+                          <span style={{ color: '#009688', fontWeight: 'normal' }}>
+                            【{value?.KHXXZZFW?.KHZZFW?.FWMC}】
+                          </span>
                         </p>
-                        <p>服务时段：{value?.KHXXZZFW?.KSRQ} ~ {value?.KHXXZZFW?.JSRQ}</p>
-                        <Checkbox
-                          value={`${value.KHXXZZFW?.id}+${value?.KHXXZZFW?.FWMC}`}
-                        >
+                        <p>
+                          服务时段：{value?.KHXXZZFW?.KSRQ} ~ {value?.KHXXZZFW?.JSRQ}
+                        </p>
+                        <Checkbox value={`${value.KHXXZZFW?.id}+${value?.KHXXZZFW?.FWMC}`}>
                           {' '}
                         </Checkbox>
                       </div>
@@ -135,7 +137,7 @@ const ReturnService = () => {
           </div>
           <div className={styles.wrap}>
             <p>
-              规则详见 <a onClick={showModal}>《课后服务协议》</a>
+              规则详见 <a onClick={showModal}>《增值服务协议》</a>
             </p>
             <div className={styles.btn}>
               <Button
@@ -167,13 +169,13 @@ const ReturnService = () => {
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>课后服务协议书</p>
+            <p>增值服务协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (
           <div className={styles.ZWSJ}>
             <img src={noOrder} alt="" />
-            <p>暂无数据</p>
+            <p>暂无增值服务协议</p>
           </div>
         )}
       </Modal>

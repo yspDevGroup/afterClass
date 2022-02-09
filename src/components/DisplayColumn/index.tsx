@@ -5,7 +5,7 @@ import { List, Badge } from 'antd';
 import type { IiconTextData } from './data';
 import IconFont from '../CustomIcon';
 import styles from './index.less';
-import { DisplayColumnItem } from '../data';
+import type { DisplayColumnItem } from '../data';
 
 const DisplayColumn: FC<IiconTextData> = ({
   hidden = false,
@@ -17,20 +17,29 @@ const DisplayColumn: FC<IiconTextData> = ({
   totil,
   parentLink,
   bjid,
-  callbackData
+  callbackData,
 }) => {
   return (
     <div
       className={styles.IconTextCompBox}
       style={{
-        background: `${!isheader ? '#FFFFFF' : '#F5F5F5'}`,
+        background: `${!isheader ? '#FFF' : '#F5F5F5'}`,
         display: hidden ? 'none' : 'block',
       }}
     >
       <List<DisplayColumnItem>
         grid={grid}
         dataSource={dataSource}
-        header={isheader === true ? <div>{title}</div> : ''}
+        header={
+          isheader === true ? (
+            <div className={styles.title}>
+              <div />
+              <span>{title}</span>
+            </div>
+          ) : (
+            ''
+          )
+        }
         renderItem={(item, index) => {
           const { icon, text, img, link, background, fontSize, count, itemType } = item;
           let curLink = link || '';
@@ -38,7 +47,7 @@ const DisplayColumn: FC<IiconTextData> = ({
             curLink = parentLink[index];
           }
           return (
-            <List.Item onClick={()=>item.handleClick?.(bjid,callbackData)}>
+            <List.Item onClick={() => item.handleClick?.(bjid, callbackData)}>
               <Link to={curLink}>
                 <div className={styles.Box}>
                   {type === 'img' || itemType === 'img' ? (
@@ -79,9 +88,7 @@ const DisplayColumn: FC<IiconTextData> = ({
                       </div>
                       <div className={styles.TextBox}>{text}</div>
                     </div>
-
                   )}
-
                 </div>
               </Link>
             </List.Item>

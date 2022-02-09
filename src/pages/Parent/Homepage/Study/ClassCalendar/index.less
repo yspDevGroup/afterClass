@@ -17,24 +17,27 @@
 
   .subTitle {
     margin: 12px 0;
-    font-size: @font-size-sm;
+    color: #666;
+    font-weight: bold;
+    font-size: 14px;
     line-height: 17px;
 
-    &:before {
+    &::before {
       display: inline-block;
       width: 3px;
       height: 12px;
+      margin-right: 4px;
       color: @text-color;
       vertical-align: baseline;
       background-color: @GreenColor;
       content: '';
-      margin-right: 4px;
     }
   }
+
   :global {
     .ant-list-item-meta {
       padding: 10px;
-      background: #ffffff;
+      background: #fff;
       border-radius: 8px;
     }
 
@@ -43,8 +46,8 @@
       background: none;
 
       .calendar-operate {
-        color: @text-color;
-        font-weight: 600;
+        color: #666;
+        font-weight: bold;
         font-size: 14px;
 
         .icon {
@@ -56,7 +59,7 @@
         margin-top: 7px;
         font-size: 14px;
         line-height: 42px;
-        border-bottom: 1px solid @border-color-base;
+        border-bottom: 1px solid #ddd;
 
         .head-cell {
           height: 42px;
@@ -79,7 +82,7 @@
             }
 
             .dot-mark {
-              background-color: @text-color  !important;
+              background-color: @text-color !important;
             }
           }
         }

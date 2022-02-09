@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-08 14:56:18
- * @LastEditTime: 2021-12-10 17:32:27
+ * @LastEditTime: 2021-12-20 10:11:04
  * @LastEditors: Sissle Lynn
  */
 
@@ -45,12 +45,12 @@ const arrangeClass = (data: API.KHPKSJ[]) => {
         nowWkd.wkd === wkd
           ? [{ wkd, count: nowWkd.count + 1, XXSJPZId: nowWkd.XXSJPZId.concat([XXSJPZ?.id]) }]
           : weekDay.concat([
-            {
-              wkd,
-              count: 1,
-              XXSJPZId: [XXSJPZ?.id],
-            },
-          ]);
+              {
+                wkd,
+                count: 1,
+                XXSJPZId: [XXSJPZ?.id],
+              },
+            ]);
       courseData[KHBJSJ?.id].weekDay = curWkd;
     } else if (KHBJSJ && KHBJSJ.id) {
       courseData[KHBJSJ?.id] = {
@@ -127,7 +127,12 @@ export const classTime = (
  * @param teacherId
  * @returns
  */
-export const getClassDays = async (classId: string, teacherId?: string, xxId?: string) => {
+export const getClassDays = async (
+  classId: string,
+  teacherId?: string,
+  xxId?: string,
+  type?: string,
+) => {
   const result = await getKHPKSJByBJID({ id: classId });
   const leaveData: SpecialType[] = [];
   const switchData: SpecialType[] = [];
@@ -140,13 +145,19 @@ export const getClassDays = async (classId: string, teacherId?: string, xxId?: s
         QJZT: [1],
       });
       if (res.status === 'ok') {
-        const response = await getAllKHJSTDK({
-          LX: [0],
+        const params: any = {
+          LX: [0, 2],
           ZT: [1],
           XXJBSJId: xxId,
-          KHBJSJId: classId,
-          SKJSId: teacherId,
-        });
+        };
+        if (type === 'exchange') {
+          params.DESKHBJSJId = classId;
+          params.DKJSId = teacherId;
+        } else {
+          params.KHBJSJId = classId;
+          params.SKJSId = teacherId;
+        }
+        const response = await getAllKHJSTDK(params);
         if (response.status === 'ok' && response.data) {
           const switchList = response.data.rows;
           if (switchList?.length) {
@@ -154,19 +165,20 @@ export const getClassDays = async (classId: string, teacherId?: string, xxId?: s
               switchData.push({
                 status: '已调课',
                 tag: '调',
-                day: v.SKRQ,
-                realDate: v.TKRQ,
-                start: v.TKJC?.KSSJ,
-                end: v.TKJC?.JSSJ,
+                day: type === 'exchange' ? v.TKRQ : v.SKRQ,
+                realDate: type === 'exchange' ? v.SKRQ : v.TKRQ,
+                start: type === 'exchange' ? v.SKJC?.KSSJ : v.TKJC?.KSSJ,
+                end: type === 'exchange' ? v.SKJC?.JSSJ : v.TKJC?.JSSJ,
                 room: {
-                  id: v.TKFJ?.id,
-                  name: v.TKFJ?.FJMC,
+                  id: type === 'exchange' ? v.SKFJ?.id : v.TKFJ?.id,
+                  name: type === 'exchange' ? v.SKFJ?.FJMC : v.TKFJ?.FJMC,
                 },
                 reason: v.BZ,
-                jcId: v.SKJC?.id,
+                jcId: type === 'exchange' ? v.TKJC?.id : v.SKJC?.id,
               });
             });
           }
+
           if (res.data) {
             const { rows } = res.data;
             if (rows?.length) {

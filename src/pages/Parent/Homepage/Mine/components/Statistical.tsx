@@ -8,8 +8,8 @@ import Nodata from '@/components/Nodata';
 
 import styles from '../index.less';
 
-const Statistical = (props: { userId?: string; xxId?: string; }) => {
-  const { userId, xxId, } = props;
+const Statistical = (props: { userId?: string; xxId?: string }) => {
+  const { userId, xxId } = props;
   const [satistics, setStatistics] = useState<any[]>();
 
   const convertData = (data: any) => {
@@ -32,10 +32,10 @@ const Statistical = (props: { userId?: string; xxId?: string; }) => {
             type: '待上',
             value: data.remain,
           },
-        ]
-      }
+        ],
+      };
     }
-    return {}
+    return {};
   };
 
   useEffect(() => {
@@ -44,16 +44,16 @@ const Statistical = (props: { userId?: string; xxId?: string; }) => {
       if (result.current) {
         const res = await countKHXSCQ({
           XNXQId: result.current.id,
-          XSJBSJId: userId
+          XSJBSJId: userId,
         });
         if (res.status === 'ok') {
           const arr = [].map.call(res.data, (item) => {
             return convertData(item);
-          })
+          });
           setStatistics(arr || []);
         }
       }
-    })()
+    })();
   }, [userId]);
 
   const config: any = {
@@ -63,10 +63,11 @@ const Statistical = (props: { userId?: string; xxId?: string; }) => {
     color: ({ type }: any) => {
       if (type === '正常') {
         return '#31D99F';
-      } if (type === '异常') {
+      }
+      if (type === '异常') {
         return '#FF7171';
       }
-      return '#DDDDDD';
+      return '#DDD';
     },
     innerRadius: 0.64,
     label: {
@@ -77,29 +78,46 @@ const Statistical = (props: { userId?: string; xxId?: string; }) => {
   };
   return (
     <div className={styles.statistical}>
-      <p><span>出勤统计</span>
+      <p>
+        <div className={styles.title}>
+          <div />
+          <span>出勤统计</span>
+        </div>
         <span>
           <Badge className={styles.legend} color="#31D99F" text="正常" />
           <Badge className={styles.legend} color="#FF7171" text="异常" />
-          <Badge className={styles.legend} color="#DDDDDD" text="待上" />
+          <Badge className={styles.legend} color="#DDD" text="待上" />
         </span>
       </p>
       <div className={styles.diagram}>
-        {
-          satistics && satistics.length ? satistics.map((value: any) => {
+        {satistics && satistics.length ? (
+          satistics.map((value: any) => {
             config.data = value.data;
-            return <>{value.data ? <div className={styles.cards}>
-              <p style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value.title}</p>
-              <Pie className={styles.pies} {...config} />
-              <div>
-                <span>正常:{value.zc}课时</span>
-                <span>异常:{value.yc}课时</span>
-                <span>待上:{value.ds}课时</span>
-              </div>
-            </div> : ''}</>
-          }) :
-            <Nodata imgSrc={noChart} desc='暂无数据' />
-        }
+            return (
+              <>
+                {value.data ? (
+                  <div className={styles.cards}>
+                    <p
+                      style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                    >
+                      {value.title}
+                    </p>
+                    <Pie className={styles.pies} {...config} />
+                    <div>
+                      <span>正常:{value.zc}课时</span>
+                      <span>异常:{value.yc}课时</span>
+                      <span>待上:{value.ds}课时</span>
+                    </div>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </>
+            );
+          })
+        ) : (
+          <Nodata imgSrc={noChart} desc="暂无数据" />
+        )}
       </div>
     </div>
   );

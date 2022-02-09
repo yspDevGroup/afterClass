@@ -7,6 +7,7 @@ import ShowName from '@/components/ShowName';
 import EllipsisHint from '../EllipsisHint';
 
 import styles from './index.less';
+import moment from 'moment';
 
 type KBItemProps = {
   mode: 'see' | 'edit';
@@ -17,6 +18,8 @@ type KBItemProps = {
         teacherWechatId?: string;
         color: string;
         bjzt: string;
+        jcmc: string;
+        fjmc: string;
       }
     | '';
   disabled: boolean;
@@ -50,6 +53,7 @@ export type DataSourceType = {
     cla: string;
     teacher: string;
     teacherWechatId?: string;
+    keys?: number;
     rowspan?: number;
     // 场地ID
     jsId: string;
@@ -87,9 +91,12 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
           border: 0,
           background: 'transparent',
           width: '100%',
+          lineHeight: '48px',
         }}
       >
-        <div className={styles.disImage}>&nbsp;</div>
+        <div className={styles.disImage}>
+          <EllipsisHint text={data?.cla} width={'100%'} />
+        </div>
       </Button>
     );
   }
@@ -103,7 +110,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
         }
       }}
       style={{
-        height: mode === 'see' ? 78 : 48,
+        height: mode === 'see' ? 98 : 48,
         padding: mode === 'see' ? 4 : 2,
         border: 0,
         background: 'transparent',
@@ -113,46 +120,82 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick }) => {
       {!data ? (
         <>&nbsp;</>
       ) : (
-        <div className="classCard">
-          <div
-            className={`cardTop`}
-            style={{
-              background: data?.color,
-            }}
-          />
-          <div
-            className={`cardcontent`}
-            style={{
-              color: data?.color,
-              background: data?.color.replace('1)', '0.1)'),
-              position: 'relative',
-            }}
-          >
-            <div className="cla">
-              <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
-              {/* {data?.cla} */}
+        <>
+          {data?.cla === '无法排课' ? (
+            <div className={styles.NoPk}>
+              <p>超出学年学期</p>
+              <span>无法排课</span>
             </div>
-            {mode === 'see' ? (
-              <div className="teacher" style={{ height: 22 }}>
-                <ShowName
-                  XM={data.teacher}
-                  type="userName"
-                  openid={data.teacherWechatId}
-                  style={{
-                    color: data?.color,
-                  }}
-                />
+          ) : (
+            <div className="classCard">
+              <div
+                className={`cardTop`}
+                style={{
+                  background: data?.color,
+                }}
+              />
+              <div
+                className={`cardcontent`}
+                style={{
+                  color: data?.color,
+                  background: data?.color.replace('1)', '0.1)'),
+                  position: 'relative',
+                }}
+              >
+                {mode === 'see' ? (
+                  <div
+                    className="teacher"
+                    style={{
+                      width: '100%',
+                      height: 22,
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: 'calc(100% - 54px)',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {data?.jcmc}
+                    </span>
+                    <ShowName
+                      XM={data.teacher}
+                      type="userName"
+                      openid={data.teacherWechatId}
+                      style={{
+                        color: data?.color,
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <span />
+                )}
+                <div className="cla">
+                  <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
+                  {/* {data?.cla} */}
+                </div>
+
+                {mode === 'see' ? (
+                  <div className="teacher" style={{ height: 22 }}>
+                    <span>{data?.fjmc}</span>
+                  </div>
+                ) : (
+                  <span />
+                )}
+                {mode === 'see' && data?.bjzt === '已开班' ? (
+                  <div className={styles.duihao}>√</div>
+                ) : (
+                  ''
+                )}
               </div>
-            ) : (
-              <span />
-            )}
-            {mode === 'see' && data?.bjzt === '已开班' ? (
-              <div className={styles.duihao}>√</div>
-            ) : (
-              ''
-            )}
-          </div>
-        </div>
+            </div>
+          )}
+        </>
       )}
     </Button>
   );
@@ -189,6 +232,7 @@ type IndexPropsType = {
   getSelectdata?: (value: any) => void;
   radioValue?: boolean;
   tearchId?: string;
+  TimeData?: any;
   /** 表格接口没有处理的数据 */
   basicData?: any[];
   style: any;
@@ -204,6 +248,7 @@ const Index: FC<IndexPropsType> = ({
   switchPages,
   getSelectdata,
   style,
+  TimeData,
   // radioValue,
   // basicData,
   // tearchId,
@@ -246,17 +291,26 @@ const Index: FC<IndexPropsType> = ({
         Modal.warning({
           title: '此课程班已结课，不能再进行排课操作',
         });
+      } else if (
+        rowData[colItem.dataIndex]?.isXZB &&
+        rowData[colItem.dataIndex]?.bjzt === '未开班'
+      ) {
+        Modal.warning({
+          title: '行政班排课不可编辑课程班课表，如有需要请在课程班排课中操作。',
+        });
       } else {
         seeChosenItem = {
           XQ: rowData[colItem.dataIndex]?.xqId, // 校区ID
           NJ: rowData[colItem.dataIndex]?.njId, // 年级ID
           KC: rowData[colItem.dataIndex]?.kcId, // 课程ID
+          XZBId: rowData[colItem.dataIndex]?.XZBId, // 行政班ID
+          isXZB: rowData[colItem.dataIndex]?.isXZB, // 行政班ID
           BJId: rowData[colItem.dataIndex]?.bjId, //  课程班ID
           CDLX: rowData.room?.FJLXId, // 场地类型ID
           CDMC: rowData.room?.jsId, // 场地名称
           weekId: rowData[colItem.dataIndex]?.weekId, // 排课ID
           jsId: rowData.room?.jsId, // 教室ID
-          hjId: rowData.course?.hjId, // 时间ID
+          hjId: rowData.course?.hjId, // 时间ID,
         };
         if (typeof switchPages === 'function') {
           switchPages();
@@ -322,6 +376,24 @@ const Index: FC<IndexPropsType> = ({
         getSelectdata(selectdata);
       }
     }
+
+    const weekDays = {
+      monday: 1,
+      tuesday: 2,
+      wednesday: 3,
+      thursday: 4,
+      friday: 5,
+      saturday: 6,
+      sunday: 7,
+    };
+    // 学年学期开始日期
+    const start = new Date(TimeData?.KSRQ);
+    // 获取学年学期开始日期为当周的周几
+    const staetWeek = Number(moment(start).format('E'));
+    const Num = Number(rowData?.room.keys) * 7 + weekDays[colItem.dataIndex] - staetWeek;
+    // 计算点击格子的日期
+    const newDay = moment(start).add(Num, 'days').format('YYYY-MM-DD');
+
     let pkData = null;
     if (type === 'edit') {
       pkData = {
@@ -329,6 +401,9 @@ const Index: FC<IndexPropsType> = ({
         FJSJId: rowData.room?.jsId, // 教室ID
         WEEKDAY: weekDay[colItem.dataIndex], // 周
         XXSJPZId: rowData.course?.hjId, // 时间ID
+        RQ: newDay,
+        IsDSZ: Number(rowData?.room.cla + 1) % 2 === 0 ? 1 : 0,
+        PKBZ: rowData?.room.cla,
       };
     } else if (type === 'see') {
       pkData = rowData[colItem.dataIndex]?.bjId;

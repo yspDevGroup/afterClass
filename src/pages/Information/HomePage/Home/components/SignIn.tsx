@@ -7,7 +7,7 @@ import ShowName from '@/components/ShowName';
 import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
 import { getAllByDate } from '@/services/after-class/khjscq';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import TeacherQD from '@/assets/TeacherQD.png'
+import TeacherQD from '@/assets/TeacherQD.png';
 
 import styles from '../index.less';
 
@@ -36,7 +36,7 @@ const SignIn = () => {
         res.data?.rows?.forEach((value: any) => {
           value.KCBSKJSSJs.forEach((items: any) => {
             const newData = {
-              ...items.JZGJBSJ,
+              ...items?.JZGJBSJ,
             };
             AllTeacher.push(newData);
           });
@@ -91,7 +91,7 @@ const SignIn = () => {
   return (
     <div className={styles.SignIn}>
       <p className={styles.title}>教师实时签到</p>
-      <div className={styles.wrap}  style={{backgroundImage:`url(${TeacherQD})`}}>
+      <div className={styles.wrap} style={{ backgroundImage: `url(${TeacherQD})` }}>
         <p>
           <span className={styles.titles}>应到教师数</span>
           <span>
@@ -105,30 +105,34 @@ const SignIn = () => {
           </span>
         </p>
         <div className={styles.AllTeacher}>
-        <Row gutter={[8, 0]}>
-          {NoSignInTeacher?.map((values: any, index: number) => {
-            if (index < 12) {
-              return (
-                <Col span={6}>
-                  <ShowName type="userName" openid={values?.WechatUserId} XM={values?.XM} style={{color:'#666'}} />
-                </Col>
-              );
-            }
-            return '';
-          })}
-        </Row>
-        <p className={styles.more}>
-          <Link
-            to={{
-              pathname: '/information/signInDetails',
-              state: NoSignInTeacher,
-            }}
-          >
-            查看更多
-          </Link>
-        </p>
+          <Row gutter={[8, 0]}>
+            {NoSignInTeacher?.map((values: any, index: number) => {
+              if (index < 12) {
+                return (
+                  <Col span={6}>
+                    <ShowName
+                      type="userName"
+                      openid={values?.WechatUserId}
+                      XM={values?.XM}
+                      style={{ color: '#666' }}
+                    />
+                  </Col>
+                );
+              }
+              return '';
+            })}
+          </Row>
+          <p className={styles.more}>
+            <Link
+              to={{
+                pathname: '/information/signInDetails',
+                state: NoSignInTeacher,
+              }}
+            >
+              查看更多
+            </Link>
+          </p>
         </div>
-
       </div>
     </div>
   );

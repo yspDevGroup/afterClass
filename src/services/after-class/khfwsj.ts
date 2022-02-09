@@ -26,6 +26,8 @@ export async function getKHFWSJ(
       XQSJ?: { id?: string; XQMC?: string; XQH?: string; XQDZ?: string };
       XNXQId?: string;
       XNXQ?: { id?: string; XN?: string; XQ?: string };
+      NJSJs?: { id?: string; NJ?: number; NJMC?: string; XD?: string }[];
+      KHBJSJs?: { id?: string; BJMC?: string; KCTP?: string }[];
     };
     message?: string;
   }>(`/khfwsj/${param0}`, {
@@ -90,10 +92,38 @@ export async function createKHFWSJ(body: API.CreateKHFWSJ, options?: { [key: str
       XQSJ?: { id?: string; XQMC?: string; XQH?: string; XQDZ?: string };
       XNXQId?: string;
       XNXQ?: { id?: string; XN?: string; XQ?: string };
+      NJSJs?: { id?: string; NJ?: number; NJMC?: string; XD?: string }[];
+      KHBJSJs?: { id?: string; BJMC?: string; KCTP?: string }[];
     };
     message?: string;
   }>('/khfwsj/create', {
     method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取所有课后服务数据 POST /khfwsj/getAll */
+export async function getAllKHFWSJ(
+  body: {
+    FWMC?: string;
+    XNXQId?: string;
+    FWZT?: number[];
+    /** 年级IDs */
+    NJSJIds?: string[];
+    XQSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { count?: number; rows?: API.KHFWSJ[] };
+    message?: string;
+  }>('/khfwsj/getAll', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },

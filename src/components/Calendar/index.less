@@ -1,9 +1,9 @@
 @import '~antd/es/style/themes/default.less';
 
 .calendarContainer {
-  font-family: "Microsoft Yahei";
-  color: #4A4A4A;
+  color: #4a4a4a;
   font-size: 16px;
+  font-family: 'Microsoft Yahei';
   background: #fff;
 
   .textCut {
@@ -14,8 +14,8 @@
 
   .calendarHeader {
     position: relative;
-    padding: 0 0 16px 0;
     height: 80px;
+    padding: 0 0 16px 0;
 
     .termInfo {
       box-sizing: border-box;
@@ -28,15 +28,15 @@
       //   margin-left: 45px;
       // }
 
-      &[v-align="center"] {
+      &[v-align='center'] {
         margin: 0 auto;
       }
 
-      &[v-align="right"] {
+      &[v-align='right'] {
         position: absolute;
         right: 0;
 
-        &+.weekInfo {
+        & + .weekInfo {
           right: 216px !important;
         }
       }
@@ -45,19 +45,19 @@
       :global(.ant-picker-focused) {
         position: relative;
         width: 120px;
-        border: none;
-        background: transparent;
-        box-shadow: none;
         padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
 
         input {
           padding-left: 25px;
-          color: #333333;
-          background: transparent;
+          color: #333;
           text-align: center;
+          background: transparent;
           cursor: pointer;
 
-          &+span {
+          & + span {
             position: absolute;
             left: 0;
             color: #2f54eb;
@@ -75,23 +75,22 @@
       }
     }
 
-    .today {
-      // visibility: hidden;
-      right: 0 !important;
-    }
-
     // .weekInfo,
     .today {
       position: absolute;
-      top: 16px;
-      right: 380px;
+      top: 8px;
+      left: 220px;
+      // position: absolute;
+      // top: 16px;
+      // right: 380px;
+      width: 120px;
+      height: 32px;
       color: #333;
       font-size: 14px;
       line-height: 32px;
-      height: 32px;
-      border-radius: 4px;
       letter-spacing: 2px;
-      background: #3E88F8;
+      background: #3e88f8;
+      border-radius: 4px;
 
       span {
         padding: 0 16px 0 8px;
@@ -114,15 +113,15 @@
       // box-shadow: 2px 4px 5px #bdbdbd;
       flex-grow: 1;
 
-      &[v-align="wk-left"] {
+      &[v-align='wk-left'] {
         .dateHeader {
           .weekItem {
             background: none;
             border: none;
 
             &.weekly {
-              visibility: hidden;
               width: 45px;
+              visibility: hidden;
             }
 
             &:nth-child(7) {
@@ -132,7 +131,7 @@
 
           .yspWeek {
             .weekItem {
-              border-bottom: 1px solid #F1EBE4;
+              border-bottom: 1px solid #f1ebe4;
             }
           }
         }
@@ -142,12 +141,12 @@
             width: 45px;
 
             .weeklyItem {
-              width: 45px;
-              padding: 0 20px;
-              line-height: 20px !important;
               display: flex;
               align-items: center;
               justify-content: center;
+              width: 45px;
+              padding: 0 20px;
+              line-height: 20px !important;
               text-align: center;
               border: none;
             }
@@ -160,23 +159,23 @@
         text-align: center;
 
         .weekItem {
-          height: 32px;
-          line-height: 32px;
-          font-size: 16px;
-          background-color: #FBEC9C;
-          border-width: 1px 0 1px 1px;
-          border-color: #ECE3B1;
-          border-style: solid;
           box-sizing: border-box;
+          height: 32px;
           overflow: hidden;
+          font-size: 16px;
+          line-height: 32px;
           text-overflow: ellipsis;
+          background-color: #fbec9c;
+          border-color: #ece3b1;
+          border-style: solid;
+          border-width: 1px 0 1px 1px;
         }
 
         .yspWeek {
-          font-weight: 400;
-          color: #4A4A4A;
           display: flex;
           flex: 1;
+          color: #4a4a4a;
+          font-weight: 400;
 
           .weekItem {
             flex: 1;
@@ -187,7 +186,7 @@
             }
 
             &:nth-child(7) {
-              border-right: 1px solid #F1EBE4;
+              border-right: 1px solid #f1ebe4;
             }
           }
         }
@@ -200,31 +199,32 @@
           flex: 1;
 
           :global {
-            #yspNoArrange{
-              background-color: #EEEEEE;
-              div[class*='noText']{
+            #yspNoArrange {
+              background-color: #eee;
+
+              div[class*='noText'] {
                 display: block;
-                text-align: center;
+                color: #999;
                 font-weight: normal;
                 font-size: 12px;
-                color: #999;
+                text-align: center;
               }
             }
           }
 
           .dayItem {
             flex: 1;
-            height: 60px;
             float: left;
-            font-weight: 600;
-            color: #565555;
-            width: 14.285%;
-            padding: 10px;
-            background-color: #ffffff;
-            border-width: 0 0 1px 1px;
-            border-color: #F1EBE4;
-            border-style: solid;
             box-sizing: border-box;
+            width: 14.285%;
+            height: 60px;
+            padding: 10px;
+            color: #565555;
+            font-weight: 600;
+            background-color: #fff;
+            border-color: #f1ebe4;
+            border-style: solid;
+            border-width: 0 0 1px 1px;
 
             &.mark {
               .day {
@@ -269,14 +269,15 @@
               }
 
               .eventMore {
-                >div {
+                > div {
                   position: relative;
                   bottom: 5px;
+
                   p {
                     color: #999;
+                    font-weight: normal;
                     font-size: 12px;
                     line-height: 22px;
-                    font-weight: normal;
                     text-align: right;
                   }
 
@@ -285,37 +286,36 @@
                     top: 0;
                     left: 10px;
                     width: 100%;
-                    padding: 8px;
                     margin-top: 0;
-                    background: #FFFFFF;
-                    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+                    padding: 8px;
+                    background: #fff;
                     border-radius: 2px;
+                    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
                   }
                 }
               }
             }
 
             .lunarDay {
-              font-size: 10px;
-              font-weight: normal;
               overflow: hidden;
+              font-weight: normal;
+              font-size: 10px;
               text-overflow: ellipsis;
             }
 
             &:nth-child(7n),
-            &:nth-child(7n+6) {
+            &:nth-child(7n + 6) {
               .day {
                 color: rgba(224, 8, 8, 0.74);
               }
             }
 
             &:nth-child(7n) {
-              border-right: 1px solid #F1EBE4;
+              border-right: 1px solid #f1ebe4;
             }
 
             &:global(.yspOthermonth) {
               &.noShow {
-
                 .day,
                 .lunarDay {
                   visibility: hidden;
@@ -324,7 +324,7 @@
 
               .day,
               .lunarDay {
-                color: #C1C0C0;
+                color: #c1c0c0;
               }
             }
 
@@ -349,11 +349,11 @@
         .weeklyItem {
           width: 60px;
           height: 120px;
-          line-height: 120px;
           color: #888;
-          border-width: 0 0 1px 1px;
-          border-color: #F1EBE4;
+          line-height: 120px;
+          border-color: #f1ebe4;
           border-style: solid;
+          border-width: 0 0 1px 1px;
         }
       }
     }
@@ -381,16 +381,16 @@
         background: #fff;
         border-radius: 2px;
 
-        >.slot {
+        > .slot {
           position: absolute;
           top: 0;
           left: 0;
           width: 4px;
           height: 100%;
-          border-radius: 0px 2px 2px 0px;
+          border-radius: 0 2px 2px 0;
         }
 
-        >.event {
+        > .event {
           width: calc(~'100% - 30px');
           padding-left: 12px;
 
@@ -422,11 +422,11 @@
       }
 
       .noData {
-        line-height: 300px;
-        text-align: center;
-        font-size: 16px;
-        letter-spacing: 2px;
         color: #888;
+        font-size: 16px;
+        line-height: 300px;
+        letter-spacing: 2px;
+        text-align: center;
 
         img {
           width: 200px;

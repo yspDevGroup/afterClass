@@ -1,7 +1,7 @@
 .leaveList {
-  background-color: #F5F5F5;
   height: auto;
   min-height: 100vh;
+  background-color: #f5f5f5;
 
   button {
     outline: none;
@@ -9,7 +9,7 @@
 
   :global {
     .ant-tabs-nav {
-      &:before {
+      &::before {
         display: none !important;
       }
 
@@ -21,11 +21,11 @@
 
         .ant-tabs-tab {
           width: 50%;
-          font-size: 16px;
           margin: 0;
           padding: 0;
-          border: none !important;
+          font-size: 16px;
           background: none !important;
+          border: none !important;
 
           .ant-tabs-tab-btn {
             margin: auto;
@@ -34,8 +34,8 @@
 
         .ant-tabs-tab-active {
           .ant-tabs-tab-btn {
-            font-weight: bold;
             color: #333;
+            font-weight: bold;
           }
         }
 
@@ -59,14 +59,14 @@
 
   .leaveForm {
     .type {
-      background: linear-gradient(180deg, #FFFFFF 52.6%, rgba(255, 255, 255, 0) 100%);
       padding: 14px 10px;
+      background: linear-gradient(180deg, #fff 52.6%, rgba(255, 255, 255, 0) 100%);
 
       p {
         margin: 0;
-        line-height: 22px;
-        font-size: 12px;
         color: #999;
+        font-size: 12px;
+        line-height: 22px;
 
         &:nth-child(1) {
           margin-bottom: 14px;
@@ -74,7 +74,7 @@
           font-size: 14px;
 
           span {
-            border-bottom: 2px solid #45c977;
+            border-bottom: 2px solid #15b628;
           }
         }
       }
@@ -84,19 +84,18 @@
       padding: 0 10px;
 
       :global {
-
         .ant-checkbox-wrapper,
         .ant-checkbox-wrapper:hover .ant-checkbox-inner,
         .ant-checkbox:hover .ant-checkbox-inner,
-        .ant-checkbox-input:focus+.ant-checkbox-inner,
+        .ant-checkbox-input:focus + .ant-checkbox-inner,
         .ant-input:focus {
-          border-color: #45c977 !important;
+          border-color: #15b628 !important;
         }
 
         .ant-checkbox-checked {
           .ant-checkbox-inner {
-            background-color: #45c977;
-            border-color: #45c977;
+            background-color: #15b628;
+            border-color: #15b628;
           }
         }
       }
@@ -104,10 +103,10 @@
 
     form {
       margin-top: 14px;
-      background: #fff;
       padding: 10px 10px 60px;
+      background: #fff;
 
-      >div[class*='ant-form-item'] {
+      > div[class*='ant-form-item'] {
         margin-bottom: 0;
 
         textarea {
@@ -118,20 +117,20 @@
 
     .fixedBtn {
       position: fixed;
+      right: 0;
       bottom: 0;
       left: 0;
-      right: 0;
-      background: #FFFFFF;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
       padding: 8px 14px;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
       button {
         width: 100%;
-        background: #45C977;
-        border-radius: 22px;
-        color: #fff;
         padding: 8px;
+        color: #fff;
+        background: #15b628;
         border: none;
+        border-radius: 22px;
       }
     }
   }
@@ -140,18 +139,18 @@
     padding: 0 10px;
 
     .Information {
+      margin-bottom: 10px;
+      padding: 10px;
       background-color: #fff;
       border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
 
       &::after {
         display: block;
-        content: '';
         clear: both;
+        content: '';
       }
 
-      >div {
+      > div {
         display: flex;
         justify-content: flex-end;
 
@@ -159,13 +158,13 @@
           flex: 1;
           font-weight: bold;
 
-          >span {
-            font-weight: normal;
-            border-radius: 4px;
-            border: 1px solid #dadada;
-            font-size: 12px;
-            padding: 2px 8px;
+          > span {
             margin-left: 8px;
+            padding: 2px 8px;
+            font-weight: normal;
+            font-size: 12px;
+            border: 1px solid #dadada;
+            border-radius: 4px;
           }
         }
 
@@ -175,28 +174,27 @@
       }
 
       p {
-        line-height: 22px;
         margin-bottom: 0;
         color: #666;
+        line-height: 22px;
       }
 
       button {
-        border: 1px solid #DDDDDD;
-        border-radius: 22px;
         float: right;
-        border: 1px solid #45c977;
-        padding: 0 24px;
         height: 30px;
-        color: #45c977;
+        padding: 0 24px;
+        color: #15b628;
+        border: 1px solid #15b628;
+        border-radius: 22px;
       }
     }
   }
 
   .noData {
     img {
+      display: block;
       width: 60%;
       margin: 50px auto;
-      display: block;
     }
   }
 }

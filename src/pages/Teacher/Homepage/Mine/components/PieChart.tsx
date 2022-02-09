@@ -16,8 +16,13 @@ type ItemType = {
   color: string;
 };
 
-const CheckOnChart = (props: { data: ItemType[]; title?: string; cls?: string }) => {
-  const { data, title, cls } = props;
+const CheckOnChart = (props: {
+  data: ItemType[];
+  title?: string;
+  subTitle?: string;
+  cls?: string;
+}) => {
+  const { data, title, subTitle, cls } = props;
   const pieConfig = {
     appendPadding: 10,
     height: 150,
@@ -43,20 +48,46 @@ const CheckOnChart = (props: { data: ItemType[]; title?: string; cls?: string })
       content: '{value}',
     },
     statistic: {
-      title: {
-        offsetY: -4,
-        style: { fontSize: '14px' },
-        content: '总课时',
-      },
-      content: {
-        offsetY: 4,
-        style: { fontSize: '16px' },
-      },
+      title: false,
+      // {
+      //   offsetY: -4,
+      //   style: { fontSize: '14px' },
+      //   content: '总课时',
+      // },
+      content: false,
+      // {
+      //   offsetY: 4,
+      //   style: { fontSize: '16px' },
+      // },
     },
   };
   return (
     <div className={`${styles.chartWrapper} ${cls}`}>
-      {title ? <div className="title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title}</div> : ''}
+      {title ? (
+        <div
+          className="title"
+          style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+        >
+          {title}
+        </div>
+      ) : (
+        ''
+      )}
+      {subTitle ? (
+        <div
+          style={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            fontSize: 12,
+            color: '#888',
+          }}
+        >
+          {subTitle}
+        </div>
+      ) : (
+        ''
+      )}
       <Pie {...pieConfig} />
     </div>
   );

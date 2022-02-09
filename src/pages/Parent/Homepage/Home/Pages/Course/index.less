@@ -4,34 +4,34 @@
   }
 
   :global {
-    .ant-tabs-tab+.ant-tabs-tab {
+    .ant-tabs-tab + .ant-tabs-tab {
       margin-left: 28px;
     }
 
-    .ant-tabs-top>.ant-tabs-nav,
-    .ant-tabs-bottom>.ant-tabs-nav,
-    .ant-tabs-top>div>.ant-tabs-nav,
-    .ant-tabs-bottom>div>.ant-tabs-nav {
+    .ant-tabs-top > .ant-tabs-nav,
+    .ant-tabs-bottom > .ant-tabs-nav,
+    .ant-tabs-top > div > .ant-tabs-nav,
+    .ant-tabs-bottom > div > .ant-tabs-nav {
       height: 22px;
       margin-bottom: 12px;
       line-height: 22px;
     }
 
-    .ant-tabs-top>.ant-tabs-nav::before,
-    .ant-tabs-bottom>.ant-tabs-nav::before,
-    .ant-tabs-top>div>.ant-tabs-nav::before,
-    .ant-tabs-bottom>div>.ant-tabs-nav::before {
-      border-bottom: 0px;
+    .ant-tabs-top > .ant-tabs-nav::before,
+    .ant-tabs-bottom > .ant-tabs-nav::before,
+    .ant-tabs-top > div > .ant-tabs-nav::before,
+    .ant-tabs-bottom > div > .ant-tabs-nav::before {
+      border-bottom: 0;
     }
 
     .ant-tabs-tab:hover {
-      color: #45c977;
+      color: #15b628;
       font-weight: 600;
       font-size: @font-size-lg;
     }
 
     .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-      color: #45c977;
+      color: #15b628;
       font-weight: 600;
       font-size: @font-size-lg;
     }
@@ -43,10 +43,10 @@
     .ant-tabs-ink-bar {
       display: none;
     }
-    .ant-tabs-content-holder{
-      .ant-tabs-nav{
-        .ant-tabs-tab{
-          .ant-tabs-tab-btn{
+    .ant-tabs-content-holder {
+      .ant-tabs-nav {
+        .ant-tabs-tab {
+          .ant-tabs-tab-btn {
             font-size: 14px;
           }
         }
@@ -60,7 +60,7 @@
         .ant-tabs-ink-bar {
           display: block;
           margin-bottom: 4px;
-          background: #45c977;
+          background: #15b628;
         }
 
         .ant-tabs-tab:hover {
@@ -88,15 +88,15 @@
       .ant-tabs-nav-list {
         width: auto !important;
         .ant-tabs-tab {
-          color: #666666 !important;
-          border: 1px solid #fff !important;
           margin-left: 28px !important;
           padding: 8px 0;
+          color: #666 !important;
+          border: 1px solid #fff !important;
           .ant-tabs-tab-btn {
             font-size: 14px !important;
           }
         }
-        .ant-tabs-tab:nth-of-type(1){
+        .ant-tabs-tab:nth-of-type(1) {
           margin-left: 0 !important;
         }
       }
@@ -121,19 +121,32 @@
           p {
             margin: 5px 0;
             overflow: hidden;
-            color: #999999;
+            color: #999;
             font-size: 12px;
             line-height: 16px;
             white-space: nowrap;
             text-overflow: ellipsis;
           }
           .title {
-            color: #333333;
+            color: #333;
             font-size: 14px;
             line-height: 18px;
           }
         }
       }
     }
+  }
+}
+
+.ZWSJ {
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+
+  img {
+    display: block;
+    width: 180px;
+    margin: 0 auto;
+    margin-top: 30px;
   }
 }

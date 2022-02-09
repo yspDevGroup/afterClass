@@ -30,7 +30,9 @@ export async function getKHXSDD(
         XH?: string;
         XM?: string;
         WechatUserId?: string;
-        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+        BJSJ?:
+          | { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } }
+          | any;
       };
       KHBJSJ?:
         | {
@@ -56,6 +58,25 @@ export async function getKHXSDD(
             BMJSSJ?: string;
             FWTP?: string;
             KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
+          }
+        | any;
+      XSFWBJ?:
+        | {
+            id?: string;
+            ZT?: number;
+            KHFWBJ?: {
+              id?: string;
+              FWFY?: string | any;
+              FWMC?: string;
+              FWTP?: string | any;
+              FWMS?: string | any;
+              BJSJ?: {
+                id?: string;
+                BJ?: string;
+                NJSJ?: { id?: string; NJMC?: string; XD?: string };
+              };
+            };
+            KHFWSJPZ?: { id?: string; KSRQ?: string; JSRQ?: string };
           }
         | any;
     };
@@ -91,6 +112,12 @@ export async function getAllKHXSDD(
     DDLX?: number;
     /** 学生ID */
     XSJBSJId?: string;
+    /** 班级ID */
+    BJSJId?: string;
+    /** 年级ID */
+    NJSJId?: string;
+    /** 校区ID */
+    XQSJId?: string;
     /** 学生姓名 */
     XSXM?: string;
     /** 课后服务名称 */
@@ -103,6 +130,8 @@ export async function getAllKHXSDD(
     XXJBSJId?: string;
     /** 班级ID */
     KHBJSJId?: string;
+    /** 学生报名服务班ID */
+    XSFWBJId?: string;
     /** 班级名称 */
     bjmc?: string;
     /** 课程名称 */
@@ -142,7 +171,9 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
         XH?: string;
         XM?: string;
         WechatUserId?: string;
-        BJSJ?: { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } };
+        BJSJ?:
+          | { id?: string; BJ?: string; NJSJ?: { id?: string; NJMC?: string; XD?: string } }
+          | any;
       };
       KHBJSJ?:
         | {
@@ -168,6 +199,25 @@ export async function createKHXSDD(body: API.CreateKHXSDD, options?: { [key: str
             BMJSSJ?: string;
             FWTP?: string;
             KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
+          }
+        | any;
+      XSFWBJ?:
+        | {
+            id?: string;
+            ZT?: number;
+            KHFWBJ?: {
+              id?: string;
+              FWFY?: string | any;
+              FWMC?: string;
+              FWTP?: string | any;
+              FWMS?: string | any;
+              BJSJ?: {
+                id?: string;
+                BJ?: string;
+                NJSJ?: { id?: string; NJMC?: string; XD?: string };
+              };
+            };
+            KHFWSJPZ?: { id?: string; KSRQ?: string; JSRQ?: string };
           }
         | any;
     };
@@ -256,22 +306,22 @@ export async function overdueKHXSDD(
 /** 移动端查询学生订单信息 POST /khxsdd/getStudentOrders */
 export async function getStudentOrders(
   body: {
+    DDZT?: string[];
+    /** 订单类型 */
+    DDLX?: number[];
     /** 学生ID */
     XSJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: API.KHXSDD[]; message?: string }>(
-    '/khxsdd/getStudentOrders',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: body,
-      ...(options || {}),
+  return request<any>('/khxsdd/getStudentOrders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    data: body,
+    ...(options || {}),
+  });
 }
 
 /** 导出课后服务订单记录 POST /khxsdd/exportStudentOrders */

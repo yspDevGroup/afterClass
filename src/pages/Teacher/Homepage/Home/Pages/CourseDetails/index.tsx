@@ -9,10 +9,11 @@ import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { convertTimeTable, ParentHomeData } from '@/services/local-services/mobileHome';
-import { getAllKHBJKSSJ, getKHBJSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
+import { getKHBJSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
 import noData from '@/assets/noCourse.png';
 
 import styles from './index.less';
+import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
 
 const CourseDetails: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -66,30 +67,34 @@ const CourseDetails: React.FC = () => {
         }
 
         if (claim && claim === '自选课' && classid) {
-          const clsRes = await getAllKHBJKSSJ({
-            KHBJSJIds: [classid],
-            page: 0,
-            pageSize: 0,
+          const resulta = await getKCBSKSJ({
+            KHBJSJId: [classid],
           });
-          if (clsRes.status === 'ok' && clsRes.data) {
-            const { rows } = clsRes.data;
+          if (resulta.status === 'ok' && resulta.data) {
+            const { rows } = resulta.data;
+            let days: any[] = [];
             if (rows?.length) {
-              const { DATA } = rows[0];
-              const days = JSON.parse(DATA);
-              // 获取课程班教师出勤数据
-              const res = await getAllKHJSCQ({
-                KHBJSJId: classid,
+              days = [].map.call(rows, (v: { XXSJPZId: string; SKRQ: string }, index) => {
+                return {
+                  index: index + 1,
+                  jcId: v.XXSJPZId,
+                  day: v.SKRQ,
+                };
               });
-              if (res.status === 'ok' && res.data) {
-                const newTime = await convertTimeTable(
-                  userId,
-                  classid,
-                  res.data,
-                  days,
-                  currentUser?.xxId,
-                );
-                setTimetableList(newTime);
-              }
+            }
+            // 获取课程班教师出勤数据
+            const res = await getAllKHJSCQ({
+              KHBJSJId: classid,
+            });
+            if (res.status === 'ok' && res.data) {
+              const newTime = await convertTimeTable(
+                userId,
+                classid,
+                res.data,
+                days,
+                currentUser?.xxId,
+              );
+              setTimetableList(newTime);
             }
           }
         } else {
@@ -126,7 +131,10 @@ const CourseDetails: React.FC = () => {
       } else {
         content = {
           title: '调课说明',
-          content: `由于${BZ},本节课临时调整到${TKRQ}日${TKJC?.KSSJ?.substring(0,5)}-${TKJC?.JSSJ?.substring(0,5)}上课,请知悉.`,
+          content: `由于${BZ},本节课临时调整到${TKRQ}日${TKJC?.KSSJ?.substring(
+            0,
+            5,
+          )}-${TKJC?.JSSJ?.substring(0, 5)}上课,请知悉.`,
         };
       }
       Modal.info({
@@ -144,7 +152,10 @@ const CourseDetails: React.FC = () => {
       } else {
         content = {
           title: '调课说明',
-          content: `由于${val.reason},本节课临时调整到${val.realDate}日${val.start}-${val.end}上课,请知悉.`,
+          content: `由于${val.reason},本节课临时调整到${val.realDate}日${val.start?.substring(
+            0,
+            5,
+          )}-${val.end?.substring(0, 5)}上课,请知悉.`,
         };
       }
       Modal.info({
@@ -174,10 +185,14 @@ const CourseDetails: React.FC = () => {
               <span>上课地点：</span>
               {KcDetail?.xq} | {KcDetail?.address}
             </li>
-            <li>
-              <span>总课时：</span>
-              {KcDetail?.KSS}课时
-            </li>
+            {KcDetail?.KSS ? (
+              <li>
+                <span>总课时：</span>
+                {KcDetail?.KSS}课时
+              </li>
+            ) : (
+              ''
+            )}
             <li>
               <span>授课班级：</span>
               {KcDetail?.BJMC}
@@ -243,6 +258,7 @@ const CourseDetails: React.FC = () => {
                   };
                   break;
                 case '调课':
+                case '已调课':
                   style = {
                     background: 'rgba(172, 144, 251, 0.2)',
                     color: '#666',
@@ -255,6 +271,7 @@ const CourseDetails: React.FC = () => {
                   };
                   break;
                 case '请假':
+                case '已请假':
                   style = {
                     background: 'rgba(242, 200, 98, 0.2)',
                     color: '#666',

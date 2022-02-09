@@ -89,6 +89,34 @@ export async function getAllBJSJ(
   });
 }
 
+/** 查询所有未创建课后服务的行政班 POST /bjsj/getAllBJSJNoKHFW */
+export async function getAllBJSJNoKHFW(
+  body: {
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 校区ID */
+    XQSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 年级ID */
+    njId?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/bjsj/getAllBJSJNoKHFW', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 创建班级数据 PUT /bjsj/create */
 export async function createBJSJ(body: API.CreateBJSJ, options?: { [key: string]: any }) {
   return request<{
@@ -294,6 +322,36 @@ export async function getClassStudents(
   options?: { [key: string]: any },
 ) {
   return request<any>('/bjsj/getClassStudents', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 查找学校所有班级服务班报名数据 POST /bjsj/getKHFWBJXSbm */
+export async function getKHFWBJXSbm(
+  body: {
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 校区ID */
+    XQSJId?: string;
+    /** 班级ID */
+    BJSJId?: string;
+    /** 年级ID */
+    NJId?: string[];
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/bjsj/getKHFWBJXSbm', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

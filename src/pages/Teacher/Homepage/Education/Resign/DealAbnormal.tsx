@@ -14,6 +14,7 @@ import GoBack from '@/components/GoBack';
 import styles from './index.less';
 import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
 import { getAllJSCQBQ } from '@/services/after-class/jscqbq';
+import moment from 'moment';
 
 const { TextArea } = Input;
 const getCountDays = (curMonth: number) => {
@@ -24,7 +25,7 @@ const getCountDays = (curMonth: number) => {
   curDate.setDate(0);
   /* 返回当月的天数 */
   return curDate.getDate();
-}
+};
 const DealAbnormal = (props: any) => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -59,24 +60,28 @@ const DealAbnormal = (props: any) => {
     }
   };
   const getData = async () => {
+    const start = `${data.year}-${data.month}-01`;
+    const end = `${data.year}-${data.month}-${getCountDays(data.month)}`;
     const res = await getAllKHJSCQ({
       JZGJBSJId: userId,
-      startDate: `${data.year}-${data.month}-01`,
-      endDate: `${data.year}-${data.month}-${getCountDays(data.month)}`,
-    })
+      startDate: moment(start).format('YYYY-MM-DD'),
+      endDate: moment(end).format('YYYY-MM-DD'),
+    });
     if (res.status === 'ok' && res.data) {
       setTotal(res.data.length);
-      const newData = res.data.filter((val) => val.CQZT === '缺席');
-      const list = [].map.call(newData, ((v: any) => {
+      const newData = res.data.filter((val: { CQZT: string }) => val.CQZT === '缺席');
+      const list = [].map.call(newData, (v: any) => {
         const { KHBJSJ, XXSJPZ, CQRQ } = v;
         return {
           title: KHBJSJ?.BJMC,
           date: CQRQ,
-          time: XXSJPZ?.KSSJ ? `${XXSJPZ?.KSSJ?.substring(0, 5)} - ${XXSJPZ?.JSSJ?.substring(0, 5)}` : '',
+          time: XXSJPZ?.KSSJ
+            ? `${XXSJPZ?.KSSJ?.substring(0, 5)} - ${XXSJPZ?.JSSJ?.substring(0, 5)}`
+            : '',
           id: KHBJSJ?.id,
-          XXSJPZId: v.XXSJPZId
-        }
-      }));
+          XXSJPZId: v.XXSJPZId,
+        };
+      });
       setDataSource(list);
     }
   };
@@ -88,27 +93,33 @@ const DealAbnormal = (props: any) => {
       SQNR: '出勤',
       BQRId: userId,
       KHBJSJId: current.id,
-      XXSJPZId: current.XXSJPZId
+      XXSJPZId: current.XXSJPZId,
     });
     if (res.status === 'ok') {
       getCQData();
       setVisible(false);
-      message.success('补签成功');
+      if (res.message === 'isAudit=false') {
+        message.success('补签成功');
+      } else {
+        message.success('补签申请提交成功');
+      }
     } else {
-      message.warning(res.message)
+      message.warning(res.message);
     }
   };
   useEffect(() => {
-    (
-      async () => {
-        const oriData = await ParentHomeData('teacher', currentUser?.xxId, currentUser.JSId || testTeacherId);
-        const { skkssj } = oriData.data;
-        if (skkssj) {
-          getCQData();
-          getData();
-        }
+    (async () => {
+      const oriData = await ParentHomeData(
+        'teacher',
+        currentUser?.xxId,
+        currentUser.JSId || testTeacherId,
+      );
+      const { skkssj } = oriData.data;
+      if (skkssj) {
+        getCQData();
+        getData();
       }
-    )()
+    })();
   }, [data]);
   return (
     <>
@@ -132,18 +143,42 @@ const DealAbnormal = (props: any) => {
           itemLayout="horizontal"
           dataSource={dataSource}
           renderItem={(item: any) => {
-            const curItem = dealData?.find((v: { BQRQ: string; XXSJPZId: string; }) => v.BQRQ === item.date && v.XXSJPZId === item.XXSJPZId);
-            return <List.Item
-              actions={curItem ? [<span key={item.id} style={{ color: '#666' }}>处理中</span>] : [<a key={item.id} onClick={() => {
-                setCurrent(item);
-                showModal('option');
-              }}>去处理</a>]}
-            >
-              <List.Item.Meta
-                title={<span>{item.title}</span>}
-                description={<p>{item.date} {item.time}</p>}
-              />
-            </List.Item>
+            const curItem = dealData?.find(
+              (v: { BQRQ: string; XXSJPZId: string }) =>
+                v.BQRQ === item.date && v.XXSJPZId === item.XXSJPZId,
+            );
+            return (
+              <List.Item
+                actions={
+                  curItem
+                    ? [
+                        <span key={item.id} style={{ color: '#666' }}>
+                          处理中
+                        </span>,
+                      ]
+                    : [
+                        <a
+                          key={item.id}
+                          onClick={() => {
+                            setCurrent(item);
+                            showModal('option');
+                          }}
+                        >
+                          去处理
+                        </a>,
+                      ]
+                }
+              >
+                <List.Item.Meta
+                  title={<span>{item.title}</span>}
+                  description={
+                    <p>
+                      {item.date} {item.time}
+                    </p>
+                  }
+                />
+              </List.Item>
+            );
           }}
         />
         <Modal
@@ -154,33 +189,63 @@ const DealAbnormal = (props: any) => {
           visible={visible}
           onOk={() => setVisible(false)}
           onCancel={() => setVisible(false)}
-          footer={modalContent === 'option' ? [
-            <Button key="back" onClick={() => setVisible(false)}>
-              取消
-            </Button>
-          ] : [
-            <Button key="back" onClick={() => setVisible(false)}>
-              取消
-            </Button>,
-            <Divider type='vertical' />,
-            <Button key="submit" type='link' onClick={() => handleResign()}>
-              确认
-            </Button>,
-          ]}
+          footer={
+            modalContent === 'option'
+              ? [
+                  <Button key="back" onClick={() => setVisible(false)}>
+                    取消
+                  </Button>,
+                ]
+              : [
+                  <Button key="back" onClick={() => setVisible(false)}>
+                    取消
+                  </Button>,
+                  <Divider type="vertical" />,
+                  <Button key="submit" type="link" onClick={() => handleResign()}>
+                    确认
+                  </Button>,
+                ]
+          }
         >
-          {modalContent === 'option' ? <>
-            <li><Link to={`/teacher/education/askForLeave?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}>请假申请</Link></li>
-            <li><Link to={`/teacher/education/courseAdjustment/applys?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}>代课申请</Link></li>
-            <li onClick={() => {
-              showModal('resign');
-            }} >补签申请</li>
-
-          </> : <>
-            <p>{current?.title}</p>
-            <p><span>缺卡原因：</span><TextArea style={{ marginTop: 16 }} rows={4} onBlur={(e) => {
-              setReason(e.target.value);
-            }} /></p>
-          </>}
+          {modalContent === 'option' ? (
+            <>
+              <li>
+                <Link
+                  to={`/teacher/education/askForLeave/newLeave?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}
+                >
+                  请假申请
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={`/teacher/education/courseAdjustment/applys?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}
+                >
+                  代课申请
+                </Link>
+              </li>
+              <li
+                onClick={() => {
+                  showModal('resign');
+                }}
+              >
+                补签申请
+              </li>
+            </>
+          ) : (
+            <>
+              <p>{current?.title}</p>
+              <p>
+                <span>缺卡原因：</span>
+                <TextArea
+                  style={{ marginTop: 16 }}
+                  rows={4}
+                  onBlur={(e) => {
+                    setReason(e.target.value);
+                  }}
+                />
+              </p>
+            </>
+          )}
         </Modal>
       </div>
     </>

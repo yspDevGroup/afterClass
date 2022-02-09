@@ -2,12 +2,12 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-12-14 09:17:24
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2021-12-23 14:38:03
+ * @LastEditors: zpl
  */
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'antd';
-import { Link, useModel } from 'umi';
+import { Access, Link, useAccess, useModel } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
 import Topbar from './Topbar';
 import CenterBar from './CenterBar';
@@ -30,6 +30,7 @@ import PromptInformation from '@/components/PromptInformation';
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
+  const { canAdmin } = useAccess();
   const { currentUser } = initialState || {};
   const [homeData, setHomeData] = useState<any>();
   const [thingData, setThingData] = useState<any>();
@@ -54,7 +55,7 @@ const Index = () => {
       XXJBSJId: currentUser?.xxId,
       XNXQId,
     });
-    if(resThings.status ==='ok'){
+    if (resThings.status === 'ok') {
       setThingData(resThings.data);
     }
     // 校内通知
@@ -138,14 +139,16 @@ const Index = () => {
           </Card>
         </Col>
       </Row>
-      <Row className={styles.chartWrapper}>
-        <Col span={24}>
-          {/* extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>} */}
-          <Card title="待办事项" bordered={false}>
+      <Access accessible={!!canAdmin}>
+        <Row className={styles.chartWrapper}>
+          <Col span={24}>
+            {/* extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>} */}
+            <Card title="待办事项" bordered={false}>
               <CenterBar data={thingData} />
-          </Card>
-        </Col>
-      </Row>
+            </Card>
+          </Col>
+        </Row>
+      </Access>
       <Row className={styles.chartWrapper}>
         <Col span={24}>
           {/* extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>} */}

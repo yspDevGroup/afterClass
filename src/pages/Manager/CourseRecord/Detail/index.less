@@ -1,49 +1,49 @@
-.container{
+.container {
   min-height: 480px;
-  ul{
+  ul {
     padding: 0;
-    li{
+    li {
       width: 100%;
       min-height: 170px;
-      padding: 16px;
       margin: 20px 0;
-      background: #F8F8F8;
+      padding: 16px;
+      background: #f8f8f8;
       border-radius: 8px;
-      .time{
-        .teacherName{
+      .time {
+        .teacherName {
+          margin: 0;
+          color: #333;
           font-weight: bold;
           font-size: 18px;
           line-height: 24px;
-          color: #333333;
-          margin: 0;
         }
-        .date{
+        .date {
           position: absolute;
           bottom: 0;
+          margin: 0;
+          color: #666;
           font-size: 14px;
           line-height: 24px;
-          color: #666666;
-          margin: 0;
         }
       }
-      .content{
+      .content {
+        display: -webkit-box;
+        min-height: 50px;
+        overflow: hidden;
+        color: #666;
         font-size: 14px;
         line-height: 24px;
-        min-height: 50px;
-        color: #666666;
-        overflow: hidden;
-        display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
       }
-      :global{
-        .ant-image{
+      :global {
+        .ant-image {
           margin-right: 12px;
-          img{
+          img {
             object-fit: cover;
           }
         }
-        .ant-image:nth-last-child(1){
+        .ant-image:nth-last-child(1) {
           margin-right: 0;
         }
       }

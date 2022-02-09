@@ -16,18 +16,17 @@ type selectType = { label: string; value: string };
 
 const { Option } = Select;
 const AdministrativeClass = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
-  const [NjId, setNjId] = useState<any>();
-  const [NjData, setNjData] = useState<any>();
+  const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
   // 校区
   const [campusId, setCampusId] = useState<string>();
   const [campusData, setCampusData] = useState<any[]>();
-
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  const [curXNXQId, setCurXNXQId] = useState<string | undefined>(undefined);
-  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
+  const [NjId, setNjId] = useState<any>();
+  const [NjData, setNjData] = useState<any>();
   const [BJId, setBJId] = useState<string | undefined>(undefined);
+  const [bjData, setBJData] = useState<selectType[] | undefined>([]);
 
   const getCampusData = async () => {
     const res = await getAllXQSJ({
@@ -73,17 +72,17 @@ const AdministrativeClass = () => {
       getNJSJ();
       setBJId(undefined);
       setNjId(undefined);
-      actionRef.current?.reload();
+      actionRef.current?.reloadAndRest();
     }
   }, [campusId]);
 
   const onBjChange = async (value: any) => {
     setBJId(value);
-    actionRef.current?.reload();
+    actionRef.current?.reloadAndRest();
   };
   const onNjChange = async (value: any) => {
     setNjId(value);
-    actionRef.current?.reload();
+    actionRef.current?.reloadAndRest();
   };
 
   const getBJSJ = async () => {
@@ -143,9 +142,23 @@ const AdministrativeClass = () => {
       width: 80,
     },
     {
-      title: '课后服务报名人数',
+      title: '课程服务报名人数',
       dataIndex: 'xsbm_count',
       key: 'xsbm_count',
+      align: 'center',
+      width: 150,
+    },
+    {
+      title: '课后服务报名人数',
+      dataIndex: 'xsfwbm_count',
+      key: 'xsfwbm_count',
+      align: 'center',
+      width: 150,
+    },
+    {
+      title: '其他服务报名人数',
+      dataIndex: 'xszzfw_count',
+      key: 'xxzzfw_count',
       align: 'center',
       width: 150,
     },
@@ -180,7 +193,7 @@ const AdministrativeClass = () => {
 
   const onCampusChange = (value: any) => {
     setCampusId(value);
-    actionRef.current?.reload();
+    // actionRef.current?.reload();
   };
   return (
     <div className={styles.AdministrativeClass}>

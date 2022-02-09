@@ -32,45 +32,68 @@ const PatrolArrange = (props: any) => {
     }
   };
   useEffect(() => {
-    if (today.getFullYear() !== nowDay.getFullYear()
-      || today.getMonth() !== nowDay.getMonth()
-      || today.getDate() !== nowDay.getDate()) {
-      setAvailable(false)
+    if (
+      today.getFullYear() !== nowDay.getFullYear() ||
+      today.getMonth() !== nowDay.getMonth() ||
+      today.getDate() !== nowDay.getDate()
+    ) {
+      setAvailable(false);
     }
     getData();
   }, []);
   return (
     <>
-      <GoBack title={'巡课'} onclick='/teacher/patrolArrange' teacher />
+      <GoBack title={'巡课'} onclick="/teacher/patrolArrange" teacher />
       <div className={styles.patrolWrapper}>
         <div className={styles.patrolContent}>
           <div className={styles.patrolClass}>
             <h4>{kcmc}</h4>
             <ul>
-              {classData?.length && classData.map((item: any) => {
-                const { XXSJPZ, FJSJ, } = item.KHPKSJs?.[0];
-                const isXk = item.KHXKJLs?.length;
-                return <li key={item.id}>
-                  <div className={styles.left}>
-                    <p>{item.BJMC}</p>
-                    <p>{XXSJPZ?.KSSJ?.substring(0, 5)}-{XXSJPZ?.JSSJ?.substring(0, 5)}</p>
-                    <p>本校 <Divider type='vertical' /> {FJSJ?.FJMC}</p>
-                  </div>
-                  <div className={styles.right}>
-                    <span style={{ color: isXk ? '#45C977' : '#FF6600', fontSize: 12 }}>{isXk ? '已' : '未'}巡课</span>
-                    {available || isXk ? <Link style={{ borderColor: isXk ? '#DDDDDD' : '#0066FF', color: isXk ? '#666666' : '#0066FF' }} to={{
-                      pathname: '/teacher/patrolArrange/newPatrol',
-                      state: {
-                        kcid: id,
-                        kcmc,
-                        xkrq: day,
-                        bjxx: item,
-                        check: isXk
-                      }
-                    }}>{isXk ? '查看' : '去巡课'}</Link> : ''}
-                  </div>
-                </li>
-              })}
+              {classData?.length &&
+                classData.map((item: any) => {
+                  const { XXSJPZ, FJSJ } = item.KHPKSJs?.[0];
+                  const isXk = item.KHXKJLs?.length;
+                  return (
+                    <li key={item.id}>
+                      <div className={styles.left}>
+                        <p>{item.BJMC}</p>
+                        <p>
+                          {XXSJPZ?.KSSJ?.substring(0, 5)}-{XXSJPZ?.JSSJ?.substring(0, 5)}
+                        </p>
+                        <p>
+                          本校 <Divider type="vertical" /> {FJSJ?.FJMC}
+                        </p>
+                      </div>
+                      <div className={styles.right}>
+                        <span style={{ color: isXk ? '#15B628' : '#f60', fontSize: 12 }}>
+                          {isXk ? '已' : '未'}巡课
+                        </span>
+                        {available || isXk ? (
+                          <Link
+                            style={{
+                              borderColor: isXk ? '#DDD' : '#0066FF',
+                              color: isXk ? '#666' : '#0066FF',
+                            }}
+                            to={{
+                              pathname: '/teacher/patrolArrange/newPatrol',
+                              state: {
+                                kcid: id,
+                                kcmc,
+                                xkrq: day,
+                                bjxx: item,
+                                check: isXk,
+                              },
+                            }}
+                          >
+                            {isXk ? '查看' : '去巡课'}
+                          </Link>
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
             </ul>
           </div>
         </div>

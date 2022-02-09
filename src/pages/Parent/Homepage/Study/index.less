@@ -1,51 +1,108 @@
 .studyPage {
-  background-color: #f5f5f5;
   min-height: 100%;
   padding: 12px 10px;
+  background-color: #f5f5f5;
 
-  .funWrapper {
-    .titleBar {
-      font-size: @font-size-lg;
-      font-weight: 600;
-      line-height: 22px;
+  .courseArea {
+    margin-bottom: 10px;
+    .title {
+      display: flex;
+      height: 24px;
       margin-bottom: 10px;
+      line-height: 24px;
+
+      > div:nth-of-type(1) {
+        display: inline-block;
+        width: 3px;
+        height: 19px;
+        margin: 3px 6px 0 0;
+        background: #15b628;
+        border-radius: 3px 0;
+      }
+
+      span {
+        color: #333;
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
+    :global {
+      .ant-tabs-content-holder {
+        .ant-list-items {
+          > div {
+            margin-bottom: 10px;
+            padding: 10px 10px 1px;
+            background: #fff;
+            border-radius: 8px;
+          }
+        }
+      }
+    }
+  }
+  .funWrapper {
+    .title {
+      display: flex;
+      height: 24px;
+      margin-bottom: 10px;
+      line-height: 24px;
+
+      > div:nth-of-type(1) {
+        display: inline-block;
+        width: 3px;
+        height: 19px;
+        margin: 3px 6px 0 0;
+        background: #15b628;
+        border-radius: 3px 0;
+      }
+
+      span {
+        color: #333;
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
+    .titleBar {
+      margin-bottom: 10px;
+      font-weight: 600;
+      font-size: @font-size-lg;
+      line-height: 22px;
     }
   }
   .headBox {
-    height: 78px;
-    background: #ffffff;
-    border-radius: 8px;
-    margin: 12px 0px 10px 0px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    height: 78px;
+    margin: 12px 0 10px 0;
     font-size: 12px;
+    background: #fff;
+    border-radius: 8px;
 
     .linkItem {
-      color: #333333;
       display: flex;
-      flex:1;
+      flex: 1;
       flex-direction: column;
       align-items: center;
+      color: #333;
 
       .top {
         width: 30px;
         height: 30px;
+        margin-bottom: 0;
         background: rgba(125, 206, 129, 0.3);
-        margin-bottom: 0px;
         border-radius: 10px;
         transform: rotate(30deg);
 
         .wrapper {
           display: flex;
-          justify-content: center;
           align-items: center;
+          justify-content: center;
           width: 30px;
           height: 30px;
+          margin-bottom: 0;
           background: linear-gradient(136.81deg, #4be651 10.81%, #00bd08 90.05%);
           border-radius: 10px;
           transform: rotate(330deg);
-          margin-bottom: 0px;
 
           img {
             display: block;
@@ -57,7 +114,8 @@
 
       .text {
         margin-top: 8px;
-        margin-bottom: 0px;
+        margin-bottom: 0;
+        font-size: 14px;
       }
 
       &:nth-child(2) {
@@ -78,6 +136,58 @@
             background: linear-gradient(136.81deg, #ff8863 10.81%, #ff1c1c 90.05%);
           }
         }
+      }
+    }
+  }
+  :global {
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin-left: 28px;
+    }
+
+    .ant-tabs-top > .ant-tabs-nav,
+    .ant-tabs-bottom > .ant-tabs-nav,
+    .ant-tabs-top > div > .ant-tabs-nav,
+    .ant-tabs-bottom > div > .ant-tabs-nav {
+      height: 22px;
+      margin-bottom: 12px;
+      line-height: 22px;
+    }
+
+    .ant-tabs-top > .ant-tabs-nav::before,
+    .ant-tabs-bottom > .ant-tabs-nav::before,
+    .ant-tabs-top > div > .ant-tabs-nav::before,
+    .ant-tabs-bottom > div > .ant-tabs-nav::before {
+      border-bottom: 0;
+    }
+
+    .ant-tabs-ink-bar {
+      display: none;
+    }
+
+    .ant-tabs-tab:hover {
+      color: #999;
+      font-weight: 600;
+      font-size: @font-size-lg;
+    }
+
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+      color: #15b628;
+      font-weight: 600;
+      font-size: @font-size-lg;
+
+      .ant-tabs-tab-btn {
+        color: #243651;
+      }
+    }
+
+    .ant-tabs-tab-btn {
+      font-size: @font-size-lg;
+    }
+
+    .ant-tabs-extra-content {
+      a {
+        color: #999;
+        font-size: @font-size-sm;
       }
     }
   }

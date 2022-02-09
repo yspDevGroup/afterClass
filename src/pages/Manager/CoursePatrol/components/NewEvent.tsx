@@ -5,6 +5,7 @@ import { useModel } from 'umi';
 import ProFormFields from '@/components/ProFormFields';
 import styles from '../index.less';
 import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
+import moment from 'moment';
 
 const formLayout = {
   labelCol: { flex: '10em' },
@@ -40,7 +41,7 @@ const NewEvent = (props: PropsType) => {
   };
   useEffect(() => {
     getTeacher();
-  }, [])
+  }, []);
   const formItems: any[] = [
     {
       type: 'input',
@@ -64,6 +65,10 @@ const NewEvent = (props: PropsType) => {
       },
     },
   ];
+  console.log(date);
+  console.log(moment(date).format('YYYY-MM-DD'));
+  console.log(moment(date).format('YYYY/MM/DD'));
+
   return (
     <div style={{ padding: '0 48px' }} className={styles.arrangeForm}>
       <ProFormFields
@@ -71,8 +76,8 @@ const NewEvent = (props: PropsType) => {
         formItems={formItems}
         formItemLayout={formLayout}
         values={{
-          RQ: date,
-          ...current
+          RQ: moment(date).format('YYYY-MM-DD'),
+          ...current,
         }}
       />
     </div>

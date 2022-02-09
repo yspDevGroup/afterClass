@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-12-10 15:24:44
+ * @LastEditTime: 2021-12-24 16:53:14
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -38,29 +38,42 @@ const Index = () => {
 
         // 检查登录状态
         switch (initialState!.currentUser.type) {
-          case '管理员':
-            {
-              if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
-                history.replace('/information/home');
-              } else {
-                history.replace('/homepage');
-              }
-            }
-            break;
-          case '老师':
-            if (params.isAdmin === '1') {
-              if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
-                history.replace('/information/home');
-              } else {
-                history.replace('/homepage');
-              }
+          case '管理员': {
+            if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
+              history.replace('/information/home');
             } else {
-              history.replace('/teacher/home');
+              history.replace('/homepage');
             }
             break;
+          }
+          case '老师': {
+            // if (ej === 'pc' || ej === 'wx-pc' || ej === 'com-wx-pc') {
+            //   history.replace('/homepage');
+            // } else {
+            history.replace('/teacher/home');
+            // }
+            break;
+          }
+          // if (params.isAdmin === '1') {
+          //   if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
+          //     history.replace('/information/home');
+          //   } else {
+          //     history.replace('/homepage');
+          //   }
+          // } else {
+          //   history.replace('/teacher/home');
+          // }
+          // break;
           case '家长':
             localStorage.removeItem('studentId');
+            localStorage.removeItem('studentName');
+            localStorage.removeItem('studentXQSJId');
+            localStorage.removeItem('studentNjId');
+            localStorage.removeItem('studentBJId');
             history.replace('/parent/home');
+            break;
+          case '其他':
+            history.replace('/403?message=抱歉，您的企业暂未通过审核，请联系管理员');
             break;
           default:
             history.replace('/403?title=未获取到合法的用户身份');
@@ -71,20 +84,27 @@ const Index = () => {
       }
     } else {
       switch (initialState?.currentUser?.type) {
-        case '管理员':
-          {
-            if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
-              history.replace('/information/home');
-            } else {
-              history.replace('/homepage');
-            }
+        case '系统管理员': {
+          if (ej === 'mobile' || ej === 'wx-mobile' || ej === 'com-wx-mobile') {
+            history.replace('/information/home');
+          } else {
+            history.replace('/homepage');
           }
           break;
-        case '老师':
+        }
+        case '老师': {
+          // if (ej === 'pc' || ej === 'wx-pc' || ej === 'com-wx-pc') {
+          //   history.replace('/homepage');
+          // } else {
           history.replace('/teacher/home');
+          // }
           break;
+        }
         case '家长':
           history.replace('/parent/home');
+          break;
+        case '其他':
+          history.replace('/403?message=抱歉，您的企业暂未通过审核，请联系管理员');
           break;
         default:
           gotoLogin('', '');

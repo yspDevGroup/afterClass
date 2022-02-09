@@ -8,7 +8,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { TreeSelect } from 'antd';
+import { Modal, TreeSelect } from 'antd';
+import { history } from 'umi';
 import ShowName from '@/components/ShowName';
 import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { getTeacherByClassId } from '@/services/after-class/khkcsj';
@@ -80,7 +81,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
   };
   const getJgTeacher = async () => {
     const res = await getTeacherByClassId({
-      KHKCSJId: kcId,
+      KHKCSJId: kcId!,
       pageSize: 0,
       page: 0,
     });
@@ -157,21 +158,61 @@ const TeacherSelect = (props: TeacherSelectProps) => {
 
   return (
     <div>
-      <TreeSelect
-        treeDefaultExpandedKeys={['0-0', '0-1']}
-        disabled={disabled}
-        treeData={treeData}
-        multiple={multiple}
-        value={value}
-        onChange={onChange}
-        treeCheckable={multiple}
-        showSearch
-        placeholder="选择教师"
-        style={{
-          width: '100%',
-        }}
-        treeNodeFilterProp="key"
-      />
+      {treeData?.children?.length === 0 ? (
+        <>
+          <div
+            className="ant-select ant-select-single ant-select-allow-clear ant-select-show-arrow ant-select-show-search"
+            onClick={() => {
+              Modal.info({
+                title: '未获取到学校教师，请先进行教师维护',
+                width: '450px',
+                okText: '去设置',
+                onOk() {
+                  history.push('/basicalSettings/teacherManagement');
+                },
+              });
+            }}
+          >
+            <div className="ant-select-selector">
+              <span className="ant-select-selection-search">
+                <input readOnly type="search" className="ant-select-selection-search-input" />
+              </span>
+              <span className="ant-select-selection-placeholder">请选择</span>
+            </div>
+            <span className="ant-select-arrow" unselectable="on" aria-hidden="true">
+              <span role="img" aria-label="down" className="anticon anticon-down ant-select-suffix">
+                <svg
+                  viewBox="64 64 896 896"
+                  focusable="false"
+                  data-icon="down"
+                  width="1em"
+                  height="1em"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path>
+                </svg>
+              </span>
+            </span>
+          </div>
+        </>
+      ) : (
+        <TreeSelect
+          treeDefaultExpandedKeys={['0-0', '0-1']}
+          disabled={disabled}
+          treeData={treeData}
+          multiple={multiple}
+          value={value}
+          onChange={onChange}
+          treeCheckable={multiple}
+          showSearch
+          placeholder="选择教师"
+          style={{
+            width: '100%',
+          }}
+          treeNodeFilterProp="key"
+        />
+      )}
     </div>
   );
 };

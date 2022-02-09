@@ -8,7 +8,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { Card, Col, InputNumber, Row, Switch } from 'antd';
+import { Button, Card, Col, InputNumber, Row, Switch } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import { createXXSPPZ, getXXSPPZ } from '@/services/after-class/xxsppz';
 
@@ -51,10 +51,10 @@ const AuditSettings = () => {
   useEffect(() => {
     (async () => {
       const res = await getXXSPPZ({
-        xxId: currentUser.xxId
+        xxId: currentUser.xxId,
       });
       if (res.status === 'ok' && res.data) {
-        const { JSQJ, JSDK, JSTK, JSBQ, JSBQ_KSRQ, JSBQ_JSRQ, } = res.data;
+        const { JSQJ, JSDK, JSTK, JSBQ, JSBQ_KSRQ, JSBQ_JSRQ } = res.data;
         setTLeave(JSQJ!);
         setSupply(JSDK!);
         setAdjust(JSTK!);
@@ -64,29 +64,44 @@ const AuditSettings = () => {
       } else {
         updateSettings();
       }
-    })()
+    })();
   }, []);
 
   return (
     <PageContainer>
-      <div className={styles.wrapperCard} >
+      <div className={styles.wrapperCard}>
         <Row gutter={24}>
           <Col span={12}>
             <div>
               <h3>请假流程</h3>
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="教师请假" bordered={false} extra={<Switch checked={tLeave} onChange={(checked) => {
-                    setTLeave(checked);
-                    updateSettings('TLeave', checked);
-                  }} />}>
+                  <Card
+                    title="教师请假"
+                    bordered={false}
+                    extra={
+                      <Switch
+                        checked={tLeave}
+                        onChange={(checked) => {
+                          setTLeave(checked);
+                          updateSettings('TLeave', checked);
+                        }}
+                      />
+                    }
+                  >
                     <p className={tLeave ? 'active' : ''}>开启时：教师请假需管理员审批</p>
-                    <p className={!tLeave ? 'active' : ''}>关闭时：教师请假，系统自动审批，无需管理员操作</p>
+                    <p className={!tLeave ? 'active' : ''}>
+                      关闭时：教师请假，系统自动审批，无需管理员操作
+                    </p>
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="学生请假" bordered={false} extra={<Switch checked={false} disabled />} >
-                    <p className='active'>学生请假无需审批，此设置项不可更改</p>
+                  <Card
+                    title="学生请假"
+                    bordered={false}
+                    extra={<Switch checked={false} disabled />}
+                  >
+                    <p className="active">学生请假无需审批，此设置项不可更改</p>
                   </Card>
                 </Col>
               </Row>
@@ -97,21 +112,43 @@ const AuditSettings = () => {
               <h3>调代课流程</h3>
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="教师代课" bordered={false} extra={<Switch checked={supply} onChange={(checked) => {
-                    setSupply(checked);
-                    updateSettings('Supply', checked);
-                  }} />}>
+                  <Card
+                    title="教师代课"
+                    bordered={false}
+                    extra={
+                      <Switch
+                        checked={supply}
+                        onChange={(checked) => {
+                          setSupply(checked);
+                          updateSettings('Supply', checked);
+                        }}
+                      />
+                    }
+                  >
                     <p className={supply ? 'active' : ''}>开启时：教师代课需管理员审批</p>
-                    <p className={!supply ? 'active' : ''}>关闭时：教师发起申请，代课教师同意后，系统自动审批，无需管理员操作</p>
+                    <p className={!supply ? 'active' : ''}>
+                      关闭时：教师发起申请，代课教师同意后，系统自动审批，无需管理员操作
+                    </p>
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="教师调课" bordered={false} extra={<Switch checked={adjust} onChange={(checked) => {
-                    setAdjust(checked);
-                    updateSettings('Adjust', checked);
-                  }} />} >
+                  <Card
+                    title="教师调课"
+                    bordered={false}
+                    extra={
+                      <Switch
+                        checked={adjust}
+                        onChange={(checked) => {
+                          setAdjust(checked);
+                          updateSettings('Adjust', checked);
+                        }}
+                      />
+                    }
+                  >
                     <p className={adjust ? 'active' : ''}>开启时：教师调课需管理员审批</p>
-                    <p className={!adjust ? 'active' : ''}>关闭时：教师发起调课，系统自动审批，无需管理员操作</p>
+                    <p className={!adjust ? 'active' : ''}>
+                      关闭时：教师发起调课，系统自动审批，无需管理员操作
+                    </p>
                   </Card>
                 </Col>
               </Row>
@@ -123,12 +160,12 @@ const AuditSettings = () => {
               <Row gutter={24}>
                 <Col span={12}>
                   <Card title="学生退课" bordered={false} extra={<Switch checked disabled />}>
-                    <p className='active'>学生退课，管理员必须审批，此设置项不可更改</p>
+                    <p className="active">学生退课，管理员必须审批，此设置项不可更改</p>
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="学生退款" bordered={false} extra={<Switch checked disabled />} >
-                    <p className='active'>学生退款，管理员必须审批，此设置项不可更改</p>
+                  <Card title="学生退款" bordered={false} extra={<Switch checked disabled />}>
+                    <p className="active">学生退款，管理员必须审批，此设置项不可更改</p>
                   </Card>
                 </Col>
               </Row>
@@ -139,45 +176,81 @@ const AuditSettings = () => {
               <h3>教师补签流程</h3>
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="教师补签" bordered={false} extra={<Switch checked={resign} onChange={(checked) => {
-                    setResign(checked);
-                    updateSettings('Resign', checked);
-                  }} />}>
+                  <Card
+                    title="教师补签"
+                    bordered={false}
+                    extra={
+                      <Switch
+                        checked={resign}
+                        onChange={(checked) => {
+                          setResign(checked);
+                          updateSettings('Resign', checked);
+                        }}
+                      />
+                    }
+                  >
                     <p className={resign ? 'active' : ''}>开启时：教师补签需管理员审批</p>
-                    <p className={!resign ? 'active' : ''}>关闭时：教师发起补签，系统自动审批，无需管理员操作</p>
+                    <p className={!resign ? 'active' : ''}>
+                      关闭时：教师发起补签，系统自动审批，无需管理员操作
+                    </p>
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="补签时段设置" bordered={false} extra={<Switch checked={edit} onChange={(checked) => {
-                    setEdit(checked);
-                  }} />}>
-                    <p className={edit ? 'active' : ''}>
-                      每月
-                      <InputNumber
-                        disabled={!edit}
-                        size='small'
-                        min={1}
-                        max={31}
-                        value={start}
-                        bordered={false}
-                        onChange={(value) => {
-                          setStart(value);
-                          updateSettings('start', value);
+                  <Card
+                    title="补签时段设置"
+                    bordered={false}
+                    extra={
+                      <Button
+                        key="button"
+                        type="primary"
+                        style={{
+                          height: 28,
+                          borderRadius: 14,
+                          display: 'flex',
+                          alignItems: 'center',
                         }}
-                      />日到
-                      <InputNumber
-                        disabled={!edit}
-                        size='small'
-                        min={1}
-                        max={31}
-                        value={end}
-                        bordered={false}
-                        onChange={(value) => {
-                          setEnd(value);
-                          updateSettings('end', value);
+                        onClick={() => {
+                          if (edit) {
+                            updateSettings();
+                          }
+                          setEdit(!edit);
                         }}
-                      />日
-                    </p>
+                      >
+                        {edit ? '保存' : '编辑'}
+                      </Button>
+                    }
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <p className={edit ? 'active' : ''}>
+                        每月
+                        <InputNumber
+                          disabled={!edit}
+                          size="small"
+                          min={1}
+                          max={31}
+                          value={start}
+                          bordered={false}
+                          onChange={(value) => {
+                            setStart(value);
+                            // updateSettings('start', value);
+                          }}
+                        />
+                        日到
+                        <InputNumber
+                          disabled={!edit}
+                          size="small"
+                          min={1}
+                          max={31}
+                          value={end}
+                          bordered={false}
+                          onChange={(value) => {
+                            setEnd(value);
+                            // updateSettings('end', value);
+                          }}
+                        />
+                        日
+                      </p>
+                    </div>
                     {end > 28 ? <p>如果当前月不足{end}天，则补签结束时间为当前月最后一天</p> : ''}
                   </Card>
                 </Col>
@@ -187,6 +260,6 @@ const AuditSettings = () => {
         </Row>
       </div>
     </PageContainer>
-  )
-}
+  );
+};
 export default AuditSettings;

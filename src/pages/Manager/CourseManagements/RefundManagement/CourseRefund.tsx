@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-29 12:21:42
- * @LastEditTime: 2021-12-10 14:43:01
+ * @LastEditTime: 2021-12-23 15:17:45
  * @LastEditors: zpl
  */
 import { useEffect, useRef, useState } from 'react';
@@ -278,6 +278,7 @@ const CourseRefund = () => {
             }
             setVisible(false);
             setCurrent(undefined);
+            form.resetFields();
             getData();
           } else {
             message.error(res.message || '退款流程出现错误，请联系管理员或稍后重试。');
@@ -368,6 +369,7 @@ const CourseRefund = () => {
           }}
           onCancel={() => {
             setVisible(false);
+            form.resetFields();
             setCurrent(undefined);
           }}
           okText="确认"

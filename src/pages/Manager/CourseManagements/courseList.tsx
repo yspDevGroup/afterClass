@@ -88,7 +88,7 @@ const CourseList = () => {
     };
     const resAll = await getAllCourses(opts);
     if (resAll.status === 'ok' && resAll.data) {
-      setDataSource(resAll.data.rows)
+      setDataSource(resAll.data.rows);
     }
   };
   useEffect(() => {
@@ -136,7 +136,7 @@ const CourseList = () => {
     fetchData();
   }, []);
   useEffect(() => {
-    if(curXNXQId){
+    if (curXNXQId) {
       getData();
     }
   }, [curXNXQId, KCLXId, KCName, JGName, KCLY]);
@@ -222,15 +222,14 @@ const CourseList = () => {
       const res = await getKHKCPJ({ id: obj.id });
       if (res.status === 'ok') {
         setPjFooter(false);
-        form.setFieldsValue({ PY: res.data.PY, ...obj })
+        form.setFieldsValue({ PY: res.data.PY, ...obj });
       }
-    }
-    else {
+    } else {
       setPjFooter(true);
-      form.setFieldsValue({ PY: '', ...obj })
+      form.setFieldsValue({ PY: '', ...obj });
     }
     setIsModalVisible(true);
-  }
+  };
   /** 操作 */
   const funOption = (record: any, action: ProCoreActionType) => {
     if (record.SSJGLX === '机构课程') {
@@ -296,6 +295,7 @@ const CourseList = () => {
                 if (res.status === 'ok') {
                   message.success('操作成功');
                   getData();
+                  actionRef?.current?.reloadAndRest?.();
                 } else {
                   message.error(res.message);
                 }
@@ -401,7 +401,7 @@ const CourseList = () => {
       },
     },
     {
-      title: '课程班信息',
+      title: '服务课堂',
       align: 'center',
       search: false,
       key: 'NJSJs',
@@ -413,10 +413,41 @@ const CourseList = () => {
           <Link
             to={{
               pathname: Url,
-              state: record,
+              state: {
+                type: '1',
+                record,
+              },
             }}
           >
-            <Tooltip title={`已开设${record.bj_count}个课程班。`}>{record.bj_count}/{record.allBJ_count}</Tooltip>
+            <Tooltip title={`已开设${record.fwbj_count}个服务课堂。`}>
+              {record.fwbj_count}/{record.allFWBJ_count}
+            </Tooltip>
+          </Link>
+        );
+      },
+    },
+    {
+      title: '缤纷课堂',
+      align: 'center',
+      search: false,
+      key: 'NJSJs',
+      dataIndex: 'NJSJs',
+      width: 100,
+      render: (_, record) => {
+        const Url = `/courseManagements/classManagement`;
+        return (
+          <Link
+            to={{
+              pathname: Url,
+              state: {
+                type: '2',
+                record,
+              },
+            }}
+          >
+            <Tooltip title={`已开设${record.bj_count || 0}个缤纷课堂。`}>
+              {record.bj_count || 0}/{record.allBJ_count}
+            </Tooltip>
           </Link>
         );
       },
@@ -463,12 +494,12 @@ const CourseList = () => {
       hideInTable: true, // 列表中不显示此列
       render: (_, record) => {
         if (record?.SSJGLX === '机构课程') {
-          return <span style={{ color: '#45C977' }}>已引入</span>;
+          return <span style={{ color: '#15B628' }}>已引入</span>;
         }
         return record?.KCZT === 0 ? (
           <span style={{ color: '#666' }}>未发布</span>
         ) : (
-          <span style={{ color: '#45C977' }}>已发布</span>
+          <span style={{ color: '#15B628' }}>已发布</span>
         );
       },
     },
@@ -490,7 +521,7 @@ const CourseList = () => {
           >
             课程详情
           </a>
-          {record?.SSJGLX === '机构课程' ?
+          {record?.SSJGLX === '机构课程' ? (
             <a
               onClick={() => {
                 const obj = { KHKCSJId: '', KCMC: '', id: '' };
@@ -502,7 +533,9 @@ const CourseList = () => {
             >
               课程评价
             </a>
-            : ''}
+          ) : (
+            ''
+          )}
 
           {funOption(record, action!)}
         </Space>
@@ -534,19 +567,27 @@ const CourseList = () => {
             <>
               <SearchLayout>
                 <div>
-                  <label htmlFor='kcname'>课程名称：</label>
-                  <Search placeholder="课程名称" allowClear onSearch={(value: string) => {
-                    setKCName(value);
-                  }} />
+                  <label htmlFor="kcname">课程名称：</label>
+                  <Search
+                    placeholder="课程名称"
+                    allowClear
+                    onSearch={(value: string) => {
+                      setKCName(value);
+                    }}
+                  />
                 </div>
                 <div>
-                  <label htmlFor='jgname'>机构名称：</label>
-                  <Search placeholder="机构名称" allowClear onSearch={(value: string) => {
-                    setJGName(value);
-                  }} />
+                  <label htmlFor="jgname">机构名称：</label>
+                  <Search
+                    placeholder="机构名称"
+                    allowClear
+                    onSearch={(value: string) => {
+                      setJGName(value);
+                    }}
+                  />
                 </div>
                 <div>
-                  <label htmlFor='kcly'>课程来源：</label>
+                  <label htmlFor="kcly">课程来源：</label>
                   <Select
                     allowClear
                     placeholder="课程来源"
@@ -555,16 +596,16 @@ const CourseList = () => {
                     }}
                     value={KCLY}
                   >
-                    <Option value='校内课程' key='校内课程'>
+                    <Option value="校内课程" key="校内课程">
                       校内课程
                     </Option>
-                    <Option value='机构课程' key='机构课程'>
+                    <Option value="机构课程" key="机构课程">
                       机构课程
                     </Option>
                   </Select>
                 </div>
                 <div>
-                  <label htmlFor='kctype'>课程类型：</label>
+                  <label htmlFor="kctype">课程类型：</label>
                   <Select
                     allowClear
                     placeholder="课程类型"
@@ -636,23 +677,32 @@ const CourseList = () => {
           <Sitclass />
         </Modal>
         {/* 课程评价的弹出框 */}
-        {
-          isModalVisible && <Modal
-            footer={pjFooter ? [<Button key="cancel" onClick={handleCancel}>
-              取消
-            </Button>,
-            <Button key="submit" type="primary" onClick={handleOk}>
-              确定
-            </Button>] : [
-              <Button key="edit" onClick={() => {
-                setPjFooter(true);
-              }}>
-                编辑
-              </Button>,
-              <Button key="cancel" type="primary" onClick={handleCancel}>
-                确定
-              </Button>
-            ]}
+        {isModalVisible && (
+          <Modal
+            footer={
+              pjFooter
+                ? [
+                    <Button key="cancel" onClick={handleCancel}>
+                      取消
+                    </Button>,
+                    <Button key="submit" type="primary" onClick={handleOk}>
+                      确定
+                    </Button>,
+                  ]
+                : [
+                    <Button
+                      key="edit"
+                      onClick={() => {
+                        setPjFooter(true);
+                      }}
+                    >
+                      编辑
+                    </Button>,
+                    <Button key="cancel" type="primary" onClick={handleCancel}>
+                      确定
+                    </Button>,
+                  ]
+            }
             visible={isModalVisible}
             onOk={handleOk}
             onCancel={handleCancel}
@@ -662,18 +712,10 @@ const CourseList = () => {
               <Form.Item name="id" hidden>
                 <Input disabled />
               </Form.Item>
-              <Form.Item
-                hidden
-                name="KHKCSJId"
-                key="KHKCSJId"
-              >
+              <Form.Item hidden name="KHKCSJId" key="KHKCSJId">
                 <Input disabled />
               </Form.Item>
-              <Form.Item
-                label="课程名称"
-                name="KCMC"
-                key="KCMC"
-              >
+              <Form.Item label="课程名称" name="KCMC" key="KCMC">
                 <Input disabled bordered={false} />
               </Form.Item>
               {pjFooter ? (
@@ -685,16 +727,14 @@ const CourseList = () => {
                 >
                   <Input.TextArea placeholder="请输入评价内容" showCount maxLength={200} rows={4} />
                 </Form.Item>
-              ) : (<Form.Item
-                label="评价内容"
-                name="PY"
-                key="PY"
-              >
-                <Input.TextArea disabled bordered={false} />
-              </Form.Item>)
-              }
+              ) : (
+                <Form.Item label="评价内容" name="PY" key="PY">
+                  <Input.TextArea disabled bordered={false} />
+                </Form.Item>
+              )}
             </Form>
-          </Modal>}
+          </Modal>
+        )}
       </div>
     </>
   );

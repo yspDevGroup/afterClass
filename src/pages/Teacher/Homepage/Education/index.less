@@ -1,45 +1,45 @@
 .studyPage {
-  background-color: #f5f5f5;
   min-height: 100%;
   padding: 12px 10px;
+  background-color: #f5f5f5;
 
   .funWrapper {
     .headBox {
-      background: #ffffff;
-      margin: 12px 0px;
-      padding: 12px 0;
-      border-radius: 8px;
-      font-size: 12px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+      margin: 12px 0;
+      padding: 12px 0;
+      font-size: 12px;
+      background: #fff;
+      border-radius: 8px;
 
       /* IE 10+ */
       .wrapper {
-        color: #333333;
         display: flex;
-        flex-direction: column;
-        align-items: center;
         flex-basis: 25%;
+        flex-direction: column;
         flex-shrink: 0;
+        align-items: center;
         padding: 12px 0;
+        color: #333;
 
         .container {
           width: 30px;
           height: 30px;
-          margin-bottom: 0px;
+          margin-bottom: 0;
           border-radius: 10px;
           transform: rotate(30deg);
 
           .content {
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             width: 30px;
             height: 30px;
+            margin-bottom: 0;
             border-radius: 10px;
             transform: rotate(330deg);
-            margin-bottom: 0px;
 
             img {
               display: block;
@@ -51,100 +51,97 @@
 
         .text {
           width: 68px;
-          text-align: center;
           margin-top: 8px;
-          margin-bottom: 0px;
+          margin-bottom: 0;
+          text-align: center;
         }
 
-        &:nth-child(7n+1) {
+        &:nth-child(7n + 1) {
           .container {
             background: rgba(229, 75, 214, 0.3);
-            ;
-
             .content {
-              background: linear-gradient(135deg, #FE5EEE 10%, #AD009C 90%);
+              background: linear-gradient(135deg, #fe5eee 10%, #ad009c 90%);
             }
           }
         }
 
-        &:nth-child(7n+2) {
+        &:nth-child(7n + 2) {
           .container {
             background: rgba(47, 163, 255, 0.3);
 
             .content {
-              background: linear-gradient(132.61deg, #85C9FF 10%, #0058DC 90%);
+              background: linear-gradient(132.61deg, #85c9ff 10%, #0058dc 90%);
             }
           }
         }
 
-        &:nth-child(7n+3) {
+        &:nth-child(7n + 3) {
           .container {
             background: rgba(255, 199, 0, 0.3);
 
             .content {
-              background: linear-gradient(133.81deg, #FFC700 10%, #FF6B00 90%);
+              background: linear-gradient(133.81deg, #ffc700 10%, #ff6b00 90%);
             }
           }
         }
 
-        &:nth-child(7n+4) {
+        &:nth-child(7n + 4) {
           .container {
             background: rgba(0, 232, 204, 0.3);
 
             .content {
-              background: linear-gradient(135deg, #00FFE0 10%, #00B19C 90%);
+              background: linear-gradient(135deg, #00ffe0 10%, #00b19c 90%);
             }
           }
         }
 
-        &:nth-child(7n+5) {
+        &:nth-child(7n + 5) {
           .container {
             background: rgba(113, 47, 255, 0.3);
 
             .content {
-              background: linear-gradient(135deg, #BA99FF 10%, #572CB4 90%);
+              background: linear-gradient(135deg, #ba99ff 10%, #572cb4 90%);
             }
           }
         }
 
-        &:nth-child(7n+6) {
+        &:nth-child(7n + 6) {
           .container {
             background: rgba(255, 135, 98, 0.3);
 
             .content {
-              background: linear-gradient(136.81deg, #FF9979 10%, #FF2C2C 90%);
+              background: linear-gradient(136.81deg, #ff9979 10%, #ff2c2c 90%);
             }
           }
         }
 
-        &:nth-child(7n+7) {
+        &:nth-child(7n + 7) {
           .container {
             background: rgba(125, 206, 129, 0.3);
 
             .content {
-              background: linear-gradient(136.81deg, #6AF16F 10%, #06BD0E 90%);
+              background: linear-gradient(136.81deg, #6af16f 10%, #06bd0e 90%);
             }
           }
         }
-
       }
     }
   }
 
   .titleBar {
-    font-size: @font-size-lg;
-    font-weight: 600;
-    line-height: 22px;
     margin-bottom: 10px;
+    font-weight: 600;
+    font-size: @font-size-lg;
+    line-height: 22px;
   }
 }
-.modalSign{
-  :global{
-    .ant-modal-confirm-title{
+.modalSign {
+  :global {
+    .ant-modal-confirm-title {
       font-size: 14px;
     }
-    .ant-modal-confirm-btns{
-      float: inherit;
+    .ant-modal-confirm-btns {
+      float: inherit !important;
       text-align: center;
     }
   }

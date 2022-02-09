@@ -3,8 +3,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-09-09 13:36:20
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2021-12-09 15:51:46
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
@@ -20,15 +20,14 @@ const Register = () => {
   useEffect(() => {
     async function fetchData() {
       const res = await getXXJBSJ({
-        id: currentUser?.xxId
+        id: currentUser?.xxId,
       });
       if (res.status === 'ok' && res.data) {
         setSchoolInfo(res.data);
-      };
-    };
+      }
+    }
     fetchData();
-  }, [])
-console.log(schoolInfo);
+  }, []);
 
   return (
     <div className={styles.Index}>
@@ -41,9 +40,7 @@ console.log(schoolInfo);
           state: { schoolInfo },
         }}
       >
-        <Button type="primary">
-          完善基本信息
-        </Button>
+        <Button type="primary">完善基本信息</Button>
       </Link>
     </div>
   );

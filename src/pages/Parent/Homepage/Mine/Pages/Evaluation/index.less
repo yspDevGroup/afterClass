@@ -19,7 +19,7 @@
           }
           .ant-tabs-tab-active {
             .ant-tabs-tab-btn {
-              color: #45c977;;
+              color: #15b628;
               font-weight: bold;
             }
           }
@@ -27,11 +27,11 @@
       }
     }
   }
-  .Application{
+  .Application {
     padding: 0 10px;
     // height: calc(~"100vh - 85px");
     .choice {
-      color: #999999;
+      color: #999;
       font-size: 12px;
     }
     .cards {
@@ -44,104 +44,103 @@
       border-radius: 8px;
       p {
         margin-bottom: 5px;
-        color: #999999;
+        color: #999;
         font-size: 12px;
       }
       .title {
         margin-bottom: 10px;
-        color: #333333;
+        color: #333;
         font-weight: bold;
         font-size: 16px;
       }
       button {
         float: right;
         height: 30px;
+        color: #15b628;
+        border: 1px solid #15b628;
         border-radius: 15px;
-        color: #45c977;
-        border:1px solid #45c977;
       }
       :global {
         .ant-btn:hover,
         .ant-btn:focus {
-          color: #45c977;
-          border-color: #45c977;
+          color: #15b628;
+          border-color: #15b628;
         }
       }
     }
   }
-  .History{
+  .History {
     width: 100%;
     padding: 0 10px;
-    .Pjcards{
+    .Pjcards {
       position: relative;
       width: 100%;
+      height: auto;
       margin-bottom: 10px;
-      padding:5px 10px 10px ;
+      padding: 5px 10px 10px;
       background-color: #fff;
       border-radius: 8px;
-      height: auto;
-      p{
+      p {
         margin: 0;
       }
-      .name{
-        >span{
-          line-height: 38px;
+      .name {
+        > span {
+          color: #000;
           font-weight: bold;
-          color: #000000;
+          line-height: 38px;
         }
-        ul{
+        ul {
           float: right;
         }
       }
-      >p:nth-child(2){
+      > p:nth-child(2) {
+        color: #999;
         font-size: 12px;
-        color: #999999;
       }
-      .PY{
+      .PY {
         max-height: 70px;
-        overflow: auto;
-        font-size: 14px;
-        color: #666666;
         margin: 5px 0;
+        overflow: auto;
+        color: #666;
+        font-size: 14px;
         word-break: break-all;
       }
-      .BJXX{
+      .BJXX {
         width: 100%;
-        background: #E9E9E9;
-        border-radius: 8px;
         height: 56px;
-        color: #666666;
         padding: 6px;
+        color: #666;
         font-size: 12px;
         line-height: 22px;
-        >p:nth-child(2){
-          color: #999999;
+        background: #e9e9e9;
+        border-radius: 8px;
+        > p:nth-child(2) {
+          color: #999;
         }
       }
       button {
-        height: 30px;
-        border-radius: 15px;
         width: 88px;
+        height: 30px;
         margin-top: 9px;
-        margin-left: calc( ~'100% - 88px');
-        color: #45c977;
-        border:1px solid #45c977;
+        margin-left: calc(~'100% - 88px');
+        color: #15b628;
+        border: 1px solid #15b628;
+        border-radius: 15px;
       }
       :global {
         .ant-btn:hover,
         .ant-btn:focus {
-          color: #45c977;
-          border-color: #45c977;
+          color: #15b628;
+          border-color: #15b628;
         }
       }
     }
-
   }
 }
 
 .EvaluationDetails {
-  background: #F5F5F5;
   height: 100%;
+  background: #f5f5f5;
   .header {
     display: flex;
     padding: 16px 10px;
@@ -152,45 +151,45 @@
     }
     > div {
       p {
-        color: #999999;
+        margin: 0;
+        color: #999;
         font-size: 12px;
         line-height: 22px;
-        margin: 0;
       }
       p:nth-child(1) {
+        color: #333;
         font-weight: bold;
         font-size: 16px;
         line-height: 22px;
-        color: #333333;
       }
     }
   }
-  .content{
-    background-color: #fff;
+  .content {
     padding: 16px 10px 30px 10px;
-    >div{
-      textarea{
+    background-color: #fff;
+    > div {
+      textarea {
         height: 230px;
       }
     }
   }
   .btn {
+    position: fixed;
+    bottom: 0;
     width: 100%;
     height: 54px;
     padding: 8px 14px;
     background-color: #fff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    position: fixed;
-    bottom: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     button {
       width: 100%;
       height: 100%;
       color: #fff;
       font-size: 16px;
       line-height: 20px;
-      background-color: #45c977;
+      background-color: #15b628;
+      border: none;
       border-radius: 19px;
-      border:none;
     }
     button[disabled] {
       background-color: #c5c4c4;
@@ -198,13 +197,13 @@
   }
 }
 
-.ZWSJ{
-  font-size: 12px;
+.ZWSJ {
   color: #999;
+  font-size: 12px;
   text-align: center;
-  img{
-    width: 180px;
+  img {
     display: block;
+    width: 180px;
     margin: 0 auto;
     margin-top: 30px;
   }

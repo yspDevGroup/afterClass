@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Link } from 'umi';
-import { Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
 import ListComponent from '@/components/ListComponent';
 
 import styles from '../index.less';
 import noData from '@/assets/noCourses1.png';
 
-const { TabPane } = Tabs;
-const TeachCourses = (props: { dataResource: any; }) => {
+const TeachCourses = (props: { dataResource: any }) => {
   const { dataResource } = props;
   const { yxkc } = dataResource;
   const [dataSource, setDataSource] = useState<any>();
@@ -24,17 +22,19 @@ const TeachCourses = (props: { dataResource: any; }) => {
         desc: [
           {
             left: [
-              `课程时段：${item.KKRQ
-                ? moment(item.KKRQ).format('YYYY.MM.DD')
-                : moment(item.KHKCSJ.KKRQ).format('YYYY.MM.DD')
-              }-${item.JKRQ
-                ? moment(item.JKRQ).format('YYYY.MM.DD')
-                : moment(item.KHKCSJ.JKRQ).format('YYYY.MM.DD')
+              `课程时段：${
+                item.KKRQ
+                  ? moment(item.KKRQ).format('YYYY.MM.DD')
+                  : moment(item.KHKCSJ.KKRQ).format('YYYY.MM.DD')
+              }-${
+                item.JKRQ
+                  ? moment(item.JKRQ).format('YYYY.MM.DD')
+                  : moment(item.KHKCSJ.JKRQ).format('YYYY.MM.DD')
               }`,
             ],
           },
           {
-            left: [`共${item.KSS}课时`],
+            left: [`${item.ISFW === 1 ? '课后服务课程，课时不限' : `共${item.KSS}课时`}`],
           },
         ],
         introduction: item.KHKCSJ.KCMS,
@@ -54,21 +54,15 @@ const TeachCourses = (props: { dataResource: any; }) => {
   }, [yxkc]);
   return (
     <div className={`${styles.tabHeader}`}>
-      <Tabs
-        centered={false}
-        tabBarExtraContent={{
-          right: (
-            <Link to={{ pathname: '/teacher/home/course', state: { allDataSource } }}>
-              全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
-            </Link>
-          ),
-        }}
-        className={styles.courseTab}
-      >
-        <TabPane tab="任教课程班" key="elective">
-          <ListComponent listData={dataSource} />
-        </TabPane>
-      </Tabs>
+      <div className={styles.title}>
+        <div />
+        <span>任教课程班</span>
+        <Link to={{ pathname: '/teacher/home/course', state: { allDataSource } }}>
+          全部 <IconFont type="icon-gengduo" />
+        </Link>
+      </div>
+
+      <ListComponent listData={dataSource} />
     </div>
   );
 };

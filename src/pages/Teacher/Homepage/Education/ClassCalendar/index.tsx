@@ -10,12 +10,18 @@ import MobileCalendar from '@/components/MobileCalendar/calendar';
 import ListComponent from '@/components/ListComponent';
 import { compareNow } from '@/utils/Timefunction';
 import { msgLeaveSchool } from '@/services/after-class/wechat';
-import { convertCourse, CurdayCourse, ParentHomeData } from '@/services/local-services/mobileHome';
+import {
+  convertCourse,
+  CurdayCourse,
+  getWeekCalendar,
+  ParentHomeData,
+} from '@/services/local-services/mobileHome';
 
 import styles from './index.less';
 import noData from '@/assets/noCourses1.png';
 import noOrder from '@/assets/noOrder1.png';
 import { getQueryString } from '@/utils/utils';
+import moment from 'moment';
 
 type propstype = {
   setDatedata?: (data: any) => void;
@@ -38,8 +44,12 @@ const ClassCalendar = (props: propstype) => {
   const prevDay = getQueryString('date');
   const dealClassId = getQueryString('classId');
   const dealJcId = getQueryString('XXSJPZId');
-  const [day, setDay] = useState<string>(!prevDay || prevDay === 'null' ? dayjs().format('YYYY-MM-DD') : prevDay);
-  const [cDay, setCDay] = useState<string>(!prevDay || prevDay === 'null' ? dayjs().format('M月D日') : dayjs(prevDay).format('M月D日'));
+  const [day, setDay] = useState<string>(
+    !prevDay || prevDay === 'null' ? dayjs().format('YYYY-MM-DD') : prevDay,
+  );
+  const [cDay, setCDay] = useState<string>(
+    !prevDay || prevDay === 'null' ? dayjs().format('M月D日') : dayjs(prevDay).format('M月D日'),
+  );
   const [course, setCourse] = useState<any>(defaultMsg);
   const [dates, setDates] = useState<any[]>([]);
   const [editCourses, setEditCourses] = useState<any>([]);
@@ -49,73 +59,76 @@ const ClassCalendar = (props: propstype) => {
   const formRef = React.createRef<any>();
   const [choosenCourses, setChoosenCourses] = useState<any>([]);
   const userId = currentUser.JSId || testTeacherId;
-  const iconTextData: DisplayColumnItem[] = (day === dayjs().format('YYYY-MM-DD')) ? [
-    {
-      text: '签到点名',
-      icon: 'icon-dianming',
-      background: '#FFC700',
-    },
-    {
-      text: '下课通知',
-      icon: 'icon-lixiao',
-      background: '#7DCE81',
-      handleClick: async (bjid: string) => {
-        setIsModalVisible(true);
-        const res = course?.list?.find((item: { bjid: string; }) => item.bjid === bjid);
-        setModalContent(`今日${res?.title}-${res?.BJMC}已下课，请知悉。`);
-        setBjid(bjid);
-      },
-    },
-    {
-      text: '课堂风采',
-      // itemType: 'img',
-      icon: 'icon-fengcaifabu-copy',
-      // img: union,
-      background: '#FF8863',
-      isRecord: true,
-      handleClick: async (bjid: string, callbackData: any) => {
-        const data = {
-          type: "picList",
-          cls: "picList",
-          list: [callbackData],
-          noDataText: "暂无课堂风采记录",
-          noDataImg: noData
-        };
-        history.push(`/teacher/education/putRecord`, {
-          bjid,
-          jsid: userId,
-          data
-        })
-      },
-    },
-  ] : [
-    {
-      text: '签到点名',
-      icon: 'icon-dianming',
-      background: '#FFC700',
-    },
-    {
-      text: '课堂风采',
-      // itemType: 'img',
-      icon: 'icon-fengcaifabu-copy',
-      // img: union,
-      background: '#FF8863',
-      handleClick: async (bjid: string, callbackData: any) => {
-        const data = {
-          type: "picList",
-          cls: "picList",
-          list: [callbackData],
-          noDataText: "暂无课堂风采记录",
-          noDataImg: noData
-        };
-        history.push(`/teacher/education/putRecord`, {
-          bjid,
-          jsid: currentUser.JSId || "1a510d94-8980-4b8b-8150-f4c0ce5e7025",
-          data
-        })
-      },
-    },
-  ];
+  const iconTextData: DisplayColumnItem[] =
+    day === dayjs().format('YYYY-MM-DD')
+      ? [
+          {
+            text: '签到点名',
+            icon: 'icon-dianming',
+            background: '#FFC700',
+          },
+          {
+            text: '下课通知',
+            icon: 'icon-lixiao',
+            background: '#7DCE81',
+            handleClick: async (bjid: string) => {
+              setIsModalVisible(true);
+              const res = course?.list?.find((item: { bjid: string }) => item.bjid === bjid);
+              setModalContent(`今日${res?.title}-${res?.BJMC}已下课，请知悉。`);
+              setBjid(bjid);
+            },
+          },
+          {
+            text: '课堂风采',
+            // itemType: 'img',
+            icon: 'icon-fengcaifabu-copy',
+            // img: union,
+            background: '#FF8863',
+            isRecord: true,
+            handleClick: async (bjid: string, callbackData: any) => {
+              const data = {
+                type: 'picList',
+                cls: 'picList',
+                list: [callbackData],
+                noDataText: '暂无课堂风采记录',
+                noDataImg: noData,
+              };
+              history.push(`/teacher/education/putRecord`, {
+                bjid,
+                jsid: userId,
+                data,
+              });
+            },
+          },
+        ]
+      : [
+          {
+            text: '签到点名',
+            icon: 'icon-dianming',
+            background: '#FFC700',
+          },
+          {
+            text: '课堂风采',
+            // itemType: 'img',
+            icon: 'icon-fengcaifabu-copy',
+            // img: union,
+            background: '#FF8863',
+            handleClick: async (bjid: string, callbackData: any) => {
+              const data = {
+                type: 'picList',
+                cls: 'picList',
+                list: [callbackData],
+                noDataText: '暂无课堂风采记录',
+                noDataImg: noData,
+              };
+              history.push(`/teacher/education/putRecord`, {
+                bjid,
+                jsid: currentUser.JSId || '1a510d94-8980-4b8b-8150-f4c0ce5e7025',
+                data,
+              });
+            },
+          },
+        ];
 
   // 根据日期修改展示数据
   const changeDateList = async (date?: any) => {
@@ -135,32 +148,40 @@ const ClassCalendar = (props: propstype) => {
         noDataImg: noData,
       });
     }
-  }
+  };
+  const getMarkDays = async (start?: string) => {
+    const oriData = await ParentHomeData('teacher', currentUser?.xxId, userId);
+    const { markDays } = oriData;
+    if (!type) {
+      const weekDys = await getWeekCalendar('teacher', userId, start || day);
+      setDates(markDays.concat(weekDys));
+    } else {
+      setDates(markDays);
+    }
+  };
   useEffect(() => {
     (async () => {
-      const oriData = await ParentHomeData('teacher', currentUser?.xxId, userId);
-      const { markDays } = oriData;
       const { courseList } = await CurdayCourse('teacher', currentUser?.xxId, userId, day);
+      getMarkDays(day);
       if (type) {
         setEditCourses(convertCourse(day, courseList, 'filter'));
       } else {
         setCourse({
           type: 'picList',
           cls: 'picList',
-          list: convertCourse(day, courseList,),
+          list: convertCourse(day, courseList),
           noDataText: '当天无课',
           noDataImg: noData,
         });
       }
-      setDates(markDays);
-    })()
+    })();
   }, []);
   useEffect(() => {
     setDatedata?.(choosenCourses);
   }, [choosenCourses, setDatedata]);
   useEffect(() => {
     if (dealClassId && editCourses) {
-      const curItems = editCourses.find((v: { bjid: string; }) => v.bjid === dealClassId);
+      const curItems = editCourses.find((v: { bjid: string }) => v.bjid === dealClassId);
       if (curItems) {
         const { desc, start, end, bjid, title, jcId, FJId } = curItems;
         if (type === 'dksq') {
@@ -172,16 +193,18 @@ const ClassCalendar = (props: propstype) => {
             bjid,
             FJId,
             title,
-          })
+          });
         } else {
-          setChoosenCourses([{
-            day,
-            start,
-            end,
-            jcId,
-            bjid,
-            title,
-          }])
+          setChoosenCourses([
+            {
+              day,
+              start,
+              end,
+              jcId,
+              bjid,
+              title,
+            },
+          ]);
         }
       }
     }
@@ -194,20 +217,21 @@ const ClassCalendar = (props: propstype) => {
   //  发送离校通知
   const handleOk = async () => {
     setIsModalVisible(false);
-    formRef.current.validateFields()
+    formRef.current
+      .validateFields()
       .then(async (values: any) => {
         const res = await msgLeaveSchool({
-          KHBJSJId: bjid,
+          KHBJSJId: bjid || '',
           text: values.info,
         });
         if (res.status === 'ok' && res.data) {
           message.success('通知已成功发送');
         } else {
           message.error(res.message);
-        };
-        formRef.current.validateFields()
+        }
+        formRef.current.validateFields();
       })
-      .catch((info: { errorFields: any; }) => {
+      .catch((info: { errorFields: any }) => {
         console.log(info.errorFields);
       });
   };
@@ -235,7 +259,7 @@ const ClassCalendar = (props: propstype) => {
   };
   // 调代课单选事件
   const onChanges = (e: any) => {
-    const { desc, bjid, title, jcId, FJId,classType } = e.target.value;
+    const { desc, bjid, title, jcId, FJId, classType } = e.target.value;
     setDatedata?.({
       day,
       classType,
@@ -245,14 +269,14 @@ const ClassCalendar = (props: propstype) => {
       bjid,
       FJId,
       title,
-    })
+    });
   };
   return (
     <div className={styles.schedule}>
       <span
         className={styles.today}
         onClick={() => {
-          if (type && type === 'edit' || type === 'dksq' || type === 'tksq') {
+          if ((type && type === 'edit') || type === 'dksq' || type === 'tksq') {
             form?.resetFields();
             setChoosenCourses([]);
           }
@@ -263,9 +287,10 @@ const ClassCalendar = (props: propstype) => {
       </span>
       <MobileCalendar
         showType={'week'}
+        disableMonthView={true}
         markDates={dates}
         onDateClick={(date: { format: (arg: string) => any }) => {
-          if (type && type === 'edit' || type === 'dksq' || type === 'tksq') {
+          if ((type && type === 'edit') || type === 'dksq' || type === 'tksq') {
             if (!compareNow(date.format('YYYY-MM-DD'))) {
               message.warning('不可选择今天之前的课程');
               return;
@@ -280,13 +305,25 @@ const ClassCalendar = (props: propstype) => {
         markType="dot"
         transitionDuration={0.1}
         currentDate={day}
+        onTouchEnd={(a: number, b: number) => {
+          const start = moment(new Date(b)).format('YYYY-MM-DD');
+          getMarkDays(start);
+        }}
       />
       {/* 根据特殊情况显示列表上方操作信息 */}
       {type && type === 'edit' ? (
         <p style={{ lineHeight: '35px', margin: 0, color: '#888' }}>请选择课程</p>
-      ) : (type && type === 'dksq' || type === 'tksq' ?
-        <p style={{ lineHeight: '35px', margin: 0, color: '#999', fontSize: '12px' }}>{type === 'dksq' ? '代课课程（仅主班教师可提交代课申请）' : type === 'tksq' ? '调课课程（仅主班教师可提交调课申请）' : ''} </p> :
-        <div className={styles.subTitle}>{cDay}</div>)}
+      ) : (type && type === 'dksq') || type === 'tksq' ? (
+        <p style={{ lineHeight: '35px', margin: 0, color: '#999', fontSize: '12px' }}>
+          {type === 'dksq'
+            ? '代课课程'
+            : type === 'tksq'
+            ? '调课课程（仅主班教师可提交调课申请）'
+            : ''}{' '}
+        </p>
+      ) : (
+        <div className={styles.subTitle}>{cDay}</div>
+      )}
 
       {/* 根据特殊情况显示列表展示样式 */}
       {type && type === 'edit' ? (
@@ -298,42 +335,67 @@ const ClassCalendar = (props: propstype) => {
             return (
               <List.Item
                 key={`${day}+${item?.bjid}+${item.jcId}`}
-                actions={[<Checkbox disabled={!!dealClassId} defaultChecked={dealClassId ? item?.bjid === dealClassId && item.jcId === dealJcId : false} onChange={(e) => onChange(e, item)} />]}
+                actions={[
+                  <Checkbox
+                    disabled={!!dealClassId}
+                    defaultChecked={
+                      dealClassId ? item?.bjid === dealClassId && item.jcId === dealJcId : false
+                    }
+                    onChange={(e) => onChange(e, item)}
+                  />,
+                ]}
               >
-                <List.Item.Meta
-                  title={`${item?.title}`}
-                  description={item.desc?.[0].left}
-                />
+                <List.Item.Meta title={`${item?.title}`} description={item.desc?.[0].left} />
               </List.Item>
             );
           }}
         />
-      ) : (type === 'dksq' || type === 'tksq' ? <div className={styles.dksq}>
-        {
-          editCourses?.length ? <Radio.Group onChange={onChanges} disabled={!!dealClassId} defaultValue={editCourses.find((item: { bjid: string; jcId: string }) => item?.bjid === dealClassId && item.jcId === dealJcId)}>
-            <Space direction="vertical">
-              {
-                editCourses?.map((item: any) => {
-                  return <Radio value={item} >
-                    <p> {item?.title}</p>
-                    <p> {item.desc?.[0].left}</p>
-                  </Radio>
-                })
-              }
-            </Space>
-          </Radio.Group> : <div className={styles.ZWSJ}>
-            <img src={noOrder} alt="" />
-            <p>暂无数据</p>
-          </div>
-        }
-      </div> :
-        <ListComponent listData={course} operation={iconTextData} />)}
-      <Modal className={styles.leaveSchool} title="下课通知" forceRender={true} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} centered={true} closable={false} cancelText='取消' okText='确认'>
+      ) : type === 'dksq' || type === 'tksq' ? (
+        <div className={styles.dksq}>
+          {editCourses?.length ? (
+            <Radio.Group
+              onChange={onChanges}
+              disabled={!!dealClassId}
+              defaultValue={editCourses.find(
+                (item: { bjid: string; jcId: string }) =>
+                  item?.bjid === dealClassId && item.jcId === dealJcId,
+              )}
+            >
+              <Space direction="vertical">
+                {editCourses?.map((item: any) => {
+                  return (
+                    <Radio value={item}>
+                      <p> {item?.title}</p>
+                      <p> {item.desc?.[0].left}</p>
+                    </Radio>
+                  );
+                })}
+              </Space>
+            </Radio.Group>
+          ) : (
+            <div className={styles.ZWSJ}>
+              <img src={noOrder} alt="" />
+              <p>暂无数据</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <ListComponent listData={course} operation={iconTextData} />
+      )}
+      <Modal
+        className={styles.leaveSchool}
+        title="下课通知"
+        forceRender={true}
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        centered={true}
+        closable={false}
+        cancelText="取消"
+        okText="确认"
+      >
         <Form ref={formRef}>
-          <Form.Item
-            name="info"
-            initialValue={modalContent}
-          >
+          <Form.Item name="info" initialValue={modalContent}>
             <Input.TextArea defaultValue={modalContent} />
           </Form.Item>
         </Form>

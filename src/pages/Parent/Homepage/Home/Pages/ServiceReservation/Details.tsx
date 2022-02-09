@@ -2,7 +2,7 @@
  * @description: 服务详情
  * @author: wsl
  * @Date: 2021-09-26 17:28:08
- * @LastEditTime: 2021-10-15 15:01:42
+ * @LastEditTime: 2022-02-09 14:51:44
  * @LastEditors: zpl
  */
 import GoBack from '@/components/GoBack';
@@ -14,7 +14,9 @@ import { getStudent, KHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { Link, useModel, history } from 'umi';
-import { enHenceMsg } from '@/utils/utils';
+import { enHenceMsg, getQueryString } from '@/utils/utils';
+import { signService } from '@/services/after-class/xsjbsj';
+import noOrder from '@/assets/noOrder.png';
 
 const Details = () => {
   const { initialState } = useModel('@@initialState');
@@ -23,43 +25,46 @@ const Details = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
   const [state, setstate] = useState(false);
-  const [KHFUXY, setKHFUXY] = useState<any>();
+  const [KHFUXY, setKHFUXY] = useState<any>([]);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const [orderInfo, setOrderInfo] = useState<any>();
+  const path = getQueryString('path');
+  const id = getQueryString('id');
+  const type = getQueryString('type');
 
-  const type = window.location.href.split('type=')[1].split('&id=')[0];
   const StorageXSId = localStorage.getItem('studentId');
   useEffect(() => {
-    const id = window.location.href.split('id=')[1];
-    (async () => {
-      if (type === 'YX') {
-        const res = await getStudent({
-          XSJBSJId: StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId,
-          KHXXZZFWId: id,
-        });
-        if (res.status === 'ok') {
-          setData(res.data?.rows?.[0].KHXXZZFW);
+    if (id) {
+      (async () => {
+        if (type === 'YX') {
+          const res = await getStudent({
+            XSJBSJId: StorageXSId || currentUser?.student?.[0].XSJBSJId || testStudentId,
+            KHXXZZFWId: id,
+          });
+          if (res.status === 'ok') {
+            setData(res.data?.rows?.[0].KHXXZZFW);
+          }
+        } else if (type === 'KS') {
+          const res = await KHXXZZFW({ id });
+          if (res.status === 'ok') {
+            setData(res.data);
+          }
         }
-      } else if (type === 'KS') {
-        const res = await KHXXZZFW({ id });
-        if (res.status === 'ok') {
-          setData(res.data);
-        }
-      }
-    })();
+      })();
+    }
   }, [StorageXSId]);
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
         BT: '',
-        LX: ['课后服务协议'],
+        LX: ['增值服务协议'],
         XXJBSJId: currentUser?.xxId,
         ZT: ['已发布'],
         page: 0,
         pageSize: 0,
       });
       if (res.status === 'ok') {
-        setKHFUXY(res.data?.rows?.[0].NR);
+        setKHFUXY(res.data?.rows);
       }
     })();
   }, []);
@@ -86,31 +91,52 @@ const Details = () => {
     setXystate(e.target.checked);
   };
   const submit = async () => {
-    const data: API.CreateKHXSDD = {
-      XDSJ: new Date().toISOString(),
-      ZFFS: '线上支付',
-      DDZT: '待付款',
-      DDFY: Data?.FY,
-      XSJBSJId:localStorage.getItem('studentId') || currentUser?.student[0]?.XSJBSJId || testStudentId,
-      DDLX: 1,
-      KHXXZZFWId: Data?.id,
-    };
-    const res = await createKHXSDD(data);
-    if (res.status === 'ok') {
-      if (data.DDFY > 0) {
-        setOrderInfo(res.data);
+    if (Data?.FY > 0) {
+      const data: API.CreateKHXSDD = {
+        XDSJ: new Date().toISOString(),
+        ZFFS: '线上支付',
+        DDZT: '待付款',
+        DDFY: Data?.FY,
+        XSJBSJId:
+          localStorage.getItem('studentId') || currentUser?.student[0]?.XSJBSJId || testStudentId,
+        DDLX: 1,
+        KHXXZZFWId: Data?.id,
+      };
+      const res = await createKHXSDD(data);
+      if (res.status === 'ok') {
+        if (data.DDFY > 0) {
+          setOrderInfo(res.data);
+        } else {
+          message.success('报名成功');
+          history.push('/parent/home/serviceReservation');
+        }
       } else {
-        message.success('报名成功');
-        history.push('/parent/home/serviceReservation');
+        enHenceMsg(res.message);
       }
     } else {
-      enHenceMsg(res.message);
+      const result = await signService({
+        XSJBSJId:
+          localStorage.getItem('studentId') || currentUser?.student?.[0].XSJBSJId || testStudentId,
+        KHXXZZFWId: Data?.id,
+        ZT: 0,
+      });
+      if (result.status === 'ok') {
+        message.success('报名成功');
+        history.push('/parent/home/serviceReservation');
+      } else {
+        enHenceMsg(result.message);
+      }
     }
   };
 
   return (
     <div className={styles.Details}>
-      <GoBack title={'服务详情'} />
+      {path ? (
+        <GoBack title={'服务详情'} onclick={`/parent/home?index=${path}`} />
+      ) : (
+        <GoBack title={'服务详情'} />
+      )}
+
       <div className={styles.wrap}>
         <img src={Data?.FWTP} alt="" />
         <div>
@@ -154,7 +180,7 @@ const Details = () => {
               <Checkbox onChange={onFxChange} checked={Xystate}>
                 <span>我已阅读并同意</span>
               </Checkbox>
-              <a onClick={showModal}>《课后服务协议》</a>
+              <a onClick={showModal}>《增值服务协议》</a>
             </div>
             <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
               {Data?.FY && Data?.FY > 0 ? '提交并付款' : '提交'}
@@ -195,8 +221,17 @@ const Details = () => {
           </Button>,
         ]}
       >
-        <p>课后服务协议书</p>
-        <div dangerouslySetInnerHTML={{ __html: KHFUXY }} />
+        {KHFUXY?.length !== 0 ? (
+          <>
+            <p>增值服务协议书</p>
+            <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
+          </>
+        ) : (
+          <div className={styles.ZWSJ}>
+            <img src={noOrder} alt="" />
+            <p>暂无增值服务协议</p>
+          </div>
+        )}
       </Modal>
     </div>
   );

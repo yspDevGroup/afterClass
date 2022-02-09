@@ -1,116 +1,114 @@
-@import '../theme.less' ;
+@import '../theme.less';
 
-.statisticalPage{
-  background-color: @pageBgColor;
+.statisticalPage {
   min-height: 900px;
   padding-top: 42px;
+  background-color: @pageBgColor;
   :global {
-    .ant-empty-description{
+    .ant-empty-description {
       color: #999;
       font-size: 12px;
     }
   }
-  .course{
+  .course {
     min-height: 700px;
     background-color: @pageBgColor;
   }
-  .attendance{
+  .attendance {
     min-height: 1000px;
     background-color: @pageBgColor;
   }
-  .toll{
+  .toll {
     min-height: 1100px;
     background-color: @pageBgColor;
   }
-  .topText{
+  .topText {
     width: 100%;
     height: 20px;
     padding: 12px 0;
-    text-align: center;
     color: @textColor;
     font-size: 14px;
     line-height: 20px;
+    text-align: center;
   }
-  .theTabs{
+  .theTabs {
     margin-top: 12px;
     :global {
-      .ant-tabs-nav{
-        background-color: @boxBgColor;
-        padding: 10px;
+      .ant-tabs-nav {
         margin: 0;
-        .ant-tabs-tab{
+        padding: 10px;
+        background-color: @boxBgColor;
+        .ant-tabs-tab {
           width: 80px;
           height: 34px;
-          padding: 6px;
           margin: 0 5.5px;
-          background: @pageBgColor;
-          border-radius: 27px;
-          color: #999999;
+          padding: 6px;
+          color: #999;
           font-size: 16px;
           line-height: 22px;
+          background: @pageBgColor;
+          border-radius: 27px;
         }
-        .ant-tabs-tab-active{
-          border-color: rgba(0, 102, 255, 0);
+        .ant-tabs-tab-active {
+          color: #06f;
           background: rgba(0, 102, 255, 0.2);
-          color: #0066FF;
+          border-color: rgba(0, 102, 255, 0);
         }
-
       }
     }
   }
-  .moduleTitle{
-    font-size: 16px;
+  .moduleTitle {
     font-weight: bold;
+    font-size: 16px;
     line-height: 22px;
     text-align: left;
-    &:before {
+    &::before {
       display: inline-block;
       width: 3px;
       height: 12px;
-      line-height: 22px;
+      margin-right: 4px;
       color: @textColor;
+      line-height: 22px;
       vertical-align: baseline;
       background-color: @GreenColor;
       content: '';
-      margin-right: 4px;
     }
   }
-  .container{
+  .container {
     margin: 10px;
     padding: 10px;
     background: @boxBgColor;
     border-radius: 8px;
   }
-  .allLinks{
+  .allLinks {
+    color: #999;
     font-size: 12px;
     line-height: 22px;
-    color: #999999;
   }
-  .serviceNum{
+  .serviceNum {
     margin: 20px 0;
-    h2{
+    h2 {
       color: @GreenColor;
     }
-    p{
-      color: #999999;
+    p {
+      color: #999;
     }
   }
-  .chartsContainer{
+  .chartsContainer {
     width: 100%;
     height: 95%;
     padding: 20px 0;
   }
-  .iconContainer{
+  .iconContainer {
     position: absolute;
   }
-  .iconStyle{
+  .iconStyle {
     position: relative;
     font-size: 21px;
   }
-  .iconAfter{
+  .iconAfter {
     height: 100%;
-    line-height: 100%;
     margin-left: 26px;
+    line-height: 100%;
   }
-
 }

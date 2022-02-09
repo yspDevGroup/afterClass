@@ -4,15 +4,15 @@
   position: relative;
 
   .dksq {
-    .ZWSJ{
-      font-size: 12px;
+    .ZWSJ {
+      padding: 10px;
       color: #999;
+      font-size: 12px;
       text-align: center;
       background-color: #fff;
-      padding: 10px;
-      img{
-        width: 180px;
+      img {
         display: block;
+        width: 180px;
         margin: 0 auto;
       }
     }
@@ -32,14 +32,14 @@
               top: 20px;
               right: 20px;
             }
-            >span{
-              p{
+            > span {
+              p {
                 margin: 5px;
               }
-              p:nth-child(1){
+              p:nth-child(1) {
                 font-weight: bold;
               }
-              p:nth-child(2){
+              p:nth-child(2) {
                 color: #999;
                 font-size: 12px;
               }
@@ -66,7 +66,7 @@
     font-size: @font-size-sm;
     line-height: 17px;
 
-    &:before {
+    &::before {
       display: inline-block;
       width: 3px;
       height: 12px;
@@ -80,11 +80,11 @@
 
   :global {
     div.ui-listItemWrapper {
+      position: relative;
       margin-bottom: 12px;
       padding: 10px;
-      background: #ffffff;
+      background: #fff;
       border-radius: 8px;
-      position: relative;
 
       > div.ui-listItemContent {
         display: flex;
@@ -109,9 +109,12 @@
             -webkit-transform: rotate(90deg);
             -o-transform: rotate(90deg);
             transform: rotate(90deg);
+
             /* IE 9 */
             -moz-transform: rotate(90deg);
+
             /* Firefox */
+
             /* Safari 和 Chrome */
           }
 
@@ -123,8 +126,11 @@
               -webkit-transform: rotate(-90deg);
               -o-transform: rotate(-90deg);
               transform: rotate(-90deg);
+
               /* IE 9 */
+
               /* Firefox */
+
               /* Safari 和 Chrome */
             }
           }
@@ -150,7 +156,7 @@
         margin-top: 7px;
         font-size: 14px;
         line-height: 42px;
-        border-bottom: 1px solid @border-color-base;
+        border-bottom: 1px solid #ddd;
 
         .head-cell {
           height: 42px;
@@ -219,7 +225,7 @@
       min-width: auto !important;
       .ant-input {
         min-height: 116px;
-        color: #999999;
+        color: #999;
         font-size: 14px;
         line-height: 24px;
       }

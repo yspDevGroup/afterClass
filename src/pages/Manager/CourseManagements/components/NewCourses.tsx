@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable prefer-destructuring */
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ProFormFields from '@/components/ProFormFields';
 import { createKHKCSJ, updateKHKCSJ } from '@/services/after-class/khkcsj';
 import type { ActionType } from '@ant-design/pro-table/lib/typing';
@@ -33,6 +33,7 @@ const NewCourses = (props: PropsType) => {
   // 上传成功后返回的图片地址
   const [imageUrl, setImageUrl] = useState('');
   const [isTrue, setIsTrue] = useState(true);
+  const actionRef = useRef<ActionType>();
 
   const title = current ? '编辑课程' : '新增课程';
   const values = () => {
@@ -103,6 +104,7 @@ const NewCourses = (props: PropsType) => {
           message.success('保存成功');
           Close?.();
           getData();
+          actionRef?.current?.reload();
         } else if (data.message === 'Validation error') {
           message.error(`保存失败，课程名称重复`);
         } else {
@@ -165,13 +167,13 @@ const NewCourses = (props: PropsType) => {
       key: 'KBYS',
       disabled: readonly,
       options: [
-        { label: '绯红', value: courseColorType.crimson },
-        { label: '橙色', value: courseColorType.orange },
-        { label: '黄色', value: courseColorType.yellow },
-        { label: '蓝色', value: courseColorType.blue },
-        { label: '天空蓝', value: courseColorType.skyBlue },
-        { label: '紫色', value: courseColorType.violet },
-        { label: '紫红色', value: courseColorType.purplishRed },
+        { label: '深蓝色', value: courseColorType.DarkBlue },
+        { label: '草绿色', value: courseColorType.GrassGreen },
+        { label: '蓝绿色', value: courseColorType.BlueGreen },
+        { label: '天蓝色', value: courseColorType.SkyBlue },
+        { label: '深红色', value: courseColorType.Crimson },
+        { label: '深紫色', value: courseColorType.DeepPurple },
+        { label: '土黄色', value: courseColorType.EarthyYellow },
       ],
       rules: [{ required: true, message: '请填选择课程颜色' }],
     },
@@ -227,6 +229,7 @@ const NewCourses = (props: PropsType) => {
       >
         <ProFormFields
           layout="vertical"
+          actionRef={actionRef}
           setForm={setForm}
           onFinish={onFinish}
           values={values()}

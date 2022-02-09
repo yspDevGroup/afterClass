@@ -9,7 +9,7 @@
       height: 108px;
       margin: 10px 0;
       padding: 12px;
-      background: #ffffff;
+      background: #fff;
       background-color: #fff;
       border-radius: 8px;
       p {
@@ -17,12 +17,12 @@
         line-height: 28px;
       }
       > p:nth-child(1) {
-        color: #333333;
+        color: #333;
         font-weight: bold;
         font-size: 16px;
       }
       > p:nth-child(2) {
-        color: #666666;
+        color: #666;
         font-size: 14px;
       }
       button {
@@ -50,14 +50,14 @@
   .KCMC {
     margin-top: 20px;
     margin-bottom: 5px;
-    color: #333333;
+    color: #333;
     font-weight: bold;
     font-size: 14px;
     line-height: 20px;
     text-align: center;
   }
   .BJMC {
-    color: #999999;
+    color: #999;
     font-size: 12px;
     line-height: 20px;
     text-align: center;
@@ -71,12 +71,12 @@
       border-radius: 8px;
       > div {
         width: 33.3%;
-        color: #666666;
+        color: #666;
         font-size: 14px;
         text-align: center;
         p {
           margin-bottom: 5px;
-          color: #333333;
+          color: #333;
           font-weight: bold;
           font-size: 20px;
         }
@@ -88,14 +88,14 @@
       width: 100%;
       thead {
         tr {
-          border-radius: 8px 8px 0px 0px;
+          border-radius: 8px 8px 0 0;
           th {
             height: 28px;
-            color: #666666;
+            color: #666;
             font-weight: normal;
             font-size: 12px;
             text-align: center;
-            background: #eeeeee;
+            background: #eee;
           }
         }
       }
@@ -134,9 +134,6 @@
   margin-top: calc(50vh - 160px) !important;
   padding: 0 !important;
   :global {
-    .ant-modal-content {
-      border-radius: 24px;
-    }
     .ant-modal-header {
       padding: 16px;
       text-align: center;
@@ -148,6 +145,7 @@
     }
     .ant-modal-content {
       min-width: 100% !important;
+      border-radius: 24px;
       .ant-modal-footer {
         .ant-btn {
           margin-left: 0 !important;
@@ -174,7 +172,7 @@
             width: 100%;
             height: 120px;
             padding: 10px;
-            border: 1px solid #dddddd;
+            border: 1px solid #ddd;
             border-radius: 8px;
           }
         }
@@ -183,20 +181,20 @@
     .ant-modal-footer {
       display: flex;
       justify-content: space-evenly;
-      border: none;
       height: auto !important;
-      padding:0 0 10px 0 !important;
+      padding: 0 0 10px 0 !important;
+      border: none;
       .ant-btn-primary {
+        color: #fff;
         background-color: #3874c5;
         border: none;
-        color: #fff;
       }
-      .ant-btn{
+      .ant-btn {
         width: 40% !important;
         height: 36px !important;
-        border-radius: 18px !important;
-        border-color: #3874c5;
         color: #3874c5;
+        border-color: #3874c5;
+        border-radius: 18px !important;
       }
     }
   }

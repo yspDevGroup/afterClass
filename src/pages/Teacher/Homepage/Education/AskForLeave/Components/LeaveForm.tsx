@@ -11,20 +11,16 @@ import { useModel, history } from 'umi';
 import ClassCalendar from '../../ClassCalendar';
 import styles from '../index.less';
 import { compareTime } from '@/utils/Timefunction';
+import { getClassDays } from '@/utils/TimeTable';
+import { getQueryString } from '@/utils/utils';
+import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
 import { createKHJSQJ } from '@/services/after-class/khjsqj';
 import { getMainTeacher } from '@/services/after-class/khbjsj';
-import { getClassDays } from '@/utils/TimeTable';
-import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
-import { getQueryString } from '@/utils/utils';
 
 const { TextArea } = Input;
-const LeaveForm = (props: {
-  setActiveKey: React.Dispatch<React.SetStateAction<string>>;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const LeaveForm = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { setActiveKey, setReload } = props;
   const prevDay = getQueryString('date');
   const dealClassId = getQueryString('classId');
   const [form] = Form.useForm();
@@ -46,7 +42,7 @@ const LeaveForm = (props: {
       SQNR: '请假',
       BQRId: currentUser.JSId || testTeacherId,
       KHBJSJId: bjIds[0].KHBJSJId,
-      XXSJPZId: bjIds[0].XXSJPZId
+      XXSJPZId: bjIds[0].XXSJPZId,
     });
   };
   const onFinish = async (values: any) => {
@@ -79,27 +75,30 @@ const LeaveForm = (props: {
         handleResign(bjIds);
         history.push('/teacher/education/resign');
       } else {
-        setReload(true);
         setDateData([]);
         form.resetFields();
-        setActiveKey('history');
+        history.push('/teacher/education/askForLeave');
 
         // 处理自动审批流程时主班请假导致课时变更的问题
-        if (res.message === "isAudit=false") {
+        if (res.message === 'isAudit=false') {
           const bjIdArr = [].map.call(bjIds, (item: { KHBJSJId: string }) => {
             return item.KHBJSJId;
           });
           const result = await getMainTeacher({
             KHBJSJIds: bjIdArr as string[],
             JZGJBSJId: currentUser.JSId || testTeacherId,
-            JSLX: '主教师'
+            JSLX: '主教师',
           });
           if (result.status === 'ok') {
             const { data } = result;
-            data?.forEach(async (ele: { KHBJSJId: string; }) => {
-              await getClassDays(ele.KHBJSJId, currentUser.JSId || testTeacherId, currentUser?.xxId);
+            data?.forEach(async (ele: { KHBJSJId: string }) => {
+              await getClassDays(
+                ele.KHBJSJId,
+                currentUser.JSId || testTeacherId,
+                currentUser?.xxId,
+              );
             });
-          };
+          }
         }
       }
     } else {

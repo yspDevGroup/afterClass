@@ -52,6 +52,7 @@
     path: '/basicalSettings',
     name: 'basicalSettings',
     icon: 'fileText',
+    access: 'canAdmin',
     routes: [
       {
         // 学校信息维护
@@ -70,6 +71,12 @@
         path: '/basicalSettings/service',
         name: 'service',
         component: './Manager/Announcements/Service',
+      },
+      {
+        path: '/basicalSettings/service/editServices',
+        hideInMenu: 'true',
+        name: 'serviceDetails',
+        component: './Manager/Announcements/Service/EditArticle',
       },
       {
         path: '/basicalSettings/service/editArticle',
@@ -164,6 +171,54 @@
     ],
   },
   {
+    // 课后服务
+    path: '/afterClassManagement',
+    name: 'afterClassManagement',
+    icon: 'DeploymentUnitOutlined',
+    routes: [
+      // 报名设置
+      {
+        path: '/afterClassManagement/registration_setting',
+        name: 'registrationSetting',
+        component: './Manager/AfterClassManagement/RegistrationSetting',
+      },
+      // 行政班管理
+      {
+        path: '/afterClassManagement/class_management',
+        name: 'administrationClassManagement',
+        component: './Manager/AfterClassManagement/AdministrationClassManagement',
+      },
+      // 班级详情
+      {
+        path: '/afterClassManagement/class_management/detail',
+        hideInMenu: 'true',
+        name: 'clasDetail',
+        component: './Manager/AfterClassManagement/AdministrationClassManagement/Detail',
+      },
+      // 服务配置
+      {
+        path: '/afterClassManagement/service_configuration',
+        name: 'serviceConfiguration',
+        component: './Manager/AfterClassManagement/ServiceConfiguration',
+      },
+    ],
+  },
+  {
+    // 排课管理
+    // path: '/courseManagements/courseScheduling',
+    path: '/courseScheduling',
+    name: 'courseScheduling',
+    icon: 'InsertRowBelowOutlined',
+    component: './Manager/CourseScheduling',
+  },
+  {
+    // 排课管理
+    path: '/courseArrange',
+    name: 'courseArrange',
+    icon: 'InsertRowBelowOutlined',
+    component: './Manager/CourseArrange',
+  },
+  {
     // 增值服务
     path: '/valueAddedServices',
     name: 'valueAddedServices',
@@ -197,46 +252,11 @@
     ],
   },
   {
-    // 课后服务
-    path: '/afterClassManagement',
-    name: 'afterClassManagement',
-    icon: 'DeploymentUnitOutlined',
-    routes: [
-      // 行政班管理
-      {
-        path: '/afterClassManagement/class_management',
-        name: 'administrationClassManagement',
-        component: './Manager/AfterClassManagement/AdministrationClassManagement',
-      },
-      // 班级详情
-      {
-        path: '/afterClassManagement/class_management/detail',
-        hideInMenu: 'true',
-        name: 'clasDetail',
-        component: './Manager/AfterClassManagement/AdministrationClassManagement/Detail',
-      },
-      // 服务配置
-      {
-        path: '/afterClassManagement/service_configuration',
-        name: 'serviceConfiguration',
-        component: './Manager/AfterClassManagement/ServiceConfiguration',
-      },
-    ],
-  },
-  {
-    // 排课管理
-    // path: '/courseManagements/courseScheduling',
-    path: '/courseScheduling',
-    name: 'courseScheduling',
-    icon: 'InsertRowBelowOutlined',
-    component: './Manager/CourseScheduling',
-  },
-
-  {
     // 巡课管理
     path: '/coursePatrol',
     icon: 'SolutionOutlined',
     name: 'coursePatrol',
+    access: 'canAdmin',
     routes: [
       {
         // 值班安排
@@ -257,6 +277,7 @@
     path: '/audit',
     name: 'audit',
     icon: 'Profile',
+    access: 'canAdmin',
     routes: [
       {
         // 请假管理
@@ -285,13 +306,19 @@
     icon: 'Profile',
     routes: [
       {
-        // 课程订单
+        // 课后服务订单
+        path: '/orderInquiry/afterService',
+        component: './Manager/OrderInquiry/AfterService',
+        name: 'afterService',
+      },
+      {
+        // 课程服务订单
         path: '/orderInquiry/courseorder',
         component: './Manager/OrderInquiry/CourseOrder',
         name: 'courseorder',
       },
       {
-        // 服务订单
+        // 增值服务订单
         path: '/orderInquiry/serviceorder',
         component: './Manager/OrderInquiry/ServiceOrder',
         name: 'serviceorder',
@@ -301,12 +328,14 @@
         path: '/orderInquiry/reimbursementClass',
         name: 'reimbursementClass',
         component: './Manager/CourseManagements/ReimbursementClass',
+        access: 'canAdmin',
       },
       {
         // 退款管理
         path: '/orderInquiry/refundManagement',
         name: 'refundManagement',
         component: './Manager/CourseManagements/RefundManagement',
+        access: 'canAdmin',
       },
     ],
   },
@@ -315,6 +344,7 @@
     path: '/announcements',
     name: 'announcements',
     icon: 'Notification',
+    // access: 'canAdmin',
     routes: [
       {
         // 校内通知
@@ -382,6 +412,19 @@
         component: './Manager/Statistics/AfterSchoolCourse/Detail',
       },
       {
+        // 课程统计
+        path: '/statistics/afterServiceCourse',
+        name: 'afterservicecourse',
+        component: './Manager/Statistics/AfterServiceCourse',
+      },
+      {
+        // 课后课程详情
+        path: '/statistics/afterServiceCourse/detail',
+        hideInMenu: 'true',
+        name: 'afterservicelclass',
+        component: './Manager/Statistics/AfterServiceCourse/Detail',
+      },
+      {
         // 考勤统计
         path: '/statistics/Attendance',
         name: 'attendancet',
@@ -433,6 +476,7 @@
     icon: 'PieChartOutlined',
     name: 'graphic',
     component: './Manager/Statistics/Graphic',
+    access: 'canAdmin',
   },
   {
     // 素质教育资源
@@ -440,12 +484,14 @@
     icon: 'RadarChartOutlined',
     name: 'educational',
     component: './Manager/Educational',
+    access: 'canAdmin',
   },
   {
     // 系统配置
     path: '/sysSettings',
     icon: 'SlidersOutlined',
     name: 'sysSettings',
+    access: 'canAdmin',
     routes: [
       {
         path: '/sysSettings/auditSettings',
@@ -516,12 +562,24 @@
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/SelectCourse',
       },
+      {
+        path: '/teacher/education/selectCourse/apply',
+        name: 'applys',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/SelectCourse/Apply',
+      },
       // 教师请假
       {
         path: '/teacher/education/askForLeave',
         name: 'askForLeave',
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/AskForLeave',
+      },
+      {
+        path: '/teacher/education/askForLeave/newLeave',
+        name: 'newLeave',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/AskForLeave/NewLeave',
       },
       // 教师调代课
       {
@@ -553,6 +611,12 @@
         name: 'resign',
         hideInMenu: 'true',
         component: './Teacher/Homepage/Education/Resign',
+      },
+      {
+        path: '/teacher/education/resign/dealList',
+        name: 'resign',
+        hideInMenu: 'true',
+        component: './Teacher/Homepage/Education/Resign/DealList',
       },
       {
         path: '/teacher/education/dealAbnormal',
@@ -747,6 +811,26 @@
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/Course',
       },
+      // 课后服务
+      {
+        path: '/parent/home/afterClassCoach',
+        name: 'afterClassCoach',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/AfterClassCoach',
+      },
+      {
+        path: '/parent/home/afterClassCoach/interestClassroom',
+        name: 'interestClassroom',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/AfterClassCoach/InterestClassroom',
+      },
+      // 订餐&托管
+      {
+        path: '/parent/home/trusteeship',
+        name: 'trusteeship',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/Trusteeship',
+      },
       // 服务预定
       {
         path: '/parent/home/serviceReservation',
@@ -759,6 +843,12 @@
         name: 'details',
         hideInMenu: 'true',
         component: './Parent/Homepage/Home/Pages/ServiceReservation/Details',
+      },
+      {
+        path: '/parent/home/serviceReservation/afterClassDetails',
+        name: 'afterClassDetails',
+        hideInMenu: 'true',
+        component: './Parent/Homepage/Home/Pages/ServiceReservation/AfterClassDetails',
       },
       {
         path: '/parent/home/notice',

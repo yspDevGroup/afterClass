@@ -6,25 +6,20 @@
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
-import { Tabs } from 'antd';
-import { useModel } from 'umi';
+import { useModel, history } from 'umi';
+import { enHenceMsg } from '@/utils/utils';
 import GoBack from '@/components/GoBack';
-import styles from './index.less';
-import LeaveForm from './Components/LeaveForm';
 import LeaveHistory from './Components/LeaveHistory';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { enHenceMsg } from '@/utils/utils';
 import { getAllKHJSQJ } from '@/services/after-class/khjsqj';
+import icon_leave from '@/assets/icon-teacherLeave.png';
+import styles from './index.less';
 
-const { TabPane } = Tabs;
-
-const AskForLeave =() => {
+const AskForLeave = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [curXNXQId, setCurXNXQId] = useState<any>();
-  const [activeKey, setActiveKey] = useState<string>('apply');
   const [leaveInfo, setLeaveInfo] = useState<API.KHXSQJ[]>([]);
-  const [reload, setReload] = useState<boolean>(false);
 
   const fetch = async () => {
     // 获取后台学年学期数据
@@ -35,8 +30,8 @@ const AskForLeave =() => {
   };
   const getData = async () => {
     const res = await getAllKHJSQJ({
-      XXJBSJId:currentUser?.xxId,
-      JZGJBSJId:currentUser?.JSId || testTeacherId,
+      XXJBSJId: currentUser?.xxId,
+      JZGJBSJId: currentUser?.JSId || testTeacherId,
       XNXQId: curXNXQId,
     });
     if (res.status === 'ok') {
@@ -51,32 +46,24 @@ const AskForLeave =() => {
     fetch();
   }, []);
   useEffect(() => {
-    if (activeKey === 'history' && reload) {
-      getData();
-    }
-  }, [activeKey, reload]);
+    getData();
+  }, [curXNXQId]);
   return (
     <>
-      <GoBack title={'请假'} teacher onclick="/teacher/home?index=education" />
+      <GoBack title={'请假记录'} teacher onclick="/teacher/home?index=education" />
       <div className={styles.leaveList}>
-        <Tabs
-          activeKey={activeKey}
-          centered={true}
-          onChange={(key) => {
-            setActiveKey(key);
+        <LeaveHistory leaveInfo={leaveInfo} getData={getData} />
+        <div
+          className={styles.apply}
+          onClick={() => {
+            history.push('/teacher/education/askForLeave/newLeave');
           }}
         >
-          <TabPane tab="我要请假" key="apply">
-            {activeKey === 'apply' ? (
-              <LeaveForm setActiveKey={setActiveKey} setReload={setReload} />
-            ) : (
-              ''
-            )}
-          </TabPane>
-          <TabPane tab="请假记录" key="history">
-            <LeaveHistory leaveInfo={leaveInfo} getData={getData} />
-          </TabPane>
-        </Tabs>
+          <div>
+            <img src={icon_leave} />
+          </div>
+          我要请假
+        </div>
       </div>
     </>
   );

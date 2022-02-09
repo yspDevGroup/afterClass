@@ -85,14 +85,14 @@ const CoursePatrol = () => {
       render: (text) => (text ? '是' : '否'),
       width: 120,
     },
-    {
-      title: '实到人数是否准确',
-      dataIndex: 'RSSFZQ',
-      key: ' RSSFZQ',
-      align: 'center',
-      render: (text) => (text ? '是' : '否'),
-      width: 150,
-    },
+    // {
+    //   title: '实到人数是否准确',
+    //   dataIndex: 'RSSFZQ',
+    //   key: ' RSSFZQ',
+    //   align: 'center',
+    //   render: (text) => (text ? '是' : '否'),
+    //   width: 150,
+    // },
     {
       title: '应到人数',
       dataIndex: 'YDRS',

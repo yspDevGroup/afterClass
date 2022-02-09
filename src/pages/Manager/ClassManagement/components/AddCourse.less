@@ -58,7 +58,7 @@
     }
     .noJF {
       margin-top: 40px;
-      color: #999999;
+      color: #999;
       text-align: center;
     }
   }
@@ -96,10 +96,10 @@
         padding-left: 5px;
         font-weight: bold;
         font-size: 14px;
-        border-left: 3pxsolid #4884ff;
+        border-left: 3px solid #4884ff;
       }
     }
-    P {
+    p {
       width: 300px;
     }
     .box {
@@ -137,13 +137,8 @@
     min-height: 480px;
     padding: 24px 60px;
     :global {
-      .ant-col-12 {
-        padding: 0 10px !important;
-      }
-    }
-    form {
-      > div:nth-of-type(4) {
-        margin-left: 30px;
+      .ant-col-12:nth-of-type(3) {
+        background-color: red;
       }
     }
   }
@@ -156,15 +151,25 @@
         padding-left: 5px;
         font-weight: bold;
         font-size: 14px;
-        border-left: 3pxsolid #4884ff;
+        border-left: 3px solid #4884ff;
       }
     }
-    P {
-      width: 300px;
+    > p {
+      margin-left: 30px;
     }
     .box {
       display: flex;
       padding: 0 30px;
+      p {
+        width: 300px;
+      }
     }
   }
+}
+
+.tooltips1 {
+  min-width: 600px;
+}
+.tooltips2 {
+  min-width: 380px;
 }

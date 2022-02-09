@@ -12,6 +12,7 @@ import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getTeachersByBJId } from '@/services/after-class/khbjsj';
 import ShowName from '@/components/ShowName';
+import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
 
 const CourseTable: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -67,78 +68,94 @@ const CourseTable: React.FC = () => {
           xsId: StorageXSId,
         });
         if (classInfo) {
-          setKcDetail(classInfo.detail[0]);
+          setKcDetail(classInfo.detail?.[0]);
         }
         if (res.status === 'ok' && res.data) {
-          const dataTable =
-            classInfo?.days &&
-            classInfo?.days.map((ele: any) => {
-              const { day, status, ...rest } = ele;
-              let stuStatus: string = '';
-              let style: any = {};
-              if (new Date(day).getTime() > new Date(currentDate).getTime()) {
-                stuStatus = '待上';
-                style = {
-                  background: 'rgba(137, 218, 140, 0.4)',
-                  color: '#333333',
-                };
-              }
-              if (new Date(day).getTime() === new Date(currentDate).getTime()) {
-                stuStatus = '今日';
-                style = {
-                  background: '#2196F3',
-                  color: '#FFFFFF',
-                };
-              }
-              if (new Date(day).getTime() < new Date(currentDate).getTime()) {
-                stuStatus = '出勤';
-                style = {
-                  background: '#FFFFFF',
-                  color: '#999999',
-                  border: '1px solid #dddddd',
-                };
-              }
-              if (res.data?.length) {
-                const curCQ = res.data.find((item) => item.CQRQ === day);
-                if (curCQ) {
-                  switch (curCQ?.CQZT) {
-                    case '请假':
-                      style = {
-                        background: 'rgba(242, 200, 98, 0.4)',
-                        color: '#666666',
-                      };
-                      break;
-                    case '缺席':
-                      style = {
-                        background: 'rgba(244, 138, 130, 0.4)',
-                        color: '#666666',
-                      };
-                      break;
-                    default:
-                      break;
-                  }
-                  stuStatus = curCQ?.CQZT || '出勤';
-                }
-              }
-              if (status === '已请假') {
-                style = {
-                  background: 'rgba(122, 137, 144, 0.2)',
-                  color: '#666',
-                };
-              }
-              if (status === '调课') {
-                style = {
-                  background: 'rgba(172, 144, 251, 0.2)',
-                  color: '#666',
-                };
-              }
-              return {
-                day: moment(day).format('MM/DD'),
-                status: status || stuStatus,
-                style,
-                ...rest,
-              };
+          let totalDays = classInfo?.days || [];
+          if (classInfo?.days?.length === 0 && classInfo.detail?.[0]?.KSS === 0) {
+            const result1 = await getKCBSKSJ({
+              KHBJSJId: [classid],
             });
+            if (result1.status === 'ok' && result1.data) {
+              const { rows } = result1.data;
+              if (rows?.length) {
+                totalDays = [].map.call(rows, (v: { XXSJPZId: string; SKRQ: string }, index) => {
+                  return {
+                    index: index + 1,
+                    jcId: v.XXSJPZId,
+                    day: v.SKRQ,
+                  };
+                });
+              }
+            }
+          }
+          const dataTable = totalDays?.map((ele: any) => {
+            const { day, status, ...rest } = ele;
+            let stuStatus: string = '';
+            let style: any = {};
+            if (new Date(day).getTime() > new Date(currentDate).getTime()) {
+              stuStatus = '待上';
+              style = {
+                background: 'rgba(137, 218, 140, 0.4)',
+                color: '#333',
+              };
+            }
+            if (new Date(day).getTime() === new Date(currentDate).getTime()) {
+              stuStatus = '今日';
+              style = {
+                background: '#2196F3',
+                color: '#FFF',
+              };
+            }
+            if (new Date(day).getTime() < new Date(currentDate).getTime()) {
+              stuStatus = '出勤';
+              style = {
+                background: '#FFF',
+                color: '#999',
+                border: '1px solid #DDD',
+              };
+            }
+            if (res.data?.length) {
+              const curCQ = res.data.find((item) => item.CQRQ === day);
+              if (curCQ) {
+                switch (curCQ?.CQZT) {
+                  case '请假':
+                    style = {
+                      background: 'rgba(242, 200, 98, 0.4)',
+                      color: '#666',
+                    };
+                    break;
+                  case '缺席':
+                    style = {
+                      background: 'rgba(244, 138, 130, 0.4)',
+                      color: '#666',
+                    };
+                    break;
+                  default:
+                    break;
+                }
+                stuStatus = curCQ?.CQZT || '出勤';
+              }
+            }
+            if (status === '已请假') {
+              style = {
+                background: 'rgba(122, 137, 144, 0.2)',
+                color: '#666',
+              };
+            }
+            if (status === '调课' || status === '已调课') {
+              style = {
+                background: 'rgba(172, 144, 251, 0.2)',
+                color: '#666',
+              };
+            }
+            return {
+              day: moment(day).format('MM/DD'),
+              status: status || stuStatus,
+              style,
+              ...rest,
+            };
+          });
           setTimetableList(dataTable);
         }
       }
@@ -170,7 +187,11 @@ const CourseTable: React.FC = () => {
 
   return (
     <div className={styles.CourseDetails2}>
-      <GoBack title={'课程详情'} onclick={`/parent/home?index=${path || 'index'}`} />
+      {path ? (
+        <GoBack title={'课程详情'} onclick={`/parent/home?index=${path}`} />
+      ) : (
+        <GoBack title={'课程详情'} />
+      )}
       <div className={styles.KCXX}>
         {/* 上课时段 */}
         <p className={styles.title}>{KcDetail?.title}</p>
@@ -185,10 +206,14 @@ const CourseTable: React.FC = () => {
               <span>上课地点：</span>
               {KcDetail?.xq} | {KcDetail?.address}
             </li>
-            <li>
-              <span>总课时：</span>
-              {KcDetail?.KSS}课时
-            </li>
+            {KcDetail?.KSS === 0 || KcDetail?.KSS === null ? (
+              ''
+            ) : (
+              <li>
+                <span>总课时：</span>
+                {KcDetail?.KSS}课时
+              </li>
+            )}
             <li>
               <span>授课班级：</span>
               {KcDetail?.BJMC}

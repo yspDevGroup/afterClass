@@ -304,3 +304,59 @@ export async function getPortrait(
     ...(options || {}),
   });
 }
+
+/** 获取学生待办事项 POST /xsjbsj/studentTodo */
+export async function studentTodo(
+  body: {
+    XSJBSJId?: string;
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/xsjbsj/studentTodo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 学生报名缤纷课堂 POST /xsjbsj/signClass */
+export async function signClass(
+  body: {
+    XSJBSJId?: string;
+    KHBJSJId?: string;
+    ZT?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/xsjbsj/signClass', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 学生报名增值服务 POST /xsjbsj/signService */
+export async function signService(
+  body: {
+    XSJBSJId?: string;
+    KHXXZZFWId?: string;
+    ZT?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/xsjbsj/signService', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

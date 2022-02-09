@@ -26,14 +26,14 @@ export async function getFJSJ(
       BZXX?: string;
       XQ?: string;
       XQName?: string;
-      XXJBSJ?: {
+      XQSJ?: {
         id?: string;
-        XXDM?: string;
-        XXMC?: string;
-        XXYWMC?: string;
-        XXDZ?: string;
-        XXYZBM?: string;
-        XZQHM?: string;
+        XQH?: string;
+        XQMC?: string;
+        XQDZ?: string;
+        XQYZBM?: string;
+        XQLXDH?: string;
+        XQCZDH?: string;
       };
       FJLX?: { id?: string; FJLX?: string };
     };
@@ -110,14 +110,14 @@ export async function createFJSJ(body: API.CreateFJSJ, options?: { [key: string]
       BZXX?: string;
       XQ?: string;
       XQName?: string;
-      XXJBSJ?: {
+      XQSJ?: {
         id?: string;
-        XXDM?: string;
-        XXMC?: string;
-        XXYWMC?: string;
-        XXDZ?: string;
-        XXYZBM?: string;
-        XZQHM?: string;
+        XQH?: string;
+        XQMC?: string;
+        XQDZ?: string;
+        XQYZBM?: string;
+        XQLXDH?: string;
+        XQCZDH?: string;
       };
       FJLX?: { id?: string; FJLX?: string };
     };
@@ -163,12 +163,22 @@ export async function getFJPlan(
     lxId?: string;
     /** 场地ID */
     fjId?: string;
+    /** 行政班ID */
+    xzbjId?: string;
+    /** 行政年级ID */
+    xznjId?: string;
     /** 班级ID */
     bjId?: string;
     /** 课程ID */
     kcId?: string;
     /** 校区ID */
     xqId?: string;
+    /** 是否被课后服务使用:0:没有,1:有 */
+    ISFW?: number;
+    /** 是否走班 */
+    ISZB?: number;
+    /** 课程类型 */
+    KCTAG?: string;
     /** 教师姓名 */
     JSXM?: string;
     /** 是否有排课 */

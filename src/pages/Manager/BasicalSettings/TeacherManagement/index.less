@@ -1,41 +1,41 @@
 .uploadBtn {
-    display: flex;
-    align-items: center;
-    position: relative;
-    .uploadText {
-      margin-left: 130px;
-      position: absolute;
-      top: 5px;
-    }
-    .uploadDescription {
-        margin-left: 15px;
-        font-size: @font-size-sm;
-    }
+  position: relative;
+  display: flex;
+  align-items: center;
+  .uploadText {
+    position: absolute;
+    top: 5px;
+    margin-left: 130px;
+  }
+  .uploadDescription {
+    margin-left: 15px;
+    font-size: @font-size-sm;
+  }
 }
 .btnWrapper {
   width: 100%;
   text-align: center;
 
-  button+button {
+  button + button {
     margin-left: @padding-lg*2;
   }
 }
 
 .contentWrapper {
-  background-color: #fff;
   padding-bottom: @padding-lg;
+  background-color: #fff;
 }
-.pageContain{
-  :global{
-    .ant-pro-field-index-column{
-      width:100% !important;
+.pageContain {
+  :global {
+    .ant-pro-field-index-column {
+      width: 100% !important;
     }
-    .ant-space{
-      gap: 0px !important;
+    .ant-space {
+      gap: 0 !important;
     }
     .ant-pro-table-list-toolbar-right {
       > .ant-space-item {
-        padding: 0 0 0px !important;
+        padding: 0 0 0 !important;
       }
     }
   }

@@ -12,7 +12,7 @@
   }
 
   .apply {
-    color: #333333;
+    color: #333;
     font-size: 16px;
     text-align: center;
   }
@@ -34,8 +34,8 @@
 .pageWrapper {
   .topHeader {
     .headerItem {
-      text-align: center;
       padding: @padding-lg;
+      text-align: center;
 
       h3,
       p {
@@ -50,52 +50,52 @@
       }
 
       p {
-        font-size: 14px;
-        line-height: 18px;
         display: block;
         width: 100%;
         overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 14px;
+        line-height: 18px;
         white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
-    .centerItem{
+    .centerItem {
       height: 82px;
-      background: #FFFFFF;
-      box-shadow: 0px 0px 6px rgba(37, 54, 80, 0.2);
-      border-radius: 10px;
       padding-top: 15px;
-      .lb{
-        left: 0;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(37, 54, 80, 0.2);
+      .lb {
         position: absolute;
+        left: 0;
         width: 4px;
         height: 100%;
-        border-radius: 0px 4px 4px 0px;
+        border-radius: 0 4px 4px 0;
       }
-      .borderWrap{
+      .borderWrap {
         position: relative;
         height: 50px;
         padding-left: 15px;
-        p{
-          margin: 0;
-          font-size: 14px;
-          color: #999999;
+        p {
           position: relative;
           top: -2px;
-          span{
+          margin: 0;
+          color: #999;
+          font-size: 14px;
+          span {
             float: right;
+            margin-right: 5px;
             font-size: 14px;
             line-height: 22px;
-            margin-right: 5px;
-            svg{
+            svg {
               height: 22px;
             }
           }
         }
-        h3{
+        h3 {
           margin: 0;
+          color: #333;
           font-size: 23px;
-          color: #333333;
         }
       }
     }
@@ -167,57 +167,57 @@
     .dobuleList {
       height: 144px;
 
-      div[class*="ant-col"] {
+      div[class*='ant-col'] {
         line-height: 48px;
 
         &::before {
           display: inline-block;
-          content: '';
           width: 3px;
           height: 3px;
-          border-radius: 3px;
-          background: @primary-color;
-          vertical-align: middle;
           margin-right: @padding-sm;
+          vertical-align: middle;
+          background: @primary-color;
+          border-radius: 3px;
+          content: '';
         }
       }
     }
   }
   .rowWrapper {
-    div[class*='ant-col']:nth-child(1){
+    div[class*='ant-col']:nth-child(1) {
       padding-right: 12px;
     }
-    div[class*='ant-col']+div[class*='ant-col']{
-      padding-left:12px;
+    div[class*='ant-col'] + div[class*='ant-col'] {
+      padding-left: 12px;
     }
   }
   .chartWrapper {
     margin-top: @padding-lg;
 
     .chartWrapper {
-      >div {
+      > div {
         height: 270px !important;
       }
     }
 
     .viewWrapper {
-      div[class*="ant-col"] {
+      div[class*='ant-col'] {
         text-align: center;
 
         p {
+          margin: 0;
+          padding: 0 20px;
           color: @primary-color;
           font-size: 16px;
-          margin: 0;
           text-align: left;
-          padding: 0 20px;
 
-          >span {
+          > span {
             display: inline-block;
-            color: @primary-color;
-            padding-right: @padding-md;
-            font-size: 36px;
-            font-weight: bold;
             margin: 0;
+            padding-right: @padding-md;
+            color: @primary-color;
+            font-weight: bold;
+            font-size: 36px;
           }
         }
 
@@ -226,28 +226,28 @@
         }
 
         ul {
-          padding: 0 10px;
           margin: 0;
+          padding: 0 10px;
           text-align: left;
 
           li {
             display: inline-block;
             width: 50%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: @primary-color;
             padding-right: @padding-md;
+            overflow: hidden;
+            color: @primary-color;
+            white-space: nowrap;
+            text-overflow: ellipsis;
 
             &::before {
               display: inline-block;
-              content: '';
               width: 3px;
               height: 3px;
-              border-radius: 3px;
-              background: @primary-color;
-              vertical-align: middle;
               margin-right: @padding-sm;
+              vertical-align: middle;
+              background: @primary-color;
+              border-radius: 3px;
+              content: '';
             }
           }
         }
@@ -259,7 +259,7 @@
     .ant-card-head-title {
       font-weight: bold;
     }
-    .ant-empty-description{
+    .ant-empty-description {
       color: @normal-color;
     }
   }

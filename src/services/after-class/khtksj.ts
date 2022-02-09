@@ -17,11 +17,42 @@ export async function createKHTKSJ(body: API.CreateKHTKSJ[], options?: { [key: s
   );
 }
 
+/** 批量创建课后服务退课记录 PUT /khtksj/bulkCreateKHFWTK */
+export async function bulkCreateKHFWTK(
+  body: {
+    XSJBSJIds?: string[];
+    /** 退课状态,0:申请中;1:已退课;2:不同意退课 */
+    ZT?: number;
+    /** 课后服务班级id */
+    KHFWBJId?: string;
+    KHFWSJPZIds?: string[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status?: 'ok' | 'error'; data?: API.KHTKSJ[]; message?: string }>(
+    '/khtksj/bulkCreateKHFWTK',
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
+    },
+  );
+}
+
 /** 获取课后服务退课记录 POST /khtksj/getAll */
 export async function getKHTKSJ(
   body: {
     /** 退课状态 */
     ZT?: number[];
+    /** 班级ID */
+    BJSJId?: string;
+    /** 年级ID */
+    NJSJId?: string;
+    /** 校区ID */
+    XQSJId?: string;
     /** 学生ID */
     XSJBSJId?: string;
     /** 学生姓名 */
@@ -36,7 +67,9 @@ export async function getKHTKSJ(
     KHBJSJId?: string;
     /** 课后课程ID */
     KHKCSJId?: string;
-    /** 退课类型，0:退课;1:停餐 */
+    /** 学生报名服务班ID */
+    XSFWBJId?: string;
+    /** 退课类型，0:退课;1:停餐;2:服务班 */
     LX?: number;
     /** 学校ID */
     XXJBSJId?: string;
@@ -206,6 +239,8 @@ export async function getAllRefunds(
     XNXQId?: string;
     /** 课后服务班级ID */
     KHBJSJId?: string;
+    /** 学生报名服务班ID */
+    XSFWBJId?: string;
     /** 课后增值服务ID */
     KHXXZZFWId?: string;
     /** 退课类型，0:退课;1:停餐 */
@@ -217,11 +252,7 @@ export async function getAllRefunds(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status?: 'ok' | 'error';
-    data?: { count?: number; rows?: API.KHTKSJ[] };
-    message?: string;
-  }>('/khtksj/getAllRefunds', {
+  return request<any>('/khtksj/getAllRefunds', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

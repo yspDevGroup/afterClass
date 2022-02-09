@@ -31,11 +31,12 @@ const OrderDetails: React.FC = (props: any) => {
     const res = await payKHXSDD({
       ddIds: [orderInfo.id],
       bjId: detail.id,
-      xsId: localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
+      xsId:
+        localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
       kcmc: title,
       amount: orderInfo.DDFY,
       XXJBSJId: currentUser?.xxId,
-      returnUrl:`${window.location.origin}/parent/home?index=index`
+      returnUrl: `${window.location.origin}/parent/home?index=index`,
     });
     if (res.status === 'ok') {
       setUrlPath(res.data);
@@ -45,10 +46,11 @@ const OrderDetails: React.FC = (props: any) => {
   };
   const handleFWPay = async () => {
     const result = await payKHXSDD({
-      returnUrl:`${window.location.origin}/parent/home?index=index`,
-      kcmc: fwdetail?.FWMC,
+      returnUrl: `${window.location.origin}/parent/home?index=index`,
+      kcmc: fwdetail?.FWMC || fwdetail?.KHFWBJ.FWMC,
       ddIds: [orderInfo.id],
-      xsId: localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
+      xsId:
+        localStorage.getItem('studentId') || currentUser?.student?.[0]?.XSJBSJId || testStudentId,
       amount: orderInfo?.DDFY,
       XXJBSJId: currentUser?.xxId,
     });
@@ -134,20 +136,27 @@ const OrderDetails: React.FC = (props: any) => {
                   <li>班级：{detail.BJMC}</li>
 
                   <li>
-                    学生：<span className={styles.xx}>{ localStorage.getItem('studentName') || currentUser?.student?.[0].name}</span>
+                    学生：
+                    <span className={styles.xx}>
+                      {localStorage.getItem('studentName') || currentUser?.student?.[0].name}
+                    </span>
                   </li>
                 </ul>
               </div>
             ) : (
               <div className={styles.FWXX}>
                 <ul>
-                  <p className={styles.title}>{fwdetail?.FWMC}</p>
+                  <p className={styles.title}>{fwdetail?.FWMC || fwdetail?.KHFWBJ?.FWMC}</p>
                   <li>
-                    服务时段：{moment(fwdetail?.KSRQ).format('YYYY.MM.DD')}~
-                    {moment(fwdetail?.JSRQ).format('YYYY.MM.DD')}
+                    服务时段：
+                    {moment(fwdetail?.KSRQ || fwdetail?.KHFWSJPZ?.KSRQ).format('YYYY.MM.DD')}~
+                    {moment(fwdetail?.JSRQ || fwdetail?.KHFWSJPZ?.JSRQ).format('YYYY.MM.DD')}
                   </li>
                   <li>
-                    学生：<span className={styles.xx}>{ localStorage.getItem('studentName') || currentUser?.student?.[0].name}</span>
+                    学生：
+                    <span className={styles.xx}>
+                      {localStorage.getItem('studentName') || currentUser?.student?.[0].name}
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -173,7 +182,10 @@ const OrderDetails: React.FC = (props: any) => {
             ) : (
               <div className={styles.KCZE}>
                 <p>
-                  <span>服务总额</span> <span>￥{Number(fwdetail?.FY).toFixed(2)}</span>
+                  <span>服务总额</span>{' '}
+                  <span>
+                    ￥{Number(fwdetail?.FY || fwdetail?.FWFY || fwdetail?.KHFWBJ?.FWFY).toFixed(2)}
+                  </span>
                 </p>
                 <p>
                   实付<span>￥{Number(orderInfo.DDFY).toFixed(2)}</span>

@@ -12,6 +12,7 @@ import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import CourseSelect from '@/components/Search/CourseSelect';
 import ClassSelect from '@/components/Search/ClassSelect';
+import { getAllKHXSDD } from '@/services/after-class/khxsdd';
 
 const { TextArea, Search } = Input;
 const CourseUnsubscribe = () => {
@@ -163,7 +164,7 @@ const CourseUnsubscribe = () => {
       width: 180,
     },
     {
-      title: '状态',
+      title: '退订状态',
       dataIndex: 'ZT',
       key: 'ZT',
       align: 'center',
@@ -184,7 +185,37 @@ const CourseUnsubscribe = () => {
           status: 'Error',
         },
       },
-      width: 90,
+      width: 120,
+    },
+    {
+      title: '退款状态',
+      dataIndex: 'TKZT',
+      key: 'TKZT',
+      align: 'center',
+      ellipsis: true,
+      width: 120,
+      render: (_, record) => {
+        let TKZT: any = '';
+        switch (record?.KHXSTKs?.[0]?.TKZT) {
+          case '0':
+            TKZT = '申请中';
+            break;
+          case '1':
+            TKZT = '已通过';
+            break;
+          case '2':
+            TKZT = '已驳回';
+            break;
+          case '3':
+            TKZT = '退款成功';
+            break;
+
+          default:
+            TKZT = '-';
+            break;
+        }
+        return TKZT;
+      },
     },
     {
       title: '操作',
@@ -289,23 +320,41 @@ const CourseUnsubscribe = () => {
               ((current?.KHBJSJ?.FY / current?.KHBJSJ?.KSS) * current?.KSS).toFixed(2),
             );
             if (money !== 0.0) {
-              const result = await createKHXSTK({
-                KHTKSJId: current?.id,
-                /** 退款金额 */
-                TKJE: money,
-                /** 退款状态 */
-                TKZT: 0,
+              const response = await getAllKHXSDD({
                 /** 学生ID */
                 XSJBSJId: current?.XSJBSJId,
                 /** 班级ID */
                 KHBJSJId: current?.KHBJSJId,
                 /** 学校ID */
                 XXJBSJId: currentUser?.xxId,
-                JZGJBSJId: currentUser.JSId,
+                DDZT: ['已付款'],
+                DDLX: 0,
               });
-              if (result.status === 'ok') {
-                message.success('退课成功,已自动申请退款流程');
-              } else if (result.message === '未找到该学生在当前班级的订单记录') {
+              if (response.status === 'ok' && response.data) {
+                if (response.data?.length) {
+                  const result = await createKHXSTK({
+                    KHTKSJId: current?.id,
+                    /** 退款金额 */
+                    TKJE: money,
+                    /** 退款状态 */
+                    TKZT: 0,
+                    /** 学生ID */
+                    XSJBSJId: current?.XSJBSJId,
+                    /** 班级ID */
+                    KHBJSJId: current?.KHBJSJId,
+                    /** 学校ID */
+                    XXJBSJId: currentUser?.xxId,
+                    JZGJBSJId: currentUser.JSId,
+                  });
+                  if (result.status === 'ok') {
+                    message.success('退课成功,已自动申请退款流程');
+                  } else if (result.message === '未找到该学生在当前班级的订单记录') {
+                    message.success('退课成功');
+                  }
+                } else {
+                  message.success('退课成功');
+                }
+              } else {
                 message.success('退课成功');
               }
             } else {
@@ -314,6 +363,7 @@ const CourseUnsubscribe = () => {
           }
           setVisible(false);
           setCurrent(undefined);
+          form.resetFields();
           actionRef?.current?.clearSelected?.();
           getData();
         } else {
@@ -349,30 +399,30 @@ const CourseUnsubscribe = () => {
               </span>
             </Space>
           )}
-          tableAlertOptionRender={({ selectedRowKeys, selectedRows }) => {
-            setExamine(selectedRows);
-            const newArr = selectedRows.filter((value: { ZT: number }) => {
-              return value.ZT !== 0;
-            });
-            return (
-              <Space size={16}>
-                {newArr.length === 0 ? (
-                  <a
-                    onClick={() => {
-                      setExamine(selectedRows);
-                      setVisible(true);
-                    }}
-                  >
-                    批量审批
-                  </a>
-                ) : (
-                  <Tooltip title="所选数据中包含已审批数据，不可再次审批">
-                    <span style={{ color: '#666' }}>批量审批</span>
-                  </Tooltip>
-                )}
-              </Space>
-            );
-          }}
+          // tableAlertOptionRender={({ selectedRowKeys, selectedRows }) => {
+          //   setExamine(selectedRows);
+          //   const newArr = selectedRows.filter((value: { ZT: number }) => {
+          //     return value.ZT !== 0;
+          //   });
+          //   return (
+          //     <Space size={16}>
+          //       {newArr.length === 0 ? (
+          //         <a
+          //           onClick={() => {
+          //             setExamine(selectedRows);
+          //             setVisible(true);
+          //           }}
+          //         >
+          //           批量审批
+          //         </a>
+          //       ) : (
+          //         <Tooltip title="所选数据中包含已审批数据，不可再次审批">
+          //           <span style={{ color: '#666' }}>批量审批</span>
+          //         </Tooltip>
+          //       )}
+          //     </Space>
+          //   );
+          // }}
           scroll={{ x: getTableWidth(columns) }}
           dataSource={dataSource}
           headerTitle={
@@ -414,6 +464,7 @@ const CourseUnsubscribe = () => {
           onCancel={() => {
             setVisible(false);
             setCurrent(undefined);
+            form.resetFields();
           }}
           okText="确认"
           cancelText="取消"

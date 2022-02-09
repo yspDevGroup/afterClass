@@ -1,6 +1,6 @@
 .teacherWrapper {
   padding: @padding-lg;
-  background: #ffffff;
+  background: #fff;
 
   :global {
     .ant-tabs-nav-list {
@@ -27,18 +27,19 @@
       border: none;
       cursor: default;
       resize: none;
-      text-overflow: ellipsis;
 
       .ant-picker-suffix {
         display: none;
       }
     }
-    .ant-picker-input,.ant-input-number-input-wrap {
+    .ant-picker-input,
+    .ant-input-number-input-wrap {
       input[disabled] {
         color: #333 !important;
       }
     }
-    input[disabled]::-webkit-input-placeholder,textarea[disabled]::-webkit-input-placeholder {
+    input[disabled]::-webkit-input-placeholder,
+    textarea[disabled]::-webkit-input-placeholder {
       color: #333;
     }
 
@@ -49,12 +50,12 @@
 
   .teacherInfoBody {
     width: 85%;
-    margin: 0 auto;
     min-width: 850px;
+    margin: 0 auto;
 
     :global {
-      .ant-form{
-        .ant-row:nth-of-type(3){
+      .ant-form {
+        .ant-row:nth-of-type(3) {
           height: 124px;
         }
       }

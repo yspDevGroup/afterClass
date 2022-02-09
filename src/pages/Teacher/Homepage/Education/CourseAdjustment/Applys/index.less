@@ -24,12 +24,12 @@
           }
 
           .ant-tabs-tab:hover {
-            color: #333333;
+            color: #333;
           }
 
           .ant-tabs-tab-active {
             .ant-tabs-tab-btn {
-              color: #333333;
+              color: #333;
               font-weight: bold;
             }
           }
@@ -41,7 +41,7 @@
 
 .leaveForm {
   .title {
-    color: #999999;
+    color: #999;
     font-size: 12px;
   }
 
@@ -67,66 +67,78 @@
 
     .YxCourse {
       margin: 0;
-      color: #999999;
+      color: #999;
     }
 
     .arrangeTab {
       width: 100vw;
-      margin-left: -10px;
       margin-top: 10px;
-      :global{
-        .ant-tabs-nav{
-          background: linear-gradient(180deg, #FFFFFF 65%, rgba(255, 255, 255, 0) 100%);
+      margin-left: -10px;
+
+      :global {
+        .ant-tabs-nav {
           padding: 0 10px 24px;
-          &::before{
+          background: linear-gradient(180deg, #fff 65%, rgba(255, 255, 255, 0) 100%);
+
+          &::before {
             border-bottom: none;
           }
-          .ant-tabs-nav-wrap{
+
+          .ant-tabs-nav-wrap {
             display: inline-block !important;
             flex: none;
             width: 100%;
-            .ant-tabs-tab{
-              background: inherit;
+
+            .ant-tabs-tab {
               width: auto;
-              padding: 10px 0;
               margin-right: 24px;
+              padding: 10px 0;
+              background: inherit;
+
               &.ant-tabs-tab-active {
                 position: relative;
-                &::after{
+
+                &::after {
+                  position: absolute;
+                  bottom: 5px;
+                  left: calc(~'50% - 10px');
                   display: block;
-                  content: '';
                   width: 20px;
                   height: 2px;
                   background: #4884ff;
-                  position: absolute;
-                  bottom: 5px;
-                  left: calc(~'50% - 10px')
+                  content: '';
                 }
-                .ant-tabs-tab-btn{
+
+                .ant-tabs-tab-btn {
                   color: #4884ff;
                   font-size: 14px;
                 }
               }
-              &.ant-tabs-tab-disabled{
-                .ant-tabs-tab-btn{
+
+              &.ant-tabs-tab-disabled {
+                .ant-tabs-tab-btn {
                   color: #bbb;
                 }
               }
-              .ant-tabs-tab-btn{
+
+              .ant-tabs-tab-btn {
                 font-size: 14px;
               }
             }
           }
-          .ant-tabs-ink-bar{
+
+          .ant-tabs-ink-bar {
             display: none;
           }
         }
-        .ant-tabs-content-holder{
-          padding: 0 10px;
-          margin-top: -24px;
+
+        .ant-tabs-content-holder {
           z-index: 1;
-          div[role="tabpanel"] > p{
-            color: #999999;
+          margin-top: -24px;
+          padding: 0 10px;
+
+          div[role='tabpanel'] > p {
+            color: #999;
             font-size: 12px;
           }
         }
@@ -168,8 +180,8 @@
             padding: 6px 10px;
 
             .ant-form-item-label {
-              max-width: 80px !important;
               width: 80px;
+              max-width: 80px !important;
 
               label {
                 color: #333;
@@ -190,21 +202,20 @@
               }
 
               .ant-select {
-
                 .ant-select-selector {
                   height: 32px;
-                  border: none;
                   text-align: right;
+                  border: none;
 
-                  >span {
+                  > span {
                     line-height: 32px;
                   }
                 }
               }
 
               div[id*='basic_KSSJ'] {
-                text-align: right;
                 color: #888;
+                text-align: right;
               }
             }
           }
@@ -219,12 +230,12 @@
 
         :global(.ant-select-selector) {
           height: 44px;
-          border: none;
-          border-radius: 8px;
           padding: 0 10px;
           background-color: #fff;
+          border: none;
+          border-radius: 8px;
 
-          >span {
+          > span {
             line-height: 44px;
           }
         }
@@ -243,10 +254,10 @@
 
       .kcapTk {
         padding: 6px 0;
-        border-radius: 10px;
-        background-color: #fff;
-        line-height: 26px;
         color: #666;
+        line-height: 26px;
+        background-color: #fff;
+        border-radius: 10px;
 
         :global {
           .ant-radio-wrapper {
@@ -258,7 +269,7 @@
               right: 20px;
             }
 
-            >span {
+            > span {
               p {
                 margin: 5px;
                 color: #999;
@@ -268,22 +279,39 @@
         }
       }
     }
+
+    .forbitTk {
+      height: 350px;
+
+      img {
+        display: block;
+        width: 150px;
+        margin: 0 auto;
+      }
+
+      p {
+        width: 80vw;
+        margin: 0 auto;
+        color: #888;
+        font-size: 12px;
+        line-height: 22px;
+      }
+    }
   }
 
   :global {
-
     .ant-checkbox-wrapper,
     .ant-checkbox-wrapper:hover .ant-checkbox-inner,
     .ant-checkbox:hover .ant-checkbox-inner,
-    .ant-checkbox-input:focus+.ant-checkbox-inner,
+    .ant-checkbox-input:focus + .ant-checkbox-inner,
     .ant-input:focus {
-      border-color: #0066ff !important;
+      border-color: #06f !important;
     }
 
     .ant-checkbox-checked {
       .ant-checkbox-inner {
-        background-color: #0066ff;
-        border-color: #0066ff;
+        background-color: #06f;
+        border-color: #06f;
       }
     }
   }
@@ -294,31 +322,31 @@
   right: 0;
   bottom: 0;
   left: 0;
-  display: flex;
   z-index: 2;
+  display: flex;
   justify-content: space-around;
   padding: 8px 14px;
-  background: #ffffff;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
   button {
     width: 40%;
-    color: #0066ff;
+    color: #06f;
     background: #fff;
-    border: 1px solid #0066ff;
+    border: 1px solid #06f;
     border-radius: 22px;
   }
 
   button:nth-child(2) {
     width: 40%;
     color: #fff;
-    background: #0066ff;
+    background: #06f;
     border: none;
     border-radius: 22px;
   }
 
   button[disabled] {
-    background: #eee;
     color: #999;
+    background: #eee;
   }
 }

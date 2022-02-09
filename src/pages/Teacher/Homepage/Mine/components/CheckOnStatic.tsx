@@ -17,7 +17,6 @@ import Nodata from '@/components/Nodata';
 import styles from '../index.less';
 import noChart from '@/assets/noChart1.png';
 
-
 const CheckOnStatic = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -30,7 +29,8 @@ const CheckOnStatic = () => {
     if (data && type === 'attendance') {
       const toDo = data.KSS - data.attendance - data.leave - data.substitute - data.absenteeism;
       return {
-        title: `${data.KCMC}/${data.BJMC}`,
+        title: `${data.KCMC}`,
+        subTitle: `${data.BJMC}`,
         zc: data.normal,
         yc: data.abnormal,
         ds: data.remain,
@@ -65,11 +65,11 @@ const CheckOnStatic = () => {
             value: toDo > 0 ? toDo : 0,
             color: 'l(180) 0:rgba(221, 221, 221, 0.2) 1:rgba(221, 221, 221, 1)',
           },
-        ]
-      }
+        ],
+      };
     }
     if (data && type === 'replace') {
-      const { count, cq_count,qq_count } = data;
+      const { count, cq_count, qq_count } = data;
       const num = Number(count) - Number(cq_count) - Number(qq_count);
       return [
         {
@@ -86,10 +86,10 @@ const CheckOnStatic = () => {
           label: `${data.XM}`,
           type: '待上课',
           value: num < 0 ? 0 : num,
-        }
-      ]
+        },
+      ];
     }
-    return {}
+    return {};
   };
 
   useEffect(() => {
@@ -98,17 +98,17 @@ const CheckOnStatic = () => {
       if (result.current) {
         const res = await countKHJSCQ({
           XNXQId: result.current.id,
-          JZGJBSJId: currentUser.JSId || testTeacherId
+          JZGJBSJId: currentUser.JSId || testTeacherId,
         });
         if (res.status === 'ok') {
           const arr = [].map.call(res.data, (item) => {
             return convertData(item, 'attendance');
-          })
+          });
           setStatistics(arr || []);
         }
         const response = await statisSubstitute({
           XNXQId: result.current.id,
-          JZGJBSJId: currentUser.JSId || testTeacherId
+          JZGJBSJId: currentUser.JSId || testTeacherId,
         });
         if (response.status === 'ok') {
           let newArr: any[] = [];
@@ -118,7 +118,7 @@ const CheckOnStatic = () => {
           setReplace(newArr);
         }
       }
-    })()
+    })();
   }, []);
   return (
     <>
@@ -144,7 +144,12 @@ const CheckOnStatic = () => {
             {satistics.map((item: any) => {
               return (
                 <Col span={12}>
-                  <PieChart data={item.data} title={item.title} key={item.title} />
+                  <PieChart
+                    data={item.data}
+                    title={item.title}
+                    subTitle={item.subTitle}
+                    key={item.title}
+                  />
                 </Col>
               );
             })}
@@ -154,9 +159,7 @@ const CheckOnStatic = () => {
         )}
       </div>
       <div className={styles.funWrapper}>
-        <div className={styles.titleBar}>
-          代课统计
-        </div>
+        <div className={styles.titleBar}>代课统计</div>
         {replace && replace.length ? (
           <BarChart data={replace} />
         ) : (

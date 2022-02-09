@@ -26,7 +26,8 @@ const PersonalHomepage = () => {
     localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
   const StorageNjId =
     localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
-  const StorageXQSJId = localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
+  const StorageXQSJId =
+    localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   // 未获取到孩子时跳转到403
   useEffect(() => {
     if (typeof student === 'undefined' || student?.length === 0 || !student?.[0]?.XSJBSJId) {
@@ -44,7 +45,7 @@ const PersonalHomepage = () => {
         StorageXSId,
         StorageNjId,
         bjId,
-        StorageXQSJId
+        StorageXQSJId,
       );
       const { courseStatus: newStatus } = oriData.data;
       setCourseStatus(newStatus);
@@ -86,7 +87,7 @@ const PersonalHomepage = () => {
           >
             <div
               className={styles.noScrollBar}
-              style={{ height: '100%', overflowY: 'auto' }}
+              style={{ height: '100%', overflowY: 'auto', background: '#F5F5F5' }}
               ref={homeRef}
             >
               <Home />

@@ -10,18 +10,18 @@ import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
 
 import ShowName from '@/components/ShowName';
-import IconFont from '@/components/CustomIcon';
 import TeachCourses from './components/TeachCourses';
 import EnrollClassTime from '@/components/EnrollClassTime';
 import Details from './Pages/Details';
 
 import styles from './index.less';
 import imgPop from '@/assets/teacherBg.png';
-import resourcesBg from '@/assets/resourcesBg.png';
-import resourcesRgo from '@/assets/resourcesRgo.png';
-import XunKe from '@/assets/XunKe.png';
-import DaiKe from '@/assets/DaiKe.png';
+import TeacherToDo from '@/assets/TeacherToDo.png';
+import banner from '@/assets/banner.png';
+import PatrolClass from '@/assets/PatrolClass.png';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
+import { RightOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 const Home = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -31,6 +31,7 @@ const Home = () => {
   const [notification, setNotification] = useState<any[]>();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [totalData, setTotalData] = useState<any>({});
+  const [BacklogNum, setBacklogNum] = useState<number>(2);
   // 巡课中课程安排数据
   const [dateData, setDateData] = useState<any>([]);
   const [DkData, setDkData] = useState<any>([]);
@@ -51,9 +52,11 @@ const Home = () => {
       }
     }
   };
+
+  // 调代课申请
   const getTDKData = async () => {
     const res = await getAllKHJSTDK({
-      LX: [1,2],
+      LX: [1, 2],
       ZT: [0],
       XXJBSJId: currentUser?.xxId,
       DKJSId: currentUser.JSId || testTeacherId,
@@ -112,6 +115,7 @@ const Home = () => {
     const { data } = oriData;
     setTotalData(data);
   };
+
   useEffect(() => {
     getParentHomeData();
   }, []);
@@ -148,30 +152,31 @@ const Home = () => {
           <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
         </div>
       </header>
+
       <div className={styles.pageContent}>
         {/* 学校公告 */}
         <div className={styles.noticeArea}>
-          <IconFont type="icon-gonggao" className={styles.noticeImg} />
           <div className={styles.noticeText}>
-            <span>学校公告</span>
             {notification && notification.length ? (
-              <Link
-                to={`/teacher/home/notice/announcement?listid=${notification[0].id}&index=all`}
-                style={{
-                  color: '#333',
-                  margin: '0 9px',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {notification[0].BT}
-              </Link>
+              <>
+                <Badge color="#FC7F2B" />
+                <Link
+                  to={`/teacher/home/notice/announcement?listid=${notification[0].id}&index=all`}
+                  style={{
+                    color: '#FC7F2B',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {notification[0].BT}
+                </Link>
+              </>
             ) : (
               '暂无公告'
             )}
           </div>
-          <Link
+          {/* <Link
             to={{
               pathname: '/teacher/home/notice',
               state: {
@@ -181,6 +186,95 @@ const Home = () => {
           >
             {' '}
             <IconFont type="icon-gengduo" className={styles.gengduo} />
+          </Link> */}
+        </div>
+        <div className={styles.banner} style={{ backgroundImage: `url(${banner})` }} />
+        {DkData?.length === 0 ? (
+          <></>
+        ) : (
+          <div className={styles.needToDo}>
+            <div className={styles.title}>
+              <div />
+              <span>待办提醒</span>
+            </div>
+            {DkData &&
+              DkData.map((value: any, index: number) => {
+                if (index < BacklogNum) {
+                  return (
+                    <Link
+                      to={{
+                        pathname: '/teacher/education/courseAdjustment/details',
+                        state: { id: value.id, type: 'edit' },
+                      }}
+                    >
+                      <div
+                        className={styles.wrap}
+                        style={{ backgroundImage: `url(${TeacherToDo})` }}
+                        // onClick={() => { submit(value) }}
+                      >
+                        {value?.LX === 1 ? (
+                          <i style={{ color: '#15B628' }}>代课提醒</i>
+                        ) : (
+                          <i style={{ color: '#FC7F2B' }}>换课提醒</i>
+                        )}
+                        您的同事 <span>{value?.SKJS?.XM}老师</span> 于
+                        {moment(value?.createdAt).format('YYYY年MM月DD日')}发起的{' '}
+                        <span>{value?.KHBJSJ?.KHKCSJ?.KCMC}</span> 的
+                        {value?.LX === 1 ? '代课' : '换课'}
+                        申请，请及时处理。
+                      </div>
+                    </Link>
+                  );
+                }
+                return '';
+              })}
+
+            {DkData?.length > 2 && DkData === 2 ? (
+              <p
+                onClick={() => {
+                  setBacklogNum(999);
+                }}
+              >
+                查看全部
+              </p>
+            ) : (
+              <></>
+            )}
+            {DkData?.length > 2 && DkData === 999 ? (
+              <p
+                onClick={() => {
+                  setBacklogNum(2);
+                }}
+              >
+                收起
+              </p>
+            ) : (
+              <></>
+            )}
+          </div>
+        )}
+
+        {/* 待巡课程 */}
+        <div className={styles.patrols} style={{ backgroundImage: `url(${PatrolClass})` }}>
+          {/* <div style={{ backgroundImage: `url(${DaiKe})` }}>
+           <Link to="/teacher/home/substituteList">
+          <p className={styles.titles}>
+            <span>调代课申请</span>
+            <Badge count={DkData?.length || 0} showZero={true} offset={[5, 0]} />
+          </p>
+        </Link>
+          </div>*/}
+          <Link to="/teacher/patrolArrange">
+            <p className={styles.titles}>
+              <span>今日待巡课程</span>
+              <Badge count={dateData?.length || 0} showZero={true} offset={[5, 0]} />
+            </p>
+            <div className={styles.xunke}>
+              去巡课
+              <div>
+                <RightOutlined />
+              </div>
+            </div>
           </Link>
         </div>
         {/* 今日课程 */}
@@ -191,31 +285,14 @@ const Home = () => {
             userId={currentUser.JSId || testTeacherId}
           />
         </div>
-        {/* 代课与待巡课程 */}
-        <div className={styles.patrols}>
-          <div style={{ backgroundImage: `url(${DaiKe})` }}>
-            <Link to="/teacher/home/substituteList">
-              <p className={styles.titles}>
-                <span>调代课申请</span>
-                <Badge count={DkData?.length || 0} showZero={true} offset={[5, 0]} />
-              </p>
-            </Link>
-          </div>
-          <div style={{ backgroundImage: `url(${XunKe})` }}>
-            <Link to="/teacher/patrolArrange">
-              <p className={styles.titles}>
-                <span>今日待巡课程</span>
-                <Badge count={dateData?.length || 0} showZero={true} offset={[5, 0]} />
-              </p>
-            </Link>
-          </div>
-        </div>
+
         {/* 任教课程 */}
         <div className={styles.teachCourses}>
           <TeachCourses dataResource={totalData} />
         </div>
+
         {/* 素质教育资源 */}
-        <div className={styles.resourcesBox}>
+        {/* <div className={styles.resourcesBox}>
           <a
             href="http://moodle.xianyunshipei.com/course/view.php?id=12"
             target="_blank"
@@ -226,7 +303,7 @@ const Home = () => {
             <p>素质教育资源</p>
             <img src={resourcesRgo} alt="" />
           </a>
-        </div>
+        </div> */}
         {/* 公示栏 */}
         <div className={styles.announceArea}>
           <Details data={notification} />

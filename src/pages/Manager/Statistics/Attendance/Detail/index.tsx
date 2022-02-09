@@ -350,6 +350,7 @@ const AttendanceDetail = (props: any) => {
             pagination={{
               showQuickJumper: false,
               pageSize: 5,
+              pageSizeOptions: ['5', '10', '20', '50'],
               defaultCurrent: 1,
             }}
             search={false}

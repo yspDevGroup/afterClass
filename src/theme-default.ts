@@ -38,11 +38,11 @@ export const colorDisk = [
 
 // 课程颜色
 export const courseColorType: Record<string, string> = {
-  crimson: 'rgba(240, 97, 145, 1)', // 绯红
-  orange: 'rgba(255, 137, 100, 1)', // 橙色
-  yellow: 'rgba(255, 213, 65, 1)', // 黄色
-  blue: 'rgba(62, 136, 248, 1)', // 蓝色
-  skyBlue: 'rgba(83, 193, 255, 1)', // 天空蓝
-  violet: 'rgba(149, 118, 204, 1)', // 紫色
-  purplishRed: 'rgba(255, 121, 204, 1)', // 紫红色
+  DarkBlue: 'rgba(65, 78, 182, 1)', // 深蓝
+  GrassGreen: 'rgba(38, 149, 0, 1)', // 草绿
+  BlueGreen: 'rgba(0, 140, 128, 1)', // 蓝绿
+  SkyBlue: 'rgba(64, 132, 202, 1)', // 天空蓝
+  Crimson: 'rgba(234, 64, 51, 1)', // 深红
+  DeepPurple: 'rgba(152, 0, 176, 1)', // 深紫
+  EarthyYellow: 'rgba(203, 134, 0, 1)', // 土黄
 };

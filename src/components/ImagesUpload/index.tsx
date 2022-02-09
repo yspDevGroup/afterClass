@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Upload, message, Modal } from 'antd';
+import { Upload, message } from 'antd';
 import IconFont from '@/components/CustomIcon';
 import { getAuthorization } from '@/utils/utils';
 import styles from './index.less';
@@ -9,7 +9,7 @@ const ImagesUpload = (props: {
   onValueChange: (value: string) => void;
   readonly?: boolean;
 }) => {
-  const { img, onValueChange, readonly = false } = props;
+  const { img, onValueChange } = props;
   // const [loading, setLoading] = useState<boolean>(false);
   // const [imgUrl, setImgUrl] = useState<string | undefined>(img);
   // const [previewVisible, setPreviewVisible] = useState<boolean>(false);
@@ -21,11 +21,11 @@ const ImagesUpload = (props: {
     // setImgUrl(true);
   }, [img]);
 
-  const getBase64 = (img: any, callback: any) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
+  // const getBase64 = (img: any, callback: any) => {
+  //   const reader = new FileReader();
+  //   reader.addEventListener('load', () => callback(reader.result));
+  //   reader.readAsDataURL(img);
+  // };
 
   const handleBeforeUpload = (file: any) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -60,7 +60,7 @@ const ImagesUpload = (props: {
           if (item.response?.status === 'ok') {
             urlStr = `${urlStr + item.response.data};`;
           }
-        })
+        });
         onValueChange(urlStr);
       } else {
         message.success('上传失败');
@@ -88,21 +88,25 @@ const ImagesUpload = (props: {
     <div>
       {/* {loading ? <LoadingOutlined /> : <PlusOutlined />} */}
       <div style={{ marginTop: 8 }}>
-        <IconFont className={styles.iconStyle} type={'icon-xiangji'} style={{ fontSize: 30, color: '#999999' }} />
-        < p style={{ color: '#999999', fontSize: 10 }}>添加图片</p>
+        <IconFont
+          className={styles.iconStyle}
+          type={'icon-xiangji'}
+          style={{ fontSize: 30, color: '#999' }}
+        />
+        <p style={{ color: '#999', fontSize: 10 }}>添加图片</p>
       </div>
-    </div >
+    </div>
   );
   return (
     <>
       <Upload
         name="image"
-        accept='image/*'
+        accept="image/*"
         className={styles.upload}
         listType="picture-card"
         action="/api/upload/uploadFile?type=badge&plat=school"
         headers={{
-          authorization: getAuthorization()
+          authorization: getAuthorization(),
         }}
         fileList={fileList}
         // onPreview={handlePreview}
@@ -112,7 +116,7 @@ const ImagesUpload = (props: {
         multiple
         showUploadList={{ showPreviewIcon: false }}
         isImageUrl={() => {
-          return true
+          return true;
         }}
       >
         {fileList.length >= 9 ? null : uploadButton}

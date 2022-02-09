@@ -120,24 +120,47 @@ export async function syncWechatStudents(
 }
 
 /** 导入行政班学生列表进行报名 POST /upload/importStudentSignUp */
-export async function importStudentSignUp(
-  params: {
-    // query
-    /** 课后班级id */
-    KHBJSJId: string;
-    /** 教师id */
-    JZGJBSJId: string;
-  },
-  options?: { [key: string]: any },
-) {
+export async function importStudentSignUp(options?: { [key: string]: any }) {
   return request<{ status?: 'ok' | 'error'; data?: any[]; message?: string }>(
     '/upload/importStudentSignUp',
     {
       method: 'POST',
-      params: {
-        ...params,
-      },
       ...(options || {}),
     },
   );
+}
+
+/** 导入教师巡课安排 POST /upload/importTeacherXKAP */
+export async function importTeacherXKAP(options?: { [key: string]: any }) {
+  return request<{ status?: 'ok' | 'error'; data?: any[]; message?: string }>(
+    '/upload/importTeacherXKAP',
+    {
+      method: 'POST',
+      ...(options || {}),
+    },
+  );
+}
+
+/** 课表导入 POST /upload/importSchedule */
+export async function importSchedule(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 课程班ID */
+    KHBJSJId?: string;
+    /** 场地ID */
+    FJSJId?: string;
+    /** 机构ID */
+    PKTYPE?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/upload/importSchedule', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
 }

@@ -248,7 +248,7 @@ circle ::after {
 }
 .messageDiv {
   width: calc(~'100% -50px');
-  height: 100px;
+  min-height: 100px;
   padding: 12px;
   color: #999;
   font-size: 14px;
@@ -260,4 +260,11 @@ circle ::after {
   margin-left: 12px;
   color: #999;
   font-size: 14px;
+}
+.noModalFooter {
+  :global {
+    .ant-modal-footer {
+      display: none;
+    }
+  }
 }

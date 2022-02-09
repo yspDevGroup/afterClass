@@ -15,7 +15,7 @@
       font-size: 11px;
 
       a {
-        color: #999999;
+        color: #999;
         cursor: pointer;
       }
 
@@ -26,21 +26,24 @@
   }
 
   :global {
+    .itemDisabled {
+      opacity: 0.6;
+    }
     .anticon svg {
       height: 100%;
     }
   }
 
   .noData {
+    padding-bottom: 10px;
     text-align: center;
     background-color: #fff;
     border-radius: 8px;
-    padding-bottom: 10px;
 
     h4 {
+      color: #ddd;
       font-size: 12px;
       line-height: 17px;
-      color: #DDDDDD;
     }
   }
 
@@ -49,13 +52,13 @@
     .specialPart {
       position: absolute;
       right: 0;
-      background-color: #7dce81;
-      color: #fff;
-      padding: 0 8px;
-      line-height: 20px;
-      font-size: 12px;
-      border-radius: 20px 0 0 20px;
       display: inline-block;
+      padding: 0 8px;
+      color: #fff;
+      font-size: 12px;
+      line-height: 20px;
+      background-color: #7dce81;
+      border-radius: 20px 0 0 20px;
     }
 
     .TitleRow {
@@ -70,23 +73,23 @@
         text-overflow: ellipsis;
 
         a {
-          color: #333333;
+          color: #333;
           font-weight: 600;
           font-size: 14px;
         }
-        .titles{
-          width: 100%;
+        .titles {
           display: inline-block;
+          width: 100%;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
         }
-        .types{
-          vertical-align:top;
-          background-color: red;
-          color: #fff;
+        .types {
           padding: 2px 6px 3px;
+          color: #fff;
           font-size: 12px;
+          vertical-align: top;
+          background-color: red;
           border-radius: 10px;
         }
       }
@@ -99,7 +102,7 @@
 
       .descleft {
         overflow: hidden;
-        color: #999999;
+        color: #999;
         white-space: nowrap;
         text-overflow: ellipsis;
 
@@ -142,7 +145,7 @@
         text-overflow: ellipsis;
 
         a {
-          color: #333333;
+          color: #333;
           font-weight: 600;
           font-size: 14px;
         }
@@ -156,7 +159,7 @@
 
       .descleft {
         overflow: hidden;
-        color: #999999;
+        color: #999;
         white-space: nowrap;
         text-overflow: ellipsis;
 
@@ -174,7 +177,7 @@
       .ant-list-item-meta {
         margin-bottom: 10px;
         padding: 10px;
-        background: #ffffff;
+        background: #fff;
         border-radius: 8px;
       }
     }
@@ -196,7 +199,7 @@
         text-overflow: ellipsis;
 
         a {
-          color: #333333;
+          color: #333;
           font-weight: 600;
           font-size: 14px;
         }
@@ -220,7 +223,7 @@
       .descleft {
         width: calc(~'100% - 120px');
         overflow: hidden;
-        color: #999999;
+        color: #999;
         white-space: nowrap;
         text-overflow: ellipsis;
 
@@ -228,11 +231,11 @@
           padding: 0 8px;
         }
 
-        &+div {
-          text-align: right;
+        & + div {
           width: 120px;
           overflow: hidden;
           white-space: nowrap;
+          text-align: right;
           text-overflow: ellipsis;
         }
       }
@@ -262,14 +265,14 @@
         text-overflow: ellipsis;
 
         a {
-          color: #333333;
+          color: #333;
           font-size: 14px;
         }
       }
 
       .TitleRight {
         span {
-          color: #999999;
+          color: #999;
           font-weight: 400;
           font-size: 12px;
         }
@@ -283,15 +286,15 @@
       display: flex;
       justify-content: space-between;
       height: 20px;
-      line-height: 20px;
       margin-bottom: 10px;
+      line-height: 20px;
 
       .Title {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
 
-        &:before {
+        &::before {
           display: inline-block;
           width: 4px;
           height: 4px;
@@ -303,7 +306,7 @@
         }
 
         a {
-          color: #333333;
+          color: #333;
           font-size: 14px;
         }
       }
