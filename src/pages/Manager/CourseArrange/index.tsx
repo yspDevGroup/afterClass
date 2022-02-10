@@ -31,7 +31,7 @@ const Index = () => {
             { key==='1' &&<ClassScheduling />}
           </TabPane>
           } */}
-          <TabPane tab="课程班排课" key="2">
+          <TabPane tab="课程班课表" key="2">
             {key === '2' && <CourseScheduling />}
           </TabPane>
         </Tabs>

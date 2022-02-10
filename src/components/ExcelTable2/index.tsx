@@ -212,6 +212,7 @@ type IndexPropsType = {
   basicData?: any[];
   style: any;
   bjmcValue: any;
+  xXSJPZData: any;
 };
 
 const Index: FC<IndexPropsType> = ({
@@ -226,6 +227,7 @@ const Index: FC<IndexPropsType> = ({
   style,
   TimeData,
   bjmcValue,
+  xXSJPZData
   // radioValue,
   // basicData,
   // tearchId,
@@ -412,7 +414,7 @@ const Index: FC<IndexPropsType> = ({
             <tbody>
               {datas.map((data: any, dataKey: any) => {
                 return (
-                  <tr key={Math.random()}>
+                  <tr key={Math.random()} style={{ borderBottom: Number.isInteger((dataKey + 1) / xXSJPZData?.length) ? '3px solid #e4e4e4' : '1px solid #e4e4e4' }}>
                     {columns.map((item, itemKey) => {
                       // 前两列没有事件
                       if (item.dataIndex === 'room' || item.dataIndex === 'course') {

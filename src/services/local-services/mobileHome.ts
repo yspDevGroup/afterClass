@@ -21,7 +21,7 @@ import { getKCBSKSJ } from '../after-class/kcbsksj';
 const converClassInfo = (data: any) => {
   const classData = [];
   for (let k = 0; k < data?.length; k += 1) {
-    const { id, FJSJ, KHBJSJ, WEEKDAY, XXSJPZ } = data[k];
+    const { id, FJSJ, KHBJSJ, WEEKDAY, XXSJPZ,RQ } = data[k];
     const wkd = Number(WEEKDAY);
     classData.push({
       title: KHBJSJ?.KHKCSJ?.KCMC,
@@ -41,6 +41,7 @@ const converClassInfo = (data: any) => {
       pkId: id,
       jcId: XXSJPZ?.id,
       fjId: FJSJ?.id,
+      RQ
     });
   }
   return classData;
@@ -381,7 +382,9 @@ export const CurdayCourse = async (
   totalList?.forEach((item: { detail: any[]; classType: number; days?: any[] }) => {
     const { detail, classType, days } = item;
     // 获取今日上课课程
-    const list = detail.filter((val) => val.wkd === day.getDay());
+    // const list = detail.filter((val) => val.wkd === day.getDay());
+    const list = detail.filter((val) => val.RQ === myDate);
+    console.log(list,'list-----')
     const dayList = days?.filter((v: { day: string }) => v.day === myDate);
     if (list?.length) {
       const newArr = [].map.call(list, (val: { jcId: string }) => {
@@ -469,11 +472,9 @@ export const CurdayCourse = async (
       for (let i = 0; i < (rows ? rows.length : 0); i += 1) {
         if (courseList.length > 0) {
           const same = courseList.find((v: { bjId: any; jcId: any }) => {
-            return rows?.[i]?.KHBJSJId === v.bjId;
+            return rows?.[i]?.KHBJSJId === v.bjId && rows?.[i]?.XXSJPZId === v.jcId;
           });
           if (!same) {
-            newsList.push(rows?.[i]);
-          } else if (same.jcId !== rows?.[i]?.XXSJPZId) {
             newsList.push(rows?.[i]);
           }
         } else {
@@ -795,13 +796,13 @@ export const getWeekday = (now: Date, type?: string) => {
   const nowTime = now.getTime();
   const day = now.getDay();
   const oneDayTime = 24 * 60 * 60 * 1000;
-  const SundayTime = day == 0 ? nowTime : nowTime - (day - 1) * oneDayTime - oneDayTime; //显示上周周日,如当天为周日显示当天
-  const SaturDayTime = nowTime + (7 - day) * oneDayTime - oneDayTime; //显示本周周六
+  const SundayTime = day == 0 ? nowTime : nowTime - (day - 1) * oneDayTime - oneDayTime; // 显示上周周日,如当天为周日显示当天
+  const SaturDayTime = nowTime + (7 - day) * oneDayTime - oneDayTime; // 显示本周周六
   if (type === 'Saturday') {
     return moment(SaturDayTime).format('YYYY-MM-DD');
-  } else {
-    return moment(SundayTime).format('YYYY-MM-DD');
   }
+    return moment(SundayTime).format('YYYY-MM-DD');
+
 };
 /**
  * 针对课表中中周日历的mark做部分处理

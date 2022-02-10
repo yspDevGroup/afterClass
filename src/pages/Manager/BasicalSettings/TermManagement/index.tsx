@@ -215,7 +215,7 @@ const TermManagement = () => {
         rowKey="id"
         dateFormatter="string"
         toolBarRender={() => [
-          <span style={{color:'#4884ff',marginRight:10}}>该页面所有时间维护，皆与本校课后服务密切相关，请谨慎操作</span>,
+          <span style={{color:'#4884ff',marginRight:10}}>学年学期时段与本校课后服务密切相关，且排课后不可更改，请谨慎操作</span>,
           <Button
             style={{ background: theme.btnPrimarybg, borderColor: theme.btnPrimarybg }}
             type="primary"

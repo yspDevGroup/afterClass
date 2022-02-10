@@ -923,6 +923,7 @@ const CourseScheduling = () => {
                 onExcelTableClick={onExcelTableClick}
                 radioValue={radioValue}
                 bjmcValue={bjmcValue}
+                xXSJPZData={xXSJPZData}
                 style={{
                   height: 'calc(100vh - 360px)',
                 }}

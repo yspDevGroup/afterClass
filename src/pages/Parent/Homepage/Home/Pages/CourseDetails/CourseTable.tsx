@@ -81,7 +81,7 @@ const CourseTable: React.FC = () => {
             if (rows?.length) {
               totalDays = [].map.call(rows, (v: { XXSJPZId: string, SKRQ: string }, index) => {
                 return {
-                  index: index + 1,
+                  index,
                   jcId: v.XXSJPZId,
                   day: v.SKRQ,
                 }

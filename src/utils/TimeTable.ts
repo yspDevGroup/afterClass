@@ -199,8 +199,17 @@ export const getClassDays = async (
     }
     const courseData = arrangeClass(result.data);
     if (courseData?.[classId]) {
-      const { sum, weekDay, startDate } = courseData[classId];
-      const days = classTime(sum, weekDay, startDate, leaveData, switchData);
+      // const { sum, weekDay, startDate } = courseData[classId];
+      // const days = classTime(sum, weekDay, startDate, leaveData, switchData);
+      const days: any[] = [];
+      result.data?.forEach((value: any,idx: number)=>{
+        days?.push({
+          index:idx,
+          day:value?.RQ,
+          jcId:value?.XXSJPZ?.id
+        })
+      })
+      console.log(days)
       await upsertKHBJKSSJ({ KHBJSJId: classId, DATA: JSON.stringify(days) });
     } else {
       console.log('errorId', classId);

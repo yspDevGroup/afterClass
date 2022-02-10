@@ -112,7 +112,7 @@ const ServiceConfiguration = () => {
       },
     },
     {
-      title: '所属学区',
+      title: '所属校区',
       dataIndex: 'XQSJ',
       key: 'XQSJ',
       align: 'center',
@@ -141,10 +141,13 @@ const ServiceConfiguration = () => {
     },
     {
       title: '已选课程班',
-      dataIndex: 'ZDKCS',
-      key: 'ZDKCS',
+      dataIndex: 'KHBJSJs',
+      key: 'KHBJSJs',
       align: 'center',
       width: 100,
+      render:(text: any)=>{
+        return text.length;
+      }
     },
     {
       title: '服务费用',

@@ -190,7 +190,9 @@ const Study = () => {
     })();
   }, []);
   useEffect(() => {
-    getData();
+    if(XNXQId){
+      getData();
+    }
   }, [XNXQId, NjId, LXId, day]);
   useEffect(() => {
     if (current) {
