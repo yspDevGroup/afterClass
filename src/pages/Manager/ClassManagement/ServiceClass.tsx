@@ -176,6 +176,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
   // 查看、编辑、复制课程班操作
   const handleEdit = async (data: any, type?: any) => {
     const FJS: any[] = [];
+    const BJIdsArr: any[] = [];
     const res = await getKHBJSJ({
       id: data?.id,
     });
@@ -184,6 +185,9 @@ const ServiceClass = (props: { location: { state: any } }) => {
       if (element.JSLX === '副教师') {
         FJS.push(element?.JZGJBSJId);
       }
+    });
+    currentData.BJSJs?.forEach((value: any) => {
+      BJIdsArr.push(value?.id);
     });
     const { BJMC, BJMS, KHKCSJ, KSS, XQSJId, BJSJs, FJSJ, FJSJId } = currentData;
     const BjList = {
@@ -201,7 +205,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       CDMC: FJSJ?.FJMC,
       CDMCId: FJSJId,
       KCLX: currentData.KHKCSJ.KHKCLX.KCTAG,
-      BJIds: currentData?.BJSJs?.[0]?.id,
+      BJIds: currentData?.BJSJs?.length === 0 ? currentData?.BJSJs?.[0]?.id : BJIdsArr,
       ISZB: currentData?.ISZB,
     };
     let BJRSObj: any = {};

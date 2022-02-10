@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { Button, Divider, message, Modal, Select, Input, Tooltip } from 'antd';
 import type { FC } from 'react';
 import styles from './AddCourse.less';
@@ -176,7 +177,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
       })();
     }
   }, [formValues]);
-
   // 获取课程适用年级和班级
   const getBJData = async () => {
     if (kcId && campusId) {
@@ -257,8 +257,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       if (FJSJIds) {
         newData = {
           ...info,
-          BJIds: BJIds ? [BJIds] : undefined,
-          // eslint-disable-next-line no-nested-ternary
+          BJIds: BJIds ? (Array.isArray(BJIds) ? BJIds : [BJIds]) : undefined,
           KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
           JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
@@ -272,8 +271,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       } else {
         newData = {
           ...info,
-          BJIds: BJIds ? [BJIds] : undefined,
-          // eslint-disable-next-line no-nested-ternary
+          BJIds: BJIds ? (Array.isArray(BJIds) ? BJIds : [BJIds]) : undefined,
           KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
           JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
@@ -343,6 +341,8 @@ const AddServiceClass: FC<AddCourseProps> = ({
 
     return '新增班级';
   };
+
+
 
   const formItems: any[] = [
     {
@@ -439,9 +439,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
               // setClassData([]);
               // }
               form?.setFieldsValue({
-                // KHKCSJId: undefined,
-                // ZJS: undefined,
-                // FJS: undefined,
                 BJIds: undefined,
               });
             },
@@ -513,6 +510,9 @@ const AddServiceClass: FC<AddCourseProps> = ({
               fieldProps: {
                 disabled: KCLXMC === '校内辅导',
                 onChange: (item: any) => {
+                  form?.setFieldsValue({
+                    BJIds: undefined,
+                  });
                   if (item) {
                     form?.setFieldsValue({ BJRS: undefined });
                     return setPKType(true);
@@ -526,94 +526,120 @@ const AddServiceClass: FC<AddCourseProps> = ({
         },
         PKType === false
           ? {
-              type: 'divTab',
-              text: `系统将根据您所指定的行政班创建多个相应的服务班级`,
-              style: { marginBottom: 8, marginLeft: '-185px', color: '#2E83EC' },
-            }
+            type: 'divTab',
+            text: `系统将根据您所指定的行政班创建多个相应的服务班级`,
+            style: { marginBottom: 8, marginLeft: '-185px', color: '#2E83EC' },
+          }
           : {
-              type: 'inputNumber',
-              label: '招生人数：',
-              name: 'BJRS',
-              key: 'BJRS',
-              rules: [
-                { required: true, message: '请填写课程班人数' },
-                {
-                  pattern: new RegExp('^[0-9]*[1-9][0-9]*$'),
-                  message: '请填写正确的人数',
-                },
-              ],
-            },
+            type: 'inputNumber',
+            label: '招生人数：',
+            name: 'BJRS',
+            key: 'BJRS',
+            rules: [
+              { required: true, message: '请填写课程班人数' },
+              {
+                pattern: new RegExp('^[0-9]*[1-9][0-9]*$'),
+                message: '请填写正确的人数',
+              },
+            ],
+          },
       ],
     },
     PKType === true && kcId
       ? {
-          type: 'divTab',
-          text: `(默认招生范围)：${Range}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认招生范围)：${Range}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
-    {
-      type: 'select',
-      label: '指定行政班',
-      name: 'BJIds',
-      key: 'BJIds',
-      placeholder: '请选择适用行政班',
-      rules: [{ required: !PKType, message: '请选择适用行政班' }],
-      fieldProps: {
-        options: classData?.map((item: any) => {
-          return {
-            value: item.id,
-            label: `${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`,
-          };
-        }),
+    PKType === false
+      ? {
+        type: 'select',
+        label: '指定行政班',
+        name: 'BJIds',
+        key: 'BJIds',
+        placeholder: '请选择适用行政班',
+        rules: [{ required: !PKType, message: '请选择适用行政班' }],
+        fieldProps: {
+          options: classData?.map((item: any) => {
+            return {
+              value: item.id,
+              label: `${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`,
+            };
+          }),
+        },
+      }
+      : {
+        type: 'reactnode',
+        label: '指定行政班：',
+        name: 'BJIds',
+        key: 'BJIds',
+        rules: [{ required: true, message: '请选择适用行政班' }],
+        children: (
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ width: '100%' }}
+            placeholder="请选择适用行政班"
+            defaultValue={formValues?.BJIds}
+          // onChange={handleChange}
+          >
+            {classData?.map((item: any) => {
+              return (
+                <Option
+                  value={item.id}
+                >{`${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`}</Option>
+              );
+            })}
+          </Select>
+        ),
       },
-    },
     PKType === true
       ? {
-          type: 'group',
-          key: 'group7',
-          groupItems: [
-            {
-              type: 'input',
-              label: '班级名称',
-              name: 'BJMC',
-              key: 'BJMC',
-              rules: [
-                { required: true, message: '请填写课程班名称' },
-                { max: 18, message: '最长为 18 位' },
-              ],
-              fieldProps: {
-                autocomplete: 'off',
-              },
+        type: 'group',
+        key: 'group7',
+        groupItems: [
+          {
+            type: 'input',
+            label: '班级名称',
+            name: 'BJMC',
+            key: 'BJMC',
+            rules: [
+              { required: true, message: '请填写课程班名称' },
+              { max: 18, message: '最长为 18 位' },
+            ],
+            fieldProps: {
+              autocomplete: 'off',
             },
-            {
-              type: 'reactnode',
-              label: '场地名称：',
-              name: 'CDMC',
-              key: 'CDMC',
-              // rules: [{ required: TeacherType, message: '请选择场地名称' }],
-              children: (
-                <Select
-                  showSearch
-                  allowClear
-                  placeholder="请选择"
-                  optionFilterProp="children"
-                  onChange={(value, key: any) => {
-                    setFJSJIds(key?.key);
-                  }}
-                >
-                  {FJData?.map((value: any) => {
-                    return (
-                      <Option value={value?.FJMC} key={value?.id}>
-                        {value?.FJMC}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              ),
-            },
-          ],
-        }
+          },
+          {
+            type: 'reactnode',
+            label: '场地名称：',
+            name: 'CDMC',
+            key: 'CDMC',
+            // rules: [{ required: TeacherType, message: '请选择场地名称' }],
+            children: (
+              <Select
+                showSearch
+                allowClear
+                placeholder="请选择"
+                optionFilterProp="children"
+                onChange={(value, key: any) => {
+                  setFJSJIds(key?.key);
+                }}
+              >
+                {FJData?.map((value: any) => {
+                  return (
+                    <Option value={value?.FJMC} key={value?.id}>
+                      {value?.FJMC}
+                    </Option>
+                  );
+                })}
+              </Select>
+            ),
+          },
+        ],
+      }
       : '',
     {
       type: 'div',
@@ -706,12 +732,12 @@ const AddServiceClass: FC<AddCourseProps> = ({
             return item.SSJGLX === '机构课程' && item.KHKCLX.KCTAG === KCLXMC;
           }
           return item.SSJGLX === '机构课程';
-        } else {
-          if (KCLXMC) {
-            return item.SSJGLX === '校内课程' && item.KHKCLX.KCTAG === KCLXMC;
-          }
-          return item.SSJGLX === '校内课程';
         }
+        if (KCLXMC) {
+          return item.SSJGLX === '校内课程' && item.KHKCLX.KCTAG === KCLXMC;
+        }
+        return item.SSJGLX === '校内课程';
+
       });
       setKCDate(kcDate);
     }
@@ -735,27 +761,27 @@ const AddServiceClass: FC<AddCourseProps> = ({
           formValues && names === 'chakan'
             ? null
             : [
-                <Button
-                  key="baocun"
-                  type="primary"
-                  onClick={() => {
-                    form.submit();
-                  }}
-                >
-                  保存
-                </Button>,
-                <Button
-                  key="cancel"
-                  onClick={() => {
-                    setVisible(false);
-                    setTeacherType(false);
-                    setClassData([]);
-                    setKCLXMC('');
-                  }}
-                >
-                  取消
-                </Button>,
-              ]
+              <Button
+                key="baocun"
+                type="primary"
+                onClick={() => {
+                  form.submit();
+                }}
+              >
+                保存
+              </Button>,
+              <Button
+                key="cancel"
+                onClick={() => {
+                  setVisible(false);
+                  setTeacherType(false);
+                  setClassData([]);
+                  setKCLXMC('');
+                }}
+              >
+                取消
+              </Button>,
+            ]
         }
         maskClosable={false}
       >
