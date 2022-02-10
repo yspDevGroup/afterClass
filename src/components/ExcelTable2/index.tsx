@@ -12,16 +12,16 @@ import moment from 'moment';
 type KBItemProps = {
   mode: 'see' | 'edit';
   data:
-    | {
-        cla: string;
-        teacher: string;
-        teacherWechatId?: string;
-        color: string;
-        bjzt: string;
-        jcmc: string;
-        fjmc: string;
-      }
-    | '';
+  | {
+    cla: string;
+    teacher: string;
+    teacherWechatId?: string;
+    color: string;
+    bjzt: string;
+    jcmc: string;
+    fjmc: string;
+  }
+  | '';
   disabled: boolean;
   onClick?: () => void;
   bjmcValue: any;
@@ -120,14 +120,9 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue }) =
     >
       {!data ? (
         <>&nbsp;</>
-      ) : (
-        <>
-          {data?.cla === '无法排课' ? (
-            <div className={styles.NoPk}>
-              <p>超出学年学期</p>
-              <span>无法排课</span>
-            </div>
-          ) : (
+      ) : <>
+        {
+          data?.cla === '无法排课' ? <div className={styles.NoPk}><p>超出学年学期</p><span>无法排课</span></div> :
             <div className="classCard">
               <div
                 className={`cardTop`}
@@ -144,16 +139,13 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue }) =
                 }}
               >
                 {mode === 'see' ? (
-                  <div
-                    className="teacher"
-                    style={{
-                      width: '100%',
-                      height: 22,
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      overflow: 'hidden',
-                    }}
-                  >
+                  <div className="teacher" style={{
+                    width: '100%',
+                    height: 22,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    overflow: 'hidden'
+                  }}>
                     <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
                     <ShowName
                       XM={data.teacher}
@@ -168,19 +160,9 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue }) =
                   <span />
                 )}
 
-                {mode === 'see' ? (
-                  <>
-                    {bjmcValue?.length <= 1 ? (
-                      <div className="teacher" style={{ height: 22 }}>
-                        <span>{data?.fjmc}</span>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                ) : (
-                  <span />
-                )}
+                {mode === 'see' && bjmcValue?.length <= 1 ?
+                  <EllipsisHint text={data?.fjmc} width={mode === 'see' ? '100%' : '100%'} /> : <></>
+                }
                 {mode === 'see' && data?.bjzt === '已开班' ? (
                   <div className={styles.duihao}>√</div>
                 ) : (
@@ -188,10 +170,9 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue }) =
                 )}
               </div>
             </div>
-          )}
-        </>
-      )}
-    </Button>
+        }
+      </>}
+    </Button >
   );
 };
 

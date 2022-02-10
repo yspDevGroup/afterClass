@@ -163,6 +163,7 @@ const getHomeData = async (
             page: 0,
             pageSize: 0,
           });
+          console.log(clsRes,'clsRes----------------');
           if (clsRes.status === 'ok' && clsRes.data) {
             const { rows } = clsRes.data;
             let allDates: any[] = [];
@@ -171,6 +172,7 @@ const getHomeData = async (
               for (let i = 0; i < rows?.length; i += 1) {
                 const { KHBJSJId, DATA } = rows[i];
                 let days = JSON.parse(DATA);
+                console.log(days,'days-=++++++++++++++++++++++++++++++++');
                 const clsArr = weekSchedule?.filter((value: any) => value.KHBJSJ.id === KHBJSJId);
                 const yxTar = yxkc.find((value: any) => value.id === KHBJSJId);
                 if (days?.length === 0 && clsArr?.[0]?.KHBJSJ?.ISFW === 1) {

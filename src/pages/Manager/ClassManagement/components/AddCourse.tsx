@@ -1,4 +1,4 @@
-import { Button, message, Modal, Select, Input, Tooltip } from 'antd';
+import { Button, Divider, message, Modal, Select, Input, Tooltip } from 'antd';
 import type { FC } from 'react';
 import styles from './AddCourse.less';
 import { useEffect, useState } from 'react';
@@ -68,7 +68,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
   // 默认招生范围
   const [Range, setRange] = useState<any>([]);
 
-  console.log(BjLists, '--------------');
+
   const formLayout = {
     labelCol: { flex: '7em' },
     wrapperCol: {},
@@ -190,9 +190,9 @@ const AddServiceClass: FC<AddCourseProps> = ({
         const newArr: any = [];
         res.data?.NJSJs.forEach((value: any) => {
           newArr.push(value.id);
-          newArrs.push(value?.NJMC);
+          newArrs.push(value?.NJMC)
         });
-        setRange(newArrs.toString().replaceAll(',', '、'));
+        setRange(newArrs.toString().replaceAll(',', '、'))
         const result = await getSchoolClasses({
           XXJBSJId: currentUser?.xxId,
           XNXQId: curXNXQId,
@@ -210,12 +210,12 @@ const AddServiceClass: FC<AddCourseProps> = ({
     if (kcId && campusId) {
       getBJData();
     }
+
   }, [KCLXMC, kcId, campusId]);
 
   const onFinish = async (values: any) => {
     if (Current === 0) {
       const { ZJS, FJS, BJIds, ...info } = values;
-      console.log(info);
       let ZTeacher;
       let FTeacher;
       if (formValues && CopyType === 'undefined') {
@@ -229,12 +229,12 @@ const AddServiceClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+                KHBJSJId: formValues?.id,
+              };
+            })
             : undefined;
       } else {
         ZTeacher = [
@@ -246,11 +246,11 @@ const AddServiceClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+              };
+            })
             : undefined;
       }
       let newData: any = {};
@@ -305,6 +305,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       }
     }
   };
+
 
   useEffect(() => {
     if (visible) {
@@ -417,6 +418,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
         },
       ],
     },
+
     {
       type: 'group',
       key: 'group1',
@@ -459,6 +461,30 @@ const AddServiceClass: FC<AddCourseProps> = ({
             },
           },
         },
+      ],
+    },
+    {
+      type: 'group',
+      key: 'group9',
+      groupItems: [
+        {
+          type: 'inputNumber',
+          label: '周课时数：',
+          name: 'KSS',
+          key: 'KSS',
+          rules: [
+            { required: true, message: '请填写周课时数' },
+            {
+              pattern: new RegExp('^[0-9]*[1-9][0-9]*$'),
+              message: '请填写正确的课时数',
+            },
+          ],
+          fieldProps: {
+            min: 0,
+            max: 100,
+          },
+        },
+        {}
       ],
     },
     {
@@ -691,8 +717,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
     }
   }, [KHKCAllData, isJg, KCLXMC]);
 
-  console.log(BjLists, 'BjLists');
-  console.log(formValues, 'formValues');
   return (
     <>
       <Modal

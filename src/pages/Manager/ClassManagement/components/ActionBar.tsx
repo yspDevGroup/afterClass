@@ -70,7 +70,9 @@ const ActionBar = (props: propstype) => {
         getData();
         // 开班成功后获取班级排课信息计算课时安排
         const result = await getKHPKSJByBJID({ id: records.id });
+        console.log(result, 'result');
         if (result.status === 'ok' && result.data) {
+          console.log(await getClassDays(records.id), '  await getClassDays(records.id);');
           await getClassDays(records.id);
         }
         // 开班成功后发布课程
@@ -119,7 +121,7 @@ const ActionBar = (props: propstype) => {
                 开启
               </a>
               <Popconfirm
-                title="开班后该课程班可用于课后服务配置，确定开班?"
+                title="开班后该课程班家长和教育局端可见，确定开班?"
                 onConfirm={() => release(record)}
                 okText="确定"
                 cancelText="取消"

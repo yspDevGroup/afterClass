@@ -72,23 +72,39 @@ const CourseTable: React.FC = () => {
         }
         if (res.status === 'ok' && res.data) {
           let totalDays = classInfo?.days || [];
-          if (classInfo?.days?.length === 0 && classInfo.detail?.[0]?.KSS === 0) {
-            const result1 = await getKCBSKSJ({
-              KHBJSJId: [classid],
-            });
-            if (result1.status === 'ok' && result1.data) {
-              const { rows } = result1.data;
-              if (rows?.length) {
-                totalDays = [].map.call(rows, (v: { XXSJPZId: string; SKRQ: string }, index) => {
-                  return {
-                    index: index + 1,
-                    jcId: v.XXSJPZId,
-                    day: v.SKRQ,
-                  };
-                });
-              }
+          const results = await getKCBSKSJ({
+            KHBJSJId: [classid],
+          });
+          // console.log(result,'result---');
+          if (results.status === 'ok' && results.data) {
+            const { rows } = results.data;
+            if (rows?.length) {
+              totalDays = [].map.call(rows, (v: { XXSJPZId: string, SKRQ: string }, index) => {
+                return {
+                  index: index + 1,
+                  jcId: v.XXSJPZId,
+                  day: v.SKRQ,
+                }
+              })
             }
           }
+          // if (classInfo?.days?.length === 0 && classInfo.detail?.[0]?.KSS === 0) {
+          //   const result = await getKCBSKSJ({
+          //     KHBJSJId: [classid],
+          //   });
+          //   if (result.status === 'ok' && result.data) {
+          //     const { rows } = result.data;
+          //     if (rows?.length) {
+          //       totalDays = [].map.call(rows, (v: { XXSJPZId: string, SKRQ: string }, index) => {
+          //         return {
+          //           index: index + 1,
+          //           jcId: v.XXSJPZId,
+          //           day: v.SKRQ,
+          //         }
+          //       })
+          //     }
+          //   }
+          // }
           const dataTable = totalDays?.map((ele: any) => {
             const { day, status, ...rest } = ele;
             let stuStatus: string = '';

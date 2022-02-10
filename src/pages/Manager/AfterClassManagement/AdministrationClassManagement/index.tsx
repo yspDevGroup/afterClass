@@ -211,7 +211,7 @@ const AdministrationClassManagement = () => {
       dataIndex: 'xs_count',
       key: 'xs_count',
       align: 'center',
-      width: 80,
+      width: 90,
     },
     {
       title: (
@@ -261,7 +261,7 @@ const AdministrationClassManagement = () => {
       valueType: 'option',
       key: 'option',
       align: 'center',
-      width: 150,
+      width: 190,
       render: (_, record) => {
         let f = false;
         if (record?.KHFWBJs?.[0]?.ZT === 1) {

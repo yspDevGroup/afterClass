@@ -386,40 +386,51 @@ const CourseDetails: React.FC = () => {
                       上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
                       {moment(value.JKRQ).format('YYYY.MM.DD')}
                     </p>
-                    <p>
-                      班主任：{' '}
-                      {BjDetails?.KHBJJs?.map((item: any) => {
-                        if (item.JSLX.indexOf('副') === -1) {
-                          return (
-                            <span style={{ marginRight: '1em' }}>
-                              <ShowName
-                                type="userName"
-                                openid={item?.JZGJBSJ?.WechatUserId}
-                                XM={item?.JZGJBSJ?.XM}
-                              />
-                            </span>
-                          );
-                        }
-                        return '';
-                      })}
-                    </p>
-                    <p>
-                      副班：{' '}
-                      {BjDetails?.KHBJJs?.map((item: any) => {
-                        if (item.JSLX.indexOf('主') === -1) {
-                          return (
-                            <span style={{ marginRight: '1em' }}>
-                              <ShowName
-                                type="userName"
-                                openid={item?.JZGJBSJ?.WechatUserId}
-                                XM={item.JZGJBSJ?.XM}
-                              />
-                            </span>
-                          );
-                        }
-                        return '';
-                      })}
-                    </p>
+                    <p>总课时：{value.KSS}课时</p>
+                    <p>总人数：{value.BJRS}人</p>
+                    {
+                      BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '主教师') ?
+                        <p>
+                          班主任：
+                          {BjDetails?.KHBJJs?.map((item: any) => {
+                            if (item.JSLX.indexOf('副') === -1) {
+                              return (
+                                <span style={{ marginRight: '1em' }}>
+                                  <ShowName
+                                    type="userName"
+                                    openid={item?.JZGJBSJ?.WechatUserId}
+                                    XM={item?.JZGJBSJ?.XM}
+                                  />
+                                </span>
+                              );
+                            }
+                            return '';
+                          })}
+                        </p> : ''
+                    }
+                    {
+                      BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '副教师') ?
+                        <p>
+                          副班：
+                          {BjDetails?.KHBJJs?.map((item: any) => {
+                            if (item.JSLX.indexOf('主') === -1) {
+                              return (
+                                <span style={{ marginRight: '1em' }}>
+                                  <ShowName
+                                    type="userName"
+                                    openid={item?.JZGJBSJ?.WechatUserId}
+                                    XM={item.JZGJBSJ?.XM}
+                                  />
+                                </span>
+                              );
+                            }
+                            return '';
+                          })}
+                        </p> : ''
+                    }
+
+
+
                     <p>报名费：{value.FY}元</p>
                     <p>
                       报名方式：
@@ -429,7 +440,8 @@ const CourseDetails: React.FC = () => {
                         <>{BjDetails?.BMLX === 1 ? '缴费即报名' : '免费'}</>
                       )}
                     </p>
-                    <table>
+
+                    {/* <table>
                       <thead>
                         <tr>
                           <th>上课时间</th>
@@ -465,7 +477,7 @@ const CourseDetails: React.FC = () => {
                           <td>{value.BJRS}</td>
                         </tr>
                       </tbody>
-                    </table>
+                    </table> */}
                     <p style={{ fontWeight: 'bold' }}>班级简介</p>
                     <p className={styles.content}>{BjDetails?.BJMS}</p>
                   </Panel>

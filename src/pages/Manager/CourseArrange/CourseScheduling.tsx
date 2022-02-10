@@ -120,6 +120,7 @@ const CourseScheduling = () => {
     setRecordValue({ XQ: campusId });
   };
 
+
   /**
    * 把接口返回的数据处理成ExcelTable组件所需要的
    * @param data  接口返回的数据
@@ -815,7 +816,7 @@ const CourseScheduling = () => {
                   <label>学年学期：</label>
                   <Select
                     value={curXNXQId}
-                    style={{ width: 160 }}
+                    style={{ width: 'calc(100% - 70px)' }}
                     onChange={(value: string) => {
                       setCurXNXQId(value);
                       setKcmcValue(undefined);
@@ -836,7 +837,7 @@ const CourseScheduling = () => {
                   <label>校区：</label>
                   <Select
                     value={campusId}
-                    style={{ width: 160 }}
+                    style={{ width: 'calc(100% - 45px)' }}
                     onChange={(value: string) => {
                       setCampusId(value);
                       setCdmcValue(undefined);
@@ -856,7 +857,7 @@ const CourseScheduling = () => {
                 <div>
                   <label>课程：</label>
                   <Select
-                    style={{ width: 160 }}
+                    style={{ width: 'calc(100% - 45px)' }}
                     value={kcmcValue}
                     allowClear
                     placeholder="请选择"
@@ -878,25 +879,26 @@ const CourseScheduling = () => {
                     })}
                   </Select>
                 </div>
-                <div>
-                  <label>课程班：</label>
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    style={{ width: 240 }}
-                    placeholder="请选择"
-                    onChange={(value) => setBjmcValue(value)}
-                  >
-                    {bjmcData?.map((item: selectType) => {
-                      return (
-                        <Option value={item.value} key={item.value}>
-                          {item.label}
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </div>
+
               </SearchLayout>
+              <div style={{marginTop:10}}>
+                <label>课程班：</label>
+                <Select
+                  mode="multiple"
+                  allowClear
+                  style={{ width: '70%', minWidth: '680px' }}
+                  placeholder="请选择"
+                  onChange={(value) => setBjmcValue(value)}
+                >
+                  {bjmcData?.map((item: selectType) => {
+                    return (
+                      <Option value={item.value} key={item.value}>
+                        {item.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
               {/*  添加新的课程 路由跳转 */}
               <div style={{ position: 'absolute', right: 0, top: 0 }}>
                 <Button
@@ -954,6 +956,7 @@ const CourseScheduling = () => {
           )
         )}
       </Spin>
+
     </>
   );
 };

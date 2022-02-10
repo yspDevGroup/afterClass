@@ -47,7 +47,7 @@ const SignIn = () => {
           BJIdArr.push(value.KHBJSJId);
           value.KCBSKJSSJs.forEach((items: any) => {
             const newData = {
-              ...items.JZGJBSJ,
+              ...items?.JZGJBSJ,
               KHBJSJId: value.KHBJSJId,
               KHBJSJ: value.KHBJSJ,
               XXSJPZ: value.XXSJPZ,
