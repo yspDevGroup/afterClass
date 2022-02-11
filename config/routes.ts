@@ -203,14 +203,14 @@
       },
     ],
   },
-  {
-    // 排课管理
-    // path: '/courseManagements/courseScheduling',
-    path: '/courseScheduling',
-    name: 'courseScheduling',
-    icon: 'InsertRowBelowOutlined',
-    component: './Manager/CourseScheduling',
-  },
+  // {
+  //   // 排课管理
+  //   // path: '/courseManagements/courseScheduling',
+  //   path: '/courseScheduling',
+  //   name: 'courseScheduling',
+  //   icon: 'InsertRowBelowOutlined',
+  //   component: './Manager/CourseScheduling',
+  // },
   {
     // 排课管理
     path: '/courseArrange',
