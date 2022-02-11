@@ -27,6 +27,7 @@ const CourseDetails: React.FC = () => {
   const path = getQueryString('path');
   const date = getQueryString('date');
   const userId = currentUser.JSId || testTeacherId;
+  const [KcData, setKcData] = useState<any>();
   useEffect(() => {
     async function fetchData() {
       if (classid) {
@@ -39,6 +40,12 @@ const CourseDetails: React.FC = () => {
         const classInfo = courseSchedule.find((item: { KHBJSJId: string }) => {
           return item.KHBJSJId === classid;
         });
+        const res = await getKHBJSJ({
+          id: classid,
+        });
+        if (res?.status === 'ok') {
+          setKcData(res?.data)
+        }
         if (classInfo) {
           setKcDetail(classInfo.detail[0]);
         } else {
@@ -145,9 +152,8 @@ const CourseDetails: React.FC = () => {
       if (val.tag === '假') {
         content = {
           title: '请假说明',
-          content: ` ${
-            val.reason ? `由于${val.reason},` : ''
-          }本节课程安排取消，之后课程顺延,请知悉.`,
+          content: ` ${val.reason ? `由于${val.reason},` : ''
+            }本节课程安排取消，之后课程顺延,请知悉.`,
         };
       } else {
         content = {
@@ -187,7 +193,10 @@ const CourseDetails: React.FC = () => {
             </li>
             {KcDetail?.KSS ? (
               <li>
-                <span>总课时：</span>
+                {
+                  KcData?.ISFW === 1 ? <span>周课时：</span> : <span>总课时：</span>
+                }
+
                 {KcDetail?.KSS}课时
               </li>
             ) : (
