@@ -249,15 +249,13 @@ export async function addKHPKSJ(
 export async function getAllPK(
   body: {
     /** 课后班级ID */
-    KHBJSJId?: string;
+    KHBJSJIds?: string[];
     /** 课后课程ID */
     KHKCSJId?: string;
     /** 房间ID */
     FJSJId?: string;
     /** 场地类型ID */
     FJLXId?: string;
-    /** 教师ID */
-    JZGJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
     /** 学校基本数据id */
@@ -320,6 +318,32 @@ export async function getAgencySchedule(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khpksj/getAgencySchedule', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 课时判断 POST /khpksj/judge */
+export async function judgeKHPKSJ(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 课程班ID */
+    KHBJSJId?: string;
+    /** 课时数 */
+    KSS?: number;
+    /** 排课类型 */
+    startDate?: string;
+    /** 课程名称 */
+    endDate?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khpksj/judge', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

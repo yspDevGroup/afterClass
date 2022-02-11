@@ -287,8 +287,12 @@ const AddServiceClass: FC<AddCourseProps> = ({
       if (formValues && CopyType === 'undefined') {
         // 编辑
         if (PKType === false) {
-          const { KCMC } = KCDate?.find((value: any) => value?.id === values?.KHKCSJId);
-          const BJMC = classData?.find((value: any) => value?.id === values?.BJIds);
+          const { KCMC } = KCDate?.find((value: any) => value?.id === values?.KHKCSJId); let BJMC: any;
+          if (Array.isArray(values?.BJIds)) {
+            BJMC = classData?.find((value: any) => value?.id === values?.BJIds[0]);
+          } else {
+            BJMC = classData?.find((value: any) => value?.id === values?.BJIds);
+          }
           newData.BJMC = `${KCMC}${BJMC?.NJSJ?.NJMC}${BJMC?.BJ}`
         }
         res = await updateKHBJSJ({ id: formValues.id }, newData);

@@ -311,12 +311,12 @@ export async function getOrders(
     XZQHM?: string;
     XXJBSJId?: string;
     DDLX?: number;
-    /** 学年学期ID */
-    XNXQId?: string;
     KCMC?: string;
     KHZZFWId?: string;
     KHXXZZFWId?: string;
     KHKCLXId?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
     /** 班级名称 */
     bjmc?: string;
     /** 课程名称 */

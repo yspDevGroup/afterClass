@@ -30,12 +30,13 @@ import {
 import { getQueryString, getAuthorization } from '@/utils/utils';
 import ExcelTable from '@/components/ExcelTable';
 import ShowName from '@/components/ShowName';
-import { createKHPKSJ, deleteKHPKSJ, addKHPKSJ } from '@/services/after-class/khpksj';
+import { createKHPKSJ, deleteKHPKSJ, addKHPKSJ, judgeKHPKSJ } from '@/services/after-class/khpksj';
 // import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
 import { getAllClasses } from '@/services/after-class/khbjsj';
 import type { DataSourceType } from '@/components/ExcelTable';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { getAllCourses } from '@/services/after-class/khkcsj';
+
 import { getAllPK } from '@/services/after-class/khpksj';
 import styles from '../index.less';
 import '../index.less';
@@ -111,6 +112,9 @@ const AddArranging: FC<PropsType> = (props) => {
   const [uploadVisible, setUploadVisible] = useState<boolean>(false);
   // 导入排课后返回的冲突数据
   const [ImportData, setImportData] = useState<any>([]);
+  // 课程班的课时数
+  const [Class, setClass] = useState<any>();
+
 
   const columns: {
     title: string;
@@ -215,6 +219,10 @@ const AddArranging: FC<PropsType> = (props) => {
       setLoading(false);
     }
   };
+  const getFirstDay = (date: any) => {
+    const day = date.getDay() || 7;
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
+  };
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
     // FJSJId 房间Id KHBJSJId: 课后班级数据
     // 如果value ===null 移除
@@ -233,24 +241,45 @@ const AddArranging: FC<PropsType> = (props) => {
         IsDSZ: pkData?.IsDSZ,
         PKBZ: pkData?.PKBZ,
       };
-
-      const addRes = await addKHPKSJ({
-        ...KHPKSJ,
-      });
-      // 添加班级数据
-      KHPKSJ.KHBJSJ = bjData.find((bjItem: any) => {
-        return bjItem.id === value.KHBJSJId;
-      });
-      // 添加场地数据
-      KHPKSJ.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
-
-      if (addRes.status === 'ok') {
-        KHPKSJ.id = addRes?.data?.id;
-        screenOriSource.push(KHPKSJ);
-        setLoading(false);
+      let res: any;
+      if (Class?.ISFW === 1) {
+        res = await judgeKHPKSJ({
+          XNXQId: Bj?.XNXQId,
+          KHBJSJId: Bj?.KHBJSJId,
+          KSS: Bj?.KSS,
+          startDate: moment(getFirstDay(new Date(pkData?.RQ))).format('YYYY-MM-DD'),
+          endDate: moment(getFirstDay(new Date(pkData?.RQ))).subtract(-6, "days").format("YYYY-MM-DD")
+        })
       } else {
-        message.error(addRes.message);
+        res = await judgeKHPKSJ({
+          XNXQId: Bj?.XNXQId,
+          KHBJSJId: Bj?.KHBJSJId,
+          KSS: Bj?.KSS
+        })
+      }
+      if (res?.status === 'ok') {
+        const addRes = await addKHPKSJ({
+          ...KHPKSJ,
+        });
+        // 添加班级数据
+        KHPKSJ.KHBJSJ = bjData.find((bjItem: any) => {
+          return bjItem.id === value.KHBJSJId;
+        });
+        // 添加场地数据
+        KHPKSJ.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
+
+        if (addRes.status === 'ok') {
+          KHPKSJ.id = addRes?.data?.id;
+          screenOriSource.push(KHPKSJ);
+          setLoading(false);
+        } else {
+          message.error(addRes.message);
+          refreshTable();
+          setLoading(false);
+        }
+      } else {
         refreshTable();
+        message.warning(res?.message)
         setLoading(false);
       }
     } else {
@@ -315,10 +344,9 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 班级选择
   const BjClick = (value: any) => {
-    const getFirstDay = (date: any) => {
-      const day = date.getDay() || 7;
-      return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
-    };
+    setClass(value)
+
+
     const start = new Date(moment(value?.KKRQ).format('YYYY/MM/DD  00:00:00'));
     const end = new Date(moment(value?.JKRQ).format('YYYY/MM/DD  23:59:59'));
     const times = start.getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
@@ -329,8 +357,6 @@ const AddArranging: FC<PropsType> = (props) => {
     const startZhou = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
     const endZhou = Math.ceil(time2 / (7 * 24 * 60 * 60 * 1000));
     setRqDisable([startZhou, endZhou, startWeek, endWeek])
-    console.log(startZhou, 'zhoushu--------')
-    console.log(endZhou, 'zhoushu--------')
 
     // 选择班级教师
     const JS: any = value.KHBJJs?.find((items: any) => items.JSLX === '主教师');

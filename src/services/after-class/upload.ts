@@ -142,25 +142,9 @@ export async function importTeacherXKAP(options?: { [key: string]: any }) {
 }
 
 /** 课表导入 POST /upload/importSchedule */
-export async function importSchedule(
-  body: {
-    /** 学年学期ID */
-    XNXQId?: string;
-    /** 课程班ID */
-    KHBJSJId?: string;
-    /** 场地ID */
-    FJSJId?: string;
-    /** 机构ID */
-    PKTYPE?: number;
-  },
-  options?: { [key: string]: any },
-) {
+export async function importSchedule(options?: { [key: string]: any }) {
   return request<any>('/upload/importSchedule', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
     ...(options || {}),
   });
 }
