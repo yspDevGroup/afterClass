@@ -203,6 +203,10 @@ type BuildOptions = {
   clientId: string;
   /** 注册的应用密钥 */
   clientSecret: string;
+  /** 素质教育资源地址 */
+  crpHost: string;
+  /** api后台应用id，固定为00002 */
+  apiClientId: string;
 };
 
 type InitialState = {

@@ -1,11 +1,19 @@
 import { useEffect } from 'react';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 
 const EducationalPage: React.FC = () => {
+  const { initialState } = useModel('@@initialState');
   useEffect(() => {
-    window.open('http://moodle.xianyunshipei.com/course/view.php?id=12');
-     history.go(-1);
-  }, []);
+    if (!initialState) return;
+    const { crpHost, apiClientId } = initialState.buildOptions;
+    // window.open('http://moodle.xianyunshipei.com/course/view.php?id=12');
+    const ysp_token_type = localStorage.getItem('ysp_token_type');
+    const ysp_access_token = localStorage.getItem('ysp_access_token');
+    const params = JSON.stringify({ plat: 'school' });
+    const url = `${crpHost}/auth_callback/wechat?clientId=${apiClientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}`;
+    window.open(url);
+    history.go(-1);
+  }, [initialState]);
 
   return <div />;
 };

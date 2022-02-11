@@ -29,9 +29,12 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
         ENV_host: 'http://afterclass.prod.xianyunshipei.com',
         ssoHost: 'http://sso.prod.xianyunshipei.com',
+        crpHost: 'http://crpservice.prod.xianyunshipei.com',
         authType: 'wechat',
         clientId: 'wwe2dfbe3747b6e69f',
         clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
+        // 固定配置，不可修改
+        apiClientId: '00002',
       };
     case 'chanming':
       // 禅鸣环境
@@ -40,9 +43,12 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_copyRight: '2021 版权所有：蝉鸣科技（西安）有限公司',
         ENV_host: 'http://afterclass.wuyu.imzhiliao.com',
         ssoHost: 'http://sso.wuyu.imzhiliao.com',
+        crpHost: 'http://crpservice.wuyu.imzhiliao.com',
         authType: 'wechat',
         clientId: 'wwe2dfbe3747b6e69f',
         clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
+        // 固定配置，不可修改
+        apiClientId: '00002',
       };
     case '9dy':
       // 9朵云环境
@@ -51,9 +57,12 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_copyRight: '2021 版权所有：广东九朵云科技有限公司',
         ENV_host: 'http://afterclass.9cloudstech.com',
         ssoHost: 'http://sso.9cloudstech.com',
+        crpHost: 'http://crpservice.9cloudstech.com',
         authType: 'wechat',
         clientId: 'ww73cd866f2c4dc83f',
         clientSecret: 'IfPhfMfVtX-y-BG-CrGlZIJw-m-GoCnJwxffigZDGLA',
+        // 固定配置，不可修改
+        apiClientId: '00002',
       };
     case 'development':
       // 开发测试环境
@@ -62,9 +71,13 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
         ENV_host: 'http://afterclass.test.xianyunshipei.com',
         ssoHost: 'http://sso.test.xianyunshipei.com',
+        crpHost: 'http://127.0.0.1:8000',
+        // crpHost: 'http://crpservice.test.xianyunshipei.com',
         authType: 'wechat',
         clientId: 'ww20993d96d6755f55',
         clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
+        // 固定配置，不可修改
+        apiClientId: '00002',
       };
     default:
       // 默认为local，本地开发模式下请在此处修改配置，但不要提交此处修改
@@ -73,9 +86,12 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
         ENV_host: 'http://localhost:8000',
         ssoHost: 'http://platform.test.xianyunshipei.com',
+        crpHost: 'http://crpservice.test.xianyunshipei.com',
         authType: 'password',
         clientId: 'ww20993d96d6755f55',
         clientSecret: 'wy83uVM6xgfDtE2XS5WQ',
+        // 固定配置，不可修改
+        apiClientId: '00002',
       };
   }
 };
