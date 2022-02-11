@@ -72,7 +72,7 @@ const TimePeriodForm = (props: PropsType) => {
       key: 'TITLE',
       rules: [
         { required: true, message: '请填写名称' },
-        { max: 10, message: '最长为 10 位' },
+        { max: 20, message: '最长为 20 位' },
       ],
       fieldProps: {
         autocomplete: 'off',
