@@ -40,6 +40,7 @@ import { getAllPK } from '@/services/after-class/khpksj';
 import styles from '../index.less';
 import '../index.less';
 import noJF from '@/assets/noJF.png';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -58,6 +59,7 @@ type PropsType = {
   currentUser?: API.CurrentUser | undefined;
   screenOriSource: any;
   setScreenOriSource: React.Dispatch<any>;
+  setRqDisable: React.Dispatch<any>;
   setLoading: any;
   campusId: string | undefined;
   TimeData: any;
@@ -80,6 +82,7 @@ const AddArranging: FC<PropsType> = (props) => {
     kcmcData,
     campusId,
     TimeData,
+    setRqDisable
     // setTableDataSource,
     // sameClass,
     // tableDataSource,
@@ -116,70 +119,70 @@ const AddArranging: FC<PropsType> = (props) => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-    {
-      title: '教学周',
-      dataIndex: 'room',
-      key: 'room',
-      align: 'center',
-      width: 66,
-    },
-    {
-      title: '节次',
-      dataIndex: 'course',
-      key: 'course',
-      align: 'left',
-      width: 100,
-    },
-    {
-      title: '周一',
-      dataIndex: 'monday',
-      key: 'monday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周二',
-      dataIndex: 'tuesday',
-      key: 'tuesday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周三',
-      dataIndex: 'wednesday',
-      key: 'wednesday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周四',
-      dataIndex: 'thursday',
-      key: 'thursday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周五',
-      dataIndex: 'friday',
-      key: 'friday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周六',
-      dataIndex: 'saturday',
-      key: 'saturday',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '周日',
-      dataIndex: 'sunday',
-      key: 'sunday',
-      align: 'center',
-      width: 100,
-    },
-  ];
+      {
+        title: '教学周',
+        dataIndex: 'room',
+        key: 'room',
+        align: 'center',
+        width: 66,
+      },
+      {
+        title: '节次',
+        dataIndex: 'course',
+        key: 'course',
+        align: 'left',
+        width: 100,
+      },
+      {
+        title: '周一',
+        dataIndex: 'monday',
+        key: 'monday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周二',
+        dataIndex: 'tuesday',
+        key: 'tuesday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周三',
+        dataIndex: 'wednesday',
+        key: 'wednesday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周四',
+        dataIndex: 'thursday',
+        key: 'thursday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周五',
+        dataIndex: 'friday',
+        key: 'friday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周六',
+        dataIndex: 'saturday',
+        key: 'saturday',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '周日',
+        dataIndex: 'sunday',
+        key: 'sunday',
+        align: 'center',
+        width: 100,
+      },
+    ];
 
   // 将排好的课程再次点击可以取消
   const getSelectdata = () => {
@@ -312,6 +315,23 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 班级选择
   const BjClick = (value: any) => {
+    const getFirstDay = (date: any) => {
+      const day = date.getDay() || 7;
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
+    };
+    const start = new Date(moment(value?.KKRQ).format('YYYY/MM/DD  00:00:00'));
+    const end = new Date(moment(value?.JKRQ).format('YYYY/MM/DD  23:59:59'));
+    const times = start.getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
+    const time2 = end.getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
+    const startWeek = Number(moment(value?.KKRQ).format('E'));
+    const endWeek = Number(moment(value?.JKRQ).format('E'));
+    // 获取开始时间到结束时间中间有多少个自然周
+    const startZhou = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
+    const endZhou = Math.ceil(time2 / (7 * 24 * 60 * 60 * 1000));
+    setRqDisable([startZhou, endZhou, startWeek, endWeek])
+    console.log(startZhou, 'zhoushu--------')
+    console.log(endZhou, 'zhoushu--------')
+
     // 选择班级教师
     const JS: any = value.KHBJJs?.find((items: any) => items.JSLX === '主教师');
     if (JS) {
@@ -720,36 +740,36 @@ const AddArranging: FC<PropsType> = (props) => {
                           <ProCard ghost className="banjiCard">
                             {bjData && bjData.length > 0
                               ? bjData.slice(0, 15).map((value: any) => {
-                                  const zb = value?.KHBJJs.find(
-                                    (item: any) => item.JSLX === '主教师',
-                                  );
-                                  return (
-                                    <ProCard
-                                      layout="center"
-                                      bordered
-                                      className="banjiItem"
-                                      onClick={() => BjClick(value)}
-                                      style={getKCStyle(value.id)}
-                                    >
-                                      <Tooltip title={value.BJMC}>
-                                        <p>{value.BJMC}</p>
-                                      </Tooltip>
-                                      <span>
-                                        {/* {
+                                const zb = value?.KHBJJs.find(
+                                  (item: any) => item.JSLX === '主教师',
+                                );
+                                return (
+                                  <ProCard
+                                    layout="center"
+                                    bordered
+                                    className="banjiItem"
+                                    onClick={() => BjClick(value)}
+                                    style={getKCStyle(value.id)}
+                                  >
+                                    <Tooltip title={value.BJMC}>
+                                      <p>{value.BJMC}</p>
+                                    </Tooltip>
+                                    <span>
+                                      {/* {
                                       value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
                                         ?.JZGJBSJ?.XM
                                     } */}
-                                        <ShowName
-                                          style={{ color: '#666' }}
-                                          type="userName"
-                                          openid={zb?.WechatUserId}
-                                          XM={zb?.JZGJBSJ?.XM}
-                                        />
-                                      </span>
-                                      {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
-                                    </ProCard>
-                                  );
-                                })
+                                      <ShowName
+                                        style={{ color: '#666' }}
+                                        type="userName"
+                                        openid={zb?.WechatUserId}
+                                        XM={zb?.JZGJBSJ?.XM}
+                                      />
+                                    </span>
+                                    {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                                  </ProCard>
+                                );
+                              })
                               : ''}
                             <ProCard layout="center" bordered onClick={unFold} className="unFold">
                               展开 <DownOutlined style={{ color: '#4884FF' }} />
@@ -759,36 +779,36 @@ const AddArranging: FC<PropsType> = (props) => {
                           <ProCard ghost className="banjiCard">
                             {bjData && bjData.length > 0
                               ? bjData.map((value: any) => {
-                                  const zb = value?.KHBJJs.find(
-                                    (item: any) => item.JSLX === '主教师',
-                                  );
-                                  return (
-                                    <ProCard
-                                      layout="center"
-                                      bordered
-                                      className="banjiItem"
-                                      onClick={() => BjClick(value)}
-                                      style={getKCStyle(value.id)}
-                                    >
-                                      <Tooltip title={value.BJMC}>
-                                        <p>{value.BJMC}</p>
-                                      </Tooltip>
-                                      <span>
-                                        {/* {
+                                const zb = value?.KHBJJs.find(
+                                  (item: any) => item.JSLX === '主教师',
+                                );
+                                return (
+                                  <ProCard
+                                    layout="center"
+                                    bordered
+                                    className="banjiItem"
+                                    onClick={() => BjClick(value)}
+                                    style={getKCStyle(value.id)}
+                                  >
+                                    <Tooltip title={value.BJMC}>
+                                      <p>{value.BJMC}</p>
+                                    </Tooltip>
+                                    <span>
+                                      {/* {
                                       value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
                                         ?.JZGJBSJ?.XM
                                     } */}
-                                        <ShowName
-                                          style={{ color: '#666' }}
-                                          type="userName"
-                                          openid={value.WechatUserId}
-                                          XM={zb?.JZGJBSJ?.XM}
-                                        />
-                                      </span>
-                                      {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
-                                    </ProCard>
-                                  );
-                                })
+                                      <ShowName
+                                        style={{ color: '#666' }}
+                                        type="userName"
+                                        openid={value.WechatUserId}
+                                        XM={zb?.JZGJBSJ?.XM}
+                                      />
+                                    </span>
+                                    {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                                  </ProCard>
+                                );
+                              })
                               : ''}
                             <ProCard layout="center" bordered onClick={unFold} className="unFold">
                               收起 <UpOutlined style={{ color: '#4884FF' }} />
@@ -847,7 +867,7 @@ const AddArranging: FC<PropsType> = (props) => {
                       style={{
                         height: 'calc(100vh - 500px)',
                       }}
-                      // basicData={oriSource}
+                    // basicData={oriSource}
                     />
                   </Spin>
                 ) : (

@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Select, Spin } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import type { DataSourceType } from '@/components/ExcelTableNew';
+import type { DataSourceType } from '@/components/ExcelTable2';
 // 封装的弹框组件
 import PromptInformation from '@/components/PromptInformation';
 import { theme } from '@/theme-default';
@@ -79,6 +79,9 @@ const CourseScheduling = () => {
   const [TimeData, setTimeData] = useState<any>();
   // 学期内的周数
   const [Weeks, setWeeks] = useState<any>([]);
+  // 单个班级的开课时段排课限制
+  const [RqDisable, setRqDisable] = useState<any>();
+
 
   // ----------------------------计算时间-------------------------------
   const getTime = () => {
@@ -182,8 +185,6 @@ const CourseScheduling = () => {
                   };
                   if (
                     bjId === KHItem?.KHBJSJ?.id
-                    // (!BJID && recordValue?.BJId === KHItem?.KHBJSJ?.id) ||
-                    // (BJID && BJID === KHItem?.KHBJSJ?.id)
                   ) {
                     sameClassData.push({
                       WEEKDAY: KHItem?.WEEKDAY, // 周
@@ -196,6 +197,92 @@ const CourseScheduling = () => {
                 }
               }
             });
+          }
+          if (RqDisable) {
+            // 超出该班级上课开始时段
+            if (RqDisable[2] < 7 && index === RqDisable[0] - 1) {
+              const num = RqDisable[2] - 1;
+              newWeek.slice(0,num).forEach((items: any) => {
+                table[items] = {
+                  weekId: '', // 周
+                  cla: '无法排课', // 班级名称
+                  teacher: '', // 主教师
+                  teacherWechatId: '', // 主教师微信用户ID
+                  teacherID: '', // 主教师ID
+                  bjId: '', // 班级ID
+                  kcId: '', // 课程ID
+                  njId: '', // 年级ID
+                  bjzt: '', // 班级状态
+                  xqId: '', // 校区ID
+                  color: '',
+                  dis: true,
+                  fjmc: '无法排课',
+                  jcmc: '超出当前学年学期',
+                };
+              });
+            }
+            if (index < RqDisable[0] - 1) {
+              newWeek.forEach((items: any) => {
+                table[items] = {
+                  weekId: '', // 周
+                  cla: '无法排课', // 班级名称
+                  teacher: '', // 主教师
+                  teacherWechatId: '', // 主教师微信用户ID
+                  teacherID: '', // 主教师ID
+                  bjId: '', // 班级ID
+                  kcId: '', // 课程ID
+                  njId: '', // 年级ID
+                  bjzt: '', // 班级状态
+                  xqId: '', // 校区ID
+                  color: '',
+                  dis: true,
+                  fjmc: '无法排课',
+                  jcmc: '超出当前学年学期',
+                };
+              });
+            }
+            // 超出该班级上课结束时段
+            if (RqDisable[3] < 7 && index === RqDisable[1] - 1) {
+              const num = 7 - RqDisable[3];
+              newWeek.slice(-num).forEach((items: any) => {
+                table[items] = {
+                  weekId: '', // 周
+                  cla: '无法排课', // 班级名称
+                  teacher: '', // 主教师
+                  teacherWechatId: '', // 主教师微信用户ID
+                  teacherID: '', // 主教师ID
+                  bjId: '', // 班级ID
+                  kcId: '', // 课程ID
+                  njId: '', // 年级ID
+                  bjzt: '', // 班级状态
+                  xqId: '', // 校区ID
+                  color: '',
+                  dis: true,
+                  fjmc: '无法排课',
+                  jcmc: '超出当前学年学期',
+                };
+              });
+            }
+            if (RqDisable[1] < Weeks?.length && index > RqDisable[1] - 1) {
+              newWeek.forEach((items: any) => {
+                table[items] = {
+                  weekId: '', // 周
+                  cla: '无法排课', // 班级名称
+                  teacher: '', // 主教师
+                  teacherWechatId: '', // 主教师微信用户ID
+                  teacherID: '', // 主教师ID
+                  bjId: '', // 班级ID
+                  kcId: '', // 课程ID
+                  njId: '', // 年级ID
+                  bjzt: '', // 班级状态
+                  xqId: '', // 校区ID
+                  color: '',
+                  dis: true,
+                  fjmc: '无法排课',
+                  jcmc: '超出当前学年学期',
+                };
+              });
+            }
           }
           if (endWeek < 7 && index === Weeks?.length - 1) {
             const num = 7 - endWeek;
@@ -951,6 +1038,7 @@ const CourseScheduling = () => {
             currentUser={currentUser}
             setLoading={setLoading}
             TimeData={TimeData}
+            setRqDisable={setRqDisable}
           />
 
         )}
