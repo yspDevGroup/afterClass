@@ -144,7 +144,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue }) =
                     height: 22,
                     display: 'flex',
                     justifyContent: 'space-between',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
                   }}>
                     <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
                     <ShowName

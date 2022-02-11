@@ -88,7 +88,6 @@ const ClassCalendar = (props: propstype) => {
     );
     const { markDays, data } = oriData;
     if (!type) {
-      console.log('打点----------------------------------------------------------');
 
       const weekDys = await getWeekCalendar('student', StorageXSId, start || day, data.bjIds);
       setDates(markDays.concat(weekDys));

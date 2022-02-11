@@ -197,7 +197,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 刷新Table
   const refreshTable = () => {
-    if (screenOriSource?.length > 0) {
+    if (screenOriSource) {
       const screenCD = (dataSource1: any) => {
         const newDataSource = [...dataSource1];
         if (cdmcValue) {
@@ -456,7 +456,7 @@ const AddArranging: FC<PropsType> = (props) => {
             if (data.status === 'ok') {
               setCDLoading(false);
               // 移除当前班级 所有排课
-              if (screenOriSource?.length > 0) {
+              if (screenOriSource) {
                 const screenCD = (dataSource1: any) => {
                   const newDataSource = [...dataSource1];
                   if (cdmcValue) {
@@ -843,6 +843,7 @@ const AddArranging: FC<PropsType> = (props) => {
                       getSelectdata={getSelectdata}
                       tearchId={tearchId}
                       TimeData={TimeData}
+                      xXSJPZData={xXSJPZData}
                       style={{
                         height: 'calc(100vh - 500px)',
                       }}

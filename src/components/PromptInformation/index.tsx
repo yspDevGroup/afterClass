@@ -10,6 +10,7 @@ type propttype = {
   open: boolean;
   colse: () => void;
   event?: () => void;
+  type?: boolean;
 }
 
 
@@ -18,7 +19,8 @@ const PromptInformation: FC<propttype> = (
     link,
     open,
     colse,
-    event
+    event,
+    type
   }
 ) => {
 
@@ -36,13 +38,16 @@ const PromptInformation: FC<propttype> = (
       <div className={styles.box}>
         <h2 style={{ textAlign: 'center', fontWeight: 'bold', color: 'rgba(36, 54, 81, 1)', fontSize: '14px' }}>系统提示</h2>
         <div className={styles.text}>{text}</div>
+
         <div className={styles.link}>
-          <Button style={{ marginRight: '16px' }} type='primary' onClick={() => {
-            if (link && link !== '') {
-              history.push(link)
-            };
-            event;
-          }}>现在去设置</Button>
+          {
+            !type ? <Button style={{ marginRight: '16px' }} type='primary' onClick={() => {
+              if (link && link !== '') {
+                history.push(link)
+              };
+              event;
+            }}>现在去设置</Button> : <></>
+          }
           <Button onClick={colse}>关闭</Button>
 
         </div>

@@ -29,6 +29,7 @@ const TimePeriodForm = (props: PropsType) => {
   const [terms, setTerms] = useState<{ label: string; value: string }[]>(); // 联动数据中的学期数据
   const [XNXQ, setXNXQ] = useState<API.XNXQ[]>();
   const [XQJSRQ, setXQJSRQ] = useState<any>('9999-01-01');
+  const [XQKSRQ, setXQKSRQ] = useState<any>('1000-01-01');
 
   useEffect(() => {
     async function fetchData() {
@@ -79,8 +80,8 @@ const TimePeriodForm = (props: PropsType) => {
           currentStatus === 'schedule'
             ? '如：第一节课'
             : currentStatus === 'enroll'
-            ? '如：2020-2021'
-            : '如：2021春季',
+              ? '如：2020-2021'
+              : '如：2021春季',
       },
     },
     {
@@ -96,6 +97,7 @@ const TimePeriodForm = (props: PropsType) => {
         onChange: (value: any) => {
           form.setFieldsValue({ KSSJ: undefined, JSSJ: undefined });
           setXQJSRQ(XNXQ?.find((item: any) => item?.id === value)?.JSRQ);
+          setXQKSRQ(XNXQ?.find((item: any) => item?.id === value)?.KSRQ);
         },
       },
     },
@@ -112,7 +114,7 @@ const TimePeriodForm = (props: PropsType) => {
         hideDisabledOptions: true,
         disabledDate: (currents: any) => {
           const defaults = moment(currents).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > moment(XQJSRQ).format('YYYY-MM-DD 23:59:59');
+          return defaults > moment(XQJSRQ).format('YYYY-MM-DD 23:59:59') || defaults < moment(XQKSRQ).format('YYYY-MM-DD 00:00:00');
         },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
@@ -130,7 +132,7 @@ const TimePeriodForm = (props: PropsType) => {
         hideDisabledOptions: true,
         disabledDate: (currents: any) => {
           const defaults = moment(currents).format('YYYY-MM-DD HH:mm:ss');
-          return defaults > moment(XQJSRQ).format('YYYY-MM-DD 23:59:59');
+          return defaults > moment(XQJSRQ).format('YYYY-MM-DD 23:59:59') || defaults < moment(XQKSRQ).format('YYYY-MM-DD 00:00:00');
         },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],

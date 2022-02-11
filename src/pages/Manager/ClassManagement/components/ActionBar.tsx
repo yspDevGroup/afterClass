@@ -70,9 +70,7 @@ const ActionBar = (props: propstype) => {
         getData();
         // 开班成功后获取班级排课信息计算课时安排
         const result = await getKHPKSJByBJID({ id: records.id });
-        console.log(result, 'result');
         if (result.status === 'ok' && result.data) {
-          console.log(await getClassDays(records.id), '  await getClassDays(records.id);');
           await getClassDays(records.id);
         }
         // 开班成功后发布课程

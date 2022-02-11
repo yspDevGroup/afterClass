@@ -57,6 +57,21 @@ const RoomManagement = () => {
   const { currentUser } = initialState || {};
   const [uploadVisible, setUploadVisible] = useState<boolean>(false);
 
+  useEffect(() => {
+    (
+      async () => {
+        const response = await getAllFJLX({
+          name: '',
+          XXJBSJId: currentUser?.xxId,
+        });
+        if (response.status === 'ok') {
+          if (response.data && response.data.length === 0) {
+            setopens(true);
+          }
+        }
+      }
+    )()
+  }, [])
   /**
    * 实时设置模态框标题
    *
@@ -130,13 +145,7 @@ const RoomManagement = () => {
    */
   const closePromt = () => {
     setopens(false);
-    setModalVisible(true);
-  };
-
-  const eventclose = () => {
-    setopens(false);
     setModalVisible(false);
-    handleOperation('uphold');
   };
   const columns: ProColumns<RoomItem>[] = [
     {
@@ -328,7 +337,7 @@ const RoomManagement = () => {
         text="还没有设置场地类型，请先维护场地类型"
         open={opens}
         colse={closePromt}
-        event={eventclose}
+        type={true}
       />
       <ProTable<RoomItem>
         columns={columns}

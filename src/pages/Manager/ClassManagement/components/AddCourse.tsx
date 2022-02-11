@@ -286,6 +286,11 @@ const AddServiceClass: FC<AddCourseProps> = ({
       let res: any;
       if (formValues && CopyType === 'undefined') {
         // 编辑
+        if (PKType === false) {
+          const { KCMC } = KCDate?.find((value: any) => value?.id === values?.KHKCSJId);
+          const BJMC = classData?.find((value: any) => value?.id === values?.BJIds);
+          newData.BJMC = `${KCMC}${BJMC?.NJSJ?.NJMC}${BJMC?.BJ}`
+        }
         res = await updateKHBJSJ({ id: formValues.id }, newData);
       } else if (formValues && CopyType === 'copy') {
         // 复制
@@ -303,7 +308,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
       }
     }
   };
-
 
   useEffect(() => {
     if (visible) {
@@ -514,7 +518,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
                     BJIds: undefined,
                   });
                   if (item) {
-                    form?.setFieldsValue({ BJRS: undefined });
+                    form?.setFieldsValue({ BJRS: undefined, BJMC: undefined });
                     return setPKType(true);
                   }
                   return setPKType(false);
@@ -796,16 +800,28 @@ const AddServiceClass: FC<AddCourseProps> = ({
               <p>所属校区：{XQMC || '本校'} </p>
             </div>
             <div className={styles.box}>
+              <p>周课时数：{formValues?.KSS}</p>
+            </div>
+            <div className={styles.box}>
               <p>走班排课：{formValues?.ISZB === 0 ? '否' : '是'}</p>
               {formValues?.BJRS ? <p>招生人数：{formValues?.BJRS}</p> : <></>}
             </div>
-            <p>
+            <p style={{ paddingRight: 60 }}>
               指定行政班：
               {formValues?.BJSJs?.length !== 0 ? (
                 <>
-                  {formValues?.BJSJs?.[0]?.NJSJ?.XD}
-                  {formValues?.BJSJs?.[0]?.NJSJ?.NJMC}
-                  {formValues?.BJSJs?.[0]?.BJ}
+                  {
+                    formValues?.BJSJs?.map((value: any, index: number) => {
+                      if (index === formValues?.BJSJs?.length - 1) {
+                        return <span> {value?.NJSJ?.XD}
+                          {value?.NJSJ?.NJMC}
+                          {value?.BJ}</span>
+                      }
+                      return <span> {value?.NJSJ?.XD}
+                        {value?.NJSJ?.NJMC}
+                        {value?.BJ}，</span>
+                    })
+                  }
                 </>
               ) : (
                 '—'

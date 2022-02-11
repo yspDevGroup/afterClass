@@ -63,7 +63,7 @@ const AddRoom = (props: PropsType) => {
             });
             setRoomType(data);
           } else {
-            setopens(true);
+            // setopens(true);
             //  setTimeout( function(){setModalVisible(false)},500)
           }
         } else {

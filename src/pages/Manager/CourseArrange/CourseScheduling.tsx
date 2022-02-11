@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
@@ -433,70 +434,70 @@ const CourseScheduling = () => {
     align: 'center' | 'left' | 'right';
     width: number;
   }[] = [
-    {
-      title: '教学周',
-      dataIndex: 'room',
-      key: 'room',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '节次',
-      dataIndex: 'course',
-      key: 'course',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周一',
-      dataIndex: 'monday',
-      key: 'monday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周二',
-      dataIndex: 'tuesday',
-      key: 'tuesday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周三',
-      dataIndex: 'wednesday',
-      key: 'wednesday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周四',
-      dataIndex: 'thursday',
-      key: 'thursday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周五',
-      dataIndex: 'friday',
-      key: 'friday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周六',
-      dataIndex: 'saturday',
-      key: 'saturday',
-      align: 'center',
-      width: 136,
-    },
-    {
-      title: '周日',
-      dataIndex: 'sunday',
-      key: 'sunday',
-      align: 'center',
-      width: 136,
-    },
-  ];
+      {
+        title: '教学周',
+        dataIndex: 'room',
+        key: 'room',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '节次',
+        dataIndex: 'course',
+        key: 'course',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周一',
+        dataIndex: 'monday',
+        key: 'monday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周二',
+        dataIndex: 'tuesday',
+        key: 'tuesday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周三',
+        dataIndex: 'wednesday',
+        key: 'wednesday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周四',
+        dataIndex: 'thursday',
+        key: 'thursday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周五',
+        dataIndex: 'friday',
+        key: 'friday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周六',
+        dataIndex: 'saturday',
+        key: 'saturday',
+        align: 'center',
+        width: 136,
+      },
+      {
+        title: '周日',
+        dataIndex: 'sunday',
+        key: 'sunday',
+        align: 'center',
+        width: 136,
+      },
+    ];
   /**
    * 获取Excel表格中数据的方法
    * @param value 在type="edit" 的时候使用；选中将要排课的班级的数据
@@ -782,14 +783,11 @@ const CourseScheduling = () => {
   // 筛选之后 table 排课数据信息 刷新table
   useEffect(() => {
     if (xXSJPZData.length > 0) {
-      // const tableDatas = processingData(oriSource, xXSJPZData);
-      // const tableData = processingDataNew(oriSource, xXSJPZData);
       const tableData = processingDatas(oriSource, xXSJPZData);
       setTableDataSource(tableData);
       // setLoading(false);
     }
   }, [oriSource]);
-
   return (
     <>
       {/* 弹框提示 */}
@@ -937,24 +935,24 @@ const CourseScheduling = () => {
           </div>
         ) : (
           // AddArranging 组件是新增排课页面
-          screenOriSource.length && (
-            <AddArranging
-              campus={campus}
-              campusId={campusId}
-              curXNXQId={curXNXQId}
-              xXSJPZData={xXSJPZData}
-              cdmcData={cdmcData}
-              screenOriSource={screenOriSource}
-              setScreenOriSource={setScreenOriSource}
-              processingData={processingData}
-              setState={setState}
-              formValues={recordValue}
-              kcmcData={kcmcData}
-              currentUser={currentUser}
-              setLoading={setLoading}
-              TimeData={TimeData}
-            />
-          )
+          screenOriSource &&
+          <AddArranging
+            campus={campus}
+            campusId={campusId}
+            curXNXQId={curXNXQId}
+            xXSJPZData={xXSJPZData}
+            cdmcData={cdmcData}
+            screenOriSource={screenOriSource}
+            setScreenOriSource={setScreenOriSource}
+            processingData={processingData}
+            setState={setState}
+            formValues={recordValue}
+            kcmcData={kcmcData}
+            currentUser={currentUser}
+            setLoading={setLoading}
+            TimeData={TimeData}
+          />
+
         )}
       </Spin>
 

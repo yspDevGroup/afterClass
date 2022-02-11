@@ -380,7 +380,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       key: 'PK',
       ellipsis: true,
       render: (_, record) => {
-        const Url = `/courseScheduling?courseId=${record.id}&xnxqid=${curXNXQId}&XQSJ=${record.XQSJ.id}`;
+        const Url = `/courseArrange?courseId=${record.id}&xnxqid=${curXNXQId}&XQSJ=${record.XQSJ.id}`;
         if (record.BJZT === '未开班') {
           if (record.pk_count === 0) {
             return <Link to={Url}>未排课</Link>;
@@ -539,7 +539,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
                   </Option>
                 </Select>
               </div>
-              <div>
+              {/* <div>
                 <label htmlFor="status">班级状态：</label>
                 <Select
                   allowClear
@@ -558,7 +558,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
                     已结课
                   </Option>
                 </Select>
-              </div>
+              </div> */}
             </SearchLayout>
           </>
         }

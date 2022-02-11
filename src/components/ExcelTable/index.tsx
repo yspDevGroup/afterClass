@@ -12,16 +12,16 @@ import moment from 'moment';
 type KBItemProps = {
   mode: 'see' | 'edit';
   data:
-    | {
-        cla: string;
-        teacher: string;
-        teacherWechatId?: string;
-        color: string;
-        bjzt: string;
-        jcmc: string;
-        fjmc: string;
-      }
-    | '';
+  | {
+    cla: string;
+    teacher: string;
+    teacherWechatId?: string;
+    color: string;
+    bjzt: string;
+    jcmc: string;
+    fjmc: string;
+  }
+  | '';
   disabled: boolean;
   onClick?: () => void;
 };
@@ -236,6 +236,7 @@ type IndexPropsType = {
   /** 表格接口没有处理的数据 */
   basicData?: any[];
   style: any;
+  xXSJPZData: any;
 };
 
 const Index: FC<IndexPropsType> = ({
@@ -249,6 +250,7 @@ const Index: FC<IndexPropsType> = ({
   getSelectdata,
   style,
   TimeData,
+  xXSJPZData
   // radioValue,
   // basicData,
   // tearchId,
@@ -414,6 +416,7 @@ const Index: FC<IndexPropsType> = ({
     }
   };
   const datas = stateTableData ? [...stateTableData] : [...dataSource];
+  console.log(datas,'datas-------')
   return (
     <div className={`${styles.excelTable} ${className}`}>
       <table style={{ boxShadow: '0px 5px 6px rgba(136,136,136,0.2)', marginBottom: '10px' }}>
@@ -435,7 +438,7 @@ const Index: FC<IndexPropsType> = ({
             <tbody>
               {datas.map((data, dataKey: any) => {
                 return (
-                  <tr key={Math.random()}>
+                  <tr key={Math.random()} style={{ borderBottom: Number.isInteger((dataKey + 1) / xXSJPZData?.length) ? '3px solid #e4e4e4' : '1px solid #e4e4e4' }}>
                     {columns.map((item, itemKey) => {
                       // 前两列没有事件
                       if (item.dataIndex === 'room' || item.dataIndex === 'course') {
@@ -445,7 +448,7 @@ const Index: FC<IndexPropsType> = ({
                         return (
                           <td
                             key={`${item.key}-${data.key}`}
-                            style={{ width: item.width, textAlign: item.align }}
+                            style={{ width: item.width, textAlign: 'center' }}
                             rowSpan={item.dataIndex === 'room' ? data.room.rowspan : undefined}
                           >
                             {type === 'edit' ? (
@@ -454,7 +457,7 @@ const Index: FC<IndexPropsType> = ({
                                   <div
                                     className="cla"
                                     style={{
-                                      width: item.dataIndex === 'room' ? 40 : '100%',
+                                      width: item.dataIndex === 'room' ? 45 : '100%',
                                       margin: '0 auto',
                                       wordBreak: 'break-word',
                                     }}
@@ -464,13 +467,13 @@ const Index: FC<IndexPropsType> = ({
                                 </div>
                               </div>
                             ) : (
-                              <div className="classCard" style={{ textAlign: item.align }}>
+                              <div className="classCard" style={{ textAlign: 'center' }}>
                                 <div className={`cardTop`} />
                                 <div className={`cardcontent`}>
                                   <div
                                     className="cla"
                                     style={{
-                                      width: item.dataIndex === 'room' ? 40 : '100%',
+                                      width: item.dataIndex === 'room' ? 45 : '100%',
                                       margin: '0 auto',
                                       wordBreak: 'break-word',
                                     }}
