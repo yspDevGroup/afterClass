@@ -284,7 +284,7 @@ const RoomManagement = () => {
         }
       }
     })();
-  }, []);
+  }, [modalVisible,uploadVisible]);
 
   const UploadProps: any = {
     name: 'xlsx',
@@ -380,18 +380,7 @@ const RoomManagement = () => {
         headerTitle={
           <>
             <SearchLayout>
-              <div>
-                <label htmlFor="type">场地名称：</label>
-                <Search
-                  placeholder="场地名称"
-                  allowClear
-                  onSearch={(value: string) => {
-                    setName(value);
-                    actionRef.current?.reload();
-                  }}
-                />
-              </div>
-              <div>
+            <div>
                 <label htmlFor="type">场地类型：</label>
                 <Select
                   allowClear
@@ -412,6 +401,18 @@ const RoomManagement = () => {
                     ))}
                 </Select>
               </div>
+              <div>
+                <label htmlFor="type">场地名称：</label>
+                <Search
+                  placeholder="场地名称"
+                  allowClear
+                  onSearch={(value: string) => {
+                    setName(value);
+                    actionRef.current?.reload();
+                  }}
+                />
+              </div>
+
             </SearchLayout>
           </>
         }
