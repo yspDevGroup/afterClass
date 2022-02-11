@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useModel, history } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tooltip, Select, Divider } from 'antd';
+import { Button, Modal, Tooltip, Select, Divider, Tag } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -20,6 +20,7 @@ import type { TableListParams } from '@/constant';
 import SearchLayout from '@/components/Search/Layout';
 import AppSKXQTable from './components/AppSKXQTable';
 import AddCourse from './components/AddCourse';
+import EllipsisHint from '@/components/EllipsisHint';
 
 const { Option } = Select;
 
@@ -355,6 +356,32 @@ const ServiceClass = (props: { location: { state: any } }) => {
       ellipsis: true,
       render: (_: any, record: any) => {
         return record?.KHKCSJ?.SSJGLX;
+      },
+    },
+    {
+      title: '适用行政班',
+      key: 'SYXZB',
+      dataIndex: 'SYXZB',
+      search: false,
+      align: 'center',
+      width: 200,
+      render: (text: any, record: any) => {
+        const arr = record?.BJSJs;
+        const sortArrays = (n1: any, n2: any) => {
+          if (n1.NJSJ?.NJ === n2.NJSJ?.NJ) {
+            return n1.BH - n2.BH;
+          }
+          return n1.NJSJ?.NJ - n2.NJSJ?.NJ;
+        }
+        arr.sort(sortArrays);
+        return (
+          <EllipsisHint
+            width="100%"
+            text={arr?.map((item: any) => {
+              return <Tag key={item.id}>{`${item?.NJSJ?.XD}${item?.NJSJ?.NJMC}${item?.BJ}`}</Tag>;
+            })}
+          />
+        );
       },
     },
     // {
