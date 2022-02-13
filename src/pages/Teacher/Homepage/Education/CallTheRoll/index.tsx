@@ -423,7 +423,8 @@ const CallTheRoll = (props: any) => {
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
         {claName?.BJMC}{' '}
-        {curNum ? `｜第 ${curNum} ${claName?.KSS ? '/ ' + claName?.KSS : ''} 课时` : ''}
+        {/* ${claName?.KSS ? '/ ' + claName?.KSS : ''} */}
+        {curNum ? `｜第 ${curNum}  课时` : ''}
       </div>
       <div className={styles.checkWorkAttendance}>
         {checkWorkInfo.map((item) => {

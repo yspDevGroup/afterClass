@@ -1,7 +1,7 @@
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Select, Space, message, Tooltip, Button } from 'antd';
+import { Select, Space, message, Tooltip, Button, Popconfirm } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import styles from './index.less';
@@ -146,14 +146,25 @@ const AdministrationClassManagement = () => {
         );
       }
       return (
-        <a
-          type="link"
-          onClick={() => {
+        <Popconfirm
+          title="取消发布后，系统将清除本班级所有课后服务数据，包含但不限于报名学生、教师等数据，确定取消发布吗？"
+          onConfirm={async () => {
             onReleaseClick(record?.KHFWBJs[0]?.id, false);
           }}
+          okText="确定"
+          cancelText="取消"
+          placement="topLeft"
         >
-          取消发布
-        </a>
+          <a
+            type="link"
+            // onClick={() => {
+            //   onReleaseClick(record?.KHFWBJs[0]?.id, false);
+            // }}
+          >
+            取消发布
+          </a>
+        </Popconfirm>
+
       );
     }
     return '';

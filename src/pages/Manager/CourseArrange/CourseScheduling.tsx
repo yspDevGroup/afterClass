@@ -907,6 +907,7 @@ const CourseScheduling = () => {
                       setKcmcValue(undefined);
                       setCdmcValue(undefined);
                       setKcmcValue(undefined);
+                      setBjmcValue([]);
                     }}
                   >
                     {termList?.map((item: any) => {
@@ -927,6 +928,7 @@ const CourseScheduling = () => {
                       setCampusId(value);
                       setCdmcValue(undefined);
                       setKcmcValue(undefined);
+                      setBjmcValue([]);
                     }}
                   >
                     {campus?.map((item: any) => {
@@ -949,7 +951,7 @@ const CourseScheduling = () => {
                     onChange={(value) => {
                       setKcmcValue(value);
                       // 已经选择的内容清除
-                      setBjmcValue(undefined);
+                      setBjmcValue([]);
                     }}
                   >
                     {kcmcData?.map((item: selectType) => {
@@ -973,6 +975,7 @@ const CourseScheduling = () => {
                   allowClear
                   style={{ width: '70%', minWidth: '680px' }}
                   placeholder="请选择"
+                  value={bjmcValue}
                   onChange={(value) => setBjmcValue(value)}
                 >
                   {bjmcData?.map((item: selectType) => {
