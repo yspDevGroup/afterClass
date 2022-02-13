@@ -225,8 +225,9 @@ const CourseTable: React.FC = () => {
             {KcDetail?.KSS === 0 || KcDetail?.KSS === null ? (
               ''
             ) : (
+
               <li>
-                <span>总课时：</span>
+                <span>{KcDetail?.ISFW === 1 ? '周课时：' : '总课时：'}</span>
                 {KcDetail?.KSS}课时
               </li>
             )}

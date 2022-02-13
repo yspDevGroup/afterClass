@@ -138,60 +138,69 @@ const Detail: React.FC = () => {
         )}
         <p className={styles.title}>{classDetail?.KHKCSJ?.KCMC}</p>
 
-        <ul>
-          <li>
-            上课时段：{moment(classDetail?.KKRQ).format('YYYY.MM.DD')}~
-            {moment(classDetail?.JKRQ).format('YYYY.MM.DD')}
-          </li>
-          <li>上课地点：本校</li>
-        </ul>
-        <p className={styles.title}>课程简介</p>
-        <p className={styles.content}>{classDetail?.KHKCSJ?.KCMS}</p>
-        <p className={styles.title}>班级信息</p>
-        <ul className={styles.classInformation}>
-          <li>所在班级：{classDetail?.BJMC}</li>
-          <li>{classDetail?.ISFW === 1 ? '周课时：' : '总课时：'} {classDetail.KSS}课时</li>
-          <li>总人数：{classDetail.BJRS}人</li>
-          <li className={styles.bzrname}>
-            班主任：
-            {classDetail?.KHBJJs.map((item: any) => {
-              if (item.JSLX.indexOf('副') === -1) {
-                return (
-                  <span style={{ marginRight: '1em' }}>
-                    <ShowName
-                      type="userName"
-                      openid={item?.JZGJBSJ?.WechatUserId}
-                      XM={item?.JZGJBSJ?.XM}
-                    />
-                  </span>
-                );
+        {
+          classDetail ? <>   <ul>
+            <li>
+              上课时段：{moment(classDetail?.KKRQ).format('YYYY.MM.DD')}~
+              {moment(classDetail?.JKRQ).format('YYYY.MM.DD')}
+            </li>
+            <li>上课地点：本校</li>
+          </ul>
+            <p className={styles.title}>课程简介</p>
+            <p className={styles.content}>{classDetail?.KHKCSJ?.KCMS}</p>
+            <p className={styles.title}>班级信息</p>
+            <ul className={styles.classInformation}>
+              <li>所在班级：{classDetail?.BJMC}</li>
+              <li>{classDetail?.ISFW === 1 ? '周课时：' : '总课时：'} {classDetail?.KSS}课时</li>
+              <li>总人数：{classDetail?.BJRS}人</li>
+
+              {
+                classDetail?.KHBJJs?.find((items: any) => items.JSLX === '主教师') ?
+                  <li className={styles.bzrname}>
+                    班主任：
+                    {classDetail?.KHBJJs.map((item: any) => {
+                      if (item.JSLX.indexOf('副') === -1) {
+                        return (
+                          <span style={{ marginRight: '1em' }}>
+                            <ShowName
+                              type="userName"
+                              openid={item?.JZGJBSJ?.WechatUserId}
+                              XM={item?.JZGJBSJ?.XM}
+                            />
+                          </span>
+                        );
+                      }
+                      return '';
+                    })}
+                  </li> : <></>
               }
-              return '';
-            })}
-          </li>
-          <li className={styles.bzrname}>
-            副班：
-            {classDetail?.KHBJJs.map((item: any) => {
-              if (item.JSLX.indexOf('主') === -1) {
-                return (
-                  <span style={{ marginRight: '1em' }}>
-                    <ShowName
-                      type="userName"
-                      openid={item?.JZGJBSJ?.WechatUserId}
-                      XM={item?.JZGJBSJ?.XM}
-                    />
-                  </span>
-                );
+              {
+                classDetail?.KHBJJs?.find((items: any) => items.JSLX === '副教师') ?
+                  <li className={styles.bzrname}>
+                    副班：
+                    {classDetail?.KHBJJs.map((item: any) => {
+                      if (item.JSLX.indexOf('主') === -1) {
+                        return (
+                          <span style={{ marginRight: '1em' }}>
+                            <ShowName
+                              type="userName"
+                              openid={item?.JZGJBSJ?.WechatUserId}
+                              XM={item?.JZGJBSJ?.XM}
+                            />
+                          </span>
+                        );
+                      }
+                      return '';
+                    })}
+                  </li> : <></>
               }
-              return '';
-            })}
-          </li>
-          {FKstate?.ZT === 3 ? (
-            <li className={styles.bzrname}>报名费：{classDetail?.FY}元</li>
-          ) : (
-            <></>
-          )}
-          {/* <li>
+
+              {FKstate?.ZT === 3 ? (
+                <li className={styles.bzrname}>报名费：{classDetail?.FY}元</li>
+              ) : (
+                <></>
+              )}
+              {/* <li>
             上课安排：
             <table width="100%">
               <thead>
@@ -221,57 +230,59 @@ const Detail: React.FC = () => {
               </tbody>
             </table>
           </li> */}
-          <li>
-            <div className={styles.Teachingaterial}>
-              {!JFData?.length ? (
-                <></>
-              ) : (
-                <div
-                  className={styles.box}
-                  style={{
-                    borderRadius: JFstate === true ? '8px 8px 0 0' : '8px',
-                  }}
-                >
-                  {FKstate?.ZT === 3 ? (
-                    <Checkbox onChange={onJFChange} checked={JFstate}>
-                      <span>选购教辅</span>
-                    </Checkbox>
+              <li>
+                <div className={styles.Teachingaterial}>
+                  {!JFData?.length ? (
+                    <></>
                   ) : (
-                    <span style={{ fontWeight: 'bold', fontSize: 16 }}>教辅材料</span>
+                    <div
+                      className={styles.box}
+                      style={{
+                        borderRadius: JFstate === true ? '8px 8px 0 0' : '8px',
+                      }}
+                    >
+                      {FKstate?.ZT === 3 ? (
+                        <Checkbox onChange={onJFChange} checked={JFstate}>
+                          <span>选购教辅</span>
+                        </Checkbox>
+                      ) : (
+                        <span style={{ fontWeight: 'bold', fontSize: 16 }}>教辅材料</span>
+                      )}
+                      {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
+                    </div>
                   )}
-                  {JFTotalost <= 0 ? <div>免费</div> : <div>￥{JFTotalost?.toFixed(2)}</div>}
-                </div>
-              )}
-              <div
-                className={styles.tables}
-                style={{
-                  maxHeight: FKstate?.ZT !== 3 ? 'initial' : '70px',
-                }}
-              >
-                {JFstate === true ? (
-                  <>
-                    {JFData ? (
+                  <div
+                    className={styles.tables}
+                    style={{
+                      maxHeight: FKstate?.ZT !== 3 ? 'initial' : '70px',
+                    }}
+                  >
+                    {JFstate === true ? (
                       <>
-                        {JFData?.map((value: any) => {
-                          return (
-                            <div>
-                              <div className={styles.JCMC}>{value.JCMC}</div>
-                              {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
-                            </div>
-                          );
-                        })}
+                        {JFData ? (
+                          <>
+                            {JFData?.map((value: any) => {
+                              return (
+                                <div>
+                                  <div className={styles.JCMC}>{value.JCMC}</div>
+                                  {value.JCFY <= 0 ? <div>免费</div> : <div>￥{value.JCFY}</div>}
+                                </div>
+                              );
+                            })}
+                          </>
+                        ) : (
+                          <></>
+                        )}
                       </>
                     ) : (
                       <></>
                     )}
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div>
-            </div>
-          </li>
-        </ul>
+                  </div>
+                </div>
+              </li>
+            </ul></> : <></>
+        }
+
       </div>
       {FKstate?.ZT === 3 ? (
         <div className={styles.footer}>
