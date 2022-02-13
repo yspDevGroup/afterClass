@@ -246,7 +246,7 @@ const AddArranging: FC<PropsType> = (props) => {
         res = await judgeKHPKSJ({
           XNXQId: Bj?.XNXQId,
           KHBJSJId: Bj?.KHBJSJId,
-          KSS: Bj?.KSS,
+          KSS: Class?.KSS,
           startDate: moment(getFirstDay(new Date(pkData?.RQ))).format('YYYY-MM-DD'),
           endDate: moment(getFirstDay(new Date(pkData?.RQ))).subtract(-6, "days").format("YYYY-MM-DD")
         })
