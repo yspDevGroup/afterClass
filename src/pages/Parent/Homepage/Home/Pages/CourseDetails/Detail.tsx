@@ -150,6 +150,8 @@ const Detail: React.FC = () => {
         <p className={styles.title}>班级信息</p>
         <ul className={styles.classInformation}>
           <li>所在班级：{classDetail?.BJMC}</li>
+          <li>{classDetail?.ISFW === 1 ? '周课时：' : '总课时：'} {classDetail.KSS}课时</li>
+          <li>总人数：{classDetail.BJRS}人</li>
           <li className={styles.bzrname}>
             班主任：
             {classDetail?.KHBJJs.map((item: any) => {
@@ -189,7 +191,7 @@ const Detail: React.FC = () => {
           ) : (
             <></>
           )}
-          <li>
+          {/* <li>
             上课安排：
             <table width="100%">
               <thead>
@@ -218,7 +220,7 @@ const Detail: React.FC = () => {
                 })}
               </tbody>
             </table>
-          </li>
+          </li> */}
           <li>
             <div className={styles.Teachingaterial}>
               {!JFData?.length ? (
