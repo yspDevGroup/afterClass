@@ -254,7 +254,7 @@ const AddArranging: FC<PropsType> = (props) => {
         res = await judgeKHPKSJ({
           XNXQId: Bj?.XNXQId,
           KHBJSJId: Bj?.KHBJSJId,
-          KSS: Bj?.KSS
+          KSS: Class?.KSS,
         })
       }
       if (res?.status === 'ok') {
