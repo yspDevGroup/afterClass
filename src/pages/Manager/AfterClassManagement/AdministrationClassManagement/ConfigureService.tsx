@@ -73,8 +73,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
   const getDetailTimePZ = async () => {
     setLoading(true);
     const res = await getAllXXJTPZ({
-      XNXQId: XNXQId,
-      XQSJId: XQSJId,
+      XNXQId,
+      XQSJId,
     });
     if (res.status === 'ok') {
       if (res.data?.length === 0) {
@@ -106,7 +106,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
         const { data } = res;
         if (data) {
           data?.KCFWBJs?.forEach((item: any) => {
-            console.log(item);
             // 1 辅导班
             if (item.LX === 1) {
               KCFD.push({ label: item?.KHBJSJ?.BJMC, value: item?.KHBJSJ?.id });
@@ -204,18 +203,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
       params.ZT = 1;
     }
 
-    params.RQs = BMSDData?.filter((item: any) => {
-      // 缴费方式是月
-      if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
-        return true;
-      }
-      if (JFLX === 1) {
-        return item.type === JFLX;
-      }
-      return false;
-    }).map((item: any) => {
-      return { KSRQ: item.KSRQ, JSRQ: item.JSRQ, SDBM: item.name };
-    });
+
     // 编辑
     if (detailValue?.id) {
       const res = await updateKHFWBJ({ id: detailValue?.id }, { ...params });
@@ -231,6 +219,18 @@ const ConfigureService = (props: ConfigureSeverType) => {
         message.error(res.message);
       }
     } else {
+      params.RQs = BMSDData?.filter((item: any) => {
+        // 缴费方式是月
+        if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
+          return true;
+        }
+        if (JFLX === 1) {
+          return item.type === JFLX;
+        }
+        return false;
+      }).map((item: any) => {
+        return { KSRQ: item.KSRQ, JSRQ: item.JSRQ, SDBM: item.name };
+      });
       // 新增
       const res = await createKHFWBJ(params);
       if (res.status === 'ok') {
@@ -253,8 +253,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
   const getData = async () => {
     if (XQSJId && XNXQId && NJSJ) {
       const res = await getAllKHFWSJ({
-        XNXQId: XNXQId,
-        XQSJId: XQSJId,
+        XNXQId,
+        XQSJId,
         NJSJIds: [NJSJ.id],
         FWZT: [1],
       });
@@ -303,7 +303,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
   };
   // v true 更新 false 新建
   const onTemplateSave = (v: boolean = false) => {
-    console.log('模板-----', formRef?.current);
     formRef?.current?.validateFields?.().then(async (values: ModalValue) => {
       const params: any = {
         FWMC: values?.FWMC,
@@ -316,7 +315,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
         ZDKCS: values?.KXSL,
         FWFY: values?.FWFY,
       };
-
       // 更新
       if (v) {
         if (templateId) {
@@ -351,7 +349,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
         params.NJIds = [NJSJ.id];
         params.FWZT = 1;
         const res = await createKHFWSJ(params);
-        // console.log('==========')
         if (res.status === 'ok') {
           message.success('保存成功');
           getData();
