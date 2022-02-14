@@ -41,6 +41,7 @@ const converClassInfo = (data: any) => {
       pkId: id,
       jcId: XXSJPZ?.id,
       fjId: FJSJ?.id,
+      ISFW:KHBJSJ?.ISFW,
       RQ
     });
   }
