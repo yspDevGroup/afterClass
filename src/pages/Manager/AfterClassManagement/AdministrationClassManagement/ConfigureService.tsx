@@ -23,7 +23,7 @@ type ConfigureSeverType = {
   // campusId: string,
   BJSJId: string;
   NJSJ: any;
-  XQData?: any; //{JSRQ: "2021-12-29" KSRQ: "2021-08-30"}
+  XQData?: any; // {JSRQ: "2021-12-29" KSRQ: "2021-08-30"}
   actionRef: any;
   XQSJId?: string;
   key: string;
@@ -375,15 +375,23 @@ const ConfigureService = (props: ConfigureSeverType) => {
       XNXQId,
       ISFW: 1,
       BJZT: '已开班',
-      KCTAG: '校内辅导',
       NJSJId: NJSJ?.id,
       BJSJId, // 行政班Id，
       page: 0,
       pageSize: 0,
-      XQSJId: XQSJId,
+      XQSJId,
     });
     if (res?.status === 'ok' && res?.data?.rows?.length) {
-      params.KCFD = res.data.rows.map((item: any) => {
+      const newArrFW = res.data.rows.filter((item: any) => {
+        return item?.ISZB === 0
+      });
+      const newArrKC = res.data.rows.filter((item: any) => {
+        return item?.ISZB === 1
+      });
+      params.KCFD = newArrFW.map((item: any) => {
+        return { value: item.id, label: item.BJMC };
+      });
+      params.KHKC = newArrKC.map((item: any) => {
         return { value: item.id, label: item.BJMC };
       });
     }
@@ -588,6 +596,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
             // 课程班=0 辅导班=1
             flag={0}
             XQSJId={XQSJId}
+            BJSJId={BJSJId}
           />
         </ProForm.Item>
         <Row justify="start" align="middle">
@@ -631,7 +640,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
             <Col flex="auto">
               <Space wrap style={{ width: '100%' }}>
                 {BMSDData?.filter((item: any) => {
-                  console.log('item', item);
                   // 缴费方式是月
                   if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
                     return true;

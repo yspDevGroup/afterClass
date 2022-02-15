@@ -109,8 +109,8 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
       });
     }
     const res = await addKCtoKCFWBJ({
-      KHFWBJId: KHFWBJId,
-      KHBJSJIds: KHBJSJIds,
+      KHFWBJId,
+      KHBJSJIds,
     });
     if (res.status === 'ok') {
       message.success('修改成功');
@@ -179,6 +179,7 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
             }}
             XNXQId={XNXQId}
             XQSJId={XQSJId}
+            BJSJId={BJSJId}
             // 课程班=0 辅导班=1
             flag={1}
           />
@@ -204,6 +205,7 @@ const UpdateCourses = (props: UpdateCoursesProps, ref: any) => {
             }}
             XNXQId={XNXQId}
             XQSJId={XQSJId}
+            BJSJId={BJSJId}
             // 课程班=0 辅导班=1
             flag={0}
           />

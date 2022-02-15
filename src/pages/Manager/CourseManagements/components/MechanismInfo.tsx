@@ -23,6 +23,7 @@ const MechanismInfo = (props: {
       width={480}
       onClose={onMechanismInfoClose}
       visible={visibleMechanismInfo}
+      className={classes.KcDatas}
     >
       <Form initialValues={info} className={classes.forms} labelCol={{ span: 7, offset: 0 }}>
         <Form.Item name="id" hidden>

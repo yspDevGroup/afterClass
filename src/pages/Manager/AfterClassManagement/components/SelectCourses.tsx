@@ -18,8 +18,8 @@ type SelectCourseProps = {
   getNJArr?: any; // 获取课程 function
   flag?: number; // 0 课程班 基础 1 辅导课程表
   XNXQId?: string; // 学年学期id
-  XQSJId?: string; //校区ID
-  BJSJId?: string; //班级id
+  XQSJId?: string; // 校区ID
+  BJSJId?: string; // 班级id
   disabled?: boolean;
 };
 
@@ -59,7 +59,6 @@ const SelectCourses = (props: SelectCourseProps) => {
         list?.push(item?.id);
       });
       setKHKCLXData(list);
-      console.log(list, 'list-----');
     }
   };
 
@@ -99,7 +98,6 @@ const SelectCourses = (props: SelectCourseProps) => {
       </Tag>
     ));
   };
-
   // 获取课后课程
   const getKHKCData = async (BJMC: string | undefined = undefined) => {
     const NJSJIds = getNJArr();
@@ -114,11 +112,10 @@ const SelectCourses = (props: SelectCourseProps) => {
         BJZT: '已开班',
         pageSize: 0,
         page: 0,
-        BJMC: BJMC,
+        BJMC,
         XQSJId,
         BJSJId,
       });
-      console.log(res, '----------------------------------');
       if (res?.status === 'ok') {
         const { rows } = res.data;
         if (rows.length) {

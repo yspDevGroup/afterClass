@@ -150,7 +150,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
           const result = await getStudentListByBjid({
             XSJBSJId,
             ZT: [0, 1, 3],
-            BJSJId: BJSJId,
+            BJSJId,
             page: 0,
             pageSize: 0,
           });

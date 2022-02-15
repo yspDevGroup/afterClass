@@ -385,7 +385,6 @@ export const CurdayCourse = async (
     // 获取今日上课课程
     // const list = detail.filter((val) => val.wkd === day.getDay());
     const list = detail.filter((val) => val.RQ === myDate);
-    console.log(list,'list-----')
     const dayList = days?.filter((v: { day: string }) => v.day === myDate);
     if (list?.length) {
       const newArr = [].map.call(list, (val: { jcId: string }) => {

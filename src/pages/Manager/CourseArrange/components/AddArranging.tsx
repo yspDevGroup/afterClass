@@ -327,6 +327,7 @@ const AddArranging: FC<PropsType> = (props) => {
     const bjID = getQueryString('courseId');
     if (bjID) {
       history.go(-1);
+      setState(true);
     } else {
       setState(true);
     }
@@ -344,9 +345,9 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 班级选择
   const BjClick = (value: any) => {
-    setClass(value)
-
-
+    setClass(value);
+    // 更换课程班后将场地清空
+    setCdmcValue(undefined);
     const start = new Date(moment(value?.KKRQ).format('YYYY/MM/DD  00:00:00'));
     const end = new Date(moment(value?.JKRQ).format('YYYY/MM/DD  23:59:59'));
     const times = start.getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
@@ -418,41 +419,44 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 获取课程对应课程班数据信息
   const getBjData = async (kcName?: string) => {
-    const bjmcResl = await getAllClasses({
-      page: 0,
-      pageSize: 0,
-      NJSJId: NJID,
-      KHKCSJId: kcName,
-      XNXQId: curXNXQId,
-      BJZT: '未开班',
-      XQSJId: campusId,
-    });
-    if (bjmcResl.status === 'ok') {
-      const bjRows = bjmcResl.data.rows;
-      setBjData(bjRows);
-      // 获取课程班老师 是否存在
-      if (!Bj && formValues?.BJId) {
-        const value = bjRows?.find((item: { id: string }) => item.id === formValues?.BJId);
-        if (value) {
-          BjClick(value);
+    if (curXNXQId && campusId) {
+      const bjmcResl = await getAllClasses({
+        page: 0,
+        pageSize: 0,
+        NJSJId: NJID,
+        KHKCSJId: kcName,
+        XNXQId: curXNXQId,
+        BJZT: '未开班',
+        XQSJId: campusId,
+      });
+      if (bjmcResl.status === 'ok') {
+        const bjRows = bjmcResl.data.rows;
+        setBjData(bjRows);
+        // 获取课程班老师 是否存在
+        if (!Bj && formValues?.BJId) {
+          const value = bjRows?.find((item: { id: string }) => item.id === formValues?.BJId);
+          if (value) {
+            BjClick(value);
+          }
         }
-      }
-      // 判断获取的新课程和当前选中的bj 不匹配时 清掉 bj
-      if (Bj?.id) {
-        const value = bjRows?.find((item: { id: string }) => item.id === Bj?.id);
-        if (!value) {
-          setTearchId(undefined);
-          setBj(undefined);
-          setCDLoading(false);
+        // 判断获取的新课程和当前选中的bj 不匹配时 清掉 bj
+        if (Bj?.id) {
+          const value = bjRows?.find((item: { id: string }) => item.id === Bj?.id);
+          if (!value) {
+            setTearchId(undefined);
+            setBj(undefined);
+            setCDLoading(false);
+          }
         }
       }
     }
+
   };
 
   useEffect(() => {
     getKcData();
     getBjData();
-  }, [NJID]);
+  }, [NJID, curXNXQId, campusId]);
 
   // 默认选择本校
   useEffect(() => {
@@ -679,7 +683,6 @@ const AddArranging: FC<PropsType> = (props) => {
               // onFinish={submit}
               submitter={false}
             >
-              {/* <div className={styles.screen} style={{ display: 'flex', justifyContent:'center', background:'red' }}> */}
               <Row justify="start" align="middle" style={{ background: '#F5F5F5' }}>
                 <Col span={6}>
                   <ProFormSelect

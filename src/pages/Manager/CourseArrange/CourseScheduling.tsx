@@ -202,7 +202,7 @@ const CourseScheduling = () => {
             // 超出该班级上课开始时段
             if (RqDisable[2] < 7 && index === RqDisable[0] - 1) {
               const num = RqDisable[2] - 1;
-              newWeek.slice(0,num).forEach((items: any) => {
+              newWeek.slice(0, num).forEach((items: any) => {
                 table[items] = {
                   weekId: '', // 周
                   cla: '无法排课', // 班级名称
@@ -386,6 +386,7 @@ const CourseScheduling = () => {
                     dis: bjId !== KHItem?.KHBJSJ?.id,
                     fjmc: KHItem?.FJSJ?.FJMC || KHItem?.FJSJ?.label,
                     jcmc: KHItem?.XXSJPZ?.TITLE,
+                    XNXQId: KHItem?.XNXQId
                   };
                   if (KHItem?.WEEKDAY === '1') {
                     table?.monday.push(newObj);
@@ -438,6 +439,7 @@ const CourseScheduling = () => {
                 dis: true,
                 fjmc: '无法排课',
                 jcmc: '超出当前学年学期',
+                XNXQId: '',
               };
             });
           }
@@ -459,6 +461,7 @@ const CourseScheduling = () => {
                 dis: true,
                 fjmc: '',
                 jcmc: '',
+                XNXQId: '',
               };
             });
           }
@@ -487,7 +490,7 @@ const CourseScheduling = () => {
       }
     }
   };
-
+  const bjIds = getQueryString('courseId');
   useEffect(() => {
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -495,11 +498,12 @@ const CourseScheduling = () => {
       }
       await initWXAgentConfig(['checkJsApi']);
     })();
-    const bjId = getQueryString('courseId');
+
     const XQSJId = getQueryString('XQSJ');
-    if (bjId !== null) {
+    if (bjIds !== null) {
       (async () => {
-        const njInfo = await getKHBJSJ({ id: bjId });
+        const njInfo = await getKHBJSJ({ id: bjIds });
+        console.log(njInfo,'njInfo')
         if (njInfo.status === 'ok') {
           setRecordValue({
             BJId: njInfo.data.id,
@@ -512,7 +516,7 @@ const CourseScheduling = () => {
         }
       })();
     }
-  }, []);
+  }, [bjIds]);
 
   const columns: {
     title: string;
@@ -684,7 +688,6 @@ const CourseScheduling = () => {
     const res = await getAllPK({
       XNXQId: curXNXQId,
       XXJBSJId: currentUser?.xxId,
-      // KHBJSJId: "e9fa00b5-a383-4916-bd6f-40aedb222608"
     });
     if (res.status === 'ok') {
       // 设置初始排课数据
@@ -732,7 +735,6 @@ const CourseScheduling = () => {
     const res = await queryXNXQList(currentUser?.xxId);
     const newData = res.xnxqList;
     const curTerm = res.current;
-
     if (newData?.length) {
       if (curTerm) {
         if (xnxq === null) {
@@ -784,7 +786,7 @@ const CourseScheduling = () => {
         value: item.id,
       }));
       setBjmcData(BJMC);
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -968,7 +970,7 @@ const CourseScheduling = () => {
                 </div>
 
               </SearchLayout>
-              <div style={{marginTop:10}}>
+              <div style={{ marginTop: 10 }}>
                 <label>课程班：</label>
                 <Select
                   mode="multiple"

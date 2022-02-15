@@ -5,7 +5,7 @@ import type { FC } from 'react';
 import { Button, Modal } from 'antd';
 import ShowName from '@/components/ShowName';
 import EllipsisHint from '../EllipsisHint';
-
+import { history } from 'umi';
 import styles from './index.less';
 import moment from 'moment';
 
@@ -19,7 +19,10 @@ type KBItemProps = {
     color: string;
     bjzt: string;
     jcmc: string;
+    bjId: string;
+    XNXQId: string;
     fjmc: string;
+    xqId: string;
   }
   | '';
   disabled: boolean;
@@ -248,7 +251,7 @@ const Index: FC<IndexPropsType> = ({
     setStateTableData(dataSource);
   }, [dataSource]);
 
-  const onTdClick = (rowKey: number, colKey: number) => {
+  const onTdClick = (rowKey: number, colKey: number, value: any) => {
     //  不能直接操作表格的数据
     // 需要复制一份数据出来进行修改  不然在操作表格时容易触发state 导致重新渲染
     const newData = stateTableData ? [...stateTableData] : [...dataSource];
@@ -262,32 +265,25 @@ const Index: FC<IndexPropsType> = ({
     // type === 'see'时 获取到点击单元格的数据
     let seeChosenItem = null;
     if (type === 'see' && !chosenData) {
-      if (rowData[colItem.dataIndex]?.bjzt === '已开班') {
+      if (value?.bjzt === '已开班') {
         Modal.warning({
           title: '此课程班已开班，不能再进行排课操作',
         });
-      } else if (rowData[colItem.dataIndex]?.bjzt === '已结课') {
+      } else if (value?.bjzt === '已结课') {
         Modal.warning({
           title: '此课程班已结课，不能再进行排课操作',
         });
-      } else if (
-        rowData[colItem.dataIndex]?.isXZB &&
-        rowData[colItem.dataIndex]?.bjzt === '未开班'
-      ) {
-        Modal.warning({
-          title: '行政班排课不可编辑课程班课表，如有需要请在课程班排课中操作。',
-        });
       } else {
         seeChosenItem = {
-          XQ: rowData[colItem.dataIndex]?.xqId, // 校区ID
-          NJ: rowData[colItem.dataIndex]?.njId, // 年级ID
-          KC: rowData[colItem.dataIndex]?.kcId, // 课程ID
-          XZBId: rowData[colItem.dataIndex]?.XZBId, // 行政班ID
-          isXZB: rowData[colItem.dataIndex]?.isXZB, // 行政班ID
-          BJId: rowData[colItem.dataIndex]?.bjId, //  课程班ID
+          XQ: value?.xqId, // 校区ID
+          NJ: value?.njId, // 年级ID
+          KC: value?.kcId, // 课程ID
+          XZBId: value?.XZBId, // 行政班ID
+          isXZB: value?.isXZB, // 行政班ID
+          BJId: value?.bjId, //  课程班ID
           CDLX: rowData.room?.FJLXId, // 场地类型ID
           CDMC: rowData.room?.jsId, // 场地名称
-          weekId: rowData[colItem.dataIndex]?.weekId, // 排课ID
+          weekId: value?.weekId, // 排课ID
           jsId: rowData.room?.jsId, // 教室ID
           hjId: rowData.course?.hjId, // 时间ID,
         };
@@ -296,7 +292,7 @@ const Index: FC<IndexPropsType> = ({
         }
       }
     } else if (type === 'edit') {
-      if (chosenData && !rowData[colItem.dataIndex]) {
+      if (chosenData && !value) {
         // let connst = -1;
         // newData?.forEach((item: any, key: any) => {
         //   if (
@@ -490,7 +486,7 @@ const Index: FC<IndexPropsType> = ({
                                     data={value}
                                     disabled={false}
                                     onClick={() => {
-                                      onTdClick(dataKey, itemKey);
+                                      onTdClick(dataKey, itemKey, value);
                                     }}
                                     bjmcValue={bjmcValue}
                                   />

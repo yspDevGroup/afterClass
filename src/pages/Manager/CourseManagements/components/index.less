@@ -1,9 +1,16 @@
 .courseStyles {
   :global {
+    .ant-drawer-header {
+      position: relative;
+      button {
+        position: absolute;
+        right: 0;
+      }
+    }
     .ant-space-item {
       width: 100%;
     }
-    .ant-drawer-title{
+    .ant-drawer-title {
       font-weight: bold;
     }
   }
@@ -12,9 +19,9 @@
 .drawerstyle {
   :global {
     .ant-descriptions-item-content {
-      color: #666;
       flex-wrap: wrap;
-      >.ant-tag{
+      color: #666;
+      > .ant-tag {
         margin-bottom: 8px;
       }
     }
@@ -35,13 +42,13 @@
     .ant-picker-disabled,
     .ant-input-number-disabled,
     .ant-select-disabled .ant-select-selector {
-      color: @text-color  !important;
-      background-color: inherit;
+      color: @text-color !important;
+      text-overflow: ellipsis;
       background: none !important;
+      background-color: inherit;
       border: none;
       cursor: default;
       resize: none;
-      text-overflow: ellipsis;
 
       .ant-picker-suffix {
         display: none;
@@ -50,6 +57,18 @@
 
     .ant-select-disabled .ant-select-arrow {
       display: none;
+    }
+  }
+}
+
+.KcDatas {
+  :global {
+    .ant-drawer-header {
+      position: relative;
+      button {
+        position: absolute;
+        right: 0;
+      }
     }
   }
 }
