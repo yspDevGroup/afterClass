@@ -267,11 +267,11 @@ const Index: FC<IndexPropsType> = ({
     if (type === 'see' && !chosenData) {
       if (value?.bjzt === '已开班') {
         Modal.warning({
-          title: '此课程班已开班，不能再进行排课操作',
+          title: '此课程班已开班，不可再进行排课操作',
         });
       } else if (value?.bjzt === '已结课') {
         Modal.warning({
-          title: '此课程班已结课，不能再进行排课操作',
+          title: '此课程班已结课，不可再进行排课操作',
         });
       } else {
         seeChosenItem = {

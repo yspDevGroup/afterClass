@@ -147,13 +147,14 @@ const AdministrationClassManagement = () => {
       }
       return (
         <Popconfirm
-          title="取消发布后，系统将清除本班级所有课后服务数据，包含但不限于报名学生、教师等数据，确定取消发布吗？"
+          title={record?.xsfwbm_count === 0 ? '确定取消发布吗？' : '本行政班已有学生报名，学生全部退课后，可取消发布。'}
           onConfirm={async () => {
             onReleaseClick(record?.KHFWBJs[0]?.id, false);
           }}
           okText="确定"
           cancelText="取消"
           placement="topLeft"
+          overlayClassName={ record?.xsfwbm_count === 0 ? styles?.Popups : styles?.Popup}
         >
           <a
             type="link"

@@ -34,6 +34,18 @@
 
 :global{
   .ant-popover{
-    width: 400px;
+    min-width: 200px;
+  }
+}
+
+.Popup{
+  :global{
+    .ant-popover-content{
+      .ant-popover-buttons{
+        .ant-btn-primary{
+          display: none;
+        }
+      }
+    }
   }
 }
