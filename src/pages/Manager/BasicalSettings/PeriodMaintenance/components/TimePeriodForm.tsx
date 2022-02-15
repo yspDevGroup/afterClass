@@ -57,6 +57,12 @@ const TimePeriodForm = (props: PropsType) => {
       }
     })();
   }, []);
+  useEffect(() => {
+    if(current){
+      setXQJSRQ(current?.XNXQ?.JSRQ);
+      setXQKSRQ(current?.XNXQ?.KSRQ);
+    }
+  }, [current]);
 
   const formItems: any[] = [
     {
