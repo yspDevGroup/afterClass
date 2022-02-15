@@ -1,3 +1,10 @@
+/*
+ * @description: 批量配置课后服务
+ * @author: zpl
+ * @Date: 2022-02-15 09:11:42
+ * @LastEditTime: 2022-02-15 10:18:21
+ * @LastEditors: zpl
+ */
 import React, { useState, useRef, useEffect } from 'react';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ProFormInstance } from '@ant-design/pro-form';
@@ -29,6 +36,12 @@ export type ModalValue = {
   JFLX?: number;
   BJSJIds?: any;
 };
+/**
+ * 批量配置课后服务
+ *
+ * @param {ConfigureSeverType} props
+ * @return {*}
+ */
 const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   const { XNXQId, actionRef, XQSJId, key } = props;
   const [loading, setLoading] = useState<boolean>(false);

@@ -16,7 +16,7 @@ import { bulkEditKHFWBJZT, updateKHFWBJ } from '@/services/after-class/khfwbj';
 import ClassSeviveDetail from './ClassSeviveDetail';
 import UpdateCourses from './UpdateCourses';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import ConfigureServiceBatch from './ConfigureServicebatch';
+import ConfigureServiceBatch from './ConfigureServiceBatch';
 
 type selectType = { label: string; value: string };
 
@@ -89,17 +89,17 @@ const AdministrationClassManagement = () => {
       getNJSJ();
       setBJId(undefined);
       setNjId(undefined);
-      actionRef.current?.reloadAndRest();
+      actionRef.current?.reloadAndRest?.();
     }
   }, [campusId]);
 
   const onBjChange = async (value: any) => {
     setBJId(value);
-    actionRef.current?.reloadAndRest();
+    actionRef.current?.reloadAndRest?.();
   };
   const onNjChange = async (value: any) => {
     setNjId(value);
-    actionRef.current?.reloadAndRest();
+    actionRef.current?.reloadAndRest?.();
   };
 
   const getBJSJ = async () => {
@@ -124,7 +124,7 @@ const AdministrationClassManagement = () => {
     const res = await updateKHFWBJ({ id }, { ZT: flag ? 1 : 0, XNXQId: curXNXQId });
     if (res.status === 'ok') {
       message.success(flag ? '发布成功' : '取消成功');
-      actionRef.current?.reloadAndRest();
+      actionRef.current?.reloadAndRest?.();
     } else {
       message.error(res.message);
     }
@@ -164,7 +164,6 @@ const AdministrationClassManagement = () => {
             取消发布
           </a>
         </Popconfirm>
-
       );
     }
     return '';
@@ -313,7 +312,7 @@ const AdministrationClassManagement = () => {
       if (item.id === value) {
         setCurXNXQId(value);
         setXQData(item);
-        actionRef.current?.reloadAndRest();
+        actionRef.current?.reloadAndRest?.();
       }
     });
   };
@@ -332,11 +331,11 @@ const AdministrationClassManagement = () => {
     const res = await bulkEditKHFWBJZT(params);
     if (res?.status === 'ok') {
       message.success(falg ? '发布成功' : '取消成功');
-      actionRef.current?.reloadAndRest();
-      actionRef.current.clearSelected();
+      actionRef.current?.reloadAndRest?.();
+      actionRef.current?.clearSelected?.();
     } else {
       message.error(res.message);
-      actionRef.current.clearSelected();
+      actionRef.current?.clearSelected?.();
     }
   };
   return (
@@ -355,7 +354,7 @@ const AdministrationClassManagement = () => {
                   onClick={() => {
                     const list = selectedRows.filter((item: any) => {
                       const { KHFWBJs } = item;
-                      if (KHFWBJs?.length > 0 && KHFWBJs?.[0]?.ZT === 0) return true;
+                      return KHFWBJs?.length > 0 && KHFWBJs?.[0]?.ZT === 0;
                     });
                     onRelease(list, true);
                   }}
@@ -368,7 +367,7 @@ const AdministrationClassManagement = () => {
                   onClick={() => {
                     const list = selectedRows.filter((item: any) => {
                       const { KHFWBJs } = item;
-                      if (KHFWBJs?.length > 0 && KHFWBJs?.[0]?.ZT === 1) return true;
+                      return KHFWBJs?.length > 0 && KHFWBJs?.[0]?.ZT === 1;
                     });
                     onRelease(list, false);
                   }}
@@ -433,7 +432,11 @@ const AdministrationClassManagement = () => {
                 <label htmlFor="grade">校区名称：</label>
                 <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
                   {campusData?.map((item: any) => {
-                    return <Option value={item.value}>{item.label}</Option>;
+                    return (
+                      <Option key={item.value} value={item.value}>
+                        {item.label}
+                      </Option>
+                    );
                   })}
                 </Select>
               </div>
@@ -441,7 +444,7 @@ const AdministrationClassManagement = () => {
                 <label htmlFor="grade">学年学期：</label>
                 <Select value={curXNXQId} placeholder="请选择" onChange={onXNXQChange}>
                   {curXNXQData?.map((item: any) => {
-                    return <Option value={item.id}>{`${item.XN}-${item.XQ}`}</Option>;
+                    return <Option key={item.id} value={item.id}>{`${item.XN}-${item.XQ}`}</Option>;
                   })}
                 </Select>
               </div>
@@ -450,7 +453,9 @@ const AdministrationClassManagement = () => {
                 <label htmlFor="grade">年级名称：</label>
                 <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
                   {NjData?.map((item: any) => {
-                    return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                    return (
+                      <Option key={item.id} value={item.id}>{`${item.XD}${item.NJMC}`}</Option>
+                    );
                   })}
                 </Select>
               </div>
@@ -470,7 +475,12 @@ const AdministrationClassManagement = () => {
           }
           toolBarRender={() => {
             return [
-              <ConfigureServiceBatch actionRef={actionRef} XNXQId={curXNXQId} XQSJId={campusId} />,
+              <ConfigureServiceBatch
+                key=""
+                actionRef={actionRef}
+                XNXQId={curXNXQId}
+                XQSJId={campusId}
+              />,
             ];
           }}
         />
