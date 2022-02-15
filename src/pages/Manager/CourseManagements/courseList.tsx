@@ -401,7 +401,14 @@ const CourseList = () => {
       },
     },
     {
-      title: '服务课堂',
+      title:  (
+        <span>
+          服务课堂&nbsp;
+          <Tooltip overlayStyle={{ maxWidth: '30em' }} title={<>已开启班级数/班级总数</>}>
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       align: 'center',
       search: false,
       key: 'NJSJs',
@@ -427,7 +434,14 @@ const CourseList = () => {
       },
     },
     {
-      title: '缤纷课堂',
+      title:   (
+        <span>
+          缤纷课堂&nbsp;
+          <Tooltip overlayStyle={{ maxWidth: '30em' }} title={<>已开班班级数/班级总数</>}>
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       align: 'center',
       search: false,
       key: 'NJSJs',
