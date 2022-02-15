@@ -1091,7 +1091,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
             </div>
             <div className={styles.box}>
               <p>课时数：{formValues?.KSS}</p>
-              <p>场地名称：{formValues?.FJSJ?.FJMC || '—'}</p>
+              <p>场地名称：{formValues?.FJSJ?.FJMC || formValues?.KHPKSJs?.[0]?.FJSJ?.FJMC || '—'}</p>
             </div>
             <div className={styles.box}>
               <p>

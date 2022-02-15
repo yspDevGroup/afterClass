@@ -833,7 +833,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
             </p>
             <div className={styles.box}>
               <p>班级名称：{formValues?.BJMC}</p>
-              <p>场地名称：{formValues?.FJSJ?.FJMC || '—'}</p>
+              <p>场地名称：{formValues?.FJSJ?.FJMC || formValues?.KHPKSJs?.[0]?.FJSJ?.FJMC || '—'}</p>
             </div>
             <div className={styles.box}>
               <p>
