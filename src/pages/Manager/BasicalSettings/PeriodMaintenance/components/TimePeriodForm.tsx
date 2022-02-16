@@ -20,6 +20,7 @@ type PropsType = {
   current?: Maintenance;
   onCancel?: () => void;
   setForm: React.Dispatch<React.SetStateAction<FormInstance<any> | undefined>>;
+  form: FormInstance<any> | undefined;
 };
 
 const TimePeriodForm = (props: PropsType) => {
@@ -30,12 +31,12 @@ const TimePeriodForm = (props: PropsType) => {
   const [XNXQ, setXNXQ] = useState<API.XNXQ[]>();
   const [XQJSRQ, setXQJSRQ] = useState<any>('9999-01-01');
   const [XQKSRQ, setXQKSRQ] = useState<any>('1000-01-01');
+  const [XQId, setXQId] = useState<any>();
 
   useEffect(() => {
     async function fetchData() {
       // 从本地获取学期学年信息
       const res = await queryXNXQList(currentUser?.xxId);
-
       const newData = res?.xnxqList?.map((item: any) => {
         return {
           label: item.text,
@@ -43,19 +44,9 @@ const TimePeriodForm = (props: PropsType) => {
         };
       });
       setTerms(newData);
+      setXNXQ(res.data);
     }
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const res = await getAllXNXQ({
-        XXJBSJId: currentUser?.xxId,
-      });
-      if (res.status === 'ok') {
-        setXNXQ(res.data);
-      }
-    })();
   }, []);
   useEffect(() => {
     if (current) {
@@ -63,8 +54,14 @@ const TimePeriodForm = (props: PropsType) => {
       setXQKSRQ(current?.XNXQ?.KSRQ);
     }
   }, [current]);
+  useEffect(() => {
+    if (XQId) {
+      setXQJSRQ(XNXQ?.find((item: any) => item?.id === XQId)?.JSRQ);
+      setXQKSRQ(XNXQ?.find((item: any) => item?.id === XQId)?.KSRQ);
+    }
+  }, [XQId]);
 
-  console.log(XNXQ,'XNXQ+++++++++++')
+  console.log(XNXQ, 'XNXQ+++++++++++')
 
   const formItems: any[] = [
     {
@@ -103,14 +100,13 @@ const TimePeriodForm = (props: PropsType) => {
       options: terms,
       fieldProps: {
         onChange: (value: any) => {
-          console.log(XNXQ,'XNXQ---------')
+          setXQId(value);
+          console.log(XNXQ, 'XNXQ---------')
           console.log(value)
           console.log(XNXQ?.find((item: any) => item?.id === value)?.JSRQ)
           console.log(XNXQ?.find((item: any) => item?.id === value)?.KSRQ)
 
-          form.setFieldsValue({ KSSJ: undefined, JSSJ: undefined });
-          setXQJSRQ(XNXQ?.find((item: any) => item?.id === value)?.JSRQ);
-          setXQKSRQ(XNXQ?.find((item: any) => item?.id === value)?.KSRQ);
+          form?.setFieldsValue({ KSSJ: undefined, JSSJ: undefined });
         },
       },
     },
