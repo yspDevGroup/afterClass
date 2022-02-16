@@ -772,7 +772,7 @@ const CourseScheduling = () => {
 
   // 获取课程对应课程班数据信息
   const getBjData = async () => {
-    setLoading(true);
+    // setLoading(true);
     const bjmcResl = await getAllClasses({
       page: 0,
       pageSize: 0,
@@ -786,7 +786,6 @@ const CourseScheduling = () => {
         value: item.id,
       }));
       setBjmcData(BJMC);
-      // setLoading(false);
     }
   };
 
