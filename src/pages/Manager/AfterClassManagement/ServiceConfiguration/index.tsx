@@ -176,7 +176,7 @@ const ServiceConfiguration = () => {
                 },
               );
               if (result.status === 'ok') {
-                message.success('服务状态已更新');
+                message.success('模板状态已更新');
                 getData();
               }
             }}

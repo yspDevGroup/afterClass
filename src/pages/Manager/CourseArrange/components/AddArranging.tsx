@@ -204,7 +204,7 @@ const AddArranging: FC<PropsType> = (props) => {
 
   // 刷新Table
   const refreshTable = () => {
-    if (screenOriSource) {
+    if (screenOriSource && xXSJPZData?.length) {
       const screenCD = (dataSource1: any) => {
         const newDataSource = [...dataSource1];
         if (cdmcValue) {

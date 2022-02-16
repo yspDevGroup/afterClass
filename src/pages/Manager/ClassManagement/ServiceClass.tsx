@@ -418,7 +418,19 @@ const ServiceClass = (props: { location: { state: any } }) => {
       },
     },
     {
-      title: '授课安排',
+      title: (
+        <span>
+        授课安排&nbsp;
+        <Tooltip
+          overlayStyle={{ maxWidth: '30em' }}
+          title={
+            <>实授课时/应授课时</>
+          }
+        >
+          <QuestionCircleOutlined />
+        </Tooltip>
+      </span>
+      ),
       dataIndex: 'SKXQ',
       key: 'SKXQ',
       align: 'center',
@@ -430,7 +442,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
               showModalSKXQ(record);
             }}
           >
-            <Tooltip title={`已授${record?.ks_count || 0}课时。`}>{record?.ks_count}</Tooltip>
+           {record?.ssks_count}/{record?.ysks_count}
           </a>
         );
       },
