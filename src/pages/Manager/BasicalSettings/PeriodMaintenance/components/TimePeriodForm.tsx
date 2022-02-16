@@ -64,6 +64,8 @@ const TimePeriodForm = (props: PropsType) => {
     }
   }, [current]);
 
+  console.log(XNXQ,'XNXQ+++++++++++')
+
   const formItems: any[] = [
     {
       type: 'input',
@@ -101,12 +103,11 @@ const TimePeriodForm = (props: PropsType) => {
       options: terms,
       fieldProps: {
         onChange: (value: any) => {
+          console.log(XNXQ,'XNXQ---------')
+          console.log(value)
           console.log(XNXQ?.find((item: any) => item?.id === value)?.JSRQ)
           console.log(XNXQ?.find((item: any) => item?.id === value)?.KSRQ)
-          if (value) {
-            setXQJSRQ(XNXQ?.find((item: any) => item?.id === value)?.JSRQ);
-            setXQKSRQ(XNXQ?.find((item: any) => item?.id === value)?.KSRQ);
-          }
+
           form.setFieldsValue({ KSSJ: undefined, JSSJ: undefined });
           setXQJSRQ(XNXQ?.find((item: any) => item?.id === value)?.JSRQ);
           setXQKSRQ(XNXQ?.find((item: any) => item?.id === value)?.KSRQ);
