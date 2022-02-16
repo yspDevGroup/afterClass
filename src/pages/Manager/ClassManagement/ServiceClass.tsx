@@ -298,21 +298,23 @@ const ServiceClass = (props: { location: { state: any } }) => {
     });
   };
   useEffect(() => {
-    (async () => {
-      const resBM = await getAllXXSJPZ({
-        XXJBSJId: currentUser?.xxId,
-        type: ['1'],
-      });
-      const resKK = await getAllXXSJPZ({
-        XXJBSJId: currentUser?.xxId,
-        type: ['2'],
-      });
-      if (resBM.status === 'ok' && resKK.status === 'ok') {
-        if (resBM.data?.length === 0 || resKK.data?.length === 0) {
-          infos();
+    if(kai !== true){
+      (async () => {
+        const resBM = await getAllXXSJPZ({
+          XXJBSJId: currentUser?.xxId,
+          type: ['1'],
+        });
+        const resKK = await getAllXXSJPZ({
+          XXJBSJId: currentUser?.xxId,
+          type: ['2'],
+        });
+        if (resBM.status === 'ok' && resKK.status === 'ok') {
+          if (resBM.data?.length === 0 || resKK.data?.length === 0) {
+            infos();
+          }
         }
-      }
-    })();
+      })();
+    }
   }, []);
 
   const columns: ProColumns<any>[] = [
