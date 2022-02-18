@@ -289,7 +289,8 @@ const AddArranging: FC<PropsType> = (props) => {
         if (
           KHPKSJ.FJSJId === cdmcValue && // 教室ID
           KHPKSJ.XXSJPZId === pkData.XXSJPZId && // 时间ID
-          KHPKSJ.WEEKDAY === pkData.WEEKDAY // 周
+          KHPKSJ.WEEKDAY === pkData.WEEKDAY &&  // 周
+          KHPKSJ.RQ === pkData.RQ
         ) {
           id = KHPKSJ.id;
           return false;
