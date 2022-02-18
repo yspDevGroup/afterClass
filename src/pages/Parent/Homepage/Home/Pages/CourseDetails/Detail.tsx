@@ -152,7 +152,9 @@ const Detail: React.FC = () => {
             <ul className={styles.classInformation}>
               <li>所在班级：{classDetail?.BJMC}</li>
               <li>{classDetail?.ISFW === 1 ? '周课时：' : '总课时：'} {classDetail?.KSS}课时</li>
-              <li>总人数：{classDetail?.BJRS}人</li>
+              {
+                classDetail?.BJRS !== 0 ? <li>总人数：{classDetail?.BJRS}人</li> : ''
+              }
 
               {
                 classDetail?.KHBJJs?.find((items: any) => items.JSLX === '主教师') ?
