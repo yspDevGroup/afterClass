@@ -356,6 +356,7 @@ const LeaveManagement = () => {
         <Tabs
           onChange={(value) => {
             setKey(value);
+            setDataSource([]);
           }}
           defaultActiveKey={key}
         >
