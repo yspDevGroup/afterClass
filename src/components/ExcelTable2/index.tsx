@@ -28,6 +28,7 @@ type KBItemProps = {
   disabled: boolean;
   onClick?: () => void;
   bjmcValue: any;
+  KbType: any;
 };
 
 type WeenType = {
@@ -83,7 +84,7 @@ export type DataSourceType = {
   sunday: WeenType | '';
 }[];
 
-const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue }) => {
+const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue, KbType }) => {
   if (mode === 'edit' && disabled) {
     return (
       <Button
@@ -150,14 +151,16 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue }) =
                     overflow: 'hidden',
                   }}>
                     <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
-                    <ShowName
-                      XM={data.teacher}
-                      type="userName"
-                      openid={data.teacherWechatId}
-                      style={{
-                        color: data?.color,
-                      }}
-                    />
+                    {
+                      KbType !== '教师课表' ? <ShowName
+                        XM={data.teacher}
+                        type="userName"
+                        openid={data.teacherWechatId}
+                        style={{
+                          color: data?.color,
+                        }}
+                      /> : <></>
+                    }
                   </div>
                 ) : (
                   <span />
@@ -218,6 +221,7 @@ type IndexPropsType = {
   style: any;
   bjmcValue: any;
   xXSJPZData: any;
+  KbType: any;
 };
 
 const Index: FC<IndexPropsType> = ({
@@ -232,7 +236,8 @@ const Index: FC<IndexPropsType> = ({
   style,
   TimeData,
   bjmcValue,
-  xXSJPZData
+  xXSJPZData,
+  KbType
   // radioValue,
   // basicData,
   // tearchId,
@@ -491,6 +496,7 @@ const Index: FC<IndexPropsType> = ({
                                       onTdClick(dataKey, itemKey, value);
                                     }}
                                     bjmcValue={bjmcValue}
+                                    KbType={KbType}
                                   />
                                 );
                               })}
