@@ -837,10 +837,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
     {
       type: 'textArea',
       label: '简介：',
-      rules: [{ required: true, message: '请输入班级课程安排' }],
       name: 'BJMS',
       key: 'BJMS',
-      placeholder: '请输入班级课程安排',
+      placeholder: '请输入',
       children: <TextArea showCount maxLength={200} autoSize={{ minRows: 3, maxRows: 5 }} />,
     },
   ];

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
@@ -26,11 +27,10 @@ import {
   UploadOutlined,
 } from '@ant-design/icons';
 import { getAuthorization } from '@/utils/utils';
-import ExcelTable from '@/components/ExcelTable';
 import ShowName from '@/components/ShowName';
 import { createKHPKSJ, deleteKHPKSJ, addKHPKSJ, judgeKHPKSJ } from '@/services/after-class/khpksj';
 // import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
-import { getAllClasses } from '@/services/after-class/khbjsj';
+import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
 import type { DataSourceType } from '@/components/ExcelTable';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { getAllCourses } from '@/services/after-class/khkcsj';
@@ -40,6 +40,7 @@ import styles from '../index.less';
 import '../index.less';
 import noJF from '@/assets/noJF.png';
 import moment from 'moment';
+import ExcelTable3 from '@/components/ExcelTable3';
 
 const { Option } = Select;
 
@@ -62,9 +63,10 @@ type PropsType = {
   setLoading: any;
   campusId: string | undefined;
   TimeData: any;
+  Weeks: any;
 };
 
-const AddArranging: FC<PropsType> = (props) => {
+const AddArrangingDS: FC<PropsType> = (props) => {
   const {
     screenOriSource,
     setScreenOriSource,
@@ -80,7 +82,8 @@ const AddArranging: FC<PropsType> = (props) => {
     kcmcData,
     campusId,
     TimeData,
-    setRqDisable
+    setRqDisable,
+    Weeks,
     // setTableDataSource,
     // sameClass,
     // tableDataSource,
@@ -221,98 +224,175 @@ const AddArranging: FC<PropsType> = (props) => {
     const day = date.getDay() || 7;
     return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
   };
+
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
+    // setLoading(true);
+    console.log(value, 'value--------')
+    console.log(record, 'record--------')
+    console.log(pkData, 'pkData--------')
+    const newPkDatas: any[] = [];
+    pkData.forEach((item: any) => {
+      const newObj = {
+        ...item,
+        FJSJId: cdmcValue,
+        XNXQId: curXNXQId
+      }
+      newPkDatas.push(newObj);
+    })
+    console.log(newPkDatas, 'newPkDatas')
+    // 获取该课程班剩余可排课时
+    const result = await getKHBJSJ({
+      id: Bj.KHBJSJId
+    })
+    if (result?.status === 'ok') {
+      // 将生成的所有排课取出可排的前几项
+
+      const surplusKs = result?.data?.KSS - result?.data?.KHPKSJs?.length;
+
+      if (surplusKs > 0) {
+        const PkArr = newPkDatas.slice(0, surplusKs);
+        result?.data?.KHPKSJs?.forEach((item: any) => {
+          const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
+          PkArr?.push({
+            FJSJId,
+            KHBJSJId,
+            PKBZ,
+            XNXQId,
+            RQ,
+            XXSJPZId,
+            WEEKDAY,
+            PKTYPE: value?.PKTYPE
+          })
+        })
+        console.log(PkArr, 'PkArr-------------------------')
+        if (Class?.ISFW === 0) {
+          const res = await createKHPKSJ({
+            bjIds: [value?.KHBJSJId],
+            data: PkArr
+          })
+          if (res?.status === 'ok') {
+            console.log(res)
+            setLoading(false);
+            newPkDatas.slice(0, surplusKs).forEach((values: any) => {
+              // 添加场地数据
+              values.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
+              // 添加班级数据
+              values.KHBJSJ = bjData.find((bjItem: any) => {
+                return bjItem.id === value.KHBJSJId;
+              });
+              res?.data?.forEach((items: any)=>{
+                if(items?.RQ === values?.RQ){
+                  values.id =items?.id;
+                }
+              })
+              screenOriSource.push(values);
+              refreshTable();
+              console.log(values, '+++++++++++++++++++++++++++++++++++++++++++++++++++')
+            })
+          }
+        }
+      } else {
+        message.warning('排课课时已排满，不可排课')
+      }
+
+    }
+    // console.log(screenOriSource, 'screenOriSource-----------')
+
+
+
+    // console.log(res,'res----------------------------')
     // FJSJId 房间Id KHBJSJId: 课后班级数据
     // 如果value ===null 移除
     // xuyao改变的原始数据 screenOriSource
-    setLoading(true);
-    if (value) {
-      // 添加 根据房间id
-      const KHPKSJ: any = {
-        FJSJId: cdmcValue,
-        WEEKDAY: value.WEEKDAY,
-        XNXQId: curXNXQId,
-        KHBJSJId: value.KHBJSJId,
-        XXSJPZId: value.XXSJPZId,
-        PKTYPE: 0,
-        RQ: pkData?.RQ,
-        IsDSZ: pkData?.IsDSZ,
-        PKBZ: pkData?.PKBZ,
-      };
-      let res: any;
-      if (Class?.ISFW === 1) {
-        res = await judgeKHPKSJ({
-          XNXQId: Bj?.XNXQId,
-          KHBJSJId: Bj?.KHBJSJId,
-          KSS: Class?.KSS,
-          startDate: moment(getFirstDay(new Date(pkData?.RQ))).format('YYYY-MM-DD'),
-          endDate: moment(getFirstDay(new Date(pkData?.RQ))).subtract(-6, "days").format("YYYY-MM-DD")
-        })
-      } else {
-        res = await judgeKHPKSJ({
-          XNXQId: Bj?.XNXQId,
-          KHBJSJId: Bj?.KHBJSJId,
-          KSS: Class?.KSS,
-        })
-      }
-      if (res?.status === 'ok') {
-        const addRes = await addKHPKSJ({
-          ...KHPKSJ,
-        });
-        // 添加班级数据
-        KHPKSJ.KHBJSJ = bjData.find((bjItem: any) => {
-          return bjItem.id === value.KHBJSJId;
-        });
-        // 添加场地数据
-        KHPKSJ.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
-        if (addRes.status === 'ok') {
-          KHPKSJ.id = addRes?.data?.id;
-          screenOriSource.push(KHPKSJ);
-          setLoading(false);
-        } else {
-          message.error(addRes.message);
-          refreshTable();
-          setLoading(false);
-        }
-      } else {
-        refreshTable();
-        message.warning(res?.message)
-        setLoading(false);
-      }
-    } else {
-      // 移除 根据房间Id移除数据
-      let id: string | undefined;
-      screenOriSource.filter((KHPKSJ: any) => {
-        if (
-          KHPKSJ.FJSJId === cdmcValue && // 教室ID
-          KHPKSJ.XXSJPZId === pkData.XXSJPZId && // 时间ID
-          KHPKSJ.WEEKDAY === pkData.WEEKDAY &&  // 周
-          KHPKSJ.RQ === pkData.RQ
-        ) {
-          id = KHPKSJ.id;
-          return false;
-        }
-        return true;
-      });
-      if (id) {
-        const res = await deleteKHPKSJ({
-          id,
-        });
-        if (res?.status === 'ok') {
-          setScreenOriSource(
-            screenOriSource.filter((values: any) => {
-              return values?.id !== id;
-            }),
-          );
-        }
-        if (res?.status === 'error') {
-          message.error(res?.message);
-        }
-        setLoading(false);
-      }
-    }
+    // setLoading(true);
+    // if (value) {
+    //   // 添加 根据房间id
+    //   const KHPKSJ: any = {
+    //     FJSJId: cdmcValue,
+    //     WEEKDAY: value.WEEKDAY,
+    //     XNXQId: curXNXQId,
+    //     KHBJSJId: value.KHBJSJId,
+    //     XXSJPZId: value.XXSJPZId,
+    //     PKTYPE: 0,
+    //     RQ: pkData?.RQ,
+    //     IsDSZ: pkData?.IsDSZ,
+    //     PKBZ: pkData?.PKBZ,
+    //   };
+    //   let res: any;
+    //   if (Class?.ISFW === 1) {
+    //     res = await judgeKHPKSJ({
+    //       XNXQId: Bj?.XNXQId,
+    //       KHBJSJId: Bj?.KHBJSJId,
+    //       KSS: Class?.KSS,
+    //       startDate: moment(getFirstDay(new Date(pkData?.RQ))).format('YYYY-MM-DD'),
+    //       endDate: moment(getFirstDay(new Date(pkData?.RQ))).subtract(-6, "days").format("YYYY-MM-DD")
+    //     })
+    //   } else {
+    //     res = await judgeKHPKSJ({
+    //       XNXQId: Bj?.XNXQId,
+    //       KHBJSJId: Bj?.KHBJSJId,
+    //       KSS: Class?.KSS,
+    //     })
+    //   }
+    //   if (res?.status === 'ok') {
+    //     const addRes = await addKHPKSJ({
+    //       ...KHPKSJ,
+    //     });
+    //     // 添加班级数据
+    //     KHPKSJ.KHBJSJ = bjData.find((bjItem: any) => {
+    //       return bjItem.id === value.KHBJSJId;
+    //     });
+    //     // 添加场地数据
+    //     KHPKSJ.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
+    //     if (addRes.status === 'ok') {
+    //       KHPKSJ.id = addRes?.data?.id;
+    //       screenOriSource.push(KHPKSJ);
+    //       setLoading(false);
+    //     } else {
+    //       message.error(addRes.message);
+    //       refreshTable();
+    //       setLoading(false);
+    //     }
+    //   } else {
+    //     refreshTable();
+    //     message.warning(res?.message)
+    //     setLoading(false);
+    //   }
+    // } else {
+    //   // 移除 根据房间Id移除数据
+    //   let id: string | undefined;
+    //   screenOriSource.filter((KHPKSJ: any) => {
+    //     if (
+    //       KHPKSJ.FJSJId === cdmcValue && // 教室ID
+    //       KHPKSJ.XXSJPZId === pkData.XXSJPZId && // 时间ID
+    //       KHPKSJ.WEEKDAY === pkData.WEEKDAY &&  // 周
+    //       KHPKSJ.RQ === pkData.RQ
+    //     ) {
+    //       id = KHPKSJ.id;
+    //       return false;
+    //     }
+    //     return true;
+    //   });
+    //   if (id) {
+    //     const res = await deleteKHPKSJ({
+    //       id,
+    //     });
+    //     if (res?.status === 'ok') {
+    //       setScreenOriSource(
+    //         screenOriSource.filter((values: any) => {
+    //           return values?.id !== id;
+    //         }),
+    //       );
+    //     }
+    //     if (res?.status === 'error') {
+    //       message.error(res?.message);
+    //     }
+    //     setLoading(false);
+    //   }
+    // }
   };
 
+  console.log(screenOriSource, 'screenOriSource--------')
   // 班级展开收起
   const unFold = () => {
     if (packUp === false) {
@@ -855,7 +935,7 @@ const AddArranging: FC<PropsType> = (props) => {
               <div className="site">
                 {Bj && cdmcValue ? (
                   <Spin spinning={CDLoading}>
-                    <ExcelTable
+                    <ExcelTable3
                       className={styles.borderTable}
                       columns={columns}
                       dataSource={newTableDataSource}
@@ -866,8 +946,9 @@ const AddArranging: FC<PropsType> = (props) => {
                       tearchId={tearchId}
                       TimeData={TimeData}
                       xXSJPZData={xXSJPZData}
+                      Weeks={Weeks}
                       style={{
-                        height: 'calc(100vh - 500px)',
+                        height: '100%',
                       }}
                     // basicData={oriSource}
                     />
@@ -925,4 +1006,4 @@ const AddArranging: FC<PropsType> = (props) => {
   );
 };
 
-export default AddArranging;
+export default AddArrangingDS;

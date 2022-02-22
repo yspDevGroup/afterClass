@@ -35,14 +35,15 @@
           border-left: 0;
         }
 
-        td:not(:first-child) {
-          // width: 14.2% !important;
-          // vertical-align: top !important;
-        }
         td[rowspan] {
           border-bottom: 3px solid #e4e4e4;
         }
         td {
+          :global{
+            .ant-tooltip-disabled-compatible-wrapper{
+              display: block !important;
+            }
+          }
           > button {
             > span {
               width: 100%;

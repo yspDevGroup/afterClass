@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { Descriptions, Drawer, Tag, Image, Table, message } from 'antd';
+import { Descriptions, Drawer, Tag, Image, Table, message, Input } from 'antd';
 import classes from './index.less';
 import type { FormItemType } from '@/components/CustomForm/interfice';
 import CustomForm from '@/components/CustomForm';
@@ -9,6 +9,7 @@ import { defImg } from '@/constant';
 import { getJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import ShowName from '@/components/ShowName';
 
+const { TextArea } = Input;
 /**
  * 课程详情
  * @returns
@@ -285,7 +286,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
           <Descriptions.Item label="课程封面">
             <Image width={110} height={72} src={info?.KCTP} fallback={defImg} />
           </Descriptions.Item>
-          <Descriptions.Item label="课程简介">{info?.KCMS || '——'}</Descriptions.Item>
+          <Descriptions.Item label="课程简介">  <TextArea style={{ color: '#333' }} value={info?.KCMS || '——'} allowClear bordered={false} disabled autoSize /> </Descriptions.Item>
         </Descriptions>
         <Table
           style={{ display: info?.SSJGLX === '机构课程' ? 'initial' : 'none' }}
