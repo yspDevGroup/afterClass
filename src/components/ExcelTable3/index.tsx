@@ -237,6 +237,8 @@ type IndexPropsType = {
     XNXQId?: string;
     color: string;
     teacherID: string;
+    KKRQ: string;
+    JKRQ: string;
   };
   /** 选中项发生变化时的回调 value: type='edit'时的数据； record：type='see'时的数据； bjId： 班级ID */
   onExcelTableClick?: (value: any, record: any, pkData: any) => Promise<void>
@@ -415,7 +417,7 @@ const Index: FC<IndexPropsType> = ({
       return result;
     }
     // 时段内所有周几的日期
-    const AllRQ = getWeek(TimeData?.KSRQ, TimeData?.JSRQ, weekDay[colItem.dataIndex]);
+    const AllRQ = getWeek(chosenData?.KKRQ, chosenData?.JKRQ, weekDay[colItem.dataIndex]);
 
     // 获取学期开始时间所在周一的日期
     const getFirstDay = (date: any) => {

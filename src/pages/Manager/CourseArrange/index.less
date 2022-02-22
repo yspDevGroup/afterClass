@@ -213,6 +213,12 @@
   position: relative;
   padding-bottom: 24px;
   box-shadow: 0 1px 0 #e4e4e4;
+  .teacherName {
+    > div {
+      display: inline-block;
+      width: 200px;
+    }
+  }
   > div:nth-child(1) {
     display: flex;
     flex-wrap: wrap;
@@ -300,7 +306,6 @@
         position: absolute;
         top: -54px;
         right: 0;
-        z-index: 100;
         padding: 0;
       }
       .ant-card-body {

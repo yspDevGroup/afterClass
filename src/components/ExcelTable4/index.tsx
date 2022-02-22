@@ -2,32 +2,26 @@
 /* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
-import { Button, Modal } from 'antd';
-import ShowName from '@/components/ShowName';
+import { Button, Modal, Tooltip } from 'antd';
 import EllipsisHint from '../EllipsisHint';
-import { history } from 'umi';
+
 import styles from './index.less';
-import moment from 'moment';
 
 type KBItemProps = {
   mode: 'see' | 'edit';
-  data:
-  | {
-    cla: string;
-    teacher: string;
-    teacherWechatId?: string;
-    color: string;
-    bjzt: string;
-    jcmc: string;
-    bjId: string;
-    XNXQId: string;
-    fjmc: string;
-    xqId: string;
-  }
-  | '';
+  data: any;
   disabled: boolean;
   onClick?: () => void;
-  bjmcValue: any;
+  Weeks: any;
+  chosenData: {
+    cla: string;
+    teacher: string;
+    teacherWechatId?: string | undefined;
+    KHBJSJId?: string | undefined;
+    XNXQId?: string | undefined;
+    color: string;
+    teacherID: string;
+  } | undefined
 };
 
 type WeenType = {
@@ -83,99 +77,130 @@ export type DataSourceType = {
   sunday: WeenType | '';
 }[];
 
-const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue }) => {
-  if (mode === 'edit' && disabled) {
+const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, Weeks }) => {
+  // console.log(data, 'data-------------')
+  // console.log(chosenData, 'chosenData------')
+  let arr2;
+  let BJMC;
+  if (data?.length) {
+    arr2 = data?.filter((item: any, index: number) => {
+      let temArr: any[] = []
+      data?.forEach((item2: { bjId: string; }) => temArr.push(item2.bjId))
+      return temArr.indexOf(item.bjId) === index
+    })
+    BJMC = arr2.map((value: any, index: number) => {
+      if (index < 5) {
+        return `${value?.cla}  `
+      }
+      return ''
+    })
+  }
+
+  if ((mode === 'edit' && disabled && data?.length !== Weeks?.length) || (arr2?.length > 0 && arr2?.[0]?.bjId !== chosenData?.KHBJSJId)) {
+    return (
+      <Tooltip title={
+        arr2?.length > 5 ? `${BJMC}...` : BJMC
+      }>
+        <Button
+          type="text"
+          disabled={disabled}
+          style={{
+            height: 48,
+            padding: 0,
+            border: 0,
+            background: 'transparent',
+            width: '100%',
+            lineHeight: '48px',
+          }}
+        >
+          <div className={styles.disImage}>
+            已占用
+            <EllipsisHint text={data?.cla} width={'100%'} />
+          </div>
+        </Button>
+      </Tooltip>
+    );
+  }
+  if (mode === 'edit' && data?.length !== Weeks?.length && arr2?.length === 1 && arr2?.[0]?.bjId === chosenData?.KHBJSJId) {
     return (
       <Button
         type="text"
-        disabled={disabled}
+        disabled={false}
+        onClick={() => {
+          if (typeof onClick === 'function') {
+            onClick();
+          }
+        }}
         style={{
           height: 48,
-          padding: 0,
+          padding: 2,
           border: 0,
           background: 'transparent',
           width: '100%',
-          lineHeight: '48px',
         }}
       >
-        <div className={styles.disImage}>
-          <EllipsisHint text={data?.cla} width={'100%'} />
+        <div className="classCard">
+          <div
+            className={`cardTop`}
+            style={{
+              background: data?.[0]?.color,
+            }}
+          />
+          <div
+            className={`cardcontent`}
+            style={{
+              color: data?.[0]?.color,
+              background: data?.[0]?.color?.replace('1)', '0.1)'),
+              position: 'relative',
+            }}
+          >
+            <div className="cla">
+              <EllipsisHint text={data?.[0]?.cla} width='100%' />
+            </div>
+          </div>
         </div>
       </Button>
     );
   }
+
   return (
     <Button
       type="text"
-      disabled={mode === 'see' ? false : disabled}
+      disabled={false}
       onClick={() => {
         if (typeof onClick === 'function') {
           onClick();
         }
       }}
       style={{
-        height: mode === 'see' ? 'auto' : 48,
-        padding: mode === 'see' ? 4 : 2,
+        height: 48,
+        padding: 2,
         border: 0,
         background: 'transparent',
         width: '100%',
       }}
     >
-      {!data ? (
-        <>&nbsp;</>
-      ) : <>
-        {
-          data?.cla === '无法排课' ? <div className={styles.NoPk}><p>超出学年学期</p><span>无法排课</span></div> :
-            <div className="classCard">
-              <div
-                className={`cardTop`}
-                style={{
-                  background: data?.color,
-                }}
-              />
-              <div
-                className={`cardcontent`}
-                style={{
-                  color: data?.color,
-                  background: data?.color.replace('1)', '0.1)'),
-                  position: 'relative',
-                }}
-              >
-                {mode === 'see' ? (
-                  <div className="teacher" style={{
-                    width: '100%',
-                    height: 22,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    overflow: 'hidden',
-                  }}>
-                    <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
-                    <ShowName
-                      XM={data.teacher}
-                      type="userName"
-                      openid={data.teacherWechatId}
-                      style={{
-                        color: data?.color,
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <span />
-                )}
-
-                {mode === 'see' && bjmcValue?.length <= 1 ?
-                  <EllipsisHint text={data?.fjmc} width={mode === 'see' ? '100%' : '100%'} /> : <></>
-                }
-                {mode === 'see' && data?.bjzt === '已开班' ? (
-                  <div className={styles.duihao}>√</div>
-                ) : (
-                  ''
-                )}
-              </div>
-            </div>
-        }
-      </>}
-    </Button >
+      <div className="classCard">
+        <div
+          className={`cardTop`}
+          style={{
+            background: data?.[0]?.color,
+          }}
+        />
+        <div
+          className={`cardcontent`}
+          style={{
+            color: data?.[0]?.color,
+            background: data?.[0]?.color?.replace('1)', '0.1)'),
+            position: 'relative',
+          }}
+        >
+          <div className="cla">
+            <EllipsisHint text={data?.[0]?.cla} width='100%' />
+          </div>
+        </div>
+      </div>
+    </Button>
   );
 };
 
@@ -203,7 +228,7 @@ type IndexPropsType = {
     JKRQ: string;
   };
   /** 选中项发生变化时的回调 value: type='edit'时的数据； record：type='see'时的数据； bjId： 班级ID */
-  onExcelTableClick?: (value: any, record: any, bjId: any) => void;
+  onExcelTableClick?: (value: any, record: any, pkData: any) => Promise<void>
   /** see: 单元格中不存在disable属性，edit： 单元格中存在disable属性  */
   type?: 'see' | 'edit';
   /** 切换页面  仅在type='see'起作用 */
@@ -216,8 +241,8 @@ type IndexPropsType = {
   /** 表格接口没有处理的数据 */
   basicData?: any[];
   style: any;
-  bjmcValue: any;
   xXSJPZData: any;
+  Weeks: any;
 };
 
 const Index: FC<IndexPropsType> = ({
@@ -231,13 +256,15 @@ const Index: FC<IndexPropsType> = ({
   getSelectdata,
   style,
   TimeData,
-  bjmcValue,
-  xXSJPZData
+  xXSJPZData,
+  Weeks,
   // radioValue,
   // basicData,
   // tearchId,
 }) => {
   let [stateTableData, setStateTableData] = useState<DataSourceType>();
+
+  console.log(chosenData,'chosenData---------')
   const weekDay = {
     monday: '1',
     tuesday: '2',
@@ -253,7 +280,8 @@ const Index: FC<IndexPropsType> = ({
     setStateTableData(dataSource);
   }, [dataSource]);
 
-  const onTdClick = (rowKey: number, colKey: number, value: any) => {
+
+  const onTdClick = (rowKey: number, colKey: number,) => {
     //  不能直接操作表格的数据
     // 需要复制一份数据出来进行修改  不然在操作表格时容易触发state 导致重新渲染
     const newData = stateTableData ? [...stateTableData] : [...dataSource];
@@ -264,28 +292,38 @@ const Index: FC<IndexPropsType> = ({
     // 一行的数据：根据在表格上点击获取到的key值来获取此单元格的行数据
     const rowData = newData[rowKey] || {};
 
+    // 区分编辑还是新增
+    const types = rowData[colItem.dataIndex]?.length === 0 ? '新增' : '编辑';
     // type === 'see'时 获取到点击单元格的数据
+
     let seeChosenItem = null;
     if (type === 'see' && !chosenData) {
-      if (value?.bjzt === '已开班') {
+      if (rowData[colItem.dataIndex]?.bjzt === '已开班') {
         Modal.warning({
-          title: '此课程班已开班，不可再进行排课操作',
+          title: '此课程班已开班，不能再进行排课操作',
         });
-      } else if (value?.bjzt === '已结课') {
+      } else if (rowData[colItem.dataIndex]?.bjzt === '已结课') {
         Modal.warning({
-          title: '此课程班已结课，不可再进行排课操作',
+          title: '此课程班已结课，不能再进行排课操作',
+        });
+      } else if (
+        rowData[colItem.dataIndex]?.isXZB &&
+        rowData[colItem.dataIndex]?.bjzt === '未开班'
+      ) {
+        Modal.warning({
+          title: '行政班排课不可编辑课程班课表，如有需要请在课程班排课中操作。',
         });
       } else {
         seeChosenItem = {
-          XQ: value?.xqId, // 校区ID
-          NJ: value?.njId, // 年级ID
-          KC: value?.kcId, // 课程ID
-          XZBId: value?.XZBId, // 行政班ID
-          isXZB: value?.isXZB, // 行政班ID
-          BJId: value?.bjId, //  课程班ID
+          XQ: rowData[colItem.dataIndex]?.xqId, // 校区ID
+          NJ: rowData[colItem.dataIndex]?.njId, // 年级ID
+          KC: rowData[colItem.dataIndex]?.kcId, // 课程ID
+          XZBId: rowData[colItem.dataIndex]?.XZBId, // 行政班ID
+          isXZB: rowData[colItem.dataIndex]?.isXZB, // 行政班ID
+          BJId: rowData[colItem.dataIndex]?.bjId, //  课程班ID
           CDLX: rowData.room?.FJLXId, // 场地类型ID
           CDMC: rowData.room?.jsId, // 场地名称
-          weekId: value?.weekId, // 排课ID
+          weekId: rowData[colItem.dataIndex]?.weekId, // 排课ID
           jsId: rowData.room?.jsId, // 教室ID
           hjId: rowData.course?.hjId, // 时间ID,
         };
@@ -294,18 +332,7 @@ const Index: FC<IndexPropsType> = ({
         }
       }
     } else if (type === 'edit') {
-      if (chosenData && !value) {
-        // let connst = -1;
-        // newData?.forEach((item: any, key: any) => {
-        //   if (
-        //     item[colItem.dataIndex] &&
-        //     item.course.hjId === rowData.course?.hjId &&
-        //     item[colItem.dataIndex]?.teacherID === tearchId
-        //   ) {
-        //     connst = key;
-        //   }
-        // });
-        // if (connst === -1) {
+      if (chosenData && !rowData[colItem.dataIndex]) {
         rowData[colItem.dataIndex] = {
           cla: chosenData?.cla,
           teacher: chosenData?.teacher,
@@ -313,31 +340,104 @@ const Index: FC<IndexPropsType> = ({
           dis: false,
           color: chosenData.color,
         };
-        // } else if (connst !== -1) {
-        //   Modal.warning({
-        //     title: '不能将同一个老师安排在同一天的同一时段内上课',
-        //     onOk() {
-        //       rowData[colItem.dataIndex] = '';
-        //     },
-        //   });
-        // }
       } else {
         rowData[colItem.dataIndex] = '';
       }
       setStateTableData(newData);
     }
 
-    // 选中班级后 单元格的数据
-    let selectList = null;
-    if (rowData[colItem.dataIndex]) {
-      selectList = {
+
+    /* 获取时间段内属于星期一(*)的日期们
+     * begin: 开始时间
+     * end：结束时间
+     * weekNum：星期几 {number}
+     */
+    function getWeek(begin: any, end: any, weekNum: any) {
+      let dateArr = new Array();
+      let stimeArr = begin.split("-");//= >["2018", "01", "01"]
+      let etimeArr = end.split("-");//= >["2018", "01", "30"]
+      let stoday = new Date();
+      stoday.setUTCFullYear(stimeArr[0], stimeArr[1] - 1, stimeArr[2]);
+      let etoday = new Date();
+      etoday.setUTCFullYear(etimeArr[0], etimeArr[1] - 1, etimeArr[2]);
+
+      let unixDb = stoday.getTime();// 开始时间的毫秒数
+      let unixDe = etoday.getTime();// 结束时间的毫秒数
+
+      for (let k = unixDb; k <= unixDe;) {
+        let needJudgeDate = msToDate(parseInt(k, 10)).withoutTime;
+
+        // 不加这个if判断直接push的话就是已知时间段内的所有日期
+        if (new Date(needJudgeDate).getDay() === Number(weekNum)) {
+          dateArr.push(needJudgeDate);
+        }
+        k += 24 * 60 * 60 * 1000;
+      }
+      return dateArr;
+    }
+
+    // 根据毫秒数获取日期
+    function msToDate(msec: string | number | Date) {
+      let datetime = new Date(msec);
+      let year = datetime.getFullYear();
+      let month = datetime.getMonth();
+      let date = datetime.getDate();
+      let hour = datetime.getHours();
+      let minute = datetime.getMinutes();
+      let second = datetime.getSeconds();
+
+      let result1 = `${year
+        }-${(month + 1) >= 10 ? (month + 1) : `0${month + 1}`
+        }-${(date + 1) < 10 ? `0${date}` : date
+        } ${(hour + 1) < 10 ? `0${hour}` : hour
+        }:${(minute + 1) < 10 ? `0${minute}` : minute
+        }:${(second + 1) < 10 ? `0${second}` : second}`;
+
+      let result2 = `${year
+        }-${(month + 1) >= 10 ? (month + 1) : `0${month + 1}`
+        }-${(date + 1) < 11 ? `0${date}` : date}`;
+
+      let result = {
+        hasTime: result1,
+        withoutTime: result2
+      };
+
+      return result;
+    }
+    // 时段内所有周几的日期
+    const AllRQ = getWeek(chosenData?.KKRQ, chosenData?.JKRQ, weekDay[colItem.dataIndex]);
+
+
+    const getFirstDay = (date: any) => {
+      const day = date.getDay() || 7;
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
+    };
+    getFirstDay(new Date(TimeData?.KSRQ)).getTime()
+    const times = new Date(AllRQ[0]).getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
+    // 获取生成日期的第一个是时段内的第几周，由此判断单双周
+    const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
+    console.log(AllRQ, 'AllRQ---------')
+    const pkDatas: any = [];
+    AllRQ?.forEach((value: any, index: number) => {
+      pkDatas.push({
         WEEKDAY: weekDay[colItem.dataIndex], // 周
         XXSJPZId: rowData.course?.hjId, // 时间ID
         KHBJSJId: chosenData?.KHBJSJId, // 班级ID
-        FJSJId: rowData.room?.jsId, // 教室ID
-        XNXQId: chosenData?.XNXQId, // 学年学期ID
-      };
-    }
+        PKBZ: `第${zhoushu + index}周`, // 排课备注：第几周
+        RQ: value,              // 日期
+        PKTYPE: 1
+      })
+    })
+
+    let selectList = {
+      WEEKDAY: weekDay[colItem.dataIndex], // 周
+      XXSJPZId: rowData.course?.hjId, // 时间ID
+      KHBJSJId: chosenData?.KHBJSJId, // 班级ID
+      FJSJId: rowData.room?.jsId, // 教室ID
+      XNXQId: chosenData?.XNXQId, // 学年学期ID
+      PKTYPE: 1, // 排课类型,
+      Type: types
+    };
 
     if (type === 'edit') {
       // 将排好的课程再次点击可以取消时所需要的数据
@@ -354,43 +454,13 @@ const Index: FC<IndexPropsType> = ({
       }
     }
 
-    const weekDays = {
-      monday: 1,
-      tuesday: 2,
-      wednesday: 3,
-      thursday: 4,
-      friday: 5,
-      saturday: 6,
-      sunday: 7,
-    };
-    // 学年学期开始日期
-    const start = new Date(TimeData?.KSRQ);
-    // 获取学年学期开始日期为当周的周几
-    const staetWeek = Number(moment(start).format('E'));
-    const Num = Number(rowData?.room.keys) * 7 + weekDays[colItem.dataIndex] - staetWeek;
-    // 计算点击格子的日期
-    const newDay = moment(start).add(Num, 'days').format('YYYY-MM-DD');
-
-    let pkData = null;
-    if (type === 'edit') {
-      pkData = {
-        KHBJSJId: chosenData?.KHBJSJId, // 班级ID
-        FJSJId: rowData.room?.jsId, // 教室ID
-        WEEKDAY: weekDay[colItem.dataIndex], // 周
-        XXSJPZId: rowData.course?.hjId, // 时间ID
-        RQ: newDay,
-        IsDSZ: Number(rowData?.room.cla + 1) % 2 === 0 ? 1 : 0,
-        PKBZ: rowData?.room.cla,
-      };
-    } else if (type === 'see') {
-      pkData = rowData[colItem.dataIndex]?.bjId;
-    }
     // 将表格的所有数据传输到父级的方法
     if (typeof onExcelTableClick === 'function') {
-      onExcelTableClick(selectList, seeChosenItem, pkData);
+      onExcelTableClick(selectList, seeChosenItem, pkDatas);
     }
   };
   const datas = stateTableData ? [...stateTableData] : [...dataSource];
+  console.log(datas, 'datas')
   return (
     <div className={`${styles.excelTable} ${className}`}>
       <table style={{ boxShadow: '0px 5px 6px rgba(136,136,136,0.2)', marginBottom: '10px' }}>
@@ -410,7 +480,7 @@ const Index: FC<IndexPropsType> = ({
         <div className={styles.tableContent} style={style}>
           <table>
             <tbody>
-              {datas.map((data: any, dataKey: any) => {
+              {datas.map((data, dataKey: any) => {
                 return (
                   <tr key={Math.random()} style={{ borderBottom: Number.isInteger((dataKey + 1) / xXSJPZData?.length) ? '3px solid #e4e4e4' : '1px solid #e4e4e4' }}>
                     {columns.map((item, itemKey) => {
@@ -422,11 +492,7 @@ const Index: FC<IndexPropsType> = ({
                         return (
                           <td
                             key={`${item.key}-${data.key}`}
-                            style={{
-                              width: item.width,
-                              textAlign: item.align,
-                              height: bjmcValue?.length > 1 ? '48px' : '78px',
-                            }}
+                            style={{ width: item.width, textAlign: 'center' }}
                             rowSpan={item.dataIndex === 'room' ? data.room.rowspan : undefined}
                           >
                             {type === 'edit' ? (
@@ -445,11 +511,8 @@ const Index: FC<IndexPropsType> = ({
                                 </div>
                               </div>
                             ) : (
-                              <div
-                                className="classCard"
-                                style={{ textAlign: item.align, display: 'contents' }}
-                              >
-                                {/* <div className={`cardTop`} /> */}
+                              <div className="classCard" style={{ textAlign: 'center' }}>
+                                <div className={`cardTop`} />
                                 <div className={`cardcontent`}>
                                   <div
                                     className="cla"
@@ -457,12 +520,11 @@ const Index: FC<IndexPropsType> = ({
                                       width: item.dataIndex === 'room' ? 45 : '100%',
                                       margin: '0 auto',
                                       wordBreak: 'break-word',
-                                      fontWeight: 'normal',
-                                      color: '#666',
                                     }}
                                   >
                                     {data[item.dataIndex].cla}
                                   </div>
+                                  <div className="teacher">{data[item.dataIndex].teacher}</div>
                                 </div>
                               </div>
                             )}
@@ -471,33 +533,17 @@ const Index: FC<IndexPropsType> = ({
                       }
 
                       return (
-                        <td
-                          key={`${item.key}-${data.key}`}
-                          style={{
-                            width: item.width,
-                            height: bjmcValue?.length > 1 ? '48px' : '78px',
-                          }}
-                        >
-                          {item.dataIndex !== 'room' && data?.[item.dataIndex].length ? (
-                            <>
-                              {' '}
-                              {data?.[item.dataIndex].map((value: any) => {
-                                return (
-                                  <KBItem
-                                    mode={type}
-                                    data={value}
-                                    disabled={false}
-                                    onClick={() => {
-                                      onTdClick(dataKey, itemKey, value);
-                                    }}
-                                    bjmcValue={bjmcValue}
-                                  />
-                                );
-                              })}
-                            </>
-                          ) : (
-                            <></>
-                          )}
+                        <td key={`${item.key}-${data.key}`} style={{ width: item.width }}>
+                          <KBItem
+                            mode={type}
+                            data={data[item.dataIndex]}
+                            disabled={data[item.dataIndex]?.length !== 0}
+                            onClick={() => {
+                              onTdClick(dataKey, itemKey);
+                            }}
+                            chosenData={chosenData}
+                            Weeks={Weeks}
+                          />
                         </td>
                       );
                     })}

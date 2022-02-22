@@ -40,7 +40,7 @@ import styles from '../index.less';
 import '../index.less';
 import noJF from '@/assets/noJF.png';
 import moment from 'moment';
-import ExcelTable3 from '@/components/ExcelTable3';
+import ExcelTable4 from '@/components/ExcelTable4';
 
 const { Option } = Select;
 
@@ -239,14 +239,12 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       }
       newPkDatas.push(newObj);
     })
-    console.log(newPkDatas, 'newPkDatas')
     // 获取该课程班剩余可排课时
     const result = await getKHBJSJ({
       id: Bj.KHBJSJId
     })
     if (result?.status === 'ok') {
       // 将生成的所有排课取出可排的前几项
-
       const surplusKs = result?.data?.KSS - result?.data?.KHPKSJs?.length;
 
       if (surplusKs > 0) {
@@ -264,7 +262,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
             PKTYPE: value?.PKTYPE
           })
         })
-        console.log(PkArr, 'PkArr-------------------------')
         if (Class?.ISFW === 0) {
           const res = await createKHPKSJ({
             bjIds: [value?.KHBJSJId],
@@ -392,7 +389,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     // }
   };
 
-  console.log(screenOriSource, 'screenOriSource--------')
   // 班级展开收起
   const unFold = () => {
     if (packUp === false) {
@@ -414,6 +410,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
   // 班级选择
   const BjClick = (value: any) => {
+    console.log(value,'value-------------')
     setClass(value);
     // 更换课程班后将场地清空
     setCdmcValue(undefined);
@@ -939,7 +936,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
               <div className="site">
                 {Bj && cdmcValue ? (
                   <Spin spinning={CDLoading}>
-                    <ExcelTable3
+                    <ExcelTable4
                       className={styles.borderTable}
                       columns={columns}
                       dataSource={newTableDataSource}

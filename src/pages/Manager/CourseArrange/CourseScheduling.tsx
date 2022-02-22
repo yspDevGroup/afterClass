@@ -14,7 +14,6 @@ import { theme } from '@/theme-default';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getQueryString } from '@/utils/utils';
 import styles from './index.less';
-import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 
 import { getAllClasses } from '@/services/after-class/khbjsj';
@@ -56,10 +55,10 @@ const CourseScheduling = (
     onExcelTableClick: (value: any, record: any) => void,
     pKiskai: boolean,
     setPKiskai: React.Dispatch<React.SetStateAction<boolean>>
-
+    type?: string | undefined;
   }) => {
 
-  const { state, setState, setRecordValue, kcmcData, setKcmcData, processingDatas, campus, setCampus, loading, setLoading, campusId, setCampusId, xXSJPZData, curXNXQId, setCurXNXQId, setXXSJPZData, screenOriSource, setScreenOriSource, currentUser, termList, oriSource, setOriSource, onExcelTableClick,showDrawer,pKiskai,setPKiskai } = props;
+  const { state, kcmcData, processingDatas, campus, setCampus, loading, setLoading, campusId, setCampusId, xXSJPZData, curXNXQId, setCurXNXQId, setXXSJPZData, screenOriSource, currentUser, termList, oriSource, setOriSource, onExcelTableClick, showDrawer, pKiskai, setPKiskai, type } = props;
 
   // ExcelTable表格所需要的数据
   const [tableDataSource, setTableDataSource] = useState<DataSourceType>([]);
@@ -75,7 +74,6 @@ const CourseScheduling = (
   const [bjmcValue, setBjmcValue] = useState<any>([]);
   const teacher = '';
   const [cdmcValue, setCdmcValue] = useState<any>();
-
 
 
   // 控制学期学年数据提示框的函数
@@ -108,6 +106,7 @@ const CourseScheduling = (
       }
     }
   };
+
 
   const columns: {
     title: string;
@@ -304,8 +303,10 @@ const CourseScheduling = (
       KHKCSJId: kcmcValue,
       XNXQId: curXNXQId,
       XQSJId: campusId,
+      ISFW: type === '行政班课表' ? 1 : 0
     });
     if (bjmcResl.status === 'ok') {
+      console.log(bjmcResl, 'bjmcResl------')
       const BJMC = bjmcResl.data.rows?.map((item: any) => ({
         label: item.BJMC,
         value: item.id,
@@ -375,7 +376,6 @@ const CourseScheduling = (
       setTableDataSource(tableData);
     }
   }, [oriSource]);
-
 
 
   return (

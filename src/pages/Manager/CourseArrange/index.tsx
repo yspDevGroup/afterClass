@@ -10,15 +10,16 @@ import { useModel } from 'umi';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import AddArranging from './components/AddArranging';
 import { getAllFJSJ } from '@/services/after-class/fjsj';
-import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getAllPK } from '@/services/after-class/khpksj';
-import type { DataSourceType } from '@/components/ExcelTable2';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { LeftOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import AddArrangingDS from './components/AddArrangingDS';
+import AddArrangingZ from './components/AddArrangingZ';
+import ClassScheduling from './ClassScheduling';
 
 const { TabPane } = Tabs;
 type selectType = { label: string; value: string };
@@ -26,7 +27,7 @@ type selectType = { label: string; value: string };
 const Index = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const [key, setKey] = useState<string>('2');
+  const [key, setKey] = useState<string>('1');
 
   const [recordValue, setRecordValue] = useState<any>({});
   const [state, setState] = useState(true);
@@ -478,8 +479,8 @@ const Index = () => {
                     fjmc: KHItem?.FJSJ?.FJMC || KHItem?.FJSJ?.label,
                     jcmc: KHItem?.XXSJPZ?.TITLE,
                     XNXQId: KHItem?.XNXQId,
-                    PKBZ:KHItem?.PKBZ,
-                    RQ:KHItem?.RQ,
+                    PKBZ: KHItem?.PKBZ,
+                    RQ: KHItem?.RQ,
                   };
                   if (KHItem?.WEEKDAY === '1') {
                     table?.monday.push(newObj);
@@ -532,8 +533,8 @@ const Index = () => {
                     fjmc: KHItem?.FJSJ?.FJMC || KHItem?.FJSJ?.label,
                     jcmc: KHItem?.XXSJPZ?.TITLE,
                     XNXQId: KHItem?.XNXQId,
-                    PKBZ:KHItem?.PKBZ,
-                    RQ:KHItem?.RQ,
+                    PKBZ: KHItem?.PKBZ,
+                    RQ: KHItem?.RQ,
                   };
                   if (KHItem?.WEEKDAY === '1') {
                     table?.monday.push(newObj);
@@ -569,6 +570,102 @@ const Index = () => {
             });
           }
 
+          tableData.push(table);
+        });
+      });
+    }
+    console.log(tableData, 'tableData-----------')
+    return tableData;
+  };
+  const processingDataZ = (data: any, timeData: any, bjId: string | undefined = undefined) => {
+    // setLoading(true);
+    const NewArr = ['每一周']
+    const tableData: any[] = [];
+    const sameClassData: any[] = [];
+    if (!timeData.length) {
+      setPKiskai(true);
+    } else {
+      NewArr.forEach((item: any, index: number) => {
+        timeData.forEach((timeItem: any, timeKey: number) => {
+          const table = {
+            room: {
+              cla: item,
+              keys: index,
+              teacher: '',
+              jsId: '',
+              FJLXId: '', // 场地类型ID
+              rowspan: timeKey === 0 ? timeData?.length : 0,
+            },
+            course: {
+              cla: timeItem?.TITLE,
+              teacher: `${timeItem?.KSSJ?.slice(0, 5)} — ${timeItem?.JSSJ?.slice(0, 5)}`,
+              hjId: timeItem?.id,
+            },
+            monday: [],
+            tuesday: [],
+            wednesday: [],
+            thursday: [],
+            friday: [],
+            saturday: [],
+            sunday: [],
+          };
+          if (data?.length) {
+            data.forEach((KHItem: any) => {
+              if (KHItem?.XXSJPZId === timeItem?.id) {
+                const currentTeacher = KHItem?.KHBJSJ?.KHBJJs?.find(
+                  (items: any) => items?.JSLX === '主教师',
+                );
+                const newObj: any = {
+                  weekId: KHItem?.id, // 周
+                  cla: KHItem?.KHBJSJ?.BJMC, // 班级名称
+                  teacher: currentTeacher?.JZGJBSJ?.XM, // 主教师
+                  teacherWechatId: currentTeacher?.JZGJBSJ?.WechatUserId, // 主教师微信用户ID
+                  teacherID: currentTeacher?.JZGJBSJId, // 主教师ID
+                  bjId: KHItem?.KHBJSJ?.id, // 班级ID
+                  kcId: KHItem?.KHBJSJ?.KHKCSJ?.id, // 课程ID
+                  njId: KHItem?.KHBJSJ?.KHKCSJ?.NJSJs?.[0]?.id, // 年级ID
+                  bjzt: KHItem?.KHBJSJ?.BJZT, // 班级状态
+                  xqId: KHItem?.KHBJSJ?.XQSJ?.id, // 校区ID
+                  color: KHItem?.KHBJSJ?.KHKCSJ?.KBYS || 'rgba(62, 136, 248, 1)',
+                  dis: bjId !== KHItem?.KHBJSJ?.id,
+                  fjmc: KHItem?.FJSJ?.FJMC || KHItem?.FJSJ?.label,
+                  jcmc: KHItem?.XXSJPZ?.TITLE,
+                  XNXQId: KHItem?.XNXQId,
+                  PKBZ: KHItem?.PKBZ,
+                  RQ: KHItem?.RQ,
+                };
+                if (KHItem?.WEEKDAY === '1') {
+                  table?.monday.push(newObj);
+                } else if (KHItem?.WEEKDAY === '2') {
+                  table?.tuesday.push(newObj);
+                } else if (KHItem?.WEEKDAY === '3') {
+                  table?.wednesday.push(newObj);
+                } else if (KHItem?.WEEKDAY === '4') {
+                  table?.thursday.push(newObj);
+                } else if (KHItem?.WEEKDAY === '5') {
+                  table?.friday.push(newObj);
+                } else if (KHItem?.WEEKDAY === '6') {
+                  table?.saturday.push(newObj);
+                } else if (KHItem?.WEEKDAY === '0') {
+                  table?.sunday.push(newObj);
+                }
+
+                if (
+                  bjId === KHItem?.KHBJSJ?.id
+                  // (!BJID && recordValue?.BJId === KHItem?.KHBJSJ?.id) ||
+                  // (BJID && BJID === KHItem?.KHBJSJ?.id)
+                ) {
+                  sameClassData.push({
+                    WEEKDAY: KHItem?.WEEKDAY, // 周
+                    XXSJPZId: KHItem?.XXSJPZId, // 时间ID
+                    KHBJSJId: KHItem?.KHBJSJ?.id, // 班级ID
+                    FJSJId: item.id, // 教室ID
+                    XNXQId: KHItem?.XNXQId, // 学年学期ID
+                  });
+                }
+              }
+            });
+          }
           tableData.push(table);
         });
       });
@@ -811,10 +908,10 @@ const Index = () => {
   //     console.log(tableData, 'tableData======')
   //   }
   // }, [oriSource]);
-
   return (
     <div className={styles.CourseArrange}>
       <PageContainer>
+
         {state ? (
           <Tabs
             activeKey={key}
@@ -822,12 +919,42 @@ const Index = () => {
               setKey(value);
             }}
           >
-            {<TabPane tab="行政班排课" key="1">
-              1111
+            {<TabPane tab="行政班课表" key="1">
+              {key === '1' && <CourseScheduling
+                type='行政班课表'
+                state={state}
+                setState={setState}
+                setRecordValue={setRecordValue}
+                kcmcData={kcmcData}
+                setKcmcData={setKcmcData}
+                processingDatas={processingDatas}
+                campus={campus}
+                setCampus={setCampus}
+                campusId={campusId}
+                curXNXQId={curXNXQId}
+                setCurXNXQId={setCurXNXQId}
+                xXSJPZData={xXSJPZData}
+                setXXSJPZData={setXXSJPZData}
+                screenOriSource={screenOriSource}
+                setScreenOriSource={setScreenOriSource}
+                currentUser={currentUser}
+                loading={loading}
+                setLoading={setLoading}
+                TimeData={TimeData}
+                termList={termList}
+                setCampusId={setCampusId}
+                oriSource={oriSource}
+                setOriSource={setOriSource}
+                showDrawer={showDrawer}
+                onExcelTableClick={onExcelTableClick}
+                pKiskai={pKiskai}
+                setPKiskai={setPKiskai}
+              />}
             </TabPane>
             }
             <TabPane tab="课程班课表" key="2">
               {key === '2' && <CourseScheduling
+                type='课程班课表'
                 state={state}
                 setState={setState}
                 setRecordValue={setRecordValue}
@@ -858,10 +985,68 @@ const Index = () => {
               />}
             </TabPane>
             <TabPane tab="场地课表" key="3">
-              222
+              {key === '3' && <ClassScheduling
+                type='场地课表'
+                state={state}
+                setState={setState}
+                setRecordValue={setRecordValue}
+                kcmcData={kcmcData}
+                setKcmcData={setKcmcData}
+                processingDatas={processingDatas}
+                campus={campus}
+                setCampus={setCampus}
+                campusId={campusId}
+                curXNXQId={curXNXQId}
+                setCurXNXQId={setCurXNXQId}
+                xXSJPZData={xXSJPZData}
+                setXXSJPZData={setXXSJPZData}
+                screenOriSource={screenOriSource}
+                setScreenOriSource={setScreenOriSource}
+                currentUser={currentUser}
+                loading={loading}
+                setLoading={setLoading}
+                TimeData={TimeData}
+                termList={termList}
+                setCampusId={setCampusId}
+                oriSource={oriSource}
+                setOriSource={setOriSource}
+                showDrawer={showDrawer}
+                onExcelTableClick={onExcelTableClick}
+                pKiskai={pKiskai}
+                setPKiskai={setPKiskai}
+              />}
             </TabPane>
             <TabPane tab="教师课表" key="4">
-              333
+              {key === '4' && <ClassScheduling
+                type='教师课表'
+                state={state}
+                setState={setState}
+                setRecordValue={setRecordValue}
+                kcmcData={kcmcData}
+                setKcmcData={setKcmcData}
+                processingDatas={processingDatas}
+                campus={campus}
+                setCampus={setCampus}
+                campusId={campusId}
+                curXNXQId={curXNXQId}
+                setCurXNXQId={setCurXNXQId}
+                xXSJPZData={xXSJPZData}
+                setXXSJPZData={setXXSJPZData}
+                screenOriSource={screenOriSource}
+                setScreenOriSource={setScreenOriSource}
+                currentUser={currentUser}
+                loading={loading}
+                setLoading={setLoading}
+                TimeData={TimeData}
+                termList={termList}
+                setCampusId={setCampusId}
+                oriSource={oriSource}
+                setOriSource={setOriSource}
+                showDrawer={showDrawer}
+                onExcelTableClick={onExcelTableClick}
+                pKiskai={pKiskai}
+                setPKiskai={setPKiskai}
+              />}
             </TabPane>
           </Tabs>
         ) : (
@@ -906,7 +1091,7 @@ const Index = () => {
                 </TabPane>
                 }
                 <TabPane tab="按周" key="two">
-                  <AddArranging
+                  <AddArrangingZ
                     campus={campus}
                     campusId={campusId}
                     curXNXQId={curXNXQId}
@@ -914,7 +1099,7 @@ const Index = () => {
                     cdmcData={cdmcData}
                     screenOriSource={screenOriSource}
                     setScreenOriSource={setScreenOriSource}
-                    processingData={processingData}
+                    processingData={processingDataZ}
                     setState={setState}
                     formValues={recordValue}
                     kcmcData={kcmcData}
@@ -922,6 +1107,7 @@ const Index = () => {
                     setLoading={setLoading}
                     TimeData={TimeData}
                     setRqDisable={setRqDisable}
+                    Weeks={Weeks}
                   />
                 </TabPane>
                 <TabPane tab="单双周" key="three">
