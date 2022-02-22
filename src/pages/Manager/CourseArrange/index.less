@@ -56,8 +56,8 @@
           max-width: 66%;
           .ant-form-item-control-input {
             .ant-select {
-              max-width: 300px;
               width: 100%;
+              max-width: 300px;
             }
           }
         }
@@ -215,19 +215,19 @@
   box-shadow: 0 1px 0 #e4e4e4;
   > div:nth-child(1) {
     display: flex;
-    margin-bottom: 10px !important;
     flex-wrap: wrap;
     align-content: space-between;
     width: calc(~'100% - 133px');
+    margin-bottom: 10px !important;
     > span,
     > div {
       display: flex;
+      width: 25%;
+      min-width: 220px;
       margin-right: 16px;
       // margin-bottom: 24px;
       line-height: 30px;
-      width: 25%;
-      min-width: 220px;
-      >div{
+      > div {
         width: 100%;
       }
     }
@@ -238,8 +238,8 @@
   padding-top: 20vh;
   color: rgba(62, 136, 248, 1);
   font-size: 20px;
-  text-align: center;
   letter-spacing: 2px;
+  text-align: center;
   img {
     width: 140px;
     height: 140px;
@@ -297,6 +297,10 @@
   :global {
     .ant-card {
       .ant-card-head {
+        position: absolute;
+        top: -54px;
+        right: 0;
+        z-index: 100;
         padding: 0;
       }
       .ant-card-body {
@@ -320,6 +324,32 @@
             margin-top: 10px;
           }
         }
+      }
+    }
+  }
+}
+
+.CourseArrange {
+  .goBack {
+    padding: 16px 0;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 1px solid #e4e4e4;
+  }
+  :global {
+    .ant-pro-page-container-children-content {
+      > div:nth-of-type(1) {
+        padding-top: 0 !important;
+      }
+    }
+    .ant-tabs {
+      padding-top: 18px;
+    }
+  }
+  .tabs {
+    :global {
+      .ant-tabs-nav {
+        margin-bottom: 5px !important;
       }
     }
   }
