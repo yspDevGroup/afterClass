@@ -228,7 +228,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
     // setLoading(true);
-    console.log(value, 'value--------')
     const newPkDatas: any[] = [];
     pkData.forEach((item: any) => {
       const newObj = {
@@ -242,7 +241,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     const result = await classSchedule({
       id: Bj.KHBJSJId
     })
-    console.log(result, 'result')
     if (result?.status === 'ok') {
       if (value?.Type === '新增') {
         // 将生成的所有排课取出可排的前几项
@@ -268,7 +266,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
               data: PkArr
             })
             if (res?.status === 'ok') {
-              console.log(res)
               setLoading(false);
               newPkDatas.slice(0, surplusKs).forEach((values: any) => {
                 // 添加场地数据
@@ -534,7 +531,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                 const newCDData = screenCD(
                   screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id),
                 );
-                console.log(newCDData, 'newCDData---------')
                 const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
                 setNewTableDataSource(newTableData);
                 setScreenOriSource(screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id));
@@ -546,7 +542,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       },
     });
   };
-  console.log(screenOriSource, '---------------------')
 
   // 场地改变重新筛选表格
   useEffect(() => {
@@ -556,6 +551,11 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     }
   }, [cdmcValue, Bj]);
 
+  useEffect(() => {
+    if (screenOriSource?.length !== 0) {
+      refreshTable();
+    }
+  }, [screenOriSource]);
   useEffect(() => {
     if (formValues) {
       form.setFieldsValue(formValues);

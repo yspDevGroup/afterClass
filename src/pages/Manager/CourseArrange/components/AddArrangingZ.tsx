@@ -223,8 +223,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
     // setLoading(true);
-    console.log(value, 'value--------')
-    console.log(pkData, 'pkData--------')
     // 获取该课程班剩余可排课时
     const result = await classSchedule({
       id: Bj.KHBJSJId
@@ -320,8 +318,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     } else {
       message.warning(result?.message)
     }
-
-    console.log(screenOriSource, 'screenOriSource-----------')
 
   };
 
@@ -542,6 +538,12 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       refreshTable();
     }
   }, [cdmcValue, Bj]);
+
+  useEffect(() => {
+    if (screenOriSource?.length !== 0) {
+      refreshTable();
+    }
+  }, [screenOriSource]);
 
   useEffect(() => {
     if (formValues) {

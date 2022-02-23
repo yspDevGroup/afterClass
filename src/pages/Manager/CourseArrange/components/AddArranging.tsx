@@ -528,6 +528,12 @@ const AddArranging: FC<PropsType> = (props) => {
   }, [cdmcValue, Bj]);
 
   useEffect(() => {
+    if (screenOriSource?.length !== 0) {
+      refreshTable();
+    }
+  }, [screenOriSource]);
+
+  useEffect(() => {
     if (formValues) {
       form.setFieldsValue(formValues);
       getBjData();
