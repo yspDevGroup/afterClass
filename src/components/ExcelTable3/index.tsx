@@ -78,8 +78,6 @@ export type DataSourceType = {
 }[];
 
 const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, Weeks }) => {
-  // console.log(data, 'data-------------')
-  // console.log(chosenData, 'chosenData------')
   let arr2;
   let BJMC;
 

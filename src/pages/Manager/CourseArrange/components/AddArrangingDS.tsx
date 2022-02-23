@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
@@ -28,9 +29,8 @@ import {
 } from '@ant-design/icons';
 import { getAuthorization } from '@/utils/utils';
 import ShowName from '@/components/ShowName';
-import { createKHPKSJ, deleteKHPKSJ, addKHPKSJ, judgeKHPKSJ } from '@/services/after-class/khpksj';
-// import { getFJPlan, getAllFJSJ } from '@/services/after-class/fjsj';
-import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { createKHPKSJ } from '@/services/after-class/khpksj';
+import { getAllClasses } from '@/services/after-class/khbjsj';
 import type { DataSourceType } from '@/components/ExcelTable';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { getAllCourses } from '@/services/after-class/khkcsj';
@@ -41,6 +41,7 @@ import '../index.less';
 import noJF from '@/assets/noJF.png';
 import moment from 'moment';
 import ExcelTable3 from '@/components/ExcelTable3';
+import { classSchedule } from '@/services/after-class/khpksj';
 
 const { Option } = Select;
 
@@ -228,8 +229,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
     // setLoading(true);
     console.log(value, 'value--------')
-    console.log(record, 'record--------')
-    console.log(pkData, 'pkData--------')
     const newPkDatas: any[] = [];
     pkData.forEach((item: any) => {
       const newObj = {
@@ -239,19 +238,72 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       }
       newPkDatas.push(newObj);
     })
-    console.log(newPkDatas, 'newPkDatas')
     // 获取该课程班剩余可排课时
-    const result = await getKHBJSJ({
+    const result = await classSchedule({
       id: Bj.KHBJSJId
     })
+    console.log(result, 'result')
     if (result?.status === 'ok') {
-      // 将生成的所有排课取出可排的前几项
-
-      const surplusKs = result?.data?.KSS - result?.data?.KHPKSJs?.length;
-
-      if (surplusKs > 0) {
-        const PkArr = newPkDatas.slice(0, surplusKs);
-        result?.data?.KHPKSJs?.forEach((item: any) => {
+      if (value?.Type === '新增') {
+        // 将生成的所有排课取出可排的前几项
+        const surplusKs = result?.data?.KSS - result?.data?.KHPKSJs?.length;
+        if (surplusKs > 0) {
+          const PkArr = newPkDatas.slice(0, surplusKs);
+          result?.data?.KHPKSJs?.forEach((item: any) => {
+            const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
+            PkArr?.push({
+              FJSJId,
+              KHBJSJId,
+              PKBZ,
+              XNXQId,
+              RQ,
+              XXSJPZId,
+              WEEKDAY,
+              PKTYPE: value?.PKTYPE
+            })
+          })
+          if (Class?.ISFW === 0) {
+            const res = await createKHPKSJ({
+              bjIds: [value?.KHBJSJId],
+              data: PkArr
+            })
+            if (res?.status === 'ok') {
+              console.log(res)
+              setLoading(false);
+              newPkDatas.slice(0, surplusKs).forEach((values: any) => {
+                // 添加场地数据
+                values.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
+                // 添加班级数据
+                values.KHBJSJ = bjData.find((bjItem: any) => {
+                  return bjItem.id === value.KHBJSJId;
+                });
+                res?.data?.forEach((items: any) => {
+                  if (items?.RQ === values?.RQ) {
+                    values.id = items?.id;
+                  }
+                })
+                screenOriSource.push(values);
+                refreshTable();
+              })
+            }
+          }
+        } else {
+          message.warning('排课课时已排满，不可排课')
+        }
+      } else {
+        // 删除排课
+        const PkArr: any[] = [];
+        const newArr = result?.data?.KHPKSJs.filter((items: any) => {
+          const num = items?.PKBZ?.replace(/[^0-9]/ig, "");
+          let types: boolean = false;
+          if (value?.PKTYPE === 2 && num % 2 !== 0) {
+            types = true;
+          } else if (value?.PKTYPE === 3 && num % 2 === 0) {
+            types = true;
+          }
+          return (items?.WEEKDAY !== value?.WEEKDAY || items?.XXSJPZId !== value?.XXSJPZId) || ((items?.WEEKDAY === value?.WEEKDAY && items?.XXSJPZId === value?.XXSJPZId) && types === false)
+        })
+        newArr?.forEach((item: any) => {
           const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
           PkArr?.push({
             FJSJId,
@@ -264,135 +316,25 @@ const AddArrangingDS: FC<PropsType> = (props) => {
             PKTYPE: value?.PKTYPE
           })
         })
-        console.log(PkArr, 'PkArr-------------------------')
-        if (Class?.ISFW === 0) {
-          const res = await createKHPKSJ({
-            bjIds: [value?.KHBJSJId],
-            data: PkArr
-          })
-          if (res?.status === 'ok') {
-            console.log(res)
-            setLoading(false);
-            newPkDatas.slice(0, surplusKs).forEach((values: any) => {
-              // 添加场地数据
-              values.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
-              // 添加班级数据
-              values.KHBJSJ = bjData.find((bjItem: any) => {
-                return bjItem.id === value.KHBJSJId;
-              });
-              res?.data?.forEach((items: any)=>{
-                if(items?.RQ === values?.RQ){
-                  values.id =items?.id;
-                }
-              })
-              screenOriSource.push(values);
-              refreshTable();
-              console.log(values, '+++++++++++++++++++++++++++++++++++++++++++++++++++')
-            })
+        const res = await createKHPKSJ({
+          bjIds: [value?.KHBJSJId],
+          data: PkArr
+        })
+        if (res?.status === 'ok') {
+          for (let i = 0; i < pkData.length; i++) {
+            for (let j = 0; j < screenOriSource.length; j++) {
+              if (screenOriSource[j].RQ === pkData[i].RQ && screenOriSource[j].KHBJSJId === pkData[i].KHBJSJId && screenOriSource[j].XXSJPZId === pkData[i].XXSJPZId) {
+                screenOriSource.splice(j, 1)
+              }
+            }
           }
+          refreshTable();
         }
-      } else {
-        message.warning('排课课时已排满，不可排课')
       }
-
+    } else {
+      message.error(result?.message)
     }
-    // console.log(screenOriSource, 'screenOriSource-----------')
-
-
-
-    // console.log(res,'res----------------------------')
-    // FJSJId 房间Id KHBJSJId: 课后班级数据
-    // 如果value ===null 移除
-    // xuyao改变的原始数据 screenOriSource
-    // setLoading(true);
-    // if (value) {
-    //   // 添加 根据房间id
-    //   const KHPKSJ: any = {
-    //     FJSJId: cdmcValue,
-    //     WEEKDAY: value.WEEKDAY,
-    //     XNXQId: curXNXQId,
-    //     KHBJSJId: value.KHBJSJId,
-    //     XXSJPZId: value.XXSJPZId,
-    //     PKTYPE: 0,
-    //     RQ: pkData?.RQ,
-    //     IsDSZ: pkData?.IsDSZ,
-    //     PKBZ: pkData?.PKBZ,
-    //   };
-    //   let res: any;
-    //   if (Class?.ISFW === 1) {
-    //     res = await judgeKHPKSJ({
-    //       XNXQId: Bj?.XNXQId,
-    //       KHBJSJId: Bj?.KHBJSJId,
-    //       KSS: Class?.KSS,
-    //       startDate: moment(getFirstDay(new Date(pkData?.RQ))).format('YYYY-MM-DD'),
-    //       endDate: moment(getFirstDay(new Date(pkData?.RQ))).subtract(-6, "days").format("YYYY-MM-DD")
-    //     })
-    //   } else {
-    //     res = await judgeKHPKSJ({
-    //       XNXQId: Bj?.XNXQId,
-    //       KHBJSJId: Bj?.KHBJSJId,
-    //       KSS: Class?.KSS,
-    //     })
-    //   }
-    //   if (res?.status === 'ok') {
-    //     const addRes = await addKHPKSJ({
-    //       ...KHPKSJ,
-    //     });
-    //     // 添加班级数据
-    //     KHPKSJ.KHBJSJ = bjData.find((bjItem: any) => {
-    //       return bjItem.id === value.KHBJSJId;
-    //     });
-    //     // 添加场地数据
-    //     KHPKSJ.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
-    //     if (addRes.status === 'ok') {
-    //       KHPKSJ.id = addRes?.data?.id;
-    //       screenOriSource.push(KHPKSJ);
-    //       setLoading(false);
-    //     } else {
-    //       message.error(addRes.message);
-    //       refreshTable();
-    //       setLoading(false);
-    //     }
-    //   } else {
-    //     refreshTable();
-    //     message.warning(res?.message)
-    //     setLoading(false);
-    //   }
-    // } else {
-    //   // 移除 根据房间Id移除数据
-    //   let id: string | undefined;
-    //   screenOriSource.filter((KHPKSJ: any) => {
-    //     if (
-    //       KHPKSJ.FJSJId === cdmcValue && // 教室ID
-    //       KHPKSJ.XXSJPZId === pkData.XXSJPZId && // 时间ID
-    //       KHPKSJ.WEEKDAY === pkData.WEEKDAY &&  // 周
-    //       KHPKSJ.RQ === pkData.RQ
-    //     ) {
-    //       id = KHPKSJ.id;
-    //       return false;
-    //     }
-    //     return true;
-    //   });
-    //   if (id) {
-    //     const res = await deleteKHPKSJ({
-    //       id,
-    //     });
-    //     if (res?.status === 'ok') {
-    //       setScreenOriSource(
-    //         screenOriSource.filter((values: any) => {
-    //           return values?.id !== id;
-    //         }),
-    //       );
-    //     }
-    //     if (res?.status === 'error') {
-    //       message.error(res?.message);
-    //     }
-    //     setLoading(false);
-    //   }
-    // }
   };
-
-  console.log(screenOriSource, 'screenOriSource--------')
   // 班级展开收起
   const unFold = () => {
     if (packUp === false) {
@@ -441,8 +383,8 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         XNXQId: curXNXQId || '',
         KHBJSJId: value.id || '',
         color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
-        KKRQ:value?.KKRQ,
-        JKRQ:value?.JKRQ,
+        KKRQ: value?.KKRQ,
+        JKRQ: value?.JKRQ,
       };
 
       setBj(chosenData);
@@ -459,8 +401,8 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         XNXQId: curXNXQId || '',
         KHBJSJId: value.id || '',
         color: value.KHKCSJ.KBYS || 'rgba(62, 136, 248, 1)',
-        KKRQ:value?.KKRQ,
-        JKRQ:value?.JKRQ,
+        KKRQ: value?.KKRQ,
+        JKRQ: value?.JKRQ,
       };
       setBj(chosenData);
       if (value?.FJSJ?.id) {
@@ -576,9 +518,11 @@ const AddArrangingDS: FC<PropsType> = (props) => {
           const result = createKHPKSJ(parameter);
           Promise.resolve(result).then((data) => {
             if (data.status === 'ok') {
+              message.success('该班级排课信息已清除');
               setCDLoading(false);
               // 移除当前班级 所有排课
               if (screenOriSource) {
+
                 const screenCD = (dataSource1: any) => {
                   const newDataSource = [...dataSource1];
                   if (cdmcValue) {
@@ -590,8 +534,10 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                 const newCDData = screenCD(
                   screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id),
                 );
+                console.log(newCDData, 'newCDData---------')
                 const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
                 setNewTableDataSource(newTableData);
+                setScreenOriSource(screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id));
                 setLoading(false);
               }
             }
@@ -600,6 +546,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       },
     });
   };
+  console.log(screenOriSource, '---------------------')
 
   // 场地改变重新筛选表格
   useEffect(() => {
@@ -755,7 +702,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                 </Col>
                 <Col span={6}>
                   <ProFormSelect
-                    label="年级"
+                    label="课程适用年级"
                     width="md"
                     name="NJ"
                     options={grade || []}

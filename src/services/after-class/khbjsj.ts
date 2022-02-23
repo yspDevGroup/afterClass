@@ -594,3 +594,25 @@ export async function getAllClassesByNJ(
     ...(options || {}),
   });
 }
+
+/** 判断学生选课报名时间冲突 POST /khbjsj/judgeClassConflict */
+export async function judgeClassConflict(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+    /** 课程班ID */
+    KHBJSJId?: string;
+    /** 学生ID */
+    XSJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/judgeClassConflict', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

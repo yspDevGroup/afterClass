@@ -352,3 +352,20 @@ export async function judgeKHPKSJ(
     ...(options || {}),
   });
 }
+
+/** 获取班级信息及课表 GET /khpksj/classSchedule/${param0} */
+export async function classSchedule(
+  params: {
+    // path
+    /** 班级ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<any>(`/khpksj/classSchedule/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}

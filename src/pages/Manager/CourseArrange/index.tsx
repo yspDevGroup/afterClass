@@ -28,6 +28,7 @@ const Index = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [key, setKey] = useState<string>('1');
+  const [keys, setKeys] = useState<string>('one');
 
   const [recordValue, setRecordValue] = useState<any>({});
   const [state, setState] = useState(true);
@@ -574,7 +575,6 @@ const Index = () => {
         });
       });
     }
-    console.log(tableData, 'tableData-----------')
     return tableData;
   };
   const processingDataZ = (data: any, timeData: any, bjId: string | undefined = undefined) => {
@@ -670,7 +670,6 @@ const Index = () => {
         });
       });
     }
-    console.log(tableData, 'tableData-----------')
     return tableData;
   };
 
@@ -1068,67 +1067,80 @@ const Index = () => {
             </>
             {
               screenOriSource && <Tabs
+              activeKey={keys}
+              onChange={(value: any) => {
+                setKeys(value);
+              }}
                 className={styles.tabs}
               >
                 {<TabPane tab="按天" key="one">
-                  <AddArranging
-                    campus={campus}
-                    campusId={campusId}
-                    curXNXQId={curXNXQId}
-                    xXSJPZData={xXSJPZData}
-                    cdmcData={cdmcData}
-                    screenOriSource={screenOriSource}
-                    setScreenOriSource={setScreenOriSource}
-                    processingData={processingData}
-                    setState={setState}
-                    formValues={recordValue}
-                    kcmcData={kcmcData}
-                    currentUser={currentUser}
-                    setLoading={setLoading}
-                    TimeData={TimeData}
-                    setRqDisable={setRqDisable}
-                  />
+                  {
+                    keys === 'one' &&
+                    <AddArranging
+                      campus={campus}
+                      campusId={campusId}
+                      curXNXQId={curXNXQId}
+                      xXSJPZData={xXSJPZData}
+                      cdmcData={cdmcData}
+                      screenOriSource={screenOriSource}
+                      setScreenOriSource={setScreenOriSource}
+                      processingData={processingData}
+                      setState={setState}
+                      formValues={recordValue}
+                      kcmcData={kcmcData}
+                      currentUser={currentUser}
+                      setLoading={setLoading}
+                      TimeData={TimeData}
+                      setRqDisable={setRqDisable}
+                    />
+                  }
                 </TabPane>
                 }
                 <TabPane tab="按周" key="two">
-                  <AddArrangingZ
-                    campus={campus}
-                    campusId={campusId}
-                    curXNXQId={curXNXQId}
-                    xXSJPZData={xXSJPZData}
-                    cdmcData={cdmcData}
-                    screenOriSource={screenOriSource}
-                    setScreenOriSource={setScreenOriSource}
-                    processingData={processingDataZ}
-                    setState={setState}
-                    formValues={recordValue}
-                    kcmcData={kcmcData}
-                    currentUser={currentUser}
-                    setLoading={setLoading}
-                    TimeData={TimeData}
-                    setRqDisable={setRqDisable}
-                    Weeks={Weeks}
-                  />
+                  {
+                    keys === 'two' &&
+                    <AddArrangingZ
+                      campus={campus}
+                      campusId={campusId}
+                      curXNXQId={curXNXQId}
+                      xXSJPZData={xXSJPZData}
+                      cdmcData={cdmcData}
+                      screenOriSource={screenOriSource}
+                      setScreenOriSource={setScreenOriSource}
+                      processingData={processingDataZ}
+                      setState={setState}
+                      formValues={recordValue}
+                      kcmcData={kcmcData}
+                      currentUser={currentUser}
+                      setLoading={setLoading}
+                      TimeData={TimeData}
+                      setRqDisable={setRqDisable}
+                      Weeks={Weeks}
+                    />
+                  }
                 </TabPane>
                 <TabPane tab="单双周" key="three">
-                  <AddArrangingDS
-                    campus={campus}
-                    campusId={campusId}
-                    curXNXQId={curXNXQId}
-                    xXSJPZData={xXSJPZData}
-                    cdmcData={cdmcData}
-                    screenOriSource={screenOriSource}
-                    setScreenOriSource={setScreenOriSource}
-                    processingData={processingDataDS}
-                    setState={setState}
-                    formValues={recordValue}
-                    kcmcData={kcmcData}
-                    currentUser={currentUser}
-                    setLoading={setLoading}
-                    TimeData={TimeData}
-                    setRqDisable={setRqDisable}
-                    Weeks={Weeks}
-                  />
+                  {
+                    keys === 'three' &&
+                    <AddArrangingDS
+                      campus={campus}
+                      campusId={campusId}
+                      curXNXQId={curXNXQId}
+                      xXSJPZData={xXSJPZData}
+                      cdmcData={cdmcData}
+                      screenOriSource={screenOriSource}
+                      setScreenOriSource={setScreenOriSource}
+                      processingData={processingDataDS}
+                      setState={setState}
+                      formValues={recordValue}
+                      kcmcData={kcmcData}
+                      currentUser={currentUser}
+                      setLoading={setLoading}
+                      TimeData={TimeData}
+                      setRqDisable={setRqDisable}
+                      Weeks={Weeks}
+                    />
+                  }
                 </TabPane>
               </Tabs>
             }</>

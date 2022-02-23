@@ -306,7 +306,6 @@ const CourseScheduling = (
       ISFW: type === '行政班课表' ? 1 : 0
     });
     if (bjmcResl.status === 'ok') {
-      console.log(bjmcResl, 'bjmcResl------')
       const BJMC = bjmcResl.data.rows?.map((item: any) => ({
         label: item.BJMC,
         value: item.id,
@@ -515,6 +514,7 @@ const CourseScheduling = (
               radioValue={radioValue}
               bjmcValue={bjmcValue}
               xXSJPZData={xXSJPZData}
+              KbType={type}
               style={{
                 height: 'calc(100vh - 360px)',
               }}

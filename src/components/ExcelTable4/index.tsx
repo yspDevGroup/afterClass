@@ -78,8 +78,6 @@ export type DataSourceType = {
 }[];
 
 const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, Weeks }) => {
-  // console.log(data, 'data-------------')
-  // console.log(chosenData, 'chosenData------')
   let arr2;
   let BJMC;
   if (data?.length) {
@@ -264,7 +262,6 @@ const Index: FC<IndexPropsType> = ({
 }) => {
   let [stateTableData, setStateTableData] = useState<DataSourceType>();
 
-  console.log(chosenData,'chosenData---------')
   const weekDay = {
     monday: '1',
     tuesday: '2',
@@ -416,7 +413,6 @@ const Index: FC<IndexPropsType> = ({
     const times = new Date(AllRQ[0]).getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
     // 获取生成日期的第一个是时段内的第几周，由此判断单双周
     const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
-    console.log(AllRQ, 'AllRQ---------')
     const pkDatas: any = [];
     AllRQ?.forEach((value: any, index: number) => {
       pkDatas.push({
@@ -460,7 +456,6 @@ const Index: FC<IndexPropsType> = ({
     }
   };
   const datas = stateTableData ? [...stateTableData] : [...dataSource];
-  console.log(datas, 'datas')
   return (
     <div className={`${styles.excelTable} ${className}`}>
       <table style={{ boxShadow: '0px 5px 6px rgba(136,136,136,0.2)', marginBottom: '10px' }}>

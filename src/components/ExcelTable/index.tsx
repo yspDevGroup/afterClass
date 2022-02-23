@@ -235,7 +235,7 @@ type IndexPropsType = {
   TimeData?: any;
   /** 表格接口没有处理的数据 */
   basicData?: any[];
-  style: any;
+  style?: any;
   xXSJPZData: any;
 };
 

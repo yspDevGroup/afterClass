@@ -493,6 +493,7 @@ const AddArranging: FC<PropsType> = (props) => {
           Promise.resolve(result).then((data) => {
             if (data.status === 'ok') {
               setCDLoading(false);
+              message.success('该班级排课信息已清除');
               // 移除当前班级 所有排课
               if (screenOriSource) {
                 const screenCD = (dataSource1: any) => {
@@ -508,6 +509,7 @@ const AddArranging: FC<PropsType> = (props) => {
                 );
                 const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
                 setNewTableDataSource(newTableData);
+                setScreenOriSource(screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id));
                 setLoading(false);
               }
             }
@@ -671,7 +673,7 @@ const AddArranging: FC<PropsType> = (props) => {
                 </Col>
                 <Col span={6}>
                   <ProFormSelect
-                    label="年级"
+                    label="课程适用年级"
                     width="md"
                     name="NJ"
                     options={grade || []}
@@ -866,9 +868,6 @@ const AddArranging: FC<PropsType> = (props) => {
                       tearchId={tearchId}
                       TimeData={TimeData}
                       xXSJPZData={xXSJPZData}
-                      style={{
-                        height: 'calc(100vh - 500px)',
-                      }}
                     // basicData={oriSource}
                     />
                   </Spin>
