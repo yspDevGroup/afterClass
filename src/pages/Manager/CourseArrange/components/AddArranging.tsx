@@ -536,7 +536,7 @@ const AddArranging: FC<PropsType> = (props) => {
   useEffect(() => {
     if (formValues) {
       form.setFieldsValue(formValues);
-      getBjData();
+      getBjData(formValues?.KC);
     }
   }, [formValues]);
 
