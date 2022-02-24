@@ -456,7 +456,9 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
   useEffect(() => {
     getKcData();
-    getBjData();
+    if(!formValues?.KC){
+      getBjData();
+    }
   }, [NJID, curXNXQId, campusId]);
   // 默认选择本校
   useEffect(() => {

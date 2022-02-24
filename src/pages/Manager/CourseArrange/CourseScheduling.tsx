@@ -21,6 +21,8 @@ import SearchLayout from '@/components/Search/Layout';
 // import { getAllPK } from '@/services/after-class/khpksj';
 import noJF from '@/assets/noJF.png';
 import ExcelTable2 from '@/components/ExcelTable2';
+import { getAllGrades } from '@/services/after-class/khjyjg';
+import { getAllBJSJ } from '@/services/after-class/bjsj';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
@@ -74,7 +76,13 @@ const CourseScheduling = (
   const [bjmcValue, setBjmcValue] = useState<any>([]);
   const teacher = '';
   const [cdmcValue, setCdmcValue] = useState<any>();
-
+  const [njValue, setNjValue] = useState<any>();
+  // 年级
+  const [grade, setGrade] = useState<any>([]);
+  const [bjData, setBjData] = useState<any>([]);
+  // 行政班 名称筛选
+  const [XZBId, setXZBId] = useState<string>();
+  const [XZBData, setXZBData] = useState<any[]>();
 
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
@@ -85,9 +93,6 @@ const CourseScheduling = (
   const onPkiskaiClick = () => {
     setPKiskai(false);
   };
-
-
-
 
   // 获取系统时间配置信息
   const getSysTime = async () => {
@@ -232,25 +237,17 @@ const CourseScheduling = (
       }
       return newDataSource;
     };
-    // 筛选教师(名称)
-    const screenJSMC = (dataSource4: any) => {
+    // 筛选行政班
+    const screenXZB = (dataSource4: any) => {
       const newDataSource = [...dataSource4];
-
-      if (teacher) {
-        newDataSource.forEach((item: any) => {
-          const { KHPKSJs } = item;
-          if (KHPKSJs?.length > 0) {
-            item.KHPKSJs = KHPKSJs?.filter((KHPKSJ: any) => {
-              // 主教名称
-              const jsxm = KHPKSJ?.KHBJSJ?.KHBJJs?.[0]?.JZGJBSJ?.XM;
-              if (jsxm) {
-                return jsxm.indexOf(teacher) !== -1;
-              }
-              return false;
-            });
+      if (XZBId) {
+        const newdata = newDataSource.filter((item: any) => {
+          if (item?.KHBJSJ?.BJSJs?.find((items: any) => items?.id === XZBId)) {
+            return item
           }
+          return ''
         });
-        return newDataSource;
+        return newdata;
       }
       return newDataSource;
     };
@@ -259,7 +256,7 @@ const CourseScheduling = (
     newArr = screenCD(newArr);
     newArr = screenKC(newArr);
     newArr = screenBJ(newArr);
-    newArr = screenJSMC(newArr);
+    newArr = screenXZB(newArr);
     return newArr;
   };
 
@@ -303,7 +300,6 @@ const CourseScheduling = (
       KHKCSJId: kcmcValue,
       XNXQId: curXNXQId,
       XQSJId: campusId,
-      ISFW: type === '行政班课表' ? 1 : 0
     });
     if (bjmcResl.status === 'ok') {
       const BJMC = bjmcResl.data.rows?.map((item: any) => ({
@@ -313,6 +309,53 @@ const CourseScheduling = (
       setBjmcData(BJMC);
     }
   };
+
+  // 获取年级信息
+  const getGradeData = () => {
+    const response = getAllGrades({ XD: currentUser?.XD?.split(',') });
+    Promise.resolve(response).then((res: any) => {
+      if (res.status === 'ok') {
+        const optNJ: any[] = [];
+        const nj = ['幼儿园', '小学', '初中', '高中'];
+        nj.forEach((itemNJ) => {
+          res.data?.forEach((item: any) => {
+            if (item.XD === itemNJ) {
+              optNJ.push({
+                label: `${item.XD}${item.NJMC}`,
+                value: item.id,
+              });
+            }
+          });
+        });
+        setGrade(optNJ);
+      }
+    });
+  };
+
+  // 获取行政班
+  const getXZB = async () => {
+    const res = await getAllBJSJ({ XQSJId: campusId, njId: njValue, page: 0, pageSize: 0 });
+    if (res.status === 'ok') {
+      const data = res.data?.rows?.map((item: any) => {
+        return { label: item.BJ, value: item.id };
+      });
+      setXZBData(data);
+    }
+  };
+
+  // 初始化请求获取年级信息
+  useEffect(() => {
+    if (type === '行政班课表') {
+      getGradeData();
+    }
+  }, [type]);
+
+  useEffect(() => {
+    if (njValue) {
+      setXZBId(undefined);
+      getXZB();
+    }
+  }, [njValue]);
 
   // 初始化请求请求校区
   useEffect(() => {
@@ -355,7 +398,7 @@ const CourseScheduling = (
       const screenData = getScreenOriSource(screenOriSource);
       setOriSource(screenData);
     }
-  }, [teacher, cdmcValue, kcmcValue, bjmcValue, radioValue]);
+  }, [teacher, cdmcValue, kcmcValue, bjmcValue, radioValue,XZBId]);
 
   // 切换主页 和编辑页时刷新场地排课情况
   useEffect(() => {
@@ -442,53 +485,113 @@ const CourseScheduling = (
                   })}
                 </Select>
               </div>
-
-              <div>
-                <label>课程：</label>
+              {
+                type === '课程班课表' ? <div>
+                  <label>课程：</label>
+                  <Select
+                    style={{ width: 'calc(100% - 45px)' }}
+                    value={kcmcValue}
+                    allowClear
+                    placeholder="请选择"
+                    onChange={(value) => {
+                      setKcmcValue(value);
+                      // 已经选择的内容清除
+                      setBjmcValue([]);
+                    }}
+                  >
+                    {kcmcData?.map((item: selectType) => {
+                      if (item.value) {
+                        return (
+                          <Option value={item.value} key={item.value}>
+                            {item.label}
+                          </Option>
+                        );
+                      }
+                      return '';
+                    })}
+                  </Select>
+                </div> : <></>
+              }
+              {
+                type === '行政班课表' ?
+                  <>
+                    <div>
+                      <label>年级：</label>
+                      <Select
+                        style={{ width: 'calc(100% - 45px)' }}
+                        value={kcmcValue}
+                        allowClear
+                        placeholder="请选择"
+                        onChange={(value) => {
+                          setNjValue(value);
+                          // 已经选择的内容清除
+                          setXZBId(undefined);
+                          setXZBData([]);
+                        }}
+                      >
+                        {grade?.map((item: selectType) => {
+                          if (item.value) {
+                            return (
+                              <Option value={item.value} key={item.value}>
+                                {item.label}
+                              </Option>
+                            );
+                          }
+                          return '';
+                        })}
+                      </Select>
+                    </div></>
+                  : <></>
+              }
+            </SearchLayout>
+            <SearchLayout>
+              {
+                type === '行政班课表' ?
+                  <>
+                    <div>
+                      <label htmlFor="kcly">行政班名称：</label>
+                      <Select
+                        value={XZBId}
+                        allowClear
+                        placeholder="行政班名称"
+                        onChange={(value: string) => {
+                          setXZBId(value);
+                        }}
+                      >
+                        {XZBData?.map((item: any) => {
+                          return (
+                            <Option value={item.value} key={item.value}>
+                              {item.label}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </div></>
+                  : <></>
+              }
+            </SearchLayout>
+            {
+              type === '课程班课表' ? <div style={{ marginTop: 10 }}>
+                <label>课程班：</label>
                 <Select
-                  style={{ width: 'calc(100% - 45px)' }}
-                  value={kcmcValue}
+                  mode="multiple"
                   allowClear
+                  style={{ width: '70%', minWidth: '680px' }}
                   placeholder="请选择"
-                  onChange={(value) => {
-                    setKcmcValue(value);
-                    // 已经选择的内容清除
-                    setBjmcValue([]);
-                  }}
+                  value={bjmcValue}
+                  onChange={(value) => setBjmcValue(value)}
                 >
-                  {kcmcData?.map((item: selectType) => {
-                    if (item.value) {
-                      return (
-                        <Option value={item.value} key={item.value}>
-                          {item.label}
-                        </Option>
-                      );
-                    }
-                    return '';
+                  {bjmcData?.map((item: selectType) => {
+                    return (
+                      <Option value={item.value} key={item.value}>
+                        {item.label}
+                      </Option>
+                    );
                   })}
                 </Select>
-              </div>
+              </div> : <></>
+            }
 
-            </SearchLayout>
-            <div style={{ marginTop: 10 }}>
-              <label>课程班：</label>
-              <Select
-                mode="multiple"
-                allowClear
-                style={{ width: '70%', minWidth: '680px' }}
-                placeholder="请选择"
-                value={bjmcValue}
-                onChange={(value) => setBjmcValue(value)}
-              >
-                {bjmcData?.map((item: selectType) => {
-                  return (
-                    <Option value={item.value} key={item.value}>
-                      {item.label}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </div>
             {/*  添加新的课程 路由跳转 */}
             <div style={{ position: 'absolute', right: 0, top: 0 }}>
               <Button
@@ -504,7 +607,8 @@ const CourseScheduling = (
             </div>
           </div>
           {/* 课程表组件 */}
-          {bjmcValue?.length ? (
+
+          {(bjmcValue?.length && type === '课程班课表') || (XZBId && type === '行政班课表') ? (
             <ExcelTable2
               className={''}
               columns={columns}
@@ -522,9 +626,11 @@ const CourseScheduling = (
           ) : (
             <div className={styles.noDate}>
               {' '}
-              <img src={noJF} alt="" /> <p>请选择课程班查看课表</p>{' '}
+              <img src={noJF} alt="" /> <p>请选择{type === '课程班课表' ? '课程班' : "行政班"}查看课表</p>{' '}
             </div>
           )}
+
+
         </div>
       </Spin>
 

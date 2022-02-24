@@ -21,6 +21,7 @@ import noJF from '@/assets/noJF.png';
 import ExcelTable2 from '@/components/ExcelTable2';
 import { getAllFJSJ } from '@/services/after-class/fjsj';
 import TeacherSelect from '@/components/TeacherSelect';
+import { getAllFJLX } from '@/services/after-class/fjlx';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
@@ -67,15 +68,14 @@ const CourseScheduling = (
 
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
-  // 课程选择框的数据
-  const [kcmcValue, setKcmcValue] = useState<any>();
-  const [bjmcValue, setBjmcValue] = useState<any>([]);
   // const teacher = '';
   const [cdmcValue, setCdmcValue] = useState<any>();
   // 场地名称选择框的数据
   const [cdmcData, setCdmcData] = useState<selectType[] | undefined>([]);
   const [teacherId, setTeacherId] = useState<any>();
-
+  // 场地类型
+  const [dataLX, setDataLX] = useState<any>([]);
+  const [CDLXId, setCDLXId] = useState<any>();
 
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
@@ -86,9 +86,6 @@ const CourseScheduling = (
   const onPkiskaiClick = () => {
     setPKiskai(false);
   };
-
-
-
 
   // 获取系统时间配置信息
   const getSysTime = async () => {
@@ -108,11 +105,31 @@ const CourseScheduling = (
     }
   };
 
+   // 场地类型
+   const getCDLXData = async () => {
+    const response = await getAllFJLX({
+      name: '',
+      XXJBSJId: currentUser?.xxId,
+    });
+    if (response.status === 'ok') {
+      if (response.data && response.data.length > 0) {
+        const newData: any = [].map.call(response.data, (item: RoomType) => {
+          return {
+            label: item.FJLX,
+            value: item.id,
+          };
+        });
+        setDataLX(newData);
+      }
+    }
+  };
+  // 场地数据
   const getCDData = async () => {
     const fjList = await getAllFJSJ({
       page: 1,
       pageSize: 0,
       name: '',
+      lxId: CDLXId,
       XXJBSJId: currentUser?.xxId,
       xqId: campusId,
     });
@@ -125,6 +142,11 @@ const CourseScheduling = (
       }
     }
   };
+
+  useEffect(() => {
+      setCdmcData(undefined);
+      getCDData();
+  }, [CDLXId]);
 
   const columns: {
     title: string;
@@ -224,32 +246,6 @@ const CourseScheduling = (
       }
       return newDataSource;
     };
-    // 筛选课程名称
-    const screenKC = (dataSource2: any) => {
-      const newDataSource = [...dataSource2];
-      if (kcmcValue) {
-        return newDataSource.filter((item: any) => item?.KHBJSJ?.KHKCSJ?.id === kcmcValue);
-      }
-      return newDataSource;
-    };
-    // 筛选课程班名称
-    const screenBJ = (dataSource3: any) => {
-      const newDataSource = [...dataSource3];
-      if (bjmcValue?.length) {
-        const FilterData = (a: any, b: any) => {
-          const result = new Array();
-          // eslint-disable-next-line no-plusplus
-          for (let i = 0; i < a.length; i++) {
-            if (b.indexOf(a[i]?.KHBJSJId) !== -1) {
-              result.push(a[i]);
-            }
-          }
-          return result;
-        };
-        return FilterData(newDataSource, bjmcValue);
-      }
-      return newDataSource;
-    };
     // 筛选教师(名称)
     const screenJSMC = (dataSource4: any) => {
       const newDataSource = [...dataSource4];
@@ -267,11 +263,8 @@ const CourseScheduling = (
 
     newArr = screenRadio(newArr);
     newArr = screenCD(newArr);
-    newArr = screenKC(newArr);
-    newArr = screenBJ(newArr);
     newArr = screenJSMC(newArr);
     setLoading(false);
-    console.log(newArr, 'newArrs')
     return newArr;
   };
 
@@ -327,8 +320,8 @@ const CourseScheduling = (
       }
       // 场地数据
       getCDData();
-      // 排课数据
-      // getPKData();
+      // 场地类型数据
+      getCDLXData();
     }
   }, [curXNXQId, campusId]);
 
@@ -340,7 +333,7 @@ const CourseScheduling = (
       const screenData = getScreenOriSource(screenOriSource);
       setOriSource(screenData);
     }
-  }, [teacherId, cdmcValue, kcmcValue, bjmcValue, radioValue]);
+  }, [teacherId, cdmcValue, radioValue]);
 
   // 切换主页 和编辑页时刷新场地排课情况
   useEffect(() => {
@@ -391,10 +384,7 @@ const CourseScheduling = (
                   style={{ width: 'calc(100% - 70px)' }}
                   onChange={(value: string) => {
                     setCurXNXQId(value);
-                    setKcmcValue(undefined);
                     setCdmcValue(undefined);
-                    setKcmcValue(undefined);
-                    setBjmcValue([]);
                   }}
                 >
                   {termList?.map((item: any) => {
@@ -414,8 +404,6 @@ const CourseScheduling = (
                   onChange={(value: string) => {
                     setCampusId(value);
                     setCdmcValue(undefined);
-                    setKcmcValue(undefined);
-                    setBjmcValue([]);
                   }}
                 >
                   {campus?.map((item: any) => {
@@ -427,32 +415,46 @@ const CourseScheduling = (
                   })}
                 </Select>
               </div>
-
-              <div>
-                <label>课程：</label>
-                <Select
-                  style={{ width: 'calc(100% - 45px)' }}
-                  value={kcmcValue}
-                  allowClear
-                  placeholder="请选择"
-                  onChange={(value) => {
-                    setKcmcValue(value);
-                    // 已经选择的内容清除
-                    setBjmcValue([]);
-                  }}
-                >
-                  {kcmcData?.map((item: selectType) => {
-                    if (item.value) {
+              {
+                type === '教师课表' ? <div className={styles.teacherName}>
+                  <label>教师姓名：</label>
+                  <TeacherSelect
+                    // value={ }
+                    // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
+                    type={1}
+                    multiple={false}
+                    xxId={currentUser?.xxId}
+                    kcId={undefined}
+                    onChange={(value: any) => {
+                      setTeacherId(value)
+                    }}
+                  />
+                </div> : <></>
+              }
+              {
+                type === '场地课表' ? <div>
+                  <label>场地类型：</label>
+                  <Select
+                    style={{ width: '65%' }}
+                    value={CDLXId}
+                    allowClear
+                    placeholder="请选择"
+                    onChange={(value) => {
+                      setCdmcValue(undefined);
+                      setCdmcData([]);
+                      setCDLXId(value);
+                    }}
+                  >
+                    {dataLX?.map((item: selectType) => {
                       return (
                         <Option value={item.value} key={item.value}>
                           {item.label}
                         </Option>
                       );
-                    }
-                    return '';
-                  })}
-                </Select>
-              </div>
+                    })}
+                  </Select>
+                </div> : <></>
+              }
 
             </SearchLayout>
             {
@@ -475,23 +477,7 @@ const CourseScheduling = (
                 </Select>
               </div> : <></>
             }
-            {
-              type === '教师课表' ? <div className={styles.teacherName}>
-                <label>教师姓名：</label>
-                <TeacherSelect
-                  // value={ }
-                  // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
-                  type={1}
-                  multiple={false}
-                  xxId={currentUser?.xxId}
-                  kcId={undefined}
-                  onChange={(value: any) => {
-                    console.log(value)
-                    setTeacherId(value)
-                  }}
-                />
-              </div> : <></>
-            }
+
 
             {/*  添加新的课程 路由跳转 */}
             <div style={{ position: 'absolute', right: 0, top: 0 }}>
@@ -516,7 +502,7 @@ const CourseScheduling = (
               switchPages={showDrawer}
               onExcelTableClick={onExcelTableClick}
               radioValue={radioValue}
-              bjmcValue={bjmcValue}
+              bjmcValue=''
               xXSJPZData={xXSJPZData}
               KbType={type}
               style={{

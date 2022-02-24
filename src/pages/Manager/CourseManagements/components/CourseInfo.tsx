@@ -273,6 +273,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         placement="right"
         onClose={onSchoolInfoClose}
         visible={visibleSchoolInfo}
+        className={classes.KcDatas}
       >
         <Descriptions className={classes.drawerstyle} layout="vertical" column={1}>
           <Descriptions.Item label="课程名称">{info?.KCMC}</Descriptions.Item>

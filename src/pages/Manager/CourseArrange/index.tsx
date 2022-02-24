@@ -901,12 +901,6 @@ const Index = () => {
     }
   }, [curXNXQId, campusId]);
 
-  // useEffect(() => {
-  //   if (xXSJPZData.length > 0) {
-  //     const tableData = processingDataDS(oriSource, xXSJPZData);
-  //     console.log(tableData, 'tableData======')
-  //   }
-  // }, [oriSource]);
   return (
     <div className={styles.CourseArrange}>
       <PageContainer>

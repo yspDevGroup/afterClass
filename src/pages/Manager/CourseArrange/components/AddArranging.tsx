@@ -444,7 +444,9 @@ const AddArranging: FC<PropsType> = (props) => {
 
   useEffect(() => {
     getKcData();
-    getBjData();
+    if(!formValues?.KC){
+      getBjData();
+    }
   }, [NJID, curXNXQId, campusId]);
   // 默认选择本校
   useEffect(() => {
@@ -539,6 +541,7 @@ const AddArranging: FC<PropsType> = (props) => {
       getBjData(formValues?.KC);
     }
   }, [formValues]);
+
 
   // 导入冲突后的弹窗提示
   const error = () => {
@@ -874,6 +877,9 @@ const AddArranging: FC<PropsType> = (props) => {
                       tearchId={tearchId}
                       TimeData={TimeData}
                       xXSJPZData={xXSJPZData}
+                      style={{
+                        height: 'calc(100vh - 300px)',
+                      }}
                     // basicData={oriSource}
                     />
                   </Spin>
