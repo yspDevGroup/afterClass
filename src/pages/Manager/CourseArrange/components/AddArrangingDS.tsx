@@ -226,6 +226,23 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
   };
 
+  // 计算单周排了多少课时
+  const fn = (arr: string | any[]) => {
+    // eslint-disable-next-line no-var
+    const results = [];
+    let i;
+    let j;
+    for (i = 0; i < arr.length; i++) {
+      for (j = i + 1; j < arr.length; j++) {
+        if (arr[i].WEEKDAY === arr[j].WEEKDAY && arr[i].XXSJPZId === arr[j].XXSJPZId) {
+          j = ++i;
+        }
+      }
+      results.push(arr[i]);
+    }
+    return results;
+  }
+
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
     // setLoading(true);
     const newPkDatas: any[] = [];
@@ -243,24 +260,67 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     })
     if (result?.status === 'ok') {
       if (value?.Type === '新增') {
-        // 将生成的所有排课取出可排的前几项
-        const surplusKs = result?.data?.KSS - result?.data?.KHPKSJs?.length;
-        if (surplusKs > 0) {
-          const PkArr = newPkDatas.slice(0, surplusKs);
-          result?.data?.KHPKSJs?.forEach((item: any) => {
-            const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
-            PkArr?.push({
-              FJSJId,
-              KHBJSJId,
-              PKBZ,
-              XNXQId,
-              RQ,
-              XXSJPZId,
-              WEEKDAY,
-              PKTYPE: value?.PKTYPE
+        if (result?.data?.ISFW === 1) {
+          const datas = fn(result?.data?.KHPKSJs);
+          if (datas?.length < result?.data?.KSS) {
+            const PkArr = JSON.parse(JSON.stringify(newPkDatas));
+            result?.data?.KHPKSJs?.forEach((item: any) => {
+              const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
+              PkArr?.push({
+                FJSJId,
+                KHBJSJId,
+                PKBZ,
+                XNXQId,
+                RQ,
+                XXSJPZId,
+                WEEKDAY,
+                PKTYPE: value?.PKTYPE
+              })
             })
-          })
-          if (Class?.ISFW === 0) {
+            const res = await createKHPKSJ({
+              bjIds: [value?.KHBJSJId],
+              data: PkArr
+            })
+            if (res?.status === 'ok') {
+              setLoading(false);
+              newPkDatas.forEach((values: any) => {
+                // 添加场地数据
+                values.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
+                // 添加班级数据
+                values.KHBJSJ = bjData.find((bjItem: any) => {
+                  return bjItem.id === value.KHBJSJId;
+                });
+                res?.data?.forEach((items: any) => {
+                  if (items?.RQ === values?.RQ) {
+                    values.id = items?.id;
+                  }
+                })
+                screenOriSource.push(values);
+                refreshTable();
+              })
+            }
+          } else {
+            message.warning('超出排课课时，不可排课')
+          }
+
+        } else {
+          // 将生成的所有排课取出可排的前几项
+          const surplusKs = result?.data?.KSS - result?.data?.KHPKSJs?.length;
+          if (surplusKs > 0) {
+            const PkArr = newPkDatas.slice(0, surplusKs);
+            result?.data?.KHPKSJs?.forEach((item: any) => {
+              const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
+              PkArr?.push({
+                FJSJId,
+                KHBJSJId,
+                PKBZ,
+                XNXQId,
+                RQ,
+                XXSJPZId,
+                WEEKDAY,
+                PKTYPE: value?.PKTYPE
+              })
+            })
             const res = await createKHPKSJ({
               bjIds: [value?.KHBJSJId],
               data: PkArr
@@ -283,9 +343,9 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                 refreshTable();
               })
             }
+          } else {
+            message.warning('排课课时已排满，不可排课')
           }
-        } else {
-          message.warning('排课课时已排满，不可排课')
         }
       } else {
         // 删除排课
@@ -332,6 +392,8 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       message.error(result?.message)
     }
   };
+
+  console.log(screenOriSource, 'screenOriSource--------------')
   // 班级展开收起
   const unFold = () => {
     if (packUp === false) {
@@ -467,7 +529,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
   useEffect(() => {
     getKcData();
-    if(!formValues?.KC){
+    if (!formValues?.KC) {
       getBjData();
     }
   }, [NJID, curXNXQId, campusId]);
