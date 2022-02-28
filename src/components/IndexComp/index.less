@@ -32,6 +32,42 @@
 }
 
 .pageWrapper {
+  .topHeaders {
+    display: flex;
+    justify-content: space-between;
+    > div {
+      position: relative;
+      width: 10%;
+      height: 88px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 6px rgba(37, 54, 80, 0.2);
+      padding: 12px;
+      .lb {
+        position: absolute;
+        top: 0;
+        left: 30%;
+        width: 40%;
+        height: 4px;
+        margin: auto;
+        border-radius: 0 0px 4px 4px;
+      }
+      p {
+        margin: 0;
+        color: #999;
+        font-size: 14px;
+        line-height: 16px;
+        margin-top: 4px;
+      }
+      h3 {
+        margin: 0;
+        color: #333;
+        font-size: 23px;
+        position: absolute;
+        bottom: 4px;
+      }
+    }
+  }
   .topHeader {
     .headerItem {
       padding: @padding-lg;
@@ -193,6 +229,7 @@
   }
   .chartWrapper {
     margin-top: @padding-lg;
+
 
     .chartWrapper {
       > div {

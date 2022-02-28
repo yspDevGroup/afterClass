@@ -7,16 +7,12 @@
  */
 export const bgColor = [
   {
-    begin: '#FFA178',
-    end: '#FF6756',
-  },
-  {
-    begin: '#36D1DC',
-    end: '#85ABFF',
-  },
-  {
     begin: '#FFE466',
     end: '#FF9B1E',
+  },
+  {
+    begin: '#FFA178',
+    end: '#FF6756',
   },
   {
     begin: '#6FEE7C',
@@ -30,22 +26,23 @@ export const bgColor = [
     begin: '#4BF3D5',
     end: '#1CC6C6',
   },
+  {
+    begin: '#36D1DC',
+    end: '#85ABFF',
+  },
+
 ];
 export const topNum = [
-  {
-    title: '课程班总数',
-    type: 'bj_count',
-  },
-  {
-    title: '合作机构',
-    type: 'jg_count',
-  },
   {
     title: '课程总数',
     type: 'kc_count',
   },
   {
-    title: '机构课程',
+    title: '课程班总数',
+    type: 'bj_count',
+  },
+  {
+    title: '参与班级数',
     type: 'jgkc_count',
   },
   {
@@ -55,6 +52,10 @@ export const topNum = [
   {
     title: '参与学生数',
     type: 'xs_count',
+  },
+  {
+    title: '合作机构',
+    type: 'jg_count',
   },
 ];
 export const centerNum = [
@@ -71,28 +72,46 @@ export const centerNum = [
     path: '/audit/substituteCourse'
   },
   {
-    title: '课程退订',
-    type: 'kctd_count',
-    color: '#898FD7',
-    path: '/orderInquiry/reimbursementClass'
+    title: '教师补签',
+    type: 'jstdk_count',
+    color: '#FF5959',
+    path: '/audit/resignManagement' //
   },
   {
-    title: '服务退订',
-    type: 'fwtd_count',
-    color: '#EED600',
+    title: '课后服务退订',
+    type: 'kctd_count',
+    color: '#898FD7',
+    path: '/orderInquiry/reimbursementClass?index=1'
+  },
+  {
+    title: '课程服务退订',
+    type: 'kctd_count',
+    color: '#898FD7',
     path: '/orderInquiry/reimbursementClass?index=2'
   },
   {
-    title: '课程退款',
-    type: 'kctk_count',
-    color: '#98D32D',
-    path: '/orderInquiry/refundManagement'
+    title: '增值服务退订',
+    type: 'fwtd_count',
+    color: '#EED600',
+    path: '/orderInquiry/reimbursementClass?index=3'
   },
   {
-    title: '服务退款',
+    title: '课后服务退款',
     type: 'fwtk_count',
     color: '#FFA238',
+    path: '/orderInquiry/refundManagement?index=1'
+  },
+  {
+    title: '课程服务退款',
+    type: 'kctk_count',
+    color: '#98D32D',
     path: '/orderInquiry/refundManagement?index=2'
+  },
+  {
+    title: '增值服务退款',
+    type: 'fwtk_count',
+    color: '#FFA238',
+    path: '/orderInquiry/refundManagement?index=3'
   },
 ];
 export const chartConfig: any = {

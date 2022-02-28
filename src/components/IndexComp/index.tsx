@@ -6,9 +6,9 @@
  * @LastEditors: zpl
  */
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row, Tabs } from 'antd';
 import { Access, Link, useAccess, useModel } from 'umi';
-import { RightOutlined } from '@ant-design/icons';
+import { DeploymentUnitOutlined, HighlightOutlined, RightOutlined, SmileOutlined } from '@ant-design/icons';
 import Topbar from './Topbar';
 import CenterBar from './CenterBar';
 import List from './List';
@@ -28,6 +28,7 @@ import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import PromptInformation from '@/components/PromptInformation';
 
+const { TabPane } = Tabs;
 const Index = () => {
   const { initialState } = useModel('@@initialState');
   const { canAdmin } = useAccess();
@@ -151,91 +152,259 @@ const Index = () => {
       </Access>
       <Row className={styles.chartWrapper}>
         <Col span={24}>
-          {/* extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>} */}
-          <Card title="课后服务开启流程" bordered={false}>
-            <Row gutter={[24, 0]} className={styles.viewWrapper}>
-              <Col span={5}>
-                <p>
-                  <span>01</span>
-                  基本信息管理
-                </p>
-                <img src={home1} alt="" />
-                <ul>
-                  <li>
-                    <Link to="/basicalSettings/schoolInfo">学校信息维护</Link>
-                  </li>
-                  <li>
-                    <Link to="/basicalSettings/service">服务协议配置</Link>
-                  </li>
-                  <li>
-                    <Link to="/basicalSettings/teacherManagement">教师管理</Link>
-                  </li>
-                  {/* <li>
-                    <Link to="/basicalSettings/roomManagement">场地维护</Link>
-                  </li> */}
-                </ul>
-              </Col>
-              <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={arrow} alt="" />
-              </Col>
-              <Col span={5}>
-                <p>
-                  <span>02</span>
-                  时间、场地维护
-                </p>
-                <img src={home2} alt="" />
-                <ul>
-                  <li>
-                    <Link to="/basicalSettings/termManagement">学年学期维护</Link>
-                  </li>
-                  <li>
-                    <Link to="/basicalSettings/periodMaintenance">时段维护</Link>
-                  </li>
-                  <li>
-                    <Link to="/basicalSettings/roomManagement">场地维护</Link>
-                  </li>
-                </ul>
-              </Col>
-              <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={arrow} alt="" />
-              </Col>
-              <Col span={5}>
-                <p>
-                  <span>03</span>
-                  课程管理
-                </p>
-                <img src={home3} alt="" />
-                <ul>
-                  <li>
-                    <Link to="/courseManagements/CourseManagements">课程管理</Link>
-                  </li>
-                  <li>
-                    <Link to="/courseManagements/classManagement">课程班管理</Link>
-                  </li>
-                  <li>
-                    <Link to="/courseScheduling">排课管理</Link>
-                  </li>
-                </ul>
-              </Col>
-              <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={arrow} alt="" />
-              </Col>
-              <Col span={5}>
-                <p>
-                  <span>04</span>
-                  班级、课程发布
-                </p>
-                <img src={home4} alt="" />
-                <ul>
-                  <li>
-                    <Link to="/courseManagements/CourseManagements">课程发布</Link>
-                  </li>
-                  <li>
-                    <Link to="/courseManagements/classManagement">课程班开班</Link>
-                  </li>
-                </ul>
-              </Col>
-            </Row>
+          <Card title="服务开启流程" bordered={false}>
+            <Tabs>
+              <TabPane
+                tab={
+                  <span>
+                    <DeploymentUnitOutlined />
+                    课后服务
+                  </span>
+                }
+                key="1"
+              >
+                <Row gutter={[24, 0]} className={styles.viewWrapper}>
+                  <Col span={5}>
+                    <p>
+                      <span>01</span>
+                      基本信息管理
+                    </p>
+                    <img src={home1} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/basicalSettings/schoolInfo">学校信息维护</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/service?index=normal">课后服务协议</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/teacherManagement">教师管理</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                  <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={arrow} alt="" />
+                  </Col>
+                  <Col span={5}>
+                    <p>
+                      <span>02</span>
+                      时间、场地维护
+                    </p>
+                    <img src={home3} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/basicalSettings/termManagement">学年学期维护</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/periodMaintenance">时段维护</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/roomManagement">场地维护</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                  <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={arrow} alt="" />
+                  </Col>
+                  <Col span={5}>
+                    <p>
+                      <span>03</span>
+                      课程管理
+                    </p>
+                    <img src={home2} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/courseManagements/CourseManagements">课程管理</Link>
+                      </li>
+                      <li>
+                        <Link to="/courseManagements/classManagement">课程班管理</Link>
+                      </li>
+                      <li>
+                        <Link to="/courseArrange">排课管理</Link>
+                      </li>
+                      <li>
+                        <Link to="/courseManagements/classManagement">课程班开启</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                  <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={arrow} alt="" />
+                  </Col>
+                  <Col span={5}>
+                    <p>
+                      <span>04</span>
+                      服务管理、发布
+                    </p>
+                    <img src={home4} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/afterClassManagement/registration_setting">报名模式设置</Link>
+                      </li>
+                      <li>
+                        <Link to="/afterClassManagement/class_management">行政班管理</Link>
+                      </li>
+                      <li>
+                        <Link to="/afterClassManagement/class_management">课后服务发布</Link>
+                      </li>
+                      <li>
+                        <Link to="/afterClassManagement/registration_setting">缴费管理</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                </Row>
+              </TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    <HighlightOutlined />
+                    缤纷课堂
+                  </span>
+                }
+                key="2"
+              >
+                <Row gutter={[24, 0]} className={styles.viewWrapper}>
+                  <Col span={5}>
+                    <p>
+                      <span>01</span>
+                      基本信息管理
+                    </p>
+                    <img src={home1} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/basicalSettings/schoolInfo">学校信息维护</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/service?index=service">缤纷课堂协议</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/teacherManagement">教师管理</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                  <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={arrow} alt="" />
+                  </Col>
+                  <Col span={5}>
+                    <p>
+                      <span>02</span>
+                      时间、场地维护
+                    </p>
+                    <img src={home3} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/basicalSettings/termManagement">学年学期维护</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/periodMaintenance">时段维护</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/roomManagement">场地维护</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                  <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={arrow} alt="" />
+                  </Col>
+                  <Col span={5}>
+                    <p>
+                      <span>03</span>
+                      课程管理
+                    </p>
+                    <img src={home2} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/courseManagements/CourseManagements">课程管理</Link>
+                      </li>
+                      <li>
+                        <Link to="/courseManagements/classManagement?index=2">课程班管理</Link>
+                      </li>
+                      <li>
+                        <Link to="/courseArrange">排课管理</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                  <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={arrow} alt="" />
+                  </Col>
+                  <Col span={5}>
+                    <p>
+                      <span>04</span>
+                      班级开班
+                    </p>
+                    <img src={home4} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/courseManagements/classManagement?index=2">课程班开班</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                </Row>
+              </TabPane>
+              <TabPane
+                tab={
+                  <span>
+                    <SmileOutlined />
+                    增值服务
+                  </span>
+                }
+                key="3"
+              >
+                <Row gutter={[24, 0]} className={styles.viewWrapper}>
+                  <Col span={7}>
+                    <p>
+                      <span>01</span>
+                      基本信息管理
+                    </p>
+                    <img src={home1} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/basicalSettings/schoolInfo">学校信息维护</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/service?index=increment">增值服务协议</Link>
+                      </li>
+                      <li>
+                        <Link to="/basicalSettings/termManagement">学年学期维护</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                  <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={arrow} alt="" />
+                  </Col>
+                  <Col span={7}>
+                    <p>
+                      <span>02</span>
+                      增值服务管理
+                    </p>
+                    <img src={home3} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/valueAddedServices/cateringService">服务配置</Link>
+                      </li>
+                      <li>
+                        <Link to="/valueAddedServices/serviceManagement">服务管理</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                  <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={arrow} alt="" />
+                  </Col>
+                  <Col span={7}>
+                    <p>
+                      <span>03</span>
+                      服务发布
+                    </p>
+                    <img src={home4} alt="" />
+                    <ul>
+                      <li>
+                        <Link to="/valueAddedServices/serviceManagement">增值服务发布</Link>
+                      </li>
+                    </ul>
+                  </Col>
+                </Row>
+              </TabPane>
+            </Tabs>
+
           </Card>
         </Col>
       </Row>

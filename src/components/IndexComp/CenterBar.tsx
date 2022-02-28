@@ -15,21 +15,32 @@ import { RightOutlined } from '@ant-design/icons';
 const CenterBar = (props: { data: any }) => {
   const { data } = props;
   return (
-    <Row gutter={[24, 24]} className={styles.topHeader}>
-      {centerNum.map((item, index) => {
-        return <Col span={4} key={item.title}>
-          <Link to={item.path}>
-            <div className={styles.centerItem}>
-              <div className={styles.borderWrap}>
-                <div className={styles.lb} style={{ backgroundColor: `${item.color}` }}></div>
-                <p title={item.title}>{item.title} <span><RightOutlined /></span></p>
-                <h3>{data?.[item.type] || 0}</h3>
-              </div>
-            </div>
+    <div className={styles.topHeaders}>
+      {centerNum.map((item) => {
+        return <div >
+          < Link to={item.path}>
+            <div className={styles.lb} style={{ backgroundColor: `${item.color}` }} />
+            <p title={item.title}>{item.title}</p>
+            <h3>{data?.[item.type] || 0}</h3>
           </Link>
-        </Col>
+        </div>
       })}
-    </Row>
+    </div >
+    // <Row gutter={[24, 24]} className={styles.topHeader}>
+    //   {centerNum.map((item, index) => {
+    //     return <Col span={4} key={item.title}>
+    //       <Link to={item.path}>
+    //         <div className={styles.centerItem}>
+    //           <div className={styles.borderWrap}>
+    //             <div className={styles.lb} style={{ backgroundColor: `${item.color}` }} />
+    //             <p title={item.title}>{item.title} <span><RightOutlined /></span></p>
+    //             <h3>{data?.[item.type] || 0}</h3>
+    //           </div>
+    //         </div>
+    //       </Link>
+    //     </Col>
+    //   })}
+    // </Row>
   );
 };
 export default CenterBar;

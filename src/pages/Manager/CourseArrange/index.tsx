@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Tabs } from 'antd';
+import { Button, Modal, Tabs } from 'antd';
 import PageContainer from '@/components/PageContainer';
 import { history } from 'umi';
 import CourseScheduling from './CourseScheduling';
@@ -14,7 +14,7 @@ import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { getAllPK } from '@/services/after-class/khpksj';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
-import { LeftOutlined } from '@ant-design/icons';
+import { LeftOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import AddArrangingDS from './components/AddArrangingDS';
@@ -56,6 +56,8 @@ const Index = () => {
   // 场地名称选择框的数据
   const [cdmcData, setCdmcData] = useState<selectType[] | undefined>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  // 排课须知弹框
+  const [VisiblePKXZ, setVisiblePKXZ] = useState(false);
 
   // ----------------------------计算时间-------------------------------
   const getTime = () => {
@@ -1057,6 +1059,9 @@ const Index = () => {
                   返回上一页
                 </Button>
                 {`${recordValue && recordValue.BJId ? '编辑排课' : '新增排课'}`}
+                <a className={styles.xuzhi} onClick={() => {
+                  setVisiblePKXZ(true)
+                }}><QuestionCircleOutlined /> 排课须知</a>
               </div>
             </>
             {
@@ -1140,6 +1145,30 @@ const Index = () => {
             }</>
         )}
 
+        <Modal
+          visible={VisiblePKXZ}
+          title="排课须知"
+          onOk={()=>{
+            setVisiblePKXZ(true)
+          }}
+          onCancel={()=>{
+            setVisiblePKXZ(false)
+          }}
+          footer={null}
+          className={styles.PKXZ}
+        >
+          <p className={styles.titles}><div /> <span>排课规则</span>  </p>
+          <p>1. 排课支持两种模式：第一种，循环排课，即“按周”、“单双周”排课；第二种，“按天”排课。</p>
+          <p>2. 循环排课时必须先清除其他类型下的排课信息，且“按周”排课与“单双周”排课不可同时使用，即选择“按周”进行排课时，如果该班级存在的“单双周”排课信息，则需先清除已有排课信息后方可操作，反之亦然。</p>
+          <p>3. 当循环排课模式无法满足排课需求时，可使用“按天”排课模式。</p>
+          <p>4. “按天”排课也可作为循环排课的补充，可以先进行循环排课，然后使用“按天”排课进行细节调整。</p>
+          <p className={styles.titles} style={{marginTop:15}}><div /> <span>操作建议</span>  </p>
+          <p>建议您先依据学校课表安排，选择一种适合的循环排课方式，在“按周”或“单双周”页签下完成排课后，可在“按天”排课中进行细节调整。</p>
+          <p>例如：</p>
+          <p>1. 每周循环上课，选择“按周”进行排课，随后在“按天”排课中进行调整；</p>
+          <p>2. 单双周循环上课，选择“单双周”进行排课，随后在“按天”排课中进行调整；</p>
+          <p>3. 无循环规律，选择“按天”排课，完成本学期排课安排。</p>
+        </Modal>
       </PageContainer>
     </div>
 
