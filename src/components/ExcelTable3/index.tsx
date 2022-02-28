@@ -454,7 +454,10 @@ const Index: FC<IndexPropsType> = ({
           KHBJSJId: chosenData?.KHBJSJId, // 班级ID
           PKBZ: zhoushu === 1 ? `第${(index + 1) + 1 * index}周` : `第${(index + 3) + 1 * index}周`, // 排课备注：第几周
           RQ: value,              // 日期
-          PKTYPE: rowData.room?.cla === '单周' ? 2 : 3
+          PKTYPE: rowData.room?.cla === '单周' ? 2 : 3,
+          XXSJPZ:{
+            KSSJ:`${rowData?.course?.teacher?.substring(0,5)}:00`
+          }
         })
       })
     } else {
@@ -465,7 +468,10 @@ const Index: FC<IndexPropsType> = ({
           KHBJSJId: chosenData?.KHBJSJId, // 班级ID
           PKBZ: `第${(index + 2) + 1 * index}周`, // 排课备注：第几周
           RQ: value,              // 日期
-          PKTYPE: rowData.room?.cla === '单周' ? 2 : 3
+          PKTYPE: rowData.room?.cla === '单周' ? 2 : 3,
+          XXSJPZ:{
+            KSSJ:`${rowData?.course?.teacher?.substring(0,5)}:00`
+          }
         })
       })
     }

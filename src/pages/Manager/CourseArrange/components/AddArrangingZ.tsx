@@ -265,7 +265,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
   const showConfirm = () => {
     confirm({
-      title: '如需按周/单双周排课，需先清除该班级已有排课信息，确定清除吗？ ',
+      title: '如需按周排课，需先清除该班级已有排课信息，确定清除吗？ ',
       icon: <ExclamationCircleOutlined />,
       onOk() {
         if (Bj?.id) {
@@ -302,63 +302,63 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       },
     });
   }
-    /* 获取时间段内属于星期一(*)的日期们
-     * begin: 开始时间
-     * end：结束时间
-     * weekNum：星期几 {number}
-     */
-    function getWeek(begin: any, end: any, weekNum: any) {
-      const dateArr = new Array();
-      const stimeArr = begin.split("-");//= >["2018", "01", "01"]
-      const etimeArr = end.split("-");//= >["2018", "01", "30"]
-      const stoday = new Date();
-      stoday.setUTCFullYear(stimeArr[0], stimeArr[1] - 1, stimeArr[2]);
-      const etoday = new Date();
-      etoday.setUTCFullYear(etimeArr[0], etimeArr[1] - 1, etimeArr[2]);
+  /* 获取时间段内属于星期一(*)的日期们
+   * begin: 开始时间
+   * end：结束时间
+   * weekNum：星期几 {number}
+   */
+  function getWeek(begin: any, end: any, weekNum: any) {
+    const dateArr = new Array();
+    const stimeArr = begin.split("-");//= >["2018", "01", "01"]
+    const etimeArr = end.split("-");//= >["2018", "01", "30"]
+    const stoday = new Date();
+    stoday.setUTCFullYear(stimeArr[0], stimeArr[1] - 1, stimeArr[2]);
+    const etoday = new Date();
+    etoday.setUTCFullYear(etimeArr[0], etimeArr[1] - 1, etimeArr[2]);
 
-      const unixDb = stoday.getTime();// 开始时间的毫秒数
-      const unixDe = etoday.getTime();// 结束时间的毫秒数
+    const unixDb = stoday.getTime();// 开始时间的毫秒数
+    const unixDe = etoday.getTime();// 结束时间的毫秒数
 
-      for (let k = unixDb; k <= unixDe;) {
-        const needJudgeDate = msToDate(parseInt(k, 10)).withoutTime;
+    for (let k = unixDb; k <= unixDe;) {
+      const needJudgeDate = msToDate(parseInt(k, 10)).withoutTime;
 
-        // 不加这个if判断直接push的话就是已知时间段内的所有日期
-        if (new Date(needJudgeDate).getDay() === Number(weekNum)) {
-          dateArr.push(needJudgeDate);
-        }
-        k += 24 * 60 * 60 * 1000;
+      // 不加这个if判断直接push的话就是已知时间段内的所有日期
+      if (new Date(needJudgeDate).getDay() === Number(weekNum)) {
+        dateArr.push(needJudgeDate);
       }
-      return dateArr;
+      k += 24 * 60 * 60 * 1000;
     }
+    return dateArr;
+  }
 
-    // 根据毫秒数获取日期
-    function msToDate(msec: string | number | Date) {
-      const datetime = new Date(msec);
-      const year = datetime.getFullYear();
-      const month = datetime.getMonth();
-      const date = datetime.getDate();
-      const hour = datetime.getHours();
-      const minute = datetime.getMinutes();
-      const second = datetime.getSeconds();
+  // 根据毫秒数获取日期
+  function msToDate(msec: string | number | Date) {
+    const datetime = new Date(msec);
+    const year = datetime.getFullYear();
+    const month = datetime.getMonth();
+    const date = datetime.getDate();
+    const hour = datetime.getHours();
+    const minute = datetime.getMinutes();
+    const second = datetime.getSeconds();
 
-      const result1 = `${year
-        }-${(month + 1) >= 10 ? (month + 1) : `0${month + 1}`
-        }-${(date + 1) < 10 ? `0${date}` : date
-        } ${(hour + 1) < 10 ? `0${hour}` : hour
-        }:${(minute + 1) < 10 ? `0${minute}` : minute
-        }:${(second + 1) < 10 ? `0${second}` : second}`;
+    const result1 = `${year
+      }-${(month + 1) >= 10 ? (month + 1) : `0${month + 1}`
+      }-${(date + 1) < 10 ? `0${date}` : date
+      } ${(hour + 1) < 10 ? `0${hour}` : hour
+      }:${(minute + 1) < 10 ? `0${minute}` : minute
+      }:${(second + 1) < 10 ? `0${second}` : second}`;
 
-      const result2 = `${year
-        }-${(month + 1) >= 10 ? (month + 1) : `0${month + 1}`
-        }-${(date + 1) < 11 ? `0${date}` : date}`;
+    const result2 = `${year
+      }-${(month + 1) >= 10 ? (month + 1) : `0${month + 1}`
+      }-${(date + 1) < 11 ? `0${date}` : date}`;
 
-      const result = {
-        hasTime: result1,
-        withoutTime: result2
-      };
+    const result = {
+      hasTime: result1,
+      withoutTime: result2
+    };
 
-      return result;
-    }
+    return result;
+  }
 
   // 计算单周排了多少课时
   const fn = (arr: string | any[]) => {
@@ -381,17 +381,16 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     const result = await classSchedule({
       id: Bj.KHBJSJId
     })
-    console.log(result.data.KHPKSJs, 'result')
     const newPkDatas: any[] = [];
     pkData.forEach((item: any) => {
       const newObj = {
         ...item,
         FJSJId: cdmcValue,
-        XNXQId: curXNXQId
+        XNXQId: curXNXQId,
+        WEEKDAY: item.WEEKDAY === '0' ? '7' : item.WEEKDAY
       }
       newPkDatas.push(newObj);
     })
-    console.log(newPkDatas)
     if (result?.status === 'ok') {
       if (value?.Type === '新增') {
         if (result?.data?.ISFW === 1) {
@@ -410,6 +409,11 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                 WEEKDAY,
                 PKTYPE: value?.PKTYPE
               })
+            })
+            PkArr.forEach((value1: any) => {
+              if (value1.WEEKDAY === '7') {
+                value1.WEEKDAY = '0'
+              }
             })
             const res = await createKHPKSJ({
               bjIds: [value?.KHBJSJId],
@@ -438,6 +442,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
           }
         } else {
           console.log(1111);
+          // 判断是否有周排课以外的数据存在，有的话先清除排课
           if (result?.data?.KHPKSJs?.find((items: any) => items?.PKTYPE === 0 || items?.PKTYPE === 2 || items?.PKTYPE === 3)) {
             showConfirm();
           } else {
@@ -460,6 +465,11 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                     WEEKDAY,
                     PKTYPE: value?.PKTYPE
                   })
+                })
+                PkArr.forEach((value1: any) => {
+                  if (value1.WEEKDAY === '7') {
+                    value1.WEEKDAY = '0'
+                  }
                 })
                 const res = await createKHPKSJ({
                   bjIds: [value?.KHBJSJId],
@@ -488,11 +498,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
               // 按每周排的课时重新计算
               const YPKS = Math.floor(result?.data?.KSS / (datas?.length + 1));
               const DUKS = result?.data?.KSS % (datas?.length + 1);
-              console.log(YPKS, 'YPKS-----------------');
-              console.log(DUKS, 'DUKS-----------------');
               const PkArr = newPkDatas.slice(0, YPKS);
-
-              console.log(fn(result?.data?.KHPKSJs))
               datas.forEach((values: any) => {
                 const arr1 = result?.data?.KHPKSJs?.filter((items: any) => {
                   return values.WEEKDAY === items.WEEKDAY && values.XXSJPZId === items.XXSJPZId
@@ -502,69 +508,23 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                     PkArr.push(value1)
                   }
                 })
-                console.log(arr1, 'arr1------------------------------------------------------')
               })
-              // const objs: any = {
-              //   monday: [],
-              //   tuesday: [],
-              //   wednesday: [],
-              //   thursday: [],
-              //   friday: [],
-              //   saturday: [],
-              //   sunday: [],
-              // };
-              // console.log(xXSJPZData, 'xXSJPZData')
-              // xXSJPZData.forEach((val: any) => {
-              //   objs.monday.push({
-              //     title: val.TITLE,
-              //     arr: []
-              //   })
-              //   objs.tuesday.push({
-              //     title: val.TITLE,
-              //     arr: []
-              //   })
-              //   objs.wednesday.push({
-              //     title: val.TITLE,
-              //     arr: []
-              //   })
-              //   objs.thursday.push({
-              //     title: val.TITLE,
-              //     arr: []
-              //   })
-              //   objs.friday.push({
-              //     title: val.TITLE,
-              //     arr: []
-              //   })
-              //   objs.saturday.push({
-              //     title: val.TITLE,
-              //     arr: []
-              //   })
-              //   objs.sunday.push({
-              //     title: val.TITLE,
-              //     arr: []
-              //   })
-              // })
               const datass = fn(PkArr);
-              console.log(datass, 'datas------------')
               const sortArray = (n1: any, n2: any) => {
-                if (n1.WEEKDAY === '0') {
-                  n1.WEEKDAY = '7'
-                  n2.WEEKDAY = '7'
-                }
-                return Number(`${n1?.WEEKDAY}${n1?.XXSJPZ?.KSSJ.substring(0, 5).replace(":", "")}`) - Number(`${n2?.WEEKDAY}${n2?.XXSJPZ?.KSSJ.substring(0, 5).replace(":", "")}`);
+                return Number(`${n1?.WEEKDAY === '0' ? '7' : n1.WEEKDAY}${n1?.XXSJPZ?.KSSJ.substring(0, 5).replace(":", "")}`) - Number(`${n2?.WEEKDAY === '0' ? '7' : n2.WEEKDAY}${n2?.XXSJPZ?.KSSJ.substring(0, 5).replace(":", "")}`);
               }
+              console.log(DUKS,'DUKS---')
               datass.sort(sortArray);
-              console.log(datass, '==================') // [4, 5, 8, 12, 312]
-              if (DUKS !== 0) {
+              if (DUKS !== 0 && DUKS <= datass?.length && YPKS < pkData?.length) {
                 datass.forEach((val3: any, index: number) => {
                   const { FJSJId, KHBJSJId, XNXQId, XXSJPZId, WEEKDAY } = val3;
                   if (index < DUKS) {
                     PkArr?.push({
                       FJSJId,
                       KHBJSJId,
-                      PKBZ:`第${YPKS+1}周`,
+                      PKBZ: `第${YPKS + 1}周`,
                       XNXQId,
-                      RQ:getWeek(moment(result?.data?.KKRQ).format('YYYY-MM-DD') , moment(result?.data?.JKRQ).format('YYYY-MM-DD'), WEEKDAY)[YPKS],
+                      RQ: getWeek(moment(result?.data?.KKRQ).format('YYYY-MM-DD'), moment(result?.data?.JKRQ).format('YYYY-MM-DD'), WEEKDAY)[YPKS],
                       XXSJPZId,
                       WEEKDAY: WEEKDAY === '7' ? '0' : WEEKDAY,
                       PKTYPE: 1
@@ -572,7 +532,11 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                   }
                 })
               }
-
+              PkArr.forEach((value1: any) => {
+                if (value1.WEEKDAY === '7') {
+                  value1.WEEKDAY = '0'
+                }
+              })
               const res = await createKHPKSJ({
                 bjIds: [value?.KHBJSJId],
                 data: PkArr
@@ -580,7 +544,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
               if (res?.status === 'ok') {
                 if (screenOriSource) {
                   const newData = screenOriSource.filter((item3: any) => item3.KHBJSJId !== Bj.id);
-                  console.log(newData, 'newData')
                   if (newData) {
                     PkArr.forEach((values: any) => {
                       // 添加场地数据
@@ -601,12 +564,9 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                   setScreenOriSource(newData)
                 }
               }
-
-              console.log(PkArr, 'PkArr')
             }
           }
         }
-        // 判断是否有周排课以外的数据存在，有的话先清除排课
 
       } else {
         // 删除排课
@@ -646,7 +606,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       message.warning(result.message)
     }
   };
-  // console.log(screenOriSource, 'screenOriSource')
 
   // 班级展开收起
   const unFold = () => {
