@@ -878,7 +878,7 @@ const AddArranging: FC<PropsType> = (props) => {
                       TimeData={TimeData}
                       xXSJPZData={xXSJPZData}
                       style={{
-                        height: 'calc(100vh - 300px)',
+                        height: 'calc(100vh - 400px)',
                       }}
                     // basicData={oriSource}
                     />

@@ -26,6 +26,7 @@ import {
   UpOutlined,
   VerticalAlignBottomOutlined,
   UploadOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { getAuthorization } from '@/utils/utils';
 import ShowName from '@/components/ShowName';
@@ -46,6 +47,46 @@ import { classSchedule } from '@/services/after-class/khpksj';
 const { Option } = Select;
 
 const { confirm } = Modal;
+
+/**
+ * 循环截至条件
+ *
+ * @param {{ name: string }[]} list
+ * @param {number} s
+ * @return {*}
+ */
+const canContinue = (list: { name: string }[], s: number) => {
+  return list.length < s;
+}
+
+const convertClassList = (
+  sum: number,
+  templats: {
+    /** 每周7天 */
+    days: {
+      /** 星期几 */
+      xq: string;
+      classes: {
+        name: string;
+      }[]
+    }[]
+  }[]
+) => {
+  let returnArr: { name: string }[] = [];
+  templats.forEach(templat => {
+    templat.days.forEach(day => {
+      day.classes.forEach(cla => {
+        if (canContinue(returnArr, sum))
+          returnArr.push(cla)
+      });
+    });
+  });
+  if (canContinue(returnArr, sum)) {
+    returnArr = returnArr.concat(convertClassList(sum, templats))
+  }
+  return returnArr;
+};
+
 type selectType = { label: string; value: string };
 
 type PropsType = {
@@ -221,12 +262,126 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
   };
 
+
+  const showConfirm = () => {
+    confirm({
+      title: '如需按周/单双周排课，需先清除该班级已有排课信息，确定清除吗？ ',
+      icon: <ExclamationCircleOutlined />,
+      onOk() {
+        if (Bj?.id) {
+          const parameter = {
+            bjIds: [Bj?.id],
+            data: [],
+          };
+          const result = createKHPKSJ(parameter);
+          Promise.resolve(result).then((data) => {
+            if (data.status === 'ok') {
+              message.success('该班级排课信息已清除')
+              setCDLoading(false);
+              // 移除当前班级 所有排课
+              if (screenOriSource) {
+                const screenCD = (dataSource1: any) => {
+                  const newDataSource = [...dataSource1];
+                  if (cdmcValue) {
+                    return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
+                  }
+                  return newDataSource;
+                };
+                // 根据场地名称筛选出来 场地数据
+                const newCDData = screenCD(
+                  screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id),
+                );
+                const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
+                setNewTableDataSource(newTableData);
+                setScreenOriSource(screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id));
+                setLoading(false);
+              }
+            }
+          });
+        }
+      },
+    });
+  }
+    /* 获取时间段内属于星期一(*)的日期们
+     * begin: 开始时间
+     * end：结束时间
+     * weekNum：星期几 {number}
+     */
+    function getWeek(begin: any, end: any, weekNum: any) {
+      const dateArr = new Array();
+      const stimeArr = begin.split("-");//= >["2018", "01", "01"]
+      const etimeArr = end.split("-");//= >["2018", "01", "30"]
+      const stoday = new Date();
+      stoday.setUTCFullYear(stimeArr[0], stimeArr[1] - 1, stimeArr[2]);
+      const etoday = new Date();
+      etoday.setUTCFullYear(etimeArr[0], etimeArr[1] - 1, etimeArr[2]);
+
+      const unixDb = stoday.getTime();// 开始时间的毫秒数
+      const unixDe = etoday.getTime();// 结束时间的毫秒数
+
+      for (let k = unixDb; k <= unixDe;) {
+        const needJudgeDate = msToDate(parseInt(k, 10)).withoutTime;
+
+        // 不加这个if判断直接push的话就是已知时间段内的所有日期
+        if (new Date(needJudgeDate).getDay() === Number(weekNum)) {
+          dateArr.push(needJudgeDate);
+        }
+        k += 24 * 60 * 60 * 1000;
+      }
+      return dateArr;
+    }
+
+    // 根据毫秒数获取日期
+    function msToDate(msec: string | number | Date) {
+      const datetime = new Date(msec);
+      const year = datetime.getFullYear();
+      const month = datetime.getMonth();
+      const date = datetime.getDate();
+      const hour = datetime.getHours();
+      const minute = datetime.getMinutes();
+      const second = datetime.getSeconds();
+
+      const result1 = `${year
+        }-${(month + 1) >= 10 ? (month + 1) : `0${month + 1}`
+        }-${(date + 1) < 10 ? `0${date}` : date
+        } ${(hour + 1) < 10 ? `0${hour}` : hour
+        }:${(minute + 1) < 10 ? `0${minute}` : minute
+        }:${(second + 1) < 10 ? `0${second}` : second}`;
+
+      const result2 = `${year
+        }-${(month + 1) >= 10 ? (month + 1) : `0${month + 1}`
+        }-${(date + 1) < 11 ? `0${date}` : date}`;
+
+      const result = {
+        hasTime: result1,
+        withoutTime: result2
+      };
+
+      return result;
+    }
+
+  // 计算单周排了多少课时
+  const fn = (arr: string | any[]) => {
+    // eslint-disable-next-line no-var
+    const results = [];
+    let i;
+    let j;
+    for (i = 0; i < arr.length; i++) {
+      for (j = i + 1; j < arr.length; j++) {
+        if (arr[i].WEEKDAY === arr[j].WEEKDAY && arr[i].XXSJPZId === arr[j].XXSJPZId) {
+          j = ++i;
+        }
+      }
+      results.push(arr[i]);
+    }
+    return results;
+  }
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
     // setLoading(true);
-    // 获取该课程班剩余可排课时
     const result = await classSchedule({
       id: Bj.KHBJSJId
     })
+    console.log(result.data.KHPKSJs, 'result')
     const newPkDatas: any[] = [];
     pkData.forEach((item: any) => {
       const newObj = {
@@ -236,51 +391,223 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       }
       newPkDatas.push(newObj);
     })
+    console.log(newPkDatas)
     if (result?.status === 'ok') {
       if (value?.Type === '新增') {
-        // 将生成的所有排课取出可排的前几项
-        const surplusKs = result?.data?.KSS - result?.data?.KHPKSJs?.length;
-
-        if (surplusKs > 0) {
-          const PkArr = newPkDatas.slice(0, surplusKs);
-          result?.data?.KHPKSJs?.forEach((item: any) => {
-            const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
-            PkArr?.push({
-              FJSJId,
-              KHBJSJId,
-              PKBZ,
-              XNXQId,
-              RQ,
-              XXSJPZId,
-              WEEKDAY,
-              PKTYPE: value?.PKTYPE
-            })
-          })
-          const res = await createKHPKSJ({
-            bjIds: [value?.KHBJSJId],
-            data: PkArr
-          })
-          if (res?.status === 'ok') {
-            setLoading(false);
-            newPkDatas.slice(0, surplusKs).forEach((values: any) => {
-              // 添加场地数据
-              values.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
-              // 添加班级数据
-              values.KHBJSJ = bjData.find((bjItem: any) => {
-                return bjItem.id === value.KHBJSJId;
-              });
-              res?.data?.forEach((items: any) => {
-                if (items?.RQ === values?.RQ) {
-                  values.id = items?.id;
-                }
+        if (result?.data?.ISFW === 1) {
+          const datas = fn(result?.data?.KHPKSJs);
+          if (datas?.length < result?.data?.KSS) {
+            const PkArr = newPkDatas;
+            result?.data?.KHPKSJs?.forEach((item: any) => {
+              const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
+              PkArr?.push({
+                FJSJId,
+                KHBJSJId,
+                PKBZ,
+                XNXQId,
+                RQ,
+                XXSJPZId,
+                WEEKDAY,
+                PKTYPE: value?.PKTYPE
               })
-              screenOriSource.push(values);
-              refreshTable();
             })
+            const res = await createKHPKSJ({
+              bjIds: [value?.KHBJSJId],
+              data: PkArr
+            })
+            if (res?.status === 'ok') {
+              setLoading(false);
+              newPkDatas.forEach((values: any) => {
+                // 添加场地数据
+                values.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
+                // 添加班级数据
+                values.KHBJSJ = bjData.find((bjItem: any) => {
+                  return bjItem.id === value.KHBJSJId;
+                });
+                res?.data?.forEach((items: any) => {
+                  if (items?.RQ === values?.RQ) {
+                    values.id = items?.id;
+                  }
+                })
+                screenOriSource.push(values);
+                refreshTable();
+              })
+            }
+          } else {
+            message.warning('超出排课课时，不可排课')
           }
         } else {
-          message.warning('排课课时已排满，不可排课')
+          console.log(1111);
+          if (result?.data?.KHPKSJs?.find((items: any) => items?.PKTYPE === 0 || items?.PKTYPE === 2 || items?.PKTYPE === 3)) {
+            showConfirm();
+          } else {
+            const datas = fn(result?.data?.KHPKSJs);
+            if (datas?.length === 0) {
+              // 获取该课程班剩余可排课时
+              const surplusKs = result?.data?.KSS - result?.data?.KHPKSJs?.length;
+              if (surplusKs > 0) {
+                // 将生成的所有排课取出可排的前几项
+                const PkArr = newPkDatas.slice(0, surplusKs);
+                result?.data?.KHPKSJs?.forEach((item: any) => {
+                  const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
+                  PkArr?.push({
+                    FJSJId,
+                    KHBJSJId,
+                    PKBZ,
+                    XNXQId,
+                    RQ,
+                    XXSJPZId,
+                    WEEKDAY,
+                    PKTYPE: value?.PKTYPE
+                  })
+                })
+                const res = await createKHPKSJ({
+                  bjIds: [value?.KHBJSJId],
+                  data: PkArr
+                })
+                if (res?.status === 'ok') {
+                  setLoading(false);
+                  newPkDatas.slice(0, surplusKs).forEach((values: any) => {
+                    // 添加场地数据
+                    values.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
+                    // 添加班级数据
+                    values.KHBJSJ = bjData.find((bjItem: any) => {
+                      return bjItem.id === value.KHBJSJId;
+                    });
+                    res?.data?.forEach((items: any) => {
+                      if (items?.RQ === values?.RQ) {
+                        values.id = items?.id;
+                      }
+                    })
+                    screenOriSource.push(values);
+                    refreshTable();
+                  })
+                }
+              }
+            } else {
+              // 按每周排的课时重新计算
+              const YPKS = Math.floor(result?.data?.KSS / (datas?.length + 1));
+              const DUKS = result?.data?.KSS % (datas?.length + 1);
+              console.log(YPKS, 'YPKS-----------------');
+              console.log(DUKS, 'DUKS-----------------');
+              const PkArr = newPkDatas.slice(0, YPKS);
+
+              console.log(fn(result?.data?.KHPKSJs))
+              datas.forEach((values: any) => {
+                const arr1 = result?.data?.KHPKSJs?.filter((items: any) => {
+                  return values.WEEKDAY === items.WEEKDAY && values.XXSJPZId === items.XXSJPZId
+                })
+                arr1.forEach((value1: any, inx: number) => {
+                  if (inx < YPKS) {
+                    PkArr.push(value1)
+                  }
+                })
+                console.log(arr1, 'arr1------------------------------------------------------')
+              })
+              // const objs: any = {
+              //   monday: [],
+              //   tuesday: [],
+              //   wednesday: [],
+              //   thursday: [],
+              //   friday: [],
+              //   saturday: [],
+              //   sunday: [],
+              // };
+              // console.log(xXSJPZData, 'xXSJPZData')
+              // xXSJPZData.forEach((val: any) => {
+              //   objs.monday.push({
+              //     title: val.TITLE,
+              //     arr: []
+              //   })
+              //   objs.tuesday.push({
+              //     title: val.TITLE,
+              //     arr: []
+              //   })
+              //   objs.wednesday.push({
+              //     title: val.TITLE,
+              //     arr: []
+              //   })
+              //   objs.thursday.push({
+              //     title: val.TITLE,
+              //     arr: []
+              //   })
+              //   objs.friday.push({
+              //     title: val.TITLE,
+              //     arr: []
+              //   })
+              //   objs.saturday.push({
+              //     title: val.TITLE,
+              //     arr: []
+              //   })
+              //   objs.sunday.push({
+              //     title: val.TITLE,
+              //     arr: []
+              //   })
+              // })
+              const datass = fn(PkArr);
+              console.log(datass, 'datas------------')
+              const sortArray = (n1: any, n2: any) => {
+                if (n1.WEEKDAY === '0') {
+                  n1.WEEKDAY = '7'
+                  n2.WEEKDAY = '7'
+                }
+                return Number(`${n1?.WEEKDAY}${n1?.XXSJPZ?.KSSJ.substring(0, 5).replace(":", "")}`) - Number(`${n2?.WEEKDAY}${n2?.XXSJPZ?.KSSJ.substring(0, 5).replace(":", "")}`);
+              }
+              datass.sort(sortArray);
+              console.log(datass, '==================') // [4, 5, 8, 12, 312]
+              if (DUKS !== 0) {
+                datass.forEach((val3: any, index: number) => {
+                  const { FJSJId, KHBJSJId, XNXQId, XXSJPZId, WEEKDAY } = val3;
+                  if (index < DUKS) {
+                    PkArr?.push({
+                      FJSJId,
+                      KHBJSJId,
+                      PKBZ:`第${YPKS+1}周`,
+                      XNXQId,
+                      RQ:getWeek(moment(result?.data?.KKRQ).format('YYYY-MM-DD') , moment(result?.data?.JKRQ).format('YYYY-MM-DD'), WEEKDAY)[YPKS],
+                      XXSJPZId,
+                      WEEKDAY: WEEKDAY === '7' ? '0' : WEEKDAY,
+                      PKTYPE: 1
+                    })
+                  }
+                })
+              }
+
+              const res = await createKHPKSJ({
+                bjIds: [value?.KHBJSJId],
+                data: PkArr
+              })
+              if (res?.status === 'ok') {
+                if (screenOriSource) {
+                  const newData = screenOriSource.filter((item3: any) => item3.KHBJSJId !== Bj.id);
+                  console.log(newData, 'newData')
+                  if (newData) {
+                    PkArr.forEach((values: any) => {
+                      // 添加场地数据
+                      values.FJSJ = cdmcData?.find((item4: any) => item4.value === cdmcValue);
+                      // 添加班级数据
+                      values.KHBJSJ = bjData.find((bjItem: any) => {
+                        return bjItem.id === value.KHBJSJId;
+                      });
+                      res?.data?.forEach((items: any) => {
+                        if (items?.RQ === values?.RQ) {
+                          values.id = items?.id;
+                        }
+                      })
+                      newData.push(values);
+                      refreshTable();
+                    })
+                  }
+                  setScreenOriSource(newData)
+                }
+              }
+
+              console.log(PkArr, 'PkArr')
+            }
+          }
         }
+        // 判断是否有周排课以外的数据存在，有的话先清除排课
+
       } else {
         // 删除排课
         const PkArr: any[] = [];
@@ -316,10 +643,10 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         }
       }
     } else {
-      message.warning(result?.message)
+      message.warning(result.message)
     }
-
   };
+  // console.log(screenOriSource, 'screenOriSource')
 
   // 班级展开收起
   const unFold = () => {
@@ -456,7 +783,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
   useEffect(() => {
     getKcData();
-    if(!formValues?.KC){
+    if (!formValues?.KC) {
       getBjData();
     }
   }, [NJID, curXNXQId, campusId]);
@@ -641,6 +968,8 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       }
     },
   };
+
+
 
   return (
     <div className={styles.AddArranging}>

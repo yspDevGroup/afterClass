@@ -512,7 +512,7 @@ const CourseScheduling = (
           ) : (
             <div className={styles.noDate}>
               {' '}
-              <img src={noJF} alt="" /> <p> {type === '场地课表' ? '请选择场地' : '请输入教师'}查看课表</p>{' '}
+              <img src={noJF} alt="" /> <p> {type === '场地课表' ? '请选择场地' : '请选择教师'}查看课表</p>{' '}
             </div>
           )}
         </div>

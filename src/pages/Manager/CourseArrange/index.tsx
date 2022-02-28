@@ -1061,38 +1061,15 @@ const Index = () => {
             </>
             {
               screenOriSource && <Tabs
-              activeKey={keys}
-              onChange={(value: any) => {
-                setKeys(value);
-              }}
+                activeKey={keys}
+                onChange={(value: any) => {
+                  setKeys(value);
+                }}
                 className={styles.tabs}
               >
-                {<TabPane tab="按天" key="one">
+                <TabPane tab="按周" key="one">
                   {
                     keys === 'one' &&
-                    <AddArranging
-                      campus={campus}
-                      campusId={campusId}
-                      curXNXQId={curXNXQId}
-                      xXSJPZData={xXSJPZData}
-                      cdmcData={cdmcData}
-                      screenOriSource={screenOriSource}
-                      setScreenOriSource={setScreenOriSource}
-                      processingData={processingData}
-                      setState={setState}
-                      formValues={recordValue}
-                      kcmcData={kcmcData}
-                      currentUser={currentUser}
-                      setLoading={setLoading}
-                      TimeData={TimeData}
-                      setRqDisable={setRqDisable}
-                    />
-                  }
-                </TabPane>
-                }
-                <TabPane tab="按周" key="two">
-                  {
-                    keys === 'two' &&
                     <AddArrangingZ
                       campus={campus}
                       campusId={campusId}
@@ -1113,9 +1090,9 @@ const Index = () => {
                     />
                   }
                 </TabPane>
-                <TabPane tab="单双周" key="three">
+                <TabPane tab="单双周" key="two">
                   {
-                    keys === 'three' &&
+                    keys === 'two' &&
                     <AddArrangingDS
                       campus={campus}
                       campusId={campusId}
@@ -1136,6 +1113,29 @@ const Index = () => {
                     />
                   }
                 </TabPane>
+                <TabPane tab="按天" key="three">
+                  {
+                    keys === 'three' &&
+                    <AddArranging
+                      campus={campus}
+                      campusId={campusId}
+                      curXNXQId={curXNXQId}
+                      xXSJPZData={xXSJPZData}
+                      cdmcData={cdmcData}
+                      screenOriSource={screenOriSource}
+                      setScreenOriSource={setScreenOriSource}
+                      processingData={processingData}
+                      setState={setState}
+                      formValues={recordValue}
+                      kcmcData={kcmcData}
+                      currentUser={currentUser}
+                      setLoading={setLoading}
+                      TimeData={TimeData}
+                      setRqDisable={setRqDisable}
+                    />
+                  }
+                </TabPane>
+
               </Tabs>
             }</>
         )}

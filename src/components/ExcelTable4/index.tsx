@@ -421,7 +421,10 @@ const Index: FC<IndexPropsType> = ({
         KHBJSJId: chosenData?.KHBJSJId, // 班级ID
         PKBZ: `第${zhoushu + index}周`, // 排课备注：第几周
         RQ: value,              // 日期
-        PKTYPE: 1
+        PKTYPE: 1,
+        XXSJPZ:{
+          KSSJ:`${rowData?.course?.teacher?.substring(0,5)}:00`
+        }
       })
     })
 
@@ -455,6 +458,7 @@ const Index: FC<IndexPropsType> = ({
       onExcelTableClick(selectList, seeChosenItem, pkDatas);
     }
   };
+
   const datas = stateTableData ? [...stateTableData] : [...dataSource];
   return (
     <div className={`${styles.excelTable} ${className}`}>
