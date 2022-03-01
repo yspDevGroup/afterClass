@@ -8,7 +8,7 @@ import { getQueryString } from '@/utils/utils';
 
 const { TabPane } = Tabs;
 
-const index = (props: { location: { state: any } }) => {
+const Index = (props: { location: { state: any } }) => {
   const { state } = props.location;
 
   const [keys, setKeys] = useState<string>();
@@ -24,7 +24,12 @@ const index = (props: { location: { state: any } }) => {
   }, [])
   return (
     <PageContainer>
-      <Tabs activeKey={keys}>
+      <Tabs
+        activeKey={keys}
+        onChange={(key) => {
+          setKeys(key)
+        }}
+      >
         <TabPane tab="服务课堂" key="1">
           <ServiceClass
             location={{
@@ -44,4 +49,4 @@ const index = (props: { location: { state: any } }) => {
   );
 };
 
-export default index;
+export default Index;

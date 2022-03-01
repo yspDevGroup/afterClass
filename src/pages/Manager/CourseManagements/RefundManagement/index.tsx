@@ -20,7 +20,12 @@ const Index = () => {
 
   return (
     <PageContainer>
-      <Tabs activeKey={keys}>
+      <Tabs
+        activeKey={keys}
+        onChange={(key) => {
+          setKeys(key)
+        }}
+      >
         <TabPane tab="课后服务退款" key="1">
           <ServiceAterClass />
         </TabPane>
