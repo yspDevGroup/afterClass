@@ -43,7 +43,7 @@ export const topNum = [
   },
   {
     title: '参与班级数',
-    type: 'jgkc_count',
+    type: 'khfw_count',
   },
   {
     title: '参与教师数',
@@ -73,13 +73,13 @@ export const centerNum = [
   },
   {
     title: '教师补签',
-    type: 'jstdk_count',
+    type: 'jsbq_count',
     color: '#FF5959',
-    path: '/audit/resignManagement' //
+    path: '/audit/resignManagement'
   },
   {
     title: '课后服务退订',
-    type: 'kctd_count',
+    type: 'khfwtd_count',
     color: '#898FD7',
     path: '/orderInquiry/reimbursementClass?index=1'
   },
@@ -97,7 +97,7 @@ export const centerNum = [
   },
   {
     title: '课后服务退款',
-    type: 'fwtk_count',
+    type: 'khfwtk_count',
     color: '#FFA238',
     path: '/orderInquiry/refundManagement?index=1'
   },

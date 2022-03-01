@@ -24,7 +24,7 @@ const Topbar = (props: { data: any }) => {
               item.title === '课程总数' ? '本校课程与引入课程总数' : (item.title === '课程班总数' ? '已生效服务课堂与缤纷课堂总数' : (item.title === '参与班级数' ? '参与课后服务行政班总数' : ''))
             }
               defaultVisible={false}>
-              <p title={item.title}>{item.title}</p>
+              <p style={{cursor:'pointer'}} title={item.title}>{item.title}</p>
             </Tooltip>
 
           </div>

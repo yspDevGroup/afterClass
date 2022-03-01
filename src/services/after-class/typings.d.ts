@@ -2841,40 +2841,6 @@ declare namespace API {
     RZSJ?: string;
   };
 
-  type KHKTFC = {
-    id: string;
-    /** 内容 */
-    NR: string;
-    /** 图片 */
-    TP?: string;
-    /** 创建日期 */
-    createdAt?: string;
-    /** 班级ID */
-    KHBJSJId?: string;
-    /** 教师ID */
-    JZGJBSJId?: string;
-  };
-
-  type CreateKHKTFC = {
-    /** 内容 */
-    NR: string;
-    /** 图片 */
-    TP?: string;
-    /** 班级ID */
-    KHBJSJId: string;
-    /** 教师ID */
-    XXJBSJId: string;
-    /** 教师ID */
-    JZGJBSJId: string;
-  };
-
-  type UpdateKHKTFC = {
-    /** 内容 */
-    NR?: string;
-    /** 图片 */
-    TP?: string;
-  };
-
   type KHPKSJ = {
     id: string;
     /** 上课日期(周几) */
@@ -3825,6 +3791,40 @@ declare namespace API {
     }[];
   };
 
+  type KHKTFC = {
+    id: string;
+    /** 内容 */
+    NR: string;
+    /** 图片 */
+    TP?: string;
+    /** 创建日期 */
+    createdAt?: string;
+    /** 班级ID */
+    KHBJSJId?: string;
+    /** 教师ID */
+    JZGJBSJId?: string;
+  };
+
+  type CreateKHKTFC = {
+    /** 内容 */
+    NR: string;
+    /** 图片 */
+    TP?: string;
+    /** 班级ID */
+    KHBJSJId: string;
+    /** 教师ID */
+    XXJBSJId: string;
+    /** 教师ID */
+    JZGJBSJId: string;
+  };
+
+  type UpdateKHKTFC = {
+    /** 内容 */
+    NR?: string;
+    /** 图片 */
+    TP?: string;
+  };
+
   type KHKCTJSJ = {
     id: string;
     /** 课程名称 */
@@ -4753,6 +4753,42 @@ declare namespace API {
     XB?: string;
   };
 
+  type XXGG = {
+    id: string;
+    /** 公告标题 */
+    BT?: string;
+    /** 公告内容 */
+    NR?: string;
+    /** 公告状态 */
+    ZT?: string;
+    /** 公告类型 */
+    LX?: string;
+    /** 修改时间 */
+    updatedAt?: string;
+  };
+
+  type CreateXXGG = {
+    /** 公告标题 */
+    BT?: string;
+    /** 公告内容 */
+    NR?: string;
+    /** 公告状态 */
+    ZT?: string;
+    /** 公告类型 */
+    LX?: string;
+  };
+
+  type UpdateXXGG = {
+    /** 公告标题 */
+    BT?: string;
+    /** 公告内容 */
+    NR?: string;
+    /** 公告状态 */
+    ZT?: string;
+    /** 公告类型 */
+    LX?: string;
+  };
+
   type XSXXJL = {
     id: string;
     /** 学习起始日期 */
@@ -4813,42 +4849,6 @@ declare namespace API {
     XXJLBZ?: string;
     /** 学生ID */
     XSJBSJId?: string;
-  };
-
-  type XXGG = {
-    id: string;
-    /** 公告标题 */
-    BT?: string;
-    /** 公告内容 */
-    NR?: string;
-    /** 公告状态 */
-    ZT?: string;
-    /** 公告类型 */
-    LX?: string;
-    /** 修改时间 */
-    updatedAt?: string;
-  };
-
-  type CreateXXGG = {
-    /** 公告标题 */
-    BT?: string;
-    /** 公告内容 */
-    NR?: string;
-    /** 公告状态 */
-    ZT?: string;
-    /** 公告类型 */
-    LX?: string;
-  };
-
-  type UpdateXXGG = {
-    /** 公告标题 */
-    BT?: string;
-    /** 公告内容 */
-    NR?: string;
-    /** 公告状态 */
-    ZT?: string;
-    /** 公告类型 */
-    LX?: string;
   };
 
   type XXJBPZ = {
@@ -5221,49 +5221,6 @@ declare namespace API {
     XNXQId?: string;
   };
 
-  type XXSPPZ = {
-    id: string;
-    /** 教师请假是否审批 */
-    JSQJ: boolean;
-    /** 学生请假是否审批 */
-    XSQJ: boolean;
-    /** 教师调课是否审批 */
-    JSTK: boolean;
-    /** 教师代课是否审批 */
-    JSDK: boolean;
-    /** 学生退课是否审批 */
-    XSTK: boolean;
-    /** 教师补签是否审批 */
-    JSBQ: boolean;
-    /** 教师补签开始日期 */
-    JSBQ_KSRQ: string;
-    /** 教师补签结束日期 */
-    JSBQ_JSRQ: string;
-  };
-
-  type CreateXXSPPZ = {
-    /** 教师请假是否审批 */
-    JSQJ: boolean;
-    /** 学生请假是否审批 */
-    XSQJ: boolean;
-    /** 教师调课是否审批 */
-    JSTK: boolean;
-    /** 教师代课是否审批 */
-    JSDK: boolean;
-    /** 学生退课是否审批 */
-    XSTK: boolean;
-    /** 学生退款是否审批 */
-    XSTF: boolean;
-    /** 教师补签是否审批 */
-    JSBQ: boolean;
-    /** 教师补签开始日期 */
-    JSBQ_KSRQ: string;
-    /** 教师补签结束日期 */
-    JSBQ_JSRQ: string;
-    /** 学校ID */
-    XXJBSJId: string;
-  };
-
   type XXTZGG = {
     id: string;
     /** 标题 */
@@ -5357,6 +5314,49 @@ declare namespace API {
     SFTJ?: number;
     /** 内容 */
     NR?: string;
+  };
+
+  type XXSPPZ = {
+    id: string;
+    /** 教师请假是否审批 */
+    JSQJ: boolean;
+    /** 学生请假是否审批 */
+    XSQJ: boolean;
+    /** 教师调课是否审批 */
+    JSTK: boolean;
+    /** 教师代课是否审批 */
+    JSDK: boolean;
+    /** 学生退课是否审批 */
+    XSTK: boolean;
+    /** 教师补签是否审批 */
+    JSBQ: boolean;
+    /** 教师补签开始日期 */
+    JSBQ_KSRQ: string;
+    /** 教师补签结束日期 */
+    JSBQ_JSRQ: string;
+  };
+
+  type CreateXXSPPZ = {
+    /** 教师请假是否审批 */
+    JSQJ: boolean;
+    /** 学生请假是否审批 */
+    XSQJ: boolean;
+    /** 教师调课是否审批 */
+    JSTK: boolean;
+    /** 教师代课是否审批 */
+    JSDK: boolean;
+    /** 学生退课是否审批 */
+    XSTK: boolean;
+    /** 学生退款是否审批 */
+    XSTF: boolean;
+    /** 教师补签是否审批 */
+    JSBQ: boolean;
+    /** 教师补签开始日期 */
+    JSBQ_KSRQ: string;
+    /** 教师补签结束日期 */
+    JSBQ_JSRQ: string;
+    /** 学校ID */
+    XXJBSJId: string;
   };
 
   type ZXFA = {
