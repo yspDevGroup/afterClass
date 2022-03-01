@@ -80,6 +80,7 @@ export type DataSourceType = {
 const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, Weeks }) => {
   let arr2;
   let BJMC;
+  let BJId;
   if (data?.length) {
     arr2 = data?.filter((item: any, index: number) => {
       let temArr: any[] = []
@@ -92,9 +93,10 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, We
       }
       return ''
     })
+    BJId = data?.find((items: any) => items?.bjId === chosenData?.KHBJSJId);
   }
 
-  if ((mode === 'edit' && disabled && data?.length !== Weeks?.length) || (arr2?.length > 0 && arr2?.[0]?.bjId !== chosenData?.KHBJSJId)) {
+  if (mode === 'edit' && disabled && data?.length && BJId === undefined) {
     return (
       <Tooltip title={
         arr2?.length > 5 ? `${BJMC}...` : BJMC
@@ -119,7 +121,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, We
       </Tooltip>
     );
   }
-  if (mode === 'edit' && data?.length !== Weeks?.length && arr2?.length === 1 && arr2?.[0]?.bjId === chosenData?.KHBJSJId) {
+  if (mode === 'edit' && disabled && data?.length && BJId) {
     return (
       <Button
         type="text"
@@ -141,19 +143,19 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, We
           <div
             className={`cardTop`}
             style={{
-              background: data?.[0]?.color,
+              background: BJId?.color,
             }}
           />
           <div
             className={`cardcontent`}
             style={{
-              color: data?.[0]?.color,
-              background: data?.[0]?.color?.replace('1)', '0.1)'),
+              color: BJId?.color,
+              background: BJId?.color?.replace('1)', '0.1)'),
               position: 'relative',
             }}
           >
             <div className="cla">
-              <EllipsisHint text={data?.[0]?.cla} width='100%' />
+              <EllipsisHint text={BJId?.cla} width='100%' />
             </div>
           </div>
         </div>
@@ -422,8 +424,8 @@ const Index: FC<IndexPropsType> = ({
         PKBZ: `第${zhoushu + index}周`, // 排课备注：第几周
         RQ: value,              // 日期
         PKTYPE: 1,
-        XXSJPZ:{
-          KSSJ:`${rowData?.course?.teacher?.substring(0,5)}:00`
+        XXSJPZ: {
+          KSSJ: `${rowData?.course?.teacher?.substring(0, 5)}:00`
         }
       })
     })

@@ -581,7 +581,7 @@ const Index = () => {
   };
   const processingDataZ = (data: any, timeData: any, bjId: string | undefined = undefined) => {
     // setLoading(true);
-    const NewArr = ['每一周']
+    const NewArr = ['每周']
     const tableData: any[] = [];
     const sameClassData: any[] = [];
     if (!timeData.length) {

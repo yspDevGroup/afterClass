@@ -80,6 +80,7 @@ export type DataSourceType = {
 const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, Weeks }) => {
   let arr2;
   let BJMC;
+  let BJId;
 
   let DNum: number;
   let SNum: number;
@@ -103,11 +104,9 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, We
       }
       return ''
     })
-
+    BJId = data?.find((items: any) => items?.bjId === chosenData?.KHBJSJId);
   }
-  const num = data?.[0]?.PKBZ?.replace(/[^0-9]/ig, "");
-
-  if ((mode === 'edit' && disabled && (num % 2 === 0 && data?.length !== SNum || num % 2 !== 0 && data?.length !== DNum)) || (arr2?.length > 0 && arr2?.[0]?.bjId !== chosenData?.KHBJSJId)) {
+  if ((mode === 'edit' && disabled && data?.length && BJId === undefined)) {
     return (
       <Tooltip title={
         arr2?.length > 5 ? `${BJMC}...` : BJMC
@@ -132,7 +131,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, We
       </Tooltip>
     );
   }
-  if (mode === 'edit' && (num % 2 === 0 && data?.length === SNum || num % 2 !== 0 && data?.length === DNum) && arr2?.length === 1 && arr2?.[0]?.bjId === chosenData?.KHBJSJId) {
+  if (mode === 'edit' && disabled && data?.length && BJId) {
     return (
       <Button
         type="text"
@@ -455,8 +454,8 @@ const Index: FC<IndexPropsType> = ({
           PKBZ: zhoushu === 1 ? `第${(index + 1) + 1 * index}周` : `第${(index + 3) + 1 * index}周`, // 排课备注：第几周
           RQ: value,              // 日期
           PKTYPE: rowData.room?.cla === '单周' ? 2 : 3,
-          XXSJPZ:{
-            KSSJ:`${rowData?.course?.teacher?.substring(0,5)}:00`
+          XXSJPZ: {
+            KSSJ: `${rowData?.course?.teacher?.substring(0, 5)}:00`
           }
         })
       })
@@ -469,8 +468,8 @@ const Index: FC<IndexPropsType> = ({
           PKBZ: `第${(index + 2) + 1 * index}周`, // 排课备注：第几周
           RQ: value,              // 日期
           PKTYPE: rowData.room?.cla === '单周' ? 2 : 3,
-          XXSJPZ:{
-            KSSJ:`${rowData?.course?.teacher?.substring(0,5)}:00`
+          XXSJPZ: {
+            KSSJ: `${rowData?.course?.teacher?.substring(0, 5)}:00`
           }
         })
       })
