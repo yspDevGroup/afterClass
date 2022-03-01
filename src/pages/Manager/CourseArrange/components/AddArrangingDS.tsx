@@ -339,6 +339,10 @@ const AddArrangingDS: FC<PropsType> = (props) => {
           });
         }
       },
+      okButtonProps: {
+        type:"primary",
+        danger:true,
+      },
     });
   }
 
@@ -407,7 +411,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
           } else {
             message.warning('超出排课课时，不可排课')
           }
-
         } else {
           const datas = fn(result?.data?.KHPKSJs);
           if (result?.data?.KHPKSJs?.find((items: any) => items?.PKTYPE === 0 || items?.PKTYPE === 1)) {
@@ -514,7 +517,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                   if (newData) {
                     PkArr.forEach((values: any) => {
                       // 添加场地数据
-                      if(!values.FJSJ){
+                      if (!values.FJSJ) {
                         values.FJSJ = cdmcData?.find((item4: any) => item4.value === cdmcValue);
                       }
 

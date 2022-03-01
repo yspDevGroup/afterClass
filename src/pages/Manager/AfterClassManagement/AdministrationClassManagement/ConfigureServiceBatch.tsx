@@ -72,8 +72,8 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   const getDetailTimePZ = async () => {
     setLoading(true);
     const res = await getAllXXJTPZ({
-      XNXQId: XNXQId,
-      XQSJId: XQSJId,
+      XNXQId,
+      XQSJId,
     });
     if (res.status === 'ok') {
       if (res.data?.length === 0) {
@@ -83,7 +83,11 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
         const { sjpzstr } = res.data?.[0];
         if (sjpzstr) {
           const str = JSON.parse(sjpzstr);
-          if (str) {
+          if (str.list?.find((item: any) => item?.isEnable === 1) === undefined) {
+            setBMSDData([]);
+            setJFLX(str.JFLX);
+            setInformationOpen(true);
+          } else {
             setJFLX(str.JFLX);
             setBMSDData(str.list);
           }
@@ -96,7 +100,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   const getNJSJ = async () => {
     if (XQSJId) {
       const res = await getGradesByCampus({
-        XQSJId: XQSJId,
+        XQSJId,
       });
       if (res.status === 'ok') {
         setNjData(res.data);
@@ -106,11 +110,11 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   // 获取班级
   const getBJSJ = async () => {
     const res = await getAllBJSJNoKHFW({
-      XQSJId: XQSJId,
+      XQSJId,
       njId: NjId,
       page: 0,
       pageSize: 0,
-      XNXQId: XNXQId,
+      XNXQId,
     });
     if (res.status === 'ok') {
       const data = res.data?.rows?.map((item: any) => {
@@ -123,8 +127,8 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
   const getData = async () => {
     if (XQSJId && XNXQId && NjId) {
       const res = await getAllKHFWSJ({
-        XNXQId: XNXQId,
-        XQSJId: XQSJId,
+        XNXQId,
+        XQSJId,
         NJSJIds: [NjId],
         FWZT: [1],
       });
@@ -155,7 +159,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
       }
 
       const params: any = {
-        XQSJId: XQSJId,
+        XQSJId,
         BJSJIds: values?.BJSJIds,
         XNXQId,
         ZT: 0,
@@ -389,6 +393,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
         text="未查询到报名时段数据，请先设置报名时段"
         link="/afterClassManagement/registration_setting"
         open={informationOpen}
+        closeType={true}
         colse={() => {
           setInformationOpen(false);
         }}

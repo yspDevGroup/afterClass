@@ -84,7 +84,11 @@ const ConfigureService = (props: ConfigureSeverType) => {
         const { sjpzstr } = res.data?.[0];
         if (sjpzstr) {
           const str = JSON.parse(sjpzstr);
-          if (str) {
+          if (str.list?.find((item: any) => item?.isEnable === 1) === undefined) {
+            setBMSDData([]);
+            setJFLX(str.JFLX);
+            setInformationOpen(true);
+          } else {
             setJFLX(str.JFLX);
             setBMSDData(str.list);
           }
@@ -335,13 +339,13 @@ const ConfigureService = (props: ConfigureSeverType) => {
               message.success('更新成功');
               getData();
               return true;
-            } else {
-              message.warning(result.message);
-              return false;
             }
-          } else {
-            message.warning('因课程班不匹配当前模板');
+            message.warning(result.message);
+            return false;
+
           }
+          message.warning('因课程班不匹配当前模板');
+
         } else {
           message.error('未选择服务模板');
         }
@@ -353,10 +357,10 @@ const ConfigureService = (props: ConfigureSeverType) => {
           message.success('保存成功');
           getData();
           return true;
-        } else {
-          message.warning(res.message);
-          return false;
         }
+        message.warning(res.message);
+        return false;
+
       }
     });
   };
@@ -677,7 +681,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               key="FWFY"
               min={0}
               width={80}
-              // width='xs'
+            // width='xs'
             />
           </Col>
           <Col flex="auto">
@@ -698,6 +702,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
         text="未查询到报名时段数据，请先设置报名时段"
         link="/afterClassManagement/registration_setting"
         open={informationOpen}
+        closeType={true}
         colse={() => {
           setInformationOpen(false);
         }}

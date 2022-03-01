@@ -1,3 +1,5 @@
+/* eslint-disable no-else-return */
+/* eslint-disable no-lonely-if */
 /* eslint-disable @typescript-eslint/no-shadow */
 /*
  * @description:
@@ -9,7 +11,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useModel } from 'umi';
-import { Button, Col, message, Row, Select } from 'antd';
+import { Button, Col, message, Row, Select, Space, Tag } from 'antd';
 import ProForm, {
   ModalForm,
   ProFormDigit,
@@ -24,6 +26,8 @@ import UploadImage from '@/components/ProFormFields/components/UploadImage';
 import SelectCourses from './SelectCourses';
 import styles from './index.less';
 import { PlusOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { getAllXXJTPZ } from '@/services/after-class/xxjtpz';
 
 type ServiceBasicsType = {
   title: string;
@@ -42,6 +46,9 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const [XNXQData, setXNXQData] = useState<any[]>();
   const [XNXQId, setXNXQId] = useState<string>();
   const [imageUrl, setImageUrl] = useState('');
+  const [JFLX, setJFLX] = useState<number>();
+  // 报名时段 数据
+  const [BMSDData, setBMSDData] = useState<any[]>();
 
   const formRef = useRef<any>();
 
@@ -65,10 +72,33 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
       setCampusData(arr);
     }
   };
+  // 获取排课时间配置
+  const getDetailTimePZ = async () => {
+    const res = await getAllXXJTPZ({
+      XNXQId,
+      XQSJId: campusId,
+    });
+    if (res.status === 'ok') {
+      if (res.data?.length !== 0) {
+        const { sjpzstr } = res.data?.[0];
+        if (sjpzstr) {
+          const str = JSON.parse(sjpzstr);
+          if (str.list?.find((item: any) => item?.isEnable === 1) === undefined) {
+            setBMSDData([]);
+            setJFLX(str.JFLX);
+          } else {
+            setJFLX(str.JFLX);
+            setBMSDData(str.list);
+          }
+        }
+      }
+    }
+  };
 
   // 学年学期
   const getXNXQData = async () => {
     const res = await queryXNXQList(currentUser?.xxId);
+    console.log(res,'res---------')
     const { current } = res;
     // console.log('res', res)
     if (current) {
@@ -102,7 +132,11 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   useEffect(() => {
     getCampusData();
     getXNXQData();
+    getDetailTimePZ();
   }, []);
+  useEffect(() => {
+    getDetailTimePZ();
+  }, [campusId]);
   const imageChange = (_type: string, e?: any) => {
     if (e.file.status === 'done') {
       const mas = e.file.response.message;
@@ -188,7 +222,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           });
         }
         setCampusId(XQSJId);
-        console.log('formRef', formRef);
         formRef?.current?.setFieldsValue({
           FWMC,
           XQSJId,
@@ -212,6 +245,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         formRef?.current?.setFieldsValue({
           ZDKCS: 2,
           XQSJId: id,
+          XNXQId
         });
       }
     }
@@ -248,7 +282,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             <ProFormText
               label="服务模板"
               name="FWMC"
-              readonly={type ? true : false}
+              readonly={!!type}
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
               rules={[{ required: true, message: '请填写服务模板' }]}
@@ -266,7 +300,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
               <Select
                 placeholder="请选择校区"
                 options={campusData}
-                disabled={type ? true : false}
+                disabled={!!type}
                 onChange={(value: string) => {
                   setCampusId(value);
                   getNJData(value);
@@ -285,7 +319,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
               label="适用学期"
               rules={[{ required: true, message: '请选择适用学期' }]}
             >
-              <Select placeholder="请选择" disabled={type ? true : false} options={XNXQData} />
+              <Select placeholder="请选择" disabled={!!type} options={XNXQData} />
             </ProForm.Item>
           </Col>
           <Col span={12}>
@@ -300,7 +334,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
               <Select
                 mode="multiple"
                 placeholder="请选择"
-                disabled={type ? true : false}
+                disabled={!!type}
                 options={NJData}
               />
             </ProForm.Item>
@@ -313,7 +347,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
               rules={[{ required: false, message: '请输入班级课程安排' }]}
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
-              readonly={type ? true : false}
+              readonly={!!type}
               name="FWMS"
               key="FWMS"
               placeholder="请输入班级课程安排"
@@ -339,7 +373,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
                 imagename="image"
                 width={160}
                 height={100}
-                readonly={type ? true : false}
+                readonly={!!type}
                 handleImageChange={(value: any) => {
                   imageChange('ZP', value);
                 }}
@@ -358,7 +392,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           <SelectCourses
             title="选择课程班"
             maxLength={50}
-            disabled={type ? true : false}
+            disabled={!!type}
             getNJArr={() => {
               // 获取年级
               // console.log('NJIDS',formRef?.current?.getFieldValue('NJIds'))
@@ -382,7 +416,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
               key="ZDKCS"
               min={1}
               max={50}
-              disabled={type ? true : false}
+              disabled={!!type}
               width="xs"
             />
           </Col>
@@ -396,13 +430,62 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             </span>
           </Col>
         </Row>
+        {
+          BMSDData?.length !== 0 ? <div style={{ background: '#EFEFEF', padding: '16px 0', marginBottom: '24px' }}>
+            <Row wrap={false} style={{ paddingBottom: '16px' }}>
+              <Col flex={'7em'} style={{ textAlign: 'end', color: '#222222' }}>
+                收费方式：
+              </Col>
+              <Col flex="auto">
+                <Space style={{ width: '100%' }}>
+                  <span>{JFLX === 0 ? '按月缴费' : '自定义时段收费'}</span>
+                  <span style={{ color: '#3E88F8' }}>
+                    配置生效前可在“课后服务 — 报名设置”中统一维护
+                  </span>
+                </Space>
+              </Col>
+            </Row>
+            <Row wrap={false}>
+              <Col flex={'7em'} style={{ textAlign: 'end', color: '#222222' }}>
+                报名时段：
+              </Col>
+              <Col flex="auto">
+                <Space wrap style={{ width: '100%' }}>
+                  {BMSDData?.filter((item: any) => {
+                    // 缴费方式是月
+                    if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
+                      return true;
+                    }
+                    if (JFLX === 1) {
+                      return item.type === JFLX;
+                    }
+                    return false;
+                  }).map((item: any) => {
+                    return (
+                      <Tag>
+                        <span style={{ fontSize: '16px' }}>{item.name}</span>
+                        <span style={{ color: '#999' }}>
+                          {' '}
+                          {`${moment(item.KSRQ).format('MM-DD')}~${moment(item.JSRQ).format(
+                            'MM-DD',
+                          )}`}
+                        </span>
+                        {/* {`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`} */}
+                      </Tag>
+                    );
+                  })}
+                </Space>
+              </Col>
+            </Row>
+          </div> : <></>
+        }
 
         <ProFormDigit
           label="服务费用:"
           labelCol={{ span: 3 }}
           wrapperCol={{ span: 21 }}
           rules={[{ required: true, message: '请输入服务费用' }]}
-          disabled={type ? true : false}
+          disabled={!!type}
           width="xs"
           name="FWFY"
           key="FWFY"

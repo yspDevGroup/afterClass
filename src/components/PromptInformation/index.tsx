@@ -11,6 +11,7 @@ type propttype = {
   colse: () => void;
   event?: () => void;
   type?: boolean;
+  closeType?: boolean;
 }
 
 
@@ -20,7 +21,8 @@ const PromptInformation: FC<propttype> = (
     open,
     colse,
     event,
-    type
+    type,
+    closeType
   }
 ) => {
 
@@ -48,8 +50,9 @@ const PromptInformation: FC<propttype> = (
               event;
             }}>现在去设置</Button> : <></>
           }
-          <Button onClick={colse}>关闭</Button>
-
+          {
+            closeType  ? <></> : <Button onClick={colse}>关闭</Button>
+          }
         </div>
       </div>
     </Modal>

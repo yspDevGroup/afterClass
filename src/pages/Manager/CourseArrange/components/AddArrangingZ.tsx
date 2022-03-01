@@ -300,6 +300,10 @@ const AddArrangingDS: FC<PropsType> = (props) => {
           });
         }
       },
+      okButtonProps: {
+        type:"primary",
+        danger:true,
+      },
     });
   }
   /* 获取时间段内属于星期一(*)的日期们
