@@ -241,7 +241,7 @@ const Index = () => {
                         <Link to="/afterClassManagement/registration_setting">报名模式设置</Link>
                       </li>
                       <li>
-                        <Link to="/afterClassManagement/class_management">行政班管理</Link>
+                        <Link to="/afterClassManagement/class_management">配置课后服务</Link>
                       </li>
                       <li>
                         <Link to="/afterClassManagement/class_management">课后服务发布</Link>
@@ -376,10 +376,10 @@ const Index = () => {
                       <span>02</span>
                       增值服务管理
                     </p>
-                    <img src={home3} alt="" />
+                    <img src={home2} alt="" />
                     <ul>
                       <li>
-                        <Link to="/valueAddedServices/cateringService">服务配置</Link>
+                        <Link to="/valueAddedServices/cateringService">服务类别配置</Link>
                       </li>
                       <li>
                         <Link to="/valueAddedServices/serviceManagement">服务管理</Link>

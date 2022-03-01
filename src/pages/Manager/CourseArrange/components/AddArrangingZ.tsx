@@ -513,16 +513,15 @@ const AddArrangingDS: FC<PropsType> = (props) => {
               const sortArray = (n1: any, n2: any) => {
                 return Number(`${n1?.WEEKDAY === '0' ? '7' : n1.WEEKDAY}${n1?.XXSJPZ?.KSSJ.substring(0, 5).replace(":", "")}`) - Number(`${n2?.WEEKDAY === '0' ? '7' : n2.WEEKDAY}${n2?.XXSJPZ?.KSSJ.substring(0, 5).replace(":", "")}`);
               }
-              console.log(DUKS,'DUKS---')
               datass.sort(sortArray);
               if (DUKS !== 0 && DUKS <= datass?.length && YPKS < pkData?.length) {
                 datass.forEach((val3: any, index: number) => {
-                  const { FJSJId, KHBJSJId, XNXQId, XXSJPZId, WEEKDAY } = val3;
+                  const { FJSJId, KHBJSJId, XNXQId, XXSJPZId, WEEKDAY, PKBZ } = val3;
                   if (index < DUKS) {
                     PkArr?.push({
                       FJSJId,
                       KHBJSJId,
-                      PKBZ: `第${YPKS + 1}周`,
+                      PKBZ: `第${Number(PKBZ?.replace(/[^0-9]/ig, "")) + 1}周`,
                       XNXQId,
                       RQ: getWeek(moment(result?.data?.KKRQ).format('YYYY-MM-DD'), moment(result?.data?.JKRQ).format('YYYY-MM-DD'), WEEKDAY)[YPKS],
                       XXSJPZId,
@@ -532,6 +531,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                   }
                 })
               }
+
               PkArr.forEach((value1: any) => {
                 if (value1.WEEKDAY === '7') {
                   value1.WEEKDAY = '0'

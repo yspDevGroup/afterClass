@@ -466,7 +466,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
               const YPKS = Math.floor(result?.data?.KSS / (datas?.length + 1));
               const DUKS = result?.data?.KSS % (datas?.length + 1);
               const PkArr = newPkDatas.slice(0, YPKS);
-
               datas.forEach((values: any) => {
                 const arr1 = result?.data?.KHPKSJs?.filter((items: any) => {
                   return values.WEEKDAY === items.WEEKDAY && values.XXSJPZId === items.XXSJPZId && values.PKBZ?.replace(/[^0-9]/ig, "") % 2 === items.PKBZ?.replace(/[^0-9]/ig, "") % 2
@@ -515,7 +514,10 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                   if (newData) {
                     PkArr.forEach((values: any) => {
                       // 添加场地数据
-                      values.FJSJ = cdmcData?.find((item4: any) => item4.value === cdmcValue);
+                      if(!values.FJSJ){
+                        values.FJSJ = cdmcData?.find((item4: any) => item4.value === cdmcValue);
+                      }
+
                       // 添加班级数据
                       values.KHBJSJ = bjData.find((bjItem: any) => {
                         return bjItem.id === value.KHBJSJId;
