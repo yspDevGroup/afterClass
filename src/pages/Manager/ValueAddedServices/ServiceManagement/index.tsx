@@ -342,8 +342,8 @@ const ServiceManagement = () => {
     const { BMSD, FWSD, ...info } = value;
     const start = moment(BMSD?.[0]).format('YYYY-MM-DD');
     const end = moment(BMSD?.[1]).format('YYYY-MM-DD');
-    const startTime = start + 'T00:00:00.000Z';
-    const endTime = end + 'T23:59:59.000Z';
+    const startTime = `${start  }T00:00:00.000Z`;
+    const endTime = `${end  }T23:59:59.000Z`;
 
     if (ImageUrl === '') {
       message.info('请上传图片');
@@ -453,17 +453,6 @@ const ServiceManagement = () => {
                 </Select>
               </div>
               <div>
-                <label htmlFor="name">服务名称：</label>
-                <Search
-                  placeholder="服务名称"
-                  allowClear
-                  onSearch={(value: string) => {
-                    setName(value);
-                    actionRef.current?.reload();
-                  }}
-                />
-              </div>
-              <div>
                 <label htmlFor="type">服务类别：</label>
                 <Select
                   allowClear
@@ -484,6 +473,17 @@ const ServiceManagement = () => {
                       })
                     : ''}
                 </Select>
+              </div>
+              <div>
+                <label htmlFor="name">服务名称：</label>
+                <Search
+                  placeholder="服务名称"
+                  allowClear
+                  onSearch={(value: string) => {
+                    setName(value);
+                    actionRef.current?.reload();
+                  }}
+                />
               </div>
               <div>
                 <label htmlFor="status">发布状态：</label>

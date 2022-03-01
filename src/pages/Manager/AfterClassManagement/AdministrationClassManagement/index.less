@@ -8,13 +8,12 @@
   }
 }
 .modelFooter {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   :global(.ant-btn) {
     width: auto !important;
   }
-
-  display: flex;
-  justify-content: space-between;
   .modelTips {
     color: #4884ff;
     font-size: 14px;
@@ -32,20 +31,37 @@
   }
 }
 
-:global{
-  .ant-popover{
+:global {
+  .ant-popover {
     min-width: 200px;
   }
 }
 
-.Popup{
-  :global{
-    .ant-popover-content{
-      .ant-popover-buttons{
-        .ant-btn-primary{
+.Popup {
+  :global {
+    .ant-popover-content {
+      .ant-popover-buttons {
+        .ant-btn-primary {
           display: none;
         }
       }
     }
+  }
+}
+
+.KHFWmodal {
+  :global {
+    .ant-form-item-control {
+      flex: 1 1 !important;
+    }
+    .ant-row-no-wrap{
+      .ant-card-body{
+        .ant-row{
+          margin: 0;
+          padding: 2px 0 !important;
+        }
+      }
+    }
+
   }
 }

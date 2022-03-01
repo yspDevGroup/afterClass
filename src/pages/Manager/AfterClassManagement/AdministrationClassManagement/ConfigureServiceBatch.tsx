@@ -16,6 +16,7 @@ import { getAllKHFWSJ } from '@/services/after-class/khfwsj';
 import PromptInformation from '@/components/PromptInformation';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import { bulkCreateKHFWBJ } from '@/services/after-class/khfwbj';
+import styles from './index.less'
 
 type ConfigureSeverType = {
   XNXQId: string | undefined;
@@ -220,6 +221,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
             return { label: item?.BJMC, value: item?.id };
           }) || [],
       };
+      console.log(v, '------------')
       setDetailValue(v);
       if (data?.FWTP && data.FWTP !== '') {
         setImageUrl(data.FWTP);
@@ -261,9 +263,11 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
         onFinish={onFinish}
         layout="horizontal"
         {...formLayout}
+        width={650}
+        className={styles.KHFWmodal}
       >
         <Row justify="start">
-          <Col span={12}>
+          <Col span={24}>
             <ProFormSelect
               label="所属年级"
               name="NJId"
@@ -285,7 +289,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
           </Col>
         </Row>
         <Row justify="start">
-          <Col span={12}>
+          <Col span={24}>
             <ProFormSelect
               label="行政班级"
               name="BJSJIds"
@@ -300,7 +304,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
           </Col>
         </Row>
         <Row justify="start">
-          <Col span={12}>
+          <Col span={24}>
             <ProFormSelect
               label="选择模板："
               rules={[{ required: true, message: '请选择模板' }]}
@@ -342,45 +346,24 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
                     </Row>
                   </Col>
                 </Row>
-                {/* <Row>
-                  <Col span={24}>
-                    <ProForm.Item label='服务时段'>
-                      <Space wrap style={{ width: '400px' }}>
-                        {BMSDData?.filter((item: any) => {
-                          // console.log('item', item);
-                          // 缴费方式是月
-                          if (JFLX === 0 && item.type === JFLX && item.isEnable === 1) {
-                            return true;
-                          }
-                          if (JFLX === 1) {
-                            return item.type === JFLX;
-                          }
-                          return false;
-                        }).map((item: any) => {
-                          return <Tag>{`${item.name} ${moment(item.KSRQ).format('MM-DD')}~${moment(item.KSRQ).format('MM-DD')}`}</Tag>
-                        })}
-                      </Space>
-                    </ProForm.Item>
-                  </Col>
-                  <Col span={24}>
-                    <ProForm.Item label='课后课程'>
-                      <Space wrap style={{ width: '400px' }}>
-                        {
-
-                          detailValue?.KHKC?.length
-                            ? detailValue.KHKC.map((item: any) => <Tag>{item?.label}</Tag>)
-                            : '-'
-                        }
-
-                      </Space>
-                    </ProForm.Item>
-                  </Col>
-                </Row> */}
                 <Row>
-                  <Col span={24}>
-                    <ProForm.Item label="服务简介：" name="FWMC">
-                      {detailValue?.FWMC || ''}
-                    </ProForm.Item>
+                  <Col flex="6em" style={{ textAlign: 'end' }}>
+                    课后课程：
+                  </Col>
+                  <Col flex="auto">
+                    {
+                      detailValue?.KHKC.map((value: any) => {
+                        return value?.label
+                      })
+                    }
+                  </Col>
+                </Row>
+                <Row>
+                  <Col flex="6em" style={{ textAlign: 'end' }}>
+                    服务简介：
+                  </Col>
+                  <Col flex="auto">
+                    {detailValue?.FWMC || ''}
                   </Col>
                 </Row>
               </Card>
