@@ -21,7 +21,7 @@ const Topbar = (props: { data: any }) => {
             <h3>{data?.[item.type] || 0}</h3>
             <Tooltip title={
               // eslint-disable-next-line no-nested-ternary
-              item.title === '¿Î³Ì×ÜÊý' ? '±¾Ð£¿Î³ÌÓëÒýÈë¿Î³Ì×ÜÊý' : (item.title === '¿Î³Ì°à×ÜÊý' ? 'ÒÑÉúÐ§·þÎñ¿ÎÌÃÓëçÍ·×¿ÎÌÃ×ÜÊý' : (item.title === '²ÎÓë°à¼¶Êý' ? '²ÎÓë¿Îºó·þÎñÐÐÕþ°à×ÜÊý' : ''))
+              item.title === 'è¯¾ç¨‹æ€»æ•°' ? 'æœ¬æ ¡è¯¾ç¨‹ä¸Žå¼•å…¥è¯¾ç¨‹æ€»æ•°' : (item.title === 'è¯¾ç¨‹ç­æ€»æ•°' ? 'å·²ç”Ÿæ•ˆæœåŠ¡è¯¾å ‚ä¸Žç¼¤çº·è¯¾å ‚æ€»æ•°' : (item.title === 'å‚ä¸Žç­çº§æ•°' ? 'å‚ä¸Žè¯¾åŽæœåŠ¡è¡Œæ”¿ç­æ€»æ•°' : ''))
             }
               defaultVisible={false}>
               <p title={item.title}>{item.title}</p>
