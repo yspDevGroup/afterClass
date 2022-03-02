@@ -82,16 +82,6 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, We
   let BJMC;
   let BJId;
 
-  let DNum: number;
-  let SNum: number;
-  if ((Weeks?.length) % 2 === 0) {
-    DNum = (Weeks?.length) / 2;
-    SNum = (Weeks?.length) / 2;
-  } else {
-    DNum = Math.ceil((Weeks?.length) / 2);
-    SNum = Math.floor((Weeks?.length) / 2);
-  }
-
   if (data?.length) {
     arr2 = data?.filter((item: any, index: number) => {
       let temArr: any[] = []
@@ -349,8 +339,6 @@ const Index: FC<IndexPropsType> = ({
           dis: false,
           color: chosenData.color,
         };
-      } else {
-        rowData[colItem.dataIndex] = '';
       }
       setStateTableData(newData);
     }

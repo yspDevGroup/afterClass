@@ -339,8 +339,6 @@ const Index: FC<IndexPropsType> = ({
           dis: false,
           color: chosenData.color,
         };
-      } else {
-        rowData[colItem.dataIndex] = '';
       }
       setStateTableData(newData);
     }

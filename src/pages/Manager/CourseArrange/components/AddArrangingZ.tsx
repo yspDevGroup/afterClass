@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
@@ -301,8 +302,8 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         }
       },
       okButtonProps: {
-        type:"primary",
-        danger:true,
+        type: "primary",
+        danger: true,
       },
     });
   }
@@ -574,38 +575,43 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
       } else {
         // 删除排课
-        const PkArr: any[] = [];
-        const newArr = result?.data?.KHPKSJs.filter((items: any) => {
-          return items?.WEEKDAY !== value?.WEEKDAY || items?.XXSJPZId !== value?.XXSJPZId
-        })
-        newArr?.forEach((item: any) => {
-          const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
-          PkArr?.push({
-            FJSJId,
-            KHBJSJId,
-            PKBZ,
-            XNXQId,
-            RQ,
-            XXSJPZId,
-            WEEKDAY,
-            PKTYPE: value?.PKTYPE
+        if (result?.data?.KHPKSJs?.find((items: any) => items?.PKTYPE === 0 || items?.PKTYPE === 2 || items?.PKTYPE === 3)) {
+          showConfirm();
+        } else {
+          const PkArr: any[] = [];
+          const newArr = result?.data?.KHPKSJs.filter((items: any) => {
+            return items?.WEEKDAY !== value?.WEEKDAY || items?.XXSJPZId !== value?.XXSJPZId
           })
-        })
-        const res = await createKHPKSJ({
-          bjIds: [value?.KHBJSJId],
-          data: PkArr
-        })
-        if (res?.status === 'ok') {
-          for (let i = 0; i < pkData.length; i++) {
-            for (let j = 0; j < screenOriSource.length; j++) {
-              if (screenOriSource[j].RQ === pkData[i].RQ && screenOriSource[j].KHBJSJId === pkData[i].KHBJSJId && screenOriSource[j].XXSJPZId === pkData[i].XXSJPZId) {
-                screenOriSource.splice(j, 1)
+          newArr?.forEach((item: any) => {
+            const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
+            PkArr?.push({
+              FJSJId,
+              KHBJSJId,
+              PKBZ,
+              XNXQId,
+              RQ,
+              XXSJPZId,
+              WEEKDAY,
+              PKTYPE: value?.PKTYPE
+            })
+          })
+          const res = await createKHPKSJ({
+            bjIds: [value?.KHBJSJId],
+            data: PkArr
+          })
+          if (res?.status === 'ok') {
+            for (let i = 0; i < pkData.length; i++) {
+              for (let j = 0; j < screenOriSource.length; j++) {
+                if (screenOriSource[j].RQ === pkData[i].RQ && screenOriSource[j].KHBJSJId === pkData[i].KHBJSJId && screenOriSource[j].XXSJPZId === pkData[i].XXSJPZId) {
+                  screenOriSource.splice(j, 1)
+                }
               }
             }
+            refreshTable();
           }
-          refreshTable();
         }
       }
+
     } else {
       message.warning(result.message)
     }

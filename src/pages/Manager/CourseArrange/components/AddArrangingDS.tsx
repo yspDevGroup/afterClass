@@ -340,8 +340,8 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         }
       },
       okButtonProps: {
-        type:"primary",
-        danger:true,
+        type: "primary",
+        danger: true,
       },
     });
   }
@@ -543,44 +543,49 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         }
       } else {
         // 删除排课
-        const PkArr: any[] = [];
-        const newArr = result?.data?.KHPKSJs.filter((items: any) => {
-          const num = items?.PKBZ?.replace(/[^0-9]/ig, "");
-          let types: boolean = false;
-          if (value?.PKTYPE === 2 && num % 2 !== 0) {
-            types = true;
-          } else if (value?.PKTYPE === 3 && num % 2 === 0) {
-            types = true;
-          }
-          return (items?.WEEKDAY !== value?.WEEKDAY || items?.XXSJPZId !== value?.XXSJPZId) || ((items?.WEEKDAY === value?.WEEKDAY && items?.XXSJPZId === value?.XXSJPZId) && types === false)
-        })
-        newArr?.forEach((item: any) => {
-          const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
-          PkArr?.push({
-            FJSJId,
-            KHBJSJId,
-            PKBZ,
-            XNXQId,
-            RQ,
-            XXSJPZId,
-            WEEKDAY,
-            PKTYPE: value?.PKTYPE
+        if (result?.data?.KHPKSJs?.find((items: any) => items?.PKTYPE === 0 || items?.PKTYPE === 1)) {
+          showConfirm();
+        } else {
+          const PkArr: any[] = [];
+          const newArr = result?.data?.KHPKSJs.filter((items: any) => {
+            const num = items?.PKBZ?.replace(/[^0-9]/ig, "");
+            let types: boolean = false;
+            if (value?.PKTYPE === 2 && num % 2 !== 0) {
+              types = true;
+            } else if (value?.PKTYPE === 3 && num % 2 === 0) {
+              types = true;
+            }
+            return (items?.WEEKDAY !== value?.WEEKDAY || items?.XXSJPZId !== value?.XXSJPZId) || ((items?.WEEKDAY === value?.WEEKDAY && items?.XXSJPZId === value?.XXSJPZId) && types === false)
           })
-        })
-        const res = await createKHPKSJ({
-          bjIds: [value?.KHBJSJId],
-          data: PkArr
-        })
-        if (res?.status === 'ok') {
-          for (let i = 0; i < pkData.length; i++) {
-            for (let j = 0; j < screenOriSource.length; j++) {
-              if (screenOriSource[j].RQ === pkData[i].RQ && screenOriSource[j].KHBJSJId === pkData[i].KHBJSJId && screenOriSource[j].XXSJPZId === pkData[i].XXSJPZId) {
-                screenOriSource.splice(j, 1)
+          newArr?.forEach((item: any) => {
+            const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
+            PkArr?.push({
+              FJSJId,
+              KHBJSJId,
+              PKBZ,
+              XNXQId,
+              RQ,
+              XXSJPZId,
+              WEEKDAY,
+              PKTYPE: value?.PKTYPE
+            })
+          })
+          const res = await createKHPKSJ({
+            bjIds: [value?.KHBJSJId],
+            data: PkArr
+          })
+          if (res?.status === 'ok') {
+            for (let i = 0; i < pkData.length; i++) {
+              for (let j = 0; j < screenOriSource.length; j++) {
+                if (screenOriSource[j].RQ === pkData[i].RQ && screenOriSource[j].KHBJSJId === pkData[i].KHBJSJId && screenOriSource[j].XXSJPZId === pkData[i].XXSJPZId) {
+                  screenOriSource.splice(j, 1)
+                }
               }
             }
+            refreshTable();
           }
-          refreshTable();
         }
+
       }
     } else {
       message.error(result?.message)
