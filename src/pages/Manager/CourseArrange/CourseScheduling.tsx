@@ -4,7 +4,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
-import { Button, Select, Spin } from 'antd';
+import { Button, Col, Row, Select, Spin } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import type { DataSourceType } from '@/components/ExcelTable2';
@@ -35,7 +35,7 @@ const CourseScheduling = (
     setRecordValue: React.Dispatch<any>,
     kcmcData: selectType[] | undefined
     setKcmcData: React.Dispatch<React.SetStateAction<selectType[] | undefined>>,
-    processingDatas: (data: any, timeData: any, bjId?: string | undefined) => any[],
+    processingDatas: (data: any, timeData: any, week: any, bjId?: string | undefined) => any[]
     campus: any,
     setCampus: React.Dispatch<any>,
     loading: boolean,
@@ -58,9 +58,10 @@ const CourseScheduling = (
     pKiskai: boolean,
     setPKiskai: React.Dispatch<React.SetStateAction<boolean>>
     type?: string | undefined;
+    Weeks: any;
   }) => {
 
-  const { state, kcmcData, processingDatas, campus, setCampus, loading, setLoading, campusId, setCampusId, xXSJPZData, curXNXQId, setCurXNXQId, setXXSJPZData, screenOriSource, currentUser, termList, oriSource, setOriSource, onExcelTableClick, showDrawer, pKiskai, setPKiskai, type } = props;
+  const { state, kcmcData, processingDatas, campus, setCampus, loading, setLoading, campusId, setCampusId, xXSJPZData, curXNXQId, setCurXNXQId, setXXSJPZData, screenOriSource, currentUser, termList, oriSource, setOriSource, onExcelTableClick, showDrawer, pKiskai, setPKiskai, type, Weeks } = props;
 
   // ExcelTable表格所需要的数据
   const [tableDataSource, setTableDataSource] = useState<DataSourceType>([]);
@@ -83,6 +84,7 @@ const CourseScheduling = (
   // 行政班 名称筛选
   const [XZBId, setXZBId] = useState<string>();
   const [XZBData, setXZBData] = useState<any[]>();
+  const [weekNum, setWeekNum] = useState<any>();
 
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
@@ -398,7 +400,7 @@ const CourseScheduling = (
       const screenData = getScreenOriSource(screenOriSource);
       setOriSource(screenData);
     }
-  }, [teacher, cdmcValue, kcmcValue, bjmcValue, radioValue,XZBId]);
+  }, [teacher, cdmcValue, kcmcValue, bjmcValue, radioValue, XZBId]);
 
   // 切换主页 和编辑页时刷新场地排课情况
   useEffect(() => {
@@ -414,10 +416,10 @@ const CourseScheduling = (
   // 筛选之后 table 排课数据信息 刷新table
   useEffect(() => {
     if (xXSJPZData.length > 0) {
-      const tableData = processingDatas(oriSource, xXSJPZData);
+      const tableData = processingDatas(oriSource, xXSJPZData, weekNum);
       setTableDataSource(tableData);
     }
-  }, [oriSource]);
+  }, [oriSource, weekNum]);
 
 
   return (
@@ -438,15 +440,14 @@ const CourseScheduling = (
       <Spin spinning={loading}>
         {/* 默认state的来回切换 新增排课与排课管理页面 */}
         {/* {state === true ? ( */}
-        <div>
+        <div >
           {/* 渲染的是四个选项框组件 */}
-          <div className={styles.searchWrapper}>
-            <SearchLayout>
-              <div>
+          <div className={styles.SearchBoxs}>
+            <Row>
+              <Col span={6}> <div className={styles.SearchBox}>
                 <label>学年学期：</label>
                 <Select
                   value={curXNXQId}
-                  style={{ width: 'calc(100% - 70px)' }}
                   onChange={(value: string) => {
                     setCurXNXQId(value);
                     setKcmcValue(undefined);
@@ -463,12 +464,12 @@ const CourseScheduling = (
                     );
                   })}
                 </Select>
-              </div>
-              <div>
+              </div></Col>
+              <Col span={1}> </Col>
+              <Col span={6}>  <div className={styles.SearchBox}>
                 <label>校区：</label>
                 <Select
                   value={campusId}
-                  style={{ width: 'calc(100% - 45px)' }}
                   onChange={(value: string) => {
                     setCampusId(value);
                     setCdmcValue(undefined);
@@ -484,76 +485,131 @@ const CourseScheduling = (
                     );
                   })}
                 </Select>
-              </div>
-              {
-                type === '课程班课表' ? <div>
-                  <label>课程：</label>
-                  <Select
-                    style={{ width: 'calc(100% - 45px)' }}
-                    value={kcmcValue}
-                    allowClear
-                    placeholder="请选择"
-                    onChange={(value) => {
-                      setKcmcValue(value);
-                      // 已经选择的内容清除
-                      setBjmcValue([]);
-                    }}
-                  >
-                    {kcmcData?.map((item: selectType) => {
-                      if (item.value) {
-                        return (
-                          <Option value={item.value} key={item.value}>
-                            {item.label}
-                          </Option>
-                        );
-                      }
-                      return '';
-                    })}
-                  </Select>
-                </div> : <></>
-              }
-              {
-                type === '行政班课表' ?
-                  <>
-                    <div>
-                      <label>年级：</label>
+              </div></Col>
+              <Col span={1}> </Col>
+              <Col span={6}>
+                {
+                  type === '课程班课表' ? <div className={styles.SearchBox}>
+                    <label>课程：</label>
+                    <Select
+                      value={kcmcValue}
+                      allowClear
+                      placeholder="请选择"
+                      onChange={(value) => {
+                        setKcmcValue(value);
+                        // 已经选择的内容清除
+                        setBjmcValue([]);
+                        setWeekNum(undefined)
+                      }}
+                    >
+                      {kcmcData?.map((item: selectType) => {
+                        if (item.value) {
+                          return (
+                            <Option value={item.value} key={item.value}>
+                              {item.label}
+                            </Option>
+                          );
+                        }
+                        return '';
+                      })}
+                    </Select>
+                  </div> : <></>
+                }
+                {
+                  type === '行政班课表' ?
+                    <>
+                      <div className={styles.SearchBox}>
+                        <label>年级：</label>
+                        <Select
+                          value={kcmcValue}
+                          allowClear
+                          placeholder="请选择"
+                          onChange={(value) => {
+                            setNjValue(value);
+                            // 已经选择的内容清除
+                            setXZBId(undefined);
+                            setXZBData([]);
+                            setWeekNum(undefined)
+                          }}
+                        >
+                          {grade?.map((item: selectType) => {
+                            if (item.value) {
+                              return (
+                                <Option value={item.value} key={item.value}>
+                                  {item.label}
+                                </Option>
+                              );
+                            }
+                            return '';
+                          })}
+                        </Select>
+                      </div></>
+                    : <></>
+                }
+              </Col>
+            </Row>
+            {
+              type === '课程班课表' ?
+                <Row>
+                  <Col span={13}>
+                    <div className={styles.SearchBox} style={{ marginTop: 10 }}>
+                      <label >课程班：</label>
                       <Select
-                        style={{ width: 'calc(100% - 45px)' }}
-                        value={kcmcValue}
+                        mode="multiple"
                         allowClear
+                        style={{ width: 'calc(100% - 70px)' }}
                         placeholder="请选择"
-                        onChange={(value) => {
-                          setNjValue(value);
-                          // 已经选择的内容清除
-                          setXZBId(undefined);
-                          setXZBData([]);
-                        }}
+                        value={bjmcValue}
+                        onChange={(value) => setBjmcValue(value)}
                       >
-                        {grade?.map((item: selectType) => {
-                          if (item.value) {
-                            return (
-                              <Option value={item.value} key={item.value}>
-                                {item.label}
-                              </Option>
-                            );
-                          }
-                          return '';
+                        {bjmcData?.map((item: selectType) => {
+                          return (
+                            <Option value={item.value} key={item.value}>
+                              {item.label}
+                            </Option>
+                          );
                         })}
                       </Select>
-                    </div></>
-                  : <></>
-              }
-            </SearchLayout>
-            <SearchLayout>
-              {
-                type === '行政班课表' ?
-                  <>
-                    <div>
-                      <label htmlFor="kcly">行政班名称：</label>
+                    </div> </Col>
+                  <Col span={1}> </Col>
+                  <Col span={6}>
+                    <div className={styles.SearchBox} style={{ marginTop: 10 }}>
+                      <label>教学周：</label>
+                      <Select
+                        value={weekNum?.toString()}
+                        allowClear
+                        placeholder="请选择"
+                        onChange={(value: string) => {
+                          if(value){
+                            setWeekNum([value])
+                          }else{
+                            setWeekNum(undefined)
+                          }
+
+                        }}
+                      >
+                        {Weeks?.map((item: any) => {
+                          return (
+                            <Option value={item} >
+                              {item}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </div>
+                  </Col>
+                </Row> : <></>
+            }
+            {
+              type === '行政班课表' ?
+                <Row>
+                  <Col span={6}>
+                    <div className={styles.SearchBox} style={{ marginTop: 10 }}>
+                      <label htmlFor="kcly">行政班：</label>
                       <Select
                         value={XZBId}
                         allowClear
-                        placeholder="行政班名称"
+                        placeholder="请选择"
                         onChange={(value: string) => {
                           setXZBId(value);
                         }}
@@ -566,30 +622,35 @@ const CourseScheduling = (
                           );
                         })}
                       </Select>
-                    </div></>
-                  : <></>
-              }
-            </SearchLayout>
-            {
-              type === '课程班课表' ? <div style={{ marginTop: 10 }}>
-                <label>课程班：</label>
-                <Select
-                  mode="multiple"
-                  allowClear
-                  style={{ width: '70%', minWidth: '680px' }}
-                  placeholder="请选择"
-                  value={bjmcValue}
-                  onChange={(value) => setBjmcValue(value)}
-                >
-                  {bjmcData?.map((item: selectType) => {
-                    return (
-                      <Option value={item.value} key={item.value}>
-                        {item.label}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </div> : <></>
+                    </div>
+                  </Col>
+                  <Col span={1}> </Col>
+                  <Col span={6}>
+                    <div className={styles.SearchBox} style={{ marginTop: 10 }}>
+                      <label>教学周：</label>
+                      <Select
+                        allowClear
+                        value={weekNum?.toString()}
+                        placeholder="请选择"
+                        onChange={(value: string) => {
+                          if(value){
+                            setWeekNum([value])
+                          }else{
+                            setWeekNum(undefined)
+                          }
+                        }}
+                      >
+                        {Weeks?.map((item: any) => {
+                          return (
+                            <Option value={item} >
+                              {item}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </div>
+                  </Col>
+                </Row> : <></>
             }
 
             {/*  添加新的课程 路由跳转 */}
@@ -620,7 +681,7 @@ const CourseScheduling = (
               xXSJPZData={xXSJPZData}
               KbType={type}
               style={{
-                height: 'calc(100vh - 360px)',
+                height: weekNum === undefined ? 'calc(100vh - 360px)' : 'auto',
               }}
             />
           ) : (

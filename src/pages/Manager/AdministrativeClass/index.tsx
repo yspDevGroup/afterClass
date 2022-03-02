@@ -156,7 +156,7 @@ const AdministrativeClass = () => {
       width: 150,
     },
     {
-      title: '其他服务报名人数',
+      title: '增值服务报名人数',
       dataIndex: 'xszzfw_count',
       key: 'xxzzfw_count',
       align: 'center',

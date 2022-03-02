@@ -285,16 +285,23 @@ const Index = () => {
       });
     }
     return tableData;
+
   };
-  const processingDatas = (data: any, timeData: any, bjId: string | undefined = undefined) => {
+  const processingDatas = (data: any, timeData: any, week: any, bjId: string | undefined = undefined) => {
     // setLoading(true);
     const newWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const tableData: any[] = [];
     const sameClassData: any[] = [];
+    let Weekss: any = []
+    if (week && week !== undefined) {
+      Weekss = week
+    } else {
+      Weekss = Weeks
+    }
     if (!timeData.length) {
       setPKiskai(true);
     } else {
-      Weeks.forEach((item: any, index: number) => {
+      Weekss.forEach((item: any, index: number) => {
         timeData.forEach((timeItem: any, timeKey: number) => {
           const table = {
             room: {
@@ -419,7 +426,6 @@ const Index = () => {
               };
             });
           }
-
           tableData.push(table);
         });
       });
@@ -944,6 +950,7 @@ const Index = () => {
                 onExcelTableClick={onExcelTableClick}
                 pKiskai={pKiskai}
                 setPKiskai={setPKiskai}
+                Weeks={Weeks}
               />}
             </TabPane>
             }
@@ -977,6 +984,7 @@ const Index = () => {
                 onExcelTableClick={onExcelTableClick}
                 pKiskai={pKiskai}
                 setPKiskai={setPKiskai}
+                Weeks={Weeks}
               />}
             </TabPane>
             <TabPane tab="场地课表" key="3">
@@ -1009,6 +1017,7 @@ const Index = () => {
                 onExcelTableClick={onExcelTableClick}
                 pKiskai={pKiskai}
                 setPKiskai={setPKiskai}
+                Weeks={Weeks}
               />}
             </TabPane>
             <TabPane tab="教师课表" key="4">
@@ -1041,6 +1050,7 @@ const Index = () => {
                 onExcelTableClick={onExcelTableClick}
                 pKiskai={pKiskai}
                 setPKiskai={setPKiskai}
+                Weeks={Weeks}
               />}
             </TabPane>
           </Tabs>
@@ -1148,10 +1158,10 @@ const Index = () => {
         <Modal
           visible={VisiblePKXZ}
           title="排课须知"
-          onOk={()=>{
+          onOk={() => {
             setVisiblePKXZ(true)
           }}
-          onCancel={()=>{
+          onCancel={() => {
             setVisiblePKXZ(false)
           }}
           footer={null}
@@ -1162,7 +1172,7 @@ const Index = () => {
           <p>2. 循环排课时必须先清除其他类型下的排课信息，且“按周”排课与“单双周”排课不可同时使用，即选择“按周”进行排课时，如果该班级存在的“单双周”排课信息，则需先清除已有排课信息后方可操作，反之亦然。</p>
           <p>3. 当循环排课模式无法满足排课需求时，可使用“按天”排课模式。</p>
           <p>4. “按天”排课也可作为循环排课的补充，可以先进行循环排课，然后使用“按天”排课进行细节调整。</p>
-          <p className={styles.titles} style={{marginTop:15}}><div /> <span>操作建议</span>  </p>
+          <p className={styles.titles} style={{ marginTop: 15 }}><div /> <span>操作建议</span>  </p>
           <p>建议您先依据学校课表安排，选择一种适合的循环排课方式，在“按周”或“单双周”页签下完成排课后，可在“按天”排课中进行细节调整。</p>
           <p>例如：</p>
           <p>1. 每周循环上课，选择“按周”进行排课，随后在“按天”排课中进行调整；</p>

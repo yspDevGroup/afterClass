@@ -206,14 +206,31 @@
   }
 }
 
+.SearchBoxs {
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e4e4e4;
+  .SearchBox {
+    display: flex;
+    label {
+      width: 70px;
+      line-height: 30px;
+      text-align: right;
+    }
+    > div {
+      width: calc(100% - 70px);
+    }
+  }
+}
+
 .searchWrapper {
   position: relative;
   padding-bottom: 16px;
   box-shadow: 0 1px 0 #e4e4e4;
+
   .teacherName {
     > div {
-      width: 65% !important;
       display: inline-block;
+      width: 65% !important;
       min-width: 150px;
     }
   }
@@ -338,11 +355,11 @@
     font-weight: bold;
     font-size: 16px;
     border-bottom: 1px solid #e4e4e4;
-    .xuzhi{
-      color: #3E88F8;
+    .xuzhi {
       float: right;
-      font-size: 14px;
+      color: #3e88f8;
       font-weight: normal;
+      font-size: 14px;
       line-height: 32px;
     }
   }
@@ -365,30 +382,30 @@
   }
 }
 
-.PKXZ{
+.PKXZ {
   width: 700px !important;
-  :global{
-    .ant-modal-body{
+  :global {
+    .ant-modal-body {
       padding: 16px;
     }
   }
-  p{
+  p {
     margin: 10px;
     line-height: 22px;
   }
-  .titles{
-    color:#3E88F8;
+  .titles {
+    color: #3e88f8;
     font-weight: bold;
     font-size: 14px;
-    >div{
+    > div {
+      display: inline-block;
       width: 3px;
       height: 13px;
-      border-radius: 1.5px;
-      background-color: #3E88F8;
-      display: inline-block;
       margin-right: 6px;
+      background-color: #3e88f8;
+      border-radius: 1.5px;
     }
-    >span{
+    > span {
       vertical-align: text-bottom;
     }
   }

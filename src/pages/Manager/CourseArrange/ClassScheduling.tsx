@@ -4,7 +4,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
-import { Button, Select, Spin } from 'antd';
+import { Button, Col, Row, Select, Spin } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import type { DataSourceType } from '@/components/ExcelTable2';
@@ -57,9 +57,10 @@ const CourseScheduling = (
     pKiskai: boolean,
     setPKiskai: React.Dispatch<React.SetStateAction<boolean>>
     type?: string | undefined;
+    Weeks: any;
   }) => {
 
-  const { state, kcmcData, processingDatas, campus, setCampus, loading, setLoading, campusId, setCampusId, xXSJPZData, curXNXQId, setCurXNXQId, setXXSJPZData, screenOriSource, currentUser, termList, oriSource, setOriSource, onExcelTableClick, showDrawer, pKiskai, setPKiskai, type } = props;
+  const { state, kcmcData, processingDatas, campus, setCampus, loading, setLoading, campusId, setCampusId, xXSJPZData, curXNXQId, setCurXNXQId, setXXSJPZData, screenOriSource, currentUser, termList, oriSource, setOriSource, onExcelTableClick, showDrawer, pKiskai, setPKiskai, type, Weeks } = props;
 
   // ExcelTable表格所需要的数据
   const [tableDataSource, setTableDataSource] = useState<DataSourceType>([]);
@@ -76,6 +77,7 @@ const CourseScheduling = (
   // 场地类型
   const [dataLX, setDataLX] = useState<any>([]);
   const [CDLXId, setCDLXId] = useState<any>();
+  const [weekNum, setWeekNum] = useState<any>();
 
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
@@ -105,8 +107,8 @@ const CourseScheduling = (
     }
   };
 
-   // 场地类型
-   const getCDLXData = async () => {
+  // 场地类型
+  const getCDLXData = async () => {
     const response = await getAllFJLX({
       name: '',
       XXJBSJId: currentUser?.xxId,
@@ -144,8 +146,8 @@ const CourseScheduling = (
   };
 
   useEffect(() => {
-      setCdmcData(undefined);
-      getCDData();
+    setCdmcData(undefined);
+    getCDData();
   }, [CDLXId]);
 
   const columns: {
@@ -349,11 +351,10 @@ const CourseScheduling = (
   // 筛选之后 table 排课数据信息 刷新table
   useEffect(() => {
     if (xXSJPZData.length > 0) {
-      const tableData = processingDatas(oriSource, xXSJPZData);
+      const tableData = processingDatas(oriSource, xXSJPZData, weekNum);
       setTableDataSource(tableData);
     }
-  }, [oriSource]);
-
+  }, [oriSource, weekNum]);
 
   return (
     <>
@@ -374,110 +375,144 @@ const CourseScheduling = (
         {/* 默认state的来回切换 新增排课与排课管理页面 */}
         {/* {state === true ? ( */}
         <div>
-          {/* 渲染的是四个选项框组件 */}
-          <div className={styles.searchWrapper}>
-            <SearchLayout>
-              <div>
-                <label>学年学期：</label>
-                <Select
-                  value={curXNXQId}
-                  style={{ width: 'calc(100% - 70px)' }}
-                  onChange={(value: string) => {
-                    setCurXNXQId(value);
-                    setCdmcValue(undefined);
-                  }}
-                >
-                  {termList?.map((item: any) => {
-                    return (
-                      <Option key={item.value} value={item.value}>
-                        {item.text}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </div>
-              <div>
-                <label>校区：</label>
-                <Select
-                  value={campusId}
-                  style={{ width: 'calc(100% - 45px)' }}
-                  onChange={(value: string) => {
-                    setCampusId(value);
-                    setCdmcValue(undefined);
-                  }}
-                >
-                  {campus?.map((item: any) => {
-                    return (
-                      <Option key={item.value} value={item.value}>
-                        {item.label}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </div>
-              {
-                type === '教师课表' ? <div className={styles.teacherName}>
-                  <label>教师姓名：</label>
-                  <TeacherSelect
-                    // value={ }
-                    // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
-                    type={1}
-                    multiple={false}
-                    xxId={currentUser?.xxId}
-                    kcId={undefined}
-                    onChange={(value: any) => {
-                      setTeacherId(value)
-                    }}
-                  />
-                </div> : <></>
-              }
-              {
-                type === '场地课表' ? <div>
-                  <label>场地类型：</label>
+          <div className={styles.SearchBoxs} >
+            {/* 渲染的是四个选项框组件 */}
+            <Row>
+              <Col span={6}>
+                <div className={styles.SearchBox}>
+                  <label>学年学期：</label>
                   <Select
-                    style={{ width: '65%' }}
-                    value={CDLXId}
-                    allowClear
-                    placeholder="请选择"
-                    onChange={(value) => {
+                    value={curXNXQId}
+                    onChange={(value: string) => {
+                      setCurXNXQId(value);
                       setCdmcValue(undefined);
-                      setCdmcData([]);
-                      setCDLXId(value);
                     }}
                   >
-                    {dataLX?.map((item: selectType) => {
+                    {termList?.map((item: any) => {
                       return (
-                        <Option value={item.value} key={item.value}>
+                        <Option key={item.value} value={item.value}>
+                          {item.text}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+              </Col>
+              <Col span={1}> </Col>
+              <Col span={6}>
+                <div className={styles.SearchBox}>
+                  <label>校区：</label>
+                  <Select
+                    value={campusId}
+                    onChange={(value: string) => {
+                      setCampusId(value);
+                      setCdmcValue(undefined);
+                    }}
+                  >
+                    {campus?.map((item: any) => {
+                      return (
+                        <Option key={item.value} value={item.value}>
                           {item.label}
                         </Option>
                       );
                     })}
                   </Select>
-                </div> : <></>
-              }
-
-            </SearchLayout>
-            {
-              type === '场地课表' ? <div>
-                <label>场地名称：</label>
-                <Select
-                  style={{ width: 200 }}
-                  value={cdmcValue}
-                  allowClear
-                  placeholder="请选择"
-                  onChange={(value) => setCdmcValue(value)}
-                >
-                  {cdmcData?.map((item: selectType) => {
-                    return (
-                      <Option value={item.value} key={item.value}>
-                        {item.label}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </div> : <></>
-            }
-
+                </div>
+              </Col>
+              <Col span={1}> </Col>
+              <Col span={6}>
+                {
+                  type === '教师课表' ? <div className={styles.SearchBox}>
+                    <label>教师姓名：</label>
+                    <TeacherSelect
+                      // value={ }
+                      // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
+                      type={1}
+                      multiple={false}
+                      xxId={currentUser?.xxId}
+                      kcId={undefined}
+                      onChange={(value: any) => {
+                        setTeacherId(value)
+                      }}
+                    />
+                  </div> : <></>
+                }
+                {
+                  type === '场地课表' ? <div className={styles.SearchBox}>
+                    <label>场地类型：</label>
+                    <Select
+                      value={CDLXId}
+                      allowClear
+                      placeholder="请选择"
+                      onChange={(value) => {
+                        setCdmcValue(undefined);
+                        setCdmcData([]);
+                        setCDLXId(value);
+                      }}
+                    >
+                      {dataLX?.map((item: selectType) => {
+                        return (
+                          <Option value={item.value} key={item.value}>
+                            {item.label}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </div> : <></>
+                }
+              </Col>
+            </Row>
+            <Row>
+              {
+                type === '场地课表' ?
+                  <>
+                    <Col span={6}>
+                      <div className={styles.SearchBox} style={{ marginTop: 10 }}>
+                        <label>场地名称：</label>
+                        <Select
+                          value={cdmcValue}
+                          allowClear
+                          placeholder="请选择"
+                          onChange={(value) => setCdmcValue(value)}
+                        >
+                          {cdmcData?.map((item: selectType) => {
+                            return (
+                              <Option value={item.value} key={item.value}>
+                                {item.label}
+                              </Option>
+                            );
+                          })}
+                        </Select>
+                      </div>
+                    </Col>
+                    <Col span={1}> </Col></>
+                  : <></>}
+              <Col span={6}>
+                <div className={styles.SearchBox} style={{ marginTop: 10 }}>
+                  <label>教学周：</label>
+                  <Select
+                    allowClear
+                    value={weekNum?.toString()}
+                    placeholder="请选择"
+                    onChange={(value: string) => {
+                      if (value) {
+                        setWeekNum([value])
+                      } else {
+                        setWeekNum(undefined)
+                      }
+                    }}
+                  >
+                    {Weeks?.map((item: any) => {
+                      return (
+                        <Option value={item} >
+                          {item}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+              </Col>
+            </Row>
 
             {/*  添加新的课程 路由跳转 */}
             <div style={{ position: 'absolute', right: 0, top: 0 }}>
@@ -506,7 +541,7 @@ const CourseScheduling = (
               xXSJPZData={xXSJPZData}
               KbType={type}
               style={{
-                height: 'calc(100vh - 360px)',
+                height: weekNum === undefined ? 'calc(100vh - 360px)' : 'auto',
               }}
             />
           ) : (
@@ -515,6 +550,7 @@ const CourseScheduling = (
               <img src={noJF} alt="" /> <p> {type === '场地课表' ? '请选择场地' : '请选择教师'}查看课表</p>{' '}
             </div>
           )}
+
         </div>
       </Spin>
 
