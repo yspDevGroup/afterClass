@@ -257,7 +257,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       if (FJSJIds) {
         newData = {
           ...info,
-          BJIds: BJIds ? (Array.isArray(BJIds) ? BJIds : [BJIds]) : undefined,
+          BJIds ,
           KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
           JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
@@ -271,7 +271,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       } else {
         newData = {
           ...info,
-          BJIds: BJIds ? (Array.isArray(BJIds) ? BJIds : [BJIds]) : undefined,
+          BJIds,
           KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
           JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
@@ -406,19 +406,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
                 FJS: undefined,
               });
               const { value } = values.target;
-
-              // let kcData: any;
-              // if (value === '机构课程') {
-              //   kcData = KHKCAllData?.filter((item: any) => item.SSJGLX === '机构课程' && item.KHKCSQs?.[0].ZT === 1);
-              // } else {
-              //   kcData = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
-              // }
-              // // if(KCLXMC){
-              // //  kcData= kcData.filter((item: any)=>{
-              // //     return item?.KHKCLX?.KCTAG===KCLXMC
-              // //   })
-              // // }
-              // setKCDate(kcData);
               setIsJg(value === '机构课程');
             },
           },
@@ -560,48 +547,31 @@ const AddServiceClass: FC<AddCourseProps> = ({
         style: { marginBottom: 8, color: '#bbbbbb' },
       }
       : '',
-    PKType === false
-      ? {
-        type: 'select',
-        label: '指定行政班',
-        name: 'BJIds',
-        key: 'BJIds',
-        placeholder: '请选择适用行政班',
-        rules: [{ required: !PKType, message: '请选择适用行政班' }],
-        fieldProps: {
-          options: classData?.map((item: any) => {
-            return {
-              value: item.id,
-              label: `${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`,
-            };
-          }),
-        },
-      }
-      : {
-        type: 'reactnode',
-        label: '指定行政班：',
-        name: 'BJIds',
-        key: 'BJIds',
-        rules: [{ required: true, message: '请选择适用行政班' }],
-        children: (
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: '100%' }}
-            placeholder="请选择适用行政班"
-            defaultValue={formValues?.BJIds}
-          // onChange={handleChange}
-          >
-            {classData?.map((item: any) => {
-              return (
-                <Option
-                  value={item.id}
-                >{`${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`}</Option>
-              );
-            })}
-          </Select>
-        ),
-      },
+    {
+      type: 'reactnode',
+      label: '指定行政班：',
+      name: 'BJIds',
+      key: 'BJIds',
+      rules: [{ required: true, message: '请选择适用行政班' }],
+      children: (
+        <Select
+          mode="multiple"
+          allowClear
+          style={{ width: '100%' }}
+          placeholder="请选择适用行政班"
+          defaultValue={formValues?.BJIds}
+        // onChange={handleChange}
+        >
+          {classData?.map((item: any) => {
+            return (
+              <Option
+                value={item.id}
+              >{`${item.NJSJ.XD}${item.NJSJ.NJMC}${item.BJ}`}</Option>
+            );
+          })}
+        </Select>
+      ),
+    },
     PKType === true
       ? {
         type: 'group',
