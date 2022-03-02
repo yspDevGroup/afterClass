@@ -42,6 +42,7 @@ import * as khkclx from './khkclx';
 import * as khkcpj from './khkcpj';
 import * as khkcsj from './khkcsj';
 import * as khkcsq from './khkcsq';
+import * as khktfc from './khktfc';
 import * as khpksj from './khpksj';
 import * as khtksj from './khtksj';
 import * as khxkjl from './khxkjl';
@@ -55,7 +56,6 @@ import * as khxxzzfw from './khxxzzfw';
 import * as khzzfw from './khzzfw';
 import * as njsj from './njsj';
 import * as pksj from './pksj';
-import * as khktfc from './khktfc';
 import * as redis from './redis';
 import * as reports from './reports';
 import * as sso from './sso';
@@ -72,15 +72,15 @@ import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
 import * as xsjtcy from './xsjtcy';
 import * as xsjzxx from './xsjzxx';
-import * as xxgg from './xxgg';
 import * as xsxxjl from './xsxxjl';
+import * as xxgg from './xxgg';
 import * as xxjbpz from './xxjbpz';
 import * as xxjbsj from './xxjbsj';
 import * as xxjtpz from './xxjtpz';
 import * as xxpz from './xxpz';
 import * as xxsjpz from './xxsjpz';
-import * as xxtzgg from './xxtzgg';
 import * as xxsppz from './xxsppz';
+import * as xxtzgg from './xxtzgg';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
@@ -124,6 +124,7 @@ export default {
   khkcpj,
   khkcsj,
   khkcsq,
+  khktfc,
   khpksj,
   khtksj,
   khxkjl,
@@ -137,7 +138,6 @@ export default {
   khzzfw,
   njsj,
   pksj,
-  khktfc,
   redis,
   reports,
   sso,
@@ -154,15 +154,15 @@ export default {
   xsjlsj,
   xsjtcy,
   xsjzxx,
-  xxgg,
   xsxxjl,
+  xxgg,
   xxjbpz,
   xxjbsj,
   xxjtpz,
   xxpz,
   xxsjpz,
-  xxtzgg,
   xxsppz,
+  xxtzgg,
   zxfa,
   zxsj,
 };

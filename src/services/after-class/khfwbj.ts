@@ -330,3 +330,20 @@ export async function getWBMXS(
     ...(options || {}),
   });
 }
+
+/** 清除课后服务班级相关信息 POST /khfwbj/clean */
+export async function cleanKHFWBJ(
+  body: {
+    KHFWBJIds?: string[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khfwbj/clean', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

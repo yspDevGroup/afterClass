@@ -197,18 +197,18 @@ const TeacherManagement = () => {
       <Spin spinning={state}>
         <ProTable<any>
           className={styles.pageContain}
-          title={() => (
-            <div style={{ color: '#4884ff' }}>
-              {/* <div>
-                未同步到本系统中的成员无法使用老师端，系统每天凌晨自动同步一次，如需手动更新，请点击【立即同步】按钮
-              </div> */}
-              {initialState?.buildOptions.authType === 'wechat' && (
-                <div>
-                  由于企业微信对用户敏感信息的限制，未激活的用户仅可显示部分信息，如需显示更多，可通知老师激活账号或使用本界面【导入】功能进行完善。
-                </div>
-              )}
-            </div>
-          )}
+          // title={() => (
+          //   <div style={{ color: '#4884ff' }}>
+          //     {/* <div>
+          //       未同步到本系统中的成员无法使用老师端，系统每天凌晨自动同步一次，如需手动更新，请点击【立即同步】按钮
+          //     </div> */}
+          //     {initialState?.buildOptions.authType === 'wechat' && (
+          //       <div>
+          //         由于企业微信对用户敏感信息的限制，未激活的用户仅可显示部分信息，如需显示更多，可通知老师激活账号或使用本界面【导入】功能进行完善。
+          //       </div>
+          //     )}
+          //   </div>
+          // )}
           columns={columns}
           actionRef={actionRef}
           search={false}
@@ -255,7 +255,7 @@ const TeacherManagement = () => {
             density: false,
             reload: false,
             search: {
-              placeholder: '教师名称/联系电话',
+              placeholder: '教师姓名/联系电话',
               allowClear: true,
             },
           }}

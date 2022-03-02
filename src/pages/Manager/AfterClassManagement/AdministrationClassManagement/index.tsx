@@ -12,7 +12,7 @@ import { getAllXQSJ } from '@/services/after-class/xqsj';
 import SearchLayout from '@/components/Search/Layout';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import ConfigureService from './ConfigureService';
-import { bulkEditKHFWBJZT, updateKHFWBJ } from '@/services/after-class/khfwbj';
+import { bulkEditKHFWBJZT, cleanKHFWBJ, updateKHFWBJ } from '@/services/after-class/khfwbj';
 import ClassSeviveDetail from './ClassSeviveDetail';
 import UpdateCourses from './UpdateCourses';
 import { QuestionCircleOutlined } from '@ant-design/icons';
@@ -129,6 +129,16 @@ const AdministrationClassManagement = () => {
       message.error(res.message);
     }
   };
+  //  清除配置
+  const onEliminate = async (id: string) => {
+    const res = await cleanKHFWBJ({ KHFWBJIds: [id] });
+    if (res.status === 'ok') {
+      message.success('清除成功');
+      actionRef.current?.reloadAndRest?.();
+    } else {
+      message.error(res.message);
+    }
+  };
 
   // 获取取消发布 发布按钮
   const getSetting = (record: any) => {
@@ -154,13 +164,13 @@ const AdministrationClassManagement = () => {
           okText="确定"
           cancelText="取消"
           placement="topLeft"
-          overlayClassName={ record?.xsfwbm_count === 0 ? styles?.Popups : styles?.Popup}
+          overlayClassName={record?.xsfwbm_count === 0 ? styles?.Popups : styles?.Popup}
         >
           <a
             type="link"
-            // onClick={() => {
-            //   onReleaseClick(record?.KHFWBJs[0]?.id, false);
-            // }}
+          // onClick={() => {
+          //   onReleaseClick(record?.KHFWBJs[0]?.id, false);
+          // }}
           >
             取消发布
           </a>
@@ -181,6 +191,34 @@ const AdministrationClassManagement = () => {
           XQSJId={campusId}
         />
       );
+    }
+    return '';
+  };
+  // 获取清除配置
+  const getEliminate = (record: any) => {
+    console.log(record, 'record--------')
+    if (record?.KHFWBJs?.length) {
+      if (record?.KHFWBJs[0]?.ZT === 0) {
+        return (
+          <Popconfirm
+            title='系统将清除本班级所有课后服务数据，包含但不限于服务内容、报名信息、付款记录等数据，确定清空吗？'
+            onConfirm={async () => {
+              onEliminate(record?.KHFWBJs[0]?.id);
+            }}
+            okText="确定"
+            cancelText="取消"
+            placement="topLeft"
+            overlayClassName={styles?.Eliminate}
+          >
+            <a
+              type="link"
+            >
+              清除配置
+            </a>
+          </Popconfirm>
+        );
+      }
+
     }
     return '';
   };
@@ -296,6 +334,7 @@ const AdministrationClassManagement = () => {
             )}
             {getSetting(record)}
             {getSelctCourse(record)}
+            {getEliminate(record)}
           </Space>
         );
       },
@@ -374,6 +413,30 @@ const AdministrationClassManagement = () => {
                   }}
                 >
                   取消发布
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={async () => {
+                    const list = selectedRows.filter((item: any) => {
+                      const { KHFWBJs } = item;
+                      return KHFWBJs?.length > 0 && KHFWBJs?.[0]?.ZT === 0;
+                    });
+                    const ids: any[] = [];
+                    list.forEach((value: any) => {
+                      ids.push(value?.KHFWBJs?.[0].id)
+                    })
+                    const res = await cleanKHFWBJ({ KHFWBJIds: ids });
+                    if (res?.status === 'ok') {
+                      message.success('批量清除成功');
+                      actionRef.current?.reloadAndRest?.();
+                      actionRef.current?.clearSelected?.();
+                    } else {
+                      message.error(res.message);
+                      actionRef.current?.clearSelected?.();
+                    }
+                  }}
+                >
+                  批量清除配置
                 </Button>
               </Space>
             );

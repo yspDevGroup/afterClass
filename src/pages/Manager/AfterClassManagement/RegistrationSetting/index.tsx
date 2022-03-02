@@ -85,7 +85,7 @@ const RegistrationSetting = () => {
     }
   };
 
-  //获取学年学期
+  // 获取学年学期
   const getXNXQ = async () => {
     const result = await queryXNXQList(currentUser?.xxId);
     if (result?.current) {
@@ -198,7 +198,7 @@ const RegistrationSetting = () => {
       let KSRQ = new Date(fwb.KSRQ);
       const JSRQ = new Date(fwb.JSRQ);
       while (KSRQ < JSRQ) {
-        const tempJSRQ = new Date(KSRQ.getFullYear(), KSRQ.getMonth() + 1, 0); //本月最后一天
+        const tempJSRQ = new Date(KSRQ.getFullYear(), KSRQ.getMonth() + 1, 0); // 本月最后一天
         arr.push({
           KSRQ: getTimeString(KSRQ),
           isEnable: 1,
@@ -217,7 +217,7 @@ const RegistrationSetting = () => {
         }
       }
       if (KSRQ.getMonth() === JSRQ.getMonth() && KSRQ < JSRQ) {
-        //月份相同，补充该月份的记录
+        // 月份相同，补充该月份的记录
         arr.push({
           KSRQ: getTimeString(KSRQ),
           type: 0,
@@ -381,7 +381,7 @@ const RegistrationSetting = () => {
         editable={{
           type: 'single',
           form: formRef,
-          editableKeys: editableKeys,
+          editableKeys,
           onSave: async (rowKey, data, row) => {
             console.log(rowKey, data, row);
             // await waitTime(2000);
@@ -438,9 +438,9 @@ const RegistrationSetting = () => {
   const getSetting = () => {
     if (JFLX === 0) {
       return getmonthSetting();
-    } else {
-      return getEditFromSetting();
     }
+      return getEditFromSetting();
+
   };
 
   const onPayClick = async (arr: any[], falg: boolean) => {
@@ -663,7 +663,7 @@ const RegistrationSetting = () => {
             <a
               key="editable"
               onClick={() => {
-                onPayClick([record], record?.isPay ? false : true);
+                onPayClick([record], !record?.isPay);
               }}
             >
               {record.isPay ? '关闭缴费' : '开启缴费'}
@@ -765,7 +765,7 @@ const RegistrationSetting = () => {
 
                   // }}>应用</Button>
                   <Tooltip
-                    title={(editDisable && '已有行政班配置了课后服务，报名模式不可更改') || false}
+                    title={(editDisable && '如需更改报名时间设置，需先在行政班管理界面清除所有行政班配置信息') || false}
                   >
                     <Button
                       type={editDisable ? 'ghost' : 'primary'}

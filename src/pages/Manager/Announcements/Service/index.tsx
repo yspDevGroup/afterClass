@@ -21,7 +21,12 @@ const ServiceSetting = () => {
 
   return (
     <PageContainer cls="serviceSetting">
-      <Tabs activeKey={keys}>
+      <Tabs
+        activeKey={keys}
+        onChange={(key) => {
+          setKeys(key)
+        }}
+      >
         <TabPane tab="课后服务协议" key="normal">
           <Detail type="normal" />
         </TabPane>
