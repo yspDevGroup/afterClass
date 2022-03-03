@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { useCallback, useEffect, useState } from 'react';
 import styles from './index.less';
 import type { FormInstance } from 'antd';
@@ -54,7 +55,7 @@ const SchoolEditor = (props: any) => {
     editForm?.submit();
   };
 
-  //获取区域内容
+  // 获取区域内容
   const getRegion = async (type: 'province' | 'city' | 'region', code: string) => {
     const response = await getAdministrative({
       type,
@@ -63,9 +64,9 @@ const SchoolEditor = (props: any) => {
     if (response?.status === 'ok') {
       console.log('response', response);
       return response?.data?.rows;
-    } else {
-      message.error(response.message);
     }
+      message.error(response.message);
+
     return [];
   };
 
@@ -113,7 +114,7 @@ const SchoolEditor = (props: any) => {
     history.go(-1);
   };
 
-  //城市
+  // 城市
   const handleChange = async (type: string, value: any) => {
     console.log('value', value);
 
@@ -173,22 +174,23 @@ const SchoolEditor = (props: any) => {
       if (XZQHM) {
         requestData1(XZQHM);
         requestData2(XZQHM);
+        setProvinceVal({
+          value: `${XZQHM?.substring(0, 2)}0000`,
+          label: XZQ?.split('/')[0],
+          key: `${XZQHM?.substring(0, 2)}0000`,
+        });
+        setCityVal({
+          value: `${XZQHM?.substring(0, 4)}00`,
+          label: XZQ?.split('/')[1],
+          key: `${XZQHM?.substring(0, 4)}00`,
+        });
+        setCountyVal({
+          value: XZQHM,
+          label: XZQ?.split('/')[2],
+          key: XZQHM,
+        });
       }
-      setProvinceVal({
-        value: `${XZQHM?.substring(0, 2)}0000`,
-        label: XZQ?.split('/')[0],
-        key: `${XZQHM?.substring(0, 2)}0000`,
-      });
-      setCityVal({
-        value: `${XZQHM?.substring(0, 4)}00`,
-        label: XZQ?.split('/')[1],
-        key: `${XZQHM?.substring(0, 4)}00`,
-      });
-      setCountyVal({
-        value: XZQHM,
-        label: XZQ?.split('/')[2],
-        key: XZQHM,
-      });
+
       setInfo({
         ...current,
         XD: XD ? XD.split(',') : undefined,
