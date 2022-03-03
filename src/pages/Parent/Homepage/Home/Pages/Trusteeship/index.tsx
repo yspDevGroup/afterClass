@@ -24,9 +24,12 @@ const Course = () => {
   const { TabPane } = Tabs;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { student } = currentUser || {};
   const [DataSource, setDataSource] = useState<any>();
   const [LBData, setLBData] = useState<any>([]);
 
+  const StorageNjId =
+    localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
   useEffect(() => {
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
@@ -34,6 +37,7 @@ const Course = () => {
         XXJBSJId: currentUser?.xxId,
         FWMC: '',
         FWZT: 1,
+        NJSJId:StorageNjId,
         page: 0,
         pageSize: 0,
       });
@@ -44,6 +48,7 @@ const Course = () => {
             XXJBSJId: currentUser?.xxId,
             XNXQId: res?.current?.id || '',
             FWZT: 1,
+            NJSJId: StorageNjId,
             KHZZFWId: result!.data!.rows![0].id,
           });
           if (resGetKHXXZZFW.status === 'ok') {
@@ -66,6 +71,7 @@ const Course = () => {
       const result = await getKHXXZZFW({
         XXJBSJId: currentUser?.xxId,
         XNXQId: res?.current?.id || '',
+        NJSJId: StorageNjId,
         FWZT: 1,
         KHZZFWId: key,
       });
