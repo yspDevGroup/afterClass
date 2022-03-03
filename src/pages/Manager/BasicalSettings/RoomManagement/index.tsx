@@ -81,8 +81,11 @@ const RoomManagement = () => {
     if (modalType === 'uphold') {
       return '场地类型维护';
     }
-    if (current) {
+    if (current && current?.type === 'add') {
       return '编辑场地信息';
+    }
+    if (current && current?.type === 'copy') {
+      return '复制场地信息';
     }
     return '新增场地信息';
   };
@@ -93,7 +96,8 @@ const RoomManagement = () => {
    */
   const handleOperation = (type: string, data?: RoomItem) => {
     if (data) {
-      setCurrent(data);
+      const list = { ...data, type };
+      setCurrent(list);
       setXQLabelItem({ label: data?.XQSJ?.XQMC, value: data?.XQSJ?.id });
     } else {
       setCurrent(undefined);
@@ -113,24 +117,25 @@ const RoomManagement = () => {
       const values = await form?.validateFields();
       const { id, ...rest } = values;
       // 更新或新增场地信息
-      const result = id
+      const result = id && current?.type === 'add'
         ? await updateFJSJ(
-            { id },
-            {
-              ...rest,
-              XQName: xQLabelItem?.label,
-              XQSJId: xQLabelItem.value,
-              XXJBSJId: currentUser?.xxId,
-            },
-          )
-        : await createFJSJ({
+          { id },
+          {
             ...rest,
             XQName: xQLabelItem?.label,
             XQSJId: xQLabelItem.value,
             XXJBSJId: currentUser?.xxId,
-          });
+          },
+        )
+        : await createFJSJ({
+          ...rest,
+          XQName: xQLabelItem?.label,
+          XQSJId: xQLabelItem.value,
+          XXJBSJId: currentUser?.xxId,
+        });
       if (result.status === 'ok') {
-        message.success(id ? '场地信息更新成功' : '场地信息新增成功');
+        // eslint-disable-next-line no-nested-ternary
+        message.success(id ? (current?.type === 'add' ? '场地信息更新成功' : '场地信息复制成功') : '场地信息新增成功');
         setModalVisible(false);
         actionRef.current?.reload();
       } else {
@@ -220,6 +225,8 @@ const RoomManagement = () => {
         <>
           <a onClick={() => handleOperation('add', record)}>编辑</a>
           <Divider type="vertical" />
+          <a onClick={() => handleOperation('copy', record)}>复制</a>
+          <Divider type="vertical" />
           <Popconfirm
             title="删除之后，数据不可恢复，确定要删除吗?"
             onConfirm={async () => {
@@ -284,7 +291,7 @@ const RoomManagement = () => {
         }
       }
     })();
-  }, [modalVisible,uploadVisible]);
+  }, [modalVisible, uploadVisible]);
 
   const UploadProps: any = {
     name: 'xlsx',
@@ -318,7 +325,6 @@ const RoomManagement = () => {
           actionRef?.current?.reload();
         } else {
           message.error(`${code.message}`);
-          console.log('event', event);
           event?.currentTarget?.onerror(code);
         }
       } else if (info.file.status === 'error') {
@@ -380,7 +386,7 @@ const RoomManagement = () => {
         headerTitle={
           <>
             <SearchLayout>
-            <div>
+              <div>
                 <label htmlFor="type">场地类型：</label>
                 <Select
                   allowClear
@@ -452,13 +458,13 @@ const RoomManagement = () => {
           modalType === 'uphold'
             ? null
             : [
-                <Button key="submit" type="primary" onClick={handleSubmit}>
-                  确定
-                </Button>,
-                <Button key="back" onClick={() => setModalVisible(false)}>
-                  取消
-                </Button>,
-              ]
+              <Button key="submit" type="primary" onClick={handleSubmit}>
+                确定
+              </Button>,
+              <Button key="back" onClick={() => setModalVisible(false)}>
+                取消
+              </Button>,
+            ]
         }
         style={{ maxHeight: '430px' }}
         centered

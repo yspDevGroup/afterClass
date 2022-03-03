@@ -94,6 +94,7 @@ type RoomItem = {
   XQSJ?: SchoolAreaType;
   BZXX?: string;
   XQName?: string;
+  type?: string;
 };
 
 // 微信部门的数据类型

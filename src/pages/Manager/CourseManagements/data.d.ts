@@ -29,6 +29,7 @@ export type classType = {
     XQ?: string;
   },
   KBYS?: string;
+  type?: string;
 };
 type kcshj = { id?: string; KCLX?: string };
 

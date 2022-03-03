@@ -35,14 +35,16 @@ const NewCourses = (props: PropsType) => {
   const [isTrue, setIsTrue] = useState(true);
   const actionRef = useRef<ActionType>();
 
-  const title = current ? '编辑课程' : '新增课程';
+  // eslint-disable-next-line no-nested-ternary
+  const title = current ? (current?.type === 'copy') ? '复制课程' : '编辑课程' : '新增课程';
   const values = () => {
     if (current) {
-      const { KHKCLX, KCZT, ...info } = current;
+      const { KHKCLX, KCZT, KCMC, type, ...info } = current;
       return {
+        ...info,
+        KCMC: type === 'copy' ? `${KCMC}-复制` : KCMC,
         KCZT: KCZT === '已取消' ? '待发布' : KCZT,
         KCLXId: KHKCLX?.id,
-        ...info,
       };
     }
     return {
@@ -85,7 +87,7 @@ const NewCourses = (props: PropsType) => {
         XXJBSJId: currentUser?.xxId,
         SSJGLX: '校内课程',
       };
-      if (current?.id) {
+      if (current?.id && current?.type === 'add') {
         const params = {
           id: current?.id,
         };
@@ -140,6 +142,7 @@ const NewCourses = (props: PropsType) => {
       fieldProps: {
         autocomplete: 'off',
       },
+
     },
     {
       type: 'select',

@@ -146,7 +146,7 @@ const CourseList = () => {
       setOpen(true);
     }
     if (data) {
-      const list = { ...data, njIds: data.NJSJs.map((item: any) => item.id) };
+      const list = { ...data, njIds: data.NJSJs.map((item: any) => item.id) ,type};
       setCurrent(list);
       if (data.SSJGLX === '机构课程') {
         const res = await getTeacherByClassId({
@@ -273,21 +273,8 @@ const CourseList = () => {
       <>
         {record.KCZT === 0 ? (
           <>
-            {/* <Popconfirm
-              title="课程发布后，可创建相应课程班，确定发布？"
-              onConfirm={async () => {
-                const res = await updateKHKCSJ({ id: record?.id }, { KCZT: 1 });
-                if (res.status === 'ok') {
-                  message.success('操作成功');
-                  getData();
-                } else {
-                  message.error(res.message || '操作失败');
-                }
-              }}
-            >
-              <a>发布</a>
-            </Popconfirm> */}
             <a onClick={() => handleOperation('add', record)}>编辑</a>
+            <a onClick={() => handleOperation('copy', record)}>复制</a>
             <Popconfirm
               title={`确定要删除 “${record?.KCMC}” 吗?`}
               onConfirm={async () => {

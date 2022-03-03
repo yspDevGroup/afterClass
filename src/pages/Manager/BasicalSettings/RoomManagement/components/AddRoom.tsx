@@ -166,11 +166,13 @@ const AddRoom = (props: PropsType) => {
           if (current) {
             console.log('current', current);
 
-            const { FJLX, XQSJ, XQName, ...info } = current;
+            const { FJLX, XQSJ, XQName, FJMC,FJBH, type, ...info } = current;
             return {
+              ...info,
+              FJMC: type === 'copy' ? `${FJMC}-复制` : FJMC,
+              FJBH: type === 'copy' ? `${FJBH}-复制` : FJBH,
               FJLXId: FJLX?.id,
               XQ: xQLabelItem?.value,
-              ...info,
             };
           }
           return undefined;
