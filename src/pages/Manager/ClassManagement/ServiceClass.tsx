@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useModel, history } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tooltip, Select, Divider, Tag } from 'antd';
+import { Button, Modal, Tooltip, Select, Divider, Tag, Space, message } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -9,7 +9,7 @@ import { theme } from '@/theme-default';
 import PromptInformation from '@/components/PromptInformation';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllCourses } from '@/services/after-class/khkcsj';
-import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { bulkUpdate, getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
 import { calcAllPeriod, getAllClassIds } from '@/services/after-class/kcbsksj';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import ActionBar from './components/ActionBar';
@@ -298,7 +298,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
     });
   };
   useEffect(() => {
-    if(kai !== true){
+    if (kai !== true) {
       (async () => {
         const resBM = await getAllXXSJPZ({
           XXJBSJId: currentUser?.xxId,
@@ -422,16 +422,16 @@ const ServiceClass = (props: { location: { state: any } }) => {
     {
       title: (
         <span>
-        授课安排&nbsp;
-        <Tooltip
-          overlayStyle={{ maxWidth: '30em' }}
-          title={
-            <>实授课时/应授课时</>
-          }
-        >
-          <QuestionCircleOutlined />
-        </Tooltip>
-      </span>
+          授课安排&nbsp;
+          <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title={
+              <>实授课时/应授课时</>
+            }
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
       ),
       dataIndex: 'SKXQ',
       key: 'SKXQ',
@@ -444,7 +444,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
               showModalSKXQ(record);
             }}
           >
-           {record?.ssks_count}/{record?.ysks_count}
+            {record?.ssks_count}/{record?.ysks_count}
           </a>
         );
       },
@@ -603,6 +603,48 @@ const ServiceClass = (props: { location: { state: any } }) => {
             </SearchLayout>
           </>
         }
+        rowSelection={{}}
+        tableAlertOptionRender={({ selectedRows }) => {
+          return (
+            <Button
+              type="primary"
+              onClick={async () => {
+                const list = selectedRows.filter((item: any) => {
+                  return item?.BJZT === '未开班' && item?.pk_count !== 0;
+                });
+                const ids: any[] = [];
+                list.forEach((value) => {
+                  ids.push(value?.id)
+                })
+                const res = await bulkUpdate({
+                  KHBJSJIds: ids,
+                  BJZT: '已开班'
+                })
+                if (res?.status === 'ok') {
+                  message.success('批量开启成功');
+                  actionRef.current?.reloadAndRest?.();
+                  actionRef.current?.clearSelected?.();
+                  getData();
+                } else {
+                  message.error(res.message);
+                  actionRef.current?.clearSelected?.();
+                }
+              }}
+            >
+              批量开启
+            </Button>
+          );
+        }}
+        tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+          <Space size={24}>
+            <span>
+              已选 {selectedRowKeys.length} 项
+              <a style={{ marginLeft: 8, width: '30px' }} onClick={onCleanSelected}>
+                取消选择
+              </a>
+            </span>
+          </Space>
+        )}
         toolBarRender={() => [
           <Button
             style={{ display: 'none' }}

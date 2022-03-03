@@ -616,3 +616,22 @@ export async function judgeClassConflict(
     ...(options || {}),
   });
 }
+
+/** 批量修改班级状态 POST /khbjsj/bulkUpdate */
+export async function bulkUpdate(
+  body: {
+    /** 课程班ID */
+    KHBJSJIds?: string[];
+    BJZT?: '未开班' | '已开班' | '已结课';
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/bulkUpdate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useModel, history } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tooltip, Select, Row, Col } from 'antd';
+import { Button, Modal, Tooltip, Select, Row, Col, Space, message } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -10,7 +10,7 @@ import PromptInformation from '@/components/PromptInformation';
 
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { bulkUpdate, getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
 
 import ActionBar from './components/ActionBar';
 
@@ -310,7 +310,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     });
   };
   useEffect(() => {
-    if(kai !== true){
+    if (kai !== true) {
       (async () => {
         const resBM = await getAllXXSJPZ({
           XXJBSJId: currentUser?.xxId,
@@ -564,6 +564,48 @@ const CourseManagement = (props: { location: { state: any } }) => {
         }}
         search={false}
         dataSource={dataSource}
+        rowSelection={{}}
+        tableAlertOptionRender={({ selectedRows }) => {
+          return (
+            <Button
+              type="primary"
+              onClick={async () => {
+                const list = selectedRows.filter((item: any) => {
+                  return item?.BJZT === '未开班' && item?.pk_count !== 0;
+                });
+                const ids: any[] = [];
+                list.forEach((value) => {
+                  ids.push(value?.id)
+                })
+                const res = await bulkUpdate({
+                  KHBJSJIds: ids,
+                  BJZT: '已开班'
+                })
+                if (res?.status === 'ok') {
+                  message.success('批量开班成功');
+                  actionRef.current?.reloadAndRest?.();
+                  actionRef.current?.clearSelected?.();
+                  getData();
+                } else {
+                  message.error(res.message);
+                  actionRef.current?.clearSelected?.();
+                }
+              }}
+            >
+              批量开班
+            </Button>
+          );
+        }}
+        tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+          <Space size={24}>
+            <span>
+              已选 {selectedRowKeys.length} 项
+              <a style={{ marginLeft: 8, width: '30px' }} onClick={onCleanSelected}>
+                取消选择
+              </a>
+            </span>
+          </Space>
+        )}
         headerTitle={
           <>
             <SearchLayout>

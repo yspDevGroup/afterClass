@@ -347,3 +347,22 @@ export async function cleanKHFWBJ(
     ...(options || {}),
   });
 }
+
+/** 批量修改服务班状态 POST /khfwbj/bulkUpdate */
+export async function bulkUpdate(
+  body: {
+    /** 服务班ID */
+    KHFWBJIds?: string[];
+    ZT?: 0 | 1;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khfwbj/bulkUpdate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
