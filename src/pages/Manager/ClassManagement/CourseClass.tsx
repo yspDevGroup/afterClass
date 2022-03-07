@@ -346,7 +346,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       dataIndex: 'KHKCSJ',
       key: 'KHKCSJ',
       align: 'center',
-      width: 150,
+      width: 90,
       ellipsis: true,
       render: (_: any, record: any) => {
         return record?.KHKCSJ?.SSJGLX;
@@ -412,7 +412,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
           <Tooltip
             overlayStyle={{ maxWidth: '30em' }}
             title={
-              <>实授课时/应授课时/总课时</>
+              <>实授课时/应授课时/已排课时</>
             }
           >
             <QuestionCircleOutlined />
@@ -465,7 +465,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       dataIndex: 'BJZT',
       key: 'BJZT',
       align: 'center',
-      width: 100,
+      width: 110,
       ellipsis: true,
       filters: true,
       onFilter: false,
@@ -493,7 +493,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       defaultSortOrder: 'descend',
       search: false,
       align: 'center',
-      width: 120,
+      width: 110,
       render: (text, record) => {
         return (
           <>

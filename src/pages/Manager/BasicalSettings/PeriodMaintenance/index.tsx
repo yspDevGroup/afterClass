@@ -36,7 +36,7 @@ const PeriodMaintenance = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const formRef = React.createRef<any>();
-  let requestType = ['1'];
+  let requestType = ['2'];
   let formatType = 'YYYY-MM-DD';
   if (currentStatus === 'education') {
     requestType = ['2'];

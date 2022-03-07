@@ -28,7 +28,7 @@ const ActionBar = (props: propstype) => {
 
   const shelf = (recorde: any) => {
     if (recorde.xs_count === 0) {
-      const res = updateKHBJSJ({ id: recorde.id }, { BJZT: '未开班' });
+      const res = updateKHBJSJ({ id: recorde.id }, { BJZT: '未开班', BMZT: 0 });
       new Promise((resolve) => {
         resolve(res);
       }).then(async (data: any) => {
@@ -94,7 +94,7 @@ const ActionBar = (props: propstype) => {
         MSG,
       });
       if (res.status === 'ok') {
-        const result = updateKHBJSJ({ id: record.id }, { BJZT: '未开班' });
+        const result = updateKHBJSJ({ id: record.id }, { BJZT: '未开班', BMZT: 0 });
         if ((await result).status === 'ok') {
           message.success('取消开班成功，课程费用已原路返还');
           getData();
@@ -208,7 +208,7 @@ const ActionBar = (props: propstype) => {
         <>
           {(record?.xs_count > 0 &&
             record?.xs_count < record?.BJRS) ||
-          (record.noPayXS_count > 0 && record?.noPayXS_count < record?.BJRS) ? (
+            (record.noPayXS_count > 0 && record?.noPayXS_count < record?.BJRS) ? (
             <>
               {' '}
               <a

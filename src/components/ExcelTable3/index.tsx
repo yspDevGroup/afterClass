@@ -163,6 +163,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, chosenData, We
     );
   }
 
+
   return (
     <Button
       type="text"
@@ -287,10 +288,12 @@ const Index: FC<IndexPropsType> = ({
 
     // 表头数据： 根据在表格上点击获取到的key值来获取此单元格的表头数据
     const colItem = columns[colKey] || {};
+    console.log(colItem,'colItem')
 
     // 一行的数据：根据在表格上点击获取到的key值来获取此单元格的行数据
     const rowData = newData[rowKey] || {};
 
+    console.log(rowData,'rowData')
     // 区分编辑还是新增
     const types = rowData[colItem.dataIndex]?.length === 0 ? '新增' : '编辑';
     // type === 'see'时 获取到点击单元格的数据
@@ -342,7 +345,9 @@ const Index: FC<IndexPropsType> = ({
       }
       setStateTableData(newData);
     }
+    console.log(chosenData,'chosenData')
 
+    console.log(TimeData,'TimeData')
 
     /* 获取时间段内属于星期一(*)的日期们
      * begin: 开始时间
@@ -431,6 +436,7 @@ const Index: FC<IndexPropsType> = ({
       }
 
     })
+    console.log(AllRQ,'AllRQ------')
 
     const pkDatas: any = [];
     if (rowData.room?.cla === '单周') {
@@ -462,6 +468,8 @@ const Index: FC<IndexPropsType> = ({
         })
       })
     }
+    console.log(singleArr,'singleArr')
+    console.log(doubleArr,'doubleArr')
     let selectList = {
       WEEKDAY: weekDay[colItem.dataIndex], // 周
       XXSJPZId: rowData.course?.hjId, // 时间ID
@@ -486,6 +494,7 @@ const Index: FC<IndexPropsType> = ({
         getSelectdata(selectdata);
       }
     }
+    console.log(pkDatas,'pkDatas')
 
     // 将表格的所有数据传输到父级的方法
     if (typeof onExcelTableClick === 'function') {
@@ -493,6 +502,7 @@ const Index: FC<IndexPropsType> = ({
     }
   };
   const datas = stateTableData ? [...stateTableData] : [...dataSource];
+
   return (
     <div className={`${styles.excelTable} ${className}`}>
       <table style={{ boxShadow: '0px 5px 6px rgba(136,136,136,0.2)', marginBottom: '10px' }}>
