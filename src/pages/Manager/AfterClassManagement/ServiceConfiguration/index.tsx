@@ -140,7 +140,7 @@ const ServiceConfiguration = () => {
       },
     },
     {
-      title: '已选课程班',
+      title: '课后课程数',
       dataIndex: 'KHBJSJs',
       key: 'KHBJSJs',
       align: 'center',

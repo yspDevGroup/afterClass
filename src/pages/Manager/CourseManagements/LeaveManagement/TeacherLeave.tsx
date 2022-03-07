@@ -261,9 +261,9 @@ const TeacherLeave: React.FC = () => {
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
             <div>
-              <label htmlFor="type">教师名称：</label>
+              <label htmlFor="type">教师姓名：</label>
               <Search
-                placeholder="教师名称"
+                placeholder="教师姓名"
                 allowClear
                 onSearch={(value: string) => {
                   setName(value);

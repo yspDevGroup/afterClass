@@ -115,7 +115,7 @@ const RoomManagement = () => {
   const handleSubmit = async () => {
     try {
       const values = await form?.validateFields();
-      const { id, ...rest } = values;
+      const { id, FJRS, ...rest } = values;
       // 更新或新增场地信息
       const result = id && current?.type === 'add'
         ? await updateFJSJ(
@@ -125,6 +125,7 @@ const RoomManagement = () => {
             XQName: xQLabelItem?.label,
             XQSJId: xQLabelItem.value,
             XXJBSJId: currentUser?.xxId,
+            FJRS: FJRS === '' ? 0 : FJRS
           },
         )
         : await createFJSJ({
@@ -132,6 +133,7 @@ const RoomManagement = () => {
           XQName: xQLabelItem?.label,
           XQSJId: xQLabelItem.value,
           XXJBSJId: currentUser?.xxId,
+          FJRS: FJRS === '' ? 0 : FJRS
         });
       if (result.status === 'ok') {
         // eslint-disable-next-line no-nested-ternary
@@ -207,6 +209,9 @@ const RoomManagement = () => {
       dataIndex: 'FJRS',
       align: 'center',
       width: 100,
+      render: (_, record) => {
+        return record?.FJRS === 0 ? '-' : record?.FJRS;
+      },
     },
     {
       title: '地址',

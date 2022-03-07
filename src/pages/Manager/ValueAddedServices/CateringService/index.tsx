@@ -131,7 +131,7 @@ const MutualEvaluation = () => {
       align: 'center',
     },
     {
-      title: '类别名称',
+      title: '服务类别',
       dataIndex: 'FWMC',
       key: 'FWMC',
       width: 100,
@@ -347,8 +347,8 @@ const MutualEvaluation = () => {
           headerTitle={
             <SearchLayout>
               <div>
-                <label htmlFor="kcname">类别名称：</label>
-                <Search placeholder="类别名称" allowClear onSearch={onSearch} />
+                <label htmlFor="kcname">服务类别：</label>
+                <Search placeholder="服务类别" allowClear onSearch={onSearch} />
               </div>
             </SearchLayout>
           }
@@ -384,10 +384,10 @@ const MutualEvaluation = () => {
             <Input disabled />
           </Form.Item>
           <Form.Item
-            label="类别名称"
+            label="服务类别"
             name="FWMC"
             key="FWMC"
-            rules={[{ required: true, message: '请输入类别名称' }]}
+            rules={[{ required: true, message: '请输入服务类别' }]}
           >
             <Input placeholder="请输入" />
           </Form.Item>

@@ -149,7 +149,7 @@ const OrderInquiry = (props: any) => {
       },
     },
     {
-      title: '服务类型',
+      title: '服务类别',
       dataIndex: 'KHZZFW',
       key: 'KHZZFW',
       align: 'center',

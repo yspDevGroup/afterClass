@@ -179,7 +179,7 @@ const StudentsLeave: React.FC = () => {
           <SearchLayout>
             <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
             <div>
-              <label htmlFor="type">学生名称：</label>
+              <label htmlFor="type">学生姓名：</label>
               <Search
                 placeholder="学生名称"
                 allowClear

@@ -129,7 +129,7 @@ const ServiceRefund = () => {
       width: 150,
     },
     {
-      title: '服务类型',
+      title: '服务类别',
       dataIndex: 'FWLX',
       key: 'FWLX',
       align: 'center',

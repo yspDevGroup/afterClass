@@ -105,7 +105,7 @@ const Adjustment = (props: { teacherData?: any }) => {
       fixed: 'left',
     },
     {
-      title: '申请教师',
+      title: '教师姓名',
       dataIndex: 'XSXM',
       key: 'XSXM',
       align: 'center',
@@ -273,7 +273,7 @@ const Adjustment = (props: { teacherData?: any }) => {
             <SearchLayout>
               <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={termChange} />
               <div>
-                <label htmlFor="status">调课教师：</label>
+                <label htmlFor="status">教师姓名：</label>
                 <Select
                   allowClear
                   showSearch
