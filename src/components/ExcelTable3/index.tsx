@@ -343,9 +343,6 @@ const Index: FC<IndexPropsType> = ({
       }
       setStateTableData(newData);
     }
-    console.log(chosenData,'chosenData')
-
-    console.log(TimeData,'TimeData')
 
     /* 获取时间段内属于星期一(*)的日期们
      * begin: 开始时间
@@ -412,40 +409,28 @@ const Index: FC<IndexPropsType> = ({
       const day = date.getDay() || 7;
       return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
     };
-    console.log(new Date(TimeData?.KSRQ),'new Date(TimeData?.KSRQ)')
     // getFirstDay(new Date(TimeData?.KSRQ)).getTime()
-    console.log(getFirstDay(new Date(TimeData?.KSRQ)).getTime(),'-----------------')
-    console.log(new Date(AllRQ[0]).getTime(),'new Date(AllRQ[0]).getTime()')
     const times = new Date(AllRQ[0]).getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
-    console.log(times,'times-------')
     // 获取生成日期的第一个是时段内的第几周，由此判断单双周
     const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
     const singleArr: any[] = []; // 单周
     const doubleArr: any[] = []; // 双周
-    console.log(zhoushu,'zhoushu-----')
     AllRQ.forEach((items: any, index: number) => {
-      if (zhoushu === 1) {
-        console.log('0000')
+      if (zhoushu % 2 === 1) {
         if (index % 2 === 0) {
-          console.log(1111)
           singleArr.push(items)
         } else {
-          console.log(2222)
           doubleArr.push(items)
         }
-      } else if (zhoushu === 2) {
-        console.log(33333)
+      } else if (zhoushu % 2 === 0) {
         if (index % 2 === 0) {
           doubleArr.push(items)
-          console.log(44444)
         } else {
-          console.log(5555)
           singleArr.push(items)
         }
       }
 
     })
-    console.log(AllRQ,'AllRQ------')
 
     const pkDatas: any = [];
     if (rowData.room?.cla === '单周') {
@@ -477,8 +462,6 @@ const Index: FC<IndexPropsType> = ({
         })
       })
     }
-    console.log(singleArr,'singleArr')
-    console.log(doubleArr,'doubleArr')
     let selectList = {
       WEEKDAY: weekDay[colItem.dataIndex], // 周
       XXSJPZId: rowData.course?.hjId, // 时间ID
@@ -503,7 +486,6 @@ const Index: FC<IndexPropsType> = ({
         getSelectdata(selectdata);
       }
     }
-    console.log(pkDatas,'pkDatas')
 
     // 将表格的所有数据传输到父级的方法
     if (typeof onExcelTableClick === 'function') {
