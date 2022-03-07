@@ -288,12 +288,10 @@ const Index: FC<IndexPropsType> = ({
 
     // 表头数据： 根据在表格上点击获取到的key值来获取此单元格的表头数据
     const colItem = columns[colKey] || {};
-    console.log(colItem,'colItem')
 
     // 一行的数据：根据在表格上点击获取到的key值来获取此单元格的行数据
     const rowData = newData[rowKey] || {};
 
-    console.log(rowData,'rowData')
     // 区分编辑还是新增
     const types = rowData[colItem.dataIndex]?.length === 0 ? '新增' : '编辑';
     // type === 'see'时 获取到点击单元格的数据
@@ -414,23 +412,34 @@ const Index: FC<IndexPropsType> = ({
       const day = date.getDay() || 7;
       return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
     };
-    getFirstDay(new Date(TimeData?.KSRQ)).getTime()
+    console.log(new Date(TimeData?.KSRQ),'new Date(TimeData?.KSRQ)')
+    // getFirstDay(new Date(TimeData?.KSRQ)).getTime()
+    console.log(getFirstDay(new Date(TimeData?.KSRQ)).getTime(),'-----------------')
+    console.log(new Date(AllRQ[0]).getTime(),'new Date(AllRQ[0]).getTime()')
     const times = new Date(AllRQ[0]).getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
+    console.log(times,'times-------')
     // 获取生成日期的第一个是时段内的第几周，由此判断单双周
     const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
     const singleArr: any[] = []; // 单周
     const doubleArr: any[] = []; // 双周
+    console.log(zhoushu,'zhoushu-----')
     AllRQ.forEach((items: any, index: number) => {
       if (zhoushu === 1) {
+        console.log('0000')
         if (index % 2 === 0) {
+          console.log(1111)
           singleArr.push(items)
         } else {
+          console.log(2222)
           doubleArr.push(items)
         }
       } else if (zhoushu === 2) {
+        console.log(33333)
         if (index % 2 === 0) {
           doubleArr.push(items)
+          console.log(44444)
         } else {
+          console.log(5555)
           singleArr.push(items)
         }
       }
