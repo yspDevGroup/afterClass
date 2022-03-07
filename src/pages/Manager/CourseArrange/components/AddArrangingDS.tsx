@@ -348,6 +348,8 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
     // setLoading(true);
+    console.log(value,'value--------')
+    console.log(pkData,'pkData')
     const newPkDatas: any[] = [];
     pkData.forEach((item: any) => {
       const newObj = {
@@ -358,16 +360,20 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       }
       newPkDatas.push(newObj);
     })
+    console.log(newPkDatas,'newPkDatas------')
     // 获取该课程班剩余可排课时
     const result = await classSchedule({
       id: Bj.KHBJSJId
     })
+    console.log(result,'result--------')
     if (result?.status === 'ok') {
       if (value?.Type === '新增') {
         if (result?.data?.ISFW === 1) {
           const datas = fn(result?.data?.KHPKSJs);
+          console.log(datas,'datas------')
           if (datas?.length < result?.data?.KSS) {
             const PkArr = JSON.parse(JSON.stringify(newPkDatas));
+            console.log(PkArr,'PkArr22222')
             result?.data?.KHPKSJs?.forEach((item: any) => {
               const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
               PkArr?.push({
@@ -386,6 +392,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                 value1.WEEKDAY = '0'
               }
             })
+            console.log(PkArr,'PkArr------')
             const res = await createKHPKSJ({
               bjIds: [value?.KHBJSJId],
               data: PkArr
