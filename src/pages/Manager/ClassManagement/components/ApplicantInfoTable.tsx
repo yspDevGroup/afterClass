@@ -121,23 +121,15 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
 
   // 报名时间是否在范围内
   const getISTimeRange = () => {
-    if (applicantData?.BMKSSJ && applicantData?.BMJSSJ) {
-      console.log(
-        'applicantData?.BMJSSJ',
-        moment(applicantData?.BMJSSJ, 'YYYY-MM-DD ').add(1, 'days').format('YYYY-MM-DD HH:mm:ss'),
-      );
-      const nowTime = moment().valueOf();
-      const beginTime = moment(applicantData?.BMKSSJ, 'YYYY-MM-DD').valueOf();
-      const endTime = moment(applicantData?.BMJSSJ, 'YYYY-MM-DD').add(1, 'days').valueOf();
-
-      if (nowTime >= beginTime && nowTime <= endTime) {
+    console.log(applicantData,'applicantData---------')
+    console.log(applicantData?.BMZT,'====')
+      if (applicantData?.BMZT === 1 ) {
+        console.log(1111)
         setTimeFalg(true);
       } else {
+        console.log(22222)
         setTimeFalg(false);
       }
-    } else {
-      setTimeFalg(false);
-    }
   };
   // 开课时间是否在范围内
   const getISKKTimeRange = () => {
@@ -565,6 +557,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     },
   };
 
+  console.log(timeFalg,'timeFalg------')
   return (
     <div className={styles.BMdiv}>
       <Modal
@@ -782,7 +775,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         }}
         headerTitle={`课程名称：${applicantData?.BJMC}`}
         toolBarRender={() => {
-          // 报名类型属于 免费 和先报名后缴费 并且 报名时间和报名结束时间BJZT: “'未开班','已开班','已结课' BMJSSJ: "2022-01-31 08:00:00" BMKSSJ: "2021-09-01 08:00:00"
+          // 报名类型属于 免费 和先报名后缴费 并且 报名时间和报名结束时间BJZT: “'未开班','已开班','已结课'
           if (applicantData?.BMLX === 1 && applicantData?.BJZT === '已开班') {
             return [
               <Button
@@ -819,7 +812,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           }
           if (applicantData.BJZT === '未开班') {
             return [<Button type="link">未开班, 不能报名</Button>];
-          } else if (!timeFalg) {
+          } if (!timeFalg) {
             return [<Button type="link">报名已结束</Button>];
           }
           return [];

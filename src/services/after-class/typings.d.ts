@@ -1734,6 +1734,8 @@ declare namespace API {
     ISQY?: number;
     /** 是否走班 */
     ISZB?: number;
+    /** 报名状态 */
+    BMZT?: number;
     /** 课后课程ID */
     KHKCSJId?: string;
     FJSJ?: { id?: string; FJBH?: string; FJMC?: string; FJLC?: string } | any;
@@ -1788,6 +1790,8 @@ declare namespace API {
     ISQY?: number;
     /** 是否走班 */
     ISZB?: number;
+    /** 报名状态 */
+    BMZT?: number;
     /** 试用年级 */
     NJIds?: string[];
     /** 适用行政班 */
@@ -1837,6 +1841,8 @@ declare namespace API {
     ISQY?: number;
     /** 是否走班 */
     ISZB?: number;
+    /** 报名状态 */
+    BMZT?: number;
     /** 试用年级 */
     NJIds?: string[];
     /** 课后课程ID */

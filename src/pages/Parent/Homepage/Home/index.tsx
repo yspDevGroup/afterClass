@@ -113,6 +113,7 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       if (StorageXSId) {
+
         const oriData = await ParentHomeData(
           'student',
           currentUser?.xxId,
@@ -121,6 +122,8 @@ const Home = () => {
           StorageBjId,
           StorageXQSJId,
         );
+
+
         const { data } = oriData;
         setTotalData(data);
       }
@@ -308,7 +311,7 @@ const Home = () => {
                           })}
                         </>
                       );
-                    } else if (value?.XSFWKHBJs) {
+                    } if (value?.XSFWKHBJs) {
                       return (
                         <div
                           className={styles.wrap}
@@ -367,7 +370,7 @@ const Home = () => {
             <></>
           )}
 
-          {/* 
+          {/*
           <div className={styles.enrollArea}>
             <EnrollClassTime type='student' xxId={currentUser.xxId} userId={StorageXSId} njId={StorageNjId} bjId={StorageBjId} XQSJId={StorageXQSJId} />
           </div>

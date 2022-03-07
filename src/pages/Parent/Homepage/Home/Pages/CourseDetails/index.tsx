@@ -40,7 +40,6 @@ const CourseDetails: React.FC = () => {
   const [KcDetail, setKcDetail] = useState<any>();
   const [orderInfo, setOrderInfo] = useState<any>();
   const [classDetail, setClassDetail] = useState<any>();
-  const [kaiguan, setKaiguan] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
@@ -48,7 +47,6 @@ const CourseDetails: React.FC = () => {
   const [JFData, setJFData] = useState([]);
   const [JFTotalost, setJFTotalost] = useState<number>(0);
   const [KHFUXY, setKHFUXY] = useState<any>();
-  const [ByTime, setByTime] = useState(false);
   const [BjDetails, setBjDetails] = useState<any>();
   const [KBClass, setKBClass] = useState<any>([]);
   const courseid = getQueryString('courseid');
@@ -59,10 +57,6 @@ const CourseDetails: React.FC = () => {
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KBClass;
     const current = detail[ind];
-    const enAble =
-      myDate >= new Date(moment(current.BMKSSJ).format('YYYY/MM/DD')) &&
-      myDate <= new Date(moment(current.BMJSSJ).format('YYYY/MM/DD'));
-    setByTime(enAble);
     setFY(current.FY);
     setBJ(current.id);
   };
@@ -95,7 +89,8 @@ const CourseDetails: React.FC = () => {
                   value.BJZT === '已开班' &&
                   value.BJLX === 1 &&
                   value.XQSJId === StorageXQSJId &&
-                  value?.ISFW === 0
+                  value?.ISFW === 0 &&
+                  value?.BMZT === 1
                 ) {
                   const newBjIds = value.BJSJs.filter((items: any) => {
                     return items.id === XSbjId;
@@ -108,16 +103,13 @@ const CourseDetails: React.FC = () => {
                   value.BJZT === '已开班' &&
                   value.BJLX === 0 &&
                   value.XQSJId === StorageXQSJId &&
-                  value?.ISFW === 0
+                  value?.ISFW === 0 &&
+                  value?.BMZT === 1
                 );
               });
               setKBClass(newArr);
               setKcDetail(results.data);
               changeStatus(0, newArr);
-              const kcstart = moment(results.data.BMKSSJ).format('YYYY/MM/DD');
-              const kcend = moment(results.data.BMJSSJ).format('YYYY/MM/DD');
-              const btnEnable = myDate >= new Date(kcstart) && myDate <= new Date(kcend);
-              setKaiguan(btnEnable);
               const resgetKHBJSJ = await getKHBJSJ({ id: newArr?.[0].id });
               if (resgetKHBJSJ.status === 'ok') {
                 setBjDetails(resgetKHBJSJ.data);
@@ -328,6 +320,7 @@ const CourseDetails: React.FC = () => {
     }
   };
 
+  console.log(KBClass, 'KBClass')
   return (
     <div className={styles.CourseDetails}>
       {index === 'all' ? (
@@ -378,10 +371,6 @@ const CourseDetails: React.FC = () => {
               if (value?.BJZT === '已开班') {
                 return (
                   <Panel header={value?.BJMC} key={value?.id}>
-                    <p>
-                      报名时段：{moment(value.BMKSSJ).format('YYYY.MM.DD')}-
-                      {moment(value.BMJSSJ).format('YYYY.MM.DD')}
-                    </p>
                     <p>
                       上课时段：{moment(value.KKRQ).format('YYYY.MM.DD')}-
                       {moment(value.JKRQ).format('YYYY.MM.DD')}
@@ -491,13 +480,9 @@ const CourseDetails: React.FC = () => {
         )}
       </div>
       <div className={styles.footer}>
-        {kaiguan ? (
-          <button className={styles.btn} onClick={() => setstate(true)}>
-            立即报名
-          </button>
-        ) : (
-          <button className={styles.btnes}>课程不在报名时间范围内</button>
-        )}
+        <button className={styles.btn} onClick={() => setstate(true)}>
+          立即报名
+        </button>
       </div>
       {state === true ? (
         <div className={styles.payment} onClick={() => setstate(false)}>
@@ -514,8 +499,6 @@ const CourseDetails: React.FC = () => {
                       BJMC: string;
                       id: string;
                       FY: string;
-                      BMKSSJ: Date;
-                      BMJSSJ: Date;
                       BJRS: number;
                       KHXSBJs: any[];
                       BJZT: string;
@@ -525,28 +508,15 @@ const CourseDetails: React.FC = () => {
                     ind: number,
                   ) => {
                     const valueName = `${value.id}+${value.FY}`;
-                    const start = value.BMKSSJ ? value.BMKSSJ : KcDetail.BMKSSJ;
-                    const end = value.BMKSSJ ? value.BMJSSJ : KcDetail.BMJSSJ;
-                    const enAble =
-                      myDate >= new Date(moment(start).format('YYYY/MM/DD')) &&
-                      myDate <= new Date(moment(end).format('YYYY/MM/DD'));
                     if (value.BJZT === '已开班' && value?.ISFW === 0) {
                       return (
-                        // <Popconfirm
-                        //   overlayClassName={styles.confirmStyles}
-                        //   placement="bottom"
-                        //   title={text}
-                        //   defaultVisible={BJ === value.id}
-                        // >
                         <Radio.Button
                           value={valueName}
                           style={{ marginRight: '14px' }}
-                          disabled={!enAble}
                           onClick={() => butonclick(value, ind)}
                         >
                           {value.BJMC}
                         </Radio.Button>
-                        // </Popconfirm>
                       );
                     }
                     return '';
@@ -559,7 +529,7 @@ const CourseDetails: React.FC = () => {
                   <>
                     <span>免费</span>
                     <span style={{ color: '#666', marginLeft: 10 }}>
-                      余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额
+                      余{BjDetails?.BJRS - BjDetails?.KHXSBJs?.length}个名额
                     </span>
                   </>
                 ) : (
@@ -567,7 +537,7 @@ const CourseDetails: React.FC = () => {
                     <span style={{ fontWeight: 'bold', fontSize: '22px' }}>￥{FY}</span>
                     <span>/学期</span>
                     <span style={{ color: '#666', marginLeft: 10 }}>
-                      余{BjDetails.BJRS - BjDetails?.KHXSBJs?.length}个名额
+                      余{BjDetails?.BJRS - BjDetails?.KHXSBJs?.length}个名额
                     </span>
                   </>
                 )}
@@ -636,15 +606,9 @@ const CourseDetails: React.FC = () => {
               </Checkbox>
               <a onClick={showModal}>《缤纷课堂协议》</a>
             </div>
-            {ByTime === true ? (
-              <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
-                {JFTotalost! + Number(FY) <= 0 || BjDetails?.BMLX !== 1 ? '提交' : '提交并付款'}
-              </Button>
-            ) : (
-              <Button className={styles.submit} disabled={true} onClick={submit}>
-                {JFTotalost! + Number(FY) <= 0 || BjDetails?.BMLX !== 1 ? '提交' : '提交并付款'}
-              </Button>
-            )}
+            <Button className={styles.submit} disabled={!Xystate} onClick={submit}>
+              {JFTotalost! + Number(FY) <= 0 || BjDetails?.BMLX !== 1 ? '提交' : '提交并付款'}
+            </Button>
 
             <Link
               style={{ visibility: 'hidden' }}

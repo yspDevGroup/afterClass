@@ -206,8 +206,7 @@ const ActionBar = (props: propstype) => {
     case '已开班':
       return (
         <>
-          {(new Date(record?.BMJSSJ).getTime() >= new Date().getTime() &&
-            record?.xs_count > 0 &&
+          {(record?.xs_count > 0 &&
             record?.xs_count < record?.BJRS) ||
           (record.noPayXS_count > 0 && record?.noPayXS_count < record?.BJRS) ? (
             <>

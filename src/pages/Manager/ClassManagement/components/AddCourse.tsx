@@ -127,7 +127,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
         const resSJ = await getAllXXSJPZ({
           XNXQId: curXNXQId,
           XXJBSJId: currentUser?.xxId,
-          type: ['1', '2'],
+          type: ['2'],
         });
 
         if (resSJ.status === 'ok') {

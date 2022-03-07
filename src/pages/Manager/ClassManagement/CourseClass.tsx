@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useModel, history } from 'umi';
 import { useRef, useState, useEffect } from 'react';
-import { Button, Modal, Tooltip, Select, Row, Col, Space, message } from 'antd';
+import { Button, Modal, Tooltip, Select, Row, Col, Space, message, Switch } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -10,7 +10,7 @@ import PromptInformation from '@/components/PromptInformation';
 
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { bulkUpdate, getAllClasses, getKHBJSJ } from '@/services/after-class/khbjsj';
+import { bulkUpdate, getAllClasses, getKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 
 import ActionBar from './components/ActionBar';
 
@@ -71,8 +71,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
   // const [modalVisible, setModalVisible] = useState(false);
   // // 代报名中班级信息
   // const [BjDetails, setBjDetails] = useState<any>();
-  // 针对报名时段维护后的提示信息
-  const [BMJSSJTime, setBMJSSJTime] = useState<any>();
   // 代报名中教辅费用
   // const [JFAmount, setJFAmount] = useState<any>(0);
   // 班级状态
@@ -109,19 +107,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
       setDataSource(newTableDateSource);
     }
   };
-  // 获取学年学期信息，同时获取相关课程信息与年级信息
-  useEffect(() => {
-    (async () => {
-      const res = await getAllXXSJPZ({
-        XNXQId: curXNXQId,
-        XXJBSJId: currentUser?.xxId,
-        type: ['1'],
-      });
-      if (res.status === 'ok') {
-        setBMJSSJTime(moment(res.data?.[0]?.JSSJ).format('YYYY/MM/DD 23:59:59'));
-      }
-    })();
-  }, [curXNXQId]);
   useEffect(() => {
     async function fetchData() {
       const res = await queryXNXQList(currentUser?.xxId);
@@ -234,7 +219,6 @@ const CourseManagement = (props: { location: { state: any } }) => {
     const BmList = {
       BJIds: BJIdArr,
       XzClassMC: BJMCArr,
-      BMSD: [currentData.BMKSSJ, currentData.BMJSSJ],
       BJLX,
       BJRS,
     };
@@ -298,10 +282,10 @@ const CourseManagement = (props: { location: { state: any } }) => {
     }
   };
 
-  /** 未设置报名时段时弹窗 */
+  /** 未设置开课时段时弹窗 */
   const infos = () => {
     Modal.info({
-      title: '未设置报名时段或开课时段，请先进行时段维护',
+      title: '未设置开课时段，请先进行时段维护',
       width: '450px',
       okText: '去设置',
       onOk() {
@@ -312,16 +296,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
   useEffect(() => {
     if (kai !== true) {
       (async () => {
-        const resBM = await getAllXXSJPZ({
-          XXJBSJId: currentUser?.xxId,
-          type: ['1'],
-        });
         const resKK = await getAllXXSJPZ({
           XXJBSJId: currentUser?.xxId,
           type: ['2'],
         });
-        if (resBM.status === 'ok' && resKK.status === 'ok') {
-          if (resBM.data?.length === 0 || resKK.data?.length === 0) {
+        if (resKK.status === 'ok') {
+          if (resKK.data?.length === 0) {
             infos();
           }
         }
@@ -399,7 +379,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         return (
           <a onClick={() => showModal(record)}>
             <Tooltip
-              title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count || 0}人。`}
+              title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count + record?.noPayXS_count || 0}人。`}
             >
               {record?.xs_count + record?.noPayXS_count}/{record?.BJRS}
             </Tooltip>
@@ -458,7 +438,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     {
       title: (
         <span>
-          状态&nbsp;
+          班级状态&nbsp;
           <Tooltip
             overlayStyle={{ maxWidth: '30em' }}
             title={
@@ -493,16 +473,50 @@ const CourseManagement = (props: { location: { state: any } }) => {
         return (
           <>
             {record?.BJZT}
-            {new Date(record.BMJSSJ) > new Date(BMJSSJTime) ? (
-              <Tooltip
-                overlayStyle={{ maxWidth: '30em' }}
-                title={<>该课程班报名时段已超出总报名时段，家长、教育局端不可见，请调整</>}
-              >
-                <ExclamationCircleOutlined style={{ color: '#F04D4D', marginLeft: 4 }} />
-              </Tooltip>
-            ) : (
-              <></>
-            )}
+          </>
+        );
+      },
+    },
+    {
+      title: (
+        <span>
+          报名状态  <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title='开班后可设置报名状态'
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
+      dataIndex: 'BMZT',
+      key: 'BMZT',
+      defaultSortOrder: 'descend',
+      search: false,
+      align: 'center',
+      width: 120,
+      render: (text, record) => {
+        return (
+          <>
+            {
+              record?.BJZT === '已开班' ? <Switch
+                key="BMZT"
+                checked={record?.BMZT === 1}
+                size="small"
+                disabled={record?.BJZT !== '已开班'}
+                onChange={async (checked: boolean) => {
+                  const data = {
+                    BMZT: checked === true ? 1 : 0,
+                  };
+                  const res = await updateKHBJSJ({ id: record.id }, data);
+                  if (res.status === 'ok') {
+                    message.success(checked === true ? '开启成功' : '关闭成功');
+                    getData();
+                  } else {
+                    message.error('设置失败，请联系管理员或稍后再试。');
+                  }
+                }}
+              /> : <></>
+            }
           </>
         );
       },
@@ -515,30 +529,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
       width: 230,
       fixed: 'right',
       render: (_, record) => {
-        // const BMJSSJ = new Date(record?.BMJSSJ).getTime();
-        // const newDate = new Date().getTime();
         return (
           <>
             <ActionBar record={record} handleEdit={handleEdit} getData={getData} />
-            {/* <Divider type="vertical" /> */}
-            {/* {record?.BJZT === '已开班' && newDate <= BMJSSJ ? (
-              <a
-                onClick={() => {
-                  showModalBM(record);
-                }}
-              >
-                代报名
-              </a>
-            ) : (
-              <></>
-            )}
-            {record?.BJZT === '已开班' && newDate > BMJSSJ ? (
-              <Tooltip title="该班级已开班，无法报名">
-                <span style={{ color: '#999' }}>代报名</span>
-              </Tooltip>
-            ) : (
-              <></>
-            )} */}
           </>
         );
       },
@@ -567,33 +560,94 @@ const CourseManagement = (props: { location: { state: any } }) => {
         rowSelection={{}}
         tableAlertOptionRender={({ selectedRows }) => {
           return (
-            <Button
-              type="primary"
-              onClick={async () => {
-                const list = selectedRows.filter((item: any) => {
-                  return item?.BJZT === '未开班' && item?.pk_count !== 0;
-                });
-                const ids: any[] = [];
-                list.forEach((value) => {
-                  ids.push(value?.id)
-                })
-                const res = await bulkUpdate({
-                  KHBJSJIds: ids,
-                  BJZT: '已开班'
-                })
-                if (res?.status === 'ok') {
-                  message.success('批量开班成功');
-                  actionRef.current?.reloadAndRest?.();
-                  actionRef.current?.clearSelected?.();
-                  getData();
-                } else {
-                  message.error(res.message);
-                  actionRef.current?.clearSelected?.();
-                }
-              }}
-            >
-              批量开班
-            </Button>
+            <>
+              <Tooltip title="只能对未开班并且拍过的班级开班">
+                <Button
+                  type="primary"
+                  onClick={async () => {
+                    const list = selectedRows.filter((item: any) => {
+                      return item?.BJZT === '未开班' && item?.pk_count !== 0;
+                    });
+                    const ids: any[] = [];
+                    list.forEach((value) => {
+                      ids.push(value?.id)
+                    })
+                    const res = await bulkUpdate({
+                      KHBJSJIds: ids,
+                      BJZT: '已开班'
+                    })
+                    if (res?.status === 'ok') {
+                      message.success('批量开班成功');
+                      actionRef.current?.reloadAndRest?.();
+                      actionRef.current?.clearSelected?.();
+                      getData();
+                    } else {
+                      message.error(res.message);
+                      actionRef.current?.clearSelected?.();
+                    }
+                  }}
+                >
+                  批量开班
+                </Button>
+              </Tooltip>
+
+              <Button
+                style={{ marginLeft: 10 }}
+                type="primary"
+                onClick={async () => {
+                  const list = selectedRows.filter((item: any) => {
+                    return item?.BJZT === '已开班' && item?.BMZT === 0;
+                  });
+                  const ids: any[] = [];
+                  list.forEach((value) => {
+                    ids.push(value?.id)
+                  })
+                  const res = await bulkUpdate({
+                    KHBJSJIds: ids,
+                    BMZT: 1
+                  })
+                  if (res?.status === 'ok') {
+                    message.success('批量开启报名成功');
+                    actionRef.current?.reloadAndRest?.();
+                    actionRef.current?.clearSelected?.();
+                    getData();
+                  } else {
+                    message.error(res.message);
+                    actionRef.current?.clearSelected?.();
+                  }
+                }}
+              >
+                批量开启报名
+              </Button>
+              <Button
+                style={{ marginLeft: 10 }}
+                type="primary"
+                onClick={async () => {
+                  const list = selectedRows.filter((item: any) => {
+                    return item?.BJZT === '已开班' && item?.BMZT === 1;
+                  });
+                  const ids: any[] = [];
+                  list.forEach((value) => {
+                    ids.push(value?.id)
+                  })
+                  const res = await bulkUpdate({
+                    KHBJSJIds: ids,
+                    BMZT: 0
+                  })
+                  if (res?.status === 'ok') {
+                    message.success('批量关闭报名成功');
+                    actionRef.current?.reloadAndRest?.();
+                    actionRef.current?.clearSelected?.();
+                    getData();
+                  } else {
+                    message.error(res.message);
+                    actionRef.current?.clearSelected?.();
+                  }
+                }}
+              >
+                批量关闭报名
+              </Button>
+            </>
           );
         }}
         tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (

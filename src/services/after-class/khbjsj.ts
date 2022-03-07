@@ -623,6 +623,7 @@ export async function bulkUpdate(
     /** 课程班ID */
     KHBJSJIds?: string[];
     BJZT?: '未开班' | '已开班' | '已结课';
+    BMZT?: 0 | 1;
   },
   options?: { [key: string]: any },
 ) {

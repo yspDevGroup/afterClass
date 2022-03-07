@@ -61,8 +61,6 @@ const ServiceClass = (props: { location: { state: any } }) => {
   // const [modalVisible, setModalVisible] = useState(false);
   // // 代报名中班级信息
   // const [BjDetails, setBjDetails] = useState<any>();
-  // 针对报名时段维护后的提示信息
-  const [BMJSSJTime, setBMJSSJTime] = useState<any>();
   // 代报名中教辅费用
   // const [JFAmount, setJFAmount] = useState<any>(0);
   // 班级状态
@@ -94,19 +92,6 @@ const ServiceClass = (props: { location: { state: any } }) => {
       setDataSource(newTableDateSource);
     }
   };
-  // 获取学年学期信息，同时获取相关课程信息与年级信息
-  useEffect(() => {
-    (async () => {
-      const res = await getAllXXSJPZ({
-        XNXQId: curXNXQId,
-        XXJBSJId: currentUser?.xxId,
-        type: ['1'],
-      });
-      if (res.status === 'ok') {
-        setBMJSSJTime(res.data?.[0]?.JSSJ);
-      }
-    })();
-  }, [curXNXQId]);
   useEffect(() => {
     async function fetchData() {
       const res = await queryXNXQList(currentUser?.xxId);
@@ -286,10 +271,10 @@ const ServiceClass = (props: { location: { state: any } }) => {
     }
   };
 
-  /** 未设置报名时段时弹窗 */
+  /** 未设置开课时段时弹窗 */
   const infos = () => {
     Modal.info({
-      title: '未设置报名时段或开课时段，请先进行时段维护',
+      title: '未设置开课时段，请先进行时段维护',
       width: '450px',
       okText: '去设置',
       onOk() {
@@ -300,16 +285,12 @@ const ServiceClass = (props: { location: { state: any } }) => {
   useEffect(() => {
     if (kai !== true) {
       (async () => {
-        const resBM = await getAllXXSJPZ({
-          XXJBSJId: currentUser?.xxId,
-          type: ['1'],
-        });
         const resKK = await getAllXXSJPZ({
           XXJBSJId: currentUser?.xxId,
           type: ['2'],
         });
-        if (resBM.status === 'ok' && resKK.status === 'ok') {
-          if (resBM.data?.length === 0 || resKK.data?.length === 0) {
+        if (resKK.status === 'ok') {
+          if (resKK.data?.length === 0) {
             infos();
           }
         }
@@ -469,16 +450,6 @@ const ServiceClass = (props: { location: { state: any } }) => {
         return (
           <>
             {record?.BJZT === '未开班' ? '已关闭' : '已开启'}
-            {new Date(record.BMJSSJ) > new Date(BMJSSJTime) ? (
-              <Tooltip
-                overlayStyle={{ maxWidth: '30em' }}
-                title={<>该课程班报名时段已超出总报名时段，家长、教育局端不可见，请调整</>}
-              >
-                <ExclamationCircleOutlined style={{ color: '#F04D4D', marginLeft: 4 }} />
-              </Tooltip>
-            ) : (
-              <></>
-            )}
           </>
         );
       },

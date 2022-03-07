@@ -122,9 +122,6 @@ const EnrollClassTime = (props: {
       return (
         <>
           <div className={styles.enrollText}>课后服务课程尚未开始！</div>
-          <div className={styles.enrollDate}>
-            课后服务课程将于{`${moment(resource?.bmkssj).format('YYYY.MM.DD')}`}开始报名！
-          </div>
         </>
       );
       break;
@@ -134,12 +131,6 @@ const EnrollClassTime = (props: {
           {type !== 'teacher' ? (
             <>
               <div className={styles.enrollText}>课后服务课程报名开始了！</div>
-              <div className={styles.enrollDate}>
-                报名时间：
-                {`${moment(resource?.bmkssj).format('YYYY.MM.DD')}—${moment(
-                  resource?.bmjssj,
-                ).format('YYYY.MM.DD')}`}
-              </div>
             </>
           ) : (
             <>
@@ -181,12 +172,6 @@ const EnrollClassTime = (props: {
                 <ListComp listData={datasourse} cls={styles.todayImg} />
               </div>
               <div className={styles.enrollText}>课后服务课程报名开始了！</div>
-              <div className={styles.enrollDate}>
-                报名时间：
-                {`${moment(resource?.bmkssj).format('YYYY.MM.DD')}—${moment(
-                  resource?.bmjssj,
-                ).format('YYYY.MM.DD')}`}
-              </div>
             </>
           ) : (
             <>

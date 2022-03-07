@@ -52,19 +52,6 @@ const EmptyArticle = () => {
         <>
           <div className={styles.opacity} style={{ backgroundImage: `url(${EmptyBGC})` }} />
           <p className={styles.titles}>课后服务报名暂未开始</p>
-          {Datas?.bmkssj && Datas?.bmjssj ? (
-            <div>
-              <p className={styles.titles} style={{ marginBottom: '5px' }}>
-                请在{' '}
-                <span>
-                  {Datas?.bmkssj}~{Datas?.bmjssj}
-                </span>
-              </p>
-              <p className={styles.titles}>前来报名</p>
-            </div>
-          ) : (
-            <></>
-          )}
         </>
       ) : (
         <div className={styles.notice}>

@@ -244,10 +244,6 @@ const PeriodMaintenance = () => {
               type: 'tab',
               items: [
                 {
-                  label: '报名时段维护',
-                  key: 'enroll',
-                },
-                {
                   label: '开课时段维护',
                   key: 'education',
                 },

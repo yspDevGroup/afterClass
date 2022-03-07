@@ -61,7 +61,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
   const [BJData, setBJData] = useState<any>();
   const [BMData, setBMData] = useState<any>();
   const [JFData, setJFData] = useState<any>();
-  const [baoming, setBaoming] = useState<boolean>(false);
   const [BMLX, setBMLX] = useState<boolean>(false);
   const [XQMC, setXQMC] = useState<string>();
   // 课程所有适用班级
@@ -79,8 +78,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
   const [SYNJ, setSYNJ] = useState<any>([]);
   // 校区
   const [campus, setCampus] = useState<any>([]);
-  // 报名时间
-  const [BMDate, setBMDate] = useState<any>();
   // 开课时间
   const [KKData, setKKData] = useState<any>();
   // 校区数据Id
@@ -123,21 +120,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
       if (formValues?.KHKCJCs?.length) {
         setChoosenJf(true);
         setDataSource(formValues?.KHKCJCs);
-      }
-      // const start =
-      const startTime1 = moment(BmLists?.BMSD[0], 'YYYY-MM-DD').valueOf();
-      const endTime1 = moment(BmLists?.BMSD[1], 'YYYY-MM-DD').valueOf();
-      const startTime2 = BMDate?.KSSJ
-        ? moment(BMDate?.KSSJ, 'YYYY-MM-DD').valueOf()
-        : new Date().getTime();
-      const endTime2 = BMDate?.JSSJ
-        ? moment(BMDate?.JSSJ, 'YYYY-MM-DD').valueOf()
-        : new Date().getTime();
-
-      if (startTime1 === startTime2 && endTime1 === endTime2) {
-        setBaoming(false);
-      } else {
-        setBaoming(true);
       }
       if (
         new Date(BjLists?.SKSD[0]).getTime() === new Date(KKData?.KSSJ || '').getTime() &&
@@ -215,15 +197,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         const resSJ = await getAllXXSJPZ({
           XNXQId: curXNXQId,
           XXJBSJId: currentUser?.xxId,
-          type: ['1', '2'],
+          type: [ '2'],
         });
 
         if (resSJ.status === 'ok') {
-          // 报名时间 [1]
-          const BM = resSJ.data?.find((item: any) => item.TYPE === '1');
           // 上课时间 [2]
           const KK = resSJ.data?.find((item: any) => item.TYPE === '2');
-          setBMDate(BM);
           setKKData(KK);
         }
       }
@@ -251,18 +230,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setBJData(newData);
       setBmCurrent(Current + 1);
     } else if (Current === 1) {
-      const start = values?.BMSD && values?.BMSD[0] !== undefined ? values?.BMSD[0] : BMDate?.KSSJ;
-      const end = values?.BMSD && values?.BMSD[1] !== undefined ? values?.BMSD[1] : BMDate?.JSSJ;
-      const startTime = `${start?.substring(0, 10)}T00:00:00.000Z`;
-      const endTime = `${end?.substring(0, 10)}T23:59:59.000Z`;
       const newData = {
         ...values,
         ...BJData,
         BJIds: xzb ? XzClass : [],
         XzClassMC: xzb ? XzClassMC : [],
         BJLX: xzb ? 1 : 0,
-        BMKSSJ: startTime,
-        BMJSSJ: endTime,
       };
 
       setBmCurrent(Current + 1);
@@ -454,7 +427,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setFJSJIds(undefined);
       setBMData({});
       setJFData({});
-      setBaoming(false);
       setChoosenJf(false);
       setXzb(false);
       setKaike(false);
@@ -902,55 +874,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
           message: '请填写正确的人数',
         },
       ],
-    },
-    BMDate?.id
-      ? {
-          type: 'divTab',
-          text: `(默认报名时间段)：${moment(BMDate?.KSSJ).format('YYYY-MM-DD')} — ${moment(
-            BMDate?.JSSJ,
-          ).format('YYYY-MM-DD')}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
-      : '',
-    {
-      type: 'div',
-      key: 'div',
-      label: `单独设置报名时段：`,
-      lineItem: [
-        {
-          type: 'switch',
-          fieldProps: {
-            onChange: (item: any) => {
-              if (item) {
-                return setBaoming(true);
-              }
-              // 将按钮关闭的时候 传成默认时间段
-              form.setFieldsValue({ BMSD: [BMData?.KSSJ, BMData?.JSSJ] });
-              return setBaoming(false);
-            },
-            checked: baoming,
-          },
-        },
-      ],
-    },
-    {
-      type: 'dateRange',
-      label: `报名时段:`,
-      name: 'BMSD',
-      key: 'BMSD',
-      width: '100%',
-      hidden: !baoming,
-      rules: [{ required: baoming, message: '请选择报名时段' }],
-      fieldProps: {
-        disabledDate: (current: any) => {
-          const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
-          return (
-            defaults < moment(BMDate?.KSSJ).format('YYYY-MM-DD 00:00:00') ||
-            defaults > moment(BMDate?.JSSJ).format('YYYY-MM-DD 23:59:59')
-          );
-        },
-      },
-    },
+    }
   ];
   const JFformItems: any[] = [
     {
@@ -1127,10 +1051,6 @@ const AddCourseClass: FC<AddCourseProps> = ({
               </p>
             )}
             <p className={styles.text}>课程班人数：{formValues?.BJRS}</p>
-            <p className={styles.text}>
-              报名时段：{moment(formValues?.BMKSSJ).format('YYYY-MM-DD')} ~{' '}
-              {moment(formValues?.BMJSSJ).format('YYYY-MM-DD')}
-            </p>
             <Divider orientation="left">缴费设置</Divider>
             <p className={styles.text}>
               缴费模式：
