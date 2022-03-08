@@ -312,6 +312,7 @@ export async function getOrders(
     XXJBSJId?: string;
     DDLX?: number;
     KCMC?: string;
+    NJSJId?: string;
     KHZZFWId?: string;
     KHXXZZFWId?: string;
     KHKCLXId?: string;
@@ -491,6 +492,7 @@ export async function getAllCoursesInfo(
 export async function getClassesByCourse(
   body: {
     XZQHM?: string;
+    isFW?: number;
     /** 课程ID */
     KHKCSJId?: string;
     /** 学校名称 */

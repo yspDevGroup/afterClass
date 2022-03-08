@@ -1,10 +1,10 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
-import { Button, message } from 'antd';
+import { Button, message, Spin } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
 import { useModel, Link } from 'umi';
 import { Select } from 'antd';
-import { getCourses, statisClasses, statisCourses } from '@/services/after-class/reports';
+import { exportStudentEnroll, getCourses, statisClasses, statisCourses } from '@/services/after-class/reports';
 import ProTable from '@ant-design/pro-table';
 import Style from './index.less';
 import type { TableItem } from './data';
@@ -19,6 +19,7 @@ import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import CourseSelect from '@/components/Search/CourseSelect';
 import { getSchoolCoursesTJ } from '@/services/after-class/khkcsj';
+import { DownloadOutlined } from '@ant-design/icons';
 
 type selectType = { label: string; value: string };
 
@@ -39,6 +40,7 @@ const AfterSchoolCourse: React.FC = () => {
   // 课程类型
   const [KCLXId, setKCLXId] = useState<string | undefined>();
   const [KCLXData, setKCLXData] = useState<selectType[] | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
   // table表格数据
   const columns: ProColumns<TableItem>[] = [
     {
@@ -228,8 +230,25 @@ const AfterSchoolCourse: React.FC = () => {
       message.success('刷新完成');
     }
   };
+
+  const onExportClick = () => {
+    setLoading(true);
+    (async () => {
+      const res = await exportStudentEnroll({
+        XNXQId: curXNXQId,
+      });
+      if (res.status === 'ok') {
+        window.location.href = res.data;
+        setLoading(false);
+      } else {
+        message.error(res.message);
+        setLoading(false);
+      }
+    })();
+  };
   return (
     // PageContainer组件是顶部的信息
+    <Spin spinning={loading}>
     <PageContainer>
       <div style={{ marginBottom: 24 }}>
         <SearchLayout>
@@ -362,6 +381,9 @@ const AfterSchoolCourse: React.FC = () => {
           <Button type="primary" onClick={submit}>
             刷新
           </Button>
+          <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+            导出
+          </Button>,
         </p>
         <ProTable
           columns={columns}
@@ -384,6 +406,7 @@ const AfterSchoolCourse: React.FC = () => {
       </div>
       {/* <Link to={{ pathname: '/afterSchoolCourse/detail',}}>详情</Link> */}
     </PageContainer>
+    </Spin>
   );
 };
 export default AfterSchoolCourse;

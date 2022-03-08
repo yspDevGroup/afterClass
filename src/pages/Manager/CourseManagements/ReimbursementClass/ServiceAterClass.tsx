@@ -160,17 +160,6 @@ const ServiceAterClass = () => {
       ),
     },
     {
-      title: '课后服务名称',
-      dataIndex: 'XSJBSJ',
-      key: 'XSJBSJ',
-      align: 'center',
-      width: 200,
-      ellipsis: true,
-      render: (_text: any, record: any) => {
-        return `${record?.XSFWBJ?.KHFWBJ?.FWMC}`;
-      },
-    },
-    {
       title: '行政班名称',
       dataIndex: 'XSJBSJ',
       key: 'XSJBSJ',
@@ -179,6 +168,17 @@ const ServiceAterClass = () => {
       ellipsis: true,
       render: (_text: any, record: any) => {
         return `${record?.XSFWBJ?.KHFWBJ?.BJSJ?.NJSJ?.NJMC}${record?.XSFWBJ?.KHFWBJ?.BJSJ?.BJ}`;
+      },
+    },
+    {
+      title: '课后服务名称',
+      dataIndex: 'XSJBSJ',
+      key: 'XSJBSJ',
+      align: 'center',
+      width: 200,
+      ellipsis: true,
+      render: (_text: any, record: any) => {
+        return `${record?.XSFWBJ?.KHFWBJ?.FWMC}`;
       },
     },
     {

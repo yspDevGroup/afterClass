@@ -53,6 +53,7 @@ export async function getClasses(
     KHBJSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    isFW?: number;
     /** 课后课程ID */
     KHKCSJId?: string;
     /** 页数 */
@@ -656,6 +657,32 @@ export async function exportStudentAttendanceDetailByDate(
 export async function recalculateKCTJInfo(options?: { [key: string]: any }) {
   return request<any>('/reports/recalculateKCTJInfo', {
     method: 'POST',
+    ...(options || {}),
+  });
+}
+
+/** 重新统计班级报表基本信息 POST /reports/recalculateBJTJInfo */
+export async function recalculateBJTJInfo(options?: { [key: string]: any }) {
+  return request<any>('/reports/recalculateBJTJInfo', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}
+
+/** 导出学生报名总览表 POST /reports/exportStudentEnroll */
+export async function exportStudentEnroll(
+  body: {
+    /** 学年学期ID */
+    XNXQId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/reports/exportStudentEnroll', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }

@@ -276,16 +276,20 @@ const AdministrationClassManagement = () => {
       align: 'center',
       width: 150,
       render: (_, record) => {
-        return (
-          <Link
-            key="details"
-            to={{
-              pathname: '/afterClassManagement/class_management/detail',
-              state: record,
-            }}
-          >
-            {record?.xsfwbm_count}
-          </Link>
+        return (<>
+          {
+            record?.KHFWBJs?.length === 0 || record?.KHFWBJs?.[0]?.ZT === 0 ?
+              <>{record?.xsfwbm_count}</> : <Link
+                key="details"
+                to={{
+                  pathname: '/afterClassManagement/class_management/detail',
+                  state: record,
+                }}
+              >
+                {record?.xsfwbm_count}
+              </Link>
+          }
+        </>
         );
       },
     },
