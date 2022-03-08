@@ -10,7 +10,7 @@ import { getEnrolled, getKHBJSJ, getSerEnrolled } from '@/services/after-class/k
 import { createKHJSCQ, getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { getAllKHXSQJ } from '@/services/after-class/khxsqj';
 import { createKHXSCQ, getAllKHXSCQ, getArrangement } from '@/services/after-class/khxscq';
-
+import GroupT from '@/assets/GroupT.png';
 import { theme } from '@/theme-default';
 import styles from './index.less';
 import ShowName from '@/components/ShowName';
@@ -86,21 +86,37 @@ const CallTheRoll = (props: any) => {
   const nowDate = new Date();
   const { bjId, jcId, date } = props.location.state;
   const pkDate = date?.replace(/\//g, '-'); // 日期
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+
 
   const showConfirm = (tm?: boolean, title?: string, content?: string) => {
     let secondsToGo = 3;
     const modal = Modal.success({
       className: styles.modalRoll,
       centered: true,
-      title: tm ? '签到成功' : title,
-      content: tm ? ` ${secondsToGo} 秒之后可以开始点名` : content,
+      // title: tm ? '签到成功' : title,
+      // content: tm ? ` ${secondsToGo} 秒之后可以开始点名` : content,
+      content: (
+        <div>
+          <img src={GroupT} alt="" />
+          <h3>{tm ? '签到成功' : title}</h3>
+          <p>{tm ? ` ${secondsToGo} 秒之后可以开始点名` : content}</p>
+        </div>
+      ),
     });
     if (tm) {
       const timer = setInterval(() => {
         secondsToGo -= 1;
         modal.update({
           className: styles.modalRoll,
-          content: `${secondsToGo} 秒之后可以开始点名`,
+          content: (
+            <div>
+              <img src={GroupT} alt="" />
+              <h3>{tm ? '签到成功' : title}</h3>
+              <p>{tm ? ` ${secondsToGo} 秒之后可以开始点名` : content}</p>
+            </div>
+          ),
         });
       }, 1000);
       setTimeout(() => {
@@ -322,8 +338,8 @@ const CallTheRoll = (props: any) => {
     });
     const res = await createKHXSCQ(value);
     if (res.status === 'ok') {
-      message.success('点名成功');
-      history.push('/teacher/home?index=education');
+      setIsModalVisible(true)
+
     } else {
       enHenceMsg(res.message);
     }
@@ -456,6 +472,17 @@ const CallTheRoll = (props: any) => {
           {butDis === 'done' ? '已' : butDis === 'undone' ? '已默认' : '确认'}点名
         </Button>
       </div>
+      <Modal className={styles.SignIn} visible={isModalVisible} footer={null} closable={false}>
+        <img src={GroupT} alt="" />
+        <h3>点名成功</h3>
+        <Button
+          type="primary"
+          onClick={() => {
+            history.push('/teacher/home?index=education');
+          }}>
+          我知道了
+        </Button>
+      </Modal>
     </div>
   );
 };

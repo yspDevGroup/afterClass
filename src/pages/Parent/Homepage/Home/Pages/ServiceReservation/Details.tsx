@@ -17,12 +17,14 @@ import { Link, useModel, history } from 'umi';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
 import { signService } from '@/services/after-class/xsjbsj';
 import noOrder from '@/assets/noOrder.png';
+import GroupS from '@/assets/GroupS.png';
 
 const Details = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [Data, setData] = useState<any>();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [ModalVisible, setModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
   const [state, setstate] = useState(false);
   const [KHFUXY, setKHFUXY] = useState<any>([]);
@@ -107,8 +109,7 @@ const Details = () => {
         if (data.DDFY > 0) {
           setOrderInfo(res.data);
         } else {
-          message.success('报名成功');
-          history.push('/parent/home/serviceReservation');
+          setModalVisible(true)
         }
       } else {
         enHenceMsg(res.message);
@@ -121,8 +122,7 @@ const Details = () => {
         ZT: 0,
       });
       if (result.status === 'ok') {
-        message.success('报名成功');
-        history.push('/parent/home/serviceReservation');
+        setModalVisible(true)
       } else {
         enHenceMsg(result.message);
       }
@@ -232,6 +232,17 @@ const Details = () => {
             <p>暂无增值服务协议</p>
           </div>
         )}
+      </Modal>
+      <Modal className={styles.SignIn} visible={ModalVisible} footer={null} closable={false}>
+        <img src={GroupS} alt="" />
+        <h3>报名成功</h3>
+        <Button
+          type="primary"
+          onClick={() => {
+            history.push('/parent/home?index=index');
+          }}>
+          我知道了
+        </Button>
       </Modal>
     </div>
   );

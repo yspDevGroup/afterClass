@@ -20,6 +20,7 @@ import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { RightOutlined } from '@ant-design/icons';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import noOrder from '@/assets/noOrder.png';
+import GroupS from '@/assets/GroupS.png';
 
 const { Panel } = Collapse;
 
@@ -42,6 +43,7 @@ const CourseDetails: React.FC = () => {
   const [classDetail, setClassDetail] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [ModalVisible, setModalVisible] = useState(false);
   const [Xystate, setXystate] = useState(false);
   const [JFstate, setJFstate] = useState(false);
   const [JFData, setJFData] = useState([]);
@@ -237,12 +239,7 @@ const CourseDetails: React.FC = () => {
               StorageXQSJId,
               true,
             );
-            setTimeout(() => {
-              message.success('报名成功');
-            }, 500);
-            setTimeout(() => {
-              history.push('/parent/home?index=index&reload=true');
-            }, 1000);
+            setModalVisible(true);
           }
         } else {
           enHenceMsg(res.message);
@@ -270,12 +267,7 @@ const CourseDetails: React.FC = () => {
             StorageXQSJId,
             true,
           );
-          setTimeout(() => {
-            message.success('报名成功');
-          }, 500);
-          setTimeout(() => {
-            history.push('/parent/home?index=index&reload=true');
-          }, 1000);
+          setModalVisible(true);
         } else {
           enHenceMsg(result.message);
         }
@@ -656,6 +648,17 @@ const CourseDetails: React.FC = () => {
             <p>暂无缤纷课堂协议</p>
           </div>
         )}
+      </Modal>
+      <Modal className={styles.SignIn} visible={ModalVisible} footer={null} closable={false}>
+        <img src={GroupS} alt="" />
+        <h3>报名成功</h3>
+        <Button
+          type="primary"
+          onClick={() => {
+            history.push('/parent/home?index=index&reload=true');
+          }}>
+          我知道了
+        </Button>
       </Modal>
     </div>
   );

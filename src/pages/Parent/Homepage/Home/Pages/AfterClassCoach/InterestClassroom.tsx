@@ -7,7 +7,7 @@
  */
 
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { Checkbox, Divider, message, Modal, Radio, Tag } from 'antd';
+import { Button, Checkbox, Divider, message, Modal, Radio, Tag } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useModel, history, Link } from 'umi';
 import styles from './index.less';
@@ -18,6 +18,7 @@ import { enHenceMsg } from '@/utils/utils';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { chooseKCByXSId } from '@/services/after-class/khfwbj';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
+import GroupS from '@/assets/GroupS.png';
 import {
   getKHFWBJ,
   getStudentListByBjid,
@@ -49,6 +50,7 @@ const InterestClassroom = () => {
   const [XNXQ, setXNXQ] = useState<any>();
   const [MouthId, setMouthId] = useState();
   const [ModalVisible, setModalVisible] = useState(false);
+  const [IsModalVisible, setIsModalVisible] = useState(false);
   const [Times, setTimes] = useState<any[]>([]);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
   const [orderInfo, setOrderInfo] = useState<any>();
@@ -56,12 +58,12 @@ const InterestClassroom = () => {
   const [StudentFWBJId, setStudentFWBJId] = useState();
   const [KSRQ, setKSRQ] = useState();
   const [JSRQ, setJSRQ] = useState();
-  //付款状态
+  // 付款状态
   const [FKType, setFKType] = useState(true);
   const [XKType, setXKType] = useState(true);
-  //是否开启付款
+  // 是否开启付款
   const [PayType, setPayType] = useState(true);
-  //是否退课成功
+  // 是否退课成功
   const [DropOutType, setDropOutType] = useState(true);
   // 我要报名弹窗
   const [BmModalVisible, setBmModalVisible] = useState(false);
@@ -396,9 +398,8 @@ const InterestClassroom = () => {
       // } else if (different) {
       //   message.warning('学生信息查找失败，报名失败');
       // } else {
-      message.success('报名成功');
-      setBmModalVisible(false);
-      xuankeStates();
+      setIsModalVisible(true);
+
       // }
       // window.location.reload();
     } else {
@@ -932,14 +933,28 @@ const InterestClassroom = () => {
               JKRQ: '',
               fwdetail: {
                 ...FWKCData,
-                JSRQ: JSRQ,
-                KSRQ: KSRQ,
+                JSRQ,
+                KSRQ,
               },
               type: '服务班',
             },
           }}
         />
       </div>
+      <Modal className={styles.SignIn} visible={IsModalVisible} footer={null} closable={false}>
+        <img src={GroupS} alt="" />
+        <h3>报名成功</h3>
+        <Button
+          type="primary"
+          onClick={() => {
+            setBmModalVisible(false);
+            setIsModalVisible(false);
+            xuankeStates();
+            history.push('/parent/home/afterClassCoach/interestClassroom');
+          }}>
+          我知道了
+        </Button>
+      </Modal>
     </>
   );
 };

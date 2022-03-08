@@ -4,11 +4,12 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import { history, useModel } from 'umi';
 import index_header from '@/assets/index_header.png';
 import noCourses from '@/assets/noCourses.png';
-import { Checkbox, Divider, message, Modal, Tag } from 'antd';
+import { Button, Checkbox, Divider, message, Modal, Tag } from 'antd';
 import { getKHFWBJ, studentRegistration } from '@/services/after-class/khfwbj';
 import IconFont from '@/components/CustomIcon';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import moment from 'moment';
+import GroupS from '@/assets/GroupS.png';
 
 const EmptyArticle = (props: any) => {
   const { BJMC, ParentalIdentity } = props.location.state;
@@ -22,6 +23,7 @@ const EmptyArticle = (props: any) => {
     localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
   const [FWKCData, setFWKCData] = useState<any>();
   const [ModalVisible, setModalVisible] = useState(false);
+  const [IsModalVisible, setIsModalVisible] = useState(false);
   const [Times, setTimes] = useState<any[]>();
   const [FDBId, setFDBId] = useState<any[]>([]);
   // 课后服务协议
@@ -90,6 +92,7 @@ const EmptyArticle = (props: any) => {
       KHFWSJPZIds: Times || [],
     });
     if (res.status === 'ok') {
+      setIsModalVisible(true);
       // const repeat = res.data?.find((v: { flag: number }) => {
       //   return v.flag === 0;
       // });
@@ -106,8 +109,6 @@ const EmptyArticle = (props: any) => {
       // } else if (different) {
       //   message.warning('学生信息查找失败，报名失败');
       // } else {
-      message.success('报名成功');
-      history.push('/parent/home/afterClassCoach/interestClassroom');
       // }
     } else {
       message.error('操作失败，请联系管理员');
@@ -232,6 +233,18 @@ const EmptyArticle = (props: any) => {
             {tagChild}
           </div>
         </div>
+      </Modal>
+      <Modal className={styles.SignIn} visible={IsModalVisible} footer={null} closable={false}>
+        <img src={GroupS} alt="" />
+        <h3>报名成功</h3>
+        <Button
+          type="primary"
+          onClick={() => {
+            setIsModalVisible(false);
+            history.push('/parent/home/afterClassCoach/interestClassroom');
+          }}>
+          我知道了
+        </Button>
       </Modal>
     </div>
   );

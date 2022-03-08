@@ -156,7 +156,38 @@
 }
 
 .modalRoll {
+  top: calc(~'50vh - 120px');
+  width: 260px !important;
+  height: 240px;
+  text-align: center;
+  img {
+    width: 84px;
+    height: 84px;
+  }
+  h3 {
+    font-weight: bold;
+    line-height: 50px;
+  }
+  p {
+    color: #999999;
+    font-size: 14px;
+  }
   :global {
+    .ant-modal-content {
+      border-radius: 16px !important;
+      .ant-modal-body{
+        padding: 24px;
+      }
+    }
+    .ant-modal-confirm-btns {
+      display: none;
+    }
+    .ant-modal-confirm-body {
+      text-align: center;
+      >span{
+        display: none;
+      }
+    }
     .ant-modal-confirm {
       .ant-modal-content {
         min-width: auto !important;
@@ -165,7 +196,14 @@
           padding: 44px 32px 32px;
           text-align: center;
 
+          .ant-modal-confirm-body {
+            text-align: center;
+            > span {
+              display: none !important;
+            }
+          }
           .ant-modal-confirm-body > .anticon {
+            display: none;
             float: none;
             margin-right: 0;
             color: rgba(0, 102, 255);
@@ -200,5 +238,31 @@
         margin: 8px auto;
       }
     }
+  }
+}
+
+.SignIn {
+  top: calc(~'50vh - 120px');
+  width: 260px !important;
+  height: 250px;
+  text-align: center;
+  :global {
+    .ant-modal-content {
+      border-radius: 16px;
+    }
+  }
+  img {
+    width: 84px;
+    height: 84px;
+  }
+  h3 {
+    font-weight: bold;
+    line-height: 50px;
+  }
+  button {
+    width: 144px;
+    height: 38px;
+    background: #0066ff;
+    border-radius: 22px;
   }
 }
