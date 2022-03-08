@@ -409,8 +409,8 @@ const Index: FC<IndexPropsType> = ({
       const day = date.getDay() || 7;
       return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
     };
-    // getFirstDay(new Date(TimeData?.KSRQ)).getTime()
     const times = new Date(AllRQ[0]).getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
+
     // 获取生成日期的第一个是时段内的第几周，由此判断单双周
     const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
     const singleArr: any[] = []; // 单周
@@ -432,6 +432,14 @@ const Index: FC<IndexPropsType> = ({
 
     })
 
+    let DSTimes: any;
+    if (rowData?.room?.cla === '单周') {
+      DSTimes = new Date(singleArr[0]).getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
+    } else {
+      DSTimes = new Date(doubleArr[0]).getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
+    }
+    const DSzhoushu = Math.ceil(DSTimes / (7 * 24 * 60 * 60 * 1000));
+
     const pkDatas: any = [];
     if (rowData.room?.cla === '单周') {
       singleArr?.forEach((value: any, index: number) => {
@@ -439,7 +447,7 @@ const Index: FC<IndexPropsType> = ({
           WEEKDAY: weekDay[colItem.dataIndex], // 周
           XXSJPZId: rowData.course?.hjId, // 时间ID
           KHBJSJId: chosenData?.KHBJSJId, // 班级ID
-          PKBZ: zhoushu === 1 ? `第${(index + 1) + 1 * index}周` : `第${(index + 3) + 1 * index}周`, // 排课备注：第几周
+          PKBZ: DSzhoushu === 1 ? `第${(index + 1) + 1 * index}周` : `第${(index + 3) + 1 * index}周`, // 排课备注：第几周
           RQ: value,              // 日期
           PKTYPE: rowData.room?.cla === '单周' ? 2 : 3,
           XXSJPZ: {
@@ -453,7 +461,7 @@ const Index: FC<IndexPropsType> = ({
           WEEKDAY: weekDay[colItem.dataIndex], // 周
           XXSJPZId: rowData.course?.hjId, // 时间ID
           KHBJSJId: chosenData?.KHBJSJId, // 班级ID
-          PKBZ: `第${(index + 2) + 1 * index}周`, // 排课备注：第几周
+          PKBZ: DSzhoushu === 2 ? `第${(index + 2) + 1 * index}周` : `第${(index + 4) + 1 * index}周`, // 排课备注：第几周
           RQ: value,              // 日期
           PKTYPE: rowData.room?.cla === '单周' ? 2 : 3,
           XXSJPZ: {
