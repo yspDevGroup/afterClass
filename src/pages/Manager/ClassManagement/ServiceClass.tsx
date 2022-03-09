@@ -166,7 +166,6 @@ const ServiceClass = (props: { location: { state: any } }) => {
     const res = await getKHBJSJ({
       id: data?.id,
     });
-    console.log(res.data,'----------------------')
     const currentData = res.data;
     currentData.KHBJJs?.forEach((element: { JSLX: string; JZGJBSJId: any }) => {
       if (element.JSLX === '副教师') {
@@ -214,9 +213,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       BJIdArr.push(value.id);
       BJMCArr.push(`${value.NJSJ.XD}${value.NJSJ.NJMC}${value.BJ}`);
     });
-    if (currentData?.KHKCSJ?.KHKCLX?.KCTAG === '校内辅导') {
-      currentData.BJSJs = currentData.BJSJs?.[0];
-    }
+
     const list = {
       ...currentData,
       ZJS:
@@ -226,7 +223,6 @@ const ServiceClass = (props: { location: { state: any } }) => {
       KCLX: currentData.KHKCSJ.KHKCLX.KCTAG,
       KHKCSJId: KHKCSJ?.id,
     };
-    console.log(list,'list---')
     setVisible(true);
     setCurrent(list);
     if (type === 'copy') {

@@ -235,8 +235,10 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         });
       }
     } else {
+      console.log(formRef, 'formRef')
+      console.log(campusData, 'campusData--++++++++++++++++++++++++++---')
       if (campusData?.length) {
-        let id = campusData?.find((item: any) => item.label === '本校')?.value;
+        let id = campusData?.find((item: any) => item?.label === '本校')?.value;
         if (!id) {
           id = campusData[0].value;
         }
@@ -248,8 +250,14 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           XNXQId
         });
       }
+      formRef?.current?.setFieldsValue({
+        ZDKCS: 2,
+        XNXQId
+      });
     }
   };
+  console.log(formRef, 'formRef----------')
+  console.log(campusData, 'campusData----------')
   return (
     <>
       <ModalForm<{

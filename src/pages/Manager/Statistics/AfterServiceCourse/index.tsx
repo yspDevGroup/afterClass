@@ -1,8 +1,8 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
-import { Button, message, Tabs } from 'antd';
+import { Button, message, Spin, Tabs } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
-import { useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import { Select } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import Style from './index.less';
@@ -16,6 +16,7 @@ import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
 import {
+  exportServiceEnroll,
   getFWClasses,
   getFWTJByXZB,
   statisticalKHFWBJ,
@@ -25,6 +26,7 @@ import {
 import { getAllBJSJ } from '@/services/after-class/bjsj';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
+import { DownloadOutlined } from '@ant-design/icons';
 
 type selectType = { label: string; value: string };
 
@@ -59,6 +61,7 @@ const AfterSchoolCourse: React.FC = () => {
   const [NjData, setNjData] = useState<any>();
   const [BJId, setBJId] = useState<string | undefined>(undefined);
   const [bjData, setBJData] = useState<selectType[] | undefined>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getCampusData = async () => {
     const res = await getAllXQSJ({
@@ -273,12 +276,32 @@ const AfterSchoolCourse: React.FC = () => {
       width: 100,
       ellipsis: true,
     },
+    {
+      title: '操作',
+      valueType: 'option',
+      key: 'option',
+      align: 'center',
+      width: 100,
+      render: (_, record) => {
+        return (
+          <Link
+            key="details"
+            to={{
+              pathname: '/statistics/afterServiceCourse/details',
+              state: record,
+            }}
+          >
+            详情
+          </Link>
+        );
+      },
+    },
   ];
 
   const getData = async (nowKey?: string) => {
     const kclxItem = KCLXData?.find((item: any) => item.value === KCLXId)?.label;
     let res3;
-    const newKey = nowKey ? nowKey : key;
+    const newKey = nowKey || key;
     if (newKey === '1') {
       res3 = await getFWClasses({
         XNXQId: curXNXQId,
@@ -305,7 +328,7 @@ const AfterSchoolCourse: React.FC = () => {
     }
   };
   const getCollect = async (nowKey?: string) => {
-    const newKey = nowKey ? nowKey : key;
+    const newKey = nowKey || key;
     if (nowKey) {
       setCampusId(undefined);
       setNjId(undefined);
@@ -386,202 +409,195 @@ const AfterSchoolCourse: React.FC = () => {
       message.success('刷新完成');
     }
   };
+
+  const onExportClick = () => {
+    setLoading(true);
+    (async () => {
+      const res = await exportServiceEnroll({
+        XNXQId: curXNXQId,
+      });
+      if (res.status === 'ok') {
+        window.location.href = res.data;
+        setLoading(false);
+      } else {
+        message.error(res.message);
+        setLoading(false);
+      }
+    })();
+  };
   return (
     // PageContainer组件是顶部的信息
-    <PageContainer>
-      <div className={Style.TopCards}>
-        <div>
+    <Spin spinning={loading}>
+      <PageContainer>
+        <div className={Style.TopCards}>
           <div>
-            <span>
-              <img src={classImg} />
-            </span>
             <div>
-              <h3>{collectData?.count || 0}</h3>
-              <p>行政班数</p>
+              <span>
+                <img src={classImg} />
+              </span>
+              <div>
+                <h3>{collectData?.count || 0}</h3>
+                <p>行政班数</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <span>
+                <img src={personImg} />
+              </span>
+              <div>
+                <h3>{collectData?.bmrs_count || 0}</h3>
+                <p>报名累计人次</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <span>
+                <img src={personImg} />
+              </span>
+              <div>
+                <h3>{collectData?.tkrs_count || 0}</h3>
+                <p>退课累计人次</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <span>
+                <img src={amountImg} />
+              </span>
+              <div>
+                <h3>{collectData?.skje_count ? Number(collectData?.skje_count).toFixed(2) : 0}</h3>
+                <p>收款累计金额</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <span>
+                <img src={refundImg} />
+              </span>
+              <div>
+                <h3>{collectData?.tkje_count ? Number(collectData?.tkje_count).toFixed(2) : 0}</h3>
+                <p>退款累计金额</p>
+              </div>
             </div>
           </div>
         </div>
-        <div>
-          <div>
-            <span>
-              <img src={personImg} />
-            </span>
-            <div>
-              <h3>{collectData?.bmrs_count || 0}</h3>
-              <p>报名累计人次</p>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div>
-            <span>
-              <img src={personImg} />
-            </span>
-            <div>
-              <h3>{collectData?.tkrs_count || 0}</h3>
-              <p>退课累计人次</p>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div>
-            <span>
-              <img src={amountImg} />
-            </span>
-            <div>
-              <h3>{collectData?.skje_count ? Number(collectData?.skje_count).toFixed(2) : 0}</h3>
-              <p>收款累计金额</p>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div>
-            <span>
-              <img src={refundImg} />
-            </span>
-            <div>
-              <h3>{collectData?.tkje_count ? Number(collectData?.tkje_count).toFixed(2) : 0}</h3>
-              <p>退款累计金额</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={Style.AfterSchoolCourse}>
-        <p className={Style.title}>
-          <span>系统每天凌晨自动更新一次，如需立即更新，请点击【刷新】按钮</span>
-          <Button type="primary" onClick={submit}>
-            刷新
-          </Button>
-        </p>
-        <Tabs
-          onChange={(value) => {
-            setKey(value);
-            getData(value);
-            getCollect(value);
-          }}
-          defaultActiveKey={key}
-        >
-          <TabPane tab="按课程班统计" key="1">
-            <ProTable
-              columns={columns}
-              dataSource={dataSource}
-              rowKey="id"
-              search={false}
-              pagination={{
-                showQuickJumper: true,
-                pageSize: 10,
-                defaultCurrent: 1,
-              }}
-              headerTitle={
-                <SearchLayout>
-                  <SemesterSelect
-                    XXJBSJId={currentUser?.xxId}
-                    onChange={(value: string) => {
-                      // 选择不同学期从新更新页面的数据
-                      setCurXNXQId(value);
-                    }}
-                  />
-                  {/* <CourseSelect
-                    XXJBSJId={currentUser?.xxId}
-                    XNXQId={curXNXQId}
-                    onChange={(value, data) => {
-                      setKcmc(data?.children);
-                      setKcmcValue(value);
-                    }}
-                  />
-                  <div>
-                    <label htmlFor="school">课程类型：</label>
-                    <Select
-                      value={KCLXId}
-                      style={{ width: 160 }}
-                      placeholder="课程类型"
-                      allowClear
+        <div className={Style.AfterSchoolCourse}>
+          <p className={Style.title}>
+            <span>系统每天凌晨自动更新一次，如需立即更新，请点击【刷新】按钮</span>
+            <Button type="primary" onClick={submit}>
+              刷新
+            </Button>
+            <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
+              导出
+            </Button>
+          </p>
+          <Tabs
+            onChange={(value) => {
+              setKey(value);
+              getData(value);
+              getCollect(value);
+            }}
+            defaultActiveKey={key}
+          >
+            <TabPane tab="按课程班统计" key="1">
+              <ProTable
+                columns={columns}
+                dataSource={dataSource}
+                rowKey="id"
+                search={false}
+                pagination={{
+                  showQuickJumper: true,
+                  pageSize: 10,
+                  defaultCurrent: 1,
+                }}
+                headerTitle={
+                  <SearchLayout>
+                    <SemesterSelect
+                      XXJBSJId={currentUser?.xxId}
                       onChange={(value: string) => {
-                        setKCLXId(value);
+                        // 选择不同学期从新更新页面的数据
+                        setCurXNXQId(value);
                       }}
-                    >
-                      {KCLXData?.map((item: any) => {
-                        return (
-                          <Option key={item.value} value={item.value}>
-                            {item.label}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </div> */}
-                </SearchLayout>
-              }
-              scroll={{ x: getTableWidth(columns) }}
-              options={{
-                setting: false,
-                fullScreen: false,
-                density: false,
-                reload: false,
-              }}
-            />
-          </TabPane>
-          <TabPane tab="按行政班统计" key="2">
-            <ProTable
-              columns={classColumns}
-              dataSource={classSource}
-              rowKey="id"
-              search={false}
-              pagination={{
-                showQuickJumper: true,
-                pageSize: 10,
-                defaultCurrent: 1,
-              }}
-              headerTitle={
-                <SearchLayout>
-                  <SemesterSelect
-                    XXJBSJId={currentUser?.xxId}
-                    onChange={(value: string) => {
-                      // 选择不同学期从新更新页面的数据
-                      setClassXNXQId(value);
-                    }}
-                  />
-                  <div>
-                    <label htmlFor="grade">校区名称：</label>
-                    <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
-                      {campusData?.map((item: any) => {
-                        return <Option value={item.value}>{item.label}</Option>;
-                      })}
-                    </Select>
-                  </div>
-                  <div>
-                    <label htmlFor="grade">年级名称：</label>
-                    <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
-                      {NjData?.map((item: any) => {
-                        return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
-                      })}
-                    </Select>
-                  </div>
-                  <div>
-                    <label htmlFor="kcly">班级名称：</label>
-                    <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
-                      {bjData?.map((item: any) => {
-                        return (
-                          <Option value={item.value} key={item.value}>
-                            {item.label}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </div>
-                </SearchLayout>
-              }
-              scroll={{ x: getTableWidth(columns) }}
-              options={{
-                setting: false,
-                fullScreen: false,
-                density: false,
-                reload: false,
-              }}
-            />
-          </TabPane>
-        </Tabs>
-      </div>
-    </PageContainer>
+                    />
+                  </SearchLayout>
+                }
+                scroll={{ x: getTableWidth(columns) }}
+                options={{
+                  setting: false,
+                  fullScreen: false,
+                  density: false,
+                  reload: false,
+                }}
+              />
+            </TabPane>
+            <TabPane tab="按行政班统计" key="2">
+              <ProTable
+                columns={classColumns}
+                dataSource={classSource}
+                rowKey="id"
+                search={false}
+                pagination={{
+                  showQuickJumper: true,
+                  pageSize: 10,
+                  defaultCurrent: 1,
+                }}
+                headerTitle={
+                  <SearchLayout>
+                    <SemesterSelect
+                      XXJBSJId={currentUser?.xxId}
+                      onChange={(value: string) => {
+                        // 选择不同学期从新更新页面的数据
+                        setClassXNXQId(value);
+                      }}
+                    />
+                    <div>
+                      <label htmlFor="grade">校区名称：</label>
+                      <Select value={campusId} placeholder="请选择" onChange={onCampusChange}>
+                        {campusData?.map((item: any) => {
+                          return <Option value={item.value}>{item.label}</Option>;
+                        })}
+                      </Select>
+                    </div>
+                    <div>
+                      <label htmlFor="grade">年级名称：</label>
+                      <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>
+                        {NjData?.map((item: any) => {
+                          return <Option value={item.id}>{`${item.XD}${item.NJMC}`}</Option>;
+                        })}
+                      </Select>
+                    </div>
+                    <div>
+                      <label htmlFor="kcly">班级名称：</label>
+                      <Select value={BJId} allowClear placeholder="班级名称" onChange={onBjChange}>
+                        {bjData?.map((item: any) => {
+                          return (
+                            <Option value={item.value} key={item.value}>
+                              {item.label}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </div>
+                  </SearchLayout>
+                }
+                scroll={{ x: getTableWidth(columns) }}
+                options={{
+                  setting: false,
+                  fullScreen: false,
+                  density: false,
+                  reload: false,
+                }}
+              />
+            </TabPane>
+          </Tabs>
+        </div>
+      </PageContainer>
+    </Spin>
   );
 };
 export default AfterSchoolCourse;

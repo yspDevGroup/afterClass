@@ -419,10 +419,10 @@
       },
       {
         // 课后课程详情
-        path: '/statistics/afterServiceCourse/detail',
+        path: '/statistics/afterServiceCourse/details',
         hideInMenu: 'true',
         name: 'afterservicelclass',
-        component: './Manager/Statistics/AfterServiceCourse/Detail',
+        component: './Manager/Statistics/AfterServiceCourse/Details',
       },
       {
         // 考勤统计
