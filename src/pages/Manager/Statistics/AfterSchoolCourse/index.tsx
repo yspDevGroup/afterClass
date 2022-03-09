@@ -383,7 +383,7 @@ const AfterSchoolCourse: React.FC = () => {
           </Button>
           <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
             导出
-          </Button>,
+          </Button>
         </p>
         <ProTable
           columns={columns}

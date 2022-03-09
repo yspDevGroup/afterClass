@@ -65,7 +65,7 @@ const Details = (props: any) => {
           }
           return '´ıÑ¡¿Î';
         }
-        return '¡ª¡ª';
+        return '¡ª';
       },
     },
     {
@@ -86,7 +86,7 @@ const Details = (props: any) => {
           }
           return '´ıÑ¡¿Î';
         }
-        return '¡ª¡ª';
+        return '¡ª';
       },
     },
     {
