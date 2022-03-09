@@ -26,28 +26,28 @@ const Details = (props: any) => {
 
   const columns: ProColumns<any>[] = [
     {
-      title: 'ĞòºÅ',
+      title: 'åºå·',
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
       align: 'center',
     },
     {
-      title: 'Ñ§ºÅ',
+      title: 'å­¦å·',
       dataIndex: 'XH',
       key: 'XH',
       align: 'center',
       width: 180,
     },
     {
-      title: 'Ñ§ÉúĞÕÃû',
+      title: 'å­¦ç”Ÿå§“å',
       dataIndex: 'XM',
       key: 'XM',
       align: 'center',
       width: 120,
     },
     {
-      title: '¸¨µ¼°à',
+      title: 'è¾…å¯¼ç­',
       dataIndex: 'XSFWBJs',
       key: 'XSFWBJs',
       align: 'center',
@@ -63,13 +63,13 @@ const Details = (props: any) => {
           if (list) {
             return <EllipsisHint width="100%" text={list} />;
           }
-          return '´ıÑ¡¿Î';
+          return 'å¾…é€‰è¯¾';
         }
-        return '¡ª';
+        return 'â€”';
       },
     },
     {
-      title: '¿Î³Ì°à',
+      title: 'è¯¾ç¨‹ç­',
       dataIndex: 'XSFWBJs',
       key: 'XSFWBJs',
       align: 'center',
@@ -84,13 +84,13 @@ const Details = (props: any) => {
           if (list?.length) {
             return <EllipsisHint width="100%" text={list} />;
           }
-          return '´ıÑ¡¿Î';
+          return 'å¾…é€‰è¯¾';
         }
-        return '¡ª';
+        return 'â€”';
       },
     },
     {
-      title: '±¨Ãû×´Ì¬',
+      title: 'æŠ¥åçŠ¶æ€',
       dataIndex: 'XSFWBJs',
       key: 'XSFWBJs',
       align: 'center',
@@ -98,58 +98,53 @@ const Details = (props: any) => {
       render: (text: any) => {
         if (text?.length) {
           if (text?.[0]?.ZT === 2) {
-            return 'ÒÑÍË¿Î';
+            return 'å·²é€€è¯¾';
           }
           if (text?.[0]?.ZT === 1) {
-            return 'ÍË¿ÎÖĞ';
+            return 'é€€è¯¾ä¸­';
           }
-          return 'ÒÑ±¨Ãû';
+          return 'å·²æŠ¥å';
         }
-        return 'Î´±¨Ãû';
-
+        return 'æœªæŠ¥å';
       },
     },
   ];
   useEffect(() => {
-    (
-      async () => {
-        if (value?.BJSJ?.id) {
-          const res = await getKHFWBJ({
-            BJSJId: value?.BJSJ?.id,
-            XNXQId
-          })
-          if (res?.status === 'ok') {
-            setData(res?.data)
-            setSJId(res?.data?.KHFWSJPZs?.[0]?.id)
-          }
+    (async () => {
+      if (value?.BJSJ?.id) {
+        const res = await getKHFWBJ({
+          BJSJId: value?.BJSJ?.id,
+          XNXQId,
+        });
+        if (res?.status === 'ok') {
+          setData(res?.data);
+          setSJId(res?.data?.KHFWSJPZs?.[0]?.id);
         }
       }
-    )()
-  }, [])
+    })();
+  }, []);
   useEffect(() => {
     if (SJId) {
-      (
-        async () => {
-          const result = await getStudentListByBjid({
-            BJSJId: value?.BJSJ?.id,
-            KHFWSJPZId: SJId,
-            XSXMORXH: "",
-            ZT: [0, 3],
-            page: 0,
-            pageSize: 0,
-          })
-          if (result?.status === 'ok') {
-            setDataSource(result?.data?.rows)
-          }
-          console.log(result, 'result-----')
+      (async () => {
+        const result = await getStudentListByBjid({
+          BJSJId: value?.BJSJ?.id,
+          KHFWSJPZId: SJId,
+          XSXMORXH: '',
+          ZT: [0, 3],
+          page: 0,
+          pageSize: 0,
+        });
+        if (result?.status === 'ok') {
+          setDataSource(result?.data?.rows);
         }
-      )()
+        console.log(result, 'result-----');
+      })();
     }
-  }, [SJId])
+  }, [SJId]);
 
   const callback = (key: any) => {
     setSJId(key);
-  }
+  };
 
   const onExportClick = () => {
     setLoading(true);
@@ -157,7 +152,7 @@ const Details = (props: any) => {
       const res = await exportServiceEnroll({
         XNXQId,
         BJSJId: value?.BJSJ?.id,
-        KHFWSJPZIds: SJPZIds
+        KHFWSJPZIds: SJPZIds,
       });
       if (res.status === 'ok') {
         window.location.href = res.data;
@@ -168,104 +163,129 @@ const Details = (props: any) => {
       }
     })();
   };
-  return <div className={styles.Details}>
-    <PageContain>
-      <Button
-        type="primary"
-        onClick={() => {
-          history.go(-1);
-        }}
-        style={{
-          marginBottom: '24px',
-        }}
-      >
-        <LeftOutlined />
-        ·µ»ØÉÏÒ»Ò³
-      </Button>
-      <span style={{ fontSize: '18px', marginLeft: '24px', fontWeight: 'bold' }}>
-        {`${value?.BJSJ?.NJSJ?.XD}${value?.BJSJ?.NJSJ?.NJMC}${value?.BJSJ?.BJ}`}
-      </span>
-      <p className={styles.title}>
-        <Button icon={<DownloadOutlined />} type="primary" onClick={() => {
-          setIsModalVisible(true);
-        }}>
-          µ¼³ö
+  return (
+    <div className={styles.Details}>
+      <PageContain>
+        <Button
+          type="primary"
+          onClick={() => {
+            history.go(-1);
+          }}
+          style={{
+            marginBottom: '24px',
+          }}
+        >
+          <LeftOutlined />
+          è¿”å›ä¸Šä¸€é¡µ
         </Button>
-      </p>
-      <Tabs onChange={callback}>
-        {
-          Data?.KHFWSJPZs.map((values: any) => {
-            return <TabPane tab={<><span>{values?.SDBM}</span> <span>{moment(values?.KSRQ).format('MM-DD')}~{moment(values?.JSRQ).format('MM-DD')}</span></>} key={values?.id} />
-          })
-        }
-      </Tabs>
-      <Spin spinning={loading}>
-        <ProTable
-          columns={columns}
-          dataSource={dataSource}
-          rowKey="id"
-          search={false}
-          pagination={{
-            showQuickJumper: true,
-            pageSize: 10,
-            defaultCurrent: 1,
-          }}
-          scroll={{ x: getTableWidth(columns) }}
-          options={{
-            setting: false,
-            fullScreen: false,
-            density: false,
-            reload: false,
-          }}
-        />
-      </Spin>
-      <Modal
-        title="µ¼³ö±¨ÃûĞÅÏ¢"
-        visible={isModalVisible}
-        className={styles.DCBM}
-        onOk={() => {
-          if (SJPZIds?.length === 0) {
-            message.warning('ÇëÑ¡Ôñ·şÎñÊ±¶Î')
-          } else {
-            onExportClick();
-            setSJPZIds([]);
-            setIsModalVisible(false);
-          }
-        }}
-        onCancel={() => {
-          setSJPZIds([]);
-          setIsModalVisible(false);
-        }}
-      >
-        <div className={styles.box}>
-          <span className={styles.text}>·şÎñÊ±¶Î£º</span>
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: '100%' }}
-            value={SJPZIds}
-            placeholder="ÇëÑ¡Ôñ·şÎñÊ±¶Î"
-            onChange={(items) => {
-              setSJPZIds(items)
+        <span style={{ fontSize: '18px', marginLeft: '24px', fontWeight: 'bold' }}>
+          {`${value?.BJSJ?.NJSJ?.XD}${value?.BJSJ?.NJSJ?.NJMC}${value?.BJSJ?.BJ}`}
+        </span>
+        <p className={styles.title}>
+          <Button
+            icon={<DownloadOutlined />}
+            type="primary"
+            onClick={() => {
+              setIsModalVisible(true);
             }}
           >
-            {
-              Data?.KHFWSJPZs?.map((item: any) => {
-                return <Option value={item.id}>
-                  {item?.SDBM} {moment(item?.KSRQ).format('MM-DD')}~{moment(item?.JSRQ).format('MM-DD')}
-                </Option>
-              })
+            å¯¼å‡º
+          </Button>
+        </p>
+        <Tabs onChange={callback}>
+          {Data?.KHFWSJPZs.map((values: any) => {
+            return (
+              <TabPane
+                tab={
+                  <>
+                    <span>{values?.SDBM}</span>{' '}
+                    <span>
+                      {moment(values?.KSRQ).format('MM-DD')}~{moment(values?.JSRQ).format('MM-DD')}
+                    </span>
+                  </>
+                }
+                key={values?.id}
+              />
+            );
+          })}
+        </Tabs>
+        <Spin spinning={loading}>
+          <ProTable
+            columns={columns}
+            dataSource={dataSource}
+            rowKey="id"
+            search={false}
+            pagination={{
+              showQuickJumper: true,
+              pageSize: 10,
+              defaultCurrent: 1,
+            }}
+            scroll={{ x: getTableWidth(columns) }}
+            options={{
+              setting: false,
+              fullScreen: false,
+              density: false,
+              reload: false,
+            }}
+          />
+        </Spin>
+        <Modal
+          title="å¯¼å‡ºæŠ¥åä¿¡æ¯"
+          visible={isModalVisible}
+          className={styles.DCBM}
+          onOk={() => {
+            if (SJPZIds?.length === 0) {
+              message.warning('è¯·é€‰æ‹©æœåŠ¡æ—¶æ®µ');
+            } else {
+              onExportClick();
+              setSJPZIds([]);
+              setIsModalVisible(false);
             }
-          </Select>
-        </div>
+          }}
+          onCancel={() => {
+            setSJPZIds([]);
+            setIsModalVisible(false);
+          }}
+        >
+          <div className={styles.box}>
+            <span className={styles.text}>æœåŠ¡æ—¶æ®µï¼š</span>
+            <Select
+              mode="multiple"
+              allowClear
+              style={{ width: '100%' }}
+              value={SJPZIds}
+              placeholder="è¯·é€‰æ‹©æœåŠ¡æ—¶æ®µ"
+              onChange={(items) => {
+                setSJPZIds(items);
+              }}
+            >
+              {Data?.KHFWSJPZs?.map((item: any) => {
+                return (
+                  <Option value={item.id}>
+                    {item?.SDBM} {moment(item?.KSRQ).format('MM-DD')}~
+                    {moment(item?.JSRQ).format('MM-DD')}
+                  </Option>
+                );
+              })}
+            </Select>
+          </div>
 
-        <div className={styles.tishi}>
-          <p>  <Badge color="#aaa" />µ¼³ö½öÖ§³Ö±¾ĞĞÕş°àÒÑ±¨Ãû¿Îºó·şÎñÑ§ÉúÏà¹ØĞÅÏ¢</p>
-          <p>  <Badge color="#aaa" />¿ÉÑ¡ÔñÄ³¸ö/¶à¸öÊ±¶Î½øĞĞµ¼³ö</p>
-        </div>
-      </Modal>
-    </PageContain>
-  </div>
-}
+          <div className={styles.tishi}>
+            <p>
+              {' '}
+              <Badge color="#aaa" />
+              å¯¼å‡ºä»…æ”¯æŒæœ¬è¡Œæ”¿ç­å·²æŠ¥åè¯¾åæœåŠ¡å­¦ç”Ÿç›¸å…³ä¿¡æ¯
+            </p>
+            <p>
+              {' '}
+              <Badge color="#aaa" />
+              å¯é€‰æ‹©æŸä¸ª/å¤šä¸ªæ—¶æ®µè¿›è¡Œå¯¼å‡º
+            </p>
+          </div>
+        </Modal>
+      </PageContain>
+    </div>
+  );
+};
 
 export default Details;
