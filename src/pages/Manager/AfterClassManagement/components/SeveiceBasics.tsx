@@ -49,6 +49,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const [JFLX, setJFLX] = useState<number>();
   // 报名时段 数据
   const [BMSDData, setBMSDData] = useState<any[]>();
+  const [visible, setVisible] = useState<boolean>(false);
 
   const formRef = useRef<any>();
 
@@ -200,6 +201,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
     }
   };
   const handleRefile = async () => {
+    setVisible(true);
     if (serviceId) {
       const res = await getKHFWSJ({ id: serviceId });
       if (res.status === 'ok' && res.data) {
@@ -235,8 +237,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         });
       }
     } else {
-      console.log(formRef, 'formRef')
-      console.log(campusData, 'campusData--++++++++++++++++++++++++++---')
       if (campusData?.length) {
         let id = campusData?.find((item: any) => item?.label === '本校')?.value;
         if (!id) {
@@ -250,14 +250,33 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           XNXQId
         });
       }
-      formRef?.current?.setFieldsValue({
-        ZDKCS: 2,
-        XNXQId
-      });
     }
   };
-  console.log(formRef, 'formRef----------')
-  console.log(campusData, 'campusData----------')
+  useEffect(() => {
+    (
+      async () => {
+        if (!serviceId) {
+          console.log(1111)
+          if (campusData?.length) {
+            let id = campusData?.find((item: any) => item?.label === '本校')?.value;
+            if (!id) {
+              id = campusData[0].value;
+            }
+            formRef?.current?.setFieldsValue({
+              ZDKCS: 2,
+              XQSJId: id,
+              XNXQId
+            });
+            getNJData(id);
+            await setCampusId(id);
+          }
+        } else {
+          console.log(22222)
+        }
+      }
+    )()
+  }, [visible]);
+  console.log(formRef,'===')
   return (
     <>
       <ModalForm<{
@@ -267,6 +286,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         key={serviceId}
         formRef={formRef}
         title={title}
+        visible={visible}
         submitter={!type}
         trigger={
           <Button
@@ -279,7 +299,9 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         }
         modalProps={{
           destroyOnClose: true,
-          // onCancel: () => console.log('run'),
+          onCancel: () => {
+            setVisible(false);
+          },
         }}
         onFinish={handleSubmit}
         layout="horizontal"
