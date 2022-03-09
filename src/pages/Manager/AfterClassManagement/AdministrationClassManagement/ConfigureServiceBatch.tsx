@@ -186,12 +186,12 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
       }).map((item: any) => {
         return { KSRQ: item.KSRQ, JSRQ: item.JSRQ, SDBM: item.name };
       });
-      console.log('params', params);
 
       // 新增
       const res = await bulkCreateKHFWBJ(params);
       if (res.status === 'ok') {
         message.success('配置成功');
+        setDetailValue(undefined);
         if (actionRef) {
           actionRef.current?.reloadAndRest();
         }
@@ -353,7 +353,7 @@ const ConfigureServiceBatch = (props: ConfigureSeverType) => {
                   <Col flex="auto">
                     {
                       detailValue?.KHKC.map((value: any) => {
-                        return value?.label
+                        return `${value?.label} `
                       })
                     }
                   </Col>

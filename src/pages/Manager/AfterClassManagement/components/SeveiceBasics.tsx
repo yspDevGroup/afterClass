@@ -98,7 +98,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   // 学年学期
   const getXNXQData = async () => {
     const res = await queryXNXQList(currentUser?.xxId);
-    console.log(res,'res---------')
+    console.log(res, 'res---------')
     const { current } = res;
     // console.log('res', res)
     if (current) {
@@ -259,6 +259,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         key={serviceId}
         formRef={formRef}
         title={title}
+        submitter={!type}
         trigger={
           <Button
             type={serviceId ? 'link' : 'primary'}
@@ -336,6 +337,11 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
                 placeholder="请选择"
                 disabled={!!type}
                 options={NJData}
+                onChange={(value) => {
+                  formRef?.current?.setFieldsValue({
+                    KHKC: undefined
+                  })
+                }}
               />
             </ProForm.Item>
           </Col>

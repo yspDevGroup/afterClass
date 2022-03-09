@@ -166,6 +166,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
     const res = await getKHBJSJ({
       id: data?.id,
     });
+    console.log(res.data,'----------------------')
     const currentData = res.data;
     currentData.KHBJJs?.forEach((element: { JSLX: string; JZGJBSJId: any }) => {
       if (element.JSLX === '副教师') {
@@ -225,6 +226,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       KCLX: currentData.KHKCSJ.KHKCLX.KCTAG,
       KHKCSJId: KHKCSJ?.id,
     };
+    console.log(list,'list---')
     setVisible(true);
     setCurrent(list);
     if (type === 'copy') {

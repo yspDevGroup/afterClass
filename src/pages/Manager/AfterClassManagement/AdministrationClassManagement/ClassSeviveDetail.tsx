@@ -68,10 +68,10 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
             查看
           </a>
         }
-        className={styles.noModalFooter}
+        submitter={false}
+        // className={styles.noModalFooter}
         modalProps={{
           destroyOnClose: true,
-          // footer: null,
         }}
         layout="horizontal"
         {...formLayout}
@@ -125,7 +125,7 @@ const ClassSeviveDetail = (props: ClassSeviveDetailProps) => {
                               accept=".jpg, .jpeg, .png"
                               imagename="image"
                               />
-                            } 
+                            }
 
                         </ProForm.Item> */}
           </Col>
