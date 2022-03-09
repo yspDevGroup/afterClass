@@ -47,3 +47,54 @@
     }
   }
 }
+
+.Details {
+  .title {
+    float: right;
+  }
+  :global {
+    .ant-tabs-tab {
+      > div {
+        span:nth-child(1) {
+          font-size: 16px;
+        }
+        span:nth-child(2) {
+          color: #999;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+.DCBM {
+  .box {
+    display: flex;
+    .text {
+      width: 100px;
+      line-height: 30px;
+    }
+    .text::before {
+      display: inline-block;
+      margin-right: 4px;
+      color: #ff4d4f;
+      font-size: 14px;
+      font-family: SimSun, sans-serif;
+      line-height: 1;
+      content: '*';
+    }
+  }
+}
+.tishi {
+  margin-top: 20px;
+  padding: 12px;
+  color: #999;
+  font-size: 14px;
+  line-height: 25px;
+  list-style: initial;
+  background-color: #eee;
+  border-radius: 5px;
+  p {
+    margin: 0;
+  }
+}

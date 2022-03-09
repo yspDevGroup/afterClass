@@ -61,7 +61,6 @@ const AfterSchoolCourse: React.FC = () => {
   const [NjData, setNjData] = useState<any>();
   const [BJId, setBJId] = useState<string | undefined>(undefined);
   const [bjData, setBJData] = useState<selectType[] | undefined>([]);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const getCampusData = async () => {
     const res = await getAllXQSJ({
@@ -288,7 +287,7 @@ const AfterSchoolCourse: React.FC = () => {
             key="details"
             to={{
               pathname: '/statistics/afterServiceCourse/details',
-              state: record,
+              state: { value: record, XNXQId: curXNXQId }
             }}
           >
             详情
@@ -410,24 +409,9 @@ const AfterSchoolCourse: React.FC = () => {
     }
   };
 
-  const onExportClick = () => {
-    setLoading(true);
-    (async () => {
-      const res = await exportServiceEnroll({
-        XNXQId: curXNXQId,
-      });
-      if (res.status === 'ok') {
-        window.location.href = res.data;
-        setLoading(false);
-      } else {
-        message.error(res.message);
-        setLoading(false);
-      }
-    })();
-  };
+
   return (
     // PageContainer组件是顶部的信息
-    <Spin spinning={loading}>
       <PageContainer>
         <div className={Style.TopCards}>
           <div>
@@ -491,9 +475,6 @@ const AfterSchoolCourse: React.FC = () => {
             <span>系统每天凌晨自动更新一次，如需立即更新，请点击【刷新】按钮</span>
             <Button type="primary" onClick={submit}>
               刷新
-            </Button>
-            <Button icon={<DownloadOutlined />} type="primary" onClick={onExportClick}>
-              导出
             </Button>
           </p>
           <Tabs
@@ -597,7 +578,6 @@ const AfterSchoolCourse: React.FC = () => {
           </Tabs>
         </div>
       </PageContainer>
-    </Spin>
   );
 };
 export default AfterSchoolCourse;

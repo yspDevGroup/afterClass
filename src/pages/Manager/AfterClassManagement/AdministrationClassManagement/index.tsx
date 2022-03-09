@@ -364,7 +364,7 @@ const AdministrationClassManagement = () => {
   // 取消发布、发布
   const onRelease = async (arr: any[], falg: boolean) => {
     if (!arr?.length) {
-      message.warning(falg ? '没有可发布的课后服务课程' : '没有可取消发布的课后服务课程');
+      message.warning(falg ? '没有可发布的课后服务' : '没有可取消发布的课后服务');
       return;
     }
     // console.log('批量取消发布',arr);
