@@ -133,7 +133,6 @@ const Home = () => {
       }
     } else {
       message.error('提交失败，请联系管理员');
-      console.warn(res.message);
     }
     setIsModalVisible(false);
   };
@@ -147,7 +146,9 @@ const Home = () => {
             <span ref={userRef}>
               <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.UserId} />
             </span>
-            老师，你好！
+            <span>
+              老师，你好！
+            </span>
           </h4>
           <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
         </div>
@@ -210,7 +211,7 @@ const Home = () => {
                       <div
                         className={styles.wrap}
                         style={{ backgroundImage: `url(${TeacherToDo})` }}
-                        // onClick={() => { submit(value) }}
+                      // onClick={() => { submit(value) }}
                       >
                         {value?.LX === 1 ? (
                           <i style={{ color: '#15B628' }}>代课提醒</i>
@@ -263,7 +264,7 @@ const Home = () => {
             <Badge count={DkData?.length || 0} showZero={true} offset={[5, 0]} />
           </p>
         </Link>
-          </div>*/}
+          </div> */}
           <Link to="/teacher/patrolArrange">
             <p className={styles.titles}>
               <span>今日待巡课程</span>

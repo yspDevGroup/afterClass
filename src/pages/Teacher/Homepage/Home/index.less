@@ -15,11 +15,18 @@
       padding: 26px 0 0 @padding-md;
 
       h4 {
+        display: flex;
         margin-bottom: 6px;
         color: #333;
         font-weight: 600;
         font-size: @font-size-lg;
         line-height: 24px;
+        > span:nth-child(1) {
+          max-width: 55vw;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
 
         & + div {
           color: @text-color-secondary;
@@ -142,38 +149,9 @@
         > span {
           vertical-align: text-bottom;
         }
-
-        // >span {
-        //   display: block;
-        //   width: calc(~'100vw - 110px');
-        //   margin: 10px 6px 4px 6px;
-        //   padding: 0 6px;
-        //   overflow: hidden;
-        //   line-height: 18px;
-        //   white-space: nowrap;
-        //   text-overflow: ellipsis;
-
-        //   &:nth-child(1) {
-        //     width: 63px;
-        //     margin: 10px 6px 4px 6px;
-        //     padding: 2px 5px;
-        //     color: @oriangeColor;
-        //     font-size: @font-size-sm;
-        //     line-height: 16px;
-        //     text-align: center;
-        //     border: 1px solid @oriangeColor;
-        //     border-radius: 11px;
-        //   }
-
-        //   &+a {
-        //     display: inline-block;
-        //     width: calc(~'100vw - 125px');
-        //     overflow: hidden;
-        //     color: @text-color;
-        //     white-space: nowrap;
-        //     text-overflow: ellipsis;
-        //   }
-        // }
+        > a {
+          width: calc(~'100% - 46px');
+        }
       }
 
       :global {

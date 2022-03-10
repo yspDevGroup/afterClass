@@ -44,7 +44,10 @@ const Mine = () => {
                   XM={currentUser.UserId}
                 />
               </span>
+              <span>
               老师
+              </span>
+
             </h4>
           </div>
         </div>

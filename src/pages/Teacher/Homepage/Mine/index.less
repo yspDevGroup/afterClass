@@ -20,14 +20,20 @@
 
       .headerName {
         padding-left: 10px;
-
         h4 {
+          display: flex;
           margin-bottom: 6px;
           color: #333;
           font-weight: 600;
           font-size: @font-size-lg;
           line-height: 100px;
 
+          > span:nth-child(1) {
+            max-width: 55vw;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
           & + span {
             color: @text-color-secondary;
             font-size: @font-size-sm;
