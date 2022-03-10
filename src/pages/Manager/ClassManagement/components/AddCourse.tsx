@@ -257,7 +257,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
       if (FJSJIds) {
         newData = {
           ...info,
-          BJIds ,
+          BJIds,
           KHBJJSs: TeacherType ? (FTeacher ? [...ZTeacher, ...FTeacher] : [...ZTeacher]) : [],
           KKRQ: values?.SKSD ? values?.SKSD[0] : KKData?.KSSJ,
           JKRQ: values?.SKSD ? values?.SKSD[1] : KKData?.JSSJ,
@@ -532,10 +532,7 @@ const AddServiceClass: FC<AddCourseProps> = ({
             key: 'BJRS',
             rules: [
               { required: true, message: '请填写课程班人数' },
-              {
-                pattern: new RegExp('^[0-9]*[1-9][0-9]*$'),
-                message: '请填写正确的人数',
-              },
+              { message: '人数应为正整数，且最大人数不得超过一万', pattern: /^([1-9]\d{0,3}|0)?$/ }
             ],
           },
       ],

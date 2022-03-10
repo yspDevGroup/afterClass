@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-else-return */
 /* eslint-disable no-lonely-if */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -252,12 +253,14 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
       }
     }
   };
+  console.log(serviceId, 'serviceId-----------')
   useEffect(() => {
     (
       async () => {
         if (!serviceId) {
           console.log(1111)
           if (campusData?.length) {
+            console.log(3333333)
             let id = campusData?.find((item: any) => item?.label === '本校')?.value;
             if (!id) {
               id = campusData[0].value;
@@ -269,6 +272,12 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             });
             getNJData(id);
             await setCampusId(id);
+          } else {
+            console.log(44444444)
+            formRef?.current?.setFieldsValue({
+              ZDKCS: 2,
+              XNXQId
+            });
           }
         } else {
           console.log(22222)
@@ -276,7 +285,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
       }
     )()
   }, [visible]);
-  console.log(formRef,'===')
+  console.log(formRef, '===')
   return (
     <>
       <ModalForm<{

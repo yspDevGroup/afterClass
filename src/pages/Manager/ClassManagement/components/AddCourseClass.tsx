@@ -869,10 +869,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       key: 'BJRS',
       rules: [
         { required: true, message: '请填写课程班人数' },
-        {
-          pattern: new RegExp('^[0-9]*[1-9][0-9]*$'),
-          message: '请填写正确的人数',
-        },
+        { message: '人数应为正整数，且最大人数不得超过一万', pattern: /^([1-9]\d{0,3}|0)?$/ }
       ],
     }
   ];
