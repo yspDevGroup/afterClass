@@ -109,15 +109,15 @@ const AgentRegistration = (props: {
     }
   };
   const handleChanges = (value: any, key: any) => {
-    setXSMC(key.children?.props?.children?.[0].props?.children);
+    setXSMC(key?.value?.split('+')[0]);
     setXZBXSId(key?.key);
   };
+  console.log(XSMC)
   const onChanges = (e: any) => {
     setXGJF(e.target.checked);
   };
   // 付款完成接口
   const onClickFK = async () => {
-    console.log('2', OrderId);
     const res = await getKHXSDD({
       id: OrderId!,
     });
@@ -216,7 +216,6 @@ const AgentRegistration = (props: {
     setPaymentCG('已过期');
     await overdueKHXSDD({ id: OrderId! });
   };
-  console.log('BjDetails', BjDetails);
 
   return (
     <>
@@ -271,7 +270,7 @@ const AgentRegistration = (props: {
                 >
                   {XZBXSDatas?.map((value: any) => {
                     return (
-                      <Option value={value?.XM + value?.XH} key={value?.id}>
+                      <Option value={`${value?.XM}+${value?.XH}`} key={value?.id}>
                         <div
                           style={{
                             display: 'flex',
@@ -327,7 +326,7 @@ const AgentRegistration = (props: {
           ) : (
             <>
               {(BjDetails?.KHKCJCs?.length === 0 && BmCurrent === 1) ||
-              (BjDetails?.KHKCJCs?.length !== 0 && BmCurrent === 2) ? (
+                (BjDetails?.KHKCJCs?.length !== 0 && BmCurrent === 2) ? (
                 <div className={styles.PaymentCode}>
                   {Message === '您已经报名成功，请勿重复报名!' ? (
                     <Result
@@ -410,9 +409,9 @@ const AgentRegistration = (props: {
             </>
           )}
           {(Number(DDZFY) <= 0 && BmCurrent === 1 && Number(JFTotalost) <= 0) ||
-          (BjDetails?.KHKCJCs?.length !== 0 && BmCurrent === 3) ||
-          (BjDetails?.KHKCJCs?.length === 0 && BmCurrent === 2) ||
-          (Number(BjDetails?.FY) <= 0 && BmCurrent === 3 && Number(JFTotalost) > 0) ? (
+            (BjDetails?.KHKCJCs?.length !== 0 && BmCurrent === 3) ||
+            (BjDetails?.KHKCJCs?.length === 0 && BmCurrent === 2) ||
+            (Number(BjDetails?.FY) <= 0 && BmCurrent === 3 && Number(JFTotalost) > 0) ? (
             <div className={styles.details}>
               {Message === '您已经报名成功，请勿重复报名!' ? (
                 <Result
