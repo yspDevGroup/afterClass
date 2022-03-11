@@ -281,7 +281,7 @@ const Home = () => {
                   backgroundColor: '#fff',
                   borderRadius: '100%',
                   color: '#0066FF',
-                  padding: '7px',
+                  padding: '5px',
                 }}
               />
             </div>
