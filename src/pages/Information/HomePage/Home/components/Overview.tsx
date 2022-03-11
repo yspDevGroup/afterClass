@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useContext, useEffect, useState } from 'react';
 import styles from '../index.less';
 import { Link, useModel } from 'umi';
@@ -19,8 +20,11 @@ const Overview = () => {
         XNXQId: result.current?.id
       });
       if (res.status === 'ok') {
-        console.log('res: ', res);
-        setHomeData({ ...res.data });
+        setHomeData({
+          ...res.data,
+          xs_counts: Number(res?.data?.xs_count + res?.data?.khfwxs_count),
+          tk_amounts: Number(res?.data?.tk_amount + res?.data?.khtk_amount)
+        });
       };
     }
     fetchData();

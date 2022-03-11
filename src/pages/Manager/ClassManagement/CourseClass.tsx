@@ -18,7 +18,7 @@ import ActionBar from './components/ActionBar';
 
 import ApplicantInfoTable from './components/ApplicantInfoTable';
 
-// import styles from './index.less';
+import styles from './index.less';
 // import AgentRegistration from './components/AgentRegistration';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getClassDays } from '@/utils/TimeTable';
@@ -86,6 +86,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
   const [ModalSKXQ, setModalSKXQ] = useState(false);
   // 授课班级数据
   const [SKXQData, setSKXQData] = useState({});
+  // 开课时段
+  const [SKSDData, setSKSDData] = useState<any>();
 
   const getData = async (origin?: string) => {
     const opts: TableListParams = {
@@ -308,6 +310,21 @@ const CourseManagement = (props: { location: { state: any } }) => {
       })();
     }
   }, []);
+  useEffect(() => {
+    (async () => {
+      const resKK = await getAllXXSJPZ({
+        XXJBSJId: currentUser?.xxId,
+        type: ['2'],
+        XNXQId: curXNXQId,
+      });
+      if (resKK.status === 'ok') {
+        if (resKK.data?.length !== 0) {
+          setSKSDData(resKK?.data?.[0])
+        }
+
+      }
+    })();
+  }, [curXNXQId]);
 
   const columns: ProColumns<any>[] = [
     {
@@ -472,13 +489,17 @@ const CourseManagement = (props: { location: { state: any } }) => {
       render: (_, record) => {
         return (
           <>
-            {record?.BJZT}
-            {/* <Tooltip
-            overlayStyle={{ maxWidth: '30em' }}
-            title='该班级排课超出本校开课时段'
-          >
-            <QuestionCircleOutlined />
-          </Tooltip> */}
+            {record?.BJZT} <span className={styles.TiShi}>
+              {
+                SKSDData && (SKSDData?.JSSJ < record?.JKRQ || SKSDData?.KSSJ > record?.KKRQ) ?
+                  <Tooltip
+                    overlayStyle={{ maxWidth: '30em' }}
+                    title='该班级上课时段超出本校开课时段'
+                  >
+                    <QuestionCircleOutlined />
+                  </Tooltip> : <></>
+              }
+            </span>
           </>
         );
       },

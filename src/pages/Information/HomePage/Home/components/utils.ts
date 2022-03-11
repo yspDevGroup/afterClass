@@ -36,7 +36,7 @@ export const topNum = [
   },
   {
     title: '参与学生数',
-    type: 'xs_count',
+    type: 'xs_counts',
     bgImg: joinStudent,
   },
   {
@@ -51,7 +51,7 @@ export const topNum = [
   },
   {
     title: '退费总额(元)',
-    type: 'tk_amount',
+    type: 'tk_amounts',
     bgImg: refundSum,
   },
 ];
