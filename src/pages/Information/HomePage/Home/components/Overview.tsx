@@ -20,19 +20,19 @@ const Overview = () => {
       });
       if (res.status === 'ok') {
         console.log('res: ', res);
-        setHomeData({ ...res.data});
+        setHomeData({ ...res.data });
       };
     }
     fetchData();
-  },[])
+  }, [])
 
 
   const ItemCard = (props: any) => {
-    const {title,count,bgImg,zzfw} = props;
+    const { title, count, bgImg, zzfw } = props;
     return (
-      <Card className={styles.card} bordered={false} bodyStyle={{paddingTop: 8.8, paddingLeft: 8.8, minHeight: '101.7px'}}>
-        <p style={{whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{title}</p>
-        <p>{title.indexOf("元") !== -1 ? (title.indexOf("收费") !== -1 ? ((count || 0) + (zzfw || 0)).toFixed(2) :parseFloat((count || 0)).toFixed(2)) : (count || 0)}</p>
+      <Card className={styles.card} bordered={false} bodyStyle={{ paddingTop: 8.8, paddingLeft: 8.8, minHeight: '101.7px' }}>
+        <p style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</p>
+        <p>{title.indexOf("元") !== -1 ? (title.indexOf("收费") !== -1 ? ((count || 0) + (zzfw || 0)).toFixed(2) : parseFloat((count || 0)).toFixed(2)) : (count || 0)}</p>
         <img className={styles.bgImg} src={bgImg} alt="" />
       </Card>
     )
@@ -45,10 +45,16 @@ const Overview = () => {
       >
         <TabPane tab="本学期概述" key="semester">
           <Row gutter={[8, 8]}>
-            {topNum.map((item,index)=>{
+            {topNum.map((item, index) => {
               return <Col className="gutter-row" span={8}>
-                      <ItemCard title={item.title} count={homeData ? homeData[item.type] : 0} bgImg={item.bgImg} key={index} zzfw={(homeData?.zzfw_amount ? homeData?.zzfw_amount : 0 )}/>
-                    </Col>
+                <ItemCard
+                  title={item.title}
+                  count={homeData ? homeData[item.type] : 0}
+                  bgImg={item.bgImg}
+                  key={index}
+                  zzfw={(homeData?.zzfw_amount ? homeData?.zzfw_amount : 0)}
+                />
+              </Col>
             })}
           </Row>
         </TabPane>

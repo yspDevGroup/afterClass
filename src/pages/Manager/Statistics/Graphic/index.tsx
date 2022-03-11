@@ -50,15 +50,15 @@ const ChartsPage = () => {
           },
           {
             title: '学生总数',
-            num: data?.xs_count || 0,
+            num: (data?.xs_count || 0) + (data?.khfwxs_count || 0),
           },
           {
             title: '收款总额',
-            num: Number((data?.bjdd_amount || 0) + (data?.zzfw_amount || 0)).toFixed(2),
+            num: Number((data?.bjdd_amount || 0) + (data?.zzfw_amount || 0) + (data?.khfw_amount || 0)).toFixed(2),
           },
           {
             title: '退款总额',
-            num: data?.tk_amount || 0,
+            num: (data?.tk_amount || 0) + (data?.khtk_amount || 0),
           },
         ];
         defaultData.checkOut = [
@@ -117,8 +117,8 @@ const ChartsPage = () => {
         }
         defaultData.schoolNum = data.kcbm?.length
           ? [].map.call(data.kcbm, (item: any) => {
-              return item.KCMC;
-            })
+            return item.KCMC;
+          })
           : [];
         if (data.kcbm?.length) {
           data.kcbm.forEach((item: any) => {
@@ -136,11 +136,11 @@ const ChartsPage = () => {
         }
         defaultData.enrollNum = data.kcbm?.length
           ? [].map.call(data.kcbm, (item: any) => {
-              return {
-                school: item.KCMC,
-                value: item.xs_count,
-              };
-            })
+            return {
+              school: item.KCMC,
+              value: Number(item.xs_count + item.khfwxs_count),
+            };
+          })
           : [];
         defaultData.checkOutTeacher = [
           {
@@ -184,6 +184,7 @@ const ChartsPage = () => {
     // setCurrentData(mock);
   }, [curXNXQId]);
 
+  console.log(currentData, 'currentData=====')
   return (
     <div className={styles.diaplayBox} style={{ backgroundImage: `url(${bgImg})` }}>
       {/* 头部 */}

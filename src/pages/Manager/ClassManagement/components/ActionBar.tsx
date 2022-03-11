@@ -39,9 +39,11 @@ const ActionBar = (props: propstype) => {
           // 取消课程发布
           const { KHKCSJ } = recorde;
           await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 0 });
-        } else {
-          message.error(`${type ? '关闭' : '取消'}失败，请联系管理员或稍后重试`);
-        }
+        } else if (data?.message === '该班级现在有学生数据，不能取消开班') {
+            message.warning('该班级存在关联数据，不可关闭');
+          } else {
+            message.warning(data?.message);
+          }
       });
     } else {
       message.warning('有学生报名时，此课程班不能取消开班');
@@ -207,11 +209,11 @@ const ActionBar = (props: propstype) => {
     case '已开班':
       return (
         <>
-          {
-            record?.KKRQ > moment(new Date()).format('YYYY-MM-DD') ?
+          <>
+            {((record?.xs_count + record.noPayXS_count) > 0 && (record?.xs_count + record.noPayXS_count) < record?.BJRS) ? (
               <>
-                {((record?.xs_count + record.noPayXS_count) > 0 && (record?.xs_count + record.noPayXS_count) < record?.BJRS) ? (
-                  <>
+                {
+                  record?.KKRQ > moment(new Date()).format('YYYY-MM-DD') ? <>
                     <a
                       onClick={() => {
                         setVisible(true);
@@ -255,26 +257,27 @@ const ActionBar = (props: propstype) => {
                         </Form.Item>
                       </Form>
                     </Modal>
-                  </>
-                ) : (
-                  <>
-                    <a onClick={() => shelf(record)} style={type ? undefined : { display: 'none' }}>
-                      关闭
-                    </a>
-                    <Popconfirm
-                      title="取消后该课程班家长不可见，确定取消开班?"
-                      onConfirm={() => shelf(record)}
-                      okText="确定"
-                      cancelText="取消"
-                      placement="topRight"
-                    >
-                      <a style={type ? { display: 'none' } : undefined}>取消开班</a>
-                    </Popconfirm>
-                  </>
-                )}
-              </> : <></>
-          }
+                  </> : <></>
+                }
 
+              </>
+            ) : (
+              <>
+                <a onClick={() => shelf(record)} style={type ? undefined : { display: 'none' }}>
+                  关闭
+                </a>
+                <Popconfirm
+                  title="取消后该课程班家长不可见，确定取消开班?"
+                  onConfirm={() => shelf(record)}
+                  okText="确定"
+                  cancelText="取消"
+                  placement="topRight"
+                >
+                  <a style={type ? { display: 'none' } : undefined}>取消开班</a>
+                </Popconfirm>
+              </>
+            )}
+          </>
           <Divider type="vertical" />
           <a onClick={() => handleEdit(record)}>查看</a>
           <Divider type="vertical" />

@@ -453,7 +453,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   <Col flex="4em" style={{ fontWeight: 'bold' }}>
                     已开班：
                   </Col>
-                  <Col flex="auto">家长、教育局端可见</Col>
+                  <Col flex="auto">教育局端可见</Col>
                 </Row>
               </>
             }
@@ -473,6 +473,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
         return (
           <>
             {record?.BJZT}
+            {/* <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title='该班级排课超出本校开课时段'
+          >
+            <QuestionCircleOutlined />
+          </Tooltip> */}
           </>
         );
       },
@@ -480,9 +486,25 @@ const CourseManagement = (props: { location: { state: any } }) => {
     {
       title: (
         <span>
-          报名状态  <Tooltip
+          班级状态&nbsp;
+          <Tooltip
             overlayStyle={{ maxWidth: '30em' }}
-            title='开班后可设置报名状态'
+            title={
+              <>
+                <Row>
+                  <Col flex="3em" style={{ fontWeight: 'bold' }}>
+                    开启：
+                  </Col>
+                  <Col flex="auto">家长可报名</Col>
+                </Row>
+                <Row>
+                  <Col flex="3em" style={{ fontWeight: 'bold' }}>
+                    关闭：
+                  </Col>
+                  <Col flex="auto">家长不可报名</Col>
+                </Row>
+              </>
+            }
           >
             <QuestionCircleOutlined />
           </Tooltip>
