@@ -63,12 +63,12 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
       const endTime = moment(JSQR, 'YYYY-MM-DD').add(1, 'days').valueOf();
       if (nowTime <= endTime) {
         return true;
-      } else {
-        return false;
       }
-    } else {
-      return false;
+        return false;
+
     }
+      return false;
+
   };
 
   const formRef = useRef<ProFormInstance<any>>();
@@ -82,9 +82,9 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
   const getXH = (_XH: string) => {
     if (_XH !== null && _XH.length > 4) {
       return `~${_XH.substring(_XH.length - 4)}`;
-    } else {
-      return `~ ${_XH}`;
     }
+      return `~ ${_XH}`;
+
   };
 
   // 获取学生
@@ -92,7 +92,6 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
     if (BJSJId && XNXQId) {
       const res = await getClassStudents({ BJSJId, XNXQId });
       if (res.status === 'ok') {
-        console.log('res', res);
         const { rows } = res.data;
         const students: SelectType[] = rows.map((item: any) => {
           return { label: `${item.XM}${getXH(item.XH)}`, value: item?.id };
@@ -137,7 +136,7 @@ const SignUpClass = (props: SignUpClassProps, ref: any) => {
                 <>
                   <span style={{ fontSize: '16px' }}>{item.SDBM}</span>
                   <span style={{ color: '#999' }}>{` ${moment(item.KSRQ).format('MM-DD')}~${moment(
-                    item.KSRQ,
+                    item.JSRQ,
                   ).format('MM-DD')}`}</span>
                 </>
               ),

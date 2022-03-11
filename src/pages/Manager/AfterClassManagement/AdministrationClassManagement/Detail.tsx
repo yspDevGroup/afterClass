@@ -71,12 +71,12 @@ const Detail = (props: any) => {
       const endTime = moment(JSQR, 'YYYY-MM-DD').add(1, 'days').valueOf();
       if (nowTime <= endTime) {
         return true;
-      } else {
-        return false;
       }
-    } else {
-      return false;
+        return false;
+
     }
+      return false;
+
   };
 
   const getDetailValue = async () => {
@@ -130,7 +130,7 @@ const Detail = (props: any) => {
       const KHFWSJPZ: any = KHFWSJPZIdData?.find((item: any) => item.value === KHFWSJPZId);
 
       if (KHFWSJPZ) {
-        setIsPay(KHFWSJPZ?.isPay === 1 ? true : false);
+        setIsPay(KHFWSJPZ?.isPay === 1);
         setIsOperation(getFlagTime(KHFWSJPZ.KSRQ, KHFWSJPZ.JSRQ));
       }
     }
@@ -149,7 +149,7 @@ const Detail = (props: any) => {
       if (KHFWSJPZId) {
         const KHFWSJPZ: any = KHFWSJPZIdData?.find((item: any) => item.value === KHFWSJPZId);
         if (KHFWSJPZ) {
-          setIsPay(KHFWSJPZ?.isPay === 1 ? true : false);
+          setIsPay(KHFWSJPZ?.isPay === 1);
         }
       }
     }
@@ -186,7 +186,7 @@ const Detail = (props: any) => {
       render: (text: any) => {
         if (text?.length) {
           const list = text?.[0].XSFWKHBJs?.filter(
-            (item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 1,
+            (item: any) => item?.KHBJSJ?.ISZB === 0,
           ).map((item: any) => {
             return <Tag key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</Tag>;
           });
@@ -208,7 +208,7 @@ const Detail = (props: any) => {
       render: (text: any) => {
         if (text?.length) {
           const list = text?.[0].XSFWKHBJs?.filter(
-            (item: any) => item?.KHBJSJ?.KCFWBJs?.[0]?.LX === 0,
+            (item: any) => item?.KHBJSJ?.ISZB === 1,
           ).map((item: any) => {
             return <Tag key={item?.KHBJSJ?.id}> {item?.KHBJSJ?.BJMC}</Tag>;
           });
@@ -235,9 +235,9 @@ const Detail = (props: any) => {
             return '退课中';
           }
           return '已报名';
-        } else {
-          return '未报名';
         }
+          return '未报名';
+
       },
     },
   ];
@@ -502,15 +502,15 @@ const Detail = (props: any) => {
     const MSG = flag
       ? `【缴费提醒】您的${KHFWBJs?.[0]?.FWMC}（${data?.data}）还未缴费，请及时处理。`
       : `【选课提醒】您报名的${KHFWBJs?.[0]?.FWMC}还未选课，请及时处理。`;
-    form.setFieldsValue({ MSG: MSG });
+    form.setFieldsValue({ MSG });
   }, [visible]);
 
   const getColumns = () => {
     if (KHFWBJs?.[0] && detailZT) {
       return [...columns, ...option];
-    } else {
-      return columns;
     }
+      return columns;
+
   };
   useEffect(() => {
     if (XSId) {
@@ -555,6 +555,7 @@ const Detail = (props: any) => {
         /** 课后服务班级id */
         KHFWBJId: kHFWBJId,
         KHFWSJPZIds: TKSD,
+        XNXQId: KHFWBJs?.[0].XNXQId,
       });
       if (res.status === 'ok') {
         message.success('申请成功');
@@ -688,9 +689,9 @@ const Detail = (props: any) => {
                         )}
                       </Space>
                     );
-                  } else {
-                    return '';
                   }
+                    return '';
+
                 }}
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
@@ -719,7 +720,7 @@ const Detail = (props: any) => {
                       BJSJId: state.id,
                       page: param.current || 1,
                       pageSize: param.pageSize || 10,
-                      KHFWSJPZId: KHFWSJPZId,
+                      KHFWSJPZId,
                       ZT: [],
                       XSXMORXH: searchValue,
                     });
@@ -733,7 +734,7 @@ const Detail = (props: any) => {
                           }
                           return false;
                         }
-                        //未报名 未报名 已退课
+                        // 未报名 未报名 已退课
                         if (ZT === 2) {
                           if (!item?.XSFWBJs.length || item.XSFWBJs?.[0].ZT === 2) {
                             return true;
