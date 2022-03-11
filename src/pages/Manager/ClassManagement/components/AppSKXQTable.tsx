@@ -1,22 +1,89 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-plusplus */
+/*
+ * @description: 授课安排列表
+ * @author: wsl
+ * @Date: 2021-12-07 10:57:15
+ * @LastEditTime: 2022-03-11 17:39:44
+ * @LastEditors: zpl
+ */
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
+import { Badge } from 'antd';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ShowName from '@/components/ShowName';
-import styles from '../index.less';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
-import { Badge } from 'antd';
+import styles from '../index.less';
+
+const statusColors = {
+  出勤: '#89da8c',
+  请假: '#f2c862',
+  代课: '#ac90fb',
+  待上: '#DDD',
+  缺席: '#ff7171',
+};
+
+type TeacherLabelProps = {
+  /** 上课日期 */
+  SKRQ: string;
+  /** 考勤信息类别 */
+  status?: string;
+  /** 微信用户ID */
+  WechatUserId?: string;
+  /** 姓名 */
+  XM?: string;
+};
+
+/**
+ * 根据教师出勤信息渲染dom
+ */
+const TeacherLabel: FC<TeacherLabelProps> = ({ SKRQ, status = '', WechatUserId, XM }) => {
+  let colors: string = '';
+  if (new Date(SKRQ) > new Date()) {
+    colors = statusColors.待上;
+  } else {
+    colors = statusColors[status];
+  }
+  if (colors) {
+    return (
+      <span className={styles.TeacherName} style={{ border: `1px solid ${colors}` }}>
+        <Badge color={colors} />
+        <ShowName type="userName" openid={WechatUserId} XM={XM} />
+      </span>
+    );
+  }
+  return <>—</>;
+};
+
+/** 授课详情数据定义 */
+type SKXQProps = {
+  /** 上课日期 */
+  SKRQ: string;
+  /** 学校时间配置 */
+  XXSJPZ: {
+    /** 开始时间 */
+    KSSJ: string;
+    /** 结束时间 */
+    JSSJ: string;
+  };
+  teachers?: {
+    /** 微信用户ID */
+    WechatUserId?: string;
+    /** 姓名 */
+    XM?: string;
+    /** 任教类型，1 主教，0 副教 */
+    type: number;
+    /** 出勤信息 */
+    status?: string;
+  }[];
+};
 
 type ApplicantPropsType = {
   SKXQData?: any;
 };
 
-const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
-  const { SKXQData } = props;
-  const [DataSource, setDataSource] = useState<any>();
+const ApplicantInfoTable: FC<ApplicantPropsType> = ({ SKXQData }) => {
+  const [DataSource, setDataSource] = useState<SKXQProps[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -24,66 +91,83 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         KHBJSJId: SKXQData.id,
       });
       if (res.status === 'ok') {
-        const CQData = res?.data || [];
+        /** 所有出勤信息 */
+        const CQDataList = res?.data || [];
         const result = await getKCBSKSJ({
           KHBJSJId: [SKXQData?.id],
         });
         if (result.status === 'ok') {
-          const AllSKData = result.data!.rows!;
-          const NoSignInArr: any[] = [];
-          for (let i = 0; i < CQData.length; i++) {
-            const obj = CQData[i];
-            const TimeId = obj.XXSJPZId;
-            const SKRQ = obj.CQRQ;
-            const JsId = obj.JZGJBSJId;
-            const CQZTs = obj.CQZT;
-            for (let j = 0; j < result.data!.rows!.length; j++) {
-              const aj = result.data!.rows![j];
-              const TimeIds = aj.XXSJPZId;
-              const SKRQs = aj.SKRQ;
-
-              aj.KCBSKJSSJs?.forEach((value: any) => {
-                if (TimeId === TimeIds && SKRQ === SKRQs && JsId === value?.JZGJBSJ.id) {
-                  aj.KCBSKJSSJs?.find((item: any) => {
-                    if (item.JZGJBSJ.id === JsId) {
-                      // eslint-disable-next-line no-param-reassign
-                      item.JZGJBSJ.type = CQZTs;
-                      NoSignInArr.push(aj);
-                      return NoSignInArr;
-                    }
-                    return '';
-                  });
-                }
+          /** 所有排课信息 */
+          const allSKData = result.data!.rows!;
+          // 遍历所有排课节次组装数据
+          const newDataSource: SKXQProps[] = allSKData.map(
+            (skData: { SKRQ: any; XXSJPZId: any; KCBSKJSSJs: any; XXSJPZ: any }) => {
+              // 当前课时已出勤的所有老师
+              const cqTeacherList = CQDataList.filter((data: { CQRQ: any; XXSJPZId: any }) => {
+                const sameDay = data.CQRQ === skData.SKRQ;
+                const sameJC = data.XXSJPZId === skData.XXSJPZId;
+                return sameDay && sameJC;
               });
-            }
-          }
-          NoSignInArr.forEach((value) => {
-            AllSKData.push(value);
-          });
-          const unique = (arr: any) => {
-            const arr1: any[] = [];
-            for (let i = 0, len = arr.length; i < len; i++) {
-              if (!arr1.includes(arr[i])) {
-                // 检索arr1中是否含有arr中的值
-                arr1.push(arr[i]);
+              // 当前课时排课的所有老师
+              const pkTeacherList = skData.KCBSKJSSJs;
+
+              let teachers: {
+                /** 微信用户ID */
+                WechatUserId?: string;
+                /** 姓名 */
+                XM?: string;
+                /** 任教类型，1 主教，0 副教 */
+                type: number;
+                /** 出勤信息 */
+                status?: string;
+              }[] = [];
+              if (cqTeacherList.length) {
+                teachers = cqTeacherList.map(
+                  (teacher: { JZGJBSJ: { WechatUserId: any; XM: any }; JSLX: null; CQZT: any }) => {
+                    return {
+                      WechatUserId: teacher.JZGJBSJ.WechatUserId,
+                      XM: teacher.JZGJBSJ.XM,
+                      type:
+                        typeof teacher.JSLX === 'undefined' || teacher.JSLX === null
+                          ? 1
+                          : teacher.JSLX,
+                      status: teacher.CQZT,
+                    };
+                  },
+                );
+              } else if (pkTeacherList?.length) {
+                teachers = pkTeacherList.map(
+                  (teacher: { JZGJBSJ: { WechatUserId: any; XM: any }; JSLX: any }) => ({
+                    WechatUserId: teacher.JZGJBSJ?.WechatUserId,
+                    XM: teacher.JZGJBSJ?.XM,
+                    type: teacher.JSLX!,
+                  }),
+                );
               }
-            }
-            return arr1;
-          };
-          setDataSource(unique(AllSKData));
+              return {
+                SKRQ: skData.SKRQ!,
+                XXSJPZ: {
+                  KSSJ: skData.XXSJPZ!.KSSJ!,
+                  JSSJ: skData.XXSJPZ!.JSSJ!,
+                },
+                teachers,
+              };
+            },
+          );
+          setDataSource(newDataSource);
         }
       }
     })();
   }, []);
 
-  const columns: ProColumns<any>[] = [
+  const columns: ProColumns<SKXQProps>[] = [
     {
       title: '节次',
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
       align: 'center',
-      render: (_text: any, record: any) => {
+      render: (_text, record) => {
         return DataSource.indexOf(record) + 1;
       },
     },
@@ -93,11 +177,8 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       key: 'SKRQ',
       align: 'center',
       width: 170,
-      render: (_text: any, record: any) => {
-        return `${record.SKRQ} ${record.XXSJPZ.KSSJ.substring(0, 5)}~${record.XXSJPZ.JSSJ.substring(
-          0,
-          5,
-        )}`;
+      render: (_text, record) => {
+        return `${record.SKRQ} ${record.XXSJPZ.KSSJ}~${record.XXSJPZ.JSSJ}`;
       },
     },
     {
@@ -107,41 +188,22 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       align: 'center',
       width: 100,
       ellipsis: true,
-      render: (_text: any, record: any) => {
+      render: (_text, record) => {
         return (
           <>
-            {record?.KCBSKJSSJs.length === 0 ? (
+            {record.teachers?.length === 0 ? (
               <>—</>
             ) : (
               <>
-                {record?.KCBSKJSSJs.map((value: any) => {
-                  if (value?.JSLX === 1) {
-                    let colors: any = '';
-                    if (new Date(record.SKRQ) > new Date()) {
-                      colors = '#DDD';
-                    } else if (value?.JZGJBSJ.type && value?.JZGJBSJ.type === '出勤') {
-                      colors = '#89da8c';
-                    } else if (value?.JZGJBSJ.type && value?.JZGJBSJ.type === '请假') {
-                      colors = '#f2c862';
-                    } else if (value?.JZGJBSJ.type && value?.JZGJBSJ.type === '代课') {
-                      colors = '#ac90fb';
-                    } else if (value?.JZGJBSJ.type && value?.JZGJBSJ.type === '缺席') {
-                      colors = '#ff7171';
-                    } else {
-                      colors = '#ff7171';
-                    }
+                {record.teachers?.map((value) => {
+                  if (value.type === 1) {
                     return (
-                      <span
-                        className={styles.TeacherName}
-                        style={{ border: `1px solid ${colors}` }}
-                      >
-                        <Badge color={colors} />
-                        <ShowName
-                          type="userName"
-                          openid={value?.JZGJBSJ?.WechatUserId}
-                          XM={value?.JZGJBSJ?.XM}
-                        />
-                      </span>
+                      <TeacherLabel
+                        SKRQ={record.SKRQ}
+                        status={value.status}
+                        WechatUserId={value.WechatUserId}
+                        XM={value.XM}
+                      />
                     );
                   }
                   return '';
@@ -159,39 +221,20 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
       align: 'center',
       width: 230,
       ellipsis: true,
-      render: (_text: any, record: any) => {
+      render: (_text, record) => {
         return (
           <>
-            {record?.KCBSKJSSJs.find((items: any) => items.JSLX === 0) ? (
+            {record.teachers?.find((items) => items.type === 0) ? (
               <>
-                {record?.KCBSKJSSJs.map((value: any) => {
-                  if (value.JSLX === 0) {
-                    let colors: any = '';
-                    if (new Date(record.SKRQ) > new Date()) {
-                      colors = '#DDD';
-                    } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '出勤') {
-                      colors = '#89da8c';
-                    } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '请假') {
-                      colors = '#f2c862';
-                    } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '代课') {
-                      colors = '#ac90fb';
-                    } else if (value.JZGJBSJ.type && value.JZGJBSJ.type === '缺席') {
-                      colors = '#ff7171';
-                    } else {
-                      colors = '#ff7171';
-                    }
+                {record.teachers?.map((value) => {
+                  if (value.type === 0) {
                     return (
-                      <span
-                        className={styles.TeacherName}
-                        style={{ border: `1px solid ${colors}` }}
-                      >
-                        <Badge color={colors} />
-                        <ShowName
-                          type="userName"
-                          openid={value?.JZGJBSJ?.WechatUserId}
-                          XM={value.JZGJBSJ?.XM}
-                        />
-                      </span>
+                      <TeacherLabel
+                        SKRQ={record.SKRQ}
+                        status={value.status}
+                        WechatUserId={value.WechatUserId}
+                        XM={value.XM}
+                      />
                     );
                   }
                   return '';
@@ -208,7 +251,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
 
   return (
     <div className={styles.BMdivs}>
-      <ProTable
+      <ProTable<SKXQProps>
         rowKey="id"
         search={false}
         dataSource={DataSource}
@@ -228,13 +271,11 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           reload: false,
         }}
         headerTitle={`课程班名称：${SKXQData?.BJMC}`}
-        toolBarRender={() => [
-          <Badge color="#89da8c" text="出勤" />,
-          <Badge color="#f2c862" text="请假" />,
-          <Badge color="#ac90fb" text="代课" />,
-          <Badge color="#DDD" text="待上" />,
-          <Badge color="#ff7171" text="缺勤" />,
-        ]}
+        toolBarRender={() => {
+          return Object.keys(statusColors).map((stat) => (
+            <Badge key={stat} color={statusColors[stat]} text={stat} />
+          ));
+        }}
       />
     </div>
   );
