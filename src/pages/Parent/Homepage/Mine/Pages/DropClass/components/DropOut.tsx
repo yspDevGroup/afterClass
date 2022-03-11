@@ -27,6 +27,8 @@ const DropOut = () => {
   const [KHFUXY, setKHFUXY] = useState<any>();
   const [kcData, setKcData] = useState<any>();
   const [kcList, setKcList] = useState<any>();
+  const [XNXQId, setXNXQId] = useState<string>();
+
   const [datasourse, setDatasourse] = useState<any>();
   const StorageXSId =
     localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId;
@@ -121,22 +123,36 @@ const DropOut = () => {
     setModalVisible(false);
   };
 
+  useEffect(() => {
+    (
+      async () => {
+        const result = await queryXNXQList(currentUser?.xxId);
+        if (result.current) {
+          setXNXQId(result.current.id)
+        }
+      }
+    )()
+  }, [])
+
   const onChange = (checkedValues: any) => {
-    const NewArr: any[] = [];
-    checkedValues.forEach((value: string) => {
-      const data = {
-        XSJBSJId: StorageXSId,
-        XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
-        KHBJSJId: value.split('+')[0],
-        KSS: value.split('+')[1],
-        ZT: 0,
-        BZ: '',
-        LX: 0,
-        KCMC: value.split('+')[2],
-      };
-      NewArr.push(data);
-    });
-    setDatasourse(NewArr);
+    if (XNXQId) {
+      const NewArr: any[] = [];
+      checkedValues.forEach((value: string) => {
+        const data = {
+          XSJBSJId: StorageXSId,
+          XSXM: localStorage.getItem('studentName') || (student && student[0].name) || '张三',
+          KHBJSJId: value.split('+')[0],
+          KSS: value.split('+')[1],
+          ZT: 0,
+          BZ: '',
+          LX: 0,
+          KCMC: value.split('+')[2],
+          XNXQId
+        };
+        NewArr.push(data);
+      });
+      setDatasourse(NewArr);
+    }
   };
   return (
     <div className={styles.DropClass}>

@@ -20,6 +20,8 @@ export async function createKHTKSJ(body: API.CreateKHTKSJ[], options?: { [key: s
 /** 批量创建课后服务退课记录 PUT /khtksj/bulkCreateKHFWTK */
 export async function bulkCreateKHFWTK(
   body: {
+    /** 学年学期ID */
+    XNXQId?: string;
     XSJBSJIds?: string[];
     /** 退课状态,0:申请中;1:已退课;2:不同意退课 */
     ZT?: number;

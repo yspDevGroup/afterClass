@@ -33,6 +33,8 @@ const AfterClassService = () => {
   const [Type, setType] = useState(false);
   const [FwTimes, setFwTimes] = useState<any>([]);
 
+  console.log(BaoMinData,'BaoMinData--------')
+
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
@@ -48,7 +50,7 @@ const AfterClassService = () => {
       }
     })();
   }, []);
-  //获取报名的服务
+  // 获取报名的服务
   const xuankeState = async () => {
     if (StorageXSId) {
       const res = await getStudentListByBjid({
@@ -100,6 +102,7 @@ const AfterClassService = () => {
         BZ: '',
         LX: 2,
         FWMC: value?.KHFWBJ?.FWMC,
+        XNXQId:BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.XNXQId
       };
       NewArr.push(data);
     });

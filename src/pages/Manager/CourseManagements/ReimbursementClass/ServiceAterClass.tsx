@@ -350,6 +350,7 @@ const ServiceAterClass = () => {
                   /** 学校ID */
                   XXJBSJId: currentUser?.xxId,
                   JZGJBSJId: currentUser?.JSId || testTeacherId,
+                  XNXQId: curXNXQId,
                 });
                 if (result.status === 'ok') {
                   message.success('服务退订成功,已自动申请退款流程');

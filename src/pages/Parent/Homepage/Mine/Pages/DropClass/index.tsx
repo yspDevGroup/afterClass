@@ -181,6 +181,7 @@ const DropClass = () => {
                               KHBJSJId: value?.KHBJSJId,
                               XXJBSJId: currentUser?.xxId,
                               KHTKSJId: value?.id,
+                              XNXQId:value?.XNXQId
                             };
                           } else {
                             data = {
@@ -190,6 +191,7 @@ const DropClass = () => {
                               KHXXZZFWId: value?.KHXXZZFW?.id,
                               XXJBSJId: currentUser?.xxId,
                               KHTKSJId: value?.id,
+                              XNXQId:value?.XNXQId
                             };
                           }
                           const result = await createKHXSTK(data);

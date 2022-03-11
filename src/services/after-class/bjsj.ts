@@ -338,10 +338,14 @@ export async function getKHFWBJXSbm(
     XXJBSJId?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 是否为局端 */
+    ISJD?: boolean;
     /** 校区ID */
     XQSJId?: string;
     /** 班级ID */
     BJSJId?: string;
+    /** 服务班状态 */
+    FWZT?: number;
     /** 年级ID */
     NJId?: string[];
     /** 页数 */

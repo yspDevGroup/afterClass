@@ -271,6 +271,7 @@ const CourseUnsubscribe = () => {
             /** 学校ID */
             XXJBSJId: currentUser?.xxId,
             JZGJBSJId: currentUser.JSId,
+            XNXQId: curXNXQId,
           });
           if (result.status === 'ok') {
             return '退课成功';
@@ -306,6 +307,7 @@ const CourseUnsubscribe = () => {
     }
   };
   const handleSubmit = async (param: any) => {
+    console.log(current,'current')
     const { ZT, BZ } = param;
     try {
       if (current.id) {
@@ -345,6 +347,7 @@ const CourseUnsubscribe = () => {
                     /** 学校ID */
                     XXJBSJId: currentUser?.xxId,
                     JZGJBSJId: currentUser.JSId,
+                    XNXQId: curXNXQId,
                   });
                   if (result.status === 'ok') {
                     message.success('退课成功,已自动申请退款流程');

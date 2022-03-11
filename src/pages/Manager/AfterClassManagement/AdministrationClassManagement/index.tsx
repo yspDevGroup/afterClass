@@ -463,20 +463,18 @@ const AdministrationClassManagement = () => {
             defaultCurrent: 1,
           }}
           request={async (param) => {
-            // 表单搜索项会从 params 传入，传递给后端接口。
-            // console.log('=============')
             if (curXNXQId && campusId) {
               const obj = {
                 XXJBSJId: currentUser?.xxId,
                 NJId: NjId ? [NjId] : undefined,
                 BJSJId: BJId,
+                ISJD:false,
                 XNXQId: curXNXQId,
                 page: param.current,
                 pageSize: param.pageSize,
                 XQSJId: campusId,
               };
               const res = await getKHFWBJXSbm(obj);
-              // console.log('res-------',res);
               if (res.status === 'ok') {
                 return {
                   data: res.data.rows,

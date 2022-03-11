@@ -24,6 +24,7 @@ const ReturnService = () => {
   const [KHFUXY, setKHFUXY] = useState<any>();
   const [FwData, setFwData] = useState<any>();
   const [Datasourse, setDatasourse] = useState<any>();
+  const [XNXQId, setXNXQId] = useState<string>();
   useEffect(() => {
     (async () => {
       const res = await getXXTZGG({
@@ -57,6 +58,16 @@ const ReturnService = () => {
   useEffect(() => {
     getFwData();
   }, [StorageXSId]);
+  useEffect(() => {
+    (
+      async () => {
+        const result = await queryXNXQList(currentUser?.xxId);
+        if (result.current) {
+          setXNXQId(result.current.id)
+        }
+      }
+    )()
+  }, [])
 
   /** 课后帮服务协议弹出框 */
   const showModal = () => {
@@ -99,6 +110,7 @@ const ReturnService = () => {
         ZT: 0,
         BZ: '',
         LX: 1,
+        XNXQId
       };
       NewArr.push(data);
     });

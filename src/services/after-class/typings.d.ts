@@ -3069,6 +3069,8 @@ declare namespace API {
     KHBJSJId?: string;
     /** 学生ID */
     XSJBSJId: string;
+    /** 学年学期ID */
+    XNXQId: string;
     /** 增值服务ID */
     KHXXZZFWId?: string;
     /** 学生报名的服务班ID */
@@ -3567,6 +3569,8 @@ declare namespace API {
     KHBJSJId?: string;
     /** 学校ID */
     XXJBSJId: string;
+    /** 学年学期ID */
+    XNXQId: string;
     /** 增值服务ID */
     KHXXZZFWId?: string;
     /** 审批人ID */

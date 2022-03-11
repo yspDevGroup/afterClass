@@ -161,10 +161,10 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           XSJBSJId: item?.XSJBSJId,
           ZT: 0,
           KHBJSJId: clickBjId,
+          XNXQId:applicantData?.XNXQId
         };
       });
 
-      // createKHTKSJ
       const result = await createKHTKSJ(newlist);
       // const result = await cancleClass({
       //   KHBJSJId: applicantData?.id,
@@ -361,6 +361,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                           KSS: applicantData?.KSS,
                           XSJBSJId: record?.XSJBSJ?.id,
                           KHBJSJId: record?.KHBJSJId,
+                          XNXQId:applicantData?.XNXQId
                         },
                       ]);
                       if (res?.status === 'ok' && res?.data) {
@@ -393,6 +394,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                                   JZGJBSJId: currentUser?.JSId || testTeacherId,
                                   TKZT: 0,
                                   SPSJ: moment(new Date()).format(),
+                                  XNXQId:applicantData?.XNXQId
                                 });
                                 if (rescreateKHXSTK.status === 'ok') {
                                   // 更新退款状态
