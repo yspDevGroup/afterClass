@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tabs } from 'antd';
-import { useModel, history } from 'umi';
+import { useModel } from 'umi';
 import { getQueryString } from '@/utils/utils';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 
@@ -29,11 +29,11 @@ const PersonalHomepage = () => {
   const StorageXQSJId =
     localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   // 未获取到孩子时跳转到403
-  useEffect(() => {
-    if (typeof student === 'undefined' || student?.length === 0 || !student?.[0]?.XSJBSJId) {
-      history.replace('/403?message=系统未读取到您的孩子信息，请与学校相关负责人联系');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof student === 'undefined' || student?.length === 0 || !student?.[0]?.XSJBSJId) {
+  //     history.replace('/403?message=系统未读取到您的孩子信息，请与学校相关负责人联系');
+  //   }
+  // }, []);
 
   useEffect(() => {
     (async () => {

@@ -14,14 +14,15 @@ import TeachCourses from './components/TeachCourses';
 import EnrollClassTime from '@/components/EnrollClassTime';
 import Details from './Pages/Details';
 
-import styles from './index.less';
 import imgPop from '@/assets/teacherBg.png';
 import TeacherToDo from '@/assets/TeacherToDo.png';
 import banner from '@/assets/banner.png';
-import PatrolClass from '@/assets/PatrolClass.png';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { RightOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import crpLogo from '@/assets/crp_logo.png';
+
+import styles from './index.less';
 
 const Home = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -32,6 +33,7 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [totalData, setTotalData] = useState<any>({});
   const [BacklogNum, setBacklogNum] = useState<number>(2);
+  const [crpUrl, setCrpUrl] = useState(''); // 课程资源平台链接
   // 巡课中课程安排数据
   const [dateData, setDateData] = useState<any>([]);
   const [DkData, setDkData] = useState<any>([]);
@@ -120,6 +122,18 @@ const Home = () => {
     getParentHomeData();
   }, []);
 
+  // 设置课程资源平台链接
+  useEffect(() => {
+    if (!initialState) return;
+    const { crpHost, apiClientId } = initialState.buildOptions;
+    // window.open('http://moodle.xianyunshipei.com/course/view.php?id=12');
+    const ysp_token_type = localStorage.getItem('ysp_token_type');
+    const ysp_access_token = localStorage.getItem('ysp_access_token');
+    const params = JSON.stringify({ plat: 'school' });
+    const url = `${crpHost}/auth_callback/wechat?clientId=${apiClientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}`;
+    setCrpUrl(url);
+  }, [initialState]);
+
   const onFinish = async (values: { name: string; phone: string }) => {
     const res = await updateJZGJBSJ(
       { id: currentUser.JSId },
@@ -146,9 +160,7 @@ const Home = () => {
             <span ref={userRef}>
               <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.UserId} />
             </span>
-            <span>
-              老师，你好！
-            </span>
+            <span>老师，你好！</span>
           </h4>
           <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
         </div>
@@ -211,7 +223,7 @@ const Home = () => {
                       <div
                         className={styles.wrap}
                         style={{ backgroundImage: `url(${TeacherToDo})` }}
-                      // onClick={() => { submit(value) }}
+                        // onClick={() => { submit(value) }}
                       >
                         {value?.LX === 1 ? (
                           <i style={{ color: '#15B628' }}>代课提醒</i>
@@ -256,15 +268,36 @@ const Home = () => {
         )}
 
         {/* 待巡课程 */}
-        <div className={styles.patrols} style={{ backgroundImage: `url(${PatrolClass})` }}>
-          {/* <div style={{ backgroundImage: `url(${DaiKe})` }}>
+        <div className={styles.patrolsBox}>
+          <Link to="/teacher/patrolArrange">
+            <p className={styles.titles}>
+              <span>今日待巡课程</span>
+              <Badge count={dateData?.length || 0} showZero={true} />
+            </p>
+            <div className={styles.xunke}>
+              <p>去巡课</p>
+              <RightOutlined
+                style={{
+                  backgroundColor: '#fff',
+                  borderRadius: '100%',
+                  color: '#0066FF',
+                  padding: '7px',
+                }}
+              />
+            </div>
+          </Link>
+        </div>
+
+        {/* 待巡课程 */}
+        {/* <div className={styles.patrols} style={{ backgroundImage: `url(${PatrolClass})` }}>
+          <div style={{ backgroundImage: `url(${DaiKe})` }}>
            <Link to="/teacher/home/substituteList">
           <p className={styles.titles}>
             <span>调代课申请</span>
             <Badge count={DkData?.length || 0} showZero={true} offset={[5, 0]} />
           </p>
         </Link>
-          </div> */}
+          </div>
           <Link to="/teacher/patrolArrange">
             <p className={styles.titles}>
               <span>今日待巡课程</span>
@@ -277,7 +310,7 @@ const Home = () => {
               </div>
             </div>
           </Link>
-        </div>
+        </div> */}
         {/* 今日课程 */}
         <div className={styles.enrollArea}>
           <EnrollClassTime
@@ -293,18 +326,17 @@ const Home = () => {
         </div>
 
         {/* 素质教育资源 */}
-        {/* <div className={styles.resourcesBox}>
+        <div className={styles.resourcesBox}>
           <a
-            href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+            // href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+            href={crpUrl}
             target="_blank"
             rel="noreferrer"
             className={styles.resources}
-            style={{ backgroundImage: `url(${resourcesBg})` }}
           >
-            <p>素质教育资源</p>
-            <img src={resourcesRgo} alt="" />
+            <img src={crpLogo} alt="" />
           </a>
-        </div> */}
+        </div>
         {/* 公示栏 */}
         <div className={styles.announceArea}>
           <Details data={notification} />
