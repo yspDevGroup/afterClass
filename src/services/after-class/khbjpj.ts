@@ -5,8 +5,8 @@ import { request } from 'umi';
 /** 创建课后服务-课程评价数据 PUT /khbjpj/create */
 export async function createKHBJPJ(body: API.CreateKHBJPJ, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       PJFS?: number;
       PY?: string;
@@ -59,15 +59,12 @@ export async function getKHBJPJ(
 
 /** 删除课后服务-课程评价数据 DELETE /khbjpj/${param0} */
 export async function deleteKHBJPJ(
-  params: {
-    // path
-    /** 课后服务-课程评价数据ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteKHBJPJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjpj/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khbjpj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -76,16 +73,13 @@ export async function deleteKHBJPJ(
 
 /** 更新课后服务-课程评价数据 PUT /khbjpj/update/${param0} */
 export async function updateKHBJPJ(
-  params: {
-    // path
-    /** 课后服务-课程评价数据ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateKHBJPJParams,
   body: API.UpdateKHBJPJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khbjpj/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/khbjpj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
