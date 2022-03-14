@@ -100,7 +100,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   // 学年学期
   const getXNXQData = async () => {
     const res = await queryXNXQList(currentUser?.xxId);
-    console.log(res, 'res---------')
     const { current } = res;
     // console.log('res', res)
     if (current) {
@@ -184,6 +183,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
       if (result.status === 'ok') {
         message.success('修改成功');
         reload();
+        setVisible(false);
         return true;
       } else {
         message.warning(result.message);
@@ -194,6 +194,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
       if (res.status === 'ok') {
         message.success('提交成功');
         reload();
+        setVisible(false);
         return true;
       } else {
         message.warning(res.message);
@@ -253,14 +254,11 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
       }
     }
   };
-  console.log(serviceId, 'serviceId-----------')
   useEffect(() => {
     (
       async () => {
         if (!serviceId) {
-          console.log(1111)
           if (campusData?.length) {
-            console.log(3333333)
             let id = campusData?.find((item: any) => item?.label === '本校')?.value;
             if (!id) {
               id = campusData[0].value;
@@ -273,7 +271,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             getNJData(id);
             await setCampusId(id);
           } else {
-            console.log(44444444)
             formRef?.current?.setFieldsValue({
               ZDKCS: 2,
               XNXQId
@@ -285,7 +282,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
       }
     )()
   }, [visible]);
-  console.log(formRef, '===')
   return (
     <>
       <ModalForm<{
@@ -312,6 +308,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             setVisible(false);
           },
         }}
+
         onFinish={handleSubmit}
         layout="horizontal"
         className={type ? `${styles.newModules} ${styles.noModalFooter}` : `${styles.newModules}`}

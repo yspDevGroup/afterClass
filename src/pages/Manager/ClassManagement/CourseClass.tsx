@@ -507,7 +507,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
     {
       title: (
         <span>
-          班级状态&nbsp;
+          报名状态&nbsp;
           <Tooltip
             overlayStyle={{ maxWidth: '30em' }}
             title={
