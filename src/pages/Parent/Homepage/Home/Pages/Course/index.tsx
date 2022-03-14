@@ -33,65 +33,48 @@ const Course = (props: any) => {
     const newArr = kskc?.filter((value: any) => {
       return value?.KHKCSJs?.length !== 0;
     });
-    console.log(newArr, 'newArr-----')
     setKSKCData(newArr);
   }, [kskc]);
-  alert(courseStatus);
-  alert(JSON.stringify(KSKCData));
-  alert('---------');
-  alert(JSON.stringify(kskc));
-
-
-  console.log(courseStatus,'courseStatus')
-  console.log(KSKCData,'KSKCData')
-  console.log(kskc,'kskc')
   return (
     <div className={styles.CourseBox}>
       <GoBack title={'缤纷课堂'} onclick="/parent/home?index=index" />
       <div className={`${styles.tabHeader}`}>
-        {courseStatus === 'enroll' || courseStatus === 'enrolling' ? (
-          <>
-            {KSKCData?.length === 0 || !KSKCData ? (
-              <ListComponent listData={defaultMsg} />
-            ) : (
-              <Tabs className={styles.courseType}>
-                {kskc.map((item: any) => {
-                  const courseData: any = [].map.call(item.KHKCSJs, (record: any) => {
-                    const nodeData: any = {
-                      id: record.id,
-                      title: record.KCMC,
-                      img: record.KCTP,
-                      link: `/parent/home/courseDetails?courseid=${record.id}&index=all`,
-                      desc: [
-                        {
-                          left: [record.KCMS ? `简介：${record.KCMS}` : ''],
-                        },
-                      ],
-                      introduction: record.KCMS,
-                    };
-                    return nodeData;
-                  });
-                  const { list, ...rest } = { ...defaultMsg };
-                  return (
-                    <TabPane tab={item.KCTAG} key={item.KCTAG} style={{ margin: '8px 0' }}>
-                      <ListComponent
-                        listData={{
-                          list: courseData,
-                          ...rest,
-                        }}
-                      />
-                    </TabPane>
-                  );
-                })}
-              </Tabs>
-            )}
-          </>
-        ) : (
-          <div className={styles.ZWSJ}>
-            <img src={noOrder} alt="" />
-            <p>暂无数据</p>
-          </div>
-        )}
+        <>
+          {KSKCData?.length === 0 || !KSKCData ? (
+            <ListComponent listData={defaultMsg} />
+          ) : (
+            <Tabs className={styles.courseType}>
+              {kskc.map((item: any) => {
+                const courseData: any = [].map.call(item.KHKCSJs, (record: any) => {
+                  const nodeData: any = {
+                    id: record.id,
+                    title: record.KCMC,
+                    img: record.KCTP,
+                    link: `/parent/home/courseDetails?courseid=${record.id}&index=all`,
+                    desc: [
+                      {
+                        left: [record.KCMS ? `简介：${record.KCMS}` : ''],
+                      },
+                    ],
+                    introduction: record.KCMS,
+                  };
+                  return nodeData;
+                });
+                const { list, ...rest } = { ...defaultMsg };
+                return (
+                  <TabPane tab={item.KCTAG} key={item.KCTAG} style={{ margin: '8px 0' }}>
+                    <ListComponent
+                      listData={{
+                        list: courseData,
+                        ...rest,
+                      }}
+                    />
+                  </TabPane>
+                );
+              })}
+            </Tabs>
+          )}
+        </>
       </div>
     </div>
   );

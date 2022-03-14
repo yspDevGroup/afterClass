@@ -16,6 +16,7 @@ import { createKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
 import ShowName from '@/components/ShowName';
 import noJF from '@/assets/noJF.png';
 import { getAllFJSJ } from '@/services/after-class/fjsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 type AddCourseProps = {
   visible: boolean;
@@ -86,6 +87,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
   const [FJData, setFJData] = useState<any>();
   // 场地Id
   const [FJSJIds, setFJSJIds] = useState<any>();
+  // 学年学期时间
+  const [XNXQTime, setXNXQTime] = useState<any>();
 
   const formLayout = {
     labelCol: { flex: '7em' },
@@ -188,6 +191,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
       if (res.status === 'ok') {
         setFJData(res.data?.rows);
       }
+      const result = await queryXNXQList(currentUser?.xxId);
+      setXNXQTime(result?.current);
     })();
   }, []);
   useEffect(() => {
@@ -455,6 +460,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
 
     return '新增班级';
   };
+
+  console.log(XNXQTime,'XNXQTime-----')
   const handleChange = (value: any, key: any) => {
     const newArr: any = [];
     const XZBMCArr: any = [];
@@ -800,8 +807,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
         disabledDate: (current: any) => {
           const defaults = moment(current).format('YYYY-MM-DD HH:mm:ss');
           return (
-            defaults < moment(KKData?.KSSJ).format('YYYY-MM-DD 00:00:00') ||
-            defaults > moment(KKData?.JSSJ).format('YYYY-MM-DD 23:59:59')
+            defaults < moment(XNXQTime?.KSRQ).format('YYYY-MM-DD 00:00:00') ||
+            defaults > moment(XNXQTime?.JSRQ).format('YYYY-MM-DD 23:59:59')
           );
         },
       },
