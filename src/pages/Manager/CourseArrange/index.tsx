@@ -289,7 +289,6 @@ const Index = () => {
   };
   const processingDatas = (data: any, timeData: any, week: any, bjId: string | undefined = undefined) => {
     // setLoading(true);
-    const newWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const tableData: any[] = [];
     const sameClassData: any[] = [];
     let Weekss: any = []
@@ -382,50 +381,7 @@ const Index = () => {
               }
             });
           }
-          if (endWeek < 7 && index === Weeks?.length - 1) {
-            const num = 7 - endWeek;
-            newWeek.slice(-num).forEach((items: any) => {
-              table[items] = {
-                weekId: '', // 周
-                cla: '无法排课', // 班级名称
-                teacher: '', // 主教师
-                teacherWechatId: '', // 主教师微信用户ID
-                teacherID: '', // 主教师ID
-                bjId: '', // 班级ID
-                kcId: '', // 课程ID
-                njId: '', // 年级ID
-                bjzt: '', // 班级状态
-                xqId: '', // 校区ID
-                color: '',
-                dis: true,
-                fjmc: '无法排课',
-                jcmc: '超出当前学年学期',
-                XNXQId: '',
-              };
-            });
-          }
-          if (index === 0) {
-            const num = startWeek - 1;
-            newWeek.slice(0, num).forEach((items: any) => {
-              table[items] = {
-                weekId: '', // 周
-                cla: '无法排课', // 班级名称
-                teacher: '', // 主教师
-                teacherWechatId: '', // 主教师微信用户ID
-                teacherID: '', // 主教师ID
-                bjId: '', // 班级ID
-                kcId: '', // 课程ID
-                njId: '', // 年级ID
-                bjzt: '', // 班级状态
-                xqId: '', // 校区ID
-                color: '',
-                dis: true,
-                fjmc: '',
-                jcmc: '',
-                XNXQId: '',
-              };
-            });
-          }
+
           tableData.push(table);
         });
       });

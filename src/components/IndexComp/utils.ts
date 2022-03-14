@@ -51,7 +51,7 @@ export const topNum = [
   },
   {
     title: '参与学生数',
-    type: 'xs_count',
+    type: 'xs_counts',
   },
   {
     title: '合作机构',

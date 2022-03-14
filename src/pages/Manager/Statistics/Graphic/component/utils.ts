@@ -127,17 +127,25 @@ export const getTerm = () => {
   const now = new Date();
   const month = now.getMonth();
   const year = now.getFullYear();
-  if (month < 8) {
+  if (month > 1 && month < 8) {
     return {
       XN: `${year - 1}-${year}`,
-      XQ: '第二学期',
+      XQ: '第二学期'
+    };
+  }
+  if (month > 7) {
+    return {
+      XN: `${year}-${year + 1}`,
+      XQ: '第一学期'
     };
   }
   return {
-    XN: `${year}-${year + 1}`,
-    XQ: '第一学期',
+    XN: `${year - 1}-${year}`,
+    XQ: '第一学期'
   };
+
 };
+
 export const mock: any = {
   serviceNum: [
     {

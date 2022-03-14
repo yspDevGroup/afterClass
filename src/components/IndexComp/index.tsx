@@ -50,7 +50,7 @@ const Index = () => {
     });
     if (res.status === 'ok') {
       // 配置头部统计栏目数据
-      setHomeData({ ...res.data });
+      setHomeData({ ...res.data, xs_counts: Number(res.data.xs_count + res.data.khfwxs_count) });
     }
     const resThings = await getAllUnfinish({
       XXJBSJId: currentUser?.xxId,

@@ -197,7 +197,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
         const resSJ = await getAllXXSJPZ({
           XNXQId: curXNXQId,
           XXJBSJId: currentUser?.xxId,
-          type: [ '2'],
+          type: ['2'],
         });
 
         if (resSJ.status === 'ok') {
@@ -260,12 +260,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                    KHBJSJId: formValues?.id,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
               : undefined;
         } else {
           ZTeacher = [
@@ -277,11 +277,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
           FTeacher =
             FJS && FJS?.length
               ? FJS.map((item: any) => {
-                  return {
-                    JSLX: '副教师',
-                    JZGJBSJId: item,
-                  };
-                })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
               : undefined;
         }
         const newData = {
@@ -291,9 +291,9 @@ const AddCourseClass: FC<AddCourseProps> = ({
           KHKCJCs: [],
           BJZT: '未开班',
           ISFW: 0,
+          FY: values?.BMLX === 2 ? 0 : values?.BMLX,
           XNXQId: curXNXQId,
         };
-
         let res: any;
         if (formValues && CopyType === 'undefined') {
           // 编辑
@@ -347,12 +347,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                  KHBJSJId: formValues?.id,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+                KHBJSJId: formValues?.id,
+              };
+            })
             : undefined;
       } else {
         ZTeacher = [
@@ -364,11 +364,11 @@ const AddCourseClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-                return {
-                  JSLX: '副教师',
-                  JZGJBSJId: item,
-                };
-              })
+              return {
+                JSLX: '副教师',
+                JZGJBSJId: item,
+              };
+            })
             : undefined;
       }
       const newData = {
@@ -762,10 +762,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     KKData?.id
       ? {
-          type: 'divTab',
-          text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
-          style: { marginBottom: 8, color: '#bbbbbb' },
-        }
+        type: 'divTab',
+        text: `(默认上课时间段)：${KKData?.KSSJ} — ${KKData?.JSSJ}`,
+        style: { marginBottom: 8, color: '#bbbbbb' },
+      }
       : '',
     {
       type: 'div',
@@ -902,15 +902,16 @@ const AddCourseClass: FC<AddCourseProps> = ({
       label: '费用：',
       name: 'FY',
       key: 'FY',
+      hidden: BMLX,
       readonly: BMLX,
       rules: !BMLX
         ? [
-            { required: true, message: '请填写费用' },
-            {
-              message: '费用应大于0，且最多支持2位小数',
-              pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/,
-            },
-          ]
+          { required: true, message: '请填写费用' },
+          {
+            message: '费用应大于0，且最多支持2位小数',
+            pattern: /(^[1-9](\d+)?(\.\d{1,2})?$)|(^\d\.\d{1,2}$)/,
+          },
+        ]
         : [],
       fieldProps: {
         autocomplete: 'off',
@@ -938,12 +939,12 @@ const AddCourseClass: FC<AddCourseProps> = ({
     },
     choosenJf
       ? {
-          type: 'custom',
-          text: '教辅材料',
-          name: 'KHKCJCs',
-          key: 'KHKCJCs',
-          children: getChildren(),
-        }
+        type: 'custom',
+        text: '教辅材料',
+        name: 'KHKCJCs',
+        key: 'KHKCJCs',
+        children: getChildren(),
+      }
       : '',
   ];
   return (

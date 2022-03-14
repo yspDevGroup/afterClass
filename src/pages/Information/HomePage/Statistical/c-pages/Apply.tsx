@@ -53,11 +53,11 @@ const apply = () => {
         defaultData.conditionNum.push({
           label: item.KCMC,
           type: '报名人次',
-          value:Number((parseInt(item.xsbj_count, 10) || 0) + (parseInt(item.khfwxs_count, 10) || 0)) ,
+          value:Number((parseInt(item.xsbj_count, 10) || 0) + (parseInt(item.khfwxsbj_count, 10) || 0)) ,
         });
       });
       defaultData.applyNum = [{
-        num: applyRes.data.xsbj_count + applyRes.data?.khfwxs_count,
+        num: applyRes.data.xsbj_count + applyRes.data?.khfwxsbj_count,
         title: '报名人次'
       }, {
         num: applyRes.data.xs_count + applyRes.data?.khfwxs_count,
