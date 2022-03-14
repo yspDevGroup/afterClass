@@ -304,6 +304,7 @@ const SchoolInfo = (props: { onSchoolInfoClose: any; visibleSchoolInfo: boolean;
         placement="right"
         onClose={onTeacherClose}
         visible={visibleTeacher}
+        className={classes.KcDatas}
       >
         <div className={classes.forms}>
           <CustomForm
