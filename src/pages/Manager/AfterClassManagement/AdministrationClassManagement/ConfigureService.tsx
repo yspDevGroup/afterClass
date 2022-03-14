@@ -293,7 +293,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
         FWMS: data?.FWMS,
         FWFY: data?.FWFY,
         KXSL: data?.ZDKCS,
-        // KCFD,
         KHKC:
           data?.KHBJSJs?.map((item: any) => {
             return { label: item?.BJMC, value: item?.id };
@@ -301,7 +300,11 @@ const ConfigureService = (props: ConfigureSeverType) => {
       };
       if (!detailValue?.id) {
         setDetailValue(v);
+      } else {
+        v.id = detailValue?.id;
+        setDetailValue(v);
       }
+
       if (data?.FWTP && data.FWTP !== '') {
         setImageUrl(data.FWTP);
       }

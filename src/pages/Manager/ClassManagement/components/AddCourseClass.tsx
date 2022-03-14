@@ -665,7 +665,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
       groupItems: [
         {
           type: 'inputNumber',
-          label: '课时数：',
+          label: '总课时数：',
           name: 'KSS',
           key: 'KSS',
           rules: [
@@ -1018,7 +1018,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
               </p>
             </div>
             <div className={styles.box}>
-              <p>课时数：{formValues?.KSS}</p>
+              <p>总课时数：{formValues?.KSS}</p>
               <p>场地名称：{formValues?.FJSJ?.FJMC || formValues?.KHPKSJs?.[0]?.FJSJ?.FJMC || '—'}</p>
             </div>
             <div className={styles.box}>
