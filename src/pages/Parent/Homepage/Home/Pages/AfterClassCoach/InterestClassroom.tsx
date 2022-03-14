@@ -363,10 +363,15 @@ const InterestClassroom = () => {
       KHFWBJId: FWKCData?.id,
     });
     if (res.status === 'ok') {
-      setWbmDatas(res.data);
+      const arr = res.data?.filter((value: any) => {
+        return (
+          moment(value?.JSRQ).format('YYYY/MM/DD') >= moment(new Date()).format('YYYY/MM/DD')
+        );
+      });
+      setWbmDatas(arr);
       setBmModalVisible(true);
       const newArr: any = [];
-      res.data.forEach((value: any) => {
+      arr?.forEach((value: any) => {
         newArr.push(value?.id);
       });
       setBmTimeIds(newArr);
@@ -683,7 +688,7 @@ const InterestClassroom = () => {
                       {BMDate ? (
                         <>
                           {moment(BMDate).format('YYYY/MM/DD') >=
-                          moment(new Date()).format('YYYY/MM/DD') ? (
+                            moment(new Date()).format('YYYY/MM/DD') ? (
                             <p>该时段暂未报名，请先报名</p>
                           ) : (
                             <p>该时段报名已结束，不可报名</p>
@@ -698,7 +703,7 @@ const InterestClassroom = () => {
                 {DropOutType === false ? (
                   <>
                     {moment(BMDate).format('YYYY/MM/DD') >=
-                    moment(new Date()).format('YYYY/MM/DD') ? (
+                      moment(new Date()).format('YYYY/MM/DD') ? (
                       <div className={styles.footers}>
                         <button onClick={BmSubmit}>我要报名</button>
                       </div>
@@ -832,7 +837,7 @@ const InterestClassroom = () => {
                     {BMDate ? (
                       <>
                         {moment(BMDate).format('YYYY/MM/DD') >=
-                        moment(new Date()).format('YYYY/MM/DD') ? (
+                          moment(new Date()).format('YYYY/MM/DD') ? (
                           <p>该时段暂未报名，请先报名</p>
                         ) : (
                           <p>该时段报名已结束，不可报名</p>
@@ -853,9 +858,9 @@ const InterestClassroom = () => {
                       <>
                         {' '}
                         {BaoMinData &&
-                        FKType === true &&
-                        PayType === true &&
-                        DropOutType === true ? (
+                          FKType === true &&
+                          PayType === true &&
+                          DropOutType === true ? (
                           <div className={styles.footers}>
                             <button onClick={submit}>去付款</button>
                           </div>

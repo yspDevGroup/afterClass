@@ -33,9 +33,18 @@ const Course = (props: any) => {
     const newArr = kskc?.filter((value: any) => {
       return value?.KHKCSJs?.length !== 0;
     });
+    console.log(newArr, 'newArr-----')
     setKSKCData(newArr);
   }, [kskc]);
+  alert(courseStatus);
+  alert(JSON.stringify(KSKCData));
+  alert('---------');
+  alert(JSON.stringify(kskc));
 
+
+  console.log(courseStatus,'courseStatus')
+  console.log(KSKCData,'KSKCData')
+  console.log(kskc,'kskc')
   return (
     <div className={styles.CourseBox}>
       <GoBack title={'缤纷课堂'} onclick="/parent/home?index=index" />
