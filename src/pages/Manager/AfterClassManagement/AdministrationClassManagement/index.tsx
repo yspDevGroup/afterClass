@@ -196,7 +196,6 @@ const AdministrationClassManagement = () => {
   };
   // 获取清除配置
   const getEliminate = (record: any) => {
-    console.log(record, 'record--------')
     if (record?.KHFWBJs?.length) {
       if (record?.KHFWBJs[0]?.ZT === 0) {
         return (

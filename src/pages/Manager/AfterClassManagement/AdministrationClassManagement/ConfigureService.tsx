@@ -209,7 +209,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
 
 
     // 编辑
-    if (detailValue?.id) {
+    if (detailValue?.id && KHFWBJs?.length) {
       const res = await updateKHFWBJ({ id: detailValue?.id }, { ...params });
       if (res.status === 'ok') {
         message.success('修改成功');
@@ -299,7 +299,9 @@ const ConfigureService = (props: ConfigureSeverType) => {
             return { label: item?.BJMC, value: item?.id };
           }) || [],
       };
-      setDetailValue(v);
+      if (!detailValue?.id) {
+        setDetailValue(v);
+      }
       if (data?.FWTP && data.FWTP !== '') {
         setImageUrl(data.FWTP);
       }

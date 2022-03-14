@@ -361,7 +361,7 @@ const CourseUnsubscribe = () => {
                 message.success('退课成功');
               }
             } else {
-              message.success('退课成功,退款余额为0，无需退款');
+              message.success('退课成功，退款余额为0，无需退款');
             }
           }
           setVisible(false);
