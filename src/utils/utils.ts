@@ -415,7 +415,7 @@ export const getCurrentStatus = (KKKSRQ: string, KKJSRQ: string) => {
   //   }
   // } else if (BMbegin <= today && today <= KKbegin) {
   if (today <= KKbegin) {
-    currentStatus = 'enrolled';
+    currentStatus = 'enrolling';
   } else if (KKbegin <= today && today <= KKend) {
     const nowSta = (today.getTime() - KKbegin.getTime()) / 7 / 24 / 60 / 60 / 1000;
     if (nowSta > 2) {
