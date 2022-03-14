@@ -335,7 +335,9 @@ const Index = () => {
                     <ul>
                       <li>
                         <Link to="/courseManagements/classManagement?index=2">课程班开班</Link>
-                        <Link to="/courseManagements/classManagement?index=2">开启报名</Link>
+                      </li>
+                      <li>
+                      <Link to="/courseManagements/classManagement?index=2">开启报名</Link>
                       </li>
                     </ul>
                   </Col>
