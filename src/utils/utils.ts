@@ -383,18 +383,11 @@ export const getCurrentXQ = (list: API.XNXQ[], date?: string): API.XNXQ | null =
 /**
  * 根据当前时间获取移动端时段
  *
- * @param {string} BMKSRQ 报名开始时间
- * @param {string} BMJSRQ 报名结束时间
  * @param {string} KKKSRQ 开课开始时间
  * @param {string} KKJSRQ 开课结束时间
  * @return {*}
  */
-export const getCurrentStatus = (
-  BMKSRQ: string,
-  BMJSRQ: string,
-  KKKSRQ: string,
-  KKJSRQ: string,
-) => {
+export const getCurrentStatus = (KKKSRQ: string, KKJSRQ: string) => {
   let currentStatus:
     | 'unstart'
     | 'enroll'
@@ -405,24 +398,23 @@ export const getCurrentStatus = (
     | 'noTips'
     | 'empty' = 'empty';
   const today = new Date();
-  const BMbegin = new Date(BMKSRQ);
-  const BMend = new Date(BMJSRQ);
   const KKbegin = new Date(KKKSRQ);
   const KKend = new Date(KKJSRQ);
 
-  if (today < BMbegin) {
-    currentStatus = 'unstart';
-  } else if (BMbegin <= today && today <= BMend) {
-    currentStatus = 'enroll';
-    if (KKbegin <= today && today <= BMend) {
-      // const nowSta = (today.getTime() - KKbegin.getTime()) / 7 / 24 / 60 / 60 / 1000;
-      // if (nowSta > 2) {
-      //   currentStatus = 'noTips';
-      // } else {
-      currentStatus = 'enrolling';
-      // }
-    }
-  } else if (BMbegin <= today && today <= KKbegin) {
+  // if (today < BMbegin) {
+  //   currentStatus = 'unstart';
+  // } else if (BMbegin <= today && today <= BMend) {
+  //   currentStatus = 'enroll';
+  //   if (KKbegin <= today && today <= BMend) {
+  //     // const nowSta = (today.getTime() - KKbegin.getTime()) / 7 / 24 / 60 / 60 / 1000;
+  //     // if (nowSta > 2) {
+  //     //   currentStatus = 'noTips';
+  //     // } else {
+  //     currentStatus = 'enrolling';
+  //     // }
+  //   }
+  // } else if (BMbegin <= today && today <= KKbegin) {
+  if (today <= KKbegin) {
     currentStatus = 'enrolled';
   } else if (KKbegin <= today && today <= KKend) {
     const nowSta = (today.getTime() - KKbegin.getTime()) / 7 / 24 / 60 / 60 / 1000;

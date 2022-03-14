@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2022-02-09 14:07:36
+ * @LastEditTime: 2022-03-14 15:03:42
  * @LastEditors: zpl
  */
 /* eslint-disable no-param-reassign */
@@ -21,7 +21,7 @@ import { getKCBSKSJ } from '../after-class/kcbsksj';
 const converClassInfo = (data: any) => {
   const classData = [];
   for (let k = 0; k < data?.length; k += 1) {
-    const { id, FJSJ, KHBJSJ, WEEKDAY, XXSJPZ,RQ } = data[k];
+    const { id, FJSJ, KHBJSJ, WEEKDAY, XXSJPZ, RQ } = data[k];
     const wkd = Number(WEEKDAY);
     classData.push({
       title: KHBJSJ?.KHKCSJ?.KCMC,
@@ -41,8 +41,8 @@ const converClassInfo = (data: any) => {
       pkId: id,
       jcId: XXSJPZ?.id,
       fjId: FJSJ?.id,
-      ISFW:KHBJSJ?.ISFW,
-      RQ
+      ISFW: KHBJSJ?.ISFW,
+      RQ,
     });
   }
   return classData;
@@ -151,9 +151,9 @@ const getHomeData = async (
     if (res?.status === 'ok') {
       courseStatus = 'empty';
       if (res.data) {
-        const { bmkssj, bmjssj, skkssj, skjssj, yxkc, weekSchedule, ...rest } = res.data;
-        if (bmkssj && bmjssj && skkssj && skjssj) {
-          const cStatus = getCurrentStatus(bmkssj, bmjssj, skkssj, skjssj);
+        const { skkssj, skjssj, yxkc, weekSchedule, ...rest } = res.data;
+        if (skkssj && skjssj) {
+          const cStatus = getCurrentStatus(skkssj, skjssj);
           courseStatus = cStatus;
         }
         let bjIds = [].map.call(yxkc, (v: { id: string }) => {
@@ -208,8 +208,6 @@ const getHomeData = async (
           yxkc,
           bjIds,
           weekSchedule,
-          bmkssj,
-          bmjssj,
           skkssj,
           skjssj,
           ...rest,
@@ -362,7 +360,6 @@ export const CurdayCourse = async (
 ) => {
   let data = [];
   let total: any = {};
-  const day = curDay ? new Date(curDay.replace(/-/g, '/')) : new Date(); // 获取当前的时间
   const myDate = curDay || dayjs().format('YYYY-MM-DD');
   // 获取已经处理过的课程安排数据
   if (typeof homeInfo === 'undefined' && type && xxId && userId) {
@@ -800,8 +797,7 @@ export const getWeekday = (now: Date, type?: string) => {
   if (type === 'Saturday') {
     return moment(SaturDayTime).format('YYYY-MM-DD');
   }
-    return moment(SundayTime).format('YYYY-MM-DD');
-
+  return moment(SundayTime).format('YYYY-MM-DD');
 };
 /**
  * 针对课表中中周日历的mark做部分处理
