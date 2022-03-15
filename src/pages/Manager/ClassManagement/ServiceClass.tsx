@@ -405,7 +405,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
           <Tooltip
             overlayStyle={{ maxWidth: '30em' }}
             title={
-              <>实授课时/应授课时</>
+              <>实授课时/应授课时/已排课时</>
             }
           >
             <QuestionCircleOutlined />
@@ -423,7 +423,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
               showModalSKXQ(record);
             }}
           >
-            {record?.ssks_count}/{record?.ysks_count}
+            {record?.ssks_count}/{record?.ysks_count}/{record?.pk_count}
           </a>
         );
       },
