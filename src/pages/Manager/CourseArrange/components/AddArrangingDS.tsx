@@ -366,7 +366,10 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       if (value?.Type === '新增') {
         if (result?.data?.ISFW === 1) {
           const datas = fn(result?.data?.KHPKSJs);
-          if (datas?.length < result?.data?.KSS) {
+          const NewData = datas.filter((item: any) => {
+            return item.PKBZ?.replace(/[^0-9]/ig, "") % 2 === pkData[0].PKBZ?.replace(/[^0-9]/ig, "") % 2
+          })
+          if (NewData?.length < result?.data?.KSS) {
             const PkArr = JSON.parse(JSON.stringify(newPkDatas));
             result?.data?.KHPKSJs?.forEach((item: any) => {
               const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
