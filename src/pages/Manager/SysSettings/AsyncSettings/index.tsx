@@ -29,7 +29,7 @@ const AsyncSettings = () => {
     if (res.status === 'ok') {
       setLoading(false)
       message.success('同步完成');
-    }else{
+    } else {
       setLoading(false)
       message.warning('同步失败，请重试');
     }
@@ -50,9 +50,13 @@ const AsyncSettings = () => {
               立即同步
             </Button>
           </div>
-          <div style={{ color: '#888' }}>
-            未同步到本系统中的成员将无法正常使用移动端，系统每天凌晨自动同步一次，如需手动更新，请点击【立即同步】按钮
+          <div style={{ color: '#888', lineHeight: '30px' }}>
+            本功能用于帮助课后服务平台获取企微架构中的学生、家长及行政班信息。未同步到本系统中的家长将无法正常使用课后服务移动端。
           </div>
+          <ul style={{ color: '#888', listStyle: 'revert', marginLeft: '-20px' }}>
+            <li style={{ lineHeight: '30px' }}>首次使用课后服务平台，请点击【立即同步】按钮以获取相关信息</li>
+            <li style={{ lineHeight: '30px' }}>如出现家长进入移动端后无法正常显示，请点击【立即同步】按钮进行信息同步</li>
+          </ul>
         </div>
       </PageContainer>
     </Spin>
