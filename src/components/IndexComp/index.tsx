@@ -180,6 +180,9 @@ const Index = () => {
                       <li>
                         <Link to="/basicalSettings/teacherManagement">教师管理</Link>
                       </li>
+                      <li>
+                        <Link to="/sysSettings/asyncSettings">家长信息同步</Link>
+                      </li>
                     </ul>
                   </Col>
                   <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
@@ -279,6 +282,9 @@ const Index = () => {
                       <li>
                         <Link to="/basicalSettings/teacherManagement">教师管理</Link>
                       </li>
+                      <li>
+                        <Link to="/sysSettings/asyncSettings">家长信息同步</Link>
+                      </li>
                     </ul>
                   </Col>
                   <Col span={1} style={{ display: 'flex', alignItems: 'center' }}>
@@ -368,6 +374,9 @@ const Index = () => {
                       </li>
                       <li>
                         <Link to="/basicalSettings/termManagement">学年学期维护</Link>
+                      </li>
+                      <li>
+                        <Link to="/sysSettings/asyncSettings">家长信息同步</Link>
                       </li>
                     </ul>
                   </Col>
