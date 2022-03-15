@@ -101,10 +101,6 @@ const TimePeriodForm = (props: PropsType) => {
       fieldProps: {
         onChange: (value: any) => {
           setXQId(value);
-          console.log(XNXQ, 'XNXQ---------')
-          console.log(value)
-          console.log(XNXQ?.find((item: any) => item?.id === value)?.JSRQ)
-          console.log(XNXQ?.find((item: any) => item?.id === value)?.KSRQ)
 
           form?.setFieldsValue({ KSSJ: undefined, JSSJ: undefined });
         },

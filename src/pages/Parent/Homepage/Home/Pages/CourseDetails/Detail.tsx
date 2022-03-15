@@ -155,7 +155,6 @@ const Detail: React.FC = () => {
               {
                 classDetail?.BJRS !== 0 ? <li>总人数：{classDetail?.BJRS}人</li> : ''
               }
-
               {
                 classDetail?.KHBJJs?.find((items: any) => items.JSLX === '主教师') ?
                   <li className={styles.bzrname}>
@@ -196,42 +195,15 @@ const Detail: React.FC = () => {
                     })}
                   </li> : <></>
               }
+              {
+                classDetail?.BJMS === '' ? <></> : <li>班级简介：{classDetail?.BJMS}</li>
+              }
 
               {FKstate?.ZT === 3 ? (
                 <li className={styles.bzrname}>报名费：{classDetail?.FY}元</li>
               ) : (
                 <></>
               )}
-              {/* <li>
-            上课安排：
-            <table width="100%">
-              <thead>
-                <tr>
-                  <th>星期</th>
-                  <th>节次</th>
-                  <th>时间</th>
-                  <th>校区</th>
-                  <th>教室</th>
-                </tr>
-              </thead>
-              <tbody>
-                {extra?.map((values: { FJSJ: any; XXSJPZ: any; WEEKDAY: number }) => {
-                  const weeks = `星期${'日一二三四五六'.charAt(values.WEEKDAY)}`;
-                  return (
-                    <tr key={values.XXSJPZ.TITLE}>
-                      <td>{weeks}</td>
-                      <td>{values.XXSJPZ.TITLE}</td>
-                      <td>
-                        {values.XXSJPZ.KSSJ.substring(0, 5)}-{values.XXSJPZ.JSSJ.substring(0, 5)}
-                      </td>
-                      <td>本校</td>
-                      <td>{values.FJSJ.FJMC}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </li> */}
               <li>
                 <div className={styles.Teachingaterial}>
                   {!JFData?.length ? (
