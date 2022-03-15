@@ -170,7 +170,10 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = ({ SKXQData }) => {
       align: 'center',
       width: 170,
       render: (_text, record) => {
-        return `${record.SKRQ} ${record.XXSJPZ.KSSJ}~${record.XXSJPZ.JSSJ}`;
+        return `${record.SKRQ} ${record.XXSJPZ.KSSJ?.substring(
+          0,
+          5,
+        )}~${record.XXSJPZ.JSSJ?.substring(0, 5)}`;
       },
     },
     {
