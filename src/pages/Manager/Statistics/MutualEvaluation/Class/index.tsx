@@ -10,7 +10,7 @@ import { Button } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { getTableWidth } from '@/utils/utils';
 
-const school = (props: any) => {
+const School = (props: any) => {
   const {XNXQ,record} = props.location.state.data;
   const {id, KCMC}=record;
  const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
@@ -145,4 +145,4 @@ const school = (props: any) => {
     </PageContainer>
   </div>
 }
-export default school
+export default School;

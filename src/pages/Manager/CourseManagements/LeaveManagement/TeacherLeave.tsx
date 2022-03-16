@@ -144,7 +144,7 @@ const TeacherLeave: React.FC = () => {
           />
         );
       },
-      width: 120,
+      width: 150,
     },
     {
       title: '开始时间',

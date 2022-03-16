@@ -110,7 +110,7 @@ const StudentsLeave: React.FC = () => {
           />
         );
       },
-      width: 120,
+      width: 150,
     },
     {
       title: '授课教师',

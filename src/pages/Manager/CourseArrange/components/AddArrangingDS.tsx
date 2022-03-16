@@ -63,7 +63,8 @@ type PropsType = {
   screenOriSource: any;
   setScreenOriSource: React.Dispatch<any>;
   setRqDisable: React.Dispatch<any>;
-  setLoading: any;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   campusId: string | undefined;
   TimeData: any;
   Weeks: any;
@@ -79,25 +80,20 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     currentUser,
     processingData,
     formValues,
+    loading,
     setLoading,
-    // setBJIDData,
     cdmcData,
     kcmcData,
     campusId,
     TimeData,
     setRqDisable,
     Weeks,
-    // setTableDataSource,
-    // sameClass,
-    // tableDataSource,
   } = props;
 
 
   const [packUp, setPackUp] = useState(false);
   const [form] = Form.useForm();
-  const [loading] = useState(false);
   const [CDLoading, setCDLoading] = useState(false);
-  // const [XQID, setXQID] = useState<any>('');
   const [NJID, setNJID] = useState<any>(undefined);
   const [cdmcValue, setCdmcValue] = useState<any>();
   const [newTableDataSource, setNewTableDataSource] = useState<DataSourceType>([]);
@@ -138,7 +134,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         title: '节次',
         dataIndex: 'course',
         key: 'course',
-        align: 'left',
+        align: 'center',
         width: 100,
       },
       {
@@ -615,8 +611,11 @@ const AddArrangingDS: FC<PropsType> = (props) => {
   };
 
   // 班级选择
-  const BjClick = (value: any) => {
+  const BjClick = async (value: any) => {
     setClass(value);
+    const result = await classSchedule({
+      id: value.id
+    })
     // 更换课程班后将场地清空
     setCdmcValue(undefined);
     const start = new Date(moment(value?.KKRQ).format('YYYY/MM/DD  00:00:00'));
@@ -652,6 +651,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         setCdmcValue(value?.FJSJ?.id);
         setCdFalg(true);
       } else {
+        setCdmcValue(result?.data?.KHPKSJs?.[0]?.FJSJId || '');
         setCdFalg(false);
       }
     } else {
@@ -669,6 +669,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         setCdmcValue(value?.FJSJ?.id);
         setCdFalg(true);
       } else {
+        setCdmcValue(result?.data?.KHPKSJs?.[0]?.FJSJId || '');
         setCdFalg(false);
       }
     }
@@ -811,7 +812,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
   // 场地改变重新筛选表格
   useEffect(() => {
     if (Bj?.id) {
-      setLoading(true);
       refreshTable();
     }
   }, [cdmcValue, Bj]);
@@ -916,6 +916,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     },
   };
 
+  console.log(loading, '---------------------')
   return (
     <div className={styles.AddArranging}>
       <Card
@@ -943,243 +944,239 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         }
       >
         <Spin spinning={loading} style={{ height: '100vh' }} size="large">
-          {!loading ? (
-            <ProForm
-              className="ArrangingFrom"
-              name="validate_other"
-              layout="horizontal"
-              form={form}
-              // onFinish={submit}
-              submitter={false}
-            >
-              <Row justify="start" align="middle" style={{ background: '#F5F5F5' }}>
-                <Col span={6}>
-                  <ProFormSelect
-                    label="校区"
-                    width="md"
-                    name="XQ"
-                    style={{
-                      margin: '12px 0',
-                    }}
-                    disabled={true}
-                    options={campus || []}
-                  />
-                </Col>
-                <Col span={6}>
-                  <ProFormSelect
-                    label="课程适用年级"
-                    width="md"
-                    name="NJ"
-                    options={grade || []}
-                    fieldProps={{
-                      async onChange(value) {
-                        // 年级选择时将选中的课程清空
-                        form.setFieldsValue({ KC: undefined });
-                        setNJID(value);
-                      },
-                    }}
-                  />
-                </Col>
-                <Col span={6}>
-                  <ProFormSelect
-                    label="课程"
-                    width="md"
-                    options={kcType || []}
-                    name="KC"
-                    showSearch
-                    fieldProps={{
-                      async onChange(value) {
-                        getBjData(value);
-                      },
-                    }}
-                  />
-                </Col>
-              </Row>
+          <ProForm
+            className="ArrangingFrom"
+            name="validate_other"
+            layout="horizontal"
+            form={form}
+            // onFinish={submit}
+            submitter={false}
+          >
+            <Row justify="start" align="middle" style={{ background: '#F5F5F5' }}>
+              <Col span={6}>
+                <ProFormSelect
+                  label="校区"
+                  width="md"
+                  name="XQ"
+                  style={{
+                    margin: '12px 0',
+                  }}
+                  disabled={true}
+                  options={campus || []}
+                />
+              </Col>
+              <Col span={6}>
+                <ProFormSelect
+                  label="课程适用年级"
+                  width="md"
+                  name="NJ"
+                  options={grade || []}
+                  fieldProps={{
+                    async onChange(value) {
+                      // 年级选择时将选中的课程清空
+                      form.setFieldsValue({ KC: undefined });
+                      setNJID(value);
+                    },
+                  }}
+                />
+              </Col>
+              <Col span={6}>
+                <ProFormSelect
+                  label="课程"
+                  width="md"
+                  options={kcType || []}
+                  name="KC"
+                  showSearch
+                  fieldProps={{
+                    async onChange(value) {
+                      getBjData(value);
+                    },
+                  }}
+                />
+              </Col>
+            </Row>
 
-              <div className="banji">
-                <span>课程班：</span>
-                {bjData && bjData.length === 0 ? (
-                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                ) : (
-                  <>
-                    {bjData && bjData.length < 17 ? (
-                      <ProCard ghost className="banjiCard">
-                        {bjData.map((value: any) => {
-                          const teacher =
-                            value?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ ||
-                            value?.KHBJJs?.[0]?.JZGJBSJ;
-                          return (
-                            <ProCard
-                              className="banjiItem"
-                              layout="center"
-                              bordered
-                              onClick={() => BjClick(value)}
-                              style={getKCStyle(value.id)}
-                            >
-                              <Tooltip title={value.BJMC}>
-                                <p>{value.BJMC}</p>
-                              </Tooltip>
-                              <span>
-                                <ShowName
-                                  style={{ color: '#666' }}
-                                  type="userName"
-                                  openid={teacher?.WechatUserId}
-                                  XM={teacher?.XM}
-                                />
-                              </span>
-                              {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
-                            </ProCard>
-                          );
-                        })}
-                      </ProCard>
-                    ) : (
-                      <>
-                        {packUp === false ? (
-                          <ProCard ghost className="banjiCard">
-                            {bjData && bjData.length > 0
-                              ? bjData.slice(0, 15).map((value: any) => {
-                                const zb = value?.KHBJJs.find(
-                                  (item: any) => item.JSLX === '主教师',
-                                );
-                                return (
-                                  <ProCard
-                                    layout="center"
-                                    bordered
-                                    className="banjiItem"
-                                    onClick={() => BjClick(value)}
-                                    style={getKCStyle(value.id)}
-                                  >
-                                    <Tooltip title={value.BJMC}>
-                                      <p>{value.BJMC}</p>
-                                    </Tooltip>
-                                    <span>
-                                      {/* {
-                                      value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                        ?.JZGJBSJ?.XM
-                                    } */}
-                                      <ShowName
-                                        style={{ color: '#666' }}
-                                        type="userName"
-                                        openid={zb?.WechatUserId}
-                                        XM={zb?.JZGJBSJ?.XM}
-                                      />
-                                    </span>
-                                    {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
-                                  </ProCard>
-                                );
-                              })
-                              : ''}
-                            <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                              展开 <DownOutlined style={{ color: '#4884FF' }} />
-                            </ProCard>
-                          </ProCard>
-                        ) : (
-                          <ProCard ghost className="banjiCard">
-                            {bjData && bjData.length > 0
-                              ? bjData.map((value: any) => {
-                                const zb = value?.KHBJJs.find(
-                                  (item: any) => item.JSLX === '主教师',
-                                );
-                                return (
-                                  <ProCard
-                                    layout="center"
-                                    bordered
-                                    className="banjiItem"
-                                    onClick={() => BjClick(value)}
-                                    style={getKCStyle(value.id)}
-                                  >
-                                    <Tooltip title={value.BJMC}>
-                                      <p>{value.BJMC}</p>
-                                    </Tooltip>
-                                    <span>
-                                      {/* {
-                                      value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
-                                        ?.JZGJBSJ?.XM
-                                    } */}
-                                      <ShowName
-                                        style={{ color: '#666' }}
-                                        type="userName"
-                                        openid={value.WechatUserId}
-                                        XM={zb?.JZGJBSJ?.XM}
-                                      />
-                                    </span>
-                                    {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
-                                  </ProCard>
-                                );
-                              })
-                              : ''}
-                            <ProCard layout="center" bordered onClick={unFold} className="unFold">
-                              收起 <UpOutlined style={{ color: '#4884FF' }} />
-                            </ProCard>
-                          </ProCard>
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
-              </div>
-              <Form.Item label="场地：">
-                <Select
-                  style={{ width: 200 }}
-                  value={cdmcValue}
-                  allowClear
-                  placeholder="请选择"
-                  disabled={CdFalg}
-                  onChange={(value) => setCdmcValue(value)}
-                >
-                  {cdmcData?.map((item: selectType) => {
-                    return (
-                      <Option value={item.value} key={item.value}>
-                        {item.label}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-              {Bj && cdmcValue ? (
-                <Button
-                  className="ImportBtn"
-                  key="button"
-                  type="primary"
-                  onClick={() => setUploadVisible(true)}
-                >
-                  <VerticalAlignBottomOutlined /> 导入
-                </Button>
+            <div className="banji">
+              <span>课程班：</span>
+              {bjData && bjData.length === 0 ? (
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
               ) : (
-                ''
+                <>
+                  {bjData && bjData.length < 17 ? (
+                    <ProCard ghost className="banjiCard">
+                      {bjData.map((value: any) => {
+                        const teacher =
+                          value?.KHBJJs?.find((items: any) => items.JSLX === '主教师')?.JZGJBSJ ||
+                          value?.KHBJJs?.[0]?.JZGJBSJ;
+                        return (
+                          <ProCard
+                            className="banjiItem"
+                            layout="center"
+                            bordered
+                            onClick={() => BjClick(value)}
+                            style={getKCStyle(value.id)}
+                          >
+                            <Tooltip title={value.BJMC}>
+                              <p>{value.BJMC}</p>
+                            </Tooltip>
+                            <span>
+                              <ShowName
+                                style={{ color: '#666' }}
+                                type="userName"
+                                openid={teacher?.WechatUserId}
+                                XM={teacher?.XM}
+                              />
+                            </span>
+                            {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                          </ProCard>
+                        );
+                      })}
+                    </ProCard>
+                  ) : (
+                    <>
+                      {packUp === false ? (
+                        <ProCard ghost className="banjiCard">
+                          {bjData && bjData.length > 0
+                            ? bjData.slice(0, 15).map((value: any) => {
+                              const zb = value?.KHBJJs.find(
+                                (item: any) => item.JSLX === '主教师',
+                              );
+                              return (
+                                <ProCard
+                                  layout="center"
+                                  bordered
+                                  className="banjiItem"
+                                  onClick={() => BjClick(value)}
+                                  style={getKCStyle(value.id)}
+                                >
+                                  <Tooltip title={value.BJMC}>
+                                    <p>{value.BJMC}</p>
+                                  </Tooltip>
+                                  <span>
+                                    {/* {
+                                      value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                        ?.JZGJBSJ?.XM
+                                    } */}
+                                    <ShowName
+                                      style={{ color: '#666' }}
+                                      type="userName"
+                                      openid={zb?.WechatUserId}
+                                      XM={zb?.JZGJBSJ?.XM}
+                                    />
+                                  </span>
+                                  {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                                </ProCard>
+                              );
+                            })
+                            : ''}
+                          <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                            展开 <DownOutlined style={{ color: '#4884FF' }} />
+                          </ProCard>
+                        </ProCard>
+                      ) : (
+                        <ProCard ghost className="banjiCard">
+                          {bjData && bjData.length > 0
+                            ? bjData.map((value: any) => {
+                              const zb = value?.KHBJJs.find(
+                                (item: any) => item.JSLX === '主教师',
+                              );
+                              return (
+                                <ProCard
+                                  layout="center"
+                                  bordered
+                                  className="banjiItem"
+                                  onClick={() => BjClick(value)}
+                                  style={getKCStyle(value.id)}
+                                >
+                                  <Tooltip title={value.BJMC}>
+                                    <p>{value.BJMC}</p>
+                                  </Tooltip>
+                                  <span>
+                                    {/* {
+                                      value?.KHBJJs.find((item: any) => item.JSLX === '主教师')
+                                        ?.JZGJBSJ?.XM
+                                    } */}
+                                    <ShowName
+                                      style={{ color: '#666' }}
+                                      type="userName"
+                                      openid={value.WechatUserId}
+                                      XM={zb?.JZGJBSJ?.XM}
+                                    />
+                                  </span>
+                                  {Bj?.id === value.id ? <span className="douhao">√</span> : ''}
+                                </ProCard>
+                              );
+                            })
+                            : ''}
+                          <ProCard layout="center" bordered onClick={unFold} className="unFold">
+                            收起 <UpOutlined style={{ color: '#4884FF' }} />
+                          </ProCard>
+                        </ProCard>
+                      )}
+                    </>
+                  )}
+                </>
               )}
-              <div className="site">
-                {Bj && cdmcValue ? (
-                  <Spin spinning={CDLoading}>
-                    <ExcelTable3
-                      className={styles.borderTable}
-                      columns={columns}
-                      dataSource={newTableDataSource}
-                      chosenData={Bj}
-                      onExcelTableClick={onExcelTableClick}
-                      type="edit"
-                      getSelectdata={getSelectdata}
-                      tearchId={tearchId}
-                      TimeData={TimeData}
-                      xXSJPZData={xXSJPZData}
-                      Weeks={Weeks}
-                      style={{
-                        height: '100%',
-                      }}
-                    // basicData={oriSource}
-                    />
-                  </Spin>
-                ) : (
-                  <div className={styles.noContent}>
-                    {' '}
-                    <img src={noJF} alt="" /> <p>请先选择班级和场地后再进行排课</p>{' '}
-                  </div>
-                )}
-              </div>
-            </ProForm>
-          ) : (
-            ''
-          )}
+            </div>
+            <Form.Item label="场地：">
+              <Select
+                style={{ width: 200 }}
+                value={cdmcValue}
+                allowClear
+                placeholder="请选择"
+                disabled={CdFalg}
+                onChange={(value) => setCdmcValue(value)}
+              >
+                {cdmcData?.map((item: selectType) => {
+                  return (
+                    <Option value={item.value} key={item.value}>
+                      {item.label}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+            {Bj && cdmcValue ? (
+              <Button
+                className="ImportBtn"
+                key="button"
+                type="primary"
+                onClick={() => setUploadVisible(true)}
+              >
+                <VerticalAlignBottomOutlined /> 导入
+              </Button>
+            ) : (
+              ''
+            )}
+            <div className="site">
+              {Bj && cdmcValue ? (
+                <Spin spinning={CDLoading}>
+                  <ExcelTable3
+                    className={styles.borderTable}
+                    columns={columns}
+                    dataSource={newTableDataSource}
+                    chosenData={Bj}
+                    onExcelTableClick={onExcelTableClick}
+                    type="edit"
+                    getSelectdata={getSelectdata}
+                    tearchId={tearchId}
+                    TimeData={TimeData}
+                    xXSJPZData={xXSJPZData}
+                    Weeks={Weeks}
+                    style={{
+                      height: '100%',
+                    }}
+                  // basicData={oriSource}
+                  />
+                </Spin>
+              ) : (
+                <div className={styles.noContent}>
+                  {' '}
+                  <img src={noJF} alt="" /> <p>请先选择班级和场地后再进行排课</p>{' '}
+                </div>
+              )}
+            </div>
+          </ProForm>
         </Spin>
       </Card>
       <Modal

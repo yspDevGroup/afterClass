@@ -90,7 +90,6 @@ const Index = () => {
   const startWeek = Number(moment(TimeData?.KSRQ).format('E'));
   const endWeek = Number(moment(TimeData?.JSRQ).format('E'));
   const processingData = (data: any, timeData: any, bjId: string | undefined = undefined) => {
-    // setLoading(true);
     const week = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const newWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const tableData: any[] = [];
@@ -288,7 +287,6 @@ const Index = () => {
 
   };
   const processingDatas = (data: any, timeData: any, week: any, bjId: string | undefined = undefined) => {
-    // setLoading(true);
     const tableData: any[] = [];
     const sameClassData: any[] = [];
     let Weekss: any = []
@@ -389,7 +387,6 @@ const Index = () => {
     return tableData;
   };
   const processingDataDS = (data: any, timeData: any, bjId: string | undefined = undefined) => {
-    // setLoading(true);
     const NewArr = ['单周', '双周']
     const tableData: any[] = [];
     const sameClassData: any[] = [];
@@ -542,7 +539,6 @@ const Index = () => {
     return tableData;
   };
   const processingDataZ = (data: any, timeData: any, bjId: string | undefined = undefined) => {
-    // setLoading(true);
     const NewArr = ['每周']
     const tableData: any[] = [];
     const sameClassData: any[] = [];
@@ -1054,6 +1050,7 @@ const Index = () => {
                       formValues={recordValue}
                       kcmcData={kcmcData}
                       currentUser={currentUser}
+                      loading={loading}
                       setLoading={setLoading}
                       TimeData={TimeData}
                       setRqDisable={setRqDisable}
@@ -1077,6 +1074,7 @@ const Index = () => {
                       formValues={recordValue}
                       kcmcData={kcmcData}
                       currentUser={currentUser}
+                      loading={loading}
                       setLoading={setLoading}
                       TimeData={TimeData}
                       setRqDisable={setRqDisable}
@@ -1100,6 +1098,7 @@ const Index = () => {
                       formValues={recordValue}
                       kcmcData={kcmcData}
                       currentUser={currentUser}
+                      loading={loading}
                       setLoading={setLoading}
                       TimeData={TimeData}
                       setRqDisable={setRqDisable}

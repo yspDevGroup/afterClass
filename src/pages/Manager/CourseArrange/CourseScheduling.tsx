@@ -192,9 +192,6 @@ const CourseScheduling = (
    * @param valueScreenOriSource  需要筛选的数据
    */
   const getScreenOriSource = (valueScreenOriSource: any) => {
-    // 加载中
-    // setLoading(true);
-
     const _obj = JSON.stringify(valueScreenOriSource);
     let newArr = JSON.parse(_obj);
     //
@@ -295,7 +292,6 @@ const CourseScheduling = (
 
   // 获取课程对应课程班数据信息
   const getBjData = async () => {
-    // setLoading(true);
     const bjmcResl = await getAllClasses({
       page: 0,
       pageSize: 0,

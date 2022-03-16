@@ -227,8 +227,6 @@ const CourseScheduling = (
    * @param valueScreenOriSource  需要筛选的数据
    */
   const getScreenOriSource = (valueScreenOriSource: any) => {
-    // 加载中
-    setLoading(true);
 
     const _obj = JSON.stringify(valueScreenOriSource);
     let newArr = JSON.parse(_obj);
