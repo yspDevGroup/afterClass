@@ -127,7 +127,7 @@ const AddArranging: FC<PropsType> = (props) => {
         dataIndex: 'room',
         key: 'room',
         align: 'center',
-        width: 66,
+        width: 100,
       },
       {
         title: '节次',

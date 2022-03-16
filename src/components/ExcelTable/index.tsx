@@ -59,6 +59,8 @@ export type DataSourceType = {
     jsId: string;
     /** 场地类型ID */
     FJLXId: string;
+    SD?: string;
+
   };
   /** 课次 */
   course: {
@@ -69,6 +71,7 @@ export type DataSourceType = {
     teacherWechatId?: string;
     /** 时间ID */
     hjId: string;
+    SD?: string;
   };
   monday: WeenType | '';
   tuesday: WeenType | '';
@@ -456,12 +459,13 @@ const Index: FC<IndexPropsType> = ({
                                   <div
                                     className="cla"
                                     style={{
-                                      width: item.dataIndex === 'room' ? 45 : '100%',
+                                      width: '100%',
                                       margin: '0 auto',
                                       wordBreak: 'break-word',
                                     }}
                                   >
                                     {data[item.dataIndex].cla}
+                                    <p style={{ fontWeight: 'normal', fontSize: '13px', color: '#666' }}>{data[item.dataIndex].SD}</p>
                                   </div>
                                 </div>
                               </div>
@@ -472,12 +476,13 @@ const Index: FC<IndexPropsType> = ({
                                   <div
                                     className="cla"
                                     style={{
-                                      width: item.dataIndex === 'room' ? 45 : '100%',
+                                      width: '100%',
                                       margin: '0 auto',
                                       wordBreak: 'break-word',
                                     }}
                                   >
                                     {data[item.dataIndex].cla}
+                                    <p style={{ fontWeight: 'normal', fontSize: '13px', color: '#666' }}>{data[item.dataIndex].SD}</p>
                                   </div>
                                   <div className="teacher">{data[item.dataIndex].teacher}</div>
                                 </div>

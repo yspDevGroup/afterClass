@@ -58,6 +58,8 @@ const Index = () => {
   const [loading, setLoading] = useState<boolean>(false);
   // 排课须知弹框
   const [VisiblePKXZ, setVisiblePKXZ] = useState(false);
+  // 学年学期第一周的开始时间
+  const [stateTime, setStateTime] = useState<Date>();
 
   // ----------------------------计算时间-------------------------------
   const getTime = () => {
@@ -67,6 +69,7 @@ const Index = () => {
       return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
     };
     const end = new Date(moment(TimeData?.JSRQ).format('YYYY/MM/DD  23:59:59'));
+    setStateTime(getFirstDay(new Date(TimeData?.KSRQ)))
     const times = end.getTime() - getFirstDay(new Date(TimeData?.KSRQ)).getTime();
     // 获取开始时间到结束时间中间有多少个自然周
     const zhoushu = Math.ceil(times / (7 * 24 * 60 * 60 * 1000));
@@ -107,6 +110,7 @@ const Index = () => {
               jsId: '',
               FJLXId: '', // 场地类型ID
               rowspan: timeKey === 0 ? timeData?.length : 0,
+              SD: `${moment(stateTime).add(index * 7, 'days').format('MM.DD')}-${moment(stateTime).add(6 + (index * 7), 'days').format('MM.DD')} `
             },
             course: {
               cla: timeItem?.TITLE,
@@ -289,6 +293,7 @@ const Index = () => {
   const processingDatas = (data: any, timeData: any, week: any, bjId: string | undefined = undefined) => {
     const tableData: any[] = [];
     const sameClassData: any[] = [];
+
     let Weekss: any = []
     if (week && week !== undefined) {
       Weekss = week
@@ -308,6 +313,7 @@ const Index = () => {
               jsId: '',
               FJLXId: '', // 场地类型ID
               rowspan: timeKey === 0 ? timeData?.length : 0,
+              SD: `${moment(stateTime).add(index * 7, 'days').format('MM.DD')}-${moment(stateTime).add(6 + (index * 7), 'days').format('MM.DD')} `
             },
             course: {
               cla: timeItem?.TITLE,

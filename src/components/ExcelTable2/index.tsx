@@ -396,6 +396,7 @@ const Index: FC<IndexPropsType> = ({
     }
   };
   const datas = stateTableData ? [...stateTableData] : [...dataSource];
+  console.log(datas, '--------------------')
   return (
     <div className={`${styles.excelTable} ${className}`}>
       <table style={{ boxShadow: '0px 5px 6px rgba(136,136,136,0.2)', marginBottom: '10px' }}>
@@ -440,12 +441,13 @@ const Index: FC<IndexPropsType> = ({
                                   <div
                                     className="cla"
                                     style={{
-                                      width: item.dataIndex === 'room' ? 45 : '100%',
+                                      width: '100%',
                                       margin: '0 auto',
                                       wordBreak: 'break-word',
                                     }}
                                   >
                                     {data[item.dataIndex].cla}
+                                    <p style={{ fontWeight: 'normal', fontSize: '13px', color: '#666' }}>{data[item.dataIndex].SD}</p>
                                   </div>
                                 </div>
                               </div>
@@ -459,7 +461,7 @@ const Index: FC<IndexPropsType> = ({
                                   <div
                                     className="cla"
                                     style={{
-                                      width: item.dataIndex === 'room' ? 45 : '100%',
+                                      width: '100%',
                                       margin: '0 auto',
                                       wordBreak: 'break-word',
                                       fontWeight: 'normal',
@@ -467,6 +469,7 @@ const Index: FC<IndexPropsType> = ({
                                     }}
                                   >
                                     {data[item.dataIndex].cla}
+                                    <p style={{ fontWeight: 'normal', fontSize: '13px', color: '#666' }}>{data[item.dataIndex].SD}</p>
                                   </div>
                                 </div>
                               </div>
