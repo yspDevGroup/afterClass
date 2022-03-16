@@ -201,8 +201,8 @@ const StudentsLeave: React.FC = () => {
                 <Option key="已通过" value={0}>
                   已通过
                 </Option>
-                <Option key="已取销" value={1}>
-                  已取销
+                <Option key="已取消" value={1}>
+                  已取消
                 </Option>
               </Select>
             </div>

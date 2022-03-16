@@ -201,6 +201,9 @@ const OrderInquiry = (props: any) => {
       key: 'DDFY',
       align: 'center',
       width: 120,
+      render: (_text: any, record: any) => {
+        return <div>{(Number(record.DDFY)).toFixed(2)}</div>;
+      },
     },
     {
       title: '下单时间',

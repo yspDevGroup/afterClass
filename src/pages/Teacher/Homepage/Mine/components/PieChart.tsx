@@ -23,7 +23,8 @@ const CheckOnChart = (props: {
   cls?: string;
 }) => {
   const { data, title, subTitle, cls } = props;
-  const pieConfig = {
+
+  const pieConfig: any = {
     appendPadding: 10,
     height: 150,
     data,
@@ -48,17 +49,21 @@ const CheckOnChart = (props: {
       content: '{value}',
     },
     statistic: {
-      title: false,
-      // {
-      //   offsetY: -4,
-      //   style: { fontSize: '14px' },
-      //   content: '总课时',
-      // },
-      content: false,
-      // {
-      //   offsetY: 4,
-      //   style: { fontSize: '16px' },
-      // },
+      // title: false,
+      title: {
+        offsetY: -4,
+        style: { fontSize: '14px' },
+        content: '已排课时',
+        customHtml: () => {
+          return '已排课时';
+        }
+      },
+
+      // content: false,
+      content: {
+        offsetY: 4,
+        style: { fontSize: '16px' },
+      },
     },
   };
   return (

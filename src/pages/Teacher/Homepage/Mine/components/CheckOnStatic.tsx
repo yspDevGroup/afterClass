@@ -27,7 +27,7 @@ const CheckOnStatic = () => {
   // 转换考勤数据格式
   const convertData = (data: any, type: string) => {
     if (data && type === 'attendance') {
-      const toDo = data.KSS - data.attendance - data.leave - data.substitute - data.absenteeism;
+      const toDo = data.ALL_KSS - Number(data.attendance) - Number(data.leave) - Number(data.substitute) - Number(data.absenteeism);
       return {
         title: `${data.KCMC}`,
         subTitle: `${data.BJMC}`,
@@ -38,25 +38,25 @@ const CheckOnStatic = () => {
           {
             label: `${data.KCMC}/${data.BJMC}`,
             type: '正常',
-            value: data.attendance,
+            value: Number(data.attendance),
             color: 'l(180) 0:rgba(137, 218, 140, 1) 1:rgba(137, 218, 140, 0.2)',
           },
           {
             label: `${data.KCMC}/${data.BJMC}`,
             type: '请假',
-            value: data.leave,
+            value: Number(data.leave),
             color: 'l(180) 0:rgba(242, 200, 98, 0.2) 1:rgba(242, 200, 98, 1)',
           },
           {
             label: `${data.KCMC}/${data.BJMC}`,
             type: '代课',
-            value: data.substitute,
+            value: Number(data.substitute),
             color: 'l(180) 0:rgba(172, 144, 251, 0.2) 1:rgba(172, 144, 251, 1)',
           },
           {
             label: `${data.KCMC}/${data.BJMC}`,
             type: '异常',
-            value: data.absenteeism,
+            value: Number(data.absenteeism),
             color: 'l(180) 0:rgba(244, 138, 130, 0.2) 1:rgba(244, 138, 130, 1)',
           },
           {
@@ -101,10 +101,13 @@ const CheckOnStatic = () => {
           JZGJBSJId: currentUser.JSId || testTeacherId,
         });
         if (res.status === 'ok') {
-          const arr = [].map.call(res.data, (item) => {
+          const arr = [].map.call(res.data.SKBJs, (item) => {
             return convertData(item, 'attendance');
           });
-          setStatistics(arr || []);
+          const arrs = [].map.call(res.data.RLBJs, (item) => {
+            return convertData(item, 'attendance');
+          });
+          setStatistics([...arr, ...arrs] || []);
         }
         const response = await statisSubstitute({
           XNXQId: result.current.id,
