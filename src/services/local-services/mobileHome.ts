@@ -585,6 +585,7 @@ export const CountCourses = (data: any) => {
 export const convertCourse = (day: string, course: any[] = [], type?: string) => {
   const data: any[] = [];
   course?.forEach((item: any) => {
+    console.log(item,'item')
     if (type && type === 'filter') {
       if (!item.status) {
         data.push({
@@ -618,6 +619,9 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           bjId: item.bjId,
           jcId: item.jcId,
           date: item.date || day,
+          start: item.start,
+          end: item.end,
+          title:item.title
         },
       };
       data.push({

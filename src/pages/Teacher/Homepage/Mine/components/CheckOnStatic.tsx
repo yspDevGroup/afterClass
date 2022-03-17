@@ -68,6 +68,41 @@ const CheckOnStatic = () => {
         ],
       };
     }
+    if (data && type === 'rlbj') {
+      return {
+        title: `${data.KCMC}`,
+        subTitle: `${data.BJMC}`,
+        zc: data.normal,
+        yc: data.abnormal,
+        ds: data.remain,
+        data: [
+          {
+            label: `${data.KCMC}/${data.BJMC}`,
+            type: '正常',
+            value: Number(data.attendance),
+            color: 'l(180) 0:rgba(137, 218, 140, 1) 1:rgba(137, 218, 140, 0.2)',
+          },
+          {
+            label: `${data.KCMC}/${data.BJMC}`,
+            type: '请假',
+            value: Number(data.leave),
+            color: 'l(180) 0:rgba(242, 200, 98, 0.2) 1:rgba(242, 200, 98, 1)',
+          },
+          {
+            label: `${data.KCMC}/${data.BJMC}`,
+            type: '代课',
+            value: Number(data.substitute),
+            color: 'l(180) 0:rgba(172, 144, 251, 0.2) 1:rgba(172, 144, 251, 1)',
+          },
+          {
+            label: `${data.KCMC}/${data.BJMC}`,
+            type: '异常',
+            value: Number(data.absenteeism),
+            color: 'l(180) 0:rgba(244, 138, 130, 0.2) 1:rgba(244, 138, 130, 1)',
+          },
+        ],
+      };
+    }
     if (data && type === 'replace') {
       const { count, cq_count, qq_count } = data;
       const num = Number(count) - Number(cq_count) - Number(qq_count);
@@ -105,7 +140,7 @@ const CheckOnStatic = () => {
             return convertData(item, 'attendance');
           });
           const arrs = [].map.call(res.data.RLBJs, (item) => {
-            return convertData(item, 'attendance');
+            return convertData(item, 'rlbj');
           });
           setStatistics([...arr, ...arrs] || []);
         }

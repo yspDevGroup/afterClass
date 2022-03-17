@@ -122,7 +122,7 @@ const ActionBar = (props: propstype) => {
                 开启
               </a>
               <Popconfirm
-                title="开班后该课程班家长和教育局端可见，确定开班?"
+                title="开班表示该课程班配置已就绪，教育局可见，且可随时开启报名，确定开班？"
                 onConfirm={() => release(record)}
                 okText="确定"
                 cancelText="取消"

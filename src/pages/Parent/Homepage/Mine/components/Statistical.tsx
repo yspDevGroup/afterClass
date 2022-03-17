@@ -12,13 +12,14 @@ const Statistical = (props: { userId?: string; xxId?: string }) => {
   const { userId, xxId } = props;
   const [satistics, setStatistics] = useState<any[]>();
 
-  const convertData = (data: any) => {
-    if (data) {
+  const convertData = (data: any, type: string) => {
+    if (data && type === 'kcb') {
       return {
         title: `${data.KCMC}/${data.BJMC}`,
         zc: data.normal,
         yc: data.abnormal,
         ds: data.remain,
+        ISFW: data.ISFW,
         data: [
           {
             type: '正常',
@@ -35,7 +36,24 @@ const Statistical = (props: { userId?: string; xxId?: string }) => {
         ],
       };
     }
-    return {};
+    return {
+      title: `${data.KCMC}/${data.BJMC}`,
+      zc: data.normal,
+      yc: data.abnormal,
+      ds: data.remain,
+      ISFW: data.ISFW,
+      data: [
+        {
+          type: '正常',
+          value: data.normal,
+        },
+        {
+          type: '异常',
+          value: data.abnormal,
+        }
+      ],
+    };
+
   };
 
   useEffect(() => {
@@ -47,8 +65,12 @@ const Statistical = (props: { userId?: string; xxId?: string }) => {
           XSJBSJId: userId,
         });
         if (res.status === 'ok') {
-          const arr = [].map.call(res.data, (item) => {
-            return convertData(item);
+          const arr = [].map.call(res.data, (item: any) => {
+            if (item?.ISFW === 0) {
+              return convertData(item, 'kcb');
+            }
+            return convertData(item, 'fwb');
+
           });
           setStatistics(arr || []);
         }
@@ -75,7 +97,26 @@ const Statistical = (props: { userId?: string; xxId?: string }) => {
     },
     interactions: [{ type: 'tooltip', enable: false }],
     legend: false,
+    statistic: {
+      // title: false,
+      title: {
+        offsetY: -4,
+        style: { fontSize: '14px' },
+        content: '已排课时',
+        customHtml: () => {
+          return '已排课时';
+        }
+      },
+
+      // content: false,
+      content: {
+        offsetY: 4,
+        style: { fontSize: '16px' },
+      },
+    },
   };
+
+  console.log(satistics, 'satistics')
   return (
     <div className={styles.statistical}>
       <p>
@@ -106,7 +147,10 @@ const Statistical = (props: { userId?: string; xxId?: string }) => {
                     <div>
                       <span>正常:{value.zc}课时</span>
                       <span>异常:{value.yc}课时</span>
-                      <span>待上:{value.ds}课时</span>
+                      {
+                        value?.ISFW === 0 ? <span>待上:{value.ds}课时</span> : <></>
+                      }
+
                     </div>
                   </div>
                 ) : (

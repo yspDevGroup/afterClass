@@ -15,6 +15,7 @@ import { theme } from '@/theme-default';
 import styles from './index.less';
 import ShowName from '@/components/ShowName';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
+import { sendMessageToParent } from '@/services/after-class/wechat';
 
 /**
  * 课堂点名
@@ -84,10 +85,12 @@ const CallTheRoll = (props: any) => {
   const [isSigned, setIsSigned] = useState<boolean>(false);
   // 获取当前日期
   const nowDate = new Date();
-  const { bjId, jcId, date } = props.location.state;
+  const { bjId, jcId, date, } = props.location.state;
+  const { state } = props;
   const pkDate = date?.replace(/\//g, '-'); // 日期
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  console.log(props.location.state, 'props=====')
 
 
   const showConfirm = (tm?: boolean, title?: string, content?: string) => {
@@ -260,6 +263,7 @@ const CallTheRoll = (props: any) => {
       const classInfo = courseSchedule.find((item: { KHBJSJId: string }) => {
         return item.KHBJSJId === bjId;
       });
+      console.log(classInfo, 'classInfo----')
       if (classInfo) {
         const { days, detail } = classInfo;
         const curDate = days?.find((it: { day: any }) => it.day === date);
@@ -327,9 +331,13 @@ const CallTheRoll = (props: any) => {
   };
   const onButtonClick = async () => {
     const value: any[] = [];
+    const newData: any[] = [];
     dataSource.forEach((item: any) => {
+      if (item?.isLeave === false && item?.isRealTo === "缺席") {
+        newData.push(item)
+      }
       value.push({
-        CQZT: item.isLeave ? '请假' : item.isRealTo, // 出勤 / 缺席
+        CQZT: item.isLeave ? '请假' : item.isRealTo, // 出勤 // 缺席
         CQRQ: pkDate, // 日期
         XSJBSJId: item.XSJBSJId || item.XSJBSJ?.id, // 学生ID
         KHBJSJId: bjId, // 班级ID
@@ -339,7 +347,15 @@ const CallTheRoll = (props: any) => {
     const res = await createKHXSCQ(value);
     if (res.status === 'ok') {
       setIsModalVisible(true)
-
+      if (newData?.length) {
+        newData.forEach(async (item: any) => {
+          await sendMessageToParent({
+            to: 'to_student_userid',
+            text: `【缺勤提醒】\n您的${item?.XSJBSJ?.XM}未出勤${state?.start} - ${state?.ens}的${state?.title}课，请关注孩子去向`,
+            ids: [item?.XSJBSJId],
+          })
+        })
+      }
     } else {
       enHenceMsg(res.message);
     }
