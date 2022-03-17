@@ -516,13 +516,13 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   <Col flex="3em" style={{ fontWeight: 'bold' }}>
                     开启：
                   </Col>
-                  <Col flex="auto">家长可报名</Col>
+                  <Col flex="auto">家长可见、可报名</Col>
                 </Row>
                 <Row>
                   <Col flex="3em" style={{ fontWeight: 'bold' }}>
                     关闭：
                   </Col>
-                  <Col flex="auto">家长不可报名</Col>
+                  <Col flex="auto">家长不可见、不可报名</Col>
                 </Row>
               </>
             }
