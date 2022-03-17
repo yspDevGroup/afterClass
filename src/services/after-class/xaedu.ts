@@ -2,16 +2,17 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取哈希数据 POST /redis/getHash */
-export async function getHash(
+/** 验证认证链接 POST /xaedu/validateUrl */
+export async function validateUrl(
   body: {
-    key: string;
-    fields: string[];
-    isAll: boolean;
+    /** 认证票据 */
+    ticket: string;
+    /** 认证对应的服务地址 */
+    service: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: any[]; message?: string }>('/redis/getHash', {
+  return request<any>('/xaedu/validateUrl', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

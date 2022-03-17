@@ -5,11 +5,10 @@
 import * as other from './other';
 import * as auth from './auth';
 import * as user from './user';
-import * as bjsj from './bjsj';
-import * as jzgjbsj from './jzgjbsj';
-import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
+import * as bjsj from './bjsj';
+import * as jzgjbsj from './jzgjbsj';
 import * as jcxx from './jcxx';
 import * as jscqbq from './jscqbq';
 import * as jxjhsj from './jxjhsj';
@@ -19,6 +18,7 @@ import * as jzgcfsj from './jzgcfsj';
 import * as jzggzjl from './jzggzjl';
 import * as jzgjtcy from './jzgjtcy';
 import * as jzgktyj from './jzgktyj';
+import * as fjlx from './fjlx';
 import * as jzglwsj from './jzglwsj';
 import * as jzgrysj from './jzgrysj';
 import * as jzgxxjl from './jzgxxjl';
@@ -62,6 +62,7 @@ import * as sso from './sso';
 import * as statistic from './statistic';
 import * as upload from './upload';
 import * as wechat from './wechat';
+import * as xaedu from './xaedu';
 import * as xksj from './xksj';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
@@ -87,11 +88,10 @@ export default {
   other,
   auth,
   user,
-  bjsj,
-  jzgjbsj,
-  fjlx,
   fjsj,
   jcsj,
+  bjsj,
+  jzgjbsj,
   jcxx,
   jscqbq,
   jxjhsj,
@@ -101,6 +101,7 @@ export default {
   jzggzjl,
   jzgjtcy,
   jzgktyj,
+  fjlx,
   jzglwsj,
   jzgrysj,
   jzgxxjl,
@@ -144,6 +145,7 @@ export default {
   statistic,
   upload,
   wechat,
+  xaedu,
   xksj,
   xl,
   xnjgsj,
