@@ -3,6 +3,10 @@
 // API 更新时间：
 // API 唯一标识：
 import * as other from './other';
+import * as auth from './auth';
+import * as user from './user';
+import * as bjsj from './bjsj';
+import * as jzgjbsj from './jzgjbsj';
 import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
@@ -14,14 +18,10 @@ import * as jyjgtzgg from './jyjgtzgg';
 import * as jzgcfsj from './jzgcfsj';
 import * as jzggzjl from './jzggzjl';
 import * as jzgjtcy from './jzgjtcy';
-import * as auth from './auth';
-import * as user from './user';
 import * as jzgktyj from './jzgktyj';
 import * as jzglwsj from './jzglwsj';
 import * as jzgrysj from './jzgrysj';
-import * as jzgjbsj from './jzgjbsj';
 import * as jzgxxjl from './jzgxxjl';
-import * as bjsj from './bjsj';
 import * as kcbsksj from './kcbsksj';
 import * as kcsj from './kcsj';
 import * as khbjjsrl from './khbjjsrl';
@@ -86,6 +86,10 @@ import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
   other,
+  auth,
+  user,
+  bjsj,
+  jzgjbsj,
   fjlx,
   fjsj,
   jcsj,
@@ -97,14 +101,10 @@ export default {
   jzgcfsj,
   jzggzjl,
   jzgjtcy,
-  auth,
-  user,
   jzgktyj,
   jzglwsj,
   jzgrysj,
-  jzgjbsj,
   jzgxxjl,
-  bjsj,
   kcbsksj,
   kcsj,
   khbjjsrl,

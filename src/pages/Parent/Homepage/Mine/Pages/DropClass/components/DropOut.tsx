@@ -58,12 +58,15 @@ const DropOut = () => {
         XNXQId: result.current.id,
         XSJBSJId: StorageXSId,
       });
-      if (res.status === 'ok' && res.data) {
-        const finnalList = [].map.call(res.data, (val: any) => {
+      if (res.status === 'ok') {
+        const newArr = res.data.SKBJs.filter((item: any) => {
+          return item?.ISFW === 0
+        })
+        const finnalList = [].map.call(newArr, (val: any) => {
           const curCourse = data.find((v: any) => v.id === val.id);
           return {
             YXKS: curCourse.YXKS,
-            KSS: curCourse.KSS,
+            ZKS: curCourse.ZKS,
             ...val,
           };
         });
@@ -87,7 +90,11 @@ const DropOut = () => {
           StorageXQSJId,
         );
         const { courseSchedule } = oriData;
-        const courseData = CountCourses(courseSchedule);
+
+        const newArr = courseSchedule?.filter((item: any) => {
+          return item?.ISFW === false
+        })
+        const courseData = CountCourses(newArr);
         setKcList(courseData);
         getKcData(courseData);
       }
@@ -154,6 +161,7 @@ const DropOut = () => {
       setDatasourse(NewArr);
     }
   };
+
   return (
     <div className={styles.DropClass}>
       {kcData?.length !== 0 ? (
@@ -166,7 +174,6 @@ const DropOut = () => {
                 {kcData?.map((value: any) => {
                   const JKRQ = new Date(value.KHBJSJ?.JKRQ).getTime();
                   const newDate = new Date().getTime();
-                  const last = value.KSS && value.YXKS ? value.KSS - value.YXKS : value.remain;
                   return (
                     <>
                       <div className={styles.cards}>
@@ -177,14 +184,14 @@ const DropOut = () => {
                           </span>
                         </p>
                         <p>
-                          总课时：{value.KSS}节 ｜ 已学课时：{value.YXKS || value.normal}节
+                          总课时：{value.ZKS}节 ｜ 已学课时：{value.normal}节
                         </p>
                         <p>
-                          未学课时：{last}节｜缺勤课时：{value.abnormal}节｜可退课时：
-                          {value.abnormal + last}节
+                          未学课时：{Number(value.ZKS) - Number(value.normal) - Number(value.abnormal)}节｜缺勤课时：{value.abnormal}节｜可退课时：
+                          {Number(value.ZKS) - Number(value.normal) - Number(value.abnormal)}节
                         </p>
                         <Checkbox
-                          value={`${value.id}+${value.abnormal + last}+${value.KCMC}`}
+                          value={`${value.id}+${Number(value.ZKS) - Number(value.normal) - Number(value.abnormal)}+${value.KCMC}`}
                           disabled={newDate - JKRQ > 2592000000}
                         >
                           {' '}

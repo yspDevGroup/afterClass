@@ -6,18 +6,18 @@ import { request } from 'umi';
 export async function getCityJYJTJSJ(
   body: {
     /** 学年 */
-    XN: string;
+    XN?: string;
     /** 学期 */
-    XQ: string;
+    XQ?: string;
     /** 行政区划码 */
-    XZQHM: string;
+    XZQHM?: string;
     /** 是否为市教育局 */
-    isCity: boolean;
+    isCity?: boolean;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: {
       JYJMC?: string;
       XZQHM?: string;

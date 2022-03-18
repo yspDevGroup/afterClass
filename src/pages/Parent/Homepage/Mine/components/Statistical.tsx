@@ -16,41 +16,40 @@ const Statistical = (props: { userId?: string; xxId?: string }) => {
     if (data && type === 'kcb') {
       return {
         title: `${data.KCMC}/${data.BJMC}`,
-        zc: data.normal,
-        yc: data.abnormal,
-        ds: data.remain,
+        zc: Number(data.normal),
+        yc: Number(data.abnormal),
+        ds: Number(data.remain),
         ISFW: data.ISFW,
         data: [
           {
             type: '正常',
-            value: data.normal,
+            value: Number(data.normal),
           },
           {
             type: '异常',
-            value: data.abnormal,
+            value: Number(data.abnormal),
           },
           {
             type: '待上',
-            value: data.remain,
+            value: Number(data.remain),
           },
         ],
       };
     }
     return {
       title: `${data.KCMC}/${data.BJMC}`,
-      zc: data.normal,
-      yc: data.abnormal,
-      ds: data.remain,
+      zc: Number(data.normal),
+      yc: Number(data.abnormal),
       ISFW: data.ISFW,
       data: [
         {
           type: '正常',
-          value: data.normal,
+          value: Number(data.normal),
         },
         {
           type: '异常',
-          value: data.abnormal,
-        }
+          value: Number(data.abnormal),
+        },
       ],
     };
 
@@ -65,13 +64,16 @@ const Statistical = (props: { userId?: string; xxId?: string }) => {
           XSJBSJId: userId,
         });
         if (res.status === 'ok') {
-          const arr = [].map.call(res.data, (item: any) => {
-            if (item?.ISFW === 0) {
-              return convertData(item, 'kcb');
-            }
-            return convertData(item, 'fwb');
-
+          const KcArr = [].map.call(res.data.SKBJs, (item: any) => {
+            return convertData(item, 'kcb');
           });
+          const FwArr = [].map.call(res.data.KHFWs, (item: any) => {
+            return convertData(item, 'fwb');
+          });
+          const TkArr = [].map.call(res.data.TKBJs, (item: any) => {
+            return convertData(item, 'tkb');
+          });
+          const arr = [...KcArr, ...FwArr, ...TkArr]
           setStatistics(arr || []);
         }
       }
@@ -99,15 +101,14 @@ const Statistical = (props: { userId?: string; xxId?: string }) => {
     legend: false,
     statistic: {
       // title: false,
-      title: {
-        offsetY: -4,
-        style: { fontSize: '14px' },
-        content: '已排课时',
-        customHtml: () => {
-          return '已排课时';
-        }
-      },
-
+      // title: {
+      //   offsetY: -4,
+      //   style: { fontSize: '14px' },
+      //   content: '已排课时',
+      //   customHtml: () => {
+      //     return '已排课时';
+      //   }
+      // },
       // content: false,
       content: {
         offsetY: 4,
@@ -116,7 +117,6 @@ const Statistical = (props: { userId?: string; xxId?: string }) => {
     },
   };
 
-  console.log(satistics, 'satistics')
   return (
     <div className={styles.statistical}>
       <p>

@@ -153,8 +153,8 @@ const Details = (props: any) => {
                       {localStorage.getItem('studentName') || currentUser?.student?.[0].name}
                     </span>
                   </li>
-                  <li>总课时：{state?.KHBJSJ?.KSS}</li>
-                  <li>可退订时：{state?.KSS}</li>
+                  <li>总课时：{state?.KHBJSJ?.ALL_KSS}</li>
+                  <li>可退课时：{state?.KSS}</li>
                 </ul>
               </div>
               <div className={styles.KCZE}>

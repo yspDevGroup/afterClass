@@ -53,7 +53,7 @@ const DropClass = () => {
         <div className={styles.Record}>
           <div>
             {Record?.map((value: any) => {
-              const num = value?.KHBJSJ?.KSS - value?.KSS;
+              const num = value?.KHBJSJ?.ALL_KSS - value?.KSS;
               return (
                 <Link
                   key="ck"
@@ -101,7 +101,7 @@ const DropClass = () => {
                     {value?.KHBJSJ ? (
                       <>
                         <p>
-                          总课时：{value.KHBJSJ?.KSS}节 ｜ 已学课时：{num}节{' '}
+                          总课时：{value.KHBJSJ?.ALL_KSS}节 ｜ 已学课时：{num}节{' '}
                         </p>
                         <p>
                           未学课时：{value.KSS}节 ｜ 可退课时：{value.KSS}节
