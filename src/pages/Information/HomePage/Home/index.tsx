@@ -11,6 +11,8 @@ import SignIn from './components/SignIn';
 
 import styles from './index.less';
 
+const authType = localStorage.getItem('authType') || 'none';
+
 const Home = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -39,9 +41,7 @@ const Home = () => {
                 setInitialState({ ...initialState!, currentUser: undefined });
                 removeOAuthToken();
                 removeUserInfoCache();
-                history.replace(
-                  initialState?.buildOptions.authType === 'wechat' ? '/auth_callback/overDue' : '/',
-                );
+                history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
               }}
             >
               <IconFont type="icon-tuichu" className={styles.signOut} />

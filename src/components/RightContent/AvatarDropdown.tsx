@@ -11,6 +11,8 @@ import ShowName from '@/components/ShowName';
 
 import styles from './index.less';
 
+const authType = localStorage.getItem('authType') || 'none';
+
 export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
@@ -43,9 +45,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
         setInitialState({ ...initialState, currentUser: undefined });
         removeOAuthToken();
         removeUserInfoCache();
-        history.replace(
-          initialState.buildOptions.authType === 'wechat' ? '/auth_callback/overDue' : '/',
-        );
+        history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
         return;
       }
     },

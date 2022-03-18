@@ -2,13 +2,15 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2021-12-09 09:50:38
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-03-18 15:24:56
+ * @LastEditors: zpl
  */
 import React from 'react';
 import { history, useModel } from 'umi';
 import { Button, Result } from 'antd';
 import { getLoginPath, getOauthToken, getPageQuery, gotoLink } from '@/utils/utils';
+
+const authType = localStorage.getItem('authType') || 'none';
 
 const NotFind = () => {
   const { initialState } = useModel('@@initialState');
@@ -40,7 +42,7 @@ const NotFind = () => {
           >
             {btnTXT}
           </Button>
-        ) : initialState?.buildOptions.authType !== 'wechat' ? (
+        ) : authType !== 'wechat' ? (
           <Button
             type="primary"
             onClick={() => {

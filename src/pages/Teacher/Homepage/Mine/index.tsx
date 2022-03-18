@@ -12,6 +12,8 @@ import CheckOnStatic from './components/CheckOnStatic';
 
 import styles from './index.less';
 
+const authType = localStorage.getItem('authType') || 'none';
+
 const Mine = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -44,10 +46,7 @@ const Mine = () => {
                   XM={currentUser.UserId}
                 />
               </span>
-              <span>
-              老师
-              </span>
-
+              <span>老师</span>
             </h4>
           </div>
         </div>
@@ -76,9 +75,7 @@ const Mine = () => {
               setInitialState({ ...initialState!, currentUser: undefined });
               removeOAuthToken();
               removeUserInfoCache();
-              history.replace(
-                initialState?.buildOptions.authType === 'wechat' ? '/auth_callback/overDue' : '/',
-              );
+              history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
             }}
           >
             退出登录

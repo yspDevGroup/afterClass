@@ -198,8 +198,6 @@ type BuildOptions = {
   ENV_host: string;
   /** sso认证地址 */
   ssoHost: string;
-  /** 认证方式 */
-  authType: AuthType;
   /** 注册的应用id */
   clientId: string;
   /** 注册的应用密钥 */

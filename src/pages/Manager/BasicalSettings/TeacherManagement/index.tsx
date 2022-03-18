@@ -2,7 +2,7 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2022-02-09 15:42:44
+ * @LastEditTime: 2022-03-18 15:26:20
  * @LastEditors: zpl
  */
 import React, { useRef, useState } from 'react';
@@ -202,7 +202,7 @@ const TeacherManagement = () => {
           //     {/* <div>
           //       未同步到本系统中的成员无法使用老师端，系统每天凌晨自动同步一次，如需手动更新，请点击【立即同步】按钮
           //     </div> */}
-          //     {initialState?.buildOptions.authType === 'wechat' && (
+          //     {authType === 'wechat' && (
           //       <div>
           //         由于企业微信对用户敏感信息的限制，未激活的用户仅可显示部分信息，如需显示更多，可通知老师激活账号或使用本界面【导入】功能进行完善。
           //       </div>

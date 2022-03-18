@@ -10,6 +10,31 @@ import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getEnv } from '@/services/after-class/other';
 import { DateRange, Week } from './Timefunction';
 import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
+import { casLoginUrl } from '@/constant';
+
+export const envjudge = () => {
+  const isMobile = window.navigator.userAgent.match(
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
+  ); // 是否手机端
+  const isWx = /micromessenger/i.test(navigator.userAgent); // 是否微信
+  const isComWx = /wxwork/i.test(navigator.userAgent); // 是否企业微信
+  if (isMobile) {
+    if (isComWx) {
+      return 'com-wx-mobile'; // 手机端企业微信
+    }
+    if (isWx) {
+      return 'wx-mobile'; // 手机端微信
+    }
+    return 'mobile'; // 手机
+  }
+  if (isComWx) {
+    return 'com-wx-pc'; // PC端企业微信
+  }
+  if (isWx) {
+    return 'wx-pc'; // PC端微信
+  }
+  return 'pc'; // PC
+};
 
 /**
  * 实时获取部署环境信息
@@ -30,7 +55,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.prod.xianyunshipei.com',
         ssoHost: 'http://sso.prod.xianyunshipei.com',
         crpHost: 'http://crpweb.prod.xianyunshipei.com',
-        authType: 'wechat',
         clientId: 'wwe2dfbe3747b6e69f',
         clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
         // 固定配置，不可修改
@@ -44,7 +68,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.wuyu.imzhiliao.com',
         ssoHost: 'http://sso.wuyu.imzhiliao.com',
         crpHost: 'http://crpweb.wuyu.imzhiliao.com',
-        authType: 'wechat',
         clientId: 'wwe2dfbe3747b6e69f',
         clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
         // 固定配置，不可修改
@@ -58,7 +81,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.9cloudstech.com',
         ssoHost: 'http://sso.9cloudstech.com',
         crpHost: 'http://crpweb.9cloudstech.com',
-        authType: 'wechat',
         clientId: 'ww73cd866f2c4dc83f',
         clientSecret: 'IfPhfMfVtX-y-BG-CrGlZIJw-m-GoCnJwxffigZDGLA',
         // 固定配置，不可修改
@@ -72,7 +94,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.test.xianyunshipei.com',
         ssoHost: 'http://sso.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
-        authType: 'wechat',
         clientId: 'ww20993d96d6755f55',
         clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
         // 固定配置，不可修改
@@ -86,7 +107,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://localhost:8000',
         ssoHost: 'http://platform.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
-        authType: 'password',
         clientId: 'ww20993d96d6755f55',
         clientSecret: 'wy83uVM6xgfDtE2XS5WQ',
         // 固定配置，不可修改
@@ -256,29 +276,6 @@ export const getCookie = (name: string): string => {
   return '';
 };
 
-export const envjudge = () => {
-  const isMobile = window.navigator.userAgent.match(
-    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
-  ); // 是否手机端
-  const isWx = /micromessenger/i.test(navigator.userAgent); // 是否微信
-  const isComWx = /wxwork/i.test(navigator.userAgent); // 是否企业微信
-  if (isMobile) {
-    if (isComWx) {
-      return 'com-wx-mobile'; // 手机端企业微信
-    }
-    if (isWx) {
-      return 'wx-mobile'; // 手机端微信
-    }
-    return 'mobile'; // 手机
-  }
-  if (isComWx) {
-    return 'com-wx-pc'; // PC端企业微信
-  }
-  if (isWx) {
-    return 'wx-pc'; // PC端微信
-  }
-  return 'pc'; // PC
-};
 /**
  *
  * @param suiteID
@@ -293,7 +290,8 @@ export const getLoginPath = (
   buildOptions?: BuildOptions,
   reLogin?: boolean,
 ) => {
-  const { authType = 'none', ssoHost, ENV_host, clientId, clientSecret } = buildOptions || {};
+  const { ssoHost, ENV_host, clientId, clientSecret } = buildOptions || {};
+  const authType = localStorage.getItem('authType') || 'none';
   let loginPath: string;
   switch (authType) {
     case 'none':
@@ -304,6 +302,11 @@ export const getLoginPath = (
       // 前提是本应该已经注册为微信认证，且正确配置认证回调地址为 ${ENV_host}/auth_callback/wechat
       loginPath = `${ssoHost}/wechat/authorizeUrl?suiteID=${suiteID}&isAdmin=${isAdmin}`;
       break;
+    case 'xaedu': {
+      const callbackUrl = encodeURIComponent(`${ENV_host}/auth_callback/xaedu`);
+      loginPath = `${casLoginUrl}/login?service=${callbackUrl}`;
+      break;
+    }
     case 'password':
     default:
       {

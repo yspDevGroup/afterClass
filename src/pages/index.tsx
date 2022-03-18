@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2021-12-24 16:53:14
+ * @LastEditTime: 2022-03-18 14:56:46
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -27,8 +27,9 @@ const Index = () => {
       plat: 'school',
     };
     params.suiteID = params.SuiteID || params.suiteID || '';
+    const authType = localStorage.getItem('authType') || 'none';
 
-    if (initialState?.buildOptions.authType === 'wechat') {
+    if (authType === 'wechat') {
       if (params.suiteID) {
         const { ysp_access_token } = getOauthToken();
         if (!ysp_access_token || !initialState?.currentUser) {
