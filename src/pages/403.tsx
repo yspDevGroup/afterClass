@@ -2,7 +2,7 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2022-03-18 15:24:56
+ * @LastEditTime: 2022-03-18 16:32:21
  * @LastEditors: zpl
  */
 import React from 'react';
@@ -59,7 +59,7 @@ const NotFind = () => {
               }
             }}
           >
-            {!ysp_access_token || !initialState?.currentUser ? '去登陆' : '返回首页'}
+            {!ysp_access_token || !initialState?.currentUser ? '去登录' : '返回首页'}
           </Button>
         ) : (
           ''

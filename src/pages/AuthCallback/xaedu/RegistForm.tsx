@@ -2,7 +2,7 @@
  * @description:
  * @author: zpl
  * @Date: 2022-03-18 14:09:58
- * @LastEditTime: 2022-03-18 16:06:08
+ * @LastEditTime: 2022-03-18 16:32:40
  * @LastEditors: zpl
  */
 import React, { useRef, useState } from 'react';
@@ -117,7 +117,7 @@ const RegistForm = ({ show, username }: RegistFormProps) => {
               const { status, data } = res;
               if (status === 'ok') {
                 if (data?.length) {
-                  const list = data.filter((d) => d.status);
+                  const list = data.filter((d) => !d.status);
                   setSchoolList(list);
                   setSchoolSelect(list.map((d) => ({ label: d.QYMC!, value: d.CorpID! })));
                   setShowModel('mobileSuccess');
