@@ -16,6 +16,9 @@ import { iconTextData } from './mock';
 import styles from './index.less';
 
 const { Option } = Select;
+
+const authType = localStorage.getItem('authType') || 'none';
+
 const Mine = (props: {
   status: string;
   setActiveKey: React.Dispatch<React.SetStateAction<string>>;
@@ -184,9 +187,7 @@ const Mine = (props: {
               setInitialState({ ...initialState!, currentUser: undefined });
               removeOAuthToken();
               removeUserInfoCache();
-              history.replace(
-                initialState?.buildOptions.authType === 'wechat' ? '/auth_callback/overDue' : '/',
-              );
+              history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
             }}
           >
             退出登录

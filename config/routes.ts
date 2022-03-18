@@ -32,6 +32,10 @@
         component: './AuthCallback/wechat',
       },
       {
+        path: '/auth_callback/xaedu',
+        component: './AuthCallback/xaedu',
+      },
+      {
         path: '/auth_callback/overDue',
         component: './AuthCallback/OverDue',
       },

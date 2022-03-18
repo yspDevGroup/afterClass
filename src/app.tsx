@@ -37,9 +37,10 @@ export async function getInitialState(): Promise<InitialState> {
   console.log('process.env.REACT_APP_ENV: ', process.env.REACT_APP_ENV);
   const buildOptions = await getBuildOptions();
   const fetchUserInfo = async () => {
+    const authType = localStorage.getItem('authType') || 'none';
     try {
       const currentUserRes =
-        buildOptions.authType === 'wechat'
+        authType === 'wechat'
           ? await currentWechatUser({ plat: 'school' })
           : await queryCurrentUser({ plat: 'school' });
       if (currentUserRes.status === 'ok') {
@@ -104,18 +105,19 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
     },
     links: isDev
       ? [
-          <Link to="/umi/plugin/openapi" target="_blank">
+          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
             <LinkOutlined />
             <span>openAPI 文档</span>
           </Link>,
-          <Link to="/~docs" target="_blank">
+          <Link key="docs" to="/~docs" target="_blank">
             <BookOutlined />
             <span>业务组件文档</span>
           </Link>,
-          <Version />,
+          <Version key="version" />,
         ]
       : [
           <Version
+            key="version"
             style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}
           />,
         ],
