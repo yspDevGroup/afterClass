@@ -85,12 +85,9 @@ const CallTheRoll = (props: any) => {
   const [isSigned, setIsSigned] = useState<boolean>(false);
   // 获取当前日期
   const nowDate = new Date();
-  const { bjId, jcId, date, } = props.location.state;
-  const { state } = props;
+  const { bjId, jcId, date, endTime, startTime, KCName } = props.location.state;
   const pkDate = date?.replace(/\//g, '-'); // 日期
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  console.log(props.location.state, 'props=====')
 
 
   const showConfirm = (tm?: boolean, title?: string, content?: string) => {
@@ -263,7 +260,6 @@ const CallTheRoll = (props: any) => {
       const classInfo = courseSchedule.find((item: { KHBJSJId: string }) => {
         return item.KHBJSJId === bjId;
       });
-      console.log(classInfo, 'classInfo----')
       if (classInfo) {
         const { days, detail } = classInfo;
         const curDate = days?.find((it: { day: any }) => it.day === date);
@@ -329,6 +325,7 @@ const CallTheRoll = (props: any) => {
     });
     setDataScouse(newData);
   };
+  console.log(dataSource, dataSource)
   const onButtonClick = async () => {
     const value: any[] = [];
     const newData: any[] = [];
@@ -351,8 +348,8 @@ const CallTheRoll = (props: any) => {
         newData.forEach(async (item: any) => {
           await sendMessageToParent({
             to: 'to_student_userid',
-            text: `【缺勤提醒】\n您的${item?.XSJBSJ?.XM}未出勤${state?.start} - ${state?.ens}的${state?.title}课，请关注孩子去向`,
-            ids: [item?.XSJBSJId],
+            text: `【缺勤提醒】\n您的${item?.XSJBSJ?.XM}未出勤${startTime} - ${endTime}的${KCName}课，请关注孩子去向`,
+            ids: [item?.XSJBSJ.WechatUserId],
           })
         })
       }

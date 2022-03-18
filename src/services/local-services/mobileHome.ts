@@ -558,7 +558,7 @@ export const CountCourses = (data: any) => {
         title: `${detail?.[0]?.title} 【${detail?.[0]?.BJMC}】`,
         BJMC: detail?.[0]?.BJMC,
         YXKS: learned?.length || 0,
-        ZKS: detail?.[0]?.KSS,
+        ZKS: days?.length,
         link: `/parent/home/courseTable?classid=${detail?.[0]?.bjId}&path=study`,
         desc: [
           {
@@ -569,7 +569,7 @@ export const CountCourses = (data: any) => {
             ],
           },
           {
-            left: [`共${detail?.[0]?.KSS}课时`, `已学${learned?.length || 0}课时`],
+            left: [`共${detail?.days?.length}课时`, `已学${learned?.length || 0}课时`],
           },
         ],
       };
@@ -585,7 +585,7 @@ export const CountCourses = (data: any) => {
 export const convertCourse = (day: string, course: any[] = [], type?: string) => {
   const data: any[] = [];
   course?.forEach((item: any) => {
-    console.log(item,'item')
+    console.log(item, 'item')
     if (type && type === 'filter') {
       if (!item.status) {
         data.push({
@@ -619,9 +619,9 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           bjId: item.bjId,
           jcId: item.jcId,
           date: item.date || day,
-          start: item.start,
-          end: item.end,
-          title:item.title
+          startTime: item.start,
+          endTime: item.end,
+          KCName: item.title
         },
       };
       data.push({
