@@ -1,5 +1,5 @@
 import GoBack from '@/components/GoBack';
-import { getEnrolled } from '@/services/after-class/khbjsj';
+import { getEnrolled, getSerEnrolled } from '@/services/after-class/khbjsj';
 import { Button, message, Modal, Rate } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { useEffect, useState } from 'react';
@@ -32,8 +32,25 @@ const Details = (props: any) => {
     })
     setPeopleNum(newArr)
   }
+  const onSerEnrolled = async () => {
+    const res = await getSerEnrolled({
+      id: state?.id
+    })
+    setStudentData(res.data)
+    const newArr: any[] = [];
+    res.data?.forEach((value: any) => {
+      if (value.KHXSPJId === null || value.KHXSPJId === '') {
+        newArr.push(value)
+      }
+    })
+    setPeopleNum(newArr)
+  }
   useEffect(() => {
-    ongetEnrolled();
+    if (state?.ISFW === 1) {
+      onSerEnrolled();
+    } else {
+      ongetEnrolled();
+    }
   }, []);
 
   /** 课后帮服务协议弹出框 */
@@ -62,7 +79,11 @@ const Details = (props: any) => {
       })
       if (res.status === 'ok') {
         message.success('评价成功')
-        ongetEnrolled();
+        if (state?.ISFW === 1) {
+          onSerEnrolled();
+        } else {
+          ongetEnrolled();
+        }
       }
     } else {
       const res = await updateKHXSPJ({ id: XsData?.KHXSPJId }, {
@@ -73,7 +94,11 @@ const Details = (props: any) => {
         message.success('修改成功');
         setEvaluation('');
         setFraction(0);
-        ongetEnrolled();
+        if (state?.ISFW === 1) {
+          onSerEnrolled();
+        } else {
+          ongetEnrolled();
+        }
       }
     }
   };
@@ -112,9 +137,7 @@ const Details = (props: any) => {
                 <th>操作</th>
               </tr>
             </thead>
-
             <tbody>
-
               {
                 StudentData?.map((value: any, index: number) => {
                   return <tr style={{ backgroundColor: index % 2 === 0 ? "#F5F5F5" : "#fff" }}>

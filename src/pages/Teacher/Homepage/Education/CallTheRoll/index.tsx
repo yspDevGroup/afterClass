@@ -85,7 +85,7 @@ const CallTheRoll = (props: any) => {
   const [isSigned, setIsSigned] = useState<boolean>(false);
   // 获取当前日期
   const nowDate = new Date();
-  const { bjId, jcId, date, endTime, startTime, KCName } = props.location.state;
+  const { bjId, jcId, date, endTime, startTime, KCName, JSLX } = props.location.state;
   const pkDate = date?.replace(/\//g, '-'); // 日期
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -325,7 +325,6 @@ const CallTheRoll = (props: any) => {
     });
     setDataScouse(newData);
   };
-  console.log(dataSource, dataSource)
   const onButtonClick = async () => {
     const value: any[] = [];
     const newData: any[] = [];
@@ -357,6 +356,7 @@ const CallTheRoll = (props: any) => {
       enHenceMsg(res.message);
     }
   };
+  console.log(JSLX,'JSLX----------------------------')
   const teacherCheckIn = async () => {
     const res = await createKHJSCQ([
       {
@@ -365,6 +365,7 @@ const CallTheRoll = (props: any) => {
         CQZT: '出勤',
         CQRQ: pkDate,
         KHBJSJId: bjId,
+        JSLX: JSLX === '主教师' ? 1 : 0
       },
     ]);
     if (res.status === 'ok') {

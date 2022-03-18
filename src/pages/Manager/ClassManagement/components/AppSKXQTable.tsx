@@ -14,6 +14,7 @@ import ShowName from '@/components/ShowName';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
 import styles from '../index.less';
+import moment from 'moment';
 
 const statusColors = {
   出勤: '#89da8c',
@@ -39,10 +40,10 @@ type TeacherLabelProps = {
  */
 const TeacherLabel: FC<TeacherLabelProps> = ({ SKRQ, status = '', WechatUserId, XM }) => {
   let colors: string = '';
-  if (new Date(SKRQ) > new Date()) {
-    colors = statusColors.待上;
-  } else {
+  if (status) {
     colors = statusColors[status];
+  } else if (moment(new Date(SKRQ)).format("YYYY-MM-DD") >= moment(new Date()).format("YYYY-MM-DD")) {
+    colors = statusColors.待上;
   }
   if (colors) {
     return (
