@@ -137,7 +137,6 @@ const ClassCalendar = (props: propstype) => {
     setDay(dayFormat);
     setCDay(curDay.format('M月D日'));
     const { courseList } = await CurdayCourse('teacher', currentUser?.xxId, userId, dayFormat);
-    console.log(courseList,'courseList----')
     if (type) {
       setEditCourses(convertCourse(dayFormat, courseList, 'filter'));
     } else {

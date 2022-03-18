@@ -268,9 +268,9 @@ export const ParentHomeData = async (
 const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
   newData.forEach((ele: any) => {
     let otherInd = -1;
-    // 通过bjId,jcId确认原有数据中是否与已代课数据重合
+    // 通过bjId,jcId确认原有数据中是否与已代课,请假数据重合
     const oriInd = oriData.findIndex((v: { bjId: any; jcId: any }) => {
-      const con1 = ele.SKJC?.id === v.jcId || ele.TKJC?.id === v.jcId;
+      const con1 = ele.SKJC?.id === v.jcId || ele.TKJC?.id === v.jcId || (ele.XXSJPZId === v.jcId && ele.QJRQ);
       return ele.KHBJSJId === v.bjId && con1;
     });
     if (status.includes('被')) {
@@ -623,7 +623,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           startTime: item.start,
           endTime: item.end,
           KCName: item.title,
-          JSLX:item.JSLX
+          JSLX: item.JSLX
         },
       };
       data.push({
