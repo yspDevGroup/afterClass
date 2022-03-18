@@ -1,20 +1,4 @@
 declare namespace API {
-  type LoginParams = {
-    /** 登录名 */
-    username: string;
-    /** 密码 */
-    password: string;
-    /** 自动登录 */
-    autoLogin: boolean;
-    type: 'account' | 'mobile';
-  };
-
-  type LoginResult = {
-    currentAuthority: string[];
-    token: string;
-    type: 'account' | 'mobile' | 'github';
-  };
-
   type FJLX = {
     id: string;
     /** 房间类型 */
@@ -304,109 +288,6 @@ declare namespace API {
     SPSM?: string;
     /** 审批教师ID */
     SPRId?: string;
-  };
-
-  type BJSJ = {
-    id: string;
-    /** 班号 */
-    BH: number;
-    /** 班级 */
-    BJ: string;
-    /** 建班年月 */
-    JBNY?: string | any;
-    /** 班主任工号 */
-    BZRGH?: string;
-    /** 班长学号 */
-    BZXH?: string;
-    /** 班级荣誉称号 */
-    BJRYCH?: string;
-    /** 学制 */
-    XZ?: string;
-    /** 班级类型码 */
-    BJLXM?: string;
-    /** 文理类型 */
-    WLLX?: string;
-    /** 毕业日期 */
-    BYRQ?: string | any;
-    /** 是否少数民族双语教学班 */
-    SFSSMZSYJXB?: string;
-    /** 双语教学模式码 */
-    SYJXMSM?: string;
-    /** 上课地点 */
-    SKDD?: string;
-    /** 班级简称 */
-    BJJC?: string;
-    NJSJ?: { id?: string; NJ?: number; NJMC?: string; XD?: string };
-    BZR?: { id?: string; GH?: string; XM?: string };
-    FBZR?: { id?: string; GH?: string; XM?: string };
-  };
-
-  type CreateBJSJ = {
-    /** 班号 */
-    BH: number;
-    /** 班级 */
-    BJ: string;
-    /** 建班年月 */
-    JBNY?: string | any;
-    /** 班主任工号 */
-    BZRGH?: string;
-    /** 班长学号 */
-    BZXH?: string;
-    /** 班级荣誉称号 */
-    BJRYCH?: string;
-    /** 学制 */
-    XZ?: string;
-    /** 班级类型码 */
-    BJLXM?: string;
-    /** 文理类型 */
-    WLLX?: string;
-    /** 毕业日期 */
-    BYRQ?: string | any;
-    /** 是否少数民族双语教学班 */
-    SFSSMZSYJXB?: string;
-    /** 双语教学模式码 */
-    SYJXMSM?: string;
-    /** 上课地点 */
-    SKDD?: string;
-    /** 班级简称 */
-    BJJC?: string;
-    NJSJId: string;
-    BZRId?: string;
-    FBZRId?: string;
-  };
-
-  type UpdateBJSJ = {
-    /** 班号 */
-    BH?: number;
-    /** 班级 */
-    BJ?: string;
-    /** 建班年月 */
-    JBNY?: string;
-    /** 班主任工号 */
-    BZRGH?: string;
-    /** 班长学号 */
-    BZXH?: string;
-    /** 班级荣誉称号 */
-    BJRYCH?: string;
-    /** 学制 */
-    XZ?: string;
-    /** 班级类型码 */
-    BJLXM?: string;
-    /** 文理类型 */
-    WLLX?: string;
-    /** 毕业日期 */
-    BYRQ?: string;
-    /** 是否少数民族双语教学班 */
-    SFSSMZSYJXB?: string;
-    /** 双语教学模式码 */
-    SYJXMSM?: string;
-    /** 上课地点 */
-    SKDD?: string;
-    /** 班级简称 */
-    BJJC?: string;
-    NJSJId?: string;
-    BZRId?: string;
-    FBZRId?: string;
   };
 
   type JXJHSJ = {
@@ -751,6 +632,22 @@ declare namespace API {
     QJDM?: string;
     /** 教师ID */
     JZGJBSJId?: string;
+  };
+
+  type LoginParams = {
+    /** 登录名 */
+    username: string;
+    /** 密码 */
+    password: string;
+    /** 自动登录 */
+    autoLogin: boolean;
+    type: 'account' | 'mobile';
+  };
+
+  type LoginResult = {
+    currentAuthority: string[];
+    token: string;
+    type: 'account' | 'mobile' | 'github';
   };
 
   type JZGKTYJ = {
@@ -1500,6 +1397,109 @@ declare namespace API {
     XXJLBZ?: string;
     /** 教师ID */
     JZGJBSJId?: string;
+  };
+
+  type BJSJ = {
+    id: string;
+    /** 班号 */
+    BH: number;
+    /** 班级 */
+    BJ: string;
+    /** 建班年月 */
+    JBNY?: string | any;
+    /** 班主任工号 */
+    BZRGH?: string;
+    /** 班长学号 */
+    BZXH?: string;
+    /** 班级荣誉称号 */
+    BJRYCH?: string;
+    /** 学制 */
+    XZ?: string;
+    /** 班级类型码 */
+    BJLXM?: string;
+    /** 文理类型 */
+    WLLX?: string;
+    /** 毕业日期 */
+    BYRQ?: string | any;
+    /** 是否少数民族双语教学班 */
+    SFSSMZSYJXB?: string;
+    /** 双语教学模式码 */
+    SYJXMSM?: string;
+    /** 上课地点 */
+    SKDD?: string;
+    /** 班级简称 */
+    BJJC?: string;
+    NJSJ?: { id?: string; NJ?: number; NJMC?: string; XD?: string };
+    BZR?: { id?: string; GH?: string; XM?: string };
+    FBZR?: { id?: string; GH?: string; XM?: string };
+  };
+
+  type CreateBJSJ = {
+    /** 班号 */
+    BH: number;
+    /** 班级 */
+    BJ: string;
+    /** 建班年月 */
+    JBNY?: string | any;
+    /** 班主任工号 */
+    BZRGH?: string;
+    /** 班长学号 */
+    BZXH?: string;
+    /** 班级荣誉称号 */
+    BJRYCH?: string;
+    /** 学制 */
+    XZ?: string;
+    /** 班级类型码 */
+    BJLXM?: string;
+    /** 文理类型 */
+    WLLX?: string;
+    /** 毕业日期 */
+    BYRQ?: string | any;
+    /** 是否少数民族双语教学班 */
+    SFSSMZSYJXB?: string;
+    /** 双语教学模式码 */
+    SYJXMSM?: string;
+    /** 上课地点 */
+    SKDD?: string;
+    /** 班级简称 */
+    BJJC?: string;
+    NJSJId: string;
+    BZRId?: string;
+    FBZRId?: string;
+  };
+
+  type UpdateBJSJ = {
+    /** 班号 */
+    BH?: number;
+    /** 班级 */
+    BJ?: string;
+    /** 建班年月 */
+    JBNY?: string;
+    /** 班主任工号 */
+    BZRGH?: string;
+    /** 班长学号 */
+    BZXH?: string;
+    /** 班级荣誉称号 */
+    BJRYCH?: string;
+    /** 学制 */
+    XZ?: string;
+    /** 班级类型码 */
+    BJLXM?: string;
+    /** 文理类型 */
+    WLLX?: string;
+    /** 毕业日期 */
+    BYRQ?: string;
+    /** 是否少数民族双语教学班 */
+    SFSSMZSYJXB?: string;
+    /** 双语教学模式码 */
+    SYJXMSM?: string;
+    /** 上课地点 */
+    SKDD?: string;
+    /** 班级简称 */
+    BJJC?: string;
+    NJSJId?: string;
+    BZRId?: string;
+    FBZRId?: string;
   };
 
   type KCBSKSJ = {
@@ -5560,36 +5560,6 @@ declare namespace API {
     id: string;
   };
 
-  type getBJSJParams = {
-    /** 班级ID */
-    id: string;
-  };
-
-  type deleteBJSJParams = {
-    /** 班级ID */
-    id: string;
-  };
-
-  type getClassesParams = {
-    /** 教职工ID */
-    id: string;
-  };
-
-  type updateBJSJParams = {
-    /** 班级ID */
-    id: string;
-  };
-
-  type updateClassTeacherParams = {
-    /** 班级任课老师信息ID */
-    id: string;
-  };
-
-  type deleteClassTeacherParams = {
-    /** 班级任课老师信息ID */
-    id: string;
-  };
-
   type getJXJHSJParams = {
     /** 教学计划ID */
     id: string;
@@ -5727,6 +5697,36 @@ declare namespace API {
 
   type updateJZGXXJLParams = {
     /** 教师学习简历ID */
+    id: string;
+  };
+
+  type getBJSJParams = {
+    /** 班级ID */
+    id: string;
+  };
+
+  type deleteBJSJParams = {
+    /** 班级ID */
+    id: string;
+  };
+
+  type getClassesParams = {
+    /** 教职工ID */
+    id: string;
+  };
+
+  type updateBJSJParams = {
+    /** 班级ID */
+    id: string;
+  };
+
+  type updateClassTeacherParams = {
+    /** 班级任课老师信息ID */
+    id: string;
+  };
+
+  type deleteClassTeacherParams = {
+    /** 班级任课老师信息ID */
     id: string;
   };
 

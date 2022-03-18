@@ -2,23 +2,6 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取教职工所带班级信息 GET /bjsj/classesByTeacher/${param0} */
-export async function getClasses(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getClassesParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; data?: API.BJSJ[]; message?: string }>(
-    `/bjsj/classesByTeacher/${param0}`,
-    {
-      method: 'GET',
-      params: { ...queryParams },
-      ...(options || {}),
-    },
-  );
-}
-
 /** 获取教职工基本数据 GET /jzgjbsj/${param0} */
 export async function getJZGJBSJ(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -403,4 +386,21 @@ export async function getIgnoreTeacherByClassesId(
     data: body,
     ...(options || {}),
   });
+}
+
+/** 获取教职工所带班级信息 GET /bjsj/classesByTeacher/${param0} */
+export async function getClasses(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getClassesParams,
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{ status: 'ok' | 'error'; data?: API.BJSJ[]; message?: string }>(
+    `/bjsj/classesByTeacher/${param0}`,
+    {
+      method: 'GET',
+      params: { ...queryParams },
+      ...(options || {}),
+    },
+  );
 }

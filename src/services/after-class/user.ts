@@ -32,66 +32,7 @@ export async function currentUser(
   params: API.currentUserParams,
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status: 'ok' | 'error';
-    data?: {
-      info?: {
-        id?: string;
-        jgId?: string | any;
-        jyjId?: string | any;
-        xxId?: string | any;
-        XXDM?: string;
-        XD?: string;
-        XZQHM?: string | any;
-        loginName?: string;
-        username?: string;
-        avatar?: string;
-        identityId?: string;
-        departmentId?: string;
-        status?: number;
-        userType?: string;
-        type?: string;
-        auth?: '老师' | '家长' | '管理员' | { authType?: string; appName?: string }[];
-        adminAuth?: string[];
-        userId?: string;
-        UserId?: string;
-        CorpId?: string;
-        subscriber_info?: {
-          remark?: string;
-          children?: {
-            njId?: string;
-            department?: string[];
-            student_userid?: string;
-            name?: string;
-          }[];
-        };
-        roles?: {
-          id?: string;
-          name?: string;
-          describe?: string;
-          roleType?: string;
-          orderIndex?: number;
-          rules?: {
-            id?: string;
-            permission?: { id?: string; describe?: string; permission?: string };
-            subApp?: {
-              id?: string;
-              describe?: string;
-              icon?: string;
-              isEnabled?: boolean;
-              isShow?: string;
-              name?: string;
-              orderIndex?: string;
-              path?: string;
-              subAppGroupId?: string;
-              target?: string;
-            };
-          }[];
-        }[];
-      };
-    };
-    message?: string;
-  }>('/user/currentUser', {
+  return request<any>('/user/currentUser', {
     method: 'GET',
     params: {
       ...params,

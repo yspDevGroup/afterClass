@@ -14,7 +14,18 @@ export async function validateUrl(
 ) {
   return request<{
     status: 'ok' | 'error';
-    data?: { username?: string; token?: string };
+    data?: {
+      username?: string;
+      list?: {
+        id?: string;
+        GH?: string;
+        XM?: string;
+        LXDH?: string;
+        WechatUserId?: string;
+        QYMC?: string;
+        CorpID?: string;
+      }[];
+    };
     message?: string;
   }>('/xaedu/validateUrl', {
     method: 'POST',
@@ -44,7 +55,7 @@ export async function getUsers(
       XM?: string;
       LXDH?: string;
       WechatUserId?: string;
-      XXMC?: string;
+      QYMC?: string;
       CorpID?: string;
     }[];
     message?: string;
