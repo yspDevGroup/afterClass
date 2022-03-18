@@ -12,7 +12,86 @@ export async function validateUrl(
   },
   options?: { [key: string]: any },
 ) {
-  return request<any>('/xaedu/validateUrl', {
+  return request<{ status: 'ok' | 'error'; data?: { token?: string }; message?: string }>(
+    '/xaedu/validateUrl',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
+    },
+  );
+}
+
+/** 根据手机号获取所有匹配的教师信息 POST /xaedu/getUsers */
+export async function getUsers(
+  body: {
+    /** 用户电话 */
+    phone: string;
+    /** 访问平台 */
+    plat: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status: 'ok' | 'error';
+    data?: {
+      id?: string;
+      GH?: string;
+      XM?: string;
+      LXDH?: string;
+      WechatUserId?: string;
+      XXMC?: string;
+      CorpID?: string;
+    }[];
+    message?: string;
+  }>('/xaedu/getUsers', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 用户选择绑定，并发送验证码 POST /xaedu/bindUser */
+export async function bindUser(
+  body: {
+    /** 选择绑定的课后服务教师ID */
+    teacherId: string;
+    /** 用户名 */
+    username: string;
+    /** 选择绑定的企微CorpID */
+    CorpID: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/bindUser', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 校验验证码 POST /xaedu/checkCode */
+export async function checkCode(
+  body: {
+    /** 课后服务教师ID */
+    teacherId: string;
+    /** 用户名 */
+    username: string;
+    /** 验证码 */
+    code: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/checkCode', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

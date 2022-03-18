@@ -1,9 +1,9 @@
 /*
- * @description:
+ * @description: 课后服务选课
  * @author: wsl
  * @Date: 2021-12-23 14:26:31
- * @LastEditTime: 2022-01-14 19:04:00
- * @LastEditors: wsl
+ * @LastEditTime: 2022-03-17 14:28:29
+ * @LastEditors: zpl
  */
 
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -364,9 +364,7 @@ const InterestClassroom = () => {
     });
     if (res.status === 'ok') {
       const arr = res.data?.filter((value: any) => {
-        return (
-          moment(value?.JSRQ).format('YYYY/MM/DD') >= moment(new Date()).format('YYYY/MM/DD')
-        );
+        return moment(value?.JSRQ).format('YYYY/MM/DD') >= moment(new Date()).format('YYYY/MM/DD');
       });
       setWbmDatas(arr);
       setBmModalVisible(true);
@@ -688,7 +686,7 @@ const InterestClassroom = () => {
                       {BMDate ? (
                         <>
                           {moment(BMDate).format('YYYY/MM/DD') >=
-                            moment(new Date()).format('YYYY/MM/DD') ? (
+                          moment(new Date()).format('YYYY/MM/DD') ? (
                             <p>该时段暂未报名，请先报名</p>
                           ) : (
                             <p>该时段报名已结束，不可报名</p>
@@ -703,7 +701,7 @@ const InterestClassroom = () => {
                 {DropOutType === false ? (
                   <>
                     {moment(BMDate).format('YYYY/MM/DD') >=
-                      moment(new Date()).format('YYYY/MM/DD') ? (
+                    moment(new Date()).format('YYYY/MM/DD') ? (
                       <div className={styles.footers}>
                         <button onClick={BmSubmit}>我要报名</button>
                       </div>
@@ -837,7 +835,7 @@ const InterestClassroom = () => {
                     {BMDate ? (
                       <>
                         {moment(BMDate).format('YYYY/MM/DD') >=
-                          moment(new Date()).format('YYYY/MM/DD') ? (
+                        moment(new Date()).format('YYYY/MM/DD') ? (
                           <p>该时段暂未报名，请先报名</p>
                         ) : (
                           <p>该时段报名已结束，不可报名</p>
@@ -858,9 +856,9 @@ const InterestClassroom = () => {
                       <>
                         {' '}
                         {BaoMinData &&
-                          FKType === true &&
-                          PayType === true &&
-                          DropOutType === true ? (
+                        FKType === true &&
+                        PayType === true &&
+                        DropOutType === true ? (
                           <div className={styles.footers}>
                             <button onClick={submit}>去付款</button>
                           </div>
@@ -956,7 +954,8 @@ const InterestClassroom = () => {
             setIsModalVisible(false);
             xuankeStates();
             history.push('/parent/home/afterClassCoach/interestClassroom');
-          }}>
+          }}
+        >
           我知道了
         </Button>
       </Modal>
