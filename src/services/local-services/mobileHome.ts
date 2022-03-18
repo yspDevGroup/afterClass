@@ -190,6 +190,7 @@ const getHomeData = async (
                   ISFW: clsArr?.[0]?.KHBJSJ?.ISFW === 1 || false,
                   days,
                   detail: converClassInfo(clsArr),
+                  JSLX: yxTar?.KHBJJs?.[0]?.JSLX
                 });
               }
               homeInfo.courseSchedule = newSech;
@@ -376,8 +377,8 @@ export const CurdayCourse = async (
     return item?.days?.find((v: { day: string }) => v.day === myDate) || item.days?.length === 0;
   });
   let courseList: any[] = [];
-  totalList?.forEach((item: { detail: any[]; classType: number; days?: any[] }) => {
-    const { detail, classType, days } = item;
+  totalList?.forEach((item: { detail: any[]; classType: number; days?: any[], JSLX: string }) => {
+    const { detail, classType, days, JSLX } = item;
     // 获取今日上课课程
     // const list = detail.filter((val) => val.wkd === day.getDay());
     const list = detail.filter((val) => val.RQ === myDate);
@@ -392,6 +393,7 @@ export const CurdayCourse = async (
             status: status === '已请假' ? '班主任已请假' : status,
             tag,
             classType,
+            JSLX,
             otherInfo: {
               BZ: reason,
               TKRQ: realDate,
@@ -585,7 +587,6 @@ export const CountCourses = (data: any) => {
 export const convertCourse = (day: string, course: any[] = [], type?: string) => {
   const data: any[] = [];
   course?.forEach((item: any) => {
-    console.log(item, 'item')
     if (type && type === 'filter') {
       if (!item.status) {
         data.push({
@@ -621,7 +622,8 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           date: item.date || day,
           startTime: item.start,
           endTime: item.end,
-          KCName: item.title
+          KCName: item.title,
+          JSLX:item.JSLX
         },
       };
       data.push({
