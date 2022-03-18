@@ -3,16 +3,16 @@
 // API 更新时间：
 // API 唯一标识：
 import * as other from './other';
-import * as fjlx from './fjlx';
-import * as fjsj from './fjsj';
 import * as auth from './auth';
 import * as user from './user';
+import * as fjlx from './fjlx';
+import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
 import * as jscqbq from './jscqbq';
-import * as jxjhsj from './jxjhsj';
 import * as bjsj from './bjsj';
 import * as jzgjbsj from './jzgjbsj';
+import * as jxjhsj from './jxjhsj';
 import * as jyjgsj from './jyjgsj';
 import * as jyjgtzgg from './jyjgtzgg';
 import * as jzgcfsj from './jzgcfsj';
@@ -86,16 +86,16 @@ import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
   other,
-  fjlx,
-  fjsj,
   auth,
   user,
+  fjlx,
+  fjsj,
   jcsj,
   jcxx,
   jscqbq,
-  jxjhsj,
   bjsj,
   jzgjbsj,
+  jxjhsj,
   jyjgsj,
   jyjgtzgg,
   jzgcfsj,

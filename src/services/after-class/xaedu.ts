@@ -12,17 +12,18 @@ export async function validateUrl(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: { token?: string }; message?: string }>(
-    '/xaedu/validateUrl',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: body,
-      ...(options || {}),
+  return request<{
+    status: 'ok' | 'error';
+    data?: { username?: string; token?: string };
+    message?: string;
+  }>('/xaedu/validateUrl', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    data: body,
+    ...(options || {}),
+  });
 }
 
 /** 根据手机号获取所有匹配的教师信息 POST /xaedu/getUsers */
@@ -99,4 +100,27 @@ export async function checkCode(
     data: body,
     ...(options || {}),
   });
+}
+
+/** 创建token信息 POST /xaedu/createToken */
+export async function createToken(
+  body: {
+    /** 课后服务教师ID */
+    teacherId: string;
+    /** 用户名 */
+    username: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
+    '/xaedu/createToken',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
+    },
+  );
 }
