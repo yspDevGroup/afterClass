@@ -6,45 +6,60 @@ import { request } from 'umi';
 export async function validateUrl(
   body: {
     /** 认证票据 */
-    ticket?: string;
+    ticket: string;
     /** 认证对应的服务地址 */
-    service?: string;
-  },
-  options?: { [key: string]: any },
-) {
-  return request<{ status?: 'ok' | 'error'; data?: { token?: string }; message?: string }>(
-    '/xaedu/validateUrl',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: body,
-      ...(options || {}),
-    },
-  );
-}
-
-/** 验证认证链接 POST /xaedu/getUsers */
-export async function getUsers(
-  body: {
-    /** 用户电话 */
-    phone?: string;
-    /** 访问平台 */
-    plat?: string;
+    service: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
+    data?: {
+      username?: string;
+      list?: {
+        id?: string;
+        GH?: string;
+        XM?: string;
+        LXDH?: string;
+        WechatUserId?: string;
+        QYMC?: string;
+        CorpID?: string;
+      }[];
+    };
+    message?: string;
+  }>('/xaedu/validateUrl', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 根据手机号获取所有匹配的教师信息 POST /xaedu/getUsers */
+export async function getUsers(
+  body: {
+    /** 用户电话 */
+    phone: string;
+    /** 当前登录的第三方用户名 */
+    username: string;
+    /** 访问平台 */
+    plat: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status: 'ok' | 'error';
     data?: {
       id?: string;
       GH?: string;
       XM?: string;
       LXDH?: string;
       WechatUserId?: string;
-      XXMC?: string;
+      QYMC?: string;
       CorpID?: string;
+      status?: number;
     }[];
     message?: string;
   }>('/xaedu/getUsers', {
@@ -61,15 +76,15 @@ export async function getUsers(
 export async function bindUser(
   body: {
     /** 选择绑定的课后服务教师ID */
-    teacherId?: string;
+    teacherId: string;
     /** 用户名 */
-    username?: string;
+    username: string;
     /** 选择绑定的企微CorpID */
-    CorpID?: string;
+    CorpID: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/bindUser', {
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/bindUser', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -83,15 +98,15 @@ export async function bindUser(
 export async function checkCode(
   body: {
     /** 课后服务教师ID */
-    teacherId?: string;
+    teacherId: string;
     /** 用户名 */
-    username?: string;
+    username: string;
     /** 验证码 */
-    code?: string;
+    code: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/checkCode', {
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/checkCode', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -99,4 +114,27 @@ export async function checkCode(
     data: body,
     ...(options || {}),
   });
+}
+
+/** 创建token信息 POST /xaedu/createToken */
+export async function createToken(
+  body: {
+    /** 课后服务教师ID */
+    teacherId: string;
+    /** 用户名 */
+    username: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
+    '/xaedu/createToken',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
+    },
+  );
 }

@@ -5,8 +5,8 @@ import { request } from 'umi';
 /** 创建学生学习简历 PUT /xsxxjl/create */
 export async function createXSXXJL(body: API.CreateXSXXJL, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       XXQSRQ?: string;
       XXZZRQ?: string | any;
@@ -34,14 +34,14 @@ export async function getXSXXJL(
     /** 学生ID */
     XSJBSJId?: string;
     /** 页数 */
-    page?: number;
+    page: number;
     /** 每页记录数 */
-    pageSize?: number;
+    pageSize: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.XSXXJL[] };
     message?: string;
   }>('/xsxxjl/getAll', {
@@ -56,15 +56,12 @@ export async function getXSXXJL(
 
 /** 删除学生学习简历 DELETE /xsxxjl/${param0} */
 export async function deleteXSXXJL(
-  params: {
-    // path
-    /** 简历ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteXSXXJLParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xsxxjl/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xsxxjl/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -73,16 +70,13 @@ export async function deleteXSXXJL(
 
 /** 更新学生学习简历 PUT /xsxxjl/update/${param0} */
 export async function updateXSXXJL(
-  params: {
-    // path
-    /** 学生学习简历ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateXSXXJLParams,
   body: API.UpdateXSXXJL,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xsxxjl/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xsxxjl/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
