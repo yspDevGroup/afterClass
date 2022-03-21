@@ -190,7 +190,7 @@ const AfterClassService = () => {
             </p>
             <div className={styles.btn}>
               <Button onClick={showModals} disabled={!Type}>
-                选择退课时段
+                选择退订时段
               </Button>
             </div>
           </div>
@@ -228,7 +228,7 @@ const AfterClassService = () => {
         )}
       </Modal>
       <Modal
-        title="退课确认"
+        title="退订确认"
         visible={ModalVisible}
         onOk={handleOks}
         onCancel={handleCancels}

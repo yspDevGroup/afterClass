@@ -565,7 +565,7 @@ const Detail = (props: any) => {
         onTKCancel();
       }
     } else {
-      message.warning('请选择退课时段');
+      message.warning('请选择退订时段');
     }
   };
 

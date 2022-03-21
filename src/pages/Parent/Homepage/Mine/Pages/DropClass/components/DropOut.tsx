@@ -248,7 +248,7 @@ const DropOut = () => {
         )}
       </Modal>
       <Modal
-        title="确认退课"
+        title="退订确认"
         visible={ModalVisible}
         onOk={handleOks}
         onCancel={handleCancels}
