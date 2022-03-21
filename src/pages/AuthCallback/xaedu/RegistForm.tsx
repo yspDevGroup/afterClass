@@ -8,7 +8,7 @@
 import React, { useRef, useState } from 'react';
 import { Button, message, Modal } from 'antd';
 import type { ProFormInstance } from '@ant-design/pro-form';
-import { ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-form';
+import ProForm, { ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import { history } from 'umi';
 import { CheckCircleOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { theme } from '@/theme-default';
@@ -69,7 +69,7 @@ const RegistForm = ({ show, username }: RegistFormProps) => {
   // 当前选中学校下对应的用户id
   const [teacherId, setTeacherId] = useState<string>('');
 
-  const schoolListformRef = useRef<ProFormInstance>();
+  const schoolListformRef = useRef<{ CorpID: string }>();
   const bindformRef = useRef<ProFormInstance>();
 
   return (
