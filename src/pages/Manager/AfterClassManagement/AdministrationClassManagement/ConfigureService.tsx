@@ -66,7 +66,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
 
   const formLayout = {
     labelCol: { flex: '7em' },
-    wrapperCol: { flex: 'auto' },
+    wrapperCol: { flex: '1' },
   };
 
   // 获取排课时间配置
@@ -207,7 +207,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
       params.ZT = 1;
     }
 
-
     // 编辑
     if (detailValue?.id && KHFWBJs?.length) {
       const res = await updateKHFWBJ({ id: detailValue?.id }, { ...params });
@@ -347,10 +346,8 @@ const ConfigureService = (props: ConfigureSeverType) => {
             }
             message.warning(result.message);
             return false;
-
           }
           message.warning('因课程班不匹配当前模板');
-
         } else {
           message.error('未选择服务模板');
         }
@@ -365,7 +362,6 @@ const ConfigureService = (props: ConfigureSeverType) => {
         }
         message.warning(res.message);
         return false;
-
       }
     });
   };
@@ -392,10 +388,10 @@ const ConfigureService = (props: ConfigureSeverType) => {
     });
     if (res?.status === 'ok' && res?.data?.rows?.length) {
       const newArrFW = res.data.rows.filter((item: any) => {
-        return item?.ISZB === 0
+        return item?.ISZB === 0;
       });
       const newArrKC = res.data.rows.filter((item: any) => {
-        return item?.ISZB === 1
+        return item?.ISZB === 1;
       });
       params.KCFD = newArrFW.map((item: any) => {
         return { value: item.id, label: item.BJMC };
@@ -686,7 +682,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               key="FWFY"
               min={0}
               width={80}
-            // width='xs'
+              // width='xs'
             />
           </Col>
           <Col flex="auto">

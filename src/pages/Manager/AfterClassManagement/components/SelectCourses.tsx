@@ -93,6 +93,9 @@ const SelectCourses = (props: SelectCourseProps) => {
           e.preventDefault();
           onClose(item?.value);
         }}
+        style={{
+          marginBottom: '4px',
+        }}
       >
         {item?.label}
       </Tag>
@@ -188,8 +191,8 @@ const SelectCourses = (props: SelectCourseProps) => {
       <div
         className={
           disabled
-            ? 'ant-input ant-form-item-control-input courseSpecialLyn'
-            : 'ant-input ant-form-item-control-input'
+            ? 'ant-input ant-form-item-control-input courseSpecialLyn dis'
+            : 'ant-input ant-form-item-control-input dis'
         }
         onClick={() => {
           if (!disabled) {
@@ -197,8 +200,9 @@ const SelectCourses = (props: SelectCourseProps) => {
           }
         }}
       >
-        {getTags()}
+        <div className="ant-form-item-control-input-content">{getTags()}</div>
       </div>
+
       <Modal
         onCancel={() => {
           setVisible(false);
