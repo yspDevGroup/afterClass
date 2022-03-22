@@ -6,6 +6,8 @@ import type { Moment } from 'moment';
 import moment from 'moment';
 import type { ReactNode } from '@umijs/renderer-react/node_modules/@types/react';
 import SearchLayout from '@/components/Search/Layout';
+import styles from './index.less';
+import { getAgencies } from '@/services/after-class/xxjbsj';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -28,6 +30,8 @@ const FormSelect = (props: formSelectProps) => {
   const [curXNXQId, setCurXNXQId] = useState<any>();
   const [newDate, setNewDate] = useState<Moment[]>([]);
   const [XM, setXM] = useState<string | undefined>(undefined);
+  const [JGId, setJGId] = useState<string | undefined>(undefined);
+  const [JGData, setJGData] = useState<any[]>();
 
   // 学年学期列表数据
   const [termList, setTermList] = useState<any>();
@@ -54,7 +58,7 @@ const FormSelect = (props: formSelectProps) => {
   useEffect(() => {
     if (curXNXQId && newDate.length > 0) {
       if (getDataSource) {
-        getDataSource(curXNXQId, newDate, XM);
+        getDataSource(curXNXQId, newDate, XM, JGId);
       }
     }
   }, [newDate]);
@@ -67,9 +71,18 @@ const FormSelect = (props: formSelectProps) => {
       setNewDate([moment(newTerm?.KSRQ, 'YYYY-MM-DD'), moment(newTerm?.JSRQ, 'YYYY-MM-DD')]);
     }
   };
+  const getJG = async () => {
+    const res = await getAgencies({
+      XNXQId: curXNXQId
+    })
+    if (res?.status === 'ok') {
+      setJGData(res?.data)
+    }
+  };
   useEffect(() => {
     if (curXNXQId) {
       getNewDate();
+      getJG();
     }
   }, [curXNXQId]);
 
@@ -80,7 +93,7 @@ const FormSelect = (props: formSelectProps) => {
   };
 
   return (
-    <div style={{ marginBottom: 24 }}>
+    <div className={styles.FormSelect}>
       <SearchLayout>
         <div>
           <label htmlFor="term">所属学年学期：</label>
@@ -88,6 +101,8 @@ const FormSelect = (props: formSelectProps) => {
             value={curXNXQId}
             onChange={(value: string) => {
               setCurXNXQId(value);
+              setJGId(undefined);
+              setXM(undefined);
             }}
           >
             {termList?.map((item: any) => {
@@ -102,7 +117,7 @@ const FormSelect = (props: formSelectProps) => {
         <div>
           <label htmlFor="date">考勤日期：</label>
           <RangePicker
-            style={{ width: '250px' }}
+            style={{ width: '220px' }}
             allowClear={false}
             format="YYYY-MM-DD"
             value={newDate}
@@ -112,6 +127,29 @@ const FormSelect = (props: formSelectProps) => {
             disabledDate={onDisabledTime}
           />
         </div>
+        {
+          type === 'JGteacher' ? <div>
+            <label htmlFor="jgmc">机构名称： </label>
+            <Select
+              value={JGId}
+              allowClear
+              onChange={(value: string) => {
+                setJGId(value);
+                setXM(undefined);
+                getDataSource(curXNXQId, newDate, '', value);
+              }}
+            >
+              {JGData?.map((item: any) => {
+                return (
+                  <Option key={item.id} value={item.id}>
+                    {item.QYMC}
+                  </Option>
+                );
+              })}
+            </Select>
+          </div> : <></>
+        }
+
         <div>
           <label htmlFor="name">{type === 'student' ? '学生姓名：' : '教师姓名：'} </label>
           <Search
@@ -121,7 +159,7 @@ const FormSelect = (props: formSelectProps) => {
               setXM(value.target.value);
             }}
             onSearch={(value) => {
-              getDataSource(curXNXQId, newDate, value);
+              getDataSource(curXNXQId, newDate, value, JGId);
             }}
           />
         </div>

@@ -17,7 +17,7 @@ import abnormalImg from '@/assets/abnormal.png';
 import allHoursImg from '@/assets/allHours.png';
 import ShowName from '@/components/ShowName';
 
-import { Link } from 'umi';
+import { Link, useModel } from 'umi';
 import moment, { isMoment } from 'moment';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import FormSelect from './compoents/FormSelect';
@@ -27,6 +27,8 @@ import Style from './index.less';
 
 const { TabPane } = Tabs;
 const LeaveManagement = () => {
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [key, setKey] = useState<string>('1');
   const [curXNXQIdJS, setCurXNXQIdJS] = useState<any>();
   const [newDateJS, setNewDateJS] = useState<any[]>([]);
@@ -72,6 +74,97 @@ const LeaveManagement = () => {
       render: (_, record) => (
         <ShowName type="userName" openid={record.WechatUserId} XM={record.XM} />
       ),
+    },
+    {
+      title: '授课班级数',
+      dataIndex: 'BJS',
+      key: 'BJS',
+      align: 'center',
+      width: 110,
+      render: (text, record) => record.bj_count,
+    },
+    {
+      title: '已排课时总数',
+      dataIndex: 'KSS',
+      key: 'KSS',
+      width: 120,
+      align: 'center',
+      render: (text, record) => record.all_KSS || 0,
+    },
+    {
+      title: '出勤次数',
+      dataIndex: 'CQS',
+      key: 'CQS',
+      align: 'center',
+      width: 100,
+      render: (text, record) => record.attendance || 0,
+    },
+    {
+      title: '缺勤次数',
+      dataIndex: 'QQS',
+      key: 'QQS',
+      align: 'center',
+      width: 100,
+      render: (_: any, record: any) => {
+        return Number(record.absenteeism) + Number(record.leave) + Number(record.substitute) || 0;
+      },
+    },
+    {
+      title: '操作',
+      dataIndex: 'operation',
+      key: 'operation',
+      align: 'center',
+      width: 100,
+      fixed: 'right',
+      render: (_, record) => (
+        <>
+          <Link
+            to={{
+              pathname: '/statistics/attendance/detail',
+              state: {
+                type: 'detail',
+                data: record,
+                XNXQId: curXNXQIdJS,
+                position: '老师',
+                startDate: newDateJS[0]?.format('YYYY-MM-DD'),
+                endDate: newDateJS[1]?.format('YYYY-MM-DD'),
+                duration,
+              },
+            }}
+          >
+            详情
+          </Link>
+        </>
+      ),
+    },
+  ];
+  const JGteacher: ProColumns<any>[] = [
+    {
+      title: '序号',
+      dataIndex: 'index',
+      valueType: 'index',
+      align: 'center',
+      width: 58,
+      fixed: 'left',
+    },
+    {
+      title: '姓名',
+      dataIndex: 'XM',
+      key: 'XM',
+      align: 'center',
+      fixed: 'left',
+      width: 100,
+      render: (_, record) => (
+        <ShowName type="userName" openid={record.WechatUserId} XM={record.XM} />
+      ),
+    },
+    {
+      title: '机构名称',
+      dataIndex: 'KHJYJG',
+      key: 'KHJYJG',
+      align: 'center',
+      width: 110,
+      render: (text, record) => record?.KHJYJG?.QYMC,
     },
     {
       title: '授课班级数',
@@ -221,7 +314,7 @@ const LeaveManagement = () => {
       ),
     },
   ];
-  const getDataSource = async (curXNXQId: string, newDate: any, name?: string) => {
+  const getDataSource = async (curXNXQId: string, newDate: any, name?: string, JGId?: string) => {
     let startDate;
     let endDate;
     if (newDate.length > 0) {
@@ -240,15 +333,20 @@ const LeaveManagement = () => {
     let res;
     setLoading(true);
     if (key === '1') {
-      setCurXNXQIdJS(curXNXQId);
-      setNewDateJS(newDate);
-      setJSXM(name);
-      res = await getTeachersAttendanceByDate({ ...params, JSXM: name });
-    } else {
       setCurXNXQIdXS(curXNXQId);
       setNewDateXS(newDate);
       setXSXM(name);
       res = await getStudentsAttendanceByDate({ ...params, XSXM: name });
+    } else if (key === '2') {
+      setCurXNXQIdJS(curXNXQId);
+      setNewDateJS(newDate);
+      setJSXM(name);
+      res = await getTeachersAttendanceByDate({ ...params, XXJBSJId: currentUser?.xxId, JSXM: name });
+    } else {
+      setCurXNXQIdJS(curXNXQId);
+      setNewDateJS(newDate);
+      setJSXM(name);
+      res = await getTeachersAttendanceByDate({ ...params, KHJYJGId: JGId, JSXM: name });
     }
     if (res?.status === 'ok' && res.data) {
       const { rows, ...rest } = res.data;
@@ -259,11 +357,11 @@ const LeaveManagement = () => {
   };
   useEffect(() => {
     if (key === '1') {
-      if (curXNXQIdJS) {
-        getDataSource(curXNXQIdJS, newDateJS, JSXM);
+      if (curXNXQIdXS) {
+        getDataSource(curXNXQIdXS, newDateXS, XSXM);
       }
-    } else if (curXNXQIdXS) {
-      getDataSource(curXNXQIdXS, newDateXS, XSXM);
+    } else {
+      getDataSource(curXNXQIdJS, newDateJS, JSXM);
     }
   }, [key]);
   // 教师导出
@@ -334,7 +432,71 @@ const LeaveManagement = () => {
           }}
           defaultActiveKey={key}
         >
-          <TabPane tab="教师考勤统计" key="1">
+          <TabPane tab="本校学生考勤" key="1">
+            <FormSelect
+              getDataSource={getDataSource}
+              type="student"
+              exportButton={
+                <Button
+                  type="primary"
+                  icon={<DownloadOutlined />}
+                  style={{ float: 'right' }}
+                  onClick={onExportXSClick}
+                >
+                  导出
+                </Button>
+              }
+              getDuration={getDuration}
+            />
+            <div className={Style.TopCards}>
+              <div>
+                <div>
+                  <span>
+                    <img src={personImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.AllXS_count || 0}</h3>
+                    <p>考勤学生总数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={classImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.AllXSBJ_count || 0}</h3>
+                    <p>课程班总数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={normalImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.AllXSCQ_count || 0}</h3>
+                    <p>出勤总次数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={abnormalImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.AllXSQQ_count || 0}</h3>
+                    <p>缺勤总次数</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Table TableList={{ position: '学生' }} dataSource={dataSource} columns={student} />
+          </TabPane>
+          <TabPane tab="本校教师考勤" key="2">
             <FormSelect
               getDataSource={getDataSource}
               type="teacher"
@@ -413,16 +575,16 @@ const LeaveManagement = () => {
             </div>
             <Table TableList={{ position: '老师' }} dataSource={dataSource} columns={teacher} />
           </TabPane>
-          <TabPane tab="学生考勤统计" key="2">
+          <TabPane tab="机构教师考勤" key="3">
             <FormSelect
               getDataSource={getDataSource}
-              type="student"
+              type="JGteacher"
               exportButton={
                 <Button
                   type="primary"
                   icon={<DownloadOutlined />}
-                  style={{ float: 'right' }}
-                  onClick={onExportXSClick}
+                  style={{ position: 'absolute', right: '0px' }}
+                  onClick={onExportJSClick}
                 >
                   导出
                 </Button>
@@ -436,8 +598,8 @@ const LeaveManagement = () => {
                     <img src={personImg} />
                   </span>
                   <div>
-                    <h3>{collectData?.AllXS_count || 0}</h3>
-                    <p>考勤学生总数</p>
+                    <h3>{collectData?.js_count || 0}</h3>
+                    <p>考勤教师总数</p>
                   </div>
                 </div>
               </div>
@@ -447,8 +609,19 @@ const LeaveManagement = () => {
                     <img src={classImg} />
                   </span>
                   <div>
-                    <h3>{collectData?.AllXSBJ_count || 0}</h3>
-                    <p>课程班总数</p>
+                    <h3>{collectData?.allJS_bj_count || 0}</h3>
+                    <p>授课班级总数</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <span>
+                    <img src={allHoursImg} />
+                  </span>
+                  <div>
+                    <h3>{collectData?.allJS_KSS || 0}</h3>
+                    <p>已排课时总数</p>
                   </div>
                 </div>
               </div>
@@ -458,7 +631,7 @@ const LeaveManagement = () => {
                     <img src={normalImg} />
                   </span>
                   <div>
-                    <h3>{collectData?.AllXSCQ_count || 0}</h3>
+                    <h3>{collectData?.allJS_attendance || 0}</h3>
                     <p>出勤总次数</p>
                   </div>
                 </div>
@@ -469,14 +642,19 @@ const LeaveManagement = () => {
                     <img src={abnormalImg} />
                   </span>
                   <div>
-                    <h3>{collectData?.AllXSQQ_count || 0}</h3>
+                    <h3>
+                      {collectData?.allJS_absenteeism +
+                        collectData?.allJS_leave +
+                        collectData?.allJS_substitute || 0}
+                    </h3>
                     <p>缺勤总次数</p>
                   </div>
                 </div>
               </div>
             </div>
-            <Table TableList={{ position: '学生' }} dataSource={dataSource} columns={student} />
+            <Table TableList={{ position: '老师' }} dataSource={dataSource} columns={JGteacher} />
           </TabPane>
+
         </Tabs>
       </Spin>
     </PageContainer>
@@ -484,3 +662,4 @@ const LeaveManagement = () => {
 };
 
 export default LeaveManagement;
+

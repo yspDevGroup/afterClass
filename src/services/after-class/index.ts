@@ -62,12 +62,12 @@ import * as sso from './sso';
 import * as statistic from './statistic';
 import * as upload from './upload';
 import * as wechat from './wechat';
+import * as xaedu from './xaedu';
 import * as xksj from './xksj';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
-import * as xaedu from './xaedu';
 import * as xscfsj from './xscfsj';
 import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
@@ -145,12 +145,12 @@ export default {
   statistic,
   upload,
   wechat,
+  xaedu,
   xksj,
   xl,
   xnjgsj,
   xnxq,
   xqsj,
-  xaedu,
   xscfsj,
   xsjbsj,
   xsjlsj,
