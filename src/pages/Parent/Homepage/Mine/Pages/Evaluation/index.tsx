@@ -30,12 +30,11 @@ const Evaluation = () => {
     const res = await getStudentEvaluationClasses({
       XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
       XNXQId: result.current.id,
-      ZT: [0, 1, 2, 3],
     });
     if (res.status === 'ok') {
       const newArr: any[] = [];
       res.data.forEach((value: any) => {
-        if (value.KHBJSJ?.KHBJPJs?.length === 0) {
+        if (value?.KHBJPJs?.length === 0) {
           newArr.push(value);
         }
       });
@@ -75,13 +74,16 @@ const Evaluation = () => {
                     return (
                       <>
                         <div className={styles.cards}>
-                          <p className={styles.title}>{value.KHBJSJ?.KHKCSJ?.KCMC}</p>
+                          <p className={styles.title}>{value?.KHKCSJ?.KCMC}</p>
                           <p>
-                            班级：{value.KHBJSJ?.BJMC} ｜ 任课教师：
+                            班级：{value?.BJMC}
+                          </p>
+                          <p>
+                            任课教师：
                             <ShowName
                               type="userName"
-                              openid={value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.WechatUserId}
-                              XM={value.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM}
+                              openid={value?.KHBJJs?.[0].JZGJBSJ?.WechatUserId}
+                              XM={value?.KHBJJs?.[0].JZGJBSJ?.XM}
                             />
                           </p>
                           <Link

@@ -1,5 +1,5 @@
 import PageContainer from '@/components/PageContainer';
-import { Tabs, Spin, Button, message } from 'antd';
+import { Tabs, Spin, Button, message, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import Table from './compoents/TableList';
 import type { ProColumns } from '@ant-design/pro-table';
@@ -21,7 +21,7 @@ import { Link, useModel } from 'umi';
 import moment, { isMoment } from 'moment';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import FormSelect from './compoents/FormSelect';
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
 import Style from './index.less';
 
@@ -76,7 +76,19 @@ const LeaveManagement = () => {
       ),
     },
     {
-      title: '授课班级数',
+      title: (
+        <span>
+          授课班级数&nbsp;
+          <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title={
+              <>已该时段教师实际出勤为基础统计</>
+            }
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       dataIndex: 'BJS',
       key: 'BJS',
       align: 'center',
@@ -84,7 +96,19 @@ const LeaveManagement = () => {
       render: (text, record) => record.bj_count,
     },
     {
-      title: '已排课时总数',
+      title: (
+        <span>
+          已排课时总数&nbsp;
+          <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title={
+              <>仅统计已指定授课教师的排课数据</>
+            }
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       dataIndex: 'KSS',
       key: 'KSS',
       width: 120,
@@ -167,7 +191,19 @@ const LeaveManagement = () => {
       render: (text, record) => record?.KHJYJG?.QYMC,
     },
     {
-      title: '授课班级数',
+      title: (
+        <span>
+          授课班级数&nbsp;
+          <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title={
+              <>已该时段教师实际出勤为基础统计</>
+            }
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       dataIndex: 'BJS',
       key: 'BJS',
       align: 'center',
@@ -175,7 +211,19 @@ const LeaveManagement = () => {
       render: (text, record) => record.bj_count,
     },
     {
-      title: '已排课时总数',
+      title: (
+        <span>
+          已排课时总数&nbsp;
+          <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title={
+              <>仅统计已指定授课教师的排课数据</>
+            }
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       dataIndex: 'KSS',
       key: 'KSS',
       width: 120,

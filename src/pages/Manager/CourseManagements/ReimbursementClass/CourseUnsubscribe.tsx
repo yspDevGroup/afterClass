@@ -389,9 +389,9 @@ const CourseUnsubscribe = () => {
             pageSize: 10,
             defaultCurrent: 1,
           }}
-          rowSelection={{
-            selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
-          }}
+          // rowSelection={{
+          //   selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
+          // }}
           tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
             <Space size={24}>
               <span>
