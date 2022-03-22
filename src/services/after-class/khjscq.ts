@@ -4,13 +4,16 @@ import { request } from 'umi';
 
 /** 获取课后服务教师出勤记录 GET /khjscq/${param0} */
 export async function getKHJSCQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getKHJSCQParams,
+  params: {
+    // path
+    /** 教师出勤记录ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: {
       id?: string;
       CQZT?: '出勤' | '请假' | '缺席' | '代课';
@@ -44,12 +47,15 @@ export async function getKHJSCQ(
 
 /** 删除课后服务教师出勤记录 DELETE /khjscq/${param0} */
 export async function deleteKHJSCQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteKHJSCQParams,
+  params: {
+    // path
+    /** 教师出勤记录ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khjscq/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjscq/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -74,7 +80,7 @@ export async function getAllKHJSCQ(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.KHJSCQ[]; message?: string }>(
+  return request<{ status?: 'ok' | 'error'; data?: API.KHJSCQ[]; message?: string }>(
     '/khjscq/getAll',
     {
       method: 'POST',
@@ -115,7 +121,7 @@ export async function computedMonth(
 
 /** 创建课后服务教师出勤记录 PUT /khjscq/create */
 export async function createKHJSCQ(body: API.CreateKHJSCQ[], options?: { [key: string]: any }) {
-  return request<{ status: 'ok' | 'error'; data?: any[]; message?: string }>('/khjscq/create', {
+  return request<{ status?: 'ok' | 'error'; data?: any[]; message?: string }>('/khjscq/create', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -127,13 +133,16 @@ export async function createKHJSCQ(body: API.CreateKHJSCQ[], options?: { [key: s
 
 /** 更新课后服务教师出勤记录 PUT /khjscq/update/${param0} */
 export async function updateKHJSCQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateKHJSCQParams,
+  params: {
+    // path
+    /** 教师出勤记录ID */
+    id: string;
+  },
   body: API.UpdateKHJSCQ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khjscq/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjscq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -148,9 +157,9 @@ export async function updateKHJSCQ(
 export async function countKHJSCQ(
   body: {
     /** 教师ID */
-    JZGJBSJId: string;
+    JZGJBSJId?: string;
     /** 学年学期ID */
-    XNXQId: string;
+    XNXQId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -168,9 +177,9 @@ export async function countKHJSCQ(
 export async function statisSubstitute(
   body: {
     /** 教师ID */
-    JZGJBSJId: string;
+    JZGJBSJId?: string;
     /** 学年学期ID */
-    XNXQId: string;
+    XNXQId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -188,17 +197,77 @@ export async function statisSubstitute(
 export async function getAllByDate(
   body: {
     /** 节次ID */
-    XXSJPZIds: string[];
+    XXSJPZIds?: string[];
     /** 班级ID */
-    KHBJSJIds: string[];
+    KHBJSJIds?: string[];
     /** 出勤状态 */
-    CQZT: string[];
+    CQZT?: string[];
     /** 出勤日期 */
-    CQRQ: string;
+    CQRQ?: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<any>('/khjscq/getAllByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 机构教师端出勤统计 POST /khjscq/statisticalByTeacher */
+export async function statisticalByTeacher(
+  body: {
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 学年 */
+    XN?: string;
+    /** 学期 */
+    XQ?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjscq/statisticalByTeacher', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 机构端教师出勤统计 POST /khjscq/agencyStatistical */
+export async function agencyStatistical(
+  body: {
+    /** 机构ID */
+    KHJYJGId?: string;
+    /** 学年 */
+    XN?: string;
+    /** 学期 */
+    XQ?: string;
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 教师姓名 */
+    JSXM?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjscq/agencyStatistical', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

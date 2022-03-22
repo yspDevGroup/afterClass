@@ -30,7 +30,7 @@ const Evaluation = () => {
     const res = await getStudentEvaluationClasses({
       XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
       XNXQId: result.current.id,
-      ZT: [0, 1, 2],
+      ZT: [0, 1, 2, 3],
     });
     if (res.status === 'ok') {
       const newArr: any[] = [];

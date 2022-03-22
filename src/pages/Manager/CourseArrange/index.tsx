@@ -12,7 +12,6 @@ import AddArranging from './components/AddArranging';
 import { getAllFJSJ } from '@/services/after-class/fjsj';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getAllCourses } from '@/services/after-class/khkcsj';
-import { getAllPK } from '@/services/after-class/khpksj';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { LeftOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import styles from './index.less';
@@ -29,7 +28,6 @@ const Index = () => {
   const { currentUser } = initialState || {};
   const [key, setKey] = useState<string>('1');
   const [keys, setKeys] = useState<string>('one');
-
   const [recordValue, setRecordValue] = useState<any>({});
   const [state, setState] = useState(true);
   // 课程选择框的数据
@@ -49,13 +47,8 @@ const Index = () => {
   const [RqDisable, setRqDisable] = useState<any>();
   // 学期内的周数
   const [Weeks, setWeeks] = useState<any>([]);
-  // 排课数据信息
-  const [oriSource, setOriSource] = useState<any>([]);
-  // 筛选所用到的数据
-  const [screenOriSource, setScreenOriSource] = useState<any>([]);
   // 场地名称选择框的数据
   const [cdmcData, setCdmcData] = useState<selectType[] | undefined>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   // 排课须知弹框
   const [VisiblePKXZ, setVisiblePKXZ] = useState(false);
   // 学年学期第一周的开始时间
@@ -657,10 +650,6 @@ const Index = () => {
     }
   };
 
-  // 控制学期学年数据提示框的函数
-  // const onPkiskaiClick = () => {
-  //   setPKiskai(false);
-  // };
   // 选择校区后选择学年学期
   const getXNXQData = async () => {
     const xnxq = getQueryString('xnxqid');
@@ -749,24 +738,6 @@ const Index = () => {
     }
   };
 
-  // 获取排课数据信息
-  const getPKData = async () => {
-    const bjId = getQueryString('courseId');
-    setLoading(true);
-    const res = await getAllPK({
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok') {
-      // 设置初始排课数据
-      setScreenOriSource(res.data);
-      // 设置table展示的排课数据
-      if (bjId === null) {
-        setOriSource(res.data);
-      }
-      setLoading(false);
-    }
-  };
   // 返回上一页
   const onReset = () => {
     const bjID = getQueryString('courseId');
@@ -860,8 +831,6 @@ const Index = () => {
       }
       // 场地数据
       getCDData();
-      // 排课数据
-      getPKData();
       getTime();
 
     }
@@ -881,11 +850,7 @@ const Index = () => {
             {<TabPane tab="行政班课表" key="1">
               {key === '1' && <CourseScheduling
                 type='行政班课表'
-                state={state}
-                setState={setState}
-                setRecordValue={setRecordValue}
                 kcmcData={kcmcData}
-                setKcmcData={setKcmcData}
                 processingDatas={processingDatas}
                 campus={campus}
                 setCampus={setCampus}
@@ -894,16 +859,9 @@ const Index = () => {
                 setCurXNXQId={setCurXNXQId}
                 xXSJPZData={xXSJPZData}
                 setXXSJPZData={setXXSJPZData}
-                screenOriSource={screenOriSource}
-                setScreenOriSource={setScreenOriSource}
                 currentUser={currentUser}
-                loading={loading}
-                setLoading={setLoading}
-                TimeData={TimeData}
                 termList={termList}
                 setCampusId={setCampusId}
-                oriSource={oriSource}
-                setOriSource={setOriSource}
                 showDrawer={showDrawer}
                 onExcelTableClick={onExcelTableClick}
                 pKiskai={pKiskai}
@@ -915,11 +873,7 @@ const Index = () => {
             <TabPane tab="课程班课表" key="2">
               {key === '2' && <CourseScheduling
                 type='课程班课表'
-                state={state}
-                setState={setState}
-                setRecordValue={setRecordValue}
                 kcmcData={kcmcData}
-                setKcmcData={setKcmcData}
                 processingDatas={processingDatas}
                 campus={campus}
                 setCampus={setCampus}
@@ -928,16 +882,9 @@ const Index = () => {
                 setCurXNXQId={setCurXNXQId}
                 xXSJPZData={xXSJPZData}
                 setXXSJPZData={setXXSJPZData}
-                screenOriSource={screenOriSource}
-                setScreenOriSource={setScreenOriSource}
                 currentUser={currentUser}
-                loading={loading}
-                setLoading={setLoading}
-                TimeData={TimeData}
                 termList={termList}
                 setCampusId={setCampusId}
-                oriSource={oriSource}
-                setOriSource={setOriSource}
                 showDrawer={showDrawer}
                 onExcelTableClick={onExcelTableClick}
                 pKiskai={pKiskai}
@@ -948,11 +895,6 @@ const Index = () => {
             <TabPane tab="场地课表" key="3">
               {key === '3' && <ClassScheduling
                 type='场地课表'
-                state={state}
-                setState={setState}
-                setRecordValue={setRecordValue}
-                kcmcData={kcmcData}
-                setKcmcData={setKcmcData}
                 processingDatas={processingDatas}
                 campus={campus}
                 setCampus={setCampus}
@@ -961,16 +903,9 @@ const Index = () => {
                 setCurXNXQId={setCurXNXQId}
                 xXSJPZData={xXSJPZData}
                 setXXSJPZData={setXXSJPZData}
-                screenOriSource={screenOriSource}
-                setScreenOriSource={setScreenOriSource}
                 currentUser={currentUser}
-                loading={loading}
-                setLoading={setLoading}
-                TimeData={TimeData}
                 termList={termList}
                 setCampusId={setCampusId}
-                oriSource={oriSource}
-                setOriSource={setOriSource}
                 showDrawer={showDrawer}
                 onExcelTableClick={onExcelTableClick}
                 pKiskai={pKiskai}
@@ -981,11 +916,6 @@ const Index = () => {
             <TabPane tab="教师课表" key="4">
               {key === '4' && <ClassScheduling
                 type='教师课表'
-                state={state}
-                setState={setState}
-                setRecordValue={setRecordValue}
-                kcmcData={kcmcData}
-                setKcmcData={setKcmcData}
                 processingDatas={processingDatas}
                 campus={campus}
                 setCampus={setCampus}
@@ -994,16 +924,9 @@ const Index = () => {
                 setCurXNXQId={setCurXNXQId}
                 xXSJPZData={xXSJPZData}
                 setXXSJPZData={setXXSJPZData}
-                screenOriSource={screenOriSource}
-                setScreenOriSource={setScreenOriSource}
                 currentUser={currentUser}
-                loading={loading}
-                setLoading={setLoading}
-                TimeData={TimeData}
                 termList={termList}
                 setCampusId={setCampusId}
-                oriSource={oriSource}
-                setOriSource={setOriSource}
                 showDrawer={showDrawer}
                 onExcelTableClick={onExcelTableClick}
                 pKiskai={pKiskai}
@@ -1032,8 +955,8 @@ const Index = () => {
                 }}><QuestionCircleOutlined /> 排课须知</a>
               </div>
             </>
-            {
-              screenOriSource && <Tabs
+
+             <Tabs
                 activeKey={keys}
                 onChange={(value: any) => {
                   setKeys(value);
@@ -1049,15 +972,10 @@ const Index = () => {
                       curXNXQId={curXNXQId}
                       xXSJPZData={xXSJPZData}
                       cdmcData={cdmcData}
-                      screenOriSource={screenOriSource}
-                      setScreenOriSource={setScreenOriSource}
                       processingData={processingDataZ}
-                      setState={setState}
                       formValues={recordValue}
                       kcmcData={kcmcData}
                       currentUser={currentUser}
-                      loading={loading}
-                      setLoading={setLoading}
                       TimeData={TimeData}
                       setRqDisable={setRqDisable}
                       Weeks={Weeks}
@@ -1073,15 +991,10 @@ const Index = () => {
                       curXNXQId={curXNXQId}
                       xXSJPZData={xXSJPZData}
                       cdmcData={cdmcData}
-                      screenOriSource={screenOriSource}
-                      setScreenOriSource={setScreenOriSource}
                       processingData={processingDataDS}
-                      setState={setState}
                       formValues={recordValue}
                       kcmcData={kcmcData}
                       currentUser={currentUser}
-                      loading={loading}
-                      setLoading={setLoading}
                       TimeData={TimeData}
                       setRqDisable={setRqDisable}
                       Weeks={Weeks}
@@ -1097,15 +1010,10 @@ const Index = () => {
                       curXNXQId={curXNXQId}
                       xXSJPZData={xXSJPZData}
                       cdmcData={cdmcData}
-                      screenOriSource={screenOriSource}
-                      setScreenOriSource={setScreenOriSource}
                       processingData={processingData}
-                      setState={setState}
                       formValues={recordValue}
                       kcmcData={kcmcData}
                       currentUser={currentUser}
-                      loading={loading}
-                      setLoading={setLoading}
                       TimeData={TimeData}
                       setRqDisable={setRqDisable}
                     />
@@ -1113,7 +1021,7 @@ const Index = () => {
                 </TabPane>
 
               </Tabs>
-            }</>
+            </>
         )}
 
         <Modal

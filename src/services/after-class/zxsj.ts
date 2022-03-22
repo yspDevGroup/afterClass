@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 获取作息时间数据 GET /zxsj/${param0} */
 export async function getZXSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getZXSJParams,
+  params: {
+    // path
+    /** 作息时间ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       MC?: string;
       SD?: string;
@@ -31,12 +34,15 @@ export async function getZXSJ(
 
 /** 删除作息时间数据 DELETE /zxsj/${param0} */
 export async function deleteZXSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteZXSJParams,
+  params: {
+    // path
+    /** 作息时间ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/zxsj/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/zxsj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -46,11 +52,11 @@ export async function deleteZXSJ(
 /** 查询所有作息时间数据 POST /zxsj/ */
 export async function getAllZXSJ(
   body: {
-    ZXFAId: string;
+    ZXFAId?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.ZXSJ[]; message?: string }>('/zxsj/', {
+  return request<{ status?: 'ok' | 'error'; data?: API.ZXSJ[]; message?: string }>('/zxsj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -63,8 +69,8 @@ export async function getAllZXSJ(
 /** 创建作息时间数据 PUT /zxsj/create */
 export async function createZXSJ(body: API.CreateZXSJ, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       MC?: string;
       SD?: string;
@@ -87,13 +93,16 @@ export async function createZXSJ(body: API.CreateZXSJ, options?: { [key: string]
 
 /** 更新作息时间数据 PUT /zxsj/update/${param0} */
 export async function updateZXSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateZXSJParams,
+  params: {
+    // path
+    /** 作息时间ID */
+    id: string;
+  },
   body: API.UpdateZXSJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/zxsj/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/zxsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

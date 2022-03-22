@@ -15,13 +15,12 @@ import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import { getQueryString } from '@/utils/utils';
 import styles from './index.less';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
-import SearchLayout from '@/components/Search/Layout';
-// import { getAllPK } from '@/services/after-class/khpksj';
 import noJF from '@/assets/noJF.png';
 import ExcelTable2 from '@/components/ExcelTable2';
 import { getAllFJSJ } from '@/services/after-class/fjsj';
 import TeacherSelect from '@/components/TeacherSelect';
 import { getAllFJLX } from '@/services/after-class/fjlx';
+import { getAllPK } from '@/services/after-class/khpksj';
 
 const { Option } = Select;
 type selectType = { label: string; value: string };
@@ -29,29 +28,17 @@ type selectType = { label: string; value: string };
 // 课程排课
 const CourseScheduling = (
   props: {
-    state: boolean,
-    setState: React.Dispatch<React.SetStateAction<boolean>>,
-    setRecordValue: React.Dispatch<any>,
-    kcmcData: selectType[] | undefined
-    setKcmcData: React.Dispatch<React.SetStateAction<selectType[] | undefined>>,
-    processingDatas: (data: any, timeData: any, bjId?: string | undefined) => any[],
+    processingDatas: (data: any, timeData: any, week: any, bjId?: string | undefined) => any[]
     campus: any,
     setCampus: React.Dispatch<any>,
-    loading: boolean,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     campusId: string | undefined,
     setCampusId: React.Dispatch<React.SetStateAction<string | undefined>>
     curXNXQId: any,
     setCurXNXQId: React.Dispatch<any>,
     xXSJPZData: any,
     setXXSJPZData: React.Dispatch<any>,
-    screenOriSource: any,
-    setScreenOriSource: React.Dispatch<any>,
     currentUser: any,
-    TimeData: any,
     termList: any,
-    oriSource: any,
-    setOriSource: React.Dispatch<any>,
     showDrawer: () => void,
     onExcelTableClick: (value: any, record: any) => void,
     pKiskai: boolean,
@@ -60,7 +47,7 @@ const CourseScheduling = (
     Weeks: any;
   }) => {
 
-  const { state, kcmcData, processingDatas, campus, setCampus, loading, setLoading, campusId, setCampusId, xXSJPZData, curXNXQId, setCurXNXQId, setXXSJPZData, screenOriSource, currentUser, termList, oriSource, setOriSource, onExcelTableClick, showDrawer, pKiskai, setPKiskai, type, Weeks } = props;
+  const { processingDatas, campus, setCampus, campusId, setCampusId, xXSJPZData, curXNXQId, setCurXNXQId, setXXSJPZData, currentUser, termList, onExcelTableClick, showDrawer, pKiskai, setPKiskai, type, Weeks } = props;
 
   // ExcelTable表格所需要的数据
   const [tableDataSource, setTableDataSource] = useState<DataSourceType>([]);
@@ -78,6 +65,9 @@ const CourseScheduling = (
   const [dataLX, setDataLX] = useState<any>([]);
   const [CDLXId, setCDLXId] = useState<any>();
   const [weekNum, setWeekNum] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
+  // 排课数据信息
+  const [oriSource, setOriSource] = useState<any>([]);
 
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
@@ -221,53 +211,6 @@ const CourseScheduling = (
         width: 136,
       },
     ];
-
-  /**
-   *  筛选数据 根据 课程名称Id 课程班名称Id 教师名称主副班主任, 场地名称Id
-   * @param valueScreenOriSource  需要筛选的数据
-   */
-  const getScreenOriSource = (valueScreenOriSource: any) => {
-
-    const _obj = JSON.stringify(valueScreenOriSource);
-    let newArr = JSON.parse(_obj);
-    //
-    const screenRadio = (dataSource0: any) => {
-      const newDataSource = [...dataSource0];
-      if (radioValue) {
-        return newDataSource?.filter((item: any) => item?.KHPKSJs?.length > 0);
-      }
-      return newDataSource;
-    };
-    // 筛选场地方法
-    const screenCD = (dataSource1: any) => {
-      const newDataSource = [...dataSource1];
-      if (cdmcValue) {
-        return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
-      }
-      return newDataSource;
-    };
-    // 筛选教师(名称)
-    const screenJSMC = (dataSource4: any) => {
-      const newDataSource = [...dataSource4];
-      if (teacherId) {
-        const newdata = newDataSource.filter((item: any) => {
-          if (item?.KHBJSJ.KHBJJs?.length > 0 && item?.KHBJSJ.KHBJJs?.find((value: any) => value?.JZGJBSJ?.id === teacherId)) {
-            return item
-          }
-          return ''
-        })
-        return newdata;
-      }
-      return newDataSource;
-    };
-
-    newArr = screenRadio(newArr);
-    newArr = screenCD(newArr);
-    newArr = screenJSMC(newArr);
-    setLoading(false);
-    return newArr;
-  };
-
   // 获取校区信息 默认选择第一个校区
   const getCampus = async () => {
     // 获取年级信息
@@ -298,9 +241,6 @@ const CourseScheduling = (
     }
   };
 
-
-
-
   // 初始化请求请求校区
   useEffect(() => {
     getCampus();
@@ -308,16 +248,10 @@ const CourseScheduling = (
 
   // 根据学年学期ID 获取学年课程名称数据，和班级名称数据， 获取当前学校学年的学期的场地排课情况
   useEffect(() => {
-    const bjId = getQueryString('courseId');
+    // const bjId = getQueryString('courseId');
     if (curXNXQId && campusId) {
       // 获取系统时间配置信息
       getSysTime();
-      if (bjId === null) {
-        // 课程名称数据
-        // getBjData();
-        // 课程班数据
-        // getKCData();
-      }
       // 场地数据
       getCDData();
       // 场地类型数据
@@ -326,26 +260,6 @@ const CourseScheduling = (
   }, [curXNXQId, campusId]);
 
 
-  useEffect(() => {
-    const bjId = getQueryString('courseId');
-    if (bjId === null && screenOriSource && screenOriSource.length > 0) {
-      // 筛选数据
-      const screenData = getScreenOriSource(screenOriSource);
-      setOriSource(screenData);
-    }
-  }, [teacherId, cdmcValue, radioValue]);
-
-  // 切换主页 和编辑页时刷新场地排课情况
-  useEffect(() => {
-    if (state) {
-      if (screenOriSource && screenOriSource.length > 0) {
-        // 筛选数据
-        const screenData = getScreenOriSource(screenOriSource);
-        setOriSource(screenData);
-      }
-    }
-  }, [state]);
-
   // 筛选之后 table 排课数据信息 刷新table
   useEffect(() => {
     if (xXSJPZData.length > 0) {
@@ -353,6 +267,50 @@ const CourseScheduling = (
       setTableDataSource(tableData);
     }
   }, [oriSource, weekNum]);
+
+  // 获取课程班排课数据信息
+  const CDgetPKData = async () => {
+    const bjId = getQueryString('courseId');
+    setLoading(true);
+    const res = await getAllPK({
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+      FJSJId: cdmcValue
+    });
+    if (res.status === 'ok') {
+      if (bjId === null) {
+        setOriSource(res.data);
+      }
+      setLoading(false);
+    }
+  };
+  // 获取行政班排课数据信息
+  const JSgetPKData = async () => {
+    const bjId = getQueryString('courseId');
+    setLoading(true);
+    const res = await getAllPK({
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+      JZGJBSJId: teacherId,
+    });
+    if (res.status === 'ok') {
+      if (bjId === null) {
+        setOriSource(res.data);
+      }
+      setLoading(false);
+    }
+  };
+  // 根据学年学期ID 获取学年课程名称数据，和班级名称数据， 获取当前学校学年的学期的场地排课情况
+  useEffect(() => {
+    if (curXNXQId && campusId) {
+      // 排课数据
+      if (type === '场地课表' && cdmcValue) {
+        CDgetPKData();
+      } else if (type === '教师课表' && teacherId) {
+        JSgetPKData();
+      }
+    }
+  }, [curXNXQId, campusId, cdmcValue, type, teacherId]);
 
   return (
     <>

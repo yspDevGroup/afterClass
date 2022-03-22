@@ -3,18 +3,18 @@
 // API 更新时间：
 // API 唯一标识：
 import * as other from './other';
-import * as bjsj from './bjsj';
-import * as jzgjbsj from './jzgjbsj';
 import * as auth from './auth';
 import * as user from './user';
+import * as bjsj from './bjsj';
+import * as jzgjbsj from './jzgjbsj';
 import * as fjlx from './fjlx';
 import * as fjsj from './fjsj';
 import * as jcsj from './jcsj';
 import * as jcxx from './jcxx';
 import * as jscqbq from './jscqbq';
+import * as jxjhsj from './jxjhsj';
 import * as jyjgsj from './jyjgsj';
 import * as jyjgtzgg from './jyjgtzgg';
-import * as jxjhsj from './jxjhsj';
 import * as jzgcfsj from './jzgcfsj';
 import * as jzggzjl from './jzggzjl';
 import * as jzgjtcy from './jzgjtcy';
@@ -62,12 +62,12 @@ import * as sso from './sso';
 import * as statistic from './statistic';
 import * as upload from './upload';
 import * as wechat from './wechat';
-import * as xaedu from './xaedu';
 import * as xksj from './xksj';
 import * as xl from './xl';
 import * as xnjgsj from './xnjgsj';
 import * as xnxq from './xnxq';
 import * as xqsj from './xqsj';
+import * as xaedu from './xaedu';
 import * as xscfsj from './xscfsj';
 import * as xsjbsj from './xsjbsj';
 import * as xsjlsj from './xsjlsj';
@@ -86,18 +86,18 @@ import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
 export default {
   other,
-  bjsj,
-  jzgjbsj,
   auth,
   user,
+  bjsj,
+  jzgjbsj,
   fjlx,
   fjsj,
   jcsj,
   jcxx,
   jscqbq,
+  jxjhsj,
   jyjgsj,
   jyjgtzgg,
-  jxjhsj,
   jzgcfsj,
   jzggzjl,
   jzgjtcy,
@@ -145,12 +145,12 @@ export default {
   statistic,
   upload,
   wechat,
-  xaedu,
   xksj,
   xl,
   xnjgsj,
   xnxq,
   xqsj,
+  xaedu,
   xscfsj,
   xsjbsj,
   xsjlsj,

@@ -47,7 +47,6 @@ const { confirm } = Modal;
 type selectType = { label: string; value: string };
 
 type PropsType = {
-  setState?: any;
   curXNXQId?: string;
   processingData: (value: any, timeSlot: any, bjId: string | undefined) => void;
   formValues?: Record<string, any>;
@@ -56,47 +55,31 @@ type PropsType = {
   cdmcData?: any[];
   kcmcData?: any[];
   currentUser?: API.CurrentUser | undefined;
-  screenOriSource: any;
-  setScreenOriSource: React.Dispatch<any>;
   setRqDisable: React.Dispatch<any>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   campusId: string | undefined;
   TimeData: any;
 };
 
 const AddArranging: FC<PropsType> = (props) => {
   const {
-    screenOriSource,
-    setScreenOriSource,
     curXNXQId,
     campus,
     xXSJPZData,
     currentUser,
     processingData,
     formValues,
-    loading,
-    setLoading,
-    // setBJIDData,
     cdmcData,
     kcmcData,
     campusId,
     TimeData,
-    setRqDisable
-    // setTableDataSource,
-    // sameClass,
-    // tableDataSource,
+    setRqDisable,
   } = props;
-
-
   const [packUp, setPackUp] = useState(false);
   const [form] = Form.useForm();
   const [CDLoading, setCDLoading] = useState(false);
-  // const [XQID, setXQID] = useState<any>('');
   const [NJID, setNJID] = useState<any>(undefined);
   const [cdmcValue, setCdmcValue] = useState<any>();
   const [newTableDataSource, setNewTableDataSource] = useState<DataSourceType>([]);
-
   // 选择的班级的数据
   const [Bj, setBj] = useState<any>(undefined);
   // 请求的班级列表数据
@@ -113,7 +96,10 @@ const AddArranging: FC<PropsType> = (props) => {
   const [ImportData, setImportData] = useState<any>([]);
   // 课程班的课时数
   const [Class, setClass] = useState<any>();
-
+  const [loading, setLoading] = useState<boolean>(false);
+  // 排课数据信息
+  const [oriSource, setOriSource] = useState<any>([]);
+  const [BJPKData, setBJPKData] = useState<any>([]);
 
   const columns: {
     title: string;
@@ -187,44 +173,28 @@ const AddArranging: FC<PropsType> = (props) => {
       },
     ];
 
-  // 将排好的课程再次点击可以取消
-  const getSelectdata = () => {
-    // sameClassDatas.map((item: any, key: number) => {
-    //   if (
-    //     item.FJSJId === value.FJSJId && // 教室ID
-    //     item.XXSJPZId === value.XXSJPZId && // 时间ID
-    //     item.WEEKDAY === value.WEEKDAY // 周
-    //   ) {
-    //     sameClassDatas.splice(key, 1);
-    //   }
-    //   return item;
-    // });
+  const CDgetPKData = async () => {
+    setLoading(true);
+    const res = await getAllPK({
+      XNXQId: curXNXQId,
+      XXJBSJId: currentUser?.xxId,
+      FJSJId: cdmcValue
+    });
+    if (res.status === 'ok') {
+      setOriSource(res.data)
+      setLoading(false);
+    }
   };
-
   // 刷新Table
   const refreshTable = () => {
-    if (screenOriSource && xXSJPZData?.length) {
-      const screenCD = (dataSource1: any) => {
-        const newDataSource = [...dataSource1];
-        if (cdmcValue) {
-          return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
-        }
-        return newDataSource;
-      };
-      // 根据场地名称筛选出来 场地数据
-      const newCDData = screenCD(screenOriSource);
-      const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
-      setNewTableDataSource(newTableData);
-    }
+    const newTableData: any = processingData(oriSource, xXSJPZData, Bj?.id);
+    setNewTableDataSource(newTableData);
   };
   const getFirstDay = (date: any) => {
     const day = date.getDay() || 7;
     return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
   };
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
-    // FJSJId 房间Id KHBJSJId: 课后班级数据
-    // 如果value ===null 移除
-    // xuyao改变的原始数据 screenOriSource
     setLoading(true);
     if (value) {
       // 添加 根据房间id
@@ -259,56 +229,26 @@ const AddArranging: FC<PropsType> = (props) => {
         const addRes = await addKHPKSJ({
           ...KHPKSJ,
         });
-        // 添加班级数据
-        KHPKSJ.KHBJSJ = bjData.find((bjItem: any) => {
-          return bjItem.id === value.KHBJSJId;
-        });
-        // 添加场地数据
-        KHPKSJ.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
         if (addRes.status === 'ok') {
-          KHPKSJ.id = addRes?.data?.id;
-          screenOriSource.push(KHPKSJ);
-          setLoading(false);
+          CDgetPKData();
         } else {
           message.error(addRes.message);
-          refreshTable();
-          setLoading(false);
+          CDgetPKData();
         }
       } else {
-        refreshTable();
+        CDgetPKData();
         message.warning(res?.message)
-        setLoading(false);
       }
     } else {
+      const pkId = BJPKData.find((item: any) => item?.RQ === pkData?.RQ && item?.XXSJPZId === pkData?.XXSJPZId).id;
       // 移除 根据房间Id移除数据
-      let id: string | undefined;
-      screenOriSource.filter((KHPKSJ: any) => {
-        if (
-          KHPKSJ.FJSJId === cdmcValue && // 教室ID
-          KHPKSJ.XXSJPZId === pkData.XXSJPZId && // 时间ID
-          KHPKSJ.WEEKDAY === pkData.WEEKDAY &&  // 周
-          KHPKSJ.RQ === pkData.RQ
-        ) {
-          id = KHPKSJ.id;
-          return false;
-        }
-        return true;
+      const res = await deleteKHPKSJ({
+        id: pkId
       });
-      if (id) {
-        const res = await deleteKHPKSJ({
-          id,
-        });
-        if (res?.status === 'ok') {
-          setScreenOriSource(
-            screenOriSource.filter((values: any) => {
-              return values?.id !== id;
-            }),
-          );
-        }
-        if (res?.status === 'error') {
-          message.error(res?.message);
-        }
-        setLoading(false);
+      if (res?.status === 'ok') {
+        CDgetPKData();
+      } else {
+        message.error(res?.message);
       }
     }
   };
@@ -335,9 +275,14 @@ const AddArranging: FC<PropsType> = (props) => {
   // 班级选择
   const BjClick = async (value: any) => {
     setClass(value);
+    setLoading(true);
     const result = await classSchedule({
       id: value.id
     })
+    if (result?.status === 'ok') {
+      setLoading(false);
+      setBJPKData(result?.data?.KHPKSJs);
+    }
     // 更换课程班后将场地清空
     setCdmcValue(undefined);
     const start = new Date(moment(value?.KKRQ).format('YYYY/MM/DD  00:00:00'));
@@ -444,7 +389,6 @@ const AddArranging: FC<PropsType> = (props) => {
         }
       }
     }
-
   };
 
   useEffect(() => {
@@ -501,24 +445,7 @@ const AddArranging: FC<PropsType> = (props) => {
             if (data.status === 'ok') {
               setCDLoading(false);
               message.success('该班级排课信息已清除');
-              // 移除当前班级 所有排课
-              if (screenOriSource) {
-                const screenCD = (dataSource1: any) => {
-                  const newDataSource = [...dataSource1];
-                  if (cdmcValue) {
-                    return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
-                  }
-                  return newDataSource;
-                };
-                // 根据场地名称筛选出来 场地数据
-                const newCDData = screenCD(
-                  screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id),
-                );
-                const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
-                setNewTableDataSource(newTableData);
-                setScreenOriSource(screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id));
-                setLoading(false);
-              }
+              CDgetPKData();
             }
           });
         }
@@ -532,12 +459,6 @@ const AddArranging: FC<PropsType> = (props) => {
       refreshTable();
     }
   }, [cdmcValue, Bj]);
-
-  useEffect(() => {
-    if (screenOriSource?.length !== 0) {
-      refreshTable();
-    }
-  }, [screenOriSource]);
 
   useEffect(() => {
     if (formValues) {
@@ -565,37 +486,23 @@ const AddArranging: FC<PropsType> = (props) => {
     });
   };
 
-  // 获取排课数据信息
-  const getPKData = async () => {
-    setLoading(true);
-    const res = await getAllPK({
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok') {
-      setScreenOriSource(res?.data);
-      if (res?.data?.length > 0) {
-        const screenCD = (dataSource1: any) => {
-          const newDataSource = [...dataSource1];
-          if (cdmcValue) {
-            return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
-          }
-          return newDataSource;
-        };
-        // 根据场地名称筛选出来 场地数据
-        const newCDData = screenCD(res?.data);
-        const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
-        setNewTableDataSource(newTableData);
-        setLoading(false);
-      }
-    }
-  };
-
   useEffect(() => {
     if (ImportData?.length > 0) {
       error();
     }
   }, [ImportData]);
+
+  useEffect(() => {
+    if (curXNXQId && campusId) {
+      // 选中场地排课数据
+      if (cdmcValue) {
+        CDgetPKData();
+      }
+    }
+  }, [curXNXQId, campusId, cdmcValue]);
+  useEffect(() => {
+    refreshTable();
+  }, [oriSource]);
 
   // 上传配置
   const UploadProps: any = {
@@ -624,7 +531,7 @@ const AddArranging: FC<PropsType> = (props) => {
           setImportData(code?.data);
           message.success(`上传成功`);
           setUploadVisible(false);
-          getPKData();
+          CDgetPKData();
         } else {
           message.error(`${code.message}`);
         }
@@ -634,8 +541,6 @@ const AddArranging: FC<PropsType> = (props) => {
       }
     },
   };
-
-  console.log(loading, '---------------------')
 
   return (
     <div className={styles.AddArranging}>
@@ -878,14 +783,12 @@ const AddArranging: FC<PropsType> = (props) => {
                     chosenData={Bj}
                     onExcelTableClick={onExcelTableClick}
                     type="edit"
-                    getSelectdata={getSelectdata}
                     tearchId={tearchId}
                     TimeData={TimeData}
                     xXSJPZData={xXSJPZData}
                     style={{
                       height: 'calc(100vh - 400px)',
                     }}
-                  // basicData={oriSource}
                   />
                 </Spin>
               ) : (

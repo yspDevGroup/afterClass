@@ -111,7 +111,7 @@ const AttendanceDetail = (props: any) => {
       align: 'center',
     },
     {
-      title: '授课总课时数',
+      title: '已排课时总数',
       dataIndex: 'KSS',
       key: 'KSS',
       width: 130,
@@ -141,19 +141,6 @@ const AttendanceDetail = (props: any) => {
           {Number(record.absenteeism) + Number(record.leave) + Number(record.substitute)}
         </Button>
       ),
-    },
-    {
-      title: '课时总时长(小时)',
-      dataIndex: 'KSS',
-      key: 'KSS',
-      width: 120,
-      align: 'center',
-      render: (text, record) => {
-        if (record.KSS !== '0' && duration) {
-          return ((Number(record.KSS) * duration) / 60).toFixed(2);
-        }
-        return '0';
-      },
     },
   ];
   const student: ProColumns<any>[] = [
@@ -214,19 +201,6 @@ const AttendanceDetail = (props: any) => {
           {Number(record.absenteeism) + Number(record.leave)}
         </Button>
       ),
-    },
-    {
-      title: '课时总时长(小时)',
-      dataIndex: 'KSSC',
-      key: 'KSSC',
-      align: 'center',
-      width: 150,
-      render: (text, record) => {
-        if (record.attendance !== '0' && duration) {
-          return ((Number(record.attendance) * duration) / 60).toFixed(2);
-        }
-        return '0';
-      },
     },
   ];
   const colomns: ProColumns<any>[] = [

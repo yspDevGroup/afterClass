@@ -36,7 +36,6 @@ import { getAllClasses } from '@/services/after-class/khbjsj';
 import type { DataSourceType } from '@/components/ExcelTable';
 import { getAllGrades } from '@/services/after-class/khjyjg';
 import { getAllCourses } from '@/services/after-class/khkcsj';
-
 import { getAllPK } from '@/services/after-class/khpksj';
 import styles from '../index.less';
 import '../index.less';
@@ -46,12 +45,10 @@ import ExcelTable3 from '@/components/ExcelTable3';
 import { classSchedule } from '@/services/after-class/khpksj';
 
 const { Option } = Select;
-
 const { confirm } = Modal;
 type selectType = { label: string; value: string };
 
 type PropsType = {
-  setState?: any;
   curXNXQId?: string;
   processingData: (value: any, timeSlot: any, bjId: string | undefined) => void;
   formValues?: Record<string, any>;
@@ -60,11 +57,7 @@ type PropsType = {
   cdmcData?: any[];
   kcmcData?: any[];
   currentUser?: API.CurrentUser | undefined;
-  screenOriSource: any;
-  setScreenOriSource: React.Dispatch<any>;
   setRqDisable: React.Dispatch<any>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   campusId: string | undefined;
   TimeData: any;
   Weeks: any;
@@ -72,16 +65,12 @@ type PropsType = {
 
 const AddArrangingDS: FC<PropsType> = (props) => {
   const {
-    screenOriSource,
-    setScreenOriSource,
     curXNXQId,
     campus,
     xXSJPZData,
     currentUser,
     processingData,
     formValues,
-    loading,
-    setLoading,
     cdmcData,
     kcmcData,
     campusId,
@@ -90,14 +79,12 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     Weeks,
   } = props;
 
-
   const [packUp, setPackUp] = useState(false);
   const [form] = Form.useForm();
   const [CDLoading, setCDLoading] = useState(false);
   const [NJID, setNJID] = useState<any>(undefined);
   const [cdmcValue, setCdmcValue] = useState<any>();
   const [newTableDataSource, setNewTableDataSource] = useState<DataSourceType>([]);
-
   // 选择的班级的数据
   const [Bj, setBj] = useState<any>(undefined);
   // 请求的班级列表数据
@@ -112,9 +99,9 @@ const AddArrangingDS: FC<PropsType> = (props) => {
   const [uploadVisible, setUploadVisible] = useState<boolean>(false);
   // 导入排课后返回的冲突数据
   const [ImportData, setImportData] = useState<any>([]);
-  // 课程班的课时数
-  const [Class, setClass] = useState<any>();
-
+  const [loading, setLoading] = useState<boolean>(false);
+  // 排课数据信息
+  const [oriSource, setOriSource] = useState<any>([]);
 
   const columns: {
     title: string;
@@ -188,37 +175,23 @@ const AddArrangingDS: FC<PropsType> = (props) => {
       },
     ];
 
-  // 将排好的课程再次点击可以取消
-  const getSelectdata = () => {
-    // sameClassDatas.map((item: any, key: number) => {
-    //   if (
-    //     item.FJSJId === value.FJSJId && // 教室ID
-    //     item.XXSJPZId === value.XXSJPZId && // 时间ID
-    //     item.WEEKDAY === value.WEEKDAY // 周
-    //   ) {
-    //     sameClassDatas.splice(key, 1);
-    //   }
-    //   return item;
-    // });
-  };
-
-  // 刷新Table
-  const refreshTable = () => {
-    if (screenOriSource && xXSJPZData?.length) {
-      const screenCD = (dataSource1: any) => {
-        const newDataSource = [...dataSource1];
-        if (cdmcValue) {
-          return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
-        }
-        return newDataSource;
-      };
-      // 根据场地名称筛选出来 场地数据
-      const newCDData = screenCD(screenOriSource);
-      const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
+    const CDgetPKData = async () => {
+      setLoading(true);
+      const res = await getAllPK({
+        XNXQId: curXNXQId,
+        XXJBSJId: currentUser?.xxId,
+        FJSJId: cdmcValue
+      });
+      if (res.status === 'ok') {
+        setOriSource(res.data)
+        setLoading(false);
+      }
+    };
+    // 刷新Table
+    const refreshTable = () => {
+      const newTableData: any = processingData(oriSource, xXSJPZData, Bj?.id);
       setNewTableDataSource(newTableData);
-      setLoading(false);
-    }
-  };
+    };
   const getFirstDay = (date: any) => {
     const day = date.getDay() || 7;
     return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1 - day);
@@ -239,7 +212,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     }
     return results;
   }
-
   /* 获取时间段内属于星期一(*)的日期们
   * begin: 开始时间
   * end：结束时间
@@ -313,24 +285,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
             if (data.status === 'ok') {
               message.success('该班级排课信息已清除')
               setCDLoading(false);
-              // 移除当前班级 所有排课
-              if (screenOriSource) {
-                const screenCD = (dataSource1: any) => {
-                  const newDataSource = [...dataSource1];
-                  if (cdmcValue) {
-                    return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
-                  }
-                  return newDataSource;
-                };
-                // 根据场地名称筛选出来 场地数据
-                const newCDData = screenCD(
-                  screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id),
-                );
-                const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
-                setNewTableDataSource(newTableData);
-                setScreenOriSource(screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id));
-                setLoading(false);
-              }
+              CDgetPKData();
             }
           });
         }
@@ -343,7 +298,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
   }
 
   const onExcelTableClick = async (value: any, record: any, pkData: any) => {
-    // setLoading(true);
     const newPkDatas: any[] = [];
     pkData.forEach((item: any) => {
       const newObj = {
@@ -390,22 +344,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
               data: PkArr
             })
             if (res?.status === 'ok') {
-              setLoading(false);
-              newPkDatas.forEach((values: any) => {
-                // 添加场地数据
-                values.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
-                // 添加班级数据
-                values.KHBJSJ = bjData.find((bjItem: any) => {
-                  return bjItem.id === value.KHBJSJId;
-                });
-                res?.data?.forEach((items: any) => {
-                  if (items?.RQ === values?.RQ) {
-                    values.id = items?.id;
-                  }
-                })
-                screenOriSource.push(values);
-                refreshTable();
-              })
+              CDgetPKData();
             }
           } else {
             message.warning('超出排课课时，不可排课')
@@ -443,22 +382,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                   data: PkArr
                 })
                 if (res?.status === 'ok') {
-                  setLoading(false);
-                  newPkDatas.slice(0, surplusKs).forEach((values: any) => {
-                    // 添加场地数据
-                    values.FJSJ = cdmcData?.find((item: any) => item.value === cdmcValue);
-                    // 添加班级数据
-                    values.KHBJSJ = bjData.find((bjItem: any) => {
-                      return bjItem.id === value.KHBJSJId;
-                    });
-                    res?.data?.forEach((items: any) => {
-                      if (items?.RQ === values?.RQ) {
-                        values.id = items?.id;
-                      }
-                    })
-                    screenOriSource.push(values);
-                    refreshTable();
-                  })
+                  CDgetPKData();
                 }
               } else {
                 message.warning('排课课时已排满，不可排课')
@@ -511,30 +435,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                 data: PkArr
               })
               if (res?.status === 'ok') {
-                if (screenOriSource) {
-                  const newData = screenOriSource.filter((item3: any) => item3.KHBJSJId !== Bj.id);
-                  if (newData) {
-                    PkArr.forEach((values: any) => {
-                      // 添加场地数据
-                      if (!values.FJSJ) {
-                        values.FJSJ = cdmcData?.find((item4: any) => item4.value === cdmcValue);
-                      }
-
-                      // 添加班级数据
-                      values.KHBJSJ = bjData.find((bjItem: any) => {
-                        return bjItem.id === value.KHBJSJId;
-                      });
-                      res?.data?.forEach((items: any) => {
-                        if (items?.RQ === values?.RQ) {
-                          values.id = items?.id;
-                        }
-                      })
-                      newData.push(values);
-                      refreshTable();
-                    })
-                  }
-                  setScreenOriSource(newData)
-                }
+                CDgetPKData();
               }
             }
 
@@ -574,14 +475,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
             data: PkArr
           })
           if (res?.status === 'ok') {
-            for (let i = 0; i < pkData.length; i++) {
-              for (let j = 0; j < screenOriSource.length; j++) {
-                if (screenOriSource[j].RQ === pkData[i].RQ && screenOriSource[j].KHBJSJId === pkData[i].KHBJSJId && screenOriSource[j].XXSJPZId === pkData[i].XXSJPZId) {
-                  screenOriSource.splice(j, 1)
-                }
-              }
-            }
-            refreshTable();
+            CDgetPKData();
           }
         }
 
@@ -612,7 +506,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
 
   // 班级选择
   const BjClick = async (value: any) => {
-    setClass(value);
     const result = await classSchedule({
       id: value.id
     })
@@ -783,25 +676,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
             if (data.status === 'ok') {
               message.success('该班级排课信息已清除');
               setCDLoading(false);
-              // 移除当前班级 所有排课
-              if (screenOriSource) {
-
-                const screenCD = (dataSource1: any) => {
-                  const newDataSource = [...dataSource1];
-                  if (cdmcValue) {
-                    return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
-                  }
-                  return newDataSource;
-                };
-                // 根据场地名称筛选出来 场地数据
-                const newCDData = screenCD(
-                  screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id),
-                );
-                const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
-                setNewTableDataSource(newTableData);
-                setScreenOriSource(screenOriSource.filter((item: any) => item.KHBJSJId !== Bj.id));
-                setLoading(false);
-              }
+              CDgetPKData();
             }
           });
         }
@@ -817,10 +692,16 @@ const AddArrangingDS: FC<PropsType> = (props) => {
   }, [cdmcValue, Bj]);
 
   useEffect(() => {
-    if (screenOriSource?.length !== 0) {
-      refreshTable();
+    if (curXNXQId && campusId) {
+      // 选中场地排课数据
+      if (cdmcValue) {
+        CDgetPKData();
+      }
     }
-  }, [screenOriSource]);
+  }, [curXNXQId, campusId, cdmcValue]);
+  useEffect(() => {
+    refreshTable();
+  }, [oriSource]);
   useEffect(() => {
     if (formValues) {
       form.setFieldsValue(formValues);
@@ -844,32 +725,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
         setImportData([]);
       },
     });
-  };
-
-  // 获取排课数据信息
-  const getPKData = async () => {
-    setLoading(true);
-    const res = await getAllPK({
-      XNXQId: curXNXQId,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok') {
-      setScreenOriSource(res?.data);
-      if (res?.data?.length > 0) {
-        const screenCD = (dataSource1: any) => {
-          const newDataSource = [...dataSource1];
-          if (cdmcValue) {
-            return newDataSource.filter((item: any) => item.FJSJId === cdmcValue);
-          }
-          return newDataSource;
-        };
-        // 根据场地名称筛选出来 场地数据
-        const newCDData = screenCD(res?.data);
-        const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
-        setNewTableDataSource(newTableData);
-        setLoading(false);
-      }
-    }
   };
 
   useEffect(() => {
@@ -905,7 +760,7 @@ const AddArrangingDS: FC<PropsType> = (props) => {
           setImportData(code?.data);
           message.success(`上传成功`);
           setUploadVisible(false);
-          getPKData();
+          CDgetPKData();
         } else {
           message.error(`${code.message}`);
         }
@@ -916,7 +771,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
     },
   };
 
-  console.log(loading, '---------------------')
   return (
     <div className={styles.AddArranging}>
       <Card
@@ -1158,7 +1012,6 @@ const AddArrangingDS: FC<PropsType> = (props) => {
                     chosenData={Bj}
                     onExcelTableClick={onExcelTableClick}
                     type="edit"
-                    getSelectdata={getSelectdata}
                     tearchId={tearchId}
                     TimeData={TimeData}
                     xXSJPZData={xXSJPZData}

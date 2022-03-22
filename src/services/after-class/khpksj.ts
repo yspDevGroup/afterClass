@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 获取课后排课数据 GET /khpksj/${param0} */
 export async function getKHPKSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getKHPKSJParams,
+  params: {
+    // path
+    /** 课后排课ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       WEEKDAY?: '0' | '1' | '2' | '3' | '4' | '5' | '6';
       RQ?: string;
@@ -81,12 +84,15 @@ export async function getKHPKSJ(
 
 /** 删除课后排课数据 DELETE /khpksj/${param0} */
 export async function deleteKHPKSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteKHPKSJParams,
+  params: {
+    // path
+    /** 课后排课ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khpksj/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khpksj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -95,12 +101,15 @@ export async function deleteKHPKSJ(
 
 /** 获取课后排课数据 GET /khpksj/weekSchedule/${param0} */
 export async function getKHPKSJByBJID(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getKHPKSJByBJIDParams,
+  params: {
+    // path
+    /** 班级ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; data?: API.KHPKSJ[]; message?: string }>(
+  return request<{ status?: 'ok' | 'error'; data?: API.KHPKSJ[]; message?: string }>(
     `/khpksj/weekSchedule/${param0}`,
     {
       method: 'GET',
@@ -114,9 +123,9 @@ export async function getKHPKSJByBJID(
 export async function getAllKHPKSJ(
   body: {
     /** 年级ID */
-    njId: string;
+    njId?: string;
     /** 学年学期ID */
-    XNXQId: string;
+    XNXQId?: string;
     /** 场地id */
     FJSJId?: string;
     /** 行政班id */
@@ -124,11 +133,11 @@ export async function getAllKHPKSJ(
     /** 排课类型 */
     PKTYPE?: string;
     /** 课程名称 */
-    name: string;
+    name?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.KHPKSJ[]; message?: string }>('/khpksj/', {
+  return request<{ status?: 'ok' | 'error'; data?: API.KHPKSJ[]; message?: string }>('/khpksj/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -147,7 +156,7 @@ export async function createKHPKSJ(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: {
       id?: string;
       WEEKDAY?: string;
@@ -223,7 +232,7 @@ export async function addKHPKSJ(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: { id?: string }; message?: string }>(
+  return request<{ status?: 'ok' | 'error'; data?: { id?: string }; message?: string }>(
     '/khpksj/addKHPKSJ',
     {
       method: 'PUT',
@@ -247,10 +256,12 @@ export async function getAllPK(
     FJSJId?: string;
     /** 场地类型ID */
     FJLXId?: string;
+    /** 教师ID */
+    JZGJBSJId?: string;
     /** 学年学期ID */
-    XNXQId: string;
+    XNXQId?: string;
     /** 学校基本数据id */
-    XXJBSJId: string;
+    XXJBSJId?: string;
     /** 校区数据id */
     XQSJId?: string;
     /** 行政班id */
@@ -276,13 +287,16 @@ export async function getAllPK(
 
 /** 更新课后排课数据 PUT /khpksj/update/${param0} */
 export async function updateKHPKSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateKHPKSJParams,
+  params: {
+    // path
+    /** 课后排课ID */
+    id: string;
+  },
   body: API.UpdateKHPKSJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khpksj/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khpksj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -319,11 +333,11 @@ export async function getAgencySchedule(
 export async function judgeKHPKSJ(
   body: {
     /** 学年学期ID */
-    XNXQId: string;
+    XNXQId?: string;
     /** 课程班ID */
-    KHBJSJId: string;
+    KHBJSJId?: string;
     /** 课时数 */
-    KSS: number;
+    KSS?: number;
     /** 排课类型 */
     startDate?: string;
     /** 课程名称 */
@@ -343,8 +357,11 @@ export async function judgeKHPKSJ(
 
 /** 获取班级信息及课表 GET /khpksj/classSchedule/${param0} */
 export async function classSchedule(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.classScheduleParams,
+  params: {
+    // path
+    /** 班级ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;

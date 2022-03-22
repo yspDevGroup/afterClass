@@ -82,7 +82,7 @@ const LeaveManagement = () => {
       render: (text, record) => record.bj_count,
     },
     {
-      title: '授课总课时数',
+      title: '已排课时总数',
       dataIndex: 'KSS',
       key: 'KSS',
       width: 120,
@@ -105,19 +105,6 @@ const LeaveManagement = () => {
       width: 100,
       render: (_: any, record: any) => {
         return Number(record.absenteeism) + Number(record.leave) + Number(record.substitute) || 0;
-      },
-    },
-    {
-      title: '出勤总时长(小时)',
-      dataIndex: 'KSSC',
-      key: 'KSSC',
-      align: 'center',
-      width: 120,
-      render: (text, record) => {
-        if (record.attendance !== '0' && duration) {
-          return ((Number(record.attendance) * duration) / 60).toFixed(2);
-        }
-        return '0';
       },
     },
     {
@@ -203,19 +190,6 @@ const LeaveManagement = () => {
       width: 100,
       render: (_: any, record: any) => {
         return Number(record.absenteeism) + Number(record.leave);
-      },
-    },
-    {
-      title: '课时总时长(小时)',
-      dataIndex: 'KSSC',
-      key: 'KSSC',
-      align: 'center',
-      width: 120,
-      render: (text, record) => {
-        if (record.attendance !== '0' && duration) {
-          return ((Number(record.attendance) * duration) / 60).toFixed(2);
-        }
-        return '0';
       },
     },
     {
@@ -406,7 +380,7 @@ const LeaveManagement = () => {
                   </span>
                   <div>
                     <h3>{collectData?.allJS_KSS || 0}</h3>
-                    <p>授课课时总数</p>
+                    <p>已排课时总数</p>
                   </div>
                 </div>
               </div>

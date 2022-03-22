@@ -235,7 +235,6 @@ type IndexPropsType = {
   /** 切换页面  仅在type='see'起作用 */
   switchPages?: () => void;
   className: '' | undefined;
-  getSelectdata?: (value: any) => void;
   radioValue?: boolean;
   tearchId?: string;
   TimeData?: any;
@@ -254,7 +253,6 @@ const Index: FC<IndexPropsType> = ({
   onExcelTableClick,
   type = 'see',
   switchPages,
-  getSelectdata,
   style,
   TimeData,
   xXSJPZData,
@@ -480,20 +478,6 @@ const Index: FC<IndexPropsType> = ({
       Type: types
     };
 
-    if (type === 'edit') {
-      // 将排好的课程再次点击可以取消时所需要的数据
-      const selectdata = {
-        WEEKDAY: weekDay[colItem.dataIndex], // 周
-        XXSJPZId: rowData.course?.hjId, // 时间ID
-        KHBJSJId: chosenData?.KHBJSJId, // 班级ID
-        FJSJId: rowData.room?.jsId, // 教室ID
-        XNXQId: chosenData?.XNXQId, // 学年学期ID
-      };
-      // 将获取取消单元格的数据传到父级
-      if (typeof getSelectdata === 'function') {
-        getSelectdata(selectdata);
-      }
-    }
 
     // 将表格的所有数据传输到父级的方法
     if (typeof onExcelTableClick === 'function') {
