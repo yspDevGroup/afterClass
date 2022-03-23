@@ -2,7 +2,7 @@
  * @description: 西安教育信息化综合服务平台登录
  * @author: zpl
  * @Date: 2022-03-15 15:30:49
- * @LastEditTime: 2022-03-23 11:14:49
+ * @LastEditTime: 2022-03-23 17:53:11
  * @LastEditors: zpl
  */
 import { useEffect, useState } from 'react';
@@ -10,7 +10,6 @@ import { useModel, history } from 'umi';
 import { getPageQuery, removeOAuthToken, saveOAuthToken } from '@/utils/utils';
 import { createToken, validateUrl } from '@/services/after-class/xaedu';
 import RegistForm from './RegistForm';
-import { casLoginUrl } from '@/constant';
 
 const Index = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -75,7 +74,7 @@ const Index = () => {
       login();
     } else {
       removeOAuthToken();
-      window.location.href = `${casLoginUrl}/login?service=${callbackUrl}`;
+      window.location.href = `${initialState?.buildOptions.xaeduSsoHost}/sso/login?service=${callbackUrl}`;
     }
   }, []);
 

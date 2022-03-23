@@ -2,14 +2,20 @@
  * @description: OAuth认证回调页面，password模式，本页面会先写入本地token缓存并触发身份信息获取，然后跳转向权限对应的页面
  * @author: zpl
  * @Date: 2021-07-14 16:54:06
- * @LastEditTime: 2022-03-18 14:52:05
+ * @LastEditTime: 2022-03-23 18:09:07
  * @LastEditors: zpl
  */
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import type { FC } from 'react';
 import { history, useModel } from 'umi';
 import { message } from 'antd';
-import { getPageQuery, removeOAuthToken, saveOAuthToken } from '@/utils/utils';
+import {
+  getLoginPath,
+  getPageQuery,
+  gotoLink,
+  removeOAuthToken,
+  saveOAuthToken,
+} from '@/utils/utils';
 import { createSSOToken } from '@/services/after-class/sso';
 
 const AuthCallback: FC = () => {
@@ -49,7 +55,12 @@ const AuthCallback: FC = () => {
       goto();
     } else {
       removeOAuthToken();
-      history.replace('/403');
+      if (initialState) {
+        const url = getLoginPath({ buildOptions: initialState.buildOptions });
+        gotoLink(url);
+      } else {
+        history.replace('/403');
+      }
     }
   }, []);
 

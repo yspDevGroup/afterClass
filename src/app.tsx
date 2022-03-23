@@ -16,8 +16,9 @@ import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { currentWechatUser } from './services/after-class/wechat';
 import Version from './components/Version';
 
-const isDev = false; // 取消openapi 在菜单中的展示 process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development';
 const authCallbackPath = '/auth_callback';
+const loginPath = '/user';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -86,6 +87,7 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
         !initialState?.currentUser &&
         path !== '/' &&
         !path.startsWith(authCallbackPath) &&
+        !path.startsWith(loginPath) &&
         !path.startsWith('/40')
       ) {
         console.log('initialState', initialState.currentUser);

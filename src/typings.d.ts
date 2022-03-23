@@ -187,7 +187,7 @@ declare let homeInfo: {
   markDays: any[];
 };
 
-type AuthType = 'wechat' | 'password' | 'authorization_code';
+type AuthType = 'wechat' | 'password' | 'authorization_code' | 'xaedu' | 'local';
 
 type BuildOptions = {
   /** 部署环境标记，如chanming、9dy等 */
@@ -198,6 +198,8 @@ type BuildOptions = {
   ENV_host: string;
   /** sso认证地址 */
   ssoHost: string;
+  /** 西安教育平台认证地址 */
+  xaeduSsoHost?: string;
   /** 注册的应用id */
   clientId: string;
   /** 注册的应用密钥 */
@@ -205,7 +207,7 @@ type BuildOptions = {
   /** 素质教育资源地址 */
   crpHost: string;
   /** api后台应用id，固定为00002 */
-  apiClientId: string;
+  apiClientId: '00002';
 };
 
 type InitialState = {

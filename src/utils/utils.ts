@@ -10,7 +10,6 @@ import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import { getEnv } from '@/services/after-class/other';
 import { DateRange, Week } from './Timefunction';
 import type { MenuDataItem } from '@ant-design/pro-layout/lib/typings';
-import { casLoginUrl } from '@/constant';
 
 export const envjudge = () => {
   const isMobile = window.navigator.userAgent.match(
@@ -54,10 +53,10 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
         ENV_host: 'http://afterclass.prod.xianyunshipei.com',
         ssoHost: 'http://sso.prod.xianyunshipei.com',
+        xaeduSsoHost: 'http://www.xaedu.cloud',
         crpHost: 'http://crpweb.prod.xianyunshipei.com',
         clientId: 'wwe2dfbe3747b6e69f',
         clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
-        // 固定配置，不可修改
         apiClientId: '00002',
       };
     case 'chanming':
@@ -70,7 +69,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         crpHost: 'http://crpweb.wuyu.imzhiliao.com',
         clientId: 'wwe2dfbe3747b6e69f',
         clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
-        // 固定配置，不可修改
         apiClientId: '00002',
       };
     case '9dy':
@@ -83,7 +81,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         crpHost: 'http://crpweb.9cloudstech.com',
         clientId: 'ww73cd866f2c4dc83f',
         clientSecret: 'IfPhfMfVtX-y-BG-CrGlZIJw-m-GoCnJwxffigZDGLA',
-        // 固定配置，不可修改
         apiClientId: '00002',
       };
     case 'development':
@@ -96,7 +93,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         crpHost: 'http://crpweb.test.xianyunshipei.com',
         clientId: 'ww20993d96d6755f55',
         clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
-        // 固定配置，不可修改
         apiClientId: '00002',
       };
     default:
@@ -109,7 +105,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         crpHost: 'http://crpweb.test.xianyunshipei.com',
         clientId: 'ww20993d96d6755f55',
         clientSecret: 'wy83uVM6xgfDtE2XS5WQ',
-        // 固定配置，不可修改
         apiClientId: '00002',
       };
   }
@@ -246,39 +241,43 @@ export const getCookie = (name: string): string => {
   return '';
 };
 
+type GetLoginPathProps = {
+  /** 企微登录时回传的应用id */
+  suiteID?: string;
+  /** 是否管理员，用于企微学校端管理端和老师端的区分 */
+  isAdmin?: 'true';
+  /** 动态获取到的运行环境配置 */
+  buildOptions?: BuildOptions;
+  /** 是否强制重登录，强制重登录时，sso不会使用上次的登录缓存进行自动登录 */
+  reLogin?: 'true';
+};
+
 /**
+ * 动态获取登录链接
  *
- * @param suiteID
- * @param isAdmin  是否管理员
- * @param buildOptions 环境配置信息
- * @param reLogin 是否强制重登录
- * @returns
+ * @param {GetLoginPathProps} { suiteID, isAdmin, buildOptions, reLogin }
+ * @return {*}  {string}
  */
-export const getLoginPath = (
-  suiteID: string,
-  isAdmin: string,
-  buildOptions?: BuildOptions,
-  reLogin?: boolean,
-) => {
-  const { ssoHost, ENV_host, clientId, clientSecret } = buildOptions || {};
-  const authType = localStorage.getItem('authType') || 'none';
+export const getLoginPath = ({
+  suiteID,
+  isAdmin,
+  buildOptions,
+  reLogin,
+}: GetLoginPathProps): string => {
+  const { ssoHost, ENV_host, xaeduSsoHost, clientId, clientSecret } = buildOptions || {};
+  const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
   let loginPath: string;
   switch (authType) {
-    case 'none':
-      // 获取不到配置时，直接跳转到403
-      loginPath = '/403?title=未获取到应用信息，请联系管理员';
-      break;
     case 'wechat':
       // 前提是本应该已经注册为微信认证，且正确配置认证回调地址为 ${ENV_host}/auth_callback/wechat
-      loginPath = `${ssoHost}/wechat/authorizeUrl?suiteID=${suiteID}&isAdmin=${isAdmin}`;
+      loginPath = `${ssoHost}/wechat/authorizeUrl?suiteID=${suiteID}&isAdmin=${isAdmin || false}`;
       break;
     case 'xaedu': {
       const callbackUrl = encodeURIComponent(`${ENV_host}/auth_callback/xaedu`);
-      loginPath = `${casLoginUrl}/login?service=${callbackUrl}`;
+      loginPath = `${xaeduSsoHost}/sso/login?service=${callbackUrl}`;
       break;
     }
     case 'password':
-    default:
       {
         // 为方便本地调试登录，认证回调地址通过参数传递给后台
         const callback = encodeURIComponent(`${ENV_host}/auth_callback/password`);
@@ -287,6 +286,9 @@ export const getLoginPath = (
         }`;
       }
       break;
+    case 'local':
+    default:
+      loginPath = '/user/login';
   }
   return loginPath;
 };
