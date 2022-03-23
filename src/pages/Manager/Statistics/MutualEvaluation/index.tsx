@@ -77,10 +77,10 @@ const MutualEvaluation: React.FC = () => {
       dataIndex: 'KHJYJG',
       key: 'KHJYJG',
       align: 'center',
-      width: 120,
+      width: 130,
       ellipsis: true,
-      render: (test: any) => {
-        return test?.QYMC || '-';
+      render: (test: any, record: any) => {
+        return record?.KHJYJG?.QYMC || '-';
       },
     },
     {
@@ -89,8 +89,8 @@ const MutualEvaluation: React.FC = () => {
       key: 'bj_count',
       align: 'center',
       width: 100,
-      render: (test: any) => {
-        return test;
+      render: (test: any, record: any) => {
+        return record?.fwbj_count + record?.bj_count;
       },
     },
     {

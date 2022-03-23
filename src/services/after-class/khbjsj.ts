@@ -647,3 +647,20 @@ export async function getClassesBySemester(
     ...(options || {}),
   });
 }
+
+/** 移动端获取班级详情 GET /khbjsj/getMobileClassDetail/${param0} */
+export async function getMobileClassDetail(
+  params: {
+    // path
+    /** 课后班级ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<any>(`/khbjsj/getMobileClassDetail/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}

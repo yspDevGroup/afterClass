@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Avatar, Image, Row, Col, Popconfirm, message, Skeleton } from 'antd';
+import { Avatar, Image, Row, Col, Popconfirm, message, Skeleton, Modal } from 'antd';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import GoBack from '@/components/GoBack';
@@ -19,6 +19,8 @@ const Record = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [startY, setStartY] = useState<number>(0);
   const [endY, setEndY] = useState<number>(0);
+  const [ModalVisible, setModalVisible] = useState(false);
+  const [ids, setids] = useState();
 
   const getData = async () => {
     const resKHKTFC = await getAllKHKTFC({ XXJBSJId: currentUser?.xxId });
@@ -76,6 +78,26 @@ const Record = () => {
     setStartY(-1);
     setEndY(-1);
   };
+
+  const handleOks = () => {
+    try {
+      if (ids) {
+        const params = { id: ids };
+        const res = deleteKHKTFC(params);
+        new Promise((resolve) => {
+          resolve(res);
+        }).then((data: any) => {
+          if (data.status === 'ok') {
+            message.success('删除成功');
+            getData();
+            setModalVisible(false);
+          }
+        });
+      }
+    } catch (err) {
+      message.error('删除失败，请联系管理员或稍后重试。');
+    }
+  }
   return (
     <div
       className={styles.ClassroomStyle}
@@ -133,15 +155,15 @@ const Record = () => {
                                   item.imgs.length === 2 || item.imgs.length === 4
                                     ? 12
                                     : item.imgs.length === 1
-                                    ? 24
-                                    : 8
+                                      ? 24
+                                      : 8
                                 }
                                 className={
                                   item.imgs.length === 2 || item.imgs.length === 4
                                     ? styles.pairImg
                                     : item.imgs.length === 1
-                                    ? styles.oneImg
-                                    : styles.nineImg
+                                      ? styles.oneImg
+                                      : styles.nineImg
                                 }
                               >
                                 <Image src={url} />
@@ -153,35 +175,11 @@ const Record = () => {
                     </div>
                     <p>
                       <span>{moment(item.time).format('HH:mm:ss')}</span>
-                      {currentUser?.JSId === item.JSId ? (
-                        <Popconfirm
-                          title="您确定要删除此条内容吗？"
-                          placement="topRight"
-                          onConfirm={async () => {
-                            try {
-                              if (item.id) {
-                                const params = { id: item.id };
-                                const res = deleteKHKTFC(params);
-                                new Promise((resolve) => {
-                                  resolve(res);
-                                }).then((data: any) => {
-                                  if (data.status === 'ok') {
-                                    message.success('删除成功');
-                                    getData();
-                                  }
-                                });
-                              }
-                            } catch (err) {
-                              message.error('删除失败，请联系管理员或稍后重试。');
-                            }
-                          }}
-                          onCancel={cancel}
-                          okText="确定"
-                          cancelText="取消"
-                          key={item.id}
-                        >
-                          <a href="#">删除</a>
-                        </Popconfirm>
+                      {currentUser?.JSId || testTeacherId === item.JSId ? (
+                        <a onClick={() => {
+                          setModalVisible(true);
+                          setids(item?.id);
+                        }}>删除</a>
                       ) : (
                         <></>
                       )}
@@ -205,6 +203,22 @@ const Record = () => {
           </div>
         )}
       </div>
+      <Modal
+        title="删除确认"
+        visible={ModalVisible}
+        onOk={handleOks}
+        onCancel={() => {
+          setModalVisible(false);
+        }}
+        closable={false}
+        className={styles.signUpModal}
+        okText="确认"
+        cancelText="取消"
+      >
+        <div>
+          <p>您确定要删除此条内容吗？</p>
+        </div>
+      </Modal>
     </div>
   );
 };

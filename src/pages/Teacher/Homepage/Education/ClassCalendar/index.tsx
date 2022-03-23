@@ -51,6 +51,7 @@ const ClassCalendar = (props: propstype) => {
     !prevDay || prevDay === 'null' ? dayjs().format('M月D日') : dayjs(prevDay).format('M月D日'),
   );
   const [course, setCourse] = useState<any>(defaultMsg);
+  console.log(course,'course')
   const [dates, setDates] = useState<any[]>([]);
   const [editCourses, setEditCourses] = useState<any>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);

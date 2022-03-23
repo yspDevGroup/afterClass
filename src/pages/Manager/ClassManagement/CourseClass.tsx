@@ -496,7 +496,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     overlayStyle={{ maxWidth: '30em' }}
                     title='该班级上课时段超出本校开课时段'
                   >
-                    <QuestionCircleOutlined />
+                    <ExclamationCircleOutlined />
                   </Tooltip> : <></>
               }
             </span>

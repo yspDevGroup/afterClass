@@ -9,25 +9,27 @@ import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { convertTimeTable, ParentHomeData } from '@/services/local-services/mobileHome';
-import { getKHBJSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
+import { getKHBJSJ, getMobileClassDetail, getTeachersByBJId } from '@/services/after-class/khbjsj';
 import noData from '@/assets/noCourse.png';
 
 import styles from './index.less';
 import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
+import { getAll } from '@/services/after-class/khbjjsrl';
 
-const CourseDetails: React.FC = () => {
+const CourseDetails = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [KcDetail, setKcDetail] = useState<any>();
   const [timetableList, setTimetableList] = useState<any[]>();
   const [mainTeacher, setMainTeacher] = useState<any>();
   const [teacherList, setTeacherList] = useState<any[]>([]);
+  const [FJMC, setFJMC] = useState();
   const classid = getQueryString('classid');
   const claim = getQueryString('status');
   const path = getQueryString('path');
   const date = getQueryString('date');
   const userId = currentUser.JSId || testTeacherId;
-  const [KcData, setKcData] = useState<any>();
+
   useEffect(() => {
     async function fetchData() {
       if (classid) {
@@ -40,20 +42,14 @@ const CourseDetails: React.FC = () => {
         const classInfo = courseSchedule.find((item: { KHBJSJId: string }) => {
           return item.KHBJSJId === classid;
         });
-        const res = await getKHBJSJ({
-          id: classid,
-        });
-        if (res?.status === 'ok') {
-          setKcData(res?.data)
-        }
         if (classInfo) {
           setKcDetail(classInfo.detail[0]);
         } else {
-          const res = await getKHBJSJ({
+          const resBJ = await getMobileClassDetail({
             id: classid,
           });
-          if (res.status === 'ok') {
-            const { data } = res;
+          if (resBJ.status === 'ok') {
+            const { data } = resBJ;
             setKcDetail({
               title: data.KHKCSJ.KCMC,
               xq: '本校',
@@ -73,12 +69,25 @@ const CourseDetails: React.FC = () => {
           }
         }
 
-        if (claim && claim === '自选课' && classid) {
-          const resulta = await getKCBSKSJ({
-            KHBJSJId: [classid],
-          });
-          if (resulta.status === 'ok' && resulta.data) {
-            const { rows } = resulta.data;
+
+
+        if (claim && (claim === '自选课' || claim === '代上课') && classid) {
+          let resSKSJ: { status: string; data: { rows: any; }; };
+          if (claim === '自选课') {
+            resSKSJ = await getKCBSKSJ({
+              KHBJSJId: [classid],
+            });
+          } else {
+            resSKSJ = await getKCBSKSJ({
+              KHBJSJId: [classid],
+              JZGJBSJId: userId,
+            });
+          }
+          console.log(resSKSJ, 'resSKSJ---')
+          if (resSKSJ.status === 'ok' && resSKSJ.data) {
+            setFJMC(resSKSJ?.data?.rows?.[0]?.FJSJ?.FJMC)
+            const { rows } = resSKSJ.data;
+            console.log(rows, 'rows----')
             let days: any[] = [];
             if (rows?.length) {
               days = [].map.call(rows, (v: { XXSJPZId: string; SKRQ: string }, index) => {
@@ -90,17 +99,38 @@ const CourseDetails: React.FC = () => {
               });
             }
             // 获取课程班教师出勤数据
-            const res = await getAllKHJSCQ({
+            const resCQ = await getAllKHJSCQ({
               KHBJSJId: classid,
+              JZGJBSJId: userId,
             });
-            if (res.status === 'ok' && res.data) {
+            if (resCQ.status === 'ok' && resCQ.data) {
+              let newData: any = [];
+              if (claim === '自选课') {
+                const ZXres = await getAll({
+                  KHBJSJId: classid,
+                  JZGJBSJId: userId,
+                })
+                if (ZXres?.status === 'ok') {
+                  days.forEach((item: any) => {
+                    ZXres?.data?.rows?.forEach((item2: any) => {
+                      if (item?.day === item2?.RQ && item?.jcId === item2?.XXSJPZId) {
+                        newData.push(item)
+                      }
+                    })
+                  })
+                }
+              } else {
+                newData = days;
+              }
+
               const newTime = await convertTimeTable(
                 userId,
                 classid,
-                res.data,
-                days,
+                resCQ.data,
+                newData,
                 currentUser?.xxId,
               );
+              console.log(newTime,'newTime----')
               setTimetableList(newTime);
             }
           }
@@ -124,8 +154,10 @@ const CourseDetails: React.FC = () => {
         }
       }
     }
+
     fetchData();
   }, [classid, claim]);
+
   const handleModal = (val: any) => {
     let content = {};
     if (val.otherInfo) {
@@ -189,12 +221,12 @@ const CourseDetails: React.FC = () => {
             </li>
             <li>
               <span>上课地点：</span>
-              {KcDetail?.xq} | {KcDetail?.address}
+              {KcDetail?.xq} | {FJMC}
             </li>
             {KcDetail?.KSS ? (
               <li>
                 {
-                  KcData?.ISFW === 1 ? <span>周课时：</span> : <span>总课时：</span>
+                  KcDetail?.ISFW === 1 ? <span>周课时：</span> : <span>总课时：</span>
                 }
 
                 {KcDetail?.KSS}课时

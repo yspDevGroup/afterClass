@@ -234,7 +234,7 @@ const AfterClassService = () => {
         onCancel={handleCancels}
         closable={false}
         className={styles.refund}
-        okText="确定"
+        okText="确认"
         cancelText="取消"
       >
         <div>
