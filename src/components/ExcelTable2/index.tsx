@@ -2,7 +2,7 @@
 /* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Tooltip } from 'antd';
 import ShowName from '@/components/ShowName';
 import EllipsisHint from '../EllipsisHint';
 import { history } from 'umi';
@@ -127,55 +127,69 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue, KbT
       ) : <>
         {
           data?.cla === '无法排课' ? <div className={styles.NoPk}><p>超出学年学期</p><span>无法排课</span></div> :
-            <div className="classCard">
-              <div
-                className={`cardTop`}
-                style={{
-                  background: data?.color,
-                }}
-              />
-              <div
-                className={`cardcontent`}
+            <Tooltip title={<div>
+              <p style={{ marginBottom: '5px' }}>课程班：{data?.cla}</p>
+              <p style={{ marginBottom: '5px' }}>教师：<ShowName
+                XM={data.teacher}
+                type="userName"
+                openid={data.teacherWechatId}
                 style={{
                   color: data?.color,
-                  background: data?.color.replace('1)', '0.1)'),
-                  position: 'relative',
                 }}
-              >
-                {mode === 'see' ? (
-                  <div className="teacher" style={{
-                    width: '100%',
-                    height: 22,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    overflow: 'hidden',
-                  }}>
-                    <EllipsisHint text={data?.cla} width={mode === 'see' ? '100%' : '100%'} />
-                    {
-                      KbType !== '教师课表' ? <ShowName
-                        XM={data.teacher}
-                        type="userName"
-                        openid={data.teacherWechatId}
-                        style={{
-                          color: data?.color,
-                        }}
-                      /> : <></>
-                    }
-                  </div>
-                ) : (
-                  <span />
-                )}
+              /></p>
+              <p style={{ marginBottom: '5px' }}>场地：{data?.fjmc}</p>
+            </div>} >
+              <div className="classCard">
+                <div
+                  className={`cardTop`}
+                  style={{
+                    background: data?.color,
+                  }}
+                />
+                <div
+                  className={`cardcontent`}
+                  style={{
+                    color: data?.color,
+                    background: data?.color.replace('1)', '0.1)'),
+                    position: 'relative',
+                  }}
+                >
+                  {mode === 'see' ? (
+                    <div className="teacher" style={{
+                      width: '100%',
+                      height: 22,
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      overflow: 'hidden',
+                    }}>
+                     <p className={styles.text}>{data?.cla}</p>
+                      {
+                        KbType !== '教师课表' ? <ShowName
+                          XM={data.teacher}
+                          type="userName"
+                          openid={data.teacherWechatId}
+                          style={{
+                            color: data?.color,
+                          }}
+                        /> : <></>
+                      }
+                    </div>
+                  ) : (
+                    <span />
+                  )}
 
-                {mode === 'see' && bjmcValue?.length <= 1 ?
-                  <EllipsisHint text={data?.fjmc} width={mode === 'see' ? '100%' : '100%'} /> : <></>
-                }
-                {mode === 'see' && data?.bjzt === '已开班' ? (
-                  <div className={styles.duihao}>√</div>
-                ) : (
-                  ''
-                )}
+                  {mode === 'see' && bjmcValue?.length <= 1 ?
+                    <p className={styles.text}>{data?.fjmc}</p>: <></>
+                  }
+                  {mode === 'see' && data?.bjzt === '已开班' ? (
+                    <div className={styles.duihao}>√</div>
+                  ) : (
+                    ''
+                  )}
+                </div>
               </div>
-            </div>
+            </Tooltip>
+
         }
       </>}
     </Button >

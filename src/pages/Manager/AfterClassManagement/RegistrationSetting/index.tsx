@@ -716,7 +716,7 @@ const RegistrationSetting = () => {
                   overlayClassName={styles.tooltipdiv}
                   title="报名模式设置适用于全校课后服务报名，配置课后服务后，不再允许更改此配置"
                 >
-                  <ExclamationCircleOutlined style={{ color: '#F00' }} />
+                  <ExclamationCircleOutlined />
                 </Tooltip>{' '}
               </>
             }
