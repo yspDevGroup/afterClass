@@ -2,7 +2,7 @@
  * @description:
  * @author: zpl
  * @Date: 2022-03-18 14:09:58
- * @LastEditTime: 2022-03-18 16:32:40
+ * @LastEditTime: 2022-03-21 15:55:34
  * @LastEditors: zpl
  */
 import React, { useRef, useState } from 'react';
@@ -69,8 +69,8 @@ const RegistForm = ({ show, username }: RegistFormProps) => {
   // 当前选中学校下对应的用户id
   const [teacherId, setTeacherId] = useState<string>('');
 
-  const schoolListformRef = useRef<{ CorpID: string }>();
-  const bindformRef = useRef<ProFormInstance>();
+  const schoolListformRef = useRef<ProFormInstance<{ CorpID: string }>>();
+  const bindformRef = useRef<ProFormInstance<{ code: string }>>();
 
   return (
     <Modal

@@ -5,13 +5,7 @@ import { history, Link } from 'umi';
 import type { ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 
-import {
-  getAuthorization,
-  getBuildOptions,
-  getUserCache,
-  removeOAuthToken,
-  saveUserInfoCache,
-} from './utils/utils';
+import { getAuthorization, getBuildOptions, getOauthToken, removeOAuthToken } from './utils/utils';
 import { regWechatAPI } from './utils/wx';
 import PageLoading from '@/components/PageLoading';
 import Footer from '@/components/Footer';
@@ -46,7 +40,6 @@ export async function getInitialState(): Promise<InitialState> {
       if (currentUserRes.status === 'ok') {
         const { info } = currentUserRes.data || {};
         if (info) {
-          saveUserInfoCache(info);
           return info as API.CurrentUser;
         }
       }
@@ -57,18 +50,17 @@ export async function getInitialState(): Promise<InitialState> {
     removeOAuthToken();
     return undefined;
   };
-  const userInfoCache = getUserCache();
-  // if (window.location.pathname !== '/' && userInfoCache) {
-  //   return {
-  //     fetchUserInfo,
-  //     currentUser: userInfoCache,
-  //     settings: {},
-  //     buildOptions,
-  //   };
-  // }
+  const token = getOauthToken();
+  if (token) {
+    return {
+      fetchUserInfo,
+      currentUser: await fetchUserInfo(),
+      settings: {},
+      buildOptions,
+    };
+  }
   return {
     fetchUserInfo,
-    currentUser: userInfoCache,
     settings: {},
     buildOptions,
   };

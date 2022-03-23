@@ -2,13 +2,13 @@
  * @description: 微信认证回调，本页面接收code后，通知后台获取登录信息
  * @author: zpl
  * @Date: 2021-09-04 09:00:38
- * @LastEditTime: 2022-03-18 14:52:38
+ * @LastEditTime: 2022-03-22 10:45:48
  * @LastEditors: zpl
  */
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { message } from 'antd';
 import { useModel, history } from 'umi';
-import { getPageQuery, removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
+import { getPageQuery, removeOAuthToken } from '@/utils/utils';
 import { creatTokenForWechat } from '@/utils/wx';
 
 const WechatAuth = () => {
@@ -37,7 +37,6 @@ const WechatAuth = () => {
 
   useEffect(() => {
     localStorage.setItem('authType', 'wechat');
-    removeUserInfoCache();
     removeOAuthToken();
     goto();
   }, []);

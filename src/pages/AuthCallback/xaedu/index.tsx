@@ -2,7 +2,7 @@
  * @description: 西安教育信息化综合服务平台登录
  * @author: zpl
  * @Date: 2022-03-15 15:30:49
- * @LastEditTime: 2022-03-18 15:58:34
+ * @LastEditTime: 2022-03-23 11:14:49
  * @LastEditors: zpl
  */
 import { useEffect, useState } from 'react';
@@ -57,7 +57,7 @@ const Index = () => {
         if (data.list.length === 1) {
           goto(data.list[0].id || '', data!.username!);
         } else {
-          // 显示身份显示
+          // TODO: 显示身份选择
         }
       } else {
         setIsModalVisible(true);

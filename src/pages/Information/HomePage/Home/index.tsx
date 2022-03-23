@@ -5,7 +5,7 @@ import Overview from './components/Overview';
 import Notice from './components/Notice';
 import IconFont from '@/components/CustomIcon';
 import ShowName from '@/components/ShowName';
-import { removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
+import { removeOAuthToken } from '@/utils/utils';
 import TopBgImg from '@/assets/topInfoBG.png';
 import SignIn from './components/SignIn';
 
@@ -40,7 +40,6 @@ const Home = () => {
               onClick={() => {
                 setInitialState({ ...initialState!, currentUser: undefined });
                 removeOAuthToken();
-                removeUserInfoCache();
                 history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
               }}
             >

@@ -6,7 +6,7 @@ import HeaderDropdown from '../HeaderDropdown';
 import defaultAvatar from '@/assets/avatar.png';
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
 import { LogoutOutlined } from '@ant-design/icons';
-import { removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
+import { removeOAuthToken } from '@/utils/utils';
 import ShowName from '@/components/ShowName';
 
 import styles from './index.less';
@@ -44,7 +44,6 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
       if (key === 'logout' && initialState) {
         setInitialState({ ...initialState, currentUser: undefined });
         removeOAuthToken();
-        removeUserInfoCache();
         history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
         return;
       }

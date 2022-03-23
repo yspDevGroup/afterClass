@@ -3,7 +3,7 @@ import { Link, useModel, history } from 'umi';
 import { Image } from 'antd';
 import { defUserImg } from '@/constant';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
-import { removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
+import { removeOAuthToken } from '@/utils/utils';
 import IconFont from '@/components/CustomIcon';
 import ShowName from '@/components/ShowName';
 
@@ -74,7 +74,6 @@ const Mine = () => {
             onClick={() => {
               setInitialState({ ...initialState!, currentUser: undefined });
               removeOAuthToken();
-              removeUserInfoCache();
               history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
             }}
           >

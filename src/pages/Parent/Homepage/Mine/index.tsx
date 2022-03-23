@@ -4,7 +4,7 @@ import { Link, useModel, history } from 'umi';
 import DisplayColumn from '@/components/DisplayColumn';
 import Statistical from './components/Statistical';
 import IconFont from '@/components/CustomIcon';
-import { enHenceMsg, removeOAuthToken, removeUserInfoCache } from '@/utils/utils';
+import { enHenceMsg, removeOAuthToken } from '@/utils/utils';
 import { getStudentOrders } from '@/services/after-class/khxsdd';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import index_header from '@/assets/index_header.png';
@@ -186,7 +186,6 @@ const Mine = (props: {
             onClick={() => {
               setInitialState({ ...initialState!, currentUser: undefined });
               removeOAuthToken();
-              removeUserInfoCache();
               history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
             }}
           >
