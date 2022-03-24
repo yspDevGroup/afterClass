@@ -612,7 +612,7 @@ const ConfigureService = (props: ConfigureSeverType) => {
               rules={[{ required: true, message: '请输入课程数限制' }]}
               name="KXSL"
               key="KXSL"
-              min={1}
+              min={0}
               max={50}
               width={80}
             />

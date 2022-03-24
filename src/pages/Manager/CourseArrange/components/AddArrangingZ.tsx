@@ -318,47 +318,48 @@ const AddArrangingZ: FC<PropsType> = (props) => {
       newPkDatas.push(newObj);
     })
     if (result?.status === 'ok') {
-      if (value?.Type === '新增') {
-        if (result?.data?.ISFW === 1) {
-          const datas = fn(result?.data?.KHPKSJs);
-          if (datas?.length < result?.data?.KSS) {
-            const PkArr = newPkDatas;
-            result?.data?.KHPKSJs?.forEach((item: any) => {
-              const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
-              PkArr?.push({
-                FJSJId,
-                KHBJSJId,
-                PKBZ,
-                XNXQId,
-                RQ,
-                XXSJPZId,
-                WEEKDAY,
-                PKTYPE: value?.PKTYPE
+      // 检查是否存在单双周排课
+      if (result?.data?.KHPKSJs?.find((items: any) => items?.PKTYPE === 0 || items?.PKTYPE === 2 || items?.PKTYPE === 3)) {
+        showConfirm();
+      } else {
+        if (value?.Type === '新增') {
+          if (result?.data?.ISFW === 1) {
+            const datas = fn(result?.data?.KHPKSJs);
+            if (datas?.length < result?.data?.KSS) {
+              const PkArr = newPkDatas;
+              result?.data?.KHPKSJs?.forEach((item: any) => {
+                const { FJSJId, KHBJSJId, PKBZ, XNXQId, RQ, XXSJPZId, WEEKDAY } = item;
+                PkArr?.push({
+                  FJSJId,
+                  KHBJSJId,
+                  PKBZ,
+                  XNXQId,
+                  RQ,
+                  XXSJPZId,
+                  WEEKDAY,
+                  PKTYPE: value?.PKTYPE
+                })
               })
-            })
-            PkArr.forEach((value1: any) => {
-              if (value1.WEEKDAY === '7') {
-                value1.WEEKDAY = '0'
+              PkArr.forEach((value1: any) => {
+                if (value1.WEEKDAY === '7') {
+                  value1.WEEKDAY = '0'
+                }
+              })
+              const res = await createKHPKSJ({
+                bjIds: [value?.KHBJSJId],
+                data: PkArr
+              })
+              if (res?.status === 'ok') {
+                setLoading(false);
+                CDgetPKData();
+              } else {
+                message.warning(res.message)
               }
-            })
-            const res = await createKHPKSJ({
-              bjIds: [value?.KHBJSJId],
-              data: PkArr
-            })
-            if (res?.status === 'ok') {
-              setLoading(false);
-              CDgetPKData();
             } else {
-              message.warning(res.message)
+              message.warning('超出排课课时，不可排课')
             }
           } else {
-            message.warning('超出排课课时，不可排课')
-          }
-        } else {
-          // 判断是否有周排课以外的数据存在，有的话先清除排课
-          if (result?.data?.KHPKSJs?.find((items: any) => items?.PKTYPE === 0 || items?.PKTYPE === 2 || items?.PKTYPE === 3)) {
-            showConfirm();
-          } else {
+            // 判断是否有周排课以外的数据存在，有的话先清除排课
             const datas = fn(result?.data?.KHPKSJs);
             if (datas?.length === 0) {
               // 获取该课程班剩余可排课时
@@ -444,12 +445,8 @@ const AddArrangingZ: FC<PropsType> = (props) => {
               }
             }
           }
-        }
-      } else {
-        // 删除排课
-        if (result?.data?.KHPKSJs?.find((items: any) => items?.PKTYPE === 0 || items?.PKTYPE === 2 || items?.PKTYPE === 3)) {
-          showConfirm();
         } else {
+          // 删除排课
           const PkArr: any[] = [];
           const newArr = result?.data?.KHPKSJs.filter((items: any) => {
             return items?.WEEKDAY !== value?.WEEKDAY || items?.XXSJPZId !== value?.XXSJPZId
@@ -474,9 +471,9 @@ const AddArrangingZ: FC<PropsType> = (props) => {
           if (res?.status === 'ok') {
             CDgetPKData();
           }
+
         }
       }
-
     } else {
       message.warning(result.message)
     }
