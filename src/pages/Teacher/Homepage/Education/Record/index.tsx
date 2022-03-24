@@ -110,6 +110,7 @@ const Record = () => {
         {!loading ? (
           showData && showData?.length ? (
             showData.map((item: any) => {
+              console.log(currentUser?.JSId === item.JSId, '0000000000')
               return (
                 <div className={styles.cards}>
                   <p>
@@ -175,7 +176,7 @@ const Record = () => {
                     </div>
                     <p>
                       <span>{moment(item.time).format('HH:mm:ss')}</span>
-                      {currentUser?.JSId || testTeacherId === item.JSId ? (
+                      {currentUser?.JSId === item.JSId ? (
                         <a onClick={() => {
                           setModalVisible(true);
                           setids(item?.id);

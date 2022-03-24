@@ -1,7 +1,7 @@
 .selectedPage {
   position: relative;
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   background-color: #f5f5f5;
 
   .selectedCard {
@@ -166,8 +166,10 @@
   }
 
   .listWrapper {
+    height: calc(100vh - 85px);
     margin-top: 2px;
     padding: 16px;
+    overflow: auto;
 
     .noData {
       padding: 10px;
