@@ -51,7 +51,7 @@ const DealList: React.FC = () => {
       }
     })();
   }, []);
-
+  // const newDay = moment.HTML5_FMT(new Date()).format('YYYY')
   return (
     <>
       <GoBack title={'我要补签'} teacher onclick="/teacher/education/resign" />
@@ -69,7 +69,7 @@ const DealList: React.FC = () => {
                     </p>
                   </div>
                   <div>
-                    <span className={styles.light}>统计于：2021-12-16</span>
+                    <span className={styles.light}>统计于：{Number(moment().format('MM')) === Number(item.month) ? moment().subtract(1, 'day').format('YYYY-MM-DD') : moment(`${item.year}-${item.month}`).endOf('month').format("YYYY-MM-DD")} </span>
                     {item.month < month - 1 ? (
                       <Button type="dashed" disabled>
                         已逾期

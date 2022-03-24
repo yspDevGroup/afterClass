@@ -383,7 +383,8 @@ const CourseScheduling = (
                     <TeacherSelect
                       // value={ }
                       // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
-                      type={1}
+                      type={3}
+
                       multiple={false}
                       xxId={currentUser?.xxId}
                       kcId={undefined}

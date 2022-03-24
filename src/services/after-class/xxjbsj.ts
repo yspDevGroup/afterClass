@@ -278,3 +278,20 @@ export async function getAgencies(
     ...(options || {}),
   });
 }
+
+/** 获取与学校合作过的所有机构教师 POST /xxjbsj/getAgencyTeachers */
+export async function getAgencyTeachers(
+  body: {
+    XXJBSJId?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/xxjbsj/getAgencyTeachers', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

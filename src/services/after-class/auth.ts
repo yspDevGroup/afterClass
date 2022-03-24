@@ -25,3 +25,25 @@ export async function outLogin(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+/** 账密登录 POST /auth/login */
+export async function login(
+  body: {
+    /** 登录平台 */
+    plat?: string;
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 密码 */
+    password?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

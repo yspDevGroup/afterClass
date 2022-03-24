@@ -3,8 +3,6 @@
 // API 更新时间：
 // API 唯一标识：
 import * as other from './other';
-import * as auth from './auth';
-import * as user from './user';
 import * as bjsj from './bjsj';
 import * as jzgjbsj from './jzgjbsj';
 import * as fjlx from './fjlx';
@@ -60,7 +58,9 @@ import * as redis from './redis';
 import * as reports from './reports';
 import * as sso from './sso';
 import * as statistic from './statistic';
+import * as teacherUser from './teacherUser';
 import * as upload from './upload';
+import * as user from './user';
 import * as wechat from './wechat';
 import * as xaedu from './xaedu';
 import * as xksj from './xksj';
@@ -84,10 +84,9 @@ import * as xxsppz from './xxsppz';
 import * as xxtzgg from './xxtzgg';
 import * as zxfa from './zxfa';
 import * as zxsj from './zxsj';
+import * as auth from './auth';
 export default {
   other,
-  auth,
-  user,
   bjsj,
   jzgjbsj,
   fjlx,
@@ -143,7 +142,9 @@ export default {
   reports,
   sso,
   statistic,
+  teacherUser,
   upload,
+  user,
   wechat,
   xaedu,
   xksj,
@@ -167,4 +168,5 @@ export default {
   xxtzgg,
   zxfa,
   zxsj,
+  auth,
 };

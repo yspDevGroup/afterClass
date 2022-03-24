@@ -129,7 +129,7 @@ const DealAbnormal = (props: any) => {
           <h3>{data.month}月汇总</h3>
           <div className={styles.flexWrapper}>
             <div>
-              <h3>{total}</h3>
+              <h3>{total || 0}</h3>
               <span className={styles.light}>考勤总数</span>
             </div>
             <div>

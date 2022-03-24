@@ -25,7 +25,7 @@ const AttendanceDetail = (props: any) => {
 
   const getAbsenteeismData = async (id: string) => {
     let res;
-    if (position === '老师') {
+    if (position === '老师' || position === '机构老师') {
       res = await getAllKHJSCQ({
         JZGJBSJId: data?.id,
         KHBJSJId: id,
@@ -49,7 +49,7 @@ const AttendanceDetail = (props: any) => {
   };
   useEffect(() => {
     setLoading(true);
-    if (position === '老师') {
+    if (position === '老师' || position === '机构老师') {
       (async () => {
         const res = await getTeacherAttendanceDetailByDate({
           JZGJBSJId: data.id,
@@ -227,7 +227,7 @@ const AttendanceDetail = (props: any) => {
 
   const onExportClick = () => {
     setLoading(true);
-    if (position === '老师') {
+    if (position === '老师' || position === '机构老师') {
       (async () => {
         const res = await exportTeacherAttendanceDetailByDate({
           JZGJBSJId: data.id,
@@ -288,7 +288,7 @@ const AttendanceDetail = (props: any) => {
           </Button>
 
           <ProTable
-            columns={position === '老师' ? teacher : student}
+            columns={position === '学生' ? student : teacher}
             headerTitle={`${startDate} ~ ${endDate}`}
             dataSource={dataSource}
             pagination={{
@@ -296,7 +296,7 @@ const AttendanceDetail = (props: any) => {
               pageSize: 10,
               defaultCurrent: 1,
             }}
-            scroll={{ x: getTableWidth(position === '老师' ? teacher : student) }}
+            scroll={{ x: getTableWidth(position === '学生' ? student : teacher) }}
             search={false}
             options={{
               setting: false,

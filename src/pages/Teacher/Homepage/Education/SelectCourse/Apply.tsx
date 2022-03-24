@@ -166,6 +166,7 @@ const Study = () => {
         XD: currentUser?.XD?.split(','),
       });
       if (res.status === 'ok' && res.data) {
+        console.log(res,'res------')
         setNjData(res.data?.rows);
       }
       // 获取校区列表

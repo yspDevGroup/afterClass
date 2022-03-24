@@ -31,8 +31,11 @@ const LeaveManagement = () => {
   const { currentUser } = initialState || {};
   const [key, setKey] = useState<string>('1');
   const [curXNXQIdJS, setCurXNXQIdJS] = useState<any>();
+  const [curXNXQIdJGJS, setCurXNXQIdJGJS] = useState<any>();
   const [newDateJS, setNewDateJS] = useState<any[]>([]);
+  const [newDateJGJS, setNewDateJGJS] = useState<any[]>([]);
   const [JSXM, setJSXM] = useState<string>();
+  const [JGJSXM, setJGJSXM] = useState<string>();
   const [curXNXQIdXS, setCurXNXQIdXS] = useState<any>();
   const [newDateXS, setNewDateXS] = useState<any[]>([]);
   const [XSXM, setXSXM] = useState<string>();
@@ -82,7 +85,7 @@ const LeaveManagement = () => {
           <Tooltip
             overlayStyle={{ maxWidth: '30em' }}
             title={
-              <>已该时段教师实际出勤为基础统计</>
+              <>以该时段教师实际出勤为基础统计</>
             }
           >
             <QuestionCircleOutlined />
@@ -197,7 +200,7 @@ const LeaveManagement = () => {
           <Tooltip
             overlayStyle={{ maxWidth: '30em' }}
             title={
-              <>已该时段教师实际出勤为基础统计</>
+              <>以该时段教师实际出勤为基础统计</>
             }
           >
             <QuestionCircleOutlined />
@@ -263,10 +266,10 @@ const LeaveManagement = () => {
               state: {
                 type: 'detail',
                 data: record,
-                XNXQId: curXNXQIdJS,
+                XNXQId: curXNXQIdJGJS,
                 position: '老师',
-                startDate: newDateJS[0]?.format('YYYY-MM-DD'),
-                endDate: newDateJS[1]?.format('YYYY-MM-DD'),
+                startDate: newDateJGJS[0]?.format('YYYY-MM-DD'),
+                endDate: newDateJGJS[1]?.format('YYYY-MM-DD'),
                 duration,
               },
             }}
@@ -391,9 +394,9 @@ const LeaveManagement = () => {
       setJSXM(name);
       res = await getTeachersAttendanceByDate({ ...params, XXJBSJId: currentUser?.xxId, JSXM: name });
     } else {
-      setCurXNXQIdJS(curXNXQId);
-      setNewDateJS(newDate);
-      setJSXM(name);
+      setCurXNXQIdJGJS(curXNXQId);
+      setNewDateJGJS(newDate);
+      setJGJSXM(name);
       res = await getTeachersAttendanceByDate({ ...params, KHJYJGId: JGId, JSXM: name });
     }
     if (res?.status === 'ok' && res.data) {
@@ -408,8 +411,10 @@ const LeaveManagement = () => {
       if (curXNXQIdXS) {
         getDataSource(curXNXQIdXS, newDateXS, XSXM);
       }
-    } else {
+    } else if (key === '2') {
       getDataSource(curXNXQIdJS, newDateJS, JSXM);
+    } else {
+      getDataSource(curXNXQIdJS, newDateJS, JGJSXM);
     }
   }, [key]);
   // 教师导出
@@ -419,15 +424,40 @@ const LeaveManagement = () => {
     if (newDateJS.length > 0) {
       if (isMoment(newDateJS[0])) {
         startDate = newDateJS[0].format('YYYY-MM-DD');
-        // console.log('startDate',startDate);
       }
       if (isMoment(newDateJS[1])) {
         endDate = newDateJS[1].format('YYYY-MM-DD');
-        // console.log('endDate',endDate);
       }
     }
     const params = {
       XNXQId: curXNXQIdJS,
+      startDate,
+      endDate,
+      JSXM,
+    };
+    setLoading(true);
+    const res = await exportTeachersAttendanceByDate(params);
+    if (res?.status === 'ok') {
+      setLoading(false);
+      window.location.href = res.data;
+    } else {
+      setLoading(false);
+      message.error(res.message);
+    }
+  };
+  const onExportJGJSClick = async () => {
+    let startDate;
+    let endDate;
+    if (newDateJGJS.length > 0) {
+      if (isMoment(newDateJGJS[0])) {
+        startDate = newDateJGJS[0].format('YYYY-MM-DD');
+      }
+      if (isMoment(newDateJGJS[1])) {
+        endDate = newDateJGJS[1].format('YYYY-MM-DD');
+      }
+    }
+    const params = {
+      XNXQId: curXNXQIdJGJS,
       startDate,
       endDate,
       JSXM,
@@ -456,7 +486,7 @@ const LeaveManagement = () => {
       }
     }
     const params = {
-      XNXQId: curXNXQIdJS,
+      XNXQId: curXNXQIdXS,
       startDate,
       endDate,
       XSXM,
@@ -481,228 +511,241 @@ const LeaveManagement = () => {
           defaultActiveKey={key}
         >
           <TabPane tab="本校学生考勤" key="1">
-            <FormSelect
-              getDataSource={getDataSource}
-              type="student"
-              exportButton={
-                <Button
-                  type="primary"
-                  icon={<DownloadOutlined />}
-                  style={{ float: 'right' }}
-                  onClick={onExportXSClick}
-                >
-                  导出
-                </Button>
-              }
-              getDuration={getDuration}
-            />
-            <div className={Style.TopCards}>
-              <div>
-                <div>
-                  <span>
-                    <img src={personImg} />
-                  </span>
+            {
+              key === '1' && <>
+                <FormSelect
+                  getDataSource={getDataSource}
+                  type="student"
+                  exportButton={
+                    <Button
+                      type="primary"
+                      icon={<DownloadOutlined />}
+                      style={{ float: 'right' }}
+                      onClick={onExportXSClick}
+                    >
+                      导出
+                    </Button>
+                  }
+                  getDuration={getDuration}
+                />
+                <div className={Style.TopCards}>
                   <div>
-                    <h3>{collectData?.AllXS_count || 0}</h3>
-                    <p>考勤学生总数</p>
+                    <div>
+                      <span>
+                        <img src={personImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.AllXS_count || 0}</h3>
+                        <p>考勤学生总数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={classImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.AllXSBJ_count || 0}</h3>
+                        <p>课程班总数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={normalImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.AllXSCQ_count || 0}</h3>
+                        <p>出勤总次数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={abnormalImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.AllXSQQ_count || 0}</h3>
+                        <p>缺勤总次数</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={classImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.AllXSBJ_count || 0}</h3>
-                    <p>课程班总数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={normalImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.AllXSCQ_count || 0}</h3>
-                    <p>出勤总次数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={abnormalImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.AllXSQQ_count || 0}</h3>
-                    <p>缺勤总次数</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <Table TableList={{ position: '学生' }} dataSource={dataSource} columns={student} />
-          </TabPane>
-          <TabPane tab="本校教师考勤" key="2">
-            <FormSelect
-              getDataSource={getDataSource}
-              type="teacher"
-              exportButton={
-                <Button
-                  type="primary"
-                  icon={<DownloadOutlined />}
-                  style={{ float: 'right' }}
-                  onClick={onExportJSClick}
-                >
-                  导出
-                </Button>
-              }
-              getDuration={getDuration}
-            />
-            <div className={Style.TopCards}>
-              <div>
-                <div>
-                  <span>
-                    <img src={personImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.js_count || 0}</h3>
-                    <p>考勤教师总数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={classImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.allJS_bj_count || 0}</h3>
-                    <p>授课班级总数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={allHoursImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.allJS_KSS || 0}</h3>
-                    <p>已排课时总数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={normalImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.allJS_attendance || 0}</h3>
-                    <p>出勤总次数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={abnormalImg} />
-                  </span>
-                  <div>
-                    <h3>
-                      {collectData?.allJS_absenteeism +
-                        collectData?.allJS_leave +
-                        collectData?.allJS_substitute || 0}
-                    </h3>
-                    <p>缺勤总次数</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <Table TableList={{ position: '老师' }} dataSource={dataSource} columns={teacher} />
-          </TabPane>
-          <TabPane tab="机构教师考勤" key="3">
-            <FormSelect
-              getDataSource={getDataSource}
-              type="JGteacher"
-              exportButton={
-                <Button
-                  type="primary"
-                  icon={<DownloadOutlined />}
-                  style={{ position: 'absolute', right: '0px' }}
-                  onClick={onExportJSClick}
-                >
-                  导出
-                </Button>
-              }
-              getDuration={getDuration}
-            />
-            <div className={Style.TopCards}>
-              <div>
-                <div>
-                  <span>
-                    <img src={personImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.js_count || 0}</h3>
-                    <p>考勤教师总数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={classImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.allJS_bj_count || 0}</h3>
-                    <p>授课班级总数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={allHoursImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.allJS_KSS || 0}</h3>
-                    <p>已排课时总数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={normalImg} />
-                  </span>
-                  <div>
-                    <h3>{collectData?.allJS_attendance || 0}</h3>
-                    <p>出勤总次数</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <span>
-                    <img src={abnormalImg} />
-                  </span>
-                  <div>
-                    <h3>
-                      {collectData?.allJS_absenteeism +
-                        collectData?.allJS_leave +
-                        collectData?.allJS_substitute || 0}
-                    </h3>
-                    <p>缺勤总次数</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <Table TableList={{ position: '老师' }} dataSource={dataSource} columns={JGteacher} />
+                <Table TableList={{ position: '学生' }} dataSource={dataSource} columns={student} /></>
+
+            }
           </TabPane>
 
+          <TabPane tab="本校教师考勤" key="2">
+            {
+              key === '2' && <>
+                <FormSelect
+                  getDataSource={getDataSource}
+                  type="teacher"
+                  exportButton={
+                    <Button
+                      type="primary"
+                      icon={<DownloadOutlined />}
+                      style={{ float: 'right' }}
+                      onClick={onExportJSClick}
+                    >
+                      导出
+                    </Button>
+                  }
+                  getDuration={getDuration}
+                />
+                <div className={Style.TopCards}>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={personImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.js_count || 0}</h3>
+                        <p>考勤教师总数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={classImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.allJS_bj_count || 0}</h3>
+                        <p>授课班级总数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={allHoursImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.allJS_KSS || 0}</h3>
+                        <p>已排课时总数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={normalImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.allJS_attendance || 0}</h3>
+                        <p>出勤总次数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={abnormalImg} />
+                      </span>
+                      <div>
+                        <h3>
+                          {collectData?.allJS_absenteeism +
+                            collectData?.allJS_leave +
+                            collectData?.allJS_substitute || 0}
+                        </h3>
+                        <p>缺勤总次数</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <Table TableList={{ position: '老师' }} dataSource={dataSource} columns={teacher} /></>
+            }
+          </TabPane>
+
+
+
+          <TabPane tab="机构教师考勤" key="3">
+            {
+              key === '3' && <>
+                <FormSelect
+                  getDataSource={getDataSource}
+                  type="JGteacher"
+                  exportButton={
+                    <Button
+                      type="primary"
+                      icon={<DownloadOutlined />}
+                      style={{ position: 'absolute', right: '0px' }}
+                      onClick={onExportJGJSClick}
+                    >
+                      导出
+                    </Button>
+                  }
+                  getDuration={getDuration}
+                />
+                <div className={Style.TopCards}>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={personImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.js_count || 0}</h3>
+                        <p>考勤教师总数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={classImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.allJS_bj_count || 0}</h3>
+                        <p>授课班级总数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={allHoursImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.allJS_KSS || 0}</h3>
+                        <p>已排课时总数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={normalImg} />
+                      </span>
+                      <div>
+                        <h3>{collectData?.allJS_attendance || 0}</h3>
+                        <p>出勤总次数</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <span>
+                        <img src={abnormalImg} />
+                      </span>
+                      <div>
+                        <h3>
+                          {collectData?.allJS_absenteeism +
+                            collectData?.allJS_leave +
+                            collectData?.allJS_substitute || 0}
+                        </h3>
+                        <p>缺勤总次数</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <Table TableList={{ position: '机构老师' }} dataSource={dataSource} columns={JGteacher} /></>
+            }
+          </TabPane>
         </Tabs>
       </Spin>
     </PageContainer>
