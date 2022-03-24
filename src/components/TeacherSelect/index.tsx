@@ -197,7 +197,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
       } else {
         setTreeData([JGTeacher, xxTeacher]);
       }
-    }else if (type === 3 && xxTeacher) {
+    }else if (type === 4 && xxTeacher) {
       if (!JGTeacher) {
         setTreeData([xxTeacher]);
       } else {

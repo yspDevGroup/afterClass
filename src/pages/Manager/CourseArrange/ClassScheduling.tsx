@@ -381,10 +381,7 @@ const CourseScheduling = (
                   type === '教师课表' ? <div className={styles.SearchBox}>
                     <label>教师姓名：</label>
                     <TeacherSelect
-                      // value={ }
-                      // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
-                      type={3}
-
+                      type={4}
                       multiple={false}
                       xxId={currentUser?.xxId}
                       kcId={undefined}

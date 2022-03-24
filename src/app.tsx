@@ -15,6 +15,8 @@ import headerTopSmall from '@/assets/headerTopSmall.png';
 import { currentUser as queryCurrentUser } from './services/after-class/user';
 import { currentWechatUser } from './services/after-class/wechat';
 import Version from './components/Version';
+import type { LocationDescriptor, Location } from 'history';
+import type { ReactChild, ReactFragment, ReactPortal } from 'react';
 
 const isDev = process.env.NODE_ENV === 'development';
 const authCallbackPath = '/auth_callback';
@@ -99,23 +101,29 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
     },
     links: isDev
       ? [
-          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>openAPI 文档</span>
-          </Link>,
-          <Link key="docs" to="/~docs" target="_blank">
-            <BookOutlined />
-            <span>业务组件文档</span>
-          </Link>,
-          <Version key="version" />,
-        ]
+        <Link key="openapi" to="/umi/plugin/openapi" target="_blank" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+          <LinkOutlined />
+          <span>openAPI 文档</span>
+        </Link>,
+        <Link key="docs" to="/~docs" target="_blank" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+          <BookOutlined />
+          <span>业务组件文档</span>
+        </Link>,
+        <Version key="version" />,
+      ]
       : [
-          <Version
-            key="version"
-            style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}
-          />,
-        ],
+        <Version
+          key="version"
+          style={{ color: 'rgba(255, 255, 255, 0.2)', textAlign: 'center', fontSize: '10px' }}
+        />,
+      ],
     collapsedButtonRender: false,
+    menuItemRender: (item: { name: string; itemPath: LocationDescriptor<unknown> | ((location: Location<unknown>) => LocationDescriptor<unknown>); }, dom: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined) => {
+      if (initialState?.buildOptions.ENV_type === '9dy' && item?.name === '素质教育资源') {
+        return <></>
+      }
+      return <Link to={item?.itemPath}>{dom}</Link>
+    },
     onMenuHeaderClick: (e: React.MouseEvent<HTMLDivElement>) => {
       console.log(e.target);
     },
