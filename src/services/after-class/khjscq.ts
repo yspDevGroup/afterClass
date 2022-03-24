@@ -244,6 +244,8 @@ export async function statisticalByTeacher(
 /** 机构端教师出勤统计 POST /khjscq/agencyStatistical */
 export async function agencyStatistical(
   body: {
+    /** 是否导出 */
+    output?: boolean;
     /** 机构ID */
     KHJYJGId?: string;
     /** 学年 */
@@ -268,6 +270,38 @@ export async function agencyStatistical(
   options?: { [key: string]: any },
 ) {
   return request<any>('/khjscq/agencyStatistical', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 机构端教师出勤详情 POST /khjscq/agencyStatisticalDetail */
+export async function agencyStatisticalDetail(
+  body: {
+    /** 学年 */
+    XN?: string;
+    /** 学期 */
+    XQ?: string;
+    /** 教师ID */
+    JZGJBSJId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 开始日期 */
+    startDate?: string;
+    /** 结束日期 */
+    endDate?: string;
+    /** 页数 */
+    page?: number;
+    /** 每页记录数 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khjscq/agencyStatisticalDetail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

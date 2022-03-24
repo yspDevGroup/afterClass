@@ -2,6 +2,22 @@
 /* eslint-disable */
 
 declare namespace API {
+  type LoginParams = {
+    /** 登录名 */
+    username: string;
+    /** 密码 */
+    password: string;
+    /** 自动登录 */
+    autoLogin: boolean;
+    type: 'account' | 'mobile';
+  };
+
+  type LoginResult = {
+    currentAuthority: string[];
+    token: string;
+    type: 'account' | 'mobile' | 'github';
+  };
+
   type BJSJ = {
     id: string;
     /** 班号 */
@@ -3956,6 +3972,8 @@ declare namespace API {
   type CreateTeacherUser = {
     /** 密码 */
     password: string;
+    /** 密码 */
+    username: string;
     /** 状态，0无效1有效，其他可由业务自行定义 */
     status: number;
     JZGJBSJId: string;
@@ -5488,21 +5506,5 @@ declare namespace API {
     /** 时长 */
     SC?: number;
     ZXFAId?: string;
-  };
-
-  type LoginParams = {
-    /** 登录名 */
-    username: string;
-    /** 密码 */
-    password: string;
-    /** 自动登录 */
-    autoLogin: boolean;
-    type: 'account' | 'mobile';
-  };
-
-  type LoginResult = {
-    currentAuthority: string[];
-    token: string;
-    type: 'account' | 'mobile' | 'github';
   };
 }

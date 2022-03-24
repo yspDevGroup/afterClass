@@ -431,6 +431,7 @@ const LeaveManagement = () => {
     }
     const params = {
       XNXQId: curXNXQIdJS,
+      XXJBSJId:currentUser?.xxId,
       startDate,
       endDate,
       JSXM,

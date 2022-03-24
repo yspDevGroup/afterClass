@@ -410,6 +410,10 @@ export async function exportTeachers(
     XM?: string;
     /** 学年学期ID */
     XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 机构ID */
+    KHJYJGId?: string;
     /** 教师ID */
     JZGJBSJId?: string;
     /** 页数 */
@@ -466,6 +470,10 @@ export async function exportTeachersAttendanceByDate(
   body: {
     /** 学年学期ID */
     XNXQId?: string;
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 机构ID */
+    KHJYJGId?: string;
     /** 教师姓名 */
     JSXM?: string;
     /** 开始日期 */
