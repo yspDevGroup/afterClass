@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2022-03-23 19:32:53
+ * @LastEditTime: 2022-03-24 08:46:47
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -100,7 +100,6 @@ const Index = () => {
     const { ysp_access_token } = getOauthToken();
     const hasLoginInfo: boolean = ysp_access_token && initialState?.currentUser;
     if (hasLoginInfo) {
-      debugger;
       gotoIndex(initialState?.currentUser.type);
     } else {
       gotoLogin();

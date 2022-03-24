@@ -42,6 +42,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
     }) => {
       const { key } = info;
       if (key === 'logout' && initialState) {
+        localStorage.removeItem('authType');
         setInitialState({ ...initialState, currentUser: undefined });
         removeOAuthToken();
         history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
