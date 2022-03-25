@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Tabs } from 'antd';
 import PageContainer from '@/components/PageContainer';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import CourseScheduling from './CourseScheduling';
 import { getQueryString } from '@/utils/utils';
 import moment from 'moment';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-import { useModel } from 'umi';
 import { getAllXXSJPZ } from '@/services/after-class/xxsjpz';
 import AddArranging from './components/AddArranging';
 import { getAllFJSJ } from '@/services/after-class/fjsj';
@@ -394,7 +393,7 @@ const Index = () => {
     } else {
       NewArr.forEach((item: any, index: number) => {
         timeData.forEach((timeItem: any, timeKey: number) => {
-          const table = {
+          const table: any = {
             room: {
               cla: item,
               keys: index,
@@ -546,7 +545,7 @@ const Index = () => {
     } else {
       NewArr.forEach((item: any, index: number) => {
         timeData.forEach((timeItem: any, timeKey: number) => {
-          const table = {
+          const table: any = {
             room: {
               cla: item,
               keys: index,
@@ -956,72 +955,72 @@ const Index = () => {
               </div>
             </>
 
-             <Tabs
-                activeKey={keys}
-                onChange={(value: any) => {
-                  setKeys(value);
-                }}
-                className={styles.tabs}
-              >
-                <TabPane tab="按周" key="one">
-                  {
-                    keys === 'one' &&
-                    <AddArrangingZ
-                      campus={campus}
-                      campusId={campusId}
-                      curXNXQId={curXNXQId}
-                      xXSJPZData={xXSJPZData}
-                      cdmcData={cdmcData}
-                      processingData={processingDataZ}
-                      formValues={recordValue}
-                      kcmcData={kcmcData}
-                      currentUser={currentUser}
-                      TimeData={TimeData}
-                      setRqDisable={setRqDisable}
-                      Weeks={Weeks}
-                    />
-                  }
-                </TabPane>
-                <TabPane tab="单双周" key="two">
-                  {
-                    keys === 'two' &&
-                    <AddArrangingDS
-                      campus={campus}
-                      campusId={campusId}
-                      curXNXQId={curXNXQId}
-                      xXSJPZData={xXSJPZData}
-                      cdmcData={cdmcData}
-                      processingData={processingDataDS}
-                      formValues={recordValue}
-                      kcmcData={kcmcData}
-                      currentUser={currentUser}
-                      TimeData={TimeData}
-                      setRqDisable={setRqDisable}
-                      Weeks={Weeks}
-                    />
-                  }
-                </TabPane>
-                <TabPane tab="按天" key="three">
-                  {
-                    keys === 'three' &&
-                    <AddArranging
-                      campus={campus}
-                      campusId={campusId}
-                      curXNXQId={curXNXQId}
-                      xXSJPZData={xXSJPZData}
-                      cdmcData={cdmcData}
-                      processingData={processingData}
-                      formValues={recordValue}
-                      kcmcData={kcmcData}
-                      currentUser={currentUser}
-                      TimeData={TimeData}
-                      setRqDisable={setRqDisable}
-                    />
-                  }
-                </TabPane>
+            <Tabs
+              activeKey={keys}
+              onChange={(value: any) => {
+                setKeys(value);
+              }}
+              className={styles.tabs}
+            >
+              <TabPane tab="按周" key="one">
+                {
+                  keys === 'one' &&
+                  <AddArrangingZ
+                    campus={campus}
+                    campusId={campusId}
+                    curXNXQId={curXNXQId}
+                    xXSJPZData={xXSJPZData}
+                    cdmcData={cdmcData}
+                    processingData={processingDataZ}
+                    formValues={recordValue}
+                    kcmcData={kcmcData}
+                    currentUser={currentUser}
+                    TimeData={TimeData}
+                    setRqDisable={setRqDisable}
+                    Weeks={Weeks}
+                  />
+                }
+              </TabPane>
+              <TabPane tab="单双周" key="two">
+                {
+                  keys === 'two' &&
+                  <AddArrangingDS
+                    campus={campus}
+                    campusId={campusId}
+                    curXNXQId={curXNXQId}
+                    xXSJPZData={xXSJPZData}
+                    cdmcData={cdmcData}
+                    processingData={processingDataDS}
+                    formValues={recordValue}
+                    kcmcData={kcmcData}
+                    currentUser={currentUser}
+                    TimeData={TimeData}
+                    setRqDisable={setRqDisable}
+                    Weeks={Weeks}
+                  />
+                }
+              </TabPane>
+              <TabPane tab="按天" key="three">
+                {
+                  keys === 'three' &&
+                  <AddArranging
+                    campus={campus}
+                    campusId={campusId}
+                    curXNXQId={curXNXQId}
+                    xXSJPZData={xXSJPZData}
+                    cdmcData={cdmcData}
+                    processingData={processingData}
+                    formValues={recordValue}
+                    kcmcData={kcmcData}
+                    currentUser={currentUser}
+                    TimeData={TimeData}
+                    setRqDisable={setRqDisable}
+                  />
+                }
+              </TabPane>
 
-              </Tabs>
-            </>
+            </Tabs>
+          </>
         )}
 
         <Modal

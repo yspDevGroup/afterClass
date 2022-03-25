@@ -99,7 +99,6 @@ const AddArranging: FC<PropsType> = (props) => {
   const [loading, setLoading] = useState<boolean>(false);
   // 排课数据信息
   const [oriSource, setOriSource] = useState<any>([]);
-  const [BJPKData, setBJPKData] = useState<any>([]);
 
   const columns: {
     title: string;
@@ -240,16 +239,20 @@ const AddArranging: FC<PropsType> = (props) => {
         message.warning(res?.message)
       }
     } else {
-      const pkId = BJPKData.find((item: any) => item?.RQ === pkData?.RQ && item?.XXSJPZId === pkData?.XXSJPZId).id;
+      const pkId = oriSource.find((item: any) => item?.KHBJSJId === pkData?.KHBJSJId && item?.RQ === pkData?.RQ && item?.XXSJPZId === pkData?.XXSJPZId);
       // 移除 根据房间Id移除数据
-      const res = await deleteKHPKSJ({
-        id: pkId
-      });
-      if (res?.status === 'ok') {
-        CDgetPKData();
-      } else {
-        message.error(res?.message);
+      if (pkId?.id) {
+        const res = await deleteKHPKSJ({
+          id: pkId.id
+        });
+        if (res?.status === 'ok') {
+          CDgetPKData();
+        } else {
+          setLoading(false);
+          message.error(res?.message);
+        }
       }
+
     }
   };
 
@@ -281,7 +284,6 @@ const AddArranging: FC<PropsType> = (props) => {
     })
     if (result?.status === 'ok') {
       setLoading(false);
-      setBJPKData(result?.data?.KHPKSJs);
     }
     // 更换课程班后将场地清空
     setCdmcValue(undefined);
