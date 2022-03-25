@@ -3,7 +3,7 @@ import { createKHBJPJ } from '@/services/after-class/khbjpj';
 import { Rate, Input, Button, message } from 'antd';
 import { useState } from 'react';
 import styles from './index.less';
-import { history,useModel } from 'umi';
+import { history, useModel } from 'umi';
 
 
 const { TextArea } = Input;
@@ -11,10 +11,12 @@ const { TextArea } = Input;
 
 const EvaluationDetails = (props: any) => {
   const { state } = props.location;
+  console.log(state, 'state-----')
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [Fraction, setFraction] = useState<number>()
-  const [Evaluation, setEvaluation] = useState<string>()
+  const [Evaluation, setEvaluation] = useState<string>();
+  const StorageXSId = localStorage.getItem('studentId');
   const handleChange = (value: any) => {
     setFraction(value)
   };
@@ -22,15 +24,15 @@ const EvaluationDetails = (props: any) => {
     setEvaluation(e.target.value)
   };
   const submit = async () => {
-    const { external_contact } = currentUser || {};
+    const { student, external_contact } = currentUser || {};
     const res = await createKHBJPJ({
-      PJFS:Fraction,
-      PY:Evaluation,
-      XSJBSJId:state?.XSJBSJId,
-      KHBJSJId:state?.KHBJSJId,
-      PJR:external_contact && `${state?.XSJBSJ?.XM}${external_contact.subscriber_info.remark.split('-')[1]}` || '张三爸爸'
+      PJFS: Fraction,
+      PY: Evaluation,
+      XSJBSJId: StorageXSId || (student && student[0].XSJBSJId) || testStudentId,
+      KHBJSJId: state?.id,
+      PJR: external_contact && `${state?.XSJBSJ?.XM}${external_contact.subscriber_info.remark.split('-')[1]}` || '张三爸爸'
     })
-    if(res.status === 'ok'){
+    if (res.status === 'ok') {
       message.success('评价成功')
       history.go(-1)
     }
@@ -38,11 +40,11 @@ const EvaluationDetails = (props: any) => {
   return <div className={styles.EvaluationDetails}>
     <GoBack title={'课程评价'} />
     <div className={styles.header}>
-      <img src={state?.KHBJSJ?.KHKCSJ?.KCTP} alt="" />
+      <img src={state?.KHKCSJ?.KCTP} alt="" />
       <div>
         <p>{state?.KHBJSJ?.KHKCSJ?.KCMC}</p>
-        <p>班级：{state?.KHBJSJ?.BJMC}</p>
-        <p>任课教师：{state?.KHBJSJ?.KHBJJs?.[0].JZGJBSJ?.XM}</p>
+        <p>班级：{state?.BJMC}</p>
+        <p>任课教师：{state?.KHBJJs?.[0].JZGJBSJ?.XM}</p>
       </div>
     </div>
     <div className={styles.content}>
