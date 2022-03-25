@@ -269,8 +269,9 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
   newData.forEach((ele: any) => {
     let otherInd = -1;
     // 通过bjId,jcId确认原有数据中是否与已代课,请假数据重合
+    // ele.SKJC?.id === v.jcId || ele.TKJC?.id === v.jcId ||
     const oriInd = oriData.findIndex((v: { bjId: any; jcId: any }) => {
-      const con1 = ele.SKJC?.id === v.jcId || ele.TKJC?.id === v.jcId || (ele.XXSJPZId === v.jcId && ele.QJRQ);
+      const con1 =  (ele.QJRQ && ele.XXSJPZId === v.jcId);
       return ele.KHBJSJId === v.bjId && con1;
     });
     if (status.includes('被')) {

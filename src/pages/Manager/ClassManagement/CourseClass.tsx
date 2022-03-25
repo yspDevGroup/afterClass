@@ -537,6 +537,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       search: false,
       align: 'center',
       width: 110,
+      fixed: 'right',
       render: (text, record) => {
         return (
           <>
