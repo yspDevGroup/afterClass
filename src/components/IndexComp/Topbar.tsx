@@ -17,20 +17,18 @@ const Topbar = (props: { data: any }) => {
     <Row gutter={[24, 24]} className={styles.topHeader}>
       {topNum.map((item, index) => {
         return <Col span={4} key={item.title}>
-          <div className={styles.headerItem} style={{ background: `linear-gradient(180deg, ${bgColor[index].begin} 0%, ${bgColor[index].end} 100%)` }}>
-            <h3>{data?.[item.type] || 0}</h3>
-            <Tooltip title={
-              // eslint-disable-next-line no-nested-ternary
-              item.title === '课程总数' ? '本校课程与引入课程总数' : (item.title === '课程班总数' ? '已生效服务课堂与缤纷课堂总数' : (item.title === '参与班级数' ? '参与课后服务行政班总数' : ''))
-            }
-              defaultVisible={false}>
-              <p style={{cursor:'pointer'}} title={item.title}>{item.title}</p>
-            </Tooltip>
-
-          </div>
+          <Tooltip title={
+            // eslint-disable-next-line no-nested-ternary
+            item.title === '课程总数' ? '本校课程与引入课程总数' : (item.title === '课程班总数' ? '已生效服务课堂与缤纷课堂总数' : (item.title === '参与班级数' ? '参与课后服务行政班总数' : ''))
+          } defaultVisible={false}>
+            <div className={styles.headerItem} style={{ background: `linear-gradient(180deg, ${bgColor[index].begin} 0%, ${bgColor[index].end} 100%)` }}>
+              <h3>{data?.[item.type] || 0}</h3>
+              <p style={{ cursor: 'pointer' }} title={item.title}>{item.title}</p>
+            </div>
+          </Tooltip>
         </Col>
       })}
-    </Row>
+    </Row >
   );
 };
 export default Topbar;
