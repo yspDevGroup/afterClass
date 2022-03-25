@@ -11,8 +11,6 @@ import ShowName from '@/components/ShowName';
 
 import styles from './index.less';
 
-const authType = localStorage.getItem('authType') || 'none';
-
 export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
@@ -42,6 +40,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
     }) => {
       const { key } = info;
       if (key === 'logout' && initialState) {
+        const authType = localStorage.getItem('authType') || 'local';
         localStorage.removeItem('authType');
         setInitialState({ ...initialState, currentUser: undefined });
         removeOAuthToken();
