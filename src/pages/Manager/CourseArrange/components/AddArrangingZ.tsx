@@ -771,7 +771,6 @@ const AddArrangingZ: FC<PropsType> = (props) => {
     }) {
       if (info.file.status === 'done') {
         const code = info.file.response;
-        console.log('response', info.file.response);
         if (code.status === 'ok') {
           setImportData(code?.data);
           message.success(`上传成功`);
