@@ -78,9 +78,12 @@ const TeacherLeave: React.FC = () => {
             });
           }
         }
+      } else {
+        message.warning('操作失败，请联系管理员')
       }
     } catch (err) {
-      message.error('退课流程出现错误，请联系管理员或稍后重试。');
+      setVisible(false);
+      setCurrent(undefined);
     }
   };
 
@@ -216,6 +219,9 @@ const TeacherLeave: React.FC = () => {
       align: 'center',
       ellipsis: true,
       width: 160,
+      render: (_text: any, record: any) => (
+        record.QJZT === 0 ? '' : record?.updatedAt
+      ),
     },
     {
       title: '操作',

@@ -9,7 +9,7 @@ import type { ActionType } from '@ant-design/pro-table/lib/typing';
 import { message, Button, Drawer } from 'antd';
 import type { classType } from '../data';
 import styles from './index.less';
-import { courseColorType } from '@/theme-default';
+import { courseColorsType } from '@/theme-default';
 
 type PropsType = {
   current?: classType;
@@ -78,6 +78,8 @@ const NewCourses = (props: PropsType) => {
     }
   };
 
+
+
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
@@ -86,6 +88,7 @@ const NewCourses = (props: PropsType) => {
         KCTP: current && imageUrl === '' ? current?.KCTP : imageUrl,
         XXJBSJId: currentUser?.xxId,
         SSJGLX: '校内课程',
+        KBYS: courseColorsType[Math.floor(Math.random() * (7))]
       };
       if (current?.id && current?.type === 'add') {
         const params = {
@@ -163,23 +166,23 @@ const NewCourses = (props: PropsType) => {
       options: optionsNJ,
       mode: 'multiple',
     },
-    {
-      type: 'select',
-      label: '课程颜色：',
-      name: 'KBYS',
-      key: 'KBYS',
-      disabled: readonly,
-      options: [
-        { label: '深蓝色', value: courseColorType.DarkBlue },
-        { label: '草绿色', value: courseColorType.GrassGreen },
-        { label: '蓝绿色', value: courseColorType.BlueGreen },
-        { label: '天蓝色', value: courseColorType.SkyBlue },
-        { label: '深红色', value: courseColorType.Crimson },
-        { label: '深紫色', value: courseColorType.DeepPurple },
-        { label: '土黄色', value: courseColorType.EarthyYellow },
-      ],
-      rules: [{ required: true, message: '请填选择课程颜色' }],
-    },
+    // {
+    //   type: 'select',
+    //   label: '课程颜色：',
+    //   name: 'KBYS',
+    //   key: 'KBYS',
+    //   disabled: readonly,
+    //   options: [
+    //     { label: '深蓝色', value: courseColorType.DarkBlue },
+    //     { label: '草绿色', value: courseColorType.GrassGreen },
+    //     { label: '蓝绿色', value: courseColorType.BlueGreen },
+    //     { label: '天蓝色', value: courseColorType.SkyBlue },
+    //     { label: '深红色', value: courseColorType.Crimson },
+    //     { label: '深紫色', value: courseColorType.DeepPurple },
+    //     { label: '土黄色', value: courseColorType.EarthyYellow },
+    //   ],
+    //   rules: [{ required: true, message: '请填选择课程颜色' }],
+    // },
     {
       type: 'uploadImage',
       label: '课程封面：',

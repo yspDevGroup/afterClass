@@ -209,3 +209,11 @@ export async function agencyHomePage(
     ...(options || {}),
   });
 }
+
+/** 获取所有用户身份 GET /user/getUserTypes */
+export async function getUserTypes(options?: { [key: string]: any }) {
+  return request<any>('/user/getUserTypes', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}

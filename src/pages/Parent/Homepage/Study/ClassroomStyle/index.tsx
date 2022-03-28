@@ -38,7 +38,7 @@ const ClassroomStyle = () => {
           imgs: imgsArr,
           time: item.createdAt,
           teacherName: item.JZGJBSJ.XM,
-          //班级所属于学校或机构的名称
+          // 班级所属于学校或机构的名称
           schoolName: item.KHBJSJ.KHKCSJ.KHJYJG?.QYMC || item.KHBJSJ.KHKCSJ.XXJBSJ?.XXMC,
         };
         allData.push(data);
@@ -69,11 +69,11 @@ const ClassroomStyle = () => {
       const distance = Math.abs(startY - endY);
       if (distance > 50) {
         if (startY > endY) {
-          //上滑
+          // 上滑
           setShowData([...showData, ...listData.slice(showIndex, showIndex + 3)]);
           setShowIndex(showIndex + 3);
         } else {
-          //下拉
+          // 下拉
         }
       }
     }

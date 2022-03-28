@@ -3602,78 +3602,6 @@ declare namespace API {
     deviceIp?: string;
   };
 
-  type KHXXZZFW = {
-    id: string;
-    /** 服务名称 */
-    FWMC?: string;
-    /** 服务内容 */
-    FWNR?: string;
-    /** 服务状态,0:未生效,1:生效 */
-    FWZT?: number;
-    /** 费用 */
-    FY?: number;
-    /** 报名学生人数 */
-    xs_count?: number;
-    /** 开始日期 */
-    KSRQ?: string | any;
-    /** 结束日期 */
-    JSRQ?: string | any;
-    /** 报名开始时间 */
-    BMKSSJ?: string;
-    /** 报名结束时间 */
-    BMJSSJ?: string;
-    /** 服务图片 */
-    FWTP?: string;
-    XNXQ?: { id?: string; XN?: string; XQ?: string };
-    XQSJ?: { id?: string; XQMC?: string };
-    KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
-  };
-
-  type CreateKHXXZZFW = {
-    /** 服务名称 */
-    FWMC?: string;
-    /** 服务内容 */
-    FWNR?: string;
-    /** 服务状态,0:未生效,1:生效 */
-    FWZT?: number;
-    /** 费用 */
-    FY?: number;
-    /** 开始日期 */
-    KSRQ?: string | any;
-    /** 结束日期 */
-    JSRQ?: string | any;
-    /** 报名开始时间 */
-    BMKSSJ?: string;
-    /** 报名结束时间 */
-    BMJSSJ?: string;
-    /** 服务图片 */
-    FWTP?: string;
-    XNXQId: string;
-    KHZZFWId: string;
-    XQSJId: string;
-  };
-
-  type UpdateKHXXZZFW = {
-    /** 服务名称 */
-    FWMC?: string;
-    /** 服务内容 */
-    FWNR?: string;
-    /** 服务状态,0:未生效,1:生效 */
-    FWZT?: number;
-    /** 费用 */
-    FY?: number;
-    /** 服务图片 */
-    FWTP?: string;
-    /** 开始日期 */
-    KSRQ?: string | any;
-    /** 结束日期 */
-    JSRQ?: string | any;
-    /** 报名开始时间 */
-    BMKSSJ?: string;
-    /** 报名结束时间 */
-    BMJSSJ?: string;
-  };
-
   type KHZZFW = {
     id: string;
     /** 服务名称 */
@@ -3839,6 +3767,78 @@ declare namespace API {
     }[];
   };
 
+  type KHXXZZFW = {
+    id: string;
+    /** 服务名称 */
+    FWMC?: string;
+    /** 服务内容 */
+    FWNR?: string;
+    /** 服务状态,0:未生效,1:生效 */
+    FWZT?: number;
+    /** 费用 */
+    FY?: number;
+    /** 报名学生人数 */
+    xs_count?: number;
+    /** 开始日期 */
+    KSRQ?: string | any;
+    /** 结束日期 */
+    JSRQ?: string | any;
+    /** 报名开始时间 */
+    BMKSSJ?: string;
+    /** 报名结束时间 */
+    BMJSSJ?: string;
+    /** 服务图片 */
+    FWTP?: string;
+    XNXQ?: { id?: string; XN?: string; XQ?: string };
+    XQSJ?: { id?: string; XQMC?: string };
+    KHZZFW?: { id?: string; FWMC?: string; FWNR?: string; FWJGMC?: string; FWZT?: number };
+  };
+
+  type CreateKHXXZZFW = {
+    /** 服务名称 */
+    FWMC?: string;
+    /** 服务内容 */
+    FWNR?: string;
+    /** 服务状态,0:未生效,1:生效 */
+    FWZT?: number;
+    /** 费用 */
+    FY?: number;
+    /** 开始日期 */
+    KSRQ?: string | any;
+    /** 结束日期 */
+    JSRQ?: string | any;
+    /** 报名开始时间 */
+    BMKSSJ?: string;
+    /** 报名结束时间 */
+    BMJSSJ?: string;
+    /** 服务图片 */
+    FWTP?: string;
+    XNXQId: string;
+    KHZZFWId: string;
+    XQSJId: string;
+  };
+
+  type UpdateKHXXZZFW = {
+    /** 服务名称 */
+    FWMC?: string;
+    /** 服务内容 */
+    FWNR?: string;
+    /** 服务状态,0:未生效,1:生效 */
+    FWZT?: number;
+    /** 费用 */
+    FY?: number;
+    /** 服务图片 */
+    FWTP?: string;
+    /** 开始日期 */
+    KSRQ?: string | any;
+    /** 结束日期 */
+    JSRQ?: string | any;
+    /** 报名开始时间 */
+    BMKSSJ?: string;
+    /** 报名结束时间 */
+    BMJSSJ?: string;
+  };
+
   type KHKCTJSJ = {
     id: string;
     /** 课程名称 */
@@ -3972,15 +3972,20 @@ declare namespace API {
   type CreateTeacherUser = {
     /** 密码 */
     password: string;
-    /** 密码 */
+    /** 账号 */
     username: string;
+    /** 姓名 */
+    realname: string;
     /** 状态，0无效1有效，其他可由业务自行定义 */
     status: number;
-    JZGJBSJId: string;
+    JZGJBSJId?: string;
+    CorpID: string;
     /** 登录时间 */
     loginTime?: string;
     /** 登出时间 */
     logoutTime?: string;
+    /** 用户身份ID */
+    usertype: string[];
   };
 
   type updateTeacherUser = {
@@ -3988,10 +3993,13 @@ declare namespace API {
     loginTime?: string;
     /** 登出时间 */
     logoutTime?: string;
+    JZGJBSJId?: string;
     /** 密码 */
     password?: string;
     /** 状态，0无效1有效，其他可由业务自行定义 */
     status?: number;
+    /** 用户身份ID */
+    usertype?: string[];
   };
 
   type CurrentUser = {

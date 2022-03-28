@@ -7,10 +7,8 @@ export async function getAllTeacherUser(
   body: {
     /** 启用状态 */
     status?: number;
-    /** 机构ID */
-    KHJYJGId?: string;
-    /** 学校ID */
-    XXJBSJId?: string;
+    /** 企微ID */
+    CorpID?: string;
     /** 教师ID */
     JZGJBSJId?: string;
     /** 页数 */
@@ -32,7 +30,7 @@ export async function getAllTeacherUser(
 
 /** 创建教师登录用户 PUT /teacherUser/create */
 export async function CreateTeacherUser(
-  body: API.CreateTeacherUser[],
+  body: API.CreateTeacherUser,
   options?: { [key: string]: any },
 ) {
   return request<any>('/teacherUser/create', {
@@ -62,6 +60,26 @@ export async function updateTeacherUser(
       'Content-Type': 'application/json',
     },
     params: { ...queryParams },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 重名检测 POST /teacherUser/checkUsername */
+export async function checkUsername(
+  body: {
+    /** 用户名 */
+    username?: string;
+    /** 机构企微ID */
+    CorpID?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/teacherUser/checkUsername', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     data: body,
     ...(options || {}),
   });

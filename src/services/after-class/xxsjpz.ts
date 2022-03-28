@@ -63,6 +63,10 @@ export async function getAllXXSJPZ(
   body: {
     /** 学年学期ID */
     XNXQId?: string;
+    /** 学年 */
+    XN?: string;
+    /** 学期 */
+    XQ?: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 类型，0:时段维护，1:报名开始/结束时间，2:开课/结课日期 */

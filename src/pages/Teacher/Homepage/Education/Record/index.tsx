@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Avatar, Image, Row, Col, Popconfirm, message, Skeleton, Modal } from 'antd';
+import { Avatar, Image, Row, Col, message, Skeleton, Modal } from 'antd';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import GoBack from '@/components/GoBack';
@@ -14,18 +14,23 @@ const Record = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [listData, setListData] = useState<any>();
-  const [showData, setShowData] = useState<any>();
-  const [showIndex, setShowIndex] = useState<number>(3);
+  const [showData, setShowData] = useState<any>([]);
+  const [showIndex, setShowIndex] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(true);
   const [startY, setStartY] = useState<number>(0);
   const [endY, setEndY] = useState<number>(0);
   const [ModalVisible, setModalVisible] = useState(false);
   const [ids, setids] = useState();
 
-  const getData = async () => {
-    const resKHKTFC = await getAllKHKTFC({ XXJBSJId: currentUser?.xxId });
+
+  const getData = async (res: any) => {
+    const resKHKTFC = await getAllKHKTFC({
+      XXJBSJId: currentUser?.xxId,
+      page: res / 10,
+      pageSize: 10
+    });
     if (resKHKTFC.status === 'ok') {
-      const allData: any = [];
+      setListData(resKHKTFC?.data?.rows)
       resKHKTFC.data?.rows?.forEach((item: any) => {
         const imgsArr = item.TP?.split(';');
         imgsArr.pop();
@@ -39,20 +44,18 @@ const Record = () => {
           teacher: item.JZGJBSJ,
           JSId: item.JZGJBSJId,
         };
-        allData.push(data);
+        showData.push(data);
       });
-      setShowData(allData?.slice(0, 3));
-      setListData(allData);
+
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    getData();
+    getData(showIndex);
   }, []);
 
-  function cancel(e: any) {
-    console.log(e);
-  }
+
 
   const handleTouchStart = (e: any) => {
     setStartY(e.touches[0].clientY);
@@ -67,14 +70,16 @@ const Record = () => {
       if (distance > 50) {
         if (startY > endY) {
           // 上滑
-          setShowData([...showData, ...listData.slice(showIndex, showIndex + 3)]);
-          setShowIndex(showIndex + 3);
-        } else {
-          // 下拉
+          setShowIndex(showIndex + 10);
+          if (showIndex !== 10 && listData?.length !== 0) {
+            getData(showIndex);
+          }
+          if (listData?.length === 0 && type === true) {
+            getData(showIndex - 1);
+          }
         }
       }
     }
-
     setStartY(-1);
     setEndY(-1);
   };
@@ -89,7 +94,10 @@ const Record = () => {
         }).then((data: any) => {
           if (data.status === 'ok') {
             message.success('删除成功');
-            getData();
+            const newArr = showData.filter((item: any) => {
+              return item?.id !== ids
+            })
+            setShowData(newArr)
             setModalVisible(false);
           }
         });
@@ -110,7 +118,6 @@ const Record = () => {
         {!loading ? (
           showData && showData?.length ? (
             showData.map((item: any) => {
-              console.log(currentUser?.JSId === item.JSId, '0000000000')
               return (
                 <div className={styles.cards}>
                   <p>
@@ -184,6 +191,10 @@ const Record = () => {
                       ) : (
                         <></>
                       )}
+                      <a onClick={() => {
+                        setModalVisible(true);
+                        setids(item?.id);
+                      }}>删除</a>
                     </p>
                   </div>
                 </div>

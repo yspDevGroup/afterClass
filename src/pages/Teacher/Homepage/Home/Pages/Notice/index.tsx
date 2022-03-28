@@ -25,7 +25,7 @@ const Notice = (props: any) => {
           title: notification[i].BT,
           link: `/teacher/home/notice/announcement?listid=${notification[i].id}`,
           titleRight: {
-            text: moment(notification[i].updatedAt).format('YYYY-MM-DD'),
+            text: moment(notification[i].RQ).format('YYYY-MM-DD'),
           },
         };
         if (i >= ((pages - 1) * 10) && i < pages * 10) {

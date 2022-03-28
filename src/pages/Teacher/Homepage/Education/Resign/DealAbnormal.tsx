@@ -15,6 +15,7 @@ import styles from './index.less';
 import { CreateJSCQBQ } from '@/services/after-class/jscqbq';
 import { getAllJSCQBQ } from '@/services/after-class/jscqbq';
 import moment from 'moment';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const { TextArea } = Input;
 const getCountDays = (curMonth: number) => {
@@ -45,7 +46,9 @@ const DealAbnormal = (props: any) => {
     }
   };
   const getCQData = async () => {
+    const result = await queryXNXQList(currentUser?.xxId);
     const obj = {
+      XNXQId: result.current?.id,
       XXJBSJId: currentUser?.xxId,
       BQRId: userId,
       startDate: `${data.year}-${data.month}-01`,
@@ -59,9 +62,10 @@ const DealAbnormal = (props: any) => {
       setDealData(resAll.data);
     }
   };
+
   const getData = async () => {
-    const start = `${data.year}-${data.month}-01`;
-    const end = `${data.year}-${data.month}-${getCountDays(data.month)}`;
+    const start = `${data.year}/${data.month}/01`;
+    const end = `${data.year}/${data.month}/${getCountDays(data.month)}`;
     const res = await getAllKHJSCQ({
       JZGJBSJId: userId,
       startDate: moment(start).format('YYYY-MM-DD'),
@@ -109,6 +113,7 @@ const DealAbnormal = (props: any) => {
   };
   useEffect(() => {
     (async () => {
+
       const oriData = await ParentHomeData(
         'teacher',
         currentUser?.xxId,
@@ -121,6 +126,7 @@ const DealAbnormal = (props: any) => {
       }
     })();
   }, [data]);
+  console.log(data,'-----')
   return (
     <>
       <GoBack title={'教师补签'} teacher onclick="/teacher/education/resign" />

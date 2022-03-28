@@ -46,3 +46,13 @@ export const courseColorType: Record<string, string> = {
   DeepPurple: 'rgba(152, 0, 176, 1)', // 深紫
   EarthyYellow: 'rgba(203, 134, 0, 1)', // 土黄
 };
+
+export const courseColorsType = [
+  'rgba(65, 78, 182, 1)', // 深蓝
+  'rgba(38, 149, 0, 1)', // 草绿
+  'rgba(0, 140, 128, 1)', // 蓝绿
+  'rgba(64, 132, 202, 1)', // 天空蓝
+  'rgba(234, 64, 51, 1)', // 深红
+  'rgba(152, 0, 176, 1)', // 深紫
+  'rgba(203, 134, 0, 1)', // 土黄
+];

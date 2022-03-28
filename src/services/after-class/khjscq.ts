@@ -282,6 +282,8 @@ export async function agencyStatistical(
 /** 机构端教师出勤详情 POST /khjscq/agencyStatisticalDetail */
 export async function agencyStatisticalDetail(
   body: {
+    /** 是否导出 */
+    output?: boolean;
     /** 学年 */
     XN?: string;
     /** 学期 */

@@ -71,3 +71,11 @@ export async function login(
     ...(options || {}),
   });
 }
+
+/** 获取当前用户 GET /auth/currentUser */
+export async function currentUser(options?: { [key: string]: any }) {
+  return request<any>('/auth/currentUser', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
