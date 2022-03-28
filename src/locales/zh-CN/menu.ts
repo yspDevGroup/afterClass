@@ -32,7 +32,7 @@ export default {
   'menu.afterClassManagement.administrationClassManagement': '行政班管理',
   'menu.afterClassManagement.clasDetail': '班级详情',
   'menu.valueAddedServices': '增值服务',
-  'menu.valueAddedServices.cateringService': '服务配置',
+  'menu.valueAddedServices.cateringService': '服务类别配置',
   'menu.valueAddedServices.serviceManagement': '服务管理',
   'menu.valueAddedServices.serviceManagement.serviceManagement': '服务管理',
   'menu.valueAddedServices.serviceManagement.signUp': '报名信息',
