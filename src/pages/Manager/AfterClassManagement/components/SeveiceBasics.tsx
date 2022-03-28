@@ -6,8 +6,8 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2022-02-09 15:27:04
- * @LastEditors: zpl
+ * @LastEditTime: 2022-03-28 14:32:40
+ * @LastEditors: Wu Zhan
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -249,38 +249,32 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         formRef?.current?.setFieldsValue({
           ZDKCS: 2,
           XQSJId: id,
-          XNXQId
+          XNXQId,
         });
       }
     }
   };
   useEffect(() => {
-    (
-      async () => {
-        if (!serviceId) {
-          if (campusData?.length) {
-            let id = campusData?.find((item: any) => item?.label === '本校')?.value;
-            if (!id) {
-              id = campusData[0].value;
-            }
-            formRef?.current?.setFieldsValue({
-              ZDKCS: 2,
-              XQSJId: id,
-              XNXQId
-            });
-            getNJData(id);
-            await setCampusId(id);
-          } else {
-            formRef?.current?.setFieldsValue({
-              ZDKCS: 2,
-              XNXQId
-            });
-          }
-        } else {
-          console.log(22222)
+    if (!serviceId) {
+      if (campusData?.length) {
+        let id = campusData?.find((item: any) => item?.label === '本校')?.value;
+        if (!id) {
+          id = campusData[0].value;
         }
+        formRef?.current?.setFieldsValue({
+          ZDKCS: 2,
+          XQSJId: id,
+          XNXQId,
+        });
+        getNJData(id);
+        setCampusId(id);
+      } else {
+        formRef?.current?.setFieldsValue({
+          ZDKCS: 2,
+          XNXQId,
+        });
       }
-    )()
+    }
   }, [visible]);
   return (
     <>
@@ -308,7 +302,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             setVisible(false);
           },
         }}
-
         onFinish={handleSubmit}
         layout="horizontal"
         className={type ? `${styles.newModules} ${styles.noModalFooter}` : `${styles.newModules}`}
@@ -373,10 +366,10 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
                 placeholder="请选择"
                 disabled={!!type}
                 options={NJData}
-                onChange={(value) => {
+                onChange={() => {
                   formRef?.current?.setFieldsValue({
-                    KHKC: undefined
-                  })
+                    KHKC: undefined,
+                  });
                 }}
               />
             </ProForm.Item>
@@ -472,8 +465,8 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
             </span>
           </Col>
         </Row>
-        {
-          BMSDData?.length !== 0 ? <div style={{ background: '#EFEFEF', padding: '16px 0', marginBottom: '24px' }}>
+        {BMSDData?.length !== 0 ? (
+          <div style={{ background: '#EFEFEF', padding: '16px 0', marginBottom: '24px' }}>
             <Row wrap={false} style={{ paddingBottom: '16px' }}>
               <Col flex={'7em'} style={{ textAlign: 'end', color: '#222222' }}>
                 收费方式：
@@ -519,8 +512,10 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
                 </Space>
               </Col>
             </Row>
-          </div> : <></>
-        }
+          </div>
+        ) : (
+          <></>
+        )}
 
         <ProFormDigit
           label="服务费用:"

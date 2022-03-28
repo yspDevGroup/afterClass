@@ -83,7 +83,12 @@ const CoursePatrol = () => {
           setUploadVisible(false);
           getZBEvents();
         } else {
-          message.error(`${code.message}`);
+          if (code?.message?.indexOf('RQ') !== -1) {
+            message.error('日期格式有误');
+          } else {
+            message.error(`${code.message}`);
+          }
+          event?.currentTarget?.onerror(code);
         }
       } else if (info.file.status === 'error') {
         console.log('info.file.response', info.file);
