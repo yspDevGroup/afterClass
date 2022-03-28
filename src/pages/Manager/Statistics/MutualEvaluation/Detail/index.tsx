@@ -25,16 +25,20 @@ const Detail = (props: any) => {
           返回上一页
         </Button>
         <div className={styles.TopSearchss}>
-          <span>课程名称：{data?.record?.KHKCSJ?.KCMC}</span>
+          <span>
+            学年学期：{data.XNXQ}
+          </span>
+          <span style={{ marginLeft: '20px' }}>课程名称：{data?.record?.KHKCSJ?.KCMC}</span>
           <span style={{ marginLeft: '20px' }}>班级名称：{data?.record?.BJMC}</span>
         </div>
         <Tabs>
-          <TabPane tab="学生评价" key="1">
-            <TabList ListData={{ ListName: '学生评价', ListState: data }} />
-          </TabPane>
-          <TabPane tab="课程反馈" key="2">
+          <TabPane tab="课程反馈" key="1">
             <TabList ListData={{ ListName: '课程反馈', ListState: data }} />
           </TabPane>
+          <TabPane tab="学生评价" key="2">
+            <TabList ListData={{ ListName: '学生评价', ListState: data }} />
+          </TabPane>
+
         </Tabs>
       </PageContainer>
     </div>

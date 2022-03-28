@@ -14,7 +14,7 @@ const { Option } = Select;
 
 type SemesterSelectProps = {
   XXJBSJId?: string;
-  onChange?: (val: string) => void;
+  onChange?: (val: string, key?: string) => void;
 };
 const SemesterSelect: FC<SemesterSelectProps> = ({ onChange, XXJBSJId }) => {
   const [termList, setTermList] = useState<any>();
@@ -26,7 +26,7 @@ const SemesterSelect: FC<SemesterSelectProps> = ({ onChange, XXJBSJId }) => {
     if (newData) {
       setTermList(newData);
       setTerm(curTerm?.id || newData[0].id);
-      onChange?.(curTerm?.id || newData[0].id);
+      onChange?.(curTerm?.id || newData[0].id,`${curTerm?.XN} ${curTerm?.XQ}`);
     } else {
       message.error(res.message);
     }
@@ -43,9 +43,9 @@ const SemesterSelect: FC<SemesterSelectProps> = ({ onChange, XXJBSJId }) => {
       <Select
         value={term}
         allowClear
-        onChange={(value: string) => {
+        onChange={(value: string,key: any) => {
           setTerm(value);
-          onChange?.(value);
+          onChange?.(value,key?.children);
         }}
       >
         {termList?.map((item: any) => {

@@ -2,7 +2,7 @@ import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
 import type { ProColumns } from '@ant-design/pro-table';
 import { useModel, Link } from 'umi';
-import { Select, Rate, Spin } from 'antd';
+import { Select, Rate, Spin, Tooltip } from 'antd';
 import { getAllCourses } from '@/services/after-class/khkcsj';
 import ProTable from '@ant-design/pro-table';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
@@ -10,6 +10,7 @@ import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import CourseSelect from '@/components/Search/CourseSelect';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 type selectType = { label: string; value: string };
 
@@ -30,6 +31,7 @@ const MutualEvaluation: React.FC = () => {
   const [KCLXId, setKCLXId] = useState<string | undefined>();
   const [KCLXData, setKCLXData] = useState<selectType[] | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [XNXQ, setXNXQ] = useState<string>();
 
   // table表格数据
   const columns: ProColumns<any>[] = [
@@ -94,7 +96,21 @@ const MutualEvaluation: React.FC = () => {
       },
     },
     {
-      title: '课程评分',
+      title: (
+        <span>
+          课程评分&nbsp;
+          <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title={
+              <>
+                该课程下所有班级家长评价的平均分，<br />包含全部涉及到的学年学期及学校
+              </>
+            }
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       dataIndex: 'PJFS',
       key: 'PJFS',
       width: 180,
@@ -118,7 +134,7 @@ const MutualEvaluation: React.FC = () => {
               pathname: '/statistics/mutualEvaluation/class',
               state: {
                 type: 'detail',
-                data: { XNXQ: curXNXQId, record },
+                data: { XNXQId: curXNXQId, XNXQ, record },
               },
             }}
           >
@@ -178,53 +194,56 @@ const MutualEvaluation: React.FC = () => {
             defaultCurrent: 1,
           }}
           headerTitle={
-            <SearchLayout>
-              <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={(value: string) => {
-                // 选择不同学期从新更新页面的数据
-                setCurXNXQId(value);
-              }} />
-              <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={(value, data) => {
-                setKcmcValue(data?.children);
-              }} />
-              <div>
-                <label htmlFor="school">课程类型：</label>
-                <Select
-                  value={KCLXId}
-                  style={{ width: 160 }}
-                  placeholder="课程类型"
-                  allowClear
-                  onChange={(value: string) => {
-                    setKCLXId(value)
-                  }}
-                >
-                  {KCLXData?.map((item: any) => {
-                    return (
-                      <Option key={item.value} value={item.value}>
-                        {item.label}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </div>
-              <div>
-                <label htmlFor="kcly">课程来源：</label>
-                <Select
-                  allowClear
-                  placeholder="课程来源"
-                  onChange={(value) => {
-                    setKCLY(value);
-                  }}
-                  value={KCLY}
-                >
-                  <Option value="校内课程" key="校内课程">
-                    校内课程
-                  </Option>
-                  <Option value="机构课程" key="机构课程">
-                    机构课程
-                  </Option>
-                </Select>
-              </div>
-            </SearchLayout>
+            <>
+              <SearchLayout>
+                <SemesterSelect XXJBSJId={currentUser?.xxId} onChange={(value: string, key: any) => {
+                  // 选择不同学期从新更新页面的数据
+                  setXNXQ(key);
+                  setCurXNXQId(value);
+                }} />
+                <CourseSelect XXJBSJId={currentUser?.xxId} XNXQId={curXNXQId} onChange={(value, data) => {
+                  setKcmcValue(data?.children);
+                }} />
+                <div>
+                  <label htmlFor="school">课程类型：</label>
+                  <Select
+                    value={KCLXId}
+                    style={{ width: 160 }}
+                    placeholder="课程类型"
+                    allowClear
+                    onChange={(value: string) => {
+                      setKCLXId(value)
+                    }}
+                  >
+                    {KCLXData?.map((item: any) => {
+                      return (
+                        <Option key={item.value} value={item.value}>
+                          {item.label}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </div>
+                <div>
+                  <label htmlFor="kcly">课程来源：</label>
+                  <Select
+                    allowClear
+                    placeholder="课程来源"
+                    onChange={(value) => {
+                      setKCLY(value);
+                    }}
+                    value={KCLY}
+                  >
+                    <Option value="校内课程" key="校内课程">
+                      校内课程
+                    </Option>
+                    <Option value="机构课程" key="机构课程">
+                      机构课程
+                    </Option>
+                  </Select>
+                </div>
+              </SearchLayout>
+            </>
           }
           scroll={{ x: getTableWidth(columns) }}
           options={{

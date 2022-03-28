@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
-import { Input, message, Popconfirm, Select, Space, Tag } from 'antd';
+import { Input, message, Modal, Popconfirm, Select, Space, Tag } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 
@@ -53,7 +53,16 @@ const courseNotIntroduced = () => {
     };
     const resAll = await getToIntroduceBySchool(opts);
     if (resAll.status === 'ok' && resAll.data) {
-      setDataSource(resAll.data.rows);
+      const newArr: any[] = [];
+      resAll.data.rows.forEach((item: any) => {
+        newArr.push({
+          ...item,
+          YRZT: item?.KHKCSQs?.length ? item?.KHKCSQs?.[0]?.ZT : 3
+        })
+      })
+      setDataSource(newArr);
+
+
     }
   };
   useEffect(() => {
@@ -143,20 +152,67 @@ const courseNotIntroduced = () => {
         );
       },
     },
+    // {
+    //   title: '状态',
+    //   align: 'center',
+    //   ellipsis: true,
+    //   dataIndex: 'YRZT',
+    //   key: 'YRZT',
+    //   search: false,
+    //   width: 110,
+    //   render: (text, record) => {
+    //     let status = '未引入';
+    //     if (record.KHKCSQs?.length) {
+    //       if (record.KHKCSQs[0].ZT === 0) {
+    //         status = '待确认'
+    //       } else if (record.KHKCSQs[0].ZT === 1) {
+    //         status = '已引入'
+    //       } else if (record.KHKCSQs[0].ZT === 2) {
+    //         status = '已拒绝'
+    //       } else if (record.KHKCSQs[0].ZT === 3) {
+    //         status = '未引入'
+    //       }
+    //     }
+    //     return status;
+    //   },
+    // },
     {
       title: '状态',
+      dataIndex: 'YRZT',
+      key: 'YRZT',
+      filters: true,
+      onFilter: true,
+      valueType: 'select',
+      valueEnum: {
+        0: {
+          text: '待确认',
+          status: 'Processing',
+        },
+        1: {
+          text: '已引入',
+          status: 'Success',
+          disabled: true,
+        },
+        2: {
+          text: '已拒绝',
+          status: 'Error',
+        },
+        3: {
+          text: '未引入',
+          status: 'Default'
+        },
+
+      },
+    },
+    {
+      title: '备注',
       align: 'center',
-      ellipsis: true,
-      dataIndex: 'KHKCSQs',
-      key: 'KHKCSQs',
+      width: 150,
+      key: 'BZ',
+      dataIndex: 'BZ',
       search: false,
-      width: 110,
-      render: (text, record) => {
-        let status = '未引入';
-        if (record.KHKCSQs?.length) {
-          status = record.KHKCSQs[0].ZT === 0 ? '待确认' : '已引入';
-        }
-        return status;
+      render: (_, record) => {
+        return <>{record?.KHKCSQs?.[0]?.BZ || '—'}</>;
       },
     },
     {
@@ -198,7 +254,7 @@ const courseNotIntroduced = () => {
             >
               机构详情
             </a>
-            {record.KHKCSQs?.length === 0 ? (
+            {record.KHKCSQs?.length === 0 || record.KHKCSQs?.[0]?.ZT === 2 || record.KHKCSQs?.[0]?.ZT === 3 ? (
               <Popconfirm
                 title="确定引入该课程？"
                 onConfirm={async () => {
@@ -212,7 +268,11 @@ const courseNotIntroduced = () => {
                     };
                     const res = await createKHKCSQ({ ...params, ZT: 0 });
                     if (res.status === 'ok') {
-                      message.success('引入成功，机构确认中...确认后方可建班排课');
+                      Modal.success({
+                        title: '引入成功，机构确认中...确认后方可建班排课',
+                        width: '450px',
+                        onOk() { },
+                      });
                       getData();
                       // action?.reload();
                     } else {
@@ -257,6 +317,8 @@ const courseNotIntroduced = () => {
       },
     },
   ];
+
+  console.log(dataSource,'dataSource------')
   return (
     <div>
       <ProTable<classType>

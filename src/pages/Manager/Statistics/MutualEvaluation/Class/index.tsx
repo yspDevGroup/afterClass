@@ -1,23 +1,24 @@
 import PageContainer from '@/components/PageContainer';
 import { useEffect, useState } from 'react';
-import { Rate } from 'antd';
+import { Rate, Tooltip } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns } from '@ant-design/pro-table';
 import { getClassesEvaluation } from "@/services/after-class/khbjsj"
 import { useModel, Link, history } from 'umi';
 import styles from '../index.less'
 import { Button } from 'antd';
-import { LeftOutlined } from '@ant-design/icons';
+import { LeftOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { getTableWidth } from '@/utils/utils';
 
 const School = (props: any) => {
-  const {XNXQ,record} = props.location.state.data;
-  const {id, KCMC}=record;
- const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
+  const { XNXQId, XNXQ, record } = props.location.state.data;
+  const { id, KCMC } = record;
+  const [dataSource, setDataSource] = useState<API.KHXSDD[] | undefined>([]);
 
+  console.log(record, 'record-------')
   useEffect(() => {
     (async () => {
-      const res = await getClassesEvaluation({ XNXQId:XNXQ, KHKCSJId: id })
+      const res = await getClassesEvaluation({ XNXQId, KHKCSJId: id })
       if (res.status === 'ok' && res.data) {
         setDataSource(res.data?.rows)
       }
@@ -29,7 +30,7 @@ const School = (props: any) => {
       dataIndex: 'index',
       valueType: 'index',
       width: 58,
-      fixed:'left',
+      fixed: 'left',
       align: 'center'
     },
     {
@@ -37,7 +38,7 @@ const School = (props: any) => {
       dataIndex: 'BJMC',
       key: 'BJMC',
       width: 120,
-      fixed:'left',
+      fixed: 'left',
       ellipsis: true,
       align: 'center',
     },
@@ -70,7 +71,21 @@ const School = (props: any) => {
       render: (text: any) => text
     },
     {
-      title: '课程评分',
+      title: (
+        <span>
+          课程评分&nbsp;
+          <Tooltip
+            overlayStyle={{ maxWidth: '30em' }}
+            title={
+              <>
+                该课程在当前学校所选学年学期内，<br />所有班级家长评价的平均分
+              </>
+            }
+          >
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      ),
       dataIndex: 'pj_avg',
       key: 'pj_avg',
       align: 'center',
@@ -86,7 +101,7 @@ const School = (props: any) => {
       key: 'operation',
       align: 'center',
       width: 100,
-      fixed:'right',
+      fixed: 'right',
       render: (_, record) => (
         <>
           <Link
@@ -94,7 +109,7 @@ const School = (props: any) => {
               pathname: '/statistics/MutualEvaluation/Detail',
               state: {
                 type: 'detail',
-                data:{XNXQId:XNXQ,record} ,
+                data: { XNXQId, XNXQ, record },
               },
             }}
           >
@@ -120,6 +135,9 @@ const School = (props: any) => {
       </Button>
       <div className={styles.TopSearchss}>
         <span>
+          学年学期：{XNXQ}
+        </span>
+        <span style={{ marginLeft: '20px' }}>
           课程名称：{KCMC}
         </span>
       </div>
