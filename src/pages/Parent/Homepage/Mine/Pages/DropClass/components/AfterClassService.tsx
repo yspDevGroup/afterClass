@@ -2,8 +2,8 @@
  * @description:
  * @author: wsl
  * @Date: 2021-12-29 10:59:44
- * @LastEditTime: 2022-01-06 09:31:04
- * @LastEditors: wsl
+ * @LastEditTime: 2022-03-28 17:08:53
+ * @LastEditors: Wu Zhan
  */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
@@ -33,7 +33,7 @@ const AfterClassService = () => {
   const [Type, setType] = useState(false);
   const [FwTimes, setFwTimes] = useState<any>([]);
 
-  console.log(BaoMinData,'BaoMinData--------')
+  console.log(BaoMinData, 'BaoMinData--------');
 
   useEffect(() => {
     (async () => {
@@ -102,7 +102,7 @@ const AfterClassService = () => {
         BZ: '',
         LX: 2,
         FWMC: value?.KHFWBJ?.FWMC,
-        XNXQId:BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.XNXQId
+        XNXQId: BaoMinData?.[0]?.XSFWBJs?.[0]?.KHFWBJ?.XNXQId,
       };
       NewArr.push(data);
     });
@@ -217,7 +217,7 @@ const AfterClassService = () => {
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>课后服务协议书</p>
+            <p className={styles.title}>课后服务协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (

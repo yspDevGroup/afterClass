@@ -53,8 +53,8 @@ const CourseDetails: React.FC = () => {
   const [KBClass, setKBClass] = useState<any>([]);
   const courseid = getQueryString('courseid');
   const index = getQueryString('index');
-  const curDate: Date = new Date();
-  const myDate: Date = new Date(moment(curDate).format('YYYY/MM/DD'));
+  // const curDate: Date = new Date();
+  // const myDate: Date = new Date(moment(curDate).format('YYYY/MM/DD'));
 
   const changeStatus = (ind: number, data?: any) => {
     const detail = data || KBClass;
@@ -312,7 +312,7 @@ const CourseDetails: React.FC = () => {
     }
   };
 
-  console.log(KBClass, 'KBClass')
+  console.log(KBClass, 'KBClass');
   return (
     <div className={styles.CourseDetails}>
       {index === 'all' ? (
@@ -369,48 +369,48 @@ const CourseDetails: React.FC = () => {
                     </p>
                     <p>总课时：{value.KSS}课时</p>
                     <p>总人数：{value.BJRS}人</p>
-                    {
-                      BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '主教师') ?
-                        <p>
-                          班主任：
-                          {BjDetails?.KHBJJs?.map((item: any) => {
-                            if (item.JSLX.indexOf('副') === -1) {
-                              return (
-                                <span style={{ marginRight: '1em' }}>
-                                  <ShowName
-                                    type="userName"
-                                    openid={item?.JZGJBSJ?.WechatUserId}
-                                    XM={item?.JZGJBSJ?.XM}
-                                  />
-                                </span>
-                              );
-                            }
-                            return '';
-                          })}
-                        </p> : ''
-                    }
-                    {
-                      BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '副教师') ?
-                        <p>
-                          副班：
-                          {BjDetails?.KHBJJs?.map((item: any) => {
-                            if (item.JSLX.indexOf('主') === -1) {
-                              return (
-                                <span style={{ marginRight: '1em' }}>
-                                  <ShowName
-                                    type="userName"
-                                    openid={item?.JZGJBSJ?.WechatUserId}
-                                    XM={item.JZGJBSJ?.XM}
-                                  />
-                                </span>
-                              );
-                            }
-                            return '';
-                          })}
-                        </p> : ''
-                    }
-
-
+                    {BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '主教师') ? (
+                      <p>
+                        班主任：
+                        {BjDetails?.KHBJJs?.map((item: any) => {
+                          if (item.JSLX.indexOf('副') === -1) {
+                            return (
+                              <span style={{ marginRight: '1em' }}>
+                                <ShowName
+                                  type="userName"
+                                  openid={item?.JZGJBSJ?.WechatUserId}
+                                  XM={item?.JZGJBSJ?.XM}
+                                />
+                              </span>
+                            );
+                          }
+                          return '';
+                        })}
+                      </p>
+                    ) : (
+                      ''
+                    )}
+                    {BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '副教师') ? (
+                      <p>
+                        副班：
+                        {BjDetails?.KHBJJs?.map((item: any) => {
+                          if (item.JSLX.indexOf('主') === -1) {
+                            return (
+                              <span style={{ marginRight: '1em' }}>
+                                <ShowName
+                                  type="userName"
+                                  openid={item?.JZGJBSJ?.WechatUserId}
+                                  XM={item.JZGJBSJ?.XM}
+                                />
+                              </span>
+                            );
+                          }
+                          return '';
+                        })}
+                      </p>
+                    ) : (
+                      ''
+                    )}
 
                     <p>报名费：{value.FY}元</p>
                     <p>
@@ -632,14 +632,14 @@ const CourseDetails: React.FC = () => {
         }}
         className={styles.showagreement}
         footer={[
-          <Button key="submit" type="primary" onClick={handleOk}>
+          <Button shape="round" key="submit" type="primary" onClick={handleOk}>
             确定
           </Button>,
         ]}
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>缤纷课堂协议书</p>
+            <p className={styles.title}>缤纷课堂协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (
@@ -656,7 +656,8 @@ const CourseDetails: React.FC = () => {
           type="primary"
           onClick={() => {
             history.push('/parent/home?index=index&reload=true');
-          }}>
+          }}
+        >
           我知道了
         </Button>
       </Modal>

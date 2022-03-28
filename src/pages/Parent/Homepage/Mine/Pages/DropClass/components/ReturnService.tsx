@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-09 10:48:20
- * @LastEditTime: 2021-10-12 13:41:32
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-03-28 17:07:21
+ * @LastEditors: Wu Zhan
  */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
@@ -59,15 +59,13 @@ const ReturnService = () => {
     getFwData();
   }, [StorageXSId]);
   useEffect(() => {
-    (
-      async () => {
-        const result = await queryXNXQList(currentUser?.xxId);
-        if (result.current) {
-          setXNXQId(result.current.id)
-        }
+    (async () => {
+      const result = await queryXNXQList(currentUser?.xxId);
+      if (result.current) {
+        setXNXQId(result.current.id);
       }
-    )()
-  }, [])
+    })();
+  }, []);
 
   /** 课后帮服务协议弹出框 */
   const showModal = () => {
@@ -110,7 +108,7 @@ const ReturnService = () => {
         ZT: 0,
         BZ: '',
         LX: 1,
-        XNXQId
+        XNXQId,
       };
       NewArr.push(data);
     });
@@ -174,14 +172,14 @@ const ReturnService = () => {
         closable={false}
         className={styles.showagreement}
         footer={[
-          <Button key="submit" type="primary" onClick={handleOk}>
+          <Button shape="round" key="submit" type="primary" onClick={handleOk}>
             确定
           </Button>,
         ]}
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>增值服务协议书</p>
+            <p className={styles.title}>增值服务协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (

@@ -173,11 +173,11 @@ const SignUp = (props: any) => {
           }}
           headerTitle={
             <>
-              <h3 style={{ fontWeight: 'bold', fontSize: 16, margin: '0 24px 0 0' }}>
-                {state?.FWMC}
-              </h3>
               <div className={styles.searchSpecial}>
                 <SearchLayout>
+                  <h3 style={{ fontWeight: 'bold', fontSize: 16, margin: '0 24px 0 0' }}>
+                    {state?.FWMC}
+                  </h3>
                   <div>
                     <label htmlFor="grade">年级名称：</label>
                     <Select value={NjId} allowClear placeholder="请选择" onChange={onNjChange}>

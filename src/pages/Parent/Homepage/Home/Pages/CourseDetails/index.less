@@ -577,9 +577,16 @@
       margin-top: 30px;
     }
   }
+
+  .title {
+    font-weight: bold;
+  }
+
   :global {
     .ant-modal-content {
       min-width: 100% !important;
+      overflow: hidden;
+      border-radius: 22px;
 
       .ant-modal-footer {
         .ant-btn {
@@ -609,12 +616,26 @@
 
     .ant-modal-footer {
       display: flex;
-      justify-content: space-evenly;
+      justify-content: center;
+      height: 60px !important;
+      border-top: none;
 
       .ant-btn-primary {
         color: #fff !important;
         background-color: #15b628;
         border: none;
+        border-radius: 22px !important;
+      }
+
+      .ant-btn {
+        // flex: 30%;
+        width: 50% !important;
+        height: 38px !important;
+        color: #15b628;
+        font-size: 16px !important;
+        border: none;
+        border: 1px solid #15b628;
+        border-radius: 22px !important;
       }
     }
   }
@@ -631,19 +652,23 @@
   width: 260px !important;
   height: 250px;
   text-align: center;
+
   :global {
     .ant-modal-content {
       border-radius: 16px;
     }
   }
+
   img {
     width: 84px;
     height: 84px;
   }
+
   h3 {
     font-weight: bold;
     line-height: 50px;
   }
+
   button {
     width: 144px;
     height: 38px;

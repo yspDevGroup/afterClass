@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-09 10:48:20
- * @LastEditTime: 2021-12-29 13:34:52
- * @LastEditors: wsl
+ * @LastEditTime: 2022-03-28 17:08:29
+ * @LastEditors: Wu Zhan
  */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
@@ -60,8 +60,8 @@ const DropOut = () => {
       });
       if (res.status === 'ok') {
         const newArr = res.data.SKBJs.filter((item: any) => {
-          return item?.ISFW === 0
-        })
+          return item?.ISFW === 0;
+        });
         const finnalList = [].map.call(newArr, (val: any) => {
           const curCourse = data.find((v: any) => v.id === val.id);
           return {
@@ -92,8 +92,8 @@ const DropOut = () => {
         const { courseSchedule } = oriData;
 
         const newArr = courseSchedule?.filter((item: any) => {
-          return item?.ISFW === false
-        })
+          return item?.ISFW === false;
+        });
         const courseData = CountCourses(newArr);
         setKcList(courseData);
         getKcData(courseData);
@@ -131,15 +131,13 @@ const DropOut = () => {
   };
 
   useEffect(() => {
-    (
-      async () => {
-        const result = await queryXNXQList(currentUser?.xxId);
-        if (result.current) {
-          setXNXQId(result.current.id)
-        }
+    (async () => {
+      const result = await queryXNXQList(currentUser?.xxId);
+      if (result.current) {
+        setXNXQId(result.current.id);
       }
-    )()
-  }, [])
+    })();
+  }, []);
 
   const onChange = (checkedValues: any) => {
     if (XNXQId) {
@@ -154,7 +152,7 @@ const DropOut = () => {
           BZ: '',
           LX: 0,
           KCMC: value.split('+')[2],
-          XNXQId
+          XNXQId,
         };
         NewArr.push(data);
       });
@@ -187,11 +185,15 @@ const DropOut = () => {
                           总课时：{value.ZKS}节 ｜ 已学课时：{value.normal}节
                         </p>
                         <p>
-                          未学课时：{Number(value.ZKS) - Number(value.normal) - Number(value.abnormal)}节｜缺勤课时：{value.abnormal}节｜可退课时：
+                          未学课时：
+                          {Number(value.ZKS) - Number(value.normal) - Number(value.abnormal)}
+                          节｜缺勤课时：{value.abnormal}节｜可退课时：
                           {Number(value.ZKS) - Number(value.normal) - Number(value.abnormal)}节
                         </p>
                         <Checkbox
-                          value={`${value.id}+${Number(value.ZKS) - Number(value.normal) - Number(value.abnormal)}+${value.KCMC}`}
+                          value={`${value.id}+${
+                            Number(value.ZKS) - Number(value.normal) - Number(value.abnormal)
+                          }+${value.KCMC}`}
                           disabled={newDate - JKRQ > 2592000000}
                         >
                           {' '}
@@ -237,7 +239,7 @@ const DropOut = () => {
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>缤纷课堂协议书</p>
+            <p className={styles.title}>缤纷课堂协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (

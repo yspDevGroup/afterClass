@@ -2,11 +2,11 @@
  * @description: 服务详情
  * @author: wsl
  * @Date: 2021-09-26 17:28:08
- * @LastEditTime: 2022-02-09 14:51:44
- * @LastEditors: zpl
+ * @LastEditTime: 2022-03-28 16:51:25
+ * @LastEditors: Wu Zhan
  */
 import GoBack from '@/components/GoBack';
-import { Button, Checkbox, message, Modal } from 'antd';
+import { Button, Checkbox, Modal } from 'antd';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.less';
@@ -109,7 +109,7 @@ const Details = () => {
         if (data.DDFY > 0) {
           setOrderInfo(res.data);
         } else {
-          setModalVisible(true)
+          setModalVisible(true);
         }
       } else {
         enHenceMsg(res.message);
@@ -122,7 +122,7 @@ const Details = () => {
         ZT: 0,
       });
       if (result.status === 'ok') {
-        setModalVisible(true)
+        setModalVisible(true);
       } else {
         enHenceMsg(result.message);
       }
@@ -216,14 +216,14 @@ const Details = () => {
         }}
         className={styles.showagreement}
         footer={[
-          <Button key="submit" type="primary" onClick={handleOk}>
+          <Button shape="round" key="submit" type="primary" onClick={handleOk}>
             确定
           </Button>,
         ]}
       >
         {KHFUXY?.length !== 0 ? (
           <>
-            <p>增值服务协议书</p>
+            <p className={styles.title}>增值服务协议书</p>
             <div dangerouslySetInnerHTML={{ __html: KHFUXY?.[0].NR }} />
           </>
         ) : (
@@ -240,7 +240,8 @@ const Details = () => {
           type="primary"
           onClick={() => {
             history.push('/parent/home?index=index');
-          }}>
+          }}
+        >
           我知道了
         </Button>
       </Modal>

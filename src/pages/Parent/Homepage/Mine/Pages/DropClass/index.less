@@ -221,9 +221,15 @@
   margin-top: calc(50vh - 260px) !important;
   padding: 0 !important;
 
+  .title {
+    font-weight: bold;
+  }
+
   :global {
     .ant-modal-content {
       min-width: 100% !important;
+      overflow: hidden;
+      border-radius: 22px;
 
       .ant-modal-footer {
         .ant-btn {
@@ -253,12 +259,26 @@
 
     .ant-modal-footer {
       display: flex;
-      justify-content: space-evenly;
+      justify-content: center;
+      height: 60px !important;
+      border-top: none;
 
       .ant-btn-primary {
         color: #fff !important;
         background-color: #15b628;
         border: none;
+        border-radius: 22px !important;
+      }
+
+      .ant-btn {
+        // flex: 30%;
+        width: 50% !important;
+        height: 38px !important;
+        color: #15b628;
+        font-size: 16px !important;
+        border: none;
+        border: 1px solid #15b628;
+        border-radius: 22px !important;
       }
     }
   }
@@ -290,6 +310,7 @@
           white-space: nowrap;
           text-overflow: ellipsis;
         }
+
         > span:nth-of-type(2) {
           float: right;
           margin-left: 0;

@@ -1,16 +1,16 @@
 .searchLayout {
   :global(.ant-space-item) {
-    >div {
+    > div {
       label {
         display: inline-block;
+        overflow: hidden;
         font-size: 14px;
         line-height: 32px;
-        vertical-align: middle;
-        overflow: hidden;
-        text-overflow: ellipsis;
         white-space: nowrap;
+        text-overflow: ellipsis;
+        vertical-align: middle;
 
-        &+* {
+        & + * {
           width: 170px;
         }
       }
