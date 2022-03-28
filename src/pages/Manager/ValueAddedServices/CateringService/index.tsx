@@ -30,6 +30,7 @@ const MutualEvaluation = () => {
   const actionRef = useRef<ActionType>();
   // 类别名称查询
   const [CategoryName, setCategoryName] = useState();
+  const [modalTitle, setModalTitle] = useState<string>('新增类别');
 
   const ongetKHZZFW = async () => {
     const res = await getKHZZFW({
@@ -102,6 +103,7 @@ const MutualEvaluation = () => {
   };
   const showModal = () => {
     setIsModalVisible(true);
+    setModalTitle('新增类别');
   };
 
   const handleOk = () => {
@@ -210,7 +212,7 @@ const MutualEvaluation = () => {
             {record.FWZT === 0 ? (
               <>
                 <Popconfirm
-                  title="确定发布该服务?"
+                  title="确定发布该服务类别?"
                   onConfirm={async () => {
                     const NewArr: any[] = [];
                     record?.NJSJs?.forEach((item: any) => {
@@ -258,13 +260,14 @@ const MutualEvaluation = () => {
                     };
                     form.setFieldsValue(data);
                     setIsModalVisible(true);
+                    setModalTitle('编辑类别');
                   }}
                 >
                   编辑
                 </a>
                 <Divider type="vertical" />
                 <Popconfirm
-                  title="确定删除该服务?"
+                  title="确定删除该服务类别?"
                   onConfirm={async () => {
                     try {
                       if (record.id) {
@@ -290,7 +293,7 @@ const MutualEvaluation = () => {
             ) : (
               <>
                 <Popconfirm
-                  title="确定撤销发布该服务?"
+                  title="确定撤销发布该服务类别?"
                   onConfirm={async () => {
                     const NewArr: any[] = [];
                     record?.NJSJs?.forEach((item: any) => {
@@ -366,10 +369,11 @@ const MutualEvaluation = () => {
           ]}
         />
       </div>
-      <Modal title="增值服务类别"
+      <Modal
+        title={modalTitle}
         visible={isModalVisible}
         onCancel={() => {
-          handleCancel()
+          handleCancel();
         }}
         footer={[
           <Button key="submit" type="primary" onClick={handleOk}>
@@ -378,7 +382,8 @@ const MutualEvaluation = () => {
           <Button key="back" onClick={handleCancel}>
             取消
           </Button>,
-        ]}>
+        ]}
+      >
         <Form name="basic" form={form} onFinish={submit} className={styles.Forms}>
           <Form.Item name="id" hidden>
             <Input disabled />
@@ -411,17 +416,17 @@ const MutualEvaluation = () => {
             >
               {optionsNJ?.length
                 ? optionsNJ?.map((item: any) => {
-                  return (
-                    <Option value={item?.label} key={item?.value}>
-                      {item?.label}
-                    </Option>
-                  );
-                })
+                    return (
+                      <Option value={item?.label} key={item?.value}>
+                        {item?.label}
+                      </Option>
+                    );
+                  })
                 : ''}
             </Select>
           </Form.Item>
           <Form.Item
-            label="服务单位"
+            label="合作单位"
             name="FWJGMC"
             key="FWJGMC"
             rules={[{ required: true, message: '请输入服务单位' }]}
