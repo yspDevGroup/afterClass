@@ -31,10 +31,12 @@ const ImagesUpload = (props: {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('上传的文件类型有误');
+      return false;
     }
     const isLt5M = file.size / 1024 / 1024 < 5;
     if (!isLt5M) {
       message.error('文件大小超过5MB');
+      return false;
     }
     return isJpgOrPng && isLt5M;
   };
@@ -62,8 +64,10 @@ const ImagesUpload = (props: {
           }
         });
         onValueChange(urlStr);
+        setFileList(info.fileList);
       } else {
         message.success('上传失败');
+        info?.event?.currentTarget?.onerror(code);
         // setLoading(false);
       }
       // getBase64(info.file.originFileObj, (imageUrl: string) => {
@@ -72,7 +76,6 @@ const ImagesUpload = (props: {
       //   onValueChange?.(imageUrl);
       // });
     }
-    setFileList(info.fileList);
   };
 
   // const handlePreview = async (file: any) => {
