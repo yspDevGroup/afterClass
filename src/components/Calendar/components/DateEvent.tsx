@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 15:57:02
- * @LastEditTime: 2022-03-28 15:33:06
+ * @LastEditTime: 2022-03-28 15:40:01
  * @LastEditors: Wu Zhan
  * @Description: In User Settings Edit
  * @FilePath: \afterClass\src\components\Calendar\components\DateEvent.tsx
@@ -33,7 +33,7 @@ const DateEvent = ({ colors, events }: DateEventProps) => {
       <ul>
         {events.map((event: SchoolEvent, index: number) => {
           const w = document.documentElement.clientWidth;
-          if ((w > 1255 && index < 4) || (w <= 1255 && index < 2)) {
+          if ((w > 1290 && index < 4) || (w <= 1290 && index < 2)) {
             return (
               <li key={event.title}>
                 <span
