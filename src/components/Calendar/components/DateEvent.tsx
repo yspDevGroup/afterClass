@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 15:57:02
- * @LastEditTime: 2021-12-10 12:05:24
- * @LastEditors: zpl
+ * @LastEditTime: 2022-03-28 15:33:06
+ * @LastEditors: Wu Zhan
  * @Description: In User Settings Edit
  * @FilePath: \afterClass\src\components\Calendar\components\DateEvent.tsx
  */
@@ -24,11 +24,16 @@ const DateEvent = ({ colors, events }: DateEventProps) => {
       setStatus(false);
     });
   }, []);
+  console.log(
+    'document.documentElement.clientWidth is not a function',
+    document.documentElement.clientWidth,
+  );
   return (
     <div className={styles.eventMore}>
       <ul>
         {events.map((event: SchoolEvent, index: number) => {
-          if (index < 4) {
+          const w = document.documentElement.clientWidth;
+          if ((w > 1255 && index < 4) || (w <= 1255 && index < 2)) {
             return (
               <li key={event.title}>
                 <span
@@ -63,22 +68,21 @@ const DateEvent = ({ colors, events }: DateEventProps) => {
           </p>
           {status ? (
             <ul className={styles.listMore}>
-              {events.map((event: SchoolEvent, index: number) => {
-                if (index >= 4) {
-                  return (
-                    <li key={event.title}>
-                      <span
-                        style={{
-                          background: colors[event.eventIndex! % colors.length],
-                        }}
-                      />
-                      <span className={styles.textCut}>
-                        <ShowName XM={event.title} type="userName" openid={event.wechatUserId} />
-                      </span>
-                    </li>
-                  );
-                }
-                return '';
+              {events.map((event: SchoolEvent) => {
+                return (
+                  <li key={event.title}>
+                    <span
+                      style={{
+                        background: colors[event.eventIndex! % colors.length],
+                      }}
+                    />
+                    <span className={styles.textCut}>
+                      <ShowName XM={event.title} type="userName" openid={event.wechatUserId} />
+                    </span>
+                  </li>
+                );
+
+                // return '';
               })}
             </ul>
           ) : (
