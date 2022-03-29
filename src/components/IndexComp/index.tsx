@@ -8,7 +8,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row, Tabs } from 'antd';
 import { Access, Link, useAccess, useModel } from 'umi';
-import { DeploymentUnitOutlined, HighlightOutlined, RightOutlined, SmileOutlined } from '@ant-design/icons';
+import {
+  DeploymentUnitOutlined,
+  HighlightOutlined,
+  RightOutlined,
+  SmileOutlined,
+} from '@ant-design/icons';
 import Topbar from './Topbar';
 import CenterBar from './CenterBar';
 import List from './List';
@@ -39,9 +44,13 @@ const Index = () => {
   const [annoceData, setAnnoceData] = useState<any>();
   // 学期学年没有数据时提示的开关
   const [kai, setkai] = useState<boolean>(false);
+  const [JSkai, setJSkai] = useState<boolean>(false);
   // 控制学期学年数据提示框的函数
   const kaiguan = () => {
     setkai(false);
+  };
+  const JSkaiguan = () => {
+    setJSkai(false);
   };
   const fetchData = async (XNXQId: any) => {
     const res = await homePage({
@@ -85,6 +94,10 @@ const Index = () => {
     }
   };
   useEffect(() => {
+    // 获取该用户是否导入
+    if (!currentUser.JSId && !testTeacherId) {
+      setJSkai(true);
+    }
     // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
@@ -108,6 +121,13 @@ const Index = () => {
         link="/basicalSettings/termManagement"
         open={kai}
         colse={kaiguan}
+      />
+      <PromptInformation
+        text="有部分教师暂未同步信息，请在教师管理中导入教师信息"
+        link="/basicalSettings/teacherManagement"
+        open={JSkai}
+        colse={JSkaiguan}
+        closeType={true}
       />
       <Topbar data={homeData} />
       <Row className={`${styles.listWrapper} ${styles.rowWrapper}`}>
@@ -343,7 +363,7 @@ const Index = () => {
                         <Link to="/courseManagements/classManagement?index=2">课程班开班</Link>
                       </li>
                       <li>
-                      <Link to="/courseManagements/classManagement?index=2">开启报名</Link>
+                        <Link to="/courseManagements/classManagement?index=2">开启报名</Link>
                       </li>
                     </ul>
                   </Col>
@@ -416,7 +436,6 @@ const Index = () => {
                 </Row>
               </TabPane>
             </Tabs>
-
           </Card>
         </Col>
       </Row>

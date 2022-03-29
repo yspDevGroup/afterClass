@@ -12,23 +12,23 @@ const Index = () => {
   useEffect(() => {
     const index = getQueryString('index');
     if (index) {
-      setKeys(index)
+      setKeys(index);
     } else {
-      setKeys('1')
+      setKeys('1');
     }
-  }, [])
+  }, []);
   return (
     <PageContainer>
       <Tabs
         activeKey={keys}
         onChange={(key) => {
-          setKeys(key)
+          setKeys(key);
         }}
       >
         <TabPane tab="课后服务退订" key="1">
           <ServiceAterClass />
         </TabPane>
-        <TabPane tab="课程服务退订" key="2">
+        <TabPane tab="缤纷课堂退订" key="2">
           <CourseUnsubscribe />
         </TabPane>
         <TabPane tab="增值服务退订" key="3">
