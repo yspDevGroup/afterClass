@@ -522,7 +522,7 @@ const InterestClassroom = () => {
         ) : (
           <>
             {' '}
-            {FWKCData?.KCFWBJs.find((item: any) => item.LX === 0) ? (
+            {FWKCData?.KCFWBJs.find((item: any) => item.LX === 0) && FWKCData?.KXSL !== 0 ? (
               <>
                 <div className={styles.Application}>
                   {BmCouse && XKType === true && PayType === false ? (

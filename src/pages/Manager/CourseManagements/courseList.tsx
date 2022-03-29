@@ -247,7 +247,7 @@ const CourseList = () => {
               Modal.confirm({
                 title: `确认要取消引入 “ ${record.KCMC} ” 吗？`,
                 icon: <ExclamationCircleOutlined />,
-                content: '取消后将终止该门课程，请谨慎',
+                content: '取消后将终止该门课程，请谨慎操作',
                 okText: '确认',
                 cancelText: '取消',
                 onOk() {
