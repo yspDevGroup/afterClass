@@ -151,7 +151,10 @@ const CourseUnsubscribe = () => {
       align: 'center',
       ellipsis: true,
       render: (_, record) => {
-        return record?.updatedAt?.replace(/T/, ' ').substring(0, 16);
+        if (record?.ZT !== 0) {
+          return record?.updatedAt?.replace(/T/, ' ').substring(0, 16);
+        }
+        return ''
       },
       width: 150,
     },

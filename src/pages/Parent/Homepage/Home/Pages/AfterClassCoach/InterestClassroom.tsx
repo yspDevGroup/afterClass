@@ -139,6 +139,7 @@ const InterestClassroom = () => {
     }
   };
   const xuankeStates = async () => {
+    setMouthId(MouthId);
     if (StorageXSId) {
       const res = await getStudentListByBjid({
         BJSJId: StorageBjId,
@@ -148,7 +149,15 @@ const InterestClassroom = () => {
         pageSize: 0,
       });
       if (res.status === 'ok') {
-        setBaoMinData(res.data.rows[0]);
+        const data = res.data.rows[0];
+        setBaoMinData(data);
+        const Datas = data?.XSFWBJs?.find((item: any) => item?.KHFWSJPZId === MouthId);
+        setBmCouse(Datas.XSFWKHBJs);
+        if (Datas) {
+          setDropOutType(true);
+        } else {
+          setDropOutType(false);
+        }
         const newArr: any[] = [];
         res.data.rows[0]?.XSFWBJs?.forEach((value: any) => {
           if (
@@ -175,6 +184,16 @@ const InterestClassroom = () => {
     xuankeState();
   }, []);
 
+  console.log(BaoMinData,'BaoMinData-----')
+  useEffect(() => {
+    if (BaoMinData && MouthId === FWKCData?.KHFWSJPZs?.[0].id) {
+      setBmCouse(
+        BaoMinData?.XSFWBJs?.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)
+          ?.XSFWKHBJs
+      );
+    }
+  }, [BaoMinData, MouthId]);
+
   useEffect(() => {
     if (BaoMinData && FWKCData) {
       const FKZT = BaoMinData?.XSFWBJs.find(
@@ -183,7 +202,6 @@ const InterestClassroom = () => {
       if (FKZT === 0 || FKZT === 1) {
         setFKType(false);
       }
-
       setStudentFWBJId(
         BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)
           ?.id,
@@ -195,11 +213,6 @@ const InterestClassroom = () => {
       } else {
         setDropOutType(false);
       }
-      setBmCouse(
-        BaoMinData?.XSFWBJs?.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)
-          ?.XSFWKHBJs,
-      );
-
       if (MouthId && MouthId !== FWKCData?.KHFWSJPZs?.[0].id) {
         if (
           BaoMinData?.XSFWBJs.find((item: any) => item.KHFWSJPZId === MouthId)?.KHFWSJPZ?.isPay ===
@@ -385,26 +398,7 @@ const InterestClassroom = () => {
       KHFWSJPZIds: BmTimeIds || [],
     });
     if (res.status === 'ok') {
-      // const repeat = res.data?.find((v: { flag: number }) => {
-      //   return v.flag === 0;
-      // });
-      // const wrong = res.data?.find((v: { flag: number }) => {
-      //   return v.flag === 1;
-      // });
-      // const different = res.data?.find((v: { flag: number }) => {
-      //   return v.flag === 2;
-      // });
-      // if (repeat) {
-      //   message.warning('该学生已报名，请勿重复报名');
-      // } else if (wrong) {
-      //   message.warning('数据库创建失败，报名失败');
-      // } else if (different) {
-      //   message.warning('学生信息查找失败，报名失败');
-      // } else {
       setIsModalVisible(true);
-
-      // }
-      // window.location.reload();
     } else {
       message.error('操作失败，请联系管理员');
     }
@@ -445,7 +439,7 @@ const InterestClassroom = () => {
   };
   const tagChild = WbmDatas?.map(forMap);
 
-  console.log(BMDate, 'BMDate');
+  console.log(BmCouse, '-----------------')
   return (
     <>
       <div className={styles.InterestClassroom}>
@@ -686,7 +680,7 @@ const InterestClassroom = () => {
                       {BMDate ? (
                         <>
                           {moment(BMDate).format('YYYY/MM/DD') >=
-                          moment(new Date()).format('YYYY/MM/DD') ? (
+                            moment(new Date()).format('YYYY/MM/DD') ? (
                             <p>该时段暂未报名，请先报名</p>
                           ) : (
                             <p>该时段报名已结束，不可报名</p>
@@ -701,7 +695,7 @@ const InterestClassroom = () => {
                 {DropOutType === false ? (
                   <>
                     {moment(BMDate).format('YYYY/MM/DD') >=
-                    moment(new Date()).format('YYYY/MM/DD') ? (
+                      moment(new Date()).format('YYYY/MM/DD') ? (
                       <div className={styles.footers}>
                         <button onClick={BmSubmit}>我要报名</button>
                       </div>
@@ -835,7 +829,7 @@ const InterestClassroom = () => {
                     {BMDate ? (
                       <>
                         {moment(BMDate).format('YYYY/MM/DD') >=
-                        moment(new Date()).format('YYYY/MM/DD') ? (
+                          moment(new Date()).format('YYYY/MM/DD') ? (
                           <p>该时段暂未报名，请先报名</p>
                         ) : (
                           <p>该时段报名已结束，不可报名</p>
@@ -856,9 +850,9 @@ const InterestClassroom = () => {
                       <>
                         {' '}
                         {BaoMinData &&
-                        FKType === true &&
-                        PayType === true &&
-                        DropOutType === true ? (
+                          FKType === true &&
+                          PayType === true &&
+                          DropOutType === true ? (
                           <div className={styles.footers}>
                             <button onClick={submit}>去付款</button>
                           </div>
@@ -953,7 +947,7 @@ const InterestClassroom = () => {
             setBmModalVisible(false);
             setIsModalVisible(false);
             xuankeStates();
-            history.push('/parent/home/afterClassCoach/interestClassroom');
+            // window.location.reload()
           }}
         >
           我知道了

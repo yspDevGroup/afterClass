@@ -356,7 +356,6 @@ const CallTheRoll = (props: any) => {
       enHenceMsg(res.message);
     }
   };
-  console.log(JSLX,'JSLX----------------------------')
   const teacherCheckIn = async () => {
     const res = await createKHJSCQ([
       {
@@ -472,7 +471,7 @@ const CallTheRoll = (props: any) => {
           columns={columns}
           rowKey="id"
           pagination={false}
-          scroll={{ y: 'calc(100vh - 345px)' }}
+          scroll={{ y: 'calc(100vh - 400px)' }}
         />
       </div>
       <div className={styles.footerButton}>
