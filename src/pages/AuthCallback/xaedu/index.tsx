@@ -2,13 +2,14 @@
  * @description: 西安教育信息化综合服务平台登录
  * @author: zpl
  * @Date: 2022-03-15 15:30:49
- * @LastEditTime: 2022-03-23 17:53:11
+ * @LastEditTime: 2022-03-29 20:12:21
  * @LastEditors: zpl
  */
 import { useEffect, useState } from 'react';
 import { useModel, history } from 'umi';
 import { getPageQuery, removeOAuthToken, saveOAuthToken } from '@/utils/utils';
-import { createToken, validateUrl } from '@/services/after-class/xaedu';
+import { validateUrl } from '@/services/after-class/xaedu';
+import { login as createToken } from '@/services/after-class/auth';
 import RegistForm from './RegistForm';
 
 const Index = () => {
@@ -27,7 +28,13 @@ const Index = () => {
    * @param {string} teacherId
    */
   const goto = async (teacherId: string, username: string) => {
-    const res = await createToken({ teacherId, username });
+    // const res = await createToken({ teacherId, username });
+    const res = await createToken({
+      authType: 'xaedu',
+      plat: 'teacher',
+      username,
+      teacherId,
+    });
     const { status, data, message } = res;
     if (status === 'ok') {
       saveOAuthToken({
