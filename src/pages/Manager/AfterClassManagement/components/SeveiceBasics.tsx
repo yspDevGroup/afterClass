@@ -6,7 +6,7 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2022-03-28 14:32:40
+ * @LastEditTime: 2022-03-29 13:59:47
  * @LastEditors: Wu Zhan
  */
 
@@ -254,28 +254,31 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
       }
     }
   };
-  useEffect(() => {
-    if (!serviceId) {
-      if (campusData?.length) {
-        let id = campusData?.find((item: any) => item?.label === '本校')?.value;
-        if (!id) {
-          id = campusData[0].value;
-        }
-        formRef?.current?.setFieldsValue({
-          ZDKCS: 2,
-          XQSJId: id,
-          XNXQId,
-        });
-        getNJData(id);
-        setCampusId(id);
-      } else {
-        formRef?.current?.setFieldsValue({
-          ZDKCS: 2,
-          XNXQId,
-        });
-      }
-    }
-  }, [visible]);
+  // useEffect(() => {
+  //   console.log('serviceId', serviceId);
+
+  //   if (!serviceId) {
+  //     if (campusData?.length) {
+  //       let id = campusData?.find((item: any) => item?.label === '本校')?.value;
+  //       if (!id) {
+  //         id = campusData[0].value;
+  //       }
+  //       formRef?.current?.setFieldsValue({
+  //         ZDKCS: 2,
+  //         XQSJId: id,
+  //         XNXQId,
+  //       });
+  //       getNJData(id);
+  //       setCampusId(id);
+  //     } else {
+  //       formRef?.current?.setFieldsValue({
+  //         ZDKCS: 2,
+  //         XNXQId,
+  //       });
+  //     }
+  //   }
+  // }, [visible]);
+
   return (
     <>
       <ModalForm<{
@@ -527,7 +530,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           name="FWFY"
           key="FWFY"
           min={0}
-	  max={999}
+          max={999}
         />
       </ModalForm>
     </>
