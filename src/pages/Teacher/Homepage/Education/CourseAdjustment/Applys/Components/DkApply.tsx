@@ -53,44 +53,44 @@ const DkApply = () => {
     })();
   }, [dateData]);
   /** 代课补签 */
-  const handleResign = async () => {
-    await CreateJSCQBQ({
-      XXJBSJId: currentUser.xxId,
-      BQRQ: dateData?.day,
-      QKYY: '',
-      SQNR: '代课',
-      BQRId: currentUser.JSId || testTeacherId,
-      KHBJSJId: dateData?.bjid,
-      XXSJPZId: dateData?.jcId,
-    });
-  };
   const onFinish = async (values: any) => {
-    const newData = {
-      LX: 1,
-      ZT: 0,
-      DKJSId: DKJsId,
-      BZ: values.QJYY,
-      XXJBSJId: currentUser.xxId,
-      SKJSId: currentUser.JSId || testTeacherId,
-      SKFJId: dateData?.FJId,
-      SKRQ: dateData?.day,
-      KHBJSJId: dateData?.bjid,
-      SKJCId: dateData?.jcId,
-    };
-    const res = await createKHJSTDK(newData);
-    if (res.status === 'ok') {
-      message.success('申请成功');
-      // 处理补签流程问题
-      if (prevDay && dealClassId) {
-        handleResign();
-        history.push('/teacher/education/resign');
-      } else {
+    // 处理补签流程问题
+    if (prevDay && dealClassId) {
+      await CreateJSCQBQ({
+        XXJBSJId: currentUser.xxId,
+        BQRQ: dateData?.day,
+        QKYY: values.QJYY,
+        SQNR: '代课',
+        BQRId: currentUser.JSId || testTeacherId,
+        KHBJSJId: dateData?.bjid,
+        XXSJPZId: dateData?.jcId,
+        DKRId: DKJsId
+      });
+      history.push('/teacher/education/resign');
+    } else {
+      const newData = {
+        LX: 1,
+        ZT: 0,
+        DKJSId: DKJsId,
+        BZ: values.QJYY,
+        XXJBSJId: currentUser.xxId,
+        SKJSId: currentUser.JSId || testTeacherId,
+        SKFJId: dateData?.FJId,
+        SKRQ: dateData?.day,
+        KHBJSJId: dateData?.bjid,
+        SKJCId: dateData?.jcId,
+      };
+      const res = await createKHJSTDK(newData);
+      if (res.status === 'ok') {
+        message.success('申请成功');
+
         setDateData([]);
         form.resetFields();
         history.push('/teacher/education/courseAdjustment');
+
+      } else {
+        message.error(res.message);
       }
-    } else {
-      message.error(res.message);
     }
   };
   const onGenderChange = (value: any, key: any) => {

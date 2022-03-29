@@ -41,7 +41,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                 {status ? (
                   <span
                     className={styles.specialPart}
-                    style={{ background: status.indexOf('已请假') > -1 ? '#F48A82' : '#7dce81' }}
+                    style={{ background: status.indexOf('已请假') > -1 ? 'rgb(242, 200, 98)' : '#7dce81' }}
                   >
                     {status}
                   </span>

@@ -120,7 +120,7 @@ const TabList = (props: any) => {
       width: 160,
     },
     {
-      title: '课程评分',
+      title: '该学生课堂评分',
       dataIndex: 'PJFS',
       key: 'PJFS',
       align: 'center',

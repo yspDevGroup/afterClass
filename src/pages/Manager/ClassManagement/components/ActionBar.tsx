@@ -40,10 +40,10 @@ const ActionBar = (props: propstype) => {
           const { KHKCSJ } = recorde;
           await updateKHKCSJ({ id: KHKCSJ?.id }, { KCZT: 0 });
         } else if (data?.message === '该班级现在有学生数据，不能取消开班') {
-            message.warning('该班级存在关联数据，不可关闭');
-          } else {
-            message.warning(data?.message);
-          }
+          message.warning('该班级存在关联数据，不可关闭');
+        } else {
+          message.warning(data?.message);
+        }
       });
     } else {
       message.warning('有学生报名时，此课程班不能取消开班');
@@ -209,75 +209,73 @@ const ActionBar = (props: propstype) => {
     case '已开班':
       return (
         <>
-          <>
-            {((record?.xs_count + record.noPayXS_count) > 0 && (record?.xs_count + record.noPayXS_count) < record?.BJRS) ? (
-              <>
-                {
-                  record?.KKRQ > moment(new Date()).format('YYYY-MM-DD') ? <>
-                    <a
-                      onClick={() => {
-                        setVisible(true);
+          {
+            record?.KKRQ > moment(new Date()).format('YYYY-MM-DD') ? <>
+              {((record?.xs_count + record.noPayXS_count) > 0 && (record?.xs_count + record.noPayXS_count) < record?.BJRS) ? (
+                <>
+                  <a
+                    onClick={() => {
+                      setVisible(true);
+                    }}
+                  >
+                    取消开班
+                  </a>
+                  <Modal
+                    title="取消开班"
+                    visible={visible}
+                    onOk={() => {
+                      form.submit();
+                    }}
+                    onCancel={() => {
+                      setVisible(false);
+                    }}
+                    okText="确认"
+                    cancelText="取消"
+                  >
+                    <Form
+                      labelCol={{ span: 6 }}
+                      wrapperCol={{ span: 15 }}
+                      form={form}
+                      initialValues={{
+                        MSG: `您所选的${record?.KHKCSJ?.KCMC}-${record?.BJMC}，由于报名人数不足，已关闭该班级；相关课程费用将全额原路返还，请知悉。`,
                       }}
+                      onFinish={handleSubmit}
+                      layout="horizontal"
                     >
-                      取消开班
-                    </a>
-                    <Modal
-                      title="取消开班"
-                      visible={visible}
-                      onOk={() => {
-                        form.submit();
-                      }}
-                      onCancel={() => {
-                        setVisible(false);
-                      }}
-                      okText="确认"
-                      cancelText="取消"
-                    >
-                      <Form
-                        labelCol={{ span: 6 }}
-                        wrapperCol={{ span: 15 }}
-                        form={form}
-                        initialValues={{
-                          MSG: `您所选的${record?.KHKCSJ?.KCMC}-${record?.BJMC}，由于报名人数不足，已关闭该班级；相关课程费用将全额原路返还，请知悉。`,
-                        }}
-                        onFinish={handleSubmit}
-                        layout="horizontal"
+                      <Form.Item
+                        label="取消说明"
+                        name="MSG"
+                        rules={[
+                          {
+                            required: true,
+                            message: '请输入取消说明！',
+                          },
+                        ]}
                       >
-                        <Form.Item
-                          label="取消说明"
-                          name="MSG"
-                          rules={[
-                            {
-                              required: true,
-                              message: '请输入取消说明！',
-                            },
-                          ]}
-                        >
-                          <TextArea rows={4} maxLength={200} />
-                        </Form.Item>
-                      </Form>
-                    </Modal>
-                  </> : <></>
-                }
+                        <TextArea rows={4} maxLength={200} />
+                      </Form.Item>
+                    </Form>
+                  </Modal>
+                </>
+              ) : (
+                <>
+                  <a onClick={() => shelf(record)} style={type ? undefined : { display: 'none' }}>
+                    关闭
+                  </a>
+                  <Popconfirm
+                    title="取消后该课程班家长不可见，确定取消开班?"
+                    onConfirm={() => shelf(record)}
+                    okText="确定"
+                    cancelText="取消"
+                    placement="topRight"
+                  >
+                    <a style={type ? { display: 'none' } : undefined}>取消开班</a>
+                  </Popconfirm>
+                </>
+              )}
+            </> : <></>
+          }
 
-              </>
-            ) : (
-              <>
-                <a onClick={() => shelf(record)} style={type ? undefined : { display: 'none' }}>
-                  关闭
-                </a>
-                <Popconfirm
-                  title="取消后该课程班家长不可见，确定取消开班?"
-                  onConfirm={() => shelf(record)}
-                  okText="确定"
-                  cancelText="取消"
-                  placement="topRight"
-                >
-                  <a style={type ? { display: 'none' } : undefined}>取消开班</a>
-                </Popconfirm>
-              </>
-            )}
-          </>
           <Divider type="vertical" />
           <a onClick={() => handleEdit(record)}>查看</a>
           <Divider type="vertical" />

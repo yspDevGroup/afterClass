@@ -98,6 +98,7 @@ const DealAbnormal = (props: any) => {
       BQRId: userId,
       KHBJSJId: current.id,
       XXSJPZId: current.XXSJPZId,
+
     });
     if (res.status === 'ok') {
       getCQData();
@@ -126,7 +127,7 @@ const DealAbnormal = (props: any) => {
       }
     })();
   }, [data]);
-  console.log(data,'-----')
+
   return (
     <>
       <GoBack title={'教师补签'} teacher onclick="/teacher/education/resign" />
@@ -158,21 +159,21 @@ const DealAbnormal = (props: any) => {
                 actions={
                   curItem
                     ? [
-                        <span key={item.id} style={{ color: '#666' }}>
-                          处理中
-                        </span>,
-                      ]
+                      <span key={item.id} style={{ color: '#666' }}>
+                        处理中
+                      </span>,
+                    ]
                     : [
-                        <a
-                          key={item.id}
-                          onClick={() => {
-                            setCurrent(item);
-                            showModal('option');
-                          }}
-                        >
-                          去处理
-                        </a>,
-                      ]
+                      <a
+                        key={item.id}
+                        onClick={() => {
+                          setCurrent(item);
+                          showModal('option');
+                        }}
+                      >
+                        去处理
+                      </a>,
+                    ]
                 }
               >
                 <List.Item.Meta
@@ -198,19 +199,19 @@ const DealAbnormal = (props: any) => {
           footer={
             modalContent === 'option'
               ? [
-                  <Button key="back" onClick={() => setVisible(false)}>
-                    取消
-                  </Button>,
-                ]
+                <Button key="back" onClick={() => setVisible(false)}>
+                  取消
+                </Button>,
+              ]
               : [
-                  <Button key="back" onClick={() => setVisible(false)}>
-                    取消
-                  </Button>,
-                  <Divider type="vertical" />,
-                  <Button key="submit" type="link" onClick={() => handleResign()}>
-                    确认
-                  </Button>,
-                ]
+                <Button key="back" onClick={() => setVisible(false)}>
+                  取消
+                </Button>,
+                <Divider type="vertical" />,
+                <Button key="submit" type="link" onClick={() => handleResign()}>
+                  确认
+                </Button>,
+              ]
           }
         >
           {modalContent === 'option' ? (
