@@ -51,13 +51,11 @@ const ImagesUpload = (props: {
     if (info.file.status === 'uploading') {
       // setLoading(true);
       // return;
-      setFileList(info.fileList);
     }
     if (info.file.status === 'done') {
       const code = info.file.response;
       if (code.status === 'ok') {
         message.success('上传成功');
-        // setLoading(false);
         let urlStr = '';
         info.fileList.forEach((item: any) => {
           if (item.response?.status === 'ok') {
@@ -65,18 +63,12 @@ const ImagesUpload = (props: {
           }
         });
         onValueChange(urlStr);
-        setFileList(info.fileList);
       } else {
         message.success('上传失败');
         info?.event?.currentTarget?.onerror(code);
-        // setLoading(false);
       }
-      // getBase64(info.file.originFileObj, (imageUrl: string) => {
-      //   setImgUrl(imageUrl);
-      //   setLoading(false);
-      //   onValueChange?.(imageUrl);
-      // });
     }
+    setFileList(info.fileList?.filter((item: any) => (item.status ? true : false)));
   };
 
   // const handlePreview = async (file: any) => {
