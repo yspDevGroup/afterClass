@@ -22,15 +22,14 @@ const Record = () => {
   const [ModalVisible, setModalVisible] = useState(false);
   const [ids, setids] = useState();
 
-
   const getData = async (res: any) => {
     const resKHKTFC = await getAllKHKTFC({
       XXJBSJId: currentUser?.xxId,
       page: res / 10,
-      pageSize: 10
+      pageSize: 10,
     });
     if (resKHKTFC.status === 'ok') {
-      setListData(resKHKTFC?.data?.rows)
+      setListData(resKHKTFC?.data?.rows);
       resKHKTFC.data?.rows?.forEach((item: any) => {
         const imgsArr = item.TP?.split(';');
         imgsArr.pop();
@@ -54,8 +53,6 @@ const Record = () => {
   useEffect(() => {
     getData(showIndex);
   }, []);
-
-
 
   const handleTouchStart = (e: any) => {
     setStartY(e.touches[0].clientY);
@@ -95,9 +92,9 @@ const Record = () => {
           if (data.status === 'ok') {
             message.success('删除成功');
             const newArr = showData.filter((item: any) => {
-              return item?.id !== ids
-            })
-            setShowData(newArr)
+              return item?.id !== ids;
+            });
+            setShowData(newArr);
             setModalVisible(false);
           }
         });
@@ -105,7 +102,7 @@ const Record = () => {
     } catch (err) {
       message.error('删除失败，请联系管理员或稍后重试。');
     }
-  }
+  };
   return (
     <div
       className={styles.ClassroomStyle}
@@ -163,15 +160,15 @@ const Record = () => {
                                   item.imgs.length === 2 || item.imgs.length === 4
                                     ? 12
                                     : item.imgs.length === 1
-                                      ? 24
-                                      : 8
+                                    ? 24
+                                    : 8
                                 }
                                 className={
                                   item.imgs.length === 2 || item.imgs.length === 4
                                     ? styles.pairImg
                                     : item.imgs.length === 1
-                                      ? styles.oneImg
-                                      : styles.nineImg
+                                    ? styles.oneImg
+                                    : styles.nineImg
                                 }
                               >
                                 <Image src={url} />
@@ -184,17 +181,17 @@ const Record = () => {
                     <p>
                       <span>{moment(item.time).format('HH:mm:ss')}</span>
                       {currentUser?.JSId === item.JSId ? (
-                        <a onClick={() => {
-                          setModalVisible(true);
-                          setids(item?.id);
-                        }}>删除</a>
+                        <a
+                          onClick={() => {
+                            setModalVisible(true);
+                            setids(item?.id);
+                          }}
+                        >
+                          删除
+                        </a>
                       ) : (
                         <></>
                       )}
-                      <a onClick={() => {
-                        setModalVisible(true);
-                        setids(item?.id);
-                      }}>删除</a>
                     </p>
                   </div>
                 </div>
