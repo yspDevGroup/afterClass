@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-29 17:16:51
- * @LastEditTime: 2021-12-10 13:21:58
- * @LastEditors: zpl
+ * @LastEditTime: 2022-03-29 10:16:10
+ * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
@@ -23,7 +23,6 @@ import {
   Radio,
   Tag,
 } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
 import { getAllNJSJ } from '@/services/after-class/njsj';
@@ -43,6 +42,8 @@ const Study = () => {
   const userId = currentUser.JSId || testTeacherId;
   const [day, setDay] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const divRef = useRef<HTMLDivElement | null>(null);
+  const [btnAble, setBtnAble] = useState<boolean>(false);
+  const [exist, setExist] = useState<boolean>(false);
   const [XNXQId, setXNXQId] = useState<string>();
   // const [XQId, setXQId] = useState<any>();
   // const [XQData, setXQData] = useState<any>();
@@ -93,6 +94,13 @@ const Study = () => {
         const subs = rows.filter((v: { JSLX: number }) => v.JSLX === 0);
         setMainTeacher(main);
         setSubTeacher(subs);
+        const existed = rows.find((val: any) => val.JZGJBSJ?.id === userId);
+        if (existed) {
+          setBtnAble(true);
+          setExist(true);
+        } else {
+          setExist(false);
+        }
       } else {
         setMainTeacher(undefined);
         setSubTeacher([]);
@@ -138,9 +146,9 @@ const Study = () => {
       claimCourse(mainId, subIds as string[]);
     } else {
       confirm({
-        title: `${current?.KHKCSJ?.KCMC} - ${current?.BJMC}`,
-        icon: <ExclamationCircleOutlined />,
-        content: '是否确认不对本节课程进行代课？',
+        className: styles.tipModal,
+        title: `取消代课`, // `${current?.KHKCSJ?.KCMC} - ${current?.BJMC}`,
+        content: '是否确定取消本节课程的代课？',
         okText: '确定',
         cancelText: '取消',
         onOk() {
@@ -166,7 +174,7 @@ const Study = () => {
         XD: currentUser?.XD?.split(','),
       });
       if (res.status === 'ok' && res.data) {
-        console.log(res,'res------')
+        console.log(res, 'res------');
         setNjData(res.data?.rows);
       }
       // 获取校区列表
@@ -191,7 +199,7 @@ const Study = () => {
     })();
   }, []);
   useEffect(() => {
-    if(XNXQId){
+    if (XNXQId) {
       getData();
     }
   }, [XNXQId, NjId, LXId, day]);
@@ -259,6 +267,7 @@ const Study = () => {
   const handleChange = (e: any) => {
     const type = e.target.value;
     if (type === '1') {
+      setBtnAble(true);
       setMainTeacher({
         JZGJBSJ: {
           id: userId,
@@ -284,6 +293,7 @@ const Study = () => {
               },
             },
           ]);
+          setBtnAble(true);
           setSubTeacher(nowSubs);
         }
       }
@@ -408,6 +418,7 @@ const Study = () => {
                   key={`${item.id}+${item.BMKSSJ}`}
                   actions={[
                     <input
+                      key="fruit"
                       name="Fruit"
                       type="radio"
                       value={`${item.id}+${item.BMKSSJ}`}
@@ -456,6 +467,10 @@ const Study = () => {
                     <Tag
                       closable={mainTeacher?.JZGJBSJ?.id === userId}
                       onClose={() => {
+                        const subs = subTeacher.find((val: any) => val.JZGJBSJ?.id === userId);
+                        if (!subs) {
+                          setBtnAble(false);
+                        }
                         setMainTeacher(undefined);
                       }}
                     >
@@ -480,11 +495,15 @@ const Study = () => {
                       {subTeacher.map((v: any) => {
                         return (
                           <Tag
+                            key={v.id}
                             closable={v?.JZGJBSJ?.id === userId}
                             onClose={() => {
                               const subs = subTeacher.filter(
                                 (val: any) => val.JZGJBSJ?.id !== userId,
                               );
+                              if (mainTeacher?.JZGJBSJ?.id !== userId) {
+                                setBtnAble(false);
+                              }
                               setSubTeacher(subs);
                             }}
                           >
@@ -529,7 +548,11 @@ const Study = () => {
                 </Radio.Group>
               </div>
             </div>
-            <Button className={styles.submit} onClick={() => prevJudge()}>
+            <Button
+              className={styles.submit}
+              disabled={!btnAble && !exist}
+              onClick={() => prevJudge()}
+            >
               提交
             </Button>
           </div>
