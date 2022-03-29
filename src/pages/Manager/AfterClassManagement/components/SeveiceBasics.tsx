@@ -6,7 +6,7 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2022-03-29 14:30:53
+ * @LastEditTime: 2022-03-29 15:59:42
  * @LastEditors: Wu Zhan
  */
 
@@ -240,6 +240,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         });
       }
     } else {
+      debugger;
       if (campusData?.length) {
         let id = campusData?.find((item: any) => item?.label === '本校')?.value;
         if (!id) {
