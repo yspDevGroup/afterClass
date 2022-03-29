@@ -51,6 +51,7 @@ const ImagesUpload = (props: {
     if (info.file.status === 'uploading') {
       // setLoading(true);
       // return;
+      setFileList(info.fileList);
     }
     if (info.file.status === 'done') {
       const code = info.file.response;

@@ -6,7 +6,7 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2022-03-29 13:59:47
+ * @LastEditTime: 2022-03-29 14:30:53
  * @LastEditors: Wu Zhan
  */
 
@@ -138,6 +138,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   useEffect(() => {
     getDetailTimePZ();
   }, [campusId]);
+
   const imageChange = (_type: string, e?: any) => {
     if (e.file.status === 'done') {
       const mas = e.file.response.message;
@@ -245,7 +246,9 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           id = campusData[0].value;
         }
         getNJData(id);
-        await setCampusId(id);
+        setCampusId(id);
+        debugger;
+        console.log('formRef', formRef);
         formRef?.current?.setFieldsValue({
           ZDKCS: 2,
           XQSJId: id,
