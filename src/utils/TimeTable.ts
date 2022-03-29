@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-11-08 14:56:18
- * @LastEditTime: 2021-12-20 10:11:04
+ * @LastEditTime: 2022-03-29 15:17:51
  * @LastEditors: Sissle Lynn
  */
 
@@ -199,17 +199,17 @@ export const getClassDays = async (
     }
     const courseData = arrangeClass(result.data);
     if (courseData?.[classId]) {
+      console.log('......');
       // const { sum, weekDay, startDate } = courseData[classId];
       // const days = classTime(sum, weekDay, startDate, leaveData, switchData);
       const days: any[] = [];
-      result.data?.forEach((value: any,idx: number)=>{
+      result.data?.forEach((value: any, idx: number) => {
         days?.push({
-          index:idx,
-          day:value?.RQ,
-          jcId:value?.XXSJPZ?.id
-        })
-      })
-      console.log(days)
+          index: idx,
+          day: value?.RQ,
+          jcId: value?.XXSJPZ?.id,
+        });
+      });
       await upsertKHBJKSSJ({ KHBJSJId: classId, DATA: JSON.stringify(days) });
     } else {
       console.log('errorId', classId);
