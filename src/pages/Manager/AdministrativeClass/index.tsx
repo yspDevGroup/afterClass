@@ -33,7 +33,6 @@ const AdministrativeClass = () => {
       XXJBSJId: currentUser?.xxId,
     });
     if (res?.status === 'ok') {
-      console.log('res', res.data);
       const arr = res?.data?.map((item) => {
         return {
           label: item.XQMC,
@@ -61,7 +60,6 @@ const AdministrativeClass = () => {
         XQSJId: campusId,
       });
       if (res.status === 'ok') {
-        console.log('res', res);
         setNjData(res.data);
       }
     }
@@ -142,7 +140,7 @@ const AdministrativeClass = () => {
       width: 80,
     },
     {
-      title: '课程服务报名人数',
+      title: '缤纷课堂报名人数',
       dataIndex: 'xsbm_count',
       key: 'xsbm_count',
       align: 'center',

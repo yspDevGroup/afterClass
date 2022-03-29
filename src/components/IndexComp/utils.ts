@@ -84,7 +84,7 @@ export const centerNum = [
     path: '/orderInquiry/reimbursementClass?index=1'
   },
   {
-    title: '课程服务退订',
+    title: '缤纷课堂退订',
     type: 'kctd_count',
     color: '#898FD7',
     path: '/orderInquiry/reimbursementClass?index=2'
@@ -102,7 +102,7 @@ export const centerNum = [
     path: '/orderInquiry/refundManagement?index=1'
   },
   {
-    title: '课程服务退款',
+    title: '缤纷课堂退款',
     type: 'kctk_count',
     color: '#98D32D',
     path: '/orderInquiry/refundManagement?index=2'

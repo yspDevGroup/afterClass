@@ -703,7 +703,9 @@ const AddArrangingDS: FC<PropsType> = (props) => {
             if (data.status === 'ok') {
               message.success('该班级排课信息已清除');
               setCDLoading(false);
-              CDgetPKData();
+              if(cdmcValue){
+                CDgetPKData();
+              }
             }
           });
         }

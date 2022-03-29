@@ -249,22 +249,6 @@ const CourseTab = (props: { dataResource: any }) => {
       <Tabs
         centered={centered}
         onTabClick={(key: string) => oncuechange(key)}
-        // tabBarExtraContent={
-        //   !centered
-        //     ? {
-        //       right: (
-        //         <Link
-        //           to={{
-        //             pathname: '/parent/home/serviceReservation',
-        //             state: { courseStatus, kskc, yxkcAllData, keys },
-        //           }}
-        //         >
-        //           全部 <IconFont type="icon-gengduo" className={styles.gengduo} />
-        //         </Link>
-        //       ),
-        //     }
-        //     : ''
-        // }
         className={styles.courseTab}
       >
         <TabPane tab="课后服务" key="yxkcs">
@@ -274,14 +258,14 @@ const CourseTab = (props: { dataResource: any }) => {
             <ListComponent listData={defaultMsg} />
           )}
         </TabPane>
-        <TabPane tab="课程服务" key="yxkc">
+        <TabPane tab="缤纷课堂" key="yxkc">
           {yxkc && yxkc?.length ? (
             <ListComponent listData={yxkcData} />
           ) : (
             <ListComponent listData={defaultMsg} />
           )}
         </TabPane>
-        <TabPane tab="增值服务" key="yxfw">
+        <TabPane tab="订餐&托管" key="yxfw">
           {YxserviceData && YxserviceData?.length ? (
             <ListComponent listData={yxfwData} />
           ) : (

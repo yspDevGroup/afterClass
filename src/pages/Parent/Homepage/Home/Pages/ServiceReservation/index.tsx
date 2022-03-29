@@ -70,7 +70,7 @@ const ServiceReservation = (props: any) => {
             <ListComponent listData={defaultMsgs} />
           )}
         </TabPane>
-        <TabPane tab="课程服务" key="yxkc">
+        <TabPane tab="缤纷课堂" key="yxkc">
           {yxkcAllData && yxkcAllData.length ? (
             <ListComponent listData={yxkcData} />
           ) : (
@@ -78,7 +78,7 @@ const ServiceReservation = (props: any) => {
           )}
         </TabPane>
 
-        <TabPane tab="增值服务" key="yxfw">
+        <TabPane tab="订餐&托管" key="yxfw">
           <>
             {YxserviceData && YxserviceData?.length === 0 ? (
               <ListComponent listData={defaultMsgs} />

@@ -527,6 +527,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
           name="FWFY"
           key="FWFY"
           min={0}
+	  max={999}
         />
       </ModalForm>
     </>

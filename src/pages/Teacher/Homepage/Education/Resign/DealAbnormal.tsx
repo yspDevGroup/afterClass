@@ -215,13 +215,13 @@ const DealAbnormal = (props: any) => {
         >
           {modalContent === 'option' ? (
             <>
-              <li>
+              {/* <li>
                 <Link
                   to={`/teacher/education/askForLeave/newLeave?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}
                 >
                   请假申请
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   to={`/teacher/education/courseAdjustment/applys?date=${current.date}&classId=${current.id}&XXSJPZId=${current.XXSJPZId}`}

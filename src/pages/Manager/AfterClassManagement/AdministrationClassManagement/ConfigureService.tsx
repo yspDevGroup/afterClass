@@ -677,12 +677,15 @@ const ConfigureService = (props: ConfigureSeverType) => {
             <ProFormDigit
               wrapperCol={{ flex: '6em' }}
               label="服务费用"
-              rules={[{ required: true, message: '请收入服务费用' }]}
+              rules={[
+                { required: true, message: '请收入服务费用' }
+              ]}
               name="FWFY"
               key="FWFY"
               min={0}
+              max={999}
               width={80}
-              // width='xs'
+            // width='xs'
             />
           </Col>
           <Col flex="auto">

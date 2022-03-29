@@ -118,8 +118,11 @@ const TimePeriodForm = (props: PropsType) => {
         rules: [{ required: true, message: '请填写开始时间' }],
         hideDisabledOptions: true,
         disabledDate: (currents: any) => {
-          const defaults = moment(currents).format('YYYY/MM/DD HH:mm:ss');
-          return defaults > moment(XQJSRQ).format('YYYY/MM/DD 23:59:59') || defaults < moment(XQKSRQ).format('YYYY/MM/DD 00:00:00');
+          if (currentStatus !== 'schedule') {
+            const defaults = moment(currents).format('YYYY/MM/DD HH:mm:ss');
+            return defaults > moment(XQJSRQ).format('YYYY/MM/DD 23:59:59') || defaults < moment(XQKSRQ).format('YYYY/MM/DD 00:00:00');
+          }
+          return '';
         },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
@@ -136,8 +139,11 @@ const TimePeriodForm = (props: PropsType) => {
         minuteStep: 5,
         hideDisabledOptions: true,
         disabledDate: (currents: any) => {
-          const defaults = moment(currents).format('YYYY/MM/DD HH:mm:ss');
-          return defaults > moment(XQJSRQ).format('YYYY/MM/DD 23:59:59') || defaults < moment(XQKSRQ).format('YYYY/MM/DD 00:00:00');
+          if (currentStatus !== 'schedule') {
+            const defaults = moment(currents).format('YYYY/MM/DD HH:mm:ss');
+            return defaults > moment(XQJSRQ).format('YYYY/MM/DD 23:59:59') || defaults < moment(XQKSRQ).format('YYYY/MM/DD 00:00:00');
+          }
+          return ''
         },
       },
       rules: [{ type: 'any', required: true, messsage: '请填写日期' }],
