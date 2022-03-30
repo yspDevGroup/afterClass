@@ -51,7 +51,7 @@
     }
 
     .wz {
-      padding: 20px 30px 0;
+      padding: 36px 30px 0;
       font-weight: 500;
 
       h4 {
@@ -60,6 +60,7 @@
       }
     }
   }
+
   .xb {
     position: fixed;
     bottom: 0;
@@ -68,6 +69,11 @@
     font-size: 14px;
     line-height: 22px;
     text-align: center;
+
+    :global(.ant-pro-global-footer-copyright) {
+      color: #c4c4c4;
+    }
+
     p {
       margin: 0;
     }
@@ -99,7 +105,7 @@
 
   .text {
     width: 100%;
-    height: calc(~'100vh - 110px');
+    height: calc(100vh - 110px);
     padding: 10px;
     line-height: 28px;
     background-color: #fff;
@@ -118,8 +124,9 @@
       line-height: 28px;
     }
   }
+
   .contents {
-    height: calc(~'100vh - 140px');
+    height: calc(100% - 140px);
     padding: 12px;
     overflow: auto;
   }

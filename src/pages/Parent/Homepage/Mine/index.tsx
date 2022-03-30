@@ -167,16 +167,9 @@ const Mine = (props: {
       <div className={styles.linkWrapper}>
         <ul>
           <li>
-            <IconFont type="icon-fuwugonggao" style={{ fontSize: '18px' }} />
-            <Link to="/parent/home/notice/announcement?articlepage=serveAnnounce">
-              服务公告
-              <IconFont type="icon-gengduo" />
-            </Link>
-          </li>
-          <li>
             <IconFont type="icon-guanyu" style={{ fontSize: '18px' }} />
             <Link to="/parent/home/notice/announcement?articlepage=about">
-              关于
+              关于我们
               <IconFont type="icon-gengduo" />
             </Link>
           </li>

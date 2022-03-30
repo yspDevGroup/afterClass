@@ -2,8 +2,8 @@
  * @description: 公告详情
  * @author: zpl
  * @Date: 2021-06-29 17:14:51
- * @LastEditTime: 2021-10-30 11:51:29
- * @LastEditors: zpl
+ * @LastEditTime: 2022-03-30 11:21:14
+ * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -15,6 +15,7 @@ import imgPop from '@/assets/mobileBg.png';
 import styles from './index.less';
 
 import { data } from './mock';
+import Version from '@/components/Version';
 
 const Announcement = () => {
   const { initialState } = useModel('@@initialState');
@@ -68,12 +69,16 @@ const Announcement = () => {
             <img src={content?.NR} alt="" />
           </div>
           <div className={styles.wz}>
-            <h4>课后服务平台</h4>
-            <p>
-              课后服务平台是专为国内中小学生群体量身打造的一款课后教育类应用，立足于三点半难题，提供课后服务管理与监督功能。
+            <h4 style={{ fontWeight: 'bold' }}>课后服务平台</h4>
+            <p style={{ textIndent: '2em' }}>
+              课后服务平台是专为全国中小学生群体量身打造的一款课后教育类应用，立足于三点半难题，提供课后服务管理与监督功能。
             </p>
           </div>
           <div className={styles.xb}>
+            <Version
+              key="version"
+              style={{ color: '#666', textAlign: 'center', fontWeight: 'normal', marginBottom: 24 }}
+            />
             <Footer copyRight={initialState?.buildOptions.ENV_copyRight} />
           </div>
         </div>
