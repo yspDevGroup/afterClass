@@ -2,7 +2,7 @@
  * @description: 公告详情
  * @author: zpl
  * @Date: 2021-06-29 17:14:51
- * @LastEditTime: 2022-03-30 11:21:14
+ * @LastEditTime: 2022-03-30 12:18:35
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -55,7 +55,7 @@ const Announcement = () => {
       )}
       {articlepage ? (
         <GoBack
-          title={articlepage === 'serveAnnounce' ? '服务公告' : '关于'}
+          title={articlepage === 'serveAnnounce' ? '服务公告' : '关于我们'}
           teacher
           onclick="/teacher/home?index=mine"
         />
