@@ -152,30 +152,6 @@ const courseNotIntroduced = () => {
         );
       },
     },
-    // {
-    //   title: '状态',
-    //   align: 'center',
-    //   ellipsis: true,
-    //   dataIndex: 'YRZT',
-    //   key: 'YRZT',
-    //   search: false,
-    //   width: 110,
-    //   render: (text, record) => {
-    //     let status = '未引入';
-    //     if (record.KHKCSQs?.length) {
-    //       if (record.KHKCSQs[0].ZT === 0) {
-    //         status = '待确认'
-    //       } else if (record.KHKCSQs[0].ZT === 1) {
-    //         status = '已引入'
-    //       } else if (record.KHKCSQs[0].ZT === 2) {
-    //         status = '已拒绝'
-    //       } else if (record.KHKCSQs[0].ZT === 3) {
-    //         status = '未引入'
-    //       }
-    //     }
-    //     return status;
-    //   },
-    // },
     {
       title: '状态',
       dataIndex: 'YRZT',
@@ -203,6 +179,7 @@ const courseNotIntroduced = () => {
         },
 
       },
+      width: 100,
     },
     {
       title: '备注',
@@ -220,7 +197,7 @@ const courseNotIntroduced = () => {
       valueType: 'option',
       search: false,
       key: 'option',
-      width: 220,
+      width: 250,
       fixed: 'right',
       align: 'center',
       render: (text, record, index, action) => {

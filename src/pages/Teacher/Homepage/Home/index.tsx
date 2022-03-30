@@ -23,6 +23,7 @@ import moment from 'moment';
 import crpLogo from '@/assets/crp_logo.png';
 
 import styles from './index.less';
+import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 
 const Home = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -37,6 +38,8 @@ const Home = () => {
   // 巡课中课程安排数据
   const [dateData, setDateData] = useState<any>([]);
   const [DkData, setDkData] = useState<any>([]);
+  const [policyData, setPolicyData] = useState<any>();
+
   const today = dayjs().format('YYYY/MM/DD');
   const getTodayData = async (day: string) => {
     const res = await getScheduleByDate({
@@ -69,6 +72,8 @@ const Home = () => {
       setDkData([]);
     }
   };
+
+  // 校内通知
   const getAnnoceData = async () => {
     const res = await getXXTZGG({
       ZT: ['已发布'],
@@ -83,6 +88,20 @@ const Home = () => {
       }
     } else {
       enHenceMsg(res.message);
+    }
+  };
+  // 政策公告
+  const getPolicyData = async () => {
+    const resgetXXTZGG = await getJYJGTZGG({
+      BT: '',
+      LX: 1,
+      ZT: ['已发布'],
+      XZQHM: currentUser?.XZQHM,
+      page: 1,
+      pageSize: 3,
+    });
+    if (resgetXXTZGG.status === 'ok') {
+      setPolicyData(resgetXXTZGG.data?.rows);
     }
   };
   useEffect(() => {
@@ -106,7 +125,7 @@ const Home = () => {
     getTodayData(today);
     getTDKData();
     getAnnoceData();
-    //
+    getPolicyData();
   }, [currentUser]);
   const getParentHomeData = async () => {
     const oriData = await ParentHomeData(
@@ -343,7 +362,7 @@ const Home = () => {
 
         {/* 公示栏 */}
         <div className={styles.announceArea}>
-          <Details data={notification} />
+          <Details data={notification} zcdata={policyData} />
         </div>
       </div>
       {/* 完善个人信息页面 */}

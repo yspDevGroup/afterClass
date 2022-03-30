@@ -471,7 +471,7 @@ const CallTheRoll = (props: any) => {
           columns={columns}
           rowKey="id"
           pagination={false}
-          scroll={{ y: 'calc(100vh - 400px)' }}
+          scroll={{ y: 'calc(100vh - 390px)' }}
         />
       </div>
       <div className={styles.footerButton}>
