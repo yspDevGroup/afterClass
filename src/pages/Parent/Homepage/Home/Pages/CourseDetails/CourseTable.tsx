@@ -10,9 +10,8 @@ import Nodata from '@/components/Nodata';
 import GoBack from '@/components/GoBack';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
-import { getTeachersByBJId } from '@/services/after-class/khbjsj';
+import { getAllKHBJKSSJ, getTeachersByBJId } from '@/services/after-class/khbjsj';
 import ShowName from '@/components/ShowName';
-import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
 
 const CourseTable: React.FC = () => {
   const { initialState } = useModel('@@initialState');
@@ -72,39 +71,15 @@ const CourseTable: React.FC = () => {
         }
         if (res.status === 'ok' && res.data) {
           let totalDays = classInfo?.days || [];
-          const results = await getKCBSKSJ({
-            KHBJSJId: [classid],
+          const results = await getAllKHBJKSSJ({
+            KHBJSJIds: [classid],
           });
-          // console.log(result,'result---');
           if (results.status === 'ok' && results.data) {
             const { rows } = results.data;
             if (rows?.length) {
-              totalDays = [].map.call(rows, (v: { XXSJPZId: string, SKRQ: string }, index) => {
-                return {
-                  index,
-                  jcId: v.XXSJPZId,
-                  day: v.SKRQ,
-                }
-              })
+              totalDays = JSON.parse(rows[0].DATA);
             }
           }
-          // if (classInfo?.days?.length === 0 && classInfo.detail?.[0]?.KSS === 0) {
-          //   const result = await getKCBSKSJ({
-          //     KHBJSJId: [classid],
-          //   });
-          //   if (result.status === 'ok' && result.data) {
-          //     const { rows } = result.data;
-          //     if (rows?.length) {
-          //       totalDays = [].map.call(rows, (v: { XXSJPZId: string, SKRQ: string }, index) => {
-          //         return {
-          //           index: index + 1,
-          //           jcId: v.XXSJPZId,
-          //           day: v.SKRQ,
-          //         }
-          //       })
-          //     }
-          //   }
-          // }
           const dataTable = totalDays?.map((ele: any) => {
             const { day, status, ...rest } = ele;
             let stuStatus: string = '';
@@ -184,14 +159,15 @@ const CourseTable: React.FC = () => {
       if (val.tag === '假') {
         content = {
           title: '请假说明',
-          content: ` ${
-            val.reason ? `由于${val.reason},` : ''
-          }本节课程安排取消，之后课程顺延,请知悉.`,
+          content: ` ${val.reason ? `由于${val.reason},` : ''}本节课程安排取消,请知悉。`,
         };
       } else {
         content = {
           title: '调课说明',
-          content: `由于${val.reason},本节课临时调整到${val.realDate}日${val.start}-${val.end}上课,请知悉.`,
+          content: `由于${val.reason},本节课临时调整到${val.realDate}日 ${val.start?.substring(
+            0,
+            5,
+          )}-${val.end?.substring(0, 5)} ,请知悉。`,
         };
       }
       Modal.info({
@@ -225,7 +201,6 @@ const CourseTable: React.FC = () => {
             {KcDetail?.KSS === 0 || KcDetail?.KSS === null ? (
               ''
             ) : (
-
               <li>
                 <span>{KcDetail?.ISFW === 1 ? '周课时：' : '总课时：'}</span>
                 {KcDetail?.KSS}课时
