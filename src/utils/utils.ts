@@ -79,8 +79,10 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.9cloudstech.com',
         ssoHost: 'http://sso.9cloudstech.com',
         crpHost: 'http://crpweb.9cloudstech.com',
-        clientId: 'ww73cd866f2c4dc83f',
-        clientSecret: 'IfPhfMfVtX-y-BG-CrGlZIJw-m-GoCnJwxffigZDGLA',
+        clientId: '00002',
+        clientSecret: '9RPq-sCiSq2RdbPSZqAj',
+        // clientId: 'ww73cd866f2c4dc83f',
+        // clientSecret: 'IfPhfMfVtX-y-BG-CrGlZIJw-m-GoCnJwxffigZDGLA',
         apiClientId: '00002',
       };
     case 'development':
@@ -103,8 +105,8 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://localhost:8000',
         ssoHost: 'http://platform.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
-        clientId: 'ww20993d96d6755f55',
-        clientSecret: 'wy83uVM6xgfDtE2XS5WQ',
+        clientId: '00002',
+        clientSecret: '9RPq-sCiSq2RdbPSZqAj',
         apiClientId: '00002',
       };
   }

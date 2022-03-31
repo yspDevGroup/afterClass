@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2022-03-24 08:46:47
+ * @LastEditTime: 2022-03-31 15:11:06
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -72,27 +72,32 @@ const Index = () => {
   /**
    * 根据不同身份进入对应的应用主页
    *
-   * @param {string} userType 用户身份
+   * @param {(string | string[])} userType 用户身份
    */
-  const gotoIndex = (userType: string) => {
-    switch (userType) {
-      case '系统管理员':
-      case '管理员':
-        gotoAdmin();
-        break;
-      case '老师':
-        gotoTeacher();
-        break;
-      case '家长':
-        gotoParent();
-        break;
-      case '其他':
-        history.replace('/403?message=抱歉，您的企业暂未通过审核，请联系管理员');
-        break;
-      default:
-        history.replace('/403?title=未获取到合法的用户身份');
-        break;
+  const gotoIndex = (userType: string | string[]) => {
+    const isAdmin = Array.isArray(userType)
+      ? userType.find((u) => ['系统管理员', '管理员'].includes(u))
+      : ['系统管理员', '管理员'].includes(userType);
+    if (isAdmin) {
+      gotoAdmin();
+      return;
     }
+    const isTeacher = Array.isArray(userType) ? userType.includes('老师') : userType === '老师';
+    if (isTeacher) {
+      gotoTeacher();
+      return;
+    }
+    const isParent = Array.isArray(userType) ? userType.includes('家长') : userType === '家长';
+    if (isParent) {
+      gotoParent();
+      return;
+    }
+    const isOther = Array.isArray(userType) ? userType.includes('其他') : userType === '其他';
+    if (isOther) {
+      history.replace('/403?message=抱歉，您的企业暂未通过审核，请联系管理员');
+      return;
+    }
+    history.replace('/403?title=未获取到合法的用户身份');
   };
 
   useEffect(() => {
