@@ -118,7 +118,11 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
               alt="avatar"
             />
             <span className={`${styles.name} anticon`} ref={userRef}>
-              <ShowName XM={currentUser.XM} type="userName" openid={currentUser?.UserId} />
+              <ShowName
+                XM={currentUser.XM || currentUser.realName}
+                type="userName"
+                openid={currentUser?.UserId || currentUser.username}
+              />
             </span>
           </span>
         </HeaderDropdown>
