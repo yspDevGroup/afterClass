@@ -21,6 +21,7 @@ import MobileCalendar from '@/components/MobileCalendar/calendar';
 import noData from '@/assets/noCourses1.png';
 import { getScheduleByDate, getXKrecordBydate } from '@/services/after-class/khxksj';
 import { getWeekday } from '@/services/local-services/mobileHome';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const PatrolArrange = () => {
   const { initialState } = useModel('@@initialState');
@@ -30,10 +31,11 @@ const PatrolArrange = () => {
   const [dateData, setDateData] = useState<any>([]);
   const [dates, setDates] = useState<string[]>([]);
   const getData = async (days: string) => {
+    const result = await queryXNXQList(currentUser?.xxId);
     const res = await getScheduleByDate({
       JZGJBSJId: currentUser.JSId || testTeacherId,
       RQ: days,
-      WEEKDAY: new Date(days).getDay().toString(),
+      XNXQId:result?.current?.id,
       XXJBSJId: currentUser?.xxId,
     });
     if (res.status === 'ok' && res.data) {

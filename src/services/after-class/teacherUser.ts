@@ -84,3 +84,20 @@ export async function checkUsername(
     ...(options || {}),
   });
 }
+
+/** 删除教师登录用户 DELETE /teacherUser/${param0} */
+export async function DeleteTeacherUser(
+  params: {
+    // path
+    /** 教师登录账户ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/teacherUser/${param0}`, {
+    method: 'DELETE',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}

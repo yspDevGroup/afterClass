@@ -3992,13 +3992,11 @@ declare namespace API {
   };
 
   type updateTeacherUser = {
-    /** 登录时间 */
-    loginTime?: string;
-    /** 登出时间 */
-    logoutTime?: string;
     JZGJBSJId?: string;
     /** 密码 */
     password?: string;
+    /** 姓名 */
+    realname?: string;
     /** 状态，0无效1有效，其他可由业务自行定义 */
     status?: number;
     /** 用户身份ID */

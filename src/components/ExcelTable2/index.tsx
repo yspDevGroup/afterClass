@@ -129,14 +129,16 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue, KbT
           data?.cla === '无法排课' ? <div className={styles.NoPk}><p>超出学年学期</p><span>无法排课</span></div> :
             <Tooltip title={<div>
               <p style={{ marginBottom: '5px' }}>课程班：{data?.cla}</p>
-              <p style={{ marginBottom: '5px' }}>教师：<ShowName
-                XM={data.teacher}
-                type="userName"
-                openid={data.teacherWechatId}
-                style={{
-                  color: data?.color,
-                }}
-              /></p>
+              {
+                data.teacher ? <p style={{ marginBottom: '5px' }}>教师：<ShowName
+                  XM={data.teacher}
+                  type="userName"
+                  openid={data.teacherWechatId}
+                  style={{
+                    color: data?.color,
+                  }}
+                /></p> : <></>
+              }
               <p style={{ marginBottom: '5px' }}>场地：{data?.fjmc}</p>
             </div>} >
               <div className="classCard">
@@ -162,7 +164,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue, KbT
                       justifyContent: 'space-between',
                       overflow: 'hidden',
                     }}>
-                     <p className={styles.text}>{data?.cla}</p>
+                      <p className={styles.text}>{data?.cla}</p>
                       {
                         KbType !== '教师课表' ? <ShowName
                           XM={data.teacher}
@@ -179,7 +181,7 @@ const KBItem: FC<KBItemProps> = ({ mode, data, disabled, onClick, bjmcValue, KbT
                   )}
 
                   {mode === 'see' && bjmcValue?.length <= 1 ?
-                    <p className={styles.text}>{data?.fjmc}</p>: <></>
+                    <p className={styles.text}>{data?.fjmc}</p> : <></>
                   }
                   {mode === 'see' && data?.bjzt === '已开班' ? (
                     <div className={styles.duihao}>√</div>

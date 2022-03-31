@@ -24,6 +24,7 @@ import crpLogo from '@/assets/crp_logo.png';
 
 import styles from './index.less';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const Home = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -42,10 +43,11 @@ const Home = () => {
 
   const today = dayjs().format('YYYY/MM/DD');
   const getTodayData = async (day: string) => {
+    const result = await queryXNXQList(currentUser?.xxId);
     const res = await getScheduleByDate({
       JZGJBSJId: currentUser.JSId || testTeacherId,
       RQ: day,
-      WEEKDAY: new Date(day).getDay().toString(),
+      XNXQId:result?.current?.id,
       XXJBSJId: currentUser?.xxId,
     });
     if (res.status === 'ok' && res.data) {

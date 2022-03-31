@@ -22,6 +22,7 @@ import moment from 'moment';
 import { getStudentListByBjid } from '@/services/after-class/khfwbj';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { Carousel } from 'antd';
+import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 
 const Home = () => {
   const { initialState } = useModel('@@initialState');
@@ -50,8 +51,24 @@ const Home = () => {
   // 课后服务是否可以报名
   const [BmType, setBmType] = useState(true);
   const [Headlines, setHeadlines] = useState<any>();
+  const [policyData, setPolicyData] = useState<any>();
 
   const [BJMC, setBJMC] = useState<any>();
+
+    // 政策公告
+    const getPolicyData = async () => {
+      const resgetXXTZGG = await getJYJGTZGG({
+        BT: '',
+        LX: 1,
+        ZT: ['已发布'],
+        XZQHM: currentUser?.XZQHM,
+        page: 1,
+        pageSize: 3,
+      });
+      if (resgetXXTZGG.status === 'ok') {
+        setPolicyData(resgetXXTZGG.data?.rows);
+      }
+    };
   useEffect(() => {
     async function announcements() {
       const res = await getXXTZGG({
@@ -76,6 +93,7 @@ const Home = () => {
       }
     }
     announcements();
+    getPolicyData();
     if (
       localStorage.getItem('studentName') === null &&
       localStorage.getItem('studentId') === null
@@ -84,6 +102,9 @@ const Home = () => {
       localStorage.setItem('studentId', currentUser?.student?.[0].XSJBSJId || '');
     }
   }, [currentUser]);
+
+
+
   useEffect(() => {
     const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1];
     const ParentalIdentitys = `${StorageXSName}${identity || ''}`;
@@ -406,7 +427,7 @@ const Home = () => {
 
           </a> */}
           <div className={styles.announceArea}>
-            <Details data={notification} />
+            <Details data={notification} zcdata={policyData} />
           </div>
           <Link
             style={{ visibility: 'hidden' }}

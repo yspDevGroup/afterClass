@@ -6,4 +6,43 @@
       margin-bottom: 14px;
     }
   }
+
+}
+
+.gonggao{
+  :global {
+    .ant-tabs-nav {
+      margin-bottom: 0;
+
+      .ant-tabs-nav-wrap {
+        .ant-tabs-nav-list {
+          width: 100%;
+
+          .ant-tabs-tab {
+            width: 50%;
+            margin-left: 0;
+            background: #fff;
+            border: none;
+            border-radius: 0%;
+
+            .ant-tabs-tab-btn {
+              margin: 0 auto;
+              font-size: 16px;
+            }
+          }
+
+          .ant-tabs-tab:hover {
+            color: #333;
+          }
+
+          .ant-tabs-tab-active {
+            .ant-tabs-tab-btn {
+              color: #333;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
 }

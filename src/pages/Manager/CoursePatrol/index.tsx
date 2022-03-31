@@ -21,6 +21,7 @@ import {
   updateKHXKSJ,
 } from '@/services/after-class/khxksj';
 import { getAuthorization } from '@/utils/utils';
+import { queryXNXQList } from '@/services/local-services/xnxq';
 
 const { confirm } = Modal;
 
@@ -132,11 +133,11 @@ const CoursePatrol = () => {
     });
   };
   const handleOver = async (d: string) => {
-    const newDay = moment(d).format('YYYY/MM/DD');
+    const result = await queryXNXQList(currentUser?.xxId);
     const res = await getScheduleByDate({
+      XNXQId:result?.current?.id,
       XXJBSJId: currentUser.xxId,
       RQ: d,
-      WEEKDAY: new Date(newDay).getDay().toString(),
     });
     if (res.status === 'ok' && res.data) {
       return res.data?.rows?.length > 0;

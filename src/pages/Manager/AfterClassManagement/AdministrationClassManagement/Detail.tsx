@@ -254,7 +254,7 @@ const Detail = (props: any) => {
       if (res.status === 'ok' && res.data) {
         // 可退已经报过名时间的课程
         setTKSDData(
-          res.data.rows?.[0]?.XSFWBJs?.reverse().map((item: any) => {
+          res.data.rows?.[0]?.XSFWBJs?.map((item: any) => {
             console.log('item', item);
             return {
               value: item?.KHFWSJPZ?.id,

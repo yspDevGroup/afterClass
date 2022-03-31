@@ -83,8 +83,8 @@ export async function getScheduleByDate(
     JZGJBSJId?: string;
     /** 日期 */
     RQ?: string;
-    /** 周几 */
-    WEEKDAY?: string;
+    /** 学年学期ID */
+    XNXQId?: string;
     /** 学校ID */
     XXJBSJId?: string;
   },

@@ -55,16 +55,13 @@ export async function importWechatTeachers(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
-    '/upload/importWechatTeachers',
-    {
-      method: 'POST',
-      params: {
-        ...params,
-      },
-      ...(options || {}),
+  return request<any>('/upload/importWechatTeachers', {
+    method: 'POST',
+    params: {
+      ...params,
     },
-  );
+    ...(options || {}),
+  });
 }
 
 /** 企业微信教师同步 POST /upload/syncWechatTeachers */

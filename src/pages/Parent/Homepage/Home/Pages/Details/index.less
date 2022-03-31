@@ -1,6 +1,5 @@
 .bigbox {
   width: 100%;
-  margin-top: 20px;
   .Headlines {
     display: inline-block;
     width: 36px;
@@ -21,55 +20,90 @@
     background: #333;
     border-radius: 50%;
   }
-
   :global {
     .ul {
       color: #333;
     }
-
     .link {
       color: #333;
     }
-
     ul li::marker {
       font-size: 4px;
     }
   }
-
   .header {
     display: flex;
     justify-content: space-between;
     line-height: 28px;
-
     .title {
-      display: flex;
-      height: 24px;
-      margin-bottom: 10px;
-      line-height: 24px;
+      position: relative;
+      color: #333;
+      font-weight: 600;
+      font-size: 16px;
+      font-style: normal;
+      line-height: 22px;
 
       > div:nth-of-type(1) {
-        display: inline-block;
+        position: absolute;
+        top: 2px;
         width: 3px;
         height: 19px;
-        margin: 3px 6px 0 0;
-        background: #15b628;
+        background: #3d8bf2;
         border-radius: 3px 0;
       }
 
       span {
+        margin-left: 6px;
         color: #333;
         font-weight: bold;
         font-size: 18px;
       }
     }
 
-    .all {
-      color: #999;
-      font-weight: normal;
-      font-size: 14px;
-      font-style: normal;
-      line-height: 17px;
-      text-align: right;
+
+  }
+
+  :global {
+    .ant-tabs-nav {
+      margin-bottom: 0;
+
+      .ant-tabs-nav-wrap {
+        .ant-tabs-nav-list {
+          width: 100%;
+
+          .ant-tabs-tab {
+            width: 50%;
+            margin-left: 0;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 0%;
+
+            .ant-tabs-tab-btn {
+              margin: 0 auto;
+              font-size: 16px;
+            }
+          }
+
+          .ant-tabs-tab:hover {
+            color: #333;
+          }
+
+          .ant-tabs-tab-active {
+            .ant-tabs-tab-btn {
+              color: #333;
+              font-weight: bold;
+            }
+          }
+        }
+      }
     }
+  }
+  .all {
+    color: #999;
+    font-weight: normal;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 17px;
+    text-align: center;
   }
 }

@@ -2,7 +2,7 @@
  * @description: 公告详情
  * @author: zpl
  * @Date: 2021-06-29 17:14:51
- * @LastEditTime: 2022-03-30 11:21:14
+ * @LastEditTime: 2022-03-30 12:18:35
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -16,16 +16,25 @@ import styles from './index.less';
 
 import { data } from './mock';
 import Version from '@/components/Version';
+import { Divider } from 'antd';
+import { JYJGTZGG } from '@/services/after-class/jyjgtzgg';
 
 const Announcement = () => {
   const { initialState } = useModel('@@initialState');
   const [content, setContent] = useState<any>();
   const pageId = getQueryString('listid');
+  const type = getQueryString('type');
+  const ly = getQueryString('ly');
   const articlepage = getQueryString('articlepage');
   const index = getQueryString('index');
   useEffect(() => {
     async function announcements() {
-      const res = await XXTZGG({ id: pageId! });
+      let res: any;
+      if (type === 'zcgg') {
+        res = await JYJGTZGG({ id: pageId! });
+      } else {
+        res = await XXTZGG({ id: pageId! });
+      }
       if (res.status === 'ok') {
         if (!(res.data === [])) {
           setContent(res.data);
@@ -45,20 +54,27 @@ const Announcement = () => {
   return (
     <div className={styles.DetailsBox}>
       {pageId ? (
-        <GoBack title="公告详情" onclick={index ? undefined : '/parent/home?index=index'} />
+        <GoBack
+          title="公告详情"
+          onclick={index === 'true' ? '/teacher/home/notice' : '/teacher/home?index=index'}
+          teacher
+        />
       ) : (
         ''
       )}
       {articlepage ? (
         <GoBack
           title={articlepage === 'serveAnnounce' ? '服务公告' : '关于我们'}
-          onclick="/parent/home?index=mine"
+          teacher
+          onclick="/teacher/home?index=mine"
         />
       ) : (
         ''
       )}
       {content?.BT ? <div className={styles.title}>{content?.BT}</div> : ''}
-      {content?.RQ ? <div className={styles.time}>发布时间：{content?.RQ}</div> : ''}
+      {content?.RQ ? <div className={styles.time}>
+        <span >{content?.RQ}</span>
+        {ly ? <><span> <Divider type='vertical' style={{ borderLeft: '1px solid #0000001a', margin: '0 10px' }} /></span><span>{ly}</span> </> : ''} </div> : ''}
       {content?.BT || content?.updatedAt ? <div className={styles.line} /> : ''}
       {articlepage === 'about' ? (
         <div className={styles.guanyu}>
