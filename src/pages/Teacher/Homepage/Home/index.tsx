@@ -47,7 +47,7 @@ const Home = () => {
     const res = await getScheduleByDate({
       JZGJBSJId: currentUser.JSId || testTeacherId,
       RQ: day,
-      XNXQId:result?.current?.id,
+      XNXQId: result?.current?.id,
       XXJBSJId: currentUser?.xxId,
     });
     if (res.status === 'ok' && res.data) {
@@ -146,12 +146,12 @@ const Home = () => {
   // 设置课程资源平台链接
   useEffect(() => {
     if (!initialState) return;
-    const { crpHost, apiClientId } = initialState.buildOptions;
+    const { crpHost, clientId } = initialState.buildOptions;
     // window.open('http://moodle.xianyunshipei.com/course/view.php?id=12');
     const ysp_token_type = localStorage.getItem('ysp_token_type');
     const ysp_access_token = localStorage.getItem('ysp_access_token');
     const params = JSON.stringify({ plat: 'school' });
-    const url = `${crpHost}/auth_callback/wechat?clientId=${apiClientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}`;
+    const url = `${crpHost}/auth_callback/wechat?clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}`;
     setCrpUrl(url);
   }, [initialState]);
 
@@ -244,7 +244,7 @@ const Home = () => {
                       <div
                         className={styles.wrap}
                         style={{ backgroundImage: `url(${TeacherToDo})` }}
-                      // onClick={() => { submit(value) }}
+                        // onClick={() => { submit(value) }}
                       >
                         {value?.LX === 1 ? (
                           <i style={{ color: '#15B628' }}>代课提醒</i>
@@ -347,20 +347,21 @@ const Home = () => {
         </div>
 
         {/* 素质教育资源 */}
-        {
-          initialState?.buildOptions.ENV_type === '9dy' ? <></> :
-            <div className={styles.resourcesBox}>
-              <a
-                // href="http://moodle.xianyunshipei.com/course/view.php?id=12"
-                href={crpUrl}
-                target="_blank"
-                rel="noreferrer"
-                className={styles.resources}
-              >
-                <img src={crpLogo} alt="" />
-              </a>
-            </div>
-        }
+        {initialState?.buildOptions.ENV_type === '9dy' ? (
+          <></>
+        ) : (
+          <div className={styles.resourcesBox}>
+            <a
+              // href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+              href={crpUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={styles.resources}
+            >
+              <img src={crpLogo} alt="" />
+            </a>
+          </div>
+        )}
 
         {/* 公示栏 */}
         <div className={styles.announceArea}>

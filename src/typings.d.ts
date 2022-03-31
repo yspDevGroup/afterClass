@@ -200,14 +200,10 @@ type BuildOptions = {
   ssoHost: string;
   /** 西安教育平台认证地址 */
   xaeduSsoHost?: string;
-  /** 注册的应用id */
-  clientId: string;
-  /** 注册的应用密钥 */
-  clientSecret: string;
+  /** 注册的应用id，学校端固定为00002 */
+  clientId: '00002';
   /** 素质教育资源地址 */
   crpHost: string;
-  /** api后台应用id，固定为00002 */
-  apiClientId: '00002';
 };
 
 type InitialState = {

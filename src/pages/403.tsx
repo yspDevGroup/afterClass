@@ -2,7 +2,7 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2022-03-23 18:06:52
+ * @LastEditTime: 2022-03-31 23:18:02
  * @LastEditors: zpl
  */
 import { history, useModel } from 'umi';
@@ -48,7 +48,6 @@ const NotFind = () => {
               if (!ysp_access_token || !initialState?.currentUser) {
                 const loginPath = getLoginPath({
                   suiteID: initialState?.buildOptions?.clientId || '',
-                  isAdmin: 'true',
                   buildOptions: initialState?.buildOptions,
                   reLogin: 'true',
                 });

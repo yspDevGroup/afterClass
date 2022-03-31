@@ -55,9 +55,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ssoHost: 'http://sso.prod.xianyunshipei.com',
         xaeduSsoHost: 'http://www.xaedu.cloud',
         crpHost: 'http://crpweb.prod.xianyunshipei.com',
-        clientId: 'wwe2dfbe3747b6e69f',
-        clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
-        apiClientId: '00002',
+        clientId: '00002',
       };
     case 'chanming':
       // 禅鸣环境
@@ -67,9 +65,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.wuyu.imzhiliao.com',
         ssoHost: 'http://sso.wuyu.imzhiliao.com',
         crpHost: 'http://crpweb.wuyu.imzhiliao.com',
-        clientId: 'wwe2dfbe3747b6e69f',
-        clientSecret: '6AOC8URCopue87AbTBmupZXqaKLeiKcLtAr4-v9USkY',
-        apiClientId: '00002',
+        clientId: '00002',
       };
     case '9dy':
       // 9朵云环境
@@ -80,10 +76,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ssoHost: 'http://sso.9cloudstech.com',
         crpHost: 'http://crpweb.9cloudstech.com',
         clientId: '00002',
-        clientSecret: '9RPq-sCiSq2RdbPSZqAj',
-        // clientId: 'ww73cd866f2c4dc83f',
-        // clientSecret: 'IfPhfMfVtX-y-BG-CrGlZIJw-m-GoCnJwxffigZDGLA',
-        apiClientId: '00002',
       };
     case 'development':
       // 开发测试环境
@@ -93,9 +85,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_host: 'http://afterclass.test.xianyunshipei.com',
         ssoHost: 'http://sso.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
-        clientId: 'ww20993d96d6755f55',
-        clientSecret: 'yqw2KwiyUCLv4V2_By-LYcDxD_vVyDI2jqlLOkqIqTY',
-        apiClientId: '00002',
+        clientId: '00002',
       };
     default:
       // 默认为local，本地开发模式下请在此处修改配置，但不要提交此处修改
@@ -106,8 +96,6 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ssoHost: 'http://platform.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
         clientId: '00002',
-        clientSecret: '9RPq-sCiSq2RdbPSZqAj',
-        apiClientId: '00002',
       };
   }
 };
@@ -260,19 +248,14 @@ type GetLoginPathProps = {
  * @param {GetLoginPathProps} { suiteID, isAdmin, buildOptions, reLogin }
  * @return {*}  {string}
  */
-export const getLoginPath = ({
-  suiteID,
-  isAdmin,
-  buildOptions,
-  reLogin,
-}: GetLoginPathProps): string => {
-  const { ssoHost, ENV_host, xaeduSsoHost, clientId, clientSecret } = buildOptions || {};
+export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathProps): string => {
+  const { ssoHost, ENV_host, xaeduSsoHost, clientId } = buildOptions || {};
   const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
   let loginPath: string;
   switch (authType) {
     case 'wechat':
       // 前提是本应该已经注册为微信认证，且正确配置认证回调地址为 ${ENV_host}/auth_callback/wechat
-      loginPath = `${ssoHost}/wechat/authorizeUrl?suiteID=${suiteID}&isAdmin=${isAdmin || false}`;
+      loginPath = `${ssoHost}/wechat/authorizeUrl?suiteID=${suiteID}`;
       break;
     case 'xaedu': {
       const callbackUrl = encodeURIComponent(`${ENV_host}/auth_callback/xaedu`);
@@ -283,7 +266,7 @@ export const getLoginPath = ({
       {
         // 为方便本地调试登录，认证回调地址通过参数传递给后台
         const callback = encodeURIComponent(`${ENV_host}/auth_callback/password`);
-        loginPath = `${ssoHost}/oauth2/password?response_type=${authType}&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${callback}&reLogin=${
+        loginPath = `${ssoHost}/oauth2/password?response_type=${authType}&client_id=${clientId}&redirect_uri=${callback}&reLogin=${
           reLogin || 'false'
         }`;
       }

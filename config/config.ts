@@ -18,7 +18,7 @@ export default defineConfig({
   },
   define: {
     ENV_title: '课后服务平台',
-    ENV_subTitle: '课后服务平台',
+    ENV_subTitle: '校园版',
     ENV_debug: false,
     testStudentId: '',
     testStudentBJId: '',

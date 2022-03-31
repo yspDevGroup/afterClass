@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2022-03-31 15:11:06
+ * @LastEditTime: 2022-03-31 23:18:33
  * @LastEditors: zpl
  */
 import { useEffect } from 'react';
@@ -22,7 +22,6 @@ const Index = () => {
   const gotoLogin = () => {
     const query = getPageQuery();
     const suiteID = (query.SuiteID || query.suiteID || '') as string;
-    const isAdmin = query.isAdmin === 'true' ? query.isAdmin : undefined;
     const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
     if (authType === 'wechat' && !suiteID) {
       history.replace('/403?title=未指定应用ID');
@@ -30,7 +29,6 @@ const Index = () => {
     }
     const loginPath = getLoginPath({
       suiteID,
-      isAdmin,
       buildOptions: initialState?.buildOptions,
     });
     gotoLink(loginPath);
