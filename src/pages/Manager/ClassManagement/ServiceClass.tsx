@@ -3,7 +3,7 @@ import { Link, useModel, history } from 'umi';
 import { useRef, useState, useEffect } from 'react';
 import { Button, Modal, Tooltip, Select, Divider, Tag, Space, message } from 'antd';
 import ProTable from '@ant-design/pro-table';
-import { PlusOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { theme } from '@/theme-default';
 import PromptInformation from '@/components/PromptInformation';
@@ -353,7 +353,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
             return n1.BH - n2.BH;
           }
           return n1.NJSJ?.NJ - n2.NJSJ?.NJ;
-        }
+        };
         arr.sort(sortArrays);
         return (
           <EllipsisHint
@@ -402,12 +402,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       title: (
         <span>
           授课安排&nbsp;
-          <Tooltip
-            overlayStyle={{ maxWidth: '30em' }}
-            title={
-              <>实授课时/应授课时/已排课时</>
-            }
-          >
+          <Tooltip overlayStyle={{ maxWidth: '30em' }} title={<>实授课时/应授课时/已排课时</>}>
             <QuestionCircleOutlined />
           </Tooltip>
         </span>
@@ -445,11 +440,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
       filters: true,
       onFilter: false,
       render: (_, record) => {
-        return (
-          <>
-            {record?.BJZT === '未开班' ? '已关闭' : '已开启'}
-          </>
-        );
+        return <>{record?.BJZT === '未开班' ? '已关闭' : '已开启'}</>;
       },
     },
     {
@@ -469,6 +460,30 @@ const ServiceClass = (props: { location: { state: any } }) => {
       },
     },
   ];
+
+  const getPromptInformation = () => {
+    if (kai) {
+      return (
+        <PromptInformation
+          text="未查询到学年学期数据，请先设置学年学期"
+          link="/basicalSettings/termManagement"
+          open={kai}
+          colse={kaiguan}
+        />
+      );
+    }
+    if (tips) {
+      return (
+        <PromptInformation
+          text="未查询到课程名称，请先设置课程"
+          link=""
+          open={true}
+          colse={clstips}
+        />
+      );
+    }
+    return <></>;
+  };
   return (
     <>
       <ProTable<any>
@@ -583,12 +598,12 @@ const ServiceClass = (props: { location: { state: any } }) => {
                 });
                 const ids: any[] = [];
                 list.forEach((value) => {
-                  ids.push(value?.id)
-                })
+                  ids.push(value?.id);
+                });
                 const res = await bulkUpdate({
                   KHBJSJIds: ids,
-                  BJZT: '已开班'
-                })
+                  BJZT: '已开班',
+                });
                 if (res?.status === 'ok') {
                   message.success('批量开启成功');
                   actionRef.current?.reloadAndRest?.();
@@ -604,7 +619,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
             </Button>
           );
         }}
-        tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+        tableAlertRender={({ selectedRowKeys, onCleanSelected }) => (
           <Space size={24}>
             <span>
               已选 {selectedRowKeys.length} 项
@@ -652,18 +667,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
         CopyType={CopyType}
         getData={getData}
       />
-      <PromptInformation
-        text="未查询到学年学期数据，请先设置学年学期"
-        link="/basicalSettings/termManagement"
-        open={kai}
-        colse={kaiguan}
-      />
-      <PromptInformation
-        text="未查询到课程名称，请先设置课程"
-        link=""
-        open={tips}
-        colse={clstips}
-      />
+      {getPromptInformation()}
 
       <Modal
         title="授课安排列表"
