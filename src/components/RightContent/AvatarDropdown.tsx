@@ -40,11 +40,22 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
     }) => {
       const { key } = info;
       if (key === 'logout' && initialState) {
-        const authType = localStorage.getItem('authType') || 'local';
+        const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
+
         localStorage.removeItem('authType');
         setInitialState({ ...initialState, currentUser: undefined });
         removeOAuthToken();
-        history.replace(authType === 'wechat' ? '/auth_callback/overDue' : '/');
+        switch (authType) {
+          case 'wechat':
+            history.replace('/auth_callback/overDue');
+            break;
+          case 'xaedu':
+            window.close();
+            break;
+          default:
+            history.replace('/');
+            break;
+        }
         return;
       }
     },
