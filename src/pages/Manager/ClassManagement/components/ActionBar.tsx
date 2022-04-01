@@ -301,18 +301,17 @@ const ActionBar = (props: propstype) => {
                 }}
                 okText="确认"
                 cancelText="取消"
+                width={300}
               >
-                <Space wrap={false}>
-                  <span style={{ color: '#333', fontSize: '16px' }}>
-                    课程名称：{record?.KHKCSJ?.KCMC}{' '}
-                  </span>
-                  <span style={{ color: '#333', fontSize: '16px' }}>
-                    课程班名称: {record?.BJMC}
-                  </span>
-                  <span style={{ color: '#333', fontSize: '16px' }}>
-                    确定<span style={{ color: '#FF6F6F' }}>结课</span>？
-                  </span>
-                </Space>
+                <p style={{ color: '#333', fontSize: '16px',marginBottom:'8px' }}>
+                  课程名称：{record?.KHKCSJ?.KCMC}{' '}
+                </p>
+                <p style={{ color: '#333', fontSize: '16px',marginBottom:'8px' }}>
+                  课程班名称: {record?.BJMC}
+                </p>
+                <p style={{ color: '#333', fontSize: '16px',marginBottom:'8px' }}>
+                  确定<span style={{ color: '#FF6F6F' }}>结课</span>？
+                </p>
               </Modal>
             </>
           )}

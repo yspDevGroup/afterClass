@@ -64,7 +64,6 @@ const Announcement = () => {
       {articlepage ? (
         <GoBack
           title={articlepage === 'serveAnnounce' ? '服务公告' : '关于我们'}
-          teacher
           onclick="/parent/home?index=mine"
         />
       ) : (
