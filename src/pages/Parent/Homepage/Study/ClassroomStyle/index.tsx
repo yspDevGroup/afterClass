@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import GoBack from '@/components/GoBack';
 import styles from './index.less';
 import { Avatar, Image, Row, Col, Skeleton } from 'antd';
@@ -150,8 +151,10 @@ const ClassroomStyle = () => {
                       </div>
                       <p>
                         <span>{item.time}</span>
+                      </p>
+                      <p>
                         <span>
-                          {item.className} ｜{item.classNum}
+                          {item.className}｜{item.classNum}
                         </span>
                       </p>
                     </div>

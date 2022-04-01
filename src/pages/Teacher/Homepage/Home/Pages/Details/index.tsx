@@ -97,7 +97,7 @@ const Details = (props: { data?: any[], zcdata?: any[] }) => {
         }}
       >
         <p className={styles.all}>
-          全部 <IconFont type="icon-gengduo" />
+          查看全部 <IconFont type="icon-gengduo" />
         </p>
       </Link>
     </div>

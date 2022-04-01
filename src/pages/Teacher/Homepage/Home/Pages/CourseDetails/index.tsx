@@ -28,6 +28,7 @@ const CourseDetails = () => {
   const claim = getQueryString('status');
   const path = getQueryString('path');
   const date = getQueryString('date');
+  const cdName = getQueryString('cdname');
   const userId = currentUser.JSId || testTeacherId;
 
   useEffect(() => {
@@ -221,7 +222,7 @@ const CourseDetails = () => {
             </li>
             <li>
               <span>上课地点：</span>
-              {KcDetail?.xq} | {FJMC}
+              {KcDetail?.xq} | {cdName || FJMC}
             </li>
             {KcDetail?.KSS ? (
               <li>

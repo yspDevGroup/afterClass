@@ -4,7 +4,7 @@ import styles from "./index.less";
 import type { ListData, ListItem } from '@/components/ListComponent/data';
 import moment from 'moment';
 import Nodata from '@/components/Nodata';
-import noData from '@/assets/noTzgg1.png';
+import noData from '@/assets/noTzgg.png';
 import Pagina from '../../components/Pagination/Pagination';
 import GoBack from '@/components/GoBack';
 import { Tabs } from 'antd';
@@ -70,7 +70,7 @@ const Notice = () => {
       for (let i = 0; i < notification.length; i += 1) {
         const listdata: ListItem = {
           title: notification[i].BT,
-          link: `/teacher/home/notice/announcement?listid=${notification[i].id}&index=true&type=xntz`,
+          link: `/parent/home/notice/announcement?listid=${notification[i].id}&index=true&type=xntz`,
           titleRight: {
             text: moment(notification[i].RQ).format('YYYY-MM-DD'),
           },
@@ -88,7 +88,7 @@ const Notice = () => {
       for (let i = 0; i < policyData.length; i += 1) {
         const listdata: ListItem = {
           title: policyData[i].BT,
-          link: `/teacher/home/notice/announcement?listid=${policyData[i].id}&index=true&type=zcgg&ly=${policyData[i].JYJGSJ.BMMC}`,
+          link: `/parent/home/notice/announcement?listid=${policyData[i].id}&index=true&type=zcgg&ly=${policyData[i].JYJGSJ.BMMC}`,
           titleRight: {
             text: moment(policyData[i].RQ).format('YYYY-MM-DD'),
           },
@@ -105,8 +105,8 @@ const Notice = () => {
 
   return (
     <div className={styles.gonggao}>
-      <GoBack title={'公告'} onclick='/teacher/home?index=index' teacher />
-      <Tabs type="card">
+      <GoBack title={'公告'} onclick='/parent/home?index=index'  />
+      <Tabs type='card'>
         <TabPane tab="校内通知" key="xntz">
           {notification && notification.length ? <div className={styles.NoticeBox}>
             <ListComp listData={annoceList} />

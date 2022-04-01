@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'umi';
 import styles from './index.less';
-import noData from '@/assets/noTzgg1.png';
+import noData from '@/assets/noTzgg.png';
 import IconFont from '@/components/CustomIcon';
 import Nodata from '@/components/Nodata';
 import { Tabs } from 'antd';
@@ -11,7 +11,7 @@ const Details = (props: { data?: any[], zcdata?: any[] }) => {
   const { data, zcdata } = props;
   return (
     <div className={styles.bigbox}>
-      <Tabs type="card">
+      <Tabs type='card'>
         <TabPane tab="校内通知" key="xntz">
           {data && data.length ? (
             <ul style={{ listStyle: 'initial', paddingLeft: '0px' }}>
@@ -19,7 +19,7 @@ const Details = (props: { data?: any[], zcdata?: any[] }) => {
                 if (index < 4) {
                   return (
                     <Link
-                      to={`/teacher/home/notice/announcement?listid=${record.id}&type=xntz`}
+                      to={`/parent/home/notice/announcement?listid=${record.id}&type=xntz`}
                       style={{ color: '#333' }}
                       key={record.id}
                     >
@@ -58,7 +58,7 @@ const Details = (props: { data?: any[], zcdata?: any[] }) => {
                 if (index < 4) {
                   return (
                     <Link
-                      to={`/teacher/home/notice/announcement?listid=${record.id}&type=zcgg&ly=${record.JYJGSJ.BMMC}`}
+                      to={`/parent/home/notice/announcement?listid=${record.id}&type=zcgg&ly=${record.JYJGSJ.BMMC}`}
                       style={{ color: '#333' }}
                       key={record.id}
                     >
@@ -93,11 +93,11 @@ const Details = (props: { data?: any[], zcdata?: any[] }) => {
       </Tabs>
       <Link
         to={{
-          pathname: '/teacher/home/notice',
+          pathname: '/parent/home/notice',
         }}
       >
         <p className={styles.all}>
-          全部 <IconFont type="icon-gengduo" />
+          查看全部 <IconFont type="icon-gengduo" />
         </p>
       </Link>
     </div>

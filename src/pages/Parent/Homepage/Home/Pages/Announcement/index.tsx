@@ -56,8 +56,7 @@ const Announcement = () => {
       {pageId ? (
         <GoBack
           title="公告详情"
-          onclick={index === 'true' ? '/teacher/home/notice' : '/teacher/home?index=index'}
-          teacher
+          onclick={index === 'true' ? '/parent/home/notice' : '/parent/home?index=index'}
         />
       ) : (
         ''
@@ -66,7 +65,7 @@ const Announcement = () => {
         <GoBack
           title={articlepage === 'serveAnnounce' ? '服务公告' : '关于我们'}
           teacher
-          onclick="/teacher/home?index=mine"
+          onclick="/parent/home?index=mine"
         />
       ) : (
         ''

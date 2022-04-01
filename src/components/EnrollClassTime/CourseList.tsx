@@ -30,7 +30,7 @@ const CourseList = (props: { data: any }) => {
                   className={styles.list}
                   onClick={() => {
                     history.push(
-                      `/teacher/home/courseDetails?classid=${value.bjId}&status=${value?.status}`,
+                      `/teacher/home/courseDetails?classid=${value.bjId}&status=${value?.status}&cdname=${value?.address}`,
                     );
                   }}
                 >

@@ -95,9 +95,15 @@ const Index = () => {
   };
   useEffect(() => {
     // 获取该用户是否导入
-    if (!currentUser.JSId && !testTeacherId) {
+    const authType = localStorage.getItem('authType') || 'none';
+    if (!currentUser.username && authType === 'password') {
+      setJSkai(true);
+    } else if (!currentUser.JSId && authType !== 'password') {
       setJSkai(true);
     }
+
+  }, []);
+  useEffect(() => {
     // 获取学年学期数据的获取
     (async () => {
       const res = await queryXNXQList(currentUser?.xxId);
@@ -436,6 +442,7 @@ const Index = () => {
                 </Row>
               </TabPane>
             </Tabs>
+
           </Card>
         </Col>
       </Row>
