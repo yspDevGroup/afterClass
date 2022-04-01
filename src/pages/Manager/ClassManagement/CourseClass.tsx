@@ -605,7 +605,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
         tableAlertOptionRender={({ selectedRows }) => {
           return (
             <>
-              <Tooltip title="只能对未开班并且拍过的班级开班">
+              <Tooltip title="只能对未开班并且排过的班级开班">
                 <Button
                   type="primary"
                   onClick={async () => {
@@ -621,7 +621,15 @@ const CourseManagement = (props: { location: { state: any } }) => {
                       BJZT: '已开班'
                     })
                     if (res?.status === 'ok') {
-                      message.success('批量开班成功');
+                      if(ids?.length){
+                        ids.forEach(async (v: string) => {
+                          await getClassDays(v);
+                        });
+                        message.success('批量开班成功');
+                      }else{
+                        message.warning('您所选班级均未排课，不可开班');
+                      }
+
                       actionRef.current?.reloadAndRest?.();
                       actionRef.current?.clearSelected?.();
                       getData();

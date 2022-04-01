@@ -606,6 +606,9 @@ const ServiceClass = (props: { location: { state: any } }) => {
                 });
                 if (res?.status === 'ok') {
                   if(ids?.length){
+                    ids.forEach(async (v: string) => {
+                      await getClassDays(v);
+                    });
                     message.success('批量开启成功');
                   }else{
                     message.warning('您所选班级均未排课，不可开启');

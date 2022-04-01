@@ -7,7 +7,7 @@ import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
 import { getKHBJSJ } from '@/services/after-class/khbjsj';
 import noPic from '@/assets/noPic1.png';
-import noData from '@/assets/noCourse.png';
+import noData from '@/assets/noCourse1.png';
 
 import styles from './index.less';
 import { getKCBSKSJ } from '@/services/after-class/kcbsksj';
