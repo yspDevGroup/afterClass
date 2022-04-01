@@ -73,14 +73,14 @@ const AddArranginClass: FC<PropsType> = (props) => {
   const [cdmcValue, setCdmcValue] = useState<any>();
   const [newTableDataSource, setNewTableDataSource] = useState<DataSourceType>([]);
 
-  //选择的班级的数据
+  // 选择的班级的数据
   const [Bj, setBj] = useState<any>(undefined);
   // 请求的班级列表数据
   const [bjData, setBjData] = useState<any>([]);
   const [tearchId, setTearchId] = useState(undefined);
   // 场地是否可以编辑
   const [CdFalg, setCdFalg] = useState<boolean>(false);
-  //年级
+  // 年级
   // const [grade, setGrade] = useState<any>([]);
 
   const columns: {
@@ -180,7 +180,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
         }
         return newDataSource;
       };
-      //根据场地名称筛选出来 场地数据
+      // 根据场地名称筛选出来 场地数据
       const newCDData = screenCD(screenOriSource);
       const newTableData: any = processingData(newCDData, xXSJPZData, Bj?.id);
       setNewTableDataSource(newTableData);
@@ -229,7 +229,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
     } else {
       // 移除 根据房间Id移除数据
       // console.log('移除')
-      let id: string | undefined = undefined;
+      let id: string | undefined;
       screenOriSource.forEach((item: any) => {
         const { KHPKSJs } = item;
         if (KHPKSJs.length > 0) {
@@ -279,7 +279,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
   const getKCStyle = (id: string) => {
     if (id === Bj?.id) {
       return { borderColor: 'rgba(62,136,248,1)' };
-    } else if (formValues?.BJId) {
+    } if (formValues?.BJId) {
       return {};
     }
     return {};
@@ -328,7 +328,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
     // setBJIDData(value.id);
   };
 
-  //获取课程数据
+  // 获取课程数据
   // const getKcData = async () => {
   //     const khkcResl = await getAllCourses({
   //         page: 0,
@@ -411,7 +411,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
     }
   }, [NJId, XZBId]);
 
-  //获取年级信息
+  // 获取年级信息
   // const getGradeData = () => {
   //     const response = getAllGrades({ XD: currentUser?.XD?.split(',') });
   //     Promise.resolve(response).then((res: any) => {
@@ -444,7 +444,7 @@ const AddArranginClass: FC<PropsType> = (props) => {
     confirm({
       title: '提示',
       icon: <QuestionCircleOutlined style={{ color: 'red' }} />,
-      content: '确定要清除当前所选课程班的排课信息吗？',
+      content: Bj?.id ? '确定要清除当前所选课程班的排课信息吗？' : '请先选择要清除的班级',
       onOk() {
         if (Bj?.id) {
           const parameter = {

@@ -65,8 +65,6 @@ const Login: React.FC = () => {
             <img src={logo} />
             <h3>
               {ENV_title}
-              <br />
-              {ENV_subTitle}
             </h3>
           </div>
           <ProForm

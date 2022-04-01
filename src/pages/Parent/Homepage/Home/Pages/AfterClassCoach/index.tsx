@@ -77,7 +77,7 @@ const EmptyArticle = (props: any) => {
         pageSize: 0,
       });
       if (res.status === 'ok') {
-        setKHFUXY(res.data?.rows?.[0].NR);
+        setKHFUXY(res.data?.rows?.[0]?.NR);
       }
     })();
   }, []);

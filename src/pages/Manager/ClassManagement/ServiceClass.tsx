@@ -605,12 +605,17 @@ const ServiceClass = (props: { location: { state: any } }) => {
                   BJZT: '已开班',
                 });
                 if (res?.status === 'ok') {
-                  message.success('批量开启成功');
+                  if(ids?.length){
+                    message.success('批量开启成功');
+                  }else{
+                    message.warning('您所选班级均未排课，不可开启');
+                  }
+
                   actionRef.current?.reloadAndRest?.();
                   actionRef.current?.clearSelected?.();
                   getData();
                 } else {
-                  message.error(res.message);
+                  message.warning(res.message);
                   actionRef.current?.clearSelected?.();
                 }
               }}

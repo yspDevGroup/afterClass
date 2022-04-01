@@ -447,7 +447,7 @@ const AddArranging: FC<PropsType> = (props) => {
     confirm({
       title: '提示',
       icon: <QuestionCircleOutlined style={{ color: 'red' }} />,
-      content: '确定要清除当前所选课程班的排课信息吗？',
+      content: Bj?.id ? '确定要清除当前所选课程班的排课信息吗？' : '请先选择要清除的班级',
       onOk() {
         if (Bj?.id) {
           const parameter = {
