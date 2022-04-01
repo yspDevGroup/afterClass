@@ -1,5 +1,8 @@
 .bigbox {
   width: 100%;
+  padding: 15px 10px;
+  background-color: #fff;
+  border-radius: 8px;
   .Headlines {
     display: inline-block;
     width: 36px;
@@ -30,6 +33,40 @@
     ul li::marker {
       font-size: 4px;
     }
+    .ant-tabs-nav {
+      margin-bottom: 0;
+
+      .ant-tabs-nav-wrap {
+        border-radius: 8px;
+        .ant-tabs-nav-list {
+          width: 100%;
+
+          .ant-tabs-tab {
+            width: 50%;
+            margin-left: 0;
+            background: #fff;
+            border: none;
+            border-radius: 0%;
+
+            .ant-tabs-tab-btn {
+              margin: 0 auto;
+              font-size: 16px;
+            }
+          }
+
+          .ant-tabs-tab:hover {
+            color: #333;
+          }
+
+          .ant-tabs-tab-active {
+            .ant-tabs-tab-btn {
+              color: #06f;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
   }
   .header {
     display: flex;
@@ -59,46 +96,9 @@
         font-size: 18px;
       }
     }
-
-
-  }
-
-  :global {
-    .ant-tabs-nav {
-      margin-bottom: 0;
-
-      .ant-tabs-nav-wrap {
-        .ant-tabs-nav-list {
-          width: 100%;
-
-          .ant-tabs-tab {
-            width: 50%;
-            margin-left: 0;
-            background: #f5f5f5;
-            border: none;
-            border-radius: 0%;
-
-            .ant-tabs-tab-btn {
-              margin: 0 auto;
-              font-size: 16px;
-            }
-          }
-
-          .ant-tabs-tab:hover {
-            color: #333;
-          }
-
-          .ant-tabs-tab-active {
-            .ant-tabs-tab-btn {
-              color: #333;
-              font-weight: bold;
-            }
-          }
-        }
-      }
-    }
   }
   .all {
+    margin-bottom: 0;
     color: #999;
     font-weight: normal;
     font-size: 12px;
