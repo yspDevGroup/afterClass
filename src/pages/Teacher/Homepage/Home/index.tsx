@@ -107,6 +107,7 @@ const Home = () => {
     }
   };
   useEffect(() => {
+    const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
     (async () => {
       if (/MicroMessenger/i.test(navigator.userAgent)) {
         await initWXConfig(['checkJsApi']);
@@ -118,10 +119,7 @@ const Home = () => {
       }
     })();
 
-    if (
-      (initialState?.buildOptions?.authType === 'wechat' && !currentUser.XM) ||
-      currentUser.XM === '未知'
-    ) {
+    if ((authType === 'wechat' && !currentUser.XM) || currentUser.XM === '未知') {
       setIsModalVisible(true);
     }
     getTodayData(today);
@@ -146,12 +144,13 @@ const Home = () => {
   // 设置课程资源平台链接
   useEffect(() => {
     if (!initialState) return;
-    const { crpHost, clientId } = initialState.buildOptions;
+    const { crpHost, clientId, ENV_host } = initialState.buildOptions;
     // window.open('http://moodle.xianyunshipei.com/course/view.php?id=12');
+    const url_api = decodeURIComponent(new URL(`${ENV_host}/api`).href);
     const ysp_token_type = localStorage.getItem('ysp_token_type');
     const ysp_access_token = localStorage.getItem('ysp_access_token');
     const params = JSON.stringify({ plat: 'school' });
-    const url = `${crpHost}/auth_callback/wechat?clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}`;
+    const url = `${crpHost}/auth_callback/wechat?url_api=${url_api}&clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}`;
     setCrpUrl(url);
   }, [initialState]);
 
