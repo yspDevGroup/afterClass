@@ -222,7 +222,7 @@ const CourseDetails = () => {
             </li>
             <li>
               <span>上课地点：</span>
-              {KcDetail?.xq} | {cdName || FJMC}
+              {KcDetail?.xq} | {cdName === 'undefined' ? FJMC : cdName}
             </li>
             {KcDetail?.KSS ? (
               <li>
