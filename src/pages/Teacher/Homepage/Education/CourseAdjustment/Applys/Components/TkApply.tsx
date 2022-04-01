@@ -81,14 +81,7 @@ const TkApply = () => {
   }, [NewRQ, NewKSSJ, NewJSSJ]);
   useEffect(() => {
     (async () => {
-      const opt = {
-        XXJBSJId: currentUser.xxId,
-        type: ['0'],
-      };
-      const res = await getAllXXSJPZ(opt);
-      if (res.status === 'ok' && res.data) {
-        setJcxx(res.data);
-      }
+
       const oriData = await ParentHomeData(
         'teacher',
         currentUser?.xxId,
@@ -96,6 +89,17 @@ const TkApply = () => {
       );
       const { xnxqId } = oriData.data;
       setTermId(xnxqId);
+      if(xnxqId){
+        const opt = {
+          XNXQId: xnxqId,
+          XXJBSJId: currentUser.xxId,
+          type: ['0'],
+        };
+        const res = await getAllXXSJPZ(opt);
+        if (res.status === 'ok' && res.data) {
+          setJcxx(res.data);
+        }
+      }
     })();
   }, []);
   useEffect(() => {
