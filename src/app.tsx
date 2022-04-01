@@ -78,7 +78,7 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
       // content: initialState?.currentUser?.name,
     },
     pageTitleRender: () => {
-      return `${ENV_subTitle}`;
+      return `${ENV_title}`;
     },
     footerRender: () => <Footer copyRight={initialState.buildOptions.ENV_copyRight} />,
     onPageChange: () => {

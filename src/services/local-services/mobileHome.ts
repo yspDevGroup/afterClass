@@ -632,7 +632,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
         title: item.title,
         BJMC: item.BJMC,
         img: item.img,
-        link: `/teacher/home/courseDetails?classid=${item.bjId}&path=education&date=${day}&status=${item.status}`,
+        link: `/teacher/home/courseDetails?classid=${item.bjId}&path=education&date=${day}&status=${item.status}&cdname=${item?.address}`,
         enrollLink,
         start: item.start,
         end: item.end,
