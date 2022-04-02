@@ -208,12 +208,14 @@ const RegistrationSetting = () => {
           name: `${moment(KSRQ).month() + 1}月`,
         });
         if (KSRQ.getMonth() < 11) {
+          // console.log('KSRQ', getTimeString(KSRQ));
+          KSRQ = new Date(KSRQ.setDate(1));
           KSRQ = new Date(KSRQ.setMonth(KSRQ.getMonth() + 1));
-          KSRQ = new Date(KSRQ.setDate(1));
+          // console.log('KSRQ', getTimeString(KSRQ));
         } else if (KSRQ.getMonth() === 11) {
-          KSRQ = new Date(KSRQ.setFullYear(KSRQ.getFullYear() + 1));
-          KSRQ = new Date(KSRQ.setMonth(0));
           KSRQ = new Date(KSRQ.setDate(1));
+          KSRQ = new Date(KSRQ.setMonth(0));
+          KSRQ = new Date(KSRQ.setFullYear(KSRQ.getFullYear() + 1));
         }
       }
       if (KSRQ.getMonth() === JSRQ.getMonth() && KSRQ < JSRQ) {
@@ -227,6 +229,7 @@ const RegistrationSetting = () => {
           name: `${moment(KSRQ).month() + 1}月`,
         });
       }
+      // console.log(arr)
 
       setDetail(arr, 0);
     }
@@ -439,8 +442,7 @@ const RegistrationSetting = () => {
     if (JFLX === 0) {
       return getmonthSetting();
     }
-      return getEditFromSetting();
-
+    return getEditFromSetting();
   };
 
   const onPayClick = async (arr: any[], falg: boolean) => {
@@ -674,6 +676,7 @@ const RegistrationSetting = () => {
     },
   ];
 
+  // setinitDetail()
   return (
     <div>
       <PageContain type="homepage">
@@ -765,7 +768,11 @@ const RegistrationSetting = () => {
 
                   // }}>应用</Button>
                   <Tooltip
-                    title={(editDisable && '如需更改报名时间设置，需先在行政班管理界面清除所有行政班配置信息') || false}
+                    title={
+                      (editDisable &&
+                        '如需更改报名时间设置，需先在行政班管理界面清除所有行政班配置信息') ||
+                      false
+                    }
                   >
                     <Button
                       type={editDisable ? 'ghost' : 'primary'}
