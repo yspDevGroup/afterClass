@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import PageContain from '@/components/PageContainer';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -72,10 +73,10 @@ const Detail = (props: any) => {
       if (nowTime <= endTime) {
         return true;
       }
-        return false;
+      return false;
 
     }
-      return false;
+    return false;
 
   };
 
@@ -236,7 +237,7 @@ const Detail = (props: any) => {
           }
           return '已报名';
         }
-          return '未报名';
+        return '未报名';
 
       },
     },
@@ -509,7 +510,7 @@ const Detail = (props: any) => {
     if (KHFWBJs?.[0] && detailZT) {
       return [...columns, ...option];
     }
-      return columns;
+    return columns;
 
   };
   useEffect(() => {
@@ -690,7 +691,7 @@ const Detail = (props: any) => {
                       </Space>
                     );
                   }
-                    return '';
+                  return '';
 
                 }}
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -712,39 +713,19 @@ const Detail = (props: any) => {
                   defaultCurrent: 1,
                 }}
                 request={async (param) => {
-                  // 表单搜索项会从 params 传入，传递给后端接口。
-                  // const arrZT: any[] = [];
-
                   if (state.id && KHFWSJPZId) {
                     const res = await getStudentListByBjid({
                       BJSJId: state.id,
                       page: param.current || 1,
                       pageSize: param.pageSize || 10,
                       KHFWSJPZId,
-                      ZT: [],
+                      ZT: ZT === undefined ? [] : (ZT === 0 ? [0, 3] : [ZT]),
                       XSXMORXH: searchValue,
                     });
-
                     if (res?.status === 'ok') {
-                      const data = res?.data?.rows?.filter((item: any) => {
-                        // 已报名 已报名 或者 非已退
-                        if (ZT === 1) {
-                          if (item?.XSFWBJs.length && item.XSFWBJs?.[0].ZT !== 2) {
-                            return true;
-                          }
-                          return false;
-                        }
-                        // 未报名 未报名 已退课
-                        if (ZT === 2) {
-                          if (!item?.XSFWBJs.length || item.XSFWBJs?.[0].ZT === 2) {
-                            return true;
-                          }
-                          return false;
-                        }
-                        return true;
-                      });
+
                       return {
-                        data,
+                        data:res.data.rows,
                         success: true,
                         total: res.data.count,
                       };
@@ -802,11 +783,11 @@ const Detail = (props: any) => {
                           setZT(value);
                         }}
                       >
-                        <Option value={1}>已报名</Option>;
+                        <Option value={0}>已报名</Option>;
                         {/* <Option value={1}>退课中</Option>;
                     <Option value={2}>已退课</Option>;
                     <Option value={3}>未缴费</Option>; */}
-                        <Option value={2}>未报名</Option>;
+                        <Option value={4}>未报名</Option>;
                       </Select>
                     </div>
                   </SearchLayout>
