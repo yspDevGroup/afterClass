@@ -6,8 +6,8 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2022-03-29 15:59:42
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-04-02 15:12:21
+ * @LastEditors: zpl
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -293,7 +293,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         formRef={formRef}
         title={title}
         visible={visible}
-        submitter={!type}
+        submitter={!type && undefined}
         trigger={
           <Button
             type={serviceId ? 'link' : 'primary'}
