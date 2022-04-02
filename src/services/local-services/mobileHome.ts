@@ -619,7 +619,7 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           pkId: item.pkId,
           bjId: item.bjId,
           jcId: item.jcId,
-          date: item.date || day,
+          date:  day,
           startTime: item.start,
           endTime: item.end,
           KCName: item.title,
