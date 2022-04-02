@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 17:55:59
- * @LastEditTime: 2022-04-02 15:44:22
+ * @LastEditTime: 2022-04-02 17:48:09
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -45,6 +45,7 @@ const PatrolArrange = (props: any) => {
     }
     getData();
   }, []);
+
   return (
     <>
       <GoBack title={'巡课'} onclick="/teacher/patrolArrange" teacher />
@@ -55,10 +56,10 @@ const PatrolArrange = (props: any) => {
             <ul>
               {classData?.length
                 ? classData.map((item: any) => {
-                    const { BJMC, KHPKSJs, KHXKJLs } = item;
+                    const { BJMC, KCBSKSJs, KHXKJLs } = item;
                     return (
-                      <>
-                        {KHPKSJs?.map((val: any) => {
+                      <div key={item.id}>
+                        {KCBSKSJs?.map((val: any) => {
                           const { XXSJPZ, FJSJ } = val;
                           const isXk = KHXKJLs?.find(
                             (v: { XXSJPZ: any }) => v.XXSJPZ?.id === XXSJPZ.id,
@@ -91,6 +92,7 @@ const PatrolArrange = (props: any) => {
                                         kcmc,
                                         xkrq: day,
                                         bjxx: item,
+                                        skxx: val,
                                         check: isXk,
                                         jcId: XXSJPZ.id,
                                       },
@@ -105,7 +107,7 @@ const PatrolArrange = (props: any) => {
                             </li>
                           );
                         })}
-                      </>
+                      </div>
                     );
                   })
                 : ''}
