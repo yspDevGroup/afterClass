@@ -54,13 +54,13 @@ const EnrollClassTime = (props: {
         if (status === '已请假') {
           domRight = '';
         }
-        if (status === '班主任已请假') {
+        if (status === '主班已请假') {
           domRight = '无需上课';
         }
         if (status === '代上课') {
           domRight = <TimeRight startTime={ele.start} />;
         }
-      } else if (status === '班主任已请假') {
+      } else if (status === '主班已请假') {
         domRight = '无需上课';
       } else if (ClassStatus(ele.start, ele.end) === '待上课') {
         domRight = <TimeRight startTime={ele.start} />;

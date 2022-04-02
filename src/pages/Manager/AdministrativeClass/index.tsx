@@ -125,7 +125,7 @@ const AdministrativeClass = () => {
       width: 160,
     },
     {
-      title: '班主任',
+      title: '主班',
       dataIndex: 'BZR',
       key: 'BZR',
       align: 'center',
@@ -161,7 +161,7 @@ const AdministrativeClass = () => {
       width: 150,
     },
     // {
-    //   title: '班主任',
+    //   title: '主班',
     //   dataIndex: 'BZR',
     //   key: 'BZR',
     //   align: 'center',

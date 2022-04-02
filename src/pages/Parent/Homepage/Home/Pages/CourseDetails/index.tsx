@@ -371,7 +371,7 @@ const CourseDetails: React.FC = () => {
                     <p>总人数：{value.BJRS}人</p>
                     {BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '主教师') ? (
                       <p>
-                        班主任：
+                        主班：
                         {BjDetails?.KHBJJs?.map((item: any) => {
                           if (item.JSLX.indexOf('副') === -1) {
                             return (

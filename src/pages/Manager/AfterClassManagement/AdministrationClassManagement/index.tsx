@@ -247,7 +247,7 @@ const AdministrationClassManagement = () => {
       width: 160,
     },
     {
-      title: '班主任',
+      title: '主班',
       dataIndex: 'BZR',
       key: 'BZR',
       align: 'center',

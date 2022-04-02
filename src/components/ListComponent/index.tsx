@@ -8,15 +8,17 @@
  */
 
 import type { ListData, ListItem, ListType } from './data';
-import { List } from 'antd';
+import { List, Image } from 'antd';
 import { history } from 'umi';
 import styles from './index.less';
 import DisplayColumn from '../DisplayColumn';
 import Nodata from '../Nodata';
 import noPic from '@/assets/noPic.png';
 import noPic1 from '@/assets/noPic1.png';
+import noPicBig from '@/assets/noPicBig.png';
+import noPicBig1 from '@/assets/noPicBig1.png';
 
-const statusText = ['已请假', '班主任已请假', '已调课', '代课', '已换课'];
+const statusText = ['已请假', '主班已请假', '已调课', '代课', '已换课'];
 const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) => {
   const { data, type, operation } = props;
   const teacher = history.location.pathname.indexOf('teacher') > -1;
@@ -33,8 +35,8 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                 operation
                   ? 'ui-listItemWrapper'
                   : !statusText.includes?.(v.titleRight?.text || '')
-                  ? 'itemWrapper'
-                  : 'itemDisabled'
+                    ? 'itemWrapper'
+                    : 'itemDisabled'
               }
             >
               <div className={operation ? 'ui-listItemContent' : 'itemContent'}>
@@ -59,20 +61,32 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                     style={
                       type === 'descList'
                         ? {
-                            background:
-                              v.titleRight?.text === '待上课'
-                                ? 'rgba(69, 201, 119, 0.05)'
-                                : v.titleRight?.text === '代上课'
+                          background:
+                            v.titleRight?.text === '待上课'
+                              ? 'rgba(69, 201, 119, 0.05)'
+                              : v.titleRight?.text === '代上课'
                                 ? 'rgba(255, 199, 0, 0.05)'
                                 : 'rgba(102, 102, 102, 0.05)',
-                          }
+                        }
                         : {}
                     }
                     // eslint-disable-next-line no-nested-ternary
                     avatar={
                       v.img || v.img === '' ? (
                         v.img.indexOf('http') > -1 ? (
-                          <img width="110" height="70" alt={v.title} src={v.img} />
+                          <Image
+                            style={{
+                              width: '110px',
+                              height: '70px',
+                              border: '1px solid #F7F7F7',
+                              borderRadius: '8px',
+                              textAlign: 'center',
+                            }}
+                            alt='预览图'
+                            src={v.img}
+                            fallback={teacher ? noPicBig1 : noPicBig}
+                            preview={false}
+                          />
                         ) : (
                           <div
                             style={{

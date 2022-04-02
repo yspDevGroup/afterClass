@@ -283,7 +283,7 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
     // 如果数据重合则增加原有数据的相关代课状态,否则在数组中追加相关已代课数据
     if (oriInd !== -1) {
       if (oriData?.[oriInd]?.status && oriData[oriInd].status === '已请假') {
-        oriData[oriInd].status = `班主任已请假`;
+        oriData[oriInd].status = `主班已请假`;
       } else {
         oriData[oriInd].status = status;
         oriData[oriInd].otherInfo = ele;
@@ -390,7 +390,7 @@ export const CurdayCourse = async (
           const { jcId, status, tag, reason, realDate } = currentDay;
           return {
             ...val,
-            status: status === '已请假' ? '班主任已请假' : status,
+            status: status === '已请假' ? '主班已请假' : status,
             tag,
             classType,
             JSLX,
