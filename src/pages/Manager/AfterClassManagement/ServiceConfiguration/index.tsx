@@ -218,8 +218,8 @@ const ServiceConfiguration = () => {
                       message.error('删除失败，请联系管理员或稍后重试。');
                     }
                   }}
-                  okText="Yes"
-                  cancelText="No"
+                  okText="确定"
+                  cancelText="取消"
                   placement="topLeft"
                 >
                   <a href="#" style={{ color: 'red' }}>
