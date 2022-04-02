@@ -98,7 +98,6 @@ const DealAbnormal = (props: any) => {
       BQRId: userId,
       KHBJSJId: current.id,
       XXSJPZId: current.XXSJPZId,
-
     });
     if (res.status === 'ok') {
       getCQData();
@@ -114,7 +113,6 @@ const DealAbnormal = (props: any) => {
   };
   useEffect(() => {
     (async () => {
-
       const oriData = await ParentHomeData(
         'teacher',
         currentUser?.xxId,
@@ -151,29 +149,29 @@ const DealAbnormal = (props: any) => {
           dataSource={dataSource}
           renderItem={(item: any) => {
             const curItem = dealData?.find(
-              (v: { BQRQ: string; XXSJPZId: string }) =>
-                v.BQRQ === item.date && v.XXSJPZId === item.XXSJPZId,
+              (v: { BQRQ: string; XXSJPZId: string; KHBJSJId: string }) =>
+                v.BQRQ === item.date && v.XXSJPZId === item.XXSJPZId && v.KHBJSJId === item.id,
             );
             return (
               <List.Item
                 actions={
                   curItem
                     ? [
-                      <span key={item.id} style={{ color: '#666' }}>
-                        处理中
-                      </span>,
-                    ]
+                        <span key={item.id} style={{ color: '#666' }}>
+                          处理中
+                        </span>,
+                      ]
                     : [
-                      <a
-                        key={item.id}
-                        onClick={() => {
-                          setCurrent(item);
-                          showModal('option');
-                        }}
-                      >
-                        去处理
-                      </a>,
-                    ]
+                        <a
+                          key={item.id}
+                          onClick={() => {
+                            setCurrent(item);
+                            showModal('option');
+                          }}
+                        >
+                          去处理
+                        </a>,
+                      ]
                 }
               >
                 <List.Item.Meta
@@ -199,19 +197,19 @@ const DealAbnormal = (props: any) => {
           footer={
             modalContent === 'option'
               ? [
-                <Button key="back" onClick={() => setVisible(false)}>
-                  取消
-                </Button>,
-              ]
+                  <Button key="back" onClick={() => setVisible(false)}>
+                    取消
+                  </Button>,
+                ]
               : [
-                <Button key="back" onClick={() => setVisible(false)}>
-                  取消
-                </Button>,
-                <Divider type="vertical" />,
-                <Button key="submit" type="link" onClick={() => handleResign()}>
-                  确认
-                </Button>,
-              ]
+                  <Button key="back" onClick={() => setVisible(false)}>
+                    取消
+                  </Button>,
+                  <Divider type="vertical" />,
+                  <Button key="submit" type="link" onClick={() => handleResign()}>
+                    确认
+                  </Button>,
+                ]
           }
         >
           {modalContent === 'option' ? (
