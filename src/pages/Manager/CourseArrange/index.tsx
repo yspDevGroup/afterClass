@@ -282,13 +282,16 @@ const Index = () => {
     return tableData;
 
   };
+
   const processingDatas = (data: any, timeData: any, week: any, bjId: string | undefined = undefined) => {
     const tableData: any[] = [];
     const sameClassData: any[] = [];
+    let Weekss: any = [];
+    let weekIndex: number;
 
-    let Weekss: any = []
     if (week && week !== undefined) {
-      Weekss = week
+      Weekss = week;
+      weekIndex = Weeks.indexOf(week[0]);
     } else {
       Weekss = Weeks
     }
@@ -305,7 +308,7 @@ const Index = () => {
               jsId: '',
               FJLXId: '', // 场地类型ID
               rowspan: timeKey === 0 ? timeData?.length : 0,
-              SD: `${moment(stateTime).add(index * 7, 'days').format('MM.DD')}-${moment(stateTime).add(6 + (index * 7), 'days').format('MM.DD')} `
+              SD: `${moment(stateTime).add(( weekIndex || index) * 7, 'days').format('MM.DD')}-${moment(stateTime).add(6 + (( weekIndex || index) * 7), 'days').format('MM.DD')} `
             },
             course: {
               cla: timeItem?.TITLE,
