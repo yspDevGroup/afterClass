@@ -182,7 +182,7 @@ const Home = () => {
             </span>
             <span>老师，你好！</span>
           </h4>
-          <div>{currentUser?.xxName} </div>
+          <div>{currentUser?.QYMC}</div>
         </div>
       </header>
 
@@ -243,7 +243,7 @@ const Home = () => {
                       <div
                         className={styles.wrap}
                         style={{ backgroundImage: `url(${TeacherToDo})` }}
-                      // onClick={() => { submit(value) }}
+                        // onClick={() => { submit(value) }}
                       >
                         {value?.LX === 1 ? (
                           <i style={{ color: '#15B628' }}>代课提醒</i>
