@@ -16,7 +16,7 @@ import Details from './Pages/Details';
 
 import imgPop from '@/assets/teacherBg.png';
 import TeacherToDo from '@/assets/TeacherToDo.png';
-import banner from '@/assets/banner.png';
+import banner from '@/assets/banner1.png';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { RightOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -182,7 +182,7 @@ const Home = () => {
             </span>
             <span>老师，你好！</span>
           </h4>
-          <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
+          <div>{currentUser?.xxName} </div>
         </div>
       </header>
 
@@ -243,7 +243,7 @@ const Home = () => {
                       <div
                         className={styles.wrap}
                         style={{ backgroundImage: `url(${TeacherToDo})` }}
-                        // onClick={() => { submit(value) }}
+                      // onClick={() => { submit(value) }}
                       >
                         {value?.LX === 1 ? (
                           <i style={{ color: '#15B628' }}>代课提醒</i>
