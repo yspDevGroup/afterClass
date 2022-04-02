@@ -11,13 +11,14 @@ import GoBack from '@/components/GoBack';
 import Footer from '@/components/Footer';
 import { XXTZGG } from '@/services/after-class/xxtzgg';
 import { enHenceMsg, getQueryString } from '@/utils/utils';
-import imgPop from '@/assets/mobileBg.png';
+import imgPop from '@/assets/teacherBg.png';
 import styles from './index.less';
 
 import { data } from './mock';
 import Version from '@/components/Version';
 import { Divider } from 'antd';
 import { JYJGTZGG } from '@/services/after-class/jyjgtzgg';
+
 const Announcement = () => {
   const { initialState } = useModel('@@initialState');
   const [content, setContent] = useState<any>();
@@ -71,9 +72,27 @@ const Announcement = () => {
         ''
       )}
       {content?.BT ? <div className={styles.title}>{content?.BT}</div> : ''}
-      {content?.RQ ? <div className={styles.time}>
-        <span >{content?.RQ}</span>
-        {ly ? <><span> <Divider type='vertical' style={{ borderLeft: '1px solid #0000001a', margin: '0 10px' }} /></span><span>{ly}</span> </> : ''} </div> : ''}
+      {content?.RQ ? (
+        <div className={styles.time}>
+          <span>{content?.RQ}</span>
+          {ly ? (
+            <>
+              <span>
+                {' '}
+                <Divider
+                  type="vertical"
+                  style={{ borderLeft: '1px solid #0000001a', margin: '0 10px' }}
+                />
+              </span>
+              <span>{ly}</span>{' '}
+            </>
+          ) : (
+            ''
+          )}{' '}
+        </div>
+      ) : (
+        ''
+      )}
       {content?.BT || content?.updatedAt ? <div className={styles.line} /> : ''}
       {articlepage === 'about' ? (
         <div className={styles.guanyu}>
