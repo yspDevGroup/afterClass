@@ -5,8 +5,8 @@ import { request } from 'umi';
 /** 账密登录 POST /auth/account */
 export async function postAccount(body: API.LoginParams, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: { currentAuthority?: string[]; token?: string; type?: 'account' | 'mobile' | 'github' };
+    status: 'ok' | 'error';
+    data?: { currentAuthority?: string[]; token?: string; type?: 'account' | 'mobile' | 'github' };
     message?: string;
   }>('/auth/account', {
     method: 'POST',
@@ -30,9 +30,9 @@ export async function outLogin(options?: { [key: string]: any }) {
 export async function login(
   body: {
     /** 登录类型 */
-    authType?: string;
+    authType: string;
     /** 登录平台 */
-    plat?: string;
+    plat: string;
     /** 用户名(本地登录/教育平台登录) */
     username?: string;
     /** 密码(本地登录) */

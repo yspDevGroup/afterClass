@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-12-10 18:21:21
+ * @LastEditTime: 2022-04-02 15:34:05
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -19,7 +19,7 @@ import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
 
 const { TextArea } = Input;
 const NewPatrol = (props: any) => {
-  const { kcid, kcmc, xkrq, bjxx, check } = props?.location?.state;
+  const { kcid, kcmc, xkrq, bjxx, check, jcId } = props?.location?.state;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   // 是否准时上课
@@ -63,6 +63,7 @@ const NewPatrol = (props: any) => {
     FJSJId: roominfo?.id,
     /** 班级ID */
     KHBJSJId: bjxx.id,
+    XXSJPZId: jcId,
   };
   const getCq = async () => {
     const resAll = await getAllKHXSCQ({
