@@ -241,7 +241,7 @@ const CourseDetails = () => {
             </li>
             {mainTeacher ? (
               <li>
-                <span>班主任：</span>
+                <span>主班：</span>
                 <span className={styles.teacherName}>
                   <ShowName
                     XM={mainTeacher?.JZGJBSJ?.XM}

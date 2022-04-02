@@ -210,7 +210,7 @@ const Detail: React.FC = () => {
           {
             classDetail?.KHBJJs?.find((items: any) => items?.JSLX === '主教师') ?
               <li className={styles.bzrname}>
-                班主任：
+                主班：
                 {classDetail?.KHBJJs.map((item: any) => {
                   if (item.JSLX.indexOf('副') === -1) {
                     return (
