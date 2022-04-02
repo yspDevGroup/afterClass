@@ -346,21 +346,17 @@ const Home = () => {
         </div>
 
         {/* 素质教育资源 */}
-        {initialState?.buildOptions.ENV_type === '9dy' ? (
-          <></>
-        ) : (
-          <div className={styles.resourcesBox}>
-            <a
-              // href="http://moodle.xianyunshipei.com/course/view.php?id=12"
-              href={crpUrl}
-              target="_blank"
-              rel="noreferrer"
-              className={styles.resources}
-            >
-              <img src={crpLogo} alt="" />
-            </a>
-          </div>
-        )}
+        <div className={styles.resourcesBox}>
+          <a
+            // href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+            href={crpUrl}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.resources}
+          >
+            <img src={crpLogo} alt="" />
+          </a>
+        </div>
 
         {/* 公示栏 */}
         <div className={styles.announceArea}>
