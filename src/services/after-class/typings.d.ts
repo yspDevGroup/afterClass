@@ -2015,16 +2015,7 @@ declare namespace API {
     JZGJBSJ?:
       | { id?: string; XM?: string; GH?: string; LXDH?: string | any; WechatUserId?: string }
       | any;
-    XXSJPZ?:
-      | {
-          id?: string;
-          KSSJ?: string;
-          JSSJ?: string;
-          KJS?: string | any;
-          TITLE?: string;
-          BZXX?: string;
-        }
-      | any;
+    XXSJPZ?: { id?: string; KSSJ?: string; JSSJ?: string; TITLE?: string } | any;
     KHBJSJ?: { id?: string; BJMC?: string } | any;
   };
 
@@ -5958,6 +5949,11 @@ declare namespace API {
     id: string;
   };
 
+  type updateAgencyParams = {
+    /** 课后服务教师调代课ID */
+    id: string;
+  };
+
   type KHJYJGParams = {
     /** 课后教育机构ID */
     id: string;
@@ -5970,6 +5966,11 @@ declare namespace API {
 
   type updateKHJYJGParams = {
     /** 课后教育机构ID */
+    id: string;
+  };
+
+  type updateAgencyApprovalParams = {
+    /** 机构审批配置ID */
     id: string;
   };
 

@@ -22,16 +22,7 @@ export async function getKHJSCQ(
       JZGJBSJ?:
         | { id?: string; XM?: string; GH?: string; LXDH?: string | any; WechatUserId?: string }
         | any;
-      XXSJPZ?:
-        | {
-            id?: string;
-            KSSJ?: string;
-            JSSJ?: string;
-            KJS?: string | any;
-            TITLE?: string;
-            BZXX?: string;
-          }
-        | any;
+      XXSJPZ?: { id?: string; KSSJ?: string; JSSJ?: string; TITLE?: string } | any;
       KHBJSJ?: { id?: string; BJMC?: string } | any;
     };
     message?: string;

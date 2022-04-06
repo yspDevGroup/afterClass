@@ -518,3 +518,53 @@ export async function getSchools(
     ...(options || {}),
   });
 }
+
+/** 获取机构审批配置 POST /khjyjg/getAgencyApproval */
+export async function getAgencyApproval(
+  body: {
+    KHJYJGId: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status: 'ok' | 'error';
+    data?: { id?: string; JSQJ?: boolean; JSTK?: boolean; JSDK?: boolean };
+    message?: string;
+  }>('/khjyjg/getAgencyApproval', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 更新机构审批配置 PUT /khjyjg/updateAgencyApproval/${param0} */
+export async function updateAgencyApproval(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateAgencyApprovalParams,
+  body: {
+    /** 教师请假是否审批 */
+    JSQJ?: boolean;
+    /** 教师调课是否审批 */
+    JSTK?: boolean;
+    /** 教师代课是否审批 */
+    JSDK?: boolean;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{ status: 'ok' | 'error'; message?: string }>(
+    `/khjyjg/updateAgencyApproval/${param0}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      params: { ...queryParams },
+      data: body,
+      ...(options || {}),
+    },
+  );
+}

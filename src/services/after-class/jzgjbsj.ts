@@ -387,7 +387,9 @@ export async function getIgnoreTeacherByClassesId(
     /** 课后班级数据id */
     KHBJSJId: string;
     /** 学校基本数据id */
-    XXJBSJId: string;
+    XXJBSJId?: string;
+    /** 机构ID */
+    KHJYJGId?: string;
     /** 页数 */
     page: number;
     /** 每页记录数 */
