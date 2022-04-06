@@ -2,7 +2,7 @@
  * @description:
  * @author: lyy
  * @Date: 2021-06-11 14:33:28
- * @LastEditTime: 2021-12-03 17:29:33
+ * @LastEditTime: 2022-04-06 17:34:42
  * @LastEditors: Sissle Lynn
  */
 import React from 'react';
@@ -10,11 +10,11 @@ import { Bar } from '@ant-design/charts';
 
 import styles from '../index.less';
 
-const BarChart = (props: { data: any[] | undefined, title?: string, cls?: string }) => {
+const BarChart = (props: { data: any[] | undefined; title?: string; cls?: string }) => {
   const { data, cls } = props;
   const config: any = {
     data,
-    height:200,
+    height: 200,
     xField: 'value',
     yField: 'label',
     seriesField: 'type',
@@ -26,14 +26,14 @@ const BarChart = (props: { data: any[] | undefined, title?: string, cls?: string
       radius: [10, 10, 0, 0],
     },
     color: [
-      'l(180) 0:rgba(221, 221, 221, 0.2) 1:rgba(221, 221, 221, 1)',
+      'l(180) 0:rgba(137, 218, 140, 0.2) 1:rgba(137, 218, 140, 1)',
       'l(180) 0:rgba(244, 138, 130, 0.2) 1:rgba(244, 138, 130, 1)',
-      'l(180) 0:rgba(137, 218, 140, 1) 1:rgba(137, 218, 140, 0.2)',
+      'l(180) 0:rgba(221, 221, 221, 0.2) 1:rgba(221, 221, 221, 1)',
     ],
   };
   return (
     <div className={`${styles.chartWrapper} ${cls}`}>
-      <Bar  {...config} />
+      <Bar {...config} />
     </div>
   );
 };
