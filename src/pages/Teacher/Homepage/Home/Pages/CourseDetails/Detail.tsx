@@ -36,7 +36,6 @@ const Detail: React.FC = () => {
     } else {
       enHenceMsg(res.message);
     }
-
   };
   const getWxData = async () => {
     if (/MicroMessenger/i.test(navigator.userAgent)) {
@@ -68,7 +67,6 @@ const Detail: React.FC = () => {
           return item.KHBJSJId === classid;
         });
 
-
         if (claim && claim === '自选课' && classid) {
           const resulta = await getKCBSKSJ({
             KHBJSJId: [classid],
@@ -77,9 +75,9 @@ const Detail: React.FC = () => {
             const { rows } = resulta.data;
             let days: any[] = [];
             if (rows?.length) {
-              days = [].map.call(rows, (v: { XXSJPZId: string; SKRQ: string }, index) => {
+              days = [].map.call(rows, (v: { XXSJPZId: string; SKRQ: string }, i) => {
                 return {
-                  index: index + 1,
+                  index: i + 1,
                   jcId: v.XXSJPZId,
                   day: v.SKRQ,
                 };
@@ -148,8 +146,9 @@ const Detail: React.FC = () => {
       if (val.tag === '假') {
         content = {
           title: '请假说明',
-          content: ` ${val.reason ? `由于${val.reason},` : ''
-            }本节课程安排取消，之后课程顺延,请知悉.`,
+          content: ` ${
+            val.reason ? `由于${val.reason},` : ''
+          }本节课程安排取消，之后课程顺延,请知悉.`,
         };
       } else {
         content = {
@@ -207,48 +206,49 @@ const Detail: React.FC = () => {
         <Divider />
         <ul className={styles.classInformation}>
           <li>授课班级：{classDetail?.BJMC}</li>
-          {
-            classDetail?.KHBJJs?.find((items: any) => items?.JSLX === '主教师') ?
-              <li className={styles.bzrname}>
-                班主任：
-                {classDetail?.KHBJJs.map((item: any) => {
-                  if (item.JSLX.indexOf('副') === -1) {
-                    return (
-                      <span style={{ marginRight: '1em' }}>
-                        <ShowName
-                          XM={item.JZGJBSJ.XM}
-                          type="userName"
-                          openid={item.JZGJBSJ?.WechatUserId}
-                        />
-                      </span>
-                    );
-                  }
-                  return '';
-                })}
-              </li> : <></>
-          }
-          {
-            classDetail?.KHBJJs?.find((items: any) => items?.JSLX === '副教师') ?
-              <li className={styles.bzrname}>
-                副班：
-                {classDetail?.KHBJJs.map((item: any) => {
-                  if (item.JSLX.indexOf('主') === -1) {
-                    return (
-                      <span style={{ marginRight: '1em' }}>
-                        <ShowName
-                          type="userName"
-                          openid={item.JZGJBSJ?.WechatUserId}
-                          XM={item.JZGJBSJ.XM}
-                        />
-                      </span>
-                    );
-                  }
-                  return '';
-                })}
-              </li> : <></>
-          }
+          {classDetail?.KHBJJs?.find((items: any) => items?.JSLX === '主教师') ? (
+            <li className={styles.bzrname}>
+              主班：
+              {classDetail?.KHBJJs.map((item: any) => {
+                if (item.JSLX.indexOf('副') === -1) {
+                  return (
+                    <span style={{ marginRight: '1em' }}>
+                      <ShowName
+                        XM={item.JZGJBSJ.XM}
+                        type="userName"
+                        openid={item.JZGJBSJ?.WechatUserId}
+                      />
+                    </span>
+                  );
+                }
+                return '';
+              })}
+            </li>
+          ) : (
+            <></>
+          )}
+          {classDetail?.KHBJJs?.find((items: any) => items?.JSLX === '副教师') ? (
+            <li className={styles.bzrname}>
+              副班：
+              {classDetail?.KHBJJs.map((item: any) => {
+                if (item.JSLX.indexOf('主') === -1) {
+                  return (
+                    <span style={{ marginRight: '1em' }}>
+                      <ShowName
+                        type="userName"
+                        openid={item.JZGJBSJ?.WechatUserId}
+                        XM={item.JZGJBSJ.XM}
+                      />
+                    </span>
+                  );
+                }
+                return '';
+              })}
+            </li>
+          ) : (
+            <></>
+          )}
         </ul>
-
       </div>
       <div className={styles.Timetable}>
         <p className={styles.title}>

@@ -9,7 +9,6 @@ import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
-
 import styles from './index.less';
 import { signClass } from '@/services/after-class/xsjbsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
@@ -371,7 +370,7 @@ const CourseDetails: React.FC = () => {
                     <p>总人数：{value.BJRS}人</p>
                     {BjDetails?.KHBJJs?.find((item: any) => item.JSLX === '主教师') ? (
                       <p>
-                        班主任：
+                        主班：
                         {BjDetails?.KHBJJs?.map((item: any) => {
                           if (item.JSLX.indexOf('副') === -1) {
                             return (

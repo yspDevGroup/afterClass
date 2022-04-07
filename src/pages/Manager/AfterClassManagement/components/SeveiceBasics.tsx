@@ -6,14 +6,14 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2022-04-07 09:19:43
+ * @LastEditTime: 2022-04-07 09:59:11
  * @LastEditors: Wu Zhan
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useModel } from 'umi';
-import { Button, Col, Form, message, Row, Select, Space, Tag } from 'antd';
-// import type { ProFormInstance } from '@ant-design/pro-form';
+import { Button, Col, message, Row, Select, Space, Tag } from 'antd';
+import type { ProFormInstance } from '@ant-design/pro-form';
 import ProForm, {
   ModalForm,
   ProFormDigit,
@@ -53,7 +53,8 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const [BMSDData, setBMSDData] = useState<any[]>();
   const [visible, setVisible] = useState<boolean>(false);
 
-  const [formRef] = Form.useForm();
+  // const [formRef] = Form.useForm();
+  const formRef = useRef<ProFormInstance<any>>();
 
   const formLayout = {
     labelCol: { span: 4 },
@@ -248,7 +249,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         }
         getNJData(id);
         setCampusId(id);
-        debugger;
+
         console.log('formRef', formRef);
         formRef?.current?.setFieldsValue({
           ZDKCS: 2,
@@ -293,7 +294,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         formRef={formRef}
         title={title}
         visible={visible}
-        submitter={!type}
+        submitter={!type ? undefined : false}
         trigger={
           <Button
             type={serviceId ? 'link' : 'primary'}

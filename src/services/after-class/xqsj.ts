@@ -4,17 +4,14 @@ import { request } from 'umi';
 
 /** 获取校区数据 GET /xqsj/${param0} */
 export async function getXQSJ(
-  params: {
-    // path
-    /** 校区ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getXQSJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       XQH?: string;
       XQMC?: string;
@@ -33,15 +30,12 @@ export async function getXQSJ(
 
 /** 删除校区数据 DELETE /xqsj/${param0} */
 export async function deleteXQSJ(
-  params: {
-    // path
-    /** 校区ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteXQSJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xqsj/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xqsj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -55,7 +49,7 @@ export async function getAllXQSJ(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: API.XQSJ[]; message?: string }>('/xqsj/all', {
+  return request<{ status: 'ok' | 'error'; data?: API.XQSJ[]; message?: string }>('/xqsj/all', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -68,8 +62,8 @@ export async function getAllXQSJ(
 /** 创建校区数据 PUT /xqsj/create */
 export async function createXQSJ(body: API.CreateXQSJ, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       XQH?: string;
       XQMC?: string;
@@ -91,16 +85,13 @@ export async function createXQSJ(body: API.CreateXQSJ, options?: { [key: string]
 
 /** 更新校区数据 PUT /xqsj/update/${param0} */
 export async function updateXQSJ(
-  params: {
-    // path
-    /** 校区ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateXQSJParams,
   body: API.UpdateXQSJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xqsj/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xqsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

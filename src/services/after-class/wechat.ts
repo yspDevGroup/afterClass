@@ -12,11 +12,8 @@ export async function createWechatToken(options?: { [key: string]: any }) {
 
 /** 获取当前微信用户 GET /wechat/currentUser */
 export async function currentWechatUser(
-  params: {
-    // query
-    /** 登录平台类型 */
-    plat?: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.currentWechatUserParams,
   options?: { [key: string]: any },
 ) {
   return request<any>('/wechat/currentUser', {
@@ -78,9 +75,9 @@ export async function sendMessageToTeacher(
 /** 发送离校通知 POST /wechat/msgLeaveSchool */
 export async function msgLeaveSchool(
   body: {
-    KHBJSJId?: string;
+    KHBJSJId: string;
     CorpId?: string;
-    text?: string;
+    text: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -162,13 +159,13 @@ export async function wechatDataCallback_4(options?: { [key: string]: any }) {
 export async function getQYJsSignature(
   body: {
     /** 签名用的url必须是调用JS接口页面的完整URL */
-    url?: string;
+    url: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
-    data: { appId?: string; timestamp?: number; nonceStr?: string; signature?: string };
+    status: 'ok' | 'error';
+    data?: { appId?: string; timestamp?: number; nonceStr?: string; signature?: string };
     message?: string;
   }>('/wechat/getQYJsSignature', {
     method: 'POST',
@@ -184,13 +181,13 @@ export async function getQYJsSignature(
 export async function getYYJsSignature(
   body: {
     /** 签名用的url必须是调用JS接口页面的完整URL */
-    url?: string;
+    url: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       corpid?: string;
       agentid?: string;
       timestamp?: number;
@@ -218,11 +215,8 @@ export async function settingOnWechat(options?: { [key: string]: any }) {
 
 /** 获取部门列表 GET /wechat/getDepList */
 export async function getDepList(
-  params: {
-    // query
-    /** 部门id。获取指定部门及其下的子部门。 如果不填，默认获取全量组织架构 */
-    id?: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getDepListParams,
   options?: { [key: string]: any },
 ) {
   return request<any>('/wechat/getDepList', {
@@ -236,13 +230,8 @@ export async function getDepList(
 
 /** 获取部门成员详情 GET /wechat/getDepUsers */
 export async function getDepUsers(
-  params: {
-    // query
-    /** 部门id */
-    id: string;
-    /** 1/0：是否递归获取子部门下面的成员 */
-    fetch_child: 0 | 1;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getDepUsersParams,
   options?: { [key: string]: any },
 ) {
   return request<any>('/wechat/getDepUsers', {
@@ -256,13 +245,8 @@ export async function getDepUsers(
 
 /** 获取部门成员列表(教师) GET /wechat/getDepUserList */
 export async function getDepUserList(
-  params: {
-    // query
-    /** 部门id */
-    id: string;
-    /** 1/0：是否递归获取子部门下面的成员 */
-    fetch_child: 0 | 1;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getDepUserListParams,
   options?: { [key: string]: any },
 ) {
   return request<any>('/wechat/getDepUserList', {
@@ -276,11 +260,8 @@ export async function getDepUserList(
 
 /** 获取部门列表(学校) GET /wechat/getSchDepList */
 export async function getSchDepList(
-  params: {
-    // query
-    /** 部门id */
-    id?: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getSchDepListParams,
   options?: { [key: string]: any },
 ) {
   return request<any>('/wechat/getSchDepList', {
@@ -304,13 +285,13 @@ export async function sendMsg(
     /** 家校通讯录部门列表 */
     to_party?: string[];
     /** 消息类型 */
-    msgtype?: string;
+    msgtype: string;
     /** 消息内容 */
-    content?: string;
+    content: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/wechat/sendMsg', {
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>('/wechat/sendMsg', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

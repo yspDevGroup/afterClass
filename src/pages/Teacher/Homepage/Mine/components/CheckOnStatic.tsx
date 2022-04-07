@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-10-26 16:18:21
- * @LastEditTime: 2021-12-03 17:27:33
+ * @LastEditTime: 2022-04-06 17:34:48
  * @LastEditors: Sissle Lynn
  */
 import React, { useEffect, useState } from 'react';
@@ -27,7 +27,12 @@ const CheckOnStatic = () => {
   // 转换考勤数据格式
   const convertData = (data: any, type: string) => {
     if (data && type === 'attendance') {
-      const toDo = data.ALL_KSS - Number(data.attendance) - Number(data.leave) - Number(data.substitute) - Number(data.absenteeism);
+      const toDo =
+        data.ALL_KSS -
+        Number(data.attendance) -
+        Number(data.leave) -
+        Number(data.substitute) -
+        Number(data.absenteeism);
       return {
         title: `${data.KCMC}`,
         subTitle: `${data.BJMC}`,
@@ -181,7 +186,7 @@ const CheckOnStatic = () => {
           <Row gutter={8}>
             {satistics.map((item: any) => {
               return (
-                <Col span={12}>
+                <Col span={12} key={item.id}>
                   <PieChart
                     data={item.data}
                     title={item.title}

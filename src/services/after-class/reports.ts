@@ -12,7 +12,7 @@ export async function getCourses(
     /** 课程来源 */
     KCLY?: string;
     /** 学校ID */
-    XXJBSJId?: string;
+    XXJBSJId: string;
     /** 机构ID */
     KHJYJGId?: string;
     /** 学年学期ID */
@@ -27,7 +27,7 @@ export async function getCourses(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHKCTJSJ[] };
     message?: string;
   }>('/reports/getCourses', {
@@ -55,7 +55,7 @@ export async function getClasses(
     XNXQId?: string;
     isFW?: number;
     /** 课后课程ID */
-    KHKCSJId?: string;
+    KHKCSJId: string;
     /** 页数 */
     page?: number;
     /** 每页记录数 */
@@ -137,7 +137,7 @@ export async function getTeachers(
     /** 姓名 */
     XM?: string;
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 教师ID */
     JZGJBSJId?: string;
     /** 页数 */
@@ -148,7 +148,7 @@ export async function getTeachers(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHJSKQSJ[] };
     message?: string;
   }>('/reports/getTeachers', {
@@ -167,7 +167,7 @@ export async function getStudents(
     /** 姓名 */
     XM?: string;
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学生ID */
     XSJBSJId?: string;
     /** 页数 */
@@ -178,7 +178,7 @@ export async function getStudents(
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHXSKQSJ[] };
     message?: string;
   }>('/reports/getStudents', {
@@ -195,12 +195,12 @@ export async function getStudents(
 export async function getClassDetail(
   body: {
     /** 班级ID */
-    KHBJSJId?: string;
+    KHBJSJId: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { XSId?: string; XSXM?: string; ZFZT?: string; TKZT?: string; BJMC?: string }[];
     message?: string;
   }>('/reports/getClassDetail', {
@@ -217,14 +217,14 @@ export async function getClassDetail(
 export async function getTeacherDetail(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 教师ID */
-    JZGJBSJId?: string;
+    JZGJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: {
       id?: string;
       BJMC?: string;
@@ -249,14 +249,14 @@ export async function getTeacherDetail(
 export async function getStudentDetail(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学生ID */
-    XSJBSJId?: string;
+    XSJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: {
       id?: string;
       BJMC?: string;
@@ -281,9 +281,9 @@ export async function getStudentDetail(
 export async function getCourseEvaluation(
   body: {
     /** 学校ID */
-    XXJBSJId?: string;
+    XXJBSJId: string;
     /** 课程名称 */
-    KCMC?: string;
+    KCMC: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -301,9 +301,9 @@ export async function getCourseEvaluation(
 export async function statisCourses(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学年学期ID */
-    XXJBSJId?: string;
+    XXJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -321,9 +321,9 @@ export async function statisCourses(
 export async function statisClasses(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学校ID */
-    XXJBSJId?: string;
+    XXJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -341,9 +341,9 @@ export async function statisClasses(
 export async function statisticalKHFWBJ(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学校ID */
-    XXJBSJId?: string;
+    XXJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -361,9 +361,9 @@ export async function statisticalKHFWBJ(
 export async function statisticalKHFWXZB(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学校ID */
-    XXJBSJId?: string;
+    XXJBSJId: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -409,7 +409,7 @@ export async function exportTeachers(
     /** 姓名 */
     XM?: string;
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 机构ID */
@@ -437,7 +437,7 @@ export async function exportTeachers(
 export async function getTeachersAttendanceByDate(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 机构ID */
@@ -469,7 +469,7 @@ export async function getTeachersAttendanceByDate(
 export async function exportTeachersAttendanceByDate(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学校ID */
     XXJBSJId?: string;
     /** 机构ID */
@@ -501,9 +501,9 @@ export async function exportTeachersAttendanceByDate(
 export async function getTeacherAttendanceDetailByDate(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 教师ID */
-    JZGJBSJId?: string;
+    JZGJBSJId: string;
     /** 开始日期 */
     startDate?: string;
     /** 结束日期 */
@@ -529,9 +529,9 @@ export async function getTeacherAttendanceDetailByDate(
 export async function exportTeacherAttendanceDetailByDate(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 教师ID */
-    JZGJBSJId?: string;
+    JZGJBSJId: string;
     /** 开始日期 */
     startDate?: string;
     /** 结束日期 */
@@ -557,7 +557,7 @@ export async function exportTeacherAttendanceDetailByDate(
 export async function getStudentsAttendanceByDate(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 开始日期 */
     startDate?: string;
     /** 学生姓名 */
@@ -585,7 +585,7 @@ export async function getStudentsAttendanceByDate(
 export async function exportStudentsAttendanceByDate(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 开始日期 */
     startDate?: string;
     /** 学生姓名 */
@@ -613,9 +613,9 @@ export async function exportStudentsAttendanceByDate(
 export async function getStudentAttendanceDetailByDate(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学生ID */
-    XSJBSJId?: string;
+    XSJBSJId: string;
     /** 开始日期 */
     startDate?: string;
     /** 结束日期 */
@@ -641,9 +641,9 @@ export async function getStudentAttendanceDetailByDate(
 export async function exportStudentAttendanceDetailByDate(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 学生ID */
-    XSJBSJId?: string;
+    XSJBSJId: string;
     /** 开始日期 */
     startDate?: string;
     /** 结束日期 */
@@ -685,7 +685,7 @@ export async function recalculateBJTJInfo(options?: { [key: string]: any }) {
 export async function exportStudentEnroll(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -703,11 +703,11 @@ export async function exportStudentEnroll(
 export async function exportServiceEnroll(
   body: {
     /** 学年学期ID */
-    XNXQId?: string;
+    XNXQId: string;
     /** 班级ID */
-    BJSJId?: string;
+    BJSJId: string;
     /** 导出时段 */
-    KHFWSJPZIds?: string[];
+    KHFWSJPZIds: string[];
   },
   options?: { [key: string]: any },
 ) {

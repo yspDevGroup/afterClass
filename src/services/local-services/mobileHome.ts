@@ -190,7 +190,7 @@ const getHomeData = async (
                   ISFW: clsArr?.[0]?.KHBJSJ?.ISFW === 1 || false,
                   days,
                   detail: converClassInfo(clsArr),
-                  JSLX: yxTar?.KHBJJs?.[0]?.JSLX
+                  JSLX: yxTar?.KHBJJs?.[0]?.JSLX,
                 });
               }
               homeInfo.courseSchedule = newSech;
@@ -270,7 +270,8 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
     let otherInd = -1;
     // 通过bjId,jcId确认原有数据中是否与已代课,请假数据重合
     const oriInd = oriData.findIndex((v: { bjId: any; jcId: any }) => {
-      const con1 = ele.SKJC?.id === v.jcId || ele.TKJC?.id === v.jcId || (ele.QJRQ && ele.XXSJPZId === v.jcId);
+      const con1 =
+        ele.SKJC?.id === v.jcId || ele.TKJC?.id === v.jcId || (ele.QJRQ && ele.XXSJPZId === v.jcId);
       return ele.KHBJSJId === v.bjId && con1;
     });
     if (status.includes('被')) {
@@ -283,7 +284,7 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
     // 如果数据重合则增加原有数据的相关代课状态,否则在数组中追加相关已代课数据
     if (oriInd !== -1) {
       if (oriData?.[oriInd]?.status && oriData[oriInd].status === '已请假') {
-        oriData[oriInd].status = `班主任已请假`;
+        oriData[oriInd].status = `主班已请假`;
       } else {
         oriData[oriInd].status = status;
         oriData[oriInd].otherInfo = ele;
@@ -377,7 +378,7 @@ export const CurdayCourse = async (
     return item?.days?.find((v: { day: string }) => v.day === myDate) || item.days?.length === 0;
   });
   let courseList: any[] = [];
-  totalList?.forEach((item: { detail: any[]; classType: number; days?: any[], JSLX: string }) => {
+  totalList?.forEach((item: { detail: any[]; classType: number; days?: any[]; JSLX: string }) => {
     const { detail, classType, days, JSLX } = item;
     // 获取今日上课课程
     // const list = detail.filter((val) => val.wkd === day.getDay());
@@ -390,7 +391,7 @@ export const CurdayCourse = async (
           const { jcId, status, tag, reason, realDate } = currentDay;
           return {
             ...val,
-            status: status === '已请假' ? '班主任已请假' : status,
+            status: status === '已请假' ? '主班已请假' : status,
             tag,
             classType,
             JSLX,
@@ -619,11 +620,11 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           pkId: item.pkId,
           bjId: item.bjId,
           jcId: item.jcId,
-          date: item.date || day,
+          date: day,
           startTime: item.start,
           endTime: item.end,
           KCName: item.title,
-          JSLX: item.JSLX
+          JSLX: item.JSLX,
         },
       };
       data.push({

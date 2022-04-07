@@ -4,16 +4,13 @@ import { request } from 'umi';
 
 /** 获取学校配置数据 GET /xxpz/${param0} */
 export async function getXXPZ(
-  params: {
-    // path
-    /** 学校配置ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getXXPZParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: {
       KEY?: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ' | 'TITLE';
       VALUE?: string;
@@ -30,15 +27,12 @@ export async function getXXPZ(
 
 /** 删除学校配置数据 DELETE /xxpz/${param0} */
 export async function deleteXXPZ(
-  params: {
-    // path
-    /** 学校配置ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteXXPZParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxpz/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xxpz/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -55,7 +49,7 @@ export async function getAllXXPZ(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: API.XXPZ[]; message?: string }>('/xxpz/all', {
+  return request<{ status: 'ok' | 'error'; data?: API.XXPZ[]; message?: string }>('/xxpz/all', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -68,7 +62,7 @@ export async function getAllXXPZ(
 /** 创建学校配置数据 PUT /xxpz/create */
 export async function createXXPZ(body: API.CreateXXPZ[], options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: {
       KEY?: 'BMKSSJ' | 'BMJSSJ' | 'KKRQ' | 'JKRQ' | 'TITLE';
       VALUE?: string;
@@ -88,16 +82,13 @@ export async function createXXPZ(body: API.CreateXXPZ[], options?: { [key: strin
 
 /** 更新学校配置数据 PUT /xxpz/update/${param0} */
 export async function updateXXPZ(
-  params: {
-    // path
-    /** 学校配置ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateXXPZParams,
   body: API.UpdateXXPZ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxpz/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/xxpz/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

@@ -267,7 +267,7 @@
     // 行政审批
     path: '/audit',
     name: 'audit',
-    icon: 'Profile',
+    icon: 'AuditOutlined',
     access: 'canAdmin',
     routes: [
       {

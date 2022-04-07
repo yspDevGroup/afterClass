@@ -16,7 +16,7 @@ import Details from './Pages/Details';
 
 import imgPop from '@/assets/teacherBg.png';
 import TeacherToDo from '@/assets/TeacherToDo.png';
-import banner from '@/assets/banner.png';
+import banner from '@/assets/banner1.png';
 import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { RightOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -182,7 +182,7 @@ const Home = () => {
             </span>
             <span>老师，你好！</span>
           </h4>
-          <div>欢迎使用课后服务平台，课后服务选我就对了！ </div>
+          <div>{currentUser?.QYMC}</div>
         </div>
       </header>
 
@@ -346,21 +346,17 @@ const Home = () => {
         </div>
 
         {/* 素质教育资源 */}
-        {initialState?.buildOptions.ENV_type === '9dy' ? (
-          <></>
-        ) : (
-          <div className={styles.resourcesBox}>
-            <a
-              // href="http://moodle.xianyunshipei.com/course/view.php?id=12"
-              href={crpUrl}
-              target="_blank"
-              rel="noreferrer"
-              className={styles.resources}
-            >
-              <img src={crpLogo} alt="" />
-            </a>
-          </div>
-        )}
+        <div className={styles.resourcesBox}>
+          <a
+            // href="http://moodle.xianyunshipei.com/course/view.php?id=12"
+            href={crpUrl}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.resources}
+          >
+            <img src={crpLogo} alt="" />
+          </a>
+        </div>
 
         {/* 公示栏 */}
         <div className={styles.announceArea}>

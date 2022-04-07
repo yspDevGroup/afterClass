@@ -4,15 +4,12 @@ import { request } from 'umi';
 
 /** 获取教职工所带班级信息 GET /bjsj/classesByTeacher/${param0} */
 export async function getClasses(
-  params: {
-    // path
-    /** 教职工ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getClassesParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; data?: API.BJSJ[]; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: API.BJSJ[]; message?: string }>(
     `/bjsj/classesByTeacher/${param0}`,
     {
       method: 'GET',
@@ -24,17 +21,14 @@ export async function getClasses(
 
 /** 获取教职工基本数据 GET /jzgjbsj/${param0} */
 export async function getJZGJBSJ(
-  params: {
-    // path
-    /** 教职工ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getJZGJBSJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       GH?: string;
       XM?: string;
@@ -102,15 +96,12 @@ export async function getJZGJBSJ(
 
 /** 删除教职工基本数据 DELETE /jzgjbsj/${param0} */
 export async function deleteJZGJBSJ(
-  params: {
-    // path
-    /** 教职工ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteJZGJBSJParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jzgjbsj/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/jzgjbsj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -129,14 +120,14 @@ export async function getAllJZGJBSJ(
     /** 教师姓名 */
     name?: string;
     /** 页数 */
-    page?: number;
+    page: number;
     /** 每页记录数 */
-    pageSize?: number;
+    pageSize: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { count?: number; rows?: API.JZGJBSJ[] };
     message?: string;
   }>('/jzgjbsj/', {
@@ -152,8 +143,8 @@ export async function getAllJZGJBSJ(
 /** 创建教职工基本数据 PUT /jzgjbsj/create */
 export async function createJZG(body: API.CreateJZGJBSJ, options?: { [key: string]: any }) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       GH?: string;
       XM?: string;
@@ -224,16 +215,13 @@ export async function createJZG(body: API.CreateJZGJBSJ, options?: { [key: strin
 
 /** 更新教职工基本数据 PUT /jzgjbsj/update/${param0} */
 export async function updateJZGJBSJ(
-  params: {
-    // path
-    /** 教职工ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateJZGJBSJParams,
   body: API.UpdateJZGJBSJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/jzgjbsj/update/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/jzgjbsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -246,17 +234,14 @@ export async function updateJZGJBSJ(
 
 /** 获取教师画像 GET /jzgjbsj/portrait/${param0} */
 export async function getPortrait(
-  params: {
-    // path
-    /** 教职工ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getPortraitParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       id?: string;
       GH?: string;
       XM?: string;
@@ -380,8 +365,8 @@ export async function getPortrait(
 /** 按日期查询教师的请假，调代课信息 POST /jzgjbsj/getTeachersApplication */
 export async function getTeachersApplication(
   body: {
-    JZGJBSJId?: string;
-    startDate?: string;
+    JZGJBSJId: string;
+    startDate: string;
     endDate?: string;
   },
   options?: { [key: string]: any },
@@ -400,13 +385,15 @@ export async function getTeachersApplication(
 export async function getIgnoreTeacherByClassesId(
   body: {
     /** 课后班级数据id */
-    KHBJSJId?: string;
+    KHBJSJId: string;
     /** 学校基本数据id */
     XXJBSJId?: string;
+    /** 机构ID */
+    KHJYJGId?: string;
     /** 页数 */
-    page?: number;
+    page: number;
     /** 每页记录数 */
-    pageSize?: number;
+    pageSize: number;
   },
   options?: { [key: string]: any },
 ) {
@@ -424,11 +411,11 @@ export async function getIgnoreTeacherByClassesId(
 export async function getClasses_2(
   body: {
     /** 教师ID */
-    JZGJBSJId?: string;
+    JZGJBSJId: string;
     /** 学年 */
-    XN?: string;
+    XN: string;
     /** 学期 */
-    XQ?: string;
+    XQ: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -446,14 +433,14 @@ export async function getClasses_2(
 export async function getTeacherBasis(
   body: {
     /** 企业ID */
-    CorpId?: string;
+    CorpId: string;
     /** 是否注册 */
-    IsRegistered?: boolean;
+    IsRegistered: boolean;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: { id?: string; XM?: string }[];
     message?: string;
   }>('/jzgjbsj/getTeacherBasis', {

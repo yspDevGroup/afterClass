@@ -2,7 +2,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2021-12-10 18:21:21
+ * @LastEditTime: 2022-04-02 17:58:26
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -19,7 +19,7 @@ import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
 
 const { TextArea } = Input;
 const NewPatrol = (props: any) => {
-  const { kcid, kcmc, xkrq, bjxx, check } = props?.location?.state;
+  const { kcid, kcmc, xkrq, bjxx, skxx, check, jcId } = props?.location?.state;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   // 是否准时上课
@@ -38,8 +38,8 @@ const NewPatrol = (props: any) => {
   const [signNum, setSignNum] = useState<number>(0);
   // 其他说明
   const [bzDetail, setBzDetail] = useState<any>();
-  const teacherInfo = bjxx?.KHBJJs?.[0]?.JZGJBSJ;
-  const roominfo = bjxx?.KHPKSJs?.[0]?.FJSJ;
+  const teacherInfo = skxx?.KCBSKJSSJs?.[0];
+  const roominfo = skxx?.FJSJ;
   const recordDetail: API.CreateKHXKJL = {
     /** 巡课日期 */
     RQ: moment(xkrq).format('YYYY-MM-DD'),
@@ -58,17 +58,18 @@ const NewPatrol = (props: any) => {
     /** 巡课教师ID */
     XKJSId: currentUser.JSId || testTeacherId,
     /** 授课教师ID */
-    SKJSId: teacherInfo?.id,
+    SKJSId: teacherInfo?.JZGJBSJId,
     /** 教室ID */
     FJSJId: roominfo?.id,
     /** 班级ID */
     KHBJSJId: bjxx.id,
+    XXSJPZId: jcId,
   };
   const getCq = async () => {
     const resAll = await getAllKHXSCQ({
       bjId: bjxx?.id, // 班级ID
       CQRQ: xkrq, // 日期
-      XXSJPZId: bjxx?.KHPKSJs?.[0]?.XXSJPZ?.id || undefined, // 排课ID
+      XXSJPZId: jcId || undefined, // 排课ID
     });
     if (resAll.status === 'ok') {
       const allData = resAll.data;
@@ -147,15 +148,15 @@ const NewPatrol = (props: any) => {
                   <label>任课教师</label>
                   <span>
                     <ShowName
-                      XM={bjxx?.KHBJJs?.[0]?.JZGJBSJ?.XM}
+                      XM={teacherInfo?.JZGJBSJ?.XM}
                       type="userName"
-                      openid={bjxx?.KHBJJs?.[0]?.JZGJBSJ?.WechatUserId}
+                      openid={teacherInfo?.JZGJBSJ?.WechatUserId}
                     />
                   </span>
                 </li>
                 <li>
                   <label>上课教室</label>
-                  <span>{bjxx?.KHPKSJs?.[0]?.FJSJ?.FJMC}</span>
+                  <span>{roominfo?.FJMC}</span>
                 </li>
                 <li>
                   <label>是否准时上课</label>

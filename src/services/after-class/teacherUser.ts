@@ -8,7 +8,7 @@ export async function getAllTeacherUser(
     /** 启用状态 */
     status?: number;
     /** 企微ID */
-    CorpID?: string;
+    CorpID: string;
     /** 教师ID */
     JZGJBSJId?: string;
     /** 页数 */
@@ -45,11 +45,8 @@ export async function CreateTeacherUser(
 
 /** 更新教师登录用户 PUT /teacherUser/update/${param0} */
 export async function updateTeacherUser(
-  params: {
-    // path
-    /** 校历ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.updateTeacherUserParams,
   body: API.updateTeacherUser,
   options?: { [key: string]: any },
 ) {
@@ -69,9 +66,9 @@ export async function updateTeacherUser(
 export async function checkUsername(
   body: {
     /** 用户名 */
-    username?: string;
+    username: string;
     /** 机构企微ID */
-    CorpID?: string;
+    CorpID: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -87,15 +84,12 @@ export async function checkUsername(
 
 /** 删除教师登录用户 DELETE /teacherUser/${param0} */
 export async function DeleteTeacherUser(
-  params: {
-    // path
-    /** 教师登录账户ID */
-    id: string;
-  },
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.DeleteTeacherUserParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status?: 'ok' | 'error'; message?: string }>(`/teacherUser/${param0}`, {
+  return request<{ status: 'ok' | 'error'; message?: string }>(`/teacherUser/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),

@@ -3,7 +3,7 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 09:20:56
- * @LastEditTime: 2021-12-16 14:41:47
+ * @LastEditTime: 2022-04-02 15:30:49
  * @LastEditors: Sissle Lynn
  */
 import { useEffect, useState } from 'react';
@@ -32,18 +32,20 @@ const PatrolArrange = () => {
   const [dates, setDates] = useState<string[]>([]);
   const getData = async (days: string) => {
     const result = await queryXNXQList(currentUser?.xxId);
-    const res = await getScheduleByDate({
-      JZGJBSJId: currentUser.JSId || testTeacherId,
-      RQ: days,
-      XNXQId:result?.current?.id,
-      XXJBSJId: currentUser?.xxId,
-    });
-    if (res.status === 'ok' && res.data) {
-      const { flag, rows } = res.data;
-      if (flag) {
-        setDateData(rows);
-      } else {
-        setDateData([]);
+    if (result) {
+      const res = await getScheduleByDate({
+        JZGJBSJId: currentUser.JSId || testTeacherId,
+        RQ: days,
+        XNXQId: result?.current?.id,
+        XXJBSJId: currentUser?.xxId,
+      });
+      if (res.status === 'ok' && res.data) {
+        const { flag, rows } = res.data;
+        if (flag) {
+          setDateData(rows);
+        } else {
+          setDateData([]);
+        }
       }
     }
   };
@@ -110,6 +112,7 @@ const PatrolArrange = () => {
                   <List.Item
                     actions={[
                       <span
+                        key={item.id}
                         style={{
                           color: item.SFXK === 1 ? '#0066FF' : item.SFXK === 2 ? '#15B628' : '#f60',
                           fontSize: 12,

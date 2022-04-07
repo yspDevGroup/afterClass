@@ -6,15 +6,15 @@ import { request } from 'umi';
 export async function validateUrl(
   body: {
     /** 认证票据 */
-    ticket?: string;
+    ticket: string;
     /** 认证对应的服务地址 */
-    service?: string;
+    service: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
-    data: {
+    status: 'ok' | 'error';
+    data?: {
       username?: string;
       list?: {
         id?: string;
@@ -41,16 +41,16 @@ export async function validateUrl(
 export async function getUsers(
   body: {
     /** 用户电话 */
-    phone?: string;
+    phone: string;
     /** 当前登录的第三方用户名 */
-    username?: string;
+    username: string;
     /** 访问平台 */
-    plat?: string;
+    plat: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status?: 'ok' | 'error';
+    status: 'ok' | 'error';
     data?: {
       id?: string;
       GH?: string;
@@ -76,15 +76,15 @@ export async function getUsers(
 export async function bindUser(
   body: {
     /** 选择绑定的课后服务教师ID */
-    teacherId?: string;
+    teacherId: string;
     /** 用户名 */
-    username?: string;
+    username: string;
     /** 选择绑定的企微CorpID */
-    CorpID?: string;
+    CorpID: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/bindUser', {
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/bindUser', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -98,15 +98,15 @@ export async function bindUser(
 export async function checkCode(
   body: {
     /** 课后服务教师ID */
-    teacherId?: string;
+    teacherId: string;
     /** 用户名 */
-    username?: string;
+    username: string;
     /** 验证码 */
-    code?: string;
+    code: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/checkCode', {
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>('/xaedu/checkCode', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -120,13 +120,13 @@ export async function checkCode(
 export async function createToken(
   body: {
     /** 课后服务教师ID */
-    teacherId?: string;
+    teacherId: string;
     /** 用户名 */
-    username?: string;
+    username: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+  return request<{ status: 'ok' | 'error'; data?: string; message?: string }>(
     '/xaedu/createToken',
     {
       method: 'POST',
