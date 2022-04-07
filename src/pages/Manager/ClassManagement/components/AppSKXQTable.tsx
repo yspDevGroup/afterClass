@@ -85,7 +85,6 @@ type ApplicantPropsType = {
 
 const ApplicantInfoTable: FC<ApplicantPropsType> = ({ SKXQData }) => {
   const [DataSource, setDataSource] = useState<SKXQProps[]>([]);
-
   useEffect(() => {
     (async () => {
       const res = await getAllKHJSCQ({
@@ -100,7 +99,6 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = ({ SKXQData }) => {
         if (result.status === 'ok') {
           /** 所有排课信息 */
           const allSKData = result.data!.rows!;
-          console.log(allSKData, 'allSKData----')
           // 遍历所有排课节次组装数据
           const newDataSource: SKXQProps[] = allSKData.map((skData: { SKRQ: string | undefined; XXSJPZId: string | undefined; KCBSKJSSJs: any; XXSJPZ: any; }) => {
             // 当前课时已出勤的所有老师
@@ -109,11 +107,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = ({ SKXQData }) => {
               const sameJC = data.XXSJPZId === skData.XXSJPZId;
               return sameDay && sameJC;
             });
-            console.log(cqTeacherList, 'cqTeacherList------')
             // 当前课时排课的所有老师
             const pkTeacherList = skData.KCBSKJSSJs;
 
-            console.log(pkTeacherList, 'pkTeacherList-----')
             let teachers: {
               /** 微信用户ID */
               WechatUserId?: string;
@@ -170,7 +166,6 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = ({ SKXQData }) => {
               teachers,
             };
           });
-          console.log(newDataSource, 'newDataSource---')
           setDataSource(newDataSource);
         }
       }

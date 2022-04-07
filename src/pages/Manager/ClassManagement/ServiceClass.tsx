@@ -611,7 +611,7 @@ const ServiceClass = (props: { location: { state: any } }) => {
                     });
                     message.success('批量开启成功');
                   }else{
-                    message.warning('您所选班级均未排课，不可开启');
+                    message.warning('您所选班级未排课或已开启，不可开启');
                   }
 
                   actionRef.current?.reloadAndRest?.();

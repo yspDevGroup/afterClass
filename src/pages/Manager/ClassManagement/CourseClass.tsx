@@ -627,7 +627,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
                         });
                         message.success('批量开班成功');
                       }else{
-                        message.warning('您所选班级均未排课，不可开班');
+                        message.warning('您所选班级未排课或已开班，不可开班');
                       }
 
                       actionRef.current?.reloadAndRest?.();

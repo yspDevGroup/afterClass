@@ -240,7 +240,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         });
       }
     } else {
-      debugger;
       if (campusData?.length) {
         let id = campusData?.find((item: any) => item?.label === '本校')?.value;
         if (!id) {
@@ -248,8 +247,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         }
         getNJData(id);
         setCampusId(id);
-        debugger;
-        console.log('formRef', formRef);
         formRef?.current?.setFieldsValue({
           ZDKCS: 2,
           XQSJId: id,
