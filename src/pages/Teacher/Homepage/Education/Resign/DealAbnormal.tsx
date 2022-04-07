@@ -178,7 +178,8 @@ const DealAbnormal = (props: any) => {
                   title={<span>{item.title}</span>}
                   description={
                     <p>
-                      {item.date} {item.time}
+                      <span style={{ marginRight: '10px' }}>{item.date}</span>
+                      <span>{item.time}</span>
                     </p>
                   }
                 />

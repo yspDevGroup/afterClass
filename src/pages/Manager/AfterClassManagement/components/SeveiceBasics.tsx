@@ -6,7 +6,7 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2022-04-07 09:59:11
+ * @LastEditTime: 2022-04-07 17:54:02
  * @LastEditors: Wu Zhan
  */
 
@@ -249,7 +249,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         }
         getNJData(id);
         setCampusId(id);
-
         console.log('formRef', formRef);
         formRef?.current?.setFieldsValue({
           ZDKCS: 2,
