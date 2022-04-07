@@ -6,13 +6,14 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2022-03-29 15:59:42
+ * @LastEditTime: 2022-04-07 09:19:43
  * @LastEditors: Wu Zhan
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useModel } from 'umi';
-import { Button, Col, message, Row, Select, Space, Tag } from 'antd';
+import { Button, Col, Form, message, Row, Select, Space, Tag } from 'antd';
+// import type { ProFormInstance } from '@ant-design/pro-form';
 import ProForm, {
   ModalForm,
   ProFormDigit,
@@ -52,7 +53,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const [BMSDData, setBMSDData] = useState<any[]>();
   const [visible, setVisible] = useState<boolean>(false);
 
-  const formRef = useRef<any>();
+  const [formRef] = Form.useForm();
 
   const formLayout = {
     labelCol: { span: 4 },
@@ -240,7 +241,6 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         });
       }
     } else {
-      debugger;
       if (campusData?.length) {
         let id = campusData?.find((item: any) => item?.label === '本校')?.value;
         if (!id) {
