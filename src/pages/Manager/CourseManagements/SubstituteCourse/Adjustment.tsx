@@ -465,15 +465,19 @@ const Adjustment = (props: { teacherData?: any }) => {
               <div className={styles.reason}>
                 <p className={styles.title}>
                   审批人：
-                  <ShowName
-                    type="userName"
-                    openid={Datas?.SPJS?.WechatUserId}
-                    XM={Datas?.SPJS?.XM}
-                  />
+                  {Datas?.SPJS?.WechatUserId ? (
+                    <ShowName
+                      type="userName"
+                      openid={Datas?.SPJS?.WechatUserId}
+                      XM={Datas?.SPJS?.XM}
+                    />
+                  ) : (
+                    <>—</>
+                  )}
                 </p>
                 <p>审批时间：{Datas?.updatedAt}</p>
                 <p>审批意见：{Datas?.ZT === 1 ? '同意' : '不同意'}</p>
-                <p>审批原因：{Datas?.DKBZ || '-'}</p>
+                <p>审批原因：{Datas?.DKBZ || '—'}</p>
               </div>
             ) : (
               <></>
