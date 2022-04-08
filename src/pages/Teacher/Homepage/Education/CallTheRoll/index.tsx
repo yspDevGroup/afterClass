@@ -89,7 +89,6 @@ const CallTheRoll = (props: any) => {
   const pkDate = date?.replace(/\//g, '-'); // 日期
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-
   const showConfirm = (tm?: boolean, title?: string, content?: string) => {
     let secondsToGo = 3;
     const modal = Modal.success({
@@ -329,28 +328,30 @@ const CallTheRoll = (props: any) => {
     const value: any[] = [];
     const newData: any[] = [];
     dataSource.forEach((item: any) => {
-      if (item?.isLeave === false && item?.isRealTo === "缺席") {
-        newData.push(item)
+      if (item?.isLeave === false && item?.isRealTo === '缺席') {
+        newData.push(item);
       }
       value.push({
         CQZT: item.isLeave ? '请假' : item.isRealTo, // 出勤 // 缺席
-        CQRQ: pkDate, // 日期
         XSJBSJId: item.XSJBSJId || item.XSJBSJ?.id, // 学生ID
-        KHBJSJId: bjId, // 班级ID
-        XXSJPZId: jcId, // 节次ID
       });
     });
-    const res = await createKHXSCQ(value);
+    const res = await createKHXSCQ({
+      CQRQ: pkDate, // 日期
+      KHBJSJId: bjId, // 班级ID
+      XXSJPZId: jcId, // 节次ID
+      XSCQs: value,
+    });
     if (res.status === 'ok') {
-      setIsModalVisible(true)
+      setIsModalVisible(true);
       if (newData?.length) {
         newData.forEach(async (item: any) => {
           await sendMessageToParent({
             to: 'to_student_userid',
             text: `【缺勤提醒】\n您的${item?.XSJBSJ?.XM}未出勤${startTime} - ${endTime}的${KCName}课，请关注孩子去向`,
             ids: [item?.XSJBSJ.WechatUserId],
-          })
-        })
+          });
+        });
       }
     } else {
       enHenceMsg(res.message);
@@ -364,7 +365,7 @@ const CallTheRoll = (props: any) => {
         CQZT: '出勤',
         CQRQ: pkDate,
         KHBJSJId: bjId,
-        JSLX: JSLX === '主教师' ? 1 : 0
+        JSLX: JSLX === '主教师' ? 1 : 0,
       },
     ]);
     if (res.status === 'ok') {
@@ -451,8 +452,7 @@ const CallTheRoll = (props: any) => {
       </div>
       <div className={styles.classCourseName}>{claName?.KCMC}</div>
       <div className={styles.classCourseInfo}>
-        {claName?.BJMC}{' '}
-        {/* ${claName?.KSS ? '/ ' + claName?.KSS : ''} */}
+        {claName?.BJMC} {/* ${claName?.KSS ? '/ ' + claName?.KSS : ''} */}
         {curNum ? `｜第 ${curNum}  课时` : ''}
       </div>
       <div className={styles.checkWorkAttendance}>
@@ -492,7 +492,8 @@ const CallTheRoll = (props: any) => {
           type="primary"
           onClick={() => {
             history.push('/teacher/home?index=education');
-          }}>
+          }}
+        >
           我知道了
         </Button>
       </Modal>
