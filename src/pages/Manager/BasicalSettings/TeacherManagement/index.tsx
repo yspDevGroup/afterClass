@@ -2,8 +2,8 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2022-03-18 15:26:20
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-08 14:31:01
+ * @LastEditors: Wu Zhan
  */
 import React, { useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -16,52 +16,117 @@ import type { TableListParams } from '@/constant';
 import PageContain from '@/components/PageContainer';
 import ShowName from '@/components/ShowName';
 
-import { getAuthorization, getTableWidth } from '@/utils/utils';
+import { getTableWidth } from '@/utils/utils';
 import { getAllJZGJBSJ } from '@/services/after-class/jzgjbsj';
 // import { syncWechatStudents, syncWechatTeachers } from '@/services/after-class/upload';
 
 import styles from './index.less';
+import { importWechatTeachers } from '@/services/after-class/upload';
 
 const TeacherManagement = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const [newFileList, setNewFileList] = useState<any[]>();
   // 设置模态框显示状态
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   // 列表对象引用，可主动执行刷新等操作
   const actionRef = useRef<ActionType>();
   const [state, setstate] = useState<boolean>(false);
-  const onClose = () => {
-    setModalVisible(false);
-    actionRef.current?.reload();
+  const onClose = async () => {
+    const formData = new FormData();
+
+    if (newFileList?.length) {
+      const file = newFileList?.[0];
+      if (file.status === 'error') {
+        message.error('请重新选择文件!');
+        return;
+      }
+      // console.log('newFileList', newFileList?.[0]);
+      formData.append('xlsx', file);
+      const res = await importWechatTeachers({ plat: 'school' }, { body: formData });
+      if (res.status === 'ok') {
+        if (res?.data?.fail_count === 0) {
+          message.success(`上传成功`);
+          setModalVisible(false);
+          actionRef.current?.reload();
+        } else {
+          message.success(`上传成功${res?.data?.success_count}条,失败${res?.data?.fail_count}条`);
+        }
+      } else {
+        message.error(res.message);
+        // console.log('========', file, { file, status: 'error', response: res.message });
+        setNewFileList([
+          { uid: file.uid, name: file.name, status: 'error', response: res.message },
+        ]);
+      }
+    } else {
+      message.warning('请选择文件上传!');
+    }
   };
   // 上传配置
+  // const UploadProps: any = {
+  //   name: 'xlsx',
+  //   action: '/api/upload/importWechatTeachers?plat=school',
+  //   headers: {
+  //     authorization: getAuthorization(),
+  //   },
+  //   beforeUpload(file: any) {
+  //     const isLt2M = file.size / 1024 / 1024 < 2;
+  //     const isType =
+  //       file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+  //       file.type === 'application/vnd.ms-excel';
+  //     if (!isType) {
+  //       message.error('请上传正确表格文件!');
+  //       return Upload.LIST_IGNORE;
+  //     }
+  //     if (!isLt2M) {
+  //       message.error('文件大小不能超过2M');
+  //       return Upload.LIST_IGNORE;
+  //     }
+  //     return true;
+  //   },
+  //   onChange(info: { file: { status: string; name: any; response: any }; fileList: any }) {
+  //     if (info.file.status === 'done') {
+  //       const code = info.file.response;
+  //       if (code.status === 'ok') {
+  //         message.success(`上传成功`);
+  //         setModalVisible(false);
+  //       } else {
+  //         message.error(`${code.message}`);
+  //       }
+  //     } else if (info.file.status === 'error') {
+  //       const code = info.file.response;
+  //       message.error(`${code.message}`);
+  //     }
+  //   },
+  // };
   const UploadProps: any = {
-    name: 'xlsx',
-    action: '/api/upload/importWechatTeachers?plat=school',
-    headers: {
-      authorization: getAuthorization(),
+    maxCount: 1,
+    onRemove: (file: any) => {
+      if (newFileList?.length) {
+        const index: number = newFileList.indexOf(file);
+        const list = newFileList?.slice();
+        list?.splice(index, 1);
+        setNewFileList(list);
+      }
     },
-    beforeUpload(file: any) {
+    beforeUpload: (file: any) => {
+      const isType =
+        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-excel';
+      if (!isType) {
+        message.error('请上传正确表格文件!');
+        return Upload.LIST_IGNORE;
+      }
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
         message.error('文件大小不能超过2M');
+        return Upload.LIST_IGNORE;
       }
-      return isLt2M;
+      setNewFileList([file]);
+      return true;
     },
-    onChange(info: { file: { status: string; name: any; response: any }; fileList: any }) {
-      if (info.file.status === 'done') {
-        const code = info.file.response;
-        if (code.status === 'ok') {
-          message.success(`上传成功`);
-          setModalVisible(false);
-        } else {
-          message.error(`${code.message}`);
-        }
-      } else if (info.file.status === 'error') {
-        const code = info.file.response;
-        message.error(`${code.message}`);
-      }
-    },
+    fileList: newFileList,
   };
   // const handleConfirm = async (id: any) => {
   //   const res = await deleteJZGJBSJ({ id });
@@ -281,7 +346,14 @@ const TeacherManagement = () => {
           visible={modalVisible}
           onCancel={() => setModalVisible(false)}
           footer={[
-            <Button key="back" onClick={() => setModalVisible(false)}>
+            <Button
+              key="back"
+              onClick={() => {
+                setModalVisible(false);
+                // setModalVisible(false);
+                actionRef.current?.reload();
+              }}
+            >
               取消
             </Button>,
             <Button key="submit" type="primary" onClick={onClose}>

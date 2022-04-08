@@ -58,20 +58,18 @@ const RoomManagement = () => {
   const [uploadVisible, setUploadVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    (
-      async () => {
-        const response = await getAllFJLX({
-          name: '',
-          XXJBSJId: currentUser?.xxId,
-        });
-        if (response.status === 'ok') {
-          if (response.data && response.data.length === 0) {
-            setopens(true);
-          }
+    (async () => {
+      const response = await getAllFJLX({
+        name: '',
+        XXJBSJId: currentUser?.xxId,
+      });
+      if (response.status === 'ok') {
+        if (response.data && response.data.length === 0) {
+          setopens(true);
         }
       }
-    )()
-  }, [])
+    })();
+  }, []);
   /**
    * 实时设置模态框标题
    *
@@ -117,27 +115,34 @@ const RoomManagement = () => {
       const values = await form?.validateFields();
       const { id, FJRS, ...rest } = values;
       // 更新或新增场地信息
-      const result = id && current?.type === 'add'
-        ? await updateFJSJ(
-          { id },
-          {
-            ...rest,
-            XQName: xQLabelItem?.label,
-            XQSJId: xQLabelItem.value,
-            XXJBSJId: currentUser?.xxId,
-            FJRS: FJRS === '' ? 0 : FJRS
-          },
-        )
-        : await createFJSJ({
-          ...rest,
-          XQName: xQLabelItem?.label,
-          XQSJId: xQLabelItem.value,
-          XXJBSJId: currentUser?.xxId,
-          FJRS: FJRS === '' ? 0 : FJRS
-        });
+      const result =
+        id && current?.type === 'add'
+          ? await updateFJSJ(
+              { id },
+              {
+                ...rest,
+                XQName: xQLabelItem?.label,
+                XQSJId: xQLabelItem.value,
+                XXJBSJId: currentUser?.xxId,
+                FJRS: FJRS === '' ? 0 : FJRS,
+              },
+            )
+          : await createFJSJ({
+              ...rest,
+              XQName: xQLabelItem?.label,
+              XQSJId: xQLabelItem.value,
+              XXJBSJId: currentUser?.xxId,
+              FJRS: FJRS === '' ? 0 : FJRS,
+            });
       if (result.status === 'ok') {
         // eslint-disable-next-line no-nested-ternary
-        message.success(id ? (current?.type === 'add' ? '场地信息更新成功' : '场地信息复制成功') : '场地信息新增成功');
+        message.success(
+          id
+            ? current?.type === 'add'
+              ? '场地信息更新成功'
+              : '场地信息复制成功'
+            : '场地信息新增成功',
+        );
         setModalVisible(false);
         actionRef.current?.reload();
       } else {
@@ -311,17 +316,25 @@ const RoomManagement = () => {
     // accept={''}
     beforeUpload(file: any) {
       const isLt2M = file.size / 1024 / 1024 < 2;
-      console.log('isLt2M', isLt2M);
+      const isType =
+        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-excel';
+      if (!isType) {
+        message.error('请上传正确表格文件!');
+        return Upload.LIST_IGNORE;
+      }
       if (!isLt2M) {
         message.error('文件大小不能超过2M');
+        return Upload.LIST_IGNORE;
       }
-      return isLt2M;
+      return true;
     },
     onChange(info: {
       file: { status: string; name: any; response: any };
       fileList: any;
       event: any;
     }) {
+      console.log(info);
       if (info.file.status === 'done') {
         const code = info.file.response;
         if (code.status === 'ok') {
@@ -423,7 +436,6 @@ const RoomManagement = () => {
                   }}
                 />
               </div>
-
             </SearchLayout>
           </>
         }
@@ -463,13 +475,13 @@ const RoomManagement = () => {
           modalType === 'uphold'
             ? null
             : [
-              <Button key="submit" type="primary" onClick={handleSubmit}>
-                确定
-              </Button>,
-              <Button key="back" onClick={() => setModalVisible(false)}>
-                取消
-              </Button>,
-            ]
+                <Button key="submit" type="primary" onClick={handleSubmit}>
+                  确定
+                </Button>,
+                <Button key="back" onClick={() => setModalVisible(false)}>
+                  取消
+                </Button>,
+              ]
         }
         style={{ maxHeight: '430px' }}
         centered

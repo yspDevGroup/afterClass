@@ -151,7 +151,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           XSJBSJId: item?.XSJBSJId,
           ZT: 0,
           KHBJSJId: clickBjId,
-          XNXQId: applicantData?.XNXQId
+          XNXQId: applicantData?.XNXQId,
         };
       });
 
@@ -336,9 +336,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
             {
               //  如果报名时间内 开课时间外 报名类型属于先报名后缴费 或者缴费即报名 并且付款的的情况 实现退款退费
               !kkTimeFalg &&
-                applicantData?.BJZT === '已开班' &&
-                applicantData.BMLX !== 2 &&
-                record?.ZT === 0 ? (
+              applicantData?.BJZT === '已开班' &&
+              applicantData.BMLX !== 2 &&
+              record?.ZT === 0 ? (
                 <Popconfirm
                   title="确定取消该学生的报名吗?"
                   onConfirm={async () => {
@@ -351,7 +351,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                           KSS: applicantData?.KSS,
                           XSJBSJId: record?.XSJBSJ?.id,
                           KHBJSJId: record?.KHBJSJId,
-                          XNXQId: applicantData?.XNXQId
+                          XNXQId: applicantData?.XNXQId,
                         },
                       ]);
                       if (res?.status === 'ok' && res?.data) {
@@ -384,7 +384,7 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                                   JZGJBSJId: currentUser?.JSId || testTeacherId,
                                   TKZT: 0,
                                   SPSJ: moment(new Date()).format(),
-                                  XNXQId: applicantData?.XNXQId
+                                  XNXQId: applicantData?.XNXQId,
                                 });
                                 if (rescreateKHXSTK.status === 'ok') {
                                   // 更新退款状态
@@ -483,8 +483,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
 
   const UploadProps: any = {
     name: 'xlsx',
-    action: `/api/upload/importStudentSignUp?KHBJSJId=${applicantData?.id}&XQSJId=${applicantData?.XQSJId
-      }&JZGJBSJId=${currentUser?.JSId || testTeacherId}`,
+    action: `/api/upload/importStudentSignUp?KHBJSJId=${applicantData?.id}&XQSJId=${
+      applicantData?.XQSJId
+    }&JZGJBSJId=${currentUser?.JSId || testTeacherId}`,
     headers: {
       authorization: getAuthorization(),
     },
@@ -495,8 +496,16 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     // accept={''}
     beforeUpload(file: any) {
       const isLt2M = file.size / 1024 / 1024 < 2;
+      const isType =
+        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-excel';
+      if (!isType) {
+        message.error('请上传正确表格文件!');
+        return Upload.LIST_IGNORE;
+      }
       if (!isLt2M) {
         message.error('文件大小不能超过2M');
+        return Upload.LIST_IGNORE;
       }
       return isLt2M;
     },
@@ -545,8 +554,8 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
     },
   };
 
-  console.log(applicantData, 'applicantData------')
-  console.log(applicantData.BMZT, 'applicantData------')
+  console.log(applicantData, 'applicantData------');
+  console.log(applicantData.BMZT, 'applicantData------');
   return (
     <div className={styles.BMdiv}>
       <Modal
@@ -764,7 +773,11 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
         headerTitle={`课程名称：${applicantData?.BJMC}`}
         toolBarRender={() => {
           // 报名类型属于 免费 和先报名后缴费 并且 报名时间和报名结束时间BJZT: “'未开班','已开班','已结课'
-          if (applicantData?.BMLX === 1 && applicantData?.BMZT === 1 && setKHXSBJs.length < applicantData?.BJRS) {
+          if (
+            applicantData?.BMLX === 1 &&
+            applicantData?.BMZT === 1 &&
+            setKHXSBJs.length < applicantData?.BJRS
+          ) {
             return [
               <Button
                 type="primary"
@@ -804,7 +817,6 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
           if (setKHXSBJs.length >= applicantData?.BJRS) {
             return [<Button type="link">报名人数已满， 不能报名</Button>];
           }
-
 
           return [];
         }}

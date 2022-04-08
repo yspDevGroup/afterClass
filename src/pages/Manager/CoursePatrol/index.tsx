@@ -67,10 +67,18 @@ const CoursePatrol = () => {
     beforeUpload(file: any) {
       const isLt2M = file.size / 1024 / 1024 < 2;
       console.log('isLt2M', isLt2M);
+      const isType =
+        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-excel';
+      if (!isType) {
+        message.error('请上传正确表格文件!');
+        return Upload.LIST_IGNORE;
+      }
       if (!isLt2M) {
         message.error('文件大小不能超过2M');
+        return Upload.LIST_IGNORE;
       }
-      return isLt2M;
+      return true;
     },
     onChange(info: {
       file: { status: string; name: any; response: any };
@@ -135,7 +143,7 @@ const CoursePatrol = () => {
   const handleOver = async (d: string) => {
     const result = await queryXNXQList(currentUser?.xxId);
     const res = await getScheduleByDate({
-      XNXQId:result?.current?.id,
+      XNXQId: result?.current?.id,
       XXJBSJId: currentUser.xxId,
       RQ: d,
     });

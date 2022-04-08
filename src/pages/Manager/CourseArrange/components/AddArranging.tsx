@@ -459,7 +459,7 @@ const AddArranging: FC<PropsType> = (props) => {
             if (data.status === 'ok') {
               setCDLoading(false);
               message.success('该班级排课信息已清除');
-              if(cdmcValue){
+              if (cdmcValue) {
                 CDgetPKData();
               }
             }
@@ -528,10 +528,18 @@ const AddArranging: FC<PropsType> = (props) => {
     },
     beforeUpload(file: any) {
       const isLt2M = file.size / 1024 / 1024 < 2;
+      const isType =
+        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-excel';
+      if (!isType) {
+        message.error('请上传正确表格文件!');
+        return Upload.LIST_IGNORE;
+      }
       if (!isLt2M) {
         message.error('文件大小不能超过2M');
+        return Upload.LIST_IGNORE;
       }
-      return isLt2M;
+      return true;
     },
     data: {
       XNXQId: curXNXQId,
