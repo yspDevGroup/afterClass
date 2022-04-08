@@ -605,12 +605,12 @@ const ServiceClass = (props: { location: { state: any } }) => {
                   BJZT: '已开班',
                 });
                 if (res?.status === 'ok') {
-                  if(ids?.length){
+                  if (ids?.length) {
                     ids.forEach(async (v: string) => {
                       await getClassDays(v);
                     });
                     message.success('批量开启成功');
-                  }else{
+                  } else {
                     message.warning('您所选班级未排课或已开启，不可开启');
                   }
 

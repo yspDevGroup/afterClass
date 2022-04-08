@@ -157,7 +157,11 @@ const AdministrationClassManagement = () => {
       }
       return (
         <Popconfirm
-          title={record?.xsfwbm_count === 0 ? '确定取消发布吗？' : '本行政班已有学生报名，学生全部退课后，可取消发布。'}
+          title={
+            record?.xsfwbm_count === 0
+              ? '确定取消发布吗？'
+              : '本行政班已有学生报名，学生全部退课后，可取消发布。'
+          }
           onConfirm={async () => {
             onReleaseClick(record?.KHFWBJs[0]?.id, false);
           }}
@@ -168,9 +172,9 @@ const AdministrationClassManagement = () => {
         >
           <a
             type="link"
-          // onClick={() => {
-          //   onReleaseClick(record?.KHFWBJs[0]?.id, false);
-          // }}
+            // onClick={() => {
+            //   onReleaseClick(record?.KHFWBJs[0]?.id, false);
+            // }}
           >
             取消发布
           </a>
@@ -200,7 +204,7 @@ const AdministrationClassManagement = () => {
       if (record?.KHFWBJs[0]?.ZT === 0) {
         return (
           <Popconfirm
-            title='系统将清除本班级所有课后服务数据，包含但不限于服务内容、报名信息、付款记录等数据，确定清空吗？'
+            title="系统将清除本班级所有课后服务数据，包含但不限于服务内容、报名信息、付款记录等数据，确定清空吗？"
             onConfirm={async () => {
               onEliminate(record?.KHFWBJs[0]?.id);
             }}
@@ -209,15 +213,10 @@ const AdministrationClassManagement = () => {
             placement="topLeft"
             overlayClassName={styles?.Eliminate}
           >
-            <a
-              type="link"
-            >
-              清除配置
-            </a>
+            <a type="link">清除配置</a>
           </Popconfirm>
         );
       }
-
     }
     return '';
   };
@@ -275,10 +274,12 @@ const AdministrationClassManagement = () => {
       align: 'center',
       width: 150,
       render: (_, record) => {
-        return (<>
-          {
-            record?.KHFWBJs?.length === 0 || record?.KHFWBJs?.[0]?.ZT === 0 ?
-              <>{record?.xsfwbm_count}</> : <Link
+        return (
+          <>
+            {record?.KHFWBJs?.length === 0 || record?.KHFWBJs?.[0]?.ZT === 0 ? (
+              <>{record?.xsfwbm_count}</>
+            ) : (
+              <Link
                 key="details"
                 to={{
                   pathname: '/afterClassManagement/class_management/detail',
@@ -287,8 +288,8 @@ const AdministrationClassManagement = () => {
               >
                 {record?.xsfwbm_count}
               </Link>
-          }
-        </>
+            )}
+          </>
         );
       },
     },
@@ -426,8 +427,8 @@ const AdministrationClassManagement = () => {
                     });
                     const ids: any[] = [];
                     list.forEach((value: any) => {
-                      ids.push(value?.KHFWBJs?.[0].id)
-                    })
+                      ids.push(value?.KHFWBJs?.[0].id);
+                    });
                     const res = await cleanKHFWBJ({ KHFWBJIds: ids });
                     if (res?.status === 'ok') {
                       message.success('批量清除成功');
@@ -467,7 +468,7 @@ const AdministrationClassManagement = () => {
                 XXJBSJId: currentUser?.xxId,
                 NJId: NjId ? [NjId] : undefined,
                 BJSJId: BJId,
-                ISJD:false,
+                ISJD: false,
                 XNXQId: curXNXQId,
                 page: param.current,
                 pageSize: param.pageSize,

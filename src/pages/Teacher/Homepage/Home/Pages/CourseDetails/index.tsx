@@ -9,7 +9,7 @@ import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { convertTimeTable, ParentHomeData } from '@/services/local-services/mobileHome';
-import { getKHBJSJ, getMobileClassDetail, getTeachersByBJId } from '@/services/after-class/khbjsj';
+import { getMobileClassDetail, getTeachersByBJId } from '@/services/after-class/khbjsj';
 import noData from '@/assets/noCourse.png';
 
 import styles from './index.less';
@@ -70,10 +70,8 @@ const CourseDetails = () => {
           }
         }
 
-
-
         if (claim && (claim === '自选课' || claim === '代上课') && classid) {
-          let resSKSJ: { status: string; data: { rows: any; }; };
+          let resSKSJ: { status: string; data: { rows: any } };
           if (claim === '自选课') {
             resSKSJ = await getKCBSKSJ({
               KHBJSJId: [classid],
@@ -84,11 +82,11 @@ const CourseDetails = () => {
               JZGJBSJId: userId,
             });
           }
-          console.log(resSKSJ, 'resSKSJ---')
+          console.log(resSKSJ, 'resSKSJ---');
           if (resSKSJ.status === 'ok' && resSKSJ.data) {
-            setFJMC(resSKSJ?.data?.rows?.[0]?.FJSJ?.FJMC)
+            setFJMC(resSKSJ?.data?.rows?.[0]?.FJSJ?.FJMC);
             const { rows } = resSKSJ.data;
-            console.log(rows, 'rows----')
+            console.log(rows, 'rows----');
             let days: any[] = [];
             if (rows?.length) {
               days = [].map.call(rows, (v: { XXSJPZId: string; SKRQ: string }, index) => {
@@ -110,15 +108,15 @@ const CourseDetails = () => {
                 const ZXres = await getAll({
                   KHBJSJId: classid,
                   JZGJBSJId: userId,
-                })
+                });
                 if (ZXres?.status === 'ok') {
                   days.forEach((item: any) => {
                     ZXres?.data?.rows?.forEach((item2: any) => {
                       if (item?.day === item2?.RQ && item?.jcId === item2?.XXSJPZId) {
-                        newData.push(item)
+                        newData.push(item);
                       }
-                    })
-                  })
+                    });
+                  });
                 }
               } else {
                 newData = days;
@@ -131,7 +129,7 @@ const CourseDetails = () => {
                 newData,
                 currentUser?.xxId,
               );
-              console.log(newTime,'newTime----')
+              console.log(newTime, 'newTime----');
               setTimetableList(newTime);
             }
           }
@@ -185,8 +183,9 @@ const CourseDetails = () => {
       if (val.tag === '假') {
         content = {
           title: '请假说明',
-          content: ` ${val.reason ? `由于${val.reason},` : ''
-            }本节课程安排取消，之后课程顺延,请知悉.`,
+          content: ` ${
+            val.reason ? `由于${val.reason},` : ''
+          }本节课程安排取消，之后课程顺延,请知悉.`,
         };
       } else {
         content = {
@@ -226,10 +225,7 @@ const CourseDetails = () => {
             </li>
             {KcDetail?.KSS ? (
               <li>
-                {
-                  KcDetail?.ISFW === 1 ? <span>周课时：</span> : <span>总课时：</span>
-                }
-
+                {KcDetail?.ISFW === 1 ? <span>周课时：</span> : <span>总课时：</span>}
                 {KcDetail?.KSS}课时
               </li>
             ) : (

@@ -3131,7 +3131,7 @@ declare namespace API {
 
   type CreateKHXKJL = {
     /** 巡课日期 */
-    RQ?: string;
+    RQ: string;
     /** 是否准时上课 */
     SFZSSK?: boolean;
     /** 是否为原定教师 */
@@ -3162,7 +3162,7 @@ declare namespace API {
 
   type UpdateKHXKJL = {
     /** 巡课日期 */
-    RQ?: string;
+    RQ: string;
     /** 是否准时上课 */
     SFZSSK?: boolean;
     /** 是否为原定教师 */

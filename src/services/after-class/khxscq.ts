@@ -85,7 +85,18 @@ export async function getAllKHXSCQ(
 }
 
 /** 创建课后服务出勤记录 PUT /khxscq/create */
-export async function createKHXSCQ(body: API.CreateKHXSCQ[], options?: { [key: string]: any }) {
+export async function createKHXSCQ(
+  body: {
+    /** 出勤日期 */
+    CQRQ: string;
+    /** 班级ID */
+    KHBJSJId: string;
+    /** 节次ID */
+    XXSJPZId: string;
+    XSCQs?: { CQZT?: '出勤' | '请假' | '缺席'; XSJBSJId?: string }[];
+  },
+  options?: { [key: string]: any },
+) {
   return request<{
     status: 'ok' | 'error';
     data?: {

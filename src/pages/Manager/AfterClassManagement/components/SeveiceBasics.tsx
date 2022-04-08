@@ -6,13 +6,14 @@
  * @description:
  * @author: Wu Zhan
  * @Date: 2021-12-14 08:59:02
- * @LastEditTime: 2022-04-02 15:12:21
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-07 17:54:02
+ * @LastEditors: Wu Zhan
  */
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useModel } from 'umi';
 import { Button, Col, message, Row, Select, Space, Tag } from 'antd';
+import type { ProFormInstance } from '@ant-design/pro-form';
 import ProForm, {
   ModalForm,
   ProFormDigit,
@@ -52,7 +53,8 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
   const [BMSDData, setBMSDData] = useState<any[]>();
   const [visible, setVisible] = useState<boolean>(false);
 
-  const formRef = useRef<any>();
+  // const [formRef] = Form.useForm();
+  const formRef = useRef<ProFormInstance<any>>();
 
   const formLayout = {
     labelCol: { span: 4 },
@@ -247,6 +249,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         }
         getNJData(id);
         setCampusId(id);
+        console.log('formRef', formRef);
         formRef?.current?.setFieldsValue({
           ZDKCS: 2,
           XQSJId: id,
@@ -290,7 +293,7 @@ const SeveiceBasics = (props: ServiceBasicsType) => {
         formRef={formRef}
         title={title}
         visible={visible}
-        submitter={!type && undefined}
+        submitter={!type ? undefined : false}
         trigger={
           <Button
             type={serviceId ? 'link' : 'primary'}

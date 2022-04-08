@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2022-03-14 15:03:42
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-08 10:14:24
+ * @LastEditors: Sissle Lynn
  */
 /* eslint-disable no-param-reassign */
 
@@ -190,7 +190,7 @@ const getHomeData = async (
                   ISFW: clsArr?.[0]?.KHBJSJ?.ISFW === 1 || false,
                   days,
                   detail: converClassInfo(clsArr),
-                  JSLX: yxTar?.KHBJJs?.[0]?.JSLX
+                  JSLX: yxTar?.KHBJJs?.[0]?.JSLX,
                 });
               }
               homeInfo.courseSchedule = newSech;
@@ -270,7 +270,8 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
     let otherInd = -1;
     // 通过bjId,jcId确认原有数据中是否与已代课,请假数据重合
     const oriInd = oriData.findIndex((v: { bjId: any; jcId: any }) => {
-      const con1 = ele.SKJC?.id === v.jcId || ele.TKJC?.id === v.jcId || (ele.QJRQ && ele.XXSJPZId === v.jcId);
+      const con1 =
+        ele.SKJC?.id === v.jcId || ele.TKJC?.id === v.jcId || (ele.QJRQ && ele.XXSJPZId === v.jcId);
       return ele.KHBJSJId === v.bjId && con1;
     });
     if (status.includes('被')) {
@@ -326,10 +327,12 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
           ele.LX === 0 ? ele.TKJC?.KSSJ?.substring(0, 5) : ele.SKJC?.KSSJ?.substring(0, 5);
         const jssj =
           ele.LX === 0 ? ele.TKJC?.JSSJ?.substring(0, 5) : ele.SKJC?.JSSJ?.substring(0, 5);
+        const jcId = ele.LX === 0 ? ele.TKJCId : ele.SKJCId;
+
         oriData.push({
           title: ele.KHBJSJ?.KHKCSJ?.KCMC,
           bjId: ele.KHBJSJId,
-          jcId: ele.XXSJPZId,
+          jcId: jcId || ele.XXSJPZId,
           fjId: ele.TKFJId,
           BJMC: ele.KHBJSJ?.BJMC,
           img: ele.KHBJSJ?.KHKCSJ?.KCTP,
@@ -377,7 +380,7 @@ export const CurdayCourse = async (
     return item?.days?.find((v: { day: string }) => v.day === myDate) || item.days?.length === 0;
   });
   let courseList: any[] = [];
-  totalList?.forEach((item: { detail: any[]; classType: number; days?: any[], JSLX: string }) => {
+  totalList?.forEach((item: { detail: any[]; classType: number; days?: any[]; JSLX: string }) => {
     const { detail, classType, days, JSLX } = item;
     // 获取今日上课课程
     // const list = detail.filter((val) => val.wkd === day.getDay());
@@ -586,6 +589,7 @@ export const CountCourses = (data: any) => {
  */
 export const convertCourse = (day: string, course: any[] = [], type?: string) => {
   const data: any[] = [];
+
   course?.forEach((item: any) => {
     if (type && type === 'filter') {
       if (!item.status) {
@@ -619,11 +623,11 @@ export const convertCourse = (day: string, course: any[] = [], type?: string) =>
           pkId: item.pkId,
           bjId: item.bjId,
           jcId: item.jcId,
-          date:  day,
+          date: day,
           startTime: item.start,
           endTime: item.end,
           KCName: item.title,
-          JSLX: item.JSLX
+          JSLX: item.JSLX,
         },
       };
       data.push({

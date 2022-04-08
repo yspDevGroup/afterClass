@@ -9,7 +9,6 @@ import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import noPic from '@/assets/noPic.png';
 import GoBack from '@/components/GoBack';
 import ShowName from '@/components/ShowName';
-
 import styles from './index.less';
 import { signClass } from '@/services/after-class/xsjbsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';

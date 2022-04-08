@@ -35,15 +35,17 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                 operation
                   ? 'ui-listItemWrapper'
                   : !statusText.includes?.(v.titleRight?.text || '')
-                    ? 'itemWrapper'
-                    : 'itemDisabled'
+                  ? 'itemWrapper'
+                  : 'itemDisabled'
               }
             >
               <div className={operation ? 'ui-listItemContent' : 'itemContent'}>
                 {status ? (
                   <span
                     className={styles.specialPart}
-                    style={{ background: status.indexOf('已请假') > -1 ? 'rgb(242, 200, 98)' : '#7dce81' }}
+                    style={{
+                      background: status.indexOf('已请假') > -1 ? 'rgb(242, 200, 98)' : '#7dce81',
+                    }}
                   >
                     {status}
                   </span>
@@ -61,13 +63,13 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                     style={
                       type === 'descList'
                         ? {
-                          background:
-                            v.titleRight?.text === '待上课'
-                              ? 'rgba(69, 201, 119, 0.05)'
-                              : v.titleRight?.text === '代上课'
+                            background:
+                              v.titleRight?.text === '待上课'
+                                ? 'rgba(69, 201, 119, 0.05)'
+                                : v.titleRight?.text === '代上课'
                                 ? 'rgba(255, 199, 0, 0.05)'
                                 : 'rgba(102, 102, 102, 0.05)',
-                        }
+                          }
                         : {}
                     }
                     // eslint-disable-next-line no-nested-ternary
@@ -82,7 +84,7 @@ const NewsList = (props: { data: ListItem[]; type: ListType; operation: any }) =
                               borderRadius: '8px',
                               textAlign: 'center',
                             }}
-                            alt='预览图'
+                            alt="预览图"
                             src={v.img}
                             fallback={teacher ? noPicBig1 : noPicBig}
                             preview={false}

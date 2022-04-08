@@ -28,7 +28,6 @@ import SearchLayout from '@/components/Search/Layout';
 import AddCourseClass from './components/AddCourseClass';
 import AppSKXQTable from './components/AppSKXQTable';
 import { calcAllPeriod, getAllClassIds } from '@/services/after-class/kcbsksj';
-import moment from 'moment';
 
 const { Option } = Select;
 
@@ -319,9 +318,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
       });
       if (resKK.status === 'ok') {
         if (resKK.data?.length !== 0) {
-          setSKSDData(resKK?.data?.[0])
+          setSKSDData(resKK?.data?.[0]);
         }
-
       }
     })();
   }, [curXNXQId]);
@@ -396,7 +394,9 @@ const CourseManagement = (props: { location: { state: any } }) => {
         return (
           <a onClick={() => showModal(record)}>
             <Tooltip
-              title={`班级招生名额为${record?.BJRS || 0}人，已报${record?.xs_count + record?.noPayXS_count || 0}人。`}
+              title={`班级招生名额为${record?.BJRS || 0}人，已报${
+                record?.xs_count + record?.noPayXS_count || 0
+              }人。`}
             >
               {record?.xs_count + record?.noPayXS_count}/{record?.BJRS}
             </Tooltip>
@@ -426,12 +426,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
       title: (
         <span>
           授课安排&nbsp;
-          <Tooltip
-            overlayStyle={{ maxWidth: '30em' }}
-            title={
-              <>实授课时/应授课时/已排课时</>
-            }
-          >
+          <Tooltip overlayStyle={{ maxWidth: '30em' }} title={<>实授课时/应授课时/已排课时</>}>
             <QuestionCircleOutlined />
           </Tooltip>
         </span>
@@ -489,16 +484,15 @@ const CourseManagement = (props: { location: { state: any } }) => {
       render: (_, record) => {
         return (
           <>
-            {record?.BJZT} <span className={styles.TiShi}>
-              {
-                SKSDData && (SKSDData?.JSSJ < record?.JKRQ || SKSDData?.KSSJ > record?.KKRQ) ?
-                  <Tooltip
-                    overlayStyle={{ maxWidth: '30em' }}
-                    title='该班级上课时段超出本校开课时段'
-                  >
-                    <ExclamationCircleOutlined />
-                  </Tooltip> : <></>
-              }
+            {record?.BJZT}{' '}
+            <span className={styles.TiShi}>
+              {SKSDData && (SKSDData?.JSSJ < record?.JKRQ || SKSDData?.KSSJ > record?.KKRQ) ? (
+                <Tooltip overlayStyle={{ maxWidth: '30em' }} title="该班级上课时段超出本校开课时段">
+                  <ExclamationCircleOutlined />
+                </Tooltip>
+              ) : (
+                <></>
+              )}
             </span>
           </>
         );
@@ -541,8 +535,8 @@ const CourseManagement = (props: { location: { state: any } }) => {
       render: (text, record) => {
         return (
           <>
-            {
-              record?.BJZT === '已开班' ? <Switch
+            {record?.BJZT === '已开班' ? (
+              <Switch
                 key="BMZT"
                 checked={record?.BMZT === 1}
                 size="small"
@@ -559,8 +553,10 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     message.error('设置失败，请联系管理员或稍后再试。');
                   }
                 }}
-              /> : <></>
-            }
+              />
+            ) : (
+              <></>
+            )}
           </>
         );
       },
@@ -614,19 +610,19 @@ const CourseManagement = (props: { location: { state: any } }) => {
                     });
                     const ids: any[] = [];
                     list.forEach((value) => {
-                      ids.push(value?.id)
-                    })
+                      ids.push(value?.id);
+                    });
                     const res = await bulkUpdate({
                       KHBJSJIds: ids,
-                      BJZT: '已开班'
-                    })
+                      BJZT: '已开班',
+                    });
                     if (res?.status === 'ok') {
-                      if(ids?.length){
+                      if (ids?.length) {
                         ids.forEach(async (v: string) => {
                           await getClassDays(v);
                         });
                         message.success('批量开班成功');
-                      }else{
+                      } else {
                         message.warning('您所选班级未排课或已开班，不可开班');
                       }
 
@@ -652,12 +648,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   });
                   const ids: any[] = [];
                   list.forEach((value) => {
-                    ids.push(value?.id)
-                  })
+                    ids.push(value?.id);
+                  });
                   const res = await bulkUpdate({
                     KHBJSJIds: ids,
-                    BMZT: 1
-                  })
+                    BMZT: 1,
+                  });
                   if (res?.status === 'ok') {
                     message.success('批量开启报名成功');
                     actionRef.current?.reloadAndRest?.();
@@ -680,12 +676,12 @@ const CourseManagement = (props: { location: { state: any } }) => {
                   });
                   const ids: any[] = [];
                   list.forEach((value) => {
-                    ids.push(value?.id)
-                  })
+                    ids.push(value?.id);
+                  });
                   const res = await bulkUpdate({
                     KHBJSJIds: ids,
-                    BMZT: 0
-                  })
+                    BMZT: 0,
+                  });
                   if (res?.status === 'ok') {
                     message.success('批量关闭报名成功');
                     actionRef.current?.reloadAndRest?.();
@@ -702,7 +698,7 @@ const CourseManagement = (props: { location: { state: any } }) => {
             </>
           );
         }}
-        tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+        tableAlertRender={({ selectedRowKeys, onCleanSelected }) => (
           <Space size={24}>
             <span>
               已选 {selectedRowKeys.length} 项

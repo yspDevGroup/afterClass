@@ -1,6 +1,6 @@
 import { getAllClassesByNJ } from '@/services/after-class/khbjsj';
 import { getAllKHKCLX } from '@/services/after-class/khkclx';
-import { Tag, Modal, Button, message } from 'antd';
+import { Tag, Modal, Button, message, Spin } from 'antd';
 import React, { useState, useEffect, useRef } from 'react';
 
 import type { DataNode } from './SelectCoursesModal';
@@ -26,6 +26,7 @@ type SelectCourseProps = {
 const SelectCourses = (props: SelectCourseProps) => {
   const refModal = useRef<any>();
   const [visible, setVisible] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     value,
     onChange,
@@ -50,6 +51,7 @@ const SelectCourses = (props: SelectCourseProps) => {
 
   // 获取课后课程类别
   const getKHKCLXData = async () => {
+    setLoading(true);
     const res = await getAllKHKCLX({ name: '' });
     if (res?.status === 'ok') {
       // const list = res?.data?.filter((item: any) => flag === 0 ? item.KCTAG !== '校内辅导' : item.KCTAG === '校内辅导').map((item: any) => item?.id)
@@ -60,6 +62,7 @@ const SelectCourses = (props: SelectCourseProps) => {
       });
       setKHKCLXData(list);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -105,6 +108,7 @@ const SelectCourses = (props: SelectCourseProps) => {
   const getKHKCData = async (BJMC: string | undefined = undefined) => {
     const NJSJIds = getNJArr();
     if (NJSJIds?.length && XQSJId) {
+      setLoading(true);
       const res = await getAllClassesByNJ({
         XNXQId,
         NJSJIds: getNJArr(),
@@ -168,6 +172,7 @@ const SelectCourses = (props: SelectCourseProps) => {
           setDataSource([]);
         }
       }
+      setLoading(false);
     } else {
       message.error('请先选择年级');
     }
@@ -196,7 +201,12 @@ const SelectCourses = (props: SelectCourseProps) => {
         }
         onClick={() => {
           if (!disabled) {
-            setVisible(!visible);
+            const NJSJIds = getNJArr();
+            if (NJSJIds?.length && XQSJId) {
+              setVisible(!visible);
+            } else {
+              message.error('请先选择年级');
+            }
           }
         }}
       >
@@ -227,15 +237,17 @@ const SelectCourses = (props: SelectCourseProps) => {
           </>
         }
       >
-        <SelectCoursesModal
-          ref={refModal}
-          dataSource={dataSource}
-          selectValue={selectValue}
-          onSearch={getKHKCData}
-          onChange={(v: any) => {
-            console.log('v', v);
-          }}
-        />
+        <Spin spinning={loading}>
+          <SelectCoursesModal
+            ref={refModal}
+            dataSource={dataSource}
+            selectValue={selectValue}
+            onSearch={getKHKCData}
+            onChange={(v: any) => {
+              console.log('v', v);
+            }}
+          />
+        </Spin>
       </Modal>
     </>
   );
