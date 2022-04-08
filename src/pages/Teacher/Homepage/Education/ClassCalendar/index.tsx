@@ -51,7 +51,6 @@ const ClassCalendar = (props: propstype) => {
     !prevDay || prevDay === 'null' ? dayjs().format('M月D日') : dayjs(prevDay).format('M月D日'),
   );
   const [course, setCourse] = useState<any>(defaultMsg);
-  console.log(course,'course')
   const [dates, setDates] = useState<any[]>([]);
   const [editCourses, setEditCourses] = useState<any>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -103,11 +102,6 @@ const ClassCalendar = (props: propstype) => {
           },
         ]
       : [
-          {
-            text: '签到点名',
-            icon: 'icon-dianming',
-            background: '#FFC700',
-          },
           {
             text: '课堂风采',
             // itemType: 'img',
@@ -163,7 +157,6 @@ const ClassCalendar = (props: propstype) => {
   useEffect(() => {
     (async () => {
       const { courseList } = await CurdayCourse('teacher', currentUser?.xxId, userId, day);
-      console.log(courseList,'courseList-------')
       getMarkDays(day);
       if (type) {
         setEditCourses(convertCourse(day, courseList, 'filter'));

@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-15 11:50:45
- * @LastEditTime: 2022-03-14 15:03:42
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-08 10:14:24
+ * @LastEditors: Sissle Lynn
  */
 /* eslint-disable no-param-reassign */
 
@@ -327,10 +327,12 @@ const CountCurdayCourse = (newData: any[], oriData: any[], status: string) => {
           ele.LX === 0 ? ele.TKJC?.KSSJ?.substring(0, 5) : ele.SKJC?.KSSJ?.substring(0, 5);
         const jssj =
           ele.LX === 0 ? ele.TKJC?.JSSJ?.substring(0, 5) : ele.SKJC?.JSSJ?.substring(0, 5);
+        const jcId = ele.LX === 0 ? ele.TKJCId : ele.SKJCId;
+
         oriData.push({
           title: ele.KHBJSJ?.KHKCSJ?.KCMC,
           bjId: ele.KHBJSJId,
-          jcId: ele.XXSJPZId,
+          jcId: jcId || ele.XXSJPZId,
           fjId: ele.TKFJId,
           BJMC: ele.KHBJSJ?.BJMC,
           img: ele.KHBJSJ?.KHKCSJ?.KCTP,
@@ -587,6 +589,7 @@ export const CountCourses = (data: any) => {
  */
 export const convertCourse = (day: string, course: any[] = [], type?: string) => {
   const data: any[] = [];
+
   course?.forEach((item: any) => {
     if (type && type === 'filter') {
       if (!item.status) {
