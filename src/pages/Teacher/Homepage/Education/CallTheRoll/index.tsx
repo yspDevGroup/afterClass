@@ -475,15 +475,34 @@ const CallTheRoll = (props: any) => {
         />
       </div>
       <div className={styles.footerButton}>
-        <Button
-          style={{ background: theme.primaryColor, borderColor: theme.primaryColor, width: '100%' }}
-          type="primary"
-          shape="round"
-          onClick={onButtonClick}
-          disabled={butDis !== 'doing'}
-        >
-          {butDis === 'done' ? '已' : butDis === 'undone' ? '已默认' : '确认'}点名
-        </Button>
+        {dataSource?.length ? (
+          <Button
+            style={{
+              background: theme.primaryColor,
+              borderColor: theme.primaryColor,
+              width: '100%',
+            }}
+            type="primary"
+            shape="round"
+            onClick={onButtonClick}
+            disabled={butDis !== 'doing'}
+          >
+            {butDis === 'done' ? '已' : butDis === 'undone' ? '已默认' : '确认'}点名
+          </Button>
+        ) : (
+          <Button
+            style={{
+              background: theme.primaryColor,
+              borderColor: theme.primaryColor,
+              width: '100%',
+            }}
+            type="primary"
+            shape="round"
+            disabled
+          >
+            无需点名
+          </Button>
+        )}
       </div>
       <Modal className={styles.SignIn} visible={isModalVisible} footer={null} closable={false}>
         <img src={GroupT} alt="" />
