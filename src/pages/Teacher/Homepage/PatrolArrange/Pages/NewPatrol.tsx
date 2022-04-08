@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-26 10:30:36
- * @LastEditTime: 2022-04-02 17:58:26
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-08 10:36:42
+ * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
 import { Input, InputNumber, message, Switch } from 'antd';
@@ -15,7 +15,7 @@ import styles from '../index.less';
 import moment from 'moment';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getSerEnrolled } from '@/services/after-class/khbjsj';
-import { createKHXKJL, KHXKJL } from '@/services/after-class/khxkjl';
+import { createKHXKJL, KHXKJL, updateKHXKJL } from '@/services/after-class/khxkjl';
 
 const { TextArea } = Input;
 const NewPatrol = (props: any) => {
@@ -38,6 +38,9 @@ const NewPatrol = (props: any) => {
   const [signNum, setSignNum] = useState<number>(0);
   // 其他说明
   const [bzDetail, setBzDetail] = useState<any>();
+  // 巡课记录ID
+  const [hisId, setHisId] = useState<string>();
+
   const teacherInfo = skxx?.KCBSKJSSJs?.[0];
   const roominfo = skxx?.FJSJ;
   const recordDetail: API.CreateKHXKJL = {
@@ -86,6 +89,7 @@ const NewPatrol = (props: any) => {
       id,
     });
     if (res.status === 'ok' && res.data) {
+      console.log('res', res);
       const { data } = res;
       setOnTime(data.SFZSSK!);
       setOriTeacher(data.SFYDJS!);
@@ -93,11 +97,14 @@ const NewPatrol = (props: any) => {
       setCheckNum(data.SDRS!);
       setBzDetail(data.BZXX);
       setRealNum(data.QRRS!);
+
+      setHisId(data.id);
     }
   };
   useEffect(() => {
     getCq();
     if (bjxx.KHXKJLs?.length) {
+      console.log('bjxx.KHXKJLs', bjxx.KHXKJLs);
       getDetail(bjxx.KHXKJLs[0].id);
     }
     if (bjxx.ISFW === 1) {
@@ -114,17 +121,49 @@ const NewPatrol = (props: any) => {
   }, [bjxx]);
 
   const handleSubmit = async () => {
-    const res = await createKHXKJL(recordDetail);
-    if (res.status === 'ok') {
-      message.success('巡课记录已提交');
-      history.push('/teacher/patrolArrange/classes', {
-        id: kcid,
-        day: xkrq,
-        xxId: currentUser?.xxId,
-        kcmc,
-      });
+    console.log('recordDetail', recordDetail);
+
+    const newRecordDetai: API.CreateKHXKJL = {
+      ...recordDetail,
+      SFDM: checkIn,
+      YDRS: signNum || bjxx?.xs_count,
+      // 是否准时上课
+      SFZSSK: onTime,
+      //是否原定教师
+      SFYDJS: oriTeacher,
+      BZXX: bzDetail,
+      /** 实到人数是否准确 */
+      RSSFZQ: checkIn ? accurate : false,
+      SDRS: checkNum,
+      QRRS: realNum,
+    };
+    //修改
+    if (hisId) {
+      const res = await updateKHXKJL({ id: hisId }, newRecordDetai);
+      if (res.status === 'ok') {
+        message.success('巡课记录已提交');
+        history.push('/teacher/patrolArrange/classes', {
+          id: kcid,
+          day: xkrq,
+          xxId: currentUser?.xxId,
+          kcmc,
+        });
+      } else {
+        message.error(res.message);
+      }
     } else {
-      message.error(res.message);
+      const res = await createKHXKJL(newRecordDetai);
+      if (res.status === 'ok') {
+        message.success('巡课记录已提交');
+        history.push('/teacher/patrolArrange/classes', {
+          id: kcid,
+          day: xkrq,
+          xxId: currentUser?.xxId,
+          kcmc,
+        });
+      } else {
+        message.error(res.message);
+      }
     }
   };
   const limitDecimals = (value?: any) => {
@@ -235,11 +274,16 @@ const NewPatrol = (props: any) => {
                           max={signNum}
                           formatter={limitDecimals}
                           parser={limitDecimals}
-                          onBlur={(e) => {
-                            const val = Number(e.target.value);
-                            const num = val > signNum ? signNum : val < 0 ? 0 : val;
-                            recordDetail.QRRS = num;
+                          value={realNum}
+                          onChange={(value) => {
+                            recordDetail.QRRS = value;
+                            setRealNum(value);
                           }}
+                          // onBlur={(e) => {
+                          //   const val = Number(e.target.value);
+                          //   const num = val > signNum ? signNum : val < 0 ? 0 : val;
+                          //   recordDetail.QRRS = num;
+                          // }}
                         />
                       )}
                       人
@@ -256,13 +300,14 @@ const NewPatrol = (props: any) => {
                 <div style={{ padding: '10px', color: '#666' }}>{bzDetail}</div>
               ) : (
                 <TextArea
-                  name=""
-                  id=""
+                  value={bzDetail}
                   rows={6}
                   showCount
                   maxLength={255}
-                  onBlur={(e) => {
-                    recordDetail.BZXX = e.target.value;
+                  onChange={(value) => {
+                    // console.log('value', value.target.value);
+                    // recordDetail.BZXX = value.target.value;
+                    setBzDetail(value.target.value);
                   }}
                 />
               )}

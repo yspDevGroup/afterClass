@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-25 17:55:59
- * @LastEditTime: 2022-04-02 17:48:09
- * @LastEditors: Sissle Lynn
+ * @LastEditTime: 2022-04-08 09:40:17
+ * @LastEditors: Wu Zhan
  */
 import { useEffect, useState } from 'react';
 import { Divider } from 'antd';
@@ -37,8 +37,8 @@ const PatrolArrange = (props: any) => {
   };
   useEffect(() => {
     if (
-      today.getFullYear() !== nowDay.getFullYear() ||
       today.getMonth() !== nowDay.getMonth() ||
+      today.getFullYear() !== nowDay.getFullYear() ||
       today.getDate() !== nowDay.getDate()
     ) {
       setAvailable(false);
@@ -93,7 +93,8 @@ const PatrolArrange = (props: any) => {
                                         xkrq: day,
                                         bjxx: item,
                                         skxx: val,
-                                        check: isXk,
+                                        //时间是当前时间的话允许编辑
+                                        check: !available,
                                         jcId: XXSJPZ.id,
                                       },
                                     }}
