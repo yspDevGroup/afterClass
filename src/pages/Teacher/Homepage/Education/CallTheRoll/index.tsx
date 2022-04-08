@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useRef, useState } from 'react';
 import { history, useModel } from 'umi';
+import dayjs from 'dayjs';
 import { Modal, Table, Button, Switch, message, notification, Tooltip } from 'antd';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
@@ -162,11 +163,11 @@ const CallTheRoll = (props: any) => {
       const allData = resAll.data;
       // allData 有值时已点过名
       if (allData?.length) {
-        notification.warning({
-          message: '',
-          description: '本节课已点名,请勿重复操作',
-          duration: 4,
-        });
+        // notification.warning({
+        //   message: '',
+        //   description: '本节课已点名,请勿重复操作',
+        //   duration: 4,
+        // });
         allData.forEach((item: any) => {
           item.isLeave = item.CQZT === '请假';
           item.isRealTo = item.CQZT;
@@ -207,7 +208,7 @@ const CallTheRoll = (props: any) => {
         }
         if (nowSta >= 1) {
           setButDis('undone');
-          showConfirm(false, '课堂点名', '本节课因考勤超时已默认点名');
+          // showConfirm(false, '课堂点名', '本节课因考勤超时已默认点名');
         }
         if (futureSta) {
           setButDis('undo');
@@ -314,7 +315,7 @@ const CallTheRoll = (props: any) => {
   const onSwitchItem = (value: any, checked: boolean) => {
     const newData = [...dataSource];
     newData.forEach((item: any) => {
-      if (item.XSJBSJId === value.XSJBSJId) {
+      if (item?.XSJBSJ?.id === value?.XSJBSJ?.id) {
         if (checked) {
           item.isRealTo = '出勤';
         } else {
@@ -425,7 +426,9 @@ const CallTheRoll = (props: any) => {
               realTo={text}
               record={record}
               onSwitchItem={onSwitchItem}
-              butDis={butDis !== 'doing'}
+              butDis={
+                butDis !== 'doing' && butDis === 'done' && dayjs().format('YYYY-MM-DD') !== pkDate
+              }
             />
           </div>
         );
@@ -485,7 +488,9 @@ const CallTheRoll = (props: any) => {
             type="primary"
             shape="round"
             onClick={onButtonClick}
-            disabled={butDis !== 'doing'}
+            disabled={
+              butDis !== 'doing' && butDis === 'done' && dayjs().format('YYYY-MM-DD') !== pkDate
+            }
           >
             {butDis === 'done' ? '已' : butDis === 'undone' ? '已默认' : '确认'}点名
           </Button>

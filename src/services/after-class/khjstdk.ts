@@ -9,43 +9,7 @@ export async function getKHJSTDK(
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{
-    status: 'ok' | 'error';
-    data?: {
-      id?: string;
-      LX?: number;
-      ZT?: number;
-      BZ?: string;
-      DKBZ?: string;
-      SKRQ?: string | any;
-      TKRQ?: string | any;
-      DKSPSJ?: string;
-      SKJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
-      DKJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
-      SKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
-      TKFJ?: { id?: string; BH?: string; FJMC?: string } | any;
-      SKJC?: { id?: string; KSSJ?: string; JSSJ?: string; TITLE?: string } | any;
-      TKJC?: { id?: string; KSSJ?: string; JSSJ?: string; TITLE?: string } | any;
-      KHBJSJ?: {
-        id?: string;
-        BJMC?: string;
-        KCTP?: string;
-        KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
-      };
-      desKHBJSJ?:
-        | {
-            id?: string;
-            BJMC?: string;
-            KCTP?: string;
-            KHKCSJ?: { id?: string; KCMC?: string; KCTP?: string };
-          }
-        | any;
-      SPJS?: { id?: string; XM?: string; WechatUserId?: string } | any;
-      createdAt?: string;
-      updatedAt?: string;
-    };
-    message?: string;
-  }>(`/khjstdk/${param0}`, {
+  return request<any>(`/khjstdk/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
     ...(options || {}),
@@ -227,11 +191,7 @@ export async function getAllByAgency(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    status: 'ok' | 'error';
-    data?: { count?: number; rows?: API.KHJSTDK[] };
-    message?: string;
-  }>('/khjstdk/getAllByAgency', {
+  return request<any>('/khjstdk/getAllByAgency', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

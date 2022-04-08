@@ -103,6 +103,11 @@ const ClassCalendar = (props: propstype) => {
         ]
       : [
           {
+            text: '签到点名',
+            icon: 'icon-dianming',
+            background: '#FFC700',
+          },
+          {
             text: '课堂风采',
             // itemType: 'img',
             icon: 'icon-fengcaifabu-copy',
