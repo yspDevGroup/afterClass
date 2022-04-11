@@ -150,6 +150,7 @@ const InterestClassroom = () => {
       });
       if (res.status === 'ok') {
         const data = res.data.rows[0];
+        setStudentFWBJId(data?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === MouthId)?.id);
         setBaoMinData(data);
         const Datas = data?.XSFWBJs?.find((item: any) => item?.KHFWSJPZId === MouthId);
         setBmCouse(Datas.XSFWKHBJs);
@@ -188,7 +189,7 @@ const InterestClassroom = () => {
     if (BaoMinData && MouthId === FWKCData?.KHFWSJPZs?.[0].id) {
       setBmCouse(
         BaoMinData?.XSFWBJs?.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)
-          ?.XSFWKHBJs
+          ?.XSFWKHBJs,
       );
     }
   }, [BaoMinData, MouthId]);
@@ -201,10 +202,13 @@ const InterestClassroom = () => {
       if (FKZT === 0 || FKZT === 1) {
         setFKType(false);
       }
-      setStudentFWBJId(
-        BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)
-          ?.id,
-      );
+      if (FWKCData?.KHFWSJPZs?.[0].id === MouthId) {
+        setStudentFWBJId(
+          BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)
+            ?.id,
+        );
+      }
+
       if (
         BaoMinData?.XSFWBJs.find((item: any) => item?.KHFWSJPZId === FWKCData?.KHFWSJPZs?.[0].id)
       ) {
@@ -478,19 +482,24 @@ const InterestClassroom = () => {
           <>
             <div className={styles.noData}>
               <img src={noCourses} alt="" />
-              {
-                BmCouse ? <>  {FKType === true && PayType === true ? (
-                  <>
-                    <p style={{ marginBottom: 3 }}>课后服务包含课业辅导和趣味课堂</p>
-                    <p> 本课后服务暂未配置课程，您可以先进行缴费</p>
-                  </>
-                ) : (
-                  <p>您已报名成功，后续请留意首页的选课或付费提醒</p>
-                )}</> : <>
+              {BmCouse ? (
+                <>
+                  {' '}
+                  {FKType === true && PayType === true ? (
+                    <>
+                      <p style={{ marginBottom: 3 }}>课后服务包含课业辅导和趣味课堂</p>
+                      <p> 本课后服务暂未配置课程，您可以先进行缴费</p>
+                    </>
+                  ) : (
+                    <p>您已报名成功，后续请留意首页的选课或付费提醒</p>
+                  )}
+                </>
+              ) : (
+                <>
                   {BMDate ? (
                     <>
                       {moment(BMDate).format('YYYY/MM/DD') >=
-                        moment(new Date()).format('YYYY/MM/DD') ? (
+                      moment(new Date()).format('YYYY/MM/DD') ? (
                         <p>该时段暂未报名，请先报名</p>
                       ) : (
                         <p>该时段报名已结束，不可报名</p>
@@ -498,8 +507,9 @@ const InterestClassroom = () => {
                     </>
                   ) : (
                     <></>
-                  )}</>
-              }
+                  )}
+                </>
+              )}
             </div>
             {DropOutType === false ? (
               <>
@@ -566,7 +576,9 @@ const InterestClassroom = () => {
 
                   {BmCouse ? (
                     <>
-                      {BaoMinData && XKType === false && FWKCData?.KCFWBJs.find((item: any) => item?.LX === 1) ? (
+                      {BaoMinData &&
+                      XKType === false &&
+                      FWKCData?.KCFWBJs.find((item: any) => item?.LX === 1) ? (
                         <>
                           <div className={styles.title}>
                             <div />
@@ -691,7 +703,7 @@ const InterestClassroom = () => {
                       {BMDate ? (
                         <>
                           {moment(BMDate).format('YYYY/MM/DD') >=
-                            moment(new Date()).format('YYYY/MM/DD') ? (
+                          moment(new Date()).format('YYYY/MM/DD') ? (
                             <p>该时段暂未报名，请先报名</p>
                           ) : (
                             <p>该时段报名已结束，不可报名</p>
@@ -706,7 +718,7 @@ const InterestClassroom = () => {
                 {DropOutType === false ? (
                   <>
                     {moment(BMDate).format('YYYY/MM/DD') >=
-                      moment(new Date()).format('YYYY/MM/DD') ? (
+                    moment(new Date()).format('YYYY/MM/DD') ? (
                       <div className={styles.footers}>
                         <button onClick={BmSubmit}>我要报名</button>
                       </div>
@@ -840,7 +852,7 @@ const InterestClassroom = () => {
                     {BMDate ? (
                       <>
                         {moment(BMDate).format('YYYY/MM/DD') >=
-                          moment(new Date()).format('YYYY/MM/DD') ? (
+                        moment(new Date()).format('YYYY/MM/DD') ? (
                           <p>该时段暂未报名，请先报名</p>
                         ) : (
                           <p>该时段报名已结束，不可报名</p>
@@ -861,9 +873,9 @@ const InterestClassroom = () => {
                       <>
                         {' '}
                         {BaoMinData &&
-                          FKType === true &&
-                          PayType === true &&
-                          DropOutType === true ? (
+                        FKType === true &&
+                        PayType === true &&
+                        DropOutType === true ? (
                           <div className={styles.footers}>
                             <button onClick={submit}>去付款</button>
                           </div>
