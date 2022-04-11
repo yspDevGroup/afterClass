@@ -137,6 +137,7 @@ const CallTheRoll = (props: any) => {
     // 查询教师出勤记录
     const resCheck = await getAllKHJSCQ({
       KHBJSJId: bjId,
+      XXSJPZId: jcId,
       JZGJBSJId: currentUser.JSId || testTeacherId,
       CQRQ: pkDate,
     });

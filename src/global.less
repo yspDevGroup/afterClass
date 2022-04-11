@@ -1,5 +1,11 @@
 @import '~antd/es/style/themes/default.less';
 
+/* 尝试修改页面在浏览器中触发的滑动问题 */
+html {
+  touch-action: none;
+  touch-action: pan-y;
+}
+
 html,
 body,
 #root {
@@ -64,6 +70,7 @@ body,
     justify-content: center;
     margin-top: 46px !important;
   }
+
   .ant-pro-field-index-column {
     width: auto;
   }
@@ -131,9 +138,11 @@ body,
         .ant-menu-item::after {
           border-right: 3px solid rgba(62, 136, 248, 1);
         }
+
         .ant-menu-item {
           display: none;
         }
+
         .ant-menu-submenu-inline,
         .ant-menu-item-only-child {
           display: block;
@@ -173,18 +182,22 @@ body,
     .ant-pro-field-index-column {
       width: auto;
     }
+
     .ant-tabs-top > .ant-tabs-nav {
       margin-bottom: 24px;
     }
+
     //  调整表格操作栏样式
     .ant-pro-table-list-toolbar-container {
       padding: 16px 24px;
       padding: 0 !important;
+
       .ant-pro-table-list-toolbar-left {
         .ant-pro-table-list-toolbar-title {
           padding: 0 0 24px;
         }
       }
+
       .ant-pro-table-list-toolbar-right {
         > .ant-space-item {
           padding: 0 0 24px;
@@ -236,6 +249,7 @@ body,
       margin-bottom: 0;
     }
   }
+
   // 取消footer的链接信息
   .ant-pro-global-footer {
     margin: 0;
@@ -341,6 +355,7 @@ body,
       }
     }
   }
+
   .ant-modal-content {
     min-width: auto !important;
   }

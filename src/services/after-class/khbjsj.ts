@@ -643,3 +643,40 @@ export async function getMobileClassDetail(
     ...(options || {}),
   });
 }
+
+/** 按日期查询之后的代课与请假记录 POST /khbjsj/getRecordByDate */
+export async function getRecordByDate(
+  body: {
+    KHBJSJId: string;
+    startDate: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/getRecordByDate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 修改班级教师 POST /khbjsj/changeTeachers */
+export async function changeTeachers(
+  body: {
+    KHBJSJId: string;
+    startDate: string;
+    JZGJBSJIds?: { JZGJBSJId?: string; JSLX?: number; JSXM?: string }[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<any>('/khbjsj/changeTeachers', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
