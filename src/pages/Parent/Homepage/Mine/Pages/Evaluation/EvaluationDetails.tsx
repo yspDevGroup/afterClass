@@ -4,7 +4,7 @@ import { Rate, Input, Button, message } from 'antd';
 import { useState } from 'react';
 import styles from './index.less';
 import { history, useModel } from 'umi';
-import noPic from '@/assets/noPic.png';
+import noPic from '@/assets/noPicBig.png';
 
 const { TextArea } = Input;
 
