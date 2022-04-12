@@ -70,7 +70,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
   const [Range, setRange] = useState<any>([]);
   const [FbValues, setFbValues] = useState<string[]>([]);
 
-
   const formLayout = {
     labelCol: { flex: '7em' },
     wrapperCol: {},
@@ -191,9 +190,9 @@ const AddServiceClass: FC<AddCourseProps> = ({
         const newArr: any = [];
         res.data?.NJSJs.forEach((value: any) => {
           newArr.push(value.id);
-          newArrs.push(value?.NJMC)
+          newArrs.push(value?.NJMC);
         });
-        setRange(newArrs.toString().replaceAll(',', '、'))
+        setRange(newArrs.toString().replaceAll(',', '、'));
         const result = await getSchoolClasses({
           XXJBSJId: currentUser?.xxId,
           XNXQId: curXNXQId,
@@ -211,7 +210,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
     if (kcId && campusId) {
       getBJData();
     }
-
   }, [KCLXMC, kcId, campusId]);
 
   const onFinish = async (values: any) => {
@@ -230,12 +228,12 @@ const AddServiceClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-                KHBJSJId: formValues?.id,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                  KHBJSJId: formValues?.id,
+                };
+              })
             : undefined;
       } else {
         ZTeacher = [
@@ -247,11 +245,11 @@ const AddServiceClass: FC<AddCourseProps> = ({
         FTeacher =
           FJS && FJS?.length
             ? FJS.map((item: any) => {
-              return {
-                JSLX: '副教师',
-                JZGJBSJId: item,
-              };
-            })
+                return {
+                  JSLX: '副教师',
+                  JZGJBSJId: item,
+                };
+              })
             : undefined;
       }
       let newData: any = {};
@@ -288,13 +286,14 @@ const AddServiceClass: FC<AddCourseProps> = ({
       if (formValues && CopyType === 'undefined') {
         // 编辑
         if (PKType === false) {
-          const { KCMC } = KCDate?.find((value: any) => value?.id === values?.KHKCSJId); let BJMC: any;
+          const { KCMC } = KCDate?.find((value: any) => value?.id === values?.KHKCSJId);
+          let BJMC: any;
           if (Array.isArray(values?.BJIds)) {
             BJMC = classData?.find((value: any) => value?.id === values?.BJIds[0]);
           } else {
             BJMC = classData?.find((value: any) => value?.id === values?.BJIds);
           }
-          newData.BJMC = `${KCMC}${BJMC?.NJSJ?.NJMC}${BJMC?.BJ}`
+          newData.BJMC = `${KCMC}${BJMC?.NJSJ?.NJMC}${BJMC?.BJ}`;
         }
         res = await updateKHBJSJ({ id: formValues.id }, newData);
       } else if (formValues && CopyType === 'copy') {
@@ -334,6 +333,9 @@ const AddServiceClass: FC<AddCourseProps> = ({
       form.resetFields();
       setTeacherType(false);
       setPKType(false);
+      setIsJg(false);
+      const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
+      setKCDate(kcDate);
     }
   }, [visible]);
 
@@ -350,8 +352,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
 
     return '新增班级';
   };
-
-
 
   const formItems: any[] = [
     {
@@ -379,9 +379,9 @@ const AddServiceClass: FC<AddCourseProps> = ({
               form?.setFieldsValue({
                 KHKCSJId: undefined,
                 ZJS: undefined,
-                FJS: undefined,
                 BJIds: undefined,
               });
+              setFbValues([]);
               setKcId(undefined);
             },
           },
@@ -404,8 +404,8 @@ const AddServiceClass: FC<AddCourseProps> = ({
               form.setFieldsValue({
                 KHKCSJId: undefined,
                 ZJS: undefined,
-                FJS: undefined,
               });
+              setFbValues([]);
               const { value } = values.target;
               setIsJg(value === '机构课程');
             },
@@ -436,7 +436,9 @@ const AddServiceClass: FC<AddCourseProps> = ({
               // }
               form?.setFieldsValue({
                 BJIds: undefined,
+                ZJS: undefined,
               });
+              setFbValues([]);
             },
           },
         },
@@ -638,7 +640,8 @@ const AddServiceClass: FC<AddCourseProps> = ({
           fieldProps: {
             onChange: (item: any) => {
               if (item) {
-                form?.setFieldsValue({ ZJS: undefined, FJS: undefined });
+                form?.setFieldsValue({ ZJS: undefined });
+                setFbValues([]);
                 return setTeacherType(true);
               }
               return setTeacherType(false);
@@ -716,7 +719,6 @@ const AddServiceClass: FC<AddCourseProps> = ({
           return item.SSJGLX === '校内课程' && item.KHKCLX.KCTAG === KCLXMC;
         }
         return item.SSJGLX === '校内课程';
-
       });
       setKCDate(kcDate);
     }
@@ -740,27 +742,27 @@ const AddServiceClass: FC<AddCourseProps> = ({
           formValues && names === 'chakan'
             ? null
             : [
-              <Button
-                key="baocun"
-                type="primary"
-                onClick={() => {
-                  form.submit();
-                }}
-              >
-                保存
-              </Button>,
-              <Button
-                key="cancel"
-                onClick={() => {
-                  setVisible(false);
-                  setTeacherType(false);
-                  setClassData([]);
-                  setKCLXMC('');
-                }}
-              >
-                取消
-              </Button>,
-            ]
+                <Button
+                  key="baocun"
+                  type="primary"
+                  onClick={() => {
+                    form.submit();
+                  }}
+                >
+                  保存
+                </Button>,
+                <Button
+                  key="cancel"
+                  onClick={() => {
+                    setVisible(false);
+                    setTeacherType(false);
+                    setClassData([]);
+                    setKCLXMC('');
+                  }}
+                >
+                  取消
+                </Button>,
+              ]
         }
         maskClosable={false}
       >
@@ -785,18 +787,26 @@ const AddServiceClass: FC<AddCourseProps> = ({
               指定行政班：
               {formValues?.BJSJs?.length !== 0 ? (
                 <>
-                  {
-                    formValues?.BJSJs?.map((value: any, index: number) => {
-                      if (index === formValues?.BJSJs?.length - 1) {
-                        return <span> {value?.NJSJ?.XD}
+                  {formValues?.BJSJs?.map((value: any, index: number) => {
+                    if (index === formValues?.BJSJs?.length - 1) {
+                      return (
+                        <span>
+                          {' '}
+                          {value?.NJSJ?.XD}
                           {value?.NJSJ?.NJMC}
-                          {value?.BJ}</span>
-                      }
-                      return <span> {value?.NJSJ?.XD}
+                          {value?.BJ}
+                        </span>
+                      );
+                    }
+                    return (
+                      <span>
+                        {' '}
+                        {value?.NJSJ?.XD}
                         {value?.NJSJ?.NJMC}
-                        {value?.BJ}，</span>
-                    })
-                  }
+                        {value?.BJ}，
+                      </span>
+                    );
+                  })}
                 </>
               ) : (
                 '—'
@@ -804,7 +814,9 @@ const AddServiceClass: FC<AddCourseProps> = ({
             </p>
             <div className={styles.box}>
               <p>班级名称：{formValues?.BJMC}</p>
-              <p>场地名称：{formValues?.FJSJ?.FJMC || formValues?.KHPKSJs?.[0]?.FJSJ?.FJMC || '—'}</p>
+              <p>
+                场地名称：{formValues?.FJSJ?.FJMC || formValues?.KHPKSJs?.[0]?.FJSJ?.FJMC || '—'}
+              </p>
             </div>
             <div className={styles.box}>
               <p>
@@ -866,3 +878,4 @@ const AddServiceClass: FC<AddCourseProps> = ({
   );
 };
 export default AddServiceClass;
+

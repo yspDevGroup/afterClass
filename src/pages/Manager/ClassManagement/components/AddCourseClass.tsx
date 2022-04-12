@@ -439,6 +439,10 @@ const AddCourseClass: FC<AddCourseProps> = ({
       setBMLX(false);
       setTeacherType(true);
       setDataSource([]);
+      setIsJg(false);
+      setFbValues([]);
+      const kcDate = KHKCAllData?.filter((item: any) => item.SSJGLX === '校内课程');
+      setKCDate(kcDate);
     }
   }, [visible]);
 
@@ -593,8 +597,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
               form.setFieldsValue({
                 KHKCSJId: undefined,
                 ZJS: undefined,
-                FJS: undefined,
               });
+              setFbValues([]);
               const { value } = values.target;
               let kcDate: any;
               if (value === '机构课程') {
@@ -641,6 +645,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
               if (isJg) {
                 setKcId(values);
               }
+              form.setFieldsValue({ ZJS: undefined });
+              setFbValues([]);
             },
           },
         },
@@ -718,7 +724,8 @@ const AddCourseClass: FC<AddCourseProps> = ({
           fieldProps: {
             onChange: (item: any) => {
               if (item) {
-                form.setFieldsValue({ ZJS: undefined, FJS: undefined });
+                form.setFieldsValue({ ZJS: undefined });
+                setFbValues([]);
                 return setTeacherType(true);
               }
               return setTeacherType(false);
@@ -767,7 +774,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
               setFbValues(value);
               return value;
             }
-            return ''
+            return '';
           }}
         />
       ),
@@ -841,6 +848,7 @@ const AddCourseClass: FC<AddCourseProps> = ({
                 return setXzb(true);
               }
               form.setFieldsValue({ XzClassMC: [] });
+
               return setXzb(false);
             },
             checked: xzb,
