@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 获取学校基本数据 GET /xxjbsj/${param0} */
 export async function getXXJBSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getXXJBSJParams,
+  params: {
+    // path
+    /** 学校ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       XXDM?: string;
       XH?: string;
@@ -63,12 +66,15 @@ export async function getXXJBSJ(
 
 /** 删除学校基本数据 DELETE /xxjbsj/${param0} */
 export async function deleteXXJBSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteXXJBSJParams,
+  params: {
+    // path
+    /** 学校ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/xxjbsj/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxjbsj/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -83,14 +89,14 @@ export async function getAllXXJBSJ(
     /** 学校ID */
     xxId?: string;
     /** 页数 */
-    page: number;
+    page?: number;
     /** 每页记录数 */
-    pageSize: number;
+    pageSize?: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: { count?: number; rows?: API.XXJBSJ[] };
     message?: string;
   }>('/xxjbsj/getAll', {
@@ -106,8 +112,8 @@ export async function getAllXXJBSJ(
 /** 创建学校基本数据 PUT /xxjbsj/create */
 export async function createXXJBSJ(body: API.CreateXXJBSJ, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       XXDM?: string;
       XH?: string;
@@ -162,13 +168,16 @@ export async function createXXJBSJ(body: API.CreateXXJBSJ, options?: { [key: str
 
 /** 更新学校基本数据 PUT /xxjbsj/update/${param0} */
 export async function updateXXJBSJ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateXXJBSJParams,
+  params: {
+    // path
+    /** 学校ID */
+    id: string;
+  },
   body: API.UpdateXXJBSJ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/xxjbsj/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xxjbsj/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -182,8 +191,8 @@ export async function updateXXJBSJ(
 /** 获取学校的首页统计数据 POST /xxjbsj/homePage */
 export async function homePage(
   body: {
-    XXJBSJId: string;
-    XNXQId: string;
+    XXJBSJId?: string;
+    XNXQId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -200,9 +209,9 @@ export async function homePage(
 /** 学校查看考勤趋势 POST /xxjbsj/getAttendanceTrend */
 export async function getAttendanceTrend(
   body: {
-    XXJBSJId: string;
-    startDate: string;
-    endDate: string;
+    XXJBSJId?: string;
+    startDate?: string;
+    endDate?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -219,9 +228,9 @@ export async function getAttendanceTrend(
 /** 学校按日期统计收款，退款信息 POST /xxjbsj/getRefund */
 export async function getRefund(
   body: {
-    XXJBSJId: string;
-    startDate: string;
-    endDate: string;
+    XXJBSJId?: string;
+    startDate?: string;
+    endDate?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -238,8 +247,8 @@ export async function getRefund(
 /** 获取学校代办事项 POST /xxjbsj/getAllUnfinish */
 export async function getAllUnfinish(
   body: {
-    XXJBSJId: string;
-    XNXQId: string;
+    XXJBSJId?: string;
+    XNXQId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -256,7 +265,7 @@ export async function getAllUnfinish(
 /** 根据学年学期获取学校的合作机构 POST /xxjbsj/getAgencies */
 export async function getAgencies(
   body: {
-    XNXQId: string;
+    XNXQId?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -273,7 +282,7 @@ export async function getAgencies(
 /** 获取与学校合作过的所有机构教师 POST /xxjbsj/getAgencyTeachers */
 export async function getAgencyTeachers(
   body: {
-    XXJBSJId: string;
+    XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {

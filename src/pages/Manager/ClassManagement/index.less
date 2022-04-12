@@ -269,8 +269,95 @@ circle ::after {
   }
 }
 
-.TiShi{
-  >span{
+.TiShi {
+  > span {
     color: red;
   }
 }
+
+.GHTeacher {
+  .TeacherChoice {
+    margin-bottom: 10px;
+    > div {
+      display: inline-block;
+      width: 80%;
+    }
+    :global {
+      .ant-select-disabled {
+        .ant-select-selector {
+          color: #333 !important;
+          background-color: #fff !important;
+          border: none !important;
+        }
+        .ant-select-arrow {
+          display: none;
+        }
+        .ant-select-selection-item {
+          color: #333;
+        }
+      }
+    }
+  }
+  .wrap {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #eee;
+    border-radius: 4px;
+    > p {
+      margin-bottom: 0;
+      color: #4884ff;
+    }
+  }
+  .noJF {
+    color: #999;
+    text-align: center;
+    img {
+      width: 100px;
+    }
+  }
+  :global {
+    .ant-tabs-content-top {
+      > div {
+        display: flex;
+        justify-content: space-around;
+      }
+    }
+    .ant-modal-footer {
+      button[disabled] {
+        background-color: #eee !important;
+        border-color: #eee !important;
+      }
+      .ant-btn:nth-of-type(1) {
+        float: left;
+        width: 90px !important;
+        margin-left: 0 !important;
+        background-color: #ff612f;
+        border-color: #ff612f;
+      }
+    }
+  }
+  .box {
+    width: 45%;
+    max-height: 285px;
+    margin-bottom: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+    p {
+      margin-bottom: 0;
+      color: #666;
+      line-height: 24px;
+      list-style: initial;
+    }
+    :global {
+      .ant-badge-status-dot {
+        top: -2px;
+        width: 4px;
+        height: 4px;
+      }
+    }
+  }
+}
+

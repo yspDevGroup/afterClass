@@ -41,7 +41,7 @@ const NewPatrol = (props: any) => {
   // 巡课记录ID
   const [hisId, setHisId] = useState<string>();
 
-  const teacherInfo = skxx?.KCBSKJSSJs?.[0];
+  const teacherInfo = skxx?.KCBSKJSSJs?.find((item: any) => item?.JSLX === 1);
   const roominfo = skxx?.FJSJ;
   const recordDetail: API.CreateKHXKJL = {
     /** 巡课日期 */

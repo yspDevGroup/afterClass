@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 获取作息方案数据 GET /zxfa/${param0} */
 export async function getZXFA(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getZXFAParams,
+  params: {
+    // path
+    /** 作息方案ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       FAMC?: string;
       KSRQ?: string | any;
@@ -41,12 +44,15 @@ export async function getZXFA(
 
 /** 删除作息方案数据 DELETE /zxfa/${param0} */
 export async function deleteZXFA(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteZXFAParams,
+  params: {
+    // path
+    /** 作息方案ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/zxfa/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/zxfa/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -63,7 +69,7 @@ export async function getAllZXFA(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.ZXFA[]; message?: string }>('/zxfa/', {
+  return request<{ status?: 'ok' | 'error'; data?: API.ZXFA[]; message?: string }>('/zxfa/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -76,8 +82,8 @@ export async function getAllZXFA(
 /** 创建作息方案数据 PUT /zxfa/create */
 export async function createZXFA(body: API.CreateZXFA, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       FAMC?: string;
       KSRQ?: string | any;
@@ -110,13 +116,16 @@ export async function createZXFA(body: API.CreateZXFA, options?: { [key: string]
 
 /** 更新作息方案数据 PUT /zxfa/update/${param0} */
 export async function updateZXFA(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateZXFAParams,
+  params: {
+    // path
+    /** 作息方案ID */
+    id: string;
+  },
   body: API.UpdateZXFA,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/zxfa/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/zxfa/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

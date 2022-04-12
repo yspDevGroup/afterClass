@@ -6,16 +6,16 @@ import { request } from 'umi';
 export async function getXNXQ(
   body: {
     /** 学年 */
-    xn: string;
+    xn?: string;
     /** 学期 */
-    xq: string;
+    xq?: string;
     XXJBSJId?: string;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
-    data?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+    status?: 'ok' | 'error';
+    data: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
     message?: string;
   }>('/xnxq', {
     method: 'POST',
@@ -34,7 +34,7 @@ export async function getAllXNXQ(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.XNXQ[]; message?: string }>('/xnxq/all', {
+  return request<{ status?: 'ok' | 'error'; data?: API.XNXQ[]; message?: string }>('/xnxq/all', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,8 +47,8 @@ export async function getAllXNXQ(
 /** 创建学年学期数据 PUT /xnxq/create */
 export async function createXNXQ(body: API.CreateXNXQ, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
+    status?: 'ok' | 'error';
+    data: { id?: string; XN?: string; XQ?: string; KSRQ?: string; JSRQ?: string };
     message?: string;
   }>('/xnxq/create', {
     method: 'PUT',
@@ -62,12 +62,15 @@ export async function createXNXQ(body: API.CreateXNXQ, options?: { [key: string]
 
 /** 删除学年学期数据 DELETE /xnxq/${param0} */
 export async function deleteXNXQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteXNXQParams,
+  params: {
+    // path
+    /** 学年学期ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/xnxq/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xnxq/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -76,13 +79,16 @@ export async function deleteXNXQ(
 
 /** 更新学年学期数据 PUT /xnxq/update/${param0} */
 export async function updateXNXQ(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateXNXQParams,
+  params: {
+    // path
+    /** 学年学期ID */
+    id: string;
+  },
   body: API.UpdateXNXQ,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/xnxq/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/xnxq/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

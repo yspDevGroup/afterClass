@@ -27,7 +27,6 @@ type TeacherSelectProps = {
 
 const TeacherSelect = (props: TeacherSelectProps) => {
   const { multiple, value, type, kcId, xxId, onChange, disabled } = props;
-
   const [xxTeacher, setXXTeacher] = useState<any>();
   const [JGTeacher, setJGTeacher] = useState<any>();
   const [treeData, setTreeData] = useState<any>();
@@ -36,8 +35,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
     if (GH !== null && GH.length > 4) {
       return `~${GH.substring(GH.length - 4)}`;
     }
-      return `~ ${GH}`;
-
+    return `~ ${GH}`;
   };
 
   const getTeacherList = async () => {
@@ -76,14 +74,12 @@ const TeacherSelect = (props: TeacherSelectProps) => {
       });
 
       setXXTeacher(data);
-      // console.log('学校', data);
     }
   };
   const getJgTeachers = async () => {
     const res = await getAgencyTeachers({
       XXJBSJId: xxId,
     });
-    console.log(res,'res-------')
     if (res.status === 'ok') {
       // const { rows } = res?.data;
       //   const teacherOption: { label: string | JSX.Element; value: string; WechatUserId?: string }[] =[];
@@ -119,7 +115,6 @@ const TeacherSelect = (props: TeacherSelectProps) => {
           });
         },
       );
-      console.log(data,'data-------')
       setJGTeacher(data);
     }
   };
@@ -170,8 +165,10 @@ const TeacherSelect = (props: TeacherSelectProps) => {
 
   useEffect(() => {
     getTeacherList();
-    //   getJgTeacher();
-    getJgTeachers();
+    // getJgTeacher();
+    if (type === 4) {
+      getJgTeachers();
+    }
   }, []);
 
   useEffect(() => {
@@ -197,7 +194,7 @@ const TeacherSelect = (props: TeacherSelectProps) => {
       } else {
         setTreeData([JGTeacher, xxTeacher]);
       }
-    }else if (type === 4 && xxTeacher) {
+    } else if (type === 4 && xxTeacher) {
       if (!JGTeacher) {
         setTreeData([xxTeacher]);
       } else {
@@ -267,3 +264,4 @@ const TeacherSelect = (props: TeacherSelectProps) => {
   );
 };
 export default TeacherSelect;
+

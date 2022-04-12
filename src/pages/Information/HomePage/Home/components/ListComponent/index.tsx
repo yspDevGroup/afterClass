@@ -40,7 +40,7 @@ const NewsList = (props: { data: ListItem[]; type: any; operation: any; infoType
                         <div className={styles.descRow} key={`${v.title}`}>
                           <div className={styles.descleft}>
                             {
-                              type === 'azeList' ? <span style={{fontSize: '12px'}}>{moment(v.RQ).format('YYYY.MM.DD h:mm:ss')}</span> : <span>{'类型：'}{v.KCMC ? '课程引入申请' : '机构准入申请'}</span>
+                              type === 'azeList' ? <span style={{fontSize: '12px'}}>{moment(v.RQ).format('YYYY.MM.DD HH:mm:ss')}</span> : <span>{'类型：'}{v.KCMC ? '课程引入申请' : '机构准入申请'}</span>
                             }
                           </div>
                           <div className={styles.descright}>
