@@ -41,8 +41,8 @@ const AllNotice = () => {
       const resgetXXZCGG = await getXXTZGG({
         XXJBSJId: currentUser?.xxId,
         BT: '',
-        LX: ['0', '1'],
-        ZT: ['已发布', '草稿'],
+        LX: ['0'],
+        ZT: ['已发布'],
         page: 0,
         pageSize: 0,
       });
@@ -105,4 +105,3 @@ const AllNotice = () => {
 };
 
 export default AllNotice;
-
