@@ -15,6 +15,8 @@ import ShowName from '@/components/ShowName';
 import { getAllKHJSCQ } from '@/services/after-class/khjscq';
 import { getAllKHXSCQ } from '@/services/after-class/khxscq';
 import { getTableWidth } from '@/utils/utils';
+import { getSubClassByTeacher } from '@/services/after-class/khjstdk';
+import styles from '../index.less';
 
 const AttendanceDetail = (props: any) => {
   const { data, XNXQId, position, startDate, endDate, duration } = props.location.state;
@@ -51,13 +53,27 @@ const AttendanceDetail = (props: any) => {
     setLoading(true);
     if (position === '老师' || position === '机构老师') {
       (async () => {
+        // 获取在日期范围内教师的代课班级记录
+        const result = await getSubClassByTeacher({
+          startDate,
+          endDate,
+          JZGJBSJId: data.id,
+        });
         const res = await getTeacherAttendanceDetailByDate({
           JZGJBSJId: data.id,
           XNXQId,
           startDate,
           endDate,
         });
-        if (res.status === 'ok') {
+        if (res.status === 'ok' && result?.status === 'ok') {
+          res.data.rows.forEach((item: any) => {
+            result.data.forEach((value: string) => {
+              if (item?.id === value) {
+                // eslint-disable-next-line no-param-reassign
+                item.type = '代课教师';
+              }
+            });
+          });
           setDataSource(res.data.rows);
           setLoading(false);
         }
@@ -109,7 +125,16 @@ const AttendanceDetail = (props: any) => {
       key: 'BJMC',
       width: 120,
       align: 'center',
+      render: (text: any, record: any) => {
+        return (
+          <>
+            {record?.BJMC}
+            {record?.type ? <div className={styles.types}>代</div> : <></>}
+          </>
+        );
+      },
     },
+
     {
       title: '已排课时总数',
       dataIndex: 'KSS',
@@ -337,3 +362,4 @@ const AttendanceDetail = (props: any) => {
   );
 };
 export default AttendanceDetail;
+
