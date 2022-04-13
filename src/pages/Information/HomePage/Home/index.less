@@ -189,9 +189,9 @@
 }
 
 .allThings,
-.allNotice {
+.allNotices {
   min-height: 900px;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
   background-color: @pageBgColor;
 }
 
@@ -270,6 +270,57 @@
             border-radius: 6px;
           }
         }
+      }
+    }
+  }
+}
+
+.NoticeBox {
+  margin: 20px 14px;
+
+  :global {
+    .ant-list-item-meta-title {
+      margin-bottom: 14px;
+    }
+  }
+}
+
+.AllNotice {
+  > div:nth-child(1) {
+    height: 43px;
+  }
+  .allNotices {
+    :global {
+      .ant-empty-description {
+        color: #999;
+        font-size: 12px;
+      }
+      .ant-tabs-top > .ant-tabs-nav::before,
+      .ant-tabs-bottom > .ant-tabs-nav::before,
+      .ant-tabs-top > div > .ant-tabs-nav::before,
+      .ant-tabs-bottom > div > .ant-tabs-nav::before {
+        border-bottom: 0;
+      }
+      .ant-tabs-nav {
+        margin: 0;
+      }
+      .ant-tabs-tab .ant-tabs-tab-btn {
+        font-size: 16px;
+      }
+      .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        font-weight: bold;
+      }
+      .ant-btn-primary {
+        background-color: rgba(0, 0, 0, 0) !important;
+        border: 0;
+        span {
+          color: #4884ff !important;
+        }
+      }
+      button[ant-click-animating-without-extra-node]::after {
+        border: 0 none;
+        opacity: 0;
+        animation: none 0 ease 0 1 normal;
       }
     }
   }

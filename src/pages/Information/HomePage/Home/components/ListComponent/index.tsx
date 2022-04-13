@@ -1,37 +1,45 @@
-import type { ListData, ListItem, ListType } from './data';
+import type { ListData, ListItem } from './data';
 import { List } from 'antd';
-import { Link, history } from 'umi';
+import { Link } from 'umi';
 import moment from 'moment';
 import styles from './index.less';
 import IconFont from '@/components/CustomIcon';
 
 const NewsList = (props: { data: ListItem[]; type: any; operation: any; infoType: any }) => {
   const { data, type, operation, infoType } = props;
-  const teacher = history.location.pathname.indexOf('teacher') > -1;
+  // const teacher = history.location.pathname.indexOf('teacher') > -1;
 
   return (
     <div className={styles[type]}>
       <List
         dataSource={data}
-        renderItem={(v: any,index) => {
+        renderItem={(v: any, index) => {
           return (
             <div className={operation ? 'ui-listItemWrapper' : ''}>
               <div className={operation ? 'ui-listItemContent' : ''}>
-                <Link to={{pathname: '/information/noticeDetails', state: { allDataSource: data, index, infoType }}}>
+                <Link
+                  to={{
+                    pathname: '/information/noticeDetails',
+                    state: { allDataSource: data, index, infoType },
+                  }}
+                >
                   <List.Item.Meta
                     title={
                       <div className={styles.TitleRow}>
                         <div className={styles.Title}>
                           {v.SFTT === 1 ? <div className={styles.Headlines}>头条</div> : <></>}
                           {
-                            <span style={{fontSize: '14px', fontWeight: 'bold'}}>{v.BT || v.KCMC}</span>
+                            <span style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                              {v.BT || v.KCMC}
+                            </span>
                           }
-
                         </div>
                         <div className={styles.TitleRight}>
-                         {
-                           type === 'azeList' ? '' : <span>{moment(v.createdAt).format('YYYY.MM.DD')}</span>
-                         }
+                          {type === 'azeList' ? (
+                            ''
+                          ) : (
+                            <span>{moment(v.createdAt).format('YYYY.MM.DD')}</span>
+                          )}
                         </div>
                       </div>
                     }
@@ -39,14 +47,23 @@ const NewsList = (props: { data: ListItem[]; type: any; operation: any; infoType
                       <>
                         <div className={styles.descRow} key={`${v.title}`}>
                           <div className={styles.descleft}>
-                            {
-                              type === 'azeList' ? <span style={{fontSize: '12px'}}>{moment(v.RQ).format('YYYY.MM.DD h:mm:ss')}</span> : <span>{'类型：'}{v.KCMC ? '课程引入申请' : '机构准入申请'}</span>
-                            }
+                            {type === 'azeList' ? (
+                              <span style={{ fontSize: '12px' }}>
+                                {moment(v.RQ).format('YYYY.MM.DD HH:mm:ss')}
+                              </span>
+                            ) : (
+                              <span>
+                                {'类型：'}
+                                {v.KCMC ? '课程引入申请' : '机构准入申请'}
+                              </span>
+                            )}
                           </div>
                           <div className={styles.descright}>
-                            {
-                               type === 'azeList' ? <IconFont type="icon-gengduo" className={styles.gengduo} /> : ''
-                            }
+                            {type === 'azeList' ? (
+                              <IconFont type="icon-gengduo" className={styles.gengduo} />
+                            ) : (
+                              ''
+                            )}
                           </div>
                         </div>
                       </>
@@ -82,7 +99,7 @@ const NewsList = (props: { data: ListItem[]; type: any; operation: any; infoType
 
 const ListComp = (props: { listData?: ListData; cls?: string; operation?: any; type?: any }) => {
   if (props.listData) {
-    const { header, list, type, noDataImg, noDataText, noDataIcon } = props.listData;
+    const { header, list, type, noDataIcon } = props.listData;
     const { cls, operation } = props;
 
     return (
@@ -98,7 +115,7 @@ const ListComp = (props: { listData?: ListData; cls?: string; operation?: any; t
           ''
         )}
         {list && list.length ? (
-          <NewsList data={list} type={type} operation={operation} infoType = {props.type}/>
+          <NewsList data={list} type={type} operation={operation} infoType={props.type} />
         ) : (
           <>
             {noDataIcon ? (
@@ -114,6 +131,6 @@ const ListComp = (props: { listData?: ListData; cls?: string; operation?: any; t
     );
   }
   return <></>;
-}
+};
 
 export default ListComp;

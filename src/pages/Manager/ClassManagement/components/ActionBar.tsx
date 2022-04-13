@@ -1,15 +1,30 @@
 /* eslint-disable no-param-reassign */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { Popconfirm, message, Divider, Modal, Form, Input } from 'antd';
+
+import { Popconfirm, message, Divider, Modal, Form, Input, Tabs, Button, Badge } from 'antd';
+
 import type { CourseItem } from '../data';
 import { enHenceMsg } from '@/utils/utils';
 import { getClassDays } from '@/utils/TimeTable';
-import { cancleClass, deleteKHBJSJ, updateKHBJSJ } from '@/services/after-class/khbjsj';
+import {
+  cancleClass,
+  deleteKHBJSJ,
+  getRecordByDate,
+  updateKHBJSJ,
+} from '@/services/after-class/khbjsj';
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import { updateKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
+
 import { JSInforMation } from '@/components/JSInforMation';
+
+import TeacherSelect from '@/components/TeacherSelect';
+import styles from '../index.less';
+import ShowName from '@/components/ShowName';
+import { changeTeachers } from '@/services/after-class/khbjsj';
+import { queryXNXQList } from '@/services/local-services/xnxq';
+import noJF from '@/assets/noJF.png';
 
 type propstype = {
   handleEdit: (data: CourseItem, type?: string) => void;
@@ -19,13 +34,26 @@ type propstype = {
 };
 
 const { TextArea } = Input;
+const { TabPane } = Tabs;
 const ActionBar = (props: propstype) => {
   const { handleEdit, record, getData, type } = props;
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [form] = Form.useForm();
   const [visible, setVisible] = useState<boolean>(false);
+  const [JsVisible, setJsVisible] = useState<boolean>(false);
   const [JKVisible, setJKVisible] = useState<boolean>(false);
+  // 是否机构课程
+  const [isJg, setIsJg] = useState<boolean>(false);
+  const [kcId, setKcId] = useState<string | undefined>(undefined);
+  const [ZbValues, setZbValues] = useState<string[]>([]);
+  const [FbValues, setFbValues] = useState<string[]>([]);
+  const [DKQJData, setDKQJData] = useState<any>();
+  const [keys, setKeys] = useState<string>();
+  const [state, setState] = useState<boolean>(false);
+  const [editType, seteditType] = useState<boolean>(false);
+  const [Datas, setDatas] = useState<any>();
+  const [replaceTeacher, setReplaceTeacher] = useState<any>();
 
   const shelf = (recorde: any) => {
     if (recorde.xs_count === 0) {
@@ -63,6 +91,7 @@ const ActionBar = (props: propstype) => {
     }
     setJKVisible(false);
   };
+
   const release = (records: any) => {
     const res = updateKHBJSJ({ id: records.id }, { BJZT: '已开班' });
     new Promise((resolve) => {
@@ -110,6 +139,38 @@ const ActionBar = (props: propstype) => {
       message.error('取消开班出现错误，请联系管理员或稍后重试。');
     }
   };
+
+  useEffect(() => {
+    // 若原有教师有变更，则将变更的教师放到一个数组里
+    const OldTeacher: any[] = [];
+    const ChangeTeacher: any[] = [];
+    const NewTeacher = ZbValues.concat(FbValues);
+    Datas?.KHBJJs?.forEach((value: any) => {
+      OldTeacher.push(value?.JZGJBSJ?.id);
+    });
+
+    Datas?.KHBJJs?.forEach((item: any) => {
+      if (!NewTeacher.find((values: any) => item.JZGJBSJ?.id === values)) {
+        ChangeTeacher.push(item);
+      }
+    });
+    setKeys(ChangeTeacher?.[0]?.JZGJBSJ?.id);
+    setReplaceTeacher(ChangeTeacher);
+  }, [ZbValues, FbValues]);
+  useEffect(() => {
+    if (keys) {
+      (async () => {
+        const res = await getRecordByDate({
+          KHBJSJId: record?.id,
+          startDate: moment(new Date()).format('YYYY-MM-DD'),
+          JZGJBSJId: keys,
+        });
+        if (res?.status === 'ok') {
+          setDKQJData(res?.data);
+        }
+      })();
+    }
+  }, [keys]);
 
   switch (record.BJZT) {
     case '未开班':
@@ -282,8 +343,6 @@ const ActionBar = (props: propstype) => {
           )}
 
           <Divider type="vertical" />
-          <a onClick={() => handleEdit(record)}>查看</a>
-          <Divider type="vertical" />
           <a onClick={() => handleEdit(record, 'copy')}>复制</a>
           {record.ISFW === 0 && (
             <>
@@ -320,6 +379,225 @@ const ActionBar = (props: propstype) => {
               </Modal>
             </>
           )}
+          <Divider type="vertical" />
+          <>
+            <a
+              onClick={async () => {
+                if (record?.KHKCSJ?.SSJGLX === '机构课程') {
+                  setIsJg(true);
+                  setKcId(record?.KHKCSJ?.id);
+                }
+                const ZTeacher: string[] = [];
+                const FTeacher: string[] = [];
+                record?.KHBJJs?.forEach((item: any) => {
+                  if (item?.JSLX === '主教师') {
+                    ZTeacher.push(item?.JZGJBSJ?.id);
+                  }
+                  if (item?.JSLX === '副教师') {
+                    FTeacher.push(item?.JZGJBSJ?.id);
+                  }
+                });
+                setZbValues(ZTeacher);
+                setFbValues(FTeacher);
+                setJsVisible(true);
+                setDatas(record);
+              }}
+            >
+              授课教师
+            </a>
+            <Modal
+              title="授课教师"
+              visible={JsVisible}
+              className={styles.GHTeacher}
+              onCancel={() => {
+                setJsVisible(false);
+                seteditType(false);
+                setState(false);
+              }}
+              footer={[
+                <Button
+                  type="primary"
+                  disabled={editType}
+                  onClick={() => {
+                    seteditType(true);
+                  }}
+                >
+                  更换教师
+                </Button>,
+                <>
+                  {editType === true ? (
+                    <>
+                      <Button
+                        key="submit"
+                        type="primary"
+                        onClick={async () => {
+                          const ZTeacher =
+                            ZbValues && ZbValues?.length
+                              ? ZbValues.map((item: any) => {
+                                  return {
+                                    JSLX: 1,
+                                    JZGJBSJId: item,
+                                  };
+                                })
+                              : [];
+                          const FTeacher =
+                            FbValues && FbValues?.length
+                              ? FbValues.map((item: any) => {
+                                  return {
+                                    JSLX: 0,
+                                    JZGJBSJId: item,
+                                  };
+                                })
+                              : [];
+                          const AllTeacher = ZTeacher.concat(FTeacher);
+                          const result = await queryXNXQList(currentUser?.xxId);
+                          const res = await changeTeachers({
+                            KHBJSJId: record?.id,
+                            XNXQId: result.current?.id,
+                            startDate: moment(new Date()).format('YYYY-MM-DD'),
+                            JZGJBSJIds: AllTeacher,
+                          });
+                          if (res.status === 'ok') {
+                            message.success('保存成功');
+                            setJsVisible(false);
+                            seteditType(false);
+                            setState(false);
+                            await getClassDays(record?.id, ZbValues[0], currentUser?.xxId);
+                            getData();
+                          } else {
+                            message.warning('保存失败');
+                          }
+                        }}
+                      >
+                        保存
+                      </Button>
+                      <Button
+                        key="cancel"
+                        onClick={() => {
+                          setJsVisible(false);
+                          seteditType(false);
+                          setState(false);
+                        }}
+                      >
+                        取消
+                      </Button>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>,
+              ]}
+            >
+              <div className={styles.TeacherChoice}>
+                主班：
+                <TeacherSelect
+                  disabled={!editType}
+                  value={ZbValues}
+                  // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
+                  type={isJg ? 2 : 1}
+                  multiple={false}
+                  xxId={currentUser?.xxId}
+                  kcId={isJg ? kcId : undefined}
+                  onChange={(value: any) => {
+                    setZbValues([value]);
+                    setState(true);
+                  }}
+                />
+              </div>
+              <div className={styles.TeacherChoice}>
+                副班：
+                <TeacherSelect
+                  disabled={!editType}
+                  value={FbValues}
+                  type={isJg ? 3 : 1}
+                  multiple={true}
+                  xxId={currentUser?.xxId}
+                  kcId={isJg ? kcId : undefined}
+                  onChange={(value: any) => {
+                    if (value?.length <= 3) {
+                      setFbValues(value);
+                      setState(true);
+                    }
+                  }}
+                />
+              </div>
+              {state === true && replaceTeacher?.length ? (
+                <div className={styles.wrap}>
+                  <p>
+                    更换授课教师后，将清除原有教师当前日期之后与本班级相关的所有信息，包含该教师已有的代课、请假。
+                  </p>
+                  <Tabs
+                    activeKey={keys}
+                    onChange={(key) => {
+                      setKeys(key);
+                    }}
+                  >
+                    {replaceTeacher?.map((item: any) => {
+                      return (
+                        <TabPane
+                          tab={
+                            <>
+                              <ShowName
+                                type="userName"
+                                openid={item?.JZGJBSJ?.WechatUserId}
+                                XM={item?.JZGJBSJ?.XM}
+                              />
+                            </>
+                          }
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={item?.JZGJBSJ?.id}
+                        >
+                          {DKQJData?.dks?.length === 0 && DKQJData?.qjs?.length === 0 ? (
+                            <div className={styles.noJF}>
+                              <img src={noJF} alt="" />
+                              <p>该教师无代课或请假</p>
+                            </div>
+                          ) : (
+                            <>
+                              {DKQJData?.dks?.length ? (
+                                <div className={styles.box}>
+                                  代课：
+                                  {DKQJData?.dks.map((value: any) => {
+                                    return (
+                                      <p>
+                                        <Badge color="#666" />
+                                        {value?.SKRQ} {value?.SKJC?.KSSJ.substring(0, 5)} -{' '}
+                                        {value?.SKJC?.JSSJ.substring(0, 5)}
+                                      </p>
+                                    );
+                                  })}
+                                </div>
+                              ) : (
+                                <></>
+                              )}
+
+                              {DKQJData?.qjs?.length ? (
+                                <div className={styles.box}>
+                                  请假：
+                                  {DKQJData?.qjs.map((value: any) => {
+                                    return (
+                                      <p>
+                                        <Badge color="#666" />
+                                        {value?.KHJSQJKCs?.[0]?.QJRQ} {value?.KSSJ} - {value?.JSSJ}
+                                      </p>
+                                    );
+                                  })}
+                                </div>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </TabPane>
+                      );
+                    })}
+                  </Tabs>
+                </div>
+              ) : (
+                <></>
+              )}
+            </Modal>
+          </>
         </>
       );
       break;
@@ -327,7 +605,7 @@ const ActionBar = (props: propstype) => {
     default:
       return (
         <>
-          <a onClick={() => handleEdit(record)}>查看</a>
+          <a onClick={() => handleEdit(record, 'copy')}>复制</a>
         </>
       );
   }

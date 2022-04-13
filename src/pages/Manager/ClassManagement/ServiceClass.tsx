@@ -327,6 +327,9 @@ const ServiceClass = (props: { location: { state: any } }) => {
       key: 'BJMC',
       align: 'center',
       width: 160,
+      render: (_: any, record: any) => {
+        return <a onClick={() => handleEdit(record)}>{record?.BJMC}</a>;
+      },
     },
     {
       title: '课程来源',
