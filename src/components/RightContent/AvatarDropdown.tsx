@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Avatar, Menu, Spin } from 'antd';
-import { useModel, history } from 'umi';
+import { useModel, history, useAccess, Access } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
-// import { initWXAgentConfig, initWXConfig } from '@/utils/wx';
 import defaultAvatar from '@/assets/avatar.png';
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
 import { LogoutOutlined } from '@ant-design/icons';
-import { removeOAuthToken } from '@/utils/utils';
+import { removeOAuthToken, gotoAdmin, gotoTeacher, gotoParent } from '@/utils/utils';
 import ShowName from '@/components/ShowName';
 
 import styles from './index.less';
@@ -18,6 +17,7 @@ export type GlobalHeaderRightProps = {
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { isAdmin, isParent, isTeacher } = useAccess();
 
   const [xxData, setXxData] = useState<any>();
   const userRef = useRef(null);
@@ -31,36 +31,25 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
     fetchData();
   }, []);
 
-  const onMenuClick = useCallback(
-    (info: {
-      key: string;
-      keyPath: string[];
-      item: React.ReactInstance;
-      domEvent: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>;
-    }) => {
-      const { key } = info;
-      if (key === 'logout' && initialState) {
-        const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
-
-        localStorage.removeItem('authType');
-        setInitialState({ ...initialState, currentUser: undefined });
-        removeOAuthToken();
-        switch (authType) {
-          case 'wechat':
-            history.replace('/auth_callback/overDue');
-            break;
-          case 'xaedu':
-            window.close();
-            break;
-          default:
-            history.replace('/');
-            break;
-        }
-        return;
+  const logout = useCallback(() => {
+    if (initialState) {
+      const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
+      localStorage.removeItem('authType');
+      setInitialState({ ...initialState, currentUser: undefined });
+      removeOAuthToken();
+      switch (authType) {
+        case 'wechat':
+          history.replace('/auth_callback/overDue');
+          break;
+        case 'xaedu':
+          window.close();
+          break;
+        default:
+          history.replace('/');
+          break;
       }
-    },
-    [initialState, setInitialState],
-  );
+    }
+  }, [initialState, setInitialState]);
 
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
@@ -83,8 +72,26 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
   }
 
   const menuHeaderDropdown = (
-    <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-      <Menu.Item key="logout">
+    <Menu className={styles.menu} selectedKeys={[]}>
+      <Access accessible={isAdmin && localStorage.getItem('afterclass_role') !== 'admin'}>
+        <Menu.Item key="admin" onClick={gotoAdmin}>
+          <LogoutOutlined />
+          切换到管理员
+        </Menu.Item>
+      </Access>
+      <Access accessible={isTeacher && localStorage.getItem('afterclass_role') !== 'teacher'}>
+        <Menu.Item key="teacher" onClick={gotoTeacher}>
+          <LogoutOutlined />
+          切换到教师
+        </Menu.Item>
+      </Access>
+      <Access accessible={isParent && localStorage.getItem('afterclass_role') !== 'parent'}>
+        <Menu.Item key="parent" onClick={gotoParent}>
+          <LogoutOutlined />
+          切换到家长
+        </Menu.Item>
+      </Access>
+      <Menu.Item key="logout" onClick={logout}>
         <LogoutOutlined />
         退出登录
       </Menu.Item>

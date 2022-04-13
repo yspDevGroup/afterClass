@@ -2,70 +2,16 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2022-04-13 15:35:19
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-04-13 16:58:24
+ * @LastEditors: zpl
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
-import { envjudge, getLoginPath, getOauthToken, getPageQuery, gotoLink } from '@/utils/utils';
+import { getOauthToken, gotoLogin, gotoAdmin, gotoTeacher, gotoParent } from '@/utils/utils';
 import loadImg from '@/assets/loading.gif';
-
-const ej = envjudge();
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
-
-  /**
-   * 根据认证方式和url参数获取登录链接并跳转
-   *
-   */
-  const gotoLogin = () => {
-    const query = getPageQuery();
-    const suiteID = (query.SuiteID || query.suiteID || '') as string;
-    const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
-    if (authType === 'wechat' && !suiteID) {
-      history.replace('/403?title=未指定应用ID');
-      return;
-    }
-    const loginPath = getLoginPath({
-      suiteID,
-      buildOptions: initialState?.buildOptions,
-    });
-    gotoLink(loginPath);
-  };
-
-  /**
-   * 进入管理员界面
-   *
-   */
-  const gotoAdmin = () => {
-    if (ej.includes('mobile')) {
-      gotoLink('/information/home');
-    } else {
-      gotoLink('/homepage');
-    }
-  };
-
-  /**
-   * 进入教师界面
-   *
-   */
-  const gotoTeacher = () => {
-    gotoLink('/teacher/home');
-  };
-
-  /**
-   * 进入家长界面
-   *
-   */
-  const gotoParent = () => {
-    localStorage.removeItem('studentId');
-    localStorage.removeItem('studentName');
-    localStorage.removeItem('studentXQSJId');
-    localStorage.removeItem('studentNjId');
-    localStorage.removeItem('studentBJId');
-    gotoLink('/parent/home');
-  };
 
   /**
    * 根据不同身份进入对应的应用主页
@@ -105,7 +51,7 @@ const Index = () => {
     if (hasLoginInfo) {
       gotoIndex(initialState?.currentUser.type);
     } else {
-      gotoLogin();
+      gotoLogin(initialState?.buildOptions);
     }
   }, [initialState?.currentUser?.type]);
   return (

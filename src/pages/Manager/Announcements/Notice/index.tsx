@@ -3,7 +3,7 @@
  * @description:
  * @author: wsl
  * @Date: 2021-08-09 17:41:43
- * @LastEditTime: 2021-12-23 14:54:13
+ * @LastEditTime: 2022-04-13 16:37:41
  * @LastEditors: zpl
  */
 import { useState, useRef, useEffect } from 'react';
@@ -26,7 +26,7 @@ const { TextArea, Search } = Input;
 const { Option } = Select;
 const Notice = () => {
   const { initialState } = useModel('@@initialState');
-  const { canAdmin } = useAccess();
+  const { isAdmin } = useAccess();
   const { currentUser } = initialState || {};
   const actionRef = useRef<ActionType>();
   const [form] = Form.useForm();
@@ -35,7 +35,7 @@ const Notice = () => {
   const [status, setStatus] = useState<string>();
   const [visible, setVisible] = useState<boolean>(false);
   const getData = async () => {
-    const ZT = canAdmin ? (status ? [status] : ['已发布', '草稿']) : ['已发布'];
+    const ZT = isAdmin ? (status ? [status] : ['已发布', '草稿']) : ['已发布'];
     const resgetXXTZGG = await getXXTZGG({
       XXJBSJId: currentUser?.xxId,
       BT: title,
@@ -133,7 +133,7 @@ const Notice = () => {
         草稿: { text: '草稿', status: 'Default' },
         已发布: { text: '已发布', status: 'Success' },
       },
-      hideInTable: !canAdmin,
+      hideInTable: !isAdmin,
     },
     {
       title: '头条',
@@ -149,7 +149,7 @@ const Notice = () => {
             key="SFTT"
             defaultChecked={!!text}
             size="small"
-            disabled={!canAdmin}
+            disabled={!isAdmin}
             onChange={async (checked: boolean) => {
               const data = {
                 RQ: moment(record.RQ).format(),
@@ -187,7 +187,7 @@ const Notice = () => {
             refreshHandler={() => {
               getData();
             }}
-            canAdmin={canAdmin}
+            isAdmin={isAdmin}
           />
         </div>
       ),
@@ -217,7 +217,7 @@ const Notice = () => {
           >
             发送实时消息
           </Button>,
-          <Access accessible={!!canAdmin} fallback={<></>}>
+          <Access accessible={isAdmin} fallback={<></>}>
             <Button
               key="xinjian"
               type="primary"
@@ -250,7 +250,7 @@ const Notice = () => {
               />
             </div>
             <div>
-              <Access accessible={!!canAdmin}>
+              <Access accessible={isAdmin}>
                 <label htmlFor="status">发布状态：</label>
                 <Select
                   style={{ width: 160 }}

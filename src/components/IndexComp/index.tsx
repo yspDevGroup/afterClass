@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2022-04-12 17:15:34
- * @LastEditors: Wu Zhan
+ * @LastEditTime: 2022-04-13 16:33:56
+ * @LastEditors: zpl
  */
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row, Tabs } from 'antd';
@@ -36,7 +36,7 @@ import PromptInformation from '@/components/PromptInformation';
 const { TabPane } = Tabs;
 const Index = () => {
   const { initialState } = useModel('@@initialState');
-  const { canAdmin } = useAccess();
+  const { isLogin } = useAccess();
   const { currentUser } = initialState || {};
   const [homeData, setHomeData] = useState<any>();
   const [thingData, setThingData] = useState<any>();
@@ -165,7 +165,7 @@ const Index = () => {
           </Card>
         </Col>
       </Row>
-      <Access accessible={!!canAdmin}>
+      <Access accessible={isLogin}>
         <Row className={styles.chartWrapper}>
           <Col span={24}>
             {/* extra={<Button type='primary'><img src={exportImg} style={{ marginRight: 16 }} />下载使用手册</Button>} */}

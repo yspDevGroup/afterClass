@@ -312,6 +312,63 @@ export const getQueryString = (name: string) => {
 };
 
 /**
+ * 根据认证方式和url参数获取登录链接并跳转
+ *
+ */
+export const gotoLogin = (buildOptions?: BuildOptions) => {
+  const query = getPageQuery();
+  const suiteID = (query.SuiteID || query.suiteID || '') as string;
+  const authType: AuthType = (localStorage.getItem('authType') as AuthType) || 'local';
+  if (authType === 'wechat' && !suiteID) {
+    history.replace('/403?title=未指定应用ID');
+    return;
+  }
+  const loginPath = getLoginPath({
+    suiteID,
+    buildOptions,
+  });
+  localStorage.removeItem('afterclass_role');
+  gotoLink(loginPath);
+};
+
+/**
+ * 进入管理员界面
+ *
+ */
+export const gotoAdmin = () => {
+  localStorage.setItem('afterclass_role', 'admin');
+  const ej = envjudge();
+  if (ej.includes('mobile')) {
+    gotoLink('/information/home');
+  } else {
+    gotoLink('/homepage');
+  }
+};
+
+/**
+ * 进入教师界面
+ *
+ */
+export const gotoTeacher = () => {
+  localStorage.setItem('afterclass_role', 'teacher');
+  gotoLink('/teacher/home');
+};
+
+/**
+ * 进入家长界面
+ *
+ */
+export const gotoParent = () => {
+  localStorage.setItem('afterclass_role', 'parent');
+  localStorage.removeItem('studentId');
+  localStorage.removeItem('studentName');
+  localStorage.removeItem('studentXQSJId');
+  localStorage.removeItem('studentNjId');
+  localStorage.removeItem('studentBJId');
+  gotoLink('/parent/home');
+};
+
+/**
  * 根据当前时间获取学年学期
  *
  * @param {API.XNXQ[]} list

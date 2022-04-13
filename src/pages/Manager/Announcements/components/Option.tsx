@@ -188,17 +188,17 @@ type Props = {
   ZT: string;
   refreshHandler: () => void;
   record?: TableListItem;
-  canAdmin?: boolean;
+  isAdmin?: boolean;
 };
 
 const Option: React.FC<Props> = (props) => {
-  const { id, ZT, refreshHandler, record, canAdmin } = props;
+  const { id, ZT, refreshHandler, record, isAdmin } = props;
   switch (ZT) {
     case '已发布':
       return (
         <>
           <View id={id} refreshHandler={refreshHandler} record={record} />
-          <Access accessible={!!canAdmin}>
+          <Access accessible={!!isAdmin}>
             <Divider type="vertical" />
             <UnPubOpt id={id} refreshHandler={refreshHandler} record={record} />
           </Access>

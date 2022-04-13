@@ -36,7 +36,7 @@ export async function getInitialState(): Promise<InitialState> {
   const fetchUserInfo = async () => {
     const authType = localStorage.getItem('authType') || 'none';
     let res;
-    let dataUser: API.CurrentUser;
+    let dataUser: API.CurrentUser | undefined = undefined;
     switch (authType) {
       case 'wechat':
         res = await currentWechatUser({ plat: 'school' });
