@@ -439,7 +439,7 @@ const CallTheRoll = (props: any) => {
         <div>
           <b>
             <span ref={userRef}>
-              <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.UserId} />
+              <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.XM} />
             </span>
             老师
           </b>

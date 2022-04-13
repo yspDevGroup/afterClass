@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-12-06 11:15:21
- * @LastEditTime: 2021-12-10 13:46:11
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-13 11:00:32
+ * @LastEditors: Wu Zhan
  */
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
@@ -17,6 +17,7 @@ import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
 import { getAllJSCQBQ, updateJSCQBQ } from '@/services/after-class/jscqbq';
+import { JSInforMation } from '@/components/JSInforMation';
 
 const { TextArea, Search } = Input;
 const { Option } = Select;
@@ -213,8 +214,10 @@ const ResignManagement = () => {
             {record.SPZT === 0 ? (
               <a
                 onClick={() => {
-                  setCurrent(record);
-                  setVisible(true);
+                  if (JSInforMation(currentUser)) {
+                    setCurrent(record);
+                    setVisible(true);
+                  }
                 }}
               >
                 审批

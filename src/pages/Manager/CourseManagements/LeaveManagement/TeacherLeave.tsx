@@ -11,6 +11,7 @@ import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
+import { JSInforMation } from '@/components/JSInforMation';
 
 const { TextArea, Search } = Input;
 const { Option } = Select;
@@ -79,7 +80,7 @@ const TeacherLeave: React.FC = () => {
           }
         }
       } else {
-        message.warning('操作失败，请联系管理员')
+        message.warning('操作失败，请联系管理员');
       }
     } catch (err) {
       setVisible(false);
@@ -219,9 +220,7 @@ const TeacherLeave: React.FC = () => {
       align: 'center',
       ellipsis: true,
       width: 160,
-      render: (_text: any, record: any) => (
-        record.QJZT === 0 ? '' : record?.updatedAt
-      ),
+      render: (_text: any, record: any) => (record.QJZT === 0 ? '' : record?.updatedAt),
     },
     {
       title: '操作',
@@ -236,8 +235,10 @@ const TeacherLeave: React.FC = () => {
             {record.QJZT === 0 ? (
               <a
                 onClick={() => {
-                  setCurrent(record);
-                  setVisible(true);
+                  if (JSInforMation(currentUser)) {
+                    setCurrent(record);
+                    setVisible(true);
+                  }
                 }}
               >
                 审批

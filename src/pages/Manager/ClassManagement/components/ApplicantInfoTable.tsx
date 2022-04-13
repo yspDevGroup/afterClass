@@ -31,6 +31,7 @@ import AgentRegistration from '../components/AgentRegistration';
 import { sendMessageToParent } from '@/services/after-class/wechat';
 import ReplacePay from './replacePay';
 import { getAuthorization } from '@/utils/utils';
+import { JSInforMation } from '@/components/JSInforMation';
 
 const { TextArea } = Input;
 
@@ -416,12 +417,19 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
                   okText="确定"
                   cancelText="取消"
                   placement="topRight"
+                  disabled={!JSInforMation(currentUser, false)}
                 >
                   <Tooltip
                     placement="bottom"
                     title="本课程暂未开始上课，退课后，系统将自动发起全额退款"
                   >
-                    <a>取消报名</a>
+                    <a
+                      onClick={() => {
+                        JSInforMation(currentUser);
+                      }}
+                    >
+                      取消报名
+                    </a>
                   </Tooltip>
                 </Popconfirm>
               ) : (
@@ -803,7 +811,9 @@ const ApplicantInfoTable: FC<ApplicantPropsType> = (props) => {
               <Button
                 type="primary"
                 onClick={() => {
-                  setVisible(true);
+                  if (JSInforMation(currentUser)) {
+                    setVisible(true);
+                  }
                 }}
               >
                 批量报名

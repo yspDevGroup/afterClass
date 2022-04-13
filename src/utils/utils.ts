@@ -263,6 +263,7 @@ export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathPro
       break;
     }
     case 'password':
+    default:
       {
         // 为方便本地调试登录，认证回调地址通过参数传递给后台
         const callback = encodeURIComponent(`${ENV_host}/auth_callback/password`);
@@ -276,9 +277,6 @@ export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathPro
         loginPath = url.href;
       }
       break;
-    case 'local':
-    default:
-      loginPath = '/user/login';
   }
   return loginPath;
 };
@@ -514,4 +512,23 @@ export const getTableWidth = (columns: any[]) => {
     return sum;
   }
   return 1300;
+};
+export const getCorpId = () => {
+  return localStorage.getItem('corp') || '';
+};
+
+export const setCorpId = (corp: string) => {
+  localStorage.setItem('corp', corp);
+};
+
+export const setAuthType = (authType: string) => {
+  if (authType) {
+    localStorage.setItem('authType', authType);
+  }
+};
+export const getAuthType = () => {
+  return localStorage.getItem('authType') || 'local';
+};
+export const removeAuthType = () => {
+  localStorage.removeItem('authType');
 };

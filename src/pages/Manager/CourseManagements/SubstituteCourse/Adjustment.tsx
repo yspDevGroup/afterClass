@@ -12,6 +12,7 @@ import { getClassDays } from '@/utils/TimeTable';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
+import { JSInforMation } from '@/components/JSInforMation';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -224,8 +225,10 @@ const Adjustment = (props: { teacherData?: any }) => {
               <>
                 <a
                   onClick={() => {
-                    setCurrent(record);
-                    setVisible(true);
+                    if (JSInforMation(currentUser)) {
+                      setCurrent(record);
+                      setVisible(true);
+                    }
                   }}
                 >
                   审批

@@ -2,8 +2,8 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2022-03-31 23:18:02
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-13 15:30:58
+ * @LastEditors: Wu Zhan
  */
 import { history, useModel } from 'umi';
 import { Button, Result } from 'antd';
@@ -45,7 +45,11 @@ const NotFind = () => {
           <Button
             type="primary"
             onClick={() => {
-              if (!ysp_access_token || !initialState?.currentUser) {
+              if (
+                !ysp_access_token ||
+                !initialState?.currentUser ||
+                !initialState?.currentUser?.student?.length
+              ) {
                 const loginPath = getLoginPath({
                   suiteID: initialState?.buildOptions?.clientId || '',
                   buildOptions: initialState?.buildOptions,
@@ -57,7 +61,11 @@ const NotFind = () => {
               }
             }}
           >
-            {!ysp_access_token || !initialState?.currentUser ? '去登录' : '返回首页'}
+            {!ysp_access_token ||
+            !initialState?.currentUser ||
+            !initialState?.currentUser?.student?.length
+              ? '去登录'
+              : '返回首页'}
           </Button>
         ) : (
           ''

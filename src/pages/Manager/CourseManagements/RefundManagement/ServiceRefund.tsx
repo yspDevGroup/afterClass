@@ -11,6 +11,7 @@ import SemesterSelect from '@/components/Search/SemesterSelect';
 import { getKHZZFW } from '@/services/after-class/khzzfw';
 import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { exportTKJL, getAllKHXSTK, updateKHXSTK } from '@/services/after-class/khxstk';
+import { JSInforMation } from '@/components/JSInforMation';
 
 const { Option } = Select;
 const { TextArea, Search } = Input;
@@ -240,13 +241,15 @@ const ServiceRefund = () => {
         record.TKZT === 0 ? (
           <a
             onClick={() => {
-              setCurrent(record);
-              setVisible(true);
-              form.setFieldsValue({
-                TKJE: record?.TKJE,
-                TKZT: 1,
-                BZ: '',
-              });
+              if (JSInforMation(currentUser)) {
+                setCurrent(record);
+                setVisible(true);
+                form.setFieldsValue({
+                  TKJE: record?.TKJE,
+                  TKZT: 1,
+                  BZ: '',
+                });
+              }
             }}
           >
             确认

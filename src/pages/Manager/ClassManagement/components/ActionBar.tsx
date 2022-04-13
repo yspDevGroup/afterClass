@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import { useModel } from 'umi';
-import { Popconfirm, message, Divider, Modal, Form, Input, Space } from 'antd';
+import { Popconfirm, message, Divider, Modal, Form, Input } from 'antd';
 import type { CourseItem } from '../data';
 import { enHenceMsg } from '@/utils/utils';
 import { getClassDays } from '@/utils/TimeTable';
@@ -9,7 +9,7 @@ import { cancleClass, deleteKHBJSJ, updateKHBJSJ } from '@/services/after-class/
 import { getKHPKSJByBJID } from '@/services/after-class/khpksj';
 import { updateKHKCSJ } from '@/services/after-class/khkcsj';
 import moment from 'moment';
-// import EllipsisHint from '@/components/EllipsisHint';
+import { JSInforMation } from '@/components/JSInforMation';
 
 type propstype = {
   handleEdit: (data: CourseItem, type?: string) => void;
@@ -209,13 +209,16 @@ const ActionBar = (props: propstype) => {
     case '已开班':
       return (
         <>
-          {
-            record?.KKRQ > moment(new Date()).format('YYYY-MM-DD') ? <>
-              {((record?.xs_count + record.noPayXS_count) > 0 && (record?.xs_count + record.noPayXS_count) < record?.BJRS) ? (
+          {record?.KKRQ > moment(new Date()).format('YYYY-MM-DD') ? (
+            <>
+              {record?.xs_count + record.noPayXS_count > 0 &&
+              record?.xs_count + record.noPayXS_count < record?.BJRS ? (
                 <>
                   <a
                     onClick={() => {
-                      setVisible(true);
+                      if (JSInforMation(currentUser)) {
+                        setVisible(true);
+                      }
                     }}
                   >
                     取消开班
@@ -273,8 +276,10 @@ const ActionBar = (props: propstype) => {
                   </Popconfirm>
                 </>
               )}
-            </> : <></>
-          }
+            </>
+          ) : (
+            <></>
+          )}
 
           <Divider type="vertical" />
           <a onClick={() => handleEdit(record)}>查看</a>
@@ -303,13 +308,13 @@ const ActionBar = (props: propstype) => {
                 cancelText="取消"
                 width={300}
               >
-                <p style={{ color: '#333', fontSize: '16px',marginBottom:'8px' }}>
+                <p style={{ color: '#333', fontSize: '16px', marginBottom: '8px' }}>
                   课程名称：{record?.KHKCSJ?.KCMC}{' '}
                 </p>
-                <p style={{ color: '#333', fontSize: '16px',marginBottom:'8px' }}>
+                <p style={{ color: '#333', fontSize: '16px', marginBottom: '8px' }}>
                   课程班名称: {record?.BJMC}
                 </p>
-                <p style={{ color: '#333', fontSize: '16px',marginBottom:'8px' }}>
+                <p style={{ color: '#333', fontSize: '16px', marginBottom: '8px' }}>
                   确定<span style={{ color: '#FF6F6F' }}>结课</span>？
                 </p>
               </Modal>

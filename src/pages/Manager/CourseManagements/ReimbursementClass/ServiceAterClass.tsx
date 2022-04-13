@@ -14,6 +14,7 @@ import { getGradesByCampus } from '@/services/after-class/njsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { getAllKHXSDD } from '@/services/after-class/khxsdd';
+import { JSInforMation } from '@/components/JSInforMation';
 
 type selectType = { label: string; value: string };
 
@@ -232,7 +233,7 @@ const ServiceAterClass = () => {
         if (record?.ZT !== 0) {
           return record?.updatedAt?.replace(/T/, ' ').substring(0, 16);
         }
-        return ''
+        return '';
       },
       width: 150,
     },
@@ -308,8 +309,10 @@ const ServiceAterClass = () => {
         return record.ZT === 0 ? (
           <a
             onClick={() => {
-              setCurrent(record);
-              setVisible(true);
+              if (JSInforMation(currentUser)) {
+                setCurrent(record);
+                setVisible(true);
+              }
             }}
           >
             审批

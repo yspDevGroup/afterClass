@@ -13,6 +13,7 @@ import { getAllXQSJ } from '@/services/after-class/xqsj';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import { getGradesByCampus } from '@/services/after-class/njsj';
 import { getAllBJSJ } from '@/services/after-class/bjsj';
+import { JSInforMation } from '@/components/JSInforMation';
 
 type selectType = { label: string; value: string };
 const { Option } = Select;
@@ -258,13 +259,15 @@ const ServiceRefund = () => {
         record.TKZT === 0 ? (
           <a
             onClick={() => {
-              setCurrent(record);
-              setVisible(true);
-              form.setFieldsValue({
-                TKJE: record?.TKJE,
-                TKZT: 1,
-                BZ: '',
-              });
+              if (JSInforMation(currentUser)) {
+                setCurrent(record);
+                setVisible(true);
+                form.setFieldsValue({
+                  TKJE: record?.TKJE,
+                  TKZT: 1,
+                  BZ: '',
+                });
+              }
             }}
           >
             确认

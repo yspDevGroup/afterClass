@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import headerTop from '@/assets/headerTop.png';
 import headerTopSmall from '@/assets/headerTopSmall.png';
 
-import { currentUser as queryCurrentUser } from './services/after-class/user';
+import { currentUser as queryCurrentUser } from './services/after-class/auth';
 import { currentWechatUser } from './services/after-class/wechat';
 import Version from './components/Version';
 import type { LocationDescriptor, Location } from 'history';
@@ -35,23 +35,86 @@ export async function getInitialState(): Promise<InitialState> {
   const buildOptions = await getBuildOptions();
   const fetchUserInfo = async () => {
     const authType = localStorage.getItem('authType') || 'none';
-    try {
-      const currentUserRes =
-        authType === 'wechat'
-          ? await currentWechatUser({ plat: 'school' })
-          : await queryCurrentUser({ plat: 'school' });
-      if (currentUserRes.status === 'ok') {
-        const { info } = currentUserRes.data || {};
-        if (info) {
-          return info as API.CurrentUser;
+    let res;
+    let dataUser: API.CurrentUser;
+    switch (authType) {
+      case 'wechat':
+        res = await currentWechatUser({ plat: 'school' });
+        if (res.status === 'ok') {
+          const data = res?.data?.info;
+          dataUser = data;
         }
-      }
-    } catch (error) {
-      console.warn(error);
-      history.push(`/403?title=登录失败${error}`);
+        break;
+      case 'password':
+      default:
+        res = await queryCurrentUser({ plat: 'school' });
+        console.log('res', res);
+
+        if (res.status === 'ok') {
+          const data = res?.data;
+          dataUser = {
+            ...data,
+            xxId: data?.QYId,
+            JSId: data?.UserId,
+            type: data?.userType?.map((item: { name: string }) => item.name),
+            // student: [
+            //   {
+            //     student_userid: '3587a5bd08c4178f770727d140aa1ecd',
+            //     name: '刘二',
+            //     department: [99],
+            //     parents: [
+            //       {
+            //         parent_userid: '16c5f23c3a4048e64201bd4054a29a66',
+            //         relation: '妈妈',
+            //         is_subscribe: 1,
+            //         external_userid: 'wmFmXKCAAARzx9BBO4Ppm3SRgJHDruPA',
+            //       },
+            //     ],
+            //     XSJBSJId: 'e002debe-9649-4a88-bac0-39ee141e2b28',
+            //     BJSJId: 'f5823d30-505e-4813-a9b7-efbfa2f9aacf',
+            //     NJSJId: '50a8d460-b098-11ec-95a1-52540033d8e0',
+            //     XQSJId: 'a25f6c6c-647c-431e-83ee-3c510c352ba6',
+            //   },
+            //   {
+            //     student_userid: '61017999180010',
+            //     name: '刘大',
+            //     department: [130],
+            //     parents: [
+            //       {
+            //         parent_userid: '16c5f23c3a4048e64201bd4054a29a66',
+            //         relation: '妈妈',
+            //         is_subscribe: 1,
+            //         external_userid: 'wmFmXKCAAARzx9BBO4Ppm3SRgJHDruPA',
+            //       },
+            //     ],
+            //     XSJBSJId: 'b82676c5-ce3a-4c40-bfc0-3970d48a74c0',
+            //     BJSJId: 'e6ce60c8-069a-4edb-8167-b210a68077e2',
+            //     NJSJId: '50aa4384-b098-11ec-95a1-52540033d8e0',
+            //     XQSJId: 'a25f6c6c-647c-431e-83ee-3c510c352ba6',
+            //   },
+            //   {
+            //     student_userid: '5c230c28c87014b4f688eb4523e8c8c0',
+            //     name: '刘三',
+            //     department: [99],
+            //     parents: [
+            //       {
+            //         parent_userid: '16c5f23c3a4048e64201bd4054a29a66',
+            //         relation: '妈妈',
+            //         is_subscribe: 1,
+            //         external_userid: 'wmFmXKCAAARzx9BBO4Ppm3SRgJHDruPA',
+            //       },
+            //     ],
+            //     XSJBSJId: '74b68816-969e-4a30-9f71-9bcc9b9d9c2e',
+            //     BJSJId: 'f5823d30-505e-4813-a9b7-efbfa2f9aacf',
+            //     NJSJId: '50a8d460-b098-11ec-95a1-52540033d8e0',
+            //     XQSJId: 'a25f6c6c-647c-431e-83ee-3c510c352ba6',
+            //   },
+            // ],
+          };
+        }
+        break;
     }
-    removeOAuthToken();
-    return undefined;
+    return dataUser;
   };
   const token = getOauthToken();
   if (token) {

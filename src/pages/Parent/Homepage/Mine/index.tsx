@@ -115,7 +115,11 @@ const Mine = (props: {
           {currentUser?.avatar ? <img src={currentUser?.avatar} /> : ''}
           <div className={styles.headerName}>
             <h4>{ParentalIdentity || '家长'}</h4>
-            <span>微信名：{currentUser?.username || currentUser?.name}</span>
+            {currentUser?.authType === 'wechat' ? (
+              <span>微信名：{currentUser?.username || currentUser?.name}</span>
+            ) : (
+              <span>账号:{currentUser?.username}</span>
+            )}
           </div>
         </div>
         {student?.length > 1 ? (

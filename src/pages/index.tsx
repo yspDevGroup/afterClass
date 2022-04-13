@@ -2,8 +2,8 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2022-03-31 23:18:33
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-13 15:35:19
+ * @LastEditors: Wu Zhan
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';

@@ -11,6 +11,7 @@ import { getKHXXZZFW } from '@/services/after-class/khxxzzfw';
 import { getTableWidth } from '@/utils/utils';
 import SearchLayout from '@/components/Search/Layout';
 import SemesterSelect from '@/components/Search/SemesterSelect';
+import { JSInforMation } from '@/components/JSInforMation';
 
 const { Option } = Select;
 const { TextArea, Search } = Input;
@@ -190,7 +191,7 @@ const ServiceUnsubscribe = () => {
         if (record?.ZT !== 0) {
           return record?.updatedAt?.replace(/T/, ' ').substring(0, 16);
         }
-        return ''
+        return '';
       },
       width: 150,
     },
@@ -266,8 +267,10 @@ const ServiceUnsubscribe = () => {
         return record.ZT === 0 ? (
           <a
             onClick={() => {
-              setCurrent(record);
-              setVisible(true);
+              if (JSInforMation(currentUser)) {
+                setCurrent(record);
+                setVisible(true);
+              }
             }}
           >
             审批

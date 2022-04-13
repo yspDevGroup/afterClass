@@ -2,8 +2,8 @@
  * @description:
  * @author: Sissle Lynn
  * @Date: 2021-09-01 08:49:11
- * @LastEditTime: 2021-12-23 14:38:03
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-12 17:15:34
+ * @LastEditors: Wu Zhan
  */
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row, Tabs } from 'antd';
@@ -101,7 +101,6 @@ const Index = () => {
     } else if (!currentUser.JSId && authType !== 'password') {
       setJSkai(true);
     }
-
   }, []);
   useEffect(() => {
     // 获取学年学期数据的获取
@@ -442,7 +441,6 @@ const Index = () => {
                 </Row>
               </TabPane>
             </Tabs>
-
           </Card>
         </Col>
       </Row>

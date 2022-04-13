@@ -57,12 +57,10 @@ const courseNotIntroduced = () => {
       resAll.data.rows.forEach((item: any) => {
         newArr.push({
           ...item,
-          YRZT: item?.KHKCSQs?.length ? item?.KHKCSQs?.[0]?.ZT : 3
-        })
-      })
+          YRZT: item?.KHKCSQs?.length ? item?.KHKCSQs?.[0]?.ZT : 3,
+        });
+      });
       setDataSource(newArr);
-
-
     }
   };
   useEffect(() => {
@@ -175,9 +173,8 @@ const courseNotIntroduced = () => {
         },
         3: {
           text: '未引入',
-          status: 'Default'
+          status: 'Default',
         },
-
       },
       width: 100,
     },
@@ -231,15 +228,17 @@ const courseNotIntroduced = () => {
             >
               机构详情
             </a>
-            {record.KHKCSQs?.length === 0 || record.KHKCSQs?.[0]?.ZT === 2 || record.KHKCSQs?.[0]?.ZT === 3 ? (
+            {record.KHKCSQs?.length === 0 ||
+            record.KHKCSQs?.[0]?.ZT === 2 ||
+            record.KHKCSQs?.[0]?.ZT === 3 ? (
               <Popconfirm
                 title="确定引入该课程？"
                 onConfirm={async () => {
                   try {
                     const params = {
                       KHKCSJId: record?.id || '',
-                      SQR: currentUser?.username || '',
-                      SQRId: currentUser?.userId || '',
+                      SQR: currentUser?.XM || '',
+                      SQRId: currentUser?.UserId || '', // 修改userId 为UserId
                       XXJBSJId: currentUser?.xxId || '',
                       KHJYJGId: record?.KHJYJG?.id || '',
                     };
@@ -248,7 +247,7 @@ const courseNotIntroduced = () => {
                       Modal.success({
                         title: '引入成功，机构确认中...确认后方可建班排课',
                         width: '450px',
-                        onOk() { },
+                        onOk() {},
                       });
                       getData();
                       // action?.reload();
@@ -295,7 +294,7 @@ const courseNotIntroduced = () => {
     },
   ];
 
-  console.log(dataSource,'dataSource------')
+  console.log(dataSource, 'dataSource------');
   return (
     <div>
       <ProTable<classType>
