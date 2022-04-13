@@ -126,7 +126,7 @@ const Notice = () => {
               imageStyle={{
                 minHeight: 135,
               }}
-              style={{ minHeight: 200, background: '#fff', borderRadius: '8px' }}
+              style={{ minHeight: 200, background: '#fff', borderRadius: '8px', marginTop: '10px' }}
               description={'暂无公告'}
             />
           )}
@@ -165,7 +165,7 @@ const Notice = () => {
               imageStyle={{
                 minHeight: 135,
               }}
-              style={{ minHeight: 200, background: '#fff', borderRadius: '8px' }}
+              style={{ minHeight: 200, background: '#fff', borderRadius: '8px', marginTop: '10px' }}
               description={'暂无公告'}
             />
           )}
@@ -176,4 +176,3 @@ const Notice = () => {
 };
 
 export default Notice;
-
