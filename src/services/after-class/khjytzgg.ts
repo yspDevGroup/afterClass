@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 根据ID获取课后教育机构通知公告 GET /khjytzgg/${param0} */
 export async function KHJYTZGG(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.KHJYTZGGParams,
+  params: {
+    // path
+    /** 课后教育机构通知公告ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       BT?: string;
       FBT?: string;
@@ -40,12 +43,15 @@ export async function KHJYTZGG(
 
 /** 删除课后教育机构通知公告 DELETE /khjytzgg/${param0} */
 export async function deleteKHJYTZGG(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteKHJYTZGGParams,
+  params: {
+    // path
+    /** 课后教育机构通知公告ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khjytzgg/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjytzgg/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -55,8 +61,8 @@ export async function deleteKHJYTZGG(
 /** 创建课后教育机构通知公告 PUT /khjytzgg/create */
 export async function createKHJYTZGG(body: API.CreateKHJYTZGG, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: {
+    status?: 'ok' | 'error';
+    data: {
       id?: string;
       BT?: string;
       FBT?: string;
@@ -94,18 +100,18 @@ export async function getKHJYTZGG(
     /** 类型 */
     LX?: number;
     /** 机构ID */
-    KHJYJGId: string;
+    KHJYJGId?: string;
     /** 状态 */
-    ZT: string[];
+    ZT?: string[];
     /** 页数 */
-    page: number;
+    page?: number;
     /** 每页记录数 */
-    pageSize: number;
+    pageSize?: number;
   },
   options?: { [key: string]: any },
 ) {
   return request<{
-    status: 'ok' | 'error';
+    status?: 'ok' | 'error';
     data?: { count?: number; rows?: API.KHJYTZGG[] };
     message?: string;
   }>('/khjytzgg/getAll', {
@@ -120,13 +126,16 @@ export async function getKHJYTZGG(
 
 /** 更新课后教育机构通知公告 PUT /khjytzgg/update/${param0} */
 export async function updateKHJYTZGG(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateKHJYTZGGParams,
+  params: {
+    // path
+    /** 课后教育机构通知公告ID */
+    id: string;
+  },
   body: API.UpdateKHJYTZGG,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khjytzgg/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khjytzgg/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 获取课程类型 GET /khkclx/${param0} */
 export async function getKHKCLX(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getKHKCLXParams,
+  params: {
+    // path
+    /** 类型ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: { id?: string; KCLX?: string; KCTAG?: string };
+    status?: 'ok' | 'error';
+    data: { id?: string; KCLX?: string; KCTAG?: string };
     message?: string;
   }>(`/khkclx/${param0}`, {
     method: 'GET',
@@ -22,12 +25,15 @@ export async function getKHKCLX(
 
 /** 删除课程类型 DELETE /khkclx/${param0} */
 export async function deleteKHKCLX(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteKHKCLXParams,
+  params: {
+    // path
+    /** 类型ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khkclx/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkclx/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -42,7 +48,7 @@ export async function getAllKHKCLX(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.KHKCLX[]; message?: string }>('/khkclx/', {
+  return request<{ status?: 'ok' | 'error'; data?: API.KHKCLX[]; message?: string }>('/khkclx/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -55,8 +61,8 @@ export async function getAllKHKCLX(
 /** 创建课程类型 PUT /khkclx/create */
 export async function createKHKCLX(body: API.CreateKHKCLX, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: { id?: string; KCLX?: string; KCTAG?: string };
+    status?: 'ok' | 'error';
+    data: { id?: string; KCLX?: string; KCTAG?: string };
     message?: string;
   }>('/khkclx/create', {
     method: 'PUT',
@@ -70,13 +76,16 @@ export async function createKHKCLX(body: API.CreateKHKCLX, options?: { [key: str
 
 /** 更新课程类型 PUT /khkclx/update/${param0} */
 export async function updateKHKCLX(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateKHKCLXParams,
+  params: {
+    // path
+    /** 类型ID */
+    id: string;
+  },
   body: API.UpdateKHKCLX,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/khkclx/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/khkclx/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

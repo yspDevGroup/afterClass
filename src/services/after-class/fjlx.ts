@@ -4,14 +4,17 @@ import { request } from 'umi';
 
 /** 获取房间类型 GET /fjlx/${param0} */
 export async function getFJLX(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getFJLXParams,
+  params: {
+    // path
+    /** 类型ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
   return request<{
-    status: 'ok' | 'error';
-    data?: { id?: string; FJLX?: string };
+    status?: 'ok' | 'error';
+    data: { id?: string; FJLX?: string };
     message?: string;
   }>(`/fjlx/${param0}`, {
     method: 'GET',
@@ -22,12 +25,15 @@ export async function getFJLX(
 
 /** 删除房间类型 DELETE /fjlx/${param0} */
 export async function deleteFJLX(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteFJLXParams,
+  params: {
+    // path
+    /** 类型ID */
+    id: string;
+  },
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/fjlx/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjlx/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),
@@ -44,7 +50,7 @@ export async function getAllFJLX(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{ status: 'ok' | 'error'; data?: API.FJLX[]; message?: string }>('/fjlx/', {
+  return request<{ status?: 'ok' | 'error'; data?: API.FJLX[]; message?: string }>('/fjlx/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -57,8 +63,8 @@ export async function getAllFJLX(
 /** 创建房间类型 PUT /fjlx/create */
 export async function createFJLX(body: API.CreateFJLX, options?: { [key: string]: any }) {
   return request<{
-    status: 'ok' | 'error';
-    data?: { id?: string; FJLX?: string };
+    status?: 'ok' | 'error';
+    data: { id?: string; FJLX?: string };
     message?: string;
   }>('/fjlx/create', {
     method: 'PUT',
@@ -72,13 +78,16 @@ export async function createFJLX(body: API.CreateFJLX, options?: { [key: string]
 
 /** 更新房间类型 PUT /fjlx/update/${param0} */
 export async function updateFJLX(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.updateFJLXParams,
+  params: {
+    // path
+    /** 类型ID */
+    id: string;
+  },
   body: API.UpdateFJLX,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<{ status: 'ok' | 'error'; message?: string }>(`/fjlx/update/${param0}`, {
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/fjlx/update/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
