@@ -26,7 +26,7 @@ type AddCourseProps = {
   names?: string;
   KHKCAllData?: any[];
   curXNXQId?: string;
-  currentUser?: API.CurrentUser | undefined;
+  currentUser?: CurrentUser | undefined;
   kCID?: string;
   CopyType?: string;
   getData: (origin?: string | undefined) => Promise<void>;

@@ -2,11 +2,11 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2022-04-08 14:31:01
+ * @LastEditTime: 2022-04-14 17:23:07
  * @LastEditors: Wu Zhan
  */
 import React, { useRef, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { Access, Link, useAccess, useModel } from 'umi';
 import { Button, Divider, message, Modal, Spin, Upload } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns, RequestData } from '@ant-design/pro-table';
@@ -26,6 +26,7 @@ import { importWechatTeachers } from '@/services/after-class/upload';
 const TeacherManagement = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const { isWechat } = useAccess();
   const [newFileList, setNewFileList] = useState<any[]>();
   // 设置模态框显示状态
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -332,9 +333,11 @@ const TeacherManagement = () => {
             // >
             //   同步企业微信人员信息
             // </Button>,
-            <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
-              <VerticalAlignBottomOutlined /> 导入
-            </Button>,
+            <Access accessible={isWechat}>
+              <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
+                <VerticalAlignBottomOutlined /> 导入
+              </Button>
+            </Access>,
           ]}
           rowKey="id"
           dateFormatter="string"

@@ -36,7 +36,7 @@ export async function getInitialState(): Promise<InitialState> {
   const fetchUserInfo = async () => {
     const authType = localStorage.getItem('authType') || 'none';
     let res;
-    let dataUser: API.CurrentUser | undefined = undefined;
+    let dataUser: CurrentUser | undefined = undefined;
     switch (authType) {
       case 'wechat':
         res = await currentWechatUser({ plat: 'school' });
@@ -145,8 +145,7 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
     },
     footerRender: () => <Footer copyRight={initialState.buildOptions.ENV_copyRight} />,
     onPageChange: () => {
-      const path = window.location.pathname.toLowerCase();
-
+      const path = location.pathname.toLowerCase();
       // 如果未登录，且不在首页（分发页），且不在认证页，且不是404、403等特殊页面，则重定向到403
       if (
         !initialState?.currentUser &&

@@ -16,7 +16,7 @@ const { TabPane } = Tabs;
 const OrderList = (props: {
   data?: any[];
   children: any[];
-  currentUser?: API.CurrentUser;
+  currentUser?: CurrentUser;
   triggerEvt: (param: any[]) => Promise<any>;
 }) => {
   const { data, children, currentUser, triggerEvt } = props;

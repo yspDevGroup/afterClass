@@ -272,6 +272,7 @@ export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathPro
         url.searchParams.append('client_id', clientId || '');
         url.searchParams.append('logo', `${ENV_host}/logo.png`);
         url.searchParams.append('title', `${ENV_title}`);
+        url.searchParams.append('subtitle', `${ENV_subTitle}`);
         url.searchParams.append('redirect_uri', callback);
         url.searchParams.append('reLogin', String(reLogin || 'false'));
         loginPath = url.href;

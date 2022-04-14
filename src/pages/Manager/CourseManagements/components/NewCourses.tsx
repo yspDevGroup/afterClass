@@ -18,7 +18,7 @@ type PropsType = {
   visible?: boolean;
   kclxOptions?: any[];
   optionsNJ?: any[];
-  currentUser?: API.CurrentUser;
+  currentUser?: CurrentUser;
   getData: () => Promise<void>;
 };
 const formLayout = {
@@ -36,7 +36,7 @@ const NewCourses = (props: PropsType) => {
   const actionRef = useRef<ActionType>();
 
   // eslint-disable-next-line no-nested-ternary
-  const title = current ? (current?.type === 'copy') ? '复制课程' : '编辑课程' : '新增课程';
+  const title = current ? (current?.type === 'copy' ? '复制课程' : '编辑课程') : '新增课程';
   const values = () => {
     if (current) {
       const { KHKCLX, KCZT, KCMC, type, ...info } = current;
@@ -78,8 +78,6 @@ const NewCourses = (props: PropsType) => {
     }
   };
 
-
-
   const onFinish = (values: any) => {
     new Promise((resolve, reject) => {
       let res = null;
@@ -88,7 +86,7 @@ const NewCourses = (props: PropsType) => {
         KCTP: current && imageUrl === '' ? current?.KCTP : imageUrl,
         XXJBSJId: currentUser?.xxId,
         SSJGLX: '校内课程',
-        KBYS: courseColorsType[Math.floor(Math.random() * (7))]
+        KBYS: courseColorsType[Math.floor(Math.random() * 7)],
       };
       if (current?.id && current?.type === 'add') {
         const params = {
@@ -145,7 +143,6 @@ const NewCourses = (props: PropsType) => {
       fieldProps: {
         autocomplete: 'off',
       },
-
     },
     {
       type: 'select',

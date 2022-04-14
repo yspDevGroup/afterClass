@@ -56,7 +56,7 @@ type PropsType = {
   campus?: any;
   cdmcData?: any[];
   kcmcData?: any[];
-  currentUser?: API.CurrentUser | undefined;
+  currentUser?: CurrentUser | undefined;
   setRqDisable: React.Dispatch<any>;
   campusId: string | undefined;
   TimeData: any;

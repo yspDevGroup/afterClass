@@ -208,8 +208,8 @@ type BuildOptions = {
 
 type InitialState = {
   settings?: Partial<LayoutSettings>;
-  currentUser?: any; // API.CurrentUser;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  currentUser?: CurrentUser; // API.CurrentUser;
+  fetchUserInfo?: () => Promise<CurrentUser | undefined>;
   buildOptions: BuildOptions;
 };
 
@@ -219,4 +219,70 @@ type TokenInfo = {
   expires_in?: string;
   refresh_token?: string;
   token_type?: string;
+};
+
+type CurrentUser = {
+  id?: string;
+  jgId?: string | any;
+  JSId: string | any;
+  jyjId?: string | any;
+  xxId?: string | any;
+  /** 学校代码 */
+  XXDM?: string;
+  /** 学段 */
+  XD?: string;
+  /** 行政区划码 */
+  XZQHM?: string | any;
+  /** 登录名，学号或工号 */
+  loginName?: string;
+  /** 姓名 */
+  username?: string;
+  /** 头像 */
+  avatar?: string;
+  /** 身份ID */
+  identityId?: string;
+  /** 部门ID */
+  departmentId?: string;
+  /** 状态，0无效1有效，其他可由业务自行定义 */
+  status?: number;
+  userType?: string;
+  type?: string;
+  auth?: '老师' | '家长' | '管理员' | { authType?: string; appName?: string }[];
+  adminAuth?: string[];
+  /** 微信用户ID，智慧校园 学生或老师ID */
+  userId?: string;
+  /** 微信用户ID(教师) */
+  UserId?: string;
+  /** 微信用户企业ID */
+  CorpId?: string;
+  subscriber_info?: {
+    remark?: string;
+    children?: { njId?: string; department?: string[]; student_userid?: string; name?: string }[];
+  };
+  /** */
+  authType: 'sso' | 'wechat';
+  student?: [];
+  roles?: {
+    id?: string;
+    name?: string;
+    describe?: string;
+    roleType?: string;
+    orderIndex?: number;
+    rules?: {
+      id?: string;
+      permission?: { id?: string; describe?: string; permission?: string };
+      subApp?: {
+        id?: string;
+        describe?: string;
+        icon?: string;
+        isEnabled?: boolean;
+        isShow?: string;
+        name?: string;
+        orderIndex?: string;
+        path?: string;
+        subAppGroupId?: string;
+        target?: string;
+      };
+    }[];
+  }[];
 };

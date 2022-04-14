@@ -2,8 +2,8 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2022-04-13 16:58:24
- * @LastEditors: zpl
+ * @LastEditTime: 2022-04-14 10:57:50
+ * @LastEditors: Wu Zhan
  */
 import { useEffect } from 'react';
 import { useModel, history } from 'umi';
@@ -49,7 +49,7 @@ const Index = () => {
     const { ysp_access_token } = getOauthToken();
     const hasLoginInfo: boolean = ysp_access_token && initialState?.currentUser;
     if (hasLoginInfo) {
-      gotoIndex(initialState?.currentUser.type);
+      gotoIndex(initialState?.currentUser?.type);
     } else {
       gotoLogin(initialState?.buildOptions);
     }

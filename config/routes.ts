@@ -493,6 +493,7 @@
         path: '/sysSettings/asyncSettings',
         name: 'asyncSettings',
         component: './Manager/SysSettings/AsyncSettings',
+        access: 'isWechat',
       },
     ],
   },
@@ -502,6 +503,8 @@
     layout: false,
     name: 'teacher',
     hideInMenu: 'true',
+    // component: './layouts/mobileLayout',
+    access: 'isTeacher',
     routes: [
       {
         path: '/teacher/home',
@@ -697,6 +700,7 @@
     layout: false,
     icon: 'smile',
     hideInMenu: 'true',
+    access: 'isParent',
     routes: [
       {
         path: '/parent/home',
