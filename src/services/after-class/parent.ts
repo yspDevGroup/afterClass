@@ -1,0 +1,146 @@
+// @ts-ignore
+/* eslint-disable */
+import { request } from 'umi';
+
+/** 获取家长信息 GET /parent/${param0} */
+export async function getDetail(
+  params: {
+    // path
+    /** 家长ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{
+    status?: 'ok' | 'error';
+    data: {
+      id?: string;
+      XM?: string;
+      LXDH?: string;
+      XSJBSJs?: {
+        id?: string;
+        XM?: string;
+        XH?: string;
+        WechatUserId?: string;
+        BJSJ?: {
+          id?: string;
+          BH?: number;
+          BJ?: string;
+          NJSJ?: { id?: string; NJ?: number; NJMC?: string; XD?: string };
+        };
+      }[];
+      XXJBSJs?: { id?: string; XXMC?: string; XXDM?: string; XD?: string }[];
+    };
+    message?: string;
+  }>(`/parent/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 删除家长信息 DELETE /parent/${param0} */
+export async function deleteParent(
+  params: {
+    // path
+    /** 家长ID */
+    id: string;
+  },
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/parent/${param0}`, {
+    method: 'DELETE',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 创建家长信息 PUT /parent/create */
+export async function createParent(body: API.CreateParent, options?: { [key: string]: any }) {
+  return request<{
+    status?: 'ok' | 'error';
+    data: {
+      id?: string;
+      XM?: string;
+      LXDH?: string;
+      XSJBSJs?: {
+        id?: string;
+        XM?: string;
+        XH?: string;
+        WechatUserId?: string;
+        BJSJ?: {
+          id?: string;
+          BH?: number;
+          BJ?: string;
+          NJSJ?: { id?: string; NJ?: number; NJMC?: string; XD?: string };
+        };
+      }[];
+      XXJBSJs?: { id?: string; XXMC?: string; XXDM?: string; XD?: string }[];
+    };
+    message?: string;
+  }>('/parent/create', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取家长信息 POST /parent/getAll */
+export async function getParent(
+  body: {
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 姓名 */
+    XM?: string;
+    /** 联系电话 */
+    LXDH?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status?: 'ok' | 'error'; data?: API.Parent[]; message?: string }>(
+    '/parent/getAll',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
+    },
+  );
+}
+
+/** 更新家长信息 PUT /parent/update/${param0} */
+export async function updateParent(
+  params: {
+    // path
+    /** 家长ID */
+    id: string;
+  },
+  body: API.UpdateParent,
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{ status?: 'ok' | 'error'; message?: string }>(`/parent/update/${param0}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    params: { ...queryParams },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 家长导入 POST /parent/import */
+export async function importParent(options?: { [key: string]: any }) {
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>('/parent/import', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}
