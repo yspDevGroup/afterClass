@@ -103,6 +103,12 @@
         component: './Manager/BasicalSettings/TeacherManagement/Detail',
       },
       {
+        // 家长维护
+        path: '/basicalSettings/parentMaintenance',
+        name: 'parentMaintenance',
+        component: './Manager/BasicalSettings/ParentMaintenance',
+      },
+      {
         // 时段维护
         path: '/basicalSettings/periodMaintenance',
         name: 'periodMaintenance',
@@ -915,3 +921,4 @@
     component: './404',
   },
 ];
+

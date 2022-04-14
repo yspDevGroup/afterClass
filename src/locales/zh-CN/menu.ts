@@ -7,6 +7,7 @@ export default {
   'menu.basicalSettings.schoolEditor': '学校信息修改',
   'menu.basicalSettings.roomManagement': '场地维护',
   'menu.basicalSettings.basical': '基本信息模块',
+  'menu.basicalSettings.parentMaintenance': '家长维护',
   'menu.basicalSettings.periodMaintenance': '时段维护',
   'menu.basicalSettings.termManagement': '学年学期维护',
   'menu.basicalSettings.gradeClass': '年级班级维护',

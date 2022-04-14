@@ -3768,6 +3768,45 @@ declare namespace API {
     FBZRId?: string;
   };
 
+  type Parent = {
+    id: string;
+    /** 姓名 */
+    XM: string;
+    /** 联系电话 */
+    LXDH: string;
+    XSJBSJs?: {
+      id?: string;
+      XM?: string;
+      XH?: string;
+      WechatUserId?: string;
+      BJSJ?: {
+        id?: string;
+        BH?: number;
+        BJ?: string;
+        NJSJ?: { id?: string; NJ?: number; NJMC?: string; XD?: string };
+      };
+    }[];
+    XXJBSJs?: { id?: string; XXMC?: string; XXDM?: string; XD?: string }[];
+  };
+
+  type CreateParent = {
+    /** 姓名 */
+    XM: string;
+    /** 联系电话 */
+    LXDH: string;
+    /** 学生ID */
+    XSJBSJIds?: string[];
+    /** 学校ID */
+    XXJBSJIds?: string[];
+  };
+
+  type UpdateParent = {
+    /** 学生ID */
+    XSJBSJIds?: string[];
+    /** 学校ID */
+    XXJBSJIds?: string[];
+  };
+
   type PKSJ = {
     id: string;
     /** 上课日期(周几) */
