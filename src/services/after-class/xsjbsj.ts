@@ -94,11 +94,11 @@ export async function getAllXSJBSJ(
     /** 校区Id */
     XQId?: string;
     /** 班级ID */
-    BJId?: any[];
+    BJId?: string[];
     /** 学校ID */
     XXJBSJId?: string;
     /** 年级ID */
-    NJId?: any[];
+    NJId?: string[];
     /** 页数 */
     page?: number;
     /** 每页记录数 */
