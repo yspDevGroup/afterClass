@@ -60,6 +60,7 @@ export async function getXSJBSJ(
         BJ?: string;
         NJSJ?: { id?: string; NJ?: number; NJMC?: string; XD?: string };
       };
+      Parents?: { id?: string; XM?: string; LXDH?: string }[];
     };
     message?: string;
   }>(`/xsjbsj/${param0}`, {
@@ -170,6 +171,7 @@ export async function createXSJBSJ(body: API.CreateXSJBSJ, options?: { [key: str
         BJ?: string;
         NJSJ?: { id?: string; NJ?: number; NJMC?: string; XD?: string };
       };
+      Parents?: { id?: string; XM?: string; LXDH?: string }[];
     };
     message?: string;
   }>('/xsjbsj/create', {

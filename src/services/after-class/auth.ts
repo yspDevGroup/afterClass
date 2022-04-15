@@ -79,3 +79,27 @@ export async function currentUser(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+/** 注册家长信息 POST /auth/registerParent */
+export async function registerParent(
+  body: {
+    /** 姓名 */
+    XM?: string;
+    /** 联系电话 */
+    LXDH?: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    status?: 'ok' | 'error';
+    data?: { id?: string; XM?: string; LXDH?: string };
+    message?: string;
+  }>('/auth/registerParent', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

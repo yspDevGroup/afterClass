@@ -14,11 +14,21 @@ export async function uploadFile(options?: { [key: string]: any }) {
 }
 
 /** 导入教师信息 POST /upload/importTeachers */
-export async function importTeachers(options?: { [key: string]: any }) {
+export async function importTeachers(
+  params: {
+    // query
+    /** 登录平台类型 */
+    plat?: string;
+  },
+  options?: { [key: string]: any },
+) {
   return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
     '/upload/importTeachers',
     {
       method: 'POST',
+      params: {
+        ...params,
+      },
       ...(options || {}),
     },
   );

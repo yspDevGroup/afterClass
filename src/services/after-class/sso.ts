@@ -37,7 +37,7 @@ export async function ssoExpiredCallback(options?: { [key: string]: any }) {
 /** 同步用户信息 POST /sso/synchroUsers */
 export async function synchroUsers(
   body: {
-    type?: '老师' | '学生';
+    type?: '老师' | '学生' | '家长';
     /** 学校代码 */
     XXDM?: string;
     sign?: string;

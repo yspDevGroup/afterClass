@@ -8,6 +8,11 @@
         path: '/user/login',
         component: './user/Login',
       },
+      {
+        name: 'parent',
+        path: '/user/parent',
+        component: './user/Parent',
+      },
     ],
   },
   {
@@ -103,10 +108,10 @@
         component: './Manager/BasicalSettings/TeacherManagement/Detail',
       },
       {
-        // 家长维护
-        path: '/basicalSettings/parentMaintenance',
-        name: 'parentMaintenance',
-        component: './Manager/BasicalSettings/ParentMaintenance',
+        // 学生管理
+        path: '/basicalSettings/studentMaintenance',
+        name: 'studentMaintenance',
+        component: './Manager/BasicalSettings/StudentMaintenance',
       },
       {
         // 时段维护
@@ -925,4 +930,3 @@
     component: './404',
   },
 ];
-

@@ -2,11 +2,11 @@
  * @description: 老师管理
  * @author: Sissle Lynn
  * @Date: 2021-09-06 11:16:22
- * @LastEditTime: 2022-04-14 17:23:07
+ * @LastEditTime: 2022-04-15 17:45:14
  * @LastEditors: Wu Zhan
  */
 import React, { useRef, useState } from 'react';
-import { Access, Link, useAccess, useModel } from 'umi';
+import { Link, useAccess, useModel } from 'umi';
 import { Button, Divider, message, Modal, Spin, Upload } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns, RequestData } from '@ant-design/pro-table';
@@ -26,7 +26,7 @@ import { importWechatTeachers } from '@/services/after-class/upload';
 const TeacherManagement = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
-  const { isWechat } = useAccess();
+  const { isSso } = useAccess();
   const [newFileList, setNewFileList] = useState<any[]>();
   // 设置模态框显示状态
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -44,6 +44,10 @@ const TeacherManagement = () => {
       }
       // console.log('newFileList', newFileList?.[0]);
       formData.append('xlsx', file);
+      if (isSso && currentUser?.CorpId) {
+        formData.append('CorpId', currentUser?.CorpId);
+      }
+
       const res = await importWechatTeachers({ plat: 'school' }, { body: formData });
       if (res.status === 'ok') {
         if (res?.data?.fail_count === 0) {
@@ -333,11 +337,9 @@ const TeacherManagement = () => {
             // >
             //   同步企业微信人员信息
             // </Button>,
-            <Access accessible={isWechat}>
-              <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
-                <VerticalAlignBottomOutlined /> 导入
-              </Button>
-            </Access>,
+            <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
+              <VerticalAlignBottomOutlined /> 导入
+            </Button>,
           ]}
           rowKey="id"
           dateFormatter="string"

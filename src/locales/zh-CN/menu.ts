@@ -12,6 +12,7 @@ export default {
   'menu.basicalSettings.termManagement': '学年学期维护',
   'menu.basicalSettings.gradeClass': '年级班级维护',
   'menu.basicalSettings.studentManagement': '学生管理',
+  'menu.basicalSettings.studentMaintenance': '学生管理',
   'menu.basicalSettings.service': '服务协议配置',
   'menu.basicalSettings.service.editArticle': '编辑课堂协议',
   'menu.basicalSettings.service.editServices': '编辑服务协议',

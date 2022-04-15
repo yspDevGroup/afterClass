@@ -27,7 +27,7 @@ import { useModel } from 'umi';
 import { sendMessageToParent } from '@/services/after-class/wechat';
 
 const PeriodMaintenance = () => {
-  const [currentStatus, setCurrentStatus] = useState<string | undefined>('enroll');
+  const [currentStatus, setCurrentStatus] = useState<string | undefined>('education');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [amVisible, setAMVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<Maintenance>();
@@ -221,14 +221,14 @@ const PeriodMaintenance = () => {
           >
             <a>删除</a>
           </Popconfirm>
-          {currentStatus === 'enroll' ? (
+          {/* {currentStatus === 'enroll' ? (
             <>
               <Divider type="vertical" />
               <a onClick={() => setAMVisible(true)}>报名通知</a>
             </>
           ) : (
             ''
-          )}
+          )} */}
         </>
       ),
     },

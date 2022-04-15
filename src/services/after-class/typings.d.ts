@@ -3801,6 +3801,8 @@ declare namespace API {
   };
 
   type UpdateParent = {
+    /** 姓名 */
+    XM?: string;
     /** 学生ID */
     XSJBSJIds?: string[];
     /** 学校ID */
@@ -4426,6 +4428,7 @@ declare namespace API {
       BJ?: string;
       NJSJ?: { id?: string; NJ?: number; NJMC?: string; XD?: string };
     };
+    Parents?: { id?: string; XM?: string; LXDH?: string }[];
   };
 
   type CreateXSJBSJ = {

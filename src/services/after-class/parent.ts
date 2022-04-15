@@ -144,3 +144,28 @@ export async function importParent(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+/** 学生选择家长 POST /parent/bindParent */
+export async function bindParent(
+  body: {
+    /** 学校ID */
+    XXJBSJId?: string;
+    /** 学生ID */
+    XSJBSJId?: string;
+    /** 家长ID */
+    ParentIds?: string[];
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ status?: 'ok' | 'error'; data?: string; message?: string }>(
+    '/parent/bindParent',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
+    },
+  );
+}
