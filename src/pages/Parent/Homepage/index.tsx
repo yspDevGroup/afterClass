@@ -23,9 +23,9 @@ const PersonalHomepage = () => {
   const mineRef = useRef(null);
   const index = getQueryString('index');
   const StorageXSId =
-    localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+    localStorage.getItem('studentId') || (student && student?.[0].XSJBSJId) || testStudentId;
   const StorageNjId =
-    localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+    localStorage.getItem('studentNjId') || (student && student?.[0].NJSJId) || testStudentNJId;
   const StorageXQSJId =
     localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
   // 未获取到孩子时跳转到403
