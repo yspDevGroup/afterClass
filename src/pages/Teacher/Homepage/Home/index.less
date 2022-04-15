@@ -16,16 +16,24 @@
 
       h4 {
         display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         margin-bottom: 6px;
         color: #333;
         font-weight: 600;
         font-size: @font-size-lg;
         line-height: 24px;
-        > span:nth-child(1) {
-          max-width: 55vw;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
+
+        > div:nth-child(1) {
+          display: inherit;
+
+          > span:nth-child(1) {
+            display: inline-block;
+            max-width: 40vw;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
         }
 
         & + div {
@@ -60,10 +68,20 @@
         }
       }
     }
+
+    // .XsName {
+    //   position: absolute;
+    //   top: 33px;
+    //   right: 0;
+    //   height: 30px;
+    //   padding-left: 2px;
+
+    // }
   }
 
   .needToDo {
     margin-bottom: 20px;
+
     .title {
       display: flex;
       height: 24px;
@@ -102,6 +120,7 @@
         font-weight: bold;
         font-size: 16px;
       }
+
       > span {
         color: #267ef0;
       }
@@ -144,12 +163,14 @@
       }
 
       .noticeText {
+        display: flex;
         flex: auto;
         width: 100%;
-        display: flex;
+
         > span {
           vertical-align: text-bottom;
         }
+
         > a {
           width: calc(100% - 46px);
         }
@@ -205,11 +226,13 @@
       padding: 0 10px;
       background: linear-gradient(87.38deg, #06f 0%, #17e3ff 100%);
       border-radius: 25px;
+
       a {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin: 0;
+
         .titles {
           display: flex;
           align-items: center;
@@ -217,6 +240,7 @@
           color: #fff;
           font-size: 18px;
         }
+
         .xunke {
           display: flex;
           align-items: center;
@@ -225,10 +249,12 @@
           color: #fff;
           background: linear-gradient(270deg, #06f 0%, rgba(0, 102, 255, 0) 100%);
           border-radius: 30px;
+
           p {
             margin: 0 10px 0 15px;
           }
         }
+
         :global {
           .ant-badge-count {
             min-width: 24px;
@@ -558,6 +584,7 @@
 
 .tabHeader {
   margin-bottom: 20px;
+
   .title {
     position: relative;
     display: flex;
@@ -579,6 +606,7 @@
       font-weight: bold;
       font-size: 18px;
     }
+
     a {
       position: absolute;
       right: 0;

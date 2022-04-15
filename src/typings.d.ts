@@ -227,6 +227,9 @@ type CurrentUser = {
   JSId: string | any;
   jyjId?: string | any;
   xxId?: string | any;
+  QYMC: string | any;
+  wechatUserId: string | any;
+  XM: string | any;
   /** 学校代码 */
   XXDM?: string;
   /** 学段 */

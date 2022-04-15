@@ -8,12 +8,10 @@ import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
 import { getAllKHJSTDK } from '@/services/after-class/khjstdk';
-
 import ShowName from '@/components/ShowName';
 import TeachCourses from './components/TeachCourses';
 import EnrollClassTime from '@/components/EnrollClassTime';
 import Details from './Pages/Details';
-
 import imgPop from '@/assets/teacherBg.png';
 import TeacherToDo from '@/assets/TeacherToDo.png';
 import banner from '@/assets/banner1.png';
@@ -21,11 +19,10 @@ import { ParentHomeData } from '@/services/local-services/mobileHome';
 import { RightOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import crpLogo from '@/assets/crp_logo.png';
-
 import styles from './index.less';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 import { queryXNXQList } from '@/services/local-services/xnxq';
-
+import SwitchIdentity from '@/components/RightContent/SwitchIdentity';
 const Home = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -45,7 +42,7 @@ const Home = () => {
   const getTodayData = async (day: string) => {
     const result = await queryXNXQList(currentUser?.xxId);
     const res = await getScheduleByDate({
-      JZGJBSJId: currentUser.JSId || testTeacherId,
+      JZGJBSJId: currentUser?.JSId || testTeacherId,
       RQ: day,
       XNXQId: result?.current?.id,
       XXJBSJId: currentUser?.xxId,
@@ -66,7 +63,7 @@ const Home = () => {
       LX: [1, 2],
       ZT: [0],
       XXJBSJId: currentUser?.xxId,
-      DKJSId: currentUser.JSId || testTeacherId,
+      DKJSId: currentUser?.JSId || testTeacherId,
     });
     if (res.status === 'ok') {
       setDkData(res.data?.rows);
@@ -119,7 +116,7 @@ const Home = () => {
       }
     })();
 
-    if ((authType === 'wechat' && !currentUser.XM) || currentUser.XM === '未知') {
+    if ((authType === 'wechat' && !currentUser?.XM) || currentUser?.XM === '未知') {
       setIsModalVisible(true);
     }
     getTodayData(today);
@@ -131,7 +128,7 @@ const Home = () => {
     const oriData = await ParentHomeData(
       'teacher',
       currentUser?.xxId,
-      currentUser.JSId || testTeacherId,
+      currentUser?.JSId || testTeacherId,
     );
     const { data } = oriData;
     setTotalData(data);
@@ -156,7 +153,7 @@ const Home = () => {
 
   const onFinish = async (values: { name: string; phone: string }) => {
     const res = await updateJZGJBSJ(
-      { id: currentUser.JSId },
+      { id: currentUser?.JSId },
       { XM: values.name, LXDH: values.phone },
     );
     if (res.status === 'ok') {
@@ -177,10 +174,15 @@ const Home = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.headerText}>
           <h4>
-            <span ref={userRef}>
-              <ShowName type="userName" openid={currentUser.wechatUserId} XM={currentUser.XM} />
+            <div>
+              <span ref={userRef}>
+                <ShowName type="userName" openid={currentUser?.wechatUserId} XM={currentUser?.XM} />
+              </span>
+              <span>老师，你好！</span>
+            </div>
+            <span>
+              <SwitchIdentity />
             </span>
-            <span>老师，你好！</span>
           </h4>
           <div>{currentUser?.QYMC}</div>
         </div>
@@ -335,8 +337,8 @@ const Home = () => {
         <div className={styles.enrollArea}>
           <EnrollClassTime
             type="teacher"
-            xxId={currentUser.xxId}
-            userId={currentUser.JSId || testTeacherId}
+            xxId={currentUser?.xxId}
+            userId={currentUser?.JSId || testTeacherId}
           />
         </div>
 

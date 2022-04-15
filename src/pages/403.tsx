@@ -2,7 +2,7 @@
  * @description: 鉴权失败界面
  * @author: zpl
  * @Date: 2021-07-14 17:11:16
- * @LastEditTime: 2022-04-13 15:30:58
+ * @LastEditTime: 2022-04-15 18:24:34
  * @LastEditors: Wu Zhan
  */
 import { history, useModel } from 'umi';
@@ -16,6 +16,8 @@ const NotFind = () => {
   const query = getPageQuery();
   const { title, message, btnTXT, goto } = query;
   const { ysp_access_token } = getOauthToken();
+  const isFalg =
+    !ysp_access_token || !initialState?.currentUser || !initialState?.currentUser?.student?.length;
   return (
     <Result
       status="403"
@@ -45,11 +47,7 @@ const NotFind = () => {
           <Button
             type="primary"
             onClick={() => {
-              if (
-                !ysp_access_token ||
-                !initialState?.currentUser ||
-                !initialState?.currentUser?.student?.length
-              ) {
+              if (isFalg) {
                 const loginPath = getLoginPath({
                   suiteID: initialState?.buildOptions?.clientId || '',
                   buildOptions: initialState?.buildOptions,
@@ -61,11 +59,7 @@ const NotFind = () => {
               }
             }}
           >
-            {!ysp_access_token ||
-            !initialState?.currentUser ||
-            !initialState?.currentUser?.student?.length
-              ? '去登录'
-              : '返回首页'}
+            {isFalg ? '去登录' : '返回首页'}
           </Button>
         ) : (
           ''
