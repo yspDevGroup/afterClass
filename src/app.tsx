@@ -57,6 +57,12 @@ export async function getInitialState(): Promise<InitialState> {
             xxId: data?.QYId,
             JSId: data?.UserId,
             type: data?.userType?.map((item: { name: string }) => item.name),
+            student: data?.student.map((item: any) => {
+              return {
+                ...item,
+                name: item.XM,
+              };
+            }),
             // student: [
             //   {
             //     student_userid: '3587a5bd08c4178f770727d140aa1ecd',

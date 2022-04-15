@@ -125,7 +125,7 @@ const Mine = (props: {
         {student?.length > 1 ? (
           <Select
             style={{ minWidth: '5em' }}
-            defaultValue={StorageXSName || student?.[0].studentName}
+            defaultValue={StorageXSName || student?.[0].name}
             className={styles.XsName}
             onChange={handleChange}
           >
