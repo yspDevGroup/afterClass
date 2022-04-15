@@ -2,7 +2,7 @@
  * @description: 应用入口
  * @author: zpl
  * @Date: 2021-06-07 16:02:16
- * @LastEditTime: 2022-04-14 10:57:50
+ * @LastEditTime: 2022-04-15 18:13:37
  * @LastEditors: Wu Zhan
  */
 import { useEffect } from 'react';
@@ -12,6 +12,7 @@ import loadImg from '@/assets/loading.gif';
 
 const Index = () => {
   const { initialState } = useModel('@@initialState');
+  // const {isParent}=useAccess();
 
   /**
    * 根据不同身份进入对应的应用主页
@@ -33,8 +34,13 @@ const Index = () => {
     }
     const isParent = Array.isArray(userType) ? userType.includes('家长') : userType === '家长';
     if (isParent) {
-      gotoParent();
-      return;
+      if (initialState?.currentUser?.student?.length !== 0) {
+        gotoParent();
+        return;
+      } else {
+        history.replace('/403?message=您当前未绑定学生，请先联系管理员绑定学生');
+        return;
+      }
     }
     const isOther = Array.isArray(userType) ? userType.includes('其他') : userType === '其他';
     if (isOther) {
