@@ -23,6 +23,7 @@ import { getStudentListByBjid } from '@/services/after-class/khfwbj';
 import { createKHXSDD } from '@/services/after-class/khxsdd';
 import { Carousel } from 'antd';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
+import SwitchIdentity from '@/components/RightContent/SwitchIdentity';
 
 const Home = () => {
   const { initialState } = useModel('@@initialState');
@@ -55,20 +56,20 @@ const Home = () => {
 
   const [BJMC, setBJMC] = useState<any>();
 
-    // 政策公告
-    const getPolicyData = async () => {
-      const resgetXXTZGG = await getJYJGTZGG({
-        BT: '',
-        LX: 1,
-        ZT: ['已发布'],
-        XZQHM: currentUser?.XZQHM,
-        page: 1,
-        pageSize: 3,
-      });
-      if (resgetXXTZGG.status === 'ok') {
-        setPolicyData(resgetXXTZGG.data?.rows);
-      }
-    };
+  // 政策公告
+  const getPolicyData = async () => {
+    const resgetXXTZGG = await getJYJGTZGG({
+      BT: '',
+      LX: 1,
+      ZT: ['已发布'],
+      XZQHM: currentUser?.XZQHM,
+      page: 1,
+      pageSize: 3,
+    });
+    if (resgetXXTZGG.status === 'ok') {
+      setPolicyData(resgetXXTZGG.data?.rows);
+    }
+  };
   useEffect(() => {
     async function announcements() {
       const res = await getXXTZGG({
@@ -103,8 +104,6 @@ const Home = () => {
     }
   }, [currentUser]);
 
-
-
   useEffect(() => {
     const identity = external_contact?.subscriber_info?.remark?.split('/')?.[0].split('-')[1];
     const ParentalIdentitys = `${StorageXSName}${identity || ''}`;
@@ -134,7 +133,6 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       if (StorageXSId) {
-
         const oriData = await ParentHomeData(
           'student',
           currentUser?.xxId,
@@ -143,7 +141,6 @@ const Home = () => {
           StorageBjId,
           StorageXQSJId,
         );
-
 
         const { data } = oriData;
         setTotalData(data);
@@ -202,8 +199,13 @@ const Home = () => {
         {/* <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div> */}
         <div className={styles.headerText}>
           <h4>
-            <span>{ParentalIdentity || '家长'}</span>
-            ，你好！
+            <div>
+              <span>{`${ParentalIdentity || '家长'}，你好！`}</span>
+            </div>
+            <span>
+              {' '}
+              <SwitchIdentity />
+            </span>
           </h4>
           <div className={styles.NjBj}>
             <div>{currentUser?.QYMC || ''}</div>
@@ -332,7 +334,8 @@ const Home = () => {
                           })}
                         </>
                       );
-                    } if (value?.XSFWKHBJs) {
+                    }
+                    if (value?.XSFWKHBJs) {
                       return (
                         <div
                           className={styles.wrap}
