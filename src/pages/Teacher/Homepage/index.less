@@ -9,10 +9,11 @@
 
   .menuTab {
     width: 100%;
-  
+
     > div[class='ant-tabs-nav'] {
       position: fixed;
       bottom: 0;
+      z-index: 1;
       display: block;
       width: 100%;
       height: 50px;
@@ -30,9 +31,11 @@
             color: @GreenColor;
           }
         }
+
         .ant-tabs-nav-wrap {
           display: block;
           background-color: #fff;
+
           .ant-tabs-nav-list {
             flex-flow: initial;
             justify-content: space-around;
@@ -61,14 +64,16 @@
     }
 
     > div[class='ant-tabs-content-holder'] {
-      height: calc(~'100vh - 50px');
+      height: calc(100vh - 50px);
       overflow-y: auto;
+
       > div {
         height: 100%;
       }
     }
   }
+
   .noScrollBar::-webkit-scrollbar {
-    display: none; /* Chrome Safari */
+    display: none;
   }
 }

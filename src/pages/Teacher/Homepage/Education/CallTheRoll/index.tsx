@@ -144,7 +144,12 @@ const CallTheRoll = (props: any) => {
     if (resCheck.status === 'ok') {
       // data 有值时已点过名
       if (resCheck?.data?.length) {
-        setBtnDis('done');
+        const cur = resCheck?.data?.[0]?.CQZT;
+        if (cur === '出勤') {
+          setBtnDis('done');
+        } else {
+          setBtnDis('undone');
+        }
       } else if (nowSta >= 1) {
         setBtnDis('undone');
       } else if (futureSta) {
