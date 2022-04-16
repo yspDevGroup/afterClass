@@ -283,6 +283,45 @@ export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathPro
 };
 
 /**
+ * 动态获取资源平台跳转地址
+ *
+ * @param {BuildOptions} buildOptions
+ * @param {('wechat' | 'password')} authType
+ * @param {('0' | '1')} isAdmin
+ * @return {*}
+ */
+export const getCrpUrl = (
+  buildOptions: BuildOptions,
+  authType: 'wechat' | 'password',
+  isAdmin: '0' | '1',
+) => {
+  const { crpHost, clientId, ENV_host } = buildOptions;
+  const url = new URL(`${crpHost}/oauth2/password`);
+  switch (authType) {
+    case 'password':
+      url.pathname = '/auth_callback/password';
+    case 'wechat':
+      url.pathname = '/auth_callback/wechat';
+      break;
+    default:
+      return '';
+  }
+  const url_api = decodeURIComponent(new URL(`${ENV_host}/api`).href);
+  const ysp_token_type = localStorage.getItem('ysp_token_type');
+  const ysp_access_token = localStorage.getItem('ysp_access_token');
+  const params = JSON.stringify({ plat: 'school' });
+
+  url.searchParams.append('url_api', url_api);
+  url.searchParams.append('clientId', clientId || '');
+  url.searchParams.append('token_type', ysp_token_type || 'Bearer');
+  url.searchParams.append('access_token', ysp_access_token || '');
+  url.searchParams.append('params', params);
+  url.searchParams.append('isAdmin', isAdmin);
+
+  return url.href;
+};
+
+/**
  * 跳转到指定URL连接
  *
  * @param {string} url 跳转链接

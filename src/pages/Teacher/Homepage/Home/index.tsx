@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { useModel, Link, useAccess } from 'umi';
 import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
-import { enHenceMsg } from '@/utils/utils';
+import { enHenceMsg, getCrpUrl } from '@/utils/utils';
 import { getXXTZGG } from '@/services/after-class/xxtzgg';
 import { getScheduleByDate } from '@/services/after-class/khxksj';
 import { updateJZGJBSJ } from '@/services/after-class/jzgjbsj';
@@ -23,6 +23,7 @@ import styles from './index.less';
 import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 import { queryXNXQList } from '@/services/local-services/xnxq';
 import SwitchIdentity from '@/components/RightContent/SwitchIdentity';
+
 const Home = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
@@ -143,19 +144,12 @@ const Home = () => {
   // 设置课程资源平台链接
   useEffect(() => {
     if (!initialState) return;
-    const { crpHost, clientId, ENV_host } = initialState.buildOptions;
     // window.open('http://moodle.xianyunshipei.com/course/view.php?id=12');
-    const url_api = decodeURIComponent(new URL(`${ENV_host}/api`).href);
-    const ysp_token_type = localStorage.getItem('ysp_token_type');
-    const ysp_access_token = localStorage.getItem('ysp_access_token');
-    const params = JSON.stringify({ plat: 'school' });
     if (isSso) {
-      const url = `${crpHost}/auth_callback/password?url_api=${url_api}&clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}$isAdmin=0`;
-      setCrpUrl(url);
+      setCrpUrl(getCrpUrl(initialState.buildOptions, 'password', '0'));
     }
     if (isWechat) {
-      const url = `${crpHost}/auth_callback/wechat?url_api=${url_api}&clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}$isAdmin=0`;
-      setCrpUrl(url);
+      setCrpUrl(getCrpUrl(initialState.buildOptions, 'wechat', '0'));
     }
   }, [initialState]);
 
