@@ -36,7 +36,7 @@ export async function getInitialState(): Promise<InitialState> {
   const fetchUserInfo = async () => {
     const authType = localStorage.getItem('authType') || 'none';
     let res;
-    let dataUser: CurrentUser | undefined = undefined;
+    let dataUser: CurrentUser | undefined;
     switch (authType) {
       case 'wechat':
         res = await currentWechatUser({ plat: 'school' });
@@ -57,7 +57,7 @@ export async function getInitialState(): Promise<InitialState> {
             xxId: data?.QYId,
             JSId: data?.UserId,
             type: data?.userType?.map((item: { name: string }) => item.name),
-            student: data?.student.map((item: any) => {
+            student: data?.student?.map((item: any) => {
               return {
                 ...item,
                 name: item.XM,
@@ -205,11 +205,16 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
       },
       dom: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined,
     ) => {
+      const isComWx = /wxwork/i.test(navigator.userAgent);
+      if (isComWx === true && item?.name === '学生管理') {
+        return <></>;
+      }
       return <Link to={item?.itemPath}>{dom}</Link>;
     },
     onMenuHeaderClick: (e: React.MouseEvent<HTMLDivElement>) => {
       console.log(e.target);
     },
+
     menuHeaderRender: (logo: any, title: any, props: any) => {
       if (props?.collapsed) {
         return (
@@ -346,3 +351,4 @@ export const request: RequestConfig = {
     },
   ],
 };
+

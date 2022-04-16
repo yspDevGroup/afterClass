@@ -261,7 +261,7 @@ const TeacherManagement = () => {
       ),
     },
   ];
-
+  const isComWx = /wxwork/i.test(navigator.userAgent);
   return (
     <PageContain>
       <Spin spinning={state}>
@@ -330,17 +330,25 @@ const TeacherManagement = () => {
             },
           }}
           // eslint-disable-next-line react/no-unstable-nested-components
-          toolBarRender={() => [
-            // <Button
-            //   style={{ color: '#4884ff', borderColor: '#4884ff', marginRight: '8px' }}
-            //   onClick={syncTeachers}
-            // >
-            //   同步企业微信人员信息
-            // </Button>,
-            <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
-              <VerticalAlignBottomOutlined /> 导入
-            </Button>,
-          ]}
+          toolBarRender={() => {
+            return (
+              <>
+                {/* <Button
+                 style={{ color: '#4884ff', borderColor: '#4884ff', marginRight: '8px' }}
+                 onClick={syncTeachers}
+               >
+                 同步企业微信人员信息
+               </Button> */}
+                {isComWx === true ? (
+                  <></>
+                ) : (
+                  <Button key="button" type="primary" onClick={() => setModalVisible(true)}>
+                    <VerticalAlignBottomOutlined /> 导入
+                  </Button>
+                )}
+              </>
+            );
+          }}
           rowKey="id"
           dateFormatter="string"
         />
@@ -388,3 +396,4 @@ const TeacherManagement = () => {
 TeacherManagement.wrappers = ['@/wrappers/auth'];
 
 export default TeacherManagement;
+
