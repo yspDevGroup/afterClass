@@ -86,7 +86,18 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
         </Menu.Item>
       </Access>
       <Access accessible={isParent && localStorage.getItem('afterclass_role') !== 'parent'}>
-        <Menu.Item key="parent" onClick={gotoParent}>
+        <Menu.Item
+          key="parent"
+          onClick={() => {
+            if (initialState?.currentUser?.student?.length !== 0) {
+              gotoParent();
+              return;
+            } else {
+              history.replace('/403?message=您当前未绑定学生，请先联系管理员绑定学生');
+              return;
+            }
+          }}
+        >
           <LogoutOutlined />
           切换到家长
         </Menu.Item>

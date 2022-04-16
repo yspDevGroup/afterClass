@@ -33,13 +33,13 @@ const Home = () => {
   const [totalData, setTotalData] = useState<any>({});
   const [ParentalIdentity, setParentalIdentity] = useState<string>('家长');
   const StorageXSId =
-    localStorage.getItem('studentId') || (student && student[0].XSJBSJId) || testStudentId;
+    localStorage.getItem('studentId') || (student && student?.[0]?.XSJBSJId) || testStudentId;
   const StorageNjId =
-    localStorage.getItem('studentNjId') || (student && student[0].NJSJId) || testStudentNJId;
+    localStorage.getItem('studentNjId') || (student && student?.[0]?.NJSJId) || testStudentNJId;
   const StorageBjId =
-    localStorage.getItem('studentBJId') || currentUser?.student?.[0].BJSJId || testStudentBJId;
+    localStorage.getItem('studentBJId') || currentUser?.student?.[0]?.BJSJId || testStudentBJId;
   const StorageXQSJId =
-    localStorage.getItem('studentXQSJId') || currentUser?.student?.[0].XQSJId || testStudentXQSJId;
+    localStorage.getItem('studentXQSJId') || currentUser?.student?.[0]?.XQSJId || testStudentXQSJId;
   const StorageXSName = localStorage.getItem('studentName');
   // 待办事项
   const [Backlog, setBacklog] = useState<any>([]);
@@ -93,14 +93,16 @@ const Home = () => {
         enHenceMsg(res.message);
       }
     }
-    announcements();
-    getPolicyData();
-    if (
-      localStorage.getItem('studentName') === null &&
-      localStorage.getItem('studentId') === null
-    ) {
-      localStorage.setItem('studentName', currentUser?.student?.[0].name || '');
-      localStorage.setItem('studentId', currentUser?.student?.[0].XSJBSJId || '');
+    if (currentUser?.student?.length) {
+      announcements();
+      getPolicyData();
+      if (
+        localStorage.getItem('studentName') === null &&
+        localStorage.getItem('studentId') === null
+      ) {
+        localStorage.setItem('studentName', currentUser?.student?.[0]?.name || '');
+        localStorage.setItem('studentId', currentUser?.student?.[0]?.XSJBSJId || '');
+      }
     }
   }, [currentUser]);
 
