@@ -92,7 +92,7 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
       return {
         ENV_type: 'dev',
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
-        ENV_host: 'http://192.168.0.81:8000',
+        ENV_host: 'http:/localhost:8000',
         ssoHost: 'http://platform.test.xianyunshipei.com',
         crpHost: 'http://crpweb.test.xianyunshipei.com',
         clientId: '00002',
