@@ -293,7 +293,7 @@ export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathPro
 export const getCrpUrl = (buildOptions: BuildOptions, isAdmin: '0' | '1') => {
   const { crpHost, clientId, ENV_host } = buildOptions;
   const url = new URL(crpHost);
-  url.pathname = '/auth_callback/wechat';
+  url.pathname = '/auth_callback/thirdPart';
 
   const url_api = decodeURIComponent(new URL(`${ENV_host}/api`).href);
   const ysp_token_type = localStorage.getItem('ysp_token_type');
