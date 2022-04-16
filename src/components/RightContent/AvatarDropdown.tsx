@@ -4,7 +4,7 @@ import { useModel, history, useAccess, Access } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import defaultAvatar from '@/assets/avatar.png';
 import { getXXJBSJ } from '@/services/after-class/xxjbsj';
-import { LogoutOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SwapOutlined } from '@ant-design/icons';
 import { removeOAuthToken, gotoAdmin, gotoTeacher, gotoParent } from '@/utils/utils';
 import ShowName from '@/components/ShowName';
 
@@ -75,13 +75,13 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
     <Menu className={styles.menu} selectedKeys={[]}>
       <Access accessible={isAdmin && localStorage.getItem('afterclass_role') !== 'admin'}>
         <Menu.Item key="admin" onClick={gotoAdmin}>
-          <LogoutOutlined />
+          <SwapOutlined />
           切换到管理员
         </Menu.Item>
       </Access>
       <Access accessible={isTeacher && localStorage.getItem('afterclass_role') !== 'teacher'}>
         <Menu.Item key="teacher" onClick={gotoTeacher}>
-          <LogoutOutlined />
+          <SwapOutlined />
           切换到教师
         </Menu.Item>
       </Access>
@@ -98,7 +98,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
             }
           }}
         >
-          <LogoutOutlined />
+          <SwapOutlined />
           切换到家长
         </Menu.Item>
       </Access>
