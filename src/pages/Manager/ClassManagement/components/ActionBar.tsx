@@ -490,36 +490,44 @@ const ActionBar = (props: propstype) => {
             >
               <div className={styles.TeacherChoice}>
                 主班：
-                <TeacherSelect
-                  disabled={!editType}
-                  value={ZbValues}
-                  // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
-                  type={isJg ? 2 : 1}
-                  multiple={false}
-                  xxId={currentUser?.xxId}
-                  kcId={isJg ? kcId : undefined}
-                  onChange={(value: any) => {
-                    setZbValues([value]);
-                    setState(true);
-                  }}
-                />
+                {ZbValues?.length === 0 && !editType ? (
+                  <span style={{ marginLeft: '8px' }}>—</span>
+                ) : (
+                  <TeacherSelect
+                    disabled={!editType}
+                    value={ZbValues}
+                    // isjg true 为机构课程 主班为单选 1 为校内课程 2为校外课程
+                    type={isJg ? 2 : 1}
+                    multiple={false}
+                    xxId={currentUser?.xxId}
+                    kcId={isJg ? kcId : undefined}
+                    onChange={(value: any) => {
+                      setZbValues([value]);
+                      setState(true);
+                    }}
+                  />
+                )}
               </div>
               <div className={styles.TeacherChoice}>
                 副班：
-                <TeacherSelect
-                  disabled={!editType}
-                  value={FbValues}
-                  type={isJg ? 3 : 1}
-                  multiple={true}
-                  xxId={currentUser?.xxId}
-                  kcId={isJg ? kcId : undefined}
-                  onChange={(value: any) => {
-                    if (value?.length <= 3) {
-                      setFbValues(value);
-                      setState(true);
-                    }
-                  }}
-                />
+                {FbValues?.length === 0 && !editType ? (
+                  <span style={{ marginLeft: '8px' }}>—</span>
+                ) : (
+                  <TeacherSelect
+                    disabled={!editType}
+                    value={FbValues}
+                    type={isJg ? 3 : 1}
+                    multiple={true}
+                    xxId={currentUser?.xxId}
+                    kcId={isJg ? kcId : undefined}
+                    onChange={(value: any) => {
+                      if (value?.length <= 3) {
+                        setFbValues(value);
+                        setState(true);
+                      }
+                    }}
+                  />
+                )}
               </div>
               {state === true && replaceTeacher?.length ? (
                 <div className={styles.wrap}>
