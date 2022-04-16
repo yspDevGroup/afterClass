@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import { useModel, Link, useAccess } from 'umi';
+import { useModel, Link } from 'umi';
 import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg, getCrpUrl } from '@/utils/utils';
@@ -38,8 +38,6 @@ const Home = () => {
   const [dateData, setDateData] = useState<any>([]);
   const [DkData, setDkData] = useState<any>([]);
   const [policyData, setPolicyData] = useState<any>();
-  //
-  const { isSso, isWechat } = useAccess();
 
   const today = dayjs().format('YYYY/MM/DD');
   const getTodayData = async (day: string) => {
@@ -145,12 +143,7 @@ const Home = () => {
   useEffect(() => {
     if (!initialState) return;
     // window.open('http://moodle.xianyunshipei.com/course/view.php?id=12');
-    if (isSso) {
-      setCrpUrl(getCrpUrl(initialState.buildOptions, 'password', '0'));
-    }
-    if (isWechat) {
-      setCrpUrl(getCrpUrl(initialState.buildOptions, 'wechat', '0'));
-    }
+    setCrpUrl(getCrpUrl(initialState.buildOptions, '0'));
   }, [initialState]);
 
   const onFinish = async (values: { name: string; phone: string }) => {

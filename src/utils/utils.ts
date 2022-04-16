@@ -94,7 +94,8 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
         ENV_host: 'http:/localhost:8000',
         ssoHost: 'http://platform.test.xianyunshipei.com',
-        crpHost: 'http://crpweb.test.xianyunshipei.com',
+        // crpHost: 'http://crpweb.test.xianyunshipei.com',
+        crpHost: 'http://localhost:8001',
         clientId: '00002',
       };
   }
@@ -286,26 +287,14 @@ export const getLoginPath = ({ suiteID, buildOptions, reLogin }: GetLoginPathPro
  * 动态获取资源平台跳转地址
  *
  * @param {BuildOptions} buildOptions
- * @param {('wechat' | 'password')} authType
  * @param {('0' | '1')} isAdmin
  * @return {*}
  */
-export const getCrpUrl = (
-  buildOptions: BuildOptions,
-  authType: 'wechat' | 'password',
-  isAdmin: '0' | '1',
-) => {
+export const getCrpUrl = (buildOptions: BuildOptions, isAdmin: '0' | '1') => {
   const { crpHost, clientId, ENV_host } = buildOptions;
-  const url = new URL(`${crpHost}/oauth2/password`);
-  switch (authType) {
-    case 'password':
-      url.pathname = '/auth_callback/password';
-    case 'wechat':
-      url.pathname = '/auth_callback/wechat';
-      break;
-    default:
-      return '';
-  }
+  const url = new URL(crpHost);
+  url.pathname = '/auth_callback/wechat';
+
   const url_api = decodeURIComponent(new URL(`${ENV_host}/api`).href);
   const ysp_token_type = localStorage.getItem('ysp_token_type');
   const ysp_access_token = localStorage.getItem('ysp_access_token');
