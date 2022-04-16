@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import { useModel, Link } from 'umi';
+import { useModel, Link, useAccess } from 'umi';
 import { Badge, Button, Divider, Form, Input, message, Modal } from 'antd';
 import { initWXAgentConfig, initWXConfig, showUserName } from '@/utils/wx';
 import { enHenceMsg } from '@/utils/utils';
@@ -37,6 +37,8 @@ const Home = () => {
   const [dateData, setDateData] = useState<any>([]);
   const [DkData, setDkData] = useState<any>([]);
   const [policyData, setPolicyData] = useState<any>();
+  //
+  const { isSso, isWechat } = useAccess();
 
   const today = dayjs().format('YYYY/MM/DD');
   const getTodayData = async (day: string) => {
@@ -147,8 +149,14 @@ const Home = () => {
     const ysp_token_type = localStorage.getItem('ysp_token_type');
     const ysp_access_token = localStorage.getItem('ysp_access_token');
     const params = JSON.stringify({ plat: 'school' });
-    const url = `${crpHost}/auth_callback/wechat?url_api=${url_api}&clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}`;
-    setCrpUrl(url);
+    if (isSso) {
+      const url = `${crpHost}/auth_callback/password?url_api=${url_api}&clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}$isAdmin=0`;
+      setCrpUrl(url);
+    }
+    if (isWechat) {
+      const url = `${crpHost}/auth_callback/wechat?url_api=${url_api}&clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}$isAdmin=0`;
+      setCrpUrl(url);
+    }
   }, [initialState]);
 
   const onFinish = async (values: { name: string; phone: string }) => {

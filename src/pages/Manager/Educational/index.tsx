@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { history, useModel } from 'umi';
+import { history, useAccess, useModel } from 'umi';
 
 const EducationalPage: React.FC = () => {
   const { initialState } = useModel('@@initialState');
+  const { isSso, isWechat } = useAccess();
   useEffect(() => {
     if (!initialState) return;
     const { crpHost, clientId, ENV_host } = initialState.buildOptions;
@@ -11,9 +12,17 @@ const EducationalPage: React.FC = () => {
     const ysp_token_type = localStorage.getItem('ysp_token_type');
     const ysp_access_token = localStorage.getItem('ysp_access_token');
     const params = JSON.stringify({ plat: 'school' });
-    const url = `${crpHost}/auth_callback/wechat?url_api=${url_api}&clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}`;
-    window.open(url);
-    history.go(-1);
+    let url;
+    if (isWechat) {
+      url = `${crpHost}/auth_callback/wechat?url_api=${url_api}&clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}&isAdmin=1`;
+    }
+    if (isSso) {
+      url = `${crpHost}/auth_callback/password?url_api=${url_api}&clientId=${clientId}&token_type=${ysp_token_type}&access_token=${ysp_access_token}&params=${params}&isAdmin=1`;
+    }
+    if (url) {
+      window.open(url);
+      history.go(-1);
+    }
   }, [initialState]);
 
   return <div />;
