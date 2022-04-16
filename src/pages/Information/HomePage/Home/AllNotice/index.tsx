@@ -14,7 +14,7 @@ const AllNotice = () => {
   const { currentUser } = initialState || {};
   const [dataTZGG, setTZGGData] = useState<any>();
   const [dataZCGG, setZCGGData] = useState<any>();
-
+ const [keys, setKeys] = useState<string>('notify');
   useEffect(() => {
     async function fetchData() {
       // 通知公告
@@ -65,7 +65,13 @@ const AllNotice = () => {
     <div className={styles.AllNotice}>
       <TopNav title="全部公告" state={true} />
       <div className={styles.allNotices}>
-        <Tabs centered={true}>
+        <Tabs
+          centered={true}
+          activeKey={keys}
+          onChange={(key) => {
+            setKeys(key);
+          }}
+        >
           <TabPane tab="校内通知" key="notify">
             {dataTZGG?.list.length ? (
               <>
