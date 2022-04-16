@@ -31,7 +31,7 @@ const School = (props: any) => {
       valueType: 'index',
       width: 58,
       fixed: 'left',
-      align: 'center'
+      align: 'center',
     },
     {
       title: '课程班名称',
@@ -52,15 +52,15 @@ const School = (props: any) => {
         return record?.KHBJJs?.map((item: any) => {
           return <div>{item?.JZGJBSJ?.XM}</div>;
         });
-      }
+      },
     },
     {
       title: '课程班人数',
-      dataIndex: 'pj_count',
-      key: 'pj_count',
+      dataIndex: 'xs_count',
+      key: 'xs_count',
       align: 'center',
       width: 120,
-      render: (text: any) => text
+      render: (text: any) => text,
     },
     {
       title: '评价人数',
@@ -68,7 +68,7 @@ const School = (props: any) => {
       key: ' pj_count',
       align: 'center',
       width: 100,
-      render: (text: any) => text
+      render: (text: any) => text,
     },
     {
       title: (
@@ -78,7 +78,9 @@ const School = (props: any) => {
             overlayStyle={{ maxWidth: '30em' }}
             title={
               <>
-                该课程在当前学校所选学年学期内，<br />所有班级家长评价的平均分
+                该课程在当前学校所选学年学期内，
+                <br />
+                所有班级家长评价的平均分
               </>
             }
           >
@@ -118,7 +120,7 @@ const School = (props: any) => {
         </>
       ),
     },
-  ]
+  ];
   return <div>
     <PageContainer>
       <Button
@@ -164,3 +166,4 @@ const School = (props: any) => {
   </div>
 }
 export default School;
+
