@@ -613,7 +613,7 @@ export const setAuthType = (authType: string) => {
   }
 };
 export const getAuthType = () => {
-  return localStorage.getItem('authType') || 'local';
+  return localStorage.getItem('authType') || 'password';
 };
 export const removeAuthType = () => {
   localStorage.removeItem('authType');
