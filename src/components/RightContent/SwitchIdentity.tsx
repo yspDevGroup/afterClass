@@ -2,7 +2,7 @@ import React from 'react';
 import { Dropdown, Menu } from 'antd';
 import { useModel, history, useAccess, Access } from 'umi';
 
-import { LogoutOutlined, RightOutlined } from '@ant-design/icons';
+import { RightOutlined, SwapOutlined } from '@ant-design/icons';
 import { gotoAdmin, gotoTeacher, gotoParent } from '@/utils/utils';
 
 import styles from './index.less';
@@ -18,13 +18,13 @@ const SwitchIdentity: React.FC<GlobalHeaderRightProps> = () => {
     <Menu>
       <Access accessible={isAdmin && localStorage.getItem('afterclass_role') !== 'admin'}>
         <Menu.Item key="admin" onClick={gotoAdmin}>
-          <LogoutOutlined />
+          <SwapOutlined />
           切换到管理员
         </Menu.Item>
       </Access>
       <Access accessible={isTeacher && localStorage.getItem('afterclass_role') !== 'teacher'}>
         <Menu.Item key="teacher" onClick={gotoTeacher}>
-          <LogoutOutlined />
+          <SwapOutlined />
           切换到教师
         </Menu.Item>
       </Access>
@@ -41,7 +41,7 @@ const SwitchIdentity: React.FC<GlobalHeaderRightProps> = () => {
             }
           }}
         >
-          <LogoutOutlined />
+          <SwapOutlined />
           切换到家长
         </Menu.Item>
       </Access>
