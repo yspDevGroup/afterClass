@@ -73,7 +73,7 @@ const PersonalHomepage = () => {
                 tab={
                   <span>
                     <IconFont
-                      style={{ fontSize: '16px' }}
+                      style={{ fontSize: '24px' }}
                       type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
                     />
                     首页
@@ -96,7 +96,7 @@ const PersonalHomepage = () => {
                   tab={
                     <span>
                       <IconFont
-                        style={{ fontSize: '16px' }}
+                        style={{ fontSize: '24px' }}
                         type={
                           activeKey === 'education'
                             ? 'icon-jiaoxuezhongxinfill'
@@ -121,8 +121,9 @@ const PersonalHomepage = () => {
                 tab={
                   <span>
                     <IconFont
-                      style={{ fontSize: '16px' }}
-                      type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
+                      style={{ fontSize: '26px' }}
+                      type={activeKey === 'mine' ? 'icon-wode-wode' : 'icon-wode3'}
+                      // type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
                     />
                     我的
                   </span>

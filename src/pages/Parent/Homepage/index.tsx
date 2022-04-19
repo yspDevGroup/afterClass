@@ -79,7 +79,7 @@ const PersonalHomepage = () => {
               tab={
                 <span>
                   <IconFont
-                    style={{ fontSize: '16px' }}
+                    style={{ fontSize: '24px' }}
                     type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
                   />
                   首页
@@ -102,7 +102,7 @@ const PersonalHomepage = () => {
                 tab={
                   <span>
                     <IconFont
-                      style={{ fontSize: '16px' }}
+                      style={{ fontSize: '24px' }}
                       type={activeKey === 'study' ? 'icon-xuexiyuandifill' : 'icon-xuexiyuandi'}
                     />
                     学习园地
@@ -123,7 +123,7 @@ const PersonalHomepage = () => {
               tab={
                 <span>
                   <IconFont
-                    style={{ fontSize: '16px' }}
+                    style={{ fontSize: '26px' }}
                     type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
                   />
                   我的

@@ -14,7 +14,7 @@
       bottom: 0;
       display: block;
       width: 100%;
-      height: 50px;
+      height: 60px;
       margin: 0;
       border-top: 1px solid #eee;
 
@@ -33,6 +33,9 @@
             justify-content: space-around;
 
             .ant-tabs-tab {
+              color: @text-color-secondary;
+              font-size: 10px;
+              text-align: center;
               .anticon {
                 display: block;
                 margin: 0;
@@ -41,9 +44,6 @@
               &.ant-tabs-tab-active .ant-tabs-tab-btn {
                 color: #22c76d;
               }
-
-              color: @text-color-secondary;
-              font-size: @font-size-sm;
 
               & + .ant-tabs-tab {
                 margin: 0;
@@ -60,7 +60,7 @@
     }
 
     > div[class='ant-tabs-content-holder'] {
-      height: calc(100vh - 50px);
+      height: calc(100vh - 60px);
       overflow-y: auto;
 
       > div {
