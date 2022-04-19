@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Tabs } from 'antd';
 import IconFont from '@/components/CustomIcon';
 import Home from './Home';
@@ -15,6 +15,9 @@ const Homepage = () => {
   const homeRef = useRef(null);
   const eduRef = useRef(null);
   const mineRef = useRef(null);
+  useEffect(() => {
+    localStorage.setItem('afterclass_role', 'admin');
+  }, []);
 
   return (
     <MobileCon>
@@ -41,7 +44,7 @@ const Homepage = () => {
             tab={
               <span>
                 <IconFont
-                  style={{ fontSize: '16px' }}
+                  style={{ fontSize: '26px' }}
                   type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
                 />
                 首页
@@ -61,7 +64,7 @@ const Homepage = () => {
             tab={
               <span>
                 <IconFont
-                  style={{ fontSize: '16px' }}
+                  style={{ fontSize: '26px' }}
                   type={activeKey === 'mine' ? 'icon-tongjifill' : 'icon-tongji'}
                 />
                 统计

@@ -3,7 +3,11 @@
 .indexPage {
   .cusHeader {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 126px;
+    padding-bottom: 14px;
     background: -o-linear-gradient(270deg, @DarkBlue 0%, @Cyan 100%);
     background: -moz-linear-gradient(270deg, @DarkBlue 0%, @Cyan 100%);
     background: -webkit-linear-gradient(270deg, @DarkBlue 0%, @Cyan 100%);
@@ -12,28 +16,22 @@
     .headerText {
       position: relative;
       z-index: 2;
-      padding: 26px 0 0 @padding-md;
+      padding: 0 0 0 @padding-md;
 
       h4 {
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
         margin-bottom: 6px;
         color: #333;
         font-weight: 600;
         font-size: @font-size-lg;
         line-height: 24px;
 
-        > div:nth-child(1) {
-          display: inherit;
-
-          > span:nth-child(1) {
-            display: inline-block;
-            max-width: 40vw;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-          }
+        > span:nth-child(1) {
+          display: inline-block;
+          max-width: 40vw;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
 
         & + div {

@@ -25,6 +25,10 @@ import { queryXNXQList } from '@/services/local-services/xnxq';
 import SwitchIdentity from '@/components/RightContent/SwitchIdentity';
 
 const Home = () => {
+  useEffect(() => {
+    localStorage.setItem('afterclass_role', 'teacher');
+  }, []);
+
   const { initialState, setInitialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const userRef = useRef(null);
@@ -169,18 +173,20 @@ const Home = () => {
         <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }} />
         <div className={styles.headerText}>
           <h4>
-            <div>
-              <span ref={userRef}>
-                <ShowName type="userName" openid={currentUser?.wechatUserId} XM={currentUser?.XM} />
-              </span>
-              <span>老师，您好！</span>
-            </div>
-            <span>
-              <SwitchIdentity />
+            <span ref={userRef}>
+              <ShowName type="userName" openid={currentUser?.wechatUserId} XM={currentUser?.XM} />
             </span>
+            <span>老师，您好！</span>
           </h4>
           <div>{currentUser?.QYMC}</div>
         </div>
+        <span
+          style={{
+            position: 'relative',
+          }}
+        >
+          <SwitchIdentity />
+        </span>
       </header>
 
       <div className={styles.pageContent}>

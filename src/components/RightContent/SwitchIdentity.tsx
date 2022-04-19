@@ -2,18 +2,22 @@ import React from 'react';
 import { Dropdown, Menu } from 'antd';
 import { useModel, history, useAccess, Access } from 'umi';
 
-import { RightOutlined, SwapOutlined } from '@ant-design/icons';
-import { gotoAdmin, gotoTeacher, gotoParent } from '@/utils/utils';
+import { LogoutOutlined, RightOutlined, SwapOutlined } from '@ant-design/icons';
+import { gotoAdmin, gotoTeacher, gotoParent, removeOAuthToken, getAuthType } from '@/utils/utils';
 
 import styles from './index.less';
 export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
 
-const SwitchIdentity: React.FC<GlobalHeaderRightProps> = () => {
-  const { initialState } = useModel('@@initialState');
-  const { isAdmin, isTeacher, isParent } = useAccess();
-
+const SwitchIdentity = (props: { logout?: boolean }) => {
+  const { initialState, setInitialState } = useModel('@@initialState');
+  const { isLogin, isAdmin, isTeacher, isParent } = useAccess();
+  const { logout = false } = props;
+  const list = [isAdmin, isParent, isTeacher];
+  if (logout) {
+    list.push(isLogin);
+  }
   const menuHeaderDropdown = (
     <Menu>
       <Access accessible={isAdmin && localStorage.getItem('afterclass_role') !== 'admin'}>
@@ -45,16 +49,36 @@ const SwitchIdentity: React.FC<GlobalHeaderRightProps> = () => {
           切换到家长
         </Menu.Item>
       </Access>
+      <Access accessible={isLogin && logout}>
+        <Menu.Item
+          key="admin"
+          onClick={() => {
+            setInitialState({ ...initialState!, currentUser: undefined });
+            removeOAuthToken();
+            history.replace(getAuthType() === 'wechat' ? '/auth_callback/overDue' : '/');
+          }}
+        >
+          <LogoutOutlined />
+          退出登录
+        </Menu.Item>
+      </Access>
     </Menu>
   );
-
+  const gteColor = () => {
+    if (localStorage.getItem('afterclass_role') === 'parent') {
+      return {
+        color: '#15B628',
+      };
+    }
+    return {};
+  };
+  console.log('list', list);
   return (
     <>
-      {[isAdmin, isParent, isTeacher].filter((item) => item).length > 1 && (
-        <Dropdown overlay={menuHeaderDropdown} arrow>
-          <a className={styles.menuName} onClick={(e) => e.preventDefault()}>
-            切换身份
-            <RightOutlined style={{ fontSize: '12px' }} />
+      {list.filter((item) => item).length > 1 && (
+        <Dropdown overlay={menuHeaderDropdown} trigger={['click']}>
+          <a className={styles.menuName} style={gteColor()} onClick={(e) => e.preventDefault()}>
+            {logout ? '我的' : '切换身份'} <RightOutlined style={{ fontSize: '12px' }} />
           </a>
         </Dropdown>
       )}

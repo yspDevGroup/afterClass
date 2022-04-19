@@ -26,6 +26,10 @@ import { getJYJGTZGG } from '@/services/after-class/jyjgtzgg';
 import SwitchIdentity from '@/components/RightContent/SwitchIdentity';
 
 const Home = () => {
+  useEffect(() => {
+    localStorage.setItem('afterclass_role', 'parent');
+  }, []);
+
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { student, external_contact } = currentUser || {};
@@ -198,22 +202,18 @@ const Home = () => {
   return (
     <div className={styles.indexPage}>
       <header className={styles.cusHeader} style={{ backgroundImage: `url(${index_header})` }}>
-        {/* <div className={styles.headerPop} style={{ backgroundImage: `url(${imgPop})` }}></div> */}
         <div className={styles.headerText}>
           <h4>
-            <div>
-              <span>{`${ParentalIdentity || '家长'}，你好！`}</span>
-            </div>
-            <span>
-              {' '}
-              <SwitchIdentity />
-            </span>
+            <span>{`${ParentalIdentity || '家长'}，你好！`}</span>
           </h4>
           <div className={styles.NjBj}>
             <div>{currentUser?.QYMC || ''}</div>
             <div>{BJMC || ''}</div>
           </div>
         </div>
+        <span className={styles.XsName}>
+          <SwitchIdentity />
+        </span>
       </header>
       {totalData?.courseStatus === 'empty' ? (
         <EmptyArticle />
