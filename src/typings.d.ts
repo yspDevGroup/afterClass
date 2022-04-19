@@ -264,7 +264,7 @@ type CurrentUser = {
   };
   /** */
   authType: 'sso' | 'wechat';
-  student?: [];
+  student?: any[];
   roles?: {
     id?: string;
     name?: string;

@@ -173,7 +173,7 @@ const Home = () => {
               <span ref={userRef}>
                 <ShowName type="userName" openid={currentUser?.wechatUserId} XM={currentUser?.XM} />
               </span>
-              <span>老师，你好！</span>
+              <span>老师，您好！</span>
             </div>
             <span>
               <SwitchIdentity />

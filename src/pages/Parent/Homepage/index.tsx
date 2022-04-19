@@ -8,6 +8,7 @@ import Home from './Home';
 import Study from './Study';
 import Mine from './Mine';
 import IconFont from '@/components/CustomIcon';
+import MobileCon from '@/components/MobileCon';
 
 import styles from './index.less';
 
@@ -58,88 +59,90 @@ const PersonalHomepage = () => {
   }, [index]);
 
   return (
-    <div className={styles.mobilePageHeader}>
-      {courseStatus === '' ? (
-        ''
-      ) : (
-        <Tabs
-          tabPosition="bottom"
-          className={styles.menuTab}
-          onTabClick={(key: string) => {
-            setActiveKey(key);
-            if (homeRef.current) (homeRef.current as unknown as HTMLElement).scrollTop = 0;
-            if (studyRef.current) (studyRef.current as unknown as HTMLElement).scrollTop = 0;
-            if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
-          }}
-          activeKey={activeKey}
-        >
-          <TabPane
-            tab={
-              <span>
-                <IconFont
-                  style={{ fontSize: '16px' }}
-                  type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
-                />
-                首页
-              </span>
-            }
-            key="index"
+    <MobileCon>
+      <div className={styles.mobilePageHeader}>
+        {courseStatus === '' ? (
+          ''
+        ) : (
+          <Tabs
+            tabPosition="bottom"
+            className={styles.menuTab}
+            onTabClick={(key: string) => {
+              setActiveKey(key);
+              if (homeRef.current) (homeRef.current as unknown as HTMLElement).scrollTop = 0;
+              if (studyRef.current) (studyRef.current as unknown as HTMLElement).scrollTop = 0;
+              if (mineRef.current) (mineRef.current as unknown as HTMLElement).scrollTop = 0;
+            }}
+            activeKey={activeKey}
           >
-            <div
-              className={styles.noScrollBar}
-              style={{ height: '100%', overflowY: 'auto', background: '#F5F5F5' }}
-              ref={homeRef}
-            >
-              <Home />
-            </div>
-          </TabPane>
-          {courseStatus === 'empty' ? (
-            ''
-          ) : (
             <TabPane
               tab={
                 <span>
                   <IconFont
                     style={{ fontSize: '16px' }}
-                    type={activeKey === 'study' ? 'icon-xuexiyuandifill' : 'icon-xuexiyuandi'}
+                    type={activeKey === 'index' ? 'icon-zhuyefill' : 'icon-zhuye'}
                   />
-                  学习园地
+                  首页
                 </span>
               }
-              key="study"
+              key="index"
+            >
+              <div
+                className={styles.noScrollBar}
+                style={{ height: '100%', overflowY: 'auto', background: '#F5F5F5' }}
+                ref={homeRef}
+              >
+                <Home />
+              </div>
+            </TabPane>
+            {courseStatus === 'empty' ? (
+              ''
+            ) : (
+              <TabPane
+                tab={
+                  <span>
+                    <IconFont
+                      style={{ fontSize: '16px' }}
+                      type={activeKey === 'study' ? 'icon-xuexiyuandifill' : 'icon-xuexiyuandi'}
+                    />
+                    学习园地
+                  </span>
+                }
+                key="study"
+              >
+                <div
+                  className={styles.noScrollBar}
+                  style={{ height: '100%', overflowY: 'auto' }}
+                  ref={studyRef}
+                >
+                  <Study />
+                </div>
+              </TabPane>
+            )}
+            <TabPane
+              tab={
+                <span>
+                  <IconFont
+                    style={{ fontSize: '16px' }}
+                    type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
+                  />
+                  我的
+                </span>
+              }
+              key="mine"
             >
               <div
                 className={styles.noScrollBar}
                 style={{ height: '100%', overflowY: 'auto' }}
-                ref={studyRef}
+                ref={mineRef}
               >
-                <Study />
+                <Mine status={courseStatus} setActiveKey={setActiveKey} />
               </div>
             </TabPane>
-          )}
-          <TabPane
-            tab={
-              <span>
-                <IconFont
-                  style={{ fontSize: '16px' }}
-                  type={activeKey === 'mine' ? 'icon-wodefill' : 'icon-wode'}
-                />
-                我的
-              </span>
-            }
-            key="mine"
-          >
-            <div
-              className={styles.noScrollBar}
-              style={{ height: '100%', overflowY: 'auto' }}
-              ref={mineRef}
-            >
-              <Mine status={courseStatus} setActiveKey={setActiveKey} />
-            </div>
-          </TabPane>
-        </Tabs>
-      )}
-    </div>
+          </Tabs>
+        )}
+      </div>
+    </MobileCon>
   );
 };
 

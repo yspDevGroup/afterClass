@@ -50,7 +50,7 @@ const SwitchIdentity: React.FC<GlobalHeaderRightProps> = () => {
 
   return (
     <>
-      {[isAdmin, isParent, isTeacher].filter((item) => item).length > 2 && (
+      {[isAdmin, isParent, isTeacher].filter((item) => item).length > 1 && (
         <Dropdown overlay={menuHeaderDropdown} arrow>
           <a className={styles.menuName} onClick={(e) => e.preventDefault()}>
             切换身份
