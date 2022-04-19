@@ -94,8 +94,8 @@ export const getBuildOptions = async (): Promise<BuildOptions> => {
         ENV_copyRight: '2021 版权所有：陕西五育汇智信息技术有限公司',
         ENV_host: 'http:/localhost:8000',
         ssoHost: 'http://platform.test.xianyunshipei.com',
-        // crpHost: 'http://crpweb.test.xianyunshipei.com',
-        crpHost: 'http://localhost:8001',
+        crpHost: 'http://crpweb.test.xianyunshipei.com',
+        // crpHost: 'http://localhost:8001',
         clientId: '00002',
       };
   }
