@@ -59,7 +59,7 @@ const PersonalHomepage = () => {
             ''
           ) : (
             <Tabs
-              tabPosition="bottom"
+              // tabPosition="bottom"
               className={styles.menuTab}
               onTabClick={(key: string) => {
                 setActiveKey(key);
