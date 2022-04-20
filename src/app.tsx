@@ -158,7 +158,8 @@ export const layout = ({ initialState }: { initialState: InitialState }) => {
         path !== '/' &&
         !path.startsWith(authCallbackPath) &&
         !path.startsWith(loginPath) &&
-        !path.startsWith('/40')
+        !path.startsWith('/40') &&
+        !path.startsWith('/user/parent')
       ) {
         console.log('initialState', initialState.currentUser);
         history.push('/403');
@@ -351,4 +352,3 @@ export const request: RequestConfig = {
     },
   ],
 };
-
